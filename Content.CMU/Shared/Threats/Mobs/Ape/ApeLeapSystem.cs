@@ -424,15 +424,13 @@ public sealed partial class ApeLeapSystem : EntitySystem
             _audio.PlayPvs(xeno.Comp.LeapSound, xeno);
         }
 
-        if (_net.IsClient && _timing.IsFirstTimePredicted)
+        if (_net.IsClient)
         {
             var predictedEv = new ApeLeapPredictedHitEvent(GetNetEntity(target),
                 _rmcLagCompensation.GetLastRealTick(null),
                 _rmcLagCompensation.GetClientSubstep());
-            if (_timing.InPrediction)
-                RaisePredictiveEvent(predictedEv);
-            else
-                RaiseNetworkEvent(predictedEv);
+            RaiseNetworkEvent(predictedEv);
+            if (_timing.InPrediction && _timing.IsFirstTimePredicted) RaisePredictiveEvent(predictedEv);
         }
 
         StopLeap(xeno);

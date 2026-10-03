@@ -25,8 +25,4 @@ public sealed partial class XenoActiveLungeComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan StunTime;
-
-    // CMU14: consumed before landing callbacks so one lunge resolves one impact.
-    [DataField, AutoNetworkedField]
-    public bool HitResolved;
 }

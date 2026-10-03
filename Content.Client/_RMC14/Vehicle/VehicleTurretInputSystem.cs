@@ -29,7 +29,6 @@ public sealed partial class VehicleTurretInputSystem : EntitySystem
 
     public override void Initialize()
     {
-        UpdatesBefore.Add(typeof(VehicleTurretSystem)); // CMU14: first-pass aiming must precede rotation, as replay does.
         SubscribeLocalEvent<VehicleTurretComponent, EntityTerminatingEvent>(OnTurretTerminating);
     }
 
