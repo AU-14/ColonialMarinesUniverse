@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Server.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -26,8 +27,9 @@ public sealed class YautjaMedicompProgressTest
         ("CMUYautjaWoundClamp", 2, "clamp wounds"),
     ];
 
-    [Test]
-    public async Task MedicompStagesUseOneContinuousDoAfter()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task MedicompStagesUseOneContinuousDoAfter(bool severePain)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -46,13 +48,21 @@ public sealed class YautjaMedicompProgressTest
             foreach (var (toolPrototype, step, label) in Stages)
             {
                 var patient = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
-                var surgeon = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+                var surgeon = severePain ? patient : entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
                 var tool = entMan.SpawnEntity(toolPrototype, MapCoordinates.Nullspace);
 
                 try
                 {
                     skills.SetSkill(surgeon, "RMCSkillSurgery", 3);
                     damageable.TryChangeDamage(patient, new DamageSpecifier(brute, 20));
+                    if (severePain)
+                    {
+                        var pain = entMan.GetComponent<PainShockComponent>(patient);
+                        pain.Pain = 90;
+                        pain.RawTier = PainTier.Severe;
+                        Assert.That(entMan.System<SharedPainShockSystem>().GetEffectiveTier(patient, pain),
+                            Is.GreaterThanOrEqualTo(PainTier.Severe));
+                    }
                     var targetPart = FindPart(entMan, patient, BodyPartType.Arm, BodyPartSymmetry.Left);
 
                     Assert.That(

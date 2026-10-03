@@ -602,7 +602,9 @@ public abstract partial class SharedDropshipSystem : EntitySystem
                     continue;
                 }
 
-                if (FlyTo((computerId, computer), closestDestination.Value, user))
+                // CMU14: this validated remote queen call is an automated dispatch.
+                // if (FlyTo((computerId, computer), closestDestination.Value, user))
+                if (FlyTo((computerId, computer), closestDestination.Value, null))
                 {
                     _popup.PopupEntity("You call down one of the dropships to your location", user, user, PopupType.LargeCaution);
                     var locationName = Loc.GetString("rmc-dropship-hijack-queen-call-unknown-location");

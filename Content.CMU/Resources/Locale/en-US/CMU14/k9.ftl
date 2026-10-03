@@ -131,7 +131,7 @@ rmc-k9-evacuate-dog-order = [color=cyan]Handler order: EVACUATE {$target}![/colo
 rmc-k9-good-boy-popup = {$user} praises {$dog}. {$dog} wags its mechanical tail and emits a happy beep-boop!
 
 # Sensors
-rmc-k9-senses-alert-growl = [color=red]{$dog} detects motion vibrations and growls into the darkness![/color]
+rmc-k9-senses-alert-growl = {$dog} detects motion vibrations and growls into the darkness!
 rmc-k9-senses-alert-master = [color=red]Your K9 {$dog} detected enemy motion nearby![/color]
 
 # Directions

@@ -110,8 +110,8 @@
       AU14JobCLFCellLeader: 1
       AU14JobCLFRadioOperator: 1
       AU14JobCLFPhysician: 2
-      AU14JobCLFGuerilla: 3
-      AU14JobCLFSapper: 1
+      AU14JobCLFGuerilla: 2
+      AU14JobCLFSapper: 2
 
 - type: entity
   id: ColonyAntags

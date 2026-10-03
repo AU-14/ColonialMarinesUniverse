@@ -138,7 +138,7 @@ public sealed class CMUIndependentXenoHiveTest
             Assert.Multiple(() =>
             {
                 Assert.That(eggComp!.State, Is.EqualTo(XenoEggState.Growing));
-                Assert.That(eggComp.CanSpawnGhostParasite, Is.False);
+                Assert.That(eggComp.CanSpawnGhostParasite, Is.True);
                 Assert.That(eggComp.CurrentSprite, Is.EqualTo("CMU14/HunterShip/mob/xenos/effects.rsi"));
                 Assert.That(eggAssignment!.Hive, Is.EqualTo(CMUHunterShipHiveKind.Forsaken));
                 Assert.That(weedsAssignment!.Hive, Is.EqualTo(CMUHunterShipHiveKind.Forsaken));

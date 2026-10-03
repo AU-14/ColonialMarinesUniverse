@@ -1283,12 +1283,8 @@
         amount: 2
     - name: RTO Packs
       entries:
-      - id: AU14BackpackRTOPackJungle
-        amount: 1
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
-      - id: AU14BackpackRTOPackGray
-        amount: 1
+      - id: ANPRC117GRadioFilled
+        amount: 3
     - name: Materials
       entries:
       - id: CMSheetMetal

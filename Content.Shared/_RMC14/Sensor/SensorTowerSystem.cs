@@ -240,7 +240,11 @@ public sealed partial class SensorTowerSystem : EntitySystem
             return;
 
         if (state == SensorTowerState.Off)
+        { // CMU14: activating the array routes its intelligence to the operator's faction.
             state = SensorTowerState.On;
+            if (_gunIFF.TryGetFaction(user, out var faction))
+                ent.Comp.Faction = faction.ToString();
+        }
         else if (state == SensorTowerState.On)
             state = SensorTowerState.Off;
 

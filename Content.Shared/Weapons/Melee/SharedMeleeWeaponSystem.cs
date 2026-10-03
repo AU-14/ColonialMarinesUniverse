@@ -1032,12 +1032,13 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     private List<EntityUid> GetValidAttackEntities(List<NetEntity> netEntities)
     {
         var entities = new List<EntityUid>(netEntities.Count);
+        var seen = new HashSet<EntityUid>(); // CMU14: one damage/effect application per victim per swing.
 
         foreach (var netEntity in netEntities)
         {
             if (!TryGetEntity(netEntity, out var entity) ||
                 entity == null ||
-                TerminatingOrDeleted(entity.Value))
+                TerminatingOrDeleted(entity.Value) || !seen.Add(entity.Value)) // CMU14
             {
                 continue;
             }

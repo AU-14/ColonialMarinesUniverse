@@ -4,6 +4,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Action
+    inSimulationOnly: true # CMU14: predict xeno gameplay actions during a simulation tick
     backgroundOn:
       sprite: _RMC14/Actions/xeno_actions.rsi
       state: template_active_big

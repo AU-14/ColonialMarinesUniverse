@@ -1,4 +1,4 @@
-using Content.Client._CMU14.Lobby;
+using Content.Client.CMU14.Lobby;
 using Content.Client.LateJoin;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;

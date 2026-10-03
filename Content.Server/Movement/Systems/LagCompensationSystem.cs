@@ -27,6 +27,7 @@ public sealed partial class LagCompensationSystem : EntitySystem
         base.Initialize();
         Log.Level = LogLevel.Info;
         SubscribeLocalEvent<LagCompensationComponent, MoveEvent>(OnLagMove);
+        SubscribeLocalEvent<LagCompensationComponent, ComponentStartup>(OnLagStartup); // CMU14: seed stationary history.
     }
 
     public override void Update(float frameTime)
@@ -42,16 +43,7 @@ public sealed partial class LagCompensationSystem : EntitySystem
 
         while (query.MoveNext(out var comp))
         {
-            while (comp.Positions.TryPeek(out var pos))
-            {
-                if (pos.Item1 < earliestTime)
-                {
-                    comp.Positions.Dequeue();
-                    continue;
-                }
-
-                break;
-            }
+            PruneHistory(comp, earliestTime); // CMU14: keep the last predecessor of the retained window.
         }
     }
 
@@ -72,46 +64,14 @@ public sealed partial class LagCompensationSystem : EntitySystem
         if (pSession == null || !TryComp<LagCompensationComponent>(uid, out var lag) || lag.Positions.Count == 0)
             return (xform.Coordinates, xform.LocalRotation);
 
-        var angle = Angle.Zero;
-        var coordinates = EntityCoordinates.Invalid;
-        var ping = pSession.Channel.Ping;
-        // Use 1.5 due to the trip buffer.
-        var offset = _timing.CurTick - _rmcLagCompensation.GetLastRealTick(pSession.UserId).Value;
-        var offsetTime = offset.Value * _timing.TickPeriod;
-        // CMU14: substep-aware rewind (client mid-physics when it saw the hit)
-        var substep = _rmcLagCompensation.GetLastRealSubstep(pSession.UserId);
-        if (substep != 0)
-            offsetTime -= _rmcLagCompensation.SubstepPeriod * substep;
-        if (offsetTime > BufferTime)
-            offsetTime = TimeSpan.Zero;
+        // CMU14 History Begin: LastRealTick is the final applied snapshot, not projectile execution time.
+        var viewTick = _rmcLagCompensation.GetLastRealTick(pSession.UserId);
+        if (viewTick > _timing.CurTick)
+            return (xform.Coordinates, xform.LocalRotation);
 
-        var sentTime = _timing.CurTime - offsetTime;
-
-        TimeSpan? found = null;
-        foreach (var pos in lag.Positions)
-        {
-            if (found != null && found != pos.Item1)
-                break;
-
-            coordinates = pos.Item2;
-            angle = pos.Item3;
-
-            if (pos.Item1 >= sentTime)
-                found ??= pos.Item1;
-        }
-
-        if (coordinates == default)
-        {
-            Log.Debug($"No long comp coords found, using {xform.Coordinates}");
-            coordinates = xform.Coordinates;
-            angle = xform.LocalRotation;
-        }
-        else
-        {
-            Log.Debug($"Actual coords is {xform.Coordinates} and got {coordinates}");
-        }
-
-        return (coordinates, angle);
+        var offsetTime = (_timing.CurTick - viewTick.Value).Value * _timing.TickPeriod;
+        return GetCoordinatesAngleAtTime(uid, _timing.CurTime - offsetTime, xform);
+        // CMU14 End
     }
 
     public Angle GetAngle(EntityUid uid, ICommonSession? session, TransformComponent? xform = null)

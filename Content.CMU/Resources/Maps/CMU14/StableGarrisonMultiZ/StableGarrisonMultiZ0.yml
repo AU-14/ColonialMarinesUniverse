@@ -2062,8 +2062,6 @@ entities:
       bodyStatus: InAir
     - type: Fixtures
       fixtures: {}
-    - type: Shuttle
-      dampingModifier: 0.25
     - type: ExplosionAirtightGrid
     - type: MapAtmosphere
       space: False

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 // cmu edit end
 using System;
 using System.Linq;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client._RMC14.Chat;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Chat;
