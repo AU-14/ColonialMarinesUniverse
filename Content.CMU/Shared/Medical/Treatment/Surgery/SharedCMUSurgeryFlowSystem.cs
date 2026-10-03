@@ -793,6 +793,16 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
     private bool IsPainControlledForSurgery(EntityUid patient, EntityUid surgeon)
     {
+        // Medicomp wound treatment is designed for conscious Yautja field care.
+        // Other procedures still require the normal pain control or restraint.
+        if (HasComp<YautjaComponent>(patient) &&
+            TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed) &&
+            Prototypes.TryIndex<EntityPrototype>(armed.SurgeryId, out var surgery) &&
+            surgery.TryGetComponent<CMUYautjaMedicompSurgeryConditionComponent>(out _, ComponentFactory))
+        {
+            return true;
+        }
+
         // Someone else pinning the patient still stands in for painkillers.
         if (HoldDown.IsHeldDownFor(patient, surgeon))
             return true;

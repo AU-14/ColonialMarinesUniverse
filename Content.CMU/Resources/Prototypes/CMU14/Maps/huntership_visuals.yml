@@ -1923,7 +1923,7 @@
   - type: XenoEgg
     state: Growing
     spawn: CMXenoLarva
-    canSpawnGhostParasite: false
+    canSpawnGhostParasite: true
     normalSprite: CMU14/HunterShip/mob/xenos/effects.rsi
     fragileSprite: CMU14/HunterShip/mob/xenos/effects.rsi
     sustainedSprite: CMU14/HunterShip/mob/xenos/effects.rsi
@@ -10763,6 +10763,7 @@
   id: CMUHunterShipPlacedBaseItemStunprodTemplate
   abstract: true
   components:
+  - type: CMUCattleProd
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/weapons/melee/spears.rsi
     drawdepth: Items
@@ -35823,6 +35824,9 @@
   description: "Use this to hold xenomorphic creatures safely."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: CMUXenoRestraints
+  - type: Handcuff
+    breakoutTime: 60
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/security.rsi
     drawdepth: Items
@@ -35869,6 +35873,9 @@
   description: "Use this to hold xenomorphic creatures moderately-safely."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: CMUXenoRestraints
+  - type: Handcuff
+    breakoutTime: 30
   - type: Sprite
     sprite: CMU14/HunterShip/obj/items/security.rsi
     drawdepth: Items
