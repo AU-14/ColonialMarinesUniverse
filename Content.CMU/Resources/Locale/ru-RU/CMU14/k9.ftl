@@ -131,7 +131,7 @@ rmc-k9-evacuate-dog-order = [color=cyan]Приказ кинолога: ЭВАК�
 rmc-k9-good-boy-popup = {$user} подбадривает {$dog}. {$dog} радостно виляет металлическим хвостом и издаёт довольный бип-буп!
 
 # Сенсоры
-rmc-k9-senses-alert-growl = [color=red]{$dog} фиксирует вибрацию сенсорами движения и глухо рычит в темноту![/color]
+rmc-k9-senses-alert-growl = {$dog} фиксирует вибрацию сенсорами движения и глухо рычит в темноту!
 rmc-k9-senses-alert-master = [color=red]Сенсоры вашего K9 {$dog} обнаружили движение противника поблизости![/color]
 
 # Направления
