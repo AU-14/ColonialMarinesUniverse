@@ -18,6 +18,7 @@
     - VAIPO
     platoonsOpfor:
     - UPP
+    - BEAR
     - HAZOPS
     - ProdigySF
     defaultgovfor: WEYU

@@ -64,6 +64,9 @@
       CHTORM_PMC_BEAR: 7500
       GROZA_PMC_BEAR: 6000
       SKALA_PMC_BEAR: 4500
+      Liquidators: 4500 #only flamethrowers
+      Migrant_UPP: 1000 #They don’t speak English.
+
 
 # UA Ambassador Console - Can call in US Army
 - type: entity

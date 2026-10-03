@@ -50,11 +50,11 @@
         amount: 40
       - id: AU14UPPPatrolCap
         amount: 20
-      - id: CMHeadCapSPPBeret
+      - id: RuMCHeadBeretMarien
         amount: 15
       - id: AU14UPPBoonie
         amount: 15
-      - id: AU14UPPUshanka
+      - id: RuMCUPPNavalInfantryCapUshanka
         amount: 40
       - id: RMCM5CameraGear
         amount: 30
@@ -90,13 +90,13 @@
         amount: 40
     - name: Backpack
       entries:
-      - id: RMCSatchelSPP
+      - id: RuMCUPPNavalInfantrySatchel
         amount: 80
-      - id: CMBackpackMarine
+      - id: RuMCUPPNavalInfantryBackpack
         amount: 30
-      - id: AU14IMPBackpackMarine
+      - id: RuMCUPPNavalInfantryBackpackMedical
         amount: 20
-      - id: RMCSatchelSPPWelder
+      - id: RuMCUPPNavalInfantryBackpackBig
         amount: 5
       - id: RMCScabbardShotgun
         amount: 3
@@ -104,54 +104,59 @@
         amount: 4
     - name: Belts
       entries:
-      - id: AU14BeltMarineUPP
+      - id: RuMCUPPNavalInfantryBeltAmmo
         amount: 40
+      - id: RuMCUPPNavalInfantryBeltGrenade
+        amount: 4
       - id: CMUBeltCombatSidearmRig
         amount: 15
-      - id: RMCBeltGrenade
-        amount: 4
-      - id: AU14ShotgunShellLoadingRigUPP
+      - id: RuMCUPPNavalInfantryBeltShotgun
         amount: 6
-      - id: AU14BeltHolsterPistolUPP
+      - id: RuMCUPPNavalInfantryBeltPistol
         amount: 20
-      - id: RMCBeltHolsterRevolver
+      - id: RuMCUPPNavalInfantryBeltRevolver
         amount: 10
-      - id: CMBeltKnifeFilled
-        name: M276 Knife Rig (Full)
+      - id: RuMCUPPNavalInfantryBeltKnife
         amount: 2
-      - id: AU14BeltUtilityGeneralUPP
+      - id: RuMCUPPNavalInfantryBeltGeneral
         amount: 30
     - name: Pouches
       entries:
-      - id: RMCPouchBayonet
+      - id: RuMCUPPPouchBayonet
         name: Bayonet Sheath
         amount: 25
-      - id: RMCPouchFlareFilled
+      - id: RuMCUPPPouchFlareFill
         name: Flare Pouch (Full)
         amount: 30
-      - id: RMCPouchDocumentSmall
+      - id: RuMCUPPPouchDocument
         amount: 3
-      - id: RMCPouchMagazine
+      - id: RuMCUPPPouchMagazine
         amount: 50
-      - id: RMCPouchShotgunLarge
+      #- id: RuMCUPPPouchMagazineLarge
+      #  amount: 8
+      #- id: RuMCUPPPouchShotgun
+      #  amount: 50
+      - id: RuMCUPPPouchShotgunLarge
         amount: 8
-      - id: RMCPouchGeneralMedium
-        amount: 25
-      - id: RMCPouchGeneralLarge
+      - id: RuMCUPPPouchGeneralLarge
         amount: 4
-      - id: RMCPouchMagazinePistol
+      - id: RuMCUPPPouchMagazinePistol
         amount: 25
-      - id: AU14PouchPistolAlt
+      #- id: RuMCUPPPouchMagazinePistolLarge
+      #  amount: 3
+      - id: RuMCUPPPouchPistolAlt
         amount: 20
-      - id: AU14PouchIFAKFill
+      - id: RuMCUPPPouchIFAKFill
         amount: 5
-      - id: RMCPouchConstruction
+      - id: RuMCUPPPouchConstruction
         amount: 5
-      - id: RMCPouchExplosive
+      - id: RuMCUPPPouchExplosive
         amount: 3
-      - id: RMCPouchFuelTank
+      - id: RuMCUPPPouchFuelTank
         amount: 2
-      - id: RMCPouchTools
+      - id: RuMCUPPPouchDrum
+        amount: 4
+      - id: RuMCUPPPouchTools
         amount: 15
     - name: Mask
       entries:
@@ -219,13 +224,13 @@
     sections:
     - name: Food
       entries:
-      - id: AU14MREUPP
+      - id: RuMCirpUPP
         amount: 60
-      - id: AU14BoxMREUPP
+      - id: RuMCBoxIRPUPP
         amount: 10
     - name: Medical Supplies
       entries:
-      - id: AU14PouchIFAKFill
+      - id: RuMCUPPPouchIFAKFill
         name: infantry first aid kit (Full)
         recommended: true
         amount: 30
@@ -317,11 +322,11 @@
         amount: 20
       - id: RMCWeaponPistolM82F
         amount: 4
-      - id: RMCBoxPackFlare
+      - id: RuMCBoxFlareFilled
         amount: 5
-      - id: CMPackFlare
+      - id: RuMCPackFlareWhite
         amount: 12
-      - id: RMCPackFlareCAS
+      - id: RuMCPackFlareRed
         amount: 8
     - name: Gas Mask
       entries:
@@ -546,8 +551,8 @@
       - id: AU14CamoM50Helmet
       - id: AU14UPPPatrolCap
       - id: AU14UPPBoonie
-      - id: AU14UPPUshanka
-      - id: CMHeadCapSPPBeret
+      - id: RuMCUPPNavalInfantryCapUshanka
+      - id: RuMCHeadBeretMarien
     - name: Flight Visor
       choices: { CMUPlatoonAirCrewFlightVisor: 1 }
       entries:
@@ -567,25 +572,25 @@
     - name: Backpack
       choices: { CMUPlatoonAirCrewBackpack: 1 }
       entries:
-      - id: CMSatchelMarine
+      - id: RuMCUPPNavalInfantrySatchel
     - name: Belts
       choices: { CMUPlatoonAirCrewBelts: 1 }
       entries:
-      - id: AU14BeltHolsterPistolUPP
-      - id: AU14BeltUtilityGeneralUPP
+      - id: RuMCUPPNavalInfantryBeltPistol
+      - id: RuMCUPPNavalInfantryBeltGeneral
     - name: Pouches
       choices: { CMUPlatoonAirCrewPouches: 2 }
       entries:
-      - id: RMCPouchBayonet
+      - id: RuMCUPPPouchBayonet
         name: Bayonet Sheath
-      - id: RMCPouchFlareFilled
+      - id: RuMCUPPPouchFlareFill
         name: Flare Pouch (Full)
-      - id: RMCPouchDocumentSmall
-      - id: RMCPouchMagazine
-      - id: RMCPouchGeneralMedium
-      - id: AU14PouchPistolAlt
+      - id: RuMCUPPPouchDocument
+      - id: RuMCUPPPouchMagazine
+      - id: RuMCUPPPouchGeneralLarge
+      - id: RuMCUPPPouchPistolAlt
       - id: RMCPouchMagazinePistolLarge
-      - id: RMCPouchTools
+      - id: RuMCUPPPouchTools
     - name: Glasses
       choices: { CMUPlatoonAirCrewGlasses: 1 }
       entries:
@@ -731,11 +736,11 @@
         amount: 5
     - name: Headgear
       entries:
-      - id: CMHeadCapSPPPeaked
+      - id: RuMCHeadKomisarCap
         amount: 5
-      - id: CMHeadCapSPPBeret
+      - id: RuMCHeadBeretMarien
         amount: 5
-      - id: CMHeadCapSPPUshankaCivilian
+      - id: RuMCUPPNavalInfantryCapUshankaCommander
         amount: 10
     - name: Backpack
       entries:
@@ -750,7 +755,7 @@
       entries:
       - id: RMCLaserDesignator
       - id: RMCWhistle
-      - id: RMCPackFlareCAS
+      - id: RuMCPackFlareRed
     - name: Spare Equipment
       entries:
       - id: ANPRC117GRadioOPFORFilled
@@ -767,9 +772,9 @@
         amount: 4
       - id: RMCWhistle
         amount: 10
-      - id: RMCBoxPackFlareCAS
+      - id: RuMCBoxFlareFilled
         amount: 1
-      - id: RMCPackFlareCAS
+      - id: RuMCPackFlareRed
         amount: 6
       - id: AU14JoeUPP
         amount: 5
@@ -799,8 +804,12 @@
       takeAll: CMUAREssentialEquipment
       entries:
       - id: AU14ArmorSmartGunDesertCombatHarnessUPP
+      - id: RuMCUPPPouchDrum
       - id: RMCScabbardMacheteSGFilled
-
+    - name: au14-vendor-section-headgear
+      choices: { CMHelmet: 1 }
+      entries:
+      - id: RuMCUPPNavalInfantryHeavyHelmet2
     - name: Firearm System
       choices: { CMUPlatoonMG: 1 }
       entries:
@@ -837,13 +846,19 @@
     - name: Apparel
       choices: { CMHat: 1 }
       entries:
-      - id: CMHeadCapSPPBeret
+      - id: RuMCHeadBeretMarien
+      - id: RuMCUPPNavalInfantryCapUshankaCommander
+    - name: Helmet
+      choices: { CMHelmet: 1 }
+      entries:
+      - id: RuMCUPPNavalInfantryHeavyHelmet
+      - id: RuMCUPPNavalInfantryHeavyHelmet2
     - name: Equipment
       takeAll: CMStandard
       entries:
       - id: RMCLaserDesignator
       - id: RMCWhistle
-      - id: RMCPackFlareCAS
+      - id: RuMCPackFlareRed
 
 - type: entity
   parent: ColMarTechBase
@@ -867,7 +882,7 @@
     - name: Apparel
       choices: { CMHat: 1 }
       entries:
-      - id: CMHeadCapSPPBeret
+      - id: RuMCHeadBeretMarien
     - name: Squad Leader Essentials
       takeAll: CMStandard
       entries:
@@ -875,9 +890,9 @@
     - name: Backpack
       choices: { CMBackpack: 1 }
       entries:
-      - id: CMBackpackMarine
+      - id: RuMCUPPNavalInfantryBackpack
       - id: RMCScabbardMacheteFilled
-      - id: CMSatchelMarine
+      - id: RuMCUPPNavalInfantrySatchel
         recommended: true
     - name: Footwear
       entries:
@@ -920,7 +935,7 @@
         name: sandbags x25
         points: 10
         recommended: true
-      - id: RMCPackFlareCAS
+      - id: RuMCPackFlareRed
         points: 7
       - id: RMCWeldingGoggles
         points: 5
@@ -1007,6 +1022,21 @@
       takeOne: SquadSpecKit
       sharedSpecLimit: 1
       entries:
+      - id: RuMCKitUPPHATRPG32
+        giveSquadRoleName: au14-job-name-govforspecialist-heavyantitankUPP
+        givePrefix: au14-job-prefix-govforspecialist-heavyantitankUPP
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: RuMCMachineGunTachankaCase
+        giveSquadRoleName: au14-job-name-govforspecialist-pointmanUPP
+        givePrefix: au14-job-prefix-govforspecialist-pointmanUPP
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
+      - id: RuMCGunAH12Case
+        giveSquadRoleName: au14-job-name-govforspecialist-pointmanUPP
+        givePrefix: au14-job-prefix-govforspecialist-pointmanUPP
+        isAppendSquadRoleName: false
+        isAppendPrefix: true
       - id: CMUType23ShotgunCase
         giveSquadRoleName: au14-job-name-govforspecialist-pointmanUPP
         givePrefix: au14-job-prefix-govforspecialist-pointmanUPP
@@ -1101,12 +1131,12 @@
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
-      - id: RMCSatchelSPPWelder
+      - id: RuMCUPPNavalInfantryBackpackBig
         recommended: true
     - name: Engineering Storage Pouch
       choices: { CMUPouchesCT: 2 }
       entries:
-      - id: RMCPouchConstruction
+      - id: RuMCUPPPouchConstruction
         recommended: true
       - id: RMCPouchEngineerKit
       - id: RMCPouchElectronics
@@ -1219,7 +1249,7 @@
     - name: Hat
       choices: { CMHat: 1 }
       entries:
-      - id: CMHeadCapSPPPeaked
+      - id: RuMCHeadKomisarCap
     - name: Helmet
       choices: { AU14Helmet: 1 }
       entries:
@@ -1235,15 +1265,15 @@
     - name: Backpack
       choices: { CMBackpack: 1 }
       entries:
-      - id: CMSatchelMarine
+      - id: RuMCUPPNavalInfantrySatchel
       - id: CMSatchelSecurity
     - name: Pouches
       choices: { RMCPouch: 2 }
       entries:
-      - id: RMCPouchGeneralMedium
-      - id: AU14PouchIFAKFill
-      - id: RMCPouchMagazinePistol
-      - id: RMCPouchPistol
+      - id: RuMCUPPPouchGeneralLarge
+      - id: RuMCUPPPouchIFAKFill
+      - id: RuMCUPPPouchMagazinePistol
+      - id: RuMCUPPPouchPistolAlt
     - name: Record Keeping
       takeAll: CMRecordKeeping
       entries:
@@ -1293,6 +1323,8 @@
       - id: RMCWeaponRifleType71C
         amount: 3
       - id: RMCWeaponRifleAK4047
+        amount: 10
+      - id: RuMCRifleVAL
         amount: 2
       - id: RMCWeaponPistolNP92Empty
         amount: 15
@@ -1304,6 +1336,8 @@
         amount: 3
       - id: RMCWeaponShotgunType23
         amount: 3
+      - id: RuMCUTES-CCase
+        amount: 1
     - name: primary ammunition
       entries:
       - id: AU14MagazineSmartGunUPP
@@ -1311,16 +1345,34 @@
       - id: AU14MagazineRifleAG80
         amount: 200
       - id: AU14MagazineRifleAG80AP
-        amount: 15
+        amount: 10
       - id: AU14MagazineRifleAG80Ext
         amount: 10
+      - id: RuMCMagazineRifleAG80Tracer
+        amount: 10
       - id: RMCMagazineRifleAK4047
-        amount: 60
+        amount: 30
+      - id: RuMCMagazineRifleAK4047bakelite
+        amount: 30
+      - id: RuMCMagazineRifleAK4047bakeliteLarge
+        amount: 10
       - id: RMCMagazineRifleAK4047AP
+        amount: 3
+      - id: RuMCMagazineRifleAK4047APbakelite
+        amount: 3
+      - id: RuMCMagazineRifleAK4047Tracer
         amount: 15
+      - id: RuMCMagazineRifleAK4047buben
+        amount: 3
+      - id: RuMCMagazineVAL
+        amount: 60
+      - id: RuMCMagazineVALAP
+        amount: 5
       - id: RMCMagazineRifleType71
         amount: 150
       - id: RMCMagazineRifleType71AP
+        amount: 10
+      - id: RuMCMagazineRifleType71Tracer
         amount: 15
       - id: RMCBoxShotgunHeavyBuckshot
         amount: 20
@@ -1348,18 +1400,41 @@
         amount: 40
     - name: Magazine Boxes
       entries:
-      - id: CMUBoxMagazineRifleAG80
+      - id: RuMCBoxMagazineSMGType64
         amount: 2
-      - id: RMCBoxMagazinePistolType73
+      - id: RuMCBoxMagazineRifleAG80
         amount: 2
+      - id: RuMCBoxMagazineRifleAK4047
+        amount: 2
+      - id: RuMCBoxMagazineRifleType71
+        amount: 2
+      - id: RuMCBoxMagazineSMGType64
+        amount: 2
+      - id: RuMCBoxMagazinePistolNP92
+        amount: 2
+      - id: RuMCBoxMagazinePistolType73
+        amount: 2
+      #RuMCBoxMagazineRifleType71AP
+      #RuMCBoxMagazineRifleAK4047AP
+      #RuMCBoxMagazineRifleAG80AP
+      #RuMCBoxMagazineRifleAG80EXT
     - name: Ammo Boxes
       entries:
-      - id: CMUBoxBulletsRifleAG80
+      - id: RuMCBoxBulletsSMG10x20mm
         amount: 5
-      - id: RMCBoxBulletsSMG
+      - id: RuMCBoxBulletsRifleAG80
         amount: 5
-      - id: CMUBoxBulletsPistolType73
+      - id: RuMCBoxBulletsRifle10x24mm
         amount: 5
+      - id: RuMCBoxBulletsRifleType71
+        amount: 5
+      - id: RuMCBoxBulletsPistol762x25mm
+        amount: 5
+      #RuMCBoxBulletsRifleAG80AP
+      #RuMCBoxBulletsRifle10x24mmAP
+      #RuMCBoxBulletsRifleType71AP
+      #
+      #
     - name: explosives
       entries:
       - id: AU14PacketGrenadeHighExplosiveUPPFilled
@@ -1380,7 +1455,9 @@
         amount: 6
       - id: RMCExplosivePlastic
         amount: 8
-      - id: RMCWeaponLauncherDisposableFolded
+      - id: RuMCWeaponLauncherDisposableFolded
+        amount: 2
+      - id: RuMCWeaponLauncherDisposableFoldedIncen
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12
@@ -1416,10 +1493,16 @@
         amount: 4
     - name: Pouches
       entries:
-      - id: RMCPouchMagazineLarge
+      - id: RuMCUPPPouchMagazineLarge
         amount: 10
-      - id: RMCPouchMagazinePistolLarge
+      - id: RuMCUPPPouchMagazinePistolLarge
         amount: 10
+    - name: Helmet
+      entries:
+      - id: RuMCUPPNavalInfantryHeavyHelmet
+        amount: 2
+      - id: RuMCUPPNavalInfantryHeavyHelmet2
+        amount: 4
     - name: Devices
       entries:
       - id: AU14PowerCellSmartgunUPP
@@ -1481,7 +1564,7 @@
     - name: Flag
       entries:
       - id: AU14FlagCarriableUPP
-        amount: 1
+        amount: 2
 
 - type: entity
   parent: ColMarTechBase
@@ -1499,11 +1582,11 @@
       entries:
       - id: AU14UPPPatrolCap
         amount: 20
-      - id: CMHeadCapSPPBeret
+      - id: RuMCHeadBeretMarien
         amount: 15
       - id: AU14UPPBoonie
         amount: 15
-      - id: AU14UPPUshanka
+      - id: RuMCUPPNavalInfantryCapUshanka
         amount: 40
     - name: Fatigues
       entries:
@@ -1545,5 +1628,5 @@
         amount: 25
     - name: Bag
       entries:
-      - id: CMSatchelMarine
+      - id: RuMCUPPNavalInfantrySatchel
         amount: 40
