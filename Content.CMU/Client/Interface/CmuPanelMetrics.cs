@@ -1,6 +1,6 @@
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     The measurements the CRT panels share: how tall a control is, how far things sit from a

@@ -1,7 +1,7 @@
 using Content.Client.Stylesheets;
 using Robust.Client.UserInterface.Controls;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     The lobby ready toggle's two looks, in one place.

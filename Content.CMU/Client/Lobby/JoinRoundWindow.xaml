@@ -1,6 +1,6 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-               xmlns:ui="clr-namespace:Content.Client._CMU14.Interface"
+               xmlns:ui="clr-namespace:Content.Client.CMU14.Interface"
                MinWidth="{x:Static ui:CmuPanelMetrics.ChoiceWindowWidth}">
     <!-- A ground and a slot. The four faction choices are CmuChoiceCards built in the code-behind,
          which is also where their colours live - see CmuChoiceCard for why the look is not a style

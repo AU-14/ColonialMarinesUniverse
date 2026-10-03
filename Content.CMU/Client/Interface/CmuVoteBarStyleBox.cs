@@ -1,7 +1,7 @@
 using Robust.Client.Graphics;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     A vote option's row: a track, a fill showing that option's share of the votes so far, and an

@@ -3,7 +3,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.UserInterface.Options;
+namespace Content.Client.CMU14.UserInterface.Options;
 
 /// <summary>
 ///     A collapsible group of options with a banded, clickable heading.

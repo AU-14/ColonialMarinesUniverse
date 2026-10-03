@@ -1,6 +1,6 @@
 using System;
 using Content.Client.Lobby.UI;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Shared.CCVar;
 using JetBrains.Annotations;
@@ -12,7 +12,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
 
-namespace Content.Client._CMU14.Lobby;
+namespace Content.Client.CMU14.Lobby;
 
 /// <summary>
 ///     The faction choices, moved off the lobby panel and behind a single "Join the round" button.

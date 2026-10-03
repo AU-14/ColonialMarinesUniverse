@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Client.Stylesheets;
 using Content.Shared.CCVar;
 using Robust.Client.Graphics;
@@ -7,7 +7,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.IoC;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     Draws <see cref="Source"/> through the CRT shader - scanlines, crawling grain, and a roll bar

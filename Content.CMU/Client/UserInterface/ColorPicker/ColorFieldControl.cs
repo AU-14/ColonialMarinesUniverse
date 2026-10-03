@@ -6,7 +6,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.UserInterface.ColorPicker;
+namespace Content.Client.CMU14.UserInterface.ColorPicker;
 
 /// <summary>
 ///     A draggable colour field. Paints a <see cref="ColorSelectorStyleBox"/> and reports the pointer

@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Content.Client._CMU14.Interface;
-using Content.Client._CMU14.Lobby;
-using Content.Client._CMU14.UserInterface.Options;
+using Content.Client.CMU14.Interface;
+using Content.Client.CMU14.Lobby;
+using Content.Client.CMU14.UserInterface.Options;
 using Content.Client._RMC14.LinkAccount;
 using Content.Client.Audio;
 using Content.Client.GameTicking.Managers;

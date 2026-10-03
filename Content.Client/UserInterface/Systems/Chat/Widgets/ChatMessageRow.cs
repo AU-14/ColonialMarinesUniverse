@@ -1,6 +1,6 @@
 using System;
 using System.Numerics;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Client.Resources;
 using Content.Client.UserInterface.RichText;
