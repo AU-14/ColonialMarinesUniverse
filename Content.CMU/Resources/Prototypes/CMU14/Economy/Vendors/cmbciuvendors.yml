@@ -46,7 +46,7 @@
       entries:
       - id: AU14CMBCIUHelmet
         amount: 40
-      - id: AU14HelmetGarbRiotVisor
+      - id: RMCVisorSWAT
         amount: 40
       - id: RMCHeadCapBureau
         amount: 25
@@ -227,7 +227,7 @@
         amount: 2
     - name: Gas Mask
       entries:
-      - id: CMMaskGas
+      - id: RMCMaskSWAT
         amount: 40
       - id: CMMaskPrescriptionGas
         amount: 10
