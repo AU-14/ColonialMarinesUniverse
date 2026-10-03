@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared.Physics;
 using Content.Shared.Projectiles;
+using Robust.Shared.Physics; // CMU14
 using Robust.Shared.Physics.Events;
 
 namespace Content.Shared._RMC14.Projectiles.Penetration;
@@ -17,8 +18,9 @@ public sealed partial class RMCPenetratingProjectileSystem : EntitySystem
     {
         SubscribeLocalEvent<RMCPenetratingProjectileComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<RMCPenetratingProjectileComponent, PreventCollideEvent>(OnPreventCollide);
-        SubscribeLocalEvent<RMCPenetratingProjectileComponent, StartCollideEvent>(OnStartCollide, after: [typeof(SharedProjectileSystem)]);
+        // SubscribeLocalEvent<RMCPenetratingProjectileComponent, StartCollideEvent>(OnStartCollide, after: [typeof(SharedProjectileSystem)]); // CMU14: both hit transports use ProjectileHitAcceptedEvent.
         SubscribeLocalEvent<RMCPenetratingProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
+        SubscribeLocalEvent<RMCPenetratingProjectileComponent, ProjectileHitAcceptedEvent>(OnHitAccepted); // CMU14
         SubscribeLocalEvent<RMCPenetratingProjectileComponent, AfterProjectileHitEvent>(OnAllowAdditionalHits);
     }
 
@@ -58,30 +60,51 @@ public sealed partial class RMCPenetratingProjectileSystem : EntitySystem
         Dirty(ent);
     }
 
-    /// <summary>
-    ///     Reduce the projectile damage and range based on what kind of target the projectile is colliding with.
-    /// </summary>
-    private void OnStartCollide(Entity<RMCPenetratingProjectileComponent> ent, ref StartCollideEvent args)
+    // CMU14 method: accepted physical and reported hits use the same target material.
+    private void OnHitAccepted(Entity<RMCPenetratingProjectileComponent> ent, ref ProjectileHitAcceptedEvent args)
     {
-        if(!TryComp(ent, out ProjectileComponent? projectile) || ent.Comp.ShotFrom == null)
-            return;
-
+        var target = args.Target;
+        var projectile = args.Projectile.Comp;
         var rangeLoss = ent.Comp.RangeLossPerHit;
         var damageLoss = ent.Comp.DamageMultiplierLossPerHit;
-       _rmcSize.TryGetSize(args.OtherEntity, out var size);
+        _rmcSize.TryGetSize(target, out var size);
+
+        var hardTarget = false;
+        if (TryComp(target, out FixturesComponent? fixtures) &&
+            TryComp(ent, out FixturesComponent? projectileFixtures))
+        {
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                if (!fixture.Hard || (fixture.CollisionLayer & HardCollisionGroup) == 0)
+                    continue;
+
+                foreach (var projectileFixture in projectileFixtures.Fixtures.Values)
+                {
+                    if ((projectileFixture.CollisionMask & fixture.CollisionLayer) == 0 &&
+                        (fixture.CollisionMask & projectileFixture.CollisionLayer) == 0)
+                        continue;
+
+                    hardTarget = true;
+                    break;
+                }
+
+                if (hardTarget)
+                    break;
+            }
+        }
 
         // Apply damage and range loss multipliers depending on target hit.
-        if ((args.OtherFixture.CollisionLayer & HardCollisionGroup) != 0)
+        if (hardTarget)
         {
             // Thick Membranes have a lower multiplier.
-            if (TryComp(args.OtherEntity, out OccluderComponent? occluder) &&
+            if (TryComp(target, out OccluderComponent? occluder) &&
                 !occluder.Enabled)
             {
                 rangeLoss *= ent.Comp.ThickMembraneMultiplier;
                 damageLoss *=  ent.Comp.ThickMembraneMultiplier;
 
                 // Normal membranes have an even lower multiplier.
-                if (HasComp<XenoStructureUpgradeableComponent>(args.OtherEntity))
+                if (HasComp<XenoStructureUpgradeableComponent>(target))
                 {
                     rangeLoss *= ent.Comp.MembraneMultiplier;
                     damageLoss *=  ent.Comp.MembraneMultiplier;
@@ -114,8 +137,10 @@ public sealed partial class RMCPenetratingProjectileSystem : EntitySystem
         if(ent.Comp.ShotFrom == null)
             return;
 
-        var distanceTravelled =
-            (_transform.GetMoverCoordinates(ent).Position - ent.Comp.ShotFrom.Value.Position).Length();
+        // CMU14: accepted hits already consumed their range before target destruction.
+        if (!ent.Comp.ShotFrom.Value.TryDistance(EntityManager, _transform, _transform.GetMoverCoordinates(ent), out var distanceTravelled))
+            return;
+        // CMU14 end
         var range = ent.Comp.Range - distanceTravelled;
 
         if (range < 0)
@@ -131,3 +156,7 @@ public sealed partial class RMCPenetratingProjectileSystem : EntitySystem
 /// </summary>
 [ByRefEvent]
 public record struct AfterProjectileHitEvent(Entity<ProjectileComponent> Projectile, EntityUid Target);
+
+// CMU14: raised once, after veto/deduplication and before target damage.
+[ByRefEvent]
+public readonly record struct ProjectileHitAcceptedEvent(Entity<ProjectileComponent> Projectile, EntityUid Target);

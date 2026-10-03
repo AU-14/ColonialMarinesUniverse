@@ -162,6 +162,11 @@ public abstract partial class SharedProjectileSystem : EntitySystem
         if (ev.Handled)
             return;
 
+        // CMU14: accepted-hit bookkeeping observes the target before damage can destroy it.
+        // The current hit's damage has already been captured in ev.
+        var acceptedHit = new ProjectileHitAcceptedEvent(projectile, target);
+        RaiseLocalEvent(uid, ref acceptedHit);
+
         // CMU14: intact dropship hulls forward hits to their grid's integrity pool without Damageable.
         if (_net.IsServer)
         {

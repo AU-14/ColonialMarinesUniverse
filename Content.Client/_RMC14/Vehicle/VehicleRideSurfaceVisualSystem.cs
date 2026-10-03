@@ -7,6 +7,7 @@ using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 using RmcDrawDepth = Content.Shared.DrawDepth.DrawDepth;
 using Robust.Client.GameObjects;
+using Robust.Client.GameStates; // CMU14
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 
@@ -16,7 +17,9 @@ public sealed partial class VehicleRideSurfaceVisualSystem : EntitySystem
 {
     private const float RiderPositionEpsilon = 0.000001f;
 
+    [Dependency] private IClientGameStateManager _gameStates = default!; // CMU14
     [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private VehicleRideSurfaceSystem _rideSurface = default!; // CMU14
     [Dependency] private RMCSpriteSystem _rmcSprite = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -34,12 +37,14 @@ public sealed partial class VehicleRideSurfaceVisualSystem : EntitySystem
             after: [typeof(XenoHideVisualizerSystem), typeof(XenoVisualizerSystem), typeof(RMCBuckleVisualsSystem)]);
 
         EntityManager.ComponentRemoved += OnComponentRemoved;
+        _gameStates.GameStateApplied += OnGameStateApplied; // CMU14: reset carry after all transforms are restored.
     }
 
     public override void Shutdown()
     {
         base.Shutdown();
         EntityManager.ComponentRemoved -= OnComponentRemoved;
+        _gameStates.GameStateApplied -= OnGameStateApplied; // CMU14
     }
 
     public override void Update(float frameTime)
@@ -83,7 +88,14 @@ public sealed partial class VehicleRideSurfaceVisualSystem : EntitySystem
 
     private void OnRiderState(Entity<VehicleRideSurfaceRiderComponent> ent, ref AfterAutoHandleStateEvent args)
     {
+        _rideSurface.RefreshRider(ent); // CMU14: state reception does not replay the climb that originally registered this rider.
         _rmcSprite.UpdateDrawDepth(ent.Owner);
+    }
+
+    // CMU14 method
+    private void OnGameStateApplied(GameStateAppliedArgs args)
+    {
+        _rideSurface.ResetCarryPrediction();
     }
 
     private void OnComponentRemoved(RemovedComponentEventArgs args)

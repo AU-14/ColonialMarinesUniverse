@@ -63,6 +63,7 @@ namespace Content.Client.Actions
 
             SubscribeLocalEvent<EntityTargetActionComponent, ActionTargetAttemptEvent>(OnEntityTargetAttempt);
             SubscribeLocalEvent<WorldTargetActionComponent, ActionTargetAttemptEvent>(OnWorldTargetAttempt);
+            InitializeCmuActionQueue(); // CMU14
         }
 
 
@@ -183,6 +184,7 @@ namespace Content.Client.Actions
 
         private void OnPlayerDetached(EntityUid uid, ActionsComponent component, LocalPlayerDetachedEvent args)
         {
+            _cmuRequestedActions.Clear(); // CMU14: queued input belongs to the detached character.
             UnlinkAllActions();
         }
 
@@ -204,6 +206,7 @@ namespace Content.Client.Actions
 
         public override void Shutdown()
         {
+            _cmuRequestedActions.Clear(); // CMU14
             base.Shutdown();
             CommandBinds.Unregister<ActionsSystem>();
         }
@@ -222,6 +225,12 @@ namespace Content.Client.Actions
             {
                 PerformAction(user, action);
             }
+            // CMU14 Begin: opt-in initial execution on a simulation tick.
+            else if (!GameTiming.InSimulation && action.Comp.InSimulationOnly)
+            {
+                QueueCmuAction(user, action);
+            }
+            // CMU14 End
             else
             {
                 var request = new RequestPerformActionEvent(GetNetEntity(action), _rmcLagCompensation.GetLastRealTick(null));
@@ -359,6 +368,12 @@ namespace Content.Client.Actions
 
                 PerformAction((user, user.Comp), (uid, action));
             }
+            // CMU14 Begin: keep selected target data until tick-aligned dispatch.
+            else if (!GameTiming.InSimulation && action.InSimulationOnly)
+            {
+                QueueCmuAction(user, uid, GetNetEntity(targetEnt), GetNetCoordinates(coords));
+            }
+            // CMU14 End
             else
                 RaisePredictiveEvent(new RequestPerformActionEvent(GetNetEntity(uid), GetNetEntity(targetEnt), GetNetCoordinates(coords), _rmcLagCompensation.GetLastRealTick(null)));
 
@@ -398,6 +413,12 @@ namespace Content.Client.Actions
 
                 PerformAction((user, user.Comp), (uid, action));
             }
+            // CMU14 Begin: keep selected target data until tick-aligned dispatch.
+            else if (!GameTiming.InSimulation && action.InSimulationOnly)
+            {
+                QueueCmuAction(user, uid, GetNetEntity(entity));
+            }
+            // CMU14 End
             else
             {
                 RaisePredictiveEvent(new RequestPerformActionEvent(GetNetEntity(uid), GetNetEntity(entity), _rmcLagCompensation.GetLastRealTick(null)));

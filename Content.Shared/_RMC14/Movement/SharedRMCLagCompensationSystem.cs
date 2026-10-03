@@ -26,6 +26,7 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
     private EntityQuery<FixturesComponent> _fixturesQuery;
     private int _substeps;
     private float _substepTime;
+    private TimeSpan _maxRewind; // CMU14: bound client view snapshots independently of execution substeps.
     private bool _logPrediction = false;
 
     private readonly Dictionary<NetUserId, (GameTick Tick, int Substep)> _lastRealTicks = new(); // CMU14: substep stored with the tick
@@ -42,11 +43,14 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
         Subs.CVar(_config, RMCCVars.RMCLagCompensationMarginTiles, v => MarginTiles = v, true);
         Subs.CVar(_config, CVars.NetTickrate, UpdateSubsteps, true);
         Subs.CVar(_config, CVars.TargetMinimumTickrate, UpdateSubsteps, true);
+        Subs.CVar(_config, RMCCVars.RMCLagCompensationMilliseconds, v => _maxRewind = TimeSpan.FromMilliseconds(v), true); // CMU14
     }
 
     private void OnSetLastRealTick(RMCSetLastRealTickEvent msg, EntitySessionEventArgs args)
     {
-        SetLastRealTick(args.SenderSession.UserId, msg.Tick - 1, msg.Substep); // CMU14
+        // CMU14: LastRealTick already identifies the applied snapshot; physics phase is not part of that view.
+        if (IsValidViewTick(msg.Tick))
+            SetLastRealTick(args.SenderSession.UserId, msg.Tick);
     }
 
     private void UpdateSubsteps(int _)
@@ -164,6 +168,10 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
         var substeppedProjectilePos = projectileCoordinates.Position + (projectileVelocity / _timing.TickRate) * (substep / (float)_substeps);
 
         var targetCoordinates = _transform.ToMapCoordinates(GetCoordinates(target, perspectiveSession));
+        // CMU14: overlapping XY on separate maps is never a collision.
+        if (projectileCoordinates.MapId == MapId.Nullspace || projectileCoordinates.MapId != targetCoordinates.MapId)
+            return false;
+
         var transform = new Transform(targetCoordinates.Position, 0);
         var targetBounds = new Box2(transform.Position, transform.Position);
 
@@ -226,14 +234,35 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
         return false;
     }
 
-    // CMU14 method: single validation point for predicted-hit messages so every leaper
-    // and shooter rewinds the session identically before testing collision
-    public bool ValidatePredictedHit(Entity<FixturesComponent?> target, Entity<PhysicsComponent?> projectile, ICommonSession? session, GameTick lastRealTick, int substep)
+    // CMU14 method: a snapshot describes the viewed target; execution phase only projects the projectile.
+    public bool ValidatePredictedHit(Entity<FixturesComponent?> target, Entity<PhysicsComponent?> projectile, ICommonSession? session, GameTick lastRealTick, int executionSubstep)
     {
-        if (session != null)
-            SetLastRealTick(session.UserId, lastRealTick, substep);
+        if (!IsValidViewTick(lastRealTick) || executionSubstep < -_substeps || executionSubstep > _substeps)
+            return false;
 
-        return Collides(target, projectile, session, substep);
+        if (session == null || _net.IsClient)
+            return Collides(target, projectile, session, executionSubstep);
+
+        // A hit report must not change the rewind context of unrelated interactions or later updates.
+        var hadPrevious = _lastRealTicks.TryGetValue(session.UserId, out var previous);
+        SetLastRealTick(session.UserId, lastRealTick);
+        try
+        {
+            return Collides(target, projectile, session, executionSubstep);
+        }
+        finally
+        {
+            if (hadPrevious)
+                _lastRealTicks[session.UserId] = previous;
+            else
+                _lastRealTicks.Remove(session.UserId);
+        }
+    }
+
+    // CMU14 method: reject future and expired view stamps before accepting authoritative effects.
+    private bool IsValidViewTick(GameTick tick)
+    {
+        return tick <= _timing.CurTick && (_timing.CurTick - tick.Value).Value * _timing.TickPeriod <= _maxRewind;
     }
 
     public int? GetCurrentSubstep()

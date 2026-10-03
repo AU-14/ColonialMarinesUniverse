@@ -436,6 +436,20 @@ public sealed partial class XenoProjectileSystem : EntitySystem
             return false;
 
         _audio.PlayPredicted(sound, xeno, xeno);
+
+        // CMU14: identity is simulation state. Reconstruct allocations after rollback
+        // even though the corresponding presentation entities are spawned only once.
+        XenoProjectileShooterComponent? shooter = null;
+        var firstShotId = 0;
+        if (predicted)
+        {
+            shooter = EnsureComp<XenoProjectileShooterComponent>(xeno);
+            firstShotId = shooter.NextId;
+            shooter.NextId += shots;
+            Dirty(xeno, shooter);
+        }
+        // CMU14 end
+
         if (_net.IsClient && !_gunPrediction.GunPrediction || !_timing.IsFirstTimePredicted)
             return true;
 
@@ -444,7 +458,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
         if (target != null && HasComp<MobStateComponent>(target) && !_xeno.CanAbilityAttackTarget(xeno, target.Value))
             target = null;
 
-        XenoProjectileShooterComponent? shooter = null;
+        // XenoProjectileShooterComponent? shooter = null; // CMU14: allocated before the replay guard.
         var shooterPlayer = CompOrNull<ActorComponent>(xeno)?.PlayerSession;
         var xoroshiro = _rmcPseudoRandom.GetXoroshiro64S(xeno);
 
@@ -518,7 +532,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
                 Dirty(xeno, shooter);
 
                 var shot = EnsureComp<XenoProjectileShotComponent>(projectile);
-                shot.Id = shooter.NextId++;
+                shot.Id = firstShotId + i; // CMU14: replayable allocation is separate from spawning.
                 shot.Shooter = shooterPlayer;
                 shot.ShooterEnt = xeno;
                 shot.ShotAtTick = _timing.CurTick;
