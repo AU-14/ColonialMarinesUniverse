@@ -7,6 +7,7 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
+using Content.Shared.CMU14.Timing; // CMU14
 using Content.Shared.DoAfter;
 using Content.Shared.Hands;
 using Content.Shared.Interaction;
@@ -158,7 +159,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
     /// </summary>
     public void SetCooldown(Entity<ActionComponent?>? action, TimeSpan cooldown)
     {
-        var start = GameTiming.CurTime;
+        var start = CmuPredictionTiming.GetSimulationTime(GameTiming); // CMU14
         SetCooldown(action, start, start + cooldown);
     }
 
@@ -170,13 +171,13 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (ent.Comp.Cooldown is not { } cooldown)
             return;
 
-        if (cooldown.End == GameTiming.CurTime)
+        if (cooldown.End == CmuPredictionTiming.GetSimulationTime(GameTiming)) // CMU14
             return;
 
         ent.Comp.Cooldown = new ActionCooldown
         {
             Start = cooldown.Start,
-            End = GameTiming.CurTime
+            End = CmuPredictionTiming.GetSimulationTime(GameTiming) // CMU14
         };
         DirtyField(ent, ent.Comp, nameof(ActionComponent.Cooldown));
     }
@@ -189,7 +190,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (GetAction(action) is not { } ent || cooldown < TimeSpan.Zero)
             return;
 
-        var start = GameTiming.CurTime;
+        var start = CmuPredictionTiming.GetSimulationTime(GameTiming); // CMU14
         var end = start + cooldown;
         if (ent.Comp.Cooldown?.End > end)
             return;
@@ -322,7 +323,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (!action.Comp.Enabled)
             return false;
 
-        var curTime = GameTiming.CurTime;
+        var curTime = CmuPredictionTiming.GetSimulationTime(GameTiming); // CMU14
         if (IsCooldownActive(action, curTime))
             return false;
 
@@ -819,6 +820,12 @@ public abstract partial class SharedActionsSystem : EntitySystem
         AddActionDirect(performer, actionId);
     }
 
+    // CMU14 method: expose ownership without granting callers execution access to the mutable action set.
+    public bool HasAction(EntityUid holderId, EntityUid actionId)
+    {
+        return _actionsQuery.TryComp(holderId, out var actions) && actions.Actions.Contains(actionId);
+    }
+
     public IEnumerable<Entity<ActionComponent>> GetActions(EntityUid holderId, ActionsComponent? actions = null)
     {
         if (!Resolve(holderId, ref actions, false))
@@ -936,7 +943,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (!comp.Enabled)
             return false;
 
-        var curTime = GameTiming.CurTime;
+        var curTime = CmuPredictionTiming.GetSimulationTime(GameTiming); // CMU14
         if (comp.Cooldown.HasValue && comp.Cooldown.Value.End > curTime)
             return false;
 
@@ -1108,7 +1115,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
     public bool IsCooldownActive(ActionComponent action, TimeSpan? curTime = null)
     {
         // TODO: Check for charge recovery timer
-        curTime ??= GameTiming.CurTime;
+        curTime ??= CmuPredictionTiming.GetSimulationTime(GameTiming); // CMU14
         return action.Cooldown.HasValue && action.Cooldown.Value.End > curTime;
     }
 

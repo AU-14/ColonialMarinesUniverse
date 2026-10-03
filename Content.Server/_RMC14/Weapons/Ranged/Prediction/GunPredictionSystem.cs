@@ -1,5 +1,6 @@
 using Content.Server._RMC14.Movement;
 using Content.Server.Movement.Components;
+using Content.Server.Movement.Systems; // CMU14
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
@@ -21,6 +22,7 @@ namespace Content.Server._RMC14.Weapons.Ranged.Prediction;
 public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 {
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private LagCompensationSystem _lagCompensation = default!; // CMU14
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedProjectileSystem _projectile = default!;
     [Dependency] private RMCLagCompensationSystem _rmcLagCompensation = default!;
@@ -140,25 +142,17 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         var projectileCoordinates = _transform.GetMapCoordinates(projectile);
         var projectilePosition = projectileCoordinates.Position;
 
-        MapCoordinates lowestCoordinate = default;
-        var otherCoordinates = EntityCoordinates.Invalid;
         var ping = projectile.Comp1.Shooter?.Channel.Ping ?? 0;
         // Use 1.5 due to the trip buffer.
         var sentTime = _timing.CurTime - TimeSpan.FromMilliseconds(ping * 1.5);
         var pingTime = TimeSpan.FromMilliseconds(ping);
 
-        foreach (var pos in other.Comp1.Positions)
-        {
-            otherCoordinates = pos.Item2;
-            if (pos.Item1 >= sentTime)
-                break;
-            else if (lowestCoordinate == default && pos.Item1 >= sentTime - pingTime)
-                lowestCoordinate = _transform.ToMapCoordinates(pos.Item2);
-        }
-
-        var otherMapCoordinates = otherCoordinates == default
-            ? _transform.GetMapCoordinates(other)
-            : _transform.ToMapCoordinates(otherCoordinates);
+        // CMU14 History Begin: use the same predecessor/equal-timestamp policy as other compensated hits.
+        var (otherCoordinates, _) = _lagCompensation.GetCoordinatesAngleAtTime(other, sentTime, other.Comp4);
+        var hasLowestCoordinate = _lagCompensation.TryGetHistoricalCoordinatesAngleAtTime(other, sentTime - pingTime, out var lowestCoordinates, out _);
+        var otherMapCoordinates = _transform.ToMapCoordinates(otherCoordinates);
+        var lowestCoordinate = hasLowestCoordinate ? _transform.ToMapCoordinates(lowestCoordinates) : MapCoordinates.Nullspace;
+        // CMU14 End
 
         if (!IsSameMap(projectileCoordinates, otherMapCoordinates))
             return false;
@@ -171,7 +165,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
         if (clientCoordinates != null &&
             (clientCoordinates.Value.InRange(otherMapCoordinates, _coordinateDeviation) ||
-             clientCoordinates.Value.InRange(lowestCoordinate, _lowestCoordinateDeviation)))
+             hasLowestCoordinate && clientCoordinates.Value.InRange(lowestCoordinate, _lowestCoordinateDeviation))) // CMU14: no extra tolerance around a current-position fallback.
         {
             otherMapCoordinates = clientCoordinates.Value;
         }

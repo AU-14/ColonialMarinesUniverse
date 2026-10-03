@@ -37,7 +37,9 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         SubscribeLocalEvent<VehicleTurretComponent, AttemptShootEvent>(OnAttemptShoot,
             after: new[] { typeof(GunMuzzleOffsetSystem), typeof(VehicleTurretMuzzleSystem) },
             before: new[] { typeof(GunFireArcSystem) });
-        SubscribeNetworkEvent<VehicleTurretRotateEvent>(OnRotateEvent);
+        // CMU14: predictive commands are delivered locally on both the first pass and replay.
+        // SubscribeNetworkEvent<VehicleTurretRotateEvent>(OnRotateEvent);
+        SubscribeAllEvent<VehicleTurretRotateEvent>(OnRotateEvent);
     }
 
     public override void Update(float frameTime)
@@ -111,8 +113,9 @@ public sealed partial class VehicleTurretSystem : EntitySystem
 
     private void OnRotateEvent(VehicleTurretRotateEvent args, EntitySessionEventArgs session)
     {
-        if (_net.IsClient && !_timing.IsFirstTimePredicted)
-            return;
+        // CMU14: replay must reconstruct the target and reversal deadline after rollback.
+        // if (_net.IsClient && !_timing.IsFirstTimePredicted)
+        //     return;
 
         if (_net.IsClient && _timing.ApplyingState)
             return;
@@ -733,6 +736,7 @@ public sealed partial class VehicleTurretSystem : EntitySystem
 
         var sign = turret.PendingDirectionSign;
         turret.PendingDirectionSign = 0;
+        Dirty(turretUid, turret); // CMU14: consuming a pending reversal changes networked state.
 
         ApplyTargetRotation(turretUid, turret, vehicle, pending, sign);
     }
@@ -758,14 +762,22 @@ public sealed partial class VehicleTurretSystem : EntitySystem
             turret.LastAppliedDirectionSign != 0 &&
             directionSign != turret.LastAppliedDirectionSign)
         {
+            // CMU14: repeated aim packets do not change an already queued reversal.
+            if (turret.PendingTargetRotation == desiredRotation && turret.PendingDirectionSign == directionSign)
+                return;
+
             if (turret.PendingTargetRotation == null || turret.PendingDirectionSign != directionSign)
                 turret.PendingTargetApplyAt = _timing.CurTime + TimeSpan.FromSeconds(turret.ReverseDirectionDelay);
 
             turret.PendingTargetRotation = desiredRotation;
             turret.PendingDirectionSign = directionSign;
+            Dirty(turretUid, turret); // CMU14: rollback must restore the pending reversal, not just the angle.
             return;
         }
 
+        // CMU14: clearing a pending reversal also needs to survive reconciliation.
+        if (turret.PendingTargetRotation != null || turret.PendingTargetApplyAt != TimeSpan.Zero || turret.PendingDirectionSign != 0)
+            Dirty(turretUid, turret);
         turret.PendingTargetRotation = null;
         turret.PendingTargetApplyAt = TimeSpan.Zero;
         turret.PendingDirectionSign = 0;
@@ -787,8 +799,13 @@ public sealed partial class VehicleTurretSystem : EntitySystem
             changed = true;
         }
 
-        if (directionSign != 0)
+        // CMU14 Begin: reversal direction is part of the replayed state.
+        if (directionSign != 0 && turret.LastAppliedDirectionSign != directionSign)
+        {
             turret.LastAppliedDirectionSign = directionSign;
+            changed = true;
+        }
+        // CMU14 End
 
         if (turret.RotationSpeed <= 0f)
         {

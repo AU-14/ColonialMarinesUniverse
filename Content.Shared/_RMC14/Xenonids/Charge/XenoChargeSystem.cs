@@ -880,7 +880,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
                 if (_xenoToggleChargingRecentlyHitQuery.TryComp(hit.Target, out var recently) &&
                     time < recently.LastHitAt + recently.Cooldown)
                 {
-                    return;
+                    continue; // CMU14: this pair must not discard other queued impacts or charge resets.
                 }
 
                 var ev = new XenoToggleChargingCollideEvent(hit.Crusher);

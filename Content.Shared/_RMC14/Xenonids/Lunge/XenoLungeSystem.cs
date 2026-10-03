@@ -68,8 +68,9 @@ public sealed partial class XenoLungeSystem : EntitySystem
 
     private void OnPredictedHit(XenoLungePredictedHitEvent msg, EntitySessionEventArgs args)
     {
-        if (_net.IsClient)
-            return;
+        // CMU14: saved predictive hit events must also rebuild local effects on replay.
+        // if (_net.IsClient)
+        //     return;
 
         if (args.SenderSession.AttachedEntity is not { } ent)
             return;
@@ -87,7 +88,7 @@ public sealed partial class XenoLungeSystem : EntitySystem
         // if (lunging.Target != target)
         //     return;
 
-        if (!_rmcLagCompensation.ValidatePredictedHit(target, ent, args.SenderSession, msg.LastRealTick, msg.Substep)) // CMU14
+        if (_net.IsServer && !_rmcLagCompensation.ValidatePredictedHit(target, ent, args.SenderSession, msg.LastRealTick, msg.Substep)) // CMU14
             return;
 
         ApplyLungeHitEffects((ent, lunging), target, true, false);
@@ -115,8 +116,11 @@ public sealed partial class XenoLungeSystem : EntitySystem
         _rmcPulling.TryStopAllPullsFromAndOn(xeno);
 
         var origin = _transform.GetMapCoordinates(xeno);
-        var targetCoords = _rmcLagCompensation.GetCoordinates(target, xeno);
+        // CMU14: direction and obstruction checks use map space on translated/rotated grids.
+        var targetCoords = _transform.ToMapCoordinates(_rmcLagCompensation.GetCoordinates(target, xeno));
         var diff = targetCoords.Position - origin.Position;
+        if (origin.MapId != targetCoords.MapId || diff.LengthSquared() < 0.0001f)
+            return;
         diff = diff.Normalized() * xeno.Comp.Range;
 
         // CMU14: lunges must not cross barricade lines; the throw only stops on a
@@ -136,7 +140,8 @@ public sealed partial class XenoLungeSystem : EntitySystem
         active.Origin = origin;
         active.Charge = diff;
         active.Target = target;
-        active.TargetCoordinates = _transform.ToMapCoordinates(targetCoords);
+        active.TargetCoordinates = targetCoords; // CMU14
+        active.HitResolved = false; // CMU14
         active.Range = xeno.Comp.Range;
         active.StunTime = xeno.Comp.StunTime;
         Dirty(xeno);
@@ -186,21 +191,28 @@ public sealed partial class XenoLungeSystem : EntitySystem
         ApplyLungeHitEffects(xeno.AsNullable(), args.Target, true);
     }
 
+    // CMU14 method: a missed landing cleans up the lunge; it is not a hit on the aimed target.
     private void OnXenoLungeLand(Entity<XenoActiveLungeComponent> ent, ref LandEvent args)
     {
-        if (!_pulling.IsPulling(ent))
-            ApplyLungeHitEffects(ent.AsNullable(), ent.Comp.Target, false);
-
+        StopLunge(ent);
         RemCompDeferred<XenoActiveLungeComponent>(ent);
     }
 
+    // CMU14 method: consume the actual impact before synchronous landing callbacks.
     private bool ApplyLungeHitEffects(Entity<XenoActiveLungeComponent?> xeno, EntityUid targetId, bool stopThrow, bool predicted = true)
     {
-        if (!Resolve(xeno, ref xeno.Comp, false))
+        if (!Resolve(xeno, ref xeno.Comp, false) || !xeno.Comp.Running || xeno.Comp.HitResolved)
             return false;
 
-        if (_mobState.IsDead(targetId))
+        if (TerminatingOrDeleted(targetId) || _mobState.IsDead(targetId))
             return false;
+
+        var hitCoordinates = _transform.GetMapCoordinates(targetId);
+        if (hitCoordinates.MapId != _transform.GetMapCoordinates(xeno).MapId)
+            return false;
+
+        xeno.Comp.HitResolved = true;
+        Dirty(xeno.Owner, xeno.Comp);
 
         if (_physicsQuery.TryGetComponent(xeno, out var physics) &&
             _thrownItemQuery.TryGetComponent(xeno, out var thrown))
@@ -241,26 +253,24 @@ public sealed partial class XenoLungeSystem : EntitySystem
             Dirty(xeno, melee);
         }
 
-        if (_net.IsClient && predicted)
+        if (_net.IsClient && predicted && _timing.IsFirstTimePredicted)
         {
-            var predictedEv = new XenoLungePredictedHitEvent(GetNetEntity(targetId), _rmcLagCompensation.GetLastRealTick(null), _rmcLagCompensation.GetClientSubstep()); // CMU14
-            RaiseNetworkEvent(predictedEv);
-            if (_timing.InPrediction && _timing.IsFirstTimePredicted)
-            {
+            var predictedEv = new XenoLungePredictedHitEvent(GetNetEntity(targetId), _rmcLagCompensation.GetLastRealTick(null), _rmcLagCompensation.GetClientSubstep());
+            if (_timing.InPrediction)
                 RaisePredictiveEvent(predictedEv);
-            }
+            else
+                RaiseNetworkEvent(predictedEv);
         }
 
         StopLunge(xeno);
 
-        _transform.SetMapCoordinates(targetId, xeno.Comp.TargetCoordinates);
-
-        // Fixes lunges done when hugging a wall that would otherwise not move you
+        // Correct the attacker toward the actual hit, never move an interceptor to the
+        // originally selected target's location.
         var coordinates = _transform.GetMapCoordinates(xeno);
-        if (xeno.Comp.TargetCoordinates.MapId == coordinates.MapId &&
-            !xeno.Comp.TargetCoordinates.InRange(coordinates, 1.25f))
+        if (hitCoordinates.MapId == coordinates.MapId &&
+            !hitCoordinates.InRange(coordinates, 1.25f))
         {
-            var distance = xeno.Comp.TargetCoordinates.Position - coordinates.Position;
+            var distance = hitCoordinates.Position - coordinates.Position;
             var length = distance.Length();
             var newPosition = coordinates.Offset(((float) (length - 1.25) / length) * distance);
             _transform.SetMapCoordinates(xeno, newPosition);

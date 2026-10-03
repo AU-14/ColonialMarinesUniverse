@@ -305,7 +305,9 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
         {
             if (args.DistanceThreshold != null)
             {
-                if (!_interaction.InRangeAndAccessible(args.User, args.Target.Value, args.DistanceThreshold.Value))
+                // CMU14: do-after targets opt in to historical range validation.
+                // if (!_interaction.InRangeAndAccessible(args.User, args.Target.Value, args.DistanceThreshold.Value))
+                if (!_interaction.InRangeAndAccessible(args.User, args.Target.Value, args.DistanceThreshold.Value, lagCompensated: args.LagCompensated))
                     return true;
             }
         }
