@@ -329,6 +329,12 @@
         crate: RMCCrateMagazineBGel
     - name: Specialist Ammo
       entries:
+      - cost: 1500
+      - crate: CMUCrateMagazineSVAROGIncen
+      - cost: 1000
+        crate: CMUCrateMagazineSVAROG
+      - cost: 1500
+        crate: CMUCrateMagazineSVAROGFlak
       - cost: 700
         crate: CMUCrateEMBLRAP
       - cost: 600
