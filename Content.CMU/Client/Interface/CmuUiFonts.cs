@@ -5,7 +5,7 @@ using Content.Shared.CCVar;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 /// Applies the player's font preference to UI font stacks, including fonts held by open controls.

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Shared.Chat;
 using Content.Shared.Radio;

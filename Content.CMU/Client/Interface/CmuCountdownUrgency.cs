@@ -1,7 +1,7 @@
 using Content.Client.Stylesheets;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     How urgent a countdown reads, from seconds remaining alone - shared so every timer that

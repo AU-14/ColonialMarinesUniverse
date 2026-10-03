@@ -1,11 +1,11 @@
-﻿using System.Numerics;
+using System.Numerics;
 using Content.Client.Stylesheets;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     One bordered choice: a button that is a segment of the card, and a line or two saying what

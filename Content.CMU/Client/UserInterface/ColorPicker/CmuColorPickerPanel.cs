@@ -12,7 +12,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 
-namespace Content.Client._CMU14.UserInterface.ColorPicker;
+namespace Content.Client.CMU14.UserInterface.ColorPicker;
 
 /// <summary>
 ///     The picking surface behind <see cref="CmuColorPicker"/>: a preset palette, a saturation/value

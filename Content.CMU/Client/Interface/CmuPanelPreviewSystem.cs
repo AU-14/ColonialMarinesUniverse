@@ -1,6 +1,6 @@
 using System;
 using System.Numerics;
-using Content.Client._CMU14.Lobby;
+using Content.Client.CMU14.Lobby;
 using Content.Client._RMC14.Mentor;
 using Content.Client.Administration.UI.Bwoink;
 using Content.Client.Lobby.UI;
@@ -17,7 +17,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.IoC;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     Opens the small CRT panels named by <see cref="CCVars.CMUPanelPreview"/> once at startup.

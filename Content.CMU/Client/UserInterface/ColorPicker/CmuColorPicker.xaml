@@ -1,5 +1,5 @@
 <Control xmlns="https://spacestation14.io"
-         xmlns:picker="clr-namespace:Content.Client._CMU14.UserInterface.ColorPicker">
+         xmlns:picker="clr-namespace:Content.Client.CMU14.UserInterface.ColorPicker">
     <BoxContainer Orientation="Vertical" SeparationOverride="2">
         <!-- The row: a wide swatch carrying the disclosure arrow, then the colour named in its own
              colour. Hex lives in the panel below, next to the gradient. -->

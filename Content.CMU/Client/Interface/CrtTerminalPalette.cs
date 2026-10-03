@@ -3,7 +3,7 @@ using System.Numerics;
 using Content.Client.Stylesheets;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     The surface ladder and text tones the CRT theme is built from - and the neutral ladder that

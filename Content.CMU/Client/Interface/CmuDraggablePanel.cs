@@ -4,7 +4,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Input;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     A panel the player can pick up and put somewhere else.

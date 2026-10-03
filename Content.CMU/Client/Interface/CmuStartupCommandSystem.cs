@@ -4,7 +4,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Console;
 using Robust.Shared.Timing;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     Runs one or more console commands once, shortly after the client has connected, from

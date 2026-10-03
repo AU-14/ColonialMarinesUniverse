@@ -8,7 +8,7 @@ using Robust.Shared.ColorNaming;
 using Robust.Shared.Localization;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.UserInterface.ColorPicker;
+namespace Content.Client.CMU14.UserInterface.ColorPicker;
 
 /// <summary>
 ///     A colour control that reads as a sentence: a swatch, the colour described in words and shown

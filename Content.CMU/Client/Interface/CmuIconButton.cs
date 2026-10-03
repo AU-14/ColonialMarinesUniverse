@@ -7,7 +7,7 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
 
-namespace Content.Client._CMU14.Interface;
+namespace Content.Client.CMU14.Interface;
 
 /// <summary>
 ///     A bare icon that behaves like a button: no box, no label, just the glyph and its hit area.

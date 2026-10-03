@@ -7,7 +7,7 @@ using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
 
-namespace Content.Client._CMU14.UserInterface.Options;
+namespace Content.Client.CMU14.UserInterface.Options;
 
 [GenerateTypedNameReferences]
 public sealed partial class CmuUiSetupWindow : DefaultWindow
