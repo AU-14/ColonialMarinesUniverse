@@ -38,7 +38,9 @@
   - Weld the plates back together with a [bold]blowtorch[/bold].
   - Fix the wiring with [bold]wire cutters[/bold].
   - Realign it with a [bold]wrench[/bold].
-  - Switch it on.
+  - Switch it on. Activation assigns the tower to the operator's IFF faction; that side receives sensor contacts on its tactical maps. A [bold]multitool[/bold] can reconfigure ownership while it is running.
+
+  Tower markers stay visible while the sensors are offline. Switching a tower off or losing it to another faction ends your side's sensor feed.
 
   Examine the tower if you're not sure which step comes next. A sensor tower breaks down again at random after a while, so keep checking on it.
 </Document>
