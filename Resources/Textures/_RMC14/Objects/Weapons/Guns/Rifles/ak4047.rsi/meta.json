@@ -26,6 +26,12 @@
       "name": "mag-0"
     },
     {
+      "name": "mag-1"
+    },
+    {
+      "name": "mag-2"
+    },
+    {
       "name": "wielded-inhand-left",
       "directions": 4
     },

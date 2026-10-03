@@ -15,6 +15,7 @@
     - RMC
     platoonsOpfor:
     - UPP
+    - BEAR
     - VAIPO
     defaultgovfor: USCM
     defaultopfor: VAIPO
