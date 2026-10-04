@@ -654,6 +654,21 @@
     price: 100
 
 - type: entity
+  parent: CMUYautjaRelayBeacon
+  id: CMUYautjaYoungbloodRelayBeacon
+  name: youngblood relay beacon
+  suffix: Yautja, Youngblood
+  description: A device covered in sacred text, attuned to young hunters. It whirrs and beeps every couple of seconds.
+  components:
+  - type: YautjaRelayBeacon
+    youngbloodOnly: true
+    allowCustomDestinations: false
+    allowedDestinations:
+    - YautjaShip
+  - type: StaticPrice
+    price: 100
+
+- type: entity
   parent: BaseItem
   id: CMUYautjaFalconDrone
   name: falcon drone

@@ -1646,6 +1646,7 @@ public sealed class YautjaYoungbloodTest
                     "CMUYautjaBodyMesh",
                     "CMUYautjaHuntingPouch",
                     "CMUYautjaMedicompFull",
+                    "CMUYautjaYoungbloodRelayBeacon",
                     "CMUYautjaLantern",
                 });
                 AssertBundle(entMan, armorBundle, new[]

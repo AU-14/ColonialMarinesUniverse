@@ -873,7 +873,7 @@ public sealed partial class YautjaItemSystem : EntitySystem
 
     private void UpdateRelayBeaconUi(Entity<YautjaRelayBeaconComponent> beacon, EntityUid user)
     {
-        if (!CanReachRelayBeaconAttackSelf(user) || !CanUseRelayBeacon(user))
+        if (!CanReachRelayBeaconAttackSelf(user) || !CanUseRelayBeacon(beacon, user))
             return;
 
         var entries = new List<YautjaRelayBeaconDestinationEntry>();
@@ -947,21 +947,19 @@ public sealed partial class YautjaItemSystem : EntitySystem
             if (Deleted(uid) || component.Kind != YautjaRelayDestinationKind.Ground)
                 continue;
 
-            // Map-placed ground relays set only the entity name, never the
-            // component fields. Fall back to it for the id and label.
-            var metaName = Name(uid);
+            // A relay without an id cannot be targeted; map data always sets one
             var id = component.Id.Trim();
             if (id.Length == 0)
-                id = metaName;
+                continue;
 
+            var metaName = Name(uid);
             var name = component.DisplayName.Trim();
             if (name.Length == 0)
                 name = metaName;
 
             var transform = Transform(uid);
             var coordinates = transform.Coordinates;
-            if (id.Length == 0 ||
-                name.Length == 0 ||
+            if (name.Length == 0 ||
                 !coordinates.IsValid(EntityManager) ||
                 transform.MapID == MapId.Nullspace ||
                 !ids.Add(id))
@@ -1497,13 +1495,13 @@ public sealed partial class YautjaItemSystem : EntitySystem
         return !youngblood && (yautja || techAuthorized);
     }
 
-    private bool CanUseRelayBeacon(EntityUid user)
+    private bool CanUseRelayBeacon(Entity<YautjaRelayBeaconComponent> beacon, EntityUid user)
     {
-        return CanUseRelayBeacon(
-               HasComp<YautjaComponent>(user),
-               HasComp<YautjaYoungbloodComponent>(user),
-               HasComp<YautjaTechAuthorizedComponent>(user)) &&
-               !_mobState.IsDead(user);
+        if (HasComp<YautjaYoungbloodComponent>(user) != beacon.Comp.YoungbloodOnly)
+            return false;
+
+        return (HasComp<YautjaComponent>(user) || HasComp<YautjaTechAuthorizedComponent>(user))
+            && !_mobState.IsDead(user);
     }
 
     private bool CanUseRelayBeaconAttackSelf(EntityUid beacon, EntityUid user, bool popup)
@@ -1516,10 +1514,12 @@ public sealed partial class YautjaItemSystem : EntitySystem
             return false;
         }
 
-        if (HasComp<YautjaYoungbloodComponent>(user))
+        // Standard beacons bar youngbloods, youngblood beacons bar everyone else
+        var youngblood = HasComp<YautjaYoungbloodComponent>(user);
+        if (youngblood != Comp<YautjaRelayBeaconComponent>(beacon).YoungbloodOnly)
         {
             if (popup)
-                PopupRelayBeaconDenied(user, youngblood: true);
+                PopupRelayBeaconDenied(user, youngblood);
             return false;
         }
 
