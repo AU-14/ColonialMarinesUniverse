@@ -326,7 +326,7 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
 
             if (HasComp<XenoComponent>(recipient))
                 continue;
-            if (_auRoundSystem._selectedthreat.hiveevolution)
+            if (_auRoundSystem.SelectedThreat?.hiveevolution == true)
             {
                 var popupText = Loc.GetString(HasComp<SynthComponent>(recipient)
                     ? "rmc-hive-supports-castes-synth"

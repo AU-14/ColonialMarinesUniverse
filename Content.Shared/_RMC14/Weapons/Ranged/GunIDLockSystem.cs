@@ -8,14 +8,16 @@ using Content.Shared.Popups;
 using Content.Shared.Toggleable;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 
 namespace Content.Shared._RMC14.Weapons.Ranged;
 
 public sealed partial class GunIDLockSystem : EntitySystem
 {
-    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -29,6 +31,9 @@ public sealed partial class GunIDLockSystem : EntitySystem
 
     private void OnHold(Entity<GunIDLockComponent> ent, ref GotEquippedHandEvent args)
     {
+        if (_net.IsClient)
+            return;
+
         CheckUserRevivability(ent);
 
         if (ent.Comp.User == EntityUid.Invalid)
@@ -80,10 +85,11 @@ public sealed partial class GunIDLockSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        CheckUserRevivability(ent);
-        if (ent.Comp.User == EntityUid.Invalid)
+        if (_net.IsServer)
         {
-            RegisterNewUserCombat(ent, args.User);
+            CheckUserRevivability(ent);
+            if (ent.Comp.User == EntityUid.Invalid)
+                RegisterNewUserCombat(ent, args.User);
         }
 
         if (HasComp<BypassInteractionChecksComponent>(args.User))
@@ -97,13 +103,17 @@ public sealed partial class GunIDLockSystem : EntitySystem
 
         args.Cancelled = true;
 
+        if (_net.IsClient)
+            return;
+
         var popup = Loc.GetString("rmc-shoot-id-lock-unauthorized");
         _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnExamine(Entity<GunIDLockComponent> ent, ref ExaminedEvent args)
     {
-        CheckUserRevivability(ent);
+        if (_net.IsServer)
+            CheckUserRevivability(ent);
 
         using (args.PushGroup(nameof(GunIDLockComponent)))
         {

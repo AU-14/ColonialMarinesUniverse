@@ -1,0 +1,6 @@
+- type: loadout
+  id: PouchMedkitPMCFilledAU14
+  equipment:
+    pocket1: RMCPouchMedkitPMCFilled
+
+# pocket2

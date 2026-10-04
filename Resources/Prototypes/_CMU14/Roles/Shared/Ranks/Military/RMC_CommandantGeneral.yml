@@ -1,0 +1,5 @@
+- type: rank
+  id: RMC_CommandantGeneral
+  name: Commandant General Royal Marines
+  prefix: CGRM.
+  paygrade: O10

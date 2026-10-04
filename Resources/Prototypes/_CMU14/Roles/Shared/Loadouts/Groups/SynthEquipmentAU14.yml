@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: SynthEquipmentAU14
+  name: au14-loadout-group-synth-equipment
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - SynthBreachingHammerAU14
+  - MaintenanceJackAU14
+  - PortableDialysisAU14
+  - AU14SprayCleanerExperimentalAU14

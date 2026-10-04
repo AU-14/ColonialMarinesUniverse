@@ -1,0 +1,7 @@
+- type: rank
+  id: VAI_TeamLeader
+  name: VASC Team Leader
+  prefix: VASC TL
+  paygrade: VASCTL
+
+#platoon ranks

@@ -19,12 +19,14 @@ stamp-component-stamped-name-au14-aux = Auxiliary Technician
 stamp-component-stamped-name-au14-eo = Engineering Officer
 stamp-component-stamped-name-au14-sea = Senior Enlisted Advisor
 
-stamp-component-stamped-name-au14-cl = Corporate Liaison
+stamp-component-stamped-name-au14-cl = Corporation Liaison
+stamp-component-stamped-name-au14-cs = Corporation Scientist
+
 stamp-component-stamped-name-au14-ll = Laselle Liaison
 stamp-component-stamped-name-au14-uaa = UA Ambassador
 stamp-component-stamped-name-au14-uppa = UPP Ambassador
 stamp-component-stamped-name-au14-twea = TWE Ambassador
-stamp-component-stamped-name-au14-icsca = ISCS Ambassador
+stamp-component-stamped-name-au14-icsca = ICSC Ambassador
 stamp-component-stamped-name-au14-ccaa = CCA Ambassador
 
 stamp-component-stamped-name-au14-admin = Colony Administrator

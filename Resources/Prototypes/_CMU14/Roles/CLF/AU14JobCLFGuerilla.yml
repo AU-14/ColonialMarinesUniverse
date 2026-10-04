@@ -1,0 +1,85 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCLFGuerilla
+  roundSide: ThirdParty
+  roundForce: CLF
+  roundRole: CLFGuerilla
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: CLFMember
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 3
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-clfguerilla
+  - type: StartingMindRole
+    mindRole: MindRoleCLFGuerrilla
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+  - type: ShowMarineIcons
+    factions:
+    - CLF
+  - type: FactionLanguageMember
+    factionTag: CLF
+
+  name: au14-job-name-clfguerilla
+  description: au14-job-description-clfguerilla
+  setPreference: true
+  ignoreAllegiance: true
+  playTimeTracker: AU14JobCLFGuerilla
+  basePlaytimeTracker: true
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCLFGuerilla
+  icon: "RMCJobIconCLFSoldier"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-clflrs
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCLFGuerilla
+  equipment:
+    id: AU14IDCardCLFCivilian
+   # neck: RMCCLFArmband
+  inhand:
+  - AU14CLFHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCLFGuerilla
+  name: Spawn Point CLF Guerilla
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCLFGuerilla
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCLFGuerilla
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCLFGuerilla
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - CivFootwearAU14
+  - CivJumpsuitAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

@@ -1,0 +1,221 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobRadioTelephoneOperatorBaseAbstract
+  name: au14-job-name-radiotelephoneoperator
+  description: au14-job-description-radiotelephoneoperator
+  icon: "AU14JobIconFTL"
+  spawnMenuRoleName: Fireteam Leader (GOVFOR)
+  startingGear: AU14GearGOVFORRadioTelephoneOperator
+  dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
+  playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
+  overwatchSortPriority: -3
+  overwatchRoleName: Fire Team Leaders
+  accessGroups:
+  - AU14GovforFTL
+
+- type: job
+  abstract: true
+  parent: AU14JobRadioTelephoneOperatorBaseAbstract
+  id: AU14JobRadioTelephoneOperatorBase
+  roundRole: RadioTelephoneOperator
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRTO
+  - type: JobPrefix
+    prefix: au14-job-prefix-radiotelephoneoperator
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_ftl
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: ftl
+    RMC:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 3
+        RMCSkillPolice: 1
+    UPP:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORRadioTelephoneOperatorUPP
+    WYPMC:
+    - type: Skills
+      skills:
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORRadioTelephoneOperatorWYPMC
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORRadioTelephoneOperator
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORRadioTelephoneOperator
+  equipment:
+    id: AU14JobIDCardGOVFORRadioTelephoneOperator
+    ears: AU14HeadsetGovforMarineFTL
+
+- type: startingGear
+  id: AU14GearGOVFORRadioTelephoneOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarineFTL
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORRadioTelephoneOperator
+  name: Spawn Point GOVFOR Radio Telephone Operator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORRadioTelephoneOperator
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobRadioTelephoneOperatorBase
+  id: AU14JobGOVFORRadioTelephoneOperator
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORRadioTelephoneOperator
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobRadioTelephoneOperatorBase
+  id: AU14JobOPFORRadioTelephoneOperator
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORFTL"
+  startingGear: AU14GearopforRadioTelephoneOperator
+  dummyStartingGear: AU14GearopforRadioTelephoneOperatorDummy
+  spawnMenuRoleName: Fireteam Leader (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  accessGroups:
+  - AU14OpforFTL
+
+- type: startingGear
+  id: AU14GearopforRadioTelephoneOperator
+  equipment:
+    id: AU14JobIDCardopforRadioTelephoneOperator
+    ears: AU14HeadsetOpforMarineFTL
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforRadioTelephoneOperator
+  name: Spawn Point opfor Radio Telephone Operator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORRadioTelephoneOperator
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobOPFORRadioTelephoneOperator
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearopforRadioTelephoneOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    shoes: CMBootsBrown
+    head: AU14JungleBoonieHat
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarineFTL
+
+- type: job
+  parent: AU14JobRadioTelephoneOperatorBase
+  id: AU14JobGOVFORRadioTelephoneOperatorRMC
+  roundForce: RMC
+  name: au14-job-name-radiotelephoneoperatorRMC
+  spawnMenuRoleName: Fireteam Leader (TWE RMC)
+  overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
+  ranks:
+    RMC_Corporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 216000 # 60 hours
+    RMC_LanceCorporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadAutomaticRifleman
+      time: 108000 # 30 hours
+    RMC_Marine: []
+
+- type: job
+  parent: AU14JobRadioTelephoneOperatorBase
+  id: AU14JobGOVFORRadioTelephoneOperatorUPP
+  roundForce: UPP
+  name: au14-job-name-radiotelephoneoperator-alt
+  spawnMenuRoleName: Fireteam Leader (UPP)
+  overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
+  ranks:
+    UPP_SeniorGefreiter:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORRadioTelephoneOperator
+      time: 108000 # 30 hours
+    UPP_Gefreiter: []
+
+- type: job
+  parent: AU14JobRadioTelephoneOperatorBase
+  id: AU14JobGOVFORRadioTelephoneOperatorWYPMC
+  roundForce: WYPMC
+  name: PMC Communications Specialist
+  spawnMenuRoleName: Fireteam Leader (WYPMC)
+  overwatchRoleName: au14-job-name-radiotelephoneoperator-alt
+  ranks:
+    AU14RankWeYuSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORRadioTelephoneOperator
+      time: 108000 # 30 hours
+    AU14RankWeYuOperator: []

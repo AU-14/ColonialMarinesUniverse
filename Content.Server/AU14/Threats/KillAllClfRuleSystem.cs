@@ -183,7 +183,7 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
             }
             else
             {
-                var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
+                var winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
                 if (!string.IsNullOrEmpty(winMessage))
                 {
                     _gameTicker.EndRound(winMessage);

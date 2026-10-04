@@ -1,0 +1,15 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentColonyMedical
+  name: au14-department-colony-medical
+  description: au14-department-colony-medical-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianHeadPhysician
+    - AU14JobCivilianPhysician
+    - AU14JobCivilianNurse
+    - AU14JobCivilianEthicsAndWellnessAdvisor
+    - AU14JobCivilianEmergencyResponseOfficer
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianHeadPhysician
+  faction: colonist

@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
 using Content.Shared.DoAfter;
@@ -93,8 +94,13 @@ public sealed partial class StethoscopeSystem : EntitySystem
 
     private void ExamineWithStethoscope(Entity<StethoscopeComponent> stethoscope, EntityUid user, EntityUid target)
     {
-        // TODO: Add check for respirator component when it gets moved to shared.
-        // If the mob is dead or cannot asphyxiation damage, the popup shows nothing.
+        if (HasComp<SynthComponent>(target))
+        {
+            _popup.PopupPredicted(Loc.GetString("stethoscope-nothing"), target, user);
+            stethoscope.Comp.LastMeasuredDamage = null;
+            return;
+        }
+
         if (!TryComp<MobStateComponent>(target, out var mobState)                        ||
             !TryComp<DamageableComponent>(target, out var damageComp) ||
             _mobState.IsDead(target, mobState)                                           ||

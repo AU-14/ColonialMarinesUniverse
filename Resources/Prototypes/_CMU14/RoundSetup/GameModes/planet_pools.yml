@@ -1,0 +1,8 @@
+- type: GamePlanetPool
+  id: ColonyPlanetPool
+  planets:
+  - AUPlanetLV747
+  - AUPlanetShepherdsPride
+  - AUPlanetStableGarrison
+  - AUPlanetLV624
+  - AUPlanetFlight

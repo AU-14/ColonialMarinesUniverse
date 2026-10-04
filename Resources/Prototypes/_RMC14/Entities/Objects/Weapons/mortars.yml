@@ -137,6 +137,8 @@
   - type: CMExplosionEffect
   - type: RMCScorchEffect
   - type: MortarShell
+    carvesZLevels: true
+    carveFringeRadius: 1
 
 - type: entity
   parent: RMCMortarShellBase
@@ -158,6 +160,7 @@
   - type: CMExplosionEffect
   - type: RMCScorchEffect
   - type: MortarShell
+    createsZLevelOpening: true
 
 - type: entity
   parent: RMCMortarShellBase

@@ -1,0 +1,14 @@
+- type: loadoutGroup
+  id: WYCLJumpsuitAU14
+  name: au14-loadout-group-corporate-jumpsuit
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CivilianWorkwearBlueAU14
+  - WYJumpsuitLiaisonBlackAU14
+  - WYJumpsuitLiaisonBlazerAU14
+  - WYJumpsuitLiaisonFormalAU14
+  - WYJumpsuitLiaisonOutingAU14
+  - WYJumpsuitLiaisonOutingRedAU14
+  - WYJumpsuitLiaisonSuspendersAU14
+  - WYLiaisonManagerJumpsuitAU14

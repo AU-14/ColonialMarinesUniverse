@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared.Coordinates.Helpers;
@@ -22,6 +23,8 @@ public sealed partial class XenoDespoilerOozingWoundsSystem : EntitySystem
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private XenoDespoilerCatalyzeFlagSystem _catalyze = default!;
+    [Dependency] private CMArmorSystem _armor = default!;
+    [Dependency] private XenoDespoilerHypertensionSystem _hypertension = default!;
 
     private EntityQuery<XenoDespoilerAcidSprayComponent> _sprayQuery;
     private EntityQuery<XenoDespoilerLingeringAcidComponent> _lingeringQuery;
@@ -45,9 +48,24 @@ public sealed partial class XenoDespoilerOozingWoundsSystem : EntitySystem
         if (!_rmcActions.TryUseAction(args))
             return;
 
+        var severity = ComputeSeverity(uid, action);
+
+        if (TryComp<XenoDespoilerHypertensionComponent>(uid, out var hypertension))
+        {
+
+            var stacksToRemove = severity switch
+            {
+                0 => hypertension.Stacks,
+                1 => 2,
+                2 => 1,
+                _ => hypertension.Stacks
+            };
+
+            _hypertension.RemoveStacks(uid, hypertension, stacksToRemove);
+        }
+
         var empowered = _catalyze.TakeEmpowerment(uid, comp);
 
-        var severity = ComputeSeverity(uid, action);
         var radius = action.BaseRadius + severity;
         var origin = Transform(uid).Coordinates;
         var sprayProto = empowered ? action.AcidSprayEmpoweredProto : action.AcidSprayProto;

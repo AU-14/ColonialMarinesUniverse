@@ -177157,7 +177157,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 123.5,-47.5
       parent: 1
-- proto: thirdpartyentityspawnmarker
+- proto: scenariothirdpartyentityspawnmarker
   entities:
   - uid: 26742
     components:
@@ -177238,7 +177238,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 65.5,-107.5
       parent: 1
-- proto: thirdpartyleaderspawnmarker
+- proto: scenariothirdpartyleaderspawnmarker
   entities:
   - uid: 26723
     components:
@@ -177433,7 +177433,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 64.5,-107.5
       parent: 1
-- proto: thirdpartymemberspawnmarker
+- proto: scenariothirdpartymemberspawnmarker
   entities:
   - uid: 26736
     components:
@@ -177668,7 +177668,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 72.5,-106.5
       parent: 1
-- proto: threatentityspawnmarker
+- proto: scenariothreatentityspawnmarker
   entities:
   - uid: 26716
     components:
@@ -177695,7 +177695,7 @@ entities:
     - type: Transform
       pos: 211.5,-41.5
       parent: 1
-- proto: threatleaderspawnmarker
+- proto: scenariothreatleaderspawnmarker
   entities:
   - uid: 26702
     components:
@@ -177737,7 +177737,7 @@ entities:
     - type: Transform
       pos: 215.5,-48.5
       parent: 1
-- proto: threatmemberspawnmarker
+- proto: scenariothreatmemberspawnmarker
   entities:
   - uid: 26710
     components:

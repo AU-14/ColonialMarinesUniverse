@@ -1,0 +1,69 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianMiner
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianMiner
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 2
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianminer
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: colonist
+
+  name: au14-job-name-civilianminer
+  description: au14-job-description-civilianminer
+  setPreference: true
+  playTimeTracker: AU14JobCivilianMiner
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianMiner
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-foreman
+  spawnMenuRoleName: Colony Miner (CMU)
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianMiner
+  equipment:
+    jumpsuit: AU14CivilianKellandMiningClothes
+    outerClothing: AU14CivilianHazardVestKellandMiningCorporation
+    shoes: RMCBootsCorporate
+    id: AU14IDCardColonyColonist
+
+    head: RMCHardhatOrange
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianMiner
+  name: Spawn Point Civilian Miner
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianMiner
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianMiner
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianMiner
+  points: 7
+  groups:
+  - MinerSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

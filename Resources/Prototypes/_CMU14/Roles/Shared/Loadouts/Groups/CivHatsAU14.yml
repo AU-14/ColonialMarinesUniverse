@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: CivHatsAU14
+  name: au14-loadout-group-civilian-hat
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - CivBallCapBlackAU14
+  - CivBallCapBlueTruckerAU14
+  - CivBallCapRedTruckerAU14
+  - USCMVeteranCapAU14

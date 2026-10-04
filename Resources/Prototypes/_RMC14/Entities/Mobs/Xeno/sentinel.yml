@@ -104,3 +104,4 @@
     ventCrawlIcon: sentinel
   - type: RMCActionOrder
     id: CMXenoSentinel
+  - type: CMUXenoZJump

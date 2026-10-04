@@ -26,29 +26,36 @@ public sealed partial class ReactionMixerSystem : EntitySystem
 
     private void OnAfterInteract(Entity<ReactionMixerComponent> entity, ref AfterInteractEvent args)
     {
-        if (!args.Target.HasValue || !args.CanReach || !entity.Comp.MixOnInteract)
+        if (args.Handled || !args.Target.HasValue || !args.CanReach || !entity.Comp.MixOnInteract)
             return;
 
-        if (!MixAttempt(entity, args.Target.Value, out var solution))
+        if (!MixAttempt(entity, args.Target.Value, out _))
             return;
 
-        var doAfterArgs = new DoAfterArgs(EntityManager, args.User, entity.Comp.TimeToMix, new ReactionMixDoAfterEvent(), entity, args.Target.Value, entity);
+        var doAfterArgs = new DoAfterArgs(EntityManager, args.User, entity.Comp.TimeToMix, new ReactionMixDoAfterEvent(), entity, args.Target.Value, entity)
+        {
+            NeedHand = true,
+        };
 
-        _doAfterSystem.TryStartDoAfter(doAfterArgs);
+        args.Handled = _doAfterSystem.TryStartDoAfter(doAfterArgs);
     }
 
     private void OnDoAfter(Entity<ReactionMixerComponent> entity, ref ReactionMixDoAfterEvent args)
     {
-        //Do again to get the solution again
-        if (!MixAttempt(entity, args.Target!.Value, out var solution))
+        if (args.Cancelled || args.Handled || args.Target == null)
             return;
 
-        _popup.PopupEntity(Loc.GetString(entity.Comp.MixMessage, ("mixed", Identity.Entity(args.Target!.Value, EntityManager)), ("mixer", Identity.Entity(entity.Owner, EntityManager))), args.User, args.User);
+        // Re-fetch after the do-after in case the target changed while stirring.
+        if (!MixAttempt(entity, args.Target.Value, out var solution))
+            return;
+
+        _popup.PopupEntity(Loc.GetString(entity.Comp.MixMessage, ("mixed", Identity.Entity(args.Target.Value, EntityManager)), ("mixer", Identity.Entity(entity.Owner, EntityManager))), args.User, args.User);
 
         _solutionContainers.UpdateChemicals(solution!.Value, true, entity.Comp);
 
-        var afterMixingEvent = new AfterMixingEvent(entity, args.Target!.Value);
+        var afterMixingEvent = new AfterMixingEvent(entity, args.Target.Value);
         RaiseLocalEvent(entity, afterMixingEvent);
+        args.Handled = true;
     }
 
     private void OnShake(Entity<ReactionMixerComponent> entity, ref ShakeEvent args)

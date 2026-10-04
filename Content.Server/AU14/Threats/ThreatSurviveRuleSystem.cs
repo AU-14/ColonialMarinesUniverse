@@ -31,7 +31,7 @@ public sealed partial class ThreatSurviveRuleSystem : GameRuleSystem<ThreatSurvi
         base.ActiveTick(uid, component, gameRule, frameTime);
         if (_endTime != null && _timing.CurTime >= _endTime)
         {
-            var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
+            var winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
             if (!string.IsNullOrEmpty(winMessage))
             {
                 _gameTicker.EndRound(winMessage);

@@ -14,6 +14,17 @@
         - 0,0,22,1
 
 - type: entity
+  parent: AU14IMPBackpackMarine
+  id: AU14IMPBackpackWorkingJoe
+  name: Working Joe utility pack
+  description: A standard IMP backpack modified for Seegson synthetic units. Opens instantly.
+  components:
+    - type: StorageOpenDoAfter
+      duration: 0
+      skipInHand: true
+      skipOnGround: true
+
+- type: entity
   parent: CMBackpack
   id: AU14CorpsmanIMPBackpackMarine
   name: standard weight medical IMP backpack

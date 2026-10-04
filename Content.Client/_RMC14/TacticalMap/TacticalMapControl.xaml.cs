@@ -530,13 +530,15 @@ public sealed partial class TacticalMapControl : TextureRect
             // Attempt to get the background frame. If this fails (RSI missing/corrupt), skip blip drawing.
             background = system.Frame0(backgroundRsi);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
             // Don't let a resource failure crash the entire UI. Skip drawing blips.
             DrawModeBorder(handle, Vector2.Zero, Vector2.Zero, 1f); // still draw border if appropriate
             DrawLines(handle, 1f, Vector2.Zero);
             DrawPreviewLine(handle, 1f, Vector2.Zero);
             DrawLabels(handle, 1f, Vector2.Zero);
+
+            Logger.GetSawmill("tacmap").Error($"[DrawBackgrounds] Failed to render backgrounds (missing/corrupt RSI): {ex}");
             return;
         }
 
@@ -546,15 +548,14 @@ public sealed partial class TacticalMapControl : TextureRect
         handle.DrawTextureRect(Texture, textureRect);
 
         DrawModeBorder(handle, actualTopLeft, actualSize, overlayScale);
-        // Wrap DrawBlips in a try/catch as an extra safety net for any runtime resource issues.
         try
         {
+            // Wrap DrawBlips in a try/catch as an extra safety net for any runtime resource issues.
             DrawBlips(handle, system, background, defibbableRsi, defibbableRsi2, defibbableRsi3, defibbableRsi4, undefibbableRsi, hiveLeaderRsi, actualTopLeft, overlayScale, curTime);
         }
-        catch (Exception)
-        {
-            // swallow—blips are non-critical; the rest of the UI should render.
-        }
+        // swallow—blips are non-critical; the rest of the UI should render.
+        catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBlips] Failed to run: {ex}"); }
+
         DrawLines(handle, overlayScale, actualTopLeft);
         DrawPreviewLine(handle, overlayScale, actualTopLeft);
         DrawLabels(handle, overlayScale, actualTopLeft);
@@ -600,30 +601,26 @@ public sealed partial class TacticalMapControl : TextureRect
             float scaledBlipSize = GetScaledBlipSize(overlayScale);
             UIBox2 rect = UIBox2.FromDimensions(position, new Vector2(scaledBlipSize, scaledBlipSize));
 
-            // Draw background / base frame but protect against resource failures per-frame
             try
             {
+                // Draw background / base frame but protect against resource failures per-frame
                 Texture bgTex = blip.Background != null ? system.GetFrame(blip.Background, curTime) : background;
                 handle.DrawTextureRect(bgTex, rect, blip.Color);
             }
-            catch (Exception)
-            {
-                // ignore and continue—don't crash the UI for missing background frames
-            }
+            // ignore and continue—don't crash the UI for missing background frames
+            catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBackground] Failed to render (missing background frames): {ex}"); }
 
-            // Draw main blip image safely
             try
             {
+                // Draw main blip image safely
                 if (blip.Image != null)
                 {
                     var frame = system.GetFrame(blip.Image, curTime);
                     handle.DrawTextureRect(frame, rect);
                 }
             }
-            catch (Exception)
-            {
-                // skip drawing this blip image if the frame cannot be loaded
-            }
+            // skip drawing this blip image if the frame cannot be loaded
+            catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBlips] Failed to render blip image (missing/corrupt state) '{(blip.Image as SpriteSpecifier.Rsi)?.RsiState ?? "?"}': {ex}"); }
 
             if (_localPlayerEntityId.HasValue && _blipEntityIds != null && i < _blipEntityIds.Length)
             {
@@ -640,10 +637,7 @@ public sealed partial class TacticalMapControl : TextureRect
                     var hiveTex = system.GetFrame(hiveLeaderRsi, curTime);
                     handle.DrawTextureRect(hiveTex, rect);
                 }
-                catch (Exception)
-                {
-                    // ignore
-                }
+                catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBlips] Failed to render HiveLeader (missing/corrupt blip): {ex}"); }
             }
 
             var defibTexture = blip.Status switch
@@ -663,10 +657,7 @@ public sealed partial class TacticalMapControl : TextureRect
                     if (dtex != null)
                         handle.DrawTextureRect(dtex, rect);
                 }
-                catch (Exception)
-                {
-                    // ignore
-                }
+                catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBlips] Failed to render defibTexture (missing/corrupt blip): {ex}"); }
             }
 
             if (blip.OccupantCount > 0)
@@ -682,9 +673,7 @@ public sealed partial class TacticalMapControl : TextureRect
                     handle.DrawRect(badgeRect, Color.Black.WithAlpha(0.75f));
                     handle.DrawString(countFont, badgeOrigin, countText, Color.White);
                 }
-                catch (Exception)
-                {
-                }
+                catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBlips] Failed to render vehicle OccupantCount (missing/corrupt blip/font or count): {ex}"); }
             }
 
             if (blip.FireteamNumber > 0)
@@ -700,9 +689,7 @@ public sealed partial class TacticalMapControl : TextureRect
                     handle.DrawRect(badgeRect, Color.Black.WithAlpha(0.75f));
                     handle.DrawString(ftFont, badgeOrigin, ftText, Color.White);
                 }
-                catch (Exception)
-                {
-                }
+                catch (Exception ex) { Logger.GetSawmill("tacmap").Error($"[DrawBlips] Failed to render Fireteam numbers (missing/corrupt blip/font or fireteam): {ex}"); }
             }
         }
     }

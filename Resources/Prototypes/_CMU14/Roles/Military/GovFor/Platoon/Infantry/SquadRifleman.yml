@@ -1,0 +1,256 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobSquadRiflemanBaseAbstract # Rifleman Abstraction
+  name: au14-job-name-govforsquadrifleman
+  description: au14-job-description-govforsquadrifleman
+  icon: "AU14JobIconGovRifleman"
+  spawnMenuRoleName: Rifleman (GOVFOR)
+  startingGear: AU14GearGOVFORSquadRifleman
+  dummyStartingGear: AU14GearGOVFORRiflemanDummy
+  playTimeTracker: AU14JobGOVFORSquadRifleman
+  accessGroups:
+  - AU14GovforSquad
+  hasIcon: false
+
+- type: job
+  abstract: true
+  parent: AU14JobSquadRiflemanBaseAbstract
+  id: AU14JobSquadRiflemanBase # Rifleman Base
+  roundRole: SquadRifleman
+  roundProfiles:
+  - AU14RoundJobProfileSquadRifleman
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforsquadrifleman
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: rifleman
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: rifleman
+    RMC:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    UPP:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanUPP
+    CMBCIU:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanCMBCIU
+    WYPMC:
+    - type: Skills
+      skills:
+        RMCSkillEndurance: 1
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillFireman: 1
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanWYPMC
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadRifleman
+        time: 36000 # 10 hours
+    RMCRankPrivate:
+      entity: AU14ChevronUSCMPrivate
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORSquadRifleman
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORSquadRifleman
+  equipment:
+    id: AU14IDCardSquadRifleman
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORRiflemanDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORSquadRifleman
+  name: Spawn Point GOVFOR Squad Rifleman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORSquadRifleman
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobSquadRiflemanBase
+  id: AU14JobGOVFORSquadRifleman
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORSquadRifleman
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMC
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobSquadRiflemanBase
+  id: AU14JobOPFORSquadRifleman
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORRifleman"
+  spawnMenuRoleName: Rifleman (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearopforSquadRifleman
+  dummyStartingGear: AU14GearopforRiflemanDummy
+  accessGroups:
+  - AU14OpforSquad
+
+- type: startingGear
+  id: AU14GearopforSquadRifleman
+  equipment:
+    id: AU14IDCardopforSquadRifleman
+    ears: AU14HeadsetOpforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforSquadRifleman
+  name: Spawn Point opfor Squad Rifleman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORSquadRifleman
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearopforRiflemanDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarine
+
+- type: job
+  parent: AU14JobSquadRiflemanBase
+  id: AU14JobGOVFORSquadRiflemanCMBCIU
+  roundForce: CMBCIU
+  name: Tactical Officer
+  ranks:
+    AU14RankCMBSrDeputy:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 108000 # 30 hours
+    AU14RankCMBDeputy:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 1200 # 2 hours
+    AU14RankCMBProbDeputy: []
+  spawnMenuRoleName: Operations Officer (CMBCIU)
+
+- type: job
+  parent: AU14JobSquadRiflemanBase
+  id: AU14JobGOVFORSquadRiflemanRMC
+  roundForce: RMC
+  name: au14-job-name-govforsquadriflemanRMC
+  spawnMenuRoleName: Rifleman (TWE RMC)
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMC_LanceCorporal:
+      entity: AU14ChevronRMCLanceCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORSquadRifleman
+        time: 54000 # 15 hours
+    RMC_Marine:
+      entity: AU14ChevronRMCMarine
+      requirements: []
+
+- type: job
+  parent: AU14JobSquadRiflemanBase
+  id: AU14JobGOVFORSquadRiflemanUPP
+  roundForce: UPP
+  name: Rifleman
+  spawnMenuRoleName: Rifleman (UPP)
+  ranks:
+    UPP_Gefreiter:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 108000 # 30 hours
+    UPP_Private: []
+
+- type: job
+  parent: AU14JobSquadRiflemanBase
+  id: AU14JobGOVFORSquadRiflemanWYPMC
+  roundForce: WYPMC
+  name: PMC Contractor
+  spawnMenuRoleName: Rifleman (WYPMC)
+  ranks:
+    AU14RankWeYuSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 108000 # 30 hours
+    AU14RankWeYuOperator:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORSquadRifleman
+      time: 1200 # 2 hours
+    AU14RankWeYuRecruit: []

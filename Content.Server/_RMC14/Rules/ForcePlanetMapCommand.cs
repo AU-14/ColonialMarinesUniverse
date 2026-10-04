@@ -1,4 +1,5 @@
-﻿using Content.Server.Administration;
+using Content.Server.Administration;
+using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration;
@@ -27,8 +28,10 @@ public sealed class ForcePlanetMapCommand : ToolshedCommand
         }
 
         var planetSys = Sys<CMDistressSignalRuleSystem>();
+        var roundSys = Sys<AuRoundSystem>();
         planetSys.CancelPlanetVote();
         planetSys.SetPlanet(first.Value);
+        roundSys.SetPlanet(first.Value.Proto.ID);
         ctx.WriteLine($"The next round's planet has been set to {first.Value}");
     }
 }

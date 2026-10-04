@@ -93,7 +93,8 @@ public partial class ChatBox : UIWidget
     private readonly Queue<RepeatedMessage> _primaryRepeatQueue = new();
     private readonly Queue<RepeatedMessage> _secondaryRepeatQueue = new();
     private readonly Queue<RepeatedMessage> _legacyRepeatQueue = new();
-    private readonly HashSet<string> _whitelist = ["mono", "scramble", "bolditalic", "bold", "bullet", "color", "font", "head", "italic"];
+    private readonly HashSet<string> _whitelist = ["mono", "scramble", "bolditalic", "bold", "bullet", "color", "font", "head", "italic", "langicon"];
+    // RMC14
 
     public ChatBox()
     {
@@ -1125,11 +1126,11 @@ public partial class ChatBox : UIWidget
         var formatted = CreateFormattedMessage(msg, messageColor, style);
 
         var cmChat = _entManager.SystemOrNull<CMChatSystem>();
-        if (cmChat?.TryRepetition(repeatQueue, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender) ?? false)
+        if (cmChat?.TryRepetition(repeatQueue, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender, msg.LanguageIcon) ?? false)
             return;
 
         var row = contents.AddMessage(msg, formatted, bodyColor, accentColor, fontSize);
-        cmChat?.TrackRepetition(repeatQueue, row, formatted, msg.SenderEntity, msg.Message, msg.Channel);
+        cmChat?.TrackRepetition(repeatQueue, row, formatted, msg.SenderEntity, msg.Message, msg.Channel, msg.LanguageIcon);
     }
 
     private void AddLegacyLine(ChatMessage msg)
@@ -1138,10 +1139,10 @@ public partial class ChatBox : UIWidget
         var formatted = CreateLegacyFormattedMessage(msg, color);
 
         var cmChat = _entManager.SystemOrNull<CMChatSystem>();
-        if (cmChat?.TryLegacyRepetition(_legacyRepeatQueue, LegacyContents, formatted, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender) ?? false)
+        if (cmChat?.TryLegacyRepetition(_legacyRepeatQueue, LegacyContents, formatted, msg.SenderEntity, msg.Message, msg.Channel, msg.RepeatCheckSender, msg.LanguageIcon) ?? false)
             return;
 
-        cmChat?.TrackLegacyRepetition(_legacyRepeatQueue, LegacyContents, formatted, msg.SenderEntity, msg.Message, msg.Channel);
+        cmChat?.TrackLegacyRepetition(_legacyRepeatQueue, LegacyContents, formatted, msg.SenderEntity, msg.Message, msg.Channel, msg.LanguageIcon);
         LegacyContents.AddMessage(formatted);
     }
 
@@ -1198,7 +1199,13 @@ public partial class ChatBox : UIWidget
     {
         var formatted = new FormattedMessage(3);
         formatted.PushColor(color);
+
+        // RMC14
+        if (!string.IsNullOrWhiteSpace(message.LanguageIcon))
+            formatted.AddMarkupOrThrow($"[langicon language=\"{FormattedMessage.EscapeText(message.LanguageIcon)}\"][/langicon]");
+        // RMC14
         formatted.AddMarkupOrThrow(message.WrappedMessage);
+
         formatted.Pop();
 
         return FilterProblematicTags(formatted);
@@ -1280,6 +1287,7 @@ public partial class ChatBox : UIWidget
         }
         return output;
     }
+    // RMC14
 
     public void Focus(ChatSelectChannel? channel = null)
     {

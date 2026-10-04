@@ -1,0 +1,105 @@
+- type: job
+  parent: AU14JobLEOLeaderBase
+  id: AU14JobCivilianNSPAInspector
+  roundSide: Civilian
+  roundForce: NSPA
+  roundRole: CivilianNSPAInspector
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUBureau
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillIntel: 1
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillLeadership: 3
+      RMCSkillVehicles: 1
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliannspainspector
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: tse_painspector
+  - type: Language
+    preset: AU14LanguagePresetTWE
+
+  name: au14-job-name-civiliannspainspector
+  description: au14-job-description-civiliannspainspector
+  setPreference: false
+  canBeAntag: false
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    Inspector:
+      entity: AU14ChevronNSPAInspector
+      requirements: []
+  startingGear: AU14GearCivilianNSPAInspector
+  icon: "RMCJobIconTSEPAInspector"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: NSPA Inspector (CMU)
+  accessGroups:
+  - auadmin
+  - aucmb
+  - Colonist
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianNSPAInspector
+  equipment:
+    id: AU14IDCardColonyNSPAInspector
+    outerClothing: RMCCoatTSEPA
+    jumpsuit: RMCJumpsuitTSEPA
+    shoes: RMCBootsPMCFilled
+    head: RMCHeadCapTSEPAPeakedGold
+    belt: CMBeltSecurityMarshalFilled
+    back: RMCSatchelTSEPA
+    ears: AU14CMBHeadset
+    pocket1: AU14StampNSPA
+  storage:
+    back:
+    - AU14GuidebookLawColonial
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianNSPAInspector
+  name: Spawn Point Civilian NSPA Inspector
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianNSPAInspector
+  - type: Sprite
+    state: syn_spawn
+
+- type: entity
+  parent: MarkerBase
+  id: aughostinspector
+  name: Inspector colonist ghost role
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+  - type: RandomHumanoidSpawner
+    settings: Aughostinspector
+
+- type: randomHumanoidSettings
+  parent: RMCSettingsGhostRole
+  id: Aughostinspector
+  components:
+  - type: RMCJobSpawner
+    job: AU14JobCivilianNSPAInspector

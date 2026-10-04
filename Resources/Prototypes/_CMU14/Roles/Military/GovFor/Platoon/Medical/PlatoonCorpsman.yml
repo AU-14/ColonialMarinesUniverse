@@ -1,0 +1,252 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobPlatoonCorpsmanBaseAbstract
+  name: au14-job-name-govforplatooncorpsman
+  description: au14-job-description-govforplatooncorpsman
+  icon: "AU14JobIconCorpsman"
+  spawnMenuRoleName: Hospital Corpsman (GOVFOR)
+  startingGear: AU14GearGOVFORPlatoonCorpsman
+  dummyStartingGear: AU14GearGOVFORCorpsmanDummy
+  playTimeTracker: AU14JobGOVFORPlatoonCorpsman
+  overwatchRoleName: au14-job-name-govforplatooncorpsman-plural
+  overwatchSortPriority: -2
+  accessGroups:
+  - AU14GovforCorpsman
+  - AU14GovforSquad
+
+- type: job
+  abstract: true
+  parent: AU14JobPlatoonCorpsmanBaseAbstract
+  id: AU14JobPlatoonCorpsmanBase
+  roundRole: PlatoonCorpsman
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonHospitalCorpsman
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforplatooncorpsman
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_corpsman
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: corpsman
+    RMC:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    UPP:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanUPP
+    WYPMC:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 1
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanWYPMC
+    CMBCIU:
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 2
+        RMCSkillFireman: 1
+        RMCSkillJtac: 1
+        RMCSkillMedical: 2
+        RMCSkillSurgery: 1
+        RMCSkillConstruction: 2
+        RMCSkillEngineer: 3
+        RMCSkillPolice: 2
+    - type: JobPrefix
+      prefix: au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanCMBCIU
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORPlatoonCorpsman
+        time: 36000
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORPlatoonCorpsman
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORPlatoonCorpsman
+  equipment:
+    id: AU14JobIDCardGOVFORPlatoonCorpsman
+    ears: AU14HeadsetGovforMarine
+
+- type: startingGear
+  id: AU14GearGOVFORCorpsmanDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    gloves: CMHandsLatex
+    shoes: CMBootsBlack
+    head: AU14JungleM10CorpsmanHelmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORPlatoonCorpsman
+  name: Spawn Point GOVFOR Platoon Corpsman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORPlatoonCorpsman
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobPlatoonCorpsmanBase
+  id: AU14JobGOVFORPlatoonCorpsman
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORPlatoonCorpsman
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobPlatoonCorpsmanBase
+  id: AU14JobOPFORPlatoonCorpsman
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORCorpsman"
+  spawnMenuRoleName: Hospital Corpsman (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearopforPlatoonCorpsman
+  dummyStartingGear: AU14GearopforCorpsmanDummy
+  accessGroups:
+  - AU14OpforCorpsman
+  - AU14OpforSquad
+
+- type: startingGear
+  id: AU14GearopforPlatoonCorpsman
+  equipment:
+    id: AU14JobIDCardopforPlatoonCorpsman
+    ears: AU14HeadsetOpforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforPlatoonCorpsman
+  name: Spawn Point opfor Platoon Corpsman
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORPlatoonCorpsman
+  - type: Sprite
+    state: syn_spawn
+
+- type: startingGear
+  id: AU14GearopforCorpsmanDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleOne
+    gloves: CMHandsLatex
+    shoes: CMBootsBlack
+    head: AU14JungleM10CorpsmanHelmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarine
+
+- type: job
+  parent: AU14JobPlatoonCorpsmanBase
+  id: AU14JobGOVFORPlatoonCorpsmanCMBCIU
+  roundForce: CMBCIU
+  name: Tactical Medic
+  spawnMenuRoleName: Hospital Corpsman (CMBCIU)
+  ranks:
+    AU14RankCMBSrDeputy:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsman
+      time: 108000 # 30 hours
+    AU14RankCMBDeputy: []
+
+- type: job
+  parent: AU14JobPlatoonCorpsmanBase
+  id: AU14JobGOVFORPlatoonCorpsmanRMC
+  roundForce: RMC
+  name: au14-job-name-govforplatooncorpsmanRMC
+  spawnMenuRoleName: Hospital Corpsman (TWE RMC)
+  ranks:
+    RMC_Corporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsman
+      time: 72000 # 20 hours
+    RMC_LanceCorporal: []
+
+- type: job
+  parent: AU14JobPlatoonCorpsmanBase
+  id: AU14JobGOVFORPlatoonCorpsmanUPP
+  roundForce: UPP
+  name: Field Medic
+  spawnMenuRoleName: Hospital Corpsman (UPP)
+  ranks:
+    UPP_Corporal:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsman
+      time: 108000 # 30 hours
+    UPP_SeniorGefreiter: []
+
+- type: job
+  parent: AU14JobPlatoonCorpsmanBase
+  id: AU14JobGOVFORPlatoonCorpsmanWYPMC
+  roundForce: WYPMC
+  name: PMC Combat Lifesaver
+  spawnMenuRoleName: Hospital Corpsman (WYPMC)
+  ranks:
+    AU14RankWeYuSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: AU14JobGOVFORPlatoonCorpsman
+      time: 108000 # 30 hours
+    AU14RankWeYuOperator: []

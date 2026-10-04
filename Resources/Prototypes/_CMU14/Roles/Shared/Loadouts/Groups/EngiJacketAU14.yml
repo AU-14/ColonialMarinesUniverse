@@ -1,0 +1,8 @@
+- type: loadoutGroup
+  id: EngiJacketAU14
+  name: au14-loadout-group-civilian-jacket
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - HazardVestAU14
+  - CivilianJacketSnowSuitAU14

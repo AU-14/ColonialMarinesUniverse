@@ -147,6 +147,13 @@ public partial struct AntagSelectionDefinition()
     [DataField]
     public HashSet<ProtoId<JobPrototype>>? JobBlacklist;
 
+    /// <summary>
+    /// A list of antagJobBlacklist prototypes, (e.g. "AllGovforJobs"),
+    /// much better maintainable if, for example, a new job was added.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<AntagJobBlacklistPrototype>>? JobBlacklistGroup;
+
     /// <remarks>
     /// Mostly just here for legacy compatibility and reducing boilerplate
     /// </remarks>

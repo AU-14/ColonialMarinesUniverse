@@ -492,7 +492,7 @@
     denyState: deny-unshaded
     ejectState: eject-unshaded
   - type: AccessReader
-    access: [ [ "AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ] ]
+    access: [["AU14AccessGovforSecurity"], ["AU14AccessOpforSecurity"], ["CMAccessArmory"]]
 
 - type: vendingMachineInventory
   id: CMVendorSec
@@ -517,6 +517,7 @@
     #ClueScanner: 3
     #Camera: 8
     #CameraFilm: 8
+    CMU14TearGasGrenade: 4
     RMCWhistle: 5
     RMCFoodDonut: 12
     RMCBoxDonut: 2 #Contraband

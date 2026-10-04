@@ -28,12 +28,11 @@ public sealed class ScalingViewportProjectionTest
     }
 
     [Test]
-    public void ZLevelRenderPassesAreSuppressedDuringPlacement()
+    public void ZLevelRenderPassesUseRenderCVarsOnly()
     {
-        Assert.That(ScalingViewport.ShouldUseZLevelRenderPasses(placementActive: true, zLevelsEnabled: true, renderEnabled: true), Is.False);
-        Assert.That(ScalingViewport.ShouldUseZLevelRenderPasses(placementActive: false, zLevelsEnabled: true, renderEnabled: true), Is.True);
-        Assert.That(ScalingViewport.ShouldUseZLevelRenderPasses(placementActive: false, zLevelsEnabled: false, renderEnabled: true), Is.False);
-        Assert.That(ScalingViewport.ShouldUseZLevelRenderPasses(placementActive: false, zLevelsEnabled: true, renderEnabled: false), Is.False);
+        Assert.That(ScalingViewport.ShouldUseZLevelRenderPasses(zLevelsEnabled: true, renderEnabled: true), Is.True);
+        Assert.That(ScalingViewport.ShouldUseZLevelRenderPasses(zLevelsEnabled: false, renderEnabled: true), Is.False);
+        Assert.That(ScalingViewport.ShouldUseZLevelRenderPasses(zLevelsEnabled: true, renderEnabled: false), Is.False);
     }
 
     [Test]

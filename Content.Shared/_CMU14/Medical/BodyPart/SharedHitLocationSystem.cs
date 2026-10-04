@@ -153,11 +153,7 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         {
             if (RollAimAccuracy(ent.Owner, args.Attacker, forced))
             {
-                args.ResolvedPart = forced;
-                args.ResolvedPartEntity =
-                    FindFirstPartOfType(ent.Owner, forced, args.ForcedSymmetry)
-                    ?? FindFirstPartOfType(ent.Owner, forced);
-                args.Handled = true;
+                AssignResolvedPart(ent.Owner, ref args, forced, args.ForcedSymmetry);
                 return;
             }
 
@@ -195,9 +191,8 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         var roll = Random.NextFloat() * weights.Total;
         var partType = weights.Pick(roll);
 
-        args.ResolvedPart = partType;
-        args.ResolvedPartEntity = FindFirstPartOfType(ent.Owner, partType) ?? FindFirstPartOfType(ent.Owner, BodyPartType.Torso);
-        args.Handled = true;
+        AssignResolvedPart(ent.Owner, ref args, partType);
+        args.ResolvedPartEntity ??= FindFirstPartOfType(ent.Owner, BodyPartType.Torso);
     }
 
     private bool RollAimAccuracy(EntityUid target, EntityUid? attacker, BodyPartType forced)
@@ -244,6 +239,75 @@ public abstract partial class SharedHitLocationSystem : EntitySystem
         }
         return null;
     }
+
+    private void AssignResolvedPart(
+        EntityUid bodyId,
+        ref HitLocationResolveEvent args,
+        BodyPartType type,
+        BodyPartSymmetry? symmetry = null)
+    {
+        args.ResolvedPart = type;
+        args.ResolvedPartEntity = FindBestDamagePart(bodyId, type, symmetry);
+        if (args.ResolvedPartEntity is { } partUid &&
+            TryComp<BodyPartComponent>(partUid, out var part))
+        {
+            args.ResolvedPart = part.PartType;
+        }
+
+        args.Handled = true;
+    }
+
+    private EntityUid? FindBestDamagePart(EntityUid bodyId, BodyPartType type, BodyPartSymmetry? symmetry)
+    {
+        var fallbackType = GetFallbackPartType(type);
+        var part = FindFirstDamageablePartOfType(bodyId, type, symmetry);
+
+        if (symmetry != null)
+            part ??= FindFirstDamageablePartOfType(bodyId, type);
+
+        if (fallbackType != type)
+        {
+            part ??= FindFirstDamageablePartOfType(bodyId, fallbackType, symmetry);
+            if (symmetry != null)
+                part ??= FindFirstDamageablePartOfType(bodyId, fallbackType);
+        }
+
+        part ??= FindFirstPartOfType(bodyId, type, symmetry);
+        if (symmetry != null)
+            part ??= FindFirstPartOfType(bodyId, type);
+
+        if (fallbackType != type)
+        {
+            part ??= FindFirstPartOfType(bodyId, fallbackType, symmetry);
+            if (symmetry != null)
+                part ??= FindFirstPartOfType(bodyId, fallbackType);
+        }
+
+        return part;
+    }
+
+    private EntityUid? FindFirstDamageablePartOfType(EntityUid bodyId, BodyPartType type, BodyPartSymmetry? symmetry = null)
+    {
+        foreach (var (uid, partComp) in Body.GetBodyChildren(bodyId))
+        {
+            if (partComp.PartType != type)
+                continue;
+            if (symmetry is { } s && partComp.Symmetry != s)
+                continue;
+            if (!HasComp<BodyPartHealthComponent>(uid))
+                continue;
+            return uid;
+        }
+
+        return null;
+    }
+
+    private static BodyPartType GetFallbackPartType(BodyPartType type) => type switch
+    {
+        BodyPartType.Hand => BodyPartType.Arm,
+        BodyPartType.Foot => BodyPartType.Leg,
+        _ => type,
+    };
 
     private bool HasLocalizableDamage(DamageSpecifier damage)
         => HasPositiveInGroup(damage, BruteGroup) || HasPositiveInGroup(damage, BurnGroup);

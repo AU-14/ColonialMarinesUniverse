@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Client._RMC14.Medical.HUD;
 using Content.Client._RMC14.NightVision;
+using Content.Shared._AU14.Abominations;
 using Content.Shared._RMC14.Mobs;
 using Content.Shared._RMC14.Shields;
 using Content.Shared._RMC14.Stealth;
@@ -112,11 +113,13 @@ public sealed partial class XenoHudOverlay : Overlay
         var isAdminGhost = _entity.TryGetComponent(_players.LocalEntity, out GhostComponent? ghost) &&
                            ghost.CanGhostInteract;
         var isXeno = _entity.HasComponent<XenoComponent>(_players.LocalEntity);
+        var isAbomination = _entity.HasComponent<AbominationComponent>(_players.LocalEntity) ||
+                             _entity.HasComponent<AbominationMimicTransformedComponent>(_players.LocalEntity);
         var isGhost = false;
 
         if (!_entity.HasComponent<CMGhostXenoHudComponent>(_players.LocalEntity))
         {
-            if (!isXeno && !isAdminGhost)
+            if (!isXeno && !isAdminGhost && !isAbomination)
                 return;
         }
         else
@@ -149,10 +152,10 @@ public sealed partial class XenoHudOverlay : Overlay
         }
 
         if (isXeno || isAdminGhost)
-        {
             DrawInfectedIcon(in args, scaleMatrix, rotationMatrix);
+
+        if (isXeno || isAdminGhost || isAbomination)
             DrawSynthIcon(in args, scaleMatrix, rotationMatrix);
-        }
 
         handle.UseShader(null);
         handle.SetTransform(Matrix3x2.Identity);

@@ -8,4 +8,49 @@
     job: AU14JobCivilianAmbassadorUA
   - type: ItemIFF
     factions:
+    - FactionUASOF
     - FactionVAI
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardTWEAmbassador
+  name: TWE ambassador ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianAmbassadorTWE
+  - type: ItemIFF
+    factions:
+    - FactionTWESOF
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardUPPAmbassador
+  name: UPP ambassador ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianAmbassadorUPP
+  - type: ItemIFF
+    factions:
+    - FactionUPPSOF
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardICSCAmbassador
+  name: ICSC ambassador ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianAmbassadorICSC
+  - type: ItemIFF
+    factions:
+    - FactionICSCSOF
+
+- type: entity
+  parent: CMIDCardBase
+  id: AU14IDCardCCAAmbassador
+  name: CCA ambassador ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobCivilianAmbassadorCCA
+  - type: ItemIFF
+    factions:
+    - FactionCCASOF

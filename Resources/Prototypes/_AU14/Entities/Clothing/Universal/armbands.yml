@@ -3,3 +3,17 @@
   id: AU14ArmbandYellow
   name: yellow armband
   description: Fancy yellow armband.
+
+- type: entity
+  parent: RMCPatchBase
+  id: CMU14USCMMPBrassard
+  name: MP Brassard
+  description: A Military Police brassard bearing the emblem of the United States Colonial Marines and bold white letters displaying "MP".
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Patches/mp_armbands.rsi
+    state: USCMicon
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Patches/mp_armbands.rsi
+      state: USCMpatch

@@ -98,10 +98,14 @@
         crate: RMCCrateMedicalPill
       - cost: 500
         crate: CMUCrateMedicalFieldTreatments
+        maxStock: 2
+        stockReplenishDelay: 480
       - cost: 320
         crate: AU14CrateBoxHospitalBeds
       - cost: 475
         crate: AU14CrateBoxDefibrillator
+        maxStock: 4
+        stockReplenishDelay: 600
     - name: Supplies
       entries:
       - cost: 350
@@ -172,7 +176,60 @@
         crate: AU14CrateBoxD18Magazines
       - cost: 355
         crate: AU14CrateBoxABR40Magazines
-
+    - name: Vehicle Ammo
+      entries:
+      - cost: 2000
+        crate: RMCCrateVehicleAmmoLTBCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoLTAAAP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoAceAutocannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1700
+        crate: RMCCrateVehicleAmmoDragonFlamer
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoBoyarsDualCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 900
+        crate: RMCCrateVehicleAmmoGrenadeLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 700
+        crate: RMCCrateVehicleAmmoSmokeLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2200
+        crate: RMCCrateVehicleAmmoTowLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1000
+        crate: RMCCrateVehicleAmmoCupola
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1200
+        crate: RMCCrateVehicleAmmoLZRNFlamer
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1000
+        crate: RMCCrateVehicleAmmoFrontalCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 700
+        crate: RMCCrateVehicleAmmoFlareLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoRotaryCannon
+        maxStock: 2
+        stockReplenishDelay: 300
     - name: Furniture
       entries:
       - cost: 320

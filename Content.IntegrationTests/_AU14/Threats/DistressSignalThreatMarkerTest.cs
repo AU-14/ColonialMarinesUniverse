@@ -142,7 +142,7 @@ public sealed class DistressSignalThreatMarkerTest
                     {
                         [ThreatMarkerType.Leader] = bodyCount.Leaders,
                         [ThreatMarkerType.Member] = bodyCount.Members,
-                        [ThreatMarkerType.Entity] = partySpawn.entitiestospawn.Values.Sum(),
+                        [ThreatMarkerType.Entity] = partySpawn.EntitiesToSpawn.Values.Sum(),
                     };
 
                     foreach (var (markerType, requiredCount) in requiredMarkers)
@@ -180,7 +180,7 @@ public sealed class DistressSignalThreatMarkerTest
             {
                 [ThreatMarkerType.Leader] = partySpawn.LeadersToSpawn.Values.Sum(),
                 [ThreatMarkerType.Member] = partySpawn.GruntsToSpawn.Values.Sum(),
-                [ThreatMarkerType.Entity] = partySpawn.entitiestospawn.Values.Sum(),
+                [ThreatMarkerType.Entity] = partySpawn.EntitiesToSpawn.Values.Sum(),
             };
 
             foreach (var planetProto in prototypes.EnumeratePrototypes<EntityPrototype>())

@@ -1,0 +1,93 @@
+- type: job
+  parent: AU14JobLEOLeaderBase
+  id: AU14JobCivilianCMBMarshal
+  roundSide: Civilian
+  roundForce: CMB
+  roundRole: CivilianCMBMarshal
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 5
+      RMCSkillIntel: 1
+      RMCSkillMedical: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillLeadership: 3
+      RMCSkillJtac: 3
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-cmbmarshal
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: cmb_mar
+
+  name: au14-job-name-civiliancmbmarshal
+  description: au14-job-description-civiliancmbmarshal
+  setPreference: false
+  canBeAntag: false
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    Marshal:
+      entity: AU14ChevronCMBMarshal
+      requirements: []
+  startingGear: AU14GearCivilianCMBMarshal
+  icon: "RMCJobIconBureauMarshal"
+  requireAdminNotify: true
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: CMB Marshal (CMU)
+  accessGroups:
+  - auadmin
+  - aucmb
+  - Colonist
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianCMBMarshal
+  equipment:
+    head: RMCHeadCapBureau
+    jumpsuit: AU14CMBUniform
+    belt: CMBeltSecurityMarshalFilled
+    shoes: RMCBootsPMCFilled
+    id: AU14IDCardColonyCMBMarshal
+    ears: AU14CMBHeadset
+    outerClothing: AU14CMBMarshalWindbreaker
+    pocket1: AU14GuidebookLawColonial
+    pocket2: AU14StampCMBM
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCMBMarshal
+  name: Spawn Point Civilian CMB Marshal
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCMBMarshal
+  - type: Sprite
+    state: syn_spawn
+
+- type: entity
+  parent: MarkerBase
+  id: aumarshallghost
+  name: Marshall colonist ghost role
+  components:
+  - type: Sprite
+    layers:
+    - state: red
+  - type: RandomHumanoidSpawner
+    settings: Aughostmarshall
+
+- type: randomHumanoidSettings
+  parent: RMCSettingsGhostRole
+  id: Aughostmarshall
+  components:
+  - type: RMCJobSpawner
+    job: AU14JobCivilianCMBMarshal

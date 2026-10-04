@@ -1,0 +1,66 @@
+- type: job
+  parent: CMJobBase
+  id: AU14RMCRRTSmartgunner
+  roundSide: ThirdParty
+  roundForce: RMC
+  roundRole: AU14RMCRRTSmartgunner
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonAutomaticRifleman
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforsquadautomaticriflemanRMC
+
+  name: au14-job-name-govforsquadautomaticriflemanRMC
+  description: au14-rmcert-rules
+  playTimeTracker: AU14JobRMCRRTSmartgunner
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMC_LanceCorporal:
+      entity: AU14ChevronRMCLanceCorporal
+      requirements: []
+  spawnMenuRoleName: RMC RRT Machinegunner
+  startingGear: AU14GearRMCRRTSmartgunner
+  icon: "RMCJobIconRoyalSmartGunOperator"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-rmcrrt-commander
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicRMCRRT
+  id: AU14JobRMCRRTSmartgunner
+  name: RMC reaction troop machinegunner
+  components:
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadRMCRRT
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: RMC reaction troop machinegunner
+    description: You have been dispatched as a Royal Marines Commando Rapid Reaction Troop member. The details of the mission have not been disclosed to you, however your main objective is to assist GOVFOR forces in the area of operation. You are friendly to GOVFOR command and neutral to civilians.
+    job: AU14RMCRRTSmartgunner
+    raffle:
+      settings: short
+    rules: au14-rmcert-rules
+
+- type: startingGear
+  id: AU14GearRMCRRTSmartgunner
+  equipment:
+    id: AU14IDCardRMCRRTSmartgunner
+    outerClothing: AU14ArmorSmartGunDesertCombatHarnessRMC
+    jumpsuit: AU14FatiguesBlackRMC
+    shoes: RMCBootsRoyalFilled
+    mask: RMCMaskScarfTan
+    head: AU14HeadHelmetRMCHeavy
+    gloves: AU14HandsRMC
+    belt: RMCBeltSmartGunOperatorPistolFilledL165A1
+    pocket1: RMCPouchDrumPMCFilled
+    pocket2: AU14PouchIFAKFill
+    ears: AU14HeadsetRMCRRT
+    suitstorage: RMCSmartGunRoyal
+
+- type: playTimeTracker
+  id: AU14JobRMCRRTSmartgunner

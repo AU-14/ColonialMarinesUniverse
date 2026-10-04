@@ -123,7 +123,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         var presetId = (_ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? string.Empty).ToLowerInvariant();
 
         var selectedPlanet = _auRound.GetSelectedPlanet();
-        var selectedThreat = _auRound._selectedthreat;
+        var selectedThreat = _auRound.SelectedThreat;
 
         // Keep one deterministic knowledge line for the whole round.
         EnsureRoundKnowledgeLine(selectedThreat);
@@ -304,4 +304,3 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     }
 
 }
-

@@ -878,6 +878,7 @@
     paradropping: false
     OB: true
     supplyDrop: false
+    weatherEnabled: false
 
 - type: entity
   parent: RMCAreaStrataExteriorDeepJungle

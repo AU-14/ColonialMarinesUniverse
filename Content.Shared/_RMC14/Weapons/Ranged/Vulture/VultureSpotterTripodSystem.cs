@@ -39,18 +39,21 @@ public sealed partial class VultureSpotterTripodSystem : EntitySystem
 
     private void OnContainerChanged(Entity<VultureSpotterTripodComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
-        OnContainerChanged(ent, args.Container.ID, true);
+        OnContainerChanged(ent, args.Container.ID, args.Entity, true);
     }
 
     private void OnContainerChanged(Entity<VultureSpotterTripodComponent> ent, ref EntRemovedFromContainerMessage args)
     {
-        OnContainerChanged(ent, args.Container.ID, false);
+        OnContainerChanged(ent, args.Container.ID, args.Entity, false);
     }
 
-    private void OnContainerChanged(Entity<VultureSpotterTripodComponent> ent, string containerId, bool inserted)
+    private void OnContainerChanged(Entity<VultureSpotterTripodComponent> ent, string containerId, EntityUid item, bool inserted)
     {
         if (containerId != ent.Comp.ScopeSlot)
             return;
+
+        if (TryComp(item, out ScopeComponent? scope))
+            _scope.Unscope((item, scope));
 
         if (inserted && ent.Comp.PendingScopeDirection is { } direction)
             _transform.SetLocalRotation(ent.Owner, direction.ToAngle());

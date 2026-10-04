@@ -11,6 +11,7 @@
         Blunt: -0.1
   - type: Physics
     bodyType: Static
+  - type: CMUZPhysics
   - type: Fixtures
     fixtures:
       fix1:

@@ -10,6 +10,7 @@ using Content.Server.Preferences.Managers;
 using Content.Server.Station.Events;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
+using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Players;
@@ -98,6 +99,20 @@ public sealed partial class PlayTimeTrackingSystem : EntitySystem
 
     public IEnumerable<string> GetTimedRoles(EntityUid mindId)
     {
+        if (TryComp(mindId, out MindComponent? mind))
+        {
+            foreach (var roleId in mind.MindRoles)
+            {
+                if (!TryComp(roleId, out MindRoleComponent? mindRole) ||
+                    mindRole.PlayTimeTracker is not { } tracker)
+                {
+                    continue;
+                }
+
+                yield return _prototypes.Index<PlayTimeTrackerPrototype>(tracker).ID;
+            }
+        }
+
         foreach (var role in _roles.MindGetAllRoleInfo(mindId))
         {
             if (string.IsNullOrWhiteSpace(role.PlayTimeTrackerId))

@@ -10,10 +10,10 @@ ent-RMCActionXenoDespoilerCausticEmbrace = Caustic Embrace
     .desc = Leap toward the click with an acid splash. Empowered lets you strike a chosen target up to 5 tiles away and applies an acid DoT.
 
 ent-RMCActionXenoDespoilerOozingWounds = Oozing Wounds
-    .desc = Creates a ring of acid spray around you. The radius grows as your HP drops. The empowered version stuns and applies acid.
+    .desc = Creates a ring of acid spray around you. The radius grows as your HP drops. The empowered version stuns and applies acid. Lose stacks upon use.
 
 ent-RMCActionXenoDespoilerCatalyze = Catalyze
-    .desc = Spends 1 Hypertension stack and empowers your next active ability.
+    .desc = Spends 2 Hypertension stacks and empowers your next active ability.
 
 rmc-despoiler-no-hypertension = Not enough Hypertension stacks.
 rmc-despoiler-catalyze-active = The next ability is empowered!

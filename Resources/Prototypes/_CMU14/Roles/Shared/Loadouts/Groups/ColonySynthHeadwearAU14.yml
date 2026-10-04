@@ -1,0 +1,17 @@
+- type: loadoutGroup
+  id: ColonySynthHeadwearAU14
+  name: rmc-loadout-group-synthetic-headwear
+  minLimit: 0
+  maxLimit: 2
+  loadouts:
+  - BeretEngineerRMC
+  - CapQuartermasterRMC
+  - HeadCapCargoRMC
+  - HardHatRMC
+  - HardHatOrangeRMC
+  - HardHatWhiteRMC
+  - HardHatBlueRMC
+  - HeadCapSurgBlueAU14
+  - HeadCapSurgGreenAU14
+
+# ERO

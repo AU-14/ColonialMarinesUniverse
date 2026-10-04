@@ -8,11 +8,11 @@ public sealed partial class TacMapXenoAlertSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<TacMapXenoAlertComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<TacMapXenoAlertComponent, ComponentStartup>(OnStartup);
         SubscribeLocalEvent<TacMapXenoAlertComponent, ComponentRemove>(OnRemove);
     }
 
-    private void OnMapInit(Entity<TacMapXenoAlertComponent> ent, ref MapInitEvent args)
+    private void OnStartup(Entity<TacMapXenoAlertComponent> ent, ref ComponentStartup args)
     {
         _alerts.ShowAlert(ent, ent.Comp.Alert);
     }

@@ -29,10 +29,9 @@ public sealed partial class AudioUIController : UIController
          */
 
         // No unsub coz never shuts down until program exit.
+        _configManager.OnValueChanged(CCVars.InterfaceVolume, SetInterfaceVolume, true);
         _configManager.OnValueChanged(CCVars.UIClickSound, SetClickSound, true);
         _configManager.OnValueChanged(CCVars.UIHoverSound, SetHoverSound, true);
-
-        _configManager.OnValueChanged(CCVars.InterfaceVolume, SetInterfaceVolume, true);
     }
 
     private void SetInterfaceVolume(float obj)
@@ -55,20 +54,16 @@ public sealed partial class AudioUIController : UIController
         if (!string.IsNullOrEmpty(value))
         {
             var resource = GetSoundOrFallback(value, CCVars.UIClickSound.DefaultValue);
-            var source =
-                _audioManager.CreateAudioSource(resource);
-
-            if (source != null)
-            {
-                source.Gain = ClickGain * _interfaceGain;
-                source.Global = true;
-            }
+            var source = resource != null
+                ? TryCreateUiSource(resource, ClickGain)
+                : null;
 
             _clickSource = source;
             UIManager.SetClickSound(source);
         }
         else
         {
+            _clickSource = null;
             UIManager.SetClickSound(null);
         }
     }
@@ -78,29 +73,66 @@ public sealed partial class AudioUIController : UIController
         if (!string.IsNullOrEmpty(value))
         {
             var hoverResource = GetSoundOrFallback(value, CCVars.UIHoverSound.DefaultValue);
-            var hoverSource =
-                _audioManager.CreateAudioSource(hoverResource);
-
-            if (hoverSource != null)
-            {
-                hoverSource.Gain = HoverGain * _interfaceGain;
-                hoverSource.Global = true;
-            }
+            var hoverSource = hoverResource != null
+                ? TryCreateUiSource(hoverResource, HoverGain)
+                : null;
 
             _hoverSource = hoverSource;
             UIManager.SetHoverSound(hoverSource);
         }
         else
         {
+            _hoverSource = null;
             UIManager.SetHoverSound(null);
         }
     }
 
-    private AudioResource GetSoundOrFallback(string path, string fallback)
+    private AudioResource? GetSoundOrFallback(string path, string fallback)
     {
-        if (!_cache.TryGetResource(path, out AudioResource? resource))
-            return _cache.GetResource<AudioResource>(fallback);
+        if (TryGetSound(path, out var resource))
+            return resource;
 
-        return resource;
+        if (string.IsNullOrEmpty(fallback) ||
+            path.Equals(fallback, StringComparison.Ordinal))
+        {
+            return null;
+        }
+
+        return TryGetSound(fallback, out resource)
+            ? resource
+            : null;
+    }
+
+    private bool TryGetSound(string path, out AudioResource? resource)
+    {
+        try
+        {
+            return _cache.TryGetResource(path, out resource);
+        }
+        catch (Exception e)
+        {
+            Logger.GetSawmill("ui.audio").Warning($"Failed to load UI sound '{path}': {e}");
+            resource = null;
+            return false;
+        }
+    }
+
+    private IAudioSource? TryCreateUiSource(AudioResource resource, float gain)
+    {
+        try
+        {
+            var source = _audioManager.CreateAudioSource(resource);
+            if (source == null)
+                return null;
+
+            source.Gain = gain * _interfaceGain;
+            source.Global = true;
+            return source;
+        }
+        catch (Exception e)
+        {
+            Logger.GetSawmill("ui.audio").Warning($"Failed to create UI audio source: {e}");
+            return null;
+        }
     }
 }

@@ -1,0 +1,5 @@
+- type: rank
+  id: USArmy_FirstSergeant
+  name: First Sergeant
+  prefix: 1stSgt.
+  paygrade: E8

@@ -1,7 +1,6 @@
 - type: entity
   id: CMU14TearGas
   name: Tear Gas
-  #categories: [ HideSpawnMenu ]
   components:
   - type: Transform
     anchored: true
@@ -36,37 +35,25 @@
   - type: EvenSmoke
     spawn: CMU14TearGas
     range: 2
-
-    #values tweaked to remove damage and prioritize incapacitating without any ouchies since it's meant to be a crowd control nade
-  - type: NeurotoxinInjector
-    neuroPerSecond: 2.3
-    #current neuro allows for someone who stands in the gas for the entire duration to get knocked out but without the hallucinations of CAS/mortar
+  - type: ChemicalIrritantInjector
+    irritantPerSecond: 7
     affectsDead: false
     affectsInfectedNested: false
-    toxinDamage:
-        groups:
-          Toxin: 0
-    oxygenDamage:
-        types:
-          Asphyxiation: 0
-    coughDamage:
-        groups:
-          Brute: 0
-
-    #just makes it so that you have audible feedback upon inhaling smoke
-  - type: DamageOverTime
-    affectsDead: false
-    affectsInfectedNested: false
-    emotes:
-    - Cough
-    - Gasp
-  
+    filterDamage: 1.15
+    depletionPerTick: 1
+    profile:
+      irritantType: tear_gas
+      effectThreshold: 1
+      blindThreshold: 15
+      severeThreshold: 18
+      tripThreshold: 15
+      tripChance: 0.12
+      tripStunTime: 1.5
+      blurTime: 5
+      blindTime: 1
+      minimumDelayBetweenTrips: 6
+      dyloveneEfficiency: 0
   - type: DeleteOnExplosion
-
-  #current values allow for a unit with a HAZOPS gas mask filter to stand within the duration of 4 and a half tear gas nades 
-  - type: GasMaskFilterDamage
-    damage: 0.5
-    neurotoxin: true
 
 
 - type: entity
@@ -76,6 +63,8 @@
   components:
   - type: TimedDespawn
     lifetime: 6
+  - type: EdgeSpreader
+    id: CMU14InstantTearGas
 
 
 - type: edgeSpreader

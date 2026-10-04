@@ -784,6 +784,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         }
     }
 
+    // TODO: RoundEndSound
     private void OnRoundEndMessage(RoundEndMessageEvent ev)
     {
         var rules = QueryActiveRules();
@@ -799,7 +800,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 DistressSignalRuleResult.MinorMarineVictory => distress.MinorMarineAudio,
                 DistressSignalRuleResult.MajorXenoVictory => distress.MajorXenoAudio,
                 DistressSignalRuleResult.MinorXenoVictory => distress.MinorXenoAudio,
-                // DistressSignalRuleResult.AllDied => distress.AllDiedAudio,
+                DistressSignalRuleResult.AllDied => distress.AllDiedAudio,
                 _ => null,
             };
 

@@ -66,8 +66,12 @@ public abstract partial class SharedBodyZoneTargetingSystem : EntitySystem
         TargetBodyZone.GroinPelvis => (BodyPartType.Torso, BodyPartSymmetry.None),
         TargetBodyZone.LeftArm => (BodyPartType.Arm, BodyPartSymmetry.Left),
         TargetBodyZone.RightArm => (BodyPartType.Arm, BodyPartSymmetry.Right),
+        TargetBodyZone.LeftHand => (BodyPartType.Hand, BodyPartSymmetry.Left),
+        TargetBodyZone.RightHand => (BodyPartType.Hand, BodyPartSymmetry.Right),
         TargetBodyZone.LeftLeg => (BodyPartType.Leg, BodyPartSymmetry.Left),
         TargetBodyZone.RightLeg => (BodyPartType.Leg, BodyPartSymmetry.Right),
+        TargetBodyZone.LeftFoot => (BodyPartType.Foot, BodyPartSymmetry.Left),
+        TargetBodyZone.RightFoot => (BodyPartType.Foot, BodyPartSymmetry.Right),
         _ => (BodyPartType.Torso, BodyPartSymmetry.None),
     };
 }

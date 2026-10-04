@@ -1,0 +1,215 @@
+- type: roundGroup
+  id: ColonyFallCultistRoundGroup
+  kind: Hostile
+  sourcePrototypeId: cultistThreat
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          CMXenoQueen: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          cultistJob: 3
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Member
+          - marker-id:<generic>
+    allowsUnderfill: true
+  winConditionRuleIds:
+    - KillAllColonistRule
+    - KillAllXenoRule
+  timing:
+    delayMinSeconds: 1200
+    delayMaxSeconds: 2400
+
+- type: roundGroup
+  id: ColonyFallCultistMarkerRoundGroup
+  kind: Hostile
+  sourcePrototypeId: cultistThreatOnMarker
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          CMXenoQueen: 1
+      - bucket: Member
+        count: 5
+        bodies:
+          cultistJob: 3
+        scaling:
+          cultistJob:
+            scale: 0.03
+            benchmark: 4
+            whenToBeginScaling: 50
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Leader
+          - marker-id:cultcfmarker
+      - bucket: Member
+        requiredBodyCount: 5
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Member
+          - marker-id:cultcfmarker
+    allowsUnderfill: true
+  winConditionRuleIds:
+    - KillAllColonistRule
+    - KillAllXenoRule
+  timing:
+    delayMinSeconds: 1200
+    delayMaxSeconds: 2400
+
+- type: roundGroup
+  id: ColonyFallXenoRoundGroup
+  kind: Hostile
+  sourcePrototypeId: XenoThreatCF
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          CMXenoQueen: 1
+      - bucket: Member
+        count: 4
+        bodies:
+          CMXenoLarva: 1
+        scaling:
+          CMXenoLarva:
+            scale: 0.07
+            whenToBeginScaling: 50
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Leader
+          - marker-id:xenocf
+      - bucket: Member
+        requiredBodyCount: 4
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Member
+          - marker-id:xenocf
+    allowsUnderfill: true
+  winConditionRuleIds:
+    - KillAllColonistRule
+    - KillAllXenoRule
+  timing:
+    delayMinSeconds: 1200
+    delayMaxSeconds: 2400
+
+- type: roundGroup
+  id: ColonyFallAbominationRoundGroup
+  kind: Hostile
+  sourcePrototypeId: abominationsThreat
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14AbominationMimic: 1
+        scaling:
+          AU14AbominationMimic:
+            scale: 0.05
+            whenToBeginScaling: 30
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14AbominationMimic: 1
+          AU14AbominationSkitter: 1
+        scaling:
+          AU14AbominationMimic:
+            scale: 0.05
+            whenToBeginScaling: 30
+          AU14AbominationSkitter:
+            scale: 0.04
+            whenToBeginScaling: 45
+      - bucket: Entity
+        count: 1
+        bodies:
+          AU14AbominationFleshNest: 1
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Leader
+          - marker-id:xenocf
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Member
+          - marker-id:xenocf
+      - bucket: Entity
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Entity
+          - marker-id:xenocf
+    allowsUnderfill: true
+  winConditionRuleIds:
+    - KillAllColonistRule
+    - KillAllAbominationsRule
+  timing:
+    delayMinSeconds: 1200
+    delayMaxSeconds: 2400
+
+- type: roundGroup
+  id: ColonyFallWendigoRoundGroup
+  kind: Hostile
+  sourcePrototypeId: wendigoThreat
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14Wendigo: 1
+      - bucket: Member
+        count: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:hostile
+          - bucket:Leader
+          - marker-id:<generic>
+    allowsUnderfill: true
+  winConditionRuleIds:
+    - KillAllColonistRule
+    - KillAllXenoRule
+  timing:
+    delayMinSeconds: 1200
+    delayMaxSeconds: 2400

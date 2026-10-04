@@ -18,36 +18,30 @@ public sealed class BodyZoneTargetWidget : Control
     public event Action<TargetBodyZone>? ZoneClicked;
     public Func<TargetBodyZone?>? GetSelectedZone;
 
-    private const int DollSize = 32;
-    private const int DollScale = 2;
+    private const int LayoutWidth = 32;
+    private const int LayoutHeight = 32;
+    private const int DisplaySize = 96;
+    private const string BaseState = "zone_sel";
 
     private static readonly ResPath RsiPath =
         new("/Textures/_CMU14/Medical/HUD/targetdoll.rsi");
 
-    private static readonly Dictionary<TargetBodyZone, string[]> ZoneParts = new()
+    private static readonly ZoneButton[] ZoneButtons =
     {
-        [TargetBodyZone.Head] = new[] { "head", "eyes", "mouth" },
-        [TargetBodyZone.Chest] = new[] { "torso" },
-        [TargetBodyZone.GroinPelvis] = new[] { "groin" },
-        [TargetBodyZone.LeftArm] = new[] { "leftarm", "lefthand" },
-        [TargetBodyZone.RightArm] = new[] { "rightarm", "righthand" },
-        [TargetBodyZone.LeftLeg] = new[] { "leftleg", "leftfoot" },
-        [TargetBodyZone.RightLeg] = new[] { "rightleg", "rightfoot" },
+        new(TargetBodyZone.Head, new UIBox2(10, 2, 21, 10), new[] { "head", "eyes", "mouth" }),
+        new(TargetBodyZone.RightArm, new UIBox2(6, 10, 11, 18), new[] { "rightarm" }),
+        new(TargetBodyZone.Chest, new UIBox2(11, 9, 20, 18), new[] { "torso" }),
+        new(TargetBodyZone.LeftArm, new UIBox2(20, 10, 25, 18), new[] { "leftarm" }),
+        new(TargetBodyZone.RightHand, new UIBox2(6, 18, 11, 24), new[] { "righthand" }),
+        new(TargetBodyZone.GroinPelvis, new UIBox2(10, 18, 21, 20), new[] { "groin" }),
+        new(TargetBodyZone.LeftHand, new UIBox2(20, 18, 25, 24), new[] { "lefthand" }),
+        new(TargetBodyZone.RightLeg, new UIBox2(10, 20, 16, 28), new[] { "rightleg" }),
+        new(TargetBodyZone.LeftLeg, new UIBox2(16, 20, 22, 28), new[] { "leftleg" }),
+        new(TargetBodyZone.RightFoot, new UIBox2(8, 28, 16, 32), new[] { "rightfoot" }),
+        new(TargetBodyZone.LeftFoot, new UIBox2(16, 28, 24, 32), new[] { "leftfoot" }),
     };
 
-    // Hit-test rectangles in 32x32 doll space. Right/Bottom are exclusive.
-    private static readonly (TargetBodyZone Zone, UIBox2 Rect)[] ZoneRects =
-    {
-        (TargetBodyZone.Head,        new UIBox2( 8,  0, 23,  8)),
-        (TargetBodyZone.Chest,       new UIBox2(11,  8, 20, 18)),
-        (TargetBodyZone.GroinPelvis, new UIBox2(11, 18, 20, 22)),
-        (TargetBodyZone.LeftArm,     new UIBox2(20,  9, 24, 21)),
-        (TargetBodyZone.RightArm,    new UIBox2( 7,  9, 11, 21)),
-        (TargetBodyZone.LeftLeg,     new UIBox2(16, 20, 24, 30)),
-        (TargetBodyZone.RightLeg,    new UIBox2( 8, 20, 16, 30)),
-    };
-
-    private readonly Dictionary<string, Texture> _parts = new();
+    private readonly Dictionary<string, Texture> _textures = new();
 
     private TargetBodyZone? _hovered;
 
@@ -59,46 +53,35 @@ public sealed class BodyZoneTargetWidget : Control
         var resCache = IoCManager.Resolve<IResourceCache>();
         var rsi = resCache.GetResource<RSIResource>(RsiPath).RSI;
 
-        foreach (var partList in ZoneParts.Values)
+        LoadState(rsi, BaseState);
+        foreach (var button in ZoneButtons)
         {
-            foreach (var part in partList)
+            foreach (var state in button.States)
             {
-                if (rsi.TryGetState(part, out var s))
-                    _parts[part] = s.Frame0;
-                if (rsi.TryGetState(part + "_hover", out var sh))
-                    _parts[part + "_hover"] = sh.Frame0;
+                LoadState(rsi, state);
+                LoadState(rsi, $"{state}_hover");
             }
         }
 
         MouseFilter = MouseFilterMode.Stop;
-        MinSize = new Vector2(DollSize * DollScale, DollSize * DollScale);
+        MinSize = new Vector2(DisplaySize, DisplaySize);
     }
 
     protected override void Draw(DrawingHandleScreen handle)
     {
         base.Draw(handle);
 
-        var rect = new UIBox2(Vector2.Zero, PixelSize);
+        DrawState(handle, BaseState);
 
         var selected = GetSelectedZone?.Invoke();
-
-        foreach (var (zone, parts) in ZoneParts)
-        {
-            var active = zone == selected || zone == _hovered;
-            foreach (var part in parts)
-            {
-                var key = active ? part + "_hover" : part;
-                if (!_parts.TryGetValue(key, out var tex))
-                    continue;
-                handle.DrawTextureRect(tex, rect);
-            }
-        }
+        foreach (var button in ZoneButtons)
+            DrawButton(handle, button, selected);
     }
 
     protected override void MouseMove(GUIMouseMoveEventArgs args)
     {
         base.MouseMove(args);
-        _hovered = ZoneAt(args.RelativePosition);
+        _hovered = ZoneAt(args.RelativePixelPosition);
     }
 
     protected override void MouseExited()
@@ -114,26 +97,68 @@ public sealed class BodyZoneTargetWidget : Control
         if (args.Function != EngineKeyFunctions.UIClick)
             return;
 
-        if (ZoneAt(args.RelativePosition) is { } zone)
+        if (ZoneAt(args.RelativePixelPosition) is { } zone)
         {
             ZoneClicked?.Invoke(zone);
             args.Handle();
         }
     }
 
-    private TargetBodyZone? ZoneAt(Vector2 relativePos)
+    private TargetBodyZone? ZoneAt(Vector2 relativePixelPos)
     {
-        if (Size.X <= 0 || Size.Y <= 0)
+        if (PixelSize.X <= 0 || PixelSize.Y <= 0)
             return null;
 
-        var dollX = relativePos.X * DollSize / Size.X;
-        var dollY = relativePos.Y * DollSize / Size.Y;
+        var x = relativePixelPos.X * LayoutWidth / PixelSize.X;
+        var y = relativePixelPos.Y * LayoutHeight / PixelSize.Y;
 
-        foreach (var (zone, r) in ZoneRects)
+        foreach (var button in ZoneButtons)
         {
-            if (dollX >= r.Left && dollX < r.Right && dollY >= r.Top && dollY < r.Bottom)
-                return zone;
+            var rect = button.Rect;
+            if (x >= rect.Left && x < rect.Right && y >= rect.Top && y < rect.Bottom)
+                return button.Zone;
         }
+
         return null;
     }
+
+    private void LoadState(RSI rsi, string state)
+    {
+        if (rsi.TryGetState(state, out var texture))
+            _textures[state] = texture.Frame0;
+    }
+
+    private void DrawButton(DrawingHandleScreen handle, ZoneButton button, TargetBodyZone? selected)
+    {
+        var hover = button.Zone == _hovered;
+        if (!hover && button.Zone != selected)
+            return;
+
+        foreach (var state in button.States)
+            DrawState(handle, hover ? $"{state}_hover" : state);
+    }
+
+    private void DrawState(DrawingHandleScreen handle, string state)
+    {
+        if (!_textures.TryGetValue(state, out var texture))
+            return;
+
+        handle.DrawTextureRect(texture, ScaleRect(new UIBox2(0, 0, LayoutWidth, LayoutHeight)));
+    }
+
+    private UIBox2 ScaleRect(UIBox2 rect)
+    {
+        var scaleX = PixelSize.X / LayoutWidth;
+        var scaleY = PixelSize.Y / LayoutHeight;
+        return new UIBox2(
+            rect.Left * scaleX,
+            rect.Top * scaleY,
+            rect.Right * scaleX,
+            rect.Bottom * scaleY);
+    }
+
+    private readonly record struct ZoneButton(
+        TargetBodyZone Zone,
+        UIBox2 Rect,
+        string[] States);
 }

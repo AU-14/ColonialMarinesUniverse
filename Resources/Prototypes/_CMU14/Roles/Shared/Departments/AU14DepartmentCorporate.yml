@@ -1,0 +1,18 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentCorporate
+  name: au14-department-colony-corporate
+  description: au14-department-colony-corporate-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianCorporateAdministrator
+    - AU14JobCivilianCorporateAdminAssistant
+    - AU14JobCivilianCorporateLiaison
+    - AU14JobWYGuard
+    - AU14JobCivilianScientist
+    - AU14JobCivilianKellandWarden
+    - AU14JobCivilianCorporateAssistant
+    - AU14JobColonyWorkingJoe
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianCorporateAdministrator
+  faction: colonist

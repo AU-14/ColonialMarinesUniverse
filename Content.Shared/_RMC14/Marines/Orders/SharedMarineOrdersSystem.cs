@@ -163,15 +163,15 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
             return false;
 
         var leadershipSkill = _skills.GetSkill(orders.Owner, orders.Comp.Skill);
-        if (leadershipSkill <= 0 && !HasComp<SquadLeaderComponent>(orders.Owner))
-            return false;
-
         var level = Math.Max(1, leadershipSkill);
         var duration = orders.Comp.Duration * (level + 1);
 
         _actions.SetCooldown(orders.Comp.FocusActionEntity, orders.Comp.Cooldown);
         _actions.SetCooldown(orders.Comp.MoveActionEntity, orders.Comp.Cooldown);
         _actions.SetCooldown(orders.Comp.HoldActionEntity, orders.Comp.Cooldown);
+
+        if (leadershipSkill <= 0 && !HasComp<SquadLeaderComponent>(orders.Owner))
+            return false;
 
         _receivers.Clear();
         _entityLookup.GetEntitiesInRange(xform.Coordinates, orders.Comp.OrderRange, _receivers);
@@ -230,6 +230,42 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
         _actions.SetUseDelay(comp.MoveActionEntity, comp.Cooldown);
         _actions.SetUseDelay(comp.HoldActionEntity, comp.Cooldown);
         _actions.SetUseDelay(comp.FocusActionEntity, comp.Cooldown);
+    }
+
+    protected void SyncOrderActions(Entity<MarineOrdersComponent> ent)
+    {
+        bool isLeader = HasComp<SquadLeaderComponent>(ent.Owner) || _skills.GetSkill(ent.Owner, ent.Comp.Skill) > 0;
+        bool hasActions = ent.Comp.MoveActionEntity != null;
+
+        if (isLeader == hasActions)
+            return;
+
+        if (isLeader)
+            EnsureOrderActions(ent);
+        else
+            RemoveOrderActions(ent);
+    }
+
+    private void RemoveOrderActions(Entity<MarineOrdersComponent> ent)
+    {
+        var comp = ent.Comp;
+        if (comp.MoveActionEntity != null)
+        {
+            _actions.RemoveAction(ent.Owner, comp.MoveActionEntity.Value);
+            comp.MoveActionEntity = null;
+        }
+        if (comp.HoldActionEntity != null)
+        {
+            _actions.RemoveAction(ent.Owner, comp.HoldActionEntity.Value);
+            comp.HoldActionEntity = null;
+        }
+        if (comp.FocusActionEntity != null)
+        {
+            _actions.RemoveAction(ent.Owner, comp.FocusActionEntity.Value);
+            comp.FocusActionEntity = null;
+        }
+
+        Dirty(ent);
     }
 
     private SoundSpecifier? GetMoveSound(Entity<MarineOrdersComponent> orders)

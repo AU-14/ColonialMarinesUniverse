@@ -257,3 +257,11 @@
   materials:
     CMSteel: 75 # 60
     CMGlass: 37 # 30
+
+- type: latheRecipe
+  id: RMCUniversalRecorderTape
+  result: RMCUniversalRecorderTape
+  completetime: 4
+  materials:
+    CMSteel: 20 # 60
+    CMGlass: 10 # 30

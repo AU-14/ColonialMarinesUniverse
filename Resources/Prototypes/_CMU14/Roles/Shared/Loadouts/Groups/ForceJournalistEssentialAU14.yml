@@ -1,0 +1,9 @@
+- type: loadoutGroup
+  id: ForceJournalistEssentialAU14
+  name: rmc-loadout-group-backpack
+  minLimit: 1
+  hidden: true
+  loadouts:
+  - JournalistEssentialAU14
+
+# Kelland Warden

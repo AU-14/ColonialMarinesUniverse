@@ -1,0 +1,13 @@
+- type: loadoutGroup
+  id: WYGuardHeadwearAU14
+  name: au14-loadout-group-corporate-headwear
+  minLimit: 1
+  maxLimit: 2
+  loadouts:
+  - WYArmorHelmetPMCCorporateAU14
+  - WYArmorHelmetPMCCorporateHybrisaAU14
+  - WYArmorHelmetPMCKutjevoSecurityAU14
+  - WYHeadCapWeylandYutaniDarkAU14
+
+# civs
+# colonist

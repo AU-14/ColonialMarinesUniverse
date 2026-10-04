@@ -1,0 +1,5 @@
+- type: rank
+  id: USArmy_LieutenantColonel
+  name: Lieutenant Colonel
+  prefix: Lt Col.
+  paygrade: O5

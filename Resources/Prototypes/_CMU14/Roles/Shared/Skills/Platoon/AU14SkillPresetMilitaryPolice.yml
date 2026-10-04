@@ -1,0 +1,17 @@
+- type: entity
+  id: AU14SkillPresetMilitaryPolice
+  name: Military Police
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillConstruction: 1
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 2
+      RMCSkillEngineer: 1
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 3
+      RMCSkillVehicles: 1
+      RMCSkillJtac: 1
+      RMCSkillPolice: 2

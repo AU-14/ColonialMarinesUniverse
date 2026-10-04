@@ -120,7 +120,7 @@
     pointsPerSlash: 200
     decayDelay: 10
     decayPerSecond: 120
-    bonusBurnPerStack: 20
+    bonusBurnPerStack: 15
   - type: XenoDespoilerSlashOnHit
     enhanceStacksThreshold: 3
   - type: Tackle

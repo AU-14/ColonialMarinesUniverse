@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Dropship.Weapon;
@@ -34,6 +35,7 @@ public sealed partial class RMCAirShotSystem : EntitySystem
     [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private SharedDropshipWeaponSystem _dropship = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     public override void Initialize()
     {
@@ -95,7 +97,8 @@ public sealed partial class RMCAirShotSystem : EntitySystem
             }
         }
 
-        _audio.PlayPredicted(gun.SoundGunshotModified, ent, args.User);
+        if (!_zLevels.PlayPredictedDirectlyAcrossZ(gun.SoundGunshotModified, ent, args.User))
+            _audio.PlayPredicted(gun.SoundGunshotModified, ent, args.User);
 
         if (ent.Comp.ShakeAmount > 0)
         {

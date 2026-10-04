@@ -1,0 +1,72 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianCorporateAdminAssistant
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: CivilianCorporateAdminAssistant
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancorporateadminassistant
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: corporate_assistant
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+  name: au14-job-name-civiliancorporateadminassistant
+  description: au14-job-description-civiliancorporateadminassistant
+  setPreference: false
+  playTimeTracker: AU14JobCivilianCorporateAdminAssistant
+  canBeAntag: false
+  startingGear: AU14GearCivilianCorporateAdminAssistant
+  icon: "AU14JobIconCorporateAssistant"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: Corporate Admin Assistant (CMU)
+  accessGroups:
+  - auwy
+  - Colonist
+  - AUPrisonStaff
+  - auadmin
+  - CMCargoTech
+  - auheadsofcolony
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianCorporateAdminAssistant
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardColonyCorporateLiaison
+    ears: AU14ColonyWeylandHeadset
+    outerClothing: AU14CivilianJacketGrayPufferVest
+    back: CMSatchel
+  inhand:
+  - RMCRadioHandheldColonyOff
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateAdminAssistant
+  name: Spawn Point Corporate Admin Assistant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateAdminAssistant
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateAdminAssistant
+  isHumanoid: true

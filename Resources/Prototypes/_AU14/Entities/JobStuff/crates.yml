@@ -113,3 +113,45 @@
       amount: 3
     - id: AU14ToolPickaxe
       amount: 3
+
+- type: entity
+  id: CMUCrateLivestockWeYu
+  parent: CrateLivestock
+  name: experiment subject crate
+  description: A crate containing an experiment subject.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: CMUCrateLivestockWeYuRandomSelection
+
+- type: entityTable
+  id: CMUCrateLivestockWeYuRandomSelection
+  table: !type:GroupSelector
+    children:
+    - !type:GroupSelector
+      children:
+      - id: MobCow
+      - id: MobGoat
+      - id: MobGorilla
+      - id: MobKangaroo
+      - id: MobPig
+      - !type:GroupSelector
+        weight: 0.75
+        children:
+        - id: RMCMobSmallHostFarwa
+          amount: 3
+        - id: CMMobSmallHostKobold
+          amount: 3
+          weight: 2
+        - id: CMMobSmallHostMonkey
+          amount: 3
+          weight: 4
+        - id: RMCMobSmallHostNeaera
+          amount: 3
+        - id: RMCMobSmallHostStok
+          amount: 3
+        - id: RMCMobSmallHostYiren
+          amount: 3
+        - id: CMUMobCarp
+          amount: 3

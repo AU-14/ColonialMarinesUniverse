@@ -36,4 +36,49 @@
     channels:
     - radioVAI
 
-# TODO: ICSCSOF, UASOF, TWESOF, UPPSOF, radioVAI, PART, Ambassadors/ThirdParty-callins
+- type: entity
+  id: FactionCCASOF
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - CCASOF
+
+- type: entity
+  id: FactionICSCSOF
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - ICSCSOF
+
+- type: entity
+  id: FactionUASOF
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - UASOF
+
+- type: entity
+  id: FactionTWESOF
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - TWESOF
+
+- type: entity
+  id: FactionUPPSOF
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - UPPSOF
+
+# TODO: PART

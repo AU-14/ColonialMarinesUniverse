@@ -16,13 +16,44 @@ public sealed class RequisitionsBuiState : BoundUserInterfaceState
     public bool Busy;
     public int Balance;
     public bool Full;
+    public List<RequisitionsStockInfo> Stock;
 
-    public RequisitionsBuiState(RequisitionsElevatorMode? platformLowered, bool busy, int balance, bool full)
+    public RequisitionsBuiState(
+        RequisitionsElevatorMode? platformLowered,
+        bool busy,
+        int balance,
+        bool full,
+        List<RequisitionsStockInfo> stock)
     {
         PlatformLowered = platformLowered;
         Busy = busy;
         Balance = balance;
         Full = full;
+        Stock = stock;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class RequisitionsStockInfo
+{
+    public int Category;
+    public int Order;
+    public int Current;
+    public int Max;
+    public int SecondsUntilNextReplenish;
+
+    public RequisitionsStockInfo(
+        int category,
+        int order,
+        int current,
+        int max,
+        int secondsUntilNextReplenish)
+    {
+        Category = category;
+        Order = order;
+        Current = current;
+        Max = max;
+        SecondsUntilNextReplenish = secondsUntilNextReplenish;
     }
 }
 

@@ -21,6 +21,7 @@ using Content.Shared.Popups;
 using Content.Shared.Tools.Systems;
 using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
+using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -56,6 +57,7 @@ public sealed partial class UniversalRecorderSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     public override void Initialize()
     {
@@ -223,6 +225,14 @@ public sealed partial class UniversalRecorderSystem : EntitySystem
 
         if (TryGetTape(ent, out _))
             return;
+
+        if (ent.Comp.TapeSlot.Whitelist != null
+            && !_whitelist.IsValid(ent.Comp.TapeSlot.Whitelist, args.Used))
+        {
+            _popup.PopupEntity(Loc.GetString("rmc-universal-recorder-popup-insert-fail"), ent.Owner, args.User);
+            args.Handled = true;
+            return;
+        }
 
         if (!_itemSlots.TryInsertFromHand(ent.Owner, ent.Comp.TapeSlot, args.User, excludeUserAudio: true))
             return;

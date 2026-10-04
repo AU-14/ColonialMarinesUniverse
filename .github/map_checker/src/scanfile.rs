@@ -1,6 +1,7 @@
 use log::{trace, debug};
 use std::{fs, io};
 use std::path::Path;
+use std::collections::HashMap;
 
 use crate::structs::{Matcher, Match};
 
@@ -16,7 +17,7 @@ pub fn scan_file(file_path: &Path, matchers_blacklist: &Vec<Matcher>, matchers_w
         .filter(|matcher| {
             matcher.file_paths.is_empty() || matcher.file_paths.iter().any(|p| file_path.ends_with(p))
         })
-        .collect(); 
+        .collect();
 
     // Read the file content
     debug!("Scanning file: {}", file_path.display());
@@ -51,5 +52,36 @@ pub fn scan_file(file_path: &Path, matchers_blacklist: &Vec<Matcher>, matchers_w
         }
     }
 
+    let dup_matches = check_duplicate_uids(&content);
+    matches.extend(dup_matches);
+
     Ok(matches)
+}
+
+fn check_duplicate_uids(content: &str) -> Vec<Match> {
+    let mut uid_lines: HashMap<u32, Vec<usize>> = HashMap::new();
+    let uid_regex = regex::Regex::new(r"uid:\s*(\d+)\b").expect("Failed to compile UID regex");
+
+    for (i, line) in content.lines().enumerate() {
+        if let Some(caps) = uid_regex.captures(line) {
+            if let Some(num_str) = caps.get(1) {
+                if let Ok(uid) = num_str.as_str().parse::<u32>() {
+                    uid_lines.entry(uid).or_default().push(i + 1);
+                }
+            }
+        }
+    }
+
+    let mut matches = Vec::new();
+    for (uid, lines) in uid_lines {
+        let count = lines.len();
+        if count > 1 {
+            let lines_str = lines.iter().map(|l| l.to_string()).collect::<Vec<_>>().join(", ");
+            matches.push(Match {
+                matched_text: format!("uid: {}", uid),
+                info: format!("duplicate UID {} appears {} times at lines: {}", uid, count, lines_str),
+            });
+        }
+    }
+    matches
 }

@@ -42,13 +42,6 @@
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: AU14JobIconPlatoonSarge
-  icon:
-    sprite: _AU14/Interface/au14govforjobicons.rsi
-    state: govfor_ftl
-
-- type: jobIcon
-  parent: CMJobIconBase
   id: AU14JobIconPilotOfficer
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
@@ -59,18 +52,46 @@
   id: AU14JobIconRFN
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: old_govfor_rfn
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconMP
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_mp
 
 - type: jobIcon
   parent: CMJobIconBase
-  id: AU14JobIconSarge
+  id: AU14JobIconFTL
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: govfor_ftl
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconSquadSgt
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_sergeant
 
 - type: jobIcon
   parent: CMJobIconBase
+  id: AU14JobIconPlatoonSgt
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: old_govfor_platoonsergeant
+
+- type: jobIcon
+  parent: CMJobIconBase
   id: AU14JobIconRTO
+  icon:
+    sprite: _AU14/Interface/au14govforjobicons.rsi
+    state: old_govfor_rto
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconAuxTech
   icon:
     sprite: _AU14/Interface/au14govforjobicons.rsi
     state: govfor_auxtech

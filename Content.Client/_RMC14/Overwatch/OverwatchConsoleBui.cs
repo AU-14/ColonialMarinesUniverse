@@ -76,10 +76,16 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         var squads = s.Squads.ToList();
         squads.Sort((a, b) => string.CompareOrdinal(a.Name, b.Name));
 
-        foreach (var (id, panel) in _squads)
+        foreach (var (id, panel) in _squads.ToArray())
         {
             if (squads.All(oldSquad => oldSquad.Id != id))
+            {
                 panel.Orphan();
+                _squads.Remove(id);
+                if (_squadViews.Remove(id, out var view))
+                    view.Orphan();
+                _rows.Remove(id);
+            }
         }
 
         foreach (var squad in squads)
@@ -147,13 +153,25 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 monitor.Visible = squad.Id == activeSquad;
                 monitor.TacticalMapButton.OnPressed += _ => SendPredictedMessage(new OverwatchViewTacticalMapBuiMsg());
                 monitor.OperatorButton.OnPressed += _ => SendPredictedMessage(new OverwatchConsoleTakeOperatorBuiMsg());
-                monitor.SearchBar.OnTextChanged += _ => monitor.UpdateResults(
-                    console.Location,
-                    console.ShowDead,
-                    console.ShowHidden,
-                    marines,
-                    console
-                );
+                monitor.SearchBar.OnTextChanged += _ =>
+                {
+                    if (State is not OverwatchConsoleBuiState state ||
+                        !EntMan.TryGetComponent(Owner, out OverwatchConsoleComponent? currentConsole))
+                    {
+                        return;
+                    }
+
+                    if (!state.Marines.TryGetValue(squad.Id, out var currentMarines))
+                        currentMarines = new List<OverwatchMarine>();
+
+                    monitor.UpdateResults(
+                        currentConsole.Location,
+                        currentConsole.ShowDead,
+                        currentConsole.ShowHidden,
+                        currentMarines,
+                        currentConsole
+                    );
+                };
 
                 monitor.ShowLocationButton.Label.ModulateSelfOverride = Color.Black;
                 monitor.ShowLocationButton.OnPressed += _ =>
@@ -293,6 +311,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
                 monitor.FireteamsButton.OnPressed += _ =>
                     SendPredictedMessage(new OverwatchConsoleOpenSquadFireteamsBuiMsg(squad.Id));
+                monitor.OnStop += () => SendPredictedMessage(new OverwatchConsoleStopOverwatchBuiMsg());
 
                 var canSupplyDrop = EntMan.HasComponent<SupplyDropComputerComponent>(Owner) && squad.CanSupplyDrop;
                 TabContainer.SetTabVisible(monitor.SupplyDrop, canSupplyDrop);
@@ -313,8 +332,6 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
             }
 
             monitor.OverwatchLabel.Text = Loc.GetString("rmc-overwatch-console-dashboard", ("squadName", squad.Name));
-
-            monitor.OnStop += () => SendPredictedMessage(new OverwatchConsoleStopOverwatchBuiMsg());
 
             // Fireteams are handled by the SquadInfo UI (opened by Overwatch) so we don't populate them locally here.
 
@@ -339,7 +356,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 row.Distance.Panel.Orphan();
                 row.Buttons.Container.Orphan();
 
-                _rows.Remove(id);
+                squadRows.Remove(id);
             }
 
             foreach (var marine in marines)
@@ -549,6 +566,11 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 {
                     row.Buttons.Hide.Visible = false;
                     row.Buttons.Promote.Visible = false;
+                }
+                else
+                {
+                    row.Buttons.Hide.Visible = true;
+                    row.Buttons.Promote.Visible = true;
                 }
             }
 

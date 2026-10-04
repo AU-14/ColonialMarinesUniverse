@@ -2,7 +2,7 @@
   id: WorkingJoe
   name: species-name-workingjoe
   roundStart: false
-  prototype: AU14MobWorkingJoe
+  prototype: AU14MobWorkingJoeColony
   sprites: MobWorkingJoeSprites
   markingLimits: MobHumanMarkingLimits
   dollPrototype: MobHumanDummy

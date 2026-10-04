@@ -34,10 +34,15 @@ public sealed partial class BodyZoneTargetWidgetController :
     {
         TargetBodyZone.Head,
         TargetBodyZone.RightArm,
+        TargetBodyZone.RightHand,
         TargetBodyZone.Chest,
+        TargetBodyZone.GroinPelvis,
         TargetBodyZone.LeftArm,
+        TargetBodyZone.LeftHand,
         TargetBodyZone.RightLeg,
+        TargetBodyZone.RightFoot,
         TargetBodyZone.LeftLeg,
+        TargetBodyZone.LeftFoot,
     };
 
     public override void Initialize()
@@ -48,6 +53,18 @@ public sealed partial class BodyZoneTargetWidgetController :
             InputCmdHandler.FromDelegate(_ => CycleSelectedZone(1), handle: true));
         _input.SetInputCommand(CMUKeyFunctions.CMUCycleBodyZoneTargetReverse,
             InputCmdHandler.FromDelegate(_ => CycleSelectedZone(-1), handle: true));
+        _input.SetInputCommand(CMUKeyFunctions.CMUTargetBodyZoneHead,
+            InputCmdHandler.FromDelegate(_ => SelectSingleZone(TargetBodyZone.Head), handle: true));
+        _input.SetInputCommand(CMUKeyFunctions.CMUTargetBodyZoneTorso,
+            InputCmdHandler.FromDelegate(_ => SelectZoneGroup(TargetBodyZone.Chest, TargetBodyZone.GroinPelvis), handle: true));
+        _input.SetInputCommand(CMUKeyFunctions.CMUTargetBodyZoneLeftArm,
+            InputCmdHandler.FromDelegate(_ => SelectZoneGroup(TargetBodyZone.LeftArm, TargetBodyZone.LeftHand), handle: true));
+        _input.SetInputCommand(CMUKeyFunctions.CMUTargetBodyZoneRightArm,
+            InputCmdHandler.FromDelegate(_ => SelectZoneGroup(TargetBodyZone.RightArm, TargetBodyZone.RightHand), handle: true));
+        _input.SetInputCommand(CMUKeyFunctions.CMUTargetBodyZoneLeftLeg,
+            InputCmdHandler.FromDelegate(_ => SelectZoneGroup(TargetBodyZone.LeftLeg, TargetBodyZone.LeftFoot), handle: true));
+        _input.SetInputCommand(CMUKeyFunctions.CMUTargetBodyZoneRightLeg,
+            InputCmdHandler.FromDelegate(_ => SelectZoneGroup(TargetBodyZone.RightLeg, TargetBodyZone.RightFoot), handle: true));
     }
 
     public void OnStateEntered(GameplayState state)
@@ -91,15 +108,16 @@ public sealed partial class BodyZoneTargetWidgetController :
         var parent = viewport?.Parent ?? (Control?)screen ?? UIManager.RootControl;
         parent.AddChild(widget);
 
-        const float margin = 8f;
+        const float horizontalMargin = 8f;
+        const float verticalMargin = 18f;
         var width = widget.MinSize.X;
         var height = widget.MinSize.Y;
 
         LayoutContainer.SetAnchorPreset(widget, LayoutContainer.LayoutPreset.BottomRight);
-        LayoutContainer.SetMarginLeft(widget, -(margin + width));
-        LayoutContainer.SetMarginRight(widget, -margin);
-        LayoutContainer.SetMarginTop(widget, -(margin + height));
-        LayoutContainer.SetMarginBottom(widget, -margin);
+        LayoutContainer.SetMarginLeft(widget, -(horizontalMargin + width));
+        LayoutContainer.SetMarginRight(widget, -horizontalMargin);
+        LayoutContainer.SetMarginTop(widget, -(verticalMargin + height));
+        LayoutContainer.SetMarginBottom(widget, -verticalMargin);
     }
 
     private void OnLocalAttached(EntityUid uid) => RefreshVisibility();
@@ -139,6 +157,30 @@ public sealed partial class BodyZoneTargetWidgetController :
             return;
 
         SelectZone(CycleZone(aim.Selected, direction));
+    }
+
+    private void SelectSingleZone(TargetBodyZone zone)
+    {
+        if (!ShouldShow())
+            return;
+
+        SelectZone(zone);
+    }
+
+    private void SelectZoneGroup(TargetBodyZone primary, TargetBodyZone secondary)
+    {
+        if (!ShouldShow())
+            return;
+        if (_player.LocalEntity is not { } local)
+            return;
+        if (!_entMan.TryGetComponent<BodyZoneTargetingComponent>(local, out var aim))
+            return;
+
+        var current = aim.LastSelectedAt == default
+            ? (TargetBodyZone?) null
+            : aim.Selected;
+
+        SelectZone(current == primary ? secondary : primary);
     }
 
     private void SelectZone(TargetBodyZone zone)

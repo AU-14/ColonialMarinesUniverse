@@ -408,7 +408,6 @@
     size: Small
   - type: Scope
     useInHand: true
-    canUseInsideContainer: true
     zoomLevels:
     - zoom: 1.8
       offset: 17

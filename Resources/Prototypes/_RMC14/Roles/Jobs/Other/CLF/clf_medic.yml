@@ -1,4 +1,4 @@
-- type: job
+﻿- type: job
   parent: CMJobBase
   id: RMCCLFMedic
   name: rmc-clf-medic
@@ -15,7 +15,7 @@
     components:
     - type: Skills
       skills:
-        RMCSkillFirearms: 2
+        RMCSkillFirearms: 1
         RMCSkillFireman: 1
         RMCSkillMedical: 2
         RMCSkillSurgery: 2
@@ -25,7 +25,15 @@
     - type: NpcFactionMember
       factions:
       - CLF
-    - type: CLFMember
+    - type: Language
+      spokenLanguages:
+      - Japanese
+      - English
+      understoodLanguages:
+      - Japanese
+      - English
+      currentLanguage: Japanese
+      defaultLanguage: Japanese
     - type: JobPrefix
       prefix: rmc-job-prefix-clf-medic
   hidden: true
@@ -87,15 +95,16 @@
     - RMCMRECLF
     - CMSynthGraft
     - CMCrowbar
-    - CMDefibrillator
-    - CMHealthAnalyzer
-    - CMRollerBedSpawnFolded
     pocket2:
     - RMCMagazineSMGMAC15
     - RMCMagazineSMGMAC15
     - RMCMagazineSMGMAC15
     - RMCMagazineSMGMAC15
     - RMCMagazineSMGMAC15
+    belt:
+    - CMDefibrillator
+    - CMHealthAnalyzer
+    - CMRollerBedSpawnFolded
     outerClothing:
     - RMCMagazineSMGMAC15
     - RMCMagazineSMGMAC15

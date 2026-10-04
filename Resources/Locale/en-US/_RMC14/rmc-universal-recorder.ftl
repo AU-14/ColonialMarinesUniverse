@@ -26,6 +26,7 @@ rmc-universal-recorder-popup-no-data = The tape has no data.
 rmc-universal-recorder-popup-full = Tape full.
 rmc-universal-recorder-popup-broken = The tape is broken.
 rmc-universal-recorder-popup-insert-generic = You insert the tape.
+rmc-universal-recorder-popup-insert-fail = That won't fit!
 rmc-universal-recorder-popup-recording-start = Recording started.
 rmc-universal-recorder-popup-recording-stop = Recording stopped.
 rmc-universal-recorder-popup-playback-start = Playback started.

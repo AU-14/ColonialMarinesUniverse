@@ -373,7 +373,7 @@ public sealed partial class StationJobsSystem
                 // Helper proto ids for common roles
                 var protoColonist = new ProtoId<JobPrototype>("AU14JobCivilianColonist");
                 var protoGovRifle = new ProtoId<JobPrototype>("AU14JobGOVFORSquadRifleman");
-                var protoOpfRifle = new ProtoId<JobPrototype>("AU14JobOpforSquadRifleman");
+                var protoOpfRifle = new ProtoId<JobPrototype>("AU14JobOPFORSquadRifleman");
 
                 var stationOverflows = GetOverflowJobs(station);
 

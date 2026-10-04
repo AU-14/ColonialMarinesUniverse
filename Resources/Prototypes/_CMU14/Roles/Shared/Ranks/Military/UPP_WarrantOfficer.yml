@@ -1,0 +1,5 @@
+- type: rank
+  id: UPP_WarrantOfficer
+  name: Warrant Officer
+  prefix: WO.
+  paygrade: W1

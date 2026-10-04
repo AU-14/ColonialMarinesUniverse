@@ -56,6 +56,13 @@
     - Alive
     - Critical
     - Dead
+  - type: Language
+    spokenLanguages:
+    - Xeno
+    understoodLanguages:
+    - Xeno
+    currentLanguage: Xeno
+    defaultLanguage: Xeno
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -151,7 +158,7 @@
     bodyType: KinematicController
   - type: CMUZPhysics
   # CMU14
-  - type: CMUXenoZJump
+  #- type: CMUXenoZJump
   # CMU14
   - type: Fixtures
     fixtures:

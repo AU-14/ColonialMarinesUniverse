@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Evasion;
 using Content.Shared._RMC14.Input;
 using Content.Shared.ActionBlocker;
+using Content.Shared.Body.Components;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
@@ -155,9 +156,23 @@ public sealed partial class RMCStandingSystem : EntitySystem
         if (TryComp<RMCRestComponent>(drop, out var rest) && rest.Resting)
             return true;
 
-        return HasComp<KnockedDownComponent>(drop) ||
-               HasComp<StunnedComponent>(drop) ||
-               _mob.IsIncapacitated(drop);
+        if (TryComp<BuckleComponent>(drop, out var buckle) && buckle.Buckled)
+            return true;
+
+        if (HasComp<KnockedDownComponent>(drop) ||
+            HasComp<StunnedComponent>(drop) ||
+            _mob.IsIncapacitated(drop))
+        {
+            return true;
+        }
+
+        return !HasMissingLeg(drop);
+    }
+
+    private bool HasMissingLeg(EntityUid uid)
+    {
+        return TryComp<BodyComponent>(uid, out var body) &&
+               body.LegEntities.Count < 2;
     }
 
     private void OnEnterDown(Entity<DownOnEnterComponent> mob, ref EntInsertedIntoContainerMessage args)

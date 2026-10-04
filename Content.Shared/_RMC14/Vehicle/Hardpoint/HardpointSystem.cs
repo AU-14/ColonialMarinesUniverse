@@ -2718,4 +2718,54 @@ public sealed partial class HardpointSystem : EntitySystem
         tool = held.Value;
         return true;
     }
+
+    // Used to Rejuv (Content.Server/_CMU14/Blackfoot/VehicleRejuvenateSystem)
+    public void ResetAllHardpointsToFullHealth(EntityUid vehicle)
+    {
+        if (!TryComp<HardpointSlotsComponent>(vehicle, out var hardpoints)
+                || !TryComp<ItemSlotsComponent>(vehicle, out var itemSlots))
+            return;
+
+        foreach (var mounted in _topology.GetMountedSlots(vehicle, hardpoints, itemSlots))
+        {
+            if (mounted.Item is { } item
+                && TryComp<HardpointIntegrityComponent>(item, out var integrity))
+            {
+                integrity.Integrity = integrity.MaxIntegrity;
+                Dirty(item, integrity);
+            }
+        }
+
+        RefreshVehicleFrameIntegrityFromHardpoints(vehicle, hardpoints, itemSlots);
+    }
+
+    public void ClearAllFailures(EntityUid uid)
+    {
+        if (TryComp<VehicleHardpointFailureComponent>(uid, out var frameFailures))
+        {
+            var failuresCopy = frameFailures.ActiveFailures.ToArray();
+            foreach (var failure in failuresCopy)
+                RemoveHardpointFailure(uid, uid, failure, frameFailures);
+        }
+
+        if (TryComp<HardpointSlotsComponent>(uid, out var hardpoints)
+         && TryComp<ItemSlotsComponent>(uid, out var itemSlots))
+        {
+            foreach (var mounted in _topology.GetMountedSlots(uid, hardpoints, itemSlots))
+            {
+                if (mounted.Item is not { } item)
+                    continue;
+
+                if (TryComp<VehicleHardpointFailureComponent>(item, out var itemFailures))
+                {
+                    var failuresCopy = itemFailures.ActiveFailures.ToArray();
+                    foreach (var failure in failuresCopy)
+                        RemoveHardpointFailure(uid, item, failure, itemFailures);
+                }
+            }
+        }
+
+        UpdateHardpointUi(uid);
+        RaiseHardpointSlotsChanged(uid);
+    }
 }

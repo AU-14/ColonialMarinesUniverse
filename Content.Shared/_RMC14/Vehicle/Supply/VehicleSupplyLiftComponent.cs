@@ -72,6 +72,9 @@ public sealed partial class VehicleSupplyLiftComponent : Component
     public EntityUid? PendingVehicleEntity;
 
     [NonSerialized]
+    public string PendingVehicleGroup = string.Empty;
+
+    [NonSerialized]
     public readonly List<VehicleSupplyLoadoutOption> PendingLoadouts = new();
 
     [NonSerialized]
@@ -85,6 +88,12 @@ public sealed partial class VehicleSupplyLiftComponent : Component
 
     [NonSerialized]
     public readonly HashSet<string> Deployed = new();
+
+    [NonSerialized]
+    public readonly HashSet<string> Ordered = new();
+
+    [NonSerialized]
+    public readonly Dictionary<string, string> OrderedGroups = new();
 
     [NonSerialized]
     public readonly Dictionary<string, int> Stored = new();

@@ -2,6 +2,7 @@ using Content.Shared._AU14.WorkingJoe;
 using Content.Shared.Chat.Prototypes;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
+using Robust.Shared.ContentPack;
 using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 
@@ -11,8 +12,10 @@ public sealed partial class WorkingJoeVoiceBui : BoundUserInterface
 {
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private ILocalizationManager _loc = default!;
+    [Dependency] private IResourceManager _resource = default!;
 
     private WorkingJoeVoiceWindow? _window;
+    private WorkingJoeVoiceFavorites? _favorites;
 
     public WorkingJoeVoiceBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
     {
@@ -23,11 +26,12 @@ public sealed partial class WorkingJoeVoiceBui : BoundUserInterface
     {
         base.Open();
 
-        _window = new WorkingJoeVoiceWindow();
+        _favorites ??= new WorkingJoeVoiceFavorites(_resource);
+
+        _window = new WorkingJoeVoiceWindow(_favorites);
         _window.OnClose += Close;
         _window.OnLineSelected += OnLineSelected;
 
-        // Build list from all emote prototypes tagged for WorkingJoe
         var lines = new List<WorkingJoeVoiceLine>();
         foreach (var emote in _proto.EnumeratePrototypes<EmotePrototype>())
         {

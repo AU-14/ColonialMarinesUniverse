@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: WYGuardLeftPouchAU14
+  name: au14-loadout-group-corporate-pouches
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - WYGuardPouchM88RubberAU14
+  - PouchFirstAidPMCFilledAU14
+  - PouchPoliceEquipmentSupportSynthAU14
+  - RMCPouchGeneralAU14

@@ -1,0 +1,101 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianHeadPhysician
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianHeadPhysician
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 4
+      RMCSkillResearch: 2
+      RMCSkillSurgery: 3
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-headphysician
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: head_physician
+
+  name: au14-job-name-civilianheadphysician
+  description: au14-job-description-civilianheadphysician
+  setPreference: true
+  canBeAntag: false
+  playTimeTracker: AU14JobCivilianHeadPhysician
+  requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonyMedical
+    time: 36000 # 10 hours
+  - !type:OverallPlaytimeRequirement
+    time: 86400 # 24 hours
+  - !type:AgeRequirement
+    requiredAge: 25
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NonResuscitable
+    - NoEnglish
+  ranks:
+    RMCRankCivilianDoctor: []
+  startingGear: AU14GearCivilianHeadPhysician
+  icon: "AU14JobIconColonyHeadPhysician"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonyadministrator
+  accessGroups:
+  - Colonist
+  - aumed
+  - AUPrisonStaff
+  - auheadsofcolony
+  access:
+# - AU14AccessColonyHeadPhysician # implicit
+  - AU14AccessColonyAdministrator
+  - CMAccessCMO
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianHeadPhysician
+  equipment: {}
+  storage:
+    back:
+    - AU14StampHPHY
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianHeadPhysician
+  name: Spawn Point Head Physician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianHeadPhysician
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianHeadPhysician
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianHeadPhysician
+  points: 7
+  groups:
+  - CivilianHeadPhysicianSpecializationAU14
+  - MedBackpackAU14
+  - MedJumpsuitAU14
+  - MedHatsAU14
+  - MedJacketAU14
+  - MedGlovesAU14
+  - CivFootwearAU14
+  - MedMaskAU14
+  - MedBeltAU14
+  - MedPouchAU14
+  - MedPouchRightAU14
+  - ForceMedEssentialAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

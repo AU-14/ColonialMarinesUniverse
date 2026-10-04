@@ -1,8 +1,12 @@
+using System.Linq;
+using Content.Server.AU14.Round;
+using Content.Server.AU14.Scenario;
 using Content.Server.GameTicking;
 using Content.Server.Spawners.Components;
 using Content.Server.Spawners.EntitySystems;
 using Content.Server.Station.Systems;
 using Content.Shared.AU14;
+using Content.Shared.AU14.Scenario;
 using Content.Shared.GameTicking;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -18,14 +22,20 @@ namespace Content.Server.AU14.CLF;
 public sealed partial class ClfSpawnSystem : EntitySystem
 {
     private static readonly ProtoId<CLFSpawnConfigPrototype> ClfSpawnConfig = "CLFSpawnConfig";
+    private const string ClfSafehouseBucket = "CLFSafehouse";
+    private const string ClfCivilianBackupBucket = "CLFCivilianBackup";
 
+    [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private StationSpawningSystem _stationSpawning = default!;
     [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GameTicker _ticker = default!;
 
     private EntityCoordinates? _chosenSafehouseLocation;
     private bool _hasSpawnedAdditionalEntities;
+    private ResolvedClfSpawnMarkerSet? _resolvedClfMarkers;
 
     /// <summary>
     /// CLF command job IDs that always spawn at the safehouse.
@@ -66,6 +76,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     {
         _chosenSafehouseLocation = null;
         _hasSpawnedAdditionalEntities = false;
+        _resolvedClfMarkers = null;
     }
 
     private void OnRulePlayerSpawning(RulePlayerSpawningEvent ev)
@@ -92,12 +103,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         // Choose safehouse location if not already chosen
         if (_chosenSafehouseLocation == null)
         {
-            var safehouseMarkers = new List<EntityUid>();
-            var query = EntityQueryEnumerator<SafehouseMarkerComponent, TransformComponent>();
-            while (query.MoveNext(out var uid, out var _, out var _))
-            {
-                safehouseMarkers.Add(uid);
-            }
+            var safehouseMarkers = GetSafehouseMarkers();
 
             if (safehouseMarkers.Count > 0)
             {
@@ -166,6 +172,16 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     /// </summary>
     private EntityCoordinates? GetRandomColonyCivilianSpawnPoint()
     {
+        if (_resolvedClfMarkers != null &&
+            _resolvedClfMarkers.TryGetMarkers(ClfCivilianBackupBucket, out var scenarioMarkers))
+        {
+            var scenarioCandidates = FilterCivilianSpawnMarkers(scenarioMarkers);
+            if (scenarioCandidates.Count > 0)
+                return Transform(_random.Pick(scenarioCandidates)).Coordinates;
+
+            Log.Warning("CLF Spawn System: Scenario Plan CLF civilian markers resolved but no live civilian spawn markers remained.");
+        }
+
         var candidates = new List<EntityCoordinates>();
         var spawnPoints = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
         while (spawnPoints.MoveNext(out var _, out var sp, out var xform))
@@ -178,6 +194,139 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         }
 
         return candidates.Count > 0 ? _random.Pick(candidates) : null;
+    }
+
+    private List<EntityUid> GetSafehouseMarkers()
+    {
+        if (TryResolveScenarioPlanSpawnMarkers(out var markerSet) &&
+            markerSet != null)
+        {
+            if (markerSet.TryGetMarkers(ClfSafehouseBucket, out var scenarioMarkers))
+            {
+                var markers = FilterSafehouseMarkers(scenarioMarkers);
+                if (markers.Count > 0)
+                {
+                    _resolvedClfMarkers = markerSet;
+                    Log.Debug($"CLF Spawn System: Using {markers.Count} Scenario Plan safehouse marker(s).");
+                    return markers;
+                }
+
+                Log.Warning("CLF Spawn System: Scenario Plan safehouse markers resolved but no live safehouse markers remained.");
+            }
+            else
+            {
+                Log.Warning("CLF Spawn System: Scenario Plan CLF markers resolved without a safehouse bucket.");
+            }
+        }
+
+        _resolvedClfMarkers = null;
+        return GetLegacySafehouseMarkers();
+    }
+
+    private List<EntityUid> GetLegacySafehouseMarkers()
+    {
+        var markers = new List<EntityUid>();
+        var query = EntityQueryEnumerator<SafehouseMarkerComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            markers.Add(uid);
+        }
+
+        if (markers.Count > 0)
+            Log.Debug($"CLF Spawn System: Falling back to {markers.Count} legacy safehouse marker(s).");
+
+        return markers;
+    }
+
+    private bool TryResolveScenarioPlanSpawnMarkers(out ResolvedClfSpawnMarkerSet? markers)
+    {
+        markers = null;
+
+        try
+        {
+            var request = BuildClfScenarioPlanRequest();
+            if (_scenarioPlan.TryResolveClfSpawnMarkers(request, _ticker.DefaultMap, out markers, out var diagnostic))
+                return true;
+
+            Log.Warning($"CLF Spawn System: Could not resolve Scenario Plan CLF markers. {diagnostic}");
+        }
+        catch (Exception ex)
+        {
+            Log.Error($"CLF Spawn System: Scenario Plan CLF marker resolution threw. {ex}");
+        }
+
+        markers = null;
+        return false;
+    }
+
+    private ScenarioPlanValidationRequest BuildClfScenarioPlanRequest()
+    {
+        return new ScenarioPlanValidationRequest(
+            _ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? _auRound.SelectedPreset?.ID ?? string.Empty,
+            0,
+            PlanetId: _auRound.GetSelectedPlanetId(),
+            MapId: _auRound.GetSelectedPlanet()?.MapId,
+            GovforShipId: _auRound.GetSelectedGovforShip(),
+            OpforShipId: _auRound.GetSelectedOpforShip());
+    }
+
+    private List<EntityUid> FilterSafehouseMarkers(IReadOnlyList<EntityUid> candidates)
+    {
+        var markers = new List<EntityUid>();
+        foreach (var uid in candidates)
+        {
+            if (TryComp<SafehouseMarkerComponent>(uid, out _))
+            {
+                markers.Add(uid);
+                continue;
+            }
+
+            if (HasStandaloneScenarioMarker(uid, SpawnMarkerKind.ClfSafehouse, ScenarioMarkerTags.ForceClfSafehouse))
+                markers.Add(uid);
+        }
+
+        return markers;
+    }
+
+    private List<EntityUid> FilterCivilianSpawnMarkers(IReadOnlyList<EntityUid> candidates)
+    {
+        var markers = new List<EntityUid>();
+        foreach (var uid in candidates)
+        {
+            if (TryComp(uid, out SpawnPointComponent? spawnPoint) &&
+                spawnPoint.Job != null &&
+                spawnPoint.Job.Value.Id.Equals(ColonyCivilianJobId, StringComparison.OrdinalIgnoreCase))
+            {
+                markers.Add(uid);
+                continue;
+            }
+
+            if (HasStandaloneScenarioMarker(
+                    uid,
+                    SpawnMarkerKind.ClfCivilianSpawn,
+                    ScenarioMarkerTags.ClfCivilianSpawn(ColonyCivilianJobId)))
+            {
+                markers.Add(uid);
+            }
+        }
+
+        return markers;
+    }
+
+    private bool HasStandaloneScenarioMarker(
+        EntityUid uid,
+        SpawnMarkerKind kind,
+        string requiredTag)
+    {
+        if (!TryComp(uid, out ScenarioSpawnMarkerComponent? marker) ||
+            marker.Kind != kind ||
+            !marker.Tags.Contains(requiredTag, StringComparer.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        return !HasComp<SafehouseMarkerComponent>(uid) &&
+               !HasComp<SpawnPointComponent>(uid);
     }
 
     private void SpawnAdditionalEntities()
@@ -212,5 +361,3 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     /// </summary>
     public EntityCoordinates? GetChosenSafehouse() => _chosenSafehouseLocation;
 }
-
-

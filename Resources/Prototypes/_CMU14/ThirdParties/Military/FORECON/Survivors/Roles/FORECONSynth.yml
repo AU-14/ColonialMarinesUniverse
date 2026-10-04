@@ -1,0 +1,142 @@
+- type: job
+  parent: CMJobBase
+  id: AU14FORECONSynth
+  roundSide: ThirdParty
+  roundForce: FORECON
+  roundRole: AU14FORECONSynth
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: forecon_synth
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RMCSquadFORECON
+  - type: Skills
+    skills:
+      RMCSkillCqc: 5
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 2
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 3
+      RMCSkillResearch: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPilot: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 3
+      RMCSkillIntel: 2
+      RMCSkillDomestics: 2
+      RMCSkillNavigations: 1
+  - type: DemoSpecWhitelist
+  - type: GrenadeSpecWhitelist
+  - type: ScoutWhitelist
+  - type: SniperWhitelist
+  - type: PyroWhitelist
+  - type: JobPrefix
+    prefix: rmc-job-prefix-synth
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/_RMC14/Weapons/synthpunch1.ogg
+      params:
+        variation: 0.15
+        volume: -1
+    angle: 30
+    animation: WeaponArcFist
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 35
+  - type: Synth
+  - type: Language
+    preset: AU14LanguagePresetSynth
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetSynth
+
+  name: rmc-job-name-forecon-synth
+  description: rmc-job-description-forecon
+  playTimeTracker: AU14JobFORECONSynth
+  ranks:
+    RMCRankSyntheticColonist: []
+  chevrons:
+    RMCRankChiefWarrantOfficer5:
+      entity: AU14ChevronUSCMChiefWarrantOfficer5
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSynth
+        time: 252000 #70 hours
+    RMCRankChiefWarrantOfficer4:
+      entity: AU14ChevronUSCMChiefWarrantOfficer4
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSynth
+        time: 180000 #50 hours
+    RMCRankChiefWarrantOfficer3:
+      entity: AU14ChevronUSCMChiefWarrantOfficer3
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSynth
+        time: 36000 #10 hours
+    RMCRankChiefWarrantOfficer:
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONSynth
+        time: 18000 #5 hours
+    RMCRankWarrantOfficer:
+      entity: AU14ChevronUSCMWarrantOfficer
+      requirements: []
+  spawnMenuRoleName: FORECON Synthetic (AU14, surv)
+  startingGear: AU14GearFORECONSynth
+  greeting: au14-forecon-greeting
+  icon: "RMCJobIconReconSynthetic"
+  joinNotifyCrew: false
+  supervisors: rmc-job-name-forecon-commander
+  accessGroups:
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  id: AU14JobFORECONSynth
+  name: FORECON Synthetic (Surv)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadFORECON
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-synth
+    description: rmc-job-description-forecon
+    reregister: false
+    job: AU14FORECONSynth
+    raffle:
+      settings: short
+    rules: au14-forecon-rules
+
+- type: startingGear
+  id: AU14GearFORECONSynth
+  equipment:
+    id: AU14IDCardFORECONSynth
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: CMJumpsuitMaintTech
+    shoes: CMBootsBlackFilled
+    belt: AU14BeltMedicalUPPFullSupportTech
+    pocket1: AU14PouchToolsFilledComtech
+    pocket2: RMCPouchSurvivalSynthFill
+    back: AU14CMDefibrillator
+    ears: RMCHeadsetForecon
+
+- type: playTimeTracker
+  id: AU14JobFORECONSynth

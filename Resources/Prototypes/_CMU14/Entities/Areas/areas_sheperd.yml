@@ -161,6 +161,14 @@
 
 - type: entity
   parent: CMUAreaShepWY
+  id: CMUAreaShepWYLab4
+  name: We-Yu Research Lab - Botany
+  components:
+  - type: Sprite
+    state: wy_lab
+
+- type: entity
+  parent: CMUAreaShepWY
   id: CMUAreaShepWYStorageC
   name: We-Yu Research Lab - Cold Storage
   components:
@@ -187,6 +195,14 @@
   parent: CMUAreaShepWY
   id: CMUAreaShepWYLiaison
   name: We-Yu Research Lab - Liaison Office
+  components:
+  - type: Sprite
+    state: wy_quarters
+
+- type: entity
+  parent: CMUAreaShepWY
+  id: CMUAreaShepWYAssistant
+  name: We-Yu Research Lab - Assistant Quarters
   components:
   - type: Sprite
     state: wy_quarters

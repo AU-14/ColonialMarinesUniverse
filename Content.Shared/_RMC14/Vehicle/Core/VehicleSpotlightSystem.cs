@@ -1,4 +1,6 @@
 using System;
+using Content.Shared._RMC14.Input;
+using Content.Shared._RMC14.Inventory;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Input;
 using Content.Shared.Vehicle.Components;
@@ -6,6 +8,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Vehicle;
@@ -26,30 +29,39 @@ public sealed partial class VehicleSpotlightSystem : EntitySystem
         if (_net.IsClient)
         {
             CommandBinds.Builder
-                .Bind(ContentKeyFunctions.FlipObject, InputCmdHandler.FromDelegate(session =>
-                {
-                    if (session?.AttachedEntity is not { } user)
-                        return;
-
-                    EntityUid? vehicleUid = null;
-                    if (TryComp<VehicleOperatorComponent>(user, out var op) && op.Vehicle != null)
-                    {
-                        vehicleUid = op.Vehicle.Value;
-                    }
-                    else if (_rmcVehicles.TryGetVehicleFromInterior(user, out var interiorVehicle) && interiorVehicle != null)
-                    {
-                        vehicleUid = interiorVehicle.Value;
-                    }
-
-                    if (vehicleUid == null)
-                        return;
-
-                    RaiseNetworkEvent(new VehicleSpotlightToggleRequestEvent(GetNetEntity(vehicleUid.Value)));
-                }, handle: true))
+                .Bind(ContentKeyFunctions.FlipObject, new VehicleSpotlightInputCmdHandler(this))
+                .BindBefore(CMKeyFunctions.CMHolsterPrimary,
+                    new VehicleSpotlightInputCmdHandler(this),
+                    [typeof(SharedCMInventorySystem)])
                 .Register<VehicleSpotlightSystem>();
         }
 
         SubscribeNetworkEvent<VehicleSpotlightToggleRequestEvent>(OnSpotlightToggleRequest);
+    }
+
+    private bool TryRequestToggle(ICommonSession? session)
+    {
+        if (session?.AttachedEntity is not { } user)
+            return false;
+
+        if (!TryGetSpotlightVehicle(user, out var vehicle))
+            return false;
+
+        RaiseNetworkEvent(new VehicleSpotlightToggleRequestEvent(GetNetEntity(vehicle)));
+        return true;
+    }
+
+    private bool TryGetSpotlightVehicle(EntityUid user, out EntityUid vehicle)
+    {
+        vehicle = EntityUid.Invalid;
+        if (!_rmcVehicles.TryResolveControlledVehicle(user, out var vehicleUid))
+            return false;
+
+        if (!HasComp<VehicleSpotlightComponent>(vehicleUid))
+            return false;
+
+        vehicle = vehicleUid;
+        return true;
     }
 
     private void OnSpotlightStartup(Entity<VehicleSpotlightComponent> ent, ref ComponentStartup args)
@@ -83,8 +95,12 @@ public sealed partial class VehicleSpotlightSystem : EntitySystem
             return;
 
         var vehicle = GetEntity(ev.Vehicle);
-        if (!TryComp(vehicle, out VehicleComponent? vehicleComp) || vehicleComp.Operator != user)
+        if (!TryComp(vehicle, out VehicleComponent? vehicleComp) ||
+            vehicleComp.Operator != user &&
+            (!_rmcVehicles.TryGetVehicleFromInterior(user, out var interiorVehicle) || interiorVehicle != vehicle))
+        {
             return;
+        }
 
         if (!TryComp(vehicle, out VehicleSpotlightComponent? spotlight))
             return;
@@ -165,6 +181,17 @@ public sealed partial class VehicleSpotlightSystem : EntitySystem
     {
         var clamped = Math.Clamp(performance, 0f, 1f);
         return 1f + (multiplier - 1f) * clamped;
+    }
+
+    private sealed class VehicleSpotlightInputCmdHandler(VehicleSpotlightSystem system) : InputCmdHandler
+    {
+        public override bool HandleCmdMessage(IEntityManager entManager, ICommonSession? session, IFullInputCmdMessage message)
+        {
+            if (message.State != BoundKeyState.Down)
+                return false;
+
+            return system.TryRequestToggle(session);
+        }
     }
 }
 

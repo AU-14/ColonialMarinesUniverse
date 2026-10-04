@@ -1,0 +1,7 @@
+- type: loadoutGroup
+  id: CivilianHeadPhysicianSpecializationAU14
+  name: au14-loadout-group-role-specific-ID
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CivilianHeadPhysicianSpecializationDefaultAU14

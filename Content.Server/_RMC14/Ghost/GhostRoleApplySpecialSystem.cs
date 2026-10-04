@@ -1,5 +1,6 @@
 using Content.Server._RMC14.Marines;
 using Content.Server._RMC14.Marines.Roles.Ranks;
+using Content.Server.AU14.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
@@ -20,6 +21,7 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private RankSystem _rank = default!;
     [Dependency] private MarineSystem _marine = default!;
+    [Dependency] private RoundJobProfileSystem _roundJobProfiles = default!;
 
     public override void Initialize()
     {
@@ -58,6 +60,7 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
         AddComp(ent, new OriginalRoleComponent() { Job = jobProto });
         foreach (var special in job.Special)
             special.AfterEquip(ent);
+        _roundJobProfiles.ApplyJobProfile(ent.Owner, job);
 
         if (job.Ranks is { } ranks)
         {

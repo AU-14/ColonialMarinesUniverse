@@ -1,0 +1,86 @@
+- type: job
+  parent: AU14JobCivilianScientistBase
+  id: AU14JobWYHTScientist
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYHTScientist
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 2
+      RMCSkillSurgery: 4
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianscientist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-civilianscientist
+  description: au14-wyht-description
+  ranks:
+    AU14RankScientistProfessor:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianScientist
+      time: 36000 # 10 hours
+    AU14RankScientistAssociate: []
+  spawnMenuRoleName: WY HT Scientist (3rd party)
+  startingGear: AU14GearWYHTScientist
+  greeting: au14-wyht-greeting
+  icon: "RMCJobIconPMCScientist"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - Colonist
+  - auwy
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobWYHTScientist
+  name: WY Hazard Transport Scientist (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-civilianscientist
+    description: au14-wyht-description
+    reregister: false
+    job: AU14JobWYHTScientist
+    raffle:
+      settings: short
+    rules: au14-wyht-description
+
+- type: startingGear
+  id: AU14GearWYHTScientist
+  equipment:
+    id: AU14IDCardCivilianScientist
+    jumpsuit: AU14CivilianWorkwearBlue
+    shoes: RMCShoesBlack
+    ears: AU14ColonyWeylandHeadset
+    outerClothing: RMCLabcoatOpened
+    eyes: CMGlassesSecurity
+    back: RMCSatchelChemistry
+    pocket1: RMCPouchVialFill
+    pocket2: RMCPouchChemFill
+  storage:
+    back:
+    - AU14CBRNKitWeYu
+    - RMCSyringeCaseFilled
+    - RMCSyringeCaseFilledToxin
+    - CMHandsLatex
+    - CMHealthAnalyzer

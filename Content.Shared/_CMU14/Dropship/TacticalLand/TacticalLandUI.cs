@@ -11,11 +11,17 @@ namespace Content.Shared._CMU14.Dropship.TacticalLand;
 public sealed class DropshipNavigationTacticalLandBuiState(
     NetEntity? eye,
     bool clearForLanding,
+    bool tacticalHover,
+    bool canMoveUp,
+    bool canMoveDown,
     Dictionary<DoorLocation, bool> doorLockStatus,
     bool remoteControlStatus) : BoundUserInterfaceState
 {
     public readonly NetEntity? Eye = eye;
     public readonly bool ClearForLanding = clearForLanding;
+    public readonly bool TacticalHover = tacticalHover;
+    public readonly bool CanMoveUp = canMoveUp;
+    public readonly bool CanMoveDown = canMoveDown;
     public readonly Dictionary<DoorLocation, bool> DoorLockStatus = doorLockStatus;
     public readonly bool RemoteControlStatus = remoteControlStatus;
 }
@@ -28,3 +34,12 @@ public sealed class DropshipNavigationTacticalLandConfirmMsg : BoundUserInterfac
 
 [Serializable, NetSerializable]
 public sealed class DropshipNavigationTacticalLandCancelMsg : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class DropshipNavigationTacticalLandMoveUpMsg : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class DropshipNavigationTacticalLandMoveDownMsg : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class DropshipNavigationTacticalHoverCancelMsg : BoundUserInterfaceMessage;

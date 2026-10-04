@@ -1,0 +1,7 @@
+- type: loadoutGroup
+  id: ColonySynthSuitSpecialAU14
+  name: au14-loadout-group-synth-suit-special
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - DefibrillatorAU14

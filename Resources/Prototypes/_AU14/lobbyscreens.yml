@@ -9,3 +9,7 @@
 - type: lobbyBackground
   id: AU14LobbyHAZOPS
   background: /Textures/_AU14/Lobby/HAZOPS.png
+
+- type: lobbyBackground
+  id: AU14LobbyXenos
+  background: /Textures/_AU14/Lobby/Xenos.png

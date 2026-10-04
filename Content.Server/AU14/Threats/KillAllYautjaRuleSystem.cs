@@ -84,7 +84,7 @@ public sealed partial class KillAllYautjaRuleSystem : GameRuleSystem<KillAllYaut
             if (_gameTicker.RunLevel != GameRunLevel.InRound)
                 return;
 
-            var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
+            var winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
             _gameTicker.EndRound(!string.IsNullOrEmpty(winMessage)
                 ? winMessage
                 : "The Bad Blood Clan has been eliminated.");

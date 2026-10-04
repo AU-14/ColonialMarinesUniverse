@@ -14,6 +14,9 @@ public sealed partial class DropshipTacticalLandSessionComponent : Component
     public EntityUid? Eye;
 
     [DataField, AutoNetworkedField]
+    public EntityUid? InitialMap;
+
+    [DataField, AutoNetworkedField]
     public Vector2 OriginalZoom = Vector2.One;
 
     [DataField, AutoNetworkedField]

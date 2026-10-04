@@ -1,0 +1,114 @@
+- type: job
+  parent: CMJobBase
+  id: AU14USArmyCommander
+  roundSide: ThirdParty
+  roundForce: USARMY
+  roundRole: AU14USArmyCommander
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: co
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_command
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUSArmy
+  - type: Skills
+    preset: AU14SkillPresetPlatoonCommander
+  - type: SpotterWhitelist
+  - type: JobPrefix
+    prefix: rmc-job-prefix-forecon-co
+  - type: MarineOrders
+    moveOrderSoundMale:
+      collection: AU14MaleMoveOrder
+    moveOrderSoundFemale:
+      collection: AU14FemaleMoveOrder
+    focusOrderSoundMale:
+      collection: AU14MaleFocusOrder
+    focusOrderSoundFemale:
+      collection: AU14FemaleFocusOrder
+    holdOrderSoundMale:
+      collection: AU14MaleHoldOrder
+    holdOrderSoundFemale:
+      collection: AU14FemaleHoldOrder
+  - type: RMCTrackable
+  - type: RMCPointing
+
+  name: rmc-job-name-forecon-commander
+  description: cm-job-description-commanding-officer
+  playTimeTracker: AU14JobUSArmyCommander
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    USArmy_Major:
+      entity: AU14ChevronMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyCommander
+        time: 18000 # 5 hours
+    USArmy_Captain:
+      entity: AU14ChevronCaptain
+      requirements: []
+  spawnMenuRoleName: US Army Commander (AU14, surv)
+  startingGear: AU14GearUSArmyCommander
+  greeting: au14-usarmy-greeting
+  icon: "AU14JobIconUSArmyCommander"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUSArmy
+  id: AU14JobUSArmyCommander
+  name: US Army Commander (Surv)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUSArmy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-commander
+    description: cm-job-description-commanding-officer
+    reregister: false
+    job: AU14USArmyCommander
+    raffle:
+      settings: short
+    rules: au14-usarmy-rules
+
+- type: startingGear
+  id: AU14GearUSArmyCommander
+  equipment:
+    id: AU14IDCardUSArmyCommander
+    outerClothing: AU14ArmorUSArmy
+    jumpsuit: AU14ArmyJumpsuitCavalry
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: AU14BootsUSArmyFilled
+    head: AU14BeretUSArmyMajor
+    mask: RMCMaskNeckerchiefTanDown
+    belt: RMCMatebaBeltForeconFilled
+    pocket1: RMCPouchCommand
+    pocket2: AU14PouchIFAKFill
+    back: AU14AU14MolleBackpackCOFull
+    ears: AU14HeadsetUSArmy
+    suitstorage: RMCWeaponRifleM54CFilled
+  storage:
+    back:
+    - AU14HatUSArmy
+    - RMCFlashlight
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconUSArmyCommander
+  icon:
+    sprite: _AU14/Interface/job_icons.rsi
+    state: hudsquad_co_army
+
+- type: playTimeTracker
+  id: AU14JobUSArmyCommander

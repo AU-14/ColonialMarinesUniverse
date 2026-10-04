@@ -335,6 +335,9 @@ public sealed partial class ClientClothingSystem : ClothingSystem
             _sprite.LayerSetData((equipee, sprite), index, layerData);
             _sprite.LayerSetOffset(layer, layer.Offset + slotDef.Offset);
 
+            if (clothingComponent.FlipDirOffset && (slot == "back" || slot == "suitstorage"))
+                _sprite.LayerSetDirOffset(layer, DirectionOffset.Flip);
+
             if (displacementData is not null)
             {
                 //Checking that the state is not tied to the current race. In this case we don't need to use the displacement maps.

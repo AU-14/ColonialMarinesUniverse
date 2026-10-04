@@ -1,0 +1,228 @@
+name: Publish Test Merge
+
+run-name: "Publish test merge PR #${{ inputs.pr_number }} to main server"
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+on:
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Pull request number to merge-test and publish to the main server.
+        required: true
+        type: number
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+env:
+  DOTNET_VERSION: 10.0.x
+  CONFIGURATION: Release
+  TEST_MERGE_REF: ${{ format('refs/pull/{0}/merge', inputs.pr_number) }}
+
+jobs:
+  prepare:
+    name: Resolve PR merge
+    runs-on: ubuntu-latest
+    outputs:
+      base_sha: ${{ steps.pr.outputs.base_sha }}
+      head_sha: ${{ steps.pr.outputs.head_sha }}
+      merge_ref: ${{ steps.merge.outputs.ref }}
+      merge_sha: ${{ steps.merge.outputs.sha }}
+    steps:
+      - name: Validate PR
+        id: pr
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const pullNumber = Number('${{ inputs.pr_number }}');
+            if (!Number.isInteger(pullNumber) || pullNumber <= 0) {
+              core.setFailed('pr_number must be a positive integer.');
+              return;
+            }
+
+            const { data: pull } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pullNumber,
+            });
+
+            if (pull.state !== 'open') {
+              core.setFailed(`PR #${pullNumber} is ${pull.state}; only open PRs can be test-merge published.`);
+              return;
+            }
+
+            const allowedBases = new Set(['master', 'staging', 'stable']);
+            if (!allowedBases.has(pull.base.ref)) {
+              core.setFailed(`PR #${pullNumber} targets ${pull.base.ref}; test-merge publish only supports master, staging, or stable.`);
+              return;
+            }
+
+            core.setOutput('base_sha', pull.base.sha);
+            core.setOutput('head_sha', pull.head.sha);
+            core.notice(`Publishing PR #${pullNumber}: ${pull.title}`);
+
+      - uses: actions/checkout@v6.0.2
+        with:
+          ref: ${{ env.TEST_MERGE_REF }}
+          persist-credentials: true
+          submodules: false
+
+      - name: Resolve merge version
+        id: merge
+        shell: bash
+        run: |
+          echo "ref=$TEST_MERGE_REF" >> "$GITHUB_OUTPUT"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  package:
+    name: Package ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: client
+            command: client
+            restore: dotnet restore
+          - name: server-win-x64
+            command: server --platform win-x64
+            restore: dotnet restore --runtime win-x64 /p:TargetOs=Windows
+          - name: server-linux-x64
+            command: server --platform linux-x64
+            restore: dotnet restore --runtime linux-x64 /p:TargetOs=Linux
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          ref: ${{ needs.prepare.outputs.merge_ref }}
+          persist-credentials: true
+          submodules: false
+
+      - name: Checkout submodules
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive --depth=1
+
+      - uses: actions/setup-dotnet@v5.2.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: |
+            **/*.csproj
+            **/*.props
+            **/*.targets
+            **/packages.lock.json
+
+      - name: Restore dependencies
+        run: ${{ matrix.restore }}
+
+      - name: Build Packaging
+        run: dotnet build Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-restore /m
+
+      - name: Package ${{ matrix.name }}
+        run: dotnet run --project Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-build --no-restore -- ${{ matrix.command }} --no-restore
+
+      - name: Upload ${{ matrix.name }} package
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: test-merge-release-${{ matrix.name }}
+          path: release/*.zip
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+  publish:
+    name: Publish test merge version
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+      - package
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          ref: ${{ needs.prepare.outputs.merge_ref }}
+          persist-credentials: true
+          submodules: false
+
+      - name: Checkout RobustToolbox
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --depth=1 RobustToolbox
+          cd RobustToolbox
+          git fetch --depth=1
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          pattern: test-merge-release-*
+          path: release
+          merge-multiple: true
+
+      - name: Publish test merge version
+        run: Tools/publish_multi_request.py
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+          PUBLISH_VERSION: ${{ needs.prepare.outputs.merge_sha }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Comment on PR
+        uses: actions/github-script@v9.0.0
+        env:
+          BASE_SHA: ${{ needs.prepare.outputs.base_sha }}
+          HEAD_SHA: ${{ needs.prepare.outputs.head_sha }}
+          MERGE_SHA: ${{ needs.prepare.outputs.merge_sha }}
+        with:
+          script: |
+            const baseSha = process.env.BASE_SHA;
+            const headSha = process.env.HEAD_SHA;
+            const mergeSha = process.env.MERGE_SHA;
+
+            function shortSha(sha) {
+              return sha.substring(0, 7);
+            }
+
+            function commitLink(sha) {
+              return `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/commit/${sha}`;
+            }
+
+            function formatUtc(date) {
+              const pad = value => value.toString().padStart(2, '0');
+              return [
+                `${pad(date.getUTCMonth() + 1)}/${pad(date.getUTCDate())}/${date.getUTCFullYear()}`,
+                `${pad(date.getUTCHours())}:${pad(date.getUTCMinutes())}:${pad(date.getUTCSeconds())} +00:00`,
+              ].join(' ');
+            }
+
+            const publishedAt = formatUtc(new Date());
+
+            const body = [
+              '<details>',
+              `<summary>Test Merge Deployed @ ${publishedAt}:</summary>`,
+              '',
+              '**Revision**',
+              '',
+              `Origin: [${shortSha(baseSha)}](${commitLink(baseSha)})`,
+              `Pull Request: [${shortSha(headSha)}](${commitLink(headSha)})`,
+              `Server: ${mergeSha}`,
+              '</details>',
+            ].join('\n');
+
+            try {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: Number('${{ inputs.pr_number }}'),
+                body,
+              });
+            } catch (error) {
+              if (error.status === 403 && error.response?.data?.message === 'Resource not accessible by integration') {
+                core.warning(`Could not comment on PR #${{ inputs.pr_number }} because GITHUB_TOKEN cannot write issue comments in this context.`);
+                return;
+              }
+
+              throw error;
+            }

@@ -1,0 +1,7 @@
+- type: rank
+  id: UPP_SeniorWarrantOfficer
+  name: Senior Warrant Officer
+  prefix: SnWO.
+  paygrade: W2
+
+# officers

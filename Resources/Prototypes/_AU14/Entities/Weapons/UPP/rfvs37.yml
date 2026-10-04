@@ -46,6 +46,7 @@
       - AU14CartridgeSmartGun127x40mm
     proto: AU14CartridgeSmartGun127x40mm
     capacity: 250
+    cycleable: false
   - type: Sprite
     sprite: _AU14/Weapons/Guns/Ammo/Magazines/rvs34_mag.rsi
     layers:

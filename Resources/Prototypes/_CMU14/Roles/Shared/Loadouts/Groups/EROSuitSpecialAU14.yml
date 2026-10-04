@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: EROSuitSpecialAU14
+  name: au14-loadout-group-civilian-suit-special
+  minLimit: 2
+  maxLimit: 2
+  loadouts:
+  - AU14CivilianHazardVestParamedicWhiteAU14
+  - OuterClothingExternalWebbingBlackAU14
+  - CivilianHazardVestParamedicGreenAU14
+  - CivilianJacketSnowSuitAU14

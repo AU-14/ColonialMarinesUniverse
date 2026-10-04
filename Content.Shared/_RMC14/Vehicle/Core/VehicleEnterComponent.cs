@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.DoAfter;
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 using System;
@@ -87,6 +88,9 @@ public record struct VehicleExitAttemptEvent(EntityUid User, EntityUid Exit)
 {
     public bool Cancelled;
 }
+
+[ByRefEvent]
+public readonly record struct VehicleExitedEvent(EntityUid User, EntityUid Exit, MapCoordinates ExitCoordinates);
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(VehicleSystem))]

@@ -1,0 +1,90 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianPaPOfficer
+  roundSide: Civilian
+  roundForce: PAP
+  roundRole: CivilianPaPOfficer
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillIntel: 1
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianpapofficer
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: cmb_dep
+  - type: Language
+    preset: AU14LanguagePresetUPPOfficer
+
+  name: au14-job-name-civilianpapofficer
+  description: au14-job-description-civilianpapofficer
+  setPreference: false
+  canBeAntag: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NoEnglish
+  playTimeTracker: AU14JobCivilianPaPOfficer
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    SeniorMilitsioner:
+      entity: AU14ChevronPAPStarshiyMilitsioner
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 72000 # 20 hours
+    Militsioner:
+      entity: AU14ChevronPAPMilitsioner
+      requirements: []
+  startingGear: AU14GearCivilianPaPOfficer
+  icon: "RMCJobIconBureauDeputy"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: PaP Officer (CMU)
+  accessGroups:
+  - aucmb
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianPaPOfficer
+  equipment:
+    head: CMHeadCapSPPPeakedPolice
+    jumpsuit: RMCJumpsuitSPPPaP
+    belt: CMBeltSecurityMarshalFilled
+    shoes: RMCBootsPMCFilled
+    id: AU14IDCardcivilianPaPOfficer
+    ears: AU14CMBHeadset
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianPaPOfficer
+  name: Spawn Point Civilian PAP Officer
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianPaPOfficer
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianPaPOfficer
+  isHumanoid: true
+
+# Colony Security Officer — a joint CMB/WEYu-backed security role with access to both
+# CMB and Weyland radio. Not selectable via character preferences; admin/late-join only.

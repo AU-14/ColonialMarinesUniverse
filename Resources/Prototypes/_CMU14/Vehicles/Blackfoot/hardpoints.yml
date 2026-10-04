@@ -64,13 +64,15 @@
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
   - type: GunIgnorePrediction
+  - type: BlackfootGunshot
+    sound: /Audio/_CMU14/Blackfoot/launcher.ogg
   - type: Gun
     fireRate: 0.5
     projectileSpeed: 20
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    soundGunshot: /Audio/_CMU14/Blackfoot/launcher.ogg
+    soundGunshot: null
     cameraRecoilScalar: 0
   - type: ShootAtFixedPoint
   - type: RMCWeaponAccuracy
@@ -126,6 +128,8 @@
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
   - type: GunIgnorePrediction
+  - type: BlackfootGunshot
+    sound: /Audio/_CMU14/Blackfoot/doorgun.ogg
   - type: Gun
     fireRate: 1
     projectileSpeed: 18
@@ -134,7 +138,7 @@
     selectedMode: FullAuto
     availableModes:
     - FullAuto
-    soundGunshot: /Audio/_CMU14/Blackfoot/doorgun.ogg
+    soundGunshot: null
     cameraRecoilScalar: 0
   - type: ShootAtFixedPoint
     shootArcProj: true

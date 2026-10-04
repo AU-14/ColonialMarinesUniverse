@@ -1,0 +1,18 @@
+- type: entity
+  id: AU14SkillPresetPlatoonWorkingJoe
+  name: Working Joe
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillCqc: 5
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 4
+      RMCSkillFirearms: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillDomestics: 2

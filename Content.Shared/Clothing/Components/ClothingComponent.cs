@@ -18,6 +18,13 @@ public sealed partial class ClothingComponent : Component
     public Dictionary<string, List<PrototypeLayerData>> ClothingVisuals = new();
 
     /// <summary>
+    /// When true, clothing visuals for the back and suitstorage slots have their directional offset flipped (south↔north, east↔west).
+    /// Use for items that should show their front face when the wearer's back is toward the camera.
+    /// </summary>
+    [DataField]
+    public bool FlipDirOffset = false;
+
+    /// <summary>
     /// The name of the layer in the user that this piece of clothing will map to
     /// </summary>
     [DataField]

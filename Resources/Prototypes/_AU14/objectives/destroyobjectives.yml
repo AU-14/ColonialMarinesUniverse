@@ -48,27 +48,3 @@
     entitytodestroy: AU14ObjectiveItemAIProcessor
     useanyentity: true
     amounttodestroy: 1
-
-- type: entity
-  name: Destroy Carp
-  parent: MarkerBase
-  id: destroy_carp
-  description: "Destroy a carp"
-  components:
-  - type: Sprite
-    state: red
-  - type: AuObjective
-    id: destroycarp
-    factioneutral: false
-    applicableModes:
-    - Insurgency
-    possiblefactions:
-    - clf
-    repeating: true
-    objectivelevel: 1
-    custompoints: 5
-    ObjectiveDescription: "Destroy a carp"
-  - type: DestroyObjective
-    entitytodestroy: CMUMobCarp
-    useanyentity: true
-    amounttodestroy: 1

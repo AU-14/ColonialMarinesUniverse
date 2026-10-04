@@ -1,4 +1,4 @@
-﻿# TODO RMC14 other effects
+# TODO RMC14 other effects
 - type: reagent
   parent: [ CMReagentMedicine, Dylovene ]
   id: CMDylovene
@@ -15,6 +15,9 @@
         potency: 2
       - !type:Antihallucinogenic
         potency: 2
+      - !type:ReduceChemicalIrritant
+        potency: 2
+        amount: 1
 
 # TODO RMC14 other effects
 - type: reagent

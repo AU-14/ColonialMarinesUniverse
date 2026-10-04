@@ -1,0 +1,95 @@
+- type: job
+  parent: CMJobBase
+  id: AU14PAPThirdpartySeniorInvestigator
+  roundSide: ThirdParty
+  roundForce: PAP
+  roundRole: AU14PAPThirdpartySeniorInvestigator
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_sec
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillMeleeWeapons: 2
+      RMCSkillFirearms: 2
+      RMCSkillPolice: 2
+      RMCSkillEndurance: 3
+      RMCSkillFireman: 3
+      RMCSkillMedical: 2
+      RMCSkillJtac: 1
+      RMCSkillIntel: 2
+      RMCSkillLeadership: 3
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au-14-job-prefix-papthirdparty-captain
+  - type: Language
+    preset: AU14LanguagePresetUPPOfficer
+
+  name: au-14-job-name-papthirdparty-captain
+  description: au14-papthirdparty-description
+  playTimeTracker: AU14JobPaPThirdpartySeniorInvestigator
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Major:
+      entity: AU14ChevronUPPNIMajor
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMCommander
+        time: 18000 # 5 hours
+    UPP_Captain:
+      entity: AU14ChevronUPPNICaptain
+      requirements: []
+  spawnMenuRoleName: UPP PaP Senior Investigator (3rd party)
+  startingGear: AU14GearPAPThirdpartySeniorInvestigator
+  greeting: au14-papthirdparty-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-foreman
+  accessGroups:
+  - aucmb
+  - Colonist
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicPAPThirdparty
+  id: AU14JobPaPThirdpartySeniorInvestigator
+  name: UPP PAP Senior Investigator
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-papthirdparty-captain
+    description: au14-papthirdparty-description
+    reregister: false
+    job: AU14PAPThirdpartySeniorInvestigator
+    raffle:
+      settings: short
+    rules: au14-papthirdparty-description
+
+- type: startingGear
+  id: AU14GearPAPThirdpartySeniorInvestigator
+  equipment:
+    id: AU14IDCardPAPThirdpartySeniorInvestigator
+    outerClothing: RMCCoatPaP
+    jumpsuit: RMCJumpsuitSPPPaP
+    shoes: CMBootsBlackFilled
+    gloves: RMCHandsVeteran
+    head: CMHeadCapSPPPeakedPolice
+    eyes: CMGlassesSecurity
+    belt: AU14BeltHolsterPistolUPPPAP
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelBlack
+    ears: AU14CMBHeadset
+  storage:
+    back:
+    - RMCMaskGasSPP
+
+- type: playTimeTracker
+  id: AU14JobPaPThirdpartySeniorInvestigator

@@ -1,0 +1,137 @@
+# --- Job + role prototypes -----------------------------------------------
+# Three tribal jobs, each parented directly to CMJobBase like the cultist
+# and WYHT roles. No abstract intermediary — every field is inline so the
+# standard GhostRoleApplySpecial pipe finds everything it needs.
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobTribalLeader
+  roundSide: Threat
+  roundForce: TRIBE
+  roundRole: TribalLeader
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillFireman: 1
+      RMCSkillEndurance: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-tribal-leader
+  - type: Language
+    spokenLanguages:
+    - Arcturian
+    understoodLanguages:
+    - Arcturian
+    currentLanguage: Arcturian
+    defaultLanguage: Arcturian
+
+  name: au14-job-name-tribal-leader
+  description: au14-job-description-tribal-leader
+  setPreference: false
+  playTimeTracker: AU14JobTribal
+  startingGear: AU14GearTribalLeader
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-tribal
+  roleWeight: 0.25
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobTribalSpear
+  roundSide: Threat
+  roundForce: TRIBE
+  roundRole: TribalSpear
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillFireman: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-tribal-spear
+  - type: Language
+    spokenLanguages:
+    - Arcturian
+    understoodLanguages:
+    - Arcturian
+    currentLanguage: Arcturian
+    defaultLanguage: Arcturian
+  name: au14-job-name-tribal-spear
+  description: au14-job-description-tribal-spear
+  setPreference: false
+  playTimeTracker: AU14JobTribal
+  startingGear: AU14GearTribalSpear
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-tribal
+  roleWeight: 0.25
+  hidden: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobTribalBowman
+  roundSide: Threat
+  roundForce: TRIBE
+  roundRole: TribalBowman
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-tribal-bowman
+  - type: Language
+    spokenLanguages:
+    - Arcturian
+    understoodLanguages:
+    - Arcturian
+    currentLanguage: Arcturian
+    defaultLanguage: Arcturian
+  name: au14-job-name-tribal-bowman
+  description: au14-job-description-tribal-bowman
+  setPreference: false
+  playTimeTracker: AU14JobTribal
+  startingGear: AU14GearTribalBowman
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-tribal
+  roleWeight: 0.25
+  hidden: true
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobTribalShaman
+  roundSide: Threat
+  roundForce: TRIBE
+  roundRole: TribalShaman
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+      RMCSkillCqc: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-tribal-shaman
+  - type: Language
+    spokenLanguages:
+    - Arcturian
+    understoodLanguages:
+    - Arcturian
+    currentLanguage: Arcturian
+    defaultLanguage: Arcturian
+  name: au14-job-name-tribal-shaman
+  description: au14-job-description-tribal-shaman
+  setPreference: false
+  playTimeTracker: AU14JobTribal
+  startingGear: AU14GearTribalShaman
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-tribal
+  roleWeight: 0.25
+  hidden: true
+
+- type: playTimeTracker
+  id: AU14JobTribal
+  isHumanoid: true

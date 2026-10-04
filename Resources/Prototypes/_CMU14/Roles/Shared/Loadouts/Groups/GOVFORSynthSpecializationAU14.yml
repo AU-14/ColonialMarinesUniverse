@@ -1,0 +1,12 @@
+- type: loadoutGroup
+  id: GOVFORSynthSpecializationAU14
+  name: au14-loadout-group-role-specific-ID
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - GOVFORSynthSpecializationDefaultAU14
+  - GOVFORSynthSpecializationEngineeringAU14
+  - GOVFORSynthSpecializationMedicalAU14
+  - GOVFORSynthSpecializationSecurityAU14
+  - GOVFORSynthSpecializationCommandAU14
+  - GOVFORSynthSpecializationIntelAU14

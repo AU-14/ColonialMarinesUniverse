@@ -1,0 +1,13 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentCriminal
+  name: au14-department-criminal
+  description: au14-department-criminal-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianPrisoner
+    - AU14JobMobGoon
+    - AU14JobMobBoss
+  departmentRadio: null
+  headOfDepartment: null
+  faction: colonist

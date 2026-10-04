@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Server.Administration.Logs;
@@ -107,6 +108,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     private void OnComputerStartup(EntityUid uid, RequisitionsComputerComponent comp, ComponentStartup args)
     {
         ApplyPlatoonCatalogToComputer(uid, comp);
+        ResetStock((uid, comp));
     }
 
     private void OnComputerMapInit(EntityUid uid, RequisitionsComputerComponent comp, MapInitEvent args)
@@ -116,6 +118,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         // Also apply platoon catalog in case the console needs a custom catalog based on current round
         ApplyPlatoonCatalogToComputer(uid, comp);
+        ResetStock((uid, comp));
         Dirty(uid, comp);
     }
 
@@ -207,6 +210,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             return;
 
         if (IsFull(elevator))
+            return;
+
+        if (!TryTakeStock(computer, args.Category, args.Order, order))
             return;
 
         account.Balance -= order.Cost;
@@ -648,6 +654,13 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             }
         }
 
+        var computers = EntityQueryEnumerator<RequisitionsComputerComponent>();
+        while (computers.MoveNext(out var uid, out var computer))
+        {
+            if (ProcessStock((uid, computer), time))
+                updateUI = true;
+        }
+
         var elevators = EntityQueryEnumerator<RequisitionsElevatorComponent>();
         while (elevators.MoveNext(out var uid, out var elevator))
         {
@@ -683,6 +696,210 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         if (updateUI)
             SendUIStateAll();
+    }
+
+    private void ResetStock(Entity<RequisitionsComputerComponent> computer)
+    {
+        computer.Comp.Stock.Clear();
+        EnsureStockEntries(computer, _timing.CurTime);
+    }
+
+    private static bool IsLimitedStock(RequisitionsEntry entry)
+    {
+        return entry.MaxStock > 0;
+    }
+
+    private void EnsureStockEntries(Entity<RequisitionsComputerComponent> computer, TimeSpan time)
+    {
+        var validKeys = new HashSet<(int Category, int Order)>();
+
+        for (var categoryIndex = 0; categoryIndex < computer.Comp.Categories.Count; categoryIndex++)
+        {
+            var category = computer.Comp.Categories[categoryIndex];
+            for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
+            {
+                var entry = category.Entries[orderIndex];
+                if (!IsLimitedStock(entry))
+                    continue;
+
+                var key = (categoryIndex, orderIndex);
+                validKeys.Add(key);
+                if (computer.Comp.Stock.ContainsKey(key))
+                    continue;
+
+                var maxStock = Math.Max(0, entry.MaxStock);
+                var startingStock = entry.StartingStock < 0
+                    ? maxStock
+                    : Math.Clamp(entry.StartingStock, 0, maxStock);
+
+                computer.Comp.Stock[key] = new RequisitionsStockStatus
+                {
+                    Current = startingStock,
+                    NextReplenish = startingStock < maxStock ? GetNextStockReplenish(time, entry) : TimeSpan.Zero,
+                };
+            }
+        }
+
+        foreach (var key in computer.Comp.Stock.Keys.ToArray())
+        {
+            if (!validKeys.Contains(key))
+                computer.Comp.Stock.Remove(key);
+        }
+    }
+
+    private TimeSpan GetNextStockReplenish(TimeSpan time, RequisitionsEntry entry)
+    {
+        return time + (entry.StockReplenishDelay > TimeSpan.Zero
+            ? entry.StockReplenishDelay
+            : TimeSpan.Zero);
+    }
+
+    private bool TryTakeStock(
+        Entity<RequisitionsComputerComponent> computer,
+        int category,
+        int order,
+        RequisitionsEntry entry)
+    {
+        if (!IsLimitedStock(entry))
+            return true;
+
+        EnsureStockEntries(computer, _timing.CurTime);
+        var key = (category, order);
+        if (!computer.Comp.Stock.TryGetValue(key, out var stock) ||
+            stock.Current <= 0)
+        {
+            return false;
+        }
+
+        stock.Current--;
+        if (stock.Current < entry.MaxStock && stock.NextReplenish == TimeSpan.Zero)
+            stock.NextReplenish = GetNextStockReplenish(_timing.CurTime, entry);
+
+        return true;
+    }
+
+    public bool TryReserveStock(Entity<RequisitionsComputerComponent> computer, int category, int order)
+    {
+        if (category < 0 ||
+            category >= computer.Comp.Categories.Count)
+        {
+            return false;
+        }
+
+        var requisitionsCategory = computer.Comp.Categories[category];
+        if (order < 0 ||
+            order >= requisitionsCategory.Entries.Count)
+        {
+            return false;
+        }
+
+        var entry = requisitionsCategory.Entries[order];
+        if (!IsLimitedStock(entry))
+            return true;
+
+        if (!TryTakeStock(computer, category, order, entry))
+            return false;
+
+        SendUIStateAll();
+        return true;
+    }
+
+    private bool ProcessStock(Entity<RequisitionsComputerComponent> computer, TimeSpan time)
+    {
+        EnsureStockEntries(computer, time);
+
+        var updateUi = false;
+        var waitingForStock = false;
+        for (var categoryIndex = 0; categoryIndex < computer.Comp.Categories.Count; categoryIndex++)
+        {
+            var category = computer.Comp.Categories[categoryIndex];
+            for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
+            {
+                var entry = category.Entries[orderIndex];
+                if (!IsLimitedStock(entry))
+                    continue;
+
+                var key = (categoryIndex, orderIndex);
+                if (!computer.Comp.Stock.TryGetValue(key, out var stock))
+                    continue;
+
+                if (stock.Current >= entry.MaxStock)
+                {
+                    stock.NextReplenish = TimeSpan.Zero;
+                    continue;
+                }
+
+                waitingForStock = true;
+                if (stock.NextReplenish == TimeSpan.Zero)
+                    stock.NextReplenish = GetNextStockReplenish(time, entry);
+
+                if (entry.StockReplenishDelay <= TimeSpan.Zero)
+                {
+                    stock.Current = entry.MaxStock;
+                    stock.NextReplenish = TimeSpan.Zero;
+                    updateUi = true;
+                    continue;
+                }
+
+                while (stock.Current < entry.MaxStock &&
+                       time >= stock.NextReplenish)
+                {
+                    stock.Current = Math.Min(entry.MaxStock, stock.Current + Math.Max(1, entry.StockReplenishAmount));
+                    updateUi = true;
+
+                    if (stock.Current >= entry.MaxStock)
+                    {
+                        stock.NextReplenish = TimeSpan.Zero;
+                        break;
+                    }
+
+                    stock.NextReplenish += entry.StockReplenishDelay;
+                }
+            }
+        }
+
+        if (waitingForStock && time >= computer.Comp.NextStockUiUpdate)
+        {
+            computer.Comp.NextStockUiUpdate = time + TimeSpan.FromSeconds(1);
+            updateUi = true;
+        }
+
+        return updateUi;
+    }
+
+    protected override List<RequisitionsStockInfo> GetStockInfo(Entity<RequisitionsComputerComponent> computer)
+    {
+        var time = _timing.CurTime;
+        EnsureStockEntries(computer, time);
+
+        var stockInfo = new List<RequisitionsStockInfo>();
+        for (var categoryIndex = 0; categoryIndex < computer.Comp.Categories.Count; categoryIndex++)
+        {
+            var category = computer.Comp.Categories[categoryIndex];
+            for (var orderIndex = 0; orderIndex < category.Entries.Count; orderIndex++)
+            {
+                var entry = category.Entries[orderIndex];
+                if (!IsLimitedStock(entry))
+                    continue;
+
+                var key = (categoryIndex, orderIndex);
+                if (!computer.Comp.Stock.TryGetValue(key, out var stock))
+                    continue;
+
+                var secondsUntilReplenish = 0;
+                if (stock.Current < entry.MaxStock && stock.NextReplenish > time)
+                    secondsUntilReplenish = (int) Math.Ceiling((stock.NextReplenish - time).TotalSeconds);
+
+                stockInfo.Add(new RequisitionsStockInfo(
+                    categoryIndex,
+                    orderIndex,
+                    stock.Current,
+                    entry.MaxStock,
+                    secondsUntilReplenish));
+            }
+        }
+
+        return stockInfo;
     }
 
     private bool ProcessElevator(Entity<RequisitionsElevatorComponent> ent)
@@ -840,6 +1057,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         while (computers.MoveNext(out var uid, out var comp))
         {
             ApplyPlatoonCatalogToComputer(uid, comp);
+            ResetStock((uid, comp));
             Dirty(uid, comp);
         }
     }

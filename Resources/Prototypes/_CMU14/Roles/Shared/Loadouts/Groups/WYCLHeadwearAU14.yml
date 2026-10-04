@@ -1,0 +1,8 @@
+- type: loadoutGroup
+  id: WYCLHeadwearAU14
+  name: au14-loadout-group-corporate-headwear
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - WYHeadCapWeylandYutaniDarkAU14
+  - WYLiaisonManagerCapAU14

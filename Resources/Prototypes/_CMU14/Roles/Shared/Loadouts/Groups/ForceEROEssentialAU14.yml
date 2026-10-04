@@ -1,0 +1,9 @@
+- type: loadoutGroup
+  id: ForceEROEssentialAU14
+  name: rmc-loadout-group-backpack
+  minLimit: 1
+  hidden: true
+  loadouts:
+  - EROEssentialAU14
+
+# Journalist

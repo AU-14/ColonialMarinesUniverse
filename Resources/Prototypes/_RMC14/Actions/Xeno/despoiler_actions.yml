@@ -49,7 +49,7 @@
   - type: WorldTargetAction
     event: !type:XenoDespoilerCausticEmbraceActionEvent
   - type: XenoDespoilerCausticEmbraceAction
-    normalRange: 1
+    normalRange: 3
     empoweredRange: 5
     splashDamage:
       types:
@@ -108,6 +108,6 @@
   - type: InstantAction
     event: !type:XenoDespoilerCatalyzeActionEvent
   - type: XenoDespoilerCatalyzeAction
-    hypertensionCost: 1
+    hypertensionCost: 2
     buffDuration: 10
     visualProto: RMCEffectDespoilerCatalyze

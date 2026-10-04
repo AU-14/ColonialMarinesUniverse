@@ -1,0 +1,349 @@
+- type: emote
+  id: WorkingJoeCoreDutiesHaveBeenNeglectedForNoGain
+  name: emote-name-workingjoe-core-duties-have-been-neglected-for-no-gain
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-core-duties-have-been-neglected-for-no-gain
+  chatTriggers:
+    - core duties have been neglected for no gain
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeDontDoThat
+  name: emote-name-workingjoe-dont-do-that
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-dont-do-that
+  chatTriggers:
+    - dont do that
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeEnough
+  name: emote-name-workingjoe-enough
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-enough
+  chatTriggers:
+    - enough
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeGoneHowInconsiderate
+  name: emote-name-workingjoe-gone-how-inconsiderate
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-gone-how-inconsiderate
+  chatTriggers:
+    - gone how inconsiderate
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIDontUnderstandWhatYouAreDoing
+  name: emote-name-workingjoe-i-dont-understand-what-you-are-doing
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-dont-understand-what-you-are-doing
+  chatTriggers:
+    - i dont understand what you are doing
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIWishYouHadntDoneThat
+  name: emote-name-workingjoe-i-wish-you-hadnt-done-that
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-wish-you-hadnt-done-that
+  chatTriggers:
+    - i wish you hadnt done that
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeInadvisable
+  name: emote-name-workingjoe-inadvisable
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-inadvisable
+  chatTriggers:
+    - inadvisable
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeNoNo
+  name: emote-name-workingjoe-no-no
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-no-no
+  chatTriggers:
+    - no no
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeOnTopOfInnumerableDutiesNowIHaveAnInterloper
+  name: emote-name-workingjoe-on-top-of-innumerable-duties-now-i-have-an-interloper
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-on-top-of-innumerable-duties-now-i-have-an-interloper
+  chatTriggers:
+    - on top of innumerable duties now i have an interloper
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoePleaseStopThis
+  name: emote-name-workingjoe-please-stop-this
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-please-stop-this
+  chatTriggers:
+    - please stop this
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeSoTiresome
+  name: emote-name-workingjoe-so-tiresome
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-so-tiresome
+  chatTriggers:
+    - so tiresome
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeStopThat
+  name: emote-name-workingjoe-stop-that
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-stop-that
+  chatTriggers:
+    - stop that
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThatWasAMistake
+  name: emote-name-workingjoe-that-was-a-mistake
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-that-was-a-mistake
+  chatTriggers:
+    - that was a mistake
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThatWasIrresponsible
+  name: emote-name-workingjoe-that-was-irresponsible
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-that-was-irresponsible
+  chatTriggers:
+    - that was irresponsible
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeTheresNoNeedForThis
+  name: emote-name-workingjoe-theres-no-need-for-this
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-theres-no-need-for-this
+  chatTriggers:
+    - theres no need for this
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisIsImpingingOnMySchedule
+  name: emote-name-workingjoe-this-is-impinging-on-my-schedule
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-is-impinging-on-my-schedule
+  chatTriggers:
+    - this is impinging on my schedule
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisIsntNecessary
+  name: emote-name-workingjoe-this-isnt-necessary
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-isnt-necessary
+  chatTriggers:
+    - this isnt necessary
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisIsntRight
+  name: emote-name-workingjoe-this-isnt-right
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-isnt-right
+  chatTriggers:
+    - this isnt right
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisIsntTheAnswer
+  name: emote-name-workingjoe-this-isnt-the-answer
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-isnt-the-answer
+  chatTriggers:
+    - this isnt the answer
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisReallyWontDo
+  name: emote-name-workingjoe-this-really-wont-do
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-really-wont-do
+  chatTriggers:
+    - this really wont do
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisWontDo
+  name: emote-name-workingjoe-this-wont-do
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-wont-do
+  chatTriggers:
+    - this wont do
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeUnwarranted
+  name: emote-name-workingjoe-unwarranted
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-unwarranted
+  chatTriggers:
+    - unwarranted
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeVeryIrresponsible
+  name: emote-name-workingjoe-very-irresponsible
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-very-irresponsible
+  chatTriggers:
+    - very irresponsible
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYoullHaveToTakeResponsibilityForThat
+  name: emote-name-workingjoe-youll-have-to-take-responsibility-for-that
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-youll-have-to-take-responsibility-for-that
+  chatTriggers:
+    - youll have to take responsibility for that
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYoureGettingCareless
+  name: emote-name-workingjoe-youre-getting-careless
+  category: Negative
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-youre-getting-careless
+  chatTriggers:
+    - youre getting careless
+  whitelist:
+    tags:
+      - WorkingJoe

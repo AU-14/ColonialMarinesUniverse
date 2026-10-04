@@ -1280,10 +1280,10 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         return state switch
         {
             BlackfootFlightState.Idling => sounds.EngineIdleLoopSound,
-            BlackfootFlightState.TakingOff or
-                BlackfootFlightState.VTOL or
-                BlackfootFlightState.Flight or
-                BlackfootFlightState.Landing => sounds.ExteriorFlightLoopSound ?? sounds.EngineIdleLoopSound,
+            BlackfootFlightState.TakingOff => sounds.TakeoffSound ?? sounds.ExteriorFlightLoopSound ?? sounds.EngineIdleLoopSound,
+            BlackfootFlightState.Landing => sounds.LandingSound ?? sounds.ExteriorFlightLoopSound ?? sounds.EngineIdleLoopSound,
+            BlackfootFlightState.VTOL or
+                BlackfootFlightState.Flight => sounds.ExteriorFlightLoopSound ?? sounds.EngineIdleLoopSound,
             _ => null,
         };
     }
@@ -1293,10 +1293,10 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
         return state switch
         {
             BlackfootFlightState.Idling => sounds.EngineIdleLoopSound,
-            BlackfootFlightState.TakingOff or
-                BlackfootFlightState.VTOL or
-                BlackfootFlightState.Flight or
-                BlackfootFlightState.Landing => sounds.InteriorFlightLoopSound ?? sounds.ExteriorFlightLoopSound ?? sounds.EngineIdleLoopSound,
+            BlackfootFlightState.TakingOff => sounds.TakeoffSound ?? sounds.InteriorFlightLoopSound ?? sounds.ExteriorFlightLoopSound ?? sounds.EngineIdleLoopSound,
+            BlackfootFlightState.Landing => sounds.LandingSound ?? sounds.InteriorFlightLoopSound ?? sounds.ExteriorFlightLoopSound ?? sounds.EngineIdleLoopSound,
+            BlackfootFlightState.VTOL or
+                BlackfootFlightState.Flight => sounds.InteriorFlightLoopSound ?? sounds.ExteriorFlightLoopSound ?? sounds.EngineIdleLoopSound,
             _ => null,
         };
     }
@@ -1334,7 +1334,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
 
     private void PlayBlackfootSound(EntityUid uid, SoundSpecifier sound)
     {
-        _audio.PlayPvs(sound, uid);
+        _zLevels.PlayPvsDirectlyAcrossZ(sound, uid);
 
         var interiorFilter = GetInteriorSoundFilter(uid);
         if (interiorFilter.Count > 0)

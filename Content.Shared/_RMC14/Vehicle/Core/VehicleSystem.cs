@@ -504,6 +504,9 @@ public sealed partial class VehicleSystem : EntitySystem
 
         _rmcTeleporter.HandlePulling(user, exitMapCoords);
         UntrackOccupant(user, vehicleUid);
+
+        var ev = new VehicleExitedEvent(user, ent.Owner, exitMapCoords);
+        RaiseLocalEvent(vehicleUid, ref ev);
         return true;
     }
 
@@ -799,10 +802,38 @@ public sealed partial class VehicleSystem : EntitySystem
             return;
         }
 
-        _vehicles.TrySetOperator((vehicle.Value, vehicleComp), args.Buckle.Owner);
+        var driver = args.Buckle.Owner;
+        ClearStaleVehicleOperator(driver, vehicle.Value);
+        if (!_vehicles.TrySetOperator((vehicle.Value, vehicleComp), driver) ||
+            vehicleComp.Operator != driver)
+        {
+            return;
+        }
 
-        EnsureComp<VehicleOperatorComponent>(args.Buckle.Owner);
-        _vehicleLock.EnableLockAction(args.Buckle.Owner, vehicle.Value);
+        EnsureComp<VehicleOperatorComponent>(driver);
+        _vehicleLock.EnableLockAction(driver, vehicle.Value);
+    }
+
+    private void ClearStaleVehicleOperator(EntityUid driver, EntityUid vehicle)
+    {
+        if (!TryComp(driver, out VehicleOperatorComponent? operatorComp))
+            return;
+
+        if (operatorComp.Vehicle == vehicle &&
+            TryComp(vehicle, out VehicleComponent? vehicleComp) &&
+            vehicleComp.Operator == driver)
+        {
+            return;
+        }
+
+        if (operatorComp.Vehicle is { } operatedVehicle &&
+            TryComp(operatedVehicle, out VehicleComponent? operatedVehicleComp) &&
+            operatedVehicleComp.Operator == driver)
+        {
+            _vehicles.TryRemoveOperator((operatedVehicle, operatedVehicleComp));
+        }
+
+        RemComp<VehicleOperatorComponent>(driver);
     }
 
     private void OnDriverSeatUnstrapped(Entity<VehicleDriverSeatComponent> ent, ref UnstrappedEvent args)

@@ -1,17 +1,26 @@
+using System;
 using Content.Server._CMU14.ZLevels.Core;
 using Content.Shared._CMU14.Blackfoot;
+using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Vehicle.Viewport;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.Localization;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
 
 namespace Content.Server._CMU14.Blackfoot;
 
 public sealed partial class BlackfootRearDoorSystem : EntitySystem
 {
+    private const float AirborneExitLocalPosition = 0.95f;
+    private const float AirborneExitVelocity = -8f;
+
     [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private VehicleSystem _vehicle = default!;
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
@@ -25,6 +34,7 @@ public sealed partial class BlackfootRearDoorSystem : EntitySystem
         SubscribeLocalEvent<BlackfootLookOutsideComponent, GetVerbsEvent<AlternativeVerb>>(OnLookOutsideVerb);
         SubscribeLocalEvent<BlackfootRearDoorComponent, VehicleEntryAttemptEvent>(OnEntryAttempt);
         SubscribeLocalEvent<BlackfootRearDoorComponent, VehicleExitAttemptEvent>(OnExitAttempt);
+        SubscribeLocalEvent<BlackfootRearDoorComponent, VehicleExitedEvent>(OnExited);
     }
 
     public override void Update(float frameTime)
@@ -135,10 +145,59 @@ public sealed partial class BlackfootRearDoorSystem : EntitySystem
 
     private void OnExitAttempt(Entity<BlackfootRearDoorComponent> ent, ref VehicleExitAttemptEvent args)
     {
-        if (ent.Comp.Open || !HasComp<BlackfootRearDoorVisualsComponent>(args.Exit))
+        if (!HasComp<BlackfootRearDoorVisualsComponent>(args.Exit))
             return;
 
-        _popup.PopupEntity("Open the rear door before exiting from the back.", args.User, args.User, PopupType.SmallCaution);
+        if (!ent.Comp.Open)
+        {
+            _popup.PopupEntity("Open the rear door before exiting from the back.", args.User, args.User, PopupType.SmallCaution);
+            args.Cancelled = true;
+            return;
+        }
+
+        if (!TryComp(ent.Owner, out BlackfootFlightComponent? flight) ||
+            !IsAirborneExitState(flight.State) ||
+            ent.Comp.AllowAirborneExit)
+        {
+            return;
+        }
+
+        _popup.PopupEntity("The Blackfoot is moving too fast to jump out.", args.User, args.User, PopupType.SmallCaution);
         args.Cancelled = true;
+    }
+
+    private void OnExited(Entity<BlackfootRearDoorComponent> ent, ref VehicleExitedEvent args)
+    {
+        if (!ent.Comp.Open ||
+            !ent.Comp.AllowAirborneExit ||
+            !HasComp<BlackfootRearDoorVisualsComponent>(args.Exit) ||
+            !TryComp(ent.Owner, out BlackfootFlightComponent? flight) ||
+            !IsAirborneExitState(flight.State))
+        {
+            return;
+        }
+
+        StartAirborneExitFall(args.User);
+    }
+
+    private void StartAirborneExitFall(EntityUid user)
+    {
+        if (!TryComp(user, out CMUZPhysicsComponent? zPhysics) ||
+            !TryComp(user, out PhysicsComponent? physics))
+        {
+            return;
+        }
+
+        _physics.SetBodyStatus(user, physics, BodyStatus.InAir);
+        _zLevels.SetZLocalPosition((user, zPhysics), MathF.Max(zPhysics.LocalPosition, AirborneExitLocalPosition));
+        _zLevels.SetZVelocity((user, zPhysics), MathF.Min(zPhysics.Velocity, AirborneExitVelocity));
+    }
+
+    private static bool IsAirborneExitState(BlackfootFlightState state)
+    {
+        return state is
+            BlackfootFlightState.VTOL or
+            BlackfootFlightState.Flight or
+            BlackfootFlightState.Landing;
     }
 }

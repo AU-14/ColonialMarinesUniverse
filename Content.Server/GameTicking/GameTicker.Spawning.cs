@@ -30,6 +30,7 @@ using Robust.Shared.Utility;
 using Content.Server._RMC14.Announce;
 using Content.Server._RMC14.Xenonids.Hive;
 using Content.Server.AU14.Round;
+using Content.Server.AU14.Scenario;
 using Content.Server.AU14.Threats;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.AU14.util;
@@ -45,14 +46,58 @@ namespace Content.Server.GameTicking
         [Dependency] private AdminSystem _admin = default!;
         [Dependency] private MarinePresenceAnnounceSystem _marinePresenceAnnounce = default!;
         [Dependency] private AuJobSelectionSystem _auJobSelectionSystem = default!;
+        [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
         [Dependency] private AuThreatSystem _auThreatSystem = default!;
         [Dependency] private AuThreatVoteSystem _auThreatVoteSystem = default!;
         [Dependency] private Content.Server.AU14.ThirdParty.AuThirdPartySystem _auThirdParty = default!;
         [Dependency] private Content.Server.AU14.Allegiance.AllegianceSystem _allegianceSystem = default!;
         [Dependency] private Content.Server.AU14.Origin.OriginSystem _originSystem = default!;
 
+        private const string AuThreatLeaderJob = "AU14JobThreatLeader";
+        private const string AuThreatMemberJob = "AU14JobThreatMember";
+        private const string AuThirdPartyLeaderJob = "AU14JobThirdPartyLeader";
+        private const string AuThirdPartyMemberJob = "AU14JobThirdPartyMember";
+
         public static readonly EntProtoId ObserverPrototypeName = "MobObserver";
         public static readonly EntProtoId AdminObserverPrototypeName = "RMCAdminObserver";
+
+        private readonly record struct AuAssignmentCounts(
+            int NoJob,
+            int ThreatLeaders,
+            int ThreatMembers,
+            int ThirdPartyLeaders,
+            int ThirdPartyMembers);
+
+        private static AuAssignmentCounts CountAuAssignments(
+            Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs)
+        {
+            var noJob = 0;
+            var threatLeaders = 0;
+            var threatMembers = 0;
+            var thirdPartyLeaders = 0;
+            var thirdPartyMembers = 0;
+
+            foreach (var (_, (job, _)) in assignedJobs)
+            {
+                if (job == null)
+                    noJob++;
+                else if (job == AuThreatLeaderJob)
+                    threatLeaders++;
+                else if (job == AuThreatMemberJob)
+                    threatMembers++;
+                else if (job == AuThirdPartyLeaderJob)
+                    thirdPartyLeaders++;
+                else if (job == AuThirdPartyMemberJob)
+                    thirdPartyMembers++;
+            }
+
+            return new AuAssignmentCounts(
+                noJob,
+                threatLeaders,
+                threatMembers,
+                thirdPartyLeaders,
+                thirdPartyMembers);
+        }
 
         /// <summary>
         /// Determines which platoon a job belongs to based on its ID.
@@ -70,6 +115,28 @@ namespace Content.Server.GameTicking
                 return _platoonSpawnRuleSystem.SelectedOpforPlatoon;
 
             return null;
+        }
+
+        private ScenarioPlanValidationRequest BuildScenarioPlanRuntimeRequest(string? presetId, int playerCount)
+        {
+            return new ScenarioPlanValidationRequest(
+                presetId ?? string.Empty,
+                playerCount,
+                _platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
+                _platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
+                _auRoundSystem.GetSelectedPlanetId(),
+                _auRoundSystem.GetSelectedPlanet()?.MapId,
+                _auRoundSystem.SelectedThreat?.ID,
+                _auRoundSystem.GetSelectedGovforShip(),
+                _auRoundSystem.GetSelectedOpforShip());
+        }
+
+        private static bool ShouldGenerateScenarioPlanShadow(string? presetId)
+        {
+            return presetId != null &&
+                   (presetId.Equals("DistressSignal", StringComparison.OrdinalIgnoreCase) ||
+                    presetId.Equals("Insurgency", StringComparison.OrdinalIgnoreCase) ||
+                    presetId.Equals("ColonyFall", StringComparison.OrdinalIgnoreCase));
         }
 
         /// <summary>
@@ -213,7 +280,13 @@ namespace Content.Server.GameTicking
             // Allow game rules to spawn players by themselves if needed. (For example, nuke ops or wizard)
             RaiseLocalEvent(new RulePlayerSpawningEvent(readyPlayers, profiles, force));
 
-            var playerNetIds = readyPlayers.Select(o => o.UserId).ToHashSet();
+            var readySessions = new Dictionary<NetUserId, ICommonSession>(readyPlayers.Count);
+            var playerNetIds = new HashSet<NetUserId>(readyPlayers.Count);
+            foreach (var player in readyPlayers)
+            {
+                readySessions[player.UserId] = player;
+                playerNetIds.Add(player.UserId);
+            }
 
             // RulePlayerSpawning feeds a readonlydictionary of profiles.
             // We need to take these players out of the pool of players available as they've been used.
@@ -241,36 +314,78 @@ namespace Content.Server.GameTicking
             _auThreatVoteSystem.ClearRoundJoinBlocks();
             var usesPostRoundstartThreatVote = _auRoundSystem.UsesPostRoundstartThreatVote();
             var threatVotePrepared = false;
+            _sawmill.Debug(
+                $"[RoundStart] SpawnPlayers begin: preset={presetId ?? "null"}, readyPlayers={readyPlayers.Count}, profiles={profiles.Count}, assignmentProfiles={assignmentProfiles.Count}, defaultMap={DefaultMap}, planet={_auRoundSystem.GetSelectedPlanet()?.MapId ?? "null"}, selectedThreat={_auRoundSystem.SelectedThreat?.ID ?? "null"}, postRoundstartThreatVote={usesPostRoundstartThreatVote}");
             if (usesPostRoundstartThreatVote)
             {
+                _sawmill.Debug("[RoundStart] Preparing post-roundstart threat vote.");
                 try
                 {
                     threatVotePrepared = _auThreatVoteSystem.TryPrepareThreatVote(assignmentProfiles, DefaultMap);
+                    _sawmill.Debug($"[RoundStart] TryPrepareThreatVote result={threatVotePrepared}.");
                 }
                 catch (Exception threatVoteEx)
                 {
-                    Log.Error($"TryPrepareThreatVote threw â€” round will continue without a threat vote. {threatVoteEx}");
+                    Log.Error($"TryPrepareThreatVote threw - round will continue without a threat vote. {threatVoteEx}");
                     _auThreatVoteSystem.ClearRoundJoinBlocks();
                     _auJobSelectionSystem.ForcedJobAssignments.Clear();
                 }
             }
             else
             {
+                _sawmill.Debug("[RoundStart] Assigning immediate threat jobs.");
                 _auJobSelectionSystem.AssignThreatAndThirdPartyJobs(assignmentProfiles);
             }
 
+            if (ShouldGenerateScenarioPlanShadow(presetId))
+            {
+                try
+                {
+                    _scenarioPlan.GenerateShadowPlan(
+                        BuildScenarioPlanRuntimeRequest(presetId, assignmentProfiles.Count),
+                        usesPostRoundstartThreatVote
+                            ? "RoundStartDeferredThreatVotePrepared"
+                            : "RoundStartThreatAssignmentPrepared");
+                }
+                catch (Exception scenarioEx)
+                {
+                    Log.Error($"GenerateShadowPlan threw - round will continue without a shadow Scenario Plan. {scenarioEx}");
+                }
+            }
+
             var spawnableStations = GetSpawnableStations();
+            _sawmill.Debug($"[RoundStart] Found {spawnableStations.Count} spawnable station(s).");
             var assignedJobs = _stationJobs.AssignJobs(assignmentProfiles, spawnableStations);
+            if (_sawmill.Level <= Robust.Shared.Log.LogLevel.Debug)
+            {
+                var stationAssignmentCounts = CountAuAssignments(assignedJobs);
+                _sawmill.Debug(
+                    $"[RoundStart] Station job assignment complete: assigned={assignedJobs.Count}, noJob={stationAssignmentCounts.NoJob}, threatLeaders={stationAssignmentCounts.ThreatLeaders}, threatMembers={stationAssignmentCounts.ThreatMembers}, thirdPartyLeaders={stationAssignmentCounts.ThirdPartyLeaders}, thirdPartyMembers={stationAssignmentCounts.ThirdPartyMembers}");
+            }
 
             // Defensive: any exception inside SpawnPlayers propagates to StartRound's
             // EXCEPTION_TOLERANCE catch (only enabled in Release/Tools builds), which calls
             // RestartRound() — making the round appear to "instantly restart at start" in
             // production. Wrap the threat spawn so a single subsystem can't take the round down.
-            if (!usesPostRoundstartThreatVote && _auRoundSystem._selectedthreat != null)
+            var selectedThreat = _auRoundSystem.SelectedThreat;
+            if (!usesPostRoundstartThreatVote && selectedThreat != null)
             {
+                if (_sawmill.Level <= Robust.Shared.Log.LogLevel.Debug)
+                {
+                    var beforeThreatCounts = CountAuAssignments(assignedJobs);
+                    _sawmill.Debug(
+                        $"[RoundStart] Starting immediate threat spawn for '{selectedThreat.ID}' on map {DefaultMap}; assignedThreatLeaders={beforeThreatCounts.ThreatLeaders}, assignedThreatMembers={beforeThreatCounts.ThreatMembers}.");
+                }
+
                 try
                 {
-                    _auThreatSystem.SpawnThreatAtRoundStart(_auRoundSystem._selectedthreat, DefaultMap, assignedJobs);
+                    _auThreatSystem.SpawnThreatAtRoundStart(selectedThreat, DefaultMap, assignedJobs);
+                    if (_sawmill.Level <= Robust.Shared.Log.LogLevel.Debug)
+                    {
+                        var afterThreatCounts = CountAuAssignments(assignedJobs);
+                        _sawmill.Debug(
+                            $"[RoundStart] Threat spawn returned for '{selectedThreat.ID}'; remainingThreatLeaders={afterThreatCounts.ThreatLeaders}, remainingThreatMembers={afterThreatCounts.ThreatMembers}.");
+                    }
                 }
                 catch (Exception threatEx)
                 {
@@ -280,11 +395,22 @@ namespace Content.Server.GameTicking
                         Log.Warning($"Removed {removed} threat assignment(s) after threat spawning failed so overflow assignment can handle those players.");
                 }
             }
-            else {
+            else if (usesPostRoundstartThreatVote)
+            {
+                _sawmill.Debug("[RoundStart] Threat spawn deferred until post-roundstart threat vote finishes.");
+            }
+            else
+            {
                 Log.Debug("SpawnThreatAtRoundStart debug — no threat selected, skipping threat spawn.");
             }
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, assignmentProfiles, spawnableStations);
+            if (_sawmill.Level <= Robust.Shared.Log.LogLevel.Debug)
+            {
+                var overflowAssignmentCounts = CountAuAssignments(assignedJobs);
+                _sawmill.Debug(
+                    $"[RoundStart] Overflow assignment complete: assigned={assignedJobs.Count}, noJob={overflowAssignmentCounts.NoJob}, threatLeaders={overflowAssignmentCounts.ThreatLeaders}, threatMembers={overflowAssignmentCounts.ThreatMembers}, thirdPartyLeaders={overflowAssignmentCounts.ThirdPartyLeaders}, thirdPartyMembers={overflowAssignmentCounts.ThirdPartyMembers}");
+            }
 
             // Calculate extended access for stations.
             var stationJobCounts = spawnableStations.ToDictionary(e => e, _ => 0);
@@ -292,11 +418,13 @@ namespace Content.Server.GameTicking
             {
                 if (job == null)
                 {
-                    var playerSession = _playerManager.GetSessionById(netUser);
-                    var evNoJobs = new NoJobsAvailableSpawningEvent(playerSession); // Used by gamerules to wipe their antag slot, if they got one
-                    RaiseLocalEvent(evNoJobs);
+                    if (readySessions.TryGetValue(netUser, out var playerSession))
+                    {
+                        var evNoJobs = new NoJobsAvailableSpawningEvent(playerSession); // Used by gamerules to wipe their antag slot, if they got one
+                        RaiseLocalEvent(evNoJobs);
 
-                    _chatManager.DispatchServerMessage(playerSession, Loc.GetString("job-not-available-wait-in-lobby"));
+                        _chatManager.DispatchServerMessage(playerSession, Loc.GetString("job-not-available-wait-in-lobby"));
+                    }
                 }
                 else
                 {
@@ -325,6 +453,9 @@ namespace Content.Server.GameTicking
                 if (job == null)
                     continue;
 
+                if (!readySessions.TryGetValue(player, out var playerSession))
+                    continue;
+
                 // Allegiance check: resolve the correct character profile for this player's job/platoon
                 var selectedProfile = profiles[player];
                 var resolvedProfile = ResolveProfileForAllegiance(player, selectedProfile, job);
@@ -332,13 +463,12 @@ namespace Content.Server.GameTicking
                 if (resolvedProfile == null)
                 {
                     // No matching character for this platoon's allegiance — keep player in lobby
-                    var playerSession = _playerManager.GetSessionById(player);
                     _chatManager.DispatchServerMessage(playerSession,
                         Loc.GetString("allegiance-no-matching-character"));
                     continue;
                 }
 
-                SpawnPlayer(_playerManager.GetSessionById(player), resolvedProfile, station, job, false);
+                SpawnPlayer(playerSession, resolvedProfile, station, job, false);
             }
 
             RefreshLateJoinAllowed();
@@ -347,39 +477,66 @@ namespace Content.Server.GameTicking
             // this, an exception inside third-party spawning kills the entire round at start.
             if (threatVotePrepared)
             {
+                _sawmill.Debug("[RoundStart] Starting prepared post-roundstart threat vote.");
                 try
                 {
                     _auThreatVoteSystem.StartPreparedThreatVote(assignedJobs);
+                    _sawmill.Debug("[RoundStart] Prepared threat vote started; threat and third-party spawn will continue from vote completion.");
                 }
                 catch (Exception threatVoteEx)
                 {
-                    Log.Error($"StartPreparedThreatVote threw â€” round will continue without a threat vote. {threatVoteEx}");
+                    Log.Error($"StartPreparedThreatVote threw - round will continue without a threat vote. {threatVoteEx}");
                     _auThreatVoteSystem.ClearRoundJoinBlocks();
                     var removed = AuThreatSystem.RemoveThreatJobAssignments(assignedJobs);
                     if (removed > 0)
                         Log.Warning($"Removed {removed} held threat assignment(s) after threat vote start failed.");
                 }
             }
-            else if (_auRoundSystem._selectedthreat != null)
+            if (!threatVotePrepared)
             {
-                try
+                selectedThreat = _auRoundSystem.SelectedThreat;
+                if (selectedThreat != null)
                 {
-                    _auThirdParty.StartThirdPartySpawning(_auRoundSystem._selectedthreat, assignedJobs);
+                    if (_sawmill.Level <= Robust.Shared.Log.LogLevel.Debug)
+                    {
+                        var roundstartThirdParties = 0;
+                        foreach (var party in _auRoundSystem.SelectedThirdParties)
+                        {
+                            if (party.RoundStart)
+                                roundstartThirdParties++;
+                        }
+
+                        _sawmill.Debug(
+                            $"[RoundStart] Starting third-party spawning for threat '{selectedThreat.ID}'; selectedThirdParties={_auRoundSystem.SelectedThirdParties.Count}, roundstartThirdParties={roundstartThirdParties}.");
+                    }
+
+                    try
+                    {
+                        _auThirdParty.StartThirdPartySpawning(selectedThreat, assignedJobs);
+                        _sawmill.Debug($"[RoundStart] StartThirdPartySpawning returned for threat '{selectedThreat.ID}'.");
+                    }
+                    catch (Exception thirdPartyEx)
+                    {
+                        Log.Error($"StartThirdPartySpawning threw — round will continue without third-party spawn. {thirdPartyEx}");
+                    }
                 }
-                catch (Exception thirdPartyEx)
+                else
                 {
-                    Log.Error($"StartThirdPartySpawning threw — round will continue without third-party spawn. {thirdPartyEx}");
+                    Log.Debug("StartThirdPartySpawning debug — no threat selected, skipping third-party spawn.");
                 }
-            }
-            else {
-                Log.Debug("StartThirdPartySpawning debug — no threat selected, skipping third-party spawn.");
             }
 
             // Allow rules to add roles to players who have been spawned in. (For example, on-station traitors)
-            var jobsAssignedPlayers = assignedJobs
-                .Where(x => !(threatVotePrepared && AuThreatSystem.IsThreatJob(x.Value.Item1)))
-                .Select(x => _playerManager.GetSessionById(x.Key))
-                .ToArray();
+            var jobsAssignedList = new List<ICommonSession>(assignedJobs.Count);
+            foreach (var (netUserId, (job, _)) in assignedJobs)
+            {
+                if (threatVotePrepared && AuThreatSystem.IsThreatJob(job))
+                    continue;
+
+                if (readySessions.TryGetValue(netUserId, out var session))
+                    jobsAssignedList.Add(session);
+            }
+            var jobsAssignedPlayers = jobsAssignedList.ToArray();
             RaiseLocalEvent(new RulePlayerJobsAssignedEvent(
                 jobsAssignedPlayers,
                 profiles,

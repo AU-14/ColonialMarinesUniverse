@@ -136,50 +136,144 @@
     state: generic_headset
 
 # ├──[ AMBASSADORHEADSETS ]──────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyTWEAmb
+  name: twe commissioner encryption key
+  description: An encryption key used to communicate on the commissioner's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
+    channels:
+    - TWESOF
+    defaultChannel: Colony
+
 - type: entity
   parent: AU14ColonyAdminHeadset
   id: AU14ColonyAmbassadorTWEHeadset
   name: twe commissioner headset
   description: A headset used by TWE's commissioners to communicate.
-  suffix: Colony
+  suffix: Colony, Ambassador
   components:
-  - type: RMCHeadset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyTWEAmb
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyUAAmb
+  name: ua ambassador encryption key
+  description: An encryption key used to communicate on the ambassador's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
     channels:
-    - TWESOF
+    - UASOF
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyUAAmbVAI
+  name: VAI encryption key
+  description: An encryption key used to communicate to the ambassador.
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioVAI
+    defaultChannel: Colony
 
 - type: entity
   parent: AU14ColonyAdminHeadset
   id: AU14AmbassadorUAHeadset
   name: ua ambassador headset
   description: A headset used by UA's ambassadors to communicate.
-  suffix: Colony
+  suffix: Colony, Ambassador
   components:
-  - type: RMCHeadset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyUAAmb
+      - AU14EncryptionKeyUAAmbVAI
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyUPPAmb
+  name: upp ambassador encryption key
+  description: An encryption key used to communicate on the ambassador's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
     channels:
-    - UASOF
-    - radioVAI
+    - UPPSOF
+    defaultChannel: Colony
 
 - type: entity
   parent: AU14ColonyAdminHeadset
   id: AU14AmbassadorUPPHeadset
   name: upp ambassador headset
   description: A headset used by UPP's ambassadors to communicate.
-  suffix: Colony
+  suffix: Colony, Ambassador
   components:
-  - type: RMCHeadset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyUPPAmb
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyICSCAmb
+  name: icsc ambassador encryption key
+  description: An encryption key used to communicate on the ambassador's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
     channels:
-    - UPPSOF
+    - ICSCSOF
+    defaultChannel: Colony
 
 - type: entity
   parent: AU14ColonyAdminHeadset
   id: AU14AmbassadorICSCHeadset
   name: icsc ambassador headset
-  description: A headset used by ICSC' ambassadors to communicate.
-  suffix: Colony
+  description: A headset used by ICSC's ambassadors to communicate.
+  suffix: Colony, Ambassador
   components:
-  - type: RMCHeadset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyICSCAmb
+      - AU14EncryptionKeyAdmin
+
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyCCAAmb
+  name: cca ambassador encryption key
+  description: An encryption key used to communicate on the ambassador's radio channel.
+  suffix: Ambassador
+  components:
+  - type: EncryptionKey
     channels:
-    - ICSCSOF
+    - CCASOF
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14ColonyAdminHeadset
+  id: AU14AmbassadorCCAHeadset
+  name: cca ambassador headset
+  description: A headset used by CCA's ambassadors to communicate.
+  suffix: Colony, Ambassador
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyCCAAmb
+      - AU14EncryptionKeyAdmin
+
 
 - type: entity
   parent: AU14EncryptionKey

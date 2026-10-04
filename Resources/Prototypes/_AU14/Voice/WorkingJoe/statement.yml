@@ -1,0 +1,111 @@
+- type: emote
+  id: WorkingJoeAWildGooseChaseAsSuspected
+  name: emote-name-workingjoe-a-wild-goose-chase-as-suspected
+  category: Statement
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-a-wild-goose-chase-as-suspected
+  chatTriggers:
+    - a wild goose chase as suspected
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeAsIThoughtUnfortunate
+  name: emote-name-workingjoe-as-i-thought-unfortunate
+  category: Statement
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-as-i-thought-unfortunate
+  chatTriggers:
+    - as i thought unfortunate
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeCleanUpRequired
+  name: emote-name-workingjoe-clean-up-required
+  category: Statement
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-clean-up-required
+  chatTriggers:
+    - clean up required
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeFarBeyondRepair
+  name: emote-name-workingjoe-far-beyond-repair
+  category: Statement
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-far-beyond-repair
+  chatTriggers:
+    - far beyond repair
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThere
+  name: emote-name-workingjoe-there
+  category: Statement
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-there
+  chatTriggers:
+    - there
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisCouldRequireMyAttention
+  name: emote-name-workingjoe-this-could-require-my-attention
+  category: Statement
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-could-require-my-attention
+  chatTriggers:
+    - this could require my attention
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisIsGoingToBeAProblem
+  name: emote-name-workingjoe-this-is-going-to-be-a-problem
+  category: Statement
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-is-going-to-be-a-problem
+  chatTriggers:
+    - this is going to be a problem
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeUnexplainedDisturbancesAreMostTroubling
+  name: emote-name-workingjoe-unexplained-disturbances-are-most-troubling
+  category: Statement
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-unexplained-disturbances-are-most-troubling
+  chatTriggers:
+    - unexplained disturbances are most troubling
+  whitelist:
+    tags:
+      - WorkingJoe

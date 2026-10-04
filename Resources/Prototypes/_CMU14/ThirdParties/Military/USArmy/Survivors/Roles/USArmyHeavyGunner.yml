@@ -1,0 +1,93 @@
+- type: job
+  parent: AU14USArmyHeavyGunnerBase
+  id: AU14USArmyHeavyGunner
+  roundSide: ThirdParty
+  roundForce: USARMY
+  roundRole: AU14USArmyHeavyGunner
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: smartgunner
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_ua
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUSArmy
+  - type: Skills
+    preset: AU14SkillPresetPlatoonAutomaticRifleman
+  - type: SpotterWhitelist
+  - type: JobPrefix
+    prefix: au14-job-prefix-usarmy-hg
+
+  name: au14-job-name-usarmy-hg
+  description: au14-job-description-usarmy
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    USArmy_Sergeant:
+      entity: AU14ChevronUSArmySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyHeavyGunner
+        time: 36000
+    USArmy_Corporal:
+      entity: AU14ChevronUSArmyCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyHeavyGunner
+        time: 18000
+    USArmy_Specialist:
+      entity: AU14ChevronUSArmySpecialist
+      requirements: []
+  spawnMenuRoleName: US Army Heavy Gunner (AU14, surv)
+  startingGear: AU14GearUSArmyHeavyGunner
+  greeting: au14-usarmy-greeting
+  icon: "AU14JobIconUSArmyHeavyGunner"
+  joinNotifyCrew: false
+  supervisors: cm-job-name-squad-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUSArmy
+  id: AU14JobUSArmyHeavyGunner
+  name: US Army Heavy Gunner (Surv)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUSArmy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-usarmy-hg
+    description: au14-job-description-usarmy
+    reregister: false
+    job: AU14USArmyHeavyGunner
+    raffle:
+      settings: short
+    rules: au14-usarmy-rules
+
+- type: startingGear
+  id: AU14GearUSArmyHeavyGunner
+  equipment:
+    id: AU14IDCardUSArmyHeavyGunner
+    outerClothing: AU14ArmorSmartGunJungleCombatHarnessForeconFilled
+    jumpsuit: AU14ArmyJumpsuitCavalry
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: AU14BootsUSArmyFilled
+    head: AU14HelmetUSArmy
+    belt: RMCBeltSmartGunOperatorPistol
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    ears: AU14HeadsetUSArmy
+    suitstorage: RMCSmartGun
+  storage:
+    belt:
+    - RMCMK80
+    - CMMagazinePistolMK80
+    - RMCMagazineSmartGun

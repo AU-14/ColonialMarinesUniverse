@@ -1,0 +1,5 @@
+- type: rank
+  id: UPP_FirstSergeant
+  name: First Sergeant
+  prefix: 1stSgt.
+  paygrade: E7

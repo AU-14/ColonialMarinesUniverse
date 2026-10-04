@@ -84,6 +84,12 @@
   #         False: { state: cover-closed }
   - type: AttachableHolder
     slots:
+      rmc-aslot-rail:
+        startingAttachable: RMCAttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
       rmc-aslot-underbarrel:
         startingAttachable: RMCAttachmentBipod
         whitelist:
@@ -91,9 +97,13 @@
           - RMCAttachmentBipod
   - type: AttachableHolderVisuals
     offsets:
+      rmc-aslot-rail: -0.1875, 0.125
       rmc-aslot-underbarrel: 0.418, -0.283
   - type: Wieldable
   - type: GunRequiresWield
+  - type: Corrodible
+    isCorrodible: false
+  - type: SmartGun
   - type: RMCMagneticItem
 
 - type: entity

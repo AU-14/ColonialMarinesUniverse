@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: CivJacketAU14
+  name: au14-loadout-group-civilian-jacket
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - JacketCorporateBrownAU14
+  - CivilianJacketGrayPufferVestAU14
+  - WindbreakerBlueAU14
+  - CivilianJacketSnowSuitAU14
+  - CivilianJacketOldCoatAU14

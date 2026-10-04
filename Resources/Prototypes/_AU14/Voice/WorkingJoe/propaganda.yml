@@ -1,0 +1,181 @@
+- type: emote
+  id: WorkingJoeAllVisitingCorporateRepresentativesMustReportToTheirNearestSynthetic
+  name: emote-name-workingjoe-all-visiting-corporate-representatives-must-report-to-their-nearest-synthetic
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-all-visiting-corporate-representatives-must-report-to-their-nearest-synthetic
+  chatTriggers:
+    - all visiting corporate representatives must report to their nearest synthetic
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIAmBuiltToWithstandTemperaturesOfUpTo1210Degrees
+  name: emote-name-workingjoe-i-am-built-to-withstand-temperatures-of-up-to-1210-degrees
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-am-built-to-withstand-temperatures-of-up-to-1210-degrees
+  chatTriggers:
+    - i am built to withstand temperatures of up to 1210 degrees
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIAmInexpensiveIAmReliableYouKnowMyFaceTheWorkingJoe
+  name: emote-name-workingjoe-i-am-inexpensive-i-am-reliable-you-know-my-face-the-working-joe
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-i-am-inexpensive-i-am-reliable-you-know-my-face-the-working-joe
+  chatTriggers:
+    - i am inexpensive i am reliable you know my face the working joe
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIfMyServicesDoNotMeetSeegsonStandardsPleaseLogAComplaint
+  name: emote-name-workingjoe-if-my-services-do-not-meet-seegson-standards-please-log-a-complaint
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-if-my-services-do-not-meet-seegson-standards-please-log-a-complaint
+  chatTriggers:
+    - if my services do not meet seegson standards please log a complaint
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeIfYouFindThisFacilityThatIsntToYourLikingPleaseLetMeKnow
+  name: emote-name-workingjoe-if-you-find-this-facility-that-isnt-to-your-liking-please-let-me-know
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-if-you-find-this-facility-that-isnt-to-your-liking-please-let-me-know
+  chatTriggers:
+    - if you find this facility that isnt to your liking please let me know
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeInterestedInOurWorkingJoeAndroidRangeTalkToSeegson
+  name: emote-name-workingjoe-interested-in-our-working-joe-android-range-talk-to-seegson
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-interested-in-our-working-joe-android-range-talk-to-seegson
+  chatTriggers:
+    - interested in our working joe android range talk to seegson
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeSeegsonRelentlessInThePursuitOfAffordableQuality
+  name: emote-name-workingjoe-seegson-relentless-in-the-pursuit-of-affordable-quality
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-seegson-relentless-in-the-pursuit-of-affordable-quality
+  chatTriggers:
+    - seegson relentless in the pursuit of affordable quality
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeSeegsonTomorrowTogether
+  name: emote-name-workingjoe-seegson-tomorrow-together
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-seegson-tomorrow-together
+  chatTriggers:
+    - seegson tomorrow together
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeThisIsASeegsonAssistedInstallation
+  name: emote-name-workingjoe-this-is-a-seegson-assisted-installation
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-this-is-a-seegson-assisted-installation
+  chatTriggers:
+    - this is a seegson assisted installation
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWeDontForgetTheLittleDetailsWhenSeeingTheBigPicture
+  name: emote-name-workingjoe-we-dont-forget-the-little-details-when-seeing-the-big-picture
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-we-dont-forget-the-little-details-when-seeing-the-big-picture
+  chatTriggers:
+    - we dont forget the little details when seeing the big picture
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWeHopeYoullJoinUsForTheJourney
+  name: emote-name-workingjoe-we-hope-youll-join-us-for-the-journey
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-we-hope-youll-join-us-for-the-journey
+  chatTriggers:
+    - we hope youll join us for the journey
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeWithSeegsonTheresSomeoneBehindYouHelpingYouEverySingleStepOfTheWay
+  name: emote-name-workingjoe-with-seegson-theres-someone-behind-you-helping-you-every-single-step-of-the-way
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-with-seegson-theres-someone-behind-you-helping-you-every-single-step-of-the-way
+  chatTriggers:
+    - with seegson theres someone behind you helping you every single step of the way
+  whitelist:
+    tags:
+      - WorkingJoe
+
+- type: emote
+  id: WorkingJoeYouAlwaysKnowAWorkingJoe
+  name: emote-name-workingjoe-you-always-know-a-working-joe
+  category: Propaganda
+  icon: Interface/Emotes/scream.png
+  available: false
+  chatMessages:
+    - emote-name-workingjoe-you-always-know-a-working-joe
+  chatTriggers:
+    - you always know a working joe
+  whitelist:
+    tags:
+      - WorkingJoe

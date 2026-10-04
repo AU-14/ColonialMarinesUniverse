@@ -354,10 +354,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         }
 
         if (TryComp(ent, out FixturesComponent? fixtures))
-        {
-            var fixture = fixtures.Fixtures.First();
-            _physics.SetCollisionMask(ent, fixture.Key, fixture.Value, fixture.Value.CollisionMask | (int) LeapCollisionGroup);
-        }
+            SetTemporaryCollisionMask(ent, fixtures, LeapCollisionGroup, true);
     }
 
     private void OnParasiteLeapStopped(Entity<XenoParasiteComponent> ent, ref XenoLeapStoppedEvent args)
@@ -365,34 +362,71 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         RemComp<PreventCollideComponent>(ent);
 
         if (TryComp(ent, out FixturesComponent? fixtures))
-        {
-            var fixture = fixtures.Fixtures.First();
-            if ((fixture.Value.CollisionMask & (int) CollisionGroup.AirlockLayer) == 0)
-                return;
-
-            _physics.SetCollisionMask(ent, fixture.Key, fixture.Value, fixture.Value.CollisionMask ^ (int) LeapCollisionGroup);
-        }
+            SetTemporaryCollisionMask(ent, fixtures, LeapCollisionGroup, false);
     }
 
     private void OnParasiteThrown(Entity<XenoParasiteComponent> ent, ref ThrownEvent args)
     {
         if (TryComp(ent, out FixturesComponent? fixtures))
-        {
-            var fixture = fixtures.Fixtures.First();
-            _physics.SetCollisionMask(ent, fixture.Key, fixture.Value, fixture.Value.CollisionMask | (int)ThrownCollisionGroup);
-        }
+            SetTemporaryCollisionMask(ent, fixtures, ThrownCollisionGroup, true);
     }
 
     private void OnParasiteLand(Entity<XenoParasiteComponent> ent, ref LandEvent args)
     {
         if (TryComp(ent, out FixturesComponent? fixtures))
-        {
-            var fixture = fixtures.Fixtures.First();
-            if ((fixture.Value.CollisionMask & (int) CollisionGroup.AirlockLayer & (int) CollisionGroup.BarricadeImpassable) != 0)
-                return;
+            SetTemporaryCollisionMask(ent, fixtures, ThrownCollisionGroup, false);
+    }
 
-            _physics.SetCollisionMask(ent, fixture.Key, fixture.Value, fixture.Value.CollisionMask ^ (int) ThrownCollisionGroup);
+    private void SetTemporaryCollisionMask(
+        Entity<XenoParasiteComponent> ent,
+        FixturesComponent fixtures,
+        CollisionGroup group,
+        bool active)
+    {
+        var oldLeap = ent.Comp.LeapCollisionActive;
+        var oldThrown = ent.Comp.ThrownCollisionActive;
+        var wasActive = oldLeap || oldThrown;
+
+        if (group == LeapCollisionGroup)
+            ent.Comp.LeapCollisionActive = active;
+        else if (group == ThrownCollisionGroup)
+            ent.Comp.ThrownCollisionActive = active;
+
+        if (oldLeap == ent.Comp.LeapCollisionActive &&
+            oldThrown == ent.Comp.ThrownCollisionActive)
+        {
+            return;
         }
+
+        var isActive = ent.Comp.LeapCollisionActive || ent.Comp.ThrownCollisionActive;
+        var fixture = fixtures.Fixtures.First();
+        if (!wasActive && isActive)
+            ent.Comp.BaseTemporaryCollisionMask = fixture.Value.CollisionMask;
+
+        var temporaryMask = GetTemporaryCollisionMask(ent.Comp);
+        var mask = temporaryMask == 0
+            ? ent.Comp.BaseTemporaryCollisionMask
+            : ent.Comp.BaseTemporaryCollisionMask | temporaryMask;
+
+        if (fixture.Value.CollisionMask != mask)
+            _physics.SetCollisionMask(ent, fixture.Key, fixture.Value, mask, fixtures);
+
+        if (temporaryMask == 0)
+            ent.Comp.BaseTemporaryCollisionMask = 0;
+
+        Dirty(ent);
+    }
+
+    private static int GetTemporaryCollisionMask(XenoParasiteComponent parasite)
+    {
+        var mask = 0;
+        if (parasite.LeapCollisionActive)
+            mask |= (int) LeapCollisionGroup;
+
+        if (parasite.ThrownCollisionActive)
+            mask |= (int) ThrownCollisionGroup;
+
+        return mask;
     }
 
     protected virtual void ParasiteLeapHit(Entity<XenoParasiteComponent> parasite)

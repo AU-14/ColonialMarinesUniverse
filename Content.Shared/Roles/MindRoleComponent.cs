@@ -1,4 +1,5 @@
 using Content.Shared.Mind;
+using Content.Shared.Players.PlayTimeTracking;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -51,6 +52,12 @@ public sealed partial class MindRoleComponent : BaseMindRoleComponent
     /// </summary>
     [DataField, AutoNetworkedField]
     public ProtoId<JobPrototype>? JobPrototype { get; set; }
+
+    /// <summary>
+    ///     Extra role timer to credit while this mind role is active.
+    /// </summary>
+    [DataField]
+    public ProtoId<PlayTimeTrackerPrototype>? PlayTimeTracker { get; set; }
 
     /// <summary>
     ///     Used to order the characters on by role/antag status. Highest numbers are shown first.

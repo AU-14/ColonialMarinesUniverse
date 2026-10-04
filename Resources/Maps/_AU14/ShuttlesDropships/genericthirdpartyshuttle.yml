@@ -1324,7 +1324,7 @@ entities:
     - type: Transform
       pos: 0.5,-2.5
       parent: 2
-- proto: thirdpartyentityspawnmarker
+- proto: scenariothirdpartyentityspawnmarker
   entities:
   - uid: 186
     components:
@@ -1341,7 +1341,7 @@ entities:
     - type: Transform
       pos: -0.5,4.5
       parent: 2
-- proto: thirdpartyleaderspawnmarker
+- proto: scenariothirdpartyleaderspawnmarker
   entities:
   - uid: 199
     components:
@@ -1363,7 +1363,7 @@ entities:
     - type: Transform
       pos: 2.5,5.5
       parent: 2
-- proto: thirdpartymemberspawnmarker
+- proto: scenariothirdpartymemberspawnmarker
   entities:
   - uid: 194
     components:

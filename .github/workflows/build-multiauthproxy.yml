@@ -1,0 +1,29 @@
+name: Build MultiAuth Proxy
+
+on:
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: 10.0.x
+  CONFIGURATION: Release
+
+jobs:
+  build-proxy:
+    name: Build MultiAuthProxy (linux-x64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - uses: actions/setup-dotnet@v5.2.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Publish proxy
+        run: dotnet publish Content.MultiAuthProxy -c ${{ env.CONFIGURATION }} -o publish/proxy
+
+      - name: Upload proxy artifact
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: multiauth-proxy-linux-x64
+          path: publish/proxy/*
+          retention-days: 7

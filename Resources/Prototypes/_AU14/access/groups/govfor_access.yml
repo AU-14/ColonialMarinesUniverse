@@ -28,7 +28,7 @@
 
 - type: accessLevel
   id: AU14AccessGovforFTL
-  name: Govfor Squad Sergeant
+  name: Govfor Squad Leader
 
 - type: accessLevel
   id: AU14AccessGovforGunner

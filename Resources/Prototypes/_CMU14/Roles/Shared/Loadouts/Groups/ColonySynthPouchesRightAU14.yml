@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: ColonySynthPouchesRightAU14
+  name: au14-loadout-group-synth-pouches-right
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - PouchToolsFilledSupportSyntheticRightAU14
+  - PouchDocumentRightAU14
+  - PouchAutoinjectorFilledMilitaryDoctorRightAU14
+  - PouchConstructionFillFullRightAU14
+  - PouchMedkitPMCFilledRightAU14

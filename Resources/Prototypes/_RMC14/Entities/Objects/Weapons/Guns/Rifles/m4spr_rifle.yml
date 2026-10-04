@@ -219,6 +219,9 @@
           - RMCMagazineRifleM4SPRHEAP
           - RMCMagazineRifleM5SPRHVP
           - RMCMagazineRifleM5SPRHVHIP
+          - RMCMagazineRifleM4SPRA19
+          - RMCMagazineRifleM4SPRA19Incendiary
+          - RMCMagazineRifleM4SPRA19Impact
   - type: ItemCamouflage
     camouflageVariations: {}
     layers:

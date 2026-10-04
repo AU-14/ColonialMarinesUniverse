@@ -1,0 +1,13 @@
+- type: loadoutGroup
+  id: RecruiterJumpsuitAU14
+  name: au14-loadout-group-military-jumpsuit
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - USASFFatiguesAU14
+  - FormalWhiteServiceAU14
+  - CMJumpsuitXOFormalAU14
+  - ArmyJumpsuitAU14
+  - ArmyJumpsuitTankerAU14
+  - JungleFatiguesAU14
+  - CCAFUniformAU14

@@ -1,0 +1,12 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentOrbital
+  name: au14-department-orbitalstation
+  description: au14-department-orbitalstation-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianOrbitalArbiter
+    - AU14JobCivilianOrbitalLawyer
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianOrbitalManager
+  faction: colonist # TODO: orbital faction

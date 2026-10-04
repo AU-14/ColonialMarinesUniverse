@@ -115,7 +115,7 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
                 return;
 
             // Prefer any configured win message, otherwise use a default.
-            var winMessage = _auRoundSystem._selectedthreat?.WinMessage;
+            var winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
             if (!string.IsNullOrEmpty(winMessage))
             {
                 _gameTicker.EndRound(winMessage);

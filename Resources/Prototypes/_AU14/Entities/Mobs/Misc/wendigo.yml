@@ -49,6 +49,7 @@
     - ActionWendigoDoom
     tier: 99
     hudOffset: -0.15,0.25
+  - type: BurrowedLarvaSpawnBlocked
   - type: XenoRegen
     standHealingMultiplier: 0.3
   - type: XenoHeavy

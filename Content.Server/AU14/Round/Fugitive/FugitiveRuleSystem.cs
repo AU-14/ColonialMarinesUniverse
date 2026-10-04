@@ -138,22 +138,13 @@ public sealed partial class FugitiveRuleSystem : GameRuleSystem<FugitiveRuleComp
     }
 
     /// <summary>
-    /// Returns true if the fugitive is considered detained (cuffed or dead or missing MobState)
+    /// Returns true if the fugitive is considered detained alive.
     /// </summary>
     private bool IsFugitiveDetained(EntityUid uid)
     {
         if (_entityManager.TryGetComponent<Content.Shared.Cuffs.Components.CuffableComponent>(uid, out var cuffed) && cuffed.CuffedHandCount > 0)
             return true;
-        if (_entityManager.TryGetComponent<MobStateComponent>(uid, out var state))
-        {
-            if (state.CurrentState == MobState.Dead || state.CurrentState == MobState.Invalid)
-                return true;
-        }
-        else
-        {
-            // If they don't have MobStateComponent, treat as dead
-            return true;
-        }
+
         return false;
     }
 }

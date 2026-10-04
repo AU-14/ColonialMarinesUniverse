@@ -1,0 +1,112 @@
+- type: job
+  parent: CMJobBase
+  id: AU14FORECONMarksman
+  roundSide: ThirdParty
+  roundForce: FORECON
+  roundRole: AU14FORECONMarksman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spec
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_forecon
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RMCSquadFORECON
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: ScoutWhitelist
+  - type: SpotterWhitelist
+  - type: JobPrefix
+    prefix: rmc-job-prefix-forecon-marksman
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: rmc-job-name-forecon-marksman
+  description: rmc-job-description-forecon
+  playTimeTracker: AU14JobFORECONMarksman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankGunnerySergeant:
+      entity: AU14ChevronUSCMGunnerySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONMarksman
+        time: 36000 #10 hours
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobFORECONMarksman
+        time: 18000 #5 hours
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements: []
+  spawnMenuRoleName: FORECON Marksman (AU14, surv)
+  startingGear: AU14GearFORECONMarksman
+  greeting: au14-forecon-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: cm-job-name-squad-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  id: AU14JobFORECONMarksman
+  name: FORECON Marksman (Surv)
+  components:
+  - type: Threat
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadFORECON
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-marksman
+    description: rmc-job-description-forecon
+    reregister: false
+    job: AU14FORECONMarksman
+    raffle:
+      settings: short
+    rules: au14-forecon-rules
+
+- type: startingGear
+  id: AU14GearFORECONMarksman
+  equipment:
+    id: AU14IDCardFORECONMarksman
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: RMCJumpsuitSurvivorMarineDropPouch
+    shoes: RMCScoutShoes
+    head: RMCBoonieTan
+    belt: AU14BeltPostelPistolM48A4
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelMarineForeconSurvivorFill
+    ears: RMCHeadsetForecon
+    suitstorage: AU14WeaponRifleM49A
+  storage:
+    back:
+    - RMCAttachmentRailFlashlight
+    - RMCMagazineRifleM4SPRA19
+    - RMCMagazineRifleM4SPRA19
+    - RMCMagazineRifleM4SPRA19
+
+- type: playTimeTracker
+  id: AU14JobFORECONMarksman

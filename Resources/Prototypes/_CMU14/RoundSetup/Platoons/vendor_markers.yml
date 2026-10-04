@@ -1,0 +1,1076 @@
+- type: entity
+  abstract: true
+  parent: MarkerBase
+  id: Vmarker
+  name: Marker Base
+  components:
+  - type: Sprite
+    state: green
+
+- type: entity
+  abstract: true
+  parent: Vmarker
+  id: VMarkerGovfor
+  name: Gov marker
+  components:
+  - type: VendorMarker
+    govfor: true
+
+- type: entity
+  abstract: true
+  parent: Vmarker
+  id: VMarkerOpfor
+  name: Opfor marker
+  components:
+  - type: VendorMarker
+    opfor: true
+
+- type: entity
+  abstract: true
+  parent: Vmarker
+  id: VmarkerShip
+  name: Ship marker
+  components:
+  - type: VendorMarker
+    ship: true
+
+# Groundside opfor markers
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforplatcorp
+  name: Opfor corpsman marker
+  components:
+  - type: VendorMarker
+    class: Corpsman
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforAutomaticRifleman
+  name: Opfor Arifleman marker
+  components:
+  - type: VendorMarker
+    class: Arifleman
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforComtech
+  name: Opfor combat technician marker
+  components:
+  - type: VendorMarker
+    class: combattech
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforRifleman
+  name: Opfor equipment marker
+  components:
+  - type: VendorMarker
+    class: Rifleman
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforDCC
+  name: Opfor dcc marker
+  components:
+  - type: VendorMarker
+    class: Dcc
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforWeapons
+  name: Opfor Weapons marker
+  components:
+  - type: VendorMarker
+    class: Weapons
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforClothing
+  name: Opfor Clothing marker
+  components:
+  - type: VendorMarker
+    class: Clothing
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkeropforrequisitionsvendor
+  name: OPFOR requisitions vendor marker
+  components:
+  - type: VendorMarker
+    class: ReqVend
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+    state: base
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforoperationsOfficer
+  name: Opfor command marker
+  components:
+  - type: VendorMarker
+    class: OperationsOfficer
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforradiotelephoneOperator
+  name: Opfor RTO marker
+  components:
+  - type: VendorMarker
+    class: Rto
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpfordoctor
+  name: Opfor Doctor marker
+  components:
+  - type: VendorMarker
+    class: MilitaryDoctor
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforMilitaryPolice
+  name: Opfor Military Police marker
+  components:
+  - type: VendorMarker
+    class: MilitaryPolice
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforsectionSergeant
+  name: Opfor senior sergeant marker
+  components:
+  - type: VendorMarker
+    class: SectionSergeant
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforpilot
+  name: Opfor pilot marker
+  components:
+  - type: VendorMarker
+    class: Pilot
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforSWeapons
+  name: Opfor special weapons marker
+  components:
+  - type: VendorMarker
+    class: SWeapons
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforExtraVendor1
+  name: Opfor extra vendor 1 marker
+  components:
+  - type: VendorMarker
+    class: ExtraVendor1
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforExtraVendor2
+  name: Opfor extra vendor 2 marker
+  components:
+  - type: VendorMarker
+    class: ExtraVendor2
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforExtraVendor3
+  name: Opfor extra vendor 3 marker
+  components:
+  - type: VendorMarker
+    class: ExtraVendor3
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforExtraVendor4
+  name: Opfor extra vendor 4 marker
+  components:
+  - type: VendorMarker
+    class: ExtraVendor4
+
+# Groundside govfor markers
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforcorpsman
+  name: Gov corpsman marker
+  components:
+  - type: VendorMarker
+    class: Corpsman
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforClothing
+  name: Gov Clothing marker
+  components:
+  - type: VendorMarker
+    class: Clothing
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkergovforrequisitionsvendor
+  name: Govfor requisitions vendor marker
+  components:
+  - type: VendorMarker
+    class: ReqVend
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+    state: base
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforWeapons
+  name: Gov Weapons marker
+  components:
+  - type: VendorMarker
+    class: Weapons
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforSWeapons
+  name: Gov special weapons marker
+  components:
+  - type: VendorMarker
+    class: SWeapons
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforAutomaticRifleman
+  name: Gov Arifleman marker
+  components:
+  - type: VendorMarker
+    class: Arifleman
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforRifleman
+  name: Gov equipment marker
+  components:
+  - type: VendorMarker
+    class: Rifleman
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforCombatTech
+  name: Gov combat technician marker
+  components:
+  - type: VendorMarker
+    class: combattech
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforDCC
+  name: Gov dcc marker
+  components:
+  - type: VendorMarker
+    class: Dcc
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforDoctor
+  name: Gov doctor marker
+  components:
+  - type: VendorMarker
+    class: MilitaryDoctor
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforMilitaryPolice
+  name: Gov military police marker
+  components:
+  - type: VendorMarker
+    class: MilitaryPolice
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforoperationsOfficer
+  name: Gov command marker
+  components:
+  - type: VendorMarker
+    class: OperationsOfficer
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforradiotelephoneOperator
+  name: Gov RTO marker
+  components:
+  - type: VendorMarker
+    class: Rto
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforsectionSergeant
+  name: Gov senior sergeant marker
+  components:
+  - type: VendorMarker
+    class: SectionSergeant
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforpilot
+  name: Gov pilot marker
+  components:
+  - type: VendorMarker
+    class: Pilot
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforExtraVendor1
+  name: Gov extra vendor 1 marker
+  components:
+  - type: VendorMarker
+    class: ExtraVendor1
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforExtraVendor2
+  name: Gov extra vendor 2 marker
+  components:
+  - type: VendorMarker
+    class: ExtraVendor2
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforExtraVendor3
+  name: Gov extra vendor 3 marker
+  components:
+  - type: VendorMarker
+    class: ExtraVendor3
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforExtraVendor4
+  name: Gov extra vendor 4 marker
+  components:
+  - type: VendorMarker
+    class: ExtraVendor4
+
+# Decoration markers
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforDeco1
+  name: Gov deco marker 1
+  components:
+  - type: VendorMarker
+    class: Deco1
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforDeco2
+  name: Gov deco marker 2
+  components:
+  - type: VendorMarker
+    class: Deco2
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforDeco3
+  name: Gov deco marker 3
+  components:
+  - type: VendorMarker
+    class: Deco3
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforDeco4
+  name: Gov deco marker 4
+  components:
+  - type: VendorMarker
+    class: Deco4
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforDeco5
+  name: Gov deco marker 5
+  components:
+  - type: VendorMarker
+    class: Deco5
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforDeco6
+  name: Gov deco marker 6
+  components:
+  - type: VendorMarker
+    class: Deco6
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforDeco1
+  name: Opfor deco marker 1
+  components:
+  - type: VendorMarker
+    class: Deco1
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforDeco2
+  name: Opfor deco marker 2
+  components:
+  - type: VendorMarker
+    class: Deco2
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforDeco3
+  name: Opfor deco marker 3
+  components:
+  - type: VendorMarker
+    class: Deco3
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforDeco4
+  name: Opfor deco marker 4
+  components:
+  - type: VendorMarker
+    class: Deco4
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforDeco5
+  name: Opfor deco marker 5
+  components:
+  - type: VendorMarker
+    class: Deco5
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforDeco6
+  name: Opfor deco marker 6
+  components:
+  - type: VendorMarker
+    class: Deco6
+
+# Ship vendor markers
+- type: entity
+  parent: VmarkerShip
+  id: VMarkershipClothing
+  name: Ship Clothing marker
+  components:
+  - type: VendorMarker
+    class: Clothing
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkershiprequisitionsvendor
+  name: Ship requisitions vendor marker
+  components:
+  - type: VendorMarker
+    class: ReqVend
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipCorpsman
+  name: Ship corpsman marker
+  components:
+  - type: VendorMarker
+    class: Corpsman
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipDoctor
+  name: Ship doctor marker
+  components:
+  - type: VendorMarker
+    class: MilitaryDoctor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipComtech
+  name: Ship combat technician marker
+  components:
+  - type: VendorMarker
+    class: combattech
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipAutomaticRifleman
+  name: Ship Arifleman marker
+  components:
+  - type: VendorMarker
+    class: Arifleman
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipRifleman
+  name: Ship equipment marker
+  components:
+  - type: VendorMarker
+    class: Rifleman
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipDCC
+  name: Ship aircrew clothing marker
+  components:
+  - type: VendorMarker
+    class: Dcc
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipOperationsOfficer
+  name: Ship command marker
+  components:
+  - type: VendorMarker
+    class: OperationsOfficer
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipJuniorOfficer
+  name: junior officer marker
+  components:
+  - type: VendorMarker
+    class: JuniorOfficer
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipMPPoliceman
+  name: military policeman marker
+  components:
+  - type: VendorMarker
+    class: MilitaryPolice
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipRadiotelephoneOperator
+  name: Ship RTO marker
+  components:
+  - type: VendorMarker
+    class: Rto
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipSectionSergeant
+  name: Ship senior sergeant marker
+  components:
+  - type: VendorMarker
+    class: SectionSergeant
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipPilot
+  name: Ship aircrew weapons marker
+  components:
+  - type: VendorMarker
+    class: Pilot
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipWeapons
+  name: Ship Weapons marker
+  components:
+  - type: VendorMarker
+    class: Weapons
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipSweapons
+  name: Ship Sweapons marker
+  components:
+  - type: VendorMarker
+    class: SWeapons
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
+    state: base
+
+# Ship door markers
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedFTLDoor
+  name: Ship FTL door marker
+  components:
+  - type: VendorMarker
+    class: LockedFTLDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: com
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedFTLDoorGlass
+  name: Ship FTL glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedFTLGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: comglass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedCommandDoor
+  name: Ship command door marker
+  components:
+  - type: VendorMarker
+    class: LockedCommandDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: com
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedCommandDoorGlass
+  name: Ship command glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedCommandGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: comglass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedSecurityDoor
+  name: Ship security door marker
+  components:
+  - type: VendorMarker
+    class: LockedSecurityDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: sec
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedSecurityDoorGlass
+  name: Ship security glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedSecurityDoorGlass
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: secglass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedGlassDoor
+  name: Ship glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: glass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedNormalDoor
+  name: Ship normal door marker
+  components:
+  - type: VendorMarker
+    class: LockedNormalDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: normal
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedGlassDoorEngineering
+  name: Ship engineering glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedEngineeringGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: engglass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoorEngineering
+  name: Ship locked engineering door marker
+  components:
+  - type: VendorMarker
+    class: LockedEngineeringDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: eng
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedGlassDoorMedical
+  name: Ship medical glass door marker
+  components:
+  - type: VendorMarker
+    class: LockedMedicalGlassDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: medglass
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipLockedDoorMedical
+  name: Ship locked medical door marker
+  components:
+  - type: VendorMarker
+    class: LockedMedicalDoor
+  - type: Sprite
+    drawdepth: Overdoors
+    sprite: _AU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
+    state: med
+
+# Ship console and machine markers
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipOverwatchConsole
+  name: Ship Overwatch Console Marker
+  components:
+  - type: VendorMarker
+    class: OverwatchConsole
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: overwatch
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipIntelComputer
+  name: Ship Intel Computer Marker
+  components:
+  - type: VendorMarker
+    class: IntelComputer
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipTechTree
+  name: Ship Tech Tree Console Marker
+  components:
+  - type: VendorMarker
+    class: TechTree
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: techweb
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipGroundsideOps
+  name: Ship Groundside Operations Console Marker
+  components:
+  - type: VendorMarker
+    class: GroundsideOps
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/rmc_groundside_communications_console.rsi
+    state: on
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipGroundsideOpsGovfor
+  name: Ship Groundside Operations Console Govfor Marker
+  components:
+  - type: VendorMarker
+    class: GroundsideOpsGovfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/rmc_groundside_communications_console.rsi
+    state: on
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipGroundsideOpsOpfor
+  name: Ship Groundside Operations Console Opfor Marker
+  components:
+  - type: VendorMarker
+    class: GroundsideOpsOpfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/rmc_groundside_communications_console.rsi
+    state: on
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipAllianceConsoleGovfor
+  name: Ship Alliance Console Govfor Marker
+  components:
+  - type: VendorMarker
+    class: AllianceConsoleGovfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipAllianceConsoleOpfor
+  name: Ship Alliance Console Opfor Marker
+  components:
+  - type: VendorMarker
+    class: AllianceConsoleOpfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipOrbitalCannonGovfor
+  name: Ship Orbital Cannon Govfor Marker
+  components:
+  - type: VendorMarker
+    class: OrbitalCannonGovfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: ob_console
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipOrbitalCannonOpfor
+  name: Ship Orbital Cannon Opfor Marker
+  components:
+  - type: VendorMarker
+    class: OrbitalCannonOpfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: ob_console
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipWithdrawConsoleGovfor
+  name: Ship Withdraw Console Govfor Marker
+  components:
+  - type: VendorMarker
+    class: WithdrawConsoleGovfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipWithdrawConsoleOpfor
+  name: Ship Withdraw Console Opfor Marker
+  components:
+  - type: VendorMarker
+    class: WithdrawConsoleOpfor
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipWithdrawConsoleColony
+  name: Ship Withdraw Console Colony Marker
+  components:
+  - type: VendorMarker
+    class: WithdrawConsoleColony
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipCommandTabletGovfor
+  name: Ship Command Tablet Govfor Marker
+  components:
+  - type: VendorMarker
+    class: CommandTabletGovfor
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    state: cotablet
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipCommandTabletOpfor
+  name: Ship Command Tablet Opfor Marker
+  components:
+  - type: VendorMarker
+    class: CommandTabletOpfor
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    state: cotablet
+
+- type: entity
+  parent: VmarkerShip
+  id: shipobjectivesconsolemarker
+  name: Ship Objectives Console Marker
+  components:
+  - type: VendorMarker
+    class: ObjectivesConsole
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: operating0
+
+- type: entity
+  parent: VmarkerShip
+  id: shipfetchreturnmarker
+  name: Ship Generic Fetch Return Point Marker
+  components:
+  - type: VendorMarker
+    class: ReturnPointGeneric
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipRequisitionsConsole
+  name: Ship Requisitions Console Marker
+  components:
+  - type: VendorMarker
+    class: RequisitionsConsole
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/asrs_console.rsi
+    state: off
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipRequisitionsLift
+  name: Ship Requisitions Lift Marker
+  components:
+  - type: VendorMarker
+    class: RequisitionsLift
+  - type: Sprite
+    sprite: _RMC14/Effects/elevator.rsi
+    state: supply_elevator_lowered
+    drawdepth: LowFloors
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipAnalyzer
+  name: Ship Analyzer Marker
+  components:
+  - type: VendorMarker
+    class: Analyzer
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipAICore
+  name: Ship AI Core Marker
+  components:
+  - type: VendorMarker
+    class: AICore
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/aicore.rsi
+    state: hydra-off
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforAICore
+  name: Govfor AI Core Marker
+  components:
+  - type: VendorMarker
+    class: AICore
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/aicore.rsi
+    state: hydra-off
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforAICore
+  name: Opfor AI Core Marker
+  components:
+  - type: VendorMarker
+    class: AICore
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/aicore.rsi
+    state: hydra-off
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipTacticalMap
+  name: Ship Tactical Map Marker
+  components:
+  - type: VendorMarker
+    class: TacticalMap
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: overwatch
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforTacticalMap
+  name: Govfor Tactical Map Marker
+  components:
+  - type: VendorMarker
+    class: TacticalMap
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforTacticalMap
+  name: Opfor Tactical Map Marker
+  components:
+  - type: VendorMarker
+    class: TacticalMap
+
+# Dropship and fighter markers
+- type: entity
+  parent: VmarkerShip
+  id: dropshipweaponsvmarker
+  name: Dropship Weapons VMarker
+  components:
+  - type: VendorMarker
+    class: DSPilot
+
+- type: entity
+  parent: Vmarker
+  id: dropshipshuttlevmarker
+  name: Dropship Shuttle VMarker
+  components:
+  - type: VendorMarker
+    dropship: true
+    class: DSWeapons
+
+- type: entity
+  parent: VmarkerShip
+  id: dropshipdestshipmarker
+  name: Dropship Ship destination ship VMarker
+  components:
+  - type: VendorMarker
+    class: DropshipDestination
+
+- type: entity
+  parent: VmarkerShip
+  id: dropshipfighterdestmarker
+  name: Figher Ship destination ship VMarker
+  components:
+  - type: VendorMarker
+    class: FighterDestination

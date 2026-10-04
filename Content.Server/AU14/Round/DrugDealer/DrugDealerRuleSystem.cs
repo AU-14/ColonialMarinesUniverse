@@ -16,10 +16,10 @@ public sealed partial class DrugDealerRuleSystem : GameRuleSystem<DrugDealerRule
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<DrugDealerRuleComponent, ComponentStartup>(OnDrugDealerSpawned);
+        SubscribeLocalEvent<DrugDealerComponent, ComponentStartup>(OnDrugDealerSpawned);
     }
 
-    private void OnDrugDealerSpawned(EntityUid uid, DrugDealerRuleComponent component, ref ComponentStartup args)
+    private void OnDrugDealerSpawned(EntityUid uid, DrugDealerComponent component, ComponentStartup args)
     {
         // Send CMB fax on drug dealer spawn
         _wantedSystem.SendFax(_entitySystemManager, _entityManager, "Colony Marshal Bureau", "AUPaperDrugs");

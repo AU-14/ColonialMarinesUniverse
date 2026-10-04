@@ -514,6 +514,11 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         SetHiveBurrowedLarva(hive, hive.Comp.BurrowedLarva + amount);
     }
 
+    public bool HasBurrowedLarvaSpawnPoint(Entity<HiveComponent> hive)
+    {
+        return TryGetBurrowedLarvaSpawnPosition(hive, out _);
+    }
+
     private void SetHiveBurrowedLarva(Entity<HiveComponent> hive, int larva)
     {
         var initial = hive.Comp.BurrowedLarva;
@@ -539,50 +544,59 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         if (hive.Comp.BurrowedLarva <= 0)
             return false;
 
-        EntityUid? larva = null;
-
-        bool TrySpawnAt<T>() where T : Component
-        {
-            var candidates = EntityQueryEnumerator<T, HiveMemberComponent>();
-            while (candidates.MoveNext(out var uid, out _, out var member))
-            {
-                if (member.Hive != hive)
-                    continue;
-
-                if (_mobState.IsDead(uid))
-                    continue;
-
-                var position = _transform.GetMoverCoordinates(uid);
-                larva = Spawn(hive.Comp.BurrowedLarvaId, position);
-                _transform.AttachToGridOrMap(larva.Value);
-                return true;
-            }
-
+        if (!TryGetBurrowedLarvaSpawnPosition(hive, out var position))
             return false;
-        }
 
-        if (!TrySpawnAt<HiveCoreComponent>() &&
-            !TrySpawnAt<XenoEvolutionGranterComponent>() &&
-            !TrySpawnAt<XenoComponent>())
-        {
-            return false;
-        }
-
-        if (larva == null)
-            return false;
+        var larva = Spawn(hive.Comp.BurrowedLarvaId, position);
+        _transform.AttachToGridOrMap(larva);
 
         ChangeBurrowedLarva(hive, -1);
 
-        _xeno.MakeXeno(larva.Value);
-        SetHive(larva.Value, hive);
+        _xeno.MakeXeno(larva);
+        SetHive(larva, hive);
 
         var newMind = _mind.CreateMind(session.UserId,
-            Comp<MetaDataComponent>(larva.Value).EntityName);
+            Comp<MetaDataComponent>(larva).EntityName);
         _mind.TransferTo(newMind, larva, ghostCheckOverride: true);
         _adminLog.Add(LogType.RMCBurrowedLarva,
             $"{session.Name:player} took a burrowed larva from hive {ToPrettyString(hive):hive}.");
 
         return true;
+    }
+
+    private bool TryGetBurrowedLarvaSpawnPosition(Entity<HiveComponent> hive, out EntityCoordinates position)
+    {
+        if (TryGetBurrowedLarvaSpawnPositionAt<HiveCoreComponent>(hive, out position) ||
+            TryGetBurrowedLarvaSpawnPositionAt<XenoEvolutionGranterComponent>(hive, out position) ||
+            TryGetBurrowedLarvaSpawnPositionAt<XenoComponent>(hive, out position))
+        {
+            return true;
+        }
+
+        position = default;
+        return false;
+    }
+
+    private bool TryGetBurrowedLarvaSpawnPositionAt<T>(Entity<HiveComponent> hive, out EntityCoordinates position)
+        where T : Component
+    {
+        var candidates = EntityQueryEnumerator<T, HiveMemberComponent>();
+        while (candidates.MoveNext(out var uid, out _, out var member))
+        {
+            if (member.Hive != hive.Owner ||
+                TerminatingOrDeleted(uid) ||
+                HasComp<BurrowedLarvaSpawnBlockedComponent>(uid) ||
+                _mobState.IsDead(uid))
+            {
+                continue;
+            }
+
+            position = _transform.GetMoverCoordinates(uid);
+            return true;
+        }
+
+        position = default;
+        return false;
     }
 
     private void OnAutoAssignHiveAdded(Entity<AutoAssignHiveComponent> ent, ref ComponentStartup args)

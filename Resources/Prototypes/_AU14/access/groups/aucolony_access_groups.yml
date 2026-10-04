@@ -45,6 +45,7 @@
   - CMAccessColonyResearch
   - CMAccessColonyMedbay
   - CMAccessColonyChem
+  - CMAccessMedical
 
 - type: accessGroup
   id: aunews

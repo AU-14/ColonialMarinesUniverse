@@ -1,0 +1,5 @@
+- type: rank
+  id: UPP_Corporal
+  name: Corporal
+  prefix: Corp.
+  paygrade: E4

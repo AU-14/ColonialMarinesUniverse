@@ -1,0 +1,60 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianShopkeep
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CivilianShopkeep
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 2
+      RMCSkillConstruction: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianshopkeep
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: shopkeep
+
+  name: au14-job-name-civilianshopkeep
+  description: au14-job-description-civilianshopkeep
+  setPreference: true
+  playTimeTracker: AU14JobCivilianShopkeep
+  ranks:
+    RMCRankCivilian: []
+  startingGear: AU14GearCivilianShopkeep
+  icon: "AU14JobIconColonyShopkeep"
+  hasIcon: false
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  access:
+  - AU14AccessShopkeep
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianShopkeep
+  equipment:
+    jumpsuit: AU14CivilianWorkwearYellow
+    shoes: RMCShoesBlack
+    id: AU14IDCardColonyShopkeep
+    back: CMSatchel
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianShopkeep
+  name: Spawn Point Shopkeep
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianShopkeep
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianShopkeep
+  isHumanoid: true

@@ -1,0 +1,24 @@
+- type: entity
+  id: AU14SkillPresetPlatoonJuniorOfficer
+  name: Junior Officer
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillLeadership: 3
+      RMCSkillJtac: 3
+      RMCSkillNavigations: 1
+      RMCSkillOverwatch: 1
+      RMCSkillIntel: 2
+      RMCSkillCqc: 2
+      RMCSkillFirearms: 1
+      RMCSkillEndurance: 1
+      RMCSkillPilot: 1
+      RMCSkillEngineer: 2
+      RMCSkillConstruction: 2
+      RMCSkillPowerLoader: 1
+      RMCSkillVehicles: 1
+      RMCSkillFireman: 1 #fat second el-tee
+      RMCSkillMedical: 1
+      RMCSkillSurgery: 1
+      RMCSkillPolice: 2

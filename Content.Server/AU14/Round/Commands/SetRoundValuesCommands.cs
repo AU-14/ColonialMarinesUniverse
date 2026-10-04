@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Content.Server.Administration;
 using Content.Shared._RMC14.Rules;
@@ -13,13 +14,21 @@ namespace Content.Server.AU14.Round.Commands
     {
         public string Command => "setopfor";
         public string Description => "Sets the Opfor (opposing force) platoon for the round.";
-        public string Help => "Usage: setopfor <platoonPrototypeId>";
+        public string Help => "Usage: setopfor <platoonPrototypeId> | setopfor ship <shipId>";
 
         public void Execute(IConsoleShell shell, string argStr, string[] args)
         {
+            if (args.Length == 2 && args[0].Equals("ship", StringComparison.OrdinalIgnoreCase))
+            {
+                var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
+                roundSystem.SetOpforShip(args[1]);
+                shell.WriteLine($"Opfor ship set to: {args[1]}");
+                return;
+            }
+
             if (args.Length != 1)
             {
-                shell.WriteError("Usage: setopfor <platoonPrototypeId>");
+                shell.WriteError("Usage: setopfor <platoonPrototypeId> | setopfor ship <shipId>");
                 return;
             }
             var sysMan = IoCManager.Resolve<IEntitySystemManager>();
@@ -35,7 +44,7 @@ namespace Content.Server.AU14.Round.Commands
         }
 
         public CompletionResult GetCompletion(IConsoleShell _, string[] args)
-            => RoundCommandCompletion.PlatoonCompletion(args);
+            => RoundCommandCompletion.PlatoonOrShipCompletion(args);
     }
 
     [AdminCommand(AdminFlags.Admin)]
@@ -43,13 +52,21 @@ namespace Content.Server.AU14.Round.Commands
     {
         public string Command => "setgovfor";
         public string Description => "Sets the Govfor (government force) platoon for the round.";
-        public string Help => "Usage: setgovfor <platoonPrototypeId>";
+        public string Help => "Usage: setgovfor <platoonPrototypeId> | setgovfor ship <shipId>";
 
         public void Execute(IConsoleShell shell, string argStr, string[] args)
         {
+            if (args.Length == 2 && args[0].Equals("ship", StringComparison.OrdinalIgnoreCase))
+            {
+                var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
+                roundSystem.SetGovforShip(args[1]);
+                shell.WriteLine($"Govfor ship set to: {args[1]}");
+                return;
+            }
+
             if (args.Length != 1)
             {
-                shell.WriteError("Usage: setgovfor <platoonPrototypeId>");
+                shell.WriteError("Usage: setgovfor <platoonPrototypeId> | setgovfor ship <shipId>");
                 return;
             }
             var sysMan = IoCManager.Resolve<IEntitySystemManager>();
@@ -65,7 +82,7 @@ namespace Content.Server.AU14.Round.Commands
         }
 
         public CompletionResult GetCompletion(IConsoleShell _, string[] args)
-            => RoundCommandCompletion.PlatoonCompletion(args);
+            => RoundCommandCompletion.PlatoonOrShipCompletion(args);
     }
 
     [AdminCommand(AdminFlags.Admin)]
@@ -173,14 +190,37 @@ namespace Content.Server.AU14.Round.Commands
         {
             if (args.Length != 1) return CompletionResult.Empty;
 
+            return CompletionResult.FromHintOptions(GetShipIds(), "<shipId>");
+        }
+
+        internal static CompletionResult PlatoonOrShipCompletion(string[] args)
+        {
+            if (args.Length == 1)
+            {
+                var protoMan = IoCManager.Resolve<IPrototypeManager>();
+                var options = protoMan.EnumeratePrototypes<PlatoonPrototype>()
+                    .Select(p => p.ID)
+                    .Append("ship")
+                    .OrderBy(id => id)
+                    .ToList();
+
+                return CompletionResult.FromHintOptions(options, "<platoonPrototypeId|ship>");
+            }
+
+            if (args.Length == 2 && args[0].Equals("ship", StringComparison.OrdinalIgnoreCase))
+                return CompletionResult.FromHintOptions(GetShipIds(), "<shipId>");
+
+            return CompletionResult.Empty;
+        }
+
+        private static List<string> GetShipIds()
+        {
             var protoMan = IoCManager.Resolve<IPrototypeManager>();
-            var options = protoMan.EnumeratePrototypes<PlatoonPrototype>()
+            return protoMan.EnumeratePrototypes<PlatoonPrototype>()
                 .SelectMany(p => p.PossibleShips)
                 .Distinct()
                 .OrderBy(id => id)
                 .ToList();
-
-            return CompletionResult.FromHintOptions(options, "<shipId>");
         }
     }
 }

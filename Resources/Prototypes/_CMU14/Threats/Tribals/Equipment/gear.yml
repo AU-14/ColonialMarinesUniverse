@@ -1,0 +1,122 @@
+# --- Starting gear ------------------------------------------------------
+# Inline per-variant — no abstract parent, matches the cultist/WYHT
+# starting-gear pattern. Every tribal slots a brown jumpsuit (their
+# rough leather wrap), sandals, leather satchel, and a quiver of 12
+# tribal arrows; the weapon in-hand is the only per-variant difference.
+
+- type: startingGear
+  id: AU14GearTribalLeader
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+    belt: ClothingBeltQuiver
+  inhand:
+  - TribalSpear
+  storage:
+    belt:
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    back:
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet
+
+- type: startingGear
+  id: AU14GearTribalSpear
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+    belt: ClothingBeltQuiver
+  inhand:
+  - TribalSpear
+  storage:
+    belt:
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    back:
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet
+
+- type: startingGear
+  id: AU14GearTribalBowman
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+    belt: ClothingBeltQuiver
+  inhand:
+  - TribalBow
+  storage:
+    belt:
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    - TribalArrow
+    back:
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet
+
+# Shaman — tribal medic. Drops the bow/quiver and rolls with a satchel
+# stuffed with field medicine instead. Spear is in-hand so they can still
+# defend themselves; the belt slot carries the splints/gauze/ointment
+# survivor pouch every tribal medic role uses.
+- type: startingGear
+  id: AU14GearTribalShaman
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitColorBrown
+    shoes: RMCShoesSandals
+    back: ClothingBackpackSatchelLeather
+    belt: RMCPouchFirstAidSplintsGauzeOintment
+  inhand:
+  - TribalSpear
+  storage:
+    back:
+    - CMGauze10
+    - CMOintment10
+    - CMGauze10
+    - CMOintment10
+    - CMHealthAnalyzer
+    - CMFirstAidKitFilledRobust
+    - Torch
+    - Torch
+    - Torch
+    - Torch
+    - RMCToolHatchet

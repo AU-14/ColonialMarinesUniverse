@@ -10,7 +10,6 @@ using Robust.Shared.Physics.Components;
 using Content.Shared._RMC14.Rules;
 using Robust.Shared.Containers;
 using Content.Shared.Item.ItemToggle.Components;
-using System.Numerics;
 using Content.Shared.Foldable;
 using Content.Shared.Examine;
 using Robust.Shared.Prototypes;
@@ -22,6 +21,7 @@ using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared._RMC14.Xenonids.Spray;
 using Robust.Shared.Audio.Systems;
 using Content.Shared.Ghost;
+using Robust.Shared.Physics.Collision.Shapes;
 
 namespace Content.Shared._RMC14.Deploy;
 
@@ -89,27 +89,20 @@ public sealed partial class RMCDeploySystem : EntitySystem
 
         // Get the grid and the grid component
         var gridUid = _xform.GetGrid(user);
-        if (!TryComp<MapGridComponent>(gridUid, out var grid))
+        if (!TryComp<MapGridComponent>(gridUid, out _))
             return;
 
         if (comp.FailIfNotSurface && !CheckSurface(gridUid.Value, uid, user))
             return;
 
-        // Get the player's world position
-        var userWorldPos = _xform.GetWorldPosition(user);
-        // Tile indices under player
-        var tileIndices = _map.WorldToTile(gridUid.Value, grid, userWorldPos);
-        // Center of this tile
-        var areaCenter = _map.TileCenterToVector(gridUid.Value, grid, tileIndices);
-
-        var transform = new Robust.Shared.Physics.Transform(areaCenter, 0);
-        var area = comp.DeployArea.ComputeAABB(transform, 0);
+        if (!TryGetDeployArea(user, comp.DeployArea, out _, out var area))
+            return;
 
         // Check if the area is blocked (if not disabled)
         if (comp.AreaBlockedCheck && IsAreaBlocked(area, uid, user, ent))
             return;
 
-        var doAfter = new DoAfterArgs(_entMan, user, comp.DeployTime, new RMCDeployDoAfterEvent(area), uid)
+        var doAfter = new DoAfterArgs(_entMan, user, comp.DeployTime, new RMCDeployDoAfterEvent(), uid)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
@@ -156,25 +149,16 @@ public sealed partial class RMCDeploySystem : EntitySystem
         ev.Handled = true;
 
         var user = ev.Args.User;
-        // Get the grid and the grid component
-        var gridUid = _xform.GetGrid(user);
-        if (!TryComp<MapGridComponent>(gridUid, out var grid))
+        if (!TryGetDeployArea(user, ent.Comp.DeployArea, out var areaCenter, out _))
+        {
+            ent.Comp.CurrentDeployUser = null;
+            Dirty(ent);
+            RaiseNetworkEvent(new RMCHideDeployAreaEvent(), ev.Args.User);
             return;
-
-        // Get the player's world position
-        var userWorldPos = _xform.GetWorldPosition(user);
-        // Tile indices under player
-        var tileIndices = _map.WorldToTile(gridUid.Value, grid, userWorldPos);
-        // The center of this tile (for calculating the zone)
-        var tileCenter = _map.TileCenterToVector(gridUid.Value, grid, tileIndices);
-
-        // Build transform and zone relative to tileCenter
-        var areaTransform = new Robust.Shared.Physics.Transform(tileCenter, 0);
-        var area = ent.Comp.DeployArea.ComputeAABB(areaTransform, 0);
-        var areaCenter = area.Center;
+        }
 
         // Perform deployment
-        DeploySetups(ent, areaCenter, user);
+        DeploySetups(ent, areaCenter);
 
         if (ent.Comp.DeploySound != null)
             _audio.PlayPvs(ent.Comp.DeploySound, user);
@@ -187,7 +171,7 @@ public sealed partial class RMCDeploySystem : EntitySystem
     /// <summary>
     /// Deploys setups, considering the possibility of redeploying existing entities.
     /// </summary>
-    private void DeploySetups(Entity<RMCDeployableComponent> ent, Vector2 areaCenter, EntityUid user)
+    private void DeploySetups(Entity<RMCDeployableComponent> ent, EntityCoordinates areaCenter)
     {
         if (_netManager.IsClient)
             return;
@@ -204,14 +188,14 @@ public sealed partial class RMCDeploySystem : EntitySystem
         else
         {
             // First deployment - create all setups
-            DeployAllSetups(ent, areaCenter, user);
+            DeployAllSetups(ent, areaCenter);
         }
     }
 
     /// <summary>
     /// Redeploys existing entities from the container.
     /// </summary>
-    private void RedeployExistingEntities(Entity<RMCDeployableComponent> ent, Vector2 areaCenter, BaseContainer originalStorage)
+    private void RedeployExistingEntities(Entity<RMCDeployableComponent> ent, EntityCoordinates areaCenter, BaseContainer originalStorage)
     {
         if (_netManager.IsClient)
             return;
@@ -242,13 +226,12 @@ public sealed partial class RMCDeploySystem : EntitySystem
                 _foldable.SetFolded(containedEntity, foldableComp, false); // Use force method to bypass all safety checks
 
             // Update position and rotation
-            var spawnPos = areaCenter + setup.Offset;
-            _xform.SetWorldPosition(containedEntity, spawnPos);
-            _xform.SetWorldRotation(containedEntity, Angle.FromDegrees(setup.Angle));
+            var spawnCoords = areaCenter.Offset(setup.Offset);
+            var xform = Transform(containedEntity);
+            _xform.SetCoordinates(containedEntity, xform, spawnCoords, Angle.FromDegrees(setup.Angle));
 
             if (setup.Anchor)
             {
-                var xform = Transform(containedEntity);
                 if (!xform.Anchored)
                 {
                     _xform.AnchorEntity((containedEntity, xform));
@@ -273,7 +256,7 @@ public sealed partial class RMCDeploySystem : EntitySystem
     /// <summary>
     /// Deploys all setups (first deployment).
     /// </summary>
-    private void DeployAllSetups(Entity<RMCDeployableComponent> ent, Vector2 areaCenter, EntityUid user)
+    private void DeployAllSetups(Entity<RMCDeployableComponent> ent, EntityCoordinates areaCenter)
     {
         if (_netManager.IsClient)
             return;
@@ -282,16 +265,15 @@ public sealed partial class RMCDeploySystem : EntitySystem
 
         foreach (var (setup, i) in ent.Comp.DeploySetups.Select((s, idx) => (s, idx)))
         {
-            var spawnPos = areaCenter + setup.Offset;
-            Log.Debug($"RMCDeploySystem: Spawning entity {setup.Prototype} at position {spawnPos}");
-            var spawned = Spawn(setup.Prototype, new MapCoordinates(spawnPos, _xform.GetMapId(user)));
+            var spawnCoords = areaCenter.Offset(setup.Offset);
+            Log.Debug($"RMCDeploySystem: Spawning entity {setup.Prototype} at position {spawnCoords}");
+            var spawned = Spawn(setup.Prototype, spawnCoords);
 
-            _xform.SetWorldPosition(spawned, spawnPos);
-            _xform.SetWorldRotation(spawned, Angle.FromDegrees(setup.Angle));
+            var xform = Transform(spawned);
+            _xform.SetCoordinates(spawned, xform, spawnCoords, Angle.FromDegrees(setup.Angle));
 
             if (setup.Anchor)
             {
-                var xform = Transform(spawned);
                 if (!xform.Anchored)
                 {
                     _xform.AnchorEntity((spawned, xform));
@@ -321,6 +303,29 @@ public sealed partial class RMCDeploySystem : EntitySystem
         }
     }
 
+    private bool TryGetDeployArea(
+        EntityUid user,
+        PhysShapeAabb deployArea,
+        out EntityCoordinates areaCenter,
+        out Box2 worldArea)
+    {
+        areaCenter = EntityCoordinates.Invalid;
+        worldArea = default;
+
+        var gridUid = _xform.GetGrid(user);
+        if (!TryComp<MapGridComponent>(gridUid, out var grid))
+            return false;
+
+        var userWorldPos = _xform.GetWorldPosition(user);
+        var tileIndices = _map.WorldToTile(gridUid.Value, grid, userWorldPos);
+        areaCenter = _map.ToCenterCoordinates(gridUid.Value, tileIndices, grid);
+
+        var localTransform = new Robust.Shared.Physics.Transform(areaCenter.Position, 0);
+        var localArea = deployArea.ComputeAABB(localTransform, 0);
+        worldArea = _xform.GetWorldMatrix(gridUid.Value).TransformBox(localArea);
+        return true;
+    }
+
     /// <summary>
     /// Handles the DoAfter attempt event for deployable entities, checking if the area is blocked.
     /// </summary>
@@ -329,7 +334,6 @@ public sealed partial class RMCDeploySystem : EntitySystem
         var comp = ent.Comp;
         var uid = ent.Owner;
         var user = args.Event.User;
-        var area = args.Event.Area;
 
         if (HasAnyAcid(uid))
         {
@@ -338,7 +342,9 @@ public sealed partial class RMCDeploySystem : EntitySystem
             return;
         }
 
-        if (comp.AreaBlockedCheck && IsAreaBlocked(area, uid, user, ent))
+        if (comp.AreaBlockedCheck &&
+            (!TryGetDeployArea(user, comp.DeployArea, out _, out var area) ||
+             IsAreaBlocked(area, uid, user, ent)))
         {
             _popup.PopupEntity(Loc.GetString("rmc-deploy-popup-blocked"), user, user, PopupType.SmallCaution);
             args.Cancel();
@@ -625,8 +631,8 @@ public sealed partial class RMCDeploySystem : EntitySystem
             {
                 _container.Remove(comp.OriginalEntity, storage);
                 // Place original entity at user's position
-                var userCoords = _xform.GetWorldPosition(user);
-                _xform.SetWorldPosition(comp.OriginalEntity, userCoords);
+                var userCoords = _xform.GetMoverCoordinates(user);
+                _xform.SetCoordinates(comp.OriginalEntity, userCoords);
             }
 
 
@@ -715,4 +721,3 @@ public sealed partial class RMCDeploySystem : EntitySystem
         }
     }
 }
-

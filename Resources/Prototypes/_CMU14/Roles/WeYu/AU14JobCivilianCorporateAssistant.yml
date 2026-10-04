@@ -1,0 +1,90 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianCorporateAssistant
+  roundSide: Civilian
+  roundForce: WY
+  roundRole: CivilianCorporateAssistant
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancorporateassistant
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: corporate_assistant
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - SquadPMC
+
+  name: au14-job-name-civiliancorporateassistant
+  playTimeTracker: AU14JobCivilianCorporateAssistant
+  description: au14-job-description-civiliancorporateassistant
+  setPreference: true
+  ranks:
+    AU14RankWYSeniorAssistant:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateAssistant
+      time: 90000 # 25 hours
+    AU14RankWYAssistant:
+    - !type:RoleTimeRequirement
+      role: AU14JobCivilianCorporateAssistant
+      time: 36000 # 10 hours
+    AU14RankWYJuniorAssistant: []
+  startingGear: AU14GearCivilianCorporateAssistant
+  icon: "AU14JobIconCorporateAssistant"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auwy
+  access:
+  - AU14AccessCorporateWEYULiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianCorporateAssistant
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceup
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14CivilianJacketTanPufferVest
+    ears: AU14ColonyWeylandHeadset
+    ears2: RMCM5CameraGear
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCorporateAssistant
+  name: Spawn Point Civilian Corporate Assistant
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCorporateAssistant
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianCorporateAssistant
+  isHumanoid: true
+
+# Corporate Administrator and Corporate Admin Assistant — the Weyland-Yutani corporate
+# executive equivalent of the Colony Administrator. Manages corporate interests on-colony.
+
+- type: roleLoadout
+  id: JobAU14JobCivilianCorporateAssistant
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

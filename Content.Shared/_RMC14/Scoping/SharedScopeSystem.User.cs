@@ -114,7 +114,13 @@ public partial class SharedScopeSystem
     private bool IsUsingMountedVultureSpotterScope(Entity<ScopingComponent> user)
     {
         return user.Comp.Scope is { } scope &&
-               _container.TryGetContainingContainer((scope, null), out var container) &&
+               TryComp(scope, out ScopeComponent? scopeComp) &&
+               IsMountedVultureSpotterScope((scope, scopeComp));
+    }
+
+    private bool IsMountedVultureSpotterScope(Entity<ScopeComponent> scope)
+    {
+        return _container.TryGetContainingContainer((scope, null), out var container) &&
                HasComp<VultureSpotterTripodComponent>(container.Owner);
     }
 }

@@ -1,0 +1,104 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobWYPMCPartyLeader #m41a/2
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYPMCPartyLeader
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillConstruction: 2
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 3
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillIntel: 1
+      RMCSkillJtac: 2
+      RMCSkillLeadership: 1
+      RMCSkillMedical: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-AU14JobGOVFORSectionSergeantWYPMC
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  - type: MarineOrders
+
+  name: PMC Leader
+  description: au14-pmcparty-description
+  playTimeTracker: AU14JobWYPMCPartyLeader
+  ranks:
+    AU14RankWeYuEnforcerLead: []
+  spawnMenuRoleName: WY PMC Leader (3rd party, M41A/2)
+  startingGear: AU14GearWYPMCPartyLeader
+  greeting: au14-pmcparty-greeting
+  icon: "RMCJobIconPMCLeader"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobWYPMCPartyLeader
+  name: WY PMC Party Leader (3rd party, M41A/2)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: PMC Leader
+    description: au14-pmcparty-description
+    reregister: false
+    job: AU14JobWYPMCPartyLeader
+    raffle:
+      settings: short
+    rules: au14-wypmc-description
+
+- type: startingGear
+  id: AU14GearWYPMCPartyLeader
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: AU14WYPMCArmor
+    jumpsuit: AU14WYPMCFatigues
+    shoes: RMCBootsPMCFilled
+    mask: RMCMaskCoifPMC
+    eyes: RMCGlassesMedicalHUDGlasses
+    head: ArmorHelmetPMCFieldOfficer
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    belt: RMCMK80BeltPMCFilled
+    pocket1: RMCPouchMagazineLargePMC
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelPMC
+    ears: RMCHeadsetDistressWeYa
+    suitstorage: RMCWeaponRifleM54C2
+  storage:
+    pocket1:
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    - CMMagazineRifleM54CAP
+    back:
+    - CMSurgicalLine
+    - CMSynthGraft
+    - RMCMREWeYa
+    - RMCRangefinder
+    - CMStunbaton
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - RMCHandcuffs
+    - RMCGrenadeBlastM12
+
+- type: playTimeTracker
+  id: AU14JobWYPMCPartyLeader

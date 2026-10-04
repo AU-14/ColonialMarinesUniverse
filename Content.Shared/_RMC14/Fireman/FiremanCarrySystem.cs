@@ -375,26 +375,16 @@ public sealed partial class FiremanCarrySystem : EntitySystem
     {
         try
         {
-            foreach (var (target, carrier) in _toReparent)
+            foreach (var (target, _) in _toReparent)
             {
                 if (TerminatingOrDeleted(target))
                     continue;
 
-                if (TerminatingOrDeleted(carrier))
-                {
-                    var coordinates = _transform.GetMoverCoordinates(target);
-                    if (TerminatingOrDeleted(coordinates.EntityId))
-                        continue;
-
-                    _transform.SetCoordinates(target, coordinates);
-                    continue;
-                }
-
-                var parent = _transform.GetMoverCoordinates(target).EntityId;
-                if (target == parent)
+                var coordinates = _transform.GetMoverCoordinates(target);
+                if (target == coordinates.EntityId || TerminatingOrDeleted(coordinates.EntityId))
                     continue;
 
-                _transform.SetParent(target, parent);
+                _transform.SetCoordinates(target, coordinates);
             }
         }
         finally

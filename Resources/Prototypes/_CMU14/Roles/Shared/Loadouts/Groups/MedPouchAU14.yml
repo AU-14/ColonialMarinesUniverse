@@ -1,0 +1,11 @@
+- type: loadoutGroup
+  id: MedPouchAU14
+  name: au14-loadout-group-civilian-pouch
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - PouchMedicalAU14
+  - PouchAutoinjectorAU14
+  - PouchFirstResponderAU14
+  - PouchSyringeFillAU14
+  - PouchVialFillRightAU14

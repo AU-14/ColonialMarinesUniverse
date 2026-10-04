@@ -188,7 +188,7 @@ entities:
     - type: Transform
       pos: -1.4548297,0.57224566
       parent: 1
-- proto: CMComputerDropshipNavigationERTCLF
+- proto: CMComputerDropshipNavigationERTCLFThirdParty
   entities:
   - uid: 23
     components:
@@ -723,7 +723,7 @@ entities:
     - type: Transform
       pos: -0.5,6.5
       parent: 1
-- proto: thirdpartyentityspawnmarker
+- proto: scenariothirdpartyentityspawnmarker
   entities:
   - uid: 9001
     components:
@@ -740,7 +740,7 @@ entities:
     - type: Transform
       pos: -0.5,3.5
       parent: 1
-- proto: thirdpartyleaderspawnmarker
+- proto: scenariothirdpartyleaderspawnmarker
   entities:
   - uid: 9004
     components:
@@ -762,7 +762,7 @@ entities:
     - type: Transform
       pos: -0.5,5.5
       parent: 1
-- proto: thirdpartymemberspawnmarker
+- proto: scenariothirdpartymemberspawnmarker
   entities:
   - uid: 9008
     components:

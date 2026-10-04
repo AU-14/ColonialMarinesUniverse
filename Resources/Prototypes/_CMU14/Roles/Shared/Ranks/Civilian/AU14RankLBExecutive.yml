@@ -1,0 +1,5 @@
+- type: rank
+  id: AU14RankLBExecutive
+  name: Executive
+  prefix: Exec.
+  paygrade: LBC3

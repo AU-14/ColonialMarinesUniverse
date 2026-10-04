@@ -19,6 +19,7 @@
           mapNameTemplate: 'Sorokyne Strata'
         - type: StationJobs
           availableJobs:
+
             AU14JobCivilianColonist: [-1, -1]
             AU14JobCivilianJournalist: [1, 1]
 
@@ -34,16 +35,11 @@
             # Colony Command (non department)
             AU14JobCivilianColonyAdministrator: [1, 1]
             AU14JobCivilianColonyAdminAssistant: [1, 1]
+
             # Ambassadors
             AU14JobCivilianAmbassadorICSC: [1, 1]
-            AU14JobCivilianAmbassadorUPP: [1, 1]
 
-            # Corporate
-            AU14JobCivilianCorporateLiaison: [1, 1]
-            AU14JobCivilianCorporateAssistant: [1, 1]
-
-            AU14JobCivilianScientist: [2, 2]
-            AU14JobWYGuard: [3, 3]
+            # todo UPP researcher job overrides
 
             # Security/LEO
             AU14JobCivilianPaPOfficer: [5, 5]

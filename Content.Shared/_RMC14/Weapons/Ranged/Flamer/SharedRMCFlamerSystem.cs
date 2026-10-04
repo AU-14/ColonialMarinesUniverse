@@ -308,7 +308,8 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         if (!CanShootFlamer(flamer, fromCoordinates, toCoordinates, out var tiles, out var solution, out var reagent, out var tank))
             return;
 
-        _audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
+        if (!_zLevels.PlayPredictedDirectlyAcrossZ(gun.Comp.SoundGunshotModified, gun, user))
+            _audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
 
         //  333456
         // 1233456

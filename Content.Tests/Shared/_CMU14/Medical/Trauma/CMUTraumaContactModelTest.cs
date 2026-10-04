@@ -26,17 +26,17 @@ public sealed class CMUTraumaContactModelTest
     }
 
     [Test]
-    public void DefaultOrganProfileUsesModerateContactRates()
+    public void DefaultOrganProfileUsesReducedContactRates()
     {
         var settings = CMUTraumaContactSettings.Default;
 
         Assert.Multiple(() =>
         {
-            Assert.That(settings.BallisticHeadOrganChance, Is.EqualTo(0.55f));
-            Assert.That(settings.BallisticTorsoOrganChance, Is.EqualTo(0.50f));
-            Assert.That(settings.PierceOrganChance, Is.EqualTo(0.35f));
-            Assert.That(settings.SlashOrganChance, Is.EqualTo(0.20f));
-            Assert.That(settings.BluntOrganChance, Is.EqualTo(0.10f));
+            Assert.That(settings.BallisticHeadOrganChance, Is.EqualTo(0.08f));
+            Assert.That(settings.BallisticTorsoOrganChance, Is.EqualTo(0.25f));
+            Assert.That(settings.PierceOrganChance, Is.EqualTo(0.175f));
+            Assert.That(settings.SlashOrganChance, Is.EqualTo(0.10f));
+            Assert.That(settings.BluntOrganChance, Is.EqualTo(0.05f));
         });
     }
 

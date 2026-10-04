@@ -1,0 +1,9 @@
+- type: loadoutGroup
+  id: GOVFORAuxTechClothingAU14
+  name: au14-loadout-group-auxtech
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - GOVFORAuxTechClothingAU14Fatigues
+
+# Commander

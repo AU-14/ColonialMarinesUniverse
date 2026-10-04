@@ -1,0 +1,100 @@
+- type: job
+  parent: AU14JobTDRiflemanBase
+  id: AU14UPPTerritorialDefenseLoader
+  roundSide: ThirdParty
+  roundForce: UPP_TD
+  roundRole: AU14UPPTerritorialDefenseLoader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_spec
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 1
+      RMCSkillMedical: 1
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au-14-job-prefix-upptd-loader
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Czech
+    - Slovak
+    - Ukrainian
+    - Romanian
+    - Hungarian
+    - Lithuanian
+    understoodLanguages:
+    - Polish
+    - Czech
+    - Slovak
+    - Ukrainian
+    - Romanian
+    - Hungarian
+    - Lithuanian
+    currentLanguage: Ukrainian
+    defaultLanguage: Ukrainian
+
+  name: au-14-job-name-upptd-loader
+  description: au14-upptd-description
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Private:
+      entity: AU14ChevronUPPNIPrivate 
+      requirements: []
+  spawnMenuRoleName: UPP TD Loader (3rd party)
+  startingGear: AU14GearUPPTerritorialDefenseLoader
+  greeting: au14-upptd-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-upptd-squadleader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTDThirdparty
+  id: AU14JobUPPTerritorialDefenseLoader
+  name: UPP TD Loader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadTD
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-upptd-loader
+    description: au14-upptd-description
+    reregister: false
+    job: AU14UPPTerritorialDefenseLoader
+    raffle:
+      settings: short
+    rules: au14-upptd-description
+
+- type: startingGear
+  id: AU14GearUPPTerritorialDefenseLoader
+  equipment:
+    id: AU14IDCardUPPTDLoader
+    outerClothing: AU14ArmorArmyUPP
+    jumpsuit: AU14JumpsuitArmyUPP
+    shoes: RMCBootsSPPBlackFilled
+    head: AU14UPPBoonie
+    belt: AU14BeltMarineArmyUPPTDFilled
+    pocket1: RMCPouchFlareFilled
+    pocket2: AU14PouchIFAKFill
+    back: AU14SatchelDemoSpecUPP
+    suitstorage: RMCWeaponRifleAK4047
+  storage:
+    back:
+    - RMCMaskGasSPP
+    - RMCMRESPP
+    - CMCanteen
+    - RMCRocketHJRA12AT
+    - RMCRocketHJRA12AT
+    - RMCRocketHJRA12HE
+    - RMCRocketHJRA12Incen

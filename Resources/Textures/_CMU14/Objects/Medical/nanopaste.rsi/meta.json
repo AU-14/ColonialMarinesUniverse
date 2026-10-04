@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/12a894facff4ac60d0dcc11c854cf7a283ac8786/icons/obj/items/medical_stacks.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "icon"
+        },
+        {
+            "name": "icon-inhand-left",
+            "directions": 4
+        },
+        {
+            "name": "icon-inhand-right",
+            "directions": 4
+        }
+    ]
+}

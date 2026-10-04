@@ -32,6 +32,7 @@
     xenoMultiplier: 5
   - type: Tag
     tags:
+    - Tree
     - HideContextMenu
   - type: RemoveComponents
     components:
@@ -71,6 +72,7 @@
     xenoMultiplier: 5
   - type: Tag
     tags:
+    - Tree
     - HideContextMenu
   - type: RemoveComponents
     components:

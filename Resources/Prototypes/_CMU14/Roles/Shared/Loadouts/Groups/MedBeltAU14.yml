@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: MedBeltAU14
+  name: au14-loadout-group-civilian-belt
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - BeltMedicalAU14
+  - BeltMedicBagAU14
+
+# COS

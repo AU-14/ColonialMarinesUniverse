@@ -1,0 +1,439 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianAmbassadorCCA
+  roundSide: Civilian
+  roundForce: CCA
+  roundRole: CivilianAmbassadorCCA
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: AU14JobCivilianCorporateLiaison
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianambassadorcca
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: cca_ambassador
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Marine
+    Faction: govfor
+
+  name: au14-job-name-civilianambassadorcca
+  description: au14-job-description-civilianambassadorcca
+  playTimeTracker: AU14JobCivilianAmbassadorCCA
+  setPreference: true
+  ranks:
+    AU14RankAmbassador: []
+  startingGear: AU14GearCivilianAmbassadorCCA
+  icon: "AU14JobIconCCAAmbassador"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
+  supervisors: au14-job-supervisors-orbital
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  access:
+  - AU14AccessColonyAmbassador
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianAmbassadorCCA
+  equipment:
+    jumpsuit: AU14CivilianWorkwearYellow
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardCCAAmbassador
+    outerClothing: AU14CivilianJacketTanPufferVest
+    ears: AU14AmbassadorCCAHeadset
+    pocket1: AU14StampCCAA
+  inhand:
+  - AU14PortableVendorCCA
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianAmbassadorCCA
+  name: Spawn Point Civilian CCA Ambassador
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianAmbassadorCCA
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianAmbassadorCCA
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianAmbassadorCCA
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+# ├──[ CLF ]─────────────────────────────────────────────────────────┤
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianAmbassadorICSC
+  roundSide: Civilian
+  roundForce: ICSC
+  roundRole: CivilianAmbassadorICSC
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: AU14JobCivilianAmbassadorICSC
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianambassadoricsc
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: icsc_ambassador
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Marine
+    Faction: govfor
+
+  name: au14-job-name-civilianambassadoricsc
+  description: au14-job-description-civilianambassadoricsc
+  playTimeTracker: AU14JobCivilianAmbassadorICSC
+  setPreference: true
+  ranks:
+    AU14RankAmbassador: []
+  startingGear: AU14GearCivilianAmbassadorICSC
+  icon: "AU14JobIconICSCAmbassador"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
+  supervisors: au14-job-supervisors-orbital
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  access:
+  - AU14AccessColonyAmbassador
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianAmbassadorICSC
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardICSCAmbassador
+    outerClothing: RMCJacketCorporateBlack
+    ears: AU14AmbassadorICSCHeadset
+    pocket1: AU14StampICSCA
+  inhand:
+  - AU14PortableVendorICSC
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianAmbassadorICSC
+  name: Spawn Point Civilian ICSC Ambassador
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianAmbassadorICSC
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianAmbassadorICSC
+  isHumanoid: true
+
+# ├──[ ORBITAL ARBITER ]─────────────────────────────────────────────┤
+
+- type: roleLoadout
+  id: JobAU14JobCivilianAmbassadorICSC
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianAmbassadorTWE
+  roundSide: Civilian
+  roundForce: TWE
+  roundRole: CivilianAmbassadorTWE
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: AU14JobCivilianAmbassadorTWE
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianambassadortwe
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: twe_ambassador
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Marine
+    Faction: govfor
+
+  name: au14-job-name-civilianambassadortwe
+  description: au14-job-description-civilianambassadortwe
+  playTimeTracker: AU14JobCivilianAmbassadorTWE
+  setPreference: true
+  ranks:
+    AU14RankTWEAmbassador: []
+  startingGear: AU14GearCivilianAmbassadorTWE
+  icon: "AU14JobIconTWEAmbassador"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
+  supervisors: au14-job-supervisors-orbital
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  access:
+  - AU14AccessColonyAmbassador
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianAmbassadorTWE
+  equipment:
+    jumpsuit: AU14CivilianWorkwearPink
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardTWEAmbassador
+    outerClothing: AU14CivilianJacketOldCoat
+    ears: AU14ColonyAmbassadorTWEHeadset
+    pocket1: AU14StampTWEA
+  inhand:
+  - AU14PortableVendorTWE
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianAmbassadorTWE
+  name: Spawn Point Civilian TWE Ambassador
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianAmbassadorTWE
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianAmbassadorTWE
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianAmbassadorTWE
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianAmbassadorUA
+  roundSide: Civilian
+  roundForce: UA
+  roundRole: CivilianAmbassadorUA
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: AU14JobCivilianAmbassadorUA
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianambassadorua
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: ua_ambassador
+  - type: NpcFactionMember
+    factions:
+    - AUUnitedAmericas
+  # - CMUVAI
+  - type: Marine
+  # Faction: ""
+
+  name: au14-job-name-civilianambassadorua
+  description: au14-job-description-civilianambassadorua
+  playTimeTracker: AU14JobCivilianAmbassadorUA
+  setPreference: true
+  ranks:
+    AU14RankAmbassador: []
+  startingGear: AU14GearCivilianAmbassadorUA
+  icon: "AU14JobIconUAAmbassador"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
+  supervisors: au14-job-supervisors-orbital
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  access:
+  - AU14AccessColonyAmbassador
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianAmbassadorUA
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardUAAmbassador
+    outerClothing: RMCFancySuitJacketBrown
+    ears: AU14AmbassadorUAHeadset
+    pocket1: AU14StampUAA
+  inhand:
+  - AU14PortableVendorUA
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianAmbassadorUA
+  name: Spawn Point Civilian UA Ambassador
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianAmbassadorUA
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianAmbassadorUA
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianAmbassadorUA
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: CMJobBase
+  id: AU14JobCivilianAmbassadorUPP
+  roundSide: Civilian
+  roundForce: UPP
+  roundRole: CivilianAmbassadorUPP
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: AU14JobCivilianAmbassadorUPP
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-civilianambassadorupp
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      state: upp_ambassador
+  - type: NpcFactionMember
+    factions:
+    - GOVFOR
+  - type: Marine
+    Faction: govfor
+
+  name: au14-job-name-civilianambassadorupp
+  description: au14-job-description-civilianambassadorupp
+  playTimeTracker: AU14JobCivilianAmbassadorUPP
+  setPreference: true
+  ranks:
+    AU14RankAmbassador: []
+  startingGear: AU14GearCivilianAmbassadorUPP
+  icon: "AU14JobIconUPPAmbassador"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  whitelisted: true
+  whitelistParent: AU14JobGeneralWhitelist
+  supervisors: au14-job-supervisors-orbital
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  access:
+  - AU14AccessColonyAmbassador
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianAmbassadorUPP
+  equipment:
+    jumpsuit: CMJumpsuitSPPCiv4
+    shoes: RMCShoesLaceupBrown
+    id: AU14IDCardUPPAmbassador
+    outerClothing: RMCCoatSPP
+    ears: AU14AmbassadorUPPHeadset
+    pocket1: AU14StampUPPA
+  inhand:
+  - AU14PortableVendorUPP
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianAmbassadorUPP
+  name: Spawn Point Civilian UPP Ambassador
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianAmbassadorUPP
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: AU14JobCivilianAmbassadorUPP
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobAU14JobCivilianAmbassadorUPP
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

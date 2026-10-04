@@ -1,0 +1,15 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentAmbassadors
+  name: au14-department-ambassadors
+  description: au14-department-ambassadors-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianAmbassadorUPP
+    - AU14JobCivilianAmbassadorUA
+    - AU14JobCivilianAmbassadorTWE
+    - AU14JobCivilianAmbassadorICSC
+    - AU14JobCivilianAmbassadorCCA
+  departmentRadio: null
+  headOfDepartment: null
+  faction: colonist

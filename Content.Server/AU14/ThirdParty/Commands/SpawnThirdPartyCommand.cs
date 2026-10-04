@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Administration;
 using Content.Shared.AU14.Threats;
 using Content.Shared.Administration;
@@ -7,8 +8,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.AU14.ThirdParty.Commands;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed class SpawnThirdPartyCommand : LocalizedEntityCommands
+public sealed partial class SpawnThirdPartyCommand : LocalizedEntityCommands
 {
+    [Dependency] private IPrototypeManager _prototype = default!;
+
     public override string Command => "spawnthirdparty";
     public override string Help => "spawnthirdparty [third party name] [dropship (true/false)]\nSpawns a third party. If dropship is true, they will enter by shuttle.";
 
@@ -57,5 +60,24 @@ public sealed class SpawnThirdPartyCommand : LocalizedEntityCommands
             thirdPartySystem.SpawnThirdParty(party, partySpawnProto, false);
 
         shell.WriteLine($"Spawned third party '{party.ID}' (dropship={dropship})");
+    }
+
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
+    {
+        return args.Length switch
+        {
+            1 => CompletionResult.FromHintOptions(GetThirdPartyCompletions(), "<thirdPartyId>"),
+            2 => CompletionResult.FromHintOptions(CompletionHelper.Booleans, "<dropship>"),
+            _ => CompletionResult.Empty,
+        };
+    }
+
+    private IEnumerable<CompletionOption> GetThirdPartyCompletions()
+    {
+        return _prototype.EnumeratePrototypes<AuThirdPartyPrototype>()
+            .OrderBy(prototype => prototype.ID)
+            .Select(prototype => new CompletionOption(
+                prototype.ID,
+                prototype.DisplayName ?? prototype.ID));
     }
 }

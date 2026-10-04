@@ -1,0 +1,46 @@
+- type: votingChoices
+  id: DistressSignalVotingChoices
+  preset: DistressSignal
+  planetChoices:
+    - planets:
+        - CMUPlanetHopesRetreat
+      threatVote:
+        candidates:
+          - DistressSignalXenoRoundGroup
+          - DistressSignalAbominationRoundGroup
+      backupThreatVote:
+        candidates:
+          - DistressSignalXenoRoundGroup
+
+    - planets:
+        - AUPlanetCorsatStation
+        - AUPlanetTrijent
+        - AuPlanetKutjevo
+        - AuPlanetShivasSnowball
+      threatVote:
+        candidates:
+          - DistressSignalXenoRoundGroup
+      backupThreatVote:
+        candidates:
+          - DistressSignalXenoRoundGroup
+
+    - planets:
+        - AUPlanetSorokyne
+        - AUPlanetLV327
+      threatVote:
+        candidates:
+          - DistressSignalXenoRoundGroup
+          - DistressSignalAbominationRoundGroup
+      backupThreatVote:
+        candidates:
+          - DistressSignalXenoRoundGroup
+
+    - planets:
+        - AuPlanetChances
+      threatVote:
+        candidates:
+          - DistressSignalAbominationRoundGroup
+          - DistressSignalXenoRoundGroup
+      backupThreatVote:
+        candidates:
+          - DistressSignalXenoRoundGroup

@@ -2,8 +2,7 @@ using System.Numerics;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
-using Content.Shared.Interaction;
-using Content.Shared.Physics;
+using Content.Shared.Examine;
 using Content.Shared.Popups;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
@@ -13,10 +12,10 @@ namespace Content.Shared._RMC14.Xenonids.AcidMine;
 public sealed partial class XenoAcidMineSystem : EntitySystem
 {
     [Dependency] private INetManager _net = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
 
@@ -30,33 +29,7 @@ public sealed partial class XenoAcidMineSystem : EntitySystem
         if (args.Handled)
             return;
 
-        var targetMap = _transform.ToMapCoordinates(args.Target);
-        var origin = _transform.GetMapCoordinates(xeno.Owner);
-
-        // Trying a different LOS check to see if it feels better.
-        var offsets = new Vector2[]
-        {
-            new(0.5f, 0.5f),   // centre
-            new(0.2f, 0.2f),   // bottom-left
-            new(0.8f, 0.2f),   // bottom-right
-            new(0.2f, 0.8f),   // top-left
-            new(0.8f, 0.8f),   // top-right
-        };
-
-        var tileBase = new Vector2(targetMap.Position.Floored().X, targetMap.Position.Floored().Y);
-        var hasLos = false;
-
-        foreach (var offset in offsets)
-        {
-            var point = new MapCoordinates(tileBase + offset, targetMap.MapId);
-            if (_interaction.InRangeUnobstructed(origin, point, xeno.Comp.Range, CollisionGroup.InteractImpassable,
-                    e => e == xeno.Owner || !Transform(e).Anchored))
-            {
-                hasLos = true;
-                break;
-            }
-        }
-        if (!hasLos)
+        if (!_examine.InRangeUnOccluded(xeno.Owner, args.Target, xeno.Comp.Range))
         {
             _popup.PopupClient(Loc.GetString("rmc-xeno-acid-mine-see-fail"), xeno, xeno);
             return;

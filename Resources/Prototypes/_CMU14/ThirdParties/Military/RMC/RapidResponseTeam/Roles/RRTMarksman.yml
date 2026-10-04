@@ -1,0 +1,79 @@
+- type: job
+  parent: CMJobBase
+  id: AU14RMCRRTMarksman
+  roundSide: ThirdParty
+  roundForce: RMC
+  roundRole: AU14RMCRRTMarksman
+  roundComponents:
+  - type: Skills
+    skills:
+        RMCSkillEndurance: 2
+        RMCSkillFirearms: 2
+        RMCSkillConstruction: 1
+        RMCSkillEngineer: 1
+        RMCSkillFireman: 2
+        RMCSkillVehicles: 1
+        RMCSkillPolice: 2
+        RMCSkillCqc: 1
+        RMCSkillMedical: 1
+        RMCSkillJtac: 2
+        RMCSkillMeleeWeapons: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforspecialist-marksmanRMC
+
+  name: au14-job-name-govforspecialist-marksmanRMC
+  description: au14-rmcert-rules
+  playTimeTracker: AU14JobRMCRRTMarksman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMC_LanceCorporal:
+      entity: AU14ChevronRMCLanceCorporal
+      requirements: []
+  spawnMenuRoleName: RMC RRT Marksman
+  startingGear: AU14GearRMCRRTMarksman
+  icon: "RMCJobIconRoyalMarinesMarksman"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-rmcrrt-commander
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicRMCRRT
+  id: AU14JobRMCRRTMarksman
+  name: RMC reaction troop marksman
+  components:
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadRMCRRT
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: RMC reaction troop marksman
+    description: You have been dispatched as a Royal Marines Commando Rapid Reaction Troop member. The details of the mission have not been disclosed to you, however your main objective is to assist GOVFOR forces in the area of operation. You are friendly to GOVFOR command and neutral to civilians.
+    job: AU14RMCRRTMarksman
+    raffle:
+      settings: short
+    rules: au14-rmcert-rules
+
+- type: startingGear
+  id: AU14GearRMCRRTMarksman
+  equipment:
+    id: AU14IDCardRMCRRTMarksman
+    outerClothing: AU14ArmorRMC
+    jumpsuit: AU14FatiguesBlackRMC
+    shoes: RMCBootsRoyalFilled
+    eyes: AU14GogglesM1A1Ballistic
+    mask: RMCMaskScarfTan
+    head: AU14HeadHelmetRMCSniper
+    gloves: AU14HandsRMC
+    belt: AU14BeltHolsterPistolRMCFullL165A1
+    pocket1: RMCPouchToolsSocMarineRaiderFill
+    pocket2: AU14PouchIFAKFill
+    back: AU14RMCRRTBackpackMarksman
+    ears: AU14HeadsetRMCRRT
+    suitstorage: AU14WeaponRifleL90MFull
+
+- type: playTimeTracker
+  id: AU14JobRMCRRTMarksman

@@ -89,3 +89,4 @@ namespace Content.Shared.EntityEffects.Effects
         }
     }
 }
+

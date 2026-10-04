@@ -19,9 +19,13 @@
   special:
   - !type:AddComponentSpecial
     components:
+    - type: LanguageLearning
+      preset: RMCLanguageLearningPresetSynthColonist
+    - type: RMCAllowSuitStorage
     - type: Skills
       skills:
         RMCSkillCqc: 5
+        RMCSkillEndurance: 1
         RMCSkillEngineer: 4
         RMCSkillConstruction: 3
         RMCSkillFirearms: 2
@@ -40,18 +44,6 @@
         RMCSkillDomestics: 2
         RMCSkillNavigations: 1
     - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_RMC14/Interface/map_blips.rsi

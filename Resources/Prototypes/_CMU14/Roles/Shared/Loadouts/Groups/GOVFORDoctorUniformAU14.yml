@@ -1,0 +1,9 @@
+- type: loadoutGroup
+  id: GOVFORDoctorUniformAU14
+  name: rmc-loadout-group-govfordoctor-uniform
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - ScrubsOliveRMC
+
+# Aux Tech

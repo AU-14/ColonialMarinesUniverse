@@ -1,0 +1,13 @@
+- type: loadoutGroup
+  id: WYCLFootwearAU14
+  name: au14-loadout-group-corporate-footwear
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - ShoesLaceupAU14
+  - ShoesLaceupBrownAU14
+  - ShoesBlackAU14
+  - ShoesFancyLeatherAU14
+  - BootsCorporateAU14
+
+# security guard

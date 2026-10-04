@@ -76,16 +76,27 @@ public sealed partial class EmotePrototype : IPrototype
 /// </summary>
 [Flags]
 [Serializable, NetSerializable]
-public enum EmoteCategory : byte
+public enum EmoteCategory : uint
 {
     Invalid = 0,
     Vocal = 1 << 0,
     Hands = 1 << 1,
-    Farewell = 1 << 2,
-    Greeting = 1 << 3,
-    Question = 1 << 4,
-    RestrictedArea = 1 << 5,
-    TaskUpdate = 1 << 6,
-    Warning = 1 << 7,
-    General = byte.MaxValue
+    Greeting = 1 << 2,
+    Farewell = 1 << 3,
+    APOLLO = 1 << 4,
+    Propaganda = 1 << 5,
+    Positive = 1 << 6,
+    Negative = 1 << 7,
+    Curious = 1 << 8,
+    Interrogation = 1 << 9,
+    Identification = 1 << 10,
+    Concern = 1 << 11,
+    Search = 1 << 12,
+    Warning = 1 << 13,
+    Alert = 1 << 14,
+    Observation = 1 << 15,
+    Threat = 1 << 16,
+    Accusation = 1 << 17,
+    Statement = 1 << 18,
+    General = uint.MaxValue,
 }

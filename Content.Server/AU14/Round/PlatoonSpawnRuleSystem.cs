@@ -112,95 +112,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         continue;
                     }
 
-                    // --- DOOR MARKER LOGIC ---
-                    string? doorProtoId = null;
-                    switch (markerComp.Class)
-                    {
-                        case PlatoonMarkerClass.LockedFTLDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockGovforLockedFTL"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockOpforLockedFTL"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedFTLGlassDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockGovforGlassLockedFTL"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockOpforGlassLockedFTL"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedCommandDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockCommandGovforLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockCommandOpforLocked"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedSecurityDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockSecurityGovforLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockSecurityOpforLocked"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedSecurityDoorGlass:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockSecurityGovforGlassLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockSecurityOpforGlassLocked"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedGlassDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockGovforGlassLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockOpforGlassLocked"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedCommandGlassDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockCommandGovforGlassLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockCommandOpforGlassLocked"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedEngineeringDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockEngineerGovforLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockEngineerOpforLocked"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedEngineeringGlassDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockEngineerGovforGlassLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockEngineerOpforGlassLocked"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedMedicalDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockMedicalGovforLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockMedicalOpforLocked"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedMedicalGlassDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockMedicalGovforGlassLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockMedicalOpforGlassLocked"
-                                    : null;
-                            break;
-                        case PlatoonMarkerClass.LockedNormalDoor:
-                            doorProtoId = shipFaction.Faction == "govfor"
-                                ? "CMAirlockGovforLocked"
-                                : shipFaction.Faction == "opfor"
-                                    ? "CMAirlockOpforLocked"
-                                    : null;
-                            break;
-                    }
+                    var doorProtoId = GetLockedDoorPrototype(markerComp.Class, shipFaction.Faction);
 
                     if (doorProtoId != null)
                     {
@@ -433,7 +345,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
                     // --- VENDOR MARKER LOGIC (shipside) ---
                     // Ignore markerComp.Govfor/Opfor, use shipPlatoon and markerComp.Class
-                    if (shipPlatoon != null && shipPlatoon.VendorMarkersByClass.TryGetValue(markerComp.Class, out var vendorProtoId))
+                    if (shipPlatoon != null && TryResolvePlatoonVendor(shipPlatoon, markerComp.Class, out var vendorProtoId))
                     {
                         if (_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                         {
@@ -567,7 +479,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             }
 
             // --- VENDOR MARKER LOGIC ---
-            if (!platoon.VendorMarkersByClass.TryGetValue(markerComp.Class, out var vendorProtoId))
+            if (!TryResolvePlatoonVendor(platoon, markerComp.Class, out var vendorProtoId))
                 continue;
             if (!_prototypeManager.TryIndex<EntityPrototype>(vendorProtoId, out var vendorProto))
                 continue;
@@ -579,248 +491,365 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             }
         }
 
-        // --- DROPSHIP & FIGHTER CONSOLE SPAWNING LOGIC ---
+        HandlePlatoonShuttleSpawns(planetComp, govPlatoon, opPlatoon);
+    }
+
+    private void HandlePlatoonShuttleSpawns(
+        RMCPlanetMapPrototypeComponent planetComp,
+        PlatoonPrototype? govPlatoon,
+        PlatoonPrototype? opPlatoon)
+    {
         // Track destinations already handed out this round so multiple ships of the same
-        // faction/type don't all pile onto the same LZ (e.g. both dropships at LZ1 on USSBush).
+        // faction/type don't all pile onto the same LZ.
         var usedDestinations = new HashSet<EntityUid>();
         var destinationRandom = new Random();
 
-        // Helper: Find a destination entity for a given faction and type, optionally filtering by grid.
-        // Picks a random unused destination from the matching pool and marks it as used.
-        EntityUid? FindDestination(string faction, DropshipDestinationComponent.DestinationType type, EntityUid? gridUid = null)
+        LoadPlatoonShuttles(
+            planetComp,
+            govPlatoon,
+            "govfor",
+            planetComp.govfordropships,
+            planetComp.govforfighters,
+            usedDestinations,
+            destinationRandom);
+
+        LoadPlatoonShuttles(
+            planetComp,
+            opPlatoon,
+            "opfor",
+            planetComp.opfordropships,
+            planetComp.opforfighters,
+            usedDestinations,
+            destinationRandom);
+    }
+
+    private void LoadPlatoonShuttles(
+        RMCPlanetMapPrototypeComponent planetComp,
+        PlatoonPrototype? platoon,
+        string faction,
+        int dropshipCount,
+        int fighterCount,
+        HashSet<EntityUid> usedDestinations,
+        Random destinationRandom)
+    {
+        if (platoon == null)
+            return;
+
+        var mapRandom = new Random();
+        var dropships = platoon.CompatibleDropships.ToList();
+        for (var i = 0; i < dropshipCount && dropships.Count > 0; i++)
         {
-            var candidates = new List<EntityUid>();
-            var dropshipsDestQuery = AllEntityQuery<DropshipDestinationComponent>();
-            while (dropshipsDestQuery.MoveNext(out var destUid, out var comp))
+            var index = mapRandom.Next(dropships.Count);
+            var mapId = dropships[index];
+            dropships.RemoveAt(index);
+
+            if (!_mapLoader.TryLoadMap(mapId, out _, out var grids))
+                continue;
+
+            foreach (var grid in grids)
             {
-                if (usedDestinations.Contains(destUid))
-                    continue;
-                if (comp.FactionController != faction || comp.Destinationtype != type)
-                    continue;
-                if (gridUid != null &&
-                    _entityManager.GetComponent<TransformComponent>(destUid).GridUid != gridUid)
-                    continue;
-                candidates.Add(destUid);
-            }
-
-            if (candidates.Count == 0)
-                return null;
-
-            var picked = candidates[destinationRandom.Next(candidates.Count)];
-            usedDestinations.Add(picked);
-            return picked;
-        }
-
-        // Helper: For a given grid, find all marker UIDs of a given prototype ID
-        List<EntityUid> FindMarkersOnGrid(EntityUid grid, string markerProtoId)
-        {
-            var result = new List<EntityUid>();
-            var vendorMarkerQuery = AllEntityQuery<VendorMarkerComponent>();
-            while (vendorMarkerQuery.MoveNext(out var entUid, out var comp))
-            {
-                if (_entityManager.GetComponent<TransformComponent>(entUid).GridUid == grid
-                    && _entityManager.TryGetComponent<MetaDataComponent>(entUid, out var meta)
-                    && meta.EntityPrototype != null
-                    && meta.EntityPrototype.ID == markerProtoId)
-                    result.Add(entUid);
-            }
-            return result;
-        }
-
-        void SetPhonesFactionOnGrid(EntityUid grid, string faction)
-        {
-            var query = AllEntityQuery<RotaryPhoneComponent>();
-            while (query.MoveNext(out var phoneUid, out var phoneComp))
-            {
-                if (Transform(phoneUid).GridUid == grid)
-                {
-                    phoneComp.Faction = faction;
-                    Dirty(phoneUid, phoneComp);
-                }
-            }
-        }
-
-        // New helper: offset ladder ids found on a grid by an integer offset (e.g., +100)
-        void OffsetLaddersOnGrid(EntityUid grid, int offset)
-        {
-            // Iterate all ladder components and adjust those on the target grid
-            var query = AllEntityQuery<LadderComponent>();
-            while (query.MoveNext(out var ladderUid, out var ladderComp))
-            // foreach (var ladderComp in _entityManager.EntityQuery<LadderComponent>(true))
-            {
-                if (Transform(ladderUid).GridUid != grid)
-                    continue;
-                if (ladderComp.Id == null)
-                    continue;
-
-                // Try to parse numeric id, otherwise skip
-                if (int.TryParse(ladderComp.Id, out var numeric))
-                {
-                    ladderComp.Id = (numeric + offset).ToString();
-                    Dirty(ladderUid, ladderComp);
-                }
+                var gridMapId = _entityManager.GetComponent<TransformComponent>(grid).MapID;
+                _mapSystem.InitializeMap(gridMapId);
+                PrepareLoadedShuttleGrid(grid, faction, planetComp);
+                SpawnShuttleConsoleMarkers(
+                    grid,
+                    faction,
+                    DropshipDestinationComponent.DestinationType.Dropship,
+                    "dropshipshuttlevmarker");
+                TryFlyShuttleToDestination(
+                    grid,
+                    faction,
+                    DropshipDestinationComponent.DestinationType.Dropship,
+                    planetComp,
+                    usedDestinations,
+                    destinationRandom);
             }
         }
 
-        // Helper: Set faction for all phones that are parented to a given entity (or share its grid)
-        void SetPhonesFactionForParent(EntityUid parent, string faction)
+        var fighters = platoon.CompatibleFighters.ToList();
+        for (var i = 0; i < fighterCount && fighters.Count > 0; i++)
         {
-            if (!_entityManager.TryGetComponent<TransformComponent>(parent, out var parentTransform))
-                return;
+            var index = mapRandom.Next(fighters.Count);
+            var fighterMap = fighters[index];
+            fighters.RemoveAt(index);
 
-            var parentGrid = parentTransform.GridUid;
-            var query = AllEntityQuery<RotaryPhoneComponent>();
-            while (query.MoveNext(out var phoneUid, out var phoneComp))
-            {
-                if (Transform(phoneUid).ParentUid == parent || Transform(phoneUid).GridUid == parentGrid)
-                {
-                    phoneComp.Faction = faction;
-                    Dirty(phoneUid, phoneComp);
-                }
-            }
+            if (!_mapLoader.TryLoadGrid(fighterMap, out _, out var grid))
+                continue;
+
+            PrepareLoadedShuttleGrid(grid.Value, faction, planetComp);
+            SpawnShuttleConsoleMarkers(
+                grid.Value,
+                faction,
+                DropshipDestinationComponent.DestinationType.Figher,
+                "dropshipfighterdestmarker");
+            TryFlyShuttleToDestination(
+                grid.Value,
+                faction,
+                DropshipDestinationComponent.DestinationType.Figher,
+                planetComp,
+                usedDestinations,
+                destinationRandom);
+        }
+    }
+
+    private void PrepareLoadedShuttleGrid(
+        EntityUid grid,
+        string faction,
+        RMCPlanetMapPrototypeComponent planetComp)
+    {
+        SetPhonesFactionOnGrid(grid, faction);
+
+        if (faction == "opfor" && planetComp.OpforInShip)
+            OffsetLaddersOnGrid(grid, 100);
+    }
+
+    private void SpawnShuttleConsoleMarkers(
+        EntityUid grid,
+        string faction,
+        DropshipDestinationComponent.DestinationType type,
+        string navigationMarkerProtoId)
+    {
+        var navigationMarkers = FindMarkersOnGrid(grid, navigationMarkerProtoId);
+        if (navigationMarkers.Count > 0)
+        {
+            var navigationProto = faction == "govfor"
+                ? "CMComputerDropshipNavigationGovfor"
+                : "CMComputerDropshipNavigationOpfor";
+            foreach (var markerUid in navigationMarkers)
+                SpawnWeaponsConsole(navigationProto, markerUid, faction, type);
         }
 
-        // Helper: Find a navigation computer on a grid
-        EntityUid? FindNavComputerOnGrid(EntityUid grid)
+        var weaponsMarkers = FindMarkersOnGrid(grid, "dropshipweaponsvmarker");
+        if (weaponsMarkers.Count == 0)
+            return;
+
+        var weaponsProto = faction == "govfor"
+            ? "CMComputerDropshipWeaponsGovfor"
+            : "CMComputerDropshipWeaponsOpfor";
+        foreach (var markerUid in weaponsMarkers)
+            SpawnWeaponsConsole(weaponsProto, markerUid, faction, type);
+    }
+
+    private void TryFlyShuttleToDestination(
+        EntityUid grid,
+        string faction,
+        DropshipDestinationComponent.DestinationType type,
+        RMCPlanetMapPrototypeComponent planetComp,
+        HashSet<EntityUid> usedDestinations,
+        Random destinationRandom)
+    {
+        EntityUid? destination = null;
+        if (UsesShipDestination(planetComp, faction))
+            destination = FindDestination(faction, type, usedDestinations, destinationRandom, grid);
+
+        destination ??= FindDestination(faction, type, usedDestinations, destinationRandom);
+
+        var navComputer = FindNavComputerOnGrid(grid);
+        if (destination == null || navComputer == null)
+            return;
+
+        var navComp = _entityManager.GetComponent<DropshipNavigationComputerComponent>(navComputer.Value);
+        var navEntity = new Entity<DropshipNavigationComputerComponent>(navComputer.Value, navComp);
+        _sharedDropshipSystem.FlyTo(navEntity, destination.Value, null);
+    }
+
+    private EntityUid? FindDestination(
+        string faction,
+        DropshipDestinationComponent.DestinationType type,
+        HashSet<EntityUid> usedDestinations,
+        Random destinationRandom,
+        EntityUid? gridUid = null)
+    {
+        var candidates = new List<EntityUid>();
+        var query = AllEntityQuery<DropshipDestinationComponent>();
+        while (query.MoveNext(out var destUid, out var comp))
         {
-            // foreach (var comp in _entityManager.EntityQuery<DropshipNavigationComputerComponent>(true))
-            var query = AllEntityQuery<DropshipNavigationComputerComponent>();
-            while (query.MoveNext(out var entUid, out var comp))
+            if (usedDestinations.Contains(destUid))
+                continue;
+
+            if (comp.FactionController != faction || comp.Destinationtype != type)
+                continue;
+
+            if (gridUid != null &&
+                _entityManager.GetComponent<TransformComponent>(destUid).GridUid != gridUid)
             {
-                if (_entityManager.GetComponent<TransformComponent>(entUid).GridUid == grid)
-                    return entUid;
+                continue;
             }
+
+            candidates.Add(destUid);
+        }
+
+        if (candidates.Count == 0)
             return null;
-        }
 
-        // Helper: Spawn and configure a weapons console at a marker
-        void SpawnWeaponsConsole(string protoId, EntityUid markerUid, string faction, DropshipDestinationComponent.DestinationType type)
+        var picked = candidates[destinationRandom.Next(candidates.Count)];
+        usedDestinations.Add(picked);
+        return picked;
+    }
+
+    private List<EntityUid> FindMarkersOnGrid(EntityUid grid, string markerProtoId)
+    {
+        var result = new List<EntityUid>();
+        var query = AllEntityQuery<VendorMarkerComponent>();
+        while (query.MoveNext(out var markerUid, out _))
         {
-            var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
-            var console = _entityManager.SpawnEntity(protoId, transform.Coordinates);
-            if (!_entityManager.HasComponent<WhitelistedShuttleComponent>(console))
-                _entityManager.AddComponent<WhitelistedShuttleComponent>(console);
-            var whitelist = _entityManager.GetComponent<WhitelistedShuttleComponent>(console);
-            whitelist.Faction = faction;
-            whitelist.ShuttleType = type;
-        }
-
-
-        void HandlePlatoonConsoles(PlatoonPrototype? platoon, string faction, int dropshipCount, int fighterCount)
-        {
-            if (platoon == null) return;
-            var random = new Random();
-            var dropships = platoon.CompatibleDropships.ToList();
-            for (int i = 0; i < dropshipCount && dropships.Count > 0; i++)
+            if (_entityManager.GetComponent<TransformComponent>(markerUid).GridUid == grid &&
+                _entityManager.TryGetComponent<MetaDataComponent>(markerUid, out var meta) &&
+                meta.EntityPrototype != null &&
+                meta.EntityPrototype.ID == markerProtoId)
             {
-                var idx = random.Next(dropships.Count);
-                var mapId = dropships[idx];
-                dropships.RemoveAt(idx);
-                if (!_mapLoader.TryLoadMap(mapId, out _, out var grids))
-                    continue;
-
-                foreach (var grid in grids)
-                {
-                    var gridMapId = _entityManager.GetComponent<TransformComponent>(grid).MapID;
-                    _mapSystem.InitializeMap(gridMapId);
-                    // Ensure any existing rotary phones on this grid inherit the platoon faction
-                    SetPhonesFactionOnGrid(grid, faction);
-
-                    // Offset ladder IDs on opfor ships to avoid duplicate numeric IDs when the same ship/map
-                    // is loaded multiple times (adds 100 to numeric ladder IDs, e.g. "2" -> "102").
-                    if (faction == "opfor" && planetComp != null && planetComp.OpforInShip)
-                        OffsetLaddersOnGrid(grid, 100);
-
-                    var navMarkers = FindMarkersOnGrid(grid, "dropshipshuttlevmarker");
-                    if (navMarkers.Count > 0)
-                    {
-                        var navProto = faction == "govfor" ? "CMComputerDropshipNavigationGovfor" : "CMComputerDropshipNavigationOpfor";
-                        foreach (var navMarkerUid in navMarkers)
-                            SpawnWeaponsConsole(navProto, navMarkerUid, faction, DropshipDestinationComponent.DestinationType.Dropship);
-                    }
-
-                    var weaponsMarkers = FindMarkersOnGrid(grid, "dropshipweaponsvmarker");
-                    if (weaponsMarkers.Count > 0)
-                    {
-                        var weaponsProto = faction == "govfor" ? "CMComputerDropshipWeaponsGovfor" : "CMComputerDropshipWeaponsOpfor";
-                        foreach (var weaponsMarkerUid in weaponsMarkers)
-                            SpawnWeaponsConsole(weaponsProto, weaponsMarkerUid, faction, DropshipDestinationComponent.DestinationType.Dropship);
-                    }
-
-                    // Fly to a destination, prioritizing ship destinations if in ship
-                    EntityUid? dest = null;
-                    bool inShip = (faction == "govfor" && planetComp != null && planetComp.GovforInShip)
-                        || (faction == "opfor" && planetComp != null && planetComp.OpforInShip);
-                    if (inShip)
-                        dest = FindDestination(faction, DropshipDestinationComponent.DestinationType.Dropship, grid);
-                    dest ??= FindDestination(faction, DropshipDestinationComponent.DestinationType.Dropship);
-
-                    var navComputer = FindNavComputerOnGrid(grid);
-                    if (dest != null && navComputer != null)
-                    {
-                        var navComp = _entityManager.GetComponent<DropshipNavigationComputerComponent>(navComputer.Value);
-                        var navEntity = new Entity<DropshipNavigationComputerComponent>(navComputer.Value, navComp);
-                        _sharedDropshipSystem.FlyTo(navEntity, dest.Value, null);
-                    }
-                }
-            }
-
-            // FIGHTERS
-            var fighters = platoon.CompatibleFighters.ToList();
-            var loadedFighterGrids = new List<EntityUid>();
-            foreach (var fighterMap in fighters.ToList())
-            {
-                if (!_mapLoader.TryLoadGrid(fighterMap, out _, out var grid))
-                    continue;
-
-                loadedFighterGrids.Add(grid.Value);
-                // Ensure any existing rotary phones on this fighter grid inherit the platoon faction
-                SetPhonesFactionOnGrid(grid.Value, faction);
-
-                // Offset ladder IDs on opfor ships (fighters) as well
-                if (faction == "opfor" && planetComp != null && planetComp.OpforInShip)
-                    OffsetLaddersOnGrid(grid.Value, 100);
-
-                var fighterMarkers = FindMarkersOnGrid(grid.Value, "dropshipfighterdestmarker");
-                if (fighterMarkers.Count > 0)
-                {
-                    var proto = faction == "govfor" ? "CMComputerDropshipNavigationGovfor" : "CMComputerDropshipNavigationOpfor";
-                    foreach (var markerUid in fighterMarkers)
-                        SpawnWeaponsConsole(proto, markerUid, faction, DropshipDestinationComponent.DestinationType.Figher);
-                }
-                var weaponsMarkers = FindMarkersOnGrid(grid.Value, "dropshipweaponsvmarker");
-                if (weaponsMarkers.Count > 0)
-                {
-                    var weaponsProto = faction == "govfor" ? "CMComputerDropshipWeaponsGovfor" : "CMComputerDropshipWeaponsOpfor";
-                    foreach (var weaponsMarkerUid in weaponsMarkers)
-                        SpawnWeaponsConsole(weaponsProto, weaponsMarkerUid, faction, DropshipDestinationComponent.DestinationType.Figher);
-                }
-
-                // Fly to a destination, prioritizing ship destinations if in ship
-                EntityUid? dest = null;
-                bool inShip = (faction == "govfor" && planetComp != null && planetComp.GovforInShip)
-                    || (faction == "opfor" && planetComp != null && planetComp.OpforInShip);
-                if (inShip)
-                    dest = FindDestination(faction, DropshipDestinationComponent.DestinationType.Figher, grid.Value);
-                dest ??= FindDestination(faction, DropshipDestinationComponent.DestinationType.Figher);
-
-                var navComputer = FindNavComputerOnGrid(grid.Value);
-                if (dest != null && navComputer != null)
-                {
-                    var navComp = _entityManager.GetComponent<DropshipNavigationComputerComponent>(navComputer.Value);
-                    var navEntity = new Entity<DropshipNavigationComputerComponent>(navComputer.Value, navComp);
-                    _sharedDropshipSystem.FlyTo(navEntity, dest.Value, null);
-                }
+                result.Add(markerUid);
             }
         }
 
-        // Use the planet config to determine how many to spawn
-        var govforDropships = planetComp.govfordropships;
-        var govforFighters = planetComp.govforfighters;
-        var opforDropships = planetComp.opfordropships;
-        var opforFighters = planetComp.opforfighters;
-        HandlePlatoonConsoles(govPlatoon, "govfor", govforDropships, govforFighters);
-        HandlePlatoonConsoles(opPlatoon, "opfor", opforDropships, opforFighters);
+        return result;
+    }
+
+    private EntityUid? FindNavComputerOnGrid(EntityUid grid)
+    {
+        var query = AllEntityQuery<DropshipNavigationComputerComponent>();
+        while (query.MoveNext(out var entityUid, out _))
+        {
+            if (_entityManager.GetComponent<TransformComponent>(entityUid).GridUid == grid)
+                return entityUid;
+        }
+
+        return null;
+    }
+
+    private void SpawnWeaponsConsole(
+        string protoId,
+        EntityUid markerUid,
+        string faction,
+        DropshipDestinationComponent.DestinationType type)
+    {
+        var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
+        var console = _entityManager.SpawnEntity(protoId, transform.Coordinates);
+        if (!_entityManager.HasComponent<WhitelistedShuttleComponent>(console))
+            _entityManager.AddComponent<WhitelistedShuttleComponent>(console);
+
+        var whitelist = _entityManager.GetComponent<WhitelistedShuttleComponent>(console);
+        whitelist.Faction = faction;
+        whitelist.ShuttleType = type;
+    }
+
+    private void SetPhonesFactionOnGrid(EntityUid grid, string faction)
+    {
+        var query = AllEntityQuery<RotaryPhoneComponent>();
+        while (query.MoveNext(out var phoneUid, out var phoneComp))
+        {
+            if (Transform(phoneUid).GridUid != grid)
+                continue;
+
+            phoneComp.Faction = faction;
+            Dirty(phoneUid, phoneComp);
+        }
+    }
+
+    private void SetPhonesFactionForParent(EntityUid parent, string faction)
+    {
+        if (!_entityManager.TryGetComponent<TransformComponent>(parent, out var parentTransform))
+            return;
+
+        var parentGrid = parentTransform.GridUid;
+        var query = AllEntityQuery<RotaryPhoneComponent>();
+        while (query.MoveNext(out var phoneUid, out var phoneComp))
+        {
+            if (Transform(phoneUid).ParentUid != parent && Transform(phoneUid).GridUid != parentGrid)
+                continue;
+
+            phoneComp.Faction = faction;
+            Dirty(phoneUid, phoneComp);
+        }
+    }
+
+    private void OffsetLaddersOnGrid(EntityUid grid, int offset)
+    {
+        var query = AllEntityQuery<LadderComponent>();
+        while (query.MoveNext(out var ladderUid, out var ladderComp))
+        {
+            if (Transform(ladderUid).GridUid != grid ||
+                ladderComp.Id == null ||
+                !int.TryParse(ladderComp.Id, out var numeric))
+            {
+                continue;
+            }
+
+            ladderComp.Id = (numeric + offset).ToString();
+            Dirty(ladderUid, ladderComp);
+        }
+    }
+
+    private static bool UsesShipDestination(RMCPlanetMapPrototypeComponent planetComp, string faction)
+    {
+        return faction == "govfor" && planetComp.GovforInShip ||
+               faction == "opfor" && planetComp.OpforInShip;
+    }
+
+    private static string? GetLockedDoorPrototype(PlatoonMarkerClass markerClass, string faction)
+    {
+        return markerClass switch
+        {
+            PlatoonMarkerClass.LockedFTLDoor => FactionPrototype(
+                faction,
+                "CMAirlockGovforLockedFTL",
+                "CMAirlockOpforLockedFTL"),
+            PlatoonMarkerClass.LockedFTLGlassDoor => FactionPrototype(
+                faction,
+                "CMAirlockGovforGlassLockedFTL",
+                "CMAirlockOpforGlassLockedFTL"),
+            PlatoonMarkerClass.LockedCommandDoor => FactionPrototype(
+                faction,
+                "CMAirlockCommandGovforLocked",
+                "CMAirlockCommandOpforLocked"),
+            PlatoonMarkerClass.LockedSecurityDoor => FactionPrototype(
+                faction,
+                "CMAirlockSecurityGovforLocked",
+                "CMAirlockSecurityOpforLocked"),
+            PlatoonMarkerClass.LockedSecurityDoorGlass => FactionPrototype(
+                faction,
+                "CMAirlockSecurityGovforGlassLocked",
+                "CMAirlockSecurityOpforGlassLocked"),
+            PlatoonMarkerClass.LockedGlassDoor => FactionPrototype(
+                faction,
+                "CMAirlockGovforGlassLocked",
+                "CMAirlockOpforGlassLocked"),
+            PlatoonMarkerClass.LockedCommandGlassDoor => FactionPrototype(
+                faction,
+                "CMAirlockCommandGovforGlassLocked",
+                "CMAirlockCommandOpforGlassLocked"),
+            PlatoonMarkerClass.LockedEngineeringDoor => FactionPrototype(
+                faction,
+                "CMAirlockEngineerGovforLocked",
+                "CMAirlockEngineerOpforLocked"),
+            PlatoonMarkerClass.LockedEngineeringGlassDoor => FactionPrototype(
+                faction,
+                "CMAirlockEngineerGovforGlassLocked",
+                "CMAirlockEngineerOpforGlassLocked"),
+            PlatoonMarkerClass.LockedMedicalDoor => FactionPrototype(
+                faction,
+                "CMAirlockMedicalGovforLocked",
+                "CMAirlockMedicalOpforLocked"),
+            PlatoonMarkerClass.LockedMedicalGlassDoor => FactionPrototype(
+                faction,
+                "CMAirlockMedicalGovforGlassLocked",
+                "CMAirlockMedicalOpforGlassLocked"),
+            PlatoonMarkerClass.LockedNormalDoor => FactionPrototype(
+                faction,
+                "CMAirlockGovforLocked",
+                "CMAirlockOpforLocked"),
+            _ => null,
+        };
+    }
+
+    private static string? FactionPrototype(string faction, string govforPrototype, string opforPrototype)
+    {
+        return faction switch
+        {
+            "govfor" => govforPrototype,
+            "opfor" => opforPrototype,
+            _ => null,
+        };
     }
 
     private bool IsMarkerOnShipOrZLevel(EntityUid shipUid, TransformComponent shipTransform, TransformComponent markerTransform)
@@ -844,6 +873,28 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         }
 
         return shipNetwork.Value.Owner == markerNetwork.Value.Owner;
+    }
+
+    private bool TryResolvePlatoonVendor(
+        PlatoonPrototype platoon,
+        PlatoonMarkerClass markerClass,
+        out EntProtoId vendorProtoId)
+    {
+        if (platoon.VendorOverrides.TryGetValue(markerClass, out vendorProtoId))
+            return true;
+
+        if (platoon.VendorMarkersByClass.TryGetValue(markerClass, out vendorProtoId))
+            return true;
+
+        if (platoon.VendorSet != null &&
+            _prototypeManager.TryIndex(platoon.VendorSet.Value, out PlatoonVendorSetPrototype? vendorSet) &&
+            vendorSet.Vendors.TryGetValue(markerClass, out vendorProtoId))
+        {
+            return true;
+        }
+
+        vendorProtoId = default;
+        return false;
     }
 
     protected override void Ended(EntityUid uid, PlatoonSpawnRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)

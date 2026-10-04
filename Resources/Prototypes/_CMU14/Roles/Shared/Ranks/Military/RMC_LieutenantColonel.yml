@@ -1,0 +1,5 @@
+- type: rank
+  id: RMC_LieutenantColonel
+  name: Lieutenant Colonel
+  prefix: Lt Col.
+  paygrade: O5

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Power;
@@ -40,7 +41,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
     [Dependency] private SharedRMCPowerSystem _rmcPower = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
-    private readonly Dictionary<EntProtoId, List<Entity<CommunicationsTowerSpawnerComponent>>> _spawners = new();
+    private readonly Dictionary<CommunicationsTowerSpawnerGroup, List<Entity<CommunicationsTowerSpawnerComponent>>> _spawners = new();
 
     public override void Initialize()
     {
@@ -284,6 +285,25 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
         _appearance.SetData(tower, CommunicationsTowerLayers.Layer, tower.Comp.State);
     }
 
+    private static bool TryGetSpawnerScope(EntityUid? mapUid, CMUZLevelMapComponent? zMap, out EntityUid scope)
+    {
+        scope = default;
+        if (mapUid is not { } map)
+            return false;
+
+        if (zMap == null)
+        {
+            scope = map;
+            return true;
+        }
+
+        if (!zMap.NetworkUid.IsValid())
+            return false;
+
+        scope = zMap.NetworkUid;
+        return true;
+    }
+
     public override void Update(float frameTime)
     {
         if (_net.IsClient)
@@ -296,8 +316,19 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
             if (TerminatingOrDeleted(uid) || EntityManager.IsQueuedForDeletion(uid))
                 continue;
 
+            var xform = Transform(uid);
+            CMUZLevelMapComponent? zMap = null;
+            if (xform.MapUid is { } mapUid)
+                TryComp(mapUid, out zMap);
+
+            if (!TryGetSpawnerScope(xform.MapUid, zMap, out var scope) ||
+                TerminatingOrDeleted(scope))
+            {
+                continue;
+            }
+
             QueueDel(uid);
-            _spawners.GetOrNew(spawner.Group).Add((uid, spawner));
+            _spawners.GetOrNew(new CommunicationsTowerSpawnerGroup(scope, spawner.Group)).Add((uid, spawner));
         }
 
         foreach (var spawners in _spawners.Values)
@@ -309,4 +340,6 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
             Spawn(spawner.Comp.Spawn, _transform.GetMoverCoordinates(spawner));
         }
     }
+
+    private readonly record struct CommunicationsTowerSpawnerGroup(EntityUid Scope, EntProtoId Group);
 }

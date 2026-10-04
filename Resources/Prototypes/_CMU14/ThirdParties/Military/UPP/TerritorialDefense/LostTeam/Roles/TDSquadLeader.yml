@@ -1,0 +1,116 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPTerritorialDefenseSquadLeader
+  roundSide: ThirdParty
+  roundForce: UPP_TD
+  roundRole: AU14UPPTerritorialDefenseSquadLeader
+  roundComponents:
+  - type: SquadLeader
+  - type: MarineOrders
+    moveOrderSoundMale:
+      collection: AU14MaleMoveOrder
+    moveOrderSoundFemale:
+      collection: AU14FemaleMoveOrder
+    focusOrderSoundMale:
+      collection: AU14MaleFocusOrder
+    focusOrderSoundFemale:
+      collection: AU14FemaleFocusOrder
+    holdOrderSoundMale:
+      collection: AU14MaleHoldOrder
+    holdOrderSoundFemale:
+      collection: AU14FemaleHoldOrder # No Russian/UPP voicelines yet, its gonna have to use normal english accent
+  - type: RMCTrackable
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_sl
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 1
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 1
+      RMCSkillJtac: 2
+      RMCSkillMedical: 1
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au-14-job-prefix-upptd-squadleader
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Czech
+    - Slovak
+    - Ukrainian
+    - Romanian
+    - Hungarian
+    - Lithuanian
+    understoodLanguages:
+    - Polish
+    - Czech
+    - Slovak
+    - Ukrainian
+    - Romanian
+    - Hungarian
+    - Lithuanian
+    currentLanguage: Ukrainian
+    defaultLanguage: Ukrainian
+
+  name: au-14-job-name-upptd-squadleader
+  description: au14-upptd-description
+  playTimeTracker: AU14JobUPPTerritorialDefenseSquadLeader
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy 
+      requirements: []
+  spawnMenuRoleName: UPP TD Squad Leader (3rd party)
+  startingGear: AU14GearUPPTerritorialDefenseSquadLeader
+  greeting: au14-upptd-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: cm-job-name-platoon-commander
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicTDThirdparty
+  id: AU14JobUPPTerritorialDefenseSquadLeader
+  name: UPP TD Squad Leader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadTD
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au-14-job-name-upptd-squadleader
+    description: au14-upptd-description
+    reregister: false
+    job: AU14UPPTerritorialDefenseSquadLeader
+    raffle:
+      settings: short
+    rules: au14-upptd-description
+
+- type: startingGear
+  id: AU14GearUPPTerritorialDefenseSquadLeader
+  equipment:
+    id: AU14IDCardUPPTDSquadLeader
+    outerClothing: AU14ArmorArmyUPP
+    jumpsuit: AU14JumpsuitArmyUPP
+    shoes: RMCBootsSPPBlackFilled
+    head: AU14UPPPatrolCap
+    belt: AU14BeltMarineArmyUPPTDFilled
+    pocket1: AU14PouchSlingBinocs
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelSPP
+    suitstorage: RMCWeaponRifleAK4047
+  storage:
+    back:
+    - RMCMaskGasSPP
+    - RMCMRESPP
+    - CMCanteen
+
+- type: playTimeTracker
+  id: AU14JobUPPTerritorialDefenseSquadLeader

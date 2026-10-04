@@ -1,0 +1,21 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobMilitaryBaseAbstract
+  name: au14-job-name-govforMilitaryDoctor
+  description: au14-job-description-govforMilitaryDoctor
+  icon: "AU14JobIconDoctor"
+  spawnMenuRoleName: Military Doctor (GOVFOR)
+  startingGear: AU14GearGOVFORMilitaryDoctor
+  dummyStartingGear: AU14GearGOVFORMilitaryDoctorDummy
+  playTimeTracker: AU14JobGOVFORMilitaryDoctor
+  requireAdminNotify: true
+  overwatchRoleName: au14-job-name-govforMilitaryDoctor
+  overwatchSortPriority: -6
+  overwatchShowName: true
+  accessGroups:
+  - AU14GovforCorpsman
+  - AU14GovforSquad
+  access:
+  - CMAccessMedical
+  - CMAccessChemistry

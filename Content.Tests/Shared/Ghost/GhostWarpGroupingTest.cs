@@ -11,7 +11,7 @@ public sealed class GhostWarpGroupingTest
     {
         var grouping = GhostWarpGrouping.Classify(
             isWarpPoint: false,
-            jobId: "AU14JobOpforSquadSergeant",
+            jobId: "AU14JobOPFORSquadSergeant",
             departmentId: "AU14DepartmentOpfor",
             factions: new[] { "OPFOR" },
             isXeno: false,

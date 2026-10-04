@@ -228,7 +228,6 @@ au14-wyht-greeting = You are a part of Weyland-Yutani Hazard Transportation part
     Weyland-Yutani - building better worlds.
 
 au14-pmcparty-description = You are a part of Weyland-Yutani PMC party! You were called for a special mission in the area, follow your orders.
-
 au14-pmcparty-greeting = You are a part of Weyland-Yutani PMC party!
 
     You were called for a special mission in the area, follow your orders.
@@ -236,6 +235,8 @@ au14-pmcparty-greeting = You are a part of Weyland-Yutani PMC party!
     Company's profit is your goal.
 
     Weyland-Yutani - building better worlds.
+au14-job-name-wypmc = Private Military Contractor
+au14-job-name-wypmc-engineer = PMC Combat Engineer
 
 au14-ipie-lawyer-description = You are Intelectual Property Infringement Enforcement Lawyer of Weyland-Yutani Corporation. Defend Corporation's rights!
 au14-ipie-lawyer-greeting = You are Intelectual Property Infringement Enforcement Lawyer of Weyland-Yutani Corporation.
@@ -276,7 +277,7 @@ au14-job-prefix-vai-engi = VAIE
 au14-job-name-vai-machinegunner = Machinegunner
 au14-job-prefix-vai-machinegunner = VAIMG
 
-au14-vaipo-greeting = You are part of Vanguard's Arrow Incorporated Primary Operations. 
+au14-vaipo-greeting = You are part of Vanguard's Arrow Incorporated Primary Operations.
 
     You received a call from local UA Ambassador and to investigate it.
     Ensure safety of Ambassador for all cost.

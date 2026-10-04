@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: ColonySynthBeltAU14
+  name: au14-loadout-group-synth-belt
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - BeltMedicBagSupportSynthAU14
+  - EngiBeltUtilityFilledAU14
+  - BeltMedicalFilledAU14
+  - BeltHolsterNailgunFillAU14

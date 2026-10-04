@@ -48,6 +48,9 @@ public sealed partial class FishingSystem : SharedFishingSystem
         // Fishing spot logic
         var attachedEnt = args.OtherEntity;
 
+        if (IsVehicleTarget(attachedEnt))
+            return;
+
         if (HasComp<ActiveFishingSpotComponent>(attachedEnt))
             return;
 

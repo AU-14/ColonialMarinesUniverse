@@ -1,0 +1,14 @@
+- type: department
+  parent: CMDepartmentBase
+  id: AU14DepartmentLabor
+  name: au14-department-colony-labor
+  description: au14-department-colony-labor-description
+  color: "#e3ce94"
+  roles:
+    - AU14JobCivilianForeman
+    - AU14JobCivilianColonist
+
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianForeman
+  faction: colonist
+  editorHidden: false

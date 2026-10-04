@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
@@ -43,6 +44,7 @@ public sealed partial class RMCBattleExecuteSystem : EntitySystem
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
 
     public override void Initialize()
@@ -178,7 +180,8 @@ public sealed partial class RMCBattleExecuteSystem : EntitySystem
         _mobState.ChangeMobState(target, MobState.Dead);
         _unrevivable.MakeUnrevivable(target);
 
-        _audio.PlayPredicted(gun.SoundGunshotModified, args.Used.Value, user);
+        if (!_zLevels.PlayPredictedDirectlyAcrossZ(gun.SoundGunshotModified, args.Used.Value, user))
+            _audio.PlayPredicted(gun.SoundGunshotModified, args.Used.Value, user);
 
         var popupMessage = $"{Name(target)} WAS EXECUTED BY {Name(user)}!";
         _popup.PopupPredicted(popupMessage, target, user, PopupType.LargeCaution);

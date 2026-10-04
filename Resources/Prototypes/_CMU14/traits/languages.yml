@@ -1,0 +1,289 @@
+- type: trait
+  id: UkrainianLanguage
+  name: au14-trait-ukrainian-language-name
+  description: au14-trait-ukrainian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Ukrainian
+
+- type: trait
+  id: PolishLanguage
+  name: au14-trait-polish-language-name
+  description: au14-trait-polish-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Polish
+
+- type: trait
+  id: CzechLanguage
+  name: au14-trait-czech-language-name
+  description: au14-trait-czech-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Czech
+
+- type: trait
+  id: TurkishLanguage
+  name: au14-trait-turkish-language-name
+  description: au14-trait-turkish-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Turkish
+
+- type: trait
+  id: KoreanLanguage
+  name: au14-trait-korean-language-name
+  description: au14-trait-korean-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Korean
+
+- type: trait
+  id: ItalianLanguage
+  name: au14-trait-italian-language-name
+  description: au14-trait-italian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Italian
+
+- type: trait
+  id: IrishLanguage
+  name: au14-trait-irish-language-name
+  description: au14-trait-irish-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Irish
+
+- type: trait
+  id: FinnishLanguage
+  name: au14-trait-finnish-language-name
+  description: au14-trait-finnish-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Finnish
+
+- type: trait
+  id: HungarianLanguage
+  name: au14-trait-hungarian-language-name
+  description: au14-trait-hungarian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Hungarian
+
+- type: trait
+  id: AlbanianLanguage
+  name: au14-trait-albanian-language-name
+  description: au14-trait-albanian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Albanian
+
+- type: trait
+  id: SerbianLanguage
+  name: au14-trait-serbian-language-name
+  description: au14-trait-serbian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Serbian
+
+- type: trait
+  id: LithuanianLanguage
+  name: au14-trait-lithuanian-language-name
+  description: au14-trait-lithuanian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Lithuanian
+
+- type: trait
+  id: ArabicLanguage
+  name: au14-trait-arabic-language-name
+  description: au14-trait-arabic-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Arabic
+
+- type: trait
+  id: AfrikaansLanguage
+  name: au14-trait-afrikaans-language-name
+  description: au14-trait-afrikaans-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Afrikaans
+
+- type: trait
+  id: DutchLanguage
+  name: au14-trait-dutch-language-name
+  description: au14-trait-dutch-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Dutch
+
+- type: trait
+  id: SwahiliLanguage
+  name: au14-trait-swahili-language-name
+  description: au14-trait-swahili-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Swahili
+
+- type: trait
+  id: PersianLanguage
+  name: au14-trait-persian-language-name
+  description: au14-trait-persian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Persian
+
+- type: trait
+  id: HindiLanguage
+  name: au14-trait-hindi-language-name
+  description: au14-trait-hindi-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Hindi
+
+- type: trait
+  id: VietnameseLanguage
+  name: au14-trait-vietnamese-language-name
+  description: au14-trait-vietnamese-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Vietnamese
+
+- type: trait
+  id: PortugueseLanguage
+  name: au14-trait-portuguese-language-name
+  description: au14-trait-portuguese-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Portuguese
+
+- type: trait
+  id: IndonesianLanguage
+  name: au14-trait-indonesian-language-name
+  description: au14-trait-indonesian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Indonesian
+
+- type: trait
+  id: FilipinoLanguage
+  name: au14-trait-filipino-language-name
+  description: au14-trait-filipino-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Filipino
+
+- type: trait
+  id: UrduLanguage
+  name: au14-trait-urdu-language-name
+  description: au14-trait-urdu-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Urdu
+
+- type: trait
+  id: YorubaLanguage
+  name: au14-trait-yoruba-language-name
+  description: au14-trait-yoruba-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Yoruba
+
+- type: trait
+  id: EsperantoLanguage
+  name: au14-trait-esperanto-language-name
+  description: au14-trait-esperanto-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Esperanto
+
+- type: trait
+  id: LatinLanguage
+  name: au14-trait-latin-language-name
+  description: au14-trait-latin-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Latin
+
+- type: trait
+  id: NoEnglish
+  name: au14-trait-no-english-name
+  description: au14-trait-no-english-desc
+  category: LanguageTraits
+  cost: -1
+  components:
+  - type: RemoveLanguage
+    languages:
+    - English
+
+- type: trait
+  id: SwedishLanguage
+  name: rmc-trait-swedish-language-name
+  description: rmc-trait-swedish-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Swedish
+
+- type: trait
+  id: SignLanguage
+  name: au14-trait-sign-name
+  description: au14-trait-sign-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: SignLanguage
+
+- type: trait
+  id: BrazilianLanguage
+  name: au14-trait-brazilian-language-name
+  description: au14-trait-brazilian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Brazilian
+
+- type: trait
+  id: SlovakLanguage
+  name: au14-trait-slovak-language-name
+  description: au14-trait-slovak-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Slovak
+
+- type: trait
+  id: RomanianLanguage
+  name: au14-trait-romanian-language-name
+  description: au14-trait-romanian-language-desc
+  category: LanguageTraits
+  cost: 1
+  components: []
+  language: Romanian

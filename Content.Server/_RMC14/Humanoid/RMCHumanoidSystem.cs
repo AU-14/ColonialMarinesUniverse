@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.AU14.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Jobs;
 using Content.Shared.Clothing.Components;
@@ -15,6 +16,7 @@ namespace Content.Server._RMC14.Humanoid;
 public sealed partial class RMCHumanoidSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private RoundJobProfileSystem _roundJobProfiles = default!;
     [Dependency] private ISerializationManager _serialization = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("au14-humanoidsys");
@@ -51,6 +53,7 @@ public sealed partial class RMCHumanoidSystem : EntitySystem
             : [.. job.Special.OfType<AddComponentSpecial>()];       // original behavior
 
         ApplyAddComponentSpecials(ent.Owner, addComponents, job.ID);
+        _roundJobProfiles.ApplyJobProfile(ent.Owner, job);
     }
 
     // Runs after DoJobSpecials() to add the mising ancestor specials -> requires InheritAddComponentSpecials: true
@@ -61,11 +64,16 @@ public sealed partial class RMCHumanoidSystem : EntitySystem
         if (!ev.Mob.IsValid()) return;
         if (HasComp<RMCJobSpawnerComponent>(ev.Mob)) return;
         if (!_prototype.TryIndex<JobPrototype>(jobId, out var job)) return;
-        if (!job.InheritAddComponentSpecials) return;
-        _sawmill.Debug($"[HumanoidSystem] Player spawned with job {jobId}, applying merged specials.");
 
-        var specials = CollectAddComponentSpecials(job, includeChild: false);
-        ApplyAddComponentSpecials(ev.Mob, specials, jobId);
+        if (job.InheritAddComponentSpecials)
+        {
+            _sawmill.Debug($"[HumanoidSystem] Player spawned with job {jobId}, applying merged specials.");
+
+            var specials = CollectAddComponentSpecials(job, includeChild: false);
+            ApplyAddComponentSpecials(ev.Mob, specials, jobId);
+        }
+
+        _roundJobProfiles.ApplyJobProfile(ev.Mob, job);
     }
 
     // Because abstract prototypes are not instantiated, we have to BFS walk through the raw yml

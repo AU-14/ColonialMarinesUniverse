@@ -1,0 +1,93 @@
+- type: job
+  parent: CMJobBase
+  id: AU14LACNCommandoSniper
+  roundSide: ThirdParty
+  roundForce: LACN
+  roundRole: AU14LACNCommandoSniper
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spec_sniper
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: SpotterWhitelist
+  - type: SniperWhitelist
+  - type: JobPrefix
+    prefix: rmc-job-prefix-weapons-specialist-sniper
+  - type: Language
+    spokenLanguages:
+    - English
+    - Brazilian
+    - Spanish
+    understoodLanguages:
+    - English
+    - Brazilian
+    - Spanish
+    currentLanguage: Brazilian
+    defaultLanguage: Brazilian
+
+  name: rmc-job-name-forecon-sniper
+  playTimeTracker: AU14LACNCommandoSniper
+  description: au14-lacncommando-description
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankChiefWarrantOfficer:
+      entity: AU14ChevronLACNMasterChief
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14LACNCommandoSniper
+        time: 18000 # 5 hours
+    RMCRankWarrantOfficer:
+      entity: AU14ChevronLACNSeniorChief
+      requirements: []
+  spawnMenuRoleName: LACN Commando Sniper (AU14, 3rd Party)
+  icon: "CMJobIconEmpty"
+  startingGear: AU14GearLACNCommandoSniperTeamSniper
+  greeting: au14-lacncommando-description
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-loner
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicLACN
+  suffix: AU14, LACN
+  id: AU14JobCommandoSniperTeamSniper
+  name: LACN Commando Sniper (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadLACNCommando
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-sniper
+    description: au14-lacncommando-description
+    reregister: false
+    job: AU14LACNCommandoSniper
+    raffle:
+      settings: short
+    rules: au14-lacncommandosniper-rules
+
+- type: startingGear
+  id: AU14GearLACNCommandoSniperTeamSniper
+  equipment:
+    id: AU14IDCardLACNCommandoSniper
+    outerClothing: AU14LACNCommandoArmorStandard
+    jumpsuit: AU14LACNUniformCoat
+    shoes: AU14LACNBoots
+    eyes: AU14GogglesM1A1Ballistic
+    mask: RMCMaskScarfTan
+    head: AU14LACNNavyCap
+    gloves: AU14LACNGloves
+    belt: AU14BeltHolsterPistolLACNTPR23B
+    pocket1: RMCPouchToolsSocMarineRaiderFill
+    pocket2: AU14PouchIFAKFill
+    back: AU14LACNBackpackSniper
+    ears: AU14HeadsetGovforMarine
+    suitstorage: AU14WeaponSniperRifleM42A2
+
+- type: playTimeTracker
+  id: AU14LACNCommandoSniper

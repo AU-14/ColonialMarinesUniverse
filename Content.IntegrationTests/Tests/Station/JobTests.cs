@@ -28,7 +28,7 @@ public sealed class JobTest
     private static readonly string[] AU14JuniorOfficerJobs =
     [
         "AU14JobGOVFORPlatOp",
-        "AU14JobOpforPlatOp",
+        "AU14JobOPFORPlatOp",
         "AU14JobGOVFORPlatOpRMC",
         "AU14JobGOVFORPlatOpWYPMC",
         "AU14JobGOVFORPlatOpUPP",

@@ -1,0 +1,7 @@
+- type: rank
+  id: UPP_Colonel
+  name: Colonel
+  prefix: Col.
+  paygrade: O6
+
+# Generals

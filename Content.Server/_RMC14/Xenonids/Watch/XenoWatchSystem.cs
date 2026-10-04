@@ -141,7 +141,7 @@ public sealed partial class XenoWatchSystem : SharedXenoWatchSystem
         EnsureComp<XenoWatchingComponent>(watcher).Watching = toWatch;
         EnsureComp<XenoWatchedComponent>(toWatch).Watching.Add(watcher);
 
-        var ev = new XenoWatchEvent();
+        var ev = new XenoWatchEvent(toWatch.Owner);
         RaiseLocalEvent(watcher, ref ev);
     }
 

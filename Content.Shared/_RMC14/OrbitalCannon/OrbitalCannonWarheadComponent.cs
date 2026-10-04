@@ -1,6 +1,7 @@
-﻿using Robust.Shared.GameStates;
-using Robust.Shared.Prototypes;
+using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
+using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.OrbitalCannon;
 
@@ -28,4 +29,22 @@ public sealed partial class OrbitalCannonWarheadComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public FixedPoint2 IntelPointsAwarded = FixedPoint2.Zero;
+
+    [DataField, AutoNetworkedField]
+    public ProtoId<ExplosionPrototype>? TransitExplosionType;
+
+    [DataField, AutoNetworkedField]
+    public float TransitExplosionTotal = 1000;
+
+    [DataField, AutoNetworkedField]
+    public float TransitExplosionSlope = 20;
+
+    [DataField, AutoNetworkedField]
+    public float TransitExplosionMax = 60;
+
+    [DataField, AutoNetworkedField]
+    public float TransitTileBreakScale = 1f;
+
+    [DataField, AutoNetworkedField]
+    public int TransitMaxTileBreak = 1;
 }

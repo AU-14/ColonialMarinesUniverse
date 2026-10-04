@@ -1,0 +1,82 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobWYPMCPartySmartgunner
+  roundSide: ThirdParty
+  roundForce: WY
+  roundRole: WYPMCPartySmartgunner
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - AUWeYu
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillJtac: 1
+      RMCSkillSmartGun: 1
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillPolice: 2
+  - type: SquadArmorWearer
+  - type: JobPrefix
+    prefix: au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: smartgunner
+
+  name: PMC Smartgun Operator
+  description: au14-pmcparty-description
+  playTimeTracker: AU14JobWYPMCPartySmartgunner
+  ranks:
+    AU14RankWeYuSeniorOperator: []
+  spawnMenuRoleName: WY PMC Smartgun Operator (3rd party)
+  startingGear: AU14GearWYPMCPartySmartgunner
+  greeting: au14-pmcparty-greeting
+  icon: "RMCJobIconPMCGunner"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  accessGroups:
+  - auwy
+  - AUPrisonStaff
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicWeYu
+  id: AU14JobWYPMCPartySmartgunner
+  name: WY PMC Party Smartgun Operator (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadPMC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: PMC Smartgun Operator
+    description: au14-pmcparty-description
+    reregister: false
+    job: AU14JobWYPMCPartySmartgunner
+    raffle:
+      settings: short
+    rules: au14-wypmc-description
+
+- type: startingGear
+  id: AU14GearWYPMCPartySmartgunner
+  equipment:
+    id: AU14IDCardColonyCorporateLiaison
+    outerClothing: CMArmorM4PMCSmartGunHarness
+    jumpsuit: AU14WYPMCFatigues
+    shoes: RMCBootsPMCFilled
+    head: AU14ArmorHelmetPMCTactical
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    belt: RMCBeltSmartGunOperatorPistolPMCFilled
+    pocket1: RMCPouchDrumPMCFill
+    pocket2: AU14PouchIFAKFill
+    back: RMCScabbardMacheteSGFilled
+    eyes: RMCGlassesSmartGunSight
+    ears: RMCHeadsetDistressWeYa
+    suitstorage: RMCSmartGunPMC
+- type: playTimeTracker
+  id: AU14JobWYPMCPartySmartgunner

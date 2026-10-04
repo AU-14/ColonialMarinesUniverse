@@ -8,7 +8,6 @@ namespace Content.Shared.AU14.Threats;
 [Prototype]
 public sealed partial class PartySpawnPrototype : IPrototype
 {
-
     [IdDataField]
     public string ID { get; private set; } = default!;
 
@@ -18,19 +17,19 @@ public sealed partial class PartySpawnPrototype : IPrototype
     [DataField("leadersToSpawn", required: true)]
     public Dictionary<string, int> LeadersToSpawn { get; private set; } = new Dictionary<string, int>();
 
-    [DataField("entsToSpsawn", required: false)]
-    public Dictionary<string, int> entitiestospawn { get; private set; } = new Dictionary<string, int>();
-
+    [DataField("entsToSpawn", required: false)]
+    public Dictionary<string, int> EntitiesToSpawn { get; private set; } = new Dictionary<string, int>();
 
     [DataField("spawnTogether", required: false),]
-    public bool SpawnTogether { get; private set; } =  true;
+    public bool SpawnTogether { get; private set; } = true;
 
     /// <summary>
     /// Deprecated — use <see cref="Scaling"/> instead.
     /// Kept for backwards compatibility with existing YAML.
+    /// TODO:
     /// </summary>
     [DataField("scalewithpop", required: false)]
-    public bool ScalewithPop { get; private set; } = false;
+    public bool ScaleWithPop { get; private set; } = false;
 
     /// <summary>
     /// Per-entity population scaling. Key is the entity prototype ID (must match a key in
@@ -45,5 +44,4 @@ public sealed partial class PartySpawnPrototype : IPrototype
     [DataField("Markers", required: false)]
     public Dictionary<ThreatMarkerType, string> Markers { get; private set; } = new Dictionary<ThreatMarkerType, string>();
     // threatmarkertype, custommarkerid. if blank use generic
-
 }

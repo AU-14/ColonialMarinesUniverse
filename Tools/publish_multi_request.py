@@ -8,7 +8,7 @@ import subprocess
 from typing import Iterable
 
 PUBLISH_TOKEN = os.environ["PUBLISH_TOKEN"]
-VERSION = os.environ["GITHUB_SHA"]
+VERSION = os.environ.get("PUBLISH_VERSION") or os.environ["GITHUB_SHA"]
 
 RELEASE_DIR = "release"
 DEFAULT_UPLOAD_WORKERS = 4

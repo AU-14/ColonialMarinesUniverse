@@ -1,0 +1,1128 @@
+- type: roundGroup
+  id: DistressSignalWypmcPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: WYPMCParty
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobWYPMCPartyLeader: 1
+      - bucket: Member
+        count: 7
+        bodies:
+          AU14JobWYPMCPartyEngineer: 1
+          AU14JobWYPMCPartyMedic: 1
+          AU14JobWYPMCPartySmartgunner: 1
+          AU14JobWYPMCPartyContractorM42A: 1
+          AU14JobWYPMCPartyContractorNSG23: 1
+          AU14JobWYPMCPartyContractorM39B2: 1
+          AU14JobWYPMCPartyContractor: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 7
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalWypmcPartyAltRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: WYPMCPartyAlt
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobWYPMCPartyLeader: 1
+      - bucket: Member
+        count: 5
+        bodies:
+          AU14JobWYPMCPartyEngineer: 1
+          AU14JobWYPMCPartyMedic: 1
+          AU14JobWYPMCPartySmartgunner: 1
+          AU14JobWYPMCPartyContractorM42A: 1
+          AU14JobWYPMCPartyContractorNSG23: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 5
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUsArmyPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: USArmy
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobUSArmyCommander: 1
+          AU14JobUSArmySquadleader: 1
+      - bucket: Member
+        count: 6
+        bodies:
+          AU14JobUSArmySynth: 1
+          AU14JobUSArmyCET: 1
+          AU14JobUSArmyCMT: 1
+          AU14JobUSArmyHeavyGunner: 1
+          AU14JobUSArmyMarksman: 1
+          AU14JobUSArmyTrooper: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 6
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUsArmyAltPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: USArmyAlt
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobUSArmyCommander: 1
+          AU14JobUSArmySquadleader: 1
+      - bucket: Member
+        count: 2
+        bodies:
+          AU14JobUSArmyCET: 1
+          AU14JobUSArmyTrooper: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUsArmyAlt2PartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: USArmyAlt2
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobUSArmyCommander: 1
+          AU14JobUSArmySquadleader: 1
+      - bucket: Member
+        count: 4
+        bodies:
+          AU14JobUSArmyCET: 1
+          AU14JobUSArmyCMT: 1
+          AU14JobUSArmyHeavyGunner: 1
+          AU14JobUSArmyMarksman: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 4
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUppGromPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: UPPGROM
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobUPPGROMCommander: 1
+          AU14JobUPPGROMSquadleader: 1
+      - bucket: Member
+        count: 5
+        bodies:
+          AU14JobUPPGROMRifleman: 1
+          AU14JobUPPGROMSupportTech: 1
+          AU14JobUPPGROMMachinegunner: 1
+          AU14JobUPPGROMMarksman: 1
+          AU14JobUPPGROMPointman: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 5
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUppGromAltPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: UPPGROMAlt
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobUPPGROMCommander: 1
+          AU14JobUPPGROMSquadleader: 1
+      - bucket: Member
+        count: 1
+        bodies:
+          AU14JobUPPGROMRifleman: 0
+          AU14JobUPPGROMSupportTech: 1
+          AU14JobUPPGROMMachinegunner: 0
+          AU14JobUPPGROMMarksman: 0
+          AU14JobUPPGROMPointman: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUppGromAlt2PartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: UPPGROMAlt2
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobUPPGROMCommander: 1
+          AU14JobUPPGROMSquadleader: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14JobUPPGROMRifleman: 0
+          AU14JobUPPGROMSupportTech: 1
+          AU14JobUPPGROMMachinegunner: 1
+          AU14JobUPPGROMMarksman: 1
+          AU14JobUPPGROMPointman: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalForeconPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: FORECON
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobFORECONCommander: 1
+          AU14JobFORECONSquadleader: 1
+      - bucket: Member
+        count: 5
+        bodies:
+          AU14JobFORECONSynth: 1
+          AU14JobFORECONSupportTech: 1
+          AU14JobFORECONSmartGunOperator: 1
+          AU14JobFORECONMarksman: 1
+          AU14JobFORECONRifleman: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 5
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalForeconAltPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: FORECONAlt
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobFORECONCommander: 1
+          AU14JobFORECONSquadleader: 1
+      - bucket: Member
+        count: 1
+        bodies:
+          AU14JobFORECONRifleman: 0
+          AU14JobFORECONSupportTech: 1
+          AU14JobFORECONSmartGunOperator: 0
+          AU14JobFORECONMarksman: 0
+          AU14JobFORECONSynth: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalForeconAlt2PartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: FORECONAlt2
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobFORECONCommander: 1
+          AU14JobFORECONSquadleader: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14JobFORECONRifleman: 0
+          AU14JobFORECONSupportTech: 1
+          AU14JobFORECONSmartGunOperator: 1
+          AU14JobFORECONMarksman: 1
+          AU14JobFORECONSynth: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalIasfSurvLargePartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: IASFSurvLarge
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14IASFSurvTeamLead: 1
+          AU14IASFSurvCommander: 1
+      - bucket: Member
+        count: 6
+        bodies:
+          AU14IASFSurvPilot: 1
+          AU14IASFSurvRifleman: 2
+          AU14IASFSurvRiflemanAmmo: 1
+          AU14IASFsurvMedicalTechnician: 1
+          AU14IASFSurvCombatEngineer: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 6
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalIasfSurvMediumPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: IASFSurvMedium
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14IASFSurvTeamLead: 1
+          AU14IASFSurvCommander: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14IASFSurvPilot: 0
+          AU14IASFSurvRifleman: 0
+          AU14IASFSurvRiflemanAmmo: 1
+          AU14IASFsurvMedicalTechnician: 1
+          AU14IASFSurvCombatEngineer: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalIasfSurvSmallPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: IASFSurvSmall
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14IASFSurvTeamLead: 1
+          AU14IASFSurvCommander: 0
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14IASFSurvPilot: 0
+          AU14IASFSurvRifleman: 0
+          AU14IASFSurvRiflemanAmmo: 1
+          AU14IASFsurvMedicalTechnician: 1
+          AU14IASFSurvCombatEngineer: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalWeyuSurvLargePartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: WEYUSurvLarge
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobWYSurvLiaison: 1
+      - bucket: Member
+        count: 6
+        bodies:
+          AU14JobWYSurvPMC: 1
+          AU14JobWYSurvGoon: 2
+          AU14JobWYSurvGoonShotgun: 1
+          AU14JobWYSurvScientist: 1
+          AU14JobWYSurvEngineer: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 6
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalWeyuSurvMediumPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: WEYUSurvMedium
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobWYSurvPMC: 1
+          AU14JobWYSurvLiaison: 1
+      - bucket: Member
+        count: 4
+        bodies:
+          AU14JobWYSurvGoon: 2
+          AU14JobWYSurvScientist: 1
+          AU14JobWYSurvEngineer: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 4
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalWeyuSurvSmallPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: WEYUSurvSmall
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          AU14JobWYSurvPMC: 1
+          AU14JobWYSurvLiaison: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14JobWYSurvGoon: 2
+          AU14JobWYSurvEngineer: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalApePartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: ApeThirdParty
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 2
+        bodies:
+          CMUMobApe: 2
+      - bucket: Member
+        count: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalTimeSharesSalesmanPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: TimeSharesSalesman
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14PartyJobTimeSharesSalesman: 1
+      - bucket: Member
+        count: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalProfessorVonBandolierPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: ProfessorVonBandolier
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14PartyJobVonBandolier: 1
+      - bucket: Member
+        count: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUppTdLostTeamPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: UPPTDLostTeam
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobUPPTerritorialDefenseSquadLeader: 1
+      - bucket: Member
+        count: 2
+        bodies:
+          AU14JobUPPTerritorialDefenseRifleman: 1
+          AU14JobUPPTerritorialDefenseLoader: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalLacnSniperTeamPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: LACNSniperteam
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobCommandoSniperTeamSniper: 1
+      - bucket: Member
+        count: 1
+        bodies:
+          AU14JobCommandoSniperTeamSpotter: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalForeconFirstReconPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: FORECONFirstRecon
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobFORECONFirstReconSquadleader: 1
+      - bucket: Member
+        count: 4
+        bodies:
+          AU14JobFORECONFirstReconRifleman: 2
+          AU14JobFORECONFirstReconSmartGunOperator: 1
+          AU14JobFORECONFirstReconCorpsman: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 4
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalRmcRrtPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: RMCRRT
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobRMCRRTCommander: 1
+      - bucket: Member
+        count: 4
+        bodies:
+          AU14JobRMCRRTRifleman: 2
+          AU14JobRMCRRTCorpsman: 1
+          AU14JobRMCRRTBreacher: 0
+          AU14JobRMCRRTMarksman: 1
+          AU14JobRMCRRTSmartgunner: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 4
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalCmbInvestigationPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: CMBInvestigationParty
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          CMBInvestigationPartyJobMarshal: 1
+      - bucket: Member
+        count: 2
+        bodies:
+          CMBInvestigationPartyJobDeputy: 1
+          CMBInvestigationPartyJobDeputyShotgun: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalCmbInvestigationPartyAltRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: CMBInvestigationPartyAlt
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          CMBInvestigationPartyJobMarshal: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          CMBInvestigationPartyJobDeputy: 1
+          CMBInvestigationPartyJobDeputyShotgun: 1
+          CMBInvestigationPartyJobRightsObserver: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalPapInvestigationPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: PAPInvestigationParty
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobPaPThirdpartySeniorInvestigator: 1
+      - bucket: Member
+        count: 2
+        bodies:
+          AU14JobPaPThirdpartyInvestigator: 1
+          AU14JobPaPThirdpartyInvestigatorSMG: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalPapInvestigationPartyAltRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: PAPInvestigationPartyAlt
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobPaPThirdpartySeniorInvestigator: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14JobPaPThirdpartyInvestigator: 1
+          AU14JobPaPThirdpartyInvestigatorSMG: 1
+          AU14JobPAPThirdpartyObserver: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalNspaInvestigationPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: NSPAInvestigationParty
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          NSPAInvestigationPartyJobInspector: 1
+      - bucket: Member
+        count: 2
+        bodies:
+          NSPAInvestigationPartyJobConstable: 1
+          NSPAInvestigationPartyJobConstableSMG: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUacgLostTeamPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: UACGLostTeam
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobUACGLostSquadLeader: 1
+      - bucket: Member
+        count: 2
+        bodies:
+          AU14JobUACGLostAmmobearer: 1
+          AU14JobUACGLostRifleman: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 2
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUsArmyArmoredPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: USArmyArmored
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobUSArmySquadLeaderArmored: 1
+      - bucket: Member
+        count: 5
+        bodies:
+          AU14JobUSArmySynthArmored: 1
+          AU14JobUSArmyCETArmored: 1
+          AU14JobUSArmyCMTArmored: 1
+          AU14JobUSArmyHeavyGunnerArmored: 0
+          AU14JobUSArmyMarksmanArmored: 0
+          AU14JobUSArmyTrooperArmored: 2
+          AU14JobUSArmyTrooperArmoredLAT: 0
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 5
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalUsArmyTankPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: USArmyTank
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14JobUSArmyTankCommander: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14JobUSArmyTankGunner: 1
+          AU14JobUSArmyTankLoader: 1
+          AU14JobUSArmyTankDriver: 1
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>
+
+- type: roundGroup
+  id: DistressSignalIcrcReliefPartyRoundGroup
+  kind: ThirdParty
+  sourcePrototypeId: ICRCReliefParty
+  spawn:
+    bodyBuckets:
+      - bucket: Leader
+        count: 1
+        bodies:
+          AU14PartyJobICRCCMO: 1
+      - bucket: Member
+        count: 3
+        bodies:
+          AU14PartyJobICRCDoctor: 1
+          AU14PartyJobICRCNurse: 2
+      - bucket: Entity
+        count: 0
+    markerRequirements:
+      - bucket: Leader
+        requiredBodyCount: 1
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Leader
+          - marker-id:<generic>
+      - bucket: Member
+        requiredBodyCount: 3
+        requiredMarkerCount: 1
+        requiredTags:
+          - force:third-party
+          - bucket:Member
+          - marker-id:<generic>

@@ -1,0 +1,128 @@
+# Tribal Weapons
+
+- type: entity
+  name: tribal spear
+  parent: Spear
+  id: TribalSpear
+  description: A spear crafted by tribal warriors. Vicious when stabbed, lethal when thrown.
+  components:
+  - type: Tag
+    tags:
+    - Spear
+    - tribe
+  - type: Sprite
+    sprite: Objects/Weapons/Melee/bone_spear.rsi
+  # Base 100, light click halved to 50 via clickDamageModifier. Heavy
+  # wide swing keeps the full 100 (engine quirk: light damage pipes
+  # through ClickDamageModifier, heavy path bypasses it), so wide swing
+  # is exactly double the stab.
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    damage:
+      types:
+        Piercing: 100
+    clickDamageModifier: 0.5
+    angle: 0
+    animation: WeaponArcThrust
+    soundHit:
+      path: /Audio/Weapons/bladeslice.ogg
+  # Throw — 140 piercing on impact via DamageOtherOnHit.
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Piercing: 140
+  - type: DamageImpactProfile
+    melee:
+      contact: Stab
+      penetration: High
+      energy: High
+    heavyMelee:
+      contact: Stab
+      penetration: High
+      energy: High
+    thrown:
+      contact: Stab
+      penetration: High
+      energy: High
+  # Infinite durability — base Spear has a Destructible threshold at 30
+  # damage that shatters the haft. Override it with an absurdly high cap
+  # so the bone spear never breaks no matter what hits it.
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 99999999
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# Tribal arrow — 130 piercing on hit. Goes in the quiver, fired from
+# TribalBow / BowImprovised.
+- type: entity
+  parent: ArrowImprovised
+  id: TribalArrow
+  name: bone arrow
+  description: A barbed bone-tipped shaft fletched with feathers. Hits like a bus.
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Projectiles/arrows.rsi
+    layers:
+    - state: tail
+      color: tan
+    - state: rod
+      color: brown
+    - state: tip
+      color: ivory
+    - state: solution1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 130
+
+- type: entity
+  name: tribal bow
+  parent: BaseBow
+  id: TribalBow
+  description: A crude bow made by tribal warriors. Only usable by tribals.
+  components:
+  - type: Tag
+    tags:
+    - tribe
+  - type: Sprite
+    layers:
+    - state: unwielded
+      map: [ base ]
+    - state: unwielded-arrow
+      map: [ arrow ]
+      visible: false
+    - state: unwielded-plunger
+      map: [ plunger ]
+      visible: false
+  - type: Appearance
+  - type: ItemMapper
+    spriteLayers:
+    - arrow
+    - plunger
+    mapLayers:
+      arrow:
+        whitelist:
+          tags:
+          - Arrow
+      plunger:
+        whitelist:
+          tags:
+          - Plunger
+  - type: GenericVisualizer
+    visuals:
+      enum.WieldableVisuals.Wielded:
+        arrow:
+          True: { state: wielded-arrow }
+          False: { state: unwielded-arrow }
+        plunger:
+          True: { state: wielded-plunger }
+          False: { state: unwielded-plunger }
+        base:
+          True: { state: wielded }
+          False: { state: unwielded }

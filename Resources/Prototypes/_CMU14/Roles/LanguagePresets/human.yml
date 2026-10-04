@@ -1,0 +1,46 @@
+- type: entity
+  id: AU14LanguageLearningPresetHuman
+  name: Human Language Learning
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguageLearningPreset
+    learnableLanguages:
+    - English
+    - French
+    - Japanese
+    - Russian
+    - German
+    - Chinese
+    - Spanish
+    - Esperanto
+    - SignLanguage
+    - TacticalSignLanguage
+    - Portuguese
+    - Arcturian
+    - Ukrainian
+    - Polish
+    - Czech
+    - Italian
+    - Irish
+    - Finnish
+    - Hungarian
+    - Albanian
+    - Serbian
+    - Lithuanian
+    - Arabic
+    - Afrikaans
+    - Dutch
+    - Swahili
+    - Persian
+    - Hindi
+    - Vietnamese
+    - Indonesian
+    - Filipino
+    - Urdu
+    - Yoruba
+    - Latin
+    firstContactLanguages:
+    - Arcturian
+    comprehensionThreshold: 0.2
+    learningRange: 4.0
+    baseWordLearningRate: 0.02

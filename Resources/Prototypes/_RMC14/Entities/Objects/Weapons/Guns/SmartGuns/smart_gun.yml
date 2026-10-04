@@ -63,7 +63,7 @@
     - FullAuto
     recoilWielded: 3
     scatterWielded: 10
-    baseFireRate: 10
+    baseFireRate: 8
     burstScatterMult: 4
     modifiers:
       FullAuto:
@@ -459,7 +459,7 @@
     - range: 12
       falloff: 9999
       ignoreModifiers: true
-    - range: 4.5
+    - range: 10
       falloff: 4
   - type: RMCProjectileAccuracy
     accuracy: 105

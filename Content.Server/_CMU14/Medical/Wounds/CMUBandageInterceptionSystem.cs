@@ -332,10 +332,15 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
     {
         TargetBodyZone.Head,
         TargetBodyZone.RightArm,
+        TargetBodyZone.RightHand,
         TargetBodyZone.Chest,
+        TargetBodyZone.GroinPelvis,
         TargetBodyZone.LeftArm,
+        TargetBodyZone.LeftHand,
         TargetBodyZone.RightLeg,
+        TargetBodyZone.RightFoot,
         TargetBodyZone.LeftLeg,
+        TargetBodyZone.LeftFoot,
     };
 
     public TimeSpan ResolveBandageDelay(EntityUid part)

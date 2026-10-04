@@ -1,0 +1,9 @@
+- type: loadoutGroup
+  id: EROHatsAU14
+  name: au14-loadout-group-civilian-hat
+  minLimit: 1
+  maxLimit: 2
+  loadouts:
+  - CivBallCapBlackAU14
+  - HardhatRedAU14
+  - ArmorHelmetSPPFirefighterAU14

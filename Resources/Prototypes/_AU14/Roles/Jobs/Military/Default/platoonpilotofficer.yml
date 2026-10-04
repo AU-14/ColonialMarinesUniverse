@@ -1,6 +1,0 @@
-- type: job
-  parent: AU14JobDSPilotBase
-  id: AU14JobGOVFORDSPilot
-  hidden: false
-  setPreference: true
-  basePlaytimeTracker: true

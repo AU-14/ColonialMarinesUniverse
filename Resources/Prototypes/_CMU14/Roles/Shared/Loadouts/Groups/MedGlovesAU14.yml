@@ -1,0 +1,8 @@
+- type: loadoutGroup
+  id: MedGlovesAU14
+  name: au14-loadout-group-civilian-gloves
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - ClothingHandGlovesNitrileAU14
+  - HandsLatexAU14

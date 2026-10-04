@@ -1,0 +1,24 @@
+- type: entity
+  id: AU14SkillPresetPlatoonDP
+  name: Dropship Pilot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillConstruction: 1
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 2
+      RMCSkillOverwatch: 1
+      RMCSkillPilot: 2
+      RMCSkillLeadership: 3
+      RMCSkillIntel: 2
+      RMCSkillPowerLoader: 2
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillNavigations: 1
+      RMCSkillPolice: 1
+      RMCSkillJtac: 3

@@ -1,0 +1,6 @@
+# COS Specizalizations
+
+- type: loadout
+  id: ColonySyntheticSpecializationDefaultAU14
+  equipment:
+    id: AU14IDCardColonySynthetic

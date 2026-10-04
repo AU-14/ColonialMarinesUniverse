@@ -75,7 +75,7 @@ public sealed partial class QueenEyeOverlaySystem : EntitySystem
         }
 
         var target = queenEye;
-        if (TryComp(ent.Owner, out XenoWatchingComponent? watching) &&
+        if (TryComp(queenEye, out XenoWatchingComponent? watching) &&
             watching.Watching is { } watched)
         {
             target = watched;

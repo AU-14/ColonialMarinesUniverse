@@ -1,5 +1,4 @@
 - type: entity
-  parent: StationAiHolo
   id: CMUDropshipPilotEye
   name: dropship view
   description: A free-look projection of the dropship's nav console.
@@ -7,8 +6,36 @@
   components:
   - type: Sprite
     visible: false
+  - type: Visibility
+    layer: 2
+  - type: Physics
+    bodyType: KinematicController
+    bodyStatus: InAir
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 15
+        layer:
+        - GhostImpassable
+  - type: InputMover
+  - type: Input
+    context: "human"
+  - type: MobMover
+  - type: MovementIgnoreGravity
+  - type: MovementAlwaysTouching
+  - type: CanMoveInAir
   - type: Eye
     drawFov: false
+  - type: ContentEye
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 16
+    baseSprintSpeed: 24
+    baseAcceleration: 60
+    baseWeightlessModifier: 1
+    baseWeightlessAcceleration: 60
   - type: DropshipPilotEye
 
 - type: entity
@@ -17,3 +44,31 @@
   description: A bright yellow hologram warning of incoming danger.
   components:
   - type: HolographicWarningSign
+
+- type: entity
+  id: CMUDropshipTacticalHoverShadow
+  name: dropship hover shadow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _RMC14/Effects/effects.rsi
+    state: shadow_square
+    color: "#000000E6"
+  - type: DropshipTacticalHoverShadow
+
+- type: entity
+  id: CMUDropshipTacticalHoverDownwash
+  name: dropship downwash
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot.rsi
+    state: downwash
+  - type: AmbientSound
+    range: 18
+    volume: -2
+    sound:
+      path: /Audio/_CMU14/Blackfoot/exteriorflight.ogg
+  - type: DropshipTacticalHoverDownwash

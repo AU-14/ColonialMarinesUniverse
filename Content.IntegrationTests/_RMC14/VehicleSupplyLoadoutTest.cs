@@ -16,10 +16,22 @@ public sealed class VehicleSupplyLoadoutTest
     private const string ConsoleId = "VehicleSupplyConsole";
 
     [Test]
-    public async Task VehicleSupplyConsoleHasLoadoutCategories()
+    public async Task VehicleSupplyConsoleHasValidLoadoutCategories()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+
+        // Category IDs currently in use across vehicle ents in vehicle_supply.yml
+        var validCategories = new HashSet<string>
+        {
+            "primary",
+            "secondary",
+            "wheels",
+            "armor",
+            "support",
+            "standardtreads",
+            "auxiliary"
+        };
 
         await server.WaitAssertion(() =>
         {
@@ -31,9 +43,13 @@ public sealed class VehicleSupplyLoadoutTest
 
             foreach (var entry in console!.Vehicles)
             {
-                Assert.That(entry.LoadoutCategories.Select(c => c.Id),
-                    Is.EquivalentTo(new[] { "primary", "armor", "support" }),
-                    entry.Vehicle.Id);
+                Assert.That(entry.LoadoutCategories, Is.Not.Empty, $"{entry.Vehicle.Id} has no loadout categories");
+
+                foreach (var cat in entry.LoadoutCategories)
+                {
+                    Assert.That(cat.Id, Is.Not.Empty, $"{entry.Vehicle.Id} has a category with an empty ID");
+                    Assert.That(validCategories, Does.Contain(cat.Id), $"{entry.Vehicle.Id} uses unknown category '{cat.Id}'");
+                }
             }
         });
 
@@ -64,8 +80,9 @@ public sealed class VehicleSupplyLoadoutTest
                     continue;
                 }
 
-                var armor = entry.LoadoutCategories.Single(c => c.Id == "armor");
-                Assert.That(armor.Options, Is.Empty, vehicleId);
+                var armor = entry.LoadoutCategories.FirstOrDefault(c => c.Id == "armor");
+                if (armor != null)
+                    Assert.That(armor.Options, Is.Empty, vehicleId);
             }
         });
 
@@ -136,10 +153,10 @@ public sealed class VehicleSupplyLoadoutTest
                 "VehicleSPPTank",
                 "VehicleSPPTankCommand",
                 "VehicleBlackfoot",
-                "VehicleBlackfootDoorGunVariant",
                 "VehicleBlackfootRecon",
                 "VehicleBlackfootTransport",
             }));
+            Assert.That(entries.Keys, Does.Not.Contain("VehicleBlackfootDoorGunVariant"));
 
             AssertHardpoints(entries, "VehicleHumvee", HumveeArmedHardpoints);
             AssertHardpoints(entries, "VehicleHumveeMedical", HumveeSupportHardpoints);
@@ -156,9 +173,27 @@ public sealed class VehicleSupplyLoadoutTest
             AssertHardpoints(entries, "VehicleSPPTankCommand", SppTankHardpoints);
 
             AssertHardpoints(entries, "VehicleBlackfoot", BlackfootBaseHardpoints);
-            AssertHardpoints(entries, "VehicleBlackfootDoorGunVariant", BlackfootDoorGunHardpoints);
             AssertHardpoints(entries, "VehicleBlackfootRecon", BlackfootReconHardpoints);
             AssertHardpoints(entries, "VehicleBlackfootTransport", BlackfootBaseHardpoints);
+
+            AssertEntryGroup(entries, "VehicleHumvee", "vehicle-support");
+            AssertEntryGroup(entries, "VehicleHumveeMedical", "vehicle-support");
+            AssertEntryGroup(entries, "VehicleHumveeTransport", "vehicle-support");
+            AssertEntryGroup(entries, "VehicleHumveeARC", "vehicle-support");
+            AssertEntryGroup(entries, "VehicleSPPAPC", "vehicle-support");
+            AssertEntryGroup(entries, "VehicleBlackfoot", "vehicle-support");
+            AssertEntryGroup(entries, "VehicleBlackfootRecon", "vehicle-support");
+            AssertEntryGroup(entries, "VehicleBlackfootTransport", "vehicle-support");
+            AssertEntryGroup(entries, "VehicleAPC", "vehicle-apc");
+            AssertEntryGroup(entries, "VehicleAPCMed", "vehicle-apc");
+            AssertEntryGroup(entries, "VehicleAPCCommand", "vehicle-apc");
+            AssertEntryGroup(entries, "VehicleTank", "vehicle-tank");
+            AssertEntryGroup(entries, "VehicleSPPTank", "vehicle-tank");
+            AssertEntryGroup(entries, "VehicleSPPTankCommand", "vehicle-tank");
+
+            Assert.That(TankHardpoints, Does.Not.Contain("VehicleTankLTBCannon"));
+            Assert.That(SppTankHardpoints, Does.Not.Contain("VehicleSPPTankRailgun"));
+            Assert.That(BlackfootReconHardpoints, Does.Not.Contain("VehicleBlackfootDoorGun"));
         });
 
         await pair.CleanReturnAsync();
@@ -180,29 +215,21 @@ public sealed class VehicleSupplyLoadoutTest
 
             var entries = console!.Vehicles.ToDictionary(v => v.Vehicle.Id);
 
-            foreach (var vehicle in new[]
-                     {
-                         "VehicleHumvee",
-                         "VehicleHumveeMedical",
-                         "VehicleHumveeTransport",
-                         "VehicleHumveeARC",
-                     })
-            {
-                AssertLoadoutOption(entries, vehicle, "support", "VehicleHumveeWheel", "wheel-1");
-            }
+            AssertLoadoutOption(entries, "VehicleHumvee", "wheels", "VehicleHumveeWheel", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleHumveeMedical", "wheels", "VehicleHumveeWheel", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleHumveeTransport", "wheels", "VehicleHumveeWheel", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleHumveeARC", "support", "VehicleHumveeWheel", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleAPC", "wheels", "RMCAPCWheel", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleAPCMed", "wheels", "RMCAPCWheel", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleAPCCommand", "wheels", "RMCAPCWheel", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleSPPAPC", "wheels", "VehicleSPPAPCWheel", "wheel-1");
 
-            foreach (var vehicle in new[] { "VehicleAPC", "VehicleAPCMed", "VehicleAPCCommand" })
-            {
-                AssertLoadoutOption(entries, vehicle, "support", "RMCAPCWheel", "wheel-1");
-            }
-
-            AssertLoadoutOption(entries, "VehicleSPPAPC", "support", "VehicleSPPAPCWheel", "wheel-1");
-
-            foreach (var vehicle in new[] { "VehicleTank", "VehicleSPPTank", "VehicleSPPTankCommand" })
-            {
-                AssertLoadoutOption(entries, vehicle, "support", "VehicleTankTreads", "wheel-1");
-                AssertLoadoutOption(entries, vehicle, "support", "VehicleTankReinforcedTreads", "wheel-1");
-            }
+            AssertLoadoutOption(entries, "VehicleTank", "standardtreads", "VehicleTankTreads", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleTank", "auxiliary", "VehicleTankReinforcedTreads", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleSPPTank", "standardtreads", "VehicleTankTreads", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleSPPTank", "auxiliary", "VehicleTankReinforcedTreads", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleSPPTankCommand", "standardtreads", "VehicleTankTreads", "wheel-1");
+            AssertLoadoutOption(entries, "VehicleSPPTankCommand", "support", "VehicleTankReinforcedTreads", "wheel-1");
         });
 
         await pair.CleanReturnAsync();
@@ -256,6 +283,53 @@ public sealed class VehicleSupplyLoadoutTest
 
             var liftComp = server.EntMan.GetComponent<VehicleSupplyLiftComponent>(lift);
             Assert.That(liftComp.Stored.Keys, Is.SupersetOf(vehicleIds));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ConsoleHidesOrderedVehicleAndClaimedGroup()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        EntityUid consoleUid = default;
+        EntityUid lift = default;
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            consoleUid = entMan.SpawnEntity(ConsoleId, map.GridCoords);
+            lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var liftComp = entMan.GetComponent<VehicleSupplyLiftComponent>(lift);
+            liftComp.Ordered.Add("vehicleapc");
+            liftComp.OrderedGroups["vehicle-apc"] = "vehicleapc";
+            liftComp.Stored.Remove("vehicleapc");
+            entMan.Dirty(lift, liftComp);
+
+            var ev = new BeforeActivatableUIOpenEvent(consoleUid);
+            entMan.EventBus.RaiseLocalEvent(consoleUid, ev);
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var ui = server.EntMan.System<SharedUserInterfaceSystem>();
+            Assert.That(ui.TryGetUiState<VehicleSupplyBuiState>(consoleUid, VehicleSupplyUIKey.Key, out var state), Is.True);
+
+            var available = state!.Available.Select(v => v.Id).ToHashSet();
+            Assert.That(available, Does.Not.Contain("VehicleAPC"));
+            Assert.That(available, Does.Not.Contain("VehicleAPCMed"));
+            Assert.That(available, Does.Not.Contain("VehicleAPCCommand"));
+            Assert.That(available, Does.Contain("VehicleHumvee"));
+            Assert.That(available, Does.Contain("VehicleTank"));
         });
 
         await pair.CleanReturnAsync();
@@ -386,7 +460,7 @@ public sealed class VehicleSupplyLoadoutTest
             var entry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleTank");
             var selections = new Dictionary<string, string>
             {
-                ["primary"] = "VehicleTankLTBCannon",
+                ["primary"] = "VehicleTankAceAutocannon",
                 ["armor"] = "VehicleTankArmorBallistic",
                 ["support"] = "VehicleTankWarningArray",
             };
@@ -399,7 +473,7 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(itemSlots.TryGetSlot(vehicle, "primary", out var turretSlot), Is.True);
             Assert.That(turretSlot!.Item, Is.Not.Null);
 
-            AssertSlotItem(entMan, itemSlots, turretSlot.Item!.Value, "turret-cannon", "VehicleTankLTBCannon");
+            AssertSlotItem(entMan, itemSlots, turretSlot.Item!.Value, "turret-cannon", "VehicleTankAceAutocannon");
         });
 
         await pair.CleanReturnAsync();
@@ -411,12 +485,10 @@ public sealed class VehicleSupplyLoadoutTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
-        EntityUid doorGunBlackfoot = default;
         EntityUid reconBlackfoot = default;
 
         await server.WaitPost(() =>
         {
-            doorGunBlackfoot = server.EntMan.SpawnEntity("VehicleBlackfootDoorGunVariant", map.GridCoords);
             reconBlackfoot = server.EntMan.SpawnEntity("VehicleBlackfootRecon", map.GridCoords);
         });
 
@@ -433,19 +505,11 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(prototypes.TryIndex<EntityPrototype>(ConsoleId, out var consoleProto), Is.True);
             Assert.That(consoleProto!.TryGetComponent<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
-            var doorGunEntry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleBlackfootDoorGunVariant");
-            Assert.That(supply.DebugApplyLoadoutForTest(
-                doorGunBlackfoot,
-                doorGunEntry,
-                new Dictionary<string, string> { ["primary"] = "VehicleBlackfootDoorGun" }),
-                Is.True);
-            AssertSlotItem(entMan, itemSlots, doorGunBlackfoot, "door-gun", "VehicleBlackfootDoorGun");
-
-            var reconEntry = console.Vehicles.Single(v => v.Vehicle.Id == "VehicleBlackfootRecon");
+            var reconEntry = console!.Vehicles.Single(v => v.Vehicle.Id == "VehicleBlackfootRecon");
             Assert.That(supply.DebugApplyLoadoutForTest(
                 reconBlackfoot,
                 reconEntry,
-                new Dictionary<string, string> { ["support"] = "VehicleBlackfootReconSystem" }),
+                new Dictionary<string, string> { ["secondary"] = "VehicleBlackfootReconSystem" }),
                 Is.True);
             AssertSlotItem(entMan, itemSlots, reconBlackfoot, "recon", "VehicleBlackfootReconSystem");
 
@@ -465,7 +529,6 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleHumveeWheel",
         "VehicleHumveeSnowplow",
         "VehicleHumveeOverlight",
-        "VehicleHumveeHatch",
     };
 
     private static readonly string[] HumveeArmedHardpoints =
@@ -512,7 +575,6 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleTankArmorCaustic",
         "VehicleTankArmorPaladin",
         "VehicleTankSnowplow",
-        "VehicleTankLTBCannon",
         "VehicleTankLTAAAPMinigun",
         "VehicleTankAceAutocannon",
         "VehicleTankDragonFlamer",
@@ -534,7 +596,6 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleTankTreads",
         "VehicleTankReinforcedTreads",
         "VehicleSPPTankP17702",
-        "VehicleSPPTankRailgun",
         "VehicleSPPTankHJ35TLauncher",
         "VehicleSPPTankCupola",
         "VehicleSPPTankReactiveArmor",
@@ -552,19 +613,10 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleBlackfootReconSystem",
     };
 
-    private static readonly string[] BlackfootDoorGunHardpoints =
-    {
-        "VehicleBlackfootThrusters",
-        "VehicleBlackfootLaunchers",
-        "VehicleBlackfootDoorGun",
-        "VehicleBlackfootReconSystem",
-    };
-
     private static readonly string[] BlackfootReconHardpoints =
     {
         "VehicleBlackfootThrusters",
         "VehicleBlackfootLaunchers",
-        "VehicleBlackfootDoorGun",
         "VehicleBlackfootReconSystem",
         "VehicleBlackfootSensorArray",
     };
@@ -590,6 +642,15 @@ public sealed class VehicleSupplyLoadoutTest
     {
         Assert.That(entries.TryGetValue(vehicleId, out var entry), Is.True, vehicleId);
         Assert.That(entry!.Hardpoints.Select(h => h.Id), Is.EquivalentTo(hardpoints), vehicleId);
+    }
+
+    private static void AssertEntryGroup(
+        IReadOnlyDictionary<string, VehicleSupplyEntry> entries,
+        string vehicleId,
+        string group)
+    {
+        Assert.That(entries.TryGetValue(vehicleId, out var entry), Is.True, vehicleId);
+        Assert.That(entry!.Group, Is.EqualTo(group), vehicleId);
     }
 
     private static void AssertLoadoutOption(

@@ -1,0 +1,88 @@
+- type: job
+  parent: AU14JobLEOBase
+  id: AU14JobCivilianCWPSRanger
+  roundSide: Civilian
+  roundForce: CWPS
+  roundRole: CivilianCWPSRanger
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillIntel: 1
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancwpsranger
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: cmb_dep
+
+  name: au14-job-name-civiliancwpsranger
+  description: au14-job-description-civiliancwpsranger
+  setPreference: false
+  canBeAntag: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NoEnglish
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    SeniorRanger:
+      entity: AU14ChevronCWPSSeniorRanger
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 72000 # 20 hours
+    Ranger:
+      entity: AU14ChevronCWPSRanger
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobCivilianCMBDeputy
+        time: 7200 # 2 hours
+    RangerTrainee:
+      entity: AU14ChevronCWPSRangerTrainee
+      requirements: []
+  startingGear: AU14GearCivilianCWPSRanger
+  icon: "RMCJobIconBureauDeputy"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  access:
+  - AU14AccessColonyMarshall
+  accessGroups:
+  - aucmb
+  - Colonist
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianCWPSRanger
+  equipment:
+    head: AU14CWPSCampaignHat
+    jumpsuit: AU14CWPSUniform
+    belt: CMBeltSecurityMarshalFilled
+    shoes: RMCBootsPMCFilled
+    id: AU14IDCardcivilianCWPSranger
+    ears: AU14CMBHeadset
+    pocket1: AU14GuidebookLawColonial
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianCWPSRanger
+  name: Spawn Point Civilian CWPS Ranger
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianCWPSRanger
+  - type: Sprite
+    state: syn_spawn

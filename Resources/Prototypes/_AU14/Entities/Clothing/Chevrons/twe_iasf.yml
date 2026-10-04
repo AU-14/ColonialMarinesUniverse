@@ -1,0 +1,385 @@
+# base
+- type: entity
+  parent: RMCArmbandBase
+  id: AU14ChevronIASFBase
+  abstract: true
+  suffix: IASF Chevron
+  description: Imperial Armed Space Forces rank insignia. The badge of a soldier serving the Empire across the stars.
+
+# ├──[ Enlisted ]────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFPrivateSecondClass
+  name: private second class chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: IASF_PrivateSecondClass
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFPrivateFirstClass
+  name: private first class chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: IASF_PrivateFirstClass
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFChiefPrivate
+  name: chief private chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: IASF_ChiefPrivate
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFCorporalSecondClass
+  name: corporal second class chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: IASF_CorporalSecondClass
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFCorporalFirstClass
+  name: corporal first class chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: IASF_CorporalFirstClass
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFChiefCorporal
+  name: chief corporal chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_enlisted
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_enlisted
+  - type: RankChanger
+    rank: IASF_ChiefCorporal
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFSecondSergeant
+  name: second sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: IASF_SecondSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFFirstSergeant
+  name: first sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: IASF_FirstSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFChiefSergeant
+  name: chief sergeant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: IASF_ChiefSergeant
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFSergeantMajor
+  name: sergeant major chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: IASF_SergeantMajor
+    override: true
+
+# ├──[ Warrant Officers ]────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFSecondWarrantOfficer
+  name: second warrant officer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_warrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: IASF_SecondWarrantOfficer
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFFirstWarrantOfficer
+  name: first warrant officer chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_chiefwarrant
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_warrant
+  - type: RankChanger
+    rank: IASF_FirstWarrantOfficer
+    override: true
+
+# ├──[ Officers ]────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFSecondLieutenant
+  name: second lieutenant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: IASF_SecondLieutenant
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFFirstLieutenant
+  name: first lieutenant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: IASF_FirstLieutenant
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFCaptain
+  name: captain chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_seniorofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: IASF_Captain
+    override: true
+
+# ├──[ Field Officers ]──────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFMajor
+  name: major chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_seniorofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: IASF_Major
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFLieutenantColonel
+  name: lieutenant colonel chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: IASF_LieutenantColonel
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFColonel
+  name: colonel chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: IASF_Colonel
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFBrigadierGeneral
+  name: brigadier general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: IASF_BrigadierGeneral
+    override: true
+
+# ├──[ Generals ]────────────────────────────────────────────────────┤
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFMajorGeneral
+  name: major general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: IASF_MajorGeneral
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFLieutenantGeneral
+  name: lieutenant general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: IASF_LieutenantGeneral
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFGeneral
+  name: general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: IASF_General
+    override: true
+
+- type: entity
+  parent: AU14ChevronIASFBase
+  id: AU14ChevronIASFGeneralOfTheArmy
+  name: general of the army chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: IASF_GeneralOfTheArmy
+    override: true

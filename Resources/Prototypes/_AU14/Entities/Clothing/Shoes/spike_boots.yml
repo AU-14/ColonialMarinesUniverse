@@ -1,0 +1,25 @@
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: AU14SpikeBoots
+  name: M-19 "Treadnailer" assault boots
+  description: >-
+    Heavy-duty assault boots fitted with hardened tungsten-carbide spike plates press-welded into the sole.
+    Originally prototyped for contested terrain operations and close-quarters breaching engagements.
+    The spike array is rated to pierce standard soft armor at zero standoff distance and engage
+    organic obstructions underfoot with extreme prejudice.
+    Impedes normal movement speed by approximately 20% under full operational load.
+    Handle with care around friendly downed personnel.
+  suffix: AU14
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Shoes/spikedboots.rsi
+    layers:
+    - state: icon
+    - state: filled
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+  - type: Clothing
+    sprite: _AU14/Clothing/Shoes/spikedboots.rsi
+  - type: ClothingSpeedModifier
+    walkModifier: 0.8
+    sprintModifier: 0.8
+  - type: SpikeBoots

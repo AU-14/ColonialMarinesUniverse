@@ -71,6 +71,7 @@
   - type: Access
     groups:
     - Colonist
+    - aumed
   - type: IdCard
     jobTitle: au14-job-name-civilianphysician
   - type: ItemIFF
@@ -95,19 +96,12 @@
     jobTitle: au14-job-name-civilianpharmacist
 
 - type: entity
-  parent: AU14IDCardBaseCivilianNoIFF
+  parent: AU14IDCardCLFPhysician
   id: AU14IDCardCLFSurgeon
   name: CLF surgeon ID card
   components:
-  - type: Access
-    groups:
-    - Colonist
   - type: IdCard
     jobTitle: au14-job-name-civiliansurgeon
-  - type: ItemIFF
-    factions:
-    - FactionSurvivor
-    - FactionCLF
 
 - type: entity
   parent: CMIDCardBase

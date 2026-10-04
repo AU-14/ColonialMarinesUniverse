@@ -13,6 +13,7 @@ rmc-stethoscope-eyes-mouth = You can't hear anything. Maybe that isn't the smart
 rmc-stethoscope-other-limbs = You hear a sound here and there, but none of them give you any good information.
 rmc-stethoscope-nothing = You can't hear. Really, anything at all, how weird.
 rmc-stethoscope-dead = You can't hear anything at all, they must have kicked the bucket.
+rmc-stethoscope-synth = You hear nothing.
 
 rmc-stethoscope-verb-text = Stethoscope
 rmc-stethoscope-verb-message = Listen using the stethoscope.

@@ -24,7 +24,7 @@
         - FullAuto
       recoilUnwielded: 5
       scatterWielded: 5
-      baseFireRate: 4
+      baseFireRate: 10
       burstScatterMult: 2
       modifiers:
         Burst:
@@ -40,7 +40,7 @@
           unwieldedScatterMultiplier: 2
           shotsToMaxScatter: 4
     - type: RMCWeaponAccuracy
-      accuracyMultiplier: 1.05
+      accuracyMultiplier: 1
     - type: ItemSlots
       slots:
         gun_magazine:
@@ -57,14 +57,26 @@
       multiplier: 1.05
     - type: AttachableHolder
       slots:
+        rmc-aslot-rail:
+          startingAttachable: AU14AttachmentTwoPointSling
+          whitelist:
+            tags:
+              - RMCAttachmentRailFlashlight
+              - RMCAttachmentMagneticHarness
         rmc-aslot-underbarrel:
           whitelist:
             tags:
               - RMCAttachmentAngledGrip
+              - RMCAttachmentBipod
               - RMCAttachmentVerticalGrip
               - RMCAttachmentFlashlightGrip
               - RMCAttachmentBurstFireAssembly
     - type: GunRequiresWield
+    - type: Corrodible
+      isCorrodible: false
+    - type: Tag
+      tags:
+        - AU14WeaponRifleKramerLSW
 
 - type: entity
   parent: AU14WeaponRifleKramerLSW
