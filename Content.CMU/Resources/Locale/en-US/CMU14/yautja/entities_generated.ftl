@@ -447,6 +447,9 @@ ent-CMUYautjaRelayBeacon = relay beacon
 ent-CMUYautjaSimpleRelayBeacon = simple relay beacon
     .desc = A device covered in sacred text. It whirrs and beeps every couple of seconds.
 
+ent-CMUYautjaYoungbloodRelayBeacon = youngblood relay beacon
+    .desc = A device covered in sacred text, attuned to young hunters. It whirrs and beeps every couple of seconds.
+
 ent-CMUYautjaFalconDrone = falcon drone
     .desc = An agile drone used by Yautja to survey the hunting grounds.
 

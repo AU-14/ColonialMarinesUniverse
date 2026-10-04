@@ -2526,6 +2526,7 @@ public sealed class YautjaBowTest
                         "CMUYautjaBodyMesh",
                         "CMUYautjaHuntingPouch",
                         "CMUYautjaMedicompFull",
+                        "CMUYautjaYoungbloodRelayBeacon",
                         "CMUYautjaLantern",
                     ]);
                     AssertBundle(prototypes, entMan, "CMUYautjaStrandedHuntingEquipmentBundle",
@@ -8717,7 +8718,7 @@ public sealed class YautjaBowTest
                 "CMUYautjaYoungbloodLoadoutVendor",
                 "CMUYautjaYoungbloodHuntingEquipmentBundle",
                 "CMUYautjaEssentials",
-                ["CMUYautjaBodyMesh", "CMUYautjaHuntingPouch", "CMUYautjaMedicompFull", "CMUYautjaLantern"]),
+                ["CMUYautjaBodyMesh", "CMUYautjaHuntingPouch", "CMUYautjaMedicompFull", "CMUYautjaYoungbloodRelayBeacon", "CMUYautjaLantern"]),
             new MandatoryBundleRow(
                 "CMUYautjaYoungbloodLoadoutVendor",
                 "CMUYautjaArmorBundle",
