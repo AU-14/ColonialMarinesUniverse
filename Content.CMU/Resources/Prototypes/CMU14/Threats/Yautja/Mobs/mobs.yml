@@ -122,8 +122,6 @@
   suffix: Yautja, Bad Blood
   components:
   - type: YautjaBadBlood
-  - type: DropshipHijacker
-    hijackDoAfterSeconds: 15
   - type: Yautja
     npcFaction: CMUYautjaBadBlood
     skinHueMin: 0.0
@@ -155,6 +153,8 @@
     - CMUYautjaBadBloodGruntGear19
     - CMUYautjaBadBloodGruntGear20
     - CMUYautjaBadBloodGruntGear21
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja
@@ -163,8 +163,6 @@
   suffix: Yautja, Bad Blood
   components:
   - type: YautjaBadBlood
-  - type: DropshipHijacker
-    hijackDoAfterSeconds: 15
   - type: Yautja
     npcFaction: CMUYautjaBadBlood
     skinHueMin: 0.0
@@ -191,6 +189,8 @@
     - CMUYautjaBadBloodLeaderGear14
     - CMUYautjaBadBloodLeaderGear15
     - CMUYautjaBadBloodLeaderGear16
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: AppearanceYautja
