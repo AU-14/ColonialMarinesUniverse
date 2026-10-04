@@ -31,7 +31,7 @@
         RMCSkillPolice: 2
         RMCSkillLeadership: 2
         RMCSkillMedical: 1
-        RMCSkillOverwatch: 1
+        RMCSkillOverwatch: 2
     - type: JobPrefix
       prefix: au14-job-prefix-nemo-chief
     - type: RMCTrackable
