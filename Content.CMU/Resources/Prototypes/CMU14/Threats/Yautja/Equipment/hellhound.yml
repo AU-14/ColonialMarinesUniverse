@@ -10,9 +10,7 @@
   components:
   - type: YautjaHellhound
   - type: Language
-    spokenLanguages: []
-    understoodLanguages:
-    - Yautja
+    preset: CMUHellhoundLanguagePreset
   - type: RMCCamera
     rename: false
   - type: GhostRole
@@ -67,6 +65,8 @@
   - type: CombatMode
     canDisarm: true
     disarmFailChance: 0
+  - type: Input
+    context: "xenonid"
   - type: Xeno
     role: CMUYautjaHellhound
     accessLevels: []
