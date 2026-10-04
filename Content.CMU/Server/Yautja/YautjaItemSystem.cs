@@ -947,8 +947,17 @@ public sealed partial class YautjaItemSystem : EntitySystem
             if (Deleted(uid) || component.Kind != YautjaRelayDestinationKind.Ground)
                 continue;
 
+            // Map-placed ground relays set only the entity name, never the
+            // component fields. Fall back to it for the id and label.
+            var metaName = Name(uid);
             var id = component.Id.Trim();
+            if (id.Length == 0)
+                id = metaName;
+
             var name = component.DisplayName.Trim();
+            if (name.Length == 0)
+                name = metaName;
+
             var transform = Transform(uid);
             var coordinates = transform.Coordinates;
             if (id.Length == 0 ||

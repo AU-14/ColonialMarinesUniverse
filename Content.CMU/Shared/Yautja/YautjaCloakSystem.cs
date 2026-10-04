@@ -59,7 +59,6 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         SubscribeLocalEvent<YautjaComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<YautjaComponent, XenoDevouredEvent>(OnDevour);
         SubscribeLocalEvent<YautjaComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
-        SubscribeLocalEvent<YautjaComponent, DamageChangedEvent>(OnDamageChanged);
         SubscribeLocalEvent<YautjaComponent, ExamineAttemptEvent>(OnExamineAttempt);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnAnyDamageChanged);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
@@ -348,6 +347,8 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         _actions.SetToggled(bracer.Comp.ToggleCloakAction, false);
     }
 
+    // Taking a hit must not break the cloak by itself: a hunter can stay hidden
+    // to decline a fight. The rare projectile roll below is the only gunfire strip.
     private void OnProjectileHit(Entity<ProjectileComponent> ent, ref ProjectileHitEvent args)
     {
         if (_net.IsClient ||
@@ -391,14 +392,6 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
     private void OnParasiteInfect(Entity<YautjaComponent> ent, ref XenoParasiteInfectEvent args)
     {
-        ForceDecloak(ent.Owner);
-    }
-
-    private void OnDamageChanged(Entity<YautjaComponent> ent, ref DamageChangedEvent args)
-    {
-        if (args.DamageDelta?.AnyPositive() != true)
-            return;
-
         ForceDecloak(ent.Owner);
     }
 

@@ -91,6 +91,11 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
             .WithGender(profile.Gender)
             .WithCharacterAppearance(profile.Appearance);
 
+        // DefaultWithSpecies leaves Voice at the human default, which strips every
+        // Yautja emote sound once applied. Take the voice from the species map.
+        if (yautja.VocalSounds.TryGetValue(profile.Sex, out var voice))
+            humanoidProfile = humanoidProfile.WithVoice(voice);
+
         _humanoid.ApplyProfileTo((uid, humanoid), humanoidProfile);
         _visualBody.ApplyProfileTo(uid, humanoidProfile);
         // The profile is authoritative for player-controlled Yautja appearance.

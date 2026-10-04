@@ -17,7 +17,6 @@ using Content.Shared._RMC14.Slow;
 using Content.Shared.Body.Components;
 using Content.Shared.Body;
 using Content.Shared.Body.Part;
-using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
@@ -217,9 +216,27 @@ public sealed class YautjaMedicompSurgerySystem : EntitySystem
 
     private void ApplyGroupHeal(EntityUid body, int amount)
     {
-        var heal = new DamageSpecifier(_prototypes.Index(BruteGroup), -amount)
-                   + new DamageSpecifier(_prototypes.Index(BurnGroup), -amount);
-        _damageable.TryChangeDamage(body, heal, ignoreResistances: true);
+        if (!TryComp<DamageableComponent>(body, out var damageable))
+            return;
+
+        // An even per-type spread clamps at zero on undamaged types, so heal
+        // through HealEvenly, which moves the excess to damaged types.
+        _damageable.HealEvenly((body, damageable), -amount, BruteGroup);
+        _damageable.HealEvenly((body, damageable), -amount, BurnGroup);
+    }
+
+    private void ApplyFullGroupHeal(EntityUid body)
+    {
+        if (!TryComp<DamageableComponent>(body, out var damageable))
+            return;
+
+        // HealEvenly with the group's exact total clears the whole group,
+        // even when the damage is concentrated in a single type.
+        var damage = _damageable.GetAllDamage((body, damageable));
+        if (damage.TryGetDamageInGroup(_prototypes.Index(BruteGroup), out var brute) && brute > 0)
+            _damageable.HealEvenly((body, damageable), -brute, BruteGroup);
+        if (damage.TryGetDamageInGroup(_prototypes.Index(BurnGroup), out var burn) && burn > 0)
+            _damageable.HealEvenly((body, damageable), -burn, BurnGroup);
     }
 
     /// <summary>
