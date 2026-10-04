@@ -83,5 +83,5 @@ public sealed partial class WithdrawConsoleComponent : Component
 
     /// <summary>Total time from withdrawal initiation to round end.</summary>
     [DataField]
-    public TimeSpan WithdrawDuration = TimeSpan.FromMinutes(30);
+    public TimeSpan WithdrawDuration = TimeSpan.FromMinutes(15);
 }
