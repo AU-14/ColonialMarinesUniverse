@@ -16522,7 +16522,7 @@ public sealed class YautjaSmokeTest
             {
                 var job = prototypes.Index(HellhoundJob);
                 Assert.That(job.Name, Is.EqualTo("cmu-yautja-job-name-hellhound"));
-                Assert.That(job.Supervisors, Is.EqualTo("cm-job-supervisors-nobody"));
+                Assert.That(job.Supervisors, Is.EqualTo("cmu-job-supervisors-yautja-hellhound"));
 
                 var xeno = entMan.GetComponent<XenoComponent>(hellhound);
                 Assert.That(xeno.Tier, Is.EqualTo(0));

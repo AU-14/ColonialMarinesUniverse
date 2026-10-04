@@ -9,6 +9,16 @@
   suffix: Yautja
   components:
   - type: YautjaHellhound
+  - type: K9Dog
+    presetBond: true
+    silentSensesAlert: true
+    batteryTrick: false
+    headbiteStrikes: false
+    grabEscapeMessage: rmc-k9-arm-grab-escape-hellhound
+    praiseMessage: rmc-k9-good-boy-hellhound
+    praiseSound: /Audio/_RMC14/Voice/Vulpkanin/dog_whine.ogg
+    bindMessageMaster: rmc-k9-bind-master-hellhound
+    bindMessageDog: rmc-k9-bind-dog-hellhound
   - type: Language
     preset: CMUHellhoundLanguagePreset
   - type: RMCCamera
