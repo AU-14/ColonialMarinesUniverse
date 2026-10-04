@@ -2209,6 +2209,12 @@ public sealed partial class YautjaSleepingHellhoundComponent : Component
     [DataField]
     public EntProtoId SpawnPrototype = "CMUMobYautjaHellhound";
 
+    /// <summary>
+    /// Living hellhounds one master may lead. Waking past this is refused.
+    /// </summary>
+    [DataField]
+    public int MaxHoundsPerMaster = 3;
+
     [DataField]
     public SoundSpecifier WakeSound = new SoundPathSpecifier("/Audio/Animals/cat_hiss.ogg");
 }

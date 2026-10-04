@@ -578,6 +578,7 @@ cmu-yautja-sleeping-hellhound-denied = You're not going anywhere near that thing
 cmu-yautja-sleeping-hellhound-confirm-title = Summon Hellhound
 cmu-yautja-sleeping-hellhound-confirm-message = Do you want to wake the Hellhound?
 cmu-yautja-sleeping-hellhound-woken = {$hellhound} wakes with a hungry snarl.
+cmu-yautja-sleeping-hellhound-pack-full = You already lead a full pack of hounds.
 cmu-yautja-hellhound-ghost-name = Hellhound
 cmu-yautja-hellhound-ghost-description = Awaken as a Yautja hunting beast and serve the hunt.
 cmu-yautja-hellhound-ghost-rules = You are a Yautja hunting beast. Obey your Yautja handlers and do not grief outside staff/event direction.
