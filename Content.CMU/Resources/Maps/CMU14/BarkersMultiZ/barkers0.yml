@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v289.0.0
+  engineVersion: 290.0.0
   forkId: ""
   forkVersion: ""
-  time: 09/11/2026 23:33:51
-  entityCount: 91938
+  time: 10/04/2026 13:43:56
+  entityCount: 91946
 maps:
 - 1
 grids:
@@ -2799,6 +2799,7 @@ entities:
     - type: SpreaderGrid
     - type: MapLight
     - type: TacticalMap
+      yautjaBlips: {}
       xenoStructureBlips: {}
       xenoLines: []
       xenoLabels: {}
@@ -2838,9 +2839,15 @@ entities:
           image:
             sprite: /Textures/_RMC14/Interface/map_blips.rsi
             state: supply
+        12032:
+          indices: 12,-33
+          image:
+            sprite: /Textures/_RMC14/Interface/map_blips.rsi
+            state: supply
       weYuLines: []
       weYuLabels: {}
       weYuBlips: {}
+      sharedLines: []
       opforLines: []
       opforLabels: {}
       opforBlips: {}
@@ -2854,6 +2861,7 @@ entities:
       marineLabels: {}
       marineBlips: {}
       mapDirty: True
+      lastUpdateYautjaBlips: {}
       lastUpdateXenoStructureBlips: {}
       lastUpdateXenoBlips: {}
       lastUpdateWeYuBlips: {}
@@ -2893,6 +2901,16 @@ entities:
           moles:
             Oxygen: 27.225372
             Nitrogen: 102.419266
+        - temperature: 293.15
+          volume: 2500
+          moles:
+            Oxygen: 23.57087
+            Nitrogen: 88.67137
+        - temperature: 293.14975
+          volume: 2500
+          moles:
+            Oxygen: 21.824879
+            Nitrogen: 82.10312
         - temperature: 293.15
           volume: 2500
           moles:
@@ -3501,7 +3519,8 @@ entities:
           -3,-9:
             0: 56784
           -2,-8:
-            0: 8191
+            0: 6143
+            2: 2048
           -2,-7:
             0: 8191
           -2,-6:
@@ -3509,7 +3528,8 @@ entities:
           -2,-9:
             0: 65520
           -1,-8:
-            0: 35771
+            0: 35003
+            3: 768
           -1,-7:
             0: 4095
           -1,-6:
@@ -6342,11 +6362,11 @@ entities:
             0: 4095
           -23,-16:
             0: 13311
-            2: 49152
+            4: 49152
           -23,-17:
             0: 65535
           -23,-15:
-            2: 12
+            4: 12
           -22,-16:
             0: 61695
           -22,-15:
@@ -140979,17 +140999,19 @@ entities:
   - uid: 60
     components:
     - type: Transform
+      parent: 82720
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 82720
+  - uid: 66
+    components:
+    - type: Transform
       parent: 59
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-  - uid: 66
-    components:
-    - type: Transform
-      parent: 65
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
+      storage: 59
   - uid: 72
     components:
     - type: Transform
@@ -140997,6 +141019,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
+      storage: 71
 - proto: AU14CMDefibrillator
   entities:
   - uid: 77
@@ -141402,19 +141425,11 @@ entities:
     - type: Transform
       parent: 1
       pos: 73.5,-48.5
-    - type: ContainerContainer
-      containers:
-        storagebase: !type:Container
-          ents: []
   - uid: 1977
     components:
     - type: Transform
       parent: 1
       pos: 75.5,-48.5
-    - type: ContainerContainer
-      containers:
-        storagebase: !type:Container
-          ents: []
 - proto: AU14GeneralMedicalVendor
   entities:
   - uid: 116
@@ -147155,25 +147170,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 49.5,-24.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
-    - type: ContainerContainer
-      containers:
-        submission: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        disposals: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        DisposalUnitComponent: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: AUSubmissionPointBase
   entities:
   - uid: 1130
@@ -147181,25 +147177,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 49.5,-17.5
-    - type: ContainerContainer
-      containers:
-        submission: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        disposals: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        DisposalUnitComponent: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
 - proto: AUSubmissionPointFruit
   entities:
   - uid: 1131
@@ -147207,25 +147184,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 50.5,-9.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
-    - type: ContainerContainer
-      containers:
-        submission: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        disposals: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        DisposalUnitComponent: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: AUSubmissionPointSteel
   entities:
   - uid: 1132
@@ -147233,25 +147191,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 49.5,-9.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
-    - type: ContainerContainer
-      containers:
-        submission: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        disposals: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        DisposalUnitComponent: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: AUSubmissionPointVegetables
   entities:
   - uid: 1133
@@ -147259,11 +147198,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -178.5,-87.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
     - type: ContainerContainer
       containers:
         ItemCabinet: !type:ContainerSlot
@@ -147283,25 +147217,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 49.5,-16.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
-    - type: ContainerContainer
-      containers:
-        submission: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        disposals: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        DisposalUnitComponent: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: AUSubmissionPointWood
   entities:
   - uid: 1135
@@ -147309,25 +147224,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 49.5,-18.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
-    - type: ContainerContainer
-      containers:
-        submission: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        disposals: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        DisposalUnitComponent: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
 - proto: Basketball
   entities:
   - uid: 1136
@@ -150084,16 +149980,6 @@ entities:
       - - CMAccessColonyCommand
       - - CMAccessColonyLogistics
       - - CMAccessRequisitions
-    - type: ContainerContainer
-      containers:
-        board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        ItemCabinet: !type:ContainerSlot
-          ent: null
-          showEnts: False
-          occludes: True
 - proto: CMASRSConsoleGovfor
   entities:
   - uid: 1369
@@ -150984,16 +150870,6 @@ entities:
           entities: []
           crate: RMCDropshipAttachmentAmmoLaserCannon
           cost: 2500
-    - type: ContainerContainer
-      containers:
-        board: !type:Container
-          ents: []
-          showEnts: False
-          occludes: True
-        ItemCabinet: !type:ContainerSlot
-          ent: null
-          showEnts: False
-          occludes: True
 - proto: CMAutolathe
   entities:
   - uid: 1370
@@ -152230,51 +152106,15 @@ entities:
     components:
     - type: Transform
       parent: 1
-      pos: -2.5,-29.5
-    - type: EntityStorage
-      air:
-        temperature: 293.14673
-        volume: 200
-        moles:
-          Oxygen: 1.7459903
-          Nitrogen: 6.568249
-        immutable: False
-    - type: ContainerContainer
-      containers:
-        entity_storage: !type:Container
-          ents:
-          - 61
-          - 63
-          - 62
-          - 60
-          - 64
-          showEnts: False
-          occludes: True
-        paper_label: !type:ContainerSlot
-          ent: null
-          showEnts: False
-          occludes: True
-  - uid: 65
-    components:
-    - type: Transform
-      parent: 1
       pos: -3.5,-29.5
-    - type: EntityStorage
-      air:
-        temperature: 293.14673
-        volume: 200
-        moles:
-          Oxygen: 1.7459903
-          Nitrogen: 6.568249
-        immutable: False
     - type: ContainerContainer
       containers:
         entity_storage: !type:Container
           ents:
+          - 66
           - 67
           - 69
           - 68
-          - 66
           - 70
           showEnts: False
           occludes: True
@@ -152291,19 +152131,17 @@ entities:
       air:
         temperature: 293.14673
         volume: 200
-        moles:
-          Oxygen: 1.7459903
-          Nitrogen: 6.568249
+        moles: {}
         immutable: False
     - type: ContainerContainer
       containers:
         entity_storage: !type:Container
           ents:
-          - 73
           - 75
-          - 74
-          - 72
           - 76
+          - 72
+          - 74
+          - 73
           showEnts: False
           occludes: True
         paper_label: !type:ContainerSlot
@@ -152517,6 +152355,26 @@ entities:
     - type: Transform
       parent: 1
       pos: 75.5,-20.5
+  - uid: 82720
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-29.5
+    - type: ContainerContainer
+      containers:
+        entity_storage: !type:Container
+          ents:
+          - 60
+          - 61
+          - 63
+          - 62
+          - 64
+          showEnts: False
+          occludes: True
+        paper_label: !type:ContainerSlot
+          ent: null
+          showEnts: False
+          occludes: True
 - proto: CMClosetEmergencyFilled
   entities:
   - uid: 1689
@@ -154266,17 +154124,19 @@ entities:
   - uid: 61
     components:
     - type: Transform
+      parent: 82720
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 82720
+  - uid: 67
+    components:
+    - type: Transform
       parent: 59
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-  - uid: 67
-    components:
-    - type: Transform
-      parent: 65
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
+      storage: 59
   - uid: 73
     components:
     - type: Transform
@@ -154284,6 +154144,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
+      storage: 71
 - proto: CMFolderWhite
   entities:
   - uid: 2002
@@ -154788,17 +154649,19 @@ entities:
   - uid: 62
     components:
     - type: Transform
+      parent: 82720
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 82720
+  - uid: 68
+    components:
+    - type: Transform
       parent: 59
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-  - uid: 68
-    components:
-    - type: Transform
-      parent: 65
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
+      storage: 59
   - uid: 74
     components:
     - type: Transform
@@ -154806,6 +154669,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
+      storage: 71
 - proto: CMMaskGasMedical
   entities:
   - uid: 2110
@@ -160635,6 +160499,58 @@ entities:
     - type: Transform
       parent: 1
       pos: 51.5,3.5
+- proto: CMUAirtightSeal
+  entities:
+  - uid: 82710
+    components:
+    - type: Transform
+      parent: 1
+      pos: 71.5,-105.5
+      anchored: True
+  - uid: 82711
+    components:
+    - type: Transform
+      parent: 1
+      pos: 71.5,-100.5
+      anchored: True
+  - uid: 82712
+    components:
+    - type: Transform
+      parent: 1
+      pos: 77.5,-98.5
+      anchored: True
+  - uid: 82713
+    components:
+    - type: Transform
+      parent: 1
+      pos: 77.5,-107.5
+      anchored: True
+  - uid: 82714
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 91.5,-45.5
+      anchored: True
+  - uid: 82715
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: 88.5,-36.5
+      anchored: True
+  - uid: 82716
+    components:
+    - type: Transform
+      parent: 1
+      pos: 7.5,-13.5
+      anchored: True
+  - uid: 82717
+    components:
+    - type: Transform
+      parent: 1
+      pos: 7.5,-16.5
+      anchored: True
 - proto: CMUAutodocConsole
   entities:
   - uid: 3346
@@ -160693,6 +160609,20 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,-19.5
+- proto: CMUCanisterAir
+  entities:
+  - uid: 83427
+    components:
+    - type: Transform
+      parent: 1
+      pos: -3.5,-23.5
+- proto: CMUCanisterNitrousOxide
+  entities:
+  - uid: 83430
+    components:
+    - type: Transform
+      parent: 1
+      pos: -2.5,-23.5
 - proto: CMUCashVendorCircuits
   entities:
   - uid: 91173
@@ -162203,17 +162133,19 @@ entities:
   - uid: 63
     components:
     - type: Transform
+      parent: 82720
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 82720
+  - uid: 69
+    components:
+    - type: Transform
       parent: 59
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-  - uid: 69
-    components:
-    - type: Transform
-      parent: 65
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
+      storage: 59
   - uid: 75
     components:
     - type: Transform
@@ -162221,6 +162153,54 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
+      storage: 71
+- proto: CMUGeneratorThermo
+  entities:
+  - uid: 85719
+    components:
+    - type: Transform
+      parent: 1
+      pos: -49.5,7.5
+  - uid: 85720
+    components:
+    - type: Transform
+      parent: 1
+      pos: -47.5,7.5
+  - uid: 85721
+    components:
+    - type: Transform
+      parent: 1
+      pos: -50.5,7.5
+    - type: ContainerContainer
+      containers:
+        rmc_fusion_reactor_cell: !type:ContainerSlot {}
+  - uid: 85722
+    components:
+    - type: Transform
+      parent: 1
+      pos: -46.5,7.5
+- proto: CMUGeneratorThermoNoMapIcon
+  entities:
+  - uid: 85725
+    components:
+    - type: Transform
+      parent: 1
+      pos: -184.5,-42.5
+    missingComponents:
+    - MarineMapTracked
+    - XenoMapTracked
+    - TacticalMapTracked
+    - TacticalMapIcon
+  - uid: 85726
+    components:
+    - type: Transform
+      parent: 1
+      pos: -184.5,-43.5
+    missingComponents:
+    - MarineMapTracked
+    - XenoMapTracked
+    - TacticalMapTracked
+    - TacticalMapIcon
 - proto: CMUHybrisaExtinguisherCabinetFilled
   entities:
   - uid: 3416
@@ -555798,6 +555778,18 @@ entities:
     - type: Transform
       parent: 1
       pos: 23.5,91.5
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000003
+    components:
+    - type: MetaData
+      name: Barkers Lament ground relay
+    - type: Transform
+      parent: 1
+      pos: 23.5,-25.5
+    - type: YautjaRelayDestination
+      id: barkers-lament.ground.relay
+      displayName: Barker's Lament Ground Relay
 - proto: CMVendorCassettes
   entities:
   - uid: 79449
@@ -571481,39 +571473,23 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: -176.5,-88.5
-    - type: ContainerContainer
-      containers:
-        board: !type:Container
-          ents: []
   - uid: 82662
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: -66.5,-31.5
-    - type: ContainerContainer
-      containers:
-        board: !type:Container
-          ents: []
   - uid: 82663
     components:
     - type: Transform
       parent: 1
       rot: 4.71238898038469 rad
       pos: -60.5,-31.5
-    - type: ContainerContainer
-      containers:
-        board: !type:Container
-          ents: []
   - uid: 82664
     components:
     - type: Transform
       parent: 1
       pos: -63.5,-27.5
-    - type: ContainerContainer
-      containers:
-        board: !type:Container
-          ents: []
 - proto: ComputerObjectivesGovfor
   entities:
   - uid: 82665
@@ -574454,8 +574430,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -185.5,-89.5
-    - type: Physics
-      canCollide: False
     - type: Fixtures
       fixtures: {}
   - uid: 83210
@@ -574463,8 +574437,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -206.5,-68.5
-    - type: Physics
-      canCollide: False
     - type: Fixtures
       fixtures: {}
   - uid: 83211
@@ -574472,8 +574444,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -195.5,-68.5
-    - type: Physics
-      canCollide: False
     - type: Fixtures
       fixtures: {}
 - proto: RMCBeakerHighCapacity
@@ -575633,20 +575603,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 54.5,3.625
-- proto: CMUCanisterAir
-  entities:
-  - uid: 83427
-    components:
-    - type: Transform
-      parent: 1
-      pos: -3.5,-23.5
-- proto: CMUCanisterNitrousOxide
-  entities:
-  - uid: 83430
-    components:
-    - type: Transform
-      parent: 1
-      pos: -2.5,-23.5
 - proto: RMCCarpetBeige1
   entities:
   - uid: 83431
@@ -575888,6 +575844,14 @@ entities:
     - type: Transform
       parent: 1
       pos: -3.5,-21.5
+- proto: RMCChemStorageGround
+  entities:
+  - uid: 65
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: -0.5,-23.5
 - proto: RMCCoagulationArm
   entities:
   - uid: 83469
@@ -576226,11 +576190,11 @@ entities:
       pos: 56.5,-23.5
 - proto: RMCCrateMedicalPill
   entities:
-  - uid: 83525
+  - uid: 82719
     components:
     - type: Transform
       parent: 1
-      pos: -1.5,-23.5
+      pos: -2.5,-34.5
 - proto: RMCCrateMini
   entities:
   - uid: 83526
@@ -587364,53 +587328,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -184.4514,-44.27175
-- proto: CMUGeneratorThermo
-  entities:
-  - uid: 85719
-    components:
-    - type: Transform
-      parent: 1
-      pos: -49.5,7.5
-  - uid: 85720
-    components:
-    - type: Transform
-      parent: 1
-      pos: -47.5,7.5
-  - uid: 85721
-    components:
-    - type: Transform
-      parent: 1
-      pos: -50.5,7.5
-    - type: ContainerContainer
-      containers:
-        rmc_fusion_reactor_cell: !type:ContainerSlot {}
-  - uid: 85722
-    components:
-    - type: Transform
-      parent: 1
-      pos: -46.5,7.5
-- proto: CMUGeneratorThermoNoMapIcon
-  entities:
-  - uid: 85725
-    components:
-    - type: Transform
-      parent: 1
-      pos: -184.5,-42.5
-    missingComponents:
-    - MarineMapTracked
-    - XenoMapTracked
-    - TacticalMapTracked
-    - TacticalMapIcon
-  - uid: 85726
-    components:
-    - type: Transform
-      parent: 1
-      pos: -184.5,-43.5
-    missingComponents:
-    - MarineMapTracked
-    - XenoMapTracked
-    - TacticalMapTracked
-    - TacticalMapIcon
 - proto: RMCGeneratorFusionFake
   entities:
   - uid: 85727
@@ -587483,17 +587400,19 @@ entities:
   - uid: 64
     components:
     - type: Transform
+      parent: 82720
+    - type: Physics
+      canCollide: False
+    - type: InsideEntityStorage
+      storage: 82720
+  - uid: 70
+    components:
+    - type: Transform
       parent: 59
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-  - uid: 70
-    components:
-    - type: Transform
-      parent: 65
-    - type: Physics
-      canCollide: False
-    - type: InsideEntityStorage
+      storage: 59
   - uid: 76
     components:
     - type: Transform
@@ -587501,6 +587420,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
+      storage: 71
 - proto: RMCHardhatRedTMCC
   entities:
   - uid: 85750
@@ -587979,43 +587899,31 @@ entities:
     - type: Transform
       parent: 1
       pos: -25.5,-18.5
-    - type: ApcPowerReceiver
-      powerLoad: 5
   - uid: 85901
     components:
     - type: Transform
       parent: 1
       pos: 37.5,2.5
-    - type: ApcPowerReceiver
-      powerLoad: 5
   - uid: 85902
     components:
     - type: Transform
       parent: 1
       pos: -199.5,-43.5
-    - type: ApcPowerReceiver
-      powerLoad: 5
   - uid: 85903
     components:
     - type: Transform
       parent: 1
       pos: -196.5,-43.5
-    - type: ApcPowerReceiver
-      powerLoad: 5
   - uid: 85904
     components:
     - type: Transform
       parent: 1
       pos: -148.5,-109.5
-    - type: ApcPowerReceiver
-      powerLoad: 5
   - uid: 85905
     components:
     - type: Transform
       parent: 1
       pos: -2.5,-21.5
-    - type: ApcPowerReceiver
-      powerLoad: 5
 - proto: RMCLadderHatch
   entities:
   - uid: 85906
@@ -591524,6 +591432,7 @@ entities:
     - type: TacticalMapLines
       xenoLines: []
       weYuLines: []
+      sharedLines: []
       opforLines: []
       marineLines: []
       govforLines: []
@@ -591590,6 +591499,7 @@ entities:
     - type: TacticalMapLines
       xenoLines: []
       weYuLines: []
+      sharedLines: []
       opforLines: []
       marineLines: []
       govforLines: []
@@ -595002,50 +594912,36 @@ entities:
     - type: Transform
       parent: 1
       pos: -49.5,4.5
-    - type: ApcPowerReceiver
-      powerLoad: 1
   - uid: 87132
     components:
     - type: Transform
       parent: 1
       pos: 20.5,63.5
-    - type: ApcPowerReceiver
-      powerLoad: 1
   - uid: 87137
     components:
     - type: Transform
       parent: 1
       pos: -149.5,-95.5
-    - type: ApcPowerReceiver
-      powerLoad: 1
   - uid: 87138
     components:
     - type: Transform
       parent: 1
       pos: -144.5,-101.5
-    - type: ApcPowerReceiver
-      powerLoad: 1
   - uid: 87139
     components:
     - type: Transform
       parent: 1
       pos: -174.5,-75.5
-    - type: ApcPowerReceiver
-      powerLoad: 1
   - uid: 87140
     components:
     - type: Transform
       parent: 1
       pos: -4.5,-19.5
-    - type: ApcPowerReceiver
-      powerLoad: 1
   - uid: 87141
     components:
     - type: Transform
       parent: 1
       pos: -66.5,-22.5
-    - type: ApcPowerReceiver
-      powerLoad: 1
 - proto: RMCRollerBedHospital
   entities:
   - uid: 87142
@@ -598036,6 +597932,11 @@ entities:
       pos: -71.5,36.5
 - proto: RMCTankReagentEmpty
   entities:
+  - uid: 82718
+    components:
+    - type: Transform
+      parent: 1
+      pos: -0.5,-22.5
   - uid: 87589
     components:
     - type: Transform
@@ -598051,16 +597952,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -152.5,-106.5
-  - uid: 87592
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,-22.5
-  - uid: 87593
-    components:
-    - type: Transform
-      parent: 1
-      pos: -0.5,-23.5
 - proto: RMCTankReagentFuel
   entities:
   - uid: 87596
@@ -598340,11 +598231,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 85.5,-95.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
 - proto: RMCTrashBinGreen
   entities:
   - uid: 87653
@@ -598352,371 +598238,186 @@ entities:
     - type: Transform
       parent: 1
       pos: 11.5,-12.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87654
     components:
     - type: Transform
       parent: 1
       pos: 47.5,-16.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87655
     components:
     - type: Transform
       parent: 1
       pos: -53.5,-0.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87656
     components:
     - type: Transform
       parent: 1
       pos: -47.5,-6.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87657
     components:
     - type: Transform
       parent: 1
       pos: -24.5,-18.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87658
     components:
     - type: Transform
       parent: 1
       pos: -17.5,-10.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87659
     components:
     - type: Transform
       parent: 1
       pos: 13.5,1.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87660
     components:
     - type: Transform
       parent: 1
       pos: -30.5,-18.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87661
     components:
     - type: Transform
       parent: 1
       pos: -153.5,-101.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87662
     components:
     - type: Transform
       parent: 1
       pos: -167.5,-87.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87663
     components:
     - type: Transform
       parent: 1
       pos: -165.5,-28.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87664
     components:
     - type: Transform
       parent: 1
       pos: -147.5,-105.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87665
     components:
     - type: Transform
       parent: 1
       pos: -140.5,-109.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87666
     components:
     - type: Transform
       parent: 1
       pos: -175.5,-80.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87667
     components:
     - type: Transform
       parent: 1
       pos: -148.5,-95.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87668
     components:
     - type: Transform
       parent: 1
       pos: -110.5,-95.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87669
     components:
     - type: Transform
       parent: 1
       pos: -120.5,-94.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87670
     components:
     - type: Transform
       parent: 1
       pos: -132.5,-86.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87671
     components:
     - type: Transform
       parent: 1
       pos: -176.5,-28.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87672
     components:
     - type: Transform
       parent: 1
       pos: -169.5,-32.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87673
     components:
     - type: Transform
       parent: 1
       pos: -164.5,-32.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87674
     components:
     - type: Transform
       parent: 1
       pos: -161.5,-31.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87675
     components:
     - type: Transform
       parent: 1
       pos: -194.5,-31.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87676
     components:
     - type: Transform
       parent: 1
       pos: -202.5,-36.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87677
     components:
     - type: Transform
       parent: 1
       pos: -194.5,-54.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87678
     components:
     - type: Transform
       parent: 1
       pos: -198.5,-54.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87679
     components:
     - type: Transform
       parent: 1
       pos: -202.5,-54.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87680
     components:
     - type: Transform
       parent: 1
       pos: -206.5,-54.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87681
     components:
     - type: Transform
       parent: 1
       pos: -190.5,-49.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87682
     components:
     - type: Transform
       parent: 1
       pos: -190.5,-52.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87683
     components:
     - type: Transform
       parent: 1
       pos: -145.5,-103.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87684
     components:
     - type: Transform
       parent: 1
       pos: -11.5,-20.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87685
     components:
     - type: Transform
       parent: 1
       pos: -1.5,-1.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87686
     components:
     - type: Transform
       parent: 1
       pos: 1.5,6.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87687
     components:
     - type: Transform
       parent: 1
       pos: 8.5,6.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 87688
     components:
     - type: Transform
       parent: 1
       pos: 47.5,-24.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
   - uid: 91210
     components:
     - type: Transform
       parent: 1
       pos: 87.5,-37.5
-    - type: DisposalUnit
-      container:
-        ents: []
-        showEnts: False
-        occludes: True
 - proto: RMCTrashCart
   entities:
   - uid: 87689
@@ -598746,29 +598447,21 @@ entities:
     - type: Transform
       parent: 1
       pos: -70.42354,-25.12696
-    - type: UniversalRecorderRuntime
-    - type: ItemSlots
   - uid: 87781
     components:
     - type: Transform
       parent: 1
       pos: -66.5859,-30.186985
-    - type: UniversalRecorderRuntime
-    - type: ItemSlots
   - uid: 87782
     components:
     - type: Transform
       parent: 1
       pos: -60.300137,-30.79636
-    - type: UniversalRecorderRuntime
-    - type: ItemSlots
   - uid: 87783
     components:
     - type: Transform
       parent: 1
       pos: -67.59541,-25.15821
-    - type: UniversalRecorderRuntime
-    - type: ItemSlots
 - proto: RMCUniversalRecorderTape
   entities:
   - uid: 83322
@@ -610612,17 +610305,4 @@ entities:
     - type: Transform
       parent: 1
       pos: -46.5,126.5
-- proto: CMUYautjaGroundRelayDestination
-  entities:
-  - uid: 1000000003
-    components:
-    - type: MetaData
-      name: Barkers Lament ground relay
-    - type: Transform
-      pos: 23.5,-25.5
-      parent: 1
-    - type: YautjaRelayDestination
-      kind: Ground
-      id: barkers-lament.ground.relay
-      displayName: Barker's Lament Ground Relay
 ...
