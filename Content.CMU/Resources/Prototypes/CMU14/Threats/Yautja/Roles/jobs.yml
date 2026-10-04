@@ -585,7 +585,7 @@
     baseWalkSpeed: 3.7
     baseSprintSpeed: 7.1
   - type: Damageable
-    damageModifierSet: CMUYautja
+    #damageModifierSet: CMUYautja
   - type: Injurable
     damageContainer: Biological
     healthBarThreshold: 5

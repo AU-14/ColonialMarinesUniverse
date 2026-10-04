@@ -1005,6 +1005,7 @@
     count: 12
   - type: Wieldable
     wieldedInhandPrefix: spike_launcher
+  - type: GunRequiresWield
   - type: WieldDelay
     baseDelay: 0.45
     preventFiring: true
