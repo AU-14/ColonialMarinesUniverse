@@ -380,6 +380,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
 
         RemCompDeferred<XenoChargingComponent>(xeno);
         xeno.Comp.AlreadyHit.Clear();
+        xeno.Comp.PrimaryTarget = null; // CMU14: the completed charge no longer owns a target.
         Dirty(xeno);
     }
 
@@ -880,7 +881,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
                 if (_xenoToggleChargingRecentlyHitQuery.TryComp(hit.Target, out var recently) &&
                     time < recently.LastHitAt + recently.Cooldown)
                 {
-                    continue; // CMU14: this pair must not discard other queued impacts or charge resets.
+                    return;
                 }
 
                 var ev = new XenoToggleChargingCollideEvent(hit.Crusher);

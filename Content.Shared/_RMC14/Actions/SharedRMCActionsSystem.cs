@@ -4,7 +4,6 @@ using Content.Shared.Actions.Events;
 using Content.Shared.Interaction;
 using Robust.Shared.Serialization;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Player; // CMU14
 
 namespace Content.Shared._RMC14.Actions;
 
@@ -30,20 +29,9 @@ public abstract partial class SharedRMCActionsSystem : EntitySystem
         SubscribeLocalEvent<ActionComponent, ActionReducedUseDelayEvent>(OnReducedUseDelayEvent);
     }
 
-    // CMU14: missed-target requests have the same ownership boundary as successful action requests.
-    private void OnMissedTargetAction(RMCMissedTargetActionEvent args, EntitySessionEventArgs sessionArgs)
+    private void OnMissedTargetAction(RMCMissedTargetActionEvent args)
     {
         var action = GetEntity(args.Action);
-
-        if (sessionArgs.SenderSession.AttachedEntity is not { } user ||
-            !_actions.HasAction(user, action) ||
-            _actions.GetAction(action) is not { } ownedAction ||
-            ownedAction.Comp.AttachedEntity != user ||
-            !ownedAction.Comp.Enabled ||
-            _actions.IsCooldownActive(ownedAction.Comp))
-        {
-            return;
-        }
 
         if (!TryComp(action, out RMCCooldownOnMissComponent? cooldown))
             return;

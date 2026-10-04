@@ -44,7 +44,7 @@ public sealed class ReportedTailStabRegressionTest
             var timing = pair.Server.ResolveDependency<IGameTiming>();
             var history = entities.EnsureComponent<LagCompensationComponent>(target);
             history.Positions.Clear();
-            history.Positions.Enqueue((timing.CurTime - 10 * timing.TickPeriod, viewed, Angle.Zero));
+            history.Positions.Enqueue((timing.CurTime - TimeSpan.FromMilliseconds(50), viewed, Angle.Zero));
             history.Positions.Enqueue((timing.CurTime, entities.GetComponent<TransformComponent>(target).Coordinates, Angle.Zero));
             entities.System<SharedRMCLagCompensationSystem>().SetLastRealTick(sessions[0].UserId, timing.CurTick - 10);
             if (blocked)

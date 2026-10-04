@@ -1063,12 +1063,12 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             HasComp<ThirdPartyDropshipReturnDestinationComponent>(destination) ||
             HasComp<ThirdPartyDropshipReturnedComponent>(dropship))
         {
-            Dirty(dropship, autoReturn);
+            // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
             return;
         }
 
         autoReturn.LastActivity = _timing.CurTime;
-        Dirty(dropship, autoReturn);
+        // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
     }
 
     private void RecordThirdPartyAutoReturnActivity(EntityUid dropship)
@@ -1080,7 +1080,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         }
 
         autoReturn.LastActivity = _timing.CurTime;
-        Dirty(dropship, autoReturn);
+        // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
     }
 
     private void ResetThirdPartyAutoReturnCountdown(EntityUid dropship)
@@ -1091,7 +1091,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         autoReturn.LastActivity = _timing.CurTime;
         autoReturn.ReturnAt = null;
         autoReturn.NextWarningAt = TimeSpan.Zero;
-        Dirty(dropship, autoReturn);
+        // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
     }
 
     protected override bool IsShuttle(EntityUid dropship)
@@ -1156,7 +1156,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 {
                     autoReturn.ReturnAt = null;
                     autoReturn.NextWarningAt = TimeSpan.Zero;
-                    Dirty(uid, autoReturn);
+                    // Dirty(uid, autoReturn); // CMU14: the auto-return timer is server-only.
                 }
 
                 continue;
@@ -1165,7 +1165,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             if (autoReturn.LastActivity == TimeSpan.Zero)
             {
                 autoReturn.LastActivity = time;
-                Dirty(uid, autoReturn);
+                // Dirty(uid, autoReturn); // CMU14: the auto-return timer is server-only.
             }
 
             if (autoReturn.ReturnAt is not { } returnAt)
@@ -1176,7 +1176,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 returnAt = time + autoReturn.ReturnDelay;
                 autoReturn.ReturnAt = returnAt;
                 autoReturn.NextWarningAt = time;
-                Dirty(uid, autoReturn);
+                // Dirty(uid, autoReturn); // CMU14: the auto-return timer is server-only.
 
                 LockAllDocks(uid);
                 RefreshUI();
@@ -1186,7 +1186,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             {
                 _popup.PopupEntity(ThirdPartyAutoReturnAnnouncement, uid, PopupType.LargeCaution);
                 autoReturn.NextWarningAt = time + autoReturn.WarningInterval;
-                Dirty(uid, autoReturn);
+                // Dirty(uid, autoReturn); // CMU14: the auto-return timer is server-only.
             }
 
             if (time >= returnAt)
@@ -1201,7 +1201,7 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         {
             Log.Warning($"Third party dropship {ToPrettyString(dropship)} has no valid deep space return destination.");
             autoReturn.ReturnAt = _timing.CurTime + TimeSpan.FromSeconds(10);
-            Dirty(dropship, autoReturn);
+            // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
             return;
         }
 
@@ -1209,19 +1209,19 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         {
             Log.Warning($"Third party dropship {ToPrettyString(dropship)} has no navigation computer for automatic return.");
             autoReturn.ReturnAt = _timing.CurTime + TimeSpan.FromSeconds(10);
-            Dirty(dropship, autoReturn);
+            // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
             return;
         }
 
         autoReturn.ReturnAt = null;
         autoReturn.NextWarningAt = TimeSpan.Zero;
-        Dirty(dropship, autoReturn);
+        // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
 
         _popup.PopupEntity("Automatic return to deep space commencing.", dropship, PopupType.LargeCaution);
         if (!FlyTo(computer, autoReturn.ReturnDestination, null))
         {
             autoReturn.ReturnAt = _timing.CurTime + TimeSpan.FromSeconds(10);
-            Dirty(dropship, autoReturn);
+            // Dirty(dropship, autoReturn); // CMU14: the auto-return timer is server-only.
         }
     }
 
@@ -1241,12 +1241,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         return false;
     }
 
+    // CMU14 method: door callbacks can create or reparent dropship children.
     private void LockAllDocks(EntityUid dropship)
     {
         // CMU14 Begin: retract boarding devices with the ordinary door controls.
         var controls = new DropshipDoorControlEvent(DoorLocation.None, true);
         RaiseLocalEvent(dropship, ref controls);
         // CMU14 End
+        var docks = new List<EntityUid>();
         var enumerator = Transform(dropship).ChildEnumerator;
         while (enumerator.MoveNext(out var child))
         {
@@ -1256,7 +1258,13 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
                 continue;
             }
 
-            LockDoor(child);
+            docks.Add(child);
+        }
+
+        foreach (var dock in docks)
+        {
+            if (!TerminatingOrDeleted(dock))
+                LockDoor(dock);
         }
     }
 

@@ -38,7 +38,6 @@ public sealed partial class VehicleRideSurfaceSystem : EntitySystem
 
     private readonly Dictionary<EntityUid, RideSurfaceTransform> _lastTransforms = new();
     private readonly Dictionary<EntityUid, HashSet<EntityUid>> _ridersByVehicle = new();
-    private readonly Dictionary<EntityUid, EntityUid> _vehiclesByRider = new(); // CMU14: retain old membership across state replacement.
     private readonly HashSet<EntityUid> _movedRiders = new();
     private readonly List<EntityUid> _riderBuffer = new();
 
@@ -64,10 +63,6 @@ public sealed partial class VehicleRideSurfaceSystem : EntitySystem
         SubscribeLocalEvent<VehicleRideSurfaceComponent, PreventCollideEvent>(OnSurfacePreventCollide);
         SubscribeLocalEvent<VehicleRideSurfaceRiderComponent, PreventCollideEvent>(OnRiderPreventCollide);
         SubscribeLocalEvent<VehicleRideSurfaceRiderComponent, ComponentShutdown>(OnRiderShutdown);
-        // CMU14: a restored or newly controlled rider need not have completed a climb on this client.
-        SubscribeLocalEvent<VehicleRideSurfaceRiderComponent, ComponentStartup>(OnRiderStartup);
-        SubscribeLocalEvent<VehicleRideSurfaceRiderComponent, LocalPlayerAttachedEvent>(OnRiderAttached);
-        SubscribeLocalEvent<VehicleRideSurfaceRiderComponent, LocalPlayerDetachedEvent>(OnRiderDetached);
     }
 
     public override void Update(float frameTime)
@@ -112,57 +107,6 @@ public sealed partial class VehicleRideSurfaceSystem : EntitySystem
         UntrackRider(ent.Owner, ent.Comp.Vehicle);
     }
 
-    // CMU14 Begin: reconstruct derived membership without replaying climb effects.
-    private void OnRiderStartup(Entity<VehicleRideSurfaceRiderComponent> ent, ref ComponentStartup args)
-    {
-        RefreshRider(ent);
-    }
-
-    private void OnRiderAttached(Entity<VehicleRideSurfaceRiderComponent> ent, ref LocalPlayerAttachedEvent args)
-    {
-        RefreshRider(ent);
-        ResetCarryPrediction();
-    }
-
-    private void OnRiderDetached(Entity<VehicleRideSurfaceRiderComponent> ent, ref LocalPlayerDetachedEvent args)
-    {
-        UntrackRider(ent.Owner, ent.Comp.Vehicle);
-    }
-
-    /// <summary>
-    /// Rebuilds the rider index after authoritative state or ownership changes.
-    /// Called by the client owner of the rider's state notification.
-    /// </summary>
-    public void RefreshRider(Entity<VehicleRideSurfaceRiderComponent> rider)
-    {
-        if (!rider.Comp.Vehicle.IsValid() || (_net.IsClient && rider.Owner != _player.LocalEntity))
-        {
-            UntrackRider(rider.Owner, rider.Comp.Vehicle);
-            return;
-        }
-
-        TrackRider(rider.Comp.Vehicle, rider.Owner);
-    }
-
-    /// <summary>
-    /// Starts carry deltas from the restored vehicle transforms, after all server state has applied.
-    /// Authoritative movement has already been applied to the rider and must not be carried again.
-    /// </summary>
-    public void ResetCarryPrediction()
-    {
-        if (!_net.IsClient)
-            return;
-
-        foreach (var vehicle in _ridersByVehicle.Keys)
-        {
-            if (_transformQuery.TryComp(vehicle, out var xform))
-                _lastTransforms[vehicle] = GetRideSurfaceTransform(xform);
-            else
-                _lastTransforms.Remove(vehicle);
-        }
-    }
-    // CMU14 End
-
     private void ClearSurface(EntityUid uid)
     {
         _lastTransforms.Remove(uid);
@@ -186,11 +130,6 @@ public sealed partial class VehicleRideSurfaceSystem : EntitySystem
 
     private void TrackRider(EntityUid vehicle, EntityUid rider)
     {
-        // CMU14: state may replace Vehicle before the old membership can be removed.
-        if (_vehiclesByRider.TryGetValue(rider, out var previous) && previous != vehicle)
-            UntrackRider(rider, previous);
-        _vehiclesByRider[rider] = vehicle;
-
         if (!_ridersByVehicle.TryGetValue(vehicle, out var riders))
             _ridersByVehicle[vehicle] = riders = new HashSet<EntityUid>();
 
@@ -199,10 +138,6 @@ public sealed partial class VehicleRideSurfaceSystem : EntitySystem
 
     private void UntrackRider(EntityUid rider, EntityUid vehicle)
     {
-        // CMU14: shutdown/state replacement may already have cleared the component's Vehicle field.
-        if (_vehiclesByRider.Remove(rider, out var trackedVehicle))
-            vehicle = trackedVehicle;
-
         if (!vehicle.IsValid() || !_ridersByVehicle.TryGetValue(vehicle, out var riders))
             return;
 

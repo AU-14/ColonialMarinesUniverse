@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Numerics;
 using Content.Server.Access.Systems;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Threats;
 using Content.Server.CMU14.VendorMarker;
@@ -43,6 +44,7 @@ namespace Content.Server.CMU14.Ops.ThirdParty;
 public sealed partial class ThirdPartySystem : EntitySystem
 {
     [Dependency] private ForceInterestSystem _forceInterest = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IEntityManager _entityManager = default!;
@@ -1008,6 +1010,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         EntityCoordinates coords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
         try
         {
+            using var cost = _performance.MeasureOperation("third-party-body-spawn", protoId);
             EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
 
             // If parachute mode, hand off to the shared paradrop system so the entity falls from the sky.

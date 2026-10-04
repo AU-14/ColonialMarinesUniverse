@@ -1,0 +1,8 @@
+author: evil-two-info-types
+category: CMU
+changes:
+- message: Increased the amount of CLF sapper slots by 1 and decreased the Guerrilla
+    slots by 1 aswell.
+  type: Add
+time: '2026-10-03T12:11:33.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2055

@@ -146,17 +146,15 @@ public sealed partial class VehicleTurretComponent : Component
     [NonSerialized]
     public EntityUid? VisualEntity;
 
-    // CMU14 Begin: pending reversals affect simulation and must be restored during prediction rollback.
-    [AutoNetworkedField]
+    [NonSerialized]
     public Angle? PendingTargetRotation;
 
-    [AutoNetworkedField]
+    [NonSerialized]
     public TimeSpan PendingTargetApplyAt = TimeSpan.Zero;
 
-    [AutoNetworkedField]
+    [NonSerialized]
     public int PendingDirectionSign = 0;
 
-    [AutoNetworkedField]
+    [NonSerialized]
     public int LastAppliedDirectionSign = 0;
-    // CMU14 End
 }

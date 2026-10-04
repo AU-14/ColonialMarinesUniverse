@@ -51,8 +51,11 @@ public sealed partial class XenoChargeComponent : Component
     /// <summary>
     ///     The intended target of the charge. Intermediate mobs get knocked aside.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    // CMU14 Begin: local bookkeeping has no client consumer and may outlive the target.
+    // [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? PrimaryTarget;
+    // CMU14 End
 
     /// <summary>
     ///     Damage multiplier for intermediate targets knocked aside during charge.

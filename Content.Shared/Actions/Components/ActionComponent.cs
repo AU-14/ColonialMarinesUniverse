@@ -112,13 +112,6 @@ public sealed partial class ActionComponent : Component
     [DataField, AutoNetworkedField]
     public bool ClientExclusive;
 
-    // CMU14 field: opt in to tick-aligned initial prediction; client-only UI actions remain immediate.
-    /// <summary>
-    /// Queue networked action requests made outside simulation until the next simulation update.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public bool InSimulationOnly;
-
     /// <summary>
     ///     Determines the order in which actions are automatically added the action bar.
     /// </summary>

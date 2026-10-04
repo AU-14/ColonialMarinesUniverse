@@ -2422,6 +2422,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
         try
         {
+            using var cost = _cmuPerformance.MeasureOperation("tactical-init"); // CMU14
             foreach (var init in _toInit)
             {
                 if (!init.Comp.Running)
@@ -2452,6 +2453,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
         try
         {
+            using var cost = _cmuPerformance.MeasureOperation("tactical-tracking"); // CMU14
             foreach (var update in _toUpdate)
             {
                 if (!update.Comp.Running)
@@ -2467,6 +2469,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
 
         try
         {
+            using var cost = _cmuPerformance.MeasureOperation("tactical-vehicles"); // CMU14
             foreach (var vehicle in _vehicleBlipsToUpdate)
             {
                 if (TryComp<VehicleInteriorComponent>(vehicle, out var interior))
@@ -2478,6 +2481,7 @@ public sealed partial class TacticalMapSystem : SharedTacticalMapSystem
             _vehicleBlipsToUpdate.Clear();
         }
 
+        using var publicationCost = _cmuPerformance.MeasureOperation("tactical-publication"); // CMU14
         var maps = EntityQueryEnumerator<TacticalMapComponent>();
         while (maps.MoveNext(out var map))
         {
