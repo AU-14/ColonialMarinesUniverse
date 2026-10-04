@@ -19,15 +19,9 @@ namespace Content.Shared.CMU14.Chemistry.Effects.Positive;
 /// </summary>
 public sealed partial class YautjaWoundHealing : RMCChemicalEffect
 {
-    private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
-    private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
 
     protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var rmcDamageable = system.RMCDamageable;
-        var healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, BruteGroup, potency);
-        healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, BurnGroup, potency, healing);
-        damageable.TryChangeDamage(args.TargetEntity, healing, true, interruptsDoAfters: false);
 
         var medicalIndex = system.MedicalBodyIndex;
         var wounds = system.Wounds;
@@ -53,6 +47,6 @@ public sealed partial class YautjaWoundHealing : RMCChemicalEffect
 
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
-        return $"Heals [color=green]{PotencyPerSecond}[/color] brute and burn damage and closes active wounds.";
+        return "Closes active wounds.";
     }
 }
