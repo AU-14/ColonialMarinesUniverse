@@ -16,7 +16,7 @@ public sealed class WithdrawConsoleBuiState : BoundUserInterfaceState
     public readonly int SwipedIdCount;
     public readonly bool WithdrawActive;
     public readonly bool StalemateToggled;
-    /// <summary>True while still within the 10-minute cancellation window.</summary>
+    /// <summary>True while still within the cancellation window.</summary>
     public readonly bool CanCancel;
     /// <summary>Seconds remaining in the withdrawal countdown, or null when inactive.</summary>
     public readonly double? SecondsRemaining;
