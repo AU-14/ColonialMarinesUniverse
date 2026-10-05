@@ -60,6 +60,9 @@ public sealed partial class AmmoInFlightComponent : Component
     public int ZLevelPenetration = 0;
 
     [DataField, AutoNetworkedField]
+    public bool ApplyEffectsOnPenetrationLevels = false;
+
+    [DataField, AutoNetworkedField]
     public TimeSpan SoundTravelTime = TimeSpan.FromSeconds(1.1);
 
     [DataField, AutoNetworkedField]

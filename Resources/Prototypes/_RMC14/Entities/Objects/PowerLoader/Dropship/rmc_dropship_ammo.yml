@@ -88,6 +88,7 @@
   - type: DropshipAmmo
     ammoType: 30mm_crate_hv
     bulletSpread: 4
+    zLevelPenetration: 1
     damage:
       types:
         Blunt: 26.66
@@ -470,7 +471,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 12
-    zLevelPenetration: 2
+    zLevelPenetration: 3
     explosion:
       total: 10000
       slope: 4.5
@@ -493,7 +494,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 11
-    zLevelPenetration: 2
+    zLevelPenetration: 3
     explosion:
       total: 10000
       slope: 4.5

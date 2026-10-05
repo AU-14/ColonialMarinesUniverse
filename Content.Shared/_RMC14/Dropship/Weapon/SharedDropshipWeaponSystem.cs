@@ -774,6 +774,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             Fire = ammo.Fire,
             SoundEveryShots = ammo.SoundEveryShots,
             ZLevelPenetration = ammo.ZLevelPenetration,
+            ApplyEffectsOnPenetrationLevels = ammo.ApplyEffectsOnPenetrationLevels,
         };
 
         AddComp(inFlight, inFlightComp, true);
@@ -1948,6 +1949,99 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                     }
                 }
 
+                // Apply effects on intermediate z-levels if configured
+                if (flight.ApplyEffectsOnPenetrationLevels && flight.ZLevelPenetration > 0)
+                {
+                    var mapId = targetMap.MapId;
+                    if (_map.TryGetMap(mapId, out var sourceMap) && sourceMap is { } sourceMapUid)
+                    {
+                        var worldPos = targetMap.Position;
+                        var lastReachableLevel = 0;
+
+                        for (var offset = 1; offset <= flight.ZLevelPenetration; offset++)
+                        {
+                            if (!_zLevels.TryMapOffset((sourceMapUid, null), offset, out _, out var targetMapComp))
+                                break;
+
+                            // Check if there's an opening to this level
+                            if (_zLevels.TryFindZShotOpening(
+                                    sourceMapUid,
+                                    targetMapComp.Owner,
+                                    offset,
+                                    worldPos,
+                                    worldPos,
+                                    out _,
+                                    preferOpeningAwayFromSource: true,
+                                    maxSourceDistanceFromOpeningEdgeTiles: 2f))
+                            {
+                                lastReachableLevel = offset;
+                                var levelCoordinates = new MapCoordinates(worldPos, targetMapComp.MapId);
+
+                                // Apply explosion to this level
+                                if (flight.Explosion != null)
+                                {
+                                    _rmcExplosion.QueueExplosion(levelCoordinates,
+                                        flight.Explosion.Type,
+                                        flight.Explosion.Total,
+                                        flight.Explosion.Slope,
+                                        flight.Explosion.Max,
+                                        uid,
+                                        canCreateVacuum: false
+                                    );
+                                }
+
+                                // Apply fire to this level
+                                if (flight.Fire != null)
+                                {
+                                    var chain = _onCollide.SpawnChain();
+                                    var coords = new EntityCoordinates(targetMapComp.Owner, worldPos);
+
+                                    if (flight.Fire.Total is { } total)
+                                    {
+                                        var tiles = new List<Vector2i>();
+                                        for (var x = -flight.Fire.Range; x <= flight.Fire.Range; x++)
+                                        {
+                                            for (var y = -flight.Fire.Range; y <= flight.Fire.Range; y++)
+                                            {
+                                                tiles.Add((x, y));
+                                            }
+                                        }
+
+                                        for (var i = 0; i < total; i++)
+                                        {
+                                            if (tiles.Count == 0)
+                                                break;
+
+                                            var tile = _random.PickAndTake(tiles);
+                                            var fireCoords = coords.Offset(new Vector2(tile.X, tile.Y));
+                                            _rmcFlammable.SpawnFire(fireCoords,
+                                                flight.Fire.Type,
+                                                chain,
+                                                flight.Fire.Range,
+                                                flight.Fire.Intensity,
+                                                flight.Fire.Duration,
+                                                out _,
+                                                canSpawn: CanSpawnCASFire
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+                        // If penetration wasn't enough to reach the target, detonate at the last reachable level
+                        if (lastReachableLevel < flight.ZLevelPenetration && lastReachableLevel > 0)
+                        {
+                            // Already applied effects above, just ensure it detonated
+                            continue;
+                        }
+                    }
+                }
+
                 if (flight.Explosion != null)
                 {
                     TryDeleteDestructibleWallAt(landing);
@@ -2018,12 +2112,18 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         var mapCoordinates = _transform.ToMapCoordinates(coordinates);
-        var ceilingLevel = !_topDownOrdnance.TryResolveImpactColumn(
+        var impactResolved = _topDownOrdnance.TryResolveImpactColumn(
             mapCoordinates,
             CMUTopDownOrdnanceKind.OrbitalBombardment,
-            out _)
-            ? (short) 4
-            : (short) 3;
+            out _);
+
+        var ceilingLevel = !impactResolved ? (short) 4 : (short) 3;
+
+        // If impact column couldn't be resolved (walls blocking) but weapon has penetration,
+        // allow it to shoot through - treat it as penetrable obstacle
+        if (!impactResolved && zLevelPenetration >= 1)
+            ceilingLevel = (short) 3;
+
         if (!CanHitCeilingLevel(zLevelPenetration, ceilingLevel))
             return false;
 
@@ -2681,6 +2781,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             Fire = ev.Fire,
             SoundEveryShots = ev.SoundEveryShots,
             ZLevelPenetration = ammo.Comp.ZLevelPenetration,
+            ApplyEffectsOnPenetrationLevels = ammo.Comp.ApplyEffectsOnPenetrationLevels,
             MarkerDuration = markerDuration,
         };
         AddComp(inFlight, inFlightComp, true);
