@@ -13,6 +13,7 @@ using Content.Shared.Examine;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
+using Content.Shared.Light.Components;
 using Content.Shared.Mobs;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
@@ -22,8 +23,11 @@ using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Tag;
+using Content.Shared.Weather;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
@@ -36,8 +40,10 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedHideableHumanoidLayersSystem _humanoidLayers = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -45,9 +51,18 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     [Dependency] private TagSystem _tags = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedWeatherSystem _weather = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
 
     private static readonly ProtoId<TagPrototype> HideContextMenuTag = "HideContextMenu";
+
+    // Rain weather only. New rain prototypes must be added here or the cloak ignores them.
+    private static readonly EntProtoId[] RainWeathers =
+    [
+        "RMCHybrisaRain", "RMCHybrisaRainLight", "RMCHybrisaRainVeryLight",
+        "RMCTrijentRainLight", "RMCStrataStorm", "RMCStrataStormLight",
+        "RMCStrataStormVeryLight", "CMUWeatherAcidRain",
+    ];
 
     public override void Initialize()
     {
@@ -73,12 +88,27 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         var query = EntityQueryEnumerator<YautjaBracerComponent>();
         while (query.MoveNext(out var uid, out var bracer))
         {
-            if (bracer.CloakDuration <= TimeSpan.Zero ||
-                bracer.User is not { } user ||
-                !HasComp<EntityActiveInvisibleComponent>(user))
-            {
+            if (bracer.User is not { } user
+                || !HasComp<EntityActiveInvisibleComponent>(user))
                 continue;
+
+            // Rain flicker is edge triggered. The tell fires once per transition.
+            if (TryComp<ThermalCloakUserComponent>(user, out var cloakUser)
+                && cloakUser.Malfunction != IsExposedToRain(user))
+            {
+                cloakUser.Malfunction = !cloakUser.Malfunction;
+                if (cloakUser.Malfunction)
+                {
+                    if (bracer.CloakWarningSound != null)
+                        _audio.PlayEntity(bracer.CloakWarningSound, user, user);
+                    _popup.PopupEntity(Loc.GetString("cmu-yautja-cloak-sputter-rain"), user, user, PopupType.MediumCaution);
+                }
+
+                Dirty(user, cloakUser);
             }
+
+            if (bracer.CloakDuration <= TimeSpan.Zero)
+                continue;
 
             if (!bracer.CloakWarningPlayed &&
                 bracer.CloakWarningSound != null &&
@@ -409,6 +439,11 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
     private void OnAnyDamageChanged(Entity<DamageableComponent> target, ref DamageChangedEvent args)
     {
+        // Active acid burns the cloak off; plain hits still do not (see OnProjectileHit)
+        if (HasComp<UserAcidedComponent>(target)
+            && args.DamageDelta?.AnyPositive() == true)
+            ForceDecloak(target);
+
         if (_net.IsClient ||
             args.Origin is not { } origin ||
             args.DamageDelta?.AnyPositive() != true ||
@@ -437,6 +472,33 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         Dirty(bracer);
     }
 
+    private bool IsExposedToRain(EntityUid user)
+    {
+        var xform = Transform(user);
+        // Live weather status only. Maps without a rain event never reach the tile check.
+        var raining = false;
+        foreach (var proto in RainWeathers)
+        {
+            if (_weather.HasWeather(xform.MapID, proto))
+            {
+                raining = true;
+                break;
+            }
+        }
+
+        // No grid means floating free. Containers block the sky even on a grid.
+        if (!raining
+            || xform.GridUid is not { } gridUid
+            || _container.IsEntityInContainer(user)
+            || !TryComp<MapGridComponent>(gridUid, out var grid))
+        {
+            return false;
+        }
+
+        var tile = _map.GetTileRef(gridUid, grid, xform.Coordinates);
+        return _weather.CanWeatherAffect((gridUid, grid, CompOrNull<RoofComponent>(gridUid)), tile);
+    }
+
     public YautjaCloakDotBlocker? GetDamageOverTimeBlocker(EntityUid user)
     {
         if (HasComp<UserAcidedComponent>(user))
@@ -454,6 +516,9 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             return YautjaCloakDotBlocker.Other;
         }
 
+        if (IsExposedToRain(user))
+            return YautjaCloakDotBlocker.Water;
+
         return null;
     }
 
@@ -463,6 +528,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         {
             YautjaCloakDotBlocker.Acid => "cmu-yautja-cloak-blocked-acid",
             YautjaCloakDotBlocker.Fire => "cmu-yautja-cloak-blocked-fire",
+            YautjaCloakDotBlocker.Water => "cmu-yautja-cloak-blocked-water",
             _ => "cmu-yautja-cloak-blocked-dot",
         };
     }
@@ -521,4 +587,5 @@ public enum YautjaCloakDotBlocker : byte
     Acid,
     Fire,
     Other,
+    Water,
 }
