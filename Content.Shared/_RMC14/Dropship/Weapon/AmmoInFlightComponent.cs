@@ -57,6 +57,9 @@ public sealed partial class AmmoInFlightComponent : Component
     public int BulletSpread = 3;
 
     [DataField, AutoNetworkedField]
+    public int ZLevelPenetration = 0;
+
+    [DataField, AutoNetworkedField]
     public TimeSpan SoundTravelTime = TimeSpan.FromSeconds(1.1);
 
     [DataField, AutoNetworkedField]

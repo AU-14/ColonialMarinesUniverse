@@ -164,6 +164,7 @@
   components:
   - type: DropshipAmmo
     travelTime: 3
+    zLevelPenetration: 1
     explosion:
       total: 3000
       slope: 5.5
@@ -205,6 +206,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 2
+    zLevelPenetration: 1
     explosion:
       total: 905
       slope: 15
@@ -225,6 +227,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo # TODO RMC14 not usable in fire mission, only direct bombardment
     travelTime: 6
+    zLevelPenetration: 1
     fireMissionDelay: null
     explosion:
       total: 1780
@@ -250,6 +253,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 5
+    zLevelPenetration: 1
     explosion:
       total: 1850
       slope: 3.2
@@ -270,6 +274,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 5
+    zLevelPenetration: 1
     implosion:
       pullRange: 5.5
       pullDistance: 3.5
@@ -297,6 +302,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 6
+    zLevelPenetration: 1
     explosion:
       total: 2000
       slope: 5.5
@@ -405,6 +411,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 5
+    zLevelPenetration: 1
     implosion:
       pullRange: 4
       pullDistance: 2.5
@@ -463,6 +470,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 12
+    zLevelPenetration: 2
     explosion:
       total: 10000
       slope: 4.5
@@ -485,6 +493,7 @@
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 11
+    zLevelPenetration: 2
     explosion:
       total: 10000
       slope: 4.5
@@ -516,6 +525,7 @@
     maxRounds: 12
     roundsPerShot: 12
     bulletSpread: 17
+    zLevelPenetration: 1
     explosion:
       total: 110
       slope: 4
@@ -543,6 +553,7 @@
     roundsPerShot: 2
     bulletSpread: 9
     travelTime: 3
+    zLevelPenetration: 1
     explosion:
       total: 3000
       slope: 5.5
@@ -567,6 +578,7 @@
     roundsPerShot: 4
     bulletSpread: 5
     travelTime: 6
+    zLevelPenetration: 1
     explosion:
       total: 190
       slope: 11
@@ -594,6 +606,7 @@
     maxRounds: 6
     roundsPerShot: 6
     bulletSpread: 5
+    zLevelPenetration: 1
     explosion:
       total: 100
       slope: 12

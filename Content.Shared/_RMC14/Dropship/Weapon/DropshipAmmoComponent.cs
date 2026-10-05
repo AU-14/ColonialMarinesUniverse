@@ -81,6 +81,9 @@ public sealed partial class DropshipAmmoComponent : Component
     public int SoundEveryShots = 3;
 
     [DataField, AutoNetworkedField]
+    public int ZLevelPenetration = 0;
+
+    [DataField, AutoNetworkedField]
     public bool DeleteOnEmpty;
 
     [DataField, AutoNetworkedField]
