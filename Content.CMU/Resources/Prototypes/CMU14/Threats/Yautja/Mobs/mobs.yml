@@ -79,7 +79,7 @@
         Blunt: 12
         Structural: 3
   - type: Damageable
-    #damageModifierSet: CMUYautja
+    damageModifierSet: CMUYautja
   - type: Injurable
     damageContainer: Biological
     healthBarThreshold: 5
@@ -285,7 +285,7 @@
         Blunt: 12
         Structural: 3
   - type: Damageable
-    #damageModifierSet: CMUYautja
+    damageModifierSet: CMUYautja
   - type: Injurable
     damageContainer: Biological
     healthBarThreshold: 5

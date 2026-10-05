@@ -1,11 +1,7 @@
 using Content.Shared.Damage.Systems;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
-using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Chemistry.Effects;
-using Content.Shared._RMC14.Damage;
-using Content.Shared.Damage;
-using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
@@ -13,39 +9,28 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.CMU14.Chemistry.Effects.Positive;
 
 /// <summary>
-///     Thwei is the Yautja wound-healing reagent. It closes active wound entries so their surface bleeding
-///     stops and the normal wound-healing tick can finish the injury.
+///     Thwei is the Yautja hemostatic from the movie self-surgery scenes,
+///     ported from CM-SS13's bleeding datum: while it metabolizes, surface
+///     bleeding stops without treating the wounds, internal bleeds are
+///     removed, and blood volume returns via the hemogenic effect. The
+///     medicomp surgery heals the damage pools, never this effect.
 /// </summary>
 public sealed partial class YautjaWoundHealing : RMCChemicalEffect
 {
-
     protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-
         var medicalIndex = system.MedicalBodyIndex;
         var wounds = system.Wounds;
-        var maxWounds = Math.Max(1, (int)MathF.Ceiling(potency.Float()));
         foreach (var part in medicalIndex.GetBodyParts(args.TargetEntity))
         {
-            wounds.TryTreatWounds(
-                part.Owner,
-                WoundType.Brute,
-                maxWounds,
-                out _,
-                quality: WoundTreatmentQuality.Adequate,
-                stopArterialBleeding: true);
-            wounds.TryTreatWounds(
-                part.Owner,
-                WoundType.Burn,
-                maxWounds,
-                out _,
-                quality: WoundTreatmentQuality.Adequate,
-                stopArterialBleeding: true);
+            // Flat and presence-gated like the DM source, not potency-scaled
+            wounds.StopSurfaceBleedingOnPart(part);
+            wounds.ClearInternalBleed(part);
         }
     }
 
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
-        return "Treats active brute and burn wounds and stops arterial bleeding.";
+        return "Stops blood loss while it is in your system: surface bleeding is staunched and internal bleeding removed, but wounds stay open until treated.";
     }
 }

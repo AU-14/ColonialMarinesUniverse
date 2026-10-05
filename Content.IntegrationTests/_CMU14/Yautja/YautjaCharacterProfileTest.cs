@@ -96,7 +96,7 @@ public sealed class YautjaCharacterProfileTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(yautja.Name, Is.EqualTo("Неизвестно"));
+            Assert.That(yautja.Name, Is.EqualTo("Unknown"));
             Assert.That(yautja.Age, Is.EqualTo(100));
             Assert.That(yautja.QuillStyle, Is.EqualTo(YautjaQuillStyle.Standard));
             Assert.That(yautja.SkinColor, Is.EqualTo(YautjaSkinColor.Green));
