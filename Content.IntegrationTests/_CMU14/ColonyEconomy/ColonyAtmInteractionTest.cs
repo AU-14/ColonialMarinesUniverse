@@ -9,8 +9,8 @@ using Robust.Shared.GameObjects;
 namespace Content.IntegrationTests.CMU14.ColonyEconomy;
 
 /// <summary>
-///     End-to-end ATM tests: a connected player swipes a card and presses the real keypad buttons
-///     in the client window, and the server-side balances, cash and ATM state are checked.
+///     End-to-end ATM tests: a connected player pushes a card into the reader and presses the real
+///     keypad buttons in the client window, and the server-side balances, cash and ATM state are checked.
 /// </summary>
 public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
 {
@@ -20,7 +20,7 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
     public async Task WithdrawWithCorrectPin()
     {
         await SpawnTarget(Atm);
-        var (card, pin, _) = await SwipeNewCard(500);
+        var (card, pin, _) = await InsertNewCard(500);
 
         await Type(pin.ToString());
         Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu));
@@ -39,6 +39,8 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
             Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Result));
             Assert.That(Comp<IdCardComponent>(card).AccountBalance, Is.EqualTo(400));
             Assert.That(CashOnFloor(), Is.EqualTo(expectedCash));
+            // The cash slot shows a stack as thick as what was paid out.
+            Assert.That(ClientAtmState().CashAmount, Is.EqualTo(expectedCash), "The screen was not told how much came out");
         });
     }
 
@@ -50,7 +52,7 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
     {
         await SpawnTarget(Atm);
         var victim = await SpawnEntity("InteractionTestMob", SEntMan.GetCoordinates(TargetCoords));
-        var (card, pin, _) = await SwipeNewCard(300, owner: victim);
+        var (card, pin, _) = await InsertNewCard(300, owner: victim);
 
         await Type(pin.ToString());
         Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu));
@@ -66,7 +68,7 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
     public async Task WrongPinThreeTimesLocksTheCard()
     {
         await SpawnTarget(Atm);
-        var (card, pin, _) = await SwipeNewCard(500);
+        var (card, pin, _) = await InsertNewCard(500);
         var wrong = (pin == 1111 ? 2222 : 1111).ToString();
 
         await Type(wrong);
@@ -75,9 +77,13 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
         await Type(wrong);
         Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinLocked));
 
-        // Back out and swipe again: even the right PIN is refused while locked.
+        // Take the card back and put it in again: even the right PIN is refused while locked.
         await Enter();
-        Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Welcome));
+        Assert.Multiple(() =>
+        {
+            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Welcome));
+            Assert.That(HeldItem(), Is.EqualTo(ToServer(card)), "The locked card was not handed back");
+        });
         await Interact();
         await Type(pin.ToString());
 
@@ -93,11 +99,10 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
     public async Task DepositAndTransfer()
     {
         await SpawnTarget(Atm);
-        var (card, pin, _) = await SwipeNewCard(200);
+        var (card, pin, _) = await InsertNewCard(200);
         await Type(pin.ToString());
 
-        // Put the card down and take cash in the (single) hand to deposit it.
-        await Drop();
+        // The card is in the machine, so the (single) hand is free to hold the cash to deposit.
         await PlaceInHands(Cash, 50);
         await Type("2", enter: false);              // 2) DEPOSIT
         await Type("50");
@@ -105,6 +110,7 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
         {
             Assert.That(Comp<IdCardComponent>(card).AccountBalance, Is.EqualTo(250));
             Assert.That(HandSys.GetActiveItem((SPlayer, Hands)), Is.Null, "Deposited cash was not taken");
+            Assert.That(ClientAtmState().CashAmount, Is.EqualTo(50), "The screen was not told how much went in");
         });
 
         // Transfer to another card lying on the floor.
@@ -155,7 +161,7 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
     public async Task SecondPersonCannotUseBusyAtm()
     {
         await SpawnTarget(Atm);
-        var (_, pin, _) = await SwipeNewCard(100);
+        var (_, pin, _) = await InsertNewCard(100);
         await Type(pin.ToString());
 
         var atm = STarget!.Value;
@@ -170,14 +176,15 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
             Assert.That(AtmComp.PinAuthenticated, Is.True, "The owner's session was reset");
         });
 
-        // Once the owner closes the screen the session ends and the card is forgotten.
+        // Once the owner closes the screen the session ends - but their card stays in the reader.
+        var card = CardInAtm();
         await CloseBui(ColonyAtmUi.Key);
         Assert.Multiple(() =>
         {
             Assert.That(AtmComp.CurrentUser, Is.Null);
-            Assert.That(AtmComp.SwipedCard, Is.Null);
+            Assert.That(CardInAtm(), Is.EqualTo(card), "Walking away took the card out of the machine");
             Assert.That(AtmComp.PinAuthenticated, Is.False);
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Welcome));
+            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
         });
 
         // Now the next person can take the ATM.
@@ -190,7 +197,7 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
     public async Task SiphonRigLeaksRecentLogins()
     {
         await SpawnTarget(Atm);
-        var (_, pin, account) = await SwipeNewCard(100);
+        var (_, pin, account) = await InsertNewCard(100);
         await Type(pin.ToString());
         await CloseBui(ColonyAtmUi.Key);
         Assert.That(AtmComp.RecentLogins.Select(l => l.AccountNumber), Does.Contain(account));
@@ -212,9 +219,14 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
             Assert.That(SEntMan.HasComponent<ColonyAtmTamperedComponent>(STarget), "ATM was not marked tampered");
         });
 
-        // The hacked ATM refuses to open, even on a plain click.
+        // A plain click shows the seized screen, but starts no session on it.
         await Activate();
-        Assert.That(IsUiOpen(ColonyAtmUi.Key), Is.False, "Hacked ATM opened");
+        Assert.Multiple(() =>
+        {
+            Assert.That(IsUiOpen(ColonyAtmUi.Key), "The seized ATM showed nothing");
+            Assert.That(ClientAtmState().OutOfService, "The hacked ATM did not show its seized screen");
+            Assert.That(AtmComp.CurrentUser, Is.Null, "The hacked ATM started a session");
+        });
 
         // Reading the rig in hand shows the stolen login.
         await UseInHand();

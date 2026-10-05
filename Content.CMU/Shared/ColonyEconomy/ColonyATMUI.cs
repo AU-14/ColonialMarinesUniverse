@@ -47,6 +47,31 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
     /// <summary>How many entries the account's history holds in total.</summary>
     public int HistoryTotal { get; }
 
+    /// <summary>Whether a card is sitting in the reader.</summary>
+    public bool CardInserted { get; }
+
+    /// <summary>Prototype of the card in the reader, so the screen can show that very card going in.</summary>
+    public string? CardPrototype { get; }
+
+    /// <summary>
+    ///     A sapper's siphon rig has seized the machine: it shows the CLF's mark instead of the
+    ///     terminal and takes no input until it repairs itself.
+    /// </summary>
+    public bool OutOfService { get; }
+
+    /// <summary>
+    ///     When the card in the reader went in, and when cash last came out or went in. The screen
+    ///     plays each of those once if it is recent; one opened later shows the card already seated.
+    /// </summary>
+    public TimeSpan? CardInsertedAt { get; }
+
+    public TimeSpan? CashDispensedAt { get; }
+
+    public TimeSpan? CashDepositedAt { get; }
+
+    /// <summary>How many dollars came out or went in last; the slot shows more notes for more money.</summary>
+    public int CashAmount { get; }
+
     public ColonyAtmBuiState(
         AtmScreen screen,
         int balance,
@@ -61,7 +86,14 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
         bool tampered = false,
         ColonyAccountHistoryEntry[]? history = null,
         int historyOffset = 0,
-        int historyTotal = 0)
+        int historyTotal = 0,
+        bool cardInserted = false,
+        TimeSpan? cardInsertedAt = null,
+        TimeSpan? cashDispensedAt = null,
+        TimeSpan? cashDepositedAt = null,
+        string? cardPrototype = null,
+        bool outOfService = false,
+        int cashAmount = 0)
     {
         Screen = screen;
         Balance = balance;
@@ -77,6 +109,13 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
         History = history ?? Array.Empty<ColonyAccountHistoryEntry>();
         HistoryOffset = historyOffset;
         HistoryTotal = historyTotal;
+        CardInserted = cardInserted;
+        CardInsertedAt = cardInsertedAt;
+        CashDispensedAt = cashDispensedAt;
+        CashDepositedAt = cashDepositedAt;
+        CardPrototype = cardPrototype;
+        OutOfService = outOfService;
+        CashAmount = cashAmount;
     }
 }
 
@@ -98,13 +137,40 @@ public sealed class ColonyAtmDigitBuiMsg : BoundUserInterfaceMessage
     public ColonyAtmDigitBuiMsg(string digit) => Digit = digit;
 }
 
-/// <summary>Player pressed the Backspace (yellow) key.</summary>
+/// <summary>Player pressed the CLEAR (yellow) key: rubs out the last digit typed.</summary>
 [Serializable, NetSerializable]
 public sealed class ColonyAtmBackspaceBuiMsg : BoundUserInterfaceMessage { }
 
-/// <summary>Player pressed the Confirm (green) key.</summary>
+/// <summary>Player pressed the ENTER (green) key.</summary>
 [Serializable, NetSerializable]
 public sealed class ColonyAtmConfirmBuiMsg : BoundUserInterfaceMessage { }
+
+/// <summary>Player clicked the empty card reader: put their ID card in, from hand or from where they wear it.</summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmInsertCardBuiMsg : BoundUserInterfaceMessage { }
+
+/// <summary>Player clicked their card in the reader while signed in: log off and hand the card back.</summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmEjectCardBuiMsg : BoundUserInterfaceMessage { }
+
+/// <summary>
+///     Client → server, once the screen exists: which card is mine? Answered with
+///     <see cref="ColonyAtmOwnCardMsg"/> to the asking player only.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmOwnCardRequestMsg : BoundUserInterfaceMessage { }
+
+/// <summary>
+///     Server → the one player who opened the screen: their own card's account number and PIN, for
+///     the nav bar. Only ever sent to that player, and only for the card that is theirs (as the
+///     character notes show it) - never the card in the reader. Zero when they have none.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmOwnCardMsg(int accountNumber, int pin) : BoundUserInterfaceMessage
+{
+    public int AccountNumber { get; } = accountNumber;
+    public int Pin { get; } = pin;
+}
 
 /// <summary>Player pressed a scroll arrow on the history screen.</summary>
 [Serializable, NetSerializable]
@@ -115,6 +181,9 @@ public sealed class ColonyAtmScrollHistoryBuiMsg : BoundUserInterfaceMessage
     public ColonyAtmScrollHistoryBuiMsg(bool older) => Older = older;
 }
 
-/// <summary>Player pressed the Cancel (red) key.</summary>
+/// <summary>
+///     Player pressed the CANCEL (red) key: abandons the transaction in progress, or at the menu
+///     ends the session and hands the card back.
+/// </summary>
 [Serializable, NetSerializable]
 public sealed class ColonyAtmCancelBuiMsg : BoundUserInterfaceMessage { }

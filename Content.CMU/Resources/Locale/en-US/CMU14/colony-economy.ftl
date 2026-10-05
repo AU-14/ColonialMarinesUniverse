@@ -68,3 +68,37 @@ cash-vendor-sales-tax = Sales Tax: { $percent }%
 cash-vendor-no-sales-tax = No sales tax
 cash-vendor-buy = Buy
 cash-vendor-no-items = No items available.
+
+# Colony ATM card reader
+cmu-atm-card-slot-occupied = There's already a card in the ATM.
+cmu-atm-no-card = You have no ID card to put in.
+cmu-atm-take-card-verb = Take card
+cmu-atm-take-card-start = You start pulling the card out of the ATM...
+cmu-atm-take-card-start-others = {CAPITALIZE(THE($user))} starts pulling a card out of the ATM!
+
+# Colony ATM power-on self test, shown on the terminal as it boots
+cmu-atm-boot-title = W-Y COLONY FINANCIAL SYSTEMS
+cmu-atm-boot-bios = BIOS 2.7 (C) 2179 W-Y CORP.
+cmu-atm-boot-memory = MEMORY 640K
+cmu-atm-boot-keypad = KEYPAD
+cmu-atm-boot-reader = CARD READER
+cmu-atm-boot-dispenser = CASH DISPENSER
+cmu-atm-boot-uplink = UN TREASURY UPLINK
+cmu-atm-boot-ok = OK
+cmu-atm-boot-loading = LOADING TERMINAL...
+
+# Colony ATM seized by a sapper's siphon rig
+cmu-atm-seized-1 = SYSTEM SEIZED BY THE
+cmu-atm-seized-2 = COLONIAL LIBERATION FRONT
+cmu-atm-seized-3 = - OUT OF SERVICE -
+
+# Colony ATM screen hints; the keys are labelled OK and X
+cmu-atm-hint-confirm = OK = confirm   X = back
+cmu-atm-hint-continue = OK to continue.
+
+# Colony ATM nav bar
+cmu-atm-nav-title = Colony ATM
+cmu-atm-nav-pin = Your card #{ $account } - PIN { $pin }
+cmu-atm-nav-no-card = You have no card of your own
+cmu-atm-nav-pin-unknown = Reading your card...
+cmu-atm-nav-pop-out = Pop Out

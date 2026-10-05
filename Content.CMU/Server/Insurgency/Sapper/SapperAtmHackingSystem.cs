@@ -418,7 +418,9 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("insfor-sapper-atm-malfunction"), ent, args.User, PopupType.LargeCaution);
     }
 
-    // The ATM screen also opens on a plain click, so block that too. Other hacked devices keep their own UIs.
+    // A plain click opens the seized screen - the CLF's mark - without starting a session: the ATM
+    // system only hands the machine to a user it has claimed, so every key stays dead. Other hacked
+    // devices keep their own UIs.
     private void OnHackedActivate(Entity<SapperAtmHackedComponent> ent, ref ActivateInWorldEvent args)
     {
         if (args.Handled || !HasComp<ColonyAtmComponent>(ent) || !_ui.HasUi(ent, ColonyAtmUi.Key))
@@ -427,6 +429,7 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
         args.Handled = true;
         _audio.PlayPvs(ent.Comp.BuzzSound, ent);
         _popup.PopupEntity(Loc.GetString("insfor-sapper-atm-malfunction"), ent, args.User, PopupType.LargeCaution);
+        _ui.TryOpenUi(ent.Owner, ColonyAtmUi.Key, args.User);
     }
 
     public override void Update(float frameTime)
@@ -453,6 +456,8 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
             if (now >= comp.RecoverAt)
             {
                 RemComp<SapperAtmHackedComponent>(uid);
+                // Anyone still looking at the seized screen gets put back to a working one.
+                _ui.CloseUi(uid, ColonyAtmUi.Key);
                 continue;
             }
 

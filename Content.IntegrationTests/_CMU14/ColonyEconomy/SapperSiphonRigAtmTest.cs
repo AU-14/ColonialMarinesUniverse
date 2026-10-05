@@ -15,12 +15,13 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
 {
     private const string SiphonRig = "AU14SapperSiphonRig";
 
-    /// <summary>Swipes a new card at the target ATM, logs in with its PIN and walks away.</summary>
+    /// <summary>Puts a new card in the target ATM, logs in with its PIN, takes the card back and walks away.</summary>
     private async Task<(int Account, int Pin)> LogInAndLeave()
     {
-        var (_, pin, account) = await SwipeNewCard(100);
+        var (_, pin, account) = await InsertNewCard(100);
         await Type(pin.ToString());
         Assert.That(AtmComp.PinAuthenticated, "Login failed");
+        await Type("6", enter: false);              // 6) EXIT, card back in hand
         await CloseBui(ColonyAtmUi.Key);
         return (account, pin);
     }
@@ -62,11 +63,11 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
     public async Task SameCardAtTheSameAtmIsRememberedOnce()
     {
         await SpawnTarget(Atm);
-        var (_, pin, account) = await SwipeNewCard(100);
+        var (_, pin, account) = await InsertNewCard(100);
         await Type(pin.ToString());
         await CloseBui(ColonyAtmUi.Key);
 
-        await Interact();                            // the same card again
+        await Interact();                            // back to the ATM; the card is still in it
         await Type(pin.ToString());
         await CloseBui(ColonyAtmUi.Key);
 
@@ -79,13 +80,15 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
         // ATM one: Alice. ATM two: Alice again and Bob.
         await SpawnTarget(Atm);
         var firstAtm = Target!.Value;
-        var (_, alicePin, alice) = await SwipeNewCard(100);
+        var (_, alicePin, alice) = await InsertNewCard(100);
         await Type(alicePin.ToString());
+        await Type("6", enter: false);              // 6) EXIT, Alice's card back in hand
         await CloseBui(ColonyAtmUi.Key);
 
         var secondAtm = await SpawnTarget(Atm);
-        await Interact();                            // Alice's card is still in hand
+        await Interact();                            // Alice's card into the second ATM
         await Type(alicePin.ToString());
+        await Type("6", enter: false);
         await CloseBui(ColonyAtmUi.Key);
         var (bob, bobPin) = await LogInAndLeave();
 
@@ -146,9 +149,10 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
     public async Task RepairedAtmWorksButShowsTheSkimmer()
     {
         await SpawnTarget(Atm);
-        var (_, firstPin, _) = await SwipeNewCard(100);
+        var (_, firstPin, _) = await InsertNewCard(100);
         Assert.That(ClientAtmState().Tampered, Is.False, "An untouched ATM showed the skimmer");
         await Type(firstPin.ToString());
+        await Type("6", enter: false);              // 6) EXIT, card back in hand
         await CloseBui(ColonyAtmUi.Key);
 
         await HoldRig();
@@ -160,7 +164,7 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
             SEntMan.GetComponent<SapperAtmHackedComponent>(STarget!.Value).RecoverAt = STiming.CurTime + TimeSpan.FromSeconds(1));
         await RunSeconds(2);
 
-        var (card, pin, _) = await SwipeNewCard(100);
+        var (card, pin, _) = await InsertNewCard(100);
         await Type(pin.ToString());
         await Type("1", enter: false);              // 1) WITHDRAW
         await Type("40");
