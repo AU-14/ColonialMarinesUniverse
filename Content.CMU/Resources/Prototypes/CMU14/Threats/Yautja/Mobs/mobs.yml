@@ -248,6 +248,15 @@
   name: Yautja Youngblood
   suffix: Yautja, Youngblood, Event
   components:
+  - type: Language
+    spokenLanguages:
+    - Yautja
+    - Xeno
+    understoodLanguages:
+    - Yautja
+    - Xeno
+    currentLanguage: Yautja
+    defaultLanguage: Yautja
   - type: Yautja
   - type: YautjaYoungblood
   - type: IgnoreXenoWeedsSlowdown
