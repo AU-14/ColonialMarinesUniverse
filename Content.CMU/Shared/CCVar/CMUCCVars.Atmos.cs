@@ -42,4 +42,12 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> CMUTemperatureFahrenheit =
         CVarDef.Create("cmu.temperature.fahrenheit", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Master switch for weather hazards: damage, radiation and ignition
+    /// applied to mobs under weather effects. Weather visuals keep running
+    /// with this off; only the gameplay effects stop.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUWeatherHazards =
+        CVarDef.Create("cmu.atmos.weather_hazards", true, CVar.SERVERONLY);
 }
