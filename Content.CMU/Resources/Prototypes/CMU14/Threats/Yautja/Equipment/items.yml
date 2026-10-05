@@ -183,6 +183,8 @@
     - popup: rmc-storage-limit-cant-fit
       count: 12
       whitelist:
+        components:
+        - YautjaTechItem
   - type: YautjaTechItem
   - type: StaticPrice
     price: 50

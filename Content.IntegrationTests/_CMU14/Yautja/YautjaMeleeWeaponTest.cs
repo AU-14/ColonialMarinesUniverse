@@ -113,9 +113,12 @@ public sealed class YautjaMeleeWeaponTest
             var entMan = server.EntMan;
             var protos = server.ProtoMan;
 
+            // Wall decor knives inherit the weapon base but strip MeleeWeapon on purpose.
+            // They are display pieces, not weapons.
             var weapons = protos.EnumeratePrototypes<EntityPrototype>()
                 .Where(proto => !proto.Abstract &&
                                 !pair.IsTestEntityPrototype(proto.ID) &&
+                                !InheritsFrom(protos, proto, "CMUHunterShipFixedGearWallDecor") &&
                                 InheritsFrom(protos, proto, "CMUYautjaWeaponBase"))
                 .ToList();
 

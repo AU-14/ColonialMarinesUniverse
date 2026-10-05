@@ -12,6 +12,7 @@ using Content.Shared.Administration; // CMU14
 using Content.Shared.Bed.Sleep; // CMU14
 using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.Ghost.Components; // CMU14
 using Content.Shared.IdentityManagement;
 using Content.Shared.Players;
 using Content.Shared.Radio;
@@ -43,7 +44,18 @@ public sealed partial class ChatSystem
         if (listener == null)
             return transformedName;
 
-        if (HasComp<YautjaComponent>(source) && HasComp<YautjaComponent>(listener.Value))
+        // CMU14: clan chat names follow the bracer's name broadcast, same as identity
+        if (TryComp<YautjaComponent>(source, out var sourceYautja)
+            && HasComp<YautjaComponent>(listener.Value))
+            return sourceYautja.BracerNameActive
+                ? MetaData(source).EntityName
+                : Loc.GetString(sourceYautja.IdentityName);
+
+        // CMU14: admin ghosts see a Yautja's true name instead of the unknown mask
+        if (HasComp<YautjaComponent>(source)
+            && TryComp<GhostComponent>(listener.Value, out var listenerGhost)
+            && listenerGhost.CanGhostInteract
+            && _adminManager.IsAdmin(listener.Value))
             return MetaData(source).EntityName;
 
         if (TryComp<FixedIdentityComponent>(source, out var fixedIdentity) &&

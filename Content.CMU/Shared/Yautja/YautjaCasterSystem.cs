@@ -59,8 +59,6 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
         if (_net.IsClient)
         {
-            // CMU14: the client only predicts the popup. It must use the same text as the server so
-            // the popup system can deduplicate the authoritative copy instead of showing two notices.
             PopupMode(ent, args.User, "cmu-yautja-caster-mode-set", mode.Value);
             return;
         }
@@ -97,7 +95,6 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
         if (_net.IsClient)
         {
-            // CMU14: match the server text so the predicted popup and the authoritative copy deduplicate.
             PopupMode(ent, args.UserUid, "cmu-yautja-caster-mode-set", mode);
             return;
         }
@@ -368,12 +365,10 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
     private void OnCasterInsertAttempt(Entity<YautjaCasterComponent> ent, ref ContainerGettingInsertedAttemptEvent args)
     {
-        if (args.Cancelled ||
-            !TryComp(ent.Owner, out YautjaStoredGearComponent? stored) ||
-            !stored.Deployed)
-        {
+        if (args.Cancelled
+            || !TryComp(ent.Owner, out YautjaStoredGearComponent? stored)
+            || !stored.Deployed)
             return;
-        }
 
         // CMU14: while deployed the caster is bound to the hunter it belongs to. It may stay in one of that
         // entity's hands, but may not be moved into any other container - suit storage, racks, tables,

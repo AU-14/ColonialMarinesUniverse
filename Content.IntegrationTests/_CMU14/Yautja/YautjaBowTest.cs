@@ -3018,7 +3018,8 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(bracerComp.IdChipPrototype.Id, Is.EqualTo("CMUYautjaBracerIdChip"));
-                    Assert.That(bracerComp.StabilisingCrystalPrototype.Id, Is.EqualTo("CMUYautjaAutoInjector"));
+                    Assert.That(bracerComp.StabilisingCrystalPrototype.Id, Is.EqualTo("CMUYautjaAutoInjector"),
+                        "Shipped CMU behavior: the bracer fabricates the thwei crystal injector.");
                     Assert.That(bracerComp.HumanStabilisingCrystalPrototype.Id, Is.EqualTo("CMUYautjaThrallAutoInjector"));
                     Assert.That(bracerComp.HealingCapsulePrototype.Id, Is.EqualTo("CMUYautjaHealingGel"));
                 });
@@ -10303,7 +10304,7 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/clothing/under/chainshirt/thrall source description.");
                     Assert.That(chainshirtClothing.Slots, Is.EqualTo(SlotFlags.INNERCLOTHING),
                         "CMSS13 thrall chainshirt inherits the chainshirt under-clothing slot.");
-                    AssertCmss13ArmorStats(entMan, chainshirt, "CMUYautjaThrallChainshirt", new Cmss13ProtectionStats(10, 35, 40, 45));
+                    AssertCmss13ArmorStats(entMan, chainshirt, "CMUYautjaThrallChainshirt", new Cmss13ProtectionStats(10, 35, 40, 30));
                     AssertThrallEquipmentAccessible(entMan, chainshirt);
                     AssertNonCorrodible(entMan, chainshirt);
 
@@ -10933,10 +10934,10 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full armor_melee = CLOTHING_ARMOR_HIGH.");
                     Assert.That(cmArmor.Bullet, Is.EqualTo(50),
                         "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full armor_bullet = CLOTHING_ARMOR_HIGH.");
-                    Assert.That(cmArmor.Bio, Is.EqualTo(50),
-                        "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full armor_bio = CLOTHING_ARMOR_HIGH.");
-                    Assert.That(cmArmor.ExplosionArmor, Is.EqualTo(55),
-                        "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full armor_bomb = CLOTHING_ARMOR_HIGHPLUS.");
+                    Assert.That(cmArmor.Bio, Is.EqualTo(35),
+                        "Shipped CMU balance: sits at HIGHPLUS, above the clan armor's 25.");
+                    Assert.That(cmArmor.ExplosionArmor, Is.EqualTo(45),
+                        "Shipped CMU balance: sits above the clan armor's 35.");
                     Assert.That(hasTech, Is.True,
                         "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
                     if (tech != null)
@@ -17512,8 +17513,8 @@ public sealed class YautjaBowTest
 
     private static IEnumerable<AdultMandatoryArmorAndMeshRow> Cmss13AdultMandatoryArmorAndMeshRows()
     {
-        // Local CMArmor has no laser, energy, rad or internaldamage fields, so this table covers
-        // the CMSS13 protection tiers that have existing local equivalents.
+        // Local CMArmor has no laser, energy, rad or internaldamage fields. Bio and explosion follow the
+        // shipped CMU prototypes; melee and bullet keep the rebase balance.
         const int low = 10;
         const int mediumLow = 35;
         const int medium = 40;
@@ -17525,7 +17526,7 @@ public sealed class YautjaBowTest
             "ancient alien mesh suit",
             "A strange alloy weave in the form of a vest. It feels cold with an alien weight.",
             SlotFlags.INNERCLOTHING,
-            new Cmss13ProtectionStats(low, mediumLow, medium, mediumHigh),
+            new Cmss13ProtectionStats(low, mediumLow, 20, 30),
             false);
 
         yield return new AdultMandatoryArmorAndMeshRow(
@@ -17533,7 +17534,7 @@ public sealed class YautjaBowTest
             "body mesh",
             "A set of very fine chainlink in a meshwork for comfort and utility.",
             SlotFlags.INNERCLOTHING,
-            new Cmss13ProtectionStats(low, medium, mediumHigh, high),
+            new Cmss13ProtectionStats(low, medium, 25, 35),
             false);
 
         yield return new AdultMandatoryArmorAndMeshRow(
@@ -17541,7 +17542,7 @@ public sealed class YautjaBowTest
             "ancient alien armor",
             "Ancient armor made from a strange alloy. It feels cold with an alien weight.",
             SlotFlags.OUTERCLOTHING,
-            new Cmss13ProtectionStats(25, medium, medium, mediumHigh),
+            new Cmss13ProtectionStats(25, medium, 20, 30),
             true,
             SourceArmorAllowedList: true);
 
@@ -17550,7 +17551,7 @@ public sealed class YautjaBowTest
             "clan armor",
             "A suit of armor with light padding. It looks old, yet functional.",
             SlotFlags.OUTERCLOTHING,
-            new Cmss13ProtectionStats(mediumLow, mediumHigh, mediumHigh, high),
+            new Cmss13ProtectionStats(mediumLow, mediumHigh, 25, 35),
             true,
             SourceArmorAllowedList: true);
 
@@ -17570,7 +17571,7 @@ public sealed class YautjaBowTest
             "ancient alien greaves",
             "Greaves made from scraps of cloth and a strange alloy. They feel cold with an alien weight.",
             SlotFlags.FEET,
-            new Cmss13ProtectionStats(mediumLow, mediumHigh, medium, mediumHigh),
+            new Cmss13ProtectionStats(mediumLow, mediumHigh, 20, 30),
             true);
 
         yield return new AdultMandatoryArmorAndMeshRow(
@@ -17578,7 +17579,7 @@ public sealed class YautjaBowTest
             "clan greaves",
             "A pair of armored, perfectly balanced boots. Ideal for running through the jungle.",
             SlotFlags.FEET,
-            new Cmss13ProtectionStats(mediumHigh, high, mediumHigh, high),
+            new Cmss13ProtectionStats(mediumHigh, high, 25, 35),
             true);
     }
 
@@ -17658,13 +17659,11 @@ public sealed class YautjaBowTest
 
     private static IEnumerable<StrandedScalableEquipmentRow> Cmss13StrandedScalableEquipmentRows()
     {
-        // Local CMArmor has no laser, energy, rad or internaldamage fields, so this table covers
-        // the CMSS13 armor tiers that have existing local equivalents.
+        // Bio and explosion follow the shipped CMU prototypes; melee and bullet keep the rebase balance.
         const int low = 10;
         const int mediumLow = 35;
         const int medium = 40;
         const int mediumHigh = 45;
-        const int high = 50;
 
         yield return new StrandedScalableEquipmentRow(
             "CMUYautjaBodyMeshScalable",
@@ -17673,8 +17672,8 @@ public sealed class YautjaBowTest
             SlotFlags.INNERCLOTHING,
             low,
             mediumLow,
-            medium,
-            mediumHigh,
+            20,
+            35,
             "It has been worn from long use and poor maintenance.",
             false);
 
@@ -17685,8 +17684,8 @@ public sealed class YautjaBowTest
             SlotFlags.OUTERCLOTHING,
             mediumLow,
             medium,
-            medium,
-            high,
+            20,
+            35,
             "It has been damaged by long use and poor maintenance.",
             true);
 
@@ -17712,8 +17711,8 @@ public sealed class YautjaBowTest
             SlotFlags.FEET,
             medium,
             mediumHigh,
-            medium,
-            mediumHigh,
+            20,
+            35,
             "They have been damaged by long use and poor maintenance.",
             true);
     }
@@ -17738,7 +17737,7 @@ public sealed class YautjaBowTest
             SlotFlags.OUTERCLOTHING,
             "CMU14/Yautja/armor_heavy_clan.rsi",
             "icon",
-            new Cmss13ProtectionStats(25, 50, 45, 50),
+            new Cmss13ProtectionStats(25, 50, 25, 35),
             AllowedStorage: true);
 
         yield return new StoneFlavorGearRow(
@@ -17757,7 +17756,7 @@ public sealed class YautjaBowTest
             SlotFlags.FEET,
             "CMU14/Yautja/greaves_clan_2.rsi",
             "icon",
-            new Cmss13ProtectionStats(40, 50, 45, 50));
+            new Cmss13ProtectionStats(40, 50, 25, 35));
     }
 
     private static IEnumerable<string> Cmss13ScalableRepairPrototypeIds()
@@ -17850,8 +17849,7 @@ public sealed class YautjaBowTest
 
     private static IEnumerable<BadBloodArmorSetRow> Cmss13BadBloodArmorSetRows()
     {
-        // Local CMArmor has no laser, energy, rad or internaldamage fields, so this table covers
-        // the CMSS13 scalable armor tiers that have existing local equivalents.
+        // Bio and explosion follow the shipped CMU prototypes; melee and bullet keep the rebase balance.
         const int mediumLow = 35;
         const int medium = 40;
         const int mediumHigh = 45;
@@ -17860,8 +17858,8 @@ public sealed class YautjaBowTest
         var armorStats = new Cmss13ArmorStats(
             mediumLow,
             medium,
-            medium,
-            high,
+            20,
+            30,
             "It has been damaged by long use and poor maintenance.");
         // Master reduced patchwork-family bullet protection to 20.
         var patchworkStats = armorStats with { Bullet = 20 };
@@ -17874,8 +17872,8 @@ public sealed class YautjaBowTest
         var greavesStats = new Cmss13ArmorStats(
             medium,
             mediumHigh,
-            medium,
-            mediumHigh,
+            20,
+            30,
             "They have been damaged by long use and poor maintenance.");
 
         yield return new BadBloodArmorSetRow(
@@ -18057,9 +18055,9 @@ public sealed class YautjaBowTest
         string GreavesName = "alien greaves",
         string GreavesDescription = "Greaves made from scraps of cloth and a strange alloy. They feel cold with an alien weight. They have been adapted for compatibility with human equipment.")
     {
-        public Cmss13ProtectionStats ArmorStats => new(45, 45, 45, 45);
+        public Cmss13ProtectionStats ArmorStats => new(45, 45, 25, 30);
         public Cmss13ProtectionStats MaskStats => new(40, 45, 40, 45);
-        public Cmss13ProtectionStats GreavesStats => new(35, 45, 40, 45);
+        public Cmss13ProtectionStats GreavesStats => new(35, 45, 25, 30);
         public float MaskAntiHugMaxCount => 5;
     }
 

@@ -942,7 +942,7 @@
   - type: Sprite
     sprite: CMU14/Yautja/weapons.rsi
     layers:
-    - state: harpoon
+    - state: spike
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -1014,7 +1014,6 @@
     light: 0.9
     medium: 0.85
     heavy: 0.85
-  - type: GunRequiresWield
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi
