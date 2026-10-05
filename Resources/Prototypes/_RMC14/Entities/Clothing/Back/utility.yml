@@ -18,6 +18,8 @@
   - type: ClothingIgnoreBlockBackpack
   - type: GrantParaDroppable
 
+
+
 - type: entity
   id: RMCParachuteDeployed
   name: deployed parachute
