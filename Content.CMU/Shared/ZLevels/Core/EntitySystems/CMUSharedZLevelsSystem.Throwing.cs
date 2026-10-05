@@ -33,8 +33,11 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private void OnThrown(Entity<CMUZPhysicsComponent> ent, ref ThrownEvent args)
     {
-        if (_pendingZThrows.ContainsKey(ent.Owner))
+        if (_pendingZThrows.TryGetValue(ent.Owner, out var pending))
+        {
+            _pendingZThrows[ent.Owner] = pending with { Launched = true };
             return;
+        }
 
         if (args.User is not { } user ||
             !TryComp<CMUZLevelViewerComponent>(user, out var viewer) ||
@@ -64,15 +67,7 @@ public abstract partial class CMUSharedZLevelsSystem
         var offset = GetRequestedThrowOffset(args.PlayerUid);
 
         if (offset == 0)
-        {
-            if (TryQueuePendingZThrow(args.ItemUid, sourceMap, 1, from, to) ||
-                TryQueuePendingZThrow(args.ItemUid, sourceMap, -1, from, to))
-            {
-                return;
-            }
-
             return;
-        }
 
         TryQueuePendingZThrow(args.ItemUid, sourceMap, offset, from, to);
     }
@@ -124,7 +119,10 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private void OnThrownMove(ref MoveEvent args)
     {
+        // Releasing an item from a hand moves it before ThrownEvent. Keep the transition queued
+        // until launch so that release cannot consume it and then apply a second upward impulse.
         if (!_pendingZThrows.TryGetValue(args.Sender, out var pending) ||
+            !pending.Launched ||
             !TryComp<CMUZPhysicsComponent>(args.Sender, out var zPhysics) ||
             !TryComp<MapComponent>(pending.SourceMap, out var sourceMap))
         {
@@ -189,7 +187,8 @@ public abstract partial class CMUSharedZLevelsSystem
         SetZVelocity(nullableEnt, ThrowDownZVelocity);
     }
 
-    private readonly record struct PendingZThrow(EntityUid SourceMap, int Offset, EntityUid TargetMap, Vector2 Opening, Vector2 Direction);
+    private readonly record struct PendingZThrow(
+        EntityUid SourceMap, int Offset, EntityUid TargetMap, Vector2 Opening, Vector2 Direction, bool Launched = false);
     private readonly record struct RecentZThrowTransition(EntityUid SourceMap, EntityUid TargetMap, Vector2 Opening);
 
     public bool TryGetRecentZThrowExplosionProjection(
