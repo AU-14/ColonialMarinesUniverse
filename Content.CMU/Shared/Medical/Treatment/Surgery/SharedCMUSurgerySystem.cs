@@ -41,6 +41,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
     [Dependency] protected SharedCMUShrapnelSystem Shrapnel = default!;
     [Dependency] protected SharedCMUWoundsSystem Wounds = default!;
+    [Dependency] protected SharedCMUOpenStumpSystem Stumps = default!;
 
     private bool _medicalEnabled;
     private bool _surgeryEnabled;
@@ -56,6 +57,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         typeof(CMUSurgeryStepRemoveLimbEffectComponent),
         typeof(CMUSurgeryStepDebrideEscharEffectComponent),
         typeof(CMUSurgeryStepResolveTraitEffectComponent),
+        typeof(CMUSurgeryStepCloseStumpEffectComponent),
     ];
 
     public override void Initialize()
@@ -67,6 +69,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         SubscribeLocalEvent<CMUOrganDamagedSurgeryConditionComponent, CMSurgeryStepCompleteCheckEvent>(OnOrganDamagedCompleteCheck);
         SubscribeLocalEvent<CMUInternalBleedingSurgeryConditionComponent, CMSurgeryValidEvent>(OnInternalBleedingValid);
         SubscribeLocalEvent<CMUEscharSurgeryConditionComponent, CMSurgeryValidEvent>(OnEscharValid);
+        SubscribeLocalEvent<CMUOpenStumpSurgeryConditionComponent, CMSurgeryValidEvent>(OnOpenStumpValid);
         SubscribeLocalEvent<CMUSurgicalTraitConditionComponent, CMSurgeryValidEvent>(OnSurgicalTraitValid);
         SubscribeLocalEvent<CMUSurgicalTraitConditionComponent, CMSurgeryStepCompleteCheckEvent>(OnSurgicalTraitCompleteCheck);
 
@@ -80,6 +83,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         SubscribeLocalEvent<CMUSurgeryStepRemoveLimbEffectComponent, CMSurgeryStepEvent>(OnRemoveLimbStep);
         SubscribeLocalEvent<CMUSurgeryStepDebrideEscharEffectComponent, CMSurgeryStepEvent>(OnDebrideEscharStep);
         SubscribeLocalEvent<CMUSurgeryStepResolveTraitEffectComponent, CMSurgeryStepEvent>(OnResolveSurgicalTraitStep);
+        SubscribeLocalEvent<CMUSurgeryStepCloseStumpEffectComponent, CMSurgeryStepEvent>(OnCloseStumpStep);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.SurgeryEnabled, v => _surgeryEnabled = v, true);
@@ -184,6 +188,25 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     {
         if (!HasComp<InternalBleedingComponent>(args.Part))
             args.Cancelled = true;
+    }
+
+    private void OnOpenStumpValid(Entity<CMUOpenStumpSurgeryConditionComponent> ent, ref CMSurgeryValidEvent args)
+    {
+        if (!HasComp<CMUOpenStumpComponent>(args.Part))
+            args.Cancelled = true;
+    }
+
+    private void OnCloseStumpStep(Entity<CMUSurgeryStepCloseStumpEffectComponent> ent, ref CMSurgeryStepEvent args)
+    {
+        if (!IsSurgeryEnabled())
+            return;
+        if (!HasComp<CMUOpenStumpComponent>(args.Part))
+        {
+            args.Failed = true;
+            return;
+        }
+
+        Stumps.CloseAllStumps(args.Part);
     }
 
     private void OnEscharValid(Entity<CMUEscharSurgeryConditionComponent> ent, ref CMSurgeryValidEvent args)

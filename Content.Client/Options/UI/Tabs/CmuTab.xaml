@@ -32,6 +32,9 @@
                 <CheckBox Name="ExamineLogInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-log-in-chat'}" />
                 <CheckBox Name="ExamineFullTextInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-full-text-in-chat'}" />
                 <!-- cmu edit start -->
+                <CheckBox Name="ExamineWoundsInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-wounds-in-chat'}" />
+                <!-- cmu edit end -->
+                <!-- cmu edit start -->
                 <CheckBox Name="ChatSpeechSoundsCheckBox"
                           Text="{Loc 'cmu-ui-options-chat-speech-sounds'}"
                           ToolTip="{Loc 'cmu-ui-options-chat-speech-sounds-tooltip'}" />

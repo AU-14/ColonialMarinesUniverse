@@ -1,0 +1,36 @@
+<Document>
+  # Colonial Marshal Bureau
+
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/CMBHeader.png" MaxHeight="128"/>
+
+  [italic]"The laws of Earth stretch beyond the Sol."[/italic]
+
+  The [bold]Colonial Marshal Bureau[/bold] (CMB), formally the Office of the Colonial Marshals, is the law enforcement agency that polices human colonies and space stations across the frontier. It was founded as the law enforcement arm of the [textlink="United Americas" link="CMUGuideLoreUA"] Colonial Administration, and is as old as the Administration itself.
+
+  ## Purpose
+  - Marshals are both investigators and police. They uphold UA colonial law and Earth law, and work alongside US federal agencies.
+  - Both the Marshals and Colonial Administration exist to protect colonists' lives and rights. Most colonists have little to no say over the corporations whose facilities they live and work in, and a Marshal is often the only help they can count on.
+  - Their work centers on smuggling, common crime, the black market, and corporate corruption and cover-ups.
+
+  ## Reputation
+  - Much of the police and military on the colonies sits in one company's pocket or another. Marshals are meant to be different, bound by an oath to their communities and to see no injustice go unchecked.
+  - Not every office lives up to that oath. Some Marshals have been bribed or blackmailed, and where an office fails its people, colonists can turn on it quickly.
+  - Most Marshals are spread thin, with only a few officers covering an entire colony, and many offices are little more than a drunk tank.
+
+  ## Organization
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearCMBMarshalInvestigation" Caption="Marshal"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearCMBDeputyInvestigation" Caption="Deputy"/>
+  </Box>
+  - A [bold]Colonial Marshal[/bold] leads a team of [bold]Deputies[/bold]. A standard investigation team is a Marshal and three Deputies, sometimes with an older-model investigative synthetic in place of one Deputy.
+  - Every major Marshal office has an agent of the [textlink="Interstellar Commerce Commission" link="CMUGuideLoreICC"] attached, watching for illegal trade and dangerous biological or chemical cargo.
+  - The [bold]Crisis Intervention Unit[/bold] handles hostage situations, strikes, terrorism and any crisis beyond the local police.
+  - Marshals are equipped for police work, not war. Their gear runs to batons, riot shields, revolvers, shotguns and less-lethal rounds. When they run into an organized armed group such as the [textlink="Colonial Liberation Front" link="CMUGuideLoreCLF"], they call on the military for support.
+
+  ## Jurisdiction
+  - Marshals have full authority on colonies under their jurisdiction.
+  - Elsewhere they defer to the local authority, and only arrest with its permission or a warrant, unless a life is at stake.
+
+  ## Playable Units
+  - [textlink="CMB Crisis Intervention Unit" link="CMUGuideLorePlatoonCMBCIU"]
+</Document>

@@ -48,6 +48,7 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private OrganRelationSystem _organRelation = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
     private static readonly ProtoId<DamageTypePrototype> Bloodloss = "Bloodloss";
     private const float StumpBleedDamage = 30f;
     private static readonly SoundSpecifier SeveranceSound =
@@ -127,6 +128,8 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
                 detachedParts.Add((child.Owner, childPart.PartType, childPart.Symmetry));
         }
 
+        var stumpParent = CompOrNull<ChildOrganComponent>(args.Part)?.Parent;
+
         if (_detachableOrgan.Detach(args.Part) is not { } detachedBody)
         {
             return;
@@ -144,6 +147,8 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
         {
             FlingPartFromBody(args.Body, detachedBody);
             ApplyStumpBleed(args.Body);
+            if (stumpParent is { } parent && !TerminatingOrDeleted(parent))
+                _stumps.AddStump(parent, args.Type, partComp.Symmetry);
             _audio.PlayPvs(SeveranceSound, args.Body);
         }
 
