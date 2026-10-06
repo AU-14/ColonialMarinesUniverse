@@ -1,0 +1,49 @@
+<Document>
+  # Corporations
+
+  [textlink="Weyland-Yutani" link="CMUGuideLoreWY"] may dominate human space, but it is far from the only corporation on the frontier. Its rivals compete with it for contracts, colonies and secrets, and none of them play fair, while other companies that look independent quietly answer to it.
+
+  ## Lasalle Bionational
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/LASALLE_BIONATIONALHeader.png" MaxHeight="20"/>
+  [bold]Lasalle Bionational[/bold], usually just "Bionational", is a multinational conglomerate specializing in biological research and development.
+  - It was founded in the late 2130s by [bold]Brendan Lasalle[/bold], a former Weyland-Yutani vice president who walked out after mass layoffs in the Company's bioresearch division, taking the laid-off staff with him.
+  - Its first big break was a government contract for a cheap, radiation-resistant corn substitute. It is now known for radiation-resistant crops, livestock engineered for different environments, vaccines against extrasolar diseases, and a blight virus able to wipe out an enemy's crops.
+  - The Lasalle family holds a majority of its shares, so control passes from parent to child and the board can never push them out. Brendan's daughter, [bold]Edina Lasalle[/bold], has since taken over and built up its bioweapons division.
+  - It is locked in a bio-arms race with Weyland-Yutani for Colonial Marine weapons contracts, and the two constantly spy on and sabotage each other. Its security is weaker than the Company's, and the [textlink="Union of Progressive Peoples" link="CMUGuideLoreUPP"] has planted spies in its administration to steal its research.
+  - Its science and security teams roam the frontier searching for alien life, ancient ruins, and anything else that could be turned into a weapon.
+
+  ## Seegson
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/SEEGSONHeader.png" MaxHeight="64"/>
+  [bold]Seegson[/bold], "Tomorrow, Together", is a European conglomerate and the second largest maker of synthetics, behind only Weyland-Yutani.
+  - Founded as [bold]Sieg and Son[/bold] by Josiah Sieg, it became a major rival to Weyland Corp in the early days of faster-than-light travel by being willing to share its FTL technology with other companies. It went on to lead the market in cars, chemicals, educational equipment and building materials before renaming itself Seegson.
+  - Its subsidiaries cover communications, synthetics, credit services, security and pharmaceuticals. It is best known for its cheap, simple [bold]Working Joe[/bold] androids.
+  - Instead of terraforming planets as Weyland-Yutani did, it gambled on deep space stations, since it never developed atmospheric processors of its own. When the market turned to planetary colonies, the gamble crippled it, and many of its stations became unprofitable and had to close.
+  - It still runs dozens of stations across the frontier, but many now see it as a "second-tier" corporation that overreached. Weyland-Yutani pays it little attention.
+
+  ## Hyperdyne Corporation
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/HYPERDYNEHeader_alt.png" MaxHeight="64"/>
+  The [bold]Hyperdyne Corporation[/bold], formerly Hyperdyne Systems, pioneered synthetics and cybernetic prosthetics and colonized the Hyades Cluster. It is headquartered on [bold]Alexandria[/bold] in the Core Systems.
+  - Early in the century it worked with the [textlink="United Americas" link="CMUGuideLoreUA"] on large colonization missions, and refused to abandon the rich mining worlds of the Hyades Cluster when the UA pulled back.
+  - When Weyland's patent on synthetics expired in 2120, it rushed out its own. Its early 120-A/2 model proved unstable and had to be recalled, but it was the first to offer synthetics with a non-standard appearance for covert work.
+  - In 2147 the [textlink="Three World Empire" link="CMUGuideLoreTWE"] ordered it to submit to an investigation by the [textlink="Interstellar Commerce Commission" link="CMUGuideLoreICC"]. Hyperdyne declared independence instead, and other corporate colonies followed, sparking the conflict that created the [textlink="Independent Core System Colonies" link="CMUGuideLoreICSC"].
+  - Around 2156 the Hyades colonies revolted against it and joined the UPP. Hyperdyne lobbied the UA into a war with the UPP there, lost the cluster anyway, and secretly began working for the UPP as well.
+  - Near bankruptcy, it was forced to sell its majority shares to Weyland-Yutani and became a subsidiary. The success of its 341-B synthetic for the Colonial Marines and its Frontier Revolver later earned it enough to buy back its independence.
+  - Today it is the UPP's main weapons designer. Rather than shipping weapons, it sends blueprints and software faster-than-light so customers can print the weapons on their own fabricators.
+
+  ## Prodigy Corporation
+  The [bold]Prodigy Corporation[/bold], "Prodigy is the future. Prodigy is forever.", is an Earth-based corporation.
+  - It was founded in 2110 by [bold]Boy Kavalier[/bold], the world's youngest trillionaire and was once on track to become one of the most influental companies on Earth.
+
+In 2120 following the mysterious disappeatance of [bold]Boy Kavalier[/bold], the Prodigy Corporation fractured and lost the majority of its territory and influence, now only holding Prodigy City in New Siam on earth.
+  - Its private army, [bold]Security Services[/bold], polices Prodigy City, conducts search-and-rescue operations, and defends the city from rival corporations. To help sustain the company's remaining operations, its soldiers are contracted out to the far regions of space, as the [textlink="Prodigy Corporation Security Forces" link="CMUGuideLorePMC"].
+
+  ## Kelland Mining Company
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/KELLANDHeader.png" MaxHeight="64"/>
+  The [bold]Kelland Mining Company and Consortium[/bold] (KMCC) is a major deep space mining corporation, headquartered on [bold]Io[/bold].
+  - It was formed when every oil-prospecting company on Earth merged into one, and now runs deep space prospecting, oil and bulk mineral mining operations.
+
+  ## Lock-Mart Industries
+  [bold]Lock-Mart Industries[/bold], or Lockmart, is a starship and vehicle manufacturer headquartered in the New Eden Sector of the [textlink="Independent Core System Colonies" link="CMUGuideLoreICSC"].
+  - It is regarded as the foremost builder of commercial spacecraft, from salvage and excavation ships to freighters. It also builds for the military. The Colonial Marines' M577 armored personnel carrier is a Lockmart design.
+  - Lockmart counts both the Colonial Marines and [textlink="Weyland-Yutani" link="CMUGuideLoreWY"] among its customers.
+</Document>

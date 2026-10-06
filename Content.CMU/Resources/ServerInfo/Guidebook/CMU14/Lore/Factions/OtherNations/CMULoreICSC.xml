@@ -1,6 +1,8 @@
 <Document>
   # Independent Core System Colonies
 
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/ICSCHeader.png" MaxHeight="64"/>
+
   The [bold]Independent Core System Colonies[/bold] (ICSC) are a loose union of self-governing human worlds, most of them in the [bold]New Eden Sector[/bold] of the Core Systems, with scattered holdings out in the Outer Veil and the frontier. Every ICSC world runs its own government, and many of those governments are overseen by corporations.
 
   ## History
@@ -13,4 +15,5 @@
   - Its [bold]EntaCOMM Network[/bold] lets its worlds (and anyone who pays them a pretty penny) communicate instantly across most of colonized space.
   - The ICSC holds very little influence on Earth, holding only small enclaves such as Persia, France, Korea, Turkey and Pakistan.
   - Most of human space doesn't accept the ICSC as a real government. To the superpowers, its members are secessionists, plain and simple.
+  - Its neutrality between the great powers makes it the main source of [textlink="UNISC" link="CMUGuideLoreUNISC"] peacekeepers.
 </Document>

@@ -1,0 +1,27 @@
+<Document>
+  # Xenomorphs
+
+  <Box>
+    <GuideEntityEmbed Entity="CMXenoRunner" Caption="Runner"/>
+    <GuideEntityEmbed Entity="CMXenoDrone" Caption="Drone"/>
+    <GuideEntityEmbed Entity="CMXenoWarrior" Caption="Warrior"/>
+    <GuideEntityEmbed Entity="CMXenoQueen" Caption="Queen"/>
+  </Box>
+
+  [italic]"You still don't understand what you're dealing with, do you? Perfect organism. Its structural perfection is matched only by its hostility. I admire its purity. A survivor... unclouded by conscience, remorse, or delusions of morality. Is there room enough in space for us and it?"[/italic]  - Ash, Alien
+
+  Officially, they don't exist, and no government or common person knows of their existence. The few who have met the [bold]Xenomorphs[/bold] and lived describe a creature built for nothing but survival and slaughter: armored, acid-blooded and utterly without conscience, remorse or mercy. Wherever one appears, a colony usually goes dark soon after.
+
+  ## The Hive
+  - Xenomorphs live in a [bold]Hive[/bold], ruled by a single [bold]Queen[/bold]. Every member is an extension of her will, and their only purpose is to protect the Hive and spread it until it covers everything they can reach.
+  - The Hive shares a [bold]hivemind[/bold], letting its members speak and coordinate across great distances without a sound.
+  - They are cunning and learn fast. Whatever one of them discovers about a colony, its layout, its power and the weapons used against it, the whole Hive soon knows.
+  - The Hive covers its territory in [bold]resin[/bold] and living [bold]weeds[/bold], which feed and heal its members. Its nest is hidden deep in the most secure place it can find.
+
+  ## Life Cycle
+  - The Queen lays [bold]eggs[/bold]. When prey comes near, an egg releases a [bold]facehugger[/bold], which latches onto the victim's face and plants an embryo inside them.
+  - Living hosts are dragged back to the nest and sealed into the walls to incubate.
+  - The embryo grows inside its host until it bursts out of the chest as a [bold]larva[/bold], killing the host.
+  - The larva hides and feeds, growing quickly into a full adult, and the cycle begins again. A single egg can doom a colony within days.
+  - On rare occasions, a Xenomorph born from a [textlink="Yautja" link="CMUGuideLoreHunters"] host takes on traits of both species, becoming a far deadlier abomination.
+</Document>

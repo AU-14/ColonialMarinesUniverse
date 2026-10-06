@@ -1,0 +1,21 @@
+<Document>
+  # Vanguard's Arrow Incorporated
+
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/VANGUARDARROWHeader.png" MaxHeight="64"/>
+
+  [bold]Vanguard's Arrow Incorporated[/bold] (VAI) is a United States-based private military company, founded in 2166 by nine Colonial Marine veterans. It grew into one of the largest PMCs in the United Americas, and most of its people are former Colonial Marines, with veterans of other UA militaries filling out the rest. It fights much like the USCM, with the same kind of equipment, but with a looser command structure where everyone below the team leader is an equal.
+
+  - In 2177, VAI got the [bold]Military Aid Act[/bold] through the UA Congress, letting contractors assist Colonial Marine forces in return for back-pay. It still makes good money helping the Marines wherever it can.
+  - In early 2180, an incident on LV-191 left colonists dead and Weyland-Yutani property damaged. Many of VAI's big contracts were dropped.
+  - Months later, an unknown benefactor offered VAI a steady contract for corporate espionage and sabotage against [textlink="Weyland-Yutani" link="CMUGuideLoreWY"]. Nearly out of work, VAI took it. The quiet campaign has since grown into raids on small W-Y facilities, and it is what keeps VAI afloat.
+
+  VAI is split into five divisions:
+  - [bold]Central Command[/bold] (VAICC): the company's executives and administration.
+  - [bold]Special Protection[/bold] (VAISP): guards VAI's leadership, medical staff and ships.
+  - [bold]Special Operations[/bold] (VAISO): VAI's clandestine and black operations section. VAISO conducts all of the work against Weyland-Yutani and anything else that would be considered ilegal.
+  - [bold]Primary Operations[/bold] (VAIPO): everything else, and most of VAI's fighting strength. VAIPO (unlike VAISO), engages only in 'legal' operations.
+  - [bold]Medical Science[/bold] (VAIMS): medical ships, team medics and laboratories. VAIMS medics are often attached to VAIPO and VAISP.
+
+  ## Playable Units
+  - [textlink="VAI Primary Operations" link="CMUGuideLorePlatoonVAIPO"]
+</Document>

@@ -1,0 +1,32 @@
+# Ported from cmss13-devs/cmss13#11776 (Lore Plaque + Galaxy Map)
+
+- type: entity
+  parent: BaseItem
+  id: CMUGalaxyMap
+  name: galaxy map
+  description: A diagrammatic map of the Milky Way, laid out by sector.
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/obj/items/paper.rsi
+    state: map
+    color: "#005eab"
+  - type: Item
+    size: Small
+  - type: GuideHelp
+    openOnActivation: true
+    guides:
+    - CMUGuideLoreGalaxyMap
+
+- type: entity
+  parent: RMCSignRequisitions
+  id: CMUSignUSCMDisposition
+  name: USCM disposition and readiness
+  description: A plaque describing the deployment and arrangement of the troops that make up the United States Colonial Marines.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/decals.rsi
+    state: roplaque
+  - type: GuideHelp
+    openOnActivation: true
+    guides:
+    - CMUGuideLoreUSCM

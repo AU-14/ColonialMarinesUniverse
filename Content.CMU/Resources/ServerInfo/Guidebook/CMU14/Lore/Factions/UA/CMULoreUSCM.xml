@@ -1,0 +1,24 @@
+<Document>
+  # USCM Disposition and Readiness
+
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/USCMHeader.png" MaxHeight="64"/>
+
+  The [bold]United States Colonial Marine Corps[/bold] is organized into [bold]Marine Space Forces[/bold] (MSF), each responsible for military operations within a defined region of space. An MSF commands the ground, aerospace and support elements needed for sustained interstellar operations.
+
+  ## Components of an MSF
+  - [bold]Division[/bold]: the primary large-scale ground formation, built around three infantry regiments that together form a balanced force of combat, support and service elements. Divisions can carry out both orbital assaults and sustained surface operations.
+  - [bold]Aerospace Wing[/bold]: all dropships, strike and support craft. It provides orbital insertion, reconnaissance, close air support and logistical transport across the MSF's theatre, working alongside the Division to project force across multiple star systems.
+  - [bold]Brigade[/bold]: a self-contained formation of a single reinforced regiment with an attached aircraft group and logistics support. A compact, all-in-one division able to run independent campaigns across multiple worlds.
+  - [bold]Marine Assault Unit[/bold] (MAU): a rapid-deployment, battalion-sized expeditionary force of reinforced infantry, a dropship squadron and a combat logistics battalion, used for crises, assaults and emergency operations.
+
+  ## The Marine Space Forces
+  - [bold]MSF Sol[/bold]: the Core Systems, with a separate division solely for the Sol System.
+  - [bold]MSF Eridani[/bold]: the Outer Rim and Coreward Frontier, covering the American Corridor, the Advance and the hotly contested frontier border regions.
+  - [bold]MSF Herculis[/bold]: the Anglo-Japanese Arm, the Tartarus Sector, and as deep into the American Arm as Alpha Caeli.
+
+  See the [textlink="Galaxy Map" link="CMUGuideLoreGalaxyMap"] for where these regions lie.
+
+  ## Playable Units
+  - [textlink="USCM 'Lucky Thirteen'" link="CMUGuideLorePlatoonUSCM"]
+  - [textlink="USCM Hazardous Operations Unit" link="CMUGuideLorePlatoonHAZOPS"]
+</Document>

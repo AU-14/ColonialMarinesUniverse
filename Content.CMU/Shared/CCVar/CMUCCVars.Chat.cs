@@ -36,7 +36,7 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.chat_speech_sounds", true, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
 
     public static readonly CVarDef<bool> ChatResetToLocal =
-        CVarDef.Create("cmu.chat_reset_to_local", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.chat_reset_to_local", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     /// When the chat keybind is pressed, move the chat input to the middle of the screen until the message is sent.

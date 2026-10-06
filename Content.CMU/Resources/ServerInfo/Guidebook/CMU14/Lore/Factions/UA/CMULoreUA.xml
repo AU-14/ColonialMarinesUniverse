@@ -1,0 +1,28 @@
+<Document>
+  # United Americas
+
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/UAHeader.png" MaxHeight="64"/>
+
+  The [bold]United Americas[/bold] (UA) is a superpower formed in 2104 by the nations of North, Central and South America, in answer to the rise of the [textlink="Three World Empire" link="CMUGuideLoreTWE"]. It fields one of the most formidable militaries in human space and the strongest industrial base on the frontier.
+
+  ## Government
+  - In practice an extension of the United States government, run by a President, Vice President and a Congress representing every member nation.
+  - Most UA colonies lie in the [bold]American Arm[/bold] of the Outer Rim, with more strung along the frontier.
+
+  The UA's militaries are divided between three rival political factions. See [textlink="Politics" link="CMUGuideLoreUAPolitics"].
+
+  ## Relations
+  - [textlink="Three World Empire" link="CMUGuideLoreTWE"]: allies bound by treaties, but the UA keeps a close eye on the TWE's expansion.
+  - [textlink="Union of Progressive Peoples" link="CMUGuideLoreUPP"]: a long cold war that has turned into more and more border clashes over disputed worlds.
+  - [textlink="Weyland-Yutani" link="CMUGuideLoreWY"]: deep business ties, but growing distrust after the Corporate mishandling of many UA worlds.
+
+  ## Civil Organizations
+  - [bold]Colonial Administration[/bold], an civilian organization formed to protect the rights of American off-world colonists and manage the UA's Colonies.
+  - [textlink="Colonial Marshal Bureau" link="CMUGuideLoreCMB"] (CMB): the civilian law enforcement arm of Colonial Administration, with offices across the colonies. Its [bold]Crisis Intervention Unit[/bold] handles hostage situations, strikes, terrorism and any crisis beyond local police.
+
+  ## Military Forces
+  The [bold]United Americas Allied Command[/bold] directs the militaries of every member nation.
+  - [textlink="United States Colonial Marines" link="CMUGuideLoreUSCM"] (USCM): founded in 2101, before the UA itself, and the spearhead of every UA campaign. Split into the Sol, Eridani and Herculis branches, with reserves on Earth.
+  - [textlink="Latin American Colonial Navy" link="CMUGuideLoreOrgLACN"] (LACN): its Landing Forces specialize in rapid deployment and shock tactics for planetary assault and occupation.
+  - Other UA military forces include: the [bold]Canadian Colonial Armed Forces[/bold], the [bold]US Aerospace Force[/bold], the [bold]UA Colonial Guard[/bold], the [bold]US Colonial Coast Guard[/bold], the [bold]Outer Rim Defense Fleet[/bold] and the [bold]US Army[/bold].
+</Document>

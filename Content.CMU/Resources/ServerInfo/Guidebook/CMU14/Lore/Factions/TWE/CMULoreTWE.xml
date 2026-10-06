@@ -1,6 +1,8 @@
 <Document>
   # Three World Empire
 
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/TWEHeader.png" MaxHeight="64"/>
+
   The [bold]Three World Empire[/bold] (TWE or 3WE) is a superpower formed in 2088 when the United Kingdom and Japan pooled their lead in space exploration and joined with India and other developing nations. It takes its name from the first three worlds humanity settled: [bold]Earth, Mars and Titan[/bold]. As the first power to colonize beyond Sol, it holds more colonies than anyone else, and is the most technologically advanced nation.
 
   ## Government
@@ -15,15 +17,15 @@
   - Many far-out TWE colonies have defected to the [textlink="Union of Progressive Peoples" link="CMUGuideLoreUPP"].
 
   ## Relations
-  - [bold]United Americas[/bold]: mostly peaceful allies, but the UA watches the TWE's expansion closely, and the TWE fears being dragged into the UA's quarrels with Weyland-Yutani.
-  - [bold]Union of Progressive Peoples[/bold]: hostile; a cold war fought over the Outer Rim.
-  - [bold]ICSC[/bold]: reluctantly allied, the TWE's navy helps defend ICSC space.
+  - [textlink="United Americas" link="CMUGuideLoreUA"]: mostly peaceful allies, but the UA watches the TWE's expansion closely, and the TWE fears being dragged into the UA's quarrels with Weyland-Yutani.
+  - [textlink="Union of Progressive Peoples" link="CMUGuideLoreUPP"]: hostile; a cold war fought over the Outer Rim.
+  - [textlink="ICSC" link="CMUGuideLoreICSC"]: reluctantly allied, the TWE's navy helps defend ICSC space.
 
   ## Civil Organizations
   - [bold]Neroid Sector Policing Authority[/bold] (NSPA): the NSPA is the 3WE's main Law Enforcement branch in the Neroid Sector.
 
   ## Forces
   - [bold]Imperial Armed Space Forces[/bold] (IASF): the TWE's navy and main fighting force.
-  - [bold]Royal Marine Commandos[/bold] (RMC): the TWE's elite. Highly disciplined and well equipped, trained in rapid deployment, boarding actions, reconnaissance, sabotage and precision strikes far behind enemy lines.
+  - [textlink="Royal Marine Commandos" link="CMUGuideLoreOrgRMC"] (RMC): the TWE's elite. Highly disciplined and well equipped, trained in rapid deployment, boarding actions, reconnaissance, sabotage and precision strikes far behind enemy lines.
   - [bold]Special Air Service[/bold] (SAS): the TWE's tier one special forces.
 </Document>
