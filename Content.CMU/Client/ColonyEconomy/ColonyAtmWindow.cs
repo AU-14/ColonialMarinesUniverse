@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Numerics;
 using System.Text;
 using Content.Client.CMU14.Interface;
@@ -76,6 +75,7 @@ public sealed partial class ColonyAtmWindow : BaseWindow
     [Dependency] private IGameTiming _timing = default!;
 
     private readonly AtmScreenControl _screen;
+    private readonly FaultConsole _fault;
     private readonly AtmSprite _glass;
     private readonly CrtScreenControl _crt;
     private readonly NativeLayout _layout;
@@ -102,10 +102,10 @@ public sealed partial class ColonyAtmWindow : BaseWindow
     /// <summary>The player's card was clicked while signed in: log off and hand it back.</summary>
     public event Action? LogOffPressed;
 
-    /// <summary>The bills coming out of the cash slot; shown only while they are out.</summary>
+    /// <summary>The bills in the cash tray; shown only while they wait there.</summary>
     public readonly CashButton BtnCash = new();
 
-    /// <summary>The bills were clicked on their way out: the player takes the cash in hand.</summary>
+    /// <summary>The bills in the tray were clicked: the player takes the cash in hand.</summary>
     public event Action? TakeCashPressed;
 
     /// <summary>Text appeared on the screen this frame, a character or a self-test line.</summary>
@@ -172,8 +172,10 @@ public sealed partial class ColonyAtmWindow : BaseWindow
         var screenContent = new Control { MouseFilter = MouseFilterMode.Ignore };
         _glass = new AtmSprite(Rsi(cache, "atm_screen"));
         _screen = new AtmScreenControl(bodyFont, boldFont, Glass.Width * Px * DefaultScale);
+        _fault = new FaultConsole(bodyFont, boldFont, Glass.Width * Px * DefaultScale) { Visible = false };
         screenContent.AddChild(_glass);
         screenContent.AddChild(_screen);
+        screenContent.AddChild(_fault);
         _screen.Typed += () => TextTyped?.Invoke();
         Art(screenContent, Glass);
 
@@ -224,10 +226,10 @@ public sealed partial class ColonyAtmWindow : BaseWindow
         // mark comes up, then a power-on self test before the terminal itself.
         _glass.Play("power_on", () =>
         {
-            // A seized machine never gets as far as its own boot: the CLF's mark comes straight up.
+            // A machine out of order never gets as far as its own boot: the fault comes straight up.
             if (_state?.OutOfService == true)
             {
-                EnterSeized();
+                EnterOutOfOrder();
                 return;
             }
 
@@ -247,10 +249,12 @@ public sealed partial class ColonyAtmWindow : BaseWindow
         UpdateLights();
     }
 
-    private void EnterSeized()
+    private void EnterOutOfOrder()
     {
-        _glass.Show("clf");
+        _glass.Show("fault");
         _screen.EndBoot();
+        _screen.Visible = false;
+        _fault.Visible = true;
         SetBoot(BootPhase.Done);
     }
 
@@ -544,9 +548,12 @@ public sealed partial class ColonyAtmWindow : BaseWindow
     {
         if (s.OutOfService)
         {
-            ShowSeized(s);
+            ShowOutOfOrder(s);
             return;
         }
+
+        _fault.Visible = false;
+        _screen.Visible = true;
 
         var header  = s.AccountNumber > 0 ? $"ACCT #{s.AccountNumber}" : "COLONY ATM";
         var balance = s.Screen >= AtmScreen.MainMenu && s.AccountNumber > 0 ? $"BAL ${s.Balance}" : string.Empty;
@@ -566,23 +573,19 @@ public sealed partial class ColonyAtmWindow : BaseWindow
         UpdateHardware(s);
     }
 
-    /// <summary>The CLF's mark on the tube, the seizure notice under it, and a dead keypad.</summary>
-    private void ShowSeized(ColonyAtmBuiState s)
+    /// <summary>The console gone wrong under its OUT OF ORDER notice, and a dead keypad.</summary>
+    private void ShowOutOfOrder(ColonyAtmBuiState s)
     {
-        // The roundel fills the top half of the tube (art rows 107-145 of 102-186). Six blank lines
-        // put the notice just under it, centred, with all three lines clear of the tube's bottom edge.
-        // No newline after the last line: the cursor waits at its end, as on every other screen.
-        var lines = new[] { "cmu-atm-seized-1", "cmu-atm-seized-2", "cmu-atm-seized-3" }
-            .Select(id => _screen.Centre(Loc.GetString(id)));
-        var notice = new string('\n', 6) + string.Join('\n', lines);
-        _screen.SetState(string.Empty, string.Empty, notice, string.Empty, false);
+        _fault.Message = s.OutOfServiceMessage;
+
+        // Still warming up: the fault comes up as the tube does. Booting: it cuts the boot short.
+        if (_boot != BootPhase.PowerOn)
+            EnterOutOfOrder();
 
         BtnScrollUp.Visible = BtnScrollDown.Visible = false;
         _crt.ArtifactAmount = 0.6f;
         UpdateKeys(s);
         UpdateHardware(s);
-        if (_boot == BootPhase.Done)
-            _glass.Show("clf");
     }
 
     // The keys are labelled OK and X, so the screen names them that way.
@@ -628,6 +631,7 @@ public sealed partial class ColonyAtmWindow : BaseWindow
                 AtmHistoryKind.CashDeposit => $"+${entry.Amount} CASH DEPOSIT",
                 AtmHistoryKind.TransferOut => $"-${entry.Amount} TO #{entry.OtherAccount}",
                 AtmHistoryKind.TransferIn => $"+${entry.Amount} FROM #{entry.OtherAccount}",
+                AtmHistoryKind.Retracted => $"+${entry.Amount} CASH RETURNED",
                 _ => $"{entry.Amount}",
             };
             sb.Append('\n').Append(time).Append(' ').Append(line);
@@ -882,13 +886,6 @@ public sealed partial class ColonyAtmWindow : BaseWindow
         /// <summary>Characters that fit across the tube at the default size; text wraps to this.</summary>
         public int Columns => Math.Max(8, (int) ((_widthVirtual - 16f) / _advanceVirtual));
 
-        /// <summary>
-        ///     <paramref name="line"/> padded to sit in the middle of the tube. The padding is
-        ///     non-breaking: the word wrap would eat ordinary leading spaces.
-        /// </summary>
-        public string Centre(string line)
-            => new string('\u00a0', Math.Max(0, (Columns - line.Length) / 2)) + line;
-
         private string Wrap(string text)
         {
             var maxCols = Columns;
@@ -1094,7 +1091,7 @@ public sealed partial class ColonyAtmWindow : BaseWindow
             }
         }
 
-        private static void Glow(DrawingHandleScreen handle, Font font, Vector2 at, string text, float scale, Color color)
+        public static void Glow(DrawingHandleScreen handle, Font font, Vector2 at, string text, float scale, Color color)
         {
             var d = MathF.Max(1f, scale);
             handle.DrawString(font, at + new Vector2(-d, 0), text, scale, Bloom);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server.Administration;
 using Content.Server.CMU14.ColonyEconomy;
 using Content.Server.Stack;
 using Content.Shared.CMU14.Insurgency.Sapper;
@@ -15,6 +16,7 @@ using Content.Shared.Popups;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -41,6 +43,8 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private QuickDialogSystem _dialog = default!;
+    [Dependency] private ColonyAtmSystem _atm = default!;
 
     // Loud one-shot for the big console/ASRS drains so the theft reads as a major event.
     private static readonly SoundSpecifier BigDrainSound =
@@ -199,6 +203,46 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("insfor-sapper-atm-hacked", ("amount", haul)), atm, user);
         if (leaked > 0)
             _popup.PopupEntity(Loc.GetString("cmu-sapper-atm-logins-leaked", ("count", leaked)), user, user);
+
+        PromptForMessage(ent, atm, user);
+    }
+
+    /// <summary>
+    ///     Lets whoever bled the machine leave a line on its out-of-order screen, there until it repairs
+    ///     itself. Optional: an empty answer or a cancel leaves the plain notice.
+    /// </summary>
+    private void PromptForMessage(Entity<SapperAtmHackingComponent> rig, EntityUid atm, EntityUid user)
+    {
+        if (!TryComp(user, out ActorComponent? actor))
+            return;
+
+        var maxLength = rig.Comp.MaxAtmMessageLength;
+        _dialog.OpenDialog(actor.PlayerSession,
+            Loc.GetString("insfor-sapper-atm-message-title"),
+            Loc.GetString("insfor-sapper-atm-message-prompt", ("max", maxLength)),
+            (string message) => SetAtmMessage(atm, user, message, maxLength));
+    }
+
+    /// <summary>
+    ///     Puts <paramref name="message"/> on a siphoned ATM's out-of-order screen until the machine
+    ///     repairs itself. Ignored once it has: an answer that comes back after the repair is dropped.
+    /// </summary>
+    public void SetAtmMessage(EntityUid atm, EntityUid user, string message, int maxLength)
+    {
+        if (Deleted(atm) || !TryComp(atm, out SapperAtmHackedComponent? hacked))
+            return;
+
+        // Untrusted client text: one line, trimmed and clamped, before anyone else sees it.
+        message = new string(message.Select(c => char.IsControl(c) ? ' ' : c).ToArray()).Trim();
+        if (message.Length > maxLength)
+            message = message[..maxLength].TrimEnd();
+        if (message.Length == 0)
+            return;
+
+        hacked.Message = message;
+        _adminLog.Add(LogType.Action, LogImpact.Low,
+            $"{ToPrettyString(user):player} left a message on the siphoned ATM {ToPrettyString(atm)}: {message}");
+        _atm.RefreshScreen(atm);
     }
 
     /// <summary>
@@ -418,7 +462,7 @@ public sealed partial class SapperAtmHackingSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("insfor-sapper-atm-malfunction"), ent, args.User, PopupType.LargeCaution);
     }
 
-    // A plain click opens the seized screen - the CLF's mark - without starting a session: the ATM
+    // A plain click opens the out-of-order screen without starting a session: the ATM
     // system only hands the machine to a user it has claimed, so every key stays dead. Other hacked
     // devices keep their own UIs.
     private void OnHackedActivate(Entity<SapperAtmHackedComponent> ent, ref ActivateInWorldEvent args)

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Client.CMU14.Insurgency.Sapper;
+using Content.Server.CMU14.Insurgency.Sapper;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Insurgency.Sapper;
@@ -174,6 +175,47 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
         {
             Assert.That(ClientAtmState().Tampered, "The repaired ATM does not show the skimmer");
             Assert.That(Comp<IdCardComponent>(card).AccountBalance, Is.EqualTo(60), "The repaired ATM did not pay out");
+        });
+    }
+
+    /// <summary>
+    ///     Whoever bled the machine can leave a line on its out-of-order screen - kept to one line and
+    ///     clamped - and it is gone once the machine repairs itself.
+    /// </summary>
+    [Test]
+    public async Task SappersMessageShowsUntilTheAtmRepairs()
+    {
+        await SpawnTarget(Atm);
+        var rig = await HoldRig();
+        await Interact();
+        Assert.That(SEntMan.HasComponent<SapperAtmHackedComponent>(STarget), "The ATM was not hacked");
+
+        var hacking = SEntMan.System<SapperAtmHackingSystem>();
+        var tooLong = "WE WERE HERE\n" + new string('X', 100);
+        await Server.WaitPost(() => hacking.SetAtmMessage(STarget!.Value, SPlayer, tooLong, rig.MaxAtmMessageLength));
+
+        var message = SEntMan.GetComponent<SapperAtmHackedComponent>(STarget!.Value).Message;
+        Assert.Multiple(() =>
+        {
+            Assert.That(message, Does.StartWith("WE WERE HERE X"), "The message was not kept to one line");
+            Assert.That(message!.Length, Is.LessThanOrEqualTo(rig.MaxAtmMessageLength), "The message was not clamped");
+        });
+
+        await Activate();                            // a passer-by clicks the dead machine
+        Assert.That(ClientAtmState().OutOfServiceMessage, Is.EqualTo(message), "The screen does not show the message");
+
+        await Server.WaitPost(() =>
+            SEntMan.GetComponent<SapperAtmHackedComponent>(STarget!.Value).RecoverAt = STiming.CurTime);
+        await RunSeconds(1);
+        Assert.That(SEntMan.HasComponent<SapperAtmHackedComponent>(STarget), Is.False, "The ATM never repaired itself");
+
+        // An answer that only comes back after the repair is dropped.
+        await Server.WaitPost(() => hacking.SetAtmMessage(STarget!.Value, SPlayer, "TOO LATE", rig.MaxAtmMessageLength));
+        await Activate();
+        Assert.Multiple(() =>
+        {
+            Assert.That(ClientAtmState().OutOfService, Is.False);
+            Assert.That(ClientAtmState().OutOfServiceMessage, Is.Null, "The message outlived the repair");
         });
     }
 

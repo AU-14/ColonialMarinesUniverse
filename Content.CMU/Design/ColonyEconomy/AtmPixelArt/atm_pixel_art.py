@@ -950,92 +950,58 @@ def boot_logo(frame):
     return L
 
 
-# The CLF flag (CMU14/Structures/wallflags.rsi, clfflag) as a roundel: its green, black and red
-# bands, the four-point star on the green, the two stars on the black and the three bars on the red.
-CLF_BANDS = {
-    "green": ("#4f8a30", "#3f7a27", "#2c5a1e"),
-    "black": ("#2a2226", "#1a1417", "#110d0f"),
-    "red": ("#8a2a24", "#6e201c", "#4e1614"),
-}
-CLF_FIGURES = {"white": "#f0f0ec", "shade": "#a8a8a0", "bar": "#c8c4c4", "bar_mid": "#8b8787",
-               "bar_lo": "#5d5a5a", "ring": "#050505"}
-# The same roundel as the green tube draws it: the bands become three levels of phosphor.
-PHOSPHOR_BANDS = {
-    "green": ("#2fd160", "#1f9c43", "#167a34"),
-    "black": ("#0b1a10", "#07120a", "#050c07"),
-    "red": ("#1a8a3a", "#136b2c", "#0f5a26"),
-}
-PHOSPHOR_FIGURES = {"white": "#b8ffcc", "shade": "#46ff77", "bar": "#46ff77", "bar_mid": "#1f9c43",
-                    "bar_lo": "#167a34", "ring": "#46ff77"}
-SPARKLE = ["...#...", "...#...", "..###..", "#######", "..###..", "...#...", "...#..."]
-STAR = ["...#...", "...#...", "#######", ".#####.", "..###..", ".##.##.", ".#...#."]
-
-
-def clf_emblem(L, cx, cy, r=15, bands=CLF_BANDS, figures=CLF_FIGURES):
-    for y in range(-r, r + 1):
-        for x in range(-r, r + 1):
-            d2 = x * x + y * y
-            if d2 > r * r + r:
-                continue
-            band = "green" if y < -r // 3 else "black" if y <= r // 3 else "red"
-            lit = 0 if x + y < -r // 2 else 2 if x + y > r // 2 else 1
-            L.set(cx + x, cy + y, figures["ring"] if d2 > (r - 1) * (r - 1) + r - 1 else bands[band][lit])
-
-    def figure(rows, ox, oy, colour, shade):
-        for iy, row in enumerate(rows):
-            for ix, bit in enumerate(row):
-                if bit == "#":
-                    L.set(cx + ox + ix, cy + oy + iy, shade if (ix + iy) > len(row) + 1 else colour)
-
-    figure(SPARKLE, -3, -r + 2, figures["white"], figures["shade"])
-    figure(STAR, -10, -4, figures["white"], figures["shade"])
-    figure(STAR, 4, -4, figures["white"], figures["shade"])
-    # The three bars along the red band, the middle one a shade darker, as on the flag.
-    for x0, x1, colour in ((-12, -5, figures["bar"]), (-3, 3, figures["bar_mid"]), (5, 12, figures["bar"])):
-        for x in range(x0, x1 + 1):
-            for y in range(r // 3 + 3, r // 3 + 6):
-                if x * x + y * y < (r - 2) * (r - 2):
-                    L.set(cx + x, cy + y, colour if y < r // 3 + 5 else figures["bar_lo"])
-
-
-def export_clf_svg():
-    """The roundel on its own, as a pixel-art SVG icon."""
-    L = Layer("clf-roundel")
-    clf_emblem(L, 16, 16)
-    body = "".join(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="#%02x%02x%02x"/>' % c[:3]
-                   for x, y, w, h, c in rects(L))
-    (REVIEW / "clf_roundel.svg").write_text(
-        '<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 33 33" '
-        f'shape-rendering="crispEdges">\n  <!-- CLF roundel after the CLF wall flag sprite. -->\n  {body}\n</svg>\n',
-        encoding="utf-8", newline="\n")
-
-
-def clf_screen(frame):
-    """
-    What a siphoned ATM shows while it is out: the roundel over a red seized-system banner, with a
-    torn line of interference rolling through it every few frames.
-    """
+# What a machine knocked out of service shows behind its console: no mark, nobody's name, just a
+# tube that will not hold steady - a hot tear flicking across it, a band of rows slipping sideways,
+# the odd surge washing it bright, every other line sagging. The window spews its corrupted console
+# over this, so it stays dark enough to read through.
+def fault_screen(kind):
+    """One frame of the out-of-order tube: calm, tear, tear_low, slip, interlace, surge or sag."""
     x, y, w, h = LAYOUT["glass"]
     L = screen_on()
-    clf_emblem(L, x + w // 2, y + 23, r=19, bands=PHOSPHOR_BANDS, figures=PHOSPHOR_FIGURES)
-    if frame == 1:
-        # A flicker: the roundel's top band drops out for a frame.
-        for yy in range(y + 6, y + 13):
-            for xx in range(x + 30, x + w - 30):
-                if L.get(xx, yy) not in (None, rgba("#46ff77")):
-                    L.set(xx, yy, "#07120a")
-    if frame == 3:
-        # The tube sagging for a moment: everything a step dimmer.
-        for key, (r, g, b, al) in list(L.px.items()):
-            if x <= key[0] < x + w and y <= key[1] < y + h:
-                L.px[key] = (r * 3 // 5, g * 3 // 5, b * 3 // 5, al)
-    if frame == 2:
-        for yy in range(y + 30, y + 33):
-            for xx in range(x, x + w):
-                c = L.get(xx - 3, yy)
+
+    def scale_rows(rows, f):
+        for (px, py), (r, g, b, al) in list(L.px.items()):
+            if x <= px < x + w and py in rows:
+                L.px[(px, py)] = (min(255, int(r * f)), min(255, int(g * f)), min(255, int(b * f)), al)
+
+    light = Layer()
+    if kind in ("tear", "tear_low"):
+        # A hot tear across the tube with a smear of glow under it.
+        ty = y + (19 if kind == "tear" else 63)
+        L.rect(x, ty, x + w - 1, ty, PHOS_HOT)
+        light.rect(x, ty + 1, x + w - 1, ty + 2, "#46ff7748")
+        light.rect(x + 12, ty - 1, x + 47, ty - 1, "#46ff7730")
+    elif kind == "slip":
+        # A band of rows slipped sideways and wrapped round, the sync lost for a moment.
+        for yy in range(y + 38, y + 51):
+            row = [L.get(xx, yy) for xx in range(x, x + w)]
+            shift = 9 + (yy % 4) * 4
+            for i in range(w):
+                c = row[(i - shift) % w]
                 if c:
-                    L.set(xx, yy, c)
+                    L.set(x + i, yy, c)
+        light.rect(x, y + 37, x + w - 1, y + 37, "#46ff7738")
+        light.rect(x, y + 51, x + w - 1, y + 51, "#46ff7720")
+    elif kind == "interlace":
+        # Every other line sagging.
+        scale_rows(range(y, y + h, 2), 0.45)
+    elif kind == "surge":
+        # A surge washing the whole tube with light for a frame.
+        light.rect(x, y, x + w - 1, y + h - 1, "#46ff7726")
+        light.rect(x, y + h // 2 - 1, x + w - 1, y + h // 2 + 1, "#46ff7730")
+    elif kind == "sag":
+        # The tube sagging for a moment: everything a step dimmer.
+        scale_rows(range(y, y + h), 0.6)
+    L.blend(light)
     return L
+
+
+# The loop: long calm stretches broken by flickers, on an uneven beat so it never reads as a metronome.
+FAULT_LOOP = [("calm", 0.45), ("tear", 0.05), ("calm", 0.3), ("interlace", 0.07), ("calm", 0.6),
+              ("slip", 0.06), ("calm", 0.2), ("surge", 0.04), ("calm", 0.5), ("tear_low", 0.05),
+              ("sag", 0.08), ("calm", 0.35), ("slip", 0.05), ("interlace", 0.06)]
+FAULT_FRAMES = [kind for kind, _ in FAULT_LOOP]
+FAULT_DELAYS = [delay for _, delay in FAULT_LOOP]
 
 
 # ── RSI output ───────────────────────────────────────────────────────────────
@@ -1180,9 +1146,8 @@ def export_assets():
         ("on", [screen_on()], None),
         ("power_on", [screen_power(-1)] + [screen_power(i) for i in range(4)] + [screen_on()], POWER_ON_DELAYS),
         ("boot_logo", [boot_logo(i) for i in range(6)], BOOT_LOGO_DELAYS),
-        # Never quite steady: dim pulses, a band dropping out, a tear, on an uneven loop.
-        ("clf", [clf_screen(f) for f in (0, 3, 0, 1, 0, 2, 0, 3, 0, 1)],
-         [0.7, 0.05, 0.5, 0.08, 0.9, 0.06, 0.3, 0.04, 0.2, 0.05]),
+        # Never quite steady: tears flicking across it, rows slipping, surges, the tube sagging.
+        ("fault", [fault_screen(kind) for kind in FAULT_FRAMES], FAULT_DELAYS),
     ])
 
     # The previous layout's sprites, superseded by the ones above.
@@ -1349,7 +1314,7 @@ def export_review(base):
         "locked": [base, screen_on(), keys_result, red, seated(), led("led_power", "green"),
                    led("led_activity", "red")],
         "tampered": [base, tampered(), led("led_power", "green")],
-        "seized": [base, clf_screen(0), keys_for([], {n: "off" for n, _ in WIDE_KEYS}),
+        "out_of_order": [base, fault_screen("calm"), keys_for([], {n: "off" for n, _ in WIDE_KEYS}),
                    rails("#ff8a8a", "#ff4e5e40"), broken(0), led("led_power", "red"), led("led_activity", "red")],
     }
     for name, stack in previews.items():
@@ -1392,10 +1357,8 @@ def export_review(base):
     gif("key_states", (142, 156, 58, 34), key_frames, [0.6, 0.6, 0.5, 0.25, 0.5, 0.6])
     wide_frames = [[wide_key_layer(n, s) for n, _ in WIDE_KEYS] for s in ("off", "on", "hover", "pressed", "lit", "on")]
     gif("cancel_enter_keys", (142, 200, 58, 20), wide_frames, [0.6, 0.6, 0.5, 0.25, 0.5, 0.6])
-    # The seized screen's loop, as the window plays the clf state.
-    clf_frames = (0, 3, 0, 1, 0, 2, 0, 3, 0, 1)
-    gif("clf_seized", (27, 98, 115, 92), [[clf_screen(f)] for f in clf_frames],
-        [0.7, 0.05, 0.5, 0.08, 0.9, 0.06, 0.3, 0.04, 0.2, 0.05], scale=3)
+    # The out-of-order screen's loop, as the window plays the fault state.
+    gif("out_of_order", (27, 98, 115, 92), [[fault_screen(kind)] for kind in FAULT_FRAMES], FAULT_DELAYS, scale=3)
     gif("screen_power_on", (27, 98, 115, 92),
         [[screen_power(i)] for i in range(-1, 4)] + [[boot_logo(i)] for i in range(6)] + [[screen_on()]],
         POWER_ON_DELAYS[:-1] + BOOT_LOGO_DELAYS + [0.6], scale=3)
@@ -1405,6 +1368,5 @@ if __name__ == "__main__":
     base = export_assets()
     REVIEW.mkdir(exist_ok=True)
     export_review(base)
-    export_clf_svg()
     print("assets ->", TEXTURES)
     print("review ->", REVIEW)

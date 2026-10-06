@@ -47,7 +47,7 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
         Assert.Multiple(() =>
         {
             Assert.That(Comp<IdCardComponent>(card).AccountBalance, Is.EqualTo(400), "The full amount was not taken from the account");
-            Assert.That(CashOnFloor(), Is.EqualTo(80), "The cash dispensed was not net of tax");
+            Assert.That(CashInTray(), Is.EqualTo(80), "The cash dispensed was not net of tax");
             Assert.That(budget.GetBudget() - budgetBefore, Is.EqualTo(20), "The tax did not reach the colony budget");
         });
     }
@@ -296,7 +296,7 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
 
     /// <summary>
     ///     A siphoned ATM is out of order until it repairs itself. It refuses cards; a click shows its
-    ///     seized screen - the CLF's mark - and every key on it is dead.
+    ///     out-of-order screen and every key on it is dead.
     /// </summary>
     [Test]
     public async Task HackedAtmIsOutOfOrderUntilItRepairsItself()

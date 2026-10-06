@@ -37,7 +37,6 @@ public sealed partial class ColonyAtmSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly string[] EmptyLabels = { "", "", "" };
 
@@ -47,9 +46,6 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
     // History lines per page: as many as the screen shows, with room for one to wrap.
     private const int HistoryPageSize = 6;
-
-    // How far from the machine cash it paid out may lie and still be taken from the screen.
-    private const float CashReach = 1.5f;
 
     // Stack type shared by every dollar-bill denomination (RMCSpaceCash1, 10, 100, 1000, ...).
     private const string CashStackType = "Dollar";
@@ -108,6 +104,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
             LeaveSession(uid, comp);
 
         comp.CurrentUser = user;
+        Touch(comp);
         return true;
     }
 
@@ -124,13 +121,13 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         comp.PendingTransferTarget = 0;
         comp.RemoteDepositTarget = 0;
         comp.HistoryOffset = 0;
-        comp.DispensedCash.Clear();
     }
 
     /// <summary>
     ///     The person at the screen walked off: everything half typed is cleared, but a card left
-    ///     signed in stays signed in, back at its menu, for whoever comes up next. A card left at its
-    ///     PIN prompt still asks for the PIN.
+    ///     signed in stays signed in, back at its menu, for whoever comes up next - until it has sat
+    ///     idle long enough to sign itself out (see <see cref="Update"/>). A card left at its PIN
+    ///     prompt still asks for the PIN.
     /// </summary>
     private void LeaveSession(EntityUid uid, ColonyAtmComponent comp)
     {
@@ -243,15 +240,28 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
     private void OnGetVerbs(EntityUid uid, ColonyAtmComponent comp, GetVerbsEvent<AlternativeVerb> args)
     {
-        if (!args.CanAccess || !args.CanInteract || args.Hands == null || GetCard(uid) == null)
+        if (!args.CanAccess || !args.CanInteract || args.Hands == null)
             return;
 
         var user = args.User;
-        args.Verbs.Add(new AlternativeVerb
+        if (GetCard(uid) != null)
         {
-            Text = Loc.GetString("cmu-atm-take-card-verb"),
-            Act = () => TryTakeCard(uid, comp, user),
-        });
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("cmu-atm-take-card-verb"),
+                Act = () => TryTakeCard(uid, comp, user),
+            });
+        }
+
+        // Cash left in the tray is there for whoever reaches in first, until the machine takes it back.
+        if (CashInTray(uid) > 0)
+        {
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("cmu-atm-take-cash-verb"),
+                Act = () => TakeCash(uid, comp, user),
+            });
+        }
     }
 
     /// <summary>Clicking the empty reader on the screen puts in the user's card.</summary>
@@ -299,29 +309,14 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         TryTakeCard(uid, comp, msg.Actor);
     }
 
-    /// <summary>
-    ///     Clicking the bills as they come out puts the cash just paid out in the user's hands, if it
-    ///     still lies at the machine. Cash that does not fit in their hands lands at their feet.
-    /// </summary>
+    /// <summary>Clicking the bills in the tray takes them in hand.</summary>
     private void OnTakeCashMsg(EntityUid uid, ColonyAtmComponent comp, ColonyAtmTakeCashBuiMsg msg)
     {
         if (msg.Actor != comp.CurrentUser)
             return;
 
-        var atm = Transform(uid).Coordinates;
-        foreach (var cash in comp.DispensedCash)
-        {
-            if (TerminatingOrDeleted(cash)
-                || _container.IsEntityInContainer(cash)
-                || !_transform.InRange(Transform(cash).Coordinates, atm, CashReach))
-            {
-                continue;
-            }
-
-            _stack.TryMergeToHands(cash, msg.Actor);
-        }
-
-        comp.DispensedCash.Clear();
+        Touch(comp);
+        TakeCash(uid, comp, msg.Actor);
     }
 
     // ─── Card insertion ────────────────────────────────────────────────────
@@ -390,6 +385,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         if (msg.Actor != comp.CurrentUser || msg.Digit.Length != 1 || !char.IsAsciiDigit(msg.Digit[0]))
             return;
 
+        Touch(comp);
+
         switch (comp.Screen)
         {
             case AtmScreen.Welcome:
@@ -413,6 +410,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         if (msg.Actor != comp.CurrentUser)
             return;
 
+        Touch(comp);
+
         // CLEAR only ever edits the entry; backing out is CANCEL's job.
         if (comp.KeypadBuffer.Length == 0)
             return;
@@ -429,6 +428,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
     {
         if (msg.Actor != comp.CurrentUser)
             return;
+
+        Touch(comp);
 
         switch (comp.Screen)
         {
@@ -456,6 +457,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
     {
         if (msg.Actor != comp.CurrentUser)
             return;
+
+        Touch(comp);
 
         switch (comp.Screen)
         {
@@ -485,6 +488,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
     {
         if (msg.Actor != comp.CurrentUser || comp.Screen != AtmScreen.History || !TryGetSessionCard(uid, comp, out var cardUid, out _))
             return;
+
+        Touch(comp);
 
         // Page by page; ignore scrolling past either end.
         var offset = comp.HistoryOffset + (msg.Older ? HistoryPageSize : -HistoryPageSize);
@@ -676,6 +681,12 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         }
         if (!TryGetSessionCard(uid, comp, out _, out var card))
         { Eject(uid, comp, comp.CurrentUser); return; }
+        if (CashInTray(uid) > 0)
+        {
+            comp.StatusMessage = TakeCashFirst;
+            comp.KeypadBuffer = string.Empty;
+            RefreshUi(uid, comp); return;
+        }
         if (amount > card.AccountBalance)
         {
             comp.StatusMessage = "Insufficient funds.";
@@ -698,6 +709,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         var amount = comp.PendingAmount;
         if (amount <= 0 || amount > card.AccountBalance)
         { ShowResult(uid, comp, "Insufficient funds."); return; }
+        if (CashInTray(uid) > 0)
+        { ShowResult(uid, comp, TakeCashFirst); return; }
 
         card.AccountBalance -= amount;
         Dirty(cardUid, card);
@@ -709,7 +722,13 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
         if (netAmount > 0)
         {
-            comp.DispensedCash = _stack.SpawnMultipleNextToOrDrop(CashPrototype, netAmount, uid);
+            // The notes wait in the tray, like the card in the reader, until someone takes them.
+            var tray = _container.EnsureContainer<Container>(uid, ColonyAtmComponent.CashTrayId);
+            foreach (var cash in _stack.SpawnMultipleAtPosition(CashPrototype, netAmount, Transform(uid).Coordinates))
+                _container.Insert(cash, tray);
+
+            comp.CashAccount = card.AccountNumber;
+            comp.CashRetractAt = _timing.CurTime + comp.CashRetractDelay;
             comp.CashDispensedAt = _timing.CurTime;
             comp.CashAmount = netAmount;
             _audio.PlayPvs(comp.DispenseSound, uid);
@@ -886,6 +905,13 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
     // ─── UI building ───────────────────────────────────────────────────────
 
+    /// <summary>Sends the machine's screen afresh to whoever has it open.</summary>
+    public void RefreshScreen(EntityUid uid)
+    {
+        if (TryComp<ColonyAtmComponent>(uid, out var comp))
+            RefreshUi(uid, comp);
+    }
+
     private void RefreshUi(EntityUid uid, ColonyAtmComponent comp)
     {
         IdCardComponent? card = null;
@@ -907,6 +933,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         }
 
         _bank.IsLocked(card, out var lockExpiry);
+        TryComp<SapperAtmHackedComponent>(uid, out var hacked);
 
         // The balance is only revealed once the PIN has been entered.
         var state = new ColonyAtmBuiState(
@@ -929,8 +956,10 @@ public sealed partial class ColonyAtmSystem : EntitySystem
             comp.CashDispensedAt,
             comp.CashDepositedAt,
             cardPrototype,
-            HasComp<SapperAtmHackedComponent>(uid),
-            comp.CashAmount
+            hacked != null,
+            comp.CashAmount,
+            CashInTray(uid),
+            hacked?.Message
         );
 
         _ui.SetUiState(uid, ColonyAtmUi.Key, state);
@@ -941,6 +970,103 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         comp.Screen = AtmScreen.Result;
         comp.StatusMessage = msg;
         comp.KeypadBuffer = string.Empty;
+        RefreshUi(uid, comp);
+    }
+
+    // ─── Timeouts ──────────────────────────────────────────────────────────
+
+    /// <summary>Someone pressed something on the machine: its idle clock starts again.</summary>
+    private void Touch(ColonyAtmComponent comp)
+    {
+        comp.LastActivity = _timing.CurTime;
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var now = _timing.CurTime;
+        var query = EntityQueryEnumerator<ColonyAtmComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (comp.CashRetractAt is { } retractAt && now >= retractAt)
+                RetractCash(uid, comp);
+
+            // A card left signed in signs itself out once nobody has pressed anything for a while.
+            if (comp.PinAuthenticated && now - comp.LastActivity >= comp.IdleSignOut)
+            {
+                ResetSession(uid, comp);
+                comp.StatusMessage = "Session timed out.";
+                RefreshUi(uid, comp);
+            }
+        }
+    }
+
+    // ─── Cash tray ─────────────────────────────────────────────────────────
+
+    private const string TakeCashFirst = "Please take your cash first.";
+
+    /// <summary>Dollars waiting in the cash tray.</summary>
+    private int CashInTray(EntityUid uid)
+    {
+        if (!_container.TryGetContainer(uid, ColonyAtmComponent.CashTrayId, out var tray))
+            return 0;
+
+        var total = 0;
+        foreach (var cash in tray.ContainedEntities)
+        {
+            if (TryComp<StackComponent>(cash, out var stack))
+                total += stack.Count;
+        }
+
+        return total;
+    }
+
+    /// <summary>
+    ///     Puts the cash waiting in the tray in <paramref name="user"/>'s hands. Cash that does not fit
+    ///     in their hands lands at their feet.
+    /// </summary>
+    private void TakeCash(EntityUid uid, ColonyAtmComponent comp, EntityUid user)
+    {
+        if (!_container.TryGetContainer(uid, ColonyAtmComponent.CashTrayId, out var tray) || tray.ContainedEntities.Count == 0)
+            return;
+
+        foreach (var cash in tray.ContainedEntities.ToList())
+        {
+            if (_container.Remove(cash, tray))
+                _stack.TryMergeToHands(cash, user);
+        }
+
+        comp.CashRetractAt = null;
+        comp.CashAccount = 0;
+        RefreshUi(uid, comp);
+    }
+
+    /// <summary>
+    ///     Cash nobody took is drawn back into the machine and paid back into the account it came
+    ///     out of, as a real ATM does with notes left in its mouth.
+    /// </summary>
+    private void RetractCash(EntityUid uid, ColonyAtmComponent comp)
+    {
+        comp.CashRetractAt = null;
+        var amount = CashInTray(uid);
+        if (amount <= 0 || _bank.FindAccount(comp.CashAccount) is not { } account)
+            return;
+
+        if (_container.TryGetContainer(uid, ColonyAtmComponent.CashTrayId, out var tray))
+        {
+            foreach (var cash in tray.ContainedEntities.ToList())
+                Del(cash);
+        }
+
+        account.card.AccountBalance += amount;
+        Dirty(account.uid, account.card);
+        _bank.RecordTransaction(account.uid, AtmHistoryKind.Retracted, amount);
+
+        comp.CashAccount = 0;
+        comp.CashDepositedAt = _timing.CurTime;
+        comp.CashAmount = amount;
+        _audio.PlayPvs(comp.DepositSound, uid);
         RefreshUi(uid, comp);
     }
 

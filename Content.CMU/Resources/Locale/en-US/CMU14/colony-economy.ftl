@@ -73,6 +73,7 @@ cash-vendor-no-items = No items available.
 cmu-atm-card-slot-occupied = There's already a card in the ATM.
 cmu-atm-no-card = You have no ID card to put in.
 cmu-atm-take-card-verb = Take card
+cmu-atm-take-cash-verb = Take cash
 cmu-atm-take-card-start = You start pulling the card out of the ATM...
 cmu-atm-take-card-start-others = {CAPITALIZE(THE($user))} starts pulling a card out of the ATM!
 
@@ -87,10 +88,10 @@ cmu-atm-boot-uplink = UN TREASURY UPLINK
 cmu-atm-boot-ok = OK
 cmu-atm-boot-loading = LOADING TERMINAL...
 
-# Colony ATM seized by a sapper's siphon rig
-cmu-atm-seized-1 = SYSTEM SEIZED BY THE
-cmu-atm-seized-2 = COLONIAL LIBERATION FRONT
-cmu-atm-seized-3 = - OUT OF SERVICE -
+# Colony ATM knocked out by a sapper's siphon rig: a console gone wrong behind a plain notice.
+# The second line gives way to whatever message the sapper left.
+cmu-atm-out-of-order = OUT OF ORDER
+cmu-atm-out-of-order-sorry = PLEASE USE ANOTHER MACHINE
 
 # Colony ATM screen hints; the keys are labelled OK and X
 cmu-atm-hint-confirm = OK = confirm   X = back

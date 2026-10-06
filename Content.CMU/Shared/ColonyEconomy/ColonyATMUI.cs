@@ -54,8 +54,8 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
     public string? CardPrototype { get; }
 
     /// <summary>
-    ///     A sapper's siphon rig has seized the machine: it shows the CLF's mark instead of the
-    ///     terminal and takes no input until it repairs itself.
+    ///     A sapper's siphon rig has knocked the machine out: it shows a corrupted out-of-order
+    ///     screen instead of the terminal and takes no input until it repairs itself.
     /// </summary>
     public bool OutOfService { get; }
 
@@ -71,6 +71,12 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
 
     /// <summary>How many dollars came out or went in last; the slot shows more notes for more money.</summary>
     public int CashAmount { get; }
+
+    /// <summary>Dollars waiting in the cash tray to be taken; 0 when it is empty.</summary>
+    public int CashWaiting { get; }
+
+    /// <summary>What the sapper who knocked the machine out left on its screen, if anything.</summary>
+    public string? OutOfServiceMessage { get; }
 
     public ColonyAtmBuiState(
         AtmScreen screen,
@@ -93,7 +99,9 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
         TimeSpan? cashDepositedAt = null,
         string? cardPrototype = null,
         bool outOfService = false,
-        int cashAmount = 0)
+        int cashAmount = 0,
+        int cashWaiting = 0,
+        string? outOfServiceMessage = null)
     {
         Screen = screen;
         Balance = balance;
@@ -116,6 +124,8 @@ public sealed class ColonyAtmBuiState : BoundUserInterfaceState
         CardPrototype = cardPrototype;
         OutOfService = outOfService;
         CashAmount = cashAmount;
+        CashWaiting = cashWaiting;
+        OutOfServiceMessage = outOfServiceMessage;
     }
 }
 
@@ -153,7 +163,7 @@ public sealed class ColonyAtmInsertCardBuiMsg : BoundUserInterfaceMessage { }
 [Serializable, NetSerializable]
 public sealed class ColonyAtmEjectCardBuiMsg : BoundUserInterfaceMessage { }
 
-/// <summary>Player clicked the bills coming out of the cash slot: put the cash they were paid in their hand.</summary>
+/// <summary>Player clicked the bills waiting in the cash tray: put them in their hand.</summary>
 [Serializable, NetSerializable]
 public sealed class ColonyAtmTakeCashBuiMsg : BoundUserInterfaceMessage { }
 

@@ -39,13 +39,15 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
         {
             Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.Result));
             Assert.That(Comp<IdCardComponent>(card).AccountBalance, Is.EqualTo(400));
-            Assert.That(CashOnFloor(), Is.EqualTo(expectedCash));
+            Assert.That(CashInTray(), Is.EqualTo(expectedCash), "The cash did not wait in the tray");
+            Assert.That(CashOnFloor(), Is.Zero, "The cash was dropped instead of waiting in the tray");
             // The cash slot shows a stack as thick as what was paid out.
             Assert.That(ClientAtmState().CashAmount, Is.EqualTo(expectedCash), "The screen was not told how much came out");
+            Assert.That(ClientAtmState().CashWaiting, Is.EqualTo(expectedCash), "The screen was not told the cash is waiting");
         });
     }
 
-    /// <summary>Clicking the bills as they come out puts the cash in hand instead of on the machine.</summary>
+    /// <summary>Clicking the bills in the tray puts the cash in hand.</summary>
     [Test]
     public async Task ClickingTheCashTakesItInHand()
     {
@@ -67,8 +69,67 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
         Assert.Multiple(() =>
         {
             Assert.That(CashInHand(), Is.EqualTo(expectedCash), "The cash did not go into the hand");
-            Assert.That(CashOnFloor(), Is.Zero, "Cash was left on the machine");
+            Assert.That(CashOnFloor(), Is.Zero, "Cash was dropped on the floor");
+            Assert.That(CashInTray(), Is.Zero, "Cash was left in the tray");
             Assert.That(GetWindow<ColonyAtmWindow>().BtnCash.Visible, Is.False, "The bills can be taken twice");
+        });
+    }
+
+    /// <summary>
+    ///     Cash nobody takes is drawn back into the machine and paid back into the account it came
+    ///     out of. Until then no more cash comes out.
+    /// </summary>
+    [Test]
+    public async Task CashLeftInTheTrayGoesBackToTheAccount()
+    {
+        await SpawnTarget(Atm);
+        var (card, pin, _) = await InsertNewCard(500);
+        await Type(pin.ToString());
+
+        var tax = SEntMan.System<AdminConsoleSystem>().GetIncomeTax();
+        var expectedCash = 100 - (int) Math.Floor(100 * tax);
+
+        await Type("1", enter: false);              // 1) WITHDRAW
+        await Type("100");
+        await Enter();
+        Assert.That(CashInTray(), Is.EqualTo(expectedCash));
+
+        await Enter();                               // back to the menu
+        await Type("1", enter: false);              // 1) WITHDRAW again
+        await Type("50");
+        Assert.That(AtmComp.StatusMessage, Does.Contain("take your cash"), "More cash came out over cash still waiting");
+
+        await RunSeconds(11);
+        Assert.Multiple(() =>
+        {
+            Assert.That(CashInTray(), Is.Zero, "The cash was never drawn back in");
+            Assert.That(CashOnFloor(), Is.Zero);
+            Assert.That(Comp<IdCardComponent>(card).AccountBalance, Is.EqualTo(400 + expectedCash),
+                "The cash drawn back in was not paid back into the account");
+            Assert.That(ClientAtmState().CashWaiting, Is.Zero);
+        });
+    }
+
+    /// <summary>A card left signed in signs itself out when nobody touches the machine.</summary>
+    [Test]
+    public async Task IdleSignedInCardSignsOut()
+    {
+        await SpawnTarget(Atm);
+        var (_, pin, _) = await InsertNewCard(100);
+        await Type(pin.ToString());
+        Assert.That(AtmComp.PinAuthenticated);
+
+        await RunSeconds(5);
+        await Type("5", enter: false);              // 5) HISTORY: pressing a key keeps it signed in
+        await RunSeconds(7);
+        Assert.That(AtmComp.PinAuthenticated, "The card signed out while it was being used");
+
+        await RunSeconds(4);
+        Assert.Multiple(() =>
+        {
+            Assert.That(AtmComp.PinAuthenticated, Is.False, "The idle card stayed signed in");
+            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
+            Assert.That(CardInAtm(), Is.Not.Null, "Signing out took the card out of the machine");
         });
     }
 

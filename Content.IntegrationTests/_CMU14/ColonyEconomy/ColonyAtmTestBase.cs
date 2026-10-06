@@ -122,6 +122,23 @@ public abstract class ColonyAtmTestBase : InteractionTest
         return total;
     }
 
+    /// <summary>Dollars waiting in the ATM's cash tray.</summary>
+    protected int CashInTray()
+    {
+        var containers = SEntMan.System<SharedContainerSystem>();
+        if (!containers.TryGetContainer(STarget!.Value, ColonyAtmComponent.CashTrayId, out var tray))
+            return 0;
+
+        var total = 0;
+        foreach (var cash in tray.ContainedEntities)
+        {
+            if (SEntMan.TryGetComponent<StackComponent>(cash, out var stack))
+                total += stack.Count;
+        }
+
+        return total;
+    }
+
     /// <summary>Dollars in the player's active hand.</summary>
     protected int CashInHand()
     {

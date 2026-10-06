@@ -11,12 +11,12 @@ namespace Content.Client.CMU14.ColonyEconomy;
 ///     Walks a <see cref="ColonyAtmWindow"/> through a scripted customer session for
 ///     <c>cmu.panel_preview=atm</c>: the machine booting, a card going in, PIN, a withdrawal paid
 ///     out, a deposit taken in, the history, a lockout, the card coming back out, a tampered machine
-///     and a seized one, then round again with a different card.
+///     and an out-of-order one, then round again with a different card.
 /// </summary>
 /// <remarks>
 ///     The real window only opens for someone standing at an ATM with an ID card, mid-round, and
 ///     most of its states take several deliberate steps to reach - the lockout takes three wrong
-///     PINs, the seized screen a sapper with a siphon rig. Nothing here talks to a server: every
+///     PINs, the out-of-order screen a sapper with a siphon rig. Nothing here talks to a server: every
 ///     state is fabricated and the keypad is inert. Each step is logged, and also mirrored into the
 ///     OS window title: redirected stdout reaches a capture script in batches, long after the step it
 ///     names, while the title changes the moment the step does.
@@ -71,14 +71,16 @@ public sealed class ColonyAtmPreview
                 status: "Withdraw $300? You receive $270 after tax.")),
             // $270 comes out as a stack of four notes, $120 goes in as three.
             ("cash-dispense", 3.5f, () => State(AtmScreen.Result, authed: true, balance: 950,
-                status: "Dispensed $270. Balance: $950.", dispensedAt: Now, cash: 270)),
+                status: "Dispensed $270. Balance: $950.", dispensedAt: Now, cash: 270, waiting: 270)),
             ("cash-deposit", 3.5f, () => State(AtmScreen.Result, authed: true, balance: 1070,
                 status: "Deposited $120. Balance: $1070.", depositedAt: Now, cash: 120)),
             ("history", 3.5f, () => State(AtmScreen.History, authed: true, balance: 1070)),
             ("locked", 3.5f, () => State(AtmScreen.PinLocked)),
             ("card-eject", 3.5f, () => State(AtmScreen.Welcome, card: false)),
             ("tampered", 3.5f, () => State(AtmScreen.Welcome, card: false, tampered: true)),
-            ("seized", 4.5f, () => State(AtmScreen.Welcome, card: false, tampered: true, seized: true)),
+            // Knocked out by a siphon rig, with the line its sapper left on the screen.
+            ("out-of-order", 6f, () => State(AtmScreen.Welcome, card: false, tampered: true, outOfOrder: true,
+                message: "Sorry for the inconvenience :)")),
         };
     }
 
@@ -136,11 +138,13 @@ public sealed class ColonyAtmPreview
         string buffer = "",
         string status = "",
         bool tampered = false,
-        bool seized = false,
+        bool outOfOrder = false,
         TimeSpan? cardAt = null,
         TimeSpan? dispensedAt = null,
         TimeSpan? depositedAt = null,
-        int? cash = null)
+        int? cash = null,
+        int waiting = 0,
+        string? message = null)
     {
         _cardAt = card ? cardAt ?? _cardAt : null;
         _dispensedAt = dispensedAt ?? _dispensedAt;
@@ -167,7 +171,9 @@ public sealed class ColonyAtmPreview
             _dispensedAt,
             _depositedAt,
             card ? Cards[Math.Max(0, _round - 1) % Cards.Length] : null,
-            seized,
-            _cashAmount);
+            outOfOrder,
+            _cashAmount,
+            waiting,
+            message);
     }
 }

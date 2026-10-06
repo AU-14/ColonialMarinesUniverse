@@ -15,6 +15,12 @@ public sealed partial class ColonyAtmComponent : Component
     /// </summary>
     public const string CardSlotId = "colony_atm_card";
 
+    /// <summary>
+    ///     Container the cash tray holds paid-out notes in. Like the card, they stay in the machine
+    ///     until someone takes them - or, left too long, the machine draws them back in.
+    /// </summary>
+    public const string CashTrayId = "colony_atm_cash";
+
     /// <summary>Digits in a card PIN.</summary>
     public const int PinLength = 4;
 
@@ -39,11 +45,22 @@ public sealed partial class ColonyAtmComponent : Component
     /// <summary>How many dollars the last of those two moved, so the slot shows a wad that thick.</summary>
     public int CashAmount;
 
-    /// <summary>
-    ///     The cash last paid out this session. It lies on the machine until someone picks it up, or
-    ///     the person at the screen clicks it as it comes out to take it in hand.
-    /// </summary>
-    public List<EntityUid> DispensedCash = new();
+    /// <summary>The account the cash waiting in the tray came out of; it goes back there if left.</summary>
+    public int CashAccount;
+
+    /// <summary>When the cash waiting in the tray is drawn back in and paid back into its account.</summary>
+    public TimeSpan? CashRetractAt;
+
+    /// <summary>How long paid-out cash waits in the tray before the machine takes it back.</summary>
+    [DataField]
+    public TimeSpan CashRetractDelay = TimeSpan.FromSeconds(10);
+
+    /// <summary>When anyone last pressed anything on the machine.</summary>
+    public TimeSpan LastActivity;
+
+    /// <summary>How long a card can sit signed in with nobody touching the machine before it signs out.</summary>
+    [DataField]
+    public TimeSpan IdleSignOut = TimeSpan.FromSeconds(10);
 
     /// <summary>How long pulling out a card takes for anyone but its inserter at the screen.</summary>
     [DataField]

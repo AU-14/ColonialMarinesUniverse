@@ -46,10 +46,6 @@ public sealed partial class ColonyAtmWindow
     // The reader blinks amber this long after a card goes in, as if reading it.
     private const float ReadSeconds = 0.9f;
 
-    // Bills wait this long to be clicked and taken in hand. Left alone, they are pushed out onto the
-    // counter, where the cash itself already lies.
-    private const float CashPresentedSeconds = 5f;
-
     // The slot shows one note, and one more at each of these amounts: five for $500 and up. The
     // generator draws a set of cash states per stack height (MAX_NOTES), named dispense_1 and so on.
     private static readonly int[] MoreNotesAt = { 50, 100, 250, 500 };
@@ -69,7 +65,10 @@ public sealed partial class ColonyAtmWindow
     private TimeSpan? _seenDispense;
     private TimeSpan? _seenDeposit;
     private float _reading;
-    private float _cashPresented;
+    // Bills are out in the tray (or on their way out), waiting to be taken.
+    private bool _cashOut;
+    // Still coming out of the slot.
+    private bool _dispensing;
     // The bills were clicked on their way out, so they are lifted away as soon as they are out.
     private bool _cashTaken;
     private float _activity;
@@ -109,10 +108,10 @@ public sealed partial class ColonyAtmWindow
         {
             BtnCash.Visible = false;
             TakeCashPressed?.Invoke();
-            if (_cashPresented > 0f)
-                LiftCash();
-            else
+            if (_dispensing)
                 _cashTaken = true;
+            else
+                LiftCash();
         };
 
         var leds = Rsi(cache, "atm_leds");
@@ -204,29 +203,45 @@ public sealed partial class ColonyAtmWindow
         // Timestamps already seen when the window opened are history, not events.
         if (TakeEvent(s.CashDispensedAt, ref _seenDispense, previous == null))
         {
-            _cashPresented = 0f;
             _cashTaken = false;
+            _cashOut = true;
+            _dispensing = true;
             _notes = Notes(s.CashAmount);
             BtnCash.Visible = true;
             _cash.Play($"dispense_{_notes}", () =>
             {
-                if (_cashTaken)
+                _dispensing = false;
+                // Clicked on the way out, or taken from the tray by someone else meanwhile.
+                if (_cashTaken || _state?.CashWaiting == 0)
                 {
                     LiftCash();
                     return;
                 }
 
                 _cash.Show($"dispensed_{_notes}");
-                _cashPresented = CashPresentedSeconds;
             });
         }
+        else if (s.CashWaiting > 0 && !_cashOut)
+        {
+            // Opened on a tray someone left cash in: the bills are already out, waiting.
+            _cashOut = true;
+            _notes = Notes(s.CashWaiting);
+            BtnCash.Visible = true;
+            _cash.Show($"dispensed_{_notes}");
+        }
 
+        // Left too long, the bills are drawn back into the machine.
         if (TakeEvent(s.CashDepositedAt, ref _seenDeposit, previous == null))
         {
-            _cashPresented = 0f;
+            _cashOut = _dispensing = false;
             BtnCash.Visible = false;
             _notes = Notes(s.CashAmount);
             _cash.Play($"deposit_{_notes}", () => _cash.Show(null));
+        }
+        else if (s.CashWaiting == 0 && _cashOut && !_dispensing)
+        {
+            // Taken from the tray, by the player here or by someone at the machine.
+            LiftCash();
         }
 
         // A siphoned machine: broken down and taped off while it is out, pry marks once it is back.
@@ -238,10 +253,13 @@ public sealed partial class ColonyAtmWindow
         UpdateLights();
     }
 
-    /// <summary>The bills leave the slot: taken in hand, or pushed out onto the counter.</summary>
+    /// <summary>The bills are lifted out of the tray.</summary>
     private void LiftCash()
     {
-        _cashPresented = 0f;
+        if (!_cashOut)
+            return;
+
+        _cashOut = false;
         BtnCash.Visible = false;
         _cash.Play($"take_{_notes}", () => _cash.Show(null));
     }
@@ -285,13 +303,6 @@ public sealed partial class ColonyAtmWindow
         {
             _activity -= dt;
             lightsDue |= _activity <= 0f;
-        }
-
-        if (_cashPresented > 0f)
-        {
-            _cashPresented -= dt;
-            if (_cashPresented <= 0f)
-                LiftCash();
         }
 
         if (lightsDue)
