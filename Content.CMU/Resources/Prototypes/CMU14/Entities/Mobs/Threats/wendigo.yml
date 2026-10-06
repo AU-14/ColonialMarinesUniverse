@@ -176,3 +176,45 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:WendigoVoiceActionEvent {}
+
+# Lab-made Wendigo: about 20% less health and damage, and no area screech.
+- type: entity
+  parent: AU14Wendigo
+  id: CMUWendigoLesser
+  name: Wendigo
+  description: A tall, pale creature that looks uncannily human. Its back is branded "Weyland-Yutani".
+  components:
+  - type: GhostRole
+    name: Lesser Wendigo
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      1200: Dead
+  - type: Xeno
+    unlockAt: 99999 #never unlock naturally
+    role: CMXenoWendigo
+    emoteSounds: Wendigo
+    actionIds:
+    - ActionXenoWatch
+    - ActionXenoPunch
+    - ActionXenoPounce
+    - ActionXenoHeadbite
+    tier: 99
+    hudOffset: -0.15,0.25
+  - type: XenoPunch
+    damage:
+      types:
+        Blunt: 24
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+        Slash: 12
+        Piercing: 12
+  - type: XenoHeadbite
+    damage:
+      types:
+        Blunt: 16
+        Slash: 16
+        Piercing: 16
+    emoteCooldown: 99999

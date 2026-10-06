@@ -54,7 +54,12 @@ public abstract partial class SharedResearchDataTerminalSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeAllEvent<UpdateDataTerminalClearanceEvent>(OnUpdateClearance);
+        // Research balances are server-authoritative: the server only applies its own updates,
+        // clients mirror the ones it broadcasts.
+        if (_net.IsClient)
+            SubscribeAllEvent<UpdateDataTerminalClearanceEvent>(OnUpdateClearance);
+        else
+            SubscribeLocalEvent<UpdateDataTerminalClearanceEvent>(OnUpdateClearance);
 
     }
 
@@ -76,11 +81,17 @@ public abstract partial class SharedResearchDataTerminalSystem : EntitySystem
 
     private void OnUpdateClearance(UpdateDataTerminalClearanceEvent args)
     {
+        var oldClearance = GetClearance(args.Faction);
         if(args.Clearance != -1)
         {
             _clearance[args.Faction] = args.Clearance;
         }
         _credits[args.Faction] = args.Credits;
         OnResearchBalanceChanged(args.Faction);
+        if (args.Clearance != -1 && args.Clearance != oldClearance)
+            OnClearanceChanged(args.Faction, oldClearance, args.Clearance);
     }
+
+    /// <summary>Called after a faction's research clearance changes. Only the server override acts.</summary>
+    protected virtual void OnClearanceChanged(string faction, int oldClearance, int newClearance) { }
 }

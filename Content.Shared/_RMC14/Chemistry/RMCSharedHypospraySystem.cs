@@ -15,6 +15,7 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Components;
+using Content.Shared.CMU14.Chemistry; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.Timing;
 using Content.Shared.Verbs;
@@ -346,6 +347,9 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
             _popup.PopupClient(Loc.GetString("hypospray-component-transfer-already-full-message", ("owner", target)), target, args.User);
             return;
         }
+
+        var cmuBeforeInject = new CMUBeforeHyposprayInjectEvent(args.User, ent); // CMU14: lets CMU procedures attribute the dose
+        RaiseLocalEvent(target, ref cmuBeforeInject); // CMU14
 
         var removedSolution = _solution.SplitSolution(soln.Value, transferAmount);
 

@@ -128,6 +128,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         // Also apply platoon catalog in case the console needs a custom catalog based on current round
         ApplyPlatoonCatalogToComputer(uid, comp);
         AddXRFToCatalog(uid, comp);
+        var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(); RaiseLocalEvent(uid, ref catalogBuilt); // CMU14
         ResetStock((uid, comp));
         Dirty(uid, comp);
     }
@@ -1223,6 +1224,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             ApplyPlatoonCatalogToComputer(uid, comp);
             AddResearchTerminalToCatalog(uid, comp); // CMU14
+            var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(); RaiseLocalEvent(uid, ref catalogBuilt); // CMU14
             ResetStock((uid, comp));
             Dirty(uid, comp);
         }
