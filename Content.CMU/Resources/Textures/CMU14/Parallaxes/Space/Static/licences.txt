@@ -1,0 +1,1 @@
+static.png taken from https://github.com/cmss13-devs/cmss13/blob/f7b9367cb5c083a8c052a40dece9417031e28ffe/icons/turf/floors/space.dmi via https://github.com/GitHubUser53123/RNMC-14/commit/86da12b08ccccd944cf96bcdc573133c9112c511

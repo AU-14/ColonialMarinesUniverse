@@ -14,8 +14,8 @@
   canBeAntag: false
   displayWeight: 7
   accessGroups:
-  - AU14GovforCommand
-  - aulegacygroupcommand
+  - AU14GovforCommandNoLogistics
+  - aulegacygroupcommandnologistics
 
 - type: job
   abstract: true
@@ -113,8 +113,8 @@
   startingGear: AU14GearOPFOROfficerIntel
   dummyStartingGear: AU14GearOPFOROfficerIntelDummy
   accessGroups:
-  - AU14OpforCommand
-  - aulegacygroupcommand
+  - AU14OpforCommandNoLogistics
+  - aulegacygroupcommandnologistics
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
   useLoadoutOfJob: AU14JobGOVFOROfficerIntel

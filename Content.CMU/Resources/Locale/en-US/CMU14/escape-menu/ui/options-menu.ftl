@@ -1,5 +1,6 @@
 cmu-ui-options-examine-log-in-chat = Show detailed examine breakdown of characters in chat
 cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat like in SS13
+cmu-ui-options-examine-wounds-in-chat = Echo people's wounds to chat when you examine them like in CM13
 
 cmu-ui-options-identification = Identification
 cmu-ui-options-fof-unidentified-marker = Show question marks for unfamiliar enemy uniforms in FoF

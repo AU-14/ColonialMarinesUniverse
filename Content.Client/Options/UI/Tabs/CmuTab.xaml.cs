@@ -40,6 +40,9 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ExamineLogInChat, ExamineLogInChatCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineFullTextInChat, ExamineFullTextInChatCheckBox);
         // cmu edit start
+        Control.AddOptionCheckBox(CCVars.ExamineWoundsInChat, ExamineWoundsInChatCheckBox);
+        // cmu edit end
+        // cmu edit start
         Control.AddOptionCheckBox(CCVars.ChatSpeechSounds, ChatSpeechSoundsCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatResetToLocal, ChatResetToLocalCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatCenterInput, ChatCenterInputCheckBox);
