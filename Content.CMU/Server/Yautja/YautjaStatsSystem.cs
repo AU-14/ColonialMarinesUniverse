@@ -56,7 +56,6 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     [Dependency] private RMCStatusEffectSystem _rmcStatusEffects = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private TagSystem _tags = default!;
-    [Dependency] private YautjaHonorboundAbilitiesSystem _honorboundAbilities = default!;
     [Dependency] private SharedCMAutomatedVendorSystem _vendors = default!;
     [Dependency] private YautjaVoiceSystem _voice = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
@@ -149,14 +148,12 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     private void OnYautjaMapInit(Entity<YautjaComponent> ent, ref MapInitEvent args)
     {
         SetYautjaName(ent);
-        _honorboundAbilities.GrantActions(ent);
         _eye.RefreshVisibilityMask(ent.Owner);
     }
 
     private void OnRandomHumanoidSpawned(Entity<YautjaComponent> ent, ref RandomHumanoidSpawnedEvent args)
     {
         ApplyIntrinsicStats(ent);
-        _honorboundAbilities.GrantActions(ent);
     }
 
     private void OnIdentityChanged(Entity<YautjaComponent> ent, ref IdentityChangedEvent args)

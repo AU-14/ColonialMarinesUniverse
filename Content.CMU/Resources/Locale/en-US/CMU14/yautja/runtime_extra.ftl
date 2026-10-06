@@ -71,7 +71,6 @@ cmu-yautja-action-voice-pain-desc = Play a Yautja cry of pain.
 cmu-yautja-action-voice-roar = Voice: Roar
 cmu-yautja-action-voice-roar-desc = Emit a hunting roar.
 
-cmu-yautja-bracer-healing-capsule-created = The bracer prints {$item}.
 cmu-yautja-bracer-healing-disabled = The bracer's healing-capsule synthesis is disabled.
 cmu-yautja-falcon-drone = Falcon Drone
 cmu-yautja-gear = Yautja Gear

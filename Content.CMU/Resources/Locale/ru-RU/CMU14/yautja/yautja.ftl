@@ -119,9 +119,6 @@ cmu-yautja-bracer-id-retracted = Встроенный ID-чип убираетс
 cmu-yautja-bracer-id-slot-blocked = Ваш слот ID заблокирован.
 cmu-yautja-bracer-id-failed = Встроенный ID-чип не смог развернуться.
 cmu-yautja-bracer-fabricator-cooldown = Фабрикатор наруча всё ещё перезаряжается.
-cmu-yautja-bracer-crystal-created = Наруч выращивает {$item}.
-cmu-yautja-bracer-human-crystal-created = Наруч выращивает {$item}.
-cmu-yautja-bracer-healing-capsule-created = Наруч печатает {$item}.
 cmu-yautja-bracer-healing-disabled = Синтез лечебных капсул наручем отключён.
 cmu-yautja-tech-random-works = Вы случайно запускаете функцию наруча.
 cmu-yautja-tech-random-function = Чужие элементы управления неверно считывают ваше касание.
@@ -505,8 +502,6 @@ cmu-yautja-abomination-action-toggle-frenzy = Переключить режим 
 cmu-yautja-abomination-action-toggle-frenzy-desc = Переключить дикое неистовство между ударами по одной цели и по области.
 
 # Missing entries synced from en-US
-
-cmu-yautja-bracer-hunting-trap-created = Наруч печатает {$item}.
 
 cmu-yautja-bracer-menu-hunting-trap = Охотничья ловушка
 

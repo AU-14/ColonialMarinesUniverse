@@ -983,9 +983,9 @@ public sealed class YautjaYoungbloodTest
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleCloak"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaRecall"));
                     Assert.That(actionIds, Does.Contain("CMUActionYautjaTranslator"));
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleWristBlades"));
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleScimitar"));
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleChainGauntlet"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleWristBlades"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleScimitar"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleChainGauntlet"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaSelfDestruct"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleCaster"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleShield"));

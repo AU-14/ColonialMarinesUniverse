@@ -156,12 +156,6 @@ public sealed partial class YautjaComponent : Component
     public bool SkinColorRandomized;
 
     [DataField]
-    public EntProtoId LeapActionId = "CMUActionYautjaLeap";
-
-    [ViewVariables]
-    public EntityUid? LeapAction;
-
-    [DataField]
     public EntProtoId MarkForHuntActionId = "CMUActionYautjaMarkForHunt";
 
     [ViewVariables]
@@ -178,18 +172,6 @@ public sealed partial class YautjaComponent : Component
 
     [ViewVariables]
     public EntityUid? ButcherAction;
-
-    [DataField]
-    public float LeapThrowSpeed = 5f;
-
-    [DataField]
-    public float LeapMaxRange = 7f;
-
-    [DataField]
-    public TimeSpan LeapWindup = TimeSpan.FromSeconds(0.6);
-
-    [DataField]
-    public EntProtoId LeapWarningPrototype = "CMUYautjaLeapWarning";
 
     [DataField]
     public EntProtoId AudioPanelActionId = "CMUActionYautjaAudioPanel";
@@ -257,33 +239,6 @@ public sealed partial class YautjaComponent : Component
     [ViewVariables]
     public EntityUid? VoiceDeathLaughAction;
 
-    [DataField]
-    public EntProtoId HonorRoarActionId = "CMUActionYautjaHonorRoar";
-
-    [ViewVariables]
-    public EntityUid? HonorRoarAction;
-
-    [DataField]
-    public float HonorRoarRange = 5f;
-
-    [DataField]
-    public TimeSpan HonorRoarDuration = TimeSpan.FromSeconds(5);
-
-    [DataField]
-    public SoundSpecifier HonorRoarSound = new SoundCollectionSpecifier("CMUYautjaRoars");
-
-    [DataField]
-    public EntProtoId HuntingLeapActionId = "CMUActionYautjaHuntingLeap";
-
-    [ViewVariables]
-    public EntityUid? HuntingLeapAction;
-
-    [DataField]
-    public float HuntingLeapRange = 7f;
-
-    [DataField]
-    public float HuntingLeapSpeed = 30f;
-
     private static List<ProtoId<EmotePrototype>> GetDefaultAllowedEmotes()
     {
         var emotes = new List<ProtoId<EmotePrototype>>();
@@ -340,19 +295,6 @@ public sealed partial class YautjaComponent : Component
         sounds.Add(Sex.Unsexed, "CMUMaleYautja");
         return sounds;
     }
-}
-
-[RegisterComponent]
-public sealed partial class YautjaHuntingLeapingComponent : Component
-{
-    [DataField]
-    public EntityUid Target;
-
-    [DataField]
-    public EntityUid Weapon;
-
-    [DataField]
-    public bool Resolved;
 }
 
 [RegisterComponent]
@@ -457,18 +399,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
 
     [ViewVariables]
     public EntityUid? ToggleCloakAction;
-
-    [DataField]
-    public EntProtoId CreateFieldRationActionId = "CMUActionYautjaCreateFieldRation";
-
-    [ViewVariables]
-    public EntityUid? CreateFieldRationAction;
-
-    [DataField]
-    public EntProtoId CreateHuntingCanteenActionId = "CMUActionYautjaCreateHuntingCanteen";
-
-    [ViewVariables]
-    public EntityUid? CreateHuntingCanteenAction;
 
     [DataField]
     public EntProtoId RaiseThrallActionId = "CMUActionYautjaRaiseThrall";
@@ -667,40 +597,16 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public bool NotificationSound = true;
 
     [DataField]
-    public EntProtoId StabilisingCrystalPrototype = "CMUYautjaStabilisingCrystal";
+    public EntProtoId StabilisingCrystalPrototype = "CMUYautjaAutoInjector";
 
     [DataField]
-    public EntProtoId HumanStabilisingCrystalPrototype = "CMUYautjaHumanStabilisingCrystal";
+    public EntProtoId HumanStabilisingCrystalPrototype = "CMUYautjaThrallAutoInjector";
 
     [DataField]
     public EntProtoId HuntingTrapPrototype = "CMUYautjaHuntingTrap";
 
     [DataField]
     public FixedPoint2 StabilisingCrystalCost = 400;
-
-    [DataField]
-    public EntProtoId FieldRationPrototype = "CMUYautjaFieldRation";
-
-    [DataField]
-    public FixedPoint2 FieldRationCost = 100;
-
-    [DataField]
-    public TimeSpan FieldRationCooldown = TimeSpan.FromSeconds(30);
-
-    [DataField]
-    public TimeSpan NextFieldRation;
-
-    [DataField]
-    public EntProtoId HuntingCanteenPrototype = "CMUYautjaHuntingCanteen";
-
-    [DataField]
-    public FixedPoint2 HuntingCanteenCost = 100;
-
-    [DataField]
-    public TimeSpan HuntingCanteenCooldown = TimeSpan.FromSeconds(30);
-
-    [DataField]
-    public TimeSpan NextHuntingCanteen;
 
     [DataField]
     public FixedPoint2 HumanStabilisingCrystalCost = 400;
@@ -2563,11 +2469,10 @@ public sealed partial class YautjaGearContainerComponent : Component, IClothingS
 
     private static Dictionary<YautjaGearKind, EntProtoId> GetDefaultGearPrototypes()
     {
+        // CMU14: a bracer spawns with only its plasma caster pre-installed; the other attachments
+        // are not created at map initialization and have to be installed explicitly.
         var gear = new Dictionary<YautjaGearKind, EntProtoId>();
         gear.Add(YautjaGearKind.Caster, "CMUYautjaPlasmaCaster");
-        gear.Add(YautjaGearKind.WristBlades, "CMUYautjaWristBlades");
-        gear.Add(YautjaGearKind.Scimitar, "CMUYautjaScimitar");
-        gear.Add(YautjaGearKind.ChainGauntlet, "CMUYautjaChainGauntlet");
         return gear;
     }
 }

@@ -5,6 +5,12 @@
   name: Yautja Hunter
   suffix: Yautja, Event
   components:
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: CMUYautjaHunger
+      Thirst:
+        prototype: CMUYautjaThirst
   - type: Language
     spokenLanguages:
     - Yautja

@@ -3766,22 +3766,10 @@ public sealed class YautjaPredatorRoleTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var leap = prototypes.Index<EntityPrototype>("CMUActionYautjaLeap");
             var mark = prototypes.Index<EntityPrototype>("CMUActionYautjaMarkForHunt");
             var visor = prototypes.Index<EntityPrototype>("CMUActionYautjaToggleVisor");
             var translator = prototypes.Index<EntityPrototype>("CMUActionYautjaTranslator");
             var audioPanel = prototypes.Index<EntityPrototype>("CMUActionYautjaAudioPanel");
-
-            Assert.That(leap.TryGetComponent<ActionComponent>(out var leapAction, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(leap.TryGetComponent<TargetActionComponent>(out var leapTarget, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(leap.TryGetComponent<WorldTargetActionComponent>(out var leapWorld, server.EntMan.ComponentFactory), Is.True);
-            Assert.Multiple(() =>
-            {
-                Assert.That(leapAction!.UseDelay, Is.EqualTo(TimeSpan.FromSeconds(15)));
-                Assert.That(leapTarget!.Range, Is.EqualTo(7));
-                Assert.That(leapTarget.CheckCanAccess, Is.False);
-                Assert.That(leapWorld!.Event, Is.TypeOf<YautjaLeapActionEvent>());
-            });
 
             Assert.That(mark.TryGetComponent<ActionComponent>(out var markAction, server.EntMan.ComponentFactory), Is.True);
             Assert.That(mark.TryGetComponent<TargetActionComponent>(out var markTarget, server.EntMan.ComponentFactory), Is.True);
@@ -3845,7 +3833,6 @@ public sealed class YautjaPredatorRoleTest
                 "CMUActionYautjaToggleScimitar",
                 "CMUActionYautjaToggleShield",
                 "CMUActionYautjaToggleChainGauntlet",
-                "CMUActionYautjaLeap",
                 "CMUActionYautjaMarkForHunt",
             };
 
@@ -3999,14 +3986,9 @@ public sealed class YautjaPredatorRoleTest
             var componentFactory = server.EntMan.ComponentFactory;
             var allowedCooldownActions = new Dictionary<string, int>
             {
-                ["CMUActionYautjaLeap"] = 15,
                 ["CMUActionYautjaToggleLantern"] = 1,
-                ["CMUActionYautjaHonorRoar"] = 45,
-                ["CMUActionYautjaHuntingLeap"] = 12,
-                ["CMUActionYautjaCreateHuntingCanteen"] = 1,
                 ["CMUActionYautjaRecall"] = 5,
                 ["CMUActionYautjaRaiseThrall"] = 120,
-                ["CMUActionYautjaCreateFieldRation"] = 1,
             };
 
             var yautjaActions = prototypes.EnumeratePrototypes<EntityPrototype>()
@@ -4501,7 +4483,6 @@ public sealed class YautjaPredatorRoleTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(actionPrototypeIds, Does.Contain("CMUActionYautjaLeap"));
                     Assert.That(actionPrototypeIds, Does.Contain("CMUActionYautjaMarkForHunt"));
                     Assert.That(actionPrototypeIds, Does.Contain("CMUActionYautjaButcher"));
                     Assert.That(actionPrototypeIds, Does.Contain("CMUActionYautjaAudioPanel"));
