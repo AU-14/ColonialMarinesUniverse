@@ -1,0 +1,19 @@
+# AU-14: CAS hand-loaded ammo tags
+
+- type: Tag
+  id: AU14BOFORSMagHE
+
+- type: Tag
+  id: AU14BOFORSMagAP
+
+- type: Tag
+  id: AU14BOFORSMagAirburst
+
+- type: Tag
+  id: AU14BOFORSMagHEAT
+
+- type: Tag
+  id: AU14BOFORSMagIncendiary
+
+- type: Tag
+  id: AU14HowitzerShell

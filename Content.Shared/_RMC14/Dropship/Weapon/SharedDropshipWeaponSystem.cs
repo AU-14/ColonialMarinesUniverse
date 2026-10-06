@@ -1518,12 +1518,25 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!Resolve(weapon, ref weapon.Comp, false))
             return false;
 
-        if (!_container.TryGetContainingContainer((weapon, null), out var container) ||
-            !TryComp(container.Owner, out DropshipWeaponPointComponent? point) ||
-            !_container.TryGetContainer(container.Owner, point.AmmoContainerSlotId, out var ammoContainer))
-        {
+        if (!_container.TryGetContainingContainer((weapon, null), out var container))
             return false;
+
+        BaseContainer? ammoContainer = null;
+        if (TryComp(container.Owner, out DropshipWeaponPointComponent? point))
+        {
+            _container.TryGetContainer(container.Owner, point.AmmoContainerSlotId, out var pointAmmo);
+            ammoContainer = pointAmmo;
         }
+        // AU-14: weapons mounted on crew compartment (utility) attach points store
+        // their hand-loaded ammo on the utility point instead.
+        else if (TryComp(container.Owner, out DropshipUtilityPointComponent? utilityPoint))
+        {
+            _container.TryGetContainer(container.Owner, utilityPoint.AmmoContainerSlotId, out var utilityAmmo);
+            ammoContainer = utilityAmmo;
+        }
+
+        if (ammoContainer == null)
+            return false;
 
         foreach (var contained in ammoContainer.ContainedEntities)
         {

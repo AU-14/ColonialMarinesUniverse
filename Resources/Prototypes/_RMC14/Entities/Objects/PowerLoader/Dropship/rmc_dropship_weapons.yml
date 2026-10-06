@@ -148,3 +148,61 @@
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: minirocket_pod_loaded
     ammoSpriteThresholds: [5, 4, 3, 2, 1]
+
+- type: entity
+  parent: RMCDropshipAttachmentWeapon
+  id: RMCDropshipAttachmentBOFORS
+  name: L/60 40mm BOFORS Autocannon
+  description: A 40mm BOFORS autocannon capable of sustained fire on a position. It is fed from 20-round trays loaded by hand. Fits on both the external weapon and crew compartment attach points of dropships.
+  components:
+  - type: Sprite
+    layers:
+    - state: bofors_cannon_unloaded
+      offset: 0.5, 0.5
+  - type: DropshipFabricatorPrintable
+    cost: 800
+  - type: DropshipWeapon
+    abbreviation: ATC
+    fireDelay: 5
+    weaponAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: bofors_cannon_loaded
+    ammoEmptyAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: bofors_cannon_unloaded
+    ammoAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: bofors_cannon_loaded
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+    - RMCDropshipWeaponPoint
+
+- type: entity
+  parent: RMCDropshipAttachmentWeapon
+  id: RMCDropshipAttachmentHowitzer
+  name: M137 105mm Howitzer
+  description: A 105mm Howitzer, capable of wiping out reinforced positions. This model only holds one round, but can be reloaded in flight if mounted on the interior. Fits on both the external weapon and crew compartment attach points of dropships.
+  components:
+  - type: Sprite
+    layers:
+    - state: cas_howitzer_105_uninstalled
+      offset: 0.5, 0.5
+  - type: DropshipFabricatorPrintable
+    cost: 600
+  - type: DropshipWeapon
+    abbreviation: HWR
+    fireDelay: 5
+    weaponAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: cas_howitzer_105_installed_loaded
+    ammoEmptyAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: cas_howitzer_105_installed_unloaded
+    ammoAttachedSprite:
+      sprite: _RMC14/Objects/dropship_attachments.rsi
+      state: cas_howitzer_105_installed_loaded
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+    - RMCDropshipWeaponPoint

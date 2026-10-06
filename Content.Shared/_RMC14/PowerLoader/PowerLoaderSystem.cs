@@ -487,6 +487,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         else
         {
             args.CanUse = CanDetachPopup(ref user, ent, ent.Comp.DeployableContainerSlotId, false, out slot) ||
+                          CanDetachPopup(ref user, ent, ent.Comp.AmmoContainerSlotId, false, out slot) ||
                           CanDetachPopup(ref user, ent, ent.Comp.UtilitySlotId, false, out slot);
         }
 
@@ -855,6 +856,38 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         [NotNullWhen(true)] out ContainerSlot? slot)
     {
         slot = null;
+
+        // AU-14: weapons installed on crew compartment points (JDAM bomb clamp, etc.)
+        // take their matching ammo in the point's ammo slot.
+        if (TryComp(used, out DropshipAmmoComponent? ammo))
+        {
+            if (!_container.TryGetContainer(target, target.Comp.UtilitySlotId, out var weaponContainer))
+                return false;
+
+            foreach (var containedEntity in weaponContainer.ContainedEntities)
+            {
+                if (!HasComp<DropshipWeaponComponent>(containedEntity))
+                    continue;
+
+                if (ammo.Weapon.Id != Prototype(containedEntity)?.ID)
+                    return false;
+
+                slot = _container.EnsureContainer<ContainerSlot>(target, target.Comp.AmmoContainerSlotId);
+                if (slot.ContainedEntity == null)
+                    return true;
+
+                foreach (var buckled in GetBuckled(user))
+                {
+                    _popup.PopupClient(Loc.GetString("rmc-power-loader-occupied-ammo"), target, buckled, PopupType.SmallCaution);
+                }
+
+                slot = null;
+                return false;
+            }
+
+            return false;
+        }
+
         var slotId = target.Comp.UtilitySlotId;
         if (HasComp<RMCOrbitalDeployableComponent>(used))
         {

@@ -1,0 +1,175 @@
+# AU-14: JDAM Bomb Clamp.
+# A crew-compartment (interior) only bomb clamp that holds a single JDAM family
+# bomb. Must be moved with a powerloader and loaded by hand.
+
+- type: entity
+  parent: RMCDropshipAttachmentUtility
+  id: RMCDropshipAttachmentJDAMBombClamp
+  name: JDAM Bomb Clamp
+  description: A JDAM bomb clamp, holds one JDAM family bomb. Fits on the crew compartment attach points of dropships.
+  components:
+  - type: Sprite
+    layers:
+    - state: bomb_clamp_unloaded
+  - type: DropshipFabricatorPrintable
+    cost: 650
+  - type: DropshipWeapon
+    abbreviation: BMB
+    fireDelay: 10
+    skills:
+      all:
+        RMCSkillPilot: 2
+  - type: DropshipAttachedSprite
+    sprite:
+      sprite: _RMC14/Objects/dropship_utility_attachments.rsi
+      state: bomb_clamp_interior_loaded
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+
+# region JDAM family bombs (loaded into the JDAM Bomb Clamp)
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoJDAMHE
+  name: GBU-89B JDAM (HE)
+  description: The GBU-89B Joint Direct Attack Munition is an old but reliable large guided munition. It has an excessively long travel time, but can level entire buildings. Loaded into the JDAM Bomb Clamp.
+  components:
+  - type: Sprite
+    layers:
+    - state: jdam
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
+    travelTime: 12
+    weapon: RMCDropshipAttachmentJDAMBombClamp
+    explosion:
+      total: 10000
+      slope: 4.5
+      max: 100000000
+    impactEffects:
+    - AU14EffectExplosionParticleJDAM
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 7500
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoJDAMIncendiary
+  name: GBU-89C/N JDAM-I (Incendiary)
+  description: The GBU-89C/N Joint Direct Attack Munition is an old but reliable large guided munition fitted with a napalm payload. It can level and set alight entire buildings. Loaded into the JDAM Bomb Clamp.
+  components:
+  - type: Sprite
+    layers:
+    - state: jdami
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
+    travelTime: 11
+    weapon: RMCDropshipAttachmentJDAMBombClamp
+    explosion:
+      total: 10000
+      slope: 4.5
+      max: 100000000
+    fire:
+      type: RMCTileFireNapalm
+      range: 3
+      cardinalRange: 5
+    impactEffects:
+    - AU14EffectExplosionParticleJDAM
+    - AU14SmokeExplosionProofJDAM
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 8000
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoJDAMAP
+  name: GBU-89D/AP JDAM-AP
+  description: The GBU-89D/AP Joint Direct Attack Munition trades blast radius for a hardened penetrator capable of cracking reinforced structures and armor. Loaded into the JDAM Bomb Clamp.
+  components:
+  - type: Sprite
+    layers:
+    - state: jdam
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
+    travelTime: 12
+    weapon: RMCDropshipAttachmentJDAMBombClamp
+    armorPiercing: 100
+    explosion:
+      total: 6000
+      slope: 4
+      max: 100000000
+    impactEffects:
+    - AU14EffectExplosionParticleJDAM
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 7500
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoJDAMCluster
+  name: GBU-89E/CL JDAM-CLUSTER
+  description: The GBU-89E/CL Joint Direct Attack Munition separates into a spread of low-yield bomblets over a wide area. Loaded into the JDAM Bomb Clamp.
+  components:
+  - type: Sprite
+    layers:
+    - state: cluster
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    rounds: 12
+    maxRounds: 12
+    roundsPerShot: 12
+    bulletSpread: 17
+    travelTime: 10
+    weapon: RMCDropshipAttachmentJDAMBombClamp
+    explosion:
+      total: 110
+      slope: 4
+      max: 8
+    impactEffects:
+    - RMCEffectExplosionParticle
+    - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 4000
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoJDAMNapalm
+  name: GBU-89F/N JDAM-NAPALM
+  description: The GBU-89F/N Joint Direct Attack Munition blankets the target area in a persistent napalm firestorm. Loaded into the JDAM Bomb Clamp.
+  components:
+  - type: Sprite
+    layers:
+    - state: jdami
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    rounds: 1
+    maxRounds: 1
+    roundsPerShot: 1
+    travelTime: 11
+    weapon: RMCDropshipAttachmentJDAMBombClamp
+    explosion:
+      total: 4000
+      slope: 5
+      max: 60
+    fire:
+      type: RMCTileFireNapalm
+      range: 5
+      cardinalRange: 7
+    impactEffects:
+    - AU14EffectExplosionParticleJDAM
+    - AU14SmokeExplosionProofJDAM
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 8000
+
+# endregion

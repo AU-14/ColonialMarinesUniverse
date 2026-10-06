@@ -74,6 +74,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private RMCPlanetSystem _planet = default!; // CMU14
+    [Dependency] private Weapon.DropshipHandLoadSystem _handLoad = default!; // AU-14: hand-loaded cannon ammo
     // CMU14: Force on Force roles, hijacking, announcements and identification.
     [Dependency] private IRobustRandom _hijackRandom = default!;
 
@@ -1095,6 +1096,13 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     /// </summary>
     private void OnInteract(Entity<DropshipWeaponPointComponent> ent, ref InteractHandEvent args)
     {
+        // AU-14: hand-loaded cannon ammo (BOFORS/howitzer) unloads from the point first.
+        if (_handLoad.TryHandUnload(ent, args.User))
+        {
+            args.Handled = true;
+            return;
+        }
+
         var slot = _container.EnsureContainer<ContainerSlot>(ent, ent.Comp.WeaponContainerSlotId);
         RelayInteractToContained(slot, ref args);
     }
