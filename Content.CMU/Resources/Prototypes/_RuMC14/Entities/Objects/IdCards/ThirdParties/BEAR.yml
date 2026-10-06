@@ -1,0 +1,59 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RuCMIDCardUPPBEARCommander
+  name: PMC BEAR Commander ID card
+  components:
+  - type: PresetIdCard
+    job: RuMCUPPBEARCommander
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: RuCMIDCardUPPBEARMachinegunner
+  categories: [ HideSpawnMenu ]
+  name: PMC BEAR Machinegunner ID card
+  components:
+  - type: PresetIdCard
+    job: RuMCUPPBEARMachinegunner
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: RuCMIDCardUPPBEARRifleman
+  categories: [ HideSpawnMenu ]
+  name: PMC BEAR Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: RuMCUPPBEARRifleman
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: RuCMIDCardUPPBEARGrenader
+  categories: [ HideSpawnMenu ]
+  name: PMC BEAR Grenader ID card
+  components:
+  - type: PresetIdCard
+    job: RuMCUPPBEARGrenader
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: RuCMIDCardUPPBEARMedic
+  categories: [ HideSpawnMenu ]
+  name: PMC BEAR Medic ID card
+  components:
+  - type: PresetIdCard
+    job: RuMCUPPBEARMedic
+  - type: ItemIFF
+    factions:
+    - GOVFOR

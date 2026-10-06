@@ -43,6 +43,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
         SubscribeLocalEvent<MultiDeckDropshipComponent, FTLStartedEvent>(OnFlightStarted);
         SubscribeLocalEvent<MultiDeckDropshipComponent, FTLCompletedEvent>(OnFlightCompleted);
         SubscribeLocalEvent<MultiDeckDropshipComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<PhysicsUpdateAfterSolveEvent>(OnPhysicsAfterSolve);
     }
 
     private void OnMapInit(Entity<MultiDeckDropshipComponent> ship, ref MapInitEvent args)
@@ -114,7 +115,16 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
     private void OnFlightCompleted(Entity<MultiDeckDropshipComponent> ship, ref FTLCompletedEvent args)
         => Synchronize(ship);
 
-    public override void Update(float frameTime)
+    public override void Update(float frameTime) => SynchronizePending();
+
+    private void OnPhysicsAfterSolve(ref PhysicsUpdateAfterSolveEvent args)
+    {
+        // Physics moves the cabin after ordinary system updates. Copy its final
+        // position before the next substep and the outgoing network snapshot.
+        SynchronizePending();
+    }
+
+    private void SynchronizePending()
     {
         if (_pending.Count == 0)
             return;

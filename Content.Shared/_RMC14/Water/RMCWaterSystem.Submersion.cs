@@ -103,8 +103,9 @@ public sealed partial class RMCWaterSystem
             covered = !CanCollide((uid, component), user);
         }
 
+        // CMU14: empty fixture sets have no contacts and cannot be enumerated by the engine.
         // Some CMU maps deliberately leave water unanchored. Use contacts as a fallback for these entities.
-        if (water == null && TryComp<FixturesComponent>(user, out var fixtures) &&
+        if (water == null && TryComp<FixturesComponent>(user, out var fixtures) && fixtures.Fixtures.Count > 0 &&
             _rmcMap.TryGetTileRefForEnt(Transform(user).Coordinates, out var userGrid, out var userTile))
         {
             var contacts = _physics.GetContacts((user, fixtures));

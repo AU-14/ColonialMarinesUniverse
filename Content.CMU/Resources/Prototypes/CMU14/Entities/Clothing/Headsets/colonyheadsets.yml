@@ -11,12 +11,13 @@
   parent: AU14EncryptionKey
   id: AU14EncryptionKeyAdmin
   name: colony admin encryption key
-  description: An encryption key used to communicate on colony and CMB radio channels.
+  description: An encryption key used to communicate on colony, CMB and colony medical radio channels.
   components:
   - type: EncryptionKey
     channels:
     - Colony
     - radioCMB
+    - ColonyMedical
     defaultChannel: Colony
 
 - type: entity

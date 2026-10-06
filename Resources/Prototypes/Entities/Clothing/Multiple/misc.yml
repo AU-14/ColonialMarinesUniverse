@@ -16,6 +16,9 @@
     - HEAD
     - EARS
     - NECK
+  # cmu edit start
+  - type: CMUCombatEarProtection
+  # cmu edit end
   - type: ToggleableVisuals
     spriteLayer: enum.ToggleableVisuals.Layer
     clothingVisuals:

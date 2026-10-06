@@ -1,0 +1,15 @@
+#- type: entity
+#  parent: RMCFlagCarriableBase
+#  id: RuMCFlagCarriablePMC
+#  name: PMC flag
+#  components:
+#  - type: Sprite
+#    sprite: _RuMC14/Objects/Flags/pmc.rsi
+
+- type: entity
+  parent: RMCFlagCarriableBase
+  id: RuMCFlagCarriableBEAR
+  name: BEAR flag
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Flags/bear.rsi

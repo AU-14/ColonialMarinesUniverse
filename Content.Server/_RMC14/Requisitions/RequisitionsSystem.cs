@@ -49,6 +49,7 @@ using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Profiling; // CMU14
 using Robust.Shared.Random;
+using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Timing;
 using static Content.Shared._RMC14.Requisitions.Components.RequisitionsElevatorMode;
 
@@ -77,6 +78,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     [Dependency] private ProfManager _profiler = default!;
     [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     // CMU14 End
+    [Dependency] private ISerializationManager _serialization = default!;
 
     private static readonly EntProtoId AccountId = "RMCASRSAccount";
     private static readonly EntProtoId PaperRequisitionInvoice = "RMCPaperRequisitionInvoice";
@@ -89,6 +91,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     private bool _sellCargoRewards;
 
     private readonly HashSet<Entity<MobStateComponent>> _toPit = new();
+    private readonly List<EntityUid> _stockUiUpdates = new();
 
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabRequisitionsLogs";
 
@@ -225,9 +228,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             return;
         }
 
-        comp.Categories = catalogComp.Categories != null
-            ? new List<RequisitionsCategory>(catalogComp.Categories)
-            : new List<RequisitionsCategory>();
+        // Each console adds faction-specific entries. Do not mutate the prototype or another
+        // console's entries through a shallow copy of its category list.
+        comp.Categories = _serialization.CreateCopy(catalogComp.Categories, notNullableOverride: true);
+        comp.StockEntriesInitialized = false;
 
         Dirty(consoleUid, comp);
         Log.Debug($"[Requisitions] Applied catalog {catalogProtoId} to console {consoleUid}");
@@ -690,6 +694,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         var time = _timing.CurTime;
         var updateUI = false;
+        _stockUiUpdates.Clear();
         var accounts = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (accounts.MoveNext(out var uid, out var account))
         {
@@ -759,7 +764,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         while (computers.MoveNext(out var uid, out var computer))
         {
             if (ProcessStock((uid, computer), time))
-                updateUI = true;
+                _stockUiUpdates.Add(uid);
         }
 
         var elevators = EntityQueryEnumerator<RequisitionsElevatorComponent>();
@@ -797,12 +802,23 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         if (updateUI)
             SendUIStateAll();
+        else
+        {
+            // A stock countdown belongs to one terminal. Account/elevator changes still refresh
+            // all affected state through the existing global path.
+            foreach (var uid in _stockUiUpdates)
+            {
+                if (TryComp<RequisitionsComputerComponent>(uid, out var computer))
+                    SendUIState((uid, computer));
+            }
+        }
     }
 
     private void ResetStock(Entity<RequisitionsComputerComponent> computer)
     {
         RebuildItemizedCatalog(computer);
         computer.Comp.Stock.Clear();
+        computer.Comp.StockEntriesInitialized = false;
         EnsureStockEntries(computer, _timing.CurTime);
     }
 
@@ -813,6 +829,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private void EnsureStockEntries(Entity<RequisitionsComputerComponent> computer, TimeSpan time)
     {
+        if (computer.Comp.StockEntriesInitialized)
+            return;
+
         var validKeys = new HashSet<(int Category, int Order)>();
 
         for (var categoryIndex = 0; categoryIndex < computer.Comp.Categories.Count; categoryIndex++)
@@ -850,6 +869,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             if (!validKeys.Contains(key))
                 computer.Comp.Stock.Remove(key);
         }
+
+        computer.Comp.StockEntriesInitialized = true;
     }
 
     private TimeSpan GetNextStockReplenish(TimeSpan time, RequisitionsEntry entry)

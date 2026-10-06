@@ -61,7 +61,7 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
         gun.Comp.ShootCoordinates = shootCoordinates;
         gun.Comp.Target = targetUid;
 #pragma warning restore RA0002
-        if (rearmSemiAuto)
+        if (rearmSemiAuto && gun.Comp.SelectedMode == Content.Shared.Weapons.Ranged.Components.SelectiveFire.SemiAuto)
             _gun.ResetShotCounter(gun.Owner, gun.Comp);
 
         return _gun.AttemptShoot(user.Value, gun, projectiles, session);

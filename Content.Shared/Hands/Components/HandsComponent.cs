@@ -215,17 +215,14 @@ public sealed class HandsComponentActiveHandDeltaState(string? activeHandId) : I
     public HandsComponentState CreateNewFullState(HandsComponentState fullState)
     {
         var newState = new HandsComponentState(
-            fullState.ActiveHandId,
+            ActiveHandId,
             fullState.Hands,
             fullState.SortedHands,
             fullState.ShowInHands,
             fullState.HandDisplacement,
             fullState.LeftHandDisplacement,
             fullState.RightHandDisplacement,
-            fullState.CanBeStripped)
-        {
-            ActiveHandId = fullState.ActiveHandId,
-        };
+            fullState.CanBeStripped);
         return newState;
     }
 }

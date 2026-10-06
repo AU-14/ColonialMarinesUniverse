@@ -1,0 +1,102 @@
+<Document>
+  # Surgery
+
+  Some injuries can only be fixed by operating: compound and shattered fractures, internal bleeding, damaged organs, eschar, severed limbs and the bleeding stumps they leave.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMScalpel" Caption="Scalpel"/>
+    <GuideEntityEmbed Entity="CMHemostat" Caption="Hemostat"/>
+    <GuideEntityEmbed Entity="CMRetractor" Caption="Retractor"/>
+    <GuideEntityEmbed Entity="CMCautery" Caption="Cautery"/>
+  </Box>
+  <Box>
+    <GuideEntityEmbed Entity="CMCircularSaw" Caption="Circular saw"/>
+    <GuideEntityEmbed Entity="CMBonesetter" Caption="Bone setter"/>
+    <GuideEntityEmbed Entity="CMBoneGel" Caption="Bone gel"/>
+    <GuideEntityEmbed Entity="CMUOrganClampItem" Caption="Organ vessel clamp"/>
+  </Box>
+
+  ## Preparing the Patient
+  - [bold]Lay the patient down.[/bold] You can't operate on someone standing up. An [bold]operating table[/bold] is best.
+  - [bold]Put them under.[/bold] A patient who is asleep, unconscious, on strong enough painkillers or held down by someone keeps still. An awake patient in severe pain screams and thrashes, and steps can't go ahead.
+  - You can operate on yourself if you're buckled into a seat, but it's harder.
+
+  ## Anesthetic
+  <Box>
+    <GuideEntityEmbed Entity="CMAnestheticTankFilled" Caption="Anesthetic tank"/>
+  </Box>
+  The cleanest way to put a patient under is the [bold]anesthetic tank[/bold], which holds nitrous oxide.
+  - Put a breath mask on the patient, attach the anesthetic tank and turn on their internals.
+  - They get drowsy, and about [bold]6 seconds[/bold] later they fall asleep.
+  - They stay asleep for as long as they keep breathing from the tank. Turn off their internals or take the tank away and they wake up.
+  - Anesthetic tanks and medical gas masks are stocked in the medical supply vendor, and come in the surgery crate.
+  - It doesn't work on synthetics.
+
+  ### Drugs Instead
+  If you don't have a tank, drugs will do:
+  - [bold]Soporific[/bold]: 8 units or more puts the patient to sleep, and it's a strong painkiller as well.
+  - [bold]Oxycodone[/bold] also works. It kills pain well enough to operate, but the patient stays awake, and it makes them [color=#FFA500]loopy[/color]: their vision blurs and darkens at the edges. Over 20 units they start acting drunk and hallucinating, and it begins to poison them.
+  - Tramadol, sleen and fentanyl are also strong enough. Paracetamol isn't.
+
+  ### Holding the Patient Down
+  [color=#FFA500]No painkillers? Have someone hold the patient down.[/color] A second person pinning them still counts the same as painkillers: you can operate on an awake patient in severe pain, and they won't thrash when a step goes wrong.
+  - Right-click the patient while they're lying down and choose [bold]Hold down[/bold]. It takes 2 seconds.
+  - Stay right next to them. If you step away, get knocked out or the patient gets up, you let go, and surgery stops until the pain is dealt with.
+  - The surgeon can't hold the patient down themselves.
+  - Choose [bold]Let go[/bold] when you're done.
+
+  It doesn't make steps any less likely to fail. The surface, tools and skill still decide that.
+
+  ## Operating
+  1. Use a surgical tool on the patient to open the [bold]Surgical Procedure[/bold] window.
+  2. Pick the body part, then the surgery. The window lists only the surgeries that part needs, grouped by what they fix, along with anything wrong with the part.
+  3. Press [bold]Begin Surgery[/bold]. The window tells you each step and which tool it needs.
+  4. Click the patient with that tool to do the step. Each step takes a couple of seconds, less with more surgical skill.
+  5. When you've finished, you can start another surgery on the same open part, or [bold]Close Up[/bold].
+
+  Only one body part can be operated on at a time. Finish or abandon a surgery before starting on another part.
+
+  ## When Steps Go Wrong
+  A step can fail and cut the patient. The chance depends on how rough the conditions are:
+  - [bold]Where the patient is[/bold]: an operating table or a proper bed is fine. A roller bed, stretcher or bedroll is rougher. A patient who isn't strapped down at all is roughest.
+  - [bold]Improvised tools[/bold]: some substitutes make a step more likely to fail. See [bold]Improvised Tools[/bold] below.
+  - [bold]Operating on yourself[/bold] makes every step harder.
+  - [bold]Surgical skill[/bold] makes up for bad conditions. An expert surgeon can operate cleanly in the field.
+
+  With good conditions a step never fails. The worse they get, the higher the chance: 5%, then 25%, then 50%.
+
+  ## Improvised Tools
+  No surgical kit? Everyday items can stand in for most tools. Every substitute is [bold]slower[/bold] than the real thing, from about half again as long for a blowtorch up to nearly three times as long for a cigarette. Ones marked [color=#FFA500]rough[/color] also make a step more likely to fail. When a step fails, the damage depends on the tool: blades cut, blunt tools bruise, hot tools burn.
+
+  Listed from best to worst:
+  - [bold]Scalpel[/bold]: a knife, or a [color=#FFA500]glass shard (rough)[/color].
+  - [bold]Hemostat[/bold]: surgical line, wire cutters, a fork, cable coil, or gauze.
+  - [bold]Retractor[/bold]: a crowbar, a vehicle maintenance jack [color=#FFA500](rough)[/color], a knife [color=#FFA500](rough)[/color], or a [color=#FFA500]glass shard (rough)[/color].
+  - [bold]Cautery[/bold]: a blowtorch or welder, surgical line, cable coil, a lighter, or a [color=#FFA500]cigarette (rough)[/color].
+  - [bold]Circular saw[/bold]: a hatchet [color=#FFA500](rough)[/color], a machete [color=#FFA500](rough)[/color], a pen [color=#FFA500](rough)[/color], or a [color=#FFA500]metal rod (rough)[/color].
+  - [bold]Bone setter[/bold]: a wrench, or a vehicle maintenance jack [color=#FFA500](rough)[/color].
+  - [bold]Bone gel[/bold]: a screwdriver [color=#FFA500](rough)[/color], or a [color=#FFA500]metal rod (rough)[/color].
+  - [bold]Organ clamp[/bold]: surgical line, cable coil, or a bandana or headband.
+  - [bold]Debriding eschar[/bold]: a burn kit, or ointment.
+
+  Surgical line is the best all-rounder to carry: it covers the hemostat, cautery and organ clamp, and it's nearly as quick as the real tools.
+
+  ## Surgeries and Their Steps
+  Each type of surgery has its own page with every step and the tool it needs:
+  - [textlink="Opening and Closing" link="CMUGuideSurgeryOpening"]: opening an incision or bone cavity, and closing up.
+
+  - [textlink="Fracture Surgery" link="CMUGuideSurgeryFractures"]: setting simple, compound and shattered fractures.
+
+  - [textlink="Bleeding, Burns and Complications" link="CMUGuideSurgeryBleeding"]: internal bleeding, eschar, and complications found in open wounds.
+
+  - [textlink="Organ Surgery" link="CMUGuideSurgeryOrgans"]: suturing, removing and replacing organs, the brain and eyes, and embryo removal.
+
+  - [textlink="Limb Surgery" link="CMUGuideSurgeryLimbs"]: closing stumps, amputation, reattachment and replacement limbs.
+
+  ## After Surgery
+  - The patient is left [bold]recovering from surgery[/bold] for a while and can't run.
+  - After setting a bone, put a cast on within 5 minutes. See [textlink="Fractures" link="CMUGuideMedicalBones"].
+
+  ## The Autodoc
+  The [bold]autodoc pod[/bold] operates by itself. A trained surgeon queues procedures from its console, and the pod carries them out on the patient inside. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"], which also covers the body scanner that can make your surgery twice as fast.
+</Document>

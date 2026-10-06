@@ -177,6 +177,7 @@ public sealed class CMUZOverheadEntityTest : GameTest
             {
                 bool ReceivesItem()
                 {
+                    scene.Z.PrepareOverheadPvs();
                     var ev = new ExpandPvsEvent(ServerSession!, 1);
                     SEntMan.EventBus.RaiseEvent(EventSource.Local, ref ev);
                     return ev.Entities?.Contains(item) == true;
@@ -192,6 +193,44 @@ public sealed class CMUZOverheadEntityTest : GameTest
                 Assert.That(ReceivesItem(), Is.True);
                 SEntMan.RemoveComponent<CMUZFallingComponent>(item);
                 Assert.That(ReceivesItem(), Is.False);
+            }
+            finally
+            {
+                subscribers.RemoveViewSubscriber(view, ServerSession!);
+            }
+        });
+    }
+
+    [Test]
+    public async Task OverheadSelectionChecksOnlyNearbyCellsAndRefreshesAcrossNegativeCoordinates()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            using var scene = new Scene(SEntMan, Server.ResolveDependency<ITileDefinitionManager>());
+            var nearby = scene.SpawnItem(2);
+            for (var i = 0; i < 256; i++)
+            {
+                var distant = scene.SpawnItem(2);
+                scene.Transform.SetCoordinates(distant,
+                    new EntityCoordinates(scene.Levels[2], new Vector2(1000 + i * 40, 1000)));
+            }
+            var view = SEntMan.SpawnEntity(null, new EntityCoordinates(scene.Levels[0], new Vector2(0.5f)));
+            var subscribers = SEntMan.System<ViewSubscriberSystem>();
+            subscribers.AddViewSubscriber(view, ServerSession!);
+            try
+            {
+                foreach (var x in new[] { 0.5f, -0.5f, -32f, -32.01f })
+                {
+                    var position = new Vector2(x, 0.5f);
+                    scene.Transform.SetCoordinates(nearby, new EntityCoordinates(scene.Levels[2], position));
+                    scene.Transform.SetCoordinates(view, new EntityCoordinates(scene.Levels[0], position));
+                    scene.Z.PrepareOverheadPvs();
+                    var ev = new ExpandPvsEvent(ServerSession!, 1);
+                    SEntMan.EventBus.RaiseEvent(EventSource.Local, ref ev);
+                    Assert.That(ev.Entities, Does.Contain(nearby));
+                    Assert.That(scene.Z.LastOverheadPvsCandidateChecks, Is.EqualTo(1),
+                        "The 256 distant falling entities must not be visited for this view.");
+                }
             }
             finally
             {

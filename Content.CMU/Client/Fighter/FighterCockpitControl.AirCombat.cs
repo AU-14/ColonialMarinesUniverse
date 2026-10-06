@@ -15,7 +15,9 @@ public sealed partial class FighterCockpitControl
         Flares.StatusColor = Flares.Lit ? Color.Orange : null;
         Flares.ToolTip = !seat.Pilot ? Loc.GetString("cmu-fighter-flares-pilot")
             : combat is { Incoming: true }
-                ? Loc.GetString("cmu-fighter-flares-chance", ("chance", MathF.Round(combat.FlareEvasionChance * 100)))
+                ? Loc.GetString("cmu-fighter-flares-chance", ("chance", MathF.Round((combat.FlaresUsed
+                    ? combat.DeployedFlareEvasionChance
+                    : FighterAirCombat.FlareEvasion(aircraft, combat, now)) * 100)))
                 : Loc.GetString("cmu-fighter-flares-idle");
         IncomingFlares.Visible = combat is { Incoming: true };
         IncomingFlares.Disabled = Flares.Disabled;

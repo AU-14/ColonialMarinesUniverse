@@ -45,6 +45,11 @@ entities:
     components:
     - type: MetaData
       name: Normandy Dropship (RMC)
+    - type: DropshipTacticalHoverAppearance
+      downwashOffsets:
+      - -2.5,-1
+      - 3.5,-1
+      - 0.5,7.5
     - type: Transform
       parent: 72
     - type: MapGrid

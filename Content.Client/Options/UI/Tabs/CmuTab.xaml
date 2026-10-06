@@ -7,7 +7,12 @@
                 <Button Name="OpenUiSetupButton" Text="{Loc 'cmu-ui-setup-open'}" Margin="0 0 0 8" />
                 <ui:CmuAppearanceOptions Name="Appearance" />
 
-                <!-- CMU14: tactical map preferences -->
+                <!-- CMU14: faction gameplay options. -->
+                <Label Text="{Loc 'cmu-ui-options-identification'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
+                <CheckBox Name="FoFUnidentifiedMarkerCheckBox"
+                          Text="{Loc 'cmu-ui-options-fof-unidentified-marker'}"
+                          ToolTip="{Loc 'cmu-ui-options-fof-unidentified-marker-tooltip'}" />
+
                 <Label Text="{Loc cmu-options-tacmap}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="ClassicTacMapCheckBox" Text="{Loc cmu-options-tacmap-classic}"
                           ToolTip="{Loc cmu-options-tacmap-classic-tooltip}" />
@@ -26,6 +31,20 @@
                 <Label Text="{Loc 'ui-options-cmu-chat'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="ExamineLogInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-log-in-chat'}" />
                 <CheckBox Name="ExamineFullTextInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-full-text-in-chat'}" />
+                <!-- cmu edit start -->
+                <CheckBox Name="ExamineWoundsInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-wounds-in-chat'}" />
+                <!-- cmu edit end -->
+                <!-- cmu edit start -->
+                <CheckBox Name="ChatSpeechSoundsCheckBox"
+                          Text="{Loc 'cmu-ui-options-chat-speech-sounds'}"
+                          ToolTip="{Loc 'cmu-ui-options-chat-speech-sounds-tooltip'}" />
+                <CheckBox Name="ChatResetToLocalCheckBox"
+                          Text="{Loc 'cmu-ui-options-chat-reset-to-local'}"
+                          ToolTip="{Loc 'cmu-ui-options-chat-reset-to-local-tooltip'}" />
+                <CheckBox Name="ChatCenterInputCheckBox"
+                          Text="{Loc 'cmu-ui-options-chat-center-input'}"
+                          ToolTip="{Loc 'cmu-ui-options-chat-center-input-tooltip'}" />
+                <!-- cmu edit end -->
 
                 <Label Text="{Loc 'cmu-ui-options-accessibility'}" Margin="0 10 0 0" StyleClasses="LabelKeyText" />
                 <CheckBox Name="ExplosionScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-enabled'}" />

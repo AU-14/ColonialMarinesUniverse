@@ -760,6 +760,10 @@
           name: P-17702 rotary cannon
           item: VehicleSPPTankP17702
           slot: primary::turret-cannon
+        - id: VehicleSPPTankRailgun
+          name: SPP railgun
+          item: VehicleSPPTankRailgun
+          slot: primary::turret-cannon
       - id: secondary
         name: Secondary
         options:
@@ -820,6 +824,7 @@
       - VehicleTankTreads
       - VehicleTankReinforcedTreads
       - VehicleSPPTankP17702
+      - VehicleSPPTankRailgun
       - VehicleSPPTankHJ35TLauncher
       - VehicleSPPTankCupola
       - VehicleSPPTankReactiveArmor

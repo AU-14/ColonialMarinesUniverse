@@ -28,9 +28,9 @@
   requiresGovforVote: true
   supportedPlanets:
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
-  - CMUPlanetStableGarrisonDistress
+# - CMUPlanetStableGarrisonDistress # govfor spawns planetside
 # - AUPlanetShepherdsPride # lot of forests/chokes
-  - CMUPlanetHopesRetreat
+# - CMUPlanetHopesRetreat # govfor spawns planetside
   - AUPlanetBosenmoriBasho
 # - AUPlanetLV747 # Solaris Gulch
 # - AUPlanetLV759 # Hybrisa Metro # missing threat spawns, scenario fails

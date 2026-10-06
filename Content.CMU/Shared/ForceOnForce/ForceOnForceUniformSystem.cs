@@ -1,27 +1,35 @@
+using Content.Shared._RMC14.Marines;
 using Content.Shared.Inventory;
-using Robust.Shared.Prototypes;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 
 namespace Content.Shared.CMU14.ForceOnForce;
 
 public sealed partial class ForceOnForceUniformSystem : EntitySystem
 {
     [Dependency] private InventorySystem _inventory = default!;
-    [Dependency] private IPrototypeManager _prototypes = default!;
 
-    public bool IsUnidentified(EntityUid user)
+    public bool IsUnidentified(EntityUid target, EntityUid? viewer)
     {
-        if (!TryComp<ForceOnForceUniformComponent>(user, out var policy))
+        if (TryComp<MobStateComponent>(target, out var mob) && mob.CurrentState == MobState.Dead)
             return false;
-        if (!_inventory.TryGetSlotEntity(user, "jumpsuit", out var uniform) ||
+
+        // Only FoF viewers have a uniform policy. Friendly personnel keep their normal identifiers.
+        if (!TryComp<ForceOnForceUniformComponent>(viewer, out var policy) ||
+            !TryComp<MarineComponent>(viewer, out var viewingMarine) ||
+            !TryComp<MarineComponent>(target, out var targetMarine) ||
+            string.IsNullOrEmpty(viewingMarine.Faction) ||
+            string.IsNullOrEmpty(targetMarine.Faction) ||
+            string.Equals(viewingMarine.Faction, targetMarine.Faction, StringComparison.OrdinalIgnoreCase))
+        {
+            return false;
+        }
+
+        if (!_inventory.TryGetSlotEntity(target, "jumpsuit", out var uniform) ||
             MetaData(uniform.Value).EntityPrototype is not { } prototype)
             return true;
-        if (policy.Uniforms.Contains(prototype.ID))
-            return false;
-        foreach (var parent in _prototypes.EnumerateParents<EntityPrototype>(prototype.ID))
-        {
-            if (policy.Uniforms.Contains(parent.ID))
-                return false;
-        }
-        return true;
+        // Uniforms of another faction can inherit a friendly uniform's components.
+        // Recognize the issued/catalogued items themselves, not every descendant.
+        return !policy.Uniforms.Contains(prototype.ID);
     }
 }

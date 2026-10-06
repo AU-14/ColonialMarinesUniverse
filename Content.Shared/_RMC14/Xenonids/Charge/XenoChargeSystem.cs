@@ -380,6 +380,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
 
         RemCompDeferred<XenoChargingComponent>(xeno);
         xeno.Comp.AlreadyHit.Clear();
+        xeno.Comp.PrimaryTarget = null; // CMU14: the completed charge no longer owns a target.
         Dirty(xeno);
     }
 

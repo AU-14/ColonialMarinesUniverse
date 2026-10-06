@@ -232,8 +232,13 @@ public sealed partial class RMCStorageSystem : EntitySystem
         if (TerminatingOrDeleted(ent))
             return;
 
-        if (!HasComp<NoStunOnExitComponent>(args.Container.Owner))
+        // cmu edit start: no stun when climbing out of lockers, closets and crates
+        if (!HasComp<NoStunOnExitComponent>(args.Container.Owner) &&
+            !HasComp<EntityStorageComponent>(args.Container.Owner))
+        {
             _stun.TryStun(ent, _stunStorage, true);
+        }
+        // cmu edit end
 
         if (HasComp<SkyFallingComponent>(args.Container.Owner) || HasComp<CrashLandingComponent>(args.Container.Owner))
         {

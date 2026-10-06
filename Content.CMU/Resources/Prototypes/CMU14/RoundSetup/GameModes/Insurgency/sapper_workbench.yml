@@ -89,13 +89,14 @@
 
 # The siphon rig (Phase 5). Built only at the Sapper's Workbench (recipe: sheets + LV cable + any
 # electronics). Using it on a colony ATM runs a long, loud hack that pays out an equal slice of the
-# colony budget and leaves the machine sparking and refusing to open until it self-repairs.
+# colony budget and leaves the machine sparking and refusing to open until it self-repairs. On an ATM
+# it also dumps the machine's cached card logins (account numbers and PINs); use the rig in hand to read them.
 - type: entity
   parent: BaseItem
   id: AU14SapperSiphonRig
   name: siphon rig
   suffix: CLF, Sapper
-  description: A skimming rig of scavenged wiring and cloned card readers. Clamp it onto a colony ATM, budget console, or ASRS terminal and it quietly bleeds the funds out into cash.
+  description: A skimming rig of scavenged wiring and cloned card readers. Clamp it onto a colony ATM, budget console, or ASRS terminal and it quietly bleeds the funds out into cash. On an ATM it also copies the card numbers and PINs of recent customers.
   components:
   - type: Sprite
     sprite: Objects/Devices/camera_bug.rsi
@@ -104,3 +105,10 @@
   - type: Item
     size: Small
   - type: SapperAtmHacking
+  - type: ActivatableUI
+    key: enum.SapperSiphonRigUiKey.Key
+    inHandsOnly: true
+  - type: UserInterface
+    interfaces:
+      enum.SapperSiphonRigUiKey.Key:
+        type: SapperSiphonRigBui

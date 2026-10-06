@@ -1,0 +1,69 @@
+author: Vencallium
+category: CMU
+changes:
+- message: Reworked USS Bush across multiple decks.
+  type: Map
+- message: Added USS Bush area definitions for Vehicle Storage, Post Exchange, Sub-Deck
+    Hallway, Shoot House, Gym, Atmospherics Control, Auxiliary Flight Deck, and Telecommunications.
+  type: Map
+- message: Updated Shiva’s Snowball and added two additional upper Z-levels.
+  type: Map
+- message: Added Shiva’s Snowball roof area definitions for Central Habitation, Med-Sec-Eng,
+    and the Aerodrome.
+  type: Map
+- message: Added colorable Alpha, Bravo, and Charlie squad floor markings.
+  type: Add
+- message: Added colorable pilot and medical floor markings.
+  type: Add
+- message: Added a weights bench, weight lifter, and punching bag for mapping.
+  type: Add
+- message: Added cargo grate and marked cargo floor tiles.
+  type: Add
+- message: Added a blue directional ultra window variant.
+  type: Add
+- message: Added a CMU tritium canister with a custom sprite.
+  type: Add
+- message: Added a box containing seven no-skill pill bottles.
+  type: Add
+- message: Added ten no-skill pill-bottle boxes to the medical vendor’s stock.
+  type: Add
+- message: Added individual vial fabrication to the medilathe, costing 125 glass and
+    25 plastic with a four-second fabrication time.
+  type: Add
+- message: Doubled portable oxygen and nitrogen miner output from 20 to 40 mol/s.
+  type: Tweak
+- message: Made portable oxygen and nitrogen miners permanently anchored.
+  type: Tweak
+- message: Switched portable gas miners to the RMC environment power channel with
+    a 1,500 W power requirement.
+  type: Tweak
+- message: Updated gas miner examination text to list the gases produced by mixture
+    miners.
+  type: Tweak
+- message: Removed explicit non-occluding overrides from the affected curtain prototype.
+  type: Tweak
+- message: Updated the existing medical and smartgunner decal sprites.
+  type: Tweak
+- message: Removed original Stable Garrison from the planet pool while retaining Stable
+    Garrison Redux.
+  type: Remove
+- message: Fixed the map renderer missing decals stored on chunk entities.
+  type: Fix
+- message: Added permanently anchored plasma, phoron, carbon dioxide, nitrous oxide,
+    and tritium gas miner variants for administrator spawning.
+  type: Admin
+- message: Added an air miner that produces a mixture of 21% oxygen and 79% nitrogen.
+  type: Admin
+- message: Configured the new gas miner variants for 40 mol/s total output and a 150
+    kPa external pressure limit.
+  type: Admin
+- message: Added weighted gas-mixture support to gas miners.
+  type: Code
+- message: Added validation that ignores invalid gas weights and disables mixture
+    miners when no valid mixture can be produced.
+  type: Code
+- message: Added integration tests covering gas miner prototypes, output settings,
+    anchoring, power configuration, and air mixture configuration.
+  type: Code
+time: '2026-09-27T11:54:19.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1978

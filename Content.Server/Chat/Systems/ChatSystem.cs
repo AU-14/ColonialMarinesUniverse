@@ -323,6 +323,10 @@ public sealed partial class ChatSystem : SharedChatSystem
                     currentLanguage);
                 break;
             case InGameICChatType.Emote:
+                // cmu edit start
+                if (TrySendCMUEmoteWithSpeech(source, message, range, nameOverride, hideLog, ignoreActionBlocker, currentLanguage))
+                    break;
+                // cmu edit end
                 SendEntityEmote(
                     source,
                     message,

@@ -1,0 +1,35 @@
+- type: entity
+  parent: RMCArmorVest
+  id: RuMCPAGSTArmorVest
+  name: PAGST armor vest
+  description: PAGST armor vest.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/HAZOPS/pagstvest.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95
+  - type: CMArmor
+    melee: 5
+    bullet: 5
+    bio: 25
+    explosionArmor: 5
+
+- type: entity
+  parent: AU14BaseArmor
+  id: RuMCPoweredWarfightingArmor
+  name: powered warfighting armor
+  description: desc
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/HAZOPS/poweredwarfightingarmor.rsi
+  - type: CMArmor
+    bio: 35
+    bullet: 10
+    explosionArmor: 10
+    melee: 18
+  - type: ClothingSpeedModifier
+    walkModifier: 0.75
+    sprintModifier: 0.75

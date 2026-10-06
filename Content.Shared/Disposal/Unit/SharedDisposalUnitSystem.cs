@@ -96,7 +96,8 @@ public abstract partial class SharedDisposalUnitSystem : EntitySystem
 
     private void OnExploded(Entity<DisposalUnitComponent> ent, ref BeforeExplodeEvent args)
     {
-        args.Contents.AddRange(GetContainedEntities(ent));
+        if (ent.Comp.Container != null)
+            args.Contents.AddRange(ent.Comp.Container.ContainedEntities);
     }
 
     private void OnPowerChange(Entity<DisposalUnitComponent> ent, ref PowerChangedEvent args)
@@ -198,7 +199,7 @@ public abstract partial class SharedDisposalUnitSystem : EntitySystem
             _container.Insert(inserted, ent.Comp.Container);
         }
 
-        if (!GetContainedEntities(ent).Contains(inserted))
+        if (ent.Comp.Container == null || !ent.Comp.Container.Contains(inserted))
             return;
 
         if (_timing.CurTime >= ent.Comp.NextAllowedInsertSound)
@@ -494,7 +495,7 @@ public abstract partial class SharedDisposalUnitSystem : EntitySystem
     public IReadOnlyList<EntityUid> GetContainedEntities(Entity<DisposalUnitComponent> ent)
     {
         if (ent.Comp.Container == null)
-            return new List<EntityUid>();
+            return Array.Empty<EntityUid>();
 
         return ent.Comp.Container.ContainedEntities.ToList();
     }
@@ -506,7 +507,7 @@ public abstract partial class SharedDisposalUnitSystem : EntitySystem
     /// <returns>The entity count.</returns>
     public int GetContainedEntityCount(Entity<DisposalUnitComponent> ent)
     {
-        return GetContainedEntities(ent).Count;
+        return ent.Comp.Container?.ContainedEntities.Count ?? 0;
     }
 
     /// <summary>

@@ -17,9 +17,11 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkRampVehicleTest
 {
-    [TestCase("omaha")]
-    [TestCase("midway")]
-    public async Task TimedRampCarriesALargeVehicleThroughRepeatedCycles(string variant)
+    [TestCase("omaha", "VehicleAPC")]
+    [TestCase("midway", "VehicleAPC")]
+    [TestCase("omaha", "VehicleBlackfoot")]
+    [TestCase("midway", "VehicleBlackfoot")]
+    public async Task TimedRampCarriesALargeVehicleThroughRepeatedCycles(string variant, string prototype)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         EntityUid ship = default;
@@ -41,7 +43,7 @@ public sealed class MohawkRampVehicleTest
             for (var y = -10; y <= 10; y++)
                 maps.SetTile(lowerMap, terrain, new Vector2i(x, y), floor);
             entities.System<MohawkSystem>().SetRampDeployed(ship, true, true);
-            vehicle = entities.SpawnEntity("VehicleAPC", new EntityCoordinates(lowerMap, 0.5f, -4.5f));
+            vehicle = entities.SpawnEntity(prototype, new EntityCoordinates(lowerMap, 0.5f, -4.5f));
         });
         for (var cycle = 0; cycle < 3; cycle++)
         {
@@ -56,7 +58,8 @@ public sealed class MohawkRampVehicleTest
             {
                 var entities = pair.Server.EntMan;
                 Assert.That(entities.GetComponent<TransformComponent>(vehicle).GridUid, Is.EqualTo(ship));
-                Assert.That(entities.GetComponent<CMUZPhysicsComponent>(vehicle).LocalPosition, Is.EqualTo(0).Within(0.01f));
+                if (entities.TryGetComponent<CMUZPhysicsComponent>(vehicle, out var zPhysics))
+                    Assert.That(zPhysics.LocalPosition, Is.EqualTo(0).Within(0.01f));
                 Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true), Is.True);
             });
             await pair.RunSeconds(6);

@@ -1,4 +1,5 @@
 using System;
+using Content.Shared.Timing;
 using System.Collections.Generic;
 using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
@@ -84,6 +85,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     private float _woundScanAccumulator;
     private bool _processingWoundHealing;
+    private bool _updatingWoundSchedules;
     private readonly List<(EntityUid PartUid, BodyPartWoundComponent Wounds, BodyPartComponent Part, EntityUid Body)>
         _woundHealingCandidates = new();
 
@@ -97,6 +99,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         base.Initialize();
         if (!Net.IsClient)
         {
+            InitializeWoundScheduling();
             // after: ordering so we read updated bone integrity / fracture
             // severity / organ stage from the same hit.
             SubscribeLocalEvent<BodyPartComponent, BodyPartDamagedEvent>(
@@ -924,7 +927,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
 
     protected void UpdateServer(float frameTime)
     {
-        if (!IsEnabled())
+        if (_updatingWoundSchedules || !IsEnabled())
             return;
 
         _woundScanAccumulator += frameTime;
@@ -933,16 +936,34 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         _woundScanAccumulator = 0f;
 
         var now = Timing.CurTime;
-        TickExternalBleed(now);
-        TickWoundHealing(now);
-        TickInternalBleed(now);
+        _updatingWoundSchedules = true;
+        try
+        {
+            TickExternalBleed(now);
+            TickWoundHealing(now);
+            TickInternalBleed(now);
+        }
+        finally
+        {
+            foreach (var wounds in _dueExternalBleeds)
+                if (wounds.ScheduleChanged != null && !MetaData(wounds.ScheduledOwner).EntityPaused) ScheduleWounds(wounds);
+            foreach (var bleeding in _dueInternalBleeds)
+                if (bleeding.ScheduleChanged != null && !MetaData(bleeding.ScheduledOwner).EntityPaused) ScheduleInternalBleed(bleeding);
+            _dueExternalBleeds.Clear();
+            _dueInternalBleeds.Clear();
+            _updatingWoundSchedules = false;
+        }
     }
 
     private void TickExternalBleed(TimeSpan now)
     {
-        var query = EntityQueryEnumerator<BodyPartWoundComponent, BodyPartComponent>();
-        while (query.MoveNext(out var partUid, out var wounds, out _))
+        _dueExternalBleeds.Clear();
+        while (_externalBleedDeadlines.TryTakeDue(now, out var due)) _dueExternalBleeds.Add(due);
+        foreach (var wounds in _dueExternalBleeds)
         {
+            var partUid = wounds.ScheduledOwner;
+            if (wounds.ScheduleChanged == null || TerminatingOrDeleted(partUid) ||
+                MetaData(partUid).EntityPaused || !HasComp<BodyPartComponent>(partUid)) continue;
             if (wounds.ExternalBleeding == ExternalBleedTier.None)
                 continue;
 
@@ -958,7 +979,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             if (bodyOwner is null || IsWoundPhysiologySuspended(bodyOwner.Value))
                 continue;
 
-            if (TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
+            // Arterial bleeding keeps draining a corpse; lesser bleeds stop at death.
+            if (wounds.ExternalBleeding != ExternalBleedTier.Arterial &&
+                TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
                 continue;
 
             ApplyExternalBleed(bodyOwner.Value, partUid, wounds.ExternalBleeding, 1f);
@@ -974,11 +997,14 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         {
             // Damage callbacks can create a replacement wound component and invalidate
             // the engine query. Collect due owners before publishing any healing.
-            var query = EntityQueryEnumerator<BodyPartWoundComponent, BodyPartComponent>();
-            while (query.MoveNext(out var uid, out var wounds, out var part))
+            while (_woundHealDeadlines.TryTakeDue(now, out var wounds))
             {
-                if (wounds.NextHealTick <= now && part.Body is { } body)
+                var uid = wounds.ScheduledOwner;
+                if (wounds.ScheduleChanged != null && !TerminatingOrDeleted(uid) &&
+                    !MetaData(uid).EntityPaused && TryComp(uid, out BodyPartComponent? part) && part.Body is { } body)
                     _woundHealingCandidates.Add((uid, wounds, part, body));
+                else if (wounds.ScheduleChanged != null && !TerminatingOrDeleted(uid) && !MetaData(uid).EntityPaused)
+                    _orphanWoundOwners.Add(wounds);
             }
             foreach (var (partUid, wounds, part, body) in _woundHealingCandidates)
                 HealWoundsOnPart(body, partUid, part, wounds, now);
@@ -987,6 +1013,11 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
         {
             // Retain capacity, but no tissue references, between scans. A nested
             // update cannot consume the same work or overwrite this snapshot.
+            foreach (var (_, wounds, _, _) in _woundHealingCandidates)
+                if (wounds.ScheduleChanged != null) ScheduleWounds(wounds);
+            foreach (var wounds in _orphanWoundOwners)
+                if (wounds.ScheduleChanged != null) ScheduleWounds(wounds);
+            _orphanWoundOwners.Clear();
             _woundHealingCandidates.Clear();
             _processingWoundHealing = false;
         }
@@ -1080,9 +1111,12 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     private void TickInternalBleed(TimeSpan now)
     {
         var tickSeconds = _internalBleedTickSeconds;
-        var query = EntityQueryEnumerator<InternalBleedingComponent>();
-        while (query.MoveNext(out var partUid, out var ib))
+        _dueInternalBleeds.Clear();
+        while (_internalBleedDeadlines.TryTakeDue(now, out var due)) _dueInternalBleeds.Add(due);
+        foreach (var ib in _dueInternalBleeds)
         {
+            var partUid = ib.ScheduledOwner;
+            if (ib.ScheduleChanged == null || TerminatingOrDeleted(partUid) || MetaData(partUid).EntityPaused) continue;
             if (ib.NextBleedTick > now)
                 continue;
             ib.NextBleedTick = now + TimeSpan.FromSeconds(tickSeconds);

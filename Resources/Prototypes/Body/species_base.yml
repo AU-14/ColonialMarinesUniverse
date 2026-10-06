@@ -130,7 +130,9 @@
         type: StrippableBoundUserInterface
   - type: Puller
   - type: Speech
-    speechSounds: Alto
+    # cmu edit start
+    speechSounds: CMUHumanMale
+    # cmu edit end
   - type: DamageForceSay
   - type: Vocal
     emoteSounds: MaleHuman

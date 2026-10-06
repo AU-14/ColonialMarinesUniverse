@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Events;
 #pragma warning disable RA0002 // Observe committed regional health and source-owned resistance values.
 using System.Collections.Generic;
 using System.Linq;

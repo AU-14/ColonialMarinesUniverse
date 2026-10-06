@@ -1,7 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client._RMC14.Mentor;
 using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;

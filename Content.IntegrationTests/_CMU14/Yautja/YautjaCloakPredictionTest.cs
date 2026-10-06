@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Events;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Examine;

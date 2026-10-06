@@ -79,15 +79,15 @@
     shoes: RMCBootsPMCFilled
     id: AU14IDCardColonyCMBDeputy
     ears: AU14CMBHeadset
-    outerClothing: RMCCoatSnowSurvivorCMBDeputy
+    outerClothing: RMCCoatBureauDeputy
     suitstorage: AU14BeltHolsterPistolBlack
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
-  inhand:
-  - RMCGunCasePistolM1984
   storage:
     back:
     - AU14GuidebookLawColonial
+    - ForensicScanner
+    - CMURecordsTablet
 
 - type: entity
   parent: CMSpawnPointJobBase

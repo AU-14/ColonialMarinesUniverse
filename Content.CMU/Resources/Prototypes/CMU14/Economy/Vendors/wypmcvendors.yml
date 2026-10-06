@@ -265,6 +265,8 @@
         name: infantry first aid kit (Full)
         recommended: true
         amount: 30
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -351,6 +353,8 @@
       - id: AU14BeltMedicBagBlack
     - name: General Medical Supplies
       entries:
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 60
       - id: AU14Tourniquet
@@ -1133,6 +1137,8 @@
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12
+      - id: AU14Bangalore
+        amount: 2
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel

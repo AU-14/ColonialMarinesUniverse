@@ -76,9 +76,9 @@ public sealed partial class CMUReconstructionControl
         => ContactAt(relativePosition)?.CameraTarget;
 
     public NetEntity? XenoAt(Vector2 relativePosition)
-        => ContactAt(relativePosition)?.XenoWatchTarget;
+        => ContactAt(relativePosition, watchableXenosOnly: true)?.XenoWatchTarget;
 
-    private CMUReconContact? ContactAt(Vector2 relativePosition)
+    private CMUReconContact? ContactAt(Vector2 relativePosition, bool watchableXenosOnly = false)
     {
         if (!ShowContacts || Scene is not { } scene) return null;
         var pixel = relativePosition * UIScale;
@@ -88,6 +88,8 @@ public sealed partial class CMUReconstructionControl
         {
             var contact = TrackedContacts[i];
             if (contact.Depth != scene.MinDepth + _selectedLevel) continue;
+            // Structures and other non-watchable icons must not turn an overlapping xeno click into an eye teleport.
+            if (watchableXenosOnly && contact.XenoWatchTarget == null) continue;
             var point = ContactPosition(contact, scene);
             if (UIBox2.FromDimensions(point - new Vector2(10 * UIScale), new Vector2(20 * UIScale)).Contains(pixel))
                 return contact;

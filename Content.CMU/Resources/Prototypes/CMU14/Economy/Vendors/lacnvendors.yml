@@ -216,6 +216,14 @@
         amount: 5
       - id: CMWelder
         amount: 5
+    - name: Engineering Supplies
+      entries:
+      - id: CMSheetMetal50
+        amount: 2
+      - id: BarbedWire15
+        amount: 4
+      - id: RMCCableCoil
+        amount: 15
     - name: Flare and light
       entries:
       - id: RMCFlashlight # Combat Flashlight
@@ -242,6 +250,10 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+    - name: Hearing Protection
+      entries:
+      - id: CMUHeadElectronicHearingProtection
+        amount: 60
     - name: Miscellaneous
       entries:
       #- id: CMMap
@@ -274,6 +286,8 @@
       - id: AU14PouchIFAKFill
         name: infantry first aid kit (Full)
         recommended: true
+        amount: 30
+      - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
@@ -335,6 +349,8 @@
       - id: CMULACNBeltMedical
     - name: General Medical Supplies
       entries:
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 60
       - id: AU14Tourniquet
@@ -1176,6 +1192,8 @@
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12
+      - id: AU14Bangalore
+        amount: 2
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentShotgunChoke

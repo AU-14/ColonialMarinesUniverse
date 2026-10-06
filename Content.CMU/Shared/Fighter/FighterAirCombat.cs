@@ -21,7 +21,11 @@ public sealed partial class FighterAirCombatComponent : Component
     [DataField] public Vector2 CrashStart;
     [DataField] public Vector2 CrashTarget;
     [DataField] public float CrashHeight;
-    [DataField, AutoNetworkedField] public float FlareEvasionChance = .65f;
+    // Best case: immediate flares at maximum speed. Slow flight and late flares reduce this.
+    [DataField, AutoNetworkedField] public float FlareEvasionChance = .45f;
+    [DataField, AutoNetworkedField] public float SlowFlareEvasionMultiplier = .5f;
+    [DataField, AutoNetworkedField] public float LateFlareEvasionMultiplier = .25f;
+    [DataField, AutoNetworkedField] public float DeployedFlareEvasionChance;
     [DataField, AutoNetworkedField] public bool Incoming;
     [DataField, AutoNetworkedField] public bool IncomingFromGround;
     [DataField, AutoNetworkedField] public bool IncomingPlasma;
@@ -57,6 +61,22 @@ public sealed class FighterCoverSectorEvent(int sector) : EntityEventArgs
 /// <summary>Shared sector geometry for the coverage chart and authoritative interception checks.</summary>
 public static class FighterAirCombat
 {
+    /// <summary>Capture effectiveness when flares deploy, so later speed changes cannot improve that attempt.</summary>
+    public static float FlareEvasion(FighterAircraftComponent aircraft, FighterAirCombatComponent combat, TimeSpan now)
+    {
+        var duration = (combat.IncomingAt - combat.IncomingStartedAt).TotalSeconds;
+        if (duration <= 0 || now >= combat.IncomingAt)
+            return 0;
+
+        var remaining = (float) Math.Clamp((combat.IncomingAt - now).TotalSeconds / duration, 0, 1);
+        var speed = Math.Clamp((aircraft.Speed - aircraft.MinimumSpeed) /
+                               Math.Max(1f, aircraft.MaximumSpeed - aircraft.MinimumSpeed), 0, 1);
+        var late = Math.Clamp(combat.LateFlareEvasionMultiplier, 0, 1);
+        var slow = Math.Clamp(combat.SlowFlareEvasionMultiplier, 0, 1);
+        return Math.Clamp(combat.FlareEvasionChance, 0, 1) *
+               (late + (1 - late) * remaining) * (slow + (1 - slow) * speed);
+    }
+
     public static Vector2i Grid(Box2 battlefield)
     {
         var cell = Math.Max(1f, Math.Min(128f, Math.Min(battlefield.Width, battlefield.Height) / 3f));

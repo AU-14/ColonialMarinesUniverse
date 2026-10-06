@@ -37,6 +37,8 @@ namespace Content.Shared.CMU14.util
         VehicleCrew,
         SentryDeployer,
         ReqEquipment,
-        EngiEquipment
+        EngiEquipment,
+        ResearchTerminal,
+        HospitalEmergencyComputer
     }
 }

@@ -1,0 +1,306 @@
+#Переможный шаблон. НЕ УДАЛЯТЬ ЕГО!!!!
+
+#- type: entity
+#  name: Баобаб.
+#  parent: CMFoodBase
+#  id: RuMCFood
+#  description: нихуя не понял, но очень вкусно
+#  components:
+#  - type: Sprite
+#    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+#    state: cookie-peanutbutter
+#  - type: Food
+#    transferAmount: 3
+#  - type: SolutionContainerManager
+#    solutions:
+#      food:
+#        maxVol: 5
+#        reagents:
+#        - ReagentId: Nutriment
+#          Quantity: 1
+#        - ReagentId: RMCPeanutButter
+#          Quantity: 1
+#        - ReagentId: Protein
+#          Quantity: 1
+#        - ReagentId: Sugar
+#          Quantity: 1
+#  - type: FlavorProfile
+#    flavors:
+#    - sweet
+#    - nutty
+#    - bread
+#    - rice
+#    - bacon
+#    - vegetables
+#    - meaty
+#    - tomato
+#    - cheesy
+#    - chocolate
+#    - creamy
+#    - garlic
+#    - fishy
+#    - egg
+#    - bitter
+#    - chicken
+#    - potatoes
+#    - salty
+
+- type: entity
+  name: hardtack biscuit
+  parent: CMFoodBase
+  id: RuMCFoodGallet
+  description: A dense, dry biscuit that could outlast any war. Best soaked in tea or water before consumption.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: gallet
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 7
+  - type: FlavorProfile
+    flavors:
+    - bread
+
+- type: entity
+  name: salted fish
+  parent: CMFoodBase
+  id: RuMCFoodFish
+  description: It's stone-like to the touch. Knead it before use, or risk breaking a tooth.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: fish
+  - type: Edible
+    transferAmount: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+      - ReagentId: Protein
+        Quantity: 10
+  - type: FlavorProfile
+    flavors:
+    - garlic
+    - fishy
+    - salty
+
+- type: entity
+  name: meat pie
+  parent: CMFoodBase
+  id: RuMCFoodPie
+  description: A simple proletarian pie filled with meat and vegetables. Nothing fancy, but it fills the stomach.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: pie
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Protein
+        Quantity: 5
+  - type: FlavorProfile
+    flavors:
+    - bread
+    - vegetables
+    - meaty
+    - garlic
+    - salty
+
+- type: entity
+  name: canned chicken
+  parent: CMFoodBase
+  id: RuMCFoodChicken
+  description: Tender canned chicken in its own broth. Not bad for field rations, though the texture leaves something to be desired.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: chicken
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Protein
+        Quantity: 10
+  - type: FlavorProfile
+    flavors:
+    - garlic
+    - chicken
+    - salty
+
+- type: entity
+  name: mashed potatoes
+  parent: CMFoodBase
+  id: RuMCFoodMashedPotatoes
+  description: Instant mashed potatoes. Add water, stir, and enjoy the taste of the frontline.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: mashed_potatoes
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 19
+      - ReagentId: Protein
+        Quantity: 1
+  - type: FlavorProfile
+    flavors:
+    - potatoes
+    - salty
+
+#desert --------------------------------------------------------------------------------------------
+
+- type: entity
+  name: fruit candies
+  parent: CMFoodBase
+  id: RuMCFoodCandies
+  description: Brightly colored fruit candies. A small piece of home on the battlefield.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: candies
+  - type: Edible
+    transferAmount: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
+      - ReagentId: Sugar
+        Quantity: 7
+  - type: FlavorProfile
+    flavors:
+    - sweet
+
+- type: entity
+  name: toffees
+  parent: CMFoodBase
+  id: RuMCFoodCandiesToffees
+  description: Chewy, sticky toffees. A real test for your dental work in the field.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: toffees
+  - type: Edible
+    transferAmount: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: Sugar
+        Quantity: 11
+  - type: FlavorProfile
+    flavors:
+    - sweet
+
+- type: entity
+  name: chocolate curd
+  parent: CMFoodBase
+  id: RuMCFoodChocolateCurd
+  description: A sweet chocolate-covered curd dessert. Melts in your mouth, not in the ration pack.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: curd
+  - type: Edible
+    transferAmount: 9
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Protein
+        Quantity: 3
+      - ReagentId: Sugar
+        Quantity: 5
+  - type: FlavorProfile
+    flavors:
+    - sweet
+    - chocolate
+    - creamy
+
+- type: entity
+  name: chocolate bar
+  parent: CMFoodBase
+  id: RuMCFoodChocolate
+  description: Standard-issue field chocolate. A small comfort in the chaos of combat.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: chocolate
+  - type: Edible
+    transferAmount: 4
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+      - ReagentId: Sugar
+        Quantity: 10
+  - type: FlavorProfile
+    flavors:
+    - sweet
+    - chocolate
+
+- type: entity
+  name: hematogen bar
+  parent: CMFoodBase
+  id: RuMCFoodHematogen
+  description: A nutrient-rich bar based on bovine blood. An acquired taste, but excellent for restoring strength in the field.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Consulable/Food/irp_contents.rsi
+    state: hematogen
+  - type: Edible
+    transferAmount: 6
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 12
+      - ReagentId: RMCPeanutButter
+        Quantity: 1
+      - ReagentId: Protein
+        Quantity: 10
+      - ReagentId: Sugar
+        Quantity: 7
+  - type: FlavorProfile
+    flavors:
+    - nutty
+    - sweet
+    - chocolate

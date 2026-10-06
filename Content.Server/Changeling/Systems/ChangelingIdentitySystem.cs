@@ -15,7 +15,7 @@ public sealed partial class ChangelingIdentitySystem : SharedChangelingIdentityS
 
     private void OnGetState(Entity<ChangelingIdentityComponent> entity, ref ComponentGetState args)
     {
-        List<ChangelingNetworkedIdentityData> sentIdentities = new();
+        List<ChangelingNetworkedIdentityData> sentIdentities = new(entity.Comp.ConsumedIdentities.Count);
 
         foreach (var identity in entity.Comp.ConsumedIdentities)
         {

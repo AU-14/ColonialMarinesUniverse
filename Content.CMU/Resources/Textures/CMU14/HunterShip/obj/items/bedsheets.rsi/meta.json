@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/bedsheets.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "sheet"
+    },
+    {
+      "name": "sheetblue"
+    },
+    {
+      "name": "sheetorange"
+    },
+    {
+      "name": "sheetred"
+    },
+    {
+      "name": "sheetpurple"
+    },
+    {
+      "name": "sheetgreen"
+    },
+    {
+      "name": "sheetyellow"
+    },
+    {
+      "name": "sheetrainbow"
+    },
+    {
+      "name": "sheetbrown"
+    },
+    {
+      "name": "sheetcaptain"
+    },
+    {
+      "name": "sheethop"
+    },
+    {
+      "name": "sheetce",
+      "directions": 4
+    },
+    {
+      "name": "sheethos"
+    },
+    {
+      "name": "sheetmedical"
+    },
+    {
+      "name": "sheetrd"
+    },
+    {
+      "name": "sheetciv_a2"
+    },
+    {
+      "name": "sheetciv_a1"
+    },
+    {
+      "name": "sheetclown"
+    },
+    {
+      "name": "sheetmime"
+    },
+    {
+      "name": "folded_sheet_medical"
+    },
+    {
+      "name": "bedroll_sheet",
+      "directions": 4
+    }
+  ]
+}

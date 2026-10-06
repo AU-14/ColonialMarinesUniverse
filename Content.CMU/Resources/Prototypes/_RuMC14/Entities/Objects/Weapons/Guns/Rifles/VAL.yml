@@ -1,0 +1,232 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: TOPS VAL-S
+  id: RuMCRifleVAL
+  description: For those who prefer to solve problems without making a fuss. One shot, one problem gone. The silencer works so well that even your trench mate won't know it was you.
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Rifles/VAL/VAL_inhands.rsi
+    layers:
+    - state: base
+      sprite: _RuMC14/Objects/Weapons/Guns/Rifles/VAL/VAL.rsi
+    - state: bolt-open
+      sprite: _RuMC14/Objects/Weapons/Guns/Rifles/VAL/VAL.rsi
+      map: [ "enum.GunVisualLayers.Base" ]
+    - state: mag-0
+      sprite: _RuMC14/Objects/Weapons/Guns/Rifles/VAL/VAL.rsi
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/Rifles/VAL/VAL_inhands.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_type88.ogg
+      params:
+        volume: -1
+        variation: 0.05
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - FullAuto
+    recoilUnwielded: 2
+    scatterWielded: 3
+    scatterUnwielded: 10
+    baseFireRate: 5.5
+    modifiers:
+      FullAuto:
+        maxScatterModifier: 8
+        shotsToMaxScatter: 8
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 15
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.3
+    accuracyMultiplierUnwielded: 0.65
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RuMCMagazineVAL
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RuMCMagazineVAL
+  - type: GunDamageModifier
+    multiplier: 1.1
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: RuMCAttachmentSuppressorVAL
+        whitelist:
+          tags:
+          - RuMCAttachmentSuppressorVAL
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-rail: -0.05, 0.154
+      rmc-aslot-underbarrel: 0.42, -0.21
+      rmc-aslot-barrel: 0.5, 0.0945931415
+      rmc-aslot-stock: 0.2, -0.2
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: Tag
+    tags:
+    - RuMCRifleVAL
+  - type: Wieldable
+  - type: WieldableSpeedModifiers
+    base: 0.85
+    light: 0.85
+    medium: 0.8
+    heavy: 0.77
+  - type: WieldDelay
+    baseDelay: 0.22
+
+- type: entity
+  parent: RuMCRifleVAL
+  id: RuMCRifleVALTactical
+  suffix: Tactical
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        locked: true
+        startingAttachable: RuMCAttachmentSuppressorVAL
+        whitelist:
+          tags:
+          - RuMCAttachmentSuppressorVAL
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentLaserSight
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentVerticalGrip
+
+- type: entity
+  parent: RMCMagazineRifleAK4047
+  id: RuMCMagazineVAL
+  name: "TOPS VAL-S magazine (10x24mm)"
+  description: A 35-round magazine of 10x24mm cartridges.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/VAL.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    #- state: ammo_band
+    #  color: "#212121"
+  - type: Tag
+    tags:
+    - RuMCMagazineVAL
+    - CMMagazineRifle
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+    proto: CMCartridgeRifle10x24mm
+    capacity: 35
+    deleteWhenEmpty: false
+
+- type: entity
+  parent: RMCMagazineRifleAK4047
+  id: RuMCMagazineVALAP
+  name: "TOPS VAL-S magazine (10x24mm AP)"
+  description: A 35-round magazine of 10x24mm (AP) cartridges.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/VAL.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#212121"
+  - type: Tag
+    tags:
+    - RuMCMagazineVAL
+    - CMMagazineRifle
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mmAP
+    proto: CMCartridgeRifle10x24mmAP
+    capacity: 35
+    deleteWhenEmpty: false
+
+- type: entity
+  parent: RMCMagazineRifleAK4047
+  id: RuMCMagazineVALTracer
+  name: "TOPS VAL-S magazine (10x24mm Tracer)"
+  description: A 35-round magazine of 10x24mm (Tracer)) cartridges.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/Rifles/VAL.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Tag
+    tags:
+    - RuMCMagazineVAL
+    - CMMagazineRifle
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - CMCartridgeRifle10x24mm
+      - RuMCCartridgeRifle10x24Tracer
+    proto: RuMCCartridgeRifle10x24Tracer
+    capacity: 35
+    deleteWhenEmpty: false
+
+# Tags
+
+- type: Tag
+  id: RuMCRifleVAL
+
+- type: Tag
+  id: RuMCMagazineVAL

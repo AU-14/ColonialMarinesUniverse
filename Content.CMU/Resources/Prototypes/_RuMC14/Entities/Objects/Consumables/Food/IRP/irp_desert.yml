@@ -1,0 +1,58 @@
+- type: entity
+  abstract: true
+  parent: RuMCIRPComponentBase
+  id: RuMCIRPDesertComponentBase
+  description: Упаковочка для сладкого.
+  components:
+  - type: Sprite
+    state: pack_desert
+
+- type: entity
+  parent: RuMCIRPDesertComponentBase
+  id: RuMCIRPComponentCandies
+  name: fruit candies pouch
+  description: A sealed pouch containing brightly colored fruit candies. A small piece of home on the battlefield.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodCandies
+
+- type: entity
+  parent: RuMCIRPDesertComponentBase
+  id: RuMCIRPComponentCandiesToffees
+  name: toffees pouch
+  description: A sealed pouch of chewy, sticky toffees. A real test for your dental work in the field.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodCandiesToffees
+
+- type: entity
+  parent: RuMCIRPDesertComponentBase
+  id: RuMCIRPComponentChocolateCurd
+  name: chocolate curd pouch
+  description: A sealed pouch containing a sweet chocolate-covered curd dessert. Melts in your mouth, not in the ration pack.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodChocolateCurd
+
+- type: entity
+  parent: RuMCIRPDesertComponentBase
+  id: RuMCIRPComponentChocolate
+  name: chocolate bar pouch
+  description: A sealed pouch containing standard-issue field chocolate. A small comfort in the chaos of combat.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodChocolate
+
+- type: entity
+  parent: RuMCIRPDesertComponentBase
+  id: RuMCIRPComponentHematogen
+  name: hematogen bar pouch
+  description: A sealed pouch containing a nutrient-rich bar based on bovine blood. An acquired taste, but excellent for restoring strength in the field.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: RuMCFoodHematogen

@@ -1,0 +1,24 @@
+- type: entity
+  parent: BaseItem
+  id: CMURecordsTablet
+  name: mobile criminal records tablet
+  description: A rugged handheld terminal linked to the colony's criminal records database. Used by the Colonial Marshal Bureau and colony law enforcement in the field.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    state: cotablet
+  - type: Item
+    sprite: _RMC14/Objects/Devices/command_tablet.rsi
+    size: Small
+  - type: CriminalRecordsConsole
+    securityChannel: radioCMB
+  - type: ActivatableUI
+    key: enum.CriminalRecordsConsoleKey.Key
+    inHandsOnly: true
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessColonyMarshall"], ["AU14AccessColonyAdministrator"], ["CMAccessColonyCommand"], ["CMAccessColonyBrig"]]
+  - type: UserInterface
+    interfaces:
+      enum.CriminalRecordsConsoleKey.Key:
+        type: CriminalRecordsConsoleBoundUserInterface

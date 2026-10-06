@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/structures/props/curtain.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "green"
+    },
+    {
+      "name": "shower"
+    },
+    {
+      "name": "shower-o"
+    },
+    {
+      "name": "green-o"
+    },
+    {
+      "name": "red"
+    },
+    {
+      "name": "red-o"
+    },
+    {
+      "name": "colorable"
+    },
+    {
+      "name": "colorable-o"
+    },
+    {
+      "name": "colorable_transparent"
+    },
+    {
+      "name": "colorable_transparent-o"
+    },
+    {
+      "name": "hospitalcurtain",
+      "directions": 4
+    },
+    {
+      "name": "leather_curtain"
+    },
+    {
+      "name": "leather_curtain-o"
+    },
+    {
+      "name": "leather_curtain_2"
+    },
+    {
+      "name": "leather_curtain_2-o"
+    },
+    {
+      "name": "leather_curtain_3"
+    },
+    {
+      "name": "leather_curtain_3-o"
+    },
+    {
+      "name": "leather_curtain_4"
+    },
+    {
+      "name": "leather_curtain_4-o"
+    }
+  ]
+}

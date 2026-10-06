@@ -7,7 +7,7 @@
   components:
   - type: GuideHelp
     guides:
-    - RMCGuideRoleMortar
+    - CMUGuideMortar
   - type: Sprite
     sprite: CMU14/Weapons/Mortar/L53A1.rsi
     layers:

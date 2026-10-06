@@ -171,7 +171,7 @@ public sealed partial class DropshipTacticalLandSystem
             }
         }
 
-        if (navigationConsole is not { } console)
+        if (navigationConsole is not { } console || !_dropship.CanUseNavigation(console, pilot))
             return;
 
         var before = new BeforeActivatableUIOpenEvent(pilot);
@@ -843,6 +843,8 @@ public sealed partial class DropshipTacticalLandSystem
                 hover.GunshipLinearVelocity == Vector2.Zero &&
                 hover.GunshipAngularVelocityDegrees == 0f)
             {
+                hover.GunshipVisualThrust = Vector2.Zero;
+                hover.GunshipVisualTurn = 0f;
                 hover.GunshipFlightSimulationAccumulator = 0f;
                 continue;
             }
@@ -862,6 +864,8 @@ public sealed partial class DropshipTacticalLandSystem
         Entity<DropshipTacticalHoverComponent> hover,
         float frameTime)
     {
+        hover.Comp.GunshipVisualThrust = Vector2.Zero;
+        hover.Comp.GunshipVisualTurn = 0f;
         if (hover.Comp.AltitudeTransitionAt != null)
         {
             if (seat is { } altitudeSeat)
@@ -930,6 +934,8 @@ public sealed partial class DropshipTacticalLandSystem
         if (seat?.Comp.HeldInputs.HasFlag(GunshipControlInput.RotateRight) == true)
             turn -= 1f;
 
+        hover.Comp.GunshipVisualTurn = turn * maneuveringAccelerationMultiplier * thrustMultiplier;
+
         if (turn != 0f)
         {
             var previousAngularSpeed = MathF.Abs(hover.Comp.GunshipAngularVelocityDegrees);
@@ -961,6 +967,7 @@ public sealed partial class DropshipTacticalLandSystem
             localMovement = Vector2.Normalize(localMovement);
             localMovement.X *= maneuveringAccelerationMultiplier;
             localMovement.Y *= propulsionAccelerationMultiplier;
+            hover.Comp.GunshipVisualThrust = localMovement * thrustMultiplier;
             hover.Comp.GunshipLinearVelocity += rotation.RotateVec(localMovement) *
                 controls!.TranslationAcceleration * thrustMultiplier * frameTime;
 

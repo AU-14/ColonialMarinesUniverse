@@ -14,14 +14,26 @@ public sealed partial class IgnitionSourceSystem : SharedIgnitionSourceSystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!; // CMU14
 
+    private EntityQuery<MetaDataComponent> _metadataQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _metadataQuery = GetEntityQuery<MetaDataComponent>();
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<IgnitionSourceComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var xform))
+        // Reject unlit sources before resolving metadata and transforms. Keep scanning
+        // the source components so direct admin edits are visible on the next update.
+        var query = AllEntityQuery<IgnitionSourceComponent>();
+        while (query.MoveNext(out var uid, out var comp))
         {
-            if (!comp.Ignited)
+            if (!comp.Ignited ||
+                !_metadataQuery.TryComp(uid, out var metadata) || metadata.EntityPaused ||
+                !TryComp(uid, out TransformComponent? xform))
                 continue;
 
             // CMU14: throttle per-source exposes to the sustain cadence.

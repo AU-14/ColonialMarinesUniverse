@@ -90,6 +90,7 @@
     - CMPaperBin30
   inhand:
   - AU14BriefcaseLawBundle
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

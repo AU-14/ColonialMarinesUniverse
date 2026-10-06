@@ -125,6 +125,9 @@
     - Wall
   - type: ZLevelWallSupport
   - type: Clickable
+  # cmu edit start
+  - type: CMUWallLeanable
+  # cmu edit end
 
 - type: entity
   abstract: true

@@ -270,6 +270,8 @@ au14-job-name-wypmc-smartgun-operator = PMC Smartgun Operator
 au14-job-name-wypmc-sniper = PMC Sniper
 au14-job-name-wypmc-engineer = PMC Combat Engineer
 
+au14-job-name-ipie-lawyer = IPIE Lawyer
+au14-job-name-ipie-ppo = IPIE Personal Protection Officer
 au14-ipie-lawyer-description = You are Intelectual Property Infringement Enforcement Lawyer of Weyland-Yutani Corporation. Defend Corporation's rights!
 au14-ipie-lawyer-greeting = You are Intelectual Property Infringement Enforcement Lawyer of Weyland-Yutani Corporation.
 

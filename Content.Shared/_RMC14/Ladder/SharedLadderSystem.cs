@@ -131,11 +131,12 @@ public abstract partial class SharedLadderSystem : EntitySystem
         var time = _timing.CurTime;
         if (ent.Comp.LastDoAfterEnt is { } lastEnt &&
             ent.Comp.LastDoAfterId is { } lastId &&
+            TryGetEntity(lastEnt, out var lastUser) && !TerminatingOrDeleted(lastUser) &&
             time - ent.Comp.LastDoAfterTime < ent.Comp.Delay * 5 &&
-            _doAfter.GetStatus(new DoAfterId(lastEnt, lastId)) == DoAfterStatus.Running &&
+            _doAfter.GetStatus(new DoAfterId(lastUser.Value, lastId)) == DoAfterStatus.Running &&
             !HasComp<GhostComponent>(user))
         {
-            if (ent.Comp.LastDoAfterEnt != user)
+            if (lastUser != user)
             {
                 var msg = Loc.GetString("rmc-ladder-someone-else-climbing");
                 _popup.PopupClient(msg, ent, user, PopupType.SmallCaution);
@@ -157,7 +158,7 @@ public abstract partial class SharedLadderSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter, out var doAfterId))
             return;
 
-        ent.Comp.LastDoAfterEnt = doAfterId.Value.Uid;
+        ent.Comp.LastDoAfterEnt = GetNetEntity(doAfterId.Value.Uid);
         ent.Comp.LastDoAfterId = doAfterId.Value.Index;
         ent.Comp.LastDoAfterTime = time;
         Dirty(ent);
@@ -199,6 +200,13 @@ public abstract partial class SharedLadderSystem : EntitySystem
         if (_actorQuery.TryComp(user, out var actor))
             RemoveViewer(ent, actor.PlayerSession);
 
+        if (TryGetNetEntity(user, out var netUser) && ent.Comp.LastDoAfterEnt == netUser && ent.Comp.LastDoAfterId == args.DoAfter.Index)
+        {
+            ent.Comp.LastDoAfterEnt = null;
+            ent.Comp.LastDoAfterId = null;
+            Dirty(ent);
+        }
+
         if (args.Cancelled || args.Handled)
             return;
 
@@ -216,10 +224,6 @@ public abstract partial class SharedLadderSystem : EntitySystem
         var selfMessage = Loc.GetString("rmc-ladder-finish-climbing-self");
         var othersMessage = Loc.GetString("rmc-ladder-finish-climbing-others", ("user", user));
         _popup.PopupPredicted(selfMessage, othersMessage, user, user);
-
-        ent.Comp.LastDoAfterEnt = null;
-        ent.Comp.LastDoAfterId = null;
-        Dirty(ent);
 
         _rmcTeleporter.HandlePulling(user, coordinates);
     }

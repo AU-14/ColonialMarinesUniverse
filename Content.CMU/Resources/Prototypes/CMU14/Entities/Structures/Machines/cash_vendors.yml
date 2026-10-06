@@ -705,6 +705,9 @@
     - id: AU14CMDefibrillator
       name: Defibrillator
       price: 60
+    - id: CMUMaskCPR
+      name: CPR Mask
+      price: 10
     - id: CMSyringe
       name: Syringe
       price: 5
@@ -894,6 +897,9 @@
     - id: RMCBoxSterileMask
       name: Sterile Mask Box
       price: 8
+    - id: CMUMaskCPR
+      name: CPR Mask
+      price: 10
     - id: RMCBoxLatexGloves
       name: Latex Glove Box
       price: 8

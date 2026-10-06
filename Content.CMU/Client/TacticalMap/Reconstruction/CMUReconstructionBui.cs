@@ -115,7 +115,6 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
             _window.OnClear += () => SendMessage(new CMUReconClearOrdersMessage());
             _window.OnFinalClose += () => { StopSurveyRetry(); CloseCamera(); };
             _window.OnClosing += Remember;
-            _window.OnStaticMap += SwitchToClassic;
             _window.OnMapSelected += SelectMap;
             _window.OnLayerSelected += message =>
             {
@@ -137,26 +136,6 @@ public class CMUReconstructionBui(EntityUid owner, Enum uiKey) : RMCPopOutBui<Ta
         Timer.Spawn(TimeSpan.FromSeconds(0.5), RequestSurvey, _surveyRetry.Token);
         Timer.SpawnRepeating(TimeSpan.FromSeconds(2), RequestSurvey, _surveyRetry.Token);
         RequestSurvey();
-    }
-
-    private void SwitchToClassic()
-    {
-        Remember();
-        StopSurveyRetry();
-        CloseCamera();
-        _classic = true;
-        UsingReconstruction = false;
-        _cfg.SetCVar(CCVars.CMUTacMapClassic, true);
-        _cfg.SaveToFile();
-        if (_window != null)
-        {
-            _window.OnFinalClose -= Close;
-            _window.DisposePopOut();
-            _window.Dispose();
-            _window = null;
-        }
-        if (UiKey is CMUReconstructionUiKey) StartSurveyRetry();
-        else OpenClassicWindow();
     }
 
     private void RequestSurvey()

@@ -1,0 +1,49 @@
+<Document>
+  # Sentries
+
+  Sentry guns hold ground while you're busy elsewhere. Military engineers can draw one from their gear rack's support equipment slot, and sentries also turn up in supply crates.
+
+  ## Sentry Guns
+  <Box>
+    <GuideEntityEmbed Entity="AU14CaseSentry" Caption="571-C sentry case"/>
+    <GuideEntityEmbed Entity="AU14CaseSentryFlamer" Caption="55-FA flamer sentry case"/>
+  </Box>
+  - The [bold]571-C sentry gun[/bold] case holds the sentry and a spare ammo drum. It's armed with an autocannon, and it won't fire on your own side.
+  - The [bold]55-FA assault sentry flamer[/bold] case holds a flamer sentry and a spare drum. It sprays fire instead of bullets, and the fire it leaves behind can still burn friendlies.
+  - Operating a sentry needs engineering training.
+
+  ### Setting Up
+  - Use the sentry in your hand to deploy it where you stand. It takes 3 seconds.
+  - A sentry can only turn 75 degrees to either side of the way it faces, so point it down the approach you want covered. While it's switched off, rotate it with a [bold]screwdriver[/bold].
+  - [color=red]Put it on your IFF before switching it on.[/color] A freshly deployed sentry has no side. Use a [bold]multitool[/bold] on it (1 second) to set it to your IFF, so it knows who's friendly. It won't switch on until you do, and examining it reminds you if it's still unset.
+  - Switch it on to start it tracking targets. It can't be rotated or moved while it's on.
+  - A sentry won't switch on within two tiles of another active sentry.
+
+  ### Keeping It Running
+  - When its drum runs dry, load a new one. It takes 7 seconds, and you can only swap the drum once it's empty.
+  - Use a [bold]wrench[/bold] to disassemble it back into an item so you can move it.
+
+  ### Upgrading
+  <Box>
+    <GuideEntityEmbed Entity="RMCEngineeringUpgrade" Caption="Engineering upgrade kit"/>
+  </Box>
+  The [bold]engineering upgrade kit[/bold] turns a standard 571-C into a specialized sentry. Disassemble the sentry with a wrench first, then hold the kit in your active hand and use it on the sentry to pick one:
+  - [bold]725-D sniper sentry[/bold]: long-range targeting.
+  - [bold]12-G shotgun sentry[/bold]: built for close range, with sturdier plating and steel tusks that cut anyone who attacks it.
+  - [bold]512-M mini sentry[/bold]: compact, for quick deployment in the field.
+  - [bold]571-D omnidirectional sentry[/bold]: turns all the way around, covering every direction.
+
+  ## The Sentry Laptop
+  <Box>
+    <GuideEntityEmbed Entity="RMCSentryLaptop" Caption="Sentry laptop"/>
+  </Box>
+  The [bold]sentry laptop[/bold] lets you monitor and control your sentries remotely. It comes in some sentry cases and supply crates, and engineering vendors stock it. You need engineering training to use it.
+  - [bold]Setting up[/bold]: place it on a table. It opens and powers up there, and shuts down again if it's picked up.
+  - [bold]Linking sentries[/bold]: with the laptop open, use an access tuner (multitool) to link each sentry to it.
+  - Each linked sentry gets a card showing its health, ammo, mode, location and current target. You can rename it, too.
+  - [bold]Toggle power[/bold] switches a sentry on or off from the laptop.
+  - [bold]View cam[/bold] lets you look through the sentry's camera.
+  - [bold]IFF targeting controls[/bold] choose which factions each sentry will and won't shoot at. [bold]Reset to default[/bold] puts them back to normal. There are also controls to apply these to every linked sentry at once.
+  - [bold]Unlink[/bold] drops a sentry from the laptop.
+  - [bold]Alerts[/bold]: the laptop warns you when a sentry is taking damage, drops to critical health, runs low on ammo (a quarter left) or starts engaging a target. With the screen open the alerts show in the window; otherwise they pop up over the laptop.
+</Document>

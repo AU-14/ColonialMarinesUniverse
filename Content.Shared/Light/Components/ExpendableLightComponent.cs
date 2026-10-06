@@ -61,7 +61,10 @@ public sealed partial class ExpendableLightComponent : Component
     [ViewVariables]
     public bool Activated => CurrentState is ExpendableLightState.Lit or ExpendableLightState.Fading;
 
-    [DataField, AutoNetworkedField]
+    /// <summary>
+    /// Server countdown in seconds. Clients use the replicated state and appearance behavior.
+    /// </summary>
+    [DataField]
     public float StateExpiryTime;
 
     [DataField, AutoNetworkedField]

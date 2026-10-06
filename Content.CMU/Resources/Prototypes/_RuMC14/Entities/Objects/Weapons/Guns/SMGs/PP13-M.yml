@@ -1,0 +1,269 @@
+- type: entity
+  parent: RMCWeaponRifleAK4047
+  name: PP-13-M assault SMG
+  id: RuMCWeaponSMGsPP13M
+  description: The UPP assault SMG was designed for advanced assault units. The M in the name stands for "many," as there were many of them produced.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/SMGs/PP13M.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: ItemMapper
+    mapLayers:
+      mag-0:
+        whitelist:
+          tags:
+          - RuMCMagazinePP13M
+      #mag-1:
+      #  whitelist:
+      #    tags:
+      #    - RuMCMagazineRifleAK4047bakelite
+      #    - RuMCMagazineRifleAK4047APbakelite
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/SMGs/PP13M.rsi
+  - type: ContainerContainer
+    containers:
+      gun_magazine: !type:ContainerSlot
+      gun_chamber: !type:ContainerSlot
+  - type: Gun
+    shotsPerBurst: 3
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_type64.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilWielded: 1
+    recoilUnwielded: 1
+    scatterWielded: 10
+    scatterUnwielded: 14
+    baseFireRate: 6.7
+    burstScatterMult: 4
+    modifiers:
+      Burst:
+        fireDelay: 0.0999
+        maxScatterModifier: 2.5
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+      FullAuto:
+        maxScatterModifier: 3.5
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.1
+    accuracyMultiplierUnwielded: 0.75
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: RuMCMagazinePP13M
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - RuMCMagazinePP13M
+  - type: GunDamageModifier
+    multiplier: 1.2
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        locked: true
+        startingAttachable: RuMCAttachmentPP13MStockCollapsible
+        whitelist:
+          tags:
+          - RuMCAttachmentPP13MStockCollapsible
+          - RuMCAttachmentAK13StockCollapsible
+          - RuMCAttachmentPKPStockCollapsible
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.7, 0.095
+      rmc-aslot-rail: -0.25, 0.15
+      rmc-aslot-stock: -0.4355, 0.07
+      rmc-aslot-underbarrel: 0.22, -0.21
+  - type: Tag
+    tags:
+    - RMCWeaponSMG
+    - RuMCWeaponSMGPP13M
+  - type: WieldDelay
+    baseDelay: 0.22
+
+- type: entity
+  parent: RuMCWeaponSMGsPP13M
+  id: RuMCWeaponSMGsPP13MTactical
+  suffix: Tactical
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentSuppressor
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
+          - RMCAttachmentSuppressor
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+          - RMCAttachmentS84xTelescopicScope
+          - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        locked: true
+        startingAttachable: RuMCAttachmentPP13MStockCollapsible
+        whitelist:
+          tags:
+          - RuMCAttachmentPP13MStockCollapsible
+          - RuMCAttachmentAK13StockCollapsible
+          - RuMCAttachmentPKPStockCollapsible
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentAngledGrip
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentLaserSight
+          - RMCAttachmentU1GrenadeLauncher
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentFlamer
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazinePP13M
+  name: PP13M magazine (10x20mm)
+  description: Magazine for PP13M with 54 rounds.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazinePP13M
+    - CMMagazineSmg
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RMCCartridgeType64
+    proto: RMCCartridgeType64
+    capacity: 54
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/SMGs/PP13M.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    #- state: ammo_band
+    #  color: "#e5b13c"
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazinePP13MTracer
+  name: PP13M tracer magazine (10x20mm)
+  description: Magazine for PP13M with 54 tracer rounds.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazinePP13M
+    - CMMagazineSmg
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridgeSMG10x20Tracer
+    proto: RuMCCartridgeSMG10x20Tracer
+    capacity: 54
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/SMGs/PP13M.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: RuMCMagazinePP13MAP
+  name: PP13M AP magazine (10x20mm)
+  description: Magazine for PP13M with 54 AP rounds.
+  components:
+  - type: Tag
+    tags:
+    - RuMCMagazinePP13M
+    - CMMagazineSmg
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+      - RuMCCartridgeSMG10x20AP
+    proto: RuMCCartridgeSMG10x20AP
+    capacity: 54
+    deleteWhenEmpty: false
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Magazines/SMGs/PP13M.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#212121"
+  - type: Clothing
+    slots:
+    - suitStorage
+
+- type: Tag
+  id: RuMCWeaponSMGPP13M
+
+- type: Tag
+  id: RuMCMagazinePP13M
+

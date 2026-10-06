@@ -125,39 +125,13 @@ public sealed partial class LagProfileCommand : IConsoleCommand
             return;
         }
 
-        ProfBuffer snapshot = _prof.Buffer.Snapshot();
         long? sinceStart = includeAllSinceStart ? _startIndexOffset : null;
-        List<long> frameIndices = LagProfileCommand.GetFrameIndices(snapshot, frameLimit, sinceStart);
-        if (frameIndices.Count == 0)
+        var capture = Capture(_prof, frameLimit, sinceStart);
+        var (frames, samples, counters) = capture;
+        if (frames.Count == 0)
         {
             shell.WriteError("No valid profile frames were found. Let the server run for a few frames and try again.");
             return;
-        }
-
-        var samples = new Dictionary<string, LagProfileSample>();
-        var counters = new Dictionary<string, LagProfileCounter>();
-        var frames = new List<LagProfileFrame>(frameIndices.Count);
-
-        foreach (long indexOffset in frameIndices)
-        {
-            ref ProfIndex index = ref snapshot.Index(indexOffset);
-            long? frame = TryGetFrameNumber(snapshot, index);
-            TimeAndAllocSample frameTime = LagProfileCommand.TryGetFrameTime(snapshot, index);
-            frames.Add(new(frame, frameTime.Time, frameTime.Alloc));
-
-            for (long logOffset = index.StartPos; logOffset < index.EndPos; logOffset++)
-            {
-                ref ProfLog log = ref snapshot.Log(logOffset);
-                switch (log.Type)
-                {
-                    case ProfLogType.Value:
-                        AddValue(samples, counters, log.Value.StringId, log.Value.Value);
-                        break;
-                    case ProfLogType.GroupEnd:
-                        AddSample(samples, "group", log.GroupEnd.StringId, log.GroupEnd.Value);
-                        break;
-                }
-            }
         }
 
         bool reportingSinceStart = sinceStart is not null;
@@ -203,6 +177,44 @@ public sealed partial class LagProfileCommand : IConsoleCommand
         }
     }
 
+    /// <summary>
+    /// Aggregates completed frames on the server main thread before console output can write new
+    /// profiler events. The returned rows own their data; no live ring references escape this pass.
+    /// </summary>
+    internal static LagProfileCapture Capture(ProfManager profiler, int frameLimit, long? sinceStart = null)
+    {
+        // Copy the offsets, not the potentially large backing arrays. Keep this pass callback-free.
+        var buffer = profiler.Buffer;
+        var frameIndices = GetFrameIndices(buffer, frameLimit, sinceStart);
+        var samples = new Dictionary<(string Kind, string Name), LagProfileSample>();
+        var counters = new Dictionary<string, LagProfileCounter>();
+        var frames = new List<LagProfileFrame>(frameIndices.Count);
+
+        foreach (var indexOffset in frameIndices)
+        {
+            var index = buffer.Index(indexOffset);
+            var frame = TryGetFrameNumber(profiler, buffer, index);
+            var frameTime = TryGetFrameTime(buffer, index);
+            frames.Add(new(frame, frameTime.Time, frameTime.Alloc));
+
+            for (var logOffset = index.StartPos; logOffset < index.EndPos; logOffset++)
+            {
+                var log = buffer.Log(logOffset);
+                switch (log.Type)
+                {
+                    case ProfLogType.Value:
+                        AddValue(profiler, samples, counters, log.Value.StringId, log.Value.Value);
+                        break;
+                    case ProfLogType.GroupEnd:
+                        AddSample(samples, "group", profiler.GetString(log.GroupEnd.StringId), log.GroupEnd.Value);
+                        break;
+                }
+            }
+        }
+
+        return new(frames, samples, counters);
+    }
+
     private bool TryParseReportArgs(IConsoleShell shell,
         string[] args,
         int defaultFrameLimit,
@@ -235,12 +247,12 @@ public sealed partial class LagProfileCommand : IConsoleCommand
         return true;
     }
 
-    private void AddValue(Dictionary<string, LagProfileSample> samples,
+    private static void AddValue(ProfManager profiler, Dictionary<(string Kind, string Name), LagProfileSample> samples,
         Dictionary<string, LagProfileCounter> counters,
         int stringId,
         ProfValue value)
     {
-        string name = _prof.GetString(stringId);
+        string name = profiler.GetString(stringId);
         if (name == ProfTextStartFrame)
             return;
 
@@ -258,12 +270,7 @@ public sealed partial class LagProfileCommand : IConsoleCommand
         }
     }
 
-    private void AddSample(Dictionary<string, LagProfileSample> samples, string kind, int stringId, ProfValue value)
-    {
-        LagProfileCommand.AddSample(samples, kind, _prof.GetString(stringId), value);
-    }
-
-    private static void AddSample(Dictionary<string, LagProfileSample> samples, string kind, string name,
+    private static void AddSample(Dictionary<(string Kind, string Name), LagProfileSample> samples, string kind, string name,
         ProfValue value)
     {
         if (value.Type != ProfValueType.TimeAllocSample)
@@ -272,7 +279,7 @@ public sealed partial class LagProfileCommand : IConsoleCommand
         if (kind == "group" && name == "Frame")
             return;
 
-        var key = $"{kind}:{name}";
+        var key = (kind, name);
         if (!samples.TryGetValue(key, out LagProfileSample? sample))
         {
             sample = new(kind, name);
@@ -295,6 +302,9 @@ public sealed partial class LagProfileCommand : IConsoleCommand
 
     private static List<long> GetFrameIndices(ProfBuffer snapshot, int frameLimit, long? sinceIndexOffset)
     {
+        if (snapshot.LogBuffer.Length == 0 || snapshot.IndexBuffer.Length == 0)
+            return [];
+
         long validLogStart = snapshot.LogWriteOffset - snapshot.LogBuffer.LongLength;
         long validIndexStart = Math.Max(0, snapshot.IndexWriteOffset - snapshot.IndexBuffer.LongLength);
         if (sinceIndexOffset is { } start)
@@ -303,8 +313,9 @@ public sealed partial class LagProfileCommand : IConsoleCommand
         var frames = new List<long>();
         for (long indexOffset = snapshot.IndexWriteOffset - 1; indexOffset >= validIndexStart; indexOffset--)
         {
-            ref ProfIndex index = ref snapshot.Index(indexOffset);
+            var index = snapshot.Index(indexOffset);
             if (index.Type != ProfIndexType.Frame ||
+                index.StartPos < 0 || index.EndPos <= index.StartPos ||
                 index.StartPos < validLogStart ||
                 index.EndPos > snapshot.LogWriteOffset)
                 continue;
@@ -318,12 +329,12 @@ public sealed partial class LagProfileCommand : IConsoleCommand
         return frames;
     }
 
-    private long? TryGetFrameNumber(ProfBuffer snapshot, ProfIndex index)
+    private static long? TryGetFrameNumber(ProfManager profiler, ProfBuffer snapshot, ProfIndex index)
     {
         ref ProfLog start = ref snapshot.Log(index.StartPos);
         if (start.Type != ProfLogType.Value ||
             start.Value.Value.Type != ProfValueType.Int64 ||
-            _prof.GetString(start.Value.StringId) != ProfTextStartFrame)
+            profiler.GetString(start.Value.StringId) != ProfTextStartFrame)
             return null;
 
         return start.Value.Value.Int64;
@@ -351,7 +362,7 @@ public sealed partial class LagProfileCommand : IConsoleCommand
         return $"{kib / 1024d:N1} MiB";
     }
 
-    private sealed class LagProfileSample
+    internal sealed class LagProfileSample
     {
         public readonly string Kind;
         public readonly string Name;
@@ -377,7 +388,7 @@ public sealed partial class LagProfileCommand : IConsoleCommand
         }
     }
 
-    private sealed class LagProfileCounter
+    internal sealed class LagProfileCounter
     {
         public readonly string Name;
         public int Count;
@@ -398,5 +409,10 @@ public sealed partial class LagProfileCommand : IConsoleCommand
         }
     }
 
-    private readonly record struct LagProfileFrame(long? Frame, double TimeSeconds, long AllocatedBytes);
+    internal readonly record struct LagProfileFrame(long? Frame, double TimeSeconds, long AllocatedBytes);
+
+    internal sealed record LagProfileCapture(
+        IReadOnlyList<LagProfileFrame> Frames,
+        IReadOnlyDictionary<(string Kind, string Name), LagProfileSample> Samples,
+        IReadOnlyDictionary<string, LagProfileCounter> Counters);
 }

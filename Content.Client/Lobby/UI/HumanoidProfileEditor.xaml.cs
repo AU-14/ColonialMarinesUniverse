@@ -1,3 +1,8 @@
+using System.IO;
+using System.Linq;
+using System.Numerics;
+using Content.Client.CMU14.Yautja.Lobby;
+using Content.Client._RMC14.NamedItems;
 using Content.Client.Humanoid;
 using Content.Client.Message;
 using Content.Client.Players.PlayTimeTracking;
@@ -37,6 +42,36 @@ namespace Content.Client.Lobby.UI
         private readonly LobbyUIController _controller;
 
         private readonly SpriteSystem _sprite;
+
+        private YautjaProfileEditor? _yautjaTab;
+
+        private void RefreshYautjaTab()
+        {
+            if (!_requirements.CanCustomizeWhitelistedJob("CMUYautjaHunter"))
+            {
+                if (_yautjaTab != null)
+                {
+                    TabContainer.RemoveChild(_yautjaTab);
+                    _yautjaTab = null;
+                }
+
+                return;
+            }
+
+            if (_yautjaTab == null)
+            {
+                _yautjaTab = new YautjaProfileEditor();
+                _yautjaTab.OnProfileChanged += profile =>
+                {
+                    Profile = profile;
+                    SetDirty();
+                };
+                TabContainer.AddChild(_yautjaTab);
+                TabContainer.SetTabTitle(TabContainer.ChildCount - 1, Loc.GetString("cmu-yautja-lobby-tab"));
+            }
+
+            _yautjaTab.SetProfile(Profile);
+        }
 
         // CCvar.
         private int _maxNameLength;
@@ -102,6 +137,7 @@ namespace Content.Client.Lobby.UI
             _requirements = requirements;
             _controller = UserInterfaceManager.GetUIController<LobbyUIController>();
             _sprite = _entManager.System<SpriteSystem>();
+            _requirements.Updated += RefreshYautjaTab;
 
             _maxNameLength = _cfgManager.GetCVar(CCVars.MaxNameLength);
             _allowFlavorText = _cfgManager.GetCVar(CCVars.FlavorText);
@@ -143,10 +179,13 @@ namespace Content.Client.Lobby.UI
 
             #region Name
 
-            NameEdit.OnTextChanged += args => { SetName(args.Text); };
-            NameEdit.IsValid = args => args.Length <= _maxNameLength;
+            // cmu edit start
+            CMUSetupNameEdits();
+            // cmu edit end
             RandomizeUnlockedButton.OnPressed += args => { RandomizeProfile(); };
-            WarningLabel.SetMarkup($"[color=red]{Loc.GetString("humanoid-profile-editor-naming-rules-warning")}[/color]");
+            // cmu edit start
+            WarningLabel.SetMarkup(Loc.GetString("humanoid-profile-editor-naming-rules-warning"));
+            // cmu edit end
 
             #endregion Name
 
@@ -399,6 +438,7 @@ namespace Content.Client.Lobby.UI
             RefreshSpecies();
             RefreshTraits();
             RefreshFlavorText();
+            RefreshYautjaTab();
             ReloadPreview();
 
             if (Profile != null)
@@ -421,12 +461,16 @@ namespace Content.Client.Lobby.UI
 
         protected override void Dispose(bool disposing)
         {
+            _requirements.Updated -= RefreshYautjaTab;
             base.Dispose(disposing);
             if (!disposing)
                 return;
 
             _loadoutWindow?.Dispose();
             _loadoutWindow = null;
+            // cmu edit start
+            UnsubscribeDividerColors();
+            // cmu edit end
         }
 
         protected override void EnteredTree()
@@ -438,6 +482,10 @@ namespace Content.Client.Lobby.UI
         private void UpdateSaveButton()
         {
             SaveButton.Disabled = Profile is null || !IsDirty;
+            // cmu edit start
+            if (!CMUHasRequiredName())
+                SaveButton.Disabled = true;
+            // cmu edit end
             ResetButton.Disabled = Profile is null || !IsDirty;
         }
 

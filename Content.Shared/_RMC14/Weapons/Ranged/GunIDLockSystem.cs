@@ -21,6 +21,7 @@ public sealed partial class GunIDLockSystem : EntitySystem
 
     public override void Initialize()
     {
+        InitializeCMUUserLifetime(); // CMU14
         SubscribeLocalEvent<GunIDLockComponent, GotEquippedHandEvent>(OnHold);
         SubscribeLocalEvent<GunIDLockComponent, AttemptShootEvent>(OnShootAttempt);
         SubscribeLocalEvent<GunIDLockComponent, ExaminedEvent>(OnExamine);
@@ -151,6 +152,7 @@ public sealed partial class GunIDLockSystem : EntitySystem
     private void RegisterNewUser(Entity<GunIDLockComponent> ent, EntityUid user)
     {
         ent.Comp.User = user;
+        _cmuReferences.Watch(ent, user); // CMU14
         Dirty(ent);
         var popup = Loc.GetString("rmc-id-lock-authorization", ("gun", ent.Owner));
         _popup.PopupClient(popup, user, PopupType.Medium);
@@ -159,6 +161,7 @@ public sealed partial class GunIDLockSystem : EntitySystem
     private void RegisterNewUserCombat(Entity<GunIDLockComponent> ent, EntityUid user)
     {
         ent.Comp.User = user;
+        _cmuReferences.Watch(ent, user); // CMU14
         Dirty(ent);
         var popup = Loc.GetString("rmc-id-lock-authorization-combat", ("gun", ent.Owner));
         _popup.PopupClient(popup, user, user, PopupType.Small);

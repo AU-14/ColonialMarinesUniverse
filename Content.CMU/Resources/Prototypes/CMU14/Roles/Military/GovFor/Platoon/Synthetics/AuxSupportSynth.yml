@@ -167,19 +167,14 @@
   groups:
   - GOVFORSynthSpecializationAU14
   - SynthBackpackAU14
-  - SynthUniformAU14
-  - SynthUniformAccessoriesAU14
   - SynthEquipmentAU14
   - SynthAccesoriesSpecialAU14
-  - SynthSuitAU14
   - SynthSuitSpecialAU14
   - SynthBeltAU14
   - SynthPouchesLeftAU14
   - SynthPouchesRightAU14
-  - SynthHeadwearAU14
   - SynthGlassesAU14
   - SynthGlovesAU14
-  - SynthShoesRMC
   - SynthMasksAU14
   - HelmetGarbsRMC
   - SmokablesRMC

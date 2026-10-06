@@ -1,27 +1,6 @@
 name: Test Packaging
 on:
-  push:
-    branches: [master, staging, stable]
-    paths:
-      - '**.cs'
-      - '**.csproj'
-      - '**.sln'
-      - '**.git**'
-      - '**.yml'
-      - 'RobustToolbox'
-      - 'RobustToolbox/**'
-  merge_group:
-  pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
-    branches: [master, staging, stable]
-    paths:
-      - '**.cs'
-      - '**.csproj'
-      - '**.sln'
-      - '**.git**'
-      - '**.yml'
-      - 'RobustToolbox'
-      - 'RobustToolbox/**'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -37,7 +16,6 @@ env:
 jobs:
   package:
     name: Test Packaging / ${{ matrix.name }}
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:

@@ -32,6 +32,15 @@ public sealed partial class AU14CCVars : CVars
     /// game view left of the monitor centre. When on, the viewport pane is padded so the game view sits in
     /// the middle of the window (at the cost of a slightly narrower viewport).
     /// </summary>
+    // the AN/PRC-117G panel's first-open briefing has been read and dismissed
+    public static readonly CVarDef<bool> AnprcIntroSeen =
+        CVarDef.Create("au14.anprc_intro_seen", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    // expert view on the AN/PRC-117G panel: hides the explanations under each control and
+    // prints the set's own shorthand. every control works the same either way
+    public static readonly CVarDef<bool> AnprcExpertView =
+        CVarDef.Create("au14.anprc_expert_view", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> CenterSeparatedViewport =
         CVarDef.Create("au14.center_separated_viewport", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 

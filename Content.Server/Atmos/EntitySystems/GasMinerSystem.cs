@@ -5,6 +5,7 @@ using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
 using Content.Shared.Atmos.Piping.Components;
+using Content.Shared.CMU14.Atmos; // CMU14
 using JetBrains.Annotations;
 using Robust.Server.GameObjects;
 
@@ -54,18 +55,60 @@ public sealed partial class GasMinerSystem : SharedGasMinerSystem
         }
         else
         {
-            miner.MinerState = GasMinerState.Working;
-
             // Time to mine some gas.
-            var merger = new GasMixture(1) { Temperature = miner.SpawnTemperature };
-            merger.SetMoles(miner.SpawnGas, toSpawn);
-            _atmosphereSystem.Merge(environment, merger);
+            if (TryCreateOutputMixture(ent, toSpawn, out var merger)) // CMU14
+            {
+                miner.MinerState = GasMinerState.Working;
+                _atmosphereSystem.Merge(environment, merger);
+            }
+            else
+            {
+                miner.MinerState = GasMinerState.Disabled;
+            }
         }
 
         if (miner.MinerState != oldState)
         {
             Dirty(ent);
         }
+    }
+
+    // CMU14: allow special-purpose miners to emit a true gas mixture while keeping
+    // GasMinerComponent.SpawnAmount as the total mol/s output.
+    private bool TryCreateOutputMixture(
+        Entity<GasMinerComponent> ent,
+        float toSpawn,
+        [NotNullWhen(true)] out GasMixture? output)
+    {
+        var miner = ent.Comp;
+        output = new GasMixture(1) { Temperature = miner.SpawnTemperature };
+
+        if (!TryComp<CMUGasMinerMixtureComponent>(ent, out var mixture))
+        {
+            output.SetMoles(miner.SpawnGas, toSpawn);
+            return true;
+        }
+
+        var totalWeight = 0f;
+        foreach (var weight in mixture.Gases.Values)
+        {
+            if (weight > 0f && float.IsFinite(weight))
+                totalWeight += weight;
+        }
+
+        if (totalWeight <= 0f || !float.IsFinite(totalWeight))
+        {
+            output = null;
+            return false;
+        }
+
+        foreach (var (gas, weight) in mixture.Gases)
+        {
+            if (weight > 0f && float.IsFinite(weight))
+                output.SetMoles(gas, toSpawn * weight / totalWeight);
+        }
+
+        return true;
     }
 
     private bool GetValidEnvironment(Entity<GasMinerComponent> ent, [NotNullWhen(true)] out GasMixture? environment)

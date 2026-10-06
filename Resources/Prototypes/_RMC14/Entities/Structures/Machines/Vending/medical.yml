@@ -310,6 +310,8 @@
         amount: 10
       - id: RMCBoxPillCanister
         amount: 10
+      - id: CMUBoxPillCanisterNoSkill
+        amount: 10
       - id: RMCDropper
         amount: 5
       - id: CMSyringe

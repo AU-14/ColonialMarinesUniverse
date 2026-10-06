@@ -1,0 +1,17 @@
+- type: speechSounds
+  id: CMUHumanMale
+  saySound:
+    path: /Audio/CMU14/Voice/ChatSpeak/human_male_speak.ogg
+  askSound:
+    path: /Audio/CMU14/Voice/ChatSpeak/human_male_speak_ask.ogg
+  exclaimSound:
+    path: /Audio/CMU14/Voice/ChatSpeak/human_male_speak_exclaim.ogg
+
+- type: speechSounds
+  id: CMUHumanFemale
+  saySound:
+    path: /Audio/CMU14/Voice/ChatSpeak/human_female_speak.ogg
+  askSound:
+    path: /Audio/CMU14/Voice/ChatSpeak/human_female_speak_ask.ogg
+  exclaimSound:
+    path: /Audio/CMU14/Voice/ChatSpeak/human_female_speak_exclaim.ogg

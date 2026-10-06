@@ -7,8 +7,7 @@ public sealed partial class HumanoidProfileEditor
     private void InitializeForceOnForcePreferences()
     {
         TabContainer.SetTabTitle(ForceOnForceTabIndex, Loc.GetString("cmu-fof-tab"));
-        ForceOnForceTabs.SetTabTitle(0, Loc.GetString("cmu-fof-govfor"));
-        ForceOnForceTabs.SetTabTitle(1, Loc.GetString("cmu-fof-opfor"));
+        ForceOnForceTabs.SetTabTitle(0, Loc.GetString("cmu-fof-roles"));
         foreach (var side in Enum.GetValues<ForceOnForceSide>())
             FoFSideButton.AddItem(Loc.GetString($"cmu-fof-side-{side.ToString().ToLowerInvariant()}"), (int) side);
         foreach (var fallback in Enum.GetValues<ForceOnForceFallback>())

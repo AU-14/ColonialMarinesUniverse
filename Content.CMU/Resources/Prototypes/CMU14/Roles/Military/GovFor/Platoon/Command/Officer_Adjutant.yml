@@ -36,6 +36,8 @@
   - type: ANPRCCryptoAuthority
   - type: AU14SilenceOrderAbility
   - type: AU14CallToAttentionAbility
+    canCall: false
+    attentionFocusPriority: 250
   - type: AU14CallToAttentionImmune
   - type: Skills
     preset: AU14SkillPresetOfficerAdjutant

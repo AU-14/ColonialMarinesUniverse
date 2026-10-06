@@ -137,22 +137,23 @@ public sealed partial class HardpointIntegrityComponent : Component
     [DataField, AutoNetworkedField]
     public float Integrity;
 
-    /// <summary>Only substantial hits to a seriously damaged part can cause a fault.</summary>
+    // CMU14: ordinary combat damage can fault a damaged part, with a vehicle-wide rate limit.
     [DataField]
-    public float FailureIntegrityThreshold = 0.4f;
+    public float FailureIntegrityThreshold = 0.75f;
 
     [DataField]
-    public float FailureMinimumDamageFraction = 0.08f;
+    public float FailureMinimumDamageFraction = 0.02f;
 
     [DataField]
-    public float FailureChance = 0.05f;
+    public float FailureChance = 0.15f;
 
     /// <summary>Shared by all parts when this integrity component belongs to a vehicle.</summary>
     [DataField]
-    public TimeSpan FailureRollCooldown = TimeSpan.FromSeconds(60);
+    public TimeSpan FailureRollCooldown = TimeSpan.FromSeconds(30);
 
-    [DataField]
-    public int MaxVehicleFailures = 2;
+    // CMU14: VehicleHardpointFailureComponent.MaxActiveFailures caps each part instead.
+    // [DataField]
+    // public int MaxVehicleFailures = 2;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan NextFailureRoll;
@@ -181,14 +182,24 @@ public sealed partial class HardpointIntegrityComponent : Component
     [DataField]
     public float RepairChunkMinimum = 0.01f;
 
+    // CMU14: repairs restore health at the cost of permanent structural capacity.
+    [DataField]
+    public float RepairWearFraction = 0.3f; // CMU14: triple permanent wear per repair.
+
+    [DataField]
+    public float MinimumRepairCapacityFraction = 0.2f; // CMU14: retain at least 20% of factory capacity.
+
+    [DataField, AutoNetworkedField]
+    public float RepairWear;
+
     [DataField]
     public float FrameRepairChunkSeconds = 1f;
 
     [DataField, AutoNetworkedField]
     public bool BypassEntryOnZero;
 
-    [NonSerialized]
-    public float NativeMaxIntegrity; // CMU14: configured pool, restored while no hardpoints are mounted
+    [DataField] // CMU14: preserve the original capacity across serialization and module changes.
+    public float NativeMaxIntegrity;
 
     [NonSerialized]
     public bool Repairing;
@@ -258,9 +269,11 @@ public sealed partial class HardpointRemoveDoAfterEvent : DoAfterEvent
 [Serializable, NetSerializable]
 public sealed partial class HardpointRepairDoAfterEvent : DoAfterEvent
 {
+    public float RepairAmount;
+
     public override DoAfterEvent Clone()
     {
-        return new HardpointRepairDoAfterEvent();
+        return new HardpointRepairDoAfterEvent { RepairAmount = RepairAmount };
     }
 }
 

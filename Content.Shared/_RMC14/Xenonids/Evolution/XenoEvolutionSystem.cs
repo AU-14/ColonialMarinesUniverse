@@ -1003,6 +1003,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         }
 
         FixedPoint2? evoOverride = null;
+        var overrideIgnoresGranter = false; // CMU14
         var overrides = EntityQueryEnumerator<EvolutionOverrideComponent>();
         while (overrides.MoveNext(out var comp))
         {
@@ -1010,6 +1011,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             // Overrides can overlap (for example a hive boon and the hijack surge).
             // Entity iteration order must not let the weaker effect mask the stronger one.
             evoOverride = evoOverride is { } previous ? FixedPoint2.Max(previous, comp.Amount) : comp.Amount;
+            overrideIgnoresGranter |= comp.IgnoreGranter; // CMU14
         }
 
         var evolution = EntityQueryEnumerator<XenoEvolutionComponent>();
@@ -1054,7 +1056,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 if (needsOvipositor && HasEvolutionIgnoreGranter(uid))
                     hasGranter = true;
 
-                if (needsOvipositor && comp.RequiresGranter && !hasGranter)
+                // CMU14: the timed hijack surge also grants evolution without an ovipositor.
+                // if (needsOvipositor && comp.RequiresGranter && !hasGranter)
+                if (needsOvipositor && comp.RequiresGranter && !hasGranter && !overrideIgnoresGranter)
                     continue;
 
                 SetPoints((uid, comp), comp.Points + gain);

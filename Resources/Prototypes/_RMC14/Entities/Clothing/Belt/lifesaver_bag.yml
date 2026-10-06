@@ -52,6 +52,9 @@
       - CMUCastItem
       - CMUOrganClamp
       - CMUSplintItem
+      # cmu edit start
+      - CMUCPRMask
+      # cmu edit end
       components:
       - CMSurgeryTool # catch-all for above commented out NewMed tags
       - Hypospray

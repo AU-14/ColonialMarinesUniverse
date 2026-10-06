@@ -5,6 +5,7 @@ using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Movement; // CMU14
 using Content.Shared._RMC14.Stun;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Xenonids.GasToggle;
 using Content.Shared._RMC14.Xenonids.Neurotoxin;
 using Content.Shared._RMC14.Xenonids.Rotate;
@@ -314,6 +315,7 @@ public abstract partial class SharedXenoTailStabSystem : EntitySystem
                 if (!HasComp<XenoComponent>(hit))
                 {
                     if (stab.Comp.InjectNeuro &&
+                        !HasComp<YautjaComponent>(hit) &&
                         TryComp<NeurotoxinInjectorComponent>(stab, out var neuroTox))
                     {
 

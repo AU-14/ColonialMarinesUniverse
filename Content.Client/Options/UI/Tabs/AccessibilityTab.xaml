@@ -1,7 +1,7 @@
 <Control xmlns="https://spacestation14.io"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:ui="clr-namespace:Content.Client.Options.UI"
-         xmlns:cmu="clr-namespace:Content.Client._CMU14.UserInterface.Options">
+         xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
         <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
             <!-- Grouped by what an option *does*, not by which fork added it, and each group folds

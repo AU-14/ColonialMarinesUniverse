@@ -16,6 +16,9 @@ public sealed partial class SpeechSoundSystem : EntitySystem
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    // cmu edit start
+    [Dependency] private Robust.Shared.Configuration.INetConfigurationManager _netConfig = default!;
+    // cmu edit end
 
     [SubscribeLocalEvent]
     private void OnEntitySpoke(Entity<SpeechComponent> ent, ref EntitySpokeEvent args)
@@ -34,7 +37,13 @@ public sealed partial class SpeechSoundSystem : EntitySystem
         var sound = GetSpeechSound(ent, args.Message, speechSounds);
         ent.Comp.LastTimeSoundPlayed = currentTime;
         if (_net.IsServer) // TODO: replace this call with PlayPredicted when chat is predicted.
-            _audio.PlayPvs(sound, ent);
+        {
+            // cmu edit start
+            var filter = Robust.Shared.Player.Filter.Pvs(ent)
+                .RemoveWhere(session => !_netConfig.GetClientCVar(session.Channel, Content.Shared.CCVar.CCVars.ChatSpeechSounds));
+            _audio.PlayEntity(sound, filter, ent, true);
+            // cmu edit end
+        }
     }
 
     /// <summary>

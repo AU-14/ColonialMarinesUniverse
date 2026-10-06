@@ -9,7 +9,7 @@
   - type: Storage
     maxItemSize: Large
     grid:
-    - 0,0,13,1 #7 slots
+    - 0,0,15,1 #8 slots
     whitelist:
       tags:
       - DiscreteHealthAnalyzer
@@ -32,6 +32,7 @@
       - CMSynthGraft
       - PillPacket
       - Hypospray
+      - CMUCPRMask
       components:
       - Hypospray
       - CMUSplintItem
@@ -52,3 +53,4 @@
     - id: AU14PacketPillsTramadol
     - id: AU14FirstAidAutoInjectorNoSkill
     - id: CMUSplintItem
+    - id: CMUMaskCPR

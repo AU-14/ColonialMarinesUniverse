@@ -363,6 +363,7 @@
     - AU14JobOPFORMilitaryDoctor
     - AU14JobOPFOROfficerMedical
     - AU14JobOPFORAuxSupportSynth
+    - AU14JobOPFORNurse
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
@@ -446,6 +447,7 @@
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORWeaponsSpecialist
+    - AU14JobOPFORWeaponsSpecialist
     pointsType: Specialist
     sections:
     - name: Weapons Specialist Sets

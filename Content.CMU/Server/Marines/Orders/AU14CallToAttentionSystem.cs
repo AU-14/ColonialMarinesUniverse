@@ -49,6 +49,9 @@ public sealed partial class AU14CallToAttentionSystem : EntitySystem
     private void OnStartup(Entity<AU14CallToAttentionAbilityComponent> ent, ref ComponentStartup args)
     {
         var comp = ent.Comp;
+        if (!comp.CanCall)
+            return;
+
         _actions.AddAction(ent, ref comp.ActionEntity, comp.Action);
         _actions.SetUseDelay(comp.ActionEntity, comp.Cooldown);
     }
@@ -60,7 +63,7 @@ public sealed partial class AU14CallToAttentionSystem : EntitySystem
 
     private void OnCallToAttentionAction(Entity<AU14CallToAttentionAbilityComponent> ent, ref AU14CallToAttentionActionEvent args)
     {
-        if (args.Handled)
+        if (args.Handled || !ent.Comp.CanCall)
             return;
 
         if (!TryComp(ent, out TransformComponent? xform) || _mobState.IsDead(ent))
@@ -94,9 +97,9 @@ public sealed partial class AU14CallToAttentionSystem : EntitySystem
             _visibleTargets.Add(target);
         }
 
-        _visibleTargets.RemoveAll(uid => !IsValidTarget(uid));
-
         var attentionFocus = GetAttentionFocus(ent.Owner, _visibleTargets);
+
+        _visibleTargets.RemoveAll(uid => !IsValidTarget(uid));
         foreach (var target in _visibleTargets)
         {
             ApplyWhisperEffect(target, ent.Comp.WhisperDuration);

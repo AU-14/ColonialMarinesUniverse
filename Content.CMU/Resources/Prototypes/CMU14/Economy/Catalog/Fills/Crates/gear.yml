@@ -359,3 +359,14 @@
     contents:
     - id: CMSheetPhoron
       amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateElectronicHearingProtection
+  name: electronic hearing protection crate
+  description: A crate that contains 10 sets of electronic hearing protection.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUHeadElectronicHearingProtection
+      amount: 10

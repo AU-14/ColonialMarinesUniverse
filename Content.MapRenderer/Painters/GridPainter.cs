@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using Content.Shared.Decals;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
+using Robust.Shared.GameStates; // CMU14: decal chunks are stored on chunk entities.
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Timing;
@@ -105,6 +106,22 @@ namespace Content.MapRenderer.Painters
             stopwatch.Start();
 
             var decals = new Dictionary<EntityUid, List<DecalData>>();
+
+            // CMU14 DecalChunk Begin: current map saves store decals on chunk entities, not grids.
+            var chunkQuery = _sEntityManager.AllEntityQueryEnumerator<ChunkEntityComponent, DecalChunkComponent>();
+            while (chunkQuery.MoveNext(out _, out var chunk, out var chunkDecals))
+            {
+                if (!_sEntityManager.TryGetComponent<MapGridComponent>(chunk.Root, out var grid))
+                    continue;
+
+                foreach (var decal in chunkDecals.Decals.Values)
+                {
+                    var (x, y) = TransformLocalPosition(decal.Coordinates, grid);
+                    decals.GetOrNew(chunk.Root).Add(new DecalData(decal, x, y));
+                }
+            }
+            // CMU14 End
+
             var query = _sEntityManager.AllEntityQueryEnumerator<MapGridComponent>();
 
             while (query.MoveNext(out var uid, out var grid))

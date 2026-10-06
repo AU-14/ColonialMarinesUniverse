@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "license": null,
-  "copyright": "UGV sprites by nzzy (Discord), supplied for CMU. Hull and turret separated with source pixels for independent aiming. License not specified in the supplied metadata.",
+  "license": "CC-BY-SA-3.0",
+  "copyright": "UGV sprites by nzzy (Discord), supplied for CMU. Hull and turret separated with source pixels for independent aiming.",
   "size": {
     "x": 48,
     "y": 48

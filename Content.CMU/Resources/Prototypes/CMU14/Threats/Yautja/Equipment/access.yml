@@ -1,0 +1,73 @@
+- type: accessLevel
+  id: CMUAccessYautjaSecure
+  name: Yautja Secure
+
+- type: accessLevel
+  id: CMUAccessYautjaElite
+  name: Yautja Elite
+
+- type: accessLevel
+  id: CMUAccessYautjaElder
+  name: Yautja Elder
+
+- type: accessLevel
+  id: CMUAccessYautjaLeader
+  name: Yautja Leader
+
+- type: accessLevel
+  id: CMUAccessYautjaAncient
+  name: Yautja Ancient
+
+- type: accessLevel
+  id: CMUAccessYautjaBadBlood
+  name: Yautja Bad Blood
+
+- type: accessGroup
+  id: CMUYautjaAccessSecure
+  tags:
+  - CMUAccessYautjaSecure
+
+- type: accessGroup
+  id: CMUYautjaAccessElite
+  tags:
+  - CMUAccessYautjaSecure
+  - CMUAccessYautjaElite
+
+- type: accessGroup
+  id: CMUYautjaAccessElder
+  tags:
+  - CMUAccessYautjaSecure
+  - CMUAccessYautjaElite
+  - CMUAccessYautjaElder
+
+- type: accessGroup
+  id: CMUYautjaAccessLeader
+  tags:
+  - CMUAccessYautjaSecure
+  - CMUAccessYautjaElite
+  - CMUAccessYautjaElder
+  - CMUAccessYautjaLeader
+
+- type: accessGroup
+  id: CMUYautjaAccessAncient
+  tags:
+  - CMUAccessYautjaSecure
+  - CMUAccessYautjaElite
+  - CMUAccessYautjaElder
+  - CMUAccessYautjaLeader
+  - CMUAccessYautjaAncient
+
+- type: accessGroup
+  id: CMUYautjaAccessBadBlood
+  tags:
+  - CMUAccessYautjaBadBlood
+
+- type: accessGroup
+  id: CMUYautjaAccessHunterShip
+  tags:
+  - CMUAccessYautjaSecure
+  - CMUAccessYautjaElite
+  - CMUAccessYautjaElder
+  - CMUAccessYautjaLeader
+  - CMUAccessYautjaAncient
+  - CMUAccessYautjaBadBlood

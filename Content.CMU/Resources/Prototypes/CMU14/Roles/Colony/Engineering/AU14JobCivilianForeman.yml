@@ -66,6 +66,8 @@
     id: AU14IDCardColonyForeman
     ears: AU14ColonyAdminHeadset
     pocket1: AU14StampFore
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

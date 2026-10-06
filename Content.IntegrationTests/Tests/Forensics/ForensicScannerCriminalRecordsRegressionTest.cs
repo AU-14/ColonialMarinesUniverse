@@ -59,6 +59,9 @@ public sealed class ForensicScannerCriminalRecordsRegressionTest : GameTest
                 [map.Grid.Owner],
                 "Records",
                 gameMap);
+            // cmu edit start
+            station = Server.System<Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem>().GetRecords()!.Value;
+            // cmu edit end
             scanner = SEntMan.SpawnEntity("ForensicScanner", map.GridCoords);
             humanoid = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             nonHumanoid = SEntMan.SpawnEntity("ForensicScannerRecordsNonHumanoid", map.GridCoords);

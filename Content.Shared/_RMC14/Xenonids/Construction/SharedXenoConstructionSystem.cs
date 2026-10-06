@@ -1416,21 +1416,23 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         Dirty(ent.Comp.Xeno.Value, list);
     }
 
+    // CMU14 method: clear surviving structures, not the owner whose list is being removed.
     private void OnListRemove<T>(Entity<XenoSecretionListComponent> ent, ref T args)
     {
         foreach (var built in ent.Comp.Built.Values)
         {
             foreach (var nEnt in built)
             {
-                if (GetEntity(nEnt) is not { Valid: true } ||
-                    TerminatingOrDeleted(ent) ||
-                    !TryComp(ent, out XenoSecretionLimitedComponent? limited))
+                if (GetEntity(nEnt) is not { Valid: true } structure ||
+                    TerminatingOrDeleted(structure) ||
+                    !TryComp(structure, out XenoSecretionLimitedComponent? limited) ||
+                    limited.Xeno != ent.Owner)
                 {
                     continue;
                 }
 
                 limited.Xeno = null;
-                Dirty(ent, limited);
+                Dirty(structure, limited);
             }
         }
     }

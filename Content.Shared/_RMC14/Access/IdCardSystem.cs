@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared.Access.Components;
+using Content.Shared.Access.Systems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Clothing.EntitySystems;
 using Content.Shared.Database;
@@ -20,6 +21,7 @@ public sealed partial class IdCardSystem : EntitySystem
 
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
     [Dependency] private IGameTiming _timing = default!; // CMU14
 
     private TimeSpan _nextOwnerSweep; // CMU14
@@ -60,7 +62,7 @@ public sealed partial class IdCardSystem : EntitySystem
     {
         if (args.Handled || !TryComp(args.Used, out IdCardComponent? idCard) || idCard.OriginalOwner != null)
             return;
-        idCard.OriginalOwner = args.Target;
+        _idCard.TryChangeOriginalOwner(args.Used, args.Target, idCard);
         var popupMessage = $"{Name(args.User)} bound an ID to {Name(args.Target)}.";
         _popup.PopupPredicted(popupMessage, args.Target, args.User, PopupType.Small);
         _adminLogger.Add(LogType.RMCIdModify,
@@ -83,7 +85,7 @@ public sealed partial class IdCardSystem : EntitySystem
         if (ent.Comp.OriginalOwner != null || args.Handled)
             return;
 
-        ent.Comp.OriginalOwner = args.User;
+        _idCard.TryChangeOriginalOwner(ent, args.User, ent.Comp);
         args.Handled = true;
         var popupMessage = $"Bound ID to yourself.";
         _popup.PopupClient(popupMessage, args.User, PopupType.Small);

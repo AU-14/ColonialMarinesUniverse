@@ -38,3 +38,9 @@ cmu-zlevel-ladder-retract-no-hand = You need an empty hand to retract the ladder
 cmu-zlevel-ladder-retract-finish = You retract the ladder.
 # AU14 (building overhaul): stage 1 of the look-up cycle (faint upper ghost).
 cmu-zlevel-faint-up-enabled = You glance upward, faintly making out the level above.
+cmu-zlevel-ladder-throw-start-self = You get ready to toss {THE($item)} {$direction} the ladder.
+cmu-zlevel-ladder-throw-start-others = {$user} gets ready to toss {THE($item)} {$direction} the ladder.
+cmu-zlevel-ladder-throw-finish-self = You toss {THE($item)} {$direction} the ladder.
+cmu-zlevel-ladder-throw-finish-others = {$user} tosses {THE($item)} {$direction} the ladder.
+cmu-zlevel-ladder-throw-up = up
+cmu-zlevel-ladder-throw-down = down

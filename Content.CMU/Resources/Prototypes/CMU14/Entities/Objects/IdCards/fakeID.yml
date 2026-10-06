@@ -33,10 +33,10 @@
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardCLFFakeFreightSystemsSpecialist
-  name: freight systems specialist ID card
+  name: logistics specialist ID card
   components:
   - type: JobTitleChanger
-    jobTitle: Freight Systems Specialist
+    jobTitle: Logistics Specialist
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -49,10 +49,10 @@
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardCLFFakeWasteManagementSpecialist
-  name: waste management specialist ID card
+  name: waste management ID card
   components:
   - type: JobTitleChanger
-    jobTitle: Waste Management Specialist
+    jobTitle: Waste Management
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
@@ -73,10 +73,10 @@
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardCLFFakeEmergencyResponseOfficer
-  name: emergency response officer ID card
+  name: paramedic ID card
   components:
   - type: JobTitleChanger
-    jobTitle: Emergency Response Officer
+    jobTitle: Paramedic
 
 - type: entity
   parent: AU14IDCardColonyEmergencyResponseOfficer

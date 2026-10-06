@@ -235,7 +235,7 @@ public sealed class VehicleGameplayRegressionTest : GameTest
             var remaining = Integrity(treads).Integrity;
             Assert.That(remaining, Is.GreaterThan(initial * 0.7f), "three tail stabs should not cripple fresh running gear");
             Assert.That(remaining, Is.LessThan(initial), "side attacks must still reach the treads");
-            TestContext.WriteLine($"{prototype}: {initial - remaining:0.##} integrity lost to three Ravager tail stabs; {remaining:0.##}/{initial} remains.");
+            TestContext.Out.WriteLine($"{prototype}: {initial - remaining:0.##} integrity lost to three Ravager tail stabs; {remaining:0.##}/{initial} remains.");
             var hits = 3;
             while (Integrity(treads).Integrity > 0f && hits < 100)
             {
@@ -244,7 +244,7 @@ public sealed class VehicleGameplayRegressionTest : GameTest
                 hits++;
             }
             Assert.That(hits, Is.InRange(10, 99), "running gear must resist several hits but remain destructible");
-            TestContext.WriteLine($"{prototype}: {hits} side-on Ravager tail stabs to destroy fresh treads without armor plating.");
+            TestContext.Out.WriteLine($"{prototype}: {hits} side-on Ravager tail stabs to destroy fresh treads without armor plating.");
         });
     }
 

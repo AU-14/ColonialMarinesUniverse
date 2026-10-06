@@ -1,0 +1,33 @@
+cmu-yautja-sleeping-hellhound-denied = Вы не собираетесь подходить к этой твари!
+cmu-yautja-sleeping-hellhound-confirm-title = Призвать адскую гончую
+cmu-yautja-sleeping-hellhound-confirm-message = Разбудить адскую гончую?
+cmu-yautja-sleeping-hellhound-woken = {$hellhound} просыпается с голодным рыком.
+cmu-yautja-hellhound-ghost-name = Адская гончая
+cmu-yautja-hellhound-ghost-description = Пробудитесь как охотничий зверь яутжа и служите охоте.
+cmu-yautja-hellhound-ghost-rules = Вы охотничий зверь яутжа. Подчиняйтесь своим яутжа-хозяевам и не гриферьте вне указаний администрации или ивента.
+cmu-yautja-hellhound-no-owner = У вас нет хозяина.
+cmu-yautja-hellhound-owner-wrong-place = Вы не чувствуете хозяина в этом месте.
+cmu-yautja-hellhound-sniffs = {$hellhound} торопливо нюхает землю.
+cmu-yautja-hellhound-sense-start = Вы торопливо нюхаете землю, пытаясь найти хозяина.
+cmu-yautja-hellhound-sense-owner = Ваш хозяин в {$distance} метрах к {$direction}.
+cmu-yautja-hellhound-examine-human = Вы едва можете разобрать символы, но там написано ⵍⴻⴱⵔⵓ
+cmu-yautja-hellhound-examine-no-owner = У неё нет хозяина.
+cmu-yautja-hellhound-examine-owner = Её хозяин: {$owner}!
+cmu-yautja-hellhound-direction-north = северу
+cmu-yautja-hellhound-direction-northeast = северо-востоку
+cmu-yautja-hellhound-direction-east = востоку
+cmu-yautja-hellhound-direction-southeast = юго-востоку
+cmu-yautja-hellhound-direction-south = югу
+cmu-yautja-hellhound-direction-southwest = юго-западу
+cmu-yautja-hellhound-direction-west = западу
+cmu-yautja-hellhound-direction-northwest = северо-западу
+
+cmu-yautja-houndpad-denied = Вы не понимаете интерфейс охотничьего зверя.
+cmu-yautja-houndpad-interface-title = Интерфейс наблюдения за адскими гончими
+cmu-yautja-houndpad-watch = Наблюдательная площадка фиксирует трансляцию {$hellhound}.
+cmu-yautja-houndpad-unwatch = Наблюдательная площадка сбрасывает трансляцию адской гончей.
+
+ent-CMUActionYautjaHellhoundGorge = Пронзить
+    .desc = Прыгнуть на добычу и пронзить её шипами.
+ent-CMUActionYautjaHellhoundSenseOwner = Найти хозяина
+    .desc = Вынюхать местоположение вашего яутжа-хозяина.

@@ -15,10 +15,17 @@
                 <BoxContainer Orientation="Vertical">
                     <ui:HighlightedContainer>
                         <BoxContainer Orientation="Vertical">
-                            <BoxContainer Orientation="Horizontal" VerticalExpand="True">
-                                <Label Text="{Loc 'humanoid-profile-editor-name-label'}" />
-                                <LineEdit Name="NameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 0" />
-                            </BoxContainer>
+                            <!-- cmu edit start -->
+                            <GridContainer Columns="2" VerticalExpand="True">
+                                <Label Text="{Loc 'cmu-profile-editor-first-name-label'}" />
+                                <LineEdit Name="FirstNameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 2" />
+                                <Label Text="{Loc 'cmu-profile-editor-last-name-label'}" />
+                                <LineEdit Name="LastNameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 2" />
+                                <Label Text="{Loc 'cmu-profile-editor-nickname-label'}" />
+                                <LineEdit Name="NicknameEdit" StyleClasses="CharacterNameInput" MinSize="270 0" VerticalAlignment="Center" Margin="5 0 0 2" />
+                            </GridContainer>
+                            <Label Name="NameRequiredLabel" Visible="False" FontColorOverride="#FF4444" />
+                            <!-- cmu edit end -->
                             <RichTextLabel Name="WarningLabel" HorizontalExpand="False"
                                             VerticalExpand="True" MaxWidth="425"
                                             HorizontalAlignment="Left" />
@@ -290,6 +297,20 @@
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
+                <!-- cmu edit start: traits and markings sit between regulation appearance and insurgency -->
+                <BoxContainer Orientation="Vertical" Margin="10">
+                    <!-- Traits -->
+                    <ScrollContainer VerticalExpand="True">
+                        <BoxContainer Name="TraitsList" Orientation="Vertical" />
+                    </ScrollContainer>
+                </BoxContainer>
+                <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10">
+                    <!-- Markings -->
+                    <!-- cmu edit start -->
+                    <humanoid:MarkingPicker Name="Markings" IgnoreLayers="Hair,FacialHair" HorizontalExpand="True" VerticalExpand="True" />
+                    <!-- cmu edit end -->
+                </BoxContainer>
+                <!-- cmu edit end -->
                 <!-- CMU14: strip-level FoF annotation, overlaid on the tab header row -->
                 <Control VerticalExpand="True">
                     <TabContainer Name="InsurgencyTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
@@ -380,24 +401,10 @@
                     <Label Text="{Loc 'cmu-fof-fallback-explanation'}" />
                     <TabContainer Name="ForceOnForceTabs" VerticalExpand="True" StyleClasses="CrtTabContainer">
                         <ScrollContainer VerticalExpand="True">
-                            <BoxContainer Name="FoFGovernmentJobList" Orientation="Vertical" />
-                        </ScrollContainer>
-                        <ScrollContainer VerticalExpand="True">
-                            <BoxContainer Name="FoFOppositionJobList" Orientation="Vertical" />
+                            <!-- CMU14: faction gameplay options. -->
+                            <BoxContainer Name="FoFJobList" Orientation="Vertical" />
                         </ScrollContainer>
                     </TabContainer>
-                </BoxContainer>
-                <BoxContainer Orientation="Vertical" Margin="10">
-                    <!-- Traits -->
-                    <ScrollContainer VerticalExpand="True">
-                        <BoxContainer Name="TraitsList" Orientation="Vertical" />
-                    </ScrollContainer>
-                </BoxContainer>
-                <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10">
-                    <!-- Markings -->
-                    <!-- cmu edit start -->
-                    <humanoid:MarkingPicker Name="Markings" IgnoreLayers="Hair,FacialHair" HorizontalExpand="True" VerticalExpand="True" />
-                    <!-- cmu edit end -->
                 </BoxContainer>
                 <BoxContainer Name="NamedItemsTab" Orientation="Vertical" Margin="10">
                     <!-- Named Items -->

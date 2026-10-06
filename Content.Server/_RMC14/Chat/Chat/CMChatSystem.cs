@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.Components;
+using Content.Server._RMC14.Language.Systems; // CMU14
 using Content.Shared.Speech.EntitySystems;
 using Content.Server.Players;
 using Content.Shared.CMU14.Threats.Mobs.Xeno;
@@ -12,6 +13,7 @@ using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.CMU14;
+using ManageHiveComponent = Content.Shared._RMC14.Xenonids.ManageHive.ManageHiveComponent;
 using Content.Shared.Chat;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
@@ -43,6 +45,7 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ReplacementAccentSystem _wordreplacement = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private LanguageSystem _language = default!; // CMU14
 
 
     private static readonly ProtoId<ReplacementAccentPrototype> ChatSanitize = "CMChatSanitize";
@@ -55,6 +58,7 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
         base.Initialize();
 
         SubscribeLocalEvent<ImaginaryFriendComponent, ChatMessageAfterGetRecipients>(OnImaginaryFriendGetRecipients);
+        SubscribeLocalEvent<XenoComponent, ChatMessageAfterGetRecipients>(OnXenoAfterGetRecipients);
     }
 
     private void OnImaginaryFriendGetRecipients(Entity<ImaginaryFriendComponent> ent, ref ChatMessageAfterGetRecipients args)
@@ -74,6 +78,54 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
             args.Recipients.Remove(session);
     }
 
+    private void OnXenoAfterGetRecipients(Entity<XenoComponent> ent, ref ChatMessageAfterGetRecipients args)
+    {
+        if (args.Purpose != ChatRecipientPurpose.Speech)
+            return;
+
+        _toRemove.Clear();
+        var hive = _hive.GetHive(ent.Owner);
+        var hivebroken = IsHivebrokenXeno(ent.Owner);
+        foreach (var (session, data) in args.Recipients)
+        {
+            if (data.Observer)
+                continue;
+
+            if (CanHearXenoSpeech(ent.Owner, session.AttachedEntity, hivebroken, hive))
+                continue;
+
+            _toRemove.Add(session);
+        }
+
+        foreach (var session in _toRemove)
+        {
+            args.Recipients.Remove(session);
+        }
+    }
+
+    private bool CanHearXenoSpeech(
+        EntityUid source,
+        EntityUid? listener,
+        bool hivebroken,
+        Entity<HiveComponent>? hive)
+    {
+        // CMU14: language grants must also admit their listeners through the recipient filter.
+        if (listener is { } hearer && _language.CanUnderstand(hearer, _chatSystem.GetCurrentLanguageForSpeech(source)))
+            return true;
+
+        if (!hivebroken)
+        {
+            return HasComp<XenoComponent>(listener) ||
+                   HasComp<HasKnowledgeOfXenoLanguageComponent>(listener) ||
+                   (HasComp<ManageHiveComponent>(source) && hive is not null && hive.Value.Comp.Corrupted);
+        }
+
+        return HasComp<XenoComponent>(listener) ||
+               HasComp<HasKnowledgeOfXenoLanguageComponent>(listener) ||
+               HasComp<YautjaComponent>(listener) ||
+               HasComp<YautjaThrallComponent>(listener) ||
+               HasComp<YautjaHivebrokenXenoComponent>(listener);
+    }
 
     public override string SanitizeMessageReplaceWords(EntityUid source, string msg)
     {

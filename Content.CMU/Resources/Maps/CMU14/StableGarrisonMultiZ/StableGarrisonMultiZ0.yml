@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/17/2026 01:40:02
-  entityCount: 140610
+  entityCount: 140595
 maps:
 - 1
 grids:
@@ -2062,8 +2062,6 @@ entities:
       bodyStatus: InAir
     - type: Fixtures
       fixtures: {}
-    - type: Shuttle
-      dampingModifier: 0.25
     - type: ExplosionAirtightGrid
     - type: MapAtmosphere
       space: False
@@ -484175,7 +484173,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 218.5,-66.5
-- proto: AU14HospitalEmergencyComputer
+- proto: CMUVMarkerColonyHospitalEmergencyComputer
   entities:
   - uid: 12645
     components:
@@ -550603,88 +550601,6 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: -16.5,-136.5
-- proto: fetchreturngovfor
-  entities:
-  - uid: 12487
-    components:
-    - type: Transform
-      parent: 1
-      pos: 64.5,-1.5
-  - uid: 12488
-    components:
-    - type: Transform
-      parent: 1
-      pos: 64.5,-2.5
-  - uid: 12489
-    components:
-    - type: Transform
-      parent: 1
-      pos: 64.5,-3.5
-  - uid: 12490
-    components:
-    - type: Transform
-      parent: 1
-      pos: 65.5,-2.5
-  - uid: 12491
-    components:
-    - type: Transform
-      parent: 1
-      pos: 65.5,-1.5
-  - uid: 12492
-    components:
-    - type: Transform
-      parent: 1
-      pos: 65.5,-3.5
-  - uid: 12493
-    components:
-    - type: Transform
-      parent: 1
-      pos: 66.5,-1.5
-  - uid: 12494
-    components:
-    - type: Transform
-      parent: 1
-      pos: 66.5,-2.5
-  - uid: 12495
-    components:
-    - type: Transform
-      parent: 1
-      pos: 66.5,-3.5
-  - uid: 12496
-    components:
-    - type: Transform
-      parent: 1
-      pos: 67.5,-1.5
-  - uid: 12497
-    components:
-    - type: Transform
-      parent: 1
-      pos: 67.5,-2.5
-  - uid: 12498
-    components:
-    - type: Transform
-      parent: 1
-      pos: 67.5,-3.5
-  - uid: 12646
-    components:
-    - type: Transform
-      parent: 1
-      pos: 67.5,-0.5
-  - uid: 12647
-    components:
-    - type: Transform
-      parent: 1
-      pos: 66.5,-0.5
-  - uid: 12648
-    components:
-    - type: Transform
-      parent: 1
-      pos: 65.5,-0.5
-  - uid: 12649
-    components:
-    - type: Transform
-      parent: 1
-      pos: 64.5,-0.5
 - proto: fetchwylaptopobjective
   entities:
   - uid: 12499
@@ -829188,4 +829104,17 @@ entities:
       containers:
         rmc_xeno_tunnel_mob_container: !type:Container
           ents: []
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000010
+    components:
+    - type: MetaData
+      name: Stable Garrison Redux ground relay
+    - type: Transform
+      pos: 201.5,-110.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: stable-garrison-redux.ground.relay
+      displayName: Stable Garrison Redux Ground Relay
 ...

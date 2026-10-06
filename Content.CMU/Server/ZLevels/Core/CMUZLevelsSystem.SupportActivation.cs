@@ -17,6 +17,7 @@ public sealed partial class CMUZLevelsSystem
         SubscribeLocalEvent<CMUZLevelHighGroundComponent, AnchorStateChangedEvent>(OnHighGroundAnchorChanged);
         SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ =>
         {
+            ClearOverheadPvsStorage();
             _pendingSupportWakeRegions.Clear();
             _supportWakeRegions.Clear();
             _supportWakeEntities.Clear();

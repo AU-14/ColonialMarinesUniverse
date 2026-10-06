@@ -22,6 +22,7 @@
       settings: short
   - type: Skills
     preset: AU14SkillPresetPlatoonHospitalCorpsman
+  - type: K9Handler
 
 - type: partySpawn
   id: AU14IntelThirdPartyK9HandlerSpawn
@@ -41,6 +42,24 @@
   minplayers: 500
   maxplayers: 600
   GhostsNeeded: 600
+  roundstart: false
+
+- type: partySpawn
+  id: AU14IntelThirdPartyK9SoloSpawn
+  leadersToSpawn:
+    AU14MobK9GhostRoleGOVFOR: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: AU14IntelThirdPartyK9Solo
+  partyspawn: AU14IntelThirdPartyK9SoloSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
+  weight: 1
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 1
   roundstart: false
 
 - type: entity

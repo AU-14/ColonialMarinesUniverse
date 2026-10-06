@@ -6,6 +6,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: Skills
     skills:
       RMCSkillConstruction: 2
@@ -85,6 +86,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: Skills
     skills:
       RMCSkillConstruction: 2
@@ -234,6 +236,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: Skills
     skills:
       RMCSkillConstruction: 2
@@ -311,6 +314,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: Skills
     skills:
       RMCSkillConstruction: 2

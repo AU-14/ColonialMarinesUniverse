@@ -180,20 +180,20 @@ public sealed partial class SpawnPointSystem : EntitySystem
             }
         }
 
-        // CMU14 Begin: the station filter above hides job markers on other maps, so colony jobs
-        // handed the warship station ended in the random-spawner backup below. Match the exact
-        // job marker anywhere before that fallback.
-        if (preferredPositions.Count == 0 && possiblePositions.Count == 0)
+        // CMU14: civilian jobs can be assigned through the ship's job list even though
+        // their dedicated spawn marker belongs to the colony or orbital station.
+        // Prefer that job's marker before falling back to an unrelated spawn point.
+        if (side == RoundJobSide.Civilian && args.Job != null &&
+            preferredPositions.Count == 0 && possiblePositions.Count == 0)
         {
-            var jobPoints = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
-            while (jobPoints.MoveNext(out _, out var jobPoint, out var jobXform))
+            var civilianPoints = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
+            while (civilianPoints.MoveNext(out _, out var spawnPoint, out var xform))
             {
-                if (jobPoint.SpawnType == SpawnPointType.Job
-                    && (args.Job == null || jobPoint.Job == args.Job))
-                    possiblePositions.Add(jobXform.Coordinates);
+                if (spawnPoint.SpawnType == SpawnPointType.Job && spawnPoint.Job == args.Job &&
+                    xform.MapID != MapId.Nullspace)
+                    possiblePositions.Add(xform.Coordinates);
             }
         }
-        // CMU14 End
 
         // Last resort: any spawn point.
         if (preferredPositions.Count == 0 && possiblePositions.Count == 0)

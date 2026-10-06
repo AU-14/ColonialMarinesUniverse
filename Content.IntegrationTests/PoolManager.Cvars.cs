@@ -1,6 +1,8 @@
 #nullable enable
 using Content.Shared.CMU14.BalanceRating;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.CCVar;
+using Robust.Shared;
 
 namespace Content.IntegrationTests;
 
@@ -11,6 +13,10 @@ public static partial class PoolManager
 {
     public static readonly (string cvar, string value)[] TestCvars =
     {
+        // CMU14: the engine pool defaults this to 1, which caps the entire .NET worker pool when
+        // CI sets DOTNET_PROCESSOR_COUNT=1. Prototype startup then deadlocks on queued worker tasks.
+        // Keep the worker pool unrestricted while retaining CI's single-worker PLINQ workaround.
+        (CVars.ThreadParallelCount.Name, "0"),
         // @formatter:off
         (CCVars.DatabaseSynchronous.Name,     "true"),
         (CCVars.DatabaseSnapshot.Name,        "true"),
@@ -37,5 +43,7 @@ public static partial class PoolManager
         (CCVars.MovementMobPushing.Name,       "false"),
         (CCVars.ResourceUploadingStoreDeletionDays.Name, "0"),
         (CMUBalanceRatingCVars.AutomaticEnabled.Name, "false"),
+        // Tests that exercise automatic hunts opt in; pooled round restarts must not load extra maps.
+        (YautjaPredatorRoundCVars.RandomEnabled.Name, "false"),
     };
 }

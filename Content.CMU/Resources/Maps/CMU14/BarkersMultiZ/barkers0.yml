@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/11/2026 23:33:51
-  entityCount: 91964
+  entityCount: 91938
 maps:
 - 1
 grids:
@@ -571841,143 +571841,6 @@ entities:
     - type: Transform
       parent: 1
       pos: -129.5,16.5
-- proto: fetchreturngovfor
-  entities:
-  - uid: 82710
-    components:
-    - type: Transform
-      parent: 1
-      pos: -149.5,-35.5
-  - uid: 82711
-    components:
-    - type: Transform
-      parent: 1
-      pos: -149.5,-34.5
-  - uid: 82712
-    components:
-    - type: Transform
-      parent: 1
-      pos: -149.5,-33.5
-  - uid: 82713
-    components:
-    - type: Transform
-      parent: 1
-      pos: -150.5,-35.5
-  - uid: 82714
-    components:
-    - type: Transform
-      parent: 1
-      pos: -150.5,-34.5
-  - uid: 82715
-    components:
-    - type: Transform
-      parent: 1
-      pos: -150.5,-33.5
-  - uid: 82716
-    components:
-    - type: Transform
-      parent: 1
-      pos: -151.5,-35.5
-  - uid: 82717
-    components:
-    - type: Transform
-      parent: 1
-      pos: -151.5,-34.5
-  - uid: 82718
-    components:
-    - type: Transform
-      parent: 1
-      pos: -151.5,-33.5
-  - uid: 82719
-    components:
-    - type: Transform
-      parent: 1
-      pos: -152.5,-35.5
-  - uid: 82720
-    components:
-    - type: Transform
-      parent: 1
-      pos: -152.5,-34.5
-  - uid: 82721
-    components:
-    - type: Transform
-      parent: 1
-      pos: -152.5,-33.5
-  - uid: 82722
-    components:
-    - type: Transform
-      parent: 1
-      pos: -153.5,-35.5
-  - uid: 82723
-    components:
-    - type: Transform
-      parent: 1
-      pos: -153.5,-34.5
-  - uid: 82724
-    components:
-    - type: Transform
-      parent: 1
-      pos: -157.5,-35.5
-  - uid: 82725
-    components:
-    - type: Transform
-      parent: 1
-      pos: -153.5,-33.5
-  - uid: 82726
-    components:
-    - type: Transform
-      parent: 1
-      pos: -154.5,-35.5
-  - uid: 82727
-    components:
-    - type: Transform
-      parent: 1
-      pos: -154.5,-34.5
-  - uid: 82728
-    components:
-    - type: Transform
-      parent: 1
-      pos: -154.5,-33.5
-  - uid: 82729
-    components:
-    - type: Transform
-      parent: 1
-      pos: -155.5,-35.5
-  - uid: 82730
-    components:
-    - type: Transform
-      parent: 1
-      pos: -155.5,-34.5
-  - uid: 82731
-    components:
-    - type: Transform
-      parent: 1
-      pos: -155.5,-33.5
-  - uid: 82732
-    components:
-    - type: Transform
-      parent: 1
-      pos: -156.5,-35.5
-  - uid: 82733
-    components:
-    - type: Transform
-      parent: 1
-      pos: -156.5,-34.5
-  - uid: 82734
-    components:
-    - type: Transform
-      parent: 1
-      pos: -156.5,-33.5
-  - uid: 82735
-    components:
-    - type: Transform
-      parent: 1
-      pos: -157.5,-34.5
-  - uid: 82736
-    components:
-    - type: Transform
-      parent: 1
-      pos: -157.5,-33.5
 - proto: fetchtheaterhandbookobjective
   entities:
   - uid: 82737
@@ -610749,4 +610612,17 @@ entities:
     - type: Transform
       parent: 1
       pos: -46.5,126.5
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000003
+    components:
+    - type: MetaData
+      name: Barkers Lament ground relay
+    - type: Transform
+      pos: 23.5,-25.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: barkers-lament.ground.relay
+      displayName: Barker's Lament Ground Relay
 ...

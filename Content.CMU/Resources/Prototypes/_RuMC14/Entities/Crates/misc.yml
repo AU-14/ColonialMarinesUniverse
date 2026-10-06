@@ -1,0 +1,290 @@
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateUTES-C
+  name: contains the UTES-C 12.7mm heavy machine gun and 4 ammunition boxes.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCUTES-CCase
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateUTES-CMagazine
+  name: contains the UTES-C Magazine.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCMagazineUTES-C
+      amount: 1
+    - id: RuMCMagazineUTES-CTracter
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateAH12
+  name: contains the AH12
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCGunAH12Case_alt
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateVAL
+  name: contains the VAL
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCGunVALCase_alt
+      amount: 1
+
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateRPG_36
+  name: contains the RPG-36.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCWeaponLauncherDisposableFolded
+      amount: 4
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateRPO_Pchela
+  name: contains the RPO-Pchela.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCWeaponLauncherDisposableFoldedIncen
+      amount: 4
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateRPG_36_T
+  name: contains the RPG-36-T.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCWeaponLauncherDisposableTermobaricFolded
+      amount: 4
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateRPG_32
+  name: contains the termobaric rocket for RPG-32.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCRocketRPG_Termobaric
+      amount: 4
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateRG35F
+  name: contains the termobaric grenade RG35F.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCPacketGrenadeTermobaricUPPFilled
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateBoxBulletsRifleAG80
+  name: crate 9.7x16mm ammunition box
+  description: A 9.7x16mm ammunition box.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxBulletsRifleAG80
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateBoxBulletsRifleAG80AP
+  name: crate 9.7x16mm AP ammunition box
+  description: A 9.7x16mm (AP) ammunition box.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxBulletsRifleAG80AP
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateBoxBulletsRifleType71
+  name: crate 5.45x39mm ammunition box
+  description: A 5.45x39mm ammunition box.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxBulletsRifleType71
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateBoxBulletsRifleType71AP
+  name: crate 5.45x39mm AP ammunition box
+  description: A 5.45x39mm (AP) ammunition box.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxBulletsRifleType71AP
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateBoxBulletsRifle10x24mm
+  name: crate 10x24mm ammunition box
+  description: A 10x24mm ammunition box.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxBulletsRifle10x24mm
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateBoxBulletsRifle10x24mmAP
+  name: crate 10x24mm AP ammunition box
+  description: A 10x24mm (AP) ammunition box.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxBulletsRifle10x24mmAP
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateBulletsSMG10x20mm
+  name: crate ammunition 10x20mm box
+  description: A 10x20mm ammunition box.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxBulletsSMG10x20mm
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateBulletsPistol762x25mm
+  name: crate ammunition 7.62x25mm box
+  description: A 7.62x25mm ammunition box.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxBulletsPistol762x25mm
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazineRifleAK4047
+  name: crate magazine AK4047 box
+  description: 10 magazine AK4047
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazineRifleAK4047
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazineRifleAK4047AP
+  name: crate AP magazine AK4047 box
+  description: 10 magazine AK4047
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazineRifleAK4047AP
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazineRifleAG80
+  name: crate magazine AG80 box
+  description: 10 magazine AG80
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazineRifleAG80
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazineRifleAG80AP
+  name: crate AP magazine AG80 box
+  description: 10 magazine AG80
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazineRifleAG80AP
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazineRifleAG80EXT
+  name: crate EXT magazine AG80 box
+  description: 10 magazine AG80
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazineRifleAG80EXT
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazinePistolType73
+  name: crate magazine box
+  description: 10 magazine Type73
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazinePistolType73
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazinePistolNP92
+  name: crate magazine NP92 box
+  description: 10 magazine NP92
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazinePistolNP92
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazineSMGType64
+  name: crate magazine Type64 box
+  description: 10 magazine Type64
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazineSMGType64
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazineRifleType71
+  name: crate magazine Type71 box
+  description: 10 magazine Type71
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazineRifleType71
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateMagazineRifleType71AP
+  name: crate AP magazine Type71 box
+  description: 10 magazine Type71
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCBoxMagazineRifleType71AP
+      amount: 1

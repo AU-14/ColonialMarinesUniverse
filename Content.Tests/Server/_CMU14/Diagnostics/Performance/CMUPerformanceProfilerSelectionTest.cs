@@ -57,4 +57,112 @@ public sealed class CMUPerformanceProfilerSelectionTest
         Assert.That(selected.Contains(3), Is.True);
         Assert.That(truncated, Is.True);
     }
+
+    [TestCase(0)]
+    [TestCase(1)]
+    public void SingleFrameSelectionUsesNewestCompletedFrame(int newestTickCount)
+    {
+        CMUPerformanceProfileCandidate[] candidates =
+        [
+            new(1, 1.0, 1000, 1, 20),
+            new(2, 0.2, 100, 1, 20),
+            new(3, 0.01, 1, newestTickCount, 20),
+        ];
+
+        IReadOnlyList<long> selected = CMUPerformanceProfilerReader.SelectFrameOffsets(
+            candidates,
+            1,
+            128,
+            out bool truncated);
+
+        Assert.That(selected, Is.EqualTo(new long[] { 3 }),
+            "The newest completed frame must remain visible even when older frames have larger timings or allocations.");
+        Assert.That(truncated, Is.False);
+    }
+
+    [Test]
+    public void NewestZeroTickFrameKeepsRecentTickWorkAlongsideIt()
+    {
+        CMUPerformanceProfileCandidate[] candidates =
+        [
+            new(1, 1.0, 1000, 1, 20),
+            new(2, 0.02, 2, 1, 20),
+            new(3, 0.01, 1, 0, 20),
+        ];
+
+        IReadOnlyList<long> selected = CMUPerformanceProfilerReader.SelectFrameOffsets(
+            candidates,
+            2,
+            128,
+            out bool truncated);
+
+        Assert.That(selected, Is.EqualTo(new long[] { 2, 3 }),
+            "A fresh input-only frame and the latest simulation frame take priority over an older extreme.");
+        Assert.That(truncated, Is.False);
+    }
+
+    [Test]
+    public void OversizedHistoricalFrameDoesNotStarveRecentFrames()
+    {
+        CMUPerformanceProfileCandidate[] candidates =
+        [
+            new(1, 10.0, 1000, 1, 2000),
+            new(2, 0.02, 2, 1, 64),
+            new(3, 0.01, 1, 0, 64),
+        ];
+
+        IReadOnlyList<long> selected = CMUPerformanceProfilerReader.SelectFrameOffsets(
+            candidates,
+            3,
+            128,
+            out bool truncated);
+
+        Assert.That(selected, Is.EqualTo(new long[] { 2, 3 }));
+        Assert.That(truncated, Is.True,
+            "Omitting historical detail because it exceeds the event budget must remain explicit.");
+    }
+
+    [Test]
+    public void RejectedLargeCandidatesAreBackfilledWithinFrameAndEventLimits()
+    {
+        CMUPerformanceProfileCandidate[] candidates =
+        [
+            new(1, 10.0, 10, 1, 200),
+            new(2, 0.1, 1000, 1, 200),
+            new(3, 0.01, 1, 1, 30),
+            new(4, 0.02, 2, 1, 30),
+            new(5, 0.03, 3, 1, 30),
+        ];
+
+        IReadOnlyList<long> selected = CMUPerformanceProfilerReader.SelectFrameOffsets(
+            candidates,
+            3,
+            128,
+            out bool truncated);
+
+        Assert.That(selected, Is.EqualTo(new long[] { 3, 4, 5 }),
+            "Rejected expensive candidates must not occupy frame slots that smaller recent frames can fill.");
+        Assert.That(truncated, Is.True);
+    }
+
+    [Test]
+    public void OversizedNewestFrameIsSelectedAloneForPartialCapture()
+    {
+        CMUPerformanceProfileCandidate[] candidates =
+        [
+            new(1, 1.0, 1000, 1, 20),
+            new(2, 0.2, 100, 1, 20),
+            new(3, 0.01, 1, 0, 400),
+        ];
+
+        IReadOnlyList<long> selected = CMUPerformanceProfilerReader.SelectFrameOffsets(
+            candidates,
+            3,
+            128,
+            out bool truncated);
+
+        Assert.That(selected, Is.EqualTo(new long[] { 3 }),
+            "A bounded tail of the newest frame must not be replaced by complete but stale frames.");
+        Assert.That(truncated, Is.True);
+    }
 }

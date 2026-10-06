@@ -169,13 +169,13 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         ChemYamls.Add(args.ID, yamlstr);
         _protoMan.LoadString(yamlstr, true);
         _generatedReagents.Add(args.ID);
-        CreateRecipe(args);
-        _generatedRecipes.Add(args.ID);
+        var recipeIds = CreateRecipe(args);
+        _generatedRecipes.UnionWith(recipeIds);
         Dictionary<Type, HashSet<string>> mod = [];
         HashSet<string> hashy = [];
         hashy.Add(args.ID);
         mod.Add(typeof(ReagentPrototype), hashy);
-        mod.Add(typeof(ReactionPrototype), hashy);
+        mod.Add(typeof(ReactionPrototype), recipeIds);
         _protoMan.ReloadPrototypes(mod);
         /* //UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
         if (_protoMan.TryLoadDynamic(reagent))
@@ -185,7 +185,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             _generatedRecipes.Add(args.ID);
         }*/
     }
-    protected void CreateRecipe(GeneratedReagentData args)
+    protected HashSet<string> CreateRecipe(GeneratedReagentData args)
     {
         var reagents = _protoMan.GetInstances<ReagentPrototype>();
         var properties = _protoMan.GetInstances<ReagentPropertyPrototype>();
@@ -214,17 +214,34 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         product.Add(args.ID, Math.Max(1, args.RecipeYield).ToString());
         recipe.Add("products", product);
         recipe.Add("reactants", ingredients);
-        string yamlstr =
-            $"- type: reaction\n" +
-            $"  id: {args.ID}\n" +
-            $"  abstract: false\n" +
-            $"  priority: {prio.Value + 1}\n" +
-            $"  reactants:\n{recipstr}" +
-            $"  products:\n" +
-            $"    {args.ID}: {args.RecipeYield}\n";
-        //_sawmill.Info(yamlstr);
-        _protoMan.LoadString(yamlstr);
-        RecipeYamls.Add(args.ID, yamlstr);
+        HashSet<string> recipeIds = [];
+        LoadRecipe(args.ID, recipstr);
+
+        // Sheets and uranium glass yield upstream Uranium, while RMC jugs and
+        // generated contracts use RMCUranium. Both have the same displayed name.
+        // Accept either source in research without changing other chemistry recipes.
+        if (args.Recipe.ContainsKey("RMCUranium") && !args.Recipe.ContainsKey("Uranium"))
+        {
+            LoadRecipe($"CMUGeneratedUraniumAlternative{args.ID}",
+                recipstr.Replace("    RMCUranium:\n", "    Uranium:\n"));
+        }
+
+        return recipeIds;
+
+        void LoadRecipe(string id, string reactants)
+        {
+            var yamlstr =
+                $"- type: reaction\n" +
+                $"  id: {id}\n" +
+                $"  abstract: false\n" +
+                $"  priority: {prio.Value + 1}\n" +
+                $"  reactants:\n{reactants}" +
+                $"  products:\n" +
+                $"    {args.ID}: {args.RecipeYield}\n";
+            _protoMan.LoadString(yamlstr);
+            RecipeYamls.Add(id, yamlstr);
+            recipeIds.Add(id);
+        }
         /* UNCOMMENT WHEN https://github.com/space-wizards/RobustToolbox/pull/6609 IS MERGED
         _protoMan.TryLoadDynamic(recipe);
         */

@@ -1,3 +1,5 @@
+using Content.Server.Ghost.Roles.Events;
+using Content.Server.Players.JobWhitelist;
 using System.Linq;
 using Content.Server._RMC14.Ghost.Roles;
 using Content.Server.Administration.Logs;
@@ -45,6 +47,7 @@ namespace Content.Server.Ghost.Roles;
 [UsedImplicitly]
 public sealed partial class GhostRoleSystem : EntitySystem
 {
+    [Dependency] private JobWhitelistManager _jobWhitelist = default!;
     [Dependency] private IBanManager _ban = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private EuiManager _euiManager = default!;
@@ -302,12 +305,19 @@ public sealed partial class GhostRoleSystem : EntitySystem
         return player.AttachedEntity is not { } entity || HasComp<GhostComponent>(entity);
     }
 
-    private bool CanRequestGhostRole(ICommonSession player, Entity<GhostRoleComponent> role)
+    private bool CanRequestGhostRole(ICommonSession player, Entity<GhostRoleComponent> role, bool explicitRequest = false) // CMU14
     {
         if (!CanRequestGhostRole(player))
             return false;
 
         TryPrototypes(role, out var antags, out var jobs);
+
+        // CMU14: faction role whitelists apply to ghost roles too.
+        foreach (var job in jobs)
+        {
+            if (!_jobWhitelist.IsAllowed(player, job))
+                return false;
+        }
 
         // Preserve the fork's fail-closed role-ban check until the session's ban cache is available.
         if ((jobs.Count > 0 || antags.Count > 0) && _ban.GetRoleBans(player.UserId) == null)
@@ -316,7 +326,12 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (_ban.IsRoleBanned(player, antags) || _ban.IsRoleBanned(player, jobs))
             return false;
 
-        return IsRoleAllowed(player, jobs, antags, role.Comp.Requirements);
+        if (!IsRoleAllowed(player, jobs, antags, role.Comp.Requirements))
+            return false;
+
+        var attempt = new GhostRoleRequestAttemptEvent(player, role.Owner, role.Comp, ExplicitRequest: explicitRequest); // CMU14
+        RaiseLocalEvent(role.Owner, ref attempt);
+        return !attempt.Cancelled;
     }
 
     private bool TryTakeover(ICommonSession player, uint identifier)
@@ -546,7 +561,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
             return;
 
-        if (!CanRequestGhostRole(player, roleEnt))
+        if (!CanRequestGhostRole(player, roleEnt, explicitRequest: true)) // CMU14: report custom eligibility denials only on a request.
             return;
         if (roleEnt.Comp.RaffleConfig is not null)
         {

@@ -94,6 +94,7 @@
     pocket1: AU14StampLiaison
   inhand:
   - RMCPortableVendorCorporate
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase
