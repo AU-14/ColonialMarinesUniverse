@@ -426,7 +426,7 @@
     mode: SnapgridCenter
   components:
   - type: Explosive
-    explosionType: RMCExplosion
+    explosionType: RMC
     maxIntensity: 18
     intensitySlope: 20
     totalIntensity: 120
@@ -435,4 +435,3 @@
   - type: TileFireOnTrigger
     spawn: RMCTileFire
     range: 2
-    total: 4
