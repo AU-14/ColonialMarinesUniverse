@@ -33,11 +33,15 @@
   ## Bleeding
   Open wounds bleed. The injury report and health analyzer show how badly: minor, moderate, severe or [color=red]arterial[/color].
   - [bold]Arterial bleeding[/bold] is the most dangerous and drains blood fast. Gauze won't stop it; use a trauma kit, a packed trauma kit, surgical line or a tourniquet.
+  - A wound only becomes arterial from one very heavy hit, around 60 damage or more from a bullet, blade or shrapnel.
+  - [bold]Torn-off limbs[/bold] leave a stump that bleeds arterially until it's closed with surgery. Only a tourniquet on the stump holds it in the meantime.
   - [bold]Packed gauze[/bold] and [bold]packed trauma kits[/bold] can be used just to control bleeding. Packed gauze only works on non-arterial bleeding; a packed trauma kit also stops arterial bleeding.
   - Blood loss starves the body of oxygen. Replace lost blood with blood packs or IV drips.
+  - [bold]After death[/bold], most bleeding clots on its own once the heart stops pumping. [color=red]Arterial bleeding and open stumps keep bleeding[/color], so a body left like that can lose all its blood before it's revived. Stop them before you revive someone.
 
   ## Tourniquets
   - Put a tourniquet on an arm or leg to stop that limb bleeding. It's quick enough to put on yourself under fire.
+  - [bold]Stumps[/bold]: aim at the missing limb and apply a tourniquet to clamp its stump. A stump tourniquet doesn't kill anything, but the stump starts bleeding again when it comes off, so close it with surgery. See [textlink="Limb Surgery" link="CMUGuideSurgeryLimbs"].
   - [color=red]After 5 minutes, the limb dies[/color] and becomes necrotic. Treat the wounds properly and take the tourniquet off before then, using the [bold]Remove tourniquet[/bold] option. Taking it off gives it back.
 
   ## Internal Bleeding

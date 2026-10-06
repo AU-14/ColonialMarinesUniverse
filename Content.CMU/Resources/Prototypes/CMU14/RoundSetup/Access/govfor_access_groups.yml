@@ -83,3 +83,17 @@
   tags:
   - AU14AccessGovfor
   - AU14AccessGovforMedical
+
+- type: accessGroup
+  id: AU14GovforCommandNoLogistics
+  tags:
+  - AU14AccessGovfor
+  - AU14AccessGovforSquad
+  - AU14AccessGovforCommand
+  - AU14AccessGovforSecurity
+  - AU14AccessGovforFTL
+  - AU14AccessGovforMedical
+  - AU14AccessGovforEngineering
+  - AU14AccessGovforGunner
+  - AU14AccessGovforPilot
+  - AU14AccessGovforVehicleCrew

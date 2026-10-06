@@ -1,0 +1,22 @@
+<Document>
+  # Tribals
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearTribalLeader" Caption="Leader"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearTribalSpear" Caption="Spear"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearTribalBowman" Caption="Bowman"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearTribalShaman" Caption="Shaman"/>
+  </Box>
+
+  Humanity is not the only people out among the stars. The [bold]tribals[/bold] are an intelligent, stone-age society native to some frontier worlds, living in clans and fiercely devoted to protecting their homeworld.
+
+  ## The Tribe
+  - Tribals live in bands led by a [bold]chief[/bold], who rallies the tribe and leads its defense.
+  - Their warriors fight with weapons of bone, stone and wood: [bold]spears[/bold] that are vicious up close and deadly when thrown, and crude [bold]bows[/bold] firing barbed, bone-tipped arrows that hit with frightening force.
+  - Their [bold]shamans[/bold] are healers and spiritual guides, patching up the wounded and keeping the band alive.
+  - They protect themselves with armor of bone plates and hide lashed together with sinew, and helms carved from the skulls of great beasts. It turns a claw or a blade well enough, but not a rifle round.
+
+  ## Contact
+  - To the tribals, colonists and soldiers are invaders on their land. They often attack outsiders on sight, and will fight to drive them off at any cost.
+  - Their worlds can be rich in valuable resources that corporations and governments are eager to claim, which makes contact with them anything but peaceful.
+</Document>
