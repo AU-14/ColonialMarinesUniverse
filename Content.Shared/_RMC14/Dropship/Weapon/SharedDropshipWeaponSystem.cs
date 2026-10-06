@@ -775,6 +775,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             SoundEveryShots = ammo.SoundEveryShots,
             ZLevelPenetration = ammo.ZLevelPenetration,
             ApplyEffectsOnPenetrationLevels = ammo.ApplyEffectsOnPenetrationLevels,
+            TargetLowestZLevel = ammo.TargetLowestZLevel,
         };
 
         AddComp(inFlight, inFlightComp, true);
@@ -2042,6 +2043,105 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                     }
                 }
 
+                // Target the lowest z-level with tiles if configured
+                if (flight.TargetLowestZLevel)
+                {
+                    var mapId = targetMap.MapId;
+                    if (_map.TryGetMap(mapId, out var sourceMap) && sourceMap is { } sourceMapUid)
+                    {
+                        var worldPos = targetMap.Position;
+                        var lowestLevel = 0;
+                        var lowestLevelMap = sourceMapUid;
+                        var lowestLevelMapComp = EntityManager.GetComponent<MapComponent>(sourceMapUid);
+
+                        // Find the lowest z-level with an opening/tiles
+                        for (var offset = 1; offset <= 10; offset++) // Search up to 10 levels down
+                        {
+                            if (!_zLevels.TryMapOffset((sourceMapUid, null), offset, out _, out var nextMapComp))
+                                break;
+
+                            // Check if there's an opening to this level
+                            if (_zLevels.TryFindZShotOpening(
+                                    sourceMapUid,
+                                    nextMapComp.Owner,
+                                    offset,
+                                    worldPos,
+                                    worldPos,
+                                    out _,
+                                    preferOpeningAwayFromSource: true,
+                                    maxSourceDistanceFromOpeningEdgeTiles: 2f))
+                            {
+                                lowestLevel = offset;
+                                lowestLevelMap = nextMapComp.Owner;
+                                lowestLevelMapComp = nextMapComp;
+                            }
+                            else
+                            {
+                                // No opening at this level, so previous level was the lowest
+                                break;
+                            }
+                        }
+
+                        // Apply effects at the lowest level with tiles
+                        if (lowestLevel > 0)
+                        {
+                            var levelCoordinates = new MapCoordinates(worldPos, lowestLevelMapComp.MapId);
+
+                            // Apply explosion to lowest level
+                            if (flight.Explosion != null)
+                            {
+                                _rmcExplosion.QueueExplosion(levelCoordinates,
+                                    flight.Explosion.Type,
+                                    flight.Explosion.Total,
+                                    flight.Explosion.Slope,
+                                    flight.Explosion.Max,
+                                    uid,
+                                    canCreateVacuum: false
+                                );
+                            }
+
+                            // Apply fire to lowest level
+                            if (flight.Fire != null)
+                            {
+                                var chain = _onCollide.SpawnChain();
+                                var coords = new EntityCoordinates(lowestLevelMap, worldPos);
+
+                                if (flight.Fire.Total is { } total)
+                                {
+                                    var tiles = new List<Vector2i>();
+                                    for (var x = -flight.Fire.Range; x <= flight.Fire.Range; x++)
+                                    {
+                                        for (var y = -flight.Fire.Range; y <= flight.Fire.Range; y++)
+                                        {
+                                            tiles.Add((x, y));
+                                        }
+                                    }
+
+                                    for (var i = 0; i < total; i++)
+                                    {
+                                        if (tiles.Count == 0)
+                                            break;
+
+                                        var tile = _random.PickAndTake(tiles);
+                                        var fireCoords = coords.Offset(new Vector2(tile.X, tile.Y));
+                                        _rmcFlammable.SpawnFire(fireCoords,
+                                            flight.Fire.Type,
+                                            chain,
+                                            flight.Fire.Range,
+                                            flight.Fire.Intensity,
+                                            flight.Fire.Duration,
+                                            out _,
+                                            canSpawn: CanSpawnCASFire
+                                        );
+                                    }
+                                }
+                            }
+
+                            continue; // Skip normal target-level explosion/fire
+                        }
+                    }
+                }
+
                 if (flight.Explosion != null)
                 {
                     TryDeleteDestructibleWallAt(landing);
@@ -2782,6 +2882,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             SoundEveryShots = ev.SoundEveryShots,
             ZLevelPenetration = ammo.Comp.ZLevelPenetration,
             ApplyEffectsOnPenetrationLevels = ammo.Comp.ApplyEffectsOnPenetrationLevels,
+            TargetLowestZLevel = ammo.Comp.TargetLowestZLevel,
             MarkerDuration = markerDuration,
         };
         AddComp(inFlight, inFlightComp, true);

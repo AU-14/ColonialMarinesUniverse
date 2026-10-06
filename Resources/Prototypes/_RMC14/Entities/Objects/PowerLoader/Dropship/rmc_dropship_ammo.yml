@@ -89,6 +89,7 @@
     ammoType: 30mm_crate_hv
     bulletSpread: 4
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     damage:
       types:
         Blunt: 26.66
@@ -166,6 +167,7 @@
   - type: DropshipAmmo
     travelTime: 3
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 3000
       slope: 5.5
@@ -208,6 +210,7 @@
   - type: DropshipAmmo
     travelTime: 2
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 905
       slope: 15
@@ -229,6 +232,7 @@
   - type: DropshipAmmo # TODO RMC14 not usable in fire mission, only direct bombardment
     travelTime: 6
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     fireMissionDelay: null
     explosion:
       total: 1780
@@ -255,6 +259,7 @@
   - type: DropshipAmmo
     travelTime: 5
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 1850
       slope: 3.2
@@ -276,6 +281,7 @@
   - type: DropshipAmmo
     travelTime: 5
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     implosion:
       pullRange: 5.5
       pullDistance: 3.5
@@ -304,6 +310,7 @@
   - type: DropshipAmmo
     travelTime: 6
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 2000
       slope: 5.5
@@ -413,6 +420,7 @@
   - type: DropshipAmmo
     travelTime: 5
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     implosion:
       pullRange: 4
       pullDistance: 2.5
@@ -472,6 +480,7 @@
   - type: DropshipAmmo
     travelTime: 12
     zLevelPenetration: 3
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 10000
       slope: 4.5
@@ -495,6 +504,7 @@
   - type: DropshipAmmo
     travelTime: 11
     zLevelPenetration: 3
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 10000
       slope: 4.5
@@ -527,6 +537,7 @@
     roundsPerShot: 12
     bulletSpread: 17
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 110
       slope: 4
@@ -555,6 +566,7 @@
     bulletSpread: 9
     travelTime: 3
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 3000
       slope: 5.5
@@ -580,6 +592,7 @@
     bulletSpread: 5
     travelTime: 6
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 190
       slope: 11
@@ -608,6 +621,7 @@
     roundsPerShot: 6
     bulletSpread: 5
     zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     explosion:
       total: 100
       slope: 12

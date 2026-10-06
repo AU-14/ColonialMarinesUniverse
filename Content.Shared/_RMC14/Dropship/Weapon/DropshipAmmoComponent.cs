@@ -87,6 +87,9 @@ public sealed partial class DropshipAmmoComponent : Component
     public bool ApplyEffectsOnPenetrationLevels = false;
 
     [DataField, AutoNetworkedField]
+    public bool TargetLowestZLevel = false;
+
+    [DataField, AutoNetworkedField]
     public bool DeleteOnEmpty;
 
     [DataField, AutoNetworkedField]

@@ -416,3 +416,23 @@
     impactEffects:
     - RMCEffectExplosionParticle
     - RMCSmokeExplosionProofSmall
+
+- type: entity
+  parent: MarkerBase
+  id: RMCExplosionSmallWithFire
+  name: small explosion
+  suffix: Small blast with fire!
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Explosive
+    explosionType: RMCExplosion
+    maxIntensity: 18
+    intensitySlope: 20
+    totalIntensity: 120
+    canCreateVacuum: false
+  - type: CMExplosionEffect
+  - type: TileFireOnTrigger
+    spawn: RMCTileFire
+    range: 2
+    total: 4
