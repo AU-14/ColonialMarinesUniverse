@@ -37,6 +37,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly string[] EmptyLabels = { "", "", "" };
 
@@ -46,6 +47,9 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
     // History lines per page: as many as the screen shows, with room for one to wrap.
     private const int HistoryPageSize = 6;
+
+    // How far from the machine cash it paid out may lie and still be taken from the screen.
+    private const float CashReach = 1.5f;
 
     // Stack type shared by every dollar-bill denomination (RMCSpaceCash1, 10, 100, 1000, ...).
     private const string CashStackType = "Dollar";
@@ -63,6 +67,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmCancelBuiMsg>(OnCancel);
         SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmInsertCardBuiMsg>(OnInsertCardMsg);
         SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmEjectCardBuiMsg>(OnEjectCardMsg);
+        SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmTakeCashBuiMsg>(OnTakeCashMsg);
         SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmOwnCardRequestMsg>(OnOwnCardRequest);
         SubscribeLocalEvent<ColonyAtmComponent, ColonyAtmScrollHistoryBuiMsg>(OnScrollHistory);
         SubscribeLocalEvent<ColonyAtmComponent, EntRemovedFromContainerMessage>(OnCardRemoved);
@@ -88,7 +93,8 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
     /// <summary>
     ///     An ATM serves one person at a time. Refuses (with a popup) while someone else has it open,
-    ///     otherwise hands the machine to <paramref name="user"/>, starting a fresh session if they are new.
+    ///     otherwise hands the machine to <paramref name="user"/>, clearing anything half typed if they
+    ///     are new to it (see <see cref="LeaveSession"/>).
     /// </summary>
     private bool TryClaim(EntityUid uid, ColonyAtmComponent comp, EntityUid user)
     {
@@ -99,15 +105,14 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         }
 
         if (comp.CurrentUser != user)
-            ResetSession(uid, comp);
+            LeaveSession(uid, comp);
 
         comp.CurrentUser = user;
         return true;
     }
 
     /// <summary>
-    ///     Forgets the PIN and everything typed. A card left in the reader stays there, so the next
-    ///     person to walk up finds the machine asking for its PIN.
+    ///     Forgets the PIN and everything typed. A card in the reader stays there, asking for its PIN.
     /// </summary>
     private void ResetSession(EntityUid uid, ColonyAtmComponent comp)
     {
@@ -119,6 +124,23 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         comp.PendingTransferTarget = 0;
         comp.RemoteDepositTarget = 0;
         comp.HistoryOffset = 0;
+        comp.DispensedCash.Clear();
+    }
+
+    /// <summary>
+    ///     The person at the screen walked off: everything half typed is cleared, but a card left
+    ///     signed in stays signed in, back at its menu, for whoever comes up next. A card left at its
+    ///     PIN prompt still asks for the PIN.
+    /// </summary>
+    private void LeaveSession(EntityUid uid, ColonyAtmComponent comp)
+    {
+        var signedIn = TryGetSessionCard(uid, comp, out _, out _);
+        ResetSession(uid, comp);
+        if (!signedIn)
+            return;
+
+        comp.PinAuthenticated = true;
+        comp.Screen = AtmScreen.MainMenu;
     }
 
     // ─── Card slot ─────────────────────────────────────────────────────────
@@ -277,6 +299,31 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         TryTakeCard(uid, comp, msg.Actor);
     }
 
+    /// <summary>
+    ///     Clicking the bills as they come out puts the cash just paid out in the user's hands, if it
+    ///     still lies at the machine. Cash that does not fit in their hands lands at their feet.
+    /// </summary>
+    private void OnTakeCashMsg(EntityUid uid, ColonyAtmComponent comp, ColonyAtmTakeCashBuiMsg msg)
+    {
+        if (msg.Actor != comp.CurrentUser)
+            return;
+
+        var atm = Transform(uid).Coordinates;
+        foreach (var cash in comp.DispensedCash)
+        {
+            if (TerminatingOrDeleted(cash)
+                || _container.IsEntityInContainer(cash)
+                || !_transform.InRange(Transform(cash).Coordinates, atm, CashReach))
+            {
+                continue;
+            }
+
+            _stack.TryMergeToHands(cash, msg.Actor);
+        }
+
+        comp.DispensedCash.Clear();
+    }
+
     // ─── Card insertion ────────────────────────────────────────────────────
 
     private void OnInteractUsing(EntityUid uid, ColonyAtmComponent comp, InteractUsingEvent args)
@@ -326,11 +373,12 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
     private void OnUiClosed(EntityUid uid, ColonyAtmComponent comp, BoundUIClosedEvent args)
     {
-        // Only the person operating the machine ends the session. Their card stays in the reader.
+        // Only the person operating the machine leaves the session. Their card stays in the reader,
+        // still signed in if it was.
         if (args.Actor != comp.CurrentUser)
             return;
 
-        ResetSession(uid, comp);
+        LeaveSession(uid, comp);
         comp.CurrentUser = null;
         RefreshUi(uid, comp);
     }
@@ -661,7 +709,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
 
         if (netAmount > 0)
         {
-            _stack.SpawnMultipleNextToOrDrop(CashPrototype, netAmount, uid);
+            comp.DispensedCash = _stack.SpawnMultipleNextToOrDrop(CashPrototype, netAmount, uid);
             comp.CashDispensedAt = _timing.CurTime;
             comp.CashAmount = netAmount;
             _audio.PlayPvs(comp.DispenseSound, uid);

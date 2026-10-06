@@ -65,9 +65,9 @@ public sealed class SapperSiphonRigAtmTest : ColonyAtmTestBase
         await SpawnTarget(Atm);
         var (_, pin, account) = await InsertNewCard(100);
         await Type(pin.ToString());
-        await CloseBui(ColonyAtmUi.Key);
+        await Type("6", enter: false);              // 6) EXIT, card back in hand
 
-        await Interact();                            // back to the ATM; the card is still in it
+        await Interact();                            // the same card into the same ATM again
         await Type(pin.ToString());
         await CloseBui(ColonyAtmUi.Key);
 

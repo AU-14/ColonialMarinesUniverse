@@ -102,8 +102,24 @@ public sealed partial class ColonyAtmWindow : BaseWindow
     /// <summary>The player's card was clicked while signed in: log off and hand it back.</summary>
     public event Action? LogOffPressed;
 
+    /// <summary>The bills coming out of the cash slot; shown only while they are out.</summary>
+    public readonly CashButton BtnCash = new();
+
+    /// <summary>The bills were clicked on their way out: the player takes the cash in hand.</summary>
+    public event Action? TakeCashPressed;
+
     /// <summary>Text appeared on the screen this frame, a character or a self-test line.</summary>
     public event Action? TextTyped;
+
+    /// <summary>
+    ///     The machine's first frame on screen. Until the server confirms a closed UI, every tick it
+    ///     receives reopens that UI and disposes it again within one update, so the machine's sounds
+    ///     start from here rather than from opening.
+    /// </summary>
+    public event Action? Woke;
+
+    /// <summary>Whether the machine has had a frame on screen; see <see cref="Woke"/>.</summary>
+    public bool Awake { get; private set; }
 
     private enum BootPhase
     {
@@ -475,6 +491,12 @@ public sealed partial class ColonyAtmWindow : BaseWindow
     // going once the machine has popped out into a window of its own.
     private void Tick(FrameEventArgs args)
     {
+        if (!Awake)
+        {
+            Awake = true;
+            Woke?.Invoke();
+        }
+
         // The full tube pass is optional for readability; the screen keeps its own scanlines without it.
         _crt.Visible = _cfg.GetCVar(CCVars.CMUCrtMenuEffect);
         _screen.Scanlines = !_crt.Drawing;

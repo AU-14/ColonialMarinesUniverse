@@ -30,6 +30,8 @@ public sealed partial class ColonyAtmWindow
     private static readonly UIBox2 CardRect = UIBox2.FromDimensions(145, 86, 51, 48);
     // Room for the bills fanned out toward the customer, down to the shelf.
     private static readonly UIBox2 CashRect = UIBox2.FromDimensions(42, 196, 85, 27);
+    // The bills themselves, all the way out with the stack fanned (the generator's CASH_* geometry).
+    private static readonly UIBox2 BillsRect = UIBox2.FromDimensions(51, 202, 67, 21);
     // The status lights sit on the fascia left of the cash slot, above the counter shelf.
     private static readonly UIBox2 PowerLedRect = UIBox2.FromDimensions(31, 196, 5, 5);
     private static readonly UIBox2 ActivityLedRect = UIBox2.FromDimensions(31, 207, 5, 5);
@@ -44,8 +46,9 @@ public sealed partial class ColonyAtmWindow
     // The reader blinks amber this long after a card goes in, as if reading it.
     private const float ReadSeconds = 0.9f;
 
-    // Bills stay presented this long before they are taken (the cash itself is already on the floor).
-    private const float CashPresentedSeconds = 1.6f;
+    // Bills wait this long to be clicked and taken in hand. Left alone, they are pushed out onto the
+    // counter, where the cash itself already lies.
+    private const float CashPresentedSeconds = 5f;
 
     // The slot shows one note, and one more at each of these amounts: five for $500 and up. The
     // generator draws a set of cash states per stack height (MAX_NOTES), named dispense_1 and so on.
@@ -67,6 +70,8 @@ public sealed partial class ColonyAtmWindow
     private TimeSpan? _seenDeposit;
     private float _reading;
     private float _cashPresented;
+    // The bills were clicked on their way out, so they are lifted away as soon as they are out.
+    private bool _cashTaken;
     private float _activity;
     private int _notes = 1;
 
@@ -97,6 +102,18 @@ public sealed partial class ColonyAtmWindow
 
         _cash = new AtmSprite(Rsi(cache, "atm_cash"));
         Art(_cash, CashRect);
+
+        Art(BtnCash, BillsRect);
+        BtnCash.Visible = false;
+        BtnCash.OnPressed += _ =>
+        {
+            BtnCash.Visible = false;
+            TakeCashPressed?.Invoke();
+            if (_cashPresented > 0f)
+                LiftCash();
+            else
+                _cashTaken = true;
+        };
 
         var leds = Rsi(cache, "atm_leds");
         _ledPower = new AtmSprite(leds);
@@ -188,9 +205,17 @@ public sealed partial class ColonyAtmWindow
         if (TakeEvent(s.CashDispensedAt, ref _seenDispense, previous == null))
         {
             _cashPresented = 0f;
+            _cashTaken = false;
             _notes = Notes(s.CashAmount);
+            BtnCash.Visible = true;
             _cash.Play($"dispense_{_notes}", () =>
             {
+                if (_cashTaken)
+                {
+                    LiftCash();
+                    return;
+                }
+
                 _cash.Show($"dispensed_{_notes}");
                 _cashPresented = CashPresentedSeconds;
             });
@@ -198,6 +223,8 @@ public sealed partial class ColonyAtmWindow
 
         if (TakeEvent(s.CashDepositedAt, ref _seenDeposit, previous == null))
         {
+            _cashPresented = 0f;
+            BtnCash.Visible = false;
             _notes = Notes(s.CashAmount);
             _cash.Play($"deposit_{_notes}", () => _cash.Show(null));
         }
@@ -209,6 +236,14 @@ public sealed partial class ColonyAtmWindow
             _activity = ActivitySeconds;
 
         UpdateLights();
+    }
+
+    /// <summary>The bills leave the slot: taken in hand, or pushed out onto the counter.</summary>
+    private void LiftCash()
+    {
+        _cashPresented = 0f;
+        BtnCash.Visible = false;
+        _cash.Play($"take_{_notes}", () => _cash.Show(null));
     }
 
     private static int Notes(int amount)
@@ -256,7 +291,7 @@ public sealed partial class ColonyAtmWindow
         {
             _cashPresented -= dt;
             if (_cashPresented <= 0f)
-                _cash.Play($"take_{_notes}", () => _cash.Show(null));
+                LiftCash();
         }
 
         if (lightsDue)
@@ -439,6 +474,39 @@ public sealed partial class ColonyAtmWindow
                 var inset = i * artPixel;
                 handle.DrawRect(new UIBox2(box.Left - inset, box.Top - inset, box.Right + inset, box.Bottom + inset),
                     colour.WithAlpha(colour.A / (i + 1)), filled: false);
+            }
+        }
+    }
+
+    // ─── The cash slot ────────────────────────────────────────────────────
+
+    /// <summary>
+    ///     The bills while they are out of the slot: a click takes them in hand. The same light outline
+    ///     as the reader's shows round them.
+    /// </summary>
+    public sealed class CashButton : Button
+    {
+        private static readonly Color Hover = new(1f, 0.95f, 0.8f, 0.35f);
+
+        public CashButton()
+        {
+            StyleBoxOverride = new StyleBoxFlat { BackgroundColor = Color.Transparent };
+            ModulateSelfOverride = Color.White;
+            DefaultCursorShape = CursorShape.Hand;
+        }
+
+        protected override void Draw(DrawingHandleScreen handle)
+        {
+            base.Draw(handle);
+            if (DrawMode is not (DrawModeEnum.Hover or DrawModeEnum.Pressed))
+                return;
+
+            var artPixel = PixelSize.X / BillsRect.Width;
+            for (var i = 0; i < 2; i++)
+            {
+                var inset = i * artPixel;
+                handle.DrawRect(new UIBox2(inset, inset, PixelSize.X - inset, PixelSize.Y - inset),
+                    Hover.WithAlpha(Hover.A / (i + 1)), filled: false);
             }
         }
     }

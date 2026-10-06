@@ -231,21 +231,43 @@ public sealed class ColonyAtmTransactionTest : ColonyAtmTestBase
         Assert.That(AtmComp.KeypadBuffer, Is.EqualTo("500"));
     }
 
+    /// <summary>A card left signed in stays signed in; only what was half typed is gone.</summary>
     [Test]
-    public async Task ClosingTheAtmMeansThePinIsNeededAgain()
+    public async Task CardLeftSignedInStaysSignedIn()
     {
         await SpawnTarget(Atm);
         var (_, pin, _) = await InsertNewCard(100);
         await Type(pin.ToString());
-        Assert.That(AtmComp.PinAuthenticated);
+        await Type("1", enter: false);              // 1) WITHDRAW
+        await Type("5", enter: false);
 
         await CloseBui(ColonyAtmUi.Key);
         await Interact();                            // come back; the card is still in the reader
 
         Assert.Multiple(() =>
         {
+            Assert.That(AtmComp.PinAuthenticated, Is.True, "Walking away signed the card out");
+            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu));
+            Assert.That(AtmComp.KeypadBuffer, Is.Empty, "The half-typed amount was kept");
+        });
+    }
+
+    /// <summary>A card left at its PIN prompt still needs the PIN; the digits typed so far are gone.</summary>
+    [Test]
+    public async Task CardLeftAtThePinPromptStillNeedsThePin()
+    {
+        await SpawnTarget(Atm);
+        var (_, pin, _) = await InsertNewCard(100);
+        await Type(pin.ToString()[..2], enter: false);
+
+        await CloseBui(ColonyAtmUi.Key);
+        await Interact();
+
+        Assert.Multiple(() =>
+        {
             Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
-            Assert.That(AtmComp.PinAuthenticated, Is.False, "The ATM remembered the PIN after it was closed");
+            Assert.That(AtmComp.PinAuthenticated, Is.False);
+            Assert.That(AtmComp.KeypadBuffer, Is.Empty, "The half-typed PIN was kept");
         });
     }
 

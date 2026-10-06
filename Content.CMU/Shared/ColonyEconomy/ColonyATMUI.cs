@@ -153,6 +153,10 @@ public sealed class ColonyAtmInsertCardBuiMsg : BoundUserInterfaceMessage { }
 [Serializable, NetSerializable]
 public sealed class ColonyAtmEjectCardBuiMsg : BoundUserInterfaceMessage { }
 
+/// <summary>Player clicked the bills coming out of the cash slot: put the cash they were paid in their hand.</summary>
+[Serializable, NetSerializable]
+public sealed class ColonyAtmTakeCashBuiMsg : BoundUserInterfaceMessage { }
+
 /// <summary>
 ///     Client → server, once the screen exists: which card is mine? Answered with
 ///     <see cref="ColonyAtmOwnCardMsg"/> to the asking player only.

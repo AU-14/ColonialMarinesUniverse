@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client.CMU14.ColonyEconomy;
 using Content.Client.CMU14.Insurgency.Sapper;
 using Content.Server.CMU14.ColonyEconomy;
 using Content.Shared.CMU14.Insurgency.Sapper;
@@ -41,6 +42,33 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
             Assert.That(CashOnFloor(), Is.EqualTo(expectedCash));
             // The cash slot shows a stack as thick as what was paid out.
             Assert.That(ClientAtmState().CashAmount, Is.EqualTo(expectedCash), "The screen was not told how much came out");
+        });
+    }
+
+    /// <summary>Clicking the bills as they come out puts the cash in hand instead of on the machine.</summary>
+    [Test]
+    public async Task ClickingTheCashTakesItInHand()
+    {
+        await SpawnTarget(Atm);
+        var (_, pin, _) = await InsertNewCard(500);
+        await Type(pin.ToString());
+
+        var tax = SEntMan.System<AdminConsoleSystem>().GetIncomeTax();
+        var expectedCash = 100 - (int) Math.Floor(100 * tax);
+
+        await Type("1", enter: false);              // 1) WITHDRAW
+        await Type("100");
+        await Enter();
+        Assert.That(GetWindow<ColonyAtmWindow>().BtnCash.Visible, "The bills coming out cannot be clicked");
+
+        await ClickControl<ColonyAtmWindow>(nameof(ColonyAtmWindow.BtnCash));
+        await RunTicks(5);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(CashInHand(), Is.EqualTo(expectedCash), "The cash did not go into the hand");
+            Assert.That(CashOnFloor(), Is.Zero, "Cash was left on the machine");
+            Assert.That(GetWindow<ColonyAtmWindow>().BtnCash.Visible, Is.False, "The bills can be taken twice");
         });
     }
 
@@ -176,21 +204,26 @@ public sealed class ColonyAtmInteractionTest : ColonyAtmTestBase
             Assert.That(AtmComp.PinAuthenticated, Is.True, "The owner's session was reset");
         });
 
-        // Once the owner closes the screen the session ends - but their card stays in the reader.
+        // Once the owner closes the screen the machine is free - and their card stays in the reader,
+        // still signed in.
         var card = CardInAtm();
         await CloseBui(ColonyAtmUi.Key);
         Assert.Multiple(() =>
         {
             Assert.That(AtmComp.CurrentUser, Is.Null);
             Assert.That(CardInAtm(), Is.EqualTo(card), "Walking away took the card out of the machine");
-            Assert.That(AtmComp.PinAuthenticated, Is.False);
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
+            Assert.That(AtmComp.PinAuthenticated, Is.True, "Walking away signed the card out");
         });
 
-        // Now the next person can take the ATM.
+        // Now the next person can take the ATM, and finds the card left signed in.
         await Server.WaitPost(() => InteractSys.InteractionActivate(stranger, atm));
         await RunTicks(5);
-        Assert.That(AtmComp.CurrentUser, Is.EqualTo(stranger));
+        Assert.Multiple(() =>
+        {
+            Assert.That(AtmComp.CurrentUser, Is.EqualTo(stranger));
+            Assert.That(AtmComp.PinAuthenticated, Is.True);
+            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu));
+        });
     }
 
     [Test]

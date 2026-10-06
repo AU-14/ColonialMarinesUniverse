@@ -39,6 +39,12 @@ public sealed partial class ColonyAtmComponent : Component
     /// <summary>How many dollars the last of those two moved, so the slot shows a wad that thick.</summary>
     public int CashAmount;
 
+    /// <summary>
+    ///     The cash last paid out this session. It lies on the machine until someone picks it up, or
+    ///     the person at the screen clicks it as it comes out to take it in hand.
+    /// </summary>
+    public List<EntityUid> DispensedCash = new();
+
     /// <summary>How long pulling out a card takes for anyone but its inserter at the screen.</summary>
     [DataField]
     public TimeSpan TakeCardDelay = TimeSpan.FromSeconds(2);

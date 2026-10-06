@@ -34,6 +34,7 @@ public sealed partial class ColonyAtmBui(EntityUid owner, Enum uiKey) : BoundUse
     private const float ToneMiddle = 2156f;
 
     private EntityUid? _zap;
+    private bool _outOfService;
 
     private SharedAudioSystem _audio = default!;
     private ColonyAtmWindow? _window;
@@ -54,7 +55,16 @@ public sealed partial class ColonyAtmBui(EntityUid owner, Enum uiKey) : BoundUse
             _window.Open(position);
         else
             _window.OpenCentered();
-        Play(StartupSound, -3f);
+
+        // Heard only once the machine is really on screen: see ColonyAtmWindow.Woke.
+        _window.Woke += () =>
+        {
+            Play(StartupSound, -3f);
+            UpdateZap();
+
+            // The nav bar's reminder of the player's own PIN; the server answers this player alone.
+            SendMessage(new ColonyAtmOwnCardRequestMsg());
+        };
 
         // Numpad digits (also used for numbered menu selection), each with its (row, column) on a
         // phone pad for its tone. CLEAR sits on *, 00 on #, CANCEL and ENTER on C and D.
@@ -79,12 +89,10 @@ public sealed partial class ColonyAtmBui(EntityUid owner, Enum uiKey) : BoundUse
         _window.BtnClear.OnPressed  += _ => { Key(3, 0); SendPredictedMessage(new ColonyAtmBackspaceBuiMsg()); };
         _window.BtnCancel.OnPressed += _ => { Key(2, 3); SendPredictedMessage(new ColonyAtmCancelBuiMsg()); };
 
-        // The nav bar's reminder of the player's own PIN; the server answers this player alone.
-        SendMessage(new ColonyAtmOwnCardRequestMsg());
-
         // The card reader itself: click it to put your card in, click your card to log off.
         _window.InsertCardPressed += () => SendPredictedMessage(new ColonyAtmInsertCardBuiMsg());
         _window.LogOffPressed += () => SendPredictedMessage(new ColonyAtmEjectCardBuiMsg());
+        _window.TakeCashPressed += () => SendPredictedMessage(new ColonyAtmTakeCashBuiMsg());
 
         _window.TextTyped += () => Play(TypeSound, -9f, _random.NextFloat(0.85f, 1.2f));
 
@@ -98,23 +106,36 @@ public sealed partial class ColonyAtmBui(EntityUid owner, Enum uiKey) : BoundUse
         if (_window == null || state is not ColonyAtmBuiState s)
             return;
 
-        // Audio feedback on meaningful state transitions.
-        if (s.Screen == AtmScreen.PinLocked && _prevScreen != AtmScreen.PinLocked)
-            Play(LockedSound, 2f);
-        else if (s.StatusMessage != _prevStatus && IsErrorMessage(s.StatusMessage))
-            Play(ErrorSound, -5f);
+        // Audio feedback on state transitions while the machine is on screen, not for the state it opens on.
+        if (_window.Awake)
+        {
+            if (s.Screen == AtmScreen.PinLocked && _prevScreen != AtmScreen.PinLocked)
+                Play(LockedSound, 2f);
+            else if (s.StatusMessage != _prevStatus && IsErrorMessage(s.StatusMessage))
+                Play(ErrorSound, -5f);
+        }
 
         _prevScreen = s.Screen;
         _prevStatus = s.StatusMessage;
-
-        // A seized reader arcs for as long as the machine is out. The loop starts with the state that
-        // seizes it, as do the sparks drawn to it.
-        if (s.OutOfService && _zap == null)
-            _zap = _audio.PlayGlobal(ZapSound, Filter.Local(), false, AudioParams.Default.WithVolume(-6f).WithLoop(true))?.Entity;
-        else if (!s.OutOfService)
-            _zap = _audio.Stop(_zap);
+        _outOfService = s.OutOfService;
+        UpdateZap();
 
         _window.UpdateDisplay(s);
+    }
+
+    /// <summary>
+    ///     A seized reader arcs for as long as the machine is out. The loop starts with the state that
+    ///     seizes it, as do the sparks drawn to it, or with the first frame of a screen opened on one.
+    /// </summary>
+    private void UpdateZap()
+    {
+        if (_window is not { Awake: true })
+            return;
+
+        if (_outOfService && _zap == null)
+            _zap = _audio.PlayGlobal(ZapSound, Filter.Local(), false, AudioParams.Default.WithVolume(-6f).WithLoop(true))?.Entity;
+        else if (!_outOfService)
+            _zap = _audio.Stop(_zap);
     }
 
     private void Digit(string digit, int row, int column)
