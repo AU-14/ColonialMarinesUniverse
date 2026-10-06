@@ -128,3 +128,14 @@ cmu-guide-entry-meds-suffocation = Suffocation Medications
 cmu-guide-entry-meds-pain = Painkillers
 cmu-guide-entry-meds-organs = Organ and Bone Medications
 cmu-guide-entry-meds-other = Other Medications
+
+cmu-guide-entry-lore = Lore
+cmu-guide-entry-lore-factions = Factions
+cmu-guide-entry-lore-ua = United Americas
+cmu-guide-entry-lore-upp = Union of Progressive Peoples
+cmu-guide-entry-lore-twe = Three World Empire
+cmu-guide-entry-lore-cca = Central Confederation of Africa
+cmu-guide-entry-lore-icsc = Independent Core System Colonies
+cmu-guide-entry-lore-wy = Weyland-Yutani
+cmu-guide-entry-lore-clf = Colonial Liberation Front
+cmu-guide-entry-lore-pmc = Private Military Companies

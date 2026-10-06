@@ -20,6 +20,12 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.examine_full_text_in_chat", false, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
 
     /// <summary>
+    /// Whether the wounds, fractures and missing limbs you see when examining someone are also echoed to your chat log.
+    /// </summary>
+    public static readonly CVarDef<bool> ExamineWoundsInChat =
+        CVarDef.Create("cmu.examine_wounds_in_chat", false, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
+
+    /// <summary>
     /// After sending a message on any channel other than Local, switch the chat input back to Local.
     /// Does nothing if Local can't be selected, e.g. as a ghost.
     /// </summary>
@@ -30,7 +36,7 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.chat_speech_sounds", true, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
 
     public static readonly CVarDef<bool> ChatResetToLocal =
-        CVarDef.Create("cmu.chat_reset_to_local", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.chat_reset_to_local", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     /// <summary>
     /// When the chat keybind is pressed, move the chat input to the middle of the screen until the message is sent.

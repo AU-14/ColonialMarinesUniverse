@@ -449,6 +449,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
             "fracture" => TryComp<FractureComponent>(part, out var fracture)
                 && fracture.Severity != FractureSeverity.None,
             "bleed" => HasComp<InternalBleedingComponent>(part),
+            "stump" => HasComp<CMUOpenStumpComponent>(part),
             "burn" => HasComp<CMUEscharComponent>(part),
             "parasite" => partType == BodyPartType.Torso,
             "suture" or "head_organ" => HasDamagedOrganForSurgery(part, surgeryId),

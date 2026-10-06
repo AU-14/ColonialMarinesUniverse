@@ -14,6 +14,7 @@
   - CMUResearchIndex
   - CMUGuideRoleRider
   - CMUChemicals
+  - CMUGuideLore
 
 - type: guideEntry
   parent: RMC
@@ -436,3 +437,84 @@
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Chemicals/CMUOrdinanceChemicals.xml"
   filterEnabled: True
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLore
+  name: cmu-guide-entry-lore
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/CMULore.xml"
+  children:
+  - CMUGuideLoreFactions
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreFactions
+  name: cmu-guide-entry-lore-factions
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULoreFactions.xml"
+  children:
+  - CMUGuideLoreUA
+  - CMUGuideLoreUPP
+  - CMUGuideLoreTWE
+  - CMUGuideLoreCCA
+  - CMUGuideLoreICSC
+  - CMUGuideLoreWY
+  - CMUGuideLoreCLF
+  - CMUGuideLorePMC
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUA
+  name: cmu-guide-entry-lore-ua
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULoreUA.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUPP
+  name: cmu-guide-entry-lore-upp
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULoreUPP.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreTWE
+  name: cmu-guide-entry-lore-twe
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULoreTWE.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreCCA
+  name: cmu-guide-entry-lore-cca
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULoreCCA.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreICSC
+  name: cmu-guide-entry-lore-icsc
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULoreICSC.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreWY
+  name: cmu-guide-entry-lore-wy
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULoreWY.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreCLF
+  name: cmu-guide-entry-lore-clf
+  priority: 8
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULoreCLF.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePMC
+  name: cmu-guide-entry-lore-pmc
+  priority: 9
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULorePMC.xml"
