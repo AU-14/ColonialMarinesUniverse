@@ -464,6 +464,7 @@
   - CMUGuideLorePathogen
   - CMUGuideLoreBiomorphs
   - CMUGuideLoreApes
+  - CMUGuideLoreTribals
 
 - type: guideEntry
   parent: RMC
@@ -592,6 +593,8 @@
   name: cmu-guide-entry-lore-aliens
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreAliens.xml"
+  children:
+  - CMUGuideLoreCultists
 
 - type: guideEntry
   parent: RMC
@@ -1033,3 +1036,17 @@
   name: cmu-guide-entry-lore-ihro
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/International/CMULoreIHRO.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreCultists
+  name: cmu-guide-entry-lore-cultists
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreCultists.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreTribals
+  name: cmu-guide-entry-lore-tribals
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreTribals.xml"
