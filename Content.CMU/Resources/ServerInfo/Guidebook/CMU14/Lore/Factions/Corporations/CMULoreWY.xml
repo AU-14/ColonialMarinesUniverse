@@ -1,7 +1,7 @@
 <Document>
   # Weyland-Yutani
 
-  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/WEYLANDHeader.png" MaxHeight="64"/>
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/WEYLANDHeader.png" MaxHeight="128"/>
 
   [bold]Weyland-Yutani[/bold], known as "the Company", is the dominant megacorporation in human space. It was born from the merger of the British Weyland Corp and the Japanese Yutani Corporation, and led humanity's first terraforming of the Moon. Its slogan is "Building Better Worlds."
 
@@ -19,6 +19,11 @@
   - Many Colonial Marine ships have vanished while supporting Company colonies at the request of officers in the Company's pocket. Clashes between Marines and Company forces have broken out more than once, and the worst of them, which left dozens dead on both sides, was kept out of the news.
 
   ## Divisions
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearCivilianCorporateLiaison" Caption="Liaison"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearWYSurvScientist" Caption="Scientist"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearWeYuDivisionManager" Caption="Executive"/>
+  </Box>
   The Company is split into divisions, each with its own chain of executives, managers and directors.
   - [bold]Special Services[/bold]: sales, transportation, food, employment and everything that falls to no one else.
   - [bold]Corporate Relations[/bold]: keeps other factions friendly, through "gifts" or by quietly tipping them off, and keeps the Company's secrets out of government hands.
@@ -35,6 +40,10 @@
   - [textlink="Colonial Liberation Front" link="CMUGuideLoreCLF"]: openly hostile. The CLF targets Company colonies above all others, and the Company answers with PMC patrols around its assets and strikes against CLF leadership.
 
   ## Forces
+  <Box>
+    <CMUGuideOutfitEmbed Gear="CMUGearWeYuGoon" Caption="Security"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearWYPMCPartyContractor" Caption="PMC"/>
+  </Box>
   - [textlink="Weyland-Yutani PMC" link="CMUGuideLoreWYPMC"], the "Whiteshields": the Company's own soldiers, guarding its facilities and handling security and containment. Colonial governments often hire them because they get the job done faster than the local military.
   - [bold]Weyland-Yutani Corporate Security[/bold], known by many as [bold]"mall cops"[/bold] or [bold]"oranges"[/bold] are the Company's primary security presence on many of its colonies and facilities. Usually recruited and organized locally, it protects Company personnel, property and interests and keeps order in Weyland-Yutani settlements. On Company-owned colonies they commonly serve as the de facto police force, handling everything from routine patrols and criminal investigations to riot control and the protection of sensitive corporate sites.
 </Document>

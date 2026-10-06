@@ -148,6 +148,7 @@ cmu-guide-entry-lore-clf = Colonial Liberation Front
 cmu-guide-entry-lore-pmc = Private Military Companies
 cmu-guide-entry-lore-icc = Interstellar Commerce Commission
 cmu-guide-entry-lore-icrc = International Committee of the Red Cross
+cmu-guide-entry-lore-ihro = Interstellar Human Rights Organization
 cmu-guide-entry-lore-vai = Vanguard's Arrow Incorporated
 cmu-guide-entry-lore-organisms = Organisms
 cmu-guide-entry-lore-technologies = Technologies

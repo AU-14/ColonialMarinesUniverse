@@ -1,0 +1,7 @@
+- type: parallax
+  id: CMUParallaxSpace
+  layers:
+    - texture:
+        !type:ImageParallaxTextureSource
+        path: "/Textures/CMU14/Parallaxes/Space/Static/static.png"
+      slowness: 0

@@ -1,7 +1,7 @@
 <Document>
   # Three World Empire
 
-  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/TWEHeader.png" MaxHeight="64"/>
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/TWEHeader.png" MaxHeight="128"/>
 
   The [bold]Three World Empire[/bold] (TWE or 3WE) is a superpower formed in 2088 when the United Kingdom and Japan pooled their lead in space exploration and joined with India and other developing nations. It takes its name from the first three worlds humanity settled: [bold]Earth, Mars and Titan[/bold]. As the first power to colonize beyond Sol, it holds more colonies than anyone else, and is the most technologically advanced nation.
 
@@ -22,9 +22,17 @@
   - [textlink="ICSC" link="CMUGuideLoreICSC"]: reluctantly allied, the TWE's navy helps defend ICSC space.
 
   ## Civil Organizations
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearNSPAConstableInvestigation" Caption="NSPA"/>
+  </Box>
   - [bold]Neroid Sector Policing Authority[/bold] (NSPA): the NSPA is the 3WE's main Law Enforcement branch in the Neroid Sector.
 
   ## Forces
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearRMCRRTRifleman" Caption="RMC"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearSASRifleman" Caption="SAS"/>
+    <CMUGuideOutfitEmbed Gear="AU14RMCGearIASFRifle" Caption="IASF"/>
+  </Box>
   - [bold]Imperial Armed Space Forces[/bold] (IASF): the TWE's navy and main fighting force.
   - [textlink="Royal Marine Commandos" link="CMUGuideLoreOrgRMC"] (RMC): the TWE's elite. Highly disciplined and well equipped, trained in rapid deployment, boarding actions, reconnaissance, sabotage and precision strikes far behind enemy lines.
   - [bold]Special Air Service[/bold] (SAS): the TWE's tier one special forces.

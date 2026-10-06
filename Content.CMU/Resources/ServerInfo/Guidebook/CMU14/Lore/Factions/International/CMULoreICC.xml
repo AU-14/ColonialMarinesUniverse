@@ -1,6 +1,8 @@
 <Document>
   # Interstellar Commerce Commission
 
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/ICC.png" MaxHeight="128"/>
+
   The [bold]Interstellar Commerce Commission[/bold] (ICC) is the body through which all interstellar trade is conducted and monitored. Headquartered on [bold]Ruby Colony[/bold] in the Outer Veil, it is officially an independent organization, but in practice it was founded by [textlink="Weyland-Yutani" link="CMUGuideLoreWY"] and is effectively owned and run by the Company.
 
   ## Duties
@@ -10,6 +12,9 @@
   - [bold]Police actions[/bold]: it organizes military operations against colonies declared in flagrant violation of its regulations, such as the ongoing suppression of the revolt on Alexandria. It has no army of its own, so it borrows troops from the nations and corporations of human space, with the Colonial Marines often taking the lead.
 
   ## On the Frontier
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearNSPAICCLiaison" Caption="ICC Liaison"/>
+  </Box>
   - Every major [textlink="Colonial Marshal" link="CMUGuideLoreCMB"] office has an ICC agent attached, working alongside the Marshals to stop dangerous biological and chemical cargo.
   - It counts the [textlink="United Americas" link="CMUGuideLoreUA"], the [textlink="Three World Empire" link="CMUGuideLoreTWE"] and Weyland-Yutani among its allies.
   - It also runs an engineering trade school, with campuses on Earth and Mars, which trains many of the engineers who crew commercial ships.

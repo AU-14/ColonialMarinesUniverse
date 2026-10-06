@@ -810,6 +810,7 @@
   children:
   - CMUGuideLoreUNISC
   - CMUGuideLoreICRC
+  - CMUGuideLoreIHRO
 
 - type: guideEntry
   parent: RMC
@@ -1025,3 +1026,10 @@
   name: cmu-guide-entry-lore-apes
   priority: 5
   text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreApes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreIHRO
+  name: cmu-guide-entry-lore-ihro
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/International/CMULoreIHRO.xml"

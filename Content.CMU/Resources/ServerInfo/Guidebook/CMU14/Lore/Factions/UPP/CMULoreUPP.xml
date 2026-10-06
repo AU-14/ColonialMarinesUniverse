@@ -1,7 +1,7 @@
 <Document>
   # Union of Progressive Peoples
 
-  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/UPPHeader.png" MaxHeight="64"/>
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/UPPHeader.png" MaxHeight="128"/>
 
   The [bold]Union of Progressive Peoples[/bold] (UPP) is a socialist superpower formed in 2108 by Russia, China, Germany and Spain, later joined by Vietnam and other Asian and Eastern European nations, to stand against the [textlink="Three World Empire" link="CMUGuideLoreTWE"] and the [textlink="United Americas" link="CMUGuideLoreUA"]. It is the only great power free of corporate influence, and scorns its rivals as "corporatists".
 
@@ -17,6 +17,11 @@
   - [textlink="Weyland-Yutani" link="CMUGuideLoreWY"]: everything the UPP despises.
 
   ## Forces
+  <Box>
+    <CMUGuideOutfitEmbed Gear="CMUGearUPPLineRifleman" Caption="UPPNI"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearUPPTerritorialDefenseRifleman" Caption="TG"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearCivilianPaPOfficer" Caption="PaP"/>
+  </Box>
   - [bold]Space Operating Forces[/bold]: the UPP's elite special forces commandos.
   - [textlink="Naval Infantry" link="CMUGuideLoreOrgUPPNI"]: UPP shocktroops equivalent to the US Colonial Marines.
   - [bold]Territorial Guard[/bold] (TG): each UPP colony has a complement of UPP Territorial Guard personnel, usually composed of poorly trained part-time 'weekend' soldiers drawn from the colony’s workforce.

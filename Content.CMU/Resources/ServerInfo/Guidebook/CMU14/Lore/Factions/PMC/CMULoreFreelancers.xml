@@ -1,6 +1,12 @@
 <Document>
   # Freelancers
 
+  <Box>
+    <CMUGuideOutfitEmbed Gear="CMUGearFreelancerStandard" Caption="Freelancer"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearFreelancerMedic" Caption="Medic"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearFreelancerLeader" Caption="Leader"/>
+  </Box>
+
   The [bold]Freelancers[/bold] are mercenaries who fight for whoever pays. Whether they're your best friend or your worst enemy depends entirely on who signed the contract.
 
   ## Origins

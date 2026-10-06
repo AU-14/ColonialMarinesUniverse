@@ -1,6 +1,12 @@
 <Document>
   # United Nations Interstellar Settlement Corps
 
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearUNISCRifleman" Caption="Rifleman"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearUNISCCorpsman" Caption="Corpsman"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearUNISCEnforcer" Caption="Enforcer"/>
+  </Box>
+
   The [bold]United Nations Interstellar Settlement Corps[/bold] (UNISC) is the branch of the [textlink="United Nations" link="CMUGuideLoreUN"] responsible for the protection of humanity's settlements, first in the Sol System and now across its colonies among the stars. It is best known on the frontier for its [bold]peacekeepers[/bold].
 
   ## History

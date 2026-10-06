@@ -1,7 +1,7 @@
 <Document>
   # Colonial Liberation Front
 
-  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/CLFHeader.png" MaxHeight="64"/>
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/CLFHeader.png" MaxHeight="128"/>
 
 The [bold]Colonial Liberation Front[/bold] (CLF) is the name most commonly used for the largest and most active collection of militant movements fighting for colonial independence. It is concentrated primarily in the [bold]Neroid Sector[/bold] of [textlink="Three World Empire" link="CMUGuideLoreTWE"] space.
 
@@ -12,4 +12,11 @@ The United Americas and the Three World Empire both classify the CLF as a terror
 In reality, however, the CLF is far less unified than government propaganda often suggests. There is no single organization, ideology, or command structure linking every group identified as CLF. One cell may consist of little more than a handful of anarchists meeting in a basement, while another may resemble a religious cult, organized insurgency, or even a planetwide military backed by naval forces and a functioning government.
 
 As a result, the term [bold]"CLF"[/bold] is itself somewhat misleading. Rather than describing one coherent organization, it has increasingly become a broad political label applied by the United Americas to separatist, insurgent, and anti-corporate movements throughout the Neroid Sector.
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearCLFMachineGunner" Caption="Insurgent"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearCLFEngineer" Caption="Engineer"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearCLFSpecialist" Caption="Specialist"/>
+    <CMUGuideOutfitEmbed Gear="CMU14GearCLFCommandoOperator" Caption="Commando"/>
+  </Box>
 </Document>

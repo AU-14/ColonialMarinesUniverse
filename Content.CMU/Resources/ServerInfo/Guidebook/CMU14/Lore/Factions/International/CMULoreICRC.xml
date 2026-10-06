@@ -1,6 +1,11 @@
 <Document>
   # International Committee of the Red Cross
 
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearICRCDoctor" Caption="Doctor"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearICRCNurse" Caption="Nurse"/>
+  </Box>
+
   The [bold]International Committee of the Red Cross[/bold] (ICRC) is the oldest and largest humanitarian organization in human space. Independent and strictly neutral, it brings medical aid, vaccines and relief to anyone in need, whatever their nation, allegiance or side in a conflict.
 
   ## The Organization

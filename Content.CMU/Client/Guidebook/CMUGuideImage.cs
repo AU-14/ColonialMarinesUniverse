@@ -13,7 +13,7 @@ namespace Content.Client.CMU14.Guidebook;
 /// <summary>
 ///     Guidebook tag that embeds an image, e.g. &lt;CMUGuideImage Path="/ServerInfo/Guidebook/x.png"/&gt;.
 ///     Scales down to fit the page width while keeping its aspect ratio, but never scales up.
-///     An optional MaxHeight (in pixels) shrinks it further, e.g. to keep a logo small.
+///     An optional MaxHeight (in pixels) sets the displayed height, e.g. to keep logos a consistent size.
 /// </summary>
 [UsedImplicitly]
 public sealed partial class CMUGuideImage : TextureRect, IDocumentTag
@@ -54,10 +54,10 @@ public sealed partial class CMUGuideImage : TextureRect, IDocumentTag
             return Vector2.Zero;
 
         var size = Texture.Size * TextureScale;
-        var scale = float.IsFinite(availableSize.X) && size.X > availableSize.X
-            ? availableSize.X / size.X
-            : 1f;
-        scale = MathF.Min(scale, _maxHeight / size.Y);
+        // MaxHeight sets the displayed height (scaling up or down); without it the image is never enlarged.
+        var scale = float.IsFinite(_maxHeight) ? _maxHeight / size.Y : 1f;
+        if (float.IsFinite(availableSize.X) && size.X * scale > availableSize.X)
+            scale = availableSize.X / size.X;
 
         return size * scale;
     }

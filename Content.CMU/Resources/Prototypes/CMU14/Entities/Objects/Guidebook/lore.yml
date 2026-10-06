@@ -30,3 +30,23 @@
     openOnActivation: true
     guides:
     - CMUGuideLoreUSCM
+
+# Guidebook outfit preview for the Canadian Colonial Armed Forces, which have clothing but no starting gear of their own.
+- type: startingGear
+  id: CMUGearGuideCCAF
+  equipment:
+    jumpsuit: AU14CCAFUniform
+    outerClothing: AU14CCAFArmor
+    head: AU14CCAFHelmetISACV
+    shoes: CMBootsBlack
+
+# Guidebook outfit preview for a standard LACN Landing Forces trooper; the platoon itself is outfitted from vendors.
+- type: startingGear
+  id: CMUGearGuideLACN
+  equipment:
+    jumpsuit: AU14LACNUniform
+    outerClothing: AU14LACNArmorStandard
+    head: AU14LACNHelmetStandard
+    gloves: AU14LACNGloves
+    shoes: AU14LACNBoots
+    back: AU14LACNBackpack

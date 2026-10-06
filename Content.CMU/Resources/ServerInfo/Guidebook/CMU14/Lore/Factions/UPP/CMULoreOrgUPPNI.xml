@@ -1,5 +1,11 @@
 <Document>
   # UPP Naval Infantry
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="CMUGearUPPLineRifleman" Caption="Rifleman"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearUPPLineMedic" Caption="Medic"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearUPPLineLeader" Caption="Leader"/>
+  </Box>
   The [bold]Naval Infantry[/bold] are the [textlink="Union of Progressive Peoples" link="CMUGuideLoreUPP"]' shock troops, its equivalent of the Colonial Marines. They are carried to war by the UPP's fleets and fight planetside wherever the Union expands.
 
   ## Under Construction

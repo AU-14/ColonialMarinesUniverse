@@ -31,8 +31,8 @@
   ## What Your Character Knows
   - Your [bold]lore primer[/bold] in the character menu tells you the date, where you are, who is present and what threats you might face. Read it every round.
   - Ordinary people know about the superpowers, the corporations and the insurgencies. That is everyday news.
-  - Xenomorphs and other alien life are [bold]not common knowledge[/bold]. Officially they don't exist, and most people have never heard of them. Don't act like you know what they are unless your character has a reason to.
-  - Synthetics are common and look human. Many people distrust them.
+  - [textlink="Xenomorphs" link="CMUGuideLoreAliens"] and other alien life are [bold]not common knowledge[/bold]. Officially they don't exist, and most people have never heard of them. Don't act like you know what they are unless your character has a reason to.
+  - [textlink="Synthetics" link="CMUGuideLoreSynthetics"] are common and look human. Many people distrust them.
 
   ## Everyday Life
   - The frontier is brutal and unforgiving. Accidents, disease, violence and things far worse claim lives every day, and death can come at any turn.
@@ -42,5 +42,5 @@
   - [textlink="Factions" link="CMUGuideLoreFactions"]: who's who on the frontier.
   - [textlink="Organisms" link="CMUGuideLoreOrganisms"]: what's out there in the dark.
   - [textlink="Technologies" link="CMUGuideLoreTechnologies"]: the machines that keep humanity alive among the stars.
-  - [textlink="Galaxy Map" link="CMUGuideLoreGalaxyMap"] and [textlink="Earth Map" link="CMUGuideLoreEarthMap"]: where everything is.
+  - [textlink="Locations" link="CMUGuideLoreLocations"]: the maps, the Neroid Sector and the colonies where your story takes place.
 </Document>

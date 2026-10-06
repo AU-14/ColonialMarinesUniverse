@@ -4,7 +4,7 @@
   [textlink="Weyland-Yutani" link="CMUGuideLoreWY"] may dominate human space, but it is far from the only corporation on the frontier. Its rivals compete with it for contracts, colonies and secrets, and none of them play fair, while other companies that look independent quietly answer to it.
 
   ## Lasalle Bionational
-  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/LASALLE_BIONATIONALHeader.png" MaxHeight="20"/>
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/LASALLE_BIONATIONALHeader.png" MaxHeight="120"/>
   [bold]Lasalle Bionational[/bold], usually just "Bionational", is a multinational conglomerate specializing in biological research and development.
   - It was founded in the late 2130s by [bold]Brendan Lasalle[/bold], a former Weyland-Yutani vice president who walked out after mass layoffs in the Company's bioresearch division, taking the laid-off staff with him.
   - Its first big break was a government contract for a cheap, radiation-resistant corn substitute. It is now known for radiation-resistant crops, livestock engineered for different environments, vaccines against extrasolar diseases, and a blight virus able to wipe out an enemy's crops.
@@ -21,7 +21,7 @@
   - It still runs dozens of stations across the frontier, but many now see it as a "second-tier" corporation that overreached. Weyland-Yutani pays it little attention.
 
   ## Hyperdyne Corporation
-  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/HYPERDYNEHeader_alt.png" MaxHeight="64"/>
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/hyperdynealt.png" MaxHeight="192"/>
   The [bold]Hyperdyne Corporation[/bold], formerly Hyperdyne Systems, pioneered synthetics and cybernetic prosthetics and colonized the Hyades Cluster. It is headquartered on [bold]Alexandria[/bold] in the Core Systems.
   - Early in the century it worked with the [textlink="United Americas" link="CMUGuideLoreUA"] on large colonization missions, and refused to abandon the rich mining worlds of the Hyades Cluster when the UA pulled back.
   - When Weyland's patent on synthetics expired in 2120, it rushed out its own. Its early 120-A/2 model proved unstable and had to be recalled, but it was the first to offer synthetics with a non-standard appearance for covert work.
@@ -38,12 +38,70 @@ In 2120 following the mysterious disappeatance of [bold]Boy Kavalier[/bold], the
   - Its private army, [bold]Security Services[/bold], polices Prodigy City, conducts search-and-rescue operations, and defends the city from rival corporations. To help sustain the company's remaining operations, its soldiers are contracted out to the far regions of space, as the [textlink="Prodigy Corporation Security Forces" link="CMUGuideLorePMC"].
 
   ## Kelland Mining Company
-  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/KELLANDHeader.png" MaxHeight="64"/>
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/KELLANDHeaderAlt.png" MaxHeight="128"/>
   The [bold]Kelland Mining Company and Consortium[/bold] (KMCC) is a major deep space mining corporation, headquartered on [bold]Io[/bold].
   - It was formed when every oil-prospecting company on Earth merged into one, and now runs deep space prospecting, oil and bulk mineral mining operations.
 
   ## Lock-Mart Industries
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/lock_mart.png" MaxHeight="128"/>
   [bold]Lock-Mart Industries[/bold], or Lockmart, is a starship and vehicle manufacturer headquartered in the New Eden Sector of the [textlink="Independent Core System Colonies" link="CMUGuideLoreICSC"].
   - It is regarded as the foremost builder of commercial spacecraft, from salvage and excavation ships to freighters. It also builds for the military. The Colonial Marines' M577 armored personnel carrier is a Lockmart design.
   - Lockmart counts both the Colonial Marines and [textlink="Weyland-Yutani" link="CMUGuideLoreWY"] among its customers.
+
+  ## Armat Battlefield Systems
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/armat.png" MaxHeight="128"/>
+  [bold]Armat Battlefield Systems[/bold], usually just Armat, is an arms manufacturer headquartered in Saginaw, Michigan, in the [textlink="United Americas" link="CMUGuideLoreUA"] (UA).
+  - It is the largest defense contractor in the UA, and supplies most of the weapons used by the [textlink="Colonial Marines" link="CMUGuideLoreUSCM"].
+  - It builds mostly military-grade small arms, along with grenades, mines, helmets and body armor. Its best-known products include the [bold]M41A Pulse Rifle[/bold] and the [bold]M4[/bold] pistol series, both standard issue for the Colonial Marines.
+  - It is a rival of [bold]Hyperdyne[/bold], whose weapon designs arm the Union of Progressive Peoples.
+  - In 2178 Armat bought the German arms maker Kramer Metallarbeiten after it became a threat in the mercenary and private military market. The buyout is still being fought in the Three World Empire's antitrust courts.
+
+  ## Norcomm
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/norcomm.png" MaxHeight="128"/>
+  [bold]Norcomm[/bold] is a state company of the [textlink="Union of Progressive Peoples" link="CMUGuideLoreUPP"] (UPP) and a major weapons supplier to its armed forces.
+  - It began under the Chinese/Asian Nation Cooperative, and became the UPP military's firearms division when the UPP absorbed the Cooperative in 2164.
+  - Its equipment is less sophisticated than that of the other superpowers, but famous for its durability. Its [bold]AK-4047 Pulse Assault Rifle[/bold] and [bold]QSZ-203[/bold] pistol are known for working in the worst conditions.
+  - It also builds rocket launchers, explosives, combat synthetics and computer mainframes. Its mainframe design, based on Seegson's APOLLO system, has caused friction with [textlink="Seegson" link="CMUGuideLoreCorporations"].
+
+  ## Grant Corporation
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/grant.png" MaxHeight="128"/>
+  The [bold]Grant Corporation[/bold] is a major Earth-based interplanetary corporation with interests in many fields.
+  - Behind closed doors, it studies [textlink="Xenomorphs" link="CMUGuideLoreAliens"] from remote research outposts, hoping to profit from what it learns.
+  - Compared with its rivals, it is known for taking a more ethical approach to that work.
+
+  ## Chigusa Corporation
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/chigusa.png" MaxHeight="128"/>
+  The [bold]Chigusa Corporation[/bold], "a multistellar company", is a family-run Japanese corporation headquartered in New Osaka and led by its CEO, [bold]Takashi Chigusa[/bold]. It is a rival of [textlink="Weyland-Yutani" link="CMUGuideLoreWY"].
+  - It focuses on colonization, ranching, plasma harvesting and mining, and runs its own cargo ships.
+  - Its [bold]xenobiology division[/bold] studies alien life, and the company has shown a keen interest in preserving any specimens it comes across.
+
+  ## AEGIS Armaments
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/AEGISHeader.png" MaxHeight="128"/>
+  [bold]AEGIS Armaments[/bold] is an arms manufacturer whose equipment is found in armories across human space.
+  - Its products include optics, muzzle devices and gun racks built for militaries and corporations alike.
+  - Its [bold]Research and Development Division[/bold] works on experimental weapons, such as the [bold]KRAKEN[/bold], a phoron-based orbital warhead built for targets where a single strike isn't enough.
+  - Its [bold]Strategic Operations Division[/bold] oversees the company's field operations, sending researchers to supervise its prototypes in use and recover them when things go wrong.
+
+  ## Tyrell Corporation
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/TYRELLCORPHeader_alt.png" MaxHeight="128"/>
+  The [bold]Tyrell Corporation[/bold], "More human than human", was a high-tech firm founded by [bold]Eldon Tyrell[/bold] and headquartered in two vast pyramids on the outskirts of Los Angeles.
+  - It built some of the first bioengineered artificial humans known as [bold]replicants[/bold].
+  - Its later replicant models were made to live as long as humans, and were declared a threat to humanity. They were hunted down and eventually outlawed.
+  - After a catastrophic blackout, the company collapsed, and rivals bought up what remained of its technology. Its name and its legacy still haunt the synthetics industry.
+
+  ## Gemba Systec
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/gemba_systec.png" MaxHeight="128"/>
+  [bold]Gemba Systec[/bold] is an electronics manufacturer and freight handler. Its industrial storage crates, emergency phone boxes and mainframe servers are found in stations and colonies across the frontier.
+
+  ## Karnak
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/karnak.png" MaxHeight="128"/>
+  [bold]Karnak[/bold] makes electronics, and is best known for its terminal systems, which link up to station and colony networks and their internal mail. Its handheld PDAs are common, even among synthetic workers.
+
+  ## Koorlander Corp
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/koorlander.png" MaxHeight="128"/>
+  [bold]Koorlander Corp[/bold] makes cigarettes, most famously [bold]Koorlander Gold[/bold], grown on its tobacco farms across several colony worlds. It competes with the rival brand Balaji Imperial.
+
+  ## Souta Corp
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/souta.png" MaxHeight="128"/>
+  [bold]Souta Corp[/bold] brews [bold]Souta Dry[/bold] and Souta Lager, cheap beers popular as an alternative to Weyland-Yutani's Aspen Beer.
 </Document>

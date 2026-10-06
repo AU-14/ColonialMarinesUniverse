@@ -1,6 +1,12 @@
 <Document>
   # Prodigy Security Services
 
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearCivilianProdigyGuardSurv" Caption="Guard"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearCivilianProdigyGuardMedicSurv" Caption="Medic"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearCivilianProdigyGuardLeaderSurv" Caption="Leader"/>
+  </Box>
+
   [bold]Security Services[/bold] is the private army of the [textlink="Prodigy Corporation" link="CMUGuideLoreCorporations"]. It polices Prodigy City, conducts search-and-rescue operations and defends the city from rival corporations. To help sustain the company's remaining operations, its soldiers are also contracted out to the far regions of space as the [bold]Prodigy Corporation Security Forces[/bold].
 
   ## Under Construction

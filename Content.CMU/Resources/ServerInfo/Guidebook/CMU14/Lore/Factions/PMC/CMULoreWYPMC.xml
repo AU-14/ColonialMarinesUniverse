@@ -7,6 +7,12 @@
 
   Most of the time they guard Weyland-Yutani facilities, escort Company science teams and handle security and containment. Colonial governments also hire them, because they tend to get the job done faster than the local military. Their work is never limited to one kind of job, and many of their deployments are "shadow missions" kept quiet even from the governments the Company works alongside.
 
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearWYPMCPartyContractor" Caption="Contractor"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearWYPMCPartyMedic" Caption="Medic"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearWYPMCPartyLeader" Caption="Leader"/>
+  </Box>
+
   ## Recruitment
   - Few apply their way in. Most recruits are veterans with personal contacts high in the Company, or soldiers who caught a superior's eye and were hand-picked.
   - The Company values skill in the field and a willingness to follow directives without question, whatever a soldier's own morals. In return, PMCs are very well paid, and there is never a shortage of work.

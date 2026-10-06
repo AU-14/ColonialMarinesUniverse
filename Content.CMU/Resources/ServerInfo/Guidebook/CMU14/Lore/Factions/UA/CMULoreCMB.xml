@@ -1,7 +1,7 @@
 <Document>
   # Colonial Marshal Bureau
 
-  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/CMBHeader.png" MaxHeight="64"/>
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/CMBHeader.png" MaxHeight="128"/>
 
   [italic]"The laws of Earth stretch beyond the Sol."[/italic]
 
@@ -18,6 +18,10 @@
   - Most Marshals are spread thin, with only a few officers covering an entire colony, and many offices are little more than a drunk tank.
 
   ## Organization
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearCMBMarshalInvestigation" Caption="Marshal"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearCMBDeputyInvestigation" Caption="Deputy"/>
+  </Box>
   - A [bold]Colonial Marshal[/bold] leads a team of [bold]Deputies[/bold]. A standard investigation team is a Marshal and three Deputies, sometimes with an older-model investigative synthetic in place of one Deputy.
   - Every major Marshal office has an agent of the [textlink="Interstellar Commerce Commission" link="CMUGuideLoreICC"] attached, watching for illegal trade and dangerous biological or chemical cargo.
   - The [bold]Crisis Intervention Unit[/bold] handles hostage situations, strikes, terrorism and any crisis beyond the local police.

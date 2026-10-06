@@ -1,7 +1,12 @@
 <Document>
   # USCM Disposition and Readiness
 
-  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/USCMHeader.png" MaxHeight="64"/>
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/USCMHeader.png" MaxHeight="128"/>
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearFORECONFirstReconRifleman" Caption="FORECON"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearGOVFORRiflemanDummy" Caption="USCM"/>
+  </Box>
 
   The [bold]United States Colonial Marine Corps[/bold] is organized into [bold]Marine Space Forces[/bold] (MSF), each responsible for military operations within a defined region of space. An MSF commands the ground, aerospace and support elements needed for sustained interstellar operations.
 
