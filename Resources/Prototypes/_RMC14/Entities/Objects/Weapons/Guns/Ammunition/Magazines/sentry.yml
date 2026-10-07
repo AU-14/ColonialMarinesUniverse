@@ -59,8 +59,10 @@
 - type: entity
   parent: BaseMagazineRifle
   id: RMCMagazineSentryFire
-  name: 45-FM sentry incinerator fuel tank #CMU change, added the model number in name for clarity when using the Itemized Req UI
-  description: A fuel tank of Ultra Thick Napthal Fuel, used in the UN 45-FM. Contains 100 units of fuel.
+  name: 45-FM sentry incinerator fuel tank 
+  # cmu edit start: no UA/UN prefix on sentry descriptions
+  description: A fuel tank of Ultra Thick Napthal Fuel, used in the 45-FM. Contains 100 units of fuel.
+  # cmu edit end
   components:
   - type: Tag
     tags:
@@ -86,8 +88,10 @@
 - type: entity
   parent: BaseMagazineRifle
   id: RMCMagazineSentryFireBlue
-  name: 55-FA sentry incinerator fuel tank #CMU change, added the model number in name for clarity when using the Itemized Req UI
-  description: A fuel tank of usually Ultra Thick Napthal Fuel, a sticky combustible liquid chemical, used in the UN 55-FA.
+  name: 55-FA sentry incinerator fuel tank
+  # cmu edit start: no UA/UN prefix on sentry descriptions
+  description: A fuel tank of usually Ultra Thick Napthal Fuel, a sticky combustible liquid chemical, used in the 55-FA.
+  # cmu edit end
   components:
   - type: Tag
     tags:
@@ -113,8 +117,10 @@
 - type: entity
   parent: BaseMagazineRifle
   id: RMCMagazineSentryFireSmoke
-  name: 60-FP sentry incinerator fuel tank #CMU change, added the model number in name for clarity when using the Itemized Req UI
-  description: A fuel tank of compressed Ultra Thick Napthal Fuel, used in the UN 60-FP.
+  name: 60-FP sentry incinerator fuel tank
+  # cmu edit start: no UA/UN prefix on sentry descriptions
+  description: A fuel tank of compressed Ultra Thick Napthal Fuel, used in the 60-FP.
+  # cmu edit end
   components:
   - type: Tag
     tags:
