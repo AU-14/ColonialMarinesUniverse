@@ -11822,5 +11822,62 @@
   id: 729
   time: '2026-10-06T19:14:44.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2087
+- author: deepdarkdepths
+  changes:
+  - message: Fixed Despoiler's Caustic Embrace to be a proper leap instead of teleport.
+    type: Fix
+  id: 730
+  time: '2026-10-06T21:18:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2018
+- author: troytroy400
+  changes:
+  - message: Ported the G2 Electroshock grenade. Its pulse burns and drains stamina,
+      knocks synthetics out for 25 seconds and slows. The G2 can be planted at your
+      feet as a landmine. It uses the planter's IFF. A multitool can disarm it.
+    type: Add
+  - message: Added the M51A BFAB bounding grenade. It hops into the air when it lands
+      armed and bursts into shrapnel. It can be thrown by hand or fired from a launcher.
+    type: Add
+  - message: Added the M108 canister grenade round, which turns a grenade launcher
+      into a shotgun, being slightly better buckshot.
+    type: Add
+  - message: Added the M38 HEAP armour-piercing grenade round. Not currently available
+      without admin intervention.
+    type: Add
+  - message: Added M47-G and M47-R green and red signal smoke grenades.
+    type: Add
+  - message: Added deployable grenade boxes holding 25 grenades (12 for Type 6 and
+      RDG-17).
+    type: Add
+  - message: M81 riot grenade launchers can now fire any 30mm grenade.
+    type: Tweak
+  - message: CMB CIU now has M81 riot grenade launchers in their requisitions vendor.
+    type: Add
+  - message: Added an Explosives guide covering grenades, claymores, charges and IEDs.
+    type: Add
+  - message: 'Renamed grenades to their proper lore designations: M40 HEDP, M47 HSDP,
+      M77 HIAM, M60 WPSI and M42 MFHS.'
+    type: Tweak
+  - message: HEDP and HSDP grenades fired from a launcher now detonate on impact.
+    type: Tweak
+  - message: Smoke grenades now last 35 seconds. Regular smoke is darker and white
+      phosphorus smoke is lighter. Explosives can now clear smoke.
+    type: Tweak
+  - message: Grenades now play a proper lore accurate arming sound when primed. The
+      M15 uses a pin-pull sound.
+    type: Tweak
+  - message: Fixed CMB CIU having an ammo crate instead of box in their vendor.
+    type: Fix
+  - message: Fixed area echo not working on the USS Bush and planet maps.
+    type: Fix
+  - message: Fixed echoing sounds always using the smallest echo preset instead of
+      one matching the room size.
+    type: Fix
+  - message: Mortar shells, grenade boxes and ammo boxes that are at least half full
+      now catch fire and cook off when left in flames.
+    type: Add
+  id: 731
+  time: '2026-10-07T01:08:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2091
 Name: CMU
 Order: -1
