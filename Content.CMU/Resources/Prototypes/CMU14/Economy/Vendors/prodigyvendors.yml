@@ -1069,6 +1069,8 @@
         amount: 5
     - name: explosives
       entries:
+      - id: CMUBoxGrenadeTraining
+        amount: 1
       - id: CMPacketGrenadeHighExplosiveFilled
         amount: 6
       - id: RMCPacketGrenadeIncendiaryFilled
@@ -1080,6 +1082,16 @@
       - id: RMCPacketGrenadeWhitePhosphorusFilled
         amount: 3
       - id: CMPacketGrenadeFragOldFilled
+        amount: 2
+      - id: CMUPacketGrenadeBFABFilled
+        amount: 2
+      - id: CMUPacketGrenadeCanisterFilled
+        amount: 2
+      - id: CMUPacketGrenadeSmokeGreenFilled
+        amount: 2
+      - id: CMUPacketGrenadeSmokeRedFilled
+        amount: 2
+      - id: CMUPacketGrenadeElectroshockFilled
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3

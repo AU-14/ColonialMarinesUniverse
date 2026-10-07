@@ -42,7 +42,7 @@
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
-  name: LACN Landing Forces
+  name: Latin American Colonial Navy
   lorePrimer: AU14PrimerPlatoonLACN
   Allegiance: UA
   languages:
@@ -2095,36 +2095,36 @@
 
 - type: lorePrimer
   id: AU14PrimerPlatoonLACN
-  PlatoonInfo: "Latin American Colonial Navy, Landing Forces (LACN). A branch of the United Americas' space forces, LACN specializes in rapid deployment and shock tactics for planetary assault and occupation."
+  PlatoonInfo: lore-primer-platoon-lacn-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonUSCM
-  PlatoonInfo: "The United States Colonial Marines (USCM) 4th Division, 13th Strike Group, 13th Regiment, known as the “Lucky Thirteen”, is a Colonial Marine expeditionary force formed to patrol the outer colonies for threats to the United Americas. The Lucky Thirteen is composed primarily of reservists and B-rate troops drawn from the inner UA colonies following the Tychon Tackle. They have been deployed to the Neroid Sector to bolster the United Americas response to the growing number of insurgencies."
+  PlatoonInfo: lore-primer-platoon-uscm-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonUPP
-  PlatoonInfo: "The Union of Progressive Peoples Naval Infantry (UPP), under the 5th Fleet of the 5th Division, is known as the 'North Stars.' Drawn from Chinese (former CANC), Russian, German, and Spanish conscripts, the unit is considered one of the most culturally diverse formations in the UPP, even among the 5th Fleet. The 'North Stars' are regarded as underfunded, even by UPP standards, yet despite this, they continue to demonstrate an undying loyalty to the party."
+  PlatoonInfo: lore-primer-platoon-upp-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonWEYU
-  PlatoonInfo: "The Weyland-Yutani Private Military Company (WEYU PMC), known as the 'Whiteshields', is the organized security force of Weyland-Yutani. While usually reserved for operations directly related to Weyland-Yutani facilities, whether for security or containment, colonial governments have often found hiring them to be more efficient and effective than relying on the local military."
+  PlatoonInfo: lore-primer-platoon-weyu-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonCMBCIU
-  PlatoonInfo: "The Colonial Marshals Bureau Crisis Intervention Unit (CMB CIU) is a specialized unit of deputies and marshals tasked with responding to hostage situations, worker strikes, terrorist incidents, and any other high-profile crisis serious enough to require intervention beyond the capabilities of local law enforcement."
+  PlatoonInfo: lore-primer-platoon-cmbciu-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonHAZOPS
-  PlatoonInfo: "The United States Colonial Marines Hazardous Operations Unit (HAZOPS) specializes in high-risk environments, including chemical, biological, radiological, and explosive threats. HAZOPS teams are trained for rapid response and containment in CBRN conditions."
+  PlatoonInfo: lore-primer-platoon-hazops-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonProdigySF
-  PlatoonInfo: "The Prodigy Corporation Security Forces are a motley group of former military personnel, former law enforcement officers, and independently hired mercenaries employed by the Prodigy Corporation, which contracts them out to whichever faction is willing to pay the most."
+  PlatoonInfo: lore-primer-platoon-prodigysf-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonVAIPO
-  PlatoonInfo: "Vanguard Arrow Inc, 'Primary Operations' (VAIPO). A security detail firm specializing in the protection of high-value targets/assets and rapid response services.  They are United States-based Private Military Company comprised of former UA forces and veterans alike."
+  PlatoonInfo: lore-primer-platoon-vaipo-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonRMC
-  PlatoonInfo: "The Three World Empire Royal Marine Commandos (TWE RMC) are a specialized and highly disciplined force trained in rapid deployment, boarding actions, reconnaissance, sabotage, and precision strikes way behind enemy lines."
+  PlatoonInfo: lore-primer-platoon-rmc-info

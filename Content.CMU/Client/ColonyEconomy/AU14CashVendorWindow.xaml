@@ -11,6 +11,11 @@
             <Button Name="ScanIdBtn" Access="Public" Text="{Loc cash-vendor-scan-id}" MinWidth="80" Visible="False" />
             <Button Name="ReturnChangeBtn" Access="Public" Text="{Loc cash-vendor-return-change}" MinWidth="120" />
         </BoxContainer>
+        <!-- ID account row: whatever the inserted cash does not cover is charged to the card -->
+        <BoxContainer Name="IdAccountRow" Access="Public" Orientation="Horizontal" Margin="8 2" Visible="False">
+            <Label Text="{Loc cash-vendor-id-account}" StyleClasses="LabelKeyText" />
+            <Label Name="IdAccountLabel" Access="Public" Text="" StyleClasses="LabelKeyText" HorizontalExpand="True" />
+        </BoxContainer>
         <!-- Department budget row (visible when dept mode active) -->
         <BoxContainer Name="DeptBudgetRow" Access="Public" Orientation="Horizontal" Margin="8 2" Visible="False">
             <Label Text="{Loc cash-vendor-department-budget}" StyleClasses="LabelKeyText" />

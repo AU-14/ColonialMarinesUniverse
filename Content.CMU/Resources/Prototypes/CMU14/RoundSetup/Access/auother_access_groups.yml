@@ -44,3 +44,21 @@
   tags:
   - CMAccessBrig
   - CMAccessArmory
+
+- type: accessGroup
+  id: aulegacygroupcommandnologistics
+  tags:
+  - CMAccessGovforCommand
+  - CMAccessBrig
+  - CMAccessArmory
+  - CMAccessMedPrep
+  - CMAccessMedical
+  - CMAccessChemistry
+  - CMAccessMarineRifleman
+  - CMAccessMarinePrep
+  - CMAccessSmartPrep
+  - CMAccessSquadLeaderPrep
+  - CMAccessDropship
+  - CMAccessPilot
+  - CMAccessCrewman
+  - RMCAccessVehicleCrew

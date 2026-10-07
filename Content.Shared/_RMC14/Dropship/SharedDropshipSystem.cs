@@ -4,6 +4,7 @@ using System.Numerics; // CMU14
 using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.CMU14.Dropship.GunshipControls; // CMU14
 using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -578,6 +579,10 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             while (computerQuery.MoveNext(out var computerId, out var computer))
             {
                 if (!computer.Hijackable)
+                    continue;
+
+                // CMU14: Xenos can summon transports for hijack, but not the gunship.
+                if (isXeno && HasComp<GunshipControlsComponent>(computerId))
                     continue;
 
                 if (Transform(computerId).GridUid != uid)

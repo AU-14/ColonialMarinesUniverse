@@ -61,6 +61,10 @@ public enum AtmHistoryKind : byte
     CashDeposit,
     TransferOut,
     TransferIn,
+    /// <summary>Cash paid out but never taken, drawn back into the machine and paid back in.</summary>
+    Retracted,
+    /// <summary>Paid at a vending machine with the card, for whatever inserted cash didn't cover.</summary>
+    Purchase,
 }
 
 /// <summary>

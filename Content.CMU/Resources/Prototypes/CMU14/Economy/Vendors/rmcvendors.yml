@@ -1422,6 +1422,8 @@
         amount: 5
     - name: explosives
       entries:
+      - id: CMUBoxGrenadeTraining
+        amount: 1
       - id: AU14PacketGrenadeHighExplosiveRMCFilled
         amount: 8
       - id: AU14PacketGrenadeIncendiaryRMCFilled

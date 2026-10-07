@@ -1,6 +1,12 @@
 - type: job
   parent: CMJobBase
   id: AU14JobCivilianCorporateAdminAssistant
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: WY
   roundRole: CivilianCorporateAdminAssistant
