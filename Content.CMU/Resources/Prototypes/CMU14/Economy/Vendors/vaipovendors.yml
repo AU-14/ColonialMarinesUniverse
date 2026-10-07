@@ -373,8 +373,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
-      - id: CMBeltMedicBag
+      - id: CMUBeltMedicBagVAI
+        recommended: true
+      - id: CMUBeltMedicalVAI
     - name: General Medical Supplies
       entries:
       - id: CMUMaskCPR

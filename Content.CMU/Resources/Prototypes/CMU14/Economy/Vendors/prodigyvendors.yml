@@ -334,7 +334,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: AU14BeltMedicBagBlack
+      - id: AU14BeltMedicBagProdigy
+        recommended: true
+      - id: CMUBeltMedicalProdigy
     - name: Medical Armor
       choices: { CMUPlatoonMedicalArmor: 1 }
       entries:

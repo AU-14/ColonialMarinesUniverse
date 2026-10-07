@@ -337,6 +337,8 @@
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
       - id: AU14BeltMedicBagBlack
+        recommended: true
+      - id: CMBeltMedical
     - name: General Medical Supplies
       entries:
       - id: CMUMaskCPR
@@ -557,8 +559,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
       - id: AU14BeltMedicBagBlack
+        recommended: true
+      - id: CMBeltMedical
     - name: General Medical Supplies
       entries:
       - id: AU14HemostaticGauzePacket

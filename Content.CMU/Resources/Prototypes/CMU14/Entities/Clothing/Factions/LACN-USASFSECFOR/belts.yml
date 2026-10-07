@@ -49,9 +49,9 @@
 
 - type: entity
   parent: CMBeltMedicBag
-  id: CMULACNBeltMedical
+  id: CMUBeltMedicBagLACN
   name: LACN lifesaver bag
-  description: An LACN load-bearing belt mounting a duffel bag filled with a range of injectors and light medical supplies. Common among corpsmen.
+  description: An LACN load-bearing belt mounting a duffel bag filled with a range of injectors and light medical supplies. Common among corpsmen. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNmedbelt.rsi
@@ -59,6 +59,13 @@
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNmedbelt.rsi
   - type: ItemCamouflage
     camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltMedical
+  id: CMUBeltMedicalLACN
+  name: LACN medical storage rig
+  suffix: CMU
+  description: The LACN medical storage rig is the standard load-bearing equipment for many LACN corpsmen. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport medical supplies. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.
 
 - type: entity
   parent: RMCBeltGrenade
