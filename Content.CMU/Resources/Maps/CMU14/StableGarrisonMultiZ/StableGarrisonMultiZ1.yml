@@ -617421,7 +617421,7 @@ entities:
     - type: Transform
       parent: 1
       pos: 100.5,-140.5
-- proto: RMCWeaponLauncherM81
+- proto: CMUWeaponLauncherM81
   entities:
   - uid: 57315
     components:

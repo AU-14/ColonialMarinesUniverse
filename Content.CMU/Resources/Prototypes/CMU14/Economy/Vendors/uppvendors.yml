@@ -1437,6 +1437,8 @@
       #
     - name: explosives
       entries:
+      - id: CMUBoxGrenadeTraining
+        amount: 1
       - id: AU14PacketGrenadeHighExplosiveUPPFilled
         amount: 10
       - id: AU14PacketGrenadeIncendiaryUPPFilled

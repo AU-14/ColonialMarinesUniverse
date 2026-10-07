@@ -41,6 +41,8 @@
     inverted: true
     traits:
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   setPreference: true
   ranks:
     AU14RankLBSeniorExecutive:

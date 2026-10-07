@@ -27,6 +27,15 @@
   name: cmu-guide-entry-sop-equipment
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPEquipmentAndPersonnel.xml"
+  children:
+  - AU14SOPPhysicalStandards
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPPhysicalStandards
+  name: cmu-guide-entry-sop-physical-standards
+  text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPPhysicalStandards.xml"
+  priority: 3
 
 - type: guideEntry
   parent: RMC

@@ -122,10 +122,21 @@ public sealed partial class RMCMagneticSystem : EntitySystem
         receivingItem = ev.ReceivingItem;
         receivingContainer = ev.ReceivingContainer;
 
-        // CMU14: receivers must see the event even without a magnetic field, or the broiler never reclaims a dropped flamer.
-        // A regular sling falls back to the wearer when no receiver handled it.
+        // CMU14 Sling Return Begin: receivers must see the event even without a magnetic field.
+        // A regular sling can fall back to the wearer only while its destination is free.
         if (!ent.Comp.NeedsMagneticField && magnetizer == default)
-            magnetizer = user;
+        {
+            var slots = _inventory.GetSlotEnumerator(user, ent.Comp.MagnetizeToSlots & SlotFlags.SUITSTORAGE);
+            while (slots.MoveNext(out var slot))
+            {
+                if (slot.Count > 0)
+                    continue;
+
+                magnetizer = user;
+                break;
+            }
+        }
+        // CMU14 End
 
         return magnetizer != default;
     }
@@ -328,7 +339,7 @@ public sealed partial class RMCMagneticSystem : EntitySystem
                 var slots = _inventory.GetSlotEnumerator(user, SlotFlags.SUITSTORAGE);
                 while (slots.MoveNext(out var slot))
                 {
-                    if (_inventory.TryEquip(user, uid, slot.ID, force: true))
+                    if (_inventory.TryEquip(user, uid, slot.ID, silent: true, force: true)) // CMU14: a failed automatic return should not spam equip errors.
                     {
                         var popup = Loc.GetString("rmc-magnetize-return",
                             ("item", uid),
