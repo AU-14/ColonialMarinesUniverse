@@ -405,9 +405,6 @@
     attributes:
       proper: true
       gender: male
-  - type: WarpPoint
-    follow: true
-    location: cmu-warp-location-eryk
     
 - type: entity #CMU14
   parent: RMCMobRatGray
@@ -424,9 +421,6 @@
     attributes:
       proper: true
       gender: male
-  - type: WarpPoint
-    follow: true
-    location: cmu-warp-location-joao
 
 # Spawners
 - type: entity
