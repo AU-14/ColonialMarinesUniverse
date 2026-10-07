@@ -1,0 +1,33 @@
+<Document>
+  # Resuscitation
+
+  A patient who dies can often still be brought back, but only for a limited time. Once that time runs out, or the body starts to rot, they're gone for good.
+
+  ## How Long You Have: The Rot Timer
+  The moment someone dies, a [bold]rot timer[/bold] starts. It's how long their body can still be revived before it starts to decay.
+  - It lasts [bold]5 minutes[/bold]. When it runs out the body rots, and nothing can bring them back.
+  - A health analyzer shows roughly how many minutes are left. A medical HUD's health icon on a dead patient also changes as the timer runs down, from revivable to close to almost gone.
+  - The timer only runs while they're dead. Revive them and it resets.
+
+  You can buy more time:
+  - [bold]CPR[/bold]: every round adds 7 seconds, and more with a CPR mask on the patient.
+  - [bold]The recovery position[/bold]: adds a few seconds for every minute they lie in it.
+  - [bold]Neurocryogenic[/bold]: injected into a corpse, it keeps extending the timer for as long as it's in their system.
+
+  ## CPR
+  - Click a dead patient with an empty hand to do chest compressions. Each round takes a few seconds.
+  - Each round adds 7 seconds to the time the patient can still be brought back, and clears up to 10 suffocation damage.
+  - You can't do CPR through a face mask. Pull it down or take it off first.
+  - A [bold]CPR mask[/bold] can be put on an unconscious patient to make CPR more effective. It slips off when they come to.
+
+  ## The Recovery Position
+  - Right-click a collapsed patient and choose [bold]Recovery position[/bold] to roll them onto their side.
+  - While they stay put, a living patient slowly recovers from suffocation damage.
+  - For a dead patient, every minute in the recovery position adds a few more seconds before they can no longer be brought back.
+
+  ## Bringing Them Back
+  - A defibrillator shocks a dead patient back to life, if their body can still be saved. See [textlink="Defibrillators" link="CMUGuideDefibrillators"].
+  - Treat the patient's injuries before shocking. A revival only works if the shock can bring their total damage back below the point where they died.
+  - The heart has to be in good enough shape to restart. A failing or dead heart must be repaired first. See [textlink="Organs" link="CMUGuideMedicalOrgans"].
+  - [bold]Cardiocaine[/bold] can sometimes restart a heart that has stopped.
+</Document>

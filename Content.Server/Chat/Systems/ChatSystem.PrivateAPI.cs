@@ -1,3 +1,4 @@
+using Content.Server._RMC14.Chat.Chat;
 using System.Linq;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Chat;
@@ -130,7 +131,7 @@ public sealed partial class ChatSystem
             ("message", FormattedMessage.EscapeText(obfuscatedMessage)));
 
 
-        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange))
+        foreach (var (session, data) in GetRecipients(source, WhisperMuffledRange, ChatRecipientPurpose.Speech))
         {
             EntityUid listener;
 

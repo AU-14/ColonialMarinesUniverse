@@ -1351,7 +1351,14 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     public void SpawnLarva(Entity<VictimInfectedComponent> victim, out EntityUid spawned)
     {
         var larvaContainer = _container.EnsureContainer<ContainerSlot>(victim.Owner, victim.Comp.LarvaContainerId);
-        spawned = SpawnInContainerOrDrop(victim.Comp.BurstSpawn, victim.Owner, larvaContainer.ID);
+        // CMU14 start: hive assignment can wake the queue during spawn initialization.
+        var overrides = new ComponentRegistry
+        {
+            ["Burster"] = new EntityPrototype.ComponentRegistryEntry(new BursterComponent { BurstFrom = victim.Owner }),
+        };
+        // spawned = SpawnInContainerOrDrop(victim.Comp.BurstSpawn, victim.Owner, larvaContainer.ID);
+        spawned = SpawnInContainerOrDrop(victim.Comp.BurstSpawn, victim.Owner, larvaContainer.ID, overrides: overrides);
+        // CMU14 end
         LinkLarvaToVictim(victim, spawned);
     }
 
@@ -1372,7 +1379,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         burster.BurstFrom = victim.Owner;
         Dirty(spawned, burster);
 
-        // Let the accepted infector claim this specific larva before hive assignment wakes the general larva queue.
+        // CMU14: the spawn-time victim link protects the reservation until this claim can be transferred.
         LarvaLinked(victim, spawned);
 
         if (HasComp<XenoComponent>(spawned))

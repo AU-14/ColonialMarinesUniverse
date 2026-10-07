@@ -1,3 +1,5 @@
+using Content.Shared._RMC14.Weapons.Common;
+using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
 using Content.Shared.Database;
 using Content.Shared.Examine;
@@ -21,6 +23,7 @@ public sealed partial class BatteryWeaponFireModesSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<BatteryWeaponFireModesComponent, UseInHandEvent>(OnUseInHandEvent);
+        SubscribeLocalEvent<BatteryWeaponFireModesComponent, UniqueActionEvent>(OnUniqueAction);
         SubscribeLocalEvent<BatteryWeaponFireModesComponent, GetVerbsEvent<Verb>>(OnGetVerb);
         SubscribeLocalEvent<BatteryWeaponFireModesComponent, ExaminedEvent>(OnExamined);
     }
@@ -87,13 +90,22 @@ public sealed partial class BatteryWeaponFireModesSystem : EntitySystem
         TryCycleFireMode(ent, args.User);
     }
 
-    public void TryCycleFireMode(Entity<BatteryWeaponFireModesComponent> ent, EntityUid? user = null)
+    private void OnUniqueAction(Entity<BatteryWeaponFireModesComponent> ent, ref UniqueActionEvent args)
     {
-        if (ent.Comp.FireModes.Count < 2)
+        if (args.Handled || !ent.Comp.CycleOnUniqueAction || ent.Comp.FireModes.Count < 2)
             return;
 
+        if (TryCycleFireMode(ent, args.UserUid))
+            args.Handled = true;
+    }
+
+    public bool TryCycleFireMode(Entity<BatteryWeaponFireModesComponent> ent, EntityUid? user = null)
+    {
+        if (ent.Comp.FireModes.Count < 2)
+            return false;
+
         var index = (ent.Comp.CurrentFireMode + 1) % ent.Comp.FireModes.Count;
-        TrySetFireMode(ent, index, user);
+        return TrySetFireMode(ent, index, user);
     }
 
     public bool TrySetFireMode(Entity<BatteryWeaponFireModesComponent> ent, int index, EntityUid? user = null)
@@ -121,7 +133,13 @@ public sealed partial class BatteryWeaponFireModesSystem : EntitySystem
                 _appearanceSystem.SetData(ent, BatteryWeaponFireModeVisuals.State, prototype.ID, appearance);
 
             if (user != null)
-                _popupSystem.PopupEntity(Loc.GetString("gun-set-fire-mode-popup", ("mode", prototype.Name)), ent, user.Value);
+            {
+                var popup = fireMode.PopupText.Length > 0
+                    ? fireMode.PopupText
+                    : Loc.GetString("gun-set-fire-mode-popup", ("mode", prototype.Name));
+
+                _popupSystem.PopupEntity(popup, ent, user.Value);
+            }
         }
 
         if (TryComp(ent, out BatteryAmmoProviderComponent? batteryAmmoProviderComponent))
@@ -132,6 +150,12 @@ public sealed partial class BatteryWeaponFireModesSystem : EntitySystem
             Dirty(ent, batteryAmmoProviderComponent);
 
             _gun.UpdateShots((ent, batteryAmmoProviderComponent));
+        }
+
+        if (fireMode.FireRate > 0 && TryComp(ent.Owner, out GunComponent? gun))
+        {
+            _gun.SetFireRate((ent.Owner, gun), fireMode.FireRate);
+            _gun.RefreshModifiers((ent.Owner, gun));
         }
     }
 }

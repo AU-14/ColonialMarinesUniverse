@@ -25,12 +25,12 @@
 
   More energy heals more and is more likely to bring someone back, but it burns the patient more. For the Lifepak, each setting heals up to this much suffocation damage [bold]and[/bold] up to this much blood loss damage:
   - [bold]50 J[/bold]: heals 30 of each. No burns.
-  - [bold]70 J[/bold]: heals 37.5 of each. Deals 5 shock damage.
+  - [bold]70 J[/bold]: heals 37 of each. Deals 5 shock damage.
   - [bold]100 J[/bold]: heals 45 of each. Deals 10 shock damage.
   - [bold]120 J[/bold]: heals 60 of each. Deals 18 shock damage.
   - [bold]150 J[/bold]: heals 75 of each. Deals 25 shock damage.
   - [bold]170 J[/bold]: heals 90 of each. Deals 25 shock damage, plus 5 burn damage to the chest. This leaves a small burn wound a burn kit can treat, with a 1 in 10 chance of a full-thickness burn (eschar), which has to be surgically debrided.
-  - [bold]200 J[/bold]: heals 112.5 of each. Deals 25 shock damage, plus 10 burn damage to the chest. There's also a 1 in 4 chance of a full-thickness burn (eschar), which has to be surgically debrided.
+  - [bold]200 J[/bold]: heals 115 of each. Deals 25 shock damage, plus 10 burn damage to the chest. There's also a 1 in 4 chance of a full-thickness burn (eschar), which has to be surgically debrided.
 
   Shock damage is a type of burn damage, treated like any other burn.
 

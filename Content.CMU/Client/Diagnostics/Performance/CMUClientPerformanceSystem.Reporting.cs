@@ -94,6 +94,8 @@ public sealed partial class CMUClientPerformanceSystem
 
     private void AppendInventory(StringBuilder text)
     {
+        AppendAudioInventory(text);
+
         var counts = new Dictionary<string, int>(StringComparer.Ordinal);
         var entities = 0;
         var components = 0;

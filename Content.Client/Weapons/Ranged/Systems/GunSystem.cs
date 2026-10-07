@@ -104,6 +104,7 @@ public sealed partial class GunSystem : SharedGunSystem
     }
 
     private bool _spreadOverlay;
+    private bool _fireInputHandled;
 
     public override void Initialize()
     {
@@ -193,6 +194,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
         if (entityNull == null || !TryComp<CombatModeComponent>(entityNull, out var combat) || !combat.IsInCombatMode)
         {
+            _fireInputHandled = false;
             return;
         }
 
@@ -200,20 +202,35 @@ public sealed partial class GunSystem : SharedGunSystem
 
         if (!TryGetGun(entity, out var gun))
         {
+            _fireInputHandled = false;
             return;
         }
 
         var useKey = gun.Comp.UseKey ? EngineKeyFunctions.Use : EngineKeyFunctions.UseSecondary;
+        var fireInputDown = _inputSystem.CmdStates.GetState(useKey) == BoundKeyState.Down;
 
-        if (_inputSystem.CmdStates.GetState(useKey) != BoundKeyState.Down && !gun.Comp.BurstActivated)
+        if (!fireInputDown && !gun.Comp.BurstActivated)
         {
+            _fireInputHandled = false;
             if (gun.Comp.ShotCounter != 0)
                 RaisePredictiveEvent(new RequestStopShootEvent { Gun = GetNetEntity(gun) });
             return;
         }
 
         if (gun.Comp.NextFire > Timing.CurTime)
+        {
+            if (fireInputDown && !_fireInputHandled)
+            {
+                _fireInputHandled = true;
+                var cooldownAttempt = new GunCooldownAttemptEvent(entity, gun);
+                RaiseLocalEvent(gun.Owner, ref cooldownAttempt);
+            }
+
             return;
+        }
+
+        if (fireInputDown)
+            _fireInputHandled = true;
 
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
 

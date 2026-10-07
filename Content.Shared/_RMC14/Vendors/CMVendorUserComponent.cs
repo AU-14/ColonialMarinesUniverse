@@ -1,4 +1,4 @@
-﻿using Content.Shared.Roles;
+using Content.Shared.Roles;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -15,6 +15,9 @@ public sealed partial class CMVendorUserComponent : Component
     public Dictionary<string, int> Choices = new();
 
     [DataField, AutoNetworkedField]
+    public HashSet<string>? ChoiceWhitelist;
+
+    [DataField, AutoNetworkedField]
     public HashSet<(string Category, EntProtoId Ent)> TakeAll = new();
 
     [DataField, AutoNetworkedField]
@@ -25,4 +28,7 @@ public sealed partial class CMVendorUserComponent : Component
 
     [DataField, AutoNetworkedField]
     public Dictionary<string, int>? ExtraPoints;
+
+    [DataField, AutoNetworkedField]
+    public Dictionary<string, int> PurchaseCounts = new();
 }

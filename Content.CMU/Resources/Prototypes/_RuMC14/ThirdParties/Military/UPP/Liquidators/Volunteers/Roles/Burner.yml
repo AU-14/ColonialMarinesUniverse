@@ -8,7 +8,7 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: upp_pvt
+      state: spp_pvt
   - type: AssignSquad
     whitelist:
       tags:
@@ -24,7 +24,7 @@
       RMCSkillVehicles: 2
       RMCSkillJtac: 1
   - type: JobPrefix
-    prefix: Rifleman
+    prefix: rumc-job-prefix-rifleman
   - type: MarineOrders
   - type: RMCTrackable
   - type: RMCPointing
@@ -69,7 +69,7 @@
         time: 5400 # 1.5 hours
   spawnMenuRoleName: Liquidator
   startingGear: RuMCGearUPPLiquidatorBurner
-  greeting: Вы член группы ликвидаторов UPP! Ваша задача выжечь дотла всю биологическую угрозу на колонии, ни шагу назад!
+  greeting: rumc-liquidator-greeting
   icon: "RuMCJobIconUPPLiquidatorBurner"
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor

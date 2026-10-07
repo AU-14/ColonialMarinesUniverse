@@ -1,0 +1,57 @@
+<Document>
+  # Vehicle Repair
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCMaintenanceJack" Caption="Maintenance jack"/>
+  </Box>
+
+  Vehicles are built from a [bold]frame[/bold] with [bold]hardpoints[/bold] mounted on it: weapons, armor, engine, treads or wheels and so on. Each hardpoint has its own integrity, and damaged hardpoints start breaking down in specific ways. Your engineering skill makes every repair faster.
+
+  ## Maintenance Mode
+  You can't work on a vehicle while it's running.
+  - The [bold]driver[/bold] has to stop the vehicle and switch it into maintenance mode. Opening or closing the panels takes 5 seconds.
+  - While the panels are open, the engine and weapons are locked.
+  - [color=red]Open panels expose the vehicle's systems, and it takes 50% more damage.[/color] Don't open up under fire.
+  - You can't repair anything while its ammunition is cooking off.
+
+  ## Checking the Damage
+  - Examine a vehicle or a hardpoint to see its integrity and condition, from pristine down to barely holding together.
+  - Use the [bold]Vehicle maintenance[/bold] verb to open the hardpoint menu. It lists every mounted hardpoint, its integrity, and any active faults, with buttons to repair or remove each one.
+  - A damaged hardpoint loses performance as its integrity drops, starting below 70%. At 15% it stops working entirely.
+
+  ## Repairing Hardpoints
+  - Hold a [bold]blowtorch[/bold] and weld the damaged hardpoint. Each pass restores a chunk of its integrity and burns fuel, so bring a full welder or a fuel tank.
+  - Hardpoints can be repaired while mounted, from the hardpoint menu, or after removing them.
+  - Each repair permanently removes [color=orange]30% of the integrity restored[/color] from the part's repair ceiling, down to [bold]20% of its factory capacity[/bold]. The displayed maximum stays at factory capacity, so a worn part will no longer reach 100%.
+
+  ## Repairing the Frame
+  - The frame's hull integrity comes from its hardpoints. Repair the damaged hardpoints first; the frame can't be fixed while they're still broken.
+  - Then weld the frame. Welding only brings it back up to [bold]75%[/bold].
+  - Finish the last 25% by tightening it with a [bold]wrench[/bold].
+
+  ## Faults
+  A hardpoint below 75% of its remaining repair capacity that takes a heavy hit can develop a [bold]fault[/bold], and [color=orange]each hardpoint can carry up to two[/color] at once. Other hardpoints have their own allowance. Snowplows do not develop faults. Faults show up when you examine the vehicle and in the hardpoint menu. Pick the fault to repair, then work through each step with the right tool in your active hand. The menu tells you what each step needs.
+
+  - [bold]Armor plating breach[/bold]: the hardpoint's armor stops protecting. Wrench, then weld.
+  - [bold]Jammed feed system[/bold]: the weapon jams or misfires at random. Screwdriver, then multitool.
+  - [bold]Runaway trigger[/bold]: the weapon fires on its own. Screwdriver, multitool, then wrench.
+  - [bold]Damaged traverse ring[/bold]: the turret turns very slowly. Wrench, then maintenance jack.
+  - [bold]Engine misfire[/bold]: lower acceleration and top speed. Screwdriver, multitool, then wrench.
+  - [bold]Transmission slip[/bold]: lower acceleration, reverse and top speed. Maintenance jack, then wrench.
+  - [bold]Warped frame[/bold]: the frame drags, slowing everything. Maintenance jack, weld, then wrench.
+  - [bold]Damaged mount[/bold]: the hardpoint's output is weakened. Maintenance jack, then wrench.
+  - [bold]Tire blowout[/bold]: lost speed and traction. Crowbar, maintenance jack, then wrench.
+  - [bold]Thrown tread[/bold]: the vehicle can barely move. Maintenance jack, crowbar, then wrench.
+  - [bold]Engine overheating[/bold]: acceleration heavily reduced. Screwdriver, crowbar, then multitool.
+  - [bold]Electrical short[/bold]: the hardpoint's output is unreliable. Wire cutters, multitool, then screwdriver.
+  - [bold]Fuel leak[/bold]: the vehicle leaks fuel until it's fixed. Screwdriver, weld, then wrench.
+
+  ## Swapping Hardpoints
+  - Remove a hardpoint from the hardpoint menu while holding a [bold]maintenance jack[/bold]. Some can also be pried off with a crowbar.
+  - A vehicle with an empty wheel mount can't move until a wheel is put back in.
+
+  ## Locks
+  - The driver can lock and unlock the vehicle's doors.
+  - Enough damage breaks the lock open, and someone can cut it open with wire cutters in a minute.
+  - Fix a broken lock with a [bold]screwdriver[/bold]. It takes 10 seconds.
+</Document>

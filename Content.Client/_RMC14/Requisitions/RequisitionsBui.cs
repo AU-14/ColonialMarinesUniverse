@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 using Content.Client.Stylesheets;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using JetBrains.Annotations;

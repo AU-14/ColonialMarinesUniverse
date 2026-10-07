@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -815,10 +816,10 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     }
 
     // CMU14: fire growth and synthetic resistance.
-    /// <summary>Fire bypasses worn armor, but must respect a synthetic body's heat resistance.</summary>
+    /// <summary>Fire bypasses worn armor, but respects synthetic and Yautja heat resistance.</summary>
     public void DamageFromFire(EntityUid target, DamageSpecifier damage, bool interruptsDoAfters = true, EntityUid? origin = null)
     {
-        _damageable.TryChangeDamage(target, damage, ignoreResistances: !HasComp<SynthComponent>(target),
+        _damageable.TryChangeDamage(target, damage, ignoreResistances: !HasComp<SynthComponent>(target) && !HasComp<YautjaComponent>(target),
             interruptsDoAfters: interruptsDoAfters, origin: origin);
     }
 
@@ -991,13 +992,20 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         }
     }
 
+    // CMU14 method: ignition damage can spawn new fire sources during processing.
     private void RunIgniteOnCollide()
     {
         try
         {
             var applyQuery = EntityQueryEnumerator<RMCIgniteOnCollideComponent>();
             while (applyQuery.MoveNext(out var uid, out var apply))
+                _cmuIgnitionSources.Add((uid, apply));
+
+            foreach (var (uid, apply) in _cmuIgnitionSources)
             {
+                if (apply.Deleted || TerminatingOrDeleted(uid))
+                    continue;
+
                 // The immutable membership snapshot survives ignition callbacks that
                 // anchor new fire. Damage/immunity are still evaluated every update.
                 foreach (var contact in _anchorTiles.Get(uid))
@@ -1022,6 +1030,10 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         catch (Exception e)
         {
             Log.Error($"Error processing {nameof(RMCIgniteOnCollideComponent)}:\n{e}");
+        }
+        finally
+        {
+            _cmuIgnitionSources.Clear();
         }
     }
 

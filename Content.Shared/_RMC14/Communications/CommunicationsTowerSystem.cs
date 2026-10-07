@@ -15,6 +15,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Content.Shared.Power;
 using Content.Shared.Radio;
@@ -168,7 +169,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
             return;
 
         var factions = new HashSet<EntProtoId<IFFFactionComponent>>();
-        if (_gunIFF.TryGetFactions(args.User, factions))
+        if (_gunIFF.TryGetFactions(args.User, factions, SlotFlags.IDCARD | SlotFlags.EARS))
         {
             foreach (var faction in factions)
             {

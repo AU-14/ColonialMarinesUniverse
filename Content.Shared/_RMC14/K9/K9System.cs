@@ -370,12 +370,14 @@ public sealed partial class K9System : EntitySystem
             Dirty(grab.Dog, dogComp);
         }
 
+        // CMU14: release the grip before stopping the pull so its handlers cannot block or restart it.
+        RemComp<K9GrabbedComponent>(target);
         if (TryComp<PullableComponent>(target, out var pullable))
         {
             _pulling.TryStopPull(target, pullable);
         }
 
-        RemCompDeferred<K9GrabbedComponent>(target);
+        // RemCompDeferred<K9GrabbedComponent>(target); // CMU14: removed before stopping the pull
         _movementSpeed.RefreshMovementSpeedModifiers(target);
     }
 

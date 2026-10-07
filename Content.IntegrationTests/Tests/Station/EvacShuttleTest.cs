@@ -25,6 +25,7 @@ public sealed class EvacShuttleTest : GameTest
     /// Ensure that the emergency shuttle can be called, and that it will travel to centcomm
     /// </summary>
     [Test]
+    [NonParallelizable]
     public async Task EmergencyEvacTest()
     {
         var pair = Pair;

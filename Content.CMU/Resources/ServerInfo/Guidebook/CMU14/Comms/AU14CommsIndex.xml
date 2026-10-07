@@ -1,7 +1,9 @@
 <Document>
   # Communications Guide
 
-  This section covers the radio systems used by ground forces.
+  This section covers the radio equipment and communications systems used by ground forces.
+
+  New to the system? Start with [textlink="Getting On The Net" link="AU14CommsGettingOnTheNet"] for a step-by-step introduction.
 
   <Box>
     <GuideEntityEmbed Entity="ANPRC117GRadio" Caption="AN/PRC-117G"/>
@@ -10,19 +12,30 @@
 
   ## Guides
 
-  - [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] - operating instructions for the manpack radio: net setup, operating modes, COMSEC fill, retransmission stations, interception, and the net log.
-  - [textlink="Field Headsets" link="AU14CommsHeadsets"] - issued headsets: named nets, relay coverage, jamming, and direct-frequency tuning.
-  - [textlink="Voice Procedure" link="AU14CommsVoiceProcedure"] - standard radio message format, prowords, and worked examples for contact reports, fire missions, and casualty evacuation requests.
-  - [textlink="Comms Quick Reference" link="AU14CommsQuickRef"] - chat prefixes, signal ranges, antennas, operating modes, transmit power, squelch, and COMSEC controls.
+  - [textlink="Getting On The Net" link="AU14CommsGettingOnTheNet"] - a beginner's walkthrough covering headsets, relay coverage, setting up an AN/PRC, and making your first transmission.
+  - [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] - the complete guide to the manpack radio, including nets, relay coverage, the handset, field phone, battery, COMSEC, staked radios, and antenna masts.
+  - [textlink="AN/PRC-117G: Guided Panel" link="AU14CommsANPRCGuided"] - the standard radio interface, including NETS, LOG, SECURITY, and SETTINGS.
+  - [textlink="AN/PRC-117G: Expert Faceplate" link="AU14CommsANPRCExpert"] - advanced radio controls, direct frequencies, search and direction finding, power settings, EMCON, retransmission, and other operator functions.
+  - [textlink="Field Headsets" link="AU14CommsHeadsets"] - issued headsets and earpieces, their available nets, relay coverage, jamming, and tuning.
+  - [textlink="Voice Procedure" link="AU14CommsVoiceProcedure"] - radio message structure, common prowords, and examples for contact reports, fire missions, and casualty evacuation requests.
+  - [textlink="Comms Quick Reference" link="AU14CommsQuickRef"] - commonly needed prefixes, ranges, antenna figures, radio settings, and COMSEC controls in one place.
+  - [textlink="Comms and Sensor Towers" link="CMUGuideTowers"] - repairing, tuning, and powering the colony's communications and sensor towers.
 
-  ## Find a Topic
+  ## Find a topic
 
   <Table Columns="2" MinForcedColumnWidth="120">
     <ColorBox Color="#263238">
-      <Box Margin="4">[bold]Topic[/bold]</Box>
+      <Box Margin="4">[bold]I want to...[/bold]</Box>
     </ColorBox>
     <ColorBox Color="#263238">
-      <Box Margin="4">[bold]Guide[/bold]</Box>
+      <Box Margin="4">[bold]Read[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Learn the radio system from the beginning</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="Getting On The Net" link="AU14CommsGettingOnTheNet"]</Box>
     </ColorBox>
 
     <ColorBox>
@@ -33,24 +46,38 @@
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">Use an issued headset</Box>
+      <Box Margin="4">Use an issued headset or earpiece</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">[textlink="Field Headsets" link="AU14CommsHeadsets"]</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">Learn radio calls and prowords</Box>
+      <Box Margin="4">Learn how to structure radio messages</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">[textlink="Voice Procedure" link="AU14CommsVoiceProcedure"]</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">Check a control, range, or prefix</Box>
+      <Box Margin="4">Look up a prefix, range, or setting</Box>
     </ColorBox>
     <ColorBox>
       <Box Margin="4">[textlink="Comms Quick Reference" link="AU14CommsQuickRef"]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Use advanced AN/PRC controls</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="AN/PRC-117G: Expert Faceplate" link="AU14CommsANPRCExpert"]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Get a comms or sensor tower working</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="Comms and Sensor Towers" link="CMUGuideTowers"]</Box>
     </ColorBox>
   </Table>
 </Document>

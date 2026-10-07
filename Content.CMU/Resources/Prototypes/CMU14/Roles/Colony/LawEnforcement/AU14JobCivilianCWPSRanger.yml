@@ -39,6 +39,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -83,8 +85,6 @@
     suitstorage: RMCBeltHolsterRevolver
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
-  inhand:
-  - AU14GunCasePistolM44Civ
   storage:
     back:
     - AU14GuidebookLawColonial

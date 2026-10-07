@@ -421,8 +421,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             {
                 RemovePvsActors((uid, terminal));
                 SetTarget((uid, terminal), null);
-                TrySetCameraTarget(uid, null);
+                // TrySetCameraTarget(uid, null); // CMU14: the camera can follow a different target
             }
+
+            // CMU14: camera and weapon selections have independent lifetimes.
+            if (terminal.CameraTarget == ent)
+                TrySetCameraTarget(uid, null);
 
             var targets = terminal.Targets;
             if (HasComp<MedevacStretcherComponent>(ent))

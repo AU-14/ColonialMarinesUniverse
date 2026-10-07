@@ -74,7 +74,7 @@ public abstract partial class SharedStomachSystem : EntitySystem
 
     private void OnStomachRemovedFromBody(Entity<CMUStomachComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (_net.IsClient)
+        if (Timing.ApplyingState || _net.IsClient)
             return;
         AdvanceOrgan(ent, args.OldBody, Timing.CurTime);
         // A donor does not bring the old recipient's partial vomiting interval.
@@ -89,6 +89,9 @@ public abstract partial class SharedStomachSystem : EntitySystem
     {
         if (_net.IsClient || PhysiologyUnavailable(ent.Owner) || PhysiologyUnavailable(args.Body))
             return;
+        if (Timing.ApplyingState)
+            return;
+
         RemComp<MissingStomachComponent>(args.Body);
         AdvanceOrgan(ent, args.Body, Timing.CurTime);
         if (PhysiologyUnavailable(ent.Owner) || PhysiologyUnavailable(args.Body) || GetBody(ent.Owner) != args.Body)

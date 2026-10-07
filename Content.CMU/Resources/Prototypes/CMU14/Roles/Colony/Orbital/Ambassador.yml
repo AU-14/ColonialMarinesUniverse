@@ -59,6 +59,7 @@
     id: AU14IDCardCCAAmbassador
     outerClothing: AU14CivilianJacketTanPufferVest
     ears: AU14AmbassadorCCAHeadset
+    ears2: AU14TranslatorDevice
     pocket1: AU14StampCCAA
   inhand:
   - AU14PortableVendorCCA
@@ -154,6 +155,7 @@
     id: AU14IDCardICSCAmbassador
     outerClothing: RMCJacketCorporateBlack
     ears: AU14AmbassadorICSCHeadset
+    ears2: AU14TranslatorDevice
     pocket1: AU14StampICSCA
   inhand:
   - AU14PortableVendorICSC
@@ -249,6 +251,7 @@
     id: AU14IDCardTWEAmbassador
     outerClothing: AU14CivilianJacketOldCoat
     ears: AU14ColonyAmbassadorTWEHeadset
+    ears2: AU14TranslatorDevice
     pocket1: AU14StampTWEA
   inhand:
   - AU14PortableVendorTWE
@@ -343,6 +346,7 @@
     id: AU14IDCardUAAmbassador
     outerClothing: RMCFancySuitJacketBrown
     ears: AU14AmbassadorUAHeadset
+    ears2: AU14TranslatorDevice
     pocket1: AU14StampUAA
   inhand:
   - AU14PortableVendorUA
@@ -436,6 +440,7 @@
     id: AU14IDCardUPPAmbassador
     outerClothing: RMCCoatSPP
     ears: AU14AmbassadorUPPHeadset
+    ears2: AU14TranslatorDevice
     pocket1: AU14StampUPPA
   inhand:
   - AU14PortableVendorUPP

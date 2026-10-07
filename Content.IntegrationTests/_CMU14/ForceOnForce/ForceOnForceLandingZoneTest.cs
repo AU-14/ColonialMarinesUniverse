@@ -29,16 +29,15 @@ public sealed class ForceOnForceLandingZoneTest : GameTest
             var planets = GamePlanetPoolPrototype.ExpandPlanetIds(SProtoMan, preset.PlanetPool, preset.SupportedPlanets);
             Assert.That(planets, Is.EquivalentTo(new[]
             {
-                "CMUPlanetHopesRetreat", "AUPlanetLV759", "AUPlanetTrijent", "AUPlanetBosenmoriBasho",
+                "AUPlanetTrijent", "AUPlanetBosenmoriBasho",
                 "AuPlanetChances", "AUPlanetCorsatStation", "AUPlanetLV624", "AUPlanetShepherdsPride",
-                "AUPlanetLV747", "CMUPlanetStableGarrisonRedux", "AUPlanetSorokyne",
+                "AUPlanetLV747", "AUPlanetSorokyne",
             }));
-            var groundBases = new[] { "CMUPlanetHopesRetreat", "AUPlanetLV759", "CMUPlanetStableGarrisonRedux" };
             foreach (var id in planets)
             {
                 var proto = SProtoMan.Index<EntityPrototype>(id);
                 Assert.That(proto.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, SEntMan.ComponentFactory), Is.True);
-                Assert.That(planet!.GovforInShip, Is.EqualTo(!groundBases.Contains(id)), id);
+                Assert.That(planet!.GovforInShip, Is.True, id);
                 Assert.That(planet.OpforInShip, Is.True, id);
             }
         });

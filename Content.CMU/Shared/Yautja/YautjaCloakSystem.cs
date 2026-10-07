@@ -8,6 +8,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Atmos.Components;
+using Content.Shared.FixedPoint;
 using Content.Shared.Examine;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -22,6 +23,7 @@ using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Tag;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
@@ -51,6 +53,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     {
         SubscribeLocalEvent<YautjaBracerComponent, YautjaToggleCloakActionEvent>(OnToggleCloak);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaBracerUnequippedEvent>(OnBracerUnequipped);
+        SubscribeLocalEvent<YautjaBracerComponent, EntGotInsertedIntoContainerMessage>(OnBracerInsertedIntoContainer);
 
         SubscribeLocalEvent<YautjaComponent, VaporHitEvent>(OnVaporHit);
         SubscribeLocalEvent<YautjaComponent, MobStateChangedEvent>(OnMobStateChanged);
@@ -112,9 +115,23 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         TryToggleCloak(args.Performer, ent);
     }
 
+    public bool TryToggleCloakForced(Entity<YautjaBracerComponent> bracer, EntityUid user, FixedPoint2 powerCost)
+    {
+        return TryToggleCloak(user, bracer, requireTechUser: false, powerCost);
+    }
+
     private bool TryToggleCloak(EntityUid user, Entity<YautjaBracerComponent>? bracerEnt = null)
     {
-        if (!CanUseYautjaCloak(user))
+        return TryToggleCloak(user, bracerEnt, requireTechUser: true, 25);
+    }
+
+    private bool TryToggleCloak(
+        EntityUid user,
+        Entity<YautjaBracerComponent>? bracerEnt,
+        bool requireTechUser,
+        FixedPoint2 powerCost)
+    {
+        if (requireTechUser && !CanUseYautjaCloak(user))
         {
             _popup.PopupClient(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
             return false;
@@ -160,13 +177,13 @@ public sealed partial class YautjaCloakSystem : EntitySystem
                 return false;
             }
 
-            if (!_power.HasPowerPopup(user, 25))
+            if (!_power.HasPowerPopup(user, powerCost))
                 return false;
         }
 
         if (TrySetInvisibility(bracer, user, enabling, false) && enabling)
         {
-            _power.TryRemovePower(user, 25);
+            _power.TryRemovePower(user, powerCost, popup: false);
 
             if (bracer.Comp.CloakDuration > TimeSpan.Zero)
             {
@@ -197,17 +214,29 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         _actions.SetToggled(ent.Comp.ToggleCloakAction, false);
     }
 
+    private void OnBracerInsertedIntoContainer(Entity<YautjaBracerComponent> ent, ref EntGotInsertedIntoContainerMessage args)
+    {
+        if (ent.Comp.User is not { } user)
+            return;
+
+        TrySetInvisibility(ent, user, false, true);
+        _actions.SetToggled(ent.Comp.ToggleCloakAction, false);
+    }
+
     private bool TrySetInvisibility(Entity<YautjaBracerComponent> bracer, EntityUid user, bool enabling, bool forced)
     {
         if (Deleted(user) || Terminating(user))
             return false;
 
-        var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
-        turnInvisible.RestrictWeapons = bracer.Comp.CloakRestrictWeapons;
-        turnInvisible.UncloakWeaponLock = bracer.Comp.CloakUncloakWeaponLock;
-
-        if (enabling && !HasComp<EntityActiveInvisibleComponent>(user))
+        if (enabling)
         {
+            if (HasComp<EntityActiveInvisibleComponent>(user))
+                return false;
+
+            var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
+            turnInvisible.RestrictWeapons = bracer.Comp.CloakRestrictWeapons;
+            turnInvisible.UncloakWeaponLock = bracer.Comp.CloakUncloakWeaponLock;
+
             var activeInvisibility = EnsureComp<EntityActiveInvisibleComponent>(user);
             var cloakUser = EnsureComp<ThermalCloakUserComponent>(user);
             cloakUser.Opacity = bracer.Comp.CloakOpacity;
@@ -245,6 +274,10 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
         if (!enabling && TryComp<EntityActiveInvisibleComponent>(user, out var invisible))
         {
+            var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
+            turnInvisible.RestrictWeapons = bracer.Comp.CloakRestrictWeapons;
+            turnInvisible.UncloakWeaponLock = bracer.Comp.CloakUncloakWeaponLock;
+
             invisible.Opacity = 1;
             Dirty(user, invisible);
 

@@ -1,0 +1,26 @@
+- type: entity
+  parent: BaseItem
+  id: CMUYautjaTemporaryLandingZoneFolded
+  name: temporary landing zone
+  description: PLACEHOLDER
+  components:
+  - type: Item
+    size: Huge
+  - type: Sprite
+    sprite: _RMC14/Objects/Tents/folded_tents.rsi
+    layers:
+    - state: big_tent
+  - type: RMCDeployable
+    deployArea:
+      !type:PhysShapeAabb
+      bounds: "-0.4,0.6,3.4,4.4"
+    collapseToolPrototype: CMEntrenchingTool
+    deploySetups:
+    - prototype: CMUYautjaTemporaryLandingZone
+      mode: ReactiveParental
+      offset: -0.2, 0
+
+- type: entity
+  parent: RMCTentUNMCExtended
+  id: CMUYautjaTemporaryLandingZone
+  name: Yautja LZ

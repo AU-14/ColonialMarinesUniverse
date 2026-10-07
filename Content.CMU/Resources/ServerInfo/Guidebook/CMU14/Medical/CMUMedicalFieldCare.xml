@@ -1,0 +1,24 @@
+<Document>
+  # Field Treatment Mixing
+
+  In the field you can mix your own dressings from a base and an ingredient, instead of carrying every kind of dressing ready-made.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUPlainTraumaDressing10" Caption="Packed trauma kit"/>
+    <GuideEntityEmbed Entity="CMUCoagulantPowder1" Caption="Coagulant powder"/>
+    <GuideEntityEmbed Entity="CMUBurnGel1" Caption="Burn gel"/>
+  </Box>
+
+  ## Mixing
+  - Press [keybind="CMUOpenMedicalCraftingMenu"] to open the medical crafting menu. It shows everything you can mix with what you're carrying.
+  - Each dressing uses one base and some units of one ingredient.
+  - [bold]Packed gauze[/bold] makes a gauze dressing. [bold]Packed trauma kits[/bold] make a full trauma dressing.
+  - Both bases can also be used on their own to control bleeding. See [textlink="Wounds and Bleeding" link="CMUGuideMedicalWounds"].
+
+  ## Ingredients
+  - [bold]Coagulant powder[/bold]: clotting agent. Makes hemostatic gauze, or a trauma kit from a packed trauma kit.
+  - [bold]Burn gel[/bold]: cooling gel. Makes burn gauze, or a burn kit from a packed trauma kit.
+  - [bold]Antiseptic[/bold]: makes antiseptic dressings, which clean contaminated wounds.
+  - [bold]Tissue sealant[/bold]: makes sealing dressings, which help wounds close.
+  - [bold]Trauma foam[/bold]: makes compression dressings.
+</Document>

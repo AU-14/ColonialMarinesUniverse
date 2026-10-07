@@ -422,7 +422,9 @@ public sealed partial class IntelSystem : EntitySystem
                 while (techQuery.MoveNext(out var uid, out var comp))
                 {
                     // Ghosts see each team's intel tree as-is (internal points only).
-                    var copy = comp.Tree;
+                    // cmu edit start: IntelTechTree is a class, so edit a copy, not the team's real balance
+                    var copy = comp.Tree.DisplayCopy();
+                    // cmu edit end
                     copy.Points = GetAuWinPoints(comp.Team, copy.Points);
                     teamTrees[comp.Team] = copy;
                 }
@@ -442,7 +444,9 @@ public sealed partial class IntelSystem : EntitySystem
                 var treeEntity = EnsureTechTree(team);
                 var tree = treeEntity.Comp.Tree;
                 // Show the AU win points instead of internal tech points for UI display
-                var displayTree = tree;
+                // cmu edit start: IntelTechTree is a class, so edit a copy, not the team's real balance
+                var displayTree = tree.DisplayCopy();
+                // cmu edit end
                 displayTree.Points = GetAuWinPoints(team, displayTree.Points);
                 ent.Comp.Tree = displayTree;
                 ent.Comp.TeamTrees.Clear();
@@ -692,7 +696,10 @@ public sealed partial class IntelSystem : EntitySystem
                 continue;
             }
 
-            var spawner = _random.Pick(spawners);
+            // cmu edit start
+            // var spawner = _random.Pick(spawners);
+            var spawner = PickSpreadSpawner(spawners);
+            // cmu edit end
             var coords = _transform.GetMoverCoordinates(spawner);
             var intel = Spawn(proto, coords);
             items.Add(intel);
@@ -813,6 +820,9 @@ public sealed partial class IntelSystem : EntitySystem
 
     public void RunSpawners()
     {
+        // cmu edit start
+        ResetCMUSpread();
+        // cmu edit end
         try
         {
             var spawnerQuery = EntityQueryEnumerator<IntelSpawnerComponent>();
@@ -841,9 +851,15 @@ public sealed partial class IntelSystem : EntitySystem
             mediums.AddRange(SpawnIntel(FolderProto, _folders, _folderChances));
             var highs = SpawnIntel(TechnicalManualProto, _technicalManuals, _technicalManualChances);
             // SpawnIntel(DiskProto, _disks, _diskChances);
+            // cmu edit start: CMU data disks, uploaded only at intel computers
+            SpawnCMUDataDisks();
+            // cmu edit end
             SpawnIntel(ExperimentalDevicesProto, _experimentalDevices, _experimentalDeviceChances);
             // SpawnIntel(ResearchPaperProto, _researchPapers, _researchPaperChances);
             // SpawnIntel(VialBoxProto, _vialBoxes, _vialBoxChances);
+            // cmu edit start
+            LogCMUSpread();
+            // cmu edit end
 
             tree.Comp.Tree.Documents.Total = _paperScraps + _progressReports + _folders + _technicalManuals;
             tree.Comp.Tree.UploadData.Total = _disks;
@@ -879,6 +895,9 @@ public sealed partial class IntelSystem : EntitySystem
         finally
         {
             _spawners.Clear();
+            // cmu edit start
+            ResetCMUSpread();
+            // cmu edit end
         }
     }
 
@@ -1048,7 +1067,10 @@ public sealed partial class IntelSystem : EntitySystem
             {
                 // Display the intel tree state as-is. Do NOT substitute AU/win points here.
                 // Substitute AU win points for display: query the ObjectiveMaster if available on server
-                var displayed = tree.Comp.Tree;
+                // cmu edit start: IntelTechTree is a class, so edit a copy. Writing the combined total into the
+                // real tree fed win points back into the intel balance on every refresh, compounding it.
+                var displayed = tree.Comp.Tree.DisplayCopy();
+                // cmu edit end
                 displayed.Points = GetAuWinPoints(tree.Comp.Team, displayed.Points);
                 console.Tree = displayed;
                 Dirty(uid, console);
@@ -1308,8 +1330,11 @@ public sealed partial class IntelSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUObjectiveMasterComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var comp, out var xform))
         {
+            // cmu edit start: display the combined pool, objective (win) points plus intel points,
+            // since tech purchases can spend both. Win points are FixedPoint2 so fractions carry.
             if (comp.IsActive && xform.MapID == planetMapId)
-                return FixedPoint2.New(comp.GetOrCreateFactionData(factionKey).CurrentWinPoints);
+                return comp.GetOrCreateFactionData(factionKey).CurrentWinPoints + fallback;
+            // cmu edit end
         }
 
         return fallback;
