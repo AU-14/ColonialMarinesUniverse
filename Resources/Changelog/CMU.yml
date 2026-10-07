@@ -11879,5 +11879,80 @@
   id: 731
   time: '2026-10-07T01:08:51.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2091
+- author: Ignies
+  changes:
+  - message: The colony ATM has new pixel art, a screen that boots up and sounds for
+      everything it does.
+    type: Tweak
+  - message: The ATM keeps your card while you use it. Leave it behind and someone
+      else can pull it out, or use it if you left it signed in.
+    type: Add
+  - message: The ATM shows your own card's PIN at the top of its window and can pop
+      out into its own window.
+    type: Add
+  - message: Cash visibly comes out of and goes into the ATM, more notes for more
+      money. Click the notes to take them in hand.
+    type: Tweak
+  - message: A siphoned ATM shows the CLF's mark and sparks from its broken card reader.
+    type: Tweak
+  id: 732
+  time: '2026-10-07T03:13:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2086
+- author: troytroy400
+  changes:
+  - message: On Force v Force and Distress Signal GOVFOR/OPFOR req now get a free
+      Bison Cargo Carrier from the ASRS at round start.
+    type: Add
+  - message: Food, drink, cigarette, recreation and non-department clothing vendors
+      on the colony now automatically convert to cash vendors.
+    type: Add
+  - message: Added the Alcoholic and Drug Addict disability traits.
+    type: Add
+  - message: You can now take at most four disability traits.
+    type: Tweak
+  - message: Moved the area echo settings to the CMU settings tab.
+    type: Tweak
+  - message: Added an option in the CMU settings tab to hide your username on the
+      round-end screen for those that would like to hide what character(s) they play.
+    type: Add
+  - message: Removed upstream voiceline and emote settings for species other than
+      humans.
+    type: Tweak
+  - message: Cash vendors now charge the rest of the price to the ID card you're carrying
+      when the inserted cash doesn't cover it.
+    type: Add
+  - message: Added the universal paper tool to the Rec-Vend for $35.
+    type: Add
+  - message: Military roles now have height, weight-for-height and age standards.
+    type: Add
+  - message: Hovering over a locked role now lists everything you need to change,
+      one per line, instead of listing only one at a time.
+    type: Add
+  - message: Added a Physical Standards page with grooming rules to the Military SOP,
+      under Equipment and Personnel.
+    type: Add
+  id: 733
+  time: '2026-10-07T06:07:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2093
+- author: deepdarkdepths
+  changes:
+  - message: Mindless larva can now be returned to the hive core to gain a burrowed
+      larva.
+    type: Add
+  id: 734
+  time: '2026-10-07T10:20:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2089
+- author: OverusedMeme
+  changes:
+  - message: Added missing Sentry Incinerator Fuel Tanks for the 60-FP & 55-FA Flame
+      Sentries, you'll now find them orderable through all GOVFOR factions ASRS.
+    type: Add
+  - message: Replaced improper 45-FM fuel tank with the proper 55-FA fuel tank for
+      the base 55-FA Assault Flamer Sentry opition for Combat Techs. If you upgrade
+      your Flame Sentry, remember to order its specific fuel tank at Req!
+    type: Tweak
+  id: 735
+  time: '2026-10-07T10:24:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2046
 Name: CMU
 Order: -1

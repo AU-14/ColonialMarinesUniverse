@@ -15,6 +15,7 @@ cmu-guide-entry-rules-prometheus = Prometheus Rules
 cmu-guide-entry-sop = Military Standard Operating Procedure
 cmu-guide-entry-sop-roe = Rules of Engagement
 cmu-guide-entry-sop-equipment = Equipment and Personnel
+cmu-guide-entry-sop-physical-standards = Physical Standards
 cmu-guide-entry-sop-command = Command Regulations
 cmu-guide-entry-sop-dropships = Dropships and Aircraft
 cmu-guide-entry-sop-departments = Departments

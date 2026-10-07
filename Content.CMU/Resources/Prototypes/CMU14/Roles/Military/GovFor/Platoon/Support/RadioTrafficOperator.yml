@@ -52,6 +52,8 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
