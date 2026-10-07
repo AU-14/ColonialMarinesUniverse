@@ -227,3 +227,21 @@
     state: bleed7
   name: cmu-medical-pain-severe-alert-name
   description: cmu-medical-pain-severe-alert-desc
+
+# ---- Addiction traits ------------------------------------------------
+
+- type: alert
+  id: CMUAlcoholCraving
+  icons:
+  - sprite: /Textures/Interface/Alerts/breathing.rsi
+    state: not_enough_co2
+  name: cmu-alert-alcoholcraving-name
+  description: cmu-alert-alcoholcraving-desc
+
+- type: alert
+  id: CMUDrugCraving
+  icons:
+  - sprite: /Textures/Interface/Alerts/breathing.rsi
+    state: not_enough_co2
+  name: cmu-alert-drugcraving-name
+  description: cmu-alert-drugcraving-desc

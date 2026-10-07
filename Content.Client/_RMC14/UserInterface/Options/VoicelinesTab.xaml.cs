@@ -14,32 +14,9 @@ public sealed partial class VoicelinesTab : Control
         Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesYourself, RMCVoicelinesYourself);
         Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesYourself, RMCEmotesYourself);
 
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesArachnid, RMCVoicelinesArachnid);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesDiona, RMCVoicelinesDiona);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesDwarf, RMCVoicelinesDwarf);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesFelinid, RMCVoicelinesFelinid);
+        // cmu edit: only humans are playable, other species' voiceline and emote options removed
         Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesHuman, RMCVoicelinesHuman);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesMoth, RMCVoicelinesMoth);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesReptilian, RMCVoicelinesReptilian);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesSlime, RMCVoicelinesSlime);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesAvali, RMCVoicelinesAvali);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesVulpkanin, RMCVoicelinesVulpkanin);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesRodentia, RMCVoicelinesRodentia);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesFeroxi, RMCVoicelinesFeroxi);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayVoicelinesSkrell, RMCVoicelinesSkrell);
 
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesArachnid, RMCEmotesArachnid);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesDiona, RMCEmotesDiona);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesDwarf, RMCEmotesDwarf);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesFelinid, RMCEmotesFelinid);
         Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesHuman, RMCEmotesHuman);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesMoth, RMCEmotesMoth);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesReptilian, RMCEmotesReptilian);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesSlime, RMCEmotesSlime);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesAvali, RMCEmotesAvali);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesVulpkanin, RMCEmotesVulpkanin);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesRodentia, RMCEmotesRodentia);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesFeroxi, RMCEmotesFeroxi);
-        Control.AddOptionCheckBox(RMCCVars.RMCPlayEmotesSkrell, RMCEmotesSkrell);
     }
 }

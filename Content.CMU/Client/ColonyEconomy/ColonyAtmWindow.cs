@@ -632,6 +632,7 @@ public sealed partial class ColonyAtmWindow : BaseWindow
                 AtmHistoryKind.TransferOut => $"-${entry.Amount} TO #{entry.OtherAccount}",
                 AtmHistoryKind.TransferIn => $"+${entry.Amount} FROM #{entry.OtherAccount}",
                 AtmHistoryKind.Retracted => $"+${entry.Amount} CASH RETURNED",
+                AtmHistoryKind.Purchase => $"-${entry.Amount} PURCHASE",
                 _ => $"{entry.Amount}",
             };
             sb.Append('\n').Append(time).Append(' ').Append(line);
