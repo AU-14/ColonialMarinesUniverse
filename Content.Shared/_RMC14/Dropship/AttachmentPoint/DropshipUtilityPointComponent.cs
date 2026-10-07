@@ -19,4 +19,12 @@ public sealed partial class DropshipUtilityPointComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public string AmmoContainerSlotId = "rmc_dropship_utility_point_ammo_container_slot";
+
+    /// <summary>
+    ///     AU-14: optional weapon-point location for weapons mounted on this crew
+    ///     compartment point, so they can be fired from the pilot weapons console
+    ///     and used in fire missions. Leave null for pure utility mounts.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public DropshipWeaponPointLocation? Location;
 }
