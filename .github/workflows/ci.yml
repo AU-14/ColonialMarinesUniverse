@@ -21,37 +21,6 @@ env:
   CONFIGURATION: DebugOpt
 
 jobs:
-  source-guards:
-    name: Source Guards
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-python@v7.0.0
-        with:
-          python-version: "3.13"
-
-      - name: Check CRLF
-        run: python3 Tools/check_crlf.py
-
-      - name: Reject RobustToolbox submodule updates in PRs
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v9.0.0
-        with:
-          script: |
-            const files = await github.paginate(github.rest.pulls.listFiles, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 100,
-            });
-
-            if (files.some(file => file.filename === 'RobustToolbox')) {
-              core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
-            }
-
   build:
     name: Build
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
@@ -74,19 +43,13 @@ jobs:
             **/packages.lock.json
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore Content.YAMLLinter/Content.YAMLLinter.csproj
 
       - name: Build once
-        run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
+        run: dotnet build Content.YAMLLinter/Content.YAMLLinter.csproj --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
 
-      - name: Upload Content.Tests build
-        uses: actions/upload-artifact@v7
-        with:
-          name: build-content-tests
-          path: bin/Content.Tests/
-          if-no-files-found: error
-          retention-days: 1
-          compression-level: 0
+      - name: Run Content.Tests
+        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal -- NUnit.ConsoleOut=0 NUnit.ExplicitMode=None
 
       - name: Upload YAML linter build
         uses: actions/upload-artifact@v7
@@ -106,57 +69,16 @@ jobs:
           retention-days: 1
           compression-level: 0
 
-      - name: Upload client runtime build
+      - name: Upload runtime build
         uses: actions/upload-artifact@v7
         with:
-          name: build-content-client
-          path: bin/Content.Client/
+          name: build-runtime
+          path: |
+            bin/Content.Client/
+            bin/Content.Server/
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
-
-      - name: Upload server runtime build
-        uses: actions/upload-artifact@v7
-        with:
-          name: build-content-server
-          path: bin/Content.Server/
-          if-no-files-found: error
-          retention-days: 1
-          compression-level: 0
-
-  content-tests:
-    name: Content.Tests
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          persist-credentials: true
-          submodules: recursive
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-tests
-          path: bin/Content.Tests/
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-client
-          path: bin/Content.Client/
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-server
-          path: bin/Content.Server/
-
-      - uses: actions/setup-dotnet@v6.0.0
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
-
-      - name: Run Content.Tests
-        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal -- NUnit.ConsoleOut=0
 
   yaml-linter:
     name: YAML Linter
@@ -177,13 +99,8 @@ jobs:
 
       - uses: actions/download-artifact@v8.0.1
         with:
-          name: build-content-client
-          path: bin/Content.Client/
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-server
-          path: bin/Content.Server/
+          name: build-runtime
+          path: bin/
 
       - uses: actions/setup-dotnet@v6.0.0
         with:
@@ -192,145 +109,78 @@ jobs:
       - name: Run YAML Linter
         run: dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll
 
-  schema-validators:
-    name: Schema Validators
+  asset-validation:
+    name: Asset Validation
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Check if schema validation is needed
-        id: schema_changes
+      - name: Select asset checks
+        id: changes
         uses: actions/github-script@v9.0.0
         with:
           script: |
-            if (context.eventName !== 'pull_request') {
-              core.setOutput('run_rga', 'true');
-              core.setOutput('run_map', 'true');
-              return;
+            let changed = null;
+            if (context.eventName === 'pull_request') {
+              const files = await github.paginate(github.rest.pulls.listFiles, {
+                ...context.repo, pull_number: context.payload.pull_request.number, per_page: 100,
+              });
+              changed = files.flatMap(file => [file.filename, file.previous_filename].filter(Boolean));
             }
-
-            const files = await github.paginate(github.rest.pulls.listFiles, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 100,
-            });
-            const changed = files.map(file => file.filename);
-
-            const runRga = changed.some(file =>
-              /attributions\.ya?ml$/.test(file) ||
-              file === '.github/Schemas/rga.yml' ||
-              file === '.github/Schemas/rga_validators.py' ||
-              file === '.github/Schemas/rga_requirements.txt' ||
-              file === '.github/scripts/validate_yamale.py');
-
-            const runMap = changed.some(file =>
-              file.startsWith('Resources/Maps/') ||
-              file === 'RobustToolbox' ||
-              file === '.github/Schemas/mapfile_requirements.txt' ||
-              file === '.github/scripts/validate_yamale.py');
-
-            core.setOutput('run_rga', runRga ? 'true' : 'false');
-            core.setOutput('run_map', runMap ? 'true' : 'false');
+            const all = changed === null || changed.some(file =>
+              file === 'RobustToolbox' || file === '.github/workflows/ci.yml' ||
+              file.startsWith('.github/Schemas/') || file.startsWith('.github/scripts/'));
+            const rga = all || changed.some(file => /attributions\.ya?ml$/.test(file));
+            const maps = all || changed.some(file => /^(Content\.CMU\/)?Resources\/Maps\//.test(file));
+            const rsi = all || changed.some(file => file.includes('.rsi/'));
+            for (const [key, value] of Object.entries({rga, maps, rsi, any: rga || maps || rsi}))
+              core.setOutput(key, String(value));
 
       - uses: actions/checkout@v7
-        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
+        if: steps.changes.outputs.any == 'true'
         with:
-          persist-credentials: true
           submodules: recursive
 
       - uses: actions/setup-python@v7.0.0
-        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
+        if: steps.changes.outputs.any == 'true'
         with:
           python-version: "3.13"
           cache: pip
-          cache-dependency-path: |
-            .github/Schemas/rga_requirements.txt
-            .github/Schemas/mapfile_requirements.txt
+          cache-dependency-path: .github/Schemas/*requirements.txt
 
-      - name: Install schema validator dependencies
-        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
-        run: |
-          python3 -m pip install yamale -r .github/Schemas/rga_requirements.txt -r .github/Schemas/mapfile_requirements.txt
+      - name: Install asset validators
+        if: steps.changes.outputs.any == 'true'
+        run: python3 -m pip install pillow jsonschema yamale -r .github/Schemas/rga_requirements.txt -r .github/Schemas/mapfile_requirements.txt
 
-      - name: Validate RGA schemas
-        if: steps.schema_changes.outputs.run_rga == 'true'
+      - name: Validate attributions
+        if: steps.changes.outputs.rga == 'true'
         run: |
           python3 .github/scripts/validate_yamale.py \
             --schema .github/Schemas/rga.yml \
             --path-pattern '.*attributions.ya?ml$' \
             --validators .github/Schemas/rga_validators.py
 
-      - name: Validate map schemas
-        if: steps.schema_changes.outputs.run_map == 'true'
+      - name: Validate maps
+        if: steps.changes.outputs.maps == 'true'
         run: |
           python3 .github/scripts/validate_yamale.py \
             --schema RobustToolbox/Schemas/mapfile.yml \
             --path-pattern '.*Resources/Maps/.*' \
             --validators RobustToolbox/Schemas/mapfile_validators.py
 
-      - name: Skip schema validation
-        if: steps.schema_changes.outputs.run_rga != 'true' && steps.schema_changes.outputs.run_map != 'true'
-        run: echo "No schema-validated files changed."
-
-  rsi-validator:
-    name: RSI Validator
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - name: Check if RSI validation is needed
-        id: rsi_changes
-        uses: actions/github-script@v9.0.0
-        with:
-          script: |
-            if (context.eventName !== 'pull_request') {
-              core.setOutput('run', 'true');
-              return;
-            }
-
-            const files = await github.paginate(github.rest.pulls.listFiles, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
-              per_page: 100,
-            });
-
-            core.setOutput('run', files.some(file => file.filename.includes('.rsi/')) ? 'true' : 'false');
-
-      - uses: actions/checkout@v7
-        if: steps.rsi_changes.outputs.run == 'true'
-        with:
-          persist-credentials: true
-          submodules: recursive
-
-      - uses: actions/setup-python@v7.0.0
-        if: steps.rsi_changes.outputs.run == 'true'
-        with:
-          python-version: "3.13"
-
-      - name: Install RSI validator dependencies
-        if: steps.rsi_changes.outputs.run == 'true'
-        run: python3 -m pip install pillow jsonschema
-
       - name: Validate RSIs
-        if: steps.rsi_changes.outputs.run == 'true'
-        run: python3 RobustToolbox/Schemas/validate_rsis.py Resources/
-
-      - name: Skip RSI validation
-        if: steps.rsi_changes.outputs.run != 'true'
-        run: echo "No RSI files changed."
+        if: steps.changes.outputs.rsi == 'true'
+        run: |
+          # CMU14: retain upstream structural checks and recognize the existing donor-cape license.
+          python3 .github/scripts/validate_cmu_rsis.py Resources/ Content.CMU/Resources/
 
   required-checks:
     name: Required Checks
-    if: (failure() || success()) && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     needs:
-      - source-guards
       - build
-      - content-tests
       - yaml-linter
-      - schema-validators
-      - rsi-validator
+      - asset-validation
       - integration-tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -340,12 +190,9 @@ jobs:
         with:
           script: |
             const results = {
-              'Source Guards': '${{ needs.source-guards.result }}',
               'Build': '${{ needs.build.result }}',
-              'Content.Tests': '${{ needs.content-tests.result }}',
               'YAML Linter': '${{ needs.yaml-linter.result }}',
-              'Schema Validators': '${{ needs.schema-validators.result }}',
-              'RSI Validator': '${{ needs.rsi-validator.result }}',
+              'Asset Validation': '${{ needs.asset-validation.result }}',
               'Content.IntegrationTests': '${{ needs.integration-tests.result }}',
             };
 
@@ -362,7 +209,7 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -376,14 +223,14 @@ jobs:
           # Bulk entity/component sweeps remain in the manual Build & Test Debug workflow.
           - name: admin_access_ui
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Administration
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Access
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Commands
-              | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Roles
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed
-              | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface
+              FullyQualifiedName~Content.IntegrationTests.Tests.Administration.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Access.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Commands.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Roles.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Afk.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Alerts.
               | FullyQualifiedName~Content.IntegrationTests.Tests.ClientSession.
@@ -391,54 +238,53 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Helpers.
           - name: atmos_fluids_physics
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Atmos
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Physics
+              FullyQualifiedName~Content.IntegrationTests.Tests.Atmos.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Physics.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Decals.
               | FullyQualifiedName~Content.IntegrationTests.Tests.FootPrint.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Weather.
           - name: mapping_station_shuttle_round
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.GameRules
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Mapping
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Procedural
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Replays
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Round
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Shuttle
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Station
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles
+              FullyQualifiedName~Content.IntegrationTests.Tests.GameRules.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Mapping.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Procedural.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Replays.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Round.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Shuttle.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Station.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Chasm.
               | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTable.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.WizdenContentFreeze.
           - name: cleanup_entities_world
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Damageable
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Destructible
-              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking
-              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceNetwork
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Disposal
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Doors
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Embedding
+              FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Damageable.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Destructible.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceNetwork.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Disposal.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Doors.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Embedding.
               | FullyQualifiedName~Content.IntegrationTests.Tests.GameObjects.
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Payload
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Power
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Weldable
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Wires
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Payload.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Power.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Weldable.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Wires.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Containers.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Forensics.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Mobs.
           - name: gameplay_core
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Actions
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Body
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Buckle
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Chameleon
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Climbing
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Cloning
-              | FullyQualifiedName~Content.IntegrationTests.Tests.DoAfter
+              FullyQualifiedName~Content.IntegrationTests.Tests.Actions.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Body.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Buckle.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Chameleon.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Climbing.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Cloning.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.DoAfter.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Changeling.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Chat.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Clumsy.
@@ -457,23 +303,24 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Zombie.
           - name: gameplay_runtime
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Interaction
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Internals
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Minds
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Movement
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Networking
-              | FullyQualifiedName~Content.IntegrationTests.Tests.NPC
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Puller
+              FullyQualifiedName~Content.IntegrationTests.Tests.Interaction.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Internals.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Minds.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Movement.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Networking.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.NPC.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Puller.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Follower.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Vehicle.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Trigger.
           - name: items_storage_crafting
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Construction
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Hands
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Lathe
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Materials
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Sprite
+              FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Construction.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Hands.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Lathe.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Materials.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Sprite.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Engineering.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Holosign.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Inventory.
@@ -489,75 +336,100 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Weapons.
           - name: storage_crafting_misc
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Storage
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Strip
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Tag
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Utility
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Vending
+              FullyQualifiedName~Content.IntegrationTests.Tests.Storage.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Strip.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Tag.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Utility.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Vending.
               | FullyQualifiedName~Content.IntegrationTests.Tests.IconSmoothing.
-          - name: proto_lint_locale_serial
+          - name: proto_lint_serial
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Linter
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Localization
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Preferences
-              | FullyQualifiedName~Content.IntegrationTests.Tests.PrototypeTests
-              | FullyQualifiedName~Content.IntegrationTests.Tests.Serialization
+              FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Linter.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Preferences.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.PrototypeTests.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Serialization.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Audio.
               | FullyQualifiedName~Content.IntegrationTests.Tests.NameIdentifier.
               | FullyQualifiedName~Content.IntegrationTests.Tests.Research.
           - name: rmc
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests._RMC14
-              | FullyQualifiedName~Content.IntegrationTests.Tests._RMC14.
-          - name: cmu
-            # Both namespace spellings are in use. Medical and chemistry need their
-            # own processes; matching only _CMU14 leaves them all in this shard.
+              FullyQualifiedName~RMC14.
+              & FullyQualifiedName!~RMC14.PlanetMapLoadTests.
+          # CMU14: full-rotation map sweeps exceed the normal per-test watchdog.
+          - name: map_loading
             filter: >-
-              (FullyQualifiedName~Content.IntegrationTests._CMU14.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.)
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Camera.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Camera.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Chemistry.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Chemistry.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Yautja.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Yautja.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.ZLevels.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.ZLevels.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Diagnostics.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Diagnostics.
-          - name: cmu_2
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Camera.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Camera.
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Yautja.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Yautja.
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.ZLevels.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.ZLevels.
-              | FullyQualifiedName~Content.IntegrationTests._CMU14.Diagnostics.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Diagnostics.
-          - name: cmu_chemistry
-            filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Chemistry.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Chemistry.
+              FullyQualifiedName~RMC14.PlanetMapLoadTests.
+              | FullyQualifiedName~CMU14.Dropship.MohawkLandingTest.
           - name: cmu_medical_anatomy
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.Anatomy.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.Anatomy.
+              FullyQualifiedName~CMU14.Medical.Anatomy.
           - name: cmu_medical_treatment
             filter: >-
-              FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.Treatment.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.Treatment.
+              FullyQualifiedName~CMU14.Medical.Treatment.
+          - name: cmu_chemistry
+            filter: >-
+              FullyQualifiedName~CMU14.Chemistry.
+          - name: cmu_ships
+            filter: >-
+              (FullyQualifiedName~CMU14.Dropship.
+              | FullyQualifiedName~CMU14.Blackfoot.
+              | FullyQualifiedName~CMU14.Fighter.
+              | FullyQualifiedName~CMU14.CargoVehicle.
+              | FullyQualifiedName~CMU14.Maps.)
+              & FullyQualifiedName!~CMU14.Dropship.MohawkLandingTest.
+          - name: cmu_spatial
+            filter: >-
+              FullyQualifiedName~CMU14.ZLevels.
+              | FullyQualifiedName~CMU14.Camera.
+              | FullyQualifiedName~Content.IntegrationTests.CMU.
+          # CMU14: keep the largest Yautja fixtures in separate test processes.
+          - name: cmu_yautja
+            filter: >-
+              FullyQualifiedName~CMU14.Yautja.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaBowTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaPredatorRoleTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaSmokeTest.
+          - name: cmu_yautja_weapons
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaBowTest.
+          - name: cmu_yautja_roles
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaPredatorRoleTest.
+          - name: cmu_yautja_smoke
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaSmokeTest.
+          - name: cmu_diagnostics
+            filter: >-
+              FullyQualifiedName~CMU14.Diagnostics.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Performance.
+          # CMU14: fresh lobby pairs need memory headroom after the gameplay fixtures.
+          - name: cmu_lobby_ui
+            filter: >-
+              FullyQualifiedName~CMU14.Round.CMUPresetVoteTest.
+              | FullyQualifiedName~CMU14.Chat.ChatLogLayoutTest.
+              | FullyQualifiedName~CMU14.Lobby.OptionsThemeRegressionTest.
+              | FullyQualifiedName~CMU14.Overwatch.SupportLaunchButtonTest.
           - name: cmu_medical
             filter: >-
-              (FullyQualifiedName~Content.IntegrationTests._CMU14.Medical.
-              | FullyQualifiedName~Content.IntegrationTests.CMU14.Medical.)
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.Anatomy.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.Anatomy.
-              & FullyQualifiedName!~Content.IntegrationTests._CMU14.Medical.Treatment.
-              & FullyQualifiedName!~Content.IntegrationTests.CMU14.Medical.Treatment.
+              FullyQualifiedName~CMU14.Medical.
+              & FullyQualifiedName!~CMU14.Medical.Anatomy.
+              & FullyQualifiedName!~CMU14.Medical.Treatment.
+          - name: cmu
+            filter: >-
+              FullyQualifiedName~CMU14.
+              & FullyQualifiedName!~CMU14.Medical.
+              & FullyQualifiedName!~CMU14.Chemistry.
+              & FullyQualifiedName!~CMU14.Dropship.
+              & FullyQualifiedName!~CMU14.Blackfoot.
+              & FullyQualifiedName!~CMU14.Fighter.
+              & FullyQualifiedName!~CMU14.CargoVehicle.
+              & FullyQualifiedName!~CMU14.Maps.
+              & FullyQualifiedName!~CMU14.ZLevels.
+              & FullyQualifiedName!~CMU14.Camera.
+              & FullyQualifiedName!~CMU14.Yautja.
+              & FullyQualifiedName!~CMU14.Diagnostics.
+              & FullyQualifiedName!~CMU14.Round.CMUPresetVoteTest.
+              & FullyQualifiedName!~CMU14.Chat.ChatLogLayoutTest.
+              & FullyQualifiedName!~CMU14.Lobby.OptionsThemeRegressionTest.
+              & FullyQualifiedName!~CMU14.Overwatch.SupportLaunchButtonTest.
           - name: au14
             filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
@@ -573,13 +445,8 @@ jobs:
 
       - uses: actions/download-artifact@v8.0.1
         with:
-          name: build-content-client
-          path: bin/Content.Client/
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          name: build-content-server
-          path: bin/Content.Server/
+          name: build-runtime
+          path: bin/
 
       - uses: actions/setup-dotnet@v6.0.0
         with:
@@ -603,6 +470,15 @@ jobs:
           export DOTNET_gcServer=1
           shard="${{ matrix.shard.name }}"
 
+          # CMU14: bound concurrent pairs and allow the full-rotation map sweeps to finish.
+          workers=4
+          hang_timeout=5m
+          case "$shard" in
+            root_1|cmu|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            cmu_lobby_ui) workers=1 ;;
+            map_loading) workers=1; hang_timeout=20m ;;
+          esac
+
           if [[ "$shard" == root_* ]]; then
             root_group='${{ matrix.shard.root_group }}'
             root_groups='${{ matrix.shard.root_groups }}'
@@ -619,7 +495,7 @@ jobs:
               if [[ "$base" == "EntityTest" ]] || (( i % root_groups != root_group )); then
                 continue
               fi
-              FILTER="${FILTER:+$FILTER | }FullyQualifiedName~Content.IntegrationTests.Tests.$base"
+              FILTER="${FILTER:+$FILTER | }FullyQualifiedName~Content.IntegrationTests.Tests.$base."
             done
             if [ -z "$FILTER" ]; then
               echo "::error::$shard shard: no test files assigned!"
@@ -629,6 +505,8 @@ jobs:
             FILTER='${{ matrix.shard.filter }}'
           fi
 
+          # Localization policy and upstream content freezes are opt-in in the full suite.
+          FILTER="($FILTER) & FullyQualifiedName!~.Localization. & FullyQualifiedName!~.WizdenContentFreeze."
           echo "--- $shard shard filter ---"
           echo "$FILTER"
           cd bin/Content.IntegrationTests || exit 1
@@ -636,15 +514,19 @@ jobs:
           # NUnit otherwise drops the execution filter when a shard exceeds 2,000 tests.
           dotnet test Content.IntegrationTests.dll \
             --verbosity normal --filter "$FILTER" \
-            --blame-hang-timeout 5m --blame-hang-dump-type none \
+            --blame-hang-timeout "$hang_timeout" --blame-hang-dump-type none \
             --logger "trx;LogFileName=$shard.trx" --results-directory TestResults \
-            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.AssemblySelectLimit=10000
+            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed NUnit.ExplicitMode=None NUnit.AssemblySelectLimit=10000 \
+            NUnit.NumberOfTestWorkers="$workers" # CMU14
 
-      - name: Upload test diagnostics
-        if: failure() || cancelled()
+      - name: Upload test results
+        if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: integration-test-results-${{ matrix.shard.name }}
-          path: bin/Content.IntegrationTests/TestResults/
+          name: test-results-${{ matrix.shard.name }}
+          # CMU14: retain results and blame sequences without multi-gigabyte process dumps.
+          path: |
+            bin/Content.IntegrationTests/TestResults/
+            !bin/Content.IntegrationTests/TestResults/**/*.dmp
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: 3

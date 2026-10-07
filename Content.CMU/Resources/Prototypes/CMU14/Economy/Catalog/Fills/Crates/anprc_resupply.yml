@@ -29,6 +29,8 @@
       amount: 1
     - id: ANPRCMastAntenna
       amount: 1
+    - id: RMCPowerCellHigh
+      amount: 2
 
 - type: entity
   parent: RMCCrateBase
@@ -40,4 +42,18 @@
     - id: ANPRC117GRadioOPFORFilled
       amount: 1
     - id: ANPRCMastAntenna
+      amount: 1
+    - id: RMCPowerCellHigh
+      amount: 2
+
+# the one part of a field antenna mast that cannot be knocked together from sheet metal.
+# building one in the field instead costs plasteel and circuit boards by the armful
+- type: entity
+  parent: RMCCrateBase
+  id: AU14CrateMastAntennaHead
+  name: mast antenna head crate
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MastAntennaHead
       amount: 1

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.GameTicking;
 using Content.Shared.GameTicking;
 using Content.Server.Ghost.Roles;
@@ -22,6 +23,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
 {
     [Dependency] private IComponentFactory _factory = default!;
     [Dependency] private GhostRoleSystem _ghostRole = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -168,6 +170,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
             _forces.Remove(id);
             try
             {
+                using var cost = _performance.MeasureOperation("force-deployment");
                 if (!force.Spawn(force.Interested))
                 {
                     force.RetryAt = _timing.CurTime + RetryInterval;

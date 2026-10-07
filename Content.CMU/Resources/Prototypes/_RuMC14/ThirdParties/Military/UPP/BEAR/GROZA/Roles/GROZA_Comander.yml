@@ -8,7 +8,7 @@
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: upp_sl_a
+      state: spp_sl_a
   - type: AssignSquad
     whitelist:
       tags:
@@ -33,7 +33,7 @@
   - type: EquipEntityPreset
     preset: RuMCBEARPresetGROZA
   - type: JobPrefix
-    prefix: Commander
+    prefix: rumc-job-prefix-commander
   - type: MarineOrders
   - type: RMCTrackable
   - type: RMCPointing
@@ -92,7 +92,7 @@
         time: 10800 # 3 hours
   spawnMenuRoleName: GROZA Squad Leader
   startingGear: RuMCGearUPPBEARCommanderGROZA
-  greeting: Вы член секретного спецподразделения ЧВК «Медведи» (BEAR) при СПН! Существование связи между BEAR и СПН строжайше секретно. Никто не должен знать, кто вы и что вы здесь делаете. Вы дружественны к СПН. Враждебны к ЧВК VAI и ЧВК We-Y. Работайте скрытно. Выполняйте задачи. Не оставляйте следов.
+  greeting: rumc-bear-greeting
   icon: "RuMCJobIconUPPBEARCommander"
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-govfor
@@ -128,9 +128,8 @@
     id: RuCMIDCardUPPBEARCommander
     ears: RuMCHeadsetBEARGROZA
   storage:
-    outerClothing:
-    - RMCLaserDesignator
     back:
+    - RMCLaserDesignator
     - AU14GrenadeHighExplosiveUPP
     - AU14GrenadeSmokeUPP
     - AU14GrenadeSmokeUPP

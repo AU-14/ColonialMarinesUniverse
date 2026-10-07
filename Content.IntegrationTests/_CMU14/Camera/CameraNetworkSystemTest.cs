@@ -41,6 +41,7 @@ using Robust.UnitTesting;
 namespace Content.IntegrationTests._CMU14.Camera;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public sealed class CameraNetworkSystemTest
 {
     private const string NetworkA = "CMUTestCameraNetworkA";

@@ -4,6 +4,14 @@ namespace Content.Client.Power.SMES;
 public sealed partial class SmesComponent : Component
 {
     /// <summary>
+    /// If true, the SMES visualizer leaves sprite states unchanged.
+    /// Useful for reskinned SMES entities whose RSI only has a static base state.
+    /// </summary>
+    [DataField]
+    [ViewVariables(VVAccess.ReadWrite)]
+    public bool StaticOverlayStates;
+
+    /// <summary>
     /// The prefix used for the RSI states of the sprite layers indicating the charge level of the SMES.
     /// </summary>
     [DataField("chargeOverlayPrefix")]

@@ -1,5 +1,6 @@
 cmu-ui-options-examine-log-in-chat = Show detailed examine breakdown of characters in chat
 cmu-ui-options-examine-full-text-in-chat = Echo everything you examine to chat like in SS13
+cmu-ui-options-examine-wounds-in-chat = Echo people's wounds to chat when you examine them like in CM13
 
 cmu-ui-options-identification = Identification
 cmu-ui-options-fof-unidentified-marker = Show question marks for unfamiliar enemy uniforms in FoF
@@ -11,7 +12,7 @@ cmu-ui-options-chat-crt-haze-tooltip = Draw scanlines over chat. Turn this off f
 cmu-ui-options-auto-ingest = Automatically continue eating and drinking
 cmu-ui-options-auto-ingest-tooltip = After the first bite or sip, continue consuming the held item until it is empty or the action is interrupted.
 cmu-ui-options-temperature-fahrenheit = Show temperatures in Fahrenheit
-cmu-ui-options-temperature-fahrenheit-tooltip = Switches medical scanners, atmos consoles, and the gas analyzer to Fahrenheit readings.
+cmu-ui-options-temperature-fahrenheit-tooltip = Switches medical scanners, patient monitors, atmos consoles, and the gas analyzer to Fahrenheit readings.
 cmu-ui-options-voting = Voting
 cmu-ui-options-vote-ui-large = Larger vote popup
 cmu-ui-options-vote-ui-large-tooltip = Draws votes with wider options and taller rows. Easier to read on high resolutions and ultrawide displays.

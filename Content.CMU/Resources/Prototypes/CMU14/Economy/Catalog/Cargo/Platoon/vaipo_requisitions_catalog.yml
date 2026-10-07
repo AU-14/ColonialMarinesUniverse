@@ -69,18 +69,50 @@
         crate: RMCCrateGrenadesSmoke
       - cost: 1000
         crate: RMCCrateGrenadesFragOld
+      - cost: 2000
+        crate: CMUCrateGrenadesElectroshock
+      - cost: 1800
+        crate: CMUCrateGrenadesBFAB
+      - cost: 1500
+        crate: CMUCrateGrenadesCanister
+      - cost: 1200
+        crate: CMUCrateGrenadesSmokeGreen
+      - cost: 1200
+        crate: CMUCrateGrenadesSmokeRed
       - cost: 1000
         crate: RMCCratePlasticExplosives
       - cost: 2000
         crate: RMCCrateBreachingCharges
       - cost: 1000
-        crate: RMCCrateGrenadesHighExplosiveBox
+        crate: CMUCrateGrenadeBoxHEDP
       - cost: 2000
-        crate: RMCCrateGrenadesBoxHEFA
+        crate: CMUCrateGrenadeBoxHEFA
       - cost: 1800
-        crate: RMCCrateGrenadesAirburstFragBox
+        crate: CMUCrateGrenadeBoxAGMF
       - cost: 2000
-        crate: RMCCrateBoxAGMI
+        crate: CMUCrateGrenadeBoxAGMI
+      - cost: 1000
+        crate: CMUCrateGrenadeBoxM15
+      - cost: 2000
+        crate: CMUCrateGrenadeBoxBFAB
+      - cost: 1800
+        crate: CMUCrateGrenadeBoxCanister
+      - cost: 2000
+        crate: CMUCrateGrenadeBoxHIAM
+      - cost: 2500
+        crate: CMUCrateGrenadeBoxWPSI
+      - cost: 1200
+        crate: CMUCrateGrenadeBoxSmoke
+      - cost: 1200
+        crate: CMUCrateGrenadeBoxSmokeGreen
+      - cost: 1200
+        crate: CMUCrateGrenadeBoxSmokeRed
+      - cost: 1500
+        crate: CMUCrateGrenadeBoxMFHS
+      - cost: 3000
+        crate: CMUCrateGrenadeBoxElectroshock
+      - cost: 1200
+        crate: CMUCrateGrenadeBoxAGMS
       - cost: 2000
         crate: RMCCrateGrenadesAirburstFrag
       - cost: 2000

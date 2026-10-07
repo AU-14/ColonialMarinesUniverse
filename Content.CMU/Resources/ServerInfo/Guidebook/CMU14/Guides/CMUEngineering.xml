@@ -1,0 +1,31 @@
+<Document>
+  # Engineering
+
+  Engineers build, repair, power and fortify everything else. Whether you're keeping a colony's lights on or wiring a squad's defensive line, the same tools, materials and rules apply. This guide covers all of it.
+
+  ## In This Guide
+  - [textlink="Engineering Equipment" link="CMUGuideEngGear"]: the tools and gear every engineer needs, and where to get them.
+
+  - [textlink="Construction" link="CMUGuideEngConstruction"]: your construction skill and the build menu.
+
+  - [textlink="Power" link="CMUGuideEngPower"]: reactors and generators, area power controllers, and PACMANs.
+
+  - [textlink="Atmospherics" link="CMUGuideEngAtmos"]: outdoor air, the day and night cycle, exhaust vents and refining phoron.
+
+  - [textlink="Fire and Radiation" link="CMUGuideEngHazards"]: fighting fires and staying shielded.
+
+  - [textlink="Fortifications" link="CMUGuideEngFortify"]: barricades, upgrades, barbed wire, razorwire, HESCO and sandbags.
+
+  - [textlink="Sentries" link="CMUGuideEngSentries"]: sentry guns, upgrades and the sentry laptop.
+
+  - [textlink="Breaching and Demolition" link="CMUGuideEngBreach"]: breaching charges, C4, the Bangalore and the Brute.
+
+  - [textlink="Vehicle Repair" link="CMUGuideEngVehicles"]: maintenance mode, hardpoints, the frame, and fixing faults.
+
+  - [textlink="Repairing Synthetics" link="CMUGuideEngSynths"]: welding and wiring synthetics back together, the maintenance station, and reset keys.
+
+  - [textlink="Ordnance" link="CMUGuideEngOrdnance"]: mixing flamer fuel, and making molotovs and pipe bombs.
+
+  ## Communications
+  Radio coverage depends on communications towers, relays and antennas, which engineers repair and set up. See [textlink="Comms and Sensor Towers" link="CMUGuideTowers"] and the [textlink="Communications Guide" link="AU14Comms"].
+</Document>

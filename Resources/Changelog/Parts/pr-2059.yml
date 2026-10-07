@@ -1,0 +1,41 @@
+author: rokudara-sen
+category: CMU
+changes:
+- message: The AN/PRC-117G now has a guided panel that shows its current status, tells
+    you what needs fixing, and can automatically load your standard nets
+  type: Add
+- message: The AN/PRC-117G now has a full expert faceplate with output power, waveforms,
+    Burst TX, Power Save, Priority Watch, EMCON, retrans bridging, antenna peaking,
+    OTA rekeying, station callsigns and direct frequencies
+  type: Add
+- message: The AN/PRC-117G can now be used as a field phone to call other radios and
+    command-post or ship phones
+  type: Add
+- message: The AN/PRC-117G now has a 5x2 storage compartment
+  type: Add
+- message: Field antenna masts are now built in stages and must be loaded with faction
+    COMSEC keys before they relay those factions' nets
+  type: Add
+- message: Radio operators can analyze intercepted encrypted traffic and break a fixed
+    enemy net's key
+  type: Add
+- message: The search receiver now fixes nets faster, has a 120-tile base range scaled
+    by transmitter power, and provides direction-finding information from resolved
+    nets
+  type: Tweak
+- message: AN/PRC radio notices and intercepts now use 117G and INT chat rows
+  type: Tweak
+- message: The AN/PRC-117G now drains battery based on its current activity, and RTOs
+    receive three spare cells
+  type: Tweak
+- message: DF pings and jammer fixes now appear correctly on the 3D battlefield reconstruction
+    tactical map
+  type: Fix
+- message: Reworked the AN/PRC-117G guidebook with separate overview, guided-panel
+    and expert-faceplate guides
+  type: Add
+- message: Opening the feed of a spliced field mast knocks the CLF tap off and drops
+    its keying module
+  type: Tweak
+time: '2026-09-30T22:55:06.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2059

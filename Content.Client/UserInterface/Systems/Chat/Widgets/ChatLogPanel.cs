@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Shared.Chat;
 using Robust.Client.Graphics;

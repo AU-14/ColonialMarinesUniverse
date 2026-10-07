@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Water;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Alert;
 using Content.Shared.Atmos;
@@ -660,9 +661,10 @@ namespace Content.Server.Atmos.EntitySystems
 
                 ApplyFireDamage(uid, flammable, ev.Multiplier);
 
-                // CMU14: the roll's stacks came off on the press; suppress the fade for the rest
-                // of the pin so flaring fuels cannot regrow what the roll removed.
-                if (!flammable.Resisting)
+                if (HasComp<YautjaComponent>(uid))
+                    AdjustFireStacks(uid, -2f, flammable, flammable.OnFire);
+                // CMU14: the roll removes stacks on the press; don't regrow them while pinned.
+                else if (!flammable.Resisting)
                     AdjustFireStacks(uid, flammable.FirestackFade, flammable, flammable.OnFire);
             }
 

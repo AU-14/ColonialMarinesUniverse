@@ -1,3 +1,4 @@
+using Content.Server.Humanoid;
 using Content.Server.Humanoid.Systems;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Humanoid;
@@ -11,6 +12,7 @@ namespace Content.Server._RMC14.Humanoid;
 public sealed class HiddenAppearanceSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _appearance = default!;
     [Dependency] private HumanoidProfileSystem _profile = default!;
 
     private bool _hidePlayerIdentities;
@@ -37,6 +39,10 @@ public sealed class HiddenAppearanceSystem : EntitySystem
         }
 
         var random = HumanoidCharacterProfile.RandomWithSpecies(profile.Species);
+        // CMU14: hiding identity must preserve the selected Yautja skin tone.
+        if (profile.Species.Id == "Yautja" && _appearance.TryGetSkinColor(args.Mob, out var skin))
+            random = random.WithCharacterAppearance(random.Appearance.WithSkinColor(skin));
+
         SetHiddenAppearance((args.Mob, hidden), new HiddenHumanoidAppearance(random.Species, random.Sex, random.Appearance));
     }
 

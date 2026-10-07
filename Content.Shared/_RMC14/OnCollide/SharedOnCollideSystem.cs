@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Armor.ThermalCloak;
 using Content.Shared._RMC14.Atmos;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -165,7 +166,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             var damage = ent.Comp.Damage;
             if (ent.Comp.Acidic)
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
-            _damageable.TryChangeDamage(other, damage, ent.Comp.IgnoreResistances, armorPiercing: ent.Comp.ArmorPenetration);
+            var ignoreResistances = ent.Comp.IgnoreResistances
+                && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
+            _damageable.TryChangeDamage(other, damage, ignoreResistances, armorPiercing: ent.Comp.ArmorPenetration);
             DoEmote(ent, other);
             didEmote = true;
         }
@@ -174,7 +177,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
             var damage = ent.Comp.ChainDamage;
             if (ent.Comp.Acidic)
                 damage = _xeno.TryApplyXenoAcidDamageMultiplier(other, damage);
-            _damageable.TryChangeDamage(other, damage, ent.Comp.IgnoreResistances);
+            var ignoreResistances = ent.Comp.IgnoreResistances
+                && !(ent.Comp.Fire && HasComp<YautjaComponent>(other));
+            _damageable.TryChangeDamage(other, damage, ignoreResistances);
         }
 
         // CMU14: the damage above can delete the target outright, and everything after

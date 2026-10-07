@@ -11123,5 +11123,761 @@
   id: 707
   time: '2026-09-29T00:40:51.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2047
+- author: troytroy400
+  changes:
+  - message: Added a Forensics guide to the guidebook, a defib guide and a guide on
+      how to make pipebombs in game.
+    type: Add
+  - message: The forensic scanner now shows time since death, gunshot residue, and
+      hair and skin DNA left on clothes. Fingerprints and DNA can be copied from the
+      results.
+    type: Add
+  - message: Scanning a person or body with a forensics scanner now gives a full injury
+      report, with cause of death for bodies. DNA now only shows a match if that person's
+      info is in the criminal records computer.
+    type: Add
+  - message: Payphone booths now work.
+    type: Add
+  - message: Colony requisitions can now order mobile phones, colony headsets, the
+      civilian Kramer and its magazines, and the TPR9 civilian handgun, which replaces
+      the military TPR pistol.
+    type: Add
+  - message: The CMB equipment vendor now offers a TPR9 civilian handgun case.
+    type: Add
+  - message: Defib times across the board are now way quicker.
+    type: Tweak
+  - message: Defibrillators now have energy settings from 50 J to 200 J. The Lifepak
+      can be raised or lowered by hand, lower energies heal less but burn less, and
+      higher energies heal more but leave chest burns and risk eschar. This system
+      is optional, you can still use a lifepak like normal.
+    type: Add
+  - message: AEDs now analyze the patient before every shock, pick their own energy
+      and refuse to charge when no shock is needed.
+    type: Add
+  - message: The Lifepak can be set down and hooked up to a patient as a monitor,
+      with a screen showing ECG, pleth and CO2 traces, heart rate, heart health, SpO2,
+      blood pressure, EtCO2 and patient temperature.
+    type: Add
+  - message: The Lifepak monitor can analyze the patient and select the best energy
+      and can charge and shock hands free through its leads if connected to a patient.
+    type: Add
+  - message: New AED and Lifepak voice prompts, charge, shock, heartbeat, flatline
+      and alarm sounds.
+    type: Add
+  - message: The stethoscope now plays breath sounds that match the state of the patient's
+      lungs.
+    type: Add
+  - message: The lifepak sprite now has proper working visuals.
+    type: Tweak
+  - message: Using the Lifepak's monitor and switching it on or off now need medical
+      training.
+    type: Tweak
+  - message: The handheld radio crate in colony requisitions now costs 150.
+    type: Tweak
+  - message: Removed the stun when climbing out of lockers, you still drop all items
+      when entering one however.
+    type: Remove
+  - message: The Z-level tab in the building menu is now properly hidden.
+    type: Remove
+  id: 708
+  time: '2026-09-29T17:24:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2049
+- author: troytroy400
+  changes:
+  - message: Added a full Medical guide, covering every single medical mechanic in
+      the game.
+    type: Add
+  - message: Added a Colony Law Enforcement guide.
+    type: Add
+  - message: Added an Engineering guide.
+    type: Add
+  - message: Added a Comms and Sensor Towers guide to the Communications guide.
+    type: Add
+  - message: Added the ability to hold a patient down for surgery. If you have no
+      pain killers, you can now have someone (who is not the surgeon) hold the patient
+      down to negate the need for painkillers.
+    type: Add
+  - message: Breathing from an oxygen tank on internals now clears suffocation damage
+      three times as fast.
+    type: Tweak
+  - message: Medical gas masks, anesthetic tanks and medical oxygen tanks are now
+      stocked in the medical supply vendor.
+    type: Add
+  - message: Full size shovels now dig 30% faster instead of only 10%.
+    type: Tweak
+  - message: Field antenna masts now need power to relay radio, bring your PACMAN
+      or repair those FOB APCs.
+    type: Tweak
+  - message: Loreified sentry names/descriotions.
+    type: Tweak
+  - message: Removed the outdated Medical V2 guide. The pipe bomb guide has moved
+      into the Engineering guide's Ordnance page.
+    type: Remove
+  id: 709
+  time: '2026-09-29T22:21:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2053
+- author: murdocstarsim
+  changes:
+  - message: Provosts finally decided to quit being lazy and finish up their paperwork.
+      We've rewritten the GOVFOR SOP to be more suitable. This includes a long list
+      of changes such as deployments, departments, reduced clutter, vehicle clarification
+      and much more. You can view the full changes here ->
+    type: Add
+  id: 710
+  time: '2026-09-29T22:23:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2041
+- author: TheMaiji
+  changes:
+  - message: Expanded Yautja roles, profile customization, clan progression, equipment,
+      and support creatures.
+    type: Add
+  - message: Added Hunter Ship content and hunting grounds with deployment and return
+      routes.
+    type: Add
+  - message: Fixed Yautja medical treatment, bracer tracking, cloaking, and weapon
+      interactions with current gameplay systems.
+    type: Fix
+  id: 711
+  time: '2026-09-29T22:56:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1648
+- author: troytroy400
+  changes:
+  - message: Intel now properly spawns during Distress Signal and Force on Force.
+      Bring intel items to your faction's Analyzer Machine or intel computer respectively
+      and click the machine with them to process them for intel points and clues to
+      the next intel.
+    type: Add
+  - message: Intel can now spawn in any filing cabinet or on any table. Maps with
+      no intel spawners use this as a fallback set of random spawns, but maps with
+      intel spawns already mapped can also utilize it partially based on RNG.
+    type: Add
+  - message: Objective items now show up on data detectors.
+    type: Add
+  - message: Encrypted data disks. These spawn with the rest of the intel and can
+      only be cracked at an intel computer. Solve the code in the decryption terminal
+      to upload it's intel points
+    type: Add
+  - message: Recovering the CIR-60 blackbox objective at an Analyzer now prints an
+      intel survey listing the three areas with the most remaining intel.
+    type: Add
+  - message: Intel & Objectives guidebook section covering objectives, points, intel,
+      the intel computer and data disks.
+    type: Add
+  - message: All fetch objectives are now completed by scanning the item at your Analyzer.
+      Fetch return point markers have been removed.
+    type: Tweak
+  - message: The tech tree console now shows your combined objective + intel points
+      and spends from both, using intel points first.
+    type: Tweak
+  - message: Killing threat members in Distress Signal is now worth 2 points per kill
+      and repeats forever.
+    type: Tweak
+  - message: Threat and threat leader kills only count when your faction does the
+      killing. Evolving or otherwise dying to unrelated causes no longer counts.
+    type: Tweak
+  - message: The ICRC Relief Party has been moved to Tier 1 of the GOVFOR tech tree.
+    type: Tweak
+  - message: Maps with planetside GOVFOR have been removed from the Force on Force
+      and Distress Signal rotation.
+    type: Tweak
+  - message: Fixed the kill threat and kill threat leader objectives not counting
+      kills.
+    type: Fix
+  - message: Objectives on other z-levels of the planet can now be completed.
+    type: Fix
+  - message: The Analyzer Machine's sprite now shows its states properly when destroyed
+      or scanning items.
+    type: Fix
+  - message: Intel items now fit in filing cabinets.
+    type: Fix
+  id: 712
+  time: '2026-09-30T16:36:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2056
+- author: murdocstarsim
+  changes:
+  - message: Fixed the department in SOP that was displaying an incorrect name and
+      was missing headers.
+    type: Fix
+  id: 713
+  time: '2026-09-30T21:26:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2057
+- author: troytroy400
+  changes:
+  - message: CMB and NSPA equipment vendors have a Long Arms section with options
+      for an HG 37-12 shotgun, Kramer enforcer rifle or MP5.
+    type: Add
+  - message: CMB and NSPA equipment vendors now stock evidence marker boxes, spare
+      forensic scanners and nitrile gloves.
+    type: Add
+  - message: Ambassadors now spawn with a universal translator.
+    type: Add
+  - message: Flashbangs now blind and slow everyone in range with line of sight.
+    type: Tweak
+  - message: Colony law enforcement roles no longer spawn with a gun case. Sidearms
+      and long arms are available from their vendors.
+    type: Tweak
+  - message: The CMB Marshal now spawns with a revolver and has the Marshal coat.
+    type: Tweak
+  - message: The CMB Deputy now spawns in the Bureau deputy coat instead of the parka.
+    type: Tweak
+  - message: CMB windbreakers now fit the same suit storage items as the deputy parka.
+    type: Tweak
+  - message: The CMB deputy parka no longer provides armor or slows you down.
+    type: Tweak
+  - message: The CLF Surgeon has been merged into the CLF Physician, which now has
+      full surgery skill and the surgical kit. Insurgency now has 2 CLF Physician
+      slots.
+    type: Tweak
+  - message: Distress Signal gets more Intelligence Officer slots at higher population.
+      2 at 61 players, 3 at 86 and 4 at 111.
+    type: Tweak
+  - message: The Kelland Warden has been removed from role selection.
+    type: Tweak
+  - message: Renamed the Colony Operations Synthetic to Operations Synthetic.
+    type: Tweak
+  - message: The UA recruiter description now properly says the United Americas instead
+      of US.
+    type: Tweak
+  - message: Intel now spreads out across the map instead of sometimes piling up in
+      a few areas.
+    type: Fix
+  - message: Backpacks are no longer backs of holding, all backpacks can no-longer
+      store other backpacks, rigs, pouches, etc.
+    type: Fix
+  - message: The Separated HUD layout is now the default for new players as certain
+      chat features are locked behind it. This can be changed by the player anytime
+      in settings.
+    type: Tweak
+  id: 714
+  time: '2026-09-30T22:52:58.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2062
+- author: rokudara-sen
+  changes:
+  - message: The AN/PRC-117G now has a guided panel that shows its current status,
+      tells you what needs fixing, and can automatically load your standard nets
+    type: Add
+  - message: The AN/PRC-117G now has a full expert faceplate with output power, waveforms,
+      Burst TX, Power Save, Priority Watch, EMCON, retrans bridging, antenna peaking,
+      OTA rekeying, station callsigns and direct frequencies
+    type: Add
+  - message: The AN/PRC-117G can now be used as a field phone to call other radios
+      and command-post or ship phones
+    type: Add
+  - message: The AN/PRC-117G now has a 5x2 storage compartment
+    type: Add
+  - message: Field antenna masts are now built in stages and must be loaded with faction
+      COMSEC keys before they relay those factions' nets
+    type: Add
+  - message: Radio operators can analyze intercepted encrypted traffic and break a
+      fixed enemy net's key
+    type: Add
+  - message: The search receiver now fixes nets faster, has a 120-tile base range
+      scaled by transmitter power, and provides direction-finding information from
+      resolved nets
+    type: Tweak
+  - message: AN/PRC radio notices and intercepts now use 117G and INT chat rows
+    type: Tweak
+  - message: The AN/PRC-117G now drains battery based on its current activity, and
+      RTOs receive three spare cells
+    type: Tweak
+  - message: DF pings and jammer fixes now appear correctly on the 3D battlefield
+      reconstruction tactical map
+    type: Fix
+  - message: Reworked the AN/PRC-117G guidebook with separate overview, guided-panel
+      and expert-faceplate guides
+    type: Add
+  - message: Opening the feed of a spliced field mast knocks the CLF tap off and drops
+      its keying module
+    type: Tweak
+  id: 715
+  time: '2026-09-30T22:55:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2059
+- author: Ignies
+  changes:
+  - message: ID cards now have their own ATM PIN, shown in your character notes.
+    type: Add
+  - message: 'Reworked the colony ATM: enter your PIN to withdraw, deposit or transfer
+      money.'
+    type: Tweak
+  - message: The Sapper's siphon rig also steals the PINs of the ATM's recent customers.
+    type: Add
+  id: 716
+  time: '2026-09-30T22:56:23.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2048
+- author: troytroy400
+  changes:
+  - message: Removed a number of hair styles that were absurdly long, defied gravity,
+      clashed with the sprite style or that were out of place/theme with a gritty
+      Alien game.
+    type: Remove
+  - message: All synths now use regulation appearance.
+    type: Tweak
+  id: 717
+  time: '2026-10-01T00:24:24.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2063
+- author: troytroy400
+  changes:
+  - message: Gas masks now slightly darken the edges and corners of your screen while
+      worn.
+    type: Add
+  - message: Use any item that isn't a gun on a multi-Z ladder to toss it up or down
+      the ladder after a short delay.
+    type: Add
+  - message: Added an emergency phone, a wall-mounted phone from Alien Isolation.
+      Sprite and original work by Lopz.
+    type: Add
+  - message: All faction requisitions vendors now stock 2 bangalores.
+    type: Add
+  id: 718
+  time: '2026-10-01T06:24:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2064
+- author: TheHellFireo
+  changes:
+  - message: Corrected Bush dropship alignment and crushing outside the hull.
+    type: Fix
+  - message: Fixed Force on Force respawning after being gibbed.
+    type: Fix
+  - message: Fixed Youngblood raffle eligibility and added explanations when joining
+      is denied.
+    type: Fix
+  - message: Solo Youngblood accepts players with under two hours of Youngblood experience.
+    type: Tweak
+  - message: Lexington shadows and exhaust now appear above weeds.
+    type: Fix
+  - message: OPFOR nurses can access military doctor vendors.
+    type: Fix
+  id: 719
+  time: '2026-10-01T14:41:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2065
+- author: TheHellFireo
+  changes:
+  - message: Restored charged taser drive stuns and general storage in LACN utility
+      rigs.
+    type: Fix
+  - message: Corrected projectile accuracy across grids, repeated shield impact sounds,
+      and faction-selection button visibility.
+    type: Fix
+  - message: Vehicles push along their travel direction, and queen calls recognize
+      colony grids and underground levels.
+    type: Fix
+  - message: Reserved burst larvae no longer send misleading offers to the first player
+      in the larva queue.
+    type: Fix
+  - message: Vehicle faults are more likely, and repairs permanently reduce maximum
+      integrity.
+    type: Tweak
+  - message: Alternate flamer-drone fuels now cause warning glows, severe operating
+      penalties, and catastrophic destruction hazards, including secondary cook-offs
+      for sticky napalm and R189.
+    type: Add
+  id: 720
+  time: '2026-10-01T18:59:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2066
+- author: TheHellFireo
+  changes:
+  - message: Moving vehicles now slide xenos toward the nearer side of the hull, including
+      while reversing diagonally, without pushing them through obstacles.
+    type: Fix
+  id: 721
+  time: '2026-10-01T21:21:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2067
+- author: TheHellFireo
+  changes:
+  - message: Cannibals can carve corpses with their starting kitchen knife using right-click
+      Slice.
+    type: Fix
+  - message: Butchering requires the right-click Slice verb.
+    type: Tweak
+  - message: We-Yu experiment crates keep their eggs when the round starts.
+    type: Fix
+  - message: Blood puddles leave visible footprints and drag trails again.
+    type: Fix
+  id: 722
+  time: '2026-10-01T21:21:43.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2068
+- author: TheHellFireo
+  changes:
+  - message: Deputy chevrons display the correct rank after being reapplied.
+    type: Fix
+  - message: DRAGON generators accept phoron fuel stacks correctly.
+    type: Fix
+  - message: Overlapping Oozing Wounds patches no longer hit the same target repeatedly
+      in one cast.
+    type: Fix
+  - message: Despoiler Acid Barrage can target other Z levels.
+    type: Fix
+  - message: Vehicle collisions no longer apply wall-demolition damage to drivers
+      or repeatedly charge the same contact.
+    type: Fix
+  - message: Neomorph hive pylons retain their pathogen offspring.
+    type: Fix
+  - message: Combat UGVs appear in xeno night vision and reject CPR.
+    type: Fix
+  - message: Repairing chemicals work on barricades and combat UGVs.
+    type: Fix
+  - message: Switching guns no longer bypasses queen screech scatter.
+    type: Fix
+  id: 723
+  time: '2026-10-01T21:22:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2069
+- author: TheHellFireo
+  changes:
+  - message: Fixed duplicate ambient sounds exceeding their per-sound playback limit.
+    type: Fix
+  - message: Fixed placement-preview errors while rendering other Z levels.
+    type: Fix
+  - message: Fixed missing Area Info alert localization.
+    type: Fix
+  - message: Fixed Hunter Ship food initialization and unwanted repair baseline data
+      in untouched map prototypes.
+    type: Fix
+  - message: Reduced decoded memory for selected CMU voices and added audio inventories
+      to client performance captures.
+    type: Code
+  id: 724
+  time: '2026-10-02T14:59:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2070
+- author: evil-two-info-types
+  changes:
+  - message: Increased the amount of CLF sapper slots by 1 and decreased the Guerrilla
+      slots by 1 aswell.
+    type: Add
+  id: 725
+  time: '2026-10-03T12:11:33.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2055
+- author: TheHellFireo
+  changes:
+  - message: Fixed queen dispatch and hijack evolution, threat speech and victory
+      accounting, Despoiler rewards, and K9 interactions.
+    type: Fix
+  - message: Fixed hunter injectors, captive tools, Forsaken eggs, medicomp treatment,
+      and preserve controls.
+    type: Fix
+  - message: Restored CIU radio equipment, RTO antenna-mast access, tower map markers,
+      sensor faction vision, and remote peeking.
+    type: Fix
+  - message: Clear expired VTOL camera targets without disturbing a separate weapon
+      target.
+    type: Fix
+  - message: Allow field-camera tripod deployment on Stable Garrison Redux.
+    type: Map
+  - message: Civilian nurses now have Surgery 2.
+    type: Tweak
+  - message: Tanks allow two faults per hardpoint, snowplows cannot develop faults,
+      and repairs cause triple wear down to 20% capacity.
+    type: Tweak
+  - message: Vehicle health displays retain factory maximums and use clearer fault
+      formatting.
+    type: Tweak
+  id: 726
+  time: '2026-10-03T13:38:44.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2071
+- author: TheHellFireo
+  changes:
+  - message: Fixed incorrect and repeated combat hits, including lunges affecting
+      targets they missed.
+    type: Fix
+  - message: Fixed inconsistent action cooldowns and projectile behavior during prediction.
+    type: Fix
+  - message: Fixed delayed turret aiming and riders losing predicted vehicle movement
+      after synchronization.
+    type: Fix
+  id: 727
+  time: '2026-10-03T15:13:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2072
+- author: TheHellFireo
+  changes:
+  - message: Reduced allocation spikes when dumping, deleting, or filling storage.
+    type: Fix
+  - message: Fixed repeated deleted-entity errors affecting fighter cameras, resin
+      traps, secretion ownership, and weapon locks.
+    type: Fix
+  - message: Fixed interrupted fire and dropship processing, unnecessary plant updates,
+      and chemistry simulator readiness errors.
+    type: Fix
+  - message: Recover identical admin-log writes after an ambiguous commit without
+      discarding conflicting records; improve long-stall diagnostics.
+    type: Admin
+  id: 728
+  time: '2026-10-03T17:50:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2073
+- author: troytroy400
+  changes:
+  - message: Health scanners now show the patient's overall external bleeding tier
+      and each limb's bleeding tier.
+    type: Add
+  - message: Losing a limb now leaves an open stump that bleeds arterially until it
+      is treated.
+    type: Add
+  - message: Tourniquets can be applied to and removed from open stumps.
+    type: Add
+  - message: Added the Close Stump surgery. Clamp the artery with a hemostat, then
+      cauterize the stump.
+    type: Add
+  - message: Health scanners show stumps on severed limbs.
+    type: Add
+  - message: Examining someone with an open stump shows it squirting blood or notes
+      the tourniquet on it.
+    type: Add
+  - message: A tourniquet on a stump now falls to the floor when the stump is cauterized
+      or the limb is reattached.
+    type: Add
+  - message: Arterial bleeding now continues after death. Lesser bleeding still clots
+      once the heart stops.
+    type: Tweak
+  - message: Fixed "epinephrine" being misspelled in the health scanner's recommendations.
+    type: Fix
+  - message: Added the option "Echo people's wounds to chat when you examine them
+      like in CM13".
+    type: Add
+  - message: Added a chat search button beside the chat settings.
+    type: Add
+  - message: The "reset chat channel after sending" option now returns to OOC instead
+      of Local when you're in the menu.
+    type: Tweak
+  - message: Intelligence Officers no longer have logistics access.
+    type: Tweak
+  - message: Fixed the lore primer showing "lore-primer-platoon-label" instead of
+      the platoon information. All platoon primer text is now localized.
+    type: Fix
+  - message: LACN Landing Forces now appear as "Latin American Colonial Navy" in the
+      platoon vote.
+    type: Tweak
+  - message: Hope's Retreat now belongs to the Independent Core System Colonies as
+      said in its lore.
+    type: Tweak
+  - message: Space now uses the CM13 starfield background.
+    type: Add
+  - message: Added a galaxy map item and a "USCM disposition and readiness" plaque.
+    type: Add
+  - message: Guidebook pages can now show images with zoom and use worn gear prototypes.
+    type: Add
+  - message: Added a Cooking guide covering kitchen equipment, basic ingredients,
+      sauces and every microwave recipe, including recipes that were missing from
+      the RMC guide.
+    type: Add
+  - message: Added the Lore guidebook section, introducing the setting and the state
+      of the frontier.
+    type: Add
+  - message: Added the Start Here lore guide, covering the setting, who you might
+      be, allegiances, what your character knows and everyday life.
+    type: Add
+  - message: Added the Factions page.
+    type: Add
+  - message: Added the United Americas page, with its government, relations, civil
+      organizations, federal agencies and military forces.
+    type: Add
+  - message: Added the UA Politics page, with civilian politics under construction
+      and military politics.
+    type: Add
+  - message: Added the Doves (Hearts and Minds Movement) page.
+    type: Add
+  - message: Added the Hawks (Colonial Protection Organization) page.
+    type: Add
+  - message: Added the Magpies (Military Organization for Development and Innovation)
+      page.
+    type: Add
+  - message: Added the Colonial Marines page, covering USCM disposition and readiness.
+    type: Add
+  - message: Added the USCM 'Lucky Thirteen' playable unit page.
+    type: Add
+  - message: Added the USCM Hazardous Operations Unit playable unit page.
+    type: Add
+  - message: Added the Colonial Marshal Bureau page.
+    type: Add
+  - message: Added the CMB Crisis Intervention Unit playable unit page.
+    type: Add
+  - message: Added the Latin American Colonial Navy page.
+    type: Add
+  - message: Added the LACN Landing Forces playable unit page.
+    type: Add
+  - message: Added the Union of Progressive Peoples page.
+    type: Add
+  - message: Added the UPP Naval Infantry page.
+    type: Add
+  - message: Added the UPP 'North Stars' playable unit page.
+    type: Add
+  - message: Added the Three World Empire page.
+    type: Add
+  - message: Added the Royal Marine Commandos page.
+    type: Add
+  - message: Added the TWE RMC playable unit page.
+    type: Add
+  - message: Added the Central Confederation of Africa page.
+    type: Add
+  - message: Added the Independent Core System Colonies page.
+    type: Add
+  - message: Added the United Nations page, listing its original core members and
+      current members.
+    type: Add
+  - message: Added the United Nations Interstellar Settlement Corps (UNISC) page,
+      covering its peacekeepers and the Geneva Conventions they enforce.
+    type: Add
+  - message: Added the International Committee of the Red Cross page.
+    type: Add
+  - message: Added the Interstellar Human Rights Organization page.
+    type: Add
+  - message: Added the Interstellar Commerce Commission page.
+    type: Add
+  - message: Added the Weyland-Yutani page, covering its history, influence, divisions,
+      relations and forces.
+    type: Add
+  - message: Added the Weyland-Yutani PMC page, including Whiteout.
+    type: Add
+  - message: Added the WY PMC 'Whiteshields' playable unit page.
+    type: Add
+  - message: Added the Corporations page, covering Lasalle Bionational, Seegson, Hyperdyne,
+      Prodigy, Kelland Mining, Lock-Mart, Armat, Chigusa, Grant, Norcomm, AEGIS Armaments,
+      Tyrell, Gemba Systec, Karnak, Koorlander and Souta.
+    type: Add
+  - message: Added the Colonial Liberation Front page.
+    type: Add
+  - message: Added the Private Military Companies page.
+    type: Add
+  - message: Added the Vanguard's Arrow Incorporated page.
+    type: Add
+  - message: Added the VAI Primary Operations playable unit page.
+    type: Add
+  - message: Added the Freelancers page.
+    type: Add
+  - message: Added the Prodigy Security Services page.
+    type: Add
+  - message: Added the Prodigy Security Forces playable unit page.
+    type: Add
+  - message: Added the Organisms page.
+    type: Add
+  - message: Added the Yautja page.
+    type: Add
+  - message: Added the Tribals page.
+    type: Add
+  - message: Added the Xenomorphs page.
+    type: Add
+  - message: Added the Xenomorphs cultists page.
+    type: Add
+  - message: Added the Pathogen page.
+    type: Add
+  - message: Added the Biomorphs page.
+    type: Add
+  - message: Added the Apes page.
+    type: Add
+  - message: Added the Technologies page.
+    type: Add
+  - message: Added the Synthetics page.
+    type: Add
+  - message: Added the Stasis page.
+    type: Add
+  - message: Added the Powered Work Loaders page.
+    type: Add
+  - message: Added the Atmosphere Processors page.
+    type: Add
+  - message: Added the Locations page.
+    type: Add
+  - message: Added the Galaxy Map page, which you can zoom and pan on.
+    type: Add
+  - message: Added the Earth Map page.
+    type: Add
+  - message: Added The Neroid Sector page, listing every location by the power that
+      controls it.
+    type: Add
+  - message: Added the Barker's Lament (LV-376 'Ulixes') page.
+    type: Add
+  - message: Added the Chances Claim (LV-522) page.
+    type: Add
+  - message: Added the Corsat Station page.
+    type: Add
+  - message: Added the Fiorina Prison (Fiorina 161) page.
+    type: Add
+  - message: Added the Flight page.
+    type: Add
+  - message: Added the Green Hell (LV-624) page.
+    type: Add
+  - message: Added the Kutjevo Biolab (LV-686) page.
+    type: Add
+  - message: Added the Port Nereid (LV-109 'Elgin's Folly') page.
+    type: Add
+  - message: Added the Shepherds' Pride (LV-112) page.
+    type: Add
+  - message: Added the Shivas' Snowball (LV-343) page.
+    type: Add
+  - message: Added the Solaris Gulch (LV-747) page.
+    type: Add
+  - message: Added the Stable Garrison page, covering the Carbon Ravine Disaster,
+      the Stability Mandate and Joint Base Schaefer.
+    type: Add
+  - message: Added the Bosenmori Basho page.
+    type: Add
+  - message: Added the Hope's Retreat (JE-1758 'Ascanius') page.
+    type: Add
+  - message: Added the Hybrisa Metropolitan (LV-759) page.
+    type: Add
+  - message: Added the Raijin Hydroelectric (LV-670) page.
+    type: Add
+  - message: Added the Sorokyne Strata (LV-976) page.
+    type: Add
+  - message: Updated the medical guidebook pages for stumps, the Close Stump surgery,
+      after-death bleeding and the new scanner readouts. The squad medic guide now
+      says to return fire before treating a downed squadmate unless others are covering
+      you.
+    type: Tweak
+  id: 729
+  time: '2026-10-06T19:14:44.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2087
+- author: deepdarkdepths
+  changes:
+  - message: Fixed Despoiler's Caustic Embrace to be a proper leap instead of teleport.
+    type: Fix
+  id: 730
+  time: '2026-10-06T21:18:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2018
+- author: troytroy400
+  changes:
+  - message: Ported the G2 Electroshock grenade. Its pulse burns and drains stamina,
+      knocks synthetics out for 25 seconds and slows. The G2 can be planted at your
+      feet as a landmine. It uses the planter's IFF. A multitool can disarm it.
+    type: Add
+  - message: Added the M51A BFAB bounding grenade. It hops into the air when it lands
+      armed and bursts into shrapnel. It can be thrown by hand or fired from a launcher.
+    type: Add
+  - message: Added the M108 canister grenade round, which turns a grenade launcher
+      into a shotgun, being slightly better buckshot.
+    type: Add
+  - message: Added the M38 HEAP armour-piercing grenade round. Not currently available
+      without admin intervention.
+    type: Add
+  - message: Added M47-G and M47-R green and red signal smoke grenades.
+    type: Add
+  - message: Added deployable grenade boxes holding 25 grenades (12 for Type 6 and
+      RDG-17).
+    type: Add
+  - message: M81 riot grenade launchers can now fire any 30mm grenade.
+    type: Tweak
+  - message: CMB CIU now has M81 riot grenade launchers in their requisitions vendor.
+    type: Add
+  - message: Added an Explosives guide covering grenades, claymores, charges and IEDs.
+    type: Add
+  - message: 'Renamed grenades to their proper lore designations: M40 HEDP, M47 HSDP,
+      M77 HIAM, M60 WPSI and M42 MFHS.'
+    type: Tweak
+  - message: HEDP and HSDP grenades fired from a launcher now detonate on impact.
+    type: Tweak
+  - message: Smoke grenades now last 35 seconds. Regular smoke is darker and white
+      phosphorus smoke is lighter. Explosives can now clear smoke.
+    type: Tweak
+  - message: Grenades now play a proper lore accurate arming sound when primed. The
+      M15 uses a pin-pull sound.
+    type: Tweak
+  - message: Fixed CMB CIU having an ammo crate instead of box in their vendor.
+    type: Fix
+  - message: Fixed area echo not working on the USS Bush and planet maps.
+    type: Fix
+  - message: Fixed echoing sounds always using the smallest echo preset instead of
+      one matching the room size.
+    type: Fix
+  - message: Mortar shells, grenade boxes and ammo boxes that are at least half full
+      now catch fire and cook off when left in flames.
+    type: Add
+  id: 731
+  time: '2026-10-07T01:08:51.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2091
 Name: CMU
 Order: -1
