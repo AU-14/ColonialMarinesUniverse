@@ -1137,3 +1137,19 @@
   - type: StorageFill
     contents:
     - id: CMUBoxGrenadeAGMS
+
+# Flames drawn over a mortar shell or ammo box that's cooking off (cmss13-devs/cmss13#6243).
+- type: entity
+  id: CMUCookOffFireEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/boxes.rsi
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - state: on_fire
+      shader: unshaded
+  - type: Tag
+    tags:
+    - HideContextMenu
