@@ -66,6 +66,10 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
     private static readonly EntProtoId DefaultHandVisual = "RMCVirtualDropshipGearRight";
 
+    // AU-14: tag-based matching for the JDAM bomb clamp and its bombs.
+    private static readonly ProtoId<TagPrototype> JDAMBombTag = "AU14JDAMBomb";
+    private static readonly ProtoId<TagPrototype> JDAMBombClampTag = "AU14JDAMBombClamp";
+
     private EntityQuery<PowerLoaderGrabbableComponent> _powerLoaderGrabbableQuery;
 
     public override void Initialize()
@@ -822,7 +826,8 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         string msg;
         if (HasComp<DropshipUtilityComponent>(used) ||
             HasComp<DropshipEngineComponent>(used) ||
-            HasComp<DropshipElectronicSystemComponent>(used))
+            HasComp<DropshipElectronicSystemComponent>(used) ||
+            HasComp<DropshipWeaponComponent>(used))
         {
             slotId = container;
             msg = Loc.GetString("rmc-power-loader-occupied");
@@ -870,7 +875,12 @@ public sealed partial class PowerLoaderSystem : EntitySystem
                     continue;
 
                 if (ammo.Weapon.Id != Prototype(containedEntity)?.ID)
-                    return false;
+                {
+                    // AU-14: the JDAM bomb clamp accepts any JDAM-family bomb.
+                    if (!(_tag.HasTag(containedEntity, JDAMBombClampTag) &&
+                          _tag.HasTag(used, JDAMBombTag)))
+                        return false;
+                }
 
                 slot = _container.EnsureContainer<ContainerSlot>(target, target.Comp.AmmoContainerSlotId);
                 if (slot.ContainedEntity == null)

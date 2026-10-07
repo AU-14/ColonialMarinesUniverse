@@ -17,3 +17,9 @@
 
 - type: Tag
   id: AU14HowitzerShell
+
+- type: Tag
+  id: AU14JDAMBomb
+
+- type: Tag
+  id: AU14JDAMBombClamp

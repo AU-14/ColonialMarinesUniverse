@@ -23,6 +23,9 @@
     sprite:
       sprite: _RMC14/Objects/dropship_utility_attachments.rsi
       state: bomb_clamp_interior_loaded
+  - type: Tag
+    tags:
+    - AU14JDAMBombClamp
   - type: PowerLoaderAttachable
     attachableTypes:
     - RMCDropshipUtilityPoint
@@ -39,6 +42,9 @@
     layers:
     - state: jdam
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: Tag
+    tags:
+    - AU14JDAMBomb
   - type: DropshipAmmo
     rounds: 1
     maxRounds: 1
@@ -65,6 +71,9 @@
     layers:
     - state: jdami
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: Tag
+    tags:
+    - AU14JDAMBomb
   - type: DropshipAmmo
     rounds: 1
     maxRounds: 1
@@ -96,6 +105,9 @@
     layers:
     - state: jdam
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: Tag
+    tags:
+    - AU14JDAMBomb
   - type: DropshipAmmo
     rounds: 1
     maxRounds: 1
@@ -123,6 +135,9 @@
     layers:
     - state: cluster
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: Tag
+    tags:
+    - AU14JDAMBomb
   - type: DropshipAmmo
     rounds: 12
     maxRounds: 12
@@ -151,6 +166,9 @@
     layers:
     - state: jdami
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: Tag
+    tags:
+    - AU14JDAMBomb
   - type: DropshipAmmo
     rounds: 1
     maxRounds: 1

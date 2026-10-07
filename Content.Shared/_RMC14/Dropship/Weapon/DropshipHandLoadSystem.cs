@@ -1,7 +1,10 @@
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.PowerLoader;
+using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
+using Content.Shared.Interaction.Components;
+using Content.Shared.Inventory.VirtualItem;
 using Content.Shared.Popups;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
@@ -19,14 +22,20 @@ public sealed class DropshipHandLoadSystem : EntitySystem
 {
     [Dependency] private readonly SharedContainerSystem _container = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly PowerLoaderSystem _powerLoader = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly SharedVirtualItemSystem _virtualItem = default!;
 
     public override void Initialize()
     {
         SubscribeLocalEvent<DropshipWeaponPointComponent, InteractUsingEvent>(OnWeaponPointInteractUsing);
         SubscribeLocalEvent<DropshipUtilityPointComponent, InteractUsingEvent>(OnUtilityPointInteractUsing);
+
+        SubscribeLocalEvent<DropshipHandLoadedAmmoComponent, GotEquippedHandEvent>(OnAmmoEquipped);
+        SubscribeLocalEvent<DropshipHandLoadedAmmoComponent, GotUnequippedHandEvent>(OnAmmoUnequipped);
+        SubscribeLocalEvent<DropshipHandLoadedAmmoComponent, DropAttemptEvent>(OnAmmoDropAttempt);
     }
 
     private void OnWeaponPointInteractUsing(Entity<DropshipWeaponPointComponent> ent, ref InteractUsingEvent args)
@@ -37,6 +46,40 @@ public sealed class DropshipHandLoadSystem : EntitySystem
     private void OnUtilityPointInteractUsing(Entity<DropshipUtilityPointComponent> ent, ref InteractUsingEvent args)
     {
         OnInteractUsing(ent, ref args);
+    }
+
+    /// <summary>
+    ///     Fills the user's other hand with an invisible virtual item so the round
+    ///     visibly takes both hands and cannot be held one-handed.
+    /// </summary>
+    private void OnAmmoEquipped(Entity<DropshipHandLoadedAmmoComponent> ent, ref GotEquippedHandEvent args)
+    {
+        if (!_net.IsServer)
+            return;
+
+        if (_virtualItem.TrySpawnVirtualItemInHand(ent.Owner, args.User, out var virtualItem, dropOthers: false))
+        {
+            // The virtual copy has no sprite and can't be dropped, so the other
+            // hand just reads as occupied by the same heavy round.
+            EnsureComp<UnremoveableComponent>(virtualItem.Value);
+            _metaData.SetEntityName(virtualItem.Value, Name(ent.Owner));
+            return;
+        }
+
+        // No second free hand: force the round back out.
+        _hands.TryDrop(args.User, ent.Owner, checkActionBlocker: false);
+        _popup.PopupEntity(Loc.GetString("multi-handed-item-pick-up-fail", ("number", 1), ("item", ent.Owner)), args.User, args.User);
+    }
+
+    private void OnAmmoUnequipped(Entity<DropshipHandLoadedAmmoComponent> ent, ref GotUnequippedHandEvent args)
+    {
+        _virtualItem.DeleteInHandsMatching(args.User, ent.Owner);
+    }
+
+    private void OnAmmoDropAttempt(Entity<DropshipHandLoadedAmmoComponent> ent, ref DropAttemptEvent args)
+    {
+        // These rounds are loaded straight into the weapon, never dropped on the floor.
+        args.Cancel();
     }
 
     private void OnInteractUsing(EntityUid point, ref InteractUsingEvent args)

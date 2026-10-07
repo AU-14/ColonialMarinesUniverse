@@ -14,7 +14,9 @@
   id: AU14DropshipAmmoHandLoadable
   components:
   - type: Item
-    size: Normal
+    size: Huge
+  # Heavy round: needs both hands free, no in-hand world sprite.
+  - type: MultiHandedItem
   - type: DropshipHandLoadedAmmo
   - type: DropshipAmmo
     rounds: 1
@@ -36,6 +38,7 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_1
+      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_1
@@ -83,6 +86,7 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_ap_1
+      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_ap_1
@@ -127,6 +131,7 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_ab_1
+      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_ab_1
@@ -175,6 +180,7 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_ht_1
+      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_ht_1
@@ -223,6 +229,7 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_in_1
+      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_in_1
@@ -514,6 +521,7 @@
     offset: 0.5, 0.5
     layers:
     - state: single
+      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo_64.rsi
     state: single
@@ -553,6 +561,7 @@
     offset: 0.5, 0.5
     layers:
     - state: single
+      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo_64.rsi
     state: single
@@ -597,6 +606,7 @@
     offset: 0.5, 0.5
     layers:
     - state: single
+      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo_64.rsi
     state: single
@@ -637,6 +647,7 @@
     offset: 0.5, 0.5
     layers:
     - state: single
+      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo_64.rsi
     state: single

@@ -167,12 +167,15 @@
     weaponAttachedSprite:
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: bofors_cannon_loaded
+      offset: 0.5, 0.5
     ammoEmptyAttachedSprite:
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: bofors_cannon_unloaded
+      offset: 0.5, 0.5
     ammoAttachedSprite:
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: bofors_cannon_loaded
+      offset: 0.5, 0.5
   - type: PowerLoaderAttachable
     attachableTypes:
     - RMCDropshipUtilityPoint
@@ -196,12 +199,15 @@
     weaponAttachedSprite:
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: cas_howitzer_105_installed_loaded
+      offset: 0.5, 0.5
     ammoEmptyAttachedSprite:
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: cas_howitzer_105_installed_unloaded
+      offset: 0.5, 0.5
     ammoAttachedSprite:
       sprite: _RMC14/Objects/dropship_attachments.rsi
       state: cas_howitzer_105_installed_loaded
+      offset: 0.5, 0.5
   - type: PowerLoaderAttachable
     attachableTypes:
     - RMCDropshipUtilityPoint
