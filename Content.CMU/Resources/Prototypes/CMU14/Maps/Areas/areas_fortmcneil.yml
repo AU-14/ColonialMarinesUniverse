@@ -1,0 +1,585 @@
+- type: entity
+  parent: RMCAreaBase
+  id: CMUAreaMcneil
+  name: Fort McNeil
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_kutjevo.rsi
+    state: oob
+  - type: Area
+    buildSpecial: true
+    powerNet: ground
+    minimapColor: '#97A0A6CC'
+    
+- type: entity
+  parent: CMUAreaMcneil
+  id: CMUAreaMcneilOutdoors
+  name: Fort McNeil - Outdoors
+  abstract: true
+  components:
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: true
+    mortarFire: true
+    lasing: true
+    medevac: true
+    paradropping: true
+    OB: true
+    supplyDrop: true
+    weatherEnabled: true
+    
+- type: entity
+  parent: CMUAreaMcneil
+  id: CMUAreaMcneilIndoors
+  name: Fort McNeil - Indoors
+  abstract: true
+  components:
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: true
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: false
+    weatherEnabled: false
+    
+- type: entity
+  parent: CMUAreaMcneil
+  id: CMUAreaMcneilFullProtection
+  name: Fort McNeil - Safe Zone
+  abstract: true
+  components:
+  - type: Area
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: false
+    supplyDrop: false
+    weatherEnabled: false
+
+- type: entity
+  parent: CMUAreaMcneilFullProtection
+  id: CMUAreaMcneilOutofBounds
+  name: Fort McNeil - Out of Bounds
+  components:
+  - type: Sprite
+    state: oob
+  - type: Area
+    minimapColor: '#573e19'
+    
+- type: entity
+  parent: CMUAreaMcneilFullProtection
+  id: CMUAreaMcneilOutofBoundsStatement
+  name: The Ultimate Statement - Out of Bounds
+  components:
+  - type: Sprite
+    state: oob
+  - type: Area
+    minimapColor: '#573e19'
+    
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilOpenSky
+  name: Fort McNeil - Open Sky
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilNorthernDrillSite
+  name: Fort McNeil - Northern Drill Site
+  components:
+  - type: Sprite
+    state: stone_fields
+  - type: Area
+    minimapColor: '#ebae45'
+    
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilNortheasternDrillSite
+  name: Fort McNeil - Northeastern Drill Site
+  components:
+  - type: Sprite
+    state: stone_fields
+  - type: Area
+    minimapColor: '#a3972a'    
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilSmugglerRoute
+  name: Fort McNeil - Smuggler Route
+  components:
+  - type: Sprite
+    state: colony_caves_3
+  - type: Area
+    minimapColor: '#ebae45'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilNorthernExterior
+  name: Fort McNeil - Northern Exterior
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#47917c'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilEasternExterior
+  name: Fort McNeil - Eastern Exterior
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#2cb088'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilSouthernExterior
+  name: Fort McNeil - Southern Exterior
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#19634d'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilSoutheasternExterior
+  name: Fort McNeil - Southeastern Exterior
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#175240'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilFarSoutheasternExterior
+  name: Fort McNeil - Far Southeastern Exterior
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#079669'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilSouthernDrillSite
+  name: Fort McNeil - Southern Drill Site
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#0e362a'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilWesternExterior
+  name: Fort McNeil - Western Exterior
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#06694b'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilCentralExterior
+  name: Fort McNeil - Central Exterior
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#134f4e'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilVehicleArea
+  name: Fort McNeil - Colony Vehicle Staging Area
+  components:
+  - type: Sprite
+    state: foremans
+  - type: Area
+    minimapColor: '#2f3994'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilSecondaryComms
+  name: Fort McNeil - Secondary Communications
+  components:
+  - type: Sprite
+    state: foremans
+  - type: Area
+    minimapColor: '#A6D6F2'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilSecondaryCommsWest
+  name: Fort McNeil - Secondary Communications Western Exterior
+  components:
+  - type: Sprite
+    state: stone_fields
+  - type: Area
+    minimapColor: '#87b3cc'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilSecondaryCommsSouth
+  name: Fort McNeil - Secondary Communications Southern Exterior
+  components:
+  - type: Sprite
+    state: stone_fields
+  - type: Area
+    minimapColor: '#6593ad'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneilLZExterior
+  name: Fort McNeil - LZ Exterior
+  components:
+  - type: Sprite
+    state: stone_fields
+  - type: Area
+    minimapColor: '#6593ad'
+
+- type: entity
+  parent: CMUAreaMcneilOutdoors
+  id: CMUAreaMcneiZ1
+  name: Fort Mcneil - LZ1
+  components:
+  - type: Sprite
+    state: shuttle
+  - type: Area
+    landingZone: true
+    minimapColor: '#EBE5E5E3'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilLZStorage
+  name: Fort McNeil - LZ Storage Module
+  components:
+  - type: Sprite
+    state: lz_pad
+  - type: Area
+    minimapColor: '#8D6E63'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilLZGeneratorModule
+  name: Fort McNeil - LZ Generator Module
+  components:
+  - type: Sprite
+    state: power_2
+  - type: Area
+    minimapColor: '#FF8A65'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilCommsModule
+  name: Fort McNeil - Signal Operations Module
+  components:
+  - type: Sprite
+    state: foremans
+  - type: Area
+    minimapColor: '#B2EBF2'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilCaves
+  name: Fort Mcneil - Caves
+  abstract: true
+  components:
+  - type: Sprite
+    state: colony_caves_0
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: false
+    minimapColor: '#3F3C3CEF'
+
+- type: entity
+  parent: CMUAreaMcneilCaves
+  id: CMUAreaMcneilNorthCaves
+  name: Fort Mcneil - North Caves
+  components:
+  - type: Sprite
+    state: colony_caves_0
+  - type: Area
+    minimapColor: '#37474F'
+    
+- type: entity
+  parent: CMUAreaMcneilCaves
+  id: CMUAreaMcneilNortheasternCaves
+  name: Fort Mcneil - Northeastern Caves
+  components:
+  - type: Sprite
+    state: colony_caves_1
+  - type: Area
+    minimapColor: '#32435e'    
+    
+- type: entity
+  parent: CMUAreaMcneilCaves
+  id: CMUAreaMcneilNorthCentralCaves
+  name: Fort Mcneil - North-Central Caves
+  components:
+  - type: Sprite
+    state: colony_caves_0
+  - type: Area
+    minimapColor: '#455A64'
+
+- type: entity
+  parent: CMUAreaMcneilCaves
+  id: CMUAreaMcneilNorthWestCaves
+  name: Fort Mcneil - North-West Caves
+  components:
+  - type: Sprite
+    state: colony_caves_0
+  - type: Area
+    minimapColor: '#455A51'
+    
+- type: entity
+  parent: CMUAreaMcneilCaves
+  id: CMUAreaMcneilCentralCaves
+  name: Fort Mcneil - Central Caves
+  components:
+  - type: Sprite
+    state: colony_caves_0
+  - type: Area
+    minimapColor: '#4A5B64'
+    
+- type: entity
+  parent: CMUAreaMcneilCaves
+  id: CMUAreaMcneilSouthCaves
+  name: Fort Mcneil - South Caves
+  components:
+  - type: Sprite
+    state: colony_caves_3
+  - type: Area
+    minimapColor: '#4A6464'
+    
+- type: entity
+  parent: CMUAreaMcneilCaves
+  id: CMUAreaMcneilSouthEastCaves
+  name: Fort Mcneil - Southeastern Caves
+  components:
+  - type: Sprite
+    state: colony_caves_3
+  - type: Area
+    minimapColor: '#515A64'
+    
+- type: entity
+  parent: CMUAreaMcneilCaves
+  id: CMUAreaMcneilDeepCaves
+  name: Fort Mcneil - Deep Caves
+  components:
+  - type: Sprite
+    state: colony_caves_2
+  - type: Area
+    OB: false
+    minimapColor: '#37474F'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilMedbay
+  name: Fort McNeil - Medbay
+  components:
+  - type: Sprite
+    state: med0
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilAdministration
+  name: Fort McNeil - Administration
+  components:
+  - type: Sprite
+    state: construction_int
+  - type: Area
+    minimapColor: '#714401CC'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilHydroponics
+  name: Fort McNeil - Hydroponics
+  components:
+  - type: Sprite
+    state: botany0
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilEngineering
+  name: Fort McNeil - Engineering
+  components:
+  - type: Sprite
+    state: power_2
+  - type: Area
+    minimapColor: '#C19504E7'
+
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilSecurity
+  name: Fort McNeil - Colony Security
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#A22D2DEE'
+
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilServerRoom
+  name: Fort McNeil - ServerRoom
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#5D2D2D'
+
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilAdminHallway
+  name: Fort McNeil - Administration Hallway
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#2D3FA2EE'    
+
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilBar
+  name: Fort McNeil - The R&R
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#714401CC'
+ 
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilEngineeringStoreroom
+  name: Fort McNeil - Engineering Storeroom
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#B08804'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilDormitory
+  name: Fort McNeil - Dormitory
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilOuthouse
+  name: Fort McNeil - Outhouse Module
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#2196F3'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilAdminEngineeringHallway
+  name: Fort McNeil - Engineering-Administration Connector
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#4DB6AC'   
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilEngineeringHydroHallway
+  name: Fort McNeil - Engineering-Hydroponics Connector
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#A5D6A7' 
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilHydroExit
+  name: Fort McNeil - Hydroponics Exit
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#C8E6C9' 
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilMiningStorage
+  name: Fort McNeil - Mining Operations Storage
+  components:
+  - type: Sprite
+    state: colony_int
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilPrimaryComms
+  name: Fort McNeil - Primary Communications Module
+  components:
+  - type: Sprite
+    state: power_2
+  - type: Area
+    minimapColor: '#607D8B'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilDrillCoordinationModule
+  name: Fort McNeil - Drill Coordination Module
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#714401CC'
+    
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilExcavationSupplyModule
+  name: Fort McNeil - Excavation Supply Module
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#FF8F00'
+
+- type: entity
+  parent: CMUAreaMcneilIndoors
+  id: CMUAreaMcneilEmergencySupplyModule
+  name: Fort McNeil - Emergency Supply Module
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#edf561'
