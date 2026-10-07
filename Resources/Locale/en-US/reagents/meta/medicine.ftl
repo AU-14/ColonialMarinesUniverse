@@ -14,10 +14,22 @@ reagent-name-bicaridine = bicaridine
 reagent-desc-bicaridine = An analgesic which is highly effective at treating brute damage. It's useful for stabilizing people who have been severely beaten, as well as treating less life-threatening injuries.
 
 reagent-name-cryoxadone = cryoxadone
-reagent-desc-cryoxadone = Required for the proper function of cryogenics. Heals all standard types of damage, but only works in temperatures under 213K. It can treat and rejuvenate plants when applied in small doses.
+reagent-desc-cryoxadone = A cryogenic medicine that treats asphyxiation and blood loss at 213K or colder. It can treat and rejuvenate plants when applied in small doses.
 
 reagent-name-doxarubixadone = doxarubixadone
-reagent-desc-doxarubixadone = A cryogenics chemical. Heals cellular damage caused by dangerous gasses and chemicals.
+reagent-desc-doxarubixadone = A cryogenic medicine that heals cellular damage at 213K or colder.
+
+reagent-name-traumoxadone = traumoxadone
+reagent-desc-traumoxadone = A cryogenic medicine that heals blunt, piercing, and slash damage at 213K or colder.
+
+reagent-name-urishoxadone = urishoxadone
+reagent-desc-urishoxadone = A cryogenic medicine made with urishiol that heals poison and radiation damage at 213K or colder.
+
+reagent-name-necrosol = necrosol
+reagent-desc-necrosol = A cryogenic medicine that regenerates one missing native limb per 5 units metabolized at 213K or colder. It does not heal damage.
+
+reagent-name-salicylic-acid = salicylic acid
+reagent-desc-salicylic-acid = A chemical precursor used to synthesize traumoxadone.
 
 reagent-name-dermaline = dermaline
 reagent-desc-dermaline = An advanced chemical that is more effective at treating burn damage than kelotane.
@@ -135,13 +147,13 @@ reagent-name-insuzine = insuzine
 reagent-desc-insuzine = Rapidly repairs dead tissue caused by electrocution, but cools you slightly. Completely freezes the patient when overdosed.
 
 reagent-name-opporozidone = opporozidone
-reagent-desc-opporozidone= A difficult to synthesize cryogenic drug used to regenerate rotting tissue and brain matter.
+reagent-desc-opporozidone = A cryogenic medicine that reverses 40 seconds of rot and 20 seconds of an active revival countdown per unit in dead patients at 150K or colder. It cannot reverse permanent death or an expired revival countdown.
 
 reagent-name-arcryox = arcryox
 reagent-desc-arcryox = A sickeningly blue cryogenics chemical that is able to heal extreme wounds even on the dead. It has trouble stabilizing patients however.
 
 reagent-name-aloxadone = aloxadone
-reagent-desc-aloxadone = A cryogenics chemical. Used to treat severe burns and frostbite via regeneration of the affected tissue. Works regardless of the patient being alive or dead.
+reagent-desc-aloxadone = A cryogenic medicine that heals heat, shock, cold, and caustic damage at 213K or colder, even in dead patients.
 
 reagent-name-mannitol = mannitol
 reagent-desc-mannitol = Efficiently restores brain damage.

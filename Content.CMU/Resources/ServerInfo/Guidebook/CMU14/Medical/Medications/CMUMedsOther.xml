@@ -2,9 +2,38 @@
   # Other Medications
 
   ## Cryogenics
-  These only work when the patient is very cold, below about 170 K, which in practice means inside a cryo pod. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"].
-  - [bold]Cryoxadone[/bold]: heals brute, burn, toxin, suffocation and genetic damage all at once.
-  - [bold]Clonexadone[/bold]: a stronger cryoxadone. Heals brute, burn, toxin and genetic damage faster.
+  Place a beaker in a powered cryo pod and put the patient inside. Supply cold gas from a freezer. The medicines below work on living and dead patients once the body reaches the required temperature, except Opporozidone, which treats dead patients only. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"].
+  - [bold]Cryoxadone[/bold]: heals 10 asphyxiation and 10 blood loss per unit at normal metabolism, at 213 K or colder.
+  - [bold]Aloxadone[/bold]: heals 10 each of heat, shock, cold and caustic damage per unit at normal metabolism, at 213 K or colder.
+  - [bold]Traumoxadone[/bold]: heals 10 each of blunt, piercing and slash damage per unit at normal metabolism, at 213 K or colder.
+  - [bold]Urishoxadone[/bold]: heals 10 poison and 10 radiation damage per unit at normal metabolism, at 213 K or colder.
+  - [bold]Doxarubixadone[/bold]: heals 10 cellular damage per unit at normal metabolism, at 213 K or colder.
+  - [bold]Necrosol[/bold]: regenerates one missing native limb per 5 units metabolized at 213 K or colder. It does not heal damage.
+  - [bold]Opporozidone[/bold]: reverses 40 seconds of rot and 20 seconds of an active revival countdown per unit in dead patients at 150 K or colder. It cannot reverse permanent death or an expired revival countdown.
+  - [bold]Marine Cryoxadone and Clonexadone[/bold]: older Marine cryogenic medicines. They use their own formulations and work below 170 K.
+
+  ## Cryogenic Recipes
+  All amounts are reagent units (u). Use the RMC chemical dispenser reagents and Marine medicines named below. Recipe temperatures are the minimum mixture temperature when mixing; treatment temperatures are listed above. A hotplate flatpack is available from the medical supply vendor for heating temperature-sensitive recipes.
+  - [bold]Cryoxadone[/bold]: 1 Marine Dexalin + 1 Water + 1 RMC Oxygen makes 3 Cryoxadone.
+  - [bold]Aloxadone[/bold]: 2 Cryoxadone + 1 Aloe + 2 Marine Leporazine makes 4 Aloxadone.
+  - [bold]Traumoxadone[/bold]: 1 Cryoxadone + 1 Salicylic Acid + 1 RMC Lipozine makes 2 Traumoxadone.
+  - [bold]Urishoxadone[/bold]: 3 Cryoxadone + 5 Urishiol + 2 Marine Arithrazine makes 5 Urishoxadone.
+  - [bold]Doxarubixadone[/bold]: 1 Cryoxadone + 1 CMU Unstable Mutagen makes 2 Doxarubixadone.
+  - [bold]Necrosol[/bold]: 3 Marine Cardiocaine + 1 RMC Mindbreaker Toxin + 2 Cryoxadone makes 2 Necrosol at 370 K or hotter.
+  - [bold]Opporozidone[/bold]: 1 RMC Mindbreaker Toxin + 1 RMC Phoron + 1 Doxarubixadone makes 3 Opporozidone at 400 K or hotter.
+
+  ## Cryogenic Precursors
+  Aloe comes from aloe plants, Urishiol from nettles or death nettles, and CMU Phenol from mutant carrots. RMC Phoron can be taken from phoron sheets or reagent tanks.
+  - [bold]Salicylic Acid[/bold]: 1 RMC Sodium + 1 CMU Phenol + 1 RMC Carbon + 1 RMC Oxygen makes 4 Salicylic Acid at 373.15 K or hotter.
+  - [bold]Marine Dexalin[/bold]: 2 RMC Oxygen + 5.1 RMC Phoron makes 1 Marine Dexalin and returns 5 RMC Phoron.
+  - [bold]Marine Leporazine[/bold]: 1 RMC Silicon + 1 RMC Copper with 5 RMC Phoron as a catalyst makes 2 Marine Leporazine.
+  - [bold]Marine Dylovene[/bold]: 1 RMC Silicon + 1 RMC Potassium + 1 RMC Nitrogen makes 3 Marine Dylovene.
+  - [bold]Marine Arithrazine[/bold]: 1 Marine Dylovene + 1 RMC Phosphorus makes 2 Marine Arithrazine.
+  - [bold]Table Salt[/bold]: 1 RMC Chlorine + 1 RMC Sodium makes 2 Table Salt.
+  - [bold]RMC Lipozine[/bold]: 1 Table Salt + 1 RMC Ethanol + 1 RMC Radium makes 3 RMC Lipozine.
+  - [bold]CMU Unstable Mutagen[/bold]: 1 RMC Chlorine + 1 RMC Radium + 1 RMC Phosphorus makes 3 CMU Unstable Mutagen.
+  - [bold]RMC Mindbreaker Toxin[/bold]: 1 RMC Silicon + 1 RMC Hydrogen + 1 Marine Dylovene makes 3 RMC Mindbreaker Toxin.
+  - [bold]Marine Cardiocaine[/bold]: 1 Marine Epinephrine + 1 Marine Bicaridine + 1 RMC Iron makes 3 Marine Cardiocaine.
 
   ## Body Temperature
   - [bold]Leporazine[/bold]: brings body temperature back to normal, treating both hypothermia and heatstroke. It also stops cryogenics working, so don't give it to someone going into a cryo pod. Overdosing causes extreme drowsiness.
@@ -17,6 +46,13 @@
   <GuideReagentEmbed Reagent="CMCryoxadone"/>
   <GuideReagentEmbed Reagent="CMClonexadone"/>
   <GuideReagentEmbed Reagent="CMLeporazine"/>
+  <GuideReagentEmbed Reagent="Cryoxadone"/>
+  <GuideReagentEmbed Reagent="Aloxadone"/>
+  <GuideReagentEmbed Reagent="Traumoxadone"/>
+  <GuideReagentEmbed Reagent="Urishoxadone"/>
+  <GuideReagentEmbed Reagent="Doxarubixadone"/>
+  <GuideReagentEmbed Reagent="Necrosol"/>
+  <GuideReagentEmbed Reagent="Opporozidone"/>
   <GuideReagentEmbed Reagent="CMEthylredoxrazine"/>
   <GuideReagentEmbed Reagent="RMCMethylphenidate"/>
   <GuideReagentEmbed Reagent="RMCLipozine"/>

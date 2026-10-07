@@ -30,9 +30,9 @@
   <Box>
     <GuideEntityEmbed Entity="CryoPod" Caption="Cryo pod"/>
   </Box>
-  The cryo pod chills a patient down and heals them with cryoxadone.
-  - Load a beaker of [bold]cryoxadone[/bold] into the pod, and make sure the pod is supplied with cold gas from a freezer.
-  - Put the patient inside. Once their body temperature drops low enough, the cryoxadone slowly heals brute, burn, toxin and suffocation damage all at once.
-  - Cryoxadone does nothing at normal body temperature. The patient has to be properly cold.
-  - It's slow, but it needs nobody standing over it, so it's good for patients who are stable but badly hurt.
+  The cryo pod injects medicine from an inserted beaker and chills the patient with gas from a connected freezer.
+  - Load a beaker with the cryogenic medicine needed for the patient's injuries, then put the patient inside.
+  - The new cryogenic medicines start healing when the patient's body reaches 213 K or colder. Opporozidone needs 150 K or colder.
+  - Cryoxadone treats suffocation and blood loss; Aloxadone treats burns; Traumoxadone treats brute damage; Urishoxadone treats poison and radiation; Doxarubixadone treats cellular damage; Necrosol heals multiple injuries and regenerates missing native limbs; Opporozidone reverses rot in dead patients.
+  - See [textlink="Other Medications" link="CMUGuideMedsOther"] for doses and reagent details.
 </Document>

@@ -139,6 +139,8 @@
         amount: 25
       - id: RMCVial
         amount: 35
+      - id: CMUChemistryHotplateFlatpack
+        amount: 3
       - id: CMMaskGasMedical
         amount: 6
       - id: CMAnestheticTankFilled

@@ -179,6 +179,7 @@
   physicalDesc: reagent-physical-desc-fizzy
   flavor: medicine
   color: "#0091ff"
+  worksOnTheDead: true
   plantMetabolism:
   - !type:PlantAdjustToxins
     amount: -5
@@ -187,20 +188,16 @@
   - !type:PlantCryoxadone {}
   metabolisms:
     Bloodstream:
+      metabolismRate: 1
       effects:
-      - !type:AdjustTemperature
-        amount: 80000 # Heats you up as it metabolizes necessitating constant cooling.
-      - !type:EvenHealthChange
+      - !type:HealthChange
         conditions:
         - !type:TemperatureCondition
-          # taken from tg, must be below freezing.
-          max: 273.15
+          max: 213
         damage:
-        # todo scale with temp like SS13
-          Airloss: -3
-          Brute: -2
-          Burn: -2
-          Toxin: -2
+          types:
+            Asphyxiation: -10
+            Bloodloss: -10
 
 - type: reagent
   id: Doxarubixadone
@@ -210,16 +207,18 @@
   physicalDesc: reagent-physical-desc-bubbling
   flavor: medicine
   color: "#32cd32"
+  worksOnTheDead: true
   metabolisms:
     Bloodstream:
+      metabolismRate: 1
       effects:
         - !type:HealthChange
           conditions:
           - !type:TemperatureCondition
-            max: 273.15
+            max: 213
           damage:
             types:
-             Cellular: -2
+              Cellular: -10
 
 - type: reagent
   id: Dermaline
@@ -1311,15 +1310,86 @@
   worksOnTheDead: true
   metabolisms:
     Bloodstream:
+      metabolismRate: 1
       effects:
         - !type:ReduceRotting
-          seconds: 20
+          seconds: 40
           conditions:
           #Patient must be dead and in a cryo tube (or something cold)
           - !type:TemperatureCondition
             max: 150.0
           - !type:MobStateCondition
             mobstate: Dead
+        - !type:CMUReverseRevivalTimer
+          secondsPerUnit: 20
+          conditions:
+          - !type:TemperatureCondition
+            max: 150.0
+          - !type:MobStateCondition
+            mobstate: Dead
+
+- type: reagent
+  id: Traumoxadone
+  name: reagent-name-traumoxadone
+  group: Medicine
+  desc: reagent-desc-traumoxadone
+  physicalDesc: reagent-physical-desc-soothing
+  flavor: medicine
+  color: "#880077"
+  worksOnTheDead: true
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 1
+      effects:
+      - !type:HealthChange
+        conditions:
+        - !type:TemperatureCondition
+          max: 213
+        damage:
+          types:
+            Blunt: -10
+            Piercing: -10
+            Slash: -10
+
+- type: reagent
+  id: Urishoxadone
+  name: reagent-name-urishoxadone
+  group: Medicine
+  desc: reagent-desc-urishoxadone
+  physicalDesc: reagent-physical-desc-soothing
+  flavor: medicine
+  color: "#ffa861"
+  worksOnTheDead: true
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 1
+      effects:
+      - !type:HealthChange
+        conditions:
+        - !type:TemperatureCondition
+          max: 213
+        damage:
+          types:
+            Poison: -10
+            Radiation: -10
+
+- type: reagent
+  id: Necrosol
+  name: reagent-name-necrosol
+  group: Medicine
+  desc: reagent-desc-necrosol
+  physicalDesc: reagent-physical-desc-necrotic
+  flavor: medicine
+  color: "#86a5bd"
+  worksOnTheDead: true
+  metabolisms:
+    Bloodstream:
+      metabolismRate: 1
+      effects:
+      - !type:CMURegenerateLimb
+        conditions:
+        - !type:TemperatureCondition
+          max: 213
 
 - type: reagent
   id: Arcryox
@@ -1344,7 +1414,7 @@
           Burn: -3
 
 - type: reagent
-  id : Aloxadone
+  id: Aloxadone
   name: reagent-name-aloxadone
   group: Medicine
   desc: reagent-desc-aloxadone
@@ -1354,13 +1424,18 @@
   worksOnTheDead: true
   metabolisms:
     Bloodstream:
+      metabolismRate: 1
       effects:
-      - !type:EvenHealthChange
+      - !type:HealthChange
         conditions:
         - !type:TemperatureCondition
-          max: 213.0
+          max: 213
         damage:
-          Burn: -4.5
+          types:
+            Cold: -10
+            Heat: -10
+            Shock: -10
+            Caustic: -10
 
 - type: reagent
   id : Mannitol # currently this is just a way to create psicodine
@@ -1382,6 +1457,15 @@
         visualType: Medium
         messages: [ "mannitol-effect-enlightened" ]
         probability: 0.2
+
+- type: reagent
+  id: SalicylicAcid
+  name: reagent-name-salicylic-acid
+  group: Medicine
+  desc: reagent-desc-salicylic-acid
+  physicalDesc: reagent-physical-desc-opaque
+  flavor: medicine
+  color: "#d8d1c6"
 
 - type: reagent
   id: Psicodine
