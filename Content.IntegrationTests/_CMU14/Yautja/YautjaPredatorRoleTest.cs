@@ -3987,6 +3987,8 @@ public sealed class YautjaPredatorRoleTest
             var allowedCooldownActions = new Dictionary<string, int>
             {
                 ["CMUActionYautjaToggleLantern"] = 1,
+                ["CMUActionYautjaHonorRoar"] = 45,
+                ["CMUActionYautjaHuntingLeap"] = 12,
                 ["CMUActionYautjaRecall"] = 5,
                 ["CMUActionYautjaRaiseThrall"] = 120,
             };

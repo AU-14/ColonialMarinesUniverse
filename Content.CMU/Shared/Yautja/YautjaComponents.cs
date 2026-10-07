@@ -239,6 +239,33 @@ public sealed partial class YautjaComponent : Component
     [ViewVariables]
     public EntityUid? VoiceDeathLaughAction;
 
+    [DataField]
+    public EntProtoId HonorRoarActionId = "CMUActionYautjaHonorRoar";
+
+    [ViewVariables]
+    public EntityUid? HonorRoarAction;
+
+    [DataField]
+    public float HonorRoarRange = 5f;
+
+    [DataField]
+    public TimeSpan HonorRoarDuration = TimeSpan.FromSeconds(5);
+
+    [DataField]
+    public SoundSpecifier HonorRoarSound = new SoundCollectionSpecifier("CMUYautjaRoars");
+
+    [DataField]
+    public EntProtoId HuntingLeapActionId = "CMUActionYautjaHuntingLeap";
+
+    [ViewVariables]
+    public EntityUid? HuntingLeapAction;
+
+    [DataField]
+    public float HuntingLeapRange = 7f;
+
+    [DataField]
+    public float HuntingLeapSpeed = 30f;
+
     private static List<ProtoId<EmotePrototype>> GetDefaultAllowedEmotes()
     {
         var emotes = new List<ProtoId<EmotePrototype>>();
@@ -295,6 +322,19 @@ public sealed partial class YautjaComponent : Component
         sounds.Add(Sex.Unsexed, "CMUMaleYautja");
         return sounds;
     }
+}
+
+[RegisterComponent]
+public sealed partial class YautjaHuntingLeapingComponent : Component
+{
+    [DataField]
+    public EntityUid Target;
+
+    [DataField]
+    public EntityUid Weapon;
+
+    [DataField]
+    public bool Resolved;
 }
 
 [RegisterComponent]

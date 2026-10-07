@@ -18,8 +18,8 @@
     charge: 3000
     maxCharge: 3000
     regen: 60
-    stabilisingCrystalPrototype: CMUYautjaStabilisingCrystal
-    humanStabilisingCrystalPrototype: CMUYautjaHumanStabilisingCrystal
+    stabilisingCrystalPrototype: CMUYautjaAutoInjector
+    humanStabilisingCrystalPrototype: CMUYautjaThrallAutoInjector
     healingCapsulePrototype: CMUYautjaHealingGel
     stabilisingCrystalCost: 400
     humanStabilisingCrystalCost: 400
@@ -656,6 +656,7 @@
   - type: Gun
     projectileSpeed: 28
     fireRate: 1.666667
+    resetOnHandSelected: false # CMU14: switching hands must not restart the caster's cooldown.
     minAngle: 10
     maxAngle: 10
     selectedMode: SemiAuto

@@ -572,6 +572,44 @@
     event: !type:Content.Shared.CMU14.Yautja.YautjaVoiceDeathLaughActionEvent
 - type: entity
   parent: CMUYautjaActionBase
+  id: CMUActionYautjaHonorRoar
+  name: Honor Roar
+  description: Roar, staggering and deafening nearby prey.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 45
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: screech
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:Content.Shared.CMU14.Yautja.YautjaHonorRoarActionEvent
+
+- type: entity
+  parent: CMUYautjaActionBase
+  id: CMUActionYautjaHuntingLeap
+  name: Hunting Leap
+  description: Leap at a target and strike it with your melee weapon.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: EntityTargetAction
+    canTargetSelf: false
+    targetCheckCanInteract: false
+    event: !type:Content.Shared.CMU14.Yautja.YautjaHuntingLeapActionEvent
+- type: entity
+  parent: CMUYautjaActionBase
   id: CMUActionYautjaToggleLantern
   name: Toggle Light
   description: Turn the light on and off.

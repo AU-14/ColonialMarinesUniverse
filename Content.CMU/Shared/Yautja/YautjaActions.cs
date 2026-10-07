@@ -137,6 +137,10 @@ public sealed partial class YautjaVoiceDeathCryActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaVoiceDeathLaughActionEvent : InstantActionEvent;
 
+public sealed partial class YautjaHonorRoarActionEvent : InstantActionEvent;
+
+public sealed partial class YautjaHuntingLeapActionEvent : EntityTargetActionEvent;
+
 public sealed partial class YautjaHellhoundSenseOwnerActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaAddTeleporterLocationActionEvent : InstantActionEvent;
