@@ -1,0 +1,360 @@
+# Grenades ported from cmss13-pve: #517 (grenades expansion & overhaul) and #719 (explosives overhaul pt3).
+
+# Launcher-only 30mm rounds. They have no pin, so they can't be primed by hand; the launcher sets them off.
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: CMULauncherGrenadeBase
+  components:
+  - type: Item
+    size: Small
+  - type: Clothing
+    slots:
+    - suitStorage
+  - type: Appearance
+  - type: TimerTriggerVisuals
+  - type: Destructible
+    thresholds: []
+  - type: IgnorePredictionHide
+  - type: Ammo
+  - type: Tag
+    tags:
+    - Grenade
+    - LauncherCompatibleGrenade
+    - RMCGrenadeM40 # 30mm M40 hull, so underbarrel launchers take it too
+
+- type: entity
+  parent: CMULauncherGrenadeBase
+  id: CMUGrenadeHEAP
+  name: M38 HEAP blast grenade
+  description: High-Explosive, Armour Piercing. A small, but deceptively strong blast grenade that can punch through appreciable quantities of armor, making it a solid anti-vehicle round, though it's a little less deadly to troops than the standard M40. Not a hand-grenade, as marked by the yellow color-band on its hull, launcher-fired only. Due to faulty primers, it is inadvisable to fire them directly at hard surfaces like walls, landing them just in front is recommended.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/heap.rsi
+    layers:
+    - state: icon
+      map: ["enum.TriggerVisualLayers.Base"]
+  - type: TriggerOnFixedDistanceStop
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 30
+    intensitySlope: 14
+    totalIntensity: 220
+    canCreateVacuum: false
+  # Armour-piercing charge: much harder on vehicles than its blast suggests.
+  - type: VehicleDamageMultiplier
+    multiplier: 6
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+
+- type: entity
+  parent: [ CMGrenadeBase, RMCM40DPTags ]
+  id: CMUGrenadeBFAB
+  name: M51A BFAB grenade
+  description: Bounding Fragmentation, Air-Burst. Rather than detonating where it lands, this grenade hops up into the air and bursts into a lethal hail of shrapnel. Effective against troops in the open or in foxholes. Can be fired from a grenade launcher to bound where it lands, or primed in-hand and thrown to bound once it hits the ground.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/bfab.rsi
+    layers:
+    - state: icon
+      map: ["enum.TriggerVisualLayers.Base"]
+  - type: CMUBoundingGrenade
+  - type: Tag
+    tags:
+    - Grenade
+    - HandGrenade
+    - LauncherCompatibleGrenade
+    - RMCGrenadeM40
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 6
+    intensitySlope: 3
+    totalIntensity: 40
+    canCreateVacuum: false
+  - type: ProjectileGrenade
+    triggerKey: trigger
+    fillPrototype: CMProjectileShrapnel
+    capacity: 48
+    directHit: false
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+  - type: ClusterLimitHits
+  - type: CMExplosionEffect
+    maxShrapnel: 0
+  - type: RMCScorchEffect
+
+- type: entity
+  parent: CMULauncherGrenadeBase
+  id: CMUGrenadeCanister
+  name: M108 canister grenade
+  description: 30mm canister grenade, effectively low velocity buckshot. Substantial close combat impact when fired from a grenade launcher. No, you can't set it off with a hammer, moron. Not a hand-grenade, as marked by the yellow color-band on its hull, launcher-fired only.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/canister.rsi
+    layers:
+    - state: icon
+      map: ["enum.TriggerVisualLayers.Base"]
+  - type: CartridgeAmmo
+    deleteOnSpawn: true
+    proto: CMUPelletGrenadeCanister
+
+- type: entity
+  parent: CMPelletShotgunBuckshot
+  id: CMUPelletGrenadeCanister
+  categories: [ HideSpawnMenu ]
+  components:
+  # A little stronger than a buckshot shell (4 x 65): five heavier pellets that reach a tile further.
+  - type: Projectile
+    damage:
+      types:
+        Piercing: 70
+  - type: CMArmorPiercing
+    amount: 10
+  - type: ProjectileSpread
+    proto: CMUPelletGrenadeCanister
+    count: 5
+    spread: 15
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 5
+      falloff: 9999
+      ignoreModifiers: true
+    - range: 0
+      falloff: 1
+  - type: CMUIgnoreFixedPoint
+
+# Smoke grenade cloud. Lasts longer than the generic RMC smoke used by mortars and airburst rounds.
+- type: entity
+  parent: RMCSmoke
+  id: CMUSmokeGrenade
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 35
+  - type: EvenSmoke
+    spawn: CMUSmokeGrenade
+    range: 3
+
+# Signal smoke
+- type: entity
+  parent: CMGrenadeSmoke
+  id: CMUGrenadeSmokeGreen
+  name: M47-G HSDP smoke grenade
+  description: The M47 HSDP is a small, but powerful smoke grenade. Based off the same platform as the M40 HEDP. Can be fired from a grenade launcher for impact detonation, or primed in-hand and thrown to detonate after 2.5 seconds. The G subtype erupts into a cloud of green smoke upon detonation.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/smoke_green.rsi
+  - type: SpawnOnTrigger
+    proto: CMUSmokeGreen
+
+- type: entity
+  parent: CMGrenadeSmoke
+  id: CMUGrenadeSmokeRed
+  name: M47-R HSDP smoke grenade
+  description: The M47 HSDP is a small, but powerful smoke grenade. Based off the same platform as the M40 HEDP. Can be fired from a grenade launcher for impact detonation, or primed in-hand and thrown to detonate after 2.5 seconds. The R subtype erupts into a cloud of red smoke upon detonation.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/smoke_red.rsi
+  - type: SpawnOnTrigger
+    proto: CMUSmokeRed
+
+- type: entity
+  parent: RMCSmoke
+  id: CMUSmokeGreen
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    color: "#288e76ea"
+  - type: EvenSmoke
+    spawn: CMUSmokeGreen
+    range: 2
+  - type: TimedDespawn
+    lifetime: 35
+
+- type: entity
+  parent: RMCSmoke
+  id: CMUSmokeRed
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    color: "#ca3d33e8"
+  - type: EvenSmoke
+    spawn: CMUSmokeRed
+    range: 2
+  - type: TimedDespawn
+    lifetime: 35
+
+# Packets
+- type: entity
+  abstract: true
+  parent: CMPacketBase
+  id: CMUPacketGrenadePvEBase
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/Grenades/packets.rsi
+
+- type: entity
+  parent: CMUPacketGrenadePvEBase
+  id: CMUPacketGrenadeHEAP
+  name: M38 HEAP grenade packet
+  description: It contains three M38 HEAP blast grenades. Launcher-fired only.
+  components:
+  - type: Sprite
+    layers:
+    - state: general_packet
+      map: [ "closedLayer" ]
+    - state: heap-p
+    - state: general_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+
+- type: entity
+  parent: CMUPacketGrenadeHEAP
+  id: CMUPacketGrenadeHEAPFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeHEAP
+      amount: 3
+
+- type: entity
+  parent: CMUPacketGrenadePvEBase
+  id: CMUPacketGrenadeBFAB
+  name: M51A BFAB grenade packet
+  description: It contains three M51A BFAB grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: general_packet
+      map: [ "closedLayer" ]
+    - state: bfab-p
+    - state: general_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+
+- type: entity
+  parent: CMUPacketGrenadeBFAB
+  id: CMUPacketGrenadeBFABFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeBFAB
+      amount: 3
+
+- type: entity
+  parent: CMUPacketGrenadePvEBase
+  id: CMUPacketGrenadeCanister
+  name: M108 canister grenade packet
+  description: It contains three M108 canister grenades. Launcher-fired only.
+  components:
+  - type: Sprite
+    layers:
+    - state: general_packet
+      map: [ "closedLayer" ]
+    - state: cani-p
+    - state: general_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+
+- type: entity
+  parent: CMUPacketGrenadeCanister
+  id: CMUPacketGrenadeCanisterFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeCanister
+      amount: 3
+
+- type: entity
+  parent: CMUPacketGrenadePvEBase
+  id: CMUPacketGrenadeSmokeGreen
+  name: M47-G HSDP grenade packet
+  description: It contains three M47-G green signal smoke grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: general_packet
+      map: [ "closedLayer" ]
+    - state: hsdp-p
+      color: "#4fd65f"
+    - state: general_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+
+- type: entity
+  parent: CMUPacketGrenadeSmokeGreen
+  id: CMUPacketGrenadeSmokeGreenFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeSmokeGreen
+      amount: 3
+
+- type: entity
+  parent: CMUPacketGrenadePvEBase
+  id: CMUPacketGrenadeSmokeRed
+  name: M47-R HSDP grenade packet
+  description: It contains three M47-R red signal smoke grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: general_packet
+      map: [ "closedLayer" ]
+    - state: hsdp-p
+      color: "#e05050"
+    - state: general_packet_e
+      map: [ "openLayer", "emptyLayer" ]
+
+- type: entity
+  parent: CMUPacketGrenadeSmokeRed
+  id: CMUPacketGrenadeSmokeRedFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeSmokeRed
+      amount: 3
+
+# Crates
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadesBFAB
+  name: M51A BFAB grenades crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUPacketGrenadeBFABFilled
+      amount: 2
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadesCanister
+  name: M108 canister grenades crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUPacketGrenadeCanisterFilled
+      amount: 2
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadesSmokeGreen
+  name: M47-G HSDP green smoke grenades crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUPacketGrenadeSmokeGreenFilled
+      amount: 2
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadesSmokeRed
+  name: M47-R HSDP red smoke grenades crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUPacketGrenadeSmokeRedFilled
+      amount: 2
