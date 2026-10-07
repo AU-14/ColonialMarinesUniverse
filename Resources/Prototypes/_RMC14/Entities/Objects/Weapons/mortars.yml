@@ -141,6 +141,7 @@
   - type: CMExplosionEffect
   - type: RMCScorchEffect
   - type: MortarShell
+    zLevelPenetration: 2
     carvesZLevels: true
     carveFringeRadius: 1
 
@@ -164,6 +165,7 @@
   - type: CMExplosionEffect
   - type: RMCScorchEffect
   - type: MortarShell
+    zLevelPenetration: 2
     createsZLevelOpening: true
 
 - type: entity
@@ -186,6 +188,7 @@
   - type: CMExplosionEffect
   - type: RMCScorchEffect
   - type: MortarShell
+    zLevelPenetration: 2
   - type: TileFireOnTrigger
     spawn: RMCTileFire
     range: 5
@@ -202,6 +205,7 @@
     sprite: _RMC14/Objects/Weapons/mortar.rsi
     state: mortar_ammo_flr
   - type: MortarShell
+    zLevelPenetration: 2
   - type: MortarCameraShell
 
 - type: entity
