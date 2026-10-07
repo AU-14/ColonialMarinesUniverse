@@ -7,6 +7,7 @@
   children:
   - AU14Comms
   - CMUGuideMortar
+  - CMUGuideExplosives
   - CMUGuideMedical
   - CMUGuideLawEnforcement
   - CMUGuideEngineering
@@ -55,6 +56,13 @@
   name: cmu-guide-entry-mortar
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Guides/CMUMortar.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideExplosives
+  name: cmu-guide-entry-explosives
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUExplosives.xml"
 
 - type: guideEntry
   parent: RMC
