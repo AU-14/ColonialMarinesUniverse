@@ -54,6 +54,8 @@
     bulletSpread: 3
     travelTime: 3
     fireMissionDelay: 1
+    zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: false
     weapon: RMCDropshipAttachmentBOFORS
     damage:
       types:
@@ -102,6 +104,8 @@
     bulletSpread: 3
     travelTime: 3
     fireMissionDelay: 1
+    zLevelPenetration: 2
+    applyEffectsOnPenetrationLevels: false
     weapon: RMCDropshipAttachmentBOFORS
     damage:
       types:
@@ -147,6 +151,8 @@
     bulletSpread: 6
     travelTime: 3
     fireMissionDelay: 1
+    zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentBOFORS
     damage:
       types:
@@ -196,6 +202,8 @@
     bulletSpread: 3
     travelTime: 3
     fireMissionDelay: 1
+    zLevelPenetration: 3
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentBOFORS
     damage:
       types:
@@ -245,6 +253,8 @@
     bulletSpread: 3
     travelTime: 3
     fireMissionDelay: 1
+    zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: false
     weapon: RMCDropshipAttachmentBOFORS
     damage:
       types:

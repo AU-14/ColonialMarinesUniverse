@@ -50,6 +50,8 @@
     maxRounds: 1
     roundsPerShot: 1
     travelTime: 12
+    zLevelPenetration: 2
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentJDAMBombClamp
     explosion:
       total: 10000
@@ -79,6 +81,8 @@
     maxRounds: 1
     roundsPerShot: 1
     travelTime: 11
+    zLevelPenetration: 2
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentJDAMBombClamp
     explosion:
       total: 10000
@@ -113,6 +117,9 @@
     maxRounds: 1
     roundsPerShot: 1
     travelTime: 12
+    zLevelPenetration: 3
+    applyEffectsOnPenetrationLevels: true
+    targetLowestZLevel: true  # Targets lowest z-level with tiles
     weapon: RMCDropshipAttachmentJDAMBombClamp
     armorPiercing: 100
     explosion:
@@ -144,6 +151,8 @@
     roundsPerShot: 12
     bulletSpread: 17
     travelTime: 10
+    zLevelPenetration: 2
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentJDAMBombClamp
     explosion:
       total: 110
@@ -174,6 +183,8 @@
     maxRounds: 1
     roundsPerShot: 1
     travelTime: 11
+    zLevelPenetration: 2
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentJDAMBombClamp
     explosion:
       total: 4000
