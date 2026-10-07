@@ -86,7 +86,7 @@
       - cost: 10000
         crate: AU14Crate20MMGrenadesFragDoubleRMC
       - cost: 10000
-        crate: RMCCrateBoxAGMI
+        crate: CMUCrateGrenadeBoxAGMI
       - cost: 4000
         crate: AU14Crate20MMGrenadesFragRMC
       - cost: 4000
