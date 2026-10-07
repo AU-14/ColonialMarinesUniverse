@@ -79471,19 +79471,19 @@ entities:
           cost: 4000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesHighExplosiveBox
+          crate: CMUCrateGrenadeBoxHEDP
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesBoxHEFA
+          crate: CMUCrateGrenadeBoxHEFA
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 10000
           name: null
         - entities: []
@@ -79936,19 +79936,19 @@ entities:
           cost: 4000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesHighExplosiveBox
+          crate: CMUCrateGrenadeBoxHEDP
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesBoxHEFA
+          crate: CMUCrateGrenadeBoxHEFA
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 10000
           name: null
         - entities: []
@@ -338193,7 +338193,7 @@ entities:
     - type: Transform
       pos: -2.5716593,0.4712336
       parent: 1
-- proto: RMCWeaponLauncherM81
+- proto: CMUWeaponLauncherM81
   entities:
   - uid: 11961
     components:

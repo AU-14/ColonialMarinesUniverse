@@ -1645,6 +1645,16 @@
         amount: 3
       - id: CMPacketGrenadeFragOldFilled
         amount: 2
+      - id: CMUPacketGrenadeBFABFilled
+        amount: 2
+      - id: CMUPacketGrenadeCanisterFilled
+        amount: 2
+      - id: CMUPacketGrenadeSmokeGreenFilled
+        amount: 2
+      - id: CMUPacketGrenadeSmokeRedFilled
+        amount: 2
+      - id: CMUPacketGrenadeElectroshockFilled
+        amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
       - id: AU14BoxClaymoreMineIncendiaryFilled
