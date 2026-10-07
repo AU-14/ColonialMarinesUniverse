@@ -7,6 +7,7 @@
   crates:
   - AU14CrateFOBTentCrate
   - RMCCrateMortarKit
+  - CMUCrateCargoCarrier
 
 - type: cmuRequisitionsRoundStartFreeCrate
   id: CMURequisitionsRoundStartFreeCrateOpfor
@@ -16,3 +17,4 @@
   crates:
   - AU14CrateFOBTentCrate
   - AU14CrateMortarKitRMC
+  - CMUCrateCargoCarrier
