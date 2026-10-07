@@ -4,8 +4,8 @@ meta:
   engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/07/2026 16:57:43
-  entityCount: 11148
+  time: 10/07/2026 18:53:23
+  entityCount: 11145
 maps:
 - 1
 grids:
@@ -25413,16 +25413,6 @@ entities:
       pos: 67.50719,59.469917
 - proto: CMApcConstructed
   entities:
-  - uid: 7778
-    components:
-    - type: Transform
-      parent: 1
-      pos: 87.5,26.5
-  - uid: 7779
-    components:
-    - type: Transform
-      parent: 1
-      pos: 73.5,36.5
   - uid: 7869
     components:
     - type: Transform
@@ -25471,57 +25461,6 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: 44.5,75.5
-  - uid: 8830
-    components:
-    - type: MetaData
-      name: Landing Zone APC
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 146.5,41.5
-  - uid: 8831
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 151.5,41.5
-  - uid: 10144
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 46.5,61.5
-  - uid: 10146
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 61.5,78.5
-  - uid: 10147
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 73.5,27.5
-  - uid: 10149
-    components:
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 88.5,40.5
-  - uid: 10441
-    components:
-    - type: MetaData
-      name: R&R APC
-    - type: Transform
-      parent: 1
-      rot: 3.141592653589793 rad
-      pos: 72.5,49.5
-  - uid: 10525
-    components:
-    - type: Transform
-      parent: 1
-      pos: 100.5,52.5
 - proto: CMAPCElectronics
   entities:
   - uid: 7961
@@ -25566,6 +25505,17 @@ entities:
       parent: 1
       rot: 3.141592653589793 rad
       pos: 135.5,35.5
+  - uid: 7778
+    components:
+    - type: Transform
+      parent: 1
+      pos: 87.5,26.5
+  - uid: 7779
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 88.5,40.5
   - uid: 7780
     components:
     - type: Transform
@@ -25634,6 +25584,52 @@ entities:
     - type: Transform
       parent: 1
       pos: 91.5,63.5
+  - uid: 8050
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 146.5,41.5
+  - uid: 8051
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 151.5,41.5
+  - uid: 8052
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 46.5,61.5
+  - uid: 8053
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 61.5,78.5
+  - uid: 8054
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 73.5,27.5
+  - uid: 8055
+    components:
+    - type: Transform
+      parent: 1
+      pos: 73.5,36.5
+  - uid: 8056
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 72.5,49.5
+  - uid: 8057
+    components:
+    - type: Transform
+      parent: 1
+      pos: 100.5,52.5
 - proto: CMAutolathe
   entities:
   - uid: 7214
@@ -27316,6 +27312,18 @@ entities:
       pos: 129.0409,54.759098
 - proto: CMCrowbarRed
   entities:
+  - uid: 8058
+    components:
+    - type: Transform
+      parent: 1
+      rot: 3.141592653589793 rad
+      pos: 77.549545,65.23938
+  - uid: 8059
+    components:
+    - type: Transform
+      parent: 1
+      rot: 1.5707963267948966 rad
+      pos: 60.265713,69.57146
   - uid: 10588
     components:
     - type: Transform
@@ -28837,11 +28845,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 77.3674,55.64709
-  - uid: 9880
-    components:
-    - type: Transform
-      parent: 1
-      pos: 86.5,39.5
   - uid: 9881
     components:
     - type: Transform
@@ -28951,26 +28954,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 69.23252,46.674534
-  - uid: 10974
-    components:
-    - type: Transform
-      parent: 1
-      pos: 86.5,52.5
-  - uid: 10975
-    components:
-    - type: Transform
-      parent: 1
-      pos: 86.5,52.5
-  - uid: 10976
-    components:
-    - type: Transform
-      parent: 1
-      pos: 87.5,53.5
-  - uid: 10977
-    components:
-    - type: Transform
-      parent: 1
-      pos: 87.5,53.5
 - proto: CMSheetGlassReinforced1
   entities:
   - uid: 11469
@@ -29993,128 +29976,128 @@ entities:
       pos: 50.5,27.5
 - proto: CMUAirtightSeal
   entities:
-  - uid: 8050
+  - uid: 8060
     components:
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 62.5,32.5
       anchored: True
-  - uid: 8051
+  - uid: 8061
     components:
     - type: Transform
       parent: 1
       pos: 57.5,37.5
       anchored: True
-  - uid: 8052
+  - uid: 8062
     components:
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 86.5,42.5
       anchored: True
-  - uid: 8053
+  - uid: 8063
     components:
     - type: Transform
       parent: 1
       rot: 3.141592653589793 rad
       pos: 90.5,36.5
       anchored: True
-  - uid: 8054
+  - uid: 8064
     components:
     - type: Transform
       parent: 1
       rot: 3.141592653589793 rad
       pos: 79.5,46.5
       anchored: True
-  - uid: 8055
+  - uid: 8065
     components:
     - type: Transform
       parent: 1
       pos: 87.5,64.5
       anchored: True
-  - uid: 8056
+  - uid: 8066
     components:
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 86.5,19.5
       anchored: True
-  - uid: 8057
+  - uid: 8067
     components:
     - type: Transform
       parent: 1
       rot: 3.141592653589793 rad
       pos: 65.5,67.5
       anchored: True
-  - uid: 8058
+  - uid: 8068
     components:
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 74.5,58.5
       anchored: True
-  - uid: 8059
+  - uid: 8079
     components:
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 49.5,56.5
       anchored: True
-  - uid: 8060
+  - uid: 8080
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 61.5,50.5
       anchored: True
-  - uid: 8061
+  - uid: 8081
     components:
     - type: Transform
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 61.5,42.5
       anchored: True
-  - uid: 8062
+  - uid: 8082
     components:
     - type: Transform
       parent: 1
       rot: 3.141592653589793 rad
       pos: 67.5,36.5
       anchored: True
-  - uid: 8063
+  - uid: 8083
     components:
     - type: Transform
       parent: 1
       pos: 71.5,68.5
       anchored: True
-  - uid: 8064
+  - uid: 8084
     components:
     - type: Transform
       parent: 1
       rot: 3.141592653589793 rad
       pos: 80.5,36.5
       anchored: True
-  - uid: 8065
+  - uid: 8085
     components:
     - type: Transform
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 86.5,31.5
       anchored: True
-  - uid: 8066
+  - uid: 8086
     components:
     - type: Transform
       parent: 1
       pos: 133.5,33.5
       anchored: True
-  - uid: 8067
+  - uid: 8087
     components:
     - type: Transform
       parent: 1
       pos: 139.5,33.5
       anchored: True
-  - uid: 8068
+  - uid: 8088
     components:
     - type: Transform
       parent: 1
@@ -38273,7 +38256,7 @@ entities:
         DoorStatus: True
     - type: Door
       state: Opening
-      secondsUntilStateChange: -1488.2844
+      secondsUntilStateChange: -2100.4204
   - uid: 9097
     components:
     - type: Transform
@@ -41009,6 +40992,12 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 61.5,32.5
+    - type: DeviceLinkSource
+      lastSignals:
+        DoorStatus: True
+    - type: Door
+      state: Opening
+      secondsUntilStateChange: -408.2833
   - uid: 10153
     components:
     - type: MetaData
@@ -42831,10 +42820,6 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 64.33774,24.416277
-    - type: PointLight
-      enabled: True
-    - type: HandheldLight
-      activated: True
   - uid: 7715
     components:
     - type: Transform
@@ -43007,24 +42992,20 @@ entities:
     - type: Transform
       parent: 1
       pos: 63.283752,55.19668
+    - type: PointLight
+      enabled: True
+    - type: HandheldLight
+      activated: True
   - uid: 8044
     components:
     - type: Transform
       parent: 1
       pos: 75.40687,66.61119
-    - type: PointLight
-      enabled: True
-    - type: HandheldLight
-      activated: True
   - uid: 8046
     components:
     - type: Transform
       parent: 1
       pos: 72.50578,59.724373
-    - type: PointLight
-      enabled: True
-    - type: HandheldLight
-      activated: True
   - uid: 9734
     components:
     - type: Transform
@@ -43062,6 +43043,10 @@ entities:
     - type: Transform
       parent: 1
       pos: 83.5,78.5
+    - type: PointLight
+      enabled: True
+    - type: HandheldLight
+      activated: True
   - uid: 9739
     components:
     - type: Transform
