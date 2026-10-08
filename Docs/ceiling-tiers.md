@@ -15,7 +15,7 @@ For new areas, inherit the appropriate protection preset and configure unrelated
 properties such as weather, power, and hive construction separately. Use
 `mortarPlacement` and `mortarFire`; `mortar` is not a valid Area field.
 
-Legacy areas still specify individual permission flags. When an area initializes,
+Legacy areas still specify individual permission flags. When an area map-initializes,
 the strongest disabled permission determines its ceiling tier. For example,
 `OB: false` makes the area tier 4 even if it also declares `CAS: true`; CAS and all
 lower-tier actions are blocked. To lower a tier, enable every permission in the

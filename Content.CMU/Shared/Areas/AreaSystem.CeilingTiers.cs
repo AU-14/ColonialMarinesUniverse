@@ -2,8 +2,10 @@ namespace Content.Shared._RMC14.Areas;
 
 public sealed partial class AreaSystem
 {
-    private void OnAreaInit(Entity<AreaComponent> ent, ref ComponentInit args)
+    private void OnAreaMapInit(Entity<AreaComponent> ent, ref MapInitEvent args)
     {
+        // Keep authored flags intact on uninitialized mapping grids. Runtime area entities
+        // spawn in nullspace, which is already map-initialized, so their restrictions still apply.
         ApplyCeilingTier(ent.Comp);
         Dirty(ent);
     }
