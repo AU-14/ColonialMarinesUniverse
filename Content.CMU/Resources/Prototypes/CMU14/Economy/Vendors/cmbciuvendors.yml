@@ -1301,7 +1301,8 @@
         amount: 2
     - name: RTO Packs
       entries:
-      - id: ANPRC117GRadioFilled
+      # CIU flies opfor too, a govfor-filled set here handed opfor the wrong key
+      - id: ANPRC117GRadioIssued
         amount: 3
     - name: Materials
       entries:

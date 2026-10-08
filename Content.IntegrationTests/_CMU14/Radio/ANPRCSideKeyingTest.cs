@@ -156,4 +156,36 @@ public sealed class ANPRCSideKeyingTest
 
         await pair.CleanReturnAsync();
     }
+
+    // the command vendors weren't the only leak, CIU's req rack still sold govfor-filled sets
+    [Test]
+    public async Task NoVendorSellsSideBakedComsec()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var protoMan = server.ProtoMan;
+        var baked = new[]
+        {
+            "ANPRC117GRadioFilled", "ANPRC117GRadioOPFORFilled", "ANPRCFillCardGOVFOR", "ANPRCFillCardOPFOR",
+        };
+
+        await server.WaitAssertion(() =>
+        {
+            var factory = server.ResolveDependency<IComponentFactory>();
+
+            Assert.Multiple(() =>
+            {
+                foreach (var proto in protoMan.EnumeratePrototypes<EntityPrototype>())
+                {
+                    if (proto.Abstract || !proto.TryGetComponent(out CMAutomatedVendorComponent? vendor, factory))
+                        continue;
+
+                    var stock = vendor!.Sections.SelectMany(s => s.Entries).Select(e => e.Id.Id).ToList();
+                    Assert.That(stock.Intersect(baked), Is.Empty, proto.ID);
+                }
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 }
