@@ -1,0 +1,53 @@
+- type: entity
+  parent: WeatherRain
+  id: CMUWeatherAcidRain
+  components:
+  - type: WeatherHazard
+    damage:
+      types:
+        Caustic: 0.75
+
+- type: entity
+  parent: WeatherAshfallHeavy
+  id: CMUWeatherMoltenAshfall
+  components:
+  - type: WeatherHazard
+    damage:
+      types:
+        Heat: 1
+    igniteChance: 0.01
+    fireStacks: 0.5
+
+- type: entity
+  parent: WeatherFallout
+  id: CMUWeatherSporeCloud
+  components:
+  - type: WeatherHazard
+    damage:
+      types:
+        Poison: 0.5
+
+- type: entity
+  parent: WeatherAshfall
+  id: CMUWeatherRadDust
+  components:
+  - type: WeatherHazard
+    radsPerSecond: 0.35
+
+- type: entity
+  parent: WeatherSnowfallHeavy
+  id: CMUWeatherNitrogenCold
+  components:
+  - type: WeatherHazard
+    damage:
+      types:
+        Cold: 1.2
+
+- type: entity
+  parent: WeatherSandstormHeavy
+  id: CMUWeatherMetalDust
+  components:
+  - type: WeatherHazard
+    damage:
+      types:
+        Slash: 0.35
