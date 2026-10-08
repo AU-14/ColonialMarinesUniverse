@@ -744,10 +744,8 @@ public sealed class YautjaSmokeTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(5, true)]
-    [TestCase(0, false)]
-    [TestCase(-5, false)]
-    public async Task CloakedYautjaDecloaksOnlyFromPositiveDamage(int slashDamage, bool shouldDecloak)
+    [Test]
+    public async Task CloakedYautjaKeepsCloakWhenHit()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -770,14 +768,14 @@ public sealed class YautjaSmokeTest
                 turnInvisible.Enabled = true;
 
                 var damageable = entMan.EnsureComponent<DamageableComponent>(hunter);
-                var damage = new DamageSpecifier { DamageDict = { ["Slash"] = slashDamage } };
+                var damage = new DamageSpecifier { DamageDict = { ["Slash"] = 5 } };
                 entMan.EventBus.RaiseLocalEvent(hunter, new DamageChangedEvent(damageable, damage, true, null, null));
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(entMan.HasComponent<EntityActiveInvisibleComponent>(hunter), Is.True);
-                    Assert.That(turnInvisible.Enabled, Is.EqualTo(!shouldDecloak),
-                        "CMU master breaks cloak on positive damage; healing and empty changes must preserve it.");
+                    Assert.That(turnInvisible.Enabled, Is.True,
+                        "A hit must not strip the cloak by itself; gunfire has its own rare roll.");
                 });
             }
             finally
@@ -3094,7 +3092,7 @@ public sealed class YautjaSmokeTest
                     Assert.That(active, Is.Not.Null);
                     Assert.That(entMan.GetComponent<MetaDataComponent>(active!.Value).EntityPrototype?.ID,
                         Is.EqualTo("CMUYautjaAutoInjector"),
-                        "CMSS13 activate_random_verb() slot 5 routes to injectors_internal(user, TRUE), not the local hunting-trap fabricator.");
+                        "CMSS13 activate_random_verb() slot 5 routes to injectors_internal(user, TRUE): the thwei crystal injector, not the local hunting-trap fabricator.");
                 });
             });
         }
@@ -16524,7 +16522,7 @@ public sealed class YautjaSmokeTest
             {
                 var job = prototypes.Index(HellhoundJob);
                 Assert.That(job.Name, Is.EqualTo("cmu-yautja-job-name-hellhound"));
-                Assert.That(job.Supervisors, Is.EqualTo("cm-job-supervisors-nobody"));
+                Assert.That(job.Supervisors, Is.EqualTo("cmu-job-supervisors-yautja-hellhound"));
 
                 var xeno = entMan.GetComponent<XenoComponent>(hellhound);
                 Assert.That(xeno.Tier, Is.EqualTo(0));

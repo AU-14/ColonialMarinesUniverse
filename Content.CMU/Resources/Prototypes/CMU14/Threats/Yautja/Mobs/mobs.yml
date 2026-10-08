@@ -114,8 +114,6 @@
     emoteCooldown: 8
     hiddenFromChatWindow: true
   - type: MotionDetectorTracked
-  - type: DropshipHijacker
-    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja
@@ -155,6 +153,8 @@
     - CMUYautjaBadBloodGruntGear19
     - CMUYautjaBadBloodGruntGear20
     - CMUYautjaBadBloodGruntGear21
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja
@@ -189,6 +189,8 @@
     - CMUYautjaBadBloodLeaderGear14
     - CMUYautjaBadBloodLeaderGear15
     - CMUYautjaBadBloodLeaderGear16
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: AppearanceYautja
@@ -226,6 +228,8 @@
   suffix: Yautja, Bad Blood, Event
   components:
   - type: YautjaBadBlood
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
   - type: Yautja
     npcFaction: CMUYautjaBadBlood
   - type: NpcFactionMember
@@ -244,6 +248,15 @@
   name: Yautja Youngblood
   suffix: Yautja, Youngblood, Event
   components:
+  - type: Language
+    spokenLanguages:
+    - Yautja
+    - Xeno
+    understoodLanguages:
+    - Yautja
+    - Xeno
+    currentLanguage: Yautja
+    defaultLanguage: Yautja
   - type: Yautja
   - type: YautjaYoungblood
   - type: IgnoreXenoWeedsSlowdown

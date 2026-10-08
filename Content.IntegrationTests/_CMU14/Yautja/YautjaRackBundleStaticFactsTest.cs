@@ -250,6 +250,7 @@ public sealed class YautjaRackBundleStaticFactsTest
                 "CMUYautjaBodyMesh",
                 "CMUYautjaHuntingPouch",
                 "CMUYautjaMedicompFull",
+                "CMUYautjaYoungbloodRelayBeacon",
                 "CMUYautjaLantern",
             ]);
 

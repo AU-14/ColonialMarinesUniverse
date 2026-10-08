@@ -341,7 +341,6 @@ cmu-yautja-disc-owner-denied = Умный диск настроен на дру�
 cmu-yautja-disc-stolen-activated = Украденный умный диск отвергает ваше касание и нападает на вас!
 cmu-yautja-disc-stolen-active = Активный умный диск вырывается из вашей руки.
 cmu-yautja-caster-mode-set = Режим плазменного кастера установлен: {$mode}.
-cmu-yautja-caster-mode-next = Плазменный кастер переключается в режим: {$mode}.
 cmu-yautja-caster-examine-mode = Текущий режим плазменного кастера: {$mode}. Цена энергии: {$power}.
 cmu-yautja-caster-mode-stun = оглушающие заряды
 cmu-yautja-caster-mode-immobilizer = плазменные иммобилизаторы

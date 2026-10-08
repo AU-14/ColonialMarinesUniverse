@@ -66,8 +66,11 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
         if (!HasComp<YautjaBadBloodComponent>(ent))
             return;
 
-        _actions.AddAction(ent.Owner, ref ent.Comp.HonorRoarAction, ent.Comp.HonorRoarActionId);
-        _actions.AddAction(ent.Owner, ref ent.Comp.HuntingLeapAction, ent.Comp.HuntingLeapActionId);
+        // MapInit and random-humanoid spawn both land here; grant each action once
+        if (ent.Comp.HonorRoarAction == null)
+            _actions.AddAction(ent.Owner, ref ent.Comp.HonorRoarAction, ent.Comp.HonorRoarActionId);
+        if (ent.Comp.HuntingLeapAction == null)
+            _actions.AddAction(ent.Owner, ref ent.Comp.HuntingLeapAction, ent.Comp.HuntingLeapActionId);
     }
 
     private void OnHonorRoar(Entity<YautjaComponent> hunter, ref YautjaHonorRoarActionEvent args)

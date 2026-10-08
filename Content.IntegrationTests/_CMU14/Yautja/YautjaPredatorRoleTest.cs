@@ -1419,6 +1419,7 @@ public sealed class YautjaPredatorRoleTest
                 bloodedThrall = entMan.SpawnEntity("CMMobHuman", gridCoords);
                 entMan.EnsureComponent<YautjaTechAuthorizedComponent>(bloodedThrall);
                 passenger = entMan.SpawnEntity("CMMobHuman", gridCoords.Offset(new Vector2(1, 0)));
+                entMan.EnsureComponent<YautjaTechAuthorizedComponent>(passenger);
                 simpleBeacon = entMan.SpawnEntity("CMUYautjaSimpleRelayBeacon", gridCoords);
                 passengerBracer = entMan.SpawnEntity("CMUYautjaBracer", gridCoords);
                 yautjaShipDestination = entMan.SpawnEntity("CMUHunterShipMarkerPredatorSpawn", gridCoords.Offset(new Vector2(14, 0)));

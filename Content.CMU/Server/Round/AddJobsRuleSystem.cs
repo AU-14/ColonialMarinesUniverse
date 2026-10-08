@@ -9,6 +9,7 @@ using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Roles;
+using Content.Server.CMU14.Ops.ForceOnForce;
 using Robust.Server.Player;
 using Robust.Shared.Prototypes;
 using JetBrains.Annotations;
@@ -119,11 +120,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                 {
                     scaledJobs[jobId] = entry;
 
-                    var mirror = jobId.Contains("GOVFOR")
-                        ? jobId.Replace("GOVFOR", "OPFOR")
-                        : jobId.Contains("OPFOR")
-                            ? jobId.Replace("OPFOR", "GOVFOR")
-                            : null;
+                    var mirror = FofJobs.Mirror(jobId);
                     if (mirror != null && !scaleDef.Jobs.ContainsKey(mirror) && !scaledJobs.ContainsKey(mirror))
                         scaledJobs[mirror] = entry;
                 }
