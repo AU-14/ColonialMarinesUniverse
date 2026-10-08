@@ -1,0 +1,17 @@
+# Original directional reflector strips. See SOURCES_SMALL_TRUCKS.md.
+- type: cmu3DSurface
+  id: CMU3DRoadBarrierRedSouth
+  atlasIndex: 423
+  texture: /Textures/CMU14/ThreeD/RoadBarriers/CMU3DRoadBarrierRedSouth.png
+- type: cmu3DSurface
+  id: CMU3DRoadBarrierRedNorth
+  atlasIndex: 424
+  texture: /Textures/CMU14/ThreeD/RoadBarriers/CMU3DRoadBarrierRedNorth.png
+- type: cmu3DSurface
+  id: CMU3DRoadBarrierBlueSouth
+  atlasIndex: 425
+  texture: /Textures/CMU14/ThreeD/RoadBarriers/CMU3DRoadBarrierBlueSouth.png
+- type: cmu3DSurface
+  id: CMU3DRoadBarrierBlueNorth
+  atlasIndex: 426
+  texture: /Textures/CMU14/ThreeD/RoadBarriers/CMU3DRoadBarrierBlueNorth.png

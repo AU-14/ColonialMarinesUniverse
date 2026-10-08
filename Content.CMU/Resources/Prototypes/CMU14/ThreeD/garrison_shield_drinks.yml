@@ -1,0 +1,393 @@
+# Static world appearances; all models remain source-guided drafts.
+- type: cmu3DModel
+  id: CMU3DRiotShield
+  label: Riot shield
+  status: draft
+  sourcePrototypes:
+  - RiotShield
+  referencePrototype: RiotShield
+  referenceRsi: Objects/Weapons/Melee/shields.rsi
+  referenceState: riot-icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: top frame
+    min: -0.156250000, -0.025000000, 0.468750000
+    max: 0.156250000, 0.025000000, 0.500000000
+    color: '#FFFFFF'
+    surface: CMU3DShieldDrinksSurface3200
+    surfaceAxis: XZ
+  - label: bottom frame
+    min: -0.156250000, -0.025000000, 0.000000000
+    max: 0.156250000, 0.025000000, 0.031250000
+    color: '#FFFFFF'
+    surface: CMU3DShieldDrinksSurface3201
+    surfaceAxis: XZ
+  - label: left frame
+    min: -0.156250000, -0.025000000, 0.031250000
+    max: -0.125000000, 0.025000000, 0.468750000
+    color: '#FFFFFF'
+    surface: CMU3DShieldDrinksSurface3202
+    surfaceAxis: XZ
+  - label: right frame
+    min: 0.125000000, -0.025000000, 0.031250000
+    max: 0.156250000, 0.025000000, 0.468750000
+    color: '#FFFFFF'
+    surface: CMU3DShieldDrinksSurface3203
+    surfaceAxis: XZ
+  - label: upper glazing
+    min: -0.125000000, -0.006000000, 0.343750000
+    max: 0.125000000, 0.006000000, 0.468750000
+    color: '#FFFFFF'
+    surface: CMU3DShieldDrinksSurface3204
+    surfaceAxis: XZ
+  - label: central reinforcement
+    min: -0.125000000, -0.032000000, 0.218750000
+    max: 0.125000000, 0.032000000, 0.343750000
+    color: '#FFFFFF'
+    surface: CMU3DShieldDrinksSurface3205
+    surfaceAxis: XZ
+  - label: lower glazing
+    min: -0.125000000, -0.006000000, 0.031250000
+    max: 0.125000000, 0.006000000, 0.218750000
+    color: '#FFFFFF'
+    surface: CMU3DShieldDrinksSurface3206
+    surfaceAxis: XZ
+  - label: lower rear handle stand-off
+    min: -0.022000000, 0.024000000, 0.219000000
+    max: 0.022000000, 0.080000000, 0.243000000
+    color: '#363636'
+  - label: upper rear handle stand-off
+    min: -0.022000000, 0.024000000, 0.275000000
+    max: 0.022000000, 0.080000000, 0.299000000
+    color: '#363636'
+  - label: rear cylindrical grip
+    min: -0.016000000, 0.064000000, 0.218000000
+    max: 0.016000000, 0.096000000, 0.300000000
+    color: '#1B1B1B'
+    shape: CylinderZ
+  spriteStates:
+    riot-icon:
+      frames:
+      - parts:
+        - label: top frame
+          min: -0.156250000, -0.025000000, 0.468750000
+          max: 0.156250000, 0.025000000, 0.500000000
+          color: '#FFFFFF'
+          surface: CMU3DShieldDrinksSurface3200
+          surfaceAxis: XZ
+        - label: bottom frame
+          min: -0.156250000, -0.025000000, 0.000000000
+          max: 0.156250000, 0.025000000, 0.031250000
+          color: '#FFFFFF'
+          surface: CMU3DShieldDrinksSurface3201
+          surfaceAxis: XZ
+        - label: left frame
+          min: -0.156250000, -0.025000000, 0.031250000
+          max: -0.125000000, 0.025000000, 0.468750000
+          color: '#FFFFFF'
+          surface: CMU3DShieldDrinksSurface3202
+          surfaceAxis: XZ
+        - label: right frame
+          min: 0.125000000, -0.025000000, 0.031250000
+          max: 0.156250000, 0.025000000, 0.468750000
+          color: '#FFFFFF'
+          surface: CMU3DShieldDrinksSurface3203
+          surfaceAxis: XZ
+        - label: upper glazing
+          min: -0.125000000, -0.006000000, 0.343750000
+          max: 0.125000000, 0.006000000, 0.468750000
+          color: '#FFFFFF'
+          surface: CMU3DShieldDrinksSurface3204
+          surfaceAxis: XZ
+        - label: central reinforcement
+          min: -0.125000000, -0.032000000, 0.218750000
+          max: 0.125000000, 0.032000000, 0.343750000
+          color: '#FFFFFF'
+          surface: CMU3DShieldDrinksSurface3205
+          surfaceAxis: XZ
+        - label: lower glazing
+          min: -0.125000000, -0.006000000, 0.031250000
+          max: 0.125000000, 0.006000000, 0.218750000
+          color: '#FFFFFF'
+          surface: CMU3DShieldDrinksSurface3206
+          surfaceAxis: XZ
+        - label: lower rear handle stand-off
+          min: -0.022000000, 0.024000000, 0.219000000
+          max: 0.022000000, 0.080000000, 0.243000000
+          color: '#363636'
+        - label: upper rear handle stand-off
+          min: -0.022000000, 0.024000000, 0.275000000
+          max: 0.022000000, 0.080000000, 0.299000000
+          color: '#363636'
+        - label: rear cylindrical grip
+          min: -0.016000000, 0.064000000, 0.218000000
+          max: 0.016000000, 0.096000000, 0.300000000
+          color: '#1B1B1B'
+          shape: CylinderZ
+      delays:
+      - 1
+  description: Dropped world source only. Original RGBA partitions, physical frame/handle or cylindrical can with
+    rolled rim and recessed lid. Depth, rear construction and height are inferred. Original open/closed beer visuals
+    both use icon; no extra state or gameplay is invented. Source-layer fallback and original gameplay remain active.
+    See SOURCES_SHIELD_DRINKS.md.
+- type: cmu3DModel
+  id: CMU3DBeerLiteCan
+  label: Light beer can
+  status: draft
+  sourcePrototypes:
+  - CMDrinkCanBeerLite
+  referencePrototype: CMDrinkCanBeerLite
+  referenceRsi: _RMC14/Objects/Consumable/Drinks/beer.rsi
+  referenceState: icon
+  sourceDirections: 1
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0,0
+  useEntityRotation: true
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  parts:
+  - label: round amber can body
+    min: -0.147625000, -0.132000000, 0.018000000
+    max: 0.116375000, 0.132000000, 0.426000000
+    color: '#B06C00'
+    shape: CylinderZ
+  - label: folded lower can rim
+    min: -0.152625000, -0.137000000, 0.008000000
+    max: 0.121375000, 0.137000000, 0.032000000
+    color: '#424242'
+    shape: CylinderZ
+  - label: left label
+    min: -0.145280000, -0.123870000, 0.025500000
+    max: -0.051530000, -0.099870000, 0.400500000
+    color: '#FFFFFF'
+    yaw: -40
+    surface: CMU3DShieldDrinksSurface3207
+    surfaceAxis: XZ
+  - label: central label
+    min: -0.062500000, -0.154000000, 0.025500000
+    max: 0.031250000, -0.130000000, 0.400500000
+    color: '#FFFFFF'
+    yaw: 0
+    surface: CMU3DShieldDrinksSurface3208
+    surfaceAxis: XZ
+  - label: right label
+    min: 0.020280000, -0.123870000, 0.025500000
+    max: 0.114030000, -0.099870000, 0.400500000
+    color: '#FFFFFF'
+    yaw: 40
+    surface: CMU3DShieldDrinksSurface3209
+    surfaceAxis: XZ
+  - label: rolled rim segment 1
+    min: 0.079005707, -0.008000000, 0.416000000
+    max: 0.153744293, 0.008000000, 0.454000000
+    color: '#BFBFBF'
+    yaw: 90.0
+  - label: rolled rim segment 2
+    min: 0.061321060, 0.058000000, 0.416000000
+    max: 0.136059647, 0.074000000, 0.454000000
+    color: '#BFBFBF'
+    yaw: 120.0
+  - label: rolled rim segment 3
+    min: 0.013005707, 0.106315353, 0.416000000
+    max: 0.087744293, 0.122315353, 0.454000000
+    color: '#BFBFBF'
+    yaw: 150.0
+  - label: rolled rim segment 4
+    min: -0.052994293, 0.124000000, 0.416000000
+    max: 0.021744293, 0.140000000, 0.454000000
+    color: '#BFBFBF'
+    yaw: 180.0
+  - label: rolled rim segment 5
+    min: -0.118994293, 0.106315353, 0.416000000
+    max: -0.044255707, 0.122315353, 0.454000000
+    color: '#BFBFBF'
+    yaw: 210.0
+  - label: rolled rim segment 6
+    min: -0.167309647, 0.058000000, 0.416000000
+    max: -0.092571060, 0.074000000, 0.454000000
+    color: '#BFBFBF'
+    yaw: 240.0
+  - label: rolled rim segment 7
+    min: -0.184994293, -0.008000000, 0.416000000
+    max: -0.110255707, 0.008000000, 0.454000000
+    color: '#BFBFBF'
+    yaw: 270.0
+  - label: rolled rim segment 8
+    min: -0.167309647, -0.074000000, 0.416000000
+    max: -0.092571060, -0.058000000, 0.454000000
+    color: '#BFBFBF'
+    yaw: 300.0
+  - label: rolled rim segment 9
+    min: -0.118994293, -0.122315353, 0.416000000
+    max: -0.044255707, -0.106315353, 0.454000000
+    color: '#BFBFBF'
+    yaw: 330.0
+  - label: rolled rim segment 10
+    min: -0.052994293, -0.140000000, 0.416000000
+    max: 0.021744293, -0.124000000, 0.454000000
+    color: '#BFBFBF'
+    yaw: 0.0
+  - label: rolled rim segment 11
+    min: 0.013005707, -0.122315353, 0.416000000
+    max: 0.087744293, -0.106315353, 0.454000000
+    color: '#BFBFBF'
+    yaw: 30.0
+  - label: rolled rim segment 12
+    min: 0.061321060, -0.074000000, 0.416000000
+    max: 0.136059647, -0.058000000, 0.454000000
+    color: '#BFBFBF'
+    yaw: 60.0
+  - label: recessed metal lid
+    min: -0.140625000, -0.125000000, 0.421000000
+    max: 0.109375000, 0.125000000, 0.429000000
+    color: '#999999'
+    shape: CylinderZ
+  - label: inset original lid and scored opening
+    min: -0.125625000, -0.048888889, 0.429000000
+    max: 0.094375000, 0.048888889, 0.431000000
+    color: '#FFFFFF'
+    surface: CMU3DShieldDrinksSurface3210
+    surfaceAxis: XY
+  - label: pull tab left raised edge
+    min: -0.039625000, -0.015000000, 0.430000000
+    max: -0.029625000, 0.043000000, 0.436000000
+    color: '#A6A6A6'
+  - label: pull tab right raised edge
+    min: -0.001625000, -0.015000000, 0.430000000
+    max: 0.008375000, 0.043000000, 0.436000000
+    color: '#A6A6A6'
+  - label: pull tab bridge
+    min: -0.034625000, 0.033000000, 0.430000000
+    max: 0.003375000, 0.043000000, 0.436000000
+    color: '#A6A6A6'
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: round amber can body
+          min: -0.147625000, -0.132000000, 0.018000000
+          max: 0.116375000, 0.132000000, 0.426000000
+          color: '#B06C00'
+          shape: CylinderZ
+        - label: folded lower can rim
+          min: -0.152625000, -0.137000000, 0.008000000
+          max: 0.121375000, 0.137000000, 0.032000000
+          color: '#424242'
+          shape: CylinderZ
+        - label: left label
+          min: -0.145280000, -0.123870000, 0.025500000
+          max: -0.051530000, -0.099870000, 0.400500000
+          color: '#FFFFFF'
+          yaw: -40
+          surface: CMU3DShieldDrinksSurface3207
+          surfaceAxis: XZ
+        - label: central label
+          min: -0.062500000, -0.154000000, 0.025500000
+          max: 0.031250000, -0.130000000, 0.400500000
+          color: '#FFFFFF'
+          yaw: 0
+          surface: CMU3DShieldDrinksSurface3208
+          surfaceAxis: XZ
+        - label: right label
+          min: 0.020280000, -0.123870000, 0.025500000
+          max: 0.114030000, -0.099870000, 0.400500000
+          color: '#FFFFFF'
+          yaw: 40
+          surface: CMU3DShieldDrinksSurface3209
+          surfaceAxis: XZ
+        - label: rolled rim segment 1
+          min: 0.079005707, -0.008000000, 0.416000000
+          max: 0.153744293, 0.008000000, 0.454000000
+          color: '#BFBFBF'
+          yaw: 90.0
+        - label: rolled rim segment 2
+          min: 0.061321060, 0.058000000, 0.416000000
+          max: 0.136059647, 0.074000000, 0.454000000
+          color: '#BFBFBF'
+          yaw: 120.0
+        - label: rolled rim segment 3
+          min: 0.013005707, 0.106315353, 0.416000000
+          max: 0.087744293, 0.122315353, 0.454000000
+          color: '#BFBFBF'
+          yaw: 150.0
+        - label: rolled rim segment 4
+          min: -0.052994293, 0.124000000, 0.416000000
+          max: 0.021744293, 0.140000000, 0.454000000
+          color: '#BFBFBF'
+          yaw: 180.0
+        - label: rolled rim segment 5
+          min: -0.118994293, 0.106315353, 0.416000000
+          max: -0.044255707, 0.122315353, 0.454000000
+          color: '#BFBFBF'
+          yaw: 210.0
+        - label: rolled rim segment 6
+          min: -0.167309647, 0.058000000, 0.416000000
+          max: -0.092571060, 0.074000000, 0.454000000
+          color: '#BFBFBF'
+          yaw: 240.0
+        - label: rolled rim segment 7
+          min: -0.184994293, -0.008000000, 0.416000000
+          max: -0.110255707, 0.008000000, 0.454000000
+          color: '#BFBFBF'
+          yaw: 270.0
+        - label: rolled rim segment 8
+          min: -0.167309647, -0.074000000, 0.416000000
+          max: -0.092571060, -0.058000000, 0.454000000
+          color: '#BFBFBF'
+          yaw: 300.0
+        - label: rolled rim segment 9
+          min: -0.118994293, -0.122315353, 0.416000000
+          max: -0.044255707, -0.106315353, 0.454000000
+          color: '#BFBFBF'
+          yaw: 330.0
+        - label: rolled rim segment 10
+          min: -0.052994293, -0.140000000, 0.416000000
+          max: 0.021744293, -0.124000000, 0.454000000
+          color: '#BFBFBF'
+          yaw: 0.0
+        - label: rolled rim segment 11
+          min: 0.013005707, -0.122315353, 0.416000000
+          max: 0.087744293, -0.106315353, 0.454000000
+          color: '#BFBFBF'
+          yaw: 30.0
+        - label: rolled rim segment 12
+          min: 0.061321060, -0.074000000, 0.416000000
+          max: 0.136059647, -0.058000000, 0.454000000
+          color: '#BFBFBF'
+          yaw: 60.0
+        - label: recessed metal lid
+          min: -0.140625000, -0.125000000, 0.421000000
+          max: 0.109375000, 0.125000000, 0.429000000
+          color: '#999999'
+          shape: CylinderZ
+        - label: inset original lid and scored opening
+          min: -0.125625000, -0.048888889, 0.429000000
+          max: 0.094375000, 0.048888889, 0.431000000
+          color: '#FFFFFF'
+          surface: CMU3DShieldDrinksSurface3210
+          surfaceAxis: XY
+        - label: pull tab left raised edge
+          min: -0.039625000, -0.015000000, 0.430000000
+          max: -0.029625000, 0.043000000, 0.436000000
+          color: '#A6A6A6'
+        - label: pull tab right raised edge
+          min: -0.001625000, -0.015000000, 0.430000000
+          max: 0.008375000, 0.043000000, 0.436000000
+          color: '#A6A6A6'
+        - label: pull tab bridge
+          min: -0.034625000, 0.033000000, 0.430000000
+          max: 0.003375000, 0.043000000, 0.436000000
+          color: '#A6A6A6'
+      delays:
+      - 1
+  description: Dropped world source only. Original RGBA partitions, physical frame/handle or cylindrical can with
+    rolled rim and recessed lid. Depth, rear construction and height are inferred. Original open/closed beer visuals
+    both use icon; no extra state or gameplay is invented. Source-layer fallback and original gameplay remain active.
+    See SOURCES_SHIELD_DRINKS.md.

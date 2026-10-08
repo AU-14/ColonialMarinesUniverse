@@ -62,6 +62,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _mobThresholds = default!; // CMU14: caste-relative evolution health.
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -317,7 +318,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             args.Handled ||
             args.Cancelled ||
             !_mind.TryGetMind(xeno, out _, out _) ||
-            !CanEvolvePopup(xeno, args.Choice))
+            // CMU14: !CanEvolvePopup(xeno, args.Choice))
+            !CanEvolvePopup(xeno, args.Choice) ||
+            !DamagedCheckPopup(xeno, false))
         {
             return;
         }
@@ -495,9 +498,18 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
     private bool DamagedCheckPopup(EntityUid xeno, bool predicted = true, bool doPopup = true)
     {
-        if (!TryComp(xeno, out DamageableComponent? damageable) ||
-            _damageable.GetTotalDamage((xeno, damageable)) <= 1)
+        // CMU14: use the same health maximum as the xeno HUD (critical threshold, then death).
+        // if (!TryComp(xeno, out DamageableComponent? damageable) ||
+        //     _damageable.GetTotalDamage((xeno, damageable)) <= 1)
+        if (!TryComp(xeno, out DamageableComponent? damageable))
             return true;
+
+        var maxDamage = _mobThresholds.TryGetIncapThreshold(xeno, out var maxHealth)
+            ? maxHealth.Value / 2
+            : (FixedPoint2) 1;
+        if (_damageable.GetTotalDamage((xeno, damageable)) <= maxDamage)
+            return true;
+        // CMU14 End
 
         if (predicted)
             _popup.PopupClient(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);

@@ -506,6 +506,10 @@ public abstract partial class SharedBuckleSystem
 
         if (buckleXform.ParentUid == strap.Owner && !Terminating(oldBuckledXform.ParentUid))
         {
+            // CMU14: remove motion relative to the seat before reparenting adds the seat's own velocity.
+            if (TryComp(buckle, out PhysicsComponent? physics))
+                _physics.ResetDynamics(buckle, physics);
+
             _transform.PlaceNextTo((buckle, buckleXform), (strap.Owner, oldBuckledXform));
             buckleXform.ActivelyLerping = false;
 
