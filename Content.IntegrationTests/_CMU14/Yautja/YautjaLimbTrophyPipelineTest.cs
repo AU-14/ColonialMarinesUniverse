@@ -10,6 +10,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
+using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.GameObjects;
@@ -225,6 +226,99 @@ public sealed class YautjaLimbTrophyPipelineTest
         }
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ButcheredXenoLeavesWearableScoredSkullAndPeltTrophies()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hunter = default;
+        EntityUid xeno = default;
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+                xeno = entMan.SpawnEntity("CMXenoRunner", map.GridCoords.Offset(new Vector2(1, 0)));
+                entMan.System<MobStateSystem>().ChangeMobState(xeno, MobState.Dead);
+            });
+
+            // 4 skin stages, 7 / 6.5 / 7 / 9s
+            foreach (var seconds in new[] { 7f, 6.5f, 7f, 9f })
+            {
+                await server.WaitAssertion(() =>
+                {
+                    Assert.That(server.EntMan.System<YautjaTrophySystem>()
+                        .TryStartButcher(hunter, xeno, YautjaButcherProcedure.Skin), Is.True);
+                });
+                await pair.RunTicksSync(pair.SecondsToTicks(seconds + 0.5f));
+            }
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var skulls = TrophiesOf(entMan, YautjaTrophyKind.XenoSkull);
+                var pelts = TrophiesOf(entMan, YautjaTrophyKind.XenoPelt);
+
+                Assert.That(entMan.Deleted(xeno) || entMan.IsQueuedForDeletion(xeno), Is.True,
+                    "The last skin stage consumes the xeno.");
+                Assert.That(skulls, Has.Count.EqualTo(1), "Butchering a xeno leaves its skull as a trophy.");
+                Assert.That(pelts, Has.Count.EqualTo(1), "Butchering a xeno leaves its pelt as a trophy.");
+
+                var record = entMan.GetComponent<YautjaTrophyRecordComponent>(hunter);
+                Assert.Multiple(() =>
+                {
+                    foreach (var (uid, trophy, proto) in skulls.Concat(pelts))
+                    {
+                        Assert.That(trophy.Hunter, Is.EqualTo(hunter));
+                        Assert.That(trophy.SourceName, Is.EqualTo("Runner"));
+                        Assert.That(entMan.HasComponent<UniformAccessoryComponent>(uid), Is.True,
+                            $"{proto} must stay wearable like any other trophy.");
+                    }
+
+                    Assert.That(skulls.Single().Proto, Is.EqualTo("CMUYautjaRunnerSkullTrophy"));
+                    Assert.That(pelts.Single().Proto, Is.EqualTo("CMUYautjaRunnerPeltTrophy"));
+                    Assert.That(record.XenoSkulls, Is.EqualTo(1));
+                    Assert.That(record.XenoPelts, Is.EqualTo(1));
+                });
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                foreach (var uid in new[] { hunter, xeno })
+                {
+                    if (uid != default && entMan.EntityExists(uid))
+                        entMan.DeleteEntity(uid);
+                }
+
+                var query = entMan.EntityQueryEnumerator<YautjaTrophyComponent>();
+                while (query.MoveNext(out var uid, out _))
+                    entMan.DeleteEntity(uid);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static List<(EntityUid Uid, YautjaTrophyComponent Trophy, string? Proto)> TrophiesOf(IEntityManager entMan, YautjaTrophyKind kind)
+    {
+        var result = new List<(EntityUid, YautjaTrophyComponent, string?)>();
+        var query = entMan.EntityQueryEnumerator<YautjaTrophyComponent, MetaDataComponent>();
+        while (query.MoveNext(out var uid, out var trophy, out var meta))
+        {
+            if (trophy.Kind == kind && !entMan.IsQueuedForDeletion(uid))
+                result.Add((uid, trophy, meta.EntityPrototype?.ID));
+        }
+
+        return result;
     }
 
     private static IEnumerable<int> LimbCases() => Enumerable.Range(0, Limbs.Length);

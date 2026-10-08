@@ -741,16 +741,11 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         {
             Spawn(XenoRemainsPrototype, coords);
 
-            var skull = Spawn(GetTrophyPrototype(target, YautjaTrophyKind.XenoSkull, XenoSkullPrototype), coords);
-            var pelt = Spawn(GetTrophyPrototype(target, YautjaTrophyKind.XenoPelt, XenoPeltPrototype), coords);
-            RemComp<YautjaTrophyComponent>(skull);
-            RemComp<YautjaTrophyComponent>(pelt);
-            RemComp<UniformAccessoryComponent>(skull);
-            RemComp<UniformAccessoryComponent>(pelt);
-
+            // these used to get their trophy/accessory comps stripped, so a butchered xeno
+            // never showed up on the record or the display and couldn't be worn
             var realName = MetaData(target).EntityName;
-            _meta.SetEntityName(skull, $"{realName} skull");
-            _meta.SetEntityName(pelt, $"{realName} pelt");
+            SpawnXenoButcherTrophy(hunter, target, YautjaTrophyKind.XenoSkull, XenoSkullPrototype, coords, $"{realName} skull");
+            SpawnXenoButcherTrophy(hunter, target, YautjaTrophyKind.XenoPelt, XenoPeltPrototype, coords, $"{realName} pelt");
             return;
         }
 
@@ -769,6 +764,26 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         var hide = Spawn(HumanHidePrototype, coords);
         _meta.SetEntityName(hide, $"{Name(target)}-hide");
         Spawn(HumanRemainsPrototype, coords);
+    }
+
+    private void SpawnXenoButcherTrophy(
+        EntityUid hunter,
+        EntityUid xeno,
+        YautjaTrophyKind kind,
+        EntProtoId fallback,
+        EntityCoordinates coords,
+        string name)
+    {
+        var uid = Spawn(GetTrophyPrototype(xeno, kind, fallback), coords);
+        var trophy = EnsureComp<YautjaTrophyComponent>(uid);
+        trophy.Kind = kind;
+        trophy.Hunter = hunter;
+        trophy.SourceName = GetSourceName(xeno, kind);
+        Dirty(uid, trophy);
+        _meta.SetEntityName(uid, name);
+
+        if (HasComp<YautjaComponent>(hunter))
+            RecordTrophy(hunter, kind);
     }
 
     private bool TryCompleteButcherLimb(EntityUid hunter, EntityUid target, YautjaButcherProcedure procedure)
