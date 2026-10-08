@@ -436,7 +436,7 @@
   id: CMUBosenmoriColonists
   displayName: Stranded Colonists (Bosenmori)
   partyspawn: CMUBosenmoriColonistsSpawn
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -444,5 +444,5 @@
   weight: 25
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true

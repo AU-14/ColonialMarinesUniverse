@@ -129,7 +129,7 @@
   id: IASFSurvBosenmori
   displayName: IASF Survivors (Bosenmori)
   partyspawn: IASFSurvSpawnBosenmori
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -137,7 +137,7 @@
   weight: 25
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 # Pilot-only variant
@@ -180,7 +180,7 @@
   id: IASFSurvBosenmoriPilot
   displayName: IASF Survivor Pilot (Bosenmori)
   partyspawn: IASFSurvSpawnBosenmoriPilot
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -188,5 +188,5 @@
   weight: 25
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
