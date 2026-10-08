@@ -12045,5 +12045,193 @@
   id: 741
   time: '2026-10-08T06:30:13.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2101
+- author: TheHellFireo
+  changes:
+  - message: Fixed delayed facehugger larva claims, K9 acid-trap effects, repeat drop-and-roll
+      timing, and charging while asleep.
+    type: Fix
+  - message: Corrected stale movement after carrying, unbuckling, and pouncing, and
+      prevented shooter rotation from changing queued aim on dropships.
+    type: Fix
+  - message: Restored the tactical map location pulse, separated pilot roll preferences,
+      corrected IO vendor radio factions, and preserved hair under pilot oxygen masks.
+    type: Fix
+  - message: Prevented human character traits from applying to Yautja roles and corrected
+      Midway cockpit ladder directions.
+    type: Fix
+  - message: Made catastrophic vehicle damage irreparable and enabled vehicle TOW
+      ammunition cook-offs.
+    type: Fix
+  - message: Made ceiling protection tiers cumulative, including CAS and paradrop
+      restrictions under tier 4 roofs.
+    type: Fix
+  - message: Improved Heatshield bile targeting and tripled its range.
+    type: Tweak
+  - message: Reduced the health requirement for xeno evolution, strains, and devolution
+      to 50%.
+    type: Tweak
+  id: 742
+  time: '2026-10-08T19:19:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2105
+- author: TheHellFireo
+  changes:
+  - message: Added optional first-person 3D on Stable Garrison Redux. Use cmu3d to
+      toggle it, with a controls popup and a customizable mouse-capture shortcut.
+    type: Add
+  id: 743
+  time: '2026-10-08T19:24:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2107
+- author: TheHellFireo
+  changes:
+  - message: Scavengers retain weapon readiness and finish volleys more consistently
+      around foliage and groups.
+    type: Fix
+  - message: Spawn scavenger squads at your position on ordinary maps and expeditions,
+      with movement, guarding and patrol orders.
+    type: Admin
+  - message: Added poor scrappers, rich salvage barons and trail scout scavenger variants.
+    type: Add
+  id: 744
+  time: '2026-10-08T21:05:02.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2108
+- author: HotdogMan52
+  changes:
+  - message: Added a deputy administrator stamp for deputy administrators
+    type: Add
+  id: 745
+  time: '2026-10-08T21:10:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2103
+- author: TheHellFireo
+  changes:
+  - message: Scavengers preserve combat movement and utility actions through target
+      changes.
+    type: Fix
+  - message: Squad radio reports trigger bounded support approaches and no longer
+      keep postponing reception on busy channels.
+    type: Fix
+  - message: Nearby squadmates fighting different opponents can provide covering support.
+    type: Tweak
+  - message: Added radio response diagnostics to scavenger status, including the here
+      option.
+    type: Admin
+  id: 746
+  time: '2026-10-08T21:45:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2111
+- author: TheHellFireo
+  changes:
+  - message: Characters in 3D mode retain their normal clothing and held-item sprites.
+    type: Tweak
+  - message: Dropped-item sprite fallbacks lie flat at their floor height and can
+      be targeted correctly.
+    type: Fix
+  - message: Optional 3D model libraries load only when needed, reducing startup parsing
+      and memory use for 2D clients and the server.
+    type: Tweak
+  - message: Closing the last 3D view releases its optional model library and scene
+      caches.
+    type: Fix
+  id: 747
+  time: '2026-10-08T21:58:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2109
+- author: troytroy400
+  changes:
+  - message: Bosenmori Basho now has an almost pure nitrogen atmosphere.
+    type: Add
+  - message: Breathing is turned on for humans while they're on Bosenmori Basho, so
+      internals work.
+    type: Add
+  - message: Bosenmori now has its own three custom survivors groups. These include
+      stranded IASF paratroopers, a stranded IASF pilot and a colonist survivor group.
+    type: Add
+  - message: LACN, RMC and USCM are now GOVFOR options on Bosenmori Basho, replacing
+      WY PMC.
+    type: Tweak
+  - message: Fire that spreads now burns as strong as the fire it came from, so a
+      whole fire goes out at the same time unless burning on objects/walls.
+    type: Tweak
+  - message: Removed the ghost button that appeared while in crit.
+    type: Remove
+  - message: Ghosting while in crit no longer kills your character.
+    type: Tweak
+  - message: Internals now work from gas tanks inside worn storage like satchels,
+      armor and pouches.
+    type: Add
+  - message: Added internals for GOVFOR/OPFOR in their vendors.
+    type: Add
+  - message: Automated requisitions vendors have a new Protective Equipment section
+      with the faction's gas mask, filters and high capacity oxygen tanks. Requisitions
+      can also order a crate of high capacity oxygen tanks.
+    type: Add
+  - message: Breathing from an oxygen tank now heals suffocation 1.5x as fast instead
+      of 3x.
+    type: Tweak
+  - message: Added a requisitions stock console that shows what the automated requisitions
+      vendors on the ship have left so that the poor riflemen are no longer guessing
+      what X platoon has.
+    type: Add
+  - message: Old RTO packs in automated requisitions vendors are replaced with ANPRC
+      radios and antennas.
+    type: Tweak
+  - message: Automated requisitions vendors now stock large general pouches, large
+      document pouches, large shotgun pouches and deployable z-level ladders.
+    type: Add
+  - message: Removed attachments from automated requisitions vendors that none of
+      that platoon's guns can use.
+    type: Remove
+  - message: The Royal Marine Commandos requisitions vendor now stocks L88A1 and L88A2
+      bullpup rifles.
+    type: Add
+  - message: Emergency closets now have emergency gas masks, emergency oxygen tanks
+      (with a chance of extended ones), a toolbox with flashlights and a survival
+      knife and a first aid kit.
+    type: Tweak
+  - message: Fire closets now have firefighting turnout gear, an oxygen tank, a firefighting
+      helmet, two extinguishers, flares and a fire axe.
+    type: Tweak
+  - message: Firefighting turnout gear now gives some fire and heat protection.
+    type: Tweak
+  - message: The snow jacket/suit now protects against the cold.
+    type: Tweak
+  - message: Default IFAKs now come with one hemostatic gauze packet and a tube of
+      ointment instead of two gauze packets.
+    type: Tweak
+  - message: The CAT tourniquet is now just called a tourniquet and mentions the brand
+      in the description.
+    type: Tweak
+  - message: You can now feed people pills from up to a tile and a half away.
+    type: Tweak
+  - message: Ghost roles now get proper facial hair and several that had no appearance
+      defined now do.
+    type: Fix
+  - message: Fixed soda names in the soda fountain and cold drinks machine.
+    type: Fix
+  - message: Fixed capitalization of some clothing names.
+    type: Fix
+  - message: Fixed locale issues on some third party IDs.
+    type: Fix
+  - message: BEAR localization issues resolved.
+    type: Fix
+  - message: Added a rule to the Distress Signal rules that survivors and third parties
+      may not rush the threat's hive, nest or spawn location until GOVFOR has arrived
+      on the planet or 30 minutes have passed.
+    type: Tweak
+  id: 748
+  time: '2026-10-08T22:13:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2110
+- author: rokudara-sen
+  changes:
+  - message: Synthetic blood packs, stocked in every faction's corpsman vendor, the
+      colony synth vendor, blood dispensers and the medilathe
+    type: Add
+  - message: Synthetic blood can be brewed in chemistry from dispenser chemicals
+    type: Add
+  - message: Welding a synth with no dents left now repairs damaged internal components,
+      so a damaged synth brain no longer leaves them permanently woozy
+    type: Fix
+  - message: Severed limbs no longer bleed synthetics dry
+    type: Fix
+  id: 749
+  time: '2026-10-08T22:15:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2104
 Name: CMU
 Order: -1

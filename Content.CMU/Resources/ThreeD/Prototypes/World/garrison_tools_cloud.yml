@@ -1,0 +1,1831 @@
+- type: cmu3DModel
+  id: CMU3DStunBatonCloud
+  label: 'Stun baton: grip, shaft and open electrode cage'
+  status: draft
+  sourcePrototypes:
+  - CMStunbaton
+  referencePrototype: CMStunbaton
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Melee/stun_baton.rsi
+  referenceState: stunbaton_off
+  sourceDirections: 1
+  placement: surface
+  description: Loose world icon only. Separate cylindrical rubber grip, six grip collars,
+    metal shaft, guard and open electrode cage. Source-owned off/on frames preserve
+    RSI timing and original translucent cyan spark pixels. No-cell, held and equipped
+    variants are not asserted. Physical thickness and reverse surfaces are inferred;
+    map fit and native live toggling remain unverified.
+  parts:
+  - label: insulating rubber grip
+    min: -0.406916, -0.304391, 0.006
+    max: -0.133397, -0.226391, 0.084
+    color: '#17150F'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: raised grip collar 1
+    min: -0.358661, -0.394719, 0.003
+    max: -0.348714, -0.310719, 0.087
+    color: '#26231C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: raised grip collar 2
+    min: -0.327036, -0.361656, 0.003
+    max: -0.317089, -0.277656, 0.087
+    color: '#26231C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: raised grip collar 3
+    min: -0.295411, -0.328594, 0.003
+    max: -0.285464, -0.244594, 0.087
+    color: '#26231C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: raised grip collar 4
+    min: -0.263786, -0.295531, 0.003
+    max: -0.253839, -0.211531, 0.087
+    color: '#26231C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: raised grip collar 5
+    min: -0.232161, -0.262469, 0.003
+    max: -0.222214, -0.178469, 0.087
+    color: '#26231C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: raised grip collar 6
+    min: -0.200536, -0.229406, 0.003
+    max: -0.190589, -0.145406, 0.087
+    color: '#26231C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: butt cap
+    min: -0.378839, -0.406016, 0.005
+    max: -0.353974, -0.326016, 0.085
+    color: '#0A0801'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: physical hand guard
+    min: -0.254625, -0.179062, 0.023
+    max: -0.074625, -0.131062, 0.071
+    color: '#26231C'
+    shape: CylinderX
+    yaw: 136.27303
+  - label: guard highlight
+    min: -0.234348, -0.162371, 0.06
+    max: -0.096348, -0.146371, 0.076
+    color: '#444131'
+    shape: CylinderX
+    yaw: 136.27303
+  - label: steel central shaft
+    min: -0.273169, 0.06, 0.022
+    max: 0.403169, 0.11, 0.072
+    color: '#7C7C7C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: shaft bright upper ridge
+    min: -0.192867, 0.098562, 0.057
+    max: 0.364117, 0.114562, 0.073
+    color: '#B8B8B8'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: electrode rail -1
+    min: -0.027836, 0.01283, 0.034
+    max: 0.310333, 0.03883, 0.06
+    color: '#484848'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: rail upper highlight -1
+    min: 0.044055, 0.038799, 0.054
+    max: 0.272817, 0.048799, 0.064
+    color: '#7C7C7C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: angled electrode root -1
+    min: -0.10688, -0.109522, 0.033
+    max: 0.024379, -0.081522, 0.061
+    color: '#484848'
+    shape: CylinderX
+    yaw: -0.728934
+  - label: angled electrode tip -1
+    min: 0.187543, 0.188759, 0.033
+    max: 0.30058, 0.216759, 0.061
+    color: '#484848'
+    shape: CylinderX
+    yaw: 104.406541
+  - label: electrode rail 1
+    min: -0.166583, 0.145545, 0.034
+    max: 0.171586, 0.171545, 0.06
+    color: '#484848'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: rail upper highlight 1
+    min: -0.094692, 0.171514, 0.054
+    max: 0.13407, 0.181514, 0.064
+    color: '#7C7C7C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: angled electrode root 1
+    min: -0.176254, -0.043165, 0.033
+    max: -0.044995, -0.015165, 0.061
+    color: '#484848'
+    shape: CylinderX
+    yaw: 93.274994
+  - label: angled electrode tip 1
+    min: 0.11817, 0.255116, 0.033
+    max: 0.231207, 0.283116, 0.061
+    color: '#484848'
+    shape: CylinderX
+    yaw: -11.860481
+  - label: tip ferrule
+    min: 0.239108, 0.265016, 0.006
+    max: 0.313704, 0.347016, 0.088
+    color: '#7C7C7C'
+    shape: CylinderX
+    yaw: 46.27303
+  - label: rounded contact tip
+    min: 0.296813, 0.306547, 0.008
+    max: 0.331625, 0.384547, 0.086
+    color: '#B8B8B8'
+    shape: CylinderX
+    yaw: 46.27303
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    stunbaton_off:
+      frames:
+      - parts:
+        - label: insulating rubber grip
+          min: -0.406916, -0.304391, 0.006
+          max: -0.133397, -0.226391, 0.084
+          color: '#17150F'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 1
+          min: -0.358661, -0.394719, 0.003
+          max: -0.348714, -0.310719, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 2
+          min: -0.327036, -0.361656, 0.003
+          max: -0.317089, -0.277656, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 3
+          min: -0.295411, -0.328594, 0.003
+          max: -0.285464, -0.244594, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 4
+          min: -0.263786, -0.295531, 0.003
+          max: -0.253839, -0.211531, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 5
+          min: -0.232161, -0.262469, 0.003
+          max: -0.222214, -0.178469, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 6
+          min: -0.200536, -0.229406, 0.003
+          max: -0.190589, -0.145406, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: butt cap
+          min: -0.378839, -0.406016, 0.005
+          max: -0.353974, -0.326016, 0.085
+          color: '#0A0801'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: physical hand guard
+          min: -0.254625, -0.179062, 0.023
+          max: -0.074625, -0.131062, 0.071
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 136.27303
+        - label: guard highlight
+          min: -0.234348, -0.162371, 0.06
+          max: -0.096348, -0.146371, 0.076
+          color: '#444131'
+          shape: CylinderX
+          yaw: 136.27303
+        - label: steel central shaft
+          min: -0.273169, 0.06, 0.022
+          max: 0.403169, 0.11, 0.072
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: shaft bright upper ridge
+          min: -0.192867, 0.098562, 0.057
+          max: 0.364117, 0.114562, 0.073
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: electrode rail -1
+          min: -0.027836, 0.01283, 0.034
+          max: 0.310333, 0.03883, 0.06
+          color: '#484848'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rail upper highlight -1
+          min: 0.044055, 0.038799, 0.054
+          max: 0.272817, 0.048799, 0.064
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: angled electrode root -1
+          min: -0.10688, -0.109522, 0.033
+          max: 0.024379, -0.081522, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: -0.728934
+        - label: angled electrode tip -1
+          min: 0.187543, 0.188759, 0.033
+          max: 0.30058, 0.216759, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: 104.406541
+        - label: electrode rail 1
+          min: -0.166583, 0.145545, 0.034
+          max: 0.171586, 0.171545, 0.06
+          color: '#484848'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rail upper highlight 1
+          min: -0.094692, 0.171514, 0.054
+          max: 0.13407, 0.181514, 0.064
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: angled electrode root 1
+          min: -0.176254, -0.043165, 0.033
+          max: -0.044995, -0.015165, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: 93.274994
+        - label: angled electrode tip 1
+          min: 0.11817, 0.255116, 0.033
+          max: 0.231207, 0.283116, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: -11.860481
+        - label: tip ferrule
+          min: 0.239108, 0.265016, 0.006
+          max: 0.313704, 0.347016, 0.088
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rounded contact tip
+          min: 0.296813, 0.306547, 0.008
+          max: 0.331625, 0.384547, 0.086
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: 46.27303
+      delays:
+      - 1
+    stunbaton_on:
+      frames:
+      - parts:
+        - label: insulating rubber grip
+          min: -0.406916, -0.304391, 0.006
+          max: -0.133397, -0.226391, 0.084
+          color: '#17150F'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 1
+          min: -0.358661, -0.394719, 0.003
+          max: -0.348714, -0.310719, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 2
+          min: -0.327036, -0.361656, 0.003
+          max: -0.317089, -0.277656, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 3
+          min: -0.295411, -0.328594, 0.003
+          max: -0.285464, -0.244594, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 4
+          min: -0.263786, -0.295531, 0.003
+          max: -0.253839, -0.211531, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 5
+          min: -0.232161, -0.262469, 0.003
+          max: -0.222214, -0.178469, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 6
+          min: -0.200536, -0.229406, 0.003
+          max: -0.190589, -0.145406, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: butt cap
+          min: -0.378839, -0.406016, 0.005
+          max: -0.353974, -0.326016, 0.085
+          color: '#0A0801'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: physical hand guard
+          min: -0.236062, -0.159656, 0.023
+          max: -0.056063, -0.111656, 0.071
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 136.27303
+        - label: guard highlight
+          min: -0.215785, -0.142965, 0.06
+          max: -0.077785, -0.126965, 0.076
+          color: '#444131'
+          shape: CylinderX
+          yaw: 136.27303
+        - label: steel central shaft
+          min: -0.273169, 0.06, 0.022
+          max: 0.403169, 0.11, 0.072
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: shaft bright upper ridge
+          min: -0.192867, 0.098562, 0.057
+          max: 0.364117, 0.114562, 0.073
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: electrode rail -1
+          min: -0.027836, 0.01283, 0.034
+          max: 0.310333, 0.03883, 0.06
+          color: '#484848'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rail upper highlight -1
+          min: 0.044055, 0.038799, 0.054
+          max: 0.272817, 0.048799, 0.064
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: angled electrode root -1
+          min: -0.10688, -0.109522, 0.033
+          max: 0.024379, -0.081522, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: -0.728934
+        - label: angled electrode tip -1
+          min: 0.187543, 0.188759, 0.033
+          max: 0.30058, 0.216759, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: 104.406541
+        - label: electrode rail 1
+          min: -0.166583, 0.145545, 0.034
+          max: 0.171586, 0.171545, 0.06
+          color: '#484848'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rail upper highlight 1
+          min: -0.094692, 0.171514, 0.054
+          max: 0.13407, 0.181514, 0.064
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: angled electrode root 1
+          min: -0.176254, -0.043165, 0.033
+          max: -0.044995, -0.015165, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: 93.274994
+        - label: angled electrode tip 1
+          min: 0.11817, 0.255116, 0.033
+          max: 0.231207, 0.283116, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: -11.860481
+        - label: tip ferrule
+          min: 0.239108, 0.265016, 0.006
+          max: 0.313704, 0.347016, 0.088
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rounded contact tip
+          min: 0.296813, 0.306547, 0.008
+          max: 0.331625, 0.384547, 0.086
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: 46.27303
+      - parts:
+        - label: insulating rubber grip
+          min: -0.406916, -0.304391, 0.006
+          max: -0.133397, -0.226391, 0.084
+          color: '#17150F'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 1
+          min: -0.358661, -0.394719, 0.003
+          max: -0.348714, -0.310719, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 2
+          min: -0.327036, -0.361656, 0.003
+          max: -0.317089, -0.277656, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 3
+          min: -0.295411, -0.328594, 0.003
+          max: -0.285464, -0.244594, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 4
+          min: -0.263786, -0.295531, 0.003
+          max: -0.253839, -0.211531, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 5
+          min: -0.232161, -0.262469, 0.003
+          max: -0.222214, -0.178469, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 6
+          min: -0.200536, -0.229406, 0.003
+          max: -0.190589, -0.145406, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: butt cap
+          min: -0.378839, -0.406016, 0.005
+          max: -0.353974, -0.326016, 0.085
+          color: '#0A0801'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: physical hand guard
+          min: -0.236062, -0.159656, 0.023
+          max: -0.056063, -0.111656, 0.071
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 136.27303
+        - label: guard highlight
+          min: -0.215785, -0.142965, 0.06
+          max: -0.077785, -0.126965, 0.076
+          color: '#444131'
+          shape: CylinderX
+          yaw: 136.27303
+        - label: steel central shaft
+          min: -0.273169, 0.06, 0.022
+          max: 0.403169, 0.11, 0.072
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: shaft bright upper ridge
+          min: -0.192867, 0.098562, 0.057
+          max: 0.364117, 0.114562, 0.073
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: electrode rail -1
+          min: -0.027836, 0.01283, 0.034
+          max: 0.310333, 0.03883, 0.06
+          color: '#484848'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rail upper highlight -1
+          min: 0.044055, 0.038799, 0.054
+          max: 0.272817, 0.048799, 0.064
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: angled electrode root -1
+          min: -0.10688, -0.109522, 0.033
+          max: 0.024379, -0.081522, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: -0.728934
+        - label: angled electrode tip -1
+          min: 0.187543, 0.188759, 0.033
+          max: 0.30058, 0.216759, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: 104.406541
+        - label: electrode rail 1
+          min: -0.166583, 0.145545, 0.034
+          max: 0.171586, 0.171545, 0.06
+          color: '#484848'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rail upper highlight 1
+          min: -0.094692, 0.171514, 0.054
+          max: 0.13407, 0.181514, 0.064
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: angled electrode root 1
+          min: -0.176254, -0.043165, 0.033
+          max: -0.044995, -0.015165, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: 93.274994
+        - label: angled electrode tip 1
+          min: 0.11817, 0.255116, 0.033
+          max: 0.231207, 0.283116, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: -11.860481
+        - label: tip ferrule
+          min: 0.239108, 0.265016, 0.006
+          max: 0.313704, 0.347016, 0.088
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rounded contact tip
+          min: 0.296813, 0.306547, 0.008
+          max: 0.331625, 0.384547, 0.086
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: source spark 25-3
+          min: 0.28125, 0.375, 0.045
+          max: 0.3125, 0.40625, 0.055
+          color: '#66FFFF78'
+        - label: source spark 26-3
+          min: 0.3125, 0.375, 0.045
+          max: 0.34375, 0.40625, 0.055
+          color: '#66FFFF78'
+        - label: source spark 27-3
+          min: 0.34375, 0.375, 0.045
+          max: 0.375, 0.40625, 0.055
+          color: '#66FFFF78'
+        - label: source spark 24-4
+          min: 0.25, 0.34375, 0.045
+          max: 0.28125, 0.375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 28-4
+          min: 0.375, 0.34375, 0.045
+          max: 0.40625, 0.375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 23-5
+          min: 0.21875, 0.3125, 0.045
+          max: 0.25, 0.34375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 28-5
+          min: 0.375, 0.3125, 0.045
+          max: 0.40625, 0.34375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 22-6
+          min: 0.1875, 0.28125, 0.045
+          max: 0.21875, 0.3125, 0.055
+          color: '#66FFFF78'
+        - label: source spark 28-6
+          min: 0.375, 0.28125, 0.045
+          max: 0.40625, 0.3125, 0.055
+          color: '#66FFFF78'
+        - label: source spark 27-7
+          min: 0.34375, 0.25, 0.045
+          max: 0.375, 0.28125, 0.055
+          color: '#66FFFF78'
+        - label: source spark 26-8
+          min: 0.3125, 0.21875, 0.045
+          max: 0.34375, 0.25, 0.055
+          color: '#66FFFF78'
+        - label: source spark 25-9
+          min: 0.28125, 0.1875, 0.045
+          max: 0.3125, 0.21875, 0.055
+          color: '#66FFFF78'
+      - parts:
+        - label: insulating rubber grip
+          min: -0.406916, -0.304391, 0.006
+          max: -0.133397, -0.226391, 0.084
+          color: '#17150F'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 1
+          min: -0.358661, -0.394719, 0.003
+          max: -0.348714, -0.310719, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 2
+          min: -0.327036, -0.361656, 0.003
+          max: -0.317089, -0.277656, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 3
+          min: -0.295411, -0.328594, 0.003
+          max: -0.285464, -0.244594, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 4
+          min: -0.263786, -0.295531, 0.003
+          max: -0.253839, -0.211531, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 5
+          min: -0.232161, -0.262469, 0.003
+          max: -0.222214, -0.178469, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: raised grip collar 6
+          min: -0.200536, -0.229406, 0.003
+          max: -0.190589, -0.145406, 0.087
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: butt cap
+          min: -0.378839, -0.406016, 0.005
+          max: -0.353974, -0.326016, 0.085
+          color: '#0A0801'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: physical hand guard
+          min: -0.236062, -0.159656, 0.023
+          max: -0.056063, -0.111656, 0.071
+          color: '#26231C'
+          shape: CylinderX
+          yaw: 136.27303
+        - label: guard highlight
+          min: -0.215785, -0.142965, 0.06
+          max: -0.077785, -0.126965, 0.076
+          color: '#444131'
+          shape: CylinderX
+          yaw: 136.27303
+        - label: steel central shaft
+          min: -0.273169, 0.06, 0.022
+          max: 0.403169, 0.11, 0.072
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: shaft bright upper ridge
+          min: -0.192867, 0.098562, 0.057
+          max: 0.364117, 0.114562, 0.073
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: electrode rail -1
+          min: -0.027836, 0.01283, 0.034
+          max: 0.310333, 0.03883, 0.06
+          color: '#484848'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rail upper highlight -1
+          min: 0.044055, 0.038799, 0.054
+          max: 0.272817, 0.048799, 0.064
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: angled electrode root -1
+          min: -0.10688, -0.109522, 0.033
+          max: 0.024379, -0.081522, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: -0.728934
+        - label: angled electrode tip -1
+          min: 0.187543, 0.188759, 0.033
+          max: 0.30058, 0.216759, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: 104.406541
+        - label: electrode rail 1
+          min: -0.166583, 0.145545, 0.034
+          max: 0.171586, 0.171545, 0.06
+          color: '#484848'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rail upper highlight 1
+          min: -0.094692, 0.171514, 0.054
+          max: 0.13407, 0.181514, 0.064
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: angled electrode root 1
+          min: -0.176254, -0.043165, 0.033
+          max: -0.044995, -0.015165, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: 93.274994
+        - label: angled electrode tip 1
+          min: 0.11817, 0.255116, 0.033
+          max: 0.231207, 0.283116, 0.061
+          color: '#484848'
+          shape: CylinderX
+          yaw: -11.860481
+        - label: tip ferrule
+          min: 0.239108, 0.265016, 0.006
+          max: 0.313704, 0.347016, 0.088
+          color: '#7C7C7C'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: rounded contact tip
+          min: 0.296813, 0.306547, 0.008
+          max: 0.331625, 0.384547, 0.086
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: 46.27303
+        - label: source spark 25-1
+          min: 0.28125, 0.4375, 0.045
+          max: 0.3125, 0.46875, 0.055
+          color: '#66FFFF78'
+        - label: source spark 26-1
+          min: 0.3125, 0.4375, 0.045
+          max: 0.34375, 0.46875, 0.055
+          color: '#66FFFF78'
+        - label: source spark 27-1
+          min: 0.34375, 0.4375, 0.045
+          max: 0.375, 0.46875, 0.055
+          color: '#66FFFF78'
+        - label: source spark 24-2
+          min: 0.25, 0.40625, 0.045
+          max: 0.28125, 0.4375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 28-2
+          min: 0.375, 0.40625, 0.045
+          max: 0.40625, 0.4375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 23-3
+          min: 0.21875, 0.375, 0.045
+          max: 0.25, 0.40625, 0.055
+          color: '#66FFFF78'
+        - label: source spark 25-3
+          min: 0.28125, 0.375, 0.045
+          max: 0.3125, 0.40625, 0.055
+          color: '#66FFFF32'
+        - label: source spark 26-3
+          min: 0.3125, 0.375, 0.045
+          max: 0.34375, 0.40625, 0.055
+          color: '#66FFFF32'
+        - label: source spark 27-3
+          min: 0.34375, 0.375, 0.045
+          max: 0.375, 0.40625, 0.055
+          color: '#66FFFF32'
+        - label: source spark 29-3
+          min: 0.40625, 0.375, 0.045
+          max: 0.4375, 0.40625, 0.055
+          color: '#66FFFF78'
+        - label: source spark 22-4
+          min: 0.1875, 0.34375, 0.045
+          max: 0.21875, 0.375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 24-4
+          min: 0.25, 0.34375, 0.045
+          max: 0.28125, 0.375, 0.055
+          color: '#66FFFF32'
+        - label: source spark 28-4
+          min: 0.375, 0.34375, 0.045
+          max: 0.40625, 0.375, 0.055
+          color: '#66FFFF32'
+        - label: source spark 30-4
+          min: 0.4375, 0.34375, 0.045
+          max: 0.46875, 0.375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 21-5
+          min: 0.15625, 0.3125, 0.045
+          max: 0.1875, 0.34375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 23-5
+          min: 0.21875, 0.3125, 0.045
+          max: 0.25, 0.34375, 0.055
+          color: '#66FFFF32'
+        - label: source spark 28-5
+          min: 0.375, 0.3125, 0.045
+          max: 0.40625, 0.34375, 0.055
+          color: '#66FFFF32'
+        - label: source spark 30-5
+          min: 0.4375, 0.3125, 0.045
+          max: 0.46875, 0.34375, 0.055
+          color: '#66FFFF78'
+        - label: source spark 22-6
+          min: 0.1875, 0.28125, 0.045
+          max: 0.21875, 0.3125, 0.055
+          color: '#66FFFF32'
+        - label: source spark 28-6
+          min: 0.375, 0.28125, 0.045
+          max: 0.40625, 0.3125, 0.055
+          color: '#66FFFF32'
+        - label: source spark 30-6
+          min: 0.4375, 0.28125, 0.045
+          max: 0.46875, 0.3125, 0.055
+          color: '#66FFFF78'
+        - label: source spark 27-7
+          min: 0.34375, 0.25, 0.045
+          max: 0.375, 0.28125, 0.055
+          color: '#66FFFF32'
+        - label: source spark 29-7
+          min: 0.40625, 0.25, 0.045
+          max: 0.4375, 0.28125, 0.055
+          color: '#66FFFF78'
+        - label: source spark 26-8
+          min: 0.3125, 0.21875, 0.045
+          max: 0.34375, 0.25, 0.055
+          color: '#66FFFF32'
+        - label: source spark 28-8
+          min: 0.375, 0.21875, 0.045
+          max: 0.40625, 0.25, 0.055
+          color: '#66FFFF78'
+        - label: source spark 25-9
+          min: 0.28125, 0.1875, 0.045
+          max: 0.3125, 0.21875, 0.055
+          color: '#66FFFF32'
+        - label: source spark 27-9
+          min: 0.34375, 0.1875, 0.045
+          max: 0.375, 0.21875, 0.055
+          color: '#66FFFF78'
+        - label: source spark 26-10
+          min: 0.3125, 0.15625, 0.045
+          max: 0.34375, 0.1875, 0.055
+          color: '#66FFFF78'
+      delays:
+      - 1.5
+      - 0.1
+      - 0.1
+- type: cmu3DModel
+  id: CMU3DTaserCloud
+  label: 'Projectile disabler: receiver, grip and open trigger frame'
+  status: draft
+  sourcePrototypes:
+  - RMCWeaponTaser
+  referencePrototype: RMCWeaponTaser
+  referenceRsi: /Textures/_RMC14/Objects/Weapons/Guns/Energy/taser.rsi
+  referenceState: taser
+  sourceDirections: 1
+  placement: surface
+  description: Static source-base study only. Sculpted receiver, separate forward
+    power block, paired electrode tips, thick grip, and open trigger frame retain
+    the source silhouette and palette. Exact unresampled slide crop. The actual source
+    also has an unshaded mag-unshaded-0 layer controlled by MagazineVisuals, so this
+    model intentionally does not claim complete live layered appearance, charge indicators,
+    source state playback, firing or carried/worn variants. Thickness and reverse
+    are inferred; requires source-layer composition and native/map review.
+  parts:
+  - label: rear receiver shell
+    min: -0.375, -0.03125, 0.025
+    max: -0.03125, 0.125, 0.1
+    color: '#2B2626'
+  - label: upper slide
+    min: -0.34375, 0.053125, 0.075
+    max: -0.0375, 0.125, 0.117
+    color: '#6B5E5A'
+  - label: slide underside channel
+    min: -0.34375, -0.021875, 0.012
+    max: -0.0625, 0.03125, 0.049
+    color: '#0F1013'
+  - label: central bridge
+    min: -0.0625, -0.025, 0.022
+    max: 0.0625, 0.09375, 0.09
+    color: '#17161E'
+  - label: forward power block
+    min: 0.03125, -0.04375, 0.025
+    max: 0.25, 0.09375, 0.107
+    color: '#49403F'
+  - label: muzzle end block
+    min: 0.21875, -0.121875, 0.025
+    max: 0.303125, 0.125, 0.106
+    color: '#2B2626'
+  - label: front upper sight
+    min: 0.1875, 0.1125, 0.067
+    max: 0.28125, 0.15625, 0.137
+    color: '#0F1013'
+  - label: rear upper sight
+    min: -0.375, 0.125, 0.082
+    max: -0.225, 0.15625, 0.132
+    color: '#0F1013'
+  - label: lower front frame
+    min: 0.09375, -0.140625, 0.026
+    max: 0.303125, -0.1, 0.083
+    color: '#232327'
+  - label: front frame left join
+    min: 0.03125, -0.115625, 0.028
+    max: 0.1, -0.0375, 0.081
+    color: '#6B5E5A'
+  - label: front frame right join
+    min: 0.25625, -0.115625, 0.028
+    max: 0.303125, -0.03125, 0.081
+    color: '#49403F'
+  - label: upper forward electrode
+    min: 0.2375, 0.028875, 0.058
+    max: 0.3125, 0.064875, 0.094
+    color: '#6B5E5A'
+    shape: CylinderX
+    yaw: 0.0
+  - label: lower forward electrode
+    min: 0.2375, -0.096125, 0.058
+    max: 0.3125, -0.060125, 0.094
+    color: '#6B5E5A'
+    shape: CylinderX
+    yaw: 0.0
+  - label: front bore recess
+    min: 0.303438, -0.046875, 0.043
+    max: 0.306875, 0.021875, 0.086
+    color: '#0F1013'
+  - label: grip shoulder
+    min: -0.3125, -0.1, 0.02
+    max: -0.125, -0.046875, 0.075
+    color: '#49403F'
+  - label: grip butt
+    min: -0.3375, -0.28125, 0.014
+    max: -0.228125, -0.1875, 0.07
+    color: '#0F1013'
+  - label: slanted solid handgrip
+    min: -0.35308, -0.201813, 0.017
+    max: -0.19067, -0.113813, 0.089
+    color: '#49403F'
+    shape: CylinderX
+    yaw: -101.093723
+  - label: grip groove 1
+    min: -0.298039, -0.106, 0.082
+    max: -0.223039, -0.094, 0.09
+    color: '#2B2626'
+    shape: CylinderX
+    yaw: 0.0
+  - label: grip groove 2
+    min: -0.304779, -0.140375, 0.082
+    max: -0.229779, -0.128375, 0.09
+    color: '#2B2626'
+    shape: CylinderX
+    yaw: 0.0
+  - label: grip groove 3
+    min: -0.31152, -0.17475, 0.082
+    max: -0.23652, -0.16275, 0.09
+    color: '#2B2626'
+    shape: CylinderX
+    yaw: 0.0
+  - label: grip groove 4
+    min: -0.31826, -0.209125, 0.082
+    max: -0.24326, -0.197125, 0.09
+    color: '#2B2626'
+    shape: CylinderX
+    yaw: 0.0
+  - label: trigger guard lower spar
+    min: -0.171875, -0.14, 0.033
+    max: 0.015625, -0.11, 0.063
+    color: '#2B2626'
+    shape: CylinderX
+    yaw: 0.0
+  - label: trigger guard rear join
+    min: -0.211899, -0.10675, 0.035
+    max: -0.147476, -0.08075, 0.061
+    color: '#2B2626'
+    shape: CylinderX
+    yaw: -75.963757
+  - label: trigger guard front join
+    min: -0.01057, -0.09725, 0.032
+    max: 0.088695, -0.06525, 0.064
+    color: '#2B2626'
+    shape: CylinderX
+    yaw: 61.82141
+  - label: curved trigger upper
+    min: -0.100368, -0.049063, 0.048
+    max: -0.040257, -0.029062, 0.068
+    color: '#232327'
+    shape: CylinderX
+    yaw: -62.102729
+  - label: curved trigger lower
+    min: -0.075761, -0.088688, 0.049
+    max: -0.046114, -0.070688, 0.067
+    color: '#232327'
+    shape: CylinderX
+    yaw: -108.434949
+  - label: original receiver machining marks
+    min: -0.34375, 0.03125, 0.117
+    max: -0.03125, 0.125, 0.12
+    color: '#FFFFFF'
+    surface: CMU3DToolsCloudTaserSlide
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DEmptyLightReplacerCloud
+  label: Empty light replacer under legacy spray-bottle ID
+  status: draft
+  sourcePrototypes:
+  - RMCSprayBottleSpaceCleaner
+  referencePrototype: RMCSprayBottleSpaceCleaner
+  referenceRsi: /Textures/_RMC14/Objects/Misc/Janitorial/light_replacer.rsi
+  referenceState: lightreplacer0
+  sourceDirections: 1
+  placement: surface
+  description: The exact source prototype RMCSprayBottleSpaceCleaner inherits RMCLightReplacer
+    and resolves lightreplacer0; no spray bottle geometry is invented. Separate orange
+    cartridge, tall guide, silver service plate, actuator and open handle. Default
+    empty world icon only. The unused lightreplacer1 art and held variants are not
+    claimed. Depth, reverse, tabletop pose, native admission and map contacts remain
+    draft inferences.
+  parts:
+  - label: main lower housing
+    min: -0.125, -0.075, 0.02
+    max: 0.082, 0.075, 0.265
+    color: '#343434'
+  - label: lower housing rear rib
+    min: -0.128, 0.057, 0.02
+    max: 0.086, 0.082, 0.265
+    color: '#1D1D1D'
+  - label: base foot
+    min: -0.126, -0.077, 0.0
+    max: 0.096, 0.077, 0.036
+    color: '#1D1D1D'
+  - label: silver front service plate
+    min: -0.097, -0.081, 0.112
+    max: 0.059, -0.073, 0.2
+    color: '#B0B0B0'
+  - label: plate center seam
+    min: -0.097, -0.084, 0.145
+    max: 0.059, -0.081, 0.155
+    color: '#797979'
+  - label: lower black insert
+    min: -0.092, -0.083, 0.039
+    max: 0.061, -0.076, 0.105
+    color: '#555555'
+  - label: tall guide channel
+    min: -0.182, -0.052, 0.13
+    max: -0.116, 0.053, 0.765625
+    color: '#1D1D1D'
+  - label: guide inner face
+    min: -0.167, -0.055, 0.17
+    max: -0.143, -0.05, 0.729
+    color: '#555555'
+  - label: guide silver tip
+    min: -0.167, -0.055, 0.711
+    max: -0.143, -0.05, 0.748
+    color: '#797979'
+  - label: tube base socket
+    min: -0.12, -0.055, 0.296
+    max: 0.008, 0.055, 0.34
+    color: '#5F3A25'
+  - label: tube top socket
+    min: -0.119, -0.055, 0.701
+    max: 0.007, 0.055, 0.731
+    color: '#5F3A25'
+  - label: orange tubular cartridge
+    min: -0.108, -0.045, 0.331
+    max: -0.004, 0.045, 0.708
+    color: '#A24F1F'
+    shape: CylinderZ
+  - label: cartridge pale fill
+    min: -0.088, -0.047, 0.363
+    max: -0.041, -0.039, 0.688
+    color: '#FDDBAB'
+  - label: cartridge bright edge
+    min: -0.045, -0.047, 0.35
+    max: -0.023, -0.039, 0.695
+    color: '#ED9B50'
+  - label: top actuator block
+    min: 0.034, -0.058, 0.255
+    max: 0.116, 0.058, 0.4
+    color: '#1D1D1D'
+  - label: actuator silver inset
+    min: 0.07, -0.062, 0.29
+    max: 0.09, -0.055, 0.371
+    color: '#B0B0B0'
+  - label: housing top joint
+    min: -0.098, -0.068, 0.24
+    max: 0.053, 0.068, 0.283
+    color: '#413D3A'
+  - label: handle upper bridge
+    min: 0.074, -0.041, 0.247
+    max: 0.189, 0.041, 0.278
+    color: '#343434'
+  - label: handle outer upper
+    min: 0.17, -0.04, 0.18
+    max: 0.208, 0.04, 0.254
+    color: '#413D3A'
+  - label: handle outer lower
+    min: 0.158, -0.04, 0.089
+    max: 0.2, 0.04, 0.188
+    color: '#343434'
+  - label: handle lower curved join
+    min: 0.086, -0.04, 0.048
+    max: 0.168, 0.04, 0.092
+    color: '#413D3A'
+    yaw: 20
+  - label: handle joint at foot
+    min: 0.043, -0.04, 0.041
+    max: 0.116, 0.04, 0.072
+    color: '#343434'
+  - label: handle grip rib 1
+    min: 0.168, -0.047, 0.11
+    max: 0.21, -0.04, 0.123
+    color: '#555555'
+  - label: handle grip rib 2
+    min: 0.168, -0.047, 0.147
+    max: 0.21, -0.04, 0.16
+    color: '#555555'
+  - label: handle grip rib 3
+    min: 0.168, -0.047, 0.186
+    max: 0.21, -0.04, 0.199
+    color: '#555555'
+  - label: handle grip rib 4
+    min: 0.168, -0.047, 0.227
+    max: 0.21, -0.04, 0.24
+    color: '#555555'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    lightreplacer0:
+      frames:
+      - parts:
+        - label: main lower housing
+          min: -0.125, -0.075, 0.02
+          max: 0.082, 0.075, 0.265
+          color: '#343434'
+        - label: lower housing rear rib
+          min: -0.128, 0.057, 0.02
+          max: 0.086, 0.082, 0.265
+          color: '#1D1D1D'
+        - label: base foot
+          min: -0.126, -0.077, 0.0
+          max: 0.096, 0.077, 0.036
+          color: '#1D1D1D'
+        - label: silver front service plate
+          min: -0.097, -0.081, 0.112
+          max: 0.059, -0.073, 0.2
+          color: '#B0B0B0'
+        - label: plate center seam
+          min: -0.097, -0.084, 0.145
+          max: 0.059, -0.081, 0.155
+          color: '#797979'
+        - label: lower black insert
+          min: -0.092, -0.083, 0.039
+          max: 0.061, -0.076, 0.105
+          color: '#555555'
+        - label: tall guide channel
+          min: -0.182, -0.052, 0.13
+          max: -0.116, 0.053, 0.765625
+          color: '#1D1D1D'
+        - label: guide inner face
+          min: -0.167, -0.055, 0.17
+          max: -0.143, -0.05, 0.729
+          color: '#555555'
+        - label: guide silver tip
+          min: -0.167, -0.055, 0.711
+          max: -0.143, -0.05, 0.748
+          color: '#797979'
+        - label: tube base socket
+          min: -0.12, -0.055, 0.296
+          max: 0.008, 0.055, 0.34
+          color: '#5F3A25'
+        - label: tube top socket
+          min: -0.119, -0.055, 0.701
+          max: 0.007, 0.055, 0.731
+          color: '#5F3A25'
+        - label: orange tubular cartridge
+          min: -0.108, -0.045, 0.331
+          max: -0.004, 0.045, 0.708
+          color: '#A24F1F'
+          shape: CylinderZ
+        - label: cartridge pale fill
+          min: -0.088, -0.047, 0.363
+          max: -0.041, -0.039, 0.688
+          color: '#FDDBAB'
+        - label: cartridge bright edge
+          min: -0.045, -0.047, 0.35
+          max: -0.023, -0.039, 0.695
+          color: '#ED9B50'
+        - label: top actuator block
+          min: 0.034, -0.058, 0.255
+          max: 0.116, 0.058, 0.4
+          color: '#1D1D1D'
+        - label: actuator silver inset
+          min: 0.07, -0.062, 0.29
+          max: 0.09, -0.055, 0.371
+          color: '#B0B0B0'
+        - label: housing top joint
+          min: -0.098, -0.068, 0.24
+          max: 0.053, 0.068, 0.283
+          color: '#413D3A'
+        - label: handle upper bridge
+          min: 0.074, -0.041, 0.247
+          max: 0.189, 0.041, 0.278
+          color: '#343434'
+        - label: handle outer upper
+          min: 0.17, -0.04, 0.18
+          max: 0.208, 0.04, 0.254
+          color: '#413D3A'
+        - label: handle outer lower
+          min: 0.158, -0.04, 0.089
+          max: 0.2, 0.04, 0.188
+          color: '#343434'
+        - label: handle lower curved join
+          min: 0.086, -0.04, 0.048
+          max: 0.168, 0.04, 0.092
+          color: '#413D3A'
+          yaw: 20
+        - label: handle joint at foot
+          min: 0.043, -0.04, 0.041
+          max: 0.116, 0.04, 0.072
+          color: '#343434'
+        - label: handle grip rib 1
+          min: 0.168, -0.047, 0.11
+          max: 0.21, -0.04, 0.123
+          color: '#555555'
+        - label: handle grip rib 2
+          min: 0.168, -0.047, 0.147
+          max: 0.21, -0.04, 0.16
+          color: '#555555'
+        - label: handle grip rib 3
+          min: 0.168, -0.047, 0.186
+          max: 0.21, -0.04, 0.199
+          color: '#555555'
+        - label: handle grip rib 4
+          min: 0.168, -0.047, 0.227
+          max: 0.21, -0.04, 0.24
+          color: '#555555'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DCleanerGrenadeCloud
+  label: 'Cleanade: reservoir, cap, lever and timer bead'
+  status: draft
+  sourcePrototypes:
+  - CleanerGrenade
+  referencePrototype: CleanerGrenade
+  referenceRsi: /Textures/Objects/Weapons/Grenades/janitor.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Separate round cleaner reservoir, narrow neck, metal cap, safety lever
+    and timer bead. Original unresampled cleaner-label crop. Source icon and two 0.1-second
+    primed frames are authored; geometry reads only actual RSI state with no gameplay
+    clock. Base TimerGrenadeBase GenericVisualizer names ConstructionVisuals.Layer
+    while GrenadeBase maps TriggerVisualLayers.Base, so transition ownership/live
+    priming is explicitly unverified. No foam deployment, worn or held variants. Inferred
+    depth, back, saved-map contacts and native admission remain drafts.
+  parts:
+  - label: rounded reservoir
+    min: -0.101, -0.084, 0.028
+    max: 0.101, 0.084, 0.192
+    color: '#4E8485'
+    shape: CylinderZ
+  - label: reservoir bottom rim
+    min: -0.091, -0.077, 0.013
+    max: 0.091, 0.077, 0.042
+    color: '#343B3E'
+    shape: CylinderZ
+  - label: reservoir upper shoulder
+    min: -0.09, -0.075, 0.172
+    max: 0.09, 0.075, 0.218
+    color: '#4E8485'
+    shape: Ellipsoid
+  - label: original cleaner label curved strip 1
+    min: -0.082391, -0.070985, 0.033
+    max: -0.042609, -0.066985, 0.158
+    color: '#FFFFFF'
+    surface: CMU3DToolsCloudCleanadeLabelStrip0
+    surfaceAxis: XZ
+    yaw: -38.2294235611005
+  - label: original cleaner label curved strip 2
+    min: -0.047681, -0.084878, 0.033
+    max: -0.014819, -0.080878, 0.158
+    color: '#FFFFFF'
+    surface: CMU3DToolsCloudCleanadeLabelStrip1
+    surfaceAxis: XZ
+    yaw: -18.023433368955107
+  - label: original cleaner label curved strip 3
+    min: -0.015625, -0.089, 0.033
+    max: 0.015625, -0.085, 0.158
+    color: '#FFFFFF'
+    surface: CMU3DToolsCloudCleanadeLabelStrip2
+    surfaceAxis: XZ
+    yaw: 0.0
+  - label: original cleaner label curved strip 4
+    min: 0.014819, -0.084878, 0.033
+    max: 0.047681, -0.080878, 0.158
+    color: '#FFFFFF'
+    surface: CMU3DToolsCloudCleanadeLabelStrip3
+    surfaceAxis: XZ
+    yaw: 18.023433368955107
+  - label: original cleaner label curved strip 5
+    min: 0.042609, -0.070985, 0.033
+    max: 0.082391, -0.066985, 0.158
+    color: '#FFFFFF'
+    surface: CMU3DToolsCloudCleanadeLabelStrip4
+    surfaceAxis: XZ
+    yaw: 38.2294235611005
+  - label: narrow neck
+    min: -0.052, -0.048, 0.204
+    max: 0.052, 0.048, 0.251
+    color: '#365254'
+    shape: CylinderZ
+  - label: upper metal canister
+    min: -0.09, -0.073, 0.235
+    max: 0.09, 0.073, 0.385
+    color: '#424B4E'
+    shape: CylinderZ
+  - label: metal upper rim
+    min: -0.088, -0.072, 0.368
+    max: 0.088, 0.072, 0.389
+    color: '#343B3E'
+    shape: CylinderZ
+  - label: metal shoulder cap
+    min: -0.08, -0.066, 0.378
+    max: 0.08, 0.066, 0.423
+    color: '#666E71'
+    shape: Ellipsoid
+  - label: lower metal lip
+    min: -0.077, -0.065, 0.229
+    max: 0.077, 0.065, 0.253
+    color: '#343B3E'
+    shape: CylinderZ
+  - label: cap broad source highlight
+    min: -0.066, -0.074, 0.295
+    max: -0.039, -0.067, 0.368
+    color: '#737A7D'
+  - label: cap narrow source highlight
+    min: -0.038, -0.074, 0.318
+    max: -0.012, -0.068, 0.365
+    color: '#666E71'
+  - label: front recessed cap slot
+    min: 0.001, -0.076, 0.284
+    max: 0.034, -0.069, 0.355
+    color: '#343B3E'
+  - label: lever hinge
+    min: 0.047, -0.079, 0.35
+    max: 0.093, -0.031, 0.374
+    color: '#8D793F'
+    shape: CylinderY
+  - label: brass safety lever
+    min: 0.059, -0.084, 0.273
+    max: 0.09, -0.061, 0.357
+    color: '#C3AC75'
+  - label: lever lower bent toe
+    min: 0.044, -0.084, 0.263
+    max: 0.092, -0.061, 0.286
+    color: '#A39365'
+  - label: top valve stem
+    min: -0.014, -0.013, 0.41
+    max: 0.014, 0.013, 0.461
+    color: '#343B3E'
+    shape: CylinderZ
+  - label: top amber timer bead
+    min: -0.014, -0.014, 0.448
+    max: 0.014, 0.014, 0.477
+    color: '#D79835'
+    shape: Ellipsoid
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: rounded reservoir
+          min: -0.101, -0.084, 0.028
+          max: 0.101, 0.084, 0.192
+          color: '#4E8485'
+          shape: CylinderZ
+        - label: reservoir bottom rim
+          min: -0.091, -0.077, 0.013
+          max: 0.091, 0.077, 0.042
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: reservoir upper shoulder
+          min: -0.09, -0.075, 0.172
+          max: 0.09, 0.075, 0.218
+          color: '#4E8485'
+          shape: Ellipsoid
+        - label: original cleaner label curved strip 1
+          min: -0.082391, -0.070985, 0.033
+          max: -0.042609, -0.066985, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip0
+          surfaceAxis: XZ
+          yaw: -38.2294235611005
+        - label: original cleaner label curved strip 2
+          min: -0.047681, -0.084878, 0.033
+          max: -0.014819, -0.080878, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip1
+          surfaceAxis: XZ
+          yaw: -18.023433368955107
+        - label: original cleaner label curved strip 3
+          min: -0.015625, -0.089, 0.033
+          max: 0.015625, -0.085, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip2
+          surfaceAxis: XZ
+          yaw: 0.0
+        - label: original cleaner label curved strip 4
+          min: 0.014819, -0.084878, 0.033
+          max: 0.047681, -0.080878, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip3
+          surfaceAxis: XZ
+          yaw: 18.023433368955107
+        - label: original cleaner label curved strip 5
+          min: 0.042609, -0.070985, 0.033
+          max: 0.082391, -0.066985, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip4
+          surfaceAxis: XZ
+          yaw: 38.2294235611005
+        - label: narrow neck
+          min: -0.052, -0.048, 0.204
+          max: 0.052, 0.048, 0.251
+          color: '#365254'
+          shape: CylinderZ
+        - label: upper metal canister
+          min: -0.09, -0.073, 0.235
+          max: 0.09, 0.073, 0.385
+          color: '#424B4E'
+          shape: CylinderZ
+        - label: metal upper rim
+          min: -0.088, -0.072, 0.368
+          max: 0.088, 0.072, 0.389
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: metal shoulder cap
+          min: -0.08, -0.066, 0.378
+          max: 0.08, 0.066, 0.423
+          color: '#666E71'
+          shape: Ellipsoid
+        - label: lower metal lip
+          min: -0.077, -0.065, 0.229
+          max: 0.077, 0.065, 0.253
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: cap broad source highlight
+          min: -0.066, -0.074, 0.295
+          max: -0.039, -0.067, 0.368
+          color: '#737A7D'
+        - label: cap narrow source highlight
+          min: -0.038, -0.074, 0.318
+          max: -0.012, -0.068, 0.365
+          color: '#666E71'
+        - label: front recessed cap slot
+          min: 0.001, -0.076, 0.284
+          max: 0.034, -0.069, 0.355
+          color: '#343B3E'
+        - label: lever hinge
+          min: 0.047, -0.079, 0.35
+          max: 0.093, -0.031, 0.374
+          color: '#8D793F'
+          shape: CylinderY
+        - label: brass safety lever
+          min: 0.059, -0.084, 0.273
+          max: 0.09, -0.061, 0.357
+          color: '#C3AC75'
+        - label: lever lower bent toe
+          min: 0.044, -0.084, 0.263
+          max: 0.092, -0.061, 0.286
+          color: '#A39365'
+        - label: top valve stem
+          min: -0.014, -0.013, 0.41
+          max: 0.014, 0.013, 0.461
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: top amber timer bead
+          min: -0.014, -0.014, 0.448
+          max: 0.014, 0.014, 0.477
+          color: '#D79835'
+          shape: Ellipsoid
+      delays:
+      - 1
+    primed:
+      frames:
+      - parts:
+        - label: rounded reservoir
+          min: -0.101, -0.084, 0.028
+          max: 0.101, 0.084, 0.192
+          color: '#4E8485'
+          shape: CylinderZ
+        - label: reservoir bottom rim
+          min: -0.091, -0.077, 0.013
+          max: 0.091, 0.077, 0.042
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: reservoir upper shoulder
+          min: -0.09, -0.075, 0.172
+          max: 0.09, 0.075, 0.218
+          color: '#4E8485'
+          shape: Ellipsoid
+        - label: original cleaner label curved strip 1
+          min: -0.082391, -0.070985, 0.033
+          max: -0.042609, -0.066985, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip0
+          surfaceAxis: XZ
+          yaw: -38.2294235611005
+        - label: original cleaner label curved strip 2
+          min: -0.047681, -0.084878, 0.033
+          max: -0.014819, -0.080878, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip1
+          surfaceAxis: XZ
+          yaw: -18.023433368955107
+        - label: original cleaner label curved strip 3
+          min: -0.015625, -0.089, 0.033
+          max: 0.015625, -0.085, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip2
+          surfaceAxis: XZ
+          yaw: 0.0
+        - label: original cleaner label curved strip 4
+          min: 0.014819, -0.084878, 0.033
+          max: 0.047681, -0.080878, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip3
+          surfaceAxis: XZ
+          yaw: 18.023433368955107
+        - label: original cleaner label curved strip 5
+          min: 0.042609, -0.070985, 0.033
+          max: 0.082391, -0.066985, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip4
+          surfaceAxis: XZ
+          yaw: 38.2294235611005
+        - label: narrow neck
+          min: -0.052, -0.048, 0.204
+          max: 0.052, 0.048, 0.251
+          color: '#365254'
+          shape: CylinderZ
+        - label: upper metal canister
+          min: -0.09, -0.073, 0.235
+          max: 0.09, 0.073, 0.385
+          color: '#424B4E'
+          shape: CylinderZ
+        - label: metal upper rim
+          min: -0.088, -0.072, 0.368
+          max: 0.088, 0.072, 0.389
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: metal shoulder cap
+          min: -0.08, -0.066, 0.378
+          max: 0.08, 0.066, 0.423
+          color: '#666E71'
+          shape: Ellipsoid
+        - label: lower metal lip
+          min: -0.077, -0.065, 0.229
+          max: 0.077, 0.065, 0.253
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: cap broad source highlight
+          min: -0.066, -0.074, 0.295
+          max: -0.039, -0.067, 0.368
+          color: '#737A7D'
+        - label: cap narrow source highlight
+          min: -0.038, -0.074, 0.318
+          max: -0.012, -0.068, 0.365
+          color: '#666E71'
+        - label: front recessed cap slot
+          min: 0.001, -0.076, 0.284
+          max: 0.034, -0.069, 0.355
+          color: '#343B3E'
+        - label: lever hinge
+          min: 0.047, -0.079, 0.35
+          max: 0.093, -0.031, 0.374
+          color: '#8D793F'
+          shape: CylinderY
+        - label: brass safety lever
+          min: 0.059, -0.084, 0.273
+          max: 0.09, -0.061, 0.357
+          color: '#C3AC75'
+        - label: lever lower bent toe
+          min: 0.044, -0.084, 0.263
+          max: 0.092, -0.061, 0.286
+          color: '#A39365'
+        - label: top valve stem
+          min: -0.014, -0.013, 0.41
+          max: 0.014, 0.013, 0.461
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: top amber timer bead
+          min: -0.014, -0.014, 0.448
+          max: 0.014, 0.014, 0.477
+          color: '#CCCCC9'
+          shape: Ellipsoid
+      - parts:
+        - label: rounded reservoir
+          min: -0.101, -0.084, 0.028
+          max: 0.101, 0.084, 0.192
+          color: '#4E8485'
+          shape: CylinderZ
+        - label: reservoir bottom rim
+          min: -0.091, -0.077, 0.013
+          max: 0.091, 0.077, 0.042
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: reservoir upper shoulder
+          min: -0.09, -0.075, 0.172
+          max: 0.09, 0.075, 0.218
+          color: '#4E8485'
+          shape: Ellipsoid
+        - label: original cleaner label curved strip 1
+          min: -0.082391, -0.070985, 0.033
+          max: -0.042609, -0.066985, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip0
+          surfaceAxis: XZ
+          yaw: -38.2294235611005
+        - label: original cleaner label curved strip 2
+          min: -0.047681, -0.084878, 0.033
+          max: -0.014819, -0.080878, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip1
+          surfaceAxis: XZ
+          yaw: -18.023433368955107
+        - label: original cleaner label curved strip 3
+          min: -0.015625, -0.089, 0.033
+          max: 0.015625, -0.085, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip2
+          surfaceAxis: XZ
+          yaw: 0.0
+        - label: original cleaner label curved strip 4
+          min: 0.014819, -0.084878, 0.033
+          max: 0.047681, -0.080878, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip3
+          surfaceAxis: XZ
+          yaw: 18.023433368955107
+        - label: original cleaner label curved strip 5
+          min: 0.042609, -0.070985, 0.033
+          max: 0.082391, -0.066985, 0.158
+          color: '#FFFFFF'
+          surface: CMU3DToolsCloudCleanadeLabelStrip4
+          surfaceAxis: XZ
+          yaw: 38.2294235611005
+        - label: narrow neck
+          min: -0.052, -0.048, 0.204
+          max: 0.052, 0.048, 0.251
+          color: '#365254'
+          shape: CylinderZ
+        - label: upper metal canister
+          min: -0.09, -0.073, 0.235
+          max: 0.09, 0.073, 0.385
+          color: '#424B4E'
+          shape: CylinderZ
+        - label: metal upper rim
+          min: -0.088, -0.072, 0.368
+          max: 0.088, 0.072, 0.389
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: metal shoulder cap
+          min: -0.08, -0.066, 0.378
+          max: 0.08, 0.066, 0.423
+          color: '#666E71'
+          shape: Ellipsoid
+        - label: lower metal lip
+          min: -0.077, -0.065, 0.229
+          max: 0.077, 0.065, 0.253
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: cap broad source highlight
+          min: -0.066, -0.074, 0.295
+          max: -0.039, -0.067, 0.368
+          color: '#737A7D'
+        - label: cap narrow source highlight
+          min: -0.038, -0.074, 0.318
+          max: -0.012, -0.068, 0.365
+          color: '#666E71'
+        - label: front recessed cap slot
+          min: 0.001, -0.076, 0.284
+          max: 0.034, -0.069, 0.355
+          color: '#343B3E'
+        - label: lever hinge
+          min: 0.047, -0.079, 0.35
+          max: 0.093, -0.031, 0.374
+          color: '#8D793F'
+          shape: CylinderY
+        - label: brass safety lever
+          min: 0.059, -0.084, 0.273
+          max: 0.09, -0.061, 0.357
+          color: '#C3AC75'
+        - label: lever lower bent toe
+          min: 0.044, -0.084, 0.263
+          max: 0.092, -0.061, 0.286
+          color: '#A39365'
+        - label: top valve stem
+          min: -0.014, -0.013, 0.41
+          max: 0.014, 0.013, 0.461
+          color: '#343B3E'
+          shape: CylinderZ
+        - label: top amber timer bead
+          min: -0.014, -0.014, 0.448
+          max: 0.014, 0.014, 0.477
+          color: '#EE6434'
+          shape: Ellipsoid
+      delays:
+      - 0.1
+      - 0.1
+- type: cmu3DModel
+  id: CMU3DWhiteTowelCloud
+  label: 'White towel: thick layered folds and curled hems'
+  status: draft
+  sourcePrototypes:
+  - TowelColorWhite
+  referencePrototype: TowelColorWhite
+  referenceRsi: /Textures/Clothing/Multiple/towel.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: 'Loose folded world icon only, retaining the exact TowelColorWhite
+    ID and source layer tint #EAE8E8. Multiple thick fabric layers, rounded returns,
+    exposed lower fold shadow and raised hems form actual folded volumes. Source icon
+    has one direction; equipped and in-hand resources have four directions and are
+    not modeled. Colored source layer prevents the single-white-layer spriteStates
+    path, so no live clothing appearance is asserted. Back, fold thickness, saturation,
+    liquid absorption and placement are unverified.'
+  parts:
+  - label: lower folded fabric body
+    min: -0.218, -0.218, 0.01
+    max: 0.218, 0.218, 0.049
+    color: '#929191'
+    yaw: 45
+  - label: lower soft left return
+    min: -0.168271, -0.363271, 0.01
+    max: -0.144271, 0.050729, 0.048
+    color: '#929191'
+    shape: CylinderY
+    yaw: 45
+  - label: lower soft right return
+    min: 0.142003, -0.051497, 0.01
+    max: 0.167003, 0.360503, 0.048
+    color: '#929191'
+    shape: CylinderY
+    yaw: 45
+  - label: lower front fold return
+    min: -0.074093, -0.163907, 0.035
+    max: 0.373907, -0.135907, 0.061
+    color: '#BBBABA'
+    shape: CylinderX
+    yaw: 45
+  - label: middle textile layer
+    min: -0.225172, -0.224828, 0.047
+    max: 0.230828, 0.219172, 0.075
+    color: '#BBBABA'
+    yaw: 45
+  - label: middle back soft fold
+    min: -0.05534, -0.172867, 0.046
+    max: 0.37566, -0.148867, 0.077
+    color: '#BBBABA'
+    shape: CylinderX
+    yaw: 45
+  - label: upper left broad fold
+    min: -0.174856, -0.193644, 0.078
+    max: 0.273144, 0.095356, 0.112
+    color: '#D2D0D0'
+    yaw: 45
+  - label: upper exposed fold slope
+    min: -0.320167, 0.016167, 0.075
+    max: 0.127833, 0.176167, 0.112
+    color: '#BBBABA'
+    shape: WedgeYReverse
+    yaw: 45
+  - label: upper rounded left hem
+    min: -0.169771, -0.363306, 0.076
+    max: -0.142771, 0.043694, 0.107
+    color: '#BBBABA'
+    shape: CylinderY
+    yaw: 45
+  - label: upper rounded right hem
+    min: 0.144331, -0.050876, 0.076
+    max: 0.170331, 0.364124, 0.103
+    color: '#BBBABA'
+    shape: CylinderY
+    yaw: 45
+  - label: upper back hem
+    min: -0.062558, -0.164442, 0.078
+    max: 0.369442, -0.142442, 0.106
+    color: '#BBBABA'
+    shape: CylinderX
+    yaw: 45
+  - label: loose front edge roll
+    min: -0.367614, 0.138614, 0.052
+    max: 0.066386, 0.162614, 0.079
+    color: '#D2D0D0'
+    shape: CylinderX
+    yaw: 45
+  - label: open lower fold shadow
+    min: -0.356038, 0.155538, 0.024
+    max: 0.039962, 0.160538, 0.037
+    color: '#6D6C6C'
+    yaw: 45
+  - label: lower exposed bright edge
+    min: -0.350574, 0.156074, 0.011
+    max: 0.027426, 0.167074, 0.025
+    color: '#D2D0D0'
+    shape: CylinderX
+    yaw: 45
+  - label: raised woven hem 1
+    min: -0.067528, -0.142472, 0.107
+    max: 0.340472, -0.130472, 0.113
+    color: '#C9C7C7'
+    shape: CylinderX
+    yaw: 45
+  - label: raised woven hem 2
+    min: -0.339057, 0.129057, 0.079
+    max: 0.068943, 0.141057, 0.085
+    color: '#C9C7C7'
+    shape: CylinderX
+    yaw: 45
+  referenceTint: '#EAE8E8'

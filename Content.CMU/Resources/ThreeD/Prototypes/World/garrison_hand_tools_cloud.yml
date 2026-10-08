@@ -1,0 +1,5351 @@
+- type: cmu3DModel
+  id: CMU3DHandCMCrowbarCloud
+  label: Steel crowbar with bent hook and pry foot
+  status: draft
+  sourcePrototypes:
+  - CMCrowbar
+  referencePrototype: CMCrowbar
+  referenceRsi: /Textures/_RMC14/Objects/Tools/crowbar.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Single rotating loose-world icon. Bent continuous cylindrical shaft
+    and flattened working ends follow the source centerline. Held/equipped forms are
+    outside this asset. Physical thickness, hidden sides, support pose and material
+    finish are inferred. No saved-map contact, native rendering, live interaction
+    or fidelity approval.
+  parts:
+  - label: steel pry shaft segment 1
+    min: -0.375464, -0.226875, 0.010562
+    max: -0.327661, -0.17, 0.067437
+    color: '#706F6F'
+    yaw: 11.309932
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel pry shaft segment 2
+    min: -0.44389, 0.052813, 0.010562
+    max: 0.32514, 0.109688, 0.067437
+    color: '#706F6F'
+    yaw: 45.658543
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel pry shaft segment 3
+    min: 0.209375, 0.327813, 0.010562
+    max: 0.25, 0.384688, 0.067437
+    color: '#706F6F'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel pry shaft segment 4
+    min: 0.240236, 0.30125, 0.010562
+    max: 0.322264, 0.358125, 0.067437
+    color: '#706F6F'
+    yaw: -40.364537
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel pry shaft segment 5
+    min: 0.292625, 0.248125, 0.010562
+    max: 0.348, 0.305, 0.067437
+    color: '#706F6F'
+    yaw: -73.61046
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel pry shaft segment 6
+    min: 0.289357, 0.20125, 0.010562
+    max: 0.338768, 0.258125, 0.067437
+    color: '#706F6F'
+    yaw: -124.695154
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel pry shaft bend 1
+    min: -0.356563, -0.222187, 0.010562
+    max: -0.299687, -0.165312, 0.067437
+    color: '#706F6F'
+    shape: Ellipsoid
+  - label: steel pry shaft bend 2
+    min: 0.180937, 0.327813, 0.010562
+    max: 0.237812, 0.384688, 0.067437
+    color: '#706F6F'
+    shape: Ellipsoid
+  - label: steel pry shaft bend 3
+    min: 0.221562, 0.327813, 0.010562
+    max: 0.278438, 0.384688, 0.067437
+    color: '#706F6F'
+    shape: Ellipsoid
+  - label: steel pry shaft bend 4
+    min: 0.284062, 0.274687, 0.010562
+    max: 0.340938, 0.331562, 0.067437
+    color: '#706F6F'
+    shape: Ellipsoid
+  - label: steel pry shaft bend 5
+    min: 0.299687, 0.221562, 0.010562
+    max: 0.356563, 0.278438, 0.067437
+    color: '#706F6F'
+    shape: Ellipsoid
+  - label: shaft polished ridge segment 1
+    min: -0.375673, -0.197344, 0.0555
+    max: -0.330577, -0.182344, 0.0705
+    color: '#C2C2C2'
+    yaw: 14.036243
+    pitch: 0.0
+    shape: CylinderX
+  - label: shaft polished ridge segment 2
+    min: -0.447015, 0.083125, 0.0555
+    max: 0.322015, 0.098125, 0.0705
+    color: '#C2C2C2'
+    yaw: 45.658543
+    pitch: 0.0
+    shape: CylinderX
+  - label: shaft polished ridge segment 3
+    min: 0.20625, 0.358125, 0.0555
+    max: 0.25, 0.373125, 0.0705
+    color: '#C2C2C2'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: shaft polished ridge segment 4
+    min: 0.239439, 0.331562, 0.0555
+    max: 0.316811, 0.346562, 0.0705
+    color: '#C2C2C2'
+    yaw: -43.363423
+    pitch: 0.0
+    shape: CylinderX
+  - label: shaft polished ridge bend 1
+    min: -0.33875, -0.191875, 0.0555
+    max: -0.32375, -0.176875, 0.0705
+    color: '#C2C2C2'
+    shape: Ellipsoid
+  - label: shaft polished ridge bend 2
+    min: 0.19875, 0.358125, 0.0555
+    max: 0.21375, 0.373125, 0.0705
+    color: '#C2C2C2'
+    shape: Ellipsoid
+  - label: shaft polished ridge bend 3
+    min: 0.2425, 0.358125, 0.0555
+    max: 0.2575, 0.373125, 0.0705
+    color: '#C2C2C2'
+    shape: Ellipsoid
+  - label: flattened prying foot
+    min: -0.398511, -0.222656, 0.021375
+    max: -0.323364, -0.182031, 0.042625
+    color: '#A6A6A6'
+    yaw: 3.576334
+    pitch: 0.0
+    shape: CylinderX
+  - label: flattened hook tip
+    min: 0.284932, 0.203125, 0.026125
+    max: 0.336943, 0.246875, 0.049875
+    color: '#C2C2C2'
+    yaw: -122.735226
+    pitch: 0.0
+    shape: CylinderX
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: steel pry shaft segment 1
+          min: -0.375464, -0.226875, 0.010562
+          max: -0.327661, -0.17, 0.067437
+          color: '#706F6F'
+          yaw: 11.309932
+          pitch: 0.0
+          shape: CylinderX
+        - label: steel pry shaft segment 2
+          min: -0.44389, 0.052813, 0.010562
+          max: 0.32514, 0.109688, 0.067437
+          color: '#706F6F'
+          yaw: 45.658543
+          pitch: 0.0
+          shape: CylinderX
+        - label: steel pry shaft segment 3
+          min: 0.209375, 0.327813, 0.010562
+          max: 0.25, 0.384688, 0.067437
+          color: '#706F6F'
+          yaw: 0.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: steel pry shaft segment 4
+          min: 0.240236, 0.30125, 0.010562
+          max: 0.322264, 0.358125, 0.067437
+          color: '#706F6F'
+          yaw: -40.364537
+          pitch: 0.0
+          shape: CylinderX
+        - label: steel pry shaft segment 5
+          min: 0.292625, 0.248125, 0.010562
+          max: 0.348, 0.305, 0.067437
+          color: '#706F6F'
+          yaw: -73.61046
+          pitch: 0.0
+          shape: CylinderX
+        - label: steel pry shaft segment 6
+          min: 0.289357, 0.20125, 0.010562
+          max: 0.338768, 0.258125, 0.067437
+          color: '#706F6F'
+          yaw: -124.695154
+          pitch: 0.0
+          shape: CylinderX
+        - label: steel pry shaft bend 1
+          min: -0.356563, -0.222187, 0.010562
+          max: -0.299687, -0.165312, 0.067437
+          color: '#706F6F'
+          shape: Ellipsoid
+        - label: steel pry shaft bend 2
+          min: 0.180937, 0.327813, 0.010562
+          max: 0.237812, 0.384688, 0.067437
+          color: '#706F6F'
+          shape: Ellipsoid
+        - label: steel pry shaft bend 3
+          min: 0.221562, 0.327813, 0.010562
+          max: 0.278438, 0.384688, 0.067437
+          color: '#706F6F'
+          shape: Ellipsoid
+        - label: steel pry shaft bend 4
+          min: 0.284062, 0.274687, 0.010562
+          max: 0.340938, 0.331562, 0.067437
+          color: '#706F6F'
+          shape: Ellipsoid
+        - label: steel pry shaft bend 5
+          min: 0.299687, 0.221562, 0.010562
+          max: 0.356563, 0.278438, 0.067437
+          color: '#706F6F'
+          shape: Ellipsoid
+        - label: shaft polished ridge segment 1
+          min: -0.375673, -0.197344, 0.0555
+          max: -0.330577, -0.182344, 0.0705
+          color: '#C2C2C2'
+          yaw: 14.036243
+          pitch: 0.0
+          shape: CylinderX
+        - label: shaft polished ridge segment 2
+          min: -0.447015, 0.083125, 0.0555
+          max: 0.322015, 0.098125, 0.0705
+          color: '#C2C2C2'
+          yaw: 45.658543
+          pitch: 0.0
+          shape: CylinderX
+        - label: shaft polished ridge segment 3
+          min: 0.20625, 0.358125, 0.0555
+          max: 0.25, 0.373125, 0.0705
+          color: '#C2C2C2'
+          yaw: 0.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: shaft polished ridge segment 4
+          min: 0.239439, 0.331562, 0.0555
+          max: 0.316811, 0.346562, 0.0705
+          color: '#C2C2C2'
+          yaw: -43.363423
+          pitch: 0.0
+          shape: CylinderX
+        - label: shaft polished ridge bend 1
+          min: -0.33875, -0.191875, 0.0555
+          max: -0.32375, -0.176875, 0.0705
+          color: '#C2C2C2'
+          shape: Ellipsoid
+        - label: shaft polished ridge bend 2
+          min: 0.19875, 0.358125, 0.0555
+          max: 0.21375, 0.373125, 0.0705
+          color: '#C2C2C2'
+          shape: Ellipsoid
+        - label: shaft polished ridge bend 3
+          min: 0.2425, 0.358125, 0.0555
+          max: 0.2575, 0.373125, 0.0705
+          color: '#C2C2C2'
+          shape: Ellipsoid
+        - label: flattened prying foot
+          min: -0.398511, -0.222656, 0.021375
+          max: -0.323364, -0.182031, 0.042625
+          color: '#A6A6A6'
+          yaw: 3.576334
+          pitch: 0.0
+          shape: CylinderX
+        - label: flattened hook tip
+          min: 0.284932, 0.203125, 0.026125
+          max: 0.336943, 0.246875, 0.049875
+          color: '#C2C2C2'
+          yaw: -122.735226
+          pitch: 0.0
+          shape: CylinderX
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandCMScrewdriverCloud
+  label: 'Screwdriver: separate neutral handle and steel shaft'
+  status: draft
+  sourcePrototypes:
+  - CMScrewdriver
+  referencePrototype: CMScrewdriver
+  referenceRsi: /Textures/_RMC14/Objects/Tools/screwdriver.rsi
+  referenceState: screwdriver
+  sourceDirections: 1
+  placement: surface
+  description: Two visible source layers are composed in the review. The source RandomSprite
+    Rainbow palette tints only the handle. This neutral-gray draft does not claim
+    a saved or live random tint; no incompatible single-layer adapter is declared.
+    The precomposed screwdriver-map blue icon is not substituted for the actual layered
+    source. Held/equipped forms unsupported. Physical thickness, hidden sides, support
+    pose and material finish are inferred. No saved-map contact, native rendering,
+    live interaction or fidelity approval.
+  parts:
+  - label: neutral random-tint handle
+    min: -0.302583, -0.230313, 0.005625
+    max: -0.064605, -0.141563, 0.094375
+    color: '#7F7F7F'
+    yaw: 48.460183
+    pitch: 0.0
+    shape: CylinderX
+  - label: rounded handle butt
+    min: -0.278236, -0.320938, 0.011875
+    max: -0.256139, -0.244688, 0.088125
+    color: '#4C4C4C'
+    yaw: 45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle collar
+    min: -0.117969, -0.121094, 0.015625
+    max: -0.072656, -0.052344, 0.084375
+    color: '#606060'
+    yaw: 46.397181
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel shaft
+    min: -0.136301, 0.065312, 0.033063
+    max: 0.294113, 0.097187, 0.064938
+    color: '#7F7F7F'
+    yaw: 41.909911
+    pitch: 0.0
+    shape: CylinderX
+  - label: shaft highlight
+    min: -0.112799, 0.079063, 0.056688
+    max: 0.279986, 0.089688, 0.067312
+    color: '#C1C1C1'
+    yaw: 41.936388
+    pitch: 0.0
+    shape: CylinderX
+  - label: flat working blade
+    min: 0.219434, 0.20875, 0.04275
+    max: 0.275879, 0.25375, 0.05525
+    color: '#606060'
+    yaw: 41.633539
+    pitch: 0.0
+    shape: CylinderX
+  - label: longitudinal grip ridge 1
+    min: -0.294404, -0.186719, 0.08225
+    max: -0.101846, -0.179219, 0.08975
+    color: '#C1C1C1'
+    yaw: 46.775535
+    pitch: 0.0
+    shape: CylinderX
+  - label: longitudinal grip ridge 2
+    min: -0.275654, -0.201719, 0.08225
+    max: -0.083096, -0.194219, 0.08975
+    color: '#E3E3E3'
+    yaw: 46.775535
+    pitch: 0.0
+    shape: CylinderX
+  - label: longitudinal grip ridge 3
+    min: -0.256904, -0.216719, 0.08225
+    max: -0.064346, -0.209219, 0.08975
+    color: '#606060'
+    yaw: 46.775535
+    pitch: 0.0
+    shape: CylinderX
+  - label: collar upper trim
+    min: -0.12496, -0.095625, 0.062312
+    max: -0.064103, -0.07625, 0.081687
+    color: '#C1C1C1'
+    yaw: -41.87787
+    pitch: 0.0
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DHandCMWirecutterCloud
+  label: 'Wirecutters: paired grips, forged cheeks and pivot'
+  status: draft
+  sourcePrototypes:
+  - CMWirecutter
+  referencePrototype: CMWirecutter
+  referenceRsi: /Textures/_RMC14/Objects/Tools/wirecutters.rsi
+  referenceState: cutters
+  sourceDirections: 1
+  placement: surface
+  description: Actual handle and cutty-thingy layers composed for review. RandomSprite
+    Rainbow colors the grips only; the neutral-gray grip study makes no live/random
+    color claim. Separate grips leave the source handle gap open. Joint articulation
+    and held/equipped appearances unsupported. Physical thickness, hidden sides, support
+    pose and material finish are inferred. No saved-map contact, native rendering,
+    live interaction or fidelity approval.
+  parts:
+  - label: handle core 15.75
+    min: -0.353125, -0.0125, 0.029688
+    max: 0.0, 0.028125, 0.070312
+    color: '#49433A'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: neutral random-tint handle 15.75
+    min: -0.353125, -0.036875, 0.019125
+    max: -0.054688, 0.0525, 0.082875
+    color: '#9C9C9C'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 15.75-0
+    min: -0.354687, 0.003437, 0.078625
+    max: -0.295313, 0.012188, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 15.75-1
+    min: -0.303125, 0.003437, 0.078625
+    max: -0.24375, 0.012188, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 15.75-2
+    min: -0.251563, 0.003437, 0.078625
+    max: -0.192188, 0.012188, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 15.75-3
+    min: -0.2, 0.003437, 0.078625
+    max: -0.140625, 0.012188, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 15.75-4
+    min: -0.148438, 0.003437, 0.078625
+    max: -0.089063, 0.012188, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle core 21.55
+    min: -0.353125, -0.19375, 0.029688
+    max: 0.0, -0.153125, 0.070312
+    color: '#49433A'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: neutral random-tint handle 21.55
+    min: -0.353125, -0.218125, 0.019125
+    max: -0.054688, -0.12875, 0.082875
+    color: '#9C9C9C'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 21.55-0
+    min: -0.354687, -0.177813, 0.078625
+    max: -0.295313, -0.169063, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 21.55-1
+    min: -0.303125, -0.177813, 0.078625
+    max: -0.24375, -0.169063, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 21.55-2
+    min: -0.251563, -0.177813, 0.078625
+    max: -0.192188, -0.169063, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 21.55-3
+    min: -0.2, -0.177813, 0.078625
+    max: -0.140625, -0.169063, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: handle molded groove 21.55-4
+    min: -0.148438, -0.177813, 0.078625
+    max: -0.089063, -0.169063, 0.087375
+    color: '#787878'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper forged cheek
+    min: -0.03125, -0.082812, 0.025
+    max: 0.36875, 0.04375, 0.086
+    color: '#554D42'
+  - label: lower forged cheek
+    min: -0.03125, -0.2125, 0.018
+    max: 0.36875, -0.082812, 0.078
+    color: '#4E463D'
+  - label: cutting nose
+    min: 0.353125, -0.15625, 0.023
+    max: 0.39375, 0.0, 0.085
+    color: '#74695B'
+  - label: upper cutting edge
+    min: 0.030741, -0.074375, 0.07925
+    max: 0.338009, -0.056875, 0.09675
+    color: '#74695B'
+    yaw: -4.666858
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower cutting edge
+    min: 0.030675, -0.106406, 0.07125
+    max: 0.338075, -0.088906, 0.08875
+    color: '#74695B'
+    yaw: 4.957126
+    pitch: 0.0
+    shape: CylinderX
+  - label: pivot washer
+    min: 0.225, -0.1125, 0.084
+    max: 0.303125, -0.03125, 0.096
+    color: '#3F3932'
+    shape: CylinderZ
+  - label: pivot rivet
+    min: 0.246875, -0.089063, 0.095
+    max: 0.28125, -0.054688, 0.103
+    color: '#262323'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DHandRMCShovelCloud
+  label: 'Shovel: straight handle, ferrule and formed scoop'
+  status: draft
+  sourcePrototypes:
+  - RMCShovel
+  referencePrototype: RMCShovel
+  referenceRsi: /Textures/_RMC14/Objects/Tools/shovel.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Source-shaped straight handled shovel with a shallow formed metal scoop
+    and raised side edges. No folding pose or D-handle is invented. Digging/held motion
+    unsupported. Physical thickness, hidden sides, support pose and material finish
+    are inferred. No saved-map contact, native rendering, live interaction or fidelity
+    approval.
+  parts:
+  - label: wooden shaft
+    min: -0.207579, 0.097812, 0.022813
+    max: 0.377892, 0.152188, 0.077188
+    color: '#61584C'
+    yaw: 48.353762
+    pitch: 0.0
+    shape: CylinderX
+  - label: shaft warm highlight
+    min: -0.18519, 0.127344, 0.067187
+    max: 0.361752, 0.142969, 0.082812
+    color: '#B0A18E'
+    yaw: 48.706289
+    pitch: 0.0
+    shape: CylinderX
+  - label: rounded shaft end
+    min: 0.253382, 0.304531, 0.019375
+    max: 0.288806, 0.365781, 0.080625
+    color: '#433E37'
+    yaw: 48.576334
+    pitch: 0.0
+    shape: CylinderX
+  - label: steel ferrule
+    min: -0.143725, -0.11875, 0.006937
+    max: -0.045337, -0.040625, 0.085062
+    color: '#484343'
+    yaw: 46.930587
+    pitch: 0.0
+    shape: CylinderX
+  - label: continuous pressed spade pan
+    min: -0.398438, -0.348437, 0.018
+    max: -0.1, -0.09375, 0.06
+    color: '#645D5D'
+    shape: Ellipsoid
+  - label: broad lower cutting pan
+    min: -0.40625, -0.351562, 0.021
+    max: -0.18125, -0.2, 0.054
+    color: '#7C7373'
+    shape: Ellipsoid
+  - label: upper blade shoulder
+    min: -0.25625, -0.25, 0.025
+    max: -0.096875, -0.092187, 0.063
+    color: '#645D5D'
+    shape: Ellipsoid
+  - label: rolled left scoop edge segment 1
+    min: -0.451562, -0.260937, 0.061625
+    max: -0.335938, -0.242187, 0.080375
+    color: '#B1A7A7'
+    yaw: 90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled left scoop edge segment 2
+    min: -0.413126, -0.164062, 0.061625
+    max: -0.314999, -0.145312, 0.080375
+    color: '#B1A7A7'
+    yaw: 52.765166
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled left scoop edge segment 3
+    min: -0.336719, -0.113281, 0.061625
+    max: -0.275781, -0.094531, 0.080375
+    color: '#B1A7A7'
+    yaw: 22.619865
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled left scoop edge segment 4
+    min: -0.27876, -0.110156, 0.061625
+    max: -0.161865, -0.091406, 0.080375
+    color: '#B1A7A7'
+    yaw: -8.455028
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled left scoop edge bend 1
+    min: -0.403125, -0.203125, 0.061625
+    max: -0.384375, -0.184375, 0.080375
+    color: '#B1A7A7'
+    shape: Ellipsoid
+  - label: rolled left scoop edge bend 2
+    min: -0.34375, -0.125, 0.061625
+    max: -0.325, -0.10625, 0.080375
+    color: '#B1A7A7'
+    shape: Ellipsoid
+  - label: rolled left scoop edge bend 3
+    min: -0.2875, -0.101562, 0.061625
+    max: -0.26875, -0.082812, 0.080375
+    color: '#B1A7A7'
+    shape: Ellipsoid
+  - label: sharpened shovel edge segment 1
+    min: -0.393821, -0.335625, 0.0395
+    max: -0.256179, -0.320625, 0.0545
+    color: '#B1A7A7'
+    yaw: -2.602562
+    pitch: 0.0
+    shape: CylinderX
+  - label: sharpened shovel edge segment 2
+    min: -0.262132, -0.315313, 0.0395
+    max: -0.162868, -0.300313, 0.0545
+    color: '#B1A7A7'
+    yaw: 28.17859
+    pitch: 0.0
+    shape: CylinderX
+  - label: sharpened shovel edge segment 3
+    min: -0.18377, -0.260625, 0.0395
+    max: -0.10373, -0.245625, 0.0545
+    color: '#B1A7A7'
+    yaw: 51.340192
+    pitch: 0.0
+    shape: CylinderX
+  - label: sharpened shovel edge bend 1
+    min: -0.26375, -0.33875, 0.0395
+    max: -0.24875, -0.32375, 0.0545
+    color: '#B1A7A7'
+    shape: Ellipsoid
+  - label: sharpened shovel edge bend 2
+    min: -0.17625, -0.291875, 0.0395
+    max: -0.16125, -0.276875, 0.0545
+    color: '#B1A7A7'
+    shape: Ellipsoid
+  - label: blade central reinforcing rib
+    min: -0.332963, -0.190625, 0.040125
+    max: -0.073287, -0.1625, 0.053875
+    color: '#7C7373'
+    yaw: 39.629005
+    pitch: 0.0
+    shape: CylinderX
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: wooden shaft
+          min: -0.207579, 0.097812, 0.022813
+          max: 0.377892, 0.152188, 0.077188
+          color: '#61584C'
+          yaw: 48.353762
+          pitch: 0.0
+          shape: CylinderX
+        - label: shaft warm highlight
+          min: -0.18519, 0.127344, 0.067187
+          max: 0.361752, 0.142969, 0.082812
+          color: '#B0A18E'
+          yaw: 48.706289
+          pitch: 0.0
+          shape: CylinderX
+        - label: rounded shaft end
+          min: 0.253382, 0.304531, 0.019375
+          max: 0.288806, 0.365781, 0.080625
+          color: '#433E37'
+          yaw: 48.576334
+          pitch: 0.0
+          shape: CylinderX
+        - label: steel ferrule
+          min: -0.143725, -0.11875, 0.006937
+          max: -0.045337, -0.040625, 0.085062
+          color: '#484343'
+          yaw: 46.930587
+          pitch: 0.0
+          shape: CylinderX
+        - label: continuous pressed spade pan
+          min: -0.398438, -0.348437, 0.018
+          max: -0.1, -0.09375, 0.06
+          color: '#645D5D'
+          shape: Ellipsoid
+        - label: broad lower cutting pan
+          min: -0.40625, -0.351562, 0.021
+          max: -0.18125, -0.2, 0.054
+          color: '#7C7373'
+          shape: Ellipsoid
+        - label: upper blade shoulder
+          min: -0.25625, -0.25, 0.025
+          max: -0.096875, -0.092187, 0.063
+          color: '#645D5D'
+          shape: Ellipsoid
+        - label: rolled left scoop edge segment 1
+          min: -0.451562, -0.260937, 0.061625
+          max: -0.335938, -0.242187, 0.080375
+          color: '#B1A7A7'
+          yaw: 90.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled left scoop edge segment 2
+          min: -0.413126, -0.164062, 0.061625
+          max: -0.314999, -0.145312, 0.080375
+          color: '#B1A7A7'
+          yaw: 52.765166
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled left scoop edge segment 3
+          min: -0.336719, -0.113281, 0.061625
+          max: -0.275781, -0.094531, 0.080375
+          color: '#B1A7A7'
+          yaw: 22.619865
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled left scoop edge segment 4
+          min: -0.27876, -0.110156, 0.061625
+          max: -0.161865, -0.091406, 0.080375
+          color: '#B1A7A7'
+          yaw: -8.455028
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled left scoop edge bend 1
+          min: -0.403125, -0.203125, 0.061625
+          max: -0.384375, -0.184375, 0.080375
+          color: '#B1A7A7'
+          shape: Ellipsoid
+        - label: rolled left scoop edge bend 2
+          min: -0.34375, -0.125, 0.061625
+          max: -0.325, -0.10625, 0.080375
+          color: '#B1A7A7'
+          shape: Ellipsoid
+        - label: rolled left scoop edge bend 3
+          min: -0.2875, -0.101562, 0.061625
+          max: -0.26875, -0.082812, 0.080375
+          color: '#B1A7A7'
+          shape: Ellipsoid
+        - label: sharpened shovel edge segment 1
+          min: -0.393821, -0.335625, 0.0395
+          max: -0.256179, -0.320625, 0.0545
+          color: '#B1A7A7'
+          yaw: -2.602562
+          pitch: 0.0
+          shape: CylinderX
+        - label: sharpened shovel edge segment 2
+          min: -0.262132, -0.315313, 0.0395
+          max: -0.162868, -0.300313, 0.0545
+          color: '#B1A7A7'
+          yaw: 28.17859
+          pitch: 0.0
+          shape: CylinderX
+        - label: sharpened shovel edge segment 3
+          min: -0.18377, -0.260625, 0.0395
+          max: -0.10373, -0.245625, 0.0545
+          color: '#B1A7A7'
+          yaw: 51.340192
+          pitch: 0.0
+          shape: CylinderX
+        - label: sharpened shovel edge bend 1
+          min: -0.26375, -0.33875, 0.0395
+          max: -0.24875, -0.32375, 0.0545
+          color: '#B1A7A7'
+          shape: Ellipsoid
+        - label: sharpened shovel edge bend 2
+          min: -0.17625, -0.291875, 0.0395
+          max: -0.16125, -0.276875, 0.0545
+          color: '#B1A7A7'
+          shape: Ellipsoid
+        - label: blade central reinforcing rib
+          min: -0.332963, -0.190625, 0.040125
+          max: -0.073287, -0.1625, 0.053875
+          color: '#7C7373'
+          yaw: 39.629005
+          pitch: 0.0
+          shape: CylinderX
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandMaintenanceJackCloud
+  label: 'Maintenance jack: two forked heads and banded shaft'
+  status: draft
+  sourcePrototypes:
+  - MaintenanceJack
+  referencePrototype: MaintenanceJack
+  referenceRsi: /Textures/_RMC14/Objects/Tools/maintenance_jack.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: The actual source is a diagonal dual-ended maintenance tool. Its two
+    metal fork heads, segmented black shaft and orange bands are modeled directly
+    from the icon, with real open jaw gaps. No hydraulic jack invented. Held/equipped
+    forms unsupported. Physical thickness, hidden sides, support pose and material
+    finish are inferred. No saved-map contact, native rendering, live interaction
+    or fidelity approval.
+  parts:
+  - label: black compound tool shaft segment 1
+    min: -0.280093, -0.222031, 0.01825
+    max: -0.163657, -0.154531, 0.08575
+    color: '#303030'
+    yaw: 49.899092
+    pitch: 0.0
+    shape: CylinderX
+  - label: black compound tool shaft segment 2
+    min: -0.204637, -0.1275, 0.01825
+    max: -0.060988, -0.06, 0.08575
+    color: '#303030'
+    yaw: 44.118596
+    pitch: 0.0
+    shape: CylinderX
+  - label: black compound tool shaft segment 3
+    min: -0.113264, -0.00875, 0.01825
+    max: 0.066389, 0.05875, 0.08575
+    color: '#303030'
+    yaw: 49.939216
+    pitch: 0.0
+    shape: CylinderX
+  - label: black compound tool shaft segment 4
+    min: 0.007541, 0.126406, 0.01825
+    max: 0.198709, 0.193906, 0.08575
+    color: '#303030'
+    yaw: 44.006531
+    pitch: 0.0
+    shape: CylinderX
+  - label: black compound tool shaft bend 1
+    min: -0.218125, -0.1775, 0.01825
+    max: -0.150625, -0.11, 0.08575
+    color: '#303030'
+    shape: Ellipsoid
+  - label: black compound tool shaft bend 2
+    min: -0.115, -0.0775, 0.01825
+    max: -0.0475, -0.01, 0.08575
+    color: '#303030'
+    shape: Ellipsoid
+  - label: black compound tool shaft bend 3
+    min: 0.000625, 0.06, 0.01825
+    max: 0.068125, 0.1275, 0.08575
+    color: '#303030'
+    shape: Ellipsoid
+  - label: raised central shaft highlight segment 1
+    min: -0.24343, -0.15125, 0.0775
+    max: -0.090945, -0.13625, 0.0925
+    color: '#6F6E6E'
+    yaw: 44.169685
+    pitch: 0.0
+    shape: CylinderX
+  - label: raised central shaft highlight segment 2
+    min: -0.152019, -0.01375, 0.0775
+    max: 0.067644, 0.00125, 0.0925
+    color: '#6F6E6E'
+    yaw: 50.194429
+    pitch: 0.0
+    shape: CylinderX
+  - label: raised central shaft highlight segment 3
+    min: -0.001138, 0.137813, 0.0775
+    max: 0.182388, 0.152813, 0.0925
+    color: '#6F6E6E'
+    yaw: 47.070031
+    pitch: 0.0
+    shape: CylinderX
+  - label: raised central shaft highlight bend 1
+    min: -0.12, -0.098125, 0.0775
+    max: -0.105, -0.083125, 0.0925
+    color: '#6F6E6E'
+    shape: Ellipsoid
+  - label: raised central shaft highlight bend 2
+    min: 0.020625, 0.070625, 0.0775
+    max: 0.035625, 0.085625, 0.0925
+    color: '#6F6E6E'
+    shape: Ellipsoid
+  - label: orange safety band 1
+    min: -0.229688, -0.197188, 0.014625
+    max: -0.139062, -0.118438, 0.093375
+    color: '#985004'
+    yaw: 46.397181
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange safety band 2
+    min: 0.035749, 0.066875, 0.014625
+    max: 0.087689, 0.145625, 0.093375
+    color: '#985004'
+    yaw: 46.218875
+    pitch: 0.0
+    shape: CylinderX
+  - label: orange safety band 3
+    min: 0.116107, 0.155938, 0.014625
+    max: 0.171393, 0.234687, 0.093375
+    color: '#985004'
+    yaw: 47.29061
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower wrench fork left segment 1
+    min: -0.375636, -0.267813, 0.025938
+    max: -0.236864, -0.219688, 0.074063
+    color: '#A5A5A5'
+    yaw: -172.234834
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower wrench fork left segment 2
+    min: -0.41903, -0.31625, 0.025938
+    max: -0.340345, -0.268125, 0.074063
+    color: '#A5A5A5'
+    yaw: -96.842773
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower wrench fork left bend 1
+    min: -0.399062, -0.277188, 0.025938
+    max: -0.350938, -0.229063, 0.074063
+    color: '#A5A5A5'
+    shape: Ellipsoid
+  - label: lower wrench fork right segment 1
+    min: -0.29104, -0.305625, 0.025625
+    max: -0.19646, -0.256875, 0.074375
+    color: '#6F6E6E'
+    yaw: -97.594643
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower wrench fork right segment 2
+    min: -0.308751, -0.382187, 0.025625
+    max: -0.234999, -0.333437, 0.074375
+    color: '#6F6E6E'
+    yaw: -126.384352
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower wrench fork right bend 1
+    min: -0.274375, -0.3525, 0.025625
+    max: -0.225625, -0.30375, 0.074375
+    color: '#6F6E6E'
+    shape: Ellipsoid
+  - label: lower head heel
+    min: -0.366058, -0.274688, 0.020625
+    max: -0.224567, -0.215938, 0.079375
+    color: '#A5A5A5'
+    yaw: 6.340192
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper fork outer jaw segment 1
+    min: 0.139371, 0.259375, 0.025875
+    max: 0.249691, 0.315625, 0.082125
+    color: '#6F6E6E'
+    yaw: 52.480886
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper fork outer jaw segment 2
+    min: 0.223121, 0.28125, 0.025875
+    max: 0.323754, 0.3375, 0.082125
+    color: '#6F6E6E'
+    yaw: -25.769328
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper fork outer jaw segment 3
+    min: 0.30125, 0.224219, 0.025875
+    max: 0.389375, 0.280469, 0.082125
+    color: '#6F6E6E'
+    yaw: -52.926927
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper fork outer jaw segment 4
+    min: 0.322798, 0.154687, 0.025875
+    max: 0.395952, 0.210938, 0.082125
+    color: '#6F6E6E'
+    yaw: -109.983107
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper fork outer jaw segment 5
+    min: 0.319908, 0.108594, 0.025875
+    max: 0.351967, 0.164844, 0.082125
+    color: '#6F6E6E'
+    yaw: -133.025066
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper fork outer jaw bend 1
+    min: 0.2, 0.303125, 0.025875
+    max: 0.25625, 0.359375, 0.082125
+    color: '#6F6E6E'
+    shape: Ellipsoid
+  - label: upper fork outer jaw bend 2
+    min: 0.290625, 0.259375, 0.025875
+    max: 0.346875, 0.315625, 0.082125
+    color: '#6F6E6E'
+    shape: Ellipsoid
+  - label: upper fork outer jaw bend 3
+    min: 0.34375, 0.189062, 0.025875
+    max: 0.4, 0.245312, 0.082125
+    color: '#6F6E6E'
+    shape: Ellipsoid
+  - label: upper fork outer jaw bend 4
+    min: 0.31875, 0.120313, 0.025875
+    max: 0.375, 0.176563, 0.082125
+    color: '#6F6E6E'
+    shape: Ellipsoid
+  - label: upper pry toe segment 1
+    min: 0.155711, 0.3125, 0.029
+    max: 0.228664, 0.3625, 0.079
+    color: '#A5A5A5'
+    yaw: 170.134193
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper pry toe segment 2
+    min: 0.120856, 0.340625, 0.029
+    max: 0.169769, 0.390625, 0.079
+    color: '#A5A5A5'
+    yaw: 116.565051
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper pry toe bend 1
+    min: 0.13125, 0.31875, 0.029
+    max: 0.18125, 0.36875, 0.079
+    color: '#A5A5A5'
+    shape: Ellipsoid
+  - label: upper orange wrap
+    min: 0.298723, 0.228594, 0.021312
+    max: 0.373152, 0.297969, 0.090688
+    color: '#985004'
+    yaw: -50.964487
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper jaw bright working face
+    min: 0.317259, 0.1525, 0.068312
+    max: 0.385866, 0.181875, 0.097688
+    color: '#A5A5A5'
+    yaw: -120.068583
+    pitch: 0.0
+    shape: CylinderX
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: black compound tool shaft segment 1
+          min: -0.280093, -0.222031, 0.01825
+          max: -0.163657, -0.154531, 0.08575
+          color: '#303030'
+          yaw: 49.899092
+          pitch: 0.0
+          shape: CylinderX
+        - label: black compound tool shaft segment 2
+          min: -0.204637, -0.1275, 0.01825
+          max: -0.060988, -0.06, 0.08575
+          color: '#303030'
+          yaw: 44.118596
+          pitch: 0.0
+          shape: CylinderX
+        - label: black compound tool shaft segment 3
+          min: -0.113264, -0.00875, 0.01825
+          max: 0.066389, 0.05875, 0.08575
+          color: '#303030'
+          yaw: 49.939216
+          pitch: 0.0
+          shape: CylinderX
+        - label: black compound tool shaft segment 4
+          min: 0.007541, 0.126406, 0.01825
+          max: 0.198709, 0.193906, 0.08575
+          color: '#303030'
+          yaw: 44.006531
+          pitch: 0.0
+          shape: CylinderX
+        - label: black compound tool shaft bend 1
+          min: -0.218125, -0.1775, 0.01825
+          max: -0.150625, -0.11, 0.08575
+          color: '#303030'
+          shape: Ellipsoid
+        - label: black compound tool shaft bend 2
+          min: -0.115, -0.0775, 0.01825
+          max: -0.0475, -0.01, 0.08575
+          color: '#303030'
+          shape: Ellipsoid
+        - label: black compound tool shaft bend 3
+          min: 0.000625, 0.06, 0.01825
+          max: 0.068125, 0.1275, 0.08575
+          color: '#303030'
+          shape: Ellipsoid
+        - label: raised central shaft highlight segment 1
+          min: -0.24343, -0.15125, 0.0775
+          max: -0.090945, -0.13625, 0.0925
+          color: '#6F6E6E'
+          yaw: 44.169685
+          pitch: 0.0
+          shape: CylinderX
+        - label: raised central shaft highlight segment 2
+          min: -0.152019, -0.01375, 0.0775
+          max: 0.067644, 0.00125, 0.0925
+          color: '#6F6E6E'
+          yaw: 50.194429
+          pitch: 0.0
+          shape: CylinderX
+        - label: raised central shaft highlight segment 3
+          min: -0.001138, 0.137813, 0.0775
+          max: 0.182388, 0.152813, 0.0925
+          color: '#6F6E6E'
+          yaw: 47.070031
+          pitch: 0.0
+          shape: CylinderX
+        - label: raised central shaft highlight bend 1
+          min: -0.12, -0.098125, 0.0775
+          max: -0.105, -0.083125, 0.0925
+          color: '#6F6E6E'
+          shape: Ellipsoid
+        - label: raised central shaft highlight bend 2
+          min: 0.020625, 0.070625, 0.0775
+          max: 0.035625, 0.085625, 0.0925
+          color: '#6F6E6E'
+          shape: Ellipsoid
+        - label: orange safety band 1
+          min: -0.229688, -0.197188, 0.014625
+          max: -0.139062, -0.118438, 0.093375
+          color: '#985004'
+          yaw: 46.397181
+          pitch: 0.0
+          shape: CylinderX
+        - label: orange safety band 2
+          min: 0.035749, 0.066875, 0.014625
+          max: 0.087689, 0.145625, 0.093375
+          color: '#985004'
+          yaw: 46.218875
+          pitch: 0.0
+          shape: CylinderX
+        - label: orange safety band 3
+          min: 0.116107, 0.155938, 0.014625
+          max: 0.171393, 0.234687, 0.093375
+          color: '#985004'
+          yaw: 47.29061
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower wrench fork left segment 1
+          min: -0.375636, -0.267813, 0.025938
+          max: -0.236864, -0.219688, 0.074063
+          color: '#A5A5A5'
+          yaw: -172.234834
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower wrench fork left segment 2
+          min: -0.41903, -0.31625, 0.025938
+          max: -0.340345, -0.268125, 0.074063
+          color: '#A5A5A5'
+          yaw: -96.842773
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower wrench fork left bend 1
+          min: -0.399062, -0.277188, 0.025938
+          max: -0.350938, -0.229063, 0.074063
+          color: '#A5A5A5'
+          shape: Ellipsoid
+        - label: lower wrench fork right segment 1
+          min: -0.29104, -0.305625, 0.025625
+          max: -0.19646, -0.256875, 0.074375
+          color: '#6F6E6E'
+          yaw: -97.594643
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower wrench fork right segment 2
+          min: -0.308751, -0.382187, 0.025625
+          max: -0.234999, -0.333437, 0.074375
+          color: '#6F6E6E'
+          yaw: -126.384352
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower wrench fork right bend 1
+          min: -0.274375, -0.3525, 0.025625
+          max: -0.225625, -0.30375, 0.074375
+          color: '#6F6E6E'
+          shape: Ellipsoid
+        - label: lower head heel
+          min: -0.366058, -0.274688, 0.020625
+          max: -0.224567, -0.215938, 0.079375
+          color: '#A5A5A5'
+          yaw: 6.340192
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper fork outer jaw segment 1
+          min: 0.139371, 0.259375, 0.025875
+          max: 0.249691, 0.315625, 0.082125
+          color: '#6F6E6E'
+          yaw: 52.480886
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper fork outer jaw segment 2
+          min: 0.223121, 0.28125, 0.025875
+          max: 0.323754, 0.3375, 0.082125
+          color: '#6F6E6E'
+          yaw: -25.769328
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper fork outer jaw segment 3
+          min: 0.30125, 0.224219, 0.025875
+          max: 0.389375, 0.280469, 0.082125
+          color: '#6F6E6E'
+          yaw: -52.926927
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper fork outer jaw segment 4
+          min: 0.322798, 0.154687, 0.025875
+          max: 0.395952, 0.210938, 0.082125
+          color: '#6F6E6E'
+          yaw: -109.983107
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper fork outer jaw segment 5
+          min: 0.319908, 0.108594, 0.025875
+          max: 0.351967, 0.164844, 0.082125
+          color: '#6F6E6E'
+          yaw: -133.025066
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper fork outer jaw bend 1
+          min: 0.2, 0.303125, 0.025875
+          max: 0.25625, 0.359375, 0.082125
+          color: '#6F6E6E'
+          shape: Ellipsoid
+        - label: upper fork outer jaw bend 2
+          min: 0.290625, 0.259375, 0.025875
+          max: 0.346875, 0.315625, 0.082125
+          color: '#6F6E6E'
+          shape: Ellipsoid
+        - label: upper fork outer jaw bend 3
+          min: 0.34375, 0.189062, 0.025875
+          max: 0.4, 0.245312, 0.082125
+          color: '#6F6E6E'
+          shape: Ellipsoid
+        - label: upper fork outer jaw bend 4
+          min: 0.31875, 0.120313, 0.025875
+          max: 0.375, 0.176563, 0.082125
+          color: '#6F6E6E'
+          shape: Ellipsoid
+        - label: upper pry toe segment 1
+          min: 0.155711, 0.3125, 0.029
+          max: 0.228664, 0.3625, 0.079
+          color: '#A5A5A5'
+          yaw: 170.134193
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper pry toe segment 2
+          min: 0.120856, 0.340625, 0.029
+          max: 0.169769, 0.390625, 0.079
+          color: '#A5A5A5'
+          yaw: 116.565051
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper pry toe bend 1
+          min: 0.13125, 0.31875, 0.029
+          max: 0.18125, 0.36875, 0.079
+          color: '#A5A5A5'
+          shape: Ellipsoid
+        - label: upper orange wrap
+          min: 0.298723, 0.228594, 0.021312
+          max: 0.373152, 0.297969, 0.090688
+          color: '#985004'
+          yaw: -50.964487
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper jaw bright working face
+          min: 0.317259, 0.1525, 0.068312
+          max: 0.385866, 0.181875, 0.097688
+          color: '#A5A5A5'
+          yaw: -120.068583
+          pitch: 0.0
+          shape: CylinderX
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandHydroponicsToolClippersCloud
+  label: 'Pruning clippers: two grips and bypass blades'
+  status: draft
+  sourcePrototypes:
+  - HydroponicsToolClippers
+  referencePrototype: HydroponicsToolClippers
+  referenceRsi: /Textures/Objects/Tools/Hydroponics/clippers.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Source green/yellow handles remain separated around the broad metal
+    bypass blades and riveted pivot. Modeled as a loose closed tool; held cutting
+    action and mechanics remain unsupported. Physical thickness, hidden sides, support
+    pose and material finish are inferred. No saved-map contact, native rendering,
+    live interaction or fidelity approval.
+  parts:
+  - label: upper green handle frame segment 1
+    min: -0.302049, 0.125625, 0.027625
+    max: -0.176076, 0.174375, 0.076375
+    color: '#192A16'
+    yaw: -29.744881
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper green handle frame segment 2
+    min: -0.184494, 0.089688, 0.027625
+    max: 0.000119, 0.138438, 0.076375
+    color: '#192A16'
+    yaw: -2.910838
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper green handle frame segment 3
+    min: -0.00861, 0.055312, 0.027625
+    max: 0.10236, 0.104063, 0.076375
+    color: '#192A16'
+    yaw: -32.347443
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper green handle frame bend 1
+    min: -0.20875, 0.094375, 0.027625
+    max: -0.16, 0.143125, 0.076375
+    color: '#192A16'
+    shape: Ellipsoid
+  - label: upper green handle frame bend 2
+    min: -0.024375, 0.085, 0.027625
+    max: 0.024375, 0.13375, 0.076375
+    color: '#192A16'
+    shape: Ellipsoid
+  - label: upper orange grip insert
+    min: -0.203224, 0.097031, 0.048813
+    max: -0.048339, 0.145156, 0.083187
+    color: '#E79E35'
+    yaw: -2.89127
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper grip notch 0
+    min: -0.197656, 0.118594, 0.0835
+    max: -0.164844, 0.123594, 0.0885
+    color: '#E9B665'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper grip notch 1
+    min: -0.164844, 0.118594, 0.0835
+    max: -0.132031, 0.123594, 0.0885
+    color: '#E9B665'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper grip notch 2
+    min: -0.132031, 0.118594, 0.0835
+    max: -0.099219, 0.123594, 0.0885
+    color: '#E9B665'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper grip notch 3
+    min: -0.099219, 0.118594, 0.0835
+    max: -0.066406, 0.123594, 0.0885
+    color: '#E9B665'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower green handle frame segment 1
+    min: -0.296962, -0.074375, 0.027625
+    max: -0.184288, -0.025625, 0.076375
+    color: '#192A16'
+    yaw: -19.440035
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower green handle frame segment 2
+    min: -0.187552, -0.09, 0.027625
+    max: 5.2e-05, -0.04125, 0.076375
+    color: '#192A16'
+    yaw: 1.909152
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower green handle frame segment 3
+    min: -0.00861, -0.057188, 0.027625
+    max: 0.10236, -0.008438, 0.076375
+    color: '#192A16'
+    yaw: 32.347443
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower green handle frame bend 1
+    min: -0.211875, -0.093125, 0.027625
+    max: -0.163125, -0.044375, 0.076375
+    color: '#192A16'
+    shape: Ellipsoid
+  - label: lower green handle frame bend 2
+    min: -0.024375, -0.086875, 0.027625
+    max: 0.024375, -0.038125, 0.076375
+    color: '#192A16'
+    shape: Ellipsoid
+  - label: lower orange grip insert
+    min: -0.203129, -0.096719, 0.048813
+    max: -0.048434, -0.048594, 0.083187
+    color: '#E79E35'
+    yaw: 0.578726
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower grip notch 0
+    min: -0.198437, -0.0775, 0.0835
+    max: -0.164063, -0.0725, 0.0885
+    color: '#E9B665'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower grip notch 1
+    min: -0.165625, -0.0775, 0.0835
+    max: -0.13125, -0.0725, 0.0885
+    color: '#E9B665'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower grip notch 2
+    min: -0.132812, -0.0775, 0.0835
+    max: -0.098438, -0.0725, 0.0885
+    color: '#E9B665'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower grip notch 3
+    min: -0.1, -0.0775, 0.0835
+    max: -0.065625, -0.0725, 0.0885
+    color: '#E9B665'
+    yaw: -90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper blade root
+    min: 0.0625, -0.015625, 0.03
+    max: 0.1875, 0.096875, 0.085
+    color: '#626262'
+    shape: Ellipsoid
+  - label: upper blade spine
+    min: 0.140625, 0.037812, 0.0445
+    max: 0.365625, 0.093437, 0.0695
+    color: '#777474'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: upper blade bevel
+    min: 0.181166, 0.041719, 0.069375
+    max: 0.362584, 0.059844, 0.080625
+    color: '#ADADAD'
+    yaw: 2.468118
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower bypass blade
+    min: 0.10293, -0.057344, 0.022937
+    max: 0.256445, 0.002656, 0.051062
+    color: '#4D4D4D'
+    yaw: 4.085617
+    pitch: 0.0
+    shape: CylinderX
+  - label: lower blade tapered tip
+    min: 0.216091, -0.006406, 0.029187
+    max: 0.340159, 0.023594, 0.044812
+    color: '#626262'
+    yaw: 36.29263
+    pitch: 0.0
+    shape: CylinderX
+  - label: joint pin
+    min: 0.098437, -0.014062, 0.08
+    max: 0.15625, 0.04375, 0.1
+    color: '#8A8A8A'
+    shape: CylinderZ
+  - label: joint pin slot
+    min: 0.109375, 0.01, 0.100875
+    max: 0.145312, 0.018125, 0.107125
+    color: '#454545'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: upper green handle frame segment 1
+          min: -0.302049, 0.125625, 0.027625
+          max: -0.176076, 0.174375, 0.076375
+          color: '#192A16'
+          yaw: -29.744881
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper green handle frame segment 2
+          min: -0.184494, 0.089688, 0.027625
+          max: 0.000119, 0.138438, 0.076375
+          color: '#192A16'
+          yaw: -2.910838
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper green handle frame segment 3
+          min: -0.00861, 0.055312, 0.027625
+          max: 0.10236, 0.104063, 0.076375
+          color: '#192A16'
+          yaw: -32.347443
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper green handle frame bend 1
+          min: -0.20875, 0.094375, 0.027625
+          max: -0.16, 0.143125, 0.076375
+          color: '#192A16'
+          shape: Ellipsoid
+        - label: upper green handle frame bend 2
+          min: -0.024375, 0.085, 0.027625
+          max: 0.024375, 0.13375, 0.076375
+          color: '#192A16'
+          shape: Ellipsoid
+        - label: upper orange grip insert
+          min: -0.203224, 0.097031, 0.048813
+          max: -0.048339, 0.145156, 0.083187
+          color: '#E79E35'
+          yaw: -2.89127
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper grip notch 0
+          min: -0.197656, 0.118594, 0.0835
+          max: -0.164844, 0.123594, 0.0885
+          color: '#E9B665'
+          yaw: -90.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper grip notch 1
+          min: -0.164844, 0.118594, 0.0835
+          max: -0.132031, 0.123594, 0.0885
+          color: '#E9B665'
+          yaw: -90.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper grip notch 2
+          min: -0.132031, 0.118594, 0.0835
+          max: -0.099219, 0.123594, 0.0885
+          color: '#E9B665'
+          yaw: -90.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper grip notch 3
+          min: -0.099219, 0.118594, 0.0835
+          max: -0.066406, 0.123594, 0.0885
+          color: '#E9B665'
+          yaw: -90.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower green handle frame segment 1
+          min: -0.296962, -0.074375, 0.027625
+          max: -0.184288, -0.025625, 0.076375
+          color: '#192A16'
+          yaw: -19.440035
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower green handle frame segment 2
+          min: -0.187552, -0.09, 0.027625
+          max: 5.2e-05, -0.04125, 0.076375
+          color: '#192A16'
+          yaw: 1.909152
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower green handle frame segment 3
+          min: -0.00861, -0.057188, 0.027625
+          max: 0.10236, -0.008438, 0.076375
+          color: '#192A16'
+          yaw: 32.347443
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower green handle frame bend 1
+          min: -0.211875, -0.093125, 0.027625
+          max: -0.163125, -0.044375, 0.076375
+          color: '#192A16'
+          shape: Ellipsoid
+        - label: lower green handle frame bend 2
+          min: -0.024375, -0.086875, 0.027625
+          max: 0.024375, -0.038125, 0.076375
+          color: '#192A16'
+          shape: Ellipsoid
+        - label: lower orange grip insert
+          min: -0.203129, -0.096719, 0.048813
+          max: -0.048434, -0.048594, 0.083187
+          color: '#E79E35'
+          yaw: 0.578726
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower grip notch 0
+          min: -0.198437, -0.0775, 0.0835
+          max: -0.164063, -0.0725, 0.0885
+          color: '#E9B665'
+          yaw: -90.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower grip notch 1
+          min: -0.165625, -0.0775, 0.0835
+          max: -0.13125, -0.0725, 0.0885
+          color: '#E9B665'
+          yaw: -90.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower grip notch 2
+          min: -0.132812, -0.0775, 0.0835
+          max: -0.098438, -0.0725, 0.0885
+          color: '#E9B665'
+          yaw: -90.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower grip notch 3
+          min: -0.1, -0.0775, 0.0835
+          max: -0.065625, -0.0725, 0.0885
+          color: '#E9B665'
+          yaw: -90.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper blade root
+          min: 0.0625, -0.015625, 0.03
+          max: 0.1875, 0.096875, 0.085
+          color: '#626262'
+          shape: Ellipsoid
+        - label: upper blade spine
+          min: 0.140625, 0.037812, 0.0445
+          max: 0.365625, 0.093437, 0.0695
+          color: '#777474'
+          yaw: 0.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: upper blade bevel
+          min: 0.181166, 0.041719, 0.069375
+          max: 0.362584, 0.059844, 0.080625
+          color: '#ADADAD'
+          yaw: 2.468118
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower bypass blade
+          min: 0.10293, -0.057344, 0.022937
+          max: 0.256445, 0.002656, 0.051062
+          color: '#4D4D4D'
+          yaw: 4.085617
+          pitch: 0.0
+          shape: CylinderX
+        - label: lower blade tapered tip
+          min: 0.216091, -0.006406, 0.029187
+          max: 0.340159, 0.023594, 0.044812
+          color: '#626262'
+          yaw: 36.29263
+          pitch: 0.0
+          shape: CylinderX
+        - label: joint pin
+          min: 0.098437, -0.014062, 0.08
+          max: 0.15625, 0.04375, 0.1
+          color: '#8A8A8A'
+          shape: CylinderZ
+        - label: joint pin slot
+          min: 0.109375, 0.01, 0.100875
+          max: 0.145312, 0.018125, 0.107125
+          color: '#454545'
+          yaw: 0.0
+          pitch: 0.0
+          shape: CylinderX
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandCMWelderCloud
+  label: 'Unlit blowtorch: ribbed grip, hinged cap and nozzle'
+  status: draft
+  sourcePrototypes:
+  - CMWelder
+  referencePrototype: CMWelder
+  referenceRsi: /Textures/_RMC14/Objects/Tools/welder.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Only the unlit icon is supported by the single-visible-layer adapter.
+    Source welder_on is a separate two-frame 0.5/0.3-second powered composition with
+    raised cap and flame; active torch/fire/lighting/fuel behavior is explicitly unsupported,
+    as are held/equipped forms. Physical thickness, hidden sides, support pose and
+    material finish are inferred. No saved-map contact, native rendering, live interaction
+    or fidelity approval.
+  parts:
+  - label: rounded bronze fuel-grip body
+    min: -0.055, -0.075, 0.05
+    max: 0.09, 0.075, 0.41
+    color: '#4E463D'
+    shape: CylinderZ
+  - label: lower body shoulder
+    min: -0.048, -0.067, 0.018
+    max: 0.079, 0.067, 0.115
+    color: '#3F3932'
+    shape: Ellipsoid
+  - label: rounded lower foot
+    min: -0.025, -0.055, 0
+    max: 0.055, 0.055, 0.064
+    color: '#241F1A'
+    shape: CylinderZ
+  - label: upper shoulder
+    min: -0.095, -0.082, 0.352
+    max: 0.09, 0.079, 0.449
+    color: '#3F3932'
+    shape: Ellipsoid
+  - label: finger scallop ridge 1
+    min: 0.056, -0.072, 0.085
+    max: 0.105, 0.072, 0.122
+    color: '#74695B'
+    shape: Ellipsoid
+  - label: finger scallop ridge 2
+    min: 0.056, -0.072, 0.146
+    max: 0.105, 0.072, 0.183
+    color: '#74695B'
+    shape: Ellipsoid
+  - label: finger scallop ridge 3
+    min: 0.056, -0.072, 0.207
+    max: 0.105, 0.072, 0.244
+    color: '#74695B'
+    shape: Ellipsoid
+  - label: finger scallop ridge 4
+    min: 0.056, -0.072, 0.268
+    max: 0.105, 0.072, 0.305
+    color: '#74695B'
+    shape: Ellipsoid
+  - label: finger scallop ridge 5
+    min: 0.056, -0.072, 0.329
+    max: 0.105, 0.072, 0.366
+    color: '#74695B'
+    shape: Ellipsoid
+  - label: ignition lever mounting root
+    min: -0.075, -0.044, 0.29
+    max: -0.044, 0.044, 0.342
+    color: '#313131'
+  - label: front ignition lever housing
+    min: -0.13, -0.061, 0.262
+    max: -0.065, 0.061, 0.369
+    color: '#313131'
+    shape: Ellipsoid
+  - label: front ignition lever
+    min: -0.126, -0.074, 0.288
+    max: -0.077, -0.06, 0.32
+    color: '#686767'
+  - label: neck below cap
+    min: -0.04, -0.054, 0.414
+    max: 0.045, 0.054, 0.474
+    color: '#2E2822'
+    shape: CylinderZ
+  - label: top closed pivot cap
+    min: -0.108, -0.089, 0.46
+    max: 0.118, 0.087, 0.531
+    color: '#3F3932'
+  - label: cap rounded top
+    min: -0.099, -0.084, 0.509
+    max: 0.117, 0.082, 0.552
+    color: '#4E463D'
+    shape: Ellipsoid
+  - label: top cap pale edge
+    min: 0.076, -0.09, 0.472
+    max: 0.093, -0.082, 0.526
+    color: '#74695B'
+  - label: horizontal nozzle neck
+    min: 0.035, -0.04, 0.38
+    max: 0.14, 0.04, 0.46
+    color: '#313131'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: barrel nozzle
+    min: 0.123, -0.035, 0.386
+    max: 0.2, 0.035, 0.456
+    color: '#474747'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: nozzle lip 1
+    min: 0.194271, 0.018258, 0.4215
+    max: 0.207729, 0.030258, 0.4335
+    color: '#686767'
+    yaw: -90.0
+    pitch: 75.0
+    shape: CylinderX
+  - label: nozzle lip 2
+    min: 0.194271, 0.011758, 0.432758
+    max: 0.207729, 0.023758, 0.444758
+    color: '#686767'
+    yaw: -90.0
+    pitch: 45.0
+    shape: CylinderX
+  - label: nozzle lip 3
+    min: 0.194271, 0.0005, 0.439258
+    max: 0.207729, 0.0125, 0.451258
+    color: '#686767'
+    yaw: -90.0
+    pitch: 15.0
+    shape: CylinderX
+  - label: nozzle lip 4
+    min: 0.194271, -0.0125, 0.439258
+    max: 0.207729, -0.0005, 0.451258
+    color: '#686767'
+    yaw: -90.0
+    pitch: -15.0
+    shape: CylinderX
+  - label: nozzle lip 5
+    min: 0.194271, -0.023758, 0.432758
+    max: 0.207729, -0.011758, 0.444758
+    color: '#686767'
+    yaw: -90.0
+    pitch: -45.0
+    shape: CylinderX
+  - label: nozzle lip 6
+    min: 0.194271, -0.030258, 0.4215
+    max: 0.207729, -0.018258, 0.4335
+    color: '#686767'
+    yaw: -90.0
+    pitch: -75.0
+    shape: CylinderX
+  - label: nozzle lip 7
+    min: 0.194271, -0.030258, 0.4085
+    max: 0.207729, -0.018258, 0.4205
+    color: '#686767'
+    yaw: 90.0
+    pitch: -75.0
+    shape: CylinderX
+  - label: nozzle lip 8
+    min: 0.194271, -0.023758, 0.397242
+    max: 0.207729, -0.011758, 0.409242
+    color: '#686767'
+    yaw: 90.0
+    pitch: -45.0
+    shape: CylinderX
+  - label: nozzle lip 9
+    min: 0.194271, -0.0125, 0.390742
+    max: 0.207729, -0.0005, 0.402742
+    color: '#686767'
+    yaw: 90.0
+    pitch: -15.0
+    shape: CylinderX
+  - label: nozzle lip 10
+    min: 0.194271, 0.0005, 0.390742
+    max: 0.207729, 0.0125, 0.402742
+    color: '#686767'
+    yaw: 90.0
+    pitch: 15.0
+    shape: CylinderX
+  - label: nozzle lip 11
+    min: 0.194271, 0.011758, 0.397242
+    max: 0.207729, 0.023758, 0.409242
+    color: '#686767'
+    yaw: 90.0
+    pitch: 45.0
+    shape: CylinderX
+  - label: nozzle lip 12
+    min: 0.194271, 0.018258, 0.4085
+    max: 0.207729, 0.030258, 0.4205
+    color: '#686767'
+    yaw: 90.0
+    pitch: 75.0
+    shape: CylinderX
+  - label: cap hinge axle
+    min: -0.116, -0.064, 0.45
+    max: -0.084, 0.064, 0.482
+    color: '#2E2822'
+    shape: CylinderY
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: rounded bronze fuel-grip body
+          min: -0.055, -0.075, 0.05
+          max: 0.09, 0.075, 0.41
+          color: '#4E463D'
+          shape: CylinderZ
+        - label: lower body shoulder
+          min: -0.048, -0.067, 0.018
+          max: 0.079, 0.067, 0.115
+          color: '#3F3932'
+          shape: Ellipsoid
+        - label: rounded lower foot
+          min: -0.025, -0.055, 0
+          max: 0.055, 0.055, 0.064
+          color: '#241F1A'
+          shape: CylinderZ
+        - label: upper shoulder
+          min: -0.095, -0.082, 0.352
+          max: 0.09, 0.079, 0.449
+          color: '#3F3932'
+          shape: Ellipsoid
+        - label: finger scallop ridge 1
+          min: 0.056, -0.072, 0.085
+          max: 0.105, 0.072, 0.122
+          color: '#74695B'
+          shape: Ellipsoid
+        - label: finger scallop ridge 2
+          min: 0.056, -0.072, 0.146
+          max: 0.105, 0.072, 0.183
+          color: '#74695B'
+          shape: Ellipsoid
+        - label: finger scallop ridge 3
+          min: 0.056, -0.072, 0.207
+          max: 0.105, 0.072, 0.244
+          color: '#74695B'
+          shape: Ellipsoid
+        - label: finger scallop ridge 4
+          min: 0.056, -0.072, 0.268
+          max: 0.105, 0.072, 0.305
+          color: '#74695B'
+          shape: Ellipsoid
+        - label: finger scallop ridge 5
+          min: 0.056, -0.072, 0.329
+          max: 0.105, 0.072, 0.366
+          color: '#74695B'
+          shape: Ellipsoid
+        - label: ignition lever mounting root
+          min: -0.075, -0.044, 0.29
+          max: -0.044, 0.044, 0.342
+          color: '#313131'
+        - label: front ignition lever housing
+          min: -0.13, -0.061, 0.262
+          max: -0.065, 0.061, 0.369
+          color: '#313131'
+          shape: Ellipsoid
+        - label: front ignition lever
+          min: -0.126, -0.074, 0.288
+          max: -0.077, -0.06, 0.32
+          color: '#686767'
+        - label: neck below cap
+          min: -0.04, -0.054, 0.414
+          max: 0.045, 0.054, 0.474
+          color: '#2E2822'
+          shape: CylinderZ
+        - label: top closed pivot cap
+          min: -0.108, -0.089, 0.46
+          max: 0.118, 0.087, 0.531
+          color: '#3F3932'
+        - label: cap rounded top
+          min: -0.099, -0.084, 0.509
+          max: 0.117, 0.082, 0.552
+          color: '#4E463D'
+          shape: Ellipsoid
+        - label: top cap pale edge
+          min: 0.076, -0.09, 0.472
+          max: 0.093, -0.082, 0.526
+          color: '#74695B'
+        - label: horizontal nozzle neck
+          min: 0.035, -0.04, 0.38
+          max: 0.14, 0.04, 0.46
+          color: '#313131'
+          yaw: 0.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: barrel nozzle
+          min: 0.123, -0.035, 0.386
+          max: 0.2, 0.035, 0.456
+          color: '#474747'
+          yaw: 0.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: nozzle lip 1
+          min: 0.194271, 0.018258, 0.4215
+          max: 0.207729, 0.030258, 0.4335
+          color: '#686767'
+          yaw: -90.0
+          pitch: 75.0
+          shape: CylinderX
+        - label: nozzle lip 2
+          min: 0.194271, 0.011758, 0.432758
+          max: 0.207729, 0.023758, 0.444758
+          color: '#686767'
+          yaw: -90.0
+          pitch: 45.0
+          shape: CylinderX
+        - label: nozzle lip 3
+          min: 0.194271, 0.0005, 0.439258
+          max: 0.207729, 0.0125, 0.451258
+          color: '#686767'
+          yaw: -90.0
+          pitch: 15.0
+          shape: CylinderX
+        - label: nozzle lip 4
+          min: 0.194271, -0.0125, 0.439258
+          max: 0.207729, -0.0005, 0.451258
+          color: '#686767'
+          yaw: -90.0
+          pitch: -15.0
+          shape: CylinderX
+        - label: nozzle lip 5
+          min: 0.194271, -0.023758, 0.432758
+          max: 0.207729, -0.011758, 0.444758
+          color: '#686767'
+          yaw: -90.0
+          pitch: -45.0
+          shape: CylinderX
+        - label: nozzle lip 6
+          min: 0.194271, -0.030258, 0.4215
+          max: 0.207729, -0.018258, 0.4335
+          color: '#686767'
+          yaw: -90.0
+          pitch: -75.0
+          shape: CylinderX
+        - label: nozzle lip 7
+          min: 0.194271, -0.030258, 0.4085
+          max: 0.207729, -0.018258, 0.4205
+          color: '#686767'
+          yaw: 90.0
+          pitch: -75.0
+          shape: CylinderX
+        - label: nozzle lip 8
+          min: 0.194271, -0.023758, 0.397242
+          max: 0.207729, -0.011758, 0.409242
+          color: '#686767'
+          yaw: 90.0
+          pitch: -45.0
+          shape: CylinderX
+        - label: nozzle lip 9
+          min: 0.194271, -0.0125, 0.390742
+          max: 0.207729, -0.0005, 0.402742
+          color: '#686767'
+          yaw: 90.0
+          pitch: -15.0
+          shape: CylinderX
+        - label: nozzle lip 10
+          min: 0.194271, 0.0005, 0.390742
+          max: 0.207729, 0.0125, 0.402742
+          color: '#686767'
+          yaw: 90.0
+          pitch: 15.0
+          shape: CylinderX
+        - label: nozzle lip 11
+          min: 0.194271, 0.011758, 0.397242
+          max: 0.207729, 0.023758, 0.409242
+          color: '#686767'
+          yaw: 90.0
+          pitch: 45.0
+          shape: CylinderX
+        - label: nozzle lip 12
+          min: 0.194271, 0.018258, 0.4085
+          max: 0.207729, 0.030258, 0.4205
+          color: '#686767'
+          yaw: 90.0
+          pitch: 75.0
+          shape: CylinderX
+        - label: cap hinge axle
+          min: -0.116, -0.064, 0.45
+          max: -0.084, 0.064, 0.482
+          color: '#2E2822'
+          shape: CylinderY
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandRMCToolboxMechanicalGreenCloud
+  label: 'Green mechanical toolbox: hollow shell and hinged lid'
+  status: draft
+  sourcePrototypes:
+  - RMCToolboxMechanicalGreen
+  referencePrototype: RMCToolboxMechanicalGreen
+  referenceRsi: /Textures/_RMC14/Objects/Tools/Toolboxes/toolbox_green.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  description: Inherited ToolboxBase GenericVisualizer changes the single visible
+    base layer between icon and icon-open. Both static states have a hollow container
+    shell, hinges, latches and open carry handle. Contents, interaction animation
+    and inhands unsupported. Physical thickness, hidden sides, support pose and material
+    finish are inferred. No saved-map contact, native rendering, live interaction
+    or fidelity approval.
+  parts:
+  - label: box bottom
+    min: -0.275, -0.15, 0.015
+    max: 0.275, 0.15, 0.047
+    color: '#2A2926'
+  - label: side shell -1
+    min: -0.277, -0.15, 0.044
+    max: -0.249, 0.15, 0.215
+    color: '#426A58'
+  - label: side shell 1
+    min: 0.249, -0.15, 0.044
+    max: 0.277, 0.15, 0.215
+    color: '#426A58'
+  - label: front rear shell -1
+    min: -0.27, -0.151, 0.044
+    max: 0.27, -0.127, 0.215
+    color: '#426A58'
+  - label: front rear shell 1
+    min: -0.27, 0.127, 0.044
+    max: 0.27, 0.151, 0.215
+    color: '#426A58'
+  - label: interior base lining
+    min: -0.244, -0.12, 0.045
+    max: 0.244, 0.12, 0.056
+    color: '#384640'
+  - label: lower reinforcement rib -1
+    min: -0.275, -0.159, 0.066
+    max: 0.275, -0.143, 0.09
+    color: '#438B67'
+  - label: lower reinforcement rib 1
+    min: -0.275, 0.143, 0.066
+    max: 0.275, 0.159, 0.09
+    color: '#438B67'
+  - label: latch lower socket -0.154
+    min: -0.179, -0.171, 0.145
+    max: -0.129, -0.149, 0.2
+    color: '#2A2926'
+  - label: latch plate -0.154
+    min: -0.168, -0.179, 0.169
+    max: -0.14, -0.171, 0.212
+    color: '#929292'
+  - label: latch lower socket 0.154
+    min: 0.129, -0.171, 0.145
+    max: 0.179, -0.149, 0.2
+    color: '#2A2926'
+  - label: latch plate 0.154
+    min: 0.14, -0.179, 0.169
+    max: 0.168, -0.171, 0.212
+    color: '#929292'
+  - label: rear hinge barrel -0.168
+    min: -0.213, 0.13, 0.198
+    max: -0.123, 0.166, 0.229
+    color: '#929292'
+    shape: CylinderX
+  - label: rear hinge barrel 0.168
+    min: 0.123, 0.13, 0.198
+    max: 0.213, 0.166, 0.229
+    color: '#929292'
+    shape: CylinderX
+  - label: closed lid core
+    min: -0.272, -0.153, 0.218
+    max: 0.272, 0.153, 0.269
+    color: '#426A58'
+  - label: closed top raised panel
+    min: -0.238, -0.122, 0.268
+    max: 0.238, 0.122, 0.295
+    color: '#438B67'
+  - label: handle upright -0.149
+    min: -0.163, -0.02, 0.294
+    max: -0.135, 0.02, 0.365
+    color: '#3D3D3D'
+  - label: handle upright 0.149
+    min: 0.135, -0.02, 0.294
+    max: 0.163, 0.02, 0.365
+    color: '#3D3D3D'
+  - label: metal carry handle
+    min: -0.164, -0.023, 0.348
+    max: 0.164, 0.023, 0.378
+    color: '#929292'
+  - label: handle attachment -0.16
+    min: -0.185, -0.042, 0.285
+    max: -0.135, 0.042, 0.306
+    color: '#2A2926'
+  - label: handle attachment 0.16
+    min: 0.135, -0.042, 0.285
+    max: 0.185, 0.042, 0.306
+    color: '#2A2926'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: box bottom
+          min: -0.275, -0.15, 0.015
+          max: 0.275, 0.15, 0.047
+          color: '#2A2926'
+        - label: side shell -1
+          min: -0.277, -0.15, 0.044
+          max: -0.249, 0.15, 0.215
+          color: '#426A58'
+        - label: side shell 1
+          min: 0.249, -0.15, 0.044
+          max: 0.277, 0.15, 0.215
+          color: '#426A58'
+        - label: front rear shell -1
+          min: -0.27, -0.151, 0.044
+          max: 0.27, -0.127, 0.215
+          color: '#426A58'
+        - label: front rear shell 1
+          min: -0.27, 0.127, 0.044
+          max: 0.27, 0.151, 0.215
+          color: '#426A58'
+        - label: interior base lining
+          min: -0.244, -0.12, 0.045
+          max: 0.244, 0.12, 0.056
+          color: '#384640'
+        - label: lower reinforcement rib -1
+          min: -0.275, -0.159, 0.066
+          max: 0.275, -0.143, 0.09
+          color: '#438B67'
+        - label: lower reinforcement rib 1
+          min: -0.275, 0.143, 0.066
+          max: 0.275, 0.159, 0.09
+          color: '#438B67'
+        - label: latch lower socket -0.154
+          min: -0.179, -0.171, 0.145
+          max: -0.129, -0.149, 0.2
+          color: '#2A2926'
+        - label: latch plate -0.154
+          min: -0.168, -0.179, 0.169
+          max: -0.14, -0.171, 0.212
+          color: '#929292'
+        - label: latch lower socket 0.154
+          min: 0.129, -0.171, 0.145
+          max: 0.179, -0.149, 0.2
+          color: '#2A2926'
+        - label: latch plate 0.154
+          min: 0.14, -0.179, 0.169
+          max: 0.168, -0.171, 0.212
+          color: '#929292'
+        - label: rear hinge barrel -0.168
+          min: -0.213, 0.13, 0.198
+          max: -0.123, 0.166, 0.229
+          color: '#929292'
+          shape: CylinderX
+        - label: rear hinge barrel 0.168
+          min: 0.123, 0.13, 0.198
+          max: 0.213, 0.166, 0.229
+          color: '#929292'
+          shape: CylinderX
+        - label: closed lid core
+          min: -0.272, -0.153, 0.218
+          max: 0.272, 0.153, 0.269
+          color: '#426A58'
+        - label: closed top raised panel
+          min: -0.238, -0.122, 0.268
+          max: 0.238, 0.122, 0.295
+          color: '#438B67'
+        - label: handle upright -0.149
+          min: -0.163, -0.02, 0.294
+          max: -0.135, 0.02, 0.365
+          color: '#3D3D3D'
+        - label: handle upright 0.149
+          min: 0.135, -0.02, 0.294
+          max: 0.163, 0.02, 0.365
+          color: '#3D3D3D'
+        - label: metal carry handle
+          min: -0.164, -0.023, 0.348
+          max: 0.164, 0.023, 0.378
+          color: '#929292'
+        - label: handle attachment -0.16
+          min: -0.185, -0.042, 0.285
+          max: -0.135, 0.042, 0.306
+          color: '#2A2926'
+        - label: handle attachment 0.16
+          min: 0.135, -0.042, 0.285
+          max: 0.185, 0.042, 0.306
+          color: '#2A2926'
+      delays:
+      - 1
+    icon-open:
+      frames:
+      - parts:
+        - label: box bottom
+          min: -0.275, -0.15, 0.015
+          max: 0.275, 0.15, 0.047
+          color: '#2A2926'
+        - label: side shell -1
+          min: -0.277, -0.15, 0.044
+          max: -0.249, 0.15, 0.215
+          color: '#426A58'
+        - label: side shell 1
+          min: 0.249, -0.15, 0.044
+          max: 0.277, 0.15, 0.215
+          color: '#426A58'
+        - label: front rear shell -1
+          min: -0.27, -0.151, 0.044
+          max: 0.27, -0.127, 0.215
+          color: '#426A58'
+        - label: front rear shell 1
+          min: -0.27, 0.127, 0.044
+          max: 0.27, 0.151, 0.215
+          color: '#426A58'
+        - label: interior base lining
+          min: -0.244, -0.12, 0.045
+          max: 0.244, 0.12, 0.056
+          color: '#384640'
+        - label: lower reinforcement rib -1
+          min: -0.275, -0.159, 0.066
+          max: 0.275, -0.143, 0.09
+          color: '#438B67'
+        - label: lower reinforcement rib 1
+          min: -0.275, 0.143, 0.066
+          max: 0.275, 0.159, 0.09
+          color: '#438B67'
+        - label: latch lower socket -0.154
+          min: -0.179, -0.171, 0.145
+          max: -0.129, -0.149, 0.2
+          color: '#2A2926'
+        - label: latch plate -0.154
+          min: -0.168, -0.179, 0.169
+          max: -0.14, -0.171, 0.212
+          color: '#929292'
+        - label: latch lower socket 0.154
+          min: 0.129, -0.171, 0.145
+          max: 0.179, -0.149, 0.2
+          color: '#2A2926'
+        - label: latch plate 0.154
+          min: 0.14, -0.179, 0.169
+          max: 0.168, -0.171, 0.212
+          color: '#929292'
+        - label: rear hinge barrel -0.168
+          min: -0.213, 0.13, 0.198
+          max: -0.123, 0.166, 0.229
+          color: '#929292'
+          shape: CylinderX
+        - label: rear hinge barrel 0.168
+          min: 0.123, 0.13, 0.198
+          max: 0.213, 0.166, 0.229
+          color: '#929292'
+          shape: CylinderX
+        - label: opened upright lid outer panel
+          min: -0.272, 0.13, 0.221
+          max: 0.272, 0.165, 0.475
+          color: '#426A58'
+        - label: lid recessed inner panel
+          min: -0.234, 0.122, 0.25
+          max: 0.234, 0.13, 0.439
+          color: '#384640'
+        - label: lid inner edge -1
+          min: -0.265, 0.112, 0.237
+          max: -0.239, 0.132, 0.464
+          color: '#438B67'
+        - label: lid inner edge 1
+          min: 0.239, 0.112, 0.237
+          max: 0.265, 0.132, 0.464
+          color: '#438B67'
+        - label: lid top edge
+          min: -0.255, 0.11, 0.449
+          max: 0.255, 0.133, 0.475
+          color: '#438B67'
+        - label: open base upper front rail
+          min: -0.274, -0.158, 0.205
+          max: 0.274, -0.128, 0.232
+          color: '#438B67'
+        - label: open handle upright -0.149
+          min: -0.163, 0.166, 0.322
+          max: -0.135, 0.217, 0.35
+          color: '#3D3D3D'
+        - label: open handle upright 0.149
+          min: 0.135, 0.166, 0.322
+          max: 0.163, 0.217, 0.35
+          color: '#3D3D3D'
+        - label: open lid handle grip
+          min: -0.164, 0.203, 0.326
+          max: 0.164, 0.23, 0.356
+          color: '#929292'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandRMCZippoExecCloud
+  label: 'Executive zippo: enamel case, gold inlay and hinge'
+  status: draft
+  sourcePrototypes:
+  - RMCZippoExec
+  referencePrototype: RMCZippoExec
+  referenceRsi: /Textures/_RMC14/Objects/Tools/Lighters/execzippo.rsi
+  referenceState: closed
+  sourceDirections: 1
+  placement: surface
+  description: Closed source state only. The original layered base/top/open/flame
+    composition is not conflated with a single state; open geometry is supplied separately
+    as an unbound study. Flame, illumination, ignition, held and helmet accessories
+    unsupported. Physical thickness, hidden sides, support pose and material finish
+    are inferred. No saved-map contact, native rendering, live interaction or fidelity
+    approval.
+  parts:
+  - label: black lighter lower body
+    min: -0.108, -0.05, 0.016
+    max: 0.108, 0.05, 0.23
+    color: '#292929'
+  - label: lower case side bevels
+    min: -0.113, -0.042, 0.026
+    max: 0.113, 0.042, 0.221
+    color: '#1B1B1B'
+    shape: Ellipsoid
+  - label: front enamel panel
+    min: -0.092, -0.054, 0.031
+    max: 0.092, -0.049, 0.217
+    color: '#333333'
+  - label: gold center inlay
+    min: -0.017, -0.057, 0.03
+    max: 0.017, -0.053, 0.227
+    color: '#80683F'
+  - label: gold inlay side glint
+    min: -0.017, -0.06, 0.033
+    max: -0.007, -0.057, 0.221
+    color: '#A58959'
+  - label: case bottom rim
+    min: -0.1, -0.051, 0.012
+    max: 0.1, 0.051, 0.029
+    color: '#0F1013'
+  - label: hinge barrel
+    min: -0.122, -0.02, 0.203
+    max: -0.102, 0.025, 0.271
+    color: '#5C5C63'
+    shape: CylinderZ
+  - label: closed lid
+    min: -0.108, -0.05, 0.239
+    max: 0.108, 0.05, 0.33
+    color: '#484848'
+  - label: lid dark top
+    min: -0.091, -0.047, 0.328
+    max: 0.091, 0.046, 0.346
+    color: '#0F1013'
+  - label: lid gold stripe
+    min: -0.017, -0.055, 0.24
+    max: 0.017, -0.05, 0.327
+    color: '#A58959'
+  - label: lid upper gold glint
+    min: -0.017, -0.058, 0.304
+    max: 0.017, -0.055, 0.329
+    color: '#EFCF91'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    closed:
+      frames:
+      - parts:
+        - label: black lighter lower body
+          min: -0.108, -0.05, 0.016
+          max: 0.108, 0.05, 0.23
+          color: '#292929'
+        - label: lower case side bevels
+          min: -0.113, -0.042, 0.026
+          max: 0.113, 0.042, 0.221
+          color: '#1B1B1B'
+          shape: Ellipsoid
+        - label: front enamel panel
+          min: -0.092, -0.054, 0.031
+          max: 0.092, -0.049, 0.217
+          color: '#333333'
+        - label: gold center inlay
+          min: -0.017, -0.057, 0.03
+          max: 0.017, -0.053, 0.227
+          color: '#80683F'
+        - label: gold inlay side glint
+          min: -0.017, -0.06, 0.033
+          max: -0.007, -0.057, 0.221
+          color: '#A58959'
+        - label: case bottom rim
+          min: -0.1, -0.051, 0.012
+          max: 0.1, 0.051, 0.029
+          color: '#0F1013'
+        - label: hinge barrel
+          min: -0.122, -0.02, 0.203
+          max: -0.102, 0.025, 0.271
+          color: '#5C5C63'
+          shape: CylinderZ
+        - label: closed lid
+          min: -0.108, -0.05, 0.239
+          max: 0.108, 0.05, 0.33
+          color: '#484848'
+        - label: lid dark top
+          min: -0.091, -0.047, 0.328
+          max: 0.091, 0.046, 0.346
+          color: '#0F1013'
+        - label: lid gold stripe
+          min: -0.017, -0.055, 0.24
+          max: 0.017, -0.05, 0.327
+          color: '#A58959'
+        - label: lid upper gold glint
+          min: -0.017, -0.058, 0.304
+          max: 0.017, -0.055, 0.329
+          color: '#EFCF91'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandRMCZippoExecCloudOpenStudy
+  label: 'Executive zippo: unlit open construction study'
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCZippoExec
+  referenceRsi: /Textures/_RMC14/Objects/Tools/Lighters/execzippo.rsi
+  referenceState: open
+  sourceDirections: 1
+  placement: surface
+  description: Unbound static geometry study of the open source. Separate hinged lid,
+    chimney, vents and striker. The source uses overlapping layer visibility and a
+    flame overlay, so no automatic closed/open linkage or lit state is claimed. Physical
+    thickness, hidden sides, support pose and material finish are inferred. No saved-map
+    contact, native rendering, live interaction or fidelity approval.
+  parts:
+  - label: black lighter lower body
+    min: -0.108, -0.05, 0.016
+    max: 0.108, 0.05, 0.23
+    color: '#292929'
+  - label: lower case side bevels
+    min: -0.113, -0.042, 0.026
+    max: 0.113, 0.042, 0.221
+    color: '#1B1B1B'
+    shape: Ellipsoid
+  - label: front enamel panel
+    min: -0.092, -0.054, 0.031
+    max: 0.092, -0.049, 0.217
+    color: '#333333'
+  - label: gold center inlay
+    min: -0.017, -0.057, 0.03
+    max: 0.017, -0.053, 0.227
+    color: '#80683F'
+  - label: gold inlay side glint
+    min: -0.017, -0.06, 0.033
+    max: -0.007, -0.057, 0.221
+    color: '#A58959'
+  - label: case bottom rim
+    min: -0.1, -0.051, 0.012
+    max: 0.1, 0.051, 0.029
+    color: '#0F1013'
+  - label: hinge barrel
+    min: -0.122, -0.02, 0.203
+    max: -0.102, 0.025, 0.271
+    color: '#5C5C63'
+    shape: CylinderZ
+  - label: opened lid shell
+    min: -0.236, -0.05, 0.239
+    max: -0.121, 0.05, 0.426
+    color: '#292929'
+  - label: lid inner well
+    min: -0.219, -0.053, 0.258
+    max: -0.139, -0.05, 0.404
+    color: '#484848'
+  - label: lid interior gold band
+    min: -0.217, -0.056, 0.293
+    max: -0.139, -0.052, 0.334
+    color: '#80683F'
+  - label: silver chimney plate
+    min: -0.055, -0.037, 0.222
+    max: 0.024, 0.035, 0.289
+    color: '#5C5C63'
+  - label: chimney vent 0
+    min: -0.046, -0.041, 0.254
+    max: -0.035, -0.036, 0.268
+    color: '#0F1013'
+  - label: chimney vent 1
+    min: -0.023, -0.041, 0.254
+    max: -0.012, -0.036, 0.268
+    color: '#0F1013'
+  - label: chimney vent 2
+    min: 0.0, -0.041, 0.254
+    max: 0.011, -0.036, 0.268
+    color: '#0F1013'
+  - label: flint striker wheel
+    min: -0.006, -0.033, 0.23
+    max: 0.074, 0.033, 0.296
+    color: '#333333'
+    yaw: 90.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: wheel teeth 0.247
+    min: 0.054, -0.045, 0.247
+    max: 0.07, 0.045, 0.253
+    color: '#5C5C63'
+  - label: wheel teeth 0.262
+    min: 0.054, -0.045, 0.262
+    max: 0.07, 0.045, 0.268
+    color: '#5C5C63'
+  - label: wheel teeth 0.277
+    min: 0.054, -0.045, 0.277
+    max: 0.07, 0.045, 0.283
+    color: '#5C5C63'
+- type: cmu3DModel
+  id: CMU3DHandRMCCableCoilCloud
+  label: Full red cable coil with through-hole and loose lead
+  status: draft
+  sourcePrototypes:
+  - RMCCableCoil
+  referencePrototype: RMCCableCoil
+  referenceRsi: /Textures/_RMC14/Objects/Power/coil.rsi
+  referenceState: coil3
+  sourceDirections: 1
+  placement: surface
+  description: 'Default source coil3 layer is explicitly tinted #FF0000. This full-coil
+    study retains the wound opening; no wooden reel is invented. Stack-dependent coil1/coil2
+    shapes and arbitrary recolors are inventoried but not bound or asserted. Layer
+    tint is baked only for this study, not declared a global Sprite tint. Physical
+    thickness, hidden sides, support pose and material finish are inferred. No saved-map
+    contact, native rendering, live interaction or fidelity approval.'
+  parts:
+  - label: coiled cable turn 1 1
+    min: 0.003818, 0.038651, 0.003
+    max: 0.072542, 0.102651, 0.067
+    color: '#330000'
+    yaw: 142.553821
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 2
+    min: -0.032614, 0.060367, 0.003
+    max: 0.032405, 0.124367, 0.067
+    color: '#330000'
+    yaw: 159.010698
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 3
+    min: -0.067946, 0.068021, 0.003
+    max: -0.0088, 0.132021, 0.067
+    color: '#330000'
+    yaw: 179.935101
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 4
+    min: -0.097974, 0.060447, 0.003
+    max: -0.043625, 0.124447, 0.067
+    color: '#330000'
+    yaw: -151.613449
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 5
+    min: -0.119622, 0.038799, 0.003
+    max: -0.065273, 0.102799, 0.067
+    color: '#330000'
+    yaw: -118.386551
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 6
+    min: -0.129594, 0.006373, 0.003
+    max: -0.070448, 0.070373, 0.067
+    color: '#330000'
+    yaw: -89.935101
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 7
+    min: -0.124876, -0.031896, 0.003
+    max: -0.059857, 0.032104, 0.067
+    color: '#330000'
+    yaw: -69.010698
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 8
+    min: -0.105013, -0.07018, 0.003
+    max: -0.036289, -0.00618, 0.067
+    color: '#330000'
+    yaw: -52.553821
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 9
+    min: -0.072542, -0.102651, 0.003
+    max: -0.003818, -0.038651, 0.067
+    color: '#330000'
+    yaw: -37.446179
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 10
+    min: -0.032405, -0.124367, 0.003
+    max: 0.032614, -0.060367, 0.067
+    color: '#330000'
+    yaw: -20.989302
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 11
+    min: 0.0088, -0.132021, 0.003
+    max: 0.067946, -0.068021, 0.067
+    color: '#330000'
+    yaw: -0.064899
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 12
+    min: 0.043625, -0.124447, 0.003
+    max: 0.097974, -0.060447, 0.067
+    color: '#330000'
+    yaw: 28.386551
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 13
+    min: 0.065273, -0.102799, 0.003
+    max: 0.119622, -0.038799, 0.067
+    color: '#330000'
+    yaw: 61.613449
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 14
+    min: 0.070448, -0.070373, 0.003
+    max: 0.129594, -0.006373, 0.067
+    color: '#330000'
+    yaw: 90.064899
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 15
+    min: 0.059857, -0.032104, 0.003
+    max: 0.124876, 0.031896, 0.067
+    color: '#330000'
+    yaw: 110.989302
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 1 16
+    min: 0.036289, 0.00618, 0.003
+    max: 0.105013, 0.07018, 0.067
+    color: '#330000'
+    yaw: 127.446179
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 1
+    min: 0.003818, 0.038651, 0.038
+    max: 0.072542, 0.102651, 0.102
+    color: '#560000'
+    yaw: 142.553821
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 2
+    min: -0.032614, 0.060367, 0.038
+    max: 0.032405, 0.124367, 0.102
+    color: '#560000'
+    yaw: 159.010698
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 3
+    min: -0.067946, 0.068021, 0.038
+    max: -0.0088, 0.132021, 0.102
+    color: '#560000'
+    yaw: 179.935101
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 4
+    min: -0.097974, 0.060447, 0.038
+    max: -0.043625, 0.124447, 0.102
+    color: '#560000'
+    yaw: -151.613449
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 5
+    min: -0.119622, 0.038799, 0.038
+    max: -0.065273, 0.102799, 0.102
+    color: '#560000'
+    yaw: -118.386551
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 6
+    min: -0.129594, 0.006373, 0.038
+    max: -0.070448, 0.070373, 0.102
+    color: '#560000'
+    yaw: -89.935101
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 7
+    min: -0.124876, -0.031896, 0.038
+    max: -0.059857, 0.032104, 0.102
+    color: '#560000'
+    yaw: -69.010698
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 8
+    min: -0.105013, -0.07018, 0.038
+    max: -0.036289, -0.00618, 0.102
+    color: '#560000'
+    yaw: -52.553821
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 9
+    min: -0.072542, -0.102651, 0.038
+    max: -0.003818, -0.038651, 0.102
+    color: '#560000'
+    yaw: -37.446179
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 10
+    min: -0.032405, -0.124367, 0.038
+    max: 0.032614, -0.060367, 0.102
+    color: '#560000'
+    yaw: -20.989302
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 11
+    min: 0.0088, -0.132021, 0.038
+    max: 0.067946, -0.068021, 0.102
+    color: '#560000'
+    yaw: -0.064899
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 12
+    min: 0.043625, -0.124447, 0.038
+    max: 0.097974, -0.060447, 0.102
+    color: '#560000'
+    yaw: 28.386551
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 13
+    min: 0.065273, -0.102799, 0.038
+    max: 0.119622, -0.038799, 0.102
+    color: '#560000'
+    yaw: 61.613449
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 14
+    min: 0.070448, -0.070373, 0.038
+    max: 0.129594, -0.006373, 0.102
+    color: '#560000'
+    yaw: 90.064899
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 15
+    min: 0.059857, -0.032104, 0.038
+    max: 0.124876, 0.031896, 0.102
+    color: '#560000'
+    yaw: 110.989302
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 2 16
+    min: 0.036289, 0.00618, 0.038
+    max: 0.105013, 0.07018, 0.102
+    color: '#560000'
+    yaw: 127.446179
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 1
+    min: 0.003818, 0.038651, 0.073
+    max: 0.072542, 0.102651, 0.137
+    color: '#AA0000'
+    yaw: 142.553821
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 2
+    min: -0.032614, 0.060367, 0.073
+    max: 0.032405, 0.124367, 0.137
+    color: '#AA0000'
+    yaw: 159.010698
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 3
+    min: -0.067946, 0.068021, 0.073
+    max: -0.0088, 0.132021, 0.137
+    color: '#AA0000'
+    yaw: 179.935101
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 4
+    min: -0.097974, 0.060447, 0.073
+    max: -0.043625, 0.124447, 0.137
+    color: '#AA0000'
+    yaw: -151.613449
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 5
+    min: -0.119622, 0.038799, 0.073
+    max: -0.065273, 0.102799, 0.137
+    color: '#AA0000'
+    yaw: -118.386551
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 6
+    min: -0.129594, 0.006373, 0.073
+    max: -0.070448, 0.070373, 0.137
+    color: '#AA0000'
+    yaw: -89.935101
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 7
+    min: -0.124876, -0.031896, 0.073
+    max: -0.059857, 0.032104, 0.137
+    color: '#AA0000'
+    yaw: -69.010698
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 8
+    min: -0.105013, -0.07018, 0.073
+    max: -0.036289, -0.00618, 0.137
+    color: '#AA0000'
+    yaw: -52.553821
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 9
+    min: -0.072542, -0.102651, 0.073
+    max: -0.003818, -0.038651, 0.137
+    color: '#AA0000'
+    yaw: -37.446179
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 10
+    min: -0.032405, -0.124367, 0.073
+    max: 0.032614, -0.060367, 0.137
+    color: '#AA0000'
+    yaw: -20.989302
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 11
+    min: 0.0088, -0.132021, 0.073
+    max: 0.067946, -0.068021, 0.137
+    color: '#AA0000'
+    yaw: -0.064899
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 12
+    min: 0.043625, -0.124447, 0.073
+    max: 0.097974, -0.060447, 0.137
+    color: '#AA0000'
+    yaw: 28.386551
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 13
+    min: 0.065273, -0.102799, 0.073
+    max: 0.119622, -0.038799, 0.137
+    color: '#AA0000'
+    yaw: 61.613449
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 14
+    min: 0.070448, -0.070373, 0.073
+    max: 0.129594, -0.006373, 0.137
+    color: '#AA0000'
+    yaw: 90.064899
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 15
+    min: 0.059857, -0.032104, 0.073
+    max: 0.124876, 0.031896, 0.137
+    color: '#AA0000'
+    yaw: 110.989302
+    pitch: 0.0
+    shape: CylinderX
+  - label: coiled cable turn 3 16
+    min: 0.036289, 0.00618, 0.073
+    max: 0.105013, 0.07018, 0.137
+    color: '#AA0000'
+    yaw: 127.446179
+    pitch: 0.0
+    shape: CylinderX
+  - label: loose cable lead segment 1
+    min: -0.101562, -0.072188, 0.0145
+    max: -0.023438, -0.037187, 0.0495
+    color: '#AA0000'
+    yaw: -143.130102
+    pitch: 0.0
+    shape: CylinderX
+  - label: loose cable lead segment 2
+    min: -0.15625, -0.095625, 0.0145
+    max: -0.09375, -0.060625, 0.0495
+    color: '#AA0000'
+    yaw: 180.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: loose cable lead segment 3
+    min: -0.217727, -0.122187, 0.0145
+    max: -0.144773, -0.087187, 0.0495
+    color: '#AA0000'
+    yaw: -133.264295
+    pitch: 0.0
+    shape: CylinderX
+  - label: loose cable lead bend 1
+    min: -0.11125, -0.095625, 0.0145
+    max: -0.07625, -0.060625, 0.0495
+    color: '#AA0000'
+    shape: Ellipsoid
+  - label: loose cable lead bend 2
+    min: -0.17375, -0.095625, 0.0145
+    max: -0.13875, -0.060625, 0.0495
+    color: '#AA0000'
+    shape: Ellipsoid
+  - label: tinted exposed terminal
+    min: -0.238768, -0.149688, 0.008875
+    max: -0.189357, -0.103438, 0.055125
+    color: '#690000'
+    yaw: -161.565051
+    pitch: 0.0
+    shape: CylinderX
+  referenceTint: '#FF0000'
+- type: cmu3DModel
+  id: CMU3DHandRMCBucketJanitorialCloud
+  label: 'Janitorial bucket: open rectangular shell and source warning'
+  status: draft
+  sourcePrototypes:
+  - RMCBucketJanitorial
+  referencePrototype: RMCBucketJanitorial
+  referenceRsi: /Textures/_RMC14/Objects/Misc/Janitorial/janibucket.rsi
+  referenceState: janibucket
+  sourceDirections: 1
+  placement: surface
+  description: Empty visible layer only; three source solution-fill levels, fluid
+    color, contents and unused lid art remain unsupported. Hollow bottom/side construction,
+    open rim, molded grips and exact original front marking crop. No liquid is baked
+    into the empty bucket. Physical thickness, hidden sides, support pose and material
+    finish are inferred. No saved-map contact, native rendering, live interaction
+    or fidelity approval.
+  parts:
+  - label: janitorial bucket base
+    min: -0.201, -0.148, 0.006
+    max: 0.201, 0.148, 0.039
+    color: '#C17F20'
+  - label: janitorial side wall 0--1
+    min: -0.223, -0.151, 0.03
+    max: -0.187, 0.151, 0.169
+    color: '#E2A616'
+  - label: janitorial end wall 0--1
+    min: -0.205, -0.167, 0.03
+    max: 0.205, -0.135, 0.169
+    color: '#E2A616'
+  - label: janitorial side wall 0-1
+    min: 0.187, -0.151, 0.03
+    max: 0.223, 0.151, 0.169
+    color: '#E2A616'
+  - label: janitorial end wall 0-1
+    min: -0.205, 0.135, 0.03
+    max: 0.205, 0.167, 0.169
+    color: '#C17F20'
+  - label: janitorial side wall 1--1
+    min: -0.236, -0.16, 0.166
+    max: -0.2, 0.16, 0.305
+    color: '#E2A616'
+  - label: janitorial end wall 1--1
+    min: -0.218, -0.176, 0.166
+    max: 0.218, -0.144, 0.305
+    color: '#E2A616'
+  - label: janitorial side wall 1-1
+    min: 0.2, -0.16, 0.166
+    max: 0.236, 0.16, 0.305
+    color: '#E2A616'
+  - label: janitorial end wall 1-1
+    min: -0.218, 0.144, 0.166
+    max: 0.218, 0.176, 0.305
+    color: '#C17F20'
+  - label: janitorial side wall 2--1
+    min: -0.249, -0.169, 0.302
+    max: -0.213, 0.169, 0.441
+    color: '#E2A616'
+  - label: janitorial end wall 2--1
+    min: -0.231, -0.185, 0.302
+    max: 0.231, -0.153, 0.441
+    color: '#E2A616'
+  - label: janitorial side wall 2-1
+    min: 0.213, -0.169, 0.302
+    max: 0.249, 0.169, 0.441
+    color: '#E2A616'
+  - label: janitorial end wall 2-1
+    min: -0.231, 0.153, 0.302
+    max: 0.231, 0.185, 0.441
+    color: '#C17F20'
+  - label: open yellow rim side -1
+    min: -0.256, -0.184, 0.428
+    max: -0.218, 0.184, 0.464
+    color: '#E6BE20'
+  - label: open yellow rim end -1
+    min: -0.239, -0.191, 0.428
+    max: 0.239, -0.159, 0.464
+    color: '#E6BE20'
+  - label: open yellow rim side 1
+    min: 0.218, -0.184, 0.428
+    max: 0.256, 0.184, 0.464
+    color: '#E6BE20'
+  - label: open yellow rim end 1
+    min: -0.239, 0.159, 0.428
+    max: 0.239, 0.191, 0.464
+    color: '#E6BE20'
+  - label: original janitorial front warning
+    min: -0.140625, -0.187, 0.098
+    max: 0.140625, -0.181, 0.2855
+    color: '#FFFFFF'
+    surface: CMU3DHandToolsCloudJanitorialWarning
+    surfaceAxis: XZ
+  - label: molded side grip -1
+    min: -0.264, -0.08, 0.364
+    max: -0.242, 0.08, 0.391
+    color: '#A6670C'
+  - label: molded side grip 1
+    min: 0.242, -0.08, 0.364
+    max: 0.264, 0.08, 0.391
+    color: '#A6670C'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    janibucket:
+      frames:
+      - parts:
+        - label: janitorial bucket base
+          min: -0.201, -0.148, 0.006
+          max: 0.201, 0.148, 0.039
+          color: '#C17F20'
+        - label: janitorial side wall 0--1
+          min: -0.223, -0.151, 0.03
+          max: -0.187, 0.151, 0.169
+          color: '#E2A616'
+        - label: janitorial end wall 0--1
+          min: -0.205, -0.167, 0.03
+          max: 0.205, -0.135, 0.169
+          color: '#E2A616'
+        - label: janitorial side wall 0-1
+          min: 0.187, -0.151, 0.03
+          max: 0.223, 0.151, 0.169
+          color: '#E2A616'
+        - label: janitorial end wall 0-1
+          min: -0.205, 0.135, 0.03
+          max: 0.205, 0.167, 0.169
+          color: '#C17F20'
+        - label: janitorial side wall 1--1
+          min: -0.236, -0.16, 0.166
+          max: -0.2, 0.16, 0.305
+          color: '#E2A616'
+        - label: janitorial end wall 1--1
+          min: -0.218, -0.176, 0.166
+          max: 0.218, -0.144, 0.305
+          color: '#E2A616'
+        - label: janitorial side wall 1-1
+          min: 0.2, -0.16, 0.166
+          max: 0.236, 0.16, 0.305
+          color: '#E2A616'
+        - label: janitorial end wall 1-1
+          min: -0.218, 0.144, 0.166
+          max: 0.218, 0.176, 0.305
+          color: '#C17F20'
+        - label: janitorial side wall 2--1
+          min: -0.249, -0.169, 0.302
+          max: -0.213, 0.169, 0.441
+          color: '#E2A616'
+        - label: janitorial end wall 2--1
+          min: -0.231, -0.185, 0.302
+          max: 0.231, -0.153, 0.441
+          color: '#E2A616'
+        - label: janitorial side wall 2-1
+          min: 0.213, -0.169, 0.302
+          max: 0.249, 0.169, 0.441
+          color: '#E2A616'
+        - label: janitorial end wall 2-1
+          min: -0.231, 0.153, 0.302
+          max: 0.231, 0.185, 0.441
+          color: '#C17F20'
+        - label: open yellow rim side -1
+          min: -0.256, -0.184, 0.428
+          max: -0.218, 0.184, 0.464
+          color: '#E6BE20'
+        - label: open yellow rim end -1
+          min: -0.239, -0.191, 0.428
+          max: 0.239, -0.159, 0.464
+          color: '#E6BE20'
+        - label: open yellow rim side 1
+          min: 0.218, -0.184, 0.428
+          max: 0.256, 0.184, 0.464
+          color: '#E6BE20'
+        - label: open yellow rim end 1
+          min: -0.239, 0.159, 0.428
+          max: 0.239, 0.191, 0.464
+          color: '#E6BE20'
+        - label: original janitorial front warning
+          min: -0.140625, -0.187, 0.098
+          max: 0.140625, -0.181, 0.2855
+          color: '#FFFFFF'
+          surface: CMU3DHandToolsCloudJanitorialWarning
+          surfaceAxis: XZ
+        - label: molded side grip -1
+          min: -0.264, -0.08, 0.364
+          max: -0.242, 0.08, 0.391
+          color: '#A6670C'
+        - label: molded side grip 1
+          min: 0.242, -0.08, 0.364
+          max: 0.264, 0.08, 0.391
+          color: '#A6670C'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandRMCBucketCloud
+  label: 'Metal bucket: open mouth and raised loop handle'
+  status: draft
+  sourcePrototypes:
+  - RMCBucket
+  referencePrototype: RMCBucket
+  referenceRsi: /Textures/_RMC14/Objects/Misc/Janitorial/bucket.rsi
+  referenceState: bucket
+  sourceDirections: 1
+  placement: surface
+  description: Empty source bucket only. Hollow metal staves, bottom, rolled brown
+    rim and open arched handle preserve the actual source construction. Three solution-fill
+    appearances, liquid colors, pouring and held forms unsupported. Physical thickness,
+    hidden sides, support pose and material finish are inferred. No saved-map contact,
+    native rendering, live interaction or fidelity approval.
+  parts:
+  - label: metal bucket base
+    min: -0.093, -0.077, 0.008
+    max: 0.093, 0.077, 0.026
+    color: '#3D3D3D'
+    shape: CylinderZ
+  - label: bucket wall tier 1 stave 1
+    min: 0.069942, -0.008, 0.022
+    max: 0.110058, 0.008, 0.1
+    color: '#666666'
+    yaw: 90.0
+  - label: bucket wall tier 1 stave 2
+    min: 0.063091, 0.020701, 0.022
+    max: 0.103207, 0.036701, 0.1
+    color: '#929292'
+    yaw: 112.5
+  - label: bucket wall tier 1 stave 3
+    min: 0.043581, 0.045033, 0.022
+    max: 0.083698, 0.061033, 0.1
+    color: '#A6A6A6'
+    yaw: 135.0
+  - label: bucket wall tier 1 stave 4
+    min: 0.014383, 0.061291, 0.022
+    max: 0.0545, 0.077291, 0.1
+    color: '#666666'
+    yaw: 157.5
+  - label: bucket wall tier 1 stave 5
+    min: -0.020058, 0.067, 0.022
+    max: 0.020058, 0.083, 0.1
+    color: '#666666'
+    yaw: 180.0
+  - label: bucket wall tier 1 stave 6
+    min: -0.0545, 0.061291, 0.022
+    max: -0.014383, 0.077291, 0.1
+    color: '#929292'
+    yaw: 202.5
+  - label: bucket wall tier 1 stave 7
+    min: -0.083698, 0.045033, 0.022
+    max: -0.043581, 0.061033, 0.1
+    color: '#A6A6A6'
+    yaw: 225.0
+  - label: bucket wall tier 1 stave 8
+    min: -0.103207, 0.020701, 0.022
+    max: -0.063091, 0.036701, 0.1
+    color: '#666666'
+    yaw: 247.5
+  - label: bucket wall tier 1 stave 9
+    min: -0.110058, -0.008, 0.022
+    max: -0.069942, 0.008, 0.1
+    color: '#666666'
+    yaw: 270.0
+  - label: bucket wall tier 1 stave 10
+    min: -0.103207, -0.036701, 0.022
+    max: -0.063091, -0.020701, 0.1
+    color: '#929292'
+    yaw: 292.5
+  - label: bucket wall tier 1 stave 11
+    min: -0.083698, -0.061033, 0.022
+    max: -0.043581, -0.045033, 0.1
+    color: '#A6A6A6'
+    yaw: 315.0
+  - label: bucket wall tier 1 stave 12
+    min: -0.0545, -0.077291, 0.022
+    max: -0.014383, -0.061291, 0.1
+    color: '#666666'
+    yaw: 337.5
+  - label: bucket wall tier 1 stave 13
+    min: -0.020058, -0.083, 0.022
+    max: 0.020058, -0.067, 0.1
+    color: '#666666'
+    yaw: 0.0
+  - label: bucket wall tier 1 stave 14
+    min: 0.014383, -0.077291, 0.022
+    max: 0.0545, -0.061291, 0.1
+    color: '#929292'
+    yaw: 22.5
+  - label: bucket wall tier 1 stave 15
+    min: 0.043581, -0.061033, 0.022
+    max: 0.083698, -0.045033, 0.1
+    color: '#A6A6A6'
+    yaw: 45.0
+  - label: bucket wall tier 1 stave 16
+    min: 0.063091, -0.036701, 0.022
+    max: 0.103207, -0.020701, 0.1
+    color: '#666666'
+    yaw: 67.5
+  - label: bucket wall tier 2 stave 1
+    min: 0.077186, -0.008, 0.097
+    max: 0.120814, 0.008, 0.175
+    color: '#666666'
+    yaw: 90.0
+  - label: bucket wall tier 2 stave 2
+    min: 0.06965, 0.023763, 0.097
+    max: 0.113278, 0.039763, 0.175
+    color: '#929292'
+    yaw: 112.5
+  - label: bucket wall tier 2 stave 3
+    min: 0.04819, 0.05069, 0.097
+    max: 0.091818, 0.06669, 0.175
+    color: '#A6A6A6'
+    yaw: 135.0
+  - label: bucket wall tier 2 stave 4
+    min: 0.016072, 0.068682, 0.097
+    max: 0.0597, 0.084682, 0.175
+    color: '#666666'
+    yaw: 157.5
+  - label: bucket wall tier 2 stave 5
+    min: -0.021814, 0.075, 0.097
+    max: 0.021814, 0.091, 0.175
+    color: '#666666'
+    yaw: 180.0
+  - label: bucket wall tier 2 stave 6
+    min: -0.0597, 0.068682, 0.097
+    max: -0.016072, 0.084682, 0.175
+    color: '#929292'
+    yaw: 202.5
+  - label: bucket wall tier 2 stave 7
+    min: -0.091818, 0.05069, 0.097
+    max: -0.04819, 0.06669, 0.175
+    color: '#A6A6A6'
+    yaw: 225.0
+  - label: bucket wall tier 2 stave 8
+    min: -0.113278, 0.023763, 0.097
+    max: -0.06965, 0.039763, 0.175
+    color: '#666666'
+    yaw: 247.5
+  - label: bucket wall tier 2 stave 9
+    min: -0.120814, -0.008, 0.097
+    max: -0.077186, 0.008, 0.175
+    color: '#666666'
+    yaw: 270.0
+  - label: bucket wall tier 2 stave 10
+    min: -0.113278, -0.039763, 0.097
+    max: -0.06965, -0.023763, 0.175
+    color: '#929292'
+    yaw: 292.5
+  - label: bucket wall tier 2 stave 11
+    min: -0.091818, -0.06669, 0.097
+    max: -0.04819, -0.05069, 0.175
+    color: '#A6A6A6'
+    yaw: 315.0
+  - label: bucket wall tier 2 stave 12
+    min: -0.0597, -0.084682, 0.097
+    max: -0.016072, -0.068682, 0.175
+    color: '#666666'
+    yaw: 337.5
+  - label: bucket wall tier 2 stave 13
+    min: -0.021814, -0.091, 0.097
+    max: 0.021814, -0.075, 0.175
+    color: '#666666'
+    yaw: 0.0
+  - label: bucket wall tier 2 stave 14
+    min: 0.016072, -0.084682, 0.097
+    max: 0.0597, -0.068682, 0.175
+    color: '#929292'
+    yaw: 22.5
+  - label: bucket wall tier 2 stave 15
+    min: 0.04819, -0.06669, 0.097
+    max: 0.091818, -0.05069, 0.175
+    color: '#A6A6A6'
+    yaw: 45.0
+  - label: bucket wall tier 2 stave 16
+    min: 0.06965, -0.039763, 0.097
+    max: 0.113278, -0.023763, 0.175
+    color: '#666666'
+    yaw: 67.5
+  - label: rolled metal bucket rim 1
+    min: 0.076944, 0.006264, 0.174
+    max: 0.117368, 0.026264, 0.194
+    color: '#85654C'
+    yaw: 103.298085
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 2
+    min: 0.06126, 0.036316, 0.174
+    max: 0.10347, 0.056316, 0.194
+    color: '#85654C'
+    yaw: 128.447939
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 3
+    min: 0.032738, 0.059317, 0.174
+    max: 0.07733, 0.079317, 0.194
+    color: '#85654C'
+    yaw: 150.649709
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 4
+    min: -0.003769, 0.071765, 0.174
+    max: 0.04242, 0.091765, 0.194
+    color: '#85654C'
+    yaw: 170.496718
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 5
+    min: -0.04242, 0.071765, 0.174
+    max: 0.003769, 0.091765, 0.194
+    color: '#85654C'
+    yaw: -170.496718
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 6
+    min: -0.07733, 0.059317, 0.174
+    max: -0.032738, 0.079317, 0.194
+    color: '#85654C'
+    yaw: -150.649709
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 7
+    min: -0.10347, 0.036316, 0.174
+    max: -0.06126, 0.056316, 0.194
+    color: '#85654C'
+    yaw: -128.447939
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 8
+    min: -0.117368, 0.006264, 0.174
+    max: -0.076944, 0.026264, 0.194
+    color: '#85654C'
+    yaw: -103.298085
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 9
+    min: -0.117368, -0.026264, 0.174
+    max: -0.076944, -0.006264, 0.194
+    color: '#85654C'
+    yaw: -76.701915
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 10
+    min: -0.10347, -0.056316, 0.174
+    max: -0.06126, -0.036316, 0.194
+    color: '#85654C'
+    yaw: -51.552061
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 11
+    min: -0.07733, -0.079317, 0.174
+    max: -0.032738, -0.059317, 0.194
+    color: '#85654C'
+    yaw: -29.350291
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 12
+    min: -0.04242, -0.091765, 0.174
+    max: 0.003769, -0.071765, 0.194
+    color: '#85654C'
+    yaw: -9.503282
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 13
+    min: -0.003769, -0.091765, 0.174
+    max: 0.04242, -0.071765, 0.194
+    color: '#85654C'
+    yaw: 9.503282
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 14
+    min: 0.032738, -0.079317, 0.174
+    max: 0.07733, -0.059317, 0.194
+    color: '#85654C'
+    yaw: 29.350291
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 15
+    min: 0.06126, -0.056316, 0.174
+    max: 0.10347, -0.036316, 0.194
+    color: '#85654C'
+    yaw: 51.552061
+    pitch: 0.0
+    shape: CylinderX
+  - label: rolled metal bucket rim 16
+    min: 0.076944, -0.026264, 0.174
+    max: 0.117368, -0.006264, 0.194
+    color: '#85654C'
+    yaw: 76.701915
+    pitch: 0.0
+    shape: CylinderX
+  - label: curved raised carry handle 1
+    min: 0.079235, -0.009, 0.173471
+    max: 0.118257, 0.009, 0.191471
+    color: '#85654C'
+    yaw: 180.0
+    pitch: 86.316122
+    shape: CylinderX
+  - label: curved raised carry handle 2
+    min: 0.074935, -0.009, 0.211435
+    max: 0.112655, 0.009, 0.229435
+    color: '#85654C'
+    yaw: 180.0
+    pitch: 78.692739
+    shape: CylinderX
+  - label: curved raised carry handle 3
+    min: 0.066512, -0.009, 0.24652
+    max: 0.101768, 0.009, 0.26452
+    color: '#85654C'
+    yaw: 180.0
+    pitch: 70.249204
+    shape: CylinderX
+  - label: curved raised carry handle 4
+    min: 0.054309, -0.009, 0.276966
+    max: 0.086223, 0.009, 0.294966
+    color: '#85654C'
+    yaw: 180.0
+    pitch: 60.255119
+    shape: CylinderX
+  - label: curved raised carry handle 5
+    min: 0.038778, -0.009, 0.301245
+    max: 0.066959, 0.009, 0.319245
+    color: '#85654C'
+    yaw: 180.0
+    pitch: 47.715884
+    shape: CylinderX
+  - label: curved raised carry handle 6
+    min: 0.020428, -0.009, 0.318141
+    max: 0.045212, 0.009, 0.336141
+    color: '#85654C'
+    yaw: 180.0
+    pitch: 31.481281
+    shape: CylinderX
+  - label: curved raised carry handle 7
+    min: -0.000214, -0.009, 0.326806
+    max: 0.022466, 0.009, 0.344806
+    color: '#85654C'
+    yaw: 180.0
+    pitch: 11.154359
+    shape: CylinderX
+  - label: curved raised carry handle 8
+    min: -0.022466, -0.009, 0.326806
+    max: 0.000214, 0.009, 0.344806
+    color: '#85654C'
+    yaw: 180.0
+    pitch: -11.154359
+    shape: CylinderX
+  - label: curved raised carry handle 9
+    min: -0.045212, -0.009, 0.318141
+    max: -0.020428, 0.009, 0.336141
+    color: '#85654C'
+    yaw: 180.0
+    pitch: -31.481281
+    shape: CylinderX
+  - label: curved raised carry handle 10
+    min: -0.066959, -0.009, 0.301245
+    max: -0.038778, 0.009, 0.319245
+    color: '#85654C'
+    yaw: 180.0
+    pitch: -47.715884
+    shape: CylinderX
+  - label: curved raised carry handle 11
+    min: -0.086223, -0.009, 0.276966
+    max: -0.054309, 0.009, 0.294966
+    color: '#85654C'
+    yaw: 180.0
+    pitch: -60.255119
+    shape: CylinderX
+  - label: curved raised carry handle 12
+    min: -0.101768, -0.009, 0.24652
+    max: -0.066512, 0.009, 0.26452
+    color: '#85654C'
+    yaw: 180.0
+    pitch: -70.249204
+    shape: CylinderX
+  - label: curved raised carry handle 13
+    min: -0.112655, -0.009, 0.211435
+    max: -0.074935, 0.009, 0.229435
+    color: '#85654C'
+    yaw: 180.0
+    pitch: -78.692739
+    shape: CylinderX
+  - label: curved raised carry handle 14
+    min: -0.118257, -0.009, 0.173471
+    max: -0.079235, 0.009, 0.191471
+    color: '#85654C'
+    yaw: 180.0
+    pitch: -86.316122
+    shape: CylinderX
+  - label: handle mounting ear -1
+    min: -0.112, -0.012, 0.15
+    max: -0.086, 0.012, 0.19
+    color: '#554233'
+    shape: CylinderY
+  - label: handle mounting ear 1
+    min: 0.086, -0.012, 0.15
+    max: 0.112, 0.012, 0.19
+    color: '#554233'
+    shape: CylinderY
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    bucket:
+      frames:
+      - parts:
+        - label: metal bucket base
+          min: -0.093, -0.077, 0.008
+          max: 0.093, 0.077, 0.026
+          color: '#3D3D3D'
+          shape: CylinderZ
+        - label: bucket wall tier 1 stave 1
+          min: 0.069942, -0.008, 0.022
+          max: 0.110058, 0.008, 0.1
+          color: '#666666'
+          yaw: 90.0
+        - label: bucket wall tier 1 stave 2
+          min: 0.063091, 0.020701, 0.022
+          max: 0.103207, 0.036701, 0.1
+          color: '#929292'
+          yaw: 112.5
+        - label: bucket wall tier 1 stave 3
+          min: 0.043581, 0.045033, 0.022
+          max: 0.083698, 0.061033, 0.1
+          color: '#A6A6A6'
+          yaw: 135.0
+        - label: bucket wall tier 1 stave 4
+          min: 0.014383, 0.061291, 0.022
+          max: 0.0545, 0.077291, 0.1
+          color: '#666666'
+          yaw: 157.5
+        - label: bucket wall tier 1 stave 5
+          min: -0.020058, 0.067, 0.022
+          max: 0.020058, 0.083, 0.1
+          color: '#666666'
+          yaw: 180.0
+        - label: bucket wall tier 1 stave 6
+          min: -0.0545, 0.061291, 0.022
+          max: -0.014383, 0.077291, 0.1
+          color: '#929292'
+          yaw: 202.5
+        - label: bucket wall tier 1 stave 7
+          min: -0.083698, 0.045033, 0.022
+          max: -0.043581, 0.061033, 0.1
+          color: '#A6A6A6'
+          yaw: 225.0
+        - label: bucket wall tier 1 stave 8
+          min: -0.103207, 0.020701, 0.022
+          max: -0.063091, 0.036701, 0.1
+          color: '#666666'
+          yaw: 247.5
+        - label: bucket wall tier 1 stave 9
+          min: -0.110058, -0.008, 0.022
+          max: -0.069942, 0.008, 0.1
+          color: '#666666'
+          yaw: 270.0
+        - label: bucket wall tier 1 stave 10
+          min: -0.103207, -0.036701, 0.022
+          max: -0.063091, -0.020701, 0.1
+          color: '#929292'
+          yaw: 292.5
+        - label: bucket wall tier 1 stave 11
+          min: -0.083698, -0.061033, 0.022
+          max: -0.043581, -0.045033, 0.1
+          color: '#A6A6A6'
+          yaw: 315.0
+        - label: bucket wall tier 1 stave 12
+          min: -0.0545, -0.077291, 0.022
+          max: -0.014383, -0.061291, 0.1
+          color: '#666666'
+          yaw: 337.5
+        - label: bucket wall tier 1 stave 13
+          min: -0.020058, -0.083, 0.022
+          max: 0.020058, -0.067, 0.1
+          color: '#666666'
+          yaw: 0.0
+        - label: bucket wall tier 1 stave 14
+          min: 0.014383, -0.077291, 0.022
+          max: 0.0545, -0.061291, 0.1
+          color: '#929292'
+          yaw: 22.5
+        - label: bucket wall tier 1 stave 15
+          min: 0.043581, -0.061033, 0.022
+          max: 0.083698, -0.045033, 0.1
+          color: '#A6A6A6'
+          yaw: 45.0
+        - label: bucket wall tier 1 stave 16
+          min: 0.063091, -0.036701, 0.022
+          max: 0.103207, -0.020701, 0.1
+          color: '#666666'
+          yaw: 67.5
+        - label: bucket wall tier 2 stave 1
+          min: 0.077186, -0.008, 0.097
+          max: 0.120814, 0.008, 0.175
+          color: '#666666'
+          yaw: 90.0
+        - label: bucket wall tier 2 stave 2
+          min: 0.06965, 0.023763, 0.097
+          max: 0.113278, 0.039763, 0.175
+          color: '#929292'
+          yaw: 112.5
+        - label: bucket wall tier 2 stave 3
+          min: 0.04819, 0.05069, 0.097
+          max: 0.091818, 0.06669, 0.175
+          color: '#A6A6A6'
+          yaw: 135.0
+        - label: bucket wall tier 2 stave 4
+          min: 0.016072, 0.068682, 0.097
+          max: 0.0597, 0.084682, 0.175
+          color: '#666666'
+          yaw: 157.5
+        - label: bucket wall tier 2 stave 5
+          min: -0.021814, 0.075, 0.097
+          max: 0.021814, 0.091, 0.175
+          color: '#666666'
+          yaw: 180.0
+        - label: bucket wall tier 2 stave 6
+          min: -0.0597, 0.068682, 0.097
+          max: -0.016072, 0.084682, 0.175
+          color: '#929292'
+          yaw: 202.5
+        - label: bucket wall tier 2 stave 7
+          min: -0.091818, 0.05069, 0.097
+          max: -0.04819, 0.06669, 0.175
+          color: '#A6A6A6'
+          yaw: 225.0
+        - label: bucket wall tier 2 stave 8
+          min: -0.113278, 0.023763, 0.097
+          max: -0.06965, 0.039763, 0.175
+          color: '#666666'
+          yaw: 247.5
+        - label: bucket wall tier 2 stave 9
+          min: -0.120814, -0.008, 0.097
+          max: -0.077186, 0.008, 0.175
+          color: '#666666'
+          yaw: 270.0
+        - label: bucket wall tier 2 stave 10
+          min: -0.113278, -0.039763, 0.097
+          max: -0.06965, -0.023763, 0.175
+          color: '#929292'
+          yaw: 292.5
+        - label: bucket wall tier 2 stave 11
+          min: -0.091818, -0.06669, 0.097
+          max: -0.04819, -0.05069, 0.175
+          color: '#A6A6A6'
+          yaw: 315.0
+        - label: bucket wall tier 2 stave 12
+          min: -0.0597, -0.084682, 0.097
+          max: -0.016072, -0.068682, 0.175
+          color: '#666666'
+          yaw: 337.5
+        - label: bucket wall tier 2 stave 13
+          min: -0.021814, -0.091, 0.097
+          max: 0.021814, -0.075, 0.175
+          color: '#666666'
+          yaw: 0.0
+        - label: bucket wall tier 2 stave 14
+          min: 0.016072, -0.084682, 0.097
+          max: 0.0597, -0.068682, 0.175
+          color: '#929292'
+          yaw: 22.5
+        - label: bucket wall tier 2 stave 15
+          min: 0.04819, -0.06669, 0.097
+          max: 0.091818, -0.05069, 0.175
+          color: '#A6A6A6'
+          yaw: 45.0
+        - label: bucket wall tier 2 stave 16
+          min: 0.06965, -0.039763, 0.097
+          max: 0.113278, -0.023763, 0.175
+          color: '#666666'
+          yaw: 67.5
+        - label: rolled metal bucket rim 1
+          min: 0.076944, 0.006264, 0.174
+          max: 0.117368, 0.026264, 0.194
+          color: '#85654C'
+          yaw: 103.298085
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 2
+          min: 0.06126, 0.036316, 0.174
+          max: 0.10347, 0.056316, 0.194
+          color: '#85654C'
+          yaw: 128.447939
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 3
+          min: 0.032738, 0.059317, 0.174
+          max: 0.07733, 0.079317, 0.194
+          color: '#85654C'
+          yaw: 150.649709
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 4
+          min: -0.003769, 0.071765, 0.174
+          max: 0.04242, 0.091765, 0.194
+          color: '#85654C'
+          yaw: 170.496718
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 5
+          min: -0.04242, 0.071765, 0.174
+          max: 0.003769, 0.091765, 0.194
+          color: '#85654C'
+          yaw: -170.496718
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 6
+          min: -0.07733, 0.059317, 0.174
+          max: -0.032738, 0.079317, 0.194
+          color: '#85654C'
+          yaw: -150.649709
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 7
+          min: -0.10347, 0.036316, 0.174
+          max: -0.06126, 0.056316, 0.194
+          color: '#85654C'
+          yaw: -128.447939
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 8
+          min: -0.117368, 0.006264, 0.174
+          max: -0.076944, 0.026264, 0.194
+          color: '#85654C'
+          yaw: -103.298085
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 9
+          min: -0.117368, -0.026264, 0.174
+          max: -0.076944, -0.006264, 0.194
+          color: '#85654C'
+          yaw: -76.701915
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 10
+          min: -0.10347, -0.056316, 0.174
+          max: -0.06126, -0.036316, 0.194
+          color: '#85654C'
+          yaw: -51.552061
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 11
+          min: -0.07733, -0.079317, 0.174
+          max: -0.032738, -0.059317, 0.194
+          color: '#85654C'
+          yaw: -29.350291
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 12
+          min: -0.04242, -0.091765, 0.174
+          max: 0.003769, -0.071765, 0.194
+          color: '#85654C'
+          yaw: -9.503282
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 13
+          min: -0.003769, -0.091765, 0.174
+          max: 0.04242, -0.071765, 0.194
+          color: '#85654C'
+          yaw: 9.503282
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 14
+          min: 0.032738, -0.079317, 0.174
+          max: 0.07733, -0.059317, 0.194
+          color: '#85654C'
+          yaw: 29.350291
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 15
+          min: 0.06126, -0.056316, 0.174
+          max: 0.10347, -0.036316, 0.194
+          color: '#85654C'
+          yaw: 51.552061
+          pitch: 0.0
+          shape: CylinderX
+        - label: rolled metal bucket rim 16
+          min: 0.076944, -0.026264, 0.174
+          max: 0.117368, -0.006264, 0.194
+          color: '#85654C'
+          yaw: 76.701915
+          pitch: 0.0
+          shape: CylinderX
+        - label: curved raised carry handle 1
+          min: 0.079235, -0.009, 0.173471
+          max: 0.118257, 0.009, 0.191471
+          color: '#85654C'
+          yaw: 180.0
+          pitch: 86.316122
+          shape: CylinderX
+        - label: curved raised carry handle 2
+          min: 0.074935, -0.009, 0.211435
+          max: 0.112655, 0.009, 0.229435
+          color: '#85654C'
+          yaw: 180.0
+          pitch: 78.692739
+          shape: CylinderX
+        - label: curved raised carry handle 3
+          min: 0.066512, -0.009, 0.24652
+          max: 0.101768, 0.009, 0.26452
+          color: '#85654C'
+          yaw: 180.0
+          pitch: 70.249204
+          shape: CylinderX
+        - label: curved raised carry handle 4
+          min: 0.054309, -0.009, 0.276966
+          max: 0.086223, 0.009, 0.294966
+          color: '#85654C'
+          yaw: 180.0
+          pitch: 60.255119
+          shape: CylinderX
+        - label: curved raised carry handle 5
+          min: 0.038778, -0.009, 0.301245
+          max: 0.066959, 0.009, 0.319245
+          color: '#85654C'
+          yaw: 180.0
+          pitch: 47.715884
+          shape: CylinderX
+        - label: curved raised carry handle 6
+          min: 0.020428, -0.009, 0.318141
+          max: 0.045212, 0.009, 0.336141
+          color: '#85654C'
+          yaw: 180.0
+          pitch: 31.481281
+          shape: CylinderX
+        - label: curved raised carry handle 7
+          min: -0.000214, -0.009, 0.326806
+          max: 0.022466, 0.009, 0.344806
+          color: '#85654C'
+          yaw: 180.0
+          pitch: 11.154359
+          shape: CylinderX
+        - label: curved raised carry handle 8
+          min: -0.022466, -0.009, 0.326806
+          max: 0.000214, 0.009, 0.344806
+          color: '#85654C'
+          yaw: 180.0
+          pitch: -11.154359
+          shape: CylinderX
+        - label: curved raised carry handle 9
+          min: -0.045212, -0.009, 0.318141
+          max: -0.020428, 0.009, 0.336141
+          color: '#85654C'
+          yaw: 180.0
+          pitch: -31.481281
+          shape: CylinderX
+        - label: curved raised carry handle 10
+          min: -0.066959, -0.009, 0.301245
+          max: -0.038778, 0.009, 0.319245
+          color: '#85654C'
+          yaw: 180.0
+          pitch: -47.715884
+          shape: CylinderX
+        - label: curved raised carry handle 11
+          min: -0.086223, -0.009, 0.276966
+          max: -0.054309, 0.009, 0.294966
+          color: '#85654C'
+          yaw: 180.0
+          pitch: -60.255119
+          shape: CylinderX
+        - label: curved raised carry handle 12
+          min: -0.101768, -0.009, 0.24652
+          max: -0.066512, 0.009, 0.26452
+          color: '#85654C'
+          yaw: 180.0
+          pitch: -70.249204
+          shape: CylinderX
+        - label: curved raised carry handle 13
+          min: -0.112655, -0.009, 0.211435
+          max: -0.074935, 0.009, 0.229435
+          color: '#85654C'
+          yaw: 180.0
+          pitch: -78.692739
+          shape: CylinderX
+        - label: curved raised carry handle 14
+          min: -0.118257, -0.009, 0.173471
+          max: -0.079235, 0.009, 0.191471
+          color: '#85654C'
+          yaw: 180.0
+          pitch: -86.316122
+          shape: CylinderX
+        - label: handle mounting ear -1
+          min: -0.112, -0.012, 0.15
+          max: -0.086, 0.012, 0.19
+          color: '#554233'
+          shape: CylinderY
+        - label: handle mounting ear 1
+          min: 0.086, -0.012, 0.15
+          max: 0.112, 0.012, 0.19
+          color: '#554233'
+          shape: CylinderY
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandCMStampApprovedCloud
+  label: Approval stamp
+  status: draft
+  sourcePrototypes:
+  - CMStampApproved
+  referencePrototype: CMStampApproved
+  referenceRsi: /Textures/_RMC14/Objects/Misc/paper.rsi
+  referenceState: stamp-approve
+  sourceDirections: 1
+  placement: surface
+  description: Loose-world stamp with separate rubber platen, metal frame and colored
+    handle. The actual icon contains a color code rather than readable approval lettering;
+    no lettering is invented. Paper stamping overlays and carried forms are not this
+    physical item. Physical thickness, hidden sides, support pose and material finish
+    are inferred. No saved-map contact, native rendering, live interaction or fidelity
+    approval.
+  parts:
+  - label: rubber stamp platen
+    min: -0.139, -0.086, 0.006
+    max: 0.139, 0.086, 0.039
+    color: '#000000'
+  - label: colored base identity band
+    min: -0.139, -0.09, 0.017
+    max: 0.139, -0.086, 0.037
+    color: '#164600'
+  - label: colored base highlight
+    min: -0.126, -0.093, 0.02
+    max: -0.096, -0.09, 0.035
+    color: '#2C8800'
+  - label: upper metal platen
+    min: -0.128, -0.076, 0.04
+    max: 0.128, 0.076, 0.077
+    color: '#585753'
+  - label: platen upper rail
+    min: -0.115, -0.072, 0.074
+    max: 0.115, 0.072, 0.091
+    color: '#797979'
+  - label: handle mounting collar
+    min: -0.031, -0.033, 0.086
+    max: 0.031, 0.033, 0.12
+    color: '#333436'
+    shape: CylinderZ
+  - label: colored handle stem
+    min: -0.017, -0.02, 0.105
+    max: 0.017, 0.02, 0.218
+    color: '#164600'
+    shape: CylinderZ
+  - label: handle upper grip
+    min: -0.025, -0.029, 0.196
+    max: 0.025, 0.029, 0.249
+    color: '#1E1918'
+    shape: Ellipsoid
+  - label: source colored handle glint
+    min: -0.014, -0.021, 0.171
+    max: 0.003, -0.017, 0.217
+    color: '#2C8800'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    stamp-approve:
+      frames:
+      - parts:
+        - label: rubber stamp platen
+          min: -0.139, -0.086, 0.006
+          max: 0.139, 0.086, 0.039
+          color: '#000000'
+        - label: colored base identity band
+          min: -0.139, -0.09, 0.017
+          max: 0.139, -0.086, 0.037
+          color: '#164600'
+        - label: colored base highlight
+          min: -0.126, -0.093, 0.02
+          max: -0.096, -0.09, 0.035
+          color: '#2C8800'
+        - label: upper metal platen
+          min: -0.128, -0.076, 0.04
+          max: 0.128, 0.076, 0.077
+          color: '#585753'
+        - label: platen upper rail
+          min: -0.115, -0.072, 0.074
+          max: 0.115, 0.072, 0.091
+          color: '#797979'
+        - label: handle mounting collar
+          min: -0.031, -0.033, 0.086
+          max: 0.031, 0.033, 0.12
+          color: '#333436'
+          shape: CylinderZ
+        - label: colored handle stem
+          min: -0.017, -0.02, 0.105
+          max: 0.017, 0.02, 0.218
+          color: '#164600'
+          shape: CylinderZ
+        - label: handle upper grip
+          min: -0.025, -0.029, 0.196
+          max: 0.025, 0.029, 0.249
+          color: '#1E1918'
+          shape: Ellipsoid
+        - label: source colored handle glint
+          min: -0.014, -0.021, 0.171
+          max: 0.003, -0.017, 0.217
+          color: '#2C8800'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandCMStampDeniedCloud
+  label: Denial stamp
+  status: draft
+  sourcePrototypes:
+  - CMStampDenied
+  referencePrototype: CMStampDenied
+  referenceRsi: /Textures/_RMC14/Objects/Misc/paper.rsi
+  referenceState: stamp-deny
+  sourceDirections: 1
+  placement: surface
+  description: Loose-world stamp with separate rubber platen, metal frame and colored
+    handle. The actual icon contains a color code rather than readable approval lettering;
+    no lettering is invented. Paper stamping overlays and carried forms are not this
+    physical item. Physical thickness, hidden sides, support pose and material finish
+    are inferred. No saved-map contact, native rendering, live interaction or fidelity
+    approval.
+  parts:
+  - label: rubber stamp platen
+    min: -0.139, -0.086, 0.006
+    max: 0.139, 0.086, 0.039
+    color: '#000000'
+  - label: colored base identity band
+    min: -0.139, -0.09, 0.017
+    max: 0.139, -0.086, 0.037
+    color: '#660000'
+  - label: colored base highlight
+    min: -0.126, -0.093, 0.02
+    max: -0.096, -0.09, 0.035
+    color: '#B34444'
+  - label: upper metal platen
+    min: -0.128, -0.076, 0.04
+    max: 0.128, 0.076, 0.077
+    color: '#585753'
+  - label: platen upper rail
+    min: -0.115, -0.072, 0.074
+    max: 0.115, 0.072, 0.091
+    color: '#797979'
+  - label: handle mounting collar
+    min: -0.031, -0.033, 0.086
+    max: 0.031, 0.033, 0.12
+    color: '#333436'
+    shape: CylinderZ
+  - label: colored handle stem
+    min: -0.017, -0.02, 0.105
+    max: 0.017, 0.02, 0.218
+    color: '#660000'
+    shape: CylinderZ
+  - label: handle upper grip
+    min: -0.025, -0.029, 0.196
+    max: 0.025, 0.029, 0.249
+    color: '#1E1918'
+    shape: Ellipsoid
+  - label: source colored handle glint
+    min: -0.014, -0.021, 0.171
+    max: 0.003, -0.017, 0.217
+    color: '#B34444'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    stamp-deny:
+      frames:
+      - parts:
+        - label: rubber stamp platen
+          min: -0.139, -0.086, 0.006
+          max: 0.139, 0.086, 0.039
+          color: '#000000'
+        - label: colored base identity band
+          min: -0.139, -0.09, 0.017
+          max: 0.139, -0.086, 0.037
+          color: '#660000'
+        - label: colored base highlight
+          min: -0.126, -0.093, 0.02
+          max: -0.096, -0.09, 0.035
+          color: '#B34444'
+        - label: upper metal platen
+          min: -0.128, -0.076, 0.04
+          max: 0.128, 0.076, 0.077
+          color: '#585753'
+        - label: platen upper rail
+          min: -0.115, -0.072, 0.074
+          max: 0.115, 0.072, 0.091
+          color: '#797979'
+        - label: handle mounting collar
+          min: -0.031, -0.033, 0.086
+          max: 0.031, 0.033, 0.12
+          color: '#333436'
+          shape: CylinderZ
+        - label: colored handle stem
+          min: -0.017, -0.02, 0.105
+          max: 0.017, 0.02, 0.218
+          color: '#660000'
+          shape: CylinderZ
+        - label: handle upper grip
+          min: -0.025, -0.029, 0.196
+          max: 0.025, 0.029, 0.249
+          color: '#1E1918'
+          shape: Ellipsoid
+        - label: source colored handle glint
+          min: -0.014, -0.021, 0.171
+          max: 0.003, -0.017, 0.217
+          color: '#B34444'
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandRMCRadioHandheldColonyOffCloud
+  label: 'Colony shortwave radio: source-animated LCD and keypad'
+  status: draft
+  sourcePrototypes:
+  - RMCRadioHandheldColonyOff
+  referencePrototype: RMCRadioHandheldColonyOff
+  referenceRsi: /Textures/_RMC14/Objects/Devices/radio.rsi
+  referenceState: walkietalkie
+  sourceDirections: 1
+  placement: surface
+  description: The Off child disables RadioMicrophone and RadioSpeaker but does not
+    replace the three-frame walkietalkie world icon. Exactly those frames and 0.2/0.4/0.2-second
+    RSI timing are authored using original display crops. No audio state, frequency,
+    UI, charging, transmission or held behavior is asserted. Physical thickness, hidden
+    sides, support pose and material finish are inferred. No saved-map contact, native
+    rendering, live interaction or fidelity approval.
+  parts:
+  - label: radio dark housing
+    min: -0.16, -0.066, 0.016
+    max: 0.16, 0.066, 0.542
+    color: '#1E1918'
+  - label: radio silver face
+    min: -0.141, -0.075, 0.03
+    max: 0.141, -0.066, 0.526
+    color: '#7E8386'
+  - label: radio side bumper -1
+    min: -0.161, -0.073, 0.021
+    max: -0.137, 0.068, 0.532
+    color: '#3A322C'
+  - label: radio side bumper 1
+    min: 0.137, -0.073, 0.021
+    max: 0.161, 0.068, 0.532
+    color: '#3A322C'
+  - label: speaker inset
+    min: -0.116, -0.079, 0.414
+    max: 0.116, -0.074, 0.496
+    color: '#5E5E5E'
+  - label: speaker grille rail 0
+    min: -0.11, -0.083, 0.42
+    max: 0.11, -0.078, 0.431
+    color: '#ADADAD'
+  - label: speaker grille rail 1
+    min: -0.11, -0.083, 0.448
+    max: 0.11, -0.078, 0.459
+    color: '#ADADAD'
+  - label: speaker grille rail 2
+    min: -0.11, -0.083, 0.476
+    max: 0.11, -0.078, 0.487
+    color: '#ADADAD'
+  - label: LCD bezel
+    min: -0.12, -0.082, 0.288
+    max: 0.12, -0.074, 0.414
+    color: '#0D1A20'
+  - label: source LCD frame 0
+    min: -0.109375, -0.085, 0.289
+    max: 0.109375, -0.082, 0.414
+    color: '#FFFFFF'
+    surface: CMU3DHandToolsCloudRadioScreen0
+    surfaceAxis: XZ
+  - label: keypad key 0-0
+    min: -0.109, -0.088, 0.073
+    max: -0.078, -0.077, 0.133
+    color: '#44494A'
+  - label: keypad key 1-0
+    min: -0.051, -0.088, 0.073
+    max: -0.02, -0.077, 0.133
+    color: '#44494A'
+  - label: keypad key 2-0
+    min: 0.007, -0.088, 0.073
+    max: 0.038, -0.077, 0.133
+    color: '#44494A'
+  - label: keypad key 3-0
+    min: 0.065, -0.088, 0.073
+    max: 0.096, -0.077, 0.133
+    color: '#44494A'
+  - label: keypad key 0-1
+    min: -0.109, -0.088, 0.165
+    max: -0.078, -0.077, 0.225
+    color: '#44494A'
+  - label: keypad key 1-1
+    min: -0.051, -0.088, 0.165
+    max: -0.02, -0.077, 0.225
+    color: '#44494A'
+  - label: keypad key 2-1
+    min: 0.007, -0.088, 0.165
+    max: 0.038, -0.077, 0.225
+    color: '#44494A'
+  - label: keypad key 3-1
+    min: 0.065, -0.088, 0.165
+    max: 0.096, -0.077, 0.225
+    color: '#44494A'
+  - label: key row separator 0
+    min: -0.122, -0.082, 0.054
+    max: 0.122, -0.076, 0.07
+    color: '#ADADAD'
+  - label: key row separator 1
+    min: -0.122, -0.082, 0.147
+    max: 0.122, -0.076, 0.163
+    color: '#ADADAD'
+  - label: whip antenna
+    min: 0.0405, 0.015, 0.6055
+    max: 0.2195, 0.033, 0.6235
+    color: '#1E1918'
+    yaw: 0.0
+    pitch: 90.0
+    shape: CylinderX
+  - label: antenna base socket
+    min: 0.106, 0.005, 0.522
+    max: 0.154, 0.043, 0.555
+    color: '#2C2828'
+    shape: CylinderZ
+  - label: side control 0
+    min: 0.159, -0.018, 0.303
+    max: 0.177, 0.029, 0.347
+    color: '#5E5E5E'
+  - label: side control 1
+    min: 0.159, -0.018, 0.388
+    max: 0.177, 0.029, 0.432
+    color: '#5E5E5E'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    walkietalkie:
+      frames:
+      - parts:
+        - label: radio dark housing
+          min: -0.16, -0.066, 0.016
+          max: 0.16, 0.066, 0.542
+          color: '#1E1918'
+        - label: radio silver face
+          min: -0.141, -0.075, 0.03
+          max: 0.141, -0.066, 0.526
+          color: '#7E8386'
+        - label: radio side bumper -1
+          min: -0.161, -0.073, 0.021
+          max: -0.137, 0.068, 0.532
+          color: '#3A322C'
+        - label: radio side bumper 1
+          min: 0.137, -0.073, 0.021
+          max: 0.161, 0.068, 0.532
+          color: '#3A322C'
+        - label: speaker inset
+          min: -0.116, -0.079, 0.414
+          max: 0.116, -0.074, 0.496
+          color: '#5E5E5E'
+        - label: speaker grille rail 0
+          min: -0.11, -0.083, 0.42
+          max: 0.11, -0.078, 0.431
+          color: '#ADADAD'
+        - label: speaker grille rail 1
+          min: -0.11, -0.083, 0.448
+          max: 0.11, -0.078, 0.459
+          color: '#ADADAD'
+        - label: speaker grille rail 2
+          min: -0.11, -0.083, 0.476
+          max: 0.11, -0.078, 0.487
+          color: '#ADADAD'
+        - label: LCD bezel
+          min: -0.12, -0.082, 0.288
+          max: 0.12, -0.074, 0.414
+          color: '#0D1A20'
+        - label: source LCD frame 0
+          min: -0.109375, -0.085, 0.289
+          max: 0.109375, -0.082, 0.414
+          color: '#FFFFFF'
+          surface: CMU3DHandToolsCloudRadioScreen0
+          surfaceAxis: XZ
+        - label: keypad key 0-0
+          min: -0.109, -0.088, 0.073
+          max: -0.078, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 1-0
+          min: -0.051, -0.088, 0.073
+          max: -0.02, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 2-0
+          min: 0.007, -0.088, 0.073
+          max: 0.038, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 3-0
+          min: 0.065, -0.088, 0.073
+          max: 0.096, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 0-1
+          min: -0.109, -0.088, 0.165
+          max: -0.078, -0.077, 0.225
+          color: '#44494A'
+        - label: keypad key 1-1
+          min: -0.051, -0.088, 0.165
+          max: -0.02, -0.077, 0.225
+          color: '#44494A'
+        - label: keypad key 2-1
+          min: 0.007, -0.088, 0.165
+          max: 0.038, -0.077, 0.225
+          color: '#44494A'
+        - label: keypad key 3-1
+          min: 0.065, -0.088, 0.165
+          max: 0.096, -0.077, 0.225
+          color: '#44494A'
+        - label: key row separator 0
+          min: -0.122, -0.082, 0.054
+          max: 0.122, -0.076, 0.07
+          color: '#ADADAD'
+        - label: key row separator 1
+          min: -0.122, -0.082, 0.147
+          max: 0.122, -0.076, 0.163
+          color: '#ADADAD'
+        - label: whip antenna
+          min: 0.0405, 0.015, 0.6055
+          max: 0.2195, 0.033, 0.6235
+          color: '#1E1918'
+          yaw: 0.0
+          pitch: 90.0
+          shape: CylinderX
+        - label: antenna base socket
+          min: 0.106, 0.005, 0.522
+          max: 0.154, 0.043, 0.555
+          color: '#2C2828'
+          shape: CylinderZ
+        - label: side control 0
+          min: 0.159, -0.018, 0.303
+          max: 0.177, 0.029, 0.347
+          color: '#5E5E5E'
+        - label: side control 1
+          min: 0.159, -0.018, 0.388
+          max: 0.177, 0.029, 0.432
+          color: '#5E5E5E'
+      - parts:
+        - label: radio dark housing
+          min: -0.16, -0.066, 0.016
+          max: 0.16, 0.066, 0.542
+          color: '#1E1918'
+        - label: radio silver face
+          min: -0.141, -0.075, 0.03
+          max: 0.141, -0.066, 0.526
+          color: '#7E8386'
+        - label: radio side bumper -1
+          min: -0.161, -0.073, 0.021
+          max: -0.137, 0.068, 0.532
+          color: '#3A322C'
+        - label: radio side bumper 1
+          min: 0.137, -0.073, 0.021
+          max: 0.161, 0.068, 0.532
+          color: '#3A322C'
+        - label: speaker inset
+          min: -0.116, -0.079, 0.414
+          max: 0.116, -0.074, 0.496
+          color: '#5E5E5E'
+        - label: speaker grille rail 0
+          min: -0.11, -0.083, 0.42
+          max: 0.11, -0.078, 0.431
+          color: '#ADADAD'
+        - label: speaker grille rail 1
+          min: -0.11, -0.083, 0.448
+          max: 0.11, -0.078, 0.459
+          color: '#ADADAD'
+        - label: speaker grille rail 2
+          min: -0.11, -0.083, 0.476
+          max: 0.11, -0.078, 0.487
+          color: '#ADADAD'
+        - label: LCD bezel
+          min: -0.12, -0.082, 0.288
+          max: 0.12, -0.074, 0.414
+          color: '#0D1A20'
+        - label: source LCD frame 1
+          min: -0.109375, -0.085, 0.289
+          max: 0.109375, -0.082, 0.414
+          color: '#FFFFFF'
+          surface: CMU3DHandToolsCloudRadioScreen1
+          surfaceAxis: XZ
+        - label: keypad key 0-0
+          min: -0.109, -0.088, 0.073
+          max: -0.078, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 1-0
+          min: -0.051, -0.088, 0.073
+          max: -0.02, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 2-0
+          min: 0.007, -0.088, 0.073
+          max: 0.038, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 3-0
+          min: 0.065, -0.088, 0.073
+          max: 0.096, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 0-1
+          min: -0.109, -0.088, 0.165
+          max: -0.078, -0.077, 0.225
+          color: '#44494A'
+        - label: keypad key 1-1
+          min: -0.051, -0.088, 0.165
+          max: -0.02, -0.077, 0.225
+          color: '#44494A'
+        - label: keypad key 2-1
+          min: 0.007, -0.088, 0.165
+          max: 0.038, -0.077, 0.225
+          color: '#44494A'
+        - label: keypad key 3-1
+          min: 0.065, -0.088, 0.165
+          max: 0.096, -0.077, 0.225
+          color: '#44494A'
+        - label: key row separator 0
+          min: -0.122, -0.082, 0.054
+          max: 0.122, -0.076, 0.07
+          color: '#ADADAD'
+        - label: key row separator 1
+          min: -0.122, -0.082, 0.147
+          max: 0.122, -0.076, 0.163
+          color: '#ADADAD'
+        - label: whip antenna
+          min: 0.0405, 0.015, 0.6055
+          max: 0.2195, 0.033, 0.6235
+          color: '#1E1918'
+          yaw: 0.0
+          pitch: 90.0
+          shape: CylinderX
+        - label: antenna base socket
+          min: 0.106, 0.005, 0.522
+          max: 0.154, 0.043, 0.555
+          color: '#2C2828'
+          shape: CylinderZ
+        - label: side control 0
+          min: 0.159, -0.018, 0.303
+          max: 0.177, 0.029, 0.347
+          color: '#5E5E5E'
+        - label: side control 1
+          min: 0.159, -0.018, 0.388
+          max: 0.177, 0.029, 0.432
+          color: '#5E5E5E'
+      - parts:
+        - label: radio dark housing
+          min: -0.16, -0.066, 0.016
+          max: 0.16, 0.066, 0.542
+          color: '#1E1918'
+        - label: radio silver face
+          min: -0.141, -0.075, 0.03
+          max: 0.141, -0.066, 0.526
+          color: '#7E8386'
+        - label: radio side bumper -1
+          min: -0.161, -0.073, 0.021
+          max: -0.137, 0.068, 0.532
+          color: '#3A322C'
+        - label: radio side bumper 1
+          min: 0.137, -0.073, 0.021
+          max: 0.161, 0.068, 0.532
+          color: '#3A322C'
+        - label: speaker inset
+          min: -0.116, -0.079, 0.414
+          max: 0.116, -0.074, 0.496
+          color: '#5E5E5E'
+        - label: speaker grille rail 0
+          min: -0.11, -0.083, 0.42
+          max: 0.11, -0.078, 0.431
+          color: '#ADADAD'
+        - label: speaker grille rail 1
+          min: -0.11, -0.083, 0.448
+          max: 0.11, -0.078, 0.459
+          color: '#ADADAD'
+        - label: speaker grille rail 2
+          min: -0.11, -0.083, 0.476
+          max: 0.11, -0.078, 0.487
+          color: '#ADADAD'
+        - label: LCD bezel
+          min: -0.12, -0.082, 0.288
+          max: 0.12, -0.074, 0.414
+          color: '#0D1A20'
+        - label: source LCD frame 2
+          min: -0.109375, -0.085, 0.289
+          max: 0.109375, -0.082, 0.414
+          color: '#FFFFFF'
+          surface: CMU3DHandToolsCloudRadioScreen2
+          surfaceAxis: XZ
+        - label: keypad key 0-0
+          min: -0.109, -0.088, 0.073
+          max: -0.078, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 1-0
+          min: -0.051, -0.088, 0.073
+          max: -0.02, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 2-0
+          min: 0.007, -0.088, 0.073
+          max: 0.038, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 3-0
+          min: 0.065, -0.088, 0.073
+          max: 0.096, -0.077, 0.133
+          color: '#44494A'
+        - label: keypad key 0-1
+          min: -0.109, -0.088, 0.165
+          max: -0.078, -0.077, 0.225
+          color: '#44494A'
+        - label: keypad key 1-1
+          min: -0.051, -0.088, 0.165
+          max: -0.02, -0.077, 0.225
+          color: '#44494A'
+        - label: keypad key 2-1
+          min: 0.007, -0.088, 0.165
+          max: 0.038, -0.077, 0.225
+          color: '#44494A'
+        - label: keypad key 3-1
+          min: 0.065, -0.088, 0.165
+          max: 0.096, -0.077, 0.225
+          color: '#44494A'
+        - label: key row separator 0
+          min: -0.122, -0.082, 0.054
+          max: 0.122, -0.076, 0.07
+          color: '#ADADAD'
+        - label: key row separator 1
+          min: -0.122, -0.082, 0.147
+          max: 0.122, -0.076, 0.163
+          color: '#ADADAD'
+        - label: whip antenna
+          min: 0.0405, 0.015, 0.6055
+          max: 0.2195, 0.033, 0.6235
+          color: '#1E1918'
+          yaw: 0.0
+          pitch: 90.0
+          shape: CylinderX
+        - label: antenna base socket
+          min: 0.106, 0.005, 0.522
+          max: 0.154, 0.043, 0.555
+          color: '#2C2828'
+          shape: CylinderZ
+        - label: side control 0
+          min: 0.159, -0.018, 0.303
+          max: 0.177, 0.029, 0.347
+          color: '#5E5E5E'
+        - label: side control 1
+          min: 0.159, -0.018, 0.388
+          max: 0.177, 0.029, 0.432
+          color: '#5E5E5E'
+      delays:
+      - 0.2
+      - 0.4
+      - 0.2
+- type: cmu3DModel
+  id: CMU3DHandAU14CassetteTapeRisingSunCloud
+  label: 'Rising Sun cassette: shell, reels and original printed label'
+  status: draft
+  sourcePrototypes:
+  - AU14CassetteTapeRisingSun
+  referencePrototype: AU14CassetteTapeRisingSun
+  referenceRsi: /Textures/_RMC14/Objects/Devices/cassette_player.rsi
+  referenceState: cassette_rising_sun
+  sourceDirections: 1
+  placement: surface
+  description: Source red/white printed label wraps two separate shell rails; two
+    actual reel apertures and hubs remain open. Exact label crops do not cover the
+    full sprite. Tape playback, flipping, audio and ribbon effects unsupported. Physical
+    thickness, hidden sides, support pose and material finish are inferred. No saved-map
+    contact, native rendering, live interaction or fidelity approval.
+  parts:
+  - label: cassette lower shell
+    min: -0.21875, -0.1875, 0.018
+    max: 0.1875, -0.125, 0.061
+    color: '#1A2022'
+  - label: cassette upper shell
+    min: -0.21875, 0.0, 0.018
+    max: 0.1875, 0.125, 0.067
+    color: '#2D2E30'
+  - label: cassette left wall
+    min: -0.21875, -0.15625, 0.018
+    max: -0.18125, 0.03125, 0.067
+    color: '#1A2022'
+  - label: cassette right wall
+    min: 0.15, -0.15625, 0.018
+    max: 0.1875, 0.03125, 0.067
+    color: '#1A2022'
+  - label: cassette center upper rail
+    min: -0.1875, -0.014062, 0.02
+    max: 0.15625, 0.01875, 0.062
+    color: '#383838'
+  - label: cassette center lower rail
+    min: -0.1875, -0.128125, 0.02
+    max: 0.15625, -0.0625, 0.067
+    color: '#383838'
+  - label: reel bearing ring 12.9 1
+    min: -0.082496, -0.02125, 0.037
+    max: -0.062737, -0.00325, 0.055
+    color: '#383838'
+    yaw: 105.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 2
+    min: -0.088996, -0.009992, 0.037
+    max: -0.069237, 0.008008, 0.055
+    color: '#383838'
+    yaw: 135.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 3
+    min: -0.100254, -0.003492, 0.037
+    max: -0.080496, 0.014508, 0.055
+    color: '#383838'
+    yaw: 165.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 4
+    min: -0.113254, -0.003492, 0.037
+    max: -0.093496, 0.014508, 0.055
+    color: '#383838'
+    yaw: -165.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 5
+    min: -0.124513, -0.009992, 0.037
+    max: -0.104754, 0.008008, 0.055
+    color: '#383838'
+    yaw: -135.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 6
+    min: -0.131013, -0.02125, 0.037
+    max: -0.111254, -0.00325, 0.055
+    color: '#383838'
+    yaw: -105.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 7
+    min: -0.131013, -0.03425, 0.037
+    max: -0.111254, -0.01625, 0.055
+    color: '#383838'
+    yaw: -75.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 8
+    min: -0.124513, -0.045508, 0.037
+    max: -0.104754, -0.027508, 0.055
+    color: '#383838'
+    yaw: -45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 9
+    min: -0.113254, -0.052008, 0.037
+    max: -0.093496, -0.034008, 0.055
+    color: '#383838'
+    yaw: -15.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 10
+    min: -0.100254, -0.052008, 0.037
+    max: -0.080496, -0.034008, 0.055
+    color: '#383838'
+    yaw: 15.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 11
+    min: -0.088996, -0.045508, 0.037
+    max: -0.069237, -0.027508, 0.055
+    color: '#383838'
+    yaw: 45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 12.9 12
+    min: -0.082496, -0.03425, 0.037
+    max: -0.062737, -0.01625, 0.055
+    color: '#383838'
+    yaw: 75.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel drive tooth 12.9-0
+    min: -0.079687, -0.02775, 0.034
+    max: -0.06875, -0.00975, 0.052
+    color: '#000000'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel drive tooth 12.9-1
+    min: -0.113672, -0.047371, 0.034
+    max: -0.102734, -0.029371, 0.052
+    color: '#000000'
+    yaw: -120.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel drive tooth 12.9-2
+    min: -0.113672, -0.008129, 0.034
+    max: -0.102734, 0.009871, 0.052
+    color: '#000000'
+    yaw: 120.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 1
+    min: 0.080004, -0.02125, 0.037
+    max: 0.099763, -0.00325, 0.055
+    color: '#383838'
+    yaw: 105.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 2
+    min: 0.073504, -0.009992, 0.037
+    max: 0.093263, 0.008008, 0.055
+    color: '#383838'
+    yaw: 135.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 3
+    min: 0.062246, -0.003492, 0.037
+    max: 0.082004, 0.014508, 0.055
+    color: '#383838'
+    yaw: 165.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 4
+    min: 0.049246, -0.003492, 0.037
+    max: 0.069004, 0.014508, 0.055
+    color: '#383838'
+    yaw: -165.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 5
+    min: 0.037987, -0.009992, 0.037
+    max: 0.057746, 0.008008, 0.055
+    color: '#383838'
+    yaw: -135.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 6
+    min: 0.031487, -0.02125, 0.037
+    max: 0.051246, -0.00325, 0.055
+    color: '#383838'
+    yaw: -105.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 7
+    min: 0.031487, -0.03425, 0.037
+    max: 0.051246, -0.01625, 0.055
+    color: '#383838'
+    yaw: -75.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 8
+    min: 0.037987, -0.045508, 0.037
+    max: 0.057746, -0.027508, 0.055
+    color: '#383838'
+    yaw: -45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 9
+    min: 0.049246, -0.052008, 0.037
+    max: 0.069004, -0.034008, 0.055
+    color: '#383838'
+    yaw: -15.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 10
+    min: 0.062246, -0.052008, 0.037
+    max: 0.082004, -0.034008, 0.055
+    color: '#383838'
+    yaw: 15.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 11
+    min: 0.073504, -0.045508, 0.037
+    max: 0.093263, -0.027508, 0.055
+    color: '#383838'
+    yaw: 45.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel bearing ring 18.1 12
+    min: 0.080004, -0.03425, 0.037
+    max: 0.099763, -0.01625, 0.055
+    color: '#383838'
+    yaw: 75.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel drive tooth 18.1-0
+    min: 0.082813, -0.02775, 0.034
+    max: 0.09375, -0.00975, 0.052
+    color: '#000000'
+    yaw: 0.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel drive tooth 18.1-1
+    min: 0.048828, -0.047371, 0.034
+    max: 0.059766, -0.029371, 0.052
+    color: '#000000'
+    yaw: -120.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: reel drive tooth 18.1-2
+    min: 0.048828, -0.008129, 0.034
+    max: 0.059766, 0.009871, 0.052
+    color: '#000000'
+    yaw: 120.0
+    pitch: 0.0
+    shape: CylinderX
+  - label: tape bridge strip
+    min: -0.0625, -0.03125, 0.039
+    max: 0.025, -0.003125, 0.056
+    color: '#D6D6D6'
+  - label: original RisingSunLabelTop
+    min: -0.1875, 0.03125, 0.067
+    max: 0.15625, 0.125, 0.069
+    color: '#FFFFFF'
+    surface: CMU3DHandToolsCloudRisingSunLabelTop
+    surfaceAxis: XY
+  - label: original RisingSunLabelBottom
+    min: -0.1875, -0.09375, 0.067
+    max: 0.15625, -0.0625, 0.069
+    color: '#FFFFFF'
+    surface: CMU3DHandToolsCloudRisingSunLabelBottom
+    surfaceAxis: XY
+  - label: original RisingSunLabelLeft
+    min: -0.1875, -0.0625, 0.067
+    max: -0.15625, 0.03125, 0.069
+    color: '#FFFFFF'
+    surface: CMU3DHandToolsCloudRisingSunLabelLeft
+    surfaceAxis: XY
+  - label: original RisingSunLabelRight
+    min: 0.15625, -0.0625, 0.067
+    max: 0.1875, 0.03125, 0.069
+    color: '#FFFFFF'
+    surface: CMU3DHandToolsCloudRisingSunLabelRight
+    surfaceAxis: XY
+  - label: cassette corner screw 9.7-12.8
+    min: -0.207813, 0.089062, 0.063
+    max: -0.185938, 0.110937, 0.071
+    color: '#383838'
+    shape: CylinderZ
+  - label: cassette corner screw 9.7-20.8
+    min: -0.207813, -0.160938, 0.063
+    max: -0.185938, -0.139062, 0.071
+    color: '#383838'
+    shape: CylinderZ
+  - label: cassette corner screw 21.25-12.8
+    min: 0.153125, 0.089062, 0.063
+    max: 0.175, 0.110937, 0.071
+    color: '#383838'
+    shape: CylinderZ
+  - label: cassette corner screw 21.25-20.8
+    min: 0.153125, -0.160938, 0.063
+    max: 0.175, -0.139062, 0.071
+    color: '#383838'
+    shape: CylinderZ
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    cassette_rising_sun:
+      frames:
+      - parts:
+        - label: cassette lower shell
+          min: -0.21875, -0.1875, 0.018
+          max: 0.1875, -0.125, 0.061
+          color: '#1A2022'
+        - label: cassette upper shell
+          min: -0.21875, 0.0, 0.018
+          max: 0.1875, 0.125, 0.067
+          color: '#2D2E30'
+        - label: cassette left wall
+          min: -0.21875, -0.15625, 0.018
+          max: -0.18125, 0.03125, 0.067
+          color: '#1A2022'
+        - label: cassette right wall
+          min: 0.15, -0.15625, 0.018
+          max: 0.1875, 0.03125, 0.067
+          color: '#1A2022'
+        - label: cassette center upper rail
+          min: -0.1875, -0.014062, 0.02
+          max: 0.15625, 0.01875, 0.062
+          color: '#383838'
+        - label: cassette center lower rail
+          min: -0.1875, -0.128125, 0.02
+          max: 0.15625, -0.0625, 0.067
+          color: '#383838'
+        - label: reel bearing ring 12.9 1
+          min: -0.082496, -0.02125, 0.037
+          max: -0.062737, -0.00325, 0.055
+          color: '#383838'
+          yaw: 105.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 2
+          min: -0.088996, -0.009992, 0.037
+          max: -0.069237, 0.008008, 0.055
+          color: '#383838'
+          yaw: 135.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 3
+          min: -0.100254, -0.003492, 0.037
+          max: -0.080496, 0.014508, 0.055
+          color: '#383838'
+          yaw: 165.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 4
+          min: -0.113254, -0.003492, 0.037
+          max: -0.093496, 0.014508, 0.055
+          color: '#383838'
+          yaw: -165.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 5
+          min: -0.124513, -0.009992, 0.037
+          max: -0.104754, 0.008008, 0.055
+          color: '#383838'
+          yaw: -135.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 6
+          min: -0.131013, -0.02125, 0.037
+          max: -0.111254, -0.00325, 0.055
+          color: '#383838'
+          yaw: -105.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 7
+          min: -0.131013, -0.03425, 0.037
+          max: -0.111254, -0.01625, 0.055
+          color: '#383838'
+          yaw: -75.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 8
+          min: -0.124513, -0.045508, 0.037
+          max: -0.104754, -0.027508, 0.055
+          color: '#383838'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 9
+          min: -0.113254, -0.052008, 0.037
+          max: -0.093496, -0.034008, 0.055
+          color: '#383838'
+          yaw: -15.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 10
+          min: -0.100254, -0.052008, 0.037
+          max: -0.080496, -0.034008, 0.055
+          color: '#383838'
+          yaw: 15.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 11
+          min: -0.088996, -0.045508, 0.037
+          max: -0.069237, -0.027508, 0.055
+          color: '#383838'
+          yaw: 45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 12.9 12
+          min: -0.082496, -0.03425, 0.037
+          max: -0.062737, -0.01625, 0.055
+          color: '#383838'
+          yaw: 75.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel drive tooth 12.9-0
+          min: -0.079687, -0.02775, 0.034
+          max: -0.06875, -0.00975, 0.052
+          color: '#000000'
+          yaw: 0.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel drive tooth 12.9-1
+          min: -0.113672, -0.047371, 0.034
+          max: -0.102734, -0.029371, 0.052
+          color: '#000000'
+          yaw: -120.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel drive tooth 12.9-2
+          min: -0.113672, -0.008129, 0.034
+          max: -0.102734, 0.009871, 0.052
+          color: '#000000'
+          yaw: 120.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 1
+          min: 0.080004, -0.02125, 0.037
+          max: 0.099763, -0.00325, 0.055
+          color: '#383838'
+          yaw: 105.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 2
+          min: 0.073504, -0.009992, 0.037
+          max: 0.093263, 0.008008, 0.055
+          color: '#383838'
+          yaw: 135.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 3
+          min: 0.062246, -0.003492, 0.037
+          max: 0.082004, 0.014508, 0.055
+          color: '#383838'
+          yaw: 165.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 4
+          min: 0.049246, -0.003492, 0.037
+          max: 0.069004, 0.014508, 0.055
+          color: '#383838'
+          yaw: -165.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 5
+          min: 0.037987, -0.009992, 0.037
+          max: 0.057746, 0.008008, 0.055
+          color: '#383838'
+          yaw: -135.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 6
+          min: 0.031487, -0.02125, 0.037
+          max: 0.051246, -0.00325, 0.055
+          color: '#383838'
+          yaw: -105.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 7
+          min: 0.031487, -0.03425, 0.037
+          max: 0.051246, -0.01625, 0.055
+          color: '#383838'
+          yaw: -75.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 8
+          min: 0.037987, -0.045508, 0.037
+          max: 0.057746, -0.027508, 0.055
+          color: '#383838'
+          yaw: -45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 9
+          min: 0.049246, -0.052008, 0.037
+          max: 0.069004, -0.034008, 0.055
+          color: '#383838'
+          yaw: -15.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 10
+          min: 0.062246, -0.052008, 0.037
+          max: 0.082004, -0.034008, 0.055
+          color: '#383838'
+          yaw: 15.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 11
+          min: 0.073504, -0.045508, 0.037
+          max: 0.093263, -0.027508, 0.055
+          color: '#383838'
+          yaw: 45.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel bearing ring 18.1 12
+          min: 0.080004, -0.03425, 0.037
+          max: 0.099763, -0.01625, 0.055
+          color: '#383838'
+          yaw: 75.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel drive tooth 18.1-0
+          min: 0.082813, -0.02775, 0.034
+          max: 0.09375, -0.00975, 0.052
+          color: '#000000'
+          yaw: 0.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel drive tooth 18.1-1
+          min: 0.048828, -0.047371, 0.034
+          max: 0.059766, -0.029371, 0.052
+          color: '#000000'
+          yaw: -120.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: reel drive tooth 18.1-2
+          min: 0.048828, -0.008129, 0.034
+          max: 0.059766, 0.009871, 0.052
+          color: '#000000'
+          yaw: 120.0
+          pitch: 0.0
+          shape: CylinderX
+        - label: tape bridge strip
+          min: -0.0625, -0.03125, 0.039
+          max: 0.025, -0.003125, 0.056
+          color: '#D6D6D6'
+        - label: original RisingSunLabelTop
+          min: -0.1875, 0.03125, 0.067
+          max: 0.15625, 0.125, 0.069
+          color: '#FFFFFF'
+          surface: CMU3DHandToolsCloudRisingSunLabelTop
+          surfaceAxis: XY
+        - label: original RisingSunLabelBottom
+          min: -0.1875, -0.09375, 0.067
+          max: 0.15625, -0.0625, 0.069
+          color: '#FFFFFF'
+          surface: CMU3DHandToolsCloudRisingSunLabelBottom
+          surfaceAxis: XY
+        - label: original RisingSunLabelLeft
+          min: -0.1875, -0.0625, 0.067
+          max: -0.15625, 0.03125, 0.069
+          color: '#FFFFFF'
+          surface: CMU3DHandToolsCloudRisingSunLabelLeft
+          surfaceAxis: XY
+        - label: original RisingSunLabelRight
+          min: 0.15625, -0.0625, 0.067
+          max: 0.1875, 0.03125, 0.069
+          color: '#FFFFFF'
+          surface: CMU3DHandToolsCloudRisingSunLabelRight
+          surfaceAxis: XY
+        - label: cassette corner screw 9.7-12.8
+          min: -0.207813, 0.089062, 0.063
+          max: -0.185938, 0.110937, 0.071
+          color: '#383838'
+          shape: CylinderZ
+        - label: cassette corner screw 9.7-20.8
+          min: -0.207813, -0.160938, 0.063
+          max: -0.185938, -0.139062, 0.071
+          color: '#383838'
+          shape: CylinderZ
+        - label: cassette corner screw 21.25-12.8
+          min: 0.153125, 0.089062, 0.063
+          max: 0.175, 0.110937, 0.071
+          color: '#383838'
+          shape: CylinderZ
+        - label: cassette corner screw 21.25-20.8
+          min: 0.153125, -0.160938, 0.063
+          max: 0.175, -0.139062, 0.071
+          color: '#383838'
+          shape: CylinderZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DHandRMCCassettePlayerCloud
+  label: 'Cassette player: housing, recessed window, reels and controls'
+  status: draft
+  sourcePrototypes:
+  - RMCCassettePlayer
+  referencePrototype: RMCCassettePlayer
+  referenceRsi: /Textures/_RMC14/Objects/Devices/cassette_player.rsi
+  referenceState: walkman
+  sourceDirections: 1
+  placement: surface
+  description: Default walkman source only. Separate door frame, cassette bay, visible
+    reels, hinge spine and side controls. walkman_1 through walkman_6 colored cases,
+    playing/empty overlays, audio, UI and worn/headset effects remain inventoried
+    and unsupported. Physical thickness, hidden sides, support pose and material finish
+    are inferred. No saved-map contact, native rendering, live interaction or fidelity
+    approval.
+  parts:
+  - label: cassette player main shell
+    min: -0.207, -0.073, 0.016
+    max: 0.207, 0.073, 0.525
+    color: '#1A2022'
+  - label: front upper housing
+    min: -0.184, -0.08, 0.425
+    max: 0.177, -0.074, 0.507
+    color: '#505050'
+  - label: upper speaker strip
+    min: -0.163, -0.085, 0.453
+    max: 0.129, -0.079, 0.488
+    color: '#646464'
+  - label: upper small control
+    min: 0.143, -0.09, 0.457
+    max: 0.176, -0.08, 0.49
+    color: '#818486'
+  - label: door top rail
+    min: -0.176, -0.088, 0.385
+    max: 0.12, -0.076, 0.412
+    color: '#5B5B5B'
+  - label: door lower rail
+    min: -0.176, -0.088, 0.05
+    max: 0.12, -0.076, 0.08
+    color: '#505050'
+  - label: door left rail
+    min: -0.182, -0.09, 0.061
+    max: -0.144, -0.076, 0.395
+    color: '#505050'
+  - label: door right rail
+    min: 0.089, -0.09, 0.061
+    max: 0.13, -0.076, 0.395
+    color: '#5B5B5B'
+  - label: recessed cassette seat
+    min: -0.144, -0.08, 0.08
+    max: 0.09, -0.074, 0.385
+    color: '#2A2D2F'
+  - label: window surround
+    min: -0.11, -0.091, 0.126
+    max: 0.035, -0.08, 0.342
+    color: '#1A2022'
+  - label: visible reel at 0.18
+    min: -0.078, -0.096, 0.143
+    max: -0.004, -0.084, 0.217
+    color: '#818486'
+    shape: CylinderY
+  - label: reel spindle 0.18
+    min: -0.053, -0.1, 0.164
+    max: -0.027, -0.095, 0.196
+    color: '#B9B5BC'
+    shape: CylinderY
+  - label: visible reel at 0.282
+    min: -0.078, -0.096, 0.245
+    max: -0.004, -0.084, 0.319
+    color: '#818486'
+    shape: CylinderY
+  - label: reel spindle 0.282
+    min: -0.053, -0.1, 0.266
+    max: -0.027, -0.095, 0.298
+    color: '#B9B5BC'
+    shape: CylinderY
+  - label: hinge-side silver spine
+    min: 0.145, -0.082, 0.049
+    max: 0.177, -0.075, 0.404
+    color: '#818486'
+  - label: door hinge 0.101
+    min: 0.122, -0.071, 0.101
+    max: 0.153, -0.041, 0.155
+    color: '#53595F'
+    shape: CylinderZ
+  - label: door hinge 0.345
+    min: 0.122, -0.071, 0.345
+    max: 0.153, -0.041, 0.399
+    color: '#53595F'
+    shape: CylinderZ
+  - label: side playback button 1
+    min: 0.205, -0.03, 0.4
+    max: 0.234, 0.032, 0.461
+    color: '#A43E19'
+  - label: side playback button 2
+    min: 0.205, -0.03, 0.325
+    max: 0.234, 0.032, 0.386
+    color: '#7E8386'
+  - label: side playback button 3
+    min: 0.205, -0.03, 0.25
+    max: 0.234, 0.032, 0.311
+    color: '#646464'
+  sourceSpriteOffset: 0, 0
+  sourceSpriteRotates: true
+  spriteStates:
+    walkman:
+      frames:
+      - parts:
+        - label: cassette player main shell
+          min: -0.207, -0.073, 0.016
+          max: 0.207, 0.073, 0.525
+          color: '#1A2022'
+        - label: front upper housing
+          min: -0.184, -0.08, 0.425
+          max: 0.177, -0.074, 0.507
+          color: '#505050'
+        - label: upper speaker strip
+          min: -0.163, -0.085, 0.453
+          max: 0.129, -0.079, 0.488
+          color: '#646464'
+        - label: upper small control
+          min: 0.143, -0.09, 0.457
+          max: 0.176, -0.08, 0.49
+          color: '#818486'
+        - label: door top rail
+          min: -0.176, -0.088, 0.385
+          max: 0.12, -0.076, 0.412
+          color: '#5B5B5B'
+        - label: door lower rail
+          min: -0.176, -0.088, 0.05
+          max: 0.12, -0.076, 0.08
+          color: '#505050'
+        - label: door left rail
+          min: -0.182, -0.09, 0.061
+          max: -0.144, -0.076, 0.395
+          color: '#505050'
+        - label: door right rail
+          min: 0.089, -0.09, 0.061
+          max: 0.13, -0.076, 0.395
+          color: '#5B5B5B'
+        - label: recessed cassette seat
+          min: -0.144, -0.08, 0.08
+          max: 0.09, -0.074, 0.385
+          color: '#2A2D2F'
+        - label: window surround
+          min: -0.11, -0.091, 0.126
+          max: 0.035, -0.08, 0.342
+          color: '#1A2022'
+        - label: visible reel at 0.18
+          min: -0.078, -0.096, 0.143
+          max: -0.004, -0.084, 0.217
+          color: '#818486'
+          shape: CylinderY
+        - label: reel spindle 0.18
+          min: -0.053, -0.1, 0.164
+          max: -0.027, -0.095, 0.196
+          color: '#B9B5BC'
+          shape: CylinderY
+        - label: visible reel at 0.282
+          min: -0.078, -0.096, 0.245
+          max: -0.004, -0.084, 0.319
+          color: '#818486'
+          shape: CylinderY
+        - label: reel spindle 0.282
+          min: -0.053, -0.1, 0.266
+          max: -0.027, -0.095, 0.298
+          color: '#B9B5BC'
+          shape: CylinderY
+        - label: hinge-side silver spine
+          min: 0.145, -0.082, 0.049
+          max: 0.177, -0.075, 0.404
+          color: '#818486'
+        - label: door hinge 0.101
+          min: 0.122, -0.071, 0.101
+          max: 0.153, -0.041, 0.155
+          color: '#53595F'
+          shape: CylinderZ
+        - label: door hinge 0.345
+          min: 0.122, -0.071, 0.345
+          max: 0.153, -0.041, 0.399
+          color: '#53595F'
+          shape: CylinderZ
+        - label: side playback button 1
+          min: 0.205, -0.03, 0.4
+          max: 0.234, 0.032, 0.461
+          color: '#A43E19'
+        - label: side playback button 2
+          min: 0.205, -0.03, 0.325
+          max: 0.234, 0.032, 0.386
+          color: '#7E8386'
+        - label: side playback button 3
+          min: 0.205, -0.03, 0.25
+          max: 0.234, 0.032, 0.311
+          color: '#646464'
+      delays:
+      - 1
