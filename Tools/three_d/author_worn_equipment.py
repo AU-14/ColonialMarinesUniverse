@@ -19,8 +19,8 @@ import equipment_hull
 import inventory as inv
 
 ROOT = bm.ROOT
-MODELS = bm.SOURCE / 'garrison_worn_equipment.yml'
-POSES = bm.SOURCE / 'garrison_worn_equipment_poses.yml'
+MODELS = bm.EQUIPMENT_SOURCE / 'garrison_worn_equipment.yml'
+POSES = bm.EQUIPMENT_SOURCE / 'garrison_worn_equipment_poses.yml'
 # Slot aliases from ClientClothingSystem.TemporarySlotMap; flags from Clothing.
 SLOTS = [('jumpsuit', 'innerclothing', 'INNERCLOTHING'), ('outerClothing', 'outerclothing', 'OUTERCLOTHING'),
          ('head', 'head', 'HELMET'), ('eyes', 'eyes', 'EYES'), ('ears', 'ears', 'EARS'),

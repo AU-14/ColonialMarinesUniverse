@@ -18,7 +18,7 @@ import inventory as art_inventory
 from scene import enrich_materials
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = ROOT / "Content.CMU/Resources/Prototypes/CMU14/ThreeD/tile_materials.yml"
+OUTPUT = ROOT / "Content.CMU/Resources/ThreeD/Prototypes/World/tile_materials.yml"
 
 
 def source_metadata(root: Path, reference: str) -> list[str]:

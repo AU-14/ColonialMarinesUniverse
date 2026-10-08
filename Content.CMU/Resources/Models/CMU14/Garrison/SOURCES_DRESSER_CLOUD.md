@@ -1,6 +1,6 @@
 # Wooden dresser draft
 
-New source: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_dresser_cloud.yml`
+New source: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_dresser_cloud.yml`
 
 Exact intended prototype: `Dresser` (six Redux records in the committed inventory).
 Original reference: `Resources/Textures/Structures/Furniture/furniture.rsi/dresser.png`, state `dresser`, one direction, 32 × 32 pixels. Original definition: `Resources/Prototypes/Entities/Structures/Furniture/dresser.yml`.

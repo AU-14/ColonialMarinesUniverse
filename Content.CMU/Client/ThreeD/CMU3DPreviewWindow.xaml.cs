@@ -18,7 +18,7 @@ public sealed partial class CMU3DPreviewWindow : DefaultWindow
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IEntityManager _entities = default!;
 
-    private readonly CMU3DModelPrototype[] _models;
+    private CMU3DModelPrototype[] _models;
     private CMU3DModelPrototype? _model;
     private IDirectionalTextureProvider? _reference;
     private Direction _direction = Direction.South;
@@ -64,6 +64,16 @@ public sealed partial class CMU3DPreviewWindow : DefaultWindow
             References.Disabled = true;
             Details.SetMessage(Loc.GetString("cmu-3d-empty"));
         }
+    }
+
+    public void ReleaseResources()
+    {
+        _models = [];
+        _model = null;
+        _reference = null;
+        _referenceSources = [];
+        ReferenceIcon.Texture = null;
+        View.ReleaseResources();
     }
 
     public bool SelectModel(string id)

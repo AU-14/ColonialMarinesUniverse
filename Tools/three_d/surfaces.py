@@ -14,7 +14,7 @@ from PIL import Image
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+SOURCE = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World'
 CELL = 256
 COLUMNS = 64
 MAX_SURFACES = 4095

@@ -46,8 +46,8 @@ Source Sprite state names, original direction counts and prototype IDs are uncha
 
 ## Deliverables
 
-- Editable models: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_structural_vehicle_cloud.yml`
-- Source surfaces: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_structural_vehicle_cloud_art.yml`
+- Editable models: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_structural_vehicle_cloud.yml`
+- Source surfaces: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_structural_vehicle_cloud_art.yml`
 - Texture directory: `Content.CMU/Resources/Textures/CMU14/ThreeD/structural_vehicle_cloud/`
 - Ten direct, unchanged-exporter GLBs in `Content.CMU/Resources/Models/CMU14/Garrison/`
 - Art authoring / verification: `Tools/three_d/author_structural_vehicle_cloud.py`, `verify_structural_vehicle_cloud.py`, `check_structural_vehicle_blender.py`

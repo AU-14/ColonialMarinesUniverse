@@ -13,7 +13,7 @@ import sprite_states,scene,surfaces
 from placement import resolve_placements
 from author_wide_machinery import world_parts,contacts
 GEN=ROOT/'Tools/three_d/generated';REVIEW=GEN/'review/material-stacks';BASE=ROOT/'.codex/model-batch-baseline978'
-MODEL=ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_material_stacks.yml'
+MODEL=ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_material_stacks.yml'
 ART=MODEL.with_name('garrison_material_stacks_art.yml')
 TEXTURES=ROOT/'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces'
 NOTE=ROOT/'Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_MATERIAL_STACKS.md'

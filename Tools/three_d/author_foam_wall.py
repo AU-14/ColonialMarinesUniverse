@@ -25,7 +25,7 @@ from author_wide_machinery import world_parts
 
 GEN = ROOT / 'Tools/three_d/generated'
 BASELINE = ROOT / '.codex/model-batch-baseline1006'
-MODEL = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_foam_wall.yml'
+MODEL = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_foam_wall.yml'
 ART = MODEL.with_name('garrison_foam_wall_art.yml')
 TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces/FoamWall'
 NOTE = ROOT / 'Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_FOAM_WALL.md'

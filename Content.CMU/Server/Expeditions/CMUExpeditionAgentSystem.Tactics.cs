@@ -53,7 +53,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (other == uid || HasComp<ActorComponent>(other) || !_mobs.IsAlive(other) ||
                 buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.OutOfAmmo ||
                 buddy.Squad != agent.Squad ||
-                buddy.Target != agent.Target || !IsFriendly(uid, other) ||
+                !SharedEngagement(agent, buddy) || !IsFriendly(uid, other) ||
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12))
                 continue;
             members++;
@@ -63,6 +63,11 @@ public sealed partial class CMUExpeditionAgentSystem
         // Local attack slots stagger exposure; they are released immediately on retreat, injury, death or possession.
         return attacking < (members + 1) / 2;
     }
+
+    private bool SharedEngagement(CMUExpeditionAgentComponent first, CMUExpeditionAgentComponent second) =>
+        first.Target != null && first.Target == second.Target ||
+        first.LastSeen is { } a && second.LastSeen is { } b && _timing.CurTime < first.ForgetAt &&
+        _timing.CurTime < second.ForgetAt && _transform.InRange(a, b, 8);
 
     private void UpdateEmotions(EntityUid uid, CMUExpeditionAgentComponent agent, float damage, TimeSpan now)
     {
@@ -76,7 +81,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             if (other == uid || !_mobs.IsAlive(other) || HasComp<ActorComponent>(other) ||
                 buddy.Squad != agent.Squad || buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.OutOfAmmo ||
-                buddy.Target != agent.Target || !IsFriendly(uid, other) ||
+                !SharedEngagement(agent, buddy) || !IsFriendly(uid, other) ||
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12))
                 continue;
             agent.SupportingAllies++;

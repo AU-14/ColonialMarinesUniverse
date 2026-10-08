@@ -7,8 +7,8 @@ Source repository: TheHellFireo/CMU-Garrison-3D, ref `Chip/garrison-3d`. Actual 
 22 editable physical assemblies cover 14 exact target IDs (13 mapped designs and nine unbound construction studies). Inventory reports 29 Redux and 15 classic placements for those IDs. Placement counts are not scene-fit or runtime evidence. All models remain draft. No engine or runtime files were edited, no gameplay/map/server was launched, and nothing was published.
 
 Canonical art files:
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_printed_small_cloud.yml`
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_printed_small_cloud_art.yml`
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_printed_small_cloud.yml`
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_printed_small_cloud_art.yml`
 - `Content.CMU/Resources/Textures/CMU14/ThreeD/printed_small_cloud/`
 
 The 27 surface indices use the exact first 27 entries of `families.printed_small.indices` in `reference/cloud-atlas-allocations.json`, preserving all gaps. No numeric-range assumption was used. Cross-family index uniqueness passes. Source crops are original unchanged RGBA pixels. The cookbook cover tint is the explicit source `#e22541` part multiplier; decorations retain their original colors.
