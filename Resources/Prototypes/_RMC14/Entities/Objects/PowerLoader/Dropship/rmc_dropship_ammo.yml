@@ -471,7 +471,7 @@
     - AU14EffectExplosionParticleJDAM
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 7500
+    cost: 5000
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
@@ -498,7 +498,7 @@
     - AU14SmokeExplosionProofJDAM
   - type: DropshipFabricatorPrintable
     category: Ammo
-    cost: 8000
+    cost: 5000
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
