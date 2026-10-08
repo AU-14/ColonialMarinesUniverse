@@ -59,6 +59,7 @@ public sealed partial class AreaSystem : EntitySystem
         _xenoConstruct = GetEntityQuery<XenoConstructComponent>();
 
         SubscribeLocalEvent<AreaGridComponent, MapInitEvent>(OnAreaGridMapInit);
+        SubscribeLocalEvent<AreaComponent, ComponentInit>(OnAreaInit); // CMU14: enforce cumulative roof tiers.
 
         Subs.CVar(_config, RMCCVars.RMCHiveSpreadEarlyMinutes, v => _earlySpreadHiveTime = TimeSpan.FromMinutes(v), true);
     }
