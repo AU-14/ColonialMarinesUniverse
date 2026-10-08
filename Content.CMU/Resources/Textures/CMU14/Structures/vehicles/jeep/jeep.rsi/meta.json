@@ -220,7 +220,15 @@
       "directions": 4
     },
     {
+      "name": "hood_open_outline",
+      "directions": 4
+    },
+    {
       "name": "fuel_door_outline",
+      "directions": 4
+    },
+    {
+      "name": "fuel_door_open_outline",
       "directions": 4
     },
     {
@@ -1049,6 +1057,66 @@
     },
     {
       "name": "headlights_overlay_1",
+      "directions": 4
+    },
+    {
+      "name": "click_hood_closed",
+      "directions": 4
+    },
+    {
+      "name": "click_hood_open",
+      "directions": 4
+    },
+    {
+      "name": "click_windshield_up",
+      "directions": 4
+    },
+    {
+      "name": "click_windshield_down",
+      "directions": 4
+    },
+    {
+      "name": "click_fuel_door_closed",
+      "directions": 4
+    },
+    {
+      "name": "click_fuel_door_open",
+      "directions": 4
+    },
+    {
+      "name": "click_wheels",
+      "directions": 4
+    },
+    {
+      "name": "click_engine",
+      "directions": 4
+    },
+    {
+      "name": "click_spare",
+      "directions": 4
+    },
+    {
+      "name": "click_jerrycan",
+      "directions": 4
+    },
+    {
+      "name": "click_shovel",
+      "directions": 4
+    },
+    {
+      "name": "click_axe",
+      "directions": 4
+    },
+    {
+      "name": "click_headlights",
+      "directions": 4
+    },
+    {
+      "name": "click_seat_driver",
+      "directions": 4
+    },
+    {
+      "name": "click_seat_passenger",
       "directions": 4
     },
     {

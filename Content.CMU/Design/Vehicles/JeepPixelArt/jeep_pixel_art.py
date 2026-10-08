@@ -2,8 +2,8 @@
 """Generates the CMU military jeep RSIs and their previews.
 
 The jeep is a voxel model (1 voxel = 1 px) rendered for each RSI direction with the oblique 3/4
-projection the other vehicles use: screen_x = x, screen_y = -y - z, so top faces and south-facing
-faces show. Every pixel remembers which part won the depth test, which is how a direction is split
+projection the other vehicles use: screen_x = x, screen_y = -y * depth - z * height, so top faces
+and south-facing faces show. The depth and height scales are per view (DEPTH_SCALE, HEIGHT_SCALE). Every pixel remembers which part won the depth test, which is how a direction is split
 into layers. Riders sit between the vehicle entity and an overlay entity:
 
   vehicle entity (under riders)
@@ -117,6 +117,10 @@ OVERLAY_PARTS = {
     "W": {"wall_left"},
 }
 WHEEL_PARTS = {"wheel"}
+# Seat backs join the overlay, in front and back views, wherever they are nearer the viewer than
+# every rider that could be drawn there: seen from behind they cover their own riders, seen from the
+# front the front seats cover the rear riders.
+SEAT_BACK_PARTS = {"seat_back", "rear_bench_back", "gunner_seat"}
 
 # Hardpoints that sit on the body; each lists the directions where it is drawn over the riders.
 ATTACHMENTS = {
@@ -166,7 +170,7 @@ SEATS = {
 RIDER_HIP_ROW = {"S": 19, "N": 20, "E": 18, "W": 18}
 MG_PIVOT = (-16.0, 0.0, 34)
 # Cargo slot: footprint of a standard 28 px crate on the bed, and the crate sprite's ground centre.
-SLOT = dict(f0=-26, f1=-18, r0=-14, r1=13, floor=8)
+SLOT = dict(f0=-26, f1=-18, r0=-14, r1=13, floor=13)
 CRATE_GROUND_ROW = 26
 
 
@@ -300,15 +304,20 @@ def inside_tub(f, r, z):
     return -19 <= r <= 18 and z >= 6 and f <= 5
 
 
-def tread_face(m, fc, r0, r1, frame, face, destroyed):
+def under_fender(r):
+    return 9 <= r <= 19 or -20 <= r <= -10
+
+
+def tread_face(m, fc, r0, r1, frame, face, destroyed, lift=0):
     """A tyre seen end-on: its tread face, as tall as the wheel is wide from the side. face is +1 for
-    the front of the tyre (seen facing south), -1 for the back (facing north)."""
+    the front of the tyre (seen facing south), -1 for the back (facing north). A lifted tread keeps
+    its full height outboard of the fender and tucks under it inboard."""
     radius = int(WHEEL_R)
     f = fc + radius if face > 0 else fc - radius
     top = 2 * radius - 1
     for z in range(0, top + 1):
         for r in range(r0, r1 + 1):
-            if inside_tub(f, r, z):
+            if inside_tub(f, r, z + lift) or lift and z + lift >= FENDER - 1 and under_fender(r):
                 continue
             edge = r in (r0, r1)
             if edge and z in (0, top):
@@ -322,18 +331,19 @@ def tread_face(m, fc, r0, r1, frame, face, destroyed):
                 if edge and not lug:
                     continue
                 mat = "rubber" if lug else "groove"
-            m.put(f, r, z, mat, "wheel")
+            m.put(f, r, z + lift, mat, "wheel")
 
 
-def wheels(view, phase=0.0, destroyed=False):
+def wheels(view, phase=0.0, destroyed=False, axles=(FRONT_AXLE, REAR_AXLE)):
     m = Model()
-    for fc in (FRONT_AXLE, REAR_AXLE):
+    for fc in axles:
         for r0, r1 in WHEEL_SPAN:
             if view in "EW":
-                wheel(m, fc, WHEEL_Z, r0, r1, phase, inside_tub, destroyed)
+                wheel(m, round(fc * LENGTH_SCALE[view]), WHEEL_Z, r0, r1, phase, inside_tub, destroyed)
             else:
                 frame = round(phase / (2 * math.pi / LUGS) * WHEEL_FRAMES)
-                tread_face(m, fc, r0, r1, frame, 1 if view == "S" else -1, destroyed)
+                lift = 0 if fc == FAR_AXLE.get(view) else NEAR_WHEEL_LIFT.get(view, 0)
+                tread_face(m, fc, r0, r1, frame, 1 if view == "S" else -1, destroyed, lift)
     if view in "EW":
         # Shadowed wheel well behind the near rear tyre; the far side keeps its plain inner skin.
         r = 18 if view == "E" else -19
@@ -344,8 +354,31 @@ def wheels(view, phase=0.0, destroyed=False):
     return m
 
 
-def build(variant):
-    """The body without wheels or hardpoints."""
+# Front and back views draw the far axle's wheels this many rows towards the far end, tucked behind
+# the body, so the axles sit where the side view puts them instead of halfway up the tub.
+FAR_WHEEL_SHIFT = {"S": -13, "N": -14}
+# Facing south the front tyres are raised off the bottom edge by the gap the rear tyres keep facing
+# north.
+NEAR_WHEEL_LIFT = {"S": 5}
+FAR_AXLE = {"S": REAR_AXLE, "N": FRONT_AXLE}
+
+
+def near_axles(view):
+    return tuple(a for a in (FRONT_AXLE, REAR_AXLE) if a != FAR_AXLE.get(view))
+
+
+def far_wheels(view, occupied, phase=0.0, destroyed=False):
+    """The far axle's wheels for a front or back view, shifted, where nothing else is drawn."""
+    if view not in FAR_WHEEL_SHIFT:
+        return {}
+    buf, _ = render(wheels(view, phase, destroyed, axles=(FAR_AXLE[view],)), view)
+    col = shade(buf)
+    shift = FAR_WHEEL_SHIFT[view]
+    return {(x, y + shift): c for (x, y), c in col.items() if (x, y + shift) not in occupied}
+
+
+def build(variant, view=None):
+    """The body without wheels or hardpoints, as drawn for a view (seat backs differ per view)."""
     m = Model()
 
     # Frame rails, cross members and the brake drums left when the wheels come off.
@@ -364,6 +397,9 @@ def build(variant):
     # Steering tie rod ahead of the front axle; both show through the gaps beside the grille.
     m.box(FRONT_AXLE + 5, FRONT_AXLE + 5, -17, 16, WHEEL_Z - 2, WHEEL_Z - 2, "steel", "chassis")
     m.mirror_box(FRONT_AXLE + 3, FRONT_AXLE + 4, 15, 16, WHEEL_Z - 2, WHEEL_Z - 2, "steel", "chassis")
+
+    # Drums and axles stay under the tub floor, seen only from outside.
+    m.remove(lambda f, r, z: m.vox[(f, r, z)][1] == "chassis" and inside_tub(f, r, z))
 
     # Tub: floor, double-skinned walls, rear wheel arches and the step below the door.
     m.box(-30, 5, -20, 19, 6, 7, "od_in", "floor")
@@ -439,15 +475,12 @@ def build(variant):
     m.mirror_box(33, 33, 12, 13, 4, 5, "steel", "bumper")
     m.paint(lambda f, r, z: f == 32 and z == 5 and r in (-17, -16, -14, -12, 11, 13, 15, 16), "white")
 
-    # Front seats with pleated backs, the tunnel and its levers.
+    # Front seats, the tunnel and its levers.
     for r0, r1 in ((4, 15), (-16, -5)):
         seat(m, -11, -3, r0, r1, "seat")
-        m.box(-12, -11, r0, r1, 13, 23, "canvas", "seat_back")
-        m.paint(lambda f, r, z, r0=r0, r1=r1: f == -12 and r0 <= r <= r1 and (r in (r0, r1) or z in (13, 23)),
-                "frame")
-        m.box(-12, -12, r0 + 1, r1 - 1, 18, 18, "canvas_seam", "seat_back")
-        for rp in (r0 + 3, r0 + 6, r0 + 9):
-            m.box(-11, -11, rp, rp, 15, 22, "canvas_seam", "seat_back")
+        seat_back(m, -12, r0, r1, SEAT_BACK_TOP.get(view, 30), "seat_back")
+        # Plate closing the seat base under the back, so the legs don't show from behind.
+        m.box(-14, -12, r0, r1, 8, 12, "od_in", "seat_back")
     m.box(-9, 4, -3, 2, 8, 9, "od_in", "tunnel")
     m.box(-2, -2, -1, -1, 10, 15, "black", "tunnel")
     m.box(0, 0, 0, 1, 10, 14, "black", "tunnel")
@@ -457,7 +490,7 @@ def build(variant):
     m.mirror_box(-31, -31, 15, 19, 3, 5, "od", "bumperette")
     m.mirror_box(-31, -31, 16, 17, 11, 12, "red", "taillight")
     m.mirror_box(-31, -31, 16, 17, 13, 13, "black", "taillight")
-    m.mirror_box(-31, -31, 17, 18, 14, 15, "amber", "taillight")
+    m.mirror_box(-31, -31, 16, 17, 14, 15, "amber", "taillight")
     m.box(-32, -31, -1, 0, 3, 4, "steel", "bumperette")
     m.box(-31, -31, 6, 8, 13, 15, "steel", "rear_wall")
     m.box(-31, -31, -17, -10, 7, 7, "steel", "rear_wall")
@@ -473,23 +506,49 @@ def build(variant):
         cargo_bed(m)
     elif variant == "transport":
         seat(m, -27, -21, -16, 15, "rear_bench")
-        m.box(-27, -21, -1, 0, 12, 12, "canvas_seam", "rear_bench")
-        m.box(-29, -28, -16, 15, 8, 23, "canvas", "rear_bench_back")
-        for rp in (-13, -9, -5, 4, 8, 12):
-            m.box(-28, -28, rp, rp, 13, 22, "canvas_seam", "rear_bench_back")
+        m.box(-27, -21, -1, 0, 13, 13, "canvas_seam", "rear_bench")
+        seat_back(m, -26, -16, 15, SEAT_BACK_TOP.get(view, 30), "rear_bench_back")
     else:
         gun_mount(m)
     return m
 
 
 def seat(m, f0, f1, r0, r1, part):
-    """Canvas cushion on a tube frame standing on four legs, so the floor shows under it."""
-    for f in (f0, f1):
-        for r in (r0, r1):
-            m.put(f, r, 8, "frame", part)
-    m.box(f0, f1, r0, r1, 9, 9, "frame", part)
-    m.box(f0, f1, r0, r1, 10, 12, "canvas", part)
-    m.paint(lambda f, r, z: m.vox[(f, r, z)][1] == part and z == 12 and f == (f0 + f1) // 2, "canvas_seam")
+    """Padded cushion on a steel tube frame standing on four legs, so the floor shows under it. The
+    front edge is rolled and piped."""
+    for f in (f0 + 1, f1 - 1):
+        for r in (r0 + 1, r1 - 1):
+            m.box(f, f, r, r, 8, 9, "steel", part)
+    m.box(f0, f1, r0, r1, 10, 10, "frame", part)
+    m.box(f0, f1, r0, r1, 11, 13, "canvas", part)
+    m.remove(lambda f, r, z: (f, r, z) in m.vox and m.vox[(f, r, z)][1] == part and z == 13
+             and (f == f1 or (f == f0 and r in (r0, r1)) or (f == f1 - 1 and r in (r0, r1))))
+    m.paint(lambda f, r, z: m.vox[(f, r, z)][1] == part and z == 11 and f == f1, "canvas_seam")
+    m.paint(lambda f, r, z: m.vox[(f, r, z)][1] == part and z == 13 and f == (f0 + f1) // 2, "canvas_seam")
+
+
+# Top of the seat backs per view: seen from behind they cover a seated rider up to the neck; seen
+# from the front they stay low behind the riders.
+SEAT_BACK_TOP = {"S": 22, "N": 30, "E": 30, "W": 30}
+
+
+def seat_back(m, f_base, r0, r1, top, part):
+    """Upright padded back on a tube frame, three voxels thick from f_base back: the dark tubes run
+    up its rear edges and across the top, the corners are rounded, a stitched band crosses it and
+    the front is pleated. Upright, so the back reads as one smooth panel from behind."""
+    rear = f_base - 2
+    m.box(rear, f_base, r0, r1, 13, top, "canvas", part)
+    m.box(rear, rear, r0, r0, 13, top, "frame", part)
+    m.box(rear, rear, r1, r1, 13, top, "frame", part)
+    m.box(rear, f_base, r0 + 1, r1 - 1, 19, 19, "canvas_seam", part)
+    for rp in range(r0 + 3, r1 - 1, 3):
+        m.box(f_base, f_base, rp, rp, 14, top - 2, "canvas_seam", part)
+    # The top is padded thicker towards the rider, like a bolster, so it reads from the side.
+    m.box(f_base + 1, f_base + 2, r0, r1, top - 5, top - 1, "canvas", part)
+    m.box(f_base + 1, f_base + 2, r0, r1, top - 6, top - 6, "canvas_seam", part)
+    m.remove(lambda f, r, z: z == top and r in (r0, r1) and rear <= f <= f_base)
+    m.remove(lambda f, r, z: z == top - 1 and r in (r0, r1) and f == f_base + 2)
+    m.box(rear, rear, r0 + 1, r1 - 1, top, top, "frame", part)
 
 
 def steering_wheel(m):
@@ -513,18 +572,24 @@ def steering_wheel(m):
 
 
 def cargo_bed(m):
-    """Flat bed with the slot a standard crate is dragged into and wrenched down."""
+    """Raised deck resting on the wheel arches so it shows over the tailgate from behind: ribbed
+    lengthwise, tie-down rails with hooks along both sides, and the corners of the slot a standard
+    crate is dragged into and wrenched down."""
     s = SLOT
-    for r in (-10, -4, 3, 9):
-        m.box(-28, -14, r, r, 8, 8, "steel", "floor")
+    deck = s["floor"]
+    m.box(-28, -15, -18, 17, deck, deck, "od_in", "bed")
+    # Rail along the front edge, parting the bed from the seats.
+    m.box(-15, -15, -18, 17, deck + 1, deck + 1, "steel", "bed")
+    for r in range(-15, 16, 4):
+        m.box(-28, -15, r, r, deck, deck, "od_seam", "bed")
+    for r in (-18, 17):
+        m.box(-28, -15, r, r, deck + 1, deck + 1, "steel", "bed")
+        for f in (-27, -22, -17):
+            m.put(f, r, deck + 2, "steel", "bed")
     for f, df in ((s["f0"], 1), (s["f1"], -1)):
         for r, dr in ((s["r0"], 1), (s["r1"], -1)):
-            m.box(min(f, f + 2 * df), max(f, f + 2 * df), r, r, 8, 8, "yellow", "floor")
-            m.box(f, f, min(r, r + 2 * dr), max(r, r + 2 * dr), 8, 8, "yellow", "floor")
-            m.put(f - df, r - dr, 8, "steel", "floor")
-    for r in (-17, 16):
-        m.box(-25, -21, r, r, 8, 8, "strap", "floor")
-        m.box(-20, -20, r, r, 8, 8, "steel", "floor")
+            m.box(min(f, f + 2 * df), max(f, f + 2 * df), r, r, deck, deck, "yellow", "bed")
+            m.box(f, f, min(r, r + 2 * dr), max(r, r + 2 * dr), deck, deck, "yellow", "bed")
 
 
 def gun_mount(m):
@@ -536,8 +601,13 @@ def gun_mount(m):
         m.line((corner[0] + 0.5, corner[1] + 0.5, 9.0), (-16.0, 0.0, 15.0), "steel", "pedestal")
     m.box(-28, -19, -7, 6, 8, 8, "steel", "floor")
     m.paint(lambda f, r, z: z == 8 and -28 <= f <= -19 and -7 <= r <= 6 and (f + r) % 2 == 0, "gun")
-    m.box(-24, -23, -1, 0, 9, 23, "steel", "gunner_seat")
-    m.box(-25, -22, -2, 1, 24, 24, "canvas", "gunner_seat")
+    m.box(-24, -23, -1, 0, 9, 22, "steel", "gunner_seat")
+    m.box(-26, -21, -3, 2, 23, 24, "canvas", "gunner_seat")
+    m.remove(lambda f, r, z: z == 24 and f in (-26, -21) and r in (-3, 2))
+    m.box(-21, -21, -3, 2, 23, 23, "canvas_seam", "gunner_seat")
+    m.box(-27, -27, -2, 1, 25, 28, "canvas", "gunner_seat")
+    m.box(-27, -27, -3, -3, 23, 28, "steel", "gunner_seat")
+    m.box(-27, -27, 2, 2, 23, 28, "steel", "gunner_seat")
     for r0, r1 in ((12, 17), (-18, -13)):
         m.box(-28, -24, r0, r1, 8, 12, "od", "ammo")
         m.box(-28, -26, r0, r1, 13, 15, "od", "ammo")
@@ -672,27 +742,28 @@ def spare(damaged=False):
 
 
 def spare_tread(damaged, view):
-    """The spare seen from the side: its tread face, as tall as the wheel, like the tyres seen
-    from the front, instead of the disc edge-on."""
+    """The spare seen from the side: its tread face, as tall as the wheel, textured like the road
+    tyres seen from the side: a knobby edge, a dotted groove band inside it and solid rubber."""
     radius = int(WHEEL_R)
     r = 7 + radius if view == "E" else 7 - radius
     top = 2 * radius
     m = Model()
     for z in range(14 - radius, 14 + radius + 1):
         for f in range(SPARE_F[0], SPARE_F[1] + 1):
-            edge = f in SPARE_F
             row = z - (14 - radius)
-            if edge and row in (0, top):
+            edge_f, edge_z = f in SPARE_F, row in (0, top)
+            if edge_f and edge_z:
                 continue
-            lug = (row // 2 + (f % 2)) % 2 == 0
             if damaged:
+                lug = (row // 2 + (f % 2)) % 2 == 0
                 if row > top - 3 and noise(f, z) < 0.6 or noise(z, f, 5) < 0.3:
                     continue
-                mat = "char" if lug else "black"
-            else:
-                if edge and not lug:
-                    continue
-                mat = "rubber" if lug else "groove"
+                m.put(f, r, z, "char" if lug else "black", "spare")
+                continue
+            if (edge_f or edge_z) and (row + f) % 2 == 0:
+                continue
+            band = f in (SPARE_F[0] + 1, SPARE_F[1] - 1) or row in (1, top - 1)
+            mat = "groove" if band and (row // 2 + f) % 2 == 0 else "rubber"
             m.put(f, r, z, mat, "spare")
     return m
 
@@ -869,10 +940,10 @@ def lamps(kind):
         m.mirror_box(-31, -31, 16, 17, 11, 12, "lit_red" if kind == "tail" else "lit_brake", "lights")
     elif kind == "signal_right":
         m.box(28, 28, 16, 16, FENDER + 1, FENDER + 1, "lit_amber", "lights")
-        m.box(-31, -31, 17, 18, 14, 15, "lit_amber", "lights")
+        m.box(-31, -31, 16, 17, 14, 15, "lit_amber", "lights")
     else:
         m.box(28, 28, -17, -17, FENDER + 1, FENDER + 1, "lit_amber", "lights")
-        m.box(-31, -31, -19, -18, 14, 15, "lit_amber", "lights")
+        m.box(-31, -31, -18, -17, 14, 15, "lit_amber", "lights")
     return m
 
 
@@ -1018,27 +1089,53 @@ def to_world(view, f, r):
     return -f, r
 
 
+# Screen scale of the depth axis and of height, per view. Side views squash the jeep's width so
+# they read as low as the other vehicles.
+DEPTH_SCALE = {"S": 1.0, "N": 1.0, "E": 0.65, "W": 0.65, "X": 1.0}
+# Side views stretch the jeep's length so it is as long as the front and back views are tall; the
+# road wheels keep their round shape on the stretched axles.
+LENGTH_SCALE = {"E": 1.25, "W": 1.25}
+HEIGHT_SCALE = {"S": 1.0, "N": 1.0, "E": 1.0, "W": 1.0, "X": 1.0}
+# Depth added to a voxel's top face so its own front face wins below it; less than any depth step.
+TOP_BIAS = 0.3
+
+
 def project(view, f, r, z):
     x, y = to_world(view, f, r)
-    return x, -y - z
+    return x * LENGTH_SCALE.get(view, 1.0), -y * DEPTH_SCALE[view] - z * HEIGHT_SCALE[view]
+
+
+class Buffer(dict):
+    """A render result that remembers its view."""
+    view = None
 
 
 def render(model, view, parts=None):
     """Z-buffered oblique render: {(col, row): (depth, mat, part, face, voxel)} for opaque voxels,
     and the same for glass. Smaller depth is nearer the viewer."""
-    buf = {}
-    glass = {}
+    buf = Buffer()
+    glass = Buffer()
+    buf.view = glass.view = view
     for key, (mat, part) in model.vox.items():
         if parts is not None and part not in parts:
             continue
         f, r, z = key
         wx, wy = to_world(view, f + 0.5, r + 0.5)
-        xi, yi = math.floor(wx), math.floor(wy)
+        yi = math.floor(wy)
+        stretch = 1.0 if part in WHEEL_PARTS else LENGTH_SCALE.get(view, 1.0)
+        x0 = math.floor((wx - 0.5) * stretch)
+        x1 = max(x0, math.ceil((wx + 0.5) * stretch) - 1)
         target = glass if mat == GLASS else buf
-        for face, row, depth in (("top", -(yi + z + 2), yi + 0.5), ("front", -(yi + z + 1), yi)):
-            cur = target.get((xi, row))
-            if cur is None or depth < cur[0]:
-                target[(xi, row)] = (depth, mat, part, face, key)
+        lift = z * HEIGHT_SCALE[view]
+        near = math.floor(yi * DEPTH_SCALE[view] + lift)
+        far = max(near, math.floor((yi + 1) * DEPTH_SCALE[view] + lift) - 1)
+        depth = yi * DEPTH_SCALE[view]
+        faces = [("top", -(row + 2), depth + TOP_BIAS) for row in range(near, far + 1)]
+        for xi in range(x0, x1 + 1):
+            for face, row, d in faces + [("front", -(near + 1), depth)]:
+                cur = target.get((xi, row))
+                if cur is None or d < cur[0]:
+                    target[(xi, row)] = (d, mat, part, face, key)
     return buf, glass
 
 
@@ -1050,8 +1147,11 @@ def shade(buf):
     top faces get a lit lip where they fold into the face below and along their west edge; the row
     above an outline on a vertical face falls into shadow; low bodywork picks up mud."""
     edge = set()
+    # Rows on a flat top surface step this far in depth when the depth axis is squashed.
+    stretch = 1 / min(1.0, DEPTH_SCALE.get(getattr(buf, "view", None), 1.0))
     for (x, y), (d, mat, part, _, _) in buf.items():
         for dx, dy, limit in NEIGHBOURS:
+            limit = limit * stretch if dy == -1 else limit
             n = buf.get((x + dx, y + dy))
             if mat in FLAT_MATS and n is not None and n[2] == part:
                 continue
@@ -1065,7 +1165,7 @@ def shade(buf):
             col = pal["line"]
         elif face == "top":
             below = buf.get((x, y + 1))
-            fold = below is not None and below[3] == "front" and abs(below[0] - (d - 0.5)) < 1e-6
+            fold = below is not None and below[3] == "front" and abs(below[0] - (d - TOP_BIAS)) < 1e-6
             col = pal["hi"] if fold or (x - 1, y) in edge else pal["top"]
         else:
             col = pal["dark"] if (x, y + 1) in edge else pal["front"]
@@ -1120,8 +1220,8 @@ def layer_of(buf, col, glass, part):
 def split_direction(variant, view, dy):
     """One direction split into layer pixel dicts, in canvas coordinates."""
     overlay_parts = OVERLAY_PARTS[view]
-    body = build(variant)
-    model = body.merged(wheels(view))
+    body = build(variant, view)
+    model = body.merged(wheels(view, axles=near_axles(view)))
 
     full, _ = render(model, view)
     full_col = shade(full)
@@ -1135,13 +1235,25 @@ def split_direction(variant, view, dy):
             layers["wheels"][px] = full_col[px]
         elif part in overlay_parts:
             layers["overlay"][px] = full_col[px]
+    if view in "SN":
+        riders = []
+        for name, f, r, z in SEATS[variant]:
+            sx, sy = project(view, f, r, z)
+            cy = sy - (RIDER_HIP_ROW[view] - 16)
+            riders.append((to_world(view, f, r)[1] * DEPTH_SCALE[view], sx - 8, sx + 8, cy - 16, cy + 15))
+        for px, (d, _, part, _, _) in full.items():
+            if part not in SEAT_BACK_PARTS:
+                continue
+            under = [rd for rd, x0, x1, y0, y1 in riders if x0 <= px[0] <= x1 and y0 <= px[1] <= y1]
+            if under and d < min(under):
+                layers["overlay"][px] = full_col[px]
     # The base keeps what the overlay and wheels hide, so the drums show with the wheels off.
     for px, c in base_col.items():
         winner = full.get(px)
         owned = winner is not None and winner[2] in base_parts
         layers["base"][px] = full_col[px] if owned else c
 
-    broken, _ = render(body.merged(wheels(view, destroyed=True)), view)
+    broken, _ = render(body.merged(wheels(view, destroyed=True, axles=near_axles(view))), view)
     broken_col = shade(broken)
     layers["wheels_destroyed"] = {px: broken_col[px] for px, v in broken.items() if v[2] in WHEEL_PARTS}
 
@@ -1158,6 +1270,10 @@ def split_direction(variant, view, dy):
                     layer[px] = blend(layer[px], c)
             layers[f"{name}_{state}"] = layer
 
+    occupied = set(full) | {px for name in FITTED for px in layers[f"{name}_0"]}
+    layers["wheels"].update(far_wheels(view, occupied))
+    layers["wheels_destroyed"].update(far_wheels(view, occupied, destroyed=True))
+
     def lid_layer(lid):
         buf, _ = render(model.merged(lid), view)
         col = shade(buf)
@@ -1169,9 +1285,12 @@ def split_direction(variant, view, dy):
 
     frames = []
     for k in range(WHEEL_FRAMES):
-        fb, _ = render(body.merged(wheels(view, k * (2 * math.pi / LUGS) / WHEEL_FRAMES)), view)
+        phase = k * (2 * math.pi / LUGS) / WHEEL_FRAMES
+        fb, _ = render(body.merged(wheels(view, phase, axles=near_axles(view))), view)
         fc = shade(fb)
-        frames.append({px: fc[px] for px, v in fb.items() if v[2] in WHEEL_PARTS})
+        frame = {px: fc[px] for px, v in fb.items() if v[2] in WHEEL_PARTS}
+        frame.update(far_wheels(view, occupied, phase))
+        frames.append(frame)
 
     ox, oy = SIZE // 2, SIZE // 2 + dy
 
@@ -1229,7 +1348,7 @@ def view_dy():
     for v in DIRS:
         rows = []
         for var in VARIANTS:
-            m = build(var).merged(wheels(v)).merged(hood_open()).merged(fuel_door(FUEL_DOOR_SWING[-1]))
+            m = build(var, v).merged(wheels(v)).merged(hood_open()).merged(fuel_door(FUEL_DOOR_SWING[-1]))
             for name, make in HARDPOINTS.items():
                 if name != "windshield_down":
                     m = m.merged(make())
@@ -1293,6 +1412,84 @@ def rsi_sheet(tiles):
     for i, t in enumerate(tiles):
         out.paste(t, ((i % cols) * w, (i // cols) * h))
     return out
+
+
+# States drawn by the overlay entity (over the riders) besides the "*overlay*" ones.
+OVERLAY_ENTITY_STATES = ("lights_on", "headlights_on", "brake_on", "signal_left", "signal_right",
+                         "engine_smoke_0", "engine_smoke_1")
+# Rows kept between the lowest rider sprite and the overlay frame bottom, so riders sort under it.
+RIDER_SORT_MARGIN = 2
+
+
+def overlay_entity_state(name):
+    """Hover outlines are drawn by the overlay entity too, over everything else."""
+    if name == "mgturret_outline":
+        return False
+    return "overlay" in name or name in OVERLAY_ENTITY_STATES or name.endswith("_outline")
+
+
+def rsi_frames(path, state):
+    """Frames of a saved RSI state in file order, and the number of frames per direction."""
+    meta = json.load(open(os.path.join(path, "meta.json")))
+    entry = next(e for e in meta["states"] if e["name"] == state)
+    per = len(entry["delays"][0]) if "delays" in entry else 1
+    count = entry.get("directions", 1) * per
+    sheet_img = Image.open(os.path.join(path, state + ".png")).convert("RGBA")
+    cols = math.ceil(math.sqrt(count))
+    frames = [sheet_img.crop(((i % cols) * SIZE, (i // cols) * SIZE, (i % cols + 1) * SIZE, (i // cols + 1) * SIZE))
+              for i in range(count)]
+    return frames, per
+
+
+def lowest_row(img):
+    box = img.getchannel("A").getbbox()
+    return box[3] - 1 if box else -1
+
+
+def slide_overlay_states(dy):
+    """Robust y-sorts sprites by the bottom edge of their frame, so a 96 px overlay sorts as if it
+    reached 48 px below the vehicle and covers anyone standing in front of it. Each direction's
+    overlay frames are slid down to sit on the frame bottom (no lower than the lowest rider, so
+    riders still sort under it) and the client draws them back up by the same rows. The turret
+    states get one slide for all directions. Returns ({direction: rows}, turret rows)."""
+    paths = [os.path.join(RSI_DIR, RSI_NAMES[var] + ".rsi") for var in VARIANTS]
+    names = {path: [e["name"] for e in json.load(open(os.path.join(path, "meta.json")))["states"]]
+             for path in paths}
+    low = {v: 0 for v in DIRS}
+    turret_low = 0
+    for path in paths:
+        for name in names[path]:
+            if overlay_entity_state(name):
+                frames, per = rsi_frames(path, name)
+                for i, f in enumerate(frames):
+                    v = DIRS[i // per]
+                    low[v] = max(low[v], lowest_row(f))
+            elif name.startswith("mgturret_") and not name.endswith("_outline"):
+                frames, _ = rsi_frames(path, name)
+                turret_low = max([turret_low] + [lowest_row(f) for f in frames])
+
+    riders = {v: max(16 - o[v]["px"][1] for var in VARIANTS for o in seat_offsets(var, dy).values())
+              for v in DIRS}
+    half = SIZE // 2
+    shift = {v: max(0, half - max(low[v] - (half - 1), riders[v] + RIDER_SORT_MARGIN)) for v in DIRS}
+    # The turret is drawn by RMC's turret visual entity, which turns it about its centre, so its
+    # frames keep the pivot centred.
+    turret_shift = 0
+
+    for path in paths:
+        for name in names[path]:
+            turret = name.startswith("mgturret_") and not name.endswith("_outline")
+            if not overlay_entity_state(name) or turret:
+                continue
+            frames, per = rsi_frames(path, name)
+            moved = []
+            for i, f in enumerate(frames):
+                rows = turret_shift if turret else shift[DIRS[i // per]]
+                out = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
+                out.paste(f, (0, rows))
+                moved.append(out)
+            rsi_sheet(moved).save(os.path.join(path, name + ".png"))
+    return shift, turret_shift
 
 
 def centred(model, view, size, cy=None):
@@ -1476,11 +1673,11 @@ OUTLINE = (255, 232, 150)
 # Seat regions in jeep space (f, r, z ranges) for outlines and click ids, per version.
 SEAT_PARTS = {"seat", "seat_back", "rear_bench", "rear_bench_back", "gunner_seat"}
 SEAT_REGIONS = {
-    "driver": ((-12, -3), (-16, -5), (8, 23)),
-    "passenger": ((-12, -3), (4, 15), (8, 23)),
-    "rear_left": ((-29, -21), (-16, -1), (8, 23)),
-    "rear_right": ((-29, -21), (0, 15), (8, 23)),
-    "gunner": ((-25, -22), (-2, 1), (9, 24)),
+    "driver": ((-16, -3), (-16, -5), (8, 31)),
+    "passenger": ((-16, -3), (4, 15), (8, 31)),
+    "rear_left": ((-31, -21), (-16, -1), (8, 31)),
+    "rear_right": ((-31, -21), (0, 15), (8, 31)),
+    "gunner": ((-27, -21), (-3, 2), (9, 29)),
 }
 SEAT_IDS = {"driver": 13, "passenger": 14, "rear_left": 15, "rear_right": 16, "gunner": 17}
 
@@ -1510,12 +1707,57 @@ def outline(pixels):
 
 def click_scene(variant, view, hood):
     """Every slot filled, so each slot's pixels can be looked up even while it is empty."""
-    m = build(variant).merged(wheels(view)).merged(hood).merged(fuel_door())
+    m = build(variant, view).merged(wheels(view, axles=near_axles(view))).merged(hood).merged(fuel_door())
     for name, make in HARDPOINTS.items():
         if name == "windshield_down":
             continue
         m = m.merged(spare_tread(False, view) if name == "spare" and view in "EW" else make())
     return m
+
+
+# Alpha of the click masks: just over the game's click threshold, so a mask drawn over the part it
+# copies is invisible, and over an empty slot it leaves a faint ghost of the missing item.
+MASK_ALPHA = 30
+
+
+def click_masks(variant, per_dir, dy):
+    """Per interactable part and state, the part's pixels in the jeep's own colours at MASK_ALPHA:
+    the sprites of the clickable part entities layered on the jeep."""
+    down = tuple("windshield_down" if n == "windshield_up" else n for n in FITTED)
+    out = {}
+    for v in DIRS:
+        d = per_dir[v]
+        scenes = {
+            "shut": composite(variant, v, per_dir, dy, turret=False),
+            "open": composite(variant, v, per_dir, dy, turret=False, hood="hood_open"),
+            "door": composite(variant, v, per_dir, dy, turret=False, door=len(FUEL_DOOR_SWING) - 1),
+            "down": composite(variant, v, per_dir, dy, turret=False, fitted=down),
+        }
+        parts = {
+            "hood_closed": ("shut", d["hood_closed"]),
+            "hood_open": ("open", d["hood_open"]),
+            "windshield_up": ("shut", d["windshield_up_0"]),
+            "windshield_down": ("down", d["windshield_down_0"]),
+            "fuel_door_closed": ("shut", d["fuel_door_swing"][0]),
+            "fuel_door_open": ("door", d["fuel_door_swing"][-1]),
+            "wheels": ("shut", d["wheels"]),
+            "engine": ("open", d["engine_0"]),
+        }
+        for name in ("spare", "jerrycan", "shovel", "axe", "headlights"):
+            parts[name] = ("shut", d[f"{name}_0"])
+        for name, *_ in SEATS[variant]:
+            parts[f"seat_{name}"] = ("shut", d["seats"].get(name, set()))
+        for name, (scene, pixels) in parts.items():
+            img = scenes[scene]
+            mask = {}
+            for px in pixels:
+                if not (0 <= px[0] < SIZE and 0 <= px[1] < SIZE):
+                    continue
+                c = img.getpixel(px)
+                if c[3]:
+                    mask[px] = c[:3] + (MASK_ALPHA,)
+            out.setdefault(name, []).append(to_image(mask))
+    return out
 
 
 def write_click_maps(variant, dy):
@@ -1537,6 +1779,8 @@ def write_click_maps(variant, dy):
                 key = (x + SIZE // 2, y + SIZE // 2 + dy[v])
                 if key not in px or px[key][0] == 0:
                     px[key] = (CLICK_IDS["windshield"], 0, 0, 255)
+            for (x, y) in far_wheels(v, set(buf) | set(glass)):
+                px[(x + SIZE // 2, y + SIZE // 2 + dy[v])] = (CLICK_IDS["wheel"], 0, 0, 255)
             tiles.append(to_image(px))
         rsi_sheet(tiles).save(os.path.join(path, f"{RSI_NAMES[variant]}_{name}.png"))
 
@@ -1593,7 +1837,9 @@ def write_rsi(variant, dy):
     for name in [n for n in HARDPOINTS if n in ATTACHMENTS]:
         save(name + "_outline", [to_image(outline(alpha(per_dir[v][name + "_0"]))) for v in DIRS])
     save("hood_outline", [to_image(outline(alpha(per_dir[v]["hood_closed"]))) for v in DIRS])
+    save("hood_open_outline", [to_image(outline(alpha(per_dir[v]["hood_open"]))) for v in DIRS])
     save("fuel_door_outline", [to_image(outline(alpha(per_dir[v]["fuel_door_swing"][0]))) for v in DIRS])
+    save("fuel_door_open_outline", [to_image(outline(alpha(per_dir[v]["fuel_door_swing"][-1]))) for v in DIRS])
     save("wheels_outline", [to_image(outline(alpha(per_dir[v]["wheels"]))) for v in DIRS])
     for name, *_ in SEATS[variant]:
         save(f"seat_{name}_outline", [to_image(outline(per_dir[v]["seats"].get(name, set()))) for v in DIRS])
@@ -1640,6 +1886,8 @@ def write_rsi(variant, dy):
         save("mgturret_1", mg_images(damaged=True), directions=8)
         save("mgturret_raised_0", mg_images(pitch=RAISED_PITCH), directions=8)
         save("mgturret_raised_1", mg_images(damaged=True, pitch=RAISED_PITCH), directions=8)
+    for name, tiles in click_masks(variant, per_dir, dy).items():
+        save(f"click_{name}", tiles)
     blank = to_image({})
     for placeholder in ("PRIMARY", "ATTACH", "WHEEL"):
         save(placeholder, [blank], directions=1)
@@ -1938,6 +2186,7 @@ def main():
         os.remove(os.path.join(PREVIEW_DIR, old))
     dy = view_dy()
     per = {var: write_rsi(var, dy) for var in VARIANTS}
+    overlay_shift, turret_shift = slide_overlay_states(dy)
     icons = write_small_rsis()
 
     def grid(scale=3, **kw):
@@ -2070,6 +2319,11 @@ def main():
         "riders": {var: {n: {v: o[v] for v in DIRS} for n, o in seat_offsets(var, dy).items()}
                    for var in VARIANTS},
         "mgturret_pixel_offsets": {v: list(p) for v, p in mg_offsets(dy).items()},
+        "overlay_slide_note": "Overlay-entity states (*overlay*, lights, signals, brake, smoke) are stored "
+                              "slid down by overlay_slide_px rows per direction, and mgturret_* by "
+                              "mgturret_slide_px rows; draw them that many pixels higher.",
+        "overlay_slide_px": overlay_shift,
+        "mgturret_slide_px": turret_shift,
         "cargo_crate_offsets": {v: list(p) for v, p in crate_offsets(dy).items()},
     }
     with open(os.path.join(HERE, "seat_offsets.json"), "w", newline="\n") as fh:

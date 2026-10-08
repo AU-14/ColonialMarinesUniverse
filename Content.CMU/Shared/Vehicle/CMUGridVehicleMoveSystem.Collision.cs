@@ -19,6 +19,20 @@ public sealed partial class GridVehicleMoverSystem
         return smashable?.SelfDamageMultiplier ?? 1f;
     }
 
+    private bool CMUIsAboard(EntityUid other, EntityUid vehicle)
+    {
+        var parent = Transform(other).ParentUid;
+        for (var i = 0; i < 4 && parent.IsValid(); i++)
+        {
+            if (parent == vehicle)
+                return true;
+
+            parent = Transform(parent).ParentUid;
+        }
+
+        return false;
+    }
+
     private void CMUApplyVehicleCollision(
         EntityUid vehicle,
         GridVehicleMoverComponent mover,

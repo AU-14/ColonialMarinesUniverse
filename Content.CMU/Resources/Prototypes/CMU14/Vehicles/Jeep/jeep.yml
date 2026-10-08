@@ -1,0 +1,756 @@
+- type: hardpointVehicleFamily
+  id: CMUJeep
+
+- type: Tag
+  id: CMUJeepWheel
+
+- type: Tag
+  id: CMUJerryCan
+
+- type: Tag
+  id: CMUJeepWindshield
+
+- type: Tag
+  id: CMUJeepHeadlights
+
+- type: entity
+  parent: BaseItem
+  id: CMUJeepHardpointBase
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/hardpoints.rsi
+  - type: Item
+    size: Large
+
+- type: entity
+  parent: CMUJeepHardpointBase
+  id: CMUJeepWheel
+  name: jeep wheel set
+  description: A set of jeep wheels. The spare on the tailgate is the same set.
+  components:
+  - type: Sprite
+    state: tires
+  - type: HardpointItem
+    hardpointType: Wheel
+    vehicleFamily: CMUJeep
+    slotType: Wheel
+    damageMultiplier: 0.15
+    repairRate: 0.0165
+  - type: HardpointIntegrity
+    maxIntegrity: 200
+    integrity: 200
+  - type: VehicleWheelItem
+  - type: Tag
+    tags:
+    - CMUJeepWheel
+
+- type: entity
+  parent: CMUJeepHardpointBase
+  id: CMUJeepWindshield
+  name: jeep windshield
+  description: A folding windshield frame with its glass. Fitted and taken off with a screwdriver.
+  components:
+  - type: Sprite
+    state: windshield
+  - type: CMUJeepPartIntegrity
+    integrity: 50
+    maxIntegrity: 50
+  - type: Tag
+    tags:
+    - CMUJeepWindshield
+
+- type: entity
+  parent: CMUJeepHardpointBase
+  id: CMUJeepHeadlights
+  name: jeep headlights
+  description: A pair of round jeep headlamps. Fitted and taken off with a screwdriver.
+  components:
+  - type: Sprite
+    state: headlights
+  - type: Item
+    size: Normal
+  - type: CMUJeepPartIntegrity
+    integrity: 30
+    maxIntegrity: 30
+  - type: Tag
+    tags:
+    - CMUJeepHeadlights
+
+- type: entity
+  parent: CMUJeepHardpointBase
+  id: CMUJeepMGMount
+  name: jeep gun mount
+  description: The gun jeep's pedestal mount. It swings through a quarter turn either side of the bonnet.
+  components:
+  - type: Sprite
+    state: mgturret
+  - type: Item
+    size: Huge
+  - type: HardpointItem
+    hardpointType: Turret
+    vehicleFamily: CMUJeep
+    slotType: Turret
+    damageMultiplier: 0.15
+    repairRate: 0.008
+  - type: HardpointIntegrity
+    maxIntegrity: 100
+    integrity: 100
+  - type: VehicleTurret
+    rotateToCursor: true
+    stabilizedRotation: false
+    rotationSpeed: 220
+    cmuMaxYawDegrees: 45
+    showOverlay: true
+    useDirectionalOffsets: true
+    overlayRsi: CMU14/Structures/vehicles/jeep/jeep_gunner.rsi
+    overlayState: mgturret_0
+    overlayDamagedState: mgturret_1
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "-20,18"
+    pixelOffsetSouth: "0,35"
+    pixelOffsetWest: "20,18"
+  - type: ItemSlots
+    slots:
+      turret-gun:
+        startingItem: CMUJeepMG
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+  - type: ContainerContainer
+    containers:
+      turret-gun: !type:ContainerSlot
+  - type: HardpointState
+  - type: HardpointSlots
+    vehicleFamily: CMUJeep
+    slots:
+    - id: turret-gun
+      hardpointType: Cannon
+      slotType: Cannon
+      required: false
+      insertDelay: 2.0
+
+- type: entity
+  parent: CMUJeepHardpointBase
+  id: CMUJeepMG
+  name: jeep machine gun
+  description: A belt-fed machine gun for the gun jeep's pedestal, fed from cupola ammo crates.
+  components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: Sprite
+    state: mgturret
+  - type: HardpointItem
+    hardpointType: Cannon
+    vehicleFamily: CMUJeep
+    slotType: Cannon
+    damageMultiplier: 0.1
+    repairRate: 0.01
+  - type: HardpointIntegrity
+    maxIntegrity: 100
+    integrity: 100
+  - type: VehicleTurretAttachment
+  - type: VehicleTurret
+    showOverlay: false
+    fireWhileRotatingGraceDegrees: 15
+    useBarrelDirectionForShots: true
+    maxShotCurvatureDegrees: 10
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: Gun
+    fireRate: 8
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a_2.ogg
+    cameraRecoilScalar: 0
+  - type: GunIFF
+    enabled: true
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 3
+    accuracyMultiplierUnwielded: 3
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: VehicleCartridgeSentry10x50mm
+    capacity: 300
+  - type: VehicleHardpointAmmo
+    magazineSize: 300
+    maxStoredMagazines: 2
+  - type: GunFireArc
+    arc: 100
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxCupola
+  - type: GunMuzzleOffset
+    offset: "0,-0.6"
+    muzzleOffset: "0,0"
+    useAimDirection: false
+    useContainerOwner: false
+
+- type: entity
+  id: CMUVehicleJeepBase
+  abstract: true
+  name: jeep
+  description: A light, open four-by-four. Fast and nimble, but nothing stands between its crew and the bullets.
+  components:
+  - type: RMCNightVisionVisible
+    priority: -2
+  - type: Vehicle
+    movementKind: Grid
+    transferDamage: false
+  - type: VehicleOperatorDamage
+  - type: CMUVehicleSeats
+    seats:
+    - id: driver
+      name: cmu-vehicle-seat-driver
+      offset: 0.3125,0.25
+      exit: 0.95,0.25
+      driver: true
+    - id: passenger
+      name: cmu-vehicle-seat-passenger
+      offset: -0.3125,0.25
+      exit: -0.95,0.25
+  - type: CMUJeep
+    parts:
+    - id: hood
+      name: cmu-jeep-part-hood
+    - id: windshield
+      name: cmu-jeep-part-windshield
+      slot: jeep-windshield
+    - id: fuel_door
+      name: cmu-jeep-part-fuel-door
+    - id: engine
+      name: cmu-jeep-part-engine
+    - id: headlights
+      name: cmu-jeep-part-headlights
+      slot: jeep-headlights
+    - id: wheels
+      name: cmu-jeep-part-wheels
+      slot: wheel-1
+    - id: spare
+      name: cmu-jeep-part-spare
+      slot: jeep-spare
+    - id: jerrycan
+      name: cmu-jeep-part-jerrycan
+      slot: jeep-jerrycan
+    - id: shovel
+      name: cmu-jeep-part-shovel
+      slot: jeep-shovel
+    - id: axe
+      name: cmu-jeep-part-axe
+      slot: jeep-axe
+  - type: Clickable
+    bounds:
+      south: -0.66,-1.41,0.66,1.28
+      north: -0.66,-1.47,0.66,1.03
+      east: -1.25,-0.81,1.34,0.78
+      west: -1.34,-0.81,1.25,0.78
+  - type: CMUVehicleFuel
+    fuel: 45
+    maxFuel: 60
+  - type: CMUVehicleCrayon
+    map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep.png
+  - type: RMCIgnoreGhostInteractionLimits
+  - type: RequireProjectileTarget
+    alwaysHitWhitelist:
+      components: [XenoAcidProjectile, VehicleDamageMultiplier]
+  - type: GridVehicleMover
+    maxSpeed: 8
+    acceleration: 5
+    deceleration: 12
+    maxRotationSpeedDegrees: 120
+    alignmentAssistDegrees: 8
+    ignoreLightObstacleDamage: true
+    rotationAccelerationDegrees: 240
+    rotationDecelerationDegrees: 300
+    turnDelay: 0.25
+    pushCooldown: 2
+    xenoBlockMinimumSize: Xeno
+    xenoPushMinimumSize: Immobile
+    canSmashWalls: true
+    wallSmashMinSpeed: 7
+    wallSmashWheelDamage: 0.3
+    wallSmashHullDamage: 18
+    wallSmashSlowdownMultiplier: 0.75
+    wallSmashSlowdownDuration: 0.25
+    mobCollisionHullDamage: 8
+    speedAtZeroIntegrity: 0.6
+    crashImmobileDuration: 3
+    crashImmobileMinSpeed: 8
+    mobCrashImmobileDuration: 4
+    mobCrashImmobileMinSpeed: 5
+    xenoMobCrashImmobileDuration: 8
+    xenoMobCrashImmobileMinSpeed: 5
+  - type: VehicleOvercharge
+    speedMultiplier: 1.55
+    duration: 3
+    cooldown: 14
+    overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
+  - type: VehicleSound
+    runningSound: /Audio/_RMC14/Vehicle/box_van_driving.ogg
+    runningSoundCooldown: 2.3
+    hornSound: /Audio/_RMC14/Vehicle/sound_vehicles_humvee_horn.ogg
+    hornCooldown: 1
+    collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
+    collisionSoundCooldown: 1.5
+    collisionSoundMinSpeed: 7
+    mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
+  - type: VehicleSpotlight
+    radius: 6
+    energy: 2.5
+    softness: 2
+  - type: Physics
+    bodyType: Dynamic
+  - type: CMUZPhysics
+  - type: CMUVehicleZTraversal
+  - type: CMUZLevelViewer
+  - type: Fixtures
+    fixtures:
+      world:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.45,-1.05,0.45,1.05
+        density: 800
+        mask:
+        - Impassable
+        - HighImpassable
+        - LowImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+      mob:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.45,-1.05,0.45,1.05
+        density: 800
+        mask:
+        - MidImpassable
+        - BarricadeImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+  - type: Damageable
+    damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: MeleeReceivedMultiplier
+    xenoMultiplier: 5
+    otherMultiplier: 1
+  - type: InteractionOutline
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: CMU14/Structures/vehicles/jeep/jeep.rsi
+    layers:
+    - map: [ base ]
+      state: jeep_base
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ engine ]
+      state: engine_0
+    - map: [ hood ]
+      state: hood_closed
+    - map: [ fuel_door ]
+      state: fuel_door_closed
+    - map: [ headlights ]
+      state: headlights_0
+    - map: [ windshield ]
+      state: windshield_up_0
+    - map: [ spare ]
+      state: spare_0
+    - map: [ jerrycan ]
+      state: jerrycan_0
+    - map: [ shovel ]
+      state: shovel_0
+    - map: [ axe ]
+      state: axe_0
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: CMUVehicleOverlay
+    prototype: CMUJeepOverlay
+  - type: PointLight
+    enabled: false
+    radius: 6
+    energy: 2.5
+    softness: 2
+    autoRot: true
+    offset: "0,0.9"
+  - type: Corrodible
+    isCorrodible: false
+  - type: DoAfter
+  - type: UserInterface
+    interfaces:
+      enum.HardpointUiKey.Key:
+        type: HardpointBoundUserInterface
+      enum.VehicleWeaponsUiKey.Key:
+        type: VehicleWeaponsBoundUserInterface
+  - type: VehicleWeapons
+  - type: InputMover
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      jeep-spare: !type:ContainerSlot
+      jeep-jerrycan: !type:ContainerSlot
+      jeep-shovel: !type:ContainerSlot
+      jeep-axe: !type:ContainerSlot
+      jeep-windshield: !type:ContainerSlot
+      jeep-headlights: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      wheel-1:
+        startingItem: CMUJeepWheel
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+      jeep-spare:
+        name: cmu-jeep-part-spare
+        startingItem: CMUJeepWheel
+        whitelist:
+          tags:
+          - CMUJeepWheel
+      jeep-jerrycan:
+        name: cmu-jeep-part-jerrycan
+        startingItem: RMCFuelCan
+        whitelist:
+          tags:
+          - CMUJerryCan
+      jeep-shovel:
+        name: cmu-jeep-part-shovel
+        startingItem: CMEntrenchingTool
+        whitelist:
+          tags:
+          - Shovel
+      jeep-axe:
+        name: cmu-jeep-part-axe
+        startingItem: FireAxe
+        whitelist:
+          tags:
+          - FireAxe
+      jeep-windshield:
+        name: cmu-jeep-part-windshield
+        startingItem: CMUJeepWindshield
+        disableEject: true
+        whitelist:
+          tags:
+          - CMUJeepWindshield
+      jeep-headlights:
+        name: cmu-jeep-part-headlights
+        startingItem: CMUJeepHeadlights
+        disableEject: true
+        whitelist:
+          tags:
+          - CMUJeepHeadlights
+  - type: HardpointSlots
+    vehicleFamily: CMUJeep
+    slots:
+    - id: wheel-1
+      disableEject: true
+      hardpointType: Wheel
+      slotType: Wheel
+      insertDelay: 1.5
+  - type: VehicleWheelSlots
+    slotCount: 1
+    slots:
+    - wheel-1
+  - type: HardpointIntegrity
+    maxIntegrity: 600
+    integrity: 600
+  - type: HardpointState
+  - type: Appearance
+
+- type: entity
+  parent: CMUVehicleJeepBase
+  id: CMUVehicleJeepCargo
+  name: cargo jeep
+  description: A light, open two-seater with a crate bed. The fastest of the jeeps, and its crew is fully exposed.
+  components:
+  - type: GridVehicleMover
+    maxSpeed: 9
+  - type: CMUVehicleCargo
+    whitelist:
+      components:
+      - EntityStorage
+      - Pullable
+    crateOffsets:
+      South: 0,30
+      North: 0,-16
+      East: -27,7
+      West: 27,7
+
+- type: entity
+  parent: CMUVehicleJeepBase
+  id: CMUVehicleJeepTransport
+  name: transport jeep
+  description: A light, open four-seater. Slower than the cargo jeep, and its crew is fully exposed.
+  components:
+  - type: GridVehicleMover
+    maxSpeed: 8
+  - type: CMUVehicleSeats
+    seats:
+    - id: driver
+      name: cmu-vehicle-seat-driver
+      offset: 0.3125,0.25
+      exit: 0.95,0.25
+      driver: true
+    - id: passenger
+      name: cmu-vehicle-seat-passenger
+      offset: -0.3125,0.25
+      exit: -0.95,0.25
+    - id: rear_left
+      name: cmu-vehicle-seat-rear-left
+      offset: 0.3125,0.75
+      exit: 0.95,0.75
+    - id: rear_right
+      name: cmu-vehicle-seat-rear-right
+      offset: -0.3125,0.75
+      exit: -0.95,0.75
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/jeep_transport.rsi
+  - type: CMUVehicleOverlay
+    prototype: CMUJeepTransportOverlay
+  - type: CMUVehicleCrayon
+    map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep_transport.png
+
+- type: entity
+  parent: CMUVehicleJeepBase
+  id: CMUVehicleJeepGunner
+  name: gun jeep
+  description: A light, open jeep with a pedestal machine gun behind the seats. The slowest jeep, and its crew is fully exposed.
+  components:
+  - type: GridVehicleMover
+    maxSpeed: 7
+  - type: CMUVehicleSeats
+    seats:
+    - id: driver
+      name: cmu-vehicle-seat-driver
+      offset: 0.3125,0.25
+      exit: 0.95,0.25
+      driver: true
+    - id: passenger
+      name: cmu-vehicle-seat-passenger
+      offset: -0.3125,0.25
+      exit: -0.95,0.25
+    - id: gunner
+      name: cmu-vehicle-seat-gunner
+      prototype: CMUVehicleSeatGunner
+      offset: 0,0.75
+      exit: 0,1.55
+      lift: 12
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/jeep_gunner.rsi
+  - type: CMUVehicleOverlay
+    prototype: CMUJeepGunnerOverlay
+  - type: CMUVehicleCrayon
+    map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep_gunner.png
+  - type: ContainerContainer
+    containers:
+      turret: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      turret:
+        startingItem: CMUJeepMGMount
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+  - type: HardpointSlots
+    vehicleFamily: CMUJeep
+    slots:
+    - id: wheel-1
+      disableEject: true
+      hardpointType: Wheel
+      slotType: Wheel
+      insertDelay: 1.5
+    - id: turret
+      disableEject: true
+      hardpointType: Turret
+      slotType: Turret
+      insertDelay: 2.0
+      required: false
+
+- type: entity
+  id: CMUJeepOverlay
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: CMU14/Structures/vehicles/jeep/jeep.rsi
+    layers:
+    - state: jeep_overlay
+    - map: [ damaged_frame ]
+      state: damaged_overlay
+      visible: false
+    - map: [ hood ]
+      state: hood_closed_overlay
+    - map: [ headlights ]
+      state: headlights_overlay_0
+    - map: [ windshield ]
+      state: windshield_up_overlay_0
+    - map: [ spare ]
+      state: spare_overlay_0
+    - map: [ jerrycan ]
+      state: jerrycan_overlay_0
+    - map: [ shovel ]
+      state: shovel_overlay_0
+    - map: [ axe ]
+      state: axe_overlay_0
+    - map: [ fuel_door ]
+      state: fuel_door_closed_overlay
+    - map: [ wheels ]
+      state: wheels_overlay_0
+    - map: [ lights ]
+      state: lights_on
+      visible: false
+    - map: [ headlights_on ]
+      state: headlights_on
+      visible: false
+    - map: [ brake ]
+      state: brake_on
+      visible: false
+    - map: [ signal_left ]
+      state: signal_left
+      visible: false
+    - map: [ signal_right ]
+      state: signal_right
+      visible: false
+    - map: [ smoke ]
+      state: engine_smoke_0
+      visible: false
+    - map: [ straps ]
+      sprite: CMU14/Structures/vehicles/jeep/cargo_straps.rsi
+      state: straps
+      visible: false
+    - map: [ hover ]
+      state: hood_outline
+      visible: false
+  - type: CMUVehicleOverlayVisuals
+    directionOffsets:
+      South: 0,0
+      North: 0,0
+      East: 0,16
+      West: 0,16
+    layerOffsets:
+      straps:
+        South: 0,30
+        North: 0,-16
+        East: -27,7
+        West: 27,7
+
+- type: entity
+  parent: CMUJeepOverlay
+  id: CMUJeepTransportOverlay
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/jeep_transport.rsi
+
+- type: entity
+  parent: CMUJeepOverlay
+  id: CMUJeepGunnerOverlay
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/jeep_gunner.rsi
+    layers:
+    - state: jeep_overlay
+    - map: [ damaged_frame ]
+      state: damaged_overlay
+      visible: false
+    - map: [ hood ]
+      state: hood_closed_overlay
+    - map: [ headlights ]
+      state: headlights_overlay_0
+    - map: [ windshield ]
+      state: windshield_up_overlay_0
+    - map: [ spare ]
+      state: spare_overlay_0
+    - map: [ jerrycan ]
+      state: jerrycan_overlay_0
+    - map: [ shovel ]
+      state: shovel_overlay_0
+    - map: [ axe ]
+      state: axe_overlay_0
+    - map: [ fuel_door ]
+      state: fuel_door_closed_overlay
+    - map: [ wheels ]
+      state: wheels_overlay_0
+    - map: [ lights ]
+      state: lights_on
+      visible: false
+    - map: [ headlights_on ]
+      state: headlights_on
+      visible: false
+    - map: [ brake ]
+      state: brake_on
+      visible: false
+    - map: [ signal_left ]
+      state: signal_left
+      visible: false
+    - map: [ signal_right ]
+      state: signal_right
+      visible: false
+    - map: [ smoke ]
+      state: engine_smoke_0
+      visible: false
+    - map: [ hover ]
+      state: hood_outline
+      visible: false
+  - type: CMUVehicleOverlayVisuals
+    directionOffsets:
+      South: 0,0
+      North: 0,0
+      East: 0,16
+      West: 0,16
+
+- type: entity
+  id: CMUVehiclePart
+  categories: [ HideSpawnMenu ]
+  name: jeep part
+  components:
+  - type: Sprite
+    drawdepth: BelowMobs
+    sprite: CMU14/Structures/vehicles/jeep/jeep.rsi
+    layers:
+    - map: [ mask ]
+      state: click_hood_closed
+  - type: Clickable
+  - type: CMUVehiclePart
+
+- type: entity
+  parent: CMUVehiclePart
+  id: CMUVehicleSeat
+  categories: [ HideSpawnMenu ]
+  name: seat
+  components:
+  - type: Sprite
+    layers:
+    - map: [ mask ]
+      state: click_seat_driver
+  - type: Strap
+    modifyBuckleDrawDepth: false
+  - type: CMUVehicleSeat
+
+- type: entity
+  parent: CMUVehicleSeat
+  id: CMUVehicleSeatGunner
+  categories: [ HideSpawnMenu ]
+  name: gunner's seat
+  components:
+  - type: VehicleWeaponsSeat
+    skills:
+      all: {}
+    isPrimaryOperatorSeat: true
+    allowUiSelection: true
+    allowHotbarSelection: true
+  - type: UserInterface
+    interfaces:
+      enum.VehicleWeaponsUiKey.Key:
+        type: VehicleWeaponsBoundUserInterface

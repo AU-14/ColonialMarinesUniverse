@@ -228,6 +228,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 if (TryComp(other, out VehicleRideSurfaceRiderComponent? rider) && rider.Vehicle == uid)
                     continue;
 
+                // CMU14: crew strapped into an open vehicle hang off it and sit inside its hull.
+                if (CMUIsAboard(other, uid))
+                    continue;
+
                 if (ignoredEntities != null && ignoredEntities.Contains(other))
                     continue;
 

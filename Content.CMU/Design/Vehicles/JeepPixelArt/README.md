@@ -7,6 +7,25 @@
 python Content.CMU/Design/Vehicles/JeepPixelArt/jeep_pixel_art.py
 ```
 
+## Projection
+
+Screen x is the world x and screen y is `-depth * DEPTH_SCALE - z * HEIGHT_SCALE`, per view:
+
+- Front and back views (S, N) are drawn 1:1.
+- Side views (E, W) squash the jeep's width to 0.65 and stretch its length by 1.25
+  (`LENGTH_SCALE`), so the side view is as long as the front view is tall. The road wheels stay
+  round on the stretched axles.
+- In the front and back views the far axle's wheels are drawn shifted towards the far end
+  (`FAR_WHEEL_SHIFT`: S -13, N -14 rows) and tucked behind the body. Facing south the near tyres are
+  lifted 5 rows (`NEAR_WHEEL_LIFT`).
+- Seat backs are taller facing north (they cover the riders up to the neck) than facing south
+  (`SEAT_BACK_TOP`), and in both views they join the overlay where they are in front of a rider.
+
+Robust y-sorts sprites by the bottom of their whole frame. Overlay-entity states (`*overlay*`,
+lights, signals, smoke, outlines) are stored slid down per direction (`overlay_slide_px` in
+`seat_offsets.json`) and drawn back up by the overlay's `directionOffsets`, so the overlay sorts at
+the jeep's near edge: people in front draw over it, riders under it.
+
 ## RSIs
 
 | RSI | Version |
@@ -187,6 +206,34 @@ never take paint, so nothing floats off the edge.
 Wheels and hardpoints aren't in the map: drawings stay on the bodywork. Use the alpha to split the
 painted pixels between the vehicle entity and the overlay entity. `crayon()` and `crayon_demo()` in
 the script are the reference; `jeep_crayons.png` shows the result.
+
+## In game
+
+Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml`, strings in
+`Content.CMU/Resources/Locale/en-US/CMU14/vehicle/jeep.ftl`. Code:
+
+| File | Does |
+| --- | --- |
+| `Shared/Vehicle/Jeep/CMUVehicleOverlay*` | spawns the overlay entity drawn over the riders |
+| `Shared/Vehicle/Jeep/CMUVehicleSeat*` | one strap entity per seat (the driver's seat drives), exit points, passenger gun scatter by firearms skill |
+| `Shared/Vehicle/Jeep/CMUJeep*` | hood, windshield and fuel door toggles, clickable parts, item hooks, engine/windshield/headlight wear and repair, jerry can leaks, stray shots passing through |
+| `Shared/Vehicle/Jeep/CMUVehicleFuel*` | fuel use and refuelling from a fuel can at the fuel door; the do-after bar starts at the tank level |
+| `Shared/Vehicle/Jeep/CMUVehicleCargo*` | loading, wrenching down and unloading a crate on the cargo bed |
+| `Shared/Vehicle/Jeep/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs` | crayon drawings anchored to the body via `crayon_maps/` |
+| `Client/Vehicle/CMU*` | overlay frame and lights, part masks and hover outlines, swing animations, damage looks, suspension bob, crate placement, crayon painting |
+
+Clickable parts are child entities whose sprite is the `click_*` mask: the part's own pixels at
+about 12% alpha, just over the engine's click threshold and invisible over the part itself. Clicks
+and hover pick the part, and the hover draws the matching `*_outline` state on the overlay.
+
+CMU14-marked edits outside the jeep files: RMC's grid mover ignores entities riding the vehicle,
+RMC's weapon seats fall back to the open vehicle a CMU seat belongs to, turrets take an optional
+`cmuMaxYawDegrees` arc, `SharedDoAfterSystem.CMUSetProgress` starts a do-after part-way, and RMC's
+fuel can carries a `CMUJerryCan` tag and a `fuel` solution.
+
+Test: `Test/run_jeep_test.ps1` starts a local server on `Maps/Test/jeep_test.yml` (the dev map with
+the spawn in the hall, the three jeeps and a test kit) and a client that joins it. Build the server
+and client first.
 
 ## Offsets
 
