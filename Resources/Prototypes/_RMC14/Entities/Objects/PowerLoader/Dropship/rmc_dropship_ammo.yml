@@ -23,6 +23,8 @@
   name: PGU-100 Multi-Purpose 30mm ammo crate
   description: "A crate full of PGU-100 30mm Multi-Purpose ammo designed to penetrate light (non reinforced) structures, as well as shred infantry, IAVs, LAVs, IMVs, and MRAPs. Works in large areas for use on Class 4 and superior alien insectoid infestations, as well as fitting within the armaments allowed for use against a tier 4 insurgency as well as higher tiers. However, it lacks armor penetrating capabilities, for which Anti-Tank 30mm ammo is needed. Can be loaded into the GAU-21 30mm cannon."
   components:
+  - type: RMCGenericExamine
+    message: It can penetrate 1 z-level.
   - type: Sprite
     layers:
     - state: 30mm_crate_10
@@ -33,6 +35,8 @@
     maxRounds: 400
     roundsPerShot: 40
     fireMissionDelay: 1
+    zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     damage:
       types:
         Blunt: 35
@@ -128,6 +132,8 @@
   id: RMCDropshipAttachmentAmmoRocket
   name: abstract rocket
   components:
+ - type: RMCGenericExamine
+    message: It can penetrate 1 z-level.
   - type: Sprite
     sprite: _RMC14/Objects/dropship_ammo_64.rsi
     offset: 0.5, 0.5
@@ -153,6 +159,8 @@
     bulletSpread: 0
     travelTime: 6
     fireMissionDelay: 3
+    zLevelPenetration: 2
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentGuidedMissileLauncher
     soundCockpit: /Audio/_RMC14/Effects/rocketpod_fire.ogg
     soundMarker: /Audio/_RMC14/Effects/rocketpod_fire.ogg #IncommingRocket.ogg sounds better, and more accurate, but this is what is used in parity, i believe it to be a mistake in the original PR, but we can change it in the future
@@ -165,10 +173,10 @@
   description: The AIM-224A missile is a retrofit of the latest in air-to-air missile technology. Earning the nickname of 'Widowmaker' from various dropship pilots after improvements to its guidance warhead prevents it from being jammed leading to its high kill rate. Not well suited for ground bombardment but its high velocity makes it reach its target quickly. This one has been modified to be a free-fall bomb as a result of dropship ammo shortages. Can be loaded into the LAU-444 Guided Missile Launcher.
   components:
   - type: RMCGenericExamine
-    message: It can penetrate 1 z-level.
+    message: It can penetrate 2 z-levels.
   - type: DropshipAmmo
     travelTime: 3
-    zLevelPenetration: 1
+    zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: true
     explosion:
       total: 3000
@@ -206,14 +214,14 @@
   description: The GBU-67 'Keeper II' is the latest in a generation of laser guided weaponry that spans all the way back to the 20th century. Earning its nickname from a shortening of 'Peacekeeper' which comes from the program that developed its guidance system and the various uses of it during peacekeeping conflicts. Its payload is designed to devastate armored targets. Can be loaded into the LAU-444 Guided Missile Launcher.
   components:
   - type: RMCGenericExamine
-    message: It can penetrate 1 z-level.
+    message: It can penetrate 2 z-levels.
   - type: Sprite
     layers:
     - state: paveway
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 2
-    zLevelPenetration: 1
+    zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: true
     explosion:
       total: 905
@@ -230,14 +238,14 @@
   description: The AGM-99 'Napalm' is an incendiary missile used to turn specific targeted areas into giant balls of fire for a long time.
   components:
   - type: RMCGenericExamine
-    message: It can penetrate 1 z-level.
+    message: It can penetrate 2 z-levels.
   - type: Sprite
     layers:
     - state: napalm
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo # TODO RMC14 not usable in fire mission, only direct bombardment
     travelTime: 6
-    zLevelPenetration: 1
+    zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: true
     fireMissionDelay: null
     explosion:
@@ -259,14 +267,14 @@
   description: The AGM-184 Harpoon II is an Anti-Ship Missile, designed and used to effectively take down enemy ships with a huge blast wave with low explosive power. This one is modified to use ground signals and can be seen as a cheaper alternative to conventional ordnance. Can be loaded into the LAU-444 Guided Missile Launcher.
   components:
   - type: RMCGenericExamine
-    message: It can penetrate 1 z-level.
+    message: It can penetrate 2 z-levels.
   - type: Sprite
     layers:
     - state: harpoon
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 5
-    zLevelPenetration: 1
+    zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: true
     explosion:
       total: 1850
@@ -283,14 +291,14 @@
   description: The BLU-200 'Dragon's Breath' is a thermobaric fuel-air bomb. The aerosolized fuel mixture creates a vacuum when ignited causing serious damage to those in its way.
   components:
   - type: RMCGenericExamine
-    message: It can penetrate 1 z-level.
+    message: It can penetrate 2 z-levels.
   - type: Sprite
     layers:
     - state: fatty
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 5
-    zLevelPenetration: 1
+    zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: true
     implosion:
       pullRange: 5.5
@@ -314,14 +322,14 @@
   description: The AGM-227 missile is a mainstay of the overhauled dropship fleet against any mobile or armored ground targets. It's earned the nickname of 'Banshee' from the sudden wail that it emits right before hitting a target. Useful to clear out large areas. Can be loaded into the LAU-444 Guided Missile Launcher.
   components:
   - type: RMCGenericExamine
-    message: It can penetrate 1 z-level.
+    message: It can penetrate 2 z-levels.
   - type: Sprite
     layers:
     - state: banshee
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 6
-    zLevelPenetration: 1
+    zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: true
     explosion:
       total: 2000
@@ -345,6 +353,8 @@
     layers:
     - state: minirocket_6
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: RMCGenericExamine
+    message: It can penetrate 1 z-level.
   - type: DropshipAmmo
     rounds: 6
     maxRounds: 6
@@ -352,6 +362,8 @@
     bulletSpread: 0
     travelTime: 8
     fireMissionDelay: 2
+    zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentRocketPod
     soundCockpit: /Audio/_RMC14/Effects/rocketpod_fire.ogg
     soundMarker: /Audio/_RMC14/Effects/rocketpod_fire.ogg
