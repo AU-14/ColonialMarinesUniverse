@@ -5,6 +5,7 @@ using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Server.Mind;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.NightVision;
+using Content.Shared._RMC14.Xenonids.Construction.Nest; // CMU14
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -54,10 +55,15 @@ public sealed class XenoParasiteLarvaClaimTest
         insanePainChance: 0
     """;
 
-    [TestCase(false, "RMCTestXenoParasiteClaim")]
-    [TestCase(true, "RMCTestXenoParasiteClaim")]
-    [TestCase(true, "RMCTestXenoWatcherClaim")]
-    public async Task PlayerParasiteControlsLarvaSpawnedFromInfectedHost(bool pvs, string parasitePrototype)
+    // CMU14: cover the real attachment delay, nested hosts, and spent-parasite cleanup before answering.
+    [TestCase(false, "RMCTestXenoParasiteClaim", false, false, false)]
+    [TestCase(true, "RMCTestXenoParasiteClaim", false, false, false)]
+    [TestCase(true, "RMCTestXenoWatcherClaim", false, false, false)]
+    [TestCase(true, "CMXenoParasite", true, true, false, TestName = "NestedHostAcceptsLarvaBeforeParasiteFallsOff")]
+    [TestCase(true, "CMXenoParasite", true, false, false, TestName = "NestedHostAcceptsLarvaAfterParasiteFallsOff")]
+    [TestCase(true, "CMXenoParasite", true, false, true, TestName = "NestedHostAcceptsLarvaAfterSpentParasiteDeleted")]
+    public async Task PlayerParasiteControlsLarvaSpawnedFromInfectedHost(
+        bool pvs, string parasitePrototype, bool nestedHost, bool answerBeforeFallOff, bool deleteSpentParasite)
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -78,6 +84,7 @@ public sealed class XenoParasiteLarvaClaimTest
         EntityUid victim = default;
         EntityUid ghost = default;
         NetEntity ghostNet = default;
+        TimeSpan fallOffDelay = default; // CMU14
 
         await server.WaitAssertion(() =>
         {
@@ -85,15 +92,44 @@ public sealed class XenoParasiteLarvaClaimTest
             parasite = entMan.SpawnEntity(parasitePrototype, map.GridCoords);
             victim = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
 
+            // CMU14 start: nesting must not prevent the infection or its ownership handoff.
+            if (nestedHost)
+            {
+                var nest = entMan.SpawnEntity("XenoNest", map.GridCoords.Offset(new Vector2(1, 0)));
+#pragma warning disable RA0002
+                entMan.GetComponent<XenoNestComponent>(nest).Nested = victim;
+                entMan.EnsureComponent<XenoNestedComponent>(victim).Nest = nest;
+#pragma warning restore RA0002
+                entMan.System<SharedTransformSystem>().SetCoordinates(victim, new EntityCoordinates(nest, Vector2.Zero));
+            }
+            Assert.That(entMan.HasComponent<VictimInfectedComponent>(victim), Is.False);
+            // CMU14 end
+
             var mindId = mind.CreateMind(player.UserId, "Parasite");
             mind.TransferTo(mindId, parasite);
             mind.SetUserId(mindId, player.UserId);
 
             var parasiteComp = entMan.GetComponent<XenoParasiteComponent>(parasite);
+            fallOffDelay = parasiteComp.FallOffDelay; // CMU14
             Assert.That(parasiteSystem.Infect((parasite, parasiteComp), victim, force: true), Is.True);
         });
 
         await pair.RunTicksSync(5);
+
+        // CMU14 start: the prompt opens before the host has an infection component.
+        if (!answerBeforeFallOff && fallOffDelay > TimeSpan.Zero)
+            await pair.RunSeconds((float) fallOffDelay.TotalSeconds + 1);
+
+        if (deleteSpentParasite)
+        {
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(entMan.HasComponent<ParasiteSpentComponent>(parasite), Is.True);
+                entMan.DeleteEntity(parasite);
+            });
+            await pair.RunTicksSync(5);
+        }
+        // CMU14 end
 
         await server.WaitAssertion(() =>
         {
@@ -123,6 +159,10 @@ public sealed class XenoParasiteLarvaClaimTest
         });
 
         await pair.RunTicksSync(5);
+
+        // CMU14: let an early answer migrate from the attached parasite to the completed infection.
+        if (answerBeforeFallOff)
+            await pair.RunSeconds((float) fallOffDelay.TotalSeconds + 1);
 
         await server.WaitAssertion(() =>
         {

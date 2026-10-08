@@ -11,12 +11,14 @@
   # T-15:00 - claxon starts & MU/TH/UR announces 10/15 mins
   - delay: 0
     announcement: { loc: 'cmu-ops-sfx-activated' }
-  - delay: 5
+  - delay: 13
+    announcement: { loc: 'cmu-ops-sfx-destruct-with-override', locArgs: { detonation: 'Fifteen Minutes', override: 'Ten Minutes' } }
+  # Delta klaxon (gamma.ogg, 12.4s) plays first when the alert arms. Sirens join once it ends.
+  - delay: 14
     layer: alarm1
     loop: true
     sound: /Audio/CMU14/Private/Ambience/claxon/claxon_siren1_f_iconic.ogg
     audioParams: { volume: -5 }
-    announcement: { loc: 'cmu-ops-sfx-destruct-with-override', locArgs: { detonation: 'Fifteen Minutes', override: 'Ten Minutes' } }
     marker: "RedAlarmOn"
     markerData: { frequency: 2.0 }  # Slow ominous pulse (~3s cycle)
 

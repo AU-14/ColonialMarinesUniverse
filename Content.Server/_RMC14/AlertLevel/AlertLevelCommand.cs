@@ -11,7 +11,7 @@ public sealed class AlertLevelCommand : ToolshedCommand
     [CommandImplementation("get")]
     public void Set(IInvocationContext context)
     {
-        var level = Sys<RMCAlertLevelSystem>().Get();
+        var level = Sys<RMCAlertLevelSystem>().Get(ExecutingEntity(context)); // CMU14
         context.WriteLine($"The current alert level is {level}");
     }
 

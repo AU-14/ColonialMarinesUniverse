@@ -392,11 +392,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (comp.Budget < cost) return;
         if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
-        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
-        {
-            _popup.PopupEntity(Loc.GetString("ambassador-console-support-unavailable"), uid, msg.Actor);
-            return;
-        }
+        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
 
         comp.Budget -= cost;
         comp.CalledParties.Add(msg.ThirdPartyId);

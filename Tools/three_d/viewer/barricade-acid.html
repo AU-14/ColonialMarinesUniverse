@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Barricade acid · Garrison Redux</title>
+  <style>
+    :root {color-scheme:dark;font-family:system-ui,sans-serif;background:#0d171d;color:#dfe9e7}
+    body {max-width:1200px;margin:auto;padding:26px} h1{font-size:27px} p{color:#b4c6c7;line-height:1.6} a{color:#8ee1c8}
+    .controls{display:flex;gap:16px;flex-wrap:wrap;align-items:center;padding:20px;background:#192931;border-radius:9px}
+    label{display:flex;gap:8px;align-items:center} button,select{padding:8px 12px;background:#253a43;color:inherit;border:1px solid #48616a;border-radius:5px}
+    button{cursor:pointer} button:disabled{opacity:.5} input[type=range]{width:190px}
+    .views{display:grid;grid-template-columns:250px 1fr;gap:20px;margin-top:22px} figure{margin:0}
+    img{width:224px;height:224px;image-rendering:pixelated;background:#17262d} figcaption{color:#adc4c2;font-size:14px;margin:12px 0}
+    canvas{width:100%;height:540px;display:block;touch-action:none;border:1px solid #30484f;border-radius:7px} output{font-variant-numeric:tabular-nums}
+    #error{color:#ffb3a0;white-space:pre-wrap} .badge{color:#ffd092;font-size:13px;letter-spacing:.05em}
+    @media(max-width:700px){.views{grid-template-columns:1fr}canvas{height:390px}img{width:160px;height:160px}}
+  </style>
+</head>
+<body>
+  <div class="badge">STABLE GARRISON REDUX · SOURCE AND 3D ANIMATION</div>
+  <h1>Reinforced barricade: bubbling acid</h1>
+  <p>Five source frames repeat while acid is visible. Change damage or wire during playback, or clear acid to return to that same barricade pose. This is an animation comparison; the game controls actual expiry and water removal.</p>
+  <div class="controls">
+    <label>Damage <select id="damage"><option>0</option><option>4</option><option>8</option><option>12</option></select></label>
+    <label><input type="checkbox" id="wire"> Barbed wire</label>
+    <label><input type="checkbox" id="acid" checked> Acid visible</label>
+    <label>Source facing <select id="facing"><option value="0">South</option><option value="1">North</option><option value="2">East</option><option value="3">West</option></select></label>
+    <button id="play" disabled>Play loop</button><button id="reset" disabled>Reset frame</button>
+    <label>Time <input id="time" type="range" min="0" max=".5" step=".001" value="0" aria-label="Acid strip time"></label><output id="clock">0.000 s</output>
+  </div>
+  <p id="frame" aria-live="polite">Loading source frames and geometry…</p><p id="error" role="alert" hidden></p>
+  <div class="views">
+    <figure><img id="source" alt="Original barricade damage, acid and wire composition"><figcaption>Original sprite at the selected entity facing.</figcaption></figure>
+    <figure><canvas id="model" tabindex="0" aria-label="Rotatable 3D acid barricade. Drag or use arrow keys to orbit; scroll to zoom."></canvas><figcaption>Drag to rotate; scroll to zoom. The camera is independent of source facing.</figcaption></figure>
+  </div>
+  <p>Colored patch volumes and rising flecks retain the front/rear source pixels. Physical depth, the different front/rear heights, side appearance and native gameplay interaction remain unverified. These are draft frame poses, without a finished fluid simulation.</p>
+  <p><a href="./">Redux map</a> · <a href="./?scene=../generated/plasteel-acid-fixture.json">All 192 comparison poses</a> · <a href="./button-animation.html">Door controls</a> · <a href="../generated/plasteel-acid-study/CMU3DReinforcedPlasteelBarricade.glb" download>Download GLB</a></p>
+  <script type="module" src="./barricade-acid.js"></script>
+</body>
+</html>

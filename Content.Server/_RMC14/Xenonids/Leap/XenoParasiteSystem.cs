@@ -93,13 +93,12 @@ public sealed partial class XenoParasiteSystem : SharedXenoParasiteSystem
             Loc.GetString("rmc-xeno-parasite-larva-claim-message"));
     }
 
+    // CMU14 method: validate completed claims through the infection even if its parasite has been deleted.
     private void OnLarvaClaimChoice(XenoParasiteLarvaClaimChoiceEvent ev)
     {
         if (!TryGetEntity(ev.Ghost, out var ghost) ||
-            !TryGetEntity(ev.Parasite, out var parasite) ||
             !TryGetEntity(ev.Victim, out var victim) ||
-            !TryComp(ghost.Value, out ActorComponent? actor) ||
-            !TryComp<XenoParasiteComponent>(parasite.Value, out var parasiteComp))
+            !TryComp(ghost.Value, out ActorComponent? actor))
         {
             return;
         }
@@ -107,7 +106,7 @@ public sealed partial class XenoParasiteSystem : SharedXenoParasiteSystem
         if (actor.PlayerSession.AttachedEntity != ghost.Value)
             return;
 
-        if (!TrySetLarvaClaimChoice((parasite.Value, parasiteComp), victim.Value, actor.PlayerSession.UserId, ev.Claim))
+        if (!TrySetLarvaClaimChoice(ev.Parasite, victim.Value, actor.PlayerSession.UserId, ev.Claim))
             return;
 
         if (!ev.Claim ||
