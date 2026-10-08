@@ -84,7 +84,8 @@ Following the humvee, `_0` is intact and `_1` is damaged (`damagedVehicleState`)
 ## Hood and engine
 
 - **Hood states:** `hood_closed` and `hood_open` (each with an `_overlay` twin). The open lid swings
-  back past upright to lean on the windshield, so the bay stays in view from the front.
+  just past upright and rests in front of the raked windshield, so the bay stays in view from the
+  front.
 - **Animation:** `hood_opening` and `hood_closing` are 7 frames at 0.07 s. Play one, then switch to
   `hood_open` or `hood_closed`.
 - **Engine hardpoint:** sits in the bay under the lid, so it only shows with the hood open. To fix a
@@ -94,6 +95,15 @@ Following the humvee, `_0` is intact and `_1` is damaged (`damagedVehicleState`)
   shut.
 
 `jeep_hood_swing.gif`, `jeep_hood_open.png` and `jeep_engine_smoke.gif` show them.
+
+## Windshield
+
+- **Animation:** `windshield_folding_0/1` and `windshield_raising_0/1` (each with an `_overlay`
+  twin) swing the frame between up and folded onto the hood, 5 frames at 0.07 s. Play one, then set
+  the windshield hardpoint to `windshield_down_*` or `windshield_up_*`.
+- **Damage:** the `_1` versions keep the bullet holes through the motion.
+
+`jeep_windshield_fold.gif` shows it.
 
 ## Lights
 
@@ -116,7 +126,9 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
 ## Interaction
 
 - **Empty hand:**
-  - Clicking the hood or the fuel door opens or closes it.
+  - Clicking the hood opens or closes it. It can't open while the windshield is folded down on it.
+  - Clicking the windshield folds it down or raises it, only while the hood is shut.
+  - Clicking the fuel door opens or closes it.
   - Clicking a fitted item (shovel, axe, jerry can, spare, wheels and so on) takes it into the hand.
 - **Holding an item:** hovering the jeep shows that slot's `*_outline` (a bright rim and faint fill,
   also where the slot is empty). Using the item there fits it.

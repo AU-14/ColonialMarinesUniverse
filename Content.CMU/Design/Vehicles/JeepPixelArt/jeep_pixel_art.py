@@ -138,10 +138,13 @@ HEADLIGHTS = (-14, 13)
 HEADLIGHT_Z = 13
 # The hood lid is drawn over the engine bay; facing south it is also in front of the riders.
 HOOD_OVER = "S"
-# Past upright, leaning back against the windshield like the real jeep, so the bay stays in view.
-HOOD_OPEN_DEGREES = 112
+# Just past upright, resting in front of the raked windshield without passing it, so the bay
+# stays in view.
+HOOD_OPEN_DEGREES = 100
 # Lid angle per frame while it swings open (eased); closing plays it backwards.
-HOOD_SWING = (0, 9, 26, 50, 76, 98, 112)
+HOOD_SWING = (0, 9, 26, 50, 72, 90, 100)
+# Windshield angle per frame while it folds forward onto the hood; raising plays it backwards.
+WINDSHIELD_FOLD = (105, 84, 58, 30, 0)
 HOOD_SWING_DELAY = 0.07
 # Fuel filler door on the right-side panel (the tools hang on the left): its span on the outer
 # skin, the opened angle and the swing frames.
@@ -574,6 +577,30 @@ def windshield_down(damaged=False):
     if damaged:
         m.paint(lambda f, r, zz: f == 18 and r in (-20, -19, -18, 12, 13), "char")
     return m
+
+
+def windshield_at(degrees):
+    """The windshield frame swung about its hinge on the cowl: 0 lies on the hood, about 105 is
+    the raked upright position. Used for the in-between frames of folding and raising."""
+    t = math.radians(degrees)
+    m = Model()
+    for v in range(12):
+        for r in range(-20, 20):
+            frame = v in (0, 11) or r in (-20, 19, -1, 0)
+            mat = "od" if frame else GLASS
+            for a in (0.25, 0.75):
+                f = 8.5 + (v + a) * math.cos(t)
+                z = HOOD + 1.5 + (v + a) * math.sin(t)
+                m.vox[(math.floor(f), r, math.floor(z))] = (mat, "windshield")
+    m.mirror_box(8, 8, 19, 19, HOOD, HOOD + 1, "steel", "windshield")
+    return m
+
+
+def windshield_frames():
+    """Folding sequence, ending on the exact upright and folded hardpoint states."""
+    last = len(WINDSHIELD_FOLD) - 1
+    return [windshield_up() if i == 0 else windshield_down() if i == last else windshield_at(a)
+            for i, a in enumerate(WINDSHIELD_FOLD)]
 
 
 def wirecutter(damaged=False):
@@ -1157,6 +1184,18 @@ def split_direction(variant, view, dy):
     out["wheels_frames"] = [place(f) for f in frames]
     out["hood_swing"] = [place(f) for f in swing]
 
+    fold = {}
+    for state, damaged in (("0", False), ("1", True)):
+        frames_ws = []
+        for shield in windshield_frames():
+            buf, glass = render(model.merged(shield), view)
+            layer, glass_px = layer_of(buf, shade(buf), glass, "windshield")
+            if damaged:
+                bullet_holes(layer, glass_px, seed(variant, view, "windshield_fold"), 4)
+            frames_ws.append(place(layer))
+        fold[state] = frames_ws
+    out["windshield_fold"] = fold
+
     def door_layer(door):
         buf, _ = render(model.merged(door), view)
         col = shade(buf)
@@ -1549,6 +1588,15 @@ def write_rsi(variant, dy):
         save("mgturret_outline", [to_image(outline({(x, y) for x in range(SIZE) for y in range(SIZE)
                                                     if img.getpixel((x, y))[3] > 0})) for img in mg_images()],
              directions=8)
+    fold_delays = [[HOOD_SWING_DELAY] * len(WINDSHIELD_FOLD) for _ in DIRS]
+    over_ws = ATTACHMENTS["windshield_up"]
+    for motion, order in (("folding", 1), ("raising", -1)):
+        for state in ("0", "1"):
+            frames_of = lambda v: per_dir[v]["windshield_fold"][state][::order]
+            save(f"windshield_{motion}_{state}", [to_image({} if v in over_ws else f) for v in DIRS
+                                                 for f in frames_of(v)], delays=fold_delays)
+            save(f"windshield_{motion}_overlay_{state}", [to_image(f if v in over_ws else {}) for v in DIRS
+                                                         for f in frames_of(v)], delays=fold_delays)
     save("lights_on", [to_image(per_dir[v]["lights"]) for v in DIRS])
     save("headlights_on", [to_image(per_dir[v]["headlights_on"]) for v in DIRS])
     save("brake_on", [to_image(per_dir[v]["brake_on"]) for v in DIRS])
@@ -1894,6 +1942,21 @@ def main():
                  for f in (FITTED, down)]
         sheet(rows, 5).save(os.path.join(PREVIEW_DIR, f"jeep_{var}_x5.png"))
     crayon_demo(per, dy).save(os.path.join(PREVIEW_DIR, "jeep_crayons.png"))
+    last = len(WINDSHIELD_FOLD) - 1
+    fold_seq = list(range(last + 1)) + [last] * 8 + list(range(last, -1, -1)) + [0] * 8
+    fold_frames = []
+    for k in fold_seq:
+        rows = []
+        for var in VARIANTS:
+            row = []
+            for v in DIRS:
+                d = dict(per[var][v])
+                d["windshield_up_0"] = d["windshield_fold"]["0"][k]
+                row.append(composite(var, v, {**per[var], v: d}, dy))
+            rows.append(row)
+        fold_frames.append(sheet(rows, 3).convert("RGB"))
+    fold_frames[0].save(os.path.join(PREVIEW_DIR, "jeep_windshield_fold.gif"), save_all=True,
+                        append_images=fold_frames[1:], duration=int(HOOD_SWING_DELAY * 1000) + 40, loop=0)
     grid(hood="hood_open").save(os.path.join(PREVIEW_DIR, "jeep_hood_open.png"))
     hover_rows = []
     for var in VARIANTS:
