@@ -9,7 +9,7 @@ public sealed partial class CMU3DSceneControl
     public bool TryProjectHead(EntityUid uid, float extraHeight, out Vector2 pixel)
     {
         pixel = default;
-        if (uid == _equipmentPlayers.LocalEntity ||
+        if (uid == _players.LocalEntity ||
             !_entities.TryGetComponent(uid, out TransformComponent? xform) || !SceneMaps.Contains(xform.MapID) ||
             !_entities.TryGetComponent(uid, out SpriteComponent? sprite) || !sprite.Visible || sprite.ContainerOccluded ||
             !_entities.TryGetComponent(uid, out MetaDataComponent? meta) ||
