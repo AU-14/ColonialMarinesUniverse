@@ -138,6 +138,11 @@ HOOD_OPEN_DEGREES = 112
 # Lid angle per frame while it swings open (eased); closing plays it backwards.
 HOOD_SWING = (0, 9, 26, 50, 76, 98, 112)
 HOOD_SWING_DELAY = 0.07
+# Fuel filler door on the right-side panel (the tools hang on the left): its span on the outer
+# skin, the opened angle and the swing frames.
+FUEL_DOOR = dict(f0=-9, f1=-4, z0=10, z1=14)
+FUEL_DOOR_OVER = "E"
+FUEL_DOOR_SWING = (0, 35, 70, 100)
 SMOKE_FRAMES = 8
 SMOKE_DELAY = 0.12
 
@@ -356,6 +361,11 @@ def build(variant):
     m.box(-30, 5, -20, 19, 6, 7, "od_in", "floor")
     m.box(-30, 5, 19, 19, 6, RIM, "od", "wall_right")
     m.box(-29, 5, 18, 18, 6, RIM, "od_in", "wall_right")
+    d = FUEL_DOOR
+    m.remove(lambda f, r, z: r == 19 and d["f0"] <= f <= d["f1"] and d["z0"] <= z <= d["z1"])
+    m.box(d["f0"], d["f1"], 18, 18, d["z0"], d["z1"], "black", "wall_right")
+    m.box(-7, -6, 19, 19, 11, 13, "steel", "wall_right")
+    m.box(-7, -6, 19, 19, 12, 12, "black", "wall_right")
     m.box(-30, 5, -20, -20, 6, RIM, "od", "wall_left")
     m.box(-29, 5, -19, -19, 6, RIM, "od_in", "wall_left")
     m.box(-30, -30, -19, 18, 6, RIM, "od", "rear_wall")
@@ -677,6 +687,27 @@ def hood_open(degrees=HOOD_OPEN_DEGREES):
 
 
 HOODS = {"hood_closed": hood_lid, "hood_open": hood_open}
+
+
+def fuel_door(degrees=0):
+    """Fuel filler door, hinged on its front edge, swung out from the right-side panel."""
+    d = FUEL_DOOR
+    hinge_f, hinge_r = d["f1"] + 1.0, 20.0
+    t = math.radians(degrees)
+    m = Model()
+    for f in range(d["f0"], d["f1"] + 1):
+        for z in range(d["z0"], d["z1"] + 1):
+            edge = f in (d["f0"], d["f1"]) or z in (d["z0"], d["z1"])
+            mat = "od_seam" if edge else "od"
+            if f == d["f0"] and z == 12:
+                mat = "steel"
+            if f == d["f1"] and z in (d["z0"] + 1, d["z1"] - 1):
+                mat = "steel"
+            for a in (0.25, 0.75):
+                df = f + a - hinge_f
+                ff, rr = hinge_f + df * math.cos(t), hinge_r - 0.5 - df * math.sin(t)
+                m.vox[(math.floor(ff), math.floor(rr), z)] = (mat, "fuel_door")
+    return m
 
 
 def engine(damaged=False):
@@ -1023,17 +1054,25 @@ def split_direction(variant, view, dy):
     def place(d):
         return {(x + ox, y + oy): c for (x, y), c in d.items()}
 
-    shut, _ = render(model.merged(hood_lid()), view)
+    shut, _ = render(model.merged(hood_lid()).merged(fuel_door()), view)
     surface = {}
     for px, (_, _, part, face, key) in shut.items():
         if part not in WHEEL_PARTS and part not in CRAYON_SKIP:
-            over_riders = part in overlay_parts or (part == "hood_lid" and view in HOOD_OVER)
+            over_riders = (part in overlay_parts or (part == "hood_lid" and view in HOOD_OVER)
+                           or (part == "fuel_door" and view in FUEL_DOOR_OVER))
             surface[px] = (*key, face, over_riders)
 
     out = {k: place(v) for k, v in layers.items()}
     out["surface"] = place(surface)
     out["wheels_frames"] = [place(f) for f in frames]
     out["hood_swing"] = [place(f) for f in swing]
+
+    def door_layer(door):
+        buf, _ = render(model.merged(door), view)
+        col = shade(buf)
+        return place({px: col[px] for px, e in buf.items() if e[2] == "fuel_door"})
+
+    out["fuel_door_swing"] = [door_layer(fuel_door(a)) for a in FUEL_DOOR_SWING]
     out["lights"] = place(lights_layer(model, view, front=False))
     out["headlights_on"] = place(lights_layer(model, view, front=True))
     return out
@@ -1045,7 +1084,7 @@ def view_dy():
     for v in DIRS:
         rows = []
         for var in VARIANTS:
-            m = build(var).merged(wheels(v)).merged(hood_open())
+            m = build(var).merged(wheels(v)).merged(hood_open()).merged(fuel_door(FUEL_DOOR_SWING[-1]))
             for name, make in HARDPOINTS.items():
                 if name != "windshield_down":
                     m = m.merged(make())
@@ -1323,6 +1362,16 @@ def write_rsi(variant, dy):
     for name in HOODS:
         save(name, [to_image({} if v in HOOD_OVER else per_dir[v][name]) for v in DIRS])
         save(name + "_overlay", [to_image(per_dir[v][name] if v in HOOD_OVER else {}) for v in DIRS])
+    door = lambda v, f, over: to_image(f if (v in FUEL_DOOR_OVER) == over else {})
+    for state, frame in (("fuel_door_closed", 0), ("fuel_door_open", -1)):
+        save(state, [door(v, per_dir[v]["fuel_door_swing"][frame], False) for v in DIRS])
+        save(state + "_overlay", [door(v, per_dir[v]["fuel_door_swing"][frame], True) for v in DIRS])
+    door_delays = [[HOOD_SWING_DELAY] * len(FUEL_DOOR_SWING) for _ in DIRS]
+    for state, order in (("fuel_door_opening", 1), ("fuel_door_closing", -1)):
+        save(state, [door(v, f, False) for v in DIRS for f in per_dir[v]["fuel_door_swing"][::order]],
+             delays=door_delays)
+        save(state + "_overlay", [door(v, f, True) for v in DIRS for f in per_dir[v]["fuel_door_swing"][::order]],
+             delays=door_delays)
     save("lights_on", [to_image(per_dir[v]["lights"]) for v in DIRS])
     save("headlights_on", [to_image(per_dir[v]["headlights_on"]) for v in DIRS])
     swing = [[HOOD_SWING_DELAY] * len(HOOD_SWING) for _ in DIRS]
@@ -1420,7 +1469,8 @@ def paste(dst, src, x, y):
 
 
 def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=None, loaded=False,
-              fitted=FITTED, wheels_on=True, turret=True, hood="hood_closed", smoke=None, lights=False):
+              fitted=FITTED, wheels_on=True, turret=True, hood="hood_closed", smoke=None, lights=False,
+              door=0):
     """What the game draws for one direction: vehicle layers, riders, then the overlay entity."""
     v = per_dir[view]
     near = view in "EW"
@@ -1435,6 +1485,8 @@ def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=Non
         img.alpha_composite(to_image(v[f"engine_{st}"]))
     if hood and view not in HOOD_OVER:
         img.alpha_composite(to_image(v[hood]))
+    if view not in FUEL_DOOR_OVER:
+        img.alpha_composite(to_image(v["fuel_door_swing"][door]))
     for name in hardpoints:
         if name != "engine" and view not in ATTACHMENTS[name]:
             img.alpha_composite(to_image(v[f"{name}_{st}"]))
@@ -1476,6 +1528,8 @@ def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=Non
     # Overlay entity: the lid goes after the windshield, which it stands in front of when open.
     if hood and view in HOOD_OVER:
         img.alpha_composite(to_image(v[hood]))
+    if view in FUEL_DOOR_OVER:
+        img.alpha_composite(to_image(v["fuel_door_swing"][door]))
     if wheels_on and near:
         img.alpha_composite(to_image(wheel_px))
     if lights:
@@ -1659,6 +1713,12 @@ def main():
         sheet(rows, 5).save(os.path.join(PREVIEW_DIR, f"jeep_{var}_x5.png"))
     crayon_demo(per, dy).save(os.path.join(PREVIEW_DIR, "jeep_crayons.png"))
     grid(hood="hood_open").save(os.path.join(PREVIEW_DIR, "jeep_hood_open.png"))
+    last = len(FUEL_DOOR_SWING) - 1
+    door_seq = list(range(last + 1)) + [last] * 8 + list(range(last, -1, -1)) + [0] * 8
+    door_frames = [sheet([[composite(var, v, per[var], dy, door=k) for v in ("E", "S", "N")] for var in VARIANTS], 3)
+                   .convert("RGB") for k in door_seq]
+    door_frames[0].save(os.path.join(PREVIEW_DIR, "jeep_fuel_door.gif"), save_all=True,
+                        append_images=door_frames[1:], duration=int(HOOD_SWING_DELAY * 1000) + 40, loop=0)
     night = []
     for on in (False, True):
         for var in VARIANTS:

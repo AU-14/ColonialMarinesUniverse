@@ -40,6 +40,142 @@
       "directions": 4
     },
     {
+      "name": "fuel_door_closed",
+      "directions": 4
+    },
+    {
+      "name": "fuel_door_closed_overlay",
+      "directions": 4
+    },
+    {
+      "name": "fuel_door_open",
+      "directions": 4
+    },
+    {
+      "name": "fuel_door_open_overlay",
+      "directions": 4
+    },
+    {
+      "name": "fuel_door_opening",
+      "directions": 4,
+      "delays": [
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ]
+      ]
+    },
+    {
+      "name": "fuel_door_opening_overlay",
+      "directions": 4,
+      "delays": [
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ]
+      ]
+    },
+    {
+      "name": "fuel_door_closing",
+      "directions": 4,
+      "delays": [
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ]
+      ]
+    },
+    {
+      "name": "fuel_door_closing_overlay",
+      "directions": 4,
+      "delays": [
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ],
+        [
+          0.07,
+          0.07,
+          0.07,
+          0.07
+        ]
+      ]
+    },
+    {
       "name": "lights_on",
       "directions": 4
     },
