@@ -1021,7 +1021,7 @@
         givePrefix: au14-job-prefix-govforspecialist-heavyantitankUPP
         isAppendSquadRoleName: false
         isAppendPrefix: true
-      - id: AU14KitUPPMarksmanType88
+      - id: CMUSVAROGCaseUPPSpec
         giveSquadRoleName: au14-job-name-govforspecialist-marksmanUPP
         givePrefix: au14-job-prefix-govforspecialist-marksmanUPP
         isAppendSquadRoleName: false
@@ -1293,6 +1293,8 @@
         amount: 10
     - name: special issue firearms
       entries:
+      - id: AU14KitUPPMarksmanType88
+        amount: 1
       - id: RMCWeaponRifleType71
         amount: 6
       - id: RMCWeaponRifleType71C
