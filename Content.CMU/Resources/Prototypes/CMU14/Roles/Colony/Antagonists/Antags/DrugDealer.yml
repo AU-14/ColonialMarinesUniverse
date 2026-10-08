@@ -70,6 +70,8 @@
     back:
     - AUPaperDrugs
     - RMCLighter
+    - CMUDrugCookingKit
+    - PackPaperRolling
 
 - type: entity
   parent: RMCBoxCardboard

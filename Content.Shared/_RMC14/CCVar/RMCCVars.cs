@@ -18,7 +18,7 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.xeno_speed_multiplier", 1f, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<bool> RMCAutoPunctuate =
-        CVarDef.Create("rmc.auto_punctuate", false, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);
+        CVarDef.Create("rmc.auto_punctuate", true, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE); // CMU14: on by default, players opt out in settings
 
     public static readonly CVarDef<bool> RMCAutoEjectMagazines =
         CVarDef.Create("rmc.auto_eject_magazines", true, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);

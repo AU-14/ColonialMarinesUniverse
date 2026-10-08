@@ -327,6 +327,7 @@
       On: bptube1
       Broken: bptube-broken
       Burned: bptube-burned
+  - type: CMUWarshipAlertLightExempt # CMU14: maint light, keeps its color on warship alerts
 
 - type: entity
   parent: RMCLightFixtureBlueDouble
