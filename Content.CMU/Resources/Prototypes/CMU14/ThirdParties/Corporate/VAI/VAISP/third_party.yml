@@ -16,5 +16,5 @@
   weight: 20
   minplayers: 100
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: false

@@ -352,15 +352,6 @@
 #   language: Swedish
 
 # - type: trait
-#   id: BrazilianLanguage
-#   name: au14-trait-brazilian-language-name
-#   description: au14-trait-brazilian-language-desc
-#   category: LanguageTraits
-#   cost: 1
-#   components: []
-#   language: Brazilian
-
-# - type: trait
 #   id: SlovakLanguage
 #   name: au14-trait-slovak-language-name
 #   description: au14-trait-slovak-language-desc

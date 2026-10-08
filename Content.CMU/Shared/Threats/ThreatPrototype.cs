@@ -18,10 +18,10 @@ public sealed partial class ThreatPrototype : IPrototype
     [DataField]
     public bool AllowConsecutiveVotes;
 
-    [DataField("blacklistedPlatoons", required: false)]
+    [DataField]
     public List<string> BlacklistedPlatoons { get; private set; } = new();
 
-    [DataField("WhitelistedPlatoons", required: false)]
+    [DataField]
     public List<string> WhitelistedPlatoons { get; private set; } = new();
 
     [DataField("threatweight", required: false)]
@@ -62,11 +62,11 @@ public sealed partial class ThreatPrototype : IPrototype
 
     // for roundstart
 
-    [DataField("blacklistedgamemodes")]
+    [DataField]
     public List<string> BlacklistedGamemodes { get; private set; } = new();
 
-    [DataField("whitelistedgamemodes")]
-    public List<string> whitelistedgamemodes { get; private set; } = new();
+    [DataField]
+    public List<string> WhitelistedGamemodes { get; private set; } = new();
 
     [DataField("maxplayers")]
     public int MaxPlayers { get; private set; }

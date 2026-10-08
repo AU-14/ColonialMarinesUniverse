@@ -25,14 +25,14 @@
   - type: Language
     spokenLanguages:
     - English
-    - Brazilian
+    - Portuguese
     - Spanish
     understoodLanguages:
     - English
-    - Brazilian
+    - Portuguese
     - Spanish
-    currentLanguage: Brazilian
-    defaultLanguage: Brazilian
+    currentLanguage: Portuguese
+    defaultLanguage: Portuguese
 
   name: au14-job-name-forecon-spotter
   playTimeTracker: AU14LACNCommandoSpotter

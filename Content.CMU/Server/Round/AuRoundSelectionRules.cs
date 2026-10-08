@@ -9,7 +9,7 @@ internal static class AuRoundSelectionRules
 {
     public static bool IsExplicitlyWhitelistedForGamemode(ThirdPartyPrototype proto, string gamemode)
     {
-        return ContainsIgnoreCase(proto.whitelistedgamemodes, gamemode);
+        return ContainsIgnoreCase(proto.WhitelistedGamemodes, gamemode);
     }
 
     public static bool IsThirdPartyAllowed(
@@ -23,8 +23,8 @@ internal static class AuRoundSelectionRules
         if (ContainsIgnoreCase(proto.BlacklistedGamemodes, currentGamemode))
             return false;
 
-        if (proto.whitelistedgamemodes.Count > 0 &&
-            !ContainsIgnoreCase(proto.whitelistedgamemodes, currentGamemode))
+        if (proto.WhitelistedGamemodes.Count > 0 &&
+            !ContainsIgnoreCase(proto.WhitelistedGamemodes, currentGamemode))
             return false;
 
         if (proto.MaxPlayers < playerCount || proto.MinPlayers > playerCount)
