@@ -1,0 +1,2676 @@
+- type: cmu3DModel
+  id: CMU3DDecorFloorBrickrubbleEast
+  label: Brickrubble / East
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorBrickrubble
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: brickrubble
+  referenceDirection: 2
+  sourceDirections: 8
+  directionalModels: &id001
+  - CMU3DDecorFloorBrickrubbleSouth
+  - CMU3DDecorFloorBrickrubbleNorth
+  - CMU3DDecorFloorBrickrubbleEast
+  - CMU3DDecorFloorBrickrubbleWest
+  - CMU3DDecorFloorBrickrubbleSouthEast
+  - CMU3DDecorFloorBrickrubbleSouthWest
+  - ''
+  - ''
+  yawOffset: -90
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.073153, 0.283266, 0.004000
+    max: 0.012030, 0.362016, 0.102400
+    color: '#4E3329'
+    label: brick 1 fractured section 1
+    yaw: 8.1301
+  - min: 0.010541, 0.288904, 0.004000
+    max: 0.221646, 0.398279, 0.124000
+    color: '#4E3329'
+    label: brick 1 fractured section 2
+    yaw: 8.1301
+  - min: 0.220213, 0.318913, 0.004000
+    max: 0.294285, 0.408601, 0.124000
+    color: '#4E3329'
+    label: brick 1 fractured section 3
+    yaw: 8.1301
+  - min: 0.004944, 0.285638, 0.006000
+    max: 0.230864, 0.297638, 0.054000
+    color: '#3E271D'
+    label: brick 1 lower fracture face
+    yaw: 8.1301
+  - min: -0.161591, 0.202920, 0.004000
+    max: -0.114287, 0.263670, 0.086000
+    color: '#70442B'
+    label: brick 2 fractured section 1
+    yaw: 55.00798
+  - min: -0.149377, 0.258503, 0.004000
+    max: -0.032146, 0.342878, 0.104000
+    color: '#70442B'
+    label: brick 2 fractured section 2
+    yaw: 55.00798
+  - min: -0.065921, 0.330966, 0.004000
+    max: -0.024787, 0.400153, 0.104000
+    color: '#70442B'
+    label: brick 2 fractured section 3
+    yaw: 55.00798
+  - min: -0.123156, 0.269691, 0.006000
+    max: 0.002301, 0.281691, 0.054000
+    color: '#70442B'
+    label: brick 2 lower fracture face
+    yaw: 55.00798
+  - min: 0.143687, 0.144103, 0.004000
+    max: 0.203371, 0.227353, 0.102400
+    color: '#70442B'
+    label: brick 3 fractured section 1
+    yaw: -62.30053
+  - min: 0.147822, 0.036012, 0.004000
+    max: 0.295735, 0.151637, 0.124000
+    color: '#70442B'
+    label: brick 3 fractured section 2
+    yaw: -62.30053
+  - min: 0.242269, -0.042039, 0.004000
+    max: 0.294168, 0.052773, 0.124000
+    color: '#70442B'
+    label: brick 3 fractured section 3
+    yaw: -62.30053
+  - min: 0.092291, 0.065792, 0.006000
+    max: 0.250585, 0.077792, 0.054000
+    color: '#4E3329'
+    label: brick 3 lower fracture face
+    yaw: -62.30053
+  - min: -0.316742, -0.164210, 0.004000
+    max: -0.280894, -0.096710, 0.069600
+    color: '#70442B'
+    label: brick 4 fractured section 1
+    yaw: 55.00798
+  - min: -0.307486, -0.126261, 0.004000
+    max: -0.218645, -0.032511, 0.084000
+    color: '#70442B'
+    label: brick 4 fractured section 2
+    yaw: 55.00798
+  - min: -0.244240, -0.068663, 0.004000
+    max: -0.213067, 0.008212, 0.084000
+    color: '#70442B'
+    label: brick 4 fractured section 3
+    yaw: 55.00798
+  - min: -0.276000, -0.112462, 0.006000
+    max: -0.180924, -0.100462, 0.054000
+    color: '#4E3329'
+    label: brick 4 lower fracture face
+    yaw: 55.00798
+  - min: -0.072265, -0.163797, 0.004000
+    max: -0.015716, -0.087297, 0.086000
+    color: '#70442B'
+    label: brick 5 fractured section 1
+    yaw: 13.3925
+  - min: -0.018390, -0.155893, 0.004000
+    max: 0.121754, -0.049643, 0.104000
+    color: '#70442B'
+    label: brick 5 fractured section 2
+    yaw: 13.3925
+  - min: 0.119179, -0.124406, 0.004000
+    max: 0.168353, -0.037281, 0.104000
+    color: '#70442B'
+    label: brick 5 fractured section 3
+    yaw: 13.3925
+  - min: -0.015285, -0.158384, 0.006000
+    max: 0.134693, -0.146384, 0.054000
+    color: '#4E3329'
+    label: brick 5 lower fracture face
+    yaw: 13.3925
+  - min: 0.183139, -0.333926, 0.004000
+    max: 0.219699, -0.270926, 0.077800
+    color: '#70442B'
+    label: brick 6 fractured section 1
+    yaw: -35.53768
+  - min: 0.207856, -0.383133, 0.004000
+    max: 0.298463, -0.295633, 0.094000
+    color: '#70442B'
+    label: brick 6 fractured section 2
+    yaw: -35.53768
+  - min: 0.287063, -0.410830, 0.004000
+    max: 0.318855, -0.339080, 0.094000
+    color: '#70442B'
+    label: brick 6 fractured section 3
+    yaw: -35.53768
+  - min: 0.179051, -0.377157, 0.006000
+    max: 0.276016, -0.365157, 0.054000
+    color: '#3E271D'
+    label: brick 6 lower fracture face
+    yaw: -35.53768
+- type: cmu3DModel
+  id: CMU3DDecorFloorBrickrubbleNorth
+  label: Brickrubble / North
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorBrickrubble
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: brickrubble
+  referenceDirection: 1
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: -180
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.208514, 0.253367, 0.004000
+    max: -0.150143, 0.332117, 0.086000
+    color: '#4E3329'
+    label: brick 1 fractured section 1
+    yaw: 19.65382
+  - min: -0.156057, 0.272198, 0.004000
+    max: -0.011399, 0.381573, 0.104000
+    color: '#4E3329'
+    label: brick 1 fractured section 2
+    yaw: 19.65382
+  - min: -0.017091, 0.314904, 0.004000
+    max: 0.033666, 0.404592, 0.104000
+    color: '#4E3329'
+    label: brick 1 fractured section 3
+    yaw: 19.65382
+  - min: -0.147334, 0.270929, 0.006000
+    max: 0.007476, 0.282929, 0.054000
+    color: '#4E3329'
+    label: brick 1 lower fracture face
+    yaw: 19.65382
+  - min: -0.423275, -0.009660, 0.004000
+    max: -0.375118, 0.057840, 0.069600
+    color: '#70442B'
+    label: brick 2 fractured section 1
+    yaw: -15.9454
+  - min: -0.378341, -0.045794, 0.004000
+    max: -0.258996, 0.047956, 0.084000
+    color: '#70442B'
+    label: brick 2 fractured section 2
+    yaw: -15.9454
+  - min: -0.262097, -0.059502, 0.004000
+    max: -0.220222, 0.017373, 0.084000
+    color: '#70442B'
+    label: brick 2 fractured section 3
+    yaw: -15.9454
+  - min: -0.397602, -0.046243, 0.006000
+    max: -0.269881, -0.034243, 0.054000
+    color: '#70442B'
+    label: brick 2 lower fracture face
+    yaw: -15.9454
+  - min: -0.027932, 0.160796, 0.004000
+    max: 0.036163, 0.228296, 0.094200
+    color: '#70442B'
+    label: brick 3 fractured section 1
+    yaw: -105.64225
+  - min: -0.105362, 0.040330, 0.004000
+    max: 0.053482, 0.134080, 0.114000
+    color: '#70442B'
+    label: brick 3 fractured section 2
+    yaw: -105.64225
+  - min: -0.082736, -0.054549, 0.004000
+    max: -0.027001, 0.022326, 0.114000
+    color: '#70442B'
+    label: brick 3 fractured section 3
+    yaw: -105.64225
+  - min: -0.152059, 0.097060, 0.006000
+    max: 0.017933, 0.109060, 0.054000
+    color: '#70442B'
+    label: brick 3 lower fracture face
+    yaw: -105.64225
+  - min: 0.221998, 0.247899, 0.004000
+    max: 0.287531, 0.324399, 0.102400
+    color: '#70442B'
+    label: brick 4 fractured section 1
+    yaw: -105.64225
+  - min: 0.142831, 0.123275, 0.004000
+    max: 0.305238, 0.229525, 0.124000
+    color: '#70442B'
+    label: brick 4 fractured section 2
+    yaw: -105.64225
+  - min: 0.165965, 0.027204, 0.004000
+    max: 0.222950, 0.114329, 0.124000
+    color: '#70442B'
+    label: brick 4 fractured section 3
+    yaw: -105.64225
+  - min: 0.090017, 0.188031, 0.006000
+    max: 0.263820, 0.200031, 0.054000
+    color: '#70442B'
+    label: brick 4 lower fracture face
+    yaw: -105.64225
+  - min: 0.006454, -0.288669, 0.004000
+    max: 0.068594, -0.198669, 0.086000
+    color: '#815641'
+    label: brick 5 fractured section 1
+    yaw: 25.46335
+  - min: 0.058097, -0.259706, 0.004000
+    max: 0.212095, -0.134706, 0.104000
+    color: '#815641'
+    label: brick 5 fractured section 2
+    yaw: 25.46335
+  - min: 0.201991, -0.203736, 0.004000
+    max: 0.256026, -0.101236, 0.104000
+    color: '#815641'
+    label: brick 5 fractured section 3
+    yaw: 25.46335
+  - min: 0.074615, -0.258669, 0.006000
+    max: 0.239421, -0.246669, 0.054000
+    color: '#815641'
+    label: brick 5 lower fracture face
+    yaw: 25.46335
+  - min: -0.142567, -0.279850, 0.004000
+    max: -0.084021, -0.212350, 0.069600
+    color: '#815641'
+    label: brick 6 fractured section 1
+    yaw: -25.46335
+  - min: -0.093912, -0.336751, 0.004000
+    max: 0.051181, -0.243001, 0.084000
+    color: '#815641'
+    label: brick 6 fractured section 2
+    yaw: -25.46335
+  - min: 0.041661, -0.370447, 0.004000
+    max: 0.092570, -0.293572, 0.084000
+    color: '#815641'
+    label: brick 6 fractured section 3
+    yaw: -25.46335
+  - min: -0.121314, -0.333847, 0.006000
+    max: 0.033961, -0.321847, 0.054000
+    color: '#4E3329'
+    label: brick 6 lower fracture face
+    yaw: -25.46335
+  - min: 0.318653, -0.109213, 0.004000
+    max: 0.383071, -0.030463, 0.102400
+    color: '#70442B'
+    label: brick 7 fractured section 1
+    yaw: -82.03039
+  - min: 0.286572, -0.235475, 0.004000
+    max: 0.446217, -0.126100, 0.124000
+    color: '#70442B'
+    label: brick 7 fractured section 2
+    yaw: -82.03039
+  - min: 0.353337, -0.332420, 0.004000
+    max: 0.409353, -0.242733, 0.124000
+    color: '#70442B'
+    label: brick 7 fractured section 3
+    yaw: -82.03039
+  - min: 0.229200, -0.189794, 0.006000
+    max: 0.400048, -0.177794, 0.054000
+    color: '#70442B'
+    label: brick 7 lower fracture face
+    yaw: -82.03039
+  - min: -0.259317, -0.313675, 0.004000
+    max: -0.225625, -0.259675, 0.061400
+    color: '#70442B'
+    label: brick 8 fractured section 1
+    yaw: -124.99202
+  - min: -0.317822, -0.372177, 0.004000
+    max: -0.234324, -0.297177, 0.074000
+    color: '#70442B'
+    label: brick 8 fractured section 2
+    yaw: -124.99202
+  - min: -0.323064, -0.411630, 0.004000
+    max: -0.293766, -0.350130, 0.074000
+    color: '#70442B'
+    label: brick 8 fractured section 3
+    yaw: -124.99202
+  - min: -0.347755, -0.319093, 0.006000
+    max: -0.258398, -0.307093, 0.054000
+    color: '#4E3329'
+    label: brick 8 lower fracture face
+    yaw: -124.99202
+- type: cmu3DModel
+  id: CMU3DDecorFloorBrickrubbleSouth
+  label: Brickrubble / South
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBrickrubble
+  referencePrototype: DecorFloorBrickrubble
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: brickrubble
+  referenceDirection: 0
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: 0
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.176208, 0.348083, 0.004000
+    max: -0.105485, 0.428040, 0.094200
+    color: '#815641'
+    label: brick 1 fractured section 1
+    yaw: -28.17859
+  - min: -0.120062, 0.274454, 0.004000
+    max: 0.055208, 0.385505, 0.114000
+    color: '#815641'
+    label: brick 1 fractured section 2
+    yaw: -28.17859
+  - min: 0.041177, 0.228545, 0.004000
+    max: 0.102675, 0.319607, 0.114000
+    color: '#815641'
+    label: brick 1 fractured section 3
+    yaw: -28.17859
+  - min: -0.155240, 0.280232, 0.006000
+    max: 0.032331, 0.290893, 0.054000
+    color: '#815641'
+    label: brick 1 lower fracture face
+    yaw: -28.17859
+  - min: -0.220433, 0.089102, 0.004000
+    max: -0.185329, 0.139075, 0.069600
+    color: '#70442B'
+    label: brick 2 fractured section 1
+    yaw: 19.65382
+  - min: -0.188886, 0.099919, 0.004000
+    max: -0.101890, 0.169326, 0.084000
+    color: '#70442B'
+    label: brick 2 fractured section 2
+    yaw: 19.65382
+  - min: -0.105314, 0.125928, 0.004000
+    max: -0.074789, 0.182842, 0.084000
+    color: '#70442B'
+    label: brick 2 fractured section 3
+    yaw: 19.65382
+  - min: -0.183319, 0.098350, 0.006000
+    max: -0.090218, 0.109011, 0.054000
+    color: '#3E271D'
+    label: brick 2 lower fracture face
+    yaw: 19.65382
+  - min: -0.300407, -0.063647, 0.004000
+    max: -0.266900, -0.023668, 0.061400
+    color: '#70442B'
+    label: brick 3 fractured section 1
+    yaw: 19.65382
+  - min: -0.270295, -0.051821, 0.004000
+    max: -0.187254, 0.003704, 0.074000
+    color: '#70442B'
+    label: brick 3 fractured section 2
+    yaw: 19.65382
+  - min: -0.190523, -0.027959, 0.004000
+    max: -0.161386, 0.017572, 0.074000
+    color: '#70442B'
+    label: brick 3 fractured section 3
+    yaw: 19.65382
+  - min: -0.266825, -0.053759, 0.006000
+    max: -0.177958, -0.043098, 0.054000
+    color: '#281919'
+    label: brick 3 lower fracture face
+    yaw: 19.65382
+  - min: 0.000759, 0.072704, 0.004000
+    max: 0.065070, 0.132672, 0.102400
+    color: '#815641'
+    label: brick 4 fractured section 1
+    yaw: -90.0
+  - min: -0.046775, -0.050801, 0.004000
+    max: 0.112604, 0.032487, 0.124000
+    color: '#815641'
+    label: brick 4 fractured section 2
+    yaw: -90.0
+  - min: 0.004953, -0.150955, 0.004000
+    max: 0.060875, -0.082659, 0.124000
+    color: '#815641'
+    label: brick 4 fractured section 3
+    yaw: -90.0
+  - min: -0.091346, -0.010293, 0.006000
+    max: 0.079217, 0.000368, 0.054000
+    color: '#4E3329'
+    label: brick 4 lower fracture face
+    yaw: -90.0
+  - min: 0.165434, 0.047799, 0.004000
+    max: 0.207779, 0.103769, 0.077800
+    color: '#4E3329'
+    label: brick 5 fractured section 1
+    yaw: 55.00798
+  - min: 0.176368, 0.097246, 0.004000
+    max: 0.281308, 0.174982, 0.094000
+    color: '#4E3329'
+    label: brick 5 fractured section 2
+    yaw: 55.00798
+  - min: 0.251075, 0.162310, 0.004000
+    max: 0.287896, 0.226053, 0.094000
+    color: '#4E3329'
+    label: brick 5 fractured section 3
+    yaw: 55.00798
+  - min: 0.200760, 0.107761, 0.006000
+    max: 0.313065, 0.118421, 0.054000
+    color: '#3E271D'
+    label: brick 5 lower fracture face
+    yaw: 55.00798
+  - min: -0.147498, -0.203977, 0.004000
+    max: -0.095344, -0.124020, 0.086000
+    color: '#70442B'
+    label: brick 6 fractured section 1
+    yaw: 13.3925
+  - min: -0.097810, -0.198515, 0.004000
+    max: 0.031442, -0.087463, 0.104000
+    color: '#70442B'
+    label: brick 6 fractured section 2
+    yaw: 13.3925
+  - min: 0.029068, -0.168299, 0.004000
+    max: 0.074420, -0.077237, 0.104000
+    color: '#70442B'
+    label: brick 6 fractured section 3
+    yaw: 13.3925
+  - min: -0.093411, -0.200531, 0.006000
+    max: 0.044912, -0.189870, 0.054000
+    color: '#4E3329'
+    label: brick 6 lower fracture face
+    yaw: 13.3925
+  - min: 0.132537, -0.200271, 0.004000
+    max: 0.184923, -0.130309, 0.094200
+    color: '#4E3329'
+    label: brick 7 fractured section 1
+    yaw: -62.30053
+  - min: 0.136166, -0.294540, 0.004000
+    max: 0.265993, -0.197370, 0.114000
+    color: '#4E3329'
+    label: brick 7 fractured section 2
+    yaw: -62.30053
+  - min: 0.219064, -0.363434, 0.004000
+    max: 0.264616, -0.283755, 0.114000
+    color: '#4E3329'
+    label: brick 7 fractured section 3
+    yaw: -62.30053
+  - min: 0.089366, -0.269605, 0.006000
+    max: 0.228303, -0.258944, 0.054000
+    color: '#3E271D'
+    label: brick 7 lower fracture face
+    yaw: -62.30053
+  - min: -0.114629, -0.431788, 0.004000
+    max: -0.061977, -0.367823, 0.077800
+    color: '#4E3329'
+    label: brick 8 fractured section 1
+    yaw: 25.46335
+  - min: -0.070872, -0.404858, 0.004000
+    max: 0.059613, -0.316017, 0.094000
+    color: '#4E3329'
+    label: brick 8 fractured section 2
+    yaw: 25.46335
+  - min: 0.051051, -0.358970, 0.004000
+    max: 0.096836, -0.286120, 0.094000
+    color: '#4E3329'
+    label: brick 8 fractured section 3
+    yaw: 25.46335
+  - min: -0.060598, -0.404943, 0.006000
+    max: 0.079042, -0.394282, 0.054000
+    color: '#3E271D'
+    label: brick 8 lower fracture face
+    yaw: 25.46335
+- type: cmu3DModel
+  id: CMU3DDecorFloorBrickrubbleSouthEast
+  label: Brickrubble / SouthEast
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorBrickrubble
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: brickrubble
+  referenceDirection: 4
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: -45
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.114559, 0.353263, 0.004000
+    max: -0.078542, 0.425880, 0.094200
+    color: '#70442B'
+    label: brick 1 fractured section 1
+  - min: -0.078542, 0.339142, 0.004000
+    max: 0.010717, 0.440000, 0.114000
+    color: '#70442B'
+    label: brick 1 fractured section 2
+  - min: 0.010717, 0.348220, 0.004000
+    max: 0.042036, 0.430923, 0.114000
+    color: '#70442B'
+    label: brick 1 fractured section 3
+  - min: -0.084023, 0.336595, 0.006000
+    max: 0.011499, 0.346786, 0.054000
+    color: '#4E3329'
+    label: brick 1 lower fracture face
+  - min: -0.118609, 0.161965, 0.004000
+    max: -0.062646, 0.228850, 0.102400
+    color: '#4E3329'
+    label: brick 2 fractured section 1
+    yaw: -105.64225
+  - min: -0.186216, 0.055236, 0.004000
+    max: -0.047524, 0.148132, 0.124000
+    color: '#4E3329'
+    label: brick 2 fractured section 2
+    yaw: -105.64225
+  - min: -0.166461, -0.026612, 0.004000
+    max: -0.117796, 0.049562, 0.124000
+    color: '#4E3329'
+    label: brick 2 fractured section 3
+    yaw: -105.64225
+  - min: -0.232373, 0.111939, 0.006000
+    max: -0.083947, 0.122131, 0.054000
+    color: '#4E3329'
+    label: brick 2 lower fracture face
+    yaw: -105.64225
+  - min: 0.046114, 0.166284, 0.004000
+    max: 0.088846, 0.235080, 0.086000
+    color: '#3E271D'
+    label: brick 3 fractured section 1
+    yaw: -15.9454
+  - min: 0.085987, 0.132491, 0.004000
+    max: 0.191888, 0.228040, 0.104000
+    color: '#3E271D'
+    label: brick 3 fractured section 2
+    yaw: -15.9454
+  - min: 0.189136, 0.121440, 0.004000
+    max: 0.226295, 0.199790, 0.104000
+    color: '#3E271D'
+    label: brick 3 fractured section 3
+    yaw: -15.9454
+  - min: 0.067167, 0.132449, 0.006000
+    max: 0.180500, 0.142641, 0.054000
+    color: '#281919'
+    label: brick 3 lower fracture face
+    yaw: -15.9454
+  - min: 0.019264, -0.021231, 0.004000
+    max: 0.065379, 0.036099, 0.069600
+    color: '#4E3329'
+    label: brick 4 fractured section 1
+    yaw: -109.29005
+  - min: -0.041314, -0.108075, 0.004000
+    max: 0.072970, -0.028451, 0.084000
+    color: '#4E3329'
+    label: brick 4 fractured section 2
+    yaw: -109.29005
+  - min: -0.029723, -0.173768, 0.004000
+    max: 0.010377, -0.108476, 0.084000
+    color: '#4E3329'
+    label: brick 4 fractured section 3
+    yaw: -109.29005
+  - min: -0.079504, -0.058211, 0.006000
+    max: 0.042801, -0.048019, 0.054000
+    color: '#281919'
+    label: brick 4 lower fracture face
+    yaw: -109.29005
+  - min: 0.239122, -0.050726, 0.004000
+    max: 0.268653, 0.000870, 0.061400
+    color: '#3E271D'
+    label: brick 5 fractured section 1
+    yaw: -55.00798
+  - min: 0.246747, -0.102833, 0.004000
+    max: 0.319933, -0.031171, 0.074000
+    color: '#3E271D'
+    label: brick 5 fractured section 2
+    yaw: -55.00798
+  - min: 0.298848, -0.136881, 0.004000
+    max: 0.324528, -0.078118, 0.074000
+    color: '#3E271D'
+    label: brick 5 fractured section 3
+    yaw: -55.00798
+  - min: 0.215808, -0.089608, 0.006000
+    max: 0.294130, -0.079416, 0.054000
+    color: '#281919'
+    label: brick 5 lower fracture face
+    yaw: -55.00798
+  - min: -0.325405, -0.213207, 0.004000
+    max: -0.278630, -0.144411, 0.102400
+    color: '#815641'
+    label: brick 6 fractured section 1
+    yaw: -46.97493
+  - min: -0.304472, -0.286053, 0.004000
+    max: -0.188551, -0.190504, 0.124000
+    color: '#815641'
+    label: brick 6 fractured section 2
+    yaw: -46.97493
+  - min: -0.213425, -0.334694, 0.004000
+    max: -0.172751, -0.256343, 0.124000
+    color: '#815641'
+    label: brick 6 fractured section 3
+    yaw: -46.97493
+  - min: -0.343685, -0.272003, 0.006000
+    max: -0.219629, -0.261811, 0.054000
+    color: '#3E271D'
+    label: brick 6 lower fracture face
+    yaw: -46.97493
+  - min: -0.217180, -0.361060, 0.004000
+    max: -0.181179, -0.297998, 0.086000
+    color: '#4E3329'
+    label: brick 7 fractured section 1
+    yaw: -19.65382
+  - min: -0.184827, -0.394381, 0.004000
+    max: -0.095606, -0.306794, 0.104000
+    color: '#4E3329'
+    label: brick 7 fractured section 2
+    yaw: -19.65382
+  - min: -0.099117, -0.406767, 0.004000
+    max: -0.067812, -0.334945, 0.104000
+    color: '#4E3329'
+    label: brick 7 fractured section 3
+    yaw: -19.65382
+  - min: -0.204040, -0.393736, 0.006000
+    max: -0.108559, -0.383544, 0.054000
+    color: '#3E271D'
+    label: brick 7 lower fracture face
+    yaw: -19.65382
+  - min: -0.027895, -0.435216, 0.004000
+    max: 0.000935, -0.381709, 0.069600
+    color: '#815641'
+    label: brick 8 fractured section 1
+    yaw: 25.46335
+  - min: -0.003935, -0.424064, 0.004000
+    max: 0.067514, -0.349748, 0.084000
+    color: '#815641'
+    label: brick 8 fractured section 2
+    yaw: 25.46335
+  - min: 0.062826, -0.396626, 0.004000
+    max: 0.087896, -0.335687, 0.084000
+    color: '#815641'
+    label: brick 8 fractured section 3
+    yaw: 25.46335
+  - min: 0.006740, -0.424058, 0.006000
+    max: 0.083204, -0.413866, 0.054000
+    color: '#3E271D'
+    label: brick 8 lower fracture face
+    yaw: 25.46335
+- type: cmu3DModel
+  id: CMU3DDecorFloorBrickrubbleSouthWest
+  label: Brickrubble / SouthWest
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorBrickrubble
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: brickrubble
+  referenceDirection: 5
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: 45
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.313136, 0.248935, 0.004000
+    max: -0.259167, 0.327685, 0.077800
+    color: '#70442B'
+    label: brick 1 fractured section 1
+    yaw: -29.74488
+  - min: -0.271534, 0.187055, 0.004000
+    max: -0.137784, 0.296430, 0.094000
+    color: '#70442B'
+    label: brick 1 fractured section 2
+    yaw: -29.74488
+  - min: -0.149687, 0.152078, 0.004000
+    max: -0.102757, 0.241765, 0.094000
+    color: '#70442B'
+    label: brick 1 fractured section 3
+    yaw: -29.74488
+  - min: -0.304927, 0.192611, 0.006000
+    max: -0.161791, 0.204611, 0.054000
+    color: '#4E3329'
+    label: brick 1 lower fracture face
+    yaw: -29.74488
+  - min: 0.122940, 0.203758, 0.004000
+    max: 0.171927, 0.289258, 0.094200
+    color: '#815641'
+    label: brick 2 fractured section 1
+    yaw: -35.53768
+  - min: 0.156058, 0.137614, 0.004000
+    max: 0.277461, 0.256364, 0.114000
+    color: '#815641'
+    label: brick 2 fractured section 2
+    yaw: -35.53768
+  - min: 0.262187, 0.100640, 0.004000
+    max: 0.304785, 0.198015, 0.114000
+    color: '#815641'
+    label: brick 2 fractured section 3
+    yaw: -35.53768
+  - min: 0.116431, 0.146972, 0.006000
+    max: 0.246354, 0.158972, 0.054000
+    color: '#3E271D'
+    label: brick 2 lower fracture face
+    yaw: -35.53768
+  - min: -0.092604, -0.018393, 0.004000
+    max: -0.050216, 0.055857, 0.086000
+    color: '#70442B'
+    label: brick 3 fractured section 1
+    yaw: 19.65382
+  - min: -0.054511, -0.008037, 0.004000
+    max: 0.050538, 0.095088, 0.104000
+    color: '#70442B'
+    label: brick 3 fractured section 2
+    yaw: 19.65382
+  - min: 0.046404, 0.025109, 0.004000
+    max: 0.083263, 0.109671, 0.104000
+    color: '#70442B'
+    label: brick 3 fractured section 3
+    yaw: 19.65382
+  - min: -0.044467, -0.009137, 0.006000
+    max: 0.067953, 0.002863, 0.054000
+    color: '#815641'
+    label: brick 3 lower fracture face
+    yaw: 19.65382
+  - min: 0.129785, -0.100511, 0.004000
+    max: 0.168597, -0.037511, 0.069600
+    color: '#70442B'
+    label: brick 4 fractured section 1
+  - min: 0.168597, -0.112761, 0.004000
+    max: 0.264785, -0.025261, 0.084000
+    color: '#70442B'
+    label: brick 4 fractured section 2
+  - min: 0.264785, -0.104886, 0.004000
+    max: 0.298535, -0.033136, 0.084000
+    color: '#70442B'
+    label: brick 4 fractured section 3
+  - min: 0.162691, -0.115761, 0.006000
+    max: 0.265629, -0.103761, 0.054000
+    color: '#3E271D'
+    label: brick 4 lower fracture face
+  - min: -0.250684, -0.242315, 0.004000
+    max: -0.194981, -0.163565, 0.077800
+    color: '#70442B'
+    label: brick 5 fractured section 1
+  - min: -0.194981, -0.257627, 0.004000
+    max: -0.056934, -0.148252, 0.094000
+    color: '#70442B'
+    label: brick 5 fractured section 2
+  - min: -0.056934, -0.247784, 0.004000
+    max: -0.008496, -0.158096, 0.094000
+    color: '#70442B'
+    label: brick 5 fractured section 3
+  - min: -0.203457, -0.260627, 0.006000
+    max: -0.055723, -0.248627, 0.054000
+    color: '#815641'
+    label: brick 5 lower fracture face
+  - min: 0.063970, -0.327508, 0.004000
+    max: 0.116861, -0.255508, 0.086000
+    color: '#4E3329'
+    label: brick 6 fractured section 1
+    yaw: 29.74488
+  - min: 0.104741, -0.295871, 0.004000
+    max: 0.235819, -0.195871, 0.104000
+    color: '#4E3329'
+    label: brick 6 fractured section 2
+    yaw: 29.74488
+  - min: 0.224154, -0.242946, 0.004000
+    max: 0.270146, -0.160946, 0.104000
+    color: '#4E3329'
+    label: brick 6 fractured section 3
+    yaw: 29.74488
+  - min: 0.120465, -0.294390, 0.006000
+    max: 0.260742, -0.282390, 0.054000
+    color: '#3E271D'
+    label: brick 6 lower fracture face
+    yaw: 29.74488
+- type: cmu3DModel
+  id: CMU3DDecorFloorBrickrubbleWest
+  label: Brickrubble / West
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorBrickrubble
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: brickrubble
+  referenceDirection: 3
+  sourceDirections: 8
+  directionalModels: *id001
+  yawOffset: 90
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry. The first West-frame brick uses 0.04 tiles less inferred ground depth to clear
+    the saved wreck tire; source X, piece scale and saved transforms are unchanged.
+  parts:
+  - min: -0.170466, 0.237354, 0.004000
+    max: -0.133644, 0.308522, 0.102400
+    color: '#70442B'
+    label: brick 1 fractured section 1
+    yaw: 43.60282
+  - min: -0.151310, 0.267680, 0.004000
+    max: -0.060053, 0.366526, 0.124000
+    color: '#70442B'
+    label: brick 1 fractured section 2
+    yaw: 43.60282
+  - min: -0.077057, 0.319086, 0.004000
+    max: -0.045037, 0.400138, 0.124000
+    color: '#70442B'
+    label: brick 1 fractured section 3
+    yaw: 43.60282
+  - min: -0.123935, 0.276387, 0.006000
+    max: -0.026275, 0.286645, 0.054000
+    color: '#70442B'
+    label: brick 1 lower fracture face
+    yaw: 43.60282
+  - min: 0.019475, 0.288431, 0.004000
+    max: 0.053270, 0.346135, 0.086000
+    color: '#4E3329'
+    label: brick 2 fractured section 1
+  - min: 0.053270, 0.277211, 0.004000
+    max: 0.137021, 0.357356, 0.104000
+    color: '#4E3329'
+    label: brick 2 fractured section 2
+  - min: 0.137021, 0.284424, 0.004000
+    max: 0.166408, 0.350142, 0.104000
+    color: '#4E3329'
+    label: brick 2 fractured section 3
+  - min: 0.048127, 0.274646, 0.006000
+    max: 0.137756, 0.284905, 0.054000
+    color: '#3E271D'
+    label: brick 2 lower fracture face
+  - min: -0.238251, 0.157218, 0.004000
+    max: -0.166362, 0.220692, 0.094200
+    color: '#815641'
+    label: brick 3 fractured section 1
+    yaw: -95.71059
+  - min: -0.303827, 0.020472, 0.004000
+    max: -0.125667, 0.108631, 0.114000
+    color: '#815641'
+    label: brick 3 fractured section 2
+    yaw: -95.71059
+  - min: -0.257976, -0.091333, 0.004000
+    max: -0.195464, -0.019042, 0.114000
+    color: '#815641'
+    label: brick 3 fractured section 3
+    yaw: -95.71059
+  - min: -0.350920, 0.068218, 0.006000
+    max: -0.160258, 0.078476, 0.054000
+    color: '#70442B'
+    label: brick 3 lower fracture face
+    yaw: -95.71059
+  - min: -0.090798, 0.012128, 0.004000
+    max: -0.047287, 0.083297, 0.094200
+    color: '#70442B'
+    label: brick 4 fractured section 1
+    yaw: 55.00798
+  - min: -0.079564, 0.060283, 0.004000
+    max: 0.028267, 0.159128, 0.114000
+    color: '#70442B'
+    label: brick 4 fractured section 2
+    yaw: 55.00798
+  - min: -0.002799, 0.128846, 0.004000
+    max: 0.035037, 0.209899, 0.114000
+    color: '#70442B'
+    label: brick 4 fractured section 3
+    yaw: 55.00798
+  - min: -0.046587, 0.075380, 0.006000
+    max: 0.068812, 0.085638, 0.054000
+    color: '#815641'
+    label: brick 4 lower fracture face
+    yaw: 55.00798
+  - min: 0.074909, 0.138659, 0.004000
+    max: 0.095492, 0.190593, 0.069600
+    color: '#70442B'
+    label: brick 5 fractured section 1
+  - min: 0.095492, 0.128562, 0.004000
+    max: 0.146505, 0.200692, 0.084000
+    color: '#70442B'
+    label: brick 5 fractured section 2
+  - min: 0.146505, 0.135053, 0.004000
+    max: 0.164404, 0.194200, 0.084000
+    color: '#70442B'
+    label: brick 5 fractured section 3
+  - min: 0.092360, 0.125997, 0.006000
+    max: 0.146952, 0.136255, 0.054000
+    color: '#3E271D'
+    label: brick 5 lower fracture face
+  - min: -0.300435, -0.206741, 0.004000
+    max: -0.273093, -0.150960, 0.069600
+    color: '#70442B'
+    label: brick 6 fractured section 1
+  - min: -0.273093, -0.217587, 0.004000
+    max: -0.205330, -0.140114, 0.084000
+    color: '#70442B'
+    label: brick 6 fractured section 2
+  - min: -0.205330, -0.210615, 0.004000
+    max: -0.181554, -0.147087, 0.084000
+    color: '#70442B'
+    label: brick 6 fractured section 3
+  - min: -0.277254, -0.220152, 0.006000
+    max: -0.204736, -0.209894, 0.054000
+    color: '#281919'
+    label: brick 6 lower fracture face
+  - min: 0.120675, -0.137814, 0.004000
+    max: 0.163168, -0.060875, 0.086000
+    color: '#815641'
+    label: brick 7 fractured section 1
+    yaw: -35.53768
+  - min: 0.149403, -0.195727, 0.004000
+    max: 0.254710, -0.088868, 0.104000
+    color: '#815641'
+    label: brick 7 fractured section 2
+    yaw: -35.53768
+  - min: 0.241461, -0.227453, 0.004000
+    max: 0.278411, -0.139828, 0.104000
+    color: '#815641'
+    label: brick 7 fractured section 3
+    yaw: -35.53768
+  - min: 0.113888, -0.187207, 0.006000
+    max: 0.226585, -0.176948, 0.054000
+    color: '#3E271D'
+    label: brick 7 lower fracture face
+    yaw: -35.53768
+  - min: -0.085023, -0.435384, 0.004000
+    max: -0.056312, -0.383450, 0.069600
+    color: '#815641'
+    label: brick 8 fractured section 1
+    yaw: 25.46335
+  - min: -0.061162, -0.424014, 0.004000
+    max: 0.009992, -0.351883, 0.084000
+    color: '#815641'
+    label: brick 8 fractured section 2
+    yaw: 25.46335
+  - min: 0.005323, -0.396859, 0.004000
+    max: 0.030290, -0.337712, 0.084000
+    color: '#815641'
+    label: brick 8 fractured section 3
+    yaw: 25.46335
+  - min: -0.050946, -0.424129, 0.006000
+    max: 0.025201, -0.413871, 0.054000
+    color: '#281919'
+    label: brick 8 lower fracture face
+    yaw: 25.46335
+- type: cmu3DModel
+  id: CMU3DDecorFloorCardboardEast
+  label: Cardboard / East
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorCardboard
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: cardboard
+  referenceDirection: 2
+  sourceDirections: 8
+  directionalModels: &id002
+  - CMU3DDecorFloorCardboardSouth
+  - CMU3DDecorFloorCardboardNorth
+  - CMU3DDecorFloorCardboardEast
+  - CMU3DDecorFloorCardboardWest
+  - CMU3DDecorFloorCardboardSouthEast
+  - CMU3DDecorFloorCardboardSouthWest
+  - ''
+  - ''
+  yawOffset: -90
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry. Cartons use an existing authored support surface when present, otherwise retain
+    their floor datum.
+  parts:
+  - min: -0.386011, -0.192877, 0.004000
+    max: -0.030268, 0.118398, 0.028000
+    color: '#52402D'
+    label: carton 1 recessed bottom
+    yaw: -30
+  - min: -0.363492, -0.108833, 0.004000
+    max: -0.343926, 0.202442, 0.224000
+    color: '#52402D'
+    label: carton 1 left wall
+    yaw: -30
+  - min: -0.072354, -0.276922, 0.004000
+    max: -0.052788, 0.034353, 0.224000
+    color: '#52402D'
+    label: carton 1 right wall
+    yaw: -30
+  - min: -0.439373, -0.173336, 0.004000
+    max: -0.122761, -0.153771, 0.224000
+    color: '#52402D'
+    label: carton 1 front wall
+    yaw: -30
+  - min: -0.293518, 0.079292, 0.004000
+    max: 0.023093, 0.098858, 0.224000
+    color: '#52402D'
+    label: carton 1 back wall
+    yaw: -30
+  - min: -0.354295, -0.350036, 0.200509
+    max: -0.260913, -0.068999, 0.212509
+    color: '#6C503B'
+    label: carton 1 folded front flap
+    yaw: 240
+    pitch: -22
+  - min: -0.165268, -0.018541, 0.258277
+    max: -0.069217, 0.258939, 0.270277
+    color: '#6C503B'
+    label: carton 1 raised back flap
+    yaw: 60
+    pitch: 57
+  - min: -0.065987, -0.245652, 0.194535
+    max: 0.015834, -0.040210, 0.206535
+    color: '#6C503B'
+    label: carton 1 side flap
+    yaw: -30
+    pitch: -35
+  - min: -0.010258, -0.082660, 0.004000
+    max: 0.372166, 0.246402, 0.028000
+    color: '#52402D'
+    label: carton 2 recessed bottom
+    yaw: -16
+  - min: -0.003229, -0.032652, 0.004000
+    max: 0.016337, 0.296411, 0.264000
+    color: '#52402D'
+    label: carton 2 left wall
+    yaw: -16
+  - min: 0.345572, -0.132669, 0.004000
+    max: 0.365137, 0.196394, 0.264000
+    color: '#52402D'
+    label: carton 2 right wall
+    yaw: -16
+  - min: -0.033346, -0.076666, 0.004000
+    max: 0.309946, -0.057100, 0.264000
+    color: '#52402D'
+    label: carton 2 front wall
+    yaw: -16
+  - min: 0.051963, 0.220842, 0.004000
+    max: 0.395255, 0.240408, 0.264000
+    color: '#52402D'
+    label: carton 2 back wall
+    yaw: -16
+  - min: 0.076979, -0.268958, 0.240509
+    max: 0.170362, 0.033157, 0.252509
+    color: '#7F6949'
+    label: carton 2 folded front flap
+    yaw: 254
+    pitch: -22
+  - min: 0.185489, 0.116026, 0.298277
+    max: 0.281540, 0.414317, 0.310277
+    color: '#7F6949'
+    label: carton 2 raised back flap
+    yaw: 74
+    pitch: 57
+  - min: 0.356062, -0.088662, 0.234535
+    max: 0.437883, 0.128519, 0.246535
+    color: '#7F6949'
+    label: carton 2 side flap
+    yaw: -16
+    pitch: -35
+  - label: carton 1 front fold crease 1
+    color: '#52402D'
+    min: -0.351101, -0.176446, 0.072000
+    max: -0.223033, -0.171446, 0.079000
+    yaw: -30
+  - label: carton 1 front fold crease 2
+    color: '#52402D'
+    min: -0.374224, -0.176446, 0.149000
+    max: -0.199910, -0.171446, 0.156000
+    yaw: -30
+  - label: carton 2 front fold crease 1
+    color: '#52402D'
+    min: 0.066156, -0.080918, 0.085000
+    max: 0.203829, -0.075918, 0.092000
+    yaw: -16
+  - label: carton 2 front fold crease 2
+    color: '#52402D'
+    min: 0.041299, -0.080918, 0.176000
+    max: 0.228686, -0.075918, 0.183000
+    yaw: -16
+  placement: surface
+- type: cmu3DModel
+  id: CMU3DDecorFloorCardboardNorth
+  label: Cardboard / North
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorCardboard
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: cardboard
+  referenceDirection: 1
+  sourceDirections: 8
+  directionalModels: *id002
+  yawOffset: -180
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry. Cartons use an existing authored support surface when present, otherwise retain
+    their floor datum.
+  parts:
+  - min: -0.404473, 0.054074, 0.004000
+    max: -0.044473, 0.394074, 0.028000
+    color: '#3A3127'
+    label: carton 1 recessed bottom
+    yaw: -12
+  - min: -0.400780, 0.089211, 0.004000
+    max: -0.378780, 0.429211, 0.234000
+    color: '#6C503B'
+    label: carton 1 left wall
+    yaw: -12
+  - min: -0.070166, 0.018937, 0.004000
+    max: -0.048166, 0.358937, 0.234000
+    color: '#6C503B'
+    label: carton 1 right wall
+    yaw: -12
+  - min: -0.415531, 0.057548, 0.004000
+    max: -0.099531, 0.079548, 0.234000
+    color: '#6C503B'
+    label: carton 1 front wall
+    yaw: -12
+  - min: -0.349415, 0.368599, 0.004000
+    max: -0.033415, 0.390599, 0.234000
+    color: '#6C503B'
+    label: carton 1 back wall
+    yaw: -12
+  - min: -0.399506, 0.072786, 0.223000
+    max: -0.225506, 0.412786, 0.245000
+    color: '#7F6949'
+    label: carton 1 closed lid half -1
+    yaw: -12
+  - min: -0.223440, 0.035362, 0.223000
+    max: -0.049440, 0.375362, 0.245000
+    color: '#7F6949'
+    label: carton 1 closed lid half 1
+    yaw: -12
+  - min: -0.233473, 0.067674, 0.242000
+    max: -0.215473, 0.380474, 0.250000
+    color: '#6C503B'
+    label: carton 1 lid fold
+    yaw: -12
+  - min: -0.377663, 0.173840, 0.248000
+    max: -0.089663, 0.187840, 0.252000
+    color: '#3A3127'
+    label: carton 1 short lid crease
+    yaw: -12
+  - min: -0.054473, -0.318069, 0.004000
+    max: 0.355527, 0.051931, 0.028000
+    color: '#52402D'
+    label: carton 2 recessed bottom
+    yaw: -24
+  - min: -0.037701, -0.239162, 0.004000
+    max: -0.015701, 0.130838, 0.254000
+    color: '#52402D'
+    label: carton 2 left wall
+    yaw: -24
+  - min: 0.316755, -0.396976, 0.004000
+    max: 0.338755, -0.026976, 0.254000
+    color: '#52402D'
+    label: carton 2 right wall
+    yaw: -24
+  - min: -0.103245, -0.303026, 0.004000
+    max: 0.262755, -0.281026, 0.254000
+    color: '#52402D'
+    label: carton 2 front wall
+    yaw: -24
+  - min: 0.038299, 0.014888, 0.004000
+    max: 0.404299, 0.036888, 0.254000
+    color: '#52402D'
+    label: carton 2 back wall
+    yaw: -24
+  - min: 0.002982, -0.508494, 0.228333
+    max: 0.107982, -0.184594, 0.240333
+    color: '#7F6949'
+    label: carton 2 folded front flap
+    yaw: 246
+    pitch: -22
+  - min: 0.183736, -0.097095, 0.293288
+    max: 0.291736, 0.222705, 0.305288
+    color: '#7F6949'
+    label: carton 2 raised back flap
+    yaw: 66
+    pitch: 57
+  - min: 0.326227, -0.353876, 0.221615
+    max: 0.418227, -0.109676, 0.233615
+    color: '#7F6949'
+    label: carton 2 side flap
+    yaw: -24
+    pitch: -35
+  - label: carton 1 front fold crease 1
+    color: '#3A3127'
+    min: -0.324826, 0.054310, 0.075250
+    max: -0.195226, 0.059310, 0.082250
+    yaw: -12
+  - label: carton 1 front fold crease 2
+    color: '#3A3127'
+    min: -0.348226, 0.054310, 0.155750
+    max: -0.171826, 0.059310, 0.162750
+    yaw: -12
+  - label: carton 2 front fold crease 1
+    color: '#52402D'
+    min: 0.001074, -0.305489, 0.081750
+    max: 0.148674, -0.300489, 0.088750
+    yaw: -24
+  - label: carton 2 front fold crease 2
+    color: '#52402D'
+    min: -0.025576, -0.305489, 0.169250
+    max: 0.175324, -0.300489, 0.176250
+    yaw: -24
+  placement: surface
+- type: cmu3DModel
+  id: CMU3DDecorFloorCardboardSouth
+  label: Cardboard / South
+  status: draft
+  sourcePrototypes:
+  - DecorFloorCardboard
+  referencePrototype: DecorFloorCardboard
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: cardboard
+  referenceDirection: 0
+  sourceDirections: 8
+  directionalModels: *id002
+  yawOffset: 0
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry. Cartons use an existing authored support surface when present, otherwise retain
+    their floor datum.
+  parts:
+  - min: -0.031174, 0.086408, 0.004000
+    max: 0.282809, 0.371184, 0.028000
+    color: '#3A3127'
+    label: carton 1 recessed bottom
+    yaw: -43
+  - min: 0.008844, 0.187999, 0.004000
+    max: 0.024908, 0.472774, 0.274000
+    color: '#52402D'
+    label: carton 1 left wall
+    yaw: -43
+  - min: 0.226728, -0.015182, 0.004000
+    max: 0.242792, 0.269593, 0.274000
+    color: '#52402D'
+    label: carton 1 right wall
+    yaw: -43
+  - min: -0.106740, 0.122502, 0.004000
+    max: 0.175115, 0.138567, 0.274000
+    color: '#52402D'
+    label: carton 1 front wall
+    yaw: -43
+  - min: 0.076521, 0.319025, 0.004000
+    max: 0.358376, 0.335089, 0.274000
+    color: '#52402D'
+    label: carton 1 back wall
+    yaw: -43
+  - min: -0.033867, -0.025358, 0.253639
+    max: 0.042804, 0.222689, 0.265639
+    color: '#7F6949'
+    label: carton 1 folded front flap
+    yaw: 227
+    pitch: -22
+  - min: 0.198141, 0.226184, 0.301069
+    max: 0.277002, 0.471091, 0.313069
+    color: '#7F6949'
+    label: carton 1 raised back flap
+    yaw: 47
+    pitch: 57
+  - min: 0.227168, 0.008987, 0.248734
+    max: 0.294346, 0.196939, 0.260734
+    color: '#7F6949'
+    label: carton 1 side flap
+    yaw: -43
+    pitch: -35
+  - min: -0.313211, -0.293814, 0.004000
+    max: -0.028436, -0.030944, 0.028000
+    color: '#3A3127'
+    label: carton 2 recessed bottom
+    yaw: -34
+  - min: -0.290241, -0.218683, 0.004000
+    max: -0.274177, 0.044186, 0.234000
+    color: '#6C503B'
+    label: carton 2 left wall
+    yaw: -34
+  - min: -0.067470, -0.368945, 0.004000
+    max: -0.051405, -0.106075, 0.234000
+    color: '#6C503B'
+    label: carton 2 right wall
+    yaw: -34
+  - min: -0.366153, -0.272717, 0.004000
+    max: -0.113506, -0.256653, 0.234000
+    color: '#6C503B'
+    label: carton 2 front wall
+    yaw: -34
+  - min: -0.228141, -0.068106, 0.004000
+    max: 0.024506, -0.052042, 0.234000
+    color: '#6C503B'
+    label: carton 2 back wall
+    yaw: -34
+  - min: -0.302532, -0.413297, 0.213639
+    max: -0.225862, -0.188324, 0.225639
+    color: '#7F6949'
+    label: carton 2 folded front flap
+    yaw: 236
+    pitch: -22
+  - min: -0.124748, -0.146673, 0.261069
+    max: -0.045887, 0.075452, 0.273069
+    color: '#7F6949'
+    label: carton 2 raised back flap
+    yaw: 56
+    pitch: 57
+  - min: -0.063557, -0.344134, 0.208734
+    max: 0.003621, -0.170640, 0.220734
+    color: '#7F6949'
+    label: carton 2 side flap
+    yaw: -34
+    pitch: -35
+  - min: 0.092959, -0.416904, 0.004000
+    max: 0.341225, -0.168638, 0.028000
+    color: '#52402D'
+    label: carton 3 recessed bottom
+    yaw: -12
+  - min: 0.095496, -0.392765, 0.004000
+    max: 0.111561, -0.144499, 0.264000
+    color: '#6C503B'
+    label: carton 3 left wall
+    yaw: -12
+  - min: 0.322623, -0.441043, 0.004000
+    max: 0.338687, -0.192777, 0.264000
+    color: '#6C503B'
+    label: carton 3 right wall
+    yaw: -12
+  - min: 0.084885, -0.414366, 0.004000
+    max: 0.301022, -0.398302, 0.264000
+    color: '#6C503B'
+    label: carton 3 front wall
+    yaw: -12
+  - min: 0.133162, -0.187239, 0.004000
+    max: 0.349299, -0.171175, 0.264000
+    color: '#6C503B'
+    label: carton 3 back wall
+    yaw: -12
+  - min: 0.096506, -0.403999, 0.253000
+    max: 0.216257, -0.155733, 0.275000
+    color: '#7F6949'
+    label: carton 3 closed lid half -1
+    yaw: -12
+  - min: 0.217927, -0.429808, 0.253000
+    max: 0.337678, -0.181542, 0.275000
+    color: '#7F6949'
+    label: carton 3 closed lid half 1
+    yaw: -12
+  - min: 0.210520, -0.406973, 0.272000
+    max: 0.223664, -0.178569, 0.280000
+    color: '#6C503B'
+    label: carton 3 lid fold
+    yaw: -12
+  - min: 0.111075, -0.329452, 0.278000
+    max: 0.309688, -0.319229, 0.282000
+    color: '#52402D'
+    label: carton 3 short lid crease
+    yaw: -12
+  - label: carton 1 front fold crease 1
+    color: '#3A3127'
+    min: -0.030513, 0.119258, 0.088250
+    max: 0.082520, 0.124258, 0.095250
+    yaw: -43
+  - label: carton 1 front fold crease 2
+    color: '#3A3127'
+    min: -0.050922, 0.119258, 0.182750
+    max: 0.102929, 0.124258, 0.189750
+    yaw: -43
+  - label: carton 2 front fold crease 1
+    color: '#3A3127'
+    min: -0.297799, -0.277133, 0.075250
+    max: -0.195280, -0.272133, 0.082250
+    yaw: -34
+  - label: carton 2 front fold crease 2
+    color: '#3A3127'
+    min: -0.316310, -0.277133, 0.155750
+    max: -0.176770, -0.272133, 0.162750
+    yaw: -34
+  - label: carton 3 front fold crease 1
+    color: '#52402D'
+    min: 0.145771, -0.420572, 0.085000
+    max: 0.235146, -0.415572, 0.092000
+    yaw: -12
+  - label: carton 3 front fold crease 2
+    color: '#52402D'
+    min: 0.129633, -0.420572, 0.176000
+    max: 0.251284, -0.415572, 0.183000
+    yaw: -12
+  placement: surface
+- type: cmu3DModel
+  id: CMU3DDecorFloorCardboardSouthEast
+  label: Cardboard / SouthEast
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorCardboard
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: cardboard
+  referenceDirection: 4
+  sourceDirections: 8
+  directionalModels: *id002
+  yawOffset: -45
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry. Cartons use an existing authored support surface when present, otherwise retain
+    their floor datum.
+  parts:
+  - min: -0.106782, -0.049010, 0.004000
+    max: 0.323218, 0.320990, 0.028000
+    color: '#52402D'
+    label: carton 1 recessed bottom
+    yaw: -33
+  - min: -0.073871, 0.062096, 0.004000
+    max: -0.051871, 0.432096, 0.264000
+    color: '#6C503B'
+    label: carton 1 left wall
+    yaw: -33
+  - min: 0.268307, -0.160117, 0.004000
+    max: 0.290307, 0.209883, 0.264000
+    color: '#6C503B'
+    label: carton 1 right wall
+    yaw: -33
+  - min: -0.179549, -0.020939, 0.004000
+    max: 0.206451, 0.001061, 0.264000
+    color: '#6C503B'
+    label: carton 1 front wall
+    yaw: -33
+  - min: 0.009985, 0.270918, 0.004000
+    max: 0.395985, 0.292918, 0.264000
+    color: '#6C503B'
+    label: carton 1 back wall
+    yaw: -33
+  - min: -0.071552, -0.229838, 0.238333
+    max: 0.033448, 0.109862, 0.250333
+    color: '#7F6949'
+    label: carton 1 folded front flap
+    yaw: 237
+    pitch: -22
+  - min: 0.170994, 0.148110, 0.303288
+    max: 0.278994, 0.483510, 0.315288
+    color: '#7F6949'
+    label: carton 1 raised back flap
+    yaw: 57
+    pitch: 57
+  - min: 0.274134, -0.123730, 0.231615
+    max: 0.366134, 0.120470, 0.243615
+    color: '#7F6949'
+    label: carton 1 side flap
+    yaw: -33
+    pitch: -35
+  - min: -0.374282, -0.381153, 0.004000
+    max: -0.034282, -0.061153, 0.028000
+    color: '#52402D'
+    label: carton 2 recessed bottom
+    yaw: -10
+  - min: -0.371866, -0.353543, 0.004000
+    max: -0.349866, -0.033543, 0.234000
+    color: '#52402D'
+    label: carton 2 left wall
+    yaw: -10
+  - min: -0.058698, -0.408763, 0.004000
+    max: -0.036698, -0.088763, 0.234000
+    color: '#52402D'
+    label: carton 2 right wall
+    yaw: -10
+  - min: -0.378156, -0.378889, 0.004000
+    max: -0.082156, -0.356889, 0.234000
+    color: '#52402D'
+    label: carton 2 front wall
+    yaw: -10
+  - min: -0.326408, -0.085417, 0.004000
+    max: -0.030408, -0.063417, 0.234000
+    color: '#52402D'
+    label: carton 2 back wall
+    yaw: -10
+  - min: -0.369991, -0.366393, 0.223000
+    max: -0.205991, -0.046393, 0.245000
+    color: '#7F6949'
+    label: carton 2 closed lid half -1
+    yaw: -10
+  - min: -0.202573, -0.395913, 0.223000
+    max: -0.038573, -0.075913, 0.245000
+    color: '#7F6949'
+    label: carton 2 closed lid half 1
+    yaw: -10
+  - min: -0.213282, -0.368353, 0.242000
+    max: -0.195282, -0.073953, 0.250000
+    color: '#52402D'
+    label: carton 2 lid fold
+    yaw: -10
+  - min: -0.347506, -0.269121, 0.248000
+    max: -0.075506, -0.255121, 0.252000
+    color: '#52402D'
+    label: carton 2 short lid crease
+    yaw: -10
+  - label: carton 1 front fold crease 1
+    color: '#52402D'
+    min: -0.070485, -0.022503, 0.085000
+    max: 0.084315, -0.017503, 0.092000
+    yaw: -33
+  - label: carton 1 front fold crease 2
+    color: '#52402D'
+    min: -0.098435, -0.022503, 0.176000
+    max: 0.112265, -0.017503, 0.183000
+    yaw: -33
+  - label: carton 2 front fold crease 1
+    color: '#52402D'
+    min: -0.293440, -0.382207, 0.075250
+    max: -0.171040, -0.377207, 0.082250
+    yaw: -10
+  - label: carton 2 front fold crease 2
+    color: '#52402D'
+    min: -0.315540, -0.382207, 0.155750
+    max: -0.148940, -0.377207, 0.162750
+    yaw: -10
+  placement: surface
+- type: cmu3DModel
+  id: CMU3DDecorFloorCardboardSouthWest
+  label: Cardboard / SouthWest
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorCardboard
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: cardboard
+  referenceDirection: 5
+  sourceDirections: 8
+  directionalModels: *id002
+  yawOffset: 45
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry. Cartons use an existing authored support surface when present, otherwise retain
+    their floor datum.
+  parts:
+  - min: -0.281987, 0.001949, 0.004000
+    max: 0.135314, 0.359635, 0.028000
+    color: '#3A3127'
+    label: carton 1 recessed bottom
+    yaw: -30
+  - min: -0.255497, 0.100810, 0.004000
+    max: -0.233638, 0.458496, 0.264000
+    color: '#52402D'
+    label: carton 1 left wall
+    yaw: -30
+  - min: 0.086966, -0.096911, 0.004000
+    max: 0.108824, 0.260775, 0.264000
+    color: '#52402D'
+    label: carton 1 right wall
+    yaw: -30
+  - min: -0.344085, 0.024445, 0.004000
+    max: 0.029498, 0.046303, 0.264000
+    color: '#52402D'
+    label: carton 1 front wall
+    yaw: -30
+  - min: -0.176171, 0.315280, 0.004000
+    max: 0.197412, 0.337139, 0.264000
+    color: '#52402D'
+    label: carton 1 back wall
+    yaw: -30
+  - min: -0.239103, -0.180809, 0.238460
+    max: -0.134778, 0.148858, 0.250460
+    color: '#6C503B'
+    label: carton 1 folded front flap
+    yaw: 240
+    pitch: -22
+  - min: -0.022957, 0.198234, 0.302997
+    max: 0.084349, 0.523728, 0.314997
+    color: '#6C503B'
+    label: carton 1 raised back flap
+    yaw: 60
+    pitch: 57
+  - min: 0.094079, -0.060289, 0.231785
+    max: 0.185487, 0.175784, 0.243785
+    color: '#6C503B'
+    label: carton 1 side flap
+    yaw: -30
+    pitch: -35
+  - min: -0.070853, -0.387319, 0.004000
+    max: 0.296769, -0.049504, 0.028000
+    color: '#2C231F'
+    label: carton 2 recessed bottom
+    yaw: -20
+  - min: -0.060427, -0.328190, 0.004000
+    max: -0.038568, 0.009624, 0.244000
+    color: '#6C503B'
+    label: carton 2 left wall
+    yaw: -20
+  - min: 0.264485, -0.446448, 0.004000
+    max: 0.286344, -0.108634, 0.244000
+    color: '#6C503B'
+    label: carton 2 right wall
+    yaw: -20
+  - min: -0.103025, -0.377791, 0.004000
+    max: 0.220879, -0.355933, 0.244000
+    color: '#6C503B'
+    label: carton 2 front wall
+    yaw: -20
+  - min: 0.005038, -0.080890, 0.004000
+    max: 0.328942, -0.059031, 0.244000
+    color: '#6C503B'
+    label: carton 2 back wall
+    yaw: -20
+  - min: -0.062330, -0.355885, 0.233000
+    max: 0.115520, -0.018070, 0.255000
+    color: '#6C503B'
+    label: carton 2 closed lid half -1
+    yaw: -20
+  - min: 0.110397, -0.418752, 0.233000
+    max: 0.288247, -0.080938, 0.255000
+    color: '#6C503B'
+    label: carton 2 closed lid half 1
+    yaw: -20
+  - min: 0.104016, -0.373806, 0.252000
+    max: 0.121901, -0.063017, 0.260000
+    color: '#6C503B'
+    label: carton 2 lid fold
+    yaw: -20
+  - min: -0.049110, -0.266634, 0.258000
+    max: 0.244987, -0.252724, 0.262000
+    color: '#2C231F'
+    label: carton 2 short lid crease
+    yaw: -20
+  - label: carton 1 front fold crease 1
+    color: '#3A3127'
+    min: -0.238408, 0.022482, 0.085000
+    max: -0.088179, 0.027482, 0.092000
+    yaw: -30
+  - label: carton 1 front fold crease 2
+    color: '#3A3127'
+    min: -0.265532, 0.022482, 0.176000
+    max: -0.061055, 0.027482, 0.183000
+    yaw: -30
+  - label: carton 2 front fold crease 1
+    color: '#2C231F'
+    min: -0.011349, -0.380638, 0.078500
+    max: 0.120995, -0.375638, 0.085500
+    yaw: -20
+  - label: carton 2 front fold crease 2
+    color: '#2C231F'
+    min: -0.035245, -0.380638, 0.162500
+    max: 0.144890, -0.375638, 0.169500
+    yaw: -20
+  placement: surface
+- type: cmu3DModel
+  id: CMU3DDecorFloorCardboardWest
+  label: Cardboard / West
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorCardboard
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: cardboard
+  referenceDirection: 3
+  sourceDirections: 8
+  directionalModels: *id002
+  yawOffset: 90
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry. Cartons use an existing authored support surface when present, otherwise retain
+    their floor datum.
+  parts:
+  - min: -0.205800, 0.068378, 0.004000
+    max: 0.116460, 0.374525, 0.028000
+    color: '#3A3127'
+    label: carton 1 recessed bottom
+    yaw: -36
+  - min: -0.176719, 0.157879, 0.004000
+    max: -0.158995, 0.464025, 0.274000
+    color: '#52402D'
+    label: carton 1 left wall
+    yaw: -36
+  - min: 0.069655, -0.021122, 0.004000
+    max: 0.087379, 0.285024, 0.274000
+    color: '#52402D'
+    label: carton 1 right wall
+    yaw: -36
+  - min: -0.272841, 0.095920, 0.004000
+    max: 0.013970, 0.113645, 0.274000
+    color: '#52402D'
+    label: carton 1 front wall
+    yaw: -36
+  - min: -0.103310, 0.329259, 0.004000
+    max: 0.183501, 0.346983, 0.274000
+    color: '#52402D'
+    label: carton 1 back wall
+    yaw: -36
+  - min: -0.199992, -0.061407, 0.252155
+    max: -0.115399, 0.193178, 0.264155
+    color: '#6C503B'
+    label: carton 1 folded front flap
+    yaw: 234
+    pitch: -22
+  - min: 0.015726, 0.238778, 0.304486
+    max: 0.102736, 0.490141, 0.316486
+    color: '#6C503B'
+    label: carton 1 raised back flap
+    yaw: 54
+    pitch: 57
+  - min: 0.073187, 0.007870, 0.246743
+    max: 0.147306, 0.209926, 0.258743
+    color: '#6C503B'
+    label: carton 1 side flap
+    yaw: -36
+    pitch: -35
+  - min: -0.382035, -0.131307, 0.004000
+    max: -0.059776, 0.142613, 0.028000
+    color: '#52402D'
+    label: carton 2 recessed bottom
+    yaw: -9
+  - min: -0.380161, -0.107487, 0.004000
+    max: -0.362436, 0.166433, 0.254000
+    color: '#6C503B'
+    label: carton 2 left wall
+    yaw: -9
+  - min: -0.079375, -0.155127, 0.004000
+    max: -0.061651, 0.118793, 0.254000
+    color: '#6C503B'
+    label: carton 2 right wall
+    yaw: -9
+  - min: -0.384350, -0.129730, 0.004000
+    max: -0.097539, -0.112006, 0.254000
+    color: '#6C503B'
+    label: carton 2 front wall
+    yaw: -9
+  - min: -0.344272, 0.123312, 0.004000
+    max: -0.057461, 0.141036, 0.254000
+    color: '#6C503B'
+    label: carton 2 back wall
+    yaw: -9
+  - min: -0.378627, -0.118704, 0.243000
+    max: -0.222331, 0.155216, 0.265000
+    color: '#7F6949'
+    label: carton 2 closed lid half -1
+    yaw: -9
+  - min: -0.219480, -0.143911, 0.243000
+    max: -0.063185, 0.130010, 0.265000
+    color: '#7F6949'
+    label: carton 2 closed lid half 1
+    yaw: -9
+  - min: -0.228156, -0.120350, 0.262000
+    max: -0.213655, 0.131656, 0.270000
+    color: '#6C503B'
+    label: carton 2 lid fold
+    yaw: -9
+  - min: -0.355380, -0.035158, 0.268000
+    max: -0.097572, -0.023879, 0.272000
+    color: '#52402D'
+    label: carton 2 short lid crease
+    yaw: -9
+  - min: 0.024817, -0.351134, 0.004000
+    max: 0.339020, -0.069157, 0.028000
+    color: '#3A3127'
+    label: carton 3 recessed bottom
+    yaw: -30
+  - min: 0.044677, -0.277014, 0.004000
+    max: 0.062401, 0.004963, 0.244000
+    color: '#52402D'
+    label: carton 3 left wall
+    yaw: -30
+  - min: 0.301436, -0.425253, 0.004000
+    max: 0.319160, -0.143277, 0.244000
+    color: '#52402D'
+    label: carton 3 right wall
+    yaw: -30
+  - min: -0.023522, -0.333432, 0.004000
+    max: 0.255232, -0.315708, 0.244000
+    color: '#52402D'
+    label: carton 3 front wall
+    yaw: -30
+  - min: 0.108604, -0.104583, 0.004000
+    max: 0.387359, -0.086859, 0.244000
+    color: '#52402D'
+    label: carton 3 back wall
+    yaw: -30
+  - min: 0.049519, -0.490318, 0.222155
+    max: 0.134112, -0.242098, 0.234155
+    color: '#6C503B'
+    label: carton 3 folded front flap
+    yaw: 240
+    pitch: -22
+  - min: 0.220755, -0.190065, 0.274486
+    max: 0.307765, 0.055013, 0.286486
+    color: '#6C503B'
+    label: carton 3 raised back flap
+    yaw: 60
+    pitch: 57
+  - min: 0.307203, -0.396927, 0.216743
+    max: 0.381323, -0.210823, 0.228743
+    color: '#6C503B'
+    label: carton 3 side flap
+    yaw: -30
+    pitch: -35
+  - label: carton 1 front fold crease 1
+    color: '#3A3127'
+    min: -0.194496, 0.092574, 0.088250
+    max: -0.078482, 0.097574, 0.095250
+    yaw: -36
+  - label: carton 1 front fold crease 2
+    color: '#3A3127'
+    min: -0.215442, 0.092574, 0.182750
+    max: -0.057535, 0.097574, 0.189750
+    yaw: -36
+  - label: carton 2 front fold crease 1
+    color: '#52402D'
+    min: -0.300828, -0.135220, 0.081750
+    max: -0.184815, -0.130220, 0.088750
+    yaw: -9
+  - label: carton 2 front fold crease 2
+    color: '#52402D'
+    min: -0.321775, -0.135220, 0.169250
+    max: -0.163868, -0.130220, 0.176250
+    yaw: -9
+  - label: carton 3 front fold crease 1
+    color: '#3A3127'
+    min: 0.053298, -0.337462, 0.078500
+    max: 0.166412, -0.332462, 0.085500
+    yaw: -30
+  - label: carton 3 front fold crease 2
+    color: '#3A3127'
+    min: 0.032875, -0.337462, 0.162500
+    max: 0.186835, -0.332462, 0.169500
+    yaw: -30
+  placement: surface
+- type: cmu3DModel
+  id: CMU3DDecorFloorScrapwoodEast
+  label: Scrapwood / East
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorScrapwood
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: woodscrap
+  referenceDirection: 2
+  sourceDirections: 8
+  directionalModels: &id003
+  - CMU3DDecorFloorScrapwoodSouth
+  - CMU3DDecorFloorScrapwoodNorth
+  - CMU3DDecorFloorScrapwoodEast
+  - CMU3DDecorFloorScrapwoodWest
+  - CMU3DDecorFloorScrapwoodSouthEast
+  - CMU3DDecorFloorScrapwoodSouthWest
+  - ''
+  - ''
+  yawOffset: -90
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.185308, 0.230601, 0.004000
+    max: 0.284390, 0.283726, 0.033000
+    color: '#3F2E1B'
+    label: plank 1 body
+    yaw: -29.74488
+  - min: 0.223484, 0.107543, 0.007500
+    max: 0.293669, 0.137293, 0.029500
+    color: '#3F2E1B'
+    label: plank 1 splintered end
+    yaw: -29.74488
+  - min: -0.127430, 0.264195, 0.032000
+    max: 0.239691, 0.273195, 0.037000
+    color: '#2B1A11'
+    label: plank 1 long grain
+    yaw: -29.74488
+  - min: -0.323083, 0.114306, 0.013000
+    max: 0.203415, 0.176806, 0.042000
+    color: '#6C503B'
+    label: plank 2 body
+    yaw: -21.64444
+  - min: 0.153817, 0.010854, 0.016500
+    max: 0.232489, 0.045854, 0.038500
+    color: '#6C503B'
+    label: plank 2 splintered end
+    yaw: -21.64444
+  - min: -0.259829, 0.155579, 0.041000
+    max: 0.151687, 0.164579, 0.046000
+    color: '#52402D'
+    label: plank 2 long grain
+    yaw: -21.64444
+  - min: -0.301304, -0.108908, 0.022000
+    max: 0.150386, -0.046408, 0.051000
+    color: '#6C503B'
+    label: plank 3 body
+    yaw: 25.46335
+  - min: 0.113137, -0.006587, 0.025500
+    max: 0.180631, 0.028413, 0.047500
+    color: '#6C503B'
+    label: plank 3 splintered end
+    yaw: 25.46335
+  - min: -0.258699, -0.068051, 0.050000
+    max: 0.094346, -0.059051, 0.055000
+    color: '#52402D'
+    label: plank 3 long grain
+    yaw: 25.46335
+  - min: -0.015027, -0.260471, 0.031000
+    max: 0.364109, -0.207346, 0.060000
+    color: '#7F6949'
+    label: plank 4 body
+    yaw: -37.92646
+  - min: 0.296176, -0.382474, 0.034500
+    max: 0.352829, -0.352724, 0.056500
+    color: '#7F6949'
+    label: plank 4 splintered end
+    yaw: -37.92646
+  - min: 0.034536, -0.227932, 0.059000
+    max: 0.330872, -0.218932, 0.064000
+    color: '#52402D'
+    label: plank 4 long grain
+    yaw: -37.92646
+  - min: -0.382380, -0.196631, 0.040000
+    max: 0.122087, -0.137256, 0.069000
+    color: '#52402D'
+    label: plank 5 body
+    yaw: 4.41562
+  - min: 0.099244, -0.177833, 0.043500
+    max: 0.174624, -0.144583, 0.065500
+    color: '#52402D'
+    label: plank 5 splintered end
+    yaw: 4.41562
+  - min: -0.328437, -0.156644, 0.068000
+    max: 0.065858, -0.147644, 0.073000
+    color: '#3F2E1B'
+    label: plank 5 long grain
+    yaw: 4.41562
+  - min: -0.112426, -0.279667, 0.049000
+    max: 0.055258, -0.232792, 0.078000
+    color: '#6C503B'
+    label: plank 6 body
+    yaw: 13.3925
+  - min: 0.047852, -0.260219, 0.052500
+    max: 0.072908, -0.233969, 0.074500
+    color: '#6C503B'
+    label: plank 6 splintered end
+    yaw: 13.3925
+  - min: -0.096830, -0.249329, 0.077000
+    max: 0.034234, -0.240329, 0.082000
+    color: '#3F2E1B'
+    label: plank 6 long grain
+    yaw: 13.3925
+  - min: 0.156717, -0.013372, 0.058000
+    max: 0.379865, 0.036628, 0.087000
+    color: '#7F6949'
+    label: plank 7 body
+    yaw: -31.47684
+  - min: 0.345717, -0.074640, 0.061500
+    max: 0.379061, -0.046640, 0.083500
+    color: '#7F6949'
+    label: plank 7 splintered end
+    yaw: -31.47684
+  - min: 0.187610, 0.017788, 0.086000
+    max: 0.362025, 0.026788, 0.091000
+    color: '#6C503B'
+    label: plank 7 long grain
+    yaw: -31.47684
+  - label: plank 1 short fracture tooth
+    color: '#3F2E1B'
+    min: 0.261284, 0.129625, 0.008000
+    max: 0.308254, 0.147688, 0.029000
+    yaw: -29.74488
+  - label: plank 2 short fracture tooth
+    color: '#6C503B'
+    min: 0.193885, 0.041285, 0.017000
+    max: 0.246535, 0.062535, 0.038000
+    yaw: -21.64444
+  - label: plank 3 short fracture tooth
+    color: '#6C503B'
+    min: 0.123345, 0.035139, 0.026000
+    max: 0.168514, 0.056389, 0.047000
+    yaw: 25.46335
+  - label: plank 4 short fracture tooth
+    color: '#7F6949'
+    min: 0.331549, -0.362544, 0.035000
+    max: 0.369463, -0.344482, 0.056000
+    yaw: -37.92646
+  - label: plank 5 short fracture tooth
+    color: '#52402D'
+    min: 0.125105, -0.139896, 0.044000
+    max: 0.175551, -0.119708, 0.065000
+    yaw: 4.41562
+  - label: plank 6 short fracture tooth
+    color: '#6C503B'
+    min: 0.051558, -0.230592, 0.053000
+    max: 0.068327, -0.214655, 0.074000
+    yaw: 13.3925
+  - label: plank 7 short fracture tooth
+    color: '#7F6949'
+    min: 0.370496, -0.051035, 0.062000
+    max: 0.392811, -0.034035, 0.083000
+    yaw: -31.47684
+- type: cmu3DModel
+  id: CMU3DDecorFloorScrapwoodNorth
+  label: Scrapwood / North
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorScrapwood
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: woodscrap
+  referenceDirection: 1
+  sourceDirections: 8
+  directionalModels: *id003
+  yawOffset: -180
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.371597, 0.271823, 0.004000
+    max: 0.097073, 0.334323, 0.033000
+    color: '#6C503B'
+    label: plank 1 body
+    yaw: -9.54038
+  - min: 0.069508, 0.229093, 0.007500
+    max: 0.139539, 0.264093, 0.029500
+    color: '#6C503B'
+    label: plank 1 splintered end
+    yaw: -9.54038
+  - min: -0.317831, 0.313982, 0.032000
+    max: 0.048486, 0.322982, 0.037000
+    color: '#6C503B'
+    label: plank 1 long grain
+    yaw: -9.54038
+  - min: -0.288577, 0.164903, 0.013000
+    max: 0.201553, 0.218028, 0.042000
+    color: '#7F6949'
+    label: plank 2 body
+    yaw: -33.69007
+  - min: 0.128127, 0.021790, 0.016500
+    max: 0.201365, 0.051540, 0.038500
+    color: '#7F6949'
+    label: plank 2 splintered end
+    yaw: -33.69007
+  - min: -0.227690, 0.198017, 0.041000
+    max: 0.155400, 0.207017, 0.046000
+    color: '#52402D'
+    label: plank 2 long grain
+    yaw: -33.69007
+  - min: -0.363257, 0.093252, 0.022000
+    max: 0.307483, 0.155752, 0.051000
+    color: '#7F6949'
+    label: plank 3 body
+    yaw: 13.3925
+  - min: 0.270619, 0.173944, 0.025500
+    max: 0.370845, 0.208944, 0.047500
+    color: '#7F6949'
+    label: plank 3 splintered end
+    yaw: 13.3925
+  - min: -0.293634, 0.135202, 0.050000
+    max: 0.230622, 0.144202, 0.055000
+    color: '#3F2E1B'
+    label: plank 3 long grain
+    yaw: 13.3925
+  - min: -0.085713, -0.193802, 0.031000
+    max: 0.186189, -0.137552, 0.060000
+    color: '#6C503B'
+    label: plank 4 body
+    yaw: -45.57873
+  - min: 0.120505, -0.293948, 0.034500
+    max: 0.161134, -0.262448, 0.056500
+    color: '#6C503B'
+    label: plank 4 splintered end
+    yaw: -45.57873
+  - min: -0.045979, -0.160334, 0.059000
+    max: 0.166542, -0.151334, 0.064000
+    color: '#6C503B'
+    label: plank 4 long grain
+    yaw: -45.57873
+  - min: 0.019046, -0.102954, 0.040000
+    max: 0.331430, -0.049829, 0.069000
+    color: '#52402D'
+    label: plank 5 body
+    yaw: 38.4373
+  - min: 0.289530, 0.001009, 0.043500
+    max: 0.336208, 0.030759, 0.065500
+    color: '#52402D'
+    label: plank 5 splintered end
+    yaw: 38.4373
+  - min: 0.044900, -0.070488, 0.068000
+    max: 0.289063, -0.061488, 0.073000
+    color: '#6C503B'
+    label: plank 5 long grain
+    yaw: 38.4373
+  - min: -0.086327, -0.279963, 0.049000
+    max: 0.124303, -0.229963, 0.078000
+    color: '#52402D'
+    label: plank 6 body
+    yaw: -112.78241
+  - min: -0.051398, -0.366801, 0.052500
+    max: -0.019925, -0.338801, 0.074500
+    color: '#52402D'
+    label: plank 6 splintered end
+    yaw: -112.78241
+  - min: -0.051802, -0.264303, 0.077000
+    max: 0.112828, -0.255303, 0.082000
+    color: '#52402D'
+    label: plank 6 long grain
+    yaw: -112.78241
+  - label: plank 1 short fracture tooth
+    color: '#6C503B'
+    min: 0.100823, 0.264973, 0.008000
+    max: 0.147690, 0.286223, 0.029000
+    yaw: -9.54038
+  - label: plank 2 short fracture tooth
+    color: '#7F6949'
+    min: 0.168018, 0.041677, 0.017000
+    max: 0.217031, 0.059739, 0.038000
+    yaw: -33.69007
+  - label: plank 3 short fracture tooth
+    color: '#7F6949'
+    min: 0.300212, 0.216685, 0.026000
+    max: 0.367286, 0.237935, 0.047000
+    yaw: 13.3925
+  - label: plank 4 short fracture tooth
+    color: '#6C503B'
+    min: 0.153663, -0.273753, 0.035000
+    max: 0.180853, -0.254628, 0.056000
+    yaw: -45.57873
+  - label: plank 5 short fracture tooth
+    color: '#52402D'
+    min: 0.288057, 0.034146, 0.044000
+    max: 0.319295, 0.052209, 0.065000
+    yaw: 38.4373
+  - label: plank 6 short fracture tooth
+    color: '#52402D'
+    min: -0.025233, -0.377247, 0.053000
+    max: -0.004170, -0.360247, 0.074000
+    yaw: -112.78241
+- type: cmu3DModel
+  id: CMU3DDecorFloorScrapwoodSouth
+  label: Scrapwood / South
+  status: draft
+  sourcePrototypes:
+  - DecorFloorScrapwood
+  referencePrototype: DecorFloorScrapwood
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: woodscrap
+  referenceDirection: 0
+  sourceDirections: 8
+  directionalModels: *id003
+  yawOffset: 0
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.378256, -0.174852, 0.004000
+    max: 0.179788, -0.109227, 0.033000
+    color: '#6C503B'
+    label: plank 1 body
+    yaw: -38.78436
+  - min: 0.078796, -0.358025, 0.007500
+    max: 0.162182, -0.321275, 0.029500
+    color: '#6C503B'
+    label: plank 1 splintered end
+    yaw: -38.78436
+  - min: -0.307043, -0.133751, 0.032000
+    max: 0.129129, -0.124751, 0.037000
+    color: '#3F2E1B'
+    label: plank 1 long grain
+    yaw: -38.78436
+  - min: -0.281729, -0.039361, 0.013000
+    max: 0.302011, 0.023139, 0.042000
+    color: '#7F6949'
+    label: plank 2 body
+    yaw: 27.75854
+  - min: 0.246931, 0.104312, 0.016500
+    max: 0.334156, 0.139312, 0.038500
+    color: '#7F6949'
+    label: plank 2 splintered end
+    yaw: 27.75854
+  - min: -0.225265, 0.001216, 0.041000
+    max: 0.230992, 0.010216, 0.046000
+    color: '#6C503B'
+    label: plank 2 long grain
+    yaw: 27.75854
+  - min: -0.124075, 0.009969, 0.022000
+    max: 0.300607, 0.063094, 0.051000
+    color: '#7F6949'
+    label: plank 3 body
+    yaw: -39.80557
+  - min: 0.220534, -0.132296, 0.025500
+    max: 0.283993, -0.102546, 0.047500
+    color: '#7F6949'
+    label: plank 3 splintered end
+    yaw: -39.80557
+  - min: -0.069199, 0.042235, 0.050000
+    max: 0.262736, 0.051235, 0.055000
+    color: '#6C503B'
+    label: plank 3 long grain
+    yaw: -39.80557
+  - min: 0.048373, 0.257067, 0.031000
+    max: 0.315659, 0.307067, 0.060000
+    color: '#52402D'
+    label: plank 4 body
+    yaw: -35.53768
+  - min: 0.269781, 0.175753, 0.034500
+    max: 0.309720, 0.203753, 0.056500
+    color: '#52402D'
+    label: plank 4 splintered end
+    yaw: -35.53768
+  - min: 0.084825, 0.287739, 0.059000
+    max: 0.293738, 0.296739, 0.064000
+    color: '#52402D'
+    label: plank 4 long grain
+    yaw: -35.53768
+  - min: -0.162208, 0.072246, 0.040000
+    max: 0.307490, 0.134746, 0.069000
+    color: '#7F6949'
+    label: plank 5 body
+    yaw: 29.74488
+  - min: 0.260926, 0.195644, 0.043500
+    max: 0.331111, 0.230644, 0.065500
+    color: '#7F6949'
+    label: plank 5 splintered end
+    yaw: 29.74488
+  - min: -0.118672, 0.112562, 0.068000
+    max: 0.248449, 0.121562, 0.073000
+    color: '#7F6949'
+    label: plank 5 long grain
+    yaw: 29.74488
+  - label: plank 1 short fracture tooth
+    color: '#6C503B'
+    min: 0.127152, -0.335645, 0.008000
+    max: 0.182956, -0.313333, 0.029000
+    yaw: -38.78436
+  - label: plank 2 short fracture tooth
+    color: '#7F6949'
+    min: 0.262660, 0.147894, 0.017000
+    max: 0.321034, 0.169144, 0.038000
+    yaw: 27.75854
+  - label: plank 3 short fracture tooth
+    color: '#7F6949'
+    min: 0.258574, -0.114139, 0.026000
+    max: 0.301043, -0.096076, 0.047000
+    yaw: -39.80557
+  - label: plank 4 short fracture tooth
+    color: '#52402D'
+    min: 0.298008, 0.197146, 0.035000
+    max: 0.324736, 0.214146, 0.056000
+    yaw: -35.53768
+  - label: plank 5 short fracture tooth
+    color: '#7F6949'
+    min: 0.269469, 0.237480, 0.044000
+    max: 0.316438, 0.258730, 0.065000
+    yaw: 29.74488
+- type: cmu3DModel
+  id: CMU3DDecorFloorScrapwoodSouthEast
+  label: Scrapwood / SouthEast
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorScrapwood
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: woodscrap
+  referenceDirection: 4
+  sourceDirections: 8
+  directionalModels: *id003
+  yawOffset: -45
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.347986, 0.218987, 0.004000
+    max: 0.128662, 0.275237, 0.033000
+    color: '#6C503B'
+    label: plank 1 body
+    yaw: -14.14948
+  - min: 0.095664, 0.156119, 0.007500
+    max: 0.166887, 0.187619, 0.029500
+    color: '#6C503B'
+    label: plank 1 splintered end
+    yaw: -14.14948
+  - min: -0.292501, 0.256248, 0.032000
+    max: 0.080052, 0.265248, 0.037000
+    color: '#52402D'
+    label: plank 1 long grain
+    yaw: -14.14948
+  - min: -0.267980, 0.019657, 0.013000
+    max: 0.111156, 0.072781, 0.042000
+    color: '#6C503B'
+    label: plank 2 body
+    yaw: -37.92646
+  - min: 0.043223, -0.102347, 0.016500
+    max: 0.099876, -0.072597, 0.038500
+    color: '#6C503B'
+    label: plank 2 splintered end
+    yaw: -37.92646
+  - min: -0.218417, 0.052195, 0.041000
+    max: 0.077919, 0.061195, 0.046000
+    color: '#2B1A11'
+    label: plank 2 long grain
+    yaw: -37.92646
+  - min: -0.376814, 0.083496, 0.022000
+    max: 0.126240, 0.142871, 0.051000
+    color: '#6C503B'
+    label: plank 3 body
+    yaw: -13.3925
+  - min: 0.092440, 0.020511, 0.025500
+    max: 0.167609, 0.053761, 0.047500
+    color: '#6C503B'
+    label: plank 3 splintered end
+    yaw: -13.3925
+  - min: -0.318445, 0.123123, 0.050000
+    max: 0.074747, 0.132123, 0.055000
+    color: '#2B1A11'
+    label: plank 3 long grain
+    yaw: -13.3925
+  - min: -0.307669, -0.047308, 0.031000
+    max: -0.036655, 0.005817, 0.060000
+    color: '#6C503B'
+    label: plank 4 body
+    yaw: -25.46335
+  - min: -0.068745, -0.109219, 0.034500
+    max: -0.028249, -0.079469, 0.056500
+    color: '#6C503B'
+    label: plank 4 splintered end
+    yaw: -25.46335
+  - min: -0.272365, -0.013254, 0.059000
+    max: -0.060539, -0.004254, 0.064000
+    color: '#6C503B'
+    label: plank 4 long grain
+    yaw: -25.46335
+  - min: 0.028825, 0.014969, 0.040000
+    max: 0.408101, 0.077469, 0.069000
+    color: '#6C503B'
+    label: plank 5 body
+    yaw: 55.00798
+  - min: 0.317927, 0.184044, 0.043500
+    max: 0.374600, 0.219044, 0.065500
+    color: '#6C503B'
+    label: plank 5 splintered end
+    yaw: 55.00798
+  - min: 0.057440, 0.050679, 0.068000
+    max: 0.353885, 0.059679, 0.073000
+    color: '#6C503B'
+    label: plank 5 long grain
+    yaw: 55.00798
+  - min: 0.105720, -0.270522, 0.049000
+    max: 0.299956, -0.217397, 0.078000
+    color: '#3F2E1B'
+    label: plank 6 body
+    yaw: 11.53462
+  - min: 0.291607, -0.251312, 0.052500
+    max: 0.320631, -0.221562, 0.074500
+    color: '#3F2E1B'
+    label: plank 6 splintered end
+    yaw: 11.53462
+  - min: 0.124274, -0.235447, 0.077000
+    max: 0.276090, -0.226447, 0.082000
+    color: '#3F2E1B'
+    label: plank 6 long grain
+    yaw: 11.53462
+  - min: -0.213305, -0.205120, 0.058000
+    max: 0.056481, -0.148870, 0.087000
+    color: '#52402D'
+    label: plank 7 body
+    yaw: -59.74356
+  - min: -0.038840, -0.323045, 0.061500
+    max: 0.001473, -0.291545, 0.083500
+    color: '#52402D'
+    label: plank 7 splintered end
+    yaw: -59.74356
+  - min: -0.171699, -0.174410, 0.086000
+    max: 0.039169, -0.165410, 0.091000
+    color: '#3F2E1B'
+    label: plank 7 long grain
+    yaw: -59.74356
+  - label: plank 1 short fracture tooth
+    color: '#6C503B'
+    min: 0.128905, 0.186481, 0.008000
+    max: 0.176570, 0.205606, 0.029000
+    yaw: -14.14948
+  - label: plank 2 short fracture tooth
+    color: '#6C503B'
+    min: 0.078596, -0.082417, 0.017000
+    max: 0.116510, -0.064355, 0.038000
+    yaw: -37.92646
+  - label: plank 3 short fracture tooth
+    color: '#6C503B'
+    min: 0.127185, 0.052858, 0.026000
+    max: 0.177491, 0.073045, 0.047000
+    yaw: -13.3925
+  - label: plank 4 short fracture tooth
+    color: '#6C503B'
+    min: -0.042749, -0.082556, 0.035000
+    max: -0.015648, -0.064494, 0.056000
+    yaw: -25.46335
+  - label: plank 5 short fracture tooth
+    color: '#6C503B'
+    min: 0.307987, 0.218913, 0.044000
+    max: 0.345915, 0.240163, 0.065000
+    yaw: 55.00798
+  - label: plank 6 short fracture tooth
+    color: '#3F2E1B'
+    min: 0.296940, -0.217707, 0.053000
+    max: 0.316363, -0.199645, 0.074000
+    yaw: 11.53462
+  - label: plank 7 short fracture tooth
+    color: '#52402D'
+    min: -0.003144, -0.309688, 0.062000
+    max: 0.023835, -0.290563, 0.083000
+    yaw: -59.74356
+- type: cmu3DModel
+  id: CMU3DDecorFloorScrapwoodSouthWest
+  label: Scrapwood / SouthWest
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorScrapwood
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: woodscrap
+  referenceDirection: 5
+  sourceDirections: 8
+  directionalModels: *id003
+  yawOffset: 45
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.255888, 0.073501, 0.004000
+    max: 0.123784, 0.126626, 0.033000
+    color: '#52402D'
+    label: plank 1 body
+    yaw: -30.76272
+  - min: 0.071289, -0.028903, 0.007500
+    max: 0.128021, 0.000847, 0.029500
+    color: '#52402D'
+    label: plank 1 splintered end
+    yaw: -30.76272
+  - min: -0.207637, 0.106976, 0.032000
+    max: 0.089119, 0.115976, 0.037000
+    color: '#52402D'
+    label: plank 1 long grain
+    yaw: -30.76272
+  - min: -0.327062, -0.061990, 0.013000
+    max: 0.038708, -0.005740, 0.042000
+    color: '#52402D'
+    label: plank 2 body
+    yaw: 48.01279
+  - min: -0.031677, 0.084728, 0.016500
+    max: 0.022978, 0.116228, 0.038500
+    color: '#52402D'
+    label: plank 2 splintered end
+    yaw: 48.01279
+  - min: -0.297574, -0.028958, 0.041000
+    max: -0.011685, -0.019958, 0.046000
+    color: '#52402D'
+    label: plank 2 long grain
+    yaw: 48.01279
+  - min: -0.096263, -0.061990, 0.022000
+    max: 0.307909, -0.005740, 0.051000
+    color: '#6C503B'
+    label: plank 3 body
+    yaw: -42.27369
+  - min: 0.224292, -0.203771, 0.025500
+    max: 0.284685, -0.172271, 0.047500
+    color: '#6C503B'
+    label: plank 3 splintered end
+    yaw: -42.27369
+  - min: -0.042670, -0.027960, 0.050000
+    max: 0.273234, -0.018960, 0.055000
+    color: '#6C503B'
+    label: plank 3 long grain
+    yaw: -42.27369
+  - min: -0.053788, -0.082749, 0.031000
+    max: 0.202934, -0.029624, 0.060000
+    color: '#3F2E1B'
+    label: plank 4 body
+    yaw: -17.61258
+  - min: 0.180749, -0.124792, 0.034500
+    max: 0.219110, -0.095042, 0.056500
+    color: '#3F2E1B'
+    label: plank 4 splintered end
+    yaw: -17.61258
+  - min: -0.021736, -0.048028, 0.059000
+    max: 0.178920, -0.039028, 0.064000
+    color: '#3F2E1B'
+    label: plank 4 long grain
+    yaw: -17.61258
+  - min: -0.090704, 0.094260, 0.040000
+    max: 0.114850, 0.150510, 0.069000
+    color: '#6C503B'
+    label: plank 5 body
+    yaw: -22.20348
+  - min: 0.092026, 0.052544, 0.043500
+    max: 0.122741, 0.084044, 0.065500
+    color: '#6C503B'
+    label: plank 5 splintered end
+    yaw: -22.20348
+  - min: -0.062945, 0.130905, 0.068000
+    max: 0.097719, 0.139905, 0.073000
+    color: '#52402D'
+    label: plank 5 long grain
+    yaw: -22.20348
+  - label: plank 1 short fracture tooth
+    color: '#52402D'
+    min: 0.104729, -0.005849, 0.008000
+    max: 0.142696, 0.012214, 0.029000
+    yaw: -30.76272
+  - label: plank 2 short fracture tooth
+    color: '#52402D'
+    min: -0.036311, 0.118606, 0.017000
+    max: 0.000266, 0.137731, 0.038000
+    yaw: 48.01279
+  - label: plank 3 short fracture tooth
+    color: '#6C503B'
+    min: 0.262928, -0.184856, 0.026000
+    max: 0.303345, -0.165731, 0.047000
+    yaw: -42.27369
+  - label: plank 4 short fracture tooth
+    color: '#3F2E1B'
+    min: 0.202942, -0.095553, 0.035000
+    max: 0.228614, -0.077490, 0.056000
+    yaw: -17.61258
+  - label: plank 5 short fracture tooth
+    color: '#6C503B'
+    min: 0.113897, 0.082863, 0.044000
+    max: 0.134452, 0.101988, 0.065000
+    yaw: -22.20348
+- type: cmu3DModel
+  id: CMU3DDecorFloorScrapwoodWest
+  label: Scrapwood / West
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: DecorFloorScrapwood
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: woodscrap
+  referenceDirection: 3
+  sourceDirections: 8
+  directionalModels: *id003
+  yawOffset: 90
+  description: Source-specific solid arrangement with sampled original colors. Ground composition centered independently
+    of padded source canvas. Hidden depth, fine break edges and material response remain inferred. Two transparent source
+    directions have no invented geometry.
+  parts:
+  - min: -0.266908, 0.219910, 0.004000
+    max: 0.209740, 0.276160, 0.033000
+    color: '#6C503B'
+    label: plank 1 body
+    yaw: -14.14948
+  - min: 0.176742, 0.157042, 0.007500
+    max: 0.247965, 0.188542, 0.029500
+    color: '#6C503B'
+    label: plank 1 splintered end
+    yaw: -14.14948
+  - min: -0.211423, 0.257171, 0.032000
+    max: 0.161130, 0.266171, 0.037000
+    color: '#52402D'
+    label: plank 1 long grain
+    yaw: -14.14948
+  - min: -0.150924, 0.105178, 0.013000
+    max: 0.250006, 0.167678, 0.042000
+    color: '#52402D'
+    label: plank 2 body
+    yaw: -35.53768
+  - min: 0.183005, -0.017001, 0.016500
+    max: 0.242914, 0.017999, 0.038500
+    color: '#52402D'
+    label: plank 2 splintered end
+    yaw: -35.53768
+  - min: -0.098062, 0.144642, 0.041000
+    max: 0.215308, 0.153642, 0.046000
+    color: '#3F2E1B'
+    label: plank 2 long grain
+    yaw: -35.53768
+  - min: -0.317105, -0.006430, 0.022000
+    max: -0.021313, 0.056070, 0.051000
+    color: '#7F6949'
+    label: plank 3 body
+    yaw: -23.19859
+  - min: -0.053713, -0.068648, 0.025500
+    max: -0.009515, -0.033648, 0.047500
+    color: '#7F6949'
+    label: plank 3 splintered end
+    yaw: -23.19859
+  - min: -0.278651, 0.034682, 0.050000
+    max: -0.047457, 0.043682, 0.055000
+    color: '#52402D'
+    label: plank 3 long grain
+    yaw: -23.19859
+  - min: -0.220314, 0.041338, 0.031000
+    max: 0.100646, 0.097588, 0.060000
+    color: '#6C503B'
+    label: plank 4 body
+    yaw: 21.28641
+  - min: 0.079416, 0.102217, 0.034500
+    max: 0.127376, 0.133717, 0.056500
+    color: '#6C503B'
+    label: plank 4 splintered end
+    yaw: 21.28641
+  - min: -0.190371, 0.078066, 0.059000
+    max: 0.060493, 0.087066, 0.064000
+    color: '#6C503B'
+    label: plank 4 long grain
+    yaw: 21.28641
+  - min: -0.045278, 0.156070, 0.040000
+    max: 0.144360, 0.206070, 0.069000
+    color: '#6C503B'
+    label: plank 5 body
+    yaw: 55.00798
+  - min: 0.103113, 0.242045, 0.043500
+    max: 0.131450, 0.270045, 0.065500
+    color: '#6C503B'
+    label: plank 5 splintered end
+    yaw: 55.00798
+  - min: -0.034811, 0.183739, 0.068000
+    max: 0.113412, 0.192739, 0.073000
+    color: '#3F2E1B'
+    label: plank 5 long grain
+    yaw: 55.00798
+  - min: -0.142406, -0.251965, 0.049000
+    max: 0.272738, -0.189465, 0.078000
+    color: '#7F6949'
+    label: plank 6 body
+    yaw: 10.7843
+  - min: 0.252698, -0.212493, 0.052500
+    max: 0.314731, -0.177493, 0.074500
+    color: '#7F6949'
+    label: plank 6 splintered end
+    yaw: 10.7843
+  - min: -0.099998, -0.209866, 0.077000
+    max: 0.224483, -0.200866, 0.082000
+    color: '#6C503B'
+    label: plank 6 long grain
+    yaw: 10.7843
+  - min: 0.011809, -0.266474, 0.058000
+    max: 0.212273, -0.219599, 0.087000
+    color: '#7F6949'
+    label: plank 7 body
+    yaw: -35.53768
+  - min: 0.176502, -0.327305, 0.061500
+    max: 0.206457, -0.301055, 0.083500
+    color: '#7F6949'
+    label: plank 7 splintered end
+    yaw: -35.53768
+  - min: 0.040510, -0.238001, 0.086000
+    max: 0.197195, -0.229001, 0.091000
+    color: '#6C503B'
+    label: plank 7 long grain
+    yaw: -35.53768
+  - label: plank 1 short fracture tooth
+    color: '#6C503B'
+    min: 0.209983, 0.187404, 0.008000
+    max: 0.257648, 0.206529, 0.029000
+    yaw: -14.14948
+  - label: plank 2 short fracture tooth
+    color: '#52402D'
+    min: 0.221640, 0.008526, 0.017000
+    max: 0.261733, 0.029776, 0.038000
+    yaw: -35.53768
+  - label: plank 3 short fracture tooth
+    color: '#7F6949'
+    min: -0.025347, -0.036119, 0.026000
+    max: 0.004232, -0.014869, 0.047000
+    yaw: -23.19859
+  - label: plank 4 short fracture tooth
+    color: '#6C503B'
+    min: 0.086284, 0.138778, 0.035000
+    max: 0.118380, 0.157903, 0.056000
+    yaw: 21.28641
+  - label: plank 5 short fracture tooth
+    color: '#6C503B'
+    min: 0.090309, 0.267025, 0.044000
+    max: 0.109273, 0.284025, 0.065000
+    yaw: 55.00798
+  - label: plank 6 short fracture tooth
+    color: '#7F6949'
+    min: 0.269743, -0.171877, 0.053000
+    max: 0.311257, -0.150627, 0.074000
+    yaw: 10.7843
+  - label: plank 7 short fracture tooth
+    color: '#7F6949'
+    min: 0.200451, -0.306338, 0.062000
+    max: 0.220498, -0.290400, 0.083000
+    yaw: -35.53768

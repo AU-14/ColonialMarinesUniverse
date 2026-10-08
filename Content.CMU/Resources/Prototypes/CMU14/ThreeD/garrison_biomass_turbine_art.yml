@@ -1,0 +1,21 @@
+# Original CC-BY-SA-3.0 biomass turbine pixels; see RSI metadata and model description.
+- type: cmu3DSurface
+  id: CMU3DBiomassTurbineLeftVent
+  atlasIndex: 1080
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DBiomassTurbineLeftVent.png
+- type: cmu3DSurface
+  id: CMU3DBiomassTurbineRightVent
+  atlasIndex: 1081
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DBiomassTurbineRightVent.png
+- type: cmu3DSurface
+  id: CMU3DBiomassTurbineIntake
+  atlasIndex: 1082
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DBiomassTurbineIntake.png
+- type: cmu3DSurface
+  id: CMU3DBiomassTurbineBadge
+  atlasIndex: 1083
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DBiomassTurbineBadge.png
+- type: cmu3DSurface
+  id: CMU3DBiomassTurbineBearing
+  atlasIndex: 1084
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DBiomassTurbineBearing.png

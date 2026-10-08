@@ -1,0 +1,266 @@
+{
+  "criterion": "Resolved Sprite components are identical, or have identical explicit layers with an unused top-level state. Other differences are contents, access, objective metadata or battery slot contents. Default appearance only; existing runtime state guards remain.",
+  "bound": [
+    {
+      "id": "AU14CorporateASRSConsole",
+      "model": "CMU3DStandingASRSTerminal",
+      "mappedParent": "CMASRSConsole",
+      "differences": [
+        "RequisitionsComputer",
+        "AccessReader"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "AU14CrateBoxABR40Magazines",
+      "model": "CMU3DSteelCrate",
+      "mappedParent": "RMCCrateBase",
+      "differences": [
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "AU14CrateBoxGamblingTableParts",
+      "model": "CMU3DSteelCrate",
+      "mappedParent": "RMCCrateBase",
+      "differences": [
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "AU14CrateBoxM4A3",
+      "model": "CMU3DSteelCrate",
+      "mappedParent": "RMCCrateBase",
+      "differences": [
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "AU14CrateBoxToolbelt",
+      "model": "CMU3DSteelCrate",
+      "mappedParent": "RMCCrateBase",
+      "differences": [
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "AU14CrateCivilianClothingRandom",
+      "model": "CMU3DSteelCrate",
+      "mappedParent": "RMCCrateBase",
+      "differences": [
+        "EntityTableContainerFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "AUCMDefibrillatorEmpty",
+      "model": "CMU3DPortableDefibrillator",
+      "mappedParent": "AU14CMDefibrillator",
+      "differences": [
+        "ItemSlots"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "CMASRSConsoleColony",
+      "model": "CMU3DStandingASRSTerminal",
+      "mappedParent": "CMASRSConsole",
+      "differences": [
+        "RequisitionsComputer",
+        "AccessReader"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "CMUCratePreciousMetals",
+      "model": "CMU3DSecureCrate",
+      "mappedParent": "RMCCrateSecure",
+      "differences": [
+        "StorageFill",
+        "AccessReader"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCArmoryLockerRedM890FilledSingle",
+      "model": "CMU3DArmoryLocker",
+      "mappedParent": "RMCLockerGunRed",
+      "differences": [
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCBookcaseEngineering",
+      "model": "CMU3DBookcase",
+      "mappedParent": "RMCBookcase",
+      "differences": [],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCBookcaseMedical",
+      "model": "CMU3DBookcase",
+      "mappedParent": "RMCBookcase",
+      "differences": [],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCBoxZiptie",
+      "model": "CMU3DRMCBoxHandcuffs",
+      "mappedParent": "RMCBoxHandcuffs",
+      "differences": [
+        "Tag",
+        "Item",
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCCrateAttachmentRailFlashlight",
+      "model": "CMU3DSteelCrate",
+      "mappedParent": "RMCCrateBase",
+      "differences": [
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCCrateBlackmarketFireArms",
+      "model": "CMU3DLargeWoodCrate",
+      "mappedParent": "RMCCrateLarge",
+      "differences": [
+        "SpawnOnTerminate"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCCrateMetalBuildable",
+      "model": "CMU3DSteelCrate",
+      "mappedParent": "RMCCrateBase",
+      "differences": [
+        "RequisitionsCrate"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCDoubleDoorEngineerGlassEngineering",
+      "model": "CMU3DLegacyEngineerDoor",
+      "mappedParent": "RMCDoubleDoorEngineerGlass",
+      "differences": [
+        "AccessReader"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCLockerFridgeDry",
+      "model": "CMU3DFridge",
+      "mappedParent": "CMLockerFridge",
+      "differences": [
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCLockerFridgeGroceries",
+      "model": "CMU3DFridge",
+      "mappedParent": "CMLockerFridge",
+      "differences": [
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "RMCLockerFridgeOrganic",
+      "model": "CMU3DFridge",
+      "mappedParent": "CMLockerFridge",
+      "differences": [
+        "StorageFill"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "captureadminobjective",
+      "model": "CMU3DPrintedAU14WallFlagUA",
+      "mappedParent": "AU14WallFlagUA",
+      "differences": [
+        "AreaLabel",
+        "CaptureObjective",
+        "CMUObjective",
+        "NavMapBeacon"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "capturedesertobjective",
+      "model": "CMU3DPrintedAU14WallFlagUA",
+      "mappedParent": "AU14WallFlagUA",
+      "differences": [
+        "CaptureObjective",
+        "CMUObjective",
+        "NavMapBeacon"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "capturemineobjective",
+      "model": "CMU3DPrintedAU14WallFlagUA",
+      "mappedParent": "AU14WallFlagUA",
+      "differences": [
+        "CaptureObjective",
+        "CMUObjective",
+        "NavMapBeacon"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "captureobjectiveneroidgeothermalgenerators",
+      "model": "CMU3DPrintedAU14WallFlagUA",
+      "mappedParent": "AU14WallFlagUA",
+      "differences": [
+        "CaptureObjective",
+        "CMUObjective",
+        "NavMapBeacon"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "captureobjectiveneroidspaceport",
+      "model": "CMU3DPrintedAU14WallFlagUA",
+      "mappedParent": "AU14WallFlagUA",
+      "differences": [
+        "CaptureObjective",
+        "CMUObjective",
+        "NavMapBeacon"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "captureuaflagobjective",
+      "model": "CMU3DPrintedAU14WallFlagUA",
+      "mappedParent": "AU14WallFlagUA",
+      "differences": [
+        "CaptureObjective",
+        "CMUObjective",
+        "NavMapBeacon"
+      ],
+      "spriteEqual": true
+    },
+    {
+      "id": "AU14CrateWorkTools",
+      "model": "CMU3DSteelCrate",
+      "mappedParent": "RMCCrateBase",
+      "differences": [
+        "Sprite",
+        "StorageFill"
+      ],
+      "spriteEqual": false,
+      "effectiveSpriteEqual": true,
+      "evidence": "SpriteComponent.AfterDeserialization only uses top-level state when layerDatums.Count is zero. Both prototypes inherit identical nonempty layers; the child state field is ignored."
+    }
+  ],
+  "retainedInherited": []
+}

@@ -512,9 +512,6 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         EntityUid? target = null;
         switch (attack)
         {
-            //CMU no wide swing
-            case HeavyAttackEvent when !weapon.WideAttackAllowed:
-                return false;
             case LightAttackEvent light:
                 if (light.Target != null && !TryGetEntity(light.Target, out target))
                 {

@@ -1,0 +1,17 @@
+# Original RSI label/paper crops. CC-BY-SA-3.0; see SOURCES_FOOD_CLOUD.md.
+- type: cmu3DSurface
+  id: CMU3DFoodCloudFlourLabel
+  texture: /Textures/CMU14/ThreeD/food_cloud/flour_label.png
+  atlasIndex: 1385
+- type: cmu3DSurface
+  id: CMU3DFoodCloudFlourWeave
+  texture: /Textures/CMU14/ThreeD/food_cloud/flour_weave.png
+  atlasIndex: 1386
+- type: cmu3DSurface
+  id: CMU3DFoodCloudSugarLabel
+  texture: /Textures/CMU14/ThreeD/food_cloud/sugar_label.png
+  atlasIndex: 1387
+- type: cmu3DSurface
+  id: CMU3DFoodCloudSugarWeave
+  texture: /Textures/CMU14/ThreeD/food_cloud/sugar_weave.png
+  atlasIndex: 1388

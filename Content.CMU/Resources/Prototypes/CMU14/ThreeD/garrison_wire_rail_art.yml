@@ -1,0 +1,16 @@
+- type: cmu3DSurface
+  id: CMU3DWireRailSurface01
+  atlasIndex: 648
+  texture: /Textures/CMU14/ThreeD/WireRail/CMU3DWireRailSurface01.png
+- type: cmu3DSurface
+  id: CMU3DWireRailSurface02
+  atlasIndex: 649
+  texture: /Textures/CMU14/ThreeD/WireRail/CMU3DWireRailSurface02.png
+- type: cmu3DSurface
+  id: CMU3DWireRailSurface03
+  atlasIndex: 650
+  texture: /Textures/CMU14/ThreeD/WireRail/CMU3DWireRailSurface03.png
+- type: cmu3DSurface
+  id: CMU3DWireRailSurface04
+  atlasIndex: 651
+  texture: /Textures/CMU14/ThreeD/WireRail/CMU3DWireRailSurface04.png

@@ -1,0 +1,614 @@
+- type: cmu3DModel
+  id: CMU3DOverheadLatticeVertical1
+  label: Overhead lattice Vertical1
+  status: draft
+  sourcePrototypes:
+  - RMCOverheadLatticeVertical1
+  referenceRsi: _RMC14/Structures/overhead_lattice.rsi
+  referenceState: lattice1
+  description: Source-specific end or middle steel lattice with two four-shade chords, an optional end cap and continuous
+    diagonal braces. Footprint uses 32 source pixels per tile. Height 2.82-2.94 and hidden steel section are inferred to clear
+    existing 2.8-tile walls. Source projection offsets are not ground translations; centered axes retain joined cap/chord
+    alignment. SpriteFade is not implemented. Static draft; see SOURCES_REDUX_LATTICE.md.
+  parts:
+  - min: -0.312500000, -0.312500000, 2.820000000
+    max: -0.281250000, 0.500000000, 2.940000000
+    color: '#151515'
+    label: west chord shade 1
+  - min: -0.281250000, -0.312500000, 2.820000000
+    max: -0.250000000, 0.500000000, 2.940000000
+    color: '#2A2A2A'
+    label: west chord shade 2
+  - min: -0.250000000, -0.312500000, 2.820000000
+    max: -0.218750000, 0.500000000, 2.940000000
+    color: '#545454'
+    label: west chord shade 3
+  - min: -0.218750000, -0.312500000, 2.820000000
+    max: -0.187500000, 0.500000000, 2.940000000
+    color: '#1C1C1C'
+    label: west chord shade 4
+  - min: 0.187500000, -0.312500000, 2.820000000
+    max: 0.218750000, 0.500000000, 2.940000000
+    color: '#151515'
+    label: east chord shade 1
+  - min: 0.218750000, -0.312500000, 2.820000000
+    max: 0.250000000, 0.500000000, 2.940000000
+    color: '#2A2A2A'
+    label: east chord shade 2
+  - min: 0.250000000, -0.312500000, 2.820000000
+    max: 0.281250000, 0.500000000, 2.940000000
+    color: '#545454'
+    label: east chord shade 3
+  - min: 0.281250000, -0.312500000, 2.820000000
+    max: 0.312500000, 0.500000000, 2.940000000
+    color: '#1C1C1C'
+    label: east chord shade 4
+  - min: -0.187500000, -0.218750000, 2.820000000
+    max: 0.187500000, -0.187500000, 2.940000000
+    color: '#1C1C1C'
+    label: south end cap shade 1
+  - min: -0.187500000, -0.250000000, 2.820000000
+    max: 0.187500000, -0.218750000, 2.940000000
+    color: '#545454'
+    label: south end cap shade 2
+  - min: -0.187500000, -0.281250000, 2.820000000
+    max: 0.187500000, -0.250000000, 2.940000000
+    color: '#2A2A2A'
+    label: south end cap shade 3
+  - min: -0.187500000, -0.312500000, 2.820000000
+    max: 0.187500000, -0.281250000, 2.940000000
+    color: '#151515'
+    label: south end cap shade 4
+  - min: -0.330115891, 0.028013957, 2.846000000
+    max: 0.376990891, 0.050111043, 2.934000000
+    color: '#1C1C1C'
+    yaw: -45.0
+    label: main diagonal shade 1
+  - min: -0.345740891, 0.012388957, 2.846000000
+    max: 0.361365891, 0.034486043, 2.934000000
+    color: '#545454'
+    yaw: -45.0
+    label: main diagonal shade 2
+  - min: -0.361365891, -0.003236043, 2.846000000
+    max: 0.345740891, 0.018861043, 2.934000000
+    color: '#2A2A2A'
+    yaw: -45.0
+    label: main diagonal shade 3
+  - min: -0.376990891, -0.018861043, 2.846000000
+    max: 0.330115891, 0.003236043, 2.934000000
+    color: '#151515'
+    yaw: -45.0
+    label: main diagonal shade 4
+  - min: -0.275103152, 0.348326457, 2.846000000
+    max: 0.056353152, 0.370423543, 2.934000000
+    color: '#1C1C1C'
+    yaw: -135.0
+    label: northwest continuation shade 1
+  - min: -0.290728152, 0.363951457, 2.846000000
+    max: 0.040728152, 0.386048543, 2.934000000
+    color: '#545454'
+    yaw: -135.0
+    label: northwest continuation shade 2
+  - min: -0.284256065, 0.379576457, 2.846000000
+    max: 0.003006065, 0.401673543, 2.934000000
+    color: '#2A2A2A'
+    yaw: -135.0
+    label: northwest continuation shade 3
+  - min: -0.277783978, 0.395201457, 2.846000000
+    max: -0.034716022, 0.417298543, 2.934000000
+    color: '#151515'
+    yaw: -135.0
+    label: northwest continuation shade 4
+- type: cmu3DModel
+  id: CMU3DOverheadLatticeVertical2
+  label: Overhead lattice Vertical2
+  status: draft
+  sourcePrototypes:
+  - RMCOverheadLatticeVertical2
+  referenceRsi: _RMC14/Structures/overhead_lattice.rsi
+  referenceState: lattice2
+  description: Source-specific end or middle steel lattice with two four-shade chords, an optional end cap and continuous
+    diagonal braces. Footprint uses 32 source pixels per tile. Height 2.82-2.94 and hidden steel section are inferred to clear
+    existing 2.8-tile walls. Source projection offsets are not ground translations; centered axes retain joined cap/chord
+    alignment. SpriteFade is not implemented. Static draft; see SOURCES_REDUX_LATTICE.md.
+  parts:
+  - min: -0.312500000, -0.500000000, 2.820000000
+    max: -0.281250000, 0.312500000, 2.940000000
+    color: '#151515'
+    label: west chord shade 1
+  - min: -0.281250000, -0.500000000, 2.820000000
+    max: -0.250000000, 0.312500000, 2.940000000
+    color: '#2A2A2A'
+    label: west chord shade 2
+  - min: -0.250000000, -0.500000000, 2.820000000
+    max: -0.218750000, 0.312500000, 2.940000000
+    color: '#545454'
+    label: west chord shade 3
+  - min: -0.218750000, -0.500000000, 2.820000000
+    max: -0.187500000, 0.312500000, 2.940000000
+    color: '#1C1C1C'
+    label: west chord shade 4
+  - min: 0.187500000, -0.500000000, 2.820000000
+    max: 0.218750000, 0.312500000, 2.940000000
+    color: '#151515'
+    label: east chord shade 1
+  - min: 0.218750000, -0.500000000, 2.820000000
+    max: 0.250000000, 0.312500000, 2.940000000
+    color: '#2A2A2A'
+    label: east chord shade 2
+  - min: 0.250000000, -0.500000000, 2.820000000
+    max: 0.281250000, 0.312500000, 2.940000000
+    color: '#545454'
+    label: east chord shade 3
+  - min: 0.281250000, -0.500000000, 2.820000000
+    max: 0.312500000, 0.312500000, 2.940000000
+    color: '#1C1C1C'
+    label: east chord shade 4
+  - min: -0.187500000, 0.281250000, 2.820000000
+    max: 0.187500000, 0.312500000, 2.940000000
+    color: '#1C1C1C'
+    label: north end cap shade 1
+  - min: -0.187500000, 0.250000000, 2.820000000
+    max: 0.187500000, 0.281250000, 2.940000000
+    color: '#545454'
+    label: north end cap shade 2
+  - min: -0.187500000, 0.218750000, 2.820000000
+    max: 0.187500000, 0.250000000, 2.940000000
+    color: '#2A2A2A'
+    label: north end cap shade 3
+  - min: -0.187500000, 0.187500000, 2.820000000
+    max: 0.187500000, 0.218750000, 2.940000000
+    color: '#151515'
+    label: north end cap shade 4
+  - min: -0.330115891, 0.028013957, 2.846000000
+    max: 0.376990891, 0.050111043, 2.934000000
+    color: '#1C1C1C'
+    yaw: -45.0
+    label: main diagonal shade 1
+  - min: -0.345740891, 0.012388957, 2.846000000
+    max: 0.361365891, 0.034486043, 2.934000000
+    color: '#545454'
+    yaw: -45.0
+    label: main diagonal shade 2
+  - min: -0.361365891, -0.003236043, 2.846000000
+    max: 0.345740891, 0.018861043, 2.934000000
+    color: '#2A2A2A'
+    yaw: -45.0
+    label: main diagonal shade 3
+  - min: -0.376990891, -0.018861043, 2.846000000
+    max: 0.330115891, 0.003236043, 2.934000000
+    color: '#151515'
+    yaw: -45.0
+    label: main diagonal shade 4
+  - min: -0.003006065, -0.401673543, 2.846000000
+    max: 0.284256065, -0.379576457, 2.934000000
+    color: '#1C1C1C'
+    yaw: -135.0
+    label: southeast continuation shade 1
+  - min: -0.040728152, -0.386048543, 2.846000000
+    max: 0.290728152, -0.363951457, 2.934000000
+    color: '#545454'
+    yaw: -135.0
+    label: southeast continuation shade 2
+  - min: -0.078450239, -0.370423543, 2.846000000
+    max: 0.297200239, -0.348326457, 2.934000000
+    color: '#2A2A2A'
+    yaw: -135.0
+    label: southeast continuation shade 3
+  - min: -0.094075239, -0.354798543, 2.846000000
+    max: 0.281575239, -0.332701457, 2.934000000
+    color: '#151515'
+    yaw: -135.0
+    label: southeast continuation shade 4
+- type: cmu3DModel
+  id: CMU3DOverheadLatticeVertical3
+  label: Overhead lattice Vertical3
+  status: draft
+  sourcePrototypes:
+  - RMCOverheadLatticeVertical3
+  referenceRsi: _RMC14/Structures/overhead_lattice.rsi
+  referenceState: lattice3
+  description: Source-specific end or middle steel lattice with two four-shade chords, an optional end cap and continuous
+    diagonal braces. Footprint uses 32 source pixels per tile. Height 2.82-2.94 and hidden steel section are inferred to clear
+    existing 2.8-tile walls. Source projection offsets are not ground translations; centered axes retain joined cap/chord
+    alignment. SpriteFade is not implemented. Static draft; see SOURCES_REDUX_LATTICE.md.
+  parts:
+  - min: -0.312500000, -0.500000000, 2.820000000
+    max: -0.281250000, 0.500000000, 2.940000000
+    color: '#151515'
+    label: west chord shade 1
+  - min: -0.281250000, -0.500000000, 2.820000000
+    max: -0.250000000, 0.500000000, 2.940000000
+    color: '#2A2A2A'
+    label: west chord shade 2
+  - min: -0.250000000, -0.500000000, 2.820000000
+    max: -0.218750000, 0.500000000, 2.940000000
+    color: '#545454'
+    label: west chord shade 3
+  - min: -0.218750000, -0.500000000, 2.820000000
+    max: -0.187500000, 0.500000000, 2.940000000
+    color: '#1C1C1C'
+    label: west chord shade 4
+  - min: 0.187500000, -0.500000000, 2.820000000
+    max: 0.218750000, 0.500000000, 2.940000000
+    color: '#151515'
+    label: east chord shade 1
+  - min: 0.218750000, -0.500000000, 2.820000000
+    max: 0.250000000, 0.500000000, 2.940000000
+    color: '#2A2A2A'
+    label: east chord shade 2
+  - min: 0.250000000, -0.500000000, 2.820000000
+    max: 0.281250000, 0.500000000, 2.940000000
+    color: '#545454'
+    label: east chord shade 3
+  - min: 0.281250000, -0.500000000, 2.820000000
+    max: 0.312500000, 0.500000000, 2.940000000
+    color: '#1C1C1C'
+    label: east chord shade 4
+  - min: -0.330115891, 0.028013957, 2.846000000
+    max: 0.376990891, 0.050111043, 2.934000000
+    color: '#1C1C1C'
+    yaw: -45.0
+    label: main diagonal shade 1
+  - min: -0.345740891, 0.012388957, 2.846000000
+    max: 0.361365891, 0.034486043, 2.934000000
+    color: '#545454'
+    yaw: -45.0
+    label: main diagonal shade 2
+  - min: -0.361365891, -0.003236043, 2.846000000
+    max: 0.345740891, 0.018861043, 2.934000000
+    color: '#2A2A2A'
+    yaw: -45.0
+    label: main diagonal shade 3
+  - min: -0.376990891, -0.018861043, 2.846000000
+    max: 0.330115891, 0.003236043, 2.934000000
+    color: '#151515'
+    yaw: -45.0
+    label: main diagonal shade 4
+  - min: -0.275103152, 0.348326457, 2.846000000
+    max: 0.056353152, 0.370423543, 2.934000000
+    color: '#1C1C1C'
+    yaw: -135.0
+    label: northwest continuation shade 1
+  - min: -0.290728152, 0.363951457, 2.846000000
+    max: 0.040728152, 0.386048543, 2.934000000
+    color: '#545454'
+    yaw: -135.0
+    label: northwest continuation shade 2
+  - min: -0.284256065, 0.379576457, 2.846000000
+    max: 0.003006065, 0.401673543, 2.934000000
+    color: '#2A2A2A'
+    yaw: -135.0
+    label: northwest continuation shade 3
+  - min: -0.277783978, 0.395201457, 2.846000000
+    max: -0.034716022, 0.417298543, 2.934000000
+    color: '#151515'
+    yaw: -135.0
+    label: northwest continuation shade 4
+  - min: -0.003006065, -0.401673543, 2.846000000
+    max: 0.284256065, -0.379576457, 2.934000000
+    color: '#1C1C1C'
+    yaw: -135.0
+    label: southeast continuation shade 1
+  - min: -0.040728152, -0.386048543, 2.846000000
+    max: 0.290728152, -0.363951457, 2.934000000
+    color: '#545454'
+    yaw: -135.0
+    label: southeast continuation shade 2
+  - min: -0.078450239, -0.370423543, 2.846000000
+    max: 0.297200239, -0.348326457, 2.934000000
+    color: '#2A2A2A'
+    yaw: -135.0
+    label: southeast continuation shade 3
+  - min: -0.094075239, -0.354798543, 2.846000000
+    max: 0.281575239, -0.332701457, 2.934000000
+    color: '#151515'
+    yaw: -135.0
+    label: southeast continuation shade 4
+- type: cmu3DModel
+  id: CMU3DOverheadLatticeHorizontal4
+  label: Overhead lattice Horizontal4
+  status: draft
+  sourcePrototypes:
+  - RMCOverheadLatticeHorizontal4
+  referenceRsi: _RMC14/Structures/overhead_lattice.rsi
+  referenceState: lattice4
+  description: Source-specific end or middle steel lattice with two four-shade chords, an optional end cap and continuous
+    diagonal braces. Footprint uses 32 source pixels per tile. Height 2.82-2.94 and hidden steel section are inferred to clear
+    existing 2.8-tile walls. Source projection offsets are not ground translations; centered axes retain joined cap/chord
+    alignment. SpriteFade is not implemented. Static draft; see SOURCES_REDUX_LATTICE.md.
+  parts:
+  - min: -0.312500000, 0.281250000, 2.820000000
+    max: 0.500000000, 0.312500000, 2.940000000
+    color: '#1C1C1C'
+    label: north chord shade 1
+  - min: -0.312500000, 0.250000000, 2.820000000
+    max: 0.500000000, 0.281250000, 2.940000000
+    color: '#545454'
+    label: north chord shade 2
+  - min: -0.312500000, 0.218750000, 2.820000000
+    max: 0.500000000, 0.250000000, 2.940000000
+    color: '#2A2A2A'
+    label: north chord shade 3
+  - min: -0.312500000, 0.187500000, 2.820000000
+    max: 0.500000000, 0.218750000, 2.940000000
+    color: '#151515'
+    label: north chord shade 4
+  - min: -0.312500000, -0.218750000, 2.820000000
+    max: 0.500000000, -0.187500000, 2.940000000
+    color: '#1C1C1C'
+    label: south chord shade 1
+  - min: -0.312500000, -0.250000000, 2.820000000
+    max: 0.500000000, -0.218750000, 2.940000000
+    color: '#545454'
+    label: south chord shade 2
+  - min: -0.312500000, -0.281250000, 2.820000000
+    max: 0.500000000, -0.250000000, 2.940000000
+    color: '#2A2A2A'
+    label: south chord shade 3
+  - min: -0.312500000, -0.312500000, 2.820000000
+    max: 0.500000000, -0.281250000, 2.940000000
+    color: '#151515'
+    label: south chord shade 4
+  - min: -0.312500000, -0.187500000, 2.820000000
+    max: -0.281250000, 0.187500000, 2.940000000
+    color: '#151515'
+    label: west end cap shade 1
+  - min: -0.281250000, -0.187500000, 2.820000000
+    max: -0.250000000, 0.187500000, 2.940000000
+    color: '#2A2A2A'
+    label: west end cap shade 2
+  - min: -0.250000000, -0.187500000, 2.820000000
+    max: -0.218750000, 0.187500000, 2.940000000
+    color: '#545454'
+    label: west end cap shade 3
+  - min: -0.218750000, -0.187500000, 2.820000000
+    max: -0.187500000, 0.187500000, 2.940000000
+    color: '#1C1C1C'
+    label: west end cap shade 4
+  - min: -0.330115891, 0.028013957, 2.846000000
+    max: 0.376990891, 0.050111043, 2.934000000
+    color: '#1C1C1C'
+    yaw: -45.0
+    label: main diagonal shade 1
+  - min: -0.345740891, 0.012388957, 2.846000000
+    max: 0.361365891, 0.034486043, 2.934000000
+    color: '#545454'
+    yaw: -45.0
+    label: main diagonal shade 2
+  - min: -0.361365891, -0.003236043, 2.846000000
+    max: 0.345740891, 0.018861043, 2.934000000
+    color: '#2A2A2A'
+    yaw: -45.0
+    label: main diagonal shade 3
+  - min: -0.376990891, -0.018861043, 2.846000000
+    max: 0.330115891, 0.003236043, 2.934000000
+    color: '#151515'
+    yaw: -45.0
+    label: main diagonal shade 4
+  - min: 0.174785805, -0.096986043, 2.846000000
+    max: 0.528339195, -0.074888957, 2.934000000
+    color: '#151515'
+    yaw: 45.0
+    label: southeast continuation shade 1
+  - min: 0.190410805, -0.112611043, 2.846000000
+    max: 0.543964195, -0.090513957, 2.934000000
+    color: '#2A2A2A'
+    yaw: 45.0
+    label: southeast continuation shade 2
+  - min: 0.228132892, -0.128236043, 2.846000000
+    max: 0.537492108, -0.106138957, 2.934000000
+    color: '#545454'
+    yaw: 45.0
+    label: southeast continuation shade 3
+  - min: 0.265854979, -0.143861043, 2.846000000
+    max: 0.531020021, -0.121763957, 2.934000000
+    color: '#1C1C1C'
+    yaw: 45.0
+    label: southeast continuation shade 4
+- type: cmu3DModel
+  id: CMU3DOverheadLatticeHorizontal8
+  label: Overhead lattice Horizontal8
+  status: draft
+  sourcePrototypes:
+  - RMCOverheadLatticeHorizontal8
+  referenceRsi: _RMC14/Structures/overhead_lattice.rsi
+  referenceState: lattice8
+  description: Source-specific end or middle steel lattice with two four-shade chords, an optional end cap and continuous
+    diagonal braces. Footprint uses 32 source pixels per tile. Height 2.82-2.94 and hidden steel section are inferred to clear
+    existing 2.8-tile walls. Source projection offsets are not ground translations; centered axes retain joined cap/chord
+    alignment. SpriteFade is not implemented. Static draft; see SOURCES_REDUX_LATTICE.md.
+  parts:
+  - min: -0.500000000, 0.281250000, 2.820000000
+    max: 0.312500000, 0.312500000, 2.940000000
+    color: '#1C1C1C'
+    label: north chord shade 1
+  - min: -0.500000000, 0.250000000, 2.820000000
+    max: 0.312500000, 0.281250000, 2.940000000
+    color: '#545454'
+    label: north chord shade 2
+  - min: -0.500000000, 0.218750000, 2.820000000
+    max: 0.312500000, 0.250000000, 2.940000000
+    color: '#2A2A2A'
+    label: north chord shade 3
+  - min: -0.500000000, 0.187500000, 2.820000000
+    max: 0.312500000, 0.218750000, 2.940000000
+    color: '#151515'
+    label: north chord shade 4
+  - min: -0.500000000, -0.218750000, 2.820000000
+    max: 0.312500000, -0.187500000, 2.940000000
+    color: '#1C1C1C'
+    label: south chord shade 1
+  - min: -0.500000000, -0.250000000, 2.820000000
+    max: 0.312500000, -0.218750000, 2.940000000
+    color: '#545454'
+    label: south chord shade 2
+  - min: -0.500000000, -0.281250000, 2.820000000
+    max: 0.312500000, -0.250000000, 2.940000000
+    color: '#2A2A2A'
+    label: south chord shade 3
+  - min: -0.500000000, -0.312500000, 2.820000000
+    max: 0.312500000, -0.281250000, 2.940000000
+    color: '#151515'
+    label: south chord shade 4
+  - min: 0.187500000, -0.187500000, 2.820000000
+    max: 0.218750000, 0.187500000, 2.940000000
+    color: '#151515'
+    label: east end cap shade 1
+  - min: 0.218750000, -0.187500000, 2.820000000
+    max: 0.250000000, 0.187500000, 2.940000000
+    color: '#2A2A2A'
+    label: east end cap shade 2
+  - min: 0.250000000, -0.187500000, 2.820000000
+    max: 0.281250000, 0.187500000, 2.940000000
+    color: '#545454'
+    label: east end cap shade 3
+  - min: 0.281250000, -0.187500000, 2.820000000
+    max: 0.312500000, 0.187500000, 2.940000000
+    color: '#1C1C1C'
+    label: east end cap shade 4
+  - min: -0.330115891, 0.028013957, 2.846000000
+    max: 0.376990891, 0.050111043, 2.934000000
+    color: '#1C1C1C'
+    yaw: -45.0
+    label: main diagonal shade 1
+  - min: -0.345740891, 0.012388957, 2.846000000
+    max: 0.361365891, 0.034486043, 2.934000000
+    color: '#545454'
+    yaw: -45.0
+    label: main diagonal shade 2
+  - min: -0.361365891, -0.003236043, 2.846000000
+    max: 0.345740891, 0.018861043, 2.934000000
+    color: '#2A2A2A'
+    yaw: -45.0
+    label: main diagonal shade 3
+  - min: -0.376990891, -0.018861043, 2.846000000
+    max: 0.330115891, 0.003236043, 2.934000000
+    color: '#151515'
+    yaw: -45.0
+    label: main diagonal shade 4
+  - min: -0.531020021, 0.153013957, 2.846000000
+    max: -0.265854979, 0.175111043, 2.934000000
+    color: '#151515'
+    yaw: 45.0
+    label: northwest continuation shade 1
+  - min: -0.537492108, 0.137388957, 2.846000000
+    max: -0.228132892, 0.159486043, 2.934000000
+    color: '#2A2A2A'
+    yaw: 45.0
+    label: northwest continuation shade 2
+  - min: -0.543964195, 0.121763957, 2.846000000
+    max: -0.190410805, 0.143861043, 2.934000000
+    color: '#545454'
+    yaw: 45.0
+    label: northwest continuation shade 3
+  - min: -0.528339195, 0.106138957, 2.846000000
+    max: -0.174785805, 0.128236043, 2.934000000
+    color: '#1C1C1C'
+    yaw: 45.0
+    label: northwest continuation shade 4
+- type: cmu3DModel
+  id: CMU3DOverheadLatticeHorizontal12
+  label: Overhead lattice Horizontal12
+  status: draft
+  sourcePrototypes:
+  - RMCOverheadLatticeHorizontal12
+  referenceRsi: _RMC14/Structures/overhead_lattice.rsi
+  referenceState: lattice12
+  description: Source-specific end or middle steel lattice with two four-shade chords, an optional end cap and continuous
+    diagonal braces. Footprint uses 32 source pixels per tile. Height 2.82-2.94 and hidden steel section are inferred to clear
+    existing 2.8-tile walls. Source projection offsets are not ground translations; centered axes retain joined cap/chord
+    alignment. SpriteFade is not implemented. Static draft; see SOURCES_REDUX_LATTICE.md.
+  parts:
+  - min: -0.500000000, 0.281250000, 2.820000000
+    max: 0.500000000, 0.312500000, 2.940000000
+    color: '#1C1C1C'
+    label: north chord shade 1
+  - min: -0.500000000, 0.250000000, 2.820000000
+    max: 0.500000000, 0.281250000, 2.940000000
+    color: '#545454'
+    label: north chord shade 2
+  - min: -0.500000000, 0.218750000, 2.820000000
+    max: 0.500000000, 0.250000000, 2.940000000
+    color: '#2A2A2A'
+    label: north chord shade 3
+  - min: -0.500000000, 0.187500000, 2.820000000
+    max: 0.500000000, 0.218750000, 2.940000000
+    color: '#151515'
+    label: north chord shade 4
+  - min: -0.500000000, -0.218750000, 2.820000000
+    max: 0.500000000, -0.187500000, 2.940000000
+    color: '#1C1C1C'
+    label: south chord shade 1
+  - min: -0.500000000, -0.250000000, 2.820000000
+    max: 0.500000000, -0.218750000, 2.940000000
+    color: '#545454'
+    label: south chord shade 2
+  - min: -0.500000000, -0.281250000, 2.820000000
+    max: 0.500000000, -0.250000000, 2.940000000
+    color: '#2A2A2A'
+    label: south chord shade 3
+  - min: -0.500000000, -0.312500000, 2.820000000
+    max: 0.500000000, -0.281250000, 2.940000000
+    color: '#151515'
+    label: south chord shade 4
+  - min: -0.330115891, 0.028013957, 2.846000000
+    max: 0.376990891, 0.050111043, 2.934000000
+    color: '#1C1C1C'
+    yaw: -45.0
+    label: main diagonal shade 1
+  - min: -0.345740891, 0.012388957, 2.846000000
+    max: 0.361365891, 0.034486043, 2.934000000
+    color: '#545454'
+    yaw: -45.0
+    label: main diagonal shade 2
+  - min: -0.361365891, -0.003236043, 2.846000000
+    max: 0.345740891, 0.018861043, 2.934000000
+    color: '#2A2A2A'
+    yaw: -45.0
+    label: main diagonal shade 3
+  - min: -0.376990891, -0.018861043, 2.846000000
+    max: 0.330115891, 0.003236043, 2.934000000
+    color: '#151515'
+    yaw: -45.0
+    label: main diagonal shade 4
+  - min: -0.531020021, 0.153013957, 2.846000000
+    max: -0.265854979, 0.175111043, 2.934000000
+    color: '#151515'
+    yaw: 45.0
+    label: northwest continuation shade 1
+  - min: -0.537492108, 0.137388957, 2.846000000
+    max: -0.228132892, 0.159486043, 2.934000000
+    color: '#2A2A2A'
+    yaw: 45.0
+    label: northwest continuation shade 2
+  - min: -0.543964195, 0.121763957, 2.846000000
+    max: -0.190410805, 0.143861043, 2.934000000
+    color: '#545454'
+    yaw: 45.0
+    label: northwest continuation shade 3
+  - min: -0.528339195, 0.106138957, 2.846000000
+    max: -0.174785805, 0.128236043, 2.934000000
+    color: '#1C1C1C'
+    yaw: 45.0
+    label: northwest continuation shade 4
+  - min: 0.174785805, -0.096986043, 2.846000000
+    max: 0.528339195, -0.074888957, 2.934000000
+    color: '#151515'
+    yaw: 45.0
+    label: southeast continuation shade 1
+  - min: 0.190410805, -0.112611043, 2.846000000
+    max: 0.543964195, -0.090513957, 2.934000000
+    color: '#2A2A2A'
+    yaw: 45.0
+    label: southeast continuation shade 2
+  - min: 0.228132892, -0.128236043, 2.846000000
+    max: 0.537492108, -0.106138957, 2.934000000
+    color: '#545454'
+    yaw: 45.0
+    label: southeast continuation shade 3
+  - min: 0.265854979, -0.143861043, 2.846000000
+    max: 0.531020021, -0.121763957, 2.934000000
+    color: '#1C1C1C'
+    yaw: 45.0
+    label: southeast continuation shade 4

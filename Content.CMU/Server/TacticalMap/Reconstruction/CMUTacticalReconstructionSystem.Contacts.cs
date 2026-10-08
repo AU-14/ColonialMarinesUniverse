@@ -74,7 +74,8 @@ public sealed partial class CMUTacticalReconstructionSystem
                     ? GetNetEntity(target) : null;
                 NetEntity? xenoWatchTarget = source == actor && blip.Image?.RsiState != "enemy_blip" &&
                     _xenoWatch.CanQueenWatch(actor, target) ? GetNetEntity(target) : null;
-                contacts.Add(new CMUReconContact(survey.Atlas.MinDepth + level, blip, name, cameraTarget, xenoWatchTarget));
+                contacts.Add(new CMUReconContact(survey.Atlas.MinDepth + level, blip, name, cameraTarget, xenoWatchTarget,
+                    IsOperator: target == actor));
             }
         }
         if (TryComp<TacticalMapUserComponent>(source, out var user))

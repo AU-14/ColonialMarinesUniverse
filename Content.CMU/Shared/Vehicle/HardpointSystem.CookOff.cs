@@ -10,12 +10,25 @@ public sealed partial class HardpointSystem
             || (_topology.TryGetVehicle(target, out var vehicle) && HasComp<ActiveTankCookOffComponent>(vehicle));
     }
 
+    public bool IsDestroyedBeyondRepair(EntityUid target)
+    {
+        return IsCookedOff(target)
+            || (TryComp<HardpointIntegrityComponent>(target, out var integrity) && integrity.DestroyedBeyondRepair)
+            || (_topology.TryGetVehicle(target, out var vehicle)
+                && TryComp<HardpointIntegrityComponent>(vehicle, out var frame) && frame.DestroyedBeyondRepair);
+    }
+
+    public string GetWreckMessage(EntityUid target)
+    {
+        return Loc.GetString(IsCookedOff(target) ? "cmu-tank-cook-off-unrepairable" : "cmu-vehicle-wreck-unrepairable");
+    }
+
     private bool CanRepairCookOff(EntityUid target, EntityUid user)
     {
-        if (!IsCookedOff(target))
+        if (!IsDestroyedBeyondRepair(target))
             return true;
 
-        _popup.PopupClient(Loc.GetString("cmu-tank-cook-off-unrepairable"), target, user, PopupType.SmallCaution);
+        _popup.PopupClient(GetWreckMessage(target), target, user, PopupType.SmallCaution);
         return false;
     }
 }

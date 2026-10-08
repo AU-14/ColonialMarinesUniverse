@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/17/2026 01:40:02
-  entityCount: 140595
+  entityCount: 140593
 maps:
 - 1
 grids:
@@ -562,6 +562,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMU3DElevation
+      profile: CMU3DStableGarrisonRedux0
     - type: MetaData
       name: Mapping Stable Garrison
     - type: Transform
@@ -483807,7 +483809,7 @@ entities:
     components:
     - type: Transform
       parent: 1
-      rot: 3.141592653589793 rad
+      rot: 0 rad
       pos: 280.5,-111.5
   - uid: 444
     components:
@@ -520700,11 +520702,6 @@ entities:
     - type: Transform
       parent: 1
       pos: 286.5,-103.5
-  - uid: 4143
-    components:
-    - type: Transform
-      parent: 1
-      pos: 285.5,-103.5
   - uid: 6643
     components:
     - type: Transform
@@ -568330,12 +568327,6 @@ entities:
       parent: 1
       rot: 1.5707963267948966 rad
       pos: 113.5,-147.5
-  - uid: 16755
-    components:
-    - type: Transform
-      parent: 1
-      rot: 1.5707963267948966 rad
-      pos: 113.5,-142.5
   - uid: 16756
     components:
     - type: Transform

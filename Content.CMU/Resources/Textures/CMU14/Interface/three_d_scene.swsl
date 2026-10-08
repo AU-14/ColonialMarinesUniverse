@@ -1,0 +1,564 @@
+// CMU local 3D scene workbench. Original work, CC0-1.0.
+// Layout and budgets match CMU3DSceneEncoding. No tactical-survey data is consumed.
+light_mode unshaded;
+uniform sampler2D sceneBoxes;
+uniform sampler2D sceneGrid;
+uniform sampler2D sceneSurfaces;
+uniform sampler2D sceneSurfaceInfo;
+uniform highp vec2 surfaceAtlasSize;
+uniform highp vec3 cameraOrigin;
+uniform highp vec3 cameraForward;
+uniform highp vec3 cameraRight;
+uniform highp vec3 cameraUp;
+uniform highp vec2 sceneZ;
+uniform highp float aspect;
+uniform highp float tanHalfFov;
+uniform highp vec4 gridLayout;
+uniform highp vec3 gridZ;
+uniform highp float sceneRadius;
+uniform highp vec3 sceneView;
+uniform sampler2D liveLight;
+uniform highp float useLiveLight;
+uniform highp float brightness;
+uniform sampler2D spriteAtlas;
+uniform sampler2D billboardData;
+uniform highp float billboardCount;
+uniform highp vec2 billboardLayout;
+uniform highp float selectedBox;
+uniform sampler2D equipmentBoxes;
+uniform sampler2D equipmentRoots;
+uniform highp float equipmentCount;
+
+highp vec4 boxData(highp float boxId, highp float column) {
+    if (boxId < 0.0) {
+        highp float equipmentIndex = (-boxId - 1.0) * 6.0 + column;
+        highp vec2 equipmentUV = vec2((mod(equipmentIndex, 256.0) + 0.5) / 256.0,
+            1.0 - (floor(equipmentIndex / 256.0) + 0.5) / 768.0);
+        return floor(texture2D(equipmentBoxes, equipmentUV) * 255.0 + 0.5);
+    }
+    highp float index = (boxId - 1.0) * 6.0 + column;
+    highp vec2 uv = vec2((mod(index, 256.0) + 0.5) / 256.0, 1.0 - (floor(index / 256.0) + 0.5) / gridLayout.w);
+    return floor(texture2D(sceneBoxes, uv) * 255.0 + 0.5);
+}
+highp vec4 gridData(highp float index) {
+    highp vec2 uv = vec2((mod(index, 2048.0) + 0.5) / 2048.0, 1.0 - (floor(index / 2048.0) + 0.5) / gridLayout.z);
+    return floor(texture2D(sceneGrid, uv) * 255.0 + 0.5);
+}
+highp vec2 unpackPair(highp vec4 data) {
+    return vec2(data.r + data.g * 256.0, data.b + data.a * 256.0);
+}
+highp vec2 slab(highp vec3 origin, highp vec3 ray, highp vec3 low, highp vec3 high) {
+    if ((abs(ray.x) < 0.000001 && (origin.x < low.x || origin.x > high.x)) ||
+        (abs(ray.y) < 0.000001 && (origin.y < low.y || origin.y > high.y)) ||
+        (abs(ray.z) < 0.000001 && (origin.z < low.z || origin.z > high.z))) return vec2(1000000.0, -1000000.0);
+    highp vec3 inv = (step(vec3(0.0), ray) * 2.0 - 1.0) / max(abs(ray), vec3(0.000001));
+    highp vec3 a = (low - origin) * inv;
+    highp vec3 b = (high - origin) * inv;
+    highp vec3 near = min(a, b);
+    highp vec3 far = max(a, b);
+    // Parallel rays inside a slab impose no distance constraint, including its boundary.
+    highp vec3 parallel = vec3(1.0) - step(vec3(0.000001), abs(ray));
+    near = mix(near, vec3(-1000000.0), parallel);
+    far = mix(far, vec3(1000000.0), parallel);
+    return vec2(max(max(near.x, near.y), near.z), min(min(far.x, far.y), far.z));
+}
+// Source pixels are unfiltered sRGB, uploaded with the same row convention as box data.
+highp vec4 sampleSurface(highp vec4 metadata, highp vec3 local) {
+    if (metadata.g >= 128.0) return vec4(1.0);
+    highp float index = metadata.b + floor(metadata.g / 8.0) * 256.0;
+    if (index < 0.5) return vec4(1.0);
+    highp vec4 info = floor(texture2D(sceneSurfaceInfo, vec2((index - 0.5) / 4096.0, 0.5)) * 255.0 + 0.5);
+    if (info.a < 0.5) return vec4(0.0);
+    highp float axis = mod(metadata.g, 4.0);
+    highp vec2 uv = vec2(local.x + 0.5, 1.0 - (local.z + 0.5) * metadata.a / 255.0);
+    if (axis > 1.5 && axis < 2.5) uv = vec2(local.x + 0.5, 0.5 - local.y);
+    if (axis > 2.5) uv.x = 0.5 - local.y;
+    if (mod(metadata.g, 8.0) > 3.5) uv.x = 1.0 - uv.x;
+    highp vec2 dimensions = info.rg + 1.0;
+    highp vec2 pixel = clamp(floor(uv * dimensions), vec2(0.0), dimensions - 1.0);
+    highp vec2 cell = vec2(mod(index - 1.0, 64.0), floor((index - 1.0) / 64.0)) * (surfaceAtlasSize.x / 64.0);
+    highp vec2 atlasUV = (cell + pixel + 0.5) / surfaceAtlasSize;
+    return texture2D(sceneSurfaces, vec2(atlasUV.x, 1.0 - atlasUV.y));
+}
+// The same 4x4 screen-door coverage as the browser and comparison renderer.
+// Sampling retained fractional source alpha keeps shoreline shadows translucent.
+highp float coverageThreshold(highp vec2 fragmentPixel) {
+    highp vec2 pixel = mod(floor(fragmentPixel), 4.0);
+    highp vec2 low = mod(pixel, 2.0);
+    highp vec2 high = floor(pixel / 2.0);
+    highp float lowIndex = mod(low.x + low.y, 2.0) * 2.0 + low.y;
+    highp float highIndex = mod(high.x + high.y, 2.0) * 2.0 + high.y;
+    return (4.0 * lowIndex + highIndex + 0.5) / 16.0;
+}
+// BEGIN GENERATED FOLIAGE TRANSFORMS
+void foliageTransform(highp float index, out highp vec3 center, out highp vec3 ax, out highp vec3 ay, out highp vec3 az) {
+    if (index == 0.0) {
+        center = vec3(0.1665561764, 0.0000000000, -0.3400000000);
+        ax = vec3(13.1376511416, 0.0000000000, -8.0547624053);
+        ay = vec3(-0.0000000000, 36.9846988843, 0.0000000000);
+        az = vec3(4.3935067665, 0.0000000000, 7.1659915318);
+    }
+    else if (index == 1.0) {
+        center = vec3(-0.1584580011, 0.1451605092, -0.3022222222);
+        ax = vec3(-6.0376261024, 5.5309600850, -8.3956742133);
+        ay = vec3(-22.2536282558, -24.2921816043, 0.0000000000);
+        az = vec3(-4.1703139061, 3.8203491514, 5.5158160721);
+    }
+    else if (index == 2.0) {
+        center = vec3(0.0218478100, -0.2489445266, -0.2644444444);
+        ax = vec3(1.0384961734, -11.8331282619, -6.2767506339);
+        ay = vec3(27.5626021371, 2.4189424989, 0.0000000000);
+        az = vec3(0.3061046783, -3.4879049270, 6.6261537743);
+    }
+    else if (index == 3.0) {
+        center = vec3(0.1683425511, 0.2195730476, -0.2266666667);
+        ax = vec3(6.2024076007, 8.0899423877, -3.3617355739);
+        ay = vec3(-19.3732945386, 14.8531427715, 0.0000000000);
+        az = vec3(1.3661663706, 1.7819221085, 6.8087353614);
+    }
+    else if (index == 4.0) {
+        center = vec3(-0.2929138014, -0.0518123271, -0.1888888889);
+        ax = vec3(-6.6809371642, -1.1817637140, -5.4142412923);
+        ay = vec3(4.3017612934, -24.3194105187, 0.0000000000);
+        az = vec3(-4.2452896713, -0.7509319674, 5.4024074861);
+    }
+    else if (index == 5.0) {
+        center = vec3(0.2644673249, -0.1682324640, -0.1511111111);
+        ax = vec3(7.7735427505, -4.9448915914, -8.5763195936);
+        ay = vec3(14.5600553178, 22.8889168491, 0.0000000000);
+        az = vec3(3.8585574534, -2.4544984081, 4.9125839352);
+    }
+    else if (index == 6.0) {
+        center = vec3(-0.0844563805, 0.3141735257, -0.1133333333);
+        ax = vec3(-3.2166250406, 11.9656848199, -4.8776752260);
+        ay = vec3(-27.7577027769, -7.4618480401, 0.0000000000);
+        az = vec3(-0.6240261052, 2.3213460072, 6.1061368984);
+    }
+    else if (index == 7.0) {
+        center = vec3(-0.1537394621, -0.2960159789, -0.0755555556);
+        ax = vec3(-4.1286081054, -7.9493836753, -3.7394157798);
+        ay = vec3(24.5142186913, -12.7317545762, 0.0000000000);
+        az = vec3(-1.1467878894, -2.2080702974, 5.9601384451);
+    }
+    else if (index == 8.0) {
+        center = vec3(0.3178673822, 0.1160846581, -0.0377777778);
+        ax = vec3(7.3091238289, 2.6692802995, -7.4670051656);
+        ay = vec3(-8.3994725916, 22.9997521360, 0.0000000000);
+        az = vec3(4.1608732958, 1.5195442541, 4.6160980115);
+    }
+    else if (index == 9.0) {
+        center = vec3(-0.3142774891, 0.1297291789, 0.0000000000);
+        ax = vec3(-7.8439255164, 3.2378584270, -6.4401320402);
+        ay = vec3(-8.3816721803, -20.3051534733, 0.0000000000);
+        az = vec3(-3.5637854687, 1.4710788352, 5.0802083827);
+    }
+    else if (index == 10.0) {
+        center = vec3(0.1434299610, -0.3065014956, 0.0377777778);
+        ax = vec3(3.1979466961, -6.8338263386, -2.4139864875);
+        ay = vec3(20.1678746823, 9.4377271256, 0.0000000000);
+        az = vec3(0.8263035276, -1.7657626432, 6.0934019188);
+    }
+    else if (index == 11.0) {
+        center = vec3(0.0998286810, 0.3182695657, 0.0755555556);
+        ax = vec3(2.7432278497, 8.7458426563, -5.1602140131);
+        ay = vec3(-24.0477628113, 7.5428400966, 0.0000000000);
+        az = vec3(0.9482654800, 3.0232197757, 5.6280442387);
+    }
+    else if (index == 12.0) {
+        center = vec3(-0.2814768698, -0.1631215995, 0.1133333333);
+        ax = vec3(-8.5808156354, -4.9727580552, -10.2104819148);
+        ay = vec3(14.2206772218, -24.5386982629, 0.0000000000);
+        az = vec3(-4.0727433765, -2.3602380348, 4.5721987594);
+    }
+    else if (index == 13.0) {
+        center = vec3(0.3061300246, -0.0673018271, 0.1511111111);
+        ax = vec3(9.0138964179, -1.9816798415, -5.3191350799);
+        ay = vec3(6.2742633959, 28.5392015222, 0.0000000000);
+        az = vec3(3.2732589492, -0.7196167978, 5.8150181851);
+    }
+    else if (index == 14.0) {
+        center = vec3(-0.1710785421, 0.2433416215, 0.1888888889);
+        ax = vec3(-5.9625805677, 8.4811572882, -3.2872685469);
+        ay = vec3(-22.4381443441, -15.7748805848, 0.0000000000);
+        az = vec3(-1.2014838593, 1.7089871531, 6.5884891520);
+    }
+    else if (index == 15.0) {
+        center = vec3(-0.0355562715, -0.2743852935, 0.2266666667);
+        ax = vec3(-1.3306224842, -10.2683218747, -7.7053508006);
+        ay = vec3(25.0281991829, -3.2432840516, 0.0000000000);
+        az = vec3(-0.5500500455, -4.2446982377, 5.7515663947);
+    }
+    else if (index == 16.0) {
+        center = vec3(0.1910868459, 0.1610481960, 0.2644444444);
+        ax = vec3(5.3158866750, 4.4802349175, -6.7387426918);
+        ay = vec3(-16.5232369387, 19.6051449731, 0.0000000000);
+        az = vec3(3.9884814683, 3.3614964040, 5.3812128928);
+    }
+    else if (index == 17.0) {
+        center = vec3(-0.2147130035, 0.0088790568, 0.3022222222);
+        ax = vec3(-10.3529141062, 0.4281255017, -4.4248060595);
+        ay = vec3(-1.2281020744, -29.6979162383, 0.0000000000);
+        az = vec3(-3.0998828702, 0.1281898889, 7.2653359316);
+    }
+    else if (index == 18.0) {
+        center = vec3(0.1180599170, -0.1174853859, 0.3400000000);
+        ax = vec3(12.0373091952, -11.9787303980, -6.5458723466);
+        ay = vec3(25.0812479465, 25.2039011234, 0.0000000000);
+        az = vec3(2.1429419494, -2.1325134591, 7.8431194361);
+    }
+    else { center = vec3(0.0); ax = vec3(1.0, 0.0, 0.0); ay = vec3(0.0, 1.0, 0.0); az = vec3(0.0, 0.0, 1.0); }
+}
+// END GENERATED FOLIAGE TRANSFORMS
+
+highp float intersectBox(highp float id, highp vec3 origin, highp vec3 ray, highp float threshold, highp vec2 segment,
+    out highp vec3 normal, out highp vec3 albedo) {
+    normal = vec3(0.0, 0.0, 1.0);
+    albedo = vec3(0.0);
+    highp vec2 a = unpackPair(boxData(id, 0.0));
+    highp vec2 b = unpackPair(boxData(id, 1.0));
+    highp vec2 c = unpackPair(boxData(id, 2.0));
+    highp vec3 center = (vec3(a, b.x) - 32768.0) / 1024.0;
+    highp vec3 halfSize = vec3(b.y, c) / 2048.0;
+    highp vec4 metadata = boxData(id, 5.0);
+    // Reject other floors before rotation/shape work. Tilted solids need their full local bounds.
+    highp vec2 segmentZ = origin.z + ray.z * segment;
+    if (metadata.g < 128.0 && (max(segmentZ.x, segmentZ.y) < center.z - halfSize.z - 0.002 ||
+        min(segmentZ.x, segmentZ.y) > center.z + halfSize.z + 0.002)) return 1000000.0;
+    highp vec2 rotation = normalize((unpackPair(boxData(id, 3.0)) - 32768.0) / 32767.0);
+    highp vec3 relative = origin - center;
+    highp vec3 localOrigin = vec3(rotation.x * relative.x + rotation.y * relative.y,
+        -rotation.y * relative.x + rotation.x * relative.y, relative.z);
+    highp vec3 localRay = vec3(rotation.x * ray.x + rotation.y * ray.y,
+        -rotation.y * ray.x + rotation.x * ray.y, ray.z);
+    highp float pitch = metadata.g >= 128.0 ? ((metadata.g - 128.0) * 256.0 + metadata.a - 16384.0) * (3.141592653589793 / 32768.0) : 0.0;
+    highp vec2 tilt = vec2(cos(pitch), sin(pitch));
+    localOrigin = vec3(tilt.x * localOrigin.x + tilt.y * localOrigin.z, localOrigin.y, -tilt.y * localOrigin.x + tilt.x * localOrigin.z);
+    localRay = vec3(tilt.x * localRay.x + tilt.y * localRay.z, localRay.y, -tilt.y * localRay.x + tilt.x * localRay.z);
+    highp vec2 bounds = slab(localOrigin, localRay, -halfSize, halfSize);
+    if (bounds.y < max(max(bounds.x, 0.0001), segment.x - 0.001) || bounds.x > segment.y + 0.001) return 1000000.0;
+    highp float distance = bounds.x >= 0.0001 ? bounds.x : bounds.y;
+    highp float shape = metadata.r;
+    highp vec3 cylinderAxis = shape < 2.5 ? vec3(1.0, 0.0, 0.0) : shape < 3.5 ? vec3(0.0, 1.0, 0.0) : vec3(0.0, 0.0, 1.0);
+    highp float leafShear = mod(shape - 7.0, 2.0) > 0.5 ? -0.85 : 0.85;
+    highp float leafScale = sqrt(1.0 - 0.85 * 0.85);
+    highp vec3 foliageNormal = vec3(0.0, 0.0, 1.0);
+    if (shape > 10.5 && shape < 11.5) {
+        distance = 1000000.0;
+        highp vec3 unitOrigin = localOrigin / (halfSize * 2.0);
+        highp vec3 unitRay = localRay / (halfSize * 2.0);
+        for (int leaf = 0; leaf < 19; leaf++) {
+            highp vec3 leafCenter;
+            highp vec3 ax;
+            highp vec3 ay;
+            highp vec3 az;
+            foliageTransform(float(leaf), leafCenter, ax, ay, az);
+            highp vec3 relativeLeaf = unitOrigin - leafCenter;
+            highp vec3 o = vec3(dot(relativeLeaf, ax), dot(relativeLeaf, ay), dot(relativeLeaf, az));
+            highp vec3 d = vec3(dot(unitRay, ax), dot(unitRay, ay), dot(unitRay, az));
+            highp float qa = dot(d, d);
+            highp float qb = dot(o, d);
+            highp float discriminant = qb * qb - qa * (dot(o, o) - 1.0);
+            if (qa <= 0.0 || discriminant < 0.0) continue;
+            highp float root = sqrt(discriminant);
+            highp float near = (-qb - root) / qa;
+            highp float hit = near >= 0.0001 ? near : (-qb + root) / qa;
+            if (hit < 0.0001 || hit >= distance) continue;
+            distance = hit;
+            highp vec3 pointLeaf = o + d * hit;
+            foliageNormal = normalize((ax * pointLeaf.x + ay * pointLeaf.y + az * pointLeaf.z) / halfSize);
+        }
+        if (distance >= 1000000.0) return distance;
+    }
+    if ((shape > 0.5 && shape < 1.5) || (shape > 6.5 && shape < 10.5)) {
+        highp vec3 o = localOrigin / halfSize;
+        highp vec3 d = localRay / halfSize;
+        if (shape > 6.5 && shape < 8.5) {
+            o.x = (o.x - leafShear * o.z) / leafScale;
+            d.x = (d.x - leafShear * d.z) / leafScale;
+        } else if (shape > 8.5) {
+            o.y = (o.y - leafShear * o.z) / leafScale;
+            d.y = (d.y - leafShear * d.z) / leafScale;
+        }
+        highp float qa = dot(d, d);
+        highp float qb = dot(o, d);
+        highp float discriminant = qb * qb - qa * (dot(o, o) - 1.0);
+        if (discriminant < 0.0) return 1000000.0;
+        highp float root = sqrt(discriminant);
+        highp float near = (-qb - root) / qa;
+        distance = near >= 0.0001 ? near : (-qb + root) / qa;
+        if (distance < 0.0001) return 1000000.0;
+    }
+    if (shape > 1.5 && shape < 4.5) {
+        highp vec3 o = localOrigin / halfSize * (vec3(1.0) - cylinderAxis);
+        highp vec3 d = localRay / halfSize * (vec3(1.0) - cylinderAxis);
+        highp float qa = dot(d, d);
+        highp float qb = dot(o, d);
+        highp float qc = dot(o, o) - 1.0;
+        if (qa < 0.000000000001) {
+            if (qc > 0.0) return 1000000.0;
+        } else {
+            highp float discriminant = qb * qb - qa * qc;
+            if (discriminant < 0.0) return 1000000.0;
+            highp float root = sqrt(discriminant);
+            bounds = vec2(max(bounds.x, (-qb - root) / qa), min(bounds.y, (-qb + root) / qa));
+        }
+        if (bounds.y < max(bounds.x, 0.0001)) return 1000000.0;
+        distance = bounds.x >= 0.0001 ? bounds.x : bounds.y;
+    }
+    if (shape > 4.5 && shape < 6.5) {
+        highp float slope = shape > 5.5 ? 1.0 : -1.0;
+        highp float planeOrigin = localOrigin.z / halfSize.z + slope * localOrigin.y / halfSize.y;
+        highp float planeRay = localRay.z / halfSize.z + slope * localRay.y / halfSize.y;
+        if (abs(planeRay) < 0.000001) {
+            if (planeOrigin > 0.0) return 1000000.0;
+        } else if (planeRay < 0.0) bounds.x = max(bounds.x, -planeOrigin / planeRay);
+        else bounds.y = min(bounds.y, -planeOrigin / planeRay);
+        if (bounds.y < max(bounds.x, 0.0001)) return 1000000.0;
+        distance = bounds.x >= 0.0001 ? bounds.x : bounds.y;
+    }
+    highp vec3 point = localOrigin + localRay * distance;
+    highp vec4 paint = boxData(id, 4.0) / 255.0;
+    highp vec4 surfaceColor = sampleSurface(metadata, point / (halfSize * 2.0));
+    if (surfaceColor.a < 0.5 || paint.a * surfaceColor.a < threshold) {
+        distance = bounds.y;
+        point = localOrigin + localRay * distance;
+        surfaceColor = sampleSurface(metadata, point / (halfSize * 2.0));
+        if (surfaceColor.a < 0.5 || paint.a * surfaceColor.a < threshold) return 1000000.0;
+    }
+    highp vec3 edge = abs(abs(point) - halfSize);
+    highp vec3 localNormal = vec3(0.0, 0.0, sign(point.z));
+    if (edge.x <= edge.y && edge.x <= edge.z) localNormal = vec3(sign(point.x), 0.0, 0.0);
+    else if (edge.y <= edge.z) localNormal = vec3(0.0, sign(point.y), 0.0);
+    if (shape > 0.5 && shape < 1.5) localNormal = normalize(point / (halfSize * halfSize));
+    if (shape > 6.5 && shape < 10.5) {
+        highp vec3 unit = point / halfSize;
+        highp vec3 gradient = unit;
+        if (shape < 8.5) {
+            gradient.x = (unit.x - leafShear * unit.z) / (leafScale * leafScale);
+            gradient.z = unit.z - leafShear * gradient.x;
+        } else {
+            gradient.y = (unit.y - leafShear * unit.z) / (leafScale * leafScale);
+            gradient.z = unit.z - leafShear * gradient.y;
+        }
+        localNormal = normalize(gradient / halfSize);
+    }
+    if (shape > 10.5 && shape < 11.5) localNormal = foliageNormal;
+    if (shape > 1.5 && shape < 4.5) {
+        if (abs(abs(dot(point, cylinderAxis)) - dot(halfSize, cylinderAxis)) < 0.00001)
+            localNormal = cylinderAxis * sign(dot(point, cylinderAxis));
+        else localNormal = normalize(point / (halfSize * halfSize) * (vec3(1.0) - cylinderAxis));
+    }
+    highp float wedgeSlope = shape > 5.5 ? 1.0 : -1.0;
+    if (shape > 4.5 && shape < 6.5 && abs(point.z / halfSize.z + wedgeSlope * point.y / halfSize.y) < 0.0001)
+        localNormal = normalize(vec3(0.0, wedgeSlope / halfSize.y, 1.0 / halfSize.z));
+    localNormal = vec3(tilt.x * localNormal.x - tilt.y * localNormal.z, localNormal.y, tilt.y * localNormal.x + tilt.x * localNormal.z);
+    normal = vec3(rotation.x * localNormal.x - rotation.y * localNormal.y,
+        rotation.y * localNormal.x + rotation.x * localNormal.y, localNormal.z);
+    albedo = paint.rgb * surfaceColor.rgb;
+    return distance;
+}
+
+highp float traceScene(highp vec3 origin, highp vec3 ray, highp float threshold, out highp vec3 normal,
+    out highp vec3 albedo, out highp float picked) {
+    normal = vec3(0.0, 0.0, 1.0);
+    albedo = vec3(0.0);
+    picked = 0.0;
+    highp vec2 volume = slab(origin, ray, vec3(sceneView.xy - vec2(sceneView.z), sceneZ.x - 0.002), vec3(sceneView.xy + vec2(sceneView.z), sceneZ.y + 0.002));
+    highp float distance = max(0.0, volume.x);
+    if (volume.y < max(distance, 0.0001)) return -1.0;
+    highp vec3 inv = (step(vec3(0.0), ray) * 2.0 - 1.0) / max(abs(ray), vec3(0.000001));
+    // Up to 208 XYZ crossings in the extended 64x64x80 grid.
+    for (int stepIndex = 0; stepIndex < 224; stepIndex++) {
+        if (distance > volume.y) break;
+        highp vec3 point = origin + ray * (distance + 0.0001);
+        highp vec3 cell = floor(vec3(point.xy - gridLayout.y, (point.z - gridZ.x) / gridZ.y));
+        if (cell.x < 0.0 || cell.y < 0.0 || cell.z < 0.0 || cell.x >= gridLayout.x || cell.y >= gridLayout.x || cell.z >= gridZ.z) break;
+        highp vec3 boundary = vec3(cell.xy + gridLayout.y, cell.z * gridZ.y + gridZ.x) + step(vec3(0.0), ray) * vec3(1.0, 1.0, gridZ.y);
+        highp vec3 next = max((boundary - origin) * inv, vec3(distance));
+        if (abs(ray.x) < 0.000001) next.x = 1000000.0;
+        if (abs(ray.y) < 0.000001) next.y = 1000000.0;
+        if (abs(ray.z) < 0.000001) next.z = 1000000.0;
+        highp float cellEnd = min(volume.y, min(next.x, min(next.y, next.z)));
+        highp float descriptor = ((cell.z * gridLayout.x + cell.y) * gridLayout.x + cell.x) * 2.0;
+        highp vec4 startBytes = gridData(descriptor);
+        highp float start = startBytes.r + startBytes.g * 256.0 + startBytes.b * 65536.0;
+        highp vec4 countBytes = gridData(descriptor + 1.0);
+        highp float count = countBytes.r + countBytes.g * 256.0 + countBytes.b * 65536.0;
+        highp float references = gridLayout.x * gridLayout.x * gridZ.z * 2.0;
+        highp float best = 1000000.0;
+        highp float bestId = 0.0;
+        highp vec3 bestNormal = normal;
+        highp vec3 bestAlbedo = albedo;
+        // Keep the bounded loop in sync with CMU3DSceneEncoding.MaxCellBoxes.
+        for (int candidate = 0; candidate < 130560; candidate++) {
+            if (float(candidate) >= count) break;
+            highp float reference = start + float(candidate);
+            highp vec4 entry = gridData(references + reference);
+            highp vec2 segmentZ = origin.z + ray.z * vec2(distance, min(cellEnd, best));
+            if (max(segmentZ.x, segmentZ.y) < mod(entry.b, 128.0) * 2.0 - 128.0 || min(segmentZ.x, segmentZ.y) > entry.a * 2.0 - 128.0) continue;
+            highp float id = entry.r + entry.g * 256.0 + floor(entry.b / 128.0) * 65536.0;
+            highp vec3 candidateNormal;
+            highp vec3 candidateAlbedo;
+            highp float hit = intersectBox(id, origin, ray, threshold, vec2(distance, min(cellEnd, best)), candidateNormal, candidateAlbedo);
+            if (hit < distance - 0.001 || hit > cellEnd + 0.001 || hit > best) continue;
+            best = hit;
+            bestId = id;
+            bestNormal = candidateNormal;
+            bestAlbedo = candidateAlbedo;
+        }
+        if (bestId > 0.0) {
+            normal = bestNormal;
+            albedo = bestAlbedo;
+            picked = bestId;
+            return best;
+        }
+        distance = cellEnd + 0.0001;
+    }
+    return -1.0;
+}
+highp vec3 linearColor(highp vec3 color) {
+    return mix(color / 12.92, pow((color + 0.055) / 1.055, vec3(2.4)), step(vec3(0.04045), color));
+}
+highp vec2 billboardPair(highp float index) {
+    highp vec4 data = floor(texture2D(billboardData, vec2((index + 0.5) / billboardLayout.y, 0.5)) * 255.0 + 0.5);
+    return (unpackPair(data) - 32768.0) / 1024.0;
+}
+highp float traceBillboards(highp vec3 ray, highp float nearest, highp float threshold, out highp vec3 spriteColor, out highp vec3 spriteNormal, out highp float emissive) {
+    spriteColor = vec3(0.0);
+    spriteNormal = vec3(0.0);
+    emissive = 0.0;
+    highp float best = nearest < 0.0 ? 1000000.0 : nearest;
+    highp float result = -1.0;
+    // Keep the loop bound in sync with CMU3DSceneControl.BillboardLimit.
+    for (int i = 0; i < 256; i++) {
+        if (float(i) >= billboardCount) break;
+        highp vec2 xy = billboardPair(float(i) * 4.0);
+        highp vec2 zw = billboardPair(float(i) * 4.0 + 1.0);
+        highp vec2 heightYaw = billboardPair(float(i) * 4.0 + 2.0);
+        highp vec2 tiltLight = billboardPair(float(i) * 4.0 + 3.0);
+        if (zw.y <= 0.0 || heightYaw.x <= 0.0) continue;
+        highp vec3 right = vec3(cos(heightYaw.y), sin(heightYaw.y), 0.0);
+        highp vec3 up = vec3(right.y * sin(tiltLight.x), -right.x * sin(tiltLight.x), cos(tiltLight.x));
+        highp vec3 normal = cross(up, right);
+        highp float denominator = dot(ray, normal);
+        if (abs(denominator) < 0.00001) continue;
+        highp vec3 center = vec3(xy, zw.x);
+        highp float t = dot(center - cameraOrigin, normal) / denominator;
+        if (t < 0.01 || t >= best) continue;
+        highp vec3 world = cameraOrigin + ray * t;
+        if (abs(world.x - sceneView.x) > sceneView.z || abs(world.y - sceneView.y) > sceneView.z) continue;
+        highp vec3 local = world - center;
+        highp vec2 uv = vec2(dot(local, right) / zw.y, dot(local, up) / heightYaw.x) + 0.5;
+        if (uv.x < 0.0 || uv.y < 0.0 || uv.x > 1.0 || uv.y > 1.0) continue;
+        highp vec2 atlasUv = (vec2(mod(float(i), billboardLayout.x), floor(float(i) / billboardLayout.x)) + vec2(uv.x, 1.0 - uv.y)) / billboardLayout.x;
+        atlasUv.y = 1.0 - atlasUv.y;
+        highp vec4 paint = texture2D(spriteAtlas, atlasUv);
+        if (paint.a <= threshold) continue;
+        spriteColor = paint.rgb;
+        spriteNormal = denominator < 0.0 ? normal : -normal;
+        emissive = tiltLight.y;
+        best = t;
+        result = t;
+    }
+    return result;
+}
+highp vec4 equipmentData(highp float group, highp float index) {
+    return floor(texture2D(equipmentRoots, vec2((group * 12.0 + index + 0.5) / 768.0, 0.5)) * 255.0 + 0.5);
+}
+highp vec2 equipmentPair(highp float group, highp float index) {
+    return (unpackPair(equipmentData(group, index)) - 32768.0) / 1024.0;
+}
+highp float traceEquipment(highp vec3 ray, highp float nearest, highp float threshold,
+    out highp vec3 normal, out highp vec3 albedo) {
+    normal = vec3(0.0);
+    albedo = vec3(0.0);
+    highp float best = nearest < 0.0 ? 1000000.0 : nearest;
+    highp float result = -1.0;
+    for (int group = 0; group < 64; group++) {
+        if (float(group) >= equipmentCount) break;
+        highp float g = float(group);
+        highp vec2 sphereXY = equipmentPair(g, 10.0);
+        highp vec2 sphereZR = equipmentPair(g, 11.0);
+        highp vec3 toSphere = vec3(sphereXY, sphereZR.x) - cameraOrigin;
+        highp float projection = dot(toSphere, ray);
+        highp float perpendicular = dot(toSphere, toSphere) - projection * projection;
+        if (perpendicular > sphereZR.y * sphereZR.y || projection + sphereZR.y < 0.01 ||
+            projection - sphereZR.y >= best) continue;
+        highp vec2 p0 = equipmentPair(g, 0.0);
+        highp vec2 p1 = equipmentPair(g, 1.0);
+        highp vec2 p2 = equipmentPair(g, 2.0);
+        highp vec2 p3 = equipmentPair(g, 3.0);
+        highp vec2 p4 = equipmentPair(g, 4.0);
+        highp vec2 p5 = equipmentPair(g, 5.0);
+        highp vec3 center = vec3(p0, p1.x);
+        highp vec3 ax = vec3(p1.y, p2);
+        highp vec3 ay = vec3(p3, p4.x);
+        highp vec3 az = vec3(p4.y, p5);
+        highp vec3 inverseScale = vec3(1.0) / max(vec3(dot(ax, ax), dot(ay, ay), dot(az, az)), vec3(0.000001));
+        highp vec3 relative = cameraOrigin - center;
+        highp vec3 origin = vec3(dot(relative, ax), dot(relative, ay), dot(relative, az)) * inverseScale;
+        highp vec3 direction = vec3(dot(ray, ax), dot(ray, ay), dot(ray, az)) * inverseScale;
+        highp vec2 p6 = equipmentPair(g, 6.0);
+        highp vec2 p7 = equipmentPair(g, 7.0);
+        highp vec2 p8 = equipmentPair(g, 8.0);
+        highp vec2 range = slab(origin, direction, vec3(p6, p7.x), vec3(p7.y, p8));
+        if (range.x > range.y || range.y < 0.01 || range.x >= best) continue;
+        highp vec4 parts = equipmentData(g, 9.0);
+        highp float start = parts.r + parts.g * 256.0;
+        for (int part = 0; part < 512; part++) {
+            if (float(part) >= parts.b + parts.a * 256.0) break;
+            highp vec3 candidateNormal;
+            highp vec3 candidateColor;
+            highp float hit = intersectBox(-(start + float(part) + 1.0), origin, direction, threshold,
+                vec2(max(0.01, range.x - 0.002), min(best, range.y + 0.002)), candidateNormal, candidateColor);
+            if (hit < 0.01 || hit >= best) continue;
+            best = hit;
+            result = hit;
+            normal = normalize(ax * candidateNormal.x + ay * candidateNormal.y + az * candidateNormal.z);
+            albedo = candidateColor;
+        }
+    }
+    return result;
+}
+void fragment() {
+    highp vec2 screen = (UV2 * 2.0 - 1.0) * vec2(aspect, 1.0);
+    highp vec3 ray = normalize(cameraForward + (cameraRight * screen.x + cameraUp * screen.y) * tanHalfFov);
+    highp vec3 normal;
+    highp vec3 albedo;
+    highp float picked;
+    highp float distance = traceScene(cameraOrigin, ray, coverageThreshold(gl_FragCoord.xy), normal, albedo, picked);
+    highp vec3 spriteColor;
+    highp vec3 spriteNormal;
+    highp float spriteEmissive;
+    highp float spriteDistance = traceBillboards(ray, distance, coverageThreshold(gl_FragCoord.xy), spriteColor, spriteNormal, spriteEmissive);
+    if (spriteDistance >= 0.0) {
+        distance = spriteDistance;
+        albedo = spriteColor;
+        normal = spriteNormal;
+        picked = 0.0;
+    }
+    highp vec3 equipmentNormal;
+    highp vec3 equipmentColor;
+    highp float equipmentDistance = traceEquipment(ray, distance, coverageThreshold(gl_FragCoord.xy), equipmentNormal, equipmentColor);
+    if (equipmentDistance >= 0.0) {
+        distance = equipmentDistance;
+        albedo = equipmentColor;
+        normal = equipmentNormal;
+        spriteDistance = -1.0;
+        picked = 0.0;
+    }
+    highp vec3 color = mix(vec3(0.006, 0.012, 0.018), vec3(0.016, 0.026, 0.032), UV2.y);
+    if (distance >= 0.0) {
+        highp float diffuse = max(0.0, dot(normal, normalize(vec3(-0.4, -0.6, 1.0))));
+        highp vec3 light = vec3(1.0);
+        if (useLiveLight > 0.5) {
+            highp vec2 lightUv = (cameraOrigin.xy + ray.xy * distance + normal.xy * 0.04) / (sceneRadius * 2.0) + 0.5;
+            light = texture2D(liveLight, clamp(lightUv, vec2(0.001), vec2(0.999))).rgb * brightness;
+        }
+        color = (spriteDistance >= 0.0 ? albedo : linearColor(albedo)) * (0.72 + diffuse * 0.28) * light;
+        if (spriteDistance >= 0.0 && spriteEmissive > 0.5) color = albedo;
+        if (selectedBox > 0.0 && abs(selectedBox - picked) < 0.5) color = mix(color, vec3(0.95, 0.42, 0.08), 0.42);
+        color = mix(color, vec3(0.016, 0.026, 0.032), smoothstep(24.0, 65.0, distance) * 0.25);
+    }
+    COLOR = vec4(color, 1.0);
+}

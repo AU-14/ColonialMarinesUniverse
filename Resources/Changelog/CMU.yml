@@ -12045,5 +12045,41 @@
   id: 741
   time: '2026-10-08T06:30:13.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2101
+- author: TheHellFireo
+  changes:
+  - message: Fixed delayed facehugger larva claims, K9 acid-trap effects, repeat drop-and-roll
+      timing, and charging while asleep.
+    type: Fix
+  - message: Corrected stale movement after carrying, unbuckling, and pouncing, and
+      prevented shooter rotation from changing queued aim on dropships.
+    type: Fix
+  - message: Restored the tactical map location pulse, separated pilot roll preferences,
+      corrected IO vendor radio factions, and preserved hair under pilot oxygen masks.
+    type: Fix
+  - message: Prevented human character traits from applying to Yautja roles and corrected
+      Midway cockpit ladder directions.
+    type: Fix
+  - message: Made catastrophic vehicle damage irreparable and enabled vehicle TOW
+      ammunition cook-offs.
+    type: Fix
+  - message: Made ceiling protection tiers cumulative, including CAS and paradrop
+      restrictions under tier 4 roofs.
+    type: Fix
+  - message: Improved Heatshield bile targeting and tripled its range.
+    type: Tweak
+  - message: Reduced the health requirement for xeno evolution, strains, and devolution
+      to 50%.
+    type: Tweak
+  id: 742
+  time: '2026-10-08T19:19:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2105
+- author: TheHellFireo
+  changes:
+  - message: Added optional first-person 3D on Stable Garrison Redux. Use cmu3d to
+      toggle it, with a controls popup and a customizable mouse-capture shortcut.
+    type: Add
+  id: 743
+  time: '2026-10-08T19:24:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2107
 Name: CMU
 Order: -1

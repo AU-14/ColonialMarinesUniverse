@@ -25,6 +25,7 @@
   - Each repair permanently removes [color=orange]30% of the integrity restored[/color] from the part's repair ceiling, down to [bold]20% of its factory capacity[/bold]. The displayed maximum stays at factory capacity, so a worn part will no longer reach 100%.
 
   ## Repairing the Frame
+  - A single hit that deals at least the vehicle's full hull capacity after armor permanently destroys the frame. Welding or replacing hardpoints cannot restore it. Tanks also cook off when this happens.
   - The frame's hull integrity comes from its hardpoints. Repair the damaged hardpoints first; the frame can't be fixed while they're still broken.
   - Then weld the frame. Welding only brings it back up to [bold]75%[/bold].
   - Finish the last 25% by tightening it with a [bold]wrench[/bold].
