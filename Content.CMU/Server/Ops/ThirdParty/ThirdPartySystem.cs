@@ -221,6 +221,16 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private bool SpawnThirdPartyNow(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship)
     {
+        var spawned = SpawnThirdPartyNowInner(party, spawnProto, roundStart, assignedJobs, overrideDropship);
+        if (spawned)
+            _auRoundSystem.MarkThirdPartySpawned(party);
+
+        return spawned;
+    }
+
+    private bool SpawnThirdPartyNowInner(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs, bool? overrideDropship)
+    {
         const float SpawnTogetherRadius = 8f;
         _sawmill.Debug($"[ThirdPartySystem] Spawning third party: ({party.ID})");
         if (spawnProto == null)

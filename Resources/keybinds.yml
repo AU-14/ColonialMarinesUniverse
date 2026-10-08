@@ -1,5 +1,9 @@
-﻿version: 1 # Not used right now, whatever.
+version: 1 # Not used right now, whatever.
 binds:
+- function: CMUToggleFirstPersonMouse # CMU14: first-person mouse capture (rebindable).
+  type: State
+  key: F8
+  mod1: Alt
 - function: UIClick
   type: State
   key: MouseLeft

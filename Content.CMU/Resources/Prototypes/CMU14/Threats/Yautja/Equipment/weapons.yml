@@ -16,7 +16,6 @@
   - type: MeleeWeapon
     wideAnimationRotation: -135
     attackRate: 1
-    wideAttackAllowed: false 
     damage:
       types:
         Blunt: 12

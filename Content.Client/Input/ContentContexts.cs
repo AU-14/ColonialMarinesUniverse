@@ -37,6 +37,7 @@ namespace Content.Client.Input
             common.AddFunction(ContentKeyFunctions.SaveItemLocation);
             common.AddFunction(ContentKeyFunctions.Point);
             common.AddFunction(ContentKeyFunctions.RotateCameraWithMouse);
+            common.AddFunction(CMUKeyFunctions.CMUToggleFirstPersonMouse); // CMU14
             common.AddFunction(ContentKeyFunctions.ZoomOut);
             common.AddFunction(ContentKeyFunctions.ZoomIn);
             common.AddFunction(ContentKeyFunctions.ResetZoom);

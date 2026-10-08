@@ -1,0 +1,774 @@
+- type: cmu3DModel
+  id: CMU3DMaintenanceHatchCloud
+  label: Rectangular maintenance hatch cover
+  status: draft
+  sourcePrototypes:
+  - XenoTunnelMaint
+  referencePrototype: XenoTunnelMaint
+  referenceRsi: /Textures/_RMC14/Structures/Xenos/xeno_tunnel.rsi
+  referenceState: maintenancehatch_alt
+  sourceDirections: 1
+  description: Rectangular fixed cover with connected rim, exact-source small rim strips and 36 staggered physical
+    grate apertures. Source dark cell interiors are interpreted as openings; no opaque dark backing is used. Physical
+    cover only. Ground-plane deprojection, hidden construction and thickness are inferred. No floor cutout, pit, underground
+    travel, terrain edits, native/map/fidelity acceptance or animation is supplied. Map-context fit is pending. See
+    SOURCES_MAINTENANCE_COVERS_CLOUD.md.
+  parts:
+  - label: north perimeter casting
+    min: -0.4375, 0.21075, 0
+    max: 0.4375, 0.34375, 0.049
+    color: '#403F3F'
+  - label: south perimeter casting
+    min: -0.4375, -0.34375, 0
+    max: 0.4375, -0.21075, 0.049
+    color: '#3F3E3D'
+  - label: west perimeter casting
+    min: -0.4375, -0.34375, 0
+    max: -0.27325, 0.34375, 0.049
+    color: '#3E3E3D'
+  - label: east perimeter casting
+    min: 0.27325, -0.34375, 0
+    max: 0.4375, 0.34375, 0.049
+    color: '#3E3E3D'
+  - label: north outer lip
+    min: -0.4375, 0.32375, 0.012
+    max: 0.4375, 0.34475, 0.064
+    color: '#242423'
+  - label: south outer lip
+    min: -0.4375, -0.34475, 0.012
+    max: 0.4375, -0.32375, 0.064
+    color: '#242423'
+  - label: west outer lip
+    min: -0.4385, -0.34375, 0.012
+    max: -0.4175, 0.34375, 0.064
+    color: '#242423'
+  - label: east outer lip
+    min: 0.4175, -0.34375, 0.012
+    max: 0.4385, 0.34375, 0.064
+    color: '#242423'
+  - label: north bright rim source strip
+    min: -0.375, 0.26175, 0.048
+    max: 0.375, 0.31375, 0.056
+    color: '#FFFFFF'
+    surface: CMU3DMaintenanceCoversCloudArt000
+    surfaceAxis: XY
+  - label: south bright rim source strip
+    min: -0.375, -0.31375, 0.048
+    max: 0.375, -0.26175, 0.056
+    color: '#FFFFFF'
+    surface: CMU3DMaintenanceCoversCloudArt001
+    surfaceAxis: XY
+  - label: west bright rim source strip
+    min: -0.3825, -0.29975, 0.048
+    max: -0.3505, 0.29975, 0.056
+    color: '#FFFFFF'
+    surface: CMU3DMaintenanceCoversCloudArt002
+    surfaceAxis: XY
+  - label: east bright rim source strip
+    min: 0.3505, -0.29975, 0.048
+    max: 0.3825, 0.29975, 0.056
+    color: '#FFFFFF'
+    surface: CMU3DMaintenanceCoversCloudArt003
+    surfaceAxis: XY
+  - label: north inner rim source strip
+    min: -0.31225, 0.20675, 0.047
+    max: 0.31225, 0.23875, 0.054
+    color: '#FFFFFF'
+    surface: CMU3DMaintenanceCoversCloudArt004
+    surfaceAxis: XY
+  - label: south inner rim source strip
+    min: -0.31225, -0.23875, 0.047
+    max: 0.31225, -0.20675, 0.054
+    color: '#FFFFFF'
+    surface: CMU3DMaintenanceCoversCloudArt005
+    surfaceAxis: XY
+  - label: cross rib source row 18
+    min: -0.28925, 0.1671389, 0.014
+    max: 0.28925, 0.22175, 0.05
+    color: '#2B2A29'
+  - label: cross rib source row 20
+    min: -0.28925, 0.0699167, 0.014
+    max: 0.28925, 0.1245278, 0.05
+    color: '#3C3B3A'
+  - label: cross rib source row 22
+    min: -0.28925, -0.0273056, 0.014
+    max: 0.28925, 0.0273056, 0.05
+    color: '#4B4B48'
+  - label: cross rib source row 24
+    min: -0.28925, -0.1245278, 0.014
+    max: 0.28925, -0.0699167, 0.05
+    color: '#454542'
+  - label: cross rib source row 26
+    min: -0.28925, -0.22175, 0.014
+    max: 0.28925, -0.1671389, 0.05
+    color: '#312F2E'
+  - label: staggered short rib source 7,19
+    min: -0.28125, 0.1165278, 0.014
+    max: -0.25, 0.1751389, 0.05
+    color: '#363434'
+  - label: staggered short rib source 9,19
+    min: -0.21875, 0.1165278, 0.014
+    max: -0.1875, 0.1751389, 0.05
+    color: '#3B3939'
+  - label: staggered short rib source 11,19
+    min: -0.15625, 0.1165278, 0.014
+    max: -0.125, 0.1751389, 0.05
+    color: '#393736'
+  - label: staggered short rib source 13,19
+    min: -0.09375, 0.1165278, 0.014
+    max: -0.0625, 0.1751389, 0.05
+    color: '#393736'
+  - label: staggered short rib source 15,19
+    min: -0.03125, 0.1165278, 0.014
+    max: 0.0, 0.1751389, 0.05
+    color: '#393736'
+  - label: staggered short rib source 17,19
+    min: 0.03125, 0.1165278, 0.014
+    max: 0.0625, 0.1751389, 0.05
+    color: '#393736'
+  - label: staggered short rib source 19,19
+    min: 0.09375, 0.1165278, 0.014
+    max: 0.125, 0.1751389, 0.05
+    color: '#393736'
+  - label: staggered short rib source 21,19
+    min: 0.15625, 0.1165278, 0.014
+    max: 0.1875, 0.1751389, 0.05
+    color: '#393736'
+  - label: staggered short rib source 23,19
+    min: 0.21875, 0.1165278, 0.014
+    max: 0.25, 0.1751389, 0.05
+    color: '#323131'
+  - label: staggered short rib source 8,21
+    min: -0.25, 0.0193056, 0.014
+    max: -0.21875, 0.0779167, 0.05
+    color: '#413E3E'
+  - label: staggered short rib source 10,21
+    min: -0.1875, 0.0193056, 0.014
+    max: -0.15625, 0.0779167, 0.05
+    color: '#474744'
+  - label: staggered short rib source 12,21
+    min: -0.125, 0.0193056, 0.014
+    max: -0.09375, 0.0779167, 0.05
+    color: '#474744'
+  - label: staggered short rib source 14,21
+    min: -0.0625, 0.0193056, 0.014
+    max: -0.03125, 0.0779167, 0.05
+    color: '#474744'
+  - label: staggered short rib source 16,21
+    min: 0.0, 0.0193056, 0.014
+    max: 0.03125, 0.0779167, 0.05
+    color: '#474744'
+  - label: staggered short rib source 18,21
+    min: 0.0625, 0.0193056, 0.014
+    max: 0.09375, 0.0779167, 0.05
+    color: '#474744'
+  - label: staggered short rib source 20,21
+    min: 0.125, 0.0193056, 0.014
+    max: 0.15625, 0.0779167, 0.05
+    color: '#474744'
+  - label: staggered short rib source 22,21
+    min: 0.1875, 0.0193056, 0.014
+    max: 0.21875, 0.0779167, 0.05
+    color: '#474745'
+  - label: staggered short rib source 24,21
+    min: 0.25, 0.0193056, 0.014
+    max: 0.28125, 0.0779167, 0.05
+    color: '#434240'
+  - label: staggered short rib source 7,23
+    min: -0.28125, -0.0779167, 0.014
+    max: -0.25, -0.0193056, 0.05
+    color: '#454442'
+  - label: staggered short rib source 9,23
+    min: -0.21875, -0.0779167, 0.014
+    max: -0.1875, -0.0193056, 0.05
+    color: '#484845'
+  - label: staggered short rib source 11,23
+    min: -0.15625, -0.0779167, 0.014
+    max: -0.125, -0.0193056, 0.05
+    color: '#464645'
+  - label: staggered short rib source 13,23
+    min: -0.09375, -0.0779167, 0.014
+    max: -0.0625, -0.0193056, 0.05
+    color: '#464645'
+  - label: staggered short rib source 15,23
+    min: -0.03125, -0.0779167, 0.014
+    max: 0.0, -0.0193056, 0.05
+    color: '#464645'
+  - label: staggered short rib source 17,23
+    min: 0.03125, -0.0779167, 0.014
+    max: 0.0625, -0.0193056, 0.05
+    color: '#464645'
+  - label: staggered short rib source 19,23
+    min: 0.09375, -0.0779167, 0.014
+    max: 0.125, -0.0193056, 0.05
+    color: '#464645'
+  - label: staggered short rib source 21,23
+    min: 0.15625, -0.0779167, 0.014
+    max: 0.1875, -0.0193056, 0.05
+    color: '#464645'
+  - label: staggered short rib source 23,23
+    min: 0.21875, -0.0779167, 0.014
+    max: 0.25, -0.0193056, 0.05
+    color: '#424140'
+  - label: staggered short rib source 8,25
+    min: -0.25, -0.1751389, 0.014
+    max: -0.21875, -0.1165278, 0.05
+    color: '#323230'
+  - label: staggered short rib source 10,25
+    min: -0.1875, -0.1751389, 0.014
+    max: -0.15625, -0.1165278, 0.05
+    color: '#363534'
+  - label: staggered short rib source 12,25
+    min: -0.125, -0.1751389, 0.014
+    max: -0.09375, -0.1165278, 0.05
+    color: '#363534'
+  - label: staggered short rib source 14,25
+    min: -0.0625, -0.1751389, 0.014
+    max: -0.03125, -0.1165278, 0.05
+    color: '#363534'
+  - label: staggered short rib source 16,25
+    min: 0.0, -0.1751389, 0.014
+    max: 0.03125, -0.1165278, 0.05
+    color: '#363534'
+  - label: staggered short rib source 18,25
+    min: 0.0625, -0.1751389, 0.014
+    max: 0.09375, -0.1165278, 0.05
+    color: '#363534'
+  - label: staggered short rib source 20,25
+    min: 0.125, -0.1751389, 0.014
+    max: 0.15625, -0.1165278, 0.05
+    color: '#363534'
+  - label: staggered short rib source 22,25
+    min: 0.1875, -0.1751389, 0.014
+    max: 0.21875, -0.1165278, 0.05
+    color: '#363534'
+  - label: staggered short rib source 24,25
+    min: 0.25, -0.1751389, 0.014
+    max: 0.28125, -0.1165278, 0.05
+    color: '#343432'
+- type: cmu3DModel
+  id: CMU3DHybrisaSewerCoverCloud
+  label: Hybrisa circular sewer cover
+  status: draft
+  sourcePrototypes:
+  - XenoTunnelMaintHybrisa
+  - XenoTunnelMaintHybrisaNoXenoDesc
+  referencePrototype: XenoTunnelMaintHybrisa
+  referenceRsi: /Textures/_RMC14/Structures/Xenos/xeno_tunnel.rsi
+  referenceState: wymanhole
+  sourceDirections: 1
+  description: The two exact source owners share identical wymanhole art. Connected 24-sector circular casting, narrow
+    metallic bevels, five-by-five grid ribs, and four blind cardinal fixing/lifting recesses. Center aperture topology
+    is an interpretation of opaque checker-shaded source art, not a source-proven hole mask. The four cardinal recesses
+    have metal bottoms; their purpose as screw or lifting sockets is not established. Physical cover only. Ground-plane
+    deprojection, hidden construction and thickness are inferred. No floor cutout, pit, underground travel, terrain
+    edits, native/map/fidelity acceptance or animation is supplied. Map-context fit is pending. See SOURCES_MAINTENANCE_COVERS_CLOUD.md.
+  parts:
+  - label: cardinal recess 0 inner
+    min: 0.175, -0.0397426, 0
+    max: 0.2335625, 0.0397426, 0.05
+    color: '#52504F'
+    yaw: 0.0
+  - label: cardinal recess 0 outer
+    min: 0.2695625, -0.0397426, 0
+    max: 0.328125, 0.0397426, 0.05
+    color: '#52504F'
+    yaw: 0.0
+  - label: cardinal recess 0 left
+    min: 0.2305625, -0.0397426, 0
+    max: 0.2725625, -0.0145, 0.05
+    color: '#52504F'
+    yaw: 0.0
+  - label: cardinal recess 0 right
+    min: 0.2305625, 0.0145, 0
+    max: 0.2725625, 0.0397426, 0.05
+    color: '#52504F'
+    yaw: 0.0
+  - label: cardinal blind recess 0 metal bottom
+    min: 0.2315625, -0.0165, 0
+    max: 0.2715625, 0.0165, 0.017
+    color: '#070606'
+    yaw: 0.0
+  - label: cardinal recess 0 original source pixels
+    min: 0.2335625, -0.0145, 0.016
+    max: 0.2695625, 0.0145, 0.0175
+    color: '#FFFFFF'
+    yaw: 0.0
+    surface: CMU3DMaintenanceCoversCloudArt006
+    surfaceAxis: XY
+  - label: connected dark annulus sector 1
+    min: 0.1664282, 0.0253666, 0
+    max: 0.3195532, 0.1048518, 0.05
+    color: '#2A2929'
+    yaw: 15.0
+  - label: connected dark annulus sector 2
+    min: 0.141297, 0.0860387, 0
+    max: 0.294422, 0.1655238, 0.05
+    color: '#2A2929'
+    yaw: 30.0
+  - label: connected dark annulus sector 3
+    min: 0.101319, 0.138139, 0
+    max: 0.254444, 0.2176241, 0.05
+    color: '#2A2929'
+    yaw: 45.0
+  - label: connected dark annulus sector 4
+    min: 0.0492188, 0.1781169, 0
+    max: 0.2023438, 0.2576021, 0.05
+    color: '#2A2929'
+    yaw: 60.0
+  - label: connected dark annulus sector 5
+    min: -0.0114533, 0.2032481, 0
+    max: 0.1416717, 0.2827333, 0.05
+    color: '#2A2929'
+    yaw: 75.0
+  - label: cardinal recess 6 inner
+    min: -0.0292813, 0.1645387, 0
+    max: 0.0292813, 0.2440238, 0.05
+    color: '#52504F'
+    yaw: 90.0
+  - label: cardinal recess 6 outer
+    min: -0.0292812, 0.2591012, 0
+    max: 0.0292812, 0.3385863, 0.05
+    color: '#52504F'
+    yaw: 90.0
+  - label: cardinal recess 6 left
+    min: 0.0061213, 0.2389412, 0
+    max: 0.0481213, 0.2641838, 0.05
+    color: '#52504F'
+    yaw: 90.0
+  - label: cardinal recess 6 right
+    min: -0.0481213, 0.2389412, 0
+    max: -0.0061213, 0.2641838, 0.05
+    color: '#52504F'
+    yaw: 90.0
+  - label: cardinal blind recess 6 metal bottom
+    min: -0.02, 0.2350625, 0
+    max: 0.02, 0.2680625, 0.017
+    color: '#070606'
+    yaw: 90.0
+  - label: cardinal recess 6 original source pixels
+    min: -0.018, 0.2370625, 0.016
+    max: 0.018, 0.2660625, 0.0175
+    color: '#FFFFFF'
+    yaw: 90.0
+    surface: CMU3DMaintenanceCoversCloudArt007
+    surfaceAxis: XY
+  - label: connected dark annulus sector 7
+    min: -0.1416717, 0.2032481, 0
+    max: 0.0114533, 0.2827333, 0.05
+    color: '#2A2929'
+    yaw: 105.0
+  - label: connected dark annulus sector 8
+    min: -0.2023437, 0.1781169, 0
+    max: -0.0492187, 0.2576021, 0.05
+    color: '#2A2929'
+    yaw: 120.0
+  - label: connected dark annulus sector 9
+    min: -0.254444, 0.138139, 0
+    max: -0.101319, 0.2176241, 0.05
+    color: '#2A2929'
+    yaw: 135.0
+  - label: connected dark annulus sector 10
+    min: -0.294422, 0.0860387, 0
+    max: -0.141297, 0.1655238, 0.05
+    color: '#2A2929'
+    yaw: 150.0
+  - label: connected dark annulus sector 11
+    min: -0.3195532, 0.0253666, 0
+    max: -0.1664282, 0.1048518, 0.05
+    color: '#2A2929'
+    yaw: 165.0
+  - label: cardinal recess 12 inner
+    min: -0.2335625, -0.0397426, 0
+    max: -0.175, 0.0397426, 0.05
+    color: '#52504F'
+    yaw: 180.0
+  - label: cardinal recess 12 outer
+    min: -0.328125, -0.0397426, 0
+    max: -0.2695625, 0.0397426, 0.05
+    color: '#52504F'
+    yaw: 180.0
+  - label: cardinal recess 12 left
+    min: -0.2725625, 0.0145, 0
+    max: -0.2305625, 0.0397426, 0.05
+    color: '#52504F'
+    yaw: 180.0
+  - label: cardinal recess 12 right
+    min: -0.2725625, -0.0397426, 0
+    max: -0.2305625, -0.0145, 0.05
+    color: '#52504F'
+    yaw: 180.0
+  - label: cardinal blind recess 12 metal bottom
+    min: -0.2715625, -0.0165, 0
+    max: -0.2315625, 0.0165, 0.017
+    color: '#070606'
+    yaw: 180.0
+  - label: cardinal recess 12 original source pixels
+    min: -0.2695625, -0.0145, 0.016
+    max: -0.2335625, 0.0145, 0.0175
+    color: '#FFFFFF'
+    yaw: 180.0
+    surface: CMU3DMaintenanceCoversCloudArt008
+    surfaceAxis: XY
+  - label: connected dark annulus sector 13
+    min: -0.3195532, -0.1048518, 0
+    max: -0.1664282, -0.0253666, 0.05
+    color: '#2A2929'
+    yaw: 195.0
+  - label: connected dark annulus sector 14
+    min: -0.294422, -0.1655238, 0
+    max: -0.141297, -0.0860387, 0.05
+    color: '#2A2929'
+    yaw: 210.0
+  - label: connected dark annulus sector 15
+    min: -0.254444, -0.2176241, 0
+    max: -0.101319, -0.138139, 0.05
+    color: '#2A2929'
+    yaw: 225.0
+  - label: connected dark annulus sector 16
+    min: -0.2023438, -0.2576021, 0
+    max: -0.0492188, -0.1781169, 0.05
+    color: '#2A2929'
+    yaw: 240.0
+  - label: connected dark annulus sector 17
+    min: -0.1416717, -0.2827333, 0
+    max: 0.0114533, -0.2032481, 0.05
+    color: '#2A2929'
+    yaw: 255.0
+  - label: cardinal recess 18 inner
+    min: -0.0292813, -0.2440238, 0
+    max: 0.0292812, -0.1645387, 0.05
+    color: '#52504F'
+    yaw: 270.0
+  - label: cardinal recess 18 outer
+    min: -0.0292813, -0.3385863, 0
+    max: 0.0292812, -0.2591012, 0.05
+    color: '#52504F'
+    yaw: 270.0
+  - label: cardinal recess 18 left
+    min: -0.0481213, -0.2641838, 0
+    max: -0.0061213, -0.2389412, 0.05
+    color: '#52504F'
+    yaw: 270.0
+  - label: cardinal recess 18 right
+    min: 0.0061213, -0.2641838, 0
+    max: 0.0481213, -0.2389412, 0.05
+    color: '#52504F'
+    yaw: 270.0
+  - label: cardinal blind recess 18 metal bottom
+    min: -0.02, -0.2680625, 0
+    max: 0.02, -0.2350625, 0.017
+    color: '#070606'
+    yaw: 270.0
+  - label: cardinal recess 18 original source pixels
+    min: -0.018, -0.2660625, 0.016
+    max: 0.018, -0.2370625, 0.0175
+    color: '#FFFFFF'
+    yaw: 270.0
+    surface: CMU3DMaintenanceCoversCloudArt009
+    surfaceAxis: XY
+  - label: connected dark annulus sector 19
+    min: -0.0114533, -0.2827333, 0
+    max: 0.1416717, -0.2032481, 0.05
+    color: '#2A2929'
+    yaw: 285.0
+  - label: connected dark annulus sector 20
+    min: 0.0492188, -0.2576021, 0
+    max: 0.2023438, -0.1781169, 0.05
+    color: '#2A2929'
+    yaw: 300.0
+  - label: connected dark annulus sector 21
+    min: 0.101319, -0.2176241, 0
+    max: 0.254444, -0.138139, 0.05
+    color: '#2A2929'
+    yaw: 315.0
+  - label: connected dark annulus sector 22
+    min: 0.141297, -0.1655238, 0
+    max: 0.294422, -0.0860387, 0.05
+    color: '#2A2929'
+    yaw: 330.0
+  - label: connected dark annulus sector 23
+    min: 0.1664282, -0.1048518, 0
+    max: 0.3195532, -0.0253666, 0.05
+    color: '#2A2929'
+    yaw: 345.0
+  - label: outer metallic cast bevel 0
+    min: 0.302125, -0.0497844, 0.048
+    max: 0.328125, 0.0497844, 0.056
+    color: '#666463'
+    yaw: 0.0
+  - label: inner metallic cast bevel 0
+    min: 0.175, -0.0292269, 0.048
+    max: 0.195, 0.0292269, 0.056
+    color: '#6C6967'
+    yaw: 0.0
+  - label: outer metallic cast bevel 1
+    min: 0.2913874, 0.031776, 0.048
+    max: 0.3173874, 0.1313447, 0.056
+    color: '#666463'
+    yaw: 15.0
+  - label: inner metallic cast bevel 1
+    min: 0.1686963, 0.0186547, 0.048
+    max: 0.1886963, 0.0771084, 0.056
+    color: '#6C6967'
+    yaw: 15.0
+  - label: outer metallic cast bevel 2
+    min: 0.2599063, 0.1077781, 0.048
+    max: 0.2859063, 0.2073469, 0.056
+    color: '#666463'
+    yaw: 30.0
+  - label: inner metallic cast bevel 2
+    min: 0.1502147, 0.0632731, 0.048
+    max: 0.1702147, 0.1217269, 0.056
+    color: '#6C6967'
+    yaw: 30.0
+  - label: outer metallic cast bevel 3
+    min: 0.209827, 0.1730426, 0.048
+    max: 0.235827, 0.2726114, 0.056
+    color: '#6D6A68'
+    yaw: 45.0
+  - label: inner metallic cast bevel 3
+    min: 0.1208148, 0.1015879, 0.048
+    max: 0.1408148, 0.1600416, 0.056
+    color: '#5B5958'
+    yaw: 45.0
+  - label: outer metallic cast bevel 4
+    min: 0.1445625, 0.2231219, 0.048
+    max: 0.1705625, 0.3226906, 0.056
+    color: '#6D6A68'
+    yaw: 60.0
+  - label: inner metallic cast bevel 4
+    min: 0.0825, 0.1309878, 0.048
+    max: 0.1025, 0.1894416, 0.056
+    color: '#5B5958'
+    yaw: 60.0
+  - label: outer metallic cast bevel 5
+    min: 0.0685604, 0.254603, 0.048
+    max: 0.0945604, 0.3541718, 0.056
+    color: '#6D6A68'
+    yaw: 75.0
+  - label: inner metallic cast bevel 5
+    min: 0.0378815, 0.1494694, 0.048
+    max: 0.0578815, 0.2079231, 0.056
+    color: '#5B5958'
+    yaw: 75.0
+  - label: outer metallic cast bevel 6
+    min: -0.013, 0.2653406, 0.048
+    max: 0.013, 0.3649094, 0.056
+    color: '#666463'
+    yaw: 90.0
+  - label: inner metallic cast bevel 6
+    min: -0.01, 0.1557731, 0.048
+    max: 0.01, 0.2142269, 0.056
+    color: '#6A6765'
+    yaw: 90.0
+  - label: outer metallic cast bevel 7
+    min: -0.0945604, 0.254603, 0.048
+    max: -0.0685604, 0.3541718, 0.056
+    color: '#666463'
+    yaw: 105.0
+  - label: inner metallic cast bevel 7
+    min: -0.0578815, 0.1494694, 0.048
+    max: -0.0378815, 0.2079231, 0.056
+    color: '#6A6765'
+    yaw: 105.0
+  - label: outer metallic cast bevel 8
+    min: -0.1705625, 0.2231219, 0.048
+    max: -0.1445625, 0.3226906, 0.056
+    color: '#666463'
+    yaw: 120.0
+  - label: inner metallic cast bevel 8
+    min: -0.1025, 0.1309878, 0.048
+    max: -0.0825, 0.1894416, 0.056
+    color: '#6A6765'
+    yaw: 120.0
+  - label: outer metallic cast bevel 9
+    min: -0.235827, 0.1730426, 0.048
+    max: -0.209827, 0.2726114, 0.056
+    color: '#2A2929'
+    yaw: 135.0
+  - label: inner metallic cast bevel 9
+    min: -0.1408148, 0.1015879, 0.048
+    max: -0.1208148, 0.1600416, 0.056
+    color: '#6A6765'
+    yaw: 135.0
+  - label: outer metallic cast bevel 10
+    min: -0.2859063, 0.1077781, 0.048
+    max: -0.2599063, 0.2073469, 0.056
+    color: '#2A2929'
+    yaw: 150.0
+  - label: inner metallic cast bevel 10
+    min: -0.1702147, 0.0632731, 0.048
+    max: -0.1502147, 0.1217269, 0.056
+    color: '#6A6765'
+    yaw: 150.0
+  - label: outer metallic cast bevel 11
+    min: -0.3173874, 0.031776, 0.048
+    max: -0.2913874, 0.1313447, 0.056
+    color: '#2A2929'
+    yaw: 165.0
+  - label: inner metallic cast bevel 11
+    min: -0.1886963, 0.0186547, 0.048
+    max: -0.1686963, 0.0771084, 0.056
+    color: '#6A6765'
+    yaw: 165.0
+  - label: outer metallic cast bevel 12
+    min: -0.328125, -0.0497844, 0.048
+    max: -0.302125, 0.0497844, 0.056
+    color: '#666463'
+    yaw: 180.0
+  - label: inner metallic cast bevel 12
+    min: -0.195, -0.0292269, 0.048
+    max: -0.175, 0.0292269, 0.056
+    color: '#6C6967'
+    yaw: 180.0
+  - label: outer metallic cast bevel 13
+    min: -0.3173874, -0.1313447, 0.048
+    max: -0.2913874, -0.031776, 0.056
+    color: '#666463'
+    yaw: 195.0
+  - label: inner metallic cast bevel 13
+    min: -0.1886963, -0.0771084, 0.048
+    max: -0.1686963, -0.0186547, 0.056
+    color: '#6C6967'
+    yaw: 195.0
+  - label: outer metallic cast bevel 14
+    min: -0.2859063, -0.2073469, 0.048
+    max: -0.2599063, -0.1077781, 0.056
+    color: '#666463'
+    yaw: 210.0
+  - label: inner metallic cast bevel 14
+    min: -0.1702147, -0.1217269, 0.048
+    max: -0.1502147, -0.0632731, 0.056
+    color: '#6C6967'
+    yaw: 210.0
+  - label: outer metallic cast bevel 15
+    min: -0.235827, -0.2726114, 0.048
+    max: -0.209827, -0.1730426, 0.056
+    color: '#6D6A68'
+    yaw: 225.0
+  - label: inner metallic cast bevel 15
+    min: -0.1408148, -0.1600416, 0.048
+    max: -0.1208148, -0.1015879, 0.056
+    color: '#5B5958'
+    yaw: 225.0
+  - label: outer metallic cast bevel 16
+    min: -0.1705625, -0.3226906, 0.048
+    max: -0.1445625, -0.2231219, 0.056
+    color: '#6D6A68'
+    yaw: 240.0
+  - label: inner metallic cast bevel 16
+    min: -0.1025, -0.1894416, 0.048
+    max: -0.0825, -0.1309878, 0.056
+    color: '#5B5958'
+    yaw: 240.0
+  - label: outer metallic cast bevel 17
+    min: -0.0945604, -0.3541718, 0.048
+    max: -0.0685604, -0.254603, 0.056
+    color: '#6D6A68'
+    yaw: 255.0
+  - label: inner metallic cast bevel 17
+    min: -0.0578815, -0.2079231, 0.048
+    max: -0.0378815, -0.1494694, 0.056
+    color: '#5B5958'
+    yaw: 255.0
+  - label: outer metallic cast bevel 18
+    min: -0.013, -0.3649094, 0.048
+    max: 0.013, -0.2653406, 0.056
+    color: '#666463'
+    yaw: 270.0
+  - label: inner metallic cast bevel 18
+    min: -0.01, -0.2142269, 0.048
+    max: 0.01, -0.1557731, 0.056
+    color: '#6A6765'
+    yaw: 270.0
+  - label: outer metallic cast bevel 19
+    min: 0.0685604, -0.3541718, 0.048
+    max: 0.0945604, -0.254603, 0.056
+    color: '#666463'
+    yaw: 285.0
+  - label: inner metallic cast bevel 19
+    min: 0.0378815, -0.2079231, 0.048
+    max: 0.0578815, -0.1494694, 0.056
+    color: '#6A6765'
+    yaw: 285.0
+  - label: outer metallic cast bevel 20
+    min: 0.1445625, -0.3226906, 0.048
+    max: 0.1705625, -0.2231219, 0.056
+    color: '#666463'
+    yaw: 300.0
+  - label: inner metallic cast bevel 20
+    min: 0.0825, -0.1894416, 0.048
+    max: 0.1025, -0.1309878, 0.056
+    color: '#6A6765'
+    yaw: 300.0
+  - label: outer metallic cast bevel 21
+    min: 0.209827, -0.2726114, 0.048
+    max: 0.235827, -0.1730426, 0.056
+    color: '#2A2929'
+    yaw: 315.0
+  - label: inner metallic cast bevel 21
+    min: 0.1208148, -0.1600416, 0.048
+    max: 0.1408148, -0.1015879, 0.056
+    color: '#6A6765'
+    yaw: 315.0
+  - label: outer metallic cast bevel 22
+    min: 0.2599063, -0.2073469, 0.048
+    max: 0.2859063, -0.1077781, 0.056
+    color: '#2A2929'
+    yaw: 330.0
+  - label: inner metallic cast bevel 22
+    min: 0.1502147, -0.1217269, 0.048
+    max: 0.1702147, -0.0632731, 0.056
+    color: '#6A6765'
+    yaw: 330.0
+  - label: outer metallic cast bevel 23
+    min: 0.2913874, -0.1313447, 0.048
+    max: 0.3173874, -0.031776, 0.056
+    color: '#2A2929'
+    yaw: 345.0
+  - label: inner metallic cast bevel 23
+    min: 0.1686963, -0.0771084, 0.048
+    max: 0.1886963, -0.0186547, 0.056
+    color: '#6A6765'
+    yaw: 345.0
+  - label: round cover north south grid rib 0
+    min: -0.1375, -0.1377353, 0.013
+    max: -0.1125, 0.1377353, 0.042
+    color: '#4A4847'
+  - label: round cover north south grid rib 1
+    min: -0.075, -0.1751849, 0.013
+    max: -0.05, 0.1751849, 0.042
+    color: '#4A4847'
+  - label: round cover north south grid rib 2
+    min: -0.0125, -0.186, 0.013
+    max: 0.0125, 0.186, 0.042
+    color: '#4A4847'
+  - label: round cover north south grid rib 3
+    min: 0.05, -0.1751849, 0.013
+    max: 0.075, 0.1751849, 0.042
+    color: '#4A4847'
+  - label: round cover north south grid rib 4
+    min: 0.1125, -0.1377353, 0.013
+    max: 0.1375, 0.1377353, 0.042
+    color: '#4A4847'
+  - label: round cover east west grid rib 0
+    min: -0.1377353, -0.1375, 0.013
+    max: 0.1377353, -0.1125, 0.043
+    color: '#4A4847'
+  - label: round cover east west grid rib 1
+    min: -0.1751849, -0.075, 0.013
+    max: 0.1751849, -0.05, 0.043
+    color: '#4A4847'
+  - label: round cover east west grid rib 2
+    min: -0.186, -0.0125, 0.013
+    max: 0.186, 0.0125, 0.043
+    color: '#4A4847'
+  - label: round cover east west grid rib 3
+    min: -0.1751849, 0.05, 0.013
+    max: 0.1751849, 0.075, 0.043
+    color: '#413F3E'
+  - label: round cover east west grid rib 4
+    min: -0.1377353, 0.1125, 0.013
+    max: 0.1377353, 0.1375, 0.043
+    color: '#4A4847'

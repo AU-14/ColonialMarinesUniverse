@@ -1,0 +1,746 @@
+# Source-guided curved machinery drafts; original RSI metadata provides attribution.
+- type: cmu3DModel
+  id: CMU3DFiltration
+  label: Water filtration pressure-vessel assembly
+  status: draft
+  sourcePrototypes:
+  - RMCFiltration
+  referencePrototype: RMCFiltration
+  referenceRsi: _RMC14/Structures/Filtration/96x96.rsi
+  referenceState: filtration
+  sourceDirections: 1
+  useEntityRotation: true
+  description: One long fore/aft pressure drum, two ribbed upright filters, round green and ochre bridge pipes,
+    front outlet and open support gantry follow the source silhouette. Height 1.88 tiles. Vertical dimensions, hidden
+    back surfaces, bore depths and pipe elevations remain inferred. Original source is one static direction; no
+    operating animation is invented. Source CC-BY-SA-3.0, cmss13 commit 46d1d000640006d99b3ea99475fee4ba96890702
+    icons/obj/structures/props/96x96.dmi.
+  parts:
+  - label: long left pressure vessel
+    min: -1.390000, -0.990000, 0.320000
+    max: -0.390000, 1.030000, 1.380000
+    color: '#4D4C4B'
+    shape: CylinderY
+  - label: rounded pressure vessel rear head
+    min: -1.390000, 0.880000, 0.320000
+    max: -0.390000, 1.250000, 1.380000
+    color: '#43413D'
+    shape: Ellipsoid
+  - label: rounded pressure vessel front head
+    min: -1.390000, -1.210000, 0.320000
+    max: -0.390000, -0.870000, 1.380000
+    color: '#2B2A28'
+    shape: Ellipsoid
+  - label: front head circular flange
+    min: -1.310000, -1.240000, 0.400000
+    max: -0.470000, -1.170000, 1.300000
+    color: '#969594'
+    shape: CylinderY
+  - label: front head inset
+    min: -1.230000, -1.252000, 0.480000
+    max: -0.550000, -1.238000, 1.220000
+    color: '#484743'
+    shape: CylinderY
+  - label: front outlet coupling
+    min: -1.055000, -1.300000, 0.640000
+    max: -0.725000, -1.230000, 0.990000
+    color: '#8D8572'
+    shape: CylinderY
+  - label: ochre front outlet
+    min: -1.000000, -1.460000, 0.680000
+    max: -0.780000, -1.270000, 0.940000
+    color: '#3E3417'
+    shape: CylinderY
+  - label: front outlet rim
+    min: -1.025000, -1.480000, 0.655000
+    max: -0.755000, -1.435000, 0.965000
+    color: '#8D8572'
+    shape: CylinderY
+  - label: front outlet bore
+    min: -0.985000, -1.482000, 0.702000
+    max: -0.795000, -1.479000, 0.918000
+    color: '#25200E'
+    shape: CylinderY
+  - label: pressure drum saddle foot
+    min: -1.330000, -0.760000, 0.000000
+    max: -0.450000, -0.500000, 0.430000
+    color: '#2B2A28'
+  - label: pressure drum saddle foot
+    min: -1.330000, 0.640000, 0.000000
+    max: -0.450000, 0.900000, 0.430000
+    color: '#2B2A28'
+  - label: source rust patch on pressure shell
+    min: -1.395000, 0.200000, 0.600000
+    max: -1.369000, 0.530000, 0.850000
+    color: '#6E3D26'
+  - label: source rust patch on pressure shell
+    min: -1.395000, -0.500000, 0.810000
+    max: -1.369000, -0.300000, 1.020000
+    color: '#6E3D26'
+  - label: source rust patch on pressure shell
+    min: -0.985000, -0.050000, 1.360000
+    max: -0.875000, 0.350000, 1.378000
+    color: '#6E3D26'
+  - label: rear upright dark filter vessel
+    min: 0.215000, 0.245000, 0.190000
+    max: 1.105000, 1.135000, 1.290000
+    color: '#2B2A28'
+    shape: CylinderZ
+  - label: rear lower cast flange
+    min: 0.180000, 0.210000, 0.180000
+    max: 1.140000, 1.170000, 0.280000
+    color: '#191919'
+    shape: CylinderZ
+  - label: rear upper cast flange
+    min: 0.180000, 0.210000, 1.240000
+    max: 1.140000, 1.170000, 1.370000
+    color: '#43413D'
+    shape: CylinderZ
+  - label: rear pale lid rim
+    min: 0.240000, 0.270000, 1.365000
+    max: 1.080000, 1.110000, 1.440000
+    color: '#8D8572'
+    shape: CylinderZ
+  - label: rear recessed lid
+    min: 0.305000, 0.335000, 1.436000
+    max: 1.015000, 1.045000, 1.450000
+    color: '#43413D'
+    shape: CylinderZ
+  - label: rear concentric lid ridge
+    min: 0.375000, 0.405000, 1.447000
+    max: 0.945000, 0.975000, 1.482000
+    color: '#8D8572'
+    shape: CylinderZ
+  - label: rear inner lid
+    min: 0.415000, 0.445000, 1.480000
+    max: 0.905000, 0.935000, 1.489000
+    color: '#4D4C4B'
+    shape: CylinderZ
+  - label: rear filter housing rib
+    min: 0.295000, 0.425000, 0.290000
+    max: 0.345000, 0.475000, 1.230000
+    color: '#484743'
+  - label: rear filter housing rib
+    min: 0.515000, 0.235000, 0.290000
+    max: 0.565000, 0.285000, 1.230000
+    color: '#484743'
+  - label: rear filter housing rib
+    min: 0.775000, 0.245000, 0.290000
+    max: 0.825000, 0.295000, 1.230000
+    color: '#484743'
+  - label: rear filter housing rib
+    min: 0.985000, 0.445000, 0.290000
+    max: 1.035000, 0.495000, 1.230000
+    color: '#484743'
+  - label: rear filter housing rib
+    min: 0.285000, 0.885000, 0.290000
+    max: 0.335000, 0.935000, 1.230000
+    color: '#484743'
+  - label: rear filter housing rib
+    min: 0.975000, 0.905000, 0.290000
+    max: 1.025000, 0.955000, 1.230000
+    color: '#484743'
+  - label: rear casing rust stain
+    min: 0.440000, 0.265000, 0.440000
+    max: 0.510000, 0.279000, 0.660000
+    color: '#6E3D26'
+  - label: rear casing rust stain
+    min: 0.810000, 0.265000, 0.860000
+    max: 0.880000, 0.279000, 1.080000
+    color: '#6E3D26'
+  - label: front upright dark filter vessel
+    min: 0.215000, -1.035000, 0.190000
+    max: 1.105000, -0.145000, 1.290000
+    color: '#2B2A28'
+    shape: CylinderZ
+  - label: front lower cast flange
+    min: 0.180000, -1.070000, 0.180000
+    max: 1.140000, -0.110000, 0.280000
+    color: '#191919'
+    shape: CylinderZ
+  - label: front upper cast flange
+    min: 0.180000, -1.070000, 1.240000
+    max: 1.140000, -0.110000, 1.370000
+    color: '#43413D'
+    shape: CylinderZ
+  - label: front pale lid rim
+    min: 0.240000, -1.010000, 1.365000
+    max: 1.080000, -0.170000, 1.440000
+    color: '#8D8572'
+    shape: CylinderZ
+  - label: front recessed lid
+    min: 0.305000, -0.945000, 1.436000
+    max: 1.015000, -0.235000, 1.450000
+    color: '#43413D'
+    shape: CylinderZ
+  - label: front concentric lid ridge
+    min: 0.375000, -0.875000, 1.447000
+    max: 0.945000, -0.305000, 1.482000
+    color: '#8D8572'
+    shape: CylinderZ
+  - label: front inner lid
+    min: 0.415000, -0.835000, 1.480000
+    max: 0.905000, -0.345000, 1.489000
+    color: '#4D4C4B'
+    shape: CylinderZ
+  - label: front filter housing rib
+    min: 0.295000, -0.855000, 0.290000
+    max: 0.345000, -0.805000, 1.230000
+    color: '#484743'
+  - label: front filter housing rib
+    min: 0.515000, -1.045000, 0.290000
+    max: 0.565000, -0.995000, 1.230000
+    color: '#484743'
+  - label: front filter housing rib
+    min: 0.775000, -1.035000, 0.290000
+    max: 0.825000, -0.985000, 1.230000
+    color: '#484743'
+  - label: front filter housing rib
+    min: 0.985000, -0.835000, 0.290000
+    max: 1.035000, -0.785000, 1.230000
+    color: '#484743'
+  - label: front filter housing rib
+    min: 0.285000, -0.395000, 0.290000
+    max: 0.335000, -0.345000, 1.230000
+    color: '#484743'
+  - label: front filter housing rib
+    min: 0.975000, -0.375000, 0.290000
+    max: 1.025000, -0.325000, 1.230000
+    color: '#484743'
+  - label: front casing rust stain
+    min: 0.440000, -1.015000, 0.440000
+    max: 0.510000, -1.001000, 0.660000
+    color: '#6E3D26'
+  - label: front casing rust stain
+    min: 0.810000, -1.015000, 0.860000
+    max: 0.880000, -1.001000, 1.080000
+    color: '#6E3D26'
+  - label: green rear transverse manifold
+    min: -0.900000, 0.590000, 1.670000
+    max: 0.660000, 0.790000, 1.870000
+    color: '#276855'
+    shape: CylinderX
+  - label: green rear elbow
+    min: -1.005000, 0.585000, 1.630000
+    max: -0.795000, 0.795000, 1.880000
+    color: '#276855'
+    shape: Ellipsoid
+  - label: green rear downpipe
+    min: -1.000000, 0.590000, 1.380000
+    max: -0.800000, 0.790000, 1.760000
+    color: '#276855'
+    shape: CylinderZ
+  - label: green rear connection collar
+    min: -1.055000, 0.535000, 1.400000
+    max: -0.745000, 0.845000, 1.490000
+    color: '#969594'
+    shape: CylinderZ
+  - label: green rear elbow
+    min: 0.555000, 0.585000, 1.630000
+    max: 0.765000, 0.795000, 1.880000
+    color: '#276855'
+    shape: Ellipsoid
+  - label: green rear downpipe
+    min: 0.560000, 0.590000, 1.380000
+    max: 0.760000, 0.790000, 1.760000
+    color: '#276855'
+    shape: CylinderZ
+  - label: green rear connection collar
+    min: 0.505000, 0.535000, 1.400000
+    max: 0.815000, 0.845000, 1.490000
+    color: '#969594'
+    shape: CylinderZ
+  - label: ochre front transverse manifold
+    min: -0.900000, -0.690000, 1.670000
+    max: 0.660000, -0.490000, 1.870000
+    color: '#685627'
+    shape: CylinderX
+  - label: ochre front elbow
+    min: -1.005000, -0.695000, 1.630000
+    max: -0.795000, -0.485000, 1.880000
+    color: '#685627'
+    shape: Ellipsoid
+  - label: ochre front downpipe
+    min: -1.000000, -0.690000, 1.380000
+    max: -0.800000, -0.490000, 1.760000
+    color: '#685627'
+    shape: CylinderZ
+  - label: ochre front connection collar
+    min: -1.055000, -0.745000, 1.400000
+    max: -0.745000, -0.435000, 1.490000
+    color: '#969594'
+    shape: CylinderZ
+  - label: ochre front elbow
+    min: 0.555000, -0.695000, 1.630000
+    max: 0.765000, -0.485000, 1.880000
+    color: '#685627'
+    shape: Ellipsoid
+  - label: ochre front downpipe
+    min: 0.560000, -0.690000, 1.380000
+    max: 0.760000, -0.490000, 1.760000
+    color: '#685627'
+    shape: CylinderZ
+  - label: ochre front connection collar
+    min: 0.505000, -0.745000, 1.400000
+    max: 0.815000, -0.435000, 1.490000
+    color: '#969594'
+    shape: CylinderZ
+  - label: exposed support frame post
+    min: 0.145000, -1.255000, 0.000000
+    max: 0.235000, -1.165000, 1.120000
+    color: '#43413D'
+  - label: exposed support frame post
+    min: 1.255000, -1.255000, 0.000000
+    max: 1.345000, -1.165000, 1.120000
+    color: '#43413D'
+  - label: exposed support frame post
+    min: 1.255000, 1.125000, 0.000000
+    max: 1.345000, 1.215000, 1.120000
+    color: '#43413D'
+  - label: right longitudinal frame rail
+    min: 1.255000, -1.250000, 0.120000
+    max: 1.345000, 1.215000, 0.185000
+    color: '#4D4C4B'
+  - label: right longitudinal frame rail
+    min: 1.255000, -1.250000, 1.080000
+    max: 1.345000, 1.215000, 1.145000
+    color: '#4D4C4B'
+  - label: right frame narrow crossbar
+    min: 1.230000, -1.098000, 0.290000
+    max: 1.380000, -1.042000, 0.350000
+    color: '#969594'
+  - label: right frame narrow crossbar
+    min: 1.230000, -0.728000, 0.290000
+    max: 1.380000, -0.672000, 0.350000
+    color: '#969594'
+  - label: right frame narrow crossbar
+    min: 1.230000, -0.338000, 0.290000
+    max: 1.380000, -0.282000, 0.350000
+    color: '#969594'
+  - label: right frame narrow crossbar
+    min: 1.230000, 0.052000, 0.290000
+    max: 1.380000, 0.108000, 0.350000
+    color: '#969594'
+  - label: right frame narrow crossbar
+    min: 1.230000, 0.452000, 0.290000
+    max: 1.380000, 0.508000, 0.350000
+    color: '#969594'
+  - label: right frame narrow crossbar
+    min: 1.230000, 0.852000, 0.290000
+    max: 1.380000, 0.908000, 0.350000
+    color: '#969594'
+  - label: front instrument plinth
+    min: 0.200000, -1.250000, 0.050000
+    max: 1.120000, -1.080000, 0.300000
+    color: '#2B2A28'
+  - label: front instrument enclosure
+    min: 0.240000, -1.230000, 0.300000
+    max: 1.080000, -1.080000, 0.650000
+    color: '#43413D'
+  - label: source front panel dark recess
+    min: 0.340000, -1.244000, 0.380000
+    max: 0.980000, -1.228000, 0.530000
+    color: '#191919'
+  - label: front panel left rust edge
+    min: 0.290000, -1.247000, 0.300000
+    max: 0.360000, -1.232000, 0.630000
+    color: '#6E3D26'
+  - label: front panel right rust edge
+    min: 0.890000, -1.247000, 0.300000
+    max: 0.960000, -1.232000, 0.630000
+    color: '#6E3D26'
+- type: cmu3DModel
+  id: CMU3DFiltrationDisinfection
+  label: Five-vessel disinfection filter
+  status: draft
+  sourcePrototypes:
+  - RMCFiltrationDisinfection
+  referencePrototype: RMCFiltrationDisinfection
+  referenceRsi: _RMC14/Structures/Filtration/96x96.rsi
+  referenceState: disinfection
+  sourceDirections: 1
+  useEntityRotation: true
+  description: Three yellow-topped rear vessels and two blue-topped front vessels retain the staggered source layout,
+    copper patina, exposed legs and return pipes. Height 1.72 tiles. The 3x2 footprint is centred half a tile south,
+    matching its asymmetric fixture rather than recentring the sprite. Vertical dimensions, hidden back surfaces,
+    bore depths and pipe elevations remain inferred. Original source is one static direction; no operating animation
+    is invented. Source CC-BY-SA-3.0, cmss13 commit 46d1d000640006d99b3ea99475fee4ba96890702 icons/obj/structures/props/96x96.dmi.
+  parts:
+  - label: rear west copper filter vessel
+    min: -1.375000, -0.350000, 0.280000
+    max: -0.605000, 0.420000, 1.610000
+    color: '#725B49'
+    shape: CylinderZ
+  - label: rear west dark base collar
+    min: -1.392000, -0.367000, 0.270000
+    max: -0.588000, 0.437000, 0.390000
+    color: '#30271F'
+    shape: CylinderZ
+  - label: rear west thick copper lid rim
+    min: -1.413000, -0.388000, 1.580000
+    max: -0.567000, 0.458000, 1.710000
+    color: '#47392E'
+    shape: CylinderZ
+  - label: rear west open top dark recess
+    min: -1.328000, -0.303000, 1.705000
+    max: -0.652000, 0.373000, 1.717000
+    color: '#271F19'
+    shape: CylinderZ
+  - label: rear west source colored filter surface
+    min: -1.275000, -0.250000, 1.716000
+    max: -0.705000, 0.320000, 1.720000
+    color: '#B6BD1E'
+    shape: CylinderZ
+  - label: rear west worn circumferential band
+    min: -1.379000, -0.354000, 0.540000
+    max: -0.601000, 0.424000, 0.610000
+    color: '#AD5525'
+    shape: CylinderZ
+  - label: rear west worn circumferential band
+    min: -1.379000, -0.354000, 0.910000
+    max: -0.601000, 0.424000, 0.980000
+    color: '#783A18'
+    shape: CylinderZ
+  - label: rear west worn circumferential band
+    min: -1.379000, -0.354000, 1.230000
+    max: -0.601000, 0.424000, 1.300000
+    color: '#604D3E'
+    shape: CylinderZ
+  - label: rear west vertical copper patina
+    min: -1.100000, -0.351000, 0.390000
+    max: -0.990000, -0.336000, 0.640000
+    color: '#AC5525'
+  - label: rear west vertical copper patina
+    min: -0.925000, -0.351000, 1.020000
+    max: -0.795000, -0.336000, 1.350000
+    color: '#5D2C11'
+  - label: rear west vertical copper patina
+    min: -1.150000, -0.351000, 0.730000
+    max: -0.980000, -0.336000, 0.860000
+    color: '#AD5525'
+  - label: rear west open stand foot
+    min: -1.305000, -0.135000, 0.000000
+    max: -1.215000, 0.205000, 0.320000
+    color: '#271F19'
+  - label: rear west open stand foot
+    min: -0.765000, -0.135000, 0.000000
+    max: -0.675000, 0.205000, 0.320000
+    color: '#271F19'
+  - label: rear middle copper filter vessel
+    min: -0.385000, -0.350000, 0.280000
+    max: 0.385000, 0.420000, 1.610000
+    color: '#725B49'
+    shape: CylinderZ
+  - label: rear middle dark base collar
+    min: -0.402000, -0.367000, 0.270000
+    max: 0.402000, 0.437000, 0.390000
+    color: '#30271F'
+    shape: CylinderZ
+  - label: rear middle thick copper lid rim
+    min: -0.423000, -0.388000, 1.580000
+    max: 0.423000, 0.458000, 1.710000
+    color: '#47392E'
+    shape: CylinderZ
+  - label: rear middle open top dark recess
+    min: -0.338000, -0.303000, 1.705000
+    max: 0.338000, 0.373000, 1.717000
+    color: '#271F19'
+    shape: CylinderZ
+  - label: rear middle source colored filter surface
+    min: -0.285000, -0.250000, 1.716000
+    max: 0.285000, 0.320000, 1.720000
+    color: '#B6BD1E'
+    shape: CylinderZ
+  - label: rear middle worn circumferential band
+    min: -0.389000, -0.354000, 0.540000
+    max: 0.389000, 0.424000, 0.610000
+    color: '#AD5525'
+    shape: CylinderZ
+  - label: rear middle worn circumferential band
+    min: -0.389000, -0.354000, 0.910000
+    max: 0.389000, 0.424000, 0.980000
+    color: '#783A18'
+    shape: CylinderZ
+  - label: rear middle worn circumferential band
+    min: -0.389000, -0.354000, 1.230000
+    max: 0.389000, 0.424000, 1.300000
+    color: '#604D3E'
+    shape: CylinderZ
+  - label: rear middle vertical copper patina
+    min: -0.110000, -0.351000, 0.390000
+    max: 0.000000, -0.336000, 0.640000
+    color: '#AC5525'
+  - label: rear middle vertical copper patina
+    min: 0.065000, -0.351000, 1.020000
+    max: 0.195000, -0.336000, 1.350000
+    color: '#5D2C11'
+  - label: rear middle vertical copper patina
+    min: -0.160000, -0.351000, 0.730000
+    max: 0.010000, -0.336000, 0.860000
+    color: '#AD5525'
+  - label: rear middle open stand foot
+    min: -0.315000, -0.135000, 0.000000
+    max: -0.225000, 0.205000, 0.320000
+    color: '#271F19'
+  - label: rear middle open stand foot
+    min: 0.225000, -0.135000, 0.000000
+    max: 0.315000, 0.205000, 0.320000
+    color: '#271F19'
+  - label: rear east copper filter vessel
+    min: 0.605000, -0.350000, 0.280000
+    max: 1.375000, 0.420000, 1.610000
+    color: '#725B49'
+    shape: CylinderZ
+  - label: rear east dark base collar
+    min: 0.588000, -0.367000, 0.270000
+    max: 1.392000, 0.437000, 0.390000
+    color: '#30271F'
+    shape: CylinderZ
+  - label: rear east thick copper lid rim
+    min: 0.567000, -0.388000, 1.580000
+    max: 1.413000, 0.458000, 1.710000
+    color: '#47392E'
+    shape: CylinderZ
+  - label: rear east open top dark recess
+    min: 0.652000, -0.303000, 1.705000
+    max: 1.328000, 0.373000, 1.717000
+    color: '#271F19'
+    shape: CylinderZ
+  - label: rear east source colored filter surface
+    min: 0.705000, -0.250000, 1.716000
+    max: 1.275000, 0.320000, 1.720000
+    color: '#B6BD1E'
+    shape: CylinderZ
+  - label: rear east worn circumferential band
+    min: 0.601000, -0.354000, 0.540000
+    max: 1.379000, 0.424000, 0.610000
+    color: '#AD5525'
+    shape: CylinderZ
+  - label: rear east worn circumferential band
+    min: 0.601000, -0.354000, 0.910000
+    max: 1.379000, 0.424000, 0.980000
+    color: '#783A18'
+    shape: CylinderZ
+  - label: rear east worn circumferential band
+    min: 0.601000, -0.354000, 1.230000
+    max: 1.379000, 0.424000, 1.300000
+    color: '#604D3E'
+    shape: CylinderZ
+  - label: rear east vertical copper patina
+    min: 0.880000, -0.351000, 0.390000
+    max: 0.990000, -0.336000, 0.640000
+    color: '#AC5525'
+  - label: rear east vertical copper patina
+    min: 1.055000, -0.351000, 1.020000
+    max: 1.185000, -0.336000, 1.350000
+    color: '#5D2C11'
+  - label: rear east vertical copper patina
+    min: 0.830000, -0.351000, 0.730000
+    max: 1.000000, -0.336000, 0.860000
+    color: '#AD5525'
+  - label: rear east open stand foot
+    min: 0.675000, -0.135000, 0.000000
+    max: 0.765000, 0.205000, 0.320000
+    color: '#271F19'
+  - label: rear east open stand foot
+    min: 1.215000, -0.135000, 0.000000
+    max: 1.305000, 0.205000, 0.320000
+    color: '#271F19'
+  - label: front west copper filter vessel
+    min: -1.025000, -1.375000, 0.280000
+    max: -0.255000, -0.605000, 1.610000
+    color: '#725B49'
+    shape: CylinderZ
+  - label: front west dark base collar
+    min: -1.042000, -1.392000, 0.270000
+    max: -0.238000, -0.588000, 0.390000
+    color: '#30271F'
+    shape: CylinderZ
+  - label: front west thick copper lid rim
+    min: -1.063000, -1.413000, 1.580000
+    max: -0.217000, -0.567000, 1.710000
+    color: '#47392E'
+    shape: CylinderZ
+  - label: front west open top dark recess
+    min: -0.978000, -1.328000, 1.705000
+    max: -0.302000, -0.652000, 1.717000
+    color: '#271F19'
+    shape: CylinderZ
+  - label: front west source colored filter surface
+    min: -0.925000, -1.275000, 1.716000
+    max: -0.355000, -0.705000, 1.720000
+    color: '#4A8CBD'
+    shape: CylinderZ
+  - label: front west worn circumferential band
+    min: -1.029000, -1.379000, 0.540000
+    max: -0.251000, -0.601000, 0.610000
+    color: '#AD5525'
+    shape: CylinderZ
+  - label: front west worn circumferential band
+    min: -1.029000, -1.379000, 0.910000
+    max: -0.251000, -0.601000, 0.980000
+    color: '#783A18'
+    shape: CylinderZ
+  - label: front west worn circumferential band
+    min: -1.029000, -1.379000, 1.230000
+    max: -0.251000, -0.601000, 1.300000
+    color: '#604D3E'
+    shape: CylinderZ
+  - label: front west vertical copper patina
+    min: -0.750000, -1.376000, 0.390000
+    max: -0.640000, -1.361000, 0.640000
+    color: '#AC5525'
+  - label: front west vertical copper patina
+    min: -0.575000, -1.376000, 1.020000
+    max: -0.445000, -1.361000, 1.350000
+    color: '#5D2C11'
+  - label: front west vertical copper patina
+    min: -0.800000, -1.376000, 0.730000
+    max: -0.630000, -1.361000, 0.860000
+    color: '#AD5525'
+  - label: front west open stand foot
+    min: -0.955000, -1.160000, 0.000000
+    max: -0.865000, -0.820000, 0.320000
+    color: '#271F19'
+  - label: front west open stand foot
+    min: -0.415000, -1.160000, 0.000000
+    max: -0.325000, -0.820000, 0.320000
+    color: '#271F19'
+  - label: front east copper filter vessel
+    min: 0.255000, -1.375000, 0.280000
+    max: 1.025000, -0.605000, 1.610000
+    color: '#725B49'
+    shape: CylinderZ
+  - label: front east dark base collar
+    min: 0.238000, -1.392000, 0.270000
+    max: 1.042000, -0.588000, 0.390000
+    color: '#30271F'
+    shape: CylinderZ
+  - label: front east thick copper lid rim
+    min: 0.217000, -1.413000, 1.580000
+    max: 1.063000, -0.567000, 1.710000
+    color: '#47392E'
+    shape: CylinderZ
+  - label: front east open top dark recess
+    min: 0.302000, -1.328000, 1.705000
+    max: 0.978000, -0.652000, 1.717000
+    color: '#271F19'
+    shape: CylinderZ
+  - label: front east source colored filter surface
+    min: 0.355000, -1.275000, 1.716000
+    max: 0.925000, -0.705000, 1.720000
+    color: '#4A8CBD'
+    shape: CylinderZ
+  - label: front east worn circumferential band
+    min: 0.251000, -1.379000, 0.540000
+    max: 1.029000, -0.601000, 0.610000
+    color: '#AD5525'
+    shape: CylinderZ
+  - label: front east worn circumferential band
+    min: 0.251000, -1.379000, 0.910000
+    max: 1.029000, -0.601000, 0.980000
+    color: '#783A18'
+    shape: CylinderZ
+  - label: front east worn circumferential band
+    min: 0.251000, -1.379000, 1.230000
+    max: 1.029000, -0.601000, 1.300000
+    color: '#604D3E'
+    shape: CylinderZ
+  - label: front east vertical copper patina
+    min: 0.530000, -1.376000, 0.390000
+    max: 0.640000, -1.361000, 0.640000
+    color: '#AC5525'
+  - label: front east vertical copper patina
+    min: 0.705000, -1.376000, 1.020000
+    max: 0.835000, -1.361000, 1.350000
+    color: '#5D2C11'
+  - label: front east vertical copper patina
+    min: 0.480000, -1.376000, 0.730000
+    max: 0.650000, -1.361000, 0.860000
+    color: '#AD5525'
+  - label: front east open stand foot
+    min: 0.325000, -1.160000, 0.000000
+    max: 0.415000, -0.820000, 0.320000
+    color: '#271F19'
+  - label: front east open stand foot
+    min: 0.865000, -1.160000, 0.000000
+    max: 0.955000, -0.820000, 0.320000
+    color: '#271F19'
+  - label: outer return riser
+    min: -1.470000, -0.110000, 0.070000
+    max: -1.370000, -0.010000, 1.010000
+    color: '#30271F'
+    shape: CylinderZ
+  - label: outer pipe top elbow
+    min: -1.480000, -0.110000, 0.920000
+    max: -1.360000, 0.180000, 1.070000
+    color: '#47392E'
+    shape: Ellipsoid
+  - label: outer return connection
+    min: -1.420000, -0.110000, 0.930000
+    max: -1.130000, -0.010000, 1.030000
+    color: '#47392E'
+    shape: CylinderX
+  - label: outer return riser
+    min: 1.370000, -0.110000, 0.070000
+    max: 1.470000, -0.010000, 1.010000
+    color: '#30271F'
+    shape: CylinderZ
+  - label: outer pipe top elbow
+    min: 1.360000, -0.110000, 0.920000
+    max: 1.480000, 0.180000, 1.070000
+    color: '#47392E'
+    shape: Ellipsoid
+  - label: outer return connection
+    min: 1.130000, -0.110000, 0.930000
+    max: 1.420000, -0.010000, 1.030000
+    color: '#47392E'
+    shape: CylinderX
+  - label: rear inter-vessel crosspipe
+    min: -1.100000, -0.060000, 1.000000
+    max: 1.100000, 0.070000, 1.130000
+    color: '#47392E'
+    shape: CylinderX
+  - label: rear lower outlet pipe
+    min: -1.055000, -0.340000, 0.280000
+    max: -0.925000, -0.100000, 0.410000
+    color: '#30271F'
+    shape: CylinderY
+  - label: rear lower outlet pipe
+    min: -0.065000, -0.340000, 0.280000
+    max: 0.065000, -0.100000, 0.410000
+    color: '#30271F'
+    shape: CylinderY
+  - label: rear lower outlet pipe
+    min: 0.925000, -0.340000, 0.280000
+    max: 1.055000, -0.100000, 0.410000
+    color: '#30271F'
+    shape: CylinderY
+  - label: front return elbow
+    min: -0.790000, -1.450000, 0.050000
+    max: -0.490000, -1.160000, 0.270000
+    color: '#30271F'
+    shape: CylinderY
+  - label: front outlet pale coupling
+    min: -0.810000, -1.455000, 0.100000
+    max: -0.470000, -1.390000, 0.320000
+    color: '#9C9C9C'
+    shape: CylinderY
+  - label: front open stand tie
+    min: -0.950000, -1.220000, 0.120000
+    max: -0.330000, -1.150000, 0.180000
+    color: '#47392E'
+  - label: front return elbow
+    min: 0.490000, -1.450000, 0.050000
+    max: 0.790000, -1.160000, 0.270000
+    color: '#30271F'
+    shape: CylinderY
+  - label: front outlet pale coupling
+    min: 0.470000, -1.455000, 0.100000
+    max: 0.810000, -1.390000, 0.320000
+    color: '#9C9C9C'
+    shape: CylinderY
+  - label: front open stand tie
+    min: 0.330000, -1.220000, 0.120000
+    max: 0.950000, -1.150000, 0.180000
+    color: '#47392E'
