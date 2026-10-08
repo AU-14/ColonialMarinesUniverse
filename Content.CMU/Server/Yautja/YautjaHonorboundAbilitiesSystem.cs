@@ -62,7 +62,8 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
 
     public void GrantActions(Entity<YautjaComponent> ent)
     {
-        if (HasComp<YautjaBadBloodComponent>(ent))
+
+        if (!HasComp<YautjaBadBloodComponent>(ent))
             return;
 
         _actions.AddAction(ent.Owner, ref ent.Comp.HonorRoarAction, ent.Comp.HonorRoarActionId);
@@ -71,7 +72,7 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
 
     private void OnHonorRoar(Entity<YautjaComponent> hunter, ref YautjaHonorRoarActionEvent args)
     {
-        if (args.Handled || args.Performer != hunter.Owner || HasComp<YautjaBadBloodComponent>(hunter))
+        if (args.Handled || args.Performer != hunter.Owner || !HasComp<YautjaBadBloodComponent>(hunter))
             return;
 
         args.Handled = true;
@@ -103,7 +104,7 @@ public sealed partial class YautjaHonorboundAbilitiesSystem : EntitySystem
     {
         if (args.Handled ||
             args.Performer != hunter.Owner ||
-            HasComp<YautjaBadBloodComponent>(hunter) ||
+            !HasComp<YautjaBadBloodComponent>(hunter) ||
             !CanAttack(hunter.Owner, args.Target) ||
             HasComp<YautjaHuntingLeapingComponent>(hunter) ||
             !_melee.TryGetWeapon(hunter.Owner, out var weapon, out _) ||

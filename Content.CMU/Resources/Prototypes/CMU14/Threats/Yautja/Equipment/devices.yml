@@ -18,8 +18,8 @@
     charge: 3000
     maxCharge: 3000
     regen: 60
-    stabilisingCrystalPrototype: CMUYautjaStabilisingCrystal
-    humanStabilisingCrystalPrototype: CMUYautjaHumanStabilisingCrystal
+    stabilisingCrystalPrototype: CMUYautjaAutoInjector
+    humanStabilisingCrystalPrototype: CMUYautjaThrallAutoInjector
     healingCapsulePrototype: CMUYautjaHealingGel
     stabilisingCrystalCost: 400
     humanStabilisingCrystalCost: 400
@@ -654,6 +654,7 @@
   - type: Gun
     projectileSpeed: 28
     fireRate: 1.666667
+    resetOnHandSelected: false # CMU14: switching hands must not restart the caster's cooldown.
     minAngle: 10
     maxAngle: 10
     selectedMode: SemiAuto
@@ -1102,8 +1103,8 @@
 - type: entity
   parent: CMAutoInjector
   id: CMUYautjaAutoInjector
-  name: yautja autoinjector
-  description: An alien autoinjector loaded with a strong trauma and burn treatment cocktail.
+  name: unusual crystal
+  description: A strange glowing crystal with a spike at one end.
   suffix: Yautja
   components:
   - type: Sprite
@@ -2136,8 +2137,8 @@
 - type: entity
   parent: CMUYautjaAutoInjector
   id: CMUYautjaThrallAutoInjector
-  name: yautja autoinjector
-  description: An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.
+  name: orange unusual crystal
+  description: A strange glowing crystal with a spike at one end.
   suffix: Yautja, Thrall
   components:
   - type: Sprite

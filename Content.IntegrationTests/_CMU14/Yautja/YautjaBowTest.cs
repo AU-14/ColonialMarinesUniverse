@@ -3017,8 +3017,8 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(bracerComp.IdChipPrototype.Id, Is.EqualTo("CMUYautjaBracerIdChip"));
-                    Assert.That(bracerComp.StabilisingCrystalPrototype.Id, Is.EqualTo("CMUYautjaStabilisingCrystal"));
-                    Assert.That(bracerComp.HumanStabilisingCrystalPrototype.Id, Is.EqualTo("CMUYautjaHumanStabilisingCrystal"));
+                    Assert.That(bracerComp.StabilisingCrystalPrototype.Id, Is.EqualTo("CMUYautjaAutoInjector"));
+                    Assert.That(bracerComp.HumanStabilisingCrystalPrototype.Id, Is.EqualTo("CMUYautjaThrallAutoInjector"));
                     Assert.That(bracerComp.HealingCapsulePrototype.Id, Is.EqualTo("CMUYautjaHealingGel"));
                 });
             }
@@ -3038,8 +3038,8 @@ public sealed class YautjaBowTest
             var factory = client.ResolveDependency<IComponentFactory>();
 
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaBracerIdChip", "CMU14/HunterShip/obj/items/radio.rsi", "upp_key");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaStabilisingCrystal", "_RMC14/Objects/Medical/emergency_auto_injector.rsi", "autoinjector");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHumanStabilisingCrystal", "_RMC14/Objects/Medical/emergency_auto_injector.rsi", "autoinjector");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaAutoInjector", "CMU14/Yautja/medical.rsi", "crystal");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaThrallAutoInjector", "CMU14/Yautja/medical.rsi", "crystal");
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaHealingGel", "CMU14/Yautja/medical.rsi", "healing_gel");
         });
 
@@ -17270,45 +17270,41 @@ public sealed class YautjaBowTest
     private static IEnumerable<BracerFabricatedMedicalRow> Cmss13BracerFabricatedMedicalRows()
     {
         yield return new BracerFabricatedMedicalRow(
-            "CMUYautjaStabilisingCrystal",
+            "CMUYautjaAutoInjector",
             "/obj/item/reagent_container/hypospray/autoinjector/yautja",
             new MedicompPayloadRow(
-                "CMUYautjaStabilisingCrystal",
+                "CMUYautjaAutoInjector",
                 "/obj/item/reagent_container/hypospray/autoinjector/yautja",
-                "yautja autoinjector",
-                "An alien autoinjector loaded with a strong trauma and burn treatment cocktail.",
+                "unusual crystal",
+                "A strange glowing crystal with a spike at one end.",
                 "Small",
                 ["CMAutoInjector", "CMUYautjaMedicompItem"],
                 YautjaMedicalItem: true,
                 Hypospray: new MedicompPayloadHyposprayRow(
-                    45,
-                    135,
+                    30,
+                    30,
                     new Dictionary<string, int>
                     {
-                        ["CMBicaridine"] = 45,
-                        ["CMKelotane"] = 45,
-                        ["CMTricordrazine"] = 45,
+                        ["thwei"] = 30,
                     })));
 
         yield return new BracerFabricatedMedicalRow(
-            "CMUYautjaHumanStabilisingCrystal",
+            "CMUYautjaThrallAutoInjector",
             "/obj/item/reagent_container/hypospray/autoinjector/yautja/thrall",
             new MedicompPayloadRow(
-                "CMUYautjaHumanStabilisingCrystal",
+                "CMUYautjaThrallAutoInjector",
                 "/obj/item/reagent_container/hypospray/autoinjector/yautja/thrall",
-                "yautja autoinjector",
-                "An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.",
+                "orange unusual crystal",
+                "A strange glowing crystal with a spike at one end.",
                 "Small",
                 ["CMAutoInjector", "CMUYautjaMedicompItem"],
                 YautjaMedicalItem: true,
                 Hypospray: new MedicompPayloadHyposprayRow(
-                    45,
-                    135,
+                    30,
+                    30,
                     new Dictionary<string, int>
                     {
-                        ["CMBicaridine"] = 45,
-                        ["CMKelotane"] = 45,
-                        ["CMTricordrazine"] = 45,
+                        ["dathwei"] = 30,
                     })));
 
         yield return new BracerFabricatedMedicalRow(
@@ -17390,8 +17386,8 @@ public sealed class YautjaBowTest
         yield return new MedicompPayloadRow(
             "CMUYautjaAutoInjector",
             "/obj/item/reagent_container/hypospray/autoinjector/yautja",
-            "yautja autoinjector",
-            "An alien autoinjector loaded with a strong trauma and burn treatment cocktail.",
+            "unusual crystal",
+            "A strange glowing crystal with a spike at one end.",
             "Small",
             ["CMAutoInjector", "CMUYautjaMedicompItem"],
             YautjaMedicalItem: true,
@@ -17406,8 +17402,8 @@ public sealed class YautjaBowTest
         yield return new MedicompPayloadRow(
             "CMUYautjaThrallAutoInjector",
             "/obj/item/reagent_container/hypospray/autoinjector/yautja/thrall",
-            "yautja autoinjector",
-            "An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.",
+            "orange unusual crystal",
+            "A strange glowing crystal with a spike at one end.",
             "Small",
             ["CMAutoInjector", "CMUYautjaMedicompItem"],
             YautjaMedicalItem: true,

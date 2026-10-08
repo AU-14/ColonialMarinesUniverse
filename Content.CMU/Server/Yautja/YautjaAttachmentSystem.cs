@@ -79,6 +79,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         SubscribeLocalEvent<YautjaStoredGearComponent, GotUnequippedHandEvent>(OnStoredGearUnequippedHand);
         SubscribeLocalEvent<YautjaStoredGearComponent, DroppedEvent>(OnStoredGearDropped);
         SubscribeLocalEvent<YautjaStoredGearComponent, RMCDroppedEvent>(OnStoredGearRMCDropped);
+        SubscribeLocalEvent<YautjaStoredGearComponent, RMCItemDropAttemptEvent>(OnStoredGearDropAttempt);
+        SubscribeLocalEvent<YautjaStoredGearComponent, ContainerGettingRemovedAttemptEvent>(OnStoredGearRemoveAttempt);
         SubscribeLocalEvent<YautjaStoredGearHandRemovalCompletedEvent>(OnStoredGearHandRemovalCompleted);
         SubscribeLocalEvent<DoorComponent, YautjaBracerAttachmentForceDoorDoAfterEvent>(OnBracerAttachmentForceDoorDoAfter);
         SubscribeLocalEvent<AirlockComponent, InteractUsingEvent>(OnForceAirlockWithBracerAttachment);
@@ -668,6 +670,49 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return;
 
         TryRetractStoredGear(ent, args.User);
+    }
+
+    private void OnStoredGearDropAttempt(Entity<YautjaStoredGearComponent> ent, ref RMCItemDropAttemptEvent args)
+    {
+        if (args.Cancelled ||
+            !ent.Comp.Deployed ||
+            !HasComp<YautjaCasterComponent>(ent.Owner))
+        {
+            return;
+        }
+
+        // CMU14: a deployed plasma caster is glued to the hunter. No drop attempt - the player's own drop,
+        // a disarm, a strip or a forced drop - may take it out of the hand. Instead it re-attaches to its
+        // source bracer, matching CMSS13 plasma_caster/dropped() which forceMoves the caster back to source.
+        var user = ent.Comp.Bracer is { } bracer && !TerminatingOrDeleted(bracer)
+            ? Transform(bracer).ParentUid
+            : ent.Owner;
+
+        TryRetractStoredGear(ent, user);
+        args.Cancelled = true;
+    }
+
+    private void OnStoredGearRemoveAttempt(Entity<YautjaStoredGearComponent> ent, ref ContainerGettingRemovedAttemptEvent args)
+    {
+        // Retracting disables this guard - the retraction itself has to take the gear out of the hand.
+        if (args.Cancelled ||
+            ent.Comp.Retracting ||
+            !ent.Comp.Deployed ||
+            !HasComp<YautjaCasterComponent>(ent.Owner))
+        {
+            return;
+        }
+
+        // CMU14: a deployed plasma caster is glued to the hunter. Any attempt to take it out of the hand -
+        // the player's own drop, another entity stripping it (which skips the CanDrop action blocker), a
+        // hand swap or a container transfer - re-attaches it to its source bracer instead of removing it.
+        // This is the same hook UnremoveableComponent uses, scoped to the caster and non-destructive.
+        var user = ent.Comp.Bracer is { } bracer && !TerminatingOrDeleted(bracer)
+            ? Transform(bracer).ParentUid
+            : ent.Owner;
+
+        TryRetractStoredGear(ent, user);
+        args.Cancel();
     }
 
     private void ToggleGear(Entity<YautjaGearContainerComponent> bracer, InstantActionEvent args, YautjaGearKind kind)

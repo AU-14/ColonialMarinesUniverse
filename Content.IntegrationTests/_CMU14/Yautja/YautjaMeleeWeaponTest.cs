@@ -102,6 +102,73 @@ public sealed class YautjaMeleeWeaponTest
     }
 
     [Test]
+    public async Task YautjaMeleeWeaponsDoNotAllowWideAttacks()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var protos = server.ProtoMan;
+
+            var weapons = protos.EnumeratePrototypes<EntityPrototype>()
+                .Where(proto => !proto.Abstract &&
+                                !pair.IsTestEntityPrototype(proto.ID) &&
+                                InheritsFrom(protos, proto, "CMUYautjaWeaponBase"))
+                .ToList();
+
+            Assert.That(weapons, Is.Not.Empty,
+                "Expected concrete weapons inheriting CMUYautjaWeaponBase to exist.");
+
+            foreach (var proto in weapons)
+            {
+                var uid = entMan.SpawnEntity(proto.ID, map.GridCoords);
+                try
+                {
+                    Assert.That(entMan.TryGetComponent<MeleeWeaponComponent>(uid, out var melee), Is.True,
+                        $"{proto.ID} inherits CMUYautjaWeaponBase and must have a MeleeWeaponComponent.");
+
+                    Assert.That(melee!.WideAttackAllowed, Is.False,
+                        $"{proto.ID} must set wideAttackAllowed: false so it cannot perform wide (arc) attacks.");
+                }
+                finally
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static bool InheritsFrom(IPrototypeManager prototypes, EntityPrototype proto, string ancestor)
+    {
+        var pending = new Queue<string>(proto.Parents ?? Array.Empty<string>());
+        var seen = new HashSet<string>();
+
+        while (pending.Count > 0)
+        {
+            var parentId = pending.Dequeue();
+            if (!seen.Add(parentId))
+                continue;
+
+            if (parentId == ancestor)
+                return true;
+
+            if (prototypes.TryIndex<EntityPrototype>(parentId, out var parent) && parent.Parents != null)
+            {
+                foreach (var grandParent in parent.Parents)
+                    pending.Enqueue(grandParent);
+            }
+        }
+
+        return false;
+    }
+
+    [Test]
     public async Task YautjaMeleeXenoInterferenceRequiresYautjaSpeciesLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient();
