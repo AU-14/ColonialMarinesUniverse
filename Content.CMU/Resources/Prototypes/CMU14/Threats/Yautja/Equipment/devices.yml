@@ -18,8 +18,8 @@
     charge: 3000
     maxCharge: 3000
     regen: 60
-    stabilisingCrystalPrototype: CMUYautjaStabilisingCrystal
-    humanStabilisingCrystalPrototype: CMUYautjaHumanStabilisingCrystal
+    stabilisingCrystalPrototype: CMUYautjaAutoInjector
+    humanStabilisingCrystalPrototype: CMUYautjaThrallAutoInjector
     healingCapsulePrototype: CMUYautjaHealingGel
     stabilisingCrystalCost: 400
     humanStabilisingCrystalCost: 400
@@ -387,100 +387,6 @@
 
 - type: entity
   parent: BaseItem
-  id: CMUYautjaStabilisingCrystal
-  name: yautja autoinjector
-  description: An alien autoinjector loaded with a strong trauma and burn treatment cocktail.
-  suffix: Yautja, Bracer Fabricated
-  components:
-  - type: Item
-    size: Small
-  - type: Sprite
-    sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
-    layers:
-    - state: autoinjector
-  - type: Hypospray
-    transferAmount: 45
-    solutionName: pen
-    injectOnly: true
-    onlyAffectsMobs: true
-    canContainerDraw: false
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 135
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 45
-        - ReagentId: CMKelotane
-          Quantity: 45
-        - ReagentId: CMTricordrazine
-          Quantity: 45
-  - type: CMRefillableSolution
-    solution: pen
-    reagents:
-      CMBicaridine: 45
-      CMKelotane: 45
-      CMTricordrazine: 45
-  - type: MedicallyUnskilledDoAfter
-    min: 0
-    doAfter: 0
-  - type: YautjaMedicalItem
-  - type: UseDelay
-    delay: 0.2
-  - type: Tag
-    tags:
-    - CMAutoInjector
-    - CMUYautjaMedicompItem
-
-- type: entity
-  parent: BaseItem
-  id: CMUYautjaHumanStabilisingCrystal
-  name: yautja autoinjector
-  description: An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.
-  suffix: Yautja, Thrall, Bracer Fabricated
-  components:
-  - type: Item
-    size: Small
-  - type: Sprite
-    sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
-    layers:
-    - state: autoinjector
-  - type: Hypospray
-    transferAmount: 45
-    solutionName: pen
-    injectOnly: true
-    onlyAffectsMobs: true
-    canContainerDraw: false
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 135
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 45
-        - ReagentId: CMKelotane
-          Quantity: 45
-        - ReagentId: CMTricordrazine
-          Quantity: 45
-  - type: CMRefillableSolution
-    solution: pen
-    reagents:
-      CMBicaridine: 45
-      CMKelotane: 45
-      CMTricordrazine: 45
-  - type: MedicallyUnskilledDoAfter
-    min: 0
-    doAfter: 0
-  - type: YautjaMedicalItem
-  - type: UseDelay
-    delay: 0.2
-  - type: Tag
-    tags:
-    - CMAutoInjector
-    - CMUYautjaMedicompItem
-
-- type: entity
-  parent: BaseItem
   id: CMUYautjaMaskOrnament
   name: Mask Ornament
   description: An ornate addition to your mask.
@@ -654,6 +560,7 @@
   - type: Gun
     projectileSpeed: 28
     fireRate: 1.666667
+    resetOnHandSelected: false # CMU14: switching hands must not restart the caster's cooldown.
     minAngle: 10
     maxAngle: 10
     selectedMode: SemiAuto
@@ -1098,12 +1005,14 @@
     tags:
     - DiscreteHealthAnalyzer
     - CMUYautjaMedicompItem
+  - type: HealthScanner
+    allowXenoTargets: true
 
 - type: entity
   parent: CMAutoInjector
   id: CMUYautjaAutoInjector
-  name: yautja autoinjector
-  description: An alien autoinjector loaded with a strong trauma and burn treatment cocktail.
+  name: unusual crystal
+  description: A strange glowing crystal with a spike at one end.
   suffix: Yautja
   components:
   - type: Sprite
@@ -2136,8 +2045,8 @@
 - type: entity
   parent: CMUYautjaAutoInjector
   id: CMUYautjaThrallAutoInjector
-  name: yautja autoinjector
-  description: An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.
+  name: orange unusual crystal
+  description: A strange glowing crystal with a spike at one end.
   suffix: Yautja, Thrall
   components:
   - type: Sprite
@@ -2239,6 +2148,7 @@
     - CMUYautjaBodyMesh
     - CMUYautjaHuntingPouch
     - CMUYautjaMedicompFull
+    - CMUYautjaYoungbloodRelayBeacon
     - CMUYautjaLantern
 
 - type: entity

@@ -1,0 +1,57 @@
+# Rotating alert beacons spawned by CMUWarshipAlertLightsSystem as children of
+# warship light fixtures. Pure lights, no sprite: the sweep is the visual.
+- type: entity
+  id: CMUWarshipAlertBeaconBlue
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    radius: 4
+    energy: 0.6
+    netsync: false
+    color: "#3D7BFF"
+    lightMask: ConeDouble
+  - type: RotatingLight
+    speed: 15
+
+- type: entity
+  id: CMUWarshipAlertBeaconRed
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1.0
+    netsync: false
+    color: "#EE0500"
+    lightMask: ConeDouble
+  - type: RotatingLight
+    speed: 45
+
+- type: entity
+  id: CMUWarshipAlertBeaconBlack
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 0.8
+    netsync: false
+    color: "#E50F0F"
+    lightMask: ConeDouble
+  - type: RotatingLight
+    speed: 30
+
+- type: entity
+  id: CMUWarshipAlertBeaconDelta
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    radius: 4
+    energy: 0.7
+    netsync: false
+    color: "#FFC82E"
+    lightMask: ConeDouble
+  - type: RotatingLight
+    speed: 60

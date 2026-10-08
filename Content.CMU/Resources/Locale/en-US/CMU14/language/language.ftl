@@ -140,6 +140,9 @@ language-Arcturian-description = An alien language from Arcturus with harmonic t
 language-Pathogen-name= = Pathogenic
 language-Pathogen-description = The common tongue of the Mycelial Confluence - a wet, clicking language carried through spores.
 
+language-Beast-name = Beast
+language-Beast-description = The tongue of nature.
+
 # First contact descriptions
 language-Xeno-first-contact = The sounds follow an alien hive pattern.
 language-Yautja-first-contact = The sounds follow an alien hunter's pattern.
