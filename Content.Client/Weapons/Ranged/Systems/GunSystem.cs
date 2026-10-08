@@ -242,10 +242,10 @@ public sealed partial class GunSystem : SharedGunSystem
             return;
         }
 
-        // Define target coordinates relative to the user or gun so network latency on moving grids
-        // does not distort the requested target location.
+        // CMU14: Keep aim on the moving grid without depending on the shooter's facing.
         var coordinateEntity = HasComp<GunUseGunOriginComponent>(gun.Owner) ? gun.Owner : entity;
-        var coordinates = TransformSystem.ToCoordinates(coordinateEntity, mousePos);
+        // var coordinates = TransformSystem.ToCoordinates(coordinateEntity, mousePos); // CMU14
+        var coordinates = GetAimCoordinates(TransformSystem, coordinateEntity, mousePos); // CMU14
 
         var target = GetBestTarget(_eyeManager.CurrentEye, mousePos);
         if (_state.CurrentState is GameplayStateBase screen)

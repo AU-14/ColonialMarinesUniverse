@@ -8,7 +8,6 @@
     sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNpilotmask.rsi
   - type: HideLayerClothing
     slots:
-    - Hair
     - HeadTop
     - HeadSide
     - Snout
