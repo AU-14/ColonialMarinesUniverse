@@ -513,6 +513,11 @@
     currentLanguage: RiderCant
     defaultLanguage: RiderCant
   - type: AllLanguages
+  # alerts has to be here already or the nv toggle alert never shows at map init
+  - type: Alerts
+  - type: NightVision
+    innate: true
+    alert: XenoNightVision
 
 - type: entity
   id: ActionRiderManifest
