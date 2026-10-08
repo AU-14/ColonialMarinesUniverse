@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
@@ -6,6 +7,7 @@ using Content.Shared.Coordinates;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Nutrition.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -74,6 +76,14 @@ public sealed partial class ApeLimbRipSystem : EntitySystem
                 if (!_containers.TryGetContainingContainer((limb.Id, null, null), out var container) ||
                     !_containers.Remove(limb.Id, container))
                     continue;
+
+                // synths use the normal organic human parts, which are Edible, so the ape was
+                // just eating synth arms like meat
+                if (HasComp<SynthComponent>(target))
+                {
+                    foreach (var part in _body.GetBodyPartChildren(limb.Id, limb.Component))
+                        RemComp<EdibleComponent>(part.Id);
+                }
 
                 _transform.SetCoordinates(limb.Id, ape.Owner.ToCoordinates());
                 _transform.AttachToGridOrMap(limb.Id);
