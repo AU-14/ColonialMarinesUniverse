@@ -1,0 +1,39 @@
+- files: ["crt_startup.ogg"]
+  license: "Custom"
+  copyright: "\"CRT computer monitor startup\" by freesound_community on Pixabay, under the Pixabay Content License (free to use, credit not required). Trimmed to the switch click and power-on thump and converted to mono Ogg Vorbis."
+  source: "https://pixabay.com/sound-effects/crt-computer-monitor-startup-100657/"
+
+- files: ["atm_type.wav"]
+  license: "Custom"
+  copyright: "Click by kauasilbershlachparodes on Pixabay, under the Pixabay Content License (free to use, credit not required). Cut to its first tick and converted to mono WAV."
+  source: "https://pixabay.com/sound-effects/"
+
+- files: ["atm_zap.wav"]
+  license: "Custom"
+  copyright: "Electricity by freesound_community on Pixabay, under the Pixabay Content License (free to use, credit not required). Converted to mono WAV; the seized reader's sparks are timed to it."
+  source: "https://pixabay.com/sound-effects/"
+
+- files: ["atm_key.wav"]
+  license: "Custom"
+  copyright: "Key press by KoiRoylers on Pixabay, under the Pixabay Content License (free to use, credit not required). Cut to one press and release and converted to mono WAV; the ATM pitches it per key, like a phone keypad's tones."
+  source: "https://pixabay.com/sound-effects/"
+
+- files: ["atm_error.wav"]
+  license: "Custom"
+  copyright: "Wrong by freesound_community on Pixabay, under the Pixabay Content License (free to use, credit not required). Trimmed and converted to mono WAV."
+  source: "https://pixabay.com/sound-effects/"
+
+- files: ["atm_locked.wav"]
+  license: "Custom"
+  copyright: "Locked by freesound_community on Pixabay, under the Pixabay Content License (free to use, credit not required). Trimmed and converted to mono WAV."
+  source: "https://pixabay.com/sound-effects/"
+
+- files: ["atm_cash.wav"]
+  license: "Custom"
+  copyright: "ATM cash by Alex_jauk on Pixabay, under the Pixabay Content License (free to use, credit not required). Cut to the note counter's run and converted to mono WAV; the cash slot's animation is timed to it."
+  source: "https://pixabay.com/sound-effects/"
+
+- files: ["atm_card_in.wav", "atm_card_out.wav"]
+  license: "Custom"
+  copyright: "Cut from various ATM sounds by freesound_community on Pixabay, under the Pixabay Content License (free to use, credit not required). Converted to mono WAV."
+  source: "https://pixabay.com/sound-effects/"

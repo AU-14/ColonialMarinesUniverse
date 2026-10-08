@@ -24,6 +24,8 @@
   - type: YautjaGearContainer
     actionWhitelist:
     - WristBlades
+    gearPrototypes:
+      WristBlades: CMUYautjaWristBlades
 
 - type: entity
   parent: BaseStorageItem
