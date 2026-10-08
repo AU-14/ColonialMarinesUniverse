@@ -67,7 +67,7 @@ so an empty slot still reads.
 | wheels | `wheels_0` intact (animated while moving), `wheels_1` destroyed; hidden when removed (brake drums show) | jeep wheel |
 | windshield | `windshield_up_*`, `windshield_down_*`; the damaged glass has bullet holes | jeep windshield |
 | turret (gunner) | `mgturret_0` / `_1` | heavy machine gun |
-| spare | `spare_*` | jeep wheel |
+| spare | `spare_*`; drawn as its tread face from the side; removed leaves the carrier | the same wheel-set item the wheel slot takes, so it replaces destroyed wheels |
 | jerry can | `jerrycan_*`; the damaged can is holed and drips fuel | `RMCFuelCan` |
 | shovel | `shovel_*` | `CMEntrenchingTool` |
 | axe | `axe_*` | fire axe |

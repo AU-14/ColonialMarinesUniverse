@@ -593,15 +593,46 @@ def searchlight(damaged=False):
     return m
 
 
+# The spare is a full road wheel, as wide as the others, on the carrier behind the rear panel.
+SPARE_F = (-38, -32)
+
+
 def spare(damaged=False):
     """A jeep wheel on the rear carrier, axle along f, rim facing backwards."""
     m = Model()
+    width = SPARE_F[1] - SPARE_F[0] + 1
     for a in range(-9, 10):
         for b in range(-9, 10):
-            for t in range(4):
+            for t in range(width):
                 mat = wheel_disc(a, b, t % 2, t == 0, 0.0, destroyed=damaged)
                 if mat:
-                    m.put(-35 + t, 7 + a, 14 + b, mat, "spare")
+                    m.put(SPARE_F[0] + t, 7 + a, 14 + b, mat, "spare")
+    return m
+
+
+def spare_tread(damaged, view):
+    """The spare seen from the side: its tread face, as tall as the wheel, like the tyres seen
+    from the front, instead of the disc edge-on."""
+    radius = int(WHEEL_R)
+    r = 7 + radius if view == "E" else 7 - radius
+    top = 2 * radius
+    m = Model()
+    for z in range(14 - radius, 14 + radius + 1):
+        for f in range(SPARE_F[0], SPARE_F[1] + 1):
+            edge = f in SPARE_F
+            row = z - (14 - radius)
+            if edge and row in (0, top):
+                continue
+            lug = (row // 2 + (f % 2)) % 2 == 0
+            if damaged:
+                if row > top - 3 and noise(f, z) < 0.6 or noise(z, f, 5) < 0.3:
+                    continue
+                mat = "char" if lug else "black"
+            else:
+                if edge and not lug:
+                    continue
+                mat = "rubber" if lug else "groove"
+            m.put(f, r, z, mat, "spare")
     return m
 
 
@@ -1023,7 +1054,7 @@ def split_direction(variant, view, dy):
 
     for name, make in HARDPOINTS.items():
         for state, damaged in (("0", False), ("1", True)):
-            part_model = make(damaged)
+            part_model = spare_tread(damaged, view) if name == "spare" and view in "EW" else make(damaged)
             buf, glass = render(model.merged(part_model), view)
             col = shade(buf)
             part = next(iter(part_model.vox.values()))[1]
