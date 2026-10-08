@@ -49,6 +49,10 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
                 ("damage", _damage.GetTotalDamage(uid).Float()), ("suppressed", agent.SuppressedUntil > _timing.CurTime),
                 ("anchor", agent.CoverAnchor?.ToString() ?? "-"), ("peek", agent.PeekPosition?.ToString() ?? "-"),
                 ("cells", agent.LastSearchCells), ("milliseconds", agent.LastSearchMilliseconds.ToString("F2"))));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-orders-status",
+                ("destination", agent.OrderedDestination?.ToString() ?? "-"), ("patrolling", agent.Patrolling),
+                ("waypoint", agent.PatrolPoints.Count == 0 ? 0 : agent.PatrolIndex + 1),
+                ("points", agent.PatrolPoints.Count), ("blocked", agent.OrderBlocked)));
         }
     }
 }

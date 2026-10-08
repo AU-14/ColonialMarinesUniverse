@@ -85,7 +85,9 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var now = _timing.CurTime;
+        _orderRouteSearched = false;
         _bodyClearCache.Clear();
+        _groundCache.Clear();
         _grenadeHazards.RemoveAll(hazard => hazard.Until <= now);
         var query = EntityQueryEnumerator<CMUExpeditionAgentComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var agent, out var transform))
@@ -128,8 +130,12 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
         ReceiveContact(uid, agent, now);
         var seen = Observe(uid, agent, transform, now);
+        if (seen != null)
+            agent.OrderRoute.Clear();
         var damage = _damage.GetTotalDamage(uid).Float();
         var hit = damage > agent.LastDamage + 0.1f;
+        if (hit)
+            agent.OrderRoute.Clear();
         agent.LastDamage = damage;
         if (seen != null || hit || now < agent.SuppressedUntil)
             CancelWork(uid, agent);
@@ -168,6 +174,16 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var hasAmmo = ReadyRifle(uid, agent);
         if (RunPlan(uid, agent, hasAmmo, damage, hit, now))
             return;
+        // An exhausted weapon should not prevent an otherwise safe relocation or patrol.
+        if (!hasAmmo && seen == null && (agent.LastSeen == null || now >= agent.ForgetAt) && agent.OrderedDestination != null)
+        {
+            agent.Target = null;
+            agent.LastSeen = null;
+            ClearCover(agent);
+            agent.State = CMUExpeditionAgentState.Guard;
+            FollowOrders(uid, agent, now);
+            return;
+        }
         if (agent.State != CMUExpeditionAgentState.Retreat && agent.State != CMUExpeditionAgentState.OutOfAmmo &&
             (!hasAmmo || damage >= agent.RetreatDamage && now >= agent.NextRetreat &&
                 HasMedicine(uid) && ShouldTreat(agent, damage, now)))
@@ -265,18 +281,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
                 agent.LastSeen = null;
                 ClearCover(agent);
                 agent.State = CMUExpeditionAgentState.Guard;
-                if (agent.OrderedDestination is { } order)
-                {
-                    if (_transform.InRange(transform.Coordinates, order, 0.5f))
-                    {
-                        agent.Home = order;
-                        agent.OrderedDestination = null;
-                        _steering.Unregister(uid);
-                    }
-                    else
-                        Move(uid, order);
-                }
-                else if (!TryFortify(uid, agent, now))
+                if (!FollowOrders(uid, agent, now) && !TryFortify(uid, agent, now))
                     Move(uid, home);
             }
             return;

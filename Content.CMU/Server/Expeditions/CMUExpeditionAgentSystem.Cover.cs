@@ -113,32 +113,21 @@ public sealed partial class CMUExpeditionAgentSystem
     private (EntityCoordinates Anchor, EntityCoordinates? Peek)? FindPosition(EntityUid uid,
         CMUExpeditionAgentComponent agent, TransformComponent transform, bool retreat)
     {
-        if (agent.LastSeen is not { } threat || transform.GridUid is not { } grid ||
-            !TryComp<CMUExpeditionMapComponent>(grid, out var expedition))
+        if (agent.LastSeen is not { } threat || transform.GridUid is not { } grid)
             return null;
-        var plan = expedition.Plan;
         var started = Stopwatch.GetTimestamp();
         var origin = _transform.GetGridOrMapTilePosition(uid, transform);
         var pending = new Queue<(int X, int Y, int Steps)>();
-        var visited = new HashSet<int>();
+        var visited = new HashSet<Vector2i>();
         var candidates = new List<(EntityCoordinates Position, int Steps)>();
         pending.Enqueue((origin.X, origin.Y, 0));
         // Fixed work bound per search; native steering handles live pathfinding and failure.
         while (pending.TryDequeue(out var point) && visited.Count < 256)
         {
-            if (point.X < 1 || point.Y < 1 || point.X >= plan.Size - 1 || point.Y >= plan.Size - 1 || point.Steps > 8)
-                continue;
-            var index = plan.Index(point.X, point.Y);
-            if (!visited.Add(index) ||
-                plan.Terrain[index] is CMUExpeditionTerrain.Water or CMUExpeditionTerrain.Cliff)
-                continue;
-            var safe = true;
-            foreach (var fire in plan.FirePockets)
-                safe &= Math.Abs(point.X - fire.X) > 3 || Math.Abs(point.Y - fire.Y) > 3;
-            if (!safe)
+            if (point.Steps > 8 || !visited.Add(new Vector2i(point.X, point.Y)))
                 continue;
             var coordinates = new EntityCoordinates(grid, new Vector2(point.X + 0.5f, point.Y + 0.5f));
-            if (GrenadeDanger(coordinates) || !BodyFits(uid, coordinates))
+            if (!ValidOrderPoint(uid, coordinates))
                 continue;
             if (agent.Home is not { } home || !_transform.InRange(home, coordinates, agent.LeashRange))
                 continue;
@@ -195,7 +184,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 var preferredRange = agent.PreferredFireRange + agent.Stress * 2;
                 var score = -anchor.Steps * 0.6f - stepOut - Math.Abs(range - preferredRange) * 0.5f - exposure;
                 // Reject inferior pairs before their expensive corridor casts; exposure is cached once per peek.
-                if (score <= bestScore || !DryPassage(uid, plan, anchor.Position, peek) || !ClearLane(uid, anchor.Position, peek, 0.35f, movement: true))
+                if (score <= bestScore || !DryPassage(uid, anchor.Position, peek) || !ClearLane(uid, anchor.Position, peek, 0.35f, movement: true))
                     continue;
                 bestScore = score;
                 best = (anchor.Position, peek);
@@ -214,16 +203,15 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.MaxSearchMilliseconds = Math.Max(agent.MaxSearchMilliseconds, agent.LastSearchMilliseconds);
     }
 
-    private bool DryPassage(EntityUid uid, CMUExpeditionPlan plan, EntityCoordinates from, EntityCoordinates to)
+    private bool DryPassage(EntityUid uid, EntityCoordinates from, EntityCoordinates to)
     {
+        if (_transform.ToMapCoordinates(from).MapId != _transform.ToMapCoordinates(to).MapId)
+            return false;
+        to = _transform.ToCoordinates(from.EntityId, _transform.ToMapCoordinates(to));
         for (var step = 0; step <= 16; step++)
         {
             var position = Vector2.Lerp(from.Position, to.Position, step / 16f);
-            if (position.X < 1 || position.Y < 1 || position.X >= plan.Size - 1 || position.Y >= plan.Size - 1)
-                return false;
-            var index = plan.Index((int) MathF.Floor(position.X), (int) MathF.Floor(position.Y));
-            if (plan.Terrain[index] is CMUExpeditionTerrain.Water or CMUExpeditionTerrain.Cliff ||
-                plan.Props[index] != CMUExpeditionProp.None && !BodyFits(uid, new EntityCoordinates(from.EntityId, position)))
+            if (!ValidOrderPoint(uid, new EntityCoordinates(from.EntityId, position)))
                 return false;
         }
         return true;
@@ -236,8 +224,6 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         agent.NextPeekAdjustment = now + TimeSpan.FromSeconds(1.2);
         var start = Transform(uid).Coordinates;
-        if (!TryComp<CMUExpeditionMapComponent>(start.EntityId, out var expedition))
-            return false;
         var localThreat = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(threat));
         var delta = localThreat.Position - start.Position;
         if (delta.LengthSquared() < 0.01f)
@@ -249,12 +235,9 @@ public sealed partial class CMUExpeditionAgentSystem
             if (agent.Home is not { } home || !_transform.InRange(candidate, home, agent.LeashRange) ||
                 agent.CoverAnchor is { } anchor && !_transform.InRange(candidate, anchor, 3.6f) ||
                 agent.FailedPosition is { } failed && now < agent.AvoidPositionUntil && _transform.InRange(candidate, failed, 0.6f) ||
-                Reserved(uid, candidate) || !DryPassage(uid, expedition.Plan, start, candidate))
+                Reserved(uid, candidate) || !DryPassage(uid, start, candidate))
                 continue;
-            var safe = true;
-            foreach (var fire in expedition.Plan.FirePockets)
-                safe &= Math.Abs(candidate.X - fire.X - 0.5f) > 3 || Math.Abs(candidate.Y - fire.Y - 0.5f) > 3;
-            if (!safe || !BodyFits(uid, candidate) || !ClearLane(uid, start, candidate, 0.3f, movement: true) ||
+            if (!ClearLane(uid, start, candidate, 0.3f, movement: true) ||
                 !_guns.TryGetGun(uid, out var gun) || !SafeShot(uid, agent, gun, threat, candidate))
                 continue;
             agent.PeekPosition = candidate;

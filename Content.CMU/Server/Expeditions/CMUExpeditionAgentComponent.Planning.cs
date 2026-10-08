@@ -30,6 +30,14 @@ public sealed partial class CMUExpeditionAgentComponent
     public TimeSpan GrenadeWindowEnd;
     public TimeSpan SquadGrenadeReady;
     public EntityCoordinates? OrderedDestination;
+    public readonly List<EntityCoordinates> PatrolPoints = new();
+    public readonly Queue<EntityCoordinates> OrderRoute = new();
+    public bool Patrolling;
+    public int PatrolIndex;
+    public TimeSpan NextOrderRoute;
+    public EntityCoordinates? OrderProgressPosition;
+    public TimeSpan OrderProgressAt;
+    public bool OrderBlocked;
     public bool Entrench;
     public EntityUid? WorkItem;
     public DoAfterId? WorkDoAfter;

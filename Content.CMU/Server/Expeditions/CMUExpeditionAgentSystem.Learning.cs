@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Linq;
 using Content.Shared.CMU14.Expeditions;
 using Content.Shared.GameTicking;
 using Robust.Shared.ContentPack;
@@ -23,7 +24,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 _experience = JsonSerializer.Deserialize<Dictionary<string, CMUTacticalExperience>>(json) ?? new();
             // Accept only the finite biome/disposition vocabulary, and reject non-finite or malformed tuning data.
             var clean = new Dictionary<string, CMUTacticalExperience>();
-            foreach (var biome in Enum.GetValues<CMUExpeditionBiome>())
+            foreach (var biome in Enum.GetNames<CMUExpeditionBiome>().Append("Ordinary"))
             foreach (var disposition in Enum.GetValues<CMUExpeditionDisposition>())
             {
                 var key = $"{biome}/{disposition}";
@@ -53,10 +54,10 @@ public sealed partial class CMUExpeditionAgentSystem
             _roundExperience[key] = new CMUTacticalExperience { Samples = value.Samples, FlankReturn = value.FlankReturn, PeekReturn = value.PeekReturn };
     }
 
-    private string? ExperienceKey(EntityUid uid, CMUExpeditionAgentComponent agent)
+    private string ExperienceKey(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         if (Transform(uid).GridUid is not { } grid || !TryComp<CMUExpeditionMapComponent>(grid, out var map))
-            return null;
+            return $"Ordinary/{agent.Disposition}";
         return $"{map.Plan.Biome}/{agent.Disposition}";
     }
 

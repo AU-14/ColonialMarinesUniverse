@@ -1,6 +1,6 @@
 # Expedition infantry: tactical design and research
 
-Scope: the opt-in CMU expedition scavenger controller. Decisions remain server-side;
+Scope: the opt-in CMU scavenger controller, on expedition and ordinary maps. Decisions remain server-side;
 native steering, firearms, physics, factions and medical do-afters execute actions.
 
 ## Sources and adaptations
@@ -31,7 +31,7 @@ native steering, firearms, physics, factions and medical do-afters execute actio
 1. Observe at 150 ms intervals and store a last-seen coordinate for six seconds. Compare
    usable shots at the four nearest visible targets plus the current one, retaining the
    current target during a viable volley. Never track an unseen target's current position.
-2. Keep the MAR-40 shouldered during combat movement; lower it for actual utility work.
+2. Keep rifles shouldered during combat movement; lower them for actual utility work.
    Initial aim takes 180 ms and peek aim 80 ms, in addition to native weapon readiness.
    Volleys consume real rounds at the weapon's native rate; cover searches wait until the
    volley ends. A first shot starts the full burst window. Recheck geometry and the next
@@ -39,7 +39,7 @@ native steering, firearms, physics, factions and medical do-afters execute actio
    a persistently blocked lane triggers a deliberate sidestep or withdrawal.
 3. Search at most 256 local cells, with an eight-step search radius. Pair an occluded
    shelter with a firing position no more than 3.2 metres away along a clear passage.
-4. Move precisely into the firing position, aim briefly, fire up to three rounds, return
+4. Move precisely into the firing position, aim briefly, fire the variant's limited volley, return
    to shelter, and reassess. Nearby squadmates reserve different positions and stagger
    peeks with local attack slots.
 5. Hits or visible hostile fire passing within 1.5 metres interrupt exposure. Pressure
@@ -77,18 +77,35 @@ throwers in a two-second window; the squad then waits 35 seconds. Smoke for casu
 shares that budget. Throw preparation rechecks the friendly blast area and only primes a
 grenade after a successful physical throw.
 
-Bounded aggregate exposure/flank outcomes are persisted by biome and disposition to
+Bounded aggregate exposure/flank outcomes are persisted by biome and disposition (or the
+`Ordinary` environment for maps without expedition metadata) to
 `/cmu-expedition-experience.json` in server user data. They adjust next-round costs within
 0.75–1.25. This is modest outcome adaptation, not neural training or player-specific profiling.
 
 ## Operator controls
 
-`cmu-expedition-ai <map> [1..6]` creates a new squad on each invocation and prints its ID.
+`cmu-expedition-ai <map|here> [1..12] [mixed|regular|poor|rich|scout]` creates a new squad
+and prints its ID. `here` works from a body or observer over ground on ordinary maps too.
+Numeric expedition IDs select the recovery objective. Variants have distinct finite gear,
+armor and combat tuning; see [the command and variant guide](README.md#integration-boundary).
 `cmu-expedition-orders <map> <squad> move <x> <y>` moves it to spread positions.
+`cmu-expedition-orders here <squad> move` uses the administrator's current position.
 Replace `move` with `guard` to establish a guard area and entrench after 20 quiet seconds.
 Guards use their real shovel to dig and build a mound, or nearby metal to build a native
 barricade. Construction stops on contact, injury, possession or a new order. One completed
 fortification per guard order avoids filling every nearby tile indefinitely.
+
+Add 2-8 locations with `patrol-add` in place of `move`, then issue `patrol-start` without
+coordinates. `patrol-stop` holds the current area; `patrol-clear` also removes the points.
+Combat interrupts travel and the patrol resumes after contact expires. `move`/`guard` replace
+the active patrol. Explicit orders follow bounded, dry routes (2,048 cells, at most one search
+per update), rechecking live obstruction and retrying blocked travel after three seconds.
+`cmu-expedition-ai-status <map>` displays progress and blocked orders. Long or maze-like routes
+may need intermediate waypoints; separate grids, levels and closed doors are not traversed.
+
+Ground checks use current grid tiles, RMC water/fire entities and body collision. Generated
+terrain adds water/cliff bounds, but ordinary maps need no expedition component. Local cover,
+flanking and rescue use the same ground checks, including grids with negative tile coordinates.
 
 Use `style Aggressive`, `style Steady` or `style Cautious` to tune a squad. `target GOVFOR,OPFOR`
 sets explicit target factions; `friendly GOVFOR` protects that faction. `default` restores
@@ -107,3 +124,10 @@ magazine exhaustion, radio snapshots, physical casualty pulling, grenade prepara
 six-guard squads, guard construction, generated terrain and moving connected player bodies.
 The six-guard fixture reports candidate-search timing and completed physical flanks.
 These are engine simulations; final combat balance still needs human multiplayer playtesting.
+
+The responsiveness, squad variants, patrols and ordinary-map support in the follow-up were
+compiled without running tests, as requested. Previous fixture results do not validate these
+changes. In-game verification should include multiple squads in dense vegetation, peeks beside
+walls, each loadout's ammunition/reload behavior, and interrupted/resumed patrols on both an
+ordinary colony grid and an expedition. Verify blocked waypoints, water/fire avoidance,
+incapacitation and player possession, and record search cost with simultaneous contacts.

@@ -7,22 +7,26 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentSystem
 {
-    private bool BuildTacticalRoute(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates destination)
+    private bool BuildTacticalRoute(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates destination, bool ordered = false)
     {
         agent.Route.Clear();
         agent.RouteDestination = null;
-        var start = Transform(uid).Coordinates;
-        if (start.EntityId != destination.EntityId || !TryComp<CMUExpeditionMapComponent>(start.EntityId, out var expedition))
+        if (!TrySquadCoordinates(Transform(uid).Coordinates, out var start) ||
+            !TrySquadCoordinates(destination, out destination) || start.EntityId != destination.EntityId)
             return false;
-        var plan = expedition.Plan;
-        var first = plan.Index((int) start.X, (int) start.Y);
-        var last = plan.Index((int) destination.X, (int) destination.Y);
-        if (first < 0 || last < 0 || first >= plan.Size * plan.Size || last >= plan.Size * plan.Size)
+        // A local coordinate window also supports ordinary grids with negative tile indices.
+        // No terrain array or expedition component is required for routing.
+        var origin = new Vector2i((int) MathF.Floor(Math.Min(start.X, destination.X)) - 16,
+            (int) MathF.Floor(Math.Min(start.Y, destination.Y)) - 16);
+        var size = (int) MathF.Ceiling(Math.Max(Math.Abs(destination.X - start.X), Math.Abs(destination.Y - start.Y))) + 34;
+        if (size > 1024)
             return false;
+        var first = ((int) MathF.Floor(start.Y) - origin.Y) * size + (int) MathF.Floor(start.X) - origin.X;
+        var last = ((int) MathF.Floor(destination.Y) - origin.Y) * size + (int) MathF.Floor(destination.X) - origin.X;
         var started = Stopwatch.GetTimestamp();
         var danger = new Dictionary<int, float>();
         var passages = new Dictionary<(int, int), bool>();
-        var route = CMUTacticalRoute.Find(plan.Size, first, last, Walkable, Danger, Passage, out var expanded);
+        var route = CMUTacticalRoute.Find(size, first, last, Walkable, Danger, Passage, out var expanded, ordered ? 2048 : 256);
         agent.LastRouteCells = expanded;
         agent.LastRouteMilliseconds = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
         if (route == null)
@@ -36,7 +40,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             var furthest = Math.Min(index + 5, route.Count - 1);
             // Validate the actual start and final sub-tile endpoint, not only cell centres.
-            while (furthest >= index && (!DryPassage(uid, plan, previous, Waypoint(furthest)) ||
+            while (furthest >= index && (!DryPassage(uid, previous, Waypoint(furthest)) ||
                 !ClearLane(uid, previous, Waypoint(furthest), 0.35f, movement: true)))
                 furthest--;
             if (furthest < index)
@@ -51,7 +55,7 @@ public sealed partial class CMUExpeditionAgentSystem
         if (route.Count == 1)
         {
             if (!_transform.InRange(start, destination, ArrivalRange) &&
-                (!DryPassage(uid, plan, start, destination) || !ClearLane(uid, start, destination, 0.35f, movement: true)))
+                (!DryPassage(uid, start, destination) || !ClearLane(uid, start, destination, 0.35f, movement: true)))
                 return false;
             agent.Route.Enqueue(destination);
         }
@@ -60,24 +64,20 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.MoveProgressAt = _timing.CurTime;
         return true;
 
-        EntityCoordinates Coordinates(int cell) => new(start.EntityId, new Vector2(cell % plan.Size + 0.5f, cell / plan.Size + 0.5f));
+        EntityCoordinates Coordinates(int cell) => new(start.EntityId, new Vector2(origin.X + cell % size + 0.5f, origin.Y + cell / size + 0.5f));
         EntityCoordinates Waypoint(int index) => index == route.Count - 1 ? destination : Coordinates(route[index]);
         bool Walkable(int cell)
         {
             var point = Coordinates(cell);
-            if (plan.Terrain[cell] is CMUExpeditionTerrain.Water or CMUExpeditionTerrain.Cliff ||
-                !BodyFits(uid, point) || agent.Home is not { } home ||
-                !_transform.InRange(home, point, agent.LeashRange) || !_transform.InRange(start, point, 16) || GrenadeDanger(point))
+            if (!ValidOrderPoint(uid, point) ||
+                !ordered && (agent.Home is not { } home || !_transform.InRange(home, point, agent.LeashRange) || !_transform.InRange(start, point, 16)))
                 return false;
-            foreach (var fire in plan.FirePockets)
-            {
-                if (Math.Abs(point.X - fire.X - 0.5f) <= 3 && Math.Abs(point.Y - fire.Y - 0.5f) <= 3)
-                    return false;
-            }
             return true;
         }
         float Danger(int cell)
         {
+            if (ordered)
+                return 0;
             if (danger.TryGetValue(cell, out var cost))
                 return cost;
             var point = Coordinates(cell);
@@ -119,8 +119,6 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.LastSeen is not { } threat || agent.Home is not { } home)
             return null;
         var start = Transform(uid).Coordinates;
-        if (!TryComp<CMUExpeditionMapComponent>(start.EntityId, out var expedition))
-            return null;
         var localThreat = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(threat));
         var original = start.Position - localThreat.Position;
         if (original.LengthSquared() < 4)
@@ -130,14 +128,10 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             var point = start.Offset(side * offset - Vector2.Normalize(original) * 2);
             point = new EntityCoordinates(point.EntityId, new Vector2(MathF.Floor(point.X) + 0.5f, MathF.Floor(point.Y) + 0.5f));
-            if (!_transform.InRange(home, point, agent.LeashRange) || Reserved(uid, point) || GrenadeDanger(point) ||
-                point.X < 1 || point.Y < 1 || point.X >= expedition.Plan.Size - 1 || point.Y >= expedition.Plan.Size - 1)
+            if (!_transform.InRange(home, point, agent.LeashRange) || Reserved(uid, point) || !ValidOrderPoint(uid, point))
                 continue;
-            var cell = expedition.Plan.Index((int) point.X, (int) point.Y);
             var angle = Vector2.Dot(Vector2.Normalize(original), Vector2.Normalize(point.Position - localThreat.Position));
             if (angle > 0.8f || !_transform.InRange(point, threat, agent.FireRange) ||
-                !BodyFits(uid, point) ||
-                expedition.Plan.Terrain[cell] is CMUExpeditionTerrain.Water or CMUExpeditionTerrain.Cliff ||
                 !FiringLaneClear(uid, point, threat))
                 continue;
             return point;
