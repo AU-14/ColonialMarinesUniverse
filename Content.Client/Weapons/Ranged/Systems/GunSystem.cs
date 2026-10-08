@@ -150,6 +150,8 @@ public sealed partial class GunSystem : SharedGunSystem
                 continue;
 
             var ent = Spawn(HitscanProto, coords);
+            // CMU14: the stretched travel sprite follows the shot axis in 3D.
+            EnsureComp<Content.Client.CMU14.ThreeD.Scene.CMU3DCombatVisualComponent>(ent).AlongTrajectory = a.Distance != 1;
             var sprite = Comp<SpriteComponent>(ent);
 
             var xform = Transform(ent);
@@ -233,6 +235,10 @@ public sealed partial class GunSystem : SharedGunSystem
             _fireInputHandled = true;
 
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
+        // CMU14: use the perspective ray for captured and released aiming.
+        var firstPerson = EntityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>()
+            .TryFirstPersonAim(out var firstPersonAim, out var firstPersonTarget);
+        if (firstPerson) mousePos = firstPersonAim;
 
         if (mousePos.MapId == MapId.Nullspace)
         {
@@ -247,8 +253,9 @@ public sealed partial class GunSystem : SharedGunSystem
         var coordinateEntity = HasComp<GunUseGunOriginComponent>(gun.Owner) ? gun.Owner : entity;
         var coordinates = TransformSystem.ToCoordinates(coordinateEntity, mousePos);
 
-        var target = GetBestTarget(_eyeManager.CurrentEye, mousePos);
-        if (_state.CurrentState is GameplayStateBase screen)
+        // CMU14: keep the source entity selected by the visible 3D ray.
+        var target = firstPerson ? GetNetEntity(firstPersonTarget) : GetBestTarget(_eyeManager.CurrentEye, mousePos);
+        if (!firstPerson && _state.CurrentState is GameplayStateBase screen)
             target = GetNetEntity(screen.GetClickedEntity(mousePos)) ?? target;
 
         if (_player.LocalSession is not { } session)
@@ -546,6 +553,7 @@ public sealed partial class GunSystem : SharedGunSystem
         }
 
         var ent = Spawn(message.Prototype, coordinates);
+        EnsureComp<Content.Client.CMU14.ThreeD.Scene.CMU3DCombatVisualComponent>(ent).Weapon = gunUid; // CMU14
         TransformSystem.SetWorldRotationNoLerp(ent, message.Angle);
 
         // CMU14: anchor UGV flashes to the independently aimed, elevated barrel sprite.

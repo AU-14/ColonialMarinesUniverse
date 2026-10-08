@@ -25,6 +25,7 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
             return;
 
         var ent = Spawn(ev.Prototype, coords);
+        EnsureComp<Content.Client.CMU14.ThreeD.Scene.CMU3DCombatVisualComponent>(ent); // CMU14: elevate first-person impact artwork.
 
         if (TryComp<SpriteComponent>(ent, out var sprite))
         {
