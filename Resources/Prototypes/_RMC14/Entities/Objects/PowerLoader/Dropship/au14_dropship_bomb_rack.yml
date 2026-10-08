@@ -38,10 +38,13 @@
   name: GBU-89B JDAM (HE)
   description: The GBU-89B Joint Direct Attack Munition is an old but reliable large guided munition. It has an excessively long travel time, but can level entire buildings. Loaded into the JDAM Bomb Clamp.
   components:
+  #cmu start
   - type: Sprite
+    sprite: CMU14/Objects/Dropship/jdam.rsi
     layers:
-    - state: jdam
+    - state: jdam2_bst
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  #cmu end
   - type: Tag
     tags:
     - AU14JDAMBomb
@@ -69,10 +72,13 @@
   name: GBU-89C/N JDAM-I (Incendiary)
   description: The GBU-89C/N Joint Direct Attack Munition is an old but reliable large guided munition fitted with a napalm payload. It can level and set alight entire buildings. Loaded into the JDAM Bomb Clamp.
   components:
+  #cmu start
   - type: Sprite
+    sprite: CMU14/Objects/Dropship/jdam.rsi
     layers:
-    - state: jdami
+    - state: jdam2_nap
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  #cmu end
   - type: Tag
     tags:
     - AU14JDAMBomb
@@ -105,10 +111,13 @@
   name: GBU-89D/AP JDAM-AP
   description: The GBU-89D/AP Joint Direct Attack Munition trades blast radius for a hardened penetrator capable of cracking reinforced structures and armor. Loaded into the JDAM Bomb Clamp.
   components:
+  #cmu start
   - type: Sprite
+    sprite: CMU14/Objects/Dropship/jdam.rsi
     layers:
-    - state: jdam
+    - state: jdam2_ap
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  #cmu end
   - type: Tag
     tags:
     - AU14JDAMBomb
@@ -138,10 +147,13 @@
   name: GBU-89E/CL JDAM-CLUSTER
   description: The GBU-89E/CL Joint Direct Attack Munition separates into a spread of low-yield bomblets over a wide area. Loaded into the JDAM Bomb Clamp.
   components:
+  #cmu start
   - type: Sprite
+    sprite: CMU14/Objects/Dropship/jdam.rsi
     layers:
-    - state: cluster
+    - state: jdam2_clst
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  #cmu end
   - type: Tag
     tags:
     - AU14JDAMBomb
@@ -171,10 +183,13 @@
   name: GBU-89F/N JDAM-NAPALM
   description: The GBU-89F/N Joint Direct Attack Munition blankets the target area in a persistent napalm firestorm. Loaded into the JDAM Bomb Clamp.
   components:
+  #cmu start
   - type: Sprite
+    sprite: CMU14/Objects/Dropship/jdam.rsi
     layers:
-    - state: jdami
+    - state: jdam2_nap
       map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  #cmu end
   - type: Tag
     tags:
     - AU14JDAMBomb

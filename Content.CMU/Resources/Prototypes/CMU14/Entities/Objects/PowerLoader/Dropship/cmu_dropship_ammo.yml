@@ -69,7 +69,7 @@
   - type: Sprite
     sprite: CMU14/Objects/Dropship/jdam.rsi
     layers:
-    - state: jdam
+    - state: jdam2_bst
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 12
@@ -97,7 +97,7 @@
   - type: Sprite
     sprite: CMU14/Objects/Dropship/jdam.rsi
     layers:
-    - state: jdami
+    - state: jdam2_nap
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 11

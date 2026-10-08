@@ -8,10 +8,16 @@
   },
   "states": [
     {
-      "name": "jdam"
+      "name": "jdam2_bst"
     },
     {
-      "name": "jdami"
+      "name": "jdam2_nap"
+    },
+    {
+      "name": "jdam2_ap"
+    },
+    {
+      "name": "jdam2_clst"
     }
   ]
 }
