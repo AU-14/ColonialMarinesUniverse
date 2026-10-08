@@ -13,4 +13,5 @@
   setPreference: false  # all faction variants are hidden in the loadout menu
   roundComponents:
     - type: RegulationAppearance
+    - type: CMUMilitaryHeightStandard
     - type: SpawnHungryThirsty

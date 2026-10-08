@@ -16,7 +16,8 @@ namespace Content.IntegrationTests.CMU14.ColonyEconomy;
 [TestFixture]
 public sealed class ColonyAtmWindowSizeTest
 {
-    private const float AspectRatio = 679f / 899f;
+    // The window shows the art's fascia, 203 x 181 art pixels, under a nav bar of fixed height.
+    private const float AspectRatio = 203f / 181f;
 
     // Physical resolution and UI scale; the window works in the resulting virtual pixels.
     private static readonly (int Width, int Height, float UiScale)[] Screens =
@@ -49,8 +50,16 @@ public sealed class ColonyAtmWindowSizeTest
     private static readonly MethodInfo MouseMoveMethod =
         typeof(Control).GetMethod("MouseMove", BindingFlags.Instance | BindingFlags.NonPublic)!;
 
+    // The size the player last dragged an ATM to is remembered for the session, so a test that
+    // depends on the opening size forgets it first rather than inheriting another test's.
+    private static readonly FieldInfo ChosenScale =
+        typeof(ColonyAtmWindow).GetField("_chosenScale", BindingFlags.Static | BindingFlags.NonPublic)!;
+
+    private static void ForgetChosenSize()
+        => ChosenScale.SetValue(null, null);
+
     private static Control[] Keypad(ColonyAtmWindow window) =>
-        new Control[] { window.Btn1, window.Btn9, window.BtnDel, window.Btn0, window.BtnOk, window.BtnEnter };
+        new Control[] { window.Btn1, window.Btn9, window.BtnClear, window.Btn0, window.Btn00, window.BtnCancel, window.BtnEnter };
 
     private static ScreenCoordinates Pixels(Control control, Vector2 position) =>
         new(position * control.UIScale, control.Window?.Id ?? default);
@@ -104,7 +113,7 @@ public sealed class ColonyAtmWindowSizeTest
                 {
                     Assert.That(window.Size.X, Is.LessThanOrEqualTo(screenSize.X + 0.5f), $"{name}: window wider than screen");
                     Assert.That(window.Size.Y, Is.LessThanOrEqualTo(screenSize.Y + 0.5f), $"{name}: window taller than screen");
-                    Assert.That(window.Size.X / window.Size.Y, Is.EqualTo(AspectRatio).Within(0.01f), $"{name}: art is stretched");
+                    Assert.That(window.Size.X / (window.Size.Y - ColonyAtmWindow.NavHeight), Is.EqualTo(AspectRatio).Within(0.01f), $"{name}: art is stretched");
                     Assert.That(Inside(screenBox, windowBox), $"{name}: window {windowBox} is off screen {screenBox}");
 
                     // Every key, ENTER included, sits inside the window and on screen.
@@ -203,6 +212,7 @@ public sealed class ColonyAtmWindowSizeTest
 
         await client.WaitPost(() =>
         {
+            ForgetChosenSize();
             screen = new LayoutContainer { SetSize = new Vector2(1920, 1080) };
             uiMan.WindowRoot.AddChild(screen);
             LayoutContainer.SetPosition(screen, Vector2.Zero);
@@ -214,6 +224,7 @@ public sealed class ColonyAtmWindowSizeTest
         });
         await client.WaitRunTicks(10);
 
+        // A smaller screen the ATM still fits: it keeps its size but is pulled back on screen.
         await client.WaitPost(() =>
         {
             bigSize = window.Size;
@@ -226,8 +237,24 @@ public sealed class ColonyAtmWindowSizeTest
             var screenBox = UIBox2.FromDimensions(Vector2.Zero, screen.SetSize);
             Assert.Multiple(() =>
             {
+                Assert.That(window.Size.X, Is.EqualTo(bigSize.X).Within(0.5f), "Window shrank on a screen it fits");
+                Assert.That(Inside(screenBox, UIBox2.FromDimensions(window.Position, window.Size)),
+                    $"Window at {window.Position} left off the {screen.SetSize} screen");
+            });
+
+            // A screen too short for it: it shrinks to fit, and stays on screen.
+            screen.SetSize = new Vector2(700, 400);
+        });
+        await client.WaitRunTicks(10);
+
+        await client.WaitAssertion(() =>
+        {
+            var screenBox = UIBox2.FromDimensions(Vector2.Zero, screen.SetSize);
+            Assert.Multiple(() =>
+            {
                 Assert.That(window.Size.Y, Is.LessThan(bigSize.Y), "Window did not shrink with the screen");
-                Assert.That(Inside(screenBox, UIBox2.FromDimensions(window.Position, window.Size)), "Window left off screen after resize");
+                Assert.That(Inside(screenBox, UIBox2.FromDimensions(window.Position, window.Size)),
+                    $"Window at {window.Position} left off the {screen.SetSize} screen");
             });
 
             screen.SetSize = new Vector2(1920, 1080);
@@ -258,6 +285,9 @@ public sealed class ColonyAtmWindowSizeTest
         ColonyAtmWindow window = default!;
         var start = Vector2.Zero;
         var corner = Vector2.Zero;
+        var pull = 0f;
+
+        await client.WaitPost(ForgetChosenSize);
 
         async Task<ColonyAtmWindow> Open()
         {
@@ -290,20 +320,24 @@ public sealed class ColonyAtmWindowSizeTest
         await client.WaitPost(() =>
         {
             start = window.Size;
+            pull = MathF.Min(150f, (start.X - window.MinSize.X) / 2f);
             // Grab just inside the bottom-right corner, on the resize grip.
             corner = window.GlobalPosition + window.Size - new Vector2(4, 4);
         });
         await client.DoGuiEvent(window, Click(window, corner, BoundKeyState.Down));
 
         // Pull the corner in, mostly sideways: the height follows the width.
-        await DragTo(corner - new Vector2(150, 20));
+        await DragTo(corner - new Vector2(pull, pull / 7f));
         await client.WaitAssertion(() =>
         {
             Assert.Multiple(() =>
             {
-                Assert.That(window.Size.X, Is.EqualTo(start.X - 150).Within(1f), "The window did not follow the corner");
-                Assert.That(window.Size.X / window.Size.Y, Is.EqualTo(AspectRatio).Within(0.01f), "Resizing stretched the art");
-                Assert.That(window.Position, Is.EqualTo(new Vector2(100, 100)), "A corner drag moved the window");
+                Assert.That(pull, Is.GreaterThan(20f), "No room to drag the corner in");
+                Assert.That(window.Size.X, Is.EqualTo(start.X - pull).Within(1f), "The window did not follow the corner");
+                Assert.That(window.Size.X / (window.Size.Y - ColonyAtmWindow.NavHeight), Is.EqualTo(AspectRatio).Within(0.01f), "Resizing stretched the art");
+                // The engine's layout leaves float dust (~1e-5 px) on the position; anything visible is a move.
+                Assert.That(window.Position.EqualsApprox(new Vector2(100, 100), 0.01),
+                    $"A corner drag moved the window to {window.Position}");
             });
         });
 
@@ -316,7 +350,7 @@ public sealed class ColonyAtmWindowSizeTest
             {
                 Assert.That(window.Size.X, Is.EqualTo(window.MinSize.X).Within(1f), "The window shrank past its minimum");
                 Assert.That(window.Size.X, Is.LessThan(start.X));
-                Assert.That(window.Size.X / window.Size.Y, Is.EqualTo(AspectRatio).Within(0.01f), "Resizing stretched the art");
+                Assert.That(window.Size.X / (window.Size.Y - ColonyAtmWindow.NavHeight), Is.EqualTo(AspectRatio).Within(0.01f), "Resizing stretched the art");
                 foreach (var key in Keypad(window))
                     Assert.That(Inside(windowBox, UIBox2.FromDimensions(key.GlobalPosition, key.Size)), "A key fell outside the small window");
             });
