@@ -27,16 +27,41 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.LastRouteMilliseconds = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
         if (route == null)
             return false;
-        // The initial partial cell also needs clearance; the grid search only checked centre-to-centre segments.
-        if (route.Count > 1 && !ClearLane(uid, start, Coordinates(route[1]), 0.35f))
+        if (!BodyFits(uid, destination))
             return false;
-        for (var index = 1; index < route.Count - 1; index++)
-            agent.Route.Enqueue(Coordinates(route[index]));
-        agent.Route.Enqueue(destination);
+        // Skip unnecessary cell-centre stops along straight, dry corridors. Keep obstacle
+        // corners as waypoints instead of steering left/right at every tile in a forest.
+        var previous = start;
+        for (var index = 1; index < route.Count; index++)
+        {
+            var furthest = Math.Min(index + 5, route.Count - 1);
+            // Validate the actual start and final sub-tile endpoint, not only cell centres.
+            while (furthest >= index && (!DryPassage(uid, plan, previous, Waypoint(furthest)) ||
+                !ClearLane(uid, previous, Waypoint(furthest), 0.35f, movement: true)))
+                furthest--;
+            if (furthest < index)
+            {
+                agent.Route.Clear();
+                return false;
+            }
+            previous = Waypoint(furthest);
+            agent.Route.Enqueue(previous);
+            index = furthest;
+        }
+        if (route.Count == 1)
+        {
+            if (!_transform.InRange(start, destination, ArrivalRange) &&
+                (!DryPassage(uid, plan, start, destination) || !ClearLane(uid, start, destination, 0.35f, movement: true)))
+                return false;
+            agent.Route.Enqueue(destination);
+        }
         agent.RouteDestination = destination;
+        agent.MoveProgressPosition = start;
+        agent.MoveProgressAt = _timing.CurTime;
         return true;
 
         EntityCoordinates Coordinates(int cell) => new(start.EntityId, new Vector2(cell % plan.Size + 0.5f, cell / plan.Size + 0.5f));
+        EntityCoordinates Waypoint(int index) => index == route.Count - 1 ? destination : Coordinates(route[index]);
         bool Walkable(int cell)
         {
             var point = Coordinates(cell);
@@ -60,18 +85,23 @@ public sealed partial class CMUExpeditionAgentSystem
             if (agent.LastSeen is { } threat && _timing.CurTime < agent.ForgetAt &&
                 RayClear(uid, _transform.ToMapCoordinates(point), _transform.ToMapCoordinates(threat)))
             {
-                // A radio snapshot is an uncertain firing lane. Discount that estimate while
-                // investigating so the bounded search can close contact instead of circling it.
-                var confidence = agent.State == CMUExpeditionAgentState.Investigate && agent.ContactFromRadio ? 0.25f : 1;
-                cost += (2 + agent.Stress * 3 + (1 - agent.Aggression)) * agent.LearnedDangerCost * confidence;
+                cost += (2 + agent.Stress * 3 + (1 - agent.Aggression)) * agent.LearnedDangerCost;
             }
             foreach (var other in agent.VisibleThreats)
             {
+                // Exposure remains costly, but a large group must not turn every route into
+                // an unbounded detour around the same overlapping firing lanes.
+                if (cost >= 6)
+                    break;
                 if (agent.LastSeen is { } current && _transform.InRange(current, other, 1))
                     continue;
                 if (RayClear(uid, _transform.ToMapCoordinates(point), _transform.ToMapCoordinates(other)))
                     cost += 2;
             }
+            cost = Math.Min(6, cost);
+            // Closing to rifle range accepts some exposure; a radio snapshot carries less certainty.
+            if (agent.State == CMUExpeditionAgentState.Investigate)
+                cost *= agent.ContactFromRadio ? 0.15f : 0.3f;
             danger[cell] = cost;
             return cost;
         }
@@ -79,7 +109,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             var key = a < b ? (a, b) : (b, a);
             if (!passages.TryGetValue(key, out var clear))
-                passages[key] = clear = ClearLane(uid, Coordinates(a), Coordinates(b), 0.35f);
+                passages[key] = clear = ClearLane(uid, Coordinates(a), Coordinates(b), 0.35f, movement: true);
             return clear;
         }
     }

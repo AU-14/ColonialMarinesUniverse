@@ -37,15 +37,17 @@ public sealed partial class CMUExpeditionAgentSystem
         return clear;
     }
 
-    private bool RayClear(EntityUid uid, MapCoordinates from, MapCoordinates to)
+    private bool RayClear(EntityUid uid, MapCoordinates from, MapCoordinates to, bool movement = false)
     {
         if (from.MapId != to.MapId)
             return false;
         var delta = to.Position - from.Position;
         if (delta.LengthSquared() < 0.0001f)
             return true;
-        var ray = new CollisionRay(from.Position, Vector2.Normalize(delta),
-            (int) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable | CollisionGroup.BulletImpassable));
+        var mask = CollisionGroup.Impassable | CollisionGroup.InteractImpassable;
+        if (!movement)
+            mask |= CollisionGroup.BulletImpassable;
+        var ray = new CollisionRay(from.Position, Vector2.Normalize(delta), (int) mask);
         // Only the existence of an obstruction matters. Do not collect every hit behind the first wall.
         return !_physics.IntersectRayWithPredicate(from.MapId, ray, delta.Length(),
             entity => entity == uid || HasComp<NpcFactionMemberComponent>(entity), true).Any();
@@ -53,15 +55,20 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool FiringLaneClear(EntityUid uid, EntityCoordinates from, EntityCoordinates to)
     {
-        if (!_guns.TryGetGun(uid, out var gun))
+        var start = _transform.ToMapCoordinates(from);
+        var end = _transform.ToMapCoordinates(to);
+        var delta = end.Position - start.Position;
+        if (start.MapId != end.MapId || delta.LengthSquared() < 0.01f || !BodyFits(uid, from) || !RayClear(uid, start, end))
             return false;
-        var distance = Vector2.Distance(_transform.ToMapCoordinates(from).Position, _transform.ToMapCoordinates(to).Position);
-        var width = 0.3f + (float) Math.Tan(Math.Min(gun.Comp.MaxAngleModified.Theta, Math.PI / 2) / 2) * distance;
-        return ClearLane(uid, from, to, width);
+        // Clear the body and muzzle around nearby corners, then require a direct line to the
+        // target. Trees beside a distant target may catch stray rounds without blocking the shot.
+        var muzzleEnd = _transform.ToCoordinates(from.EntityId,
+            new MapCoordinates(start.Position + Vector2.Normalize(delta) * Math.Min(1.25f, delta.Length()), start.MapId));
+        return ClearLane(uid, from, muzzleEnd, 0.3f);
     }
 
     /// <summary>Three rays leave room for the body's width and the weapon's scatter around a corner.</summary>
-    private bool ClearLane(EntityUid uid, EntityCoordinates from, EntityCoordinates to, float endWidth)
+    private bool ClearLane(EntityUid uid, EntityCoordinates from, EntityCoordinates to, float endWidth, bool movement = false)
     {
         var start = _transform.ToMapCoordinates(from);
         var end = _transform.ToMapCoordinates(to);
@@ -69,11 +76,11 @@ public sealed partial class CMUExpeditionAgentSystem
         if (start.MapId != end.MapId || delta.LengthSquared() < 0.01f)
             return false;
         var perpendicular = Vector2.Normalize(new Vector2(-delta.Y, delta.X));
-        return RayClear(uid, start, end) &&
+        return RayClear(uid, start, end, movement) &&
                RayClear(uid, new MapCoordinates(start.Position + perpendicular * 0.3f, start.MapId),
-                   new MapCoordinates(end.Position + perpendicular * endWidth, end.MapId)) &&
+                   new MapCoordinates(end.Position + perpendicular * endWidth, end.MapId), movement) &&
                RayClear(uid, new MapCoordinates(start.Position - perpendicular * 0.3f, start.MapId),
-                   new MapCoordinates(end.Position - perpendicular * endWidth, end.MapId));
+                   new MapCoordinates(end.Position - perpendicular * endWidth, end.MapId), movement);
     }
 
     private bool Sheltered(EntityUid uid, EntityCoordinates location, EntityCoordinates threat)
@@ -188,7 +195,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 var preferredRange = agent.PreferredFireRange + agent.Stress * 2;
                 var score = -anchor.Steps * 0.6f - stepOut - Math.Abs(range - preferredRange) * 0.5f - exposure;
                 // Reject inferior pairs before their expensive corridor casts; exposure is cached once per peek.
-                if (score <= bestScore || !DryPassage(uid, plan, anchor.Position, peek) || !ClearLane(uid, anchor.Position, peek, 0.35f))
+                if (score <= bestScore || !DryPassage(uid, plan, anchor.Position, peek) || !ClearLane(uid, anchor.Position, peek, 0.35f, movement: true))
                     continue;
                 bestScore = score;
                 best = (anchor.Position, peek);
@@ -227,7 +234,7 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (now < agent.NextPeekAdjustment)
             return false;
-        agent.NextPeekAdjustment = now + TimeSpan.FromSeconds(0.8);
+        agent.NextPeekAdjustment = now + TimeSpan.FromSeconds(1.2);
         var start = Transform(uid).Coordinates;
         if (!TryComp<CMUExpeditionMapComponent>(start.EntityId, out var expedition))
             return false;
@@ -236,17 +243,18 @@ public sealed partial class CMUExpeditionAgentSystem
         if (delta.LengthSquared() < 0.01f)
             return false;
         var side = Vector2.Normalize(new Vector2(-delta.Y, delta.X));
-        foreach (var distance in new[] { 0.4f, -0.4f, 0.75f, -0.75f, 1.1f, -1.1f })
+        foreach (var distance in new[] { 0.75f, -0.75f, 1.25f, -1.25f, 2f, -2f })
         {
             var candidate = start.Offset(side * distance);
             if (agent.Home is not { } home || !_transform.InRange(candidate, home, agent.LeashRange) ||
                 agent.CoverAnchor is { } anchor && !_transform.InRange(candidate, anchor, 3.6f) ||
+                agent.FailedPosition is { } failed && now < agent.AvoidPositionUntil && _transform.InRange(candidate, failed, 0.6f) ||
                 Reserved(uid, candidate) || !DryPassage(uid, expedition.Plan, start, candidate))
                 continue;
             var safe = true;
             foreach (var fire in expedition.Plan.FirePockets)
                 safe &= Math.Abs(candidate.X - fire.X - 0.5f) > 3 || Math.Abs(candidate.Y - fire.Y - 0.5f) > 3;
-            if (!safe || !BodyFits(uid, candidate) || !ClearLane(uid, start, candidate, 0.3f) ||
+            if (!safe || !BodyFits(uid, candidate) || !ClearLane(uid, start, candidate, 0.3f, movement: true) ||
                 !_guns.TryGetGun(uid, out var gun) || !SafeShot(uid, agent, gun, threat, candidate))
                 continue;
             agent.PeekPosition = candidate;

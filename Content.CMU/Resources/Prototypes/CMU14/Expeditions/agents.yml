@@ -54,7 +54,7 @@
     courage: 0.8
     preferredFireRange: 6
     retreatDamage: 65
-    burstPause: 0.65
+    burstPause: 0.4
     healOpportunityDelay: 18
   - type: FixedIdentity
     name: cmu-expedition-raider-identity
@@ -70,7 +70,7 @@
     preferredFireRange: 10
     retreatDamage: 45
     burstSize: 2
-    burstPause: 1.1
+    burstPause: 0.8
     healOpportunityDelay: 10
   - type: FixedIdentity
     name: cmu-expedition-sentry-identity

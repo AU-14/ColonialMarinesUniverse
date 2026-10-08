@@ -184,7 +184,7 @@ These are schematics, not screenshots of in-game art. Generator v7 changes crash
 | Human AI sight, faction filtering, physical pursuit, finite ammunition, last-seen expiry, injury retreat into reachable cover and incapacitation shutdown | `InfantryUsesSightRealAmmunitionAndMovementThenStopsWhenIncapacitated` |
 | Rifle handling and holding fire for teammates | `InfantryReadiesRifleAndHoldsFireForTeammates` |
 | Physical short-burst peeks, near-miss suppression and return to shelter | `InfantryPeeksFiresShortBurstsAndPhysicallyReturnsToShelter` |
-| Full firing-corridor clearance and actual projectile hits | `InfantryStepsClearOfGrazingWallAndShootsWithoutRemovingIt` |
+| Nearby muzzle clearance around walls and actual projectile hits | `InfantryStepsClearOfGrazingWallAndShootsWithoutRemovingIt` |
 | Sheltered medical actions, damage interruption and exhausted supplies | `WoundedInfantryTreatsInShelterInterruptsOnDamageAndExhaustsDressings` |
 | Staggered squad exposure, continued attacks by both soldiers and failure memory | `SquadStaggersPeeksAndBothGuardsKeepAttacking` |
 | Automatic LZ publication, physical guard orders/construction and fighter departure | `AutomaticLandingZoneAndGuardOrderBuildPhysicalCover` |

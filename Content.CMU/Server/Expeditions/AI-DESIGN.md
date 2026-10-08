@@ -15,7 +15,8 @@ native steering, firearms, physics, factions and medical do-afters execute actio
 - [Arjen Beij and Remco Straatman, Killzone: Dynamic Procedural Tactics, GDCE 2005](https://www.guerrilla-games.com/media/News/Files/gdce05_killzone_ai.pdf).
   Position evaluation combines range, exposure and movement cost. For our generated maps,
   candidates must pass dry-ground, fire, leash and live collision checks before scoring.
-  Shelters must conceal the guard's width; peeks must clear the rifle's scatter cone.
+  Shelters must conceal the guard's width; peeks must clear the body, nearby muzzle corridor
+  and direct shot. Distant foliage beside the aim point can catch stray rounds.
   Scores favor short step-outs, useful range and protection from secondary observed threats.
   Bounded local A* assigns exposure costs, then native steering follows the chosen waypoints.
 
@@ -27,10 +28,15 @@ native steering, firearms, physics, factions and medical do-afters execute actio
 
 ## Current behavior
 
-1. Observe at 150 ms intervals, retain a visible target, and store a last-seen coordinate
-   for six seconds. Never update that coordinate from an unseen target.
-2. Shoulder the MAR-40 before shooting. Use its real projectile speed for bounded lead.
-   Short volleys consume real rounds. Recheck geometry and allied bodies before each shot.
+1. Observe at 150 ms intervals and store a last-seen coordinate for six seconds. Compare
+   usable shots at the four nearest visible targets plus the current one, retaining the
+   current target during a viable volley. Never track an unseen target's current position.
+2. Keep the MAR-40 shouldered during combat movement; lower it for actual utility work.
+   Initial aim takes 180 ms and peek aim 80 ms, in addition to native weapon readiness.
+   Volleys consume real rounds at the weapon's native rate; cover searches wait until the
+   volley ends. A first shot starts the full burst window. Recheck geometry and the next
+   shot's recoil cone for allied bodies before every shot. A crossing ally pauses fire;
+   a persistently blocked lane triggers a deliberate sidestep or withdrawal.
 3. Search at most 256 local cells, with an eight-step search radius. Pair an occluded
    shelter with a firing position no more than 3.2 metres away along a clear passage.
 4. Move precisely into the firing position, aim briefly, fire up to three rounds, return
@@ -41,8 +47,12 @@ native steering, firearms, physics, factions and medical do-afters execute actio
 6. Wounded guards use their physical three-dose dressing pack while sheltered. They free
    a hand and complete a three-second native medical action. Damage, movement, lost
    safety, incapacitation or player possession cancels treatment.
-7. A failed/timed-out movement destination is avoided for eight seconds. Destroyed cover,
-   changed threat angles, expired contacts and missing paths invalidate the current plan.
+7. A failed/timed-out movement destination is avoided for eight seconds. A combat move
+   with no 20 cm progress for 1.5 seconds fails early. Pursuit route failures back off for
+   one second. Movement checks use body collision rather than bullet-only obstruction;
+   clear dry route segments skip intermediate tile stops. Exposure penalties are capped
+   so overlapping enemy lanes do not multiply into prohibitive detours.
+   Destroyed cover, changed threat angles and expired contacts invalidate the current plan.
 
 The distances and timers above are tuning choices for this game, not values claimed by
 the cited papers. The aim is readable, adaptable opposition with ordinary ammunition and

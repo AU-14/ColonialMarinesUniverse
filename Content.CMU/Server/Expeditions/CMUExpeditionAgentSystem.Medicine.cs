@@ -33,6 +33,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
 
         // Unshoulder the rifle to free a hand; the dressing stays in its accessible medical pocket.
+        agent.RifleLoweredUntil = now + TimeSpan.FromSeconds(0.3);
         if (_guns.TryGetGun(uid, out var gun))
             _wield.TryUnwield(gun.Owner, uid);
         if (_hands.GetEmptyHandCount(uid) == 0)

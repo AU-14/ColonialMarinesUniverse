@@ -86,7 +86,7 @@ public sealed partial class CMUExpeditionAgentSystem
             {
                 var deep = refuge.Offset(Vector2.Normalize(away) * 1.5f);
                 if (TryComp<CMUExpeditionMapComponent>(refuge.EntityId, out var map) && DryPassage(uid, map.Plan, refuge, deep) &&
-                    ClearLane(uid, refuge, deep, 0.4f) && ShelteredFromKnownThreats(uid, agent, deep))
+                    ClearLane(uid, refuge, deep, 0.4f, movement: true) && ShelteredFromKnownThreats(uid, agent, deep))
                     shelter = deep;
             }
         }
