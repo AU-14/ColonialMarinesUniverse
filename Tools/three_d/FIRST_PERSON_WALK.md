@@ -57,11 +57,12 @@ or 0.5 (allowed 0.25-1). Brightness is a lighting multiplier, default 1, clamped
   units with a neutral material; architectural height and surface detail still need source review.
 - Up to 256 nearby live sprites share an atlas, prioritizing characters and effects. Mobs and transient
   effects face the camera; unsupported world fixtures retain their orientation. SpriteSystem supplies
-  source layers, directional frames, typing indicators and animations. Worn/held equipment with a
-  matching 3D pose renders separately. Walls and ceilings occlude sprites and their alpha cutouts.
+  source layers, directional frames, typing indicators and animations. Clothing and held items remain
+  part of the mob sprite; there are no attached or first-person equipment models. Dropped-item sprite
+  fallbacks lie flat at their physical elevation. Walls and ceilings occlude sprites and their alpha cutouts.
 - Projectiles and effect entities are collected independently of static geometry publication. Muzzle
-  flashes attach to the front of the held model when available; other combat effects use weapon height
-  on their map. Stretched hitscan artwork follows the shot axis and turns its plane toward the viewer.
+  flashes and other combat effects use weapon height on their map. Stretched hitscan artwork follows
+  the shot axis and turns its plane toward the viewer.
   Combat effects retain unshaded visibility and fading, and cannot intercept interaction/aiming rays.
 - Overhead speech uses the sender's sprite height and actual floor in the perspective camera. Existing
   chat formatting, stacking and lifetime remain in use. Solid geometry and the camera's near plane

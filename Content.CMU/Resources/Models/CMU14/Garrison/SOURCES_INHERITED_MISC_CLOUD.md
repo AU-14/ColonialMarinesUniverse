@@ -12,8 +12,8 @@ Zero unresolved is limited to source identity and named static compositions. It 
 
 ## Files and evidence
 
-- Editable family: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_inherited_misc_cloud.yml`
-- Surface registry: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_inherited_misc_cloud_art.yml`
+- Editable family: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_inherited_misc_cloud.yml`
+- Surface registry: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_inherited_misc_cloud_art.yml`
 - Full per-ID/source/blob/license audit: `Tools/three_d/generated/inherited-misc-cloud-audit.json`
 - Authored export/crop/palette record: `Tools/three_d/generated/inherited-misc-cloud-verification.json`
 - Initial compatible-candidate audit: `reference/inherited-misc-compat-audit.json`

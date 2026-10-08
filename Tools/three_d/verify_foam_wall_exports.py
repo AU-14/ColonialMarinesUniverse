@@ -104,7 +104,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--prefix',default='utility-batch')
     args=parser.parse_args()
-    model=bm.load_models(ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_foam_wall.yml')[0]
+    model=bm.load_models(ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_foam_wall.yml')[0]
     models=json.loads((GEN/'models.json').read_text())['models']
     library={m['id']:m for m in models}
     for field in ('parts','foamAppearance','sourcePrototypes','referencePrototype','referenceRsi','referenceState',

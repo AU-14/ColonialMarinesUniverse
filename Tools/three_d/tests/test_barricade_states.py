@@ -15,7 +15,7 @@ import scene
 class BarricadeStatesTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.model = bm.validate_model(next(m for m in yaml.load((bm.SOURCE / 'garrison_plasteel_barricade.yml').read_text(),
+        cls.model = bm.validate_model(next(m for m in yaml.load((bm.WORLD_SOURCE / 'garrison_plasteel_barricade.yml').read_text(),
                                                               Loader=yaml.CSafeLoader) if m['type'] == 'cmu3DModel'))
         cls.defaults = json.loads((bm.VIEWER / 'plasteel-state-review/report.json').read_text())['resolvedComponents']
 
