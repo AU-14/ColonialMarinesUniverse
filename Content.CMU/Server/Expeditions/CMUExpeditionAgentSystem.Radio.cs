@@ -66,11 +66,15 @@ public sealed partial class CMUExpeditionAgentSystem
             !TryComp<CMUExpeditionAgentComponent>(source, out var sender) || !SameSquad(ent, ent.Comp, source, sender) ||
             !_transform.InRange(Transform(source).Coordinates, Transform(ent).Coordinates, 40))
             return;
+        // A busy squad may send several reports during the reaction delay. Refresh the
+        // snapshot without repeatedly postponing the first report's delivery deadline.
+        if (ent.Comp.RadioPosition == null)
+            ent.Comp.RadioDeliveryAt = report.Observed + TimeSpan.FromSeconds(0.6);
         ent.Comp.RadioTarget = report.Target;
         ent.Comp.RadioPosition = report.Position;
         ent.Comp.RadioObservedAt = report.Observed;
-        ent.Comp.RadioDeliveryAt = report.Observed + TimeSpan.FromSeconds(0.6);
         ent.Comp.ReportsReceived++;
+        ent.Comp.RadioDecision = "pending";
     }
 
     private void ReceiveContact(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
@@ -78,18 +82,59 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.RadioPosition is not { } report || now < agent.RadioDeliveryAt)
             return;
         agent.RadioPosition = null;
-        if (!RadioReady(uid, out _) || agent.RadioObservedAt <= agent.LastContact ||
-            now >= agent.RadioObservedAt + agent.MemoryDuration || agent.Home is not { } home ||
-            !_transform.InRange(home, report, agent.LeashRange))
+        if (!RadioReady(uid, out var headset))
+        {
+            agent.RadioDecision = "radio-unavailable";
             return;
-        if (agent.RadioTarget is { } target && !AcceptOrderedContact(uid, agent, target))
+        }
+        if (agent.RadioObservedAt <= agent.LastContact || now >= agent.RadioObservedAt + agent.RadioMemoryDuration)
+        {
+            agent.RadioDecision = "stale-report";
             return;
-        if (agent.Target != agent.RadioTarget && agent.Action != null)
-            CancelPlan(uid, agent, false);
+        }
+        if (!agent.ContactFromRadio && agent.Target != null && now - agent.LastContact < agent.LostSightDelay ||
+            agent.Action != null || agent.State is CMUExpeditionAgentState.Healing or CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.Withdraw)
+        {
+            agent.RadioDecision = "maintaining-current-action";
+            return;
+        }
+        if (agent.Home is not { } home || !_transform.InRange(home, report, agent.LeashRange))
+        {
+            agent.RadioDecision = "outside-guard-area";
+            return;
+        }
+        if (agent.RadioTarget is not { } target || !Exists(target) || !AcceptOrderedContact(uid, agent, target))
+        {
+            agent.RadioDecision = "invalid-target";
+            return;
+        }
+        if (agent.LastSeen == null)
+            agent.FirstContact = now;
+        var newlyResponding = !agent.ContactFromRadio || agent.Target != target;
+        if (newlyResponding && !CommittedMovement(agent))
+        {
+            ClearCover(agent);
+            agent.State = CMUExpeditionAgentState.Watch;
+            _steering.Unregister(uid);
+        }
+        CancelWork(uid, agent);
+        agent.OrderRoute.Clear();
         agent.Target = agent.RadioTarget;
         agent.LastSeen = report;
         agent.LastContact = agent.RadioObservedAt;
-        agent.ForgetAt = agent.RadioObservedAt + agent.MemoryDuration;
+        agent.ForgetAt = agent.RadioObservedAt + agent.RadioMemoryDuration;
         agent.ContactFromRadio = true;
+        agent.ReportsAccepted++;
+        agent.RadioDecision = "supporting-report";
+        if (newlyResponding && now >= agent.NextRadioResponse)
+        {
+            var keys = Comp<EncryptionKeyHolderComponent>(headset);
+            var channel = keys.Channels.FirstOrDefault(c => !keys.ReadOnlyChannels.Contains(c));
+            if (channel != default)
+            {
+                agent.NextRadioResponse = now + TimeSpan.FromSeconds(12);
+                _radio.SendRadioMessage(uid, Loc.GetString("cmu-expedition-support-response"), channel, headset, null);
+            }
+        }
     }
 }

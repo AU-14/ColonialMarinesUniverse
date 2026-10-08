@@ -36,6 +36,11 @@ public sealed partial class CMUExpeditionAgentComponent : Component
     public EntityUid? Target;
     public TimeSpan ForgetAt;
     public TimeSpan LastContact;
+    public TimeSpan NextTargetSwitch;
+    public EntityCoordinates? InvestigationDestination;
+    public EntityCoordinates? InvestigationContact;
+    public TimeSpan NextInvestigation;
+    public TimeSpan? LostAimSince;
     public TimeSpan FireAt;
     public TimeSpan BurstEnd;
     public TimeSpan MoveUntil;

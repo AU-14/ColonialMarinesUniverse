@@ -260,23 +260,31 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
         if (seen == null)
         {
+            if (agent.State is CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage)
+            {
+                if (now - agent.LastContact >= TimeSpan.FromSeconds(0.35))
+                    EndBurst(uid, agent, now, false);
+                return;
+            }
             if (TryTreat(uid, agent, damage, now))
                 return;
             if (agent.LastSeen is { } lastSeen && now < agent.ForgetAt)
             {
-                if (now < agent.LastContact + agent.LostSightDelay)
+                if (!agent.ContactFromRadio && now < agent.LastContact + agent.LostSightDelay)
                 {
                     agent.State = CMUExpeditionAgentState.Watch;
                     _steering.Unregister(uid);
                 }
                 else
                 {
-                    agent.State = CMUExpeditionAgentState.Investigate;
-                    Move(uid, lastSeen);
+                    InvestigateContact(uid, agent, lastSeen, now);
                 }
             }
             else
             {
+                if (agent.ContactFromRadio)
+                    agent.RadioDecision = "report-expired";
+                agent.ContactFromRadio = false;
                 agent.Target = null;
                 agent.LastSeen = null;
                 ClearCover(agent);
@@ -299,20 +307,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
 
         var separation = Vector2.Distance(_transform.GetWorldPosition(uid), _transform.GetWorldPosition(seen.Value));
-        if (separation > agent.FireRange)
+        if (separation > agent.FireRange || agent.State == CMUExpeditionAgentState.Investigate && separation > agent.FireRange - 1.25f)
         {
             if (agent.State != CMUExpeditionAgentState.Investigate)
                 ClearCover(agent);
-            agent.State = CMUExpeditionAgentState.Investigate;
-            // Close to a firing distance instead of budgeting a danger route all the way onto
-            // a visible enemy's body. A guard just outside rifle range only needs a short advance.
-            var contact = _transform.ToCoordinates(transform.Coordinates.EntityId, _transform.ToMapCoordinates(agent.LastSeen!.Value));
-            var advance = Vector2.Normalize(contact.Position - transform.Coordinates.Position) *
-                (separation - Math.Max(1, agent.FireRange - 1.5f));
-            var destination = transform.Coordinates.Offset(advance);
-            if (agent.RouteDestination is { } previous && _transform.InRange(previous, destination, 1))
-                destination = previous;
-            Move(uid, destination);
+            InvestigateContact(uid, agent, agent.LastSeen!.Value, now, visible: true);
             return;
         }
 
@@ -363,6 +362,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var stance = agent.State == CMUExpeditionAgentState.Recover && agent.PeekPosition is { } peek
             ? peek : transform.Coordinates;
         var armed = _guns.TryGetGun(uid, out var rifle);
+        var currentVisible = false;
         for (var index = 0; index < candidates.Count; index++)
         {
             var (hostile, distance) = candidates[index];
@@ -374,6 +374,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             var score = distance + (usable ? 0 : agent.DetectionRange + 4);
             if (hostile == agent.Target)
             {
+                currentVisible = true;
                 // Do not restart aim because two equally exposed players exchange places.
                 score -= 2;
                 if (usable && agent.State is CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage)
@@ -384,18 +385,31 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             best = score;
             seen = hostile;
         }
+        // Keep a visible contact while completing a move or utility action. A tree briefly
+        // hiding that contact must not erase the destination halfway through a step-out.
+        if (agent.Target != null && seen != agent.Target)
+        {
+            if (currentVisible && (CommittedMovement(agent) || agent.Action != null ||
+                agent.State == CMUExpeditionAgentState.Healing || now < agent.NextTargetSwitch))
+                seen = agent.Target;
+            else if (!currentVisible && !agent.ContactFromRadio && _mobs.IsAlive(agent.Target.Value) && now - agent.LastContact < TimeSpan.FromSeconds(0.45))
+                return null;
+        }
         if (seen is { } target)
         {
             if (agent.LastSeen == null || now - agent.LastContact > TimeSpan.FromSeconds(30))
                 agent.FirstContact = now;
             if (agent.Target != target)
             {
-                if (agent.Action != null)
+                if (agent.Action == CMUTacticalAction.Flank)
                     CancelPlan(uid, agent, false);
                 agent.RepeatedPeekHits = 0;
-                ClearCover(agent);
-                if (agent.State is CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage or CMUExpeditionAgentState.Recover)
+                agent.NextTargetSwitch = now + TimeSpan.FromSeconds(1.5);
+                if (!CommittedMovement(agent) && agent.Action == null && agent.State != CMUExpeditionAgentState.Healing)
+                {
+                    ClearCover(agent);
                     agent.State = CMUExpeditionAgentState.Guard;
+                }
             }
             agent.Target = target;
             agent.LastSeen = Transform(target).Coordinates;
@@ -406,6 +420,10 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
         return seen;
     }
+
+    private static bool CommittedMovement(CMUExpeditionAgentComponent agent) => agent.State is
+        CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Withdraw or
+        CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.PlanMove;
 
     private bool ReadyRifle(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
@@ -428,6 +446,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     private static void Aim(CMUExpeditionAgentComponent agent, TimeSpan now, bool peek = false)
     {
+        agent.InvestigationDestination = null;
+        agent.InvestigationContact = null;
+        agent.Route.Clear();
+        agent.RouteDestination = null;
+        agent.LostAimSince = null;
         agent.State = CMUExpeditionAgentState.Aim;
         agent.FireAt = now + (peek ? agent.PeekAimDuration : agent.AimDuration);
     }
@@ -444,6 +467,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     private static void ClearCover(CMUExpeditionAgentComponent agent)
     {
+        agent.InvestigationDestination = null;
+        agent.InvestigationContact = null;
         agent.ResumeVolley = false;
         agent.CoverDestination = null;
         agent.CoverAnchor = null;
@@ -484,8 +509,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var clearStance = precise && agent.LastSeen is { } threat &&
             _transform.InRange(transform.Coordinates, destination, 0.7f) &&
             _transform.InRange(transform.Coordinates, threat, agent.FireRange - 0.25f) &&
-            _guns.TryGetGun(uid, out var stanceGun) && SafeShot(uid, agent, stanceGun, threat);
-        if (clearStance || _transform.InRange(transform.Coordinates, destination, precise ? 0.12f : ArrivalRange))
+            FiringLaneClear(uid, transform.Coordinates, threat);
+        var shelteredStop = agent.State is CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Withdraw &&
+            _transform.InRange(transform.Coordinates, destination, 0.55f) && BodyFits(uid, transform.Coordinates) &&
+            ShelteredFromKnownThreats(uid, agent, transform.Coordinates);
+        if (clearStance || shelteredStop || _transform.InRange(transform.Coordinates, destination, precise ? 0.12f : ArrivalRange))
         {
             _steering.Unregister(uid);
             // Cancel travel momentum at a deliberate cover stop; otherwise a short arrival radius
@@ -496,6 +524,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             agent.RouteDestination = null;
             if (clearStance)
                 agent.PeekPosition = transform.Coordinates;
+            if (shelteredStop)
+                agent.CoverAnchor = transform.Coordinates;
             return false;
         }
         if (agent.MoveProgressPosition is not { } progress || !_transform.InRange(transform.Coordinates, progress, 0.2f))
