@@ -16,6 +16,11 @@
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentCorporate
     time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: WY
   roundRole: CivilianCorporateLiaison
