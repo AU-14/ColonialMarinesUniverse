@@ -33,6 +33,13 @@
       - Arabic
       - Afrikaans
       - Dutch
+      - German
+      - English
+      - Spanish
+      - French
+      - Russian
+      - Japanese
+      - Mandarin
       - Swahili
       - Persian
       - Hindi
@@ -45,7 +52,6 @@
       - Esperanto
       - Latin
       - Swedish
-      - Brazilian
       - Slovak
       - Romanian
     understoodLanguages:
@@ -67,6 +73,13 @@
       - Arabic
       - Afrikaans
       - Dutch
+      - German
+      - English
+      - Spanish
+      - French
+      - Russian
+      - Japanese
+      - Mandarin
       - Swahili
       - Persian
       - Hindi
@@ -79,6 +92,5 @@
       - Esperanto
       - Latin
       - Swedish
-      - Brazilian
       - Slovak
       - Romanian

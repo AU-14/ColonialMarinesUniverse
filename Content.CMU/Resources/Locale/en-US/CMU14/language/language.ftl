@@ -62,11 +62,8 @@ language-Binary-description = The machine language of 1s and 0s, pure informatio
 language-Legalese-name = Legalese
 language-Legalese-description = High-corporate elitist jargon, full of clauses and disclaimers.
 
-language-Portuguese-name = Portuguese
-language-Portuguese-description = A Romance Earth language with nasal sounds and flowing speech.
-
-language-Brazilian-name = Brazilian
-language-Brazilian-description = A regional Earth language variant with Portuguese roots.
+language-Portuguese-name = Brazilian Portuguese
+language-Portuguese-description = A Romance Earth language with nasal sounds and flowing speech, in the form spoken across Brazil.
 
 language-Ukrainian-name = Ukrainian
 language-Ukrainian-description = A Slavic Earth language known for its unique alphabet and soft pronunciation.

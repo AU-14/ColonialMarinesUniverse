@@ -124,12 +124,12 @@
 
 - type: language
   id: Portuguese
-  name: "Portuguese"
-  description: "An old Earth language."
+  name: "Brazilian Portuguese"
+  description: "An old Earth language, in the form spoken across Brazil."
   typefaceId: DefaultItalic
   languageIcon:
     sprite: /Textures/_RMC14/Interface/flags.rsi
-    state: PT
+    state: BR
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["lhão", "nhê", "chã", "brio", "grão", "três", "prão", "frão", "vão", "ção", "rê", "dê", "fla", "cro", "gri", "plu", "são", "mão", "nho", "lho", "qui", "gue", "ria", "rio", "mar", "sol", "lua", "bom", "bem", "lar"]
@@ -324,20 +324,6 @@
     maxSyllables: 3
   sisterLanguages:
     German: 0.35
-
-- type: language
-  id: Brazilian
-  name: "Brazilian"
-  description: "An old Earth language."
-  typefaceId: DefaultBold
-  languageIcon:
-    sprite: /Textures/_RMC14/Interface/flags.rsi
-    state: BR
-  expectedVocabularySize: 140
-  obfuscationMethod:
-    !type:SyllableObfuscation
-    replacement: ["ih", "tá", "okay", "ser", "tu", "opa", "me", "de", "senhor", "senhora", "nome", "copo", "prato", "talher", "um", "tipo", "aquilo", "pessoa", "fulano", "oi", "ei", "e", "é", "ah", "tem", "algo", "bem", "mal", "legal", "illegal", "maldito", "maldita", "arma", "sim", "não", "talvez", "quem", "onde", "quando", "como", "porquê", "porque", "eu", "você", "ele", "ela", "nós", "eles", "amigo", "inimigo", "homem", "mulher", "criança", "chefe", "soldado", "médico", "comandante", "ajuda", "perigo", "cuidado", "pare", "vá", "vem", "fica", "espera", "olha", "escuta", "fala", "silêncio", "água", "comida", "casa", "porta", "chão", "céu", "terra", "fogo", "luz", "escuro", "noite", "dia", "agora", "depois", "antes", "aqui", "lá", "perto", "longe", "rápido", "devagar", "forte", "fraco", "bom", "ruim", "novo", "velho", "grande", "pequeno", "verdade", "mentira", "seguro", "morto", "vivo"]
-    minSyllables: 2
 
 - type: language
   id: Ukrainian
