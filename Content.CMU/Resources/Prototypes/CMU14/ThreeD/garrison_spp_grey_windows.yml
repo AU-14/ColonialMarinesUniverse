@@ -1,0 +1,515 @@
+- type: cmu3DModel
+  status: draft
+  connectToNeighbours: true
+  sourceDirections: 1
+  id: CMU3DSPPGreyWindow
+  label: Grey SPP reinforced window
+  sourcePrototypes:
+  - RMCWindowSPPReinforcedGrey
+  referenceRsi: _RMC14/Structures/Windows/spp_grey_window.rsi
+  referenceState: uppwall_window0
+  parts:
+  - label: lower sill core
+    min: -0.5000000, -0.1050000, 0.0000000
+    max: 0.5000000, 0.1050000, 0.6500000
+    color: '#2D2F2EFF'
+  - label: bottom dark foot front
+    min: -0.5000000, -0.1400000, 0.0000000
+    max: 0.5000000, -0.1050000, 0.0700000
+    color: '#1C1C1CFF'
+  - label: bottom dark foot back
+    min: -0.5000000, 0.1050000, 0.0000000
+    max: 0.5000000, 0.1400000, 0.0700000
+    color: '#1C1C1CFF'
+  - label: foot highlight front
+    min: -0.5000000, -0.1450000, 0.0700000
+    max: 0.5000000, -0.1050000, 0.1050000
+    color: '#444645FF'
+  - label: foot highlight back
+    min: -0.5000000, 0.1050000, 0.0700000
+    max: 0.5000000, 0.1450000, 0.1050000
+    color: '#444645FF'
+  - label: lower brown shadow front
+    min: -0.5000000, -0.1350000, 0.1050000
+    max: 0.5000000, -0.1050000, 0.1600000
+    color: '#1F1815FF'
+  - label: lower brown shadow back
+    min: -0.5000000, 0.1050000, 0.1050000
+    max: 0.5000000, 0.1350000, 0.1600000
+    color: '#1F1815FF'
+  - label: brown footing front
+    min: -0.5000000, -0.1300000, 0.1600000
+    max: 0.5000000, -0.1050000, 0.2150000
+    color: '#24201EFF'
+  - label: brown footing back
+    min: -0.5000000, 0.1050000, 0.1600000
+    max: 0.5000000, 0.1300000, 0.2150000
+    color: '#24201EFF'
+  - label: lower channel front
+    min: -0.5000000, -0.1400000, 0.2150000
+    max: 0.5000000, -0.1050000, 0.2800000
+    color: '#1C1C1CFF'
+  - label: lower channel back
+    min: -0.5000000, 0.1050000, 0.2150000
+    max: 0.5000000, 0.1400000, 0.2800000
+    color: '#1C1C1CFF'
+  - label: raised lower rib front
+    min: -0.5000000, -0.1450000, 0.2800000
+    max: 0.5000000, -0.1050000, 0.3400000
+    color: '#2D2F2EFF'
+  - label: raised lower rib back
+    min: -0.5000000, 0.1050000, 0.2800000
+    max: 0.5000000, 0.1450000, 0.3400000
+    color: '#2D2F2EFF'
+  - label: middle groove front
+    min: -0.5000000, -0.1300000, 0.3400000
+    max: 0.5000000, -0.1050000, 0.4000000
+    color: '#1C1C1CFF'
+  - label: middle groove back
+    min: -0.5000000, 0.1050000, 0.3400000
+    max: 0.5000000, 0.1300000, 0.4000000
+    color: '#1C1C1CFF'
+  - label: broad steel fascia front
+    min: -0.5000000, -0.1400000, 0.4000000
+    max: 0.5000000, -0.1050000, 0.5200000
+    color: '#444645FF'
+  - label: broad steel fascia back
+    min: -0.5000000, 0.1050000, 0.4000000
+    max: 0.5000000, 0.1400000, 0.5200000
+    color: '#444645FF'
+  - label: upper sill edge front
+    min: -0.5000000, -0.1500000, 0.5200000
+    max: 0.5000000, -0.1050000, 0.5850000
+    color: '#2D2F2EFF'
+  - label: upper sill edge back
+    min: -0.5000000, 0.1050000, 0.5200000
+    max: 0.5000000, 0.1500000, 0.5850000
+    color: '#2D2F2EFF'
+  - label: top rubber gasket front
+    min: -0.5000000, -0.1450000, 0.5850000
+    max: 0.5000000, -0.1050000, 0.6500000
+    color: '#191A15FF'
+  - label: top rubber gasket back
+    min: -0.5000000, 0.1050000, 0.5850000
+    max: 0.5000000, 0.1450000, 0.6500000
+    color: '#191A15FF'
+  - label: exposed sill top
+    min: -0.5000000, -0.1050000, 0.6250000
+    max: 0.5000000, 0.1050000, 0.6500000
+    color: '#444645FF'
+  - label: west full-height end frame
+    min: -0.5000000, -0.1050000, 0.6500000
+    max: -0.3437500, 0.1050000, 2.6000000
+    color: '#191A15FF'
+    omitWhenConnected: 8
+  - label: west lower channel -1
+    min: -0.5000000, -0.1200000, 0.6500000
+    max: -0.3437500, -0.1050000, 1.0800000
+    color: '#24201EFF'
+    omitWhenConnected: 8
+  - label: west lower channel 1
+    min: -0.5000000, 0.1050000, 0.6500000
+    max: -0.3437500, 0.1200000, 1.0800000
+    color: '#24201EFF'
+    omitWhenConnected: 8
+  - label: west lower rim -1
+    min: -0.5000000, -0.1200000, 1.0800000
+    max: -0.3437500, -0.1050000, 1.1600000
+    color: '#2D2F2EFF'
+    omitWhenConnected: 8
+  - label: west lower rim 1
+    min: -0.5000000, 0.1050000, 1.0800000
+    max: -0.3437500, 0.1200000, 1.1600000
+    color: '#2D2F2EFF'
+    omitWhenConnected: 8
+  - label: west central recess -1
+    min: -0.5000000, -0.1200000, 1.1600000
+    max: -0.3437500, -0.1050000, 1.5000000
+    color: '#252727FF'
+    omitWhenConnected: 8
+  - label: west central recess 1
+    min: -0.5000000, 0.1050000, 1.1600000
+    max: -0.3437500, 0.1200000, 1.5000000
+    color: '#252727FF'
+    omitWhenConnected: 8
+  - label: west upper steel -1
+    min: -0.5000000, -0.1200000, 1.5000000
+    max: -0.3437500, -0.1050000, 2.5400000
+    color: '#444645FF'
+    omitWhenConnected: 8
+  - label: west upper steel 1
+    min: -0.5000000, 0.1050000, 1.5000000
+    max: -0.3437500, 0.1200000, 2.5400000
+    color: '#444645FF'
+    omitWhenConnected: 8
+  - label: west upper highlight -1
+    min: -0.5000000, -0.1200000, 2.5400000
+    max: -0.3437500, -0.1050000, 2.5800000
+    color: '#555858FF'
+    omitWhenConnected: 8
+  - label: west upper highlight 1
+    min: -0.5000000, 0.1050000, 2.5400000
+    max: -0.3437500, 0.1200000, 2.5800000
+    color: '#555858FF'
+    omitWhenConnected: 8
+  - label: west dark top edge -1
+    min: -0.5000000, -0.1200000, 2.5800000
+    max: -0.3437500, -0.1050000, 2.6000000
+    color: '#161717FF'
+    omitWhenConnected: 8
+  - label: west dark top edge 1
+    min: -0.5000000, 0.1050000, 2.5800000
+    max: -0.3437500, 0.1200000, 2.6000000
+    color: '#161717FF'
+    omitWhenConnected: 8
+  - label: west inner edge
+    min: -0.3437500, -0.0800000, 0.6500000
+    max: -0.3125000, 0.0800000, 2.6000000
+    color: '#7C9091FF'
+    omitWhenConnected: 8
+  - label: east full-height end frame
+    min: 0.3437500, -0.1050000, 0.6500000
+    max: 0.5000000, 0.1050000, 2.6000000
+    color: '#191A15FF'
+    omitWhenConnected: 4
+  - label: east lower channel -1
+    min: 0.3437500, -0.1200000, 0.6500000
+    max: 0.5000000, -0.1050000, 1.0800000
+    color: '#24201EFF'
+    omitWhenConnected: 4
+  - label: east lower channel 1
+    min: 0.3437500, 0.1050000, 0.6500000
+    max: 0.5000000, 0.1200000, 1.0800000
+    color: '#24201EFF'
+    omitWhenConnected: 4
+  - label: east lower rim -1
+    min: 0.3437500, -0.1200000, 1.0800000
+    max: 0.5000000, -0.1050000, 1.1600000
+    color: '#2D2F2EFF'
+    omitWhenConnected: 4
+  - label: east lower rim 1
+    min: 0.3437500, 0.1050000, 1.0800000
+    max: 0.5000000, 0.1200000, 1.1600000
+    color: '#2D2F2EFF'
+    omitWhenConnected: 4
+  - label: east central recess -1
+    min: 0.3437500, -0.1200000, 1.1600000
+    max: 0.5000000, -0.1050000, 1.5000000
+    color: '#252727FF'
+    omitWhenConnected: 4
+  - label: east central recess 1
+    min: 0.3437500, 0.1050000, 1.1600000
+    max: 0.5000000, 0.1200000, 1.5000000
+    color: '#252727FF'
+    omitWhenConnected: 4
+  - label: east upper steel -1
+    min: 0.3437500, -0.1200000, 1.5000000
+    max: 0.5000000, -0.1050000, 2.5400000
+    color: '#444645FF'
+    omitWhenConnected: 4
+  - label: east upper steel 1
+    min: 0.3437500, 0.1050000, 1.5000000
+    max: 0.5000000, 0.1200000, 2.5400000
+    color: '#444645FF'
+    omitWhenConnected: 4
+  - label: east upper highlight -1
+    min: 0.3437500, -0.1200000, 2.5400000
+    max: 0.5000000, -0.1050000, 2.5800000
+    color: '#555858FF'
+    omitWhenConnected: 4
+  - label: east upper highlight 1
+    min: 0.3437500, 0.1050000, 2.5400000
+    max: 0.5000000, 0.1200000, 2.5800000
+    color: '#555858FF'
+    omitWhenConnected: 4
+  - label: east dark top edge -1
+    min: 0.3437500, -0.1200000, 2.5800000
+    max: 0.5000000, -0.1050000, 2.6000000
+    color: '#161717FF'
+    omitWhenConnected: 4
+  - label: east dark top edge 1
+    min: 0.3437500, 0.1050000, 2.5800000
+    max: 0.5000000, 0.1200000, 2.6000000
+    color: '#161717FF'
+    omitWhenConnected: 4
+  - label: east inner edge
+    min: 0.3125000, -0.0800000, 0.6500000
+    max: 0.3437500, 0.0800000, 2.6000000
+    color: '#7C9091FF'
+    omitWhenConnected: 4
+  - label: top glass edge
+    min: -0.5000000, -0.0350000, 2.5113636
+    max: 0.5000000, 0.0350000, 2.6000000
+    color: '#445050BF'
+  - label: top reflection
+    min: -0.5000000, -0.0350000, 2.4227273
+    max: 0.5000000, 0.0350000, 2.5113636
+    color: '#595F5FBF'
+  - label: upper pane
+    min: -0.5000000, -0.0350000, 1.9795455
+    max: 0.5000000, 0.0350000, 2.4227273
+    color: '#52595ABF'
+  - label: fine reflection
+    min: -0.5000000, -0.0350000, 1.8909091
+    max: 0.5000000, 0.0350000, 1.9795455
+    color: '#595F5FBF'
+  - label: middle pane edge
+    min: -0.5000000, -0.0350000, 1.8022727
+    max: 0.5000000, 0.0350000, 1.8909091
+    color: '#52595ABF'
+  - label: middle pane
+    min: -0.5000000, -0.0350000, 1.3590909
+    max: 0.5000000, 0.0350000, 1.8022727
+    color: '#4A5353BF'
+  - label: lower transition
+    min: -0.5000000, -0.0350000, 1.2704545
+    max: 0.5000000, 0.0350000, 1.3590909
+    color: '#5C7778E6'
+  - label: lower blue pane
+    min: -0.5000000, -0.0350000, 0.9159091
+    max: 0.5000000, 0.0350000, 1.2704545
+    color: '#637C7CE6'
+  - label: lower blue edge
+    min: -0.5000000, -0.0350000, 0.7386364
+    max: 0.5000000, 0.0350000, 0.9159091
+    color: '#526D6EE6'
+  - label: bottom pane seal
+    min: -0.5000000, -0.0350000, 0.6500000
+    max: 0.5000000, 0.0350000, 0.7386364
+    color: '#41696BFF'
+  description: Grey reinforced glazing with source-color/alpha bands, deep ribbed steel sill and free-end trim. Same-key cardinal
+    connections turn and join the assembly; trim disappears at connected ends. Physical height 2.6 and sill depth are inferred.
+    The source construction graph replaces this with RMCWindowFrameSPPReinforcedGrey after breakage; no shatter animation.
+    See SOURCES_SPP_GREY_WINDOWS.md.
+- type: cmu3DModel
+  status: draft
+  connectToNeighbours: true
+  sourceDirections: 1
+  id: CMU3DSPPGreyWindowFrame
+  label: Grey SPP open window frame
+  sourcePrototypes:
+  - RMCWindowFrameSPPReinforcedGrey
+  referenceRsi: _RMC14/Structures/Windows/Frames/spp_grey_frame.rsi
+  referenceState: uppwall_window_frame0
+  parts:
+  - label: lower sill core
+    min: -0.5000000, -0.1050000, 0.0000000
+    max: 0.5000000, 0.1050000, 0.6500000
+    color: '#2D2F2EFF'
+  - label: bottom dark foot front
+    min: -0.5000000, -0.1400000, 0.0000000
+    max: 0.5000000, -0.1050000, 0.0700000
+    color: '#1C1C1CFF'
+  - label: bottom dark foot back
+    min: -0.5000000, 0.1050000, 0.0000000
+    max: 0.5000000, 0.1400000, 0.0700000
+    color: '#1C1C1CFF'
+  - label: foot highlight front
+    min: -0.5000000, -0.1450000, 0.0700000
+    max: 0.5000000, -0.1050000, 0.1050000
+    color: '#444645FF'
+  - label: foot highlight back
+    min: -0.5000000, 0.1050000, 0.0700000
+    max: 0.5000000, 0.1450000, 0.1050000
+    color: '#444645FF'
+  - label: lower brown shadow front
+    min: -0.5000000, -0.1350000, 0.1050000
+    max: 0.5000000, -0.1050000, 0.1600000
+    color: '#1F1815FF'
+  - label: lower brown shadow back
+    min: -0.5000000, 0.1050000, 0.1050000
+    max: 0.5000000, 0.1350000, 0.1600000
+    color: '#1F1815FF'
+  - label: brown footing front
+    min: -0.5000000, -0.1300000, 0.1600000
+    max: 0.5000000, -0.1050000, 0.2150000
+    color: '#24201EFF'
+  - label: brown footing back
+    min: -0.5000000, 0.1050000, 0.1600000
+    max: 0.5000000, 0.1300000, 0.2150000
+    color: '#24201EFF'
+  - label: lower channel front
+    min: -0.5000000, -0.1400000, 0.2150000
+    max: 0.5000000, -0.1050000, 0.2800000
+    color: '#1C1C1CFF'
+  - label: lower channel back
+    min: -0.5000000, 0.1050000, 0.2150000
+    max: 0.5000000, 0.1400000, 0.2800000
+    color: '#1C1C1CFF'
+  - label: raised lower rib front
+    min: -0.5000000, -0.1450000, 0.2800000
+    max: 0.5000000, -0.1050000, 0.3400000
+    color: '#2D2F2EFF'
+  - label: raised lower rib back
+    min: -0.5000000, 0.1050000, 0.2800000
+    max: 0.5000000, 0.1450000, 0.3400000
+    color: '#2D2F2EFF'
+  - label: middle groove front
+    min: -0.5000000, -0.1300000, 0.3400000
+    max: 0.5000000, -0.1050000, 0.4000000
+    color: '#1C1C1CFF'
+  - label: middle groove back
+    min: -0.5000000, 0.1050000, 0.3400000
+    max: 0.5000000, 0.1300000, 0.4000000
+    color: '#1C1C1CFF'
+  - label: broad steel fascia front
+    min: -0.5000000, -0.1400000, 0.4000000
+    max: 0.5000000, -0.1050000, 0.5200000
+    color: '#444645FF'
+  - label: broad steel fascia back
+    min: -0.5000000, 0.1050000, 0.4000000
+    max: 0.5000000, 0.1400000, 0.5200000
+    color: '#444645FF'
+  - label: upper sill edge front
+    min: -0.5000000, -0.1500000, 0.5200000
+    max: 0.5000000, -0.1050000, 0.5850000
+    color: '#2D2F2EFF'
+  - label: upper sill edge back
+    min: -0.5000000, 0.1050000, 0.5200000
+    max: 0.5000000, 0.1500000, 0.5850000
+    color: '#2D2F2EFF'
+  - label: top rubber gasket front
+    min: -0.5000000, -0.1450000, 0.5850000
+    max: 0.5000000, -0.1050000, 0.6500000
+    color: '#191A15FF'
+  - label: top rubber gasket back
+    min: -0.5000000, 0.1050000, 0.5850000
+    max: 0.5000000, 0.1450000, 0.6500000
+    color: '#191A15FF'
+  - label: exposed sill top
+    min: -0.5000000, -0.1050000, 0.6250000
+    max: 0.5000000, 0.1050000, 0.6500000
+    color: '#444645FF'
+  - label: west full-height end frame
+    min: -0.5000000, -0.1050000, 0.6500000
+    max: -0.3437500, 0.1050000, 2.6000000
+    color: '#191A15FF'
+    omitWhenConnected: 8
+  - label: west lower channel -1
+    min: -0.5000000, -0.1200000, 0.6500000
+    max: -0.3437500, -0.1050000, 1.0800000
+    color: '#24201EFF'
+    omitWhenConnected: 8
+  - label: west lower channel 1
+    min: -0.5000000, 0.1050000, 0.6500000
+    max: -0.3437500, 0.1200000, 1.0800000
+    color: '#24201EFF'
+    omitWhenConnected: 8
+  - label: west lower rim -1
+    min: -0.5000000, -0.1200000, 1.0800000
+    max: -0.3437500, -0.1050000, 1.1600000
+    color: '#2D2F2EFF'
+    omitWhenConnected: 8
+  - label: west lower rim 1
+    min: -0.5000000, 0.1050000, 1.0800000
+    max: -0.3437500, 0.1200000, 1.1600000
+    color: '#2D2F2EFF'
+    omitWhenConnected: 8
+  - label: west central recess -1
+    min: -0.5000000, -0.1200000, 1.1600000
+    max: -0.3437500, -0.1050000, 1.5000000
+    color: '#252727FF'
+    omitWhenConnected: 8
+  - label: west central recess 1
+    min: -0.5000000, 0.1050000, 1.1600000
+    max: -0.3437500, 0.1200000, 1.5000000
+    color: '#252727FF'
+    omitWhenConnected: 8
+  - label: west upper steel -1
+    min: -0.5000000, -0.1200000, 1.5000000
+    max: -0.3437500, -0.1050000, 2.5400000
+    color: '#444645FF'
+    omitWhenConnected: 8
+  - label: west upper steel 1
+    min: -0.5000000, 0.1050000, 1.5000000
+    max: -0.3437500, 0.1200000, 2.5400000
+    color: '#444645FF'
+    omitWhenConnected: 8
+  - label: west upper highlight -1
+    min: -0.5000000, -0.1200000, 2.5400000
+    max: -0.3437500, -0.1050000, 2.5800000
+    color: '#555858FF'
+    omitWhenConnected: 8
+  - label: west upper highlight 1
+    min: -0.5000000, 0.1050000, 2.5400000
+    max: -0.3437500, 0.1200000, 2.5800000
+    color: '#555858FF'
+    omitWhenConnected: 8
+  - label: west dark top edge -1
+    min: -0.5000000, -0.1200000, 2.5800000
+    max: -0.3437500, -0.1050000, 2.6000000
+    color: '#161717FF'
+    omitWhenConnected: 8
+  - label: west dark top edge 1
+    min: -0.5000000, 0.1050000, 2.5800000
+    max: -0.3437500, 0.1200000, 2.6000000
+    color: '#161717FF'
+    omitWhenConnected: 8
+  - label: east full-height end frame
+    min: 0.3437500, -0.1050000, 0.6500000
+    max: 0.5000000, 0.1050000, 2.6000000
+    color: '#191A15FF'
+    omitWhenConnected: 4
+  - label: east lower channel -1
+    min: 0.3437500, -0.1200000, 0.6500000
+    max: 0.5000000, -0.1050000, 1.0800000
+    color: '#24201EFF'
+    omitWhenConnected: 4
+  - label: east lower channel 1
+    min: 0.3437500, 0.1050000, 0.6500000
+    max: 0.5000000, 0.1200000, 1.0800000
+    color: '#24201EFF'
+    omitWhenConnected: 4
+  - label: east lower rim -1
+    min: 0.3437500, -0.1200000, 1.0800000
+    max: 0.5000000, -0.1050000, 1.1600000
+    color: '#2D2F2EFF'
+    omitWhenConnected: 4
+  - label: east lower rim 1
+    min: 0.3437500, 0.1050000, 1.0800000
+    max: 0.5000000, 0.1200000, 1.1600000
+    color: '#2D2F2EFF'
+    omitWhenConnected: 4
+  - label: east central recess -1
+    min: 0.3437500, -0.1200000, 1.1600000
+    max: 0.5000000, -0.1050000, 1.5000000
+    color: '#252727FF'
+    omitWhenConnected: 4
+  - label: east central recess 1
+    min: 0.3437500, 0.1050000, 1.1600000
+    max: 0.5000000, 0.1200000, 1.5000000
+    color: '#252727FF'
+    omitWhenConnected: 4
+  - label: east upper steel -1
+    min: 0.3437500, -0.1200000, 1.5000000
+    max: 0.5000000, -0.1050000, 2.5400000
+    color: '#444645FF'
+    omitWhenConnected: 4
+  - label: east upper steel 1
+    min: 0.3437500, 0.1050000, 1.5000000
+    max: 0.5000000, 0.1200000, 2.5400000
+    color: '#444645FF'
+    omitWhenConnected: 4
+  - label: east upper highlight -1
+    min: 0.3437500, -0.1200000, 2.5400000
+    max: 0.5000000, -0.1050000, 2.5800000
+    color: '#555858FF'
+    omitWhenConnected: 4
+  - label: east upper highlight 1
+    min: 0.3437500, 0.1050000, 2.5400000
+    max: 0.5000000, 0.1200000, 2.5800000
+    color: '#555858FF'
+    omitWhenConnected: 4
+  - label: east dark top edge -1
+    min: 0.3437500, -0.1200000, 2.5800000
+    max: 0.5000000, -0.1050000, 2.6000000
+    color: '#161717FF'
+    omitWhenConnected: 4
+  - label: east dark top edge 1
+    min: 0.3437500, 0.1050000, 2.5800000
+    max: 0.5000000, 0.1200000, 2.6000000
+    color: '#161717FF'
+    omitWhenConnected: 4
+  description: Open frame left by grey SPP reinforced-window breakage, sharing the sill and free-end frame geometry without
+    glass or an invented top lintel. Cardinal connections remove joined end trim. Off-map replacement prototype; fracture
+    motion, shards and native destruction interaction review remain open. Physical dimensions inferred. See SOURCES_SPP_GREY_WINDOWS.md.

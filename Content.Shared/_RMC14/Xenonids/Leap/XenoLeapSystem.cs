@@ -193,19 +193,8 @@ public sealed partial class XenoLeapSystem : EntitySystem
             return;
         }
 
-        var leaping = EnsureComp<XenoLeapingComponent>(xeno);
-
-        args.Handled = true;
-
-        leaping.KnockdownRequiresInvisibility = xeno.Comp.KnockdownRequiresInvisibility;
-        leaping.DestroyObjects = xeno.Comp.DestroyObjects;
-        leaping.MoveDelayTime = xeno.Comp.MoveDelayTime;
-        leaping.Damage = xeno.Comp.Damage;
-        leaping.HitEffect = xeno.Comp.HitEffect;
-        leaping.TargetJitterTime = xeno.Comp.TargetJitterTime;
-        leaping.TargetCameraShakeStrength = xeno.Comp.TargetCameraShakeStrength;
-        leaping.IgnoredCollisionGroupLarge = xeno.Comp.IgnoredCollisionGroupLarge;
-        leaping.IgnoredCollisionGroupSmall = xeno.Comp.IgnoredCollisionGroupSmall;
+        // CMU14: create leap state only after validating the path below.
+        // A rejected leap must not leave default destination/timing fields for Update.
 
         _rmcPulling.TryStopAllPullsFromAndOn(xeno);
 
@@ -235,6 +224,19 @@ public sealed partial class XenoLeapSystem : EntitySystem
         }
 
         var impulse = direction.Normalized() * xeno.Comp.Strength * physics.Mass;
+
+        // CMU14: moved after path validation so blocked/invalid attempts have no active leap.
+        var leaping = EnsureComp<XenoLeapingComponent>(xeno);
+        args.Handled = true;
+        leaping.KnockdownRequiresInvisibility = xeno.Comp.KnockdownRequiresInvisibility;
+        leaping.DestroyObjects = xeno.Comp.DestroyObjects;
+        leaping.MoveDelayTime = xeno.Comp.MoveDelayTime;
+        leaping.Damage = xeno.Comp.Damage;
+        leaping.HitEffect = xeno.Comp.HitEffect;
+        leaping.TargetJitterTime = xeno.Comp.TargetJitterTime;
+        leaping.TargetCameraShakeStrength = xeno.Comp.TargetCameraShakeStrength;
+        leaping.IgnoredCollisionGroupLarge = xeno.Comp.IgnoredCollisionGroupLarge;
+        leaping.IgnoredCollisionGroupSmall = xeno.Comp.IgnoredCollisionGroupSmall;
 
         leaping.Origin = _transform.GetMoverCoordinates(xeno);
         leaping.Destination = origin.Offset(direction);

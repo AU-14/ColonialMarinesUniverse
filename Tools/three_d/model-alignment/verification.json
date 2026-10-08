@@ -1,0 +1,43 @@
+{
+  "baseCommit": "25648f31e3e5609170d33b7d573aa01c07ea392d",
+  "modelCount": 2476,
+  "gltf": {
+    "validator": "2.0.0-dev.3.10",
+    "errors": 0,
+    "warnings": 0
+  },
+  "manifestSha256": "14220f2c376afa5e94b892580890820fb027b78d5959c6e92d48080f97499ff5",
+  "deterministicExport": "Verified 2476 deterministic GLBs, manifest and viewer assets",
+  "tests": {
+    "focusedUnitPassed": 148,
+    "connectedIntegrationPassed": 2,
+    "pythonModelExporterPassed": 26,
+    "pythonEquipmentHullPassed": 2
+  },
+  "buildConfiguration": "Release",
+  "interactiveGameplayAcceptance": false,
+  "artReview": {
+    "originalDrafts": 1676,
+    "wornCandidates": 919,
+    "rejectedFragmentedRigidAssemblies": 120,
+    "retainedWornAssemblies": 799,
+    "revisedWorldModels": 8,
+    "additionalHeldVariants": 1
+  },
+  "heldProfiles": 166,
+  "equipmentWithHeldProfile": 165,
+  "equipmentWithWornProfile": 909,
+  "notes": [
+    "The native shader evidence is separate; unit/integration checks are not a live performance claim.",
+    "Original hidden-side design remains inferred. All assets retain draft status."
+  ],
+  "viewerReferenceFiles": 4020,
+  "restoredExistingViewerReferences": 935,
+  "newEquipmentViewerReferences": 800,
+  "launchFollowUp": {
+    "sourceReferenceTestsPassed": 29,
+    "nativeReleaseClientSandbox": "passed",
+    "localServerConnection": "passed",
+    "interactiveGameplayAcceptance": false
+  }
+}

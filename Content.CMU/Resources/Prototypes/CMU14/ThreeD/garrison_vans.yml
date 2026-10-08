@@ -1,0 +1,3490 @@
+# Van and ambulance drafts. See SOURCES_VANS.md.
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleAmbulance
+  label: Ambulance
+  sourcePrototypes:
+  - RMCPropVehicleAmbulance
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: ambulance
+  status: draft
+  sourceDirections: 1
+  yawOffset: -90
+  groundOffset: 0.671875, 0.25
+  description: Source-specific ambulance with a separate forward cab, ribbed medical body, emergency lights, original
+    stripes and medical markings. Original facing and padded horizontal framing are retained; physical depth, height
+    and hidden construction are inferred. Static initial-frame draft. See SOURCES_VANS.md.
+  parts:
+  - label: ladder chassis
+    min: -0.33540, -1.07187, 0.14000
+    max: 0.33540, 1.10187, 0.28000
+    color: '#202728'
+  - label: floor deck
+    min: -0.37410, -1.01188, 0.27000
+    max: 0.37410, 1.08187, 0.31500
+    color: '#383D3D'
+  - label: axle 1
+    min: -0.43000, -0.79263, 0.17000
+    max: 0.43000, -0.73862, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.46400, -0.97062, 0.01200
+    max: -0.40200, -0.56063, 0.42200
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 -1
+    min: -0.47500, -0.90707, 0.07555
+    max: -0.46500, -0.62418, 0.35845
+    color: '#414341'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.48700, -0.82163, 0.16100
+    max: -0.47700, -0.70962, 0.27300
+    color: '#5D605E'
+    shape: CylinderX
+  - label: rim bolt 1 -1 -1
+    min: -0.49400, -0.86462, 0.20000
+    max: -0.48900, -0.83062, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: rim bolt 1 -1 1
+    min: -0.49400, -0.70063, 0.20000
+    max: -0.48900, -0.66663, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.40200, -0.97062, 0.01200
+    max: 0.46400, -0.56063, 0.42200
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 1
+    min: 0.46500, -0.90707, 0.07555
+    max: 0.47500, -0.62418, 0.35845
+    color: '#414341'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.47700, -0.82163, 0.16100
+    max: 0.48700, -0.70962, 0.27300
+    color: '#5D605E'
+    shape: CylinderX
+  - label: rim bolt 1 1 -1
+    min: 0.48900, -0.86462, 0.20000
+    max: 0.49400, -0.83062, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: rim bolt 1 1 1
+    min: 0.48900, -0.70063, 0.20000
+    max: 0.49400, -0.66663, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.43000, 0.67612, 0.17000
+    max: 0.43000, 0.73013, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.46400, 0.49813, 0.01200
+    max: -0.40200, 0.90812, 0.42200
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 -1
+    min: -0.47500, 0.56168, 0.07555
+    max: -0.46500, 0.84457, 0.35845
+    color: '#414341'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.48700, 0.64712, 0.16100
+    max: -0.47700, 0.75913, 0.27300
+    color: '#5D605E'
+    shape: CylinderX
+  - label: rim bolt 2 -1 -1
+    min: -0.49400, 0.60413, 0.20000
+    max: -0.48900, 0.63813, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: rim bolt 2 -1 1
+    min: -0.49400, 0.76812, 0.20000
+    max: -0.48900, 0.80212, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.40200, 0.49813, 0.01200
+    max: 0.46400, 0.90812, 0.42200
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 1
+    min: 0.46500, 0.56168, 0.07555
+    max: 0.47500, 0.84457, 0.35845
+    color: '#414341'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.47700, 0.64712, 0.16100
+    max: 0.48700, 0.75913, 0.27300
+    color: '#5D605E'
+    shape: CylinderX
+  - label: rim bolt 2 1 -1
+    min: 0.48900, 0.60413, 0.20000
+    max: 0.49400, 0.63813, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: rim bolt 2 1 1
+    min: 0.48900, 0.76812, 0.20000
+    max: 0.49400, 0.80212, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: front bumper
+    min: -0.44500, -1.20687, 0.24000
+    max: 0.44500, -1.14387, 0.43000
+    color: '#434948'
+  - label: rear bumper
+    min: -0.44500, 1.14688, 0.24000
+    max: 0.44500, 1.19687, 0.36000
+    color: '#404544'
+  - label: lower skirt -1 0
+    min: -0.43000, -1.17188, 0.28500
+    max: -0.39400, -0.98438, 0.44800
+    color: '#6A6866'
+  - label: lower skirt -1 1
+    min: -0.43000, -0.54688, 0.28500
+    max: -0.39400, 0.48438, 0.44800
+    color: '#6A6866'
+  - label: lower skirt -1 2
+    min: -0.43000, 0.92188, 0.28500
+    max: -0.39400, 1.17188, 0.44800
+    color: '#6A6866'
+  - label: upper wheel rail -1
+    min: -0.43000, -1.14062, 0.43000
+    max: -0.39400, 1.14062, 0.48800
+    color: '#6A6866'
+  - label: lower skirt 1 0
+    min: 0.39400, -1.17188, 0.28500
+    max: 0.43000, -0.98438, 0.44800
+    color: '#6A6866'
+  - label: lower skirt 1 1
+    min: 0.39400, -0.54688, 0.28500
+    max: 0.43000, 0.48438, 0.44800
+    color: '#6A6866'
+  - label: lower skirt 1 2
+    min: 0.39400, 0.92188, 0.28500
+    max: 0.43000, 1.17188, 0.44800
+    color: '#6A6866'
+  - label: upper wheel rail 1
+    min: 0.39400, -1.14062, 0.43000
+    max: 0.43000, 1.14062, 0.48800
+    color: '#6A6866'
+  - label: medical floor
+    min: -0.38500, -0.20312, 0.32000
+    max: 0.38500, 1.14062, 0.37000
+    color: '#424949'
+  - label: medical rear closure
+    min: -0.43000, 1.07812, 0.33000
+    max: 0.43000, 1.17188, 1.11000
+    color: '#6A6866'
+  - label: cab hood
+    min: -0.39560, -1.07812, 0.45500
+    max: 0.39560, -0.60938, 0.60400
+    color: '#6A6866'
+    shape: WedgeY
+  - label: hood top original
+    min: -0.35260, -1.04688, 0.54300
+    max: 0.35260, -0.67188, 0.61900
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtAmbulanceHood
+    surfaceAxis: XY
+  - label: cab windshield surround
+    min: -0.43000, -0.82812, 0.57400
+    max: 0.43000, -0.51562, 0.99000
+    color: '#5C5957'
+    shape: WedgeY
+  - label: cab sloping windshield
+    min: -0.38300, -0.83437, 0.61800
+    max: 0.38300, -0.53125, 0.96800
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtAmbulanceWindshield
+    surfaceAxis: XZ
+  - label: cab roof
+    min: -0.43000, -0.54688, 0.97500
+    max: 0.43000, -0.20312, 1.02200
+    color: '#6A6866'
+  - label: original cab roof
+    min: -0.39000, -0.54063, 1.02300
+    max: 0.39000, -0.21250, 1.02800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceCabRoof
+    surfaceAxis: XY
+  - label: medical roof
+    min: -0.45300, -0.20312, 1.10600
+    max: 0.45300, 1.14062, 1.15900
+    color: '#6A6866'
+  - label: original ribbed roof
+    min: -0.41500, -0.17188, 1.16000
+    max: 0.41500, 1.10938, 1.16500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalRoof
+    surfaceAxis: XY
+  - label: raised longitudinal roof rib 0
+    min: -0.37600, -0.14062, 1.16500
+    max: -0.36000, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 1
+    min: -0.27086, -0.14062, 1.16500
+    max: -0.25486, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 2
+    min: -0.16571, -0.14062, 1.16500
+    max: -0.14971, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 3
+    min: -0.06057, -0.14062, 1.16500
+    max: -0.04457, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 4
+    min: 0.04457, -0.14062, 1.16500
+    max: 0.06057, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 5
+    min: 0.14971, -0.14062, 1.16500
+    max: 0.16571, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 6
+    min: 0.25486, -0.14062, 1.16500
+    max: 0.27086, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 7
+    min: 0.36000, -0.14062, 1.16500
+    max: 0.37600, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: medical side wall -1
+    min: -0.43000, -0.20312, 0.42700
+    max: -0.39600, 1.14062, 1.11500
+    color: '#6A6866'
+  - label: original medical side -1 0
+    min: -0.43600, -0.20312, 0.56500
+    max: -0.43200, -0.04688, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide0
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original medical side -1 1
+    min: -0.43600, -0.04688, 0.56500
+    max: -0.43200, 0.23438, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide1
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original medical side -1 2
+    min: -0.43600, 0.23438, 0.56500
+    max: -0.43200, 1.14062, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide2
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: service door lower -1
+    min: -0.43000, -0.04688, 0.31100
+    max: -0.39600, 0.23438, 0.56600
+    color: '#5C5957'
+  - label: original lower door -1
+    min: -0.43600, -0.04688, 0.31300
+    max: -0.43200, 0.23438, 0.56500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceLowerDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab side shell -1
+    min: -0.43000, -0.57812, 0.38500
+    max: -0.39600, -0.20312, 0.97500
+    color: '#6A6866'
+  - label: original cab door -1
+    min: -0.43600, -0.57812, 0.39700
+    max: -0.43200, -0.20312, 0.97400
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab front side -1
+    min: -0.43000, -1.07812, 0.41000
+    max: -0.39600, -0.57812, 0.62000
+    color: '#6A6866'
+  - label: original front stripe -1
+    min: -0.43600, -1.07812, 0.42900
+    max: -0.43200, -0.57812, 0.56900
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceHoodStripe
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: service step -1
+    min: -0.47500, -0.07812, 0.23800
+    max: -0.43000, 0.26562, 0.28600
+    color: '#616565'
+  - label: emergency red lens -1 32
+    min: -0.45400, -0.17188, 1.03500
+    max: -0.43700, -0.10938, 1.08400
+    color: '#782C2D'
+  - label: emergency red lens -1 72
+    min: -0.45400, 1.07812, 1.03500
+    max: -0.43700, 1.14062, 1.08400
+    color: '#782C2D'
+  - label: medical side wall 1
+    min: 0.39600, -0.20312, 0.42700
+    max: 0.43000, 1.14062, 1.11500
+    color: '#6A6866'
+  - label: original medical side 1 0
+    min: 0.43200, -0.20312, 0.56500
+    max: 0.43600, -0.04688, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide0
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original medical side 1 1
+    min: 0.43200, -0.04688, 0.56500
+    max: 0.43600, 0.23438, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide1
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original medical side 1 2
+    min: 0.43200, 0.23438, 0.56500
+    max: 0.43600, 1.14062, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide2
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: service door lower 1
+    min: 0.39600, -0.04688, 0.31100
+    max: 0.43000, 0.23438, 0.56600
+    color: '#5C5957'
+  - label: original lower door 1
+    min: 0.43200, -0.04688, 0.31300
+    max: 0.43600, 0.23438, 0.56500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceLowerDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab side shell 1
+    min: 0.39600, -0.57812, 0.38500
+    max: 0.43000, -0.20312, 0.97500
+    color: '#6A6866'
+  - label: original cab door 1
+    min: 0.43200, -0.57812, 0.39700
+    max: 0.43600, -0.20312, 0.97400
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab front side 1
+    min: 0.39600, -1.07812, 0.41000
+    max: 0.43000, -0.57812, 0.62000
+    color: '#6A6866'
+  - label: original front stripe 1
+    min: 0.43200, -1.07812, 0.42900
+    max: 0.43600, -0.57812, 0.56900
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceHoodStripe
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: service step 1
+    min: 0.43000, -0.07812, 0.23800
+    max: 0.47500, 0.26562, 0.28600
+    color: '#616565'
+  - label: emergency red lens 1 32
+    min: 0.43700, -0.17188, 1.03500
+    max: 0.45400, -0.10938, 1.08400
+    color: '#782C2D'
+  - label: emergency red lens 1 72
+    min: 0.43700, 1.07812, 1.03500
+    max: 0.45400, 1.14062, 1.08400
+    color: '#782C2D'
+  - label: cab emergency lamp
+    min: -0.32000, -0.23438, 1.02300
+    max: -0.13000, -0.17188, 1.07100
+    color: '#273F62'
+  - label: cab emergency lamp
+    min: 0.13000, -0.23438, 1.02300
+    max: 0.32000, -0.17188, 1.07100
+    color: '#772E2E'
+  - label: inferred rear medical door -1
+    min: -0.40200, 1.17388, 0.36600
+    max: -0.01100, 1.19087, 1.07200
+    color: '#6A6866'
+  - label: rear medical glazing -1
+    min: -0.35700, 1.19188, 0.76100
+    max: -0.05600, 1.19687, 0.96900
+    color: '#273C3B'
+  - label: rear medical red stripe -1
+    min: -0.40200, 1.19287, 0.53200
+    max: -0.01100, 1.19788, 0.61500
+    color: '#6C3637'
+  - label: inferred rear medical door 1
+    min: 0.01100, 1.17388, 0.36600
+    max: 0.40200, 1.19087, 1.07200
+    color: '#6A6866'
+  - label: rear medical glazing 1
+    min: 0.05600, 1.19188, 0.76100
+    max: 0.35700, 1.19687, 0.96900
+    color: '#273C3B'
+  - label: rear medical red stripe 1
+    min: 0.01100, 1.19287, 0.53200
+    max: 0.40200, 1.19788, 0.61500
+    color: '#6C3637'
+  - label: front grille
+    min: -0.24500, -1.17988, 0.43000
+    max: 0.24500, -1.17388, 0.50000
+    color: '#202929'
+  - label: headlight
+    min: -0.39000, -1.17988, 0.52500
+    max: -0.26000, -1.17388, 0.59500
+    color: '#ADB5AC'
+  - label: headlight
+    min: 0.26000, -1.17988, 0.52500
+    max: 0.39000, -1.17388, 0.59500
+    color: '#ADB5AC'
+  - label: cab seat base
+    min: -0.29000, -0.52313, 0.31700
+    max: -0.09000, -0.30312, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: -0.29000, -0.35313, 0.40000
+    max: -0.09000, -0.28313, 0.70000
+    color: '#273333'
+  - label: cab seat base
+    min: 0.07500, -0.52313, 0.31700
+    max: 0.27500, -0.30312, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: 0.07500, -0.35313, 0.40000
+    max: 0.27500, -0.28313, 0.70000
+    color: '#273333'
+  - label: dashboard
+    min: -0.37000, -0.86187, 0.59000
+    max: 0.37000, -0.73188, 0.69000
+    color: '#263232'
+  - label: mirror -1
+    min: -0.51500, -0.58188, 0.76000
+    max: -0.43900, -0.49188, 0.84000
+    color: '#5C5957'
+  - label: mirror 1
+    min: 0.43900, -0.58188, 0.76000
+    max: 0.51500, -0.49188, 0.84000
+    color: '#5C5957'
+  - label: mirror mounting arm -1
+    color: '#5C5957'
+    shape: Box
+    min: -0.46000, -0.56188, 0.77400
+    max: -0.41700, -0.53287, 0.79700
+  - label: mirror mounting arm 1
+    color: '#5C5957'
+    shape: Box
+    min: 0.41700, -0.56188, 0.77400
+    max: 0.46000, -0.53287, 0.79700
+  - label: vertical rim bolt 1 -1 -1
+    color: '#949794'
+    shape: CylinderX
+    min: -0.49400, -0.78263, 0.11800
+    max: -0.48900, -0.74862, 0.15200
+  - label: vertical rim bolt 1 -1 1
+    color: '#949794'
+    shape: CylinderX
+    min: -0.49400, -0.78263, 0.28200
+    max: -0.48900, -0.74862, 0.31600
+  - label: vertical rim bolt 1 1 -1
+    color: '#949794'
+    shape: CylinderX
+    min: 0.48900, -0.78263, 0.11800
+    max: 0.49400, -0.74862, 0.15200
+  - label: vertical rim bolt 1 1 1
+    color: '#949794'
+    shape: CylinderX
+    min: 0.48900, -0.78263, 0.28200
+    max: 0.49400, -0.74862, 0.31600
+  - label: vertical rim bolt 2 -1 -1
+    color: '#949794'
+    shape: CylinderX
+    min: -0.49400, 0.68612, 0.11800
+    max: -0.48900, 0.72013, 0.15200
+  - label: vertical rim bolt 2 -1 1
+    color: '#949794'
+    shape: CylinderX
+    min: -0.49400, 0.68612, 0.28200
+    max: -0.48900, 0.72013, 0.31600
+  - label: vertical rim bolt 2 1 -1
+    color: '#949794'
+    shape: CylinderX
+    min: 0.48900, 0.68612, 0.11800
+    max: 0.49400, 0.72013, 0.15200
+  - label: vertical rim bolt 2 1 1
+    color: '#949794'
+    shape: CylinderX
+    min: 0.48900, 0.68612, 0.28200
+    max: 0.49400, 0.72013, 0.31600
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleAmbulanceF
+  label: AmbulanceF
+  sourcePrototypes:
+  - RMCPropVehicleAmbulanceF
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: ambulance_f
+  status: draft
+  sourceDirections: 1
+  yawOffset: 90
+  groundOffset: 0.671875, 0.25
+  description: Source-specific ambulance with a separate forward cab, ribbed medical body, emergency lights, original
+    stripes and medical markings. Original facing and padded horizontal framing are retained; physical depth, height
+    and hidden construction are inferred. Static initial-frame draft. See SOURCES_VANS.md.
+  parts:
+  - label: ladder chassis
+    min: -0.33540, -1.07187, 0.14000
+    max: 0.33540, 1.10187, 0.28000
+    color: '#202728'
+  - label: floor deck
+    min: -0.37410, -1.01188, 0.27000
+    max: 0.37410, 1.08187, 0.31500
+    color: '#383D3D'
+  - label: axle 1
+    min: -0.43000, -0.79263, 0.17000
+    max: 0.43000, -0.73862, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.46400, -0.97062, 0.01200
+    max: -0.40200, -0.56063, 0.42200
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 -1
+    min: -0.47500, -0.90707, 0.07555
+    max: -0.46500, -0.62418, 0.35845
+    color: '#414341'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.48700, -0.82163, 0.16100
+    max: -0.47700, -0.70962, 0.27300
+    color: '#5D605E'
+    shape: CylinderX
+  - label: rim bolt 1 -1 -1
+    min: -0.49400, -0.86462, 0.20000
+    max: -0.48900, -0.83062, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: rim bolt 1 -1 1
+    min: -0.49400, -0.70063, 0.20000
+    max: -0.48900, -0.66663, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.40200, -0.97062, 0.01200
+    max: 0.46400, -0.56063, 0.42200
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 1
+    min: 0.46500, -0.90707, 0.07555
+    max: 0.47500, -0.62418, 0.35845
+    color: '#414341'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.47700, -0.82163, 0.16100
+    max: 0.48700, -0.70962, 0.27300
+    color: '#5D605E'
+    shape: CylinderX
+  - label: rim bolt 1 1 -1
+    min: 0.48900, -0.86462, 0.20000
+    max: 0.49400, -0.83062, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: rim bolt 1 1 1
+    min: 0.48900, -0.70063, 0.20000
+    max: 0.49400, -0.66663, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.43000, 0.67612, 0.17000
+    max: 0.43000, 0.73013, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.46400, 0.49813, 0.01200
+    max: -0.40200, 0.90812, 0.42200
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 -1
+    min: -0.47500, 0.56168, 0.07555
+    max: -0.46500, 0.84457, 0.35845
+    color: '#414341'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.48700, 0.64712, 0.16100
+    max: -0.47700, 0.75913, 0.27300
+    color: '#5D605E'
+    shape: CylinderX
+  - label: rim bolt 2 -1 -1
+    min: -0.49400, 0.60413, 0.20000
+    max: -0.48900, 0.63813, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: rim bolt 2 -1 1
+    min: -0.49400, 0.76812, 0.20000
+    max: -0.48900, 0.80212, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.40200, 0.49813, 0.01200
+    max: 0.46400, 0.90812, 0.42200
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 1
+    min: 0.46500, 0.56168, 0.07555
+    max: 0.47500, 0.84457, 0.35845
+    color: '#414341'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.47700, 0.64712, 0.16100
+    max: 0.48700, 0.75913, 0.27300
+    color: '#5D605E'
+    shape: CylinderX
+  - label: rim bolt 2 1 -1
+    min: 0.48900, 0.60413, 0.20000
+    max: 0.49400, 0.63813, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: rim bolt 2 1 1
+    min: 0.48900, 0.76812, 0.20000
+    max: 0.49400, 0.80212, 0.23400
+    color: '#949794'
+    shape: CylinderX
+  - label: front bumper
+    min: -0.44500, -1.20687, 0.24000
+    max: 0.44500, -1.14387, 0.43000
+    color: '#434948'
+  - label: rear bumper
+    min: -0.44500, 1.14688, 0.24000
+    max: 0.44500, 1.19687, 0.36000
+    color: '#404544'
+  - label: lower skirt -1 0
+    min: -0.43000, -1.17188, 0.28500
+    max: -0.39400, -0.98438, 0.44800
+    color: '#6A6866'
+  - label: lower skirt -1 1
+    min: -0.43000, -0.54688, 0.28500
+    max: -0.39400, 0.48438, 0.44800
+    color: '#6A6866'
+  - label: lower skirt -1 2
+    min: -0.43000, 0.92188, 0.28500
+    max: -0.39400, 1.17188, 0.44800
+    color: '#6A6866'
+  - label: upper wheel rail -1
+    min: -0.43000, -1.14062, 0.43000
+    max: -0.39400, 1.14062, 0.48800
+    color: '#6A6866'
+  - label: lower skirt 1 0
+    min: 0.39400, -1.17188, 0.28500
+    max: 0.43000, -0.98438, 0.44800
+    color: '#6A6866'
+  - label: lower skirt 1 1
+    min: 0.39400, -0.54688, 0.28500
+    max: 0.43000, 0.48438, 0.44800
+    color: '#6A6866'
+  - label: lower skirt 1 2
+    min: 0.39400, 0.92188, 0.28500
+    max: 0.43000, 1.17188, 0.44800
+    color: '#6A6866'
+  - label: upper wheel rail 1
+    min: 0.39400, -1.14062, 0.43000
+    max: 0.43000, 1.14062, 0.48800
+    color: '#6A6866'
+  - label: medical floor
+    min: -0.38500, -0.20312, 0.32000
+    max: 0.38500, 1.14062, 0.37000
+    color: '#424949'
+  - label: medical rear closure
+    min: -0.43000, 1.07812, 0.33000
+    max: 0.43000, 1.17188, 1.11000
+    color: '#6A6866'
+  - label: cab hood
+    min: -0.39560, -1.07812, 0.45500
+    max: 0.39560, -0.60938, 0.60400
+    color: '#6A6866'
+    shape: WedgeY
+  - label: hood top original
+    min: -0.35260, -1.04688, 0.54300
+    max: 0.35260, -0.67188, 0.61900
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtAmbulanceHood
+    surfaceAxis: XY
+  - label: cab windshield surround
+    min: -0.43000, -0.82812, 0.57400
+    max: 0.43000, -0.51562, 0.99000
+    color: '#5C5957'
+    shape: WedgeY
+  - label: cab sloping windshield
+    min: -0.38300, -0.83437, 0.61800
+    max: 0.38300, -0.53125, 0.96800
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtAmbulanceWindshield
+    surfaceAxis: XZ
+  - label: cab roof
+    min: -0.43000, -0.54688, 0.97500
+    max: 0.43000, -0.20312, 1.02200
+    color: '#6A6866'
+  - label: original cab roof
+    min: -0.39000, -0.54063, 1.02300
+    max: 0.39000, -0.21250, 1.02800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceCabRoof
+    surfaceAxis: XY
+  - label: medical roof
+    min: -0.45300, -0.20312, 1.10600
+    max: 0.45300, 1.14062, 1.15900
+    color: '#6A6866'
+  - label: original ribbed roof
+    min: -0.41500, -0.17188, 1.16000
+    max: 0.41500, 1.10938, 1.16500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalRoof
+    surfaceAxis: XY
+  - label: raised longitudinal roof rib 0
+    min: -0.37600, -0.14062, 1.16500
+    max: -0.36000, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 1
+    min: -0.27086, -0.14062, 1.16500
+    max: -0.25486, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 2
+    min: -0.16571, -0.14062, 1.16500
+    max: -0.14971, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 3
+    min: -0.06057, -0.14062, 1.16500
+    max: -0.04457, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 4
+    min: 0.04457, -0.14062, 1.16500
+    max: 0.06057, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 5
+    min: 0.14971, -0.14062, 1.16500
+    max: 0.16571, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 6
+    min: 0.25486, -0.14062, 1.16500
+    max: 0.27086, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: raised longitudinal roof rib 7
+    min: 0.36000, -0.14062, 1.16500
+    max: 0.37600, 1.07812, 1.17700
+    color: '#5C5957'
+  - label: medical side wall -1
+    min: -0.43000, -0.20312, 0.42700
+    max: -0.39600, 1.14062, 1.11500
+    color: '#6A6866'
+  - label: original medical side -1 0
+    min: -0.43600, -0.20312, 0.56500
+    max: -0.43200, -0.04688, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide0
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original medical side -1 1
+    min: -0.43600, -0.04688, 0.56500
+    max: -0.43200, 0.23438, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide1
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original medical side -1 2
+    min: -0.43600, 0.23438, 0.56500
+    max: -0.43200, 1.14062, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide2
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: service door lower -1
+    min: -0.43000, -0.04688, 0.31100
+    max: -0.39600, 0.23438, 0.56600
+    color: '#5C5957'
+  - label: original lower door -1
+    min: -0.43600, -0.04688, 0.31300
+    max: -0.43200, 0.23438, 0.56500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceLowerDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab side shell -1
+    min: -0.43000, -0.57812, 0.38500
+    max: -0.39600, -0.20312, 0.97500
+    color: '#6A6866'
+  - label: original cab door -1
+    min: -0.43600, -0.57812, 0.39700
+    max: -0.43200, -0.20312, 0.97400
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab front side -1
+    min: -0.43000, -1.07812, 0.41000
+    max: -0.39600, -0.57812, 0.62000
+    color: '#6A6866'
+  - label: original front stripe -1
+    min: -0.43600, -1.07812, 0.42900
+    max: -0.43200, -0.57812, 0.56900
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceHoodStripe
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: service step -1
+    min: -0.47500, -0.07812, 0.23800
+    max: -0.43000, 0.26562, 0.28600
+    color: '#616565'
+  - label: emergency red lens -1 32
+    min: -0.45400, -0.17188, 1.03500
+    max: -0.43700, -0.10938, 1.08400
+    color: '#782C2D'
+  - label: emergency red lens -1 72
+    min: -0.45400, 1.07812, 1.03500
+    max: -0.43700, 1.14062, 1.08400
+    color: '#782C2D'
+  - label: medical side wall 1
+    min: 0.39600, -0.20312, 0.42700
+    max: 0.43000, 1.14062, 1.11500
+    color: '#6A6866'
+  - label: original medical side 1 0
+    min: 0.43200, -0.20312, 0.56500
+    max: 0.43600, -0.04688, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide0
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original medical side 1 1
+    min: 0.43200, -0.04688, 0.56500
+    max: 0.43600, 0.23438, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide1
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: original medical side 1 2
+    min: 0.43200, 0.23438, 0.56500
+    max: 0.43600, 1.14062, 1.07500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceMedicalSide2
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: service door lower 1
+    min: 0.39600, -0.04688, 0.31100
+    max: 0.43000, 0.23438, 0.56600
+    color: '#5C5957'
+  - label: original lower door 1
+    min: 0.43200, -0.04688, 0.31300
+    max: 0.43600, 0.23438, 0.56500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceLowerDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab side shell 1
+    min: 0.39600, -0.57812, 0.38500
+    max: 0.43000, -0.20312, 0.97500
+    color: '#6A6866'
+  - label: original cab door 1
+    min: 0.43200, -0.57812, 0.39700
+    max: 0.43600, -0.20312, 0.97400
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab front side 1
+    min: 0.39600, -1.07812, 0.41000
+    max: 0.43000, -0.57812, 0.62000
+    color: '#6A6866'
+  - label: original front stripe 1
+    min: 0.43200, -1.07812, 0.42900
+    max: 0.43600, -0.57812, 0.56900
+    color: '#FFFFFF'
+    surface: CMU3DVanArtAmbulanceHoodStripe
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: service step 1
+    min: 0.43000, -0.07812, 0.23800
+    max: 0.47500, 0.26562, 0.28600
+    color: '#616565'
+  - label: emergency red lens 1 32
+    min: 0.43700, -0.17188, 1.03500
+    max: 0.45400, -0.10938, 1.08400
+    color: '#782C2D'
+  - label: emergency red lens 1 72
+    min: 0.43700, 1.07812, 1.03500
+    max: 0.45400, 1.14062, 1.08400
+    color: '#782C2D'
+  - label: cab emergency lamp
+    min: -0.32000, -0.23438, 1.02300
+    max: -0.13000, -0.17188, 1.07100
+    color: '#273F62'
+  - label: cab emergency lamp
+    min: 0.13000, -0.23438, 1.02300
+    max: 0.32000, -0.17188, 1.07100
+    color: '#772E2E'
+  - label: inferred rear medical door -1
+    min: -0.40200, 1.17388, 0.36600
+    max: -0.01100, 1.19087, 1.07200
+    color: '#6A6866'
+  - label: rear medical glazing -1
+    min: -0.35700, 1.19188, 0.76100
+    max: -0.05600, 1.19687, 0.96900
+    color: '#273C3B'
+  - label: rear medical red stripe -1
+    min: -0.40200, 1.19287, 0.53200
+    max: -0.01100, 1.19788, 0.61500
+    color: '#6C3637'
+  - label: inferred rear medical door 1
+    min: 0.01100, 1.17388, 0.36600
+    max: 0.40200, 1.19087, 1.07200
+    color: '#6A6866'
+  - label: rear medical glazing 1
+    min: 0.05600, 1.19188, 0.76100
+    max: 0.35700, 1.19687, 0.96900
+    color: '#273C3B'
+  - label: rear medical red stripe 1
+    min: 0.01100, 1.19287, 0.53200
+    max: 0.40200, 1.19788, 0.61500
+    color: '#6C3637'
+  - label: front grille
+    min: -0.24500, -1.17988, 0.43000
+    max: 0.24500, -1.17388, 0.50000
+    color: '#202929'
+  - label: headlight
+    min: -0.39000, -1.17988, 0.52500
+    max: -0.26000, -1.17388, 0.59500
+    color: '#ADB5AC'
+  - label: headlight
+    min: 0.26000, -1.17988, 0.52500
+    max: 0.39000, -1.17388, 0.59500
+    color: '#ADB5AC'
+  - label: cab seat base
+    min: -0.29000, -0.52313, 0.31700
+    max: -0.09000, -0.30312, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: -0.29000, -0.35313, 0.40000
+    max: -0.09000, -0.28313, 0.70000
+    color: '#273333'
+  - label: cab seat base
+    min: 0.07500, -0.52313, 0.31700
+    max: 0.27500, -0.30312, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: 0.07500, -0.35313, 0.40000
+    max: 0.27500, -0.28313, 0.70000
+    color: '#273333'
+  - label: dashboard
+    min: -0.37000, -0.86187, 0.59000
+    max: 0.37000, -0.73188, 0.69000
+    color: '#263232'
+  - label: mirror -1
+    min: -0.51500, -0.58188, 0.76000
+    max: -0.43900, -0.49188, 0.84000
+    color: '#5C5957'
+  - label: mirror 1
+    min: 0.43900, -0.58188, 0.76000
+    max: 0.51500, -0.49188, 0.84000
+    color: '#5C5957'
+  - label: mirror mounting arm -1
+    color: '#5C5957'
+    shape: Box
+    min: -0.46000, -0.56188, 0.77400
+    max: -0.41700, -0.53287, 0.79700
+  - label: mirror mounting arm 1
+    color: '#5C5957'
+    shape: Box
+    min: 0.41700, -0.56188, 0.77400
+    max: 0.46000, -0.53287, 0.79700
+  - label: vertical rim bolt 1 -1 -1
+    color: '#949794'
+    shape: CylinderX
+    min: -0.49400, -0.78263, 0.11800
+    max: -0.48900, -0.74862, 0.15200
+  - label: vertical rim bolt 1 -1 1
+    color: '#949794'
+    shape: CylinderX
+    min: -0.49400, -0.78263, 0.28200
+    max: -0.48900, -0.74862, 0.31600
+  - label: vertical rim bolt 1 1 -1
+    color: '#949794'
+    shape: CylinderX
+    min: 0.48900, -0.78263, 0.11800
+    max: 0.49400, -0.74862, 0.15200
+  - label: vertical rim bolt 1 1 1
+    color: '#949794'
+    shape: CylinderX
+    min: 0.48900, -0.78263, 0.28200
+    max: 0.49400, -0.74862, 0.31600
+  - label: vertical rim bolt 2 -1 -1
+    color: '#949794'
+    shape: CylinderX
+    min: -0.49400, 0.68612, 0.11800
+    max: -0.48900, 0.72013, 0.15200
+  - label: vertical rim bolt 2 -1 1
+    color: '#949794'
+    shape: CylinderX
+    min: -0.49400, 0.68612, 0.28200
+    max: -0.48900, 0.72013, 0.31600
+  - label: vertical rim bolt 2 1 -1
+    color: '#949794'
+    shape: CylinderX
+    min: 0.48900, 0.68612, 0.11800
+    max: 0.49400, 0.72013, 0.15200
+  - label: vertical rim bolt 2 1 1
+    color: '#949794'
+    shape: CylinderX
+    min: 0.48900, 0.68612, 0.28200
+    max: 0.49400, 0.72013, 0.31600
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleBoxVanBlueGrey
+  label: BoxVanBlueGrey
+  sourcePrototypes:
+  - RMCPropVehicleBoxVanBlueGrey
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: box_van_bluegrey
+  status: draft
+  sourceDirections: 1
+  yawOffset: 90
+  groundOffset: 0.484375, 0.25
+  description: Source-specific cab-over van with wheel openings, ventilated sill, recessed side panels and original
+    roof/cab art. Original facing and padded horizontal framing are retained; physical depth, height and hidden
+    construction are inferred. Static initial-frame draft. See SOURCES_VANS.md.
+  parts:
+  - label: ladder chassis
+    min: -0.31590, -0.88438, 0.14000
+    max: 0.31590, 0.91437, 0.28000
+    color: '#202728'
+  - label: floor deck
+    min: -0.35235, -0.82437, 0.27000
+    max: 0.35235, 0.89438, 0.31500
+    color: '#383D3D'
+  - label: axle 1
+    min: -0.40500, -0.54263, 0.17000
+    max: 0.40500, -0.48862, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.43900, -0.70312, 0.01200
+    max: -0.37700, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 -1
+    min: -0.45000, -0.64500, 0.07012
+    max: -0.44000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.46200, -0.57163, 0.14350
+    max: -0.45200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 -1 -1
+    min: -0.46900, -0.61462, 0.18250
+    max: -0.46400, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 -1 1
+    min: -0.46900, -0.45062, 0.18250
+    max: -0.46400, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.37700, -0.70312, 0.01200
+    max: 0.43900, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 1
+    min: 0.44000, -0.64500, 0.07012
+    max: 0.45000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.45200, -0.57163, 0.14350
+    max: 0.46200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 1 -1
+    min: 0.46400, -0.61462, 0.18250
+    max: 0.46900, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 1 1
+    min: 0.46400, -0.45062, 0.18250
+    max: 0.46900, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.40500, 0.51987, 0.17000
+    max: 0.40500, 0.57388, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.43900, 0.35938, 0.01200
+    max: -0.37700, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 -1
+    min: -0.45000, 0.41750, 0.07012
+    max: -0.44000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.46200, 0.49088, 0.14350
+    max: -0.45200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 -1 -1
+    min: -0.46900, 0.44787, 0.18250
+    max: -0.46400, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 -1 1
+    min: -0.46900, 0.61187, 0.18250
+    max: -0.46400, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.37700, 0.35938, 0.01200
+    max: 0.43900, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 1
+    min: 0.44000, 0.41750, 0.07012
+    max: 0.45000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.45200, 0.49088, 0.14350
+    max: 0.46200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 1 -1
+    min: 0.46400, 0.44787, 0.18250
+    max: 0.46900, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 1 1
+    min: 0.46400, 0.61187, 0.18250
+    max: 0.46900, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: front bumper
+    min: -0.42000, -1.01937, 0.24000
+    max: 0.42000, -0.95637, 0.43000
+    color: '#434948'
+  - label: rear bumper
+    min: -0.42000, 0.95937, 0.24000
+    max: 0.42000, 1.00937, 0.36000
+    color: '#404544'
+  - label: lower skirt -1 0
+    min: -0.40500, -0.98438, 0.28500
+    max: -0.36900, -0.73438, 0.44800
+    color: '#3C4752'
+  - label: lower skirt -1 1
+    min: -0.40500, -0.29688, 0.28500
+    max: -0.36900, 0.32812, 0.44800
+    color: '#3C4752'
+  - label: lower skirt -1 2
+    min: -0.40500, 0.76562, 0.28500
+    max: -0.36900, 0.98438, 0.44800
+    color: '#3C4752'
+  - label: upper wheel rail -1
+    min: -0.40500, -0.95312, 0.43000
+    max: -0.36900, 0.95312, 0.48800
+    color: '#3C4752'
+  - label: lower skirt 1 0
+    min: 0.36900, -0.98438, 0.28500
+    max: 0.40500, -0.73438, 0.44800
+    color: '#3C4752'
+  - label: lower skirt 1 1
+    min: 0.36900, -0.29688, 0.28500
+    max: 0.40500, 0.32812, 0.44800
+    color: '#3C4752'
+  - label: lower skirt 1 2
+    min: 0.36900, 0.76562, 0.28500
+    max: 0.40500, 0.98438, 0.44800
+    color: '#3C4752'
+  - label: upper wheel rail 1
+    min: 0.36900, -0.95312, 0.43000
+    max: 0.40500, 0.95312, 0.48800
+    color: '#3C4752'
+  - label: cargo floor
+    min: -0.35500, -0.32812, 0.32000
+    max: 0.35500, 0.92188, 0.37000
+    color: '#323A3A'
+  - label: rear closure
+    min: -0.40500, 0.85938, 0.37000
+    max: 0.40500, 0.98438, 0.98000
+    color: '#3C4752'
+  - label: front cab lower
+    min: -0.40500, -0.95312, 0.43000
+    max: 0.40500, -0.67188, 0.68000
+    color: '#3C4752'
+  - label: front glazing surround
+    min: -0.40500, -0.95312, 0.65000
+    max: 0.40500, -0.64062, 1.01000
+    color: '#38434E'
+    shape: WedgeY
+  - label: continuous sloping windshield
+    min: -0.36200, -0.95781, 0.70000
+    max: 0.36200, -0.65625, 0.98900
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtBoxVanBlueGreyWindshield
+    surfaceAxis: XZ
+  - label: roof slab
+    min: -0.40500, -0.67188, 1.00000
+    max: 0.40500, 0.89062, 1.05500
+    color: '#3C4752'
+  - label: original roof panel
+    min: -0.36000, -0.64062, 1.05600
+    max: 0.36000, 0.79688, 1.06100
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanBlueGreyRoof
+    surfaceAxis: XY
+  - label: cargo side shell -1
+    min: -0.40500, -0.32812, 0.46800
+    max: -0.38000, 0.92188, 1.00600
+    color: '#3C4752'
+  - label: original cargo side -1
+    min: -0.41100, -0.32812, 0.50500
+    max: -0.40700, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanBlueGreyCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell -1
+    min: -0.40500, -0.73438, 0.43500
+    max: -0.38000, -0.35938, 0.98900
+    color: '#3C4752'
+  - label: original cab door -1
+    min: -0.41100, -0.73438, 0.45000
+    max: -0.40700, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanBlueGreyCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame -1
+    min: -0.40500, -0.35938, 0.44000
+    max: -0.38000, -0.32812, 1.02000
+    color: '#38434E'
+  - label: sill vent housing -1
+    min: -0.40500, -0.26562, 0.24500
+    max: -0.38000, 0.26562, 0.43300
+    color: '#38434E'
+  - label: original sill vent -1
+    min: -0.41100, -0.17188, 0.25500
+    max: -0.40700, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanBlueGreySillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step -1
+    min: -0.44500, -0.26562, 0.22100
+    max: -0.39500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: cargo side shell 1
+    min: 0.38000, -0.32812, 0.46800
+    max: 0.40500, 0.92188, 1.00600
+    color: '#3C4752'
+  - label: original cargo side 1
+    min: 0.40700, -0.32812, 0.50500
+    max: 0.41100, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanBlueGreyCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell 1
+    min: 0.38000, -0.73438, 0.43500
+    max: 0.40500, -0.35938, 0.98900
+    color: '#3C4752'
+  - label: original cab door 1
+    min: 0.40700, -0.73438, 0.45000
+    max: 0.41100, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanBlueGreyCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame 1
+    min: 0.38000, -0.35938, 0.44000
+    max: 0.40500, -0.32812, 1.02000
+    color: '#38434E'
+  - label: sill vent housing 1
+    min: 0.38000, -0.26562, 0.24500
+    max: 0.40500, 0.26562, 0.43300
+    color: '#38434E'
+  - label: original sill vent 1
+    min: 0.40700, -0.17188, 0.25500
+    max: 0.41100, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanBlueGreySillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step 1
+    min: 0.39500, -0.26562, 0.22100
+    max: 0.44500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: rear door panel -1
+    min: -0.38000, 0.98638, 0.40500
+    max: -0.00800, 0.99538, 0.94000
+    color: '#3C4752'
+  - label: rear door handle -1
+    min: -0.06200, 0.99638, 0.60000
+    max: -0.03800, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: rear door panel 1
+    min: 0.00800, 0.98638, 0.40500
+    max: 0.38000, 0.99538, 0.94000
+    color: '#3C4752'
+  - label: rear door handle 1
+    min: 0.03800, 0.99638, 0.60000
+    max: 0.06200, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: front grille
+    min: -0.24500, -0.99538, 0.47500
+    max: 0.24500, -0.98938, 0.58400
+    color: '#172122'
+  - label: front headlight
+    min: -0.37300, -0.99538, 0.59600
+    max: -0.24300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: front headlight
+    min: 0.24300, -0.99538, 0.59600
+    max: 0.37300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: rear red lamp
+    min: -0.38500, 0.99638, 0.43500
+    max: -0.31500, 1.00238, 0.52600
+    color: '#622526'
+  - label: rear red lamp
+    min: 0.31500, 0.99638, 0.43500
+    max: 0.38500, 1.00238, 0.52600
+    color: '#622526'
+  - label: cab seat base
+    min: -0.29000, -0.64813, 0.31700
+    max: -0.09000, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: -0.29000, -0.47813, 0.40000
+    max: -0.09000, -0.40813, 0.70000
+    color: '#273333'
+  - label: cab seat base
+    min: 0.07500, -0.64813, 0.31700
+    max: 0.27500, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: 0.07500, -0.47813, 0.40000
+    max: 0.27500, -0.40813, 0.70000
+    color: '#273333'
+  - label: dashboard
+    min: -0.34500, -0.67437, 0.59000
+    max: 0.34500, -0.54438, 0.69000
+    color: '#263232'
+  - label: mirror -1
+    min: -0.49000, -0.73813, 0.76000
+    max: -0.41400, -0.64812, 0.84000
+    color: '#38434E'
+  - label: mirror 1
+    min: 0.41400, -0.73813, 0.76000
+    max: 0.49000, -0.64812, 0.84000
+    color: '#38434E'
+  - label: mirror mounting arm -1
+    color: '#38434E'
+    shape: Box
+    min: -0.43500, -0.71813, 0.77400
+    max: -0.39200, -0.68912, 0.79700
+  - label: mirror mounting arm 1
+    color: '#38434E'
+    shape: Box
+    min: 0.39200, -0.71813, 0.77400
+    max: 0.43500, -0.68912, 0.79700
+  - label: vertical rim bolt 1 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.10050
+    max: -0.46400, -0.49863, 0.13450
+  - label: vertical rim bolt 1 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.26450
+    max: -0.46400, -0.49863, 0.29850
+  - label: vertical rim bolt 1 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.10050
+    max: 0.46900, -0.49863, 0.13450
+  - label: vertical rim bolt 1 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.26450
+    max: 0.46900, -0.49863, 0.29850
+  - label: vertical rim bolt 2 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.10050
+    max: -0.46400, 0.56388, 0.13450
+  - label: vertical rim bolt 2 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.26450
+    max: -0.46400, 0.56388, 0.29850
+  - label: vertical rim bolt 2 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.10050
+    max: 0.46900, 0.56388, 0.13450
+  - label: vertical rim bolt 2 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.26450
+    max: 0.46900, 0.56388, 0.29850
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleBoxVanMaintGrey
+  label: BoxVanMaintGrey
+  sourcePrototypes:
+  - RMCPropVehicleBoxVanMaintGrey
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: box_van_maintenanceblue
+  status: draft
+  sourceDirections: 1
+  yawOffset: -90
+  groundOffset: 0.484375, 0.25
+  description: Source-specific cab-over van with wheel openings, ventilated sill, recessed side panels and original
+    roof/cab art. Original facing and padded horizontal framing are retained; physical depth, height and hidden
+    construction are inferred. Static initial-frame draft. See SOURCES_VANS.md.
+  parts:
+  - label: ladder chassis
+    min: -0.31590, -0.88438, 0.14000
+    max: 0.31590, 0.91437, 0.28000
+    color: '#202728'
+  - label: floor deck
+    min: -0.35235, -0.82437, 0.27000
+    max: 0.35235, 0.89438, 0.31500
+    color: '#383D3D'
+  - label: axle 1
+    min: -0.40500, -0.54263, 0.17000
+    max: 0.40500, -0.48862, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.43900, -0.70312, 0.01200
+    max: -0.37700, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 -1
+    min: -0.45000, -0.64500, 0.07012
+    max: -0.44000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.46200, -0.57163, 0.14350
+    max: -0.45200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 -1 -1
+    min: -0.46900, -0.61462, 0.18250
+    max: -0.46400, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 -1 1
+    min: -0.46900, -0.45062, 0.18250
+    max: -0.46400, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.37700, -0.70312, 0.01200
+    max: 0.43900, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 1
+    min: 0.44000, -0.64500, 0.07012
+    max: 0.45000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.45200, -0.57163, 0.14350
+    max: 0.46200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 1 -1
+    min: 0.46400, -0.61462, 0.18250
+    max: 0.46900, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 1 1
+    min: 0.46400, -0.45062, 0.18250
+    max: 0.46900, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.40500, 0.51987, 0.17000
+    max: 0.40500, 0.57388, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.43900, 0.35938, 0.01200
+    max: -0.37700, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 -1
+    min: -0.45000, 0.41750, 0.07012
+    max: -0.44000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.46200, 0.49088, 0.14350
+    max: -0.45200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 -1 -1
+    min: -0.46900, 0.44787, 0.18250
+    max: -0.46400, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 -1 1
+    min: -0.46900, 0.61187, 0.18250
+    max: -0.46400, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.37700, 0.35938, 0.01200
+    max: 0.43900, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 1
+    min: 0.44000, 0.41750, 0.07012
+    max: 0.45000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.45200, 0.49088, 0.14350
+    max: 0.46200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 1 -1
+    min: 0.46400, 0.44787, 0.18250
+    max: 0.46900, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 1 1
+    min: 0.46400, 0.61187, 0.18250
+    max: 0.46900, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: front bumper
+    min: -0.42000, -1.01937, 0.24000
+    max: 0.42000, -0.95637, 0.43000
+    color: '#434948'
+  - label: rear bumper
+    min: -0.42000, 0.95937, 0.24000
+    max: 0.42000, 1.00937, 0.36000
+    color: '#404544'
+  - label: lower skirt -1 0
+    min: -0.40500, -0.98438, 0.28500
+    max: -0.36900, -0.73438, 0.44800
+    color: '#262F39'
+  - label: lower skirt -1 1
+    min: -0.40500, -0.29688, 0.28500
+    max: -0.36900, 0.32812, 0.44800
+    color: '#262F39'
+  - label: lower skirt -1 2
+    min: -0.40500, 0.76562, 0.28500
+    max: -0.36900, 0.98438, 0.44800
+    color: '#262F39'
+  - label: upper wheel rail -1
+    min: -0.40500, -0.95312, 0.43000
+    max: -0.36900, 0.95312, 0.48800
+    color: '#262F39'
+  - label: lower skirt 1 0
+    min: 0.36900, -0.98438, 0.28500
+    max: 0.40500, -0.73438, 0.44800
+    color: '#262F39'
+  - label: lower skirt 1 1
+    min: 0.36900, -0.29688, 0.28500
+    max: 0.40500, 0.32812, 0.44800
+    color: '#262F39'
+  - label: lower skirt 1 2
+    min: 0.36900, 0.76562, 0.28500
+    max: 0.40500, 0.98438, 0.44800
+    color: '#262F39'
+  - label: upper wheel rail 1
+    min: 0.36900, -0.95312, 0.43000
+    max: 0.40500, 0.95312, 0.48800
+    color: '#262F39'
+  - label: cargo floor
+    min: -0.35500, -0.32812, 0.32000
+    max: 0.35500, 0.92188, 0.37000
+    color: '#323A3A'
+  - label: rear closure
+    min: -0.40500, 0.85938, 0.37000
+    max: 0.40500, 0.98438, 0.98000
+    color: '#262F39'
+  - label: front cab lower
+    min: -0.40500, -0.95312, 0.43000
+    max: 0.40500, -0.67188, 0.68000
+    color: '#262F39'
+  - label: front glazing surround
+    min: -0.40500, -0.95312, 0.65000
+    max: 0.40500, -0.64062, 1.01000
+    color: '#2A3540'
+    shape: WedgeY
+  - label: continuous sloping windshield
+    min: -0.36200, -0.95781, 0.70000
+    max: 0.36200, -0.65625, 0.98900
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtBoxVanMaintGreyWindshield
+    surfaceAxis: XZ
+  - label: roof slab
+    min: -0.40500, -0.67188, 1.00000
+    max: 0.40500, 0.89062, 1.05500
+    color: '#262F39'
+  - label: original roof panel
+    min: -0.36000, -0.57812, 1.05600
+    max: 0.36000, 0.35938, 1.06100
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyRoof
+    surfaceAxis: XY
+  - label: cargo side shell -1
+    min: -0.40500, -0.32812, 0.46800
+    max: -0.38000, 0.92188, 1.00600
+    color: '#262F39'
+  - label: original cargo side -1
+    min: -0.41100, -0.32812, 0.50500
+    max: -0.40700, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell -1
+    min: -0.40500, -0.73438, 0.43500
+    max: -0.38000, -0.35938, 0.98900
+    color: '#262F39'
+  - label: original cab door -1
+    min: -0.41100, -0.73438, 0.45000
+    max: -0.40700, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame -1
+    min: -0.40500, -0.35938, 0.44000
+    max: -0.38000, -0.32812, 1.02000
+    color: '#2A3540'
+  - label: sill vent housing -1
+    min: -0.40500, -0.26562, 0.24500
+    max: -0.38000, 0.26562, 0.43300
+    color: '#2A3540'
+  - label: original sill vent -1
+    min: -0.41100, -0.17188, 0.25500
+    max: -0.40700, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreySillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step -1
+    min: -0.44500, -0.26562, 0.22100
+    max: -0.39500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: cargo side shell 1
+    min: 0.38000, -0.32812, 0.46800
+    max: 0.40500, 0.92188, 1.00600
+    color: '#262F39'
+  - label: original cargo side 1
+    min: 0.40700, -0.32812, 0.50500
+    max: 0.41100, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell 1
+    min: 0.38000, -0.73438, 0.43500
+    max: 0.40500, -0.35938, 0.98900
+    color: '#262F39'
+  - label: original cab door 1
+    min: 0.40700, -0.73438, 0.45000
+    max: 0.41100, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame 1
+    min: 0.38000, -0.35938, 0.44000
+    max: 0.40500, -0.32812, 1.02000
+    color: '#2A3540'
+  - label: sill vent housing 1
+    min: 0.38000, -0.26562, 0.24500
+    max: 0.40500, 0.26562, 0.43300
+    color: '#2A3540'
+  - label: original sill vent 1
+    min: 0.40700, -0.17188, 0.25500
+    max: 0.41100, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreySillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step 1
+    min: 0.39500, -0.26562, 0.22100
+    max: 0.44500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: roof fan housing
+    min: -0.23500, 0.37500, 1.06100
+    max: 0.23500, 0.68750, 1.11600
+    color: '#2A3540'
+    shape: CylinderZ
+  - label: original stationary fan
+    min: -0.19200, 0.39062, 1.11700
+    max: 0.19200, 0.67188, 1.12200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyRoofFan
+    surfaceAxis: XY
+  - label: rear door panel -1
+    min: -0.38000, 0.98638, 0.40500
+    max: -0.00800, 0.99538, 0.94000
+    color: '#262F39'
+  - label: rear door handle -1
+    min: -0.06200, 0.99638, 0.60000
+    max: -0.03800, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: rear door panel 1
+    min: 0.00800, 0.98638, 0.40500
+    max: 0.38000, 0.99538, 0.94000
+    color: '#262F39'
+  - label: rear door handle 1
+    min: 0.03800, 0.99638, 0.60000
+    max: 0.06200, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: front grille
+    min: -0.24500, -0.99538, 0.47500
+    max: 0.24500, -0.98938, 0.58400
+    color: '#172122'
+  - label: front headlight
+    min: -0.37300, -0.99538, 0.59600
+    max: -0.24300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: front headlight
+    min: 0.24300, -0.99538, 0.59600
+    max: 0.37300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: rear red lamp
+    min: -0.38500, 0.99638, 0.43500
+    max: -0.31500, 1.00238, 0.52600
+    color: '#622526'
+  - label: rear red lamp
+    min: 0.31500, 0.99638, 0.43500
+    max: 0.38500, 1.00238, 0.52600
+    color: '#622526'
+  - label: cab seat base
+    min: -0.29000, -0.64813, 0.31700
+    max: -0.09000, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: -0.29000, -0.47813, 0.40000
+    max: -0.09000, -0.40813, 0.70000
+    color: '#273333'
+  - label: cab seat base
+    min: 0.07500, -0.64813, 0.31700
+    max: 0.27500, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: 0.07500, -0.47813, 0.40000
+    max: 0.27500, -0.40813, 0.70000
+    color: '#273333'
+  - label: dashboard
+    min: -0.34500, -0.67437, 0.59000
+    max: 0.34500, -0.54438, 0.69000
+    color: '#263232'
+  - label: mirror -1
+    min: -0.49000, -0.73813, 0.76000
+    max: -0.41400, -0.64812, 0.84000
+    color: '#2A3540'
+  - label: mirror 1
+    min: 0.41400, -0.73813, 0.76000
+    max: 0.49000, -0.64812, 0.84000
+    color: '#2A3540'
+  - label: mirror mounting arm -1
+    color: '#2A3540'
+    shape: Box
+    min: -0.43500, -0.71813, 0.77400
+    max: -0.39200, -0.68912, 0.79700
+  - label: mirror mounting arm 1
+    color: '#2A3540'
+    shape: Box
+    min: 0.39200, -0.71813, 0.77400
+    max: 0.43500, -0.68912, 0.79700
+  - label: vertical rim bolt 1 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.10050
+    max: -0.46400, -0.49863, 0.13450
+  - label: vertical rim bolt 1 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.26450
+    max: -0.46400, -0.49863, 0.29850
+  - label: vertical rim bolt 1 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.10050
+    max: 0.46900, -0.49863, 0.13450
+  - label: vertical rim bolt 1 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.26450
+    max: 0.46900, -0.49863, 0.29850
+  - label: vertical rim bolt 2 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.10050
+    max: -0.46400, 0.56388, 0.13450
+  - label: vertical rim bolt 2 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.26450
+    max: -0.46400, 0.56388, 0.29850
+  - label: vertical rim bolt 2 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.10050
+    max: 0.46900, 0.56388, 0.13450
+  - label: vertical rim bolt 2 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.26450
+    max: 0.46900, 0.56388, 0.29850
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleBoxVanMaintGreyF
+  label: BoxVanMaintGreyF
+  sourcePrototypes:
+  - RMCPropVehicleBoxVanMaintGreyF
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: box_van_maintenanceblue_f
+  status: draft
+  sourceDirections: 1
+  yawOffset: 90
+  groundOffset: 0.484375, 0.25
+  description: Source-specific cab-over van with wheel openings, ventilated sill, recessed side panels and original
+    roof/cab art. Original facing and padded horizontal framing are retained; physical depth, height and hidden
+    construction are inferred. Static initial-frame draft. See SOURCES_VANS.md.
+  parts:
+  - label: ladder chassis
+    min: -0.31590, -0.88438, 0.14000
+    max: 0.31590, 0.91437, 0.28000
+    color: '#202728'
+  - label: floor deck
+    min: -0.35235, -0.82437, 0.27000
+    max: 0.35235, 0.89438, 0.31500
+    color: '#383D3D'
+  - label: axle 1
+    min: -0.40500, -0.54263, 0.17000
+    max: 0.40500, -0.48862, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.43900, -0.70312, 0.01200
+    max: -0.37700, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 -1
+    min: -0.45000, -0.64500, 0.07012
+    max: -0.44000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.46200, -0.57163, 0.14350
+    max: -0.45200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 -1 -1
+    min: -0.46900, -0.61462, 0.18250
+    max: -0.46400, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 -1 1
+    min: -0.46900, -0.45062, 0.18250
+    max: -0.46400, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.37700, -0.70312, 0.01200
+    max: 0.43900, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 1
+    min: 0.44000, -0.64500, 0.07012
+    max: 0.45000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.45200, -0.57163, 0.14350
+    max: 0.46200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 1 -1
+    min: 0.46400, -0.61462, 0.18250
+    max: 0.46900, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 1 1
+    min: 0.46400, -0.45062, 0.18250
+    max: 0.46900, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.40500, 0.51987, 0.17000
+    max: 0.40500, 0.57388, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.43900, 0.35938, 0.01200
+    max: -0.37700, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 -1
+    min: -0.45000, 0.41750, 0.07012
+    max: -0.44000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.46200, 0.49088, 0.14350
+    max: -0.45200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 -1 -1
+    min: -0.46900, 0.44787, 0.18250
+    max: -0.46400, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 -1 1
+    min: -0.46900, 0.61187, 0.18250
+    max: -0.46400, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.37700, 0.35938, 0.01200
+    max: 0.43900, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 1
+    min: 0.44000, 0.41750, 0.07012
+    max: 0.45000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.45200, 0.49088, 0.14350
+    max: 0.46200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 1 -1
+    min: 0.46400, 0.44787, 0.18250
+    max: 0.46900, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 1 1
+    min: 0.46400, 0.61187, 0.18250
+    max: 0.46900, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: front bumper
+    min: -0.42000, -1.01937, 0.24000
+    max: 0.42000, -0.95637, 0.43000
+    color: '#434948'
+  - label: rear bumper
+    min: -0.42000, 0.95937, 0.24000
+    max: 0.42000, 1.00937, 0.36000
+    color: '#404544'
+  - label: lower skirt -1 0
+    min: -0.40500, -0.98438, 0.28500
+    max: -0.36900, -0.73438, 0.44800
+    color: '#262F39'
+  - label: lower skirt -1 1
+    min: -0.40500, -0.29688, 0.28500
+    max: -0.36900, 0.32812, 0.44800
+    color: '#262F39'
+  - label: lower skirt -1 2
+    min: -0.40500, 0.76562, 0.28500
+    max: -0.36900, 0.98438, 0.44800
+    color: '#262F39'
+  - label: upper wheel rail -1
+    min: -0.40500, -0.95312, 0.43000
+    max: -0.36900, 0.95312, 0.48800
+    color: '#262F39'
+  - label: lower skirt 1 0
+    min: 0.36900, -0.98438, 0.28500
+    max: 0.40500, -0.73438, 0.44800
+    color: '#262F39'
+  - label: lower skirt 1 1
+    min: 0.36900, -0.29688, 0.28500
+    max: 0.40500, 0.32812, 0.44800
+    color: '#262F39'
+  - label: lower skirt 1 2
+    min: 0.36900, 0.76562, 0.28500
+    max: 0.40500, 0.98438, 0.44800
+    color: '#262F39'
+  - label: upper wheel rail 1
+    min: 0.36900, -0.95312, 0.43000
+    max: 0.40500, 0.95312, 0.48800
+    color: '#262F39'
+  - label: cargo floor
+    min: -0.35500, -0.32812, 0.32000
+    max: 0.35500, 0.92188, 0.37000
+    color: '#323A3A'
+  - label: rear closure
+    min: -0.40500, 0.85938, 0.37000
+    max: 0.40500, 0.98438, 0.98000
+    color: '#262F39'
+  - label: front cab lower
+    min: -0.40500, -0.95312, 0.43000
+    max: 0.40500, -0.67188, 0.68000
+    color: '#262F39'
+  - label: front glazing surround
+    min: -0.40500, -0.95312, 0.65000
+    max: 0.40500, -0.64062, 1.01000
+    color: '#2A3540'
+    shape: WedgeY
+  - label: continuous sloping windshield
+    min: -0.36200, -0.95781, 0.70000
+    max: 0.36200, -0.65625, 0.98900
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtBoxVanMaintGreyWindshield
+    surfaceAxis: XZ
+  - label: roof slab
+    min: -0.40500, -0.67188, 1.00000
+    max: 0.40500, 0.89062, 1.05500
+    color: '#262F39'
+  - label: original roof panel
+    min: -0.36000, -0.57812, 1.05600
+    max: 0.36000, 0.35938, 1.06100
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyRoof
+    surfaceAxis: XY
+  - label: cargo side shell -1
+    min: -0.40500, -0.32812, 0.46800
+    max: -0.38000, 0.92188, 1.00600
+    color: '#262F39'
+  - label: original cargo side -1
+    min: -0.41100, -0.32812, 0.50500
+    max: -0.40700, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell -1
+    min: -0.40500, -0.73438, 0.43500
+    max: -0.38000, -0.35938, 0.98900
+    color: '#262F39'
+  - label: original cab door -1
+    min: -0.41100, -0.73438, 0.45000
+    max: -0.40700, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame -1
+    min: -0.40500, -0.35938, 0.44000
+    max: -0.38000, -0.32812, 1.02000
+    color: '#2A3540'
+  - label: sill vent housing -1
+    min: -0.40500, -0.26562, 0.24500
+    max: -0.38000, 0.26562, 0.43300
+    color: '#2A3540'
+  - label: original sill vent -1
+    min: -0.41100, -0.17188, 0.25500
+    max: -0.40700, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreySillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step -1
+    min: -0.44500, -0.26562, 0.22100
+    max: -0.39500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: cargo side shell 1
+    min: 0.38000, -0.32812, 0.46800
+    max: 0.40500, 0.92188, 1.00600
+    color: '#262F39'
+  - label: original cargo side 1
+    min: 0.40700, -0.32812, 0.50500
+    max: 0.41100, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell 1
+    min: 0.38000, -0.73438, 0.43500
+    max: 0.40500, -0.35938, 0.98900
+    color: '#262F39'
+  - label: original cab door 1
+    min: 0.40700, -0.73438, 0.45000
+    max: 0.41100, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame 1
+    min: 0.38000, -0.35938, 0.44000
+    max: 0.40500, -0.32812, 1.02000
+    color: '#2A3540'
+  - label: sill vent housing 1
+    min: 0.38000, -0.26562, 0.24500
+    max: 0.40500, 0.26562, 0.43300
+    color: '#2A3540'
+  - label: original sill vent 1
+    min: 0.40700, -0.17188, 0.25500
+    max: 0.41100, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreySillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step 1
+    min: 0.39500, -0.26562, 0.22100
+    max: 0.44500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: roof fan housing
+    min: -0.23500, 0.37500, 1.06100
+    max: 0.23500, 0.68750, 1.11600
+    color: '#2A3540'
+    shape: CylinderZ
+  - label: original stationary fan
+    min: -0.19200, 0.39062, 1.11700
+    max: 0.19200, 0.67188, 1.12200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintGreyRoofFan
+    surfaceAxis: XY
+  - label: rear door panel -1
+    min: -0.38000, 0.98638, 0.40500
+    max: -0.00800, 0.99538, 0.94000
+    color: '#262F39'
+  - label: rear door handle -1
+    min: -0.06200, 0.99638, 0.60000
+    max: -0.03800, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: rear door panel 1
+    min: 0.00800, 0.98638, 0.40500
+    max: 0.38000, 0.99538, 0.94000
+    color: '#262F39'
+  - label: rear door handle 1
+    min: 0.03800, 0.99638, 0.60000
+    max: 0.06200, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: front grille
+    min: -0.24500, -0.99538, 0.47500
+    max: 0.24500, -0.98938, 0.58400
+    color: '#172122'
+  - label: front headlight
+    min: -0.37300, -0.99538, 0.59600
+    max: -0.24300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: front headlight
+    min: 0.24300, -0.99538, 0.59600
+    max: 0.37300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: rear red lamp
+    min: -0.38500, 0.99638, 0.43500
+    max: -0.31500, 1.00238, 0.52600
+    color: '#622526'
+  - label: rear red lamp
+    min: 0.31500, 0.99638, 0.43500
+    max: 0.38500, 1.00238, 0.52600
+    color: '#622526'
+  - label: cab seat base
+    min: -0.29000, -0.64813, 0.31700
+    max: -0.09000, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: -0.29000, -0.47813, 0.40000
+    max: -0.09000, -0.40813, 0.70000
+    color: '#273333'
+  - label: cab seat base
+    min: 0.07500, -0.64813, 0.31700
+    max: 0.27500, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: 0.07500, -0.47813, 0.40000
+    max: 0.27500, -0.40813, 0.70000
+    color: '#273333'
+  - label: dashboard
+    min: -0.34500, -0.67437, 0.59000
+    max: 0.34500, -0.54438, 0.69000
+    color: '#263232'
+  - label: mirror -1
+    min: -0.49000, -0.73813, 0.76000
+    max: -0.41400, -0.64812, 0.84000
+    color: '#2A3540'
+  - label: mirror 1
+    min: 0.41400, -0.73813, 0.76000
+    max: 0.49000, -0.64812, 0.84000
+    color: '#2A3540'
+  - label: mirror mounting arm -1
+    color: '#2A3540'
+    shape: Box
+    min: -0.43500, -0.71813, 0.77400
+    max: -0.39200, -0.68912, 0.79700
+  - label: mirror mounting arm 1
+    color: '#2A3540'
+    shape: Box
+    min: 0.39200, -0.71813, 0.77400
+    max: 0.43500, -0.68912, 0.79700
+  - label: vertical rim bolt 1 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.10050
+    max: -0.46400, -0.49863, 0.13450
+  - label: vertical rim bolt 1 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.26450
+    max: -0.46400, -0.49863, 0.29850
+  - label: vertical rim bolt 1 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.10050
+    max: 0.46900, -0.49863, 0.13450
+  - label: vertical rim bolt 1 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.26450
+    max: 0.46900, -0.49863, 0.29850
+  - label: vertical rim bolt 2 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.10050
+    max: -0.46400, 0.56388, 0.13450
+  - label: vertical rim bolt 2 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.26450
+    max: -0.46400, 0.56388, 0.29850
+  - label: vertical rim bolt 2 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.10050
+    max: 0.46900, 0.56388, 0.13450
+  - label: vertical rim bolt 2 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.26450
+    max: 0.46900, 0.56388, 0.29850
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleBoxVanMaintWhiteF
+  label: BoxVanMaintWhiteF
+  sourcePrototypes:
+  - RMCPropVehicleBoxVanMaintWhiteF
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: box_van_maintenancewhite_f
+  status: draft
+  sourceDirections: 1
+  yawOffset: 90
+  groundOffset: 0.484375, 0.25
+  description: Source-specific cab-over van with wheel openings, ventilated sill, recessed side panels and original
+    roof/cab art. Original facing and padded horizontal framing are retained; physical depth, height and hidden
+    construction are inferred. Static initial-frame draft. See SOURCES_VANS.md.
+  parts:
+  - label: ladder chassis
+    min: -0.31590, -0.88438, 0.14000
+    max: 0.31590, 0.91437, 0.28000
+    color: '#202728'
+  - label: floor deck
+    min: -0.35235, -0.82437, 0.27000
+    max: 0.35235, 0.89438, 0.31500
+    color: '#383D3D'
+  - label: axle 1
+    min: -0.40500, -0.54263, 0.17000
+    max: 0.40500, -0.48862, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.43900, -0.70312, 0.01200
+    max: -0.37700, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 -1
+    min: -0.45000, -0.64500, 0.07012
+    max: -0.44000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.46200, -0.57163, 0.14350
+    max: -0.45200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 -1 -1
+    min: -0.46900, -0.61462, 0.18250
+    max: -0.46400, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 -1 1
+    min: -0.46900, -0.45062, 0.18250
+    max: -0.46400, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.37700, -0.70312, 0.01200
+    max: 0.43900, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 1
+    min: 0.44000, -0.64500, 0.07012
+    max: 0.45000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.45200, -0.57163, 0.14350
+    max: 0.46200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 1 -1
+    min: 0.46400, -0.61462, 0.18250
+    max: 0.46900, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 1 1
+    min: 0.46400, -0.45062, 0.18250
+    max: 0.46900, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.40500, 0.51987, 0.17000
+    max: 0.40500, 0.57388, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.43900, 0.35938, 0.01200
+    max: -0.37700, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 -1
+    min: -0.45000, 0.41750, 0.07012
+    max: -0.44000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.46200, 0.49088, 0.14350
+    max: -0.45200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 -1 -1
+    min: -0.46900, 0.44787, 0.18250
+    max: -0.46400, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 -1 1
+    min: -0.46900, 0.61187, 0.18250
+    max: -0.46400, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.37700, 0.35938, 0.01200
+    max: 0.43900, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 1
+    min: 0.44000, 0.41750, 0.07012
+    max: 0.45000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.45200, 0.49088, 0.14350
+    max: 0.46200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 1 -1
+    min: 0.46400, 0.44787, 0.18250
+    max: 0.46900, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 1 1
+    min: 0.46400, 0.61187, 0.18250
+    max: 0.46900, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: front bumper
+    min: -0.42000, -1.01937, 0.24000
+    max: 0.42000, -0.95637, 0.43000
+    color: '#434948'
+  - label: rear bumper
+    min: -0.42000, 0.95937, 0.24000
+    max: 0.42000, 1.00937, 0.36000
+    color: '#404544'
+  - label: lower skirt -1 0
+    min: -0.40500, -0.98438, 0.28500
+    max: -0.36900, -0.73438, 0.44800
+    color: '#585756'
+  - label: lower skirt -1 1
+    min: -0.40500, -0.29688, 0.28500
+    max: -0.36900, 0.32812, 0.44800
+    color: '#585756'
+  - label: lower skirt -1 2
+    min: -0.40500, 0.76562, 0.28500
+    max: -0.36900, 0.98438, 0.44800
+    color: '#585756'
+  - label: upper wheel rail -1
+    min: -0.40500, -0.95312, 0.43000
+    max: -0.36900, 0.95312, 0.48800
+    color: '#585756'
+  - label: lower skirt 1 0
+    min: 0.36900, -0.98438, 0.28500
+    max: 0.40500, -0.73438, 0.44800
+    color: '#585756'
+  - label: lower skirt 1 1
+    min: 0.36900, -0.29688, 0.28500
+    max: 0.40500, 0.32812, 0.44800
+    color: '#585756'
+  - label: lower skirt 1 2
+    min: 0.36900, 0.76562, 0.28500
+    max: 0.40500, 0.98438, 0.44800
+    color: '#585756'
+  - label: upper wheel rail 1
+    min: 0.36900, -0.95312, 0.43000
+    max: 0.40500, 0.95312, 0.48800
+    color: '#585756'
+  - label: cargo floor
+    min: -0.35500, -0.32812, 0.32000
+    max: 0.35500, 0.92188, 0.37000
+    color: '#323A3A'
+  - label: rear closure
+    min: -0.40500, 0.85938, 0.37000
+    max: 0.40500, 0.98438, 0.98000
+    color: '#585756'
+  - label: front cab lower
+    min: -0.40500, -0.95312, 0.43000
+    max: 0.40500, -0.67188, 0.68000
+    color: '#585756'
+  - label: front glazing surround
+    min: -0.40500, -0.95312, 0.65000
+    max: 0.40500, -0.64062, 1.01000
+    color: '#636261'
+    shape: WedgeY
+  - label: continuous sloping windshield
+    min: -0.36200, -0.95781, 0.70000
+    max: 0.36200, -0.65625, 0.98900
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtBoxVanMaintWhiteFWindshield
+    surfaceAxis: XZ
+  - label: roof slab
+    min: -0.40500, -0.67188, 1.00000
+    max: 0.40500, 0.89062, 1.05500
+    color: '#585756'
+  - label: original roof panel
+    min: -0.36000, -0.57812, 1.05600
+    max: 0.36000, 0.35938, 1.06100
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintWhiteFRoof
+    surfaceAxis: XY
+  - label: cargo side shell -1
+    min: -0.40500, -0.32812, 0.46800
+    max: -0.38000, 0.92188, 1.00600
+    color: '#585756'
+  - label: original cargo side -1
+    min: -0.41100, -0.32812, 0.50500
+    max: -0.40700, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintWhiteFCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell -1
+    min: -0.40500, -0.73438, 0.43500
+    max: -0.38000, -0.35938, 0.98900
+    color: '#585756'
+  - label: original cab door -1
+    min: -0.41100, -0.73438, 0.45000
+    max: -0.40700, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintWhiteFCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame -1
+    min: -0.40500, -0.35938, 0.44000
+    max: -0.38000, -0.32812, 1.02000
+    color: '#636261'
+  - label: sill vent housing -1
+    min: -0.40500, -0.26562, 0.24500
+    max: -0.38000, 0.26562, 0.43300
+    color: '#636261'
+  - label: original sill vent -1
+    min: -0.41100, -0.17188, 0.25500
+    max: -0.40700, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintWhiteFSillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step -1
+    min: -0.44500, -0.26562, 0.22100
+    max: -0.39500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: cargo side shell 1
+    min: 0.38000, -0.32812, 0.46800
+    max: 0.40500, 0.92188, 1.00600
+    color: '#585756'
+  - label: original cargo side 1
+    min: 0.40700, -0.32812, 0.50500
+    max: 0.41100, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintWhiteFCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell 1
+    min: 0.38000, -0.73438, 0.43500
+    max: 0.40500, -0.35938, 0.98900
+    color: '#585756'
+  - label: original cab door 1
+    min: 0.40700, -0.73438, 0.45000
+    max: 0.41100, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintWhiteFCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame 1
+    min: 0.38000, -0.35938, 0.44000
+    max: 0.40500, -0.32812, 1.02000
+    color: '#636261'
+  - label: sill vent housing 1
+    min: 0.38000, -0.26562, 0.24500
+    max: 0.40500, 0.26562, 0.43300
+    color: '#636261'
+  - label: original sill vent 1
+    min: 0.40700, -0.17188, 0.25500
+    max: 0.41100, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintWhiteFSillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step 1
+    min: 0.39500, -0.26562, 0.22100
+    max: 0.44500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: roof fan housing
+    min: -0.23500, 0.37500, 1.06100
+    max: 0.23500, 0.68750, 1.11600
+    color: '#636261'
+    shape: CylinderZ
+  - label: original stationary fan
+    min: -0.19200, 0.39062, 1.11700
+    max: 0.19200, 0.67188, 1.12200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanMaintWhiteFRoofFan
+    surfaceAxis: XY
+  - label: rear door panel -1
+    min: -0.38000, 0.98638, 0.40500
+    max: -0.00800, 0.99538, 0.94000
+    color: '#585756'
+  - label: rear door handle -1
+    min: -0.06200, 0.99638, 0.60000
+    max: -0.03800, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: rear door panel 1
+    min: 0.00800, 0.98638, 0.40500
+    max: 0.38000, 0.99538, 0.94000
+    color: '#585756'
+  - label: rear door handle 1
+    min: 0.03800, 0.99638, 0.60000
+    max: 0.06200, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: front grille
+    min: -0.24500, -0.99538, 0.47500
+    max: 0.24500, -0.98938, 0.58400
+    color: '#172122'
+  - label: front headlight
+    min: -0.37300, -0.99538, 0.59600
+    max: -0.24300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: front headlight
+    min: 0.24300, -0.99538, 0.59600
+    max: 0.37300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: rear red lamp
+    min: -0.38500, 0.99638, 0.43500
+    max: -0.31500, 1.00238, 0.52600
+    color: '#622526'
+  - label: rear red lamp
+    min: 0.31500, 0.99638, 0.43500
+    max: 0.38500, 1.00238, 0.52600
+    color: '#622526'
+  - label: cab seat base
+    min: -0.29000, -0.64813, 0.31700
+    max: -0.09000, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: -0.29000, -0.47813, 0.40000
+    max: -0.09000, -0.40813, 0.70000
+    color: '#273333'
+  - label: cab seat base
+    min: 0.07500, -0.64813, 0.31700
+    max: 0.27500, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: 0.07500, -0.47813, 0.40000
+    max: 0.27500, -0.40813, 0.70000
+    color: '#273333'
+  - label: dashboard
+    min: -0.34500, -0.67437, 0.59000
+    max: 0.34500, -0.54438, 0.69000
+    color: '#263232'
+  - label: mirror -1
+    min: -0.49000, -0.73813, 0.76000
+    max: -0.41400, -0.64812, 0.84000
+    color: '#636261'
+  - label: mirror 1
+    min: 0.41400, -0.73813, 0.76000
+    max: 0.49000, -0.64812, 0.84000
+    color: '#636261'
+  - label: mirror mounting arm -1
+    color: '#636261'
+    shape: Box
+    min: -0.43500, -0.71813, 0.77400
+    max: -0.39200, -0.68912, 0.79700
+  - label: mirror mounting arm 1
+    color: '#636261'
+    shape: Box
+    min: 0.39200, -0.71813, 0.77400
+    max: 0.43500, -0.68912, 0.79700
+  - label: vertical rim bolt 1 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.10050
+    max: -0.46400, -0.49863, 0.13450
+  - label: vertical rim bolt 1 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.26450
+    max: -0.46400, -0.49863, 0.29850
+  - label: vertical rim bolt 1 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.10050
+    max: 0.46900, -0.49863, 0.13450
+  - label: vertical rim bolt 1 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.26450
+    max: 0.46900, -0.49863, 0.29850
+  - label: vertical rim bolt 2 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.10050
+    max: -0.46400, 0.56388, 0.13450
+  - label: vertical rim bolt 2 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.26450
+    max: -0.46400, 0.56388, 0.29850
+  - label: vertical rim bolt 2 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.10050
+    max: 0.46900, 0.56388, 0.13450
+  - label: vertical rim bolt 2 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.26450
+    max: 0.46900, 0.56388, 0.29850
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleBoxVanRed
+  label: BoxVanRed
+  sourcePrototypes:
+  - RMCPropVehicleBoxVanRed
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: box_van_red
+  status: draft
+  sourceDirections: 1
+  yawOffset: -90
+  groundOffset: 0.484375, 0.25
+  description: Source-specific cab-over van with wheel openings, ventilated sill, recessed side panels and original
+    roof/cab art. Original facing and padded horizontal framing are retained; physical depth, height and hidden
+    construction are inferred. Static initial-frame draft. See SOURCES_VANS.md.
+  parts:
+  - label: ladder chassis
+    min: -0.31590, -0.88438, 0.14000
+    max: 0.31590, 0.91437, 0.28000
+    color: '#202728'
+  - label: floor deck
+    min: -0.35235, -0.82437, 0.27000
+    max: 0.35235, 0.89438, 0.31500
+    color: '#383D3D'
+  - label: axle 1
+    min: -0.40500, -0.54263, 0.17000
+    max: 0.40500, -0.48862, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.43900, -0.70312, 0.01200
+    max: -0.37700, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 -1
+    min: -0.45000, -0.64500, 0.07012
+    max: -0.44000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.46200, -0.57163, 0.14350
+    max: -0.45200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 -1 -1
+    min: -0.46900, -0.61462, 0.18250
+    max: -0.46400, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 -1 1
+    min: -0.46900, -0.45062, 0.18250
+    max: -0.46400, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.37700, -0.70312, 0.01200
+    max: 0.43900, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 1
+    min: 0.44000, -0.64500, 0.07012
+    max: 0.45000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.45200, -0.57163, 0.14350
+    max: 0.46200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 1 -1
+    min: 0.46400, -0.61462, 0.18250
+    max: 0.46900, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 1 1
+    min: 0.46400, -0.45062, 0.18250
+    max: 0.46900, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.40500, 0.51987, 0.17000
+    max: 0.40500, 0.57388, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.43900, 0.35938, 0.01200
+    max: -0.37700, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 -1
+    min: -0.45000, 0.41750, 0.07012
+    max: -0.44000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.46200, 0.49088, 0.14350
+    max: -0.45200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 -1 -1
+    min: -0.46900, 0.44787, 0.18250
+    max: -0.46400, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 -1 1
+    min: -0.46900, 0.61187, 0.18250
+    max: -0.46400, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.37700, 0.35938, 0.01200
+    max: 0.43900, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 1
+    min: 0.44000, 0.41750, 0.07012
+    max: 0.45000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.45200, 0.49088, 0.14350
+    max: 0.46200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 1 -1
+    min: 0.46400, 0.44787, 0.18250
+    max: 0.46900, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 1 1
+    min: 0.46400, 0.61187, 0.18250
+    max: 0.46900, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: front bumper
+    min: -0.42000, -1.01937, 0.24000
+    max: 0.42000, -0.95637, 0.43000
+    color: '#434948'
+  - label: rear bumper
+    min: -0.42000, 0.95937, 0.24000
+    max: 0.42000, 1.00937, 0.36000
+    color: '#404544'
+  - label: lower skirt -1 0
+    min: -0.40500, -0.98438, 0.28500
+    max: -0.36900, -0.73438, 0.44800
+    color: '#672727'
+  - label: lower skirt -1 1
+    min: -0.40500, -0.29688, 0.28500
+    max: -0.36900, 0.32812, 0.44800
+    color: '#672727'
+  - label: lower skirt -1 2
+    min: -0.40500, 0.76562, 0.28500
+    max: -0.36900, 0.98438, 0.44800
+    color: '#672727'
+  - label: upper wheel rail -1
+    min: -0.40500, -0.95312, 0.43000
+    max: -0.36900, 0.95312, 0.48800
+    color: '#672727'
+  - label: lower skirt 1 0
+    min: 0.36900, -0.98438, 0.28500
+    max: 0.40500, -0.73438, 0.44800
+    color: '#672727'
+  - label: lower skirt 1 1
+    min: 0.36900, -0.29688, 0.28500
+    max: 0.40500, 0.32812, 0.44800
+    color: '#672727'
+  - label: lower skirt 1 2
+    min: 0.36900, 0.76562, 0.28500
+    max: 0.40500, 0.98438, 0.44800
+    color: '#672727'
+  - label: upper wheel rail 1
+    min: 0.36900, -0.95312, 0.43000
+    max: 0.40500, 0.95312, 0.48800
+    color: '#672727'
+  - label: cargo floor
+    min: -0.35500, -0.32812, 0.32000
+    max: 0.35500, 0.92188, 0.37000
+    color: '#323A3A'
+  - label: rear closure
+    min: -0.40500, 0.85938, 0.37000
+    max: 0.40500, 0.98438, 0.98000
+    color: '#672727'
+  - label: front cab lower
+    min: -0.40500, -0.95312, 0.43000
+    max: 0.40500, -0.67188, 0.68000
+    color: '#672727'
+  - label: front glazing surround
+    min: -0.40500, -0.95312, 0.65000
+    max: 0.40500, -0.64062, 1.01000
+    color: '#612525'
+    shape: WedgeY
+  - label: continuous sloping windshield
+    min: -0.36200, -0.95781, 0.70000
+    max: 0.36200, -0.65625, 0.98900
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtBoxVanRedWindshield
+    surfaceAxis: XZ
+  - label: roof slab
+    min: -0.40500, -0.67188, 1.00000
+    max: 0.40500, 0.89062, 1.05500
+    color: '#672727'
+  - label: original roof panel
+    min: -0.36000, -0.64062, 1.05600
+    max: 0.36000, 0.79688, 1.06100
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanRedRoof
+    surfaceAxis: XY
+  - label: cargo side shell -1
+    min: -0.40500, -0.32812, 0.46800
+    max: -0.38000, 0.92188, 1.00600
+    color: '#672727'
+  - label: original cargo side -1
+    min: -0.41100, -0.32812, 0.50500
+    max: -0.40700, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanRedCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell -1
+    min: -0.40500, -0.73438, 0.43500
+    max: -0.38000, -0.35938, 0.98900
+    color: '#672727'
+  - label: original cab door -1
+    min: -0.41100, -0.73438, 0.45000
+    max: -0.40700, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanRedCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame -1
+    min: -0.40500, -0.35938, 0.44000
+    max: -0.38000, -0.32812, 1.02000
+    color: '#612525'
+  - label: sill vent housing -1
+    min: -0.40500, -0.26562, 0.24500
+    max: -0.38000, 0.26562, 0.43300
+    color: '#612525'
+  - label: original sill vent -1
+    min: -0.41100, -0.17188, 0.25500
+    max: -0.40700, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanRedSillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step -1
+    min: -0.44500, -0.26562, 0.22100
+    max: -0.39500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: cargo side shell 1
+    min: 0.38000, -0.32812, 0.46800
+    max: 0.40500, 0.92188, 1.00600
+    color: '#672727'
+  - label: original cargo side 1
+    min: 0.40700, -0.32812, 0.50500
+    max: 0.41100, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanRedCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell 1
+    min: 0.38000, -0.73438, 0.43500
+    max: 0.40500, -0.35938, 0.98900
+    color: '#672727'
+  - label: original cab door 1
+    min: 0.40700, -0.73438, 0.45000
+    max: 0.41100, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanRedCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame 1
+    min: 0.38000, -0.35938, 0.44000
+    max: 0.40500, -0.32812, 1.02000
+    color: '#612525'
+  - label: sill vent housing 1
+    min: 0.38000, -0.26562, 0.24500
+    max: 0.40500, 0.26562, 0.43300
+    color: '#612525'
+  - label: original sill vent 1
+    min: 0.40700, -0.17188, 0.25500
+    max: 0.41100, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanRedSillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step 1
+    min: 0.39500, -0.26562, 0.22100
+    max: 0.44500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: rear door panel -1
+    min: -0.38000, 0.98638, 0.40500
+    max: -0.00800, 0.99538, 0.94000
+    color: '#672727'
+  - label: rear door handle -1
+    min: -0.06200, 0.99638, 0.60000
+    max: -0.03800, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: rear door panel 1
+    min: 0.00800, 0.98638, 0.40500
+    max: 0.38000, 0.99538, 0.94000
+    color: '#672727'
+  - label: rear door handle 1
+    min: 0.03800, 0.99638, 0.60000
+    max: 0.06200, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: front grille
+    min: -0.24500, -0.99538, 0.47500
+    max: 0.24500, -0.98938, 0.58400
+    color: '#172122'
+  - label: front headlight
+    min: -0.37300, -0.99538, 0.59600
+    max: -0.24300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: front headlight
+    min: 0.24300, -0.99538, 0.59600
+    max: 0.37300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: rear red lamp
+    min: -0.38500, 0.99638, 0.43500
+    max: -0.31500, 1.00238, 0.52600
+    color: '#622526'
+  - label: rear red lamp
+    min: 0.31500, 0.99638, 0.43500
+    max: 0.38500, 1.00238, 0.52600
+    color: '#622526'
+  - label: cab seat base
+    min: -0.29000, -0.64813, 0.31700
+    max: -0.09000, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: -0.29000, -0.47813, 0.40000
+    max: -0.09000, -0.40813, 0.70000
+    color: '#273333'
+  - label: cab seat base
+    min: 0.07500, -0.64813, 0.31700
+    max: 0.27500, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: 0.07500, -0.47813, 0.40000
+    max: 0.27500, -0.40813, 0.70000
+    color: '#273333'
+  - label: dashboard
+    min: -0.34500, -0.67437, 0.59000
+    max: 0.34500, -0.54438, 0.69000
+    color: '#263232'
+  - label: mirror -1
+    min: -0.49000, -0.73813, 0.76000
+    max: -0.41400, -0.64812, 0.84000
+    color: '#612525'
+  - label: mirror 1
+    min: 0.41400, -0.73813, 0.76000
+    max: 0.49000, -0.64812, 0.84000
+    color: '#612525'
+  - label: mirror mounting arm -1
+    color: '#612525'
+    shape: Box
+    min: -0.43500, -0.71813, 0.77400
+    max: -0.39200, -0.68912, 0.79700
+  - label: mirror mounting arm 1
+    color: '#612525'
+    shape: Box
+    min: 0.39200, -0.71813, 0.77400
+    max: 0.43500, -0.68912, 0.79700
+  - label: vertical rim bolt 1 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.10050
+    max: -0.46400, -0.49863, 0.13450
+  - label: vertical rim bolt 1 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.26450
+    max: -0.46400, -0.49863, 0.29850
+  - label: vertical rim bolt 1 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.10050
+    max: 0.46900, -0.49863, 0.13450
+  - label: vertical rim bolt 1 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.26450
+    max: 0.46900, -0.49863, 0.29850
+  - label: vertical rim bolt 2 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.10050
+    max: -0.46400, 0.56388, 0.13450
+  - label: vertical rim bolt 2 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.26450
+    max: -0.46400, 0.56388, 0.29850
+  - label: vertical rim bolt 2 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.10050
+    max: 0.46900, 0.56388, 0.13450
+  - label: vertical rim bolt 2 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.26450
+    max: 0.46900, 0.56388, 0.29850
+- type: cmu3DModel
+  id: CMU3DRMCPropVehicleBoxVanWhite
+  label: BoxVanWhite
+  sourcePrototypes:
+  - RMCPropVehicleBoxVanWhite
+  referenceRsi: _RMC14/Structures/Vehicles/vehicles3.rsi
+  referenceState: box_van_white
+  status: draft
+  sourceDirections: 1
+  yawOffset: -90
+  groundOffset: 0.484375, 0.25
+  description: Source-specific cab-over van with wheel openings, ventilated sill, recessed side panels and original
+    roof/cab art. Original facing and padded horizontal framing are retained; physical depth, height and hidden
+    construction are inferred. Static initial-frame draft. See SOURCES_VANS.md.
+  parts:
+  - label: ladder chassis
+    min: -0.31590, -0.88438, 0.14000
+    max: 0.31590, 0.91437, 0.28000
+    color: '#202728'
+  - label: floor deck
+    min: -0.35235, -0.82437, 0.27000
+    max: 0.35235, 0.89438, 0.31500
+    color: '#383D3D'
+  - label: axle 1
+    min: -0.40500, -0.54263, 0.17000
+    max: 0.40500, -0.48862, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.43900, -0.70312, 0.01200
+    max: -0.37700, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 -1
+    min: -0.45000, -0.64500, 0.07012
+    max: -0.44000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 -1
+    min: -0.46200, -0.57163, 0.14350
+    max: -0.45200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 -1 -1
+    min: -0.46900, -0.61462, 0.18250
+    max: -0.46400, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 -1 1
+    min: -0.46900, -0.45062, 0.18250
+    max: -0.46400, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.37700, -0.70312, 0.01200
+    max: 0.43900, -0.32812, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 1 1
+    min: 0.44000, -0.64500, 0.07012
+    max: 0.45000, -0.38625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 1 1
+    min: 0.45200, -0.57163, 0.14350
+    max: 0.46200, -0.45963, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 1 1 -1
+    min: 0.46400, -0.61462, 0.18250
+    max: 0.46900, -0.58062, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 1 1 1
+    min: 0.46400, -0.45062, 0.18250
+    max: 0.46900, -0.41662, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.40500, 0.51987, 0.17000
+    max: 0.40500, 0.57388, 0.22000
+    color: '#272E2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.43900, 0.35938, 0.01200
+    max: -0.37700, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 -1
+    min: -0.45000, 0.41750, 0.07012
+    max: -0.44000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 -1
+    min: -0.46200, 0.49088, 0.14350
+    max: -0.45200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 -1 -1
+    min: -0.46900, 0.44787, 0.18250
+    max: -0.46400, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 -1 1
+    min: -0.46900, 0.61187, 0.18250
+    max: -0.46400, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.37700, 0.35938, 0.01200
+    max: 0.43900, 0.73438, 0.38700
+    color: '#141918'
+    shape: CylinderX
+  - label: recessed rim 2 1
+    min: 0.44000, 0.41750, 0.07012
+    max: 0.45000, 0.67625, 0.32888
+    color: '#2E3139'
+    shape: CylinderX
+  - label: hub 2 1
+    min: 0.45200, 0.49088, 0.14350
+    max: 0.46200, 0.60288, 0.25550
+    color: '#575B66'
+    shape: CylinderX
+  - label: rim bolt 2 1 -1
+    min: 0.46400, 0.44787, 0.18250
+    max: 0.46900, 0.48187, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: rim bolt 2 1 1
+    min: 0.46400, 0.61187, 0.18250
+    max: 0.46900, 0.64587, 0.21650
+    color: '#666A74'
+    shape: CylinderX
+  - label: front bumper
+    min: -0.42000, -1.01937, 0.24000
+    max: 0.42000, -0.95637, 0.43000
+    color: '#434948'
+  - label: rear bumper
+    min: -0.42000, 0.95937, 0.24000
+    max: 0.42000, 1.00937, 0.36000
+    color: '#404544'
+  - label: lower skirt -1 0
+    min: -0.40500, -0.98438, 0.28500
+    max: -0.36900, -0.73438, 0.44800
+    color: '#7F7B77'
+  - label: lower skirt -1 1
+    min: -0.40500, -0.29688, 0.28500
+    max: -0.36900, 0.32812, 0.44800
+    color: '#7F7B77'
+  - label: lower skirt -1 2
+    min: -0.40500, 0.76562, 0.28500
+    max: -0.36900, 0.98438, 0.44800
+    color: '#7F7B77'
+  - label: upper wheel rail -1
+    min: -0.40500, -0.95312, 0.43000
+    max: -0.36900, 0.95312, 0.48800
+    color: '#7F7B77'
+  - label: lower skirt 1 0
+    min: 0.36900, -0.98438, 0.28500
+    max: 0.40500, -0.73438, 0.44800
+    color: '#7F7B77'
+  - label: lower skirt 1 1
+    min: 0.36900, -0.29688, 0.28500
+    max: 0.40500, 0.32812, 0.44800
+    color: '#7F7B77'
+  - label: lower skirt 1 2
+    min: 0.36900, 0.76562, 0.28500
+    max: 0.40500, 0.98438, 0.44800
+    color: '#7F7B77'
+  - label: upper wheel rail 1
+    min: 0.36900, -0.95312, 0.43000
+    max: 0.40500, 0.95312, 0.48800
+    color: '#7F7B77'
+  - label: cargo floor
+    min: -0.35500, -0.32812, 0.32000
+    max: 0.35500, 0.92188, 0.37000
+    color: '#323A3A'
+  - label: rear closure
+    min: -0.40500, 0.85938, 0.37000
+    max: 0.40500, 0.98438, 0.98000
+    color: '#7F7B77'
+  - label: front cab lower
+    min: -0.40500, -0.95312, 0.43000
+    max: 0.40500, -0.67188, 0.68000
+    color: '#7F7B77'
+  - label: front glazing surround
+    min: -0.40500, -0.95312, 0.65000
+    max: 0.40500, -0.64062, 1.01000
+    color: '#76726F'
+    shape: WedgeY
+  - label: continuous sloping windshield
+    min: -0.36200, -0.95781, 0.70000
+    max: 0.36200, -0.65625, 0.98900
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DVanArtBoxVanWhiteWindshield
+    surfaceAxis: XZ
+  - label: roof slab
+    min: -0.40500, -0.67188, 1.00000
+    max: 0.40500, 0.89062, 1.05500
+    color: '#7F7B77'
+  - label: original roof panel
+    min: -0.36000, -0.64062, 1.05600
+    max: 0.36000, 0.79688, 1.06100
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanWhiteRoof
+    surfaceAxis: XY
+  - label: cargo side shell -1
+    min: -0.40500, -0.32812, 0.46800
+    max: -0.38000, 0.92188, 1.00600
+    color: '#7F7B77'
+  - label: original cargo side -1
+    min: -0.41100, -0.32812, 0.50500
+    max: -0.40700, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanWhiteCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell -1
+    min: -0.40500, -0.73438, 0.43500
+    max: -0.38000, -0.35938, 0.98900
+    color: '#7F7B77'
+  - label: original cab door -1
+    min: -0.41100, -0.73438, 0.45000
+    max: -0.40700, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanWhiteCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame -1
+    min: -0.40500, -0.35938, 0.44000
+    max: -0.38000, -0.32812, 1.02000
+    color: '#76726F'
+  - label: sill vent housing -1
+    min: -0.40500, -0.26562, 0.24500
+    max: -0.38000, 0.26562, 0.43300
+    color: '#76726F'
+  - label: original sill vent -1
+    min: -0.41100, -0.17188, 0.25500
+    max: -0.40700, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanWhiteSillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step -1
+    min: -0.44500, -0.26562, 0.22100
+    max: -0.39500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: cargo side shell 1
+    min: 0.38000, -0.32812, 0.46800
+    max: 0.40500, 0.92188, 1.00600
+    color: '#7F7B77'
+  - label: original cargo side 1
+    min: 0.40700, -0.32812, 0.50500
+    max: 0.41100, 0.92188, 0.98500
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanWhiteCargoSide
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door shell 1
+    min: 0.38000, -0.73438, 0.43500
+    max: 0.40500, -0.35938, 0.98900
+    color: '#7F7B77'
+  - label: original cab door 1
+    min: 0.40700, -0.73438, 0.45000
+    max: 0.41100, -0.35938, 0.98800
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanWhiteCabDoor
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab door frame 1
+    min: 0.38000, -0.35938, 0.44000
+    max: 0.40500, -0.32812, 1.02000
+    color: '#76726F'
+  - label: sill vent housing 1
+    min: 0.38000, -0.26562, 0.24500
+    max: 0.40500, 0.26562, 0.43300
+    color: '#76726F'
+  - label: original sill vent 1
+    min: 0.40700, -0.17188, 0.25500
+    max: 0.41100, 0.17188, 0.41200
+    color: '#FFFFFF'
+    surface: CMU3DVanArtBoxVanWhiteSillVent
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: access step 1
+    min: 0.39500, -0.26562, 0.22100
+    max: 0.44500, 0.23438, 0.24700
+    color: '#343C3C'
+  - label: rear door panel -1
+    min: -0.38000, 0.98638, 0.40500
+    max: -0.00800, 0.99538, 0.94000
+    color: '#7F7B77'
+  - label: rear door handle -1
+    min: -0.06200, 0.99638, 0.60000
+    max: -0.03800, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: rear door panel 1
+    min: 0.00800, 0.98638, 0.40500
+    max: 0.38000, 0.99538, 0.94000
+    color: '#7F7B77'
+  - label: rear door handle 1
+    min: 0.03800, 0.99638, 0.60000
+    max: 0.06200, 1.01238, 0.70000
+    color: '#737A7B'
+  - label: front grille
+    min: -0.24500, -0.99538, 0.47500
+    max: 0.24500, -0.98938, 0.58400
+    color: '#172122'
+  - label: front headlight
+    min: -0.37300, -0.99538, 0.59600
+    max: -0.24300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: front headlight
+    min: 0.24300, -0.99538, 0.59600
+    max: 0.37300, -0.98938, 0.67300
+    color: '#C0C1AB'
+  - label: rear red lamp
+    min: -0.38500, 0.99638, 0.43500
+    max: -0.31500, 1.00238, 0.52600
+    color: '#622526'
+  - label: rear red lamp
+    min: 0.31500, 0.99638, 0.43500
+    max: 0.38500, 1.00238, 0.52600
+    color: '#622526'
+  - label: cab seat base
+    min: -0.29000, -0.64813, 0.31700
+    max: -0.09000, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: -0.29000, -0.47813, 0.40000
+    max: -0.09000, -0.40813, 0.70000
+    color: '#273333'
+  - label: cab seat base
+    min: 0.07500, -0.64813, 0.31700
+    max: 0.27500, -0.42812, 0.41000
+    color: '#2D3838'
+  - label: cab seat back
+    min: 0.07500, -0.47813, 0.40000
+    max: 0.27500, -0.40813, 0.70000
+    color: '#273333'
+  - label: dashboard
+    min: -0.34500, -0.67437, 0.59000
+    max: 0.34500, -0.54438, 0.69000
+    color: '#263232'
+  - label: mirror -1
+    min: -0.49000, -0.73813, 0.76000
+    max: -0.41400, -0.64812, 0.84000
+    color: '#76726F'
+  - label: mirror 1
+    min: 0.41400, -0.73813, 0.76000
+    max: 0.49000, -0.64812, 0.84000
+    color: '#76726F'
+  - label: mirror mounting arm -1
+    color: '#76726F'
+    shape: Box
+    min: -0.43500, -0.71813, 0.77400
+    max: -0.39200, -0.68912, 0.79700
+  - label: mirror mounting arm 1
+    color: '#76726F'
+    shape: Box
+    min: 0.39200, -0.71813, 0.77400
+    max: 0.43500, -0.68912, 0.79700
+  - label: vertical rim bolt 1 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.10050
+    max: -0.46400, -0.49863, 0.13450
+  - label: vertical rim bolt 1 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, -0.53263, 0.26450
+    max: -0.46400, -0.49863, 0.29850
+  - label: vertical rim bolt 1 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.10050
+    max: 0.46900, -0.49863, 0.13450
+  - label: vertical rim bolt 1 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, -0.53263, 0.26450
+    max: 0.46900, -0.49863, 0.29850
+  - label: vertical rim bolt 2 -1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.10050
+    max: -0.46400, 0.56388, 0.13450
+  - label: vertical rim bolt 2 -1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: -0.46900, 0.52988, 0.26450
+    max: -0.46400, 0.56388, 0.29850
+  - label: vertical rim bolt 2 1 -1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.10050
+    max: 0.46900, 0.56388, 0.13450
+  - label: vertical rim bolt 2 1 1
+    color: '#666A74'
+    shape: CylinderX
+    min: 0.46400, 0.52988, 0.26450
+    max: 0.46900, 0.56388, 0.29850

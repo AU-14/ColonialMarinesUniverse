@@ -205,6 +205,9 @@ public sealed partial class AreaInfoSystem : EntitySystem
         var canSupplyDrop = _area.CanSupplyDrop(mapCoordinates);
         var canMortarPlacement = _area.CanMortarPlacement(coordinates);
         var canLase = _area.CanLase(coordinates);
+        // CMU14: display the same roof permissions checked when these actions are used.
+        var canMedevac = _area.CanMedevac(coordinates);
+        var canParadrop = _area.CanParadrop(coordinates);
 
         // Determine ceiling level based on effective protection (including roofing entities)
         // Note: severityToUse is offset by +1 because roofnull is at index 0 (for "no area" case)
@@ -223,7 +226,9 @@ public sealed partial class AreaInfoSystem : EntitySystem
             ceilingLevel = 2;
             severityToUse = (short)3;
         }
-        else if (!canMortarPlacement || !canLase || !_area.CanMedevac(coordinates) || !_area.CanParadrop(coordinates))
+        // CMU14: reuse the effective permission checks above.
+        // else if (!canMortarPlacement || !canLase || !_area.CanMedevac(coordinates) || !_area.CanParadrop(coordinates))
+        else if (!canMortarPlacement || !canLase || !canMedevac || !canParadrop)
         {
             ceilingLevel = 1;
             severityToUse = (short)2;
@@ -239,7 +244,8 @@ public sealed partial class AreaInfoSystem : EntitySystem
             ceilingLevel, hasHiveCoreProtection, hasPylonProtection,
             canOrbitalBombard, orbitalBombardment is { Redirected: true }, canCAS, canSupplyDrop,
             canMortarFire, mortarFire is { Redirected: true }, canMortarPlacement, canLase,
-            area.Value.Comp.Medevac, area.Value.Comp.Paradropping, area.Value.Comp.NoTunnel,
+            // CMU14: area.Value.Comp.Medevac, area.Value.Comp.Paradropping, area.Value.Comp.NoTunnel,
+            canMedevac, canParadrop, area.Value.Comp.NoTunnel,
             area.Value.Comp.Unweedable, area.Value.Comp.ResinAllowed);
         if (ent.Comp.LastRestrictionState == restrictionState && ent.Comp.LastRestrictionText is { } cachedRestrictions)
             return (areaProto.Name, severityToUse, cachedRestrictions);
@@ -278,12 +284,14 @@ public sealed partial class AreaInfoSystem : EntitySystem
         else
             restrictedActions.Add("Laser Designation");
 
-        if (area.Value.Comp.Medevac)
+        // CMU14: if (area.Value.Comp.Medevac)
+        if (canMedevac)
             allowedActions.Add("Casualty Evacuation");
         else
             restrictedActions.Add("Casualty Evacuation");
 
-        if (area.Value.Comp.Paradropping)
+        // CMU14: if (area.Value.Comp.Paradropping)
+        if (canParadrop)
             allowedActions.Add("Paradropping");
         else
             restrictedActions.Add("Paradropping");
