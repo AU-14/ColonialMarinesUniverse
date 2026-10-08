@@ -14,7 +14,7 @@ import surfaces
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / 'Resources/Textures/_RMC14/Objects/Misc/bedsheets.rsi'
-MODEL = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_bedsheets.yml'
+MODEL = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_bedsheets.yml'
 ART = MODEL.with_name('garrison_bedsheets_art.yml')
 OUT = ROOT / 'Tools/three_d/generated'
 NOTE = ROOT / 'Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_BEDSHEETS.md'

@@ -26,7 +26,7 @@ from author_wide_machinery import world_parts, contacts
 STAGE = ROOT/'.codex/reagent-tanks-staged'
 BASELINE = ROOT/'.codex/captured-scene-baseline867'
 SOURCE = ROOT/'Resources/Textures/_RMC14/Structures/Storage/reagent_tank.rsi'
-MODELS = Path('Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_reagent_tanks.yml')
+MODELS = Path('Content.CMU/Resources/ThreeD/Prototypes/World/garrison_reagent_tanks.yml')
 ART = MODELS.with_name('garrison_reagent_tanks_art.yml')
 UTILITIES = MODELS.with_name('garrison_utilities.yml')
 TEXTURES = Path('Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces')

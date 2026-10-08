@@ -29,7 +29,7 @@ from author_wide_machinery import world_parts, box_bounds
 BASE = ROOT / '.codex/model-batch-baseline1006'
 GEN = ROOT / 'Tools/three_d/generated'
 REVIEW = GEN / 'review/disposal-junctions'
-MODEL = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_disposal_junctions.yml'
+MODEL = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_disposal_junctions.yml'
 ART = MODEL.with_name('garrison_disposal_junctions_art.yml')
 TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/DisposalJunctions'
 NOTE = ROOT / 'Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_DISPOSAL_JUNCTIONS.md'

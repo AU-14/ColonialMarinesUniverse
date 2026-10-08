@@ -141,21 +141,9 @@ def render_smoke(gl, program, smoke, native_srgb, uniform_buffers):
         uniform1f(uniform('useLiveLight'), 0)
         uniform1f(uniform('brightness'), 1)
         uniform1f(uniform('billboardCount'), 0)
-        uniform1f(uniform('equipmentCount'), 0)
-        if 'equipment' in smoke:
-            equipment = smoke['equipment']
-            active_texture(0x84C8)
-            raw = equipment['boxes']
-            stride = 256 * 4
-            upload_texture(256, 768, b''.join(raw[row * stride:(row + 1) * stride] for row in reversed(range(768))))
-            uniform1i(uniform('equipmentBoxes'), 8)
-            active_texture(0x84C9)
-            upload_texture(768, 1, equipment['roots'])
-            uniform1i(uniform('equipmentRoots'), 9)
-            uniform1f(uniform('equipmentCount'), 1)
         if 'billboard' in smoke:
             billboard = smoke['billboard']
-            packed = struct.pack('<8H', *(round(v * 1024 + 32768) for v in (billboard.get('x', 0), billboard['y'], 1.3, 1, 2,
+            packed = struct.pack('<8H', *(round(v * 1024 + 32768) for v in (billboard.get('x', 0), billboard['y'], billboard.get('z', 1.3), 1, 2,
                                                                        billboard.get('yaw', 0), billboard.get('tilt', 0), billboard.get('emissive', 0))))
             slot = billboard.get('slot', 0)
             columns = 16 if slot >= 64 else 8
@@ -422,28 +410,13 @@ def validate(root: Path, powershell: str, sdl_path: Path, benchmark: bool = Fals
                                  samples=[{'name': name, 'pixel': [32, 32], 'cpuBoxIndex': 1, 'expectedRGB': (0, 255, 0)}])
                     billboard_smokes.append(render_smoke(gl, program, scene, native_srgb, uniform_buffers))
                 variants[-1]['billboardSmokes'] = billboard_smokes
-                # Use actual C# packed geometry with independent rigid roots. The
-                # translated/rotated blue cabinet must occlude the red world prop;
-                # moving it behind the prop must restore the world hit.
-                equipment_smokes = []
-                packed_box = base64.b64decode(parsed['smoke']['boxPixels'])[:24]
-                for name, origin, axes, start, expected in (
-                    ('equipment-ahead', (0, -3, 0), (1,0,0, 0,1,0, 0,0,1), 0, (0,0,255)),
-                    ('equipment-rotated', (.7, -2, 0), (0,1,0, -1,0,0, 0,0,1), 300, (0,0,255)),
-                    ('equipment-behind', (0, 3, 0), (1,0,0, 0,1,0, 0,0,1), 0, (255,0,0)),
-                ):
-                    data = bytearray(256 * 768 * 4)
-                    data[start*24:(start+1)*24] = packed_box
-                    roots = bytearray(768 * 4)
-                    # Conservative local bounds and world sphere contain the fixture.
-                    values = (*origin, *axes, -1.5, 0, 0, 1.5, 1.5, 2.5)
-                    roots[:36] = struct.pack('<18H', *(round(v * 1024 + 32768) for v in values))
-                    roots[36:40] = struct.pack('<2H', start, 1)
-                    roots[40:48] = struct.pack('<4H', *(round(v * 1024 + 32768) for v in (*origin[:2], 1.3, 3)))
-                    scene = dict(parsed['smoke'], name=name, equipment={'boxes': bytes(data), 'roots': bytes(roots)},
-                                 samples=[{'name': name, 'pixel': [32,32], 'cpuBoxIndex': 1, 'expectedRGB': expected}])
-                    equipment_smokes.append(render_smoke(gl, program, scene, native_srgb, uniform_buffers))
-                variants[-1]['equipmentSmokes'] = equipment_smokes
+                ground_sprite = dict(parsed['smoke'], name='ground-sprite',
+                                     origin=[0, -2, 2], forward=[0, 0, -1], right=[1, 0, 0], up=[0, 1, 0],
+                                     billboard={'y': -2, 'z': .01, 'tilt': -1.570796327, 'cutout': True},
+                                     samples=[{'name': 'opaque-ground-pixel', 'pixel': [25, 32], 'cpuBoxIndex': -1,
+                                               'expectedRGB': (0, 255, 0)},
+                                              {'name': 'transparent-ground-pixel', 'pixel': [39, 32], 'cpuBoxIndex': -1}])
+                variants[-1]['groundSpriteSmoke'] = render_smoke(gl, program, ground_sprite, native_srgb, uniform_buffers)
                 dark = dict(parsed['smoke'], name='live-light-darkness', darkLight=True,
                             samples=[{'name': 'dark-lit-surface', 'pixel': [32, 32], 'cpuBoxIndex': 1, 'expectedRGB': [0, 0, 0]}])
                 variants[-1]['lightingSmoke'] = render_smoke(gl, program, dark, native_srgb, uniform_buffers)

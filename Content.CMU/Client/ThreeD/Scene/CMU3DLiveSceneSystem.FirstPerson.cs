@@ -66,6 +66,7 @@ public sealed partial class CMU3DLiveSceneSystem
         if (_firstPersonView != null)
             return true;
         Close();
+        _modelLease = _modelLibrary.AcquireWorld();
         _firstPersonHost = viewport;
         _worldWasVisible = viewport.Viewport.Visible;
         _firstPersonView = new CMU3DSceneControl(true)
@@ -115,9 +116,7 @@ public sealed partial class CMU3DLiveSceneSystem
         _captureRequested = false;
         _captureRequestedFromUi = false;
         _captureWaitReason = null;
-        _actor = null;
-        _boxes.Clear();
-        _animatedSprites.Clear();
+        ReleaseSceneData();
     }
 
     private void UpdateFirstPersonCamera()

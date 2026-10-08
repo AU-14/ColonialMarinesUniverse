@@ -8,6 +8,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared.Chat;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Item;
 using Moq;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -118,6 +119,41 @@ public sealed class CMU3DLiveBillboardTest : GameTest
             Assert.That(camera.TryProject(center + new Vector3(0, .4f, .4f), out var empty), Is.True);
             view.Aim(empty, out hit);
             Assert.That(hit, Is.Null, "The original south frame's occupied corner is empty in this view.");
+        });
+    }
+
+    [Test]
+    public async Task DroppedSpriteLiesOnItsFloorAndPicksOnlyItsVisiblePixels()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var mapUid = Client.System<SharedMapSystem>().CreateMap(out var map, runMapInit: true);
+            CEntMan.AddComponent<CMUZLevelMapComponent>(mapUid).Depth = 1;
+            var item = CEntMan.SpawnEntity("ClickTestRotatingCornerVisibleNoRot", new MapCoordinates(Vector2.Zero, map));
+            CEntMan.AddComponent<ItemComponent>(item);
+            using var view = new CMU3DSceneControl(true) { SceneMap = map };
+            view.SceneMaps.Add(map);
+            view.SetBillboards([item]);
+            var floor = CMU3DZProjection.StoryHeight;
+            var camera = CMU3DFirstPersonCamera.Frame(new Vector2(0, -2), 0, -.6f,
+                new Vector2(800, 600), groundHeight: floor);
+            view.SetCameraOverride(camera);
+            var candidate = Collect(view).Single(x => Value<EntityUid>(x, "Uid") == item);
+            var center = Value<Vector3>(candidate, "Center");
+            var tilt = Value<float>(candidate, "Tilt");
+            Assert.That(center.Z, Is.EqualTo(floor).Within(.02f),
+                "Transparent sprite padding must not raise a dropped item above its actual Z floor.");
+            Assert.That(MathF.Cos(tilt), Is.EqualTo(0).Within(.0001f),
+                "The entire sprite plane must lie flat rather than standing upright on the floor.");
+            var published = (IList) typeof(CMU3DSceneControl)
+                .GetField("_billboards", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue(view)!;
+            published.Add(candidate);
+            Assert.That(camera.TryProject(center + new Vector3(.25f, .25f, 0), out var visible), Is.True);
+            view.Aim(visible, out var hit);
+            Assert.That(hit, Is.EqualTo(item), "The ray must hit the opaque corner on the horizontal plane.");
+            Assert.That(camera.TryProject(center + new Vector3(-.25f, -.25f, 0), out var empty), Is.True);
+            view.Aim(empty, out hit);
+            Assert.That(hit, Is.Null, "Transparent pixels must remain unclickable after laying the sprite flat.");
         });
     }
 

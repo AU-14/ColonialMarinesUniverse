@@ -18,7 +18,7 @@ import build_models
 import surfaces
 
 ROOT = Path(__file__).resolve().parents[2]
-PROTOTYPES = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOTYPES = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World'
 MODEL_FILE = PROTOTYPES / 'garrison_environment.yml'
 ART_FILE = PROTOTYPES / 'garrison_hybrisa_platform_three_art.yml'
 TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces'

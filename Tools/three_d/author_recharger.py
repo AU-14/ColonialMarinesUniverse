@@ -24,7 +24,7 @@ from placement import resolve_placements
 GEN = ROOT / 'Tools/three_d/generated'
 BASELINE = ROOT / '.codex/model-batch-baseline1006'
 REVIEW = GEN / 'review/recharger'
-MODEL = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_recharger.yml'
+MODEL = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_recharger.yml'
 ART = MODEL.with_name('garrison_recharger_art.yml')
 TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces/Recharger'
 NOTE = ROOT / 'Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_RECHARGER.md'

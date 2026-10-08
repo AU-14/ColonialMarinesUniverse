@@ -24,7 +24,7 @@ from author_vendor_fans import contact_witnesses
 ROOT=Path(__file__).resolve().parents[2]
 GEN=ROOT/'Tools/three_d/generated'
 BASE=ROOT/'.codex/model-batch-baseline978'
-PROTOS=ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOS=ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World'
 MODEL=PROTOS/'garrison_loose_planks.yml'
 ART=PROTOS/'garrison_loose_planks_art.yml'
 TEXTURES=ROOT/'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces'

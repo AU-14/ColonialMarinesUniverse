@@ -3,7 +3,7 @@
 This batch targets Stable Garrison Redux. All three assemblies remain drafts:
 `CMU3DColonyReinforcedWindow`, `CMU3DColonyReinforcedWindowFrame`, and
 `CMU3DUltraDirectionalWindow`. Definitions are in
-`Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_colony_ultra_windows.yml`.
+`Content.CMU/Resources/ThreeD/Prototypes/World/garrison_colony_ultra_windows.yml`.
 
 ## Source and attribution
 

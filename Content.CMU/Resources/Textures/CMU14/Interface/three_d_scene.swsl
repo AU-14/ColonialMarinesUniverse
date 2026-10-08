@@ -25,17 +25,8 @@ uniform sampler2D billboardData;
 uniform highp float billboardCount;
 uniform highp vec2 billboardLayout;
 uniform highp float selectedBox;
-uniform sampler2D equipmentBoxes;
-uniform sampler2D equipmentRoots;
-uniform highp float equipmentCount;
 
 highp vec4 boxData(highp float boxId, highp float column) {
-    if (boxId < 0.0) {
-        highp float equipmentIndex = (-boxId - 1.0) * 6.0 + column;
-        highp vec2 equipmentUV = vec2((mod(equipmentIndex, 256.0) + 0.5) / 256.0,
-            1.0 - (floor(equipmentIndex / 256.0) + 0.5) / 768.0);
-        return floor(texture2D(equipmentBoxes, equipmentUV) * 255.0 + 0.5);
-    }
     highp float index = (boxId - 1.0) * 6.0 + column;
     highp vec2 uv = vec2((mod(index, 256.0) + 0.5) / 256.0, 1.0 - (floor(index / 256.0) + 0.5) / gridLayout.w);
     return floor(texture2D(sceneBoxes, uv) * 255.0 + 0.5);
@@ -462,64 +453,6 @@ highp float traceBillboards(highp vec3 ray, highp float nearest, highp float thr
     }
     return result;
 }
-highp vec4 equipmentData(highp float group, highp float index) {
-    return floor(texture2D(equipmentRoots, vec2((group * 12.0 + index + 0.5) / 768.0, 0.5)) * 255.0 + 0.5);
-}
-highp vec2 equipmentPair(highp float group, highp float index) {
-    return (unpackPair(equipmentData(group, index)) - 32768.0) / 1024.0;
-}
-highp float traceEquipment(highp vec3 ray, highp float nearest, highp float threshold,
-    out highp vec3 normal, out highp vec3 albedo) {
-    normal = vec3(0.0);
-    albedo = vec3(0.0);
-    highp float best = nearest < 0.0 ? 1000000.0 : nearest;
-    highp float result = -1.0;
-    for (int group = 0; group < 64; group++) {
-        if (float(group) >= equipmentCount) break;
-        highp float g = float(group);
-        highp vec2 sphereXY = equipmentPair(g, 10.0);
-        highp vec2 sphereZR = equipmentPair(g, 11.0);
-        highp vec3 toSphere = vec3(sphereXY, sphereZR.x) - cameraOrigin;
-        highp float projection = dot(toSphere, ray);
-        highp float perpendicular = dot(toSphere, toSphere) - projection * projection;
-        if (perpendicular > sphereZR.y * sphereZR.y || projection + sphereZR.y < 0.01 ||
-            projection - sphereZR.y >= best) continue;
-        highp vec2 p0 = equipmentPair(g, 0.0);
-        highp vec2 p1 = equipmentPair(g, 1.0);
-        highp vec2 p2 = equipmentPair(g, 2.0);
-        highp vec2 p3 = equipmentPair(g, 3.0);
-        highp vec2 p4 = equipmentPair(g, 4.0);
-        highp vec2 p5 = equipmentPair(g, 5.0);
-        highp vec3 center = vec3(p0, p1.x);
-        highp vec3 ax = vec3(p1.y, p2);
-        highp vec3 ay = vec3(p3, p4.x);
-        highp vec3 az = vec3(p4.y, p5);
-        highp vec3 inverseScale = vec3(1.0) / max(vec3(dot(ax, ax), dot(ay, ay), dot(az, az)), vec3(0.000001));
-        highp vec3 relative = cameraOrigin - center;
-        highp vec3 origin = vec3(dot(relative, ax), dot(relative, ay), dot(relative, az)) * inverseScale;
-        highp vec3 direction = vec3(dot(ray, ax), dot(ray, ay), dot(ray, az)) * inverseScale;
-        highp vec2 p6 = equipmentPair(g, 6.0);
-        highp vec2 p7 = equipmentPair(g, 7.0);
-        highp vec2 p8 = equipmentPair(g, 8.0);
-        highp vec2 range = slab(origin, direction, vec3(p6, p7.x), vec3(p7.y, p8));
-        if (range.x > range.y || range.y < 0.01 || range.x >= best) continue;
-        highp vec4 parts = equipmentData(g, 9.0);
-        highp float start = parts.r + parts.g * 256.0;
-        for (int part = 0; part < 512; part++) {
-            if (float(part) >= parts.b + parts.a * 256.0) break;
-            highp vec3 candidateNormal;
-            highp vec3 candidateColor;
-            highp float hit = intersectBox(-(start + float(part) + 1.0), origin, direction, threshold,
-                vec2(max(0.01, range.x - 0.002), min(best, range.y + 0.002)), candidateNormal, candidateColor);
-            if (hit < 0.01 || hit >= best) continue;
-            best = hit;
-            result = hit;
-            normal = normalize(ax * candidateNormal.x + ay * candidateNormal.y + az * candidateNormal.z);
-            albedo = candidateColor;
-        }
-    }
-    return result;
-}
 void fragment() {
     highp vec2 screen = (UV2 * 2.0 - 1.0) * vec2(aspect, 1.0);
     highp vec3 ray = normalize(cameraForward + (cameraRight * screen.x + cameraUp * screen.y) * tanHalfFov);
@@ -535,16 +468,6 @@ void fragment() {
         distance = spriteDistance;
         albedo = spriteColor;
         normal = spriteNormal;
-        picked = 0.0;
-    }
-    highp vec3 equipmentNormal;
-    highp vec3 equipmentColor;
-    highp float equipmentDistance = traceEquipment(ray, distance, coverageThreshold(gl_FragCoord.xy), equipmentNormal, equipmentColor);
-    if (equipmentDistance >= 0.0) {
-        distance = equipmentDistance;
-        albedo = equipmentColor;
-        normal = equipmentNormal;
-        spriteDistance = -1.0;
         picked = 0.0;
     }
     highp vec3 color = mix(vec3(0.006, 0.012, 0.018), vec3(0.016, 0.026, 0.032), UV2.y);
