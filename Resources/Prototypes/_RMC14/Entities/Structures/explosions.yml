@@ -289,12 +289,12 @@
     explosion:
       total: 18000
       slope: 5.5
-      max: 150000000
+      max: 150000
     fire:
       type: RMCTileFireNapalm
-      range: 5
-      cardinalRange: 7
-      ordinalRange: 7
+      range: 8
+      cardinalRange: 11
+      ordinalRange: 11
   impactEffects:
     - AU14EffectExplosionParticleJDAM
     - AU14SmokeExplosionProofJDAM
@@ -309,7 +309,7 @@
     explosion:
     total: 13000
     slope: 4
-    max: 120000000
+    max: 120000
     impactEffects:
      - AU14EffectExplosionParticleJDAM
      - AU14SmokeExplosionProofJDAM
