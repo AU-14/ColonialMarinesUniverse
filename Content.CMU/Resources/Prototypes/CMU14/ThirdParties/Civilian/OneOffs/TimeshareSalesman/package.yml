@@ -69,8 +69,9 @@
   weight: 5
   minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false
+  ghostsCallable: true
 
 - type: startingGear
   id: AU14GearTimeSharesSalesman

@@ -574,7 +574,7 @@ namespace Content.Server.CMU14.Round
             return true;
         }
 
-        private ThirdPartyPrototype? PickWeightedThirdParty(IReadOnlyList<ThirdPartyPrototype> candidates)
+        internal ThirdPartyPrototype? PickWeightedThirdParty(IReadOnlyList<ThirdPartyPrototype> candidates)
         {
             var totalWeight = 0;
             foreach (var candidate in candidates)

@@ -16,7 +16,7 @@
   displayName: BEAR CHTORM
   announceAsSurvivors: true
   partyspawn: BEARSpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -25,7 +25,7 @@
   weight: 20
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: false
 
 - type: partySpawn
@@ -46,7 +46,7 @@
   displayName: BEAR GROZA
   announceAsSurvivors: true
   partyspawn: BEARSpawnAlt
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -55,7 +55,7 @@
   weight: 20
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: false
 
 - type: partySpawn
@@ -76,7 +76,7 @@
   displayName: BEAR SKALA
   announceAsSurvivors: true
   partyspawn: BEARSpawnAlt2
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
   entrymethod: shuttle
@@ -84,5 +84,5 @@
   weight: 20
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: false

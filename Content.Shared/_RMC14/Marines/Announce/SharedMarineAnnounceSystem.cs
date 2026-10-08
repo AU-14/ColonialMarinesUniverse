@@ -137,7 +137,12 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         if (text.Length > CharacterLimit)
             text = text[..CharacterLimit].Trim();
 
-        AnnounceSigned(args.Actor, text, name: ent.Comp.AnnounceName, faction: ResolveAnnouncementFaction(ent));
+        // CMU14: admin tablets announce under High Command
+        var author = ent.Comp.AnnounceAuthor is { } announceAuthor ? Loc.GetString(announceAuthor) : null;
+        AnnounceSigned(args.Actor, text,
+            author: author,
+            name: ent.Comp.AnnounceName,
+            faction: ResolveAnnouncementFaction(ent));
 
         ent.Comp.LastAnnouncement = time;
         Dirty(ent);
