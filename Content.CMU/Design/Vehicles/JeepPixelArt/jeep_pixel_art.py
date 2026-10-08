@@ -80,10 +80,13 @@ PAL = {
     "brass": ramp((222, 188, 98), (198, 162, 76), (172, 138, 62), (142, 112, 50), (80, 62, 26)),
     "lit": ramp((255, 252, 230), (255, 248, 214), (255, 244, 200), (250, 236, 180), (240, 224, 160)),
     "lit_red": ramp((255, 120, 96), (255, 92, 70), (240, 70, 54), (220, 56, 44), (190, 40, 32)),
+    "lit_brake": ramp((255, 196, 176), (255, 168, 146), (255, 140, 118), (255, 116, 96), (240, 90, 70)),
     "lit_amber": ramp((255, 214, 120), (255, 196, 90), (246, 176, 70), (230, 156, 56), (200, 130, 40)),
     "lens": ramp((250, 246, 222), (236, 230, 196), (226, 220, 182), (206, 200, 164), (120, 116, 96)),
     "lens_dk": ramp((206, 200, 166), (186, 180, 148), (170, 164, 134), (150, 144, 118), (90, 88, 70)),
     "lit_dim": ramp((255, 238, 186), (252, 228, 168), (246, 216, 150), (236, 200, 132), (210, 170, 100)),
+    "od_flat": ramp((110, 118, 74), (110, 118, 74), (110, 118, 74), (110, 118, 74), (34, 38, 24)),
+    "od_in_flat": ramp((80, 86, 54), (80, 86, 54), (80, 86, 54), (80, 86, 54), (30, 33, 21)),
     "rust": ramp((176, 102, 64), (146, 80, 48), (120, 64, 40), (98, 52, 32), (54, 28, 16)),
 }
 GLASS = "glass"
@@ -91,6 +94,8 @@ GLASS_TINT = (176, 206, 204, 78)
 GLASS_SHINE = (232, 244, 242, 150)
 MUD = (98, 84, 58)
 BODY_MATS = {"od", "od_seam", "frame"}
+# Materials shaded as one flat surface: no lines or highlights between pixels of the same part.
+FLAT_MATS = {"od_flat", "od_in_flat"}
 
 VARIANTS = ("cargo", "gunner", "transport")
 RSI_NAMES = {"cargo": "jeep", "gunner": "jeep_gunner", "transport": "jeep_transport"}
@@ -720,6 +725,8 @@ def hood_open(degrees=HOOD_OPEN_DEGREES):
     lid = hood_lid()
     if degrees == 0:
         return lid
+    flat = {"od": "od_flat", "od_seam": "od_in_flat", "od_in": "od_in_flat"}
+    lid = Model({k: (flat.get(mat, mat), part) for k, (mat, part) in lid.vox.items()})
     t = math.radians(degrees)
     hinge_f, hinge_z = 10.0, HOOD + 1.0
     m = Model()
@@ -818,8 +825,8 @@ def lamps(kind):
     if kind == "head":
         return headlight_lamps(lens="lit", part="lights")
     m = Model()
-    if kind == "tail":
-        m.mirror_box(-31, -31, 16, 17, 11, 12, "lit_red", "lights")
+    if kind in ("tail", "brake"):
+        m.mirror_box(-31, -31, 16, 17, 11, 12, "lit_red" if kind == "tail" else "lit_brake", "lights")
     elif kind == "signal_right":
         m.box(28, 28, 16, 16, FENDER + 1, FENDER + 1, "lit_amber", "lights")
         m.box(-31, -31, 17, 18, 14, 15, "lit_amber", "lights")
@@ -829,15 +836,33 @@ def lamps(kind):
     return m
 
 
-LIGHT_GLOW = {"lit": (255, 236, 170), "lit_red": (255, 70, 50), "lit_amber": (255, 180, 70)}
+LIGHT_GLOW = {"lit": (255, 236, 170), "lit_red": (255, 70, 50), "lit_amber": (255, 180, 70),
+              "lit_brake": (255, 84, 62)}
+# Light thrown onto the bodywork around each lamp: colour, reach in pixels, peak opacity. Brakes are
+# the tail lights burning brighter.
+LIGHT_SPILL = {"lit": ((255, 236, 180), 8, 52), "lit_red": ((255, 60, 40), 7, 64),
+               "lit_brake": ((255, 66, 44), 11, 118), "lit_amber": ((255, 168, 60), 7, 76)}
 
 
 def lights_layer(model, view, kind):
-    """Lit lamp pixels plus a soft glow around them, for an unshaded overlay layer."""
+    """Lit lamps, a subtle cast of their light over the nearby bodywork, and a soft halo, for an
+    unshaded overlay layer."""
     buf, _ = render(model.merged(lamps(kind)), view)
     col = shade(buf)
     lit = {px: (col[px], e[1]) for px, e in buf.items() if e[2] == "lights" and e[1] in LIGHT_GLOW}
     out = {}
+    for (x, y), e in buf.items():
+        if e[2] == "lights":
+            continue
+        best = None
+        for (lx, ly), (_, mat) in lit.items():
+            colour, reach, peak = LIGHT_SPILL[mat]
+            d = math.hypot(x - lx, y - ly)
+            a = round(peak * (1 - d / reach) ** 2) if d < reach else 0
+            if a and (best is None or a > best[3]):
+                best = colour + (a,)
+        if best:
+            out[(x, y)] = best
     for (x, y), (c, mat) in lit.items():
         glow = LIGHT_GLOW[mat]
         for dx in range(-3, 4):
@@ -985,9 +1010,11 @@ def shade(buf):
     top faces get a lit lip where they fold into the face below and along their west edge; the row
     above an outline on a vertical face falls into shadow; low bodywork picks up mud."""
     edge = set()
-    for (x, y), (d, _, _, _, _) in buf.items():
+    for (x, y), (d, mat, part, _, _) in buf.items():
         for dx, dy, limit in NEIGHBOURS:
             n = buf.get((x + dx, y + dy))
+            if mat in FLAT_MATS and n is not None and n[2] == part:
+                continue
             if n is None or n[0] > d + limit:
                 edge.add((x, y))
                 break
@@ -1112,6 +1139,11 @@ def split_direction(variant, view, dy):
         return {(x + ox, y + oy): c for (x, y), c in d.items()}
 
     shut, _ = render(model.merged(hood_lid()).merged(fuel_door()), view)
+    seats = {}
+    for px, (_, _, part, _, key) in full.items():
+        if part in SEAT_PARTS and seat_at(key, variant):
+            seats.setdefault(seat_at(key, variant), set()).add(px)
+
     surface = {}
     for px, (_, _, part, face, key) in shut.items():
         if part not in WHEEL_PARTS and part not in CRAYON_SKIP:
@@ -1121,6 +1153,7 @@ def split_direction(variant, view, dy):
 
     out = {k: place(v) for k, v in layers.items()}
     out["surface"] = place(surface)
+    out["seats"] = {name: set(place({p: 0 for p in pts})) for name, pts in seats.items()}
     out["wheels_frames"] = [place(f) for f in frames]
     out["hood_swing"] = [place(f) for f in swing]
 
@@ -1131,6 +1164,7 @@ def split_direction(variant, view, dy):
 
     out["fuel_door_swing"] = [door_layer(fuel_door(a)) for a in FUEL_DOOR_SWING]
     out["lights"] = place(lights_layer(model, view, "tail"))
+    out["brake_on"] = place(lights_layer(model, view, "brake"))
     out["headlights_on"] = place(lights_layer(model, view, "head"))
     out["signal_left"] = place(lights_layer(model, view, "signal_left"))
     out["signal_right"] = place(lights_layer(model, view, "signal_right"))
@@ -1387,6 +1421,25 @@ def write_crayon_map(variant, per_dir):
 CLICK_IDS = {"hood_lid": 1, "fuel_door": 2, "engine": 3, "headlights": 4, "windshield": 5, "spare": 6,
              "jerrycan": 7, "shovel": 8, "axe": 9, "wirecutter": 10, "searchlight": 11, "wheel": 12}
 OUTLINE = (255, 232, 150)
+# Seat regions in jeep space (f, r, z ranges) for outlines and click ids, per version.
+SEAT_PARTS = {"seat", "seat_back", "rear_bench", "rear_bench_back", "gunner_seat"}
+SEAT_REGIONS = {
+    "driver": ((-12, -3), (-16, -5), (8, 23)),
+    "passenger": ((-12, -3), (4, 15), (8, 23)),
+    "rear_left": ((-29, -21), (-16, -1), (8, 23)),
+    "rear_right": ((-29, -21), (0, 15), (8, 23)),
+    "gunner": ((-25, -22), (-2, 1), (9, 24)),
+}
+SEAT_IDS = {"driver": 13, "passenger": 14, "rear_left": 15, "rear_right": 16, "gunner": 17}
+
+
+def seat_at(key, variant):
+    """Which of this version's seats a voxel belongs to, or None."""
+    for name, *_ in SEATS[variant]:
+        (f0, f1), (r0, r1), (z0, z1) = SEAT_REGIONS[name]
+        if f0 <= key[0] <= f1 and r0 <= key[1] <= r1 and z0 <= key[2] <= z1:
+            return name
+    return None
 
 
 def outline(pixels):
@@ -1424,7 +1477,10 @@ def write_click_maps(variant, dy):
             buf, glass = render(click_scene(variant, v, hood), v)
             px = {}
             for (x, y), e in buf.items():
-                px[(x + SIZE // 2, y + SIZE // 2 + dy[v])] = (CLICK_IDS.get(e[2], 0), 0, 0, 255)
+                ident = CLICK_IDS.get(e[2], 0)
+                if e[2] in SEAT_PARTS and seat_at(e[4], variant):
+                    ident = SEAT_IDS[seat_at(e[4], variant)]
+                px[(x + SIZE // 2, y + SIZE // 2 + dy[v])] = (ident, 0, 0, 255)
             for (x, y), e in glass.items():
                 key = (x + SIZE // 2, y + SIZE // 2 + dy[v])
                 if key not in px or px[key][0] == 0:
@@ -1487,12 +1543,15 @@ def write_rsi(variant, dy):
     save("hood_outline", [to_image(outline(alpha(per_dir[v]["hood_closed"]))) for v in DIRS])
     save("fuel_door_outline", [to_image(outline(alpha(per_dir[v]["fuel_door_swing"][0]))) for v in DIRS])
     save("wheels_outline", [to_image(outline(alpha(per_dir[v]["wheels"]))) for v in DIRS])
+    for name, *_ in SEATS[variant]:
+        save(f"seat_{name}_outline", [to_image(outline(per_dir[v]["seats"].get(name, set()))) for v in DIRS])
     if variant == "gunner":
         save("mgturret_outline", [to_image(outline({(x, y) for x in range(SIZE) for y in range(SIZE)
                                                     if img.getpixel((x, y))[3] > 0})) for img in mg_images()],
              directions=8)
     save("lights_on", [to_image(per_dir[v]["lights"]) for v in DIRS])
     save("headlights_on", [to_image(per_dir[v]["headlights_on"]) for v in DIRS])
+    save("brake_on", [to_image(per_dir[v]["brake_on"]) for v in DIRS])
     blink = [[SIGNAL_DELAY, SIGNAL_DELAY] for _ in DIRS]
     for side in ("signal_left", "signal_right"):
         save(side, [to_image(f) for v in DIRS for f in (per_dir[v][side], {})], delays=blink)
@@ -1869,15 +1928,15 @@ def main():
         if signals is not None:
             img.alpha_composite(to_image(per[var][v]["lights"]))
             img.alpha_composite(to_image(per[var][v]["headlights_on"]))
-            if blink_on:
-                for side in signals:
-                    img.alpha_composite(to_image(per[var][v][side]))
+            for layer in signals:
+                if blink_on or not layer.startswith("signal"):
+                    img.alpha_composite(to_image(per[var][v][layer]))
         return img
 
-    cases = (None, ("signal_left", "signal_right"), ("signal_left",), ("signal_right",))
+    cases = (None, (), ("brake_on",), ("signal_left", "signal_right"), ("signal_left",), ("signal_right",))
     sheet([[night_frame("cargo", v, c) for v in DIRS] for c in cases], 3, bg=(18, 20, 26, 255)).save(
         os.path.join(PREVIEW_DIR, "jeep_lights.png"))
-    blink_frames = [sheet([[night_frame("cargo", v, c, on) for v in DIRS] for c in cases[1:]], 3,
+    blink_frames = [sheet([[night_frame("cargo", v, c, on) for v in DIRS] for c in cases[3:]], 3,
                           bg=(18, 20, 26, 255)).convert("RGB") for on in (True, False)]
     blink_frames[0].save(os.path.join(PREVIEW_DIR, "jeep_signals.gif"), save_all=True,
                          append_images=blink_frames[1:], duration=int(SIGNAL_DELAY * 1000), loop=0)

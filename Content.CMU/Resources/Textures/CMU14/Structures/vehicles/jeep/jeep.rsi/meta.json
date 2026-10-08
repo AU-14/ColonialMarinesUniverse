@@ -228,11 +228,23 @@
       "directions": 4
     },
     {
+      "name": "seat_driver_outline",
+      "directions": 4
+    },
+    {
+      "name": "seat_passenger_outline",
+      "directions": 4
+    },
+    {
       "name": "lights_on",
       "directions": 4
     },
     {
       "name": "headlights_on",
+      "directions": 4
+    },
+    {
+      "name": "brake_on",
       "directions": 4
     },
     {

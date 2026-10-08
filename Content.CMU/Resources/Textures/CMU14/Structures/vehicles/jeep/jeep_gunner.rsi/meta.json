@@ -228,6 +228,18 @@
       "directions": 4
     },
     {
+      "name": "seat_driver_outline",
+      "directions": 4
+    },
+    {
+      "name": "seat_passenger_outline",
+      "directions": 4
+    },
+    {
+      "name": "seat_gunner_outline",
+      "directions": 4
+    },
+    {
       "name": "mgturret_outline",
       "directions": 8
     },
@@ -237,6 +249,10 @@
     },
     {
       "name": "headlights_on",
+      "directions": 4
+    },
+    {
+      "name": "brake_on",
       "directions": 4
     },
     {
