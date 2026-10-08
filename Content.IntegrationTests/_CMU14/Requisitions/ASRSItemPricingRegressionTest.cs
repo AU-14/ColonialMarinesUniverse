@@ -26,7 +26,7 @@ public sealed class ASRSItemPricingRegressionTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(prices["AU14WeaponLauncherOG60"], Is.EqualTo(400));
-                Assert.That(prices["AU14BoxHEDPUPP"], Is.EqualTo(1500));
+                Assert.That(prices["CMUBoxGrenadeType6"], Is.EqualTo(1500));
                 Assert.That(prices["AU14BoxHIDPUPP"], Is.EqualTo(1300));
                 Assert.That(requisitions.Categories.SelectMany(category => category.Entries)
                     .Single(entry => entry.Crate.Id == "AU14CrateOG60").Cost, Is.EqualTo(1200));

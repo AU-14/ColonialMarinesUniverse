@@ -4,7 +4,7 @@
   voteCooldownGroup: Neomorphs
   lorePrimer: AU14PrimerThreatNeomorphs
   roundstartspawns: NeomorphsThreatSpawns
-  blacklistedgamemodes:
+  blacklistedGamemodes:
    - ColonyFall
   jobScaling: DefaultDistressScale
 
@@ -31,9 +31,9 @@
   lorePrimer: AU14PrimerThreatNeomorphs
   roundstartspawns: NeomorphsThreatSpawnsCF
   thirdpartyinterval: 9100
-  whitelistedgamemodes:
+  whitelistedGamemodes:
   - ColonyFall
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - DistressSignal
   winconditions:
   - KillAllColonistRule

@@ -170,22 +170,6 @@ public sealed partial class YautjaHuntEscapeScanDoAfterEvent : SimpleDoAfterEven
 public sealed partial class YautjaPreserveEscapeDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]
-public sealed partial class YautjaLeapDoAfterEvent : SimpleDoAfterEvent
-{
-    [DataField]
-    public NetCoordinates Coordinates;
-
-    [DataField]
-    public NetEntity? Warning;
-
-    public YautjaLeapDoAfterEvent(NetCoordinates coordinates, NetEntity? warning = null)
-    {
-        Coordinates = coordinates;
-        Warning = warning;
-    }
-}
-
-[Serializable, NetSerializable]
 public sealed partial class YautjaChainGauntletExecuteDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]

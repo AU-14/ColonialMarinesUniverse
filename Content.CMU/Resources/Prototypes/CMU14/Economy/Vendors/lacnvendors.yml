@@ -1516,8 +1516,8 @@
     - name: Tool Storage
       choices: { CMUCTToolStorage: 2 }
       entries:
-      - id: CMULACNBeltUtilityFilled
-        name: LACN utility rig (filled)
+      - id: CMULACNBeltToolbeltFilled
+        name: LACN toolbelt rig (filled)
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
@@ -1582,8 +1582,8 @@
       entries:
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
-      - id: CMULACNBeltUtilityFilled
-        name: LACN utility tools rig (filled)
+      - id: CMULACNBeltToolbeltFilled
+        name: LACN toolbelt rig (filled)
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:

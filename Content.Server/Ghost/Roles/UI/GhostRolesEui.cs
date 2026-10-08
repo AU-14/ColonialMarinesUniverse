@@ -1,4 +1,5 @@
 using Content.Server.EUI;
+using Content.Server.CMU14.Ops.ThirdParty; // CMU14
 using Content.Server.CMU14.Threats;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.Eui;
@@ -10,16 +11,20 @@ namespace Content.Server.Ghost.Roles.UI
     {
         private readonly GhostRoleSystem _ghostRoleSystem;
         private readonly ForceInterestSystem _forceInterest;
+        private readonly GhostThirdPartyCallSystem _ghostThirdPartyCall; // CMU14
 
         public GhostRolesEui()
         {
-            _ghostRoleSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<GhostRoleSystem>();
-            _forceInterest = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<ForceInterestSystem>();
+            var systems = IoCManager.Resolve<IEntitySystemManager>();
+            _ghostRoleSystem = systems.GetEntitySystem<GhostRoleSystem>();
+            _forceInterest = systems.GetEntitySystem<ForceInterestSystem>();
+            _ghostThirdPartyCall = systems.GetEntitySystem<GhostThirdPartyCallSystem>(); // CMU14
         }
 
         public override GhostRolesEuiState GetNewState()
         {
-            return new(_ghostRoleSystem.GetGhostRolesInfo(Player), _forceInterest.GetForces(Player));
+            return new(_ghostRoleSystem.GetGhostRolesInfo(Player), _forceInterest.GetForces(Player),
+                _ghostThirdPartyCall.GetState()); // CMU14
         }
 
         public override void HandleMessage(EuiMessageBase msg)
@@ -30,6 +35,9 @@ namespace Content.Server.Ghost.Roles.UI
             {
                 case SetForceInterestMessage interest:
                     _forceInterest.SetInterest(Player, interest.Identifier, interest.Interested);
+                    break;
+                case GhostThirdPartyCallMessage call: // CMU14
+                    _ghostThirdPartyCall.RequestCall(Player);
                     break;
                 case RequestGhostRoleMessage req:
                     _ghostRoleSystem.Request(Player, req.Identifier);

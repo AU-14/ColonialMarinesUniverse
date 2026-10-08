@@ -9,6 +9,7 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Mind;
+using Content.Server.Preferences.Managers;
 using Content.Server.Station.Systems;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
@@ -27,6 +28,7 @@ using Content.Shared.CMU14.Round;
 using Content.Shared.CMU14.Round.Roles;
 using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking;
+using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -356,6 +358,11 @@ public sealed class ForceOnForceGameplayTest : GameTest
     public async Task RespawnsStayOnTheirOriginalSideUntilTheRoundResets(string faction, RoundJobSide own, RoundJobSide enemy)
     {
         var map = await Pair.CreateTestMap();
+        var prefMan = Server.ResolveDependency<IServerPreferencesManager>();
+        var originalProfile = prefMan.GetPreferences(ServerSession!.UserId).Characters[0];
+        await Server.WaitPost(() => prefMan.SetProfile(ServerSession!.UserId, 0,
+            ((HumanoidCharacterProfile) originalProfile).WithSex(Sex.Male).WithAge(25)
+                .WithHeight("5'10\"").WithWeight(160)).Wait());
         await Server.WaitAssertion(() =>
         {
             var ticker = Server.System<GameTicker>();
@@ -391,6 +398,8 @@ public sealed class ForceOnForceGameplayTest : GameTest
             Assert.That(respawn.HasLockedSide(player), Is.False);
             Assert.That(respawn.CanJoinSide(player, enemy), Is.True, "a new round allows a fresh choice");
         });
+
+        await Server.WaitPost(() => prefMan.SetProfile(ServerSession!.UserId, 0, originalProfile).Wait());
     }
 
     [TestCase(false)]

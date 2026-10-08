@@ -162,7 +162,7 @@ public static class ThreatVoteSelection
         int playerCount)
         => ThreatVoteSelection.IsThreatAllowed(
             threat.BlacklistedGamemodes,
-            threat.whitelistedgamemodes,
+            threat.WhitelistedGamemodes,
             threat.MinPlayers,
             threat.MaxPlayers,
             threat.BlacklistedPlatoons,

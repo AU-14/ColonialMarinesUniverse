@@ -20,7 +20,7 @@
   weight: 20
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 4
+  ghostsNeeded: 4
   roundstart: false
 
 - type: partySpawn
@@ -42,7 +42,7 @@
   weight: 10
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false
 
 - type: thirdParty
@@ -51,10 +51,10 @@
   displayName: UPP Line Infantry (Survivors)
   entrymethod: ground
   weight: 5
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
   announcearrival: ''
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - colonyfall
