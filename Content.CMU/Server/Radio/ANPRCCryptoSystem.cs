@@ -18,6 +18,7 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
 
     private readonly Dictionary<string, int> _generation = new();
 
@@ -293,6 +294,24 @@ public sealed partial class ANPRCCryptoSystem : EntitySystem
         RaiseLocalEvent(anprc, new ANPRCCryptoChangedEvent());
 
         return true;
+    }
+
+    /// <summary>
+    ///     Keys an unkeyed card to a side at that side's current generation, as a fresh issue from
+    ///     the signal section would be, and tells the set it sits in.
+    /// </summary>
+    public void KeyFillCard(Entity<ANPRCFillCardComponent> card, string faction, string designation)
+    {
+        card.Comp.Faction = faction;
+        card.Comp.Designation = designation;
+        card.Comp.Generation = GetGeneration(faction);
+        Dirty(card);
+
+        if (_container.TryGetContainingContainer(card.Owner, out var container) &&
+            container.ID == FillSlotId)
+        {
+            RaiseLocalEvent(container.Owner, new ANPRCCryptoChangedEvent());
+        }
     }
 
     public string GetFillFaction(EntityUid anprc)

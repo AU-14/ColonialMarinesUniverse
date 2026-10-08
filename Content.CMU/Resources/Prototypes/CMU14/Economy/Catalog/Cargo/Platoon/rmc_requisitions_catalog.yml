@@ -109,6 +109,12 @@
         crate: RMCCrateFoodIngredients
     - name: Gear
       entries:
+      - cost: 300
+        crate: ANPRCFillCardResupplyCrate
+      - cost: 1500
+        crate: ANPRCRadioResupplyCrate
+      - cost: 2500
+        crate: AU14CrateMastAntennaHead
       - cost: 1200
         crate: AU14CrateTacticalMonocular
       - cost: 1700

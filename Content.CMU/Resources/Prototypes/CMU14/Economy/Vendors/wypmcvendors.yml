@@ -692,6 +692,12 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
+      - id: ANPRC117GRadioIssued
+        amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 1
       - id: ArmorHelmetPMCFieldOfficer
         amount: 3
       - id: RMCExplosiveBreachingCharge
