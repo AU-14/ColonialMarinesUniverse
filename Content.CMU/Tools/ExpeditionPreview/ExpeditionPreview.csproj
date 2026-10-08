@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Shared/Expeditions/CMUExpeditionCrashes.cs;../../Shared/Expeditions/CMUExpeditionWreckBlueprints.cs;../../Shared/Expeditions/CMUExpeditionMuleBlueprint.cs" Link="%(Filename)%(Extension)" />
+    <Compile Include="../../Shared/Expeditions/CMUExpeditionPlan.cs;../../Shared/Expeditions/CMUExpeditionGenerator.cs;../../Shared/Expeditions/CMUExpeditionNavigation.cs;../../Shared/Expeditions/CMUExpeditionEnvironment.cs;../../Shared/Expeditions/CMUExpeditionShoreline.cs" Link="%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

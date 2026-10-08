@@ -26,6 +26,9 @@ public sealed partial class CameraMouseRotationSystem : EntitySystem
     [Dependency] private SharedMoverController _mover = default!;
 
     private bool _rotating;
+    private bool _externalMouse;
+    private bool _relativeLook;
+    private EntityUid? _lookEntity;
     private bool _pendingSync;
     private bool _rotationChanged;
     private bool _awaitingServerRotation;
@@ -40,7 +43,10 @@ public sealed partial class CameraMouseRotationSystem : EntitySystem
 
         CommandBinds.Builder
             .Bind(ContentKeyFunctions.RotateCameraWithMouse,
-                InputCmdHandler.FromDelegate(_ => StartRotating(), _ => StopRotating(), handle: true))
+                InputCmdHandler.FromDelegate(_ => StartRotating(), _ =>
+                {
+                    if (!_externalMouse) StopRotating();
+                }, handle: true))
             .Register<CameraMouseRotationSystem>();
 
         _placement.PlacementChanged += OnPlacementChanged;
@@ -67,7 +73,7 @@ public sealed partial class CameraMouseRotationSystem : EntitySystem
             return;
         }
 
-        if (_rotating)
+        if (_rotating && !_externalMouse)
         {
             var mouse = _input.MouseScreenPosition;
             if (!mouse.IsValid)
@@ -81,7 +87,7 @@ public sealed partial class CameraMouseRotationSystem : EntitySystem
             ApplyMouseDelta(relativeX);
         }
 
-        if (_rotating || _awaitingServerRotation || _timing.CurTime < _releaseProtectionUntil)
+        if (!_relativeLook && (_rotating || _awaitingServerRotation || _timing.CurTime < _releaseProtectionUntil))
         {
             if (_player.LocalEntity is not { } local ||
                 !_mover.SetCameraRotation(local, _targetRotation, immediate: true))
@@ -105,7 +111,8 @@ public sealed partial class CameraMouseRotationSystem : EntitySystem
             TrySyncRotation();
     }
 
-    private void StartRotating()
+    /// <summary>Also used by the local first-person viewport's look gesture.</summary>
+    public void StartRotating()
     {
         if (_rotating ||
             _player.LocalEntity is not { } local ||
@@ -119,6 +126,8 @@ public sealed partial class CameraMouseRotationSystem : EntitySystem
         if (!mouse.IsValid || !_clyde.IsFocused)
             return;
 
+        _relativeLook = false;
+        _lookEntity = local;
         _targetRotation = mover.TargetRelativeRotation;
         _rotationChanged = false;
         _awaitingServerRotation = false;
@@ -127,8 +136,9 @@ public sealed partial class CameraMouseRotationSystem : EntitySystem
         _rotating = true;
     }
 
-    private void StopRotating()
+    public void StopRotating()
     {
+        _externalMouse = false;
         if (!_rotating)
             return;
 
@@ -141,10 +151,34 @@ public sealed partial class CameraMouseRotationSystem : EntitySystem
         }
     }
 
+    public void StartRelativeLook()
+    {
+        StartRotating();
+        _externalMouse = _rotating;
+        _relativeLook = _externalMouse;
+    }
+
+    public void RelativeLook(float pixels)
+    {
+        if (!_externalMouse) return;
+        _relativeLook = true;
+        _lookEntity = _player.LocalEntity;
+        ApplyMouseDelta(pixels);
+    }
+
+    /// <summary>Newest local look sample, independent of network state rollback between prediction ticks.</summary>
+    public bool TryGetRelativeLookRotation(EntityUid actor, out Angle rotation)
+    {
+        rotation = _targetRotation;
+        return _relativeLook && _lookEntity == actor && _player.LocalEntity == actor && !_mover.CameraRotationLocked &&
+            (_rotating || _awaitingServerRotation || _timing.CurTime < _releaseProtectionUntil);
+    }
+
     private void ApplyMouseDelta(float relativeX)
     {
         if (!_rotating ||
             relativeX == 0f ||
+            _mover.CameraRotationLocked ||
             _player.LocalEntity is not { } local ||
             !HasComp<InputMoverComponent>(local))
         {
@@ -156,7 +190,9 @@ public sealed partial class CameraMouseRotationSystem : EntitySystem
         var delta = Angle.FromDegrees(-relativeX * DegreesPerPixel);
         _targetRotation = (_targetRotation + delta).Reduced();
         _rotationChanged = true;
-        if (!_mover.SetCameraRotation(local, _targetRotation, immediate: true))
+        // Relative first-person look is presentation on render frames. Its predictive
+        // event applies the same heading to movement on the next simulation tick.
+        if (!_externalMouse && !_mover.SetCameraRotation(local, _targetRotation, immediate: true))
         {
             StopRotating();
             return;

@@ -4,9 +4,9 @@
   roundstartspawns: wendigoParty
   spawnExtraVoteMembers: false
   thirdpartyinterval: 9100
-  whitelistedgamemodes:
+  whitelistedGamemodes:
   - ColonyFall
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - DistressSignal
   winconditions:
   - KillAllColonistRule
