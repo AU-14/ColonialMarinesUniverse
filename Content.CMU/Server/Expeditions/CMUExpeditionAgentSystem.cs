@@ -295,13 +295,24 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var separation = Vector2.Distance(_transform.GetWorldPosition(uid), _transform.GetWorldPosition(seen.Value));
         if (separation > agent.FireRange)
         {
-            ClearCover(agent);
+            if (agent.State != CMUExpeditionAgentState.Investigate)
+                ClearCover(agent);
             agent.State = CMUExpeditionAgentState.Investigate;
-            Move(uid, agent.LastSeen!.Value);
+            // Close to a firing distance instead of budgeting a danger route all the way onto
+            // a visible enemy's body. A guard just outside rifle range only needs a short advance.
+            var contact = _transform.ToCoordinates(transform.Coordinates.EntityId, _transform.ToMapCoordinates(agent.LastSeen!.Value));
+            var advance = Vector2.Normalize(contact.Position - transform.Coordinates.Position) *
+                (separation - Math.Max(1, agent.FireRange - 1.5f));
+            var destination = transform.Coordinates.Offset(advance);
+            if (agent.RouteDestination is { } previous && _transform.InRange(previous, destination, 1))
+                destination = previous;
+            Move(uid, destination);
             return;
         }
 
-        if (agent.CoverAnchor == null && now >= agent.NextReposition)
+        // React from the current firing stance before starting a longer cover move. Hits and
+        // suppression still take priority above; otherwise dense cover must not delay every opening shot.
+        if (agent.CoverAnchor == null && now >= agent.NextReposition && now >= agent.FirstContact + agent.BurstDuration)
         {
             agent.NextReposition = now + agent.RepositionCooldown;
             if (FindPosition(uid, agent, transform, false) is { } position)
@@ -427,10 +438,14 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         // stance near the destination has the required firing cone, not at an arbitrary tile centre.
         var clearStance = precise && agent.LastSeen is { } threat &&
             _transform.InRange(transform.Coordinates, destination, 0.7f) &&
-            FiringLaneClear(uid, transform.Coordinates, threat);
+            _transform.InRange(transform.Coordinates, threat, agent.FireRange - 0.25f) &&
+            _guns.TryGetGun(uid, out var stanceGun) && SafeShot(uid, agent, stanceGun, threat);
         if (clearStance || _transform.InRange(transform.Coordinates, destination, precise ? 0.12f : ArrivalRange))
         {
             _steering.Unregister(uid);
+            // Cancel travel momentum at a deliberate cover stop; otherwise a short arrival radius
+            // can leave the NPC coasting out of the shelter after its steering has been removed.
+            _physics.SetLinearVelocity(uid, Vector2.Zero);
             agent.CoverDestination = null;
             agent.Route.Clear();
             agent.RouteDestination = null;
@@ -471,7 +486,9 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
         if (TryComp<CMUExpeditionAgentComponent>(uid, out var agent) && agent.RouteDestination == destination)
         {
-            while (agent.Route.TryPeek(out var point) && _transform.InRange(Transform(uid).Coordinates, point, 0.2f))
+            // Use the same arrival radius as the steering stop below. A smaller dequeue radius
+            // strands a route between the two thresholds with no active steering.
+            while (agent.Route.TryPeek(out var point) && _transform.InRange(Transform(uid).Coordinates, point, ArrivalRange))
                 agent.Route.Dequeue();
             if (agent.Route.TryPeek(out var waypoint))
                 destination = waypoint;

@@ -15,7 +15,7 @@ using Robust.Shared.Map;
 
 namespace Content.IntegrationTests._CMU14.Expeditions;
 
-[TestFixture]
+[TestFixture, NonParallelizable]
 public sealed partial class CMUExpeditionAdvancedAgentTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Dirty = true };
@@ -69,6 +69,7 @@ public sealed partial class CMUExpeditionAdvancedAgentTest : GameTest
         var heldAngle = false;
         var withdrew = false;
         var initiative = 0f;
+        var trace = new List<string>();
         for (var sample = 0; sample < 60; sample++)
         {
             await Pair.RunSeconds(0.15f);
@@ -78,11 +79,12 @@ public sealed partial class CMUExpeditionAdvancedAgentTest : GameTest
                 heldAngle |= agent.State == CMUExpeditionAgentState.HoldAngle;
                 withdrew |= agent.State == CMUExpeditionAgentState.Withdraw;
                 initiative = agent.Initiative;
+                trace.Add($"{sample}: {agent.State}, pos={SEntMan.GetComponent<TransformComponent>(guard).Coordinates}, anchor={agent.CoverAnchor}, peek={agent.PeekPosition}, dest={agent.CoverDestination}, route={agent.Route.Count}, shots={agent.ShotsFired}, initiative={agent.Initiative}");
             });
         }
         await Server.WaitAssertion(() =>
         {
-            Assert.That(heldAngle, Is.EqualTo(presses), "A confident raider follows up from the angle; a cautious sentry returns after the short volley.");
+            Assert.That(heldAngle, Is.EqualTo(presses), $"A confident raider follows up from the angle; a cautious sentry returns after the short volley.\n{string.Join(Environment.NewLine, trace)}");
             Assert.That(withdrew, Is.True, "Even aggressive soldiers must eventually return to cover.");
         });
         for (var hit = 0; hit < 3; hit++)

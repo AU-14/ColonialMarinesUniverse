@@ -59,7 +59,12 @@ public sealed partial class CMUExpeditionAgentSystem
             cost = 0;
             if (agent.LastSeen is { } threat && _timing.CurTime < agent.ForgetAt &&
                 RayClear(uid, _transform.ToMapCoordinates(point), _transform.ToMapCoordinates(threat)))
-                cost += (2 + agent.Stress * 3 + (1 - agent.Aggression)) * agent.LearnedDangerCost;
+            {
+                // A radio snapshot is an uncertain firing lane. Discount that estimate while
+                // investigating so the bounded search can close contact instead of circling it.
+                var confidence = agent.State == CMUExpeditionAgentState.Investigate && agent.ContactFromRadio ? 0.25f : 1;
+                cost += (2 + agent.Stress * 3 + (1 - agent.Aggression)) * agent.LearnedDangerCost * confidence;
+            }
             foreach (var other in agent.VisibleThreats)
             {
                 if (agent.LastSeen is { } current && _transform.InRange(current, other, 1))

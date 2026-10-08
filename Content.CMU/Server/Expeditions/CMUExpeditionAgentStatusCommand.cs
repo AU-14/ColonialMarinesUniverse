@@ -40,7 +40,7 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
                 ("entity", EntityManager.GetNetEntity(uid)), ("state", agent.State.ToString()),
                 ("goal", agent.Goal.ToString()), ("action", agent.Action?.ToString() ?? "-"), ("squad", agent.Squad),
                 ("reloads", agent.Reloads), ("grenades", agent.GrenadesThrown), ("rescues", agent.Rescues), ("flanks", agent.Flanks),
-                ("reports", agent.ReportsReceived), ("failures", agent.FailedPlans),
+                ("reports", agent.ReportsReceived), ("failures", agent.FailedPlans), ("fireCheck", agent.LastFireCheck),
                 ("routeCells", agent.LastRouteCells), ("routeMs", agent.LastRouteMilliseconds.ToString("F2")),
                 ("maxSearchMs", agent.MaxSearchMilliseconds.ToString("F2")),
                 ("disposition", agent.Disposition.ToString()), ("emotion", agent.Emotion.ToString()),

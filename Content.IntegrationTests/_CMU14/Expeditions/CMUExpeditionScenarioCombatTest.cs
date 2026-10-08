@@ -15,7 +15,7 @@ using Robust.Shared.Map;
 
 namespace Content.IntegrationTests._CMU14.Expeditions;
 
-[TestFixture]
+[TestFixture, NonParallelizable]
 public sealed class CMUExpeditionScenarioCombatTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Dirty = true, Connected = true };
@@ -86,7 +86,7 @@ public sealed class CMUExpeditionScenarioCombatTest : GameTest
                     Assert.That(SGameTiming.CurTime - agent.ActionStarted, Is.LessThan(TimeSpan.FromSeconds(11)), "Long travel must time out and replan.");
                 maximumTravel = Math.Max(maximumTravel, Vector2.Distance(initial.Position, SEntMan.GetComponent<TransformComponent>(player).Coordinates.Position));
                 if (sample % 20 == 0)
-                    trace.Add($"{agent.State}/{agent.Action}, guard={position}, ammo={Ammo(rifle)}, search={agent.LastSearchMilliseconds:F2}ms, route={agent.LastRouteMilliseconds:F2}ms");
+                    trace.Add($"{agent.State}/{agent.Action}, guard={position}, ammo={Ammo(rifle)}, fire={agent.LastFireCheck}, anchor={agent.CoverAnchor}, peek={agent.PeekPosition}, search={agent.LastSearchMilliseconds:F2}ms, route={agent.LastRouteMilliseconds:F2}ms");
             });
         }
         await Server.WaitAssertion(() =>

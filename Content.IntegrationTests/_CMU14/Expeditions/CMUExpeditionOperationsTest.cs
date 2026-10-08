@@ -1,6 +1,9 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Expeditions;
+using Content.Server.CMU14.Fighter;
+using Content.Shared.CMU14.Fighter;
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Entrenching;
 using Content.Shared.CMU14.Expeditions;
 using Robust.Shared.GameObjects;
@@ -8,7 +11,7 @@ using Robust.Shared.Map;
 
 namespace Content.IntegrationTests._CMU14.Expeditions;
 
-[TestFixture]
+[TestFixture, NonParallelizable]
 public sealed class CMUExpeditionOperationsTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Dirty = true };
@@ -16,7 +19,7 @@ public sealed class CMUExpeditionOperationsTest : GameTest
     [Test]
     public async Task AutomaticLandingZoneAndGuardOrderBuildPhysicalCover()
     {
-        EntityUid map = default, guard = default;
+        EntityUid map = default, guard = default, fighter = default, pilot = default;
         EntityCoordinates destination = default;
         await Server.WaitAssertion(() =>
         {
@@ -49,6 +52,30 @@ public sealed class CMUExpeditionOperationsTest : GameTest
             while (built.MoveNext(out _, out _, out var xform))
                 found |= xform.MapUid == map && Vector2.Distance(xform.LocalPosition, destination.Position) < 3;
             Assert.That(found, Is.True, $"Dig and build a real native mound: state={agent.State}, tool={agent.WorkItem}, action={agent.WorkDoAfter}.");
+            SEntMan.DeleteEntity(guard);
+            // Move the aircraft test away from the newly built barricade.
+            var site = destination.Offset(new Vector2(-8, -4));
+            fighter = SEntMan.SpawnEntity("CMUFighterGround", site);
+            pilot = SEntMan.SpawnEntity("MobHuman", site.Offset(new Vector2(2.4f, 0)));
+            SEntMan.EnsureComponent<MarineComponent>(pilot).Faction = "govfor";
+            var flights = Server.System<FighterSystem>();
+            Assert.That(flights.TryLaunchExpedition(pilot, map), Is.False, "An unseated user cannot launch an aircraft.");
+            Assert.That(flights.TryBoardGround(pilot, fighter), Is.True);
+        });
+        await Pair.RunSeconds(0.5f);
+        await Server.WaitAssertion(() =>
+        {
+            var ground = SEntMan.GetComponent<FighterGroundComponent>(fighter);
+            var flights = Server.System<FighterSystem>();
+            var launch = SEntMan.GetComponent<TransformComponent>(fighter).Coordinates;
+            Assert.That(flights.TryLaunchExpedition(pilot, map), Is.True);
+            var flight = SEntMan.GetComponent<FighterAircraftComponent>(ground.Aircraft!.Value);
+            Assert.That(flight.TerrainMap, Is.EqualTo(map));
+            Assert.That(flight.ViewMap, Is.EqualTo(SEntMan.GetComponent<CMUExpeditionMapComponent>(map).UpperMaps[0]));
+            Assert.That(flight.GroundState, Is.EqualTo(FighterGroundState.TakingOff));
+            Assert.That(ground.LaunchCoordinates, Is.EqualTo(launch), "Changing theater must preserve the physical return site.");
+            Assert.That(flights.TryLaunchExpedition(pilot, map), Is.False, "No theater changes during takeoff.");
+            SEntMan.DeleteEntity(fighter);
             SEntMan.DeleteEntity(map);
         });
     }

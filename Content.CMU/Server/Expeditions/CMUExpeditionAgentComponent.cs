@@ -40,6 +40,7 @@ public sealed partial class CMUExpeditionAgentComponent : Component
     public TimeSpan BurstEnd;
     public TimeSpan MoveUntil;
     public int ShotsFired;
+    public string LastFireCheck = "idle";
     public float LastDamage;
     public TimeSpan SuppressedUntil;
     public TimeSpan NextSuppressionResponse;

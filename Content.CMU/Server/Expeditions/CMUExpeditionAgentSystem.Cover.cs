@@ -7,6 +7,7 @@ using Content.Shared.NPC.Components;
 using Content.Shared.Physics;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Systems;
 
 namespace Content.Server.CMU14.Expeditions;
@@ -24,9 +25,14 @@ public sealed partial class CMUExpeditionAgentSystem
         var location = _transform.ToMapCoordinates(point);
         // Rays starting inside a wall do not report an entry hit. Test the body footprint instead.
         var bounds = new Box2Rotated(Box2.CenteredAround(location.Position, new Vector2(0.58f)), Angle.Zero);
-        clear = !_physics.GetCollidingEntities(location.MapId, bounds).Any(body => body.Owner != uid &&
-            !HasComp<NpcFactionMemberComponent>(body) && body.Comp.CanCollide &&
-            (body.Comp.CollisionLayer & (int) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable)) != 0);
+        var fixtures = new HashSet<FixtureProxy>();
+        _lookup.GetFixturesIntersecting(location.MapId, bounds, fixtures, new FixtureQueryArgs(new QueryFilter
+        {
+            LayerBits = 0,
+            MaskBits = (long) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable),
+            Flags = QueryFlags.Dynamic | QueryFlags.Static,
+        }));
+        clear = !fixtures.Any(fixture => fixture.Entity != uid && !HasComp<NpcFactionMemberComponent>(fixture.Entity));
         _bodyClearCache[point] = clear;
         return clear;
     }
@@ -155,7 +161,8 @@ public sealed partial class CMUExpeditionAgentSystem
             else if (!retreat)
             {
                 var distance = Vector2.Distance(_transform.ToMapCoordinates(candidate.Position).Position, threatPosition);
-                if (distance >= agent.MinimumFireRange && distance <= agent.FireRange &&
+                // Leave room for the target's movement and the body's sub-tile arrival offset.
+                if (distance >= agent.MinimumFireRange && distance <= agent.FireRange - 0.75f &&
                     FiringLaneClear(uid, candidate.Position, threat))
                 {
                     var exposure = 0f;

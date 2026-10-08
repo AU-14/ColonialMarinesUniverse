@@ -33,6 +33,11 @@ public sealed partial class CMUExpeditionAgentCommand : LocalizedEntityCommands
             return;
         }
         var squad = expedition.NextSquad++;
+        var occupied = new List<Vector2>();
+        var existing = EntityManager.EntityQueryEnumerator<CMUExpeditionAgentComponent, TransformComponent>();
+        while (existing.MoveNext(out _, out var agent, out var transform))
+            if (transform.MapUid == uid && agent.State != CMUExpeditionAgentState.Disabled)
+                occupied.Add(transform.LocalPosition);
         var plan = expedition.Plan;
         var positions = new List<EntityCoordinates>();
         for (var radius = 4; radius <= 12 && positions.Count < count; radius += 3)
@@ -51,6 +56,8 @@ public sealed partial class CMUExpeditionAgentCommand : LocalizedEntityCommands
             foreach (var fire in plan.FirePockets)
                 safe &= Math.Abs(px - fire.X) > 3 || Math.Abs(py - fire.Y) > 3;
             var coordinates = new EntityCoordinates(uid, new Vector2(px + 0.5f, py + 0.5f));
+            foreach (var position in occupied)
+                safe &= Vector2.DistanceSquared(position, coordinates.Position) >= 2;
             if (safe && !positions.Contains(coordinates))
                 positions.Add(coordinates);
         }
@@ -58,7 +65,9 @@ public sealed partial class CMUExpeditionAgentCommand : LocalizedEntityCommands
         for (var i = 0; i < positions.Count; i++)
         {
             var guard = EntityManager.SpawnEntity(profiles[i % profiles.Length], positions[i]);
-            EntityManager.GetComponent<CMUExpeditionAgentComponent>(guard).Squad = squad;
+            var agent = EntityManager.GetComponent<CMUExpeditionAgentComponent>(guard);
+            agent.Squad = squad;
+            agent.Entrench = true;
         }
         expedition.GuardsSpawned = positions.Count > 0;
         shell.WriteLine(Loc.GetString("cmu-expedition-ai-spawned", ("count", positions.Count)));

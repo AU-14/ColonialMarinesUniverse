@@ -23,7 +23,10 @@ public sealed partial class CMUExpeditionAgentSystem
             if (status == DoAfterStatus.Running)
                 return true;
             agent.WorkDoAfter = null;
-            if (status == DoAfterStatus.Finished && agent.WorkBuild)
+            var nearby = new HashSet<EntityUid>();
+            var location = _transform.GetMapCoordinates(uid);
+            _lookup.GetEntitiesInRange(location.MapId, location.Position, 1.8f, nearby);
+            if (agent.WorkBuild && nearby.Any(item => HasComp<DirtMoundComponent>(item) || HasComp<BarricadeComponent>(item)))
             {
                 agent.Fortifications++;
                 agent.Entrench = false;

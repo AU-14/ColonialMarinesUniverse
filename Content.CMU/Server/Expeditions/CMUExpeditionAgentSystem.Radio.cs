@@ -82,7 +82,7 @@ public sealed partial class CMUExpeditionAgentSystem
             now >= agent.RadioObservedAt + agent.MemoryDuration || agent.Home is not { } home ||
             !_transform.InRange(home, report, agent.LeashRange))
             return;
-        if (agent.RadioTarget is { } target && IsFriendly(uid, target))
+        if (agent.RadioTarget is { } target && !AcceptOrderedContact(uid, agent, target))
             return;
         if (agent.Target != agent.RadioTarget && agent.Action != null)
             CancelPlan(uid, agent, false);

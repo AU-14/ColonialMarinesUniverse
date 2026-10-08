@@ -32,6 +32,10 @@ public sealed partial class CMUExpeditionAgentSystem
             factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)) && !IsFriendly(uid, other));
     }
 
+    private bool AcceptOrderedContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target) =>
+        !IsFriendly(uid, target) && (agent.TargetFactions.Count == 0 ||
+            TryComp<NpcFactionMemberComponent>(target, out var member) && member.Factions.Any(f => agent.TargetFactions.Contains(f.Id)));
+
     public bool OrderPosition(EntityUid uid, EntityCoordinates destination, bool entrench)
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) ||

@@ -2,6 +2,7 @@ using System.Numerics;
 using Content.Server.CMU14.Expeditions;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.CMU14.Expeditions;
+using Content.Shared._RMC14.Explosion;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage.Components;
 using Content.Shared.Inventory;
@@ -76,11 +77,13 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
     [Test]
     public async Task GrenadeRechecksFriendsBeforePrimingAndThrowsAFinitePhysicalItem()
     {
-        EntityUid map = default, guard = default, enemy = default, grenade = default, ally = default;
+        EntityUid map = default, guard = default, enemy = default, second = default, grenade = default, ally = default;
+        EntityCoordinates contact = default;
         await Server.WaitAssertion(() =>
         {
             (map, guard, enemy) = Arena("CMUExpeditionScavenger");
-            var second = SEntMan.SpawnEntity("CMMobHuman", SEntMan.GetComponent<TransformComponent>(enemy).Coordinates.Offset(new Vector2(0, -1)));
+            contact = SEntMan.GetComponent<TransformComponent>(enemy).Coordinates;
+            second = SEntMan.SpawnEntity("CMMobHuman", contact.Offset(new Vector2(0, -1)));
             SEntMan.AddComponent<GodmodeComponent>(second);
             Server.System<NpcFactionSystem>().AddFaction(second, "GOVFOR");
             grenade = Stored(guard).Single(item => SEntMan.TryGetComponent<CMUExpeditionGrenadeComponent>(item, out var kind) && !kind.Smoke);
@@ -98,6 +101,8 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             Assert.That(SEntMan.HasComponent<ActiveTimerTriggerComponent>(grenade), Is.False, "A buddy entering the blast area during preparation cancels the throw before priming.");
             Assert.That(SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).GrenadesThrown, Is.Zero);
             SEntMan.DeleteEntity(ally);
+            SEntMan.DeleteEntity(enemy);
+            SEntMan.DeleteEntity(second);
         });
         await Pair.RunSeconds(15);
         await Server.WaitAssertion(() =>
@@ -106,7 +111,15 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
                 "An interrupted opening decision must not become rapid grenade retries.");
         });
         await Pair.RunSeconds(20);
-        await Server.WaitAssertion(() => SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).RepeatedPeekHits = 2);
+        await Server.WaitAssertion(() =>
+        {
+            foreach (var offset in new[] { Vector2.Zero, new Vector2(0, -1) })
+            {
+                var hostile = SEntMan.SpawnEntity("CMMobHuman", contact.Offset(offset));
+                SEntMan.AddComponent<GodmodeComponent>(hostile);
+                Server.System<NpcFactionSystem>().AddFaction(hostile, "GOVFOR");
+            }
+        });
         var thrown = false;
         for (var i = 0; i < 75 && !thrown; i++)
         {
@@ -126,6 +139,53 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
         {
             Assert.That(Server.System<SharedTransformSystem>().InRange(
                 SEntMan.GetComponent<TransformComponent>(guard).Coordinates, SEntMan.GetComponent<TransformComponent>(grenade).Coordinates, 2), Is.False);
+            SEntMan.DeleteEntity(map);
+        });
+    }
+
+    [Test]
+    public async Task SquadLimitsOpeningGrenadesAndDoesNotChainThrows()
+    {
+        EntityUid map = default;
+        var guards = new List<EntityUid>();
+        await Server.WaitAssertion(() =>
+        {
+            var arena = Arena("CMUExpeditionScavenger");
+            map = arena.Map;
+            guards.Add(arena.Guard);
+            var origin = SEntMan.GetComponent<TransformComponent>(arena.Guard).Coordinates;
+            guards.Add(SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(0, -2))));
+            guards.Add(SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(0, -4))));
+            foreach (var guard in guards)
+            {
+                SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).Squad = 7;
+                SEntMan.AddComponent<GodmodeComponent>(guard);
+                SEntMan.RemoveComponent<StunOnExplosionReceivedComponent>(guard);
+            }
+            // Keep an enduring contact for the cooldown observation. Native explosion stun
+            // still uses legacy status IDs that the generic godmode handler cannot resolve.
+            SEntMan.RemoveComponent<StunOnExplosionReceivedComponent>(arena.Enemy);
+            var second = SEntMan.SpawnEntity("CMMobHuman",
+                SEntMan.GetComponent<TransformComponent>(arena.Enemy).Coordinates.Offset(new Vector2(0, -1)));
+            SEntMan.AddComponent<GodmodeComponent>(second);
+            SEntMan.RemoveComponent<StunOnExplosionReceivedComponent>(second);
+            Server.System<NpcFactionSystem>().AddFaction(second, "GOVFOR");
+        });
+        for (var sample = 0; sample < 150; sample++)
+        {
+            await Pair.RunSeconds(0.2f);
+            await Server.WaitAssertion(() =>
+            {
+                var agents = guards.Select(g => SEntMan.GetComponent<CMUExpeditionAgentComponent>(g)).ToArray();
+                Assert.That(agents.Count(a => a.Action == CMUTacticalAction.ThrowGrenade), Is.LessThanOrEqualTo(2));
+                Assert.That(agents.Sum(a => a.GrenadesThrown), Is.LessThanOrEqualTo(2),
+                    "A third equipped guard must respect the squad cooldown after the opening pair throws.");
+            });
+        }
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(guards.Sum(g => SEntMan.GetComponent<CMUExpeditionAgentComponent>(g).GrenadesThrown), Is.EqualTo(2),
+                "Exercise the two-throw allowance with actual grenades, not only a no-throw safety case.");
             SEntMan.DeleteEntity(map);
         });
     }

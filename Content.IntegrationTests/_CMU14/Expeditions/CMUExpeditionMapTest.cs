@@ -15,7 +15,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests._CMU14.Expeditions;
 
-[TestFixture]
+[TestFixture, NonParallelizable]
 public sealed class CMUExpeditionMapTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Dirty = true };

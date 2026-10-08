@@ -65,14 +65,27 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         }
         if (!_guns.TryGetGun(uid, out var gun) || !_guns.CanShoot(gun))
+        {
+            agent.LastFireCheck = "weapon-not-ready";
             return;
+        }
         if (!TryAimPoint(uid, agent, gun, out var point))
         {
+            agent.LastFireCheck = "no-visible-aim-point";
+            if (agent.PeekPosition is { } unusable)
+            {
+                // A moving target can invalidate a formerly clear peek. Do not repeat that
+                // exposure indefinitely just because the remembered position still has a clear ray.
+                agent.FailedPosition = unusable;
+                agent.AvoidPositionUntil = now + TimeSpan.FromSeconds(8);
+                agent.NextReposition = now;
+            }
             EndBurst(uid, agent, now, false);
             return;
         }
         if (!FiringLaneClear(uid, Transform(uid).Coordinates, point))
         {
+            agent.LastFireCheck = "obstructed-firing-cone";
             if (TryAdjustPeek(uid, agent, point, now))
                 return;
             if (agent.PeekPosition is { } failed)
@@ -86,6 +99,7 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (!SafeShot(uid, agent, gun, point))
         {
+            agent.LastFireCheck = "friendly-in-firing-cone";
             agent.BlockedShotSince ??= now;
             if (now - agent.BlockedShotSince > TimeSpan.FromSeconds(1) && TryAdjustPeek(uid, agent, point, now))
                 return;
@@ -105,7 +119,7 @@ public sealed partial class CMUExpeditionAgentSystem
             _combat.SetInCombatMode(uid, true, combat);
         var direction = _transform.ToMapCoordinates(point).Position - _transform.GetWorldPosition(uid);
         _transform.SetWorldRotation(uid, direction.ToWorldAngle());
-        _guns.AttemptShoot(uid, gun, point, agent.Target);
+        agent.LastFireCheck = _guns.AttemptShoot(uid, gun, point, agent.Target) ? "trigger-accepted" : "native-trigger-rejected";
     }
 
     private void EndBurst(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now, bool allowPress = true)

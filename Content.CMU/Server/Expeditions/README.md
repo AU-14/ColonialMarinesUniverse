@@ -129,7 +129,7 @@ colony mining and the planet-selection console remain later phases.
 AI cover and route decisions must account for the *current* world, including destroyed objects,
 instead of treating this initial generation plan as an always-correct navigation map.
 
-`cmu-expedition-ai <map ID> [count: 1-6]` (Admin) adds one opt-in squad near the objective.
+`cmu-expedition-ai <map ID> [count: 1-6]` (Admin) adds a new squad near the objective and prints its squad ID.
 Armed scavengers detect visible GOVFOR enemies and use a real loaded MAR-40 with firearm training.
 They shoulder the rifle, lead using its projectile speed, aim for 0.3 seconds and fire at most three
 rounds. Every trigger attempt checks the full scatter corridor and nearby allies. Decisions run every
@@ -142,9 +142,9 @@ Visible hostile fire passing near a guard or a fresh hit causes a suppression re
 seek shelter and use their finite three-dose dressing pack through interruptible native medical actions.
 Briefly lost enemies are watched for 1.5 seconds; last-seen memory expires after six seconds. Incapacitation,
 player control and disabling NPCs stop movement, fire and treatment. Reloading, casualty rescue, grenades
-and coordinated flanking are still later work. See [AI design and research](AI-DESIGN.md) for sources,
+and coordinated flanking use bounded plans and native actions. See [AI design and research](AI-DESIGN.md) for sources,
 behavior rules and limitations. Use `cmu-expedition-ai-status <map ID>` to inspect state, ammunition,
-health, suppression, selected shelter/peek positions and the last cover-search cost.
+health, suppression, selected shelter/peek positions, the last firing check and cover-search cost.
 
 ## Verification and preview
 
@@ -184,79 +184,40 @@ These are schematics, not screenshots of in-game art. Generator v7 changes crash
 | Human AI sight, faction filtering, physical pursuit, finite ammunition, last-seen expiry, injury retreat into reachable cover and incapacitation shutdown | `InfantryUsesSightRealAmmunitionAndMovementThenStopsWhenIncapacitated` |
 | Rifle handling and holding fire for teammates | `InfantryReadiesRifleAndHoldsFireForTeammates` |
 | Physical short-burst peeks, near-miss suppression and return to shelter | `InfantryPeeksFiresShortBurstsAndPhysicallyReturnsToShelter` |
-| Full firing-corridor clearance and actual projectile hits | `InfantryRejectsGrazingWallAnglesAndHitsFromAClearLane` |
+| Full firing-corridor clearance and actual projectile hits | `InfantryStepsClearOfGrazingWallAndShootsWithoutRemovingIt` |
 | Sheltered medical actions, damage interruption and exhausted supplies | `WoundedInfantryTreatsInShelterInterruptsOnDamageAndExhaustsDressings` |
 | Staggered squad exposure, continued attacks by both soldiers and failure memory | `SquadStaggersPeeksAndBothGuardsKeepAttacking` |
+| Automatic LZ publication, physical guard orders/construction and fighter departure | `AutomaticLandingZoneAndGuardOrderBuildPhysicalCover` |
+| Maximum two opening grenades and a shared cooldown | `SquadLimitsOpeningGrenadesAndDoesNotChainThrows` |
+| Multi-z links, open landing airspace and synchronized day/night phase | `ProfilesBuildBeforeTheirGovforLandingZoneOpens` |
 
-Verified on 2026-10-08 for v4: generator tests **Passed: 289, Failed: 0, Skipped: 0**,
-including all 3,360 layout combinations. Engine integration tests **Passed: 2, Failed: 0,
-Skipped: 0**, materializing all seven biomes and inspecting native water and vegetation components.
-The woodland seed 42 preview entered the client gameplay view at its LZ. Visual quality and aircraft
-fit still require in-game inspection; successful generation is not an aesthetic acceptance test.
-
-Verified for the v5 water and dressing update: **Passed: 16, Failed: 0, Skipped: 0** using
-`dotnet test Content.Tests/Content.Tests.csproj --no-restore --filter '(FullyQualifiedName~CMUExpeditionGeneratorTest|FullyQualifiedName~CMUExpeditionShorelineTest)&FullyQualifiedName!~LandingAndAllSitesRemainReachable'`.
-This reruns the focused generator regressions and shoreline tests, including every neighbour pattern
-in all four rotations. The existing full layout matrix was not repeated for these dressing changes.
-The integration command above also passed **2 tests, 0 failures, 0 skipped**, rebuilding all seven
-biomes and checking native water prototype IDs, rotations, depth and nonblocking ground detail.
-
-Before connecting a player-facing console, fly an actual Govfor dropship into each biome and back,
-walk both approaches while dragging equipment, check tree visibility and collisions, check
-navigation-console discovery and faction filtering, and measure generation tick time with players
-online. Time the trip to establish whether 140×140 feels sufficiently large for the intended mission.
-
-The playtests above remain necessary: automated reachability and shape variety do not establish
-whether a generated expedition has good combat pacing or convincing in-game scenery.
-
-Verified for v6 on 2026-10-08: **297 generator/shoreline cases passed**, including the complete
-3,360-layout access/conservation matrix, plus **4 engine integration tests passed**. The matrix ran
-in four 70-case batches by story after building, to keep each run bounded:
-
-```text
-dotnet test Content.Tests/Content.Tests.csproj --no-restore --filter '(FullyQualifiedName~CMUExpeditionGeneratorTest|FullyQualifiedName~CMUExpeditionShorelineTest)&FullyQualifiedName!~LandingAndAllSitesRemainReachable'
-dotnet test Content.Tests/Content.Tests.csproj --no-build --no-restore --filter 'FullyQualifiedName~LandingAndAllSitesRemainReachable&Name~CrashRecovery'
-dotnet test Content.Tests/Content.Tests.csproj --no-build --no-restore --filter 'FullyQualifiedName~LandingAndAllSitesRemainReachable&Name~SurveyCamp'
-dotnet test Content.Tests/Content.Tests.csproj --no-build --no-restore --filter 'FullyQualifiedName~LandingAndAllSitesRemainReachable&Name~BrokenConvoy'
-dotnet test Content.Tests/Content.Tests.csproj --no-build --no-restore --filter 'FullyQualifiedName~LandingAndAllSitesRemainReachable&Name~LostRelay'
-dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-restore --filter FullyQualifiedName~CMUExpedition
-```
-
-The preview tool can also export a complete machine-readable plan:
-`dotnet run --project Content.CMU/Tools/ExpeditionPreview -- --plan mountain.json Mountain 42 Highlands CrashRecovery`.
-
-Verified for the infantry fire-control update on 2026-10-08: **2 combat integration tests passed,
-0 failed, 0 skipped**. The new regression failed against the previous controller (two rounds fired
-within the initial 0.6-second aiming interval), then passed with the update. It measures native
-magazine consumption and physical movement; the existing test also checks the delayed investigation,
-injury retreat and incapacitation behavior. Command:
-
-```text
-dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-restore --filter FullyQualifiedName~CMUExpeditionAgentTest
-```
-
-In-game acceptance still needs a moving player: hold an angle, briefly break line of sight, rush
-the guard and damage it beside a wreck. Check that burst spacing is readable, cover changes have
-a reason and the pauses do not make the opposition too easy. Medical treatment, reloading and
-squad coordination were outside that initial update; the current controller is described above.
-
-Verified for the v7 MULE lander: **83 generator tests passed**, including all **840 crash-recovery
-layouts** across biome/landform combinations and map sizes, plus **3 engine integration tests passed**.
-The MULE-specific cases check the central cargo lane and exits beyond the engine supports, hull/deck
-size, cargo fittings and dry placement across woodland, mountain and beach seeds. Engine coverage
-materializes all seven biomes and checks every wreck object's prototype and rotation.
+Generator v7 was checked with 83 generator cases, including all 840 crash-recovery layouts,
+and three map integration cases before the upper-level addition. The complete 3,360-layout
+matrix is available above; the later broad rerun was stopped after 134 passing cases and
+must not be treated as a completed pass.
 
 ```text
 dotnet test Content.Tests/Content.Tests.csproj --no-build --no-restore --filter 'FullyQualifiedName~CMUExpeditionGeneratorTest&(FullyQualifiedName!~LandingAndAllSitesRemainReachable|Name~CrashRecovery)'
-dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-restore --filter FullyQualifiedName~CMUExpeditionMapTest
+dotnet test Content.Tests/Content.Tests.csproj --no-build --no-restore --filter FullyQualifiedName~CMUTacticalPlannerTest
+dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-restore --filter FullyQualifiedName~CMUExpedition
 ```
 
-Mountain / Highlands / CrashRecovery, seed 42, previews the MULE with a detached engine and a nose
-strike against the rock face. The airframe is a crash-site set piece; it is not a flyable dropship.
+The preview tool can export a complete machine-readable plan:
+`dotnet run --project Content.CMU/Tools/ExpeditionPreview -- --plan mountain.json Mountain 42 Highlands CrashRecovery`.
+Mountain / Highlands / CrashRecovery, seed 42, previews the MULE with a detached engine and a
+nose strike against the rock face. The wreck is a set piece, not a flyable aircraft.
 
-Verified for the researched infantry tactics update on 2026-10-08: **6 combat integration tests
-passed, 0 failed, 0 skipped**, using the focused agent-test command above. This includes real rifle
-hits and ammunition consumption, teammate and grazing-wall fire inhibition, physical peek/withdraw
-cycles, perceived near-miss suppression, interrupted native treatment with finite dressings, staggered
-two-guard attacks, failure memory, sight expiry and incapacitation shutdown. Generator layout tests
-were not rerun because this update changes only infantry behavior and their equipment.
+The current engine fixtures exercise real rifle fire, medical supplies, magazines, grenade
+throws, casualty pulling, squad radio, guard construction, fighter departure and moving
+connected player bodies in trees, the MULE, mountain corners and swamp banks. On 2026-10-08,
+the latest results for all 24 expedition integration cases passed across the focused runs,
+along with four planner unit tests. The final affected cover/terrain rerun passed all five
+cases without skips. Six-guard cover searches measured 3.65/3.98 ms median and 5.91/6.91 ms
+95th percentile for one/two squads in the local debug simulation, not a production guarantee.
+
+Before connecting a player-facing console, fly an actual Govfor dropship into each biome and
+back, walk both approaches while dragging equipment, check tree visibility and collisions,
+and measure generation tick time with players online. Watch repeated peeks into held angles,
+squad crowding and long movement interruptions. The six-guard fixture reports candidate-search
+costs. Human multiplayer playtesting is still required for pacing, combat balance, aircraft
+footprints and visual quality.

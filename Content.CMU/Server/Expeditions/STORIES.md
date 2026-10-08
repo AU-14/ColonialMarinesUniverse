@@ -19,7 +19,7 @@ cmu-expedition open <map ID>
 cmu-expedition-visit <map ID>
 ```
 
-Wait for ready status before opening or visiting. One generation job and three expedition maps
+The LZ opens and announces automatically when ready. Wait for ready status before visiting. One generation job and three expedition maps
 are allowed at once. Use existing map tools to remove an unused map only after evacuating it.
 From the server console, append the connected username to the visit command.
 
