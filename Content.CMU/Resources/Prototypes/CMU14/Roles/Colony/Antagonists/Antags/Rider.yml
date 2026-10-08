@@ -154,6 +154,11 @@
     - ActionXenoPsychicWhisper
   - type: XenoPsychicCommunication
     whisperRange: 7
+  # psychic whisper opens its text dialog on the whisperer, no key here means it silently never opens
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
   # Hands exist only so the hatchling can trigger vent entrance interactions;
   # the empty WhitelistPickup keeps those hands from looting anything
   - type: Hands
