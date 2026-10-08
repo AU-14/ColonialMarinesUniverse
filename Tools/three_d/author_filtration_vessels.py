@@ -12,7 +12,7 @@ import yaml
 import build_models
 
 ROOT = Path(__file__).resolve().parents[2]
-OUTPUT = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_filtration_vessels.yml'
+OUTPUT = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_filtration_vessels.yml'
 RSI = '_RMC14/Structures/Filtration/96x96.rsi'
 
 

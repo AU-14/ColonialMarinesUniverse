@@ -46,8 +46,8 @@ The source artwork has aliased and mirrored directional frames. Each of the four
 
 ## Verification and review
 
-- Canonical YAML: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_medical_cloud.yml`
-- Surface YAML: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_medical_cloud_art.yml`
+- Canonical YAML: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_medical_cloud.yml`
+- Surface YAML: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_medical_cloud_art.yml`
 - Reproducible art authoring helper: `Tools/three_d/authoring/author_medical_cloud.py`
 - Source comparisons, orbit renders, full state overview, crop manifest and verification: `Tools/three_d/generated/review/medical-cloud/`
 - Individual portable GLBs: this model directory

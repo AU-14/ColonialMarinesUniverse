@@ -1,0 +1,30 @@
+# same pack, different whitelist. the white fill comes from RMCSynthBlood's colour
+- type: entity
+  parent: CMBloodPack
+  id: CMUSynthBloodPack
+  name: synthetic blood pack
+  description: A blood pack rated for synthetic circulatory fluid. Only takes on synthetics.
+  suffix: CMU, empty
+  components:
+  - type: BloodPack
+    transferableReagents: [ RMCSynthBlood ]
+
+- type: entity
+  parent: CMUSynthBloodPack
+  id: CMUSynthBloodPackFull
+  suffix: CMU, Full
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pack:
+        maxVol: 300
+        reagents:
+        - ReagentId: RMCSynthBlood
+          Quantity: 300
+
+- type: latheRecipe
+  id: CMUSynthBloodPack
+  result: CMUSynthBloodPack
+  completetime: 4
+  materials:
+    RMCPlastic: 625

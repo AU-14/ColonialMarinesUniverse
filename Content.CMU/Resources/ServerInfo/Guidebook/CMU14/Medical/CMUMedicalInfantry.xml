@@ -10,7 +10,8 @@
   ## What's in Your IFAK
   <Box>
     <GuideEntityEmbed Entity="AU14Tourniquet" Caption="Tourniquet"/>
-    <GuideEntityEmbed Entity="AU14HemostaticGauzePacket" Caption="Hemostatic gauze (x2)"/>
+    <GuideEntityEmbed Entity="AU14HemostaticGauzePacket" Caption="Hemostatic gauze"/>
+    <GuideEntityEmbed Entity="CMOintment10" Caption="Ointment"/>
     <GuideEntityEmbed Entity="CMUSplintItem" Caption="Splint"/>
   </Box>
   <Box>
@@ -20,8 +21,9 @@
     <GuideEntityEmbed Entity="CMUMaskCPR" Caption="CPR mask"/>
   </Box>
 
-  - [bold]CAT tourniquet[/bold]: stops a bleeding arm or leg. Quick enough to put on yourself under fire.
-  - [bold]Hemostatic gauze packets (2)[/bold]: use a packet in your hand to open it, then use the gauze on a wound. Each one dresses a wound, then it's gone.
+  - [bold]Tourniquet[/bold]: stops a bleeding arm or leg. Quick enough to put on yourself under fire.
+  - [bold]Hemostatic gauze packet[/bold]: use the packet in your hand to open it, then use the gauze on a wound. It dresses one wound, then it's gone.
+  - [bold]Ointment[/bold]: treats burns. Use it on a burned body part; a tube has 10 uses.
   - [bold]Splint[/bold]: holds a broken arm or leg together so moving on it doesn't make it worse.
   - [bold]First-aid autoinjector[/bold]: a single shot of tricordrazine, which heals all damage a little, and dexalin, which helps with suffocation.
   - [bold]Tricordrazine pill packet[/bold]: four pills that each heal all damage a little. Don't take more than 2 in a short time.

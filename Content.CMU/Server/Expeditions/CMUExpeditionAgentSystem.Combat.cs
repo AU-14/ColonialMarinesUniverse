@@ -50,10 +50,16 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void UpdateFire(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.State == CMUExpeditionAgentState.HoldAngle && now >= agent.FireAt)
+        if (agent.Action != null)
+            return;
+        var resuming = agent.State == CMUExpeditionAgentState.HoldAngle ||
+            agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor == null;
+        var canResume = resuming &&
+            now >= agent.FireAt && agent.Target is { } target && _mobs.IsAlive(target) && Visible(uid, target, agent.FireRange);
+        if (agent.State == CMUExpeditionAgentState.HoldAngle && now >= agent.FireAt && canResume)
             Aim(agent, now, true);
         if (agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor == null && now >= agent.FireAt &&
-            CanLeaveCover(uid, agent))
+            canResume && CanLeaveCover(uid, agent))
             Aim(agent, now);
         if (agent.State == CMUExpeditionAgentState.Aim && now >= agent.FireAt)
         {
@@ -79,6 +85,10 @@ public sealed partial class CMUExpeditionAgentSystem
         if (!TryAimPoint(uid, agent, gun, out var point))
         {
             agent.LastFireCheck = "no-visible-aim-point";
+            agent.LostAimSince ??= now;
+            // Hold the stance through a brief loss behind a tree; never fire without sight.
+            if (now - agent.LostAimSince < TimeSpan.FromSeconds(0.35))
+                return;
             if (agent.PeekPosition is { } unusable)
             {
                 // A moving target can invalidate a formerly clear peek. Do not repeat that
@@ -90,6 +100,7 @@ public sealed partial class CMUExpeditionAgentSystem
             EndBurst(uid, agent, now, false);
             return;
         }
+        agent.LostAimSince = null;
         if (!FiringLaneClear(uid, Transform(uid).Coordinates, point))
         {
             agent.LastFireCheck = "obstructed-firing-cone";
@@ -130,6 +141,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void EndBurst(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now, bool allowPress = true)
     {
+        agent.LostAimSince = null;
         agent.BlockedShotSince = null;
         if (allowPress && agent.CoverAnchor != null && agent.Initiative >= 0.75f && agent.Stress < 0.3f &&
             agent.FollowupBursts == 0 && agent.ShotsFired >= VolleySize(agent))

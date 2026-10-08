@@ -6,7 +6,7 @@ All 23 assemblies remain draft. This batch is editable ground-world exterior gam
 
 23 unchanged-exporter GLBs cover 23 unique exact source IDs. There are 24 distinct physical poses: the default for each prop plus the extended telebaton. The exporter writes 25 static glTF scenes because the default telebaton scene is also retained separately from its two named states. No animation clips are added. Maximum editable parts per pose: 48. All are supported Box, Cylinder, Ellipsoid and rotated source-part primitives.
 
-Canonical authored files: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_field_gear_cloud.yml` and `garrison_field_gear_cloud_art.yml`. GLBs are under `Content.CMU/Resources/Models/CMU14/Garrison/CMU3DField*.glb`. The two exact unresampled detail crops are the full yellow FoamBox count strip and small red smart-scope bracket marking, under `Textures/CMU14/ThreeD/field_gear_cloud`. They use the first two indices from the centrally reserved field_gear list, 2583 and 2584; the script reads the actual gap-containing list and never invents a range. No whole-sprite slab or billboard is used.
+Canonical authored files: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_field_gear_cloud.yml` and `garrison_field_gear_cloud_art.yml`. GLBs are under `Content.CMU/Resources/Models/CMU14/Garrison/CMU3DField*.glb`. The two exact unresampled detail crops are the full yellow FoamBox count strip and small red smart-scope bracket marking, under `Textures/CMU14/ThreeD/field_gear_cloud`. They use the first two indices from the centrally reserved field_gear list, 2583 and 2584; the script reads the actual gap-containing list and never invents a range. No whole-sprite slab or billboard is used.
 
 ## Source checkpoint and resolved states
 

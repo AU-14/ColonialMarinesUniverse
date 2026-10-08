@@ -7,7 +7,7 @@ from layout import connected_parts,render_yaw
 class ColonyUltraWindowTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.models={m['id']:bm.validate_model(m) for m in yaml.load((bm.SOURCE/'garrison_colony_ultra_windows.yml').read_text(encoding='utf-8'),Loader=yaml.CSafeLoader)}
+        cls.models={m['id']:bm.validate_model(m) for m in yaml.load((bm.WORLD_SOURCE/'garrison_colony_ultra_windows.yml').read_text(encoding='utf-8'),Loader=yaml.CSafeLoader)}
 
     def test_broken_replacement_retains_structure_and_removes_every_pane_in_all_connections(self):
         intact=self.models['CMU3DColonyReinforcedWindow'];broken=self.models['CMU3DColonyReinforcedWindowFrame']

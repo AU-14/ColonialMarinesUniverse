@@ -23,8 +23,8 @@ import build_models
 import surfaces
 
 STAGE = ROOT/'.codex/window-shutter-staged'
-MODEL_REL = Path('Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_environment.yml')
-ART_REL = Path('Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_window_shutter_art.yml')
+MODEL_REL = Path('Content.CMU/Resources/ThreeD/Prototypes/World/garrison_environment.yml')
+ART_REL = Path('Content.CMU/Resources/ThreeD/Prototypes/World/garrison_window_shutter_art.yml')
 TEXTURE_REL = Path('Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces')
 REVIEW_REL = Path('Tools/three_d/generated/review/window-shutter-consolidated')
 PROOF_REL = Path('Tools/three_d/generated/window-shutter-consolidation-proof.json')

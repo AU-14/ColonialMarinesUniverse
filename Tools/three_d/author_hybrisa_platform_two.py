@@ -14,7 +14,7 @@ import yaml
 import build_models
 
 ROOT = Path(__file__).resolve().parents[2]
-PROTOTYPES = ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOTYPES = ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World'
 MODEL_FILE = PROTOTYPES/'garrison_architecture.yml'
 ART_FILE = PROTOTYPES/'garrison_hybrisa_platform_two_art.yml'
 RSI = '_RMC14/Structures/platforms.rsi'

@@ -1,0 +1,20 @@
+- type: entity
+  id: CMURequisitionsStockConsole
+  parent: RMCCommunicationsConsoleBase
+  name: requisitions stock console
+  description: A terminal that reads the inventory of the automated requisitions vendors on this ship, showing what each still has in stock.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: CMURequisitionsStockConsole
+  - type: ActivatableUI
+    key: enum.CMURequisitionsStockConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.CMURequisitionsStockConsoleUiKey.Key:
+        type: CMURequisitionsStockConsoleBoundUserInterface

@@ -520,3 +520,7 @@
       - id: RMCFlashlightPen
       - id: AU14CMDefibrillator
       - id: RMCSynthResetKey
+    - name: Synthetic Supplies
+      entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2

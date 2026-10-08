@@ -14,8 +14,8 @@ This art-only family contains **26 editable assemblies**, **31 distinct authored
 
 Canonical resources:
 
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_drinks_extra_cloud.yml`
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_drinks_extra_cloud_art.yml`
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_drinks_extra_cloud.yml`
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_drinks_extra_cloud_art.yml`
 - `Content.CMU/Resources/Textures/CMU14/ThreeD/drinks_extra_cloud/`
 - Direct `CMU3D*DrinksExtraCloud*.glb` files beside this document
 - `Tools/three_d/generated/review/drinks-extra-cloud/`: original compositions, source-facing / orbit / rear views, fixed-scale sheet and highlights

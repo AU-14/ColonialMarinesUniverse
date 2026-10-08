@@ -4,7 +4,7 @@ This cloud art batch supplies 23 editable physical assemblies: eleven exact-prot
 
 ## Deliverables
 
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_containers_cloud.yml`: editable physical parts
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_containers_cloud.yml`: editable physical parts
 - `garrison_containers_cloud_art.yml`: 51 original PNG label crops, reserved atlas indices 4000–4050
 - `Content.CMU/Resources/Textures/CMU14/ThreeD/containers_cloud/`: unchanged source pixels cropped into curved-wall print strips
 - `Tools/three_d/generated/cloud-containers/models/`: 23 GLBs and manifest produced directly by unchanged `build_models.py`
@@ -92,8 +92,8 @@ Run from repository root:
 
     python Tools/three_d/author_containers_cloud.py
     python Tools/three_d/verify_containers_cloud.py
-    python Tools/three_d/build_models.py --source Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_containers_cloud.yml --output Tools/three_d/generated/cloud-containers/models --review-output Tools/three_d/generated/cloud-containers/review --viewer-output Tools/three_d/generated/cloud-containers/viewer
-    python Tools/three_d/build_models.py --source Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_containers_cloud.yml --output Tools/three_d/generated/cloud-containers/models --review-output Tools/three_d/generated/cloud-containers/review --viewer-output Tools/three_d/generated/cloud-containers/viewer --check
+    python Tools/three_d/build_models.py --source Content.CMU/Resources/ThreeD/Prototypes/World/garrison_containers_cloud.yml --output Tools/three_d/generated/cloud-containers/models --review-output Tools/three_d/generated/cloud-containers/review --viewer-output Tools/three_d/generated/cloud-containers/viewer
+    python Tools/three_d/build_models.py --source Content.CMU/Resources/ThreeD/Prototypes/World/garrison_containers_cloud.yml --output Tools/three_d/generated/cloud-containers/models --review-output Tools/three_d/generated/cloud-containers/review --viewer-output Tools/three_d/generated/cloud-containers/viewer --check
 
 ## Attribution
 

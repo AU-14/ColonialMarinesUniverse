@@ -13,7 +13,7 @@ from button_animation_review import source_frames
 class ModelFrameTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.models = [bm.validate_model(m) for m in yaml.load((bm.SOURCE / 'garrison_architecture.yml').read_text(encoding='utf-8'), Loader=yaml.CSafeLoader)
+        cls.models = [bm.validate_model(m) for m in yaml.load((bm.WORLD_SOURCE / 'garrison_architecture.yml').read_text(encoding='utf-8'), Loader=yaml.CSafeLoader)
                       if m.get('doorButtonStates')]
 
     def test_all_authored_frame_solids_preserve_source_projection(self):

@@ -76,6 +76,14 @@ public sealed class CMU3DPreviewControl : Control
         ResetCamera();
     }
 
+    public void ReleaseResources()
+    {
+        SetModel(null);
+        _roundedView?.ReleaseResources();
+        _roundedView?.Orphan();
+        _roundedView = null;
+    }
+
     public void ResetCamera()
     {
         _camera.SetAngles(-MathF.PI / 2, MathF.PI / 6);

@@ -41,8 +41,8 @@ No Khronos validation, native renderer admission, full-map contact, live-state b
 
 ## Files and reproduction
 
-- Canonical models: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_weapon_world_cloud.yml`
-- Canonical source surfaces: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_weapon_world_cloud_art.yml`
+- Canonical models: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_weapon_world_cloud.yml`
+- Canonical source surfaces: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_weapon_world_cloud_art.yml`
 - Fourteen source PNG patches: `Content.CMU/Resources/Textures/CMU14/ThreeD/weapon_world_cloud/`
 - GLBs: this directory, named in the target list above
 - Source-facing/orbit comparisons and overview: `Tools/three_d/generated/cloud-review/weapon-world/`

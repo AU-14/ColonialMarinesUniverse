@@ -17,6 +17,11 @@ those maps and only subscribes to marked floors. Administrator workbench access
 remains separate. See [first-person documentation](../../../Tools/three_d/FIRST_PERSON_WALK.md)
 for renderer behavior and current limitations.
 
+Mobs retain their complete normal sprites, including clothing and held-item layers.
+The live view does not attach 3D equipment to characters or draw first-person equipment
+models. Dropped objects still use their world models where supported; item sprite
+fallbacks lie flat at their physical elevation and retain pixel-aware targeting.
+
 ## Asset workbench
 
 While connected to a server, open the client console and run `cmu_3d` to inspect the loaded `cmu3DModel`

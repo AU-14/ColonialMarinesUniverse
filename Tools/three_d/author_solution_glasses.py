@@ -25,7 +25,7 @@ from author_vendor_fans import occupied
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT/'.codex/model-batch-baseline1015'
 GEN = ROOT/'Tools/three_d/generated'
-PROTOS = ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOS = ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World'
 MODEL = PROTOS/'garrison_solution_glasses.yml'
 ART = PROTOS/'garrison_solution_glasses_art.yml'
 TEXTURES = ROOT/'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces/SolutionGlasses'
