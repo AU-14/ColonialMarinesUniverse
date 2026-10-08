@@ -35,14 +35,14 @@
     maxRounds: 400
     roundsPerShot: 40
     fireMissionDelay: 1
-    zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
     damage:
       types:
         Blunt: 35
         Slash: 35
         Piercing: 35
     armorPiercing: 10
+    zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentGau21Cannon
     soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
     soundGround: /Audio/_RMC14/Dropship/gau.ogg
@@ -85,6 +85,8 @@
   name: PGU-105 30mm Anti-tank ammo crate
   description: "A crate full of PGU-105 Specialized 30mm APFSDS Titanium-Tungsten alloy penetrators, made for countering peer and near peer APCs, IFVs, and MBTs in CAS support. It is designed to penetrate up to the equivalent 1350mm of RHA when launched from a GAU-21. It is much less effective against soft targets however, in which case 30mm ball ammunition is recommended. WARNING: discarding petals from the ammunition can be harmful if the dropship does not pull out at the needed speeds. Please consult page 3574 of the manual, available for order at any AEGIS store. Can be loaded into the GAU-21 30mm cannon."
   components:
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Sprite
     layers:
     - state: 30mm_crate_hv_10
@@ -92,8 +94,6 @@
   - type: DropshipAmmo
     ammoType: 30mm_crate_hv
     bulletSpread: 4
-    zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
     damage:
       types:
         Blunt: 26.66
@@ -101,6 +101,8 @@
         Piercing: 26.67
     armorPiercing: 40
     travelTime: 6
+    zLevelPenetration: 2
+    applyEffectsOnPenetrationLevels: true
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 450
@@ -132,8 +134,8 @@
   id: RMCDropshipAttachmentAmmoRocket
   name: abstract rocket
   components:
- - type: RMCGenericExamine
-    message: It can penetrate 1 z-level.
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Sprite
     sprite: _RMC14/Objects/dropship_ammo_64.rsi
     offset: 0.5, 0.5
