@@ -39,15 +39,11 @@ public sealed partial class CMUExpeditionAgentSystem
     public bool OrderPosition(EntityUid uid, EntityCoordinates destination, bool entrench)
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) ||
-            !TryComp<CMUExpeditionMapComponent>(destination.EntityId, out var map) ||
-            Transform(uid).MapUid != destination.EntityId || destination.X < 1 || destination.Y < 1 ||
-            destination.X >= map.Plan.Size - 1 || destination.Y >= map.Plan.Size - 1 ||
-            map.Plan.Terrain[map.Plan.Index((int) destination.X, (int) destination.Y)] is CMUExpeditionTerrain.Water or CMUExpeditionTerrain.Cliff ||
-            !BodyFits(uid, destination))
+            !TrySquadCoordinates(destination, out destination) ||
+            Transform(uid).MapUid != Transform(destination.EntityId).MapUid || !ValidOrderPoint(uid, destination))
             return false;
-        CancelPlan(uid, agent, false);
-        CancelTreatment(agent);
-        CancelWork(uid, agent);
+        ResetOrders(uid, agent);
+        agent.Patrolling = false;
         agent.OrderedDestination = destination;
         agent.Entrench = entrench;
         agent.Target = null;
@@ -64,6 +60,12 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.LastSeen = null;
         agent.RadioTarget = null;
         agent.RadioPosition = null;
+        agent.OrderRoute.Clear();
+        agent.NextOrderRoute = TimeSpan.Zero;
+        agent.OrderBlocked = false;
+        ClearCover(agent);
+        _steering.Unregister(uid);
+        agent.State = CMUExpeditionAgentState.Guard;
     }
 
     private bool GrenadeDecisionAvailable(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)

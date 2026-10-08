@@ -94,5 +94,5 @@ public sealed partial class CMUExpeditionAgentSystem
         TimeSpan.FromSeconds(agent.BurstPause.TotalSeconds * (1.2 - agent.Initiative * 0.4 + agent.Stress * 0.6));
 
     private static int VolleySize(CMUExpeditionAgentComponent agent) =>
-        Math.Max(1, agent.BurstSize - (agent.Emotion == CMUExpeditionEmotion.Shaken ? 1 : 0));
+        Math.Max(Math.Min(2, agent.BurstSize), agent.BurstSize - (agent.Emotion == CMUExpeditionEmotion.Shaken ? 1 : 0));
 }

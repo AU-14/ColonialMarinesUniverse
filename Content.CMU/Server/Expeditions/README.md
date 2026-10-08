@@ -129,10 +129,48 @@ colony mining and the planet-selection console remain later phases.
 AI cover and route decisions must account for the *current* world, including destroyed objects,
 instead of treating this initial generation plan as an always-correct navigation map.
 
-`cmu-expedition-ai <map ID> [count: 1-6]` (Admin) adds a new squad near the objective and prints its squad ID.
-Armed scavengers detect visible GOVFOR enemies and use a real loaded MAR-40 with firearm training.
-They shoulder the rifle, lead using its projectile speed, aim for 0.3 seconds and fire at most three
-rounds. Every trigger attempt checks the full scatter corridor and nearby allies. Decisions run every
+`cmu-expedition-ai <map ID|here> [count: 1-12] [mixed|regular|poor|rich|scout]` (Admin)
+adds a new squad and prints its squad and map IDs. A numeric expedition ID spawns near its objective.
+Use `here` while standing or ghosting over ground on **any map**, including ordinary colony maps.
+Spawning finds dry, clear, unoccupied positions nearby and reports partial deployment if space is limited.
+
+| Variant | Equipment and behavior |
+| --- | --- |
+| `regular` | MAR-40, militia vest, two spare magazines, blast and smoke grenades |
+| `poor` | Scrapper with a surplus pistol, one spare magazine, patched coat, lower courage, no grenades |
+| `rich` | Salvage baron with reinforced ceramic armor, a loaded pulse rifle, three spare magazines, four-shot volleys, blast and smoke grenades |
+| `scout` | Trail scout with a MAR-30 carbine, harness, smoke grenade, longer detection range and cautious positioning |
+| `mixed` | A repeating roster of regulars, scrappers, raiders, scouts, sentries and salvage barons |
+
+All variants carry finite dressings, a squad headset and a shovel. They target GOVFOR by default.
+Use the printed squad ID in place of `1` below:
+
+```text
+cmu-expedition-ai here 6 rich
+cmu-expedition-orders here 1 move
+cmu-expedition-orders here 1 guard
+cmu-expedition-orders here 1 patrol-add
+```
+
+Move or ghost to another location and repeat `patrol-add` (2-8 points), then use
+`cmu-expedition-orders here 1 patrol-start`. The squad loops the route, pauses for combat and
+resumes afterward. `patrol-stop` holds the current area and keeps the points; `patrol-clear`
+also removes them. `move` and `guard` replace the active patrol. `guard` permits native digging
+on suitable ground or barricade construction with nearby metal after a quiet period.
+Explicit coordinates remain available: `cmu-expedition-orders <map ID> 1 patrol-add <x> <y>`.
+`style Aggressive`, `friendly GOVFOR` and `target OPFOR` work with either a numeric map or `here`.
+
+Cover, flanking, firing, treatment, reloads, rescue, radio and grenades work without expedition
+metadata. Routes use live ground, water/fire entities and collision; expedition plans add terrain
+constraints. Coordinates are attached to the ground grid, including rotated grids and negative
+tile indices. Walking routes stay on one grid and level; they do not board ships, cross between
+separate grids, open closed doors, climb or teleport. Use reachable waypoints around long detours.
+Order searches are capped at 2,048 cells, one search per update; blocked routes retry after three
+seconds. `cmu-expedition-ai-status <map ID>` includes the order, patrol index and blocked flag.
+
+Armed scavengers detect visible enemies and use their real loaded weapon with firearm training.
+They shoulder rifles, lead using projectile speed, aim for 0.18 seconds (0.08 after a peek), and fire
+limited volleys. Every trigger attempt checks muzzle clearance and allies in the next shot's recoil cone. Decisions run every
 0.15 seconds. Paired shelter and peek positions produce physical step-out attacks and withdrawals;
 cover recovery lasts 0.8 seconds unless incoming fire or treatment requires longer. Squad attack slots
 stagger peeks and position reservations reduce crowding. Cover searches inspect at most 256 nearby
@@ -184,7 +222,7 @@ These are schematics, not screenshots of in-game art. Generator v7 changes crash
 | Human AI sight, faction filtering, physical pursuit, finite ammunition, last-seen expiry, injury retreat into reachable cover and incapacitation shutdown | `InfantryUsesSightRealAmmunitionAndMovementThenStopsWhenIncapacitated` |
 | Rifle handling and holding fire for teammates | `InfantryReadiesRifleAndHoldsFireForTeammates` |
 | Physical short-burst peeks, near-miss suppression and return to shelter | `InfantryPeeksFiresShortBurstsAndPhysicallyReturnsToShelter` |
-| Full firing-corridor clearance and actual projectile hits | `InfantryStepsClearOfGrazingWallAndShootsWithoutRemovingIt` |
+| Nearby muzzle clearance around walls and actual projectile hits | `InfantryStepsClearOfGrazingWallAndShootsWithoutRemovingIt` |
 | Sheltered medical actions, damage interruption and exhausted supplies | `WoundedInfantryTreatsInShelterInterruptsOnDamageAndExhaustsDressings` |
 | Staggered squad exposure, continued attacks by both soldiers and failure memory | `SquadStaggersPeeksAndBothGuardsKeepAttacking` |
 | Automatic LZ publication, physical guard orders/construction and fighter departure | `AutomaticLandingZoneAndGuardOrderBuildPhysicalCover` |

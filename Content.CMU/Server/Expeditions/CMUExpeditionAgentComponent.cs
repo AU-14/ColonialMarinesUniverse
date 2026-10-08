@@ -19,11 +19,11 @@ public sealed partial class CMUExpeditionAgentComponent : Component
     [DataField] public float EmergencyHealDamage = 85;
     [DataField] public TimeSpan HealOpportunityDelay = TimeSpan.FromSeconds(14);
     [DataField] public TimeSpan MemoryDuration = TimeSpan.FromSeconds(6);
-    [DataField] public TimeSpan AimDuration = TimeSpan.FromSeconds(0.3);
-    [DataField] public TimeSpan PeekAimDuration = TimeSpan.FromSeconds(0.12);
+    [DataField] public TimeSpan AimDuration = TimeSpan.FromSeconds(0.18);
+    [DataField] public TimeSpan PeekAimDuration = TimeSpan.FromSeconds(0.08);
     [DataField] public int BurstSize = 3;
     [DataField] public TimeSpan BurstDuration = TimeSpan.FromSeconds(1.2);
-    [DataField] public TimeSpan BurstPause = TimeSpan.FromSeconds(0.8);
+    [DataField] public TimeSpan BurstPause = TimeSpan.FromSeconds(0.55);
     [DataField] public TimeSpan LostSightDelay = TimeSpan.FromSeconds(1.5);
     [DataField] public TimeSpan RepositionCooldown = TimeSpan.FromSeconds(4);
     [DataField] public TimeSpan RepositionTimeout = TimeSpan.FromSeconds(5);
@@ -39,7 +39,11 @@ public sealed partial class CMUExpeditionAgentComponent : Component
     public TimeSpan FireAt;
     public TimeSpan BurstEnd;
     public TimeSpan MoveUntil;
+    public EntityCoordinates? MoveProgressPosition;
+    public TimeSpan MoveProgressAt;
+    public TimeSpan RifleLoweredUntil;
     public int ShotsFired;
+    public bool ResumeVolley;
     public string LastFireCheck = "idle";
     public float LastDamage;
     public TimeSpan SuppressedUntil;

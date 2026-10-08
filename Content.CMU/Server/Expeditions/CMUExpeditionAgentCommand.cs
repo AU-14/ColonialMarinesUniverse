@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Server.Administration;
 using Content.Shared.Administration;
-using Content.Shared.CMU14.Expeditions;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
 
@@ -10,7 +9,9 @@ namespace Content.Server.CMU14.Expeditions;
 [AdminCommand(AdminFlags.Admin)]
 public sealed partial class CMUExpeditionAgentCommand : LocalizedEntityCommands
 {
+    [Dependency] private CMUExpeditionAgentSystem _agents = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override string Command => "cmu-expedition-ai";
     public override string Description => Loc.GetString("cmd-cmu-expedition-ai-desc");
@@ -19,58 +20,58 @@ public sealed partial class CMUExpeditionAgentCommand : LocalizedEntityCommands
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         var count = 3;
-        if (args.Length is < 1 or > 2 || !int.TryParse(args[0], out var number) ||
-            args.Length == 2 && !int.TryParse(args[1], out count) || count is < 1 or > 6 ||
-            !_map.MapExists(new MapId(number)))
+        var variant = args.Length == 3 ? args[2].ToLowerInvariant() : "mixed";
+        if (args.Length is < 1 or > 3 || args.Length >= 2 && !int.TryParse(args[1], out count) ||
+            count is < 1 or > 12 || !CMUExpeditionAgentSystem.IsSquadVariant(variant))
         {
             shell.WriteError(Help);
             return;
         }
-        var uid = _map.GetMap(new MapId(number));
-        if (!EntityManager.TryGetComponent<CMUExpeditionMapComponent>(uid, out var expedition) || !expedition.Ready)
+        EntityUid map;
+        EntityCoordinates center;
+        if (args[0] == "here")
+        {
+            if (shell.Player?.AttachedEntity is not { } player ||
+                !EntityManager.TryGetComponent<TransformComponent>(player, out var transform) || transform.MapUid is not { } currentMap)
+            {
+                shell.WriteError(Loc.GetString("cmu-expedition-here-no-player"));
+                return;
+            }
+            map = currentMap;
+            center = _transform.ToCoordinates(map, _transform.GetMapCoordinates(player));
+        }
+        else if (int.TryParse(args[0], out var number) && _map.MapExists(new MapId(number)))
+        {
+            map = _map.GetMap(new MapId(number));
+            center = new EntityCoordinates(map, Vector2.Zero);
+        }
+        else
+        {
+            shell.WriteError(Help);
+            return;
+        }
+        EntityManager.TryGetComponent<CMUExpeditionMapComponent>(map, out var expedition);
+        if (expedition is { Ready: false })
         {
             shell.WriteError(Loc.GetString("cmu-expedition-not-ready"));
             return;
         }
-        var squad = expedition.NextSquad++;
-        var occupied = new List<Vector2>();
-        var existing = EntityManager.EntityQueryEnumerator<CMUExpeditionAgentComponent, TransformComponent>();
-        while (existing.MoveNext(out _, out var agent, out var transform))
-            if (transform.MapUid == uid && agent.State != CMUExpeditionAgentState.Disabled)
-                occupied.Add(transform.LocalPosition);
-        var plan = expedition.Plan;
-        var positions = new List<EntityCoordinates>();
-        for (var radius = 4; radius <= 12 && positions.Count < count; radius += 3)
-        for (var y = -radius; y <= radius && positions.Count < count; y += 3)
-        for (var x = -radius; x <= radius && positions.Count < count; x += 3)
+        if (args[0] != "here")
         {
-            var px = plan.Objective.X + x;
-            var py = plan.Objective.Y + y;
-            if (px < 1 || py < 1 || px >= plan.Size - 1 || py >= plan.Size - 1)
-                continue;
-            var i = plan.Index(px, py);
-            if (plan.Props[i] != CMUExpeditionProp.None || !plan.Paths[i] ||
-                plan.Terrain[i] is CMUExpeditionTerrain.Water or CMUExpeditionTerrain.Cliff)
-                continue;
-            var safe = true;
-            foreach (var fire in plan.FirePockets)
-                safe &= Math.Abs(px - fire.X) > 3 || Math.Abs(py - fire.Y) > 3;
-            var coordinates = new EntityCoordinates(uid, new Vector2(px + 0.5f, py + 0.5f));
-            foreach (var position in occupied)
-                safe &= Vector2.DistanceSquared(position, coordinates.Position) >= 2;
-            if (safe && !positions.Contains(coordinates))
-                positions.Add(coordinates);
+            if (expedition == null)
+            {
+                shell.WriteError(Loc.GetString("cmu-expedition-ai-use-here"));
+                return;
+            }
+            center = new EntityCoordinates(map, new Vector2(expedition.Plan.Objective.X + 0.5f, expedition.Plan.Objective.Y + 0.5f));
         }
-        var profiles = new[] { "CMUExpeditionScavenger", "CMUExpeditionScavengerAggressive", "CMUExpeditionScavengerCautious" };
-        for (var i = 0; i < positions.Count; i++)
+        var spawned = _agents.SpawnSquad(center, count, variant, out var squad);
+        if (spawned == 0)
         {
-            var guard = EntityManager.SpawnEntity(profiles[i % profiles.Length], positions[i]);
-            var agent = EntityManager.GetComponent<CMUExpeditionAgentComponent>(guard);
-            agent.Squad = squad;
-            agent.Entrench = true;
+            shell.WriteError(Loc.GetString("cmu-expedition-ai-no-space"));
+            return;
         }
-        expedition.GuardsSpawned = positions.Count > 0;
-        shell.WriteLine(Loc.GetString("cmu-expedition-ai-spawned", ("count", positions.Count)));
-        shell.WriteLine(Loc.GetString("cmu-expedition-ai-squad", ("squad", squad)));
+        shell.WriteLine(Loc.GetString("cmu-expedition-ai-deployed", ("count", spawned), ("requested", count),
+            ("variant", variant), ("squad", squad), ("map", EntityManager.GetComponent<TransformComponent>(map).MapID.ToString())));
     }
 }

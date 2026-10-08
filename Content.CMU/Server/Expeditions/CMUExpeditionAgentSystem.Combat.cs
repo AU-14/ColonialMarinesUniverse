@@ -40,6 +40,9 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (HasComp<ActorComponent>(args.User) || !TryComp<CMUExpeditionAgentComponent>(args.User, out var agent))
             return;
+        // Readiness delays must not consume the volley before the rifle actually fires.
+        if (agent.ShotsFired == 0)
+            agent.BurstEnd = _timing.CurTime + agent.BurstDuration;
         agent.ShotsFired += args.Ammo.Count;
         if (agent.ShotsFired >= VolleySize(agent))
             EndBurst(args.User, agent, _timing.CurTime);
@@ -55,7 +58,10 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.State == CMUExpeditionAgentState.Aim && now >= agent.FireAt)
         {
             agent.State = CMUExpeditionAgentState.Engage;
-            agent.ShotsFired = 0;
+            // A lane-clearing sidestep continues the same limited volley.
+            if (!agent.ResumeVolley)
+                agent.ShotsFired = 0;
+            agent.ResumeVolley = false;
             agent.BurstEnd = now + agent.BurstDuration;
         }
         if (agent.State != CMUExpeditionAgentState.Engage)
@@ -102,15 +108,14 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             agent.LastFireCheck = "friendly-in-firing-cone";
             agent.BlockedShotSince ??= now;
-            if (now - agent.BlockedShotSince > TimeSpan.FromSeconds(1) && TryAdjustPeek(uid, agent, point, now))
-                return;
-            // Do not dump a late volley when an ally clears the muzzle. Reacquire briefly first.
-            if (agent.ShotsFired > 0 || agent.CoverAnchor != null)
-                EndBurst(uid, agent, now, false);
-            else
+            // A crossing teammate pauses this volley without repeatedly resetting aim. If the
+            // lane stays occupied, make one deliberate sidestep or yield the attack slot.
+            if (now - agent.BlockedShotSince >= TimeSpan.FromSeconds(0.35))
             {
-                agent.State = CMUExpeditionAgentState.Aim;
-                agent.FireAt = now + ThinkInterval;
+                if (TryAdjustPeek(uid, agent, point, now))
+                    return;
+                agent.NextReposition = now;
+                EndBurst(uid, agent, now, false);
             }
             return;
         }
@@ -125,6 +130,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void EndBurst(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now, bool allowPress = true)
     {
+        agent.BlockedShotSince = null;
         if (allowPress && agent.CoverAnchor != null && agent.Initiative >= 0.75f && agent.Stress < 0.3f &&
             agent.FollowupBursts == 0 && agent.ShotsFired >= VolleySize(agent))
         {
@@ -168,8 +174,14 @@ public sealed partial class CMUExpeditionAgentSystem
         var from = _transform.ToMapCoordinates(start);
         var to = _transform.ToMapCoordinates(point);
         var distance = Vector2.Distance(from.Position, to.Position);
-        // Check the body/muzzle and both sides of the entire native scatter cone, not one grazing ray.
-        var spread = (float) Math.Tan(Math.Min(gun.MaxAngleModified.Theta, Math.PI / 2) / 2);
+        if (from.MapId != to.MapId || distance < 0.1f)
+            return false;
+        // Match the next native shot's recoil, including recovery since the previous shot.
+        // Using maximum sustained-fire scatter made whole squads wait on empty lanes.
+        var elapsed = (_timing.CurTime - gun.LastFire).TotalSeconds;
+        var scatter = Math.Clamp(gun.CurrentAngle.Theta + gun.AngleIncreaseModified.Theta -
+            gun.AngleDecayModified.Theta * elapsed, gun.MinAngleModified.Theta, gun.MaxAngleModified.Theta);
+        var spread = (float) Math.Tan(Math.Min(scatter, Math.PI / 2) / 2);
         if (!FiringLaneClear(uid, start, point))
             return false;
 
