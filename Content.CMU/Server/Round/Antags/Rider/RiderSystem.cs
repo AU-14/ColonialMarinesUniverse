@@ -16,6 +16,7 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Administration;
 using Content.Shared.Alert;
 using Content.Shared.Bed.Sleep;
@@ -144,6 +145,7 @@ public sealed partial class RiderSystem : EntitySystem
         "ActionRiderSustain",
         "ActionRiderMute",
     ];
+    private const string MuteActionId = "ActionRiderMute";
     private static readonly ProtoId<LanguagePrototype> RiderCantLanguage = "RiderCant";
     private static readonly ProtoId<AlertPrototype> GripAlert = "CMUGrip";
 
@@ -743,6 +745,7 @@ public sealed partial class RiderSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("rider-punish-host"), host, host, PopupType.LargeCaution);
         _adminLogger.Add(LogType.Damaged, LogImpact.Medium,
             $"{ToPrettyString(ent):rider} punished {ToPrettyString(host):host}");
+        MarkUsed(ent, args);
     }
 
     private void OnMuteAction(Entity<RiderComponent> ent, ref RiderMuteActionEvent args)
@@ -753,7 +756,9 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
-        // toggle, so the rider isn't stuck with a full minute once they want the host talking again
+        // toggle, so the rider isn't stuck with a full minute once they want the host talking again.
+        // never Handled: the use delay would lock the button and the release press with it,
+        // EndMute puts the cooldown on instead, dated from the cast
         if (_timing.CurTime < ent.Comp.MutedUntil)
         {
             EndMute(ent, host);
@@ -782,10 +787,20 @@ public sealed partial class RiderSystem : EntitySystem
         if (ent.Comp.MutedUntil == TimeSpan.Zero)
             return;
 
+        var castAt = ent.Comp.MutedUntil - ent.Comp.MuteDuration;
         ent.Comp.MutedUntil = TimeSpan.Zero;
         // eject runs from the hatchling's own teardown too, don't dirty actions that are going away
         if (!TerminatingOrDeleted(ent.Owner))
+        {
             SetMuteToggled(ent, false);
+
+            // anchored to the cast so letting go early doesn't hand out a fresh cooldown
+            foreach (var copy in ActionCopies(ent, MuteActionId))
+            {
+                if (copy.Comp.UseDelay is { } delay && castAt + delay > _timing.CurTime)
+                    _actions.SetCooldown(copy.Owner, castAt, castAt + delay);
+            }
+        }
 
         if (host is { } freed && !TerminatingOrDeleted(freed))
             _popup.PopupEntity(Loc.GetString("rider-mute-end"), freed, freed);
@@ -794,15 +809,44 @@ public sealed partial class RiderSystem : EntitySystem
     // the phantom has its own copy of the mute button, so both need the toggled state
     private void SetMuteToggled(Entity<RiderComponent> ent, bool toggled)
     {
-        _actions.SetToggled(ent.Comp.MuteAction, toggled);
+        foreach (var copy in ActionCopies(ent, MuteActionId))
+            _actions.SetToggled(copy.Owner, toggled);
+    }
+
+    // every copy of one ability, hatchling's and phantom's
+    private IEnumerable<Entity<ActionComponent>> ActionCopies(Entity<RiderComponent> ent, string protoId)
+    {
+        foreach (var action in _actions.GetActions(ent.Owner))
+        {
+            if (MetaData(action).EntityPrototype?.ID == protoId)
+                yield return action;
+        }
 
         if (ent.Comp.Manifest is not { } manifest || TerminatingOrDeleted(manifest))
-            return;
+            yield break;
 
         foreach (var action in _actions.GetActions(manifest))
         {
-            if (MetaData(action).EntityPrototype?.ID == "ActionRiderMute")
-                _actions.SetToggled(action.Owner, toggled);
+            if (MetaData(action).EntityPrototype?.ID == protoId)
+                yield return action;
+        }
+    }
+
+    // the press went off: Handled lets the actions system start the use delay on the pressed
+    // button, the other copy gets it here or swapping to the phantom's bar dodges every timer
+    private void MarkUsed(Entity<RiderComponent> ent, BaseActionEvent args)
+    {
+        args.Handled = true;
+
+        var pressed = args.Action;
+        if (pressed.Comp.UseDelay is not { } delay
+            || MetaData(pressed).EntityPrototype?.ID is not { } protoId)
+            return;
+
+        foreach (var copy in ActionCopies(ent, protoId))
+        {
+            if (copy.Owner != pressed.Owner)
+                _actions.SetCooldown(copy.Owner, delay);
         }
     }
 
@@ -843,6 +887,7 @@ public sealed partial class RiderSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("rider-seize-host"), host, host, PopupType.LargeCaution);
         _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
             $"{ToPrettyString(ent):rider} seized {ToPrettyString(host):host}");
+        MarkUsed(ent, args);
     }
 
     private EntityUid EnsureSeizeProxy(Entity<RiderComponent> ent, EntityUid host)
@@ -975,6 +1020,8 @@ public sealed partial class RiderSystem : EntitySystem
         }
 
         EndSeize(ent, true);
+        // not Handled on purpose: no use delay, and from the phantom or a seize this deletes the
+        // pressed button, which the actions system would then keep poking after we return
         Eject(ent, host, loud: !IsUnconscious(host));
     }
 
@@ -1043,7 +1090,17 @@ public sealed partial class RiderSystem : EntitySystem
         // Minds eye is the same body in a different skin: the whole bar comes
         // along, and abilities run on the buried body via the manifest relays
         foreach (var action in ManifestActions)
-            _actions.AddAction(manifest, action);
+        {
+            if (_actions.AddAction(manifest, action) is not { } copy)
+                continue;
+
+            // the phantom's buttons are new every time, without this withdraw + manifest wipes every cooldown
+            foreach (var own in ActionCopies(ent, action))
+            {
+                if (own.Comp.Cooldown is { } cooldown)
+                    _actions.SetCooldown(copy, cooldown.Start, cooldown.End);
+            }
+        }
 
         ent.Comp.Manifest = manifest;
         if (_timing.CurTime < ent.Comp.MutedUntil)
@@ -1053,6 +1110,7 @@ public sealed partial class RiderSystem : EntitySystem
         _eye.RefreshVisibilityMask(host);
         _adminLogger.Add(LogType.AntagSelection, LogImpact.Low,
             $"{ToPrettyString(ent):rider} manifested to {ToPrettyString(host):host}");
+        args.Handled = true;
     }
 
     // The withdraw action lives on the manifest, so the event is raised there
@@ -1061,6 +1119,7 @@ public sealed partial class RiderSystem : EntitySystem
         if (!TryComp<RiderComponent>(ent.Comp.Rider, out var rider))
             return;
 
+        // not Handled, the button dies with the phantom
         EndManifest(new Entity<RiderComponent>(ent.Comp.Rider, rider));
     }
 
@@ -1250,6 +1309,7 @@ public sealed partial class RiderSystem : EntitySystem
 
         // The button must show the state it is in, or hosts fight blind
         _actions.SetToggled(ent.Comp.ResistAction, ent.Comp.ResistActive);
+        args.Handled = true;
 
         if (!ent.Comp.ResistActive)
             return;
@@ -1265,6 +1325,7 @@ public sealed partial class RiderSystem : EntitySystem
             || !rider.SeizeActive)
             return;
 
+        // same as OnExitAction, EndSeize deletes this very button
         EndSeize((ent.Comp.Rider, rider), true);
     }
 
@@ -1390,6 +1451,7 @@ public sealed partial class RiderSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("rider-surge-host"), host, host);
         _adminLogger.Add(LogType.ChemicalReaction, LogImpact.Low,
             $"{ToPrettyString(ent):rider} granted resilience to {ToPrettyString(host):host}");
+        MarkUsed(ent, args);
     }
 
     private bool PourMix(Entity<SolutionComponent> soln, (string Reagent, float Dose)[] mix, float scale)
@@ -1424,6 +1486,7 @@ public sealed partial class RiderSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("rider-coax-host"), host, host);
         _adminLogger.Add(LogType.Healed, LogImpact.Low,
             $"{ToPrettyString(ent):rider} coaxed {ToPrettyString(host):host}");
+        MarkUsed(ent, args);
     }
 
     private void OnSustainAction(Entity<RiderComponent> ent, ref RiderSustainActionEvent args)
@@ -1453,6 +1516,7 @@ public sealed partial class RiderSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("rider-sustain-host"), host, host);
         _adminLogger.Add(LogType.Healed, LogImpact.Low,
             $"{ToPrettyString(ent):rider} sustained {ToPrettyString(host):host}");
+        MarkUsed(ent, args);
     }
 
     private void DepositCrawlResidue(EntityUid hatchling)
