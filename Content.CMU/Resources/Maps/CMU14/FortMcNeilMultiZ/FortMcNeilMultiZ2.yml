@@ -4,7 +4,7 @@ meta:
   engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/07/2026 21:15:07
+  time: 10/08/2026 03:08:21
   entityCount: 8784
 maps:
 - 1
@@ -21,7 +21,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Mapping Fort_McNeil [2]
+      name: Mapping Fort McNeil [2]
     - type: Transform
     - type: Map
       mapPaused: True

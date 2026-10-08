@@ -264,6 +264,7 @@
   - type: Sprite
     state: shuttle
   - type: Area
+    resinAllowed: false
     landingZone: true
     minimapColor: '#EBE5E5E3'
     

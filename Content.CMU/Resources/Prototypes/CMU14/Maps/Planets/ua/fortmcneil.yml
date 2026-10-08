@@ -4,7 +4,7 @@
   components:
   - type: RMCPlanetMapPrototype
     votename: "Fort McNeil"
-    mapId: fortmcneil
+    mapId: cmufortmcneil
     lorePrimer: CMUPrimerPlanetFortMcNeil
     allegiance: UA
     camouflage: Desert
@@ -64,30 +64,21 @@
     # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers
-    - CultistThreatCF
-    - WendigoThreatCF
+    # - CultistThreatCF
+    # - WendigoThreatCF
     # - AbominationsThreatCF # no xenocf markers
-    - TribalsThreatCF
-    - ApeThreatCF
+    # - TribalsThreatCF
+    # - ApeThreatCF
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
     
 - type: lorePrimer
   id: CMUPrimerPlanetFortMcNeil
   planetText: "An automated distress signal has been received from the colony site of Fort McNeil, on the border world of White Antre. A response team has been dispatched to investigate."
-
-- type: entity
-  parent: MarkerBase
-  id: CMUFortMcneilMultiTileVehicleMarker 
-  name: multitile vehicle marker
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: Sprite
-    visible: false
-    
+  
 - type: gameMap
-  id: fortmcneil
-  mapName: Fort_McNeil
+  id: cmufortmcneil
+  mapName: Fort McNeil
   mapPath: "/Maps/CMU14/FortMcNeilMultiZ/FortMcNeilMultiZ0.yml"
   mapsBelow: []
   mapsAbove:
