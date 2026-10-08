@@ -40,6 +40,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilianDoctor: []
   startingGear: AU14GearCivilianHeadPhysician

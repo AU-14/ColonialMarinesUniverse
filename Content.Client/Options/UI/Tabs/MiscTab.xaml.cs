@@ -83,8 +83,7 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(RMCCVars.RMCDamageYourself, RMCDamageYourself);
         Control.AddOptionCheckBox(RMCCVars.RMCShowNewPlayerIcons, RMCShowNewPlayerIcons);
         Control.AddOptionDropDown(RMCCVars.RMCXenoDefaultNightVision, RMCXenoNightVisionDefault, xenoNightVisionEntries);
-        Control.AddOptionCheckBox(MonoCVars.AreaEchoEnabled, AreaEchoCheckBox); // Mono
-        Control.AddOptionCheckBox(MonoCVars.AreaEchoHighResolution, AreaEchoHighResolutionCheckBox); // Mono
+        // cmu edit: area echo options moved to the CMU tab
         Control.AddOptionCheckBox(CCVars.InterfaceChatFollowButton, ChatFollowButton);
 
         Control.Initialize();

@@ -86,7 +86,7 @@
       - cost: 10000
         crate: AU14Crate20MMGrenadesFragDoubleRMC
       - cost: 10000
-        crate: RMCCrateBoxAGMI
+        crate: CMUCrateGrenadeBoxAGMI
       - cost: 4000
         crate: AU14Crate20MMGrenadesFragRMC
       - cost: 4000
@@ -308,6 +308,10 @@
       - cost: 600
         crate: RMCCrateBoxMagazineSentryFire
       - cost: 300
+        crate: RMCCrateBoxMagazineSentryFireBlue
+      - cost: 600
+        crate: RMCCrateBoxMagazineSentryFireSmoke
+      - cost: 600
         crate: RMCCrateBoxShellsShotgunSlugs
       - cost: 300
         crate: RMCCrateBoxShellsShotgunFlechette

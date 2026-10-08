@@ -288,7 +288,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
             _prototypes.TryIndex(planetPrimerId, out LorePrimerPrototype? primer) &&
             primer.PlanetText is { } planetTextKey) // RuMC edit
         {
-            lines.Add(Loc.GetString(planetTextKey)); // RuMC edit
+            lines.Add(LocOrText(planetTextKey)); // RuMC edit // cmu edit
             return;
         }
 
@@ -307,7 +307,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
             primer.PlatoonInfo is { } platoonInfoKey)
         {
             lines.Add(Loc.GetString("lore-primer-platoon-label",
-                ("info", Loc.GetString(platoonInfoKey))));
+                ("info", LocOrText(platoonInfoKey)))); // cmu edit
             // RuMC edit end
             return;
         }
@@ -315,6 +315,14 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         if (!string.IsNullOrWhiteSpace(platoon.Name))
             lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", platoon.Name))); // RuMC edit
     }
+
+    // cmu edit start
+    /// <summary>Primer fields hold either a locale key or plain text; plain text is shown as-is.</summary>
+    private string LocOrText(string keyOrText)
+    {
+        return Loc.TryGetString(keyOrText, out var text) ? text : keyOrText;
+    }
+    // cmu edit end
 
     private bool IsThreatMind(MindComponent mind)
     {

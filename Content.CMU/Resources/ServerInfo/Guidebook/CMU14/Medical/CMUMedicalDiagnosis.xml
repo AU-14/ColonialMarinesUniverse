@@ -16,6 +16,7 @@
   Use it on a patient to open a full scan.
   - [bold]Top bar[/bold]: overall health, pulse, blood level, temperature and shock risk, with a status of stable, serious, critical or deceased.
   - [bold]Body[/bold]: each body part's health, with its wounds, bleeding, embedded shrapnel, eschar, splints, casts and tourniquets.
+  - [bold]Bleeding[/bold]: with basic medical training, the scan shows how bad each bleed is (minor, moderate, severe or [color=red]arterial[/color]), on the blood readout and on each bleeding body part. A missing limb's row shows whether its stump is bleeding arterially or has a tourniquet on it.
   - [bold]Fractures and internal bleeding[/bold]: need basic medical training. With more training it tells you the exact fracture severity and where the bleeding is.
   - [bold]Organs[/bold]: need a trained medic. Each organ shows its stage (healthy, bruised, damaged, failing or dead) and health.
   - [bold]Pain[/bold]: the patient's pain level and how close they are to pain shock.

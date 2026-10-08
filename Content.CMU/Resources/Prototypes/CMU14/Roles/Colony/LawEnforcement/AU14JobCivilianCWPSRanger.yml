@@ -39,6 +39,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:

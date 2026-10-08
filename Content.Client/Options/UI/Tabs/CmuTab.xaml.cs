@@ -32,6 +32,9 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ChatEnableRunechatBubbles, RunechatSpeechBubblesCheckBox);
         Control.AddOptionPercentSlider(CCVars.ChatRunechatBubbleScale, RunechatSpeechBubbleScaleSlider, 0.5f, 2f);
         Control.AddOptionCheckBox(CCVars.CMUVoteUiLarge, VoteUiLargeCheckBox);
+        // cmu edit start: hide username on the round-end screen
+        Control.AddOptionCheckBox(Content.Shared.CMU14.CCVar.AU14CCVars.HideRoundEndUsername, HideRoundEndUsernameCheckBox);
+        // cmu edit end
         // CMU14: faction gameplay fixes.
         Control.AddOptionCheckBox(CCVars.ForceOnForceUnidentifiedMarkerEnabled, FoFUnidentifiedMarkerCheckBox);
         // CMU14: tactical map preferences.
@@ -39,6 +42,9 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.CMUTacMapCenterOnOpen, CenterTacMapCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineLogInChat, ExamineLogInChatCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineFullTextInChat, ExamineFullTextInChatCheckBox);
+        // cmu edit start
+        Control.AddOptionCheckBox(CCVars.ExamineWoundsInChat, ExamineWoundsInChatCheckBox);
+        // cmu edit end
         // cmu edit start
         Control.AddOptionCheckBox(CCVars.ChatSpeechSounds, ChatSpeechSoundsCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatResetToLocal, ChatResetToLocalCheckBox);
@@ -55,6 +61,10 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CMUMedicalCCVars.AutoReapplyKitsEnabled, AutoReapplyKitsCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.UiLessSurgeryEnabled, UiLessSurgeryCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUScreamOnHotbarEnabled, ScreamOnHotbarCheckBox);
+        // cmu edit start: area echo options, moved from the Misc tab
+        Control.AddOptionCheckBox(Content.Shared._Mono.CCVar.MonoCVars.AreaEchoEnabled, AreaEchoCheckBox);
+        Control.AddOptionCheckBox(Content.Shared._Mono.CCVar.MonoCVars.AreaEchoHighResolution, AreaEchoHighResolutionCheckBox);
+        // cmu edit end
         Control.AddOptionPercentSlider(CMUZLevelsCVars.BlurStrength, ZLevelBlurSlider, scale: OldZLevelBlurStrength);
         Control.AddOptionPercentSlider(CMUZLevelsCVars.FaintUpperAlpha, FaintLookUpOpacitySlider, 0.05f, 0.80f);
 

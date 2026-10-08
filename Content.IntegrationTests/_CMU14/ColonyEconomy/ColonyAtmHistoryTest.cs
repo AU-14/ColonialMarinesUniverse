@@ -15,7 +15,7 @@ public sealed class ColonyAtmHistoryTest : ColonyAtmTestBase
     public async Task HistoryListsWithdrawalsDepositsAndTransfers()
     {
         await SpawnTarget(Atm);
-        var (card, pin, account) = await SwipeNewCard(500);
+        var (card, pin, account) = await InsertNewCard(500);
         var (otherUid, _, otherAccount) = await SpawnOtherCard();
         await Type(pin.ToString());
 
@@ -24,7 +24,6 @@ public sealed class ColonyAtmHistoryTest : ColonyAtmTestBase
         await Enter();
         await Enter();                              // back to the main menu
 
-        await Drop();
         await PlaceInHands(Cash, 30);
         await Type("2", enter: false);              // 2) DEPOSIT
         await Type("30");
@@ -83,7 +82,7 @@ public sealed class ColonyAtmHistoryTest : ColonyAtmTestBase
     public async Task HistoryIsOnlySentOnTheHistoryScreenAfterThePin()
     {
         await SpawnTarget(Atm);
-        var (card, pin, _) = await SwipeNewCard(100);
+        var (card, pin, _) = await InsertNewCard(100);
         await Server.WaitPost(() =>
             SEntMan.System<ColonyBankSystem>().RecordTransaction(ToServer(card), AtmHistoryKind.Deposit, 25));
 
@@ -95,10 +94,10 @@ public sealed class ColonyAtmHistoryTest : ColonyAtmTestBase
         await Type("5", enter: false);              // 5) HISTORY
         Assert.That(ClientAtmState().History, Has.Length.EqualTo(1));
 
-        await Delete();
+        await Cancel();
         Assert.Multiple(() =>
         {
-            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu), "DEL did not leave the history screen");
+            Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.MainMenu), "CANCEL did not leave the history screen");
             Assert.That(ClientAtmState().History, Is.Empty, "The history stayed on screen after leaving it");
         });
     }
@@ -108,7 +107,7 @@ public sealed class ColonyAtmHistoryTest : ColonyAtmTestBase
     public async Task ScrollArrowsPageThroughOlderHistory()
     {
         await SpawnTarget(Atm);
-        var (card, pin, _) = await SwipeNewCard(100);
+        var (card, pin, _) = await InsertNewCard(100);
         var amounts = Enumerable.Range(1, 14).ToList();
         await Server.WaitPost(() =>
         {
