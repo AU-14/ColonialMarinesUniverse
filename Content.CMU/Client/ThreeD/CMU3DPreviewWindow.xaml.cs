@@ -16,6 +16,7 @@ namespace Content.Client.CMU14.ThreeD;
 public sealed partial class CMU3DPreviewWindow : DefaultWindow
 {
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private CMU3DModelLibrary _modelLibrary = default!;
     [Dependency] private IEntityManager _entities = default!;
 
     private readonly CMU3DModelPrototype[] _models;
@@ -27,6 +28,7 @@ public sealed partial class CMU3DPreviewWindow : DefaultWindow
     public CMU3DPreviewWindow()
     {
         IoCManager.InjectDependencies(this);
+        _modelLibrary.LoadWorkbench();
         RobustXamlLoader.Load(this);
         SetSize = Vector2.Clamp(UserInterfaceManager.RootControl.Size - new Vector2(24), MinSize, new Vector2(1000, 680));
         _models = _prototypes.EnumeratePrototypes<CMU3DModelPrototype>()

@@ -9,7 +9,7 @@ import build_models as bm
 class BarricadeAcidTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.model = bm.validate_model(yaml.load((bm.SOURCE/'garrison_plasteel_barricade.yml').read_text(),Loader=yaml.CSafeLoader)[-1])
+        cls.model = bm.validate_model(yaml.load((bm.WORLD_SOURCE/'garrison_plasteel_barricade.yml').read_text(),Loader=yaml.CSafeLoader)[-1])
 
     def test_all_160_source_compositions_keep_acid_before_wire(self):
         for wired in (False, True):

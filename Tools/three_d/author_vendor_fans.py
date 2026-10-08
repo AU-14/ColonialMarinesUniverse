@@ -23,7 +23,7 @@ from author_wide_machinery import world_parts, contacts, box_bounds
 ROOT = Path(__file__).resolve().parents[2]
 GEN = ROOT/'Tools/three_d/generated'
 BASE = ROOT/'.codex/model-batch-baseline950'
-PROTOS = ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOS = ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World'
 MODEL = PROTOS/'garrison_vendor_fans.yml'
 ART = PROTOS/'garrison_vendor_fans_art.yml'
 TEXTURES = ROOT/'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces'

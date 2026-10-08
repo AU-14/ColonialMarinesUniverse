@@ -16,7 +16,7 @@ import yaml
 import build_models
 
 ROOT=Path(__file__).resolve().parents[2]
-PROTOTYPES=ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOTYPES=ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World'
 MODEL_FILE=PROTOTYPES/'garrison_overhead_machinery.yml'
 ART_FILE=PROTOTYPES/'garrison_overhead_machinery_art.yml'
 OLD_FILE=PROTOTYPES/'garrison_machinery_debris.yml'

@@ -11,7 +11,7 @@ class LightStatesTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.models = [bm.validate_model(m) for filename in ('garrison_environment.yml', 'garrison_small_lights.yml', 'garrison_tube_lights.yml')
-                      for m in yaml.load((bm.SOURCE / filename).read_text(), Loader=yaml.CSafeLoader)
+                      for m in yaml.load((bm.WORLD_SOURCE / filename).read_text(), Loader=yaml.CSafeLoader)
                       if m.get('poweredLightStates')]
 
     def test_glb_contains_all_five_disjoint_poses_and_correct_default(self):

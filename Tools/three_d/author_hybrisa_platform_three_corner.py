@@ -18,7 +18,7 @@ import surfaces
 from author_hybrisa_platform_three import decoded_parts, rotated_bounds, union_proof, contains, rotate
 
 ROOT=Path(__file__).resolve().parents[2]
-PROTOTYPES=ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOTYPES=ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World'
 MODEL_FILE=PROTOTYPES/'garrison_environment.yml'
 ART_FILE=PROTOTYPES/'garrison_hybrisa_platform_three_corner_art.yml'
 MODEL='CMU3DHybrisaPlatformThreeCorner'

@@ -64,7 +64,7 @@ def main():
         elif isinstance(value, list):
             for index, child in enumerate(value):
                 native_vectors(child, f'{location}[{index}]')
-    for path in bm.SOURCE.glob('*.yml'):
+    for path in bm.SOURCE.rglob('*.yml'):
         for model in inv.load_yaml(path.read_text(encoding='utf-8')) or []:
             if model.get('type') == 'cmu3DModel' and model['id'] in checked_ids:
                 native_vectors(model, model['id'])

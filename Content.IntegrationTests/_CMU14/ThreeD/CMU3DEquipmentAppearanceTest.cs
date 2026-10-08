@@ -1,4 +1,5 @@
 using Content.Client.CMU14.ThreeD.Scene;
+using Content.Client.CMU14.ThreeD;
 using Content.Client.Inventory;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.CMU14.ThreeD;
@@ -37,6 +38,7 @@ public sealed class CMU3DEquipmentAppearanceTest : GameTest
         await Pair.RunUntilSynced();
         await Client.WaitAssertion(() =>
         {
+            Client.ResolveDependency<CMU3DModelLibrary>().LoadWorkbench();
             var local = ToClientUid(wearer);
             var prototypes = Client.ResolveDependency<IPrototypeManager>();
             var poses = prototypes.EnumeratePrototypes<CMU3DEquipmentPosePrototype>().ToArray();

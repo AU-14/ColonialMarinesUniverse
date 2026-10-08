@@ -36,6 +36,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
     [Dependency] private CMU3DElevationSystem _elevation = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private CMU3DModelLibrary _modelLibrary = default!;
     [Dependency] private ITileDefinitionManager _tiles = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -106,6 +107,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
     {
         if (!_admins.HasFlag(AdminFlags.Debug) || !TryContext(out _, out _))
             return false;
+        _modelLibrary.LoadWorld();
         CloseFirstPerson();
         if (_window == null)
         {
@@ -244,6 +246,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
     {
         if (_catalog != null)
             return;
+        _modelLibrary.LoadWorld();
         _catalog = new CMU3DSceneCatalog(_prototypes.EnumeratePrototypes<CMU3DModelPrototype>(), id =>
             _prototypes.TryIndex<EntityPrototype>(id, out var prototype) ? prototype.Parents : null);
         foreach (var material in _prototypes.EnumeratePrototypes<CMU3DTileMaterialPrototype>())

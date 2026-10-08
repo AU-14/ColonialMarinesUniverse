@@ -794,7 +794,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--inventory", type=Path, default=ROOT / "Tools/three_d/generated/inventory.json")
-    parser.add_argument("--models", type=Path, default=ROOT / "Content.CMU/Resources/Prototypes/CMU14/ThreeD")
+    parser.add_argument("--models", type=Path, default=ROOT / "Content.CMU/Resources/ThreeD/Prototypes")
     parser.add_argument("--variant", choices=MAP_DEFINITIONS, default="classic")
     parser.add_argument("--level", type=int, default=0)
     parser.add_argument("--all-levels", action="store_true", help="Assemble every configured map at physical floor spacing")

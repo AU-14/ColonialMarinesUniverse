@@ -65,7 +65,7 @@ def main():
                              'Source borders and grid orientation are retained. Thickness 0.012 tiles is inferred; '
                              'the isolated reference is not every saved appearance. See SOURCES_SKYBLUE_CARPET.md.',
                  parts=parts)
-    target = bm.SOURCE / 'garrison_skyblue_carpet.yml'
+    target = bm.WORLD_SOURCE / 'garrison_skyblue_carpet.yml'
     target.write_text(yaml.safe_dump([model, *surfaces], sort_keys=False, width=110), encoding='utf-8')
     bm.surfaces.load_surfaces.cache_clear()
     model = bm.validate_model(model)

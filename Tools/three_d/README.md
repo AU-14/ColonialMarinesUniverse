@@ -144,7 +144,9 @@ cmu_3d off
 
 Drag to orbit, scroll to zoom, and use the cardinal views to compare a model with its source prototype icon. Searchable selectors expose all assets and their reference IDs. The marine is a scale mannequin and the rifle is an unrigged prop.
 
-- Editable definitions: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/*.yml`.
+- Editable world definitions: `Content.CMU/Resources/ThreeD/Prototypes/World/*.yml`.
+- Equipment authoring definitions: `Content.CMU/Resources/ThreeD/Prototypes/Equipment/*.yml`.
+- These presentation libraries are outside the normal prototype startup directory. The client loads world geometry on its first 3D opt-in, and equipment drafts only when opening the model workbench. Both stay cached across connections; a prototype reset allows them to load again. Initial opt-in can pause while loading. The server and clients that stay in 2D never load these libraries. Map elevation profiles and the shader declaration remain under `Prototypes/CMU14/ThreeD`.
 - Portable models: `Content.CMU/Resources/Models/CMU14/Garrison/*.glb`.
 - Attributions and modeling assumptions: `Content.CMU/Resources/Models/CMU14/Garrison/SOURCES*.md`.
 - Contact sheet: `Tools/three_d/generated/review/overview.png`.

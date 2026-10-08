@@ -25,7 +25,7 @@ from author_wide_machinery import world_parts, contacts
 ROOT = Path(__file__).resolve().parents[2]
 BASE = ROOT/'.codex/model-batch-baseline1006'
 GEN = ROOT/'Tools/three_d/generated'
-PROTOS = ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOS = ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World'
 MODEL = PROTOS/'garrison_shield_drinks.yml'
 ART = PROTOS/'garrison_shield_drinks_art.yml'
 TEXTURES = ROOT/'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces/ShieldDrinks'

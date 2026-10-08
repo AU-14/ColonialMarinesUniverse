@@ -130,7 +130,7 @@ establish that those live behaviors work.
 ## Ownership and verification
 
 `Tools/three_d/author_overhead_machinery.py` owns
-`Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_overhead_machinery.yml`,
+`Content.CMU/Resources/ThreeD/Prototypes/World/garrison_overhead_machinery.yml`,
 `garrison_overhead_machinery_art.yml`, the `CMU3DOverheadSurface*` textures and this
 source family. The existing `CMU3DRMCMachinePropBig11` ID is preserved; only its
 record was removed from `garrison_machinery_debris.yml` and replaced in the new

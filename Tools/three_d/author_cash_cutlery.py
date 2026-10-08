@@ -24,7 +24,7 @@ from author_wide_machinery import world_parts, contacts
 
 GEN=ROOT/'Tools/three_d/generated'
 REVIEW=GEN/'review/cash-cutlery'
-MODELS=ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_cash_cutlery.yml'
+MODELS=ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_cash_cutlery.yml'
 ART=MODELS.with_name('garrison_cash_cutlery_art.yml')
 TEXTURES=ROOT/'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces'
 NOTES=ROOT/'Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_CASH_CUTLERY.md'

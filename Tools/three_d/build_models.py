@@ -21,7 +21,9 @@ from primitives import ellipsoid_geometry, solid_geometry, triangle_count
 import surfaces
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / "Content.CMU/Resources/Prototypes/CMU14/ThreeD"
+SOURCE = ROOT / "Content.CMU/Resources/ThreeD/Prototypes"
+WORLD_SOURCE = SOURCE / "World"
+EQUIPMENT_SOURCE = SOURCE / "Equipment"
 OUTPUT = ROOT / "Content.CMU/Resources/Models/CMU14/Garrison"
 REVIEW = ROOT / "Tools/three_d/generated/review"
 VIEWER = ROOT / "Tools/three_d/generated"
@@ -314,7 +316,7 @@ def validate_model(model, *, part_limit=128):
 
 
 def load_models(source=SOURCE):
-    paths = [source] if source.is_file() else sorted(source.glob("*.yml"))
+    paths = [source] if source.is_file() else sorted(source.rglob("*.yml"))
     models, seen, references, random_references = [], set(), {}, set()
     for path in paths:
         entries = yaml.load(path.read_text(encoding="utf-8"), Loader=getattr(yaml, "CSafeLoader", yaml.SafeLoader))

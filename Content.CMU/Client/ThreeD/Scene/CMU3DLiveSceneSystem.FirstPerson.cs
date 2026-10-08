@@ -65,6 +65,7 @@ public sealed partial class CMU3DLiveSceneSystem
             return false;
         if (_firstPersonView != null)
             return true;
+        _modelLibrary.LoadWorld();
         Close();
         _firstPersonHost = viewport;
         _worldWasVisible = viewport.Viewport.Visible;

@@ -4,6 +4,7 @@ using Content.IntegrationTests.Fixtures;
 using Content.Shared.CMU14.ThreeD;
 using Robust.Shared.Prototypes;
 using Robust.Client.ResourceManagement;
+using Serilog.Events;
 
 namespace Content.IntegrationTests.CMU14.ThreeD;
 
@@ -11,11 +12,47 @@ namespace Content.IntegrationTests.CMU14.ThreeD;
 [TestFixture]
 public sealed class CMU3DModelLoadingTest : GameTest
 {
+    public override PoolSettings PoolSettings => new() { Connected = true, Fresh = true, Dirty = true };
+
     [Test]
-    public async Task ModelLibraryLoadsOnBothSidesWithValidGeometryAndReferences()
+    public async Task OptionalLibraryLoadsOnlyOnClientAndCanReloadAfterPrototypeReset()
     {
-        await Server.WaitAssertion(() => Validate(Server.ResolveDependency<IPrototypeManager>()));
-        await Client.WaitAssertion(() => Validate(Client.ResolveDependency<IPrototypeManager>()));
+        await Client.WaitAssertion(() =>
+        {
+            Assert.That(CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>(), Is.Empty,
+                "Joining in 2D must not parse or retain optional model geometry.");
+            var library = Client.ResolveDependency<CMU3DModelLibrary>();
+            library.LoadWorld();
+            Validate(CProtoMan);
+            Assert.That(CProtoMan.EnumeratePrototypes<CMU3DEquipmentPosePrototype>(), Is.Empty,
+                "The live renderer uses mob sprites and does not need attachment definitions.");
+            var model = CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>().First();
+            library.LoadWorld();
+            Assert.That(CProtoMan.Index<CMU3DModelPrototype>(model.ID), Is.SameAs(model),
+                "Repeated opt-ins must reuse the parsed library.");
+
+            // CMU ignores map definitions on clients. Reset re-registers the shared
+            // kind and logs this existing warning; all other loader warnings still fail.
+            bool IgnoredMapWarning(string sawmill, LogEvent message) =>
+                sawmill == "proto" && message.Level == LogEventLevel.Warning &&
+                message.RenderMessage() == "Registering an ignored prototype Content.Shared.Maps.GameMapPrototype";
+            Pair.ClientLogHandler.JudgeLog += IgnoredMapWarning;
+            try
+            {
+                CProtoMan.Reset();
+            }
+            finally
+            {
+                Pair.ClientLogHandler.JudgeLog -= IgnoredMapWarning;
+            }
+            library.LoadWorld();
+            Validate(CProtoMan);
+            Assert.That(CProtoMan.Index<CMU3DModelPrototype>(model.ID), Is.Not.SameAs(model),
+                "Replay/prototype resets must not leave the loader believing removed models are still available.");
+        });
+        await Server.WaitAssertion(() =>
+            Assert.That(SProtoMan.EnumeratePrototypes<CMU3DModelPrototype>(), Is.Empty,
+                "A client's 3D opt-in must not load presentation geometry on the shared server."));
     }
 
     [Test]
@@ -27,6 +64,10 @@ public sealed class CMU3DModelLoadingTest : GameTest
             var prototypes = Client.ResolveDependency<IPrototypeManager>();
             try
             {
+                Assert.That(preview.Open(), Is.True);
+                Validate(prototypes);
+                Assert.That(prototypes.EnumeratePrototypes<CMU3DModelPrototype>().Any(model => model.EquipmentOnly), Is.True,
+                    "The authoring workbench must still make equipment drafts available.");
                 foreach (var model in prototypes.EnumeratePrototypes<CMU3DModelPrototype>())
                     Assert.That(preview.Open(model.ID), Is.True, model.ID);
                 Assert.That(preview.Open("CMU3DThisModelDoesNotExist"), Is.False);
@@ -95,6 +136,7 @@ public sealed class CMU3DModelLoadingTest : GameTest
     {
         await Client.WaitAssertion(() =>
         {
+            Client.ResolveDependency<CMU3DModelLibrary>().LoadWorld();
             var surfaces = CMU3DSceneSurfaces.Load(Client.ResolveDependency<IPrototypeManager>(),
                 Client.ResolveDependency<IResourceCache>());
             Assert.That(surfaces.Width, Is.GreaterThan(1));
