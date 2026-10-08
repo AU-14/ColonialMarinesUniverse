@@ -1,3 +1,5 @@
+using Robust.Shared.Utility;
+
 namespace Content.Shared.CMU14.Expeditions;
 
 [Flags]
@@ -21,13 +23,16 @@ public static class CMUTacticalPlanner
     public static List<CMUTacticalAction>? Plan(CMUTacticalFact initial, CMUTacticalFact required,
         CMUTacticalFact forbidden, IReadOnlyList<CMUTacticalOperator> actions, out int expanded, int budget = 128)
     {
-        var frontier = new PriorityQueue<(CMUTacticalFact State, float Cost), float>();
+        // Robust's sandbox-safe queue is a max-heap, so reverse the cost comparison.
+        var frontier = new PriorityQueue<(CMUTacticalFact State, float Cost)>(
+            Comparer<(CMUTacticalFact State, float Cost)>.Create((a, b) => b.Cost.CompareTo(a.Cost)));
         var costs = new Dictionary<CMUTacticalFact, float> { [initial] = 0 };
         var previous = new Dictionary<CMUTacticalFact, (CMUTacticalFact State, CMUTacticalAction Action)>();
-        frontier.Enqueue((initial, 0), 0);
+        frontier.Add((initial, 0));
         expanded = 0;
-        while (frontier.TryDequeue(out var node, out _) && expanded < budget)
+        while (frontier.Count > 0 && expanded < budget)
         {
+            var node = frontier.Take();
             if (node.Cost > costs[node.State])
                 continue;
             expanded++;
@@ -54,7 +59,7 @@ public static class CMUTacticalPlanner
                     continue;
                 costs[next] = cost;
                 previous[next] = (node.State, action.Action);
-                frontier.Enqueue((next, cost), cost);
+                frontier.Add((next, cost));
             }
         }
         return null;

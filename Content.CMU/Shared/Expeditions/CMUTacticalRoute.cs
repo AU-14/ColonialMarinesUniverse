@@ -1,3 +1,5 @@
+using Robust.Shared.Utility;
+
 namespace Content.Shared.CMU14.Expeditions;
 
 /// <summary>Local A* with nonnegative exposure costs. Returns no route when blocked or over budget.</summary>
@@ -6,13 +8,16 @@ public static class CMUTacticalRoute
     public static List<int>? Find(int size, int start, int end, Func<int, bool> walkable,
         Func<int, float> danger, Func<int, int, bool> passage, out int expanded, int budget = 256)
     {
-        var open = new PriorityQueue<(int Cell, float Cost), float>();
+        // Keep path cost separate from A* priority; Robust's queue serves the maximum first.
+        var open = new PriorityQueue<(int Cell, float Cost, float Priority)>(
+            Comparer<(int Cell, float Cost, float Priority)>.Create((a, b) => b.Priority.CompareTo(a.Priority)));
         var costs = new Dictionary<int, float> { [start] = 0 };
         var parents = new Dictionary<int, int>();
-        open.Enqueue((start, 0), Distance(start, end, size));
+        open.Add((start, 0, Distance(start, end, size)));
         expanded = 0;
-        while (open.TryDequeue(out var current, out _) && expanded < budget)
+        while (open.Count > 0 && expanded < budget)
         {
+            var current = open.Take();
             if (current.Cost > costs[current.Cell])
                 continue;
             expanded++;
@@ -37,7 +42,7 @@ public static class CMUTacticalRoute
                     continue;
                 costs[next] = cost;
                 parents[next] = current.Cell;
-                open.Enqueue((next, cost), cost + Distance(next, end, size));
+                open.Add((next, cost, cost + Distance(next, end, size)));
             }
         }
         return null;

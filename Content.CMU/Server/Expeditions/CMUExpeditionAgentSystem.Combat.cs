@@ -49,7 +49,8 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (agent.State == CMUExpeditionAgentState.HoldAngle && now >= agent.FireAt)
             Aim(agent, now, true);
-        if (agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor == null && now >= agent.FireAt)
+        if (agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor == null && now >= agent.FireAt &&
+            CanLeaveCover(uid, agent))
             Aim(agent, now);
         if (agent.State == CMUExpeditionAgentState.Aim && now >= agent.FireAt)
         {

@@ -325,7 +325,9 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
 
         _steering.Unregister(uid);
-        if (agent.State is not (CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage or CMUExpeditionAgentState.Recover))
+        // Reacquiring a target or losing cover must not bypass the squad's attack slots.
+        if (agent.State is not (CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage or CMUExpeditionAgentState.Recover) &&
+            CanLeaveCover(uid, agent))
             Aim(agent, now);
     }
 

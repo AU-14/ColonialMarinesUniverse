@@ -178,9 +178,6 @@
 - type: entity
   parent: RMCCampfire
   id: CMUExpeditionCampfire
-  components:
-  - type: Campfire
-    fuel: 0
 
 - type: entity
   parent: CMUExpeditionFloorDetail
