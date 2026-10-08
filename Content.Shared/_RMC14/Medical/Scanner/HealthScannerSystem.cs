@@ -174,7 +174,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return false;
         }
 
-        var ev = new HealthScannerAttemptTargetEvent();
+        var ev = new HealthScannerAttemptTargetEvent(Scanner: scanner.Owner); // CMU14: pass the analyzer so targets can allow it
         RaiseLocalEvent(target, ref ev);
         if (ev.Cancelled)
         {

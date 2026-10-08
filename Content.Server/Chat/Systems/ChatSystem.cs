@@ -15,6 +15,7 @@ using Content.Shared.ActionBlocker;
 using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
+using Content.Shared.Damage.ForceSay; // CMU14
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
 using Content.Shared.Ghost.Components;
@@ -22,6 +23,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Players.RateLimiting;
 using Content.Shared.Radio;
 using Content.Shared.Speech.EntitySystems;
+using Content.Shared.StatusEffectNew; // CMU14
 using Content.Shared.Whitelist;
 using Robust.Server.Player;
 using Robust.Shared.Audio.Systems;
@@ -63,10 +65,12 @@ public sealed partial class ChatSystem : SharedChatSystem
     [Dependency] private INetConfigurationManager _netConfigManager = default!;
     [Dependency] private LanguageSystem _language = default!;
     [Dependency] private RMCChatBansManager _rmcChatBans = default!;
+    [Dependency] private StatusEffectsSystem _newStatus = default!; // CMU14
 
     private bool _loocEnabled = true;
     private bool _deadLoocEnabled;
     private bool _critLoocEnabled;
+    private bool _critWhisperEnabled; // CMU14
     private readonly bool _adminLoocEnabled = true;
     private bool _deadChatEnabled = true;
 
@@ -77,6 +81,7 @@ public sealed partial class ChatSystem : SharedChatSystem
         Subs.CVar(_configurationManager, CCVars.LoocEnabled, OnLoocEnabledChanged, true);
         Subs.CVar(_configurationManager, CCVars.DeadLoocEnabled, OnDeadLoocEnabledChanged, true);
         Subs.CVar(_configurationManager, CCVars.CritLoocEnabled, OnCritLoocEnabledChanged, true);
+        Subs.CVar(_configurationManager, CCVars.CritWhisper, OnCritWhisperEnabledChanged, true); // CMU14
         Subs.CVar(_configurationManager, CCVars.DeadChatEnabled, OnDeadChatEnabledChanged, true);
 
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnGameChange);
@@ -111,6 +116,9 @@ public sealed partial class ChatSystem : SharedChatSystem
         _chatManager.DispatchServerAnnouncement(
             Loc.GetString(val ? "chat-manager-crit-looc-chat-enabled-message" : "chat-manager-crit-looc-chat-disabled-message"));
     }
+
+    // CMU14 method
+    private void OnCritWhisperEnabledChanged(bool val) => _critWhisperEnabled = val;
 
     private void OnDeadChatEnabledChanged(bool val)
     {
@@ -223,6 +231,20 @@ public sealed partial class ChatSystem : SharedChatSystem
         {
             desiredType = InGameICChatType.Whisper;
             checkRadioPrefix = false;
+        }
+
+        // CMU14: crit players whisper instead of speaking. Force-say's one-shot
+        // allowance still sends the interrupted sentence as speech.
+        if (desiredType == InGameICChatType.Speak
+            && _critWhisperEnabled
+            && !HasComp<AllowNextCritSpeechComponent>(source)
+            && _mobStateSystem.IsCritical(source))
+        {
+            desiredType = InGameICChatType.Whisper;
+            checkRadioPrefix = false;
+            // reuse the radio matcher to strip any prefix (;, :h, .h) so it doesn't leak into the whisper
+            TryProcessRadioMessage(source, message, out var strippedText, out _, quiet: true);
+            message = strippedText;
         }
 
         var shouldCapitalize = desiredType != InGameICChatType.Emote;

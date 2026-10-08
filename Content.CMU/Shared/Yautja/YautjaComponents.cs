@@ -156,12 +156,6 @@ public sealed partial class YautjaComponent : Component
     public bool SkinColorRandomized;
 
     [DataField]
-    public EntProtoId LeapActionId = "CMUActionYautjaLeap";
-
-    [ViewVariables]
-    public EntityUid? LeapAction;
-
-    [DataField]
     public EntProtoId MarkForHuntActionId = "CMUActionYautjaMarkForHunt";
 
     [ViewVariables]
@@ -178,18 +172,6 @@ public sealed partial class YautjaComponent : Component
 
     [ViewVariables]
     public EntityUid? ButcherAction;
-
-    [DataField]
-    public float LeapThrowSpeed = 5f;
-
-    [DataField]
-    public float LeapMaxRange = 7f;
-
-    [DataField]
-    public TimeSpan LeapWindup = TimeSpan.FromSeconds(0.6);
-
-    [DataField]
-    public EntProtoId LeapWarningPrototype = "CMUYautjaLeapWarning";
 
     [DataField]
     public EntProtoId AudioPanelActionId = "CMUActionYautjaAudioPanel";
@@ -459,18 +441,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? ToggleCloakAction;
 
     [DataField]
-    public EntProtoId CreateFieldRationActionId = "CMUActionYautjaCreateFieldRation";
-
-    [ViewVariables]
-    public EntityUid? CreateFieldRationAction;
-
-    [DataField]
-    public EntProtoId CreateHuntingCanteenActionId = "CMUActionYautjaCreateHuntingCanteen";
-
-    [ViewVariables]
-    public EntityUid? CreateHuntingCanteenAction;
-
-    [DataField]
     public EntProtoId RaiseThrallActionId = "CMUActionYautjaRaiseThrall";
 
     [ViewVariables]
@@ -667,40 +637,16 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public bool NotificationSound = true;
 
     [DataField]
-    public EntProtoId StabilisingCrystalPrototype = "CMUYautjaStabilisingCrystal";
+    public EntProtoId StabilisingCrystalPrototype = "CMUYautjaAutoInjector";
 
     [DataField]
-    public EntProtoId HumanStabilisingCrystalPrototype = "CMUYautjaHumanStabilisingCrystal";
+    public EntProtoId HumanStabilisingCrystalPrototype = "CMUYautjaThrallAutoInjector";
 
     [DataField]
     public EntProtoId HuntingTrapPrototype = "CMUYautjaHuntingTrap";
 
     [DataField]
     public FixedPoint2 StabilisingCrystalCost = 400;
-
-    [DataField]
-    public EntProtoId FieldRationPrototype = "CMUYautjaFieldRation";
-
-    [DataField]
-    public FixedPoint2 FieldRationCost = 100;
-
-    [DataField]
-    public TimeSpan FieldRationCooldown = TimeSpan.FromSeconds(30);
-
-    [DataField]
-    public TimeSpan NextFieldRation;
-
-    [DataField]
-    public EntProtoId HuntingCanteenPrototype = "CMUYautjaHuntingCanteen";
-
-    [DataField]
-    public FixedPoint2 HuntingCanteenCost = 100;
-
-    [DataField]
-    public TimeSpan HuntingCanteenCooldown = TimeSpan.FromSeconds(30);
-
-    [DataField]
-    public TimeSpan NextHuntingCanteen;
 
     [DataField]
     public FixedPoint2 HumanStabilisingCrystalCost = 400;
@@ -1817,6 +1763,9 @@ public sealed partial class YautjaRelayBeaconComponent : Component
     public bool AllowCustomDestinations = true;
 
     [DataField]
+    public bool YoungbloodOnly;
+
+    [DataField]
     public EntityUid? AddTeleporterLocationAction;
 
     [DataField]
@@ -2012,6 +1961,9 @@ public sealed partial class YautjaHuntConsoleComponent : Component
             HuntCall("serpents_small", "cmu-yautja-hunt-call-serpents-small", 4, 1f, SerpentPrey()),
             HuntCall("serpents_group", "cmu-yautja-hunt-call-serpents-group", 6, 1.2f, SerpentPrey()),
             HuntCall("serpents_large", "cmu-yautja-hunt-call-serpents-large", 8, 1.4f, SerpentPrey()),
+            HuntCall("tribal_small", "cmu-yautja-hunt-call-tribal-small", 8, 1f, TribalPrey()),
+            HuntCall("tribal_group", "cmu-yautja-hunt-call-tribal-group", 12, 1.2f, TribalPrey()),
+            HuntCall("tribal_large", "cmu-yautja-hunt-call-tribal-large", 15, 1.4f, TribalPrey()),
             HuntCall("elite_mixed_small", "cmu-yautja-hunt-call-elite-mixed-small", 4, 1.5f, ElitePrey()),
             HuntCall("elite_mixed_group", "cmu-yautja-hunt-call-elite-mixed-group", 6, 2f, ElitePrey()),
             HuntCall("elite_mixed_large", "cmu-yautja-hunt-call-elite-mixed-large", 8, 2.5f, ElitePrey()),
@@ -2099,6 +2051,17 @@ public sealed partial class YautjaHuntConsoleComponent : Component
             Entity("CMXenoLurker", 2),
             Entity("CMXenoPraetorian"),
             Entity("CMXenoRavager"),
+        };
+    }
+
+    private static List<YautjaHuntSpawnEntry> TribalPrey()
+    {
+        return new List<YautjaHuntSpawnEntry>
+        {
+            Entity("AU14MobTribalLeader"),
+            Entity("AU14MobTribalSpear", 4),
+            Entity("AU14MobTribalBowman", 2),
+            Entity("AU14MobTribalShaman", 2),
         };
     }
 
@@ -2259,6 +2222,12 @@ public sealed partial class YautjaSleepingHellhoundComponent : Component
 {
     [DataField]
     public EntProtoId SpawnPrototype = "CMUMobYautjaHellhound";
+
+    /// <summary>
+    /// Living hellhounds one master may lead. Waking past this is refused.
+    /// </summary>
+    [DataField]
+    public int MaxHoundsPerMaster = 3;
 
     [DataField]
     public SoundSpecifier WakeSound = new SoundPathSpecifier("/Audio/Animals/cat_hiss.ogg");
@@ -2563,11 +2532,10 @@ public sealed partial class YautjaGearContainerComponent : Component, IClothingS
 
     private static Dictionary<YautjaGearKind, EntProtoId> GetDefaultGearPrototypes()
     {
+        // CMU14: a bracer spawns with only its plasma caster pre-installed; the other attachments
+        // are not created at map initialization and have to be installed explicitly.
         var gear = new Dictionary<YautjaGearKind, EntProtoId>();
         gear.Add(YautjaGearKind.Caster, "CMUYautjaPlasmaCaster");
-        gear.Add(YautjaGearKind.WristBlades, "CMUYautjaWristBlades");
-        gear.Add(YautjaGearKind.Scimitar, "CMUYautjaScimitar");
-        gear.Add(YautjaGearKind.ChainGauntlet, "CMUYautjaChainGauntlet");
         return gear;
     }
 }
@@ -2629,6 +2597,7 @@ public sealed partial class YautjaStoredGearComponent : Component
     public ContainerSlot? AttachedContainer;
 
     public bool Retracting;
+    public bool ReinsertedByDeploy;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]

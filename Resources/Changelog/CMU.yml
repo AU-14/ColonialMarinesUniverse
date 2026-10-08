@@ -11972,5 +11972,78 @@
   id: 737
   time: '2026-10-07T22:30:24.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2095
+- author: KeiKiyomi
+  changes:
+  - message: Fixed OBs not hitting all z-levels
+    type: Fix
+  id: 738
+  time: '2026-10-08T01:16:16.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2098
+- author: troytroy400
+  changes:
+  - message: Coffins now hold less than a crate.
+    type: Tweak
+  - message: Round-start intel should now spawn reliably.
+    type: Fix
+  - message: Destroyable multi-Z grates and roof tiles can now actually be destroyed
+      by explosions as intended.
+    type: Fix
+  - message: Destroyable tiles now drop debris when destroyed.
+    type: Add
+  - message: C4 and breaching charges can now be planted directly on destroyable tiles
+      to blow them open.
+    type: Add
+  - message: Destroyable tiles left with no tile next to them now collapse instead
+      of floating.
+    type: Add
+  - message: Added missing destroyable roof tile variants.
+    type: Add
+  - message: The LACN utility rig now holds general supplies like the other utility
+      rigs, instead of anything.
+    type: Tweak
+  - message: Added the LACN toolbelt rig, available filled in the LACN engineering
+      and combat technician gear racks.
+    type: Add
+  - message: Robotic limbs no longer bleed when a hand or limb is blown off them.
+    type: Fix
+  - message: The universal translator now also has German, English, Spanish, French,
+      Russian, Japanese and Mandarin.
+    type: Add
+  - message: Brazilian and Portuguese are now a single language, Brazilian Portuguese.
+    type: Tweak
+  - message: The UA Artificial Womb origin now gives you Tactical Sign Language.
+    type: Add
+  - message: Falling out of a flying dropship without a parachute now shatters your
+      legs, breaks your arms, hands and feet, gives you severe brain damage and deals
+      105 brute damage on landing.
+    type: Add
+  - message: Added CMU's birthday (November 11) and Alien Day (April 26) to the holiday
+      greetings.
+    type: Add
+  id: 739
+  time: '2026-10-08T02:09:07.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2099
+- author: byondsucks
+  changes:
+  - message: u can't wide swing with yautja weapons
+    type: Add
+  id: 740
+  time: '2026-10-08T03:13:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2088
+- author: maertayn
+  changes:
+  - message: Ghost callable minor third party
+    type: Add
+  - message: Per warship alert levels, some light fixtures emit light
+    type: Add
+  - message: Crit whispering works and auto-punctuate is on by default again
+    type: Fix
+  - message: Decal chunk fix was reverted by rebase, performance should be better
+    type: Fix
+  - message: Hazardous weather effects
+    type: Add
+  id: 741
+  time: '2026-10-08T06:30:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2101
 Name: CMU
 Order: -1
