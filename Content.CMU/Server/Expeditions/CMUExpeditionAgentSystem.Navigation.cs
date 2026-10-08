@@ -7,6 +7,77 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentSystem
 {
+    private void InvestigateContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates contact, TimeSpan now, bool visible = false)
+    {
+        var start = Transform(uid).Coordinates;
+        var localContact = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(contact));
+        var delta = localContact.Position - start.Position;
+        var distance = delta.Length();
+        var stopRange = visible ? Math.Max(1, agent.FireRange - 1.5f) : 2.5f;
+        if (distance <= stopRange)
+        {
+            _steering.Unregister(uid);
+            agent.State = CMUExpeditionAgentState.Watch;
+            agent.InvestigationDestination = null;
+            agent.InvestigationContact = null;
+            agent.Route.Clear();
+            agent.RouteDestination = null;
+            if (agent.ContactFromRadio)
+                agent.RadioDecision = "watching-reported-area";
+            return;
+        }
+        if (agent.InvestigationDestination is { } previous && !_transform.InRange(start, previous, 0.6f) &&
+            (now < agent.NextInvestigation || agent.InvestigationContact is { } oldContact && _transform.InRange(oldContact, contact, 2)))
+        {
+            agent.State = CMUExpeditionAgentState.Investigate;
+            Move(uid, previous);
+            CheckFailure();
+            return;
+        }
+        if (now < agent.NextInvestigation)
+        {
+            _steering.Unregister(uid);
+            agent.State = CMUExpeditionAgentState.Watch;
+            return;
+        }
+        agent.NextInvestigation = now + TimeSpan.FromSeconds(1);
+        agent.InvestigationDestination = null;
+        // Reports can be farther away than the 16-tile tactical search. Advance in bounded
+        // steps and spread responders, without ever tracking the unseen target's current body.
+        var ideal = start.Offset(Vector2.Normalize(delta) * Math.Min(8, distance - stopRange));
+        foreach (var candidate in NearbySquadPositions(ideal, 2))
+        {
+            if (!ValidOrderPoint(uid, candidate) || Reserved(uid, candidate) || agent.Home is not { } home ||
+                !_transform.InRange(home, candidate, agent.LeashRange) || _transform.InRange(start, candidate, 0.75f) ||
+                agent.FailedPosition is { } failed && now < agent.AvoidPositionUntil + TimeSpan.FromSeconds(3) && _transform.InRange(candidate, failed, 1.4f))
+                continue;
+            agent.InvestigationDestination = candidate;
+            agent.InvestigationContact = contact;
+            agent.State = CMUExpeditionAgentState.Investigate;
+            Move(uid, candidate);
+            CheckFailure();
+            return;
+        }
+        _steering.Unregister(uid);
+        agent.State = CMUExpeditionAgentState.Watch;
+        if (agent.ContactFromRadio)
+            agent.RadioDecision = "support-route-blocked";
+
+        void CheckFailure()
+        {
+            if (agent.State != CMUExpeditionAgentState.Watch)
+            {
+                if (agent.ContactFromRadio)
+                    agent.RadioDecision = "advancing-to-report";
+                return;
+            }
+            agent.InvestigationDestination = null;
+            agent.NextInvestigation = now + TimeSpan.FromSeconds(1);
+            if (agent.ContactFromRadio)
+                agent.RadioDecision = "support-route-blocked";
+        }
+    }
+
     private bool BuildTacticalRoute(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates destination, bool ordered = false)
     {
         agent.Route.Clear();

@@ -258,6 +258,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             if (agent.CoverAnchor is { } anchor && _transform.InRange(coordinates, anchor, 0.9f) ||
                 agent.PeekPosition is { } peek && _transform.InRange(coordinates, peek, 0.9f) ||
+                agent.InvestigationDestination is { } support && _transform.InRange(coordinates, support, 1.5f) ||
                 agent.CoverDestination is { } destination && _transform.InRange(coordinates, destination, 0.9f))
                 return true;
         }

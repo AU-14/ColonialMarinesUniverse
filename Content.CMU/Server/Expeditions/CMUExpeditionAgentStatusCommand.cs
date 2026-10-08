@@ -23,7 +23,18 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        if (args.Length != 1 || !int.TryParse(args[0], out var number) || !_map.MapExists(new MapId(number)))
+        if (args.Length != 1)
+        {
+            shell.WriteError(Help);
+            return;
+        }
+        MapId map;
+        if (args[0] == "here" && shell.Player?.AttachedEntity is { } player &&
+            EntityManager.TryGetComponent<TransformComponent>(player, out var playerTransform))
+            map = playerTransform.MapID;
+        else if (int.TryParse(args[0], out var number) && _map.MapExists(new MapId(number)))
+            map = new MapId(number);
+        else
         {
             shell.WriteError(Help);
             return;
@@ -31,7 +42,7 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
         var query = EntityManager.EntityQueryEnumerator<CMUExpeditionAgentComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var agent, out var transform))
         {
-            if (transform.MapID != new MapId(number))
+            if (transform.MapID != map)
                 continue;
             var ammo = new GetAmmoCountEvent();
             if (_guns.TryGetGun(uid, out var gun))
@@ -53,6 +64,10 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
                 ("destination", agent.OrderedDestination?.ToString() ?? "-"), ("patrolling", agent.Patrolling),
                 ("waypoint", agent.PatrolPoints.Count == 0 ? 0 : agent.PatrolIndex + 1),
                 ("points", agent.PatrolPoints.Count), ("blocked", agent.OrderBlocked)));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-radio-status",
+                ("received", agent.ReportsReceived), ("accepted", agent.ReportsAccepted),
+                ("decision", agent.RadioDecision), ("radioContact", agent.ContactFromRadio),
+                ("destination", agent.InvestigationDestination?.ToString() ?? "-")));
         }
     }
 }

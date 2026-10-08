@@ -60,6 +60,10 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.LastSeen = null;
         agent.RadioTarget = null;
         agent.RadioPosition = null;
+        agent.ContactFromRadio = false;
+        agent.RadioDecision = "orders-reset";
+        agent.NextInvestigation = TimeSpan.Zero;
+        agent.NextTargetSwitch = TimeSpan.Zero;
         agent.OrderRoute.Clear();
         agent.NextOrderRoute = TimeSpan.Zero;
         agent.OrderBlocked = false;
