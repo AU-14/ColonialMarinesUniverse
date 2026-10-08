@@ -1,0 +1,124 @@
+- type: cmu3DModel
+  id: CMU3DPrisonCarpet
+  label: Prison carpet — connected corners
+  status: draft
+  sourcePrototypes:
+  - CMCarpetPrison
+  referencePrototype: CMCarpetPrison
+  referenceRsi: /Textures/CMU14/ThreeD/PrisonCarpetReferences.rsi
+  referenceState: isolated
+  sourceDirections: 1
+  cornerSurfaces:
+  - CMU3DPrisonCarpetSurface01
+  - CMU3DPrisonCarpetSurface02
+  - CMU3DPrisonCarpetSurface03
+  - CMU3DPrisonCarpetSurface04
+  - CMU3DPrisonCarpetSurface05
+  - CMU3DPrisonCarpetSurface06
+  - CMU3DPrisonCarpetSurface07
+  - CMU3DPrisonCarpetSurface08
+  - CMU3DPrisonCarpetSurface01
+  - CMU3DPrisonCarpetSurface02
+  - CMU3DPrisonCarpetSurface03
+  - CMU3DPrisonCarpetSurface04
+  - CMU3DPrisonCarpetSurface05
+  - CMU3DPrisonCarpetSurface06
+  - CMU3DPrisonCarpetSurface07
+  - CMU3DPrisonCarpetSurface08
+  - CMU3DPrisonCarpetSurface07
+  - CMU3DPrisonCarpetSurface08
+  - CMU3DPrisonCarpetSurface06
+  - CMU3DPrisonCarpetSurface05
+  - CMU3DPrisonCarpetSurface09
+  - CMU3DPrisonCarpetSurface10
+  - CMU3DPrisonCarpetSurface11
+  - CMU3DPrisonCarpetSurface12
+  - CMU3DPrisonCarpetSurface07
+  - CMU3DPrisonCarpetSurface08
+  - CMU3DPrisonCarpetSurface06
+  - CMU3DPrisonCarpetSurface05
+  - CMU3DPrisonCarpetSurface13
+  - CMU3DPrisonCarpetSurface13
+  - CMU3DPrisonCarpetSurface13
+  - CMU3DPrisonCarpetSurface13
+  description: Four thin floor quadrants compose the original prison carpet artwork from eight-neighbour IconSmooth
+    CornerFill states. Preserves source borders, diagonal corners and map-grid alignment. A 0.012-tile thickness
+    is inferred; hidden fabric construction and material response remain drafts. The isolated reference is not a
+    claim about every saved tile. See SOURCES_PRISON_CARPET.md.
+  parts:
+  - label: SE carpet quadrant
+    min: 0, -0.5, 0
+    max: 0.5, 0, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DPrisonCarpetSurface01
+    surfaceAxis: XY
+  - label: NE carpet quadrant
+    min: 0, 0, 0
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DPrisonCarpetSurface03
+    surfaceAxis: XY
+  - label: NW carpet quadrant
+    min: -0.5, 0, 0
+    max: 0, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DPrisonCarpetSurface02
+    surfaceAxis: XY
+  - label: SW carpet quadrant
+    min: -0.5, -0.5, 0
+    max: 0, 0, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DPrisonCarpetSurface04
+    surfaceAxis: XY
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface01
+  atlasIndex: 652
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface01.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface02
+  atlasIndex: 653
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface02.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface03
+  atlasIndex: 654
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface03.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface04
+  atlasIndex: 655
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface04.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface05
+  atlasIndex: 656
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface05.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface06
+  atlasIndex: 657
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface06.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface07
+  atlasIndex: 658
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface07.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface08
+  atlasIndex: 659
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface08.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface09
+  atlasIndex: 660
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface09.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface10
+  atlasIndex: 661
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface10.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface11
+  atlasIndex: 662
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface11.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface12
+  atlasIndex: 663
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface12.png
+- type: cmu3DSurface
+  id: CMU3DPrisonCarpetSurface13
+  atlasIndex: 664
+  texture: /Textures/CMU14/ThreeD/PrisonCarpet/CMU3DPrisonCarpetSurface13.png

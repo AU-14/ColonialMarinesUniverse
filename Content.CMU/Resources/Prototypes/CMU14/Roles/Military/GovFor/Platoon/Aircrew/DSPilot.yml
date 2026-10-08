@@ -295,6 +295,7 @@
 - type: job
   parent: AU14JobGOVFORDSPilot
   id: AU14JobGOVFORGunshipPilot
+  forceOnForcePreferenceRole: GunshipPilot
   name: au14-job-name-govforgunshippilot
   description: au14-job-description-govforgunshippilot
   spawnMenuRoleName: au14-spawn-role-name-govfor-gunship-pilot
@@ -314,6 +315,7 @@
 - type: job
   parent: AU14JobOPFORDSPilot
   id: AU14JobOPFORGunshipPilot
+  forceOnForcePreferenceRole: GunshipPilot
   name: au14-job-name-govforgunshippilot
   description: au14-job-description-govforgunshippilot
   spawnMenuRoleName: au14-spawn-role-name-opfor-gunship-pilot
@@ -332,6 +334,7 @@
 - type: job
   parent: AU14JobGOVFORDSPilot
   id: AU14JobGOVFORFighterPilot
+  forceOnForcePreferenceRole: FighterPilot
   name: au14-job-name-govforfighterpilot
   description: au14-job-description-govforfighterpilot
   spawnMenuRoleName: au14-spawn-role-name-govfor-fighter-pilot
@@ -355,6 +358,7 @@
 - type: job
   parent: AU14JobOPFORDSPilot
   id: AU14JobOPFORFighterPilot
+  forceOnForcePreferenceRole: FighterPilot
   name: au14-job-name-govforfighterpilot
   description: au14-job-description-govforfighterpilot
   spawnMenuRoleName: au14-spawn-role-name-opfor-fighter-pilot
@@ -377,6 +381,7 @@
 - type: job
   parent: AU14JobGOVFORDSPilot
   id: AU14JobGOVFORFighterSystemsOfficer
+  forceOnForcePreferenceRole: FighterSystemsOfficer
   name: au14-job-name-govforfightersystemsofficer
   description: au14-job-description-govforfightersystemsofficer
   spawnMenuRoleName: au14-spawn-role-name-govfor-fighter-systems-officer
@@ -396,6 +401,7 @@
 - type: job
   parent: AU14JobOPFORDSPilot
   id: AU14JobOPFORFighterSystemsOfficer
+  forceOnForcePreferenceRole: FighterSystemsOfficer
   name: au14-job-name-govforfightersystemsofficer
   description: au14-job-description-govforfightersystemsofficer
   spawnMenuRoleName: au14-spawn-role-name-opfor-fighter-systems-officer

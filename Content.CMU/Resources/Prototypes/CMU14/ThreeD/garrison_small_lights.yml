@@ -1,0 +1,693 @@
+- type: cmu3DModel
+  id: CMU3DSmallRedWallLight
+  label: Small red wall bulb
+  status: draft
+  sourcePrototypes:
+  - RMCLightFixtureSmallRedAlwaysPowered
+  description: Exposed horizontal bulb and socket at the saved wall face. Five source-owned bulb states; no fabricated protective
+    housing. Mount height, hidden depth, opaque glass shading and side shape are inferred. Source glow is not a solid part
+    and this preview does not emit light. See SOURCES_SMALL_LIGHTS.md.
+  wallMounted: true
+  sourceDirections: 4
+  referenceRsi: _RMC14/Structures/Wallmounts/LightingOffset/light_bulb.rsi
+  referenceState: bulb1
+  referenceTint: '#C02526'
+  bakedSpriteTint: '#C02526'
+  poweredLightStates:
+    bulb1:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#1E0606'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#651111'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#180505'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#330A0A'
+        shape: CylinderY
+      - label: Bulb glass body
+        min: -0.062500, -0.769000, 2.237500
+        max: 0.062500, -0.608000, 2.362500
+        color: '#B61A0E'
+        shape: Ellipsoid
+      - label: Glass midtone
+        min: -0.038, -0.754, 2.313
+        max: 0.038, -0.625, 2.378
+        color: '#7A0B05'
+        shape: Ellipsoid
+      - label: Glass highlight
+        min: -0.019, -0.744, 2.36
+        max: 0.013, -0.637, 2.388
+        color: '#B91E16'
+        shape: Ellipsoid
+    bulb0:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#1E0606'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#651111'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#180505'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#330A0A'
+        shape: CylinderY
+      - label: Bulb glass body
+        min: -0.062500, -0.769000, 2.237500
+        max: 0.062500, -0.608000, 2.362500
+        color: '#651111'
+        shape: Ellipsoid
+      - label: Glass midtone
+        min: -0.038, -0.754, 2.313
+        max: 0.038, -0.625, 2.378
+        color: '#651111'
+        shape: Ellipsoid
+      - label: Glass highlight
+        min: -0.019, -0.744, 2.36
+        max: 0.013, -0.637, 2.388
+        color: '#921B1B'
+        shape: Ellipsoid
+    bulb-empty:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#1E0606'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#651111'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#180505'
+        shape: CylinderY
+      - label: Empty socket left tab
+        min: -0.093750, -0.575000, 2.268750
+        max: -0.062500, -0.512000, 2.331250
+        color: '#6F1516'
+      - label: Empty socket right tab
+        min: 0.062500, -0.575000, 2.268750
+        max: 0.093750, -0.512000, 2.331250
+        color: '#6F1516'
+      - label: Recessed contact
+        min: -0.016000, -0.586500, 2.284000
+        max: 0.016000, -0.586000, 2.316000
+        color: '#6B110D'
+    bulb-broken:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#1E0606'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#651111'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#180505'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#330A0A'
+        shape: CylinderY
+      - label: Short retained glass
+        min: -0.049000, -0.664000, 2.266000
+        max: 0.045000, -0.610000, 2.341000
+        color: '#4A0D0D'
+        shape: Ellipsoid
+      - label: Long broken glass edge
+        min: -0.044000, -0.778000, 2.279000
+        max: -0.017000, -0.637000, 2.325000
+        color: '#921B1B'
+      - label: Broken glass shoulder
+        min: -0.014000, -0.706000, 2.271000
+        max: 0.031000, -0.635000, 2.329000
+        color: '#651111'
+      - label: Dark jagged tip
+        min: -0.032000, -0.786000, 2.286000
+        max: -0.017000, -0.754000, 2.312000
+        color: '#350A0A'
+    bulb-burned:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#1E0606'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#651111'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#180505'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#330A0A'
+        shape: CylinderY
+      - label: Bulb glass body
+        min: -0.062500, -0.769000, 2.237500
+        max: 0.062500, -0.608000, 2.362500
+        color: '#3D0A0A'
+        shape: Ellipsoid
+      - label: Glass midtone
+        min: -0.038, -0.754, 2.313
+        max: 0.038, -0.625, 2.378
+        color: '#3D0A0A'
+        shape: Ellipsoid
+      - label: Glass highlight
+        min: -0.019, -0.744, 2.36
+        max: 0.013, -0.637, 2.388
+        color: '#590F0F'
+        shape: Ellipsoid
+  parts:
+  - label: Socket wall foot
+    min: -0.062500, -0.526000, 2.253125
+    max: 0.062500, -0.501000, 2.346875
+    color: '#1E0606'
+  - label: Socket metal collar
+    min: -0.062500, -0.565000, 2.237500
+    max: 0.062500, -0.526000, 2.362500
+    color: '#651111'
+    shape: CylinderY
+  - label: Socket black insulator
+    min: -0.062500, -0.586000, 2.253125
+    max: 0.062500, -0.565000, 2.346875
+    color: '#180505'
+    shape: CylinderY
+  - label: Bulb neck
+    min: -0.031250, -0.615000, 2.268750
+    max: 0.031250, -0.582000, 2.331250
+    color: '#330A0A'
+    shape: CylinderY
+  - label: Bulb glass body
+    min: -0.062500, -0.769000, 2.237500
+    max: 0.062500, -0.608000, 2.362500
+    color: '#B61A0E'
+    shape: Ellipsoid
+  - label: Glass midtone
+    min: -0.038, -0.754, 2.313
+    max: 0.038, -0.625, 2.378
+    color: '#7A0B05'
+    shape: Ellipsoid
+  - label: Glass highlight
+    min: -0.019, -0.744, 2.36
+    max: 0.013, -0.637, 2.388
+    color: '#B91E16'
+    shape: Ellipsoid
+  fitInsideWall: true
+  backWallMountTargets:
+  - RMCWallStrata
+  - RMCWallHybrisa
+  - RMCWallHybrisaRock
+  - RMCWallPrisonReinforced
+  - RMCWallHybrisaMedical
+  - RMCWallKutjevoRockBorder
+
+- type: cmu3DModel
+  id: CMU3DSmallBlueWallLight
+  label: Small blue wall bulb
+  status: draft
+  sourcePrototypes:
+  - RMCLightFixtureSmallBlue
+  description: Exposed horizontal bulb and socket at the saved wall face. Five source-owned bulb states; no fabricated protective
+    housing. Mount height, hidden depth, opaque glass shading and side shape are inferred. Source glow is not a solid part
+    and this preview does not emit light. See SOURCES_SMALL_LIGHTS.md.
+  wallMounted: true
+  sourceDirections: 4
+  referenceRsi: _RMC14/Structures/Wallmounts/LightingOffset/light_bulb.rsi
+  referenceState: bbulb1
+  referenceTint: '#FFFFFF'
+  bakedSpriteTint: '#FFFFFF'
+  poweredLightStates:
+    bbulb1:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#444242'
+        shape: CylinderY
+      - label: Bulb glass body
+        min: -0.062500, -0.769000, 2.237500
+        max: 0.062500, -0.608000, 2.362500
+        color: '#89B6E5'
+        shape: Ellipsoid
+      - label: Glass midtone
+        min: -0.038, -0.754, 2.313
+        max: 0.038, -0.625, 2.378
+        color: '#5E8BB9'
+        shape: Ellipsoid
+      - label: Glass highlight
+        min: -0.019, -0.744, 2.36
+        max: 0.013, -0.637, 2.388
+        color: '#99CCFF'
+        shape: Ellipsoid
+    bbulb0:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#444242'
+        shape: CylinderY
+      - label: Bulb glass body
+        min: -0.062500, -0.769000, 2.237500
+        max: 0.062500, -0.608000, 2.362500
+        color: '#867872'
+        shape: Ellipsoid
+      - label: Glass midtone
+        min: -0.038, -0.754, 2.313
+        max: 0.038, -0.625, 2.378
+        color: '#867872'
+        shape: Ellipsoid
+      - label: Glass highlight
+        min: -0.019, -0.744, 2.36
+        max: 0.013, -0.637, 2.388
+        color: '#C2BAB6'
+        shape: Ellipsoid
+    bbulb-empty:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Empty socket left tab
+        min: -0.093750, -0.575000, 2.268750
+        max: -0.062500, -0.512000, 2.331250
+        color: '#939393'
+      - label: Empty socket right tab
+        min: 0.062500, -0.575000, 2.268750
+        max: 0.093750, -0.512000, 2.331250
+        color: '#939393'
+      - label: Recessed contact
+        min: -0.016000, -0.586500, 2.284000
+        max: 0.016000, -0.586000, 2.316000
+        color: '#8E7659'
+    bbulb-broken:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#444242'
+        shape: CylinderY
+      - label: Short retained glass
+        min: -0.049000, -0.664000, 2.266000
+        max: 0.045000, -0.610000, 2.341000
+        color: '#625854'
+        shape: Ellipsoid
+      - label: Long broken glass edge
+        min: -0.044000, -0.778000, 2.279000
+        max: -0.017000, -0.637000, 2.325000
+        color: '#C2BAB6'
+      - label: Broken glass shoulder
+        min: -0.014000, -0.706000, 2.271000
+        max: 0.031000, -0.635000, 2.329000
+        color: '#867872'
+      - label: Dark jagged tip
+        min: -0.032000, -0.786000, 2.286000
+        max: -0.017000, -0.754000, 2.312000
+        color: '#464444'
+    bbulb-burned:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#444242'
+        shape: CylinderY
+      - label: Bulb glass body
+        min: -0.062500, -0.769000, 2.237500
+        max: 0.062500, -0.608000, 2.362500
+        color: '#514845'
+        shape: Ellipsoid
+      - label: Glass midtone
+        min: -0.038, -0.754, 2.313
+        max: 0.038, -0.625, 2.378
+        color: '#514845'
+        shape: Ellipsoid
+      - label: Glass highlight
+        min: -0.019, -0.744, 2.36
+        max: 0.013, -0.637, 2.388
+        color: '#766964'
+        shape: Ellipsoid
+  parts:
+  - label: Socket wall foot
+    min: -0.062500, -0.526000, 2.253125
+    max: 0.062500, -0.501000, 2.346875
+    color: '#282828'
+  - label: Socket metal collar
+    min: -0.062500, -0.565000, 2.237500
+    max: 0.062500, -0.526000, 2.362500
+    color: '#867872'
+    shape: CylinderY
+  - label: Socket black insulator
+    min: -0.062500, -0.586000, 2.253125
+    max: 0.062500, -0.565000, 2.346875
+    color: '#202020'
+    shape: CylinderY
+  - label: Bulb neck
+    min: -0.031250, -0.615000, 2.268750
+    max: 0.031250, -0.582000, 2.331250
+    color: '#444242'
+    shape: CylinderY
+  - label: Bulb glass body
+    min: -0.062500, -0.769000, 2.237500
+    max: 0.062500, -0.608000, 2.362500
+    color: '#89B6E5'
+    shape: Ellipsoid
+  - label: Glass midtone
+    min: -0.038, -0.754, 2.313
+    max: 0.038, -0.625, 2.378
+    color: '#5E8BB9'
+    shape: Ellipsoid
+  - label: Glass highlight
+    min: -0.019, -0.744, 2.36
+    max: 0.013, -0.637, 2.388
+    color: '#99CCFF'
+    shape: Ellipsoid
+  fitInsideWall: true
+  backWallMountTargets:
+  - RMCWallStrata
+  - RMCWallHybrisa
+  - RMCWallHybrisaRock
+  - RMCWallPrisonReinforced
+  - RMCWallHybrisaMedical
+  - RMCWallKutjevoRockBorder
+
+- type: cmu3DModel
+  id: CMU3DSmallEmptyWallLight
+  label: Small empty wall socket
+  status: draft
+  sourcePrototypes:
+  - RMCLightFixtureSmallEmpty
+  description: Exposed horizontal bulb and socket at the saved wall face. Five source-owned bulb states; no fabricated protective
+    housing. Mount height, hidden depth, opaque glass shading and side shape are inferred. Source glow is not a solid part
+    and this preview does not emit light. See SOURCES_SMALL_LIGHTS.md.
+  wallMounted: true
+  sourceDirections: 4
+  referenceRsi: _RMC14/Structures/Wallmounts/LightingOffset/light_bulb.rsi
+  referenceState: bulb-empty
+  referenceTint: '#FFFFFF'
+  bakedSpriteTint: '#FFFFFF'
+  poweredLightStates:
+    bulb1:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#444242'
+        shape: CylinderY
+      - label: Bulb glass body
+        min: -0.062500, -0.769000, 2.237500
+        max: 0.062500, -0.608000, 2.362500
+        color: '#F2B45C'
+        shape: Ellipsoid
+      - label: Glass midtone
+        min: -0.038, -0.754, 2.313
+        max: 0.038, -0.625, 2.378
+        color: '#A24F1F'
+        shape: Ellipsoid
+      - label: Glass highlight
+        min: -0.019, -0.744, 2.36
+        max: 0.013, -0.637, 2.388
+        color: '#F6CD94'
+        shape: Ellipsoid
+    bulb0:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#444242'
+        shape: CylinderY
+      - label: Bulb glass body
+        min: -0.062500, -0.769000, 2.237500
+        max: 0.062500, -0.608000, 2.362500
+        color: '#867872'
+        shape: Ellipsoid
+      - label: Glass midtone
+        min: -0.038, -0.754, 2.313
+        max: 0.038, -0.625, 2.378
+        color: '#867872'
+        shape: Ellipsoid
+      - label: Glass highlight
+        min: -0.019, -0.744, 2.36
+        max: 0.013, -0.637, 2.388
+        color: '#C2BAB6'
+        shape: Ellipsoid
+    bulb-empty:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Empty socket left tab
+        min: -0.093750, -0.575000, 2.268750
+        max: -0.062500, -0.512000, 2.331250
+        color: '#939393'
+      - label: Empty socket right tab
+        min: 0.062500, -0.575000, 2.268750
+        max: 0.093750, -0.512000, 2.331250
+        color: '#939393'
+      - label: Recessed contact
+        min: -0.016000, -0.586500, 2.284000
+        max: 0.016000, -0.586000, 2.316000
+        color: '#8E7659'
+    bulb-broken:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#444242'
+        shape: CylinderY
+      - label: Short retained glass
+        min: -0.049000, -0.664000, 2.266000
+        max: 0.045000, -0.610000, 2.341000
+        color: '#625854'
+        shape: Ellipsoid
+      - label: Long broken glass edge
+        min: -0.044000, -0.778000, 2.279000
+        max: -0.017000, -0.637000, 2.325000
+        color: '#C2BAB6'
+      - label: Broken glass shoulder
+        min: -0.014000, -0.706000, 2.271000
+        max: 0.031000, -0.635000, 2.329000
+        color: '#867872'
+      - label: Dark jagged tip
+        min: -0.032000, -0.786000, 2.286000
+        max: -0.017000, -0.754000, 2.312000
+        color: '#464444'
+    bulb-burned:
+      parts:
+      - label: Socket wall foot
+        min: -0.062500, -0.526000, 2.253125
+        max: 0.062500, -0.501000, 2.346875
+        color: '#282828'
+      - label: Socket metal collar
+        min: -0.062500, -0.565000, 2.237500
+        max: 0.062500, -0.526000, 2.362500
+        color: '#867872'
+        shape: CylinderY
+      - label: Socket black insulator
+        min: -0.062500, -0.586000, 2.253125
+        max: 0.062500, -0.565000, 2.346875
+        color: '#202020'
+        shape: CylinderY
+      - label: Bulb neck
+        min: -0.031250, -0.615000, 2.268750
+        max: 0.031250, -0.582000, 2.331250
+        color: '#444242'
+        shape: CylinderY
+      - label: Bulb glass body
+        min: -0.062500, -0.769000, 2.237500
+        max: 0.062500, -0.608000, 2.362500
+        color: '#514845'
+        shape: Ellipsoid
+      - label: Glass midtone
+        min: -0.038, -0.754, 2.313
+        max: 0.038, -0.625, 2.378
+        color: '#514845'
+        shape: Ellipsoid
+      - label: Glass highlight
+        min: -0.019, -0.744, 2.36
+        max: 0.013, -0.637, 2.388
+        color: '#766964'
+        shape: Ellipsoid
+  parts:
+  - label: Socket wall foot
+    min: -0.062500, -0.526000, 2.253125
+    max: 0.062500, -0.501000, 2.346875
+    color: '#282828'
+  - label: Socket metal collar
+    min: -0.062500, -0.565000, 2.237500
+    max: 0.062500, -0.526000, 2.362500
+    color: '#867872'
+    shape: CylinderY
+  - label: Socket black insulator
+    min: -0.062500, -0.586000, 2.253125
+    max: 0.062500, -0.565000, 2.346875
+    color: '#202020'
+    shape: CylinderY
+  - label: Empty socket left tab
+    min: -0.093750, -0.575000, 2.268750
+    max: -0.062500, -0.512000, 2.331250
+    color: '#939393'
+  - label: Empty socket right tab
+    min: 0.062500, -0.575000, 2.268750
+    max: 0.093750, -0.512000, 2.331250
+    color: '#939393'
+  - label: Recessed contact
+    min: -0.016000, -0.586500, 2.284000
+    max: 0.016000, -0.586000, 2.316000
+    color: '#8E7659'
+  fitInsideWall: true
+  backWallMountTargets:
+  - RMCWallStrata
+  - RMCWallHybrisa
+  - RMCWallHybrisaRock
+  - RMCWallPrisonReinforced
+  - RMCWallHybrisaMedical
+  - RMCWallKutjevoRockBorder
