@@ -22,12 +22,12 @@ public sealed class CMU3DModelLoadingTest : GameTest
             Assert.That(CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>(), Is.Empty,
                 "Joining in 2D must not parse or retain optional model geometry.");
             var library = Client.ResolveDependency<CMU3DModelLibrary>();
-            library.LoadWorld();
+            using var lease = library.AcquireWorld();
             Validate(CProtoMan);
             Assert.That(CProtoMan.EnumeratePrototypes<CMU3DEquipmentPosePrototype>(), Is.Empty,
                 "The live renderer uses mob sprites and does not need attachment definitions.");
             var model = CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>().First();
-            library.LoadWorld();
+            lease.EnsureLoaded();
             Assert.That(CProtoMan.Index<CMU3DModelPrototype>(model.ID), Is.SameAs(model),
                 "Repeated opt-ins must reuse the parsed library.");
 
@@ -45,7 +45,7 @@ public sealed class CMU3DModelLoadingTest : GameTest
             {
                 Pair.ClientLogHandler.JudgeLog -= IgnoredMapWarning;
             }
-            library.LoadWorld();
+            lease.EnsureLoaded();
             Validate(CProtoMan);
             Assert.That(CProtoMan.Index<CMU3DModelPrototype>(model.ID), Is.Not.SameAs(model),
                 "Replay/prototype resets must not leave the loader believing removed models are still available.");
@@ -77,6 +77,49 @@ public sealed class CMU3DModelLoadingTest : GameTest
             finally
             {
                 preview.Close();
+            }
+        });
+    }
+
+    [Test]
+    public async Task WorkbenchAndWorldViewReleaseOnlyTheirOwnLibraries()
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var library = Client.ResolveDependency<CMU3DModelLibrary>();
+            var preview = CEntMan.System<CMU3DPreviewSystem>();
+            var world = library.AcquireWorld();
+            try
+            {
+                preview.Open();
+                var equipment = CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>().First(model => model.EquipmentOnly).ID;
+                world.Dispose();
+                Assert.That(preview.Open(equipment), Is.True,
+                    "Closing a world view must leave the open workbench's models usable.");
+                preview.Close();
+                Assert.That(CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>(), Is.Empty);
+                Assert.That(CProtoMan.TryGetMapping<CMU3DModelPrototype>(equipment, out _), Is.False,
+                    "Unload must remove parsed YAML as well as deserialized prototypes.");
+
+                world = library.AcquireWorld();
+                var model = CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>().First();
+                preview.Open(equipment);
+                preview.Close();
+                Assert.That(CProtoMan.EnumeratePrototypes<CMU3DEquipmentPosePrototype>(), Is.Empty,
+                    "Closing the workbench should release equipment data even while world rendering remains active.");
+                Assert.That(CProtoMan.TryGetMapping<CMU3DModelPrototype>(equipment, out _), Is.False);
+                world.EnsureLoaded();
+                Assert.That(CProtoMan.Index<CMU3DModelPrototype>(model.ID), Is.SameAs(model),
+                    "Releasing equipment must not unload or reparse the world's library.");
+                world.Dispose();
+                Assert.That(CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>(), Is.Empty);
+                Assert.That(CProtoMan.EnumeratePrototypes<CMU3DSurfacePrototype>(), Is.Empty);
+                Assert.That(CProtoMan.EnumeratePrototypes<CMU3DTileMaterialPrototype>(), Is.Empty);
+            }
+            finally
+            {
+                preview.Close();
+                world.Dispose();
             }
         });
     }
@@ -136,7 +179,7 @@ public sealed class CMU3DModelLoadingTest : GameTest
     {
         await Client.WaitAssertion(() =>
         {
-            Client.ResolveDependency<CMU3DModelLibrary>().LoadWorld();
+            using var lease = Client.ResolveDependency<CMU3DModelLibrary>().AcquireWorld();
             var surfaces = CMU3DSceneSurfaces.Load(Client.ResolveDependency<IPrototypeManager>(),
                 Client.ResolveDependency<IResourceCache>());
             Assert.That(surfaces.Width, Is.GreaterThan(1));

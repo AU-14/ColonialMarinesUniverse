@@ -14,7 +14,15 @@ namespace Content.IntegrationTests.CMU14.ThreeD;
 [TestFixture]
 public sealed class CMU3DEquipmentAppearanceTest : GameTest
 {
+    private CMU3DModelLibrary.Lease? _models;
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
+    [TearDown]
+    public async Task ReleaseModels()
+    {
+        await Client.WaitPost(() => _models?.Dispose());
+    }
 
     [Test]
     public async Task ReplicatedEquipmentMatchesItsPoseAndUnknownPaintKeepsTheSprite()
@@ -38,7 +46,7 @@ public sealed class CMU3DEquipmentAppearanceTest : GameTest
         await Pair.RunUntilSynced();
         await Client.WaitAssertion(() =>
         {
-            Client.ResolveDependency<CMU3DModelLibrary>().LoadWorkbench();
+            _models = Client.ResolveDependency<CMU3DModelLibrary>().AcquireWorkbench();
             var local = ToClientUid(wearer);
             var prototypes = Client.ResolveDependency<IPrototypeManager>();
             var poses = prototypes.EnumeratePrototypes<CMU3DEquipmentPosePrototype>().ToArray();

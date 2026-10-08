@@ -58,6 +58,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
     private static readonly Vector2i[] FloorNeighbours = [new(0, -1), new(1, 0), new(0, 1), new(-1, 0)];
 
     private CMU3DLiveSceneWindow? _window;
+    private CMU3DModelLibrary.Lease? _modelLease;
     private CMU3DSceneCatalog? _catalog;
     private readonly Dictionary<string, Color[]> _tileColors = new(StringComparer.Ordinal);
     private readonly HashSet<Entity<SpriteComponent>> _candidates = [];
@@ -107,8 +108,8 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
     {
         if (!_admins.HasFlag(AdminFlags.Debug) || !TryContext(out _, out _))
             return false;
-        _modelLibrary.LoadWorld();
         CloseFirstPerson();
+        _modelLease ??= _modelLibrary.AcquireWorld();
         if (_window == null)
         {
             var window = new CMU3DLiveSceneWindow();
@@ -151,25 +152,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
             return;
         _window = null;
         UpdateSubscription(0);
-        _actor = null;
-        _selected = null;
-        _selectedModel = null;
-        _boxes.Clear();
-        _entityBoxes.Clear();
-        _animatedSprites.Clear();
-        _candidates.Clear();
-        _wallTargets.Clear();
-        _ordered.Clear();
-        _grids.Clear();
-        _surfaces.Clear();
-        _surfaceProps.Clear();
-        _surfaceOffsets.Clear();
-        _surfaceRearWalls.Clear();
-        _surfaceMountFallbacks.Clear();
-        _terrainCutouts.Clear();
-        _terrainTargetPrototypes.Clear();
-        _terrainSources.Clear();
-        _terrainVolumes.Clear();
+        ReleaseSceneData();
     }
 
     private void OnAdminStatusUpdated()
@@ -246,7 +229,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
     {
         if (_catalog != null)
             return;
-        _modelLibrary.LoadWorld();
+        _modelLease!.EnsureLoaded();
         _catalog = new CMU3DSceneCatalog(_prototypes.EnumeratePrototypes<CMU3DModelPrototype>(), id =>
             _prototypes.TryIndex<EntityPrototype>(id, out var prototype) ? prototype.Parents : null);
         foreach (var material in _prototypes.EnumeratePrototypes<CMU3DTileMaterialPrototype>())

@@ -146,7 +146,7 @@ Drag to orbit, scroll to zoom, and use the cardinal views to compare a model wit
 
 - Editable world definitions: `Content.CMU/Resources/ThreeD/Prototypes/World/*.yml`.
 - Equipment authoring definitions: `Content.CMU/Resources/ThreeD/Prototypes/Equipment/*.yml`.
-- These presentation libraries are outside the normal prototype startup directory. The client loads world geometry on its first 3D opt-in, and equipment drafts only when opening the model workbench. Both stay cached across connections; a prototype reset allows them to load again. Initial opt-in can pause while loading. The server and clients that stay in 2D never load these libraries. Map elevation profiles and the shader declaration remain under `Prototypes/CMU14/ThreeD`.
+- These presentation libraries are outside the normal prototype startup directory. Open 3D views share world geometry; only the model workbench loads equipment drafts. Closing the last view unloads model instances and parsed YAML and releases scene caches. Closing only the workbench unloads equipment while another 3D view can keep using world geometry. Reopening after release loads the required library again and can pause while loading. Memory becomes eligible for normal garbage collection; toggles do not force a collection. The server and clients that stay in 2D never load these libraries. Map elevation profiles and the shader declaration remain under `Prototypes/CMU14/ThreeD`.
 - Portable models: `Content.CMU/Resources/Models/CMU14/Garrison/*.glb`.
 - Attributions and modeling assumptions: `Content.CMU/Resources/Models/CMU14/Garrison/SOURCES*.md`.
 - Contact sheet: `Tools/three_d/generated/review/overview.png`.
