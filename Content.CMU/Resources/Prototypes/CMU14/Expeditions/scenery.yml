@@ -1,0 +1,225 @@
+# Expedition-only scenery using existing licensed sprites. Small dressing has no collision or loot.
+- type: entity
+  id: CMUExpeditionFloorDetail
+  abstract: true
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Fixtures
+  - type: Sprite
+    drawdepth: FloorObjects
+  - type: Clickable
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionLeafLitter1
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/turf/ground_map.rsi
+    state: plant1
+    color: "#93815A"
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionLeafLitter2
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/turf/ground_map.rsi
+    state: plant2
+    color: "#93815A"
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionLeafLitter3
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/turf/ground_map.rsi
+    state: plant3
+    color: "#93815A"
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionLeafLitter4
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/turf/ground_map.rsi
+    state: plant4
+    color: "#93815A"
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionMoss1
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/turf/ground_map.rsi
+    state: plant5
+    color: "#83A16E"
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionMoss2
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/turf/ground_map.rsi
+    state: plant6
+    color: "#83A16E"
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionMoss3
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/turf/ground_map.rsi
+    state: plant7
+    color: "#83A16E"
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionFungus1
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hydroponics.rsi
+    state: walkingmushroom-grow1
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionFungus2
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hydroponics.rsi
+    state: walkingmushroom-grow2
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionFungus3
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hydroponics.rsi
+    state: walkingmushroom-grow3
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionAsh
+  components:
+  - type: Sprite
+    sprite: Objects/Materials/materials.rsi
+    state: ash
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionCharcoal
+  components:
+  - type: Sprite
+    sprite: CMU14/N14content/world.rsi
+    state: woodscrap
+    color: "#4B423C"
+
+- type: entity
+  parent: RMCFloraTyrargoDeadTree01
+  id: CMUExpeditionCharredTree1
+  components:
+  - type: Sprite
+    color: "#77716B"
+  - type: Flamability
+    chance: 0
+    spread: 0
+
+- type: entity
+  parent: RMCFloraTyrargoDeadTree02
+  id: CMUExpeditionCharredTree2
+  components:
+  - type: Sprite
+    color: "#77716B"
+  - type: Flamability
+    chance: 0
+    spread: 0
+
+- type: entity
+  parent: RMCFloraTyrargoDeadTree03
+  id: CMUExpeditionCharredTree3
+  components:
+  - type: Sprite
+    color: "#77716B"
+  - type: Flamability
+    chance: 0
+    spread: 0
+
+- type: entity
+  parent: RMCFloraTyrargoDeadTree04
+  id: CMUExpeditionCharredTree4
+  components:
+  - type: Sprite
+    color: "#77716B"
+  - type: Flamability
+    chance: 0
+    spread: 0
+
+- type: entity
+  parent: CMUExpeditionBoulder1
+  id: CMUExpeditionFallenLog1
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Flora/Grass/tyrargo_wood_flora.rsi
+    state: trunk_01
+    offset: 0, 0
+
+- type: entity
+  parent: CMUExpeditionBoulder1
+  id: CMUExpeditionFallenLog2
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Flora/Grass/tyrargo_wood_flora.rsi
+    state: trunk_02
+    offset: 0, 0
+
+- type: entity
+  parent: RMCCampfire
+  id: CMUExpeditionCampfire
+  components:
+  - type: Campfire
+    fuel: 0
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionBurntFrame
+  components:
+  - type: Sprite
+    sprite: CMU14/N14content/world.rsi
+    state: woodscrap
+    color: "#51433B"
+
+- type: entity
+  parent: CMUExpeditionFloorDetail
+  id: CMUExpeditionAbandonedPack
+  components:
+  - type: Sprite
+    sprite: CMU14/N14content/world.rsi
+    state: cardboard
+
+- type: entity
+  parent: CMUExpeditionSupply
+  id: CMUExpeditionWreckedCart
+  components:
+  - type: Sprite
+    sprite: CMU14/HunterShip/turf/ground_map.rsi
+    state: cart_wreck
+
+- type: entity
+  parent: RMCTileFire
+  id: CMUExpeditionWildfire
+  components:
+  - type: TileFire
+    id: CMUExpeditionWildfire
+    duration: 600
+    growthDuration: 3
+    bigFireDuration: 0
+  - type: DamageOnCollide
+    damage:
+      types:
+        Heat: 12
+    ignoreResistances: false
+  - type: PointLight
+    radius: 3

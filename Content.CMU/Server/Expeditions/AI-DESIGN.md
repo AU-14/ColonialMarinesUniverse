@@ -1,0 +1,99 @@
+# Expedition infantry: tactical design and research
+
+Scope: the opt-in CMU expedition scavenger controller. Decisions remain server-side;
+native steering, firearms, physics, factions and medical do-afters execute actions.
+
+## Sources and adaptations
+
+- [Jeff Orkin, Three States and a Plan: The A.I. of F.E.A.R., GDC 2006](https://www.gamedevs.org/uploads/three-states-plan-ai-of-fear.pdf).
+  The useful architectural ideas are shared working memory, action preconditions, recovery
+  after failed actions, and separating individual survival from squad coordination.
+  Our controller keeps remembered contacts, reserved cover/peek positions and a short
+  failed-destination memory. Squad attack slots never override injury, suppression or
+  player possession. This is a small action controller, not a complete GOAP implementation.
+
+- [Arjen Beij and Remco Straatman, Killzone: Dynamic Procedural Tactics, GDCE 2005](https://www.guerrilla-games.com/media/News/Files/gdce05_killzone_ai.pdf).
+  Position evaluation combines range, exposure and movement cost. For our generated maps,
+  candidates must pass dry-ground, fire, leash and live collision checks before scoring.
+  Shelters must conceal the guard's width; peeks must clear the rifle's scatter cone.
+  Scores favor short step-outs, useful range and protection from secondary observed threats.
+  Bounded local A* assigns exposure costs, then native steering follows the chosen waypoints.
+
+- [Microsoft, Halo 2 AI Behavior List](https://learn.microsoft.com/en-us/halo-master-chief-collection/h2/ai/aibehaviorlist).
+  Its documented cover-peek and self-preservation behaviors inform immediate withdrawal
+  under pressure and separate watch/search phases after losing contact.
+  Our guards suppress their own exposure after perceived hostile shots pass near their
+  position, remember a last-seen location briefly, and reassess before leaving shelter.
+
+## Current behavior
+
+1. Observe at 150 ms intervals, retain a visible target, and store a last-seen coordinate
+   for six seconds. Never update that coordinate from an unseen target.
+2. Shoulder the MAR-40 before shooting. Use its real projectile speed for bounded lead.
+   Short volleys consume real rounds. Recheck geometry and allied bodies before each shot.
+3. Search at most 256 local cells, with an eight-step search radius. Pair an occluded
+   shelter with a firing position no more than 3.2 metres away along a clear passage.
+4. Move precisely into the firing position, aim briefly, fire up to three rounds, return
+   to shelter, and reassess. Nearby squadmates reserve different positions and stagger
+   peeks with local attack slots.
+5. Hits or visible hostile fire passing within 1.5 metres interrupt exposure. Pressure
+   delays the next peek; uncovered guards seek a safe refuge when one is reachable.
+6. Wounded guards use their physical three-dose dressing pack while sheltered. They free
+   a hand and complete a three-second native medical action. Damage, movement, lost
+   safety, incapacitation or player possession cancels treatment.
+7. A failed/timed-out movement destination is avoided for eight seconds. Destroyed cover,
+   changed threat angles, expired contacts and missing paths invalidate the current plan.
+
+The distances and timers above are tuning choices for this game, not values claimed by
+the cited papers. The aim is readable, adaptable opposition with ordinary ammunition and
+medical limits.
+
+## Planning, squads, and experience
+
+A bounded GOAP search (128 states) chooses from executable cover, reload, treatment, rescue,
+smoke, grenade, flank and attack actions. Each action checks its preconditions again when it
+starts and fails on obstruction, interruption or timeout. Movement uses a 256-node local A*
+search with danger costs and real collision checks. Physical magazines, dressings and grenades
+are finite inventory items. A native pulling joint drags critical squadmates into shelter.
+
+Equipped squad headsets share a frozen observation after a short delay, within 40 metres.
+Reports expire and do not reveal an unseen target's current position. Squads have separate
+position reservations, staggered attack slots and one flanker at a time. Aggressive, steady
+and cautious dispositions respond to pressure, wounds and nearby support.
+
+Grenades are considered on initial contact with multiple enemies, or as a last resort after
+repeated failed exposures or severe pressure. Reservations cap a squad decision at two
+throwers in a two-second window; the squad then waits 35 seconds. Smoke for casualty recovery
+shares that budget. Throw preparation rechecks the friendly blast area and only primes a
+grenade after a successful physical throw.
+
+Bounded aggregate exposure/flank outcomes are persisted by biome and disposition to
+`/cmu-expedition-experience.json` in server user data. They adjust next-round costs within
+0.75–1.25. This is modest outcome adaptation, not neural training or player-specific profiling.
+
+## Operator controls
+
+`cmu-expedition-ai <map> [1..6]` creates a new squad on each invocation and prints its ID.
+`cmu-expedition-orders <map> <squad> move <x> <y>` moves it to spread positions.
+Replace `move` with `guard` to establish a guard area and entrench after 20 quiet seconds.
+Guards use their real shovel to dig and build a mound, or nearby metal to build a native
+barricade. Construction stops on contact, injury, possession or a new order. One completed
+fortification per guard order avoids filling every nearby tile indefinitely.
+
+Use `style Aggressive`, `style Steady` or `style Cautious` to tune a squad. `target GOVFOR,OPFOR`
+sets explicit target factions; `friendly GOVFOR` protects that faction. `default` restores
+native faction targeting or removes the friendly overrides. Friendly overrides take priority;
+these commands never change the server's global faction relations.
+
+## Verification
+
+```text
+dotnet test Content.Tests/Content.Tests.csproj --no-restore --filter FullyQualifiedName~CMUTacticalPlannerTest
+dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --no-restore --filter FullyQualifiedName~CMUExpedition
+```
+
+Fixtures exercise real weapon fire, lane safety, corner peeks, treatment interruption,
+magazine exhaustion, radio snapshots, physical casualty pulling, grenade preparation,
+six-guard squads, guard construction, generated terrain and moving connected player bodies.
+The six-guard fixture reports candidate-search timing and completed physical flanks.
+These are engine simulations; final combat balance still needs human multiplayer playtesting.
