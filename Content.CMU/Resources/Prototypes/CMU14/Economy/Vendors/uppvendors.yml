@@ -406,6 +406,8 @@
       - id: AU14BeltMedicBagUPP
     - name: General Medical Supplies
       entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
