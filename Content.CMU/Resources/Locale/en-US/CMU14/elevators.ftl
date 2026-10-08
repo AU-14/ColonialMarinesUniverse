@@ -7,6 +7,7 @@ cmu-elevator-invalid-rail-outline = The elevator needs a closed, connected outli
 cmu-elevator-no-destination = There is no linked z-level or floor grid in that direction.
 cmu-elevator-destination-blocked = The destination elevator footprint is occupied.
 cmu-elevator-platform-grid-blocked = Another grid on the elevator platform prevents it from moving.
+cmu-elevator-overloaded = The elevator is overloaded and has broken. An engineer must re-enable it.
 cmu-elevator-disable-verb = Disable elevator
 cmu-elevator-enable-verb = Enable elevator
 cmu-elevator-disable-confirmation = Disable this elevator? Only engineering-qualified personnel can enable it again.

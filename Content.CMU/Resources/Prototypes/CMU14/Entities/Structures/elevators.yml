@@ -32,3 +32,5 @@
     drawdepth: HighFloorObjects
   - type: InteractionOutline
   - type: CMUElevator
+  - type: CMUElevatorWeightLimit
+    maxEntities: 20

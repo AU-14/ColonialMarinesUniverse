@@ -54,11 +54,21 @@ the existing raised railing artwork.
   indicated direction. After each successful trip, the next direction reverses.
 - The trip is rejected if the rail outline or control placement is invalid,
   there is no linked z-level in that direction, destination tiles are not empty,
-  the destination footprint is occupied, or another grid is on the platform.
+  a non-mob entity blocks the destination footprint, or another grid is on the
+  platform.
+- Any mob standing under the arriving footprint on the destination level is
+  gibbed when the elevator arrives. Keep the shaft clear while the platform is
+  moving; this is a lethal hazard, not a safety interlock.
 - Platform tiles are transferred to the corresponding coordinates on the
   destination level. The source footprint is cleared. Keep the destination
   footprint empty on every level the elevator serves.
 - The platform footprint's bounding rectangle is limited to 1,024 tiles.
+- The control's `CMUElevatorWeightLimit` component sets the maximum number of
+  entities the platform can carry. Its default `maxEntities` is 20. The elevator
+  control and its rails do not count toward this limit. If a move is attempted
+  while the load exceeds the limit, the elevator breaks, stays in place, and
+  must be re-enabled by an engineer. It will not gib destination-level mobs
+  when a trip is refused for excess load.
 
 ## Disable or re-enable
 

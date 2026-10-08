@@ -29,3 +29,10 @@ public sealed partial class CMUElevatorRailComponent : Component
     [DataField, AutoNetworkedField]
     public string ElevatorId = string.Empty;
 }
+
+[RegisterComponent]
+public sealed partial class CMUElevatorWeightLimitComponent : Component
+{
+    [DataField]
+    public int MaxEntities = 20;
+}

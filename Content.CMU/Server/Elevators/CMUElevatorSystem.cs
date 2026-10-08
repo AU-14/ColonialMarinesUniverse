@@ -3,7 +3,9 @@ using System.Linq;
 using Content.Shared.CMU14.Elevators;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared.Gibbing;
 using Content.Shared.Interaction;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Content.Server.CMU14.ZLevels.Core;
@@ -24,6 +26,7 @@ public sealed class CMUElevatorSystem : EntitySystem
 
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private MapSystem _map = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -32,6 +35,7 @@ public sealed class CMUElevatorSystem : EntitySystem
 
     private readonly HashSet<EntityUid> _nearby = new();
     private readonly HashSet<EntityUid> _platformEntities = new();
+    private readonly HashSet<EntityUid> _crushTargets = new();
     private readonly HashSet<Vector2i> _railTiles = new();
     private readonly HashSet<Vector2i> _footprintTiles = new();
     private readonly HashSet<Vector2i> _outsideTiles = new();
@@ -160,6 +164,7 @@ public sealed class CMUElevatorSystem : EntitySystem
             return false;
         }
 
+        _crushTargets.Clear();
         _tilesToMove.Clear();
         foreach (var sourceTile in footprint)
         {
@@ -184,7 +189,7 @@ public sealed class CMUElevatorSystem : EntitySystem
                 return false;
             }
 
-            if (IsOccupied(targetGridUid, targetGrid, targetTile, targetCoordinates))
+            if (HasBlockingEntity(targetGridUid, targetGrid, targetTile, targetCoordinates))
             {
                 failure = "cmu-elevator-destination-blocked";
                 return false;
@@ -205,6 +210,21 @@ public sealed class CMUElevatorSystem : EntitySystem
         {
             failure = "cmu-elevator-platform-grid-blocked";
             return false;
+        }
+
+        if (TryComp<CMUElevatorWeightLimitComponent>(ent, out var weightLimit) &&
+            CountPlatformLoad() > weightLimit.MaxEntities)
+        {
+            ent.Comp.Disabled = true;
+            Dirty(ent);
+            failure = "cmu-elevator-overloaded";
+            return false;
+        }
+
+        foreach (var target in _crushTargets)
+        {
+            if (!TerminatingOrDeleted(target))
+                _gibbing.Gib(target);
         }
 
         foreach (var tile in _tilesToMove)
@@ -381,28 +401,49 @@ public sealed class CMUElevatorSystem : EntitySystem
         return true;
     }
 
-    private bool IsOccupied(EntityUid gridUid, MapGridComponent grid, Vector2i tile, MapCoordinates coordinates)
+    private int CountPlatformLoad()
+    {
+        var count = 0;
+        foreach (var entity in _platformEntities)
+        {
+            if (HasComp<CMUElevatorComponent>(entity) ||
+                HasComp<CMUElevatorRailComponent>(entity))
+            {
+                continue;
+            }
+
+            count++;
+        }
+
+        return count;
+    }
+
+    private bool HasBlockingEntity(EntityUid gridUid, MapGridComponent grid, Vector2i tile, MapCoordinates coordinates)
     {
         _nearby.Clear();
-        _lookup.GetEntitiesInRange(coordinates.MapId, coordinates.Position, EntityLookupRadius, _nearby, LookupFlags.All);
+        _lookup.GetEntitiesInRange(coordinates.MapId, coordinates.Position, EntityLookupRadius, _nearby, LookupFlags.Uncontained);
         foreach (var entity in _nearby)
         {
-            if (HasComp<MapGridComponent>(entity) || TerminatingOrDeleted(entity))
+            if (HasComp<MapComponent>(entity) ||
+                HasComp<MapGridComponent>(entity) ||
+                TerminatingOrDeleted(entity))
                 continue;
 
             var xform = Transform(entity);
             if (xform.MapID != coordinates.MapId)
                 continue;
 
-            if (xform.GridUid == gridUid &&
-                _map.TileIndicesFor(gridUid, grid, xform.Coordinates) == tile)
+            var entityCoordinates = _transform.GetMapCoordinates(entity);
+            if (_map.TileIndicesFor(gridUid, grid, entityCoordinates) != tile)
+                continue;
+
+            if (HasComp<MobStateComponent>(entity))
             {
-                return true;
+                _crushTargets.Add(entity);
+                continue;
             }
 
-            var entityCoordinates = _transform.GetMapCoordinates(entity);
-            if (Vector2.DistanceSquared(entityCoordinates.Position, coordinates.Position) <= 0.5f)
-                return true;
+            return true;
         }
 
         return false;
