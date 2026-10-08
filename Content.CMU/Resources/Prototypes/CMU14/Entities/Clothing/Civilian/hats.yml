@@ -1,7 +1,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14USCMVeteranCap
-  name: USCM Veteran Ball Cap
+  name: USCM veteran ball cap
   description: "A black ball cap with the patch of the USCM, surrounded by the words 'USCMC Veteran Semper Fi'"
   components:
   - type: Sprite
@@ -12,7 +12,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14CivBallCapBlack
-  name: Black Ball Cap
+  name: black ball cap
   description: A simple ball cap.
   components:
   - type: Sprite
@@ -23,7 +23,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14CivFedoraTan
-  name: Tan Fedora
+  name: tan fedora
   description: A stylish hat.
   components:
   - type: Sprite
@@ -34,7 +34,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14CivFedoraBrown
-  name: Brown Fedora
+  name: brown fedora
   description: A stylish hat.
   components:
   - type: Sprite
@@ -45,7 +45,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14CivFedoraGray
-  name: Gray Fedora
+  name: gray fedora
   description: A stylish hat.
   components:
   - type: Sprite
@@ -56,7 +56,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14CivBallCapBlueTrucker
-  name: Blue Trucker Ball Cap
+  name: blue trucker ball cap
   description: A trucker ball cap.
   components:
   - type: Sprite
@@ -67,7 +67,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14CivBallCapRedTrucker
-  name: Red Trucker Ball Cap
+  name: red trucker ball cap
   description: A trucker ball cap.
   components:
   - type: Sprite
@@ -78,7 +78,7 @@
 - type: entity
   parent: ClothingHeadBase
   id: AU14HeadPithHelmet
-  name: Pith Helmet
+  name: pith helmet
   description: A relic of a by-gone era of imperalism, this fashionably plain and simple helmet is a favorite of a certain Big-Game Hunter.
   components:
   - type: Sprite

@@ -1,0 +1,448 @@
+# Gear
+- type: startingGear
+  id: CMUGearBosenmoriHunter
+  equipment:
+    id: AU14IDCardColonyColonist
+    jumpsuit: AU14CivilianWorkwearGreen
+    suitstorage: RMCWeaponBoltActionRifle
+    shoes: RMCBootsVanBandolier
+    mask: CMUMaskGasEmergency
+    back: AU14SlingSatchelBlack
+    head: AU14CivBallCapRedTrucker
+    pocket1: CMUFieldOxygenTankFilled
+    belt: AU14BeltUtilityGeneralBlackCLFSurvMolly
+    outerClothing: AU14CivilianJacketBlueParka
+    pocket2: RMCFlashlight
+  storage:
+    back:
+    - CMUFieldOxygenTankFilled
+    - RMCMagazineRifleHunting
+    - RMCMagazineRifleHunting
+    - RMCMagazineRifleHunting
+    - RMCMagazineRifleHunting
+    - RMCMagazineRifleHunting
+    - CMSheetMetal
+
+- type: startingGear
+  id: CMUGearBosenmoriRevolver
+  equipment:
+    id: AU14IDCardColonyColonist
+    jumpsuit: AU14CivilianFloralRed
+    shoes: RMCShoesBrown
+    mask: RMCMaskRebreather
+    back: CMSatchel
+    belt: AU14BeltHolsterPistolLACNTPR23B
+    pocket1: CMUFieldOxygenTankFilled
+    pocket2: RMCFlashlight
+  storage:
+    back:
+    - CMUFieldOxygenTankFilled
+    - CMUSurvivalKnife
+    - RMCShellShotgunHeavyBuckshot
+    - RMCShellShotgunHeavyBuckshot
+    - RMCShellShotgunHeavyBuckshot
+    - RMCGrenadeIED
+    - RMCGrenadeIED
+  inhand:
+  - RMCBaseballBatMetal
+  - CMUWeaponShotgunOlympiets
+
+- type: startingGear
+  id: CMUGearBosenmoriHoldout
+  equipment:
+    id: AU14IDCardColonyColonist
+    jumpsuit: AU14CivilianFlannelWhite
+    shoes: RMCShoesBlack
+    mask: CMUMaskGasEmergency
+    back: AU14SlingSatchelBlue
+    belt: AU14BeltKnifeBlackFilled
+    pocket1: CMUFieldOxygenTankFilled
+    pocket2: RMCWeaponPistolHoldout
+  inhand:
+  - AU14ToolMachete
+  - CMUWeaponRifleKramerCivilian
+  storage:
+    back:
+    - CMUFieldOxygenTankFilled
+    - AU14WeaponRifleKramerMagazineStandard
+    - AU14WeaponRifleKramerMagazineStandard
+    - RMCMagazinePistolHoldout
+    - RMCMagazinePistolHoldout
+    - RMCMagazinePistolHoldout
+    - RMCMagazinePistolHoldout
+    - AU14HemostaticGauzePacket
+    - RMCFlashlight
+
+- type: startingGear
+  id: CMUGearBosenmoriSurgeon
+  equipment:
+    id: AU14IDCardColonyColonist
+    jumpsuit: CMScrubsGreen
+    shoes: RMCShoesBrown
+    ears: CMUHeadsetColonyMedical
+    mask: CMMaskGasMedical
+    back: CMSatchelMedical
+    outerClothing: RMCLabcoatVirology
+    belt: CMUBeltMedicBagICRCDoctor
+    pocket1: RMCPouchFirstAidInjectors
+    pocket2: CMU14WeaponPistolGlock77
+  storage:
+    back:
+    - CMUMedicalOxygenTankFilled
+    - CMUMedicalOxygenTankFilled
+    - CMSurgicalCaseFilled
+    - CMUSurvivalKnife
+    - CMU14MagazinePistolGlock77HP
+    - CMU14MagazinePistolGlock77AP
+  inhand:
+  - CMUDefibrillatorCompact
+
+- type: startingGear
+  id: CMUGearBosenmoriEngineer
+  equipment:
+    id: AU14IDCardColonyEngineer
+    head: RMCHardhatWhite
+    jumpsuit: AU14CivilianWeYuEngineerClothes
+    outerClothing: CMUClothingOuterSuitEngineer
+    suitstorage: WeaponShotgunM357
+    shoes: RMCBootsCorporate
+    mask: CMUMaskGasEmergency
+    belt: AU14BeltUtilityFilled
+    back: CMBackpackEngineer
+    pocket1: CMUFieldOxygenTankFilled
+    pocket2: RMCPouchShotgunLargeBuckshot
+  storage:
+    back:
+    - CMUFieldOxygenTankFilled
+    - CMShellShotgunSlugs
+    - CMShellShotgunFlechette
+    - CMShellShotgunFlechette
+    - RMCFlashlight
+    - CMSheetMetal50
+    - CMSheetPlasteel30
+    - RMCPlankWood
+    - CMSandbagEmpty50
+    - CMSandbagEmpty50
+  inhand:
+  - RMCFlashlightLantern
+
+- type: startingGear
+  id: CMUGearBosenmoriAtmosEngineer
+  equipment:
+    id: CMUIDCardCivilianAtmosian
+    head: RMCHardhatOrange
+    jumpsuit: AU14CivilianWeYuEngineerClothes
+    outerClothing: CMUArmorFirefighter
+    suitstorage: CMUWeaponArsonistFlamer
+    shoes: RMCBootsCorporate
+    mask: CMMaskGas
+    back: CMBackpackEngineer
+    belt: RMCBeltHolsterPistolTSEFilledL54
+    pocket1: CMUAtmosScanner
+    pocket2: AU14PouchIFAKFill
+  storage:
+    back:
+    - CMUFieldOxygenTankFilled
+    - CMUFieldOxygenTankFilled
+    - CMUGasMaskFilter
+    - CMFireExtinguisherPortable
+    - CMUFireSuppressantGrenade
+    - CMUFireSuppressantGrenade
+    - RMCTankFlamerColony
+    - CMSheetMetal50
+    - CMRodMetal
+    - CMSandbagEmpty25
+
+- type: startingGear
+  parent: AU14GearCivilianNSPAConstable
+  id: CMUGearBosenmoriNSPAConstable
+  equipment:
+    mask: AU14MaskGasRMC
+    outerClothing: RMCCoatTSEPAHighVisVest
+    pocket1: RMCFlashlight
+    pocket2: AU14PouchIFAKFill
+  storage:
+    back:
+    - RMCMagazineRifleL90
+    - RMCMagazineRifleL90
+    - RMCMagazineRifleL90Drum
+    - CMUGrenadeElectroshock
+    - CMUGrenadeElectroshock
+    - CMUFieldOxygenTankFilled
+    - CMUFieldOxygenTankFilled
+    suitstorage:
+    - RMCWeaponPistolL54
+    - RMCMagazinePistolL54
+    - RMCMagazinePistolL54
+    - RMCMagazinePistolL54
+    - RMCMagazinePistolL54
+    - RMCMagazinePistolL54
+    - RMCMagazinePistolL54
+  inhand:
+  - RMCWeaponRifleL90A1FilledSemiStripped
+  - AU14TeleBaton
+
+# Jobs
+- type: job
+  parent: AU14JobLEOBase
+  id: CMUJobBosenmoriColonist
+  roundSide: Civilian
+  roundForce: COLONY
+  roundRole: CMUJobBosenmoriColonist
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancolonist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+  name: cmu-job-name-bosenmori-colonist
+  description: cmu-job-description-bosenmori-colonist
+  setPreference: false
+  playTimeTracker: AU14JobReturningColonistPlaytime
+  ranks:
+    RMCRankCivilian: []
+  startingGear: CMUGearBosenmoriRevolver
+  spawnMenuRoleName: cmu-spawn-role-colonist-3rd-party
+  icon: "CMJobIconEmpty"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  accessGroups:
+  - Colonist
+  roleWeight: 0.25
+  hidden: true
+
+- type: job
+  parent: CMUJobBosenmoriColonist
+  id: CMUJobBosenmoriHunter
+  startingGear: CMUGearBosenmoriHunter
+
+- type: job
+  parent: CMUJobBosenmoriColonist
+  id: CMUJobBosenmoriHoldout
+  startingGear: CMUGearBosenmoriHoldout
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 2
+      RMCSkillMeleeWeapons: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancolonist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+
+- type: job
+  parent: CMUJobBosenmoriColonist
+  id: CMUJobBosenmoriSurgeon
+  name: cmu-job-name-bosenmori-surgeon
+  startingGear: CMUGearBosenmoriSurgeon
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillMedical: 3
+      RMCSkillResearch: 1
+      RMCSkillSurgery: 3
+      RMCSkillFirearms: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancolonist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+
+- type: job
+  parent: CMUJobBosenmoriColonist
+  id: CMUJobBosenmoriEngineer
+  name: cmu-job-name-bosenmori-engineer
+  startingGear: CMUGearBosenmoriEngineer
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillEngineer: 4
+      RMCSkillFirearms: 2
+      RMCSkillConstruction: 4
+      RMCSkillPowerLoader: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancolonist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+
+- type: job
+  parent: CMUJobBosenmoriEngineer
+  id: CMUJobBosenmoriAtmosEngineer
+  startingGear: CMUGearBosenmoriAtmosEngineer
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 4
+      RMCSkillPowerLoader: 2
+      RMCSkillFireman: 3
+      RMCSkillDomestics: 1
+      RMCSkillVehicles: 1
+      RMCSkillFirearms: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliancolonist
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+
+- type: job
+  parent: CMUJobBosenmoriColonist
+  id: CMUJobBosenmoriNSPAConstable
+  name: cmu-job-name-bosenmori-nspa
+  startingGear: CMUGearBosenmoriNSPAConstable
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillIntel: 1
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillEngineer: 1
+      RMCSkillConstruction: 1
+      RMCSkillVehicles: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-civiliannspaConstable
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: synth
+
+# Mobs
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicMisc
+  id: CMUBosenmoriSurvivorBase
+  abstract: true
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: CMUSpawnWithInternals
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-bosenmori-colonist
+    description: cmu-job-description-bosenmori-colonist
+    rules: cmu-job-rules-bosenmori-colonist
+    reregister: false
+    job: CMUJobBosenmoriColonist
+    raffle:
+      settings: short
+
+- type: entity
+  parent: CMUBosenmoriSurvivorBase
+  id: CMUBosenmoriColonistRevolver
+  name: Stranded Colonist (Bosenmori)
+  suffix: Revolver
+
+- type: entity
+  parent: CMUBosenmoriSurvivorBase
+  id: CMUBosenmoriColonistHunter
+  name: Stranded Colonist (Bosenmori)
+  suffix: Hunter
+  components:
+  - type: GhostRole
+    job: CMUJobBosenmoriHunter
+
+- type: entity
+  parent: CMUBosenmoriSurvivorBase
+  id: CMUBosenmoriColonistHoldout
+  name: Stranded Colonist (Bosenmori)
+  suffix: Holdout
+  components:
+  - type: GhostRole
+    job: CMUJobBosenmoriHoldout
+
+- type: entity
+  parent: CMUBosenmoriSurvivorBase
+  id: CMUBosenmoriSurgeon
+  name: Stranded Surgeon (Bosenmori)
+  components:
+  - type: GhostRole
+    name: cmu-job-name-bosenmori-surgeon
+    job: CMUJobBosenmoriSurgeon
+
+- type: entity
+  parent: CMUBosenmoriSurvivorBase
+  id: CMUBosenmoriEngineer
+  name: Stranded Engineer (Bosenmori)
+  components:
+  - type: GhostRole
+    name: cmu-job-name-bosenmori-engineer
+    job: CMUJobBosenmoriEngineer
+
+- type: entity
+  parent: CMUBosenmoriSurvivorBase
+  id: CMUBosenmoriAtmosEngineer
+  name: Stranded Engineer (Bosenmori)
+  suffix: Atmospherics
+  components:
+  - type: GhostRole
+    name: cmu-job-name-bosenmori-engineer
+    job: CMUJobBosenmoriAtmosEngineer
+
+- type: entity
+  parent: CMUBosenmoriSurvivorBase
+  id: CMUBosenmoriNSPAConstable
+  name: Stranded NSPA Constable (Bosenmori)
+  components:
+  - type: GhostRole
+    name: cmu-job-name-bosenmori-nspa
+    job: CMUJobBosenmoriNSPAConstable
+
+# Third party
+- type: partySpawn
+  id: CMUBosenmoriColonistsSpawn
+  leadersToSpawn:
+    CMUBosenmoriNSPAConstable: 1
+  gruntsToSpawn:
+    CMUBosenmoriColonistRevolver: 1
+    CMUBosenmoriColonistHunter: 1
+    CMUBosenmoriColonistHoldout: 1
+    CMUBosenmoriSurgeon: 1
+    CMUBosenmoriEngineer: 1
+    CMUBosenmoriAtmosEngineer: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: CMUBosenmoriColonists
+  displayName: Stranded Colonists (Bosenmori)
+  partyspawn: CMUBosenmoriColonistsSpawn
+  blacklistedgamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: ground
+  weight: 25
+  minplayers: 0
+  maxplayers: 400
+  GhostsNeeded: 0
+  roundstart: true
