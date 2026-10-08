@@ -28,6 +28,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundComponents:
   - type: MarineOrders
 

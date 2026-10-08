@@ -16,12 +16,6 @@ ent-CMUYautjaMask-desc = Чужая охотничья маска со встр�
 ent-CMUYautjaBracerIdChip-name = встроенный ID-чип наруча
 ent-CMUYautjaBracerIdChip-desc = Компактная идентификационная пластина, разворачиваемая из наруча яутжа.
 
-ent-CMUYautjaStabilisingCrystal-name = стабилизирующий кристалл
-ent-CMUYautjaStabilisingCrystal-desc = Кристалл, выращенный наручем, быстро стабилизирующий чужую биологию.
-
-ent-CMUYautjaHumanStabilisingCrystal-name = человеческий стабилизирующий кристалл
-ent-CMUYautjaHumanStabilisingCrystal-desc = Кристалл, выращенный наручем и настроенный на людей и рабов.
-
 ent-CMUYautjaMaskOrnament-name = украшение маски
 ent-CMUYautjaMaskOrnament-desc = Небольшое церемониальное украшение, крепящееся к биомаске яутжа.
 

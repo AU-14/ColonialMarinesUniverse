@@ -42,6 +42,7 @@
   ### 2. Stop the Heavy Bleeding
   - Bleeding kills fastest. [color=red]Arterial bleeding[/color] (spurting blood) can drain you in moments.
   - Bleeding from an [bold]arm or leg[/bold]: put the tourniquet on it.
+  - [bold]Lost a limb[/bold]: the stump bleeds arterially until a medic closes it with surgery. Aim at the missing limb and put the tourniquet on the stump.
   - [color=red]A tourniquet kills the limb after 5 minutes.[/color] It's there to keep you alive until a medic can treat the wound properly and take it off. Get to a medic, or have your squad call for one.
 
   ### 3. Dress the Wounds
@@ -62,9 +63,11 @@
   - These won't fix serious injuries; they just buy time.
 
   ## When a Squadmate Goes Down
-  - [bold]Call for a medic[/bold] first. Give your location.
+  - [bold]Return fire and neutralize the threat first.[/bold] Don't stop to treat anyone while you're still being shot at, unless others are covering you. A second casualty helps no one.
+  - [bold]Call for a medic[/bold]. Give your location.
   - [bold]Stop their bleeding[/bold] with your own tourniquet and gauze if they're bleeding out.
   - [bold]Unconscious but alive[/bold]: roll them into the [bold]recovery position[/bold] (right-click them). It helps them breathe while you wait.
+  - [bold]Arterial bleeding and stumps keep bleeding after death.[/bold] Get a tourniquet on them even if they're already dead, or there'll be no blood left by the time a medic arrives.
   - [bold]Dead[/bold]: they can still be brought back for a while. Put your CPR mask on them and do [bold]CPR[/bold] by clicking them with an empty hand. Each round buys them more time until a medic with a defibrillator arrives.
 
   ## Leave It to the Medics

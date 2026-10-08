@@ -42,6 +42,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   canBeAntag: false
   ranks:
     RMCRankCivilian: []

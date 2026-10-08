@@ -83,7 +83,7 @@ public sealed partial class HiveCollapseRuleSystem : GameRuleSystem<HiveCollapse
         }
 
         string? winMessage = _auRoundSystem.SelectedThreat?.WinMessage;
-        _roundStats.RecordThreatDefeatedRule("HiveCollapseRule");
+        _roundStats.RecordHiveCollapseRule();
         _gameTicker.EndRound(string.IsNullOrEmpty(winMessage) ? DefaultWinMsg : winMessage);
         if (_gameTicker.RunLevel == GameRunLevel.PostRound)
             _hiveCollapseTime = null;

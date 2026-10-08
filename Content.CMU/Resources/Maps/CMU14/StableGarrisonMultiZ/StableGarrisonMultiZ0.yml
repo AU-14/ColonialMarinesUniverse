@@ -502179,7 +502179,7 @@ entities:
           name: null
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 1800
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
@@ -502187,7 +502187,7 @@ entities:
           name: null
           maxStock: 0
           entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 2000
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
@@ -503352,7 +503352,7 @@ entities:
           name: null
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 1800
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
@@ -503360,7 +503360,7 @@ entities:
           name: null
           maxStock: 0
           entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 2000
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
@@ -823597,7 +823597,7 @@ entities:
           endTime: 910.3900359
     - type: RMCWeaponAccuracy
       modifiedAccuracyMultiplier: 0.85
-- proto: RMCWeaponLauncherM81
+- proto: CMUWeaponLauncherM81
   entities:
   - uid: 18005
     components:

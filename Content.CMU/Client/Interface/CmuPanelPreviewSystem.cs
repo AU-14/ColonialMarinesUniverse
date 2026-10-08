@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Content.Client.CMU14.ColonyEconomy;
 using Content.Client.CMU14.Lobby;
 using Content.Client._RMC14.Mentor;
 using Content.Client.Administration.UI.Bwoink;
@@ -49,9 +50,14 @@ public sealed partial class CmuPanelPreviewSystem : EntitySystem
 
     private bool _done;
 
+    /// <summary>The ATM preview steps through a scripted session, so it needs ticking after it opens.</summary>
+    private ColonyAtmPreview? _atm;
+
     public override void FrameUpdate(float frameTime)
     {
         base.FrameUpdate(frameTime);
+
+        _atm?.Update(frameTime);
 
         if (_done)
             return;
@@ -94,6 +100,13 @@ public sealed partial class CmuPanelPreviewSystem : EntitySystem
                     break;
                 case "observe":
                     Open(new ObserveWarningWindow(), opened++);
+                    break;
+                // The ATM only opens at a machine, with a card, mid-round; this plays a whole
+                // session on its own instead. Centred rather than cascaded: it is the only thing
+                // worth looking at while it runs.
+                case "atm":
+                    _atm = new ColonyAtmPreview();
+                    _atm.Open();
                     break;
             }
         }

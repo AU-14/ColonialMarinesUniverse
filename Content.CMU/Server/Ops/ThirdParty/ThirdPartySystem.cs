@@ -195,12 +195,11 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
     public float GetSignalIntervalMultiplier() => _signalIntervalMultiplier;
 
-    public bool SpawnThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
+    // Queues the party for interest collection; spawn happens later on its own timer, so
+    // there is no meaningful failure at this point and nothing is returned
+    public void SpawnThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null, bool? overrideDropship = null)
-    {
-        QueueThirdParty(party, spawnProto, roundStart, overrideDropship, true, assignedJobs);
-        return true;
-    }
+        => QueueThirdParty(party, spawnProto, roundStart, overrideDropship, true, assignedJobs);
 
     private uint QueueThirdParty(ThirdPartyPrototype party, PartySpawnPrototype spawnProto, bool roundStart,
         bool? overrideDropship, bool ready,

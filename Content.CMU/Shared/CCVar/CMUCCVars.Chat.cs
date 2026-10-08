@@ -20,6 +20,12 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.examine_full_text_in_chat", false, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
 
     /// <summary>
+    /// Whether the wounds, fractures and missing limbs you see when examining someone are also echoed to your chat log.
+    /// </summary>
+    public static readonly CVarDef<bool> ExamineWoundsInChat =
+        CVarDef.Create("cmu.examine_wounds_in_chat", false, CVar.CLIENT | CVar.REPLICATED | CVar.ARCHIVE);
+
+    /// <summary>
     /// After sending a message on any channel other than Local, switch the chat input back to Local.
     /// Does nothing if Local can't be selected, e.g. as a ghost.
     /// </summary>

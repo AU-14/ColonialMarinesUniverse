@@ -1141,6 +1141,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private void OnMoneyInserted(EntityUid uid, ColonyAtmComponent comp, EntInsertedIntoContainerMessage args)
     {
+        // CMU14: the colony ATM holds the customer's ID card, and the cash it pays out until it is taken,
+        // in containers of their own; neither is a payment.
+        if (args.Container.ID is ColonyAtmComponent.CardSlotId or ColonyAtmComponent.CashTrayId)
+            return;
+
         int stackCount = 1;
         if (TryComp(args.Entity, out StackComponent? stack))
             stackCount = stack.Count;

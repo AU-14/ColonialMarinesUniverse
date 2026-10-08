@@ -16,7 +16,7 @@
   weight: 1
   minplayers: 0
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 
 - type: partySpawn
@@ -35,7 +35,7 @@
   weight: 1
   minplayers: 0
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 
 - type: partySpawn
@@ -54,7 +54,7 @@
   weight: 1
   minplayers: 0
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 
 - type: partySpawn
@@ -73,7 +73,7 @@
   weight: 1
   minplayers: 0
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 
 - type: thirdParty
@@ -82,10 +82,10 @@
   displayName: CLF Insurgent Cell (Survivors)
   entrymethod: ground
   weight: 8
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
   announcearrival: ''
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - colonyfall
