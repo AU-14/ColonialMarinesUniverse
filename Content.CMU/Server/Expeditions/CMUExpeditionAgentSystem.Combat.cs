@@ -44,6 +44,7 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.ShotsFired == 0)
             agent.BurstEnd = _timing.CurTime + agent.BurstDuration;
         agent.ShotsFired += args.Ammo.Count;
+        agent.LastShotAt = _timing.CurTime;
         if (agent.ShotsFired >= VolleySize(agent))
             EndBurst(args.User, agent, _timing.CurTime);
     }
@@ -104,6 +105,8 @@ public sealed partial class CMUExpeditionAgentSystem
         if (!FiringLaneClear(uid, Transform(uid).Coordinates, point))
         {
             agent.LastFireCheck = "obstructed-firing-cone";
+            if (now < agent.SpacingUntil)
+                return;
             if (TryAdjustPeek(uid, agent, point, now))
                 return;
             if (agent.PeekPosition is { } failed)
@@ -118,6 +121,8 @@ public sealed partial class CMUExpeditionAgentSystem
         if (!SafeShot(uid, agent, gun, point))
         {
             agent.LastFireCheck = "friendly-in-firing-cone";
+            if (now < agent.SpacingUntil)
+                return;
             agent.BlockedShotSince ??= now;
             // A crossing teammate pauses this volley without repeatedly resetting aim. If the
             // lane stays occupied, make one deliberate sidestep or yield the attack slot.
@@ -131,7 +136,8 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         }
         agent.BlockedShotSince = null;
-        _steering.Unregister(uid);
+        if (agent.SpacingDestination == null)
+            _steering.Unregister(uid);
         if (TryComp<CombatModeComponent>(uid, out var combat))
             _combat.SetInCombatMode(uid, true, combat);
         var direction = _transform.ToMapCoordinates(point).Position - _transform.GetWorldPosition(uid);
@@ -143,6 +149,13 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         agent.LostAimSince = null;
         agent.BlockedShotSince = null;
+        if (now < agent.SpacingUntil)
+        {
+            agent.State = CMUExpeditionAgentState.Recover;
+            agent.FireAt = now + TimeSpan.FromSeconds(0.2);
+            return;
+        }
+        ValidateCover(uid, agent, false, now);
         if (allowPress && agent.CoverAnchor != null && agent.Initiative >= 0.75f && agent.Stress < 0.3f &&
             agent.FollowupBursts == 0 && agent.ShotsFired >= VolleySize(agent))
         {

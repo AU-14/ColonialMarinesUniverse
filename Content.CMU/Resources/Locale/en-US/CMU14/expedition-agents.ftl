@@ -35,6 +35,7 @@ cmu-expedition-sentry-identity = scavenger sentry
 cmu-expedition-contact-report = Contact at my last observed position. Cover the approach.
 cmu-expedition-support-response = Copy that contact. Moving to support; cover my approach.
 cmu-expedition-ai-radio-status = Radio: {$received} received / {$accepted} accepted, {$decision}, acting on radio {$radioContact}, approach {$destination}.
+cmu-expedition-ai-survival-status = Survival: weapon {$weapon}, recovered {$recovered}, spacing {$spacing} to {$destination}, rejected cover {$cover}, preparing work {$preparing}, working {$working}.
 cmu-expedition-radio-channel = Field squad
 ent-CMUExpeditionHeadset = scavenger field headset
     .desc = A short-range squad radio. It works without a tower within forty metres.

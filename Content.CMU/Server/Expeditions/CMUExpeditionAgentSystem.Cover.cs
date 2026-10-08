@@ -110,6 +110,34 @@ public sealed partial class CMUExpeditionAgentSystem
         return true;
     }
 
+    private void ValidateCover(EntityUid uid, CMUExpeditionAgentComponent agent, bool hit, TimeSpan now)
+    {
+        if (agent.CoverAnchor is not { } anchor)
+            return;
+        var atShelter = _transform.InRange(Transform(uid).Coordinates, anchor, 0.7f);
+        // A hit while supposedly hidden invalidates even cover our geometry considers solid
+        // (penetrable scenery, changed firing angles, or an attacker not yet observed).
+        var hitWhileHidden = hit && atShelter && agent.State is
+            CMUExpeditionAgentState.Recover or CMUExpeditionAgentState.Healing or CMUExpeditionAgentState.Retreat;
+        if (!hitWhileHidden && ShelteredFromKnownThreats(uid, agent, anchor) &&
+            (!atShelter || agent.State != CMUExpeditionAgentState.Recover ||
+                ShelteredFromKnownThreats(uid, agent, Transform(uid).Coordinates)))
+            return;
+        agent.FailedPosition = anchor;
+        agent.RejectedCover++;
+        agent.AvoidPositionUntil = now + TimeSpan.FromSeconds(8);
+        ClearCover(agent);
+        // Give an exposed rifleman a chance to return fire before searching for another shelter.
+        agent.NextReposition = now + agent.BurstDuration;
+        agent.NextSuppressionResponse = now + agent.BurstDuration;
+        if (agent.Action == null && agent.State is CMUExpeditionAgentState.Reposition or
+            CMUExpeditionAgentState.Withdraw or CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Retreat)
+        {
+            _steering.Unregister(uid);
+            agent.State = CMUExpeditionAgentState.Guard;
+        }
+    }
+
     private (EntityCoordinates Anchor, EntityCoordinates? Peek)? FindPosition(EntityUid uid,
         CMUExpeditionAgentComponent agent, TransformComponent transform, bool retreat)
     {
@@ -253,13 +281,20 @@ public sealed partial class CMUExpeditionAgentSystem
         var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
         while (query.MoveNext(out var other, out var agent))
         {
-            if (other == uid || agent.State == CMUExpeditionAgentState.Disabled || !IsFriendly(uid, other) ||
-                owner.Squad != agent.Squad || Transform(uid).MapID != Transform(other).MapID)
+            if (other == uid || !_mobs.IsAlive(other) || !IsFriendly(uid, other) ||
+                Transform(uid).MapID != Transform(other).MapID)
                 continue;
-            if (agent.CoverAnchor is { } anchor && _transform.InRange(coordinates, anchor, 0.9f) ||
-                agent.PeekPosition is { } peek && _transform.InRange(coordinates, peek, 0.9f) ||
+            // Bodies need personal space even across squads. Future-position reservations
+            // remain squad-local so unrelated squads cannot reserve each other's whole area.
+            if (_transform.InRange(coordinates, Transform(other).Coordinates, 1.3f))
+                return true;
+            if (owner.Squad != agent.Squad || agent.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.Incapacitated)
+                continue;
+            if (agent.CoverAnchor is { } anchor && _transform.InRange(coordinates, anchor, 1.6f) ||
+                agent.PeekPosition is { } peek && _transform.InRange(coordinates, peek, 1.6f) ||
                 agent.InvestigationDestination is { } support && _transform.InRange(coordinates, support, 1.5f) ||
-                agent.CoverDestination is { } destination && _transform.InRange(coordinates, destination, 0.9f))
+                agent.CoverDestination is { } destination && _transform.InRange(coordinates, destination, 1.5f) ||
+                agent.SpacingDestination is { } escape && _transform.InRange(coordinates, escape, 1.5f))
                 return true;
         }
         return false;

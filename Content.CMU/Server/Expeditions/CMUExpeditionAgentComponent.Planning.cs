@@ -40,6 +40,7 @@ public sealed partial class CMUExpeditionAgentComponent
     public bool OrderBlocked;
     public bool Entrench;
     public EntityUid? WorkItem;
+    public bool PreparingWork;
     public DoAfterId? WorkDoAfter;
     public bool WorkBuild;
     public TimeSpan NextWork;

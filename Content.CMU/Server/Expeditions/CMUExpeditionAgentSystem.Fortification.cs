@@ -35,8 +35,16 @@ public sealed partial class CMUExpeditionAgentSystem
             }
         }
         if (now < agent.NextWork)
-            return agent.WorkItem != null;
+            return agent.WorkItem != null || agent.PreparingWork;
+        // Do not lower the rifle merely to discover that this floor cannot be dug or that
+        // no materials are available. A failed work retry is not a weapon-handling action.
+        if (agent.WorkItem == null && !agent.PreparingWork && !CanPrepareFortification(uid))
+        {
+            agent.NextWork = now + TimeSpan.FromSeconds(15);
+            return false;
+        }
         agent.NextWork = now + TimeSpan.FromSeconds(1);
+        agent.PreparingWork = true;
         _steering.Unregister(uid);
         if (_guns.TryGetGun(uid, out var rifle))
             _wield.TryUnwield(rifle.Owner, uid);
@@ -62,7 +70,12 @@ public sealed partial class CMUExpeditionAgentSystem
                     { agent.WorkItem = item; break; }
         }
         if (agent.WorkItem is not { } tool || !Exists(tool))
+        {
+            CancelWork(uid, agent);
+            agent.NextWork = now + TimeSpan.FromSeconds(15);
             return false;
+        }
+        agent.PreparingWork = false;
         var before = TryComp<DoAfterComponent>(uid, out var component) ? component.NextId : (ushort) 0;
         if (TryComp<RMCConstructionItemComponent>(tool, out var metal))
         {
@@ -86,6 +99,24 @@ public sealed partial class CMUExpeditionAgentSystem
         return true;
     }
 
+    private bool CanPrepareFortification(EntityUid uid)
+    {
+        var point = _transform.GetMapCoordinates(uid);
+        var nearby = new HashSet<EntityUid>();
+        _lookup.GetEntitiesInRange(point.MapId, point.Position, 1.5f, nearby);
+        if (nearby.Any(item => TryComp<RMCConstructionItemComponent>(item, out var material) &&
+            material.Buildable?.Any(p => p.Id == "RMCMetalBarricadeBuild") == true &&
+            TryComp<StackComponent>(item, out var stack) && stack.Count >= 4 &&
+            !_containers.IsEntityOrParentInContainer(item) && _interaction.InRangeUnobstructed(uid, item)))
+            return true;
+        if (!Supplies(uid, out var supplies))
+            return false;
+        var diggable = _turf.TryGetTileRef(Transform(uid).Coordinates.Offset(new Vector2(0, 1)), out var tile) &&
+            _turf.GetContentTileDefinition(tile.Value).CanDig;
+        return supplies.Container.ContainedEntities.Any(item => TryComp<EntrenchingToolComponent>(item, out var shovel) &&
+            (diggable || shovel.TotalLayers >= shovel.MoundCost));
+    }
+
     private void CancelWork(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         if (agent.WorkDoAfter is { } work && _doAfter.GetStatus(work) == DoAfterStatus.Running)
@@ -97,5 +128,6 @@ public sealed partial class CMUExpeditionAgentSystem
                 _hands.TryDrop(uid, item);
         }
         agent.WorkItem = null;
+        agent.PreparingWork = false;
     }
 }

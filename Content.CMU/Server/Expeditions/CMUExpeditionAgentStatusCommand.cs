@@ -68,6 +68,11 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
                 ("received", agent.ReportsReceived), ("accepted", agent.ReportsAccepted),
                 ("decision", agent.RadioDecision), ("radioContact", agent.ContactFromRadio),
                 ("destination", agent.InvestigationDestination?.ToString() ?? "-")));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-survival-status",
+                ("weapon", agent.WeaponRecoveryDecision), ("recovered", agent.WeaponsRecovered),
+                ("spacing", agent.SpacingDecision), ("destination", agent.SpacingDestination?.ToString() ?? "-"),
+                ("cover", agent.RejectedCover), ("preparing", agent.PreparingWork),
+                ("working", agent.WorkItem != null)));
         }
     }
 }

@@ -45,13 +45,16 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool CanLeaveCover(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
+        // Attack slots control exposing yourself from safety, never self-defence while exposed.
+        if (_timing.CurTime < agent.SpacingUntil || !ShelteredFromKnownThreats(uid, agent, Transform(uid).Coordinates))
+            return true;
         var members = 1;
         var attacking = 0;
         var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
         while (query.MoveNext(out var other, out var buddy))
         {
             if (other == uid || HasComp<ActorComponent>(other) || !_mobs.IsAlive(other) ||
-                buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.OutOfAmmo ||
+                buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.Incapacitated or CMUExpeditionAgentState.RecoverWeapon ||
                 buddy.Squad != agent.Squad ||
                 !SharedEngagement(agent, buddy) || !IsFriendly(uid, other) ||
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12))
@@ -80,7 +83,7 @@ public sealed partial class CMUExpeditionAgentSystem
         while (query.MoveNext(out var other, out var buddy))
         {
             if (other == uid || !_mobs.IsAlive(other) || HasComp<ActorComponent>(other) ||
-                buddy.Squad != agent.Squad || buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.OutOfAmmo ||
+                buddy.Squad != agent.Squad || buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.Incapacitated or CMUExpeditionAgentState.RecoverWeapon ||
                 !SharedEngagement(agent, buddy) || !IsFriendly(uid, other) ||
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12))
                 continue;

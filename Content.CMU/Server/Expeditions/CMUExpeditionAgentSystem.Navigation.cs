@@ -13,7 +13,8 @@ public sealed partial class CMUExpeditionAgentSystem
         var localContact = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(contact));
         var delta = localContact.Position - start.Position;
         var distance = delta.Length();
-        var stopRange = visible ? Math.Max(1, agent.FireRange - 1.5f) : 2.5f;
+        var stopRange = visible ? Math.Max(1, agent.FireRange - 1.5f) :
+            agent.LastContactWasMelee ? agent.MeleeStandoffRange : 2.5f;
         if (distance <= stopRange)
         {
             _steering.Unregister(uid);
@@ -48,6 +49,7 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var candidate in NearbySquadPositions(ideal, 2))
         {
             if (!ValidOrderPoint(uid, candidate) || Reserved(uid, candidate) || agent.Home is not { } home ||
+                agent.LastContactWasMelee && _transform.InRange(candidate, contact, agent.MeleeStandoffRange) ||
                 !_transform.InRange(home, candidate, agent.LeashRange) || _transform.InRange(start, candidate, 0.75f) ||
                 agent.FailedPosition is { } failed && now < agent.AvoidPositionUntil + TimeSpan.FromSeconds(3) && _transform.InRange(candidate, failed, 1.4f))
                 continue;

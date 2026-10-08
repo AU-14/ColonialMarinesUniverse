@@ -137,6 +137,44 @@ decision and the current approach point. `maintaining-current-action`, `outside-
 `stale-report`, `support-route-blocked` and `watching-reported-area` explain why hearing a
 callout may not result in immediate movement. Acknowledgements do not broadcast contacts.
 
+## Disarms, rushes and sustained pressure
+
+Each guard remembers the rifle it physically held. After native stun/knockdown and stand-up
+finish, it selects a rifle still in either hand or picks its dropped rifle up through normal
+hands and interaction checks. Recovery approaches are limited to six metres, visible loose
+weapons and bounded dry routes. Held, stored, hidden, deleted or anchored weapons are not
+retrieved. A close rush interrupts a distant retrieval, but permits picking up a reachable
+rifle. Failed pickups/routes have retry delays; ammunition is never replaced by recovery.
+
+Visible xenos (including neomorphs) and unarmed melee opponents get an urgent priority inside
+the six-metre standoff, including their projected approach over 0.65 seconds. This priority
+can break an ordinary target lock or utility action. Up to fourteen short escape corridors
+are scored against the closest six visible melee threats, terrain, hazards and squad spacing.
+Committed escape steps continue while the rifle fires through the normal aim, ammo, fire-rate,
+wield and friendly-fire checks. There is no speed boost or guaranteed escape from faster aliens.
+If trapped, the guard returns fire. After sight loss it briefly holds the approach and avoids
+walking inside the remembered melee standoff; it does not track an unseen body's movement.
+
+Cover anchors are rechecked against all known threats before use and at volley completion.
+A hit while waiting at an anchor invalidates that location even when geometry reports it
+sheltered. Invalid cover is avoided for eight seconds. Exposed guards can fire regardless of
+squad exposure slots. Ordinary suppression allows at least two return shots before cutting
+a volley short, and repeated suppression cannot extend the shelter pause indefinitely.
+Critical injury still permits immediate withdrawal. If no real shelter exists, an armed
+guard keeps fighting rather than travelling home to wait in the open. Treatment/reload
+safety also requires a brief break in actual damage.
+
+Cover/peek reservations and physical squad spacing prevent multiple guards selecting nearly
+the same stance. A crowded exposed pair yields one guard between volleys, at most once every
+three seconds. Escape destinations are reserved too; physical bodies in other squads are
+avoided without sharing their future-position reservations.
+
+Idle fortification has an explicit preparation state. Retry timers no longer lower rifles,
+and tools are only prepared when usable ground or metal is present. Newly spawned squads
+wait twenty seconds before attempting construction. The survival line in
+`cmu-expedition-ai-status here` reports weapon recovery, escape decisions, invalidated cover
+and preparation/work state.
+
 ## Verification
 
 ```text
@@ -156,3 +194,13 @@ changes. In-game verification should include multiple squads in dense vegetation
 walls, each loadout's ammunition/reload behavior, and interrupted/resumed patrols on both an
 ordinary colony grid and an expedition. Verify blocked waypoints, water/fire avoidance,
 incapacitation and player possession, and record search cost with simultaneous contacts.
+
+The survival/suppression follow-up is also build-only; no tests or in-game checks were run.
+Verify disarm and knockdown with the rifle underfoot and several tiles away, a stolen/stored
+rifle, missing hands, and a revived guard. Rush a squad with moving xenos/neomorphs around trees
+and corners, then retreat out of sight. Check fire during escape, no blind shots, no pursuit
+into the remembered melee gap, water/fire avoidance and behavior when no escape exists.
+Keep firing while advancing on a squad: guards must return shots between withdrawals and
+reject an exposed or penetrable shelter instead of repeatedly waiting there. Check crowded
+groups and friendly-fire lanes. Spawn `cmu-expedition-ai here 5 rich` on both dirt and indoor
+flooring and observe idle weapon handling before/after the twenty-second construction delay.

@@ -68,6 +68,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.NextOrderRoute = TimeSpan.Zero;
         agent.OrderBlocked = false;
         ClearCover(agent);
+        StopSpacing(uid, agent);
         _steering.Unregister(uid);
         agent.State = CMUExpeditionAgentState.Guard;
     }

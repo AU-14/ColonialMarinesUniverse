@@ -120,6 +120,7 @@ public sealed partial class CMUExpeditionAgentSystem
         CancelWork(uid, agent);
         agent.OrderRoute.Clear();
         agent.Target = agent.RadioTarget;
+        agent.LastContactWasMelee = HasComp<Content.Shared._RMC14.Xenonids.XenoComponent>(target);
         agent.LastSeen = report;
         agent.LastContact = agent.RadioObservedAt;
         agent.ForgetAt = agent.RadioObservedAt + agent.RadioMemoryDuration;

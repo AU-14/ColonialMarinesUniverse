@@ -70,6 +70,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.Squad = squad;
             agent.Home = positions[i];
             agent.Entrench = true;
+            agent.NextWork = _timing.CurTime + TimeSpan.FromSeconds(20);
             agent.NextThink = _timing.CurTime + TimeSpan.FromSeconds(i * 0.02);
         }
         if (map != null)

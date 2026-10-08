@@ -97,6 +97,8 @@ public enum CMUExpeditionAgentState : byte
     Rescuing,
     Throwing,
     Disabled,
+    Incapacitated,
+    RecoverWeapon,
 }
 
 public enum CMUExpeditionDisposition : byte { Steady, Aggressive, Cautious }
