@@ -127,8 +127,8 @@
   name: M889 HE mortar shell
   description: An 80mm mortar shell loaded with an high explosive charge.
   components:
-  - type: Examine
-    description: It can penetrate 2 z-levels.
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Item
     heldPrefix: he
   - type: Sprite
@@ -153,8 +153,8 @@
   name: M971 HEAT-MP mortar shell
   description: An 80mm mortar shell loaded with an high explosive anti tank multi purpose charge. It has a smaller blast radius than an HE round, but a devastating effect.
   components:
-  - type: Examine
-    description: It can penetrate 2 z-levels.
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Item
     heldPrefix: heat
   - type: Sprite
@@ -178,8 +178,8 @@
   name: M902 HE-INC mortar shell
   description: An 80mm mortar shell loaded with an high explosive incendiary charge. Perfect for long-range area denial.
   components:
-  - type: Examine
-    description: It can penetrate 2 z-levels.
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Item
     heldPrefix: inc
   - type: Sprite
@@ -205,8 +205,8 @@
   name: M853 ILLUM-OBS mortar shell
   description: An 80mm mortar shell, loaded with an illumination flare and observation camera, attached to a parachute.
   components:
-  - type: Examine
-    description: It can penetrate 2 z-levels.
+  - type: RMCGenericExamine
+    message: It can penetrate 2 z-levels.
   - type: Item
     heldPrefix: flr
   - type: Sprite
