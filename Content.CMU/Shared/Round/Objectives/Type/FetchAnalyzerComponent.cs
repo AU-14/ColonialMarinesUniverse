@@ -1,4 +1,5 @@
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
 using Content.Shared.CMU14.Round.Objectives.Components;
 
 namespace Content.Shared.CMU14.Round.Objectives.Type;
@@ -15,6 +16,29 @@ public sealed partial class FetchAnalyzerComponent : Robust.Shared.GameObjects.C
     public Dictionary<string, int> Banked = new();
 
     [DataField] public List<AnalyzerConversionEntry> Conversions = new();
+
+    /// <summary>Scanning RMC intel items credits this faction's intel points, multiplied by this.</summary>
+    [DataField] public float IntelPointMultiplier = 1f;
+
+    /// <summary>How long the working animation plays after the Analyzer processes something.</summary>
+    [DataField] public TimeSpan WorkingDuration = TimeSpan.FromSeconds(3.2);
+
+    public TimeSpan? WorkingUntil;
+}
+
+[Serializable, NetSerializable]
+public enum FetchAnalyzerVisuals : byte
+{
+    State,
+}
+
+[Serializable, NetSerializable]
+public enum FetchAnalyzerVisualState : byte
+{
+    Idle,
+    Working,
+    Off,
+    Broken,
 }
 
 [DataDefinition]

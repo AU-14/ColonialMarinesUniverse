@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 01:49:32
-  entityCount: 91087
+  entityCount: 91060
 maps:
 - 1
 grids:
@@ -151410,19 +151410,19 @@ entities:
           cost: 4000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesHighExplosiveBox
+          crate: CMUCrateGrenadeBoxHEDP
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesBoxHEFA
+          crate: CMUCrateGrenadeBoxHEFA
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 10000
           name: null
         - entities: []
@@ -562084,143 +562084,6 @@ entities:
     components:
     - type: Transform
       pos: -129.5,16.5
-      parent: 1
-- proto: fetchreturngovfor
-  entities:
-  - uid: 82710
-    components:
-    - type: Transform
-      pos: -149.5,-35.5
-      parent: 1
-  - uid: 82711
-    components:
-    - type: Transform
-      pos: -149.5,-34.5
-      parent: 1
-  - uid: 82712
-    components:
-    - type: Transform
-      pos: -149.5,-33.5
-      parent: 1
-  - uid: 82713
-    components:
-    - type: Transform
-      pos: -150.5,-35.5
-      parent: 1
-  - uid: 82714
-    components:
-    - type: Transform
-      pos: -150.5,-34.5
-      parent: 1
-  - uid: 82715
-    components:
-    - type: Transform
-      pos: -150.5,-33.5
-      parent: 1
-  - uid: 82716
-    components:
-    - type: Transform
-      pos: -151.5,-35.5
-      parent: 1
-  - uid: 82717
-    components:
-    - type: Transform
-      pos: -151.5,-34.5
-      parent: 1
-  - uid: 82718
-    components:
-    - type: Transform
-      pos: -151.5,-33.5
-      parent: 1
-  - uid: 82719
-    components:
-    - type: Transform
-      pos: -152.5,-35.5
-      parent: 1
-  - uid: 82720
-    components:
-    - type: Transform
-      pos: -152.5,-34.5
-      parent: 1
-  - uid: 82721
-    components:
-    - type: Transform
-      pos: -152.5,-33.5
-      parent: 1
-  - uid: 82722
-    components:
-    - type: Transform
-      pos: -153.5,-35.5
-      parent: 1
-  - uid: 82723
-    components:
-    - type: Transform
-      pos: -153.5,-34.5
-      parent: 1
-  - uid: 82724
-    components:
-    - type: Transform
-      pos: -157.5,-35.5
-      parent: 1
-  - uid: 82725
-    components:
-    - type: Transform
-      pos: -153.5,-33.5
-      parent: 1
-  - uid: 82726
-    components:
-    - type: Transform
-      pos: -154.5,-35.5
-      parent: 1
-  - uid: 82727
-    components:
-    - type: Transform
-      pos: -154.5,-34.5
-      parent: 1
-  - uid: 82728
-    components:
-    - type: Transform
-      pos: -154.5,-33.5
-      parent: 1
-  - uid: 82729
-    components:
-    - type: Transform
-      pos: -155.5,-35.5
-      parent: 1
-  - uid: 82730
-    components:
-    - type: Transform
-      pos: -155.5,-34.5
-      parent: 1
-  - uid: 82731
-    components:
-    - type: Transform
-      pos: -155.5,-33.5
-      parent: 1
-  - uid: 82732
-    components:
-    - type: Transform
-      pos: -156.5,-35.5
-      parent: 1
-  - uid: 82733
-    components:
-    - type: Transform
-      pos: -156.5,-34.5
-      parent: 1
-  - uid: 82734
-    components:
-    - type: Transform
-      pos: -156.5,-33.5
-      parent: 1
-  - uid: 82735
-    components:
-    - type: Transform
-      pos: -157.5,-34.5
-      parent: 1
-  - uid: 82736
-    components:
-    - type: Transform
-      pos: -157.5,-33.5
       parent: 1
 - proto: fetchtheaterhandbookobjective
   entities:

@@ -6,7 +6,7 @@
   priority: 3
   children:
   - AU14SOPRulesofEngagement
-  - AU14SOPRankStructure
+  - AU14SOPDepartments
   - AU14SOPEquipmentAndPersonnel
   - AU14SOPCommand
   - AU14SOPDropshipsandAircraft
@@ -27,6 +27,15 @@
   name: cmu-guide-entry-sop-equipment
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPEquipmentAndPersonnel.xml"
+  children:
+  - AU14SOPPhysicalStandards
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPPhysicalStandards
+  name: cmu-guide-entry-sop-physical-standards
+  text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPPhysicalStandards.xml"
+  priority: 3
 
 - type: guideEntry
   parent: RMC
@@ -44,10 +53,10 @@
 
 - type: guideEntry
   parent: RMC
-  id: AU14SOPRankStructure
-  name: cmu-guide-entry-sop-ranks
+  id: AU14SOPDepartments
+  name: cmu-guide-entry-sop-departments
   priority: 1
-  text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPRankStructure.xml"
+  text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPDepartments.xml"
 
 - type: guideEntry
   parent: RMC

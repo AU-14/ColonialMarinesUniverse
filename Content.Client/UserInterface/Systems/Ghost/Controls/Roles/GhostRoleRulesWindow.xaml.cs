@@ -7,7 +7,6 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Client.UserInterface.XAML;
 using Robust.Shared.Configuration;
-using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
@@ -17,7 +16,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
     {
         [Dependency] private IConfigurationManager _cfg = IoCManager.Resolve<IConfigurationManager>();
         [Dependency] private IStylesheetManager _stylesheetManager = default!;
-        private float _timer;
         private readonly GhostRoleKind _ghostRoleKind;
 
         public GhostRoleRulesWindow(string rules, GhostRoleKind ghostRoleKind, Action<BaseButton.ButtonEventArgs> requestAction)
@@ -25,22 +23,11 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             IoCManager.InjectDependencies(this);
             RobustXamlLoader.Load(this);
             ApplyCrtPalette();
-            var ghostRoleTime = _cfg.GetCVar(CCVars.GhostRoleTime);
-            _timer = ghostRoleTime;
             _ghostRoleKind = ghostRoleKind;
 
-            if (ghostRoleTime > 0f)
-            {
-                RequestButton.Text = GetButtonText(true);
-                TopBanner.SetMessage(FormattedMessage.FromMarkupPermissive(rules + "\n" + Loc.GetString("ghost-roles-window-rules-footer", ("time", ghostRoleTime))));
-                RequestButton.Disabled = true;
-            }
-            else
-            {
-                TopBanner.SetMessage(FormattedMessage.FromMarkupPermissive(rules));
-                RequestButton.Disabled = false;
-                RequestButton.Text = GetButtonText(false);
-            }
+            TopBanner.SetMessage(FormattedMessage.FromMarkupPermissive(rules));
+            RequestButton.Disabled = false;
+            RequestButton.Text = GetButtonText();
 
             RequestButton.OnPressed += requestAction;
             _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
@@ -71,44 +58,18 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             Stylesheet = _stylesheetManager.SheetNano;
             CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
         }
-
-
-        protected override void FrameUpdate(FrameEventArgs args)
-        {
-            base.FrameUpdate(args);
-            if (!RequestButton.Disabled) return;
-            if (_timer > 0.0)
-            {
-                _timer -= args.DeltaSeconds;
-                RequestButton.Text = GetButtonText(true);
-            }
-            else
-            {
-                RequestButton.Disabled = false;
-                RequestButton.Text = GetButtonText(false);
-            }
-        }
-
-        private string GetButtonText(bool timer)
+        private string GetButtonText()
         {
             var messageId = _ghostRoleKind switch
             {
-                GhostRoleKind.FirstComeFirstServe => timer
-                    ? "ghost-roles-window-request-role-button-timer"
-                    : "ghost-roles-window-request-role-button",
-                GhostRoleKind.RaffleReady or GhostRoleKind.RaffleInProgress => timer
-                    ? "ghost-roles-window-join-raffle-button-timer"
-                    : "ghost-roles-window-join-raffle-button",
-                GhostRoleKind.RaffleJoined => timer
-                    ? "ghost-roles-window-leave-raffle-button-timer"
-                    : "ghost-roles-window-leave-raffle-button-confirm",
+                GhostRoleKind.FirstComeFirstServe => "ghost-roles-window-request-role-button",
+                GhostRoleKind.RaffleReady or GhostRoleKind.RaffleInProgress => "ghost-roles-window-join-raffle-button",
+                GhostRoleKind.RaffleJoined => "ghost-roles-window-leave-raffle-button-confirm",
                 _ => throw new ArgumentOutOfRangeException(nameof(_ghostRoleKind),
                     $"Unknown {nameof(GhostRoleKind)} '{_ghostRoleKind}'")
             };
 
-            return timer
-                ? Loc.GetString(messageId, ("time", $"{Math.Max(_timer, 0):0.0}"))
-                : Loc.GetString(messageId);
+            return Loc.GetString(messageId);
         }
     }
 }

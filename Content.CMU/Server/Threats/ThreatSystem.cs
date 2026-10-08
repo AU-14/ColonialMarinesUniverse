@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.GameTicking;
@@ -7,7 +8,6 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
-using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
@@ -48,6 +48,7 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -604,6 +605,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
                         spawnedList?.Add(ent);
                         _forceInterest.TrackRole(ent);
@@ -662,6 +664,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-extra-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
                         spawnedMembers.Add(ent);
                         AddThreatFaction(ent, ThreatMemberJobId);
@@ -1003,17 +1006,6 @@ public sealed partial class ThreatSystem : EntitySystem
         EnsureComp<NpcFactionMemberComponent>(entity);
         _npcFaction.AddFaction((entity, CompOrNull<NpcFactionMemberComponent>(entity)), threatNPCFaction);
         RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(entity));
-    }
-
-    internal bool HasCrashedDropship()
-    {
-        EntityQueryEnumerator<DropshipComponent> dropships = EntityQueryEnumerator<DropshipComponent>();
-        while (dropships.MoveNext(out _, out DropshipComponent? dropship))
-        {
-            return dropship.Crashed;
-        }
-
-        return false;
     }
 
     internal bool IsExcludedFromVictory(EntityUid uid, MobStateComponent mobState)

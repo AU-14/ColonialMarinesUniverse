@@ -1,0 +1,10 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Reduced repeated simulation, spatial-query, and network-state work.
+  type: Code
+- message: Added server performance cost and retention diagnostics and log-comparison
+    tools.
+  type: Admin
+time: '2026-09-28T21:33:48.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2045

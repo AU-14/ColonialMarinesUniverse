@@ -654,13 +654,8 @@ public sealed partial class ScalingViewport
                 return true;
             }
 
-            if (candidate != uid &&
-                TryResolveZLevelViewer(uid, out viewEntity, out viewer, out xform))
-            {
-                CacheZLevelViewEntity(uid, viewEntity);
-                return true;
-            }
-
+            // Remote eyes without a Z-level viewer use the normal camera renderer.
+            // Falling back to the owner would render the owner's map at the remote coordinates.
             ClearZLevelViewEntityCache();
             return false;
         }
@@ -689,13 +684,6 @@ public sealed partial class ScalingViewport
 
         var candidate = eye.Target ?? eyeEntity;
         if (TryResolveZLevelViewer(candidate, out viewEntity, out viewer, out xform))
-        {
-            CacheZLevelViewEntity(eyeEntity, viewEntity);
-            return true;
-        }
-
-        if (candidate != eyeEntity &&
-            TryResolveZLevelViewer(eyeEntity, out viewEntity, out viewer, out xform))
         {
             CacheZLevelViewEntity(eyeEntity, viewEntity);
             return true;

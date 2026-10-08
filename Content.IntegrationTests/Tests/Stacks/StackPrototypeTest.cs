@@ -40,10 +40,10 @@ public sealed class StackPrototypeTest : GameTest
                 Assert.That(stack!.StackTypeId, Is.EqualTo(new ProtoId<StackPrototype>(ChildStack)));
             });
 
-            var forkPrototype = SProtoMan.Index<StackPrototype>("CMUYautjaHealingGel");
+            var forkPrototype = SProtoMan.Index<StackPrototype>("CMUYautjaStabilizerGel");
             Assert.Multiple(() =>
             {
-                Assert.That(forkPrototype.Name, Is.EqualTo("healing gel"));
+                Assert.That(forkPrototype.Name, Is.EqualTo("stabilizer gel"));
                 Assert.That(localization.HasString(forkPrototype.Name), Is.False,
                     "This representative fork stack name is intentionally raw, not a localization ID.");
                 Assert.That(

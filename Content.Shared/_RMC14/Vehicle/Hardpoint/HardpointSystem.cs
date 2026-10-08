@@ -530,6 +530,9 @@ public sealed partial class HardpointSystem : EntitySystem
             return false;
         }
 
+        // CMU14: capture the frame's own capacity before mounted parts replace it.
+        EnsureNativeMaxIntegrity(frameIntegrity);
+
         var totalIntegrity = 0f;
         var totalMaxIntegrity = 0f;
         var visited = new HashSet<EntityUid>();
@@ -556,7 +559,7 @@ public sealed partial class HardpointSystem : EntitySystem
             if (frameIntegrity.NativeMaxIntegrity <= 0f)
                 return false;
 
-            totalMaxIntegrity = frameIntegrity.NativeMaxIntegrity;
+            totalMaxIntegrity = frameIntegrity.NativeMaxIntegrity - frameIntegrity.RepairWear;
             totalIntegrity = Math.Clamp(frameIntegrity.Integrity, 0f, totalMaxIntegrity);
         }
         // CMU14 Frame End
@@ -591,7 +594,8 @@ public sealed partial class HardpointSystem : EntitySystem
         if (!TryComp(vehicle, out HardpointIntegrityComponent? frame) || frame.MaxIntegrity <= 0f)
             return;
 
-        if (!TryRollFailure(vehicle, frame, amount))
+        // CMU14: if (!TryRollFailure(vehicle, frame, amount))
+        if (!TryRollFailure(vehicle, (vehicle, frame), amount))
             return;
 
         var candidates = new List<VehicleHardpointFailure>
@@ -624,7 +628,8 @@ public sealed partial class HardpointSystem : EntitySystem
             return;
         }
 
-        if (!TryRollFailure(vehicle, frame, amount))
+        // CMU14: if (!TryRollFailure(vehicle, frame, amount))
+        if (!TryRollFailure(vehicle, (vehicle, frame), amount))
             return;
 
         AddHardpointFailure(vehicle, vehicle, VehicleHardpointFailure.FuelLeak, failures);
@@ -637,7 +642,11 @@ public sealed partial class HardpointSystem : EntitySystem
         HardpointIntegrityComponent integrity)
     {
         var candidates = GetFailureCandidates(vehicle, hardpoint);
-        if (candidates.Count == 0 || !TryRollFailure(vehicle, integrity, amount))
+        // CMU14: exhausted fault choices must not consume another module's roll interval.
+        if (TryComp(hardpoint, out VehicleHardpointFailureComponent? failures))
+            candidates.RemoveAll(failures.ActiveFailures.Contains);
+        // if (candidates.Count == 0 || !TryRollFailure(vehicle, integrity, amount))
+        if (candidates.Count == 0 || !TryRollFailure(vehicle, (hardpoint, integrity), amount))
             return;
 
         TryAddRandomFailure(vehicle, hardpoint, candidates);
@@ -646,6 +655,9 @@ public sealed partial class HardpointSystem : EntitySystem
     private List<VehicleHardpointFailure> GetFailureCandidates(EntityUid vehicle, EntityUid hardpoint)
     {
         var candidates = new List<VehicleHardpointFailure>();
+
+        if (IsFaultImmuneHardpoint(hardpoint)) // CMU14: passive snowplows cannot develop mechanical faults.
+            return candidates;
 
         if (hardpoint == vehicle)
         {
@@ -736,6 +748,9 @@ public sealed partial class HardpointSystem : EntitySystem
         VehicleHardpointFailure failure,
         VehicleHardpointFailureComponent? failures = null)
     {
+        if (IsFaultImmuneHardpoint(hardpoint)) // CMU14: cover every fault source, not just random rolls.
+            return false;
+
         failures ??= EnsureComp<VehicleHardpointFailureComponent>(hardpoint);
 
         if (failures.ActiveFailures.Contains(failure))
@@ -1500,9 +1515,16 @@ public sealed partial class HardpointSystem : EntitySystem
         return scaled;
     }
 
+    // CMU14 method: persist the unworn baseline only when gameplay first needs it.
+    // ComponentInit also runs in the map editor, where untouched prototypes must stay unchanged.
+    private static void EnsureNativeMaxIntegrity(HardpointIntegrityComponent integrity)
+    {
+        if (integrity.NativeMaxIntegrity <= 0f)
+            integrity.NativeMaxIntegrity = integrity.MaxIntegrity + integrity.RepairWear;
+    }
+
     private void OnHardpointIntegrityInit(Entity<HardpointIntegrityComponent> ent, ref ComponentInit args)
     {
-        ent.Comp.NativeMaxIntegrity = ent.Comp.MaxIntegrity; // CMU14: cache configured max before derived refreshes replace it
         if (ent.Comp.Integrity <= 0f)
             ent.Comp.Integrity = ent.Comp.MaxIntegrity;
 
@@ -1545,6 +1567,7 @@ public sealed partial class HardpointSystem : EntitySystem
         return true;
     }
 
+    // CMU14 method: damage descriptions retain the unworn loadout's maximum.
     private bool TryGetVehicleEffectiveIntegrity(
         EntityUid vehicle,
         HardpointIntegrityComponent frame,
@@ -1554,7 +1577,7 @@ public sealed partial class HardpointSystem : EntitySystem
         out float max)
     {
         current = frame.Integrity;
-        max = frame.MaxIntegrity;
+        max = GetFactoryMaxIntegrity(vehicle, frame);
         // CMU14: surviving parts do not count as a repairable hull.
         if (IsCookedOff(vehicle))
         {
@@ -1583,7 +1606,7 @@ public sealed partial class HardpointSystem : EntitySystem
                 maxTopLevelCurrent = MathF.Max(maxTopLevelCurrent, integrity.Integrity);
             }
 
-            maxTopLevelMax = MathF.Max(maxTopLevelMax, integrity.MaxIntegrity);
+            maxTopLevelMax = MathF.Max(maxTopLevelMax, GetFactoryMaxIntegrity(integrity));
         }
 
         if (maxTopLevelMax <= 0f)
@@ -1591,7 +1614,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
         var hullFraction = intactTopLevelHardpoints > 0 ? slots.FrameDamageFractionWhileIntact : 1f;
         current = GetVehicleEffectiveIntegrity(frame.Integrity, maxTopLevelCurrent, hullFraction);
-        max = GetVehicleEffectiveIntegrity(frame.MaxIntegrity, maxTopLevelMax, slots.FrameDamageFractionWhileIntact);
+        max = GetVehicleEffectiveIntegrity(max, maxTopLevelMax, slots.FrameDamageFractionWhileIntact);
         return true;
     }
 
@@ -2133,7 +2156,14 @@ public sealed partial class HardpointSystem : EntitySystem
                 return;
         }
 
+        EnsureNativeMaxIntegrity(ent.Comp); // CMU14: retain the original repair floor across successive repairs.
         var previousIntegrity = ent.Comp.Integrity;
+        var capacityFloor = MathF.Max(previousIntegrity,
+            ent.Comp.NativeMaxIntegrity * Math.Clamp(ent.Comp.MinimumRepairCapacityFraction, 0f, 1f));
+        var wear = MathF.Min(MathF.Max(0f, ent.Comp.MaxIntegrity - capacityFloor),
+            repairAmount * Math.Clamp(ent.Comp.RepairWearFraction, 0f, 1f));
+        ent.Comp.RepairWear += wear;
+        ent.Comp.MaxIntegrity -= wear;
         ent.Comp.Integrity = MathF.Min(ent.Comp.MaxIntegrity, ent.Comp.Integrity + repairAmount);
 
         Dirty(ent.Owner, ent.Comp);
@@ -2403,7 +2433,9 @@ public sealed partial class HardpointSystem : EntitySystem
         if (TryComp(uid, out HardpointIntegrityComponent? frame))
         {
             frameIntegrity = frame.Integrity;
-            frameMaxIntegrity = frame.MaxIntegrity;
+            // CMU14: show factory capacity instead of a shrinking repair ceiling.
+            // frameMaxIntegrity = frame.MaxIntegrity;
+            frameMaxIntegrity = GetFactoryMaxIntegrity(uid, frame);
             hasFrameIntegrity = true;
         }
 
@@ -2427,7 +2459,8 @@ public sealed partial class HardpointSystem : EntitySystem
                 if (TryComp(item, out HardpointIntegrityComponent? hardpointIntegrity))
                 {
                     integrity = hardpointIntegrity.Integrity;
-                    maxIntegrity = hardpointIntegrity.MaxIntegrity;
+                    // CMU14: maxIntegrity = hardpointIntegrity.MaxIntegrity;
+                    maxIntegrity = GetFactoryMaxIntegrity(hardpointIntegrity);
                     hasIntegrity = true;
                 }
             }
@@ -2507,7 +2540,8 @@ public sealed partial class HardpointSystem : EntitySystem
                 if (TryComp(installedItem, out HardpointIntegrityComponent? hardpointIntegrity))
                 {
                     integrity = hardpointIntegrity.Integrity;
-                    maxIntegrity = hardpointIntegrity.MaxIntegrity;
+                    // CMU14: maxIntegrity = hardpointIntegrity.MaxIntegrity;
+                    maxIntegrity = GetFactoryMaxIntegrity(hardpointIntegrity);
                     hasIntegrity = true;
                 }
             }

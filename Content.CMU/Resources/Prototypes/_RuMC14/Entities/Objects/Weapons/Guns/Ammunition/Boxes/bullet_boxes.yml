@@ -78,7 +78,7 @@
   suffix: Empty
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxBulletAG80
     node: RuMCBoxBulletsRifleAG80Empty
   - type: BulletBox
     bulletType: CMUBoxBulletsRifleAG80
@@ -116,8 +116,8 @@
   suffix: Empty
   components:
   - type: Construction
-    graph: RMCBoxMagazine
-    node: RuMCBoxBulletsRifleAG80Empty
+    graph: RuMCBoxBulletAG80
+    node: RuMCBoxBulletsRifleAG80APEmpty
   - type: BulletBox
     bulletType: CMUBoxBulletsRifleAG80AP
     amount: 0
@@ -156,7 +156,7 @@
   suffix: Empty
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxBulletType71
     node: RuMCBoxBulletsRifleType71Empty
   - type: BulletBox
     bulletType: CMUBoxBulletsRifleType71
@@ -194,7 +194,7 @@
   suffix: Empty
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxBulletType71
     node: RuMCBoxBulletsRifleType71APEmpty
   - type: BulletBox
     bulletType: CMUBoxBulletsRifleType71AP
@@ -234,7 +234,7 @@
   suffix: Empty
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxBullet10x24mm
     node: RuMCBoxBulletsRifle10x24mmEmpty
   - type: BulletBox
     bulletType: RMCBoxBulletsRifle
@@ -272,7 +272,7 @@
   suffix: Empty
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxBullet10x24mm
     node: RuMCBoxBulletsRifle10x24mmAPEmpty
   - type: BulletBox
     bulletType: RMCBoxBulletsRifleAP
@@ -312,7 +312,7 @@
   suffix: Empty
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxBulletType64
     node: RuMCBoxBulletsSMG10x20mmEmpty
   - type: BulletBox
     bulletType: RMCBoxBulletsSMG
@@ -350,7 +350,7 @@
   suffix: Empty
   components:
   - type: Construction
-    graph: RMCBoxMagazine
+    graph: RuMCBoxBulletType19
     node: RuMCBoxBulletsPistol762x25mmEmpty
   - type: BulletBox
     bulletType: CMUBoxBulletsSMGType19

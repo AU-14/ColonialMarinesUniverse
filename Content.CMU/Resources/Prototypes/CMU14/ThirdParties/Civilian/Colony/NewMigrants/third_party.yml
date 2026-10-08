@@ -1,6 +1,5 @@
 # Potential for language system addition in the future
 
-
 - type: partySpawn
   id: MigratingCivsSpawn
   leadersToSpawn:
@@ -17,11 +16,9 @@
   weight: 30
   minplayers: 30
   maxplayers: 54
-  GhostsNeeded: 5
+  ghostsNeeded: 5
   roundstart: false
-  whitelistedgamemodes:
-    - insurgency
-    - colonyfall
+  ghostsCallable: true
 
 - type: partySpawn
   id: MigratingCivsMediumSpawn
@@ -39,11 +36,9 @@
   weight: 30
   minplayers: 55
   maxplayers: 100
-  GhostsNeeded: 5
+  ghostsNeeded: 5
   roundstart: false
-  whitelistedgamemodes:
-    - insurgency
-    - colonyfall
+  ghostsCallable: true
 
 - type: partySpawn
   id: MigratingCivsLargeSpawn
@@ -61,8 +56,6 @@
   weight: 30
   minplayers: 101
   maxplayers: 400
-  GhostsNeeded: 6
+  ghostsNeeded: 6
   roundstart: false
-  whitelistedgamemodes:
-    - insurgency
-    - colonyfall
+  ghostsCallable: true

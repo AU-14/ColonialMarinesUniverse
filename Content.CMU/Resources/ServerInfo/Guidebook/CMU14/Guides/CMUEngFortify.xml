@@ -1,0 +1,77 @@
+<Document>
+  # Fortifications
+
+  <Box>
+    <GuideEntityEmbed Entity="CMBarricadeMetal" Caption="Metal barricade"/>
+    <GuideEntityEmbed Entity="RMCBarricadePlasteel" Caption="Plasteel barricade"/>
+    <GuideEntityEmbed Entity="RMCBarricadeWood" Caption="Wooden barricade"/>
+  </Box>
+
+  Barricades, barbed wire and razorwire are all built from a stack of materials in your hand. See [textlink="Construction" link="CMUGuideEngConstruction"] for how the build menu works.
+
+  ## Barricades
+  - [bold]Metal barricade[/bold]: 4 metal. The standard barricade, with 450 health. Needs basic construction training.
+  - [bold]Folding metal barricade[/bold]: 6 metal. A gate you can open and close at a moment's notice, but weaker, with 400 health.
+  - [bold]Plasteel barricade[/bold]: 6 plasteel. The strongest barricade, with 900 health, but it takes longer to build.
+  - [bold]Folding plasteel barricade[/bold]: 8 plasteel. A plasteel gate.
+  - [bold]Wooden barricade[/bold]: 5 wood. Cheap, and blocks from both sides, but it only stops some shots and wood takes extra damage. Charging creatures smash straight through it. Repair it with a nailgun and wood planks.
+
+  A metal or plasteel barricade only faces one way, and blocks attacks and fire coming from that side. To get the most out of one, stand right up against it, or keep more than four tiles back.
+
+  ## Repairing
+  - Weld a damaged metal or plasteel barricade with a blowtorch, or patch it up with a nailgun.
+  - Examine a barricade to see how damaged it is, from good shape down to crumbling apart.
+
+  ## Taking Barricades Down
+  Unscrew a barricade with a screwdriver, then pry it apart with a crowbar. You get back some of the materials; the more damaged it is, the less you get.
+
+  ## Upgrades
+  Metal and plasteel barricades can be upgraded to stand up better to a particular kind of damage. You need basic construction training.
+  - Use [bold]2 metal[/bold] on the barricade and pick an upgrade from the menu.
+  - [bold]Composite[/bold]: much better against explosives, bullets and fire.
+  - [bold]Biohazard[/bold]: better against burns, such as acid.
+  - [bold]Reinforced[/bold]: better against brute force, such as claws and melee.
+  - Use a [bold]multitool[/bold] on an upgraded barricade to strip the upgrade off and get the metal back, so you can pick a different one.
+
+  ## Barbed Wire
+  <Box>
+    <GuideEntityEmbed Entity="BarbedWire1" Caption="Barbed wire"/>
+  </Box>
+  - [bold]Making it[/bold]: open your metal stack's build menu and pick barbed wire. Each length costs [bold]1 metal[/bold] and takes a second, and you can make 5, 10 or 20 at once.
+  - [bold]Wiring a barricade[/bold]: use barbed wire on a barricade. It takes 2 seconds.
+  - A wired barricade has 50 more health, and cuts anyone who attacks it in melee or leaps into it.
+  - Nobody can climb over a wired barricade.
+  - Wire cutters take the wire back off in a second, and give you the wire back.
+  - The wire stays on when you upgrade the barricade.
+
+  ## Razorwire
+  <Box>
+    <GuideEntityEmbed Entity="RMCBarricadeRazorwire" Caption="Razorwire"/>
+  </Box>
+  Razorwire is a free-standing coil laid across the ground to slow down anything trying to get through.
+  - [bold]Making it[/bold]: use a stack of barbed wire in your hand and pick razorwire. It costs [bold]2 barbed wire[/bold], takes 2 seconds, and needs basic construction training.
+  - Anyone walking through it moves at [bold]less than a third[/bold] of their normal speed, and gets cut while they're in it.
+  - Attacking it cuts the attacker.
+  - It doesn't block movement or shots; it just makes crossing slow and painful. Lay it in front of your barricades so attackers get stuck under your guns.
+  - [bold]Taking it down[/bold]: cut it with wire cutters (5 seconds), unanchor it with a wrench, then wrench it again (5 seconds) to tear it up and get a length of barbed wire back.
+
+  ## HESCO Barricades
+  <Box>
+    <GuideEntityEmbed Entity="AU14HescoKit" Caption="HESCO kit"/>
+  </Box>
+  Deploy the HESCO kit on the ground facing the way you want it to face, then pack it with dirt using an entrenching tool. Each fill stage takes a few shovelfuls, and several people filling the same basket finish it faster.
+
+  You can stop at one of two heights:
+  - [bold]Barricade (halfway)[/bold]: fill the basket once and it becomes a [bold]HESCO barricade[/bold]. It's sturdy cover that works like any other barricade: people can still vault it, and you can [bold]wire it[/bold] with barbed wire to stop that and cut anyone who attacks it.
+  - [bold]Wall (all the way)[/bold]: use your entrenching tool on a finished HESCO barricade to raise it (3 seconds), then fill it again. The finished [bold]HESCO wall[/bold] stops bullets, blocks sight entirely and can't be climbed, and it's the toughest of the two.
+
+  To take one down, use the Disassemble verb on it, then dig it out with your entrenching tool. It steps back down one stage at a time until you get the kit back.
+
+  ## Sandbags
+  Fill empty sandbags with an entrenching tool, then stack them into sandbag barricades.
+
+  ## MB-6 Folding Barricades
+  Use them in your hand to deploy them, and drag a deployed one onto yourself to collapse it again.
+
+  For sentry guns, see [textlink="Sentries" link="CMUGuideEngSentries"].
+</Document>

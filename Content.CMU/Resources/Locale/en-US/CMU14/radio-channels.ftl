@@ -35,4 +35,5 @@ chat-radio-twe = TWE
 chat-radio-icsc = ICSC
 chat-radio-cca = CCA
 chat-radio-vai = VAI
+chat-radio-raiders = RAID
 chat-radio-part = Prodigy

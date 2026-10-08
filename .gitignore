@@ -26,6 +26,8 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
+# CMU14: imported Hunter Ship sprites are source assets, not build output.
+!Content.CMU/Resources/Textures/CMU14/HunterShip/obj/
 [Ll]og/
 
 # Visual Studio 2015 cache/options directory
@@ -333,4 +335,3 @@ settings.local.json
 # personal agent configs
 AGENTS.md
 CLAUDE.md
-Content.CMU/Resources/Prototypes/CMU14/Entities/Structures/Atmos/exhaust_vents.yml

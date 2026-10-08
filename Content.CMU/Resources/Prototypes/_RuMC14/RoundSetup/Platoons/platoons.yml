@@ -1,7 +1,6 @@
 - type: platoon
   id: BEAR
   name: "PMC 'BEAR'"
-  nameLocKey: lore-primer-platoon-bear
   lorePrimer: RuMCPrimerPlatoonBEAR
   Allegiance: UPP
   languages:

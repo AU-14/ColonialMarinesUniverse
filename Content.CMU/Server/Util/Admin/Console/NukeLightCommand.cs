@@ -114,7 +114,7 @@ public sealed partial class NukeLightCommand : LocalizedEntityCommands
         };
     }
 
-    private static bool TryParseFloat(IConsoleShell shell, string[] args, int index, string name, ref float value)
+    private bool TryParseFloat(IConsoleShell shell, string[] args, int index, string name, ref float value)
     {
         if (args.Length <= index)
             return true;
@@ -126,7 +126,7 @@ public sealed partial class NukeLightCommand : LocalizedEntityCommands
         return false;
     }
 
-    private static bool TryParseCoordinates(IConsoleShell shell, string[] args, out MapCoordinates coords)
+    private bool TryParseCoordinates(IConsoleShell shell, string[] args, out MapCoordinates coords)
     {
         coords = default;
 

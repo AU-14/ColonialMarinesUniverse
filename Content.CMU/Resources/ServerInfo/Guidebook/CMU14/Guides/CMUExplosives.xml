@@ -1,0 +1,131 @@
+<Document>
+  # Explosives
+
+  Explosives give you firepower around corners, over cover and into places you don't want to walk into. This guide covers grenades, mines and the other explosives a soldier is likely to carry. For mortars, see [textlink="Mortar" link="CMUGuideMortar"].
+
+  # Grenades
+  Most grenades are [bold]hand grenades[/bold] that you can also fire from a grenade launcher. A few are [bold]launcher-only rounds[/bold] that you can't prime by hand at all.
+
+  ## Using a Hand Grenade
+  - Hold the grenade and use it in your hand [color=#FFA500][keybind="ActivateItemInHand"][/color] to pull the pin. You'll hear it arm and the grenade starts flashing.
+  - Throw it [color=#FFA500][keybind="ThrowItemInHand"][/color] before the fuse runs out. Once it's armed you can't put the pin back.
+  - Most grenades have a [bold]4 second[/bold] fuse. Smoke has 2.5 seconds and white phosphorus only 2.
+  - Grenades bounce and slide. Throw a little short in tight corridors, and never prime one while a friend is standing between you and the target.
+
+  ## Firing From a Launcher
+  - Any grenade marked for launcher use can be loaded into a grenade launcher.
+  - The launcher arms the grenade when it fires it. Most grenades go off about a second after leaving the barrel.
+  - [bold]Dual-purpose[/bold] grenades, the [bold]M40 HEDP[/bold] and [bold]M47 HSDP[/bold], also have an [bold]impact fuse[/bold] and go off the moment they reach the spot you aimed at.
+  - Fragmentation grenades like the [bold]HEFA[/bold] and [bold]M15[/bold] have no impact fuse, so they rely on the launcher's own timer.
+
+  ## Hand Grenades
+  <Box>
+    <GuideEntityEmbed Entity="CMGrenadeHighExplosive" Caption="M40 HEDP"/>
+    <GuideEntityEmbed Entity="CMGrenadeFrag" Caption="HEFA"/>
+    <GuideEntityEmbed Entity="CMGrenadeFragOld" Caption="M15"/>
+    <GuideEntityEmbed Entity="CMUGrenadeBFAB" Caption="M51A BFAB"/>
+    <GuideEntityEmbed Entity="AU14GrenadeHighExplosiveUPP" Caption="Type 6"/>
+  </Box>
+  - [bold]M40 HEDP[/bold]: the standard blast grenade. Dual-purpose, so it detonates on impact when fired from a launcher.
+  - [bold]HEFA[/bold]: a fragmentation grenade that throws out a large cloud of shrapnel. Deadly in the open, dangerous to anyone nearby.
+  - [bold]M15[/bold]: an older fragmentation grenade with plenty of shrapnel. It's being phased out for the safer 30mm-series grenades.
+  - [bold]Type 6[/bold]: a fragmentation grenade.
+  - [bold]M51A BFAB[/bold]: a bounding grenade. Once it lands, armed, it hops up into the air and bursts into shrapnel from above. Good against troops behind low cover. Throw it primed, or fire it from a launcher to bound where it lands.
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCGrenadeIncendiary" Caption="M77 HIAM"/>
+    <GuideEntityEmbed Entity="AU14GrenadeIncendiaryUPP" Caption="Type 8"/>
+    <GuideEntityEmbed Entity="RMCGrenadeWhitePhosphorusCompound" Caption="M60 WPSI"/>
+    <GuideEntityEmbed Entity="RMCGrenadeMFHS" Caption="M42 MFHS"/>
+  </Box>
+  - [bold]M77 HIAM[/bold]: an incendiary grenade that spreads fire across an area. Good for denying ground and blocking an advance.
+  - [bold]Type 8[/bold]: another incendiary grenade that sets the area alight.
+  - [bold]M60 WPSI[/bold]: white phosphorus. Throws up a smoke screen and sets things alight. Short 2 second fuse.
+  - [bold]M42 MFHS[/bold]: releases liquid metal that hardens into temporary walls. Useful to seal a breach or block a corridor, but the foam is easy to break.
+
+  ## Smoke
+  <Box>
+    <GuideEntityEmbed Entity="CMGrenadeSmoke" Caption="M47 HSDP"/>
+    <GuideEntityEmbed Entity="CMUGrenadeSmokeGreen" Caption="M47-G"/>
+    <GuideEntityEmbed Entity="CMUGrenadeSmokeRed" Caption="M47-R"/>
+    <GuideEntityEmbed Entity="AU14GrenadeSmokeUPP" Caption="RDG-17"/>
+  </Box>
+  Smoke grenades fill the area with a cloud that blocks sight for about [bold]35 seconds[/bold].
+  - [bold]M47 HSDP[/bold]: a thick smoke screen to cover a crossing or a casualty pickup. Dual-purpose, so it also bursts on impact from a launcher.
+  - [bold]RDG-17[/bold]: a smoke screen grenade, much like the M47.
+  - [bold]M47-G / M47-R[/bold]: green and red signal smoke, used to mark landing zones, targets or rally points. Agree on what each colour means before you use them.
+
+  ## Launcher-Only Rounds
+  These have a yellow band on the hull and no pin. You [bold]cannot[/bold] throw them armed; load them into a grenade launcher.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUGrenadeHEAP" Caption="M38 HEAP"/>
+    <GuideEntityEmbed Entity="CMUGrenadeCanister" Caption="M108 canister"/>
+  </Box>
+  - [bold]M38 HEAP[/bold]: armour-piercing round that detonates on impact. A slightly smaller blast than the M40, but it hits vehicles far harder. Land it just in front of a wall rather than straight into it.
+  - [bold]M108 canister[/bold]: turns the launcher into a giant shotgun. Fires a spread of buckshot straight out of the barrel. Best at close range.
+
+  ## G2 Electroshock Grenade
+  <Box>
+    <GuideEntityEmbed Entity="CMUGrenadeElectroshock" Caption="G2 Electroshock"/>
+  </Box>
+  - Releases an electric pulse after a [bold]3 second[/bold] fuse. Fired from a launcher, it flies straight instead of arcing and goes off the moment it hits someone or something. Walls block the pulse, and it weakens with distance.
+  - Humans take burns and lose a lot of stamina.
+  - Synthetics take extra damage and are knocked out for [bold]25 seconds[/bold].
+  - Xenonids take burns and are slowed. Up close they're slowed heavily.
+  - [bold]Landmine mode[/bold]: click the tile you're standing on with the grenade to bury it. This takes 5 seconds and you have to stand still. Anyone not on your side who steps on it pops a live grenade out of the ground that goes off one second later, and that pulse spares your own side.
+  - A buried grenade can be disarmed with a [bold]multitool[/bold], which gives you the grenade back.
+
+  ## Packets and Boxes
+  - [bold]Packets[/bold] hold three grenades and fit in your bag or webbing.
+  - [bold]Grenade boxes[/bold] hold 25 grenades of one type, or 12 for the smaller boxes. Click the floor with a box to set it down and open the lid, then click it with an empty hand to see what's inside. Drag it onto yourself to pick it back up.
+  - A box only takes back its own type of grenade, and never an armed one.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMUBoxGrenadeHEDP" Caption="M40 HEDP box"/>
+    <GuideEntityEmbed Entity="CMUBoxGrenadeSmoke" Caption="M47 HSDP box"/>
+    <GuideEntityEmbed Entity="CMUBoxGrenadeElectroshock" Caption="G2 box"/>
+  </Box>
+
+  [color=#FF0000][bold]Keep boxes away from fire.[/bold][/color] A box with most of its grenades still inside will catch fire if flames reach it. The grenades then cook off a few seconds later in one big explosion. Once a box starts burning you can't take anything out of it, so get clear.
+
+  # Mines
+  ## M20 Claymore
+  <Box>
+    <GuideEntityEmbed Entity="RMCExplosiveClaymoreMine" Caption="M20 Claymore"/>
+    <GuideEntityEmbed Entity="AU14ExplosiveClaymoreMineIncendiary" Caption="M20 incendiary"/>
+  </Box>
+  The claymore is a [bold]directional[/bold] mine. When something walks into the space in front of it, it sprays shrapnel forward in a wide cone.
+  - Face the way you want it to point, then use it in your hand [color=#FFA500][keybind="ActivateItemInHand"][/color]. Planting takes a few seconds and you have to stand still. It goes on the tile you're standing on, facing the same way you are.
+  - Only one mine fits on a tile.
+  - It knows your side. Anyone sharing your IFF can walk past it safely; anyone else sets it off.
+  - Xenonid spit can set it off, and enough damage will too, so don't bury it in the middle of a firefight.
+  - The [bold]incendiary[/bold] version sprays less shrapnel but leaves the area burning.
+  - To take one back, use a [bold]multitool[/bold] on it. Disarming takes a few seconds and returns the mine to your hand.
+  - [bold]FRONT TOWARD ENEMY.[/bold] Everything behind and beside it is safe; everything in front of it isn't, including you if you walk the wrong way.
+
+  The G2 electroshock grenade can also be planted as a mine; see above.
+
+  # Charges
+  <Box>
+    <GuideEntityEmbed Entity="RMCExplosiveBreachingCharge" Caption="Breaching charge"/>
+    <GuideEntityEmbed Entity="RMCExplosivePlastic" Caption="C4"/>
+  </Box>
+  - [bold]Breaching charges[/bold] stick to a wall and blow it open three seconds later. The blast is tiny on your side, and it sprays shrapnel into the room beyond.
+  - [bold]C4[/bold] takes longer to place and beeps for ten seconds before a large explosion that hurts anyone nearby on either side.
+  - Both need engineering training. See [textlink="Breaching and Demolition" link="CMUGuideEngBreach"] for the full details, the Bangalore and the M6H-BRUTE.
+
+  # Improvised Explosives
+  <Box>
+    <GuideEntityEmbed Entity="AU14IED" Caption="IED"/>
+    <GuideEntityEmbed Entity="AU14IEDLarge" Caption="Large IED"/>
+  </Box>
+  Insurgents build and use [bold]IEDs[/bold]: large, unstable bombs packed with shrapnel. They're set off remotely by a linked signaller or phone, and can wreck both troops and light vehicles. Watch for odd objects on roads and in doorways, and don't touch one you can't identify.
+
+  ## Tips
+  - Call out "frag out" or similar before you throw, so your squad knows to stay back.
+  - Fire spreads and smoke drifts. Don't throw incendiaries or smoke where your own side needs to move or see.
+  - Tell your squad where you've laid mines.
+  - Keep ammunition out of fires. A mortar shell left burning explodes after about 5 seconds, and an ammo box that's at least half full goes up a few seconds later. Neither can be picked up once it's burning.
+  - Grenades and mines are ordered through Requisitions, either in packets or in full boxes.
+</Document>

@@ -14,7 +14,7 @@
   weight:  20
   minplayers: 400 # admins spawn only
   maxplayers: 400
-  GhostsNeeded: 3
+  ghostsNeeded: 3
   roundstart: false
 
 - type: partySpawn
@@ -33,5 +33,5 @@
   weight:  20
   minplayers: 400 # admins spawn only
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false

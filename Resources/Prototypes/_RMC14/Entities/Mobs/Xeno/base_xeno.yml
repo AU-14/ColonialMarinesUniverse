@@ -291,6 +291,7 @@
     - Unconscious
     - TemporaryBlindness
     - Deaf
+    - YautjaInterference
   - type: ImmuneToClothingRequiredStepTrigger
   - type: IntrinsicRadioReceiver
   - type: IntrinsicRadioTransmitter
@@ -521,6 +522,11 @@
     - DoorBumpOpener
   - type: Hands
     examineShowEmpty: false
+  # CMU14: only purpose-built xeno restraints can bind developed xenos.
+  - type: Cuffable
+    cuffsWhitelist:
+      components:
+      - CMUXenoRestraints
   - type: GiveHands
     hands:
     - name: Right Hand

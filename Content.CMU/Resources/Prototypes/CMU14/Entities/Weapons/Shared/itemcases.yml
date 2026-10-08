@@ -123,11 +123,11 @@
       tags:
       - RMCSentry
       - RMCMagazineSentry
-      - RMCMagazineSentryFire
+      - RMCMagazineSentryFireBlue
   - type: StorageFill
     contents:
     - id: RMCSentryFire
-    - id: RMCMagazineSentryFire
+    - id: RMCMagazineSentryFireBlue
   - type: ItemMapper
     mapLayers:
       gun:

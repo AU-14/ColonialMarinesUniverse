@@ -9,6 +9,7 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Mind;
+using Content.Server.Preferences.Managers;
 using Content.Server.Station.Systems;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
@@ -27,6 +28,7 @@ using Content.Shared.CMU14.Round;
 using Content.Shared.CMU14.Round.Roles;
 using Content.Shared.CMU14.util;
 using Content.Shared.GameTicking;
+using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -356,6 +358,11 @@ public sealed class ForceOnForceGameplayTest : GameTest
     public async Task RespawnsStayOnTheirOriginalSideUntilTheRoundResets(string faction, RoundJobSide own, RoundJobSide enemy)
     {
         var map = await Pair.CreateTestMap();
+        var prefMan = Server.ResolveDependency<IServerPreferencesManager>();
+        var originalProfile = prefMan.GetPreferences(ServerSession!.UserId).Characters[0];
+        await Server.WaitPost(() => prefMan.SetProfile(ServerSession!.UserId, 0,
+            ((HumanoidCharacterProfile) originalProfile).WithSex(Sex.Male).WithAge(25)
+                .WithHeight("5'10\"").WithWeight(160)).Wait());
         await Server.WaitAssertion(() =>
         {
             var ticker = Server.System<GameTicker>();
@@ -390,6 +397,47 @@ public sealed class ForceOnForceGameplayTest : GameTest
             SEntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
             Assert.That(respawn.HasLockedSide(player), Is.False);
             Assert.That(respawn.CanJoinSide(player, enemy), Is.True, "a new round allows a fresh choice");
+        });
+
+        await Server.WaitPost(() => prefMan.SetProfile(ServerSession!.UserId, 0, originalProfile).Wait());
+    }
+
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task GibbingStartsTheRespawnWaitWithoutRestartingAnExistingWait(bool alreadyDead)
+    {
+        var map = await Pair.CreateTestMap();
+        var player = ServerSession!.UserId;
+        EntityUid body = default;
+        await Server.WaitAssertion(() =>
+        {
+            body = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var minds = Server.System<MindSystem>();
+            var mind = minds.CreateMind(player);
+            minds.TransferTo(mind, body);
+            Assert.That(Server.System<MobStateSystem>().IsAlive(body), Is.True);
+            if (alreadyDead)
+                Server.System<MobStateSystem>().ChangeMobState(body, MobState.Dead);
+        });
+        if (alreadyDead)
+            await Pair.RunSeconds(60);
+        await Server.WaitAssertion(() =>
+        {
+            var respawn = Server.System<ForceOnForceRespawnSystem>();
+            var expected = alreadyDead ? respawn.Remaining(player) : ForceOnForceRespawnSystem.RespawnDelay;
+            Assert.That(expected, Is.GreaterThan(TimeSpan.Zero));
+            if (alreadyDead)
+                Assert.That(expected, Is.LessThan(ForceOnForceRespawnSystem.RespawnDelay));
+            Server.System<Content.Shared.Gibbing.GibbingSystem>().Gib(body);
+            Assert.That(respawn.HasDied(player), Is.True, "Dropship gibbing must count as death even without a dead mob-state transition.");
+            Assert.That(respawn.Remaining(player), Is.EqualTo(expected));
+        });
+        await Pair.RunTicksSync(2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.Deleted(body), Is.True);
+            Assert.That(Server.System<ForceOnForceRespawnSystem>().HasDied(player), Is.True,
+                "Deleting the gibbed body must retain the account's death record.");
         });
     }
 

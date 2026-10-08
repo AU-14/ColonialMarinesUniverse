@@ -1,0 +1,11 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Removed a number of hair styles that were absurdly long, defied gravity,
+    clashed with the sprite style or that were out of place/theme with a gritty Alien
+    game.
+  type: Remove
+- message: All synths now use regulation appearance.
+  type: Tweak
+time: '2026-10-01T00:24:24.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2063

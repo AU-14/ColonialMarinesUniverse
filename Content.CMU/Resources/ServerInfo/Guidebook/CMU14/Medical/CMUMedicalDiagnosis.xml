@@ -1,0 +1,76 @@
+<Document>
+  # Diagnosis
+
+  Before you can treat a patient you need to know what's wrong. How much you can see depends on your medical training.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMHealthAnalyzer" Caption="Health analyzer"/>
+    <GuideEntityEmbed Entity="RMCStethoscope" Caption="Stethoscope"/>
+  </Box>
+
+  ## Looking at the Patient
+  - [bold]Examining[/bold] someone shows their visible wounds and fractures, and which body part each one is on.
+  - [bold]Inspect injuries[/bold]: right-click a patient and choose Inspect injuries to take a closer look. After a short check you get an injury report listing each body part's wounds and how badly they're bleeding. You can bind a key to this under [bold]CMU Medical[/bold] in the controls menu.
+
+  ## The Health Analyzer
+  Use it on a patient to open a full scan.
+  - [bold]Top bar[/bold]: overall health, pulse, blood level, temperature and shock risk, with a status of stable, serious, critical or deceased.
+  - [bold]Body[/bold]: each body part's health, with its wounds, bleeding, embedded shrapnel, eschar, splints, casts and tourniquets.
+  - [bold]Bleeding[/bold]: with basic medical training, the scan shows how bad each bleed is (minor, moderate, severe or [color=red]arterial[/color]), on the blood readout and on each bleeding body part. A missing limb's row shows whether its stump is bleeding arterially or has a tourniquet on it.
+  - [bold]Fractures and internal bleeding[/bold]: need basic medical training. With more training it tells you the exact fracture severity and where the bleeding is.
+  - [bold]Organs[/bold]: need a trained medic. Each organ shows its stage (healthy, bruised, damaged, failing or dead) and health.
+  - [bold]Pain[/bold]: the patient's pain level and how close they are to pain shock.
+  - For a dead patient it also shows roughly how many minutes are left before they can no longer be brought back.
+
+  If the analyzer can't show something because of your training, it says so, so you know to find someone more qualified rather than assuming the patient is fine.
+
+  ## Damage Types
+  The analyzer breaks a patient's damage down by type. Each group heals differently, so knowing which one you're looking at tells you what to reach for.
+
+  [bold]Brute[/bold]: blunt, slash and piercing. Punches, claws, blades and bullets.
+  - Dress the wounds with gauze or a trauma kit, then heal with [bold]bicaridine[/bold].
+  - Heavy brute damage can also break bones and cause internal bleeding.
+  - See [textlink="Brute Medications" link="CMUGuideMedsBrute"].
+
+  [bold]Burn[/bold]: heat, shock, cold and caustic. Fire, electricity, freezing and acid.
+  - Treat the burns with ointment or a burn kit, then heal with [bold]kelotane[/bold] or the stronger [bold]dermaline[/bold].
+  - A big burn in one hit can leave eschar. See [textlink="Wounds and Bleeding" link="CMUGuideMedicalWounds"].
+  - See [textlink="Burn Medications" link="CMUGuideMedsBurn"].
+
+  [bold]Toxin[/bold]: poison and radiation. Toxic chemicals, overdoses, failing organs and radiation.
+  - Heal with [bold]dylovene[/bold], which also clears hallucinations.
+  - Keep an eye on the liver and kidneys, which filter toxins and get damaged by them. See [textlink="Organs" link="CMUGuideMedicalOrgans"].
+  - See [textlink="Toxin Medications" link="CMUGuideMedsToxin"].
+
+  [bold]Suffocation[/bold]: asphyxiation and blood loss. Not breathing, damaged lungs, a stopped heart, or bleeding out.
+  - Heal with [bold]dexalin[/bold], and breathe from an oxygen tank to recover three times as fast.
+  - Blood loss won't go away until the blood is replaced. Stop the bleeding and give blood.
+  - See [textlink="Suffocation Medications" link="CMUGuideMedsSuffocation"].
+
+  [bold]Genetic[/bold]: cellular damage. Rare, and only a few things cause it.
+  - Only a few treatments touch it, such as [bold]cryoxadone[/bold] in a cryo pod. See [textlink="Other Medications" link="CMUGuideMedsOther"].
+
+  [bold]Tricordrazine[/bold] heals a little of brute, burn, toxin and suffocation all at once, and is a good general-purpose drug when you're not sure what you're dealing with. For every medicine, see [textlink="Medications" link="CMUGuideMedications"].
+
+  ## The Stethoscope
+  Use it on a patient, or right-click them, and listen for 2 seconds. It needs basic medical training.
+  - [bold]Heart[/bold]: whether there's a heartbeat, and how fast. A trained medic hears the exact rate.
+  - [bold]Lungs[/bold]: you hear the patient breathe:
+    - [bold]Clear[/bold]: healthy lungs.
+    - [bold]Wet[/bold]: crackling breaths. Fluid or blood in the lungs, from pulmonary edema or lung damage.
+    - [bold]Faint[/bold]: quiet, weak breaths. The lungs are failing and barely moving air.
+    - A dead patient isn't breathing, so there's nothing to hear.
+  - A trained medic can also tell how much pain the patient is in.
+
+  ## Holocards
+  Patients get a holocard automatically, based on their condition:
+  - [bold]Stable[/bold]: only minor injuries.
+  - [bold]Trauma[/bold]: fractures or internal bleeding.
+  - [bold]Organ failure[/bold]: at least one organ is failing.
+
+  ## Body Scanner
+  The [bold]body scanner pod[/bold] and its console give a full scan of a patient lying in the pod, including enclosed injuries, and help plan surgery. See [textlink="Medical Machines" link="CMUGuideMedicalMachines"].
+
+  ## Patient Monitor
+  A Lifepak can be hooked up to a patient to watch their heart rhythm, oxygen, blood pressure and more in real time. See [textlink="Defibrillators" link="CMUGuideDefibrillators"].
+</Document>

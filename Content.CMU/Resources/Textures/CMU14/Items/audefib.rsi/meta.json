@@ -1,37 +1,14 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Normal defib sprites by aleksh on discord. Advanced Defib Sprites Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/05eaa3484b1a35aa759300bcfc8f0119f009daae/icons/obj/items/devices.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_lefthand.dmi",
+  "copyright": "Defib sprites by aleksh on discord.",
   "size": {
     "x": 32,
     "y": 32
   },
   "states": [
     {
-      "name": "adv_defib_on",
-      "delays": [
-        [
-          0.4,
-          0.4,
-          0.4,
-          0.4
-        ]
-      ]
-    },
-    {
       "name": "defib"
-    },
-    {
-      "name": "equipped-BACKPACK",
-      "directions": 4
-    },
-    {
-      "name": "equipped-BELT",
-      "directions": 4
-    },
-    {
-      "name": "equipped-OUTERCLOTHING",
-      "directions": 4
     },
     {
       "name": "defib_on",
@@ -52,62 +29,18 @@
       ]
     },
     {
-      "name": "adv_defib"
+      "name": "defibpaddlesoverlay"
     },
     {
-      "name": "full"
-    },
-    {
-      "name": "half"
-    },
-    {
-      "name": "low"
-    },
-    {
-      "name": "empty",
-      "delays": [
-        [
-          0.4,
-          0.4
-        ]
-      ]
-    },
-    {
-      "name": "1"
-    },
-    {
-      "name": "2"
-    },
-    {
-      "name": "3"
-    },
-    {
-      "name": "4"
-    },
-    {
-      "name": "5"
-    },
-    {
-      "name": "6"
-    },
-    {
-      "name": "7"
-    },
-    {
-      "name": "8"
-    },
-    {
-      "name": "9"
-    },
-    {
-      "name": "10"
-    },
-    {
-      "name": "adv_defib-inhand-left",
+      "name": "equipped-BACKPACK",
       "directions": 4
     },
     {
-      "name": "adv_defib-inhand-right",
+      "name": "equipped-BELT",
+      "directions": 4
+    },
+    {
+      "name": "equipped-OUTERCLOTHING",
       "directions": 4
     },
     {

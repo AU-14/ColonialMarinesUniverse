@@ -107,7 +107,7 @@ public sealed partial class SharedForensicScannerSystem : EntitySystem
 
             // CMU14: event carries the scanner for broadcast consumers
             var scanned = new ForensicScannerScannedEvent(scanner, args.Args.Target.Value);
-            RaiseLocalEvent(scanner.Owner, ref scanned);
+            RaiseLocalEvent(scanner.Owner, ref scanned, true); // cmu edit: broadcast too, for the colony bounty and forensics systems
         }
 
         OpenUserInterface(args.Args.User, scanner);

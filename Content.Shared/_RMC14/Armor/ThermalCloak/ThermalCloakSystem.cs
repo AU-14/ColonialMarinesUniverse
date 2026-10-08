@@ -15,6 +15,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Trigger.Systems;
+using Content.Shared.CMU14.Yautja;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
@@ -23,6 +24,7 @@ using Robust.Shared.Maths;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random; // CMU14: cloak malfunction flicker rolls
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Armor.ThermalCloak;
@@ -38,6 +40,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!; // CMU14: cloak malfunction flicker
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private INetManager _net = default!;
@@ -72,7 +75,17 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         {
             var isMoving = physics.LinearVelocity.LengthSquared() > 0.01f;
             var target = isMoving ? cloakUser.MovingOpacity : cloakUser.Opacity;
-            var delta = MathF.Min(cloakUser.LerpSpeed * frameTime, MathF.Abs(target - cloakUser.CurrentOpacity));
+            // CMU14: rain malfunction flicker. Malfunction is set by YautjaCloakSystem on rain-exposed tiles.
+            // Target opacity spikes toward visible and the lerp runs faster so it reads as static.
+            var lerpSpeed = cloakUser.LerpSpeed;
+            if (cloakUser.Malfunction)
+            {
+                if (_random.Prob(0.35f))
+                    target = _random.NextFloat(0.4f, 1.0f);
+                lerpSpeed = 4f;
+            }
+
+            var delta = MathF.Min(lerpSpeed * frameTime, MathF.Abs(target - cloakUser.CurrentOpacity)); // CMU14: lerpSpeed covers the flicker rate
             var newOpacity = cloakUser.CurrentOpacity + MathF.Sign(target - cloakUser.CurrentOpacity) * delta;
 
             if (!MathHelper.CloseToPercent(newOpacity, cloakUser.CurrentOpacity))
@@ -246,7 +259,9 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (args.Cancelled || !TryComp<EntityTurnInvisibleComponent>(args.User, out var comp))
             return;
 
-        if (comp.RestrictWeapons && comp.Enabled || comp.UncloakTime + comp.UncloakWeaponLock > _timing.CurTime)
+        var isYautjaCaster = HasComp<YautjaComponent>(args.User) && HasComp<YautjaCasterComponent>(ent.Owner);
+        if ((!isYautjaCaster && comp.RestrictWeapons && comp.Enabled) ||
+            comp.UncloakTime + comp.UncloakWeaponLock > _timing.CurTime)
         {
             args.Cancelled = true;
 

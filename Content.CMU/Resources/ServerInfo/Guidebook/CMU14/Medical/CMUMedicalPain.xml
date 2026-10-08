@@ -1,0 +1,28 @@
+<Document>
+  # Pain
+
+  Injuries hurt. Pain builds up from wounds, fractures, burns and other trauma, and fades slowly on its own once the cause is treated.
+
+  ## Pain Levels
+  - [bold]Aching[/bold] (mild): movement and aim are slightly impaired.
+  - [bold]Hurt[/bold] (moderate): movement and aim are impaired, and actions take longer.
+  - [bold]Agony[/bold] (severe): movement and aim are heavily impaired.
+  - [bold]Pain shock[/bold]: the body is overwhelmed. The patient is badly slowed, keeps collapsing, and struggles to think straight.
+
+  The worse the pain, the slower you move and act and the more your aim sways. In pain shock you move at about 70% speed and actions take half again as long.
+
+  ## Checking Pain
+  - A health analyzer shows the patient's pain level and their [bold]shock risk[/bold]: how close they are to pain shock.
+  - A trained medic can judge a patient's pain with a stethoscope.
+
+  ## Painkillers
+  Painkillers stop pain building up as fast, help it fade, and mask the symptoms. They don't treat the injuries underneath; stop the medication and the pain comes back.
+  - [bold]Paracetamol[/bold]: mild. Takes the edge off. Overdose at 60u.
+  - [bold]Tramadol[/bold]: a moderate opioid that strongly masks pain. Overdose at 30u.
+  - [bold]Oxycodone[/bold]: a heavy opioid for severe pain that can fully mask pain shock. Overdose at 20u.
+  - [bold]Fentanyl[/bold]: near-total pain relief, but a fatal dose is barely more than an effective one. Overdose at 10u.
+  - [bold]Sleen[/bold]: a strong experimental painkiller. Overdoses turn toxic and disorienting. Overdose at 20u.
+  - [bold]Soporific[/bold]: a sedative painkiller that causes drowsiness. At surgical doses it puts the patient to sleep. Overdose at 30u.
+
+  Strong painkillers or putting the patient to sleep are also important before surgery. See [textlink="Surgery" link="CMUGuideMedicalSurgery"].
+</Document>

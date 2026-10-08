@@ -1099,6 +1099,8 @@
         amount: 1
       - id: RMCWeaponShotgunXM38
         amount: 1
+      - id: CMUWeaponLauncherM81
+        amount: 3
     - name: primary ammunition
       entries:
       - id: AU14MagazineRifleM20A
@@ -1153,7 +1155,7 @@
         amount: 200
     - name: Magazine Boxes
       entries:
-      - id: RMCCrateBoxBulletsRifle
+      - id: RMCBoxBulletsRifle
         amount: 2
       - id: RMCBoxMagazineRifleM16
         amount: 2
@@ -1177,6 +1179,8 @@
         amount: 5
     - name: explosives
       entries:
+      - id: CMUBoxGrenadeTraining
+        amount: 1
       - id: CMPacketGrenadeHighExplosiveFilled
         amount: 6
       - id: RMCPacketGrenadeIncendiaryFilled
@@ -1189,6 +1193,14 @@
         amount: 3
       - id: CMPacketGrenadeFragOldFilled
         amount: 2
+      - id: CMUPacketGrenadeCanisterFilled
+        amount: 4 #CIU get extra canister
+      - id: CMUPacketGrenadeSmokeGreenFilled
+        amount: 2
+      - id: CMUPacketGrenadeSmokeRedFilled
+        amount: 2
+      - id: CMUPacketGrenadeElectroshockFilled
+        amount: 4 #CIU get extra electroshock
       - id: RMCBoxClaymoreMineFilled
         amount: 3
       - id: AU14BoxClaymoreMineIncendiaryFilled
@@ -1215,6 +1227,8 @@
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12
+      - id: AU14Bangalore
+        amount: 2
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel
@@ -1281,12 +1295,8 @@
         amount: 2
     - name: RTO Packs
       entries:
-      - id: AU14BackpackRTOPackJungle
-        amount: 1
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
-      - id: AU14BackpackRTOPackGray
-        amount: 1
+      - id: ANPRC117GRadioFilled
+        amount: 3
     - name: Materials
       entries:
       - id: CMSheetMetal

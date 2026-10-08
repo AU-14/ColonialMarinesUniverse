@@ -102,14 +102,14 @@ public sealed partial class CMUReconstructionTest
         }
         finally
         {
-            if (Server.IsAlive) await Server.WaitPost(() =>
+            await Server.WaitPost(() =>
             {
                 if (viewer.IsValid()) _ui.CloseUi(viewer, TacticalMapUserUi.Key, viewer);
                 Server.PlayerMan.SetAttachedEntity(session, original);
                 foreach (var uid in new[] { viewer, drone, unlinked })
                     if (uid.IsValid() && SEntMan.EntityExists(uid)) SEntMan.DeleteEntity(uid);
             });
-            if (Server.IsAlive && Client.IsAlive) await Pair.RunUntilSynced();
+            await Pair.RunUntilSynced();
         }
     }
 

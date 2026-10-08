@@ -132,16 +132,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
                     if (markerComp.Class == PlatoonMarkerClass.DropshipDestination)
                     {
-                        string dropshipDestinationProtoId = "CMDropshipDestinationHome";
-                        var dropshipEntity = _entityManager.SpawnAttachedTo(dropshipDestinationProtoId, transform.Coordinates, rotation: transform.LocalRotation);
-                        // Inherit the metadata name from the marker
-                        if (_entityManager.TryGetComponent<MetaDataComponent>(markerUid, out var markerMeta) &&
-                            _entityManager.TryGetComponent<MetaDataComponent>(dropshipEntity, out var destMeta))
-                        {
-                            _metaData.SetEntityName(dropshipEntity, markerMeta.EntityName, destMeta);
-                        }
-                        _sharedDropshipSystem.SetFactionController(dropshipEntity, shipFaction.Faction);
-                        _sharedDropshipSystem.SetDestinationType(dropshipEntity, "Dropship");
+                        SpawnDropshipDestination((markerUid, markerComp), transform, shipFaction.Faction);
                         continue;
                     }
 
@@ -244,6 +235,17 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             planetComp.opforfighters,
             usedDestinations,
             destinationRandom);
+    }
+
+    private EntityUid SpawnDropshipDestination(Entity<VendorMarkerComponent> marker, TransformComponent transform, string faction)
+    {
+        var destination = SpawnAttachedTo("CMDropshipDestinationHome", transform.Coordinates, rotation: transform.LocalRotation);
+        // Anchored markers snap to tile centers; the grid origin can require a separate offset.
+        _sharedDropshipSystem.SetLandingOffset(destination, marker.Comp.LandingOffset);
+        _metaData.SetEntityName(destination, Name(marker));
+        _sharedDropshipSystem.SetFactionController(destination, faction);
+        _sharedDropshipSystem.SetDestinationType(destination, "Dropship");
+        return destination;
     }
 
     private void LoadPlatoonShuttles(

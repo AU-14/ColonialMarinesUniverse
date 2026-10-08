@@ -1364,6 +1364,8 @@
         amount: 5
     - name: explosives
       entries:
+      - id: CMUBoxGrenadeTraining
+        amount: 1
       - id: AU14PacketGrenadeHighExplosiveUPPFilled
         amount: 10
       - id: AU14PacketGrenadeIncendiaryUPPFilled
@@ -1386,6 +1388,8 @@
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12
+      - id: AU14Bangalore
+        amount: 2
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel

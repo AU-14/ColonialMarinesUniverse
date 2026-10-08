@@ -13,8 +13,10 @@ SPDX-License-Identifier: AGPL-3.0-only
                 <BoxContainer Orientation="Horizontal" Margin="2 2 2 2">
                     <Button Name="TabSpawnlists" Text="{Loc 'gmod-construction-menu-spawnlists'}"
                             ToggleMode="True" Pressed="True" MinWidth="110"/>
+                    <!-- cmu edit start: z-level building page hidden -->
                     <Button Name="TabTiles" Text="{Loc 'gmod-construction-menu-tiles'}"
-                            ToggleMode="True" MinWidth="80" Margin="4 0 0 0"/>
+                            ToggleMode="True" MinWidth="80" Margin="4 0 0 0" Visible="False"/>
+                    <!-- cmu edit end -->
                     <Control HorizontalExpand="True"/>
                     <OptionButton Name="ModeDropdown" MinWidth="190" Margin="0 0 4 0"/>
                     <Button Name="HeaderCloseButton" Text="✕" MinWidth="34"/>

@@ -1,0 +1,8 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Moving vehicles now slide xenos toward the nearer side of the hull, including
+    while reversing diagonally, without pushing them through obstacles.
+  type: Fix
+time: '2026-10-01T21:21:39.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2067

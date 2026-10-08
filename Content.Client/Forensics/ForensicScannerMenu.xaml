@@ -1,27 +1,39 @@
+<!-- cmu edit start: CRT forensic report layout -->
 <DefaultWindow xmlns="https://spacestation14.io"
             Title="{Loc 'forensic-scanner-interface-title'}"
-            MinSize="350 200"
-            SetSize="350 500">
-    <BoxContainer Orientation="Vertical">
-        <BoxContainer Orientation="Horizontal">
-            <Button Name="Print"
-                TextAlign="Center"
-                HorizontalExpand="True"
-                Access="Public"
-                Disabled="True"
-                Text="{Loc 'forensic-scanner-interface-print'}" />
-            <Button Name="Clear"
-                TextAlign="Center"
-                HorizontalExpand="True"
-                Access="Public"
-                Disabled="True"
-                Text="{Loc 'forensic-scanner-interface-clear'}" />
+            MinSize="420 360"
+            SetSize="470 640">
+    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
+            <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+                <Button Name="Print"
+                    TextAlign="Center"
+                    HorizontalExpand="True"
+                    Access="Public"
+                    Disabled="True"
+                    Text="{Loc 'forensic-scanner-interface-print'}" />
+                <Button Name="Clear"
+                    TextAlign="Center"
+                    HorizontalExpand="True"
+                    Access="Public"
+                    Disabled="True"
+                    Text="{Loc 'forensic-scanner-interface-clear'}" />
+            </BoxContainer>
+            <PanelContainer Name="HeaderPanel" StyleClasses="CrtHeaderPanel" Visible="False">
+                <Label
+                    Name="NameLabel"
+                    StyleClasses="CrtHeadingBig"
+                    Align="Center" />
+            </PanelContainer>
+            <Label
+                Name="Diagnostics"
+                StyleClasses="CrtDimText"
+                Align="Center"
+                Text="{Loc forensic-scanner-interface-no-data}"/>
+            <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                <BoxContainer Name="Entries" Orientation="Vertical" HorizontalExpand="True" SeparationOverride="6" />
+            </ScrollContainer>
         </BoxContainer>
-        <Label
-            Name="NameLabel"
-            Align="Center" />
-        <Label
-            Name="Diagnostics"
-            Text="{Loc forensic-scanner-interface-no-data}"/>
-    </BoxContainer>
+    </PanelContainer>
 </DefaultWindow>
+<!-- cmu edit end -->

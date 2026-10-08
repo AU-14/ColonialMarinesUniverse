@@ -40,6 +40,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     AU14RankColonySeniorAdminAssistant:
     - !type:RoleTimeRequirement

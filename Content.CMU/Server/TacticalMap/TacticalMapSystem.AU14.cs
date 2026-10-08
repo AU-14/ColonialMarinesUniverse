@@ -7,6 +7,17 @@ public sealed partial class TacticalMapSystem
 {
     private int _nextIntelBlipKey = -1;
 
+    // intel blips are keyed below zero so they never collide with an entity's own blip, which also
+    // means nothing can look an entity up from the key. anything that needs to know where one sits
+    // (the reconstruction view places contacts by the entity's map) asks here instead
+    private readonly Dictionary<int, EntityUid> _intelBlipGrids = new();
+
+    /// <summary>The grid an intel blip (a DF ping, a jammer fix) was placed on.</summary>
+    public bool TryGetIntelBlipGrid(int key, out EntityUid grid)
+    {
+        return _intelBlipGrids.TryGetValue(key, out grid);
+    }
+
     private static readonly Dictionary<string, SpriteSpecifier.Rsi> FactionSignalIcon = new()
     {
         ["govfor"] = new SpriteSpecifier.Rsi(
@@ -83,7 +94,8 @@ public sealed partial class TacticalMapSystem
     public (EntityUid GridId, int Key)? CreateFactionIntelBlip(
         EntityUid source,
         string sourceFactionLower,
-        string viewerFactionUpper)
+        string viewerFactionUpper,
+        bool snapshot = false)
     {
         if (!_transformQuery.TryComp(source, out var xform) ||
             xform.GridUid is not { } gridId ||
@@ -106,7 +118,7 @@ public sealed partial class TacticalMapSystem
 
         var key = _nextIntelBlipKey--;
 
-        if (!TryGetBlipDicts(tacticalMap, viewerFactionUpper, out var live, out _))
+        if (!TryGetBlipDicts(tacticalMap, viewerFactionUpper, out var live, out var snapshotBlips))
             return null;
 
         // live dict only: DF fixes are realtime SIGINT for the ops consoles (tacmap
@@ -114,6 +126,12 @@ public sealed partial class TacticalMapSystem
         // updates handed to every rifleman. a manual update pulled while the fix is
         // up still captures it, which is fine - that update reflects current intel
         live[key] = blip;
+        _intelBlipGrids[key] = gridId;
+
+        // a fix an RTO took on a net they broke out themselves is short-lived and theirs to act on,
+        // so it goes on the map every tacmap on the side draws, not only the ops consoles
+        if (snapshot)
+            snapshotBlips[key] = blip;
 
         tacticalMap.MapDirty = true;
         return (gridId, key);
@@ -126,6 +144,8 @@ public sealed partial class TacticalMapSystem
 
         if (!TryGetBlipDicts(tacticalMap, viewerFactionUpper, out var live, out var snapshot))
             return;
+
+        _intelBlipGrids.Remove(key);
 
         var removed = live.Remove(key);
         removed |= snapshot.Remove(key);

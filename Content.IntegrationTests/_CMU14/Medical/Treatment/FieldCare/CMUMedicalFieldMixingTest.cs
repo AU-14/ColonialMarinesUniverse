@@ -20,6 +20,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.CMU14.Medical.Treatment.FieldCare;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public sealed class CMUMedicalFieldMixingTest
 {
     [TestCase(0, 5)]

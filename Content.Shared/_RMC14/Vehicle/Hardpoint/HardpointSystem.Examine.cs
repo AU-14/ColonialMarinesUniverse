@@ -43,7 +43,8 @@ public sealed partial class HardpointSystem
             return (current, max);
         }
 
-        return (ent.Comp.Integrity, ent.Comp.MaxIntegrity);
+        // CMU14: return (ent.Comp.Integrity, ent.Comp.MaxIntegrity);
+        return (ent.Comp.Integrity, GetFactoryMaxIntegrity(ent.Owner, ent.Comp));
     }
 
     private FormattedMessage GetDamageExamine(Entity<HardpointIntegrityComponent> ent)
@@ -65,9 +66,13 @@ public sealed partial class HardpointSystem
 
                 message.PushNewline();
                 message.PushNewline();
+                // CMU14: give each module a heading without parsing its name as markup.
+                message.PushColor(Color.Cyan);
                 message.AddText(Name(item));
+                message.Pop();
                 message.PushNewline();
-                AppendIntegrity(message, integrity.Integrity, integrity.MaxIntegrity);
+                // CMU14: AppendIntegrity(message, integrity.Integrity, integrity.MaxIntegrity);
+                AppendIntegrity(message, integrity.Integrity, GetFactoryMaxIntegrity(integrity));
                 AppendFailures(message, item);
             }
         }
@@ -98,7 +103,8 @@ public sealed partial class HardpointSystem
         message.PushNewline();
         if (!TryComp(uid, out VehicleHardpointFailureComponent? failures) || failures.ActiveFailures.Count == 0)
         {
-            message.AddText(Loc.GetString("rmc-vehicle-damage-examine-no-faults"));
+            // CMU14: message.AddText(Loc.GetString("rmc-vehicle-damage-examine-no-faults"));
+            message.AddMarkupOrThrow(Loc.GetString("rmc-vehicle-damage-examine-no-faults"));
             return;
         }
 
@@ -106,7 +112,9 @@ public sealed partial class HardpointSystem
         foreach (var failure in failures.ActiveFailures)
         {
             message.PushNewline();
-            message.AddText(Loc.GetString("rmc-vehicle-damage-examine-fault",
+            // CMU14: render formatted fault names and descriptions.
+            // message.AddText(Loc.GetString("rmc-vehicle-damage-examine-fault",
+            message.AddMarkupOrThrow(Loc.GetString("rmc-vehicle-damage-examine-fault",
                 ("fault", GetFailureAlertName(failure)), ("effect", GetFailureEffect(failure))));
         }
     }
