@@ -753,6 +753,16 @@ public sealed partial class RiderSystem : EntitySystem
             return;
         }
 
+        // toggle, so the rider isn't stuck with a full minute once they want the host talking again
+        if (_timing.CurTime < ent.Comp.MutedUntil)
+        {
+            EndMute(ent, host);
+            RiderPopup(ent, "rider-mute-release");
+            _adminLogger.Add(LogType.Chat, LogImpact.Low,
+                $"{ToPrettyString(ent):rider} released the mute on {ToPrettyString(host):host}");
+            return;
+        }
+
         if (!SpendGrip(ent, ent.Comp.MuteCost))
         {
             RiderPopup(ent, "rider-grip-low");
@@ -760,10 +770,40 @@ public sealed partial class RiderSystem : EntitySystem
         }
 
         ent.Comp.MutedUntil = _timing.CurTime + ent.Comp.MuteDuration;
+        SetMuteToggled(ent, true);
         _popup.PopupEntity(Loc.GetString("rider-mute-host"), host, host, PopupType.MediumCaution);
         RiderPopup(ent, "rider-mute-cast");
         _adminLogger.Add(LogType.Chat, LogImpact.Medium,
             $"{ToPrettyString(ent):rider} muted {ToPrettyString(host):host}");
+    }
+
+    private void EndMute(Entity<RiderComponent> ent, EntityUid? host)
+    {
+        if (ent.Comp.MutedUntil == TimeSpan.Zero)
+            return;
+
+        ent.Comp.MutedUntil = TimeSpan.Zero;
+        // eject runs from the hatchling's own teardown too, don't dirty actions that are going away
+        if (!TerminatingOrDeleted(ent.Owner))
+            SetMuteToggled(ent, false);
+
+        if (host is { } freed && !TerminatingOrDeleted(freed))
+            _popup.PopupEntity(Loc.GetString("rider-mute-end"), freed, freed);
+    }
+
+    // the phantom has its own copy of the mute button, so both need the toggled state
+    private void SetMuteToggled(Entity<RiderComponent> ent, bool toggled)
+    {
+        _actions.SetToggled(ent.Comp.MuteAction, toggled);
+
+        if (ent.Comp.Manifest is not { } manifest || TerminatingOrDeleted(manifest))
+            return;
+
+        foreach (var action in _actions.GetActions(manifest))
+        {
+            if (MetaData(action).EntityPrototype?.ID == "ActionRiderMute")
+                _actions.SetToggled(action.Owner, toggled);
+        }
     }
 
     private void OnSeizeAction(Entity<RiderComponent> ent, ref RiderSeizeActionEvent args)
@@ -1006,6 +1046,9 @@ public sealed partial class RiderSystem : EntitySystem
             _actions.AddAction(manifest, action);
 
         ent.Comp.Manifest = manifest;
+        if (_timing.CurTime < ent.Comp.MutedUntil)
+            SetMuteToggled(ent, true);
+
         _mind.Visit(riderMindId, manifest);
         _eye.RefreshVisibilityMask(host);
         _adminLogger.Add(LogType.AntagSelection, LogImpact.Low,
@@ -1105,6 +1148,9 @@ public sealed partial class RiderSystem : EntitySystem
         EndSeize(ent, false);
         EndManifest(ent);
         RemoveLatchMarker(ent);
+
+        // otherwise a leftover clamp mutes the next host and the button stays lit
+        EndMute(ent, null);
 
         RestoreHostLanguage(host);
 
@@ -1556,10 +1602,7 @@ public sealed partial class RiderSystem : EntitySystem
             }
 
             if (comp.MutedUntil != TimeSpan.Zero && _timing.CurTime >= comp.MutedUntil)
-            {
-                comp.MutedUntil = TimeSpan.Zero;
-                _popup.PopupEntity(Loc.GetString("rider-mute-end"), host, host);
-            }
+                EndMute((uid, comp), host);
 
             // An owner who never reclaimed the revived body loses it to the raffle
             if (ridden is { HostReturnEndsAt: { } returnBy } && _timing.CurTime >= returnBy)
