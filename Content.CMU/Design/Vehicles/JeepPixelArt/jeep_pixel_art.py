@@ -359,6 +359,9 @@ def build(variant):
 
     # Tub: floor, double-skinned walls, rear wheel arches and the step below the door.
     m.box(-30, 5, -20, 19, 6, 7, "od_in", "floor")
+    for r in (-17, -13, -9, -5, 4, 8, 12, 16):
+        m.box(-28, 3, r, r, 8, 8, "od_in", "floor")
+    m.mirror_box(-27, -27, 14, 14, 8, 8, "steel", "floor")
     m.box(-30, 5, 19, 19, 6, RIM, "od", "wall_right")
     m.box(-29, 5, 18, 18, 6, RIM, "od_in", "wall_right")
     d = FUEL_DOOR
@@ -430,11 +433,13 @@ def build(variant):
 
     # Front seats with pleated backs, the tunnel and its levers.
     for r0, r1 in ((4, 15), (-16, -5)):
-        m.box(-10, -3, r0, r1, 8, 12, "canvas", "seat")
-        m.box(-12, -11, r0, r1, 8, 23, "canvas", "seat_back")
-        m.paint(lambda f, r, z, r0=r0: f == -7 and z == 12 and r0 <= r <= r0 + 11, "canvas_seam")
+        seat(m, -11, -3, r0, r1, "seat")
+        m.box(-12, -11, r0, r1, 13, 23, "canvas", "seat_back")
+        m.paint(lambda f, r, z, r0=r0, r1=r1: f == -12 and r0 <= r <= r1 and (r in (r0, r1) or z in (13, 23)),
+                "frame")
+        m.box(-12, -12, r0 + 1, r1 - 1, 18, 18, "canvas_seam", "seat_back")
         for rp in (r0 + 3, r0 + 6, r0 + 9):
-            m.box(-11, -11, rp, rp, 14, 22, "canvas_seam", "seat_back")
+            m.box(-11, -11, rp, rp, 15, 22, "canvas_seam", "seat_back")
     m.box(-9, 4, -3, 2, 8, 9, "od_in", "tunnel")
     m.box(-2, -2, -1, -1, 10, 15, "black", "tunnel")
     m.box(0, 0, 0, 1, 10, 14, "black", "tunnel")
@@ -444,6 +449,7 @@ def build(variant):
     m.mirror_box(-31, -31, 15, 19, 3, 5, "od", "bumperette")
     m.mirror_box(-31, -31, 16, 17, 11, 12, "red", "taillight")
     m.mirror_box(-31, -31, 16, 17, 13, 13, "black", "taillight")
+    m.mirror_box(-31, -31, 17, 18, 14, 15, "amber", "taillight")
     m.box(-32, -31, -1, 0, 3, 4, "steel", "bumperette")
     m.box(-31, -31, 6, 8, 13, 15, "steel", "rear_wall")
     m.box(-31, -31, -17, -10, 7, 7, "steel", "rear_wall")
@@ -458,7 +464,7 @@ def build(variant):
     if variant == "cargo":
         cargo_bed(m)
     elif variant == "transport":
-        m.box(-27, -21, -16, 15, 8, 12, "canvas", "rear_bench")
+        seat(m, -27, -21, -16, 15, "rear_bench")
         m.box(-27, -21, -1, 0, 12, 12, "canvas_seam", "rear_bench")
         m.box(-29, -28, -16, 15, 8, 23, "canvas", "rear_bench_back")
         for rp in (-13, -9, -5, 4, 8, 12):
@@ -468,10 +474,20 @@ def build(variant):
     return m
 
 
+def seat(m, f0, f1, r0, r1, part):
+    """Canvas cushion on a tube frame standing on four legs, so the floor shows under it."""
+    for f in (f0, f1):
+        for r in (r0, r1):
+            m.put(f, r, 8, "frame", part)
+    m.box(f0, f1, r0, r1, 9, 9, "frame", part)
+    m.box(f0, f1, r0, r1, 10, 12, "canvas", part)
+    m.paint(lambda f, r, z: m.vox[(f, r, z)][1] == part and z == 12 and f == (f0 + f1) // 2, "canvas_seam")
+
+
 def steering_wheel(m):
     """Nearly upright rim on the driver's side, its top leaning towards the dash: a ring from behind,
     an arc over the dash from the front, a thin slanted line from the side."""
-    hub = (1.0, -9.5, HOOD + 3.5)
+    hub = (1.0, -9.5, HOOD + 0.5)
     radius = 3.6
     tilt = math.radians(30)
     up = (math.sin(tilt), 0.0, math.cos(tilt))
@@ -485,7 +501,7 @@ def steering_wheel(m):
     for a in (0.0, math.pi, -math.pi / 2):
         m.line(hub, at(a, radius - 0.6), "gun", "steering")
     m.put(math.floor(hub[0]), math.floor(hub[1]), math.floor(hub[2]), "steel", "steering")
-    m.line((4.5, -9.5, HOOD - 2.0), hub, "black", "steering")
+    m.line((4.5, -9.5, HOOD - 4.0), hub, "black", "steering")
 
 
 def cargo_bed(m):
@@ -793,22 +809,32 @@ def headlights(damaged=False):
     return headlight_lamps(cracked=damaged)
 
 
-def lamps(front):
-    """The lamps lit: the headlights, or the tail lights and fender markers."""
-    if front:
+SIGNAL_DELAY = 0.4
+
+
+def lamps(kind):
+    """The lamps lit for one light group: headlights, tail lights, or one side's turn signals
+    (front fender marker and rear amber lamp). Left is the driver's side."""
+    if kind == "head":
         return headlight_lamps(lens="lit", part="lights")
     m = Model()
-    m.mirror_box(-31, -31, 16, 17, 11, 12, "lit_red", "lights")
-    m.mirror_box(28, 28, 16, 16, FENDER + 1, FENDER + 1, "lit_amber", "lights")
+    if kind == "tail":
+        m.mirror_box(-31, -31, 16, 17, 11, 12, "lit_red", "lights")
+    elif kind == "signal_right":
+        m.box(28, 28, 16, 16, FENDER + 1, FENDER + 1, "lit_amber", "lights")
+        m.box(-31, -31, 17, 18, 14, 15, "lit_amber", "lights")
+    else:
+        m.box(28, 28, -17, -17, FENDER + 1, FENDER + 1, "lit_amber", "lights")
+        m.box(-31, -31, -19, -18, 14, 15, "lit_amber", "lights")
     return m
 
 
 LIGHT_GLOW = {"lit": (255, 236, 170), "lit_red": (255, 70, 50), "lit_amber": (255, 180, 70)}
 
 
-def lights_layer(model, view, front):
+def lights_layer(model, view, kind):
     """Lit lamp pixels plus a soft glow around them, for an unshaded overlay layer."""
-    buf, _ = render(model.merged(lamps(front)), view)
+    buf, _ = render(model.merged(lamps(kind)), view)
     col = shade(buf)
     lit = {px: (col[px], e[1]) for px, e in buf.items() if e[2] == "lights" and e[1] in LIGHT_GLOW}
     out = {}
@@ -1104,8 +1130,10 @@ def split_direction(variant, view, dy):
         return place({px: col[px] for px, e in buf.items() if e[2] == "fuel_door"})
 
     out["fuel_door_swing"] = [door_layer(fuel_door(a)) for a in FUEL_DOOR_SWING]
-    out["lights"] = place(lights_layer(model, view, front=False))
-    out["headlights_on"] = place(lights_layer(model, view, front=True))
+    out["lights"] = place(lights_layer(model, view, "tail"))
+    out["headlights_on"] = place(lights_layer(model, view, "head"))
+    out["signal_left"] = place(lights_layer(model, view, "signal_left"))
+    out["signal_right"] = place(lights_layer(model, view, "signal_right"))
     return out
 
 
@@ -1355,6 +1383,56 @@ def write_crayon_map(variant, per_dir):
     rsi_sheet(tiles).save(os.path.join(path, RSI_NAMES[variant] + ".png"))
 
 
+# Part under the cursor, for click handling: written to the R channel of the click maps.
+CLICK_IDS = {"hood_lid": 1, "fuel_door": 2, "engine": 3, "headlights": 4, "windshield": 5, "spare": 6,
+             "jerrycan": 7, "shovel": 8, "axe": 9, "wirecutter": 10, "searchlight": 11, "wheel": 12}
+OUTLINE = (255, 232, 150)
+
+
+def outline(pixels):
+    """Hover highlight for a part: a bright rim just outside it and a faint fill inside, so it also
+    marks an empty slot where the item goes back."""
+    out = {}
+    for (x, y) in pixels:
+        out[(x, y)] = OUTLINE + (70,)
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                p = (x + dx, y + dy)
+                if p not in pixels:
+                    out[p] = OUTLINE + (230,)
+    return out
+
+
+def click_scene(variant, view, hood):
+    """Every slot filled, so each slot's pixels can be looked up even while it is empty."""
+    m = build(variant).merged(wheels(view)).merged(hood).merged(fuel_door())
+    for name, make in HARDPOINTS.items():
+        if name == "windshield_down":
+            continue
+        m = m.merged(spare_tread(False, view) if name == "spare" and view in "EW" else make())
+    return m
+
+
+def write_click_maps(variant, dy):
+    """Per-pixel part ids (R) with the jeep's silhouette in A, one map with the hood shut and one
+    with it open, laid out like an RSI state."""
+    path = os.path.join(RSI_DIR, "click_maps")
+    os.makedirs(path, exist_ok=True)
+    for name, hood in (("hood_closed", hood_lid()), ("hood_open", hood_open())):
+        tiles = []
+        for v in DIRS:
+            buf, glass = render(click_scene(variant, v, hood), v)
+            px = {}
+            for (x, y), e in buf.items():
+                px[(x + SIZE // 2, y + SIZE // 2 + dy[v])] = (CLICK_IDS.get(e[2], 0), 0, 0, 255)
+            for (x, y), e in glass.items():
+                key = (x + SIZE // 2, y + SIZE // 2 + dy[v])
+                if key not in px or px[key][0] == 0:
+                    px[key] = (CLICK_IDS["windshield"], 0, 0, 255)
+            tiles.append(to_image(px))
+        rsi_sheet(tiles).save(os.path.join(path, f"{RSI_NAMES[variant]}_{name}.png"))
+
+
 def write_meta(path, size, states):
     meta = {"version": 1, "license": "CC-BY-SA-3.0", "copyright": COPYRIGHT,
             "size": {"x": size, "y": size}, "states": states}
@@ -1403,8 +1481,21 @@ def write_rsi(variant, dy):
              delays=door_delays)
         save(state + "_overlay", [door(v, f, True) for v in DIRS for f in per_dir[v]["fuel_door_swing"][::order]],
              delays=door_delays)
+    alpha = lambda d: {k for k, c in d.items() if c[3] > 0}
+    for name in [n for n in HARDPOINTS if n in ATTACHMENTS]:
+        save(name + "_outline", [to_image(outline(alpha(per_dir[v][name + "_0"]))) for v in DIRS])
+    save("hood_outline", [to_image(outline(alpha(per_dir[v]["hood_closed"]))) for v in DIRS])
+    save("fuel_door_outline", [to_image(outline(alpha(per_dir[v]["fuel_door_swing"][0]))) for v in DIRS])
+    save("wheels_outline", [to_image(outline(alpha(per_dir[v]["wheels"]))) for v in DIRS])
+    if variant == "gunner":
+        save("mgturret_outline", [to_image(outline({(x, y) for x in range(SIZE) for y in range(SIZE)
+                                                    if img.getpixel((x, y))[3] > 0})) for img in mg_images()],
+             directions=8)
     save("lights_on", [to_image(per_dir[v]["lights"]) for v in DIRS])
     save("headlights_on", [to_image(per_dir[v]["headlights_on"]) for v in DIRS])
+    blink = [[SIGNAL_DELAY, SIGNAL_DELAY] for _ in DIRS]
+    for side in ("signal_left", "signal_right"):
+        save(side, [to_image(f) for v in DIRS for f in (per_dir[v][side], {})], delays=blink)
     swing = [[HOOD_SWING_DELAY] * len(HOOD_SWING) for _ in DIRS]
     for state, order in (("hood_opening", 1), ("hood_closing", -1)):
         save(state, [to_image({} if v in HOOD_OVER else f) for v in DIRS for f in per_dir[v]["hood_swing"][::order]],
@@ -1434,6 +1525,7 @@ def write_rsi(variant, dy):
         save(placeholder, [blank], directions=1)
     write_meta(path, SIZE, states)
     write_crayon_map(variant, per_dir)
+    write_click_maps(variant, dy)
     return per_dir
 
 
@@ -1744,29 +1836,51 @@ def main():
         sheet(rows, 5).save(os.path.join(PREVIEW_DIR, f"jeep_{var}_x5.png"))
     crayon_demo(per, dy).save(os.path.join(PREVIEW_DIR, "jeep_crayons.png"))
     grid(hood="hood_open").save(os.path.join(PREVIEW_DIR, "jeep_hood_open.png"))
+    hover_rows = []
+    for var in VARIANTS:
+        for fitted in ((), FITTED):
+            row = []
+            for v in DIRS:
+                img = composite(var, v, per[var], dy, fitted=fitted, wheels_on=bool(fitted))
+                state_dir = os.path.join(RSI_DIR, RSI_NAMES[var] + ".rsi")
+                names = (["spare", "jerrycan", "shovel", "axe", "headlights", "wheels"] if not fitted
+                         else ["hood", "fuel_door"])
+                for n in names:
+                    sheet_img = Image.open(os.path.join(state_dir, n + "_outline.png")).convert("RGBA")
+                    d = DIRS.index(v)
+                    img.alpha_composite(sheet_img.crop(((d % 2) * SIZE, (d // 2) * SIZE, (d % 2) * SIZE + SIZE,
+                                                        (d // 2) * SIZE + SIZE)))
+                row.append(img)
+            hover_rows.append(row)
+    sheet(hover_rows, 3).save(os.path.join(PREVIEW_DIR, "jeep_hover_outlines.png"))
     last = len(FUEL_DOOR_SWING) - 1
     door_seq = list(range(last + 1)) + [last] * 8 + list(range(last, -1, -1)) + [0] * 8
     door_frames = [sheet([[composite(var, v, per[var], dy, door=k) for v in ("E", "S", "N")] for var in VARIANTS], 3)
                    .convert("RGB") for k in door_seq]
     door_frames[0].save(os.path.join(PREVIEW_DIR, "jeep_fuel_door.gif"), save_all=True,
                         append_images=door_frames[1:], duration=int(HOOD_SWING_DELAY * 1000) + 40, loop=0)
-    night = []
-    for on in (False, True):
-        for var in VARIANTS:
-            row = []
-            for v in DIRS:
-                img = composite(var, v, per[var], dy)
-                px = img.load()
-                for y in range(SIZE):
-                    for x in range(SIZE):
-                        r, g, b, a = px[x, y]
-                        px[x, y] = (r * 2 // 7, g * 2 // 7, b * 3 // 8, a)
-                if on:
-                    img.alpha_composite(to_image(per[var][v]["lights"]))
-                    img.alpha_composite(to_image(per[var][v]["headlights_on"]))
-                row.append(img)
-            night.append(row)
-    sheet(night, 3, bg=(18, 20, 26, 255)).save(os.path.join(PREVIEW_DIR, "jeep_lights.png"))
+    def night_frame(var, v, signals, blink_on=True):
+        img = composite(var, v, per[var], dy)
+        px = img.load()
+        for y in range(SIZE):
+            for x in range(SIZE):
+                r, g, b, a = px[x, y]
+                px[x, y] = (r * 2 // 7, g * 2 // 7, b * 3 // 8, a)
+        if signals is not None:
+            img.alpha_composite(to_image(per[var][v]["lights"]))
+            img.alpha_composite(to_image(per[var][v]["headlights_on"]))
+            if blink_on:
+                for side in signals:
+                    img.alpha_composite(to_image(per[var][v][side]))
+        return img
+
+    cases = (None, ("signal_left", "signal_right"), ("signal_left",), ("signal_right",))
+    sheet([[night_frame("cargo", v, c) for v in DIRS] for c in cases], 3, bg=(18, 20, 26, 255)).save(
+        os.path.join(PREVIEW_DIR, "jeep_lights.png"))
+    blink_frames = [sheet([[night_frame("cargo", v, c, on) for v in DIRS] for c in cases[1:]], 3,
+                          bg=(18, 20, 26, 255)).convert("RGB") for on in (True, False)]
+    blink_frames[0].save(os.path.join(PREVIEW_DIR, "jeep_signals.gif"), save_all=True,
+                         append_images=blink_frames[1:], duration=int(SIGNAL_DELAY * 1000), loop=0)
     grid(hood="hood_open", riders=True, loaded=True).save(os.path.join(PREVIEW_DIR, "jeep_hood_open_riders.png"))
     last = len(HOOD_SWING) - 1
     sequence = list(range(last + 1)) + [last] * 8 + list(range(last, -1, -1)) + [0] * 8

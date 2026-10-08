@@ -176,12 +176,112 @@
       ]
     },
     {
+      "name": "windshield_up_outline",
+      "directions": 4
+    },
+    {
+      "name": "windshield_down_outline",
+      "directions": 4
+    },
+    {
+      "name": "wirecutter_outline",
+      "directions": 4
+    },
+    {
+      "name": "searchlight_outline",
+      "directions": 4
+    },
+    {
+      "name": "spare_outline",
+      "directions": 4
+    },
+    {
+      "name": "jerrycan_outline",
+      "directions": 4
+    },
+    {
+      "name": "shovel_outline",
+      "directions": 4
+    },
+    {
+      "name": "axe_outline",
+      "directions": 4
+    },
+    {
+      "name": "engine_outline",
+      "directions": 4
+    },
+    {
+      "name": "headlights_outline",
+      "directions": 4
+    },
+    {
+      "name": "hood_outline",
+      "directions": 4
+    },
+    {
+      "name": "fuel_door_outline",
+      "directions": 4
+    },
+    {
+      "name": "wheels_outline",
+      "directions": 4
+    },
+    {
+      "name": "mgturret_outline",
+      "directions": 8
+    },
+    {
       "name": "lights_on",
       "directions": 4
     },
     {
       "name": "headlights_on",
       "directions": 4
+    },
+    {
+      "name": "signal_left",
+      "directions": 4,
+      "delays": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "signal_right",
+      "directions": 4,
+      "delays": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ]
     },
     {
       "name": "hood_opening",

@@ -28,8 +28,9 @@ The jeep is open, so riders are drawn between the vehicle and an overlay entity:
    hardpoints, then `wheels_0` / `wheels_1` (layer `rmc-wheels`).
 2. Crate (when loaded) and riders, far to near. Facing north the crate goes after the riders.
 3. Overlay entity: `jeep_overlay`, `damaged_overlay`, the hardpoint `*_overlay_0` / `_1` states,
-   the hood `*_overlay` state, `wheels_overlay_0` / `_1`, then the unshaded `lights_on`,
-   `headlights_on` and `engine_smoke_*`.
+   the hood and fuel door `*_overlay` states, `wheels_overlay_0` / `_1`, then the unshaded
+   `lights_on`, `headlights_on`, `signal_left`, `signal_right` and `engine_smoke_*`, and last the
+   `*_outline` hover highlights.
 4. Turret visual: `mgturret_0` / `mgturret_1`, like `humveeturret_0`. Facing north the gunner
    stands between the camera and the gun, so in that direction the turret goes under the riders.
 
@@ -96,13 +97,39 @@ Following the humvee, `_0` is intact and `_1` is damaged (`damagedVehicleState`)
 ## Lights
 
 The driver toggles RMC's `VehicleSpotlight` with F, the "Flip object" / "Holster primary" binding.
-That only switches a point light, so the jeep adds two unshaded overlay states to show it:
-- `lights_on`: tail lights and fender marker lamps.
+That only switches a point light, so the jeep adds unshaded overlay states to show it:
+- `lights_on`: the tail lights.
 - `headlights_on`: the headlights; show it only while the headlights hardpoint is fitted and
   intact.
+- `signal_left` / `signal_right`: each side's turn signal, the front fender marker and a rear
+  amber lamp, blinking at 0.4 s. Left is the driver's side.
+  - Stationary with the lights on, both blink as hazards.
+  - While steering left or right, only that side blinks.
+  - Reset both animations together so they blink in step.
 
 The searchlight hardpoint already scales the spotlight. `jeep_lights.png` shows night with the
-lights off and on.
+lights off, with hazards, and signalling left and right; `jeep_signals.gif` blinks them.
+
+## Interaction
+
+- **Empty hand:**
+  - Clicking the hood or the fuel door opens or closes it.
+  - Clicking a fitted item (shovel, axe, jerry can, spare, wheels and so on) takes it into the hand.
+- **Holding an item:** hovering the jeep shows that slot's `*_outline` (a bright rim and faint fill,
+  also where the slot is empty). Using the item there fits it.
+- **Hover highlight:** `hood_outline` and `fuel_door_outline` highlight those click targets.
+- **Click maps:** `click_maps/<rsi name>_hood_closed.png` and `_hood_open.png` give the part under
+  each pixel, in the same layout as the crayon maps. Alpha marks the jeep and R holds the part id:
+
+  | id | part | id | part | id | part |
+  | --- | --- | --- | --- | --- | --- |
+  | 0 | body | 5 | windshield | 10 | wire cutter |
+  | 1 | hood | 6 | spare | 11 | searchlight |
+  | 2 | fuel door | 7 | jerry can | 12 | wheels |
+  | 3 | engine | 8 | shovel | | |
+  | 4 | headlights | 9 | axe | | |
+
+  The maps are drawn with every slot filled, so they also find an empty slot.
 
 ## Motion
 
