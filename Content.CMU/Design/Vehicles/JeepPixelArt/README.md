@@ -27,8 +27,10 @@ The jeep is open, so riders are drawn between the vehicle and an overlay entity:
 1. Vehicle entity: `jeep_base`, `damaged_frame`, `engine_*`, the hood state, the other
    hardpoints, then `wheels_0` / `wheels_1` (layer `rmc-wheels`).
 2. Crate (when loaded) and riders, far to near. Facing north the crate goes after the riders.
-3. Overlay entity: `jeep_overlay`, `damaged_overlay`, the hardpoint `*_overlay_0` / `_1` states,
-   the hood and fuel door `*_overlay` states, `wheels_overlay_0` / `_1`, then the unshaded
+3. Overlay entity: `jeep_overlay`, `damaged_overlay`, `hood_closed_overlay`, the hardpoint
+   `*_overlay_0` / `_1` states, then the raised hood (`hood_opening` / `hood_open` /
+   `hood_closing` `_overlay`) and the fuel door `*_overlay` states, `wheels_overlay_0` / `_1`, then
+   the unshaded
    `lights_on`, `brake_on`, `headlights_on`, `signal_left`, `signal_right` and `engine_smoke_*`,
    and last the
    `*_outline` hover highlights.
@@ -88,6 +90,11 @@ Following the humvee, `_0` is intact and `_1` is damaged (`damagedVehicleState`)
   front.
 - **Animation:** `hood_opening` and `hood_closing` are 7 frames at 0.07 s. Play one, then switch to
   `hood_open` or `hood_closed`.
+- **Draw order with the windshield:** facing south, a shut hood is drawn under the windshield,
+  which can lie folded on it. A raising, raised or closing lid is drawn over it, in front of the
+  upright windshield. The two never clash because the hood only opens with the windshield up. In
+  practice that is two overlay layers, one below the hardpoints for the shut hood and one above
+  them for the moving and open lid.
 - **Engine hardpoint:** sits in the bay under the lid, so it only shows with the hood open. To fix a
   damaged engine, open the hood and replace or repair the engine hardpoint.
 - **Smoke:** `engine_smoke_0` (light, damaged) and `engine_smoke_1` (heavy, nearly broken) are

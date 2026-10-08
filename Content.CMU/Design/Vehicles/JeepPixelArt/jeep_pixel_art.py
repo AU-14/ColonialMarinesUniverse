@@ -604,22 +604,35 @@ def windshield_frames():
 
 
 def wirecutter(damaged=False):
-    """Notched wire-cutter post on the front bumper."""
+    """Angle-iron wire cutter clamped to the front bumper: a broad olive post with a sharpened,
+    toothed front edge, a forward hook over a notch at the top, and two braces to the bumper."""
     m = Model()
-    top = 27
+    top = 28
     bend = 3 if damaged else 0
-    for z in range(4, top + 1):
-        lean = bend * max(0, z - 18) // 9
-        m.box(33 + lean, 33 + lean, -1, 0, z, z, "steel", "wirecutter")
-        if z >= 7:
-            m.put(34 + lean, -1, z, "frame", "wirecutter")
-    for z in (22, 23, 25, 26):
-        lean = bend * max(0, z - 18) // 9
-        m.box(35 + lean, 35 + lean, -1, 0, z, z, "steel", "wirecutter")
-    m.line((33.5, -0.5, 12.0), (31.5, -7.5, 6.5), "frame", "wirecutter")
-    m.line((33.5, -0.5, 12.0), (31.5, 6.5, 6.5), "frame", "wirecutter")
+
+    def lean(z):
+        return bend * max(0, z - 18) // 10
+
+    m.box(31, 34, -3, 2, 3, 7, "od", "wirecutter")
+    m.mirror_box(35, 35, 1, 2, 4, 5, "steel", "wirecutter")
+    for z in range(8, top + 1):
+        f = 33 + lean(z)
+        m.box(f, f + 1, -2, 1, z, z, "od", "wirecutter")
+        m.box(f, f + 1, -2, -2, z, z, "od_seam", "wirecutter")
+        if z <= top - 4:
+            m.box(f + 2, f + 2, -1, 0, z, z, "steel" if z % 2 else "hub", "wirecutter")
+    # Hook: an upper jaw reaching forward over a notch, with a sharpened tip.
+    for z in range(top - 3, top + 1):
+        f = 35 + lean(z)
+        m.box(f, f + 2, -1, 0, z, z, "od", "wirecutter")
+        m.box(f + 3, f + 3, -1, 0, z, z, "steel", "wirecutter")
+    m.box(35 + lean(top), 38 + lean(top), -1, 0, top, top, "od_seam", "wirecutter")
+    for a, b in (((33.5, -2.5, 16.0), (32.5, -7.5, 7.0)), ((33.5, 1.5, 16.0), (32.5, 6.5, 7.0))):
+        m.line(a, b, "od", "wirecutter")
+        m.line((a[0] - 1, a[1], a[2]), (b[0] - 1, b[1], b[2]), "od_seam", "wirecutter")
     if damaged:
-        m.paint(lambda f, r, z: 14 <= z <= 20 and (f + z) % 3 == 0, "char")
+        m.paint(lambda f, r, z: 14 <= z <= 22 and (f + z) % 3 == 0, "char")
+        m.remove(lambda f, r, z: z >= top - 1 and f >= 37 + lean(top))
     return m
 
 
@@ -1752,11 +1765,14 @@ def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=Non
     img.alpha_composite(to_image(v["overlay"]))
     if damaged:
         img.alpha_composite(to_image(damage(v["overlay"], seed(variant, view, "overlay"))))
+    # Overlay entity: a shut hood goes under the windshield, which can be folded down onto it; a
+    # raised lid goes over it, standing in front of the upright windshield.
+    if hood == "hood_closed" and view in HOOD_OVER:
+        img.alpha_composite(to_image(v[hood]))
     for name in hardpoints:
         if view in ATTACHMENTS[name]:
             img.alpha_composite(to_image(v[f"{name}_{st}"]))
-    # Overlay entity: the lid goes after the windshield, which it stands in front of when open.
-    if hood and view in HOOD_OVER:
+    if hood and hood != "hood_closed" and view in HOOD_OVER:
         img.alpha_composite(to_image(v[hood]))
     if view in FUEL_DOOR_OVER:
         img.alpha_composite(to_image(v["fuel_door_swing"][door]))
@@ -1929,7 +1945,7 @@ def main():
 
     grid().save(os.path.join(PREVIEW_DIR, "jeep_variants.png"))
     grid(riders=True, loaded=True).save(os.path.join(PREVIEW_DIR, "jeep_riders.png"))
-    down = ("windshield_down",) + FITTED[1:]
+    down = tuple("windshield_down" if n == "windshield_up" else n for n in FITTED)
     everything = FITTED + ("wirecutter", "searchlight")
     grid(riders=True, loaded=True, fitted=down).save(os.path.join(PREVIEW_DIR, "jeep_riders_windshield_down.png"))
     grid(damaged=True).save(os.path.join(PREVIEW_DIR, "jeep_damaged.png"))
@@ -2013,8 +2029,8 @@ def main():
             row = []
             for v in DIRS:
                 d = dict(per[var][v])
-                d["hood_closed"] = d["hood_swing"][k]
-                row.append(composite(var, v, {**per[var], v: d}, dy))
+                d["hood_open"] = d["hood_swing"][k]
+                row.append(composite(var, v, {**per[var], v: d}, dy, hood="hood_open"))
             rows.append(row)
         swing_frames.append(sheet(rows, 3).convert("RGB"))
     swing_frames[0].save(os.path.join(PREVIEW_DIR, "jeep_hood_swing.gif"), save_all=True,
