@@ -185,7 +185,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
             {
                 args.Verbs.Add(new AlternativeVerb
                 {
-                    Priority = 100,
+                    Priority = 120,
                     Act = () =>
                     {
                         if (CanWatchPopup(ent, user))
@@ -214,7 +214,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
             {
                 args.Verbs.Add(new AlternativeVerb
                 {
-                    Priority = 100,
+                    Priority = 120,
                     Act = () =>
                     {
                         if (CanWatchPopup(ent, user))
