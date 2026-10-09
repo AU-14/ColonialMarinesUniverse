@@ -7,7 +7,7 @@ namespace Content.Server.CMU14.Expeditions;
 public sealed partial class CMUExpeditionAgentSystem
 {
     private bool CanFireWhileMoving(EntityUid uid, CMUExpeditionAgentComponent agent) =>
-        agent.PendingWeapon == null && agent.ScavengeTarget == null && agent.Treatment == null && agent.WorkItem == null && !agent.PreparingWork &&
+        agent.FlareItem == null && agent.PendingWeapon == null && agent.ScavengeTarget == null && agent.Treatment == null && agent.WorkItem == null && !agent.PreparingWork &&
         (agent.Action == null || agent.Action is CMUTacticalAction.Flank or CMUTacticalAction.TakeCover) &&
         agent.State is CMUExpeditionAgentState.Guard or CMUExpeditionAgentState.Investigate or
             CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Withdraw or
@@ -58,7 +58,7 @@ public sealed partial class CMUExpeditionAgentSystem
             _combat.SetInCombatMode(uid, true, combat);
         var direction = _transform.ToMapCoordinates(point).Position - _transform.GetWorldPosition(uid);
         _transform.SetWorldRotation(uid, direction.ToWorldAngle());
-        agent.LastFireCheck = _guns.AttemptShoot(uid, gun, point, agent.Target)
+        agent.LastFireCheck = _guns.AttemptShoot(uid, gun, point, agent.FiringAtFlash ? null : agent.Target)
             ? "moving-trigger-accepted" : "moving-native-trigger-rejected";
     }
 

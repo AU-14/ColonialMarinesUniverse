@@ -75,10 +75,18 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
                 ("callouts", agent.RadioCallouts), ("scavenged", agent.WeaponsScavenged),
                 ("strikes", agent.LastResortStrikes),
                 ("item", agent.ScavengeTarget is { } item ? EntityManager.GetNetEntity(item).ToString() : "-")));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-vision-status",
+                ("sight", agent.VisionDecision), ("flares", agent.FlaresUsed), ("flashShots", agent.FlashShots), ("bipods", agent.BipodsDeployed)));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-logistics-status",
+                ("outfit", agent.Outfit), ("decision", agent.SupplyDecision), ("shared", agent.SuppliesShared),
+                ("received", agent.SuppliesReceived), ("crates", agent.CratesOpened)));
             shell.WriteLine(Loc.GetString("cmu-expedition-ai-fieldcraft-status",
                 ("construction", agent.FortificationDecision), ("facing", agent.FortificationFacing.ToString()),
                 ("supplies", agent.SuppliesScavenged), ("hazard", agent.HazardDecision), ("dodges", agent.HazardDodges),
                 ("detours", agent.LocalDetours), ("failures", agent.OrderFailures)));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-door-status",
+                ("decision", agent.DoorDecision), ("opened", agent.DoorsOpened), ("failures", agent.DoorFailures),
+                ("door", agent.WaitingForDoor is { } door ? EntityManager.GetNetEntity(door).ToString() : "-")));
             shell.WriteLine(Loc.GetString("cmu-expedition-ai-survival-status",
                 ("weapon", agent.WeaponRecoveryDecision), ("recovered", agent.WeaponsRecovered),
                 ("spacing", agent.SpacingDecision), ("destination", agent.SpacingDestination?.ToString() ?? "-"),

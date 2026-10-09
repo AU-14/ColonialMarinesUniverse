@@ -7,6 +7,7 @@ using Content.Shared.CMU14.Medical.Defibrillator;
 using Content.Shared.Damage.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Medical;
+using Content.Shared.Medical.Healing;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -163,7 +164,11 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             if (!medic.Covered)
                 return true;
-            medic.Shelter ??= FindPosition(uid, agent, Transform(uid), true)?.Anchor;
+            if (_mobs.IsCritical(patient) && Bleeding(patient) && medic.PatientDoses == 0 &&
+                MedicalWorkSafe(uid, agent, medic, patient) && MedicalItems(uid).Any(item => UsefulDressing(item, patient) &&
+                    TryComp<HealingComponent>(item, out var dressing) && dressing.BloodlossModifier < 0))
+                return WorkOnPatient(uid, agent, medic, patient, now, stabilizeBleeding: true);
+            medic.Shelter ??= MedicalCollectionPoint(uid, agent);
             if (medic.Shelter is not { } shelter)
             {
                 CancelMedical(uid, agent, "no-extraction-shelter", true);
@@ -265,7 +270,8 @@ public sealed partial class CMUExpeditionAgentSystem
         _timing.CurTime - claim.LastWound >= TimeSpan.FromSeconds(1) &&
         _timing.CurTime - agent.LastHit >= TimeSpan.FromSeconds(1) && agent.RushTarget == null &&
         (TreatmentSafe(uid, agent) && ShelteredFromKnownThreats(uid, agent, Transform(patient).Coordinates) ||
-         _mobs.IsAlive(patient) && medic.Covered && !agent.Crossfire && _timing.CurTime >= agent.SuppressedUntil);
+         (_mobs.IsAlive(patient) || _mobs.IsCritical(patient) && Bleeding(patient)) &&
+         medic.Covered && !agent.Crossfire && _timing.CurTime >= agent.SuppressedUntil);
 
     private bool FreeMedicalHand(EntityUid uid, CMUExpeditionAgentComponent agent)
     {

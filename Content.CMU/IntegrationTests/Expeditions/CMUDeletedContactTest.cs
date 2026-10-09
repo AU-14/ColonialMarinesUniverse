@@ -5,6 +5,7 @@ using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
 
 namespace Content.IntegrationTests.CMU14.Expeditions;
 
@@ -17,6 +18,9 @@ public sealed class CMUDeletedContactTest : GameTest
         var map = await Pair.CreateTestMap();
         await Server.WaitAssertion(() =>
         {
+            // The contact must be illuminated under the NPC's normal visibility rules.
+            Server.System<SharedMapSystem>().SetAmbientLight(
+                SEntMan.GetComponent<TransformComponent>(map.Grid.Owner).MapID, Color.White);
             var guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", map.GridCoords);
             var target = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(3, 0)));
             Server.System<NpcFactionSystem>().AddFaction(target, "GOVFOR");

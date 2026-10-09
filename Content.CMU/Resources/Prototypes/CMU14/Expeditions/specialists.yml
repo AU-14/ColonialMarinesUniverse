@@ -52,7 +52,7 @@
   id: CMUExpeditionDisposableLauncher
   components:
   - type: BallisticAmmoProvider
-    proto: RMCRocketHJRA12HE
+    proto: RMCRocketHJRA12AT
   - type: CMUBackblast
     nearEffect: CMUBackblastSmokeNear
     farEffect: CMUBackblastSmokeFar
@@ -74,18 +74,22 @@
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
     back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionSMG
   storage:
     back:
-    - CMMagazineSMGM63
-    - CMMagazineSMGM63
     - CMUExpeditionSidearm
     - CMMagazinePistolM1984
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
+    - CMPackFlare
+    belt:
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
 
 - type: entity
   parent: CMUExpeditionScavenger
@@ -112,18 +116,22 @@
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
     back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionSupportRifle
   storage:
     back:
-    - CMMagazineRifleM54CE2
-    - CMMagazineRifleM54CE2
     - CMUExpeditionSidearm
     - CMMagazinePistolM1984
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
+    - CMPackFlare
+    belt:
+    - CMMagazineRifleM54CE2
+    - CMMagazineRifleM54CE2
 
 - type: entity
   parent: CMUExpeditionScavenger
@@ -152,18 +160,22 @@
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
     back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionMarksmanRifle
   storage:
     back:
-    - CMMagazineRifleM4SPR
-    - CMMagazineRifleM4SPR
     - CMUExpeditionSidearm
     - CMMagazinePistolM1984
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
+    - CMPackFlare
+    belt:
+    - CMMagazineRifleM4SPR
+    - CMMagazineRifleM4SPR
 
 - type: entity
   parent: CMUExpeditionScavenger
@@ -193,25 +205,30 @@
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
     back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
     suitStorage: CMUExpeditionDisposableLauncher
   inhand:
   - CMUExpeditionSMG
   storage:
     back:
-    - CMMagazineSMGM63
-    - CMMagazineSMGM63
     - CMUExpeditionSidearm
     - CMMagazinePistolM1984
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
+    - CMPackFlare
+    belt:
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
 
 - type: entity
   parent: CMUExpeditionScavenger
   id: CMUExpeditionScavengerRocketeer
   components:
   - type: CMUExpeditionAgent
+    antiVehicle: true
     burstSize: 4
     courage: 0.7
     preferredFireRange: 7

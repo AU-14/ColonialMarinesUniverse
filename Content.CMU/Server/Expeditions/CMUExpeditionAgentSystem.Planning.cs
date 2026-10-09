@@ -14,7 +14,7 @@ public sealed partial class CMUExpeditionAgentSystem
 {
     private bool RunPlan(EntityUid uid, CMUExpeditionAgentComponent agent, bool armed, float damage, bool hit, TimeSpan now)
     {
-        if (!agent.PlanningEnabled)
+        if (!agent.PlanningEnabled || agent.Action == null && !OptionalDecisionReady(agent))
             return false;
         if (agent.Action == null && now < agent.MedicalCoverUntil && armed && !hit && damage < agent.RetreatDamage)
             return false;
@@ -64,8 +64,9 @@ public sealed partial class CMUExpeditionAgentSystem
                 agent.GrenadeDecision = "cluster-or-last-resort";
                 goal = CMUTacticalGoal.Flush;
             }
-            else if (damage < agent.RetreatDamage && available && armed && !agent.Crossfire && now >= agent.NextFlank && agent.HasCoveringAlly &&
-                (agent.Initiative >= (agent.CombatRole == CMUExpeditionCombatRole.Flanker ? 0.4f : 0.6f) * agent.LearnedFlankCost ||
+            else if (agent.RecoveryUntil <= now && agent.Duty is not (CMUSquadDuty.Overwatch or CMUSquadDuty.RearGuard or CMUSquadDuty.Medic or CMUSquadDuty.Recover) &&
+                damage < agent.RetreatDamage && available && armed && !agent.Crossfire && now >= agent.NextFlank && agent.HasCoveringAlly &&
+                (agent.Duty == CMUSquadDuty.Advance || agent.Initiative >= (agent.CombatRole == CMUExpeditionCombatRole.Flanker ? 0.4f : 0.6f) * agent.LearnedFlankCost ||
                     agent.RepeatedPeekHits >= 2) && !SquadHasFlanker(uid, agent) &&
                 FlankPosition(uid, agent) is { } flank && TryReserveManeuver(uid, agent, now))
             {

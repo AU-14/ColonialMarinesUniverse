@@ -20,19 +20,23 @@
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
     back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionSMG
   storage:
     back:
-    - CMMagazineSMGM63
-    - CMMagazineSMGM63
     - CMUExpeditionDefibrillator
     - CMUExpeditionStabilizer
     - CMUExpeditionFieldDressing
     - CMUExpeditionFieldDressing
     - CMUExpeditionFieldDressing
     - CMUExpeditionSmokeGrenade
+    - CMPackFlare
+    belt:
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
 
 - type: entity
   parent: CMUExpeditionScavenger

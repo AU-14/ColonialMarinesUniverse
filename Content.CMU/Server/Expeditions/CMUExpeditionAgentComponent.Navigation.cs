@@ -12,4 +12,12 @@ public sealed partial class CMUExpeditionAgentComponent
     public TimeSpan? OrderBlockedSince;
     public int OrderFailures;
     public EntityCoordinates? LastOrderProgressPosition;
+    public EntityUid? WaitingForDoor;
+    public TimeSpan DoorWaitUntil;
+    public bool DoorOpenRequested;
+    public EntityUid? FailedDoor;
+    public TimeSpan AvoidDoorUntil;
+    public string DoorDecision = "none";
+    public int DoorsOpened;
+    public int DoorFailures;
 }
