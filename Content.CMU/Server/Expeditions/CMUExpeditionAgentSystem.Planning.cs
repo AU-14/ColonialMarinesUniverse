@@ -31,12 +31,15 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (agent.Plan.Count > 0)
             return StartNextAction(uid, agent, damage, now);
-        if (now < agent.NextPlan)
+        if (armed && now < agent.NextPlan)
+            return false;
+        var spare = SpareAmmunition(uid);
+        // An empty rifle must not wait for the optional tactical-planning cadence.
+        if (now < agent.NextPlan && (armed || spare == null))
             return false;
         agent.NextPlan = now + TimeSpan.FromSeconds(1);
         var safe = TreatmentSafe(uid, agent);
         var medicine = HasMedicine(uid);
-        var spare = SpareAmmunition(uid);
         var mustHeal = medicine && damage >= agent.RetreatDamage && ShouldTreat(agent, damage, now);
         var goal = !armed && spare != null ? CMUTacticalGoal.Rearm : mustHeal ? CMUTacticalGoal.Recover : CMUTacticalGoal.Fight;
 
@@ -252,14 +255,14 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (agent.Action is A.Reload or A.ThrowGrenade && agent.ActionDoAfter == null && !agent.ActionComplete)
         {
-            // Unwielding queues the virtual off-hand for deletion. Let native hands finish that transition.
-            if (now - agent.ActionStarted < TimeSpan.FromSeconds(0.2))
+            // Wait for the real virtual-grip removal, not an additional reaction timer.
+            if (_hands.GetEmptyHandCount(uid) == 0 && now - agent.ActionStarted < TimeSpan.FromSeconds(0.5))
                 return true;
             var delay = 0.8;
             if (agent.Action == A.Reload)
                 delay = _guns.TryGetGun(uid, out var reloading) &&
                     TryComp<Content.Shared.Weapons.Ranged.Components.BallisticAmmoProviderComponent>(reloading, out var tube)
-                    ? Math.Max(0.8, tube.InsertDelay) : 2.5;
+                    ? Math.Max(agent.ShellReloadDuration.TotalSeconds, tube.InsertDelay) : agent.MagazineReloadDuration.TotalSeconds;
             if (agent.ActionItem is not { } item || !Exists(item) ||
                 !StartUtility(uid, agent, item, TimeSpan.FromSeconds(delay)))
             {
@@ -330,7 +333,7 @@ public sealed partial class CMUExpeditionAgentSystem
         CancelMedical(uid, agent, "task-cancelled", failed);
         if (failed && agent.Action is { } action)
         {
-            agent.FailedActions[action] = _timing.CurTime + TimeSpan.FromSeconds(8);
+            agent.FailedActions[action] = _timing.CurTime + TimeSpan.FromSeconds(action == A.Reload ? 0.75 : 8);
             agent.FailedPlans++;
             if (action == A.Flank)
                 RecordTactic(uid, agent, false);

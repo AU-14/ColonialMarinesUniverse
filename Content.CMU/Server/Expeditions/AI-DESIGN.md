@@ -573,3 +573,26 @@ Manual verification for this revision (not run):
    Add/remove a blocker and separate one member. Check half-tile detours, bounded waits/retries,
    rejoining when possible and explicit blocked status when impossible. Repeat through RMC water
    and during combat; record navigation cost and frame time. Compilation is not runtime validation.
+
+Barricade traversal and fire:
+
+- Route searches admit unwired native `Climbable` surfaces. Movement approaches a clear
+  starting point, validates the sweep to the surface origin, and calls `ClimbSystem.TryClimb`.
+  Native delays, interaction restrictions, collision changes and wire/shutter checks apply.
+  Orders, possession, incapacitation and damage cancel preparation. Failed climbs get an
+  eight-second retry backoff and a route rebuild. Non-climbable folding barricades need a detour.
+- Shooting and sight recognize low bullet cover separately from body collision. Both native
+  directional blockers and CMU `BarricadeBlock` proximity/facing rules are considered.
+  Partial cover permits small-arms fire; it does not guarantee a hit or certify medical shelter.
+  Rocket lanes remain conservative. A blocked lane can trigger one bounded lateral advance
+  per local squad when a short sidestep fails, without requiring nonexistent covering fire.
+- Sandbag fixtures now use the same climb-compatible layers as other low barricades rather
+  than full wall layers. This corrects native traversal for players as well as AI.
+
+Manual verification for these changes (not run locally): order a squad across unwired metal
+barricades, sandbags and platform corners from both sides, then repeat with wire, a closed
+shutter, a blocked landing, a nearby friendly and a mid-action order/knockdown. Check detours
+around deployed folding barricades and resumption of the original order. Fight humans behind
+rotated, single and double rows of cover: verify return fire, limited lateral advances, real
+projectile blocking, no friendly fire, and no shots through full walls or smoke. Record squad
+navigation cost with six guards; compilation alone does not validate movement in game.

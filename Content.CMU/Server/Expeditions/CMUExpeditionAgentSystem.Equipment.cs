@@ -177,12 +177,16 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             // Consume a real shell from the carried handful using the native insertion path.
             success = _guns.TryAmmoInsert((tubeGun.Owner, tube), item, ent, tubeGun.Owner, 0);
-            if (Exists(item) && _hands.IsHolding(ent.Owner, item, out _) && Supplies(ent, out var bag))
-                _hands.TryDropIntoContainer(ent.Owner, item, bag.Container);
+            if (Exists(item) && _hands.IsHolding(ent.Owner, item, out _))
+                StoreSupply(ent, item);
             if (success)
             {
                 agent.Reloads++;
-                if (SpareAmmunition(ent, tubeGun) is { } next && _timing.CurTime < agent.ActionUntil)
+                // Under contact, one live shell is enough to return fire. Top off only
+                // without a visible target; otherwise a shotgun can spend the whole fight loading.
+                var returnFire = agent.Target is { } contact && Visible(ent, contact, agent.FireRange)
+                    && WeaponAmmo(tubeGun) > 0;
+                if (!returnFire && SpareAmmunition(ent, tubeGun) is { } next && _timing.CurTime < agent.ActionUntil)
                 {
                     agent.ActionItem = next;
                     agent.ActionStarted = _timing.CurTime;
@@ -218,6 +222,23 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             agent.ActionItem = null;
             agent.ActionComplete = true;
+            if (agent.Action == CMUTacticalAction.Reload)
+            {
+                // Release the utility state and ready the weapon immediately. A known
+                // visible target does not need a second aim/recovery cycle after reloading.
+                var now = _timing.CurTime;
+                ContinueAction(ent, agent, agent.LastDamage, now);
+                agent.RifleLoweredUntil = now;
+                agent.NextThink = now;
+                agent.NextReposition = now + agent.BurstDuration;
+                agent.NextPlan = now + agent.BurstDuration;
+                if (ReadyRifle(ent, agent) && _guns.TryGetGun(ent, out var ready)
+                    && TryAimPoint(ent, agent, ready, out var aim) && SafeShot(ent, agent, ready, aim))
+                {
+                    Aim(agent, now, true);
+                    agent.FireAt = now;
+                }
+            }
         }
         else
             CancelPlan(ent, agent, true);

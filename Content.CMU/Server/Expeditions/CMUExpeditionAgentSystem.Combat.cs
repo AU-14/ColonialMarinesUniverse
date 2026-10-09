@@ -34,7 +34,7 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         var stationary = ent.Comp.State == CMUExpeditionAgentState.Engage && ent.Comp.Action == null &&
             ent.Comp.PendingWeapon == null && _timing.CurTime < ent.Comp.BurstEnd && ent.Comp.ShotsFired < VolleySize(ent.Comp);
-        if (!_npcs.Enabled || !_mobs.IsAlive(ent) || ent.Comp.FlareItem != null || (!stationary && !MovingShotAllowed(ent, ent.Comp)) ||
+        if (!_npcs.Enabled || !_mobs.IsAlive(ent) || ent.Comp.VaultTarget != null || ent.Comp.FlareItem != null || (!stationary && !MovingShotAllowed(ent, ent.Comp)) ||
             !TryComp<GunComponent>(args.Used, out var gun) || !TryAimPoint(ent, ent.Comp, gun, out var point) ||
             !SafeShot(ent, ent.Comp, gun, point))
             args.Cancel();
@@ -92,7 +92,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void UpdateFire(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.FlareItem != null || agent.AimedWeapon != null)
+        if (agent.VaultTarget != null || agent.FlareItem != null || agent.AimedWeapon != null)
             return;
         if (CanFireWhileMoving(uid, agent))
         {
@@ -168,7 +168,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.LastFireCheck = "obstructed-firing-cone";
             if (now < agent.SpacingUntil)
                 return;
-            if (TryAdjustPeek(uid, agent, point, now))
+            if (TryAdjustPeek(uid, agent, point, now) || TryBlockedFiringAngle(uid, agent, point, now))
                 return;
             if (agent.PeekPosition is { } failed)
             {

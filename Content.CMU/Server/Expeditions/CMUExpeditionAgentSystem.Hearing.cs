@@ -11,6 +11,8 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentSystem
 {
+    private readonly HashSet<Entity<CMUExpeditionAgentComponent>> _hearingAgents = new();
+
     private void InitializeHearing() => SubscribeLocalEvent<DoorComponent, DoorStateChangedEvent>(OnHeardDoor);
 
     private void OnHeardDoor(Entity<DoorComponent> ent, ref DoorStateChangedEvent args)
@@ -32,11 +34,13 @@ public sealed partial class CMUExpeditionAgentSystem
         if (!_npcs.Enabled)
             return;
         var origin = _transform.ToMapCoordinates(source);
-        var nearby = new HashSet<EntityUid>();
-        _lookup.GetEntitiesInRange(origin.MapId, origin.Position, range, nearby);
-        foreach (var uid in nearby)
+        // runs on every gunshot and door in every round, so only look up agents. the untyped
+        // lookup pulled every entity within 18 tiles even when no expedition NPC existed
+        _hearingAgents.Clear();
+        _lookup.GetEntitiesInRange(origin.MapId, origin.Position, range, _hearingAgents);
+        foreach (var (uid, agent) in _hearingAgents)
         {
-            if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) || !_mobs.IsAlive(uid) ||
+            if (!_mobs.IsAlive(uid) ||
                 HasComp<ActorComponent>(uid) || _timing.CurTime < agent.NextHearing ||
                 shooter is { } known && IsFriendly(uid, known))
                 continue;

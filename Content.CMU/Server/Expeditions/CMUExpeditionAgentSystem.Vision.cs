@@ -19,7 +19,7 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool SightLine(EntityUid observer, EntityCoordinates point, float range) =>
         _interaction.InRangeUnobstructed(observer, point, range,
             CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
-            predicate: entity => entity == observer || HasComp<NpcFactionMemberComponent>(entity) || TransparentWindow(entity)) &&
+            predicate: entity => entity == observer || HasComp<NpcFactionMemberComponent>(entity) || TransparentWindow(entity) || LowBulletCover(entity)) &&
         !SmokeOccludes(Transform(observer).Coordinates, point);
 
     private bool CanSpot(EntityUid observer, EntityUid target)
@@ -100,7 +100,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (contribution < 0.005f ||
                 !_interaction.InRangeUnobstructed(new MapCoordinates(origin, map.MapId), map, radius,
                     CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
-                    predicate: entity => entity == uid || HasComp<NpcFactionMemberComponent>(entity) || TransparentWindow(entity)))
+                    predicate: entity => entity == uid || HasComp<NpcFactionMemberComponent>(entity) || TransparentWindow(entity) || LowBulletCover(entity)))
                 continue;
             level += contribution;
         }
