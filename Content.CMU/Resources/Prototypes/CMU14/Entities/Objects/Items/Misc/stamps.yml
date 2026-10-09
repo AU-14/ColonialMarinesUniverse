@@ -304,6 +304,18 @@
 
 - type: entity
   parent: AU14StampBase
+  id: AU14StampDepAdmin
+  name: deputy administrator's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-hop
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-depadmin
+    stampedColor: "#3681bb"
+    stampState: "paper_stamp-circle"
+
+- type: entity
+  parent: AU14StampBase
   id: AU14StampFore
   name: foreman's rubber stamp
   components:

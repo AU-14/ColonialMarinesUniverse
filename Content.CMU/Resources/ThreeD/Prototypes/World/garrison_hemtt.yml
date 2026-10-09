@@ -1,0 +1,1313 @@
+# Four-view HEMETT drafts; see SOURCES_HEMETT.md.
+- type: cmu3DModel
+  id: CMU3DAU14PropHemettTruckNoBed
+  label: HEMETT bare cargo deck
+  sourcePrototypes:
+  - AU14PropHemettTruckNoBed
+  status: draft
+  referenceRsi: CMU14/Structures/vehicles/militarycargotrucks.rsi
+  referenceState: miltruck_1
+  sourceDirections: 4
+  groundOffset: 0.5, 0
+  description: Four-axle military truck reconstructed from all four source directions. Eight real capped-cylinder
+    tires, cab glazing and side/roof detail, raised deck and separate NoBed construction. Explicit +0.5 map-X ground
+    pivot follows horizontal source framing without rotating around the entity or copying its screen-height offset.
+    Unseen chassis, physical heights, suspension and continuous sloped windshield and stepped canopy shoulders are
+    inferred. Static draft; no drivable vehicle behavior. See SOURCES_HEMETT.md.
+  parts:
+  - label: axle 1
+    min: -0.60000, -1.05500, 0.23000
+    max: 0.60000, -0.98500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.62500, -1.25000, 0.01500
+    max: -0.47500, -0.79000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 1 -1
+    min: -0.63500, -1.17500, 0.09000
+    max: -0.62700, -0.86500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 1 -1
+    min: -0.64700, -1.08500, 0.18000
+    max: -0.63500, -0.95500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.47500, -1.25000, 0.01500
+    max: 0.62500, -0.79000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 1 1
+    min: 0.62700, -1.17500, 0.09000
+    max: 0.63500, -0.86500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 1 1
+    min: 0.63500, -1.08500, 0.18000
+    max: 0.64700, -0.95500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.60000, -0.50500, 0.23000
+    max: 0.60000, -0.43500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.62500, -0.70000, 0.01500
+    max: -0.47500, -0.24000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 2 -1
+    min: -0.63500, -0.62500, 0.09000
+    max: -0.62700, -0.31500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 2 -1
+    min: -0.64700, -0.53500, 0.18000
+    max: -0.63500, -0.40500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.47500, -0.70000, 0.01500
+    max: 0.62500, -0.24000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 2 1
+    min: 0.62700, -0.62500, 0.09000
+    max: 0.63500, -0.31500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 2 1
+    min: 0.63500, -0.53500, 0.18000
+    max: 0.64700, -0.40500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: axle 3
+    min: -0.60000, 0.58500, 0.23000
+    max: 0.60000, 0.65500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 3 -1
+    min: -0.62500, 0.39000, 0.01500
+    max: -0.47500, 0.85000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 3 -1
+    min: -0.63500, 0.46500, 0.09000
+    max: -0.62700, 0.77500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 3 -1
+    min: -0.64700, 0.55500, 0.18000
+    max: -0.63500, 0.68500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 3 1
+    min: 0.47500, 0.39000, 0.01500
+    max: 0.62500, 0.85000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 3 1
+    min: 0.62700, 0.46500, 0.09000
+    max: 0.63500, 0.77500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 3 1
+    min: 0.63500, 0.55500, 0.18000
+    max: 0.64700, 0.68500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: axle 4
+    min: -0.60000, 1.08500, 0.23000
+    max: 0.60000, 1.15500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 4 -1
+    min: -0.62500, 0.89000, 0.01500
+    max: -0.47500, 1.35000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 4 -1
+    min: -0.63500, 0.96500, 0.09000
+    max: -0.62700, 1.27500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 4 -1
+    min: -0.64700, 1.05500, 0.18000
+    max: -0.63500, 1.18500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 4 1
+    min: 0.47500, 0.89000, 0.01500
+    max: 0.62500, 1.35000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 4 1
+    min: 0.62700, 0.96500, 0.09000
+    max: 0.63500, 1.27500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 4 1
+    min: 0.63500, 1.05500, 0.18000
+    max: 0.64700, 1.18500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: underframe
+    min: -0.45000, -1.40000, 0.27000
+    max: 0.45000, 1.43000, 0.45000
+    color: '#272D2D'
+  - label: long chassis beam
+    min: -0.50000, -1.40000, 0.39000
+    max: -0.43000, 1.45000, 0.53000
+    color: '#333B3B'
+  - label: long chassis beam
+    min: 0.43000, -1.40000, 0.39000
+    max: 0.50000, 1.45000, 0.53000
+    color: '#333B3B'
+  - label: low belly fuel tank
+    min: -0.49000, -0.20000, 0.23000
+    max: 0.49000, 0.36000, 0.48000
+    color: '#3F4848'
+  - label: rear bumper
+    min: -0.57000, 1.43000, 0.37000
+    max: 0.57000, 1.49000, 0.50000
+    color: '#636B6A'
+  - label: rear red tail lamp
+    min: -0.51000, 1.49100, 0.41000
+    max: -0.42000, 1.49600, 0.46500
+    color: '#805D55'
+  - label: rear red tail lamp
+    min: 0.42000, 1.49100, 0.41000
+    max: 0.51000, 1.49600, 0.46500
+    color: '#805D55'
+  - label: front bumper
+    min: -0.62000, -1.49000, 0.38000
+    max: 0.62000, -1.42000, 0.52000
+    color: '#272D2D'
+  - label: cab lower body
+    min: -0.60000, -1.41000, 0.51000
+    max: 0.60000, -0.50000, 1.01500
+    color: '#4B5656'
+  - label: cab rear bulkhead
+    min: -0.58500, -0.57000, 0.94000
+    max: 0.58500, -0.49000, 1.72000
+    color: '#3F4848'
+  - label: cab roof backing
+    min: -0.57000, -1.18000, 1.68000
+    max: 0.57000, -0.50000, 1.76000
+    color: '#4B5656'
+  - label: roof hatches and vents
+    min: -0.55000, -1.16500, 1.76100
+    max: 0.55000, -0.51500, 1.76500
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedCabRoof
+    surfaceAxis: XY
+  - label: cab side wall
+    min: -0.60200, -1.13000, 0.99000
+    max: -0.58600, -0.55000, 1.69000
+    color: '#4B5656'
+  - label: cab side glazing
+    min: -0.60300, -1.11000, 1.07000
+    max: -0.58500, -0.57000, 1.65000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedCabEast
+    surfaceAxis: YZ
+  - label: door lower border
+    min: -0.60500, -1.37000, 0.97000
+    max: -0.58300, -0.53000, 1.00500
+    color: '#6F7877'
+  - label: door vents and marker
+    min: -0.60700, -0.98000, 0.56000
+    max: -0.58100, -0.54000, 0.97000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedVentEast
+    surfaceAxis: YZ
+  - label: cab entry step
+    min: -0.67500, -1.36000, 0.30000
+    max: -0.52500, -1.20000, 0.36000
+    color: '#333B3B'
+  - label: side mirror support
+    min: -0.69500, -1.24500, 1.27000
+    max: -0.56500, -1.21500, 1.31000
+    color: '#333B3B'
+  - label: side mirror housing
+    min: -0.72800, -1.25500, 1.24000
+    max: -0.67200, -1.20000, 1.40000
+    color: '#1B2020'
+  - label: cab side wall
+    min: 0.58600, -1.13000, 0.99000
+    max: 0.60200, -0.55000, 1.69000
+    color: '#4B5656'
+  - label: cab side glazing
+    min: 0.58500, -1.11000, 1.07000
+    max: 0.60300, -0.57000, 1.65000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedCabWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: door lower border
+    min: 0.58300, -1.37000, 0.97000
+    max: 0.60500, -0.53000, 1.00500
+    color: '#6F7877'
+  - label: door vents and marker
+    min: 0.58100, -0.98000, 0.56000
+    max: 0.60700, -0.54000, 0.97000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedVentWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab entry step
+    min: 0.52500, -1.36000, 0.30000
+    max: 0.67500, -1.20000, 0.36000
+    color: '#333B3B'
+  - label: side mirror support
+    min: 0.56500, -1.24500, 1.27000
+    max: 0.69500, -1.21500, 1.31000
+    color: '#333B3B'
+  - label: side mirror housing
+    min: 0.67200, -1.25500, 1.24000
+    max: 0.72800, -1.20000, 1.40000
+    color: '#1B2020'
+  - label: front grille and lamps
+    min: -0.57000, -1.41400, 0.53000
+    max: 0.57000, -1.41000, 0.83000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedFrontGrille
+    surfaceAxis: XZ
+  - label: cargo deck structure
+    min: -0.60000, -0.49000, 0.50000
+    max: 0.60000, 1.46000, 0.66000
+    color: '#333B3B'
+  - label: cargo skirt panel
+    min: -0.60700, -0.48000, 0.51000
+    max: -0.59300, 1.45000, 0.75000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedBaseEast
+    surfaceAxis: YZ
+  - label: cargo skirt panel
+    min: 0.59300, -0.48000, 0.51000
+    max: 0.60700, 1.45000, 0.75000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedBaseWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: bare grooved deck
+    min: -0.56500, -0.46000, 0.66500
+    max: 0.56500, 1.43000, 0.66900
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedBareDeck
+    surfaceAxis: XY
+  - label: bare deck raised side rail
+    min: -0.58000, -0.48000, 0.66500
+    max: -0.53000, 1.46000, 0.70500
+    color: '#6F7877'
+  - label: bare deck raised side rail
+    min: 0.53000, -0.48000, 0.66500
+    max: 0.58000, 1.46000, 0.70500
+    color: '#6F7877'
+  - label: bare deck end rail
+    min: -0.57000, -0.47000, 0.66500
+    max: 0.57000, -0.42000, 0.70500
+    color: '#6F7877'
+  - label: bare deck end rail
+    min: -0.57000, 1.41000, 0.66500
+    max: 0.57000, 1.46000, 0.70500
+    color: '#6F7877'
+  - label: deck transverse rib
+    min: -0.53000, -0.23000, 0.67100
+    max: 0.53000, -0.20400, 0.69500
+    color: '#3F4848'
+  - label: deck transverse rib
+    min: -0.53000, 0.00000, 0.67100
+    max: 0.53000, 0.02600, 0.69500
+    color: '#3F4848'
+  - label: deck transverse rib
+    min: -0.53000, 0.23000, 0.67100
+    max: 0.53000, 0.25600, 0.69500
+    color: '#3F4848'
+  - label: deck transverse rib
+    min: -0.53000, 0.46000, 0.67100
+    max: 0.53000, 0.48600, 0.69500
+    color: '#3F4848'
+  - label: deck transverse rib
+    min: -0.53000, 0.69000, 0.67100
+    max: 0.53000, 0.71600, 0.69500
+    color: '#3F4848'
+  - label: deck transverse rib
+    min: -0.53000, 0.92000, 0.67100
+    max: 0.53000, 0.94600, 0.69500
+    color: '#3F4848'
+  - label: deck transverse rib
+    min: -0.53000, 1.15000, 0.67100
+    max: 0.53000, 1.17600, 0.69500
+    color: '#3F4848'
+  - label: recessed circular deck plate
+    min: -0.10000, 0.00000, 0.67100
+    max: 0.10000, 0.20000, 0.67700
+    color: '#272D2D'
+    shape: CylinderZ
+  - label: tie-down center
+    min: -0.02300, 0.07700, 0.67800
+    max: 0.02300, 0.12300, 0.69000
+    color: '#6F7877'
+    shape: CylinderZ
+  - label: recessed circular deck plate
+    min: -0.10000, 0.90000, 0.67100
+    max: 0.10000, 1.10000, 0.67700
+    color: '#272D2D'
+    shape: CylinderZ
+  - label: tie-down center
+    min: -0.02300, 0.97700, 0.67800
+    max: 0.02300, 1.02300, 0.69000
+    color: '#6F7877'
+    shape: CylinderZ
+  - label: sloped cab front backing
+    min: -0.57000, -1.41500, 1.03000
+    max: 0.57000, -1.14500, 1.68000
+    color: '#3F4848'
+    shape: WedgeY
+  - label: continuous sloped divided windscreen
+    min: -0.51500, -1.42000, 1.04400
+    max: 0.51500, -1.15000, 1.67000
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DTruckArtFullWindscreen
+    surfaceAxis: XZ
+  - label: sloping windshield side frame
+    min: -0.57000, -1.42400, 1.03500
+    max: -0.51500, -1.14500, 1.68300
+    color: '#6F7877'
+    shape: WedgeY
+  - label: sloping windshield side frame
+    min: 0.51500, -1.42400, 1.03500
+    max: 0.57000, -1.14500, 1.68300
+    color: '#6F7877'
+    shape: WedgeY
+- type: cmu3DModel
+  id: CMU3DAU14PropHemettTruckOpenBed
+  label: HEMETT open cargo bed
+  sourcePrototypes:
+  - AU14PropHemettTruckOpenBed
+  status: draft
+  referenceRsi: CMU14/Structures/vehicles/militarycargotrucks.rsi
+  referenceState: miltruck_2
+  sourceDirections: 4
+  groundOffset: 0.5, 0
+  description: Four-axle military truck reconstructed from all four source directions. Eight real capped-cylinder
+    tires, cab glazing and side/roof detail, raised deck and separate OpenBed construction. Explicit +0.5 map-X
+    ground pivot follows horizontal source framing without rotating around the entity or copying its screen-height
+    offset. Unseen chassis, physical heights, suspension and continuous sloped windshield and stepped canopy shoulders
+    are inferred. Static draft; no drivable vehicle behavior. See SOURCES_HEMETT.md.
+  parts:
+  - label: axle 1
+    min: -0.60000, -1.05500, 0.23000
+    max: 0.60000, -0.98500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.62500, -1.25000, 0.01500
+    max: -0.47500, -0.79000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 1 -1
+    min: -0.63500, -1.17500, 0.09000
+    max: -0.62700, -0.86500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 1 -1
+    min: -0.64700, -1.08500, 0.18000
+    max: -0.63500, -0.95500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.47500, -1.25000, 0.01500
+    max: 0.62500, -0.79000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 1 1
+    min: 0.62700, -1.17500, 0.09000
+    max: 0.63500, -0.86500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 1 1
+    min: 0.63500, -1.08500, 0.18000
+    max: 0.64700, -0.95500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.60000, -0.50500, 0.23000
+    max: 0.60000, -0.43500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.62500, -0.70000, 0.01500
+    max: -0.47500, -0.24000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 2 -1
+    min: -0.63500, -0.62500, 0.09000
+    max: -0.62700, -0.31500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 2 -1
+    min: -0.64700, -0.53500, 0.18000
+    max: -0.63500, -0.40500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.47500, -0.70000, 0.01500
+    max: 0.62500, -0.24000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 2 1
+    min: 0.62700, -0.62500, 0.09000
+    max: 0.63500, -0.31500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 2 1
+    min: 0.63500, -0.53500, 0.18000
+    max: 0.64700, -0.40500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: axle 3
+    min: -0.60000, 0.58500, 0.23000
+    max: 0.60000, 0.65500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 3 -1
+    min: -0.62500, 0.39000, 0.01500
+    max: -0.47500, 0.85000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 3 -1
+    min: -0.63500, 0.46500, 0.09000
+    max: -0.62700, 0.77500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 3 -1
+    min: -0.64700, 0.55500, 0.18000
+    max: -0.63500, 0.68500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 3 1
+    min: 0.47500, 0.39000, 0.01500
+    max: 0.62500, 0.85000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 3 1
+    min: 0.62700, 0.46500, 0.09000
+    max: 0.63500, 0.77500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 3 1
+    min: 0.63500, 0.55500, 0.18000
+    max: 0.64700, 0.68500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: axle 4
+    min: -0.60000, 1.08500, 0.23000
+    max: 0.60000, 1.15500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 4 -1
+    min: -0.62500, 0.89000, 0.01500
+    max: -0.47500, 1.35000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 4 -1
+    min: -0.63500, 0.96500, 0.09000
+    max: -0.62700, 1.27500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 4 -1
+    min: -0.64700, 1.05500, 0.18000
+    max: -0.63500, 1.18500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 4 1
+    min: 0.47500, 0.89000, 0.01500
+    max: 0.62500, 1.35000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 4 1
+    min: 0.62700, 0.96500, 0.09000
+    max: 0.63500, 1.27500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 4 1
+    min: 0.63500, 1.05500, 0.18000
+    max: 0.64700, 1.18500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: underframe
+    min: -0.45000, -1.40000, 0.27000
+    max: 0.45000, 1.43000, 0.45000
+    color: '#272D2D'
+  - label: long chassis beam
+    min: -0.50000, -1.40000, 0.39000
+    max: -0.43000, 1.45000, 0.53000
+    color: '#333B3B'
+  - label: long chassis beam
+    min: 0.43000, -1.40000, 0.39000
+    max: 0.50000, 1.45000, 0.53000
+    color: '#333B3B'
+  - label: low belly fuel tank
+    min: -0.49000, -0.20000, 0.23000
+    max: 0.49000, 0.36000, 0.48000
+    color: '#3F4848'
+  - label: rear bumper
+    min: -0.57000, 1.43000, 0.37000
+    max: 0.57000, 1.49000, 0.50000
+    color: '#636B6A'
+  - label: rear red tail lamp
+    min: -0.51000, 1.49100, 0.41000
+    max: -0.42000, 1.49600, 0.46500
+    color: '#805D55'
+  - label: rear red tail lamp
+    min: 0.42000, 1.49100, 0.41000
+    max: 0.51000, 1.49600, 0.46500
+    color: '#805D55'
+  - label: front bumper
+    min: -0.62000, -1.49000, 0.38000
+    max: 0.62000, -1.42000, 0.52000
+    color: '#272D2D'
+  - label: cab lower body
+    min: -0.60000, -1.41000, 0.51000
+    max: 0.60000, -0.50000, 1.01500
+    color: '#4B5656'
+  - label: cab rear bulkhead
+    min: -0.58500, -0.57000, 0.94000
+    max: 0.58500, -0.49000, 1.72000
+    color: '#3F4848'
+  - label: cab roof backing
+    min: -0.57000, -1.18000, 1.68000
+    max: 0.57000, -0.50000, 1.76000
+    color: '#4B5656'
+  - label: roof hatches and vents
+    min: -0.55000, -1.16500, 1.76100
+    max: 0.55000, -0.51500, 1.76500
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedCabRoof
+    surfaceAxis: XY
+  - label: cab side wall
+    min: -0.60200, -1.13000, 0.99000
+    max: -0.58600, -0.55000, 1.69000
+    color: '#4B5656'
+  - label: cab side glazing
+    min: -0.60300, -1.11000, 1.07000
+    max: -0.58500, -0.57000, 1.65000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedCabEast
+    surfaceAxis: YZ
+  - label: door lower border
+    min: -0.60500, -1.37000, 0.97000
+    max: -0.58300, -0.53000, 1.00500
+    color: '#6F7877'
+  - label: door vents and marker
+    min: -0.60700, -0.98000, 0.56000
+    max: -0.58100, -0.54000, 0.97000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedVentEast
+    surfaceAxis: YZ
+  - label: cab entry step
+    min: -0.67500, -1.36000, 0.30000
+    max: -0.52500, -1.20000, 0.36000
+    color: '#333B3B'
+  - label: side mirror support
+    min: -0.69500, -1.24500, 1.27000
+    max: -0.56500, -1.21500, 1.31000
+    color: '#333B3B'
+  - label: side mirror housing
+    min: -0.72800, -1.25500, 1.24000
+    max: -0.67200, -1.20000, 1.40000
+    color: '#1B2020'
+  - label: cab side wall
+    min: 0.58600, -1.13000, 0.99000
+    max: 0.60200, -0.55000, 1.69000
+    color: '#4B5656'
+  - label: cab side glazing
+    min: 0.58500, -1.11000, 1.07000
+    max: 0.60300, -0.57000, 1.65000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedCabWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: door lower border
+    min: 0.58300, -1.37000, 0.97000
+    max: 0.60500, -0.53000, 1.00500
+    color: '#6F7877'
+  - label: door vents and marker
+    min: 0.58100, -0.98000, 0.56000
+    max: 0.60700, -0.54000, 0.97000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedVentWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab entry step
+    min: 0.52500, -1.36000, 0.30000
+    max: 0.67500, -1.20000, 0.36000
+    color: '#333B3B'
+  - label: side mirror support
+    min: 0.56500, -1.24500, 1.27000
+    max: 0.69500, -1.21500, 1.31000
+    color: '#333B3B'
+  - label: side mirror housing
+    min: 0.67200, -1.25500, 1.24000
+    max: 0.72800, -1.20000, 1.40000
+    color: '#1B2020'
+  - label: front grille and lamps
+    min: -0.57000, -1.41400, 0.53000
+    max: 0.57000, -1.41000, 0.83000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedFrontGrille
+    surfaceAxis: XZ
+  - label: cargo deck structure
+    min: -0.60000, -0.49000, 0.50000
+    max: 0.60000, 1.46000, 0.66000
+    color: '#333B3B'
+  - label: cargo skirt panel
+    min: -0.60700, -0.48000, 0.51000
+    max: -0.59300, 1.45000, 0.75000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtOpenBedBaseEast
+    surfaceAxis: YZ
+  - label: cargo skirt panel
+    min: 0.59300, -0.48000, 0.51000
+    max: 0.60700, 1.45000, 0.75000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtOpenBedBaseWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: ribbed bed floor
+    min: -0.53500, -0.46000, 0.66500
+    max: 0.53500, 1.41000, 0.66900
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtOpenBedOpenDeck
+    surfaceAxis: XY
+  - label: cargo bed wall
+    min: -0.59500, -0.48000, 0.67000
+    max: -0.54500, 1.45000, 1.43000
+    color: '#4B5656'
+  - label: vertical cargo wall ribs
+    min: -0.59800, -0.47000, 0.76000
+    max: -0.54200, 1.44000, 1.42000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtOpenBedWallEast
+    surfaceAxis: YZ
+  - label: bed top edge rail
+    min: -0.60600, -0.48000, 1.43000
+    max: -0.53400, 1.45000, 1.47000
+    color: '#6F7877'
+  - label: cargo bed wall
+    min: 0.54500, -0.48000, 0.67000
+    max: 0.59500, 1.45000, 1.43000
+    color: '#4B5656'
+  - label: vertical cargo wall ribs
+    min: 0.54200, -0.47000, 0.76000
+    max: 0.59800, 1.44000, 1.42000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtOpenBedWallWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: bed top edge rail
+    min: 0.53400, -0.48000, 1.43000
+    max: 0.60600, 1.45000, 1.47000
+    color: '#6F7877'
+  - label: bed end wall
+    min: -0.55000, -0.49000, 0.67000
+    max: 0.55000, -0.43000, 1.43000
+    color: '#4B5656'
+  - label: end top edge rail
+    min: -0.60000, -0.49600, 1.43000
+    max: 0.60000, -0.42400, 1.47000
+    color: '#6F7877'
+  - label: end panel rib
+    min: -0.42400, -0.49600, 0.72000
+    max: -0.37600, -0.42400, 1.39000
+    color: '#333B3B'
+  - label: end panel rib
+    min: -0.02400, -0.49600, 0.72000
+    max: 0.02400, -0.42400, 1.39000
+    color: '#333B3B'
+  - label: end panel rib
+    min: 0.37600, -0.49600, 0.72000
+    max: 0.42400, -0.42400, 1.39000
+    color: '#333B3B'
+  - label: bed end wall
+    min: -0.55000, 1.39000, 0.67000
+    max: 0.55000, 1.45000, 1.43000
+    color: '#4B5656'
+  - label: end top edge rail
+    min: -0.60000, 1.38400, 1.43000
+    max: 0.60000, 1.45600, 1.47000
+    color: '#6F7877'
+  - label: end panel rib
+    min: -0.42400, 1.38400, 0.72000
+    max: -0.37600, 1.45600, 1.39000
+    color: '#333B3B'
+  - label: end panel rib
+    min: -0.02400, 1.38400, 0.72000
+    max: 0.02400, 1.45600, 1.39000
+    color: '#333B3B'
+  - label: end panel rib
+    min: 0.37600, 1.38400, 0.72000
+    max: 0.42400, 1.45600, 1.39000
+    color: '#333B3B'
+  - label: sloped cab front backing
+    min: -0.57000, -1.41500, 1.03000
+    max: 0.57000, -1.14500, 1.68000
+    color: '#3F4848'
+    shape: WedgeY
+  - label: continuous sloped divided windscreen
+    min: -0.51500, -1.42000, 1.04400
+    max: 0.51500, -1.15000, 1.67000
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DTruckArtFullWindscreen
+    surfaceAxis: XZ
+  - label: sloping windshield side frame
+    min: -0.57000, -1.42400, 1.03500
+    max: -0.51500, -1.14500, 1.68300
+    color: '#6F7877'
+    shape: WedgeY
+  - label: sloping windshield side frame
+    min: 0.51500, -1.42400, 1.03500
+    max: 0.57000, -1.14500, 1.68300
+    color: '#6F7877'
+    shape: WedgeY
+- type: cmu3DModel
+  id: CMU3DAU14PropHemettTruckClosedBed
+  label: HEMETT canvas-covered cargo bed
+  sourcePrototypes:
+  - AU14PropHemettTruckClosedBed
+  status: draft
+  referenceRsi: CMU14/Structures/vehicles/militarycargotrucks.rsi
+  referenceState: miltruck_3
+  sourceDirections: 4
+  groundOffset: 0.5, 0
+  description: Four-axle military truck reconstructed from all four source directions. Eight real capped-cylinder
+    tires, cab glazing and side/roof detail, raised deck and separate ClosedBed construction. Explicit +0.5 map-X
+    ground pivot follows horizontal source framing without rotating around the entity or copying its screen-height
+    offset. Unseen chassis, physical heights, suspension and continuous sloped windshield and stepped canopy shoulders
+    are inferred. Static draft; no drivable vehicle behavior. See SOURCES_HEMETT.md.
+  parts:
+  - label: axle 1
+    min: -0.60000, -1.05500, 0.23000
+    max: 0.60000, -0.98500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 1 -1
+    min: -0.62500, -1.25000, 0.01500
+    max: -0.47500, -0.79000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 1 -1
+    min: -0.63500, -1.17500, 0.09000
+    max: -0.62700, -0.86500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 1 -1
+    min: -0.64700, -1.08500, 0.18000
+    max: -0.63500, -0.95500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 1 1
+    min: 0.47500, -1.25000, 0.01500
+    max: 0.62500, -0.79000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 1 1
+    min: 0.62700, -1.17500, 0.09000
+    max: 0.63500, -0.86500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 1 1
+    min: 0.63500, -1.08500, 0.18000
+    max: 0.64700, -0.95500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: axle 2
+    min: -0.60000, -0.50500, 0.23000
+    max: 0.60000, -0.43500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 2 -1
+    min: -0.62500, -0.70000, 0.01500
+    max: -0.47500, -0.24000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 2 -1
+    min: -0.63500, -0.62500, 0.09000
+    max: -0.62700, -0.31500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 2 -1
+    min: -0.64700, -0.53500, 0.18000
+    max: -0.63500, -0.40500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 2 1
+    min: 0.47500, -0.70000, 0.01500
+    max: 0.62500, -0.24000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 2 1
+    min: 0.62700, -0.62500, 0.09000
+    max: 0.63500, -0.31500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 2 1
+    min: 0.63500, -0.53500, 0.18000
+    max: 0.64700, -0.40500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: axle 3
+    min: -0.60000, 0.58500, 0.23000
+    max: 0.60000, 0.65500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 3 -1
+    min: -0.62500, 0.39000, 0.01500
+    max: -0.47500, 0.85000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 3 -1
+    min: -0.63500, 0.46500, 0.09000
+    max: -0.62700, 0.77500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 3 -1
+    min: -0.64700, 0.55500, 0.18000
+    max: -0.63500, 0.68500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 3 1
+    min: 0.47500, 0.39000, 0.01500
+    max: 0.62500, 0.85000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 3 1
+    min: 0.62700, 0.46500, 0.09000
+    max: 0.63500, 0.77500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 3 1
+    min: 0.63500, 0.55500, 0.18000
+    max: 0.64700, 0.68500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: axle 4
+    min: -0.60000, 1.08500, 0.23000
+    max: 0.60000, 1.15500, 0.30000
+    color: '#272D2D'
+    shape: CylinderX
+  - label: tire 4 -1
+    min: -0.62500, 0.89000, 0.01500
+    max: -0.47500, 1.35000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 4 -1
+    min: -0.63500, 0.96500, 0.09000
+    max: -0.62700, 1.27500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 4 -1
+    min: -0.64700, 1.05500, 0.18000
+    max: -0.63500, 1.18500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: tire 4 1
+    min: 0.47500, 0.89000, 0.01500
+    max: 0.62500, 1.35000, 0.47500
+    color: '#1B2020'
+    shape: CylinderX
+  - label: recessed metal wheel rim 4 1
+    min: 0.62700, 0.96500, 0.09000
+    max: 0.63500, 1.27500, 0.40000
+    color: '#585F5E'
+    shape: CylinderX
+  - label: wheel hub 4 1
+    min: 0.63500, 1.05500, 0.18000
+    max: 0.64700, 1.18500, 0.31000
+    color: '#78807B'
+    shape: CylinderX
+  - label: underframe
+    min: -0.45000, -1.40000, 0.27000
+    max: 0.45000, 1.43000, 0.45000
+    color: '#272D2D'
+  - label: long chassis beam
+    min: -0.50000, -1.40000, 0.39000
+    max: -0.43000, 1.45000, 0.53000
+    color: '#333B3B'
+  - label: long chassis beam
+    min: 0.43000, -1.40000, 0.39000
+    max: 0.50000, 1.45000, 0.53000
+    color: '#333B3B'
+  - label: low belly fuel tank
+    min: -0.49000, -0.20000, 0.23000
+    max: 0.49000, 0.36000, 0.48000
+    color: '#3F4848'
+  - label: rear bumper
+    min: -0.57000, 1.43000, 0.37000
+    max: 0.57000, 1.49000, 0.50000
+    color: '#636B6A'
+  - label: rear red tail lamp
+    min: -0.51000, 1.49100, 0.41000
+    max: -0.42000, 1.49600, 0.46500
+    color: '#805D55'
+  - label: rear red tail lamp
+    min: 0.42000, 1.49100, 0.41000
+    max: 0.51000, 1.49600, 0.46500
+    color: '#805D55'
+  - label: front bumper
+    min: -0.62000, -1.49000, 0.38000
+    max: 0.62000, -1.42000, 0.52000
+    color: '#272D2D'
+  - label: cab lower body
+    min: -0.60000, -1.41000, 0.51000
+    max: 0.60000, -0.50000, 1.01500
+    color: '#4B5656'
+  - label: cab rear bulkhead
+    min: -0.58500, -0.57000, 0.94000
+    max: 0.58500, -0.49000, 1.72000
+    color: '#3F4848'
+  - label: cab roof backing
+    min: -0.57000, -1.18000, 1.68000
+    max: 0.57000, -0.50000, 1.76000
+    color: '#4B5656'
+  - label: roof hatches and vents
+    min: -0.55000, -1.16500, 1.76100
+    max: 0.55000, -0.51500, 1.76500
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedCabRoof
+    surfaceAxis: XY
+  - label: cab side wall
+    min: -0.60200, -1.13000, 0.99000
+    max: -0.58600, -0.55000, 1.69000
+    color: '#4B5656'
+  - label: cab side glazing
+    min: -0.60300, -1.11000, 1.07000
+    max: -0.58500, -0.57000, 1.65000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedCabEast
+    surfaceAxis: YZ
+  - label: door lower border
+    min: -0.60500, -1.37000, 0.97000
+    max: -0.58300, -0.53000, 1.00500
+    color: '#6F7877'
+  - label: door vents and marker
+    min: -0.60700, -0.98000, 0.56000
+    max: -0.58100, -0.54000, 0.97000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedVentEast
+    surfaceAxis: YZ
+  - label: cab entry step
+    min: -0.67500, -1.36000, 0.30000
+    max: -0.52500, -1.20000, 0.36000
+    color: '#333B3B'
+  - label: side mirror support
+    min: -0.69500, -1.24500, 1.27000
+    max: -0.56500, -1.21500, 1.31000
+    color: '#333B3B'
+  - label: side mirror housing
+    min: -0.72800, -1.25500, 1.24000
+    max: -0.67200, -1.20000, 1.40000
+    color: '#1B2020'
+  - label: cab side wall
+    min: 0.58600, -1.13000, 0.99000
+    max: 0.60200, -0.55000, 1.69000
+    color: '#4B5656'
+  - label: cab side glazing
+    min: 0.58500, -1.11000, 1.07000
+    max: 0.60300, -0.57000, 1.65000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedCabWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: door lower border
+    min: 0.58300, -1.37000, 0.97000
+    max: 0.60500, -0.53000, 1.00500
+    color: '#6F7877'
+  - label: door vents and marker
+    min: 0.58100, -0.98000, 0.56000
+    max: 0.60700, -0.54000, 0.97000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedVentWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: cab entry step
+    min: 0.52500, -1.36000, 0.30000
+    max: 0.67500, -1.20000, 0.36000
+    color: '#333B3B'
+  - label: side mirror support
+    min: 0.56500, -1.24500, 1.27000
+    max: 0.69500, -1.21500, 1.31000
+    color: '#333B3B'
+  - label: side mirror housing
+    min: 0.67200, -1.25500, 1.24000
+    max: 0.72800, -1.20000, 1.40000
+    color: '#1B2020'
+  - label: front grille and lamps
+    min: -0.57000, -1.41400, 0.53000
+    max: 0.57000, -1.41000, 0.83000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtNoBedFrontGrille
+    surfaceAxis: XZ
+  - label: cargo deck structure
+    min: -0.60000, -0.49000, 0.50000
+    max: 0.60000, 1.46000, 0.66000
+    color: '#333B3B'
+  - label: cargo skirt panel
+    min: -0.60700, -0.48000, 0.51000
+    max: -0.59300, 1.45000, 0.75000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtOpenBedBaseEast
+    surfaceAxis: YZ
+  - label: cargo skirt panel
+    min: 0.59300, -0.48000, 0.51000
+    max: 0.60700, 1.45000, 0.75000
+    color: '#FFFFFF'
+    surface: CMU3DTruckArtOpenBedBaseWest
+    surfaceAxis: YZ
+    surfaceFlipU: true
+  - label: canvas lower shadow
+    min: -0.58000, -0.49000, 0.75000
+    max: 0.58000, 1.45000, 1.16000
+    color: '#1B241C'
+  - label: canvas covered volume
+    min: -0.58000, -0.49000, 1.16000
+    max: 0.58000, 1.45000, 1.85000
+    color: '#49584B'
+  - label: rounded cover shoulder
+    min: -0.55000, -0.49000, 1.85000
+    max: 0.55000, 1.45000, 1.92500
+    color: '#49584B'
+  - label: rounded canvas crown
+    min: -0.47000, -0.49000, 1.92500
+    max: 0.47000, 1.45000, 1.96000
+    color: '#59695B'
+  - label: canvas transverse strap
+    min: -0.48000, -0.48200, 1.96100
+    max: 0.48000, -0.43800, 1.96900
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: -0.59300, -0.48200, 0.76000
+    max: -0.56700, -0.43800, 1.85000
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: 0.56700, -0.48200, 0.76000
+    max: 0.59300, -0.43800, 1.85000
+    color: '#81937F'
+  - label: canvas transverse strap
+    min: -0.48000, -0.17200, 1.96100
+    max: 0.48000, -0.12800, 1.96900
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: -0.59300, -0.17200, 0.76000
+    max: -0.56700, -0.12800, 1.85000
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: 0.56700, -0.17200, 0.76000
+    max: 0.59300, -0.12800, 1.85000
+    color: '#81937F'
+  - label: canvas transverse strap
+    min: -0.48000, 0.14800, 1.96100
+    max: 0.48000, 0.19200, 1.96900
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: -0.59300, 0.14800, 0.76000
+    max: -0.56700, 0.19200, 1.85000
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: 0.56700, 0.14800, 0.76000
+    max: 0.59300, 0.19200, 1.85000
+    color: '#81937F'
+  - label: canvas transverse strap
+    min: -0.48000, 0.46800, 1.96100
+    max: 0.48000, 0.51200, 1.96900
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: -0.59300, 0.46800, 0.76000
+    max: -0.56700, 0.51200, 1.85000
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: 0.56700, 0.46800, 0.76000
+    max: 0.59300, 0.51200, 1.85000
+    color: '#81937F'
+  - label: canvas transverse strap
+    min: -0.48000, 0.78800, 1.96100
+    max: 0.48000, 0.83200, 1.96900
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: -0.59300, 0.78800, 0.76000
+    max: -0.56700, 0.83200, 1.85000
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: 0.56700, 0.78800, 0.76000
+    max: 0.59300, 0.83200, 1.85000
+    color: '#81937F'
+  - label: canvas transverse strap
+    min: -0.48000, 1.10800, 1.96100
+    max: 0.48000, 1.15200, 1.96900
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: -0.59300, 1.10800, 0.76000
+    max: -0.56700, 1.15200, 1.85000
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: 0.56700, 1.10800, 0.76000
+    max: 0.59300, 1.15200, 1.85000
+    color: '#81937F'
+  - label: canvas transverse strap
+    min: -0.48000, 1.39800, 1.96100
+    max: 0.48000, 1.44200, 1.96900
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: -0.59300, 1.39800, 0.76000
+    max: -0.56700, 1.44200, 1.85000
+    color: '#81937F'
+  - label: canvas tie-down strap
+    min: 0.56700, 1.39800, 0.76000
+    max: 0.59300, 1.44200, 1.85000
+    color: '#81937F'
+  - label: rear flap darker lower opening
+    min: -0.52000, 1.45100, 0.77000
+    max: 0.52000, 1.45600, 1.15000
+    color: '#111B14'
+  - label: sloped cab front backing
+    min: -0.57000, -1.41500, 1.03000
+    max: 0.57000, -1.14500, 1.68000
+    color: '#3F4848'
+    shape: WedgeY
+  - label: continuous sloped divided windscreen
+    min: -0.51500, -1.42000, 1.04400
+    max: 0.51500, -1.15000, 1.67000
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DTruckArtFullWindscreen
+    surfaceAxis: XZ
+  - label: sloping windshield side frame
+    min: -0.57000, -1.42400, 1.03500
+    max: -0.51500, -1.14500, 1.68300
+    color: '#6F7877'
+    shape: WedgeY
+  - label: sloping windshield side frame
+    min: 0.51500, -1.42400, 1.03500
+    max: 0.57000, -1.14500, 1.68300
+    color: '#6F7877'
+    shape: WedgeY
+  - label: strap around lower canvas shoulder
+    min: -0.58800, -0.48200, 1.84500
+    max: -0.54800, -0.43800, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: -0.55900, -0.48200, 1.92200
+    max: -0.46600, -0.43800, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: 0.54800, -0.48200, 1.84500
+    max: 0.58800, -0.43800, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: 0.46600, -0.48200, 1.92200
+    max: 0.55900, -0.43800, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: -0.58800, -0.17200, 1.84500
+    max: -0.54800, -0.12800, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: -0.55900, -0.17200, 1.92200
+    max: -0.46600, -0.12800, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: 0.54800, -0.17200, 1.84500
+    max: 0.58800, -0.12800, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: 0.46600, -0.17200, 1.92200
+    max: 0.55900, -0.12800, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: -0.58800, 0.14800, 1.84500
+    max: -0.54800, 0.19200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: -0.55900, 0.14800, 1.92200
+    max: -0.46600, 0.19200, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: 0.54800, 0.14800, 1.84500
+    max: 0.58800, 0.19200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: 0.46600, 0.14800, 1.92200
+    max: 0.55900, 0.19200, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: -0.58800, 0.46800, 1.84500
+    max: -0.54800, 0.51200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: -0.55900, 0.46800, 1.92200
+    max: -0.46600, 0.51200, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: 0.54800, 0.46800, 1.84500
+    max: 0.58800, 0.51200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: 0.46600, 0.46800, 1.92200
+    max: 0.55900, 0.51200, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: -0.58800, 0.78800, 1.84500
+    max: -0.54800, 0.83200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: -0.55900, 0.78800, 1.92200
+    max: -0.46600, 0.83200, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: 0.54800, 0.78800, 1.84500
+    max: 0.58800, 0.83200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: 0.46600, 0.78800, 1.92200
+    max: 0.55900, 0.83200, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: -0.58800, 1.10800, 1.84500
+    max: -0.54800, 1.15200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: -0.55900, 1.10800, 1.92200
+    max: -0.46600, 1.15200, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: 0.54800, 1.10800, 1.84500
+    max: 0.58800, 1.15200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: 0.46600, 1.10800, 1.92200
+    max: 0.55900, 1.15200, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: -0.58800, 1.39800, 1.84500
+    max: -0.54800, 1.44200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: -0.55900, 1.39800, 1.92200
+    max: -0.46600, 1.44200, 1.96900
+    color: '#81937F'
+  - label: strap around lower canvas shoulder
+    min: 0.54800, 1.39800, 1.84500
+    max: 0.58800, 1.44200, 1.93300
+    color: '#81937F'
+  - label: strap around upper canvas shoulder
+    min: 0.46600, 1.39800, 1.92200
+    max: 0.55900, 1.44200, 1.96900
+    color: '#81937F'

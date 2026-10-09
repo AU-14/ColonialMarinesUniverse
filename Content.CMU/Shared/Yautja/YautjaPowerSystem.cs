@@ -132,8 +132,11 @@ public sealed partial class YautjaPowerSystem : EntitySystem
         AddAction(ent.Comp, ref args, ref ent.Comp.OpenBracerMenuAction, ent.Comp.OpenBracerMenuActionId);
         AddAction(ent.Comp, ref args, ref ent.Comp.ToggleCloakAction, ent.Comp.ToggleCloakActionId);
         AddAction(ent.Comp, ref args, ref ent.Comp.RecallAction, ent.Comp.RecallActionId);
-        AddAction(ent.Comp, ref args, ref ent.Comp.CreateFieldRationAction, ent.Comp.CreateFieldRationActionId);
-        AddAction(ent.Comp, ref args, ref ent.Comp.CreateHuntingCanteenAction, ent.Comp.CreateHuntingCanteenActionId);
+        // the action proto + handler existed but nothing ever granted it, so sd was menu-only
+        // and the drag-a-dead-hunter path was unreachable. whitelist still keeps it off military bracers,
+        // youngbloods can't sd at all so no point giving them a button that just says no
+        if (!HasComp<YautjaYoungbloodComponent>(args.User))
+            AddAction(ent.Comp, ref args, ref ent.Comp.SelfDestructAction, ent.Comp.SelfDestructActionId);
 
         if (ent.Comp.EnableRaiseThrall)
             AddAction(ent.Comp, ref args, ref ent.Comp.RaiseThrallAction, ent.Comp.RaiseThrallActionId);

@@ -82,6 +82,22 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
         "CMJobXenoSentinel",
         "CMJobXenoSpitter",
         "CMJobXenoWarrior",
+
+        // Pathogen castes keep their own trackers and count as xeno time.
+        "CMU14JobPathogenAberration",
+        "CMU14JobPathogenBlight",
+        "CMUJobPathogenBloodburster",
+        "CMU14JobPathogenBrute",
+        "CMU14JobPathogenConditor",
+        "CMU14JobPathogenHarbinger",
+        "CMU14JobPathogenHaze",
+        "CMU14JobPathogenMatriarch",
+        "CMU14JobPathogenNeomorph",
+        "CMU14JobPathogenOvermind",
+        "CMU14JobPathogenPopper",
+        "CMU14JobPathogenRoot",
+        "CMU14JobPathogenSprinter",
+        "CMU14JobPathogenVenator",
     };
 
     [Dependency] private ISharedAdminLogManager _adminLog = default!;

@@ -254,11 +254,11 @@ ent-CMUYautjaHealingGun = healing gun
 ent-CMUYautjaAlienHealthAnalyzer = alien health analyzer
     .desc = A bio-scanner tuned for alien physiology and battlefield triage.
 
-ent-CMUYautjaAutoInjector = yautja autoinjector
-    .desc = An alien autoinjector loaded with a strong trauma and burn treatment cocktail.
+ent-CMUYautjaAutoInjector = unusual crystal
+    .desc = A strange glowing crystal with a spike at one end.
 
-ent-CMUYautjaThrallAutoInjector = yautja autoinjector
-    .desc = An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.
+ent-CMUYautjaThrallAutoInjector = orange unusual crystal
+    .desc = A strange glowing crystal with a spike at one end.
 
 ent-CMUYautjaHerbalCase = herbs case
     .desc = A small case packed with Yautja trauma poultices and burn salves.
@@ -446,6 +446,9 @@ ent-CMUYautjaRelayBeacon = relay beacon
 
 ent-CMUYautjaSimpleRelayBeacon = simple relay beacon
     .desc = A device covered in sacred text. It whirrs and beeps every couple of seconds.
+
+ent-CMUYautjaYoungbloodRelayBeacon = youngblood relay beacon
+    .desc = A device covered in sacred text, attuned to young hunters. It whirrs and beeps every couple of seconds.
 
 ent-CMUYautjaFalconDrone = falcon drone
     .desc = An agile drone used by Yautja to survey the hunting grounds.

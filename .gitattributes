@@ -31,3 +31,6 @@
 ###############################################################################
 Resources/Maps/**/*.yml merge=mapping-merge-driver
 Content.CMU/Resources/Maps/**/*.yml merge=mapping-merge-driver
+
+# CMU14: Garrison model exports are binary assets.
+*.glb binary

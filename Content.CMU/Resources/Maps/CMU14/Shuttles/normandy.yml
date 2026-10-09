@@ -1214,13 +1214,13 @@ entities:
   - uid: 104
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad
       pos: 1.5,8.5
       parent: 2
   - uid: 161
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad
       pos: -0.5,8.5
       parent: 2
 - proto: dropshipweaponsvmarker
@@ -1228,7 +1228,7 @@ entities:
   - uid: 160
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad
       pos: 0.5,8.5
       parent: 2
 - proto: RMCEngineAttachmentPoint

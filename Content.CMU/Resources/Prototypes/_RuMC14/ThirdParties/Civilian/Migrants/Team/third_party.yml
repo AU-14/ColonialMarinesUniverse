@@ -11,7 +11,7 @@
   id: Migrant_UPP
   announceAsSurvivors: true
   partyspawn: RuMCMigrantSpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -20,5 +20,5 @@
   weight: 0
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: false

@@ -1,0 +1,4962 @@
+# Draft loose uniform icon geometry; see SOURCES_UNIFORMS_EXTRA_CLOUD.md.
+- type: cmu3DModel
+  id: CMU3DAU14CivilianBaristaClothesWorldCloud
+  label: AU14CivilianBaristaClothes laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianBaristaClothes
+  referencePrototype: AU14CivilianBaristaClothes
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Uniforms/cuppajoesuniform.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Barista set: broad taupe short sleeves, wide connected shirt, low turned V collar, dark shirt hem,
+    small waist tab and longer paired black folded trousers with an open lower split. Default base dropped/world
+    icon only. No actor, worn, held, accessories, stains, camouflage changes, live tint, folded worn prefixes or
+    animations. Physical thickness and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: barista continuous rear shirt
+    min: -0.1484375, -0.1328125, 0.004
+    max: 0.1171875, 0.125, 0.027
+    color: '#474249'
+  - label: left barista shirt continuous cloth panel
+    min: -0.15, -0.1203125, 0.008
+    max: -0.015625, 0.0921875, 0.04
+    color: '#9E978F'
+  - label: left barista shirt left turned edge
+    min: -0.1546875, -0.120625, 0.006
+    max: -0.1396875, 0.0925, 0.035
+    color: '#474249'
+    shape: CylinderY
+  - label: left barista shirt right turned edge
+    min: -0.0259375, -0.120625, 0.006
+    max: -0.0109375, 0.0925, 0.035
+    color: '#474249'
+    shape: CylinderY
+  - label: left barista shirt lower folded edge
+    min: -0.1490625, -0.125, 0.007
+    max: -0.0165625, -0.10875, 0.032
+    color: '#474249'
+    shape: CylinderX
+  - label: left barista shirt left shallow folded fabric
+    min: -0.19, -0.0265625, 0.03
+    max: 0.000625, -0.0015625, 0.046
+    color: '#9E978F'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left barista shirt right shallow folded fabric
+    min: -0.16625, -0.0265625, 0.03
+    max: 0.024375, -0.0015625, 0.046
+    color: '#9E978F'
+    shape: WedgeY
+    yaw: 90
+  - label: right barista shirt continuous cloth panel
+    min: -0.015625, -0.1203125, 0.008
+    max: 0.11875, 0.0921875, 0.04
+    color: '#9E978F'
+  - label: right barista shirt left turned edge
+    min: -0.0203125, -0.120625, 0.006
+    max: -0.0053125, 0.0925, 0.035
+    color: '#474249'
+    shape: CylinderY
+  - label: right barista shirt right turned edge
+    min: 0.1084375, -0.120625, 0.006
+    max: 0.1234375, 0.0925, 0.035
+    color: '#474249'
+    shape: CylinderY
+  - label: right barista shirt lower folded edge
+    min: -0.0146875, -0.125, 0.007
+    max: 0.1178125, -0.10875, 0.032
+    color: '#474249'
+    shape: CylinderX
+  - label: right barista shirt left shallow folded fabric
+    min: -0.055625, -0.0265625, 0.03
+    max: 0.135, -0.0015625, 0.046
+    color: '#9E978F'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right barista shirt right shallow folded fabric
+    min: -0.031875, -0.0265625, 0.03
+    max: 0.15875, -0.0015625, 0.046
+    color: '#9E978F'
+    shape: WedgeY
+    yaw: 90
+  - label: low inner collar facing
+    min: -0.08125, 0.078125, 0.006
+    max: 0.05, 0.1546875, 0.022
+    color: '#2C2935'
+  - label: left barista shoulder
+    min: -0.1762881, 0.0898438, 0.007
+    max: -0.0987119, 0.1648437, 0.039
+    color: '#A69F98'
+    yaw: -108.799885
+  - label: left broad short sleeve
+    min: -0.23089, 0.03125, 0.008
+    max: -0.1362975, 0.11875, 0.038
+    color: '#A69F98'
+    yaw: -120.801446
+  - label: left turned short sleeve cuff
+    min: -0.2291728, 0.0148437, 0.024
+    max: -0.1739522, 0.0367187, 0.046
+    color: '#9E978F'
+    yaw: -25.114835
+  - label: left continuous collar fold
+    min: -0.1275067, 0.0992187, 0.028
+    max: -0.0224933, 0.1335938, 0.054
+    color: '#9D968E'
+    yaw: -46.808739
+  - label: left collar dark inner edge
+    min: -0.092704, 0.1164063, 0.018
+    max: -0.0307335, 0.1242188, 0.04
+    color: '#474249'
+    yaw: -33.690068
+  - label: right barista shoulder
+    min: 0.0674619, 0.0898438, 0.007
+    max: 0.1450381, 0.1648437, 0.039
+    color: '#A69F98'
+    yaw: -71.200115
+  - label: right broad short sleeve
+    min: 0.1050475, 0.03125, 0.008
+    max: 0.19964, 0.11875, 0.038
+    color: '#A69F98'
+    yaw: -59.198554
+  - label: right turned short sleeve cuff
+    min: 0.1427022, 0.0148437, 0.024
+    max: 0.1979228, 0.0367187, 0.046
+    color: '#9E978F'
+    yaw: -154.885165
+  - label: right continuous collar fold
+    min: -0.0087567, 0.0992187, 0.028
+    max: 0.0962567, 0.1335938, 0.054
+    color: '#9D968E'
+    yaw: -133.191261
+  - label: right collar dark inner edge
+    min: -0.0005165, 0.1164063, 0.018
+    max: 0.061454, 0.1242188, 0.04
+    color: '#474249'
+    yaw: -146.309932
+  - label: barista central button placket
+    min: -0.028125, -0.1390625, 0.03
+    max: -0.003125, 0.09375, 0.049
+    color: '#7E746B'
+  - label: barista dark shirt hem
+    min: -0.15, -0.1265625, 0.024
+    max: 0.11875, -0.09375, 0.043
+    color: '#474249'
+  - label: black trousers connecting waistband
+    min: -0.153125, -0.1640625, 0.004
+    max: 0.121875, -0.1125, 0.031
+    color: '#151515'
+  - label: left extended trouser leg continuous cloth panel
+    min: -0.15, -0.2765625, 0.008
+    max: -0.0353125, -0.1390625, 0.03
+    color: '#393B3E'
+  - label: left extended trouser leg left turned edge
+    min: -0.1546875, -0.276875, 0.006
+    max: -0.1396875, -0.13875, 0.024999999999999998
+    color: '#1C1D1F'
+    shape: CylinderY
+  - label: left extended trouser leg right turned edge
+    min: -0.045625, -0.276875, 0.006
+    max: -0.030625, -0.13875, 0.024999999999999998
+    color: '#1C1D1F'
+    shape: CylinderY
+  - label: left extended trouser leg lower folded edge
+    min: -0.1490625, -0.28125, 0.007
+    max: -0.03625, -0.265, 0.022
+    color: '#1C1D1F'
+    shape: CylinderX
+  - label: left extended trouser leg left shallow folded fabric
+    min: -0.1623438, -0.2203125, 0.019999999999999997
+    max: -0.0467188, -0.1953125, 0.036
+    color: '#393B3E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left extended trouser leg right shallow folded fabric
+    min: -0.1385937, -0.2203125, 0.019999999999999997
+    max: -0.0229687, -0.1953125, 0.036
+    color: '#393B3E'
+    shape: WedgeY
+    yaw: 90
+  - label: left black trouser pressed fold
+    min: -0.0995313, -0.265625, 0.023
+    max: -0.0857812, -0.1625, 0.038
+    color: '#303234'
+    shape: CylinderY
+  - label: right extended trouser leg continuous cloth panel
+    min: 0.0040625, -0.2765625, 0.008
+    max: 0.11875, -0.1390625, 0.03
+    color: '#393B3E'
+  - label: right extended trouser leg left turned edge
+    min: -0.000625, -0.276875, 0.006
+    max: 0.014375, -0.13875, 0.024999999999999998
+    color: '#1C1D1F'
+    shape: CylinderY
+  - label: right extended trouser leg right turned edge
+    min: 0.1084375, -0.276875, 0.006
+    max: 0.1234375, -0.13875, 0.024999999999999998
+    color: '#1C1D1F'
+    shape: CylinderY
+  - label: right extended trouser leg lower folded edge
+    min: 0.005, -0.28125, 0.007
+    max: 0.1178125, -0.265, 0.022
+    color: '#1C1D1F'
+    shape: CylinderX
+  - label: right extended trouser leg left shallow folded fabric
+    min: -0.0082812, -0.2203125, 0.019999999999999997
+    max: 0.1073438, -0.1953125, 0.036
+    color: '#393B3E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right extended trouser leg right shallow folded fabric
+    min: 0.0154687, -0.2203125, 0.019999999999999997
+    max: 0.1310938, -0.1953125, 0.036
+    color: '#393B3E'
+    shape: WedgeY
+    yaw: 90
+  - label: right black trouser pressed fold
+    min: 0.0545313, -0.265625, 0.023
+    max: 0.0682812, -0.1625, 0.038
+    color: '#303234'
+    shape: CylinderY
+  - label: barista small waist tab
+    min: -0.028125, -0.159375, 0.027
+    max: -0.003125, -0.11875, 0.045
+    color: '#685F68'
+- type: cmu3DModel
+  id: CMU3DAU14CivilianBoilerSuitCyanWorldCloud
+  label: AU14CivilianBoilerSuitCyan laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianBoilerSuitCyan
+  referencePrototype: AU14CivilianBoilerSuitCyan
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Uniforms/cyanboilersuit.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded boilersuit: attached short sleeves, turned V collar, twin flat chest pockets, narrow placket,
+    dark belt and same-material folded trousers. Default base dropped/world icon only. No actor, worn, held, accessories,
+    stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness and underside
+    inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#272E2F'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#636D6E'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#272E2F'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#272E2F'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#272E2F'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#636D6E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#636D6E'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#636D6E'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#272E2F'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#272E2F'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#272E2F'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#636D6E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#636D6E'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#272E2F'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#778182'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#4F5A5B'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#161818'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#3C4647'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#272E2F'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#3C4647'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#636D6E'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#272E2F'
+    yaw: -41.531771
+  - label: left flat chest pocket cloth
+    min: -0.125, 0.059375, 0.034
+    max: -0.0625, 0.1328125, 0.047
+    color: '#636D6E'
+  - label: left pocket folded upper seam
+    min: -0.125, 0.12, 0.043
+    max: -0.0625, 0.13125, 0.052
+    color: '#778182'
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#778182'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#4F5A5B'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#161818'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#3C4647'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#272E2F'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#3C4647'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#636D6E'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#272E2F'
+    yaw: -138.468229
+  - label: right flat chest pocket cloth
+    min: 0.03125, 0.059375, 0.034
+    max: 0.09375, 0.1328125, 0.047
+    color: '#3C4647'
+  - label: right pocket folded upper seam
+    min: 0.03125, 0.12, 0.043
+    max: 0.09375, 0.13125, 0.052
+    color: '#4F5A5B'
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#3C4647'
+  - label: short upper placket highlight
+    min: -0.0234375, -0.05625, 0.043
+    max: -0.010625, 0.125, 0.052
+    color: '#3C4647'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#161818'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#3C4647'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#161818'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#161818'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#161818'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#3C4647'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#3C4647'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#161818'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#3C4647'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#161818'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#161818'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#161818'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#3C4647'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#3C4647'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#161818'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#3C4647'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#161818'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#151515'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#151515'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt000
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14CivilianBoilerSuitDarkBlueSynthWorldCloud
+  label: AU14CivilianBoilerSuitDarkBlueSynth laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianBoilerSuitDarkBlueSynth
+  referencePrototype: AU14CivilianBoilerSuitDarkBlueSynth
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Uniforms/darkblueboilersuit.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded boilersuit: attached short sleeves, turned V collar, twin flat chest pockets, narrow placket,
+    dark belt and same-material folded trousers. Default base dropped/world icon only. No actor, worn, held, accessories,
+    stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness and underside
+    inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#181D23'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#414C5A'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#181D23'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#181D23'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#181D23'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#414C5A'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#414C5A'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#414C5A'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#181D23'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#181D23'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#181D23'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#414C5A'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#414C5A'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#181D23'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#515C6A'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#303A45'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#0D1014'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#232A32'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#181D23'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#232A32'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#414C5A'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#181D23'
+    yaw: -41.531771
+  - label: left flat chest pocket cloth
+    min: -0.125, 0.059375, 0.034
+    max: -0.0625, 0.1328125, 0.047
+    color: '#414C5A'
+  - label: left pocket folded upper seam
+    min: -0.125, 0.12, 0.043
+    max: -0.0625, 0.13125, 0.052
+    color: '#515C6A'
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#515C6A'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#303A45'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#0D1014'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#232A32'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#181D23'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#232A32'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#414C5A'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#181D23'
+    yaw: -138.468229
+  - label: right flat chest pocket cloth
+    min: 0.03125, 0.059375, 0.034
+    max: 0.09375, 0.1328125, 0.047
+    color: '#232A32'
+  - label: right pocket folded upper seam
+    min: 0.03125, 0.12, 0.043
+    max: 0.09375, 0.13125, 0.052
+    color: '#303A45'
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#232A32'
+  - label: short upper placket highlight
+    min: -0.0234375, -0.05625, 0.043
+    max: -0.010625, 0.125, 0.052
+    color: '#232A32'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#0D1014'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#232A32'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#0D1014'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#0D1014'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#0D1014'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#232A32'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#232A32'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#0D1014'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#232A32'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#0D1014'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#0D1014'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#0D1014'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#232A32'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#232A32'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#0D1014'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#232A32'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#0D1014'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#151515'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#151515'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt001
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14CivilianBoilerSuitGrayWorldCloud
+  label: AU14CivilianBoilerSuitGray laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianBoilerSuitGray
+  referencePrototype: AU14CivilianBoilerSuitGray
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Uniforms/grayboilersuit.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded boilersuit: attached short sleeves, turned V collar, twin flat chest pockets, narrow placket,
+    dark belt and same-material folded trousers. Default base dropped/world icon only. No actor, worn, held, accessories,
+    stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness and underside
+    inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#2B2C2D'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#686A6B'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#2B2C2D'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#2B2C2D'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#2B2C2D'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#686A6B'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#686A6B'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#686A6B'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#2B2C2D'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#2B2C2D'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#2B2C2D'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#686A6B'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#686A6B'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#2B2C2D'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#7E8384'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#56595A'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#1F1F1F'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#3D3E3F'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#2B2C2D'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#3D3E3F'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#686A6B'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#2B2C2D'
+    yaw: -41.531771
+  - label: left flat chest pocket cloth
+    min: -0.125, 0.059375, 0.034
+    max: -0.0625, 0.1328125, 0.047
+    color: '#686A6B'
+  - label: left pocket folded upper seam
+    min: -0.125, 0.12, 0.043
+    max: -0.0625, 0.13125, 0.052
+    color: '#7E8384'
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#7E8384'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#56595A'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#1F1F1F'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#3D3E3F'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#2B2C2D'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#3D3E3F'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#686A6B'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#2B2C2D'
+    yaw: -138.468229
+  - label: right flat chest pocket cloth
+    min: 0.03125, 0.059375, 0.034
+    max: 0.09375, 0.1328125, 0.047
+    color: '#3D3E3F'
+  - label: right pocket folded upper seam
+    min: 0.03125, 0.12, 0.043
+    max: 0.09375, 0.13125, 0.052
+    color: '#56595A'
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#3D3E3F'
+  - label: short upper placket highlight
+    min: -0.0234375, -0.05625, 0.043
+    max: -0.010625, 0.125, 0.052
+    color: '#3D3E3F'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#1F1F1F'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#3D3E3F'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#1F1F1F'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#1F1F1F'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#1F1F1F'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#3D3E3F'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#3D3E3F'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#1F1F1F'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#3D3E3F'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#1F1F1F'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#1F1F1F'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#1F1F1F'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#3D3E3F'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#3D3E3F'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#1F1F1F'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#3D3E3F'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#1F1F1F'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#151515'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#151515'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt002
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14CivilianBoilerSuitWhiteWorldCloud
+  label: AU14CivilianBoilerSuitWhite laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianBoilerSuitWhite
+  referencePrototype: AU14CivilianBoilerSuitWhite
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Uniforms/whiteboilersuit.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded boilersuit: attached short sleeves, turned V collar, twin flat chest pockets, narrow placket,
+    dark belt and same-material folded trousers. Default base dropped/world icon only. No actor, worn, held, accessories,
+    stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness and underside
+    inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#534F43'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#A49F92'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#534F43'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#534F43'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#534F43'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#A49F92'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#A49F92'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#A49F92'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#534F43'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#534F43'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#534F43'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#A49F92'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#A49F92'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#534F43'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#BBB6A9'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#8D8675'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#3A372F'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#746C59'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#534F43'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#746C59'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#A49F92'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#534F43'
+    yaw: -41.531771
+  - label: left flat chest pocket cloth
+    min: -0.125, 0.059375, 0.034
+    max: -0.0625, 0.1328125, 0.047
+    color: '#A49F92'
+  - label: left pocket folded upper seam
+    min: -0.125, 0.12, 0.043
+    max: -0.0625, 0.13125, 0.052
+    color: '#BBB6A9'
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#BBB6A9'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#8D8675'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#3A372F'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#746C59'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#534F43'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#746C59'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#A49F92'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#534F43'
+    yaw: -138.468229
+  - label: right flat chest pocket cloth
+    min: 0.03125, 0.059375, 0.034
+    max: 0.09375, 0.1328125, 0.047
+    color: '#746C59'
+  - label: right pocket folded upper seam
+    min: 0.03125, 0.12, 0.043
+    max: 0.09375, 0.13125, 0.052
+    color: '#8D8675'
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#746C59'
+  - label: short upper placket highlight
+    min: -0.0234375, -0.05625, 0.043
+    max: -0.010625, 0.125, 0.052
+    color: '#746C59'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#3A372F'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#746C59'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#3A372F'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#3A372F'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#3A372F'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#746C59'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#746C59'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#3A372F'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#746C59'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#3A372F'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#3A372F'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#3A372F'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#746C59'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#746C59'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#3A372F'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#746C59'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#3A372F'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#151515'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#151515'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt003
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14CivilianWorkwearBlueWorldCloud
+  label: AU14CivilianWorkwearBlue laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianWorkwearBlue
+  referencePrototype: AU14CivilianWorkwearBlue
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Uniforms/blueworkwear.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded workwear: joined shirt panels, short cuffed sleeves, shallow chest folds, turned collar,
+    small source waist clasp and contrasting folded trousers. Default base dropped/world icon only. No actor, worn,
+    held, accessories, stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness
+    and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#3F4A63'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#546388'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#3F4A63'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#3F4A63'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#3F4A63'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#546388'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#546388'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#546388'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#3F4A63'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#3F4A63'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#3F4A63'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#546388'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#546388'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#2D3343'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#546388'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#6D7B9F'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#2D3343'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#546388'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#3F4A63'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#546388'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#8899C1'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#2D3343'
+    yaw: -41.531771
+  - label: left upper chest fold
+    min: -0.1147587, 0.1142187, 0.034
+    max: -0.0430538, 0.1279688, 0.048
+    color: '#8899C1'
+    shape: CylinderX
+    yaw: -11.309932
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#546388'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#6D7B9F'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#2D3343'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#546388'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#3F4A63'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#546388'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#8899C1'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#2D3343'
+    yaw: -138.468229
+  - label: right upper chest fold
+    min: 0.0118038, 0.1142187, 0.034
+    max: 0.0835087, 0.1279688, 0.048
+    color: '#8899C1'
+    shape: CylinderX
+    yaw: -168.690068
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#546388'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#10171D'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#2A3645'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#10171D'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#10171D'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#2A3645'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#10171D'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#10171D'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#2A3645'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#4F3022'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#321E15'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#321E15'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt004
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14CivilianWorkwearGreenWorldCloud
+  label: AU14CivilianWorkwearGreen laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianWorkwearGreen
+  referencePrototype: AU14CivilianWorkwearGreen
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Uniforms/greenworkwear.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded workwear: joined shirt panels, short cuffed sleeves, shallow chest folds, turned collar,
+    small source waist clasp and contrasting folded trousers. Default base dropped/world icon only. No actor, worn,
+    held, accessories, stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness
+    and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#2B3F2F'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#3C533F'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#2B3F2F'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#2B3F2F'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#2B3F2F'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#3C533F'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#3C533F'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#3C533F'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#2B3F2F'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#2B3F2F'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#2B3F2F'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#3C533F'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#3C533F'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#232E25'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#3C533F'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#4C674F'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#232E25'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#3C533F'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#2B3F2F'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#3C533F'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#647F67'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#232E25'
+    yaw: -41.531771
+  - label: left upper chest fold
+    min: -0.1147587, 0.1142187, 0.034
+    max: -0.0430538, 0.1279688, 0.048
+    color: '#647F67'
+    shape: CylinderX
+    yaw: -11.309932
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#3C533F'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#4C674F'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#232E25'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#3C533F'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#2B3F2F'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#3C533F'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#647F67'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#232E25'
+    yaw: -138.468229
+  - label: right upper chest fold
+    min: 0.0118038, 0.1142187, 0.034
+    max: 0.0835087, 0.1279688, 0.048
+    color: '#647F67'
+    shape: CylinderX
+    yaw: -168.690068
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#3C533F'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#10171D'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#2A3645'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#10171D'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#10171D'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#2A3645'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#10171D'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#10171D'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#2A3645'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#4F3022'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#321E15'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#321E15'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt005
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14CivilianWorkwearPinkWorldCloud
+  label: AU14CivilianWorkwearPink laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianWorkwearPink
+  referencePrototype: AU14CivilianWorkwearPink
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Uniforms/pinkworkwear.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded workwear: joined shirt panels, short cuffed sleeves, shallow chest folds, turned collar,
+    small source waist clasp and contrasting folded trousers. Default base dropped/world icon only. No actor, worn,
+    held, accessories, stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness
+    and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#673333'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#845757'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#673333'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#673333'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#673333'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#845757'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#845757'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#845757'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#673333'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#673333'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#673333'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#845757'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#845757'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#4B1D1D'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#845757'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#996969'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#4B1D1D'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#845757'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#673333'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#845757'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#B48888'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#4B1D1D'
+    yaw: -41.531771
+  - label: left upper chest fold
+    min: -0.1147587, 0.1142187, 0.034
+    max: -0.0430538, 0.1279688, 0.048
+    color: '#B48888'
+    shape: CylinderX
+    yaw: -11.309932
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#845757'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#996969'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#4B1D1D'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#845757'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#673333'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#845757'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#B48888'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#4B1D1D'
+    yaw: -138.468229
+  - label: right upper chest fold
+    min: 0.0118038, 0.1142187, 0.034
+    max: 0.0835087, 0.1279688, 0.048
+    color: '#B48888'
+    shape: CylinderX
+    yaw: -168.690068
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#845757'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#10171D'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#2A3645'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#10171D'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#10171D'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#2A3645'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#10171D'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#10171D'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#2A3645'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#4F3022'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#321E15'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#321E15'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt006
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14CivilianWorkwearYellowWorldCloud
+  label: AU14CivilianWorkwearYellow laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianWorkwearYellow
+  referencePrototype: AU14CivilianWorkwearYellow
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Uniforms/yellowworkwear.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded workwear: joined shirt panels, short cuffed sleeves, shallow chest folds, turned collar,
+    small source waist clasp and contrasting folded trousers. Default base dropped/world icon only. No actor, worn,
+    held, accessories, stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness
+    and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#4B422E'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#756542'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#4B422E'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#4B422E'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#4B422E'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#756542'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#756542'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#756542'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#4B422E'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#4B422E'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#4B422E'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#756542'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#756542'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#342F24'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#756542'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#8D7B53'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#342F24'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#756542'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#4B422E'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#756542'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#A49065'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#342F24'
+    yaw: -41.531771
+  - label: left upper chest fold
+    min: -0.1147587, 0.1142187, 0.034
+    max: -0.0430538, 0.1279688, 0.048
+    color: '#A49065'
+    shape: CylinderX
+    yaw: -11.309932
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#756542'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#8D7B53'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#342F24'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#756542'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#4B422E'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#756542'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#A49065'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#342F24'
+    yaw: -138.468229
+  - label: right upper chest fold
+    min: 0.0118038, 0.1142187, 0.034
+    max: 0.0835087, 0.1279688, 0.048
+    color: '#A49065'
+    shape: CylinderX
+    yaw: -168.690068
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#756542'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#10171D'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#2A3645'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#10171D'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#10171D'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#2A3645'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#10171D'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#10171D'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#2A3645'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#10171D'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#2A3645'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#4F3022'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#321E15'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#321E15'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt007
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14LACNUniformCoatWorldCloud
+  label: AU14LACNUniformCoat laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - AU14LACNUniformCoat
+  referencePrototype: AU14LACNUniformCoat
+  referenceRsi: /Textures/CMU14/Clothing/LACN/Uniforms/lacnuniformcoat.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'LACN long green coat: connected shoulders and sleeves, raised pointed collar, twin sewn chest pockets,
+    dark waistband and flared long tails over a recessed black lining. The source black tail region is opaque cloth,
+    not a transparent opening. Default base dropped/world icon only. No actor, worn, held, accessories, stains,
+    camouflage changes, live tint, folded worn prefixes or animations. Physical thickness and underside inferred;
+    native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: LACN coat continuous back
+    min: -0.146875, -0.1375, 0.004
+    max: 0.115625, 0.15, 0.024
+    color: '#1B1E1B'
+  - label: left LACN coat torso continuous cloth panel
+    min: -0.1484375, -0.0859375, 0.008
+    max: -0.015625, 0.1296875, 0.043
+    color: '#646E64'
+  - label: left LACN coat torso left turned edge
+    min: -0.153125, -0.08625, 0.006
+    max: -0.138125, 0.13, 0.038
+    color: '#1B1E1B'
+    shape: CylinderY
+  - label: left LACN coat torso right turned edge
+    min: -0.0259375, -0.08625, 0.006
+    max: -0.0109375, 0.13, 0.038
+    color: '#1B1E1B'
+    shape: CylinderY
+  - label: left LACN coat torso lower folded edge
+    min: -0.1475, -0.090625, 0.007
+    max: -0.0165625, -0.074375, 0.034999999999999996
+    color: '#1B1E1B'
+    shape: CylinderX
+  - label: left LACN coat torso left shallow folded fabric
+    min: -0.1907813, 0.009375, 0.032999999999999995
+    max: 0.0029687, 0.034375, 0.048999999999999995
+    color: '#646E64'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left LACN coat torso right shallow folded fabric
+    min: -0.1670312, 0.009375, 0.032999999999999995
+    max: 0.0267188, 0.034375, 0.048999999999999995
+    color: '#646E64'
+    shape: WedgeY
+    yaw: 90
+  - label: left long coat tail continuous cloth panel
+    min: -0.1703125, -0.2484375, 0.008
+    max: -0.015625, -0.0875, 0.041
+    color: '#7E8D7E'
+  - label: left long coat tail left turned edge
+    min: -0.175, -0.24875, 0.006
+    max: -0.16, -0.0871875, 0.036000000000000004
+    color: '#1B1E1B'
+    shape: CylinderY
+  - label: left long coat tail right turned edge
+    min: -0.0259375, -0.24875, 0.006
+    max: -0.0109375, -0.0871875, 0.036000000000000004
+    color: '#1B1E1B'
+    shape: CylinderY
+  - label: left long coat tail lower folded edge
+    min: -0.169375, -0.253125, 0.007
+    max: -0.0165625, -0.236875, 0.033
+    color: '#1B1E1B'
+    shape: CylinderX
+  - label: left long coat tail left shallow folded fabric
+    min: -0.174375, -0.1804687, 0.031
+    max: -0.0353125, -0.1554688, 0.047
+    color: '#7E8D7E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left long coat tail right shallow folded fabric
+    min: -0.150625, -0.1804687, 0.031
+    max: -0.0115625, -0.1554688, 0.047
+    color: '#7E8D7E'
+    shape: WedgeY
+    yaw: 90
+  - label: left tapering tail hem
+    min: -0.1515625, -0.278125, 0.007
+    max: -0.0203125, -0.2359375, 0.024
+    color: '#1B1E1B'
+    shape: CylinderX
+  - label: right LACN coat torso continuous cloth panel
+    min: -0.015625, -0.0859375, 0.008
+    max: 0.1171875, 0.1296875, 0.043
+    color: '#646E64'
+  - label: right LACN coat torso left turned edge
+    min: -0.0203125, -0.08625, 0.006
+    max: -0.0053125, 0.13, 0.038
+    color: '#1B1E1B'
+    shape: CylinderY
+  - label: right LACN coat torso right turned edge
+    min: 0.106875, -0.08625, 0.006
+    max: 0.121875, 0.13, 0.038
+    color: '#1B1E1B'
+    shape: CylinderY
+  - label: right LACN coat torso lower folded edge
+    min: -0.0146875, -0.090625, 0.007
+    max: 0.11625, -0.074375, 0.034999999999999996
+    color: '#1B1E1B'
+    shape: CylinderX
+  - label: right LACN coat torso left shallow folded fabric
+    min: -0.0579687, 0.009375, 0.032999999999999995
+    max: 0.1357812, 0.034375, 0.048999999999999995
+    color: '#646E64'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right LACN coat torso right shallow folded fabric
+    min: -0.0342188, 0.009375, 0.032999999999999995
+    max: 0.1595312, 0.034375, 0.048999999999999995
+    color: '#646E64'
+    shape: WedgeY
+    yaw: 90
+  - label: right long coat tail continuous cloth panel
+    min: -0.0375, -0.2484375, 0.008
+    max: 0.1171875, -0.0875, 0.041
+    color: '#7E8D7E'
+  - label: right long coat tail left turned edge
+    min: -0.0421875, -0.24875, 0.006
+    max: -0.0271875, -0.0871875, 0.036000000000000004
+    color: '#1B1E1B'
+    shape: CylinderY
+  - label: right long coat tail right turned edge
+    min: 0.106875, -0.24875, 0.006
+    max: 0.121875, -0.0871875, 0.036000000000000004
+    color: '#1B1E1B'
+    shape: CylinderY
+  - label: right long coat tail lower folded edge
+    min: -0.0365625, -0.253125, 0.007
+    max: 0.11625, -0.236875, 0.033
+    color: '#1B1E1B'
+    shape: CylinderX
+  - label: right long coat tail left shallow folded fabric
+    min: -0.0415625, -0.1804687, 0.031
+    max: 0.0975, -0.1554688, 0.047
+    color: '#7E8D7E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right long coat tail right shallow folded fabric
+    min: -0.0178125, -0.1804687, 0.031
+    max: 0.12125, -0.1554688, 0.047
+    color: '#7E8D7E'
+    shape: WedgeY
+    yaw: 90
+  - label: right tapering tail hem
+    min: -0.01875, -0.278125, 0.007
+    max: 0.1125, -0.2359375, 0.024
+    color: '#1B1E1B'
+    shape: CylinderX
+  - label: LACN recessed dark tail lining
+    min: -0.04375, -0.2546875, 0.002
+    max: 0.0125, -0.128125, 0.014
+    color: '#000000'
+  - label: LACN lower waist cloth connection
+    min: -0.15, -0.1125, 0.004
+    max: 0.11875, -0.0703125, 0.026
+    color: '#646E64'
+  - label: LACN dark neck lining
+    min: -0.0875, 0.125, 0.006
+    max: 0.05625, 0.2125, 0.021
+    color: '#000000'
+  - label: left LACN shoulder
+    min: -0.171032, 0.1070313, 0.007
+    max: -0.082093, 0.1835938, 0.04
+    color: '#4B524B'
+    yaw: -108.434949
+  - label: left LACN sleeve
+    min: -0.2400498, 0.0507812, 0.008
+    max: -0.1302627, 0.1242188, 0.037
+    color: '#646E64'
+    yaw: -114.376469
+  - label: left LACN low cuff
+    min: -0.2320777, 0.0221875, 0.022
+    max: -0.1663598, 0.0434375, 0.047
+    color: '#313631'
+    yaw: -28.393019
+  - label: left raised collar leaf
+    min: -0.1164566, 0.1835938, 0.013
+    max: -0.0679184, 0.2210937, 0.05
+    color: '#313631'
+    yaw: -93.691386
+  - label: left pointed lapel
+    min: -0.1227463, 0.1257813, 0.028
+    max: -0.0210037, 0.1617188, 0.052
+    color: '#646E64'
+    yaw: -47.489553
+  - label: left LACN upper pocket
+    min: -0.125, 0.04375, 0.034
+    max: -0.0625, 0.1, 0.047
+    color: '#4B524B'
+  - label: left LACN pocket top seam
+    min: -0.125, 0.09, 0.043
+    max: -0.0625, 0.103125, 0.052
+    color: '#1B1E1B'
+  - label: right LACN shoulder
+    min: 0.050843, 0.1070313, 0.007
+    max: 0.139782, 0.1835938, 0.04
+    color: '#4B524B'
+    yaw: -71.565051
+  - label: right LACN sleeve
+    min: 0.0990127, 0.0507812, 0.008
+    max: 0.2087998, 0.1242188, 0.037
+    color: '#646E64'
+    yaw: -65.623531
+  - label: right LACN low cuff
+    min: 0.1351098, 0.0221875, 0.022
+    max: 0.2008277, 0.0434375, 0.047
+    color: '#313631'
+    yaw: -151.606981
+  - label: right raised collar leaf
+    min: 0.0366684, 0.1835938, 0.013
+    max: 0.0852066, 0.2210937, 0.05
+    color: '#313631'
+    yaw: -86.308614
+  - label: right pointed lapel
+    min: -0.0102463, 0.1257813, 0.028
+    max: 0.0914963, 0.1617188, 0.052
+    color: '#646E64'
+    yaw: -132.510447
+  - label: right LACN upper pocket
+    min: 0.03125, 0.04375, 0.034
+    max: 0.09375, 0.1, 0.047
+    color: '#4B524B'
+  - label: right LACN pocket top seam
+    min: 0.03125, 0.09, 0.043
+    max: 0.09375, 0.103125, 0.052
+    color: '#1B1E1B'
+  - label: LACN long center closure
+    min: -0.0265625, -0.184375, 0.028
+    max: -0.0046875, 0.1203125, 0.049
+    color: '#313631'
+  - label: LACN dark sewn waist band
+    min: -0.146875, -0.0921875, 0.031
+    max: 0.115625, -0.0640625, 0.05
+    color: '#1B1E1B'
+- type: cmu3DModel
+  id: CMU3DCMJumpsuitColonistWorldCloud
+  label: CMJumpsuitColonist laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - CMJumpsuitColonist
+  referencePrototype: CMJumpsuitColonist
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Uniforms/Survivor/colonist.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded boilersuit: attached short sleeves, turned V collar, twin flat chest pockets, narrow placket,
+    dark belt and same-material folded trousers. Original ochre shoulder bands retained. Default base dropped/world
+    icon only. No actor, worn, held, accessories, stains, camouflage changes, live tint, folded worn prefixes or
+    animations. Physical thickness and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#272E2F'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#636D6E'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#272E2F'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#272E2F'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#272E2F'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#636D6E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#636D6E'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#636D6E'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#272E2F'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#272E2F'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#272E2F'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#636D6E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#636D6E'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#272E2F'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#778182'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#A49043'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#161818'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#3C4647'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#272E2F'
+    yaw: -35.537678
+  - label: left original ochre shoulder stripe
+    min: -0.2164679, 0.1401562, 0.032
+    max: -0.1569696, 0.1707812, 0.047
+    color: '#CEB96A'
+    yaw: -113.198591
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#3C4647'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#636D6E'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#272E2F'
+    yaw: -41.531771
+  - label: left flat chest pocket cloth
+    min: -0.125, 0.059375, 0.034
+    max: -0.0625, 0.1328125, 0.047
+    color: '#636D6E'
+  - label: left pocket folded upper seam
+    min: -0.125, 0.12, 0.043
+    max: -0.0625, 0.13125, 0.052
+    color: '#778182'
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#778182'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#A49043'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#161818'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#3C4647'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#272E2F'
+    yaw: -144.462322
+  - label: right original ochre shoulder stripe
+    min: 0.1257196, 0.1401562, 0.032
+    max: 0.1852179, 0.1707812, 0.047
+    color: '#CEB96A'
+    yaw: -66.801409
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#3C4647'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#636D6E'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#272E2F'
+    yaw: -138.468229
+  - label: right flat chest pocket cloth
+    min: 0.03125, 0.059375, 0.034
+    max: 0.09375, 0.1328125, 0.047
+    color: '#3C4647'
+  - label: right pocket folded upper seam
+    min: 0.03125, 0.12, 0.043
+    max: 0.09375, 0.13125, 0.052
+    color: '#4F5A5B'
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#3C4647'
+  - label: short upper placket highlight
+    min: -0.0234375, -0.05625, 0.043
+    max: -0.010625, 0.125, 0.052
+    color: '#3C4647'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#161818'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#3C4647'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#161818'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#161818'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#161818'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#3C4647'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#3C4647'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#161818'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#3C4647'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#161818'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#161818'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#161818'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#3C4647'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#3C4647'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#161818'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#3C4647'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#161818'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#151515'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#151515'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt008
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DCMJumpsuitLiaisonFieldWorldCloud
+  label: CMJumpsuitLiaisonField laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - CMJumpsuitLiaisonField
+  referencePrototype: CMJumpsuitLiaisonField
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Uniforms/Liaison/corporate_field.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded workwear: joined shirt panels, short cuffed sleeves, shallow chest folds, turned collar,
+    small source waist clasp and contrasting folded trousers. Default base dropped/world icon only. No actor, worn,
+    held, accessories, stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness
+    and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#252C33'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#303C46'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#252C33'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#252C33'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#252C33'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#303C46'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#303C46'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#303C46'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#252C33'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#252C33'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#252C33'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#303C46'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#303C46'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#161B21'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#303C46'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#394F63'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#161B21'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#303C46'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#252C33'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#303C46'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#496782'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#161B21'
+    yaw: -41.531771
+  - label: left upper chest fold
+    min: -0.1147587, 0.1142187, 0.034
+    max: -0.0430538, 0.1279688, 0.048
+    color: '#496782'
+    shape: CylinderX
+    yaw: -11.309932
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#303C46'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#394F63'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#161B21'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#303C46'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#252C33'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#303C46'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#496782'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#161B21'
+    yaw: -138.468229
+  - label: right upper chest fold
+    min: 0.0118038, 0.1142187, 0.034
+    max: 0.0835087, 0.1279688, 0.048
+    color: '#496782'
+    shape: CylinderX
+    yaw: -168.690068
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#303C46'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#100D0A'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#372D21'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#100D0A'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#100D0A'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#100D0A'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#372D21'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#372D21'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#100D0A'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#372D21'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#100D0A'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#100D0A'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#100D0A'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#372D21'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#372D21'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#100D0A'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#372D21'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.0859375, 0.025
+    max: 0.1421875, -0.05625, 0.047
+    color: '#242424'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.09, 0.039
+    max: -0.1078125, -0.05, 0.053
+    color: '#151515'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.09, 0.039
+    max: 0.0875, -0.05, 0.053
+    color: '#151515'
+  - label: original small waist clasp
+    min: -0.0625, -0.09375, 0.045
+    max: 0.03125, -0.0625, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt009
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCJumpsuitBlueWorkwearWorldCloud
+  label: RMCJumpsuitBlueWorkwear laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - RMCJumpsuitBlueWorkwear
+  referencePrototype: RMCJumpsuitBlueWorkwear
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Uniforms/Civilian/blue_workwear.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded workwear: joined shirt panels, short cuffed sleeves, shallow chest folds, turned collar,
+    small source waist clasp and contrasting folded trousers. Default base dropped/world icon only. No actor, worn,
+    held, accessories, stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness
+    and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.1421875, 0.004
+    max: 0.115625, 0.096875, 0.024
+    color: '#182129'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.125, 0.008
+    max: -0.015625, 0.0890625, 0.043
+    color: '#29343E'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.1253125, 0.006
+    max: -0.138125, 0.089375, 0.038
+    color: '#182129'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.1253125, 0.006
+    max: -0.0109375, 0.089375, 0.038
+    color: '#182129'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.1296875, 0.007
+    max: -0.0165625, -0.1134375, 0.034999999999999996
+    color: '#182129'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, -0.0304687, 0.032999999999999995
+    max: 0.0021875, -0.0054688, 0.048999999999999995
+    color: '#29343E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, -0.0304687, 0.032999999999999995
+    max: 0.0259375, -0.0054688, 0.048999999999999995
+    color: '#29343E'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.125, 0.008
+    max: 0.1171875, 0.0890625, 0.043
+    color: '#29343E'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.1253125, 0.006
+    max: -0.0053125, 0.089375, 0.038
+    color: '#182129'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.1253125, 0.006
+    max: 0.121875, 0.089375, 0.038
+    color: '#182129'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.1296875, 0.007
+    max: 0.11625, -0.1134375, 0.034999999999999996
+    color: '#182129'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, -0.0304687, 0.032999999999999995
+    max: 0.135, -0.0054688, 0.048999999999999995
+    color: '#29343E'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, -0.0304687, 0.032999999999999995
+    max: 0.15875, -0.0054688, 0.048999999999999995
+    color: '#29343E'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.075, 0.006
+    max: 0.05, 0.1515625, 0.022
+    color: '#101418'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.08125, 0.008
+    max: -0.0786763, 0.1515625, 0.041
+    color: '#29343E'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0320313, 0.009
+    max: -0.1113235, 0.1007812, 0.036
+    color: '#444E59'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0035938, 0.011
+    max: -0.1502545, 0.0214063, 0.025
+    color: '#101418'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0154688, 0.028
+    max: -0.1502545, 0.0345313, 0.047
+    color: '#29343E'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0023437, 0.014
+    max: -0.1471857, 0.0210938, 0.042
+    color: '#182129'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.0840625, 0.014
+    max: -0.0099288, 0.1284375, 0.045
+    color: '#29343E'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.09, 0.036
+    max: -0.0099288, 0.1225, 0.054
+    color: '#566371'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1273437, 0.018
+    max: -0.0236292, 0.1367188, 0.039
+    color: '#101418'
+    yaw: -41.531771
+  - label: left upper chest fold
+    min: -0.1147587, 0.0517187, 0.034
+    max: -0.0430538, 0.0654688, 0.048
+    color: '#566371'
+    shape: CylinderX
+    yaw: -11.309932
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.08125, 0.008
+    max: 0.1431987, 0.1515625, 0.041
+    color: '#29343E'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0320313, 0.009
+    max: 0.1793015, 0.1007812, 0.036
+    color: '#444E59'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0035938, 0.011
+    max: 0.176308, 0.0214063, 0.025
+    color: '#101418'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0154688, 0.028
+    max: 0.176308, 0.0345313, 0.047
+    color: '#29343E'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0023437, 0.014
+    max: 0.1293768, 0.0210938, 0.042
+    color: '#182129'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.0840625, 0.014
+    max: 0.1103837, 0.1284375, 0.045
+    color: '#29343E'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.09, 0.036
+    max: 0.1103837, 0.1225, 0.054
+    color: '#566371'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1273437, 0.018
+    max: 0.0654333, 0.1367188, 0.039
+    color: '#101418'
+    yaw: -138.468229
+  - label: right upper chest fold
+    min: 0.0118038, 0.0517187, 0.034
+    max: 0.0835087, 0.0654688, 0.048
+    color: '#566371'
+    shape: CylinderX
+    yaw: -168.690068
+  - label: continuous center button placket
+    min: -0.028125, -0.1296875, 0.03
+    max: -0.003125, 0.0734375, 0.049
+    color: '#29343E'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.2296875, 0.004
+    max: 0.1421875, -0.1109375, 0.021
+    color: '#27190E'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.234375, 0.008
+    max: -0.0171875, -0.14375, 0.037
+    color: '#533E2C'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.2346875, 0.006
+    max: -0.163125, -0.1434375, 0.032
+    color: '#27190E'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.2346875, 0.006
+    max: -0.0125, -0.1434375, 0.032
+    color: '#27190E'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.2390625, 0.007
+    max: -0.018125, -0.2228125, 0.028999999999999998
+    color: '#27190E'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.2015625, 0.026999999999999996
+    max: -0.0728125, -0.1765625, 0.043
+    color: '#533E2C'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.2015625, 0.026999999999999996
+    max: -0.0490625, -0.1765625, 0.043
+    color: '#533E2C'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.2484375, 0.007
+    max: -0.0203125, -0.2203125, 0.03
+    color: '#27190E'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.234375, 0.008
+    max: 0.1421875, -0.14375, 0.037
+    color: '#533E2C'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.2346875, 0.006
+    max: -0.00375, -0.1434375, 0.032
+    color: '#27190E'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.2346875, 0.006
+    max: 0.146875, -0.1434375, 0.032
+    color: '#27190E'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.2390625, 0.007
+    max: 0.14125, -0.2228125, 0.028999999999999998
+    color: '#27190E'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.2015625, 0.026999999999999996
+    max: 0.0865625, -0.1765625, 0.043
+    color: '#533E2C'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.2015625, 0.026999999999999996
+    max: 0.1103125, -0.1765625, 0.043
+    color: '#533E2C'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.2484375, 0.007
+    max: 0.1390625, -0.2203125, 0.03
+    color: '#27190E'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.2421875, 0.023
+    max: -0.008125, -0.13125, 0.038
+    color: '#533E2C'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.1484375, 0.025
+    max: 0.1421875, -0.11875, 0.047
+    color: '#242424'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.1525, 0.039
+    max: -0.1078125, -0.1125, 0.053
+    color: '#151515'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.1525, 0.039
+    max: 0.0875, -0.1125, 0.053
+    color: '#151515'
+  - label: original small waist clasp
+    min: -0.0625, -0.15625, 0.045
+    max: 0.03125, -0.125, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt010
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCJumpsuitKhakiWorkwearJacketlessWorldCloud
+  label: RMCJumpsuitKhakiWorkwearJacketless laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - RMCJumpsuitKhakiWorkwearJacketless
+  referencePrototype: RMCJumpsuitKhakiWorkwearJacketless
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Uniforms/Civilian/khaki_workwear.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded workwear: joined shirt panels, short cuffed sleeves, shallow chest folds, turned collar,
+    small source waist clasp and contrasting folded trousers. Default base dropped/world icon only. No actor, worn,
+    held, accessories, stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness
+    and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.1421875, 0.004
+    max: 0.115625, 0.096875, 0.024
+    color: '#4B422E'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.125, 0.008
+    max: -0.015625, 0.0890625, 0.043
+    color: '#756542'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.1253125, 0.006
+    max: -0.138125, 0.089375, 0.038
+    color: '#4B422E'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.1253125, 0.006
+    max: -0.0109375, 0.089375, 0.038
+    color: '#4B422E'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.1296875, 0.007
+    max: -0.0165625, -0.1134375, 0.034999999999999996
+    color: '#4B422E'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, -0.0304687, 0.032999999999999995
+    max: 0.0021875, -0.0054688, 0.048999999999999995
+    color: '#756542'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, -0.0304687, 0.032999999999999995
+    max: 0.0259375, -0.0054688, 0.048999999999999995
+    color: '#756542'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.125, 0.008
+    max: 0.1171875, 0.0890625, 0.043
+    color: '#756542'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.1253125, 0.006
+    max: -0.0053125, 0.089375, 0.038
+    color: '#4B422E'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.1253125, 0.006
+    max: 0.121875, 0.089375, 0.038
+    color: '#4B422E'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.1296875, 0.007
+    max: 0.11625, -0.1134375, 0.034999999999999996
+    color: '#4B422E'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, -0.0304687, 0.032999999999999995
+    max: 0.135, -0.0054688, 0.048999999999999995
+    color: '#756542'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, -0.0304687, 0.032999999999999995
+    max: 0.15875, -0.0054688, 0.048999999999999995
+    color: '#756542'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.075, 0.006
+    max: 0.05, 0.1515625, 0.022
+    color: '#342F24'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.08125, 0.008
+    max: -0.0786763, 0.1515625, 0.041
+    color: '#756542'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0320313, 0.009
+    max: -0.1113235, 0.1007812, 0.036
+    color: '#8D7B53'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0035938, 0.011
+    max: -0.1502545, 0.0214063, 0.025
+    color: '#342F24'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0154688, 0.028
+    max: -0.1502545, 0.0345313, 0.047
+    color: '#756542'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0023437, 0.014
+    max: -0.1471857, 0.0210938, 0.042
+    color: '#4B422E'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.0840625, 0.014
+    max: -0.0099288, 0.1284375, 0.045
+    color: '#756542'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.09, 0.036
+    max: -0.0099288, 0.1225, 0.054
+    color: '#A49065'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1273437, 0.018
+    max: -0.0236292, 0.1367188, 0.039
+    color: '#342F24'
+    yaw: -41.531771
+  - label: left upper chest fold
+    min: -0.1147587, 0.0517187, 0.034
+    max: -0.0430538, 0.0654688, 0.048
+    color: '#A49065'
+    shape: CylinderX
+    yaw: -11.309932
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.08125, 0.008
+    max: 0.1431987, 0.1515625, 0.041
+    color: '#756542'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0320313, 0.009
+    max: 0.1793015, 0.1007812, 0.036
+    color: '#8D7B53'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0035938, 0.011
+    max: 0.176308, 0.0214063, 0.025
+    color: '#342F24'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0154688, 0.028
+    max: 0.176308, 0.0345313, 0.047
+    color: '#756542'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0023437, 0.014
+    max: 0.1293768, 0.0210938, 0.042
+    color: '#4B422E'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.0840625, 0.014
+    max: 0.1103837, 0.1284375, 0.045
+    color: '#756542'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.09, 0.036
+    max: 0.1103837, 0.1225, 0.054
+    color: '#A49065'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1273437, 0.018
+    max: 0.0654333, 0.1367188, 0.039
+    color: '#342F24'
+    yaw: -138.468229
+  - label: right upper chest fold
+    min: 0.0118038, 0.0517187, 0.034
+    max: 0.0835087, 0.0654688, 0.048
+    color: '#A49065'
+    shape: CylinderX
+    yaw: -168.690068
+  - label: continuous center button placket
+    min: -0.028125, -0.1296875, 0.03
+    max: -0.003125, 0.0734375, 0.049
+    color: '#756542'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.2296875, 0.004
+    max: 0.1421875, -0.1109375, 0.021
+    color: '#0D101A'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.234375, 0.008
+    max: -0.0171875, -0.14375, 0.037
+    color: '#374263'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.2346875, 0.006
+    max: -0.163125, -0.1434375, 0.032
+    color: '#0D101A'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.2346875, 0.006
+    max: -0.0125, -0.1434375, 0.032
+    color: '#0D101A'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.2390625, 0.007
+    max: -0.018125, -0.2228125, 0.028999999999999998
+    color: '#0D101A'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.2015625, 0.026999999999999996
+    max: -0.0728125, -0.1765625, 0.043
+    color: '#374263'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.2015625, 0.026999999999999996
+    max: -0.0490625, -0.1765625, 0.043
+    color: '#374263'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.2484375, 0.007
+    max: -0.0203125, -0.2203125, 0.03
+    color: '#0D101A'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.234375, 0.008
+    max: 0.1421875, -0.14375, 0.037
+    color: '#374263'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.2346875, 0.006
+    max: -0.00375, -0.1434375, 0.032
+    color: '#0D101A'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.2346875, 0.006
+    max: 0.146875, -0.1434375, 0.032
+    color: '#0D101A'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.2390625, 0.007
+    max: 0.14125, -0.2228125, 0.028999999999999998
+    color: '#0D101A'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.2015625, 0.026999999999999996
+    max: 0.0865625, -0.1765625, 0.043
+    color: '#374263'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.2015625, 0.026999999999999996
+    max: 0.1103125, -0.1765625, 0.043
+    color: '#374263'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.2484375, 0.007
+    max: 0.1390625, -0.2203125, 0.03
+    color: '#0D101A'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.2421875, 0.023
+    max: -0.008125, -0.13125, 0.038
+    color: '#374263'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.1484375, 0.025
+    max: 0.1421875, -0.11875, 0.047
+    color: '#4F3022'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.1525, 0.039
+    max: -0.1078125, -0.1125, 0.053
+    color: '#321E15'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.1525, 0.039
+    max: 0.0875, -0.1125, 0.053
+    color: '#321E15'
+  - label: original small waist clasp
+    min: -0.0625, -0.15625, 0.045
+    max: 0.03125, -0.125, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt011
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCJumpsuitLiaisonGreenWorkwearWorldCloud
+  label: RMCJumpsuitLiaisonGreenWorkwear laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - RMCJumpsuitLiaisonGreenWorkwear
+  referencePrototype: RMCJumpsuitLiaisonGreenWorkwear
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Uniforms/Liaison/green_workwear.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded workwear: joined shirt panels, short cuffed sleeves, shallow chest folds, turned collar,
+    small source waist clasp and contrasting folded trousers. Default base dropped/world icon only. No actor, worn,
+    held, accessories, stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness
+    and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.1421875, 0.004
+    max: 0.115625, 0.096875, 0.024
+    color: '#25321C'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.125, 0.008
+    max: -0.015625, 0.0890625, 0.043
+    color: '#36462B'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.1253125, 0.006
+    max: -0.138125, 0.089375, 0.038
+    color: '#25321C'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.1253125, 0.006
+    max: -0.0109375, 0.089375, 0.038
+    color: '#25321C'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.1296875, 0.007
+    max: -0.0165625, -0.1134375, 0.034999999999999996
+    color: '#25321C'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, -0.0304687, 0.032999999999999995
+    max: 0.0021875, -0.0054688, 0.048999999999999995
+    color: '#36462B'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, -0.0304687, 0.032999999999999995
+    max: 0.0259375, -0.0054688, 0.048999999999999995
+    color: '#36462B'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.125, 0.008
+    max: 0.1171875, 0.0890625, 0.043
+    color: '#36462B'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.1253125, 0.006
+    max: -0.0053125, 0.089375, 0.038
+    color: '#25321C'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.1253125, 0.006
+    max: 0.121875, 0.089375, 0.038
+    color: '#25321C'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.1296875, 0.007
+    max: 0.11625, -0.1134375, 0.034999999999999996
+    color: '#25321C'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, -0.0304687, 0.032999999999999995
+    max: 0.135, -0.0054688, 0.048999999999999995
+    color: '#36462B'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, -0.0304687, 0.032999999999999995
+    max: 0.15875, -0.0054688, 0.048999999999999995
+    color: '#36462B'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.075, 0.006
+    max: 0.05, 0.1515625, 0.022
+    color: '#1C2516'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.08125, 0.008
+    max: -0.0786763, 0.1515625, 0.041
+    color: '#36462B'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0320313, 0.009
+    max: -0.1113235, 0.1007812, 0.036
+    color: '#526445'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0035938, 0.011
+    max: -0.1502545, 0.0214063, 0.025
+    color: '#1C2516'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0154688, 0.028
+    max: -0.1502545, 0.0345313, 0.047
+    color: '#36462B'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0023437, 0.014
+    max: -0.1471857, 0.0210938, 0.042
+    color: '#25321C'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.0840625, 0.014
+    max: -0.0099288, 0.1284375, 0.045
+    color: '#36462B'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.09, 0.036
+    max: -0.0099288, 0.1225, 0.054
+    color: '#677C57'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1273437, 0.018
+    max: -0.0236292, 0.1367188, 0.039
+    color: '#1C2516'
+    yaw: -41.531771
+  - label: left upper chest fold
+    min: -0.1147587, 0.0517187, 0.034
+    max: -0.0430538, 0.0654688, 0.048
+    color: '#677C57'
+    shape: CylinderX
+    yaw: -11.309932
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.08125, 0.008
+    max: 0.1431987, 0.1515625, 0.041
+    color: '#36462B'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0320313, 0.009
+    max: 0.1793015, 0.1007812, 0.036
+    color: '#526445'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0035938, 0.011
+    max: 0.176308, 0.0214063, 0.025
+    color: '#1C2516'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0154688, 0.028
+    max: 0.176308, 0.0345313, 0.047
+    color: '#36462B'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0023437, 0.014
+    max: 0.1293768, 0.0210938, 0.042
+    color: '#25321C'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.0840625, 0.014
+    max: 0.1103837, 0.1284375, 0.045
+    color: '#36462B'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.09, 0.036
+    max: 0.1103837, 0.1225, 0.054
+    color: '#677C57'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1273437, 0.018
+    max: 0.0654333, 0.1367188, 0.039
+    color: '#1C2516'
+    yaw: -138.468229
+  - label: right upper chest fold
+    min: 0.0118038, 0.0517187, 0.034
+    max: 0.0835087, 0.0654688, 0.048
+    color: '#677C57'
+    shape: CylinderX
+    yaw: -168.690068
+  - label: continuous center button placket
+    min: -0.028125, -0.1296875, 0.03
+    max: -0.003125, 0.0734375, 0.049
+    color: '#36462B'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.2296875, 0.004
+    max: 0.1421875, -0.1109375, 0.021
+    color: '#27190E'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.234375, 0.008
+    max: -0.0171875, -0.14375, 0.037
+    color: '#533E2C'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.2346875, 0.006
+    max: -0.163125, -0.1434375, 0.032
+    color: '#27190E'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.2346875, 0.006
+    max: -0.0125, -0.1434375, 0.032
+    color: '#27190E'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.2390625, 0.007
+    max: -0.018125, -0.2228125, 0.028999999999999998
+    color: '#27190E'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.2015625, 0.026999999999999996
+    max: -0.0728125, -0.1765625, 0.043
+    color: '#533E2C'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.2015625, 0.026999999999999996
+    max: -0.0490625, -0.1765625, 0.043
+    color: '#533E2C'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.2484375, 0.007
+    max: -0.0203125, -0.2203125, 0.03
+    color: '#27190E'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.234375, 0.008
+    max: 0.1421875, -0.14375, 0.037
+    color: '#533E2C'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.2346875, 0.006
+    max: -0.00375, -0.1434375, 0.032
+    color: '#27190E'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.2346875, 0.006
+    max: 0.146875, -0.1434375, 0.032
+    color: '#27190E'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.2390625, 0.007
+    max: 0.14125, -0.2228125, 0.028999999999999998
+    color: '#27190E'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.2015625, 0.026999999999999996
+    max: 0.0865625, -0.1765625, 0.043
+    color: '#533E2C'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.2015625, 0.026999999999999996
+    max: 0.1103125, -0.1765625, 0.043
+    color: '#533E2C'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.2484375, 0.007
+    max: 0.1390625, -0.2203125, 0.03
+    color: '#27190E'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.2421875, 0.023
+    max: -0.008125, -0.13125, 0.038
+    color: '#533E2C'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.1484375, 0.025
+    max: 0.1421875, -0.11875, 0.047
+    color: '#242424'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.1525, 0.039
+    max: -0.1078125, -0.1125, 0.053
+    color: '#151515'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.1525, 0.039
+    max: 0.0875, -0.1125, 0.053
+    color: '#151515'
+  - label: original small waist clasp
+    min: -0.0625, -0.15625, 0.045
+    max: 0.03125, -0.125, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt012
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCJumpsuitLiaisonGreyWorkwearWorldCloud
+  label: RMCJumpsuitLiaisonGreyWorkwear laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - RMCJumpsuitLiaisonGreyWorkwear
+  referencePrototype: RMCJumpsuitLiaisonGreyWorkwear
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Uniforms/Liaison/grey_workwear.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded workwear: joined shirt panels, short cuffed sleeves, shallow chest folds, turned collar,
+    small source waist clasp and contrasting folded trousers. Default base dropped/world icon only. No actor, worn,
+    held, accessories, stains, camouflage changes, live tint, folded worn prefixes or animations. Physical thickness
+    and underside inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.1421875, 0.004
+    max: 0.115625, 0.096875, 0.024
+    color: '#393939'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.125, 0.008
+    max: -0.015625, 0.0890625, 0.043
+    color: '#616161'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.1253125, 0.006
+    max: -0.138125, 0.089375, 0.038
+    color: '#393939'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.1253125, 0.006
+    max: -0.0109375, 0.089375, 0.038
+    color: '#393939'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.1296875, 0.007
+    max: -0.0165625, -0.1134375, 0.034999999999999996
+    color: '#393939'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, -0.0304687, 0.032999999999999995
+    max: 0.0021875, -0.0054688, 0.048999999999999995
+    color: '#616161'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, -0.0304687, 0.032999999999999995
+    max: 0.0259375, -0.0054688, 0.048999999999999995
+    color: '#616161'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.125, 0.008
+    max: 0.1171875, 0.0890625, 0.043
+    color: '#616161'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.1253125, 0.006
+    max: -0.0053125, 0.089375, 0.038
+    color: '#393939'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.1253125, 0.006
+    max: 0.121875, 0.089375, 0.038
+    color: '#393939'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.1296875, 0.007
+    max: 0.11625, -0.1134375, 0.034999999999999996
+    color: '#393939'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, -0.0304687, 0.032999999999999995
+    max: 0.135, -0.0054688, 0.048999999999999995
+    color: '#616161'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, -0.0304687, 0.032999999999999995
+    max: 0.15875, -0.0054688, 0.048999999999999995
+    color: '#616161'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.075, 0.006
+    max: 0.05, 0.1515625, 0.022
+    color: '#262626'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.08125, 0.008
+    max: -0.0786763, 0.1515625, 0.041
+    color: '#616161'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0320313, 0.009
+    max: -0.1113235, 0.1007812, 0.036
+    color: '#818181'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0035938, 0.011
+    max: -0.1502545, 0.0214063, 0.025
+    color: '#262626'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0154688, 0.028
+    max: -0.1502545, 0.0345313, 0.047
+    color: '#616161'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0023437, 0.014
+    max: -0.1471857, 0.0210938, 0.042
+    color: '#393939'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.0840625, 0.014
+    max: -0.0099288, 0.1284375, 0.045
+    color: '#616161'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.09, 0.036
+    max: -0.0099288, 0.1225, 0.054
+    color: '#9E9E9E'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1273437, 0.018
+    max: -0.0236292, 0.1367188, 0.039
+    color: '#262626'
+    yaw: -41.531771
+  - label: left upper chest fold
+    min: -0.1147587, 0.0517187, 0.034
+    max: -0.0430538, 0.0654688, 0.048
+    color: '#9E9E9E'
+    shape: CylinderX
+    yaw: -11.309932
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.08125, 0.008
+    max: 0.1431987, 0.1515625, 0.041
+    color: '#616161'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0320313, 0.009
+    max: 0.1793015, 0.1007812, 0.036
+    color: '#818181'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0035938, 0.011
+    max: 0.176308, 0.0214063, 0.025
+    color: '#262626'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0154688, 0.028
+    max: 0.176308, 0.0345313, 0.047
+    color: '#616161'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0023437, 0.014
+    max: 0.1293768, 0.0210938, 0.042
+    color: '#393939'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.0840625, 0.014
+    max: 0.1103837, 0.1284375, 0.045
+    color: '#616161'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.09, 0.036
+    max: 0.1103837, 0.1225, 0.054
+    color: '#9E9E9E'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1273437, 0.018
+    max: 0.0654333, 0.1367188, 0.039
+    color: '#262626'
+    yaw: -138.468229
+  - label: right upper chest fold
+    min: 0.0118038, 0.0517187, 0.034
+    max: 0.0835087, 0.0654688, 0.048
+    color: '#9E9E9E'
+    shape: CylinderX
+    yaw: -168.690068
+  - label: continuous center button placket
+    min: -0.028125, -0.1296875, 0.03
+    max: -0.003125, 0.0734375, 0.049
+    color: '#616161'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.2296875, 0.004
+    max: 0.1421875, -0.1109375, 0.021
+    color: '#151515'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.234375, 0.008
+    max: -0.0171875, -0.14375, 0.037
+    color: '#303030'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.2346875, 0.006
+    max: -0.163125, -0.1434375, 0.032
+    color: '#151515'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.2346875, 0.006
+    max: -0.0125, -0.1434375, 0.032
+    color: '#151515'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.2390625, 0.007
+    max: -0.018125, -0.2228125, 0.028999999999999998
+    color: '#151515'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.2015625, 0.026999999999999996
+    max: -0.0728125, -0.1765625, 0.043
+    color: '#303030'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.2015625, 0.026999999999999996
+    max: -0.0490625, -0.1765625, 0.043
+    color: '#303030'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.2484375, 0.007
+    max: -0.0203125, -0.2203125, 0.03
+    color: '#151515'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.234375, 0.008
+    max: 0.1421875, -0.14375, 0.037
+    color: '#303030'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.2346875, 0.006
+    max: -0.00375, -0.1434375, 0.032
+    color: '#151515'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.2346875, 0.006
+    max: 0.146875, -0.1434375, 0.032
+    color: '#151515'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.2390625, 0.007
+    max: 0.14125, -0.2228125, 0.028999999999999998
+    color: '#151515'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.2015625, 0.026999999999999996
+    max: 0.0865625, -0.1765625, 0.043
+    color: '#303030'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.2015625, 0.026999999999999996
+    max: 0.1103125, -0.1765625, 0.043
+    color: '#303030'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.2484375, 0.007
+    max: 0.1390625, -0.2203125, 0.03
+    color: '#151515'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.2421875, 0.023
+    max: -0.008125, -0.13125, 0.038
+    color: '#303030'
+  - label: continuous attached waist belt
+    min: -0.1734375, -0.1484375, 0.025
+    max: 0.1421875, -0.11875, 0.047
+    color: '#242424'
+  - label: sewn waist belt loop 12.15
+    min: -0.1203125, -0.1525, 0.039
+    max: -0.1078125, -0.1125, 0.053
+    color: '#151515'
+  - label: sewn waist belt loop 18.4
+    min: 0.075, -0.1525, 0.039
+    max: 0.0875, -0.1125, 0.053
+    color: '#151515'
+  - label: original small waist clasp
+    min: -0.0625, -0.15625, 0.045
+    max: 0.03125, -0.125, 0.053
+    color: '#FFFFFF'
+    surface: CMU3DUniformsExtraCloudArt013
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCJumpsuitSunRidersWorldCloud
+  label: RMCJumpsuitSunRiders laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - RMCJumpsuitSunRiders
+  referencePrototype: RMCJumpsuitSunRiders
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Uniforms/Marine/standard/jungle.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Folded field uniform: attached short sleeves, turned collar, two chest pockets and broad cloth waistband;
+    original jungle palette. Default base dropped/world icon only. No actor, worn, held, accessories, stains, camouflage
+    changes, live tint, folded worn prefixes or animations. Physical thickness and underside inferred; native admission,
+    saved-map fit and fidelity unverified.'
+  parts:
+  - label: continuous rear shirt cloth
+    min: -0.146875, -0.0796875, 0.004
+    max: 0.115625, 0.159375, 0.024
+    color: '#403A30'
+  - label: left shirt front continuous cloth panel
+    min: -0.1484375, -0.0625, 0.008
+    max: -0.015625, 0.1515625, 0.043
+    color: '#625D45'
+  - label: left shirt front left turned edge
+    min: -0.153125, -0.0628125, 0.006
+    max: -0.138125, 0.151875, 0.038
+    color: '#403A30'
+    shape: CylinderY
+  - label: left shirt front right turned edge
+    min: -0.0259375, -0.0628125, 0.006
+    max: -0.0109375, 0.151875, 0.038
+    color: '#403A30'
+    shape: CylinderY
+  - label: left shirt front lower folded edge
+    min: -0.1475, -0.0671875, 0.007
+    max: -0.0165625, -0.0509375, 0.034999999999999996
+    color: '#403A30'
+    shape: CylinderX
+  - label: left shirt front left shallow folded fabric
+    min: -0.19, 0.0320313, 0.032999999999999995
+    max: 0.0021875, 0.0570313, 0.048999999999999995
+    color: '#625D45'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left shirt front right shallow folded fabric
+    min: -0.16625, 0.0320313, 0.032999999999999995
+    max: 0.0259375, 0.0570313, 0.048999999999999995
+    color: '#625D45'
+    shape: WedgeY
+    yaw: 90
+  - label: right shirt front continuous cloth panel
+    min: -0.015625, -0.0625, 0.008
+    max: 0.1171875, 0.1515625, 0.043
+    color: '#625D45'
+  - label: right shirt front left turned edge
+    min: -0.0203125, -0.0628125, 0.006
+    max: -0.0053125, 0.151875, 0.038
+    color: '#403A30'
+    shape: CylinderY
+  - label: right shirt front right turned edge
+    min: 0.106875, -0.0628125, 0.006
+    max: 0.121875, 0.151875, 0.038
+    color: '#403A30'
+    shape: CylinderY
+  - label: right shirt front lower folded edge
+    min: -0.0146875, -0.0671875, 0.007
+    max: 0.11625, -0.0509375, 0.034999999999999996
+    color: '#403A30'
+    shape: CylinderX
+  - label: right shirt front left shallow folded fabric
+    min: -0.0571875, 0.0320313, 0.032999999999999995
+    max: 0.135, 0.0570313, 0.048999999999999995
+    color: '#625D45'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right shirt front right shallow folded fabric
+    min: -0.0334375, 0.0320313, 0.032999999999999995
+    max: 0.15875, 0.0570313, 0.048999999999999995
+    color: '#625D45'
+    shape: WedgeY
+    yaw: 90
+  - label: recessed inner neck facing
+    min: -0.08125, 0.1375, 0.006
+    max: 0.05, 0.2140625, 0.022
+    color: '#1F1F1F'
+  - label: left continuous shoulder cloth
+    min: -0.1744487, 0.14375, 0.008
+    max: -0.0786763, 0.2140625, 0.041
+    color: '#9FA08A'
+    yaw: -95.617581
+  - label: left sloping sleeve cloth
+    min: -0.2105515, 0.0945313, 0.009
+    max: -0.1113235, 0.1632812, 0.036
+    color: '#9FA08A'
+    yaw: -116.161566
+  - label: left cuff lower cloth lip
+    min: -0.207558, 0.0660938, 0.011
+    max: -0.1502545, 0.0839063, 0.025
+    color: '#403A30'
+    yaw: -25.866357
+  - label: left cuff upper cloth lip
+    min: -0.207558, 0.0779688, 0.028
+    max: -0.1502545, 0.0970313, 0.047
+    color: '#8C8C6C'
+    yaw: -25.866357
+  - label: left cuff inner joined end
+    min: -0.1606268, 0.0648437, 0.014
+    max: -0.1471857, 0.0835938, 0.042
+    color: '#403A30'
+    yaw: -35.537678
+  - label: left turned collar backing
+    min: -0.1416337, 0.1465625, 0.014
+    max: -0.0099288, 0.1909375, 0.045
+    color: '#625D45'
+    yaw: -41.633539
+  - label: left turned collar face
+    min: -0.1416337, 0.1525, 0.036
+    max: -0.0099288, 0.185, 0.054
+    color: '#8C8C6C'
+    yaw: -41.633539
+  - label: left collar inside crease
+    min: -0.0966833, 0.1898437, 0.018
+    max: -0.0236292, 0.1992188, 0.039
+    color: '#1F1F1F'
+    yaw: -41.531771
+  - label: left flat chest pocket cloth
+    min: -0.125, 0.059375, 0.034
+    max: -0.0625, 0.1328125, 0.047
+    color: '#9FA08A'
+  - label: left pocket folded upper seam
+    min: -0.125, 0.12, 0.043
+    max: -0.0625, 0.13125, 0.052
+    color: '#625D45'
+  - label: right continuous shoulder cloth
+    min: 0.0474263, 0.14375, 0.008
+    max: 0.1431987, 0.2140625, 0.041
+    color: '#9FA08A'
+    yaw: -84.382419
+  - label: right sloping sleeve cloth
+    min: 0.0800735, 0.0945313, 0.009
+    max: 0.1793015, 0.1632812, 0.036
+    color: '#9FA08A'
+    yaw: -63.838434
+  - label: right cuff lower cloth lip
+    min: 0.1190045, 0.0660938, 0.011
+    max: 0.176308, 0.0839063, 0.025
+    color: '#403A30'
+    yaw: -154.133643
+  - label: right cuff upper cloth lip
+    min: 0.1190045, 0.0779688, 0.028
+    max: 0.176308, 0.0970313, 0.047
+    color: '#8C8C6C'
+    yaw: -154.133643
+  - label: right cuff inner joined end
+    min: 0.1159357, 0.0648437, 0.014
+    max: 0.1293768, 0.0835938, 0.042
+    color: '#403A30'
+    yaw: -144.462322
+  - label: right turned collar backing
+    min: -0.0213212, 0.1465625, 0.014
+    max: 0.1103837, 0.1909375, 0.045
+    color: '#625D45'
+    yaw: -138.366461
+  - label: right turned collar face
+    min: -0.0213212, 0.1525, 0.036
+    max: 0.1103837, 0.185, 0.054
+    color: '#8C8C6C'
+    yaw: -138.366461
+  - label: right collar inside crease
+    min: -0.0076208, 0.1898437, 0.018
+    max: 0.0654333, 0.1992188, 0.039
+    color: '#1F1F1F'
+    yaw: -138.468229
+  - label: right flat chest pocket cloth
+    min: 0.03125, 0.059375, 0.034
+    max: 0.09375, 0.1328125, 0.047
+    color: '#625D45'
+  - label: right pocket folded upper seam
+    min: 0.03125, 0.12, 0.043
+    max: 0.09375, 0.13125, 0.052
+    color: '#8C8C6C'
+  - label: continuous center button placket
+    min: -0.028125, -0.0671875, 0.03
+    max: -0.003125, 0.1359375, 0.049
+    color: '#625D45'
+  - label: folded trousers continuous underside
+    min: -0.1734375, -0.1671875, 0.004
+    max: 0.1421875, -0.0484375, 0.021
+    color: '#403A30'
+  - label: left folded trouser panel continuous cloth panel
+    min: -0.1734375, -0.171875, 0.008
+    max: -0.0171875, -0.08125, 0.037
+    color: '#9FA08A'
+  - label: left folded trouser panel left turned edge
+    min: -0.178125, -0.1721875, 0.006
+    max: -0.163125, -0.0809375, 0.032
+    color: '#403A30'
+    shape: CylinderY
+  - label: left folded trouser panel right turned edge
+    min: -0.0275, -0.1721875, 0.006
+    max: -0.0125, -0.0809375, 0.032
+    color: '#403A30'
+    shape: CylinderY
+  - label: left folded trouser panel lower folded edge
+    min: -0.1725, -0.1765625, 0.007
+    max: -0.018125, -0.1603125, 0.028999999999999998
+    color: '#403A30'
+    shape: CylinderX
+  - label: left folded trouser panel left shallow folded fabric
+    min: -0.1415625, -0.1390625, 0.026999999999999996
+    max: -0.0728125, -0.1140625, 0.043
+    color: '#9FA08A'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left folded trouser panel right shallow folded fabric
+    min: -0.1178125, -0.1390625, 0.026999999999999996
+    max: -0.0490625, -0.1140625, 0.043
+    color: '#9FA08A'
+    shape: WedgeY
+    yaw: 90
+  - label: left turned trouser hem
+    min: -0.1625, -0.1859375, 0.007
+    max: -0.0203125, -0.1578125, 0.03
+    color: '#403A30'
+    shape: CylinderX
+  - label: right folded trouser panel continuous cloth panel
+    min: -0.0140625, -0.171875, 0.008
+    max: 0.1421875, -0.08125, 0.037
+    color: '#9FA08A'
+  - label: right folded trouser panel left turned edge
+    min: -0.01875, -0.1721875, 0.006
+    max: -0.00375, -0.0809375, 0.032
+    color: '#403A30'
+    shape: CylinderY
+  - label: right folded trouser panel right turned edge
+    min: 0.131875, -0.1721875, 0.006
+    max: 0.146875, -0.0809375, 0.032
+    color: '#403A30'
+    shape: CylinderY
+  - label: right folded trouser panel lower folded edge
+    min: -0.013125, -0.1765625, 0.007
+    max: 0.14125, -0.1603125, 0.028999999999999998
+    color: '#403A30'
+    shape: CylinderX
+  - label: right folded trouser panel left shallow folded fabric
+    min: 0.0178125, -0.1390625, 0.026999999999999996
+    max: 0.0865625, -0.1140625, 0.043
+    color: '#9FA08A'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right folded trouser panel right shallow folded fabric
+    min: 0.0415625, -0.1390625, 0.026999999999999996
+    max: 0.1103125, -0.1140625, 0.043
+    color: '#9FA08A'
+    shape: WedgeY
+    yaw: 90
+  - label: right turned trouser hem
+    min: -0.003125, -0.1859375, 0.007
+    max: 0.1390625, -0.1578125, 0.03
+    color: '#403A30'
+    shape: CylinderX
+  - label: folded trousers central pressed seam
+    min: -0.023125, -0.1796875, 0.023
+    max: -0.008125, -0.06875, 0.038
+    color: '#9FA08A'
+  - label: continuous marine cloth waistband
+    min: -0.1734375, -0.084375, 0.026
+    max: 0.1421875, -0.05875, 0.044
+    color: '#625D45'
+  - label: marine lower folded cloth highlight
+    min: -0.1125, -0.11625, 0.034
+    max: 0.08125, -0.09625, 0.044
+    color: '#9FA08A'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DRMCMarineUniformDressGeneralWorldCloud
+  label: RMCMarineUniformDressGeneral laid-out uniform
+  status: draft
+  sourcePrototypes:
+  - RMCMarineUniformDressGeneral
+  referencePrototype: RMCMarineUniformDressGeneral
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Uniforms/DressBlues/general.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'General dress uniform: compact white shirt with small collar leaves and two source-visible muted
+    buttons, dark attached folded trousers and broad red Blood Stripes on both outer legs. No medals, ribbons or
+    coat are invented. Default base dropped/world icon only. No actor, worn, held, accessories, stains, camouflage
+    changes, live tint, folded worn prefixes or animations. Physical thickness and underside inferred; native admission,
+    saved-map fit and fidelity unverified.'
+  parts:
+  - label: dress shirt continuous back
+    min: -0.1453125, -0.053125, 0.005
+    max: 0.1140625, 0.20625, 0.023
+    color: '#BDB3B3'
+  - label: left white dress shirt front continuous cloth panel
+    min: -0.1375, -0.0265625, 0.008
+    max: -0.015625, 0.1859375, 0.038
+    color: '#EBE7E7'
+  - label: left white dress shirt front left turned edge
+    min: -0.1421875, -0.026875, 0.006
+    max: -0.1271875, 0.18625, 0.033
+    color: '#BDB3B3'
+    shape: CylinderY
+  - label: left white dress shirt front right turned edge
+    min: -0.0259375, -0.026875, 0.006
+    max: -0.0109375, 0.18625, 0.033
+    color: '#BDB3B3'
+    shape: CylinderY
+  - label: left white dress shirt front lower folded edge
+    min: -0.1365625, -0.03125, 0.007
+    max: -0.0165625, -0.015, 0.03
+    color: '#BDB3B3'
+    shape: CylinderX
+  - label: left white dress shirt front left shallow folded fabric
+    min: -0.18375, 0.0671875, 0.027999999999999997
+    max: 0.006875, 0.0921875, 0.044
+    color: '#EBE7E7'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left white dress shirt front right shallow folded fabric
+    min: -0.16, 0.0671875, 0.027999999999999997
+    max: 0.030625, 0.0921875, 0.044
+    color: '#EBE7E7'
+    shape: WedgeY
+    yaw: 90
+  - label: right white dress shirt front continuous cloth panel
+    min: -0.015625, -0.0265625, 0.008
+    max: 0.10625, 0.1859375, 0.038
+    color: '#EBE7E7'
+  - label: right white dress shirt front left turned edge
+    min: -0.0203125, -0.026875, 0.006
+    max: -0.0053125, 0.18625, 0.033
+    color: '#BDB3B3'
+    shape: CylinderY
+  - label: right white dress shirt front right turned edge
+    min: 0.0959375, -0.026875, 0.006
+    max: 0.1109375, 0.18625, 0.033
+    color: '#BDB3B3'
+    shape: CylinderY
+  - label: right white dress shirt front lower folded edge
+    min: -0.0146875, -0.03125, 0.007
+    max: 0.1053125, -0.015, 0.03
+    color: '#BDB3B3'
+    shape: CylinderX
+  - label: right white dress shirt front left shallow folded fabric
+    min: -0.061875, 0.0671875, 0.027999999999999997
+    max: 0.12875, 0.0921875, 0.044
+    color: '#EBE7E7'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right white dress shirt front right shallow folded fabric
+    min: -0.038125, 0.0671875, 0.027999999999999997
+    max: 0.1525, 0.0921875, 0.044
+    color: '#EBE7E7'
+    shape: WedgeY
+    yaw: 90
+  - label: dress left shoulder yoke
+    min: -0.15, 0.1625, 0.008
+    max: -0.02875, 0.2359375, 0.033
+    color: '#BDB3B3'
+  - label: dress right shoulder yoke
+    min: -0.0025, 0.1625, 0.008
+    max: 0.11875, 0.2359375, 0.033
+    color: '#BDB3B3'
+  - label: dress lower connected yoke
+    min: -0.0375, 0.1625, 0.008
+    max: 0.00625, 0.2140625, 0.033
+    color: '#BDB3B3'
+  - label: left dress shoulder attachment
+    min: -0.1890416, 0.1382813, 0.01
+    max: -0.1015834, 0.2007813, 0.037
+    color: '#BDB3B3'
+    yaw: -108.75865
+  - label: left short white sleeve
+    min: -0.2305711, 0.0929687, 0.007
+    max: -0.1350539, 0.1429688, 0.035
+    color: '#BDB3B3'
+    yaw: -93.751729
+  - label: left white cuff fold
+    min: -0.1988002, 0.06, 0.025
+    max: -0.1715123, 0.080625, 0.042
+    color: '#EBE7E7'
+    yaw: -13.24052
+  - label: left small dress collar leaf
+    min: -0.066444, 0.1934375, 0.021
+    max: -0.017931, 0.2190625, 0.045
+    color: '#D9D0D0'
+    yaw: -75.068583
+  - label: right dress shoulder attachment
+    min: 0.0703334, 0.1382813, 0.01
+    max: 0.1577916, 0.2007813, 0.037
+    color: '#BDB3B3'
+    yaw: -71.24135
+  - label: right short white sleeve
+    min: 0.1038039, 0.0929687, 0.007
+    max: 0.1993211, 0.1429688, 0.035
+    color: '#BDB3B3'
+    yaw: -86.248271
+  - label: right white cuff fold
+    min: 0.1402623, 0.06, 0.025
+    max: 0.1675502, 0.080625, 0.042
+    color: '#EBE7E7'
+    yaw: -166.75948
+  - label: right small dress collar leaf
+    min: -0.013319, 0.1934375, 0.021
+    max: 0.035194, 0.2190625, 0.045
+    color: '#D9D0D0'
+    yaw: -104.931417
+  - label: white dress shirt center placket
+    min: -0.025625, -0.025, 0.03
+    max: -0.005625, 0.203125, 0.044
+    color: '#D9D0D0'
+  - label: source-visible muted button 11.0
+    min: -0.02125, 0.1359375, 0.04
+    max: -0.01, 0.150625, 0.048
+    color: '#BDB3B3'
+  - label: source-visible muted button 13.0
+    min: -0.02125, 0.0734375, 0.04
+    max: -0.01, 0.088125, 0.048
+    color: '#BDB3B3'
+  - label: black trousers continuous folded backing
+    min: -0.16875, -0.171875, 0.004
+    max: 0.1375, -0.0203125, 0.026
+    color: '#1E1E1E'
+  - label: left black folded dress trousers continuous cloth panel
+    min: -0.16875, -0.175, 0.008
+    max: -0.015625, -0.0359375, 0.034
+    color: '#232323'
+  - label: left black folded dress trousers left turned edge
+    min: -0.1734375, -0.1753125, 0.006
+    max: -0.1584375, -0.035625, 0.029
+    color: '#0C0D0F'
+    shape: CylinderY
+  - label: left black folded dress trousers right turned edge
+    min: -0.0259375, -0.1753125, 0.006
+    max: -0.0109375, -0.035625, 0.029
+    color: '#0C0D0F'
+    shape: CylinderY
+  - label: left black folded dress trousers lower folded edge
+    min: -0.1678125, -0.1796875, 0.007
+    max: -0.0165625, -0.1634375, 0.026000000000000002
+    color: '#0C0D0F'
+    shape: CylinderX
+  - label: left black folded dress trousers left shallow folded fabric
+    min: -0.1626563, -0.1179687, 0.024
+    max: -0.0454688, -0.0929688, 0.04
+    color: '#232323'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: left black folded dress trousers right shallow folded fabric
+    min: -0.1389062, -0.1179687, 0.024
+    max: -0.0217187, -0.0929688, 0.04
+    color: '#232323'
+    shape: WedgeY
+    yaw: 90
+  - label: left broad red Blood Stripe
+    min: -0.153125, -0.1515625, 0.029
+    max: -0.12875, -0.03375, 0.043
+    color: '#881D16'
+  - label: left red stripe lower shade
+    min: -0.153125, -0.1515625, 0.039
+    max: -0.12875, -0.0984375, 0.044
+    color: '#771913'
+  - label: right black folded dress trousers continuous cloth panel
+    min: -0.015625, -0.175, 0.008
+    max: 0.1375, -0.0359375, 0.034
+    color: '#232323'
+  - label: right black folded dress trousers left turned edge
+    min: -0.0203125, -0.1753125, 0.006
+    max: -0.0053125, -0.035625, 0.029
+    color: '#0C0D0F'
+    shape: CylinderY
+  - label: right black folded dress trousers right turned edge
+    min: 0.1271875, -0.1753125, 0.006
+    max: 0.1421875, -0.035625, 0.029
+    color: '#0C0D0F'
+    shape: CylinderY
+  - label: right black folded dress trousers lower folded edge
+    min: -0.0146875, -0.1796875, 0.007
+    max: 0.1365625, -0.1634375, 0.026000000000000002
+    color: '#0C0D0F'
+    shape: CylinderX
+  - label: right black folded dress trousers left shallow folded fabric
+    min: -0.0095312, -0.1179687, 0.024
+    max: 0.1076563, -0.0929688, 0.04
+    color: '#232323'
+    shape: WedgeYReverse
+    yaw: 90
+  - label: right black folded dress trousers right shallow folded fabric
+    min: 0.0142187, -0.1179687, 0.024
+    max: 0.1314062, -0.0929688, 0.04
+    color: '#232323'
+    shape: WedgeY
+    yaw: 90
+  - label: right broad red Blood Stripe
+    min: 0.096875, -0.1515625, 0.029
+    max: 0.12125, -0.03375, 0.043
+    color: '#881D16'
+  - label: right red stripe lower shade
+    min: 0.096875, -0.1515625, 0.039
+    max: 0.12125, -0.0984375, 0.044
+    color: '#771913'
+  - label: dress trousers horizontal waist seam
+    min: -0.1671875, -0.0453125, 0.026
+    max: 0.1359375, -0.0265625, 0.039
+    color: '#0C0D0F'

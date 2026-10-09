@@ -51,6 +51,7 @@ using Content.Shared._RMC14.Light;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.CMU14.Marines; // CMU14
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab; // CMU14
 using Content.Shared._RMC14.Marines.HyperSleep;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Rules;
@@ -936,6 +937,9 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                 if (_mobState.IsDead(xeno))
                     continue;
 
+                if (HasComp<CMUWendigoLabMadeComponent>(xeno)) // CMU14: lab-made Wendigos are not hive xenos
+                    continue;
+
                 if ((ev.Dropship == null || transformComp.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(transformComp)) // CMU14
                 {
                     if (comp.CountedInSlots)
@@ -1239,6 +1243,8 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
             var xenos = EntityQueryEnumerator<ActorComponent, XenoComponent, MobStateComponent, TransformComponent>();
             while (xenos.MoveNext(out var xenoId, out _, out var xeno, out var mobState, out var xform))
             {
+                if (HasComp<CMUWendigoLabMadeComponent>(xenoId)) continue; // CMU14: lab-made Wendigos never decide the round
+
                 if (!xeno.ContributesToVictory)
                     continue;
 
@@ -1358,7 +1364,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
             if (Timing.CurTime >= distress.QueenDiedCheck)
             {
-                if (_xenoEvolution.HasLiving<XenoComponent>(4))
+                if (_xenoEvolution.HasLiving<XenoComponent>(4, x => !HasComp<CMUWendigoLabMadeComponent>(x))) // CMU14: lab-made Wendigos never decide the round
                     EndRound(distress, DistressSignalRuleResult.MinorMarineVictory);
                 else
                     EndRound(distress, DistressSignalRuleResult.MajorMarineVictory, "rmc-distress-signal-majormarinevictory-timeout");
@@ -1731,7 +1737,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
         if (time >= component.QueenDiedCheck)
         {
-            if (_xenoEvolution.HasLiving<XenoComponent>(4))
+            if (_xenoEvolution.HasLiving<XenoComponent>(4, x => !HasComp<CMUWendigoLabMadeComponent>(x))) // CMU14: lab-made Wendigos never decide the round
                 EndRound(component, DistressSignalRuleResult.MinorMarineVictory);
             else
                 EndRound(component, DistressSignalRuleResult.MajorMarineVictory, "rmc-distress-signal-majormarinevictory-timeout");

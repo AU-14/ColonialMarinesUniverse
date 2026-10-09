@@ -86,7 +86,7 @@
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    fiorina:
+    Almayer: # Matches the grid's BecomesStation ID in fiorina.yml.
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup

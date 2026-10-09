@@ -33,17 +33,28 @@
     camouflageVariations: { }
 
 - type: entity
-  parent: CMBeltUtility
+  parent: RMCBeltUtilityGeneral
   id: CMULACNBeltUtility
   name: LACN utility rig
-  description: An LACN load-bearing belt with pouches for tools and general supplies.
+  description: An LACN load-bearing belt with pouches for general supplies.
   components:
   - type: Sprite
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
   - type: Clothing
     sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
-  - type: Storage
-    whitelist: null
+  - type: ItemCamouflage
+    camouflageVariations: { }
+
+- type: entity
+  parent: CMBeltUtility
+  id: CMULACNBeltToolbelt
+  name: LACN toolbelt rig
+  description: An LACN load-bearing belt fitted with clips and pouches for engineering tools.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Universal/Belts/LACNutilitybelt.rsi
   - type: ItemCamouflage
     camouflageVariations: { }
 
@@ -204,9 +215,8 @@
     camouflageVariations: { }
 
 - type: entity
-  parent: CMULACNBeltUtility
-  id: CMULACNBeltUtilityFilled
-  name: LACN utility tools rig
+  parent: CMULACNBeltToolbelt
+  id: CMULACNBeltToolbeltFilled
   suffix: Filled
   components:
   - type: StorageFill

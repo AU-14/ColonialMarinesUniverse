@@ -592,6 +592,7 @@ public sealed partial class ExplosionSystem
             || EntityManager.IsQueuedForDeletion(uid)
             || HasComp<VehicleComponent>(uid)
             || HasComp<GridVehicleMoverComponent>(uid)
+            || CMUIsExplosionImmovable(uid) // CMU14
             || !_physicsQuery.TryGetComponent(uid, out var physics)
             || physics.BodyType != BodyType.Dynamic)
             return;
@@ -624,6 +625,11 @@ public sealed partial class ExplosionSystem
         if (_tileDefinitionManager[tileRef.Tile.TypeId] is not ContentTileDefinition tileDef || tileDef.Indestructible)
             return;
 
+        // cmu edit start: tiles marked breakIgnoresVacuum (multi-Z grates) break even when vacuums are disabled
+        if (tileDef.BreakIgnoresVacuum)
+            canCreateVacuum = true;
+        else
+        // cmu edit end
         if (!CanCreateVacuum)
             canCreateVacuum = false;
         else if (tileDef.MapAtmosphere)
@@ -653,6 +659,9 @@ public sealed partial class ExplosionSystem
         if (tileDef.TileId == tileRef.Tile.TypeId)
             return;
 
+        // cmu edit start: roll the destroyed tile's drops in its place
+        CMUSpawnTileDestroyDrops(tileRef);
+        // cmu edit end
         damagedTiles.Add((tileRef.GridIndices, new Tile(tileDef.TileId)));
     }
 

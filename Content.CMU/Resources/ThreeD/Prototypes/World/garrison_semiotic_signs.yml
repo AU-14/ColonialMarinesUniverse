@@ -1,0 +1,890 @@
+# Source and mounting assumptions: SOURCES_SEMIOTIC_SIGNS.md.
+- type: cmu3DModel
+  id: CMU3DSemioticAutodoc
+  label: autodoc semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticAutodoc
+  referencePrototype: CMSemioticAutodoc
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: autodoc
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: &id001
+  - RMCWallElevatorNoConnect8
+  - RMCWallHybrisaEngi
+  - RMCWallHybrisaMedical
+  - RMCWallHybrisaRock
+  - RMCWallKutjevoRockBorder
+  - RMCWallPrisonHull
+  - RMCWallPrisonReinforced
+  - RMCWallSPPGreyReinforced
+  - RMCWallStrata
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticAutodocFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticAutoopenclose
+  label: autoopenclose semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticAutoopenclose
+  referencePrototype: CMSemioticAutoopenclose
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: autoopenclose
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticAutoopencloseFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticCoffee
+  label: coffee semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticCoffee
+  referencePrototype: CMSemioticCoffee
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: coffee
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticCoffeeFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticFirehaz
+  label: firehaz semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticFire_haz
+  referencePrototype: CMSemioticFire_haz
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: firehaz
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticFirehazFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticFive
+  label: 5 semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticFive
+  referencePrototype: CMSemioticFive
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: '5'
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticFiveFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticFour
+  label: 4 semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticFour
+  referencePrototype: CMSemioticFour
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: '4'
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticFourFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticGalley
+  label: galley semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticGalley
+  referencePrototype: CMSemioticGalley
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: galley
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticGalleyFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticHighvoltage
+  label: highvoltage semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticHigh_voltage
+  referencePrototype: CMSemioticHigh_voltage
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: highvoltage
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticHighvoltageFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticIntercom
+  label: comm semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticIntercom
+  referencePrototype: CMSemioticIntercom
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: comm
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticIntercomFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticLadder
+  label: ladder semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticLadder
+  referencePrototype: CMSemioticLadder
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: ladder
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticLadderFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticLifesupport
+  label: lifesupport semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticLife_support
+  referencePrototype: CMSemioticLife_support
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: lifesupport
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticLifesupportFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticMedical
+  label: medical semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticMedical
+  referencePrototype: CMSemioticMedical
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: medical
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticMedicalFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticOne
+  label: 1 semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticOne
+  referencePrototype: CMSemioticOne
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: '1'
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticOneFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticOutpatient
+  label: outpatient semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticOutpatient
+  referencePrototype: CMSemioticOutpatient
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: outpatient
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticOutpatientFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticRestrictedarea
+  label: restrictedarea semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticRestrictedarea
+  referencePrototype: CMSemioticRestrictedarea
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: restrictedarea
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticRestrictedareaFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticSecurity
+  label: security semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticSecurity
+  referencePrototype: CMSemioticSecurity
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: security
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticSecurityFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticSeven
+  label: 7 semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticSeven
+  referencePrototype: CMSemioticSeven
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: '7'
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticSevenFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticSix
+  label: 6 semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticSix
+  referencePrototype: CMSemioticSix
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: '6'
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticSixFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticThree
+  label: 3 semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticThree
+  referencePrototype: CMSemioticThree
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: '3'
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticThreeFace
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DSemioticTwo
+  label: 2 semiotic plate
+  status: draft
+  sourcePrototypes:
+  - CMSemioticTwo
+  referencePrototype: CMSemioticTwo
+  referenceRsi: _RMC14/Structures/Wallmounts/semiotics.rsi
+  referenceState: '2'
+  sourceDirections: 1
+  wallMounted: true
+  useEntityRotation: true
+  backWallMountTargets: *id001
+  fitInsideWall: true
+  description: Clipped solid plate with original printed pixels, source lateral pivot
+    and wall-face mounting. Thickness, back material and 1.9-tile mounting height
+    remain inferred. Static single-frame source.
+  parts:
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 2.0875000
+    max: -0.0937500, -0.5010000, 2.1187500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 2.0562500
+    max: -0.0625000, -0.5010000, 2.0875000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4375000, -0.5260000, 1.7750000
+    max: -0.0312500, -0.5010000, 2.0562500
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.4062500, -0.5260000, 1.7437500
+    max: -0.0625000, -0.5010000, 1.7750000
+    color: '#626052'
+  - label: clipped metal plate backing
+    min: -0.3750000, -0.5260000, 1.7125000
+    max: -0.0937500, -0.5010000, 1.7437500
+    color: '#626052'
+  - label: original printed face
+    min: -0.4375000, -0.5280000, 1.7125000
+    max: -0.0312500, -0.5260000, 2.1187500
+    color: '#FFFFFF'
+    surface: CMU3DSemioticTwoFace
+    surfaceAxis: XZ

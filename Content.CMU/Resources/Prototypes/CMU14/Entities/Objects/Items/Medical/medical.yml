@@ -1233,8 +1233,8 @@
 - type: entity
   parent: CMBaseHealingItem
   id: AU14Tourniquet
-  name: CAT tourniquet
-  description: A single use tourniquet designed for self-application under fire. The CAT uses a high-tension Velcro strap and windlass rod to cut off arterial bleeding on limbs. Effective, painful and not exactly gentle. Overuse can lead to nerve damage or amputation. Still, better maimed than dead.
+  name: tourniquet
+  description: A combat application tourniquet designed for self-application under fire. It uses a high-tension Velcro strap and windlass rod to cut off arterial bleeding on limbs. Effective, painful and not exactly gentle. Overuse can lead to nerve damage or amputation. Still, better maimed than dead. Meant to be used once, but it can be reused in a pinch.
   components:
   - type: Tag
     tags:

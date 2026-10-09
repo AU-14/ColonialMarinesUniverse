@@ -159,8 +159,8 @@ public sealed partial class HardpointSlotSystem : EntitySystem
 
     private void OnInsertAttempt(Entity<HardpointSlotsComponent> ent, ref ItemSlotInsertAttemptEvent args)
     {
-        // CMU14: includes installations started before ignition.
-        if (_hardpoints.IsCookedOff(ent.Owner))
+        // CMU14: also catches installs started before it got wrecked
+        if (_hardpoints.IsWrecked(ent.Owner))
         {
             args.Cancelled = true;
             return;
@@ -275,10 +275,10 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         if (!HasComp<HardpointItemComponent>(used))
             return false;
 
-        // CMU14: new parts cannot revive a cooked-off hull.
-        if (_hardpoints.IsCookedOff(ent.Owner))
+        // CMU14: fresh parts don't bring a wreck back
+        if (_hardpoints.IsWrecked(ent.Owner))
         {
-            _popup.PopupClient(Loc.GetString("cmu-tank-cook-off-unrepairable"), ent.Owner, user);
+            _popup.PopupClient(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, user);
             return true;
         }
 

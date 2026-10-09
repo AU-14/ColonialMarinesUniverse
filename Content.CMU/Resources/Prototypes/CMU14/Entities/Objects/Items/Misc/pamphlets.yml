@@ -384,15 +384,6 @@
 
 - type: entity
   parent: CMPamphletLanguage
-  id: AU14PamphletLanguageBrazilian
-  name: Treatise of the Verdant Empire
-  description: This appears to be a chronicle of the vast forests, diverse peoples, and vibrant dialects of Brazil.
-  components:
-  - type: SkillPamphlet
-    language: Brazilian
-
-- type: entity
-  parent: CMPamphletLanguage
   id: AU14PamphletLanguageSlovak
   name: Treatise of the Tatra Mountains
   description: This appears to be a record of the proud nation between the peaks, its language a bridge between Slavic brothers.

@@ -31,6 +31,21 @@
     defaultLanguage: English
 
 - type: entity
+  id: CMUHellhoundLanguagePreset
+  categories: [ HideSpawnMenu ]
+  name: Hellhound Languages
+  components:
+  - type: LanguagePreset
+    spokenLanguages:
+    - Beast
+    understoodLanguages:
+    - Yautja
+    - Beast
+#   - Xeno
+    currentLanguage: Beast
+    defaultLanguage: Beast
+
+- type: entity
   id: AU14LanguagePresetArcturian
   name: Arcturian Language for humans
   categories: [ HideSpawnMenu ]

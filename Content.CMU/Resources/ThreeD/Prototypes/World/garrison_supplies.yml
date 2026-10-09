@@ -1,0 +1,1783 @@
+# Canonical editable drafts; see SOURCES_SUPPLIES.md.
+- type: cmu3DModel
+  id: CMU3DCMPillCanisterBicaridine
+  label: Bicaridine pill canister
+  status: draft
+  sourcePrototypes:
+  - CMPillCanisterBicaridine
+  description: Compact medicine-specific canister with a raised screw cap, grip ribs and the source right-side paper
+    label. Its 0.24-tile cap fits the closely placed medicine rows. Closed cap over the medicine-specific bottle; open
+    cap layer hidden. Depth, hidden faces and materials are inferred. Dynamic contents and appearance remain unfinished.
+  referencePrototype: CMPillCanisterBicaridine
+  referenceRsi: /Textures/CMU14/ThreeD/SupplypillcanisterReferences.rsi
+  referenceState: CMPillCanisterBicaridine
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: colored bottle body
+    min: -0.09600, -0.09600, 0.02000
+    max: 0.09600, 0.09600, 0.27100
+    color: '#C91F1F'
+    shape: CylinderZ
+  - label: bottle lower bevel
+    min: -0.08350, -0.08350, 0.00000
+    max: 0.08350, 0.08350, 0.03700
+    color: '#610101'
+    shape: CylinderZ
+  - label: neck shadow
+    min: -0.09000, -0.09000, 0.25800
+    max: 0.09000, 0.09000, 0.29400
+    color: '#610101'
+    shape: CylinderZ
+  - label: cap rim
+    min: -0.12000, -0.12000, 0.28200
+    max: 0.12000, 0.12000, 0.31800
+    color: '#9E9A92'
+    shape: CylinderZ
+  - label: closed pale screw cap
+    min: -0.11550, -0.11550, 0.31000
+    max: 0.11550, 0.11550, 0.34700
+    color: '#C2BEB5'
+    shape: CylinderZ
+  - label: cap top inset
+    min: -0.09550, -0.09550, 0.34100
+    max: 0.09550, 0.09550, 0.35500
+    color: '#DDDAD2'
+    shape: CylinderZ
+  - label: cap grip rib
+    min: 0.10700, -0.00600, 0.30900
+    max: 0.11900, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, 0.05050, 0.30900
+    max: 0.10386, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, 0.09186, 0.30900
+    max: 0.06250, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, 0.10700, 0.30900
+    max: 0.00600, 0.11900, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, 0.09186, 0.30900
+    max: -0.05050, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, 0.05050, 0.30900
+    max: -0.09186, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.11900, -0.00600, 0.30900
+    max: -0.10700, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, -0.06250, 0.30900
+    max: -0.09186, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, -0.10386, 0.30900
+    max: -0.05050, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, -0.11900, 0.30900
+    max: 0.00600, -0.10700, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, -0.10386, 0.30900
+    max: 0.06250, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, -0.06250, 0.30900
+    max: 0.10386, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: small medicine label
+    min: -0.01000, -0.10100, 0.09300
+    max: 0.08100, -0.09600, 0.23900
+    color: '#C4BFB1'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.19700
+    max: 0.07200, -0.10100, 0.21800
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.16900
+    max: 0.04800, -0.10100, 0.19000
+    color: '#49443B'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.14400
+    max: 0.07200, -0.10100, 0.16500
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.11200
+    max: 0.04800, -0.10100, 0.13300
+    color: '#49443B'
+- type: cmu3DModel
+  id: CMU3DCMPillCanisterDexalin
+  label: Dexalin pill canister
+  status: draft
+  sourcePrototypes:
+  - CMPillCanisterDexalin
+  description: Compact medicine-specific canister with a raised screw cap, grip ribs and the source right-side paper
+    label. Its 0.24-tile cap fits the closely placed medicine rows. Closed cap over the medicine-specific bottle; open
+    cap layer hidden. Depth, hidden faces and materials are inferred. Dynamic contents and appearance remain unfinished.
+  referencePrototype: CMPillCanisterDexalin
+  referenceRsi: /Textures/CMU14/ThreeD/SupplypillcanisterReferences.rsi
+  referenceState: CMPillCanisterDexalin
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: colored bottle body
+    min: -0.09600, -0.09600, 0.02000
+    max: 0.09600, 0.09600, 0.27100
+    color: '#317DEF'
+    shape: CylinderZ
+  - label: bottle lower bevel
+    min: -0.08350, -0.08350, 0.00000
+    max: 0.08350, 0.08350, 0.03700
+    color: '#003482'
+    shape: CylinderZ
+  - label: neck shadow
+    min: -0.09000, -0.09000, 0.25800
+    max: 0.09000, 0.09000, 0.29400
+    color: '#003482'
+    shape: CylinderZ
+  - label: cap rim
+    min: -0.12000, -0.12000, 0.28200
+    max: 0.12000, 0.12000, 0.31800
+    color: '#9E9A92'
+    shape: CylinderZ
+  - label: closed pale screw cap
+    min: -0.11550, -0.11550, 0.31000
+    max: 0.11550, 0.11550, 0.34700
+    color: '#C2BEB5'
+    shape: CylinderZ
+  - label: cap top inset
+    min: -0.09550, -0.09550, 0.34100
+    max: 0.09550, 0.09550, 0.35500
+    color: '#DDDAD2'
+    shape: CylinderZ
+  - label: cap grip rib
+    min: 0.10700, -0.00600, 0.30900
+    max: 0.11900, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, 0.05050, 0.30900
+    max: 0.10386, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, 0.09186, 0.30900
+    max: 0.06250, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, 0.10700, 0.30900
+    max: 0.00600, 0.11900, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, 0.09186, 0.30900
+    max: -0.05050, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, 0.05050, 0.30900
+    max: -0.09186, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.11900, -0.00600, 0.30900
+    max: -0.10700, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, -0.06250, 0.30900
+    max: -0.09186, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, -0.10386, 0.30900
+    max: -0.05050, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, -0.11900, 0.30900
+    max: 0.00600, -0.10700, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, -0.10386, 0.30900
+    max: 0.06250, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, -0.06250, 0.30900
+    max: 0.10386, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: small medicine label
+    min: -0.01000, -0.10100, 0.09300
+    max: 0.08100, -0.09600, 0.23900
+    color: '#C4BFB1'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.19700
+    max: 0.07200, -0.10100, 0.21800
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.16900
+    max: 0.04800, -0.10100, 0.19000
+    color: '#49443B'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.14400
+    max: 0.07200, -0.10100, 0.16500
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.11200
+    max: 0.04800, -0.10100, 0.13300
+    color: '#49443B'
+- type: cmu3DModel
+  id: CMU3DCMPillCanisterDylovene
+  label: Dylovene pill canister
+  status: draft
+  sourcePrototypes:
+  - CMPillCanisterDylovene
+  description: Compact medicine-specific canister with a raised screw cap, grip ribs and the source right-side paper
+    label. Its 0.24-tile cap fits the closely placed medicine rows. Closed cap over the medicine-specific bottle; open
+    cap layer hidden. Depth, hidden faces and materials are inferred. Dynamic contents and appearance remain unfinished.
+  referencePrototype: CMPillCanisterDylovene
+  referenceRsi: /Textures/CMU14/ThreeD/SupplypillcanisterReferences.rsi
+  referenceState: CMPillCanisterDylovene
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: colored bottle body
+    min: -0.09600, -0.09600, 0.02000
+    max: 0.09600, 0.09600, 0.27100
+    color: '#A7DC3C'
+    shape: CylinderZ
+  - label: bottle lower bevel
+    min: -0.08350, -0.08350, 0.00000
+    max: 0.08350, 0.08350, 0.03700
+    color: '#4B6B0D'
+    shape: CylinderZ
+  - label: neck shadow
+    min: -0.09000, -0.09000, 0.25800
+    max: 0.09000, 0.09000, 0.29400
+    color: '#4B6B0D'
+    shape: CylinderZ
+  - label: cap rim
+    min: -0.12000, -0.12000, 0.28200
+    max: 0.12000, 0.12000, 0.31800
+    color: '#9E9A92'
+    shape: CylinderZ
+  - label: closed pale screw cap
+    min: -0.11550, -0.11550, 0.31000
+    max: 0.11550, 0.11550, 0.34700
+    color: '#C2BEB5'
+    shape: CylinderZ
+  - label: cap top inset
+    min: -0.09550, -0.09550, 0.34100
+    max: 0.09550, 0.09550, 0.35500
+    color: '#DDDAD2'
+    shape: CylinderZ
+  - label: cap grip rib
+    min: 0.10700, -0.00600, 0.30900
+    max: 0.11900, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, 0.05050, 0.30900
+    max: 0.10386, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, 0.09186, 0.30900
+    max: 0.06250, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, 0.10700, 0.30900
+    max: 0.00600, 0.11900, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, 0.09186, 0.30900
+    max: -0.05050, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, 0.05050, 0.30900
+    max: -0.09186, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.11900, -0.00600, 0.30900
+    max: -0.10700, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, -0.06250, 0.30900
+    max: -0.09186, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, -0.10386, 0.30900
+    max: -0.05050, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, -0.11900, 0.30900
+    max: 0.00600, -0.10700, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, -0.10386, 0.30900
+    max: 0.06250, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, -0.06250, 0.30900
+    max: 0.10386, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: small medicine label
+    min: -0.01000, -0.10100, 0.09300
+    max: 0.08100, -0.09600, 0.23900
+    color: '#C4BFB1'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.19700
+    max: 0.07200, -0.10100, 0.21800
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.16900
+    max: 0.04800, -0.10100, 0.19000
+    color: '#49443B'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.14400
+    max: 0.07200, -0.10100, 0.16500
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.11200
+    max: 0.04800, -0.10100, 0.13300
+    color: '#49443B'
+- type: cmu3DModel
+  id: CMU3DCMPillCanisterInaprovaline
+  label: Inaprovaline pill canister
+  status: draft
+  sourcePrototypes:
+  - CMPillCanisterInaprovaline
+  description: Compact medicine-specific canister with a raised screw cap, grip ribs and the source right-side paper
+    label. Its 0.24-tile cap fits the closely placed medicine rows. Closed cap over the medicine-specific bottle; open
+    cap layer hidden. Depth, hidden faces and materials are inferred. Dynamic contents and appearance remain unfinished.
+  referencePrototype: CMPillCanisterInaprovaline
+  referenceRsi: /Textures/CMU14/ThreeD/SupplypillcanisterReferences.rsi
+  referenceState: CMPillCanisterInaprovaline
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: colored bottle body
+    min: -0.09600, -0.09600, 0.02000
+    max: 0.09600, 0.09600, 0.27100
+    color: '#C081FF'
+    shape: CylinderZ
+  - label: bottle lower bevel
+    min: -0.08350, -0.08350, 0.00000
+    max: 0.08350, 0.08350, 0.03700
+    color: '#624282'
+    shape: CylinderZ
+  - label: neck shadow
+    min: -0.09000, -0.09000, 0.25800
+    max: 0.09000, 0.09000, 0.29400
+    color: '#624282'
+    shape: CylinderZ
+  - label: cap rim
+    min: -0.12000, -0.12000, 0.28200
+    max: 0.12000, 0.12000, 0.31800
+    color: '#9E9A92'
+    shape: CylinderZ
+  - label: closed pale screw cap
+    min: -0.11550, -0.11550, 0.31000
+    max: 0.11550, 0.11550, 0.34700
+    color: '#C2BEB5'
+    shape: CylinderZ
+  - label: cap top inset
+    min: -0.09550, -0.09550, 0.34100
+    max: 0.09550, 0.09550, 0.35500
+    color: '#DDDAD2'
+    shape: CylinderZ
+  - label: cap grip rib
+    min: 0.10700, -0.00600, 0.30900
+    max: 0.11900, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, 0.05050, 0.30900
+    max: 0.10386, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, 0.09186, 0.30900
+    max: 0.06250, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, 0.10700, 0.30900
+    max: 0.00600, 0.11900, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, 0.09186, 0.30900
+    max: -0.05050, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, 0.05050, 0.30900
+    max: -0.09186, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.11900, -0.00600, 0.30900
+    max: -0.10700, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, -0.06250, 0.30900
+    max: -0.09186, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, -0.10386, 0.30900
+    max: -0.05050, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, -0.11900, 0.30900
+    max: 0.00600, -0.10700, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, -0.10386, 0.30900
+    max: 0.06250, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, -0.06250, 0.30900
+    max: 0.10386, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: small medicine label
+    min: -0.01000, -0.10100, 0.09300
+    max: 0.08100, -0.09600, 0.23900
+    color: '#C4BFB1'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.19700
+    max: 0.07200, -0.10100, 0.21800
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.16900
+    max: 0.04800, -0.10100, 0.19000
+    color: '#49443B'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.14400
+    max: 0.07200, -0.10100, 0.16500
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.11200
+    max: 0.04800, -0.10100, 0.13300
+    color: '#49443B'
+- type: cmu3DModel
+  id: CMU3DCMPillCanisterKelotane
+  label: Kelotane pill canister
+  status: draft
+  sourcePrototypes:
+  - CMPillCanisterKelotane
+  description: Compact medicine-specific canister with a raised screw cap, grip ribs and the source right-side paper
+    label. Its 0.24-tile cap fits the closely placed medicine rows. Closed cap over the medicine-specific bottle; open
+    cap layer hidden. Depth, hidden faces and materials are inferred. Dynamic contents and appearance remain unfinished.
+  referencePrototype: CMPillCanisterKelotane
+  referenceRsi: /Textures/CMU14/ThreeD/SupplypillcanisterReferences.rsi
+  referenceState: CMPillCanisterKelotane
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: colored bottle body
+    min: -0.09600, -0.09600, 0.02000
+    max: 0.09600, 0.09600, 0.27100
+    color: '#F1A338'
+    shape: CylinderZ
+  - label: bottle lower bevel
+    min: -0.08350, -0.08350, 0.00000
+    max: 0.08350, 0.08350, 0.03700
+    color: '#7F4E0A'
+    shape: CylinderZ
+  - label: neck shadow
+    min: -0.09000, -0.09000, 0.25800
+    max: 0.09000, 0.09000, 0.29400
+    color: '#7F4E0A'
+    shape: CylinderZ
+  - label: cap rim
+    min: -0.12000, -0.12000, 0.28200
+    max: 0.12000, 0.12000, 0.31800
+    color: '#9E9A92'
+    shape: CylinderZ
+  - label: closed pale screw cap
+    min: -0.11550, -0.11550, 0.31000
+    max: 0.11550, 0.11550, 0.34700
+    color: '#C2BEB5'
+    shape: CylinderZ
+  - label: cap top inset
+    min: -0.09550, -0.09550, 0.34100
+    max: 0.09550, 0.09550, 0.35500
+    color: '#DDDAD2'
+    shape: CylinderZ
+  - label: cap grip rib
+    min: 0.10700, -0.00600, 0.30900
+    max: 0.11900, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, 0.05050, 0.30900
+    max: 0.10386, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, 0.09186, 0.30900
+    max: 0.06250, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, 0.10700, 0.30900
+    max: 0.00600, 0.11900, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, 0.09186, 0.30900
+    max: -0.05050, 0.10386, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, 0.05050, 0.30900
+    max: -0.09186, 0.06250, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.11900, -0.00600, 0.30900
+    max: -0.10700, 0.00600, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.10386, -0.06250, 0.30900
+    max: -0.09186, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.06250, -0.10386, 0.30900
+    max: -0.05050, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: -0.00600, -0.11900, 0.30900
+    max: 0.00600, -0.10700, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.05050, -0.10386, 0.30900
+    max: 0.06250, -0.09186, 0.34200
+    color: '#ACA89F'
+  - label: cap grip rib
+    min: 0.09186, -0.06250, 0.30900
+    max: 0.10386, -0.05050, 0.34200
+    color: '#ACA89F'
+  - label: small medicine label
+    min: -0.01000, -0.10100, 0.09300
+    max: 0.08100, -0.09600, 0.23900
+    color: '#C4BFB1'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.19700
+    max: 0.07200, -0.10100, 0.21800
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.16900
+    max: 0.04800, -0.10100, 0.19000
+    color: '#49443B'
+  - label: source label ink
+    min: 0.04700, -0.10600, 0.14400
+    max: 0.07200, -0.10100, 0.16500
+    color: '#49443B'
+  - label: source label ink
+    min: 0.02300, -0.10600, 0.11200
+    max: 0.04800, -0.10100, 0.13300
+    color: '#49443B'
+- type: cmu3DModel
+  id: CMU3DRMCBoxBodyBag
+  label: Body-bag carton
+  status: draft
+  sourcePrototypes:
+  - RMCBoxBodyBag
+  description: Closed medical supply carton with separate top fold, side seams and unchanged source pictogram on its
+    facing panel. Single original source state. Depth, hidden faces and materials are inferred. Dynamic contents and
+    appearance remain unfinished.
+  referencePrototype: RMCBoxBodyBag
+  referenceRsi: /Textures/_RMC14/Objects/Storage/boxes.rsi
+  referenceState: bodybags
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: folded dark carton
+    min: -0.20312, -0.13250, 0.00000
+    max: 0.20312, 0.13250, 0.28125
+    color: '#444343'
+  - label: rear closure flap
+    min: -0.19112, 0.11450, 0.02200
+    max: 0.19112, 0.13650, 0.28125
+    color: '#777272'
+  - label: Front source artwork
+    min: -0.20312, -0.14150, 0.00000
+    max: 0.20312, -0.13650, 0.28125
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxBodyBagFront
+    surfaceAxis: XZ
+  - label: Top source artwork
+    min: -0.20312, -0.13250, 0.28125
+    max: 0.20312, 0.13250, 0.28625
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxBodyBagTop
+    surfaceAxis: XY
+  - label: left folded seam
+    min: -0.20713, -0.13250, 0.02200
+    max: -0.19712, 0.13250, 0.28125
+    color: '#5C5651'
+  - label: right folded seam
+    min: 0.19712, -0.13250, 0.02200
+    max: 0.20713, 0.13250, 0.28125
+    color: '#3E3935'
+- type: cmu3DModel
+  id: CMU3DRMCBoxHandcuffs
+  label: Handcuff carton
+  status: draft
+  sourcePrototypes:
+  - RMCBoxHandcuffs
+  - RMCBoxZiptie
+  description: Closed medical supply carton with separate top fold, side seams and unchanged source pictogram on its
+    facing panel. Single original source state. Depth, hidden faces and materials are inferred. Dynamic contents and
+    appearance remain unfinished.
+  referencePrototype: RMCBoxHandcuffs
+  referenceRsi: /Textures/_RMC14/Objects/Storage/boxes.rsi
+  referenceState: handcuff
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: folded dark carton
+    min: -0.20312, -0.13250, 0.00000
+    max: 0.20312, 0.13250, 0.28125
+    color: '#444343'
+  - label: rear closure flap
+    min: -0.19112, 0.11450, 0.02200
+    max: 0.19112, 0.13650, 0.28125
+    color: '#777272'
+  - label: Front source artwork
+    min: -0.20312, -0.14150, 0.00000
+    max: 0.20312, -0.13650, 0.28125
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxHandcuffsFront
+    surfaceAxis: XZ
+  - label: Top source artwork
+    min: -0.20312, -0.13250, 0.28125
+    max: 0.20312, 0.13250, 0.28625
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxBodyBagTop
+    surfaceAxis: XY
+  - label: left folded seam
+    min: -0.20713, -0.13250, 0.02200
+    max: -0.19712, 0.13250, 0.28125
+    color: '#5C5651'
+  - label: right folded seam
+    min: 0.19712, -0.13250, 0.02200
+    max: 0.20713, 0.13250, 0.28125
+    color: '#3E3935'
+- type: cmu3DModel
+  id: CMU3DRMCBoxLatexGloves
+  label: Latex-glove carton
+  status: draft
+  sourcePrototypes:
+  - RMCBoxLatexGloves
+  description: Closed medical supply carton with separate top fold, side seams and unchanged source pictogram on its
+    facing panel. Single original source state. Depth, hidden faces and materials are inferred. Dynamic contents and
+    appearance remain unfinished.
+  referencePrototype: RMCBoxLatexGloves
+  referenceRsi: /Textures/_RMC14/Objects/Storage/boxes.rsi
+  referenceState: latex
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: folded dark carton
+    min: -0.20312, -0.13250, 0.00000
+    max: 0.20312, 0.13250, 0.28125
+    color: '#444343'
+  - label: rear closure flap
+    min: -0.19112, 0.11450, 0.02200
+    max: 0.19112, 0.13650, 0.28125
+    color: '#777272'
+  - label: Front source artwork
+    min: -0.20312, -0.14150, 0.00000
+    max: 0.20312, -0.13650, 0.28125
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxLatexGlovesFront
+    surfaceAxis: XZ
+  - label: Top source artwork
+    min: -0.20312, -0.13250, 0.28125
+    max: 0.20312, 0.13250, 0.28625
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxBodyBagTop
+    surfaceAxis: XY
+  - label: left folded seam
+    min: -0.20713, -0.13250, 0.02200
+    max: -0.19712, 0.13250, 0.28125
+    color: '#5C5651'
+  - label: right folded seam
+    min: 0.19712, -0.13250, 0.02200
+    max: 0.20713, 0.13250, 0.28125
+    color: '#3E3935'
+- type: cmu3DModel
+  id: CMU3DRMCBoxPillCanister
+  label: Pill-canister carton
+  status: draft
+  sourcePrototypes:
+  - RMCBoxPillCanister
+  description: Closed medical supply carton with separate top fold, side seams and unchanged source pictogram on its
+    facing panel. Single original source state. Depth, hidden faces and materials are inferred. Dynamic contents and
+    appearance remain unfinished.
+  referencePrototype: RMCBoxPillCanister
+  referenceRsi: /Textures/_RMC14/Objects/Storage/boxes.rsi
+  referenceState: pillbox
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: folded dark carton
+    min: -0.20312, -0.13250, 0.00000
+    max: 0.20312, 0.13250, 0.28125
+    color: '#444343'
+  - label: rear closure flap
+    min: -0.19112, 0.11450, 0.02200
+    max: 0.19112, 0.13650, 0.28125
+    color: '#777272'
+  - label: Front source artwork
+    min: -0.20312, -0.14150, 0.00000
+    max: 0.20312, -0.13650, 0.28125
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxPillCanisterFront
+    surfaceAxis: XZ
+  - label: Top source artwork
+    min: -0.20312, -0.13250, 0.28125
+    max: 0.20312, 0.13250, 0.28625
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxBodyBagTop
+    surfaceAxis: XY
+  - label: left folded seam
+    min: -0.20713, -0.13250, 0.02200
+    max: -0.19712, 0.13250, 0.28125
+    color: '#5C5651'
+  - label: right folded seam
+    min: 0.19712, -0.13250, 0.02200
+    max: 0.20713, 0.13250, 0.28125
+    color: '#3E3935'
+- type: cmu3DModel
+  id: CMU3DRMCBoxSterileMask
+  label: Sterile-mask carton
+  status: draft
+  sourcePrototypes:
+  - RMCBoxSterileMask
+  description: Closed medical supply carton with separate top fold, side seams and unchanged source pictogram on its
+    facing panel. Single original source state. Depth, hidden faces and materials are inferred. Dynamic contents and
+    appearance remain unfinished.
+  referencePrototype: RMCBoxSterileMask
+  referenceRsi: /Textures/_RMC14/Objects/Storage/boxes.rsi
+  referenceState: sterile
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: folded dark carton
+    min: -0.20312, -0.13250, 0.00000
+    max: 0.20312, 0.13250, 0.28125
+    color: '#444343'
+  - label: rear closure flap
+    min: -0.19112, 0.11450, 0.02200
+    max: 0.19112, 0.13650, 0.28125
+    color: '#777272'
+  - label: Front source artwork
+    min: -0.20312, -0.14150, 0.00000
+    max: 0.20312, -0.13650, 0.28125
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxSterileMaskFront
+    surfaceAxis: XZ
+  - label: Top source artwork
+    min: -0.20312, -0.13250, 0.28125
+    max: 0.20312, 0.13250, 0.28625
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxBodyBagTop
+    surfaceAxis: XY
+  - label: left folded seam
+    min: -0.20713, -0.13250, 0.02200
+    max: -0.19712, 0.13250, 0.28125
+    color: '#5C5651'
+  - label: right folded seam
+    min: 0.19712, -0.13250, 0.02200
+    max: 0.20713, 0.13250, 0.28125
+    color: '#3E3935'
+- type: cmu3DModel
+  id: CMU3DRMCBoxSyringe
+  label: Syringe carton
+  status: draft
+  sourcePrototypes:
+  - RMCBoxSyringe
+  description: Closed medical supply carton with separate top fold, side seams and unchanged source pictogram on its
+    facing panel. Single original source state. Depth, hidden faces and materials are inferred. Dynamic contents and
+    appearance remain unfinished.
+  referencePrototype: RMCBoxSyringe
+  referenceRsi: /Textures/_RMC14/Objects/Storage/boxes.rsi
+  referenceState: syringe
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: folded dark carton
+    min: -0.20312, -0.13250, 0.00000
+    max: 0.20312, 0.13250, 0.28125
+    color: '#444343'
+  - label: rear closure flap
+    min: -0.19112, 0.11450, 0.02200
+    max: 0.19112, 0.13650, 0.28125
+    color: '#777272'
+  - label: Front source artwork
+    min: -0.20312, -0.14150, 0.00000
+    max: 0.20312, -0.13650, 0.28125
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxSyringeFront
+    surfaceAxis: XZ
+  - label: Top source artwork
+    min: -0.20312, -0.13250, 0.28125
+    max: 0.20312, 0.13250, 0.28625
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxBodyBagTop
+    surfaceAxis: XY
+  - label: left folded seam
+    min: -0.20713, -0.13250, 0.02200
+    max: -0.19712, 0.13250, 0.28125
+    color: '#5C5651'
+  - label: right folded seam
+    min: 0.19712, -0.13250, 0.02200
+    max: 0.20713, 0.13250, 0.28125
+    color: '#3E3935'
+- type: cmu3DModel
+  id: CMU3DRMCBoxFlashlights
+  label: Closed flashlight supply box
+  status: draft
+  sourcePrototypes:
+  - RMCBoxFlashlights
+  - RMCBoxFlashlightsEmpty
+  description: Closed supply carton with a shallow raised lid and separate source-painted lid/front panels. Eight starting
+    flashlights; undeployed closed lid covers contents. Depth, hidden faces and materials are inferred. Dynamic contents
+    and appearance remain unfinished.
+  referencePrototype: RMCBoxFlashlights
+  referenceRsi: /Textures/CMU14/ThreeD/SupplymodularboxesReferences.rsi
+  referenceState: RMCBoxFlashlights
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: box lower shell
+    min: -0.34375, -0.21875, 0.00500
+    max: 0.34375, 0.21875, 0.22000
+    color: '#322D25'
+  - label: lower fold
+    min: -0.34675, -0.22175, 0.00000
+    max: 0.34675, 0.22175, 0.02100
+    color: '#343029'
+  - label: Front source artwork
+    min: -0.34375, -0.22675, 0.01800
+    max: 0.34375, -0.22175, 0.22000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxFlashlightsFront
+    surfaceAxis: XZ
+  - label: closed lid slab
+    min: -0.34975, -0.22475, 0.22000
+    max: 0.34975, 0.22475, 0.24500
+    color: '#786D5B'
+  - label: Lid source artwork
+    min: -0.34975, -0.22475, 0.24500
+    max: 0.34975, 0.22475, 0.25000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxFlashlightsLid
+    surfaceAxis: XY
+  - label: folded corner
+    min: -0.33375, -0.21775, 0.02000
+    max: -0.31375, 0.21775, 0.22000
+    color: '#595043'
+  - label: folded corner
+    min: 0.31375, -0.21775, 0.02000
+    max: 0.33375, 0.21775, 0.22000
+    color: '#595043'
+- type: cmu3DModel
+  id: CMU3DRMCBoxMRE
+  label: Closed MRE carton
+  status: draft
+  sourcePrototypes:
+  - RMCBoxMRE
+  description: Closed supply carton with a shallow raised lid and separate source-painted lid/front panels. Undeployed
+    closed lid and closure band cover starting contents. Depth, hidden faces and materials are inferred. Dynamic contents
+    and appearance remain unfinished.
+  referencePrototype: RMCBoxMRE
+  referenceRsi: /Textures/CMU14/ThreeD/SupplymodularboxesReferences.rsi
+  referenceState: RMCBoxMRE
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: box lower shell
+    min: -0.28125, -0.20000, 0.00500
+    max: 0.28125, 0.20000, 0.22000
+    color: '#423629'
+  - label: lower fold
+    min: -0.28425, -0.20300, 0.00000
+    max: 0.28425, 0.20300, 0.02100
+    color: '#343029'
+  - label: Front source artwork
+    min: -0.28125, -0.20800, 0.01800
+    max: 0.28125, -0.20300, 0.22000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxMREFront
+    surfaceAxis: XZ
+  - label: closed lid slab
+    min: -0.28725, -0.20600, 0.22000
+    max: 0.28725, 0.20600, 0.24500
+    color: '#A08364'
+  - label: Lid source artwork
+    min: -0.28725, -0.20600, 0.24500
+    max: 0.28725, 0.20600, 0.25000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxMRELid
+    surfaceAxis: XY
+  - label: folded corner
+    min: -0.27125, -0.19900, 0.02000
+    max: -0.25125, 0.19900, 0.22000
+    color: '#76604A'
+  - label: folded corner
+    min: 0.25125, -0.19900, 0.02000
+    max: 0.27125, 0.19900, 0.22000
+    color: '#76604A'
+- type: cmu3DModel
+  id: CMU3DRMCBoxMagazinePistolM77APEmpty
+  label: Closed M77 AP magazine box
+  status: draft
+  sourcePrototypes:
+  - RMCBoxMagazinePistolM77APEmpty
+  description: Closed supply carton with a shallow raised lid and separate source-painted lid/front panels. Empty CMItemSlots
+    hides ammunition; undeployed lid remains closed. Depth, hidden faces and materials are inferred. Dynamic contents
+    and appearance remain unfinished.
+  referencePrototype: RMCBoxMagazinePistolM77APEmpty
+  referenceRsi: /Textures/CMU14/ThreeD/SupplymodularboxesReferences.rsi
+  referenceState: RMCBoxMagazinePistolM77APEmpty
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: box lower shell
+    min: -0.31250, -0.18750, 0.00500
+    max: 0.31250, 0.18750, 0.25000
+    color: '#5E6064'
+  - label: lower fold
+    min: -0.31550, -0.19050, 0.00000
+    max: 0.31550, 0.19050, 0.02100
+    color: '#343029'
+  - label: Front source artwork
+    min: -0.31250, -0.19550, 0.01800
+    max: 0.31250, -0.19050, 0.25000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxMagazinePistolM77APEmptyFront
+    surfaceAxis: XZ
+  - label: closed lid slab
+    min: -0.31850, -0.19350, 0.25000
+    max: 0.31850, 0.19350, 0.27500
+    color: '#5E6064'
+  - label: Lid source artwork
+    min: -0.31850, -0.19350, 0.27500
+    max: 0.31850, 0.19350, 0.28000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxMagazinePistolM77APEmptyLid
+    surfaceAxis: XY
+  - label: folded corner
+    min: -0.30250, -0.18650, 0.02000
+    max: -0.28250, 0.18650, 0.25000
+    color: '#1F1F20'
+  - label: folded corner
+    min: 0.28250, -0.18650, 0.02000
+    max: 0.30250, 0.18650, 0.25000
+    color: '#1F1F20'
+- type: cmu3DModel
+  id: CMU3DRMCBoxShotgunBeanbag
+  label: Beanbag shotgun-shell box
+  status: draft
+  sourcePrototypes:
+  - RMCBoxShotgunBeanbag
+  description: Open source-colored carton with six small horizontal shell profiles in two rows, separate brass bands
+    and the original front shell pictogram. The six profiles follow the source full-stock art; the prototype stores five
+    shell stacks, so the art does not imply a one-to-one item count. StorageFill supplies five shells; the empty overlay
+    is hidden by CMStorageVisualizer. Depth, hidden faces and materials are inferred. Dynamic contents and appearance
+    remain unfinished.
+  referencePrototype: RMCBoxShotgunBeanbag
+  referenceRsi: /Textures/CMU14/ThreeD/SupplymodularboxesReferences.rsi
+  referenceState: RMCBoxShotgunBeanbag
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: open carton bottom
+    min: -0.25000, -0.17000, 0.00000
+    max: 0.25000, 0.17000, 0.02500
+    color: '#4D77A8'
+  - label: carton side wall
+    min: -0.25000, -0.17000, 0.02000
+    max: -0.22800, 0.17000, 0.23000
+    color: '#4D77A8'
+  - label: carton side wall
+    min: 0.22800, -0.17000, 0.02000
+    max: 0.25000, 0.17000, 0.23000
+    color: '#4D77A8'
+  - label: rear carton wall
+    min: -0.25000, 0.14800, 0.02000
+    max: 0.25000, 0.17000, 0.24300
+    color: '#4D76A8'
+  - label: printed front wall
+    min: -0.25000, -0.17000, 0.02000
+    max: 0.25000, -0.14400, 0.23000
+    color: '#4D77A8'
+  - label: Front source artwork
+    min: -0.25000, -0.17500, 0.00000
+    max: 0.25000, -0.17000, 0.23000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxShotgunBeanbagFront
+    surfaceAxis: XZ
+  - label: source horizontal shell hull
+    min: -0.19700, -0.11250, 0.18350
+    max: -0.08300, -0.03550, 0.26050
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source brass band
+    min: -0.12000, -0.11400, 0.18200
+    max: -0.09600, -0.03400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.20200, -0.10800, 0.18800
+    max: -0.19400, -0.04000, 0.25600
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: -0.19700, 0.03550, 0.18350
+    max: -0.08300, 0.11250, 0.26050
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source brass band
+    min: -0.12000, 0.03400, 0.18200
+    max: -0.09600, 0.11400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.20200, 0.04000, 0.18800
+    max: -0.19400, 0.10800, 0.25600
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: -0.05700, -0.11250, 0.18350
+    max: 0.05700, -0.03550, 0.26050
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.02000, -0.11400, 0.18200
+    max: 0.04400, -0.03400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.06200, -0.10800, 0.18800
+    max: -0.05400, -0.04000, 0.25600
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: -0.05700, 0.03550, 0.18350
+    max: 0.05700, 0.11250, 0.26050
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.02000, 0.03400, 0.18200
+    max: 0.04400, 0.11400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.06200, 0.04000, 0.18800
+    max: -0.05400, 0.10800, 0.25600
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: 0.08300, -0.11250, 0.18350
+    max: 0.19700, -0.03550, 0.26050
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.16000, -0.11400, 0.18200
+    max: 0.18400, -0.03400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: 0.07800, -0.10800, 0.18800
+    max: 0.08600, -0.04000, 0.25600
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: 0.08300, 0.03550, 0.18350
+    max: 0.19700, 0.11250, 0.26050
+    color: '#2D4562'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.16000, 0.03400, 0.18200
+    max: 0.18400, 0.11400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: 0.07800, 0.04000, 0.18800
+    max: 0.08600, 0.10800, 0.25600
+    color: '#2D4562'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DRMCBoxShotgunBuckshot
+  label: Buckshot shotgun-shell box
+  status: draft
+  sourcePrototypes:
+  - RMCBoxShotgunBuckshot
+  description: Open source-colored carton with six small horizontal shell profiles in two rows, separate brass bands
+    and the original front shell pictogram. The six profiles follow the source full-stock art; the prototype stores five
+    shell stacks, so the art does not imply a one-to-one item count. StorageFill supplies five shells; the empty overlay
+    is hidden by CMStorageVisualizer. Depth, hidden faces and materials are inferred. Dynamic contents and appearance
+    remain unfinished.
+  referencePrototype: RMCBoxShotgunBuckshot
+  referenceRsi: /Textures/CMU14/ThreeD/SupplymodularboxesReferences.rsi
+  referenceState: RMCBoxShotgunBuckshot
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: open carton bottom
+    min: -0.25000, -0.17000, 0.00000
+    max: 0.25000, 0.17000, 0.02500
+    color: '#833C3C'
+  - label: carton side wall
+    min: -0.25000, -0.17000, 0.02000
+    max: -0.22800, 0.17000, 0.23000
+    color: '#833C3C'
+  - label: carton side wall
+    min: 0.22800, -0.17000, 0.02000
+    max: 0.25000, 0.17000, 0.23000
+    color: '#833C3C'
+  - label: rear carton wall
+    min: -0.25000, 0.14800, 0.02000
+    max: 0.25000, 0.17000, 0.24300
+    color: '#833C3C'
+  - label: printed front wall
+    min: -0.25000, -0.17000, 0.02000
+    max: 0.25000, -0.14400, 0.23000
+    color: '#833C3C'
+  - label: Front source artwork
+    min: -0.25000, -0.17500, 0.00000
+    max: 0.25000, -0.17000, 0.23000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxShotgunBuckshotFront
+    surfaceAxis: XZ
+  - label: source horizontal shell hull
+    min: -0.19700, -0.11250, 0.18350
+    max: -0.08300, -0.03550, 0.26050
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source brass band
+    min: -0.12000, -0.11400, 0.18200
+    max: -0.09600, -0.03400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.20200, -0.10800, 0.18800
+    max: -0.19400, -0.04000, 0.25600
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: -0.19700, 0.03550, 0.18350
+    max: -0.08300, 0.11250, 0.26050
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source brass band
+    min: -0.12000, 0.03400, 0.18200
+    max: -0.09600, 0.11400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.20200, 0.04000, 0.18800
+    max: -0.19400, 0.10800, 0.25600
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: -0.05700, -0.11250, 0.18350
+    max: 0.05700, -0.03550, 0.26050
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.02000, -0.11400, 0.18200
+    max: 0.04400, -0.03400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.06200, -0.10800, 0.18800
+    max: -0.05400, -0.04000, 0.25600
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: -0.05700, 0.03550, 0.18350
+    max: 0.05700, 0.11250, 0.26050
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.02000, 0.03400, 0.18200
+    max: 0.04400, 0.11400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.06200, 0.04000, 0.18800
+    max: -0.05400, 0.10800, 0.25600
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: 0.08300, -0.11250, 0.18350
+    max: 0.19700, -0.03550, 0.26050
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.16000, -0.11400, 0.18200
+    max: 0.18400, -0.03400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: 0.07800, -0.10800, 0.18800
+    max: 0.08600, -0.04000, 0.25600
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: 0.08300, 0.03550, 0.18350
+    max: 0.19700, 0.11250, 0.26050
+    color: '#4D2323'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.16000, 0.03400, 0.18200
+    max: 0.18400, 0.11400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: 0.07800, 0.04000, 0.18800
+    max: 0.08600, 0.10800, 0.25600
+    color: '#4D2323'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DRMCBoxShotgunSlugs
+  label: Slugs shotgun-shell box
+  status: draft
+  sourcePrototypes:
+  - RMCBoxShotgunSlugs
+  description: Open source-colored carton with six small horizontal shell profiles in two rows, separate brass bands
+    and the original front shell pictogram. The six profiles follow the source full-stock art; the prototype stores five
+    shell stacks, so the art does not imply a one-to-one item count. StorageFill supplies five shells; the empty overlay
+    is hidden by CMStorageVisualizer. Depth, hidden faces and materials are inferred. Dynamic contents and appearance
+    remain unfinished.
+  referencePrototype: RMCBoxShotgunSlugs
+  referenceRsi: /Textures/CMU14/ThreeD/SupplymodularboxesReferences.rsi
+  referenceState: RMCBoxShotgunSlugs
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: open carton bottom
+    min: -0.25000, -0.17000, 0.00000
+    max: 0.25000, 0.17000, 0.02500
+    color: '#4D7E68'
+  - label: carton side wall
+    min: -0.25000, -0.17000, 0.02000
+    max: -0.22800, 0.17000, 0.23000
+    color: '#4D7E68'
+  - label: carton side wall
+    min: 0.22800, -0.17000, 0.02000
+    max: 0.25000, 0.17000, 0.23000
+    color: '#4D7E68'
+  - label: rear carton wall
+    min: -0.25000, 0.14800, 0.02000
+    max: 0.25000, 0.17000, 0.24300
+    color: '#4D7D67'
+  - label: printed front wall
+    min: -0.25000, -0.17000, 0.02000
+    max: 0.25000, -0.14400, 0.23000
+    color: '#4D7E68'
+  - label: Front source artwork
+    min: -0.25000, -0.17500, 0.00000
+    max: 0.25000, -0.17000, 0.23000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxShotgunSlugsFront
+    surfaceAxis: XZ
+  - label: source horizontal shell hull
+    min: -0.19700, -0.11250, 0.18350
+    max: -0.08300, -0.03550, 0.26050
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source brass band
+    min: -0.12000, -0.11400, 0.18200
+    max: -0.09600, -0.03400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.20200, -0.10800, 0.18800
+    max: -0.19400, -0.04000, 0.25600
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: -0.19700, 0.03550, 0.18350
+    max: -0.08300, 0.11250, 0.26050
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source brass band
+    min: -0.12000, 0.03400, 0.18200
+    max: -0.09600, 0.11400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.20200, 0.04000, 0.18800
+    max: -0.19400, 0.10800, 0.25600
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: -0.05700, -0.11250, 0.18350
+    max: 0.05700, -0.03550, 0.26050
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.02000, -0.11400, 0.18200
+    max: 0.04400, -0.03400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.06200, -0.10800, 0.18800
+    max: -0.05400, -0.04000, 0.25600
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: -0.05700, 0.03550, 0.18350
+    max: 0.05700, 0.11250, 0.26050
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.02000, 0.03400, 0.18200
+    max: 0.04400, 0.11400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: -0.06200, 0.04000, 0.18800
+    max: -0.05400, 0.10800, 0.25600
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: 0.08300, -0.11250, 0.18350
+    max: 0.19700, -0.03550, 0.26050
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.16000, -0.11400, 0.18200
+    max: 0.18400, -0.03400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: 0.07800, -0.10800, 0.18800
+    max: 0.08600, -0.04000, 0.25600
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source horizontal shell hull
+    min: 0.08300, 0.03550, 0.18350
+    max: 0.19700, 0.11250, 0.26050
+    color: '#2D4A3D'
+    shape: CylinderX
+  - label: source brass band
+    min: 0.16000, 0.03400, 0.18200
+    max: 0.18400, 0.11400, 0.26200
+    color: '#C18450'
+    shape: CylinderX
+  - label: shell crimped end
+    min: 0.07800, 0.04000, 0.18800
+    max: 0.08600, 0.10800, 0.25600
+    color: '#2D4A3D'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DRMCBoxDonut
+  label: Closed YUM donut box
+  status: draft
+  sourcePrototypes:
+  - RMCBoxDonut
+  description: Wide shallow pastry carton with the exact pink YUM lid, checker band and striped front. The lid rests
+    horizontally; the printed perspective is separated into top and front planes. Closed box layer only; open lid and
+    random runtime donut layers are hidden. Depth, hidden faces and materials are inferred. Dynamic contents and appearance
+    remain unfinished.
+  referencePrototype: RMCBoxDonut
+  referenceRsi: /Textures/CMU14/ThreeD/SupplydonutboxReferences.rsi
+  referenceState: RMCBoxDonut
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: striped pastry carton body
+    min: -0.39062, -0.29500, 0.00000
+    max: 0.39062, 0.29500, 0.14000
+    color: '#AD5966'
+  - label: Front source artwork
+    min: -0.39062, -0.30300, 0.00000
+    max: 0.39062, -0.29800, 0.14000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxDonutFront
+    surfaceAxis: XZ
+  - label: cream lid edge
+    min: -0.40263, -0.30700, 0.14000
+    max: 0.40263, 0.30700, 0.16500
+    color: '#D3C4B0'
+  - label: Lid source artwork
+    min: -0.40263, -0.30700, 0.16500
+    max: 0.40263, 0.30700, 0.17000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBoxDonutLid
+    surfaceAxis: XY
+  - label: side pink stripe
+    min: -0.39062, -0.29500, 0.01300
+    max: -0.37862, -0.24583, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: -0.39062, -0.19667, 0.01300
+    max: -0.37862, -0.14750, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: -0.39062, -0.09833, 0.01300
+    max: -0.37862, -0.04917, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: -0.39062, 0.00000, 0.01300
+    max: -0.37862, 0.04917, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: -0.39062, 0.09833, 0.01300
+    max: -0.37862, 0.14750, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: -0.39062, 0.19667, 0.01300
+    max: -0.37862, 0.24583, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: 0.37862, -0.29500, 0.01300
+    max: 0.39062, -0.24583, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: 0.37862, -0.19667, 0.01300
+    max: 0.39062, -0.14750, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: 0.37862, -0.09833, 0.01300
+    max: 0.39062, -0.04917, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: 0.37862, 0.00000, 0.01300
+    max: 0.39062, 0.04917, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: 0.37862, 0.09833, 0.01300
+    max: 0.39062, 0.14750, 0.13200
+    color: '#C76577'
+  - label: side pink stripe
+    min: 0.37862, 0.19667, 0.01300
+    max: 0.39062, 0.24583, 0.13200
+    color: '#C76577'
+- type: cmu3DModel
+  id: CMU3DCMPacketGrenadeHighExplosive
+  label: Empty explosive packet
+  status: draft
+  sourcePrototypes:
+  - CMPacketGrenadeHighExplosive
+  description: 'Source-specific black packet with folded seams and original marking placement; the empty variant has
+    a physical open mouth and lowered flap. No StorageFill or saved contents: CMStorageVisualizer shows its empty open
+    packet state. Depth, hidden faces and materials are inferred. Dynamic contents and appearance remain unfinished.'
+  referencePrototype: CMPacketGrenadeHighExplosive
+  referenceRsi: /Textures/CMU14/ThreeD/SupplypacketsReferences.rsi
+  referenceState: CMPacketGrenadeHighExplosive
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: dark packet bottom
+    min: -0.25000, -0.14500, 0.00000
+    max: 0.25000, 0.14500, 0.02800
+    color: '#191A19'
+  - label: packet side fold
+    min: -0.25000, -0.14500, 0.02000
+    max: -0.22500, 0.14500, 0.23500
+    color: '#292A28'
+  - label: packet side fold
+    min: 0.22500, -0.14500, 0.02000
+    max: 0.25000, 0.14500, 0.23500
+    color: '#292A28'
+  - label: rear packet fold
+    min: -0.25000, 0.11900, 0.02000
+    max: 0.25000, 0.14500, 0.23500
+    color: '#323332'
+  - label: front packet wall
+    min: -0.25000, -0.14500, 0.02500
+    max: 0.25000, -0.11900, 0.23500
+    color: '#343533'
+  - label: Front source artwork
+    min: -0.25000, -0.15100, 0.02500
+    max: 0.25000, -0.14600, 0.23500
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtCMPacketGrenadeHighExplosiveFront
+    surfaceAxis: XZ
+  - label: empty dark interior
+    min: -0.22000, -0.11500, 0.02700
+    max: 0.22000, 0.11500, 0.03500
+    color: '#111210'
+  - label: folded open flap
+    min: -0.31000, -0.29000, 0.00500
+    max: 0.17000, -0.12000, 0.02100
+    color: '#252624'
+  - label: flap seam
+    min: -0.29000, -0.24500, 0.02100
+    max: 0.14000, -0.23000, 0.02900
+    color: '#3A3B39'
+- type: cmu3DModel
+  id: CMU3DRMCPacketGrenadeBatonSlugHIRRFilled
+  label: Filled HIRR baton-slug packet
+  status: draft
+  sourcePrototypes:
+  - RMCPacketGrenadeBatonSlugHIRRFilled
+  description: Source-specific black packet with folded seams and original marking placement; the empty variant has a
+    physical open mouth and lowered flap. Three starting HIRR slugs; CMStorageVisualizer shows the closed nonempty packet.
+    Depth, hidden faces and materials are inferred. Dynamic contents and appearance remain unfinished.
+  referencePrototype: RMCPacketGrenadeBatonSlugHIRRFilled
+  referenceRsi: /Textures/CMU14/ThreeD/SupplypacketsReferences.rsi
+  referenceState: RMCPacketGrenadeBatonSlugHIRRFilled
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: dark packet bottom
+    min: -0.25000, -0.14500, 0.00000
+    max: 0.25000, 0.14500, 0.02800
+    color: '#191A19'
+  - label: packet side fold
+    min: -0.25000, -0.14500, 0.02000
+    max: -0.22500, 0.14500, 0.23500
+    color: '#292A28'
+  - label: packet side fold
+    min: 0.22500, -0.14500, 0.02000
+    max: 0.25000, 0.14500, 0.23500
+    color: '#292A28'
+  - label: rear packet fold
+    min: -0.25000, 0.11900, 0.02000
+    max: 0.25000, 0.14500, 0.23500
+    color: '#323332'
+  - label: front packet wall
+    min: -0.25000, -0.14500, 0.02500
+    max: 0.25000, -0.11900, 0.23500
+    color: '#343533'
+  - label: Front source artwork
+    min: -0.25000, -0.15100, 0.02500
+    max: 0.25000, -0.14600, 0.23500
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCPacketGrenadeBatonSlugHIRRFilledFront
+    surfaceAxis: XZ
+  - label: closed folded top
+    min: -0.25000, -0.14500, 0.23500
+    max: 0.25000, 0.14500, 0.25700
+    color: '#363735'
+  - label: Top source artwork
+    min: -0.25000, -0.14500, 0.25700
+    max: 0.25000, 0.14500, 0.26200
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCPacketGrenadeBatonSlugHIRRFilledTop
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14HemostaticGauze
+  label: Folded hemostatic gauze
+  status: draft
+  sourcePrototypes:
+  - AU14HemostaticGauze
+  description: Low folded gauze stack with layered cloth edges and the unchanged pale wrapping/band artwork on the top
+    plane. Single original source state. Depth, hidden faces and materials are inferred. Dynamic contents and appearance
+    remain unfinished.
+  referencePrototype: AU14HemostaticGauze
+  referenceRsi: /Textures/CMU14/Items/quickclot.rsi
+  referenceState: hemgauze
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: folded gauze volume
+    min: -0.14050, -0.19300, 0.00000
+    max: 0.14050, 0.19300, 0.07500
+    color: '#AEBFBE'
+    shape: Ellipsoid
+  - label: visible gauze fold
+    min: -0.12600, -0.18000, 0.01800
+    max: 0.12600, 0.18000, 0.02700
+    color: '#DFE2DD'
+  - label: visible gauze fold
+    min: -0.12600, -0.18000, 0.03300
+    max: 0.12600, 0.18000, 0.04200
+    color: '#DFE2DD'
+  - label: visible gauze fold
+    min: -0.12600, -0.18000, 0.04800
+    max: 0.12600, 0.18000, 0.05700
+    color: '#DFE2DD'
+  - label: visible gauze fold
+    min: -0.12600, -0.18000, 0.06300
+    max: 0.12600, 0.18000, 0.07200
+    color: '#DFE2DD'
+  - label: Top source artwork
+    min: -0.14000, -0.21875, 0.08000
+    max: 0.14000, 0.21875, 0.08500
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtAU14HemostaticGauzeTop
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14HemostaticGauzePacketTrash
+  label: Torn quick-clot wrapper
+  status: draft
+  sourcePrototypes:
+  - AU14HemostaticGauzePacketTrash
+  description: Flattened olive packet with the original transparent torn silhouette and detached strip. Cutout pixels
+    retain the gap between the body and torn seal. Single original source state. Depth, hidden faces and materials are
+    inferred. Dynamic contents and appearance remain unfinished.
+  referencePrototype: AU14HemostaticGauzePacketTrash
+  referenceRsi: /Textures/CMU14/Items/quickclot.rsi
+  referenceState: qc_ripped
+  sourceDirections: 1
+  placement: surface
+  parts:
+  - label: flattened empty wrapper
+    min: -0.14000, -0.27800, 0.00000
+    max: 0.14000, -0.04000, 0.01500
+    color: '#333C1E'
+  - label: TornWrapper source artwork
+    min: -0.23438, -0.29688, 0.01600
+    max: 0.23438, 0.29688, 0.02500
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtAU14HemostaticGauzePacketTrashTornWrapper
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCBarrelWhite
+  label: White-and-green drum
+  status: draft
+  sourcePrototypes:
+  - RMCBarrelWhite
+  description: Upright capped steel drum with rolled rims, two pressed hoops, a metal lid and separate bung caps. The
+    small front label retains source art on a flat decal approximation; wrapped curved UVs and dents remain unfinished.
+    Single original source state. Depth, hidden faces and materials are inferred. Dynamic contents and appearance remain
+    unfinished.
+  referencePrototype: RMCBarrelWhite
+  referenceRsi: /Textures/_RMC14/Structures/barrels.rsi
+  referenceState: barrel_white
+  sourceDirections: 1
+  parts:
+  - label: painted steel drum
+    min: -0.26250, -0.26250, 0.07000
+    max: 0.26250, 0.26250, 0.71000
+    color: '#8C8165'
+    shape: CylinderZ
+  - label: bottom rolled rim
+    min: -0.24000, -0.24000, 0.01500
+    max: 0.24000, 0.24000, 0.07000
+    color: '#42433F'
+    shape: CylinderZ
+  - label: lower metal band
+    min: -0.27500, -0.27500, 0.07000
+    max: 0.27500, 0.27500, 0.11700
+    color: '#7A7767'
+    shape: CylinderZ
+  - label: upper colored band
+    min: -0.28000, -0.28000, 0.68500
+    max: 0.28000, 0.28000, 0.73700
+    color: '#345B48'
+    shape: CylinderZ
+  - label: steel lid rim
+    min: -0.27700, -0.27700, 0.73000
+    max: 0.27700, 0.27700, 0.76500
+    color: '#333A36'
+    shape: CylinderZ
+  - label: steel lid
+    min: -0.25500, -0.25500, 0.75800
+    max: 0.25500, 0.25500, 0.77700
+    color: '#717571'
+    shape: CylinderZ
+  - label: lid raised center
+    min: -0.21800, -0.21800, 0.77600
+    max: 0.21800, 0.21800, 0.78800
+    color: '#939894'
+    shape: CylinderZ
+  - label: large bung surround
+    min: -0.16350, 0.01150, 0.78500
+    max: -0.07650, 0.09850, 0.80300
+    color: '#484E49'
+    shape: CylinderZ
+  - label: large bung cap
+    min: -0.15000, 0.02500, 0.80200
+    max: -0.09000, 0.08500, 0.81100
+    color: '#9B9F9A'
+    shape: CylinderZ
+  - label: small bung
+    min: 0.10400, -0.07900, 0.78500
+    max: 0.15600, -0.02700, 0.79700
+    color: '#343A34'
+    shape: CylinderZ
+  - label: pressed drum hoop
+    min: -0.27200, -0.27200, 0.19000
+    max: 0.27200, 0.27200, 0.22100
+    color: '#A39775'
+    shape: CylinderZ
+  - label: pressed drum hoop
+    min: -0.27200, -0.27200, 0.56000
+    max: 0.27200, 0.27200, 0.59100
+    color: '#A39775'
+    shape: CylinderZ
+  - label: Label source artwork
+    min: -0.12500, -0.27300, 0.31500
+    max: 0.12500, -0.26700, 0.53500
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBarrelWhiteLabel
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DRMCBarrelYellow
+  label: Yellow hazard drum
+  status: draft
+  sourcePrototypes:
+  - RMCBarrelYellow
+  description: Upright capped steel drum with rolled rims, two pressed hoops, a metal lid and separate bung caps. The
+    small front label retains source art on a flat decal approximation; wrapped curved UVs and dents remain unfinished.
+    Single original source state. Depth, hidden faces and materials are inferred. Dynamic contents and appearance remain
+    unfinished.
+  referencePrototype: RMCBarrelYellow
+  referenceRsi: /Textures/_RMC14/Structures/barrels.rsi
+  referenceState: barrel_yellow
+  sourceDirections: 1
+  parts:
+  - label: painted steel drum
+    min: -0.26250, -0.26250, 0.07000
+    max: 0.26250, 0.26250, 0.71000
+    color: '#9C7104'
+    shape: CylinderZ
+  - label: bottom rolled rim
+    min: -0.24000, -0.24000, 0.01500
+    max: 0.24000, 0.24000, 0.07000
+    color: '#42433F'
+    shape: CylinderZ
+  - label: lower metal band
+    min: -0.27500, -0.27500, 0.07000
+    max: 0.27500, 0.27500, 0.11700
+    color: '#76570A'
+    shape: CylinderZ
+  - label: upper colored band
+    min: -0.28000, -0.28000, 0.68500
+    max: 0.28000, 0.28000, 0.73700
+    color: '#775A0A'
+    shape: CylinderZ
+  - label: steel lid rim
+    min: -0.27700, -0.27700, 0.73000
+    max: 0.27700, 0.27700, 0.76500
+    color: '#333A36'
+    shape: CylinderZ
+  - label: steel lid
+    min: -0.25500, -0.25500, 0.75800
+    max: 0.25500, 0.25500, 0.77700
+    color: '#717571'
+    shape: CylinderZ
+  - label: lid raised center
+    min: -0.21800, -0.21800, 0.77600
+    max: 0.21800, 0.21800, 0.78800
+    color: '#939894'
+    shape: CylinderZ
+  - label: large bung surround
+    min: -0.16350, 0.01150, 0.78500
+    max: -0.07650, 0.09850, 0.80300
+    color: '#484E49'
+    shape: CylinderZ
+  - label: large bung cap
+    min: -0.15000, 0.02500, 0.80200
+    max: -0.09000, 0.08500, 0.81100
+    color: '#9B9F9A'
+    shape: CylinderZ
+  - label: small bung
+    min: 0.10400, -0.07900, 0.78500
+    max: 0.15600, -0.02700, 0.79700
+    color: '#343A34'
+    shape: CylinderZ
+  - label: pressed drum hoop
+    min: -0.27200, -0.27200, 0.19000
+    max: 0.27200, 0.27200, 0.22100
+    color: '#AD840D'
+    shape: CylinderZ
+  - label: pressed drum hoop
+    min: -0.27200, -0.27200, 0.56000
+    max: 0.27200, 0.27200, 0.59100
+    color: '#AD840D'
+    shape: CylinderZ
+  - label: Label source artwork
+    min: -0.15500, -0.27300, 0.28200
+    max: 0.15500, -0.26700, 0.57000
+    color: '#FFFFFF'
+    surface: CMU3DSupplyArtRMCBarrelYellowLabel
+    surfaceAxis: XZ

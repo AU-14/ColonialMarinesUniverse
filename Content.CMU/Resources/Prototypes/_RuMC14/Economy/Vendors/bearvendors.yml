@@ -333,6 +333,8 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
     - name: au14-vendor-section-optics
       entries:
       - id: RMCLaserDesignatorPVE
@@ -743,8 +745,10 @@
       - id: RuMCPackFlareRed
     - name: au14-vendor-section-spare-equipment
       entries:
-      - id: ANPRC117GRadioOPFORFilled
+      - id: ANPRC117GRadioIssued
         amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
       - id: ANPRCMastAntenna
         amount: 1
       - id: RMCExplosiveBreachingCharge
@@ -1184,6 +1188,7 @@
   name: BEAR automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMURequisitionsVendor
   - type: AccessReader
     access: [["AU14AccessGovforReq"], ["AU14AccessOpforReq"]]
   - type: Sprite
@@ -1408,6 +1413,12 @@
         amount: 10
       - id: RuMCUPPPouchMagazinePistolLarge
         amount: 10
+      - id: RMCPouchGeneralLarge
+        amount: 5
+      - id: RMCPouchDocument
+        amount: 5
+      - id: RMCPouchShotgunLarge
+        amount: 5
     - name: au14-vendor-section-devices
       entries:
       - id: RMCIntelDetector
@@ -1418,20 +1429,30 @@
         amount: 4
       - id: RMCSentryLaptop
         amount: 4
+      - id: CMUDeployableZLevelLadder
+        amount: 2
+    - name: Protective Equipment
+      entries:
+      - id: RMCMaskGasSPP
+        amount: 30
+      - id: CMUGasMaskFilterUPP
+        amount: 30
+      - id: CMUFieldGasTankOxygenFilled
+        amount: 15
     - name: au14-vendor-section-headgear
       entries:
       - id: RuMCUPPNavalInfantryHeavyHelmet
         amount: 2
       - id: RuMCUPPNavalInfantryHeavyHelmet2
         amount: 4
-    - name: au14-vendor-section-rto-packs
+    - name: Radio Equipment
       entries:
-      - id: AU14BackpackRTOPackJungle
-        amount: 1
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
-      - id: AU14BackpackRTOPackGray
-        amount: 1
+      - id: ANPRC117GRadio
+        amount: 3
+      - id: ANPRCWhipAntenna
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 2
     - name: au14-vendor-section-materials
       entries:
       - id: CMSheetMetal

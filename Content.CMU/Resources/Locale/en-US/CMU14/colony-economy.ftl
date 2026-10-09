@@ -9,7 +9,6 @@ colony-economy-no-trade-pacts = Trade Pacts: None
 colony-economy-overview = -- Colony Economy Overview --
 colony-economy-third-party-support = -- Third Party Support --
 colony-economy-open-third-party-menu = Open Third Party Menu
-colony-economy-support-dispatch-failed = Unable to dispatch support at this time.
 colony-economy-unknown-faction = Unknown Faction
 colony-economy-apply = Apply
 

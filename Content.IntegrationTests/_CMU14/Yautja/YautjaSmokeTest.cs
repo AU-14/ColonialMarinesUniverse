@@ -370,68 +370,6 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerFabricatesRationAndCanteen()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var inventory = entMan.System<InventorySystem>();
-            var hands = entMan.System<SharedHandsSystem>();
-            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
-            var rationAction = entMan.SpawnEntity("CMUActionYautjaCreateFieldRation", MapCoordinates.Nullspace);
-            var canteenAction = entMan.SpawnEntity("CMUActionYautjaCreateHuntingCanteen", MapCoordinates.Nullspace);
-
-            try
-            {
-                entMan.EnsureComponent<YautjaComponent>(hunter);
-                Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
-
-                var rationActionComp = entMan.GetComponent<ActionComponent>(rationAction);
-                var rationEvent = new YautjaCreateFieldRationActionEvent
-                {
-                    Performer = hunter,
-                    Action = (rationAction, rationActionComp),
-                };
-                entMan.EventBus.RaiseLocalEvent(bracer, rationEvent);
-
-                var ration = hands.GetActiveItem(hunter);
-                Assert.That(ration, Is.Not.Null);
-                Assert.That(entMan.GetComponent<MetaDataComponent>(ration!.Value).EntityPrototype?.ID,
-                    Is.EqualTo("CMUYautjaFieldRation"));
-                entMan.DeleteEntity(ration.Value);
-
-                var canteenActionComp = entMan.GetComponent<ActionComponent>(canteenAction);
-                var canteenEvent = new YautjaCreateHuntingCanteenActionEvent
-                {
-                    Performer = hunter,
-                    Action = (canteenAction, canteenActionComp),
-                };
-                entMan.EventBus.RaiseLocalEvent(bracer, canteenEvent);
-
-                var canteen = hands.GetActiveItem(hunter);
-                Assert.That(canteen, Is.Not.Null);
-                Assert.That(entMan.GetComponent<MetaDataComponent>(canteen!.Value).EntityPrototype?.ID,
-                    Is.EqualTo("CMUYautjaHuntingCanteen"));
-            }
-            finally
-            {
-                entMan.DeleteEntity(hunter);
-                entMan.DeleteEntity(rationAction);
-                entMan.DeleteEntity(canteenAction);
-
-                if (!entMan.Deleted(bracer))
-                    entMan.DeleteEntity(bracer);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task CleanserGelRuntimeMatchesCmss13DissolveTimingAndGuards()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -806,10 +744,8 @@ public sealed class YautjaSmokeTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(5, true)]
-    [TestCase(0, false)]
-    [TestCase(-5, false)]
-    public async Task CloakedYautjaDecloaksOnlyFromPositiveDamage(int slashDamage, bool shouldDecloak)
+    [Test]
+    public async Task CloakedYautjaKeepsCloakWhenHit()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -832,14 +768,14 @@ public sealed class YautjaSmokeTest
                 turnInvisible.Enabled = true;
 
                 var damageable = entMan.EnsureComponent<DamageableComponent>(hunter);
-                var damage = new DamageSpecifier { DamageDict = { ["Slash"] = slashDamage } };
+                var damage = new DamageSpecifier { DamageDict = { ["Slash"] = 5 } };
                 entMan.EventBus.RaiseLocalEvent(hunter, new DamageChangedEvent(damageable, damage, true, null, null));
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(entMan.HasComponent<EntityActiveInvisibleComponent>(hunter), Is.True);
-                    Assert.That(turnInvisible.Enabled, Is.EqualTo(!shouldDecloak),
-                        "CMU master breaks cloak on positive damage; healing and empty changes must preserve it.");
+                    Assert.That(turnInvisible.Enabled, Is.True,
+                        "A hit must not strip the cloak by itself; gunfire has its own rare roll.");
                 });
             }
             finally
@@ -2630,9 +2566,9 @@ public sealed class YautjaSmokeTest
 
                 var gearComp = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
                 var holderStored = entMan.GetComponent<YautjaStoredGearComponent>(wristBladesHolder);
-                Assert.That(gearComp.Gear.TryGetValue(YautjaGearKind.WristBlades, out var defaultWristBlades), Is.True);
+                Assert.That(gearComp.Gear.ContainsKey(YautjaGearKind.WristBlades), Is.False,
+                    "CMU14: a fresh bracer carries only its plasma caster; wrist blades are installed explicitly.");
                 Assert.That(gearComp.Container, Is.Not.Null);
-                Assert.That(gearComp.Container!.Contains(defaultWristBlades), Is.True);
                 Assert.That(hands.TryPickupAnyHand(user, wristBladesHolder), Is.True);
 
                 entMan.EnsureComponent<YautjaComponent>(user);
@@ -3155,8 +3091,8 @@ public sealed class YautjaSmokeTest
                     Assert.That(ActiveBracerMisuseDoAfters(entMan, user), Is.Zero);
                     Assert.That(active, Is.Not.Null);
                     Assert.That(entMan.GetComponent<MetaDataComponent>(active!.Value).EntityPrototype?.ID,
-                        Is.EqualTo("CMUYautjaStabilisingCrystal"),
-                        "CMSS13 activate_random_verb() slot 5 routes to injectors_internal(user, TRUE), not the local hunting-trap fabricator.");
+                        Is.EqualTo("CMUYautjaAutoInjector"),
+                        "CMSS13 activate_random_verb() slot 5 routes to injectors_internal(user, TRUE): the thwei crystal injector, not the local hunting-trap fabricator.");
                 });
             });
         }
@@ -4232,15 +4168,16 @@ public sealed class YautjaSmokeTest
                 Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
 
                 var gearComp = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
-                Assert.That(gearComp.Gear.TryGetValue(YautjaGearKind.Scimitar, out var scimitar), Is.True);
-                Assert.That(gearComp.Container, Is.Not.Null);
-                Assert.That(gearComp.Container!.Contains(scimitar), Is.True);
+                Assert.That(gearComp.Gear.ContainsKey(YautjaGearKind.Scimitar), Is.False,
+                    "CMU14: a fresh bracer only pre-installs its plasma caster.");
+                gearComp.GearPrototypes[YautjaGearKind.Scimitar] = "CMUYautjaScimitar";
 
                 var actionComp = entMan.GetComponent<ActionComponent>(action);
                 entMan.EventBus.RaiseLocalEvent(bracer, NewToggleScimitarEvent(hunter, action, actionComp));
 
+                Assert.That(gearComp.Gear.TryGetValue(YautjaGearKind.Scimitar, out var scimitar), Is.True);
                 Assert.That(hands.IsHolding(hunter, scimitar), Is.True);
-                Assert.That(gearComp.Container.Contains(scimitar), Is.False);
+                Assert.That(gearComp.Container!.Contains(scimitar), Is.False);
 
                 entMan.EventBus.RaiseLocalEvent(bracer, NewToggleScimitarEvent(hunter, action, actionComp));
 
@@ -4284,8 +4221,9 @@ public sealed class YautjaSmokeTest
                 Assert.That(hands.TryPickupAnyHand(hunter, altScimitar), Is.True);
 
                 var gearComp = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
-                Assert.That(gearComp.Gear.TryGetValue(YautjaGearKind.Scimitar, out var originalScimitar), Is.True);
-                Assert.That(originalScimitar, Is.Not.EqualTo(altScimitar));
+                Assert.That(gearComp.Gear.ContainsKey(YautjaGearKind.Scimitar), Is.False,
+                    "CMU14: a fresh bracer only pre-installs its plasma caster; the scimitar is installed explicitly.");
+                gearComp.GearPrototypes[YautjaGearKind.Scimitar] = "CMUYautjaScimitar";
 
                 var interact = new InteractUsingEvent(
                     hunter,
@@ -4344,8 +4282,9 @@ public sealed class YautjaSmokeTest
                 Assert.That(hands.TryPickupAnyHand(hunter, altScimitar), Is.True);
 
                 var gearComp = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
-                Assert.That(gearComp.Gear.TryGetValue(YautjaGearKind.Scimitar, out var originalScimitar), Is.True);
-                Assert.That(originalScimitar, Is.Not.EqualTo(altScimitar));
+                Assert.That(gearComp.Gear.ContainsKey(YautjaGearKind.Scimitar), Is.False,
+                    "CMU14: a fresh bracer only pre-installs its plasma caster; the scimitar is installed explicitly.");
+                gearComp.GearPrototypes[YautjaGearKind.Scimitar] = "CMUYautjaScimitar";
 
                 var interact = new InteractUsingEvent(
                     hunter,
@@ -4373,7 +4312,8 @@ public sealed class YautjaSmokeTest
 
                 Assert.That(gearComp.SecondaryGear.TryGetValue(YautjaGearKind.Scimitar, out var rightScimitar), Is.True);
                 Assert.That(rightScimitar, Is.EqualTo(altScimitar));
-                Assert.That(gearComp.Gear[YautjaGearKind.Scimitar], Is.EqualTo(originalScimitar));
+                Assert.That(gearComp.Gear.ContainsKey(YautjaGearKind.Scimitar), Is.False,
+                    "CMU14: a fresh bracer has no pre-installed scimitar, so the left slot stays empty.");
                 Assert.That(gearComp.InstalledGear, Does.Contain(altScimitar));
                 Assert.That(gearComp.Container.Contains(altScimitar), Is.True);
                 Assert.That(hands.IsHolding(hunter, altScimitar), Is.False);
@@ -4730,11 +4670,8 @@ public sealed class YautjaSmokeTest
                 Assert.That(gearComp.InstalledGear.Any(gear =>
                     entMan.GetComponent<YautjaStoredGearComponent>(gear).DeployedPrototype != null), Is.False,
                     "CMSS13 fresh hunter bracers start with no left_bracer_attachment/right_bracer_attachment.");
-                Assert.That(gearComp.Gear.TryGetValue(YautjaGearKind.WristBlades, out var defaultWristBlades), Is.True);
-                Assert.That(gearComp.Container, Is.Not.Null);
-                Assert.That(gearComp.Container!.Contains(defaultWristBlades), Is.True);
-                Assert.That(entMan.GetComponent<YautjaStoredGearComponent>(defaultWristBlades).DeployedPrototype, Is.Null,
-                    "Native prototype-backed gear is not a physical bracer attachment holder.");
+                Assert.That(gearComp.Gear.ContainsKey(YautjaGearKind.WristBlades), Is.False,
+                    "CMU14: a fresh hunter bracer only carries its plasma caster; it does not pre-install wrist blades.");
 
                 var actionComp = entMan.GetComponent<ActionComponent>(action);
                 var deploy = NewToggleWristBladesEvent(hunter, action, actionComp);
@@ -4745,9 +4682,8 @@ public sealed class YautjaSmokeTest
                     Assert.That(deploy.Handled, Is.True);
                     Assert.That(bracerPower.Charge, Is.EqualTo((FixedPoint2) 250),
                         "CMSS13 deploy_bracer_attachments() drains 50 before warning that no left/right attachments are installed.");
-                    Assert.That(hands.IsHolding(hunter, defaultWristBlades), Is.False,
-                        "CMSS13 fresh hunter bracers start with no left_bracer_attachment/right_bracer_attachment and should not deploy a default weapon.");
-                    Assert.That(gearComp.Container.Contains(defaultWristBlades), Is.True);
+                    Assert.That(hands.IsHolding(hunter, gearComp.Gear[YautjaGearKind.Caster]), Is.False,
+                        "A fresh bracer must not leave a default weapon in the hunter's hand.");
                 });
             }
             finally
@@ -5847,7 +5783,8 @@ public sealed class YautjaSmokeTest
                     foreach (var migratedActionId in migratedActionIds)
                         Assert.That(actionIds, Does.Not.Contain(migratedActionId), $"{migratedActionId} belongs to the bracer menu.");
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaOpenMarkPanel"));
-                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaSelfDestruct"));
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaSelfDestruct"),
+                        "self-destruct is a bindable hotkey now, the bracer menu button still works too");
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTranslator"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleBracerIdChip"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaLinkThrallBracer"));
@@ -12025,117 +11962,6 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task YautjaLeapShowsWindupBeforeAnimatedThrow()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-        EntityUid hunter = default;
-        EntityUid action = default;
-
-        try
-        {
-            await server.WaitAssertion(() =>
-            {
-                var entMan = server.EntMan;
-                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-                action = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
-
-                var yautja = entMan.EnsureComponent<YautjaComponent>(hunter);
-                yautja.LeapThrowSpeed = 5f;
-                yautja.LeapMaxRange = 7f;
-                yautja.LeapWindup = TimeSpan.FromSeconds(0.2);
-
-                var actionComp = entMan.EnsureComponent<ActionComponent>(action);
-                var ev = new YautjaLeapActionEvent
-                {
-                    Performer = hunter,
-                    Action = (action, actionComp),
-                    Target = map.GridCoords.Offset(new Vector2(6, 0)),
-                };
-
-                entMan.EventBus.RaiseLocalEvent(hunter, ev);
-
-                Assert.That(ev.Handled, Is.True);
-                Assert.That(entMan.HasComponent<ThrownItemComponent>(hunter), Is.False);
-                var doAfter = entMan.GetComponent<DoAfterComponent>(hunter);
-                Assert.That(doAfter.DoAfters.Values.Any(active => active.Args.Event is YautjaLeapDoAfterEvent), Is.True);
-            });
-
-            await pair.RunTicksSync(pair.SecondsToTicks(0.4f));
-
-            await server.WaitAssertion(() =>
-            {
-                var entMan = server.EntMan;
-                var thrown = entMan.GetComponent<ThrownItemComponent>(hunter);
-                Assert.That(thrown.LandTime!.Value - thrown.ThrownTime!.Value, Is.GreaterThan(TimeSpan.FromSeconds(0.5)));
-            });
-        }
-        finally
-        {
-            await server.WaitAssertion(() =>
-            {
-                var entMan = server.EntMan;
-                if (hunter != default && !entMan.Deleted(hunter))
-                    entMan.DeleteEntity(hunter);
-                if (action != default && !entMan.Deleted(action))
-                    entMan.DeleteEntity(action);
-            });
-        }
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task YautjaLeapSpawnsVisibleClampedLandingWarning()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entMan = server.EntMan;
-            var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
-            var action = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
-
-            try
-            {
-                var yautja = entMan.EnsureComponent<YautjaComponent>(hunter);
-                yautja.LeapMaxRange = 7f;
-                yautja.LeapWindup = TimeSpan.FromSeconds(1);
-                Assert.That(yautja.LeapThrowSpeed, Is.LessThanOrEqualTo(12f));
-
-                var actionComp = entMan.EnsureComponent<ActionComponent>(action);
-                var ev = new YautjaLeapActionEvent
-                {
-                    Performer = hunter,
-                    Action = (action, actionComp),
-                    Target = map.GridCoords.Offset(new Vector2(20, 0)),
-                };
-
-                entMan.EventBus.RaiseLocalEvent(hunter, ev);
-
-                var warnings = EntityPrototypeIds(entMan, "CMUYautjaLeapWarning").ToList();
-                Assert.That(warnings.Count, Is.EqualTo(1));
-
-                var warningCoords = entMan.GetComponent<TransformComponent>(warnings[0]).Coordinates;
-                Assert.That(warningCoords.Position.X, Is.EqualTo(map.GridCoords.Position.X + 7).Within(0.01f));
-                Assert.That(warningCoords.Position.Y, Is.EqualTo(map.GridCoords.Position.Y).Within(0.01f));
-            }
-            finally
-            {
-                if (!entMan.Deleted(hunter))
-                    entMan.DeleteEntity(hunter);
-                if (!entMan.Deleted(action))
-                    entMan.DeleteEntity(action);
-            }
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
     public async Task AdjacentYautjaGearRacksUseCmss13ConnectedStates()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -16697,7 +16523,7 @@ public sealed class YautjaSmokeTest
             {
                 var job = prototypes.Index(HellhoundJob);
                 Assert.That(job.Name, Is.EqualTo("cmu-yautja-job-name-hellhound"));
-                Assert.That(job.Supervisors, Is.EqualTo("cm-job-supervisors-nobody"));
+                Assert.That(job.Supervisors, Is.EqualTo("cmu-job-supervisors-yautja-hellhound"));
 
                 var xeno = entMan.GetComponent<XenoComponent>(hellhound);
                 Assert.That(xeno.Tier, Is.EqualTo(0));

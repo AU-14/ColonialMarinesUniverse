@@ -93,11 +93,37 @@ public static class ThreatVoteSelection
 
         static void Limit(IDictionary<string, int> bodies, ref int remaining)
         {
-            foreach (string bodyId in bodies.Keys.ToList())
+            ThreatVoteSelection.DistributeBodies(bodies, ref remaining);
+        }
+    }
+
+    // round-robin, one slot per body type at a time. greedy fill gave the whole budget to whatever
+    // was listed first, so tribes on low pop were all spearmen
+    internal static void DistributeBodies(IDictionary<string, int> bodies, ref int remaining)
+    {
+        List<string> bodyIds = bodies.Keys.ToList();
+        var requested = new Dictionary<string, int>(bodyIds.Count);
+        foreach (string bodyId in bodyIds)
+        {
+            requested[bodyId] = Math.Max(0, bodies[bodyId]);
+            bodies[bodyId] = 0;
+        }
+
+        var progressed = true;
+        while (remaining > 0 && progressed)
+        {
+            progressed = false;
+            foreach (string bodyId in bodyIds)
             {
-                int count = Math.Min(Math.Max(0, bodies[bodyId]), remaining);
-                bodies[bodyId] = count;
-                remaining -= count;
+                if (remaining <= 0)
+                    break;
+
+                if (bodies[bodyId] >= requested[bodyId])
+                    continue;
+
+                bodies[bodyId]++;
+                remaining--;
+                progressed = true;
             }
         }
     }
@@ -162,7 +188,7 @@ public static class ThreatVoteSelection
         int playerCount)
         => ThreatVoteSelection.IsThreatAllowed(
             threat.BlacklistedGamemodes,
-            threat.whitelistedgamemodes,
+            threat.WhitelistedGamemodes,
             threat.MinPlayers,
             threat.MaxPlayers,
             threat.BlacklistedPlatoons,
