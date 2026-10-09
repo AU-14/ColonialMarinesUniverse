@@ -213,7 +213,7 @@ public sealed partial class LobbyPartyShowControl : Control
         UserInterfaceManager.DeferAction(() =>
         {
             Orphan();
-            this.Release();
+            CMUControlLifetime.Release(this);
         });
     }
 

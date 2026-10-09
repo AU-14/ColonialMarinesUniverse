@@ -145,7 +145,7 @@ public sealed partial class LobbyLineupStageTransition : Control
         UserInterfaceManager.DeferAction(() =>
         {
             Orphan();
-            this.Release();
+            CMUControlLifetime.Release(this);
         });
     }
 
