@@ -182,7 +182,10 @@ public sealed class LobbyLineupTest : GameTest
     }
 
     [TestCase("AU14JobGOVFORPlatCo", "GOVFOR/command")]
-    [TestCase("AU14JobGOVFORSquadRifleman", "GOVFOR/SquadGovforBravo")]
+    // cmu edit start: squad preference no longer places squad roles under that squad, they share the squads section
+    // [TestCase("AU14JobGOVFORSquadRifleman", "GOVFOR/SquadGovforBravo")]
+    [TestCase("AU14JobGOVFORSquadRifleman", "GOVFOR/squads")]
+    // cmu edit end
     public async Task ReadyLineupTracksAppearanceAndCleansUpPreviews(string job, string section)
     {
         var preferences = Server.ResolveDependency<IServerPreferencesManager>();

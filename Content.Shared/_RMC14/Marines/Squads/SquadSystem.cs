@@ -36,6 +36,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.CMU14.Squads; // cmu edit
 
 namespace Content.Shared._RMC14.Marines.Squads;
 
@@ -206,7 +207,11 @@ public sealed partial class SquadSystem : EntitySystem
 
     private void OnSquadRoleGetName(Entity<SquadMemberComponent> member, ref GetMarineSquadNameEvent args)
     {
-        if (TryGetMemberSquad(member.Owner, out var squadTeam))
+        // cmu edit start: some squads, like Auxiliary, are left off ID titles
+        // if (TryGetMemberSquad(member.Owner, out var squadTeam))
+        if (TryGetMemberSquad(member.Owner, out var squadTeam) &&
+            !HasComp<CMUAuxiliarySquadComponent>(squadTeam))
+        // cmu edit end
             args.SquadName = Name(squadTeam);
 
         var jobId = _originalRoleQuery.CompOrNull(member)?.Job;
@@ -265,6 +270,11 @@ public sealed partial class SquadSystem : EntitySystem
 
     private void OnSquadLeaderGetMarineIcon(Entity<SquadLeaderComponent> ent, ref GetMarineIconEvent args)
     {
+        // cmu edit start: auxiliary squad leaders keep their job icon
+        if (HasComp<CMUKeepJobIconComponent>(ent))
+            return;
+        // cmu edit end
+
         args.Icon = ent.Comp.Icon;
     }
 
@@ -698,7 +708,10 @@ public sealed partial class SquadSystem : EntitySystem
         var ev = new GetMarineSquadNameEvent();
         RaiseLocalEvent(marine, ref ev);
 
-        MarineSetTitle(marine, $"{ev.SquadName} {ev.RoleName}");
+        // cmu edit start: trim so a hidden squad name leaves no leading space
+        // MarineSetTitle(marine, $"{ev.SquadName} {ev.RoleName}");
+        MarineSetTitle(marine, $"{ev.SquadName} {ev.RoleName}".Trim());
+        // cmu edit end
     }
 
     public void MarineSetTitle(EntityUid marine, string title)
@@ -774,6 +787,14 @@ public sealed partial class SquadSystem : EntitySystem
 
         var newLeader = EnsureComp<SquadLeaderComponent>(toPromote);
         newLeader.Icon = icon;
+        // cmu edit start: auxiliary squad leaders keep their job icon
+        if (_squadMemberQuery.TryComp(toPromote, out var promotedMember) &&
+            promotedMember.Squad is { } promotedSquad &&
+            HasComp<CMUAuxiliarySquadComponent>(promotedSquad))
+        {
+            EnsureComp<CMUKeepJobIconComponent>(toPromote);
+        }
+        // cmu edit end
         EnsureComp<RMCTrackableComponent>(toPromote);
         EnsureComp<RMCPointingComponent>(toPromote);
         EnsureComp<RMCAwardRecommendationComponent>(toPromote);
@@ -858,6 +879,7 @@ public sealed partial class SquadSystem : EntitySystem
             RemCompDeferred<MarineOrdersComponent>(marine);
 
         RemComp<SquadLeaderComponent>(marine);
+        RemComp<CMUKeepJobIconComponent>(marine); // cmu edit
         RemComp<RMCTrackableComponent>(marine);
         RemCompDeferred<RMCPointingComponent>(marine);
         _awardRecommendation.SetCanRecommend(marine, false);

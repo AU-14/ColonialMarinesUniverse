@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared.CMU14.Lobby;
 using Content.Shared.CMU14.Round.Roles;
 using Content.Shared.Clothing;
@@ -86,11 +85,6 @@ public sealed partial class GameTicker
             "SquadAutomaticRifleman" or "SquadCombatTech" or "PlatoonCorpsman" or
             "RadioTelephoneOperator" or "WeaponsSpecialist" or "DroneOperator"))
         {
-            if (_prototypeManager.TryIndex(profile.SquadPreference, out var squad) &&
-                squad.TryComp<SquadTeamComponent>(out var team, Factory) &&
-                (string.IsNullOrEmpty(force) || string.Equals(team.Group, force, StringComparison.OrdinalIgnoreCase)))
-                return (force + "/" + squad.ID, prefix + squad.Name, team.Color, 10);
-
             return (force + "/squads", prefix + Loc.GetString("cmu-lobby-lineup-squads"), color, 10);
         }
 

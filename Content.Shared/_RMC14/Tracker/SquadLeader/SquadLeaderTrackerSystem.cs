@@ -459,6 +459,11 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
 
     private bool CanChangeFireteamMember(EntityUid user, EntityUid target, bool add, EntityUid? trackerOwner = null)
     {
+        // cmu edit start: auxiliary squads have no fireteams
+        if (add && CMUInAuxiliarySquad(target))
+            return false;
+        // cmu edit end
+
         // Allow direct squad leaders immediately.
         if (HasComp<SquadLeaderComponent>(user))
         {
