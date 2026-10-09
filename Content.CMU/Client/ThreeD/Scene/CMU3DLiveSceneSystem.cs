@@ -418,6 +418,9 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 IReadOnlyList<CMU3DModelPart>? stateParts = null;
                 var appearanceKey = string.Empty;
                 var paperOffset = Vector2.Zero;
+                var xenoAnimated = false;
+                if (match is { } xenoMatch && xenoMatch.Model.XenoStates.Count > 0)
+                    unsupportedState |= !TryXenoParts(candidate.Sprite, xenoMatch.Model, out stateParts, out xenoAnimated);
                 if (match is { } vehicleMatch && vehicleMatch.Model.VehicleLayers.Count > 0)
                     unsupportedState |= !TryVehicleParts(candidate.Uid, candidate.Sprite, vehicleMatch.Model, out stateParts);
                 if (match is { } paperMatch && paperMatch.Model.WallPaper)
@@ -603,7 +606,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 if (useModel)
                 {
                     var model = match!.Value.Model;
-                    if (model.SpriteStates.Count > 0 || model.ChargerAppearance != null ||
+                    if (model.SpriteStates.Count > 0 || xenoAnimated || model.ChargerAppearance != null ||
                         model.FoamAppearance != null || model.SolutionAppearance != null)
                         _animatedSprites.Add(candidate.Uid);
                     if (model.Placement == "surface")

@@ -3366,10 +3366,8 @@
       "status": "draft",
       "parts": 96,
       "triangles": 8492,
-      "sha256": "0ea2fb87224b3425a4121ea1c1d8760bc103f7d867f02cf96cb1e9846f78310f",
-      "sourcePrototypes": [
-        "CMUXenoEggNotDS"
-      ],
+      "sha256": "8eda5387cf7d5c1adafb552fd519068495401aff5fdaf5c42c0424b8b7a3f051",
+      "sourcePrototypes": [],
       "animationClips": 0,
       "staticSpriteScenes": 4,
       "storedFrameParts": 411
@@ -12503,9 +12501,10 @@
       "status": "draft",
       "parts": 55,
       "triangles": 660,
-      "sha256": "5ed5d96892bc2461d9bc2da7932e3bed993d4f82f4d078a46db7b44e1c3b88c4",
+      "sha256": "4d355b9a5f15031f5a4de67721842671012a539af42d7e41b7b6c877178bb454",
       "sourcePrototypes": [
-        "XenoTunnelMaint"
+        "XenoTunnelMaint",
+        "XenoTunnelMaintNoXenoDesc"
       ]
     },
     {
@@ -20759,10 +20758,8 @@
       "status": "draft",
       "parts": 117,
       "triangles": 1404,
-      "sha256": "8c6979c92c12df094e7701806e8b96e4484dedbf21b8cd3a8d45ab6afcc0b5fe",
-      "sourcePrototypes": [
-        "DoorXenoResin"
-      ]
+      "sha256": "cd2a13cdd27d158631e1239fad7379c5de948c6f9231d4a5e4ab23af2bf8d2a3",
+      "sourcePrototypes": []
     },
     {
       "id": "CMU3DResinDoorOpen",
@@ -33633,6 +33630,1254 @@
       "sha256": "b8a49cf38efad2686608e7fc56aa241da5ecf4bed4b3bdaa8d33684e987cea54",
       "sourcePrototypes": [
         "FoodLemon"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenBlightCore",
+      "label": "blight core",
+      "file": "CMU3DHiveCMU14PathogenBlightCore.glb",
+      "status": "draft",
+      "parts": 46,
+      "triangles": 2012,
+      "sha256": "de0b433111b700a4238c5328bad32df29d70212bc50be81499df2cbe10adef80",
+      "sourcePrototypes": [
+        "CMU14PathogenBlightCore"
+      ],
+      "xenoLayerScenes": 52,
+      "storedFrameParts": 756
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenBlightCoreConstructionNode",
+      "label": "blight core",
+      "file": "CMU3DHiveCMU14PathogenBlightCoreConstructionNode.glb",
+      "status": "draft",
+      "parts": 42,
+      "triangles": 2176,
+      "sha256": "03f9213fc7d301e8f26d8d851a7d37e8c0ab69c518405527b434d2cd9a15ae7e",
+      "sourcePrototypes": [
+        "CMU14PathogenBlightCoreConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenCluster",
+      "label": "mycelium cluster",
+      "file": "CMU3DHiveCMU14PathogenCluster.glb",
+      "status": "draft",
+      "parts": 37,
+      "triangles": 2876,
+      "sha256": "477b6b1954da1d6bf38465c74f16c9b7721e1e6691835c93b5d276cb0e86c97b",
+      "sourcePrototypes": [
+        "CMU14PathogenCluster"
+      ],
+      "xenoLayerScenes": 51,
+      "storedFrameParts": 696
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenClusterConstructionNode",
+      "label": "mycelium cluster",
+      "file": "CMU3DHiveCMU14PathogenClusterConstructionNode.glb",
+      "status": "draft",
+      "parts": 33,
+      "triangles": 3040,
+      "sha256": "39d069f956d423b4fc27a5e3263a0193fadef9189ae6835dec073e75296a1485",
+      "sourcePrototypes": [
+        "CMU14PathogenClusterConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenOvermindCore",
+      "label": "overmind core",
+      "file": "CMU3DHiveCMU14PathogenOvermindCore.glb",
+      "status": "draft",
+      "parts": 33,
+      "triangles": 1856,
+      "sha256": "640923f08956a526cac75fa80263abcedb0d18ab32941577ac71fa8651ce2098",
+      "sourcePrototypes": [
+        "CMU14PathogenOvermindCore"
+      ],
+      "xenoLayerScenes": 4,
+      "storedFrameParts": 132
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenPlasmaTree",
+      "label": "plasma node",
+      "file": "CMU3DHiveCMU14PathogenPlasmaTree.glb",
+      "status": "draft",
+      "parts": 27,
+      "triangles": 1472,
+      "sha256": "e3d5411b56c01a4b136a337a7c27ed8f1f19371e9c44e2728bace873b1165c09",
+      "sourcePrototypes": [
+        "CMU14PathogenPlasmaTree"
+      ],
+      "xenoLayerScenes": 1,
+      "storedFrameParts": 27
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenPlasmaTreeConstructionNode",
+      "label": "plasma node",
+      "file": "CMU3DHiveCMU14PathogenPlasmaTreeConstructionNode.glb",
+      "status": "draft",
+      "parts": 36,
+      "triangles": 1792,
+      "sha256": "6271ed9a9091e93c8fbb68847cf4433d96b437c1d9bed7e7047cbe62816b1a27",
+      "sourcePrototypes": [
+        "CMU14PathogenPlasmaTreeConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenPylon",
+      "label": "mycelium pylon",
+      "file": "CMU3DHiveCMU14PathogenPylon.glb",
+      "status": "draft",
+      "parts": 43,
+      "triangles": 1980,
+      "sha256": "d1538a929bf8906684d6a3ada177286f9dcbd7c153feee869efe4a05aeaa1873",
+      "sourcePrototypes": [
+        "CMU14PathogenPylon"
+      ],
+      "xenoLayerScenes": 49,
+      "storedFrameParts": 654
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenPylonConstructionNode",
+      "label": "mycelium pylon",
+      "file": "CMU3DHiveCMU14PathogenPylonConstructionNode.glb",
+      "status": "draft",
+      "parts": 39,
+      "triangles": 2144,
+      "sha256": "5f22ccdc41eb88160d415329e8efc373b449a3b3cd7a4e34d1d863931bedac7d",
+      "sourcePrototypes": [
+        "CMU14PathogenPylonConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenRecoveryNode",
+      "label": "recovery node",
+      "file": "CMU3DHiveCMU14PathogenRecoveryNode.glb",
+      "status": "draft",
+      "parts": 27,
+      "triangles": 1472,
+      "sha256": "b77c759e3fa3bbfa0a4ee47b6b42211d739d760ef8129d093ac0127ac52638e5",
+      "sourcePrototypes": [
+        "CMU14PathogenRecoveryNode"
+      ],
+      "xenoLayerScenes": 1,
+      "storedFrameParts": 27
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenRecoveryNodeConstructionNode",
+      "label": "recovery node",
+      "file": "CMU3DHiveCMU14PathogenRecoveryNodeConstructionNode.glb",
+      "status": "draft",
+      "parts": 36,
+      "triangles": 1792,
+      "sha256": "5de3c9d8310fb4d63c95b981b0e2c0fd2d01a28b0360a3a34b539ca87a90f124",
+      "sourcePrototypes": [
+        "CMU14PathogenRecoveryNodeConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14PathogenSporecaster",
+      "label": "sporecaster",
+      "file": "CMU3DHiveCMU14PathogenSporecaster.glb",
+      "status": "draft",
+      "parts": 43,
+      "triangles": 2816,
+      "sha256": "ce90d43a58293506f2225d16605bc43d68c9b5d6536c16930c7334c09a46a110",
+      "sourcePrototypes": [
+        "CMU14PathogenSporecaster",
+        "CMU14PathogenSporecasterConstructionNode"
+      ],
+      "xenoLayerScenes": 2,
+      "storedFrameParts": 43
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumDoor",
+      "label": "mycelium door",
+      "file": "CMU3DHiveCMU14XenoMyceliumDoor.glb",
+      "status": "draft",
+      "parts": 29,
+      "triangles": 1596,
+      "sha256": "1dda79d6ee7d87068f17eda66d3f2d42022ddf3fbd5777c2a1715b6025ee1db6",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumDoor"
+      ],
+      "xenoLayerScenes": 17,
+      "storedFrameParts": 398
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumHiveWeeds",
+      "label": "dense mycelium weeds",
+      "file": "CMU3DHiveCMU14XenoMyceliumHiveWeeds.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "5e0d42ce33ca0926ad867ecb1c5b4155c06d15a122c79755b8571d6a7d06112f",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumHiveWeeds"
+      ],
+      "xenoLayerScenes": 48,
+      "storedFrameParts": 624
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumHiveWeedsSource",
+      "label": "dense mycelium node",
+      "file": "CMU3DHiveCMU14XenoMyceliumHiveWeedsSource.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "31320908f8ca09de29518b210bc32334d3b579b4a51377232994c2a0adfa9b38",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumHiveWeedsSource"
+      ],
+      "xenoLayerScenes": 56,
+      "storedFrameParts": 664
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumHiveWeedsSourceHidden",
+      "label": "dense mycelium weeds",
+      "file": "CMU3DHiveCMU14XenoMyceliumHiveWeedsSourceHidden.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "c7aff2bbd0fdda5c0a254dbd9d4d5e49f2bf4e82168558f73f254828243320dd",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumHiveWeedsSourceHidden"
+      ],
+      "xenoLayerScenes": 49,
+      "storedFrameParts": 629
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumMembrane",
+      "label": "mycelium membrane",
+      "file": "CMU3DHiveCMU14XenoMyceliumMembrane.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1996,
+      "sha256": "64b52fc0e557f477fb145cbc15f253ec21ce595a25859258d84a53e39f9adcba",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumMembrane"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumNest",
+      "label": "mycelium nest",
+      "file": "CMU3DHiveCMU14XenoMyceliumNest.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 992,
+      "sha256": "b781d0ba1ade0fff3d40631fd90f47fcbe6b576120164c3b9c85d9c70a84d688",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumNest"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumWall",
+      "label": "mycelium wall",
+      "file": "CMU3DHiveCMU14XenoMyceliumWall.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1996,
+      "sha256": "093605a6b88754caa98163287b8891dbdc9c3fcaedcec463bf4ab90f04a619b8",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumWall"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumWeeds",
+      "label": "mycelium weeds",
+      "file": "CMU3DHiveCMU14XenoMyceliumWeeds.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "e34f9897a58563802349642203a21cfeadf2e975a9c7807fd5ecf607a1ea5056",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumWeeds"
+      ],
+      "xenoLayerScenes": 48,
+      "storedFrameParts": 624
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumWeedsSource",
+      "label": "mycelium node",
+      "file": "CMU3DHiveCMU14XenoMyceliumWeedsSource.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "a01f6afe78a04a51766de1defeef3898ef460583795e1ae097c3b55724265824",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumWeedsSource"
+      ],
+      "xenoLayerScenes": 56,
+      "storedFrameParts": 664
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumWeedsSourceHidden",
+      "label": "mycelium weeds",
+      "file": "CMU3DHiveCMU14XenoMyceliumWeedsSourceHidden.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "012e668b02f5b31e429a8e3934a7a3e863c99da26d5aa99947d1ad939fbf676c",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumWeedsSourceHidden"
+      ],
+      "xenoLayerScenes": 49,
+      "storedFrameParts": 629
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoMyceliumWeedsWall",
+      "label": "mycelium weeds",
+      "file": "CMU3DHiveCMU14XenoMyceliumWeedsWall.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 384,
+      "sha256": "987cb59a8cea2b9d3e44336e5d4f5416b7dafce2ac394f39c453c779c24d89e5",
+      "sourcePrototypes": [
+        "CMU14XenoMyceliumWeedsWall"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoThickMyceliumDoor",
+      "label": "thick mycelium door",
+      "file": "CMU3DHiveCMU14XenoThickMyceliumDoor.glb",
+      "status": "draft",
+      "parts": 29,
+      "triangles": 1596,
+      "sha256": "8a915a0d02783cd516dc358a6187edd95b63c43099ee3e9e89f8a18cf8ae41f3",
+      "sourcePrototypes": [
+        "CMU14XenoThickMyceliumDoor"
+      ],
+      "xenoLayerScenes": 17,
+      "storedFrameParts": 398
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoThickMyceliumMembrane",
+      "label": "thick mycelium membrane",
+      "file": "CMU3DHiveCMU14XenoThickMyceliumMembrane.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1996,
+      "sha256": "75ad264e4e8240976f61c25c34339248c6f80831961f71f7e7821ef329cf61c2",
+      "sourcePrototypes": [
+        "CMU14XenoThickMyceliumMembrane"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMU14XenoThickMyceliumWall",
+      "label": "thick mycelium wall",
+      "file": "CMU3DHiveCMU14XenoThickMyceliumWall.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1996,
+      "sha256": "7df9e8d01a47044375033af91aab5892a62dbe7eb1939c31127cd703dc573b95",
+      "sourcePrototypes": [
+        "CMU14XenoThickMyceliumWall"
+      ]
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipObjEffectAlienEggForsakenEggGrowingSouth",
+      "label": "Egg",
+      "file": "CMU3DHiveCMUHunterShipObjEffectAlienEggForsakenEggGrowingSouth.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "d0bf880ade6988c5ff0af372d072b44fc8f8cc940a67a34cbaf4a5c99993df50",
+      "sourcePrototypes": [
+        "CMUHunterShipObjEffectAlienEggForsakenEggGrowingSouth"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouth",
+      "label": "Weed node",
+      "file": "CMU3DHiveCMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouth.glb",
+      "status": "draft",
+      "parts": 5,
+      "triangles": 272,
+      "sha256": "45311e5cc191b81425e5feb898db8e86f58741bf77339742f59b5de3460070d0",
+      "sourcePrototypes": [
+        "CMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouth"
+      ],
+      "xenoLayerScenes": 53,
+      "storedFrameParts": 633
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffset1x2",
+      "label": "Egg",
+      "file": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffset1x2.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "e77ec3ddc62d962971915f354433a64091462ca60e16d5a7a42d7819bc1865ce",
+      "sourcePrototypes": [
+        "CMUHunterShipPlacedBaseItemEggItemSouthOffset1x2"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffset6x7",
+      "label": "Egg",
+      "file": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffset6x7.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "a55ac79e8c898f722580efe82ff0d393030ee80bd6d98c2f63164708344273bc",
+      "sourcePrototypes": [
+        "CMUHunterShipPlacedBaseItemEggItemSouthOffset6x7"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffset8x13",
+      "label": "Egg",
+      "file": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffset8x13.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "0173220e08c7a522adc3ed6079d1f7c2abac403abea0a28fe89810a2804fa276",
+      "sourcePrototypes": [
+        "CMUHunterShipPlacedBaseItemEggItemSouthOffset8x13"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg5x9",
+      "label": "Egg",
+      "file": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg5x9.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "b5b5b7ea7765829acc3c17ea13a4aa344581d6110895726fa91b95f2c01a596d",
+      "sourcePrototypes": [
+        "CMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg5x9"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg7x15",
+      "label": "Egg",
+      "file": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg7x15.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "6cb7dcc5ca1637d6df890819157d5b29abe06b3b4ca4d958072ea6afeee627da",
+      "sourcePrototypes": [
+        "CMUHunterShipPlacedBaseItemEggItemSouthOffsetNeg7x15"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset1xNeg2",
+      "label": "Egg",
+      "file": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset1xNeg2.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "e91b914ecc40b4777d8dc4c81029433586624e5594dfc061649a10712ad44093",
+      "sourcePrototypes": [
+        "CMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset1xNeg2"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset9x10",
+      "label": "Egg",
+      "file": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset9x10.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "c5948b9799863428947e462b6401ed6f73d035f05f0f650f3f3fa128bc3659bc",
+      "sourcePrototypes": [
+        "CMUHunterShipPlacedBaseItemEggItemSouthVariant02Offset9x10"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthVariant02OffsetNeg7x11",
+      "label": "Egg",
+      "file": "CMU3DHiveCMUHunterShipPlacedBaseItemEggItemSouthVariant02OffsetNeg7x11.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "1e7b31b2c06c042963d28d4da0503d5d8873f7b3a5c7f11c8cfc581c4a35cd2e",
+      "sourcePrototypes": [
+        "CMUHunterShipPlacedBaseItemEggItemSouthVariant02OffsetNeg7x11"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveCMUPathogenSporeSac",
+      "label": "spore sac",
+      "file": "CMU3DHiveCMUPathogenSporeSac.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 640,
+      "sha256": "966e3b07332ae3af1c90b48ac7ddd845a63d2e43893dc7f2336dc7505d83435c",
+      "sourcePrototypes": [
+        "CMUPathogenSporeSac"
+      ],
+      "xenoLayerScenes": 2,
+      "storedFrameParts": 28
+    },
+    {
+      "id": "CMU3DHiveDoorXenoResin",
+      "label": "resin door",
+      "file": "CMU3DHiveDoorXenoResin.glb",
+      "status": "draft",
+      "parts": 29,
+      "triangles": 1596,
+      "sha256": "e299408c3bd95e0343349b755887c040847d400358ff9a4340faf0711909056c",
+      "sourcePrototypes": [
+        "DoorXenoResin"
+      ],
+      "xenoLayerScenes": 17,
+      "storedFrameParts": 398
+    },
+    {
+      "id": "CMU3DHiveDoorXenoResinQueen",
+      "label": "queen resin door",
+      "file": "CMU3DHiveDoorXenoResinQueen.glb",
+      "status": "draft",
+      "parts": 29,
+      "triangles": 1596,
+      "sha256": "25bd461bd45f1f181792554115860f8c7e8f160e87f7d66ce3c726dd0ec0ed37",
+      "sourcePrototypes": [
+        "DoorXenoResinQueen",
+        "DoorXenoResinThick",
+        "DoorXenoResinImpenetrable"
+      ],
+      "xenoLayerScenes": 17,
+      "storedFrameParts": 398
+    },
+    {
+      "id": "CMU3DHiveDoorXenoResinThickWeedbound",
+      "label": "thick weedbound resin door",
+      "file": "CMU3DHiveDoorXenoResinThickWeedbound.glb",
+      "status": "draft",
+      "parts": 35,
+      "triangles": 1668,
+      "sha256": "28c7416712676c647342805c5a3f171a7aa194dc5f978934ba0b2a7b31c6c378",
+      "sourcePrototypes": [
+        "DoorXenoResinThickWeedbound"
+      ],
+      "xenoLayerScenes": 17,
+      "storedFrameParts": 494
+    },
+    {
+      "id": "CMU3DHiveDoorXenoResinWeedbound",
+      "label": "weedbound resin door",
+      "file": "CMU3DHiveDoorXenoResinWeedbound.glb",
+      "status": "draft",
+      "parts": 35,
+      "triangles": 1668,
+      "sha256": "44caf0a0f79e5cda37d5db4172dadc98914bd50d68e76ffb70b1bcd3497b3235",
+      "sourcePrototypes": [
+        "DoorXenoResinWeedbound"
+      ],
+      "xenoLayerScenes": 17,
+      "storedFrameParts": 494
+    },
+    {
+      "id": "CMU3DHiveHiveAcidPillarXeno",
+      "label": "acid pillar",
+      "file": "CMU3DHiveHiveAcidPillarXeno.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 1056,
+      "sha256": "1fb61a486f7aec5c58d12682bc30c922a3f56684d032bbb6e85c9129a30365d9",
+      "sourcePrototypes": [
+        "HiveAcidPillarXeno"
+      ],
+      "xenoLayerScenes": 19,
+      "storedFrameParts": 342
+    },
+    {
+      "id": "CMU3DHiveHiveClusterXeno",
+      "label": "hive cluster",
+      "file": "CMU3DHiveHiveClusterXeno.glb",
+      "status": "draft",
+      "parts": 37,
+      "triangles": 2876,
+      "sha256": "d87bd879b99b8d91b9c248bd92fa9d9d7dab9d1b633615bb1c473fb87409685a",
+      "sourcePrototypes": [
+        "HiveClusterXeno"
+      ],
+      "xenoLayerScenes": 52,
+      "storedFrameParts": 720
+    },
+    {
+      "id": "CMU3DHiveHiveClusterXenoConstructionNode",
+      "label": "hive cluster",
+      "file": "CMU3DHiveHiveClusterXenoConstructionNode.glb",
+      "status": "draft",
+      "parts": 33,
+      "triangles": 3040,
+      "sha256": "cdfef2d961d872c4384b8886689b426e2d2a436182cf431b783dabf1ef43ff2b",
+      "sourcePrototypes": [
+        "HiveClusterXenoConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveHiveCoreXeno",
+      "label": "hive core",
+      "file": "CMU3DHiveHiveCoreXeno.glb",
+      "status": "draft",
+      "parts": 46,
+      "triangles": 2012,
+      "sha256": "c5465d4f3916aa1b65295bc3bfff8502d0597b3cd8b01cd2320833045fd28001",
+      "sourcePrototypes": [
+        "HiveCoreXeno"
+      ],
+      "xenoLayerScenes": 51,
+      "storedFrameParts": 723
+    },
+    {
+      "id": "CMU3DHiveHiveCoreXenoConstructionNode",
+      "label": "hive core",
+      "file": "CMU3DHiveHiveCoreXenoConstructionNode.glb",
+      "status": "draft",
+      "parts": 42,
+      "triangles": 2176,
+      "sha256": "4ba7da21b9a2e8f43c06c96dac52bae0e254ae44c19a88ce9d10d2025f62b70e",
+      "sourcePrototypes": [
+        "HiveCoreXenoConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveHiveEggMorpherXeno",
+      "label": "egg morpher",
+      "file": "CMU3DHiveHiveEggMorpherXeno.glb",
+      "status": "draft",
+      "parts": 33,
+      "triangles": 1856,
+      "sha256": "7885bd13d77d2e523b4874476039d51d2529d716a90352e07a0e1a42cd5238f4",
+      "sourcePrototypes": [
+        "HiveEggMorpherXeno"
+      ],
+      "xenoLayerScenes": 15,
+      "storedFrameParts": 471
+    },
+    {
+      "id": "CMU3DHiveHiveEggMorpherXenoConstructionNode",
+      "label": "Egg Morpher",
+      "file": "CMU3DHiveHiveEggMorpherXenoConstructionNode.glb",
+      "status": "draft",
+      "parts": 73,
+      "triangles": 4008,
+      "sha256": "3f07f383a3ca2de7867f067a4e1b62ca636825eb63ea584fcd53373a4f6d5d9e",
+      "sourcePrototypes": [
+        "HiveEggMorpherXenoConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveHivePlasmaTreeXeno",
+      "label": "plasma tree",
+      "file": "CMU3DHiveHivePlasmaTreeXeno.glb",
+      "status": "draft",
+      "parts": 19,
+      "triangles": 1600,
+      "sha256": "dd8b9573167b1cdafcda720d222dd8c6a7598da240a67eccb4ffc590a6248ab8",
+      "sourcePrototypes": [
+        "HivePlasmaTreeXeno"
+      ],
+      "xenoLayerScenes": 1,
+      "storedFrameParts": 19
+    },
+    {
+      "id": "CMU3DHiveHivePlasmaTreeXenoConstructionNode",
+      "label": "plasma tree",
+      "file": "CMU3DHiveHivePlasmaTreeXenoConstructionNode.glb",
+      "status": "draft",
+      "parts": 28,
+      "triangles": 1920,
+      "sha256": "24d06f994b8193022aac224689edca69fbac231ed4c2d062d66dd2d3a9cd6788",
+      "sourcePrototypes": [
+        "HivePlasmaTreeXenoConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveHivePylonXeno",
+      "label": "hive pylon",
+      "file": "CMU3DHiveHivePylonXeno.glb",
+      "status": "draft",
+      "parts": 43,
+      "triangles": 1980,
+      "sha256": "fa8b8c6d665325849ad8a64222b9153f67d4c73cc51ac0486de64f4aa593cac8",
+      "sourcePrototypes": [
+        "HivePylonXeno"
+      ],
+      "xenoLayerScenes": 49,
+      "storedFrameParts": 654
+    },
+    {
+      "id": "CMU3DHiveHiveRecoveryNodeXeno",
+      "label": "recovery node",
+      "file": "CMU3DHiveHiveRecoveryNodeXeno.glb",
+      "status": "draft",
+      "parts": 19,
+      "triangles": 1600,
+      "sha256": "01f9a7c3a38ec0e948b18781562107cb2b238de133f4866b619a4b7554490aad",
+      "sourcePrototypes": [
+        "HiveRecoveryNodeXeno"
+      ],
+      "xenoLayerScenes": 1,
+      "storedFrameParts": 19
+    },
+    {
+      "id": "CMU3DHiveHiveRecoveryNodeXenoConstructionNode",
+      "label": "recovery node",
+      "file": "CMU3DHiveHiveRecoveryNodeXenoConstructionNode.glb",
+      "status": "draft",
+      "parts": 28,
+      "triangles": 1920,
+      "sha256": "d6046503af71b3f0a61c7c64bda76f92f7d68dac24695a652448638b3e3d1f57",
+      "sourcePrototypes": [
+        "HiveRecoveryNodeXenoConstructionNode"
+      ]
+    },
+    {
+      "id": "CMU3DHiveRMCHiveCocoonKing",
+      "label": "alien cocoon",
+      "file": "CMU3DHiveRMCHiveCocoonKing.glb",
+      "status": "draft",
+      "parts": 37,
+      "triangles": 2752,
+      "sha256": "45aa5852cefac95a3d879dd68287bb605f0fcdf94c3e4ef7985085172a3e48d2",
+      "sourcePrototypes": [
+        "RMCHiveCocoonKing"
+      ],
+      "xenoLayerScenes": 17,
+      "storedFrameParts": 429
+    },
+    {
+      "id": "CMU3DHiveWallXenoMembrane",
+      "label": "resin membrane",
+      "file": "CMU3DHiveWallXenoMembrane.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1996,
+      "sha256": "392956772f07078b9750977f9ee9e5346c407698dbbca737d32bf33619ea9be5",
+      "sourcePrototypes": [
+        "WallXenoMembrane"
+      ]
+    },
+    {
+      "id": "CMU3DHiveWallXenoMembraneQueen",
+      "label": "queen membrane wall",
+      "file": "CMU3DHiveWallXenoMembraneQueen.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1996,
+      "sha256": "2a58f29947225d439f7ee312b0dcdac0a47729946da2c1d6a2215fd498797b97",
+      "sourcePrototypes": [
+        "WallXenoMembraneQueen",
+        "WallXenoMembraneThick"
+      ]
+    },
+    {
+      "id": "CMU3DHiveWallXenoResin",
+      "label": "resin wall",
+      "file": "CMU3DHiveWallXenoResin.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1996,
+      "sha256": "79bb160890a8fdde188ec73e279d9c602ec2fb7623d2d30ed9ee488827343229",
+      "sourcePrototypes": [
+        "WallXenoResin",
+        "WallXenoResinWeak"
+      ]
+    },
+    {
+      "id": "CMU3DHiveWallXenoResinQueen",
+      "label": "queen resin wall",
+      "file": "CMU3DHiveWallXenoResinQueen.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1996,
+      "sha256": "a53fcbcc62e8a6f0f1831d8aaa8ccb80e6c47b8416ae6a058371d10057595559",
+      "sourcePrototypes": [
+        "WallXenoResinQueen",
+        "WallXenoResinImpenetrable",
+        "WallXenoResinThick"
+      ]
+    },
+    {
+      "id": "CMU3DHiveWallXenoResinReflective",
+      "label": "reflective resin wall",
+      "file": "CMU3DHiveWallXenoResinReflective.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1996,
+      "sha256": "295becb98eb2f84781fcea69525d1e5fd2edb3a57092ca5e9ae945acb98d1fcd",
+      "sourcePrototypes": [
+        "WallXenoResinReflective",
+        "WallXenoResinReflectiveUnstable"
+      ]
+    },
+    {
+      "id": "CMU3DHiveWallXenoResinThickWeedbound",
+      "label": "thick weedbound resin wall",
+      "file": "CMU3DHiveWallXenoResinThickWeedbound.glb",
+      "status": "draft",
+      "parts": 38,
+      "triangles": 2068,
+      "sha256": "f2a0c3dcaf259464548ed92bdcbb1e90b38cb58ec290ac922386cad83f969f43",
+      "sourcePrototypes": [
+        "WallXenoResinThickWeedbound"
+      ]
+    },
+    {
+      "id": "CMU3DHiveWallXenoResinWeedbound",
+      "label": "weedbound resin wall",
+      "file": "CMU3DHiveWallXenoResinWeedbound.glb",
+      "status": "draft",
+      "parts": 38,
+      "triangles": 2068,
+      "sha256": "8db7954faeedb207145a7e72b4964bf1a3071faf102ede1c93ce457a5afdbd61",
+      "sourcePrototypes": [
+        "WallXenoResinWeedbound"
+      ]
+    },
+    {
+      "id": "CMU3DHiveXenoCollapseResin",
+      "label": "scab resin",
+      "file": "CMU3DHiveXenoCollapseResin.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "c9c1e2f8eb5394edfa91ae4a905dcb592dd1f8b9748f6e2dbe4d6c06270bc20a",
+      "sourcePrototypes": [
+        "XenoCollapseResin"
+      ],
+      "xenoLayerScenes": 6,
+      "storedFrameParts": 78
+    },
+    {
+      "id": "CMU3DHiveXenoEgg",
+      "label": "egg",
+      "file": "CMU3DHiveXenoEgg.glb",
+      "status": "draft",
+      "parts": 31,
+      "triangles": 1832,
+      "sha256": "77075bd0a1cc6d5fa4184798ea9f22398ea04ab5182c6fcda326df10047d7793",
+      "sourcePrototypes": [
+        "XenoEgg",
+        "CMUXenoEggNotCF",
+        "CMUXenoEggNotDS"
+      ],
+      "xenoLayerScenes": 66,
+      "storedFrameParts": 1272
+    },
+    {
+      "id": "CMU3DHiveXenoEggDestroyed",
+      "label": "destroyed egg",
+      "file": "CMU3DHiveXenoEggDestroyed.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 1640,
+      "sha256": "d010a0982125c22bdb2de883d924a44bd6910731dc6423845599e26b829aa89d",
+      "sourcePrototypes": [
+        "XenoEggDestroyed"
+      ],
+      "xenoLayerScenes": 22,
+      "storedFrameParts": 424
+    },
+    {
+      "id": "CMU3DHiveXenoEggDestroyedFragile",
+      "label": "fragile egg",
+      "file": "CMU3DHiveXenoEggDestroyedFragile.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 1640,
+      "sha256": "6073da3171bcbbc49c12499b1fe96b4710cd68fe033aecdaf90d9a9fcbc0132a",
+      "sourcePrototypes": [
+        "XenoEggDestroyedFragile"
+      ],
+      "xenoLayerScenes": 22,
+      "storedFrameParts": 424
+    },
+    {
+      "id": "CMU3DHiveXenoEggDestroyedFragileSustained",
+      "label": "fragile egg",
+      "file": "CMU3DHiveXenoEggDestroyedFragileSustained.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 1640,
+      "sha256": "b9531c39717ab55d483cbfc81288f6b5392f9939e9172729d39f9867039690b5",
+      "sourcePrototypes": [
+        "XenoEggDestroyedFragileSustained"
+      ],
+      "xenoLayerScenes": 22,
+      "storedFrameParts": 424
+    },
+    {
+      "id": "CMU3DHiveXenoFastResin",
+      "label": "fast resin",
+      "file": "CMU3DHiveXenoFastResin.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "2b7ae30613b9def02f175a922bc1b72cc941b9a47407bdf2308023fe192265a5",
+      "sourcePrototypes": [
+        "XenoFastResin"
+      ],
+      "xenoLayerScenes": 6,
+      "storedFrameParts": 78
+    },
+    {
+      "id": "CMU3DHiveXenoFruitGreater",
+      "label": "greater resin fruit",
+      "file": "CMU3DHiveXenoFruitGreater.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 960,
+      "sha256": "291f4a907ba22f411324a5c75a4e3f01f395c926be4ccba0431096b19b58a3df",
+      "sourcePrototypes": [
+        "XenoFruitGreater"
+      ],
+      "xenoLayerScenes": 20,
+      "storedFrameParts": 280
+    },
+    {
+      "id": "CMU3DHiveXenoFruitLesser",
+      "label": "lesser resin fruit",
+      "file": "CMU3DHiveXenoFruitLesser.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 960,
+      "sha256": "00a04ad5f6a9089394093e520fdcb408495b135d8d05fbb9284b72fe64b8445b",
+      "sourcePrototypes": [
+        "XenoFruitLesser"
+      ],
+      "xenoLayerScenes": 15,
+      "storedFrameParts": 210
+    },
+    {
+      "id": "CMU3DHiveXenoFruitPlasma",
+      "label": "cruor resin fruit",
+      "file": "CMU3DHiveXenoFruitPlasma.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 960,
+      "sha256": "226b9d95f656938e0901e225a7ee6cfdbbbae3d6d07716e4b75c348d965d83af",
+      "sourcePrototypes": [
+        "XenoFruitPlasma"
+      ],
+      "xenoLayerScenes": 17,
+      "storedFrameParts": 238
+    },
+    {
+      "id": "CMU3DHiveXenoFruitSpeed",
+      "label": "alacrit resin fruit",
+      "file": "CMU3DHiveXenoFruitSpeed.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 960,
+      "sha256": "cb17f921ed3d28da381f9f8e0904b69cad46ff441ea4aafa702d4ebdad633903",
+      "sourcePrototypes": [
+        "XenoFruitSpeed"
+      ],
+      "xenoLayerScenes": 19,
+      "storedFrameParts": 266
+    },
+    {
+      "id": "CMU3DHiveXenoFruitSpore",
+      "label": "spore resin fruit",
+      "file": "CMU3DHiveXenoFruitSpore.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 960,
+      "sha256": "4a587a7f40c96fd7612ff9cbcb37261bd6be2edc86cbabe22881b733618436bb",
+      "sourcePrototypes": [
+        "XenoFruitSpore"
+      ],
+      "xenoLayerScenes": 14,
+      "storedFrameParts": 196
+    },
+    {
+      "id": "CMU3DHiveXenoFruitUnstable",
+      "label": "unstable resin fruit",
+      "file": "CMU3DHiveXenoFruitUnstable.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 960,
+      "sha256": "0ccdd6637dd965ee451481c64b60f849df22c79f9cdf7cc0194dc08c0fef176b",
+      "sourcePrototypes": [
+        "XenoFruitUnstable"
+      ],
+      "xenoLayerScenes": 16,
+      "storedFrameParts": 224
+    },
+    {
+      "id": "CMU3DHiveXenoHardyWeeds",
+      "label": "weeds",
+      "file": "CMU3DHiveXenoHardyWeeds.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "302b759bc199aba93bc09fdf40501d6a008d4e8eae5187a1f22f47952f536194",
+      "sourcePrototypes": [
+        "XenoHardyWeeds"
+      ],
+      "xenoLayerScenes": 48,
+      "storedFrameParts": 624
+    },
+    {
+      "id": "CMU3DHiveXenoHardyWeedsSource",
+      "label": "hardy weed node",
+      "file": "CMU3DHiveXenoHardyWeedsSource.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "5092dabcece1fcde9e61977a50d4feb81859a7265509fbdacbe73522d2a1d2a8",
+      "sourcePrototypes": [
+        "XenoHardyWeedsSource"
+      ],
+      "xenoLayerScenes": 55,
+      "storedFrameParts": 659
+    },
+    {
+      "id": "CMU3DHiveXenoHardyWeedsSourceHidden",
+      "label": "weeds",
+      "file": "CMU3DHiveXenoHardyWeedsSourceHidden.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "7023dcfa021bc24460318d0240db53935a8740d46002f83f92aaeef3fdd6ccc1",
+      "sourcePrototypes": [
+        "XenoHardyWeedsSourceHidden"
+      ],
+      "xenoLayerScenes": 49,
+      "storedFrameParts": 629
+    },
+    {
+      "id": "CMU3DHiveXenoHiveWeeds",
+      "label": "hive weeds",
+      "file": "CMU3DHiveXenoHiveWeeds.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "8b8e865fe07a5ab1fbe3dc575641bf7143d97c4f84ada27f88aec5717ec76fc7",
+      "sourcePrototypes": [
+        "XenoHiveWeeds"
+      ],
+      "xenoLayerScenes": 48,
+      "storedFrameParts": 624
+    },
+    {
+      "id": "CMU3DHiveXenoHiveWeedsCluster",
+      "label": "hive weeds",
+      "file": "CMU3DHiveXenoHiveWeedsCluster.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "21b746d56cb99a84b25c82485e0918d749378a8b6c593aa6ab9592450757dd85",
+      "sourcePrototypes": [
+        "XenoHiveWeedsCluster"
+      ],
+      "xenoLayerScenes": 48,
+      "storedFrameParts": 624
+    },
+    {
+      "id": "CMU3DHiveXenoHiveWeedsCore",
+      "label": "hive weeds",
+      "file": "CMU3DHiveXenoHiveWeedsCore.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "bde6bce8117a13bbc86f826f10ea373fe5c11636cc4af4494592ff4825c845ed",
+      "sourcePrototypes": [
+        "XenoHiveWeedsCore"
+      ],
+      "xenoLayerScenes": 48,
+      "storedFrameParts": 624
+    },
+    {
+      "id": "CMU3DHiveXenoHiveWeedsSource",
+      "label": "hive weed node",
+      "file": "CMU3DHiveXenoHiveWeedsSource.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "cb83d60e3c819b6b8eaff9ff30995985339b0ca91e415e9551afab485018cb47",
+      "sourcePrototypes": [
+        "XenoHiveWeedsSource"
+      ],
+      "xenoLayerScenes": 55,
+      "storedFrameParts": 659
+    },
+    {
+      "id": "CMU3DHiveXenoHiveWeedsSourceHidden",
+      "label": "hive weeds",
+      "file": "CMU3DHiveXenoHiveWeedsSourceHidden.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "db65246b2c5b3a6f6fa58a378ff034b77030a6088a29bf74fd2117088112d70e",
+      "sourcePrototypes": [
+        "XenoHiveWeedsSourceHidden"
+      ],
+      "xenoLayerScenes": 49,
+      "storedFrameParts": 629
+    },
+    {
+      "id": "CMU3DHiveXenoNest",
+      "label": "alien nest",
+      "file": "CMU3DHiveXenoNest.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 992,
+      "sha256": "5302c113e8c5ba8af6d07a9fb804ca32eb1c9f9acf106eb39bba2a7a1fd361b1",
+      "sourcePrototypes": [
+        "XenoNest"
+      ]
+    },
+    {
+      "id": "CMU3DHiveXenoResinHole",
+      "label": "resin trap",
+      "file": "CMU3DHiveXenoResinHole.glb",
+      "status": "draft",
+      "parts": 9,
+      "triangles": 736,
+      "sha256": "1de27dece5119b0ac69ba8a38879cc1217ffb6f5362c54049b1f8967614dd627",
+      "sourcePrototypes": [
+        "XenoResinHole"
+      ],
+      "xenoLayerScenes": 8,
+      "storedFrameParts": 77
+    },
+    {
+      "id": "CMU3DHiveXenoResinSpikes",
+      "label": "resin spikes",
+      "file": "CMU3DHiveXenoResinSpikes.glb",
+      "status": "draft",
+      "parts": 10,
+      "triangles": 1160,
+      "sha256": "8d4f7baac27932496666921ec25261eefd930914b86448f8403aebd23f11deb3",
+      "sourcePrototypes": [
+        "XenoResinSpikes"
+      ]
+    },
+    {
+      "id": "CMU3DHiveXenoStickyResin",
+      "label": "sticky resin",
+      "file": "CMU3DHiveXenoStickyResin.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "4c8f713cd9f5390e9e3bd8ccd9726d3478ad804b827048778ace19eb71d98770",
+      "sourcePrototypes": [
+        "XenoStickyResin"
+      ],
+      "xenoLayerScenes": 1,
+      "storedFrameParts": 13
+    },
+    {
+      "id": "CMU3DHiveXenoStickyResinWeak",
+      "label": "weak sticky resin",
+      "file": "CMU3DHiveXenoStickyResinWeak.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "c554510bffbd32bc3f17ca7b02054b78652037711ff522128ced821a612e21eb",
+      "sourcePrototypes": [
+        "XenoStickyResinWeak",
+        "XenoStickyResinWeakWeedbound"
+      ],
+      "xenoLayerScenes": 1,
+      "storedFrameParts": 13
+    },
+    {
+      "id": "CMU3DHiveXenoTrapperTrap",
+      "label": "xeno trap",
+      "file": "CMU3DHiveXenoTrapperTrap.glb",
+      "status": "draft",
+      "parts": 17,
+      "triangles": 1044,
+      "sha256": "ac0f68ba9af579617131a8b269ba05f92746ad76d8edf0c071f9f5fae9a3be90",
+      "sourcePrototypes": [
+        "XenoTrapperTrap",
+        "XenoTrapperEmpoweredTrap"
+      ],
+      "xenoLayerScenes": 1,
+      "storedFrameParts": 17
+    },
+    {
+      "id": "CMU3DHiveXenoTunnel",
+      "label": "Tunnel",
+      "file": "CMU3DHiveXenoTunnel.glb",
+      "status": "draft",
+      "parts": 17,
+      "triangles": 800,
+      "sha256": "0ce0fac3c75e7f01dc471bc0f2712a0f0b2496feaecba4693273fbade1ea2a8e",
+      "sourcePrototypes": [
+        "XenoTunnel"
+      ],
+      "xenoLayerScenes": 1,
+      "storedFrameParts": 17
+    },
+    {
+      "id": "CMU3DHiveXenoWeeds",
+      "label": "weeds",
+      "file": "CMU3DHiveXenoWeeds.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "11b798e5c85347ce7165ea0d3436c698a41428e470bfef3a34d54db188772535",
+      "sourcePrototypes": [
+        "XenoWeeds"
+      ],
+      "xenoLayerScenes": 48,
+      "storedFrameParts": 624
+    },
+    {
+      "id": "CMU3DHiveXenoWeedsSource",
+      "label": "weed node",
+      "file": "CMU3DHiveXenoWeedsSource.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "169b5ad4264d98092da01f7a2d3caf487d592dc9bf24ba5461efea8f2bb46cbb",
+      "sourcePrototypes": [
+        "XenoWeedsSource"
+      ],
+      "xenoLayerScenes": 55,
+      "storedFrameParts": 659
+    },
+    {
+      "id": "CMU3DHiveXenoWeedsSourceHidden",
+      "label": "weeds",
+      "file": "CMU3DHiveXenoWeedsSourceHidden.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 428,
+      "sha256": "8d6edb295aae0def9c9ad829320b4c472c0be6ea17b317a386fe45eff974b052",
+      "sourcePrototypes": [
+        "XenoWeedsSourceHidden"
+      ],
+      "xenoLayerScenes": 49,
+      "storedFrameParts": 629
+    },
+    {
+      "id": "CMU3DHiveXenoWeedsWall",
+      "label": "weeds",
+      "file": "CMU3DHiveXenoWeedsWall.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 384,
+      "sha256": "afd7013e3277660bbb4433107326bea8558a07edbfa33d2ba76a3268ed2aed25",
+      "sourcePrototypes": [
+        "XenoWeedsWall"
       ]
     }
   ]

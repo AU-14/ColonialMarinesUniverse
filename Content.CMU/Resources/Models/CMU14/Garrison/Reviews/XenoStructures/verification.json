@@ -1,0 +1,15 @@
+{
+  "newModels": 92,
+  "bindings": 104,
+  "triangles": 128444,
+  "maxParts": 73,
+  "maxTriangles": 4008,
+  "verifiedLibraryExports": 2915,
+  "rebuiltExports": 95,
+  "glTFValidation": {
+    "assets": 95,
+    "errors": 0,
+    "warnings": 0,
+    "validator": "2.0.0-dev.3.10"
+  }
+}

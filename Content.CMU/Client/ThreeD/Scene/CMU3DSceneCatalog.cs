@@ -83,6 +83,8 @@ public sealed partial class CMU3DSceneCatalog
     /// <summary>Keep authored frame families for source-layer selection; other doors require explicit stable poses.</summary>
     public CMU3DSceneMatch? WithDoorState(CMU3DSceneMatch? match, DoorState state)
     {
+        if (match is { } xeno && xeno.Model.XenoStates.Count > 0 && CMU3DDoorAppearance.SupportedState(state))
+            return xeno;
         if (match is { } animated && animated.Model.DoorSpriteStates.Count > 0 && CMU3DDoorAppearance.SupportedState(state))
             return animated;
         if (match is not { } value || state is not (DoorState.Closed or DoorState.Open))
