@@ -41,6 +41,7 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private YautjaTrophySystem _trophies = default!;
+    [Dependency] private YautjaMachineSystem _machines = default!;
 
     public override void Initialize()
     {
@@ -240,8 +241,7 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
     {
         if (!canReach ||
             !HasComp<YautjaComponent>(user) && !HasComp<YautjaTechAuthorizedComponent>(user) ||
-            !TryComp(target, out BodyPartComponent? bodyPart) ||
-            bodyPart.Body != null ||
+            !_machines.TryResolveSeveredLimb(target, out _) ||
             _hands.GetActiveItem(user) != dagger.Owner)
         {
             return false;
@@ -407,8 +407,7 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
 
         if (args.Target is not { } target ||
             Deleted(target) ||
-            !TryComp(target, out BodyPartComponent? bodyPart) ||
-            bodyPart.Body != null ||
+            !_machines.TryResolveSeveredLimb(target, out _) ||
             !HasComp<YautjaComponent>(args.User) && !HasComp<YautjaTechAuthorizedComponent>(args.User))
         {
             return;

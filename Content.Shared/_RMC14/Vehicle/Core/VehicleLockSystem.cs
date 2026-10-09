@@ -201,7 +201,7 @@ public sealed partial class VehicleLockSystem : EntitySystem
             return;
 
         // CMU14: wreck locks are beyond repair too.
-        if (_hardpoints.IsDestroyedBeyondRepair(ent.Owner))
+        if (_hardpoints.IsWrecked(ent.Owner))
         {
             _popup.PopupClient(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, args.User);
             args.Handled = true;
@@ -244,8 +244,8 @@ public sealed partial class VehicleLockSystem : EntitySystem
 
     private void OnLockRepairDoAfter(Entity<VehicleLockComponent> ent, ref VehicleLockRepairDoAfterEvent args)
     {
-        // CMU14: destruction can happen during the repair.
-        if (_hardpoints.IsDestroyedBeyondRepair(ent.Owner))
+        // CMU14: it can get wrecked mid-repair
+        if (_hardpoints.IsWrecked(ent.Owner))
             return;
 
         if (_net.IsClient || args.Cancelled || args.Handled || !ent.Comp.Broken)

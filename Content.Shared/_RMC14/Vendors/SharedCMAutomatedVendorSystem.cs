@@ -588,10 +588,15 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
                 // Get every RMCVendorSpec
                 var specVendors = EntityQueryEnumerator<RMCVendorSpecialistComponent>();
                 var allVendorsTotal = 0;
+                var thisSpecFaction = CMUGetSpecVendorFaction(vendor); // CMU14
 
                 // Goes through each RMCVendorSpec and gets the value for this kit type.
-                while (specVendors.MoveNext(out _, out var specVendorComponent))
+                while (specVendors.MoveNext(out var otherSpecVendor, out var specVendorComponent))
                 {
+                    // CMU14: the other side's rack has its own kits, don't count them against ours
+                    if (CMUGetSpecVendorFaction(otherSpecVendor) != thisSpecFaction)
+                        continue;
+
                     foreach (var linkedEntry in args.LinkedEntries)
                     {
                         specVendorComponent.GlobalSharedVends.TryGetValue(linkedEntry, out var linkedCount);
