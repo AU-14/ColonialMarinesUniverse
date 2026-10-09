@@ -1820,7 +1820,31 @@
       "directions": 4
     },
     {
-      "name": "headlights_outline",
+      "name": "extinguisher_outline",
+      "directions": 4
+    },
+    {
+      "name": "headlight_left_outline",
+      "directions": 4
+    },
+    {
+      "name": "headlight_right_outline",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_left_outline",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_right_outline",
+      "directions": 4
+    },
+    {
+      "name": "taillight_left_outline",
+      "directions": 4
+    },
+    {
+      "name": "taillight_right_outline",
       "directions": 4
     },
     {
@@ -2172,19 +2196,19 @@
       ]
     },
     {
-      "name": "lights_on",
+      "name": "headlight_left_on",
       "directions": 4
     },
     {
-      "name": "headlights_on",
+      "name": "taillight_left_on",
       "directions": 4
     },
     {
-      "name": "brake_on",
+      "name": "brake_left",
       "directions": 4
     },
     {
-      "name": "signal_left",
+      "name": "signal_front_left",
       "directions": 4,
       "delays": [
         [
@@ -2206,7 +2230,63 @@
       ]
     },
     {
-      "name": "signal_right",
+      "name": "signal_rear_left",
+      "directions": 4,
+      "delays": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "headlight_right_on",
+      "directions": 4
+    },
+    {
+      "name": "taillight_right_on",
+      "directions": 4
+    },
+    {
+      "name": "brake_right",
+      "directions": 4
+    },
+    {
+      "name": "signal_front_right",
+      "directions": 4,
+      "delays": [
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "signal_rear_right",
       "directions": 4,
       "delays": [
         [
@@ -2488,6 +2568,52 @@
       ]
     },
     {
+      "name": "engine_fire",
+      "directions": 4,
+      "delays": [
+        [
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08
+        ],
+        [
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08
+        ],
+        [
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08
+        ],
+        [
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08,
+          0.08
+        ]
+      ]
+    },
+    {
       "name": "wheels_0",
       "directions": 4,
       "delays": [
@@ -2700,19 +2826,115 @@
       "directions": 4
     },
     {
-      "name": "headlights_0",
+      "name": "extinguisher_0",
       "directions": 4
     },
     {
-      "name": "headlights_overlay_0",
+      "name": "extinguisher_overlay_0",
       "directions": 4
     },
     {
-      "name": "headlights_1",
+      "name": "extinguisher_1",
       "directions": 4
     },
     {
-      "name": "headlights_overlay_1",
+      "name": "extinguisher_overlay_1",
+      "directions": 4
+    },
+    {
+      "name": "headlight_left_0",
+      "directions": 4
+    },
+    {
+      "name": "headlight_left_overlay_0",
+      "directions": 4
+    },
+    {
+      "name": "headlight_left_1",
+      "directions": 4
+    },
+    {
+      "name": "headlight_left_overlay_1",
+      "directions": 4
+    },
+    {
+      "name": "headlight_right_0",
+      "directions": 4
+    },
+    {
+      "name": "headlight_right_overlay_0",
+      "directions": 4
+    },
+    {
+      "name": "headlight_right_1",
+      "directions": 4
+    },
+    {
+      "name": "headlight_right_overlay_1",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_left_0",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_left_overlay_0",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_left_1",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_left_overlay_1",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_right_0",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_right_overlay_0",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_right_1",
+      "directions": 4
+    },
+    {
+      "name": "turn_signal_right_overlay_1",
+      "directions": 4
+    },
+    {
+      "name": "taillight_left_0",
+      "directions": 4
+    },
+    {
+      "name": "taillight_left_overlay_0",
+      "directions": 4
+    },
+    {
+      "name": "taillight_left_1",
+      "directions": 4
+    },
+    {
+      "name": "taillight_left_overlay_1",
+      "directions": 4
+    },
+    {
+      "name": "taillight_right_0",
+      "directions": 4
+    },
+    {
+      "name": "taillight_right_overlay_0",
+      "directions": 4
+    },
+    {
+      "name": "taillight_right_1",
+      "directions": 4
+    },
+    {
+      "name": "taillight_right_overlay_1",
       "directions": 4
     },
     {
@@ -2780,7 +3002,31 @@
       "directions": 4
     },
     {
-      "name": "click_headlights",
+      "name": "click_extinguisher",
+      "directions": 4
+    },
+    {
+      "name": "click_headlight_left",
+      "directions": 4
+    },
+    {
+      "name": "click_headlight_right",
+      "directions": 4
+    },
+    {
+      "name": "click_turn_signal_left",
+      "directions": 4
+    },
+    {
+      "name": "click_turn_signal_right",
+      "directions": 4
+    },
+    {
+      "name": "click_taillight_left",
+      "directions": 4
+    },
+    {
+      "name": "click_taillight_right",
       "directions": 4
     },
     {

@@ -276,6 +276,98 @@
           "depth": 10.0
         }
       }
+    },
+    "medical": {
+      "driver": {
+        "S": {
+          "px": [
+            10,
+            6
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            -10,
+            -3
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            6
+          ],
+          "depth": 10.0
+        },
+        "W": {
+          "px": [
+            8,
+            -8
+          ],
+          "depth": -10.0
+        }
+      },
+      "passenger": {
+        "S": {
+          "px": [
+            -10,
+            7
+          ],
+          "depth": 6.5
+        },
+        "N": {
+          "px": [
+            10,
+            -4
+          ],
+          "depth": -6.5
+        },
+        "E": {
+          "px": [
+            -8,
+            -8
+          ],
+          "depth": -10.0
+        },
+        "W": {
+          "px": [
+            8,
+            6
+          ],
+          "depth": 10.0
+        }
+      },
+      "bed": {
+        "S": {
+          "px": [
+            0,
+            23
+          ],
+          "depth": 22.5
+        },
+        "N": {
+          "px": [
+            0,
+            -21
+          ],
+          "depth": -22.5
+        },
+        "E": {
+          "px": [
+            -28,
+            -1
+          ],
+          "depth": -0.0
+        },
+        "W": {
+          "px": [
+            28,
+            -1
+          ],
+          "depth": 0.0
+        }
+      }
     }
   },
   "mgturret_pixel_offsets": {
@@ -295,6 +387,10 @@
       20,
       18
     ]
+  },
+  "mgturret_muzzle_px": {
+    "along": 21,
+    "up": 2
   },
   "overlay_slide_note": "Overlay-entity states (*overlay*, lights, signals, brake, smoke) are stored slid down by overlay_slide_px rows per direction, and mgturret_* by mgturret_slide_px rows; draw them that many pixels higher.",
   "overlay_slide_px": {

@@ -51,7 +51,9 @@ the jeep's near edge: people in front draw over it, riders under it.
 | `jeep.rsi` | 2 seats, cargo bed with a crate slot |
 | `jeep_gunner.rsi` | 2 seats + gunner on the pedestal turret |
 | `jeep_transport.rsi` | 4 seats |
-| `hardpoints.rsi` | item icons for parts with no game item yet: `tires`, `mgturret`, `windshield`, `wirecutter`, `searchlight`, `engine`, `headlights`, `hood`, `door`, `tailgate` |
+| `jeep_medical.rsi` | 2 seats, the passenger's turned to face a surgical bed across the back; red crosses on the hood and the passenger's door |
+| `jeep_wreck.rsi` | one burnt-out wreck per version, named like its RSI |
+| `hardpoints.rsi` | item icons for parts with no game item yet: `tires`, `mgturret`, `windshield`, `wirecutter`, `searchlight`, `engine`, `headlight`, `turn_signal`, `taillight`, `hood`, `door`, `tailgate` |
 | `cargo_straps.rsi` | `straps`, drawn over a standard crate once it is wrenched into the slot |
 | `jeep_beams.rsi` | `beam_low`, `beam_high`: the headlight haze, 320 px, one direction, the cone pointing down from the middle of the top edge |
 | `light_masks/` | `low_beam.png`, `high_beam.png`: the beams' light cones, pointing up (the game turns them to the jeep's front) |
@@ -59,8 +61,8 @@ the jeep's near edge: people in front draw over it, riders under it.
 | `vehicle_spray_painter.rsi` | the vehicle spray painter's `icon` and the white `paint` in its cup, tinted in game with the picked colour |
 | `blood.rsi` | `splat_1`-`5` and `drip_1`-`3`: white blood splashes, tinted in game with the bleeder's blood colour |
 
-All jeep states are 96 px with 4 directions. The paint is bare olive drab, no markings: players
-decorate jeeps with crayons.
+All jeep states are 96 px with 4 directions. The paint is bare olive drab: players decorate jeeps
+with crayons. Only the medical jeep is marked, with outlined red crosses on white (`cross_field`).
 
 ## Layer stack
 
@@ -74,10 +76,8 @@ The jeep is open, so riders are drawn between the vehicle and an overlay entity:
    states, `hood_closed_overlay`, the hardpoint
    `*_overlay_0` / `_1` states, then the raised hood (`hood_opening` / `hood_open` /
    `hood_closing` `_overlay`) and the fuel door `*_overlay` states, `wheels_overlay_0` / `_1`, then
-   the unshaded
-   `lights_on`, `brake_on`, `headlights_on`, `signal_left`, `signal_right` and `engine_smoke_*`,
-   and last the
-   `*_outline` hover highlights.
+   the unshaded lit lamps (see Lights), `engine_smoke_*`, `engine_fire`, and last the `*_outline`
+   hover highlights.
 4. Turret visual: `mgturret_0` / `mgturret_1`, like `humveeturret_0`. Facing north the gunner
    stands between the camera and the gun, so in that direction the turret goes under the riders.
 
@@ -127,7 +127,13 @@ so an empty slot still reads.
 | front | `wirecutter_*` | wire cutter |
 | cowl | `searchlight_*` | searchlight |
 | engine | `engine_*`, in the bay under the hood | jeep engine |
-| headlights | `headlights_*`, big round lamps beside the grille; removed leaves the brackets | headlights |
+| headlights | `headlight_left_*`, `headlight_right_*`, big round lamps beside the grille; removed leaves the brackets | jeep headlight (fits either side) |
+| turn signals | `turn_signal_left_*`, `turn_signal_right_*`, amber lenses on the front fenders; removed leaves the housing | jeep turn signal |
+| tail lights | `taillight_left_*`, `taillight_right_*`, the rear clusters (tail and brake light over the rear turn signal); removed leaves the bracket | jeep tail light |
+| extinguisher | `extinguisher_*`, strapped to the outside of the cowl ahead of the passenger's door; removed leaves the shelf and strap | `CMFireExtinguisherPortable` (any extinguisher fits) |
+
+Left is the driver's side. The lamps are only a few pixels, so their `click_*` masks take in the
+ring of jeep around them.
 
 Following the humvee, `_0` is intact and `_1` is damaged (`damagedVehicleState`). `PRIMARY`,
 `ATTACH`, `WHEEL` are empty placeholders for hidden hardpoint layers.
@@ -163,19 +169,20 @@ Following the humvee, `_0` is intact and `_1` is damaged (`damagedVehicleState`)
 
 ## Doors and tailgate
 
-- **Side doors:** the openings run from the front seats to the cowl, above the step, on all three
+- **Side doors:** the openings run from the front seats to the cowl, above the step, on all four
   jeeps. Hinged at their front edge, they swing out to 70 degrees: `door_driver_*` and
   `door_passenger_*`, each `closed`, `open`, `opening`, `closing` (5 frames at 0.07 s) with
   `_overlay` twins. The driver's door is on the left (-r) and carries the shovel and the axe.
-- **Tailgate (cargo and gun jeeps):** the rear wall between the corner posts, above the bed, folds
-  down rearward until it lies level with the bed: `tailgate_*`, same states. The spare and the
+- **Tailgate (cargo, gun and medical jeeps):** the rear wall between the corner posts, above the
+  bed, folds down rearward until it lies level with the bed: `tailgate_*`, same states. The spare and the
   jerry can hang on it and fold away under it. The transport's bench backs onto a fixed wall.
 - **Kit on a panel:** `shovel`, `axe`, `spare` and `jerrycan` have `<name>_open_<0/1>`,
   `<name>_opening_<0/1>` and `<name>_closing_<0/1>` (with `_overlay` twins) swinging with their
   panel, plus `<name>_open_outline` and `click_<name>_open`.
 - **Shading:** mid-swing a panel is shaded as one flat surface, like the open hood; lying level, the
   tailgate is back on the voxel grid and shades like the body, with its hinge line across the bed.
-- **Fuel door:** moved to the right rear quarter, above the wheel arch, behind the passenger door.
+- **Fuel door:** on the right rear quarter, under the rim above the wheel arch, behind the passenger
+  door: a small hatch framed by a dark gap, with a hinge and a latch.
 
 `jeep_doors.gif` swings everything; `jeep_doors_open.png` has it all open.
 
@@ -188,13 +195,13 @@ is a child entity of the jeep with its own cone-masked light (`light_masks/`) an
 where its own light lands above the map's ambient light, so walls cut it off and daylight hides it.
 The beams start at the headlights the art draws in each direction
 (`headlight_lamp_anchor_px` in `seat_offsets.json`); each headlight has its own low and high beam, its light kept on the lens the art draws. The overlay also has unshaded states for the
-lamps themselves:
-- `lights_on`: the tail (position) lights.
-- `brake_on`: the same lamps burning brighter, for braking, with or without the lights on.
-- `headlights_on`: the headlights; show it only while the headlights hardpoint is fitted and
-  intact.
-- `signal_left` / `signal_right`: each side's turn signal, the front fender marker and a rear
-  amber lamp, blinking at 0.4 s. Left is the driver's side.
+lamps themselves, one per lamp and side (`LIT_STATES`), each shown only while that lamp is fitted
+and intact:
+- `headlight_<side>_on`: the headlights.
+- `taillight_<side>_on`: the tail (position) lights.
+- `brake_<side>`: the tail lights burning brighter, for braking, with or without the lights on.
+- `signal_front_<side>` (the fender lens) and `signal_rear_<side>` (the tail light's amber): the turn
+  signals, blinking at 0.4 s. Left is the driver's side.
   - The driver's "Hazard lights" action blinks both, moving or not (`actions.rsi` icon).
   - While steering left or right, only that side blinks, unless the driver has switched the
     "Automatic turn signals" action off (`signals_auto_off` / `_on`).
@@ -205,7 +212,8 @@ cooldown; RMC's own horn key (use item in hand) works too.
 
 Every lit lamp also casts a subtle wash of its colour over the nearby bodywork, stronger for the
 brakes. The searchlight hardpoint already scales the spotlight. `jeep_lights.png` shows night with the
-lights off, with hazards, and signalling left and right; `jeep_signals.gif` blinks them.
+lights off, with hazards, and signalling left and right; `jeep_signals.gif` blinks them;
+`jeep_lamps_missing.png` has three lamps taken off, by day and lit at night.
 
 ## Interaction
 
@@ -218,9 +226,14 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
   - Crates load and unload, and a loose one slides off, only over a lowered tailgate. The spare and
     the jerry can can't be reached while it is down.
   - Clicking the fuel door opens or closes it.
-  - Clicking a fitted item (shovel, axe, jerry can, spare, wheels and so on) takes it into the hand.
-- **Holding an item:** hovering the jeep shows that slot's `*_outline`, also where the slot is
-  empty. Using the item there fits it.
+  - Clicking a fitted item (shovel, axe, jerry can, spare, extinguisher, wheels and so on) takes it
+    into the hand. A lamp only comes off with a screwdriver.
+- **Holding an item:** an empty slot the item would go into shows its mask as a faint ghost of what
+  goes there, with its `*_outline` on hover; clicking it fits the item there. That picks the side
+  for a door or a lamp, which fit either. Clicking the jeep elsewhere fills the first empty slot.
+- **Key:** any jeep key goes in the ignition by clicking the jeep with it; alt-click takes it out.
+  Without it the engine won't start, and pulling it stops the engine. While someone drives, only
+  those aboard can reach it.
 - **Swapping moving parts:** the windshield, hood, doors and tailgate come off screwdriver (screws
   out), wrench (bolts out), then an empty hand lifts them off. They go back on the other way round:
   hung on with the part in hand, bolted with a wrench, screwed down with a screwdriver. A panel with
@@ -238,7 +251,8 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
   | 1 | hood | 6 | spare | 11 | searchlight |
   | 2 | fuel door | 7 | jerry can | 12 | wheels |
   | 3 | engine | 8 | shovel | 18–20 | driver's door, passenger's door, tailgate |
-  | 4 | headlights | 9 | axe | 13–17 | seats: driver, passenger, rear left, rear right, gunner |
+  | 28 | extinguisher | 9 | axe | 13–17 | seats: driver, passenger, rear left, rear right, gunner |
+  | 27 | surgical bed | 21–26 | headlights, turn signals, tail lights (left, right each) | | |
 
   The maps are drawn with every slot filled, so they also find an empty slot.
 
@@ -246,7 +260,7 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
 
 In `Content.CMU/Resources/Audio/CMU14/Jeep/`, cut from the team's Pixabay recordings (see
 `attributions.yml`):
-- `jeep_engine_start`: plays when someone takes the wheel and the jeep can run (fuel, engine).
+- `jeep_engine_start`: plays when someone takes the wheel and the jeep can run (key, fuel, engine).
 - `jeep_engine_idle` and `jeep_engine_drive`: seamless loops, the second the idle sped up. Each
   client plays both while the engine runs and fades from the idle at rest to the driving loop at
   top speed.
@@ -279,19 +293,45 @@ curve; `suspension_bob()` in the script is the reference.
   a tenth of its dirt, blood and crayon, oldest first. Scrubbing it down with soap, or a mop wet with
   any of them, takes it all off in a few seconds.
 
+## Medical jeep
+
+A surgical bed fills the back (`BED`, `surgical_bed()`): a white mattress on a steel frame across
+the rear compartment, over the wheel arches, behind a tailgate. The passenger seat is the cargo
+jeep's turned end for end (`REVERSED_SEATS`), its back against the dash, so the medic faces the bed.
+- In game the bed is a seat that lays its patient down (`Strap` `position: Down`) and counts as an
+  operating table (`CMOperatingTable`), so surgery can be done on the move. Clicking the jeep never
+  puts anyone on it (`autoSeat: false`); a patient is laid on it, by dragging them onto it or by its
+  verb, over the tailgate.
+- The patient is always drawn lying across the bed, head by the medic (`LYING_SEATS`, the seat's
+  `lyingAngles`): turned a quarter turn facing south and north, upright on screen facing east and
+  west (head down facing east, up facing west), the near wall over their lower half.
+- The rear-facing medic is drawn with their back to the camera facing south (`Reversed`).
+
+## Burning wreck
+
+When damage takes the hull to zero, the engine catches fire (`CMUJeepComponent.Burning`): flames
+lick out from under the hood and through the grille (`engine_fire`, 8 frames at 0.08 s, over the
+heavy smoke), a flickering orange glow lights it, the fire crackles, and sparks fly from the engine
+bay with now and then a bang. After six seconds it goes up and leaves a wreck from
+`jeep_wreck.rsi`, which the fire left under it doesn't burn away. `jeep_engine_fire.gif` shows it.
+
 ## Kit crate
 
-A jeep can come as a kit crate (cargo, transport or gun jeep). Opened, the bare chassis takes the
-crate's place and its contents are laid out on both sides:
+A jeep can come as a kit crate (cargo, medical, transport or gun jeep). Opened, the bare chassis
+takes the crate's place and its contents are laid out on both sides:
 - wheel sets;
-- windshield, headlights, hood, two doors, and the tailgate on cargo and gun jeeps;
+- windshield, hood, two doors, and the tailgate on cargo, medical and gun jeeps;
+- two headlights, two turn signals and two tail lights;
 - the gun mount for the gun jeep;
-- two fuel cans, the shovel and the fire axe;
-- a wrench, a screwdriver and the assembly manual.
+- two fuel cans, the shovel, the fire axe and the fire extinguisher;
+- a wrench, a screwdriver, the ignition key and the assembly manual.
 
-The chassis has its engine but an empty tank. The crate parachutes in like any crate from a squad's
-supply drop pad. As `CMUDropshipAttachmentAmmoLaunchableJeep*`, it is a round for a dropship's LAG-14
-launcher, dropped by parachute at a laser or flare.
+The chassis has its engine but an empty tank, and no lamps or key. The crate parachutes in like any
+crate from a squad's supply drop pad. As `CMUDropshipAttachmentAmmoLaunchableJeep*`, it is a round
+for a dropship's LAG-14 launcher, dropped by parachute at a laser or flare.
+
+The platoons order the kits from the ASRS under Vehicles (`jeep_requisitions.yml`): cargo 12,000,
+medical 15,000, transport 17,500, gun jeep 20,000, against an account that opens a round at 20,000.
 
 ## Crayons
 
@@ -329,7 +369,8 @@ Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml
 | `Shared/Vehicle/Jeep/CMUVehicleOverlay*` | spawns the overlay entity drawn over the riders |
 | `Shared/Vehicle/Jeep/CMUVehicleSeat*` | one strap entity per seat (the driver's seat drives), exit points, climbing in and out over shut doors, riders' gun scatter by firearms skill and the vehicle's speed (with no camera kick); seated riders keep their body but lose hard contacts and are held still around each physics step, so bumps don't unbuckle them while fire, smoke, bullets, knockbacks and drags still reach them |
 | `Shared/Vehicle/Jeep/CMUVehicleEngineSound*`, `Server/.../CMUVehicleEngineSoundSystem.cs`, `Client/Vehicle/CMUVehicleEngineLoopSystem.cs` | engine start, rev and stall from the server, running loops faded by speed on each client |
-| `Shared/Vehicle/Jeep/CMUJeep*` | hood, windshield, door, tailgate and fuel door toggles, taking moving parts off and on in steps, clickable parts, item hooks, engine/windshield/headlight wear and repair, the headlight switch and its beams, jerry can leaks, stray shots passing through |
+| `Shared/Vehicle/Jeep/CMUJeep*` | hood, windshield, door, tailgate and fuel door toggles, taking moving parts off and on in steps, clickable parts, item hooks, engine/windshield/lamp wear and repair, each lamp in its own slot (`CMUJeepLamps`), the headlight switch and its beams, jerry can leaks, stray shots passing through, the burning wreck |
+| `Shared/Vehicle/Jeep/CMUVehicleIgnition*` | the ignition key slot: no key, no running |
 | `Shared/Vehicle/Jeep/CMUVehicleFuel*` | fuel use and refuelling from a fuel can at the fuel door; the do-after bar starts at the tank level |
 | `Shared/Vehicle/Jeep/CMUVehicleCargo*` | loading, wrenching down and unloading a crate on the cargo bed, over the tailgate |
 | `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand, 30 charges, 5 a respray) and respraying the jeep with it; the art marks its paint pixels (alpha 254, 253 under mud) |
@@ -353,8 +394,9 @@ lobby, about a minute to load) and a client that joins it. Build the server and 
 off by default:
 - `cmu.jeep.dev_job`: joining players spawn as this job if the station offers it. Garrison has no
   Passenger slot, which a new test account asks for, so it is `AU14JobCivilianColonist`.
-- `cmu.jeep.dev_kit`: `CMUJeepDevKitSystem` parks the three jeeps on the nearest open ground around
-  each player (under open sky where there is room, facing south, three tiles apart), with a welder,
+- `cmu.jeep.dev_kit`: `CMUJeepDevKitSystem` parks the four jeeps on the nearest open ground around
+  each player (under open sky where there is room, facing south, three tiles apart), each with its
+  key on the ground by the driver's door, with a welder,
   wrench, screwdriver, crayons, a vehicle spray painter, a fuel can, cupola ammo, a crate and a fuel tank, and moves the
   player next to them. The server log line `Jeep dev kit for ...` gives the entities and where.
 - `cmu.jeep.dev_daylight`: the round starts at midday instead of dawn.
@@ -365,7 +407,8 @@ The admin command `jeepkit [username]` parks another set next to a player on any
 
 `seat_offsets.json` has pixel offsets (x right, y up, from the vehicle origin) per direction for:
 - each rider seat,
-- the turret pivot (`pixelOffsetSouth` etc.),
+- the turret pivot (`pixelOffsetSouth` etc.) and its muzzle (`mgturret_muzzle_px`: along the barrel
+  and up the screen, the `GunMuzzleOffset` of the gun),
 - the crate sprite in the cargo slot,
 - the headlights, where the beams start.
 

@@ -69,6 +69,7 @@ PAL = {
     "white": ramp((242, 242, 232), (228, 228, 216), (206, 206, 196), (178, 178, 168), (140, 140, 130)),
     "lamp": ramp((254, 250, 224), (242, 236, 202), (232, 226, 186), (202, 196, 162), (70, 70, 62)),
     "red": ramp((232, 106, 82), (206, 68, 50), (180, 50, 40), (142, 38, 30), (76, 22, 18)),
+    "red_line": ramp((110, 34, 26), (96, 28, 22), (84, 24, 19), (76, 22, 18), (60, 16, 12)),
     "amber": ramp((242, 192, 92), (224, 162, 62), (198, 136, 46), (162, 106, 34), (80, 52, 18)),
     "black": ramp((70, 70, 70), (44, 44, 44), (34, 34, 34), (28, 28, 28), (14, 14, 14)),
     "char": ramp((60, 56, 50), (42, 39, 35), (34, 31, 28), (28, 26, 23), (12, 11, 10)),
@@ -107,8 +108,10 @@ PAINT_MUD_ALPHA = 253
 # Materials shaded as one flat surface: no lines or highlights between pixels of the same part.
 FLAT_MATS = {"od_flat", "od_in_flat"}
 
-VARIANTS = ("cargo", "gunner", "transport")
-RSI_NAMES = {"cargo": "jeep", "gunner": "jeep_gunner", "transport": "jeep_transport"}
+VARIANTS = ("cargo", "gunner", "transport", "medical")
+RSI_NAMES = {"cargo": "jeep", "gunner": "jeep_gunner", "transport": "jeep_transport", "medical": "jeep_medical"}
+# Variants marked with red crosses on the hood and the passenger door.
+MARKED_VARIANTS = ("medical",)
 
 # Body heights (top voxel z): the tub rim is level with the hood like on the real jeep.
 RIM = 20
@@ -143,10 +146,20 @@ ATTACHMENTS = {
     "shovel": "W",
     "axe": "W",
     "engine": "",
-    "headlights": "S",
+    "extinguisher": "SE",
+    "headlight_left": "S",
+    "headlight_right": "S",
+    "turn_signal_left": "S",
+    "turn_signal_right": "S",
+    "taillight_left": "N",
+    "taillight_right": "N",
 }
+# The six lamps, each fitted on its own: the headlights, the turn signals on the front fenders and
+# the tail lights (with the rear turn signals) on the rear corners. Left is the driver's side, r < 0.
+LAMP_SIDES = {"left": 0, "right": 1}
+LAMPS = tuple(f"{kind}_{side}" for kind in ("headlight", "turn_signal", "taillight") for side in LAMP_SIDES)
 # What a jeep spawns with; the preview draws these unless told otherwise.
-FITTED = ("engine", "headlights", "windshield_up", "spare", "jerrycan", "shovel", "axe")
+FITTED = ("engine",) + LAMPS + ("windshield_up", "spare", "jerrycan", "shovel", "axe", "extinguisher")
 # Centre r of each headlight, out beside the grille under the fender line.
 HEADLIGHTS = (-14, 13)
 HEADLIGHT_Z = 13
@@ -177,7 +190,7 @@ DOOR_SWING = (0, 22, 45, 62, 70)
 # fold away under it. The transport's rear bench backs onto a fixed wall.
 TAILGATE = dict(r0=-16, r1=15, z0=13, z1=RIM)
 TAILGATE_HINGE = (-29.0, 13.0)
-TAILGATE_VARIANTS = ("cargo", "gunner")
+TAILGATE_VARIANTS = ("cargo", "gunner", "medical")
 TAILGATE_OVER = "N"
 TAILGATE_SWING = (0, 18, 45, 72, 90)
 PANEL_OVER = {**DOOR_OVER, "tailgate": TAILGATE_OVER}
@@ -187,6 +200,7 @@ RIDES = {
     "cargo": {"shovel": "door_driver", "axe": "door_driver", "spare": "tailgate", "jerrycan": "tailgate"},
     "gunner": {"shovel": "door_driver", "axe": "door_driver", "spare": "tailgate", "jerrycan": "tailgate"},
     "transport": {"shovel": "door_driver", "axe": "door_driver"},
+    "medical": {"shovel": "door_driver", "axe": "door_driver", "spare": "tailgate", "jerrycan": "tailgate"},
 }
 RIDE_NAMES = ("shovel", "axe", "spare", "jerrycan")
 SMOKE_FRAMES = 8
@@ -201,11 +215,37 @@ SEATS = {
     "gunner": [("driver", -6.5, -10.0, 13), ("passenger", -6.5, 10.0, 13), ("gunner", -23.0, 0.0, 25)],
     "transport": [("driver", -6.5, -10.0, 13), ("passenger", -6.5, 10.0, 13),
                   ("rear_left", -23.5, -10.0, 13 + REAR_BENCH_LIFT), ("rear_right", -23.5, 10.0, 13 + REAR_BENCH_LIFT)],
+    "medical": [("driver", -6.5, -10.0, 13), ("passenger", -6.5, 10.0, 13), ("bed", -22.5, 0.0, 15)],
 }
+# The medical jeep's passenger seat is turned round to face the surgical bed, and whoever is on the
+# bed lies on it.
+REVERSED_SEATS = {"medical": {"passenger"}}
+LYING_SEATS = {"medical": {"bed"}}
+OPPOSITE = {"S": "N", "N": "S", "E": "W", "W": "E"}
 # Row of a 32 px mob sprite that lands on the sitting surface. Mob sprites stand, so a row near the
 # hips puts the legs below the rim and the rider reads as seated.
 RIDER_HIP_ROW = {"S": 19, "N": 20, "E": 18, "W": 18}
+# A lying rider lies across the bed on their back, head on the passenger side by the medic. Seen
+# from the front or back, from high above, that is the front-facing sprite turned a quarter turn; seen
+# from the side it runs into the picture, the sprite upright, head down when the jeep faces east and up
+# when it faces west, its lower half behind the side wall like a strapped-in patient. Sprite, turn in
+# degrees counter-clockwise on screen, and the sprite centre's height above the bed in pixels, per view.
+LYING_SPRITE = {"S": "S", "N": "S", "E": "S", "W": "S"}
+LYING_TURN = {"S": 90, "N": -90, "E": 180, "W": 0}
+LYING_LIFT = {"S": 2, "N": 2, "E": 0, "W": 0}
+# The surgical bed: a mattress on a steel frame across the rear compartment, resting on the wheel
+# arches like the cargo deck.
+BED = dict(f0=-28, f1=-17, r0=-15, r1=14, top=15)
+
+
+def rider_view(variant, name, view):
+    """The direction a seat's rider sprite is drawn in for a view: turned round on a reversed seat."""
+    return OPPOSITE[view] if name in REVERSED_SEATS.get(variant, ()) else view
 MG_PIVOT = (-16.0, 0.0, 34)
+# Where the gun's flash and shots start, in pixels from the pivot: out along the barrel (its voxels
+# end 22 px out, the flash sprite leads by a couple), and up the screen in every direction, the
+# barrel's height above the pivot in the turret frames' straight-down view.
+MG_MUZZLE = dict(along=21, up=2)
 # Cargo slot: footprint of a standard 28 px crate on the bed, and the crate sprite's ground centre.
 SLOT = dict(f0=-26, f1=-18, r0=-14, r1=13, floor=13)
 CRATE_GROUND_ROW = 26
@@ -486,7 +526,45 @@ def build(variant, view=None):
         for dr, dz in ((-1, 0), (1, 0), (0, -1), (0, 1)):
             m.put(3, rc + dr, HOOD - 2 + dz, "black", "dash")
     m.box(3, 3, -1, 0, HOOD - 4, HOOD - 4, "steel", "dash")
+    # Instrument cluster behind the steering wheel: a black panel with two round gauges and a row
+    # of toggle switches under it.
+    m.box(3, 3, -14, -6, HOOD - 5, HOOD - 2, "black", "dash")
+    for rc in (-12, -8):
+        m.box(3, 3, rc, rc + 1, HOOD - 4, HOOD - 3, "white", "dash")
+        m.put(3, rc, HOOD - 3, "black", "dash")
+    for rs in (-13, -11, -9, -7):
+        m.put(3, rs, HOOD - 7, "steel", "dash")
+    # Defroster vents along the dash top, under the windshield.
+    for r0 in (-15, -5, 4, 12):
+        m.box(5, 5, r0, r0 + 2, HOOD, HOOD, "black", "dash")
+    # Glovebox door with its latch, a stencilled data plate over it, and the passenger's grab handle.
     m.box(3, 3, 9, 14, HOOD - 5, HOOD - 5, "od_seam", "dash")
+    m.box(3, 3, 9, 14, HOOD - 9, HOOD - 9, "od_seam", "dash")
+    m.box(3, 3, 9, 9, HOOD - 9, HOOD - 5, "od_seam", "dash")
+    m.box(3, 3, 14, 14, HOOD - 9, HOOD - 5, "od_seam", "dash")
+    m.box(3, 3, 11, 12, HOOD - 6, HOOD - 6, "steel", "dash")
+    m.box(3, 3, 5, 7, HOOD - 3, HOOD - 2, "white", "dash")
+    m.box(3, 3, 9, 15, HOOD - 1, HOOD - 1, "steel", "dash")
+    m.box(3, 3, 9, 9, HOOD - 2, HOOD - 2, "steel", "dash")
+    m.box(3, 3, 15, 15, HOOD - 2, HOOD - 2, "steel", "dash")
+    # The radio set on the tunnel under the dash: a dark box, its knobs and dial facing the seats,
+    # and the handset hung on its side.
+    m.box(1, 3, -3, 2, 10, 14, "od_in", "dash")
+    m.box(1, 1, -2, 1, 13, 13, "steel", "dash")
+    for rk in (-2, 0, 1):
+        m.put(1, rk, 11, "black", "dash")
+    m.box(1, 2, -4, -4, 11, 14, "black", "dash")
+    # Ribbed rubber floor mats and the pedals on the driver's side.
+    for r0, r1 in ((-16, -5), (4, 15)):
+        m.box(-2, 3, r0, r1, 8, 8, "rubber", "floor")
+        m.paint(lambda f, r, z: z == 8 and -2 <= f <= 3 and r0 <= r <= r1 and f % 2 == 0, "groove")
+    for rp in (-12, -9):
+        m.box(2, 2, rp, rp + 1, 9, 10, "steel", "floor")
+    m.box(1, 2, -6, -6, 9, 11, "black", "floor")
+    # The fire extinguisher's shelf and strap on the outside of the cowl, ahead of the passenger
+    # door (the extinguisher itself is a hardpoint).
+    m.box(7, 8, 20, 21, 10, 10, "steel", "cowl")
+    m.box(7, 8, 20, 20, 15, 15, "steel", "cowl")
 
     # Engine bay under the hood: aprons, radiator behind the grille, battery. The lid and the engine
     # are separate layers.
@@ -510,10 +588,8 @@ def build(variant, view=None):
     m.mirror_box(10, 30, 9, 19, FENDER - 1, FENDER, "od", "fender")
     m.mirror_box(30, 30, 9, 19, FENDER - 2, FENDER - 2, "od", "fender")
     m.remove(lambda f, r, z: f == 30 and r in (19, -20) and z == FENDER)
-    # Turn signal marker: the lens takes the front of the housing, out to the fender edge, so it
-    # shows from above, the front and the side.
+    # Turn signal housing; its lens, a hardpoint, takes the front of it out to the fender edge.
     m.mirror_box(27, 27, 16, 17, FENDER + 1, FENDER + 1, "black", "fender")
-    m.mirror_box(28, 28, 16, 17, FENDER + 1, FENDER + 1, "amber", "fender")
     m.mirror_box(25, 25, 9, 9, FENDER + 1, FENDER + 1, "steel", "fender")
 
     # C-channel bumper with shackles and stencils.
@@ -522,28 +598,35 @@ def build(variant, view=None):
     m.mirror_box(33, 33, 12, 13, 4, 5, "steel", "bumper")
     m.paint(lambda f, r, z: f == 32 and z == 5 and r in (-17, -16, -14, -12, 11, 13, 15, 16), "white")
 
-    # Front seats, the tunnel and its levers.
-    for r0, r1 in ((4, 15), (-16, -5)):
-        seat(m, -11, -3, r0, r1, "seat")
-        seat_back(m, -12, r0, r1, SEAT_BACK_TOP.get(view, 30), "seat_back")
+    # Front seats, the tunnel and its levers. A reversed seat is built facing forward on its own and
+    # turned end for end about its cushion's centre, its back then against the dash.
+    for name, r0, r1 in (("passenger", 4, 15), ("driver", -16, -5)):
+        reversed_seat = name in REVERSED_SEATS.get(variant, ())
+        target = Model() if reversed_seat else m
+        seat(target, -11, -3, r0, r1, "seat")
+        back_view = OPPOSITE.get(view) if reversed_seat else view
+        seat_back(target, -12, r0, r1, SEAT_BACK_TOP.get(back_view, 30), "seat_back")
         # Plate closing the seat base under the back, so the legs don't show from behind.
-        m.box(-14, -12, r0, r1, 8, 12, "od_in", "seat_back")
+        target.box(-14, -12, r0, r1, 8, 12, "od_in", "seat_back")
+        if reversed_seat:
+            m.vox.update({(-14 - f, r, z): v for (f, r, z), v in target.vox.items()})
     m.box(-9, 4, -3, 2, 8, 9, "od_in", "tunnel")
     m.box(-2, -2, -1, -1, 10, 15, "black", "tunnel")
     m.box(0, 0, 0, 1, 10, 14, "black", "tunnel")
     steering_wheel(m)
 
-    # Rear panel: tail lights, bumperettes, pintle, and the spare and jerry can mounts.
+    # Rear panel: the tail lights' brackets (the lamps are hardpoints), bumperettes, pintle, and the
+    # spare and jerry can mounts.
     m.mirror_box(-31, -31, 15, 19, 3, 5, "od", "bumperette")
-    m.mirror_box(-31, -31, 16, 17, 11, 12, "red", "taillight")
     m.mirror_box(-31, -31, 16, 17, 13, 13, "black", "taillight")
-    m.mirror_box(-31, -31, 16, 17, 14, 15, "amber", "taillight")
     m.box(-32, -31, -1, 0, 3, 4, "steel", "bumperette")
     if variant not in TAILGATE_VARIANTS:
         rear_mounts(m, "rear_wall")
 
     if variant == "cargo":
         cargo_bed(m)
+    elif variant == "medical":
+        surgical_bed(m)
     elif variant == "transport":
         seat(m, -27, -21, -16, 15, "rear_bench", REAR_BENCH_LIFT)
         m.box(-27, -21, -1, 0, 13 + REAR_BENCH_LIFT, 13 + REAR_BENCH_LIFT, "canvas_seam", "rear_bench")
@@ -599,9 +682,21 @@ def swing_horizontal(model, hinge_f, hinge_z, degrees, clip=None):
     return out
 
 
-def door_panel(part):
+def cross_field(size, arm, margin=2):
+    """A white square with a red cross on it, {(u, v): material} over size x size cells: arms arm
+    cells thick reaching margin cells short of the edge, outlined in dark red all round."""
+    lo = (size - arm) // 2
+    in_arm = lambda a, b: lo <= a < lo + arm and margin <= b <= size - 1 - margin
+    red = {(u, v) for u in range(size) for v in range(size) if in_arm(u, v) or in_arm(v, u)}
+    ring = {(u + du, v + dv) for (u, v) in red for du in (-1, 0, 1) for dv in (-1, 0, 1)} - red
+    return {(u, v): "red" if (u, v) in red else "red_line" if (u, v) in ring else "white"
+            for u in range(size) for v in range(size)}
+
+
+def door_panel(part, variant=None):
     """A side door, closed: the outer skin (with the rim seam and the panel gaps) and the inner skin,
-    a handle, two hinge knuckles at its front edge; the driver's also has the tool brackets."""
+    a handle, two hinge knuckles at its front edge; the driver's also has the tool brackets. A marked
+    variant's passenger door carries a red cross; the driver's is hung with the tools."""
     side = DOORS[part]
     d = DOOR
     m = Model()
@@ -619,6 +714,9 @@ def door_panel(part):
         for f in (-6, -2):
             m.box(f, f, -21, -21, 10, 10, "steel", part)
             m.box(f, f, -21, -21, 14, 14, "steel", part)
+    elif variant in MARKED_VARIANTS:
+        for (u, v), mat in cross_field(10, 2).items():
+            m.put(-7 + u, outer, 18 - v, mat, part)
     return m
 
 
@@ -632,10 +730,10 @@ def flattened(model):
     return Model({k: (PANEL_FLAT.get(mat, mat), part) for k, (mat, part) in model.vox.items()})
 
 
-def door_at(part, degrees, model=None):
+def door_at(part, degrees, model=None, variant=None):
     """A side door (or what hangs on it) swung open by degrees about its hinge."""
     side = DOORS[part]
-    panel = model or (flattened(door_panel(part)) if degrees else door_panel(part))
+    panel = model or (flattened(door_panel(part, variant)) if degrees else door_panel(part, variant))
     return swing_vertical(panel, DOOR["f1"] + 1.0, 20.0, degrees, side)
 
 
@@ -666,8 +764,8 @@ def tailgate_at(degrees, model=None):
     return Model({k: (mat, "tailgate" if part == "tailgate_mount" else part) for k, (mat, part) in out.vox.items()})
 
 
-def panel_at(part, degrees, model=None):
-    return tailgate_at(degrees, model) if part == "tailgate" else door_at(part, degrees, model)
+def panel_at(part, degrees, model=None, variant=None):
+    return tailgate_at(degrees, model) if part == "tailgate" else door_at(part, degrees, model, variant)
 
 
 def panel_swing(part):
@@ -682,7 +780,7 @@ def panels(variant):
 def panels_closed(variant):
     m = Model()
     for p in panels(variant):
-        m = m.merged(panel_at(p, 0))
+        m = m.merged(panel_at(p, 0, variant=variant))
     return m
 
 
@@ -764,6 +862,21 @@ def cargo_bed(m):
         for r, dr in ((s["r0"], 1), (s["r1"], -1)):
             m.box(min(f, f + 2 * df), max(f, f + 2 * df), r, r, deck, deck, "yellow", "bed")
             m.box(f, f, min(r, r + 2 * dr), max(r, r + 2 * dr), deck, deck, "yellow", "bed")
+
+
+def surgical_bed(m):
+    """The medical jeep's surgical bed across the rear compartment: a steel frame resting on the
+    wheel arches like the cargo deck, rails along both sides and across the front, and a white
+    mattress. A patient lies across it."""
+    b = BED
+    deck = 13
+    m.box(b["f0"], b["f1"], -18, 17, deck, deck, "steel", "litter")
+    for r in (-18, 17):
+        m.box(b["f0"], b["f1"], r, r, deck + 1, deck + 1, "steel", "litter")
+    m.box(b["f1"], b["f1"], -18, 17, deck + 1, deck + 1, "steel", "litter")
+    m.box(b["f0"], b["f1"] - 1, b["r0"], b["r1"], deck + 1, b["top"], "white", "litter")
+    m.box(b["f0"], b["f1"] - 1, b["r0"], b["r0"], b["top"], b["top"], "canvas_seam", "litter")
+    m.box(b["f0"], b["f1"] - 1, b["r1"], b["r1"], b["top"], b["top"], "canvas_seam", "litter")
 
 
 def gun_mount(m):
@@ -994,21 +1107,40 @@ def axe(damaged=False):
     return m
 
 
-def hood_lid():
-    """The closed hood: painted top with rounded shoulders over a bare underside."""
+def extinguisher(damaged=False):
+    """The portable fire extinguisher strapped upright to the outside of the cowl, ahead of the
+    passenger door, like RMC's: a dull red bottle with a pale label band, the dark valve and its
+    lever on top; scorched when damaged."""
+    m = Model()
+    z0 = 11
+    m.box(7, 8, 20, 21, z0, z0 + 5, "axe_red", "extinguisher")
+    m.box(7, 8, 20, 21, z0 + 2, z0 + 3, "canvas", "extinguisher")
+    m.box(7, 8, 20, 21, z0 + 6, z0 + 6, "black", "extinguisher")
+    m.box(7, 8, 21, 21, z0 + 7, z0 + 7, "gun", "extinguisher")
+    if damaged:
+        m.paint(lambda f, r, z: z in (z0 + 1, z0 + 4) and (f + r) % 2 == 0, "char")
+    return m
+
+
+def hood_lid(variant=None):
+    """The closed hood: painted top with rounded shoulders over a bare underside; a marked variant's
+    has a red cross on it."""
     m = Model()
     m.box(10, 29, -8, 7, HOOD, HOOD, "od", "hood_lid")
     m.box(10, 29, -8, 7, HOOD - 1, HOOD - 1, "od_in", "hood_lid")
     m.box(10, 29, -9, -9, HOOD - 1, HOOD - 1, "od", "hood_lid")
     m.box(10, 29, 8, 8, HOOD - 1, HOOD - 1, "od", "hood_lid")
     m.paint(lambda f, r, z: f == 10 and z == HOOD, "od_seam")
+    if variant in MARKED_VARIANTS:
+        for (u, v), mat in cross_field(14, 4).items():
+            m.put(13 + u, -7 + v, HOOD, mat, "hood_lid")
     return m
 
 
-def hood_open(degrees=HOOD_OPEN_DEGREES):
+def hood_open(degrees=HOOD_OPEN_DEGREES, variant=None):
     """The lid swung back about its hinge at the cowl, by default to just short of upright, ahead of
     the windshield."""
-    lid = hood_lid()
+    lid = hood_lid(variant)
     if degrees == 0:
         return lid
     flat = {"od": "od_flat", "od_seam": "od_in_flat", "od_in": "od_in_flat"}
@@ -1035,13 +1167,13 @@ def fuel_door(degrees=0):
     hinge_f, hinge_r = d["f1"] + 1.0, 20.0
     t = math.radians(degrees)
     m = Model()
+    # A dark gap all round sets the small hatch off from the wall's seam line; a steel hinge on its
+    # front edge, a latch on its back edge.
     for f in range(d["f0"], d["f1"] + 1):
         for z in range(d["z0"], d["z1"] + 1):
             edge = f in (d["f0"], d["f1"]) or z in (d["z0"], d["z1"])
-            mat = "od_seam" if edge else "od"
-            if f == d["f0"] and z == 12:
-                mat = "steel"
-            if f == d["f1"] and z in (d["z0"] + 1, d["z1"] - 1):
+            mat = "black" if edge else "od"
+            if f in (d["f0"], d["f1"]) and z == d["z0"] + 1:
                 mat = "steel"
             for a in (0.25, 0.75):
                 df = f + a - hinge_f
@@ -1069,12 +1201,13 @@ def engine(damaged=False):
     return m
 
 
-def headlight_lamps(lens="lamp", part="headlights", cracked=False):
-    """Two big round headlights on brackets beside the grille: a chrome bezel lit from the upper
-    left, a darker outer lens ring around a bright centre, and a glint."""
+def headlight_lamps(lens="lamp", part="headlights", cracked=False, centres=HEADLIGHTS):
+    """Big round headlights on brackets beside the grille (both, or those at the given centres): a
+    chrome bezel lit from the upper left, a darker outer lens ring around a bright centre, and a
+    glint."""
     lit = lens == "lit"
     m = Model()
-    for rc in HEADLIGHTS:
+    for rc in centres:
         for a in range(-3, 4):
             for b in range(-3, 4):
                 d = math.hypot(a, b)
@@ -1097,29 +1230,76 @@ def headlight_lamps(lens="lamp", part="headlights", cracked=False):
     return m
 
 
-def headlights(damaged=False):
-    """Headlights hardpoint: clear lenses, or shattered ones when damaged."""
-    return headlight_lamps(cracked=damaged)
+def corner_span(side):
+    """The r span of a lamp on a corner of the body: the fender's turn signal, the tail light."""
+    return (16, 17) if side == "right" else (-18, -17)
+
+
+def headlight(side):
+    """One headlight hardpoint: a clear lens, or a shattered one when damaged."""
+    def make(damaged=False):
+        return headlight_lamps(part=f"headlight_{side}", cracked=damaged, centres=(HEADLIGHTS[LAMP_SIDES[side]],))
+    return make
+
+
+def turn_signal(side):
+    """One front turn signal hardpoint: the amber lens in its housing on the fender, its outer half
+    smashed when damaged."""
+    def make(damaged=False):
+        m = Model()
+        r0, r1 = corner_span(side)
+        m.box(28, 28, r0, r1, FENDER + 1, FENDER + 1, "amber", f"turn_signal_{side}")
+        if damaged:
+            m.put(28, r1 if side == "right" else r0, FENDER + 1, "char", f"turn_signal_{side}")
+        return m
+    return make
+
+
+def taillight(side):
+    """One tail light hardpoint on its bracket: the red tail and brake lamp, a dark divider and the
+    amber rear turn signal; cracked through when damaged."""
+    def make(damaged=False):
+        m = Model()
+        part = f"taillight_{side}"
+        r0, r1 = corner_span(side)
+        m.box(-31, -31, r0, r1, 11, 12, "red", part)
+        m.box(-31, -31, r0, r1, 13, 13, "black", part)
+        m.box(-31, -31, r0, r1, 14, 15, "amber", part)
+        if damaged:
+            m.paint(lambda f, r, z: z != 13 and (r + z) % 2 == 0, "char")
+        return m
+    return make
 
 
 SIGNAL_DELAY = 0.4
 
 
-def lamps(kind):
-    """The lamps lit for one light group: headlights, tail lights, or one side's turn signals
-    (front fender marker and rear amber lamp). Left is the driver's side."""
+def lamps(kind, side):
+    """One lamp lit: a headlight, a tail light (brighter while braking), or a turn signal's front
+    fender lens or rear amber. Left is the driver's side."""
     if kind == "head":
-        return headlight_lamps(lens="lit", part="lights")
+        return headlight_lamps(lens="lit", part="lights", centres=(HEADLIGHTS[LAMP_SIDES[side]],))
     m = Model()
+    r0, r1 = corner_span(side)
     if kind in ("tail", "brake"):
-        m.mirror_box(-31, -31, 16, 17, 11, 12, "lit_red" if kind == "tail" else "lit_brake", "lights")
-    elif kind == "signal_right":
-        m.box(28, 28, 16, 17, FENDER + 1, FENDER + 1, "lit_amber", "lights")
-        m.box(-31, -31, 16, 17, 14, 15, "lit_amber", "lights")
+        m.box(-31, -31, r0, r1, 11, 12, "lit_red" if kind == "tail" else "lit_brake", "lights")
+    elif kind == "signal_front":
+        m.box(28, 28, r0, r1, FENDER + 1, FENDER + 1, "lit_amber", "lights")
     else:
-        m.box(28, 28, -18, -17, FENDER + 1, FENDER + 1, "lit_amber", "lights")
-        m.box(-31, -31, -18, -17, 14, 15, "lit_amber", "lights")
+        m.box(-31, -31, r0, r1, 14, 15, "lit_amber", "lights")
     return m
+
+
+# The lit layers, drawn over the riders by the overlay entity: name -> (light, side, the lamp that has
+# to be fitted and whole for it to show). The signals blink.
+LIT_STATES = {}
+for _side in LAMP_SIDES:
+    LIT_STATES[f"headlight_{_side}_on"] = ("head", _side, f"headlight_{_side}")
+    LIT_STATES[f"taillight_{_side}_on"] = ("tail", _side, f"taillight_{_side}")
+    LIT_STATES[f"brake_{_side}"] = ("brake", _side, f"taillight_{_side}")
+    LIT_STATES[f"signal_front_{_side}"] = ("signal_front", _side, f"turn_signal_{_side}")
+    LIT_STATES[f"signal_rear_{_side}"] = ("signal_rear", _side, f"taillight_{_side}")
+BLINKING = tuple(name for name in LIT_STATES if name.startswith("signal"))
 
 
 LIGHT_GLOW = {"lit": (255, 236, 170), "lit_red": (255, 70, 50), "lit_amber": (255, 180, 70),
@@ -1130,10 +1310,10 @@ LIGHT_SPILL = {"lit": ((255, 236, 180), 8, 52), "lit_red": ((255, 60, 40), 7, 64
                "lit_brake": ((255, 66, 44), 11, 118), "lit_amber": ((255, 168, 60), 7, 76)}
 
 
-def lights_layer(model, view, kind):
-    """Lit lamps, a subtle cast of their light over the nearby bodywork, and a soft halo, for an
+def lights_layer(model, view, kind, side):
+    """A lit lamp, a subtle cast of its light over the nearby bodywork, and a soft halo, for an
     unshaded overlay layer."""
-    buf, _ = render(model.merged(lamps(kind)), view)
+    buf, _ = render(model.merged(lamps(kind, side)), view)
     col = shade(buf)
     lit = {px: (col[px], e[1]) for px, e in buf.items() if e[2] == "lights" and e[1] in LIGHT_GLOW}
     out = {}
@@ -1195,6 +1375,62 @@ def smoke_frames(view, dy, heavy):
     return frames
 
 
+FIRE_FRAMES = 8
+FIRE_DELAY = 0.08
+# Flame colours from the root to the tip.
+FIRE_RAMP = ((255, 246, 196), (255, 206, 92), (255, 136, 40), (220, 64, 26))
+
+
+def fire_colour(frac):
+    """A flame's colour a fraction of the way from its root to its tip."""
+    pos = min(frac, 0.999) * (len(FIRE_RAMP) - 1)
+    i = int(pos)
+    a, b = FIRE_RAMP[i], FIRE_RAMP[i + 1]
+    t = pos - i
+    return tuple(round(a[c] + (b[c] - a[c]) * t) for c in range(3))
+
+
+def fire_frames(view, dy):
+    """Looping flames licking out from under the hood's edges and through the grille, the warning
+    before a wrecked jeep goes up: tongues that flicker, rise and narrow, pale yellow at the root and
+    red at the tip."""
+    rnd = random.Random(seed(view, "fire"))
+    tongues = [((rnd.uniform(11, 28), rnd.choice((-9.5, 8.5)), HOOD), rnd.random(), rnd.uniform(5, 10))
+               for _ in range(16)]
+    tongues += [((30.5, rnd.uniform(-7, 6), HOOD - 3), rnd.random(), rnd.uniform(4, 8)) for _ in range(5)]
+    tongues += [((rnd.uniform(13, 26), rnd.uniform(-6, 5), HOOD + 1), rnd.random(), rnd.uniform(3, 6))
+                for _ in range(4)]
+    frames = []
+    for k in range(FIRE_FRAMES):
+        px = {}
+        for (f, r, z), phase, height in tongues:
+            t = (k / FIRE_FRAMES + phase) % 1.0
+            h = height * (0.55 + 0.45 * math.sin(t * 2 * math.pi))
+            sway = 0.8 * math.sin((t + phase) * 4 * math.pi)
+            sx, sy = project(view, f, r, z)
+            cx, cy = sx + SIZE // 2, sy + SIZE // 2 + dy
+            for i in range(int(h) + 1):
+                frac = i / max(h, 1.0)
+                half = 1.7 * (1 - frac) + 0.25
+                x0 = cx + sway * frac
+                for x in range(math.floor(x0 - half), math.ceil(x0 + half)):
+                    alpha = round(240 * (1 - 0.55 * frac))
+                    px[(x, round(cy) - i)] = over(px.get((x, round(cy) - i)), fire_colour(frac) + (alpha,))
+        # A soft orange glow round the flames, under them.
+        glow = {}
+        for (x, y) in px:
+            for dx in range(-2, 3):
+                for dy_ in range(-2, 3):
+                    d = math.hypot(dx, dy_)
+                    p = (x + dx, y + dy_)
+                    if 0 < d <= 2.3 and p not in px:
+                        glow[p] = max(glow.get(p, 0), round(70 * (1 - d / 2.6)))
+        for p, a in glow.items():
+            px[p] = (255, 120, 40, a)
+        frames.append(px)
+    return frames
+
+
 def over(dst, src):
     """Alpha-composite src over dst, both RGBA tuples."""
     if dst is None:
@@ -1217,8 +1453,15 @@ HARDPOINTS = {
     "shovel": shovel,
     "axe": axe,
     "engine": engine,
-    "headlights": headlights,
+    "extinguisher": extinguisher,
+    **{f"headlight_{side}": headlight(side) for side in LAMP_SIDES},
+    **{f"turn_signal_{side}": turn_signal(side) for side in LAMP_SIDES},
+    **{f"taillight_{side}": taillight(side) for side in LAMP_SIDES},
 }
+# Where the spare's carrier and the jerry can's rack stand; the rack's upright is in front of the
+# left tail light's inner column.
+RACK = Model()
+rear_mounts(RACK, "rack")
 
 
 def build_mg(damaged=False):
@@ -1294,6 +1537,7 @@ HOOD_SHOULDERS = (-9, 8)
 # that end (fender markers, tail lamps) stay in front of the tyres.
 NEAR_WHEEL_PRIORITY = 1000.0
 LAMP_MATERIALS = {"amber", "red", "lit", "lit_red", "lit_amber", "lit_brake"}
+LAMP_PARTS = set(LAMPS) | {"lights"}
 # Ties between faces at the same depth go to the higher voxel: in the flattened views two heights
 # share a screen row, and the lower one must not show through, like grille slats on the hood edge.
 HEIGHT_TIE = 1e-4
@@ -1371,7 +1615,7 @@ def render(model, view, parts=None):
                 depth -= NEAR_WHEEL_PRIORITY
         elif part == "windshield" and view in WINDSHIELD_HEIGHT:
             near, far = windshield_rows(view, yi, z)
-        if mat in LAMP_MATERIALS and view in WHEEL_SCALE and (f > 0) == (view == "S"):
+        if mat in LAMP_MATERIALS and part in LAMP_PARTS and view in WHEEL_SCALE and (f > 0) == (view == "S"):
             depth -= 2 * NEAR_WHEEL_PRIORITY
         depth -= z * HEIGHT_TIE
         faces = [("top", -(row + 2), depth + TOP_BIAS) for row in range(near, far + 1)]
@@ -1488,8 +1732,13 @@ def split_direction(variant, view, dy):
         riders = []
         for name, f, r, z in SEATS[variant]:
             sx, sy = project(view, f, r, z)
-            cy = sy - (RIDER_HIP_ROW[view] - 16)
-            riders.append((to_world(view, f, r)[1] * DEPTH_SCALE[view], sx - 8, sx + 8, cy - 16, cy + 15))
+            depth = to_world(view, f, r)[1] * DEPTH_SCALE[view]
+            if name in LYING_SEATS.get(variant, ()):
+                cy = sy - LYING_LIFT[view]
+                riders.append((depth, sx - 16, sx + 15, cy - 8, cy + 7))
+                continue
+            cy = sy - (RIDER_HIP_ROW[rider_view(variant, name, view)] - 16)
+            riders.append((depth, sx - 8, sx + 8, cy - 16, cy + 15))
         for px, (d, _, part, _, _) in full.items():
             if part not in SEAT_BACK_PARTS:
                 continue
@@ -1509,11 +1758,16 @@ def split_direction(variant, view, dy):
     for name, make in HARDPOINTS.items():
         for state, damaged in (("0", False), ("1", True)):
             part_model = spare_tread(damaged, view) if name == "spare" and view in "EW" else make(damaged)
-            buf, glass = render(model.merged(part_model), view)
+            scene = model.merged(part_model)
+            if name.startswith("taillight"):
+                # The jerry can rack's upright stays in front of the left tail light.
+                scene = scene.merged(Model({k: model.vox[k] for k in RACK.vox if k in model.vox}))
+            buf, glass = render(scene, view)
             col = shade(buf)
             part = next(iter(part_model.vox.values()))[1]
             layer, glass_px = layer_of(buf, col, glass, part)
-            if damaged:
+            # A lamp is too small to scorch; it draws its own cracks.
+            if damaged and name not in LAMPS:
                 bullet_holes(layer, glass_px, seed(variant, view, name), 4)
                 for px, c in damage(layer, seed(variant, view, name, "scorch"), light=True).items():
                     layer[px] = blend(layer[px], c)
@@ -1529,8 +1783,8 @@ def split_direction(variant, view, dy):
         return {px: col[px] for px, e in buf.items() if e[2] == "hood_lid"}
 
     for name, make in HOODS.items():
-        layers[name] = lid_layer(make())
-    swing = [lid_layer(hood_open(a)) for a in HOOD_SWING]
+        layers[name] = lid_layer(make(variant=variant))
+    swing = [lid_layer(hood_open(a, variant)) for a in HOOD_SWING]
 
     frames = []
     for k in range(WHEEL_FRAMES):
@@ -1546,7 +1800,7 @@ def split_direction(variant, view, dy):
     def place(d):
         return {(x + ox, y + oy): c for (x, y), c in d.items()}
 
-    shut, _ = render(model.merged(hood_lid()).merged(fuel_door()), view)
+    shut, _ = render(model.merged(hood_lid(variant)).merged(fuel_door()), view)
     seats = {}
     for px, (_, _, part, _, key) in full.items():
         if part in SEAT_PARTS and seat_at(key, variant):
@@ -1589,7 +1843,7 @@ def split_direction(variant, view, dy):
     for p in panels(variant):
         frames_p = []
         for a in panel_swing(p):
-            buf, _ = render(model.without(p).merged(panel_at(p, a)), view)
+            buf, _ = render(model.without(p).merged(panel_at(p, a, variant=variant)), view)
             col = shade(buf)
             frames_p.append(place({px: col[px] for px, e in buf.items() if e[2] == p}))
         out[f"{p}_swing"] = frames_p
@@ -1610,18 +1864,15 @@ def split_direction(variant, view, dy):
                     piece = Model({k: (mat, "spare_swung") for k, (mat, _) in piece.vox.items()})
                 piece = panel_at(panel, a, piece)
                 part = "spare_swung" if name == "spare" else name
-                buf, glass = render(model.without(panel).merged(panel_at(panel, a)).merged(piece), view)
+                buf, glass = render(model.without(panel).merged(panel_at(panel, a, variant=variant)).merged(piece), view)
                 layer, glass_px = layer_of(buf, shade(buf), glass, part)
                 if damaged:
                     for px, c in damage(layer, seed(variant, view, name, "scorch"), light=True).items():
                         layer[px] = blend(layer[px], c)
                 frames_r.append(place(layer))
             out[f"{name}_swing_{state}"] = frames_r
-    out["lights"] = place(lights_layer(model, view, "tail"))
-    out["brake_on"] = place(lights_layer(model, view, "brake"))
-    out["headlights_on"] = place(lights_layer(model, view, "head"))
-    out["signal_left"] = place(lights_layer(model, view, "signal_left"))
-    out["signal_right"] = place(lights_layer(model, view, "signal_right"))
+    for state, (kind, side, _) in LIT_STATES.items():
+        out[state] = place(lights_layer(model, view, kind, side))
     return out
 
 
@@ -1698,8 +1949,7 @@ def rsi_sheet(tiles):
 
 
 # States drawn by the overlay entity (over the riders) besides the "*overlay*" ones.
-OVERLAY_ENTITY_STATES = ("lights_on", "headlights_on", "brake_on", "signal_left", "signal_right",
-                         "engine_smoke_0", "engine_smoke_1")
+OVERLAY_ENTITY_STATES = tuple(LIT_STATES) + ("engine_smoke_0", "engine_smoke_1", "engine_fire")
 # Rows kept between the lowest rider sprite and the overlay frame bottom, so riders sort under it.
 RIDER_SORT_MARGIN = 2
 
@@ -1870,6 +2120,11 @@ def scaled(model, k):
     return out
 
 
+def face_on(model, facing):
+    """A lamp turned so its lens, facing +f (facing 1) or -f (-1), looks at the camera in view X."""
+    return Model({(r, -facing * f, z): v for (f, r, z), v in model.vox.items()})
+
+
 def icon_images():
     """Hardpoint item icons, each a 32 px single-direction state."""
     tyre = Model()
@@ -1892,8 +2147,13 @@ def icon_images():
         "wirecutter": centred(wirecutter(), "E", ICON),
         "searchlight": centred(scaled(searchlight(), 2), "E", ICON),
         "engine": centred(engine(), "S", ICON),
-        "headlights": centred(scaled(Model({(f, r - 9 if r > 0 else r + 10, z): v for (f, r, z), v
-                                            in headlight_lamps().vox.items()}), 2), "S", ICON),
+        # One lamp each, blown up and turned face on: a headlight, a turn signal in its housing, a
+        # tail light on its bracket.
+        "headlight": centred(scaled(face_on(Model({k: v for k, v in headlight("right")().vox.items() if k[0] == 31}), 1),
+                                    3), "X", ICON),
+        "turn_signal": centred(scaled(face_on(turn_signal("right")().merged(
+            Model({(27, r, FENDER + 1): ("black", "x") for r in (16, 17)})), 1), 6), "X", ICON),
+        "taillight": centred(scaled(face_on(taillight("right")(), -1), 4), "X", ICON),
         # Loose panels, seen face on from above: the outer skin turned to the camera.
         "hood": centred(hood_lid(), "X", ICON),
         "door": centred(Model({(f, 19 - r, z): v for (f, r, z), v in door_panel("door_passenger").vox.items()}),
@@ -1909,9 +2169,11 @@ def seat_offsets(variant, dy):
     out = {}
     for name, f, r, z in SEATS[variant]:
         out[name] = {}
+        lying = name in LYING_SEATS.get(variant, ())
         for v in DIRS:
             sx, sy = project(v, f, r, z)
-            cy = sy + dy[v] - (RIDER_HIP_ROW[v] - 16)
+            lift = LYING_LIFT[v] if lying else RIDER_HIP_ROW[rider_view(variant, name, v)] - 16
+            cy = sy + dy[v] - lift
             out[name][v] = dict(px=(round(sx), round(-cy)), depth=to_world(v, f, r)[1])
     return out
 
@@ -1959,20 +2221,23 @@ def write_crayon_map(variant, per_dir):
 
 
 # Part under the cursor, for click handling: written to the R channel of the click maps.
-CLICK_IDS = {"hood_lid": 1, "fuel_door": 2, "engine": 3, "headlights": 4, "windshield": 5, "spare": 6,
+CLICK_IDS = {"hood_lid": 1, "fuel_door": 2, "engine": 3, "windshield": 5, "spare": 6,
              "jerrycan": 7, "shovel": 8, "axe": 9, "wirecutter": 10, "searchlight": 11, "wheel": 12,
-             "door_driver": 18, "door_passenger": 19, "tailgate": 20}
+             "door_driver": 18, "door_passenger": 19, "tailgate": 20,
+             **{lamp: 21 + i for i, lamp in enumerate(LAMPS)}, "extinguisher": 28}
 OUTLINE = (255, 255, 255)
-# Seat regions in jeep space (f, r, z ranges) for outlines and click ids, per version.
-SEAT_PARTS = {"seat", "seat_back", "rear_bench", "rear_bench_back", "gunner_seat"}
+# Seat regions in jeep space (f, r, z ranges) for outlines and click ids, per version. The passenger
+# seat's covers it turned round too, its back then against the dash.
+SEAT_PARTS = {"seat", "seat_back", "rear_bench", "rear_bench_back", "gunner_seat", "litter"}
 SEAT_REGIONS = {
     "driver": ((-16, -3), (-16, -5), (8, 31)),
-    "passenger": ((-16, -3), (4, 15), (8, 31)),
+    "passenger": ((-16, 0), (4, 15), (8, 31)),
     "rear_left": ((-31, -21), (-16, -1), (8, 31)),
     "rear_right": ((-31, -21), (0, 15), (8, 31)),
     "gunner": ((-27, -21), (-3, 2), (9, 29)),
+    "bed": ((-28, -17), (-18, 17), (8, 31)),
 }
-SEAT_IDS = {"driver": 13, "passenger": 14, "rear_left": 15, "rear_right": 16, "gunner": 17}
+SEAT_IDS = {"driver": 13, "passenger": 14, "rear_left": 15, "rear_right": 16, "gunner": 17, "bed": 27}
 
 
 def seat_at(key, variant):
@@ -2039,7 +2304,7 @@ def click_masks(variant, per_dir, dy):
             "wheels": ("shut", d["wheels"]),
             "engine": ("open", d["engine_0"]),
         }
-        for name in ("spare", "jerrycan", "shovel", "axe", "headlights"):
+        for name in ("spare", "jerrycan", "shovel", "axe", "extinguisher") + LAMPS:
             parts[name] = ("shut", d[f"{name}_0"])
         for p in ALL_PANELS:
             has = p in panels(variant)
@@ -2053,6 +2318,9 @@ def click_masks(variant, per_dir, dy):
         for name, (scene, pixels) in parts.items():
             img = scenes[scene]
             mask = {}
+            # The lamps are only a few pixels: their masks take in the ring of jeep around them.
+            if name in LAMPS:
+                pixels = set(pixels) | set(outline(set(pixels)))
             for px in pixels:
                 if not (0 <= px[0] < SIZE and 0 <= px[1] < SIZE):
                     continue
@@ -2198,12 +2466,12 @@ def write_rsi(variant, dy):
                                                  for f in frames_of(v)], delays=fold_delays)
             save(f"windshield_{motion}_overlay_{state}", [to_image(f if v in over_ws else {}) for v in DIRS
                                                          for f in frames_of(v)], delays=fold_delays)
-    save("lights_on", [to_image(per_dir[v]["lights"]) for v in DIRS])
-    save("headlights_on", [to_image(per_dir[v]["headlights_on"]) for v in DIRS])
-    save("brake_on", [to_image(per_dir[v]["brake_on"]) for v in DIRS])
     blink = [[SIGNAL_DELAY, SIGNAL_DELAY] for _ in DIRS]
-    for side in ("signal_left", "signal_right"):
-        save(side, [to_image(f) for v in DIRS for f in (per_dir[v][side], {})], delays=blink)
+    for state in LIT_STATES:
+        if state in BLINKING:
+            save(state, [to_image(f) for v in DIRS for f in (per_dir[v][state], {})], delays=blink)
+        else:
+            save(state, [to_image(per_dir[v][state]) for v in DIRS])
     swing = [[HOOD_SWING_DELAY] * len(HOOD_SWING) for _ in DIRS]
     for state, order in (("hood_opening", 1), ("hood_closing", -1)):
         save(state, [to_image({} if v in HOOD_OVER else f) for v in DIRS for f in per_dir[v]["hood_swing"][::order]],
@@ -2213,6 +2481,8 @@ def write_rsi(variant, dy):
     smoke = [[SMOKE_DELAY] * SMOKE_FRAMES for _ in DIRS]
     for state, heavy in (("engine_smoke_0", False), ("engine_smoke_1", True)):
         save(state, [to_image(f) for v in DIRS for f in smoke_frames(v, dy[v], heavy)], delays=smoke)
+    save("engine_fire", [to_image(f) for v in DIRS for f in fire_frames(v, dy[v])],
+         delays=[[FIRE_DELAY] * FIRE_FRAMES for _ in DIRS])
     save("wheels_0", [to_image(f) for v in DIRS for f in per_dir[v]["wheels_frames"]], delays=anim)
     save("wheels_1", [to_image(per_dir[v]["wheels_destroyed"]) for v in DIRS])
     save("wheels_overlay_0", [to_image(f if near[v] else {}) for v in DIRS for f in per_dir[v]["wheels_frames"]],
@@ -2373,6 +2643,40 @@ def write_blood():
     write_meta(path, ICON, [{"name": n} for n in names])
 
 
+def wreck_image(variant, view, per_dir, dy):
+    """A burnt-out jeep: the variant stripped of its kit and glass, on destroyed wheels, darkened to a
+    sooty brown with flecks of ash and char."""
+    img = composite(variant, view, per_dir, dy, damaged=True, fitted=("engine",), turret=False)
+    rnd = random.Random(seed(variant, view, "wreck"))
+    px = img.load()
+    for y in range(SIZE):
+        for x in range(SIZE):
+            r, g, b, a = px[x, y]
+            if not a:
+                continue
+            lum = (0.3 * r + 0.59 * g + 0.11 * b) * 0.55
+            roll = rnd.random()
+            lum *= 0.55 if roll < 0.1 else 1.3 if roll > 0.95 else 1.0
+            px[x, y] = (round(min(255, lum + 8)), round(min(255, lum * 0.88 + 6)), round(min(255, lum * 0.75 + 4)),
+                        255 if a >= 250 else a)
+    return img
+
+
+def write_wrecks(per, dy):
+    """jeep_wreck.rsi: one burnt-out jeep per variant, its state named after the variant's RSI."""
+    path = os.path.join(RSI_DIR, "jeep_wreck.rsi")
+    fresh_dir(path)
+    for var in VARIANTS:
+        rsi_sheet([wreck_image(var, v, per[var], dy) for v in DIRS]).save(os.path.join(path, RSI_NAMES[var] + ".png"))
+    meta = {"version": 1, "license": "CC-BY-SA-3.0",
+            "copyright": "Burnt jeep wrecks, " + COPYRIGHT[0].lower() + COPYRIGHT[1:],
+            "size": {"x": SIZE, "y": SIZE},
+            "states": [{"name": RSI_NAMES[var], "directions": 4} for var in VARIANTS]}
+    with open(os.path.join(path, "meta.json"), "w", newline="\n") as fh:
+        json.dump(meta, fh, indent=2)
+        fh.write("\n")
+
+
 # ---------------------------------------------------------------- headlight beams
 
 # The two beams the headlight switch cycles through. Low: a short, wide pool of light in front of
@@ -2516,7 +2820,8 @@ def signals_icon(on):
 
 
 def write_beams():
-    """jeep_beams.rsi (the haze sprites), light_masks/*_beam.png and the headlight switch icons."""
+    """jeep_beams.rsi (the haze sprites), light_masks/*_beam.png and the headlight switch and turn
+    signal icons."""
     path = os.path.join(RSI_DIR, "jeep_beams.rsi")
     fresh_dir(path)
     size = BEAM_TILES * 32
@@ -2661,9 +2966,12 @@ def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=Non
     if gun_under_riders:
         draw_turret()
     if riders:
-        sprite = marine(DIRS.index(view))
         offs = seat_offsets(variant, dy)
         for name, o in sorted(offs.items(), key=lambda kv: -kv[1][view]["depth"]):
+            if name in LYING_SEATS.get(variant, ()):
+                sprite = marine(DIRS.index(LYING_SPRITE[view])).rotate(LYING_TURN[view])
+            else:
+                sprite = marine(DIRS.index(rider_view(variant, name, view)))
             x, y = o[view]["px"]
             paste(img, sprite, SIZE // 2 + x - 16, SIZE // 2 - y - 16)
     if loaded and variant == "cargo" and crate_in_front:
@@ -2688,9 +2996,9 @@ def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=Non
     if wheels_on and near:
         img.alpha_composite(to_image(wheel_px))
     if lights:
-        img.alpha_composite(to_image(v["lights"]))
-        if "headlights" in hardpoints and not damaged:
-            img.alpha_composite(to_image(v["headlights_on"]))
+        for state, (kind, _, lamp) in LIT_STATES.items():
+            if kind in ("head", "tail") and lamp in hardpoints and not damaged:
+                img.alpha_composite(to_image(v[state]))
     if smoke is not None:
         img.alpha_composite(to_image(smoke))
     if turret and variant == "gunner" and not gun_under_riders:
@@ -2852,6 +3160,7 @@ def main():
     write_beams()
     write_spray_painter()
     write_blood()
+    write_wrecks(per, dy)
 
     def grid(scale=3, **kw):
         return sheet([[composite(var, v, per[var], dy, **kw) for v in DIRS] for var in VARIANTS], scale)
@@ -2894,7 +3203,7 @@ def main():
             for v in DIRS:
                 img = composite(var, v, per[var], dy, fitted=fitted, wheels_on=bool(fitted))
                 state_dir = os.path.join(RSI_DIR, RSI_NAMES[var] + ".rsi")
-                names = (["spare", "jerrycan", "shovel", "axe", "headlights", "wheels"] if not fitted
+                names = (["spare", "jerrycan", "shovel", "axe", "extinguisher", "wheels"] + list(LAMPS) if not fitted
                          else ["hood", "fuel_door"] + list(panels(var)))
                 for n in names:
                     sheet_img = Image.open(os.path.join(state_dir, n + "_outline.png")).convert("RGBA")
@@ -2917,24 +3226,31 @@ def main():
     door_frames[0].save(os.path.join(PREVIEW_DIR, "jeep_doors.gif"), save_all=True,
                         append_images=door_frames[1:], duration=int(HOOD_SWING_DELAY * 1000) + 40, loop=0)
     grid(door_driver=-1, door_passenger=-1, tailgate=-1).save(os.path.join(PREVIEW_DIR, "jeep_doors_open.png"))
-    def night_frame(var, v, signals, blink_on=True):
-        img = composite(var, v, per[var], dy)
+    def night_frame(var, v, signals, blink_on=True, fitted=FITTED):
+        img = composite(var, v, per[var], dy, fitted=fitted)
         px = img.load()
         for y in range(SIZE):
             for x in range(SIZE):
                 r, g, b, a = px[x, y]
                 px[x, y] = (r * 2 // 7, g * 2 // 7, b * 3 // 8, a)
         if signals is not None:
-            img.alpha_composite(to_image(per[var][v]["lights"]))
-            img.alpha_composite(to_image(per[var][v]["headlights_on"]))
-            for layer in signals:
-                if blink_on or not layer.startswith("signal"):
+            lit = [s for s, (kind, _, _) in LIT_STATES.items() if kind in ("head", "tail")] + list(signals)
+            for layer in lit:
+                if LIT_STATES[layer][2] in fitted and (blink_on or layer not in BLINKING):
                     img.alpha_composite(to_image(per[var][v][layer]))
         return img
 
-    cases = (None, (), ("brake_on",), ("signal_left", "signal_right"), ("signal_left",), ("signal_right",))
+    left = ("signal_front_left", "signal_rear_left")
+    right = ("signal_front_right", "signal_rear_right")
+    cases = (None, (), ("brake_left", "brake_right"), left + right, left, right)
     sheet([[night_frame("cargo", v, c) for v in DIRS] for c in cases], 3, bg=(18, 20, 26, 255)).save(
         os.path.join(PREVIEW_DIR, "jeep_lights.png"))
+    # The driver's headlight, the right turn signal and the right tail light taken off: by day, and
+    # lit at night with both signals on.
+    missing = tuple(n for n in FITTED if n not in ("headlight_left", "turn_signal_right", "taillight_right"))
+    sheet([[composite(var, v, per[var], dy, fitted=missing) for v in DIRS] for var in ("cargo", "medical")] +
+          [[night_frame(var, v, left + right, fitted=missing) for v in DIRS] for var in ("cargo", "medical")],
+          3, bg=(18, 20, 26, 255)).save(os.path.join(PREVIEW_DIR, "jeep_lamps_missing.png"))
     blink_frames = [sheet([[night_frame("cargo", v, c, on) for v in DIRS] for c in cases[3:]], 3,
                           bg=(18, 20, 26, 255)).convert("RGB") for on in (True, False)]
     blink_frames[0].save(os.path.join(PREVIEW_DIR, "jeep_signals.gif"), save_all=True,
@@ -2964,6 +3280,21 @@ def main():
         frames.append(sheet(rows, 3).convert("RGB"))
     frames[0].save(os.path.join(PREVIEW_DIR, "jeep_engine_smoke.gif"), save_all=True, append_images=frames[1:],
                    duration=int(SMOKE_DELAY * 1000), loop=0)
+    # A wrecked jeep burning before it goes up: heavy smoke and flames from under the hood.
+    flames = {v: fire_frames(v, dy[v]) for v in DIRS}
+    frames = []
+    for k in range(SMOKE_FRAMES * 3):
+        rows = []
+        for var in ("cargo", "medical"):
+            row = []
+            for v in DIRS:
+                img = composite(var, v, per[var], dy, damaged=True, smoke=smoky[v][True][k % SMOKE_FRAMES])
+                img.alpha_composite(to_image(flames[v][k % FIRE_FRAMES]))
+                row.append(img)
+            rows.append(row)
+        frames.append(sheet(rows, 3).convert("RGB"))
+    frames[0].save(os.path.join(PREVIEW_DIR, "jeep_engine_fire.gif"), save_all=True, append_images=frames[1:],
+                   duration=int(FIRE_DELAY * 1000), loop=0)
     turret_arc_demo(per, dy).save(os.path.join(PREVIEW_DIR, "jeep_turret_arc.png"))
     for snapped, name in ((False, "jeep_turret_sweep_smooth.gif"), (True, "jeep_turret_sweep_ingame.gif")):
         frames = turret_sweep(per, dy, snapped)
@@ -2990,6 +3321,7 @@ def main():
         "riders": {var: {n: {v: o[v] for v in DIRS} for n, o in seat_offsets(var, dy).items()}
                    for var in VARIANTS},
         "mgturret_pixel_offsets": {v: list(p) for v, p in mg_offsets(dy).items()},
+        "mgturret_muzzle_px": MG_MUZZLE,
         "overlay_slide_note": "Overlay-entity states (*overlay*, lights, signals, brake, smoke) are stored "
                               "slid down by overlay_slide_px rows per direction, and mgturret_* by "
                               "mgturret_slide_px rows; draw them that many pixels higher.",

@@ -26,7 +26,13 @@
       "name": "engine"
     },
     {
-      "name": "headlights"
+      "name": "headlight"
+    },
+    {
+      "name": "turn_signal"
+    },
+    {
+      "name": "taillight"
     },
     {
       "name": "hood"
