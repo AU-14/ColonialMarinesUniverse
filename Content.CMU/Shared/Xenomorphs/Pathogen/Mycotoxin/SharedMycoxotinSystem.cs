@@ -107,6 +107,10 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         if (HasOpenWound(target))
             return ProtectionResult.None;
 
+        // Internals block inhaled spores outright; Partial means this tick is blocked.
+        if (_gasMask.IsBreathingInternals(target))
+            return ProtectionResult.Partial;
+
         foreach (var slot in new[] { "mask", "head" })
         {
             if (!_inventory.TryGetSlotEntity(target, slot, out var item))

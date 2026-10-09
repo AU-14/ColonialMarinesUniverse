@@ -734,6 +734,10 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
 
                 userDamage.NextDamageAt = time + userDamage.DamageEvery;
 
+                // CMU14: internals keep out the same gases a filter does
+                if (HasComp<GasMaskFilterDamageComponent>(contact) && _mask.IsBreathingInternals(user))
+                    continue;
+
                 //this is horrible
                 if (TryComp<ContainerManagerComponent>(user, out var uinv))
                 {
