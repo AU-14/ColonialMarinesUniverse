@@ -35,11 +35,10 @@ public sealed partial class CMUExpeditionAgentComponent
     public bool Patrolling;
     public int PatrolIndex;
     public TimeSpan NextOrderRoute;
-    public EntityCoordinates? OrderProgressPosition;
-    public TimeSpan OrderProgressAt;
     public bool OrderBlocked;
     public bool Entrench;
     public EntityUid? WorkItem;
+    public bool PreparingWork;
     public DoAfterId? WorkDoAfter;
     public bool WorkBuild;
     public TimeSpan NextWork;
@@ -47,6 +46,7 @@ public sealed partial class CMUExpeditionAgentComponent
     public readonly HashSet<string> FriendlyFactions = new();
     public readonly HashSet<string> TargetFactions = new();
     public TimeSpan NextRescue;
+    public TimeSpan MedicalCoverUntil;
     public TimeSpan NextFlank;
     public TimeSpan NextRadio;
     public EntityUid? RadioTarget;

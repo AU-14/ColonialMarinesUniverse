@@ -12,8 +12,6 @@ public sealed partial class CMUExpeditionAgentSystem
 {
     private bool _orderRouteSearched;
 
-    public static bool IsSquadVariant(string variant) => variant is "mixed" or "regular" or "poor" or "rich" or "scout";
-
     public bool CanOrderSquadMember(EntityUid uid) => !HasComp<ActorComponent>(uid) && _mobs.IsAlive(uid);
 
     public int SpawnSquad(EntityCoordinates center, int count, string variant, out int squad)
@@ -53,23 +51,16 @@ public sealed partial class CMUExpeditionAgentSystem
                 squad = Math.Max(squad, member.Squad + 1);
         if (map != null)
             map.NextSquad = squad + 1;
-        var mixed = new[] { "CMUExpeditionScavenger", "CMUExpeditionScavengerPoor", "CMUExpeditionScavengerAggressive",
-            "CMUExpeditionScavengerScout", "CMUExpeditionScavengerCautious", "CMUExpeditionScavengerRich" };
+        var composition = SquadPresets[variant];
         for (var i = 0; i < positions.Count; i++)
         {
-            var prototype = variant switch
-            {
-                "poor" => "CMUExpeditionScavengerPoor",
-                "rich" => "CMUExpeditionScavengerRich",
-                "scout" => "CMUExpeditionScavengerScout",
-                "regular" => "CMUExpeditionScavenger",
-                _ => mixed[i % mixed.Length],
-            };
+            var prototype = composition[i % composition.Length];
             var uid = Spawn(prototype, positions[i]);
             var agent = Comp<CMUExpeditionAgentComponent>(uid);
             agent.Squad = squad;
             agent.Home = positions[i];
-            agent.Entrench = true;
+            agent.Entrench = !HasComp<CMUExpeditionMedicComponent>(uid);
+            agent.NextWork = _timing.CurTime + TimeSpan.FromSeconds(20);
             agent.NextThink = _timing.CurTime + TimeSpan.FromSeconds(i * 0.02);
         }
         if (map != null)
@@ -138,6 +129,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.OrderRoute.Clear();
             agent.OrderBlocked = false;
             agent.OrderedDestination = null;
+            ClearTraffic(agent);
             _steering.Unregister(uid);
             if (agent.Patrolling && agent.PatrolPoints.Count >= 2)
             {
@@ -170,36 +162,29 @@ public sealed partial class CMUExpeditionAgentSystem
                 agent.OrderRoute.Enqueue(point);
             agent.Route.Clear();
             agent.RouteDestination = null;
-            agent.OrderProgressPosition = start;
-            agent.OrderProgressAt = now;
             agent.OrderBlocked = false;
         }
-        while (agent.OrderRoute.TryPeek(out var arrived) && _transform.InRange(start, arrived, ArrivalRange))
-            agent.OrderRoute.Dequeue();
+        AdvanceRoute(uid, agent.OrderRoute, start);
         if (!agent.OrderRoute.TryPeek(out var next))
             return true;
-        if (agent.OrderProgressPosition is not { } progress || !_transform.InRange(start, progress, 0.2f))
-        {
-            agent.OrderProgressPosition = start;
-            agent.OrderProgressAt = now;
-        }
-        if (now - agent.OrderProgressAt >= TimeSpan.FromSeconds(2) ||
+        UpdateMoveProgress(agent, start, next, now);
+        if (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(2) ||
             TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath ||
-            !ValidOrderPoint(uid, next) || !DryPassage(uid, start, next) || !ClearLane(uid, start, next, 0.35f, movement: true))
+            !TraversablePassage(uid, start, next))
         {
-            BlockOrder();
+            BlockOrder(retrySoon: true);
             return true;
         }
         // The combat leash follows travel progress; contact interrupts orders near this position.
         agent.Home = start;
-        Move(uid, next);
+        Move(uid, next, routeWaypoint: agent.OrderRoute.Count > 1, validated: true);
         return true;
 
-        void BlockOrder()
+        void BlockOrder(bool retrySoon = false)
         {
             agent.OrderRoute.Clear();
             agent.OrderBlocked = true;
-            agent.NextOrderRoute = now + TimeSpan.FromSeconds(3);
+            agent.NextOrderRoute = now + TimeSpan.FromSeconds(retrySoon ? 0.5 : 3);
             _steering.Unregister(uid);
         }
     }

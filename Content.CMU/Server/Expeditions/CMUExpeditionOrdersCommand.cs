@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using Content.Server.Administration;
 using Content.Shared.Administration;
@@ -19,6 +20,45 @@ public sealed partial class CMUExpeditionOrdersCommand : LocalizedEntityCommands
     public override string Command => "cmu-expedition-orders";
     public override string Description => Loc.GetString("cmd-cmu-expedition-orders-desc");
     public override string Help => Loc.GetString("cmd-cmu-expedition-orders-help");
+
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
+    {
+        if (args.Length == 1)
+            return CMUExpeditionCommandCompletion.Maps(EntityManager, shell, here: true);
+        if (args.Length == 2 && CMUExpeditionCommandCompletion.TryMap(EntityManager, _map, shell, args[0], out var map))
+        {
+            var squads = new Dictionary<int, int>();
+            var query = EntityManager.EntityQueryEnumerator<CMUExpeditionAgentComponent, TransformComponent>();
+            while (query.MoveNext(out var uid, out var agent, out var transform))
+                if (transform.MapUid == map && agent.Squad > 0 && _agents.CanOrderSquadMember(uid))
+                    squads[agent.Squad] = squads.GetValueOrDefault(agent.Squad) + 1;
+            return CompletionResult.FromHintOptions(squads.OrderBy(pair => pair.Key).Select(pair =>
+                new CompletionOption(pair.Key.ToString(CultureInfo.InvariantCulture),
+                    Loc.GetString("cmu-expedition-hint-squad-members", ("count", pair.Value)))),
+                Loc.GetString("cmu-expedition-hint-squad"));
+        }
+        if (args.Length == 3)
+            return CompletionResult.FromHintOptions(
+                new[] { "move", "guard", "patrol-add", "patrol-start", "patrol-stop", "patrol-clear", "style", "friendly", "target" }
+                    .Select(value => new CompletionOption(value, Loc.GetString($"cmu-expedition-order-{value}"))),
+                Loc.GetString("cmu-expedition-hint-order"));
+        if (args.Length == 4 && args[2].Equals("style", StringComparison.OrdinalIgnoreCase))
+            return CompletionResult.FromHintOptions(Enum.GetNames<CMUExpeditionDisposition>(), Loc.GetString("cmu-expedition-hint-style"));
+        if (args.Length == 4 && args[2].ToLowerInvariant() is "friendly" or "target")
+        {
+            var split = args[3].LastIndexOf(',');
+            var prefix = split < 0 ? "" : args[3][..(split + 1)];
+            var selected = prefix.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            var options = _prototypes.EnumeratePrototypes<NpcFactionPrototype>().OrderBy(proto => proto.ID)
+                .Where(proto => !selected.Contains(proto.ID)).Select(proto => prefix + proto.ID).ToList();
+            if (prefix.Length == 0)
+                options.Insert(0, "default");
+            return CompletionResult.FromHintOptions(options, Loc.GetString("cmu-expedition-hint-factions"));
+        }
+        if (args.Length is 4 or 5 && args[0] != "here" && args[2].ToLowerInvariant() is "move" or "guard" or "patrol-add")
+            return CompletionResult.FromHint(Loc.GetString(args.Length == 4 ? "cmu-expedition-hint-x" : "cmu-expedition-hint-y"));
+        return CompletionResult.Empty;
+    }
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -41,7 +81,7 @@ public sealed partial class CMUExpeditionOrdersCommand : LocalizedEntityCommands
         else { shell.WriteError(Help); return; }
         if (EntityManager.TryGetComponent<CMUExpeditionMapComponent>(map, out var expedition) && !expedition.Ready)
         { shell.WriteError(Loc.GetString("cmu-expedition-not-ready")); return; }
-        var action = args[2];
+        var action = args[2].ToLowerInvariant();
         var disposition = CMUExpeditionDisposition.Steady;
         var factions = Array.Empty<string>();
         if (action is "guard" or "move" or "patrol-add")

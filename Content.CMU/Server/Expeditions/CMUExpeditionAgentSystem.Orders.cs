@@ -48,11 +48,21 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.Entrench = entrench;
         agent.Target = null;
         agent.LastSeen = null;
+        agent.PendingWeapon = null;
         return true;
     }
 
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
+        ReleaseManeuver(uid, agent);
+        ClearTraffic(agent);
+        agent.CoveringFor = null;
+        agent.CoveringUntil = TimeSpan.Zero;
+        agent.ContactDestination = null;
+        agent.FlankAssignment = null;
+        agent.FlankAssignmentUntil = TimeSpan.Zero;
+        agent.FightingPosition = null;
+        agent.PositionCommittedUntil = TimeSpan.Zero;
         CancelWork(uid, agent);
         CancelPlan(uid, agent, false);
         CancelTreatment(agent);
@@ -68,6 +78,8 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.NextOrderRoute = TimeSpan.Zero;
         agent.OrderBlocked = false;
         ClearCover(agent);
+        StopSpacing(uid, agent);
+        ClearThreatAssessment(agent);
         _steering.Unregister(uid);
         agent.State = CMUExpeditionAgentState.Guard;
     }

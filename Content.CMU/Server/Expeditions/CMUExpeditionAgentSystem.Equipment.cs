@@ -8,6 +8,7 @@ using Content.Shared.Storage;
 using Content.Shared.Throwing;
 using Content.Shared.Trigger.Components;
 using Content.Shared.Trigger.Systems;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
@@ -31,15 +32,21 @@ public sealed partial class CMUExpeditionAgentSystem
         return _inventory.TryGetSlotEntity(uid, "back", out var bag) && TryComp(bag, out storage!);
     }
 
-    private EntityUid? SpareMagazine(EntityUid uid)
+    private EntityUid? SpareAmmunition(EntityUid uid, EntityUid? weapon = null)
     {
-        if (!_guns.TryGetGun(uid, out var gun) || !_itemSlots.TryGetSlot(gun.Owner, "gun_magazine", out var slot) || !Supplies(uid, out var supplies))
+        if (weapon == null && _guns.TryGetGun(uid, out var active))
+            weapon = active;
+        if (weapon is not { } gun || !HasComp<GunComponent>(gun) || !Supplies(uid, out var supplies))
             return null;
+        _itemSlots.TryGetSlot(gun, "gun_magazine", out var slot);
+        TryComp<BallisticAmmoProviderComponent>(gun, out var tube);
         foreach (var item in supplies.Container.ContainedEntities)
         {
             var ammo = new GetAmmoCountEvent();
             RaiseLocalEvent(item, ref ammo);
-            if (ammo.Count > 0 && _itemSlots.CanInsert(gun, slot, item, uid, swap: true))
+            if (slot != null && ammo.Count > 0 && _itemSlots.CanInsert(gun, slot, item, uid, swap: true) ||
+                tube != null && TryComp<CartridgeAmmoComponent>(item, out var cartridge) && !cartridge.Spent &&
+                _guns.CanInsertBallistic((gun, tube), item))
                 return item;
         }
         return null;
@@ -74,30 +81,39 @@ public sealed partial class CMUExpeditionAgentSystem
             !_transform.InRange(Transform(uid).Coordinates, destination, 10) ||
             !ClearLane(uid, Transform(uid).Coordinates, destination, 0.4f))
             return false;
-        if (grenade.Smoke)
-            return true;
+        return grenade.Smoke || SafeBlast(uid, destination, grenade.SafeRadius,
+            TryComp<TimerTriggerComponent>(item, out var timer) ? (float) timer.Delay.TotalSeconds : 4);
+    }
+
+    private bool SafeBlast(EntityUid uid, EntityCoordinates destination, float radius, float prediction)
+    {
         var nearby = new HashSet<EntityUid>();
         var landing = _transform.ToMapCoordinates(destination);
-        _lookup.GetEntitiesInRange(landing.MapId, landing.Position, grenade.SafeRadius + 5, nearby);
+        _lookup.GetEntitiesInRange(landing.MapId, landing.Position, radius + 5, nearby);
         foreach (var entity in nearby)
         {
             if (!IsFriendly(uid, entity) || _mobs.IsDead(entity))
                 continue;
             var coordinates = Transform(entity).Coordinates;
-            if (_transform.InRange(coordinates, destination, grenade.SafeRadius))
+            if (_transform.InRange(coordinates, destination, radius))
                 return false;
             // Consider the current movement heading over the fuse, but cap prediction to avoid absurd velocities.
             if (TryComp<PhysicsComponent>(entity, out var body))
             {
-                var offset = body.LinearVelocity * 4;
+                var offset = body.LinearVelocity * prediction;
                 if (offset.LengthSquared() > 25)
                     offset = Vector2.Normalize(offset) * 5;
-                var future = _transform.GetMapCoordinates(entity).Offset(offset);
-                if (Vector2.Distance(future.Position, _transform.ToMapCoordinates(destination).Position) < grenade.SafeRadius)
+                var current = _transform.GetMapCoordinates(entity).Position;
+                // Check the swept segment, not only its far endpoint: a buddy may cross
+                // the blast circle and leave it again before the fuse expires.
+                var along = offset.LengthSquared() > 0.001f
+                    ? Math.Clamp(Vector2.Dot(landing.Position - current, offset) / offset.LengthSquared(), 0, 1) : 0;
+                if (Vector2.Distance(current + offset * along, landing.Position) < radius)
                     return false;
             }
             if (TryComp<CMUExpeditionAgentComponent>(entity, out var ally) &&
-                ally.CoverDestination is { } planned && _transform.InRange(planned, destination, grenade.SafeRadius))
+                (ally.CoverDestination is { } planned && _transform.InRange(planned, destination, radius) ||
+                 ally.SpacingDestination is { } escape && _transform.InRange(escape, destination, radius)))
                 return false;
         }
         return true;
@@ -149,7 +165,27 @@ public sealed partial class CMUExpeditionAgentSystem
             if (success)
                 agent.Reloads++;
         }
-        else if (agent.Action == CMUTacticalAction.ThrowGrenade && agent.GrenadeTarget is { } target && SafeGrenade(ent, target, item))
+        else if (agent.Action == CMUTacticalAction.Reload && TreatmentSafe(ent, agent) &&
+            _guns.TryGetGun(ent, out var tubeGun) && TryComp<BallisticAmmoProviderComponent>(tubeGun, out var tube) &&
+            _guns.CanInsertBallistic((tubeGun.Owner, tube), item))
+        {
+            // Consume a real shell from the carried handful using the native insertion path.
+            success = _guns.TryAmmoInsert((tubeGun.Owner, tube), item, ent, tubeGun.Owner, 0);
+            if (Exists(item) && _hands.IsHolding(ent.Owner, item, out _) && Supplies(ent, out var bag))
+                _hands.TryDropIntoContainer(ent.Owner, item, bag.Container);
+            if (success)
+            {
+                agent.Reloads++;
+                if (SpareAmmunition(ent, tubeGun) is { } next && _timing.CurTime < agent.ActionUntil)
+                {
+                    agent.ActionItem = next;
+                    agent.ActionStarted = _timing.CurTime;
+                    return;
+                }
+            }
+        }
+        else if (agent.Action == CMUTacticalAction.ThrowGrenade && agent.GrenadeTarget is { } target &&
+            (agent.SmokeGrenade || HasGrenadeContact(ent, agent, target)) && SafeGrenade(ent, target, item))
         {
             if (_hands.TryDrop(ent.Owner, item) && _throwing.TryThrow(item, target, user: ent, compensateFriction: true))
             {
@@ -162,7 +198,12 @@ public sealed partial class CMUExpeditionAgentSystem
                     agent.GrenadeReservationUntil = TimeSpan.Zero;
                     agent.NextGrenade = _timing.CurTime + TimeSpan.FromSeconds(35);
                     var grenade = Comp<CMUExpeditionGrenadeComponent>(item);
-                    if (!grenade.Smoke)
+                    if (grenade.Smoke)
+                    {
+                        agent.SmokesThrown++;
+                        _smokeScreens.Add((target, _timing.CurTime + TimeSpan.FromSeconds(35)));
+                    }
+                    else
                         _grenadeHazards.Add((target, _timing.CurTime + Comp<TimerTriggerComponent>(item).Delay + TimeSpan.FromSeconds(2), grenade.SafeRadius));
                 }
             }
