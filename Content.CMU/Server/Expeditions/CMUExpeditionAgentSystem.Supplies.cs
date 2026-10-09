@@ -58,8 +58,11 @@ public sealed partial class CMUExpeditionAgentSystem
         var items = SupplyItems(uid).ToArray();
         if (KnownLootGrenade(item, out var smoke))
             return items.Count(other => KnownLootGrenade(other, out var otherSmoke) && smoke == otherSmoke) < (lowOnly ? 1 : 2);
-        if (FreshFlare(item))
-            return items.Count(FreshFlare) < (lowOnly ? 1 : 3);
+        if (FlareSupplyCount(item) > 0)
+        {
+            var reserve = items.Sum(FlareSupplyCount);
+            return reserve < (lowOnly ? 2 : 8) && (FreshFlare(item) || reserve <= 2);
+        }
         if (StockDressing(item))
             return lowOnly ? PersonalDressing(uid) == null : items.Count(StockDressing) < (HasComp<CMUExpeditionMedicComponent>(uid) ? 3 : 1);
         foreach (var gun in CarriedWeapons(uid))
@@ -79,8 +82,8 @@ public sealed partial class CMUExpeditionAgentSystem
                 HasComp<Content.Shared.Medical.DefibrillatorComponent>(other) == HasComp<Content.Shared.Medical.DefibrillatorComponent>(item)) > 1;
         if (KnownLootGrenade(item, out var smoke))
             return items.Count(other => KnownLootGrenade(other, out var otherSmoke) && smoke == otherSmoke) > 1;
-        if (FreshFlare(item))
-            return items.Count(FreshFlare) > 1;
+        if (FlareSupplyCount(item) is > 0 and var flareCount)
+            return items.Sum(FlareSupplyCount) - flareCount >= 2;
         if (StockDressing(item))
             return PersonalDressing(uid) is { } dressing && dressing != item || items.Count(StockDressing) > 1;
         var compatible = false;

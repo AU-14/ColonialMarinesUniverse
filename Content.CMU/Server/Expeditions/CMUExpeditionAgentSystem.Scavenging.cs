@@ -106,7 +106,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var items = new HashSet<EntityUid>();
         foreach (var source in nearby.Where(item => HasComp<StorageComponent>(item) || HasComp<EntityStorageComponent>(item) || _mobs.IsDead(item) ||
                      HasComp<GunComponent>(item) || HasComp<BallisticAmmoProviderComponent>(item) ||
-                     HasComp<CartridgeAmmoComponent>(item) || KnownLootGrenade(item, out _) || FreshFlare(item) || StockDressing(item) || FreshMedicalTool(item)).Take(24))
+                     HasComp<CartridgeAmmoComponent>(item) || KnownLootGrenade(item, out _) || FlareSupplyCount(item) > 0 || StockDressing(item) || FreshMedicalTool(item)).Take(24))
         {
             items.Add(source);
             if (TryComp<StorageComponent>(source, out var looseStorage))

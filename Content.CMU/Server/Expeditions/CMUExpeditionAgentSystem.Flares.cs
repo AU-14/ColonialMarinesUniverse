@@ -1,6 +1,8 @@
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Dropship.Weapon;
+using Content.Shared._RMC14.Inventory;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Light.Components;
 using Content.Shared.Tag;
 using Robust.Shared.Map;
@@ -12,6 +14,7 @@ namespace Content.Server.CMU14.Expeditions;
 public sealed partial class CMUExpeditionAgentSystem
 {
     private static readonly ProtoId<TagPrototype> FlareTag = "Flare";
+    private static readonly ProtoId<TagPrototype> FlarePackTag = "CMFlarePack";
 
     private bool IsFlare(EntityUid uid) => HasComp<ExpendableLightComponent>(uid) &&
         (_tags.HasTag(uid, FlareTag) || MetaData(uid).EntityPrototype is { } prototype &&
@@ -19,6 +22,51 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool FreshFlare(EntityUid uid) => IsFlare(uid) && !HasComp<FlareSignalComponent>(uid) &&
         Comp<ExpendableLightComponent>(uid).CurrentState == ExpendableLightState.BrandNew;
+
+    private IEnumerable<EntityUid> PackedFlares(EntityUid pack)
+    {
+        if (!_tags.HasTag(pack, FlarePackTag) || !HasComp<CMItemSlotsComponent>(pack) ||
+            !TryComp<ItemSlotsComponent>(pack, out var slots))
+            yield break;
+        foreach (var slot in slots.Slots.Values)
+            if (slot.Item is { } flare && FreshFlare(flare))
+                yield return flare;
+    }
+
+    private int FlareSupplyCount(EntityUid item) => FreshFlare(item) ? 1 : PackedFlares(item).Count();
+
+    private IEnumerable<EntityUid> CarriedFlares(EntityUid uid)
+    {
+        foreach (var item in SupplyItems(uid))
+        {
+            if (FreshFlare(item))
+                yield return item;
+            else
+                foreach (var flare in PackedFlares(item))
+                    yield return flare;
+        }
+    }
+
+    private bool TakeCarriedFlare(EntityUid uid, EntityUid flare)
+    {
+        if (_hands.GetEmptyHandCount(uid) == 0 || !FreshFlare(flare))
+            return false;
+        if (SupplyItems(uid).Contains(flare))
+            return _hands.TryPickupAnyHand(uid, flare);
+        if (!_containers.TryGetContainingContainer((flare, null, null), out var container) ||
+            !SupplyItems(uid).Contains(container.Owner) || !PackedFlares(container.Owner).Contains(flare) ||
+            !TryComp<ItemSlotsComponent>(container.Owner, out var slots))
+            return false;
+        var slot = slots.Slots.Values.FirstOrDefault(candidate => candidate.Item == flare);
+        if (slot == null || !_itemSlots.TryEject(container.Owner, slot, uid, out var ejected))
+            return false;
+        if (_hands.TryPickupAnyHand(uid, ejected.Value))
+            return true;
+        // A failed pickup must not consume the pack's flare or strand it unnecessarily.
+        if (!_itemSlots.TryInsert(container.Owner, slot, ejected.Value, uid))
+            StoreSupply(uid, ejected.Value);
+        return false;
+    }
 
     private void CancelFlare(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
@@ -52,7 +100,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 return true;
             if (!_hands.IsHolding(uid, item, out _))
             {
-                if (!SupplyItems(uid).Contains(item) || !_hands.TryPickupAnyHand(uid, item))
+                if (!TakeCarriedFlare(uid, item))
                 {
                     CancelFlare(uid, agent);
                     return false;
@@ -85,7 +133,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.OrderRoute.TryPeek(out var waypoint) ? waypoint : agent.OrderedDestination ?? agent.GuardAnchor;
         if (interest is not { } area || Illumination(area) >= agent.MinimumSightLight)
             return false;
-        var flare = SupplyItems(uid).FirstOrDefault(FreshFlare);
+        var flare = CarriedFlares(uid).FirstOrDefault();
         if (flare == default)
             return false;
         var position = Transform(uid).Coordinates;

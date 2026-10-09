@@ -29,8 +29,7 @@
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - CMMagazineSniperM96S
     - CMMagazineSniperM96S

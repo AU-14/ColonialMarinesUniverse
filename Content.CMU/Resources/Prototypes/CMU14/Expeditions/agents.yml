@@ -25,8 +25,7 @@
     - CMUExpeditionSidearm
     - CMMagazinePistolM1984
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - RMCMagazineRifleMAR40
     - RMCMagazineRifleMAR40
@@ -100,8 +99,7 @@
   storage:
     back:
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - CMMagazinePistolM1984
 
@@ -128,8 +126,7 @@
     - CMUExpeditionSidearm
     - CMMagazinePistolM1984
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - CMMagazineRifleM54C
     - CMMagazineRifleM54C
@@ -155,8 +152,7 @@
     - CMUExpeditionSidearm
     - CMMagazinePistolM1984
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - RMCMagazineRifleMAR40
     - RMCMagazineRifleMAR40

@@ -69,7 +69,8 @@ An unsuppressed native muzzle flash can reveal a noisy, fixed shot position for 
 Ordinary guns may shoot that position with no entity lock; unseen movement is not tracked.
 Rockets and aimed sniper locks require a visible target. Walls, smoke and friendly lanes still apply.
 
-Every kit carries two real flares. Agents can ignite and throw them toward a dark contact or route,
+Every kit carries one native M94 pack containing eight real flares. Agents draw individual flares
+through native item-slot ejection, then ignite and throw them toward a dark contact or route,
 with a shared 30-second cooldown after a successful throw. Damage, a close rush, movement and blocked
 throws interrupt handling. Flares are consumed, and replacement flares must be found or shared.
 
@@ -77,7 +78,9 @@ throws interrupt handling. Flares are consumed, and replacement flares must be f
 
 Belts, the second-pocket pouch and backpacks are searched in that order for storage and consumption.
 Quiet, unordered agents collect useful reserves: six spare magazines per carried gun or 24 shells,
-two HE and two smoke grenades, three fresh flares and one stored dressing. Capacity and whitelists
+two HE and two smoke grenades, eight fresh flares and one stored dressing. Packed flares count
+toward reserves; a replacement pack is collected only with two or fewer flares remaining. Sharing
+loose flares or surplus packs retains at least two flares for the donor. Capacity and whitelists
 may stop collection earlier; these are targets, not guaranteed inventory sizes. A full shotgun still
 recognizes compatible reserve shells. No ammunition or grenade is created by resupply behavior.
 

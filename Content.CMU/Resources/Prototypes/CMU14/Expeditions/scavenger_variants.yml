@@ -59,8 +59,7 @@
     - CMMagazinePistolM1984
     - CMUExpeditionSmokeGrenade
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - RMCShellShotgunHeavySlugs
     - RMCShellShotgunHeavySlugs
@@ -108,8 +107,7 @@
     - CMMagazinePistolM1984
     - CMUExpeditionSmokeGrenade
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - CMMagazineSMGMP5
     - CMMagazineSMGMP5
@@ -155,8 +153,7 @@
     - CMMagazinePistolM1984
     - CMUExpeditionSmokeGrenade
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - RMCMagazineLMGM60
     - RMCMagazineLMGM60
@@ -204,8 +201,7 @@
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - RMCMagazineRifleAR10
     - RMCMagazineRifleAR10

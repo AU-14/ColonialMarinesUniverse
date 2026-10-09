@@ -86,8 +86,7 @@
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - CMMagazineSMGM63
     - CMMagazineSMGM63
@@ -129,8 +128,7 @@
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - CMMagazineRifleM54CE2
     - CMMagazineRifleM54CE2
@@ -174,8 +172,7 @@
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - CMMagazineRifleM4SPR
     - CMMagazineRifleM4SPR
@@ -221,8 +218,7 @@
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionBlastGrenade
     - RMCShovel
-    - CMFlare
-    - CMFlare
+    - CMPackFlare
     belt:
     - CMMagazineSMGM63
     - CMMagazineSMGM63

@@ -180,7 +180,8 @@ Exhausted guards can use safe grenades/smoke and claim nearby loaded firearms, c
 shells, and known HE/smoke grenades within four metres, with a five-second retrieval limit. They can
 loot dead bodies and accessible bags/belts; living or critical bodies and locked storage are excluded.
 Quiet, unordered guards stock compatible ammunition across belts, pouches and backpacks: up to six
-spare magazines per carried gun or 24 shells, two HE and two smoke grenades, three flares and a reserve dressing.
+spare magazines per carried gun or 24 shells, two HE and two smoke grenades, eight flares and a reserve dressing.
+Every kit starts with one native eight-flare pack; the AI draws individual flares from its slots.
 They open accessible crates and share surplus with nearby squadmates running low. Items remain finite,
 storage limits apply, and combat interrupts optional scavenging. At contact distance
 they use native weapon-butt or unarmed attacks while attempting to escape, rather than charging into melee.
