@@ -57,7 +57,9 @@ Identity comes from native vehicle factions, drivers, gunners, living passengers
 A friendly identity vetoes hostility. Unknown, neutral, unarmed, totaled and actively cooking-off
 vehicles are excluded from automatic targeting. Existing friendly/target orders still apply.
 
-Rocketeers prioritize a visible hostile armed vehicle while carrying a loaded tube. Their expedition
+Rocketeers spawn with one preloaded disposable RPG-36 in the human `suitstorage` slot, alongside
+their SMG and stored pistol. The rocket is inside the tube; there are no loose spare rockets.
+They prioritize a visible hostile armed vehicle while carrying a loaded tube. Their expedition
 tube fires native anti-tank ammunition; penetration, vehicle damage and cook-off use native rules.
 Launch range and blast checks use the first hull impact instead of the centre of a large vehicle.
 A wall or another body before the hull blocks the launch. Shots require a safe backblast and friendly

@@ -15,12 +15,17 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void InitializeVision()
     {
-        SubscribeLocalEvent<GunComponent, ComponentStartup>(OnObservedGunStartup);
+        SubscribeLocalEvent<GunComponent, TakeAmmoEvent>(OnObservedGunTakeAmmo);
         SubscribeLocalEvent<CMUExpeditionShotObserverComponent, GunShotEvent>(OnObservedMuzzleFlash);
     }
 
-    private void OnObservedGunStartup(Entity<GunComponent> ent, ref ComponentStartup args) =>
-        EnsureComp<CMUExpeditionShotObserverComponent>(ent.Owner);
+    private void OnObservedGunTakeAmmo(Entity<GunComponent> ent, ref TakeAmmoEvent args)
+    {
+        // Native shooting requests ammo before raising GunShotEvent, including the first
+        // shot. Install only on use, so uninitialized map prototypes stay unchanged.
+        if (args.User != null)
+            EnsureComp<CMUExpeditionShotObserverComponent>(ent.Owner);
+    }
 
     private void OnObservedMuzzleFlash(Entity<CMUExpeditionShotObserverComponent> ent, ref GunShotEvent args)
     {

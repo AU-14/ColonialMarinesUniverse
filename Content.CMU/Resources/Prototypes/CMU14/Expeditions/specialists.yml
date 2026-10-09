@@ -208,7 +208,7 @@
     belt: CMBeltMarine
     pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
-    suitStorage: CMUExpeditionDisposableLauncher
+    suitstorage: CMUExpeditionDisposableLauncher
   inhand:
   - CMUExpeditionSMG
   storage:
