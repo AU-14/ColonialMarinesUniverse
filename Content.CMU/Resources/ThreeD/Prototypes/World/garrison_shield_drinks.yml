@@ -184,66 +184,46 @@
     yaw: 40
     surface: CMU3DShieldDrinksSurface3209
     surfaceAxis: XZ
-  - label: rolled rim segment 1
-    min: 0.079005707, -0.008000000, 0.416000000
-    max: 0.153744293, 0.008000000, 0.454000000
+  - label: rolled rim segment 01
+    min: 0.0578851, -0.008, 0.416
+    max: 0.1748649, 0.008, 0.454
     color: '#BFBFBF'
     yaw: 90.0
-  - label: rolled rim segment 2
-    min: 0.061321060, 0.058000000, 0.416000000
-    max: 0.136059647, 0.074000000, 0.454000000
+  - label: rolled rim segment 02
+    min: 0.0192232, 0.0853381, 0.416
+    max: 0.136203, 0.1013381, 0.454
     color: '#BFBFBF'
-    yaw: 120.0
-  - label: rolled rim segment 3
-    min: 0.013005707, 0.106315353, 0.416000000
-    max: 0.087744293, 0.122315353, 0.454000000
-    color: '#BFBFBF'
-    yaw: 150.0
-  - label: rolled rim segment 4
-    min: -0.052994293, 0.124000000, 0.416000000
-    max: 0.021744293, 0.140000000, 0.454000000
+    yaw: 135.0
+  - label: rolled rim segment 03
+    min: -0.0741149, 0.124, 0.416
+    max: 0.0428649, 0.14, 0.454
     color: '#BFBFBF'
     yaw: 180.0
-  - label: rolled rim segment 5
-    min: -0.118994293, 0.106315353, 0.416000000
-    max: -0.044255707, 0.122315353, 0.454000000
+  - label: rolled rim segment 04
+    min: -0.167453, 0.0853381, 0.416
+    max: -0.0504732, 0.1013381, 0.454
     color: '#BFBFBF'
-    yaw: 210.0
-  - label: rolled rim segment 6
-    min: -0.167309647, 0.058000000, 0.416000000
-    max: -0.092571060, 0.074000000, 0.454000000
-    color: '#BFBFBF'
-    yaw: 240.0
-  - label: rolled rim segment 7
-    min: -0.184994293, -0.008000000, 0.416000000
-    max: -0.110255707, 0.008000000, 0.454000000
+    yaw: 225.0
+  - label: rolled rim segment 05
+    min: -0.2061149, -0.008, 0.416
+    max: -0.0891351, 0.008, 0.454
     color: '#BFBFBF'
     yaw: 270.0
-  - label: rolled rim segment 8
-    min: -0.167309647, -0.074000000, 0.416000000
-    max: -0.092571060, -0.058000000, 0.454000000
+  - label: rolled rim segment 06
+    min: -0.167453, -0.1013381, 0.416
+    max: -0.0504732, -0.0853381, 0.454
     color: '#BFBFBF'
-    yaw: 300.0
-  - label: rolled rim segment 9
-    min: -0.118994293, -0.122315353, 0.416000000
-    max: -0.044255707, -0.106315353, 0.454000000
-    color: '#BFBFBF'
-    yaw: 330.0
-  - label: rolled rim segment 10
-    min: -0.052994293, -0.140000000, 0.416000000
-    max: 0.021744293, -0.124000000, 0.454000000
+    yaw: 315.0
+  - label: rolled rim segment 07
+    min: -0.0741149, -0.14, 0.416
+    max: 0.0428649, -0.124, 0.454
     color: '#BFBFBF'
     yaw: 0.0
-  - label: rolled rim segment 11
-    min: 0.013005707, -0.122315353, 0.416000000
-    max: 0.087744293, -0.106315353, 0.454000000
+  - label: rolled rim segment 08
+    min: 0.0192232, -0.1013381, 0.416
+    max: 0.136203, -0.0853381, 0.454
     color: '#BFBFBF'
-    yaw: 30.0
-  - label: rolled rim segment 12
-    min: 0.061321060, -0.074000000, 0.416000000
-    max: 0.136059647, -0.058000000, 0.454000000
-    color: '#BFBFBF'
-    yaw: 60.0
+    yaw: 45.0
   - label: recessed metal lid
     min: -0.140625000, -0.125000000, 0.421000000
     max: 0.109375000, 0.125000000, 0.429000000
@@ -302,66 +282,46 @@
           yaw: 40
           surface: CMU3DShieldDrinksSurface3209
           surfaceAxis: XZ
-        - label: rolled rim segment 1
-          min: 0.079005707, -0.008000000, 0.416000000
-          max: 0.153744293, 0.008000000, 0.454000000
+        - label: rolled rim segment 01
+          min: 0.0578851, -0.008, 0.416
+          max: 0.1748649, 0.008, 0.454
           color: '#BFBFBF'
           yaw: 90.0
-        - label: rolled rim segment 2
-          min: 0.061321060, 0.058000000, 0.416000000
-          max: 0.136059647, 0.074000000, 0.454000000
+        - label: rolled rim segment 02
+          min: 0.0192232, 0.0853381, 0.416
+          max: 0.136203, 0.1013381, 0.454
           color: '#BFBFBF'
-          yaw: 120.0
-        - label: rolled rim segment 3
-          min: 0.013005707, 0.106315353, 0.416000000
-          max: 0.087744293, 0.122315353, 0.454000000
-          color: '#BFBFBF'
-          yaw: 150.0
-        - label: rolled rim segment 4
-          min: -0.052994293, 0.124000000, 0.416000000
-          max: 0.021744293, 0.140000000, 0.454000000
+          yaw: 135.0
+        - label: rolled rim segment 03
+          min: -0.0741149, 0.124, 0.416
+          max: 0.0428649, 0.14, 0.454
           color: '#BFBFBF'
           yaw: 180.0
-        - label: rolled rim segment 5
-          min: -0.118994293, 0.106315353, 0.416000000
-          max: -0.044255707, 0.122315353, 0.454000000
+        - label: rolled rim segment 04
+          min: -0.167453, 0.0853381, 0.416
+          max: -0.0504732, 0.1013381, 0.454
           color: '#BFBFBF'
-          yaw: 210.0
-        - label: rolled rim segment 6
-          min: -0.167309647, 0.058000000, 0.416000000
-          max: -0.092571060, 0.074000000, 0.454000000
-          color: '#BFBFBF'
-          yaw: 240.0
-        - label: rolled rim segment 7
-          min: -0.184994293, -0.008000000, 0.416000000
-          max: -0.110255707, 0.008000000, 0.454000000
+          yaw: 225.0
+        - label: rolled rim segment 05
+          min: -0.2061149, -0.008, 0.416
+          max: -0.0891351, 0.008, 0.454
           color: '#BFBFBF'
           yaw: 270.0
-        - label: rolled rim segment 8
-          min: -0.167309647, -0.074000000, 0.416000000
-          max: -0.092571060, -0.058000000, 0.454000000
+        - label: rolled rim segment 06
+          min: -0.167453, -0.1013381, 0.416
+          max: -0.0504732, -0.0853381, 0.454
           color: '#BFBFBF'
-          yaw: 300.0
-        - label: rolled rim segment 9
-          min: -0.118994293, -0.122315353, 0.416000000
-          max: -0.044255707, -0.106315353, 0.454000000
-          color: '#BFBFBF'
-          yaw: 330.0
-        - label: rolled rim segment 10
-          min: -0.052994293, -0.140000000, 0.416000000
-          max: 0.021744293, -0.124000000, 0.454000000
+          yaw: 315.0
+        - label: rolled rim segment 07
+          min: -0.0741149, -0.14, 0.416
+          max: 0.0428649, -0.124, 0.454
           color: '#BFBFBF'
           yaw: 0.0
-        - label: rolled rim segment 11
-          min: 0.013005707, -0.122315353, 0.416000000
-          max: 0.087744293, -0.106315353, 0.454000000
+        - label: rolled rim segment 08
+          min: 0.0192232, -0.1013381, 0.416
+          max: 0.136203, -0.0853381, 0.454
           color: '#BFBFBF'
-          yaw: 30.0
-        - label: rolled rim segment 12
-          min: 0.061321060, -0.074000000, 0.416000000
-          max: 0.136059647, -0.058000000, 0.454000000
-          color: '#BFBFBF'
-          yaw: 60.0
+          yaw: 45.0
         - label: recessed metal lid
           min: -0.140625000, -0.125000000, 0.421000000
           max: 0.109375000, 0.125000000, 0.429000000

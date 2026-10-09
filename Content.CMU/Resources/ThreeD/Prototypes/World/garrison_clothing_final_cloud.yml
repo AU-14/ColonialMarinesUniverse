@@ -254,10 +254,6 @@
     min: 0.03125, 0.1146875, 0.046
     max: 0.1, 0.128125, 0.058
     color: '#3B463B'
-  - label: broad source camouflage cloth tone 0
-    min: -0.125, 0.09375, 0.042
-    max: -0.059375, 0.125, 0.049
-    color: '#465746'
   - label: broad source camouflage cloth tone 1
     min: 0.04375, 0.05625, 0.042
     max: 0.1, 0.09375, 0.049
@@ -2760,7 +2756,7 @@
     yaw: -136.092703
   - label: left insulated lower skirt continuous woven panel
     min: -0.171875, -0.225, 0.007
-    max: -0.0140625, -0.096875, 0.055
+    max: 0.140625, -0.096875, 0.055
     color: '#D5CCC3'
   - label: left insulated lower skirt left bound seam
     min: -0.171875, -0.225, 0.006
@@ -2768,11 +2764,11 @@
     color: '#635C59'
   - label: left insulated lower skirt right bound seam
     min: -0.0225, -0.225, 0.006
-    max: -0.0140625, -0.096875, 0.058
+    max: -0.00875, -0.096875, 0.058
     color: '#635C59'
   - label: left insulated lower skirt lower turned hem
     min: -0.171875, -0.225, 0.006
-    max: -0.0140625, -0.2134375, 0.061
+    max: 0.140625, -0.2134375, 0.061
     color: '#635C59'
   - label: left insulated lower skirt left restrained cloth crease
     min: -0.1517187, -0.17, 0.049
@@ -2790,21 +2786,9 @@
     min: -0.153125, -0.1890625, 0.048
     max: -0.0328125, -0.13125, 0.069
     color: '#A69D97'
-  - label: right insulated lower skirt continuous woven panel
-    min: -0.0171875, -0.225, 0.007
-    max: 0.140625, -0.096875, 0.055
-    color: '#D5CCC3'
-  - label: right insulated lower skirt left bound seam
-    min: -0.0171875, -0.225, 0.006
-    max: -0.00875, -0.096875, 0.058
-    color: '#635C59'
   - label: right insulated lower skirt right bound seam
     min: 0.1321875, -0.225, 0.006
     max: 0.140625, -0.096875, 0.058
-    color: '#635C59'
-  - label: right insulated lower skirt lower turned hem
-    min: -0.0171875, -0.225, 0.006
-    max: 0.140625, -0.2134375, 0.061
     color: '#635C59'
   - label: right insulated lower skirt left restrained cloth crease
     min: 0.0029688, -0.17, 0.049

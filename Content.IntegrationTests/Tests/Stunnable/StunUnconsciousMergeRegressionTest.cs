@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Server.Atmos.Components; // CMU14
 using Content.Server.Stunnable;
 using Content.Shared._RMC14.Fireman;
 using Content.Shared._RMC14.ShakeStun;
@@ -499,9 +500,20 @@ public sealed class StunUnconsciousMergeRegressionTest : GameTest
         {
             var status = Server.System<NewStatusEffectsSystem>();
             var stun = Server.System<StunSystem>();
+
+            // CMU14: these spawn in nullspace with no air, so barotrauma hits them for 2 blunt on its
+            // next 1s tick. that's exactly the sleep wake threshold, so a tick landing inside the
+            // 3 we wait woke the raw sleeper and made this flaky. pressure isn't what we're testing
+            EntityUid SpawnSleeper()
+            {
+                var uid = SSpawn("StunUnconsciousMergeTarget");
+                SEntMan.RemoveComponent<BarotraumaComponent>(uid);
+                return uid;
+            }
+
             foreach (var owner in new[] { "StatusEffectForcedSleeping", "StatusEffectSSDSleeping" })
             {
-                var target = SSpawn("StunUnconsciousMergeTarget");
+                var target = SpawnSleeper();
                 targets.Add(target);
                 Assert.That(
                     status.TryUpdateStatusEffectDuration(target, owner, TimeSpan.FromSeconds(10)),
@@ -513,7 +525,7 @@ public sealed class StunUnconsciousMergeRegressionTest : GameTest
                 stun.TryClearStunAndKnockdown(target);
             }
 
-            rawSleep = SSpawn("StunUnconsciousMergeTarget");
+            rawSleep = SpawnSleeper();
             SEntMan.EnsureComponent<SleepingComponent>(rawSleep);
             Assert.That(stun.TryParalyze(rawSleep, TimeSpan.FromSeconds(5), refresh: true, force: true), Is.True);
             Assert.That(status.HasStatusEffect(rawSleep, ParalyzeId), Is.True);

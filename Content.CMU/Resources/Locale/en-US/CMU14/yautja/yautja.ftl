@@ -785,6 +785,7 @@ cmu-yautja-butcher-procedure-right-leg = Delimb - Right Leg
 cmu-yautja-butcher-procedure-left-leg = Delimb - Left Leg
 cmu-yautja-butcher-part-finished = You finish removing a part from {$target}.
 cmu-yautja-butcher-part-missing = The victim lacks that body part.
+cmu-yautja-butcher-part-failed = The part will not come free.
 cmu-yautja-prey-claim-self = You have claimed {$target} as your trophy.
 cmu-yautja-prey-claim-broadcast = {$hunter} has claimed {$target} as their trophy.
 cmu-yautja-prey-scalp-claim-self = You have claimed the scalp of {$target} as your trophy.

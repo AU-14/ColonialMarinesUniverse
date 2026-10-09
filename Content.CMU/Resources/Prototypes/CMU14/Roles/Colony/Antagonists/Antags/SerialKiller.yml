@@ -1,11 +1,10 @@
 - type: antagSpecifier
+  parent: CMUAntagSpecifierColonyBase
   id: SerialKiller
   prefRoles: [ SerialKillerRole ]
   jobBlacklistGroup:
-  - AllGovforJobs
   - AllOpforJobs
   - AllCLFJobs
-# - AllColonyDepartmentHeadJobs
   - AllSynthJobs
   briefing:
     text: serialkiller-role-greeting

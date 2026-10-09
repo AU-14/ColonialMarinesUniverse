@@ -2624,8 +2624,8 @@ public sealed partial class HardpointSystem : EntitySystem
     // Used to Rejuv (Content.Server/Blackfoot/VehicleRejuvenateSystem)
     public void ResetAllHardpointsToFullHealth(EntityUid vehicle)
     {
-        // CMU14: service/reset paths cannot revive a permanently wrecked vehicle.
-        if (IsDestroyedBeyondRepair(vehicle))
+        // CMU14: resets don't bring a wreck back either
+        if (IsWrecked(vehicle))
             return;
 
         if (!TryComp<HardpointSlotsComponent>(vehicle, out var hardpoints)

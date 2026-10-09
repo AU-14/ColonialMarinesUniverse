@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.CMU14.Atmos;
 using Content.Server._RMC14.Atmos;
 using Content.Shared.CMU14.Fire;
 using Content.Shared._RMC14.Atmos;
@@ -36,7 +37,7 @@ namespace Content.Server.CMU14.Fire;
 ///      A configurable scatter roll may also spawn additional tile fires in a
 ///      radius around the igniting entity.
 ///
-/// Ground fire (<see cref="TileFireComponent"/>) also spreads to nearby
+/// AU14 ground fire (<see cref="CMUAllowFireSpreadComponent"/>) also spreads to nearby
 /// <see cref="FlamabilityComponent"/> entities using the same radius/chance logic.
 ///
 /// Burn duration: 50–340 s (configurable). After burn-out the entity is marked
@@ -199,7 +200,8 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
         var tileQuery = EntityQueryEnumerator<TileFireComponent, TransformComponent>();
         while (tileQuery.MoveNext(out var uid, out _, out var xform))
         {
-            if (!_tileFireNextSpread.TryGetValue(uid, out var nextSpread) || now < nextSpread)
+            if (!HasComp<CMUAllowFireSpreadComponent>(uid) ||
+                !_tileFireNextSpread.TryGetValue(uid, out var nextSpread) || now < nextSpread)
                 continue;
 
             _tileFireNextSpread[uid] = now + BaseSpreadInterval;
@@ -268,6 +270,9 @@ public sealed partial class AU14FireSpreadSystem : EntitySystem
 
     private void OnTileFireInit(EntityUid uid, TileFireComponent _, ComponentInit args)
     {
+        if (!HasComp<CMUAllowFireSpreadComponent>(uid))
+            return;
+
         // Stagger initial spread so a batch of new fires doesn't all query at once.
         _tileFireNextSpread[uid] = _timing.CurTime + BaseSpreadInterval;
     }
