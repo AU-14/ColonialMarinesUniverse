@@ -1968,45 +1968,45 @@
       "label": "Bobda blueraspberry can",
       "file": "CMU3DBobdaBlueCloud.glb",
       "status": "draft",
-      "parts": 45,
-      "triangles": 644,
-      "sha256": "dde66a9f2b95e435fd410f8a900f83f9201651a250454461a0a4bee2ae1cb99e",
+      "parts": 22,
+      "triangles": 420,
+      "sha256": "2b2152fcf8cf6b3373110cc3c9c961ade0e07783773a7fff5bfc0a730ccd5faa",
       "sourcePrototypes": [
         "CMDrinkCanBobdaBlue"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 96
+      "storedFrameParts": 50
     },
     {
       "id": "CMU3DBobdaCherryCloud",
       "label": "Bobda cherry can",
       "file": "CMU3DBobdaCherryCloud.glb",
       "status": "draft",
-      "parts": 45,
-      "triangles": 644,
-      "sha256": "a4ef57eb9c9d96fdfc8d6069ba1b04e7e7dd826647228088435cafc49f89bf9c",
+      "parts": 22,
+      "triangles": 420,
+      "sha256": "05003f42ca3af04a75758aca60389787459219ad23b4157e9a56cc6f53cadf75",
       "sourcePrototypes": [
         "CMDrinkCanBobdaCherry"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 96
+      "storedFrameParts": 50
     },
     {
       "id": "CMU3DBobdaClassicCloud",
       "label": "Bobda classic can",
       "file": "CMU3DBobdaClassicCloud.glb",
       "status": "draft",
-      "parts": 45,
-      "triangles": 644,
-      "sha256": "c4355d59d3dce04e150649683164c3860113a98e747534b4017007f347771c83",
+      "parts": 22,
+      "triangles": 420,
+      "sha256": "8b32b7e8aaabc5e6da55bfc7bd3930d0942aaf962c7c9c5180070035dd2fa38b",
       "sourcePrototypes": [
         "CMDrinkCanBobdaClassic"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 96
+      "storedFrameParts": 50
     },
     {
       "id": "CMU3DBodyScannerConsoleCloudEast",
@@ -2171,9 +2171,9 @@
       "label": "Bicaridine chemistry bottle",
       "file": "CMU3DBottleBicaridineCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "b96da8e75f23da11269657753688db87f2d126449126d2b34b724c3282bfbb81",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "1ef6b9c2569b5d062216d843892507152e4694d795ced53f1fecbf503e8e920a",
       "sourcePrototypes": [
         "CMBottleBicaridine"
       ]
@@ -2183,9 +2183,9 @@
       "label": "Chemistry bottle capped study",
       "file": "CMU3DBottleCappedStudyCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "8eb152e82fc8291237dd17e3b719a19aa7d46aa2ac4deccdf2fd2a7053c7d6bf",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "f558a275987aa3cecc7b1ea27fbe8db42929121527a2eeea1c750f395181d6d4",
       "sourcePrototypes": []
     },
     {
@@ -2193,9 +2193,9 @@
       "label": "Dexalin chemistry bottle",
       "file": "CMU3DBottleDexalinCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "8d8599742d9c082543d852932ca5af386ffeb06250b09a07bcc4e7f25ed632d3",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "4d1cd8ccbc14ac6609ee25aad9c7311235dd9ae78047224eb0ab99f92d81dc08",
       "sourcePrototypes": [
         "CMBottleDexalin"
       ]
@@ -2205,9 +2205,9 @@
       "label": "Dylovene chemistry bottle",
       "file": "CMU3DBottleDyloveneCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "4c93c318039cdb00e0b647e15a88f18d56736466007dd5bc42f989438e0eba42",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "75e3f11c780a11456fc203a7031eecdba831e8ef655a9b40924d788383d4a493",
       "sourcePrototypes": [
         "CMBottleDylovene"
       ]
@@ -2217,9 +2217,9 @@
       "label": "Empty chemistry bottle",
       "file": "CMU3DBottleEmptyCloud.glb",
       "status": "draft",
-      "parts": 78,
-      "triangles": 988,
-      "sha256": "fddfef76b733e38ed00ac3b74fecb0fcc6fe80be3dbac4c8b97e8ed5d7692c7c",
+      "parts": 35,
+      "triangles": 524,
+      "sha256": "2aeb06d1ce965b0b21e8b1ca2308027789553438c010167a3a4c0d57de4f952e",
       "sourcePrototypes": [
         "CMBottleEmpty"
       ]
@@ -2229,9 +2229,9 @@
       "label": "Chemistry bottle neutral fill 1 study",
       "file": "CMU3DBottleFill1StudyCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "e1e6c01913d9b46f23809146e70601743c51b2d8617835cae35689ec7f3c0210",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "0b4813c699201cd5954b5f5068180277a600115c9d17289c3f78edfcd4c0c32a",
       "sourcePrototypes": []
     },
     {
@@ -2239,9 +2239,9 @@
       "label": "Chemistry bottle neutral fill 2 study",
       "file": "CMU3DBottleFill2StudyCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "baee1360a8c157cc9e9489183383ec93da1d70b0991594c0402587fd33617d66",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "90e8f005ee8c9cd7cd53e79eff8b5cd9fc673950060c2136cf109493d9d43cc3",
       "sourcePrototypes": []
     },
     {
@@ -2249,9 +2249,9 @@
       "label": "Chemistry bottle neutral fill 3 study",
       "file": "CMU3DBottleFill3StudyCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "33a3a8abfedfe41fd544ed863001ef5399b23128e2ac3a733f2bcd52cee98fb3",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "9871a9c958ff26e1354d54cb21660881fc8181c555dd2bbe3219bbe5d2f2f289",
       "sourcePrototypes": []
     },
     {
@@ -2259,9 +2259,9 @@
       "label": "Chemistry bottle neutral fill 4 study",
       "file": "CMU3DBottleFill4StudyCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "4fcd0130f3edb3bed67ed04fc3be8b7a09645f48fb4a84c53e530175951b2ed3",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "0b1e5b5e540773e1544f9c00c708f34f5c739af19cb2b737f1583e5e383774c8",
       "sourcePrototypes": []
     },
     {
@@ -2269,9 +2269,9 @@
       "label": "Chemistry bottle neutral fill 5 study",
       "file": "CMU3DBottleFill5StudyCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "b0be724ae96c54064f6a685baf3dda916b49e9ba0db1f538e162ceb43f899937",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "487134715382128ce8d79bce09656407cce83083d2cd90248198491cf7501d46",
       "sourcePrototypes": []
     },
     {
@@ -2279,9 +2279,9 @@
       "label": "Inaprovaline chemistry bottle",
       "file": "CMU3DBottleInaprovalineCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "e51b2e06d1d1cf8de74503c965cd0501f9d5a7232f46fd91537d7631bd7e84b3",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "8ec2f4aba80ad164eb527fa0207e05c6535087bbc46fc59f1ad06b2b6f5a6400",
       "sourcePrototypes": [
         "CMBottleInaprovaline"
       ]
@@ -2291,9 +2291,9 @@
       "label": "Kelotane chemistry bottle",
       "file": "CMU3DBottleKelotaneCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "e4c4a32a23b204b30fa1a134444aa8f8374d2482f109596067990a8fcee74bc5",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "35fb563a11b017afc1b3fbab6bc0399e6dff5675b7979be89b3174ba6244e18f",
       "sourcePrototypes": [
         "CMBottleKelotane"
       ]
@@ -2303,9 +2303,9 @@
       "label": "Tricordrazine chemistry bottle",
       "file": "CMU3DBottleTricordrazineCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 1116,
-      "sha256": "bdccb90e6ae8d18b791e1a1f5c357176c2c5f49bc7b27a2c4fa0879d509bdfe6",
+      "parts": 37,
+      "triangles": 652,
+      "sha256": "215500b2e87566dec545deb0cf908df5d12b7ed49ed8c0b300a475f57e1b0869",
       "sourcePrototypes": [
         "CMBottleTricordrazine"
       ]
@@ -2599,9 +2599,9 @@
       "label": "Open empty CMBeakerLarge",
       "file": "CMU3DCMBeakerLargeMedicalSmallCloud.glb",
       "status": "draft",
-      "parts": 58,
-      "triangles": 748,
-      "sha256": "28952d6ce4b860b325d2e3b08041f811230a26406826c07654c3ec40ec496749",
+      "parts": 34,
+      "triangles": 460,
+      "sha256": "2e1ef266a3ef255fb4f293a236dfc0ae5becb348528a973ffdac1aa9f790e338",
       "sourcePrototypes": [
         "CMBeakerLarge"
       ]
@@ -2611,9 +2611,9 @@
       "label": "Closed lid study CMBeakerLarge",
       "file": "CMU3DCMBeakerLargeMedicalSmallCloudLidStudy.glb",
       "status": "draft",
-      "parts": 60,
-      "triangles": 876,
-      "sha256": "62161b548180d86999e9b49fc96cfa0348ad47c3ef7a096273da891427c78f88",
+      "parts": 36,
+      "triangles": 588,
+      "sha256": "8c28b95a726186a21fe3e7a97089806a9a7cd0ebec4bfc9e85052354c8d038b7",
       "sourcePrototypes": []
     },
     {
@@ -2621,9 +2621,9 @@
       "label": "Open empty CMBeaker",
       "file": "CMU3DCMBeakerMedicalSmallCloud.glb",
       "status": "draft",
-      "parts": 57,
-      "triangles": 736,
-      "sha256": "5c0694a44ef1e65c9717ed71dab8a85be49ff237a2c2b22da5191e3132f7d9fb",
+      "parts": 33,
+      "triangles": 448,
+      "sha256": "55c1400ee161cf1f055b884b3523d8293dad1475f8722e6145d12fc005e884bd",
       "sourcePrototypes": [
         "CMBeaker"
       ]
@@ -2633,9 +2633,9 @@
       "label": "Closed lid study CMBeaker",
       "file": "CMU3DCMBeakerMedicalSmallCloudLidStudy.glb",
       "status": "draft",
-      "parts": 59,
-      "triangles": 864,
-      "sha256": "189f04d6705c2a740d9637b0d8fa08d40a78de3c0f2c006af38adfdf157b0230",
+      "parts": 35,
+      "triangles": 576,
+      "sha256": "b9483d13c99c0f2bae526eff0205f01eb5fc8c023cb4aa4427d42fe7930719b8",
       "sourcePrototypes": []
     },
     {
@@ -2840,30 +2840,30 @@
       "label": "RMC cola can",
       "file": "CMU3DCMDrinkCanColaDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 49,
-      "triangles": 692,
-      "sha256": "830d6dd8b0694bab094cc7d2547bc382bb3c924aeffb01fea2d8122ae2fc1df1",
+      "parts": 34,
+      "triangles": 564,
+      "sha256": "2e6950302d54665084a419c2aa0f7460fbe222f3cd0292c41e2596a67c66cec8",
       "sourcePrototypes": [
         "CMDrinkCanCola"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 97
+      "storedFrameParts": 67
     },
     {
       "id": "CMU3DCMDrinkCanMountainWindDrinksExtraCloud",
       "label": "Mountain Wind can",
       "file": "CMU3DCMDrinkCanMountainWindDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 49,
-      "triangles": 692,
-      "sha256": "c1f0176d791b94ded0f7b95be10df57648362358ef202a5d4c61531ba9d5dcf1",
+      "parts": 34,
+      "triangles": 564,
+      "sha256": "18c485873ddcdc81a60440d69715ec01df762ebe70641887eaceb49f584f1477",
       "sourcePrototypes": [
         "CMDrinkCanMountainWind"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 97
+      "storedFrameParts": 67
     },
     {
       "id": "CMU3DCMFirstAidKitSurgeryMedicalSmallCloud",
@@ -4568,9 +4568,9 @@
       "label": "Open full cryoxadone beaker",
       "file": "CMU3DCryoxadoneBeakerSmallDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 40,
-      "triangles": 636,
-      "sha256": "51e6c174855d7869e256d85eeda58ce88ebc2d77260a3e4e55022212c28aa083",
+      "parts": 24,
+      "triangles": 444,
+      "sha256": "71476b90eaa299555a7609956d44df9b4c88ee15ab9580abb94bb5d8ef34f96d",
       "sourcePrototypes": [
         "CryoxadoneBeakerSmall"
       ]
@@ -4580,9 +4580,9 @@
       "label": "Empty open cryoxadone vessel study",
       "file": "CMU3DCryoxadoneBeakerSmallDrinksExtraCloudEmptyStudy.glb",
       "status": "draft",
-      "parts": 38,
-      "triangles": 508,
-      "sha256": "85049ec1bb9977a7768982e76f969e838b3ce08d9090877b8c236c11c1e4056c",
+      "parts": 22,
+      "triangles": 316,
+      "sha256": "707e392da440c7e016623d0fcb781a1ea7e468d1bd9411fcb3c36907891b20fc",
       "sourcePrototypes": []
     },
     {
@@ -5394,9 +5394,9 @@
       "label": "Empty capped whiskey bottle",
       "file": "CMU3DDrinkBottleWhiskeyDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 78,
-      "triangles": 1028,
-      "sha256": "d9a356ac019b465c42326698330bbb9fe6e78578e3e7df36617b871d398c296e",
+      "parts": 55,
+      "triangles": 804,
+      "sha256": "724081afc4edd9337a72d622232ce7593c2881975fa5b6f280145d672e28d0ee",
       "sourcePrototypes": [
         "DrinkBottleWhiskey"
       ]
@@ -5406,9 +5406,9 @@
       "label": "Empty open whiskey study",
       "file": "CMU3DDrinkBottleWhiskeyDrinksExtraCloudOpenStudy.glb",
       "status": "draft",
-      "parts": 76,
-      "triangles": 900,
-      "sha256": "79412709f90d1f25949f667342e7a0c1433c9823b1c46f86e05df2ffb1f19087",
+      "parts": 53,
+      "triangles": 676,
+      "sha256": "4d33c64da7b10c5f4a09c25274bcc8ddf5d666924cd8a3baceac3808a0cde868",
       "sourcePrototypes": []
     },
     {
@@ -5431,15 +5431,15 @@
       "label": "Closed coffee liqueur bottle",
       "file": "CMU3DDrinkCoffeeLiqueurBottleFullDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 78,
-      "triangles": 1028,
-      "sha256": "b44d768a74d182b293a1b8bdce2287e09e60c91bdba7db14432aa87b47cb099d",
+      "parts": 55,
+      "triangles": 804,
+      "sha256": "138b45b53b92eaa2a69e951784b48ee99978f9baf2865b6efd13accd362fe759",
       "sourcePrototypes": [
         "DrinkCoffeeLiqueurBottleFull"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 154
+      "storedFrameParts": 108
     },
     {
       "id": "CMU3DDrinkCoffeeLiqueurGlass",
@@ -5461,30 +5461,30 @@
       "label": "Empty open cola can",
       "file": "CMU3DDrinkColaCanEmptyDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 64,
-      "triangles": 820,
-      "sha256": "3abdc1542137405787edcf67d1a3e0c3b17b1728de2c0623bb80560db46c57e5",
+      "parts": 49,
+      "triangles": 692,
+      "sha256": "b06f15da816c7e374798a86e5421e37946a5d7789e3dcf0bb9fd99b33c1511db",
       "sourcePrototypes": [
         "DrinkColaCanEmpty"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 113
+      "storedFrameParts": 83
     },
     {
       "id": "CMU3DDrinkEnergyDrinkCanDrinksExtraCloud",
       "label": "Energy drink can",
       "file": "CMU3DDrinkEnergyDrinkCanDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 49,
-      "triangles": 692,
-      "sha256": "390eedd24608ec840adf80276ac8df5185de12742d7b5408c69e5c88340488bf",
+      "parts": 34,
+      "triangles": 564,
+      "sha256": "7af1e3abae152c279342f772e0cba8475573354e550a3fa686d9a164676eea63",
       "sourcePrototypes": [
         "DrinkEnergyDrinkCan"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 114
+      "storedFrameParts": 84
     },
     {
       "id": "CMU3DDrinkGrapeSodaGlass",
@@ -5551,9 +5551,9 @@
       "label": "Empty number-one mug",
       "file": "CMU3DDrinkMugOneDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 45,
-      "triangles": 1700,
-      "sha256": "87d583ef1c4d7dd0d092750d1adbb961b7a1ee1d2f49be820eacc57801efbd52",
+      "parts": 29,
+      "triangles": 1508,
+      "sha256": "1e3b4714df7c491140f12f590f636098a29cedfe912bf6044f467efaca0bb22f",
       "sourcePrototypes": [
         "DrinkMugOne"
       ]
@@ -12787,9 +12787,9 @@
       "label": "Open empty RMCBeakerHighCapacity",
       "file": "CMU3DRMCBeakerHighCapacityMedicalSmallCloud.glb",
       "status": "draft",
-      "parts": 55,
-      "triangles": 712,
-      "sha256": "11cf0364bf9c6f5da38540c794dca22a408158c15fd8139459f424e581aea768",
+      "parts": 31,
+      "triangles": 424,
+      "sha256": "b70a5c342444fb9ba86045d6bd1046ff99e6565c2153e812208c4fbb58449484",
       "sourcePrototypes": [
         "RMCBeakerHighCapacity"
       ]
@@ -12799,9 +12799,9 @@
       "label": "Closed lid study RMCBeakerHighCapacity",
       "file": "CMU3DRMCBeakerHighCapacityMedicalSmallCloudLidStudy.glb",
       "status": "draft",
-      "parts": 57,
-      "triangles": 840,
-      "sha256": "597fbf0c390c459d2a6074f0fb1a5cc75c4514f22ae37a400ee8f8d39dcc159f",
+      "parts": 33,
+      "triangles": 552,
+      "sha256": "507bf9bb3b5ee190761d95fbec186f181e4d118add8a9930cd1d79cf207a2f95",
       "sourcePrototypes": []
     },
     {
@@ -13632,9 +13632,9 @@
       "label": "Empty coffee mug",
       "file": "CMU3DRMCCoffeeCupDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 42,
-      "triangles": 1664,
-      "sha256": "8ea63fedbdd48711fdd2679ec86efd3f6dd52e9117d9ffded1f634d416004917",
+      "parts": 26,
+      "triangles": 1472,
+      "sha256": "d5f3818a8c2250b4d239d5b17e8c45f30d4e8d19e2395863e414125ff8f23233",
       "sourcePrototypes": [
         "RMCCoffeeCup"
       ]
@@ -13644,9 +13644,9 @@
       "label": "Full coffee mug",
       "file": "CMU3DRMCCoffeeCupFilledDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 44,
-      "triangles": 1792,
-      "sha256": "f60382ab96cbebb42012bd276b9a25e8313b4e684f07e4bb8a14b0382104ceaf",
+      "parts": 28,
+      "triangles": 1600,
+      "sha256": "f4e5d091f768e83a5411c020b4034ad5c4b32a49120cd8d37203e55b33d254a1",
       "sourcePrototypes": [
         "RMCCoffeeCupFilled"
       ]
@@ -13656,9 +13656,9 @@
       "label": "Coffee level 1 study",
       "file": "CMU3DRMCCoffeeCupFilledDrinksExtraCloudFill1Study.glb",
       "status": "draft",
-      "parts": 44,
-      "triangles": 1792,
-      "sha256": "6edc23e91f6f8df6d34a540989b339365faab693b057aae2ad50b1b1641be886",
+      "parts": 28,
+      "triangles": 1600,
+      "sha256": "f03b86dfea9e611a78e993757e55305d402b4fd32d14cc06954e902bd635aad2",
       "sourcePrototypes": []
     },
     {
@@ -13666,9 +13666,9 @@
       "label": "Coffee level 2 study",
       "file": "CMU3DRMCCoffeeCupFilledDrinksExtraCloudFill2Study.glb",
       "status": "draft",
-      "parts": 44,
-      "triangles": 1792,
-      "sha256": "33208ed826c2168352d8312789d5691359c5165d229abf1c4316b0cbcc130652",
+      "parts": 28,
+      "triangles": 1600,
+      "sha256": "fef353ce75d4fff61e85e44121fd5185a30d51dd344899c3307047ef3bfaa44f",
       "sourcePrototypes": []
     },
     {
@@ -13700,45 +13700,45 @@
       "label": "Weyland-Yutani sake bottle",
       "file": "CMU3DRMCDrinkAlcoholSakeDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 78,
-      "triangles": 1028,
-      "sha256": "ff66cca8d68cf1c52c1954d79e61b79d8d18abc51eef6b7abba48d4e876d14b9",
+      "parts": 55,
+      "triangles": 804,
+      "sha256": "1fed125c583a5dd25d7881ac6b421da42dc0d712095b5372f54e53908a48f67b",
       "sourcePrototypes": [
         "RMCDrinkAlcoholSake"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 78
+      "storedFrameParts": 55
     },
     {
       "id": "CMU3DRMCDrinkAlcoholVodkaDrinksExtraCloud",
       "label": "Red Star vodka bottle",
       "file": "CMU3DRMCDrinkAlcoholVodkaDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 78,
-      "triangles": 1028,
-      "sha256": "4360ecbae3981c0b35ea4232b924b1916f169e2c71f02a85493cc434c8f4bf08",
+      "parts": 55,
+      "triangles": 804,
+      "sha256": "ca1cfe52437516cf96a96d80b892bf2a63e6385886a96723de61ba80ab3f6a1d",
       "sourcePrototypes": [
         "RMCDrinkAlcoholVodka"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 78
+      "storedFrameParts": 55
     },
     {
       "id": "CMU3DRMCDrinkAlcoholWhiskeyDrinksExtraCloud",
       "label": "Uncle Git reserve bottle",
       "file": "CMU3DRMCDrinkAlcoholWhiskeyDrinksExtraCloud.glb",
       "status": "draft",
-      "parts": 78,
-      "triangles": 1028,
-      "sha256": "dffa1bf7d061615480542cdab338bdbd18740030a0d9d72aec9de43c1a5827c9",
+      "parts": 55,
+      "triangles": 804,
+      "sha256": "c2dc148d64e18b0dd9a1d7500c2defb0f9925f79ab5553042f9482bab37b6c5c",
       "sourcePrototypes": [
         "RMCDrinkAlcoholWhiskey"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 78
+      "storedFrameParts": 55
     },
     {
       "id": "CMU3DRMCDrinkGlass",
@@ -16192,9 +16192,9 @@
       "label": "Reagent jug capped study",
       "file": "CMU3DReagentJugCappedStudyCloud.glb",
       "status": "draft",
-      "parts": 51,
-      "triangles": 976,
-      "sha256": "97474f93d134c886e8b227fda555369493149d93f5e75b2ee22fe88f975c3631",
+      "parts": 43,
+      "triangles": 880,
+      "sha256": "1519b9a5e201864878b06ec7cfb88ec9e118de41ad8171728b7d712dabb02333",
       "sourcePrototypes": []
     },
     {
@@ -16202,9 +16202,9 @@
       "label": "Empty open reagent jug",
       "file": "CMU3DReagentJugCloud.glb",
       "status": "draft",
-      "parts": 49,
-      "triangles": 848,
-      "sha256": "59ca2f3fd8d03a3eb65ce37cbb7ce69eaa7f84a0bce4a6ae85dcf53c17c88bd5",
+      "parts": 41,
+      "triangles": 752,
+      "sha256": "667766198607880324b11634d933d6e2bc17293024fdd3c72c05930b91d773a7",
       "sourcePrototypes": [
         "RMCReagentJug"
       ]
@@ -16214,9 +16214,9 @@
       "label": "Reagent jug neutral fill 1 study",
       "file": "CMU3DReagentJugFill1StudyCloud.glb",
       "status": "draft",
-      "parts": 51,
-      "triangles": 872,
-      "sha256": "43429cfdf26af70be5a43cd279dc036522395d8abcc8275b5f719d8aaf303fe7",
+      "parts": 43,
+      "triangles": 776,
+      "sha256": "a48d8d347c1b2baa6b25f834c27451ee07749ecd6ef20780eca83f377fbb9d5f",
       "sourcePrototypes": []
     },
     {
@@ -16224,9 +16224,9 @@
       "label": "Reagent jug neutral fill 2 study",
       "file": "CMU3DReagentJugFill2StudyCloud.glb",
       "status": "draft",
-      "parts": 51,
-      "triangles": 872,
-      "sha256": "0cfce83d97d81603925cab44c96d7afa44ebfc75b20b03f090c0fa716f7f6160",
+      "parts": 43,
+      "triangles": 776,
+      "sha256": "56d822b02ba38e55f4d09f8864f3a192c48350a923cd7f3f726e27972db426f9",
       "sourcePrototypes": []
     },
     {
@@ -16234,9 +16234,9 @@
       "label": "Reagent jug neutral fill 3 study",
       "file": "CMU3DReagentJugFill3StudyCloud.glb",
       "status": "draft",
-      "parts": 51,
-      "triangles": 872,
-      "sha256": "6714320d8144ba58e2b3947ff25903a59dce016224661c2403ece35e72347dca",
+      "parts": 43,
+      "triangles": 776,
+      "sha256": "3b0cdf2a54afe271282b99940c6f9aad4981ab1a9e9016ae3f8bd36e13144f26",
       "sourcePrototypes": []
     },
     {
@@ -16244,9 +16244,9 @@
       "label": "Reagent jug neutral fill 4 study",
       "file": "CMU3DReagentJugFill4StudyCloud.glb",
       "status": "draft",
-      "parts": 51,
-      "triangles": 872,
-      "sha256": "ce592cf5d949945fd3373cb0d56698a016a497a33f2c3cf9dabcc1ac6d3ab15d",
+      "parts": 43,
+      "triangles": 776,
+      "sha256": "b6578b9a1770d53431d76d73b7bbc12b80c97560654dd2f05d13ce01b9ac5602",
       "sourcePrototypes": []
     },
     {
@@ -16254,9 +16254,9 @@
       "label": "Reagent jug neutral fill 5 study",
       "file": "CMU3DReagentJugFill5StudyCloud.glb",
       "status": "draft",
-      "parts": 51,
-      "triangles": 872,
-      "sha256": "007d79d7a1b52e8a1b7d1fd5aebab69b2fdebe7a047da2a686526a7caa06e272",
+      "parts": 43,
+      "triangles": 776,
+      "sha256": "7f24ded6644d2973a3efa4576c707a2195c9a49cc5b05f8f5722b1487c88c935",
       "sourcePrototypes": []
     },
     {
