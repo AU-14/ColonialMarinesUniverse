@@ -73,6 +73,14 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
                 ("spacing", agent.SpacingDecision), ("destination", agent.SpacingDestination?.ToString() ?? "-"),
                 ("cover", agent.RejectedCover), ("preparing", agent.PreparingWork),
                 ("working", agent.WorkItem != null)));
+            agent.TargetAssignments.TryGetValue(agent.Target ?? EntityUid.Invalid, out var assigned);
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-threat-status",
+                ("enemies", agent.VisibleThreats.Count), ("sectors", agent.OccupiedThreatSectors),
+                ("shooters", agent.RecentShooters.Count), ("crossfire", agent.Crossfire),
+                ("moves", agent.CrossfireMoves), ("assigned", assigned), ("responses", agent.FlankResponses)));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-equipment-status",
+                ("weapon", agent.WeaponDecision), ("switches", agent.WeaponSwitches), ("rockets", agent.RocketsFired),
+                ("grenade", agent.GrenadeDecision), ("smokes", agent.SmokesThrown), ("movingShots", agent.TotalMovingShots)));
         }
     }
 }

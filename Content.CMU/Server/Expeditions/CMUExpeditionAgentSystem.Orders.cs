@@ -48,6 +48,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.Entrench = entrench;
         agent.Target = null;
         agent.LastSeen = null;
+        agent.PendingWeapon = null;
         return true;
     }
 
@@ -69,6 +70,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.OrderBlocked = false;
         ClearCover(agent);
         StopSpacing(uid, agent);
+        ClearThreatAssessment(agent);
         _steering.Unregister(uid);
         agent.State = CMUExpeditionAgentState.Guard;
     }

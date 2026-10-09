@@ -32,7 +32,8 @@ public sealed partial class CMUExpeditionAgentSystem
             MaskBits = (long) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable),
             Flags = QueryFlags.Dynamic | QueryFlags.Static,
         }));
-        clear = !fixtures.Any(fixture => fixture.Entity != uid && !HasComp<NpcFactionMemberComponent>(fixture.Entity));
+        clear = !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide &&
+            fixture.Entity != uid && !HasComp<NpcFactionMemberComponent>(fixture.Entity));
         _bodyClearCache[point] = clear;
         return clear;
     }
@@ -189,12 +190,9 @@ public sealed partial class CMUExpeditionAgentSystem
                 if (distance >= agent.MinimumFireRange && distance <= agent.FireRange - 0.75f &&
                     FiringLaneClear(uid, candidate.Position, threat))
                 {
-                    var exposure = 0f;
-                    foreach (var otherThreat in agent.VisibleThreats)
-                    {
-                        if (!_transform.InRange(otherThreat, threat, 1) && !Sheltered(uid, candidate.Position, otherThreat))
-                            exposure += 3;
-                    }
+                    // Score a bounded set of attack bearings. Shelter eligibility above
+                    // still checks every visible threat; a cheap score never certifies safety.
+                    var exposure = ExposureScore(uid, agent, candidate.Position) * 2;
                     peeks.Add((candidate.Position, exposure));
                 }
             }
@@ -212,7 +210,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 var preferredRange = agent.PreferredFireRange + agent.Stress * 2;
                 var score = -anchor.Steps * 0.6f - stepOut - Math.Abs(range - preferredRange) * 0.5f - exposure;
                 // Reject inferior pairs before their expensive corridor casts; exposure is cached once per peek.
-                if (score <= bestScore || !DryPassage(uid, anchor.Position, peek) || !ClearLane(uid, anchor.Position, peek, 0.35f, movement: true))
+                if (score <= bestScore || !TraversablePassage(uid, anchor.Position, peek) || !ClearLane(uid, anchor.Position, peek, 0.35f, movement: true))
                     continue;
                 bestScore = score;
                 best = (anchor.Position, peek);
@@ -231,7 +229,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.MaxSearchMilliseconds = Math.Max(agent.MaxSearchMilliseconds, agent.LastSearchMilliseconds);
     }
 
-    private bool DryPassage(EntityUid uid, EntityCoordinates from, EntityCoordinates to)
+    private bool TraversablePassage(EntityUid uid, EntityCoordinates from, EntityCoordinates to)
     {
         if (_transform.ToMapCoordinates(from).MapId != _transform.ToMapCoordinates(to).MapId)
             return false;
@@ -257,15 +255,17 @@ public sealed partial class CMUExpeditionAgentSystem
         if (delta.LengthSquared() < 0.01f)
             return false;
         var side = Vector2.Normalize(new Vector2(-delta.Y, delta.X));
+        var currentExposure = ExposureScore(uid, agent, start);
         foreach (var distance in new[] { 0.75f, -0.75f, 1.25f, -1.25f, 2f, -2f })
         {
             var candidate = start.Offset(side * distance);
             if (agent.Home is not { } home || !_transform.InRange(candidate, home, agent.LeashRange) ||
                 agent.CoverAnchor is { } anchor && !_transform.InRange(candidate, anchor, 3.6f) ||
                 agent.FailedPosition is { } failed && now < agent.AvoidPositionUntil && _transform.InRange(candidate, failed, 0.6f) ||
-                Reserved(uid, candidate) || !DryPassage(uid, start, candidate))
+                Reserved(uid, candidate) || !TraversablePassage(uid, start, candidate))
                 continue;
             if (!ClearLane(uid, start, candidate, 0.3f, movement: true) ||
+                agent.Crossfire && ExposureScore(uid, agent, candidate) > currentExposure + 0.5f ||
                 !_guns.TryGetGun(uid, out var gun) || !SafeShot(uid, agent, gun, threat, candidate))
                 continue;
             agent.PeekPosition = candidate;

@@ -21,8 +21,9 @@ public sealed partial class CMUExpeditionAgentSystem
         if (HasComp<ActorComponent>(ent))
             return;
         EnsureComp<CMUExpeditionWeaponComponent>(args.Used);
-        if (!_npcs.Enabled || !_mobs.IsAlive(ent) || ent.Comp.State != CMUExpeditionAgentState.Engage ||
-            _timing.CurTime >= ent.Comp.BurstEnd || ent.Comp.ShotsFired >= VolleySize(ent.Comp) ||
+        var stationary = ent.Comp.State == CMUExpeditionAgentState.Engage && ent.Comp.Action == null &&
+            ent.Comp.PendingWeapon == null && _timing.CurTime < ent.Comp.BurstEnd && ent.Comp.ShotsFired < VolleySize(ent.Comp);
+        if (!_npcs.Enabled || !_mobs.IsAlive(ent) || (!stationary && !MovingShotAllowed(ent, ent.Comp)) ||
             !TryComp<GunComponent>(args.Used, out var gun) || !TryAimPoint(ent, ent.Comp, gun, out var point) ||
             !SafeShot(ent, ent.Comp, gun, point))
             args.Cancel();
@@ -33,35 +34,66 @@ public sealed partial class CMUExpeditionAgentSystem
         if (args.User is not { } user || HasComp<ActorComponent>(user) ||
             !TryComp<CMUExpeditionAgentComponent>(user, out var agent))
             return;
-        args.Shots = Math.Min(args.Shots, Math.Max(0, VolleySize(agent) - agent.ShotsFired));
+        args.Shots = Math.Min(args.Shots, Math.Max(0,
+            VolleySize(agent) - (agent.MovingFire && CanFireWhileMoving(user, agent) ? agent.MovingShotsFired : agent.ShotsFired)));
     }
 
     private void OnGunShot(Entity<CMUExpeditionWeaponComponent> ent, ref GunShotEvent args)
     {
         if (HasComp<ActorComponent>(args.User) || !TryComp<CMUExpeditionAgentComponent>(args.User, out var agent))
             return;
+        agent.LastShotAt = _timing.CurTime;
+        if (TryComp<CMUExpeditionWeaponRoleComponent>(ent, out var role) && role.Rocket)
+        {
+            agent.RocketsFired++;
+            agent.NextRocket = _timing.CurTime + TimeSpan.FromSeconds(20);
+            agent.NextWeaponChoice = _timing.CurTime;
+            var squad = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
+            while (squad.MoveNext(out var other, out var buddy))
+                if (SameSquad(args.User, agent, other, buddy))
+                    buddy.NextRocket = agent.NextRocket;
+        }
+        if (agent.MovingFire && CanFireWhileMoving(args.User, agent))
+        {
+            if (agent.MovingShotsFired == 0)
+                agent.MovingBurstEnd = _timing.CurTime + agent.BurstDuration;
+            agent.MovingShotsFired += args.Ammo.Count;
+            agent.TotalMovingShots += args.Ammo.Count;
+            if (agent.MovingShotsFired >= VolleySize(agent))
+                agent.NextMovingBurst = _timing.CurTime + RecoveryDelay(agent);
+            return;
+        }
         // Readiness delays must not consume the volley before the rifle actually fires.
         if (agent.ShotsFired == 0)
             agent.BurstEnd = _timing.CurTime + agent.BurstDuration;
         agent.ShotsFired += args.Ammo.Count;
-        agent.LastShotAt = _timing.CurTime;
         if (agent.ShotsFired >= VolleySize(agent))
             EndBurst(args.User, agent, _timing.CurTime);
     }
 
     private void UpdateFire(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.Action != null)
+        if (CanFireWhileMoving(uid, agent))
+        {
+            UpdateMovingFire(uid, agent, now);
+            return;
+        }
+        agent.MovingFire = false;
+        if (agent.Action != null || agent.PendingWeapon != null)
             return;
         var resuming = agent.State == CMUExpeditionAgentState.HoldAngle ||
             agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor == null;
         var canResume = resuming &&
-            now >= agent.FireAt && agent.Target is { } target && _mobs.IsAlive(target) && Visible(uid, target, agent.FireRange);
+            (now >= agent.FireAt || UrgentFire(agent, now)) && agent.Target is { } target && _mobs.IsAlive(target) && Visible(uid, target, agent.FireRange);
+        if (canResume && UrgentFire(agent, now))
+            agent.FireAt = now;
         if (agent.State == CMUExpeditionAgentState.HoldAngle && now >= agent.FireAt && canResume)
             Aim(agent, now, true);
         if (agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor == null && now >= agent.FireAt &&
             canResume && CanLeaveCover(uid, agent))
             Aim(agent, now);
+        if (agent.State == CMUExpeditionAgentState.Aim && UrgentFire(agent, now))
+            agent.FireAt = now;
         if (agent.State == CMUExpeditionAgentState.Aim && now >= agent.FireAt)
         {
             agent.State = CMUExpeditionAgentState.Engage;
@@ -75,8 +107,15 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         if (now >= agent.BurstEnd)
         {
-            EndBurst(uid, agent, now);
-            return;
+            // Do not spend an unfired volley on a native wield/readiness delay and then
+            // impose another aim/pause cycle. Sight and lane failures still abort below.
+            if (agent.ShotsFired == 0 && now < agent.FireAt + TimeSpan.FromSeconds(3))
+                agent.BurstEnd = now + TimeSpan.FromSeconds(0.2);
+            else
+            {
+                EndBurst(uid, agent, now);
+                return;
+            }
         }
         if (!_guns.TryGetGun(uid, out var gun) || !_guns.CanShoot(gun))
         {
@@ -193,13 +232,14 @@ public sealed partial class CMUExpeditionAgentSystem
         return true;
     }
 
-    private bool SafeShot(EntityUid uid, CMUExpeditionAgentComponent agent, GunComponent gun, EntityCoordinates point, EntityCoordinates? origin = null)
+    private bool SafeShot(EntityUid uid, CMUExpeditionAgentComponent agent, GunComponent gun, EntityCoordinates point,
+        EntityCoordinates? origin = null, HashSet<EntityUid>? nearby = null)
     {
         var start = origin ?? Transform(uid).Coordinates;
         var from = _transform.ToMapCoordinates(start);
         var to = _transform.ToMapCoordinates(point);
         var distance = Vector2.Distance(from.Position, to.Position);
-        if (from.MapId != to.MapId || distance < 0.1f)
+        if (from.MapId != to.MapId || distance < 0.1f || !SafeWeaponEffect(uid, agent, gun, start, point))
             return false;
         // Match the next native shot's recoil, including recovery since the previous shot.
         // Using maximum sustained-fire scatter made whole squads wait on empty lanes.
@@ -211,8 +251,11 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
 
         var direction = Vector2.Normalize(to.Position - from.Position);
-        var nearby = new HashSet<EntityUid>();
-        _lookup.GetEntitiesInRange(uid, agent.FireRange + 3, nearby);
+        if (nearby == null)
+        {
+            nearby = new HashSet<EntityUid>();
+            _lookup.GetEntitiesInRange(uid, agent.FireRange + 3, nearby);
+        }
         foreach (var entity in nearby)
         {
             if (entity == uid || entity == agent.Target || !IsFriendly(uid, entity) ||

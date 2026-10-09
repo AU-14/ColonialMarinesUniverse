@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Server.NPC.Components;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Movement.Components;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
@@ -9,6 +10,9 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentSystem
 {
+    private float CombatStride(EntityUid uid) => TryComp<MovementSpeedModifierComponent>(uid, out var speed)
+        ? Math.Clamp(speed.CurrentSprintSpeed * 1.6f, 0.65f, 3f) : 3;
+
     private bool IsMeleeThreat(EntityUid target) => HasComp<XenoComponent>(target) ||
         HasComp<MeleeWeaponComponent>(target) && !_guns.TryGetGun(target, out _);
 
@@ -20,22 +24,29 @@ public sealed partial class CMUExpeditionAgentSystem
         return distance - Math.Max(0, closing) * agent.RushLookAhead;
     }
 
-    private bool KeepMeleeDistance(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
+    private bool KeepCombatSpacing(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
         if (agent.RushTarget != null)
         {
             if (now >= agent.SpacingUntil)
-            {
-                CancelWork(uid, agent);
-                CancelPlan(uid, agent, false);
-                CancelTreatment(agent);
-                ClearCover(agent);
-                agent.NextSpacingSearch = now;
-                // Only the tactical response is accelerated; native wield/fire delays still apply.
-                agent.State = CMUExpeditionAgentState.Guard;
-                agent.FireAt = now;
-            }
+                BeginCombatSpacing(uid, agent, now);
             agent.SpacingUntil = now + TimeSpan.FromSeconds(1);
+        }
+        else if (now >= agent.SpacingUntil && agent.Crossfire && now >= agent.NextCrossfireMove &&
+            agent.Action == null && agent.State is CMUExpeditionAgentState.Guard or CMUExpeditionAgentState.Recover or CMUExpeditionAgentState.Watch &&
+            now - agent.LastShotAt < TimeSpan.FromSeconds(1.5) &&
+            (now - agent.LastHit < TimeSpan.FromSeconds(2) || agent.RecentShooters.Count >= 2))
+        {
+            agent.NextCrossfireMove = now + TimeSpan.FromSeconds(3);
+            if (CanMoveUnderCoveringFire(uid, agent) && CrossfireStep(uid, agent, Transform(uid).Coordinates) is { } step)
+            {
+                BeginCombatSpacing(uid, agent, now);
+                agent.SpacingUntil = agent.SpacingMoveUntil = now + TimeSpan.FromSeconds(2);
+                agent.SpacingDestination = step;
+                agent.SpacingDecision = "reducing-crossfire";
+                agent.CrossfireMoves++;
+                Move(uid, step);
+            }
         }
         if (now >= agent.SpacingUntil)
         {
@@ -84,6 +95,19 @@ public sealed partial class CMUExpeditionAgentSystem
         return true;
     }
 
+    private void BeginCombatSpacing(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
+    {
+        CancelWork(uid, agent);
+        CancelPlan(uid, agent, false);
+        CancelTreatment(agent);
+        ClearCover(agent);
+        StopSpacing(uid, agent);
+        agent.NextSpacingSearch = now;
+        // Only the tactical response is accelerated; native wield/fire delays still apply.
+        agent.State = CMUExpeditionAgentState.Guard;
+        agent.FireAt = now;
+    }
+
     private EntityCoordinates? EscapeStep(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates start)
     {
         if (agent.RushTarget is not { } target)
@@ -98,7 +122,8 @@ public sealed partial class CMUExpeditionAgentSystem
         var bestScore = float.MinValue;
         EntityCoordinates? best = null;
         // Fourteen short, direct escape corridors. No long A* job or changing goal each tick.
-        foreach (var length in new[] { 3f, 1.5f })
+        var stride = CombatStride(uid);
+        foreach (var length in new[] { stride, Math.Max(0.6f, stride * 0.5f) })
         {
             foreach (var degrees in new[] { 0, 30, -30, 60, -60, 90, -90 })
             {
@@ -109,11 +134,12 @@ public sealed partial class CMUExpeditionAgentSystem
                 if (gap < currentGap + 0.4f || MeleeClearance(agent, start.Offset(offset * 0.5f)) < currentGap - 0.2f ||
                     agent.Home is not { } home || !_transform.InRange(home, candidate, agent.LeashRange) ||
                     Reserved(uid, candidate) || agent.FailedPosition is { } failed && _timing.CurTime < agent.AvoidPositionUntil &&
-                    _transform.InRange(candidate, failed, 1) || !DryPassage(uid, start, candidate) ||
+                    _transform.InRange(candidate, failed, 1) || !TraversablePassage(uid, start, candidate) ||
                     !ClearLane(uid, start, candidate, 0.35f, movement: true))
                     continue;
                 var score = Math.Min(gap, agent.MeleeStandoffRange + 2) - length * 0.15f +
-                    (FiringLaneClear(uid, candidate, threat) ? 1 : 0);
+                    (FiringLaneClear(uid, candidate, threat) ? 1 : 0) -
+                    ExposureScore(uid, agent, candidate) * (currentGap < 2 ? 0.25f : 0.6f);
                 if (score <= bestScore)
                     continue;
                 bestScore = score;

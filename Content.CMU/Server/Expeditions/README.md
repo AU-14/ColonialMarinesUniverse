@@ -21,7 +21,8 @@ cmu-expedition-visit <map ID>
 ```
 
 `generate` and `scenario` build a map in batches, then automatically open its Govfor dropship
-beacon and announce the recovery operation. `status` reports readiness; `open` remains an
+beacon and issue a short GOVFOR ARES priority recovery assignment using the native faction
+announcement and sound. `status` reports readiness; `open` remains an
 idempotent manual option for maps created through the API. No destination exposes an unfinished
 map. Remove unused maps after evacuating them; their upper levels are removed with the surface.
 
@@ -129,20 +130,31 @@ colony mining and the planet-selection console remain later phases.
 AI cover and route decisions must account for the *current* world, including destroyed objects,
 instead of treating this initial generation plan as an always-correct navigation map.
 
-`cmu-expedition-ai <map ID|here> [count: 1-12] [mixed|regular|poor|rich|scout]` (Admin)
+`cmu-expedition-ai <map ID|here> [count: 1-12] [mixed|regular|poor|rich|scout|assault|support|marksman|rocketeer|specialists]` (Admin)
 adds a new squad and prints its squad and map IDs. A numeric expedition ID spawns near its objective.
 Use `here` while standing or ghosting over ground on **any map**, including ordinary colony maps.
-Spawning finds dry, clear, unoccupied positions nearby and reports partial deployment if space is limited.
+Spawning finds traversable, clear, unoccupied positions nearby and reports partial deployment if space is limited.
+Guards can cross shallow and deep RMC water at native wading speed, including on ordinary maps.
 
 | Variant | Equipment and behavior |
 | --- | --- |
 | `regular` | MAR-40, militia vest, two spare magazines, blast and smoke grenades |
 | `poor` | Scrapper with a surplus pistol, one spare magazine, patched coat, lower courage, no grenades |
-| `rich` | Salvage baron with reinforced ceramic armor, a loaded pulse rifle, three spare magazines, four-shot volleys, blast and smoke grenades |
+| `rich` | Salvage baron with reinforced armor, modern M41A/2 rifle, three spare magazines, four-shot volleys, blast and smoke grenades |
 | `scout` | Trail scout with a MAR-30 carbine, harness, smoke grenade, longer detection range and cautious positioning |
-| `mixed` | A repeating roster of regulars, scrappers, raiders, scouts, sentries and salvage barons |
+| `assault` | M63 SMG, five-shot volleys, aggressive close-range positioning |
+| `support` | M41AE2 heavy pulse rifle, seven-shot volleys, longer holds at useful range |
+| `marksman` | M4SPR rifle, two-shot volleys, longer detection/fire range, pistol when crowded |
+| `rocketeer` | M63 SMG and a single HE-loaded RPG-36; checks blast/backblast safety and returns to the firearm after firing |
+| `specialists` | Repeating assault, support, marksman, rocketeer roster |
+| `mixed` | Repeating regular, assault, support, scout, marksman, rocketeer, poor and rich roster |
 
-All variants carry finite dressings, a squad headset and a shovel. They target GOVFOR by default.
+All variants carry finite dressings, a squad headset and a shovel. Everyone except poor
+scrappers also carries a backup pistol, with physical weapon switching and compatible spare ammo.
+They target GOVFOR by default. `cmu-expedition-ai here 4 specialists` spawns one of each specialist.
+Fire can continue during travel; fresh contact and incoming fire bypass the extra AI aim pause.
+Smoke screens withdrawals/recovery, grenades prioritize clusters, and squad explosive cooldowns
+prevent repeated volleys. See [AI-DESIGN.md](AI-DESIGN.md) for exact conditions and limits.
 Use the printed squad ID in place of `1` below:
 
 ```text

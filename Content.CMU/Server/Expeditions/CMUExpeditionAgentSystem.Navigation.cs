@@ -13,7 +13,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var localContact = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(contact));
         var delta = localContact.Position - start.Position;
         var distance = delta.Length();
-        var stopRange = visible ? Math.Max(1, agent.FireRange - 1.5f) :
+        var stopRange = visible ? Math.Max(1, WeaponFireRange(uid, agent) - 1.5f) :
             agent.LastContactWasMelee ? agent.MeleeStandoffRange : 2.5f;
         if (distance <= stopRange)
         {
@@ -106,14 +106,14 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         if (!BodyFits(uid, destination))
             return false;
-        // Skip unnecessary cell-centre stops along straight, dry corridors. Keep obstacle
+        // Skip unnecessary cell-centre stops along straight, traversable corridors. Keep obstacle
         // corners as waypoints instead of steering left/right at every tile in a forest.
         var previous = start;
         for (var index = 1; index < route.Count; index++)
         {
             var furthest = Math.Min(index + 5, route.Count - 1);
             // Validate the actual start and final sub-tile endpoint, not only cell centres.
-            while (furthest >= index && (!DryPassage(uid, previous, Waypoint(furthest)) ||
+            while (furthest >= index && (!TraversablePassage(uid, previous, Waypoint(furthest)) ||
                 !ClearLane(uid, previous, Waypoint(furthest), 0.35f, movement: true)))
                 furthest--;
             if (furthest < index)
@@ -128,7 +128,7 @@ public sealed partial class CMUExpeditionAgentSystem
         if (route.Count == 1)
         {
             if (!_transform.InRange(start, destination, ArrivalRange) &&
-                (!DryPassage(uid, start, destination) || !ClearLane(uid, start, destination, 0.35f, movement: true)))
+                (!TraversablePassage(uid, start, destination) || !ClearLane(uid, start, destination, 0.35f, movement: true)))
                 return false;
             agent.Route.Enqueue(destination);
         }

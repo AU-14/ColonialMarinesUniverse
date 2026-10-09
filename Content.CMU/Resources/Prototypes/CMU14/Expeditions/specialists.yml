@@ -1,0 +1,198 @@
+# Native equipment with server-only AI preferences; no damage, ammunition or wield-delay bonuses.
+- type: entity
+  parent: CMSatchel
+  id: CMUExpeditionFieldPack
+  components:
+  - type: Storage
+    grid:
+    - 0,0,20,1
+
+- type: entity
+  parent: CMWeaponPistolM1984
+  id: CMUExpeditionSidearm
+  components:
+  - type: CMUExpeditionWeaponRole
+    priority: 10
+    maximumRange: 9
+    closePriority: 12
+    burstLimit: 3
+
+- type: entity
+  parent: RMCWeaponRifleM54C2
+  id: CMUExpeditionAssaultRifle
+  components:
+  - type: CMUExpeditionWeaponRole
+
+- type: entity
+  parent: WeaponSMGM63
+  id: CMUExpeditionSMG
+  components:
+  - type: CMUExpeditionWeaponRole
+    maximumRange: 11
+    closePriority: 8
+
+- type: entity
+  parent: RMCWeaponRifleM54CE2
+  id: CMUExpeditionSupportRifle
+  components:
+  - type: CMUExpeditionWeaponRole
+    closePriority: -12
+    burstLimit: 7
+
+- type: entity
+  parent: WeaponRifleM4SPR
+  id: CMUExpeditionMarksmanRifle
+  components:
+  - type: CMUExpeditionWeaponRole
+    closePriority: -15
+    burstLimit: 2
+
+- type: entity
+  parent: RuMCWeaponLauncherDisposable
+  id: CMUExpeditionDisposableLauncher
+  components:
+  - type: BallisticAmmoProvider
+    proto: RMCRocketHJRA12HE
+  - type: CMUBackblast
+    nearEffect: CMUBackblastSmokeNear
+    farEffect: CMUBackblastSmokeFar
+  - type: CMUExpeditionWeaponRole
+    priority: 45
+    rocket: true
+    minimumRange: 4.5
+    maximumRange: 6
+    burstLimit: 1
+    blastRadius: 4
+
+- type: startingGear
+  id: CMUExpeditionSpecialistGear
+  abstract: true
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
+
+- type: startingGear
+  parent: CMUExpeditionSpecialistGear
+  id: CMUExpeditionAssaultGear
+  inhand:
+  - CMUExpeditionSMG
+  storage:
+    back:
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionBlastGrenade
+    - RMCShovel
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerAssault
+  components:
+  - type: CMUExpeditionAgent
+    burstSize: 5
+    burstPause: 0.35
+    aggression: 0.85
+    preferredFireRange: 6
+  - type: Loadout
+    prototypes: [CMUExpeditionAssaultGear]
+  - type: FixedIdentity
+    name: cmu-expedition-assault-identity
+
+- type: startingGear
+  parent: CMUExpeditionSpecialistGear
+  id: CMUExpeditionSupportGear
+  inhand:
+  - CMUExpeditionSupportRifle
+  storage:
+    back:
+    - CMMagazineRifleM54CE2
+    - CMMagazineRifleM54CE2
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionBlastGrenade
+    - RMCShovel
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerSupport
+  components:
+  - type: CMUExpeditionAgent
+    burstSize: 7
+    burstDuration: 1.8
+    burstPause: 0.4
+    preferredFireRange: 10
+    repositionCooldown: 6
+  - type: Loadout
+    prototypes: [CMUExpeditionSupportGear]
+  - type: FixedIdentity
+    name: cmu-expedition-support-identity
+
+- type: startingGear
+  parent: CMUExpeditionSpecialistGear
+  id: CMUExpeditionMarksmanGear
+  inhand:
+  - CMUExpeditionMarksmanRifle
+  storage:
+    back:
+    - CMMagazineRifleM4SPR
+    - CMMagazineRifleM4SPR
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionBlastGrenade
+    - RMCShovel
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerMarksman
+  components:
+  - type: CMUExpeditionAgent
+    burstSize: 2
+    burstPause: 0.65
+    fireRange: 14
+    detectionRange: 22
+    preferredFireRange: 11
+    aggression: 0.35
+  - type: Loadout
+    prototypes: [CMUExpeditionMarksmanGear]
+  - type: FixedIdentity
+    name: cmu-expedition-marksman-identity
+
+- type: startingGear
+  parent: CMUExpeditionSpecialistGear
+  id: CMUExpeditionRocketeerGear
+  equipment:
+    suitStorage: CMUExpeditionDisposableLauncher
+  inhand:
+  - CMUExpeditionSMG
+  storage:
+    back:
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionBlastGrenade
+    - RMCShovel
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerRocketeer
+  components:
+  - type: CMUExpeditionAgent
+    burstSize: 4
+    courage: 0.7
+    preferredFireRange: 7
+  - type: Loadout
+    prototypes: [CMUExpeditionRocketeerGear]
+  - type: FixedIdentity
+    name: cmu-expedition-rocketeer-identity

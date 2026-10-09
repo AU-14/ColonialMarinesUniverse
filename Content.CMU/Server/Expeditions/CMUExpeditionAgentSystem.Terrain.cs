@@ -1,5 +1,4 @@
 using Content.Shared._RMC14.Atmos;
-using Content.Shared._RMC14.Water;
 using Content.Shared.CMU14.Expeditions;
 using Content.Shared.Maps;
 using Robust.Shared.Map;
@@ -34,12 +33,13 @@ public sealed partial class CMUExpeditionAgentSystem
         _groundCache[key] = false;
         if (!_maps.TryGetTileRef(point.EntityId, grid, indices, out var tile) || _turf.IsSpace(tile))
             return false;
-        // Ordinary maps use live tiles and hazards. Generated terrain adds its water/cliff bounds.
+        // RMC water is walkable; its contact system owns the slowdown. Solid banks and
+        // map boundaries are rejected by BodyFits, just like walls on ordinary maps.
         if (TryComp<CMUExpeditionMapComponent>(point.EntityId, out var expedition))
         {
             var plan = expedition.Plan;
             if (!expedition.Ready || indices.X < 1 || indices.Y < 1 || indices.X >= plan.Size - 1 || indices.Y >= plan.Size - 1 ||
-                plan.Terrain[plan.Index(indices.X, indices.Y)] is CMUExpeditionTerrain.Water or CMUExpeditionTerrain.Cliff)
+                plan.Terrain[plan.Index(indices.X, indices.Y)] == CMUExpeditionTerrain.Cliff)
                 return false;
             foreach (var fire in plan.FirePockets)
                 if (Math.Abs(indices.X - fire.X) <= 3 && Math.Abs(indices.Y - fire.Y) <= 3)
@@ -47,7 +47,7 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         var anchored = _maps.GetAnchoredEntitiesEnumerator(point.EntityId, grid, indices);
         while (anchored.MoveNext(out var entity))
-            if (HasComp<RMCWaterComponent>(entity) || HasComp<TileFireComponent>(entity))
+            if (HasComp<TileFireComponent>(entity))
                 return false;
         _groundCache[key] = true;
         return true;

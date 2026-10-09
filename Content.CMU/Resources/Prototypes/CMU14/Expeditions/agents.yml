@@ -12,7 +12,7 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMSatchel
+    back: CMUExpeditionFieldPack
     ears: CMUExpeditionHeadset
   inhand:
   - WeaponRifleMAR40
@@ -22,6 +22,8 @@
     - RMCMagazineRifleMAR40
     - CMUExpeditionBlastGrenade
     - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
     - RMCShovel
 
 - type: entity
@@ -84,7 +86,7 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMSatchel
+    back: CMUExpeditionFieldPack
     ears: CMUExpeditionHeadset
   inhand:
   - CMWeaponPistolM1984
@@ -102,10 +104,10 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMSatchel
+    back: CMUExpeditionFieldPack
     ears: CMUExpeditionHeadset
   inhand:
-  - RMCWeaponRifleM54CSemiStripped
+  - CMUExpeditionAssaultRifle
   storage:
     back:
     - CMMagazineRifleM54C
@@ -113,6 +115,8 @@
     - CMMagazineRifleM54C
     - CMUExpeditionBlastGrenade
     - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
     - RMCShovel
 
 - type: startingGear
@@ -124,7 +128,7 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMSatchel
+    back: CMUExpeditionFieldPack
     ears: CMUExpeditionHeadset
   inhand:
   - RMCWeaponRifleMAR30
@@ -133,6 +137,8 @@
     - RMCMagazineRifleMAR40
     - RMCMagazineRifleMAR40
     - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
     - RMCShovel
 
 - type: entity
