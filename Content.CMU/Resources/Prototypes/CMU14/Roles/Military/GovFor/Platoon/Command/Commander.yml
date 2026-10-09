@@ -115,7 +115,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORPlatCo"
-  spawnMenuRoleName: Platoon Commander (OPFOR)
+  spawnMenuRoleName: Commander (OPFOR)
   supervisors: au14-job-supervisors-opforplatco
   startingGear: AU14GearOPFORPlatCo
   dummyStartingGear: AU14GearOPFORPlatCoDummy
@@ -206,8 +206,8 @@
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoCMBCIU
   roundForce: CMBCIU
-  name: Platoon Commander
-  spawnMenuRoleName: Platoon Commander (CMBCIU)
+  name: Commander
+  spawnMenuRoleName: Commander (CMBCIU)
   ranks:
     AU14RankCMBMarshal: []
 
@@ -217,15 +217,15 @@
   roundForce: RMC
   name: au14-job-name-govforplatcoRMC
   description: au14-job-description-govforplatco
-  spawnMenuRoleName: Platoon Commander (TWE RMC)
+  spawnMenuRoleName: Commander (TWE RMC)
 
 - type: job
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoUPP
   roundForce: UPP
   requirements: []
-  name: Platoon Commander
-  spawnMenuRoleName: Platoon Commander (UPP)
+  name: Commander
+  spawnMenuRoleName: Commander (UPP)
   ranks:
     UPP_Captain:
     - !type:RoleTimeRequirement
@@ -243,7 +243,7 @@
   roundForce: WYPMC
   requirements: []
   name: PMC Operations Director
-  spawnMenuRoleName: Platoon Commander (WYPMC)
+  spawnMenuRoleName: Commander (WYPMC)
   ranks:
     AU14RankWeYuCommanderSenior:
     - !type:RoleTimeRequirement

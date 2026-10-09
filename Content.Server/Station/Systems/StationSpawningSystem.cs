@@ -87,8 +87,10 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     // Round-robin rotation indices for squads per side
     private readonly string[] _govforSquads = { "SquadGovfor", "SquadGovforBravo", "SquadGovforCharlie" };
     private readonly string[] _opforSquads = { "SquadOpfor", "SquadOpforBravo", "SquadOpforCharlie" };
-    private int _govforNextSquadIndex;
-    private int _opforNextSquadIndex;
+    // cmu edit start: replaced by CMUPickSquad
+    // private int _govforNextSquadIndex;
+    // private int _opforNextSquadIndex;
+    // cmu edit end
     private static readonly ProtoId<NpcFactionPrototype> YautjaBadBloodFaction = "CMUYautjaBadBlood";
 
     private static readonly HashSet<string> NoSquadRoundRoles = new(StringComparer.OrdinalIgnoreCase)
@@ -452,145 +454,13 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             protoId = team == "govfor" ? "SquadGovforIntel" : "SquadOpforIntel";
         else
         {
+            // cmu edit start: one squad leader per squad, special roles spread evenly, riflemen fill the smallest squad
             var candidates = team == "govfor" ? _govforSquads : _opforSquads;
-
-            // New: prioritize distributing Sergeants, Automatic Riflemen, and Radio Telephone Operators
             var isSergeant = IsSquadLeaderRole(originalPrototype, originalJobId);
-            var isAutomaticRifleman = IsRoundRole(originalPrototype, "SquadAutomaticRifleman") ||
-                                      originalJobId?.Contains("automaticrifleman", StringComparison.OrdinalIgnoreCase) == true ||
-                                      originalJobId?.Contains("autora", StringComparison.OrdinalIgnoreCase) == true ||
-                                      originalJobId?.Contains("auto", StringComparison.OrdinalIgnoreCase) == true ||
-                                      originalJobId?.Contains("afn", StringComparison.OrdinalIgnoreCase) == true ||
-                                      originalJobId?.EndsWith("squadautomaticrifleman", StringComparison.OrdinalIgnoreCase) == true;
-            var isRadioTelephone = IsRoundRole(originalPrototype, "RadioTelephoneOperator") ||
-                                   originalJobId?.Contains("radiotelephoneoperator", StringComparison.OrdinalIgnoreCase) == true ||
-                                   originalJobId?.Contains("radio", StringComparison.OrdinalIgnoreCase) == true ||
-                                   originalJobId?.Contains("rto", StringComparison.OrdinalIgnoreCase) == true ||
-                                   originalJobId?.EndsWith("radiotelephoneoperator", StringComparison.OrdinalIgnoreCase) == true;
 
-            // CMU14: Player preference wins over distribution when the squad belongs to this side.
-            // Sergeants still skip a preferred squad that already has a leader so the sitting leader is not demoted.
-            // The menu only offers GovFor squads; force-balanced OpFor players get the mirrored squad by slot.
-            var preferred = profile?.SquadPreference?.Id;
-            if (team == "opfor" && preferred != null)
-            {
-                var mirror = Array.IndexOf(_govforSquads, preferred);
-                if (mirror >= 0)
-                    preferred = _opforSquads[mirror];
-            }
-
-            if (preferred != null // CMU14
-                && Array.IndexOf(candidates, preferred) != -1
-                && (!isSergeant
-                || !_squadSystem.TryEnsureSquad(preferred, out var preferredSquad)
-                || !_squadSystem.TryGetSquadLeader(preferredSquad, out _)))
-                protoId = preferred;
-
-            // CMU14: Sergeants: try to place into a squad without a leader where possible
-            else if (isSergeant)
-            {
-                string? chosen = null;
-                foreach (var candidate in candidates)
-                {
-                    if (_squadSystem.TryEnsureSquad(candidate, out var squad) &&
-                        !_squadSystem.TryGetSquadLeader(squad, out _))
-                    {
-                        chosen = candidate;
-                        break;
-                    }
-                }
-
-                if (chosen != null)
-                {
-                    protoId = chosen;
-                }
-                else
-                {
-                    // All squads already have leaders, fall back to round-robin.
-                    if (team == "govfor")
-                    {
-                        protoId = candidates[_govforNextSquadIndex % candidates.Length];
-                        _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
-                    }
-                    else
-                    {
-                        protoId = candidates[_opforNextSquadIndex % candidates.Length];
-                        _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
-                    }
-                }
-            }
-            // Automatic riflemen and radio telephone operators: try to evenly distribute so each squad gets one of each
-            else if (isAutomaticRifleman || isRadioTelephone)
-            {
-                string? chosen = null;
-                // Prefer squads that exist and don't yet have this role
-                foreach (var candidate in candidates)
-                {
-                    if (_squadSystem.TryEnsureSquad(candidate, out var squad))
-                    {
-                        // If job is available as a ProtoId, check the role count in the squad.
-                        if (job != null)
-                        {
-                            squad.Comp.Roles.TryGetValue(job.Value, out var existingCount);
-                            if (existingCount == 0)
-                            {
-                                chosen = candidate;
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            // If we don't have a proto id for the job for whatever reason,
-                            // prefer squads that exist but currently have fewer members (heuristic)
-                            if (_squadSystem.GetSquadMembersAlive(squad) == 0)
-                            {
-                                chosen = candidate;
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // Squad doesn't exist yet, so it definitely has none of the role
-                        chosen = candidate;
-                        break;
-                    }
-                }
-
-                if (chosen != null)
-                {
-                    protoId = chosen;
-                }
-                else
-                {
-                    // Fallback to round-robin distribution when every squad already has the role
-                    if (team == "govfor")
-                    {
-                        protoId = candidates[_govforNextSquadIndex % candidates.Length];
-                        _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
-                    }
-                    else
-                    {
-                        protoId = candidates[_opforNextSquadIndex % candidates.Length];
-                        _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
-                    }
-                }
-            }
-            else
-            {
-                // Default distribution (round-robin)
-                // Sergeants already handled above; everyone else falls through here.
-                if (team == "govfor")
-                {
-                    protoId = candidates[_govforNextSquadIndex % candidates.Length];
-                    _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
-                }
-                else
-                {
-                    protoId = candidates[_opforNextSquadIndex % candidates.Length];
-                    _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
-                }
-            }
+            // Squad preference is no longer offered, so it is ignored here.
+            protoId = CMUPickSquad(candidates, job, originalPrototype, originalJobId, isSergeant);
+            // cmu edit end
         }
 
         if (!_squadSystem.TryEnsureSquad(protoId, out Entity<SquadTeamComponent> ensured))
