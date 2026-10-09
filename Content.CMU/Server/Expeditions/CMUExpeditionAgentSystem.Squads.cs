@@ -12,9 +12,6 @@ public sealed partial class CMUExpeditionAgentSystem
 {
     private bool _orderRouteSearched;
 
-    public static bool IsSquadVariant(string variant) => variant is "mixed" or "regular" or "poor" or "rich" or "scout" or
-        "assault" or "support" or "marksman" or "rocketeer" or "medic" or "medical" or "specialists";
-
     public bool CanOrderSquadMember(EntityUid uid) => !HasComp<ActorComponent>(uid) && _mobs.IsAlive(uid);
 
     public int SpawnSquad(EntityCoordinates center, int count, string variant, out int squad)
@@ -54,30 +51,10 @@ public sealed partial class CMUExpeditionAgentSystem
                 squad = Math.Max(squad, member.Squad + 1);
         if (map != null)
             map.NextSquad = squad + 1;
-        var mixed = new[] { "CMUExpeditionScavenger", "CMUExpeditionScavengerAssault", "CMUExpeditionScavengerMedic", "CMUExpeditionScavengerSupport",
-            "CMUExpeditionScavengerScout", "CMUExpeditionScavengerMarksman", "CMUExpeditionScavengerRocketeer",
-            "CMUExpeditionScavengerPoor", "CMUExpeditionScavengerRich" };
-        var specialists = new[] { "CMUExpeditionScavengerAssault", "CMUExpeditionScavengerSupport",
-            "CMUExpeditionScavengerMarksman", "CMUExpeditionScavengerRocketeer", "CMUExpeditionScavengerMedic" };
-        var medical = new[] { "CMUExpeditionScavengerMedic", "CMUExpeditionScavengerSupport",
-            "CMUExpeditionScavengerAssault", "CMUExpeditionScavenger" };
+        var composition = SquadPresets[variant];
         for (var i = 0; i < positions.Count; i++)
         {
-            var prototype = variant switch
-            {
-                "poor" => "CMUExpeditionScavengerPoor",
-                "rich" => "CMUExpeditionScavengerRich",
-                "scout" => "CMUExpeditionScavengerScout",
-                "regular" => "CMUExpeditionScavenger",
-                "assault" => "CMUExpeditionScavengerAssault",
-                "support" => "CMUExpeditionScavengerSupport",
-                "marksman" => "CMUExpeditionScavengerMarksman",
-                "rocketeer" => "CMUExpeditionScavengerRocketeer",
-                "medic" => "CMUExpeditionScavengerMedic",
-                "medical" => medical[i % medical.Length],
-                "specialists" => specialists[i % specialists.Length],
-                _ => mixed[i % mixed.Length],
-            };
+            var prototype = composition[i % composition.Length];
             var uid = Spawn(prototype, positions[i]);
             var agent = Comp<CMUExpeditionAgentComponent>(uid);
             agent.Squad = squad;
@@ -152,6 +129,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.OrderRoute.Clear();
             agent.OrderBlocked = false;
             agent.OrderedDestination = null;
+            ClearTraffic(agent);
             _steering.Unregister(uid);
             if (agent.Patrolling && agent.PatrolPoints.Count >= 2)
             {

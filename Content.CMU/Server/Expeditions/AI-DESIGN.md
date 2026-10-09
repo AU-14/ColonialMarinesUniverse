@@ -10,7 +10,8 @@ native steering, firearms, physics, factions and medical do-afters execute actio
   after failed actions, and separating individual survival from squad coordination.
   Our controller keeps remembered contacts, reserved cover/peek positions and a short
   failed-destination memory. Squad attack slots never override injury, suppression or
-  player possession. This is a small action controller, not a complete GOAP implementation.
+  player possession. A bounded GOAP planner now selects executable local actions; the squad
+  coordinator separately reserves a covering shooter for a mover and monitors their continued readiness.
 
 - [Arjen Beij and Remco Straatman, Killzone: Dynamic Procedural Tactics, GDCE 2005](https://www.guerrilla-games.com/media/News/Files/gdce05_killzone_ai.pdf).
   Position evaluation combines range, exposure and movement cost. For our generated maps,
@@ -43,8 +44,9 @@ native steering, firearms, physics, factions and medical do-afters execute actio
    a persistently blocked lane triggers a deliberate sidestep or withdrawal.
 3. Search at most 256 local cells, with an eight-step search radius. Pair an occluded
    shelter with a firing position no more than 3.2 metres away along a clear passage.
-4. Move precisely into the firing position, aim briefly, fire the variant's limited volley, return
-   to shelter, and reassess. Nearby squadmates reserve different positions and stagger
+4. Move precisely into the firing position, aim briefly and fire the variant's limited volley.
+   Hold a productive stance across volleys; return to valid shelter when pressure or a lost lane warrants it.
+   Nearby squadmates reserve different positions and stagger
    peeks with local attack slots.
    Stop a peek at usable geometry even when a teammate temporarily blocks firing. Stops
    inside valid shelter tolerate 55 cm of endpoint error, avoiding needless tiny corrections.
@@ -102,7 +104,61 @@ Squads have separate
 position reservations, staggered attack slots and one flanker at a time. Aggressive, steady
 and cautious dispositions respond to pressure, wounds and nearby support.
 Guards fighting different opponents within the same eight-metre contact area count as
-supporting one another for covering fire and attack slots.
+nearby support for morale and attack slots. Actual covering fire requires a loaded gun which
+successfully fired within 1.5 seconds, a perceived target and a safe firing lane; a state named
+Aim alone cannot authorize movement.
+
+## Squad execution and navigation
+
+Optional cover changes, flanks, non-emergency healing moves and ordinary rescue approaches reserve
+one stationary shooter per mover. Support and marksman roles are preferred. An escort already
+covering medical work cannot take a movement assignment. Readiness is checked again during movement:
+empty or lost guns, blocked lanes, knockdown, player control, rushes, danger and emergency injury
+release the commitment. The mover stops optional travel and returns fire. Commitments last at most
+six seconds; emergency escapes and lone guards do not wait for nonexistent support.
+
+New contact retains the original order route and up to two metres of its current leg for at most
+1.25 seconds, provided body clearance, threat exposure and melee separation still permit it.
+Support/marksman roles settle when they have a useful shot. Firing remains independent of travel,
+including a guard waiting in a queue. After combat, the retained route is revalidated from the actual
+position and rebuilt if necessary. Target changes alone do not cancel an active physical flank.
+
+A useful firing position receives a role-configured commitment (two to six seconds in the supplied
+roles). Subsequent cover candidates need a material improvement after travel cost, exposure, range
+and a shelter bonus. Ordinary bursts do not automatically force a return into cover. Invalid geometry,
+incoming hits at shelter, blocked lanes, rushes and grenades still override the position commitment.
+
+Each traveller advertises a short corridor. Followers queue behind a leading body; opposing traffic
+in narrow passages uses stable request time and entity-ID tie breaking. A yielding guard physically
+steps into a reachable passing pocket. Waiting pauses the ordinary stall clock, but after five seconds
+the guard replans around a temporarily blocked body instead of extending its queue forever. This
+coordinates individual bounded routes; it is not a shared flow field or a guarantee of deadlock-free
+multi-agent pathfinding. Hard collision clearance stays at the native body radius.
+
+A visible flank selects the closest viable responder, biased toward skirmishers and away from support
+gunners. At most one responder, or two with six nearby members, is selected for that contact. Existing
+responders count toward the limit; covering commitments are retained. Melee emergencies still override
+target distribution. No enemy position is supplied to a member who cannot see it.
+
+The new roles, compositions, command completion and squad coordination were built and their YAML
+parsed without tests or in-game verification. Earlier runtime measurements do not validate this revision.
+Manual verification still required:
+
+1. Spawn `cmu-expedition-ai here 6 fireteam` on a colony grid and an expedition. Tab-complete the
+   returned squad ID, orders, styles and faction lists, including a second comma-separated faction.
+2. Order movement through a one-tile L-shaped corridor in both directions with two friendly squads.
+   Check distinct endpoints, queue/yield diagnostics, passing pockets, timeout/repath and arrival.
+   Repeat on a rotated grid, with a stationary blocker, RMC water and a moving crate.
+3. Make contact mid-patrol in dense trees. Confirm fire during the retained leg and during queueing,
+   then resumption of the original order. Block the covering shooter's lane, empty/disarm its gun,
+   knock it down and take player control; each must interrupt the dependent manoeuvre.
+4. Sustain frontal fire and add a lateral attacker. Confirm only selected responders turn, the front
+   keeps receiving fire, useful positions remain held and exposed shelters are rejected. Add a melee rush.
+5. Spawn each new role alone, expend its primary ammunition, reload in safety and verify finite
+   reserves and backup switching. Interrupt shotgun shell insertion with damage and movement.
+6. Record route/search time with six and twelve guards under simultaneous contact; inspect covered
+   moves, support-loss interruptions, traffic state and moving-shot counters. No cost or balance result
+   is claimed from compilation.
 
 Grenades are considered on initial contact with multiple enemies, or as a last resort after
 repeated failed exposures or severe pressure. Reservations cap a squad decision at two

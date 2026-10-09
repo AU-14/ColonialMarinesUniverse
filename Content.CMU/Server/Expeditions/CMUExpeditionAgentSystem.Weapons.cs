@@ -40,6 +40,8 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (agent.Action != null || agent.Treatment != null || agent.WorkItem != null || agent.PreparingWork)
             return false;
+        if (agent.PendingWeapon == null && HasCoverCommitment(uid, agent, now))
+            return false;
         _guns.TryGetGun(uid, out var current);
         if (agent.PendingWeapon is { } pending)
         {
@@ -117,7 +119,7 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (!Exists(weapon) || !TryComp<GunComponent>(weapon, out var gun))
             return -100;
-        if (WeaponAmmo(weapon) == 0 && (!TreatmentSafe(uid, agent) || SpareMagazine(uid, weapon) == null))
+        if (WeaponAmmo(weapon) == 0 && (!TreatmentSafe(uid, agent) || SpareAmmunition(uid, weapon) == null))
             return -100;
         TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role);
         var score = role?.Priority ?? 20;

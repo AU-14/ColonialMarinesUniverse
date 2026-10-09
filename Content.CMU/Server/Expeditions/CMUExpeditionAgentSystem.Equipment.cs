@@ -32,18 +32,21 @@ public sealed partial class CMUExpeditionAgentSystem
         return _inventory.TryGetSlotEntity(uid, "back", out var bag) && TryComp(bag, out storage!);
     }
 
-    private EntityUid? SpareMagazine(EntityUid uid, EntityUid? weapon = null)
+    private EntityUid? SpareAmmunition(EntityUid uid, EntityUid? weapon = null)
     {
         if (weapon == null && _guns.TryGetGun(uid, out var active))
             weapon = active;
-        if (weapon is not { } gun || !HasComp<GunComponent>(gun) ||
-            !_itemSlots.TryGetSlot(gun, "gun_magazine", out var slot) || !Supplies(uid, out var supplies))
+        if (weapon is not { } gun || !HasComp<GunComponent>(gun) || !Supplies(uid, out var supplies))
             return null;
+        _itemSlots.TryGetSlot(gun, "gun_magazine", out var slot);
+        TryComp<BallisticAmmoProviderComponent>(gun, out var tube);
         foreach (var item in supplies.Container.ContainedEntities)
         {
             var ammo = new GetAmmoCountEvent();
             RaiseLocalEvent(item, ref ammo);
-            if (ammo.Count > 0 && _itemSlots.CanInsert(gun, slot, item, uid, swap: true))
+            if (slot != null && ammo.Count > 0 && _itemSlots.CanInsert(gun, slot, item, uid, swap: true) ||
+                tube != null && TryComp<CartridgeAmmoComponent>(item, out var cartridge) && !cartridge.Spent &&
+                _guns.CanInsertBallistic((gun, tube), item))
                 return item;
         }
         return null;
@@ -161,6 +164,25 @@ public sealed partial class CMUExpeditionAgentSystem
             }
             if (success)
                 agent.Reloads++;
+        }
+        else if (agent.Action == CMUTacticalAction.Reload && TreatmentSafe(ent, agent) &&
+            _guns.TryGetGun(ent, out var tubeGun) && TryComp<BallisticAmmoProviderComponent>(tubeGun, out var tube) &&
+            _guns.CanInsertBallistic((tubeGun.Owner, tube), item))
+        {
+            // Consume a real shell from the carried handful using the native insertion path.
+            success = _guns.TryAmmoInsert((tubeGun.Owner, tube), item, ent, tubeGun.Owner, 0);
+            if (Exists(item) && _hands.IsHolding(ent.Owner, item, out _) && Supplies(ent, out var bag))
+                _hands.TryDropIntoContainer(ent.Owner, item, bag.Container);
+            if (success)
+            {
+                agent.Reloads++;
+                if (SpareAmmunition(ent, tubeGun) is { } next && _timing.CurTime < agent.ActionUntil)
+                {
+                    agent.ActionItem = next;
+                    agent.ActionStarted = _timing.CurTime;
+                    return;
+                }
+            }
         }
         else if (agent.Action == CMUTacticalAction.ThrowGrenade && agent.GrenadeTarget is { } target &&
             (agent.SmokeGrenade || HasGrenadeContact(ent, agent, target)) && SafeGrenade(ent, target, item))

@@ -43,6 +43,7 @@ public sealed partial class CMUExpeditionAgentSystem
         if (HasComp<ActorComponent>(args.User) || !TryComp<CMUExpeditionAgentComponent>(args.User, out var agent))
             return;
         agent.LastShotAt = _timing.CurTime;
+        agent.LastFiredWeapon = ent.Owner;
         if (TryComp<CMUExpeditionWeaponRoleComponent>(ent, out var role) && role.Rocket)
         {
             agent.RocketsFired++;
@@ -195,15 +196,12 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         }
         ValidateCover(uid, agent, false, now);
-        // A covering shooter can hold a usable lane for a short medical action. Hits, rushes,
-        // empty guns and lost sight still take their ordinary survival paths.
-        if (allowPress && now < agent.MedicalCoverUntil && now - agent.LastHit > TimeSpan.FromSeconds(1) &&
-            agent.RushTarget == null && agent.LastDamage < agent.RetreatDamage && agent.Target is { } target &&
-            Visible(uid, target, agent.FireRange) && _guns.TryGetGun(uid, out var coveringGun) &&
-            WeaponAmmo(coveringGun) > 0 && SafeShot(uid, agent, coveringGun, Transform(target).Coordinates))
+        // Keep a productive stance across volleys. A covering commitment also survives ordinary
+        // pressure; a lost lane, empty gun, rush, grenade or emergency injury invalidates it.
+        if (allowPress && (HasCoverCommitment(uid, agent, now) || KeepFightingPosition(uid, agent, now)))
         {
             agent.State = CMUExpeditionAgentState.HoldAngle;
-            agent.FireAt = now + TimeSpan.FromSeconds(0.35);
+            agent.FireAt = now + RecoveryDelay(agent);
             return;
         }
         if (allowPress && agent.CoverAnchor != null && agent.Initiative >= 0.75f && agent.Stress < 0.3f &&

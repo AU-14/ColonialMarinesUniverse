@@ -243,11 +243,9 @@ public sealed partial class CMUExpeditionAgentSystem
                 HasComp<ActorComponent>(other) || buddy.Action != null || buddy.RushTarget != null ||
                 buddy.LastDamage >= buddy.RetreatDamage || buddy.Stress >= 0.75f || now - buddy.LastHit < TimeSpan.FromSeconds(1) ||
                 !_transform.InRange(Transform(other).Coordinates, Transform(patient).Coordinates, 14) ||
-                buddy.Target is not { } target || !Visible(other, target, buddy.FireRange) ||
-                !_guns.TryGetGun(other, out var gun) || WeaponAmmo(gun) == 0 ||
-                !SafeShot(other, buddy, gun, Transform(target).Coordinates))
+                !CoveringFireReady(other, buddy, out var target))
                 continue;
-            if (buddy.State is not (CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage or CMUExpeditionAgentState.HoldAngle))
+            if (buddy.CoveringFor != null && now < buddy.CoveringUntil)
                 continue;
             if (threats.RemoveAll(point => _transform.InRange(point, Transform(target).Coordinates, 3)) > 0)
                 covering.Add(buddy);

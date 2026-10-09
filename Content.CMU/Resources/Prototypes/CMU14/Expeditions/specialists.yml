@@ -97,6 +97,7 @@
   id: CMUExpeditionScavengerAssault
   components:
   - type: CMUExpeditionAgent
+    combatRole: Breacher
     burstSize: 5
     burstPause: 0.35
     aggression: 0.85
@@ -126,6 +127,8 @@
   id: CMUExpeditionScavengerSupport
   components:
   - type: CMUExpeditionAgent
+    combatRole: Support
+    positionCommitDuration: 5
     burstSize: 7
     burstDuration: 1.8
     burstPause: 0.4
@@ -156,6 +159,8 @@
   id: CMUExpeditionScavengerMarksman
   components:
   - type: CMUExpeditionAgent
+    combatRole: Marksman
+    positionCommitDuration: 5
     burstSize: 2
     burstPause: 0.65
     fireRange: 14

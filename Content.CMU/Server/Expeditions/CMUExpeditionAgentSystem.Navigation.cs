@@ -177,6 +177,9 @@ public sealed partial class CMUExpeditionAgentSystem
         bool Walkable(int cell)
         {
             var point = Coordinates(cell);
+            if (cell != first && agent.TrafficBlockedPoint is { } blocked && _timing.CurTime < agent.AvoidTrafficUntil &&
+                _transform.InRange(point, blocked, 0.8f))
+                return false;
             if (!ValidOrderPoint(uid, point) ||
                 !ordered && (agent.Home is not { } home || !_transform.InRange(home, point, agent.LeashRange) || !_transform.InRange(start, point, 16)))
                 return false;

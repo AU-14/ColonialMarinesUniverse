@@ -95,7 +95,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12))
                 continue;
             agent.SupportingAllies++;
-            agent.HasCoveringAlly |= buddy.State is CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage or CMUExpeditionAgentState.HoldAngle;
+            agent.HasCoveringAlly |= CoveringFireReady(other, buddy, out _);
         }
         agent.Initiative = Math.Clamp(agent.Aggression + Math.Min(2, agent.SupportingAllies) * 0.1f -
             agent.Stress * 0.55f - damage / 250, 0.05f, 0.95f);

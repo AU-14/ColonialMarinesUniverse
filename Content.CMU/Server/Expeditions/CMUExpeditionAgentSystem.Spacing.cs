@@ -38,9 +38,11 @@ public sealed partial class CMUExpeditionAgentSystem
             (now - agent.LastHit < TimeSpan.FromSeconds(2) || agent.RecentShooters.Count >= 2))
         {
             agent.NextCrossfireMove = now + TimeSpan.FromSeconds(3);
-            if (CanMoveUnderCoveringFire(uid, agent) && CrossfireStep(uid, agent, Transform(uid).Coordinates) is { } step)
+            if (CrossfireStep(uid, agent, Transform(uid).Coordinates) is { } step)
             {
                 BeginCombatSpacing(uid, agent, now);
+                if (!CanMoveUnderCoveringFire(uid, agent))
+                    return false;
                 agent.SpacingUntil = agent.SpacingMoveUntil = now + TimeSpan.FromSeconds(2);
                 agent.SpacingDestination = step;
                 agent.SpacingDecision = "reducing-crossfire";
@@ -52,6 +54,13 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             if (agent.SpacingUntil != TimeSpan.Zero)
                 StopSpacing(uid, agent);
+            return false;
+        }
+        if (!ManeuverSupported(uid, agent, now))
+        {
+            StopSpacing(uid, agent);
+            agent.State = CMUExpeditionAgentState.Recover;
+            agent.FireAt = now;
             return false;
         }
 
@@ -66,6 +75,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (arrived || blocked || closingGap || now >= agent.SpacingMoveUntil)
             {
                 _steering.Unregister(uid);
+                ReleaseManeuver(uid, agent);
                 agent.SpacingDestination = null;
                 if (blocked || !arrived && now >= agent.SpacingMoveUntil)
                 {
@@ -97,6 +107,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void BeginCombatSpacing(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
+        agent.ContactDestination = null;
         CancelWork(uid, agent);
         CancelPlan(uid, agent, false);
         CancelTreatment(agent);
@@ -165,7 +176,10 @@ public sealed partial class CMUExpeditionAgentSystem
     private void StopSpacing(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         if (agent.SpacingDestination != null)
+        {
             _steering.Unregister(uid);
+            ReleaseManeuver(uid, agent);
+        }
         agent.SpacingDestination = null;
         agent.SpacingUntil = TimeSpan.Zero;
         agent.SpacingDecision = "idle";

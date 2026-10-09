@@ -21,6 +21,9 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
     public override string Description => Loc.GetString("cmd-cmu-expedition-ai-status-desc");
     public override string Help => Loc.GetString("cmd-cmu-expedition-ai-status-help");
 
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args) => args.Length == 1
+        ? CMUExpeditionCommandCompletion.Maps(EntityManager, shell, here: true) : CompletionResult.Empty;
+
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length != 1)
@@ -81,6 +84,11 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
             shell.WriteLine(Loc.GetString("cmu-expedition-ai-equipment-status",
                 ("weapon", agent.WeaponDecision), ("switches", agent.WeaponSwitches), ("rockets", agent.RocketsFired),
                 ("grenade", agent.GrenadeDecision), ("smokes", agent.SmokesThrown), ("movingShots", agent.TotalMovingShots)));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-coordination-status",
+                ("role", agent.CombatRole.ToString()), ("decision", agent.SquadDecision),
+                ("shooter", agent.CoveringShooter is { } shooter ? EntityManager.GetNetEntity(shooter).ToString() : "-"),
+                ("mover", agent.CoveringFor is { } mover ? EntityManager.GetNetEntity(mover).ToString() : "-"),
+                ("moves", agent.CoveredMoves), ("interruptions", agent.InterruptedMoves), ("traffic", agent.TrafficDecision)));
             if (EntityManager.TryGetComponent<CMUExpeditionMedicComponent>(uid, out var medic))
                 shell.WriteLine(Loc.GetString("cmu-expedition-ai-medical-status",
                     ("decision", medic.Decision), ("phase", medic.Phase.ToString()),

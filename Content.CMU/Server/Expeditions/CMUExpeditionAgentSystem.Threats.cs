@@ -108,23 +108,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool CanMoveUnderCoveringFire(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
-        var available = 0;
-        var covering = 0;
-        var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
-        while (query.MoveNext(out var other, out var buddy))
-        {
-            if (other == uid || !SameSquad(uid, agent, other, buddy) || !_mobs.IsAlive(other) || HasComp<ActorComponent>(other) ||
-                !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12) ||
-                buddy.Target == null || _timing.CurTime - buddy.LastContact > TimeSpan.FromSeconds(2) ||
-                buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.Incapacitated or
-                    CMUExpeditionAgentState.RecoverWeapon or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.Reloading)
-                continue;
-            available++;
-            if (buddy.SpacingDestination == null && _timing.CurTime - buddy.LastShotAt < TimeSpan.FromSeconds(1) &&
-                buddy.State is CMUExpeditionAgentState.Engage or CMUExpeditionAgentState.HoldAngle or CMUExpeditionAgentState.Recover)
-                covering++;
-        }
-        return available == 0 || covering >= (available + 1) / 2;
+        return TryReserveManeuver(uid, agent, _timing.CurTime);
     }
 
     private static void ClearThreatAssessment(CMUExpeditionAgentComponent agent)

@@ -54,6 +54,15 @@ public sealed partial class CMUExpeditionAgentSystem
 
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
+        ReleaseManeuver(uid, agent);
+        ClearTraffic(agent);
+        agent.CoveringFor = null;
+        agent.CoveringUntil = TimeSpan.Zero;
+        agent.ContactDestination = null;
+        agent.FlankAssignment = null;
+        agent.FlankAssignmentUntil = TimeSpan.Zero;
+        agent.FightingPosition = null;
+        agent.PositionCommittedUntil = TimeSpan.Zero;
         CancelWork(uid, agent);
         CancelPlan(uid, agent, false);
         CancelTreatment(agent);

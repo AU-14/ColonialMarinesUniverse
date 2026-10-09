@@ -132,6 +132,9 @@ public sealed partial class CMUExpeditionAgentSystem
                 ShelteredFromKnownThreats(uid, agent, Transform(uid).Coordinates)))
             return;
         agent.FailedPosition = anchor;
+        ReleaseManeuver(uid, agent);
+        agent.FightingPosition = null;
+        agent.PositionCommittedUntil = TimeSpan.Zero;
         agent.RejectedCover++;
         agent.AvoidPositionUntil = now + TimeSpan.FromSeconds(8);
         ClearCover(agent);
@@ -151,6 +154,13 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (agent.LastSeen is not { } threat || transform.GridUid is not { } grid)
             return null;
+        var currentRange = Vector2.Distance(_transform.GetWorldPosition(uid), _transform.ToMapCoordinates(threat).Position);
+        var usableStance = !retreat && currentRange <= WeaponFireRange(uid, agent) &&
+            _guns.TryGetGun(uid, out var gun) && SafeShot(uid, agent, gun, threat);
+        if (usableStance && _timing.CurTime < agent.PositionCommittedUntil)
+            return null;
+        var currentScore = -ExposureScore(uid, agent, transform.Coordinates) * 2 -
+            Math.Abs(currentRange - agent.PreferredFireRange) * 0.5f;
         var started = Stopwatch.GetTimestamp();
         var origin = _transform.GetGridOrMapTilePosition(uid, transform);
         var pending = new Queue<(int X, int Y, int Steps)>();
@@ -177,7 +187,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var threatPosition = _transform.ToMapCoordinates(threat).Position;
         foreach (var candidate in candidates)
         {
-            if (Reserved(uid, candidate.Position) || agent.FailedPosition is { } failed &&
+            if (GrenadeDanger(candidate.Position) || Reserved(uid, candidate.Position) || agent.FailedPosition is { } failed &&
                 _timing.CurTime < agent.AvoidPositionUntil && _transform.InRange(candidate.Position, failed, 1.4f))
                 continue;
             if (ShelteredFromKnownThreats(uid, agent, candidate.Position))
@@ -194,7 +204,7 @@ public sealed partial class CMUExpeditionAgentSystem
             {
                 var distance = Vector2.Distance(_transform.ToMapCoordinates(candidate.Position).Position, threatPosition);
                 // Leave room for the target's movement and the body's sub-tile arrival offset.
-                if (distance >= agent.MinimumFireRange && distance <= agent.FireRange - 0.75f &&
+                if (distance >= agent.MinimumFireRange && distance <= WeaponFireRange(uid, agent) - 0.75f &&
                     FiringLaneClear(uid, candidate.Position, threat))
                 {
                     // Score a bounded set of attack bearings. Shelter eligibility above
@@ -216,6 +226,12 @@ public sealed partial class CMUExpeditionAgentSystem
                 var range = Vector2.Distance(_transform.ToMapCoordinates(peek).Position, threatPosition);
                 var preferredRange = agent.PreferredFireRange + agent.Stress * 2;
                 var score = -anchor.Steps * 0.6f - stepOut - Math.Abs(range - preferredRange) * 0.5f - exposure;
+                // A usable firing position needs a material gain to justify travel. Shelter
+                // contributes two points, but cosmetic changes of angle do not beat the margin.
+                const float shelterValue = 2;
+                const float improvementMargin = 2.5f;
+                if (usableStance && score + shelterValue < currentScore + improvementMargin)
+                    continue;
                 // Reject inferior pairs before their expensive corridor casts; exposure is cached once per peek.
                 if (score <= bestScore || !TraversablePassage(uid, anchor.Position, peek) || !ClearLane(uid, anchor.Position, peek, 0.35f, movement: true))
                     continue;
@@ -294,6 +310,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 !_guns.TryGetGun(uid, out var gun) || !SafeShot(uid, agent, gun, threat, candidate))
                 continue;
             agent.PeekPosition = candidate;
+            agent.FightingPosition = null;
             BeginMove(uid, agent, candidate, CMUExpeditionAgentState.Peeking, now);
             return true;
         }

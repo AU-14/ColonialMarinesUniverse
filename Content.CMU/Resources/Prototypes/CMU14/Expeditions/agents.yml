@@ -180,6 +180,7 @@
   id: CMUExpeditionScavengerScout
   components:
   - type: CMUExpeditionAgent
+    combatRole: Flanker
     disposition: Cautious
     aggression: 0.4
     courage: 0.55

@@ -12,7 +12,8 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.State is CMUExpeditionAgentState.Guard or CMUExpeditionAgentState.Investigate or
             CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Withdraw or
             CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.PlanMove &&
-        TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status != SteeringStatus.NoPath;
+        (TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status != SteeringStatus.NoPath ||
+            agent.TrafficWaitingSince != null && agent.TrafficActiveUntil > _timing.CurTime);
 
     private void UpdateMovingFire(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
@@ -26,9 +27,21 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.MovingShotsFired = 0;
             agent.MovingBurstEnd = now + agent.BurstDuration;
         }
-        if (!_guns.TryGetGun(uid, out var gun) || !_guns.CanShoot(gun) ||
-            !TryAimPoint(uid, agent, gun, out var point) || !SafeShot(uid, agent, gun, point))
+        if (!_guns.TryGetGun(uid, out var gun) || !_guns.CanShoot(gun))
+        {
+            agent.LastFireCheck = "moving-weapon-not-ready";
             return;
+        }
+        if (!TryAimPoint(uid, agent, gun, out var point))
+        {
+            agent.LastFireCheck = "moving-no-visible-aim-point";
+            return;
+        }
+        if (!SafeShot(uid, agent, gun, point))
+        {
+            agent.LastFireCheck = "moving-lane-blocked";
+            return;
+        }
         // This executor does not change navigation state, unregister steering, or wait
         // for arrival. Native gun systems still enforce wielding, recoil and fire rate.
         if (TryComp<CombatModeComponent>(uid, out var combat))
