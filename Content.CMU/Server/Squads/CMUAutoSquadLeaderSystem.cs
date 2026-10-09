@@ -78,7 +78,8 @@ public sealed partial class CMUAutoSquadLeaderSystem : EntitySystem
         var squads = EntityQueryEnumerator<SquadTeamComponent>();
         while (squads.MoveNext(out var uid, out var squad))
         {
-            if (!Groups.Contains(squad.Group))
+            // Auxiliary squads never get an automatic squad leader (and have no fireteams).
+            if (!Groups.Contains(squad.Group) || HasComp<CMUAuxiliarySquadComponent>(uid))
                 continue;
 
             CheckSquadLeader((uid, squad), time);

@@ -95,17 +95,19 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
     private static readonly HashSet<string> NoSquadRoundRoles = new(StringComparer.OrdinalIgnoreCase)
     {
-        "Advisor",
-        "DropshipCrewChief",
-        "DropshipPilot",
-        "MilitaryDoctor",
-        "MilitaryPolice",
-        "PlatoonCommander",
-        "ExecutiveOfficer",
-        "CMO",
-        "ChiefMP",
-        "LogisticsOfficer",
-        "EngineeringOfficer",
+        // cmu edit start: moved to AuxiliarySquadRoundRoles
+        // "Advisor",
+        // "DropshipCrewChief",
+        // "DropshipPilot",
+        // "MilitaryDoctor",
+        // "MilitaryPolice",
+        // "PlatoonCommander",
+        // "ExecutiveOfficer",
+        // "CMO",
+        // "ChiefMP",
+        // "LogisticsOfficer",
+        // "EngineeringOfficer",
+        // cmu edit end
         "AdjutantDress",
         "BrigadierGeneral",
         "VipEscort"
@@ -123,23 +125,45 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         "Nurse",
         "WorkingJoe",
         "VehicleCommander",
-        "VehicleCrewman"
+        "VehicleCrewman",
+        // cmu edit start: staff officers, aircrew, medical and police join the auxiliary squad
+        "Advisor",
+        "DropshipCrewChief",
+        "DropshipPilot",
+        "MilitaryDoctor",
+        "MilitaryPolice",
+        "CMO",
+        "ChiefMP",
+        "LogisticsOfficer",
+        "EngineeringOfficer",
+        "PlatoonCommander",
+        "ExecutiveOfficer",
+        // cmu edit end
     };
 
     // Legacy fallback for jobs that have not been migrated to roundRole yet.
     private static readonly HashSet<string> NoSquadJobIdFragments = new(StringComparer.OrdinalIgnoreCase)
     {
-        "dcc",
-        "pilot",
-        "platco",
-        "policeman",
-        "militarydoctor"
+        // cmu edit start: moved to AuxiliarySquadJobIdFragments
+        // "dcc",
+        // "pilot",
+        // "platco",
+        // "policeman",
+        // "militarydoctor"
+        // cmu edit end
     };
 
     private static readonly HashSet<string> AuxiliarySquadJobIdFragments = new(StringComparer.OrdinalIgnoreCase)
     {
         "synth",
-        "platop"
+        "platop",
+        // cmu edit start
+        "dcc",
+        "pilot",
+        "policeman",
+        "militarydoctor",
+        "platco",
+        // cmu edit end
     };
 
     /// <summary>

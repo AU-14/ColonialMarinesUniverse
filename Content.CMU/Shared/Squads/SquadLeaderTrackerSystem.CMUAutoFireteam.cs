@@ -51,6 +51,14 @@ public sealed partial class SquadLeaderTrackerSystem
             return;
         }
 
+        // Auxiliary squads have no fireteams. Someone who led a fireteam in their old squad loses the
+        // fireteam leader icon here too.
+        if (HasComp<CMUAuxiliarySquadComponent>(squadId))
+        {
+            RemComp<FireteamLeaderComponent>(member);
+            return;
+        }
+
         var maxFireteams = squad.Fireteams.Fireteams.Length;
         var openFireteams = Math.Clamp(
             (squad.Members.Count + CMUPeoplePerFireteam - 1) / CMUPeoplePerFireteam,
@@ -236,6 +244,16 @@ public sealed partial class SquadLeaderTrackerSystem
         var ev = new CMUCanAutoLeadEvent(uid);
         RaiseLocalEvent(ref ev);
         return !ev.Cancelled;
+    }
+
+    /// <summary>
+    /// Whether this squad member is in an auxiliary squad, which has no fireteams.
+    /// </summary>
+    private bool CMUInAuxiliarySquad(EntityUid uid)
+    {
+        return _squadMemberQuery.TryComp(uid, out var member) &&
+               member.Squad is { } squad &&
+               HasComp<CMUAuxiliarySquadComponent>(squad);
     }
 
     private bool CMUIsFireteamLeaderJob(EntityUid uid)

@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Tracker;
 using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.Alert;
+using Content.Shared.CMU14.Squads;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -44,6 +45,7 @@ public sealed partial class CMUSquadLeaderTrackerSystem : EntitySystem
             if (member.Squad is not { } squad ||
                 !TryComp(squad, out SquadTeamComponent? team) ||
                 !Groups.Contains(team.Group) ||
+                HasComp<CMUAuxiliarySquadComponent>(squad) ||
                 HasComp<SquadLeaderComponent>(uid))
             {
                 continue;
