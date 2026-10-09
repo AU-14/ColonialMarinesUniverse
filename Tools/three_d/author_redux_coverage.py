@@ -85,21 +85,23 @@ class Sources:
 
 
 class Pool:
-    def __init__(self):
+    def __init__(self, art=ART, textures=TEXTURES, prefix='CMU3DReduxSurface',
+                 texture_root='/Textures/CMU14/ThreeD/ReduxCoverage'):
+        self.textures, self.prefix, self.texture_root = textures, prefix, texture_root
         self.entries, self.cache = [], {}
         self.previous = {}
         used = set()
         for path in WORLD.glob('*.yml'):
-            if path == ART:
+            if path == art:
                 continue
             for entry in yaml.load(path.read_text(encoding='utf-8-sig'), Loader=yaml.CSafeLoader) or []:
                 if entry['type'] == 'cmu3DSurface':
                     used.add(entry['atlasIndex'])
         # Retain unchanged crops and atlas slots when refining one model family.
         # Reassigning every later slot needlessly rewrites unrelated exports.
-        if ART.exists():
-            for entry in yaml.safe_load(ART.read_text(encoding='utf-8')):
-                pixels = Image.open(TEXTURES / Path(entry['texture']).name).convert('RGBA')
+        if art.exists():
+            for entry in yaml.safe_load(art.read_text(encoding='utf-8')):
+                pixels = Image.open(textures / Path(entry['texture']).name).convert('RGBA')
                 signature = hashlib.sha256(str(pixels.size).encode() + pixels.tobytes()).hexdigest()
                 self.previous[signature] = entry
                 used.add(entry['atlasIndex'])
@@ -116,12 +118,12 @@ class Pool:
                 self.cache[signature] = entry['id']
                 return entry['id']
             index = next(self.free)
-            uid = f'CMU3DReduxSurface{index}'
+            uid = f'{self.prefix}{index}'
             stream = BytesIO()
             pixels.save(stream, format='PNG')
-            write(TEXTURES / (uid + '.png'), stream.getvalue())
+            write(self.textures / (uid + '.png'), stream.getvalue())
             self.entries.append(dict(type='cmu3DSurface', id=uid, atlasIndex=index,
-                                     texture=f'/Textures/CMU14/ThreeD/ReduxCoverage/{uid}.png'))
+                                     texture=f'{self.texture_root}/{uid}.png'))
             self.cache[signature] = uid
         return self.cache[signature]
 

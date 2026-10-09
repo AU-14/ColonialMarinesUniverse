@@ -538,6 +538,12 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                         else if (model.BackWallMountTargets.Length > 0)
                             position += BackWallMountOffset(candidate.Uid, model, renderYaw, wallOffset);
                     }
+                    else if (model.WallMounted && HasComp<CMU3DVehicleCabinComponent>(mapUid))
+                    {
+                        // Cabin fixtures are placed directly against custom hull art.
+                        // Undo the ordinary model's half-tile wall-face offset.
+                        position += new Vector2(-MathF.Sin(renderYaw), MathF.Cos(renderYaw)) * .5f;
+                    }
                     else if (model.FaceAwayFromWall)
                         renderYaw = ApplianceYaw(candidate.Uid, model, renderYaw);
                     else if (model.BackWallMountTargets.Length > 0 && model.Placement != "surface")
