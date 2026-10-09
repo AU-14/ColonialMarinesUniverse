@@ -1,0 +1,4390 @@
+# Pinned source-inspected physical drafts; see SOURCES_MATERIAL_LEISURE_CLOUD.md
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureGlass50Cloud
+  label: Glass sheet stack (50)
+  status: draft
+  sourcePrototypes:
+  - CMSheetGlass
+  referencePrototype: CMSheetGlass
+  referenceRsi: /Textures/_RMC14/Objects/Materials/Sheets/glass.rsi
+  referenceState: glass_4
+  sourceDirections: 1
+  description: Source Stack count 50. Four separate thin sheets are the source visual convention, not literal inventory
+    units. Runtime count changes, hide state, damage, source partial-alpha transmission and reflections are not
+    implemented. Physical depth, rear and underside are inferred. Draft art only; no native, full-map, gameplay-state
+    or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: separate physical sheet 0
+    min: -0.2, -0.3185, 0.0
+    max: 0.2, 0.2015, 0.018
+    color: '#7FA6A6A0'
+  - label: sheet edge 0
+    min: -0.2, -0.3185, 0.0
+    max: -0.19, 0.2015, 0.02
+    color: '#52767E99'
+  - label: sheet edge 0 member 2
+    min: 0.19, -0.3185, 0.0
+    max: 0.2, 0.2015, 0.02
+    color: '#52767E99'
+  - label: glass upper specular stripe 0
+    min: -0.175, 0.1215, 0.018
+    max: 0.18, 0.1415, 0.02
+    color: '#B7DDDE99'
+  - label: separate physical sheet 1
+    min: -0.165, -0.2795, 0.019
+    max: 0.235, 0.2405, 0.037
+    color: '#7FA6A6A0'
+  - label: sheet edge 1
+    min: -0.165, -0.2795, 0.019
+    max: -0.155, 0.2405, 0.039
+    color: '#52767E99'
+  - label: sheet edge 1 member 2
+    min: 0.225, -0.2795, 0.019
+    max: 0.235, 0.2405, 0.039
+    color: '#52767E99'
+  - label: glass upper specular stripe 1
+    min: -0.14, 0.1605, 0.037
+    max: 0.215, 0.1805, 0.039
+    color: '#B7DDDE99'
+  - label: separate physical sheet 2
+    min: -0.2, -0.2405, 0.038
+    max: 0.2, 0.2795, 0.056
+    color: '#7FA6A6A0'
+  - label: sheet edge 2
+    min: -0.2, -0.2405, 0.038
+    max: -0.19, 0.2795, 0.058
+    color: '#52767E99'
+  - label: sheet edge 2 member 2
+    min: 0.19, -0.2405, 0.038
+    max: 0.2, 0.2795, 0.058
+    color: '#52767E99'
+  - label: glass upper specular stripe 2
+    min: -0.175, 0.1995, 0.056
+    max: 0.18, 0.2195, 0.058
+    color: '#B7DDDE99'
+  - label: separate physical sheet 3
+    min: -0.165, -0.2015, 0.057
+    max: 0.235, 0.3185, 0.075
+    color: '#7FA6A6A0'
+  - label: sheet edge 3
+    min: -0.165, -0.2015, 0.057
+    max: -0.155, 0.3185, 0.077
+    color: '#52767E99'
+  - label: sheet edge 3 member 2
+    min: 0.225, -0.2015, 0.057
+    max: 0.235, 0.3185, 0.077
+    color: '#52767E99'
+  - label: glass upper specular stripe 3
+    min: -0.14, 0.2385, 0.075
+    max: 0.215, 0.2585, 0.077
+    color: '#B7DDDE99'
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisurePlasteel50Cloud
+  label: Plasteel sheet stack (50)
+  status: draft
+  sourcePrototypes:
+  - CMSheetPlasteel50
+  referencePrototype: CMSheetPlasteel50
+  referenceRsi: /Textures/_RMC14/Objects/Materials/Sheets/plasteel.rsi
+  referenceState: plasteel_4
+  sourceDirections: 1
+  description: Source Stack count 50. Four separate thin sheets are the source visual convention, not literal inventory
+    units. Runtime count changes, hide state, damage, source partial-alpha transmission and reflections are not
+    implemented. Physical depth, rear and underside are inferred. Draft art only; no native, full-map, gameplay-state
+    or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: separate physical sheet 0
+    min: -0.2, -0.3185, 0.0
+    max: 0.2, 0.2015, 0.018
+    color: '#646E70'
+  - label: sheet edge 0
+    min: -0.2, -0.3185, 0.0
+    max: -0.19, 0.2015, 0.02
+    color: '#ABB8B8'
+  - label: sheet edge 0 member 2
+    min: 0.19, -0.3185, 0.0
+    max: 0.2, 0.2015, 0.02
+    color: '#ABB8B8'
+  - label: original broad reflective sheet surface 0
+    min: -0.18, -0.2985, 0.018
+    max: 0.18, 0.1815, 0.02
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt000
+    surfaceAxis: XY
+  - label: separate physical sheet 1
+    min: -0.165, -0.2795, 0.019
+    max: 0.235, 0.2405, 0.037
+    color: '#646E70'
+  - label: sheet edge 1
+    min: -0.165, -0.2795, 0.019
+    max: -0.155, 0.2405, 0.039
+    color: '#ABB8B8'
+  - label: sheet edge 1 member 2
+    min: 0.225, -0.2795, 0.019
+    max: 0.235, 0.2405, 0.039
+    color: '#ABB8B8'
+  - label: original broad reflective sheet surface 1
+    min: -0.145, -0.2595, 0.037
+    max: 0.215, 0.2205, 0.039
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt000
+    surfaceAxis: XY
+  - label: separate physical sheet 2
+    min: -0.2, -0.2405, 0.038
+    max: 0.2, 0.2795, 0.056
+    color: '#646E70'
+  - label: sheet edge 2
+    min: -0.2, -0.2405, 0.038
+    max: -0.19, 0.2795, 0.058
+    color: '#ABB8B8'
+  - label: sheet edge 2 member 2
+    min: 0.19, -0.2405, 0.038
+    max: 0.2, 0.2795, 0.058
+    color: '#ABB8B8'
+  - label: original broad reflective sheet surface 2
+    min: -0.18, -0.2205, 0.056
+    max: 0.18, 0.2595, 0.058
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt000
+    surfaceAxis: XY
+  - label: separate physical sheet 3
+    min: -0.165, -0.2015, 0.057
+    max: 0.235, 0.3185, 0.075
+    color: '#646E70'
+  - label: sheet edge 3
+    min: -0.165, -0.2015, 0.057
+    max: -0.155, 0.3185, 0.077
+    color: '#ABB8B8'
+  - label: sheet edge 3 member 2
+    min: 0.225, -0.2015, 0.057
+    max: 0.235, 0.3185, 0.077
+    color: '#ABB8B8'
+  - label: original broad reflective sheet surface 3
+    min: -0.145, -0.1815, 0.075
+    max: 0.215, 0.2985, 0.077
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt000
+    surfaceAxis: XY
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisurePhoron50Cloud
+  label: Solid phoron stack (50)
+  status: draft
+  sourcePrototypes:
+  - CMSheetPhoron
+  referencePrototype: CMSheetPhoron
+  referenceRsi: /Textures/_RMC14/Objects/Materials/Sheets/phoron.rsi
+  referenceState: phoron
+  sourceDirections: 1
+  description: Source count50 retains the same single phoron resource; no LayerStates are inherited from BaseSheet/MaterialBase.
+    Solid mineral block with independent edge planes. No material effects or reagent behavior. Physical depth, rear
+    and underside are inferred. Draft art only; no native, full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: solid phoron bar
+    min: -0.16, -0.072, 0.0
+    max: 0.16, 0.072, 0.065
+    color: '#6C304F'
+  - label: upper phoron crystal plane
+    min: -0.136, -0.061, 0.065
+    max: 0.137, 0.062, 0.078
+    color: '#C33B6C'
+  - label: left bevel
+    min: -0.16, -0.072, 0.034
+    max: -0.133, 0.072, 0.071
+    color: '#8A3768'
+    shape: WedgeY
+  - label: bright front crystalline band
+    min: -0.13, -0.074, 0.028
+    max: 0.133, -0.07, 0.055
+    color: '#E15879'
+  - label: original solid phoron upper coloration
+    min: -0.12, -0.05, 0.078
+    max: 0.12, 0.05, 0.079
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt001
+    surfaceAxis: XY
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureMetalRods1Cloud
+  label: Metal rod resource (count 1)
+  status: draft
+  sourcePrototypes:
+  - CMRodMetal1
+  referencePrototype: CMRodMetal1
+  referenceRsi: /Textures/_RMC14/Objects/Materials/parts.rsi
+  referenceState: rods
+  sourceDirections: 1
+  description: Source count1 selects rods; rods and rods_5 PNGs are byte-identical and depict several thin sticks.
+    This preserves the source convention rather than equating visible sticks with inventory units. No dynamic stack
+    adapter. Physical depth, rear and underside are inferred. Draft art only; no native, full-map, gameplay-state
+    or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: separate source rod 0
+    min: -0.3530402, -0.108, 0.0
+    max: 0.0330402, -0.072, 0.036
+    color: '#69615A'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: raised rod highlight 0
+    min: -0.3530402, -0.095, 0.03
+    max: 0.0330402, -0.085, 0.04
+    color: '#BBB7A7'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: separate source rod 1
+    min: -0.2626884, -0.028, 0.0
+    max: 0.1926884, 0.008, 0.036
+    color: '#69615A'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: raised rod highlight 1
+    min: -0.2626884, -0.015, 0.03
+    max: 0.1926884, -0.005, 0.04
+    color: '#BBB7A7'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: separate source rod 2
+    min: -0.1030402, 0.067, 0.0
+    max: 0.2830402, 0.103, 0.036
+    color: '#69615A'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: raised rod highlight 2
+    min: -0.1030402, 0.08, 0.03
+    max: 0.2830402, 0.09, 0.04
+    color: '#BBB7A7'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: separate source rod 3
+    min: 0.0562563, 0.092, 0.0
+    max: 0.3037437, 0.128, 0.036
+    color: '#69615A'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: raised rod highlight 3
+    min: 0.0562563, 0.105, 0.03
+    max: 0.3037437, 0.115, 0.04
+    color: '#BBB7A7'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureWood50Cloud
+  label: Wood plank stack (50)
+  status: draft
+  sourcePrototypes:
+  - RMCPlankWood
+  referencePrototype: RMCPlankWood
+  referenceRsi: /Textures/_RMC14/Objects/Materials/Sheets/wood.rsi
+  referenceState: wood_4
+  sourceDirections: 1
+  description: StackSystem calls ProcessOpaqueSprite and RoundToEqualLevels. Count 50 maps to wood_4. Visible plank
+    count follows source artwork. Runtime changes and consumption are unsupported. Physical depth, rear and underside
+    are inferred. Draft art only; no native, full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: separate wood plank 0
+    min: -0.362, -0.171, 0.0
+    max: 0.398, 0.039, 0.034
+    color: '#7D4E26'
+  - label: endgrain left 0
+    min: -0.365, -0.168, 0.002
+    max: -0.358, 0.036, 0.03
+    color: '#684522'
+  - label: original wood grain top 0
+    min: -0.347, -0.16, 0.034
+    max: 0.383, 0.028, 0.035
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt002
+    surfaceAxis: XY
+  - label: separate wood plank 1
+    min: -0.398, -0.127, 0.034
+    max: 0.362, 0.083, 0.068
+    color: '#7D4E26'
+  - label: endgrain left 1
+    min: -0.401, -0.124, 0.036
+    max: -0.394, 0.08, 0.064
+    color: '#684522'
+  - label: original wood grain top 1
+    min: -0.383, -0.116, 0.068
+    max: 0.347, 0.072, 0.069
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt002
+    surfaceAxis: XY
+  - label: separate wood plank 2
+    min: -0.362, -0.083, 0.068
+    max: 0.398, 0.127, 0.102
+    color: '#7D4E26'
+  - label: endgrain left 2
+    min: -0.365, -0.08, 0.07
+    max: -0.358, 0.124, 0.098
+    color: '#684522'
+  - label: original wood grain top 2
+    min: -0.347, -0.072, 0.102
+    max: 0.383, 0.116, 0.103
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt002
+    surfaceAxis: XY
+  - label: separate wood plank 3
+    min: -0.398, -0.039, 0.102
+    max: 0.362, 0.171, 0.136
+    color: '#7D4E26'
+  - label: endgrain left 3
+    min: -0.401, -0.036, 0.104
+    max: -0.394, 0.168, 0.132
+    color: '#684522'
+  - label: original wood grain top 3
+    min: -0.383, -0.028, 0.136
+    max: 0.347, 0.16, 0.137
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt002
+    surfaceAxis: XY
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureWood25Cloud
+  label: Wood plank stack (25)
+  status: draft
+  sourcePrototypes:
+  - RMCPlankWood25
+  referencePrototype: RMCPlankWood25
+  referenceRsi: /Textures/_RMC14/Objects/Materials/Sheets/wood.rsi
+  referenceState: wood_3
+  sourceDirections: 1
+  description: StackSystem calls ProcessOpaqueSprite and RoundToEqualLevels. Count 25/max50 maps to index2, wood_3;
+    inherited initial wood_4 is not the initialized default. Visible plank count follows source artwork. Runtime
+    changes and consumption are unsupported. Physical depth, rear and underside are inferred. Draft art only; no
+    native, full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: separate wood plank 0
+    min: -0.362, -0.149, 0.0
+    max: 0.398, 0.061, 0.034
+    color: '#7D4E26'
+  - label: endgrain left 0
+    min: -0.365, -0.146, 0.002
+    max: -0.358, 0.058, 0.03
+    color: '#684522'
+  - label: original wood grain top 0
+    min: -0.347, -0.138, 0.034
+    max: 0.383, 0.05, 0.035
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt002
+    surfaceAxis: XY
+  - label: separate wood plank 1
+    min: -0.398, -0.105, 0.034
+    max: 0.362, 0.105, 0.068
+    color: '#7D4E26'
+  - label: endgrain left 1
+    min: -0.401, -0.102, 0.036
+    max: -0.394, 0.102, 0.064
+    color: '#684522'
+  - label: original wood grain top 1
+    min: -0.383, -0.094, 0.068
+    max: 0.347, 0.094, 0.069
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt002
+    surfaceAxis: XY
+  - label: separate wood plank 2
+    min: -0.362, -0.061, 0.068
+    max: 0.398, 0.149, 0.102
+    color: '#7D4E26'
+  - label: endgrain left 2
+    min: -0.365, -0.058, 0.07
+    max: -0.358, 0.146, 0.098
+    color: '#684522'
+  - label: original wood grain top 2
+    min: -0.347, -0.05, 0.102
+    max: 0.383, 0.138, 0.103
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt002
+    surfaceAxis: XY
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureSandbagsEmptyCloud
+  label: Folded empty sandbag stack (10 / 50)
+  status: draft
+  sourcePrototypes:
+  - CMSandbagEmpty10
+  - CMSandbagEmpty50
+  referencePrototype: CMSandbagEmpty10
+  referenceRsi: /Textures/_RMC14/Objects/Misc/sandbags.rsi
+  referenceState: sandbag_stack
+  sourceDirections: 1
+  description: CMSandbagEmpty10 and CMSandbagEmpty50 differ only in Stack.count. Both use sandbag_stack with no
+    LayerStates. Four cloth folds preserve this identical default art; not ten or fifty modeled sacks. Acid layer
+    is unbound and contents/filling changes are not modeled. Physical depth, rear and underside are inferred. Draft
+    art only; no native, full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: folded burlap body 0
+    min: -0.185, -0.15, 0.0
+    max: 0.185, 0.18, 0.026
+    color: '#655033'
+    shape: Ellipsoid
+  - label: folded seam 0
+    min: -0.154, -0.145, 0.007
+    max: 0.154, -0.136, 0.017
+    color: '#8C7250'
+  - label: folded burlap body 1
+    min: -0.185, -0.158, 0.022
+    max: 0.185, 0.172, 0.048
+    color: '#655033'
+    shape: Ellipsoid
+  - label: folded seam 1
+    min: -0.154, -0.153, 0.029
+    max: 0.154, -0.144, 0.039
+    color: '#8C7250'
+  - label: folded burlap body 2
+    min: -0.185, -0.166, 0.044
+    max: 0.185, 0.164, 0.07
+    color: '#655033'
+    shape: Ellipsoid
+  - label: folded seam 2
+    min: -0.154, -0.161, 0.051
+    max: 0.154, -0.152, 0.061
+    color: '#8C7250'
+  - label: folded burlap body 3
+    min: -0.185, -0.174, 0.066
+    max: 0.185, 0.156, 0.092
+    color: '#655033'
+    shape: Ellipsoid
+  - label: folded seam 3
+    min: -0.154, -0.169, 0.073
+    max: 0.154, -0.16, 0.083
+    color: '#8C7250'
+  - label: top folded bag cloth
+    min: -0.16, -0.132, 0.091
+    max: 0.16, 0.15, 0.098
+    color: '#7D6549'
+  - label: top bag stitched side
+    min: -0.171, -0.134, 0.094
+    max: -0.159, 0.15, 0.102
+    color: '#9B7D57'
+  - label: top bag stitched side member 2
+    min: 0.159, -0.134, 0.094
+    max: 0.171, 0.15, 0.102
+    color: '#9B7D57'
+  - label: folded mouth rear seam
+    min: -0.17, 0.144, 0.095
+    max: 0.17, 0.157, 0.105
+    color: '#604A2F'
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureSandbagsFull5Cloud
+  label: Filled sandbag pile (5)
+  status: draft
+  sourcePrototypes:
+  - CMSandbagFull5
+  referencePrototype: CMSandbagFull5
+  referenceRsi: /Textures/_RMC14/Objects/Misc/sandbags.rsi
+  referenceState: sandbag_pile
+  sourceDirections: 1
+  description: Count5 uses the static sandbag_pile resource and does not specify stack LayerStates. Source depicts
+    three overlapping filled shapes. Acid, emptying and construction presentation are unsupported. Physical depth,
+    rear and underside are inferred. Draft art only; no native, full-map, gameplay-state or fidelity approval. See
+    SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: filled burlap sack 0
+    min: -0.3, -0.205, 0.013
+    max: 0.06, 0.055, 0.163
+    color: '#8C7050'
+    shape: Ellipsoid
+  - label: sewn bag seam 0
+    min: -0.2586, -0.162, 0.106
+    max: 0.0186, -0.148, 0.12
+    color: '#665137'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: tied sack neck 0
+    min: 0.008, -0.1, 0.08
+    max: 0.076, -0.05, 0.13
+    color: '#705737'
+    shape: Ellipsoid
+  - label: sack tie 0
+    min: 0.021, -0.082, 0.095
+    max: 0.063, -0.064, 0.113
+    color: '#4F3D28'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: filled burlap sack 1
+    min: -0.02, -0.07, 0.0
+    max: 0.3, 0.18, 0.15
+    color: '#8C7050'
+    shape: Ellipsoid
+  - label: sewn bag seam 1
+    min: 0.0168, -0.032, 0.093
+    max: 0.2632, -0.018, 0.107
+    color: '#665137'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: tied sack neck 1
+    min: 0.25, 0.03, 0.067
+    max: 0.318, 0.08, 0.117
+    color: '#705737'
+    shape: Ellipsoid
+  - label: sack tie 1
+    min: 0.263, 0.048, 0.082
+    max: 0.305, 0.066, 0.1
+    color: '#4F3D28'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: filled burlap sack 2
+    min: -0.185, 0.02, 0.059
+    max: 0.155, 0.25, 0.209
+    color: '#8C7050'
+    shape: Ellipsoid
+  - label: sewn bag seam 2
+    min: -0.1459, 0.048, 0.152
+    max: 0.1159, 0.062, 0.166
+    color: '#665137'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: tied sack neck 2
+    min: 0.104, 0.11, 0.126
+    max: 0.172, 0.16, 0.176
+    color: '#705737'
+    shape: Ellipsoid
+  - label: sack tie 2
+    min: 0.117, 0.128, 0.141
+    max: 0.159, 0.146, 0.159
+    color: '#4F3D28'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureBarbedWire15Cloud
+  label: Coiled barbed wire (15)
+  status: draft
+  sourcePrototypes:
+  - BarbedWire15
+  referencePrototype: BarbedWire15
+  referenceRsi: /Textures/_RMC14/Objects/barbed_wire.rsi
+  referenceState: barbed_wire_3
+  sourceDirections: 1
+  description: Source count15/max20 with three states selects index2, barbed_wire_3, by RoundToEqualLevels. The
+    explicit initial Sprite.state barbed_wire does not override the initialized mapped base layer. Coil path, pitch
+    and unseen wire route are physical inferences. No automatic count/hide/tint state adapter or installation pose.
+    Physical depth, rear and underside are inferred. Draft art only; no native, full-map, gameplay-state or fidelity
+    approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: continuous coiled wire segment 1
+    min: 0.16847468799999998, 0.012614303999999998, 0.0038062
+    max: 0.22876789199999997, 0.045094304, 0.0362862
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 105.23536698713252
+    pitch: 7.253405547452758
+  - label: continuous coiled wire segment 2
+    min: 0.135010892, 0.065930224, 0.0114187
+    max: 0.201755204, 0.098410224, 0.0438987
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 132.45510621144138
+    pitch: 6.549102261813983
+  - label: continuous coiled wire segment 3
+    min: 0.07504736, 0.10673635599999999, 0.0190313
+    max: 0.149972572, 0.13921635599999999, 0.0515112
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 153.9878261070656
+    pitch: 5.831386477770068
+  - label: continuous coiled wire segment 4
+    min: -0.000595776, 0.128820552, 0.0266438
+    max: 0.079612192, 0.16130055199999999, 0.0591237
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 171.73428937584447
+    pitch: 5.446111479547883
+  - label: continuous coiled wire segment 5
+    min: -0.079612192, 0.128820552, 0.0342563
+    max: 0.000595776, 0.16130055199999999, 0.0667362
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -171.7342893758445
+    pitch: 5.4461114795478816
+  - label: continuous coiled wire segment 6
+    min: -0.149972572, 0.10673635599999999, 0.0418687
+    max: -0.07504736, 0.13921635599999999, 0.0743487
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -153.9878261070656
+    pitch: 5.831386477770063
+  - label: continuous coiled wire segment 7
+    min: -0.201755204, 0.065930224, 0.0494812
+    max: -0.135010892, 0.098410224, 0.0819612
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -132.4551062114414
+    pitch: 6.5491022618139825
+  - label: continuous coiled wire segment 8
+    min: -0.22876789199999997, 0.012614303999999998, 0.0570937
+    max: -0.16847468799999998, 0.045094304, 0.0895737
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -105.23536698713251
+    pitch: 7.253405547452758
+  - label: continuous coiled wire segment 9
+    min: -0.22876789199999997, -0.045094304, 0.0647062
+    max: -0.16847468799999998, -0.012614303999999998, 0.0971862
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -74.76463301286749
+    pitch: 7.253405547452758
+  - label: continuous coiled wire segment 10
+    min: -0.201755204, -0.098410224, 0.0723187
+    max: -0.135010892, -0.065930224, 0.1047987
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -47.54489378855865
+    pitch: 6.549102261813985
+  - label: continuous coiled wire segment 11
+    min: -0.149972572, -0.13921635599999999, 0.0799312
+    max: -0.07504736, -0.10673635599999999, 0.1124112
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -26.01217389293444
+    pitch: 5.831386477770066
+  - label: continuous coiled wire segment 12
+    min: -0.079612192, -0.16130055199999999, 0.0875437
+    max: 0.000595776, -0.128820552, 0.1200237
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -8.265710624155503
+    pitch: 5.446111479547877
+  - label: continuous coiled wire segment 13
+    min: -0.000595776, -0.16130055199999999, 0.0951562
+    max: 0.079612192, -0.128820552, 0.1276362
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 8.265710624155503
+    pitch: 5.446111479547877
+  - label: continuous coiled wire segment 14
+    min: 0.07504736, -0.13921635599999999, 0.1027687
+    max: 0.149972572, -0.10673635599999999, 0.1352487
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 26.012173892934413
+    pitch: 5.831386477770068
+  - label: continuous coiled wire segment 15
+    min: 0.135010892, -0.098410224, 0.1103812
+    max: 0.201755204, -0.065930224, 0.1428612
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 47.544893788558625
+    pitch: 6.549102261813991
+  - label: continuous coiled wire segment 16
+    min: 0.16847468799999998, -0.045094304, 0.1179938
+    max: 0.22876789199999997, -0.012614303999999998, 0.1504738
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 74.76463301286745
+    pitch: 7.25340554745275
+  - label: continuous coiled wire segment 17
+    min: 0.16847468799999998, 0.012614303999999998, 0.1256062
+    max: 0.22876789199999997, 0.045094304, 0.1580862
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 105.23536698713247
+    pitch: 7.25340554745275
+  - label: continuous coiled wire segment 18
+    min: 0.135010892, 0.065930224, 0.1332187
+    max: 0.201755204, 0.098410224, 0.1656988
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 132.45510621144138
+    pitch: 6.54910226181399
+  - label: continuous coiled wire segment 19
+    min: 0.07504736, 0.10673635599999999, 0.1408312
+    max: 0.149972572, 0.13921635599999999, 0.1733112
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 153.98782610706553
+    pitch: 5.831386477770068
+  - label: continuous coiled wire segment 20
+    min: -0.000595776, 0.128820552, 0.1484437
+    max: 0.079612192, 0.16130055199999999, 0.1809238
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 171.73428937584447
+    pitch: 5.4461114795479
+  - label: continuous coiled wire segment 21
+    min: -0.079612192, 0.128820552, 0.1560563
+    max: 0.000595776, 0.16130055199999999, 0.1885363
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -171.7342893758445
+    pitch: 5.446111479547876
+  - label: continuous coiled wire segment 22
+    min: -0.149972572, 0.10673635599999999, 0.1636687
+    max: -0.07504736, 0.13921635599999999, 0.1961488
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -153.98782610706562
+    pitch: 5.831386477770081
+  - label: continuous coiled wire segment 23
+    min: -0.201755204, 0.065930224, 0.1712813
+    max: -0.135010892, 0.098410224, 0.2037613
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -132.45510621144146
+    pitch: 6.5491022618139745
+  - label: continuous coiled wire segment 24
+    min: -0.22876789199999997, 0.012614303999999998, 0.1788937
+    max: -0.16847468799999998, 0.045094304, 0.2113738
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -105.23536698713255
+    pitch: 7.25340554745275
+  - label: continuous coiled wire segment 25
+    min: -0.22876789199999997, -0.045094304, 0.1865063
+    max: -0.16847468799999998, -0.012614303999999998, 0.2189863
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -74.7646330128675
+    pitch: 7.25340554745275
+  - label: continuous coiled wire segment 26
+    min: -0.201755204, -0.098410224, 0.1941187
+    max: -0.135010892, -0.065930224, 0.2265988
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -47.544893788558596
+    pitch: 6.549102261813974
+  - label: continuous coiled wire segment 27
+    min: -0.149972572, -0.13921635599999999, 0.2017313
+    max: -0.07504736, -0.10673635599999999, 0.2342113
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -26.01217389293444
+    pitch: 5.8313864777700815
+  - label: continuous coiled wire segment 28
+    min: -0.079612192, -0.16130055199999999, 0.2093437
+    max: 0.000595776, -0.128820552, 0.2418238
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -8.265710624155531
+    pitch: 5.446111479547877
+  - label: continuous coiled wire segment 29
+    min: -0.000595776, -0.16130055199999999, 0.2169563
+    max: 0.079612192, -0.128820552, 0.2494363
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 8.265710624155503
+    pitch: 5.446111479547877
+  - label: continuous coiled wire segment 30
+    min: 0.07504736, -0.13921635599999999, 0.2245687
+    max: 0.149972572, -0.10673635599999999, 0.2570487
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 26.012173892934385
+    pitch: 5.831386477770079
+  - label: continuous coiled wire segment 31
+    min: 0.135010892, -0.098410224, 0.2321812
+    max: 0.201755204, -0.065930224, 0.2646613
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 47.54489378855857
+    pitch: 6.5491022618139745
+  - label: continuous coiled wire segment 32
+    min: 0.16847468799999998, -0.045094304, 0.2397937
+    max: 0.22876789199999997, -0.012614303999999998, 0.2722737
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 74.76463301286745
+    pitch: 7.25340554745275
+  - label: continuous coiled wire segment 33
+    min: 0.16847468799999998, 0.012614303999999998, 0.2474062
+    max: 0.22876789199999997, 0.045094304, 0.2798862
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 105.23536698713247
+    pitch: 7.253405547452721
+  - label: continuous coiled wire segment 34
+    min: 0.135010892, 0.065930224, 0.2550187
+    max: 0.201755204, 0.098410224, 0.2874987
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 132.45510621144138
+    pitch: 6.549102261814004
+  - label: continuous coiled wire segment 35
+    min: 0.07504736, 0.10673635599999999, 0.2626312
+    max: 0.149972572, 0.13921635599999999, 0.2951112
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 153.98782610706553
+    pitch: 5.831386477770057
+  - label: continuous coiled wire segment 36
+    min: -0.000595776, 0.128820552, 0.2702437
+    max: 0.079612192, 0.16130055199999999, 0.3027237
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 171.73428937584447
+    pitch: 5.4461114795479
+  - label: continuous coiled wire segment 37
+    min: -0.079612192, 0.128820552, 0.2778562
+    max: 0.000595776, 0.16130055199999999, 0.3103363
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -171.73428937584453
+    pitch: 5.446111479547854
+  - label: continuous coiled wire segment 38
+    min: -0.149972572, 0.10673635599999999, 0.2854687
+    max: -0.07504736, 0.13921635599999999, 0.3179487
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -153.98782610706564
+    pitch: 5.831386477770105
+  - label: continuous coiled wire segment 39
+    min: -0.201755204, 0.065930224, 0.2930812
+    max: -0.135010892, 0.098410224, 0.3255612
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -132.45510621144146
+    pitch: 6.549102261813945
+  - label: continuous coiled wire segment 40
+    min: -0.22876789199999997, 0.012614303999999998, 0.3006937
+    max: -0.16847468799999998, 0.045094304, 0.3331737
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -105.23536698713255
+    pitch: 7.25340554745278
+  - label: continuous coiled wire segment 41
+    min: -0.22876789199999997, -0.045094304, 0.3083062
+    max: -0.16847468799999998, -0.012614303999999998, 0.3407863
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -74.7646330128676
+    pitch: 7.253405547452754
+  - label: continuous coiled wire segment 42
+    min: -0.201755204, -0.098410224, 0.3159187
+    max: -0.135010892, -0.065930224, 0.3483987
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -47.54489378855868
+    pitch: 6.549102261813976
+  - label: continuous coiled wire segment 43
+    min: -0.149972572, -0.13921635599999999, 0.3235312
+    max: -0.07504736, -0.10673635599999999, 0.3560112
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -26.01217389293444
+    pitch: 5.831386477770056
+  - label: continuous coiled wire segment 44
+    min: -0.079612192, -0.16130055199999999, 0.3311437
+    max: 0.000595776, -0.128820552, 0.3636237
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -8.265710624155588
+    pitch: 5.446111479547924
+  - label: continuous coiled wire segment 45
+    min: -0.000595776, -0.16130055199999999, 0.3387562
+    max: 0.079612192, -0.128820552, 0.3712363
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 8.265710624155446
+    pitch: 5.44611147954783
+  - label: continuous coiled wire segment 46
+    min: 0.07504736, -0.13921635599999999, 0.3463687
+    max: 0.149972572, -0.10673635599999999, 0.3788487
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 26.012173892934385
+    pitch: 5.831386477770105
+  - label: continuous coiled wire segment 47
+    min: 0.135010892, -0.098410224, 0.3539812
+    max: 0.201755204, -0.065930224, 0.3864612
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 47.544893788558596
+    pitch: 6.549102261813918
+  - label: continuous coiled wire segment 48
+    min: 0.16847468799999998, -0.045094304, 0.3615937
+    max: 0.22876789199999997, -0.012614303999999998, 0.3940737
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 74.76463301286748
+    pitch: 7.253405547452812
+  - label: continuous coiled wire segment 49
+    min: 0.16847468799999998, 0.012614303999999998, 0.3692062
+    max: 0.22876789199999997, 0.045094304, 0.4016863
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 105.23536698713241
+    pitch: 7.253405547452752
+  - label: continuous coiled wire segment 50
+    min: 0.135010892, 0.065930224, 0.3768187
+    max: 0.201755204, 0.098410224, 0.4092987
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 132.45510621144138
+    pitch: 6.549102261813976
+  - label: continuous coiled wire segment 51
+    min: 0.07504736, 0.10673635599999999, 0.3844312
+    max: 0.149972572, 0.13921635599999999, 0.4169112
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 153.98782610706553
+    pitch: 5.831386477770058
+  - label: continuous coiled wire segment 52
+    min: -0.000595776, 0.128820552, 0.3920437
+    max: 0.079612192, 0.16130055199999999, 0.4245237
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 171.73428937584447
+    pitch: 5.446111479547875
+  - label: continuous coiled wire segment 53
+    min: -0.079612192, 0.128820552, 0.3996562
+    max: 0.000595776, 0.16130055199999999, 0.4321362
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -171.7342893758445
+    pitch: 5.446111479547878
+  - label: continuous coiled wire segment 54
+    min: -0.149972572, 0.10673635599999999, 0.4072687
+    max: -0.07504736, 0.13921635599999999, 0.4397487
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -153.98782610706564
+    pitch: 5.831386477770104
+  - label: continuous coiled wire segment 55
+    min: -0.201755204, 0.065930224, 0.4148812
+    max: -0.135010892, 0.098410224, 0.4473612
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -132.4551062114414
+    pitch: 6.5491022618139185
+  - label: continuous coiled wire segment 56
+    min: -0.22876789199999997, 0.012614303999999998, 0.4224937
+    max: -0.16847468799999998, 0.045094304, 0.4549737
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -105.23536698713252
+    pitch: 7.253405547452812
+  - label: continuous coiled wire segment 57
+    min: -0.22876789199999997, -0.045094304, 0.4301062
+    max: -0.16847468799999998, -0.012614303999999998, 0.4625862
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -74.7646330128676
+    pitch: 7.253405547452752
+  - label: continuous coiled wire segment 58
+    min: -0.201755204, -0.098410224, 0.4377187
+    max: -0.135010892, -0.065930224, 0.4701987
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -47.54489378855871
+    pitch: 6.549102261813977
+  - label: continuous coiled wire segment 59
+    min: -0.149972572, -0.13921635599999999, 0.4453312
+    max: -0.07504736, -0.10673635599999999, 0.4778112
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -26.01217389293447
+    pitch: 5.831386477770057
+  - label: continuous coiled wire segment 60
+    min: -0.079612192, -0.16130055199999999, 0.4529437
+    max: 0.000595776, -0.128820552, 0.4854237
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: -8.265710624155588
+    pitch: 5.446111479547925
+  - label: continuous coiled wire segment 61
+    min: -0.000595776, -0.16130055199999999, 0.4605562
+    max: 0.079612192, -0.128820552, 0.4930362
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 8.265710624155417
+    pitch: 5.446111479547827
+  - label: continuous coiled wire segment 62
+    min: 0.07504736, -0.13921635599999999, 0.4681687
+    max: 0.149972572, -0.10673635599999999, 0.5006487
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 26.012173892934356
+    pitch: 5.831386477770104
+  - label: continuous coiled wire segment 63
+    min: 0.135010892, -0.098410224, 0.4757812
+    max: 0.201755204, -0.065930224, 0.5082612
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 47.544893788558625
+    pitch: 6.549102261813921
+  - label: continuous coiled wire segment 64
+    min: 0.16847468799999998, -0.045094304, 0.4833937
+    max: 0.22876789199999997, -0.012614303999999998, 0.5158737
+    color: '#999E9B'
+    shape: CylinderX
+    yaw: 74.76463301286745
+    pitch: 7.25340554745281
+  - label: returning upright wire 0
+    min: 0.18095999999999998, -0.016239999999999997, 0.51272
+    max: 0.23199999999999998, 0.016239999999999997, 0.5452
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: returning upright wire 1
+    min: 0.16643877199999998, -0.016239999999999997, 0.55564
+    max: 0.21404122799999997, 0.016239999999999997, 0.58812
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 46.974934010882
+  - label: returning upright wire 2
+    min: 0.089985376, -0.016239999999999997, 0.60784
+    max: 0.18841462399999998, 0.016239999999999997, 0.64032
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 44.999999999999964
+  - label: returning upright wire 3
+    min: -0.10439999999999999, -0.016239999999999997, 0.64264
+    max: 0.10439999999999999, 0.016239999999999997, 0.67512
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 0.0
+  - label: returning upright wire 4
+    min: -0.18841462399999998, -0.016239999999999997, 0.60784
+    max: -0.089985376, 0.016239999999999997, 0.64032
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: -44.999999999999964
+  - label: returning upright wire 5
+    min: -0.267369096, -0.016239999999999997, 0.49764
+    max: -0.11311090399999998, 0.016239999999999997, 0.53012
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: -77.84505830277779
+  - label: returning upright wire 6
+    min: -0.35728, -0.016239999999999997, 0.27144
+    max: -0.05568, 0.016239999999999997, 0.30392
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: -90.0
+  - label: returning upright wire 7
+    min: -0.25781348, -0.07424, 0.06844
+    max: -0.08786651999999999, -0.04175999999999999, 0.10092
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: -59.886266849017574
+    pitch: -37.901759116224525
+  - label: returning upright wire 8
+    min: -0.14180014, -0.14964, 0.00812
+    max: 0.00260014, -0.11716, 0.0406
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: -14.036243467926482
+    pitch: -6.457444223434218
+  - label: returning upright wire 9
+    min: -0.00362152, -0.14384, -0.0
+    max: 0.14862152, -0.11136, 0.03248
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 17.744671625056924
+    pitch: 0.0
+  - label: returning upright wire 10
+    min: 0.11516120399999999, -0.06843999999999999, -0.0
+    max: 0.23631879599999997, -0.03596, 0.03248
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 59.50664159752432
+    pitch: 0.0
+  - label: sharp diagonal barb 0
+    min: 0.10381060399999999, 0.098511724, 0.023345
+    max: 0.18819619599999998, 0.11475172399999999, 0.039585
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.4909935093039
+  - label: sharp diagonal barb 1
+    min: -0.18819619599999998, 0.098511724, 0.053795
+    max: -0.10381060399999999, 0.11475172399999999, 0.070035
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.49099350930391
+  - label: sharp diagonal barb 2
+    min: -0.18819619599999998, -0.11475172399999999, 0.084245
+    max: -0.10381060399999999, -0.098511724, 0.100485
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.49099350930391
+  - label: sharp diagonal barb 3
+    min: 0.10381060399999999, -0.11475172399999999, 0.114695
+    max: 0.18819619599999998, -0.098511724, 0.130935
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.4909935093039
+  - label: sharp diagonal barb 4
+    min: 0.10381060399999999, 0.098511724, 0.145145
+    max: 0.18819619599999998, 0.11475172399999999, 0.161385
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.49099350930389
+  - label: sharp diagonal barb 5
+    min: -0.18819619599999998, 0.098511724, 0.175595
+    max: -0.10381060399999999, 0.11475172399999999, 0.191835
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.49099350930389
+  - label: sharp diagonal barb 6
+    min: -0.18819619599999998, -0.11475172399999999, 0.206045
+    max: -0.10381060399999999, -0.098511724, 0.222285
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.49099350930389
+  - label: sharp diagonal barb 7
+    min: 0.10381060399999999, -0.11475172399999999, 0.236495
+    max: 0.18819619599999998, -0.098511724, 0.252735
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.49099350930391
+  - label: sharp diagonal barb 8
+    min: 0.10381060399999999, 0.098511724, 0.266945
+    max: 0.18819619599999998, 0.11475172399999999, 0.283185
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.49099350930391
+  - label: sharp diagonal barb 9
+    min: -0.18819619599999998, 0.098511724, 0.297395
+    max: -0.10381060399999999, 0.11475172399999999, 0.313635
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.490993509303934
+  - label: sharp diagonal barb 10
+    min: -0.18819619599999998, -0.11475172399999999, 0.327845
+    max: -0.10381060399999999, -0.098511724, 0.344085
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.490993509303934
+  - label: sharp diagonal barb 11
+    min: 0.10381060399999999, -0.11475172399999999, 0.358295
+    max: 0.18819619599999998, -0.098511724, 0.374535
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.490993509303934
+  - label: sharp diagonal barb 12
+    min: 0.10381060399999999, 0.098511724, 0.388745
+    max: 0.18819619599999998, 0.11475172399999999, 0.404985
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.490993509303934
+  - label: sharp diagonal barb 13
+    min: -0.18819619599999998, 0.098511724, 0.419195
+    max: -0.10381060399999999, 0.11475172399999999, 0.435435
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.490993509303934
+  - label: sharp diagonal barb 14
+    min: -0.18819619599999998, -0.11475172399999999, 0.449645
+    max: -0.10381060399999999, -0.098511724, 0.465885
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.490993509303934
+  - label: sharp diagonal barb 15
+    min: 0.10381060399999999, -0.11475172399999999, 0.480095
+    max: 0.18819619599999998, -0.098511724, 0.496335
+    color: '#B2B6B3'
+    shape: CylinderX
+    yaw: 20.772254682045826
+    pitch: 31.490993509303934
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureIceCrystalCloud
+  label: Dark ice crystal cluster
+  status: draft
+  sourcePrototypes:
+  - RMCIceCrystal
+  referencePrototype: RMCIceCrystal
+  referenceRsi: /Textures/_RMC14/Objects/Misc/ice_crystal.rsi
+  referenceState: icon_1
+  sourceDirections: 1
+  description: Angular connected mineral cluster with solid bodies and paired closed bevels. Original icon_1 dark
+    blue, slate and green highlight palette; six interlocking clasts retain the original footprint and height envelope
+    approximately. Rear/underside faces are complete; hidden construction remains inferred. No transparent/refraction
+    effect or alternative resource-state binding is invented. Draft; see SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: crystal 0 mineral base
+    min: -0.35, -0.06, 0
+    max: -0.03, 0.22, 0.203
+    color: '#28404C'
+    shape: Box
+    yaw: -25
+  - label: crystal 0 front bevel
+    min: -0.3795833, -0.0534415, 0.203
+    max: -0.0595833, 0.0865585, 0.35
+    color: '#404C68'
+    shape: WedgeY
+    yaw: -25
+  - label: crystal 0 rear bevel
+    min: -0.3204167, 0.0734415, 0.203
+    max: -0.0004167, 0.2134415, 0.35
+    color: '#5F8279'
+    shape: WedgeYReverse
+    yaw: -25
+  - label: crystal 1 mineral base
+    min: -0.305, -0.025, 0.225
+    max: -0.075, 0.185, 0.3352
+    color: '#5F8279'
+    shape: Box
+    yaw: 10
+  - label: crystal 1 front bevel
+    min: -0.2958835, -0.0242024, 0.3352
+    max: -0.0658835, 0.0807976, 0.415
+    color: '#404C68'
+    shape: WedgeY
+    yaw: 10
+  - label: crystal 1 rear bevel
+    min: -0.3141165, 0.0792024, 0.3352
+    max: -0.0841165, 0.1842024, 0.415
+    color: '#5F8279'
+    shape: WedgeYReverse
+    yaw: 10
+  - label: crystal 2 mineral base
+    min: -0.145, -0.14, 0
+    max: 0.145, 0.15, 0.145
+    color: '#404C68'
+    shape: Box
+    yaw: 35
+  - label: crystal 2 front bevel
+    min: -0.1034157, -0.1268885, 0.145
+    max: 0.1865843, 0.0181115, 0.25
+    color: '#404C68'
+    shape: WedgeY
+    yaw: 35
+  - label: crystal 2 rear bevel
+    min: -0.1865843, -0.0081115, 0.145
+    max: 0.1034157, 0.1368885, 0.25
+    color: '#5F8279'
+    shape: WedgeYReverse
+    yaw: 35
+  - label: crystal 3 mineral base
+    min: 0.07, -0.02, 0
+    max: 0.27, 0.18, 0.1508
+    color: '#485C68'
+    shape: Box
+    yaw: -15
+  - label: crystal 3 front bevel
+    min: 0.057059, -0.0182963, 0.1508
+    max: 0.257059, 0.0817037, 0.26
+    color: '#404C68'
+    shape: WedgeY
+    yaw: -15
+  - label: crystal 3 rear bevel
+    min: 0.082941, 0.0782963, 0.1508
+    max: 0.282941, 0.1782963, 0.26
+    color: '#5F8279'
+    shape: WedgeYReverse
+    yaw: -15
+  - label: crystal 4 mineral base
+    min: -0.22, -0.245, 0
+    max: 0.14, -0.035, 0.0696
+    color: '#242A34'
+    shape: Box
+    yaw: 25
+  - label: crystal 4 front bevel
+    min: -0.1978125, -0.2400812, 0.0696
+    max: 0.1621875, -0.1350812, 0.12
+    color: '#404C68'
+    shape: WedgeY
+    yaw: 25
+  - label: crystal 4 rear bevel
+    min: -0.2421875, -0.1449188, 0.0696
+    max: 0.1178125, -0.0399188, 0.12
+    color: '#5F8279'
+    shape: WedgeYReverse
+    yaw: 25
+  - label: crystal 5 mineral base
+    min: 0.04, -0.205, 0
+    max: 0.28, -0.005, 0.08468
+    color: '#485C68'
+    shape: Box
+    yaw: -30
+  - label: crystal 5 front bevel
+    min: 0.015, -0.1983013, 0.08468
+    max: 0.255, -0.0983013, 0.146
+    color: '#404C68'
+    shape: WedgeY
+    yaw: -30
+  - label: crystal 5 rear bevel
+    min: 0.065, -0.1116987, 0.08468
+    max: 0.305, -0.0116987, 0.146
+    color: '#5F8279'
+    shape: WedgeYReverse
+    yaw: -30
+  placement: surface
+  useEntityRotation: true
+
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureBasketballCloud
+  label: Seamed orange basketball
+  status: draft
+  sourcePrototypes:
+  - Basketball
+  referencePrototype: Basketball
+  referenceRsi: /Textures/Objects/Fun/Balls/basketball.rsi
+  referenceState: icon
+  sourceDirections: 1
+  description: Physical ellipsoid with separate narrow black seams. Resting icon only; source inhand spin frames,
+    bouncing, carrying and deformation are not modeled. Physical depth, rear and underside are inferred. Draft art
+    only; no native, full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: orange rubber ball
+    min: -0.17, -0.17, 0.0036093
+    max: 0.17, 0.17, 0.3436093
+    color: '#E55404'
+    shape: Ellipsoid
+  - label: rubber panel seam 0 0
+    min: 0.1299733, 0.0282305, 0.1694093
+    max: 0.196105, 0.0366305, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 101.25
+    pitch: 0.0
+  - label: rubber panel seam 0 1
+    min: 0.1051521, 0.0881543, 0.1694093
+    max: 0.1712838, 0.0965543, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 123.75
+    pitch: 0.0
+  - label: rubber panel seam 0 2
+    min: 0.0592884, 0.1340179, 0.1694093
+    max: 0.1254201, 0.1424179, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 146.25
+    pitch: 0.0
+  - label: rubber panel seam 0 3
+    min: -0.0006354, 0.1588392, 0.1694093
+    max: 0.0654964, 0.1672392, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 168.75
+    pitch: 0.0
+  - label: rubber panel seam 0 4
+    min: -0.0654964, 0.1588392, 0.1694093
+    max: 0.0006354, 0.1672392, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -168.75
+    pitch: 0.0
+  - label: rubber panel seam 0 5
+    min: -0.1254201, 0.1340179, 0.1694093
+    max: -0.0592884, 0.1424179, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -146.25
+    pitch: 0.0
+  - label: rubber panel seam 0 6
+    min: -0.1712838, 0.0881543, 0.1694093
+    max: -0.1051521, 0.0965543, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -123.75000000000001
+    pitch: 0.0
+  - label: rubber panel seam 0 7
+    min: -0.196105, 0.0282305, 0.1694093
+    max: -0.1299733, 0.0366305, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -101.25
+    pitch: 0.0
+  - label: rubber panel seam 0 8
+    min: -0.196105, -0.0366305, 0.1694093
+    max: -0.1299733, -0.0282305, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -78.75
+    pitch: 0.0
+  - label: rubber panel seam 0 9
+    min: -0.1712838, -0.0965543, 0.1694093
+    max: -0.1051521, -0.0881543, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -56.25000000000003
+    pitch: 0.0
+  - label: rubber panel seam 0 10
+    min: -0.1254201, -0.1424179, 0.1694093
+    max: -0.0592884, -0.1340179, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -33.75
+    pitch: 0.0
+  - label: rubber panel seam 0 11
+    min: -0.0654964, -0.1672392, 0.1694093
+    max: 0.0006354, -0.1588392, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -11.250000000000028
+    pitch: 0.0
+  - label: rubber panel seam 0 12
+    min: -0.0006354, -0.1672392, 0.1694093
+    max: 0.0654964, -0.1588392, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 11.25
+    pitch: 0.0
+  - label: rubber panel seam 0 13
+    min: 0.0592884, -0.1424179, 0.1694093
+    max: 0.1254201, -0.1340179, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 33.75
+    pitch: 0.0
+  - label: rubber panel seam 0 14
+    min: 0.1051521, -0.0965543, 0.1694093
+    max: 0.1712838, -0.0881543, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 56.25
+    pitch: 0.0
+  - label: rubber panel seam 0 15
+    min: 0.1299733, -0.0366305, 0.1694093
+    max: 0.196105, -0.0282305, 0.1778093
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 78.75
+    pitch: 0.0
+  - label: rubber panel seam 1 0
+    min: 0.1299733, -0.0042, 0.2018398
+    max: 0.196105, 0.0042, 0.2102398
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 78.75000000000003
+  - label: rubber panel seam 1 1
+    min: 0.1051521, -0.0042, 0.2617636
+    max: 0.1712838, 0.0042, 0.2701636
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 56.250000000000014
+  - label: rubber panel seam 1 2
+    min: 0.0592884, -0.0042, 0.3076272
+    max: 0.1254201, 0.0042, 0.3160272
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 33.75000000000003
+  - label: rubber panel seam 1 3
+    min: -0.0006354, -0.0042, 0.3324485
+    max: 0.0654964, 0.0042, 0.3408485
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 11.249999999999977
+  - label: rubber panel seam 1 4
+    min: -0.0654964, -0.0042, 0.3324485
+    max: 0.0006354, 0.0042, 0.3408485
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: -11.249999999999973
+  - label: rubber panel seam 1 5
+    min: -0.1254201, -0.0042, 0.3076272
+    max: -0.0592884, 0.0042, 0.3160272
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: -33.75000000000003
+  - label: rubber panel seam 1 6
+    min: -0.1712838, -0.0042, 0.2617636
+    max: -0.1051521, 0.0042, 0.2701636
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: -56.24999999999999
+  - label: rubber panel seam 1 7
+    min: -0.196105, -0.0042, 0.2018398
+    max: -0.1299733, 0.0042, 0.2102398
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: -78.75000000000003
+  - label: rubber panel seam 1 8
+    min: -0.196105, -0.0042, 0.1369788
+    max: -0.1299733, 0.0042, 0.1453788
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: -78.75000000000003
+  - label: rubber panel seam 1 9
+    min: -0.1712838, -0.0042, 0.077055
+    max: -0.1051521, 0.0042, 0.085455
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: -56.25000000000003
+  - label: rubber panel seam 1 10
+    min: -0.1254201, -0.0042, 0.0311914
+    max: -0.0592884, 0.0042, 0.0395914
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: -33.75
+  - label: rubber panel seam 1 11
+    min: -0.0654964, -0.0042, 0.0063701
+    max: 0.0006354, 0.0042, 0.0147701
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: -11.250000000000036
+  - label: rubber panel seam 1 12
+    min: -0.0006354, -0.0042, 0.0063701
+    max: 0.0654964, 0.0042, 0.0147701
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 11.25000000000001
+  - label: rubber panel seam 1 13
+    min: 0.0592884, -0.0042, 0.0311914
+    max: 0.1254201, 0.0042, 0.0395914
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 33.74999999999998
+  - label: rubber panel seam 1 14
+    min: 0.1051521, -0.0042, 0.077055
+    max: 0.1712838, 0.0042, 0.085455
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 56.24999999999999
+  - label: rubber panel seam 1 15
+    min: 0.1299733, -0.0042, 0.1369788
+    max: 0.196105, 0.0042, 0.1453788
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 78.74999999999996
+  - label: rubber panel seam 2 0
+    min: -0.0330659, 0.1588392, 0.2018398
+    max: 0.0330659, 0.1672392, 0.2102398
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 78.75000000000003
+  - label: rubber panel seam 2 1
+    min: -0.0330659, 0.1340179, 0.2617636
+    max: 0.0330659, 0.1424179, 0.2701636
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 56.250000000000014
+  - label: rubber panel seam 2 2
+    min: -0.0330659, 0.0881543, 0.3076272
+    max: 0.0330659, 0.0965543, 0.3160272
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 33.75000000000003
+  - label: rubber panel seam 2 3
+    min: -0.0330659, 0.0282305, 0.3324485
+    max: 0.0330659, 0.0366305, 0.3408485
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 11.249999999999977
+  - label: rubber panel seam 2 4
+    min: -0.0330659, -0.0366305, 0.3324485
+    max: 0.0330659, -0.0282305, 0.3408485
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: -11.249999999999973
+  - label: rubber panel seam 2 5
+    min: -0.0330659, -0.0965543, 0.3076272
+    max: 0.0330659, -0.0881543, 0.3160272
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: -33.75000000000003
+  - label: rubber panel seam 2 6
+    min: -0.0330659, -0.1424179, 0.2617636
+    max: 0.0330659, -0.1340179, 0.2701636
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: -56.24999999999999
+  - label: rubber panel seam 2 7
+    min: -0.0330659, -0.1672392, 0.2018398
+    max: 0.0330659, -0.1588392, 0.2102398
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: -78.75000000000003
+  - label: rubber panel seam 2 8
+    min: -0.0330659, -0.1672392, 0.1369788
+    max: 0.0330659, -0.1588392, 0.1453788
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: -78.75000000000003
+  - label: rubber panel seam 2 9
+    min: -0.0330659, -0.1424179, 0.077055
+    max: 0.0330659, -0.1340179, 0.085455
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: -56.25000000000003
+  - label: rubber panel seam 2 10
+    min: -0.0330659, -0.0965543, 0.0311914
+    max: 0.0330659, -0.0881543, 0.0395914
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: -33.75
+  - label: rubber panel seam 2 11
+    min: -0.0330659, -0.0366305, 0.0063701
+    max: 0.0330659, -0.0282305, 0.0147701
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: -11.250000000000036
+  - label: rubber panel seam 2 12
+    min: -0.0330659, 0.0282305, 0.0063701
+    max: 0.0330659, 0.0366305, 0.0147701
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 11.25000000000001
+  - label: rubber panel seam 2 13
+    min: -0.0330659, 0.0881543, 0.0311914
+    max: 0.0330659, 0.0965543, 0.0395914
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 33.74999999999998
+  - label: rubber panel seam 2 14
+    min: -0.0330659, 0.1340179, 0.077055
+    max: 0.0330659, 0.1424179, 0.085455
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 56.24999999999999
+  - label: rubber panel seam 2 15
+    min: -0.0330659, 0.1588392, 0.1369788
+    max: 0.0330659, 0.1672392, 0.1453788
+    color: '#4E1903'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 78.74999999999996
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureChessboardCloud
+  label: Inlaid chessboard with icon pieces
+  status: draft
+  sourcePrototypes:
+  - ChessBoard
+  referencePrototype: ChessBoard
+  referenceRsi: /Textures/Objects/Fun/Tabletop/chessboard.rsi
+  referenceState: chessboard
+  sourceDirections: 1
+  description: 'World icon only: an 18x18 board with its scattered miniature pieces, authored as solid inlays and
+    small raised pieces. Tabletop UI has independent pieces and board state; those game positions are not driven
+    by this model. Physical depth, rear and underside are inferred. Draft art only; no native, full-map, gameplay-state
+    or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.'
+  parts:
+  - label: wooden board thickness
+    min: -0.281, -0.281, 0.0
+    max: 0.281, 0.281, 0.022
+    color: '#4B332D'
+  - label: inlaid square 0 0
+    min: -0.25, -0.25, 0.022
+    max: -0.1875, -0.1875, 0.025
+    color: '#D39D66'
+  - label: inlaid square 1 0
+    min: -0.1875, -0.25, 0.022
+    max: -0.125, -0.1875, 0.025
+    color: '#86533F'
+  - label: inlaid square 2 0
+    min: -0.125, -0.25, 0.022
+    max: -0.0625, -0.1875, 0.025
+    color: '#D39D66'
+  - label: inlaid square 3 0
+    min: -0.0625, -0.25, 0.022
+    max: 0.0, -0.1875, 0.025
+    color: '#86533F'
+  - label: inlaid square 4 0
+    min: 0.0, -0.25, 0.022
+    max: 0.0625, -0.1875, 0.025
+    color: '#D39D66'
+  - label: inlaid square 5 0
+    min: 0.0625, -0.25, 0.022
+    max: 0.125, -0.1875, 0.025
+    color: '#86533F'
+  - label: inlaid square 6 0
+    min: 0.125, -0.25, 0.022
+    max: 0.1875, -0.1875, 0.025
+    color: '#D39D66'
+  - label: inlaid square 7 0
+    min: 0.1875, -0.25, 0.022
+    max: 0.25, -0.1875, 0.025
+    color: '#86533F'
+  - label: inlaid square 0 1
+    min: -0.25, -0.1875, 0.022
+    max: -0.1875, -0.125, 0.025
+    color: '#86533F'
+  - label: inlaid square 1 1
+    min: -0.1875, -0.1875, 0.022
+    max: -0.125, -0.125, 0.025
+    color: '#D39D66'
+  - label: inlaid square 2 1
+    min: -0.125, -0.1875, 0.022
+    max: -0.0625, -0.125, 0.025
+    color: '#86533F'
+  - label: inlaid square 3 1
+    min: -0.0625, -0.1875, 0.022
+    max: 0.0, -0.125, 0.025
+    color: '#D39D66'
+  - label: inlaid square 4 1
+    min: 0.0, -0.1875, 0.022
+    max: 0.0625, -0.125, 0.025
+    color: '#86533F'
+  - label: inlaid square 5 1
+    min: 0.0625, -0.1875, 0.022
+    max: 0.125, -0.125, 0.025
+    color: '#D39D66'
+  - label: inlaid square 6 1
+    min: 0.125, -0.1875, 0.022
+    max: 0.1875, -0.125, 0.025
+    color: '#86533F'
+  - label: inlaid square 7 1
+    min: 0.1875, -0.1875, 0.022
+    max: 0.25, -0.125, 0.025
+    color: '#D39D66'
+  - label: inlaid square 0 2
+    min: -0.25, -0.125, 0.022
+    max: -0.1875, -0.0625, 0.025
+    color: '#D39D66'
+  - label: inlaid square 1 2
+    min: -0.1875, -0.125, 0.022
+    max: -0.125, -0.0625, 0.025
+    color: '#86533F'
+  - label: inlaid square 2 2
+    min: -0.125, -0.125, 0.022
+    max: -0.0625, -0.0625, 0.025
+    color: '#D39D66'
+  - label: inlaid square 3 2
+    min: -0.0625, -0.125, 0.022
+    max: 0.0, -0.0625, 0.025
+    color: '#86533F'
+  - label: inlaid square 4 2
+    min: 0.0, -0.125, 0.022
+    max: 0.0625, -0.0625, 0.025
+    color: '#D39D66'
+  - label: inlaid square 5 2
+    min: 0.0625, -0.125, 0.022
+    max: 0.125, -0.0625, 0.025
+    color: '#86533F'
+  - label: inlaid square 6 2
+    min: 0.125, -0.125, 0.022
+    max: 0.1875, -0.0625, 0.025
+    color: '#D39D66'
+  - label: inlaid square 7 2
+    min: 0.1875, -0.125, 0.022
+    max: 0.25, -0.0625, 0.025
+    color: '#86533F'
+  - label: inlaid square 0 3
+    min: -0.25, -0.0625, 0.022
+    max: -0.1875, 0.0, 0.025
+    color: '#86533F'
+  - label: inlaid square 1 3
+    min: -0.1875, -0.0625, 0.022
+    max: -0.125, 0.0, 0.025
+    color: '#D39D66'
+  - label: inlaid square 2 3
+    min: -0.125, -0.0625, 0.022
+    max: -0.0625, 0.0, 0.025
+    color: '#86533F'
+  - label: inlaid square 3 3
+    min: -0.0625, -0.0625, 0.022
+    max: 0.0, 0.0, 0.025
+    color: '#D39D66'
+  - label: inlaid square 4 3
+    min: 0.0, -0.0625, 0.022
+    max: 0.0625, 0.0, 0.025
+    color: '#86533F'
+  - label: inlaid square 5 3
+    min: 0.0625, -0.0625, 0.022
+    max: 0.125, 0.0, 0.025
+    color: '#D39D66'
+  - label: inlaid square 6 3
+    min: 0.125, -0.0625, 0.022
+    max: 0.1875, 0.0, 0.025
+    color: '#86533F'
+  - label: inlaid square 7 3
+    min: 0.1875, -0.0625, 0.022
+    max: 0.25, 0.0, 0.025
+    color: '#D39D66'
+  - label: inlaid square 0 4
+    min: -0.25, 0.0, 0.022
+    max: -0.1875, 0.0625, 0.025
+    color: '#D39D66'
+  - label: inlaid square 1 4
+    min: -0.1875, 0.0, 0.022
+    max: -0.125, 0.0625, 0.025
+    color: '#86533F'
+  - label: inlaid square 2 4
+    min: -0.125, 0.0, 0.022
+    max: -0.0625, 0.0625, 0.025
+    color: '#D39D66'
+  - label: inlaid square 3 4
+    min: -0.0625, 0.0, 0.022
+    max: 0.0, 0.0625, 0.025
+    color: '#86533F'
+  - label: inlaid square 4 4
+    min: 0.0, 0.0, 0.022
+    max: 0.0625, 0.0625, 0.025
+    color: '#D39D66'
+  - label: inlaid square 5 4
+    min: 0.0625, 0.0, 0.022
+    max: 0.125, 0.0625, 0.025
+    color: '#86533F'
+  - label: inlaid square 6 4
+    min: 0.125, 0.0, 0.022
+    max: 0.1875, 0.0625, 0.025
+    color: '#D39D66'
+  - label: inlaid square 7 4
+    min: 0.1875, 0.0, 0.022
+    max: 0.25, 0.0625, 0.025
+    color: '#86533F'
+  - label: inlaid square 0 5
+    min: -0.25, 0.0625, 0.022
+    max: -0.1875, 0.125, 0.025
+    color: '#86533F'
+  - label: inlaid square 1 5
+    min: -0.1875, 0.0625, 0.022
+    max: -0.125, 0.125, 0.025
+    color: '#D39D66'
+  - label: inlaid square 2 5
+    min: -0.125, 0.0625, 0.022
+    max: -0.0625, 0.125, 0.025
+    color: '#86533F'
+  - label: inlaid square 3 5
+    min: -0.0625, 0.0625, 0.022
+    max: 0.0, 0.125, 0.025
+    color: '#D39D66'
+  - label: inlaid square 4 5
+    min: 0.0, 0.0625, 0.022
+    max: 0.0625, 0.125, 0.025
+    color: '#86533F'
+  - label: inlaid square 5 5
+    min: 0.0625, 0.0625, 0.022
+    max: 0.125, 0.125, 0.025
+    color: '#D39D66'
+  - label: inlaid square 6 5
+    min: 0.125, 0.0625, 0.022
+    max: 0.1875, 0.125, 0.025
+    color: '#86533F'
+  - label: inlaid square 7 5
+    min: 0.1875, 0.0625, 0.022
+    max: 0.25, 0.125, 0.025
+    color: '#D39D66'
+  - label: inlaid square 0 6
+    min: -0.25, 0.125, 0.022
+    max: -0.1875, 0.1875, 0.025
+    color: '#D39D66'
+  - label: inlaid square 1 6
+    min: -0.1875, 0.125, 0.022
+    max: -0.125, 0.1875, 0.025
+    color: '#86533F'
+  - label: inlaid square 2 6
+    min: -0.125, 0.125, 0.022
+    max: -0.0625, 0.1875, 0.025
+    color: '#D39D66'
+  - label: inlaid square 3 6
+    min: -0.0625, 0.125, 0.022
+    max: 0.0, 0.1875, 0.025
+    color: '#86533F'
+  - label: inlaid square 4 6
+    min: 0.0, 0.125, 0.022
+    max: 0.0625, 0.1875, 0.025
+    color: '#D39D66'
+  - label: inlaid square 5 6
+    min: 0.0625, 0.125, 0.022
+    max: 0.125, 0.1875, 0.025
+    color: '#86533F'
+  - label: inlaid square 6 6
+    min: 0.125, 0.125, 0.022
+    max: 0.1875, 0.1875, 0.025
+    color: '#D39D66'
+  - label: inlaid square 7 6
+    min: 0.1875, 0.125, 0.022
+    max: 0.25, 0.1875, 0.025
+    color: '#86533F'
+  - label: inlaid square 0 7
+    min: -0.25, 0.1875, 0.022
+    max: -0.1875, 0.25, 0.025
+    color: '#86533F'
+  - label: inlaid square 1 7
+    min: -0.1875, 0.1875, 0.022
+    max: -0.125, 0.25, 0.025
+    color: '#D39D66'
+  - label: inlaid square 2 7
+    min: -0.125, 0.1875, 0.022
+    max: -0.0625, 0.25, 0.025
+    color: '#86533F'
+  - label: inlaid square 3 7
+    min: -0.0625, 0.1875, 0.022
+    max: 0.0, 0.25, 0.025
+    color: '#D39D66'
+  - label: inlaid square 4 7
+    min: 0.0, 0.1875, 0.022
+    max: 0.0625, 0.25, 0.025
+    color: '#86533F'
+  - label: inlaid square 5 7
+    min: 0.0625, 0.1875, 0.022
+    max: 0.125, 0.25, 0.025
+    color: '#D39D66'
+  - label: inlaid square 6 7
+    min: 0.125, 0.1875, 0.022
+    max: 0.1875, 0.25, 0.025
+    color: '#86533F'
+  - label: inlaid square 7 7
+    min: 0.1875, 0.1875, 0.022
+    max: 0.25, 0.25, 0.025
+    color: '#D39D66'
+  - label: board side border
+    min: -0.282, -0.28, 0.02
+    max: -0.25, 0.28, 0.028
+    color: '#3D343B'
+  - label: board side border member 2
+    min: 0.25, -0.28, 0.02
+    max: 0.282, 0.28, 0.028
+    color: '#3D343B'
+  - label: board end border
+    min: -0.25, -0.282, 0.02
+    max: 0.25, -0.25, 0.028
+    color: '#3D343B'
+  - label: board end border member 2
+    min: -0.25, 0.25, 0.02
+    max: 0.25, 0.282, 0.028
+    color: '#3D343B'
+  - label: miniature chess base 0
+    min: -0.222375, -0.16925, 0.025
+    max: -0.196375, -0.14325, 0.033
+    color: '#15140F'
+    shape: CylinderZ
+  - label: miniature chess crown 0
+    min: -0.220375, -0.16725, 0.025
+    max: -0.198375, -0.14525, 0.065
+    color: '#15140F'
+    shape: Ellipsoid
+  - label: miniature chess base 1
+    min: -0.172375, -0.10675, 0.025
+    max: -0.146375, -0.08075, 0.033
+    color: '#15140F'
+    shape: CylinderZ
+  - label: miniature chess crown 1
+    min: -0.170375, -0.10475, 0.025
+    max: -0.148375, -0.08275, 0.065
+    color: '#15140F'
+    shape: Ellipsoid
+  - label: miniature chess base 2
+    min: -0.10675, -0.059875, 0.025
+    max: -0.08075, -0.033875, 0.033
+    color: '#15140F'
+    shape: CylinderZ
+  - label: miniature chess crown 2
+    min: -0.10475, -0.057875, 0.025
+    max: -0.08275, -0.035875, 0.065
+    color: '#15140F'
+    shape: Ellipsoid
+  - label: miniature chess base 3
+    min: 0.002625, -0.091125, 0.025
+    max: 0.028625, -0.065125, 0.033
+    color: '#15140F'
+    shape: CylinderZ
+  - label: miniature chess crown 3
+    min: 0.004625, -0.089125, 0.025
+    max: 0.026625, -0.067125, 0.065
+    color: '#15140F'
+    shape: Ellipsoid
+  - label: miniature chess base 4
+    min: 0.14325, -0.16925, 0.025
+    max: 0.16925, -0.14325, 0.033
+    color: '#15140F'
+    shape: CylinderZ
+  - label: miniature chess crown 4
+    min: 0.14525, -0.16725, 0.025
+    max: 0.16725, -0.14525, 0.065
+    color: '#15140F'
+    shape: Ellipsoid
+  - label: miniature chess base 5
+    min: 0.196375, -0.153625, 0.025
+    max: 0.222375, -0.127625, 0.033
+    color: '#15140F'
+    shape: CylinderZ
+  - label: miniature chess crown 5
+    min: 0.198375, -0.151625, 0.025
+    max: 0.220375, -0.129625, 0.065
+    color: '#15140F'
+    shape: Ellipsoid
+  - label: miniature chess base 6
+    min: 0.158875, -0.063, 0.025
+    max: 0.184875, -0.037, 0.033
+    color: '#15140F'
+    shape: CylinderZ
+  - label: miniature chess crown 6
+    min: 0.160875, -0.061, 0.025
+    max: 0.182875, -0.039, 0.065
+    color: '#15140F'
+    shape: Ellipsoid
+  - label: miniature chess base 7
+    min: -0.08175, 0.01825, 0.025
+    max: -0.05575, 0.04425, 0.033
+    color: '#15140F'
+    shape: CylinderZ
+  - label: miniature chess crown 7
+    min: -0.07975, 0.02025, 0.025
+    max: -0.05775, 0.04225, 0.065
+    color: '#15140F'
+    shape: Ellipsoid
+  - label: miniature chess base 8
+    min: -0.0505, 0.14325, 0.025
+    max: -0.0245, 0.16925, 0.033
+    color: '#15140F'
+    shape: CylinderZ
+  - label: miniature chess crown 8
+    min: -0.0485, 0.14525, 0.025
+    max: -0.0265, 0.16725, 0.065
+    color: '#15140F'
+    shape: Ellipsoid
+  - label: miniature chess base 9
+    min: -0.21925, 0.008875, 0.025
+    max: -0.19325, 0.034875, 0.033
+    color: '#F4F0E3'
+    shape: CylinderZ
+  - label: miniature chess crown 9
+    min: -0.21725, 0.010875, 0.025
+    max: -0.19525, 0.032875, 0.065
+    color: '#F4F0E3'
+    shape: Ellipsoid
+  - label: miniature chess base 10
+    min: -0.153625, 0.112, 0.025
+    max: -0.127625, 0.138, 0.033
+    color: '#F4F0E3'
+    shape: CylinderZ
+  - label: miniature chess crown 10
+    min: -0.151625, 0.114, 0.025
+    max: -0.129625, 0.136, 0.065
+    color: '#F4F0E3'
+    shape: Ellipsoid
+  - label: miniature chess base 11
+    min: -0.216125, 0.152625, 0.025
+    max: -0.190125, 0.178625, 0.033
+    color: '#F4F0E3'
+    shape: CylinderZ
+  - label: miniature chess crown 11
+    min: -0.214125, 0.154625, 0.025
+    max: -0.192125, 0.176625, 0.065
+    color: '#F4F0E3'
+    shape: Ellipsoid
+  - label: miniature chess base 12
+    min: 0.196375, 0.065125, 0.025
+    max: 0.222375, 0.091125, 0.033
+    color: '#F4F0E3'
+    shape: CylinderZ
+  - label: miniature chess crown 12
+    min: 0.198375, 0.067125, 0.025
+    max: 0.220375, 0.089125, 0.065
+    color: '#F4F0E3'
+    shape: Ellipsoid
+  - label: miniature chess base 13
+    min: 0.15575, 0.13075, 0.025
+    max: 0.18175, 0.15675, 0.033
+    color: '#F4F0E3'
+    shape: CylinderZ
+  - label: miniature chess crown 13
+    min: 0.15775, 0.13275, 0.025
+    max: 0.17975, 0.15475, 0.065
+    color: '#F4F0E3'
+    shape: Ellipsoid
+  - label: miniature chess base 14
+    min: 0.127625, 0.190125, 0.025
+    max: 0.153625, 0.216125, 0.033
+    color: '#F4F0E3'
+    shape: CylinderZ
+  - label: miniature chess crown 14
+    min: 0.129625, 0.192125, 0.025
+    max: 0.151625, 0.214125, 0.065
+    color: '#F4F0E3'
+    shape: Ellipsoid
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureRubberDuckCloud
+  label: Yellow rubber duck
+  status: draft
+  sourcePrototypes:
+  - ToyRubberDuck
+  referencePrototype: ToyRubberDuck
+  referenceRsi: /Textures/Objects/Fun/ducky.rsi
+  referenceState: icon
+  sourceDirections: 1
+  description: Resting toy icon with separate head, neck, body, wings, beak and eyes. Secret stash, equipped helmet/inhand
+    appearances and sound are not modeled. Physical depth, rear and underside are inferred. Draft art only; no native,
+    full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: duck round floating body
+    min: -0.135, -0.103, -0.0
+    max: 0.135, 0.103, 0.17
+    color: '#E8C400'
+    shape: Ellipsoid
+  - label: raised duck chest
+    min: -0.023, -0.086, 0.035
+    max: 0.129, 0.066, 0.215
+    color: '#F5D500'
+    shape: Ellipsoid
+  - label: duck neck
+    min: 0.033, -0.038, 0.118
+    max: 0.137, 0.062, 0.248
+    color: '#FCE300'
+    shape: Ellipsoid
+  - label: duck head
+    min: 0.03, -0.051, 0.16
+    max: 0.178, 0.075, 0.292
+    color: '#F9DB00'
+    shape: Ellipsoid
+  - label: near folded wing
+    min: -0.105, -0.105, 0.055
+    max: 0.057, -0.069, 0.143
+    color: '#E4B600'
+    shape: Ellipsoid
+  - label: far folded wing
+    min: -0.105, 0.069, 0.055
+    max: 0.057, 0.105, 0.143
+    color: '#CFAB00'
+    shape: Ellipsoid
+  - label: raised tail
+    min: -0.16, -0.039, 0.065
+    max: -0.093, 0.041, 0.158
+    color: '#E8C600'
+    shape: WedgeY
+  - label: orange projecting beak
+    min: 0.109, -0.032, 0.195
+    max: 0.243, 0.03, 0.239
+    color: '#FA7600'
+    shape: Ellipsoid
+  - label: near black eye
+    min: 0.123, -0.054, 0.241
+    max: 0.143, -0.038, 0.263
+    color: '#241D05'
+    shape: Ellipsoid
+  - label: eye glint
+    min: 0.1315, -0.055, 0.2525
+    max: 0.1385, -0.049, 0.2595
+    color: '#FFF6B3'
+    shape: Ellipsoid
+  - label: far black eye
+    min: 0.123, 0.058, 0.241
+    max: 0.143, 0.072, 0.263
+    color: '#241D05'
+    shape: Ellipsoid
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureOrbCloud
+  label: Structural pondering orb
+  status: draft
+  sourcePrototypes:
+  - PonderingOrb
+  referencePrototype: PonderingOrb
+  referenceRsi: /Textures/Objects/Fun/pondering_orb.rsi
+  referenceState: icon
+  sourceDirections: 1
+  description: Source icon has four 0.2-second frames. The pale highlights are identical; frame1 changes blue rim
+    color, and frames2/3 add larger partial-alpha halos. Only shared structure and default frame0 are approximated.
+    Unshaded rendering, PointLight, tint, halo changes and animation selection are unsupported. Physical depth,
+    rear and underside are inferred. Draft art only; no native, full-map, gameplay-state or fidelity approval. See
+    SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: cyan orb volume
+    min: -0.17, -0.17, 0.0
+    max: 0.17, 0.17, 0.34
+    color: '#73D4EE'
+    shape: Ellipsoid
+  - label: source bright pixel run 11 13
+    min: -0.0699615, -0.0897001, 0.2831154
+    max: -0.0346538, -0.0697001, 0.3184231
+    color: '#AFEFFF'
+    shape: Ellipsoid
+  - label: source bright pixel run 12 15
+    min: -0.0222308, -0.1295257, 0.2569615
+    max: 0.0483846, -0.1095257, 0.2922692
+    color: '#C1F2FF'
+    shape: Ellipsoid
+  - label: source bright pixel run 13 14
+    min: -0.0438077, -0.1444, 0.2308077
+    max: -0.0085, -0.1244, 0.2661154
+    color: '#AFEFFF'
+    shape: Ellipsoid
+  - label: source bright pixel run 13 17
+    min: 0.0346538, -0.1391977, 0.2308077
+    max: 0.0699615, -0.1191977, 0.2661154
+    color: '#C1F2FF'
+    shape: Ellipsoid
+  - label: source bright pixel run 14 18
+    min: 0.0608077, -0.1373292, 0.2046538
+    max: 0.0961154, -0.1173292, 0.2399615
+    color: '#C1F2FF'
+    shape: Ellipsoid
+  - label: source bright pixel run 17 12
+    min: -0.0961154, -0.1434658, 0.1261923
+    max: -0.0608077, -0.1234658, 0.1615
+    color: '#C1F2FF'
+    shape: Ellipsoid
+  - label: source bright pixel run 18 13
+    min: -0.0791154, -0.155893, 0.1000385
+    max: 0.0268077, -0.135893, 0.1353462
+    color: '#C1F2FF'
+    shape: Ellipsoid
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisurePianoCloud
+  label: Closed grand piano
+  status: draft
+  sourcePrototypes:
+  - PianoInstrument
+  referencePrototype: PianoInstrument
+  referenceRsi: /Textures/Objects/Fun/Instruments/structureinstruments.rsi
+  referenceState: piano
+  sourceDirections: 4
+  description: Four source directions inspected, showing a grand piano with curved tail and keyboard on opposite
+    edge. Physical upper lid/cabinet, 31 individual keys, three legs and pedals. Source heading retained; no musical
+    action, lid hinge, broken state or played key animation is invented. Physical depth, rear and underside are
+    inferred. Draft art only; no native, full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: wide keyboard crossbeam
+    min: -0.35, 0.24, 0.51
+    max: 0.35, 0.37, 0.63
+    color: '#171717'
+  - label: asymmetric soundboard cabinet section 0
+    min: -0.345, 0.19, 0.49
+    max: 0.345, 0.26, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 0
+    min: -0.348, 0.19, 0.6
+    max: 0.348, 0.26, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 1
+    min: -0.3425, 0.12, 0.49
+    max: 0.345, 0.19, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 1
+    min: -0.3455, 0.12, 0.6
+    max: 0.348, 0.19, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 2
+    min: -0.331, 0.05, 0.49
+    max: 0.345, 0.12, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 2
+    min: -0.334, 0.05, 0.6
+    max: 0.348, 0.12, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 3
+    min: -0.306, -0.02, 0.49
+    max: 0.344, 0.05, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 3
+    min: -0.309, -0.02, 0.6
+    max: 0.347, 0.05, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 4
+    min: -0.269, -0.09, 0.49
+    max: 0.339, -0.02, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 4
+    min: -0.272, -0.09, 0.6
+    max: 0.342, -0.02, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 5
+    min: -0.219, -0.16, 0.49
+    max: 0.3295, -0.09, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 5
+    min: -0.222, -0.16, 0.6
+    max: 0.3325, -0.09, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 6
+    min: -0.1575, -0.23, 0.49
+    max: 0.3145, -0.16, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 6
+    min: -0.1605, -0.23, 0.6
+    max: 0.3175, -0.16, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 7
+    min: -0.0915, -0.3, 0.49
+    max: 0.29, -0.23, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 7
+    min: -0.0945, -0.3, 0.6
+    max: 0.293, -0.23, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 8
+    min: -0.023, -0.37, 0.49
+    max: 0.2555, -0.3, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 8
+    min: -0.026, -0.37, 0.6
+    max: 0.2585, -0.3, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 9
+    min: 0.038, -0.43, 0.49
+    max: 0.214, -0.37, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 9
+    min: 0.035, -0.43, 0.6
+    max: 0.217, -0.37, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 10
+    min: 0.078, -0.48, 0.49
+    max: 0.1715, -0.43, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 10
+    min: 0.075, -0.48, 0.6
+    max: 0.1745, -0.43, 0.625
+    color: '#191919'
+  - label: asymmetric soundboard cabinet section 11
+    min: 0.102, -0.51, 0.49
+    max: 0.1395, -0.48, 0.6
+    color: '#141414'
+  - label: closed asymmetric lid section 11
+    min: 0.099, -0.51, 0.6
+    max: 0.1425, -0.48, 0.625
+    color: '#191919'
+  - label: warm gold fallboard trim
+    min: -0.356, 0.241, 0.622
+    max: 0.356, 0.26, 0.643
+    color: '#A96D1D'
+  - label: piano square leg
+    min: -0.318, 0.22, 0.0
+    max: -0.262, 0.27, 0.52
+    color: '#161616'
+  - label: piano foot
+    min: -0.334, 0.201, 0.0
+    max: -0.246, 0.289, 0.037
+    color: '#242424'
+  - label: piano square leg member 2
+    min: 0.262, 0.22, 0.0
+    max: 0.318, 0.27, 0.52
+    color: '#161616'
+  - label: piano foot member 2
+    min: 0.246, 0.201, 0.0
+    max: 0.334, 0.289, 0.037
+    color: '#242424'
+  - label: piano square leg member 3
+    min: 0.072, -0.425, 0.0
+    max: 0.128, -0.375, 0.52
+    color: '#161616'
+  - label: piano foot member 3
+    min: 0.056, -0.444, 0.0
+    max: 0.144, -0.356, 0.037
+    color: '#242424'
+  - label: ivory piano key 0
+    min: -0.33, 0.274, 0.628
+    max: -0.296, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 1
+    min: -0.293, 0.274, 0.628
+    max: -0.259, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 2
+    min: -0.256, 0.274, 0.628
+    max: -0.222, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 3
+    min: -0.219, 0.274, 0.628
+    max: -0.185, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 4
+    min: -0.182, 0.274, 0.628
+    max: -0.148, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 5
+    min: -0.145, 0.274, 0.628
+    max: -0.111, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 6
+    min: -0.108, 0.274, 0.628
+    max: -0.074, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 7
+    min: -0.071, 0.274, 0.628
+    max: -0.037, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 8
+    min: -0.034, 0.274, 0.628
+    max: -0.0, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 9
+    min: 0.003, 0.274, 0.628
+    max: 0.037, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 10
+    min: 0.04, 0.274, 0.628
+    max: 0.074, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 11
+    min: 0.077, 0.274, 0.628
+    max: 0.111, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 12
+    min: 0.114, 0.274, 0.628
+    max: 0.148, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 13
+    min: 0.151, 0.274, 0.628
+    max: 0.185, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 14
+    min: 0.188, 0.274, 0.628
+    max: 0.222, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 15
+    min: 0.225, 0.274, 0.628
+    max: 0.259, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 16
+    min: 0.262, 0.274, 0.628
+    max: 0.296, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: ivory piano key 17
+    min: 0.299, 0.274, 0.628
+    max: 0.333, 0.373, 0.642
+    color: '#DFE1DD'
+  - label: raised black piano key 0
+    min: -0.313, 0.272, 0.642
+    max: -0.296, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 1
+    min: -0.276, 0.272, 0.642
+    max: -0.259, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 3
+    min: -0.202, 0.272, 0.642
+    max: -0.185, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 4
+    min: -0.165, 0.272, 0.642
+    max: -0.148, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 5
+    min: -0.128, 0.272, 0.642
+    max: -0.111, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 7
+    min: -0.054, 0.272, 0.642
+    max: -0.037, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 8
+    min: -0.017, 0.272, 0.642
+    max: -0.0, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 10
+    min: 0.057, 0.272, 0.642
+    max: 0.074, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 11
+    min: 0.094, 0.272, 0.642
+    max: 0.111, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 12
+    min: 0.131, 0.272, 0.642
+    max: 0.148, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 14
+    min: 0.205, 0.272, 0.642
+    max: 0.222, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 15
+    min: 0.242, 0.272, 0.642
+    max: 0.259, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: raised black piano key 17
+    min: 0.316, 0.272, 0.642
+    max: 0.333, 0.329, 0.662
+    color: '#1B1C1E'
+  - label: keyboard front dark rail
+    min: -0.356, 0.37, 0.585
+    max: 0.356, 0.384, 0.631
+    color: '#242323'
+  - label: pedal lyre vertical stem
+    min: -0.018, 0.18, 0.09
+    max: 0.018, 0.215, 0.5
+    color: '#2E2520'
+  - label: pedal crossbar
+    min: -0.092, 0.171, 0.085
+    max: 0.092, 0.236, 0.113
+    color: '#2F2922'
+  - label: brass pedal
+    min: -0.076, 0.208, 0.07
+    max: -0.046, 0.296, 0.087
+    color: '#9A6A2C'
+  - label: brass pedal member 2
+    min: -0.015, 0.208, 0.07
+    max: 0.015, 0.296, 0.087
+    color: '#9A6A2C'
+  - label: brass pedal member 3
+    min: 0.046, 0.208, 0.07
+    max: 0.076, 0.296, 0.087
+    color: '#9A6A2C'
+  placement: floor
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureTomDrumsCloud
+  label: Two hollow-shell tom drums
+  status: draft
+  sourcePrototypes:
+  - TomDrumsInstrument
+  referencePrototype: TomDrumsInstrument
+  referenceRsi: /Textures/Objects/Fun/Instruments/structureinstruments.rsi
+  referenceState: toms
+  sourceDirections: 4
+  description: Four source directions inspected. Two drum shells have real lower cavities, separate pale skins,
+    metal rims, tension rods and a supported tripod. Source view-dependent head/underside shading is approximated;
+    no played animation or sound behavior. Physical depth, rear and underside are inferred. Draft art only; no native,
+    full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: tom 0 separate curved shell stave 0
+    min: -0.097, -0.013, 0.498
+    max: -0.013, 0.013, 0.718
+    color: '#5D4937'
+    yaw: 90.0
+  - label: tom 0 separate curved shell stave 1
+    min: -0.1157564, 0.057, 0.498
+    max: -0.0317564, 0.083, 0.718
+    color: '#5D4937'
+    yaw: 120.0
+  - label: tom 0 separate curved shell stave 2
+    min: -0.167, 0.1082436, 0.498
+    max: -0.083, 0.1342436, 0.718
+    color: '#5D4937'
+    yaw: 150.0
+  - label: tom 0 separate curved shell stave 3
+    min: -0.237, 0.127, 0.498
+    max: -0.153, 0.153, 0.718
+    color: '#5D4937'
+    yaw: -180.0
+  - label: tom 0 separate curved shell stave 4
+    min: -0.307, 0.1082436, 0.498
+    max: -0.223, 0.1342436, 0.718
+    color: '#5D4937'
+    yaw: -150.0
+  - label: tom 0 separate curved shell stave 5
+    min: -0.3582436, 0.057, 0.498
+    max: -0.2742436, 0.083, 0.718
+    color: '#5D4937'
+    yaw: -120.0
+  - label: tom 0 separate curved shell stave 6
+    min: -0.377, -0.013, 0.498
+    max: -0.293, 0.013, 0.718
+    color: '#5D4937'
+    yaw: -90.0
+  - label: tom 0 separate curved shell stave 7
+    min: -0.3582436, -0.083, 0.498
+    max: -0.2742436, -0.057, 0.718
+    color: '#5D4937'
+    yaw: -60.0
+  - label: tom 0 separate curved shell stave 8
+    min: -0.307, -0.1342436, 0.498
+    max: -0.223, -0.1082436, 0.718
+    color: '#5D4937'
+    yaw: -30.0
+  - label: tom 0 separate curved shell stave 9
+    min: -0.237, -0.153, 0.498
+    max: -0.153, -0.127, 0.718
+    color: '#5D4937'
+    yaw: 0.0
+  - label: tom 0 separate curved shell stave 10
+    min: -0.167, -0.1342436, 0.498
+    max: -0.083, -0.1082436, 0.718
+    color: '#5D4937'
+    yaw: 30.0
+  - label: tom 0 separate curved shell stave 11
+    min: -0.1157564, -0.083, 0.498
+    max: -0.0317564, -0.057, 0.718
+    color: '#5D4937'
+    yaw: 60.0
+  - label: tom 0 cream drum skin
+    min: -0.337, -0.142, 0.718
+    max: -0.053, 0.142, 0.73
+    color: '#E4DCC0'
+    shape: CylinderZ
+  - label: tom 0 separate metal rim 0
+    min: -0.0958935, 0.02775, 0.489
+    max: -0.0198007, 0.04575, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 105.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 1
+    min: -0.1326435, 0.0914029, 0.489
+    max: -0.0565507, 0.1094029, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 135.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 2
+    min: -0.1962964, 0.1281529, 0.489
+    max: -0.1202036, 0.1461529, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 165.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 3
+    min: -0.2697964, 0.1281529, 0.489
+    max: -0.1937036, 0.1461529, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -165.00000000000003
+    pitch: 0.0
+  - label: tom 0 separate metal rim 4
+    min: -0.3334493, 0.0914029, 0.489
+    max: -0.2573565, 0.1094029, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -135.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 5
+    min: -0.3701993, 0.02775, 0.489
+    max: -0.2941065, 0.04575, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -105.00000000000001
+    pitch: 0.0
+  - label: tom 0 separate metal rim 6
+    min: -0.3701993, -0.04575, 0.489
+    max: -0.2941065, -0.02775, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -74.99999999999999
+    pitch: 0.0
+  - label: tom 0 separate metal rim 7
+    min: -0.3334493, -0.1094029, 0.489
+    max: -0.2573565, -0.0914029, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -45.00000000000003
+    pitch: 0.0
+  - label: tom 0 separate metal rim 8
+    min: -0.2697964, -0.1461529, 0.489
+    max: -0.1937036, -0.1281529, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -15.000000000000028
+    pitch: 0.0
+  - label: tom 0 separate metal rim 9
+    min: -0.1962964, -0.1461529, 0.489
+    max: -0.1202036, -0.1281529, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 15.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 10
+    min: -0.1326435, -0.1094029, 0.489
+    max: -0.0565507, -0.0914029, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 11
+    min: -0.0958935, -0.04575, 0.489
+    max: -0.0198007, -0.02775, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 74.99999999999997
+    pitch: 0.0
+  - label: tom 0 separate metal rim 0 member 2
+    min: -0.0958935, 0.02775, 0.721
+    max: -0.0198007, 0.04575, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 105.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 1 member 2
+    min: -0.1326435, 0.0914029, 0.721
+    max: -0.0565507, 0.1094029, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 135.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 2 member 2
+    min: -0.1962964, 0.1281529, 0.721
+    max: -0.1202036, 0.1461529, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 165.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 3 member 2
+    min: -0.2697964, 0.1281529, 0.721
+    max: -0.1937036, 0.1461529, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -165.00000000000003
+    pitch: 0.0
+  - label: tom 0 separate metal rim 4 member 2
+    min: -0.3334493, 0.0914029, 0.721
+    max: -0.2573565, 0.1094029, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -135.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 5 member 2
+    min: -0.3701993, 0.02775, 0.721
+    max: -0.2941065, 0.04575, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -105.00000000000001
+    pitch: 0.0
+  - label: tom 0 separate metal rim 6 member 2
+    min: -0.3701993, -0.04575, 0.721
+    max: -0.2941065, -0.02775, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -74.99999999999999
+    pitch: 0.0
+  - label: tom 0 separate metal rim 7 member 2
+    min: -0.3334493, -0.1094029, 0.721
+    max: -0.2573565, -0.0914029, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -45.00000000000003
+    pitch: 0.0
+  - label: tom 0 separate metal rim 8 member 2
+    min: -0.2697964, -0.1461529, 0.721
+    max: -0.1937036, -0.1281529, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -15.000000000000028
+    pitch: 0.0
+  - label: tom 0 separate metal rim 9 member 2
+    min: -0.1962964, -0.1461529, 0.721
+    max: -0.1202036, -0.1281529, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 15.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 10 member 2
+    min: -0.1326435, -0.1094029, 0.721
+    max: -0.0565507, -0.0914029, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: tom 0 separate metal rim 11 member 2
+    min: -0.0958935, -0.04575, 0.721
+    max: -0.0198007, -0.02775, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 74.99999999999997
+    pitch: 0.0
+  - label: tom tension rod
+    min: -0.141, -0.009, 0.599
+    max: 0.059, 0.009, 0.617
+    color: '#D6D9CD'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: tom tension rod member 2
+    min: -0.295, 0.145, 0.599
+    max: -0.095, 0.163, 0.617
+    color: '#D6D9CD'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: tom tension rod member 3
+    min: -0.449, -0.009, 0.599
+    max: -0.249, 0.009, 0.617
+    color: '#D6D9CD'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: tom tension rod member 4
+    min: -0.295, -0.163, 0.599
+    max: -0.095, -0.145, 0.617
+    color: '#D6D9CD'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: tom 1 separate curved shell stave 0
+    min: 0.293, -0.013, 0.498
+    max: 0.377, 0.013, 0.718
+    color: '#5D4937'
+    yaw: 90.0
+  - label: tom 1 separate curved shell stave 1
+    min: 0.2742436, 0.057, 0.498
+    max: 0.3582436, 0.083, 0.718
+    color: '#5D4937'
+    yaw: 120.0
+  - label: tom 1 separate curved shell stave 2
+    min: 0.223, 0.1082436, 0.498
+    max: 0.307, 0.1342436, 0.718
+    color: '#5D4937'
+    yaw: 150.0
+  - label: tom 1 separate curved shell stave 3
+    min: 0.153, 0.127, 0.498
+    max: 0.237, 0.153, 0.718
+    color: '#5D4937'
+    yaw: -180.0
+  - label: tom 1 separate curved shell stave 4
+    min: 0.083, 0.1082436, 0.498
+    max: 0.167, 0.1342436, 0.718
+    color: '#5D4937'
+    yaw: -150.0
+  - label: tom 1 separate curved shell stave 5
+    min: 0.0317564, 0.057, 0.498
+    max: 0.1157564, 0.083, 0.718
+    color: '#5D4937'
+    yaw: -120.0
+  - label: tom 1 separate curved shell stave 6
+    min: 0.013, -0.013, 0.498
+    max: 0.097, 0.013, 0.718
+    color: '#5D4937'
+    yaw: -90.0
+  - label: tom 1 separate curved shell stave 7
+    min: 0.0317564, -0.083, 0.498
+    max: 0.1157564, -0.057, 0.718
+    color: '#5D4937'
+    yaw: -60.0
+  - label: tom 1 separate curved shell stave 8
+    min: 0.083, -0.1342436, 0.498
+    max: 0.167, -0.1082436, 0.718
+    color: '#5D4937'
+    yaw: -30.0
+  - label: tom 1 separate curved shell stave 9
+    min: 0.153, -0.153, 0.498
+    max: 0.237, -0.127, 0.718
+    color: '#5D4937'
+    yaw: 0.0
+  - label: tom 1 separate curved shell stave 10
+    min: 0.223, -0.1342436, 0.498
+    max: 0.307, -0.1082436, 0.718
+    color: '#5D4937'
+    yaw: 30.0
+  - label: tom 1 separate curved shell stave 11
+    min: 0.2742436, -0.083, 0.498
+    max: 0.3582436, -0.057, 0.718
+    color: '#5D4937'
+    yaw: 60.0
+  - label: tom 1 cream drum skin
+    min: 0.053, -0.142, 0.718
+    max: 0.337, 0.142, 0.73
+    color: '#E4DCC0'
+    shape: CylinderZ
+  - label: tom 1 separate metal rim 0
+    min: 0.2941065, 0.02775, 0.489
+    max: 0.3701993, 0.04575, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 105.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 1
+    min: 0.2573565, 0.0914029, 0.489
+    max: 0.3334493, 0.1094029, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 135.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 2
+    min: 0.1937036, 0.1281529, 0.489
+    max: 0.2697964, 0.1461529, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 165.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 3
+    min: 0.1202036, 0.1281529, 0.489
+    max: 0.1962964, 0.1461529, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -165.00000000000003
+    pitch: 0.0
+  - label: tom 1 separate metal rim 4
+    min: 0.0565507, 0.0914029, 0.489
+    max: 0.1326435, 0.1094029, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -135.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 5
+    min: 0.0198007, 0.02775, 0.489
+    max: 0.0958935, 0.04575, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -105.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 6
+    min: 0.0198007, -0.04575, 0.489
+    max: 0.0958935, -0.02775, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -75.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 7
+    min: 0.0565507, -0.1094029, 0.489
+    max: 0.1326435, -0.0914029, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -45.00000000000003
+    pitch: 0.0
+  - label: tom 1 separate metal rim 8
+    min: 0.1202036, -0.1461529, 0.489
+    max: 0.1962964, -0.1281529, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -15.000000000000028
+    pitch: 0.0
+  - label: tom 1 separate metal rim 9
+    min: 0.1937036, -0.1461529, 0.489
+    max: 0.2697964, -0.1281529, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 15.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 10
+    min: 0.2573565, -0.1094029, 0.489
+    max: 0.3334493, -0.0914029, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 44.99999999999997
+    pitch: 0.0
+  - label: tom 1 separate metal rim 11
+    min: 0.2941065, -0.04575, 0.489
+    max: 0.3701993, -0.02775, 0.507
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 75.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 0 member 2
+    min: 0.2941065, 0.02775, 0.721
+    max: 0.3701993, 0.04575, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 105.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 1 member 2
+    min: 0.2573565, 0.0914029, 0.721
+    max: 0.3334493, 0.1094029, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 135.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 2 member 2
+    min: 0.1937036, 0.1281529, 0.721
+    max: 0.2697964, 0.1461529, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 165.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 3 member 2
+    min: 0.1202036, 0.1281529, 0.721
+    max: 0.1962964, 0.1461529, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -165.00000000000003
+    pitch: 0.0
+  - label: tom 1 separate metal rim 4 member 2
+    min: 0.0565507, 0.0914029, 0.721
+    max: 0.1326435, 0.1094029, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -135.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 5 member 2
+    min: 0.0198007, 0.02775, 0.721
+    max: 0.0958935, 0.04575, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -105.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 6 member 2
+    min: 0.0198007, -0.04575, 0.721
+    max: 0.0958935, -0.02775, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -75.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 7 member 2
+    min: 0.0565507, -0.1094029, 0.721
+    max: 0.1326435, -0.0914029, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -45.00000000000003
+    pitch: 0.0
+  - label: tom 1 separate metal rim 8 member 2
+    min: 0.1202036, -0.1461529, 0.721
+    max: 0.1962964, -0.1281529, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: -15.000000000000028
+    pitch: 0.0
+  - label: tom 1 separate metal rim 9 member 2
+    min: 0.1937036, -0.1461529, 0.721
+    max: 0.2697964, -0.1281529, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 15.0
+    pitch: 0.0
+  - label: tom 1 separate metal rim 10 member 2
+    min: 0.2573565, -0.1094029, 0.721
+    max: 0.3334493, -0.0914029, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 44.99999999999997
+    pitch: 0.0
+  - label: tom 1 separate metal rim 11 member 2
+    min: 0.2941065, -0.04575, 0.721
+    max: 0.3701993, -0.02775, 0.739
+    color: '#B6BAB6'
+    shape: CylinderX
+    yaw: 75.0
+    pitch: 0.0
+  - label: tom tension rod member 5
+    min: 0.249, -0.009, 0.599
+    max: 0.449, 0.009, 0.617
+    color: '#D6D9CD'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: tom tension rod member 6
+    min: 0.095, 0.145, 0.599
+    max: 0.295, 0.163, 0.617
+    color: '#D6D9CD'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: tom tension rod member 7
+    min: -0.059, -0.009, 0.599
+    max: 0.141, 0.009, 0.617
+    color: '#D6D9CD'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: tom tension rod member 8
+    min: 0.095, -0.163, 0.599
+    max: 0.295, -0.145, 0.617
+    color: '#D6D9CD'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: drum stand central tube
+    min: -0.27, -0.014, 0.304
+    max: 0.27, 0.014, 0.332
+    color: '#A6AEAA'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 90.0
+  - label: drum cross support
+    min: -0.06, -0.014, 0.554
+    max: 0.06, 0.014, 0.582
+    color: '#A8B0AD'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: tripod leg 0
+    min: -0.0296281, -0.01, 0.092
+    max: 0.2496281, 0.01, 0.112
+    color: '#AAB2AE'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: -38.01894259317021
+  - label: rubber tripod foot 0
+    min: 0.194, -0.026, -0.0
+    max: 0.246, 0.026, 0.032
+    color: '#33393A'
+    shape: Ellipsoid
+  - label: tripod leg 1
+    min: -0.1946281, 0.0852628, 0.092
+    max: 0.0846281, 0.1052628, 0.112
+    color: '#AAB2AE'
+    shape: CylinderX
+    yaw: 120.0
+    pitch: -38.018942593170216
+  - label: rubber tripod foot 1
+    min: -0.136, 0.1645256, -0.0
+    max: -0.084, 0.2165256, 0.032
+    color: '#33393A'
+    shape: Ellipsoid
+  - label: tripod leg 2
+    min: -0.1946281, -0.1052628, 0.092
+    max: 0.0846281, -0.0852628, 0.112
+    color: '#AAB2AE'
+    shape: CylinderX
+    yaw: -120.00000000000004
+    pitch: -38.01894259317021
+  - label: rubber tripod foot 2
+    min: -0.136, -0.2165256, -0.0
+    max: -0.084, -0.1645256, 0.032
+    color: '#33393A'
+    shape: Ellipsoid
+  placement: floor
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureBarrelYardCloud
+  label: Separate barrel yard cluster
+  status: draft
+  sourcePrototypes:
+  - RMCBarrelPileYard
+  referencePrototype: RMCBarrelPileYard
+  referenceRsi: /Textures/_RMC14/Structures/barrel_yard.rsi
+  referenceState: pile_0
+  sourceDirections: 1
+  description: Source pile_0 is 96x96 with a non-centered collision envelope -0.5,-0.5,2.4,2.5. Eighteen separate
+    drums interpret the visible and partly occluded cap groups; hidden layout/depth are inferred. The authored positive
+    quadrant footprint is an explicit physical interpretation, not a copy of Sprite.Offset 1,1. Static closed drums
+    only; no opening, burn/destruction or map fit claim. Physical depth, rear and underside are inferred. Draft
+    art only; no native, full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: barrel 0 metal body
+    min: -0.295, -0.285, 0.015
+    max: 0.235, 0.245, 0.68
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 0 closed lid
+    min: -0.295, -0.285, 0.68
+    max: 0.235, 0.245, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 0 raised chime
+    min: -0.304, -0.294, 0.12
+    max: 0.244, 0.254, 0.146
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 0 raised chime member 2
+    min: -0.304, -0.294, 0.51
+    max: 0.244, 0.254, 0.536
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 0 bottom foot rim
+    min: -0.301, -0.291, 0.0
+    max: 0.241, 0.251, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 0 original painted label
+    min: -0.15, -0.289, 0.24
+    max: 0.09, -0.248, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt003
+    surfaceAxis: XZ
+  - label: barrel 1 metal body
+    min: 0.275, -0.305, 0.015
+    max: 0.805, 0.225, 0.68
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 1 closed lid
+    min: 0.275, -0.305, 0.68
+    max: 0.805, 0.225, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 1 raised chime
+    min: 0.266, -0.314, 0.12
+    max: 0.814, 0.234, 0.146
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 1 raised chime member 2
+    min: 0.266, -0.314, 0.51
+    max: 0.814, 0.234, 0.536
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 1 bottom foot rim
+    min: 0.269, -0.311, 0.0
+    max: 0.811, 0.231, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 1 original painted label
+    min: 0.42, -0.309, 0.24
+    max: 0.66, -0.268, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt004
+    surfaceAxis: XZ
+  - label: barrel 2 metal body
+    min: 0.855, -0.325, 0.015
+    max: 1.385, 0.205, 0.68
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 2 closed lid
+    min: 0.855, -0.325, 0.68
+    max: 1.385, 0.205, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 2 raised chime
+    min: 0.846, -0.334, 0.12
+    max: 1.394, 0.214, 0.146
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 2 raised chime member 2
+    min: 0.846, -0.334, 0.51
+    max: 1.394, 0.214, 0.536
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 2 bottom foot rim
+    min: 0.849, -0.331, 0.0
+    max: 1.391, 0.211, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 2 original painted label
+    min: 1.0, -0.329, 0.24
+    max: 1.24, -0.288, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt005
+    surfaceAxis: XZ
+  - label: barrel 3 metal body
+    min: 1.425, -0.185, 0.015
+    max: 1.955, 0.345, 0.68
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 3 closed lid
+    min: 1.425, -0.185, 0.68
+    max: 1.955, 0.345, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 3 raised chime
+    min: 1.416, -0.194, 0.12
+    max: 1.964, 0.354, 0.146
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 3 raised chime member 2
+    min: 1.416, -0.194, 0.51
+    max: 1.964, 0.354, 0.536
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 3 bottom foot rim
+    min: 1.419, -0.191, 0.0
+    max: 1.961, 0.351, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 3 original painted label
+    min: 1.57, -0.189, 0.24
+    max: 1.81, -0.148, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt004
+    surfaceAxis: XZ
+  - label: barrel 4 metal body
+    min: 1.975, 0.135, 0.015
+    max: 2.505, 0.665, 0.68
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 4 closed lid
+    min: 1.975, 0.135, 0.68
+    max: 2.505, 0.665, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 4 raised chime
+    min: 1.966, 0.126, 0.12
+    max: 2.514, 0.674, 0.146
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 4 raised chime member 2
+    min: 1.966, 0.126, 0.51
+    max: 2.514, 0.674, 0.536
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 4 bottom foot rim
+    min: 1.969, 0.129, 0.0
+    max: 2.511, 0.671, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 4 original painted label
+    min: 2.12, 0.131, 0.24
+    max: 2.36, 0.172, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt003
+    surfaceAxis: XZ
+  - label: barrel 5 metal body
+    min: -0.2708119, 0.3552153, 0.015
+    max: 0.2591881, 0.8852153, 0.68
+    color: '#663536'
+    shape: CylinderZ
+  - label: barrel 5 closed lid
+    min: -0.2708119, 0.3552153, 0.68
+    max: 0.2591881, 0.8852153, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 5 raised chime
+    min: -0.2798119, 0.3462153, 0.12
+    max: 0.2681881, 0.8942153, 0.146
+    color: '#663536'
+    shape: CylinderZ
+  - label: barrel 5 raised chime member 2
+    min: -0.2798119, 0.3462153, 0.51
+    max: 0.2681881, 0.8942153, 0.536
+    color: '#663536'
+    shape: CylinderZ
+  - label: barrel 5 bottom foot rim
+    min: -0.2768119, 0.3492153, 0.0
+    max: 0.2651881, 0.8912153, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 6 metal body
+    min: 0.2808119, 0.3347847, 0.015
+    max: 0.8108119, 0.8647847, 0.68
+    color: '#C5B797'
+    shape: CylinderZ
+  - label: barrel 6 closed lid
+    min: 0.2808119, 0.3347847, 0.68
+    max: 0.8108119, 0.8647847, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 6 raised chime
+    min: 0.2718119, 0.3257847, 0.12
+    max: 0.8198119, 0.8737847, 0.146
+    color: '#C5B797'
+    shape: CylinderZ
+  - label: barrel 6 raised chime member 2
+    min: 0.2718119, 0.3257847, 0.51
+    max: 0.8198119, 0.8737847, 0.536
+    color: '#C5B797'
+    shape: CylinderZ
+  - label: barrel 6 bottom foot rim
+    min: 0.2748119, 0.3287847, 0.0
+    max: 0.8168119, 0.8707847, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 6 original painted label
+    min: 0.4258119, 0.3307847, 0.24
+    max: 0.6658119, 0.3717847, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt006
+    surfaceAxis: XZ
+  - label: barrel 7 metal body
+    min: 0.8364438, 0.3212764, 0.015
+    max: 1.3664438, 0.8512764, 0.68
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 7 closed lid
+    min: 0.8364438, 0.3212764, 0.68
+    max: 1.3664438, 0.8512764, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 7 raised chime
+    min: 0.8274438, 0.3122764, 0.12
+    max: 1.3754438, 0.8602764, 0.146
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 7 raised chime member 2
+    min: 0.8274438, 0.3122764, 0.51
+    max: 1.3754438, 0.8602764, 0.536
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 7 bottom foot rim
+    min: 0.8304438, 0.3152764, 0.0
+    max: 1.3724438, 0.8572764, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 7 original painted label
+    min: 0.9814438, 0.3172764, 0.24
+    max: 1.2214438, 0.3582764, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt005
+    surfaceAxis: XZ
+  - label: barrel 8 metal body
+    min: 1.3780951, 0.4276724, 0.015
+    max: 1.9080951, 0.9576724, 0.68
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 8 closed lid
+    min: 1.3780951, 0.4276724, 0.68
+    max: 1.9080951, 0.9576724, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 8 raised chime
+    min: 1.3690951, 0.4186724, 0.12
+    max: 1.9170951, 0.9666724, 0.146
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 8 raised chime member 2
+    min: 1.3690951, 0.4186724, 0.51
+    max: 1.9170951, 0.9666724, 0.536
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 8 bottom foot rim
+    min: 1.3720951, 0.4216724, 0.0
+    max: 1.9140951, 0.9636724, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 8 original painted label
+    min: 1.5230951, 0.4236724, 0.24
+    max: 1.7630951, 0.4646724, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt003
+    surfaceAxis: XZ
+  - label: barrel 9 metal body
+    min: 1.8604611, 0.6960512, 0.015
+    max: 2.3904611, 1.2260512, 0.68
+    color: '#C5B797'
+    shape: CylinderZ
+  - label: barrel 9 closed lid
+    min: 1.8604611, 0.6960512, 0.68
+    max: 2.3904611, 1.2260512, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 9 raised chime
+    min: 1.8514611, 0.6870512, 0.12
+    max: 2.3994611, 1.2350512, 0.146
+    color: '#C5B797'
+    shape: CylinderZ
+  - label: barrel 9 raised chime member 2
+    min: 1.8514611, 0.6870512, 0.51
+    max: 2.3994611, 1.2350512, 0.536
+    color: '#C5B797'
+    shape: CylinderZ
+  - label: barrel 9 bottom foot rim
+    min: 1.8544611, 0.6900512, 0.0
+    max: 2.3964611, 1.2320512, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 10 metal body
+    min: -0.3397465, 0.9552607, 0.015
+    max: 0.1902535, 1.4852607, 0.68
+    color: '#C5B797'
+    shape: CylinderZ
+  - label: barrel 10 closed lid
+    min: -0.3397465, 0.9552607, 0.68
+    max: 0.1902535, 1.4852607, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 10 raised chime
+    min: -0.3487465, 0.9462607, 0.12
+    max: 0.1992535, 1.4942607, 0.146
+    color: '#C5B797'
+    shape: CylinderZ
+  - label: barrel 10 raised chime member 2
+    min: -0.3487465, 0.9462607, 0.51
+    max: 0.1992535, 1.4942607, 0.536
+    color: '#C5B797'
+    shape: CylinderZ
+  - label: barrel 10 bottom foot rim
+    min: -0.3457465, 0.9492607, 0.0
+    max: 0.1962535, 1.4912607, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 11 metal body
+    min: 0.211418, 0.9248927, 0.015
+    max: 0.741418, 1.4548927, 0.68
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 11 closed lid
+    min: 0.211418, 0.9248927, 0.68
+    max: 0.741418, 1.4548927, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 11 raised chime
+    min: 0.202418, 0.9158927, 0.12
+    max: 0.750418, 1.4638927, 0.146
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 11 raised chime member 2
+    min: 0.202418, 0.9158927, 0.51
+    max: 0.750418, 1.4638927, 0.536
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 11 bottom foot rim
+    min: 0.205418, 0.9188927, 0.0
+    max: 0.747418, 1.4608927, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 11 original painted label
+    min: 0.356418, 0.9208927, 0.24
+    max: 0.596418, 0.9618927, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt004
+    surfaceAxis: XZ
+  - label: barrel 12 metal body
+    min: 0.7633286, 0.9148466, 0.015
+    max: 1.2933286, 1.4448466, 0.68
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 12 closed lid
+    min: 0.7633286, 0.9148466, 0.68
+    max: 1.2933286, 1.4448466, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 12 raised chime
+    min: 0.7543286, 0.9058466, 0.12
+    max: 1.3023286, 1.4538466, 0.146
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 12 raised chime member 2
+    min: 0.7543286, 0.9058466, 0.51
+    max: 1.3023286, 1.4538466, 0.536
+    color: '#A7860A'
+    shape: CylinderZ
+  - label: barrel 12 bottom foot rim
+    min: 0.7573286, 0.9088466, 0.0
+    max: 1.2993286, 1.4508466, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 13 metal body
+    min: 1.355, 1.045, 0.015
+    max: 1.885, 1.575, 0.68
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 13 closed lid
+    min: 1.355, 1.045, 0.68
+    max: 1.885, 1.575, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 13 raised chime
+    min: 1.346, 1.036, 0.12
+    max: 1.894, 1.584, 0.146
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 13 raised chime member 2
+    min: 1.346, 1.036, 0.51
+    max: 1.894, 1.584, 0.536
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 13 bottom foot rim
+    min: 1.349, 1.039, 0.0
+    max: 1.891, 1.581, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 14 metal body
+    min: 0.2341813, 1.5149702, 0.015
+    max: 0.7641813, 2.0449702, 0.68
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 14 closed lid
+    min: 0.2341813, 1.5149702, 0.68
+    max: 0.7641813, 2.0449702, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 14 raised chime
+    min: 0.2251813, 1.5059702, 0.12
+    max: 0.7731813, 2.0539702, 0.146
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 14 raised chime member 2
+    min: 0.2251813, 1.5059702, 0.51
+    max: 0.7731813, 2.0539702, 0.536
+    color: '#2C6734'
+    shape: CylinderZ
+  - label: barrel 14 bottom foot rim
+    min: 0.2281813, 1.5089702, 0.0
+    max: 0.7701813, 2.0509702, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 15 metal body
+    min: 0.7858187, 1.5350298, 0.015
+    max: 1.3158187, 2.0650298, 0.68
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 15 closed lid
+    min: 0.7858187, 1.5350298, 0.68
+    max: 1.3158187, 2.0650298, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 15 raised chime
+    min: 0.7768187, 1.5260298, 0.12
+    max: 1.3248187, 2.0740298, 0.146
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 15 raised chime member 2
+    min: 0.7768187, 1.5260298, 0.51
+    max: 1.3248187, 2.0740298, 0.536
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 15 bottom foot rim
+    min: 0.7798187, 1.5290298, 0.0
+    max: 1.3218187, 2.0710298, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 16 metal body
+    min: 1.755, 1.825, 0.015
+    max: 2.285, 2.355, 0.68
+    color: '#663536'
+    shape: CylinderZ
+  - label: barrel 16 closed lid
+    min: 1.755, 1.825, 0.68
+    max: 2.285, 2.355, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 16 raised chime
+    min: 1.746, 1.816, 0.12
+    max: 2.294, 2.364, 0.146
+    color: '#663536'
+    shape: CylinderZ
+  - label: barrel 16 raised chime member 2
+    min: 1.746, 1.816, 0.51
+    max: 2.294, 2.364, 0.536
+    color: '#663536'
+    shape: CylinderZ
+  - label: barrel 16 bottom foot rim
+    min: 1.749, 1.819, 0.0
+    max: 2.291, 2.361, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 16 original painted label
+    min: 1.9, 1.821, 0.24
+    max: 2.14, 1.862, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt007
+    surfaceAxis: XZ
+  - label: barrel 17 metal body
+    min: 2.205, 1.335, 0.015
+    max: 2.735, 1.865, 0.68
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 17 closed lid
+    min: 2.205, 1.335, 0.68
+    max: 2.735, 1.865, 0.705
+    color: '#373938'
+    shape: CylinderZ
+  - label: barrel 17 raised chime
+    min: 2.196, 1.326, 0.12
+    max: 2.744, 1.874, 0.146
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 17 raised chime member 2
+    min: 2.196, 1.326, 0.51
+    max: 2.744, 1.874, 0.536
+    color: '#2E4777'
+    shape: CylinderZ
+  - label: barrel 17 bottom foot rim
+    min: 2.199, 1.329, 0.0
+    max: 2.741, 1.871, 0.025
+    color: '#343735'
+    shape: CylinderZ
+  - label: barrel 17 original painted label
+    min: 2.35, 1.331, 0.24
+    max: 2.59, 1.372, 0.45
+    color: '#FFFFFF'
+    surface: CMU3DMaterialLeisureCloudArt005
+    surfaceAxis: XZ
+  placement: floor
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureSpentCasings4Cloud
+  label: Scattered spent brass cases
+  status: draft
+  sourcePrototypes:
+  - RMCBasePropCasing4
+  referencePrototype: RMCBasePropCasing4
+  referenceRsi: /Textures/_RMC14/Objects/Misc/spent_casing.rsi
+  referenceState: cartridge_4
+  sourceDirections: 1
+  description: Ten disconnected brass cases follow the inspected cartridge_4 scatter. Each has eight shell members,
+    a base and an open mouth. Source scale is tiny; the tubes are physical approximations. No arbitrary alternative
+    cartridge states or ejection animation. Physical depth, rear and underside are inferred. Draft art only; no
+    native, full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: spent case 0 thin wall 0
+    min: -0.3275, 0.169, 0.015
+    max: -0.1925, 0.181, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 0 thin wall 1
+    min: -0.3275, 0.1646066, 0.0256066
+    max: -0.1925, 0.1766066, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 0 thin wall 2
+    min: -0.3275, 0.154, 0.03
+    max: -0.1925, 0.166, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 0 thin wall 3
+    min: -0.3275, 0.1433934, 0.0256066
+    max: -0.1925, 0.1553934, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 0 thin wall 4
+    min: -0.3275, 0.139, 0.015
+    max: -0.1925, 0.151, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 0 thin wall 5
+    min: -0.3275, 0.1433934, 0.0043934
+    max: -0.1925, 0.1553934, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 0 thin wall 6
+    min: -0.3275, 0.154, 0.0
+    max: -0.1925, 0.166, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 0 thin wall 7
+    min: -0.3275, 0.1646066, 0.0043934
+    max: -0.1925, 0.1766066, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 0 closed base
+    min: -0.3275, 0.14, 0.001
+    max: -0.3185, 0.18, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 1 thin wall 0
+    min: -0.3375, 0.044, 0.015
+    max: -0.2025, 0.056, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 1 thin wall 1
+    min: -0.3375, 0.0396066, 0.0256066
+    max: -0.2025, 0.0516066, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 1 thin wall 2
+    min: -0.3375, 0.029, 0.03
+    max: -0.2025, 0.041, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 1 thin wall 3
+    min: -0.3375, 0.0183934, 0.0256066
+    max: -0.2025, 0.0303934, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 1 thin wall 4
+    min: -0.3375, 0.014, 0.015
+    max: -0.2025, 0.026, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 1 thin wall 5
+    min: -0.3375, 0.0183934, 0.0043934
+    max: -0.2025, 0.0303934, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 1 thin wall 6
+    min: -0.3375, 0.029, 0.0
+    max: -0.2025, 0.041, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 1 thin wall 7
+    min: -0.3375, 0.0396066, 0.0043934
+    max: -0.2025, 0.0516066, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 1 closed base
+    min: -0.3375, 0.015, 0.001
+    max: -0.3285, 0.055, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 2 thin wall 0
+    min: -0.0425, 0.244, 0.015
+    max: 0.0925, 0.256, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 2 thin wall 1
+    min: -0.0381066, 0.244, 0.0256066
+    max: 0.0968934, 0.256, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 2 thin wall 2
+    min: -0.0275, 0.244, 0.03
+    max: 0.1075, 0.256, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 2 thin wall 3
+    min: -0.0168934, 0.244, 0.0256066
+    max: 0.1181066, 0.256, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 2 thin wall 4
+    min: -0.0125, 0.244, 0.015
+    max: 0.1225, 0.256, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 2 thin wall 5
+    min: -0.0168934, 0.244, 0.0043934
+    max: 0.1181066, 0.256, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 2 thin wall 6
+    min: -0.0275, 0.244, 0.0
+    max: 0.1075, 0.256, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 2 thin wall 7
+    min: -0.0381066, 0.244, 0.0043934
+    max: 0.0968934, 0.256, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 2 closed base
+    min: 0.0355, 0.167, 0.001
+    max: 0.0445, 0.207, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 3 thin wall 0
+    min: 0.1175, 0.304, 0.015
+    max: 0.2525, 0.316, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 3 thin wall 1
+    min: 0.1218934, 0.304, 0.0256066
+    max: 0.2568934, 0.316, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 3 thin wall 2
+    min: 0.1325, 0.304, 0.03
+    max: 0.2675, 0.316, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 3 thin wall 3
+    min: 0.1431066, 0.304, 0.0256066
+    max: 0.2781066, 0.316, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 3 thin wall 4
+    min: 0.1475, 0.304, 0.015
+    max: 0.2825, 0.316, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 3 thin wall 5
+    min: 0.1431066, 0.304, 0.0043934
+    max: 0.2781066, 0.316, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 3 thin wall 6
+    min: 0.1325, 0.304, 0.0
+    max: 0.2675, 0.316, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 3 thin wall 7
+    min: 0.1218934, 0.304, 0.0043934
+    max: 0.2568934, 0.316, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 3 closed base
+    min: 0.1955, 0.227, 0.001
+    max: 0.2045, 0.267, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 4 thin wall 0
+    min: -0.0718934, -0.0153934, 0.015
+    max: 0.0631066, -0.0033934, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: -45.0
+    pitch: 0.0
+  - label: spent case 4 thin wall 1
+    min: -0.075, -0.0185, 0.0256066
+    max: 0.06, -0.0065, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: -45.0
+    pitch: 0.0
+  - label: spent case 4 thin wall 2
+    min: -0.0825, -0.026, 0.03
+    max: 0.0525, -0.014, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: -45.0
+    pitch: 0.0
+  - label: spent case 4 thin wall 3
+    min: -0.09, -0.0335, 0.0256066
+    max: 0.045, -0.0215, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: -45.0
+    pitch: 0.0
+  - label: spent case 4 thin wall 4
+    min: -0.0931066, -0.0366066, 0.015
+    max: 0.0418934, -0.0246066, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: -45.0
+    pitch: 0.0
+  - label: spent case 4 thin wall 5
+    min: -0.09, -0.0335, 0.0043934
+    max: 0.045, -0.0215, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: -45.0
+    pitch: 0.0
+  - label: spent case 4 thin wall 6
+    min: -0.0825, -0.026, 0.0
+    max: 0.0525, -0.014, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: -45.0
+    pitch: 0.0
+  - label: spent case 4 thin wall 7
+    min: -0.075, -0.0185, 0.0043934
+    max: 0.06, -0.0065, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: -45.0
+    pitch: 0.0
+  - label: spent case 4 closed base
+    min: -0.0640477, 0.0045477, 0.001
+    max: -0.0550477, 0.0445477, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: -45.0
+    pitch: 0.0
+  - label: spent case 5 thin wall 0
+    min: 0.2268934, 0.0846066, 0.015
+    max: 0.3618934, 0.0966066, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 5 thin wall 1
+    min: 0.23, 0.0815, 0.0256066
+    max: 0.365, 0.0935, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 5 thin wall 2
+    min: 0.2375, 0.074, 0.03
+    max: 0.3725, 0.086, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 5 thin wall 3
+    min: 0.245, 0.0665, 0.0256066
+    max: 0.38, 0.0785, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 5 thin wall 4
+    min: 0.2481066, 0.0633934, 0.015
+    max: 0.3831066, 0.0753934, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 5 thin wall 5
+    min: 0.245, 0.0665, 0.0043934
+    max: 0.38, 0.0785, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 5 thin wall 6
+    min: 0.2375, 0.074, 0.0
+    max: 0.3725, 0.086, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 5 thin wall 7
+    min: 0.23, 0.0815, 0.0043934
+    max: 0.365, 0.0935, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 5 closed base
+    min: 0.2559523, 0.0154523, 0.001
+    max: 0.2649523, 0.0554523, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: 44.99999999999997
+    pitch: 0.0
+  - label: spent case 6 thin wall 0
+    min: 0.2368934, -0.1153934, 0.015
+    max: 0.3718934, -0.1033934, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 6 thin wall 1
+    min: 0.24, -0.1185, 0.0256066
+    max: 0.375, -0.1065, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 6 thin wall 2
+    min: 0.2475, -0.126, 0.03
+    max: 0.3825, -0.114, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 6 thin wall 3
+    min: 0.255, -0.1335, 0.0256066
+    max: 0.39, -0.1215, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 6 thin wall 4
+    min: 0.2581066, -0.1366066, 0.015
+    max: 0.3931066, -0.1246066, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 6 thin wall 5
+    min: 0.255, -0.1335, 0.0043934
+    max: 0.39, -0.1215, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 6 thin wall 6
+    min: 0.2475, -0.126, 0.0
+    max: 0.3825, -0.114, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 6 thin wall 7
+    min: 0.24, -0.1185, 0.0043934
+    max: 0.375, -0.1065, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 6 closed base
+    min: 0.2659523, -0.1845477, 0.001
+    max: 0.2749523, -0.1445477, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 7 thin wall 0
+    min: 0.1175, -0.326, 0.015
+    max: 0.2525, -0.314, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 7 thin wall 1
+    min: 0.1218934, -0.326, 0.0256066
+    max: 0.2568934, -0.314, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 7 thin wall 2
+    min: 0.1325, -0.326, 0.03
+    max: 0.2675, -0.314, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 7 thin wall 3
+    min: 0.1431066, -0.326, 0.0256066
+    max: 0.2781066, -0.314, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 7 thin wall 4
+    min: 0.1475, -0.326, 0.015
+    max: 0.2825, -0.314, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 7 thin wall 5
+    min: 0.1431066, -0.326, 0.0043934
+    max: 0.2781066, -0.314, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 7 thin wall 6
+    min: 0.1325, -0.326, 0.0
+    max: 0.2675, -0.314, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 7 thin wall 7
+    min: 0.1218934, -0.326, 0.0043934
+    max: 0.2568934, -0.314, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 7 closed base
+    min: 0.1955, -0.403, 0.001
+    max: 0.2045, -0.363, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 0.0
+  - label: spent case 8 thin wall 0
+    min: -0.0875, -0.206, 0.015
+    max: 0.0475, -0.194, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 8 thin wall 1
+    min: -0.0875, -0.2103934, 0.0256066
+    max: 0.0475, -0.1983934, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 8 thin wall 2
+    min: -0.0875, -0.221, 0.03
+    max: 0.0475, -0.209, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 8 thin wall 3
+    min: -0.0875, -0.2316066, 0.0256066
+    max: 0.0475, -0.2196066, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 8 thin wall 4
+    min: -0.0875, -0.236, 0.015
+    max: 0.0475, -0.224, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 8 thin wall 5
+    min: -0.0875, -0.2316066, 0.0043934
+    max: 0.0475, -0.2196066, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 8 thin wall 6
+    min: -0.0875, -0.221, 0.0
+    max: 0.0475, -0.209, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 8 thin wall 7
+    min: -0.0875, -0.2103934, 0.0043934
+    max: 0.0475, -0.1983934, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 8 closed base
+    min: -0.0875, -0.235, 0.001
+    max: -0.0785, -0.195, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 0.0
+  - label: spent case 9 thin wall 0
+    min: -0.3481066, -0.2703934, 0.015
+    max: -0.2131066, -0.2583934, 0.027
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 9 thin wall 1
+    min: -0.345, -0.2735, 0.0256066
+    max: -0.21, -0.2615, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 9 thin wall 2
+    min: -0.3375, -0.281, 0.03
+    max: -0.2025, -0.269, 0.042
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 9 thin wall 3
+    min: -0.33, -0.2885, 0.0256066
+    max: -0.195, -0.2765, 0.0376066
+    color: '#BCB755'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 9 thin wall 4
+    min: -0.3268934, -0.2916066, 0.015
+    max: -0.1918934, -0.2796066, 0.027
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 9 thin wall 5
+    min: -0.33, -0.2885, 0.0043934
+    max: -0.195, -0.2765, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 9 thin wall 6
+    min: -0.3375, -0.281, 0.0
+    max: -0.2025, -0.269, 0.012
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 9 thin wall 7
+    min: -0.345, -0.2735, 0.0043934
+    max: -0.21, -0.2615, 0.0163934
+    color: '#77722E'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  - label: spent case 9 closed base
+    min: -0.3190477, -0.3395477, 0.001
+    max: -0.3100477, -0.2995477, 0.041
+    color: '#C8C962'
+    shape: CylinderX
+    yaw: 45.0
+    pitch: 0.0
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DMaterialLeisureRollingPinCloud
+  label: Wooden rolling pin
+  status: draft
+  sourcePrototypes:
+  - RMCRollingPin
+  referencePrototype: RMCRollingPin
+  referenceRsi: /Textures/_RMC14/Objects/Tools/Kitchen/rolling_pin.rsi
+  referenceState: icon
+  sourceDirections: 1
+  description: Cylindrical rolling body and two thinner coaxial handles follow the diagonal source icon. Only resting
+    object form; worn/inhand, cooking, melee and tool animation are unsupported. Physical depth, rear and underside
+    are inferred. Draft art only; no native, full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
+  parts:
+  - label: wood rolling cylinder
+    min: -0.268561, -0.065, -0.0
+    max: 0.268561, 0.065, 0.13
+    color: '#A46A3B'
+    shape: CylinderX
+    yaw: 28.950995207466804
+    pitch: 0.0
+  - label: near turned handle
+    min: -0.3318921, -0.1765, 0.042
+    max: -0.2231079, -0.1305, 0.088
+    color: '#865029'
+    shape: CylinderX
+    yaw: 29.156917882312996
+    pitch: 0.0
+  - label: far turned handle
+    min: 0.2231079, 0.1305, 0.042
+    max: 0.3318921, 0.1765, 0.088
+    color: '#865029'
+    shape: CylinderX
+    yaw: 29.156917882312996
+    pitch: 0.0
+  - label: wood cylindrical grain highlight
+    min: -0.2284956, -0.0255, 0.1
+    max: 0.2284956, -0.0095, 0.116
+    color: '#C08750'
+    shape: CylinderX
+    yaw: 28.920650342151532
+    pitch: 0.0
+  placement: surface
+  useEntityRotation: true

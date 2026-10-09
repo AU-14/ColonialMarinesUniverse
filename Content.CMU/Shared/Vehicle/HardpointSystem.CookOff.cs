@@ -6,14 +6,26 @@ public sealed partial class HardpointSystem
 {
     public bool IsCookedOff(EntityUid target) => HasOnVehicle<ActiveTankCookOffComponent>(target);
 
-    // kept apart from IsCookedOff on purpose, that one zeroes the hull and the damage sprite follows it
+    // kept apart from IsDestroyedBeyondRepair on purpose, that one zeroes the hull and the damage sprite follows it
     public bool IsTotaled(EntityUid target) => HasOnVehicle<VehicleTotaledComponent>(target);
 
-    public bool IsWrecked(EntityUid target) => IsCookedOff(target) || IsTotaled(target);
-
-    public string GetWreckedMessage(EntityUid target)
+    public bool IsDestroyedBeyondRepair(EntityUid target)
     {
-        return Loc.GetString(IsCookedOff(target) ? "cmu-tank-cook-off-unrepairable" : "cmu-vehicle-totaled-unrepairable");
+        return IsCookedOff(target)
+            || (TryComp<HardpointIntegrityComponent>(target, out var integrity) && integrity.DestroyedBeyondRepair)
+            || (_topology.TryGetVehicle(target, out var vehicle)
+                && TryComp<HardpointIntegrityComponent>(vehicle, out var frame) && frame.DestroyedBeyondRepair);
+    }
+
+    // cook-off, dead frame or OB totaled, for the repair/install/reset gates
+    public bool IsWrecked(EntityUid target) => IsDestroyedBeyondRepair(target) || IsTotaled(target);
+
+    public string GetWreckMessage(EntityUid target)
+    {
+        if (IsCookedOff(target))
+            return Loc.GetString("cmu-tank-cook-off-unrepairable");
+
+        return Loc.GetString(IsTotaled(target) ? "cmu-vehicle-totaled-unrepairable" : "cmu-vehicle-wreck-unrepairable");
     }
 
     private bool HasOnVehicle<T>(EntityUid target) where T : IComponent
@@ -26,7 +38,7 @@ public sealed partial class HardpointSystem
         if (!IsWrecked(target))
             return true;
 
-        _popup.PopupClient(GetWreckedMessage(target), target, user, PopupType.SmallCaution);
+        _popup.PopupClient(GetWreckMessage(target), target, user, PopupType.SmallCaution);
         return false;
     }
 }

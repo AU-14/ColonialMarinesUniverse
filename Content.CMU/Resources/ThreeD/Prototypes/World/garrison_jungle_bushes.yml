@@ -1,0 +1,1683 @@
+# Source-traced large jungle bushes. See SOURCES_JUNGLE_BUSHES.md.
+- type: cmu3DModel
+  id: CMU3DRMCBushJungle1
+  label: Jungle ribbon bush bush1
+  sourcePrototypes:
+  - RMCBushJungle1
+  referenceRsi: _RMC14/Structures/Flora/bush.rsi
+  referenceState: bush1
+  sourceDirections: 1
+  groundOffset: 0.1, 0
+  status: draft
+  description: Individual source-traced curling leaves and rooted stalks with original green palette. Source horizontal
+    offset is retained; vertical sprite offset is not a ground translation. Hidden depth, height, leaf anatomy and
+    reverse surfaces remain inferred. Static draft; see SOURCES_JUNGLE_BUSHES.md.
+  parts:
+  - label: rooted stalk 0 section 0
+    min: -0.113592, -0.088000, 0.003000
+    max: -0.042658, -0.042000, 0.489035
+    color: '#243320'
+    shape: SlantedXReverse
+  - label: rooted stalk 0 section 1
+    min: -0.118230, -0.092000, 0.355058
+    max: -0.069270, -0.038000, 0.899692
+    color: '#1C2819'
+    shape: Ellipsoid
+  - label: root sheath 0
+    min: -0.094500, -0.104000, 0.003000
+    max: -0.030500, -0.026000, 0.141000
+    color: '#243320'
+    shape: CylinderZ
+  - label: rooted stalk 1 section 0
+    min: 0.042658, -0.023000, 0.003000
+    max: 0.113592, 0.023000, 0.453378
+    color: '#243320'
+    shape: SlantedXReverse
+  - label: rooted stalk 1 section 1
+    min: 0.042658, -0.023000, 0.332622
+    max: 0.113592, 0.023000, 0.797128
+    color: '#1C2819'
+    shape: SlantedX
+  - label: root sheath 1
+    min: 0.061750, -0.039000, 0.003000
+    max: 0.125750, 0.039000, 0.141000
+    color: '#243320'
+    shape: CylinderZ
+  - label: rooted stalk 2 section 0
+    min: -0.215284, 0.042000, 0.020122
+    max: -0.097216, 0.088000, 0.484628
+    color: '#1C2819'
+    shape: SlantedXReverse
+  - label: rooted stalk 2 section 1
+    min: -0.238592, 0.042000, 0.363872
+    max: -0.167658, 0.088000, 0.828378
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: root sheath 2
+    min: -0.157000, 0.026000, 0.003000
+    max: -0.093000, 0.104000, 0.141000
+    color: '#172014'
+    shape: CylinderZ
+  - label: leaf 0 basal stalk section 0
+    color: '#364C2F'
+    shape: SlantedYReverse
+    min: -0.071510, -0.081113, 0.021520
+    max: -0.006615, 0.023613, 0.209792
+  - label: leaf 0 basal stalk section 1
+    color: '#364C2F'
+    shape: SlantedYReverse
+    min: -0.087135, -0.138613, 0.154333
+    max: -0.022240, -0.033887, 0.342605
+  - label: leaf 0 basal stalk section 2
+    color: '#364C2F'
+    shape: SlantedYReverse
+    min: -0.102760, -0.196113, 0.287145
+    max: -0.037865, -0.091387, 0.475417
+  - label: leaf 0 basal stalk section 3
+    color: '#364C2F'
+    shape: SlantedYReverse
+    min: -0.118385, -0.253613, 0.419958
+    max: -0.053490, -0.148887, 0.608230
+  - label: continuous leaf 0 curve 0
+    min: -0.134869, -0.286000, 0.441521
+    max: -0.052631, -0.192000, 1.424250
+    color: '#44603B'
+    shape: Ellipsoid
+  - label: leaf 1 basal stalk section 0
+    color: '#243320'
+    shape: SlantedXReverse
+    min: -0.089240, -0.060638, 0.018215
+    max: -0.012322, 0.031888, 0.236535
+  - label: leaf 1 basal stalk section 1
+    color: '#243320'
+    shape: SlantedXReverse
+    min: -0.128303, -0.089388, 0.174465
+    max: -0.051385, 0.003138, 0.392785
+  - label: leaf 1 basal stalk section 2
+    color: '#243320'
+    shape: SlantedXReverse
+    min: -0.167365, -0.118138, 0.330715
+    max: -0.090447, -0.025612, 0.549035
+  - label: leaf 1 basal stalk section 3
+    color: '#243320'
+    shape: SlantedXReverse
+    min: -0.206428, -0.146888, 0.486965
+    max: -0.129510, -0.054362, 0.705285
+  - label: continuous leaf 1 curve 0
+    min: -0.217875, -0.150430, 0.611007
+    max: -0.157125, -0.065776, 1.081243
+    color: '#1C2819'
+    shape: Ellipsoid
+  - label: continuous leaf 1 curve 1
+    min: -0.447809, -0.127872, 0.970808
+    max: -0.114691, -0.068539, 1.221442
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: continuous leaf 1 curve 2
+    min: -0.638906, -0.121096, 1.151984
+    max: -0.329844, -0.071109, 1.196516
+    color: '#4E6D44'
+    shape: Ellipsoid
+  - label: leaf 2 basal stalk section 0
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.046207, -0.016000, 0.022622
+    max: 0.007144, 0.016000, 0.200878
+  - label: leaf 2 basal stalk section 1
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.022769, -0.016000, 0.147622
+    max: 0.030582, 0.016000, 0.325878
+  - label: leaf 2 basal stalk section 2
+    color: '#1C2819'
+    shape: SlantedX
+    min: 0.000668, -0.016000, 0.272622
+    max: 0.054019, 0.016000, 0.450878
+  - label: leaf 2 basal stalk section 3
+    color: '#1C2819'
+    shape: SlantedX
+    min: 0.024106, -0.016000, 0.397622
+    max: 0.077457, 0.016000, 0.575878
+  - label: continuous leaf 2 curve 0
+    min: 0.004660, -0.023000, 0.447387
+    max: 0.276590, 0.023000, 1.244863
+    color: '#364C2F'
+    shape: SlantedX
+  - label: continuous leaf 2 curve 1
+    min: 0.176317, -0.052000, 1.105894
+    max: 0.386183, 0.034000, 1.367606
+    color: '#364C2F'
+    shape: SlantedX
+  - label: leaf 3 basal stalk section 0
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.056134, -0.031888, 0.022622
+    max: 0.056134, 0.060638, 0.200878
+  - label: leaf 3 basal stalk section 1
+    color: '#1C2819'
+    shape: SlantedX
+    min: 0.006366, -0.003138, 0.147622
+    max: 0.118634, 0.089388, 0.325878
+  - label: leaf 3 basal stalk section 2
+    color: '#1C2819'
+    shape: SlantedX
+    min: 0.068866, 0.025612, 0.272622
+    max: 0.181134, 0.118138, 0.450878
+  - label: leaf 3 basal stalk section 3
+    color: '#1C2819'
+    shape: SlantedX
+    min: 0.131366, 0.054362, 0.397622
+    max: 0.243634, 0.146888, 0.575878
+  - label: continuous leaf 3 curve 0
+    min: 0.187553, 0.081000, 0.485460
+    max: 0.312447, 0.167000, 0.956790
+    color: '#364C2F'
+    shape: SlantedX
+  - label: continuous leaf 3 curve 1
+    min: 0.198873, 0.110000, 0.856532
+    max: 0.613627, 0.156000, 1.054468
+    color: '#44603B'
+    shape: SlantedX
+  - label: leaf 4 basal stalk section 0
+    color: '#44603B'
+    shape: SlantedX
+    min: -0.058120, -0.047776, 0.017113
+    max: 0.065932, 0.105276, 0.245450
+  - label: leaf 4 basal stalk section 1
+    color: '#44603B'
+    shape: SlantedX
+    min: 0.012193, 0.009724, 0.181175
+    max: 0.136245, 0.162776, 0.409512
+  - label: leaf 4 basal stalk section 2
+    color: '#44603B'
+    shape: SlantedX
+    min: 0.082505, 0.067224, 0.345238
+    max: 0.206557, 0.220276, 0.573575
+  - label: leaf 4 basal stalk section 3
+    color: '#44603B'
+    shape: SlantedX
+    min: 0.152818, 0.124724, 0.509300
+    max: 0.276870, 0.277776, 0.737637
+  - label: continuous leaf 4 curve 0
+    min: 0.194977, 0.205904, 0.659338
+    max: 0.461273, 0.255891, 0.970412
+    color: '#4E6D44'
+    shape: SlantedX
+  - label: continuous leaf 4 curve 1
+    min: 0.346852, 0.199128, 0.868905
+    max: 0.621898, 0.258461, 0.948345
+    color: '#243320'
+    shape: SlantedXReverse
+  - label: continuous leaf 4 curve 2
+    min: 0.520888, 0.180570, 0.740528
+    max: 0.718750, 0.257224, 0.920472
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: leaf 5 basal stalk section 0
+    color: '#4E6D44'
+    shape: SlantedYReverse
+    min: -0.107900, -0.081113, 0.021520
+    max: 0.006337, 0.023613, 0.209792
+  - label: leaf 5 basal stalk section 1
+    color: '#4E6D44'
+    shape: SlantedYReverse
+    min: -0.146962, -0.138613, 0.154333
+    max: -0.032725, -0.033887, 0.342605
+  - label: leaf 5 basal stalk section 2
+    color: '#4E6D44'
+    shape: SlantedYReverse
+    min: -0.186025, -0.196113, 0.287145
+    max: -0.071788, -0.091387, 0.475417
+  - label: leaf 5 basal stalk section 3
+    color: '#4E6D44'
+    shape: SlantedYReverse
+    min: -0.225087, -0.253613, 0.419958
+    max: -0.110850, -0.148887, 0.608230
+  - label: continuous leaf 5 curve 0
+    min: -0.516678, -0.264000, 0.520789
+    max: -0.108322, -0.178000, 0.952711
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: continuous leaf 5 curve 1
+    min: -0.721142, -0.235000, 0.879296
+    max: -0.372608, -0.189000, 0.937954
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: leaf 6 basal stalk section 0
+    color: '#172014'
+    shape: SlantedXReverse
+    min: -0.108836, -0.060638, 0.028131
+    max: -0.008351, 0.031888, 0.156307
+  - label: leaf 6 basal stalk section 1
+    color: '#172014'
+    shape: SlantedXReverse
+    min: -0.163524, -0.089388, 0.114068
+    max: -0.063039, 0.003138, 0.242244
+  - label: leaf 6 basal stalk section 2
+    color: '#172014'
+    shape: SlantedXReverse
+    min: -0.218211, -0.118138, 0.200006
+    max: -0.117726, -0.025612, 0.328182
+  - label: leaf 6 basal stalk section 3
+    color: '#172014'
+    shape: SlantedXReverse
+    min: -0.272899, -0.146888, 0.285943
+    max: -0.172414, -0.054362, 0.414119
+  - label: continuous leaf 6 curve 0
+    min: -0.308716, -0.167000, 0.324999
+    max: -0.222534, -0.081000, 0.804751
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: leaf 7 basal stalk section 0
+    color: '#44603B'
+    shape: SlantedXReverse
+    min: -0.108836, -0.016000, 0.024825
+    max: -0.008351, 0.016000, 0.183050
+  - label: leaf 7 basal stalk section 1
+    color: '#44603B'
+    shape: SlantedXReverse
+    min: -0.163524, -0.016000, 0.134200
+    max: -0.063039, 0.016000, 0.292425
+  - label: leaf 7 basal stalk section 2
+    color: '#44603B'
+    shape: SlantedXReverse
+    min: -0.218211, -0.016000, 0.243575
+    max: -0.117726, 0.016000, 0.401800
+  - label: leaf 7 basal stalk section 3
+    color: '#44603B'
+    shape: SlantedXReverse
+    min: -0.272899, -0.016000, 0.352950
+    max: -0.172414, 0.016000, 0.511175
+  - label: continuous leaf 7 curve 0
+    min: -0.500465, -0.031430, 0.449402
+    max: -0.187035, 0.045224, 0.680348
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: continuous leaf 7 curve 1
+    min: -0.691793, -0.012872, 0.619452
+    max: -0.370707, 0.046461, 0.697798
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: continuous leaf 7 curve 2
+    min: -0.812500, -0.006096, 0.522325
+    max: -0.568050, 0.043891, 0.701175
+    color: '#4E6D44'
+    shape: SlantedX
+  - label: leaf 8 basal stalk section 0
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.079442, -0.031888, 0.030334
+    max: -0.014308, 0.060638, 0.138478
+  - label: leaf 8 basal stalk section 1
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.110692, -0.003138, 0.100647
+    max: -0.045558, 0.089388, 0.208791
+  - label: leaf 8 basal stalk section 2
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.141942, 0.025612, 0.170959
+    max: -0.076808, 0.118138, 0.279103
+  - label: leaf 8 basal stalk section 3
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.173192, 0.054362, 0.241272
+    max: -0.108058, 0.146888, 0.349416
+  - label: continuous leaf 8 curve 0
+    min: -0.562117, 0.063000, 0.285705
+    max: -0.062883, 0.149000, 0.594045
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: leaf 9 basal stalk section 0
+    color: '#172014'
+    shape: SlantedY
+    min: -0.059380, -0.023613, 0.034741
+    max: -0.010933, 0.081113, 0.102821
+  - label: leaf 9 basal stalk section 1
+    color: '#172014'
+    shape: SlantedY
+    min: -0.067192, 0.033887, 0.073804
+    max: -0.018745, 0.138613, 0.141884
+  - label: leaf 9 basal stalk section 2
+    color: '#172014'
+    shape: SlantedY
+    min: -0.075005, 0.091387, 0.112866
+    max: -0.026558, 0.196113, 0.180946
+  - label: leaf 9 basal stalk section 3
+    color: '#172014'
+    shape: SlantedY
+    min: -0.082817, 0.148887, 0.151929
+    max: -0.034370, 0.253613, 0.220009
+  - label: continuous leaf 9 curve 0
+    min: -0.472085, 0.196000, 0.179022
+    max: 0.034585, 0.282000, 0.294478
+    color: '#243320'
+    shape: SlantedXReverse
+  - label: continuous leaf 9 curve 1
+    min: -0.541694, 0.225000, 0.151103
+    max: -0.333306, 0.271000, 0.291147
+    color: '#44603B'
+    shape: SlantedX
+  - label: leaf 10 basal stalk section 0
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.064520, -0.081113, 0.032538
+    max: 0.033270, 0.023613, 0.120650
+  - label: leaf 10 basal stalk section 1
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.033270, -0.138613, 0.087225
+    max: 0.064520, -0.033887, 0.175337
+  - label: leaf 10 basal stalk section 2
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.002020, -0.196113, 0.141913
+    max: 0.095770, -0.091387, 0.230025
+  - label: leaf 10 basal stalk section 3
+    color: '#172014'
+    shape: SlantedYReverse
+    min: 0.029230, -0.253613, 0.196600
+    max: 0.127020, -0.148887, 0.284712
+  - label: continuous leaf 10 curve 0
+    min: 0.038727, -0.254096, 0.213024
+    max: 0.305023, -0.204109, 0.604226
+    color: '#243320'
+    shape: SlantedX
+  - label: continuous leaf 10 curve 1
+    min: 0.191149, -0.260872, 0.516888
+    max: 0.465101, -0.201539, 0.675362
+    color: '#172014'
+    shape: SlantedX
+  - label: continuous leaf 10 curve 2
+    min: 0.373127, -0.279430, 0.526732
+    max: 0.533123, -0.202776, 0.665518
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: leaf 11 basal stalk section 0
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.050178, -0.060638, 0.036945
+    max: 0.026740, 0.031888, 0.084993
+  - label: leaf 11 basal stalk section 1
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.011115, -0.089388, 0.060382
+    max: 0.065803, 0.003138, 0.108430
+  - label: leaf 11 basal stalk section 2
+    color: '#1C2819'
+    shape: SlantedX
+    min: 0.027947, -0.118138, 0.083820
+    max: 0.104865, -0.025612, 0.131868
+  - label: leaf 11 basal stalk section 3
+    color: '#1C2819'
+    shape: SlantedX
+    min: 0.067010, -0.146888, 0.107257
+    max: 0.143928, -0.054362, 0.155305
+  - label: continuous leaf 11 curve 0
+    min: 0.077372, -0.146430, 0.096291
+    max: 0.297628, -0.069776, 0.408459
+    color: '#1C2819'
+    shape: SlantedX
+  - label: continuous leaf 11 curve 1
+    min: 0.197997, -0.127872, 0.332702
+    max: 0.427003, -0.068539, 0.453298
+    color: '#364C2F'
+    shape: SlantedX
+  - label: continuous leaf 11 curve 2
+    min: 0.348725, -0.121096, 0.271231
+    max: 0.463775, -0.071109, 0.452269
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: leaf 12 basal stalk section 0
+    color: '#4E6D44'
+    shape: SlantedX
+    min: -0.056134, -0.016000, 0.034741
+    max: 0.056134, 0.016000, 0.102821
+  - label: leaf 12 basal stalk section 1
+    color: '#4E6D44'
+    shape: SlantedX
+    min: 0.006366, -0.016000, 0.073804
+    max: 0.118634, 0.016000, 0.141884
+  - label: leaf 12 basal stalk section 2
+    color: '#4E6D44'
+    shape: SlantedX
+    min: 0.068866, -0.016000, 0.112866
+    max: 0.181134, 0.016000, 0.180946
+  - label: leaf 12 basal stalk section 3
+    color: '#4E6D44'
+    shape: SlantedX
+    min: 0.131366, -0.016000, 0.151929
+    max: 0.243634, 0.016000, 0.220009
+  - label: continuous leaf 12 curve 0
+    min: 0.196042, -0.024096, 0.151071
+    max: 0.272708, 0.025891, 0.541179
+    color: '#1C2819'
+    shape: SlantedX
+  - label: continuous leaf 12 curve 1
+    min: 0.206486, -0.030872, 0.462655
+    max: 0.387264, 0.028461, 0.542095
+    color: '#44603B'
+    shape: SlantedX
+  - label: continuous leaf 12 curve 2
+    min: 0.324870, -0.049430, 0.150492
+    max: 0.393880, 0.027224, 0.573008
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: leaf 13 basal stalk section 0
+    color: '#1C2819'
+    shape: SlantedY
+    min: -0.051567, -0.016307, 0.038046
+    max: -0.003120, 0.045057, 0.076079
+  - label: leaf 13 basal stalk section 1
+    color: '#1C2819'
+    shape: SlantedY
+    min: -0.043755, 0.012443, 0.053671
+    max: 0.004692, 0.073807, 0.091704
+  - label: leaf 13 basal stalk section 2
+    color: '#1C2819'
+    shape: SlantedY
+    min: -0.035942, 0.041193, 0.069296
+    max: 0.012505, 0.102557, 0.107329
+  - label: leaf 13 basal stalk section 3
+    color: '#1C2819'
+    shape: SlantedY
+    min: -0.028130, 0.069943, 0.084921
+    max: 0.020317, 0.131307, 0.122954
+  - label: continuous leaf 13 curve 0
+    min: -0.038045, 0.083570, 0.066682
+    max: 0.131795, 0.160224, 0.375568
+    color: '#1C2819'
+    shape: SlantedX
+  - label: continuous leaf 13 curve 1
+    min: 0.045028, 0.102128, 0.277890
+    max: 0.267472, 0.161461, 0.351860
+    color: '#243320'
+    shape: SlantedXReverse
+  - label: continuous leaf 13 curve 2
+    min: 0.194663, 0.108904, 0.112762
+    max: 0.305337, 0.158891, 0.329488
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: leaf 14 basal stalk section 0
+    color: '#364C2F'
+    shape: SlantedY
+    min: -0.083640, -0.023613, 0.031436
+    max: -0.002298, 0.081113, 0.129564
+  - label: leaf 14 basal stalk section 1
+    color: '#364C2F'
+    shape: SlantedY
+    min: -0.107077, 0.033887, 0.093936
+    max: -0.025735, 0.138613, 0.192064
+  - label: leaf 14 basal stalk section 2
+    color: '#364C2F'
+    shape: SlantedY
+    min: -0.130515, 0.091387, 0.156436
+    max: -0.049173, 0.196113, 0.254564
+  - label: leaf 14 basal stalk section 3
+    color: '#364C2F'
+    shape: SlantedY
+    min: -0.153952, 0.148887, 0.218936
+    max: -0.072610, 0.253613, 0.317064
+  - label: continuous leaf 14 curve 0
+    min: -0.411923, 0.207000, 0.277858
+    max: -0.056827, 0.253000, 0.383142
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: continuous leaf 14 curve 1
+    min: -0.471170, 0.178000, 0.334278
+    max: -0.310080, 0.264000, 0.514222
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: inner source foliage 0
+    min: -0.062500, -0.390000, 0.049250
+    max: 0.062500, 0.050000, 0.986750
+    color: '#243320'
+    shape: SlantedYReverse
+  - label: inner source foliage 1
+    min: 0.031250, -0.050000, 0.018000
+    max: 0.156250, 0.390000, 0.768000
+    color: '#1C2819'
+    shape: SlantedY
+  - label: inner source foliage 2
+    min: -0.203125, -0.390000, 0.111750
+    max: -0.109375, 0.050000, 0.705500
+    color: '#44603B'
+    shape: SlantedYReverse
+  - label: inner source foliage 3
+    min: 0.134375, -0.050000, 0.049250
+    max: 0.240625, 0.390000, 0.549250
+    color: '#364C2F'
+    shape: SlantedY
+- type: cmu3DModel
+  id: CMU3DRMCBushJungle2
+  label: Jungle ribbon bush bush2
+  sourcePrototypes:
+  - RMCBushJungle2
+  referenceRsi: _RMC14/Structures/Flora/bush.rsi
+  referenceState: bush2
+  sourceDirections: 1
+  groundOffset: 0.1, 0
+  status: draft
+  description: Individual source-traced curling leaves and rooted stalks with original green palette. Source horizontal
+    offset is retained; vertical sprite offset is not a ground translation. Hidden depth, height, leaf anatomy and
+    reverse surfaces remain inferred. Static draft; see SOURCES_JUNGLE_BUSHES.md.
+  parts:
+  - label: rooted stalk 0 section 0
+    min: -0.176092, -0.088000, 0.003000
+    max: -0.105158, -0.042000, 0.529099
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: rooted stalk 0 section 1
+    min: -0.180730, -0.092000, 0.373087
+    max: -0.131770, -0.038000, 1.037913
+    color: '#172014'
+    shape: Ellipsoid
+  - label: root sheath 0
+    min: -0.157000, -0.104000, 0.003000
+    max: -0.093000, -0.026000, 0.141000
+    color: '#172014'
+    shape: CylinderZ
+  - label: rooted stalk 1 section 0
+    min: -0.055730, -0.027000, 0.003000
+    max: -0.006770, 0.027000, 0.529099
+    color: '#243320'
+    shape: Ellipsoid
+  - label: rooted stalk 1 section 1
+    min: -0.059034, -0.023000, 0.377494
+    max: 0.059034, 0.023000, 1.002256
+    color: '#1C2819'
+    shape: SlantedX
+  - label: root sheath 1
+    min: -0.063250, -0.039000, 0.003000
+    max: 0.000750, 0.039000, 0.141000
+    color: '#243320'
+    shape: CylinderZ
+  - label: rooted stalk 2 section 0
+    min: 0.069270, 0.038000, 0.011308
+    max: 0.118230, 0.092000, 0.555942
+    color: '#1C2819'
+    shape: Ellipsoid
+  - label: rooted stalk 2 section 1
+    min: 0.050082, 0.042000, 0.417558
+    max: 0.262418, 0.088000, 0.962192
+    color: '#364C2F'
+    shape: SlantedX
+  - label: root sheath 2
+    min: 0.061750, 0.026000, 0.003000
+    max: 0.125750, 0.104000, 0.141000
+    color: '#243320'
+    shape: CylinderZ
+  - label: leaf 0 basal stalk section 0
+    color: '#1C2819'
+    shape: SlantedYReverse
+    min: -0.121880, -0.081113, 0.019317
+    max: -0.073433, 0.023613, 0.227621
+  - label: leaf 0 basal stalk section 1
+    color: '#1C2819'
+    shape: SlantedYReverse
+    min: -0.129692, -0.138613, 0.167754
+    max: -0.081245, -0.033887, 0.376058
+  - label: leaf 0 basal stalk section 2
+    color: '#1C2819'
+    shape: SlantedYReverse
+    min: -0.137505, -0.196113, 0.316192
+    max: -0.089058, -0.091387, 0.524496
+  - label: leaf 0 basal stalk section 3
+    color: '#1C2819'
+    shape: SlantedYReverse
+    min: -0.145317, -0.253613, 0.464629
+    max: -0.096870, -0.148887, 0.672933
+  - label: continuous leaf 0 curve 0
+    min: -0.181391, -0.282000, 0.493589
+    max: -0.099859, -0.196000, 1.580500
+    color: '#1C2819'
+    shape: SlantedXReverse
+  - label: leaf 1 basal stalk section 0
+    color: '#243320'
+    shape: SlantedX
+    min: -0.112678, -0.060638, 0.017113
+    max: -0.035760, 0.031888, 0.245450
+  - label: leaf 1 basal stalk section 1
+    color: '#243320'
+    shape: SlantedX
+    min: -0.073615, -0.089388, 0.181175
+    max: 0.003303, 0.003138, 0.409512
+  - label: leaf 1 basal stalk section 2
+    color: '#243320'
+    shape: SlantedX
+    min: -0.034553, -0.118138, 0.345238
+    max: 0.042365, -0.025612, 0.573575
+  - label: leaf 1 basal stalk section 3
+    color: '#243320'
+    shape: SlantedX
+    min: 0.004510, -0.146888, 0.509300
+    max: 0.081428, -0.054362, 0.737637
+  - label: continuous leaf 1 curve 0
+    min: 0.027697, -0.149000, 0.567590
+    max: 0.159803, -0.063000, 1.580500
+    color: '#243320'
+    shape: SlantedX
+  - label: leaf 2 basal stalk section 0
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.141942, -0.016000, 0.018215
+    max: -0.076808, 0.016000, 0.236535
+  - label: leaf 2 basal stalk section 1
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.173192, -0.016000, 0.174465
+    max: -0.108058, 0.016000, 0.392785
+  - label: leaf 2 basal stalk section 2
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.204442, -0.016000, 0.330715
+    max: -0.139308, 0.016000, 0.549035
+  - label: leaf 2 basal stalk section 3
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.235692, -0.016000, 0.486965
+    max: -0.170558, 0.016000, 0.705285
+  - label: continuous leaf 2 curve 0
+    min: -0.277466, -0.023000, 0.570993
+    max: -0.191284, 0.023000, 1.371257
+    color: '#1C2819'
+    shape: SlantedXReverse
+  - label: continuous leaf 2 curve 1
+    min: -0.417624, -0.052000, 1.226295
+    max: -0.207376, 0.034000, 1.528455
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: leaf 3 basal stalk section 0
+    color: '#4E6D44'
+    shape: SlantedY
+    min: -0.121880, -0.016307, 0.013808
+    max: -0.073433, 0.045057, 0.272192
+  - label: leaf 3 basal stalk section 1
+    color: '#4E6D44'
+    shape: SlantedY
+    min: -0.129692, 0.012443, 0.201308
+    max: -0.081245, 0.073807, 0.459692
+  - label: leaf 3 basal stalk section 2
+    color: '#4E6D44'
+    shape: SlantedY
+    min: -0.137505, 0.041193, 0.388808
+    max: -0.089058, 0.102557, 0.647192
+  - label: leaf 3 basal stalk section 3
+    color: '#4E6D44'
+    shape: SlantedY
+    min: -0.145317, 0.069943, 0.576308
+    max: -0.096870, 0.131307, 0.834692
+  - label: continuous leaf 3 curve 0
+    min: -0.458060, 0.081000, 0.700400
+    max: -0.041940, 0.167000, 1.460600
+    color: '#4E6D44'
+    shape: SlantedXReverse
+  - label: continuous leaf 3 curve 1
+    min: -0.581816, 0.110000, 1.337673
+    max: -0.324434, 0.156000, 1.479577
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: leaf 4 basal stalk section 0
+    color: '#364C2F'
+    shape: SlantedY
+    min: -0.139972, -0.023613, 0.014909
+    max: 0.007160, 0.081113, 0.263278
+  - label: leaf 4 basal stalk section 1
+    color: '#364C2F'
+    shape: SlantedY
+    min: -0.085285, 0.033887, 0.194597
+    max: 0.061847, 0.138613, 0.442966
+  - label: leaf 4 basal stalk section 2
+    color: '#364C2F'
+    shape: SlantedY
+    min: -0.030597, 0.091387, 0.374284
+    max: 0.116535, 0.196113, 0.622653
+  - label: leaf 4 basal stalk section 3
+    color: '#364C2F'
+    shape: SlantedY
+    min: 0.024090, 0.148887, 0.553972
+    max: 0.171222, 0.253613, 0.802341
+  - label: continuous leaf 4 curve 0
+    min: 0.075185, 0.205904, 0.688254
+    max: 0.299815, 0.255891, 1.285246
+    color: '#364C2F'
+    shape: SlantedX
+  - label: continuous leaf 4 curve 1
+    min: 0.188414, 0.199128, 1.161590
+    max: 0.467836, 0.258461, 1.405660
+    color: '#4E6D44'
+    shape: SlantedX
+  - label: continuous leaf 4 curve 2
+    min: 0.365185, 0.180570, 1.316796
+    max: 0.572315, 0.257224, 1.375454
+    color: '#4E6D44'
+    shape: SlantedXReverse
+  - label: leaf 5 basal stalk section 0
+    color: '#4E6D44'
+    shape: SlantedX
+    min: -0.122605, -0.038105, 0.016011
+    max: 0.013230, 0.078105, 0.254364
+  - label: leaf 5 basal stalk section 1
+    color: '#4E6D44'
+    shape: SlantedX
+    min: -0.044480, 0.001895, 0.187886
+    max: 0.091355, 0.118105, 0.426239
+  - label: leaf 5 basal stalk section 2
+    color: '#4E6D44'
+    shape: SlantedX
+    min: 0.033645, 0.041895, 0.359761
+    max: 0.169480, 0.158105, 0.598114
+  - label: leaf 5 basal stalk section 3
+    color: '#4E6D44'
+    shape: SlantedX
+    min: 0.111770, 0.081895, 0.531636
+    max: 0.247605, 0.198105, 0.769989
+  - label: continuous leaf 5 curve 0
+    min: 0.172216, 0.126000, 0.664693
+    max: 0.390284, 0.212000, 1.215057
+    color: '#364C2F'
+    shape: SlantedX
+  - label: continuous leaf 5 curve 1
+    min: 0.254361, 0.155000, 1.053776
+    max: 0.687500, 0.201000, 1.169724
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: leaf 6 basal stalk section 0
+    color: '#4E6D44'
+    shape: SlantedXReverse
+    min: -0.151740, -0.060638, 0.022622
+    max: -0.074822, 0.031888, 0.200878
+  - label: leaf 6 basal stalk section 1
+    color: '#4E6D44'
+    shape: SlantedXReverse
+    min: -0.190803, -0.089388, 0.147622
+    max: -0.113885, 0.003138, 0.325878
+  - label: leaf 6 basal stalk section 2
+    color: '#4E6D44'
+    shape: SlantedXReverse
+    min: -0.229865, -0.118138, 0.272622
+    max: -0.152947, -0.025612, 0.450878
+  - label: leaf 6 basal stalk section 3
+    color: '#4E6D44'
+    shape: SlantedXReverse
+    min: -0.268928, -0.146888, 0.397622
+    max: -0.192010, -0.054362, 0.575878
+  - label: continuous leaf 6 curve 0
+    min: -0.304505, -0.139096, 0.503088
+    max: -0.226745, -0.089109, 0.814162
+    color: '#1C2819'
+    shape: SlantedXReverse
+  - label: continuous leaf 6 curve 1
+    min: -0.580204, -0.145872, 0.712541
+    max: -0.201046, -0.086539, 1.042209
+    color: '#4E6D44'
+    shape: SlantedXReverse
+  - label: continuous leaf 6 curve 2
+    min: -0.718750, -0.164430, 0.936054
+    max: -0.437308, -0.087776, 1.006196
+    color: '#4E6D44'
+    shape: SlantedX
+  - label: leaf 7 basal stalk section 0
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.122346, -0.016000, 0.012706
+    max: -0.080779, 0.016000, 0.281107
+  - label: leaf 7 basal stalk section 1
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.137971, -0.016000, 0.208018
+    max: -0.096404, 0.016000, 0.476419
+  - label: leaf 7 basal stalk section 2
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.153596, -0.016000, 0.403331
+    max: -0.112029, 0.016000, 0.671732
+  - label: leaf 7 basal stalk section 3
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.169221, -0.016000, 0.598643
+    max: -0.127654, 0.016000, 0.867044
+  - label: continuous leaf 7 curve 0
+    min: -0.524073, -0.034000, 0.766929
+    max: -0.069677, 0.052000, 1.237821
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: continuous leaf 7 curve 1
+    min: -0.563826, -0.005000, 1.129843
+    max: -0.404924, 0.041000, 1.187407
+    color: '#172014'
+    shape: SlantedX
+  - label: leaf 8 basal stalk section 0
+    color: '#1C2819'
+    shape: SlantedXReverse
+    min: -0.151740, -0.031888, 0.029232
+    max: -0.074822, 0.060638, 0.147393
+  - label: leaf 8 basal stalk section 1
+    color: '#1C2819'
+    shape: SlantedXReverse
+    min: -0.190803, -0.003138, 0.107357
+    max: -0.113885, 0.089388, 0.225518
+  - label: leaf 8 basal stalk section 2
+    color: '#1C2819'
+    shape: SlantedXReverse
+    min: -0.229865, 0.025612, 0.185482
+    max: -0.152947, 0.118138, 0.303643
+  - label: leaf 8 basal stalk section 3
+    color: '#1C2819'
+    shape: SlantedXReverse
+    min: -0.268928, 0.054362, 0.263607
+    max: -0.192010, 0.146888, 0.381768
+  - label: continuous leaf 8 curve 0
+    min: -0.283750, 0.088000, 0.305680
+    max: -0.216250, 0.142000, 0.699070
+    color: '#172014'
+    shape: Ellipsoid
+  - label: continuous leaf 8 curve 1
+    min: -0.544743, 0.063000, 0.613787
+    max: -0.174007, 0.149000, 0.734713
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: leaf 9 basal stalk section 0
+    color: '#4E6D44'
+    shape: SlantedY
+    min: -0.194660, -0.023613, 0.029232
+    max: -0.047528, 0.081113, 0.147393
+  - label: leaf 9 basal stalk section 1
+    color: '#4E6D44'
+    shape: SlantedY
+    min: -0.249347, 0.033887, 0.107357
+    max: -0.102215, 0.138613, 0.225518
+  - label: leaf 9 basal stalk section 2
+    color: '#4E6D44'
+    shape: SlantedY
+    min: -0.304035, 0.091387, 0.185482
+    max: -0.156903, 0.196113, 0.303643
+  - label: leaf 9 basal stalk section 3
+    color: '#4E6D44'
+    shape: SlantedY
+    min: -0.358722, 0.148887, 0.263607
+    max: -0.211590, 0.253613, 0.381768
+  - label: continuous leaf 9 curve 0
+    min: -0.365364, 0.198570, 0.308415
+    max: -0.290886, 0.275224, 0.696335
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: continuous leaf 9 curve 1
+    min: -0.595856, 0.217128, 0.617233
+    max: -0.279144, 0.276461, 0.731267
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: continuous leaf 9 curve 2
+    min: -0.718750, 0.223904, 0.590326
+    max: -0.475394, 0.273891, 0.726924
+    color: '#4E6D44'
+    shape: SlantedX
+  - label: leaf 10 basal stalk section 0
+    color: '#364C2F'
+    shape: SlantedX
+    min: -0.118634, -0.038105, 0.028131
+    max: -0.006366, 0.078105, 0.156307
+  - label: leaf 10 basal stalk section 1
+    color: '#364C2F'
+    shape: SlantedX
+    min: -0.056134, 0.001895, 0.114068
+    max: 0.056134, 0.118105, 0.242244
+  - label: leaf 10 basal stalk section 2
+    color: '#364C2F'
+    shape: SlantedX
+    min: 0.006366, 0.041895, 0.200006
+    max: 0.118634, 0.158105, 0.328182
+  - label: leaf 10 basal stalk section 3
+    color: '#364C2F'
+    shape: SlantedX
+    min: 0.068866, 0.081895, 0.285943
+    max: 0.181134, 0.198105, 0.414119
+  - label: continuous leaf 10 curve 0
+    min: 0.108075, 0.135904, 0.336930
+    max: 0.329425, 0.185891, 0.730320
+    color: '#44603B'
+    shape: SlantedX
+  - label: continuous leaf 10 curve 1
+    min: 0.212816, 0.129128, 0.649062
+    max: 0.537184, 0.188461, 0.730688
+    color: '#44603B'
+    shape: SlantedX
+  - label: continuous leaf 10 curve 2
+    min: 0.419196, 0.110570, 0.588685
+    max: 0.674554, 0.187224, 0.728565
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: leaf 11 basal stalk section 0
+    color: '#44603B'
+    shape: SlantedX
+    min: -0.122605, -0.029816, 0.022622
+    max: 0.013230, 0.054816, 0.200878
+  - label: leaf 11 basal stalk section 1
+    color: '#44603B'
+    shape: SlantedX
+    min: -0.044480, -0.004816, 0.147622
+    max: 0.091355, 0.079816, 0.325878
+  - label: leaf 11 basal stalk section 2
+    color: '#44603B'
+    shape: SlantedX
+    min: 0.033645, 0.020184, 0.272622
+    max: 0.169480, 0.104816, 0.450878
+  - label: leaf 11 basal stalk section 3
+    color: '#44603B'
+    shape: SlantedX
+    min: 0.111770, 0.045184, 0.397622
+    max: 0.247605, 0.129816, 0.575878
+  - label: continuous leaf 11 curve 0
+    min: 0.120735, 0.066000, 0.517435
+    max: 0.629265, 0.152000, 0.674815
+    color: '#172014'
+    shape: SlantedX
+  - label: continuous leaf 11 curve 1
+    min: 0.489091, 0.095000, 0.489981
+    max: 0.687500, 0.141000, 0.671019
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: leaf 12 basal stalk section 0
+    color: '#243320'
+    shape: SlantedX
+    min: -0.102750, -0.016000, 0.035843
+    max: -0.084750, 0.016000, 0.093907
+  - label: leaf 12 basal stalk section 1
+    color: '#243320'
+    shape: SlantedX
+    min: -0.102750, -0.016000, 0.067093
+    max: -0.084750, 0.016000, 0.125157
+  - label: leaf 12 basal stalk section 2
+    color: '#243320'
+    shape: SlantedX
+    min: -0.102750, -0.016000, 0.098343
+    max: -0.084750, 0.016000, 0.156407
+  - label: leaf 12 basal stalk section 3
+    color: '#243320'
+    shape: SlantedX
+    min: -0.102750, -0.016000, 0.129593
+    max: -0.084750, 0.016000, 0.187657
+  - label: continuous leaf 12 curve 0
+    min: -0.341481, -0.024096, 0.126415
+    max: -0.033519, 0.025891, 0.472085
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: continuous leaf 12 curve 1
+    min: -0.441875, -0.030872, 0.399250
+    max: -0.245625, 0.028461, 0.449250
+    color: '#364C2F'
+    shape: Ellipsoid
+  - label: continuous leaf 12 curve 2
+    min: -0.455833, -0.049430, 0.092946
+    max: -0.387917, 0.027224, 0.474304
+    color: '#364C2F'
+    shape: SlantedX
+  - label: leaf 13 basal stalk section 0
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.114663, -0.031888, 0.036945
+    max: -0.025962, 0.060638, 0.084993
+  - label: leaf 13 basal stalk section 1
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.067788, -0.003138, 0.060382
+    max: 0.020913, 0.089388, 0.108430
+  - label: leaf 13 basal stalk section 2
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.020913, 0.025612, 0.083820
+    max: 0.067788, 0.118138, 0.131868
+  - label: leaf 13 basal stalk section 3
+    color: '#1C2819'
+    shape: SlantedX
+    min: 0.025962, 0.054362, 0.107257
+    max: 0.114663, 0.146888, 0.155305
+  - label: continuous leaf 13 curve 0
+    min: 0.067875, 0.079570, 0.099573
+    max: 0.119625, 0.164224, 0.405177
+    color: '#44603B'
+    shape: Ellipsoid
+  - label: continuous leaf 13 curve 1
+    min: 0.035993, 0.102128, 0.272389
+    max: 0.307757, 0.161461, 0.388611
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: continuous leaf 13 curve 2
+    min: 0.231120, 0.108904, 0.003000
+    max: 0.300130, 0.158891, 0.349851
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: leaf 14 basal stalk section 0
+    color: '#44603B'
+    shape: SlantedY
+    min: -0.118385, -0.023613, 0.031436
+    max: -0.053490, 0.081113, 0.129564
+  - label: leaf 14 basal stalk section 1
+    color: '#44603B'
+    shape: SlantedY
+    min: -0.102760, 0.033887, 0.093936
+    max: -0.037865, 0.138613, 0.192064
+  - label: leaf 14 basal stalk section 2
+    color: '#44603B'
+    shape: SlantedY
+    min: -0.087135, 0.091387, 0.156436
+    max: -0.022240, 0.196113, 0.254564
+  - label: leaf 14 basal stalk section 3
+    color: '#44603B'
+    shape: SlantedY
+    min: -0.071510, 0.148887, 0.218936
+    max: -0.006615, 0.253613, 0.317064
+  - label: continuous leaf 14 curve 0
+    min: -0.122212, 0.207000, 0.247008
+    max: -0.002788, 0.253000, 0.632742
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: continuous leaf 14 curve 1
+    min: -0.179010, 0.178000, 0.522648
+    max: 0.272760, 0.264000, 0.950852
+    color: '#243320'
+    shape: SlantedX
+  - label: leaf 15 basal stalk section 0
+    color: '#172014'
+    shape: SlantedY
+    min: -0.114067, -0.081113, 0.040250
+    max: -0.065620, 0.023613, 0.058250
+  - label: leaf 15 basal stalk section 1
+    color: '#172014'
+    shape: SlantedY
+    min: -0.106255, -0.138613, 0.040250
+    max: -0.057808, -0.033887, 0.058250
+  - label: leaf 15 basal stalk section 2
+    color: '#172014'
+    shape: SlantedY
+    min: -0.098442, -0.196113, 0.040250
+    max: -0.049995, -0.091387, 0.058250
+  - label: leaf 15 basal stalk section 3
+    color: '#172014'
+    shape: SlantedY
+    min: -0.090630, -0.253613, 0.040250
+    max: -0.042183, -0.148887, 0.058250
+  - label: continuous leaf 15 curve 0
+    min: -0.232393, -0.264000, 0.003000
+    max: -0.017607, -0.178000, 0.347631
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: continuous leaf 15 curve 1
+    min: -0.208875, -0.239000, 0.249196
+    max: -0.166125, -0.185000, 0.630554
+    color: '#172014'
+    shape: Ellipsoid
+  - label: inner source foliage 0
+    min: -0.118750, -0.390000, 0.003000
+    max: -0.006250, 0.050000, 0.924250
+    color: '#44603B'
+    shape: SlantedYReverse
+  - label: inner source foliage 1
+    min: 0.000000, -0.050000, 0.080500
+    max: 0.125000, 0.390000, 0.986750
+    color: '#172014'
+    shape: SlantedY
+  - label: inner source foliage 2
+    min: -0.300000, -0.390000, 0.174250
+    max: -0.200000, 0.050000, 0.736750
+    color: '#172014'
+    shape: SlantedYReverse
+  - label: inner source foliage 3
+    min: 0.100000, -0.050000, 0.080500
+    max: 0.212500, 0.390000, 0.768000
+    color: '#243320'
+    shape: SlantedY
+- type: cmu3DModel
+  id: CMU3DRMCBushJungle3
+  label: Jungle ribbon bush bush3
+  sourcePrototypes:
+  - RMCBushJungle3
+  referenceRsi: _RMC14/Structures/Flora/bush.rsi
+  referenceState: bush3
+  sourceDirections: 1
+  groundOffset: 0.1, 0
+  status: draft
+  description: Individual source-traced curling leaves and rooted stalks with original green palette. Source horizontal
+    offset is retained; vertical sprite offset is not a ground translation. Hidden depth, height, leaf anatomy and
+    reverse surfaces remain inferred. Static draft; see SOURCES_JUNGLE_BUSHES.md.
+  parts:
+  - label: rooted stalk 0 section 0
+    min: -0.149480, -0.092000, 0.003000
+    max: -0.100520, -0.038000, 0.529099
+    color: '#1C2819'
+    shape: Ellipsoid
+  - label: rooted stalk 0 section 1
+    min: -0.152784, -0.088000, 0.368680
+    max: -0.034716, -0.042000, 1.073570
+    color: '#243320'
+    shape: SlantedX
+  - label: root sheath 0
+    min: -0.157000, -0.104000, 0.003000
+    max: -0.093000, -0.026000, 0.141000
+    color: '#1C2819'
+    shape: CylinderZ
+  - label: rooted stalk 1 section 0
+    min: 0.006770, -0.027000, 0.003000
+    max: 0.055730, 0.027000, 0.422128
+    color: '#243320'
+    shape: Ellipsoid
+  - label: rooted stalk 1 section 1
+    min: 0.003466, -0.023000, 0.296965
+    max: 0.121534, 0.023000, 0.801535
+    color: '#4E6D44'
+    shape: SlantedX
+  - label: root sheath 1
+    min: -0.000750, -0.039000, 0.003000
+    max: 0.063250, 0.039000, 0.141000
+    color: '#172014'
+    shape: CylinderZ
+  - label: rooted stalk 2 section 0
+    min: -0.243230, 0.038000, 0.011308
+    max: -0.194270, 0.092000, 0.555942
+    color: '#172014'
+    shape: Ellipsoid
+  - label: rooted stalk 2 section 1
+    min: -0.269842, 0.042000, 0.444001
+    max: -0.198908, 0.088000, 0.748249
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: root sheath 2
+    min: -0.250750, 0.026000, 0.003000
+    max: -0.186750, 0.104000, 0.141000
+    color: '#243320'
+    shape: CylinderZ
+  - label: leaf 0 basal stalk section 0
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.090630, -0.081113, 0.020418
+    max: -0.042183, 0.023613, 0.218707
+  - label: leaf 0 basal stalk section 1
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.098442, -0.138613, 0.161043
+    max: -0.049995, -0.033887, 0.359332
+  - label: leaf 0 basal stalk section 2
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.106255, -0.196113, 0.301668
+    max: -0.057808, -0.091387, 0.499957
+  - label: leaf 0 basal stalk section 3
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.114067, -0.253613, 0.442293
+    max: -0.065620, -0.148887, 0.640582
+  - label: continuous leaf 0 curve 0
+    min: -0.121680, -0.282000, 0.463957
+    max: -0.034570, -0.196000, 1.518000
+    color: '#243320'
+    shape: SlantedX
+  - label: leaf 1 basal stalk section 0
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.079442, -0.060638, 0.019317
+    max: -0.014308, 0.031888, 0.227621
+  - label: leaf 1 basal stalk section 1
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.048192, -0.089388, 0.167754
+    max: 0.016942, 0.003138, 0.376058
+  - label: leaf 1 basal stalk section 2
+    color: '#1C2819'
+    shape: SlantedX
+    min: -0.016942, -0.118138, 0.316192
+    max: 0.048192, -0.025612, 0.524496
+  - label: leaf 1 basal stalk section 3
+    color: '#1C2819'
+    shape: SlantedX
+    min: 0.014308, -0.146888, 0.464629
+    max: 0.079442, -0.054362, 0.672933
+  - label: continuous leaf 1 curve 0
+    min: 0.004196, -0.149000, 0.545079
+    max: 0.277054, -0.063000, 1.303421
+    color: '#243320'
+    shape: SlantedX
+  - label: continuous leaf 1 curve 1
+    min: 0.176591, -0.120000, 1.173074
+    max: 0.385909, -0.074000, 1.394176
+    color: '#4E6D44'
+    shape: SlantedX
+  - label: leaf 2 basal stalk section 0
+    color: '#4E6D44'
+    shape: SlantedX
+    min: -0.079442, -0.016000, 0.018215
+    max: -0.014308, 0.016000, 0.236535
+  - label: leaf 2 basal stalk section 1
+    color: '#4E6D44'
+    shape: SlantedX
+    min: -0.048192, -0.016000, 0.174465
+    max: 0.016942, 0.016000, 0.392785
+  - label: leaf 2 basal stalk section 2
+    color: '#4E6D44'
+    shape: SlantedX
+    min: -0.016942, -0.016000, 0.330715
+    max: 0.048192, 0.016000, 0.549035
+  - label: leaf 2 basal stalk section 3
+    color: '#4E6D44'
+    shape: SlantedX
+    min: 0.014308, -0.016000, 0.486965
+    max: 0.079442, 0.016000, 0.705285
+  - label: continuous leaf 2 curve 0
+    min: 0.006383, -0.024096, 0.618180
+    max: 0.274867, 0.025891, 1.011570
+    color: '#364C2F'
+    shape: SlantedX
+  - label: continuous leaf 2 curve 1
+    min: 0.151410, -0.030872, 0.913777
+    max: 0.473590, 0.028461, 1.153473
+    color: '#44603B'
+    shape: SlantedX
+  - label: continuous leaf 2 curve 2
+    min: 0.380625, -0.049430, 1.099250
+    max: 0.556875, 0.027224, 1.124250
+    color: '#364C2F'
+    shape: Ellipsoid
+  - label: leaf 3 basal stalk section 0
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.127020, -0.065437, 0.023724
+    max: -0.029230, 0.020437, 0.191964
+  - label: leaf 3 basal stalk section 1
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.158270, -0.110437, 0.140911
+    max: -0.060480, -0.024563, 0.309151
+  - label: leaf 3 basal stalk section 2
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.189520, -0.155437, 0.258099
+    max: -0.091730, -0.069563, 0.426339
+  - label: leaf 3 basal stalk section 3
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.220770, -0.200437, 0.375286
+    max: -0.122980, -0.114563, 0.543526
+  - label: continuous leaf 3 curve 0
+    min: -0.282837, -0.211430, 0.465790
+    max: -0.154663, -0.134776, 0.820210
+    color: '#1C2819'
+    shape: SlantedXReverse
+  - label: continuous leaf 3 curve 1
+    min: -0.507028, -0.192872, 0.715276
+    max: -0.180472, -0.133539, 1.039474
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: continuous leaf 3 curve 2
+    min: -0.656250, -0.186096, 0.963138
+    max: -0.379457, -0.136109, 1.104112
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: leaf 4 basal stalk section 0
+    color: '#1C2819'
+    shape: SlantedY
+    min: -0.100087, -0.023613, 0.027029
+    max: 0.014150, 0.081113, 0.165221
+  - label: leaf 4 basal stalk section 1
+    color: '#1C2819'
+    shape: SlantedY
+    min: -0.061025, 0.033887, 0.120779
+    max: 0.053212, 0.138613, 0.258971
+  - label: leaf 4 basal stalk section 2
+    color: '#1C2819'
+    shape: SlantedY
+    min: -0.021962, 0.091387, 0.214529
+    max: 0.092275, 0.196113, 0.352721
+  - label: leaf 4 basal stalk section 3
+    color: '#1C2819'
+    shape: SlantedY
+    min: 0.017100, 0.148887, 0.308279
+    max: 0.131337, 0.253613, 0.446471
+  - label: continuous leaf 4 curve 0
+    min: 0.037086, 0.205904, 0.372040
+    max: 0.306664, 0.255891, 0.726460
+    color: '#172014'
+    shape: SlantedX
+  - label: continuous leaf 4 curve 1
+    min: 0.181019, 0.199128, 0.639701
+    max: 0.506481, 0.258461, 0.802549
+    color: '#364C2F'
+    shape: SlantedX
+  - label: continuous leaf 4 curve 2
+    min: 0.387399, 0.180570, 0.686295
+    max: 0.643851, 0.257224, 0.787205
+    color: '#4E6D44'
+    shape: SlantedXReverse
+  - label: leaf 5 basal stalk section 0
+    color: '#243320'
+    shape: SlantedX
+    min: -0.087384, -0.105276, 0.023724
+    max: 0.024884, 0.047776, 0.191964
+  - label: leaf 5 basal stalk section 1
+    color: '#243320'
+    shape: SlantedX
+    min: -0.024884, -0.162776, 0.140911
+    max: 0.087384, -0.009724, 0.309151
+  - label: leaf 5 basal stalk section 2
+    color: '#243320'
+    shape: SlantedX
+    min: 0.037616, -0.220276, 0.258099
+    max: 0.149884, -0.067224, 0.426339
+  - label: leaf 5 basal stalk section 3
+    color: '#243320'
+    shape: SlantedX
+    min: 0.100116, -0.277776, 0.375286
+    max: 0.212384, -0.124724, 0.543526
+  - label: continuous leaf 5 curve 0
+    min: 0.133571, -0.261430, 0.481746
+    max: 0.397679, -0.184776, 0.710504
+    color: '#1C2819'
+    shape: SlantedX
+  - label: continuous leaf 5 curve 1
+    min: 0.278597, -0.242872, 0.647936
+    max: 0.596403, -0.183539, 0.763064
+    color: '#243320'
+    shape: SlantedX
+  - label: continuous leaf 5 curve 2
+    min: 0.482789, -0.236096, 0.621029
+    max: 0.687500, -0.186109, 0.758721
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: leaf 6 basal stalk section 0
+    color: '#44603B'
+    shape: SlantedXReverse
+    min: -0.120490, -0.060638, 0.025927
+    max: -0.043572, 0.031888, 0.174135
+  - label: leaf 6 basal stalk section 1
+    color: '#44603B'
+    shape: SlantedXReverse
+    min: -0.159553, -0.089388, 0.127490
+    max: -0.082635, 0.003138, 0.275698
+  - label: leaf 6 basal stalk section 2
+    color: '#44603B'
+    shape: SlantedXReverse
+    min: -0.198615, -0.118138, 0.229052
+    max: -0.121697, -0.025612, 0.377260
+  - label: leaf 6 basal stalk section 3
+    color: '#44603B'
+    shape: SlantedXReverse
+    min: -0.237678, -0.146888, 0.330615
+    max: -0.160760, -0.054362, 0.478823
+  - label: continuous leaf 6 curve 0
+    min: -0.313540, -0.139096, 0.399430
+    max: -0.186460, -0.089109, 0.792820
+    color: '#364C2F'
+    shape: SlantedXReverse
+  - label: continuous leaf 6 curve 1
+    min: -0.539371, -0.145872, 0.642467
+    max: -0.210629, -0.086539, 0.768533
+    color: '#44603B'
+    shape: SlantedX
+  - label: continuous leaf 6 curve 2
+    min: -0.656250, -0.164430, 0.448276
+    max: -0.417008, -0.087776, 0.712724
+    color: '#364C2F'
+    shape: SlantedX
+  - label: leaf 7 basal stalk section 0
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.130288, -0.016000, 0.029232
+    max: -0.041587, 0.016000, 0.147393
+  - label: leaf 7 basal stalk section 1
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.177163, -0.016000, 0.107357
+    max: -0.088462, 0.016000, 0.225518
+  - label: leaf 7 basal stalk section 2
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.224038, -0.016000, 0.185482
+    max: -0.135337, 0.016000, 0.303643
+  - label: leaf 7 basal stalk section 3
+    color: '#364C2F'
+    shape: SlantedXReverse
+    min: -0.270913, -0.016000, 0.263607
+    max: -0.182212, 0.016000, 0.381768
+  - label: continuous leaf 7 curve 0
+    min: -0.461820, -0.031430, 0.315041
+    max: -0.194430, 0.045224, 0.627209
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: continuous leaf 7 curve 1
+    min: -0.642188, -0.012872, 0.549250
+    max: -0.357812, 0.046461, 0.611750
+    color: '#364C2F'
+    shape: Ellipsoid
+  - label: continuous leaf 7 curve 2
+    min: -0.656250, -0.006096, 0.283759
+    max: -0.566381, 0.043891, 0.627241
+    color: '#364C2F'
+    shape: SlantedX
+  - label: leaf 8 basal stalk section 0
+    color: '#172014'
+    shape: SlantedXReverse
+    min: -0.140086, -0.031888, 0.031436
+    max: -0.039601, 0.060638, 0.129564
+  - label: leaf 8 basal stalk section 1
+    color: '#172014'
+    shape: SlantedXReverse
+    min: -0.194774, -0.003138, 0.093936
+    max: -0.094289, 0.089388, 0.192064
+  - label: leaf 8 basal stalk section 2
+    color: '#172014'
+    shape: SlantedXReverse
+    min: -0.249461, 0.025612, 0.156436
+    max: -0.148976, 0.118138, 0.254564
+  - label: leaf 8 basal stalk section 3
+    color: '#172014'
+    shape: SlantedXReverse
+    min: -0.304149, 0.054362, 0.218936
+    max: -0.203664, 0.146888, 0.317064
+  - label: continuous leaf 8 curve 0
+    min: -0.375494, 0.090904, 0.243727
+    max: -0.249506, 0.140891, 0.636023
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: continuous leaf 8 curve 1
+    min: -0.441275, 0.084128, 0.556952
+    max: -0.308725, 0.143461, 0.635298
+    color: '#1C2819'
+    shape: SlantedXReverse
+  - label: continuous leaf 8 curve 2
+    min: -0.493384, 0.065570, 0.246429
+    max: -0.381616, 0.142224, 0.664571
+    color: '#243320'
+    shape: SlantedX
+  - label: leaf 9 basal stalk section 0
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.139150, -0.065437, 0.035843
+    max: -0.024913, 0.020437, 0.093907
+  - label: leaf 9 basal stalk section 1
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.178212, -0.110437, 0.067093
+    max: -0.063975, -0.024563, 0.125157
+  - label: leaf 9 basal stalk section 2
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.217275, -0.155437, 0.098343
+    max: -0.103038, -0.069563, 0.156407
+  - label: leaf 9 basal stalk section 3
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.256337, -0.200437, 0.129593
+    max: -0.142100, -0.114563, 0.187657
+  - label: continuous leaf 9 curve 0
+    min: -0.389190, -0.211430, 0.125322
+    max: -0.173310, -0.134776, 0.473178
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: continuous leaf 9 curve 1
+    min: -0.597496, -0.192872, 0.369999
+    max: -0.277504, -0.133539, 0.447251
+    color: '#172014'
+    shape: SlantedX
+  - label: continuous leaf 9 curve 2
+    min: -0.580833, -0.186096, 0.026039
+    max: -0.512917, -0.136109, 0.447461
+    color: '#364C2F'
+    shape: SlantedX
+  - label: leaf 10 basal stalk section 0
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.095770, -0.081113, 0.035843
+    max: 0.002020, 0.023613, 0.093907
+  - label: leaf 10 basal stalk section 1
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.064520, -0.138613, 0.067093
+    max: 0.033270, -0.033887, 0.125157
+  - label: leaf 10 basal stalk section 2
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.033270, -0.196113, 0.098343
+    max: 0.064520, -0.091387, 0.156407
+  - label: leaf 10 basal stalk section 3
+    color: '#243320'
+    shape: SlantedYReverse
+    min: -0.002020, -0.253613, 0.129593
+    max: 0.095770, -0.148887, 0.187657
+  - label: continuous leaf 10 curve 0
+    min: 0.032944, -0.254096, 0.125322
+    max: 0.154556, -0.204109, 0.473178
+    color: '#1C2819'
+    shape: SlantedX
+  - label: continuous leaf 10 curve 1
+    min: 0.073544, -0.260872, 0.297591
+    max: 0.301456, -0.201539, 0.457159
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: continuous leaf 10 curve 2
+    min: 0.230574, -0.279430, 0.003000
+    max: 0.300676, -0.202776, 0.390462
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: leaf 11 basal stalk section 0
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.082817, -0.045057, 0.038046
+    max: -0.034370, 0.016307, 0.076079
+  - label: leaf 11 basal stalk section 1
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.075005, -0.073807, 0.053671
+    max: -0.026558, -0.012443, 0.091704
+  - label: leaf 11 basal stalk section 2
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.067192, -0.102557, 0.069296
+    max: -0.018745, -0.041193, 0.107329
+  - label: leaf 11 basal stalk section 3
+    color: '#172014'
+    shape: SlantedYReverse
+    min: -0.059380, -0.131307, 0.084921
+    max: -0.010933, -0.069943, 0.122954
+  - label: continuous leaf 11 curve 0
+    min: -0.122759, -0.146430, 0.058962
+    max: -0.002241, -0.069776, 0.445788
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: continuous leaf 11 curve 1
+    min: -0.226639, -0.127872, 0.373280
+    max: -0.054611, -0.068539, 0.443970
+    color: '#243320'
+    shape: SlantedXReverse
+  - label: continuous leaf 11 curve 2
+    min: -0.312733, -0.121096, 0.238308
+    max: -0.156017, -0.071109, 0.453942
+    color: '#364C2F'
+    shape: SlantedX
+  - label: leaf 12 basal stalk section 0
+    color: '#243320'
+    shape: SlantedX
+    min: -0.075471, -0.016000, 0.030334
+    max: -0.033904, 0.016000, 0.138478
+  - label: leaf 12 basal stalk section 1
+    color: '#243320'
+    shape: SlantedX
+    min: -0.059846, -0.016000, 0.100647
+    max: -0.018279, 0.016000, 0.208791
+  - label: leaf 12 basal stalk section 2
+    color: '#243320'
+    shape: SlantedX
+    min: -0.044221, -0.016000, 0.170959
+    max: -0.002654, 0.016000, 0.279103
+  - label: leaf 12 basal stalk section 3
+    color: '#243320'
+    shape: SlantedX
+    min: -0.028596, -0.016000, 0.241272
+    max: 0.012971, 0.016000, 0.349416
+  - label: continuous leaf 12 curve 0
+    min: -0.053411, -0.024096, 0.285432
+    max: 0.022161, 0.025891, 0.594318
+    color: '#1C2819'
+    shape: SlantedXReverse
+  - label: continuous leaf 12 curve 1
+    min: -0.082159, -0.030872, 0.521295
+    max: 0.144659, 0.028461, 0.639705
+    color: '#1C2819'
+    shape: SlantedX
+  - label: continuous leaf 12 curve 2
+    min: 0.051591, -0.049430, 0.458731
+    max: 0.260909, 0.027224, 0.639769
+    color: '#172014'
+    shape: SlantedXReverse
+  - label: leaf 13 basal stalk section 0
+    color: '#243320'
+    shape: SlantedX
+    min: -0.079442, -0.031888, 0.024825
+    max: -0.014308, 0.060638, 0.183050
+  - label: leaf 13 basal stalk section 1
+    color: '#243320'
+    shape: SlantedX
+    min: -0.048192, -0.003138, 0.134200
+    max: 0.016942, 0.089388, 0.292425
+  - label: leaf 13 basal stalk section 2
+    color: '#243320'
+    shape: SlantedX
+    min: -0.016942, 0.025612, 0.243575
+    max: 0.048192, 0.118138, 0.401800
+  - label: leaf 13 basal stalk section 3
+    color: '#243320'
+    shape: SlantedX
+    min: 0.014308, 0.054362, 0.352950
+    max: 0.079442, 0.146888, 0.511175
+  - label: continuous leaf 13 curve 0
+    min: 0.010211, 0.083570, 0.456544
+    max: 0.271039, 0.160224, 0.641956
+    color: '#1C2819'
+    shape: SlantedX
+  - label: continuous leaf 13 curve 1
+    min: 0.179611, 0.102128, 0.525123
+    max: 0.351639, 0.161461, 0.635877
+    color: '#44603B'
+    shape: SlantedXReverse
+  - label: continuous leaf 13 curve 2
+    min: 0.295625, 0.104904, 0.398419
+    max: 0.329375, 0.162891, 0.575081
+    color: '#172014'
+    shape: Ellipsoid
+  - label: inner source foliage 0
+    min: -0.118750, -0.390000, 0.003000
+    max: -0.006250, 0.050000, 1.111750
+    color: '#1C2819'
+    shape: SlantedYReverse
+  - label: inner source foliage 1
+    min: -0.003125, -0.050000, 0.018000
+    max: 0.128125, 0.390000, 0.768000
+    color: '#364C2F'
+    shape: SlantedY
+  - label: inner source foliage 2
+    min: -0.331250, -0.390000, 0.143000
+    max: -0.231250, 0.050000, 0.580500
+    color: '#364C2F'
+    shape: SlantedYReverse
+  - label: inner source foliage 3
+    min: 0.106250, -0.050000, 0.111750
+    max: 0.206250, 0.390000, 0.674250
+    color: '#364C2F'
+    shape: SlantedY

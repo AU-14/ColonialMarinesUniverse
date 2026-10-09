@@ -27,7 +27,7 @@
 
   <Box>
     <GuideEntityEmbed Entity="AU14HemostaticGauzePacket" Caption="Hemostatic gauze packet"/>
-    <GuideEntityEmbed Entity="AU14Tourniquet" Caption="CAT tourniquet"/>
+    <GuideEntityEmbed Entity="AU14Tourniquet" Caption="Tourniquet"/>
   </Box>
 
   ## Bleeding

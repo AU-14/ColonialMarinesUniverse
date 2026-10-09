@@ -159,7 +159,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
 
     private void OnInsertAttempt(Entity<HardpointSlotsComponent> ent, ref ItemSlotInsertAttemptEvent args)
     {
-        // CMU14: also catches installs started before it cooked off or got OB'd
+        // CMU14: also catches installs started before it got wrecked
         if (_hardpoints.IsWrecked(ent.Owner))
         {
             args.Cancelled = true;
@@ -278,7 +278,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         // CMU14: fresh parts don't bring a wreck back
         if (_hardpoints.IsWrecked(ent.Owner))
         {
-            _popup.PopupClient(_hardpoints.GetWreckedMessage(ent.Owner), ent.Owner, user);
+            _popup.PopupClient(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, user);
             return true;
         }
 

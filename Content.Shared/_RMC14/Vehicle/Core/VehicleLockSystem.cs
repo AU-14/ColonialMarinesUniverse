@@ -30,6 +30,7 @@ public sealed partial class VehicleLockSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private VehicleSystem _vehicle = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!; // CMU14
 
     public override void Initialize()
     {
@@ -200,10 +201,9 @@ public sealed partial class VehicleLockSystem : EntitySystem
             return;
 
         // CMU14: wreck locks are beyond repair too.
-        if (HasComp<ActiveTankCookOffComponent>(ent.Owner) || HasComp<VehicleTotaledComponent>(ent.Owner))
+        if (_hardpoints.IsWrecked(ent.Owner))
         {
-            var wreckMessage = HasComp<ActiveTankCookOffComponent>(ent.Owner) ? "cmu-tank-cook-off-unrepairable" : "cmu-vehicle-totaled-unrepairable";
-            _popup.PopupClient(Loc.GetString(wreckMessage), ent.Owner, args.User);
+            _popup.PopupClient(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, args.User);
             args.Handled = true;
             return;
         }
@@ -244,8 +244,8 @@ public sealed partial class VehicleLockSystem : EntitySystem
 
     private void OnLockRepairDoAfter(Entity<VehicleLockComponent> ent, ref VehicleLockRepairDoAfterEvent args)
     {
-        // CMU14: it can cook off or get OB'd mid-repair
-        if (HasComp<ActiveTankCookOffComponent>(ent.Owner) || HasComp<VehicleTotaledComponent>(ent.Owner))
+        // CMU14: it can get wrecked mid-repair
+        if (_hardpoints.IsWrecked(ent.Owner))
             return;
 
         if (_net.IsClient || args.Cancelled || args.Handled || !ent.Comp.Broken)

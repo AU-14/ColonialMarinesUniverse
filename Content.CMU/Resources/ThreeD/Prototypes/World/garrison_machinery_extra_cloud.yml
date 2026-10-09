@@ -1,0 +1,3832 @@
+- type: cmu3DModel
+  id: CMU3DSeedExtractorCloud
+  label: Seed extractor
+  status: draft
+  sourcePrototypes:
+  - SeedExtractor
+  referencePrototype: SeedExtractor
+  referenceRsi: /Textures/Structures/Machines/seed_extractor.rsi
+  referenceState: seedextractor-off
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Source seedextractor-off + seedextractor-unlit frame zero. Tall black cabinet, inset cyan display, physical
+    cooling slats, open output recess, and linked twin cylindrical processing containers. Powered frames and extraction
+    effects remain unbound. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction
+    and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation
+    remains unverified. Source Sprite offsets remain documented rather than copied into world elevation. Layer animation,
+    UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: left full depth casing
+    min: -0.40625, -0.24, 0.0
+    max: -0.375, 0.24, 1.026
+    color: '#919191'
+  - label: right full depth casing
+    min: 0.125, -0.24, 0.0
+    max: 0.15625, 0.24, 1.026
+    color: '#919191'
+  - label: cabinet rear
+    min: -0.375, 0.2, 0.0
+    max: 0.125, 0.24, 1.026
+    color: '#919191'
+  - label: case roof
+    min: -0.375, -0.24, 0.988
+    max: 0.125, 0.24, 1.026
+    color: '#919191'
+  - label: case floor
+    min: -0.375, -0.24, 0.0
+    max: 0.125, 0.24, 0.038
+    color: '#919191'
+  - label: upper blank sign
+    min: -0.375, -0.255, 0.798
+    max: 0.125, -0.15, 0.988
+    color: '#707070'
+  - label: screen bezel top
+    min: -0.375, -0.26, 0.722
+    max: 0.125, -0.14, 0.76
+    color: '#424242'
+  - label: screen bezel bottom
+    min: -0.375, -0.26, 0.342
+    max: 0.125, -0.14, 0.38
+    color: '#424242'
+  - label: screen bezel left
+    min: -0.375, -0.26, 0.38
+    max: -0.34375, -0.14, 0.722
+    color: '#424242'
+  - label: screen bezel right
+    min: 0.09375, -0.26, 0.38
+    max: 0.125, -0.14, 0.722
+    color: '#424242'
+  - label: recessed cyan status screen substrate
+    min: -0.3125, -0.205, 0.38
+    max: 0.0625, -0.165, 0.722
+    color: '#1A4C68'
+  - label: recessed cyan status screen source detail
+    min: -0.3125, -0.206, 0.38
+    max: 0.0625, -0.205, 0.722
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt000
+    surfaceAxis: XZ
+  - label: screen left infill
+    min: -0.34375, -0.21, 0.38
+    max: -0.3125, -0.14, 0.722
+    color: '#1C1C1C'
+  - label: screen right infill
+    min: 0.0625, -0.21, 0.38
+    max: 0.09375, -0.14, 0.722
+    color: '#1C1C1C'
+  - label: front vent backing
+    min: -0.375, -0.13, 0.19
+    max: 0.125, -0.1, 0.342
+    color: '#3D3D3D'
+  - label: separate diagonal vent rib 0
+    min: -0.375, -0.24, 0.19
+    max: -0.34375, -0.12, 0.342
+    color: '#707070'
+  - label: separate diagonal vent rib 1
+    min: -0.3125, -0.24, 0.19
+    max: -0.28125, -0.12, 0.342
+    color: '#404040'
+  - label: separate diagonal vent rib 2
+    min: -0.25, -0.24, 0.19
+    max: -0.21875, -0.12, 0.342
+    color: '#282828'
+  - label: separate diagonal vent rib 3
+    min: -0.1875, -0.24, 0.19
+    max: -0.15625, -0.12, 0.342
+    color: '#505050'
+  - label: separate diagonal vent rib 4
+    min: -0.125, -0.24, 0.19
+    max: -0.09375, -0.12, 0.342
+    color: '#404040'
+  - label: separate diagonal vent rib 5
+    min: -0.0625, -0.24, 0.19
+    max: -0.03125, -0.12, 0.342
+    color: '#282828'
+  - label: separate diagonal vent rib 6
+    min: 0.0, -0.24, 0.19
+    max: 0.03125, -0.12, 0.342
+    color: '#505050'
+  - label: separate diagonal vent rib 7
+    min: 0.0625, -0.24, 0.19
+    max: 0.09375, -0.12, 0.342
+    color: '#3D3D3D'
+  - label: lower output opening top
+    min: -0.375, -0.253, 0.152
+    max: 0.125, -0.07, 0.19
+    color: '#171717'
+  - label: lower output opening bottom
+    min: -0.375, -0.253, 0.0
+    max: 0.125, -0.07, 0.038
+    color: '#171717'
+  - label: lower output opening left
+    min: -0.375, -0.253, 0.038
+    max: -0.34375, -0.07, 0.152
+    color: '#171717'
+  - label: lower output opening right
+    min: 0.09375, -0.253, 0.038
+    max: 0.125, -0.07, 0.152
+    color: '#171717'
+  - label: output cavity rear
+    min: -0.34375, -0.01, 0.038
+    max: 0.09375, 0.01, 0.152
+    color: '#2E2E2E'
+  - label: right pod connecting support
+    min: 0.125, -0.215, 0.228
+    max: 0.4375, 0.24, 0.38
+    color: '#525252'
+  - label: right pod lower crossfoot
+    min: 0.1875, -0.23, 0.0
+    max: 0.4375, 0.24, 0.038
+    color: '#525252'
+  - label: right process lower leg 22
+    min: 0.1875, -0.21, 0.0
+    max: 0.21875, 0.24, 0.228
+    color: '#3D3D3D'
+  - label: right process lower leg 29
+    min: 0.40625, -0.21, 0.0
+    max: 0.4375, 0.24, 0.228
+    color: '#3D3D3D'
+  - label: lower cyan canister
+    min: 0.25, -0.225, 0.038
+    max: 0.375, -0.05, 0.228
+    color: '#C9F1FF'
+    shape: CylinderZ
+  - label: upper pod metal chamber
+    min: 0.25, -0.23, 0.342
+    max: 0.375, -0.02, 0.684
+    color: '#CECECE'
+    shape: CylinderZ
+  - label: upper pod collar
+    min: 0.21875, -0.24, 0.532
+    max: 0.40625, -0.01, 0.646
+    color: '#CECECE'
+    shape: CylinderZ
+  - label: chamber dark feed well
+    min: 0.28125, -0.247, 0.57
+    max: 0.34375, -0.21, 0.646
+    color: '#282828'
+  - label: upper chamber cap
+    min: 0.28125, -0.22, 0.684
+    max: 0.34375, -0.04, 0.722
+    color: '#1C1C1C'
+  - label: red feed stop
+    min: 0.1875, -0.25, 0.456
+    max: 0.26875, -0.04, 0.494
+    color: '#AE0000'
+  - label: green chamber indicator
+    min: 0.3125, -0.258, 0.418
+    max: 0.34375, -0.227, 0.494
+    color: '#72D371'
+- type: cmu3DModel
+  id: CMU3DElectricGrillCloud
+  label: Electric grill
+  status: draft
+  sourcePrototypes:
+  - KitchenElectricGrill
+  referencePrototype: KitchenElectricGrill
+  referenceRsi: /Textures/Structures/Machines/electric_grill.rsi
+  referenceState: icon
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Unlit icon source. Recessed grease tray, individually spaced cooking bars, connected hollow side handles
+    and front controls. Low/medium/high overlays are inventoried only; no heat or glow is simulated. Art-only static
+    draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction and attachment are inferred. Isolated geometry
+    is normalized to its lowest actual mesh vertex; mounting elevation remains unverified. Source Sprite offsets remain
+    documented rather than copied into world elevation. Layer animation, UI, live visibility, native state selection
+    and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: recessed grease tray
+    min: -0.34375, 0.0, 0.0
+    max: 0.375, 0.40625, 0.035
+    color: '#171717'
+  - label: rear rim
+    min: -0.34375, 0.40625, 0.035
+    max: 0.375, 0.4375, 0.165
+    color: '#2E2E2E'
+  - label: front rim
+    min: -0.34375, -0.03125, 0.035
+    max: 0.375, 0.0, 0.165
+    color: '#2E2E2E'
+  - label: left rim
+    min: -0.34375, 0.0, 0.035
+    max: -0.3125, 0.40625, 0.165
+    color: '#282828'
+  - label: right rim
+    min: 0.34375, 0.0, 0.035
+    max: 0.375, 0.40625, 0.165
+    color: '#282828'
+  - label: separate cooking bar 0
+    min: -0.3125, 0.0, 0.105
+    max: -0.28125, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 1
+    min: -0.25, 0.0, 0.105
+    max: -0.21875, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 2
+    min: -0.1875, 0.0, 0.105
+    max: -0.15625, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 3
+    min: -0.125, 0.0, 0.105
+    max: -0.09375, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 4
+    min: -0.0625, 0.0, 0.105
+    max: -0.03125, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 5
+    min: 0.0, 0.0, 0.105
+    max: 0.03125, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 6
+    min: 0.0625, 0.0, 0.105
+    max: 0.09375, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 7
+    min: 0.125, 0.0, 0.105
+    max: 0.15625, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 8
+    min: 0.1875, 0.0, 0.105
+    max: 0.21875, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 9
+    min: 0.25, 0.0, 0.105
+    max: 0.28125, 0.40625, 0.145
+    color: '#706F6F'
+  - label: separate cooking bar 10
+    min: 0.3125, 0.0, 0.105
+    max: 0.34375, 0.40625, 0.145
+    color: '#706F6F'
+  - label: left handle outer bridge
+    min: -0.40625, 0.03125, 0.055
+    max: -0.375, 0.34375, 0.11
+    color: '#666666'
+  - label: left handle attachment 5
+    min: -0.40625, 0.3125, 0.055
+    max: -0.3125, 0.34375, 0.11
+    color: '#555454'
+  - label: left handle attachment 14
+    min: -0.40625, 0.03125, 0.055
+    max: -0.3125, 0.0625, 0.11
+    color: '#555454'
+  - label: right handle outer bridge
+    min: 0.40625, 0.03125, 0.055
+    max: 0.4375, 0.34375, 0.11
+    color: '#666666'
+  - label: right handle attachment 5
+    min: 0.34375, 0.3125, 0.055
+    max: 0.4375, 0.34375, 0.11
+    color: '#555454'
+  - label: right handle attachment 14
+    min: 0.34375, 0.03125, 0.055
+    max: 0.4375, 0.0625, 0.11
+    color: '#555454'
+  - label: front control rail
+    min: -0.34375, -0.125, 0.005
+    max: 0.375, -0.03125, 0.135
+    color: '#686262'
+  - label: separate control (7, 18, 10, 20)
+    min: -0.28125, -0.125, 0.135
+    max: -0.1875, -0.0625, 0.152
+    color: '#413C3C'
+  - label: separate control (7, 18, 10, 20) source detail
+    min: -0.28125, -0.125, 0.152
+    max: -0.1875, -0.0625, 0.153
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt001
+    surfaceAxis: XY
+  - label: separate control (12, 18, 15, 20)
+    min: -0.125, -0.125, 0.135
+    max: -0.03125, -0.0625, 0.152
+    color: '#413C3C'
+  - label: separate control (12, 18, 15, 20) source detail
+    min: -0.125, -0.125, 0.152
+    max: -0.03125, -0.0625, 0.153
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt002
+    surfaceAxis: XY
+  - label: separate control (24, 18, 25, 20)
+    min: 0.25, -0.125, 0.135
+    max: 0.28125, -0.0625, 0.152
+    color: '#B8B0B1'
+  - label: separate control (24, 18, 25, 20) source detail
+    min: 0.25, -0.125, 0.152
+    max: 0.28125, -0.0625, 0.153
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt003
+    surfaceAxis: XY
+  - label: separate control (26, 18, 27, 20)
+    min: 0.3125, -0.125, 0.135
+    max: 0.34375, -0.0625, 0.152
+    color: '#87171B'
+  - label: separate control (26, 18, 27, 20) source detail
+    min: 0.3125, -0.125, 0.152
+    max: 0.34375, -0.0625, 0.153
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt004
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DWallCapacitorRechargerCloud
+  label: Wall capacitor recharger
+  status: draft
+  sourcePrototypes:
+  - WallWeaponCapacitorRecharger
+  referencePrototype: WallWeaponCapacitorRecharger
+  referenceRsi: /Textures/Structures/Power/wall_recharger.rsi
+  referenceState: empty
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Default empty plus light-off. Compact C-shaped charger has real open jaw volume, separate red contacts
+    and wall backing. Full source is byte-identical to empty. Charging-light cycles, inserted device appearance and wall
+    elevation are unverified. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction
+    and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation
+    remains unverified. Source Sprite offsets remain documented rather than copied into world elevation. Layer animation,
+    UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: rear mounting plate
+    min: -0.375, 0.08, 0.038
+    max: 0.125, 0.11, 0.304
+    color: '#303030'
+  - label: upper long housing
+    min: -0.34375, -0.13, 0.266
+    max: 0.125, 0.11, 0.342
+    color: '#919191'
+  - label: lower long housing
+    min: -0.375, -0.13, 0.0
+    max: 0.125, 0.11, 0.076
+    color: '#5F5F5F'
+  - label: right insertion stop
+    min: 0.03125, -0.13, 0.076
+    max: 0.125, 0.11, 0.266
+    color: '#464646'
+  - label: upper jaw shoulder
+    min: -0.375, -0.14, 0.19
+    max: -0.28125, 0.11, 0.266
+    color: '#919191'
+  - label: lower jaw shoulder
+    min: -0.375, -0.14, 0.038
+    max: -0.28125, 0.11, 0.114
+    color: '#787878'
+  - label: upper red contact
+    min: -0.4375, -0.146, 0.152
+    max: -0.375, -0.07, 0.228
+    color: '#B52626'
+  - label: lower red contact
+    min: -0.4375, -0.146, 0.038
+    max: -0.375, -0.07, 0.114
+    color: '#B52626'
+  - label: upper inner guide
+    min: -0.28125, -0.075, 0.228
+    max: -0.03125, 0.11, 0.266
+    color: '#464646'
+  - label: lower inner guide
+    min: -0.28125, -0.075, 0.114
+    max: -0.03125, 0.11, 0.152
+    color: '#5F5F5F'
+  - label: lower connector slot rib 8
+    min: -0.25, -0.14, 0.076
+    max: -0.21875, 0.11, 0.114
+    color: '#787878'
+  - label: lower connector slot rib 10
+    min: -0.1875, -0.14, 0.076
+    max: -0.15625, 0.11, 0.114
+    color: '#787878'
+  - label: lower connector slot rib 12
+    min: -0.125, -0.14, 0.076
+    max: -0.09375, 0.11, 0.114
+    color: '#787878'
+  - label: lower connector slot rib 14
+    min: -0.0625, -0.14, 0.076
+    max: -0.03125, 0.11, 0.114
+    color: '#787878'
+  - label: lower connector slot rib 16
+    min: 0.0, -0.14, 0.076
+    max: 0.03125, 0.11, 0.114
+    color: '#787878'
+- type: cmu3DModel
+  id: CMU3DArmyLatheCloud
+  label: Army lathe
+  status: draft
+  sourcePrototypes:
+  - CMArmylathe
+  referencePrototype: CMArmylathe
+  referenceRsi: /Textures/_RMC14/Structures/Machines/armylathe.rsi
+  referenceState: armylathe
+  referenceDirection: 0
+  sourceDirections: 1
+  description: armylathe + armylathe_u frame zero with closed maintenance panel. Physical recessed fabrication chamber
+    and feed rails, separate upper plaques, cooling fan, blue display/keypad and two feet. Maintenance, cutting, material
+    and powered animation states are unbound. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height,
+    rear construction and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex;
+    mounting elevation remains unverified. Source Sprite offsets remain documented rather than copied into world elevation.
+    Layer animation, UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See
+    SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: left full depth casing
+    min: -0.46875, -0.34, 0.076
+    max: -0.4375, 0.34, 1.102
+    color: '#867872'
+  - label: right full depth casing
+    min: 0.4375, -0.34, 0.076
+    max: 0.46875, 0.34, 1.102
+    color: '#867872'
+  - label: cabinet rear
+    min: -0.4375, 0.3, 0.076
+    max: 0.4375, 0.34, 1.102
+    color: '#867872'
+  - label: case roof
+    min: -0.4375, -0.34, 1.064
+    max: 0.4375, 0.34, 1.102
+    color: '#867872'
+  - label: case floor
+    min: -0.4375, -0.34, 0.076
+    max: 0.4375, 0.34, 0.114
+    color: '#867872'
+  - label: wide raised header
+    min: -0.40625, -0.352, 0.912
+    max: 0.25, -0.21, 1.102
+    color: '#69615E'
+  - label: header inset top
+    min: -0.40625, -0.362, 1.064
+    max: 0.25, -0.24, 1.102
+    color: '#867872'
+  - label: header inset bottom
+    min: -0.40625, -0.362, 0.912
+    max: 0.25, -0.24, 0.95
+    color: '#867872'
+  - label: header inset left
+    min: -0.40625, -0.362, 0.95
+    max: -0.375, -0.24, 1.064
+    color: '#867872'
+  - label: header inset right
+    min: 0.21875, -0.362, 0.95
+    max: 0.25, -0.24, 1.064
+    color: '#867872'
+  - label: right header plate
+    min: 0.28125, -0.352, 0.912
+    max: 0.4375, -0.21, 1.102
+    color: '#69615E'
+  - label: main fabrication bay top
+    min: -0.375, -0.35, 0.76
+    max: 0.21875, -0.11, 0.836
+    color: '#4D4745'
+  - label: main fabrication bay bottom
+    min: -0.375, -0.35, 0.266
+    max: 0.21875, -0.11, 0.342
+    color: '#4D4745'
+  - label: main fabrication bay left
+    min: -0.375, -0.35, 0.342
+    max: -0.3125, -0.11, 0.76
+    color: '#4D4745'
+  - label: main fabrication bay right
+    min: 0.15625, -0.35, 0.342
+    max: 0.21875, -0.11, 0.76
+    color: '#4D4745'
+  - label: deep fabrication chamber rear
+    min: -0.3125, -0.05, 0.342
+    max: 0.15625, -0.02, 0.76
+    color: '#18191B'
+  - label: bay top cutting head
+    min: -0.15625, -0.22, 0.684
+    max: -0.0625, -0.04, 0.76
+    color: '#4D4745'
+  - label: chamber central feed track
+    min: -0.125, -0.22, 0.304
+    max: -0.09375, -0.04, 0.494
+    color: '#4D4745'
+  - label: chamber secondary feed track
+    min: 0.0, -0.22, 0.304
+    max: 0.03125, -0.04, 0.494
+    color: '#4D4745'
+  - label: right equipment vertical divider
+    min: 0.21875, -0.35, 0.228
+    max: 0.28125, -0.12, 0.912
+    color: '#4D4745'
+  - label: cooling fan bezel top
+    min: 0.28125, -0.35, 0.836
+    max: 0.4375, -0.22, 0.874
+    color: '#5E5754'
+  - label: cooling fan bezel bottom
+    min: 0.28125, -0.35, 0.608
+    max: 0.4375, -0.22, 0.646
+    color: '#5E5754'
+  - label: cooling fan bezel left
+    min: 0.28125, -0.35, 0.646
+    max: 0.3125, -0.22, 0.836
+    color: '#5E5754'
+  - label: cooling fan bezel right
+    min: 0.40625, -0.35, 0.646
+    max: 0.4375, -0.22, 0.836
+    color: '#5E5754'
+  - label: recessed fan impeller substrate
+    min: 0.3125, -0.295, 0.646
+    max: 0.40625, -0.24, 0.836
+    color: '#69615E'
+  - label: recessed fan impeller source detail
+    min: 0.3125, -0.296, 0.646
+    max: 0.40625, -0.295, 0.836
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt005
+    surfaceAxis: XZ
+  - label: status display bezel top
+    min: 0.21875, -0.35, 0.532
+    max: 0.4375, -0.19, 0.57
+    color: '#4F7EC5'
+  - label: status display bezel bottom
+    min: 0.21875, -0.35, 0.38
+    max: 0.4375, -0.19, 0.418
+    color: '#4F7EC5'
+  - label: status display bezel left
+    min: 0.21875, -0.35, 0.418
+    max: 0.25, -0.19, 0.532
+    color: '#4F7EC5'
+  - label: status display bezel right
+    min: 0.40625, -0.35, 0.418
+    max: 0.4375, -0.19, 0.532
+    color: '#4F7EC5'
+  - label: blue status display substrate
+    min: 0.25, -0.31, 0.418
+    max: 0.40625, -0.24, 0.532
+    color: '#4F7EC5'
+  - label: blue status display source detail
+    min: 0.25, -0.311, 0.418
+    max: 0.40625, -0.31, 0.532
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt006
+    surfaceAxis: XZ
+  - label: blue key matrix substrate
+    min: 0.28125, -0.335, 0.228
+    max: 0.40625, -0.22, 0.342
+    color: '#867872'
+  - label: blue key matrix source detail
+    min: 0.28125, -0.336, 0.228
+    max: 0.40625, -0.335, 0.342
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt007
+    surfaceAxis: XZ
+  - label: heavy bottom crossbeam
+    min: -0.46875, -0.34, 0.114
+    max: 0.46875, 0.34, 0.228
+    color: '#5E5754'
+  - label: support foot 7
+    min: -0.28125, -0.375, 0.0
+    max: -0.1875, 0.28, 0.228
+    color: '#69615E'
+  - label: support foot 22
+    min: 0.1875, -0.375, 0.0
+    max: 0.28125, 0.28, 0.228
+    color: '#69615E'
+- type: cmu3DModel
+  id: CMU3DXRFScannerCloud
+  label: XRF scanner
+  status: draft
+  sourcePrototypes:
+  - CMUXRFScanner
+  referencePrototype: CMUXRFScanner
+  referenceRsi: /Textures/_RMC14/Structures/Machines/Science/reagent_analyzer.rsi
+  referenceState: base
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Static base source. Asymmetric two-cabinet body, recessed sample well, vent slats, instrument faces and
+    open right carry handle. Processing/sample/error/failed/finished source states and screen UI are inventoried without
+    live binding. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction and attachment
+    are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation remains unverified.
+    Source Sprite offsets remain documented rather than copied into world elevation. Layer animation, UI, live visibility,
+    native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: left instrument rear wall
+    min: -0.34375, 0.195, 0.0
+    max: -0.0625, 0.23, 0.798
+    color: '#BEBAB1'
+  - label: left instrument full depth side 5
+    min: -0.34375, -0.24, 0.0
+    max: -0.3125, 0.23, 0.798
+    color: '#BEBAB1'
+  - label: left instrument full depth side 13
+    min: -0.09375, -0.24, 0.0
+    max: -0.0625, 0.23, 0.798
+    color: '#BEBAB1'
+  - label: left instrument lower floor
+    min: -0.3125, -0.24, 0.0
+    max: -0.09375, 0.23, 0.038
+    color: '#BEBAB1'
+  - label: left instrument middle support
+    min: -0.3125, -0.24, 0.418
+    max: -0.09375, 0.23, 0.456
+    color: '#BEBAB1'
+  - label: left instrument lower fascia substrate
+    min: -0.3125, -0.15, 0.038
+    max: -0.09375, 0.23, 0.228
+    color: '#BEBAB1'
+  - label: upper transverse instrument bridge
+    min: -0.34375, -0.24, 0.76
+    max: 0.28125, 0.23, 0.836
+    color: '#BEBAB1'
+  - label: right instrument cabinet rear
+    min: -0.0625, 0.195, 0.114
+    max: 0.28125, 0.23, 0.76
+    color: '#8C8A84'
+  - label: right instrument full depth side 14
+    min: -0.0625, -0.21, 0.114
+    max: -0.03125, 0.23, 0.76
+    color: '#8C8A84'
+  - label: right instrument full depth side 24
+    min: 0.25, -0.21, 0.114
+    max: 0.28125, 0.23, 0.76
+    color: '#8C8A84'
+  - label: right instrument fascia substrate
+    min: -0.03125, -0.14, 0.114
+    max: 0.25, 0.23, 0.76
+    color: '#8C8A84'
+  - label: sample chamber rim top
+    min: -0.3125, -0.26, 0.722
+    max: -0.0625, -0.16, 0.76
+    color: '#353431'
+  - label: sample chamber rim bottom
+    min: -0.3125, -0.26, 0.456
+    max: -0.0625, -0.16, 0.494
+    color: '#353431'
+  - label: sample chamber rim left
+    min: -0.3125, -0.26, 0.494
+    max: -0.28125, -0.16, 0.722
+    color: '#353431'
+  - label: sample chamber rim right
+    min: -0.09375, -0.26, 0.494
+    max: -0.0625, -0.16, 0.722
+    color: '#353431'
+  - label: sample well rear
+    min: -0.28125, -0.12, 0.494
+    max: -0.09375, -0.09, 0.722
+    color: '#292825'
+  - label: blue sample holder substrate
+    min: -0.25, -0.195, 0.57
+    max: -0.125, -0.12, 0.646
+    color: '#6690AD'
+  - label: blue sample holder source detail
+    min: -0.25, -0.196, 0.57
+    max: -0.125, -0.195, 0.646
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt008
+    surfaceAxis: XZ
+  - label: top detector bar substrate
+    min: -0.03125, -0.225, 0.646
+    max: 0.25, -0.14, 0.76
+    color: '#5E5754'
+  - label: top detector bar source detail
+    min: -0.03125, -0.226, 0.646
+    max: 0.25, -0.225, 0.76
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt009
+    surfaceAxis: XZ
+  - label: vent opening rear (6, 16, 13, 17)
+    min: -0.3125, -0.175, 0.38
+    max: -0.09375, -0.14, 0.418
+    color: '#292825'
+  - label: individual vent separator (6, 16)
+    min: -0.3125, -0.234, 0.38
+    max: -0.28125, -0.173, 0.418
+    color: '#BEBAB1'
+  - label: individual vent separator (8, 16)
+    min: -0.25, -0.234, 0.38
+    max: -0.21875, -0.173, 0.418
+    color: '#BEBAB1'
+  - label: individual vent separator (10, 16)
+    min: -0.1875, -0.234, 0.38
+    max: -0.15625, -0.173, 0.418
+    color: '#BEBAB1'
+  - label: individual vent separator (12, 16)
+    min: -0.125, -0.234, 0.38
+    max: -0.09375, -0.173, 0.418
+    color: '#BEBAB1'
+  - label: vent opening rear (16, 13, 23, 14)
+    min: 0.0, -0.175, 0.494
+    max: 0.21875, -0.14, 0.532
+    color: '#292825'
+  - label: individual vent separator (16, 13)
+    min: 0.0, -0.234, 0.494
+    max: 0.03125, -0.173, 0.532
+    color: '#BEBAB1'
+  - label: individual vent separator (18, 13)
+    min: 0.0625, -0.234, 0.494
+    max: 0.09375, -0.173, 0.532
+    color: '#BEBAB1'
+  - label: individual vent separator (20, 13)
+    min: 0.125, -0.234, 0.494
+    max: 0.15625, -0.173, 0.532
+    color: '#BEBAB1'
+  - label: individual vent separator (22, 13)
+    min: 0.1875, -0.234, 0.494
+    max: 0.21875, -0.173, 0.532
+    color: '#BEBAB1'
+  - label: left green controls substrate
+    min: -0.34375, -0.245, 0.228
+    max: -0.0625, -0.21, 0.342
+    color: '#416957'
+  - label: left green controls source detail
+    min: -0.34375, -0.246, 0.228
+    max: -0.0625, -0.245, 0.342
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt010
+    surfaceAxis: XZ
+  - label: right green controls substrate
+    min: -0.03125, -0.245, 0.342
+    max: 0.28125, -0.21, 0.456
+    color: '#416957'
+  - label: right green controls source detail
+    min: -0.03125, -0.246, 0.342
+    max: 0.28125, -0.245, 0.456
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt011
+    surfaceAxis: XZ
+  - label: lower left recessed cover top
+    min: -0.34375, -0.25, 0.19
+    max: -0.0625, -0.16, 0.228
+    color: '#94928B'
+  - label: lower left recessed cover bottom
+    min: -0.34375, -0.25, 0.0
+    max: -0.0625, -0.16, 0.038
+    color: '#94928B'
+  - label: lower left recessed cover left
+    min: -0.34375, -0.25, 0.038
+    max: -0.3125, -0.16, 0.19
+    color: '#94928B'
+  - label: lower left recessed cover right
+    min: -0.09375, -0.25, 0.038
+    max: -0.0625, -0.16, 0.19
+    color: '#94928B'
+  - label: lower vertical port 7
+    min: -0.28125, -0.2, 0.076
+    max: -0.25, -0.17, 0.19
+    color: '#3B3935'
+  - label: lower vertical port 11
+    min: -0.15625, -0.2, 0.076
+    max: -0.125, -0.17, 0.19
+    color: '#3B3935'
+  - label: lower fan enclosure top
+    min: 0.0, -0.24, 0.228
+    max: 0.21875, -0.15, 0.266
+    color: '#5D5C57'
+  - label: lower fan enclosure bottom
+    min: 0.0, -0.24, 0.152
+    max: 0.21875, -0.15, 0.19
+    color: '#5D5C57'
+  - label: lower fan enclosure left
+    min: 0.0, -0.24, 0.19
+    max: 0.03125, -0.15, 0.228
+    color: '#5D5C57'
+  - label: lower fan enclosure right
+    min: 0.1875, -0.24, 0.19
+    max: 0.21875, -0.15, 0.228
+    color: '#5D5C57'
+  - label: lower detector fan substrate
+    min: 0.03125, -0.215, 0.19
+    max: 0.1875, -0.13, 0.228
+    color: '#8C8A84'
+  - label: lower detector fan source detail
+    min: 0.03125, -0.216, 0.19
+    max: 0.1875, -0.215, 0.228
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt012
+    surfaceAxis: XZ
+  - label: handle top
+    min: 0.28125, -0.18, 0.494
+    max: 0.375, 0.205, 0.532
+    color: '#BEBAB1'
+  - label: handle outside
+    min: 0.34375, -0.18, 0.304
+    max: 0.375, 0.205, 0.494
+    color: '#BEBAB1'
+  - label: handle bottom
+    min: 0.28125, -0.18, 0.266
+    max: 0.375, 0.205, 0.304
+    color: '#BEBAB1'
+- type: cmu3DModel
+  id: CMU3DChemSimulatorCloud
+  label: Chemical synthesis simulator
+  status: draft
+  sourcePrototypes:
+  - CMUChemSimulator
+  referencePrototype: CMUChemSimulator
+  referenceRsi: /Textures/CMU14/Structures/Machines/Science/chem_simulator.rsi
+  referenceState: modifier
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Static modifier source. Pale two-tile console has physically separate top ventilation ribs, three scientific
+    instrument bays, inset purple screen, projecting key tray, twin tube pairs and right circular control. Source +0.5
+    X pivot retained; +0.5 sprite Y is projected elevation, not world translation. Off/running/ready/reading/printing
+    and actual UI remain unbound. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction
+    and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation
+    remains unverified. Source Sprite offsets remain documented rather than copied into world elevation. Layer animation,
+    UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: left full depth casing
+    min: -0.40625, -0.28, 0.0
+    max: -0.375, 0.28, 1.14
+    color: '#3C3A36'
+  - label: right full depth casing
+    min: 1.375, -0.28, 0.0
+    max: 1.40625, 0.28, 1.14
+    color: '#3C3A36'
+  - label: cabinet rear
+    min: -0.375, 0.24, 0.0
+    max: 1.375, 0.28, 1.14
+    color: '#3C3A36'
+  - label: case roof
+    min: -0.375, -0.28, 1.102
+    max: 1.375, 0.28, 1.14
+    color: '#3C3A36'
+  - label: case floor
+    min: -0.375, -0.28, 0.0
+    max: 1.375, 0.28, 0.038
+    color: '#3C3A36'
+  - label: header solid backing
+    min: -0.375, -0.22, 0.874
+    max: 1.375, 0.28, 1.14
+    color: '#AAA8A4'
+  - label: header upper rail
+    min: -0.375, -0.3, 1.102
+    max: 1.375, -0.18, 1.14
+    color: '#858480'
+  - label: header lower rail
+    min: -0.375, -0.3, 0.836
+    max: 1.375, -0.18, 0.912
+    color: '#E2E0DC'
+  - label: individual top vent bar 5
+    min: -0.34375, -0.288, 0.912
+    max: -0.3125, -0.2, 1.102
+    color: '#AAA8A4'
+  - label: individual top vent bar 7
+    min: -0.28125, -0.288, 0.912
+    max: -0.25, -0.2, 1.102
+    color: '#91908B'
+  - label: individual top vent bar 9
+    min: -0.21875, -0.288, 0.912
+    max: -0.1875, -0.2, 1.102
+    color: '#91908B'
+  - label: individual top vent bar 11
+    min: -0.15625, -0.288, 0.912
+    max: -0.125, -0.2, 1.102
+    color: '#91908B'
+  - label: individual top vent bar 13
+    min: -0.09375, -0.288, 0.912
+    max: -0.0625, -0.2, 1.102
+    color: '#91908B'
+  - label: individual top vent bar 15
+    min: -0.03125, -0.288, 0.912
+    max: 0.0, -0.2, 1.102
+    color: '#91908B'
+  - label: individual top vent bar 47
+    min: 0.96875, -0.288, 0.912
+    max: 1.0, -0.2, 1.102
+    color: '#555555'
+  - label: individual top vent bar 49
+    min: 1.03125, -0.288, 0.912
+    max: 1.0625, -0.2, 1.102
+    color: '#555555'
+  - label: individual top vent bar 51
+    min: 1.09375, -0.288, 0.912
+    max: 1.125, -0.2, 1.102
+    color: '#555555'
+  - label: individual top vent bar 53
+    min: 1.15625, -0.288, 0.912
+    max: 1.1875, -0.2, 1.102
+    color: '#555555'
+  - label: individual top vent bar 55
+    min: 1.21875, -0.288, 0.912
+    max: 1.25, -0.2, 1.102
+    color: '#555555'
+  - label: individual top vent bar 57
+    min: 1.28125, -0.288, 0.912
+    max: 1.3125, -0.2, 1.102
+    color: '#555555'
+  - label: central original brand emblem substrate
+    min: 0.25, -0.29, 0.95
+    max: 0.6875, -0.22, 1.102
+    color: '#D2D0CA'
+  - label: central original brand emblem source detail
+    min: 0.25, -0.291, 0.95
+    max: 0.6875, -0.29, 1.102
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt013
+    surfaceAxis: XZ
+  - label: green header emblem 19 substrate
+    min: 0.09375, -0.29, 0.95
+    max: 0.21875, -0.22, 1.102
+    color: '#578864'
+  - label: green header emblem 19 source detail
+    min: 0.09375, -0.291, 0.95
+    max: 0.21875, -0.29, 1.102
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt014
+    surfaceAxis: XZ
+  - label: green header emblem 41 substrate
+    min: 0.78125, -0.29, 0.95
+    max: 0.90625, -0.22, 1.102
+    color: '#578864'
+  - label: green header emblem 41 source detail
+    min: 0.78125, -0.291, 0.95
+    max: 0.90625, -0.29, 1.102
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt015
+    surfaceAxis: XZ
+  - label: left instrument housing top
+    min: -0.375, -0.28, 0.76
+    max: 0.0625, -0.1, 0.798
+    color: '#9D9A93'
+  - label: left instrument housing bottom
+    min: -0.375, -0.28, 0.152
+    max: 0.0625, -0.1, 0.19
+    color: '#9D9A93'
+  - label: left instrument housing left
+    min: -0.375, -0.28, 0.19
+    max: -0.34375, -0.1, 0.76
+    color: '#9D9A93'
+  - label: left instrument housing right
+    min: 0.03125, -0.28, 0.19
+    max: 0.0625, -0.1, 0.76
+    color: '#9D9A93'
+  - label: left instrument fascia substrate
+    min: -0.34375, -0.215, 0.19
+    max: 0.03125, 0.28, 0.76
+    color: '#3C3A36'
+  - label: small cyan left screen top
+    min: -0.28125, -0.3, 0.684
+    max: 0.0, -0.16, 0.722
+    color: '#363430'
+  - label: small cyan left screen bottom
+    min: -0.28125, -0.3, 0.532
+    max: 0.0, -0.16, 0.57
+    color: '#363430'
+  - label: small cyan left screen left
+    min: -0.28125, -0.3, 0.57
+    max: -0.25, -0.16, 0.684
+    color: '#363430'
+  - label: small cyan left screen right
+    min: -0.03125, -0.3, 0.57
+    max: 0.0, -0.16, 0.684
+    color: '#363430'
+  - label: cyan readout substrate
+    min: -0.25, -0.245, 0.57
+    max: -0.03125, -0.18, 0.684
+    color: '#6690AD'
+  - label: cyan readout source detail
+    min: -0.25, -0.246, 0.57
+    max: -0.03125, -0.245, 0.684
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt016
+    surfaceAxis: XZ
+  - label: left knob substrate
+    min: -0.28125, -0.3, 0.342
+    max: -0.21875, -0.2, 0.456
+    color: '#363430'
+  - label: left knob source detail
+    min: -0.28125, -0.301, 0.342
+    max: -0.21875, -0.3, 0.456
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt017
+    surfaceAxis: XZ
+  - label: left mini display substrate
+    min: -0.15625, -0.3, 0.342
+    max: -0.03125, -0.2, 0.456
+    color: '#363430'
+  - label: left mini display source detail
+    min: -0.15625, -0.301, 0.342
+    max: -0.03125, -0.3, 0.456
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt018
+    surfaceAxis: XZ
+  - label: left open feed slot rear
+    min: -0.28125, -0.12, 0.228
+    max: 0.0, -0.1, 0.266
+    color: '#252525'
+  - label: left feed slot top
+    min: -0.3125, -0.28, 0.266
+    max: 0.03125, -0.12, 0.304
+    color: '#A19D91'
+  - label: left feed slot bottom
+    min: -0.3125, -0.28, 0.19
+    max: 0.03125, -0.12, 0.228
+    color: '#A19D91'
+  - label: left feed slot left
+    min: -0.3125, -0.28, 0.228
+    max: -0.28125, -0.12, 0.266
+    color: '#A19D91'
+  - label: left feed slot right
+    min: 0.0, -0.28, 0.228
+    max: 0.03125, -0.12, 0.266
+    color: '#A19D91'
+  - label: large purple display bezel top
+    min: 0.125, -0.3, 0.76
+    max: 0.90625, -0.13, 0.798
+    color: '#2A2926'
+  - label: large purple display bezel bottom
+    min: 0.125, -0.3, 0.456
+    max: 0.90625, -0.13, 0.494
+    color: '#2A2926'
+  - label: large purple display bezel left
+    min: 0.125, -0.3, 0.494
+    max: 0.15625, -0.13, 0.76
+    color: '#2A2926'
+  - label: large purple display bezel right
+    min: 0.875, -0.3, 0.494
+    max: 0.90625, -0.13, 0.76
+    color: '#2A2926'
+  - label: purple simulator readout substrate
+    min: 0.1875, -0.245, 0.494
+    max: 0.84375, -0.18, 0.76
+    color: '#8977A0'
+  - label: purple simulator readout source detail
+    min: 0.1875, -0.246, 0.494
+    max: 0.84375, -0.245, 0.76
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt019
+    surfaceAxis: XZ
+  - label: separate display function key 24
+    min: 0.25, -0.298, 0.342
+    max: 0.3125, -0.23, 0.38
+    color: '#4D4A42'
+  - label: separate display function key 29
+    min: 0.40625, -0.298, 0.342
+    max: 0.46875, -0.23, 0.38
+    color: '#7D7A72'
+  - label: separate display function key 35
+    min: 0.59375, -0.298, 0.342
+    max: 0.65625, -0.23, 0.38
+    color: '#7D7A72'
+  - label: separate display function key 40
+    min: 0.75, -0.298, 0.342
+    max: 0.8125, -0.23, 0.38
+    color: '#4D4A42'
+  - label: central controls backing
+    min: 0.0625, -0.25, 0.152
+    max: 0.96875, 0.28, 0.456
+    color: '#888476'
+  - label: keyboard tray foundation
+    min: 0.21875, -0.44, 0.038
+    max: 0.78125, -0.2, 0.228
+    color: '#7D7A72'
+  - label: keyboard left rim
+    min: 0.1875, -0.46, 0.114
+    max: 0.25, -0.22, 0.266
+    color: '#888476'
+  - label: keyboard right rim
+    min: 0.78125, -0.46, 0.114
+    max: 0.84375, -0.22, 0.266
+    color: '#888476'
+  - label: keyboard lower lip
+    min: 0.25, -0.46, 0.038
+    max: 0.78125, -0.22, 0.076
+    color: '#888476'
+  - label: keyboard main key grid substrate
+    min: 0.25, -0.446, 0.076
+    max: 0.59375, -0.415, 0.228
+    color: '#7D7A72'
+  - label: keyboard main key grid source detail
+    min: 0.25, -0.447, 0.076
+    max: 0.59375, -0.446, 0.228
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt020
+    surfaceAxis: XZ
+  - label: keyboard numeric bank substrate
+    min: 0.625, -0.446, 0.076
+    max: 0.75, -0.415, 0.228
+    color: '#7D7A72'
+  - label: keyboard numeric bank source detail
+    min: 0.625, -0.447, 0.076
+    max: 0.75, -0.446, 0.228
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt021
+    surfaceAxis: XZ
+  - label: right analysis tower top
+    min: 1.0, -0.28, 0.76
+    max: 1.375, -0.08, 0.798
+    color: '#3C3A36'
+  - label: right analysis tower bottom
+    min: 1.0, -0.28, 0.152
+    max: 1.375, -0.08, 0.19
+    color: '#3C3A36'
+  - label: right analysis tower left
+    min: 1.0, -0.28, 0.19
+    max: 1.03125, -0.08, 0.76
+    color: '#3C3A36'
+  - label: right analysis tower right
+    min: 1.34375, -0.28, 0.19
+    max: 1.375, -0.08, 0.76
+    color: '#3C3A36'
+  - label: analysis tower dark rear
+    min: 1.0625, -0.13, 0.228
+    max: 1.3125, -0.1, 0.798
+    color: '#1C1C1C'
+  - label: cyan reagent tube (50, 11)
+    min: 1.0625, -0.25, 0.646
+    max: 1.09375, -0.12, 0.76
+    color: '#8CB8D7'
+    shape: CylinderZ
+  - label: cyan reagent tube (50, 15)
+    min: 1.0625, -0.25, 0.494
+    max: 1.09375, -0.12, 0.608
+    color: '#8CB8D7'
+    shape: CylinderZ
+  - label: cyan reagent tube (56, 11)
+    min: 1.25, -0.25, 0.646
+    max: 1.28125, -0.12, 0.76
+    color: '#8CB8D7'
+    shape: CylinderZ
+  - label: cyan reagent tube (56, 15)
+    min: 1.25, -0.25, 0.494
+    max: 1.28125, -0.12, 0.608
+    color: '#8CB8D7'
+    shape: CylinderZ
+  - label: rotary control connected shaft
+    min: 1.15625, -0.24, 0.304
+    max: 1.21875, -0.11, 0.418
+    color: '#3C3A36'
+    shape: CylinderY
+  - label: blue rotary analysis control substrate
+    min: 1.09375, -0.255, 0.266
+    max: 1.28125, -0.2, 0.456
+    color: '#2A2926'
+  - label: blue rotary analysis control source detail
+    min: 1.09375, -0.256, 0.266
+    max: 1.28125, -0.255, 0.456
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt022
+    surfaceAxis: XZ
+  - label: wide green plinth
+    min: -0.40625, -0.255, 0.0
+    max: 1.40625, 0.28, 0.114
+    color: '#426A58'
+- type: cmu3DModel
+  id: CMU3DVehicleSupplyConsoleCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DVehicleSupplyConsoleCloud
+  label: Vehicle supply console
+  status: draft
+  sourcePrototypes:
+  - VehicleSupplyConsole
+  referencePrototype: VehicleSupplyConsole
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Off body plus on screen composition. Tall console with recessed cyan graph screen, protruding keyboard
+    shelf, individual lower cooling slats and enclosed base. UI, dynamic order content, damaged and powered appearances
+    are unverified. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction and attachment
+    are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation remains unverified.
+    Source Sprite offsets remain documented rather than copied into world elevation. Layer animation, UI, live visibility,
+    native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: left full depth casing
+    min: -0.375, -0.25, 0.0
+    max: -0.34375, 0.25, 1.102
+    color: '#2D2E30'
+  - label: right full depth casing
+    min: 0.3125, -0.25, 0.0
+    max: 0.34375, 0.25, 1.102
+    color: '#2D2E30'
+  - label: cabinet rear
+    min: -0.34375, 0.21, 0.0
+    max: 0.3125, 0.25, 1.102
+    color: '#2D2E30'
+  - label: case roof
+    min: -0.34375, -0.25, 1.064
+    max: 0.3125, 0.25, 1.102
+    color: '#2D2E30'
+  - label: case floor
+    min: -0.34375, -0.25, 0.0
+    max: 0.3125, 0.25, 0.038
+    color: '#2D2E30'
+  - label: top display cap
+    min: -0.28125, -0.235, 1.064
+    max: 0.25, 0.25, 1.178
+    color: '#867872'
+  - label: screen surround top
+    min: -0.28125, -0.258, 0.988
+    max: 0.25, -0.14, 1.026
+    color: '#5E5754'
+  - label: screen surround bottom
+    min: -0.28125, -0.258, 0.646
+    max: 0.25, -0.14, 0.684
+    color: '#5E5754'
+  - label: screen surround left
+    min: -0.28125, -0.258, 0.684
+    max: -0.25, -0.14, 0.988
+    color: '#5E5754'
+  - label: screen surround right
+    min: 0.21875, -0.258, 0.684
+    max: 0.25, -0.14, 0.988
+    color: '#5E5754'
+  - label: supply ordering display substrate
+    min: -0.25, -0.215, 0.684
+    max: 0.21875, -0.16, 0.988
+    color: '#10596A'
+  - label: supply ordering display source detail
+    min: -0.25, -0.216, 0.684
+    max: 0.21875, -0.215, 0.988
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt023
+    surfaceAxis: XZ
+  - label: keyboard shelf
+    min: -0.34375, -0.345, 0.38
+    max: 0.3125, -0.1, 0.646
+    color: '#867872'
+  - label: keyboard substrate
+    min: -0.3125, -0.35, 0.418
+    max: 0.28125, -0.29, 0.494
+    color: '#171514'
+  - label: keyboard source detail
+    min: -0.3125, -0.351, 0.418
+    max: 0.28125, -0.35, 0.494
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt024
+    surfaceAxis: XZ
+  - label: bottom enclosed cabinet
+    min: -0.34375, -0.25, 0.038
+    max: 0.3125, 0.25, 0.38
+    color: '#5E5754'
+  - label: lower vent rear
+    min: -0.21875, -0.21, 0.152
+    max: 0.1875, -0.17, 0.304
+    color: '#383838'
+  - label: lower cooling rib 10
+    min: -0.1875, -0.26, 0.152
+    max: -0.15625, -0.2, 0.304
+    color: '#5E5754'
+  - label: lower cooling rib 12
+    min: -0.125, -0.26, 0.152
+    max: -0.09375, -0.2, 0.304
+    color: '#5E5754'
+  - label: lower cooling rib 14
+    min: -0.0625, -0.26, 0.152
+    max: -0.03125, -0.2, 0.304
+    color: '#5E5754'
+  - label: lower cooling rib 16
+    min: 0.0, -0.26, 0.152
+    max: 0.03125, -0.2, 0.304
+    color: '#5E5754'
+  - label: lower cooling rib 18
+    min: 0.0625, -0.26, 0.152
+    max: 0.09375, -0.2, 0.304
+    color: '#5E5754'
+  - label: lower cooling rib 20
+    min: 0.125, -0.26, 0.152
+    max: 0.15625, -0.2, 0.304
+    color: '#5E5754'
+- type: cmu3DModel
+  id: CMU3DDropshipNavigationCloudSouth
+  label: Dropship navigation terminal / south
+  status: draft
+  sourcePrototypes:
+  - CMComputerDropshipNavigationPlanetside
+  referencePrototype: CMComputerDropshipNavigationPlanetside
+  referenceRsi: /Textures/_RMC14/Structures/Machines/dropship_nav_computer.rsi
+  referenceState: 'on'
+  referenceDirection: 0
+  sourceDirections: 4
+  description: On state frame zero, explicit RSI direction 0. Direction-specific connected casing, separate instrument
+    recess and original small control surfaces. Original five-frame cycle, off/broken and terminal UI unbound; these
+    are static direction studies. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction
+    and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation
+    remains unverified. Source Sprite offsets remain documented rather than copied into world elevation. Layer animation,
+    UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: left full depth casing
+    min: -0.28125, -0.14, 0.0
+    max: -0.25, 0.14, 0.798
+    color: '#AC978E'
+  - label: right full depth casing
+    min: 0.25, -0.14, 0.0
+    max: 0.28125, 0.14, 0.798
+    color: '#AC978E'
+  - label: cabinet rear
+    min: -0.25, 0.1, 0.0
+    max: 0.25, 0.14, 0.798
+    color: '#AC978E'
+  - label: case roof
+    min: -0.25, -0.14, 0.76
+    max: 0.25, 0.14, 0.798
+    color: '#AC978E'
+  - label: case floor
+    min: -0.25, -0.14, 0.0
+    max: 0.25, 0.14, 0.038
+    color: '#AC978E'
+  - label: upper terminal cap
+    min: -0.25, -0.14, 0.646
+    max: 0.25, 0.14, 0.798
+    color: '#867872'
+  - label: recessed display housing top
+    min: -0.21875, -0.155, 0.57
+    max: 0.21875, -0.02, 0.608
+    color: '#5E5754'
+  - label: recessed display housing bottom
+    min: -0.21875, -0.155, 0.304
+    max: 0.21875, -0.02, 0.342
+    color: '#5E5754'
+  - label: recessed display housing left
+    min: -0.21875, -0.155, 0.342
+    max: -0.1875, -0.02, 0.57
+    color: '#5E5754'
+  - label: recessed display housing right
+    min: 0.1875, -0.155, 0.342
+    max: 0.21875, -0.02, 0.57
+    color: '#5E5754'
+  - label: magenta navigation readout substrate
+    min: -0.15625, -0.115, 0.342
+    max: 0.15625, -0.06, 0.57
+    color: '#E13F62'
+  - label: magenta navigation readout source detail
+    min: -0.15625, -0.116, 0.342
+    max: 0.15625, -0.115, 0.57
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt025
+    surfaceAxis: XZ
+  - label: display lower apron
+    min: -0.25, -0.14, 0.228
+    max: 0.25, 0.14, 0.304
+    color: '#5E5754'
+  - label: keyboard keys substrate
+    min: -0.1875, -0.16, 0.076
+    max: 0.1875, -0.06, 0.19
+    color: '#AC978E'
+  - label: keyboard keys source detail
+    min: -0.1875, -0.161, 0.076
+    max: 0.1875, -0.16, 0.19
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt026
+    surfaceAxis: XZ
+  - label: terminal lower rail
+    min: -0.25, -0.14, 0.0
+    max: 0.25, 0.14, 0.076
+    color: '#867872'
+  directionalModels:
+  - CMU3DDropshipNavigationCloudSouth
+  - CMU3DDropshipNavigationCloudNorth
+  - CMU3DDropshipNavigationCloudEast
+  - CMU3DDropshipNavigationCloudWest
+- type: cmu3DModel
+  id: CMU3DDropshipNavigationCloudNorth
+  label: Dropship navigation terminal / north
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMComputerDropshipNavigationPlanetside
+  referenceRsi: /Textures/_RMC14/Structures/Machines/dropship_nav_computer.rsi
+  referenceState: 'on'
+  referenceDirection: 1
+  sourceDirections: 4
+  description: On state frame zero, explicit RSI direction 1. Direction-specific connected casing, separate instrument
+    recess and original small control surfaces. Original five-frame cycle, off/broken and terminal UI unbound; these
+    are static direction studies. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction
+    and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation
+    remains unverified. Source Sprite offsets remain documented rather than copied into world elevation. Layer animation,
+    UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: left full depth casing
+    min: -0.28125, -0.14, 0.0
+    max: -0.25, 0.14, 0.798
+    color: '#AC978E'
+  - label: right full depth casing
+    min: 0.25, -0.14, 0.0
+    max: 0.28125, 0.14, 0.798
+    color: '#AC978E'
+  - label: cabinet rear
+    min: -0.25, 0.1, 0.0
+    max: 0.25, 0.14, 0.798
+    color: '#AC978E'
+  - label: case roof
+    min: -0.25, -0.14, 0.76
+    max: 0.25, 0.14, 0.798
+    color: '#AC978E'
+  - label: case floor
+    min: -0.25, -0.14, 0.0
+    max: 0.25, 0.14, 0.038
+    color: '#AC978E'
+  - label: upper terminal cap
+    min: -0.25, -0.14, 0.646
+    max: 0.25, 0.14, 0.798
+    color: '#867872'
+  - label: recessed display housing top
+    min: -0.21875, -0.155, 0.57
+    max: 0.21875, -0.02, 0.608
+    color: '#5E5754'
+  - label: recessed display housing bottom
+    min: -0.21875, -0.155, 0.304
+    max: 0.21875, -0.02, 0.342
+    color: '#5E5754'
+  - label: recessed display housing left
+    min: -0.21875, -0.155, 0.342
+    max: -0.1875, -0.02, 0.57
+    color: '#5E5754'
+  - label: recessed display housing right
+    min: 0.1875, -0.155, 0.342
+    max: 0.21875, -0.02, 0.57
+    color: '#5E5754'
+  - label: back inset cover
+    min: -0.1875, -0.115, 0.342
+    max: 0.1875, -0.04, 0.57
+    color: '#5E5754'
+  - label: small rear identification label substrate
+    min: 0.03125, -0.121, 0.38
+    max: 0.125, -0.115, 0.456
+    color: '#A8A8A8'
+  - label: small rear identification label source detail
+    min: 0.03125, -0.122, 0.38
+    max: 0.125, -0.121, 0.456
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt027
+    surfaceAxis: XZ
+  - label: display lower apron
+    min: -0.25, -0.14, 0.228
+    max: 0.25, 0.14, 0.304
+    color: '#5E5754'
+  - label: rear port supporting panel
+    min: -0.25, -0.095, 0.076
+    max: 0.25, 0.14, 0.228
+    color: '#5E5754'
+  - label: back connector 10
+    min: -0.1875, -0.16, 0.114
+    max: -0.15625, -0.06, 0.19
+    color: '#383838'
+  - label: back connector 12
+    min: -0.125, -0.16, 0.114
+    max: -0.09375, -0.06, 0.19
+    color: '#383838'
+  - label: back connector 14
+    min: -0.0625, -0.16, 0.114
+    max: -0.03125, -0.06, 0.19
+    color: '#383838'
+  - label: rear connection port substrate
+    min: 0.0625, -0.16, 0.114
+    max: 0.1875, -0.08, 0.19
+    color: '#383838'
+  - label: rear connection port source detail
+    min: 0.0625, -0.161, 0.114
+    max: 0.1875, -0.16, 0.19
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt028
+    surfaceAxis: XZ
+  - label: terminal lower rail
+    min: -0.25, -0.14, 0.0
+    max: 0.25, 0.14, 0.076
+    color: '#141414'
+  directionalModels:
+  - CMU3DDropshipNavigationCloudSouth
+  - CMU3DDropshipNavigationCloudNorth
+  - CMU3DDropshipNavigationCloudEast
+  - CMU3DDropshipNavigationCloudWest
+- type: cmu3DModel
+  id: CMU3DDropshipNavigationCloudEast
+  label: Dropship navigation terminal / east
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMComputerDropshipNavigationPlanetside
+  referenceRsi: /Textures/_RMC14/Structures/Machines/dropship_nav_computer.rsi
+  referenceState: 'on'
+  referenceDirection: 2
+  sourceDirections: 4
+  description: On state frame zero, explicit RSI direction 2. Direction-specific connected casing, separate instrument
+    recess and original small control surfaces. Original five-frame cycle, off/broken and terminal UI unbound; these
+    are static direction studies. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction
+    and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation
+    remains unverified. Source Sprite offsets remain documented rather than copied into world elevation. Layer animation,
+    UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: side stepped rear body
+    min: -0.3125, -0.13, 0.038
+    max: -0.15625, 0.14, 0.722
+    color: '#867872'
+  - label: side main screen backing
+    min: -0.15625, -0.09, 0.038
+    max: 0.03125, 0.14, 0.532
+    color: '#5E5754'
+  - label: keyboard end body
+    min: 0.0625, -0.14, 0.0
+    max: 0.21875, 0.14, 0.494
+    color: '#867872'
+  - label: lower connected console rail
+    min: -0.3125, -0.14, 0.0
+    max: 0.21875, 0.14, 0.038
+    color: '#5E5754'
+  - label: raised side upper rim
+    min: -0.3125, -0.16, 0.684
+    max: -0.15625, 0.14, 0.722
+    color: '#AC978E'
+  - label: raised side lower rim
+    min: -0.3125, -0.16, 0.266
+    max: -0.15625, 0.14, 0.304
+    color: '#AC978E'
+  - label: rear side connector
+    min: -0.375, -0.09, 0.19
+    max: -0.3125, 0.11, 0.608
+    color: '#18191B'
+  - label: sloped screen supporting rib 0
+    min: -0.125, -0.135, 0.266
+    max: -0.09375, 0.14, 0.57
+    color: '#D7224A'
+  - label: narrow visible side display 0 substrate
+    min: -0.125, -0.148, 0.266
+    max: -0.09375, -0.135, 0.57
+    color: '#D7224A'
+  - label: narrow visible side display 0 source detail
+    min: -0.125, -0.149, 0.266
+    max: -0.09375, -0.148, 0.57
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt029
+    surfaceAxis: XZ
+  - label: sloped screen supporting rib 1
+    min: -0.09375, -0.135, 0.228
+    max: -0.0625, 0.14, 0.532
+    color: '#BFAC67'
+  - label: narrow visible side display 1 substrate
+    min: -0.09375, -0.148, 0.228
+    max: -0.0625, -0.135, 0.532
+    color: '#BFAC67'
+  - label: narrow visible side display 1 source detail
+    min: -0.09375, -0.149, 0.228
+    max: -0.0625, -0.148, 0.532
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt030
+    surfaceAxis: XZ
+  - label: sloped screen supporting rib 2
+    min: -0.0625, -0.135, 0.19
+    max: -0.03125, 0.14, 0.494
+    color: '#D7224A'
+  - label: narrow visible side display 2 substrate
+    min: -0.0625, -0.148, 0.19
+    max: -0.03125, -0.135, 0.494
+    color: '#D7224A'
+  - label: narrow visible side display 2 source detail
+    min: -0.0625, -0.149, 0.19
+    max: -0.03125, -0.148, 0.494
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt029
+    surfaceAxis: XZ
+  - label: sloped screen supporting rib 3
+    min: -0.03125, -0.135, 0.152
+    max: 0.0, 0.14, 0.456
+    color: '#867872'
+  - label: narrow visible side display 3 substrate
+    min: -0.03125, -0.148, 0.152
+    max: 0.0, -0.135, 0.456
+    color: '#867872'
+  - label: narrow visible side display 3 source detail
+    min: -0.03125, -0.149, 0.152
+    max: 0.0, -0.148, 0.456
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt031
+    surfaceAxis: XZ
+  - label: side keyboard keys substrate
+    min: 0.09375, -0.16, 0.076
+    max: 0.1875, -0.07, 0.456
+    color: '#5E5754'
+  - label: side keyboard keys source detail
+    min: 0.09375, -0.161, 0.076
+    max: 0.1875, -0.16, 0.456
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt032
+    surfaceAxis: XZ
+  directionalModels:
+  - CMU3DDropshipNavigationCloudSouth
+  - CMU3DDropshipNavigationCloudNorth
+  - CMU3DDropshipNavigationCloudEast
+  - CMU3DDropshipNavigationCloudWest
+- type: cmu3DModel
+  id: CMU3DDropshipNavigationCloudWest
+  label: Dropship navigation terminal / west
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMComputerDropshipNavigationPlanetside
+  referenceRsi: /Textures/_RMC14/Structures/Machines/dropship_nav_computer.rsi
+  referenceState: 'on'
+  referenceDirection: 3
+  sourceDirections: 4
+  description: On state frame zero, explicit RSI direction 3. Direction-specific connected casing, separate instrument
+    recess and original small control surfaces. Original five-frame cycle, off/broken and terminal UI unbound; these
+    are static direction studies. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction
+    and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation
+    remains unverified. Source Sprite offsets remain documented rather than copied into world elevation. Layer animation,
+    UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: side stepped rear body
+    min: 0.15625, -0.13, 0.038
+    max: 0.3125, 0.14, 0.722
+    color: '#867872'
+  - label: side main screen backing
+    min: -0.03125, -0.09, 0.038
+    max: 0.15625, 0.14, 0.532
+    color: '#5E5754'
+  - label: keyboard end body
+    min: -0.21875, -0.14, 0.0
+    max: -0.0625, 0.14, 0.494
+    color: '#867872'
+  - label: lower connected console rail
+    min: -0.21875, -0.14, 0.0
+    max: 0.3125, 0.14, 0.038
+    color: '#5E5754'
+  - label: raised side upper rim
+    min: 0.15625, -0.16, 0.684
+    max: 0.3125, 0.14, 0.722
+    color: '#AC978E'
+  - label: raised side lower rim
+    min: 0.15625, -0.16, 0.266
+    max: 0.3125, 0.14, 0.304
+    color: '#AC978E'
+  - label: rear side connector
+    min: 0.3125, -0.09, 0.19
+    max: 0.375, 0.11, 0.608
+    color: '#18191B'
+  - label: sloped screen supporting rib 0
+    min: 0.09375, -0.135, 0.266
+    max: 0.125, 0.14, 0.57
+    color: '#D7224A'
+  - label: narrow visible side display 0 substrate
+    min: 0.09375, -0.148, 0.266
+    max: 0.125, -0.135, 0.57
+    color: '#D7224A'
+  - label: narrow visible side display 0 source detail
+    min: 0.09375, -0.149, 0.266
+    max: 0.125, -0.148, 0.57
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt033
+    surfaceAxis: XZ
+  - label: sloped screen supporting rib 1
+    min: 0.0625, -0.135, 0.228
+    max: 0.09375, 0.14, 0.532
+    color: '#BFAC67'
+  - label: narrow visible side display 1 substrate
+    min: 0.0625, -0.148, 0.228
+    max: 0.09375, -0.135, 0.532
+    color: '#BFAC67'
+  - label: narrow visible side display 1 source detail
+    min: 0.0625, -0.149, 0.228
+    max: 0.09375, -0.148, 0.532
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt034
+    surfaceAxis: XZ
+  - label: sloped screen supporting rib 2
+    min: 0.03125, -0.135, 0.19
+    max: 0.0625, 0.14, 0.494
+    color: '#D7224A'
+  - label: narrow visible side display 2 substrate
+    min: 0.03125, -0.148, 0.19
+    max: 0.0625, -0.135, 0.494
+    color: '#D7224A'
+  - label: narrow visible side display 2 source detail
+    min: 0.03125, -0.149, 0.19
+    max: 0.0625, -0.148, 0.494
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt033
+    surfaceAxis: XZ
+  - label: sloped screen supporting rib 3
+    min: 0.0, -0.135, 0.152
+    max: 0.03125, 0.14, 0.456
+    color: '#867872'
+  - label: narrow visible side display 3 substrate
+    min: 0.0, -0.148, 0.152
+    max: 0.03125, -0.135, 0.456
+    color: '#867872'
+  - label: narrow visible side display 3 source detail
+    min: 0.0, -0.149, 0.152
+    max: 0.03125, -0.148, 0.456
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt031
+    surfaceAxis: XZ
+  - label: side keyboard keys substrate
+    min: -0.1875, -0.16, 0.076
+    max: -0.09375, -0.07, 0.456
+    color: '#5E5754'
+  - label: side keyboard keys source detail
+    min: -0.1875, -0.161, 0.076
+    max: -0.09375, -0.16, 0.456
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt032
+    surfaceAxis: XZ
+  directionalModels:
+  - CMU3DDropshipNavigationCloudSouth
+  - CMU3DDropshipNavigationCloudNorth
+  - CMU3DDropshipNavigationCloudEast
+  - CMU3DDropshipNavigationCloudWest
+- type: cmu3DModel
+  id: CMU3DFuelPumpCloud
+  label: Fuel transfer pump
+  status: draft
+  sourcePrototypes:
+  - RMCFuelPump
+  referencePrototype: RMCFuelPump
+  referenceRsi: /Textures/_RMC14/Structures/Power/fuel_pump.rsi
+  referenceState: fuelpump_off
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Static fuelpump_off source. Four-tile connected skid carries two upright vessels, two horizontal cylinders,
+    real looped plumbing, cooling radiator, recessed status rail and independent controller. Source -0.5 X pivot retained.
+    Five ten-frame fill cycles, powered overlay, fuel UI and actual pipe connections are unbound. Art-only static draft.
+    Horizontal scale 1/32 tile/pixel; depth, height, rear construction and attachment are inferred. Isolated geometry
+    is normalized to its lowest actual mesh vertex; mounting elevation remains unverified. Source Sprite offsets remain
+    documented rather than copied into world elevation. Layer animation, UI, live visibility, native state selection
+    and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: continuous pump skid
+    min: -2.28125, -0.36, 0.0
+    max: 1.25, 0.36, 0.15625
+    color: '#1C1A1A'
+  - label: original skid warning 0 substrate
+    min: -2.25, -0.361, 0.03125
+    max: -1.53125, -0.358, 0.09375
+    color: '#1C1A1A'
+  - label: original skid warning 0 source detail
+    min: -2.25, -0.362, 0.03125
+    max: -1.53125, -0.361, 0.09375
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt035
+    surfaceAxis: XZ
+  - label: original skid warning 1 substrate
+    min: -1.4375, -0.361, 0.03125
+    max: -1.0625, -0.358, 0.09375
+    color: '#1C1A1A'
+  - label: original skid warning 1 source detail
+    min: -1.4375, -0.362, 0.03125
+    max: -1.0625, -0.361, 0.09375
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt036
+    surfaceAxis: XZ
+  - label: original skid warning 2 substrate
+    min: -0.9375, -0.361, 0.03125
+    max: -0.5625, -0.358, 0.09375
+    color: '#1C1A1A'
+  - label: original skid warning 2 source detail
+    min: -0.9375, -0.362, 0.03125
+    max: -0.5625, -0.361, 0.09375
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt036
+    surfaceAxis: XZ
+  - label: original skid warning 3 substrate
+    min: -0.375, -0.361, 0.03125
+    max: 0.5625, -0.358, 0.09375
+    color: '#1C1A1A'
+  - label: original skid warning 3 source detail
+    min: -0.375, -0.362, 0.03125
+    max: 0.5625, -0.361, 0.09375
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt037
+    surfaceAxis: XZ
+  - label: original skid warning 4 substrate
+    min: 0.71875, -0.361, 0.03125
+    max: 1.21875, -0.358, 0.09375
+    color: '#1C1A1A'
+  - label: original skid warning 4 source detail
+    min: 0.71875, -0.362, 0.03125
+    max: 1.21875, -0.361, 0.09375
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt038
+    surfaceAxis: XZ
+  - label: main control cabinet
+    min: -0.40625, -0.36, 0.15625
+    max: 0.71875, 0.36, 0.4375
+    color: '#515252'
+  - label: yellow pump warning bezel top
+    min: -0.3125, -0.372, 0.3125
+    max: -0.09375, -0.28, 0.34375
+    color: '#515252'
+  - label: yellow pump warning bezel bottom
+    min: -0.3125, -0.372, 0.1875
+    max: -0.09375, -0.28, 0.21875
+    color: '#515252'
+  - label: yellow pump warning bezel left
+    min: -0.3125, -0.372, 0.21875
+    max: -0.28125, -0.28, 0.3125
+    color: '#515252'
+  - label: yellow pump warning bezel right
+    min: -0.125, -0.372, 0.21875
+    max: -0.09375, -0.28, 0.3125
+    color: '#515252'
+  - label: yellow pump warning substrate
+    min: -0.28125, -0.34, 0.21875
+    max: -0.125, -0.3, 0.3125
+    color: '#917822'
+  - label: yellow pump warning source detail
+    min: -0.28125, -0.341, 0.21875
+    max: -0.125, -0.34, 0.3125
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt039
+    surfaceAxis: XZ
+  - label: lower monitor bezel top
+    min: -0.0625, -0.372, 0.3125
+    max: 0.34375, -0.28, 0.34375
+    color: '#515252'
+  - label: lower monitor bezel bottom
+    min: -0.0625, -0.372, 0.1875
+    max: 0.34375, -0.28, 0.21875
+    color: '#515252'
+  - label: lower monitor bezel left
+    min: -0.0625, -0.372, 0.21875
+    max: -0.03125, -0.28, 0.3125
+    color: '#515252'
+  - label: lower monitor bezel right
+    min: 0.3125, -0.372, 0.21875
+    max: 0.34375, -0.28, 0.3125
+    color: '#515252'
+  - label: lower monitor substrate
+    min: -0.03125, -0.34, 0.21875
+    max: 0.3125, -0.3, 0.3125
+    color: '#19191C'
+  - label: lower monitor source detail
+    min: -0.03125, -0.341, 0.21875
+    max: 0.3125, -0.34, 0.3125
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt040
+    surfaceAxis: XZ
+  - label: lower port bezel top
+    min: 0.40625, -0.372, 0.3125
+    max: 0.5625, -0.28, 0.34375
+    color: '#515252'
+  - label: lower port bezel bottom
+    min: 0.40625, -0.372, 0.1875
+    max: 0.5625, -0.28, 0.21875
+    color: '#515252'
+  - label: lower port bezel left
+    min: 0.40625, -0.372, 0.21875
+    max: 0.4375, -0.28, 0.3125
+    color: '#515252'
+  - label: lower port bezel right
+    min: 0.53125, -0.372, 0.21875
+    max: 0.5625, -0.28, 0.3125
+    color: '#515252'
+  - label: lower port substrate
+    min: 0.4375, -0.34, 0.21875
+    max: 0.53125, -0.3, 0.3125
+    color: '#272729'
+  - label: lower port source detail
+    min: 0.4375, -0.341, 0.21875
+    max: 0.53125, -0.34, 0.3125
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt041
+    surfaceAxis: XZ
+  - label: small lower legend bezel top
+    min: 0.59375, -0.372, 0.3125
+    max: 0.71875, -0.28, 0.34375
+    color: '#515252'
+  - label: small lower legend bezel bottom
+    min: 0.59375, -0.372, 0.1875
+    max: 0.71875, -0.28, 0.21875
+    color: '#515252'
+  - label: small lower legend bezel left
+    min: 0.59375, -0.372, 0.21875
+    max: 0.625, -0.28, 0.3125
+    color: '#515252'
+  - label: small lower legend bezel right
+    min: 0.6875, -0.372, 0.21875
+    max: 0.71875, -0.28, 0.3125
+    color: '#515252'
+  - label: small lower legend substrate
+    min: 0.625, -0.34, 0.21875
+    max: 0.6875, -0.3, 0.3125
+    color: '#625B57'
+  - label: small lower legend source detail
+    min: 0.625, -0.341, 0.21875
+    max: 0.6875, -0.34, 0.3125
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt042
+    surfaceAxis: XZ
+  - label: vertical stainless tank 0
+    min: -1.4375, -0.31, 0.3125
+    max: -1.03125, 0.36, 1.03125
+    color: '#8D9B9A'
+    shape: CylinderZ
+  - label: rounded tank shoulder 0
+    min: -1.4375, -0.31, 0.90625
+    max: -1.03125, 0.36, 1.15625
+    color: '#8D9B9A'
+    shape: Ellipsoid
+  - label: tank lower reinforcing collar 0
+    min: -1.46875, -0.37, 0.15625
+    max: -1.0, 0.38, 0.4375
+    color: '#666767'
+    shape: CylinderZ
+  - label: tank drain cover 0 top
+    min: -1.375, -0.388, 0.34375
+    max: -1.09375, -0.3, 0.375
+    color: '#666767'
+  - label: tank drain cover 0 bottom
+    min: -1.375, -0.388, 0.1875
+    max: -1.09375, -0.3, 0.21875
+    color: '#666767'
+  - label: tank drain cover 0 left
+    min: -1.375, -0.388, 0.21875
+    max: -1.34375, -0.3, 0.34375
+    color: '#666767'
+  - label: tank drain cover 0 right
+    min: -1.125, -0.388, 0.21875
+    max: -1.09375, -0.3, 0.34375
+    color: '#666767'
+  - label: tank drain symbol 0 substrate
+    min: -1.3125, -0.382, 0.21875
+    max: -1.15625, -0.34, 0.34375
+    color: '#666767'
+  - label: tank drain symbol 0 source detail
+    min: -1.3125, -0.383, 0.21875
+    max: -1.15625, -0.382, 0.34375
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt043
+    surfaceAxis: XZ
+  - label: tank rear inlet 0
+    min: -1.53125, -0.11, 0.8125
+    max: -1.375, 0.14, 0.9375
+    color: '#302F2F'
+    shape: CylinderX
+  - label: vertical stainless tank 1
+    min: -0.9375, -0.31, 0.3125
+    max: -0.53125, 0.36, 1.03125
+    color: '#8D9B9A'
+    shape: CylinderZ
+  - label: rounded tank shoulder 1
+    min: -0.9375, -0.31, 0.90625
+    max: -0.53125, 0.36, 1.15625
+    color: '#8D9B9A'
+    shape: Ellipsoid
+  - label: tank lower reinforcing collar 1
+    min: -0.96875, -0.37, 0.15625
+    max: -0.5, 0.38, 0.4375
+    color: '#666767'
+    shape: CylinderZ
+  - label: tank drain cover 1 top
+    min: -0.875, -0.388, 0.34375
+    max: -0.59375, -0.3, 0.375
+    color: '#666767'
+  - label: tank drain cover 1 bottom
+    min: -0.875, -0.388, 0.1875
+    max: -0.59375, -0.3, 0.21875
+    color: '#666767'
+  - label: tank drain cover 1 left
+    min: -0.875, -0.388, 0.21875
+    max: -0.84375, -0.3, 0.34375
+    color: '#666767'
+  - label: tank drain cover 1 right
+    min: -0.625, -0.388, 0.21875
+    max: -0.59375, -0.3, 0.34375
+    color: '#666767'
+  - label: tank drain symbol 1 substrate
+    min: -0.8125, -0.382, 0.21875
+    max: -0.65625, -0.34, 0.34375
+    color: '#666767'
+  - label: tank drain symbol 1 source detail
+    min: -0.8125, -0.383, 0.21875
+    max: -0.65625, -0.382, 0.34375
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt043
+    surfaceAxis: XZ
+  - label: tank rear inlet 1
+    min: -1.03125, -0.11, 0.8125
+    max: -0.875, 0.14, 0.9375
+    color: '#302F2F'
+    shape: CylinderX
+  - label: horizontal pump cylinder 0
+    min: -0.4375, -0.32, 0.90625
+    max: 0.75, 0.36, 1.15625
+    color: '#ABCBCA'
+    shape: CylinderX
+  - label: cylinder collar (0, 68)
+    min: -0.375, -0.342, 0.90625
+    max: -0.3125, 0.38, 1.15625
+    color: '#ABCBCA'
+    shape: CylinderX
+  - label: cylinder collar (0, 85)
+    min: 0.15625, -0.342, 0.90625
+    max: 0.21875, 0.38, 1.15625
+    color: '#ABCBCA'
+    shape: CylinderX
+  - label: cylinder collar (0, 102)
+    min: 0.6875, -0.342, 0.90625
+    max: 0.75, 0.38, 1.15625
+    color: '#ABCBCA'
+    shape: CylinderX
+  - label: horizontal pump cylinder 1
+    min: -0.4375, -0.32, 0.65625
+    max: 0.75, 0.36, 0.90625
+    color: '#ABCBCA'
+    shape: CylinderX
+  - label: cylinder collar (1, 68)
+    min: -0.375, -0.342, 0.65625
+    max: -0.3125, 0.38, 0.90625
+    color: '#ABCBCA'
+    shape: CylinderX
+  - label: cylinder collar (1, 85)
+    min: 0.15625, -0.342, 0.65625
+    max: 0.21875, 0.38, 0.90625
+    color: '#ABCBCA'
+    shape: CylinderX
+  - label: cylinder collar (1, 102)
+    min: 0.6875, -0.342, 0.65625
+    max: 0.75, 0.38, 0.90625
+    color: '#ABCBCA'
+    shape: CylinderX
+  - label: horizontal cylinder cradle
+    min: -0.40625, -0.36, 0.40625
+    max: 0.75, 0.36, 0.53125
+    color: '#717E7D'
+  - label: main status enclosure top
+    min: -0.375, -0.39, 0.71875
+    max: 0.71875, -0.23, 0.75
+    color: '#302F2F'
+  - label: main status enclosure bottom
+    min: -0.375, -0.39, 0.5
+    max: 0.71875, -0.23, 0.53125
+    color: '#302F2F'
+  - label: main status enclosure left
+    min: -0.375, -0.39, 0.53125
+    max: -0.34375, -0.23, 0.71875
+    color: '#302F2F'
+  - label: main status enclosure right
+    min: 0.6875, -0.39, 0.53125
+    max: 0.71875, -0.23, 0.71875
+    color: '#302F2F'
+  - label: status rail rear
+    min: -0.34375, -0.3, 0.53125
+    max: 0.6875, -0.28, 0.71875
+    color: '#1D1D1F'
+  - label: pale status lamps substrate
+    min: 0.28125, -0.317, 0.59375
+    max: 0.4375, -0.285, 0.6875
+    color: '#131314'
+  - label: pale status lamps source detail
+    min: 0.28125, -0.318, 0.59375
+    max: 0.4375, -0.317, 0.6875
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt044
+    surfaceAxis: XZ
+  - label: purple status characters substrate
+    min: 0.46875, -0.317, 0.59375
+    max: 0.625, -0.285, 0.6875
+    color: '#131314'
+  - label: purple status characters source detail
+    min: 0.46875, -0.318, 0.59375
+    max: 0.625, -0.317, 0.6875
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt045
+    surfaceAxis: XZ
+  - label: left cooling radiator backing
+    min: -2.21875, 0.2, 0.25
+    max: -1.96875, 0.36, 0.59375
+    color: '#1C1A1A'
+  - label: left radiator rim top
+    min: -2.25, -0.24, 0.59375
+    max: -1.9375, 0.36, 0.625
+    color: '#434242'
+  - label: left radiator rim bottom
+    min: -2.25, -0.24, 0.25
+    max: -1.9375, 0.36, 0.28125
+    color: '#434242'
+  - label: left radiator rim left
+    min: -2.25, -0.24, 0.28125
+    max: -2.21875, 0.36, 0.59375
+    color: '#434242'
+  - label: left radiator rim right
+    min: -1.96875, -0.24, 0.28125
+    max: -1.9375, 0.36, 0.59375
+    color: '#434242'
+  - label: left radiator slat 10
+    min: -2.1875, -0.24, 0.28125
+    max: -2.15625, 0.36, 0.59375
+    color: '#131314'
+  - label: left radiator slat 12
+    min: -2.125, -0.24, 0.28125
+    max: -2.09375, 0.36, 0.59375
+    color: '#131314'
+  - label: left radiator slat 14
+    min: -2.0625, -0.24, 0.28125
+    max: -2.03125, 0.36, 0.59375
+    color: '#131314'
+  - label: left radiator slat 16
+    min: -2.0, -0.24, 0.28125
+    max: -1.96875, 0.36, 0.59375
+    color: '#131314'
+  - label: left radiator platform
+    min: -2.25, -0.36, 0.15625
+    max: -1.46875, 0.36, 0.25
+    color: '#8D9B9A'
+  - label: connected outer pipe (0, 0)
+    min: -1.95125, -0.155, 0.34375
+    max: -1.86125, -0.065, 0.53125
+    color: '#1C1A1A'
+    shape: CylinderZ
+    pitch: -0.0
+    yaw: 0.0
+  - label: connected outer pipe (0, 1)
+    min: -1.88875, -0.155, 0.263701
+    max: -1.79875, -0.065, 0.392549
+    color: '#1C1A1A'
+    shape: CylinderZ
+    pitch: -75.96375653207353
+    yaw: 180.0
+  - label: connected outer pipe (0, 2)
+    min: -1.779375, -0.155, 0.293084
+    max: -1.689375, -0.065, 0.425666
+    color: '#1C1A1A'
+    shape: CylinderZ
+    pitch: -45.0
+    yaw: 0.0
+  - label: connected outer pipe (0, 3)
+    min: -1.7325, -0.155, 0.40625
+    max: -1.6425, -0.065, 0.59375
+    color: '#1C1A1A'
+    shape: CylinderZ
+    pitch: -0.0
+    yaw: 0.0
+  - label: connected outer pipe (1, 0)
+    min: -1.88875, -0.155, 0.618982
+    max: -1.79875, -0.065, 0.787268
+    color: '#1C1A1A'
+    shape: CylinderZ
+    pitch: -21.801409486351798
+    yaw: 0.0
+  - label: connected outer pipe (1, 1)
+    min: -1.76375, -0.155, 0.723309
+    max: -1.67375, -0.065, 0.932941
+    color: '#1C1A1A'
+    shape: CylinderZ
+    pitch: -63.43494882292201
+    yaw: 0.0
+  - label: connected outer pipe (1, 2)
+    min: -1.6075, -0.155, 0.8125
+    max: -1.5175, -0.065, 0.9375
+    color: '#1C1A1A'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 0.0
+  - label: connected outer pipe (2, 0)
+    min: 0.814375, -0.155, 0.984375
+    max: 0.904375, -0.065, 1.140625
+    color: '#272729'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 0.0
+  - label: connected outer pipe (2, 1)
+    min: 0.92375, -0.155, 0.987056
+    max: 1.01375, -0.065, 1.075444
+    color: '#272729'
+    shape: CylinderZ
+    pitch: -45.00000000000001
+    yaw: 180.0
+  - label: connected outer pipe (2, 2)
+    min: 0.955, -0.155, 0.71875
+    max: 1.045, -0.065, 1.0
+    color: '#272729'
+    shape: CylinderZ
+    pitch: -0.0
+    yaw: 0.0
+  - label: connected outer pipe (3, 0)
+    min: 0.79875, -0.155, 0.71875
+    max: 0.88875, -0.065, 0.84375
+    color: '#272729'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 0.0
+  - label: connected outer pipe (3, 1)
+    min: 0.8925, -0.155, 0.678038
+    max: 0.9825, -0.065, 0.790712
+    color: '#272729'
+    shape: CylinderZ
+    pitch: -33.690067525979785
+    yaw: 180.0
+  - label: connected outer pipe (3, 2)
+    min: 0.92375, -0.155, 0.375
+    max: 1.01375, -0.065, 0.6875
+    color: '#272729'
+    shape: CylinderZ
+    pitch: -0.0
+    yaw: 0.0
+  - label: connected outer pipe (3, 3)
+    min: 0.970625, -0.155, 0.287413
+    max: 1.060625, -0.065, 0.400087
+    color: '#272729'
+    shape: CylinderZ
+    pitch: -56.309932474020215
+    yaw: 180.0
+  - label: connected outer pipe (3, 4)
+    min: 1.064375, -0.155, 0.287413
+    max: 1.154375, -0.065, 0.400087
+    color: '#272729'
+    shape: CylinderZ
+    pitch: -56.309932474020215
+    yaw: 0.0
+  - label: connected outer pipe (3, 5)
+    min: 1.11125, -0.155, 0.375
+    max: 1.20125, -0.065, 0.75
+    color: '#272729'
+    shape: CylinderZ
+    pitch: -0.0
+    yaw: 0.0
+  - label: right outer pipe support
+    min: 0.75, -0.28, 0.15625
+    max: 1.28125, 0.36, 0.40625
+    color: '#515252'
+  - label: right stop post
+    min: 1.21875, -0.28, 0.15625
+    max: 1.28125, 0.36, 0.6875
+    color: '#1C1A1A'
+- type: cmu3DModel
+  id: CMU3DBlueCanisterCloud
+  label: Blue oxygen canister
+  status: draft
+  sourcePrototypes:
+  - RMCCanisterBlue
+  referencePrototype: RMCCanisterBlue
+  referenceRsi: /Textures/_RMC14/Structures/atmos.rsi
+  referenceState: blue
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Exact blue state. Round vessel, dark retaining hoops, truly open segmented crown with four connected supports,
+    internal valve, pressure-color marks and projecting service controller. Source top opening is interpreted in the
+    horizontal plane. Destruction spawns a different prototype; no broken, gas simulation or valve behavior claimed.
+    Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction and attachment are inferred.
+    Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation remains unverified. Source Sprite
+    offsets remain documented rather than copied into world elevation. Layer animation, UI, live visibility, native state
+    selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: blue cylindrical pressure vessel
+    min: -0.27, -0.27, 0.11
+    max: 0.27, 0.27, 0.82
+    color: '#305DA1'
+    shape: CylinderZ
+  - label: rounded lower pressure head
+    min: -0.27, -0.27, 0.02
+    max: 0.27, 0.27, 0.23
+    color: '#305DA1'
+    shape: Ellipsoid
+  - label: blue foot ring
+    min: -0.235, -0.235, 0.0
+    max: 0.235, 0.235, 0.085
+    color: '#254B7A'
+    shape: CylinderZ
+  - label: rounded upper vessel shoulder
+    min: -0.27, -0.27, 0.71
+    max: 0.27, 0.27, 0.91
+    color: '#4281DE'
+    shape: Ellipsoid
+  - label: open crown rim segment 0
+    min: 0.175, -0.027, 0.945
+    max: 0.285, 0.027, 1.015
+    color: '#4281DE'
+    yaw: 90.0
+  - label: open crown rim segment 1
+    min: 0.157492, 0.061017, 0.945
+    max: 0.267492, 0.115017, 1.015
+    color: '#4281DE'
+    yaw: 112.5
+  - label: open crown rim segment 2
+    min: 0.107635, 0.135635, 0.945
+    max: 0.217635, 0.189635, 1.015
+    color: '#4281DE'
+    yaw: 135.0
+  - label: open crown rim segment 3
+    min: 0.033017, 0.185492, 0.945
+    max: 0.143017, 0.239492, 1.015
+    color: '#4281DE'
+    yaw: 157.5
+  - label: open crown rim segment 4
+    min: -0.055, 0.203, 0.945
+    max: 0.055, 0.257, 1.015
+    color: '#4281DE'
+    yaw: 180.0
+  - label: open crown rim segment 5
+    min: -0.143017, 0.185492, 0.945
+    max: -0.033017, 0.239492, 1.015
+    color: '#4281DE'
+    yaw: 202.5
+  - label: open crown rim segment 6
+    min: -0.217635, 0.135635, 0.945
+    max: -0.107635, 0.189635, 1.015
+    color: '#4281DE'
+    yaw: 225.0
+  - label: open crown rim segment 7
+    min: -0.267492, 0.061017, 0.945
+    max: -0.157492, 0.115017, 1.015
+    color: '#4281DE'
+    yaw: 247.5
+  - label: open crown rim segment 8
+    min: -0.285, -0.027, 0.945
+    max: -0.175, 0.027, 1.015
+    color: '#4281DE'
+    yaw: 270.0
+  - label: open crown rim segment 9
+    min: -0.267492, -0.115017, 0.945
+    max: -0.157492, -0.061017, 1.015
+    color: '#4281DE'
+    yaw: 292.5
+  - label: open crown rim segment 10
+    min: -0.217635, -0.189635, 0.945
+    max: -0.107635, -0.135635, 1.015
+    color: '#4281DE'
+    yaw: 315.0
+  - label: open crown rim segment 11
+    min: -0.143017, -0.239492, 0.945
+    max: -0.033017, -0.185492, 1.015
+    color: '#4281DE'
+    yaw: 337.5
+  - label: open crown rim segment 12
+    min: -0.055, -0.257, 0.945
+    max: 0.055, -0.203, 1.015
+    color: '#4281DE'
+    yaw: 360.0
+  - label: open crown rim segment 13
+    min: 0.033017, -0.239492, 0.945
+    max: 0.143017, -0.185492, 1.015
+    color: '#4281DE'
+    yaw: 22.5
+  - label: open crown rim segment 14
+    min: 0.107635, -0.189635, 0.945
+    max: 0.217635, -0.135635, 1.015
+    color: '#4281DE'
+    yaw: 45.0
+  - label: open crown rim segment 15
+    min: 0.157492, -0.115017, 0.945
+    max: 0.267492, -0.061017, 1.015
+    color: '#4281DE'
+    yaw: 67.5
+  - label: crown connected support 0
+    min: 0.204, -0.026, 0.845
+    max: 0.256, 0.026, 0.95
+    color: '#4281DE'
+  - label: crown connected support 1.5707963267948966
+    min: -0.026, 0.204, 0.845
+    max: 0.026, 0.256, 0.95
+    color: '#4281DE'
+  - label: crown connected support 3.141592653589793
+    min: -0.256, -0.026, 0.845
+    max: -0.204, 0.026, 0.95
+    color: '#4281DE'
+  - label: crown connected support 4.71238898038469
+    min: -0.026, -0.256, 0.845
+    max: 0.026, -0.204, 0.95
+    color: '#4281DE'
+  - label: central valve stem
+    min: -0.028, -0.028, 0.885
+    max: 0.028, 0.028, 0.969
+    color: '#B9B9B9'
+    shape: CylinderZ
+  - label: central valve crosshead
+    min: -0.064, -0.022, 0.95
+    max: 0.064, 0.022, 0.986
+    color: '#B9B9B9'
+    shape: CylinderX
+  - label: black retaining hoop 0.17
+    min: -0.278, -0.278, 0.17
+    max: 0.278, 0.278, 0.213
+    color: '#151515'
+    shape: CylinderZ
+  - label: black retaining hoop 0.67
+    min: -0.278, -0.278, 0.67
+    max: 0.278, 0.278, 0.713
+    color: '#151515'
+    shape: CylinderZ
+  - label: red pressure band
+    min: -0.17, -0.287, 0.67
+    max: -0.08, -0.267, 0.701
+    color: '#820A16'
+  - label: yellow pressure band
+    min: -0.08, -0.287, 0.67
+    max: 0.08, -0.267, 0.701
+    color: '#525200'
+  - label: green pressure band
+    min: 0.08, -0.287, 0.67
+    max: 0.17, -0.267, 0.701
+    color: '#045D3F'
+  - label: gray service controller
+    min: -0.18, -0.31, 0.32
+    max: 0.18, -0.19, 0.5
+    color: '#717171'
+  - label: black outlet opening
+    min: -0.16, -0.333, 0.34
+    max: -0.075, -0.3, 0.46
+    color: '#151515'
+  - label: round front valve dial
+    min: 0.0, -0.355, 0.32
+    max: 0.125, -0.31, 0.445
+    color: '#B9B9B9'
+    shape: CylinderY
+  - label: dial original markings
+    min: 0.0, -0.356, 0.32
+    max: 0.125, -0.355, 0.445
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt046
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DTwoWayLeverCloud
+  label: Two-way lever / middle
+  status: draft
+  sourcePrototypes:
+  - TwoWayLever
+  referencePrototype: TwoWayLever
+  referenceRsi: /Textures/Structures/conveyor.rsi
+  referenceState: switch-off
+  referenceDirection: 0
+  sourceDirections: 1
+  description: switch-off middle source. Solid separate handle, pivot axle, open socket and mounting foot. switch-fwd/switch-rev
+    remain inventoried source poses; no device behavior or state binding. Art-only static draft. Horizontal scale 1/32
+    tile/pixel; depth, height, rear construction and attachment are inferred. Isolated geometry is normalized to its
+    lowest actual mesh vertex; mounting elevation remains unverified. Source Sprite offsets remain documented rather
+    than copied into world elevation. Layer animation, UI, live visibility, native state selection and map contacts unverified.
+    No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: lever mounting foot
+    min: -0.09375, -0.16, 0.0
+    max: 0.09375, 0.16, 0.09375
+    color: '#7D7D7D'
+  - label: lever pivot socket top
+    min: -0.09375, -0.17, 0.09375
+    max: 0.09375, 0.17, 0.125
+    color: '#747474'
+  - label: lever pivot socket bottom
+    min: -0.09375, -0.17, 0.03125
+    max: 0.09375, 0.17, 0.0625
+    color: '#747474'
+  - label: lever pivot socket left
+    min: -0.09375, -0.17, 0.0625
+    max: -0.0625, 0.17, 0.09375
+    color: '#747474'
+  - label: lever pivot socket right
+    min: 0.0625, -0.17, 0.0625
+    max: 0.09375, 0.17, 0.09375
+    color: '#747474'
+  - label: central lever shaft
+    min: -0.03125, -0.033, 0.0625
+    max: 0.03125, 0.033, 0.40625
+    color: '#F3F3F3'
+    shape: CylinderZ
+  - label: black upper handle grip 10
+    min: -0.03125, -0.046, 0.46875
+    max: 0.03125, 0.046, 0.5
+    color: '#0F1113'
+    shape: CylinderZ
+  - label: black upper handle grip 12
+    min: -0.03125, -0.046, 0.40625
+    max: 0.03125, 0.046, 0.4375
+    color: '#0F1113'
+    shape: CylinderZ
+  - label: upper grip core
+    min: -0.03125, -0.032, 0.375
+    max: 0.03125, 0.032, 0.5
+    color: '#A6A6A6'
+    shape: CylinderZ
+  - label: pivot cross axle
+    min: -0.0625, -0.09, 0.09375
+    max: 0.0625, 0.09, 0.125
+    color: '#0F1113'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DPortableSurgicalBedCloud
+  label: Portable surgical bed / unfolded
+  status: draft
+  sourcePrototypes:
+  - CMPortableSurgicalBed
+  referencePrototype: CMPortableSurgicalBed
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/rollerbeds.rsi
+  referenceState: surgical_down
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Visible surgical_down only. Three separate pale cushion sections, two straps, connected low frame and
+    four undercarriage casters. Height/depth are inferred from the projected source. Buckled surgical_up, folded shape,
+    held/worn appearances and fold transitions are unbound. Art-only static draft. Horizontal scale 1/32 tile/pixel;
+    depth, height, rear construction and attachment are inferred. Isolated geometry is normalized to its lowest actual
+    mesh vertex; mounting elevation remains unverified. Source Sprite offsets remain documented rather than copied into
+    world elevation. Layer animation, UI, live visibility, native state selection and map contacts unverified. No fidelity
+    approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: bed lower longitudinal frame
+    min: -0.48, -0.23, 0.145
+    max: 0.48, 0.23, 0.215
+    color: '#413B2F'
+  - label: bed side rail -0.245
+    min: -0.48, -0.245, 0.215
+    max: 0.48, -0.215, 0.315
+    color: '#E3DFD8'
+  - label: bed side rail 0.215
+    min: -0.48, 0.215, 0.215
+    max: 0.48, 0.245, 0.315
+    color: '#E3DFD8'
+  - label: bed end rail -0.47
+    min: -0.47, -0.215, 0.215
+    max: -0.44, 0.215, 0.315
+    color: '#E3DFD8'
+  - label: bed end rail 0.445
+    min: 0.445, -0.215, 0.215
+    max: 0.475, 0.215, 0.315
+    color: '#E3DFD8'
+  - label: separate surgical cushion 0
+    min: -0.41, -0.18, 0.215
+    max: -0.15, 0.18, 0.305
+    color: '#C6BEAF'
+  - label: cushion raised seam 0
+    min: -0.41, -0.18, 0.295
+    max: -0.385, 0.18, 0.312
+    color: '#C6BEAF'
+  - label: separate surgical cushion 1
+    min: -0.12, -0.18, 0.215
+    max: 0.12, 0.18, 0.305
+    color: '#C6BEAF'
+  - label: cushion raised seam 1
+    min: -0.12, -0.18, 0.295
+    max: -0.095, 0.18, 0.312
+    color: '#C6BEAF'
+  - label: separate surgical cushion 2
+    min: 0.15, -0.18, 0.215
+    max: 0.41, 0.18, 0.305
+    color: '#C6BEAF'
+  - label: cushion raised seam 2
+    min: 0.15, -0.18, 0.295
+    max: 0.175, 0.18, 0.312
+    color: '#C6BEAF'
+  - label: bed lower support (-0.34, -0.17)
+    min: -0.357, -0.187, 0.055
+    max: -0.323, -0.153, 0.165
+    color: '#101113'
+  - label: small bed caster (-0.34, -0.17)
+    min: -0.382, -0.194, -0.0
+    max: -0.298, -0.146, 0.075
+    color: '#8C8C8C'
+    shape: CylinderY
+  - label: bed lower support (-0.34, 0.17)
+    min: -0.357, 0.153, 0.055
+    max: -0.323, 0.187, 0.165
+    color: '#101113'
+  - label: small bed caster (-0.34, 0.17)
+    min: -0.382, 0.146, -0.0
+    max: -0.298, 0.194, 0.075
+    color: '#8C8C8C'
+    shape: CylinderY
+  - label: bed lower support (0.34, -0.17)
+    min: 0.323, -0.187, 0.055
+    max: 0.357, -0.153, 0.165
+    color: '#101113'
+  - label: small bed caster (0.34, -0.17)
+    min: 0.298, -0.194, -0.0
+    max: 0.382, -0.146, 0.075
+    color: '#8C8C8C'
+    shape: CylinderY
+  - label: bed lower support (0.34, 0.17)
+    min: 0.323, 0.153, 0.055
+    max: 0.357, 0.187, 0.165
+    color: '#101113'
+  - label: small bed caster (0.34, 0.17)
+    min: 0.298, 0.146, -0.0
+    max: 0.382, 0.194, 0.075
+    color: '#8C8C8C'
+    shape: CylinderY
+  - label: cushion separator strap -0.17
+    min: -0.17, -0.22, 0.295
+    max: -0.135, 0.22, 0.318
+    color: '#E3DFD8'
+  - label: cushion separator strap 0.13
+    min: 0.13, -0.22, 0.295
+    max: 0.165, 0.22, 0.318
+    color: '#E3DFD8'
+- type: cmu3DModel
+  id: CMU3DWaterCoolerStacksCloud
+  label: Water cooler with spare bottles
+  status: draft
+  sourcePrototypes:
+  - RMCWaterCoolerStacks
+  referencePrototype: RMCWaterCoolerStacks
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/water_cooler.rsi
+  referenceState: water_cooler_2
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Exact water_cooler_2 source. Real dispensing recess and two taps; separate ribbed top bottle and two spare
+    bottles at different depth. Spare bottles are intentionally separate source-defined subassemblies. Refractive liquid,
+    fill changes, dispensing UI and bin contents remain unverified. Art-only static draft. Horizontal scale 1/32 tile/pixel;
+    depth, height, rear construction and attachment are inferred. Isolated geometry is normalized to its lowest actual
+    mesh vertex; mounting elevation remains unverified. Source Sprite offsets remain documented rather than copied into
+    world elevation. Layer animation, UI, live visibility, native state selection and map contacts unverified. No fidelity
+    approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: cooler enclosed lower cabinet
+    min: -0.1875, -0.22, 0.0
+    max: 0.15625, 0.22, 0.25
+    color: '#9D9A93'
+  - label: left cabinet stile
+    min: -0.1875, -0.22, 0.21875
+    max: -0.15625, 0.22, 0.59375
+    color: '#2A2926'
+  - label: right cabinet stile
+    min: 0.125, -0.22, 0.21875
+    max: 0.15625, 0.22, 0.59375
+    color: '#2A2926'
+  - label: cabinet back
+    min: -0.15625, 0.19, 0.21875
+    max: 0.125, 0.22, 0.59375
+    color: '#9D9A93'
+  - label: bottle supporting counter
+    min: -0.1875, -0.22, 0.40625
+    max: 0.15625, 0.22, 0.46875
+    color: '#BFBBB2'
+  - label: dispensing cavity rim top
+    min: -0.15625, -0.23, 0.375
+    max: 0.125, -0.11, 0.40625
+    color: '#9D9A93'
+  - label: dispensing cavity rim bottom
+    min: -0.15625, -0.23, 0.21875
+    max: 0.125, -0.11, 0.25
+    color: '#9D9A93'
+  - label: dispensing cavity rim left
+    min: -0.15625, -0.23, 0.25
+    max: -0.125, -0.11, 0.375
+    color: '#9D9A93'
+  - label: dispensing cavity rim right
+    min: 0.09375, -0.23, 0.25
+    max: 0.125, -0.11, 0.375
+    color: '#9D9A93'
+  - label: dispensing well back
+    min: -0.125, -0.08, 0.25
+    max: 0.09375, -0.05, 0.375
+    color: '#3C3A36'
+  - label: tap stem 14
+    min: -0.0625, -0.2, 0.28125
+    max: -0.03125, -0.08, 0.34375
+    color: '#BD4848'
+    shape: CylinderZ
+  - label: tap spout 14
+    min: -0.0625, -0.26, 0.28125
+    max: -0.03125, -0.12, 0.3125
+    color: '#BD4848'
+  - label: tap stem 16
+    min: 0.0, -0.2, 0.28125
+    max: 0.03125, -0.08, 0.34375
+    color: '#82B1B8'
+    shape: CylinderZ
+  - label: tap spout 16
+    min: 0.0, -0.26, 0.28125
+    max: 0.03125, -0.12, 0.3125
+    color: '#82B1B8'
+  - label: drip tray
+    min: -0.125, -0.25, 0.21875
+    max: 0.09375, -0.05, 0.25
+    color: '#BFBBB2'
+  - label: translucent-blue bottle solid 0
+    min: -0.125, -0.12, 0.5
+    max: 0.09375, 0.12, 0.78125
+    color: '#B1C7C4'
+    shape: CylinderZ
+  - label: bottle top shoulder 0
+    min: -0.125, -0.12, 0.71875
+    max: 0.09375, 0.12, 0.8125
+    color: '#B1C7C4'
+    shape: Ellipsoid
+  - label: bottle foot 0
+    min: -0.09375, -0.11, 0.46875
+    max: 0.0625, 0.11, 0.53125
+    color: '#495452'
+    shape: CylinderZ
+  - label: bottle rib (0, 8)
+    min: -0.125, -0.128, 0.6875
+    max: 0.09375, 0.128, 0.71875
+    color: '#495452'
+    shape: CylinderZ
+  - label: bottle rib (0, 10)
+    min: -0.125, -0.128, 0.625
+    max: 0.09375, 0.128, 0.65625
+    color: '#859392'
+    shape: CylinderZ
+  - label: bottle rib (0, 12)
+    min: -0.125, -0.128, 0.5625
+    max: 0.09375, 0.128, 0.59375
+    color: '#7E8C8B'
+    shape: CylinderZ
+  - label: bottle rib (0, 14)
+    min: -0.125, -0.128, 0.5
+    max: 0.09375, 0.128, 0.53125
+    color: '#909A97'
+    shape: CylinderZ
+  - label: translucent-blue bottle solid 1
+    min: 0.15625, 0.06, 0.125
+    max: 0.375, 0.32, 0.40625
+    color: '#B1C7C4'
+    shape: CylinderZ
+  - label: bottle top shoulder 1
+    min: 0.15625, 0.06, 0.34375
+    max: 0.375, 0.32, 0.4375
+    color: '#B1C7C4'
+    shape: Ellipsoid
+  - label: bottle foot 1
+    min: 0.1875, 0.07, 0.09375
+    max: 0.34375, 0.31, 0.15625
+    color: '#495452'
+    shape: CylinderZ
+  - label: bottle rib (1, 20)
+    min: 0.15625, 0.052, 0.3125
+    max: 0.375, 0.328, 0.34375
+    color: '#495452'
+    shape: CylinderZ
+  - label: bottle rib (1, 22)
+    min: 0.15625, 0.052, 0.25
+    max: 0.375, 0.328, 0.28125
+    color: '#859392'
+    shape: CylinderZ
+  - label: bottle rib (1, 24)
+    min: 0.15625, 0.052, 0.1875
+    max: 0.375, 0.328, 0.21875
+    color: '#7E8C8B'
+    shape: CylinderZ
+  - label: bottle rib (1, 26)
+    min: 0.15625, 0.052, 0.125
+    max: 0.375, 0.328, 0.15625
+    color: '#859392'
+    shape: CylinderZ
+  - label: translucent-blue bottle solid 2
+    min: 0.25, -0.24, 0.03125
+    max: 0.46875, 0.02, 0.3125
+    color: '#ACC1BE'
+    shape: CylinderZ
+  - label: bottle top shoulder 2
+    min: 0.25, -0.24, 0.25
+    max: 0.46875, 0.02, 0.34375
+    color: '#ACC1BE'
+    shape: Ellipsoid
+  - label: bottle foot 2
+    min: 0.28125, -0.23, 0.0
+    max: 0.4375, 0.01, 0.0625
+    color: '#495452'
+    shape: CylinderZ
+  - label: bottle rib (2, 23)
+    min: 0.25, -0.248, 0.21875
+    max: 0.46875, 0.028, 0.25
+    color: '#495452'
+    shape: CylinderZ
+  - label: bottle rib (2, 25)
+    min: 0.25, -0.248, 0.15625
+    max: 0.46875, 0.028, 0.1875
+    color: '#91A09F'
+    shape: CylinderZ
+  - label: bottle rib (2, 27)
+    min: 0.25, -0.248, 0.09375
+    max: 0.46875, 0.028, 0.125
+    color: '#7E8C8B'
+    shape: CylinderZ
+  - label: bottle rib (2, 29)
+    min: 0.25, -0.248, 0.03125
+    max: 0.46875, 0.028, 0.0625
+    color: '#859392'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DANPRCMastAntennaCloud
+  label: AN/PRC mast antenna attachment
+  status: draft
+  sourcePrototypes:
+  - ANPRCMastAntenna
+  referencePrototype: ANPRCMastAntenna
+  referenceRsi: /Textures/CMU14/Objects/Radio/anprc117g.rsi
+  referenceState: antenna_m
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Exact antenna_m loose-item source. Diagonal narrow rod, joined folded support frame, sleeve and two branches;
+    no full-size deployed mast is inferred from this item sprite. Item rotation, equipped radio overlay, held/worn and
+    elevation handling unverified. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height, rear construction
+    and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex; mounting elevation
+    remains unverified. Source Sprite offsets remain documented rather than copied into world elevation. Layer animation,
+    UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: main diagonal antenna shaft
+    min: 0.083562, -0.018, 0.047863
+    max: 0.119563, 0.018, 0.910782
+    color: '#151717'
+    shape: CylinderZ
+    pitch: -42.06432655357884
+    yaw: 0.0
+  - label: left folded support
+    min: -0.291625, -0.051, 0.060358
+    max: -0.239625, 0.001, 0.413912
+    color: '#151717'
+    shape: CylinderZ
+    pitch: -45.00000000000001
+    yaw: 0.0
+  - label: right folded support
+    min: -0.197875, -0.001, -0.033392
+    max: -0.145875, 0.051, 0.320162
+    color: '#151717'
+    shape: CylinderZ
+    pitch: -45.00000000000001
+    yaw: 0.0
+  - label: lower joined crossbar
+    min: -0.36875, -0.025, -0.001031
+    max: -0.31875, 0.025, 0.131551
+    color: '#2B2F2E'
+    shape: CylinderZ
+    pitch: -45.0
+    yaw: 180.0
+  - label: upper folded frame tie
+    min: -0.11875, -0.025, 0.248969
+    max: -0.06875, 0.025, 0.381551
+    color: '#53615A'
+    shape: CylinderZ
+    pitch: -45.0
+    yaw: 180.0
+  - label: short diagonal central sleeve
+    min: -0.238125, -0.035, 0.082455
+    max: -0.168125, 0.035, 0.391815
+    color: '#151717'
+    shape: CylinderZ
+    pitch: -45.0
+    yaw: 0.0
+  - label: upright attachment branch
+    min: -0.165625, -0.025, 0.34651
+    max: -0.115625, 0.025, 0.44026
+    color: '#53615A'
+    shape: CylinderZ
+    pitch: -0.0
+    yaw: 0.0
+  - label: right mounting branch
+    min: -0.071875, -0.025, 0.237135
+    max: -0.021875, 0.025, 0.330885
+    color: '#77807B'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 0.0
+  - label: right small branch terminal
+    min: 0.029875, -0.017, 0.196423
+    max: 0.063875, 0.017, 0.309097
+    color: '#77807B'
+    shape: CylinderZ
+    pitch: -56.309932474020215
+    yaw: 180.0
+- type: cmu3DModel
+  id: CMU3DTacticalMapLargeGovforCloud
+  label: Large GOVFOR tactical map table
+  status: draft
+  sourcePrototypes:
+  - CMUTacticalMapTableLargeGovfor
+  referencePrototype: CMUTacticalMapTableLargeGovfor
+  referenceRsi: /Textures/_RMC14/Structures/Machines/large_map_table.rsi
+  referenceState: maptable
+  referenceDirection: 0
+  sourceDirections: 1
+  description: Maptable + maptable-on static source composition. Broad horizontal schematic screen recessed within separately
+    built armored rails, fixing straps and control lamps, supported by source low plinth. Schematic is original decorative
+    artwork, not live tactical information. Source +1 X pivot retained; +0.5 sprite Y remains projected elevation. Actual
+    UI, power visibility, map content and floor fit unbound. Art-only static draft. Horizontal scale 1/32 tile/pixel;
+    depth, height, rear construction and attachment are inferred. Isolated geometry is normalized to its lowest actual
+    mesh vertex; mounting elevation remains unverified. Source Sprite offsets remain documented rather than copied into
+    world elevation. Layer animation, UI, live visibility, native state selection and map contacts unverified. No fidelity
+    approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: low continuous base
+    min: -0.375, -0.78125, 0.0
+    max: 2.40625, 0.71875, 0.25
+    color: '#161616'
+  - label: inset screen solid backing
+    min: -0.15625, -0.53125, 0.25
+    max: 2.15625, 0.65625, 0.35
+    color: '#1C242B'
+  - label: original fixed map schematic
+    min: -0.09375, -0.5, 0.35
+    max: 2.125, 0.625, 0.351
+    color: '#191F26'
+  - label: original fixed map schematic original detail
+    min: -0.09375, -0.5, 0.351
+    max: 2.125, 0.625, 0.352
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt047
+    surfaceAxis: XY
+  - label: rear main rim
+    min: -0.3125, 0.65625, 0.25
+    max: 2.34375, 0.78125, 0.43
+    color: '#464646'
+  - label: front main rim
+    min: -0.3125, -0.78125, 0.25
+    max: 2.34375, -0.53125, 0.43
+    color: '#464646'
+  - label: left protective rim
+    min: -0.4375, -0.53125, 0.25
+    max: -0.15625, 0.65625, 0.43
+    color: '#464646'
+  - label: right protective rim
+    min: 2.15625, -0.53125, 0.25
+    max: 2.4375, 0.65625, 0.43
+    color: '#464646'
+  - label: left armored bezel block 0
+    min: -0.40625, 0.5, 0.42
+    max: -0.1875, 0.71875, 0.46
+    color: '#464646'
+  - label: left armored bezel block 1
+    min: -0.40625, 0.15625, 0.42
+    max: -0.1875, 0.40625, 0.46
+    color: '#464646'
+  - label: left armored bezel block 2
+    min: -0.40625, -0.4375, 0.42
+    max: -0.1875, -0.1875, 0.46
+    color: '#464646'
+  - label: left armored bezel block 3
+    min: -0.40625, -0.71875, 0.42
+    max: -0.1875, -0.53125, 0.46
+    color: '#464646'
+  - label: right armored bezel block 0
+    min: 2.1875, 0.5, 0.42
+    max: 2.40625, 0.71875, 0.46
+    color: '#464646'
+  - label: right armored bezel block 1
+    min: 2.1875, 0.15625, 0.42
+    max: 2.40625, 0.40625, 0.46
+    color: '#464646'
+  - label: right armored bezel block 2
+    min: 2.1875, -0.4375, 0.42
+    max: 2.40625, -0.1875, 0.46
+    color: '#464646'
+  - label: right armored bezel block 3
+    min: 2.1875, -0.71875, 0.42
+    max: 2.40625, -0.53125, 0.46
+    color: '#464646'
+  - label: raised rear fixing strap 14
+    min: -0.0625, 0.65625, 0.4
+    max: 0.1875, 0.8125, 0.475
+    color: '#464646'
+  - label: front fixing strap 14
+    min: -0.0625, -0.8125, 0.4
+    max: 0.1875, -0.5625, 0.475
+    color: '#464646'
+  - label: raised rear fixing strap 44
+    min: 0.875, 0.65625, 0.4
+    max: 1.125, 0.8125, 0.475
+    color: '#464646'
+  - label: front fixing strap 44
+    min: 0.875, -0.8125, 0.4
+    max: 1.125, -0.5625, 0.475
+    color: '#464646'
+  - label: raised rear fixing strap 74
+    min: 1.8125, 0.65625, 0.4
+    max: 2.0625, 0.8125, 0.475
+    color: '#2A2A2A'
+  - label: front fixing strap 74
+    min: 1.8125, -0.8125, 0.4
+    max: 2.0625, -0.5625, 0.475
+    color: '#2A2A2A'
+  - label: left side lamps
+    min: -0.375, -0.03125, 0.42
+    max: -0.25, 0.09375, 0.47
+    color: '#12171C'
+  - label: left side lamps original detail
+    min: -0.375, -0.03125, 0.47
+    max: -0.25, 0.09375, 0.471
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt048
+    surfaceAxis: XY
+  - label: right side lamps
+    min: 2.28125, -0.03125, 0.42
+    max: 2.40625, 0.09375, 0.47
+    color: '#12171C'
+  - label: right side lamps original detail
+    min: 2.28125, -0.03125, 0.47
+    max: 2.40625, 0.09375, 0.471
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt049
+    surfaceAxis: XY
+  - label: front left lamps
+    min: 0.375, -0.6875, 0.42
+    max: 0.625, -0.625, 0.47
+    color: '#1C242B'
+  - label: front left lamps original detail
+    min: 0.375, -0.6875, 0.47
+    max: 0.625, -0.625, 0.471
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt050
+    surfaceAxis: XY
+  - label: front right lamps
+    min: 1.34375, -0.6875, 0.42
+    max: 1.59375, -0.625, 0.47
+    color: '#1C242B'
+  - label: front right lamps original detail
+    min: 1.34375, -0.6875, 0.47
+    max: 1.59375, -0.625, 0.471
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt051
+    surfaceAxis: XY
+  - label: left green lamps fascia
+    min: -0.06, -0.79, 0.06
+    max: 0.1, -0.75, 0.17
+    color: '#464646'
+  - label: left green lamps original detail
+    min: -0.06, -0.793, 0.065
+    max: 0.1, -0.79, 0.16
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt052
+    surfaceAxis: XZ
+  - label: right green lamps fascia
+    min: 1.93, -0.79, 0.06
+    max: 2.06, -0.75, 0.17
+    color: '#464646'
+  - label: right green lamps original detail
+    min: 1.93, -0.793, 0.065
+    max: 2.06, -0.79, 0.16
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt053
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DCommsMastGovforCloud
+  label: GOVFOR communications mast
+  status: draft
+  sourcePrototypes:
+  - AU14CommsMastGovfor
+  referencePrototype: AU14CommsMastGovfor
+  referenceRsi: /Textures/_RMC14/Structures/communications_tower_alt.rsi
+  referenceState: comm_tower_off
+  referenceDirection: 0
+  sourceDirections: 1
+  description: comm_tower_off static intact source. Tapered four-post rack construction, depth cross ties, true open
+    bays, separate electronics covers, labels, red cable and twin top stubs. Source offset 0,1 encodes projected height;
+    it is not copied to world XY. Damaged comm_tower_destroyed and communications behavior unbound. Art-only static draft.
+    Horizontal scale 1/32 tile/pixel; depth, height, rear construction and attachment are inferred. Isolated geometry
+    is normalized to its lowest actual mesh vertex; mounting elevation remains unverified. Source Sprite offsets remain
+    documented rather than copied into world elevation. Layer animation, UI, live visibility, native state selection
+    and map contacts unverified. No fidelity approval. See SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: mast foot
+    min: -0.46875, -0.27, 0.0
+    max: 0.46875, 0.27, 0.0625
+    color: '#313131'
+  - label: stage 0 front upright 4
+    min: -0.375, -0.24, 0.03125
+    max: -0.34375, -0.175, 0.6875
+    color: '#313131'
+  - label: stage 0 rear upright 4
+    min: -0.375, 0.175, 0.03125
+    max: -0.34375, 0.24, 0.6875
+    color: '#313131'
+  - label: stage 0 front upright 27
+    min: 0.34375, -0.24, 0.03125
+    max: 0.375, -0.175, 0.6875
+    color: '#313131'
+  - label: stage 0 rear upright 27
+    min: 0.34375, 0.175, 0.03125
+    max: 0.375, 0.24, 0.6875
+    color: '#313131'
+  - label: stage 0 top tie
+    min: -0.375, -0.24, 0.65625
+    max: 0.375, 0.24, 0.6875
+    color: '#313131'
+  - label: stage 0 lower tie
+    min: -0.375, -0.24, 0.03125
+    max: 0.375, 0.24, 0.0625
+    color: '#161616'
+  - label: stage 1 front upright 5
+    min: -0.34375, -0.24, 0.625
+    max: -0.3125, -0.175, 1.5
+    color: '#161616'
+  - label: stage 1 rear upright 5
+    min: -0.34375, 0.175, 0.625
+    max: -0.3125, 0.24, 1.5
+    color: '#161616'
+  - label: stage 1 front upright 26
+    min: 0.3125, -0.24, 0.625
+    max: 0.34375, -0.175, 1.5
+    color: '#161616'
+  - label: stage 1 rear upright 26
+    min: 0.3125, 0.175, 0.625
+    max: 0.34375, 0.24, 1.5
+    color: '#161616'
+  - label: stage 1 top tie
+    min: -0.34375, -0.24, 1.46875
+    max: 0.34375, 0.24, 1.5
+    color: '#313131'
+  - label: stage 1 lower tie
+    min: -0.34375, -0.24, 0.625
+    max: 0.34375, 0.24, 0.65625
+    color: '#161616'
+  - label: stage 2 front upright 6
+    min: -0.3125, -0.24, 1.46875
+    max: -0.28125, -0.175, 1.90625
+    color: '#161616'
+  - label: stage 2 rear upright 6
+    min: -0.3125, 0.175, 1.46875
+    max: -0.28125, 0.24, 1.90625
+    color: '#161616'
+  - label: stage 2 front upright 25
+    min: 0.28125, -0.24, 1.46875
+    max: 0.3125, -0.175, 1.90625
+    color: '#161616'
+  - label: stage 2 rear upright 25
+    min: 0.28125, 0.175, 1.46875
+    max: 0.3125, 0.24, 1.90625
+    color: '#161616'
+  - label: stage 2 top tie
+    min: -0.3125, -0.24, 1.875
+    max: 0.3125, 0.24, 1.90625
+    color: '#313131'
+  - label: stage 2 lower tie
+    min: -0.3125, -0.24, 1.46875
+    max: 0.3125, 0.24, 1.5
+    color: '#313131'
+  - label: stage 3 front upright 7
+    min: -0.28125, -0.24, 1.875
+    max: -0.25, -0.175, 2.3125
+    color: '#535353'
+  - label: stage 3 rear upright 7
+    min: -0.28125, 0.175, 1.875
+    max: -0.25, 0.24, 2.3125
+    color: '#535353'
+  - label: stage 3 front upright 24
+    min: 0.25, -0.24, 1.875
+    max: 0.28125, -0.175, 2.3125
+    color: '#535353'
+  - label: stage 3 rear upright 24
+    min: 0.25, 0.175, 1.875
+    max: 0.28125, 0.24, 2.3125
+    color: '#535353'
+  - label: stage 3 top tie
+    min: -0.28125, -0.24, 2.28125
+    max: 0.28125, 0.24, 2.3125
+    color: '#313131'
+  - label: stage 3 lower tie
+    min: -0.28125, -0.24, 1.875
+    max: 0.28125, 0.24, 1.90625
+    color: '#313131'
+  - label: stage 4 front upright 8
+    min: -0.25, -0.24, 2.25
+    max: -0.21875, -0.175, 2.78125
+    color: '#535353'
+  - label: stage 4 rear upright 8
+    min: -0.25, 0.175, 2.25
+    max: -0.21875, 0.24, 2.78125
+    color: '#535353'
+  - label: stage 4 front upright 23
+    min: 0.21875, -0.24, 2.25
+    max: 0.25, -0.175, 2.78125
+    color: '#535353'
+  - label: stage 4 rear upright 23
+    min: 0.21875, 0.175, 2.25
+    max: 0.25, 0.24, 2.78125
+    color: '#535353'
+  - label: stage 4 top tie
+    min: -0.25, -0.24, 2.75
+    max: 0.25, 0.24, 2.78125
+    color: '#161616'
+  - label: stage 4 lower tie
+    min: -0.25, -0.24, 2.25
+    max: 0.25, 0.24, 2.28125
+    color: '#434343'
+  - label: lower electronics cover
+    min: -0.34375, -0.205, 0.0625
+    max: 0.34375, 0.205, 0.3125
+    color: '#434343'
+  - label: large middle cover
+    min: -0.3125, -0.205, 0.6875
+    max: 0.3125, 0.205, 1.125
+    color: '#434343'
+  - label: upper equipment cover
+    min: -0.25, -0.205, 1.53125
+    max: 0.25, 0.205, 1.90625
+    color: '#434343'
+  - label: small receiver cover
+    min: -0.21875, -0.205, 2.5625
+    max: 0.21875, 0.205, 2.75
+    color: '#6C6C6C'
+  - label: lower white label substrate
+    min: -0.28125, -0.211, 0.09375
+    max: 0.0625, -0.205, 0.28125
+    color: '#A5A5A5'
+  - label: lower white label source detail
+    min: -0.28125, -0.212, 0.09375
+    max: 0.0625, -0.211, 0.28125
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt054
+    surfaceAxis: XZ
+  - label: lower side ports substrate
+    min: 0.15625, -0.211, 0.09375
+    max: 0.28125, -0.205, 0.28125
+    color: '#434343'
+  - label: lower side ports source detail
+    min: 0.15625, -0.212, 0.09375
+    max: 0.28125, -0.211, 0.28125
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt055
+    surfaceAxis: XZ
+  - label: middle white panel substrate
+    min: -0.28125, -0.211, 0.71875
+    max: 0.0, -0.205, 0.8125
+    color: '#A5A5A5'
+  - label: middle white panel source detail
+    min: -0.28125, -0.212, 0.71875
+    max: 0.0, -0.211, 0.8125
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt056
+    surfaceAxis: XZ
+  - label: upper white lettering substrate
+    min: -0.1875, -0.211, 1.71875
+    max: 0.03125, -0.205, 1.875
+    color: '#434343'
+  - label: upper white lettering source detail
+    min: -0.1875, -0.212, 1.71875
+    max: 0.03125, -0.211, 1.875
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt057
+    surfaceAxis: XZ
+  - label: top narrow instrument substrate
+    min: -0.1875, -0.211, 2.59375
+    max: 0.1875, -0.205, 2.6875
+    color: '#535353'
+  - label: top narrow instrument source detail
+    min: -0.1875, -0.212, 2.59375
+    max: 0.1875, -0.211, 2.6875
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt058
+    surfaceAxis: XZ
+  - label: upper checkered controls substrate
+    min: -0.15625, -0.211, 2.28125
+    max: 0.1875, -0.205, 2.375
+    color: '#2C2C2C'
+  - label: upper checkered controls source detail
+    min: -0.15625, -0.212, 2.28125
+    max: 0.1875, -0.211, 2.375
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt059
+    surfaceAxis: XZ
+  - label: middle central frame
+    min: -0.03125, -0.17, 1.15625
+    max: 0.03125, 0.2, 1.4375
+    color: '#313131'
+  - label: upper bay central frame
+    min: -0.03125, -0.17, 1.96875
+    max: 0.03125, 0.2, 2.1875
+    color: '#313131'
+  - label: lower bay central frame
+    min: -0.03125, -0.17, 0.34375
+    max: 0.03125, 0.2, 0.59375
+    color: '#313131'
+  - label: rear diagonal brace 0
+    min: -0.017, 0.193, 0.081723
+    max: 0.017, 0.227, 0.824527
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -67.75097634278764
+    yaw: 0.0
+  - label: rear opposed brace 0
+    min: -0.017, 0.193, 0.081723
+    max: 0.017, 0.227, 0.824527
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -67.75097634278764
+    yaw: 180.0
+  - label: rear diagonal brace 1
+    min: -0.017, 0.193, 0.967265
+    max: 0.017, 0.227, 1.626485
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -58.57043438516149
+    yaw: 0.0
+  - label: rear opposed brace 1
+    min: -0.017, 0.193, 0.967265
+    max: 0.017, 0.227, 1.626485
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -58.57043438516149
+    yaw: 180.0
+  - label: rear diagonal brace 2
+    min: -0.017, 0.193, 1.793677
+    max: 0.017, 0.227, 2.331323
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -54.46232220802562
+    yaw: 0.0
+  - label: rear opposed brace 2
+    min: -0.017, 0.193, 1.793677
+    max: 0.017, 0.227, 2.331323
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -54.46232220802562
+    yaw: 180.0
+  - label: rear diagonal brace 3
+    min: -0.017, 0.193, 2.1875
+    max: 0.017, 0.227, 2.65625
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -53.13010235415599
+    yaw: 0.0
+  - label: rear opposed brace 3
+    min: -0.017, 0.193, 2.1875
+    max: 0.017, 0.227, 2.65625
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -53.13010235415599
+    yaw: 180.0
+  - label: red lower cable 0
+    min: 0.01525, -0.196, 0.46875
+    max: 0.04725, -0.164, 0.59375
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -0.0
+    yaw: 0.0
+  - label: red lower cable 1
+    min: 0.07775, -0.196, 0.317862
+    max: 0.10975, -0.164, 0.494638
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -45.00000000000001
+    yaw: 180.0
+  - label: top left antenna stub
+    min: -0.1875, -0.018, 2.75
+    max: -0.15625, 0.018, 2.84375
+    color: '#161616'
+    shape: CylinderZ
+  - label: top tall antenna stub
+    min: 0.15625, -0.018, 2.75
+    max: 0.1875, 0.018, 2.9375
+    color: '#161616'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DSensorTowerCloud
+  label: SA-2X sensor-array tower
+  status: draft
+  sourcePrototypes:
+  - AU14SensorTower
+  referencePrototype: AU14SensorTower
+  referenceRsi: /Textures/_RMC14/Structures/Machines/sensor_tower.rsi
+  referenceState: sensor_off
+  referenceDirection: 0
+  sourceDirections: 1
+  description: sensor_off source. Grounded cylindrical base and controller, three open tapered lattice stages with connected
+    ties/braces, upper sensor tube, tilted dish with feed, red cabling and anchored guy line. Source +0.5 X pivot retained;
+    +2 Y is projected sprite elevation. Physical dish concavity, tower elevation and attachment are inferred; on-loop
+    and broken/Weld/Wire/Wrench states unbound. Art-only static draft. Horizontal scale 1/32 tile/pixel; depth, height,
+    rear construction and attachment are inferred. Isolated geometry is normalized to its lowest actual mesh vertex;
+    mounting elevation remains unverified. Source Sprite offsets remain documented rather than copied into world elevation.
+    Layer animation, UI, live visibility, native state selection and map contacts unverified. No fidelity approval. See
+    SOURCES_MACHINERY_EXTRA_CLOUD.md.
+  parts:
+  - label: round base pedestal
+    min: 0.125, -0.24, 0.0
+    max: 0.5625, 0.24, 0.875
+    color: '#4E4E4E'
+    shape: CylinderZ
+  - label: base raised collar
+    min: 0.15625, -0.25, 0.75
+    max: 0.53125, 0.25, 0.90625
+    color: '#4E4E4E'
+    shape: CylinderZ
+  - label: base left control cabinet
+    min: -0.25, -0.23, 0.0625
+    max: 0.125, 0.19, 0.59375
+    color: '#595959'
+  - label: base control screen top
+    min: -0.21875, -0.245, 0.46875
+    max: 0.09375, -0.145, 0.5
+    color: '#595959'
+  - label: base control screen bottom
+    min: -0.21875, -0.245, 0.34375
+    max: 0.09375, -0.145, 0.375
+    color: '#595959'
+  - label: base control screen left
+    min: -0.21875, -0.245, 0.375
+    max: -0.1875, -0.145, 0.46875
+    color: '#595959'
+  - label: base control screen right
+    min: 0.0625, -0.245, 0.375
+    max: 0.09375, -0.145, 0.46875
+    color: '#595959'
+  - label: base control dark display
+    min: -0.1875, -0.22, 0.375
+    max: 0.0625, -0.16, 0.46875
+    color: '#2B2B2B'
+  - label: base lower panel top
+    min: -0.21875, -0.245, 0.28125
+    max: 0.09375, -0.145, 0.3125
+    color: '#7C7C7C'
+  - label: base lower panel bottom
+    min: -0.21875, -0.245, 0.15625
+    max: 0.09375, -0.145, 0.1875
+    color: '#7C7C7C'
+  - label: base lower panel left
+    min: -0.21875, -0.245, 0.1875
+    max: -0.1875, -0.145, 0.28125
+    color: '#7C7C7C'
+  - label: base lower panel right
+    min: 0.0625, -0.245, 0.1875
+    max: 0.09375, -0.145, 0.28125
+    color: '#7C7C7C'
+  - label: base lower dark panel
+    min: -0.1875, -0.22, 0.1875
+    max: 0.0625, -0.16, 0.28125
+    color: '#595959'
+  - label: blue pedestal display substrate
+    min: 0.28125, -0.247, 0.40625
+    max: 0.40625, -0.24, 0.5625
+    color: '#262626'
+  - label: blue pedestal display source detail
+    min: 0.28125, -0.248, 0.40625
+    max: 0.40625, -0.247, 0.5625
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt060
+    surfaceAxis: XZ
+  - label: lattice upright (0, 21, -0.17)
+    min: 0.151875, -0.19, 0.81211
+    max: 0.191875, -0.15, 1.43789
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -2.862405226111906
+    yaw: 0.0
+  - label: lattice upright (0, 21, 0.17)
+    min: 0.151875, 0.15, 0.81211
+    max: 0.191875, 0.19, 1.43789
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -2.862405226111906
+    yaw: 0.0
+  - label: lattice upright (0, 33, -0.17)
+    min: 0.495625, -0.19, 0.81211
+    max: 0.535625, -0.15, 1.43789
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -2.862405226111906
+    yaw: 180.0
+  - label: lattice upright (0, 33, 0.17)
+    min: 0.495625, 0.15, 0.81211
+    max: 0.535625, 0.19, 1.43789
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -2.862405226111906
+    yaw: 180.0
+  - label: lattice cross tie (0, 114)
+    min: 0.15625, -0.183, 1.40625
+    max: 0.53125, 0.183, 1.4375
+    color: '#444444'
+  - label: lattice cross tie (0, 134)
+    min: 0.15625, -0.183, 0.78125
+    max: 0.53125, 0.183, 0.8125
+    color: '#444444'
+  - label: lattice diagonal (0, 'front')
+    min: 0.312125, -0.186, 0.768353
+    max: 0.344125, -0.154, 1.481647
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -28.81079374297305
+    yaw: 0.0
+  - label: lattice opposed (0, 'front')
+    min: 0.343375, -0.186, 0.768353
+    max: 0.375375, -0.154, 1.481647
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -28.81079374297305
+    yaw: 180.0
+  - label: lattice diagonal (0, 'rear')
+    min: 0.312125, 0.154, 0.768353
+    max: 0.344125, 0.186, 1.481647
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -28.81079374297305
+    yaw: 0.0
+  - label: lattice opposed (0, 'rear')
+    min: 0.343375, 0.154, 0.768353
+    max: 0.375375, 0.186, 1.481647
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -28.81079374297305
+    yaw: 180.0
+  - label: lattice upright (1, 22, -0.14)
+    min: 0.183125, -0.16, 1.43724
+    max: 0.223125, -0.12, 2.37526
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -1.9091524329963898
+    yaw: 0.0
+  - label: lattice upright (1, 22, 0.14)
+    min: 0.183125, 0.12, 1.43724
+    max: 0.223125, 0.16, 2.37526
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -1.9091524329963898
+    yaw: 0.0
+  - label: lattice upright (1, 32, -0.14)
+    min: 0.464375, -0.16, 1.43724
+    max: 0.504375, -0.12, 2.37526
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -1.9091524329963898
+    yaw: 180.0
+  - label: lattice upright (1, 32, 0.14)
+    min: 0.464375, 0.12, 1.43724
+    max: 0.504375, 0.16, 2.37526
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -1.9091524329963898
+    yaw: 180.0
+  - label: lattice cross tie (1, 84)
+    min: 0.1875, -0.153, 2.34375
+    max: 0.5, 0.153, 2.375
+    color: '#444444'
+  - label: lattice cross tie (1, 114)
+    min: 0.1875, -0.153, 1.40625
+    max: 0.5, 0.153, 1.4375
+    color: '#444444'
+  - label: lattice diagonal (1, 'front')
+    min: 0.312125, -0.156, 1.416861
+    max: 0.344125, -0.124, 2.395639
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -16.699244233993618
+    yaw: 0.0
+  - label: lattice opposed (1, 'front')
+    min: 0.343375, -0.156, 1.416861
+    max: 0.375375, -0.124, 2.395639
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -16.699244233993618
+    yaw: 180.0
+  - label: lattice diagonal (1, 'rear')
+    min: 0.312125, 0.124, 1.416861
+    max: 0.344125, 0.156, 2.395639
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -16.699244233993618
+    yaw: 0.0
+  - label: lattice opposed (1, 'rear')
+    min: 0.343375, 0.124, 1.416861
+    max: 0.375375, 0.156, 2.395639
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -16.699244233993618
+    yaw: 180.0
+  - label: lattice upright (2, 24, -0.105)
+    min: 0.245625, -0.125, 2.374711
+    max: 0.285625, -0.085, 3.219039
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -2.1210963966614473
+    yaw: 0.0
+  - label: lattice upright (2, 24, 0.105)
+    min: 0.245625, 0.085, 2.374711
+    max: 0.285625, 0.125, 3.219039
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -2.1210963966614473
+    yaw: 0.0
+  - label: lattice upright (2, 31, -0.105)
+    min: 0.433125, -0.125, 2.374711
+    max: 0.473125, -0.085, 3.219039
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -2.1210963966614473
+    yaw: 180.0
+  - label: lattice upright (2, 31, 0.105)
+    min: 0.433125, 0.085, 2.374711
+    max: 0.473125, 0.125, 3.219039
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -2.1210963966614473
+    yaw: 180.0
+  - label: lattice cross tie (2, 57)
+    min: 0.25, -0.118, 3.1875
+    max: 0.46875, 0.118, 3.21875
+    color: '#444444'
+  - label: lattice cross tie (2, 84)
+    min: 0.25, -0.118, 2.34375
+    max: 0.46875, 0.118, 2.375
+    color: '#444444'
+  - label: lattice diagonal (2, 'front')
+    min: 0.32775, -0.121, 2.364709
+    max: 0.35975, -0.089, 3.229041
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -12.528807709151492
+    yaw: 0.0
+  - label: lattice opposed (2, 'front')
+    min: 0.359, -0.121, 2.364709
+    max: 0.391, -0.089, 3.229041
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -12.528807709151492
+    yaw: 180.0
+  - label: lattice diagonal (2, 'rear')
+    min: 0.32775, 0.089, 2.364709
+    max: 0.35975, 0.121, 3.229041
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -12.528807709151492
+    yaw: 0.0
+  - label: lattice opposed (2, 'rear')
+    min: 0.359, 0.089, 2.364709
+    max: 0.391, 0.121, 3.229041
+    color: '#313131'
+    shape: CylinderZ
+    pitch: -12.528807709151492
+    yaw: 180.0
+  - label: central tower cable riser
+    min: 0.34375, -0.015, 0.8125
+    max: 0.375, 0.015, 3.25
+    color: '#610202'
+    shape: CylinderZ
+  - label: upper antenna mast
+    min: 0.3125, -0.072, 3.09375
+    max: 0.4375, 0.072, 4.03125
+    color: '#535353'
+    shape: CylinderZ
+  - label: top antenna tip
+    min: 0.34375, -0.023, 3.96875
+    max: 0.375, 0.023, 4.375
+    color: '#161616'
+    shape: CylinderZ
+  - label: top sensor housing
+    min: 0.28125, -0.12, 3.21875
+    max: 0.46875, 0.12, 3.53125
+    color: '#535353'
+  - label: top sensor white instrument substrate
+    min: 0.3125, -0.126, 3.28125
+    max: 0.40625, -0.12, 3.46875
+    color: '#2C2C2C'
+  - label: top sensor white instrument source detail
+    min: 0.3125, -0.127, 3.28125
+    max: 0.40625, -0.126, 3.46875
+    color: '#FFFFFF'
+    surface: CMU3DMachineryExtraCloudArt061
+    surfaceAxis: XZ
+  - label: dish mounting arm
+    min: 0.213, -0.037, 3.526179
+    max: 0.287, 0.037, 3.723821
+    color: '#262626'
+    shape: CylinderZ
+    pitch: -71.56505117707799
+    yaw: 0.0
+  - label: tilted dish bowl
+    min: 0.075, -0.285, 3.285
+    max: 0.175, 0.255, 3.965
+    color: '#4B4B4B'
+    shape: Ellipsoid
+    pitch: -30
+  - label: dish feed arm
+    min: 0.0445, -0.108, 3.59375
+    max: 0.0805, -0.072, 3.75
+    color: '#2A2A2A'
+    shape: CylinderZ
+    pitch: -53.13010235415599
+    yaw: 180.0
+  - label: red tower wiring (0, 0)
+    min: 0.406875, -0.12, 2.936791
+    max: 0.436875, -0.09, 3.281959
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -5.1944289077348
+    yaw: 180.0
+  - label: wire retaining clip (0, 0)
+    min: 0.372812, -0.0625, 3.223756
+    max: 0.392813, -0.0425, 3.338744
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 114.05734945001174
+  - label: red tower wiring (0, 1)
+    min: 0.375625, -0.12, 2.796875
+    max: 0.405625, -0.09, 2.953125
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -36.86989764584401
+    yaw: 0.0
+  - label: wire retaining clip (0, 1)
+    min: 0.388437, -0.0625, 2.872062
+    max: 0.408438, -0.0425, 3.002938
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 126.65100366014354
+  - label: red tower wiring (0, 2)
+    min: 0.36, -0.12, 2.465932
+    max: 0.39, -0.09, 2.815318
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -10.304846468766044
+    yaw: 180.0
+  - label: wire retaining clip (0, 2)
+    min: 0.341562, -0.0625, 2.759422
+    max: 0.361563, -0.0425, 2.865578
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 81.53595433603732
+  - label: red tower wiring (0, 3)
+    min: 0.406875, -0.1375, 2.339492
+    max: 0.436875, -0.1075, 2.473008
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -20.574452374651383
+    yaw: 131.76029970389786
+  - label: wire retaining clip (0, 3)
+    min: 0.372812, -0.0625, 2.411256
+    max: 0.392813, -0.0425, 2.526244
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 114.05734945001174
+  - label: red tower wiring (0, 4)
+    min: 0.39125, -0.155, 2.120623
+    max: 0.42125, -0.125, 2.348127
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -15.945395900922858
+    yaw: 0.0
+  - label: wire retaining clip (0, 4)
+    min: 0.388437, -0.08, 2.263588
+    max: 0.408438, -0.06, 2.423912
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 119.16307761490131
+  - label: red tower wiring (0, 5)
+    min: 0.375625, -0.155, 1.90514
+    max: 0.405625, -0.125, 2.12611
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -8.130102354156005
+    yaw: 180.0
+  - label: wire retaining clip (0, 5)
+    min: 0.357187, -0.08, 2.054565
+    max: 0.377188, -0.06, 2.195435
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 96.3682641491085
+  - label: red tower wiring (0, 6)
+    min: 0.406875, -0.155, 1.779326
+    max: 0.436875, -0.125, 1.908174
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -14.036243467926484
+    yaw: 180.0
+  - label: wire retaining clip (0, 6)
+    min: 0.372812, -0.08, 1.832431
+    max: 0.392813, -0.06, 1.980069
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 108.51164995449739
+  - label: red tower wiring (1, 0)
+    min: 0.438125, -0.155, 1.455766
+    max: 0.468125, -0.125, 1.637984
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -30.963756532073536
+    yaw: 0.0
+  - label: wire retaining clip (1, 0)
+    min: 0.419687, -0.08, 1.525784
+    max: 0.439688, -0.06, 1.724216
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 135.1276073157656
+  - label: red tower wiring (1, 1)
+    min: 0.313125, -0.17, 1.252046
+    max: 0.343125, -0.14, 1.497954
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -40.316414585570314
+    yaw: 10.868525340168704
+  - label: wire retaining clip (1, 1)
+    min: 0.372812, -0.08, 1.394931
+    max: 0.392813, -0.06, 1.542569
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 108.51164995449739
+  - label: red tower wiring (1, 2)
+    min: 0.219375, -0.185, 1.123453
+    max: 0.249375, -0.155, 1.282797
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -11.309932474020195
+    yaw: 0.0
+  - label: wire retaining clip (1, 2)
+    min: 0.294687, -0.095, 1.180177
+    max: 0.314688, -0.075, 1.382323
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -90.0
+    yaw: 57.24348605303576
+  - label: red tower wiring (2, 0)
+    min: 0.07875, -0.25, 0.299556
+    max: 0.10875, -0.22, 0.387944
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -45.00000000000001
+    yaw: 180.0
+  - label: red tower wiring (2, 1)
+    min: 0.156875, -0.25, 0.247464
+    max: 0.186875, -0.22, 0.346286
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -71.56505117707799
+    yaw: 180.0
+  - label: red tower wiring (2, 2)
+    min: 0.250625, -0.25, 0.247464
+    max: 0.280625, -0.22, 0.346286
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -71.56505117707799
+    yaw: 0.0
+  - label: red tower wiring (2, 3)
+    min: 0.313125, -0.25, 0.308811
+    max: 0.343125, -0.22, 0.378689
+    color: '#610202'
+    shape: CylinderZ
+    pitch: -26.565051177077994
+    yaw: 0.0
+  - label: single source guy cable
+    min: 0.8025, 0.015, 0.111444
+    max: 0.8225, 0.035, 3.294806
+    color: '#161616'
+    shape: CylinderZ
+    pitch: -13.62699485989153
+    yaw: 180.0
+  - label: guy cable anchor foot
+    min: 1.125, -0.06, 0.0625
+    max: 1.25, 0.1, 0.15625
+    color: '#383838'

@@ -250,6 +250,8 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
     - name: Hearing Protection
       entries:
       - id: CMUHeadElectronicHearingProtection
@@ -349,6 +351,8 @@
       - id: CMULACNBeltMedical
     - name: General Medical Supplies
       entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
@@ -1076,6 +1080,7 @@
   name: LACN automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"], ["AU14AccessOpforReq"] ]
   - type: Sprite
@@ -1212,10 +1217,6 @@
         amount: 12
       - id: AU14Bangalore
         amount: 2
-    - name: Barrel Attachments
-      entries:
-      - id: RMCAttachmentShotgunChoke
-        amount: 3
     - name: Rail Attachments
       entries:
       - id: RMCAttachmentTwoPointSling
@@ -1258,6 +1259,12 @@
         amount: 10
       - id: RMCPouchMagazinePistolLarge
         amount: 10
+      - id: RMCPouchGeneralLarge
+        amount: 5
+      - id: RMCPouchDocument
+        amount: 5
+      - id: RMCPouchShotgunLarge
+        amount: 5
     - name: Devices
       entries:
       - id: RMCIntelDetector
@@ -1270,12 +1277,24 @@
         amount: 4
       - id: MineDetector
         amount: 2
-    - name: RTO Packs
-      entries:
-      - id: AU14BackpackRTOPackDesert
+      - id: CMUDeployableZLevelLadder
         amount: 2
-      - id: AU14BackpackRTOPackGray
-        amount: 1
+    - name: Protective Equipment
+      entries:
+      - id: CMUMaskGasLACN
+        amount: 30
+      - id: CMUGasMaskFilter
+        amount: 30
+      - id: CMUFieldGasTankOxygenFilled
+        amount: 15
+    - name: Radio Equipment
+      entries:
+      - id: ANPRC117GRadio
+        amount: 3
+      - id: ANPRCWhipAntenna
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 2
     - name: Materials
       entries:
       - id: CMSheetMetal

@@ -4,6 +4,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Utility;
 using Robust.Shared.Graphics;
+using Robust.Shared.Graphics.RSI; // CMU14
 
 namespace Content.Client.Clickable;
 
@@ -29,7 +30,9 @@ public sealed partial class ClickableSystem : EntitySystem
     /// The draw depth for the sprite that captured the click.
     /// </param>
     /// <returns>True if the click worked, false otherwise.</returns>
-    public bool CheckClick(Entity<ClickableComponent?, SpriteComponent, TransformComponent?, FadingSpriteComponent?> entity, Vector2 worldPos, IEye eye, bool excludeFaded, out int drawDepth, out uint renderOrder, out float bottom)
+    // CMU14: Match alternate viewport artwork without changing the entity's world transform.
+    public bool CheckClick(Entity<ClickableComponent?, SpriteComponent, TransformComponent?, FadingSpriteComponent?> entity, Vector2 worldPos, IEye eye, bool excludeFaded, out int drawDepth, out uint renderOrder, out float bottom,
+        Angle? visualRotation = null, Direction? visualDirection = null)
     {
         if (!_clickableQuery.Resolve(entity.Owner, ref entity.Comp1, false))
         {
@@ -69,6 +72,7 @@ public sealed partial class ClickableSystem : EntitySystem
         drawDepth = sprite.DrawDepth;
         renderOrder = sprite.RenderOrder;
         var (spritePos, spriteRot) = _transforms.GetWorldPositionRotation(transform);
+        spriteRot = visualRotation ?? spriteRot; // CMU14
         var spriteBB = _sprites.CalculateBounds((entity.Owner, sprite), spritePos, spriteRot, eye.Rotation);
         bottom = Matrix3Helpers.CreateRotation(eye.Rotation).TransformBox(spriteBB).Bottom;
 
@@ -84,7 +88,7 @@ public sealed partial class ClickableSystem : EntitySystem
         var localPos = Vector2.Transform(Vector2.Transform(worldPos, entityXform), invSpriteMatrix);
 
         // Check explicitly defined click-able bounds
-        if (CheckDirBound((entity.Owner, entity.Comp1, entity.Comp2), relativeRotation, localPos))
+        if (CheckDirBound((entity.Owner, entity.Comp1, entity.Comp2), relativeRotation, localPos, visualDirection)) // CMU14
             return true;
 
         // Next check each individual sprite layer using automatically computed click maps.
@@ -121,7 +125,10 @@ public sealed partial class ClickableSystem : EntitySystem
 
             // Next, to get the right click map we need the "direction" of this layer that is actually being used to draw the sprite on the screen.
             // This **can** differ from the dir defined before, but can also just be the same.
-            if (sprite.EnableDirectionOverride)
+            // CMU14: The first-person portrait can select its frame separately from its rotation.
+            if (visualDirection is { } direction)
+                dir = direction.Convert(rsiState.RsiDirections);
+            else if (sprite.EnableDirectionOverride)
                 dir = sprite.DirectionOverride.Convert(rsiState.RsiDirections);
             dir = dir.OffsetRsiDir(layer.DirOffset);
 
@@ -132,7 +139,7 @@ public sealed partial class ClickableSystem : EntitySystem
         return false;
     }
 
-    public bool CheckDirBound(Entity<ClickableComponent, SpriteComponent> entity, Angle relativeRotation, Vector2 localPos)
+    public bool CheckDirBound(Entity<ClickableComponent, SpriteComponent> entity, Angle relativeRotation, Vector2 localPos, Direction? visualDirection = null) // CMU14
     {
         var clickable = entity.Comp1;
         var sprite = entity.Comp2;
@@ -154,7 +161,8 @@ public sealed partial class ClickableSystem : EntitySystem
             return true;
 
         // Next, get and check the appropriate bounding box for the current sprite orientation
-        var boundsForDir = (sprite.EnableDirectionOverride ? sprite.DirectionOverride : direction) switch
+        // CMU14: Explicit bounds are cardinal even when the portrait has eight directions.
+        var boundsForDir = (visualDirection?.Convert(RsiDirectionType.Dir4).Convert() ?? (sprite.EnableDirectionOverride ? sprite.DirectionOverride : direction)) switch
         {
             Direction.East => clickable.Bounds.East,
             Direction.North => clickable.Bounds.North,

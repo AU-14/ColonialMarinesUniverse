@@ -1,0 +1,1278 @@
+- type: cmu3DModel
+  id: CMU3DVendorIngredientsCloud
+  label: Ingredient vendor
+  status: draft
+  sourcePrototypes:
+  - CMVendorIngredients
+  referencePrototype: CMVendorIngredients
+  referenceRsi: /Textures/_RMC14/Structures/Machines/VendingMachines/snack.rsi
+  referenceState: 'off'
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  description: Source-specific blue ingredient dispenser, original silver controls and green lights, original golden
+    ingredient mark, and an actual recessed pickup tray. Default art composes off plus normal-unshaded, excluding
+    the maintenance panel. Horizontal source scale is 1/32 tile per pixel; inferred height is .038 tile per pixel.
+    Cabinet depth, underside, hidden rear construction and real illumination are unverified. These are static source-composition
+    drafts; no live state-selection or full-fidelity claim. See SOURCES_VENDOR_CLOUD.md.
+  parts:
+  - min: -0.3125, -0.3, 0.0
+    max: -0.28125, 0.3, 1.14
+    color: '#505657'
+    label: left full-depth cabinet side
+  - min: -0.3125, -0.302, 0.0
+    max: -0.28125, -0.3001, 1.14
+    color: '#FFFFFF'
+    label: left full-depth cabinet side original face
+    surface: CMU3DVendorCloudArt000
+    surfaceAxis: XZ
+  - min: 0.3125, -0.3, 0.0
+    max: 0.34375, 0.3, 1.14
+    color: '#505657'
+    label: right full-depth cabinet side
+  - min: 0.3125, -0.302, 0.0
+    max: 0.34375, -0.3001, 1.14
+    color: '#FFFFFF'
+    label: right full-depth cabinet side original face
+    surface: CMU3DVendorCloudArt000
+    surfaceAxis: XZ
+  - min: -0.28125, 0.265, 0.0
+    max: 0.3125, 0.3, 1.14
+    color: '#626668'
+    label: rear shell
+  - min: -0.28125, -0.3, 1.102
+    max: 0.3125, 0.265, 1.14
+    color: '#7E8386'
+    label: roof
+  - min: -0.28125, -0.3, 0.0
+    max: 0.3125, 0.265, 0.038
+    color: '#424748'
+    label: bottom chassis
+  - min: -0.28125, -0.31, 0.0
+    max: -0.25, -0.27, 1.14
+    color: '#989C9D'
+    label: left silver face rail
+  - min: -0.28125, -0.312, 0.0
+    max: -0.25, -0.3101, 1.14
+    color: '#FFFFFF'
+    label: left silver face rail original face
+    surface: CMU3DVendorCloudArt001
+    surfaceAxis: XZ
+  - min: 0.28125, -0.31, 0.0
+    max: 0.3125, -0.27, 1.14
+    color: '#989C9D'
+    label: right silver face rail
+  - min: 0.28125, -0.312, 0.0
+    max: 0.3125, -0.3101, 1.14
+    color: '#FFFFFF'
+    label: right silver face rail original face
+    surface: CMU3DVendorCloudArt001
+    surfaceAxis: XZ
+  - min: -0.25, -0.31, 0.95
+    max: 0.28125, -0.24, 1.14
+    color: '#7E8386'
+    label: blank upper metal sign
+  - min: -0.25, -0.312, 0.95
+    max: 0.28125, -0.3101, 1.14
+    color: '#FFFFFF'
+    label: blank upper metal sign original face
+    surface: CMU3DVendorCloudArt002
+    surfaceAxis: XZ
+  - min: -0.25, -0.29, 0.836
+    max: 0.28125, -0.255, 0.95
+    color: '#2F3B3E'
+    label: header shadow and separator
+  - min: -0.25, -0.292, 0.836
+    max: 0.28125, -0.2901, 0.95
+    color: '#FFFFFF'
+    label: header shadow and separator original face
+    surface: CMU3DVendorCloudArt003
+    surfaceAxis: XZ
+  - min: -0.25, -0.306, 0.152
+    max: -0.1875, -0.235, 0.836
+    color: '#48767C'
+    label: blue door left stile
+  - min: -0.25, -0.308, 0.152
+    max: -0.1875, -0.3061, 0.836
+    color: '#FFFFFF'
+    label: blue door left stile original face
+    surface: CMU3DVendorCloudArt004
+    surfaceAxis: XZ
+  - min: 0.21875, -0.306, 0.152
+    max: 0.28125, -0.235, 0.836
+    color: '#48767C'
+    label: blue door right stile
+  - min: 0.21875, -0.308, 0.152
+    max: 0.28125, -0.3061, 0.836
+    color: '#FFFFFF'
+    label: blue door right stile original face
+    surface: CMU3DVendorCloudArt005
+    surfaceAxis: XZ
+  - min: -0.1875, -0.306, 0.76
+    max: 0.21875, -0.245, 0.836
+    color: '#639097'
+    label: blue control header
+  - min: -0.1875, -0.308, 0.76
+    max: 0.21875, -0.3061, 0.836
+    color: '#FFFFFF'
+    label: blue control header original face
+    surface: CMU3DVendorCloudArt006
+    surfaceAxis: XZ
+  - min: -0.1875, -0.315, 0.646
+    max: -0.0625, -0.26, 0.76
+    color: '#AEBABC'
+    label: left silver selector
+  - min: -0.1875, -0.317, 0.646
+    max: -0.0625, -0.3151, 0.76
+    color: '#FFFFFF'
+    label: left silver selector original face
+    surface: CMU3DVendorCloudArt007
+    surfaceAxis: XZ
+  - min: 0.125, -0.315, 0.646
+    max: 0.21875, -0.26, 0.76
+    color: '#AEBABC'
+    label: right silver selector
+  - min: 0.125, -0.317, 0.646
+    max: 0.21875, -0.3151, 0.76
+    color: '#FFFFFF'
+    label: right silver selector original face
+    surface: CMU3DVendorCloudArt008
+    surfaceAxis: XZ
+  - min: -0.0625, -0.27, 0.646
+    max: 0.125, -0.235, 0.76
+    color: '#273638'
+    label: control bank recessed backing
+  - min: -0.0625, -0.272, 0.646
+    max: 0.125, -0.2701, 0.76
+    color: '#FFFFFF'
+    label: control bank recessed backing original face
+    surface: CMU3DVendorCloudArt009
+    surfaceAxis: XZ
+  - min: -0.03125, -0.288, 0.684
+    max: 0.0, -0.269, 0.76
+    color: '#0EA54A'
+    label: green selector 1
+  - min: -0.03125, -0.29, 0.684
+    max: 0.0, -0.2881, 0.76
+    color: '#FFFFFF'
+    label: green selector 1 original face
+    surface: CMU3DVendorCloudArt010
+    surfaceAxis: XZ
+  - min: 0.03125, -0.288, 0.684
+    max: 0.0625, -0.269, 0.76
+    color: '#0EA54A'
+    label: green selector 2
+  - min: 0.03125, -0.29, 0.684
+    max: 0.0625, -0.2881, 0.76
+    color: '#FFFFFF'
+    label: green selector 2 original face
+    surface: CMU3DVendorCloudArt010
+    surfaceAxis: XZ
+  - min: 0.09375, -0.288, 0.684
+    max: 0.125, -0.269, 0.76
+    color: '#0EA54A'
+    label: green selector 3
+  - min: 0.09375, -0.29, 0.684
+    max: 0.125, -0.2881, 0.76
+    color: '#FFFFFF'
+    label: green selector 3 original face
+    surface: CMU3DVendorCloudArt010
+    surfaceAxis: XZ
+  - min: -0.1875, -0.306, 0.304
+    max: 0.21875, -0.235, 0.646
+    color: '#60888D'
+    label: blue door with original ingredient emblem
+  - min: -0.1875, -0.308, 0.304
+    max: 0.21875, -0.3061, 0.646
+    color: '#FFFFFF'
+    label: blue door with original ingredient emblem original face
+    surface: CMU3DVendorCloudArt011
+    surfaceAxis: XZ
+  - min: -0.1875, -0.306, 0.152
+    max: -0.125, -0.235, 0.304
+    color: '#5C898E'
+    label: pickup left jamb
+  - min: -0.1875, -0.308, 0.152
+    max: -0.125, -0.3061, 0.304
+    color: '#FFFFFF'
+    label: pickup left jamb original face
+    surface: CMU3DVendorCloudArt012
+    surfaceAxis: XZ
+  - min: 0.15625, -0.306, 0.152
+    max: 0.21875, -0.235, 0.304
+    color: '#5C898E'
+    label: pickup right jamb
+  - min: 0.15625, -0.308, 0.152
+    max: 0.21875, -0.3061, 0.304
+    color: '#FFFFFF'
+    label: pickup right jamb original face
+    surface: CMU3DVendorCloudArt013
+    surfaceAxis: XZ
+  - min: -0.125, -0.322, 0.266
+    max: 0.15625, -0.265, 0.304
+    color: '#4B7176'
+    label: pickup upper rim
+  - min: -0.125, -0.324, 0.266
+    max: 0.15625, -0.3221, 0.304
+    color: '#FFFFFF'
+    label: pickup upper rim original face
+    surface: CMU3DVendorCloudArt014
+    surfaceAxis: XZ
+  - min: -0.125, -0.165, 0.228
+    max: 0.15625, -0.15, 0.266
+    color: '#151D20'
+    label: recessed pickup cavity
+  - min: -0.125, -0.167, 0.228
+    max: 0.15625, -0.1651, 0.266
+    color: '#FFFFFF'
+    label: recessed pickup cavity original face
+    surface: CMU3DVendorCloudArt015
+    surfaceAxis: XZ
+  - min: -0.125, -0.325, 0.152
+    max: 0.15625, -0.15, 0.228
+    color: '#82B8BD'
+    label: pickup tray
+  - min: -0.125, -0.327, 0.152
+    max: 0.15625, -0.3251, 0.228
+    color: '#FFFFFF'
+    label: pickup tray original face
+    surface: CMU3DVendorCloudArt016
+    surfaceAxis: XZ
+  - min: -0.25, -0.31, 0.0
+    max: 0.28125, -0.23, 0.152
+    color: '#646260'
+    label: lower plinth
+  - min: -0.25, -0.312, 0.0
+    max: 0.28125, -0.3101, 0.152
+    color: '#FFFFFF'
+    label: lower plinth original face
+    surface: CMU3DVendorCloudArt017
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DVendorCassettesCloud
+  referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
+  referenceState: CMU3DVendorCassettesCloud
+  label: Cassette recreation vendor
+  status: draft
+  sourcePrototypes:
+  - CMVendorCassettes
+  referencePrototype: CMVendorCassettes
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  description: Source green Rec-Vend has nested silver door rails, five separate black cassette selections with
+    original amber tips, solid green recessed door and pickup cavity. Default art composes off plus normal-unshaded.
+    Horizontal source scale is 1/32 tile per pixel; inferred height is .038 tile per pixel. Cabinet depth, underside,
+    hidden rear construction and real illumination are unverified. These are static source-composition drafts; no
+    live state-selection or full-fidelity claim. See SOURCES_VENDOR_CLOUD.md.
+  parts:
+  - min: -0.375, -0.32, 0.0
+    max: -0.34375, 0.32, 1.178
+    color: '#505657'
+    label: left full-depth cabinet side
+  - min: -0.375, -0.322, 0.0
+    max: -0.34375, -0.3201, 1.178
+    color: '#FFFFFF'
+    label: left full-depth cabinet side original face
+    surface: CMU3DVendorCloudArt018
+    surfaceAxis: XZ
+  - min: 0.3125, -0.32, 0.0
+    max: 0.34375, 0.32, 1.178
+    color: '#505657'
+    label: right full-depth cabinet side
+  - min: 0.3125, -0.322, 0.0
+    max: 0.34375, -0.3201, 1.178
+    color: '#FFFFFF'
+    label: right full-depth cabinet side original face
+    surface: CMU3DVendorCloudArt018
+    surfaceAxis: XZ
+  - min: -0.34375, 0.285, 0.0
+    max: 0.3125, 0.32, 1.178
+    color: '#626668'
+    label: rear shell
+  - min: -0.34375, -0.32, 1.14
+    max: 0.3125, 0.285, 1.178
+    color: '#7E8386'
+    label: roof
+  - min: -0.34375, -0.32, 0.0
+    max: 0.3125, 0.285, 0.038
+    color: '#424748'
+    label: bottom chassis
+  - min: -0.34375, -0.332, 0.0
+    max: -0.3125, -0.295, 1.178
+    color: '#A1A4A3'
+    label: left silver face rail
+  - min: -0.34375, -0.334, 0.0
+    max: -0.3125, -0.3321, 1.178
+    color: '#FFFFFF'
+    label: left silver face rail original face
+    surface: CMU3DVendorCloudArt019
+    surfaceAxis: XZ
+  - min: 0.28125, -0.332, 0.0
+    max: 0.3125, -0.295, 1.178
+    color: '#A1A4A3'
+    label: right silver face rail
+  - min: 0.28125, -0.334, 0.0
+    max: 0.3125, -0.3321, 1.178
+    color: '#FFFFFF'
+    label: right silver face rail original face
+    surface: CMU3DVendorCloudArt019
+    surfaceAxis: XZ
+  - min: -0.3125, -0.332, 0.95
+    max: 0.28125, -0.255, 1.178
+    color: '#808582'
+    label: large plain upper sign
+  - min: -0.3125, -0.334, 0.95
+    max: 0.28125, -0.3321, 1.178
+    color: '#FFFFFF'
+    label: large plain upper sign original face
+    surface: CMU3DVendorCloudArt020
+    surfaceAxis: XZ
+  - min: -0.3125, -0.31, 0.874
+    max: 0.28125, -0.255, 0.95
+    color: '#323A36'
+    label: upper black arch surround
+  - min: -0.3125, -0.312, 0.874
+    max: 0.28125, -0.3101, 0.95
+    color: '#FFFFFF'
+    label: upper black arch surround original face
+    surface: CMU3DVendorCloudArt021
+    surfaceAxis: XZ
+  - min: -0.3125, -0.317, 0.152
+    max: -0.25, -0.255, 0.874
+    color: '#56806D'
+    label: left green cabinet trim
+  - min: -0.3125, -0.319, 0.152
+    max: -0.25, -0.3171, 0.874
+    color: '#FFFFFF'
+    label: left green cabinet trim original face
+    surface: CMU3DVendorCloudArt022
+    surfaceAxis: XZ
+  - min: 0.25, -0.317, 0.152
+    max: 0.28125, -0.255, 0.874
+    color: '#56806D'
+    label: right green cabinet trim
+  - min: 0.25, -0.319, 0.152
+    max: 0.28125, -0.3171, 0.874
+    color: '#FFFFFF'
+    label: right green cabinet trim original face
+    surface: CMU3DVendorCloudArt023
+    surfaceAxis: XZ
+  - min: -0.25, -0.342, 0.76
+    max: 0.25, -0.275, 0.874
+    color: '#A5ADA9'
+    label: silver inner top rail
+  - min: -0.25, -0.344, 0.76
+    max: 0.25, -0.3421, 0.874
+    color: '#FFFFFF'
+    label: silver inner top rail original face
+    surface: CMU3DVendorCloudArt024
+    surfaceAxis: XZ
+  - min: -0.25, -0.342, 0.152
+    max: -0.1875, -0.275, 0.76
+    color: '#A5ADA9'
+    label: inner left silver rail
+  - min: -0.25, -0.344, 0.152
+    max: -0.1875, -0.3421, 0.76
+    color: '#FFFFFF'
+    label: inner left silver rail original face
+    surface: CMU3DVendorCloudArt025
+    surfaceAxis: XZ
+  - min: 0.1875, -0.342, 0.152
+    max: 0.25, -0.275, 0.76
+    color: '#A5ADA9'
+    label: inner right silver rail
+  - min: 0.1875, -0.344, 0.152
+    max: 0.25, -0.3421, 0.76
+    color: '#FFFFFF'
+    label: inner right silver rail original face
+    surface: CMU3DVendorCloudArt026
+    surfaceAxis: XZ
+  - min: -0.1875, -0.295, 0.342
+    max: 0.1875, -0.22, 0.76
+    color: '#467E63'
+    label: green cassette selector backing
+  - min: -0.1875, -0.297, 0.342
+    max: 0.1875, -0.2951, 0.76
+    color: '#FFFFFF'
+    label: green cassette selector backing original face
+    surface: CMU3DVendorCloudArt027
+    surfaceAxis: XZ
+  - min: -0.15625, -0.315, 0.494
+    max: -0.125, -0.294, 0.646
+    color: '#192D25'
+    label: cassette slot 1
+  - min: -0.15625, -0.317, 0.494
+    max: -0.125, -0.3151, 0.646
+    color: '#FFFFFF'
+    label: cassette slot 1 original face
+    surface: CMU3DVendorCloudArt028
+    surfaceAxis: XZ
+  - min: -0.09375, -0.315, 0.494
+    max: -0.0625, -0.294, 0.646
+    color: '#192D25'
+    label: cassette slot 2
+  - min: -0.09375, -0.317, 0.494
+    max: -0.0625, -0.3151, 0.646
+    color: '#FFFFFF'
+    label: cassette slot 2 original face
+    surface: CMU3DVendorCloudArt028
+    surfaceAxis: XZ
+  - min: -0.03125, -0.315, 0.494
+    max: 0.0, -0.294, 0.646
+    color: '#192D25'
+    label: cassette slot 3
+  - min: -0.03125, -0.317, 0.494
+    max: 0.0, -0.3151, 0.646
+    color: '#FFFFFF'
+    label: cassette slot 3 original face
+    surface: CMU3DVendorCloudArt028
+    surfaceAxis: XZ
+  - min: 0.03125, -0.315, 0.494
+    max: 0.0625, -0.294, 0.646
+    color: '#192D25'
+    label: cassette slot 4
+  - min: 0.03125, -0.317, 0.494
+    max: 0.0625, -0.3151, 0.646
+    color: '#FFFFFF'
+    label: cassette slot 4 original face
+    surface: CMU3DVendorCloudArt028
+    surfaceAxis: XZ
+  - min: 0.09375, -0.315, 0.494
+    max: 0.125, -0.294, 0.646
+    color: '#192D25'
+    label: cassette slot 5
+  - min: 0.09375, -0.317, 0.494
+    max: 0.125, -0.3151, 0.646
+    color: '#FFFFFF'
+    label: cassette slot 5 original face
+    surface: CMU3DVendorCloudArt028
+    surfaceAxis: XZ
+  - min: -0.1875, -0.295, 0.19
+    max: -0.15625, -0.22, 0.342
+    color: '#467E63'
+    label: pickup left green jamb
+  - min: -0.1875, -0.297, 0.19
+    max: -0.15625, -0.2951, 0.342
+    color: '#FFFFFF'
+    label: pickup left green jamb original face
+    surface: CMU3DVendorCloudArt029
+    surfaceAxis: XZ
+  - min: 0.15625, -0.295, 0.19
+    max: 0.1875, -0.22, 0.342
+    color: '#467E63'
+    label: pickup right green jamb
+  - min: 0.15625, -0.297, 0.19
+    max: 0.1875, -0.2951, 0.342
+    color: '#FFFFFF'
+    label: pickup right green jamb original face
+    surface: CMU3DVendorCloudArt030
+    surfaceAxis: XZ
+  - min: -0.15625, -0.305, 0.304
+    max: 0.15625, -0.255, 0.342
+    color: '#263B32'
+    label: pickup black upper frame
+  - min: -0.15625, -0.307, 0.304
+    max: 0.15625, -0.3051, 0.342
+    color: '#FFFFFF'
+    label: pickup black upper frame original face
+    surface: CMU3DVendorCloudArt031
+    surfaceAxis: XZ
+  - min: -0.15625, -0.16, 0.266
+    max: 0.15625, -0.14, 0.304
+    color: '#14211B'
+    label: pickup recessed back
+  - min: -0.15625, -0.162, 0.266
+    max: 0.15625, -0.1601, 0.304
+    color: '#FFFFFF'
+    label: pickup recessed back original face
+    surface: CMU3DVendorCloudArt032
+    surfaceAxis: XZ
+  - min: -0.15625, -0.318, 0.19
+    max: 0.15625, -0.14, 0.266
+    color: '#58A685'
+    label: pickup green tray
+  - min: -0.15625, -0.32, 0.19
+    max: 0.15625, -0.3181, 0.266
+    color: '#FFFFFF'
+    label: pickup green tray original face
+    surface: CMU3DVendorCloudArt033
+    surfaceAxis: XZ
+  - min: -0.1875, -0.295, 0.152
+    max: 0.1875, -0.22, 0.19
+    color: '#27372F'
+    label: inner black lower rail
+  - min: -0.1875, -0.297, 0.152
+    max: 0.1875, -0.2951, 0.19
+    color: '#FFFFFF'
+    label: inner black lower rail original face
+    surface: CMU3DVendorCloudArt034
+    surfaceAxis: XZ
+  - min: -0.3125, -0.332, 0.0
+    max: 0.28125, -0.255, 0.152
+    color: '#73716A'
+    label: lower silver plinth
+  - min: -0.3125, -0.334, 0.0
+    max: 0.28125, -0.3321, 0.152
+    color: '#FFFFFF'
+    label: lower silver plinth original face
+    surface: CMU3DVendorCloudArt035
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DVendorNutriCoCloud
+  label: NutriCo meal vendor
+  status: draft
+  sourcePrototypes:
+  - RMCNutriCoVendor
+  - RMCNutriCoVendorRCM
+  referencePrototype: RMCNutriCoVendor
+  referenceRsi: /Textures/_RMC14/Structures/Machines/VendingMachines/NutriCo/food.rsi
+  referenceState: base
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  description: Tall 32-by-64 NutriCo source has 20 transparent top rows and a 44-pixel cabinet, original blank header,
+    physically recessed meal compartment, prominent vertical handle, five green control bars and separate vent baffles.
+    The source Sprite offset 0,0.5 is a screen-placement offset, not copied into physical XY. Default off-plus-base
+    appearance uses source base artwork. Horizontal source scale is 1/32 tile per pixel; inferred height is .038
+    tile per pixel. Cabinet depth, underside, hidden rear construction and real illumination are unverified. These
+    are static source-composition drafts; no live state-selection or full-fidelity claim. See SOURCES_VENDOR_CLOUD.md.
+  parts:
+  - min: -0.5, -0.4, 0.0
+    max: -0.46875, 0.4, 1.672
+    color: '#505657'
+    label: left full-depth cabinet side
+  - min: -0.5, -0.402, 0.0
+    max: -0.46875, -0.4001, 1.672
+    color: '#FFFFFF'
+    label: left full-depth cabinet side original face
+    surface: CMU3DVendorCloudArt036
+    surfaceAxis: XZ
+  - min: 0.46875, -0.4, 0.0
+    max: 0.5, 0.4, 1.672
+    color: '#505657'
+    label: right full-depth cabinet side
+  - min: 0.46875, -0.402, 0.0
+    max: 0.5, -0.4001, 1.672
+    color: '#FFFFFF'
+    label: right full-depth cabinet side original face
+    surface: CMU3DVendorCloudArt037
+    surfaceAxis: XZ
+  - min: -0.46875, 0.365, 0.0
+    max: 0.46875, 0.4, 1.672
+    color: '#626668'
+    label: rear shell
+  - min: -0.46875, -0.4, 1.634
+    max: 0.46875, 0.365, 1.672
+    color: '#7E8386'
+    label: roof
+  - min: -0.46875, -0.4, 0.0
+    max: 0.46875, 0.365, 0.038
+    color: '#424748'
+    label: bottom chassis
+  - min: -0.46875, -0.413, 0.038
+    max: -0.4375, -0.365, 1.672
+    color: '#919595'
+    label: left silver outer frame
+  - min: -0.46875, -0.415, 0.038
+    max: -0.4375, -0.4131, 1.672
+    color: '#FFFFFF'
+    label: left silver outer frame original face
+    surface: CMU3DVendorCloudArt038
+    surfaceAxis: XZ
+  - min: 0.4375, -0.413, 0.038
+    max: 0.46875, -0.365, 1.672
+    color: '#919595'
+    label: right silver outer frame
+  - min: 0.4375, -0.415, 0.038
+    max: 0.46875, -0.4131, 1.672
+    color: '#FFFFFF'
+    label: right silver outer frame original face
+    surface: CMU3DVendorCloudArt038
+    surfaceAxis: XZ
+  - min: -0.4375, -0.413, 1.178
+    max: 0.4375, -0.325, 1.672
+    color: '#7E8386'
+    label: large upper blank metal sign
+  - min: -0.4375, -0.415, 1.178
+    max: 0.4375, -0.4131, 1.672
+    color: '#FFFFFF'
+    label: large upper blank metal sign original face
+    surface: CMU3DVendorCloudArt039
+    surfaceAxis: XZ
+  - min: -0.4375, -0.407, 0.608
+    max: -0.375, -0.335, 1.178
+    color: '#A2A5A4'
+    label: main compartment left rail
+  - min: -0.4375, -0.409, 0.608
+    max: -0.375, -0.4071, 1.178
+    color: '#FFFFFF'
+    label: main compartment left rail original face
+    surface: CMU3DVendorCloudArt040
+    surfaceAxis: XZ
+  - min: -0.375, -0.407, 1.14
+    max: 0.1875, -0.335, 1.178
+    color: '#A2A5A4'
+    label: main compartment top rail
+  - min: -0.375, -0.409, 1.14
+    max: 0.1875, -0.4071, 1.178
+    color: '#FFFFFF'
+    label: main compartment top rail original face
+    surface: CMU3DVendorCloudArt041
+    surfaceAxis: XZ
+  - min: 0.125, -0.407, 0.608
+    max: 0.1875, -0.335, 1.14
+    color: '#A2A5A4'
+    label: main compartment right rail
+  - min: 0.125, -0.409, 0.608
+    max: 0.1875, -0.4071, 1.14
+    color: '#FFFFFF'
+    label: main compartment right rail original face
+    surface: CMU3DVendorCloudArt042
+    surfaceAxis: XZ
+  - min: -0.375, -0.35, 1.026
+    max: 0.125, -0.335, 1.14
+    color: '#302E2C'
+    label: upper vent backing
+  - min: -0.375, -0.352, 1.026
+    max: 0.125, -0.3501, 1.14
+    color: '#FFFFFF'
+    label: upper vent backing original face
+    surface: CMU3DVendorCloudArt043
+    surfaceAxis: XZ
+  - min: -0.34375, -0.376, 1.026
+    max: -0.3125, -0.349, 1.14
+    color: '#767A78'
+    label: upper vent rib 1
+  - min: -0.28125, -0.376, 1.026
+    max: -0.25, -0.349, 1.14
+    color: '#767A78'
+    label: upper vent rib 2
+  - min: -0.21875, -0.376, 1.026
+    max: -0.1875, -0.349, 1.14
+    color: '#767A78'
+    label: upper vent rib 3
+  - min: -0.15625, -0.376, 1.026
+    max: -0.125, -0.349, 1.14
+    color: '#767A78'
+    label: upper vent rib 4
+  - min: -0.09375, -0.376, 1.026
+    max: -0.0625, -0.349, 1.14
+    color: '#767A78'
+    label: upper vent rib 5
+  - min: -0.03125, -0.376, 1.026
+    max: 0.0, -0.349, 1.14
+    color: '#767A78'
+    label: upper vent rib 6
+  - min: 0.03125, -0.376, 1.026
+    max: 0.0625, -0.349, 1.14
+    color: '#767A78'
+    label: upper vent rib 7
+  - min: 0.09375, -0.376, 1.026
+    max: 0.125, -0.349, 1.14
+    color: '#767A78'
+    label: upper vent rib 8
+  - min: -0.375, -0.401, 0.988
+    max: 0.125, -0.335, 1.026
+    color: '#818686'
+    label: compartment horizontal separator
+  - min: -0.375, -0.403, 0.988
+    max: 0.125, -0.4011, 1.026
+    color: '#FFFFFF'
+    label: compartment horizontal separator original face
+    surface: CMU3DVendorCloudArt044
+    surfaceAxis: XZ
+  - min: -0.375, -0.355, 0.646
+    max: 0.125, -0.3, 0.988
+    color: '#555452'
+    label: recessed oven-style meal compartment
+  - min: -0.375, -0.357, 0.646
+    max: 0.125, -0.3551, 0.988
+    color: '#FFFFFF'
+    label: recessed oven-style meal compartment original face
+    surface: CMU3DVendorCloudArt045
+    surfaceAxis: XZ
+  - min: -0.375, -0.401, 0.608
+    max: 0.125, -0.335, 0.646
+    color: '#808685'
+    label: meal compartment lower edge
+  - min: -0.375, -0.403, 0.608
+    max: 0.125, -0.4011, 0.646
+    color: '#FFFFFF'
+    label: meal compartment lower edge original face
+    surface: CMU3DVendorCloudArt046
+    surfaceAxis: XZ
+  - min: -0.03125, -0.424, 0.684
+    max: 0.0, -0.354, 0.95
+    color: '#292C29'
+    label: meal door vertical handle
+  - min: -0.03125, -0.426, 0.684
+    max: 0.0, -0.4241, 0.95
+    color: '#FFFFFF'
+    label: meal door vertical handle original face
+    surface: CMU3DVendorCloudArt047
+    surfaceAxis: XZ
+  - min: 0.1875, -0.418, 0.608
+    max: 0.25, -0.31, 1.178
+    color: '#4D504E'
+    label: vertical control divider
+  - min: 0.1875, -0.42, 0.608
+    max: 0.25, -0.4181, 1.178
+    color: '#FFFFFF'
+    label: vertical control divider original face
+    surface: CMU3DVendorCloudArt048
+    surfaceAxis: XZ
+  - min: 0.25, -0.382, 0.608
+    max: 0.4375, -0.3, 1.178
+    color: '#575B58'
+    label: control bank backing
+  - min: 0.25, -0.384, 0.608
+    max: 0.4375, -0.3821, 1.178
+    color: '#FFFFFF'
+    label: control bank backing original face
+    surface: CMU3DVendorCloudArt049
+    surfaceAxis: XZ
+  - min: 0.3125, -0.406, 1.102
+    max: 0.40625, -0.381, 1.14
+    color: '#087E0B'
+    label: green status bar 1
+  - min: 0.3125, -0.408, 1.102
+    max: 0.40625, -0.4061, 1.14
+    color: '#FFFFFF'
+    label: green status bar 1 original face
+    surface: CMU3DVendorCloudArt050
+    surfaceAxis: XZ
+  - min: 0.3125, -0.406, 1.026
+    max: 0.40625, -0.381, 1.064
+    color: '#087E0B'
+    label: green status bar 2
+  - min: 0.3125, -0.408, 1.026
+    max: 0.40625, -0.4061, 1.064
+    color: '#FFFFFF'
+    label: green status bar 2 original face
+    surface: CMU3DVendorCloudArt050
+    surfaceAxis: XZ
+  - min: 0.3125, -0.406, 0.95
+    max: 0.40625, -0.381, 0.988
+    color: '#087E0B'
+    label: green status bar 3
+  - min: 0.3125, -0.408, 0.95
+    max: 0.40625, -0.4061, 0.988
+    color: '#FFFFFF'
+    label: green status bar 3 original face
+    surface: CMU3DVendorCloudArt050
+    surfaceAxis: XZ
+  - min: 0.3125, -0.406, 0.874
+    max: 0.40625, -0.381, 0.912
+    color: '#087E0B'
+    label: green status bar 4
+  - min: 0.3125, -0.408, 0.874
+    max: 0.40625, -0.4061, 0.912
+    color: '#FFFFFF'
+    label: green status bar 4 original face
+    surface: CMU3DVendorCloudArt050
+    surfaceAxis: XZ
+  - min: 0.3125, -0.406, 0.798
+    max: 0.40625, -0.381, 0.836
+    color: '#087E0B'
+    label: green status bar 5
+  - min: 0.3125, -0.408, 0.798
+    max: 0.40625, -0.4061, 0.836
+    color: '#FFFFFF'
+    label: green status bar 5 original face
+    surface: CMU3DVendorCloudArt050
+    surfaceAxis: XZ
+  - min: 0.28125, -0.42, 0.646
+    max: 0.375, -0.381, 0.76
+    color: '#7B817D'
+    label: lower push control
+  - min: 0.28125, -0.422, 0.646
+    max: 0.375, -0.4201, 0.76
+    color: '#FFFFFF'
+    label: lower push control original face
+    surface: CMU3DVendorCloudArt051
+    surfaceAxis: XZ
+  - min: -0.4375, -0.419, 0.532
+    max: 0.4375, -0.29, 0.608
+    color: '#9B9E9D'
+    label: mid cabinet shelf
+  - min: -0.4375, -0.421, 0.532
+    max: 0.4375, -0.4191, 0.608
+    color: '#FFFFFF'
+    label: mid cabinet shelf original face
+    surface: CMU3DVendorCloudArt052
+    surfaceAxis: XZ
+  - min: -0.4375, -0.32, 0.304
+    max: 0.4375, -0.29, 0.532
+    color: '#353533'
+    label: lower ventilation recess
+  - min: -0.4375, -0.322, 0.304
+    max: 0.4375, -0.3201, 0.532
+    color: '#FFFFFF'
+    label: lower ventilation recess original face
+    surface: CMU3DVendorCloudArt053
+    surfaceAxis: XZ
+  - min: -0.40625, -0.369, 0.342
+    max: -0.375, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 1
+  - min: -0.34375, -0.369, 0.342
+    max: -0.3125, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 2
+  - min: -0.28125, -0.369, 0.342
+    max: -0.25, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 3
+  - min: -0.21875, -0.369, 0.342
+    max: -0.1875, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 4
+  - min: -0.15625, -0.369, 0.342
+    max: -0.125, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 5
+  - min: -0.09375, -0.369, 0.342
+    max: -0.0625, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 6
+  - min: 0.15625, -0.369, 0.342
+    max: 0.1875, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 7
+  - min: 0.21875, -0.369, 0.342
+    max: 0.25, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 8
+  - min: 0.28125, -0.369, 0.342
+    max: 0.3125, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 9
+  - min: 0.34375, -0.369, 0.342
+    max: 0.375, -0.319, 0.494
+    color: '#777B78'
+    label: lower vertical grille rib 10
+  - min: -0.4375, -0.408, 0.152
+    max: 0.4375, -0.3, 0.304
+    color: '#8C9190'
+    label: lower service cover
+  - min: -0.4375, -0.41, 0.152
+    max: 0.4375, -0.4081, 0.304
+    color: '#FFFFFF'
+    label: lower service cover original face
+    surface: CMU3DVendorCloudArt054
+    surfaceAxis: XZ
+  - min: -0.4375, -0.408, 0.038
+    max: -0.375, -0.3, 0.152
+    color: '#6C7270'
+    label: lower tray left jamb
+  - min: -0.4375, -0.41, 0.038
+    max: -0.375, -0.4081, 0.152
+    color: '#FFFFFF'
+    label: lower tray left jamb original face
+    surface: CMU3DVendorCloudArt055
+    surfaceAxis: XZ
+  - min: 0.375, -0.408, 0.038
+    max: 0.4375, -0.3, 0.152
+    color: '#6C7270'
+    label: lower tray right jamb
+  - min: 0.375, -0.41, 0.038
+    max: 0.4375, -0.4081, 0.152
+    color: '#FFFFFF'
+    label: lower tray right jamb original face
+    surface: CMU3DVendorCloudArt056
+    surfaceAxis: XZ
+  - min: -0.375, -0.265, 0.076
+    max: 0.375, -0.24, 0.152
+    color: '#323734'
+    label: lower inset horizontal cavity
+  - min: -0.375, -0.267, 0.076
+    max: 0.375, -0.2651, 0.152
+    color: '#FFFFFF'
+    label: lower inset horizontal cavity original face
+    surface: CMU3DVendorCloudArt057
+    surfaceAxis: XZ
+  - min: -0.375, -0.422, 0.038
+    max: 0.375, -0.24, 0.076
+    color: '#606561'
+    label: lower tray bottom lip
+  - min: -0.375, -0.424, 0.038
+    max: 0.375, -0.4221, 0.076
+    color: '#FFFFFF'
+    label: lower tray bottom lip original face
+    surface: CMU3DVendorCloudArt058
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DVendorAssortedCloud
+  label: Assorted equipment vendor
+  status: draft
+  sourcePrototypes:
+  - AU14CivilianColonyOperationsSyntheticVendor
+  - AU14CivilianEngineerVendor
+  - AU14JOGenericVendor
+  - AU14MilitaryDoctorGenericVendor
+  - AU14MilitaryPolicemanGenericVendor
+  referencePrototype: AU14CivilianColonyOperationsSyntheticVendor
+  referenceRsi: /Textures/CMU14/Structures/Vendors/assortedequipment.rsi
+  referenceState: base
+  sourceDirections: 1
+  faceAwayFromWall: true
+  faceAwayFromWindows: true
+  description: 'Actual stocked cabinet geometry follows assortedequipment.rsi base: broad upper shelf, divided lower
+    bays, three left shelves, individual rust/khaki packages, gray kit cases and yellow-tagged equipment. Exact
+    five source IDs share identical source artwork. Civilian sources use one base layer; military/JO sources composite
+    off plus base. Since base is opaque the displayed default is pixel-identical. Horizontal source scale is 1/32
+    tile per pixel; inferred height is .038 tile per pixel. Cabinet depth, underside, hidden rear construction and
+    real illumination are unverified. These are static source-composition drafts; no live state-selection or full-fidelity
+    claim. See SOURCES_VENDOR_CLOUD.md.'
+  parts:
+  - min: -0.5, -0.42, 0.0
+    max: -0.46875, 0.42, 1.216
+    color: '#505657'
+    label: left full-depth cabinet side
+  - min: -0.5, -0.422, 0.0
+    max: -0.46875, -0.4201, 1.216
+    color: '#FFFFFF'
+    label: left full-depth cabinet side original face
+    surface: CMU3DVendorCloudArt059
+    surfaceAxis: XZ
+  - min: 0.46875, -0.42, 0.0
+    max: 0.5, 0.42, 1.216
+    color: '#505657'
+    label: right full-depth cabinet side
+  - min: 0.46875, -0.422, 0.0
+    max: 0.5, -0.4201, 1.216
+    color: '#FFFFFF'
+    label: right full-depth cabinet side original face
+    surface: CMU3DVendorCloudArt060
+    surfaceAxis: XZ
+  - min: -0.46875, 0.385, 0.0
+    max: 0.46875, 0.42, 1.216
+    color: '#626668'
+    label: rear shell
+  - min: -0.46875, -0.42, 1.178
+    max: 0.46875, 0.385, 1.216
+    color: '#7E8386'
+    label: roof
+  - min: -0.46875, -0.42, 0.0
+    max: 0.46875, 0.385, 0.038
+    color: '#424748'
+    label: bottom chassis
+  - min: -0.46875, -0.432, 0.0
+    max: -0.40625, -0.395, 1.216
+    color: '#AAAAAA'
+    label: left silver face rail
+  - min: -0.46875, -0.434, 0.0
+    max: -0.40625, -0.4321, 1.216
+    color: '#FFFFFF'
+    label: left silver face rail original face
+    surface: CMU3DVendorCloudArt061
+    surfaceAxis: XZ
+  - min: 0.40625, -0.432, 0.0
+    max: 0.46875, -0.395, 1.216
+    color: '#AAAAAA'
+    label: right silver face rail
+  - min: 0.40625, -0.434, 0.0
+    max: 0.46875, -0.4321, 1.216
+    color: '#FFFFFF'
+    label: right silver face rail original face
+    surface: CMU3DVendorCloudArt062
+    surfaceAxis: XZ
+  - min: -0.40625, -0.432, 0.988
+    max: 0.40625, -0.355, 1.216
+    color: '#808587'
+    label: upper metal sign
+  - min: -0.40625, -0.434, 0.988
+    max: 0.40625, -0.4321, 1.216
+    color: '#FFFFFF'
+    label: upper metal sign original face
+    surface: CMU3DVendorCloudArt063
+    surfaceAxis: XZ
+  - min: -0.40625, 0.365, 0.836
+    max: 0.40625, 0.385, 0.988
+    color: '#212624'
+    label: upper shelf dark backing
+  - min: -0.40625, -0.432, 0.76
+    max: 0.40625, 0.385, 0.836
+    color: '#7F8380'
+    label: upper full-width shelf
+  - min: -0.40625, -0.434, 0.76
+    max: 0.40625, -0.4321, 0.836
+    color: '#FFFFFF'
+    label: upper full-width shelf original face
+    surface: CMU3DVendorCloudArt064
+    surfaceAxis: XZ
+  - min: -0.40625, 0.365, 0.152
+    max: 0.40625, 0.385, 0.76
+    color: '#282C29'
+    label: main cabinet dark backing
+  - min: -0.15625, -0.432, 0.152
+    max: -0.09375, 0.385, 0.76
+    color: '#898C88'
+    label: left bay vertical separator
+  - min: -0.15625, -0.434, 0.152
+    max: -0.09375, -0.4321, 0.76
+    color: '#FFFFFF'
+    label: left bay vertical separator original face
+    surface: CMU3DVendorCloudArt065
+    surfaceAxis: XZ
+  - min: -0.40625, -0.432, 0.532
+    max: -0.15625, 0.385, 0.57
+    color: '#92948E'
+    label: left first shelf
+  - min: -0.40625, -0.434, 0.532
+    max: -0.15625, -0.4321, 0.57
+    color: '#FFFFFF'
+    label: left first shelf original face
+    surface: CMU3DVendorCloudArt066
+    surfaceAxis: XZ
+  - min: -0.40625, -0.432, 0.342
+    max: -0.15625, 0.385, 0.38
+    color: '#92948E'
+    label: left second shelf
+  - min: -0.40625, -0.434, 0.342
+    max: -0.15625, -0.4321, 0.38
+    color: '#FFFFFF'
+    label: left second shelf original face
+    surface: CMU3DVendorCloudArt066
+    surfaceAxis: XZ
+  - min: -0.09375, -0.432, 0.532
+    max: 0.40625, 0.385, 0.57
+    color: '#92948E'
+    label: right upper shelf
+  - min: -0.09375, -0.434, 0.532
+    max: 0.40625, -0.4321, 0.57
+    color: '#FFFFFF'
+    label: right upper shelf original face
+    surface: CMU3DVendorCloudArt067
+    surfaceAxis: XZ
+  - min: -0.40625, -0.432, 0.0
+    max: 0.40625, 0.385, 0.152
+    color: '#888680'
+    label: lower silver shelf and plinth
+  - min: -0.40625, -0.434, 0.0
+    max: 0.40625, -0.4321, 0.152
+    color: '#FFFFFF'
+    label: lower silver shelf and plinth original face
+    surface: CMU3DVendorCloudArt068
+    surfaceAxis: XZ
+  - min: -0.375, -0.392, 0.836
+    max: -0.21875, -0.2, 0.988
+    color: '#85513D'
+    label: upper rust parcel
+  - min: -0.375, -0.394, 0.836
+    max: -0.21875, -0.3921, 0.988
+    color: '#FFFFFF'
+    label: upper rust parcel original face
+    surface: CMU3DVendorCloudArt069
+    surfaceAxis: XZ
+  - min: -0.1875, -0.392, 0.836
+    max: 0.09375, -0.2, 0.988
+    color: '#4E4F4A'
+    label: upper long gray case
+  - min: -0.1875, -0.394, 0.836
+    max: 0.09375, -0.3921, 0.988
+    color: '#FFFFFF'
+    label: upper long gray case original face
+    surface: CMU3DVendorCloudArt070
+    surfaceAxis: XZ
+  - min: 0.125, -0.392, 0.836
+    max: 0.25, -0.2, 0.988
+    color: '#9D8754'
+    label: upper khaki case
+  - min: 0.125, -0.394, 0.836
+    max: 0.25, -0.3921, 0.988
+    color: '#FFFFFF'
+    label: upper khaki case original face
+    surface: CMU3DVendorCloudArt071
+    surfaceAxis: XZ
+  - min: 0.3125, -0.392, 0.836
+    max: 0.40625, -0.2, 0.988
+    color: '#8F7A4D'
+    label: upper narrow khaki parcel
+  - min: 0.3125, -0.394, 0.836
+    max: 0.40625, -0.3921, 0.988
+    color: '#FFFFFF'
+    label: upper narrow khaki parcel original face
+    surface: CMU3DVendorCloudArt072
+    surfaceAxis: XZ
+  - min: -0.375, -0.392, 0.57
+    max: -0.28125, -0.2, 0.684
+    color: '#83513F'
+    label: left rust stock A
+  - min: -0.375, -0.394, 0.57
+    max: -0.28125, -0.3921, 0.684
+    color: '#FFFFFF'
+    label: left rust stock A original face
+    surface: CMU3DVendorCloudArt073
+    surfaceAxis: XZ
+  - min: -0.28125, -0.392, 0.57
+    max: -0.1875, -0.2, 0.684
+    color: '#88513F'
+    label: left rust stock B
+  - min: -0.28125, -0.394, 0.57
+    max: -0.1875, -0.3921, 0.684
+    color: '#FFFFFF'
+    label: left rust stock B original face
+    surface: CMU3DVendorCloudArt074
+    surfaceAxis: XZ
+  - min: -0.40625, -0.392, 0.38
+    max: -0.3125, -0.2, 0.494
+    color: '#A18D53'
+    label: left khaki stock A
+  - min: -0.40625, -0.394, 0.38
+    max: -0.3125, -0.3921, 0.494
+    color: '#FFFFFF'
+    label: left khaki stock A original face
+    surface: CMU3DVendorCloudArt075
+    surfaceAxis: XZ
+  - min: -0.3125, -0.392, 0.38
+    max: -0.21875, -0.2, 0.494
+    color: '#9F8A53'
+    label: left khaki stock B
+  - min: -0.3125, -0.394, 0.38
+    max: -0.21875, -0.3921, 0.494
+    color: '#FFFFFF'
+    label: left khaki stock B original face
+    surface: CMU3DVendorCloudArt076
+    surfaceAxis: XZ
+  - min: -0.21875, -0.392, 0.38
+    max: -0.15625, -0.2, 0.494
+    color: '#9B8651'
+    label: left khaki stock C
+  - min: -0.21875, -0.394, 0.38
+    max: -0.15625, -0.3921, 0.494
+    color: '#FFFFFF'
+    label: left khaki stock C original face
+    surface: CMU3DVendorCloudArt077
+    surfaceAxis: XZ
+  - min: -0.40625, -0.392, 0.19
+    max: -0.15625, -0.2, 0.304
+    color: '#83503C'
+    label: left lower red cases
+  - min: -0.40625, -0.394, 0.19
+    max: -0.15625, -0.3921, 0.304
+    color: '#FFFFFF'
+    label: left lower red cases original face
+    surface: CMU3DVendorCloudArt078
+    surfaceAxis: XZ
+  - min: -0.0625, -0.392, 0.57
+    max: 0.0625, -0.2, 0.684
+    color: '#A8AEAA'
+    label: right white wrapped parcel
+  - min: -0.0625, -0.394, 0.57
+    max: 0.0625, -0.3921, 0.684
+    color: '#FFFFFF'
+    label: right white wrapped parcel original face
+    surface: CMU3DVendorCloudArt079
+    surfaceAxis: XZ
+  - min: 0.0625, -0.392, 0.57
+    max: 0.1875, -0.2, 0.646
+    color: '#AAAFA9'
+    label: right low white package
+  - min: 0.0625, -0.394, 0.57
+    max: 0.1875, -0.3921, 0.646
+    color: '#FFFFFF'
+    label: right low white package original face
+    surface: CMU3DVendorCloudArt080
+    surfaceAxis: XZ
+  - min: 0.1875, -0.392, 0.57
+    max: 0.40625, -0.2, 0.684
+    color: '#675A38'
+    label: right upper olive kit
+  - min: 0.1875, -0.394, 0.57
+    max: 0.40625, -0.3921, 0.684
+    color: '#FFFFFF'
+    label: right upper olive kit original face
+    surface: CMU3DVendorCloudArt081
+    surfaceAxis: XZ
+  - min: -0.0625, -0.392, 0.266
+    max: 0.0625, -0.2, 0.494
+    color: '#35332C'
+    label: large dark left case
+  - min: -0.0625, -0.394, 0.266
+    max: 0.0625, -0.3921, 0.494
+    color: '#FFFFFF'
+    label: large dark left case original face
+    surface: CMU3DVendorCloudArt082
+    surfaceAxis: XZ
+  - min: 0.0625, -0.392, 0.266
+    max: 0.15625, -0.2, 0.494
+    color: '#3C392E'
+    label: large dark middle case
+  - min: 0.0625, -0.394, 0.266
+    max: 0.15625, -0.3921, 0.494
+    color: '#FFFFFF'
+    label: large dark middle case original face
+    surface: CMU3DVendorCloudArt083
+    surfaceAxis: XZ
+  - min: 0.21875, -0.392, 0.304
+    max: 0.40625, -0.2, 0.494
+    color: '#565449'
+    label: right equipment block
+  - min: 0.21875, -0.394, 0.304
+    max: 0.40625, -0.3921, 0.494
+    color: '#FFFFFF'
+    label: right equipment block original face
+    surface: CMU3DVendorCloudArt084
+    surfaceAxis: XZ
+  - min: -0.0625, -0.392, 0.19
+    max: 0.125, -0.2, 0.266
+    color: '#3E5275'
+    label: lower blue parcel
+  - min: -0.0625, -0.394, 0.19
+    max: 0.125, -0.3921, 0.266
+    color: '#FFFFFF'
+    label: lower blue parcel original face
+    surface: CMU3DVendorCloudArt085
+    surfaceAxis: XZ
+  - min: 0.125, -0.392, 0.152
+    max: 0.28125, -0.2, 0.304
+    color: '#705228'
+    label: lower brown parcel
+  - min: 0.125, -0.394, 0.152
+    max: 0.28125, -0.3921, 0.304
+    color: '#FFFFFF'
+    label: lower brown parcel original face
+    surface: CMU3DVendorCloudArt086
+    surfaceAxis: XZ
+  - min: 0.28125, -0.392, 0.152
+    max: 0.40625, -0.2, 0.266
+    color: '#3E3B2E'
+    label: lower dark parcel
+  - min: 0.28125, -0.394, 0.152
+    max: 0.40625, -0.3921, 0.266
+    color: '#FFFFFF'
+    label: lower dark parcel original face
+    surface: CMU3DVendorCloudArt087
+    surfaceAxis: XZ
+  - min: 0.21875, -0.405, 0.418
+    max: 0.25, -0.391, 0.494
+    color: '#D8B879'
+    label: equipment yellow identification tab 1
+  - min: 0.21875, -0.407, 0.418
+    max: 0.25, -0.4051, 0.494
+    color: '#FFFFFF'
+    label: equipment yellow identification tab 1 original face
+    surface: CMU3DVendorCloudArt088
+    surfaceAxis: XZ
+  - min: 0.28125, -0.405, 0.418
+    max: 0.3125, -0.391, 0.494
+    color: '#D8B879'
+    label: equipment yellow identification tab 2
+  - min: 0.28125, -0.407, 0.418
+    max: 0.3125, -0.4051, 0.494
+    color: '#FFFFFF'
+    label: equipment yellow identification tab 2 original face
+    surface: CMU3DVendorCloudArt088
+    surfaceAxis: XZ
+  - min: 0.34375, -0.405, 0.418
+    max: 0.375, -0.391, 0.494
+    color: '#D8B879'
+    label: equipment yellow identification tab 3
+  - min: 0.34375, -0.407, 0.418
+    max: 0.375, -0.4051, 0.494
+    color: '#FFFFFF'
+    label: equipment yellow identification tab 3 original face
+    surface: CMU3DVendorCloudArt088
+    surfaceAxis: XZ

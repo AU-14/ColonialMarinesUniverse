@@ -25,7 +25,7 @@ public sealed partial class HardpointSystem
         // CMU14: distinguish permanent wrecks from ordinary repairable damage.
         if (IsWrecked(ent.Owner))
         {
-            args.PushMarkup(GetWreckedMessage(ent.Owner));
+            args.PushMarkup(GetWreckMessage(ent.Owner));
             return;
         }
 

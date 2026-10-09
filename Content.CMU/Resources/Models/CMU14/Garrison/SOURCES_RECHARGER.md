@@ -1,0 +1,19 @@
+# Source-owned charging dock
+
+One exact mapping: RMCRecharger. Seventeen saved Redux chargers are visible, with no classic placements. Every saved override is Transform only; source slots and machine containers are empty, so source MapInit selects recharger-0 with no item overlays. Ten saved yaws are zero, six -90 degrees and one +90 degrees. The source is one-direction, noRot=false and snapCardinals=true: cardinal transform yaw cancels in its visible sprite rotation. The model preserves that source-facing rule rather than treating the saved transform as a recovered physical axis. Saved transforms and source pivot remain unchanged; ordinary authored surface support placement is used.
+
+The original base is a solid stepped dock with an inset pale control panel, raised individual keys, a red control, a cyan meter and a recessed front-open charging channel. Two feet remain separate at the bottom. Every opaque source pixel is represented at its original XZ coordinate; transparent silhouette pixels remain empty. A front skin contains exact source pixels or exact uniform palette colors, while separate structural solids provide unseen side/rear construction. The taser and hooked baton inserts are independently shaped solid silhouettes, placed in the source's ItemMapper order; both can coexist. Their depth and the unseen dock construction are explicit inferences, not 3D reconstruction evidence.
+
+All six indicator states are source-owned. States 0–4 have one frame; state 5 has two 0.1-second frames. Native rendering reads the actual Base/Light layer states, current frame, visibility and keyed ItemMapper layers without a second timer or chemistry/charge simulation. Portable GLB/browser studies expose 28 compositions (including hidden-light studies), 32 frame assemblies and four 0.2-second blinking loops. The original Light uses an unshaded shader; source colors and blinking are preserved, but the current 3D renderer still lights those colors normally. True unshaded/emissive illumination remains a documented limitation.
+
+The saved adapter verifies Charger, PowerChargerVisuals, ItemMapper, Sprite layers and known containers before selecting a pose. For fully resolved nonempty source records it follows source MapInit Battery startingCharge/maxCharge, direct or slotted batteries and tags across all containers. The source arithmetic is zero when empty/no battery, 1–4 by ceiling of ratio times four, and 5 at full charge. Unresolved starting items, unknown owners, overlays, layer tints, source transforms, shaders or Appearance data use the original sprite fallback. No gameplay or interaction state is invented. Live sampling reads actual layers rather than this saved-file derivation.
+
+Independent front-ray/UV reconstruction compares all 32 assemblies to source alpha composites byte for byte. Written crops are copied without filtering. The 17 context records retain saved source coordinates and report the chosen mapped support or ordinary floor; they are not a universal no-contact or game-runtime verification claim. Focused Python tests cover all compositions, loop timing, empty/direct/slotted battery selection, both overlays, source thresholds and conservative fallback. Root coordinates native builds and final whole-library exports separately.
+
+Reproduce this family only: `python Tools/three_d/author_recharger.py`; deterministic check: `--check --skip-reviews`. Source evidence: generated/recharger-source-audit.json. Proof: generated/recharger-proof.json. Review: generated/review/recharger/source-model-montage.png.
+
+## Attribution
+
+Original sprites and derived crops are CC-BY-SA-3.0. Preserve attribution on redistribution.
+
+Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/c7b4d6bd868de669ad96f1d3e4dc3702a3404355/icons/obj/structures/props/stationobjs.dmi
