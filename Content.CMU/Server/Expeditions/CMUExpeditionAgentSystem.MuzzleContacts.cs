@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared._RMC14.Weapons.Ranged.Chamber;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -15,7 +16,9 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void InitializeVision()
     {
-        SubscribeLocalEvent<GunComponent, TakeAmmoEvent>(OnObservedGunTakeAmmo);
+        // A system's subscriptions to the same event must share their ordering constraints.
+        SubscribeLocalEvent<GunComponent, TakeAmmoEvent>(OnObservedGunTakeAmmo,
+            before: new[] { typeof(RMCGunChamberSystem), typeof(SharedGunSystem) });
         SubscribeLocalEvent<CMUExpeditionShotObserverComponent, GunShotEvent>(OnObservedMuzzleFlash);
     }
 

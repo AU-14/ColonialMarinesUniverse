@@ -56,6 +56,9 @@ Periodic reports retain separate slowest-work, slowest-wall and highest-allocati
 they are not a full raw trace of every frame. Percentiles use up to 4,096 wall samples per window,
 with omitted samples reported. Inventories stop at 50,000 entities or 300,000 components, explicitly
 mark truncation and suppress comparisons against incomplete inventories.
+Periodic inventories also check a five-millisecond scan budget every 128 entities and report
+`timeLimited=True` when it is exhausted. This bounds repeated census work during capture; it is
+not a hard frame-time guarantee. Initial, manual and final inventories retain the count-based limits.
 
 Startup/report frames are excluded from both profiler aggregation and wall statistics to avoid
 diagnostic dumps creating their own incidents. The per-frame reader and profiling instrumentation
