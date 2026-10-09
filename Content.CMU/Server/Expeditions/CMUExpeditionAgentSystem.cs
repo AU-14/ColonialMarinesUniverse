@@ -275,13 +275,15 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
         if (hasAmmo && HoldCoveringFire(uid, agent, now))
             return;
-        if (WaitForSquadOrdnance(uid, agent, now) || YieldSpecialistLane(uid, agent, now) || FollowSquadDuty(uid, agent, now))
+        if (hasAmmo && (WaitForSquadOrdnance(uid, agent, now) || YieldSpecialistLane(uid, agent, now) || FollowSquadDuty(uid, agent, now)))
             return;
         if (ApproachVehicleShot(uid, agent, now))
             return;
         if (hasAmmo && ContinueContactMovement(uid, agent, now))
             return;
         if (RunPlan(uid, agent, hasAmmo, damage, hit, now))
+            return;
+        if (!hasAmmo && RunEmptyWeaponResponse(uid, agent, transform, damage, now))
             return;
         if (ShareSupplies(uid, agent, now))
             return;
@@ -706,12 +708,17 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         if (usingHands || agent.WorkItem != null || agent.PreparingWork || _timing.CurTime < agent.RifleLoweredUntil)
         {
             _wield.TryUnwield(gun.Owner, uid);
-            foreach (var hand in _hands.EnumerateHands(uid))
-                if (_hands.TryGetHeldItem(uid, hand, out var held) && held != gun.Owner && HasComp<GunComponent>(held))
-                    StowWeapon(uid, held.Value);
+            StowOtherWeapons(uid, gun.Owner);
         }
         else if (TryComp<WieldableComponent>(gun, out var wieldable) && !wieldable.Wielded)
-            _wield.TryWield((gun.Owner, wieldable), uid);
+        {
+            StowOtherWeapons(uid, gun.Owner);
+            // Native wielding can drop an occupied offhand to spawn its virtual grip.
+            // Keep a blocked primary in hand and fire a one-handed backup unwielded.
+            // Never sacrifice a gun, ammunition or a medical item just to ready a grip.
+            if (_hands.CountFreeHands(uid) >= wieldable.FreeHandsRequired)
+                _wield.TryWield((gun.Owner, wieldable), uid);
+        }
         var ammo = new GetAmmoCountEvent();
         RaiseLocalEvent(gun, ref ammo);
         return ammo.Count > 0;
@@ -746,10 +753,22 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             return;
         }
         agent.CoverAnchor = position?.Anchor;
-        BeginMove(uid, agent, position?.Anchor ?? agent.Home!.Value,
-            hasAmmo ? CMUExpeditionAgentState.Retreat : CMUExpeditionAgentState.OutOfAmmo, now);
+        var destination = position?.Anchor ?? FindAmmoEscape(uid, agent, transform.Coordinates);
+        if (destination is { } retreat)
+        {
+            BeginMove(uid, agent, retreat,
+                hasAmmo ? CMUExpeditionAgentState.Retreat : CMUExpeditionAgentState.OutOfAmmo, now);
+            if (!hasAmmo)
+                agent.WeaponDecision = position != null ? "empty-moving-to-shelter" : "empty-opening-distance";
+        }
+        else
+        {
+            _steering.Unregister(uid);
+            agent.State = CMUExpeditionAgentState.OutOfAmmo;
+            agent.WeaponDecision = "empty-no-safe-escape";
+        }
         agent.HoldUntil = now + TimeSpan.FromSeconds(2);
-        agent.NextRetreat = now + TimeSpan.FromSeconds(6);
+        agent.NextRetreat = now + TimeSpan.FromSeconds(hasAmmo ? 6 : 1);
     }
 
     private static void ClearCover(CMUExpeditionAgentComponent agent)
@@ -776,7 +795,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         agent.MoveProgressAt = now;
         if (state == CMUExpeditionAgentState.Peeking)
             agent.PeekInitialDamage = agent.LastDamage;
-        if (state is CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.Withdraw &&
+        if (state is CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.Withdraw &&
             agent.LastSeen != null && !_transform.InRange(Transform(uid).Coordinates, destination, 2) && !BuildTacticalRoute(uid, agent, destination))
         {
             agent.MoveUntil = now;

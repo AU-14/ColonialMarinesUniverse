@@ -50,7 +50,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.SmokeGrenade = false;
         if (goal == CMUTacticalGoal.Fight)
         {
-            if (damage < agent.RetreatDamage && available && now >= agent.NextRescue && agent.Stress < 0.65f &&
+            if ((armed || safe) && damage < agent.RetreatDamage && available && now >= agent.NextRescue && agent.Stress < 0.65f &&
                 (agent.HasCoveringAlly || agent.VisibleThreats.Count == 0))
                 agent.Casualty = FindCasualty(uid, agent);
             if (agent.Casualty != null)

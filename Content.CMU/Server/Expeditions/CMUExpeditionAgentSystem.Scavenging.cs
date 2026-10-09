@@ -79,6 +79,9 @@ public sealed partial class CMUExpeditionAgentSystem
             return !armed && WeaponAmmo(item) > 0 &&
                 !(TryComp<CMUExpeditionWeaponRoleComponent>(item, out var firearm) && firearm.Rocket);
         }
+        if (!armed && Comp<CMUExpeditionAgentComponent>(uid) is { LastSeen: not null } agent &&
+            _timing.CurTime < agent.ForgetAt && !CarriedWeapons(uid).Any(gun => CompatibleAmmunition(uid, gun, item)))
+            return false; // An empty combatant needs ammunition, not optional stock for the backpack.
         return CanStoreSupply(uid, item) && (WantsSupply(uid, item) || WantsMedicalTool(uid, item) || RunnerNeedsItem(uid, item));
     }
 

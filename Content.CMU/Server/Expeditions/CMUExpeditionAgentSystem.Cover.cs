@@ -145,7 +145,7 @@ public sealed partial class CMUExpeditionAgentSystem
         // A hit while supposedly hidden invalidates even cover our geometry considers solid
         // (penetrable scenery, changed firing angles, or an attacker not yet observed).
         var hitWhileHidden = hit && atShelter && agent.State is
-            CMUExpeditionAgentState.Recover or CMUExpeditionAgentState.Healing or CMUExpeditionAgentState.Retreat;
+            CMUExpeditionAgentState.Recover or CMUExpeditionAgentState.Healing or CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo;
         if (!hitWhileHidden && ShelteredFromKnownThreats(uid, agent, anchor) &&
             (!atShelter || agent.State != CMUExpeditionAgentState.Recover ||
                 ShelteredFromKnownThreats(uid, agent, Transform(uid).Coordinates)))
@@ -162,7 +162,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.NextReposition = now + agent.BurstDuration;
         agent.NextSuppressionResponse = now + agent.BurstDuration;
         if (agent.Action == null && agent.State is CMUExpeditionAgentState.Reposition or
-            CMUExpeditionAgentState.Withdraw or CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Retreat)
+            CMUExpeditionAgentState.Withdraw or CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo)
         {
             _steering.Unregister(uid);
             agent.State = CMUExpeditionAgentState.Guard;
