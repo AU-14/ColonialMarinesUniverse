@@ -120,10 +120,6 @@ public sealed class PrototypeSaveTest : GameTest
                         var compName = compFact.GetComponentName(compType);
                         compNames.Add(compName);
 
-                        // CMU14: match EntitySerializer's exclusion of runtime-only components.
-                        if (compFact.GetRegistration(compType).Unsaved)
-                            continue;
-
                         if (compType == typeof(MetaDataComponent) || compType == typeof(TransformComponent) || compType == typeof(FixturesComponent))
                             continue;
 

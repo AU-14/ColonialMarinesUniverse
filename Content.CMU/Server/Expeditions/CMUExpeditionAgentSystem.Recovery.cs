@@ -103,7 +103,7 @@ public sealed partial class CMUExpeditionAgentSystem
                     TryComp<CMUExpeditionWeaponRoleComponent>(lost, out var role) && role.Rocket && WeaponAmmo(lost) == 0)
                     continue;
                 agent.NextWeaponRecovery = now + TimeSpan.FromSeconds(2);
-                if (_inventory.TryEquip(uid, lost, "suitStorage", silent: true) || StoreSupply(uid, lost))
+                if (_inventory.TryEquip(uid, lost, SuitStorageSlot, silent: true) || StoreSupply(uid, lost))
                 {
                     agent.WeaponsRecovered++;
                     agent.WeaponRecoveryDecision = "secured-lost-primary";

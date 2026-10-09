@@ -10,6 +10,9 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentSystem
 {
+    // Inventory slot IDs are case-sensitive; this matches the human inventory template.
+    private const string SuitStorageSlot = "suitstorage";
+
     private float WeaponFireRange(EntityUid uid, CMUExpeditionAgentComponent agent) =>
         _guns.TryGetGun(uid, out var gun) && TryComp<CMUExpeditionWeaponRoleComponent>(gun, out var role)
             ? role.Rocket && VehicleAimBody(uid) != null ? agent.FireRange : Math.Min(agent.FireRange, role.MaximumRange)
@@ -28,7 +31,7 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var hand in _hands.EnumerateHands(uid))
             if (_hands.TryGetHeldItem(uid, hand, out var item) && HasComp<GunComponent>(item))
                 weapons.Add(item.Value);
-        if (_inventory.TryGetSlotEntity(uid, "suitStorage", out var slung) && HasComp<GunComponent>(slung))
+        if (_inventory.TryGetSlotEntity(uid, SuitStorageSlot, out var slung) && HasComp<GunComponent>(slung))
             weapons.Add(slung.Value);
         foreach (var item in SupplyItems(uid))
             if (HasComp<GunComponent>(item))
@@ -62,7 +65,7 @@ public sealed partial class CMUExpeditionAgentSystem
             // Revalidate possession and usefulness after freeing the wielding hand.
             if (!CarriedWeapons(uid).Contains(pending) || WeaponScore(uid, agent, pending) < 0)
                 return false;
-            var wasSlung = _inventory.TryGetSlotEntity(uid, "suitStorage", out var slung) && slung == pending;
+            var wasSlung = _inventory.TryGetSlotEntity(uid, SuitStorageSlot, out var slung) && slung == pending;
             if (!_hands.IsHolding(uid, pending, out _) && !_hands.TryPickupAnyHand(uid, pending))
                 return false;
             if (current.Owner.IsValid() && current.Owner != pending && !StowWeapon(uid, current) &&
@@ -70,7 +73,7 @@ public sealed partial class CMUExpeditionAgentSystem
             {
                 // Roll back to the source slot rather than discard a still-loaded primary.
                 if (wasSlung)
-                    _inventory.TryEquip(uid, pending, "suitStorage", silent: true);
+                    _inventory.TryEquip(uid, pending, SuitStorageSlot, silent: true);
                 else
                     StoreSupply(uid, pending);
                 ActivateWeapon(uid, current);
@@ -119,7 +122,7 @@ public sealed partial class CMUExpeditionAgentSystem
         // after resupply. Failed storage must not strand them on the floor during a swap.
         if (TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role) && role.Rocket && WeaponAmmo(weapon) == 0)
             return _hands.TryDrop(uid, weapon);
-        return _inventory.TryEquip(uid, weapon, "suitStorage", silent: true) ||
+        return _inventory.TryEquip(uid, weapon, SuitStorageSlot, silent: true) ||
             StoreSupply(uid, weapon);
     }
 
