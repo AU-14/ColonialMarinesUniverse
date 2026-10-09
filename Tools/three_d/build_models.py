@@ -282,6 +282,10 @@ def validate_model(model, *, part_limit=128):
                 raise ValueError(f"{model['id']}: animation must start at zero")
         model['doorButtonStates'] = validated
     result = {**model, "parts": parts, "sourcePrototypes": refs, "status": model.get("status", "draft")}
+    # CMU14: hive structures have independently visible roots, organs and growth layers.
+    if 'xenoStates' in model:
+        from xeno_states import validate
+        result = validate(result, validate_model, resource_file)
     if any(k in model for k in ('floorOpening', 'ceilingOpening')):
         from slab_openings import validate
         result = validate(result)
@@ -297,6 +301,11 @@ def validate_model(model, *, part_limit=128):
     if 'solutionAppearance' in model:
         from solution_glass_states import validate
         result = validate(result, validate_model)
+    # CMU14: independently visible vehicle hardpoints use the existing source owners.
+    if 'vehicleLayers' in model:
+        from vehicle_states import validate, validate_source
+        result = validate(result, validate_model)
+        validate_source(result, resource_file)
     if any(k in model for k in ('spriteStates', 'sourceSpriteOffset', 'sourceSpriteRotates')):
         from sprite_states import validate
         result = validate(result, validate_model)
@@ -542,6 +551,10 @@ def encode_glb(data, binary):
 
 
 def glb_bytes(model):
+    # CMU14: include inspectable hive layer states without flattening the live composition.
+    if model.get('xenoStates'):
+        from xeno_states import model_document
+        return encode_glb(*model_document(model, glb_document))
     if model.get('foamAppearance'):
         from foam_wall_states import model_document, validate_source
         validate_source(model, resource_file)
@@ -1105,6 +1118,11 @@ def main():
                         "sha256": hashlib.sha256(binary).hexdigest(), "sourcePrototypes": model["sourcePrototypes"]})
         if model.get('equipmentOnly'):
             entries[-1]['equipmentOnly'] = True
+        # CMU14: report stored hive states separately from the active default composition.
+        if model.get('xenoStates'):
+            states = [s for source in model['xenoStates'].values() for s in source.values()]
+            entries[-1]['xenoLayerScenes'] = sum(len(s['frames']) for s in states)
+            entries[-1]['storedFrameParts'] = sum(len(f['parts']) for s in states for f in s['frames'])
         if model.get('doorButtonStates'):
             entries[-1]['animationClips'] = len(model['frameAnimations'])
             entries[-1]['storedFrameParts'] = sum(len(f['parts']) for s in model['doorButtonStates'].values()

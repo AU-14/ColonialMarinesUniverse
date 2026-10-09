@@ -6,6 +6,16 @@ binding under **Options → Controls → Camera → 3D: Toggle mouse capture**.
 See [player controls and current limits](FIRST_PERSON_WALK.md). First person is available
 to players only on Redux; the separate live scene workbench still requires debug permission.
 
+<!-- CMU14 -->
+The latest [Redux coverage pass](../../Content.CMU/Resources/Models/CMU14/Garrison/Reviews/ReduxCoverage/README.md)
+adds 138 draft models and 203 exact prototype bindings for cables, disposal pipes,
+faction vendors, supply vehicles and other props, bringing the library to 2,614 exports.
+It audits all seven Redux levels and their spawner/vendor/vehicle choices: all 1,734
+resolved physical types have model bindings or existing native presentation. Six
+legacy references still lack content definitions or parents. These counts measure
+coverage; model fidelity and live animation remain subject to the linked review's limits.
+<!-- /CMU14 -->
+
 Generated review screenshots, scene exports and audit outputs are produced locally under
 `Tools/three_d/generated/` and are omitted from this submission. The sections below retain
 the prototype's production history; their counts and test results describe the original

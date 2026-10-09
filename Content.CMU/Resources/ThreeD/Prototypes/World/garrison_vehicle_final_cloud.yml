@@ -2506,8 +2506,8 @@
   id: CMU3DVehicleCMBPoliceVanVehicleFinalCloud
   label: CMB marshal paddywagon
   status: draft
-  sourcePrototypes:
-  - VehicleCMBPoliceVan
+  # CMU14: live layers now bind through CMU3DReduxVehicleCMBPoliceVan.
+  sourcePrototypes: []
   referencePrototype: VehicleCMBPoliceVan
   referenceRsi: /Textures/CMU14/Structures/vehicles/marshalpaddywagon.rsi
   referenceState: van_base
@@ -2853,8 +2853,8 @@
   id: CMU3DVehiclePizzaVanVehicleFinalCloud
   label: Pizza delivery van
   status: draft
-  sourcePrototypes:
-  - VehiclePizzaVan
+  # CMU14: live layers now bind through CMU3DReduxVehiclePizzaVan.
+  sourcePrototypes: []
   referencePrototype: VehiclePizzaVan
   referenceRsi: /Textures/_RMC14/Structures/Vehicles/pizza_van.rsi
   referenceState: van_base

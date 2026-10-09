@@ -3562,51 +3562,19 @@
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.09375, 0.185, 0.71625
-    max: -0.0625, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.10075, 0.236, 0.69925
-    max: -0.0555, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.0625, 0.185, 0.71625
-    max: -0.03125, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.0695, 0.236, 0.69925
-    max: -0.02425, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.03125, 0.185, 0.71625
-    max: 0.0, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.69925
-    max: 0.007, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: 0.0, 0.185, 0.71625
     max: 0.03125, 0.24, 0.935
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.69925
-    max: 0.03825, 0.254, 0.9520000000000001
+    min: -0.10075, 0.236, 0.69925
+    max: 0.03825, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.685
-    max: 0.0625, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: 0.02425, 0.236, 0.668
-    max: 0.0695, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: 0.0625, 0.185, 0.685
     max: 0.09375, 0.24, 0.935
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: 0.0555, 0.236, 0.668
-    max: 0.10075, 0.254, 0.9520000000000001
+    min: 0.02425, 0.236, 0.668
+    max: 0.10075, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: 0.09375, 0.185, 0.65375
@@ -3630,16 +3598,12 @@
     color: '#CBCAE1'
   - label: solid lid frame behind glass
     min: 0.14925, 0.236, 0.6055
-    max: 0.1945, 0.254, 0.9520000000000001
+    max: 0.22575, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: 0.1875, 0.185, 0.6225
     max: 0.21875, 0.24, 0.935
     color: '#D3CEB4'
-  - label: solid lid frame behind glass
-    min: 0.1805, 0.236, 0.6055
-    max: 0.22575, 0.254, 0.9520000000000001
-    color: '#655246'
   - label: original open glass contour and sheen
     min: -0.15625, 0.18, 0.59125
     max: 0.21875, 0.184, 0.96625
@@ -3671,20 +3635,12 @@
     max: 0.28825, 0.272, 0.8582500000000001
     color: '#655246'
   - label: source-cut opened glass column
-    min: 0.28125, 0.20299999999999999, 0.6225
-    max: 0.3125, 0.258, 0.8725
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: 0.27425, 0.254, 0.6055
-    max: 0.3195, 0.272, 0.8895000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: 0.3125, 0.20299999999999999, 0.6225
+    min: 0.28125, 0.203, 0.6225
     max: 0.34375, 0.258, 0.8725
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: 0.3055, 0.254, 0.6055
-    max: 0.35075, 0.272, 0.8895000000000001
+    min: 0.27425, 0.254, 0.6055
+    max: 0.35075, 0.272, 0.8895
     color: '#655246'
   - label: source-cut opened glass column
     min: 0.34375, 0.20299999999999999, 0.6225
@@ -3855,51 +3811,19 @@
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.09375, 0.185, 0.71625
-          max: -0.0625, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.10075, 0.236, 0.69925
-          max: -0.0555, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.0625, 0.185, 0.71625
-          max: -0.03125, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.0695, 0.236, 0.69925
-          max: -0.02425, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.03125, 0.185, 0.71625
-          max: 0.0, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.69925
-          max: 0.007, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: 0.0, 0.185, 0.71625
           max: 0.03125, 0.24, 0.935
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.69925
-          max: 0.03825, 0.254, 0.9520000000000001
+          min: -0.10075, 0.236, 0.69925
+          max: 0.03825, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.685
-          max: 0.0625, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: 0.02425, 0.236, 0.668
-          max: 0.0695, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: 0.0625, 0.185, 0.685
           max: 0.09375, 0.24, 0.935
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: 0.0555, 0.236, 0.668
-          max: 0.10075, 0.254, 0.9520000000000001
+          min: 0.02425, 0.236, 0.668
+          max: 0.10075, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: 0.09375, 0.185, 0.65375
@@ -3923,16 +3847,12 @@
           color: '#CBCAE1'
         - label: solid lid frame behind glass
           min: 0.14925, 0.236, 0.6055
-          max: 0.1945, 0.254, 0.9520000000000001
+          max: 0.22575, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: 0.1875, 0.185, 0.6225
           max: 0.21875, 0.24, 0.935
           color: '#D3CEB4'
-        - label: solid lid frame behind glass
-          min: 0.1805, 0.236, 0.6055
-          max: 0.22575, 0.254, 0.9520000000000001
-          color: '#655246'
         - label: original open glass contour and sheen
           min: -0.15625, 0.18, 0.59125
           max: 0.21875, 0.184, 0.96625
@@ -3964,20 +3884,12 @@
           max: 0.28825, 0.272, 0.8582500000000001
           color: '#655246'
         - label: source-cut opened glass column
-          min: 0.28125, 0.20299999999999999, 0.6225
-          max: 0.3125, 0.258, 0.8725
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: 0.27425, 0.254, 0.6055
-          max: 0.3195, 0.272, 0.8895000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: 0.3125, 0.20299999999999999, 0.6225
+          min: 0.28125, 0.203, 0.6225
           max: 0.34375, 0.258, 0.8725
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: 0.3055, 0.254, 0.6055
-          max: 0.35075, 0.272, 0.8895000000000001
+          min: 0.27425, 0.254, 0.6055
+          max: 0.35075, 0.272, 0.8895
           color: '#655246'
         - label: source-cut opened glass column
           min: 0.34375, 0.20299999999999999, 0.6225
@@ -5077,52 +4989,20 @@
     max: 0.132, 0.254, 0.9520000000000001
     color: '#655246'
   - label: source-cut opened glass column
-    min: 0.0625, 0.185, 0.71625
+    min: -0.03125, 0.185, 0.71625
     max: 0.09375, 0.24, 0.935
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: 0.0555, 0.236, 0.69925
-    max: 0.10075, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: 0.03125, 0.185, 0.71625
-    max: 0.0625, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: 0.02425, 0.236, 0.69925
-    max: 0.0695, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.0, 0.185, 0.71625
-    max: 0.03125, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.69925
-    max: 0.03825, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.03125, 0.185, 0.71625
-    max: -0.0, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
     min: -0.03825, 0.236, 0.69925
-    max: 0.007, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.0625, 0.185, 0.685
-    max: -0.03125, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.0695, 0.236, 0.668
-    max: -0.02425, 0.254, 0.9520000000000001
+    max: 0.10075, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.09375, 0.185, 0.685
-    max: -0.0625, 0.24, 0.935
+    max: -0.03125, 0.24, 0.935
     color: '#DDDDF4'
   - label: solid lid frame behind glass
     min: -0.10075, 0.236, 0.668
-    max: -0.0555, 0.254, 0.9520000000000001
+    max: -0.02425, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.125, 0.185, 0.65375
@@ -5145,17 +5025,13 @@
     max: -0.15625, 0.24, 0.935
     color: '#CBCAE1'
   - label: solid lid frame behind glass
-    min: -0.1945, 0.236, 0.6055
-    max: -0.14925, 0.254, 0.9520000000000001
+    min: -0.22575, 0.236, 0.6055
+    max: -0.14925, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.21875, 0.185, 0.6225
     max: -0.1875, 0.24, 0.935
     color: '#D3CEB4'
-  - label: solid lid frame behind glass
-    min: -0.22575, 0.236, 0.6055
-    max: -0.1805, 0.254, 0.9520000000000001
-    color: '#655246'
   - label: original open glass contour and sheen
     min: -0.21875, 0.18, 0.59125
     max: 0.15625, 0.184, 0.96625
@@ -5188,20 +5064,12 @@
     max: -0.243, 0.272, 0.8582500000000001
     color: '#655246'
   - label: source-cut opened glass column
-    min: -0.3125, 0.20299999999999999, 0.6225
+    min: -0.34375, 0.203, 0.6225
     max: -0.28125, 0.258, 0.8725
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: -0.3195, 0.254, 0.6055
-    max: -0.27425, 0.272, 0.8895000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.34375, 0.20299999999999999, 0.6225
-    max: -0.3125, 0.258, 0.8725
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
     min: -0.35075, 0.254, 0.6055
-    max: -0.3055, 0.272, 0.8895000000000001
+    max: -0.27425, 0.272, 0.8895
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.375, 0.20299999999999999, 0.6225
@@ -5372,52 +5240,20 @@
           max: 0.132, 0.254, 0.9520000000000001
           color: '#655246'
         - label: source-cut opened glass column
-          min: 0.0625, 0.185, 0.71625
+          min: -0.03125, 0.185, 0.71625
           max: 0.09375, 0.24, 0.935
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: 0.0555, 0.236, 0.69925
-          max: 0.10075, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: 0.03125, 0.185, 0.71625
-          max: 0.0625, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: 0.02425, 0.236, 0.69925
-          max: 0.0695, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.0, 0.185, 0.71625
-          max: 0.03125, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.69925
-          max: 0.03825, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.03125, 0.185, 0.71625
-          max: -0.0, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
           min: -0.03825, 0.236, 0.69925
-          max: 0.007, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.0625, 0.185, 0.685
-          max: -0.03125, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.0695, 0.236, 0.668
-          max: -0.02425, 0.254, 0.9520000000000001
+          max: 0.10075, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.09375, 0.185, 0.685
-          max: -0.0625, 0.24, 0.935
+          max: -0.03125, 0.24, 0.935
           color: '#DDDDF4'
         - label: solid lid frame behind glass
           min: -0.10075, 0.236, 0.668
-          max: -0.0555, 0.254, 0.9520000000000001
+          max: -0.02425, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.125, 0.185, 0.65375
@@ -5440,17 +5276,13 @@
           max: -0.15625, 0.24, 0.935
           color: '#CBCAE1'
         - label: solid lid frame behind glass
-          min: -0.1945, 0.236, 0.6055
-          max: -0.14925, 0.254, 0.9520000000000001
+          min: -0.22575, 0.236, 0.6055
+          max: -0.14925, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.21875, 0.185, 0.6225
           max: -0.1875, 0.24, 0.935
           color: '#D3CEB4'
-        - label: solid lid frame behind glass
-          min: -0.22575, 0.236, 0.6055
-          max: -0.1805, 0.254, 0.9520000000000001
-          color: '#655246'
         - label: original open glass contour and sheen
           min: -0.21875, 0.18, 0.59125
           max: 0.15625, 0.184, 0.96625
@@ -5483,20 +5315,12 @@
           max: -0.243, 0.272, 0.8582500000000001
           color: '#655246'
         - label: source-cut opened glass column
-          min: -0.3125, 0.20299999999999999, 0.6225
+          min: -0.34375, 0.203, 0.6225
           max: -0.28125, 0.258, 0.8725
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: -0.3195, 0.254, 0.6055
-          max: -0.27425, 0.272, 0.8895000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.34375, 0.20299999999999999, 0.6225
-          max: -0.3125, 0.258, 0.8725
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
           min: -0.35075, 0.254, 0.6055
-          max: -0.3055, 0.272, 0.8895000000000001
+          max: -0.27425, 0.272, 0.8895
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.375, 0.20299999999999999, 0.6225
@@ -6597,52 +6421,20 @@
     max: 0.132, 0.254, 0.9520000000000001
     color: '#655246'
   - label: source-cut opened glass column
-    min: 0.0625, 0.185, 0.71625
+    min: -0.03125, 0.185, 0.71625
     max: 0.09375, 0.24, 0.935
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: 0.0555, 0.236, 0.69925
-    max: 0.10075, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: 0.03125, 0.185, 0.71625
-    max: 0.0625, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: 0.02425, 0.236, 0.69925
-    max: 0.0695, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.0, 0.185, 0.71625
-    max: 0.03125, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.69925
-    max: 0.03825, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.03125, 0.185, 0.71625
-    max: -0.0, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
     min: -0.03825, 0.236, 0.69925
-    max: 0.007, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.0625, 0.185, 0.685
-    max: -0.03125, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.0695, 0.236, 0.668
-    max: -0.02425, 0.254, 0.9520000000000001
+    max: 0.10075, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.09375, 0.185, 0.685
-    max: -0.0625, 0.24, 0.935
+    max: -0.03125, 0.24, 0.935
     color: '#DDDDF4'
   - label: solid lid frame behind glass
     min: -0.10075, 0.236, 0.668
-    max: -0.0555, 0.254, 0.9520000000000001
+    max: -0.02425, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.125, 0.185, 0.65375
@@ -6665,17 +6457,13 @@
     max: -0.15625, 0.24, 0.935
     color: '#CBCAE1'
   - label: solid lid frame behind glass
-    min: -0.1945, 0.236, 0.6055
-    max: -0.14925, 0.254, 0.9520000000000001
+    min: -0.22575, 0.236, 0.6055
+    max: -0.14925, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.21875, 0.185, 0.6225
     max: -0.1875, 0.24, 0.935
     color: '#D3CEB4'
-  - label: solid lid frame behind glass
-    min: -0.22575, 0.236, 0.6055
-    max: -0.1805, 0.254, 0.9520000000000001
-    color: '#655246'
   - label: original open glass contour and sheen
     min: -0.21875, 0.18, 0.59125
     max: 0.15625, 0.184, 0.96625
@@ -6708,20 +6496,12 @@
     max: -0.243, 0.272, 0.8582500000000001
     color: '#655246'
   - label: source-cut opened glass column
-    min: -0.3125, 0.20299999999999999, 0.6225
+    min: -0.34375, 0.203, 0.6225
     max: -0.28125, 0.258, 0.8725
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: -0.3195, 0.254, 0.6055
-    max: -0.27425, 0.272, 0.8895000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.34375, 0.20299999999999999, 0.6225
-    max: -0.3125, 0.258, 0.8725
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
     min: -0.35075, 0.254, 0.6055
-    max: -0.3055, 0.272, 0.8895000000000001
+    max: -0.27425, 0.272, 0.8895
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.375, 0.20299999999999999, 0.6225
@@ -6892,52 +6672,20 @@
           max: 0.132, 0.254, 0.9520000000000001
           color: '#655246'
         - label: source-cut opened glass column
-          min: 0.0625, 0.185, 0.71625
+          min: -0.03125, 0.185, 0.71625
           max: 0.09375, 0.24, 0.935
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: 0.0555, 0.236, 0.69925
-          max: 0.10075, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: 0.03125, 0.185, 0.71625
-          max: 0.0625, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: 0.02425, 0.236, 0.69925
-          max: 0.0695, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.0, 0.185, 0.71625
-          max: 0.03125, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.69925
-          max: 0.03825, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.03125, 0.185, 0.71625
-          max: -0.0, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
           min: -0.03825, 0.236, 0.69925
-          max: 0.007, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.0625, 0.185, 0.685
-          max: -0.03125, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.0695, 0.236, 0.668
-          max: -0.02425, 0.254, 0.9520000000000001
+          max: 0.10075, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.09375, 0.185, 0.685
-          max: -0.0625, 0.24, 0.935
+          max: -0.03125, 0.24, 0.935
           color: '#DDDDF4'
         - label: solid lid frame behind glass
           min: -0.10075, 0.236, 0.668
-          max: -0.0555, 0.254, 0.9520000000000001
+          max: -0.02425, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.125, 0.185, 0.65375
@@ -6960,17 +6708,13 @@
           max: -0.15625, 0.24, 0.935
           color: '#CBCAE1'
         - label: solid lid frame behind glass
-          min: -0.1945, 0.236, 0.6055
-          max: -0.14925, 0.254, 0.9520000000000001
+          min: -0.22575, 0.236, 0.6055
+          max: -0.14925, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.21875, 0.185, 0.6225
           max: -0.1875, 0.24, 0.935
           color: '#D3CEB4'
-        - label: solid lid frame behind glass
-          min: -0.22575, 0.236, 0.6055
-          max: -0.1805, 0.254, 0.9520000000000001
-          color: '#655246'
         - label: original open glass contour and sheen
           min: -0.21875, 0.18, 0.59125
           max: 0.15625, 0.184, 0.96625
@@ -7003,20 +6747,12 @@
           max: -0.243, 0.272, 0.8582500000000001
           color: '#655246'
         - label: source-cut opened glass column
-          min: -0.3125, 0.20299999999999999, 0.6225
+          min: -0.34375, 0.203, 0.6225
           max: -0.28125, 0.258, 0.8725
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: -0.3195, 0.254, 0.6055
-          max: -0.27425, 0.272, 0.8895000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.34375, 0.20299999999999999, 0.6225
-          max: -0.3125, 0.258, 0.8725
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
           min: -0.35075, 0.254, 0.6055
-          max: -0.3055, 0.272, 0.8895000000000001
+          max: -0.27425, 0.272, 0.8895
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.375, 0.20299999999999999, 0.6225
@@ -8118,51 +7854,19 @@
     color: '#655246'
   - label: source-cut opened glass column
     min: -0.09375, 0.185, 0.71625
-    max: -0.0625, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.10075, 0.236, 0.69925
-    max: -0.0555, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.0625, 0.185, 0.71625
-    max: -0.03125, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.0695, 0.236, 0.69925
-    max: -0.02425, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: -0.03125, 0.185, 0.71625
-    max: 0.0, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.69925
-    max: 0.007, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: 0.0, 0.185, 0.71625
     max: 0.03125, 0.24, 0.935
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.69925
-    max: 0.03825, 0.254, 0.9520000000000001
+    min: -0.10075, 0.236, 0.69925
+    max: 0.03825, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.685
-    max: 0.0625, 0.24, 0.935
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: 0.02425, 0.236, 0.668
-    max: 0.0695, 0.254, 0.9520000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: 0.0625, 0.185, 0.685
     max: 0.09375, 0.24, 0.935
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: 0.0555, 0.236, 0.668
-    max: 0.10075, 0.254, 0.9520000000000001
+    min: 0.02425, 0.236, 0.668
+    max: 0.10075, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: 0.09375, 0.185, 0.65375
@@ -8186,16 +7890,12 @@
     color: '#CBCAE1'
   - label: solid lid frame behind glass
     min: 0.14925, 0.236, 0.6055
-    max: 0.1945, 0.254, 0.9520000000000001
+    max: 0.22575, 0.254, 0.952
     color: '#655246'
   - label: source-cut opened glass column
     min: 0.1875, 0.185, 0.6225
     max: 0.21875, 0.24, 0.935
     color: '#D3CEB4'
-  - label: solid lid frame behind glass
-    min: 0.1805, 0.236, 0.6055
-    max: 0.22575, 0.254, 0.9520000000000001
-    color: '#655246'
   - label: original open glass contour and sheen
     min: -0.15625, 0.18, 0.59125
     max: 0.21875, 0.184, 0.96625
@@ -8227,20 +7927,12 @@
     max: 0.28825, 0.272, 0.8582500000000001
     color: '#655246'
   - label: source-cut opened glass column
-    min: 0.28125, 0.20299999999999999, 0.6225
-    max: 0.3125, 0.258, 0.8725
-    color: '#DDDDF4'
-  - label: solid lid frame behind glass
-    min: 0.27425, 0.254, 0.6055
-    max: 0.3195, 0.272, 0.8895000000000001
-    color: '#655246'
-  - label: source-cut opened glass column
-    min: 0.3125, 0.20299999999999999, 0.6225
+    min: 0.28125, 0.203, 0.6225
     max: 0.34375, 0.258, 0.8725
     color: '#DDDDF4'
   - label: solid lid frame behind glass
-    min: 0.3055, 0.254, 0.6055
-    max: 0.35075, 0.272, 0.8895000000000001
+    min: 0.27425, 0.254, 0.6055
+    max: 0.35075, 0.272, 0.8895
     color: '#655246'
   - label: source-cut opened glass column
     min: 0.34375, 0.20299999999999999, 0.6225
@@ -8411,51 +8103,19 @@
           color: '#655246'
         - label: source-cut opened glass column
           min: -0.09375, 0.185, 0.71625
-          max: -0.0625, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.10075, 0.236, 0.69925
-          max: -0.0555, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.0625, 0.185, 0.71625
-          max: -0.03125, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.0695, 0.236, 0.69925
-          max: -0.02425, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: -0.03125, 0.185, 0.71625
-          max: 0.0, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.69925
-          max: 0.007, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: 0.0, 0.185, 0.71625
           max: 0.03125, 0.24, 0.935
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.69925
-          max: 0.03825, 0.254, 0.9520000000000001
+          min: -0.10075, 0.236, 0.69925
+          max: 0.03825, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.685
-          max: 0.0625, 0.24, 0.935
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: 0.02425, 0.236, 0.668
-          max: 0.0695, 0.254, 0.9520000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: 0.0625, 0.185, 0.685
           max: 0.09375, 0.24, 0.935
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: 0.0555, 0.236, 0.668
-          max: 0.10075, 0.254, 0.9520000000000001
+          min: 0.02425, 0.236, 0.668
+          max: 0.10075, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: 0.09375, 0.185, 0.65375
@@ -8479,16 +8139,12 @@
           color: '#CBCAE1'
         - label: solid lid frame behind glass
           min: 0.14925, 0.236, 0.6055
-          max: 0.1945, 0.254, 0.9520000000000001
+          max: 0.22575, 0.254, 0.952
           color: '#655246'
         - label: source-cut opened glass column
           min: 0.1875, 0.185, 0.6225
           max: 0.21875, 0.24, 0.935
           color: '#D3CEB4'
-        - label: solid lid frame behind glass
-          min: 0.1805, 0.236, 0.6055
-          max: 0.22575, 0.254, 0.9520000000000001
-          color: '#655246'
         - label: original open glass contour and sheen
           min: -0.15625, 0.18, 0.59125
           max: 0.21875, 0.184, 0.96625
@@ -8520,20 +8176,12 @@
           max: 0.28825, 0.272, 0.8582500000000001
           color: '#655246'
         - label: source-cut opened glass column
-          min: 0.28125, 0.20299999999999999, 0.6225
-          max: 0.3125, 0.258, 0.8725
-          color: '#DDDDF4'
-        - label: solid lid frame behind glass
-          min: 0.27425, 0.254, 0.6055
-          max: 0.3195, 0.272, 0.8895000000000001
-          color: '#655246'
-        - label: source-cut opened glass column
-          min: 0.3125, 0.20299999999999999, 0.6225
+          min: 0.28125, 0.203, 0.6225
           max: 0.34375, 0.258, 0.8725
           color: '#DDDDF4'
         - label: solid lid frame behind glass
-          min: 0.3055, 0.254, 0.6055
-          max: 0.35075, 0.272, 0.8895000000000001
+          min: 0.27425, 0.254, 0.6055
+          max: 0.35075, 0.272, 0.8895
           color: '#655246'
         - label: source-cut opened glass column
           min: 0.34375, 0.20299999999999999, 0.6225
@@ -9646,33 +9294,17 @@
     max: -0.15625, 0.24, 0.925
     color: '#222729'
   - label: solid lid frame behind glass
-    min: -0.1945, 0.236, 0.30799999999999994
-    max: -0.14925, 0.254, 0.9420000000000001
+    min: -0.1945, 0.236, 0.308
+    max: -0.0555, 0.254, 0.942
     color: '#505B60'
   - label: source-cut opened glass column
-    min: -0.15625, 0.185, 0.32499999999999996
-    max: -0.125, 0.24, 0.925
-    color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: -0.16325, 0.236, 0.30799999999999994
-    max: -0.118, 0.254, 0.9420000000000001
-    color: '#505B60'
-  - label: source-cut opened glass column
-    min: -0.125, 0.185, 0.32499999999999996
+    min: -0.15625, 0.185, 0.325
     max: -0.09375, 0.24, 0.925
     color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: -0.132, 0.236, 0.30799999999999994
-    max: -0.08675, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.09375, 0.185, 0.32499999999999996
     max: -0.0625, 0.24, 0.925
     color: '#89869B'
-  - label: solid lid frame behind glass
-    min: -0.10075, 0.236, 0.30799999999999994
-    max: -0.0555, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.0625, 0.185, 0.32499999999999996
     max: -0.03125, 0.24, 0.9
@@ -9686,17 +9318,13 @@
     max: 0.0, 0.24, 0.875
     color: '#9D99B2'
   - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.30799999999999994
-    max: 0.007, 0.254, 0.892
+    min: -0.03825, 0.236, 0.308
+    max: 0.03825, 0.254, 0.892
     color: '#505B60'
   - label: source-cut opened glass column
     min: 0.0, 0.185, 0.32499999999999996
     max: 0.03125, 0.24, 0.875
     color: '#66686E'
-  - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.30799999999999994
-    max: 0.03825, 0.254, 0.892
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.32499999999999996
     max: 0.0625, 0.24, 0.85
@@ -10005,33 +9633,17 @@
           max: -0.15625, 0.24, 0.925
           color: '#222729'
         - label: solid lid frame behind glass
-          min: -0.1945, 0.236, 0.30799999999999994
-          max: -0.14925, 0.254, 0.9420000000000001
+          min: -0.1945, 0.236, 0.308
+          max: -0.0555, 0.254, 0.942
           color: '#505B60'
         - label: source-cut opened glass column
-          min: -0.15625, 0.185, 0.32499999999999996
-          max: -0.125, 0.24, 0.925
-          color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: -0.16325, 0.236, 0.30799999999999994
-          max: -0.118, 0.254, 0.9420000000000001
-          color: '#505B60'
-        - label: source-cut opened glass column
-          min: -0.125, 0.185, 0.32499999999999996
+          min: -0.15625, 0.185, 0.325
           max: -0.09375, 0.24, 0.925
           color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: -0.132, 0.236, 0.30799999999999994
-          max: -0.08675, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.09375, 0.185, 0.32499999999999996
           max: -0.0625, 0.24, 0.925
           color: '#89869B'
-        - label: solid lid frame behind glass
-          min: -0.10075, 0.236, 0.30799999999999994
-          max: -0.0555, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.0625, 0.185, 0.32499999999999996
           max: -0.03125, 0.24, 0.9
@@ -10045,17 +9657,13 @@
           max: 0.0, 0.24, 0.875
           color: '#9D99B2'
         - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.30799999999999994
-          max: 0.007, 0.254, 0.892
+          min: -0.03825, 0.236, 0.308
+          max: 0.03825, 0.254, 0.892
           color: '#505B60'
         - label: source-cut opened glass column
           min: 0.0, 0.185, 0.32499999999999996
           max: 0.03125, 0.24, 0.875
           color: '#66686E'
-        - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.30799999999999994
-          max: 0.03825, 0.254, 0.892
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.32499999999999996
           max: 0.0625, 0.24, 0.85
@@ -11372,33 +10980,17 @@
     max: 0.1875, 0.24, 0.925
     color: '#222729'
   - label: solid lid frame behind glass
-    min: 0.14925, 0.236, 0.30799999999999994
-    max: 0.1945, 0.254, 0.9420000000000001
+    min: 0.0555, 0.236, 0.308
+    max: 0.1945, 0.254, 0.942
     color: '#505B60'
   - label: source-cut opened glass column
-    min: 0.125, 0.185, 0.32499999999999996
+    min: 0.09375, 0.185, 0.325
     max: 0.15625, 0.24, 0.925
     color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: 0.118, 0.236, 0.30799999999999994
-    max: 0.16325, 0.254, 0.9420000000000001
-    color: '#505B60'
-  - label: source-cut opened glass column
-    min: 0.09375, 0.185, 0.32499999999999996
-    max: 0.125, 0.24, 0.925
-    color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: 0.08675, 0.236, 0.30799999999999994
-    max: 0.132, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.0625, 0.185, 0.32499999999999996
     max: 0.09375, 0.24, 0.925
     color: '#89869B'
-  - label: solid lid frame behind glass
-    min: 0.0555, 0.236, 0.30799999999999994
-    max: 0.10075, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.32499999999999996
     max: 0.0625, 0.24, 0.9
@@ -11412,17 +11004,13 @@
     max: 0.03125, 0.24, 0.875
     color: '#9D99B2'
   - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.30799999999999994
+    min: -0.03825, 0.236, 0.308
     max: 0.03825, 0.254, 0.892
     color: '#505B60'
   - label: source-cut opened glass column
     min: -0.03125, 0.185, 0.32499999999999996
     max: -0.0, 0.24, 0.875
     color: '#66686E'
-  - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.30799999999999994
-    max: 0.007, 0.254, 0.892
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.0625, 0.185, 0.32499999999999996
     max: -0.03125, 0.24, 0.85
@@ -11733,33 +11321,17 @@
           max: 0.1875, 0.24, 0.925
           color: '#222729'
         - label: solid lid frame behind glass
-          min: 0.14925, 0.236, 0.30799999999999994
-          max: 0.1945, 0.254, 0.9420000000000001
+          min: 0.0555, 0.236, 0.308
+          max: 0.1945, 0.254, 0.942
           color: '#505B60'
         - label: source-cut opened glass column
-          min: 0.125, 0.185, 0.32499999999999996
+          min: 0.09375, 0.185, 0.325
           max: 0.15625, 0.24, 0.925
           color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: 0.118, 0.236, 0.30799999999999994
-          max: 0.16325, 0.254, 0.9420000000000001
-          color: '#505B60'
-        - label: source-cut opened glass column
-          min: 0.09375, 0.185, 0.32499999999999996
-          max: 0.125, 0.24, 0.925
-          color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: 0.08675, 0.236, 0.30799999999999994
-          max: 0.132, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.0625, 0.185, 0.32499999999999996
           max: 0.09375, 0.24, 0.925
           color: '#89869B'
-        - label: solid lid frame behind glass
-          min: 0.0555, 0.236, 0.30799999999999994
-          max: 0.10075, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.32499999999999996
           max: 0.0625, 0.24, 0.9
@@ -11773,17 +11345,13 @@
           max: 0.03125, 0.24, 0.875
           color: '#9D99B2'
         - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.30799999999999994
+          min: -0.03825, 0.236, 0.308
           max: 0.03825, 0.254, 0.892
           color: '#505B60'
         - label: source-cut opened glass column
           min: -0.03125, 0.185, 0.32499999999999996
           max: -0.0, 0.24, 0.875
           color: '#66686E'
-        - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.30799999999999994
-          max: 0.007, 0.254, 0.892
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.0625, 0.185, 0.32499999999999996
           max: -0.03125, 0.24, 0.85
@@ -13102,33 +12670,17 @@
     max: -0.15625, 0.24, 0.925
     color: '#222729'
   - label: solid lid frame behind glass
-    min: -0.1945, 0.236, 0.30799999999999994
-    max: -0.14925, 0.254, 0.9420000000000001
+    min: -0.1945, 0.236, 0.308
+    max: -0.0555, 0.254, 0.942
     color: '#505B60'
   - label: source-cut opened glass column
-    min: -0.15625, 0.185, 0.32499999999999996
-    max: -0.125, 0.24, 0.925
-    color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: -0.16325, 0.236, 0.30799999999999994
-    max: -0.118, 0.254, 0.9420000000000001
-    color: '#505B60'
-  - label: source-cut opened glass column
-    min: -0.125, 0.185, 0.32499999999999996
+    min: -0.15625, 0.185, 0.325
     max: -0.09375, 0.24, 0.925
     color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: -0.132, 0.236, 0.30799999999999994
-    max: -0.08675, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.09375, 0.185, 0.32499999999999996
     max: -0.0625, 0.24, 0.925
     color: '#89869B'
-  - label: solid lid frame behind glass
-    min: -0.10075, 0.236, 0.30799999999999994
-    max: -0.0555, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.0625, 0.185, 0.32499999999999996
     max: -0.03125, 0.24, 0.9
@@ -13142,17 +12694,13 @@
     max: 0.0, 0.24, 0.875
     color: '#9D99B2'
   - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.30799999999999994
-    max: 0.007, 0.254, 0.892
+    min: -0.03825, 0.236, 0.308
+    max: 0.03825, 0.254, 0.892
     color: '#505B60'
   - label: source-cut opened glass column
     min: 0.0, 0.185, 0.32499999999999996
     max: 0.03125, 0.24, 0.875
     color: '#66686E'
-  - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.30799999999999994
-    max: 0.03825, 0.254, 0.892
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.32499999999999996
     max: 0.0625, 0.24, 0.85
@@ -13461,33 +13009,17 @@
           max: -0.15625, 0.24, 0.925
           color: '#222729'
         - label: solid lid frame behind glass
-          min: -0.1945, 0.236, 0.30799999999999994
-          max: -0.14925, 0.254, 0.9420000000000001
+          min: -0.1945, 0.236, 0.308
+          max: -0.0555, 0.254, 0.942
           color: '#505B60'
         - label: source-cut opened glass column
-          min: -0.15625, 0.185, 0.32499999999999996
-          max: -0.125, 0.24, 0.925
-          color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: -0.16325, 0.236, 0.30799999999999994
-          max: -0.118, 0.254, 0.9420000000000001
-          color: '#505B60'
-        - label: source-cut opened glass column
-          min: -0.125, 0.185, 0.32499999999999996
+          min: -0.15625, 0.185, 0.325
           max: -0.09375, 0.24, 0.925
           color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: -0.132, 0.236, 0.30799999999999994
-          max: -0.08675, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.09375, 0.185, 0.32499999999999996
           max: -0.0625, 0.24, 0.925
           color: '#89869B'
-        - label: solid lid frame behind glass
-          min: -0.10075, 0.236, 0.30799999999999994
-          max: -0.0555, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.0625, 0.185, 0.32499999999999996
           max: -0.03125, 0.24, 0.9
@@ -13501,17 +13033,13 @@
           max: 0.0, 0.24, 0.875
           color: '#9D99B2'
         - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.30799999999999994
-          max: 0.007, 0.254, 0.892
+          min: -0.03825, 0.236, 0.308
+          max: 0.03825, 0.254, 0.892
           color: '#505B60'
         - label: source-cut opened glass column
           min: 0.0, 0.185, 0.32499999999999996
           max: 0.03125, 0.24, 0.875
           color: '#66686E'
-        - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.30799999999999994
-          max: 0.03825, 0.254, 0.892
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.32499999999999996
           max: 0.0625, 0.24, 0.85
@@ -14828,33 +14356,17 @@
     max: 0.1875, 0.24, 0.925
     color: '#222729'
   - label: solid lid frame behind glass
-    min: 0.14925, 0.236, 0.30799999999999994
-    max: 0.1945, 0.254, 0.9420000000000001
+    min: 0.0555, 0.236, 0.308
+    max: 0.1945, 0.254, 0.942
     color: '#505B60'
   - label: source-cut opened glass column
-    min: 0.125, 0.185, 0.32499999999999996
+    min: 0.09375, 0.185, 0.325
     max: 0.15625, 0.24, 0.925
     color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: 0.118, 0.236, 0.30799999999999994
-    max: 0.16325, 0.254, 0.9420000000000001
-    color: '#505B60'
-  - label: source-cut opened glass column
-    min: 0.09375, 0.185, 0.32499999999999996
-    max: 0.125, 0.24, 0.925
-    color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: 0.08675, 0.236, 0.30799999999999994
-    max: 0.132, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.0625, 0.185, 0.32499999999999996
     max: 0.09375, 0.24, 0.925
     color: '#89869B'
-  - label: solid lid frame behind glass
-    min: 0.0555, 0.236, 0.30799999999999994
-    max: 0.10075, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.32499999999999996
     max: 0.0625, 0.24, 0.9
@@ -14868,17 +14380,13 @@
     max: 0.03125, 0.24, 0.875
     color: '#9D99B2'
   - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.30799999999999994
+    min: -0.03825, 0.236, 0.308
     max: 0.03825, 0.254, 0.892
     color: '#505B60'
   - label: source-cut opened glass column
     min: -0.03125, 0.185, 0.32499999999999996
     max: -0.0, 0.24, 0.875
     color: '#66686E'
-  - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.30799999999999994
-    max: 0.007, 0.254, 0.892
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.0625, 0.185, 0.32499999999999996
     max: -0.03125, 0.24, 0.85
@@ -15189,33 +14697,17 @@
           max: 0.1875, 0.24, 0.925
           color: '#222729'
         - label: solid lid frame behind glass
-          min: 0.14925, 0.236, 0.30799999999999994
-          max: 0.1945, 0.254, 0.9420000000000001
+          min: 0.0555, 0.236, 0.308
+          max: 0.1945, 0.254, 0.942
           color: '#505B60'
         - label: source-cut opened glass column
-          min: 0.125, 0.185, 0.32499999999999996
+          min: 0.09375, 0.185, 0.325
           max: 0.15625, 0.24, 0.925
           color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: 0.118, 0.236, 0.30799999999999994
-          max: 0.16325, 0.254, 0.9420000000000001
-          color: '#505B60'
-        - label: source-cut opened glass column
-          min: 0.09375, 0.185, 0.32499999999999996
-          max: 0.125, 0.24, 0.925
-          color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: 0.08675, 0.236, 0.30799999999999994
-          max: 0.132, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.0625, 0.185, 0.32499999999999996
           max: 0.09375, 0.24, 0.925
           color: '#89869B'
-        - label: solid lid frame behind glass
-          min: 0.0555, 0.236, 0.30799999999999994
-          max: 0.10075, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.32499999999999996
           max: 0.0625, 0.24, 0.9
@@ -15229,17 +14721,13 @@
           max: 0.03125, 0.24, 0.875
           color: '#9D99B2'
         - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.30799999999999994
+          min: -0.03825, 0.236, 0.308
           max: 0.03825, 0.254, 0.892
           color: '#505B60'
         - label: source-cut opened glass column
           min: -0.03125, 0.185, 0.32499999999999996
           max: -0.0, 0.24, 0.875
           color: '#66686E'
-        - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.30799999999999994
-          max: 0.007, 0.254, 0.892
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.0625, 0.185, 0.32499999999999996
           max: -0.03125, 0.24, 0.85
@@ -16559,33 +16047,17 @@
     max: -0.15625, 0.24, 0.925
     color: '#222729'
   - label: solid lid frame behind glass
-    min: -0.1945, 0.236, 0.30799999999999994
-    max: -0.14925, 0.254, 0.9420000000000001
+    min: -0.1945, 0.236, 0.308
+    max: -0.0555, 0.254, 0.942
     color: '#505B60'
   - label: source-cut opened glass column
-    min: -0.15625, 0.185, 0.32499999999999996
-    max: -0.125, 0.24, 0.925
-    color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: -0.16325, 0.236, 0.30799999999999994
-    max: -0.118, 0.254, 0.9420000000000001
-    color: '#505B60'
-  - label: source-cut opened glass column
-    min: -0.125, 0.185, 0.32499999999999996
+    min: -0.15625, 0.185, 0.325
     max: -0.09375, 0.24, 0.925
     color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: -0.132, 0.236, 0.30799999999999994
-    max: -0.08675, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.09375, 0.185, 0.32499999999999996
     max: -0.0625, 0.24, 0.925
     color: '#89869B'
-  - label: solid lid frame behind glass
-    min: -0.10075, 0.236, 0.30799999999999994
-    max: -0.0555, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.0625, 0.185, 0.32499999999999996
     max: -0.03125, 0.24, 0.9
@@ -16599,17 +16071,13 @@
     max: 0.0, 0.24, 0.875
     color: '#9D99B2'
   - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.30799999999999994
-    max: 0.007, 0.254, 0.892
+    min: -0.03825, 0.236, 0.308
+    max: 0.03825, 0.254, 0.892
     color: '#505B60'
   - label: source-cut opened glass column
     min: 0.0, 0.185, 0.32499999999999996
     max: 0.03125, 0.24, 0.875
     color: '#66686E'
-  - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.30799999999999994
-    max: 0.03825, 0.254, 0.892
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.32499999999999996
     max: 0.0625, 0.24, 0.85
@@ -16918,33 +16386,17 @@
           max: -0.15625, 0.24, 0.925
           color: '#222729'
         - label: solid lid frame behind glass
-          min: -0.1945, 0.236, 0.30799999999999994
-          max: -0.14925, 0.254, 0.9420000000000001
+          min: -0.1945, 0.236, 0.308
+          max: -0.0555, 0.254, 0.942
           color: '#505B60'
         - label: source-cut opened glass column
-          min: -0.15625, 0.185, 0.32499999999999996
-          max: -0.125, 0.24, 0.925
-          color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: -0.16325, 0.236, 0.30799999999999994
-          max: -0.118, 0.254, 0.9420000000000001
-          color: '#505B60'
-        - label: source-cut opened glass column
-          min: -0.125, 0.185, 0.32499999999999996
+          min: -0.15625, 0.185, 0.325
           max: -0.09375, 0.24, 0.925
           color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: -0.132, 0.236, 0.30799999999999994
-          max: -0.08675, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.09375, 0.185, 0.32499999999999996
           max: -0.0625, 0.24, 0.925
           color: '#89869B'
-        - label: solid lid frame behind glass
-          min: -0.10075, 0.236, 0.30799999999999994
-          max: -0.0555, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.0625, 0.185, 0.32499999999999996
           max: -0.03125, 0.24, 0.9
@@ -16958,17 +16410,13 @@
           max: 0.0, 0.24, 0.875
           color: '#9D99B2'
         - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.30799999999999994
-          max: 0.007, 0.254, 0.892
+          min: -0.03825, 0.236, 0.308
+          max: 0.03825, 0.254, 0.892
           color: '#505B60'
         - label: source-cut opened glass column
           min: 0.0, 0.185, 0.32499999999999996
           max: 0.03125, 0.24, 0.875
           color: '#66686E'
-        - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.30799999999999994
-          max: 0.03825, 0.254, 0.892
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.32499999999999996
           max: 0.0625, 0.24, 0.85
@@ -18285,33 +17733,17 @@
     max: 0.1875, 0.24, 0.925
     color: '#222729'
   - label: solid lid frame behind glass
-    min: 0.14925, 0.236, 0.30799999999999994
-    max: 0.1945, 0.254, 0.9420000000000001
+    min: 0.0555, 0.236, 0.308
+    max: 0.1945, 0.254, 0.942
     color: '#505B60'
   - label: source-cut opened glass column
-    min: 0.125, 0.185, 0.32499999999999996
+    min: 0.09375, 0.185, 0.325
     max: 0.15625, 0.24, 0.925
     color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: 0.118, 0.236, 0.30799999999999994
-    max: 0.16325, 0.254, 0.9420000000000001
-    color: '#505B60'
-  - label: source-cut opened glass column
-    min: 0.09375, 0.185, 0.32499999999999996
-    max: 0.125, 0.24, 0.925
-    color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: 0.08675, 0.236, 0.30799999999999994
-    max: 0.132, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.0625, 0.185, 0.32499999999999996
     max: 0.09375, 0.24, 0.925
     color: '#89869B'
-  - label: solid lid frame behind glass
-    min: 0.0555, 0.236, 0.30799999999999994
-    max: 0.10075, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.32499999999999996
     max: 0.0625, 0.24, 0.9
@@ -18325,17 +17757,13 @@
     max: 0.03125, 0.24, 0.875
     color: '#9D99B2'
   - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.30799999999999994
+    min: -0.03825, 0.236, 0.308
     max: 0.03825, 0.254, 0.892
     color: '#505B60'
   - label: source-cut opened glass column
     min: -0.03125, 0.185, 0.32499999999999996
     max: -0.0, 0.24, 0.875
     color: '#66686E'
-  - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.30799999999999994
-    max: 0.007, 0.254, 0.892
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.0625, 0.185, 0.32499999999999996
     max: -0.03125, 0.24, 0.85
@@ -18646,33 +18074,17 @@
           max: 0.1875, 0.24, 0.925
           color: '#222729'
         - label: solid lid frame behind glass
-          min: 0.14925, 0.236, 0.30799999999999994
-          max: 0.1945, 0.254, 0.9420000000000001
+          min: 0.0555, 0.236, 0.308
+          max: 0.1945, 0.254, 0.942
           color: '#505B60'
         - label: source-cut opened glass column
-          min: 0.125, 0.185, 0.32499999999999996
+          min: 0.09375, 0.185, 0.325
           max: 0.15625, 0.24, 0.925
           color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: 0.118, 0.236, 0.30799999999999994
-          max: 0.16325, 0.254, 0.9420000000000001
-          color: '#505B60'
-        - label: source-cut opened glass column
-          min: 0.09375, 0.185, 0.32499999999999996
-          max: 0.125, 0.24, 0.925
-          color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: 0.08675, 0.236, 0.30799999999999994
-          max: 0.132, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.0625, 0.185, 0.32499999999999996
           max: 0.09375, 0.24, 0.925
           color: '#89869B'
-        - label: solid lid frame behind glass
-          min: 0.0555, 0.236, 0.30799999999999994
-          max: 0.10075, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.32499999999999996
           max: 0.0625, 0.24, 0.9
@@ -18686,17 +18098,13 @@
           max: 0.03125, 0.24, 0.875
           color: '#9D99B2'
         - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.30799999999999994
+          min: -0.03825, 0.236, 0.308
           max: 0.03825, 0.254, 0.892
           color: '#505B60'
         - label: source-cut opened glass column
           min: -0.03125, 0.185, 0.32499999999999996
           max: -0.0, 0.24, 0.875
           color: '#66686E'
-        - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.30799999999999994
-          max: 0.007, 0.254, 0.892
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.0625, 0.185, 0.32499999999999996
           max: -0.03125, 0.24, 0.85
@@ -20015,33 +19423,17 @@
     max: -0.15625, 0.24, 0.925
     color: '#222729'
   - label: solid lid frame behind glass
-    min: -0.1945, 0.236, 0.30799999999999994
-    max: -0.14925, 0.254, 0.9420000000000001
+    min: -0.1945, 0.236, 0.308
+    max: -0.0555, 0.254, 0.942
     color: '#505B60'
   - label: source-cut opened glass column
-    min: -0.15625, 0.185, 0.32499999999999996
-    max: -0.125, 0.24, 0.925
-    color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: -0.16325, 0.236, 0.30799999999999994
-    max: -0.118, 0.254, 0.9420000000000001
-    color: '#505B60'
-  - label: source-cut opened glass column
-    min: -0.125, 0.185, 0.32499999999999996
+    min: -0.15625, 0.185, 0.325
     max: -0.09375, 0.24, 0.925
     color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: -0.132, 0.236, 0.30799999999999994
-    max: -0.08675, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.09375, 0.185, 0.32499999999999996
     max: -0.0625, 0.24, 0.925
     color: '#89869B'
-  - label: solid lid frame behind glass
-    min: -0.10075, 0.236, 0.30799999999999994
-    max: -0.0555, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.0625, 0.185, 0.32499999999999996
     max: -0.03125, 0.24, 0.9
@@ -20055,17 +19447,13 @@
     max: 0.0, 0.24, 0.875
     color: '#9D99B2'
   - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.30799999999999994
-    max: 0.007, 0.254, 0.892
+    min: -0.03825, 0.236, 0.308
+    max: 0.03825, 0.254, 0.892
     color: '#505B60'
   - label: source-cut opened glass column
     min: 0.0, 0.185, 0.32499999999999996
     max: 0.03125, 0.24, 0.875
     color: '#66686E'
-  - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.30799999999999994
-    max: 0.03825, 0.254, 0.892
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.32499999999999996
     max: 0.0625, 0.24, 0.85
@@ -20374,33 +19762,17 @@
           max: -0.15625, 0.24, 0.925
           color: '#222729'
         - label: solid lid frame behind glass
-          min: -0.1945, 0.236, 0.30799999999999994
-          max: -0.14925, 0.254, 0.9420000000000001
+          min: -0.1945, 0.236, 0.308
+          max: -0.0555, 0.254, 0.942
           color: '#505B60'
         - label: source-cut opened glass column
-          min: -0.15625, 0.185, 0.32499999999999996
-          max: -0.125, 0.24, 0.925
-          color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: -0.16325, 0.236, 0.30799999999999994
-          max: -0.118, 0.254, 0.9420000000000001
-          color: '#505B60'
-        - label: source-cut opened glass column
-          min: -0.125, 0.185, 0.32499999999999996
+          min: -0.15625, 0.185, 0.325
           max: -0.09375, 0.24, 0.925
           color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: -0.132, 0.236, 0.30799999999999994
-          max: -0.08675, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.09375, 0.185, 0.32499999999999996
           max: -0.0625, 0.24, 0.925
           color: '#89869B'
-        - label: solid lid frame behind glass
-          min: -0.10075, 0.236, 0.30799999999999994
-          max: -0.0555, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.0625, 0.185, 0.32499999999999996
           max: -0.03125, 0.24, 0.9
@@ -20414,17 +19786,13 @@
           max: 0.0, 0.24, 0.875
           color: '#9D99B2'
         - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.30799999999999994
-          max: 0.007, 0.254, 0.892
+          min: -0.03825, 0.236, 0.308
+          max: 0.03825, 0.254, 0.892
           color: '#505B60'
         - label: source-cut opened glass column
           min: 0.0, 0.185, 0.32499999999999996
           max: 0.03125, 0.24, 0.875
           color: '#66686E'
-        - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.30799999999999994
-          max: 0.03825, 0.254, 0.892
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.32499999999999996
           max: 0.0625, 0.24, 0.85
@@ -21741,33 +21109,17 @@
     max: 0.1875, 0.24, 0.925
     color: '#222729'
   - label: solid lid frame behind glass
-    min: 0.14925, 0.236, 0.30799999999999994
-    max: 0.1945, 0.254, 0.9420000000000001
+    min: 0.0555, 0.236, 0.308
+    max: 0.1945, 0.254, 0.942
     color: '#505B60'
   - label: source-cut opened glass column
-    min: 0.125, 0.185, 0.32499999999999996
+    min: 0.09375, 0.185, 0.325
     max: 0.15625, 0.24, 0.925
     color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: 0.118, 0.236, 0.30799999999999994
-    max: 0.16325, 0.254, 0.9420000000000001
-    color: '#505B60'
-  - label: source-cut opened glass column
-    min: 0.09375, 0.185, 0.32499999999999996
-    max: 0.125, 0.24, 0.925
-    color: '#6F6B85'
-  - label: solid lid frame behind glass
-    min: 0.08675, 0.236, 0.30799999999999994
-    max: 0.132, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.0625, 0.185, 0.32499999999999996
     max: 0.09375, 0.24, 0.925
     color: '#89869B'
-  - label: solid lid frame behind glass
-    min: 0.0555, 0.236, 0.30799999999999994
-    max: 0.10075, 0.254, 0.9420000000000001
-    color: '#505B60'
   - label: source-cut opened glass column
     min: 0.03125, 0.185, 0.32499999999999996
     max: 0.0625, 0.24, 0.9
@@ -21781,17 +21133,13 @@
     max: 0.03125, 0.24, 0.875
     color: '#9D99B2'
   - label: solid lid frame behind glass
-    min: -0.007, 0.236, 0.30799999999999994
+    min: -0.03825, 0.236, 0.308
     max: 0.03825, 0.254, 0.892
     color: '#505B60'
   - label: source-cut opened glass column
     min: -0.03125, 0.185, 0.32499999999999996
     max: -0.0, 0.24, 0.875
     color: '#66686E'
-  - label: solid lid frame behind glass
-    min: -0.03825, 0.236, 0.30799999999999994
-    max: 0.007, 0.254, 0.892
-    color: '#505B60'
   - label: source-cut opened glass column
     min: -0.0625, 0.185, 0.32499999999999996
     max: -0.03125, 0.24, 0.85
@@ -22102,33 +21450,17 @@
           max: 0.1875, 0.24, 0.925
           color: '#222729'
         - label: solid lid frame behind glass
-          min: 0.14925, 0.236, 0.30799999999999994
-          max: 0.1945, 0.254, 0.9420000000000001
+          min: 0.0555, 0.236, 0.308
+          max: 0.1945, 0.254, 0.942
           color: '#505B60'
         - label: source-cut opened glass column
-          min: 0.125, 0.185, 0.32499999999999996
+          min: 0.09375, 0.185, 0.325
           max: 0.15625, 0.24, 0.925
           color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: 0.118, 0.236, 0.30799999999999994
-          max: 0.16325, 0.254, 0.9420000000000001
-          color: '#505B60'
-        - label: source-cut opened glass column
-          min: 0.09375, 0.185, 0.32499999999999996
-          max: 0.125, 0.24, 0.925
-          color: '#6F6B85'
-        - label: solid lid frame behind glass
-          min: 0.08675, 0.236, 0.30799999999999994
-          max: 0.132, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.0625, 0.185, 0.32499999999999996
           max: 0.09375, 0.24, 0.925
           color: '#89869B'
-        - label: solid lid frame behind glass
-          min: 0.0555, 0.236, 0.30799999999999994
-          max: 0.10075, 0.254, 0.9420000000000001
-          color: '#505B60'
         - label: source-cut opened glass column
           min: 0.03125, 0.185, 0.32499999999999996
           max: 0.0625, 0.24, 0.9
@@ -22142,17 +21474,13 @@
           max: 0.03125, 0.24, 0.875
           color: '#9D99B2'
         - label: solid lid frame behind glass
-          min: -0.007, 0.236, 0.30799999999999994
+          min: -0.03825, 0.236, 0.308
           max: 0.03825, 0.254, 0.892
           color: '#505B60'
         - label: source-cut opened glass column
           min: -0.03125, 0.185, 0.32499999999999996
           max: -0.0, 0.24, 0.875
           color: '#66686E'
-        - label: solid lid frame behind glass
-          min: -0.03825, 0.236, 0.30799999999999994
-          max: 0.007, 0.254, 0.892
-          color: '#505B60'
         - label: source-cut opened glass column
           min: -0.0625, 0.185, 0.32499999999999996
           max: -0.03125, 0.24, 0.85

@@ -41,6 +41,7 @@ namespace Content.Shared._RMC14.Xenonids.Acid;
 
 public abstract partial class SharedXenoAcidSystem : EntitySystem
 {
+    [Dependency] private HardpointSystem _hardpoints = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private DamageableSystem _damageable = default!;
@@ -201,6 +202,24 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
 
         if (!xeno.Comp.CanMeltStructures && corrodible.Structure)
             return;
+
+        if (HasComp<HardpointSlotsComponent>(target))
+        {
+            if (args.PlasmaCost != 0 && !_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, args.PlasmaCost))
+                return;
+
+            if (args.EnergyCost != 0 && !_xenoEnergy.TryRemoveEnergyPopup(xeno.Owner, args.EnergyCost))
+                return;
+
+            if (_net.IsClient)
+                return;
+
+            args.Handled = true;
+
+            var vehicleDamage = args.VehicleDamage ?? GetDefaultVehicleAcidDamage(args.Strength);
+            _hardpoints.DamageHardpoint(target, target, vehicleDamage);
+            return;
+        }
 
         // Re-check if acid can be replaced at DoAfter end to prevent race conditions
         // (e.g., weak acid downgrading strong acid if both DoAfters were started before any completed)
@@ -481,6 +500,16 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
         Dirty(uid, secondWind);
         RemoveAcid(uid);
         return true;
+    }
+
+    private static float GetDefaultVehicleAcidDamage(XenoAcidStrength strength)
+    {
+        return strength switch
+        {
+            XenoAcidStrength.Weak => 16f,
+            XenoAcidStrength.Strong => 100f,
+            _ => 40f,
+        };
     }
 
     public bool IsMelted(EntityUid uid)

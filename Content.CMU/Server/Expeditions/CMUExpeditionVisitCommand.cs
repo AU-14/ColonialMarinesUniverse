@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Linq;
 using Content.Server.Administration;
 using Content.Server.GameTicking;
 using Content.Shared.Administration;
@@ -25,6 +26,14 @@ public sealed partial class CMUExpeditionVisitCommand : LocalizedEntityCommands
     public override string Command => "cmu-expedition-visit";
     public override string Description => Loc.GetString("cmd-cmu-expedition-visit-desc");
     public override string Help => Loc.GetString("cmd-cmu-expedition-visit-help");
+
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args) => args.Length switch
+    {
+        1 => CMUExpeditionCommandCompletion.Maps(EntityManager, shell, expeditionsOnly: true),
+        2 => CompletionResult.FromOptions(_players.Sessions.Where(session => session.Status == SessionStatus.InGame)
+            .Select(session => session.Name).OrderBy(name => name)),
+        _ => CompletionResult.Empty,
+    };
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {

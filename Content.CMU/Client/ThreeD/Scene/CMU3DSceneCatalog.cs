@@ -22,6 +22,8 @@ public sealed partial class CMU3DSceneCatalog
         foreach (var model in models.OrderBy(model => model.Status != "reviewed").ThenBy(model => model.ID, StringComparer.Ordinal))
         {
             _models.TryAdd(model.ID, model);
+            foreach (var turret in model.VehicleTurretPrototypes)
+                _vehicleTurrets.TryAdd(turret, model);
             foreach (var reference in model.SourcePrototypes)
                 _references.TryAdd(reference, model);
             foreach (var reference in model.RandomSpritePrototypes)
@@ -81,6 +83,8 @@ public sealed partial class CMU3DSceneCatalog
     /// <summary>Keep authored frame families for source-layer selection; other doors require explicit stable poses.</summary>
     public CMU3DSceneMatch? WithDoorState(CMU3DSceneMatch? match, DoorState state)
     {
+        if (match is { } xeno && xeno.Model.XenoStates.Count > 0 && CMU3DDoorAppearance.SupportedState(state))
+            return xeno;
         if (match is { } animated && animated.Model.DoorSpriteStates.Count > 0 && CMU3DDoorAppearance.SupportedState(state))
             return animated;
         if (match is not { } value || state is not (DoorState.Closed or DoorState.Open))

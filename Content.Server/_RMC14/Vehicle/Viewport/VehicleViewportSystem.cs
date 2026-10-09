@@ -76,7 +76,7 @@ public sealed partial class VehicleViewportSystem : EntitySystem
         if (_net.IsClient ||
             !args.CanInteract ||
             !args.CanAccess ||
-            args.Using != null ||
+            // args.Using != null || // CMU14: held items do not prevent peeking.
             !_vehicles.TryFindEntryPoint(ent.Owner, args.User, out var entryIndex))
         {
             return;
@@ -86,6 +86,7 @@ public sealed partial class VehicleViewportSystem : EntitySystem
         var vehicle = ent.Owner;
         args.Verbs.Add(new AlternativeVerb
         {
+            Priority = 100, // CMU14: peeking is the default alt-click action, even while holding an item.
             Text = Loc.GetString("rmc-vehicle-look-inside"),
             Act = () => ToggleInteriorPeek(user, vehicle, entryIndex),
         });
@@ -103,6 +104,10 @@ public sealed partial class VehicleViewportSystem : EntitySystem
         if (TryComp(user, out EyeComponent? newEye))
             userState.PreviousTarget = newEye.Target;
         userState.Source = source;
+
+        var watching = EnsureComp<VehicleWatchingComponent>(user);
+        watching.Watching = vehicle;
+        Dirty(user, watching);
 
         _eye.SetTarget(user, vehicle);
         _viewToggle.EnableViewToggle(user, vehicle, source, userState.PreviousTarget, isOutside: true);
@@ -131,6 +136,10 @@ public sealed partial class VehicleViewportSystem : EntitySystem
         userState.Source = vehicle;
         userState.PeekTarget = Spawn("VehiclePeekAnchor", peekCoords);
 
+        var watching = EnsureComp<VehicleWatchingComponent>(user);
+        watching.Watching = userState.PeekTarget; // CMU14: examine from inside the doorway.
+        Dirty(user, watching);
+
         _eye.SetTarget(user, userState.PeekTarget);
         Dirty(user, userState);
         return true;
@@ -152,5 +161,6 @@ public sealed partial class VehicleViewportSystem : EntitySystem
             QueueDel(peekTarget);
 
         RemCompDeferred<VehicleViewportUserComponent>(user);
+        RemCompDeferred<VehicleWatchingComponent>(user);
     }
 }
