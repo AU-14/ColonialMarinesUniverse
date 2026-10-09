@@ -7,6 +7,11 @@ using Content.Shared.CMU14.Medical.Core;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Yautja;
+using Content.Server.Atmos.EntitySystems;
+using Content.Server.Explosion.EntitySystems;
+using Content.Server.Station.Systems;
+using Content.Shared.Atmos;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DragDrop;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
@@ -15,6 +20,9 @@ using Content.Shared.Inventory;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
+using Content.Shared.Roles;
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.GameObjects;
 using ServerHandsSystem = Content.Server.Hands.Systems.HandsSystem;
 
@@ -324,6 +332,80 @@ public sealed class YautjaPlaytestRegressionTest
         await server.WaitAssertion(() =>
             Assert.That(server.EntMan.GetComponent<FiremanCarriableComponent>(victim).CanThrow, Is.False,
                 "a marine carrying the same guy later shouldn't inherit the pred's throw"));
+
+        await pair.CleanReturnAsync();
+    }
+
+    // a full hunter kit used to stack its armor into near immunity, it should soften hazards, not erase them
+    [Test]
+    public async Task GearedHunterStillFeelsExplosionsAndFire()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid bare = default, geared = default;
+        var explosion = new Dictionary<EntityUid, float>();
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var moles = new float[Atmospherics.AdjustedNumberOfGases];
+            moles[(int) Gas.Oxygen] = 21.824779f;
+            moles[(int) Gas.Nitrogen] = 82.10312f;
+            entMan.System<AtmosphereSystem>().SetMapAtmosphere(map.MapUid, false, new GasMixture(moles, Atmospherics.T20C));
+
+            bare = entMan.SpawnEntity("CMUMobYautja", new MapCoordinates(new System.Numerics.Vector2(0, 200), map.MapId));
+            geared = entMan.SpawnEntity("CMUMobYautja", new MapCoordinates(new System.Numerics.Vector2(60, 200), map.MapId));
+            var gear = server.ResolveDependency<IPrototypeManager>().Index<StartingGearPrototype>("CMUYautjaHunterGear");
+            entMan.System<StationSpawningSystem>().EquipStartingGear(geared, gear);
+        });
+        await pair.RunTicksSync(5);
+
+        // a small blast, so neither hunter hits the damage cap and the ratio means something
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            foreach (var hunter in new[] { bare, geared })
+            {
+                entMan.System<ExplosionSystem>().QueueExplosion(
+                    entMan.System<SharedTransformSystem>().GetMapCoordinates(hunter), "RMC", 15, 5, 10, null, addLog: false);
+            }
+        });
+        await pair.RunTicksSync(30);
+
+        await server.WaitPost(() =>
+        {
+            var damage = server.EntMan.System<DamageableSystem>();
+            foreach (var hunter in new[] { bare, geared })
+            {
+                explosion[hunter] = damage.GetTotalDamage(hunter).Float();
+                TestContext.Out.WriteLine($"explosion {(hunter == bare ? "bare" : "geared")}: {explosion[hunter]}");
+                damage.SetAllDamage(hunter, 0);
+            }
+
+            // rmc incendiary fire, the flamer path, not atmos
+            var flammable = server.EntMan.System<Content.Shared._RMC14.Atmos.SharedRMCFlammableSystem>();
+            Assert.That(flammable.Ignite((bare, null), 30, 20, null), Is.True);
+            Assert.That(flammable.Ignite((geared, null), 30, 20, null), Is.True);
+        });
+        await pair.RunTicksSync(pair.SecondsToTicks(6));
+
+        await server.WaitAssertion(() =>
+        {
+            var damage = server.EntMan.System<DamageableSystem>();
+            var bareFire = damage.GetTotalDamage(bare).Float();
+            var gearedFire = damage.GetTotalDamage(geared).Float();
+            TestContext.Out.WriteLine($"fire bare: {bareFire} geared: {gearedFire}");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(explosion[bare], Is.GreaterThan(0f), "the test blast didn't reach the hunter");
+                Assert.That(explosion[geared], Is.GreaterThan(explosion[bare] * 0.3f),
+                    "a full kit still blocks almost the whole blast");
+                Assert.That(gearedFire, Is.GreaterThan(bareFire * 0.3f),
+                    "a full kit still makes the hunter fireproof");
+            });
+        });
 
         await pair.CleanReturnAsync();
     }
