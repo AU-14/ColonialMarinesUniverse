@@ -11,8 +11,9 @@ using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 namespace Content.Client.CMU14.Vehicle;
 
 /// <summary>
-/// Draws a crate riding in a cargo bed at the bed's spot for the vehicle's facing, unrotated, between
-/// the vehicle and its overlay, bouncing with the body.
+/// Draws a crate riding in a cargo bed at the bed's spot for the vehicle's drawn facing, between the
+/// vehicle and its overlay, bouncing with the body. A vehicle between headings turns its art by the
+/// leftover angle, so the crate's spot and the crate itself turn with it and stay on the bed.
 /// </summary>
 public sealed class CMUVehicleCargoVisualSystem : EntitySystem
 {
@@ -23,29 +24,39 @@ public sealed class CMUVehicleCargoVisualSystem : EntitySystem
 
     private const float PixelsPerMeter = 32f;
 
-    private readonly Dictionary<EntityUid, (Vector2 Offset, int DrawDepth)> _carried = new();
+    private readonly Dictionary<EntityUid, (Vector2 Offset, int DrawDepth, Angle Rotation, bool NoRotation)> _carried = new();
     private readonly HashSet<EntityUid> _current = new();
     private readonly List<EntityUid> _released = new();
 
     public override void FrameUpdate(float frameTime)
     {
         _current.Clear();
-        var query = EntityQueryEnumerator<CMUVehicleCargoCrateComponent, SpriteComponent>();
-        while (query.MoveNext(out var uid, out var crate, out var sprite))
+        var query = EntityQueryEnumerator<CMUVehicleCargoCrateComponent, SpriteComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var crate, out var sprite, out var xform))
         {
-            if (crate.Vehicle is not { } vehicle || !TryComp(vehicle, out CMUVehicleCargoComponent? cargo))
+            // A crate taken off the bed keeps the component until the server's removal arrives.
+            if (crate.Vehicle is not { } vehicle ||
+                xform.ParentUid != vehicle ||
+                !TryComp(vehicle, out CMUVehicleCargoComponent? cargo))
+            {
                 continue;
+            }
 
-            var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(
-                _transform.GetWorldRotation(vehicle) + _eye.CurrentEye.Rotation);
+            var screenRotation = _transform.GetWorldRotation(vehicle) + _eye.CurrentEye.Rotation;
+            var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(screenRotation);
             if (!cargo.CrateOffsets.TryGetValue(direction, out var pixels))
                 continue;
 
             if (!_carried.ContainsKey(uid))
-                _carried[uid] = (sprite.Offset, sprite.DrawDepth);
+                _carried[uid] = (sprite.Offset, sprite.DrawDepth, sprite.Rotation, sprite.NoRotation);
 
+            // The crate sits at the vehicle's origin, so its whole place on screen is the bed's spot,
+            // turned like the vehicle's art.
+            var leftover = screenRotation - direction.ToAngle();
             var bob = CMUVehicleBob.Offset(vehicle, CompOrNull<GridVehicleMoverComponent>(vehicle), _timing.CurTime);
-            _sprite.SetOffset((uid, sprite), (pixels + new Vector2(0f, bob)) / PixelsPerMeter);
+            sprite.NoRotation = true;
+            _sprite.SetRotation((uid, sprite), leftover);
+            _sprite.SetOffset((uid, sprite), leftover.RotateVec((pixels + new Vector2(0f, bob)) / PixelsPerMeter));
             _sprite.SetDrawDepth((uid, sprite), (int) DrawDepth.Mobs);
             _current.Add(uid);
         }
@@ -58,6 +69,8 @@ public sealed class CMUVehicleCargoVisualSystem : EntitySystem
 
             if (TryComp(uid, out SpriteComponent? sprite))
             {
+                sprite.NoRotation = original.NoRotation;
+                _sprite.SetRotation((uid, sprite), original.Rotation);
                 _sprite.SetOffset((uid, sprite), original.Offset);
                 _sprite.SetDrawDepth((uid, sprite), original.DrawDepth);
             }

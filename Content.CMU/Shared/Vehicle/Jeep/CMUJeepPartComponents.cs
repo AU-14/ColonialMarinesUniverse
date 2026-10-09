@@ -35,6 +35,11 @@ public sealed partial class CMUFuelLeakComponent : Component
     /// </summary>
     [DataField]
     public float Rate = 0.5f;
+
+    /// <summary>
+    /// Fuel lost but not yet drained, waiting to add up to a hundredth of a unit.
+    /// </summary>
+    public float Pending;
 }
 
 /// <summary>
@@ -67,5 +72,59 @@ public sealed partial class CMUJeepPartRemoveDoAfterEvent : DoAfterEvent
     public override DoAfterEvent Clone()
     {
         return new CMUJeepPartRemoveDoAfterEvent(Slot);
+    }
+}
+
+/// <summary>
+/// One step of taking a moving part off or putting it on: its fastening goes from <see cref="From"/>
+/// to <see cref="To"/>.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed partial class CMUJeepPanelFastenDoAfterEvent : DoAfterEvent
+{
+    [DataField]
+    public string Slot = string.Empty;
+
+    [DataField]
+    public int From;
+
+    [DataField]
+    public int To;
+
+    public CMUJeepPanelFastenDoAfterEvent()
+    {
+    }
+
+    public CMUJeepPanelFastenDoAfterEvent(string slot, int from, int to)
+    {
+        Slot = slot;
+        From = from;
+        To = to;
+    }
+
+    public override DoAfterEvent Clone()
+    {
+        return new CMUJeepPanelFastenDoAfterEvent(Slot, From, To);
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed partial class CMUJeepPartRepairDoAfterEvent : DoAfterEvent
+{
+    [DataField]
+    public string Slot = string.Empty;
+
+    public CMUJeepPartRepairDoAfterEvent()
+    {
+    }
+
+    public CMUJeepPartRepairDoAfterEvent(string slot)
+    {
+        Slot = slot;
+    }
+
+    public override DoAfterEvent Clone()
+    {
+        return new CMUJeepPartRepairDoAfterEvent(Slot);
     }
 }

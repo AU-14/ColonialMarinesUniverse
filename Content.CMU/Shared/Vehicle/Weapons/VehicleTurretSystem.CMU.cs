@@ -10,10 +10,24 @@ public sealed partial class VehicleTurretSystem
         if (turret.CMUMaxYawDegrees <= 0f)
             return desired;
 
+        if (!turret.StabilizedRotation)
+            return CMUClampLocalYaw(turret, desired);
+
         var vehicleRot = _transform.GetWorldRotation(vehicle);
-        var local = turret.StabilizedRotation ? (desired - vehicleRot).Reduced() : desired.Reduced();
+        return (CMUClampLocalYaw(turret, desired - vehicleRot) + vehicleRot).Reduced();
+    }
+
+    /// <summary>
+    /// CMU14: clamps a vehicle-relative angle to the turret's arc. Reduced() keeps angles anywhere in
+    /// (-2π, 2π), so the angle is first wrapped to the shortest turn from the front, or aim past 180°
+    /// would snap to the wrong edge.
+    /// </summary>
+    private Angle CMUClampLocalYaw(VehicleTurretComponent turret, Angle local)
+    {
+        if (turret.CMUMaxYawDegrees <= 0f)
+            return local;
+
         var max = MathHelper.DegreesToRadians(turret.CMUMaxYawDegrees);
-        var clamped = new Angle(Math.Clamp(local.Theta, -max, max));
-        return turret.StabilizedRotation ? (clamped + vehicleRot).Reduced() : clamped;
+        return new Angle(Math.Clamp(Angle.ShortestDistance(Angle.Zero, local).Theta, -max, max));
     }
 }

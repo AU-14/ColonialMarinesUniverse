@@ -8,12 +8,13 @@ using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Graphics.RSI;
 using Robust.Shared.Timing;
+using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.CMU14.Vehicle;
 
 /// <summary>
 /// Keeps a vehicle's over-rider overlay on the same cardinal frame as the vehicle, and drives its
-/// near wheels, lamps, brake lights and turn signals from the vehicle's state.
+/// near wheels, frame damage, lamps, brake lights and turn signals from the vehicle's state.
 /// </summary>
 public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 {
@@ -21,6 +22,7 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private VehicleTurretSystem _turret = default!;
 
     private const float PixelsPerMeter = 32f;
     private const float StoppedSpeed = 0.05f;
@@ -28,14 +30,19 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
     // Both signal states blink on the same two-frame cycle; this keeps every lamp in step.
     private const double SignalPeriod = 0.8;
 
+    // This frame's body lift per vehicle, in the vehicle's frame, for its mounted turrets to follow.
+    private readonly Dictionary<EntityUid, (Vector2 Lift, Direction Direction)> _lifts = new();
+
     public override void Initialize()
     {
         UpdatesAfter.Add(typeof(VehicleExactCardinalDirectionSystem));
+        UpdatesAfter.Add(typeof(VehicleTurretVisualSystem));
         UpdatesAfter.Add(typeof(VehicleWheelVisualizerSystem));
     }
 
     public override void FrameUpdate(float frameTime)
     {
+        _lifts.Clear();
         var query = EntityQueryEnumerator<CMUVehicleOverlayVisualsComponent, SpriteComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var visuals, out var sprite, out var xform))
         {
@@ -45,26 +52,81 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 
             var vehicle = xform.ParentUid;
             var bob = CMUVehicleBob.Offset(vehicle, CompOrNull<GridVehicleMoverComponent>(vehicle), _timing.CurTime);
+            var lift = (-direction.ToAngle()).RotateVec(new Vector2(0f, bob / PixelsPerMeter));
+            _lifts[vehicle] = (lift, direction);
             ApplyDirection(ent, visuals, direction, bob);
-            BobBody(vehicle, direction, bob);
+            BobBody(vehicle, lift);
             MirrorWheels(ent, vehicle);
+            MirrorDamage(ent, vehicle);
             UpdateLights(ent, visuals, vehicle);
         }
+
+        BobTurrets();
     }
 
     /// <summary>
     /// Lifts the vehicle's own layers by the suspension bob; the wheels stay on the ground.
     /// </summary>
-    private void BobBody(EntityUid vehicle, Direction direction, float bob)
+    private void BobBody(EntityUid vehicle, Vector2 lift)
     {
         if (!TryComp(vehicle, out SpriteComponent? sprite))
             return;
 
-        var offset = (-direction.ToAngle()).RotateVec(new Vector2(0f, bob / PixelsPerMeter));
         _sprite.LayerMapTryGet((vehicle, sprite), VehicleWheelLayers.Wheels, out var wheels, false);
         for (var i = 0; i < sprite.AllLayers.Count(); i++)
         {
-            _sprite.LayerSetOffset((vehicle, sprite), i, i == wheels ? Vector2.Zero : offset);
+            _sprite.LayerSetOffset((vehicle, sprite), i, i == wheels ? Vector2.Zero : lift);
+        }
+    }
+
+    /// <summary>
+    /// Lifts a mounted turret with its vehicle's body. The turret's visual turns on the vehicle and
+    /// draws its layers in its own frame, so the body's lift is turned back by the turret's aim.
+    /// </summary>
+    private void BobTurrets()
+    {
+        var turrets = EntityQueryEnumerator<VehicleTurretVisualComponent, SpriteComponent>();
+        while (turrets.MoveNext(out var uid, out var visual, out var sprite))
+        {
+            if (!TryGetEntity(visual.Turret, out var turret) ||
+                !_turret.TryGetVehicle(turret.Value, out var vehicle) ||
+                !_lifts.TryGetValue(vehicle, out var frame))
+            {
+                continue;
+            }
+
+            // Facing north the crew stands between the camera and the gun, so the gun drops to the
+            // riders' depth and y-sorts behind them; otherwise it stays over them, at the depth the
+            // turret visual system gives it.
+            var depth = frame.Direction == Direction.North
+                ? (int) DrawDepth.Mobs
+                : (int) DrawDepth.OverMobs + (HasComp<VehicleTurretAttachmentComponent>(turret) ? 1 : 0);
+            if (sprite.DrawDepth != depth)
+                _sprite.SetDrawDepth((uid, sprite), depth);
+
+            var lift = frame.Lift;
+
+            var aim = _transform.GetWorldRotation(uid) - _transform.GetWorldRotation(vehicle);
+            var offset = (-aim).RotateVec(lift);
+
+            // The exact cardinal system shows a turret's cardinal frame and only turns four-way
+            // states back, so an eight-way gun would be drawn as that frame turned by the whole
+            // heading. Pick the gun's frame from its aim on the vehicle's drawn frame instead, and
+            // turn it back the same way, so it sits in the body's perspective at any heading.
+            var gun = (frame.Direction.ToAngle() + aim).GetDir();
+            for (var i = 0; i < sprite.AllLayers.Count(); i++)
+            {
+                _sprite.LayerSetOffset((uid, sprite), i, offset);
+
+                var layer = sprite[i];
+                if (layer.ActualRsi is { } rsi &&
+                    rsi.TryGetState(layer.RsiState, out var state) &&
+                    state.RsiDirections == RsiDirectionType.Dir8)
+                {
+                    sprite.DirectionOverride = gun;
+                    _sprite.LayerSetRotation((uid, sprite), i, -gun.ToAngle());
+                }
+            }
         }
     }
 
@@ -129,6 +191,27 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         _sprite.LayerSetAnimationTime(ent.AsNullable(), index, wheels.AnimationTime);
     }
 
+    /// <summary>
+    /// Shows the overlay's frame damage as the frame damage visualizer shows the vehicle's, fading in
+    /// as the frame's integrity drops.
+    /// </summary>
+    private void MirrorDamage(Entity<SpriteComponent> ent, EntityUid vehicle)
+    {
+        if (!_sprite.LayerMapTryGet(ent.AsNullable(), VehicleFrameDamageLayers.DamagedFrame, out var index, false))
+            return;
+
+        if (!TryComp(vehicle, out SpriteComponent? vehicleSprite) ||
+            !_sprite.LayerMapTryGet((vehicle, vehicleSprite), VehicleFrameDamageLayers.DamagedFrame, out var source, false))
+        {
+            _sprite.LayerSetVisible(ent.AsNullable(), index, false);
+            return;
+        }
+
+        var damage = vehicleSprite[source];
+        _sprite.LayerSetVisible(ent.AsNullable(), index, damage.Visible);
+        _sprite.LayerSetColor(ent.AsNullable(), index, damage.Color);
+    }
+
     private void UpdateLights(Entity<SpriteComponent> ent, CMUVehicleOverlayVisualsComponent visuals, EntityUid vehicle)
     {
         var lightsOn = TryComp(vehicle, out VehicleSpotlightComponent? spotlight) && spotlight.Enabled;
@@ -145,17 +228,19 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
             visuals.LastSpeed = speed;
             braking = _timing.CurTime < visuals.BrakeUntil;
 
+            // Steering blinks the turn signals unless the driver has switched that off.
             var steer = mover.AngularVelocityDegrees * MathF.Sign(mover.CurrentSpeed);
-            if (speed <= StoppedSpeed)
-            {
-                left = right = lightsOn;
-            }
-            else
+            var auto = !TryComp(vehicle, out CMUVehicleDriverActionsComponent? actions) || actions.AutoSignals;
+            if (auto && speed > StoppedSpeed)
             {
                 left = steer > TurningDegrees;
                 right = steer < -TurningDegrees;
             }
         }
+
+        // The driver's hazard switch blinks both sides, moving or not.
+        if (TryComp(vehicle, out CMUVehicleDriverActionsComponent? driver) && driver.Hazards)
+            left = right = true;
 
         SetVisible(ent, "lights", lightsOn);
         SetVisible(ent, "headlights_on", lightsOn);

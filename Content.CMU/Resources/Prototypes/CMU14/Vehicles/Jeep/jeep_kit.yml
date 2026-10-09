@@ -1,0 +1,457 @@
+# A jeep in parts: a kit crate that, opened, leaves the bare chassis with its parts, tools and an
+# assembly manual laid out beside it. The crate parachutes in from a squad's supply drop pad like any
+# crate, or from a dropship's LAG-14 launcher as a launch-bay round, at a laser or flare.
+
+- type: entity
+  parent: CMUVehicleJeepCargo
+  id: CMUVehicleJeepCargoChassis
+  suffix: Unassembled
+  components:
+  # Empty tank; the kit's spare fuel can fills it.
+  - type: CMUVehicleFuel
+    fuel: 0
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      jeep-spare: !type:ContainerSlot
+      jeep-jerrycan: !type:ContainerSlot
+      jeep-shovel: !type:ContainerSlot
+      jeep-axe: !type:ContainerSlot
+      jeep-windshield: !type:ContainerSlot
+      jeep-headlights: !type:ContainerSlot
+      jeep-hood: !type:ContainerSlot
+      jeep-door-driver: !type:ContainerSlot
+      jeep-door-passenger: !type:ContainerSlot
+      jeep-tailgate: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      wheel-1:
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+      jeep-spare:
+        name: cmu-jeep-part-spare
+        whitelist:
+          tags:
+          - CMUJeepWheel
+      jeep-jerrycan:
+        name: cmu-jeep-part-jerrycan
+        whitelist:
+          tags:
+          - CMUJerryCan
+      jeep-shovel:
+        name: cmu-jeep-part-shovel
+        whitelist:
+          tags:
+          - Shovel
+      jeep-axe:
+        name: cmu-jeep-part-axe
+        whitelist:
+          tags:
+          - FireAxe
+      jeep-windshield:
+        name: cmu-jeep-part-windshield
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepWindshield
+      jeep-headlights:
+        name: cmu-jeep-part-headlights
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepHeadlights
+      jeep-hood:
+        name: cmu-jeep-part-hood
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepHood
+      jeep-door-driver:
+        name: cmu-jeep-part-door-driver
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+      jeep-door-passenger:
+        name: cmu-jeep-part-door-passenger
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+      jeep-tailgate:
+        name: cmu-jeep-part-tailgate
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepTailgate
+
+- type: entity
+  parent: CMUVehicleJeepTransport
+  id: CMUVehicleJeepTransportChassis
+  suffix: Unassembled
+  components:
+  # Empty tank; the kit's spare fuel can fills it.
+  - type: CMUVehicleFuel
+    fuel: 0
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      jeep-spare: !type:ContainerSlot
+      jeep-jerrycan: !type:ContainerSlot
+      jeep-shovel: !type:ContainerSlot
+      jeep-axe: !type:ContainerSlot
+      jeep-windshield: !type:ContainerSlot
+      jeep-headlights: !type:ContainerSlot
+      jeep-hood: !type:ContainerSlot
+      jeep-door-driver: !type:ContainerSlot
+      jeep-door-passenger: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      wheel-1:
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+      jeep-spare:
+        name: cmu-jeep-part-spare
+        whitelist:
+          tags:
+          - CMUJeepWheel
+      jeep-jerrycan:
+        name: cmu-jeep-part-jerrycan
+        whitelist:
+          tags:
+          - CMUJerryCan
+      jeep-shovel:
+        name: cmu-jeep-part-shovel
+        whitelist:
+          tags:
+          - Shovel
+      jeep-axe:
+        name: cmu-jeep-part-axe
+        whitelist:
+          tags:
+          - FireAxe
+      jeep-windshield:
+        name: cmu-jeep-part-windshield
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepWindshield
+      jeep-headlights:
+        name: cmu-jeep-part-headlights
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepHeadlights
+      jeep-hood:
+        name: cmu-jeep-part-hood
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepHood
+      jeep-door-driver:
+        name: cmu-jeep-part-door-driver
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+      jeep-door-passenger:
+        name: cmu-jeep-part-door-passenger
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+
+- type: entity
+  parent: CMUVehicleJeepGunner
+  id: CMUVehicleJeepGunnerChassis
+  suffix: Unassembled
+  components:
+  # Empty tank; the kit's spare fuel can fills it.
+  - type: CMUVehicleFuel
+    fuel: 0
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      jeep-spare: !type:ContainerSlot
+      jeep-jerrycan: !type:ContainerSlot
+      jeep-shovel: !type:ContainerSlot
+      jeep-axe: !type:ContainerSlot
+      jeep-windshield: !type:ContainerSlot
+      jeep-headlights: !type:ContainerSlot
+      jeep-hood: !type:ContainerSlot
+      jeep-door-driver: !type:ContainerSlot
+      jeep-door-passenger: !type:ContainerSlot
+      jeep-tailgate: !type:ContainerSlot
+      turret: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      wheel-1:
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+      jeep-spare:
+        name: cmu-jeep-part-spare
+        whitelist:
+          tags:
+          - CMUJeepWheel
+      jeep-jerrycan:
+        name: cmu-jeep-part-jerrycan
+        whitelist:
+          tags:
+          - CMUJerryCan
+      jeep-shovel:
+        name: cmu-jeep-part-shovel
+        whitelist:
+          tags:
+          - Shovel
+      jeep-axe:
+        name: cmu-jeep-part-axe
+        whitelist:
+          tags:
+          - FireAxe
+      jeep-windshield:
+        name: cmu-jeep-part-windshield
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepWindshield
+      jeep-headlights:
+        name: cmu-jeep-part-headlights
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepHeadlights
+      jeep-hood:
+        name: cmu-jeep-part-hood
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepHood
+      jeep-door-driver:
+        name: cmu-jeep-part-door-driver
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+      jeep-door-passenger:
+        name: cmu-jeep-part-door-passenger
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+      jeep-tailgate:
+        name: cmu-jeep-part-tailgate
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepTailgate
+      turret:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+
+- type: entity
+  parent: RMCCrateGreen
+  id: CMUCrateJeepKitCargo
+  name: cargo jeep kit crate
+  description: A cargo jeep in parts, with the tools and the manual to put it together. Open it on clear ground; the chassis takes the crate's place.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    state: base
+  - type: CMUVehicleKitCrate
+    chassis: CMUVehicleJeepCargoChassis
+  - type: StorageFill
+    contents:
+    - id: CMUJeepWheel
+    - id: CMUJeepWheel
+    - id: CMUJeepWindshield
+    - id: CMUJeepHeadlights
+    - id: CMUJeepHood
+    - id: CMUJeepDoor
+    - id: CMUJeepDoor
+    - id: RMCFuelCan
+    - id: RMCFuelCan
+    - id: CMEntrenchingTool
+    - id: RMCFireAxe
+    - id: CMWrench
+    - id: CMScrewdriver
+    - id: CMUPaperJeepAssemblyManual
+    - id: CMUJeepTailgate
+
+- type: entity
+  parent: RMCDropshipAttachmentBase
+  id: CMUDropshipAttachmentAmmoLaunchableJeepCargo
+  name: air-droppable cargo jeep
+  description: A cargo jeep kit crate rigged with a parachute. Load it into the LAG-14 Internal Sentry Launcher and launch it at a laser or flare; it lands as a crate to open and put together.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    state: base
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+  - type: PowerLoaderDetachable
+  - type: Appearance
+  - type: RMCOrbitalDeployable
+    deployPrototype: CMUCrateJeepKitCargo
+    dropPod: false
+    useParachute: true
+
+- type: entity
+  parent: RMCCrateGreen
+  id: CMUCrateJeepKitTransport
+  name: transport jeep kit crate
+  description: A transport jeep in parts, with the tools and the manual to put it together. Open it on clear ground; the chassis takes the crate's place.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    state: base
+  - type: CMUVehicleKitCrate
+    chassis: CMUVehicleJeepTransportChassis
+  - type: StorageFill
+    contents:
+    - id: CMUJeepWheel
+    - id: CMUJeepWheel
+    - id: CMUJeepWindshield
+    - id: CMUJeepHeadlights
+    - id: CMUJeepHood
+    - id: CMUJeepDoor
+    - id: CMUJeepDoor
+    - id: RMCFuelCan
+    - id: RMCFuelCan
+    - id: CMEntrenchingTool
+    - id: RMCFireAxe
+    - id: CMWrench
+    - id: CMScrewdriver
+    - id: CMUPaperJeepAssemblyManual
+
+- type: entity
+  parent: RMCDropshipAttachmentBase
+  id: CMUDropshipAttachmentAmmoLaunchableJeepTransport
+  name: air-droppable transport jeep
+  description: A transport jeep kit crate rigged with a parachute. Load it into the LAG-14 Internal Sentry Launcher and launch it at a laser or flare; it lands as a crate to open and put together.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    state: base
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+  - type: PowerLoaderDetachable
+  - type: Appearance
+  - type: RMCOrbitalDeployable
+    deployPrototype: CMUCrateJeepKitTransport
+    dropPod: false
+    useParachute: true
+
+- type: entity
+  parent: RMCCrateGreen
+  id: CMUCrateJeepKitGunner
+  name: gun jeep kit crate
+  description: A gun jeep in parts, with the tools and the manual to put it together. Open it on clear ground; the chassis takes the crate's place.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    state: base
+  - type: CMUVehicleKitCrate
+    chassis: CMUVehicleJeepGunnerChassis
+  - type: StorageFill
+    contents:
+    - id: CMUJeepWheel
+    - id: CMUJeepWheel
+    - id: CMUJeepWindshield
+    - id: CMUJeepHeadlights
+    - id: CMUJeepHood
+    - id: CMUJeepDoor
+    - id: CMUJeepDoor
+    - id: RMCFuelCan
+    - id: RMCFuelCan
+    - id: CMEntrenchingTool
+    - id: RMCFireAxe
+    - id: CMWrench
+    - id: CMScrewdriver
+    - id: CMUPaperJeepAssemblyManual
+    - id: CMUJeepTailgate
+    - id: CMUJeepMGMount
+
+- type: entity
+  parent: RMCDropshipAttachmentBase
+  id: CMUDropshipAttachmentAmmoLaunchableJeepGunner
+  name: air-droppable gun jeep
+  description: A gun jeep kit crate rigged with a parachute. Load it into the LAG-14 Internal Sentry Launcher and launch it at a laser or flare; it lands as a crate to open and put together.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    state: base
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+  - type: PowerLoaderDetachable
+  - type: Appearance
+  - type: RMCOrbitalDeployable
+    deployPrototype: CMUCrateJeepKitGunner
+    dropPod: false
+    useParachute: true
+
+- type: entity
+  parent: CMPaperWritten
+  id: CMUPaperJeepAssemblyManual
+  name: jeep assembly manual
+  description: Step by step, how to put a jeep from its kit crate together.
+  components:
+  - type: Paper
+    content: cmu-jeep-assembly-manual

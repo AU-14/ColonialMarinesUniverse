@@ -9,7 +9,7 @@ namespace Content.Shared.CMU14.Vehicle.Jeep;
 /// Crayon drawings stored on a vehicle's body: each is anchored to a point on a panel, so it stays on
 /// the same spot as the vehicle turns and only shows where that panel faces the camera.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class CMUVehicleCrayonComponent : Component
 {
     /// <summary>
@@ -19,10 +19,32 @@ public sealed partial class CMUVehicleCrayonComponent : Component
     public ResPath Map;
 
     [DataField]
-    public int MaxDrawings = 24;
+    public int MaxDrawings = 50;
 
     [DataField, AutoNetworkedField]
     public List<CMUCrayonDrawing> Drawings = new();
+
+    /// <summary>
+    /// Blood splashed on the body, stored like the drawings and drawn under them.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<CMUCrayonDrawing> Blood = new();
+
+    [DataField]
+    public int MaxBlood = 40;
+}
+
+/// <summary>
+/// Hinged panel a crayon map pixel is on. The map has them shut, so paint on one hides while it is open.
+/// </summary>
+public enum CMUCrayonPanel : byte
+{
+    Body,
+    Hood,
+    FuelDoor,
+    DriverDoor,
+    PassengerDoor,
+    Tailgate,
 }
 
 [DataDefinition, Serializable, NetSerializable]

@@ -30,6 +30,7 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
 
     private const string Layer = "crayon";
     private const float Opacity = 0.75f;
+    private const float BloodOpacity = 0.9f;
 
     private readonly Dictionary<ResPath, Image<Rgba32>?> _maps = new();
     private readonly Dictionary<string, Image<Rgba32>?> _decals = new();
@@ -37,7 +38,13 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
 
     private sealed class Paint
     {
-        public List<CMUCrayonDrawing>? Drawings;
+        // The drawings list is refilled in place by each state, so a new state marks the paint stale.
+        public bool Stale = true;
+
+        // What the paint was baked with: the overlay's slide, and the panels it left out while open.
+        public CMUVehicleOverlayVisualsComponent? Visuals;
+        public int OpenPanels;
+
         public readonly OwnedTexture?[] Under = new OwnedTexture?[4];
         public readonly OwnedTexture?[] Over = new OwnedTexture?[4];
 
@@ -58,6 +65,13 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         UpdatesAfter.Add(typeof(VehicleExactCardinalDirectionSystem));
         UpdatesAfter.Add(typeof(CMUVehicleOverlayVisualSystem));
         SubscribeLocalEvent<CMUVehicleCrayonComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<CMUVehicleCrayonComponent, AfterAutoHandleStateEvent>(OnState);
+    }
+
+    private void OnState(Entity<CMUVehicleCrayonComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        if (_paints.TryGetValue(ent, out var paint))
+            paint.Stale = true;
     }
 
     public override void Shutdown()
@@ -89,7 +103,7 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         var query = EntityQueryEnumerator<CMUVehicleCrayonComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var crayon, out var sprite))
         {
-            if (crayon.Drawings.Count == 0 && !_paints.ContainsKey(uid))
+            if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 && !_paints.ContainsKey(uid))
                 continue;
 
             Entity<SpriteComponent>? overlay = null;
@@ -104,10 +118,17 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
             if (!_paints.TryGetValue(uid, out var paint))
                 _paints[uid] = paint = new Paint();
 
-            if (!ReferenceEquals(paint.Drawings, crayon.Drawings))
+            // The overlay can arrive after the drawings, and a panel swinging changes what shows.
+            var jeep = CompOrNull<CMUJeepComponent>(uid);
+            var openPanels = OpenPanels(jeep);
+            if (paint.Stale ||
+                !ReferenceEquals(paint.Visuals, overlayVisuals) ||
+                paint.OpenPanels != openPanels)
             {
-                paint.Drawings = crayon.Drawings;
-                Repaint(crayon, paint, overlayVisuals);
+                paint.Stale = false;
+                paint.Visuals = overlayVisuals;
+                paint.OpenPanels = openPanels;
+                Repaint(crayon, paint, overlayVisuals, jeep);
             }
 
             var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(
@@ -138,10 +159,10 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         _sprite.LayerSetRotation(ent.AsNullable(), index, counter);
     }
 
-    private void Repaint(CMUVehicleCrayonComponent crayon, Paint paint, CMUVehicleOverlayVisualsComponent? overlayVisuals)
+    private void Repaint(CMUVehicleCrayonComponent crayon, Paint paint, CMUVehicleOverlayVisualsComponent? overlayVisuals, CMUJeepComponent? jeep)
     {
         paint.Dispose();
-        if (crayon.Drawings.Count == 0 || GetImage(_maps, crayon.Map) is not { } map)
+        if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 || GetImage(_maps, crayon.Map) is not { } map)
             return;
 
         for (var i = 0; i < MapDirections.Length; i++)
@@ -162,10 +183,16 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
                 {
                     var (px, py) = MapPixel(direction, x, y);
                     var surface = Pixel(map, px, py);
-                    if (!DecodeSurface(surface.R, surface.G, surface.B, surface.A, out var voxel, out var front, out var overRiders))
+                    // The map has the panels shut, so an open one would leave its paint hanging in the air.
+                    if (!DecodeSurface(surface.R, surface.G, surface.B, surface.A, out var voxel, out var front, out var overRiders, out var panel) ||
+                        IsPanelOpen(jeep, panel))
+                    {
                         continue;
+                    }
 
-                    if (PaintPixel(crayon.Drawings, voxel, front, direction) is not { } color)
+                    // Crayon goes on over blood.
+                    if ((PaintPixel(crayon.Drawings, voxel, front, direction, Opacity) ??
+                         PaintPixel(crayon.Blood, voxel, front, direction, BloodOpacity)) is not { } color)
                         continue;
 
                     if (overRiders)
@@ -191,7 +218,7 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
     /// <summary>
     /// The colour the newest drawing covering this surface point paints, or null.
     /// </summary>
-    private Rgba32? PaintPixel(List<CMUCrayonDrawing> drawings, Vector3 voxel, bool front, Direction direction)
+    private Rgba32? PaintPixel(List<CMUCrayonDrawing> drawings, Vector3 voxel, bool front, Direction direction, float opacity)
     {
         for (var i = drawings.Count - 1; i >= 0; i--)
         {
@@ -208,7 +235,7 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
                 c.R * texel.R / 255f,
                 c.G * texel.G / 255f,
                 c.B * texel.B / 255f,
-                c.A * texel.A / 255f * Opacity);
+                c.A * texel.A / 255f * opacity);
         }
 
         return null;
@@ -230,17 +257,18 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         return image;
     }
 
-    public override bool TryGetSurface(ResPath map, Direction direction, int x, int y, out Vector3 voxel, out bool front, out bool overRiders)
+    public override bool TryGetSurface(ResPath map, Direction direction, int x, int y, out Vector3 voxel, out bool front, out bool overRiders, out CMUCrayonPanel panel)
     {
         voxel = default;
         front = false;
         overRiders = false;
+        panel = CMUCrayonPanel.Body;
         if (x < 0 || y < 0 || x >= FrameSize || y >= FrameSize || GetImage(_maps, map) is not { } image)
             return false;
 
         var (px, py) = MapPixel(direction, x, y);
         var pixel = Pixel(image, px, py);
-        return DecodeSurface(pixel.R, pixel.G, pixel.B, pixel.A, out voxel, out front, out overRiders);
+        return DecodeSurface(pixel.R, pixel.G, pixel.B, pixel.A, out voxel, out front, out overRiders, out panel);
     }
 
     private static Rgba32 Pixel(Image<Rgba32> image, int x, int y)

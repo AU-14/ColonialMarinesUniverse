@@ -1,6 +1,8 @@
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.Administration.Logs;
 using Content.Shared.Charges.Systems;
 using Content.Shared.Crayon;
+using Content.Shared.Database;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
@@ -12,11 +14,13 @@ namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
 {
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedChargesSystem _charges = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     public const int FrameSize = 96;
     public const float PixelsPerMeter = 32f;
@@ -53,15 +57,22 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
 
         if (_charges.IsEmpty(args.Used))
         {
-            _popup.PopupEntity(Loc.GetString("cmu-vehicle-crayon-empty"), ent, args.User);
+            if (crayon.DeleteEmpty)
+                UseUpCrayon(args.Used, args.User);
+            else
+                _popup.PopupEntity(Loc.GetString("cmu-vehicle-crayon-empty"), ent, args.User);
+
             return;
         }
 
-        var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(_transform.GetWorldRotation(ent));
-        var offset = _transform.ToMapCoordinates(args.ClickLocation).Position - _transform.GetWorldPosition(ent);
+        // The frame is drawn turned by whatever is left over past its cardinal, which a jeep can rest at.
+        var (position, rotation) = _transform.GetWorldPositionRotation(ent);
+        var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(rotation);
+        var offset = (direction.ToAngle() - rotation).RotateVec(_transform.ToMapCoordinates(args.ClickLocation).Position - position);
         var x = (int) MathF.Floor(FrameSize / 2f + offset.X * PixelsPerMeter);
         var y = (int) MathF.Floor(FrameSize / 2f - offset.Y * PixelsPerMeter);
-        if (!TryGetSurface(ent.Comp.Map, direction, x, y, out var voxel, out var front, out _))
+        if (!TryGetSurface(ent.Comp.Map, direction, x, y, out var voxel, out var front, out _, out var panel) ||
+            IsPanelOpen(CompOrNull<CMUJeepComponent>(ent.Owner), panel))
         {
             _popup.PopupEntity(Loc.GetString("cmu-vehicle-crayon-miss"), ent, args.User);
             return;
@@ -85,23 +96,70 @@ public abstract class SharedCMUVehicleCrayonSystem : EntitySystem
         Dirty(ent);
         _charges.TryUseCharge(args.Used);
         _audio.PlayPvs(crayon.UseSound, ent);
+        _adminLog.Add(LogType.CrayonDraw, LogImpact.Low,
+            $"{ToPrettyString(args.User):user} drew a {crayon.Color:color} {crayon.SelectedState} on {ToPrettyString(ent):entity}");
+
+        // As on the floor: a used up crayon is spent, otherwise its typed text moves on to the next decal.
+        if (crayon.DeleteEmpty && _charges.IsEmpty(args.Used))
+            UseUpCrayon(args.Used, args.User);
+        else
+            _ui.ServerSendUiMessage(args.Used, CrayonUiKey.Key, new CrayonUsedMessage(crayon.SelectedState));
+    }
+
+    private void UseUpCrayon(EntityUid crayon, EntityUid user)
+    {
+        _popup.PopupEntity(Loc.GetString("crayon-interact-used-up-text", ("owner", crayon)), user, user);
+        QueueDel(crayon);
     }
 
     /// <summary>
     /// The body voxel a pixel of a direction's frame shows, whether that is the camera-facing panel
-    /// (else a top face), and whether it is drawn over the riders.
+    /// (else a top face), whether it is drawn over the riders and the hinged panel it is on.
     /// </summary>
-    public abstract bool TryGetSurface(ResPath map, Direction direction, int x, int y, out Vector3 voxel, out bool front, out bool overRiders);
+    public abstract bool TryGetSurface(ResPath map, Direction direction, int x, int y, out Vector3 voxel, out bool front, out bool overRiders, out CMUCrayonPanel panel);
 
     /// <summary>
-    /// Decodes a crayon map pixel (R = f + 128, G = r + 128, B = 2z + front, A = 0 off the body, 128 over riders).
+    /// Decodes a crayon map pixel (R = f + 128, G = r + 128, B = 2z + front, A = 0 off the body, else
+    /// 255 - panel under riders or 128 - panel over them).
     /// </summary>
-    protected static bool DecodeSurface(byte r, byte g, byte b, byte a, out Vector3 voxel, out bool front, out bool overRiders)
+    protected static bool DecodeSurface(byte r, byte g, byte b, byte a, out Vector3 voxel, out bool front, out bool overRiders, out CMUCrayonPanel panel)
     {
         voxel = new Vector3(r - 128, g - 128, b / 2);
         front = b % 2 == 1;
-        overRiders = a == 128;
+        overRiders = a <= 128;
+        panel = (CMUCrayonPanel) ((overRiders ? 128 : 255) - a);
         return a != 0;
+    }
+
+    /// <summary>
+    /// Whether a panel is swung away from the shut position the map has it in.
+    /// </summary>
+    protected static bool IsPanelOpen(CMUJeepComponent? jeep, CMUCrayonPanel panel)
+    {
+        return panel switch
+        {
+            CMUCrayonPanel.Hood => jeep?.HoodOpen == true,
+            CMUCrayonPanel.FuelDoor => jeep?.FuelDoorOpen == true,
+            CMUCrayonPanel.DriverDoor => jeep?.DriverDoorOpen == true,
+            CMUCrayonPanel.PassengerDoor => jeep?.PassengerDoorOpen == true,
+            CMUCrayonPanel.Tailgate => jeep?.TailgateOpen == true,
+            _ => false,
+        };
+    }
+
+    /// <summary>
+    /// One bit per panel that is open, to tell when paint baked with the panels as they were is stale.
+    /// </summary>
+    protected static int OpenPanels(CMUJeepComponent? jeep)
+    {
+        var mask = 0;
+        foreach (var panel in Enum.GetValues<CMUCrayonPanel>())
+        {
+            if (IsPanelOpen(jeep, panel))
+                mask |= 1 << (int) panel;
+        }
+
+        return mask;
     }
 
     protected static (int X, int Y) MapPixel(Direction direction, int x, int y)

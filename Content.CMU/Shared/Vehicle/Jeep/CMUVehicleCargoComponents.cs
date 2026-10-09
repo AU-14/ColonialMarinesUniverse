@@ -68,6 +68,14 @@ public sealed partial class CMUVehicleCargoCrateComponent : Component
     public bool CanCollide = true;
 }
 
+/// <summary>
+/// A crate that has been pulled. Clicking a jeep with the hand pulling it loads it onto the cargo bed;
+/// the pull's virtual item hands that click to the crate. Left on once the pull ends: the handlers
+/// check who is pulling it.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUVehicleCargoPulledComponent : Component;
+
 [Serializable, NetSerializable]
 public sealed partial class CMUVehicleCargoLoadDoAfterEvent : SimpleDoAfterEvent;
 

@@ -1,0 +1,76 @@
+- type: entity
+  id: CMUActionJeepHazards
+  parent: BaseAction
+  name: Hazard lights
+  description: Switch the jeep's hazard lights on or off. Both turn signals blink together.
+  components:
+  - type: InstantAction
+    event: !type:CMUVehicleHazardsActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 0.3
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/jeep/actions.rsi
+      state: hazards_off
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: CMU14/Structures/vehicles/jeep/actions.rsi
+      state: hazards_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+
+- type: entity
+  id: CMUActionJeepAutoSignals
+  parent: BaseAction
+  name: Automatic turn signals
+  description: Switch the turn signals blinking on their own as you steer on or off.
+  components:
+  - type: InstantAction
+    event: !type:CMUVehicleAutoSignalsActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 0.3
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/jeep/actions.rsi
+      state: signals_auto_off
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: CMU14/Structures/vehicles/jeep/actions.rsi
+      state: signals_auto_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+
+- type: entity
+  id: CMUActionJeepHorn
+  parent: BaseAction
+  name: Horn
+  description: Sound the jeep's horn.
+  components:
+  - type: InstantAction
+    event: !type:CMUVehicleHornActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+  - type: Sprite
+    layers:
+    - sprite: Objects/Fun/push_horn.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+
+# One switch for the headlights: off, low beam, high beam, off. The icon shows where it is; there
+# is no toggled icon layer, which would hide it.
+- type: entity
+  id: CMUActionJeepHeadlights
+  parent: BaseAction
+  name: Headlights
+  description: Switch the jeep's headlights through off, low beam and high beam.
+  components:
+  - type: InstantAction
+    event: !type:CMUVehicleHeadlightsActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 0.3
+  - type: Sprite
+    layers:
+    - sprite: CMU14/Structures/vehicles/jeep/actions.rsi
+      state: headlights_off
+      map: ["enum.ActionVisuals.Icon"]
