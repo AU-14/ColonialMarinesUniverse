@@ -29,4 +29,9 @@ public sealed partial class FiremanCarrySystem
         carriable.CanThrow = canThrow;
         Dirty(carried, carriable);
     }
+
+    public bool IsAggressivelyGrabbed(EntityUid target)
+    {
+        return IsBeingAggressivelyGrabbed(target);
+    }
 }
