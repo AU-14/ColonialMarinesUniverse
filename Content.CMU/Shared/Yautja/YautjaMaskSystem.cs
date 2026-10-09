@@ -147,6 +147,17 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         var query = EntityQueryEnumerator<YautjaMaskComponent>();
         while (query.MoveNext(out var uid, out var mask))
         {
+            // the drain below killed the visor and deleted the nv glasses, nothing ever turned it back on
+            // so taking the bracer off cost you night vision until you took the mask off and on again
+            if (mask.VisorWaitingForPower &&
+                !mask.VisorEnabled &&
+                mask.User is { } waiting &&
+                !TryGetVisorToggleFailure((uid, mask), waiting, out _))
+            {
+                EnableVisor((uid, mask), waiting, false);
+                continue;
+            }
+
             if (!mask.VisorEnabled ||
                 mask.Drain <= FixedPoint2.Zero ||
                 mask.User is not { } user ||
@@ -159,6 +170,7 @@ public sealed partial class YautjaMaskSystem : EntitySystem
 
             _popup.PopupEntity(Loc.GetString("cmu-yautja-visor-low-power"), user, user, PopupType.MediumCaution);
             DisableVisor((uid, mask), user);
+            mask.VisorWaitingForPower = !HasWornYautjaPowerSource(user);
         }
     }
 
@@ -171,6 +183,7 @@ public sealed partial class YautjaMaskSystem : EntitySystem
             return;
 
         mask.Comp.VisorEnabled = true;
+        mask.Comp.VisorWaitingForPower = false;
         mask.Comp.User = user;
         mask.Comp.NextDrain = _timing.CurTime + mask.Comp.DrainEvery;
         Dirty(mask);
@@ -190,6 +203,7 @@ public sealed partial class YautjaMaskSystem : EntitySystem
             return;
 
         mask.Comp.VisorEnabled = false;
+        mask.Comp.VisorWaitingForPower = false;
         Dirty(mask);
         _actions.SetToggled(mask.Comp.ToggleVisorAction, false);
 
