@@ -15,4 +15,9 @@ public sealed partial class CMUTieHairDoAfterEvent : DoAfterEvent
 public sealed partial class CMUUntieHairDoAfterEvent : DoAfterEvent
 {
     public override DoAfterEvent Clone() => this;
+
+    /// <summary>
+    /// Style to untie into when there is no stored original, i.e. hair that spawned tied back.
+    /// </summary>
+    public string? LooseStyleId;
 }

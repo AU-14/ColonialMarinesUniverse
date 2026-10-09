@@ -212,7 +212,7 @@ au14-usarmy-armored-greeting = You are a member of US Army 32nd Armored Division
 
     You were dispatched to aid GOVFOR forces in the AO!
 
-    Get ready for action and report to the GVOFR Commander!
+    Get ready for action and report to the GOVFOR Commanding Officer!
 
     You are friendly to GOVFOR, neutral to civilians and hostile to CLF!
 
