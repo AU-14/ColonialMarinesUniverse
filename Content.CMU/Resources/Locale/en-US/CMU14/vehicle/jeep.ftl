@@ -3,14 +3,24 @@ cmu-vehicle-seat-passenger = passenger seat
 cmu-vehicle-seat-rear-left = rear left seat
 cmu-vehicle-seat-rear-right = rear right seat
 cmu-vehicle-seat-gunner = gunner's seat
+cmu-vehicle-seat-medic = medic's seat
+cmu-vehicle-seat-bed = surgical bed
 cmu-vehicle-seat-verb = Sit in the {$seat}
+cmu-vehicle-seat-lie-verb = Lie on the {$seat}
 cmu-vehicle-seat-exit-verb = Get out
 cmu-vehicle-seat-none-free = There's no free seat.
 
 cmu-jeep-part-hood = hood
 cmu-jeep-part-windshield = windshield
 cmu-jeep-part-fuel-door = fuel door
-cmu-jeep-part-headlights = headlights
+cmu-jeep-part-headlight-left = driver's headlight
+cmu-jeep-part-headlight-right = passenger's headlight
+cmu-jeep-part-turn-signal-left = driver's turn signal
+cmu-jeep-part-turn-signal-right = passenger's turn signal
+cmu-jeep-part-taillight-left = driver's tail light
+cmu-jeep-part-taillight-right = passenger's tail light
+cmu-jeep-part-extinguisher = fire extinguisher
+cmu-jeep-part-ignition = ignition key
 cmu-jeep-part-wheels = wheels
 cmu-jeep-part-spare = spare wheel set
 cmu-jeep-part-jerrycan = jerry can
@@ -33,7 +43,7 @@ cmu-jeep-engine-dead = The engine coughs and dies. It needs repairs under the ho
 cmu-jeep-engine-examine = The engine is at {$percent}%.
 cmu-jeep-engine-fine = The engine doesn't need any work.
 cmu-jeep-part-fine = There's nothing to fix on the {$part}.
-cmu-jeep-wreck-warning = {CAPITALIZE(THE($vehicle))} bursts into flames!
+cmu-jeep-wreck-warning = Flames burst from under {THE($vehicle)}'s hood! Get clear before it goes up!
 cmu-vehicle-cargo-load-verb = Load crate
 cmu-vehicle-cargo-unload-verb = Unload crate
 cmu-vehicle-cargo-secured = You wrench the crate down.
@@ -62,6 +72,9 @@ cmu-jeep-headlights-low = You switch on the low beams.
 cmu-jeep-headlights-high = You switch on the high beams.
 cmu-jeep-headlights-broken = You flick the switch, but the headlights stay dark.
 
+cmu-vehicle-ignition-examine-key = The key is in the ignition.
+cmu-vehicle-ignition-examine-no-key = There's no key in the ignition.
+
 cmu-vehicle-grime-clean = It's already clean.
 cmu-vehicle-grime-scrubbed = You scrub {THE($vehicle)} clean.
 cmu-vehicle-spray-painter-title = Vehicle paint
@@ -71,24 +84,26 @@ cmu-vehicle-spray-painter-charges = Paint left: {$current}/{$max} (a respray use
 # The manual packed in a jeep kit crate.
 cmu-jeep-assembly-manual =
     {"["}head=2]JEEP FIELD ASSEMBLY[/head]
-    {"["}italic]For the cargo, transport and gun jeeps delivered as kit crates.[/italic]
+    {"["}italic]For the cargo, medical, transport and gun jeeps delivered as kit crates.[/italic]
 
-    The crate holds the chassis, its parts, a wrench, a screwdriver and two fuel cans. Opening it sets the chassis down where the crate stood and lays the parts out on either side. The chassis comes with its engine fitted and an empty tank.
+    The crate holds the chassis, its parts, a wrench, a screwdriver, two fuel cans and the ignition key. Opening it sets the chassis down where the crate stood and lays the parts out on either side. The chassis comes with its engine fitted and an empty tank.
 
     {"["}bold]1. Wheels.[/bold] Take a wheel set and use it on the chassis. It goes on by hand. The jeep can't move without it.
 
-    {"["}bold]2. Panels.[/bold] The hood, both doors and the windshield (and the tailgate on cargo and gun jeeps) each go on in three steps:
+    {"["}bold]2. Panels.[/bold] The hood, both doors and the windshield (and the tailgate on cargo, medical and gun jeeps) each go on in three steps:
     - Use the part on the jeep to hang it on its hinges.
     - Use a wrench on the part to bolt it on.
     - Use a screwdriver on the part to screw it down.
     A door takes either side. Taking a panel off is the same in reverse: screwdriver, wrench, then lift it off with an empty hand.
 
-    {"["}bold]3. Headlights.[/bold] Use them on the jeep. They come off with a screwdriver.
+    {"["}bold]3. Lamps.[/bold] Two headlights, two turn signals for the front fenders and two tail lights. Each fits either side: hold it and click where it goes. They come off with a screwdriver.
 
-    {"["}bold]4. Kit.[/bold] Hang the shovel and the fire axe on the driver's door. On the cargo and gun jeeps, hang the spare wheel set and a fuel can on the tailgate while it is up. On the transport they hang on the rear wall.
+    {"["}bold]4. Kit.[/bold] Hang the shovel and the fire axe on the driver's door and strap the fire extinguisher to the cowl ahead of the passenger's door. On the cargo, medical and gun jeeps, hang the spare wheel set and a fuel can on the tailgate while it is up. On the transport they hang on the rear wall.
 
     {"["}bold]5. Gun jeep only.[/bold] Fit the gun mount on the pedestal behind the seats.
 
     {"["}bold]6. Fuel.[/bold] Open the fuel door on the right rear quarter and use the second fuel can on it.
 
-    {"["}bold]Driving.[/bold] Doors open let the crew in and out at once; over a shut door it takes a moment. The headlight switch cycles low beam, high beam and off. Lower the tailgate to load or unload a crate.
+    {"["}bold]7. Key.[/bold] Put the key in the ignition. Without it the engine won't start, and taking it out stops it.
+
+    {"["}bold]Driving.[/bold] Doors open let the crew in and out at once; over a shut door it takes a moment. The headlight switch cycles low beam, high beam and off. Lower the tailgate to load or unload a crate. On the medical jeep, drag a casualty onto the surgical bed over the lowered tailgate; the medic's seat faces the bed.

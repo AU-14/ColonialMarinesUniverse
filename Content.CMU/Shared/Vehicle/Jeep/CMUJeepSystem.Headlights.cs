@@ -71,18 +71,20 @@ public sealed partial class CMUJeepSystem
     }
 
     /// <summary>
-    /// Lights the beam the switch is on, if the headlights are fitted and intact. Server only.
+    /// Lights the beams the switch is on, each from its own headlight if that is fitted and intact.
+    /// Server only.
     /// </summary>
     private void UpdateBeams(EntityUid vehicle)
     {
         if (_net.IsClient || !TryComp(vehicle, out CMUVehicleHeadlightsComponent? lights))
             return;
 
-        var works = HeadlightsWork(vehicle);
+        var driver = LampWorks(vehicle, DriverHeadlight);
+        var passenger = LampWorks(vehicle, PassengerHeadlight);
         foreach (var beam in lights.Beams)
         {
             if (TryComp(beam, out CMUVehicleHeadlightBeamComponent? comp))
-                _lights.SetEnabled(beam, works && comp.Mode == lights.Mode);
+                _lights.SetEnabled(beam, (comp.Driver ? driver : passenger) && comp.Mode == lights.Mode);
         }
     }
 
@@ -120,7 +122,9 @@ public sealed partial class CMUJeepSystem
                 _ => "cmu-jeep-headlights-high",
             };
 
-            if (ent.Comp.Mode != CMUHeadlightMode.Off && !HeadlightsWork(ent.Owner))
+            if (ent.Comp.Mode != CMUHeadlightMode.Off &&
+                !LampWorks(ent, DriverHeadlight) &&
+                !LampWorks(ent, PassengerHeadlight))
                 message = "cmu-jeep-headlights-broken";
 
             _popup.PopupEntity(Loc.GetString(message), ent, user.Value);

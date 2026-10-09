@@ -24,9 +24,10 @@ using Robust.Shared.Timing;
 namespace Content.Server.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// Turns a jeep whose hull damage has brought to zero into a burning wreck: a short warning, then its
-/// riders are thrown clear, a loaded crate goes off the back, the jeep's explosive goes off, and the jeep
-/// with every part fitted to it is replaced by a wreck, debris, oil and fire.
+/// Turns a jeep whose hull damage has brought to zero into a burning wreck: its engine bursts into
+/// flames, throwing sparks while the fire crackles, then its riders are thrown clear, a loaded crate
+/// goes off the back, the jeep's explosive goes off, and the jeep with every part fitted to it is
+/// replaced by a wreck, debris, oil and fire.
 /// </summary>
 public sealed class CMUJeepWreckSystem : EntitySystem
 {
@@ -75,6 +76,8 @@ public sealed class CMUJeepWreckSystem : EntitySystem
             {
                 if (now >= detonateAt)
                     _detonating.Add((uid, wreck));
+                else if (now >= wreck.NextSpark)
+                    Spark((uid, wreck), now);
 
                 continue;
             }
@@ -103,21 +106,43 @@ public sealed class CMUJeepWreckSystem : EntitySystem
 
     private void Arm(Entity<CMUJeepWreckComponent> ent)
     {
-        ent.Comp.DetonateAt = _timing.CurTime + ent.Comp.Delay;
+        var now = _timing.CurTime;
+        ent.Comp.DetonateAt = now + ent.Comp.Delay;
+        ent.Comp.NextSpark = now + ent.Comp.MinSparkDelay;
 
-        // The engine goes with the hull, and its heavy smoke is part of the warning.
-        if (TryComp(ent.Owner, out CMUJeepComponent? jeep) && jeep.EngineIntegrity > 0f)
+        // The engine goes with the hull and catches fire: flames from under the hood over its heavy
+        // smoke, a flickering glow and the fire's crackle, all gone with the jeep when it goes up.
+        if (TryComp(ent.Owner, out CMUJeepComponent? jeep))
         {
             jeep.EngineIntegrity = 0f;
+            jeep.Burning = true;
             Dirty(ent.Owner, jeep);
         }
 
-        _audio.PlayPvs(ent.Comp.WarningSound, ent.Owner);
+        SpawnAttachedTo(ent.Comp.FireLightPrototype, new EntityCoordinates(ent.Owner, ent.Comp.EngineBay));
+        if (ent.Comp.WarningSound is { } crackle)
+            _audio.PlayPvs(crackle, ent.Owner, crackle.Params.WithLoop(true));
+
         _popup.PopupEntity(Loc.GetString(ent.Comp.WarningPopup, ("vehicle", ent.Owner)),
             ent.Owner,
             Filter.Pvs(ent.Owner),
             true,
             PopupType.LargeCaution);
+    }
+
+    /// <summary>
+    /// Sparks fly from somewhere in the burning engine bay, and now and then something in it gives
+    /// way with a bang.
+    /// </summary>
+    private void Spark(Entity<CMUJeepWreckComponent> ent, TimeSpan now)
+    {
+        var wreck = ent.Comp;
+        var span = (float) (wreck.MaxSparkDelay - wreck.MinSparkDelay).TotalSeconds;
+        wreck.NextSpark = now + wreck.MinSparkDelay + TimeSpan.FromSeconds(_random.NextFloat(0f, span));
+
+        var offset = wreck.EngineBay + new Vector2(_random.NextFloat(-0.35f, 0.35f), _random.NextFloat(-0.3f, 0.3f));
+        Spawn(wreck.SparkPrototype, new EntityCoordinates(ent.Owner, offset));
+        _audio.PlayPvs(_random.Prob(0.35f) ? wreck.PopSound : wreck.SparkSound, ent.Owner);
     }
 
     private void Detonate(Entity<CMUJeepWreckComponent> ent)

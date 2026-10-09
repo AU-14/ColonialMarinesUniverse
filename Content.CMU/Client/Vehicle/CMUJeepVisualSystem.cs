@@ -4,6 +4,7 @@ using Content.Client.Gameplay;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CMU14.Vehicle.Jeep;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -23,6 +24,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
 {
     [Dependency] private CombatModeSystem _combat = default!;
     [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private IInputManager _input = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private CMUJeepSystem _jeepSystem = default!;
@@ -99,8 +101,21 @@ public sealed class CMUJeepVisualSystem : EntitySystem
                 }
             }
 
-            var lamps = jeep.HeadlightsBroken ? "1" : "0";
-            SetState((uid, sprite), "headlights", $"headlights_{lamps}");
+            // Each lamp shows while fitted, cracked once broken.
+            if (TryComp(uid, out CMUJeepLampsComponent? lamps))
+            {
+                foreach (var lamp in lamps.Lamps)
+                {
+                    var look = lamps.Broken.Contains(lamp.Id) ? "1" : "0";
+                    SetState((uid, sprite), lamp.Id, $"{lamp.Id}_{look}");
+                    SetVisible((uid, sprite), lamp.Id, lamp.Slot.HasItem);
+                    if (overlay == null)
+                        continue;
+
+                    SetState(overlay.Value, lamp.Id, $"{lamp.Id}_overlay_{look}");
+                    SetVisible(overlay.Value, lamp.Id, lamp.Slot.HasItem);
+                }
+            }
 
             // Kit hung on a panel swings with it: the shovel and the axe on the driver's door, the
             // spare and the jerry can on the tailgate.
@@ -113,9 +128,9 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             SetState((uid, sprite), "engine", engine < jeep.EngineSmokeFraction ? "engine_1" : "engine_0");
             if (overlay != null)
             {
-                SetState(overlay.Value, "headlights", $"headlights_overlay_{lamps}");
                 SetState(overlay.Value, "smoke", engine < jeep.EngineHeavySmokeFraction ? "engine_smoke_1" : "engine_smoke_0");
                 SetVisible(overlay.Value, "smoke", engine < jeep.EngineSmokeFraction);
+                SetVisible(overlay.Value, "fire", jeep.Burning);
             }
             Animate((uid, sprite), overlay, "fuel_door", SwingOf(swings, "fuel_door"), jeep.FuelDoorOpen, FuelDoorSwing,
                 "fuel_door_open", "fuel_door_closed", "fuel_door_opening", "fuel_door_closing");
@@ -131,10 +146,6 @@ public sealed class CMUJeepVisualSystem : EntitySystem
                 if (overlay != null)
                     SetVisible(overlay.Value, part.Id, fitted);
             }
-
-            // The beam needs intact headlights; the switch still lights the tail and marker lamps.
-            if (overlay != null && (jeep.HeadlightsBroken || !IsFitted(uid, slots, CMUJeepSystem.HeadlightsSlot)))
-                SetVisible(overlay.Value, "headlights_on", false);
 
             if (TryComp(uid, out CMUVehicleCargoComponent? cargo) && overlay != null)
                 SetVisible(overlay.Value, "straps", cargo.Crate != null && cargo.Secured);
@@ -176,10 +187,14 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             SetState((uid, sprite), "mask", MaskState(part, jeep));
 
             // A hidden mask drops out of the click test, so in combat mode attacks and aimed shots land
-            // on the jeep itself, and an empty slot is refitted through the jeep's own item slots.
+            // on the jeep itself. An empty slot's mask shows, a faint ghost of what goes there, only
+            // while what is in hand would go in, so it is fitted where it is clicked; otherwise the jeep's
+            // own item slots take it.
+            TryComp(vehicle, out ItemSlotsComponent? vehicleSlots);
             var fitted = part.Slot is not { } slotId ||
                          part.Part == "wheels" ||
-                         (TryComp(vehicle, out ItemSlotsComponent? vehicleSlots) && IsFitted(vehicle, vehicleSlots, slotId));
+                         IsFitted(vehicle, vehicleSlots, slotId) ||
+                         HeldFits(vehicle, vehicleSlots, slotId);
             var reachable = part.Part switch
             {
                 "engine" => _jeepSystem.IsHoodOpen(vehicle, jeep),
@@ -313,6 +328,19 @@ public sealed class CMUJeepVisualSystem : EntitySystem
         return slots != null &&
                _itemSlots.TryGetSlot((vehicle, slots), slotId, out var slot) &&
                slot.HasItem;
+    }
+
+    /// <summary>
+    /// Whether the local player's held item would go into a vehicle's empty slot.
+    /// </summary>
+    private bool HeldFits(EntityUid vehicle, ItemSlotsComponent? slots, string slotId)
+    {
+        return slots != null &&
+               _player.LocalEntity is { } user &&
+               _hands.GetActiveItem(user) is { } held &&
+               _itemSlots.TryGetSlot((vehicle, slots), slotId, out var slot) &&
+               !slot.HasItem &&
+               _itemSlots.CanInsert(vehicle, slot, held, null);
     }
 
     private void SetVisible(Entity<SpriteComponent> ent, string key, bool visible)

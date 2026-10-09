@@ -7,9 +7,13 @@
   id: CMUVehicleJeepCargoChassis
   suffix: Unassembled
   components:
-  # Empty tank; the kit's spare fuel can fills it.
+  # Empty tank; the kit's spare fuel can fills it. Its lamps and key come in the crate.
   - type: CMUVehicleFuel
     fuel: 0
+  - type: CMUJeepLamps
+    fitted: false
+  - type: CMUVehicleIgnition
+    startWithKey: false
   - type: ContainerContainer
     containers:
       wheel-1: !type:ContainerSlot
@@ -21,7 +25,7 @@
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
-      jeep-headlights: !type:ContainerSlot
+      jeep-extinguisher: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -60,13 +64,107 @@
         whitelist:
           tags:
           - CMUJeepWindshield
-      jeep-headlights:
-        name: cmu-jeep-part-headlights
+      jeep-extinguisher:
+        name: cmu-jeep-part-extinguisher
+        whitelist:
+          components:
+          - FireExtinguisher
+      jeep-hood:
+        name: cmu-jeep-part-hood
         disableEject: true
         swap: false
         whitelist:
           tags:
-          - CMUJeepHeadlights
+          - CMUJeepHood
+      jeep-door-driver:
+        name: cmu-jeep-part-door-driver
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+      jeep-door-passenger:
+        name: cmu-jeep-part-door-passenger
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+      jeep-tailgate:
+        name: cmu-jeep-part-tailgate
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepTailgate
+
+- type: entity
+  parent: CMUVehicleJeepMedical
+  id: CMUVehicleJeepMedicalChassis
+  suffix: Unassembled
+  components:
+  # Empty tank; the kit's spare fuel can fills it. Its lamps and key come in the crate.
+  - type: CMUVehicleFuel
+    fuel: 0
+  - type: CMUJeepLamps
+    fitted: false
+  - type: CMUVehicleIgnition
+    startWithKey: false
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      jeep-spare: !type:ContainerSlot
+      jeep-jerrycan: !type:ContainerSlot
+      jeep-shovel: !type:ContainerSlot
+      jeep-axe: !type:ContainerSlot
+      jeep-windshield: !type:ContainerSlot
+      jeep-extinguisher: !type:ContainerSlot
+      jeep-hood: !type:ContainerSlot
+      jeep-door-driver: !type:ContainerSlot
+      jeep-door-passenger: !type:ContainerSlot
+      jeep-tailgate: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      wheel-1:
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+      jeep-spare:
+        name: cmu-jeep-part-spare
+        whitelist:
+          tags:
+          - CMUJeepWheel
+      jeep-jerrycan:
+        name: cmu-jeep-part-jerrycan
+        whitelist:
+          tags:
+          - CMUJerryCan
+      jeep-shovel:
+        name: cmu-jeep-part-shovel
+        whitelist:
+          tags:
+          - Shovel
+      jeep-axe:
+        name: cmu-jeep-part-axe
+        whitelist:
+          tags:
+          - FireAxe
+      jeep-windshield:
+        name: cmu-jeep-part-windshield
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepWindshield
+      jeep-extinguisher:
+        name: cmu-jeep-part-extinguisher
+        whitelist:
+          components:
+          - FireExtinguisher
       jeep-hood:
         name: cmu-jeep-part-hood
         disableEject: true
@@ -101,9 +199,13 @@
   id: CMUVehicleJeepTransportChassis
   suffix: Unassembled
   components:
-  # Empty tank; the kit's spare fuel can fills it.
+  # Empty tank; the kit's spare fuel can fills it. Its lamps and key come in the crate.
   - type: CMUVehicleFuel
     fuel: 0
+  - type: CMUJeepLamps
+    fitted: false
+  - type: CMUVehicleIgnition
+    startWithKey: false
   - type: ContainerContainer
     containers:
       wheel-1: !type:ContainerSlot
@@ -115,7 +217,7 @@
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
-      jeep-headlights: !type:ContainerSlot
+      jeep-extinguisher: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -153,13 +255,11 @@
         whitelist:
           tags:
           - CMUJeepWindshield
-      jeep-headlights:
-        name: cmu-jeep-part-headlights
-        disableEject: true
-        swap: false
+      jeep-extinguisher:
+        name: cmu-jeep-part-extinguisher
         whitelist:
-          tags:
-          - CMUJeepHeadlights
+          components:
+          - FireExtinguisher
       jeep-hood:
         name: cmu-jeep-part-hood
         disableEject: true
@@ -187,9 +287,13 @@
   id: CMUVehicleJeepGunnerChassis
   suffix: Unassembled
   components:
-  # Empty tank; the kit's spare fuel can fills it.
+  # Empty tank; the kit's spare fuel can fills it. Its lamps and key come in the crate.
   - type: CMUVehicleFuel
     fuel: 0
+  - type: CMUJeepLamps
+    fitted: false
+  - type: CMUVehicleIgnition
+    startWithKey: false
   - type: ContainerContainer
     containers:
       wheel-1: !type:ContainerSlot
@@ -201,7 +305,7 @@
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
-      jeep-headlights: !type:ContainerSlot
+      jeep-extinguisher: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -241,13 +345,11 @@
         whitelist:
           tags:
           - CMUJeepWindshield
-      jeep-headlights:
-        name: cmu-jeep-part-headlights
-        disableEject: true
-        swap: false
+      jeep-extinguisher:
+        name: cmu-jeep-part-extinguisher
         whitelist:
-          tags:
-          - CMUJeepHeadlights
+          components:
+          - FireExtinguisher
       jeep-hood:
         name: cmu-jeep-part-hood
         disableEject: true
@@ -295,6 +397,11 @@
       map: ["enum.StorageVisualLayers.Base"]
     - state: closed
       map: ["enum.StorageVisualLayers.Door"]
+    # Where the ASRS hangs its invoice.
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
   - type: Icon
     sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
     state: base
@@ -305,7 +412,12 @@
     - id: CMUJeepWheel
     - id: CMUJeepWheel
     - id: CMUJeepWindshield
-    - id: CMUJeepHeadlights
+    - id: CMUJeepHeadlight
+    - id: CMUJeepHeadlight
+    - id: CMUJeepTurnSignal
+    - id: CMUJeepTurnSignal
+    - id: CMUJeepTailLight
+    - id: CMUJeepTailLight
     - id: CMUJeepHood
     - id: CMUJeepDoor
     - id: CMUJeepDoor
@@ -313,10 +425,13 @@
     - id: RMCFuelCan
     - id: CMEntrenchingTool
     - id: RMCFireAxe
+    - id: CMFireExtinguisherPortable
     - id: CMWrench
     - id: CMScrewdriver
-    - id: CMUPaperJeepAssemblyManual
+    - id: CMUJeepKey
     - id: CMUJeepTailgate
+    - id: CMUPaperJeepAssemblyManual
+      orGroup: CMUJeepKitManual
 
 - type: entity
   parent: RMCDropshipAttachmentBase
@@ -339,6 +454,74 @@
 
 - type: entity
   parent: RMCCrateGreen
+  id: CMUCrateJeepKitMedical
+  name: medical jeep kit crate
+  description: A medical jeep in parts, with the tools and the manual to put it together. Open it on clear ground; the chassis takes the crate's place.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    # Where the ASRS hangs its invoice.
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    state: base
+  - type: CMUVehicleKitCrate
+    chassis: CMUVehicleJeepMedicalChassis
+  - type: StorageFill
+    contents:
+    - id: CMUJeepWheel
+    - id: CMUJeepWheel
+    - id: CMUJeepWindshield
+    - id: CMUJeepHeadlight
+    - id: CMUJeepHeadlight
+    - id: CMUJeepTurnSignal
+    - id: CMUJeepTurnSignal
+    - id: CMUJeepTailLight
+    - id: CMUJeepTailLight
+    - id: CMUJeepHood
+    - id: CMUJeepDoor
+    - id: CMUJeepDoor
+    - id: RMCFuelCan
+    - id: RMCFuelCan
+    - id: CMEntrenchingTool
+    - id: RMCFireAxe
+    - id: CMFireExtinguisherPortable
+    - id: CMWrench
+    - id: CMScrewdriver
+    - id: CMUJeepKey
+    - id: CMUJeepTailgate
+    - id: CMUPaperJeepAssemblyManual
+      orGroup: CMUJeepKitManual
+
+- type: entity
+  parent: RMCDropshipAttachmentBase
+  id: CMUDropshipAttachmentAmmoLaunchableJeepMedical
+  name: air-droppable medical jeep
+  description: A medical jeep kit crate rigged with a parachute. Load it into the LAG-14 Internal Sentry Launcher and launch it at a laser or flare; it lands as a crate to open and put together.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
+    state: base
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+  - type: PowerLoaderDetachable
+  - type: Appearance
+  - type: RMCOrbitalDeployable
+    deployPrototype: CMUCrateJeepKitMedical
+    dropPod: false
+    useParachute: true
+
+- type: entity
+  parent: RMCCrateGreen
   id: CMUCrateJeepKitTransport
   name: transport jeep kit crate
   description: A transport jeep in parts, with the tools and the manual to put it together. Open it on clear ground; the chassis takes the crate's place.
@@ -350,6 +533,11 @@
       map: ["enum.StorageVisualLayers.Base"]
     - state: closed
       map: ["enum.StorageVisualLayers.Door"]
+    # Where the ASRS hangs its invoice.
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
   - type: Icon
     sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
     state: base
@@ -360,7 +548,12 @@
     - id: CMUJeepWheel
     - id: CMUJeepWheel
     - id: CMUJeepWindshield
-    - id: CMUJeepHeadlights
+    - id: CMUJeepHeadlight
+    - id: CMUJeepHeadlight
+    - id: CMUJeepTurnSignal
+    - id: CMUJeepTurnSignal
+    - id: CMUJeepTailLight
+    - id: CMUJeepTailLight
     - id: CMUJeepHood
     - id: CMUJeepDoor
     - id: CMUJeepDoor
@@ -368,9 +561,12 @@
     - id: RMCFuelCan
     - id: CMEntrenchingTool
     - id: RMCFireAxe
+    - id: CMFireExtinguisherPortable
     - id: CMWrench
     - id: CMScrewdriver
+    - id: CMUJeepKey
     - id: CMUPaperJeepAssemblyManual
+      orGroup: CMUJeepKitManual
 
 - type: entity
   parent: RMCDropshipAttachmentBase
@@ -404,6 +600,11 @@
       map: ["enum.StorageVisualLayers.Base"]
     - state: closed
       map: ["enum.StorageVisualLayers.Door"]
+    # Where the ASRS hangs its invoice.
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
   - type: Icon
     sprite: _RMC14/Structures/Storage/Crates/densecrate.rsi
     state: base
@@ -414,7 +615,12 @@
     - id: CMUJeepWheel
     - id: CMUJeepWheel
     - id: CMUJeepWindshield
-    - id: CMUJeepHeadlights
+    - id: CMUJeepHeadlight
+    - id: CMUJeepHeadlight
+    - id: CMUJeepTurnSignal
+    - id: CMUJeepTurnSignal
+    - id: CMUJeepTailLight
+    - id: CMUJeepTailLight
     - id: CMUJeepHood
     - id: CMUJeepDoor
     - id: CMUJeepDoor
@@ -422,11 +628,14 @@
     - id: RMCFuelCan
     - id: CMEntrenchingTool
     - id: RMCFireAxe
+    - id: CMFireExtinguisherPortable
     - id: CMWrench
     - id: CMScrewdriver
-    - id: CMUPaperJeepAssemblyManual
+    - id: CMUJeepKey
     - id: CMUJeepTailgate
     - id: CMUJeepMGMount
+    - id: CMUPaperJeepAssemblyManual
+      orGroup: CMUJeepKitManual
 
 - type: entity
   parent: RMCDropshipAttachmentBase

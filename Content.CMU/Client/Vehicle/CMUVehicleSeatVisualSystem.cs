@@ -14,10 +14,10 @@ using Robust.Shared.Timing;
 namespace Content.Client.CMU14.Vehicle;
 
 /// <summary>
-/// Seats riders of an open vehicle like the fighter's cockpit crew: they face along the vehicle,
-/// turn with it between cardinal headings, sit where the art draws their seat in each direction,
-/// bounce with the body, and are cut off below their seat line so their legs never show through
-/// the seats in front.
+/// Seats riders of an open vehicle like the fighter's cockpit crew: they face along the vehicle (or
+/// back along it, on a reversed seat), turn with it between cardinal headings, sit where the art draws
+/// their seat in each direction, bounce with the body, and are cut off below their seat line so their
+/// legs never show through the seats in front. Whoever is on a bed is always drawn lying on it.
 /// </summary>
 public sealed class CMUVehicleSeatVisualSystem : EntitySystem
 {
@@ -101,10 +101,12 @@ public sealed class CMUVehicleSeatVisualSystem : EntitySystem
                     _riders[rider] = original = new RiderState(sprite, offset);
                 }
 
+                // A bed's patient lies face up, turned as the art lays them out for this direction.
+                var lying = seat.LyingAngles.TryGetValue(direction, out var turn);
                 sprite.NoRotation = true;
                 sprite.EnableDirectionOverride = true;
-                sprite.DirectionOverride = direction;
-                _sprite.SetRotation((rider, sprite), leftover);
+                sprite.DirectionOverride = lying ? Direction.South : seat.Reversed ? direction.GetOpposite() : direction;
+                _sprite.SetRotation((rider, sprite), leftover + (lying ? Angle.FromDegrees(turn) : Angle.Zero));
                 _sprite.SetOffset((rider, sprite), original.Offset + shift);
                 UpdateClip((rider, sprite), original, seat.Clips.TryGetValue(direction, out var clip) ? clip : (float?) null, leftover, eyeRotation);
             }

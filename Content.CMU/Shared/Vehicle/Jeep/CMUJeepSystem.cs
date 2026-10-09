@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Actions;
 using Content.Shared.Chemistry.EntitySystems;
@@ -40,7 +41,6 @@ public sealed partial class CMUJeepSystem : EntitySystem
     [Dependency] private SharedToolSystem _tool = default!;
 
     public const string WindshieldSlot = "jeep-windshield";
-    public const string HeadlightsSlot = "jeep-headlights";
     public const string JerryCanSlot = "jeep-jerrycan";
     public const string SpareSlot = "jeep-spare";
     public const string ShovelSlot = "jeep-shovel";
@@ -77,6 +77,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
         SubscribeLocalEvent<CMUVehiclePartComponent, InteractUsingEvent>(OnPartInteractUsing);
 
         InitializeHeadlights();
+        InitializeLamps();
     }
 
     private void OnMapInit(Entity<CMUJeepComponent> ent, ref MapInitEvent args)
@@ -84,7 +85,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
         if (_net.IsClient || ent.Comp.PartEntities.Count > 0)
             return;
 
-        foreach (var data in ent.Comp.Parts)
+        foreach (var data in ent.Comp.Parts.Concat(LampParts(ent)))
         {
             var part = SpawnAttachedTo(ent.Comp.PartPrototype, new EntityCoordinates(ent, data.Offset));
             _metaData.SetEntityName(part, Loc.GetString(data.Name));
@@ -190,7 +191,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("cmu-jeep-engine-dead"), ent, driver, PopupType.MediumCaution);
 
         WearPart(ent, WindshieldSlot, total * jeep.WindshieldDamageShare);
-        WearPart(ent, HeadlightsSlot, total * jeep.HeadlightDamageShare);
+        WearLamps(ent, total);
 
         if (total >= jeep.PunctureMinDamage &&
             _random.Prob(jeep.JerryCanPunctureChance) &&
@@ -217,15 +218,15 @@ public sealed partial class CMUJeepSystem : EntitySystem
     }
 
     /// <summary>
-    /// Recomputes the damage flags the client draws from, and lets the headlight beam shine only
-    /// through intact headlights.
+    /// Recomputes the damage flags the client draws from, and lets each headlight beam shine only
+    /// through an intact headlight.
     /// </summary>
     private void RefreshParts(Entity<CMUJeepComponent> ent)
     {
         var jeep = ent.Comp;
         Entity<ItemSlotsComponent?> vehicle = (ent.Owner, CompOrNull<ItemSlotsComponent>(ent.Owner));
         jeep.WindshieldDamaged = IsBroken(vehicle, WindshieldSlot);
-        jeep.HeadlightsBroken = IsBroken(vehicle, HeadlightsSlot);
+        RefreshLamps(vehicle);
         jeep.JerryCanLeaking = TryGetPartSlot(vehicle, JerryCanSlot, out var can) &&
                                HasComp<CMUFuelLeakComponent>(can.Item);
         Dirty(ent);
@@ -248,13 +249,6 @@ public sealed partial class CMUJeepSystem : EntitySystem
         return TryGetPartSlot(vehicle, slotId, out var slot) &&
                TryComp(slot.Item, out CMUJeepPartIntegrityComponent? part) &&
                part.Integrity <= part.MaxIntegrity * part.BrokenFraction;
-    }
-
-    public bool HeadlightsWork(Entity<ItemSlotsComponent?> vehicle)
-    {
-        return TryGetPartSlot(vehicle, HeadlightsSlot, out var slot) &&
-               slot.HasItem &&
-               !IsBroken(vehicle, HeadlightsSlot);
     }
 
     public override void Update(float frameTime)
@@ -302,6 +296,10 @@ public sealed partial class CMUJeepSystem : EntitySystem
         }
 
         var user = args.User;
+
+        // A lamp only comes off with a screwdriver.
+        if (IsLamp(vehicle, ent.Comp.Part))
+            return;
 
         // A moving part with its screws and bolts out lifts off by hand.
         if (IsMovingPart(ent.Comp.Part) &&
@@ -360,8 +358,6 @@ public sealed partial class CMUJeepSystem : EntitySystem
                 break;
             case Hood or "windshield" or "fuel_door" or "engine" or DriverDoor or PassengerDoor or Tailgate:
                 break;
-            case "headlights":
-                return;
             case var seat when seat.StartsWith("seat_"):
                 _seats.ClickSeat(ent.Owner, user);
                 break;
@@ -421,10 +417,11 @@ public sealed partial class CMUJeepSystem : EntitySystem
 
                 args.Handled = true;
                 return;
-            case "windshield" or "headlights" when ent.Comp.Slot is { } worn &&
-                                                     TryGetPartSlot(vehicle, worn, out var wornSlot) &&
-                                                     TryComp(wornSlot.Item, out CMUJeepPartIntegrityComponent? integrity) &&
-                                                     _tool.HasQuality(used, jeep.PartRepairQuality):
+            case var glass when (glass == "windshield" || IsLamp(vehicle, glass)) &&
+                                ent.Comp.Slot is { } worn &&
+                                TryGetPartSlot(vehicle, worn, out var wornSlot) &&
+                                TryComp(wornSlot.Item, out CMUJeepPartIntegrityComponent? integrity) &&
+                                _tool.HasQuality(used, jeep.PartRepairQuality):
                 if (integrity.Integrity >= integrity.MaxIntegrity)
                 {
                     _popup.PopupClient(Loc.GetString("cmu-jeep-part-fine", ("part", Name(ent))), vehicle, user);
@@ -437,10 +434,11 @@ public sealed partial class CMUJeepSystem : EntitySystem
 
                 args.Handled = true;
                 return;
-            case "headlights" when ent.Comp.Slot is { } removable &&
-                                   TryGetPartSlot(vehicle, removable, out var fitted) &&
-                                   fitted.HasItem &&
-                                   _tool.HasQuality(used, jeep.PartRemoveQuality):
+            case var lamp when IsLamp(vehicle, lamp) &&
+                               ent.Comp.Slot is { } removable &&
+                               TryGetPartSlot(vehicle, removable, out var fitted) &&
+                               fitted.HasItem &&
+                               _tool.HasQuality(used, jeep.PartRemoveQuality):
                 _tool.UseTool(used, user, vehicle, (float) jeep.PartRemoveDelay.TotalSeconds,
                     jeep.PartRemoveQuality, new CMUJeepPartRemoveDoAfterEvent(removable));
                 args.Handled = true;

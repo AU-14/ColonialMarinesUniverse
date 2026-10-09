@@ -38,6 +38,9 @@ public sealed class CMUVehicleGrimeBuildUpSystem : EntitySystem
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
     private static readonly Color DefaultBlood = Color.FromHex("#800000");
 
+    // Height of a surgical bed's mattress top in the art's voxels (jeep_pixel_art.py BED).
+    private const float BedTop = 15f;
+
     // Mobs a vehicle has run down, until their run-over wears off, so each hit splashes once.
     private readonly Dictionary<EntityUid, TimeSpan> _runOver = new();
 
@@ -183,19 +186,30 @@ public sealed class CMUVehicleGrimeBuildUpSystem : EntitySystem
     }
 
     /// <summary>
-    /// Blood on a seat's cushion, or on the floor in front of it. Seat entities sit at their seat's
-    /// offset in vehicle space (facing south), which is (-r, -f) / 32 in the art's voxels.
+    /// Blood on a seat's cushion, or on the floor in front of it, or soaking a bed's mattress. Seat
+    /// entities sit at their seat's offset in vehicle space (facing south), which is (-r, -f) / 32 in
+    /// the art's voxels.
     /// </summary>
     private void SplashSeat(EntityUid vehicle, EntityUid seat, Color color, bool splat)
     {
         var local = Transform(seat).LocalPosition * 32f;
+        TryComp(seat, out CMUVehicleSeatComponent? comp);
+        if (comp is { LyingAngles.Count: > 0 })
+        {
+            var onBed = new Vector3(-local.Y + _random.NextFloat(-4f, 4f), -local.X + _random.NextFloat(-11f, 11f), BedTop);
+            _grime.AddBlood(vehicle, color, onBed, "up", splat);
+            return;
+        }
+
         var f = -local.Y + _random.NextFloat(-3f, 3f);
         var r = -local.X + _random.NextFloat(-3f, 3f);
-        var gunner = TryComp(seat, out CMUVehicleSeatComponent? comp) && comp.Lift > 0f;
+        var gunner = comp is { Lift: > 0f };
         var rear = local.Y > 16f;
+        // The floor in front of a seat turned round to face the back is behind it.
+        var ahead = comp is { Reversed: true } ? -6f : 6f;
         Vector3 anchor;
         if (gunner || _random.Prob(0.35f))
-            anchor = new Vector3(f + (gunner ? 0f : 6f), r, gunner ? 8f : 7f);
+            anchor = new Vector3(f + (gunner ? 0f : ahead), r, gunner ? 8f : 7f);
         else
             anchor = new Vector3(f, r, rear ? 16f : 13f);
 

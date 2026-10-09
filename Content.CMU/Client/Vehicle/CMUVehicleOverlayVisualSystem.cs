@@ -19,6 +19,7 @@ namespace Content.Client.CMU14.Vehicle;
 public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 {
     [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private CMUJeepSystem _jeep = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -29,6 +30,12 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
     private const float TurningDegrees = 5f;
     // Both signal states blink on the same two-frame cycle; this keeps every lamp in step.
     private const double SignalPeriod = 0.8;
+
+    // Each side's lit layers, and the lamp each needs fitted and whole: the tail lights carry the
+    // brake lights and the rear turn signals.
+    private static readonly string[] Sides = ["left", "right"];
+    private static readonly string[] SignalLayers =
+        ["signal_front_left", "signal_rear_left", "signal_front_right", "signal_rear_right"];
 
     // This frame's body lift per vehicle, in the vehicle's frame, for its mounted turrets to follow.
     private readonly Dictionary<EntityUid, (Vector2 Lift, Direction Direction)> _lifts = new();
@@ -242,14 +249,20 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         if (TryComp(vehicle, out CMUVehicleDriverActionsComponent? driver) && driver.Hazards)
             left = right = true;
 
-        SetVisible(ent, "lights", lightsOn);
-        SetVisible(ent, "headlights_on", lightsOn);
-        SetVisible(ent, "brake", braking);
-        SetVisible(ent, "signal_left", left);
-        SetVisible(ent, "signal_right", right);
+        foreach (var side in Sides)
+        {
+            var signal = side == "left" ? left : right;
+            var head = _jeep.LampWorks(vehicle, $"headlight_{side}");
+            var tail = _jeep.LampWorks(vehicle, $"taillight_{side}");
+            SetVisible(ent, $"headlight_{side}_on", lightsOn && head);
+            SetVisible(ent, $"taillight_{side}_on", lightsOn && tail);
+            SetVisible(ent, $"brake_{side}", braking && tail);
+            SetVisible(ent, $"signal_front_{side}", signal && _jeep.LampWorks(vehicle, $"turn_signal_{side}"));
+            SetVisible(ent, $"signal_rear_{side}", signal && tail);
+        }
 
         var blink = (float) (_timing.CurTime.TotalSeconds % SignalPeriod);
-        foreach (var key in new[] { "signal_left", "signal_right" })
+        foreach (var key in SignalLayers)
         {
             if (_sprite.LayerMapTryGet(ent.AsNullable(), key, out var index, false))
                 _sprite.LayerSetAnimationTime(ent.AsNullable(), index, blink);

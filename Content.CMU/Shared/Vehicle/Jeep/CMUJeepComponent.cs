@@ -83,7 +83,7 @@ public sealed partial class CMUJeepComponent : Component
     public ProtoId<ToolQualityPrototype> EngineRepairQuality = "Welding";
 
     /// <summary>
-    /// Integrity each welding pass restores to the fitted windshield or headlights.
+    /// Integrity each welding pass restores to the fitted windshield or a lamp.
     /// </summary>
     [DataField]
     public float PartRepairAmount = 10f;
@@ -116,16 +116,14 @@ public sealed partial class CMUJeepComponent : Component
     public Dictionary<string, int> Fastening = new();
 
     /// <summary>
-    /// Share of each hit on the hull taken by the engine, the fitted windshield and the headlights.
+    /// Share of each hit on the hull taken by the engine and the fitted windshield. The lamps take
+    /// theirs as <see cref="CMUJeepLampData"/> says.
     /// </summary>
     [DataField]
     public float EngineDamageShare = 0.3f;
 
     [DataField]
     public float WindshieldDamageShare = 0.25f;
-
-    [DataField]
-    public float HeadlightDamageShare = 0.15f;
 
     /// <summary>
     /// Chance per hit of at least <see cref="PunctureMinDamage"/> to hole the hanging jerry can.
@@ -146,10 +144,14 @@ public sealed partial class CMUJeepComponent : Component
     public bool WindshieldDamaged;
 
     [DataField, AutoNetworkedField]
-    public bool HeadlightsBroken;
-
-    [DataField, AutoNetworkedField]
     public bool JerryCanLeaking;
+
+    /// <summary>
+    /// The hull gave out and the engine is on fire: flames lick out from under the hood until the jeep
+    /// goes up.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Burning;
 
     [DataField]
     public List<CMUVehiclePartData> Parts = new();

@@ -7,6 +7,7 @@ using Content.Server.Station.Systems;
 using Content.Shared._NC14.DayNightCycle;
 using Content.Shared._RMC14.Areas;
 using Content.Shared.CMU14.Vehicle.Jeep;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.GameTicking;
@@ -26,7 +27,7 @@ namespace Content.Server.CMU14.Vehicle.Jeep;
 /// <summary>
 /// Jeep test server helper, off unless the jeep test config turns it on (see <see cref="CMUJeepDevCVars"/>).
 /// On a server without a lobby it gives joining players a job their station offers, so a test account
-/// spawns as a person on any map, then parks the three jeeps and a test kit on the nearest open ground
+/// spawns as a person on any map, then parks the four jeeps and a test kit on the nearest open ground
 /// around each player and brings the player next to them.
 /// </summary>
 public sealed class CMUJeepDevKitSystem : EntitySystem
@@ -43,8 +44,10 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
     [Dependency] private ITileDefinitionManager _tileDefs = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
 
-    private static readonly EntProtoId[] Jeeps = { "CMUVehicleJeepCargo", "CMUVehicleJeepTransport", "CMUVehicleJeepGunner" };
+    private static readonly EntProtoId[] Jeeps =
+        { "CMUVehicleJeepCargo", "CMUVehicleJeepTransport", "CMUVehicleJeepGunner", "CMUVehicleJeepMedical" };
 
     // What the jeep's parts take: welding, screwing and anchoring tools, a crayon, refuelling, cupola
     // ammo. The loose tools share the player's tile; the crate and the fuel tank are hard and need a
@@ -134,7 +137,7 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
     }
 
     /// <summary>
-    /// Parks the three jeeps and the test kit on the nearest open ground around a player, under open
+    /// Parks the four jeeps and the test kit on the nearest open ground around a player, under open
     /// sky where there is room, and moves the player next to them if they ended up further away.
     /// </summary>
     public bool TrySpawnKit(EntityUid player, [NotNullWhen(true)] out List<EntityUid>? jeeps, [NotNullWhen(false)] out string? error)
@@ -172,7 +175,9 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
 
             Reserve(grid, JeepTiles(tile));
             placed.Add(tile);
-            jeeps.Add(SpawnAttachedTo(proto, _map.GridTileToLocal(gridUid, gridComp, tile)));
+            var jeep = SpawnAttachedTo(proto, _map.GridTileToLocal(gridUid, gridComp, tile));
+            jeeps.Add(jeep);
+            LeaveKitKey(jeep);
         }
 
         if (placed.Count == 0)
@@ -218,6 +223,22 @@ public sealed class CMUJeepDevKitSystem : EntitySystem
                  $"; player at {stand}.");
         error = null;
         return true;
+    }
+
+    /// <summary>
+    /// A test jeep's key comes out of the ignition and lies on the ground by the driver's door, to be
+    /// put in before driving off.
+    /// </summary>
+    private void LeaveKitKey(EntityUid jeep)
+    {
+        if (!TryComp(jeep, out CMUVehicleIgnitionComponent? ignition) ||
+            !_itemSlots.TryEject(jeep, ignition.KeySlot, null, out var key, true))
+        {
+            return;
+        }
+
+        _transform.SetCoordinates(key.Value, new EntityCoordinates(jeep, new Vector2(0.95f, 0.25f)));
+        _transform.AttachToGridOrMap(key.Value);
     }
 
     /// <summary>

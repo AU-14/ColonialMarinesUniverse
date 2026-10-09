@@ -11,7 +11,16 @@
   id: CMUJeepWindshield
 
 - type: Tag
-  id: CMUJeepHeadlights
+  id: CMUJeepHeadlight
+
+- type: Tag
+  id: CMUJeepTurnSignal
+
+- type: Tag
+  id: CMUJeepTailLight
+
+- type: Tag
+  id: CMUJeepKey
 
 - type: Tag
   id: CMUJeepHood
@@ -109,20 +118,71 @@
 
 - type: entity
   parent: CMUJeepHardpointBase
-  id: CMUJeepHeadlights
-  name: jeep headlights
-  description: A pair of round jeep headlamps. Fitted and taken off with a screwdriver.
+  id: CMUJeepHeadlight
+  name: jeep headlight
+  description: A round jeep headlamp. It fits either side; a screwdriver takes it off, and it goes back on by hand.
   components:
   - type: Sprite
-    state: headlights
+    state: headlight
   - type: Item
-    size: Normal
+    size: Small
   - type: CMUJeepPartIntegrity
     integrity: 30
     maxIntegrity: 30
   - type: Tag
     tags:
-    - CMUJeepHeadlights
+    - CMUJeepHeadlight
+
+- type: entity
+  parent: CMUJeepHardpointBase
+  id: CMUJeepTurnSignal
+  name: jeep turn signal
+  description: An amber turn signal lamp for a jeep's front fender. It fits either side; a screwdriver takes it off.
+  components:
+  - type: Sprite
+    state: turn_signal
+  - type: Item
+    size: Tiny
+  - type: CMUJeepPartIntegrity
+    integrity: 15
+    maxIntegrity: 15
+  - type: Tag
+    tags:
+    - CMUJeepTurnSignal
+
+- type: entity
+  parent: CMUJeepHardpointBase
+  id: CMUJeepTailLight
+  name: jeep tail light
+  description: A jeep's rear lamp cluster, its tail and brake light over the rear turn signal. It fits either side; a screwdriver takes it off.
+  components:
+  - type: Sprite
+    state: taillight
+  - type: Item
+    size: Small
+  - type: CMUJeepPartIntegrity
+    integrity: 20
+    maxIntegrity: 20
+  - type: Tag
+    tags:
+    - CMUJeepTailLight
+
+# Any jeep's key fits any jeep. Without one in the ignition the engine won't start, and pulling it out
+# stops it.
+- type: entity
+  parent: BaseItem
+  id: CMUJeepKey
+  name: jeep key
+  description: An ignition key for a military jeep. Any jeep takes it; without it in the ignition the engine won't start.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/vehicle_key.rsi
+    state: key
+  - type: Item
+    size: Tiny
+  - type: Tag
+    tags:
+    - CMUJeepKey
 
 - type: entity
   parent: CMUJeepHardpointBase
@@ -154,7 +214,7 @@
   parent: CMUJeepHardpointBase
   id: CMUJeepTailgate
   name: jeep tailgate
-  description: The fold-down tailgate of a cargo or gun jeep. Comes off by its screws, then its bolts.
+  description: The fold-down tailgate of a cargo, gun or medical jeep. Comes off by its screws, then its bolts.
   components:
   - type: Sprite
     state: tailgate
@@ -328,9 +388,19 @@
     arc: 100
   - type: RefillableByBulletBox
     bulletType: VehicleAmmoBoxCupola
+  # The turret frames are drawn looking straight down on the gun, so its muzzle is 2 px up the screen
+  # from the pivot whichever way it points, and 21 px out along the barrel (jeep_pixel_art.py
+  # MG_MUZZLE). The lift is a directional offset that doesn't turn; the length is the muzzle offset,
+  # which turns with the barrel. Shots and the flash both start there.
   - type: GunMuzzleOffset
-    offset: "0,-0.6"
-    muzzleOffset: "0,0"
+    useDirectionalOffsets: true
+    rotateDirectionalOffsets: false
+    offset: "0,0.0625"
+    offsetNorth: "0,0.0625"
+    offsetEast: "0,0.0625"
+    offsetSouth: "0,0.0625"
+    offsetWest: "0,0.0625"
+    muzzleOffset: "0,-0.65625"
     useAimDirection: false
     useContainerOwner: false
 
@@ -402,9 +472,6 @@
       name: cmu-jeep-part-fuel-door
     - id: engine
       name: cmu-jeep-part-engine
-    - id: headlights
-      name: cmu-jeep-part-headlights
-      slot: jeep-headlights
     - id: wheels
       name: cmu-jeep-part-wheels
       slot: wheel-1
@@ -420,6 +487,11 @@
     - id: axe
       name: cmu-jeep-part-axe
       slot: jeep-axe
+    # Strapped to the outside of the cowl, ahead of the passenger door.
+    - id: extinguisher
+      name: cmu-jeep-part-extinguisher
+      slot: jeep-extinguisher
+      offset: -0.64,-0.23
     hoodOpenSound:
       path: /Audio/CMU14/Jeep/jeep_hood_open.wav
       params:
@@ -452,6 +524,97 @@
       params:
         volume: -4
         pitch: 0.9
+  # Each lamp fitted on its own: offsets are where its click mask sits (vehicle space, facing south).
+  - type: CMUJeepLamps
+    lamps:
+    - id: headlight_left
+      name: cmu-jeep-part-headlight-left
+      offset: 0.45,-1
+      hitChance: 0.3
+      damageShare: 0.5
+      slot:
+        name: cmu-jeep-part-headlight-left
+        startingItem: CMUJeepHeadlight
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepHeadlight
+    - id: headlight_right
+      name: cmu-jeep-part-headlight-right
+      offset: -0.45,-1
+      hitChance: 0.3
+      damageShare: 0.5
+      slot:
+        name: cmu-jeep-part-headlight-right
+        startingItem: CMUJeepHeadlight
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepHeadlight
+    - id: turn_signal_left
+      name: cmu-jeep-part-turn-signal-left
+      offset: 0.55,-0.88
+      hitChance: 0.25
+      damageShare: 0.4
+      slot:
+        name: cmu-jeep-part-turn-signal-left
+        startingItem: CMUJeepTurnSignal
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepTurnSignal
+    - id: turn_signal_right
+      name: cmu-jeep-part-turn-signal-right
+      offset: -0.55,-0.88
+      hitChance: 0.25
+      damageShare: 0.4
+      slot:
+        name: cmu-jeep-part-turn-signal-right
+        startingItem: CMUJeepTurnSignal
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepTurnSignal
+    - id: taillight_left
+      name: cmu-jeep-part-taillight-left
+      offset: 0.55,0.97
+      hitChance: 0.25
+      damageShare: 0.4
+      slot:
+        name: cmu-jeep-part-taillight-left
+        startingItem: CMUJeepTailLight
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepTailLight
+    - id: taillight_right
+      name: cmu-jeep-part-taillight-right
+      offset: -0.55,0.97
+      hitChance: 0.25
+      damageShare: 0.4
+      slot:
+        name: cmu-jeep-part-taillight-right
+        startingItem: CMUJeepTailLight
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepTailLight
+  - type: CMUVehicleIgnition
+    keySlot:
+      name: cmu-jeep-part-ignition
+      startingItem: CMUJeepKey
+      swap: false
+      insertSound: /Audio/Machines/id_insert.ogg
+      ejectSound: /Audio/Machines/id_swipe.ogg
+      whitelist:
+        tags:
+        - CMUJeepKey
   - type: CMUVehicleEngineSound
     startSound:
       path: /Audio/CMU14/Jeep/jeep_engine_start.wav
@@ -502,8 +665,8 @@
   - type: Reactive
   # A spray painter resprays the body in its chosen colour; see paint.swsl.
   - type: CMUVehiclePaint
-    layers: [ base, damaged_frame, engine, hood, door_driver, door_passenger, tailgate, fuel_door, headlights, windshield, spare, rmc-wheels ]
-    overlayLayers: [ body, damaged_frame, door_driver, door_passenger, tailgate, hood, fuel_door, headlights, windshield, spare, wheels ]
+    layers: [ base, damaged_frame, engine, hood, door_driver, door_passenger, tailgate, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, taillight_left, taillight_right, extinguisher, windshield, spare, rmc-wheels ]
+    overlayLayers: [ body, damaged_frame, door_driver, door_passenger, tailgate, taillight_left, taillight_right, hood, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, extinguisher, windshield, spare, wheels ]
   - type: RMCIgnoreGhostInteractionLimits
   - type: RequireProjectileTarget
     alwaysHitWhitelist:
@@ -629,8 +792,20 @@
       state: tailgate_closed
     - map: [ fuel_door ]
       state: fuel_door_closed
-    - map: [ headlights ]
-      state: headlights_0
+    - map: [ headlight_left ]
+      state: headlight_left_0
+    - map: [ headlight_right ]
+      state: headlight_right_0
+    - map: [ turn_signal_left ]
+      state: turn_signal_left_0
+    - map: [ turn_signal_right ]
+      state: turn_signal_right_0
+    - map: [ taillight_left ]
+      state: taillight_left_0
+    - map: [ taillight_right ]
+      state: taillight_right_0
+    - map: [ extinguisher ]
+      state: extinguisher_0
     - map: [ windshield ]
       state: windshield_up_0
     - map: [ spare ]
@@ -667,7 +842,7 @@
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
-      jeep-headlights: !type:ContainerSlot
+      jeep-extinguisher: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -711,14 +886,12 @@
         whitelist:
           tags:
           - CMUJeepWindshield
-      jeep-headlights:
-        name: cmu-jeep-part-headlights
-        startingItem: CMUJeepHeadlights
-        disableEject: true
-        swap: false
+      jeep-extinguisher:
+        name: cmu-jeep-part-extinguisher
+        startingItem: CMFireExtinguisherPortable
         whitelist:
-          tags:
-          - CMUJeepHeadlights
+          components:
+          - FireExtinguisher
       jeep-hood:
         name: cmu-jeep-part-hood
         startingItem: CMUJeepHood
@@ -807,7 +980,7 @@
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
-      jeep-headlights: !type:ContainerSlot
+      jeep-extinguisher: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -852,14 +1025,12 @@
         whitelist:
           tags:
           - CMUJeepWindshield
-      jeep-headlights:
-        name: cmu-jeep-part-headlights
-        startingItem: CMUJeepHeadlights
-        disableEject: true
-        swap: false
+      jeep-extinguisher:
+        name: cmu-jeep-part-extinguisher
+        startingItem: CMFireExtinguisherPortable
         whitelist:
-          tags:
-          - CMUJeepHeadlights
+          components:
+          - FireExtinguisher
       jeep-hood:
         name: cmu-jeep-part-hood
         startingItem: CMUJeepHood
@@ -986,9 +1157,6 @@
       name: cmu-jeep-part-fuel-door
     - id: engine
       name: cmu-jeep-part-engine
-    - id: headlights
-      name: cmu-jeep-part-headlights
-      slot: jeep-headlights
     - id: wheels
       name: cmu-jeep-part-wheels
       slot: wheel-1
@@ -1004,6 +1172,11 @@
     - id: axe
       name: cmu-jeep-part-axe
       slot: jeep-axe
+    # Strapped to the outside of the cowl, ahead of the passenger door.
+    - id: extinguisher
+      name: cmu-jeep-part-extinguisher
+      slot: jeep-extinguisher
+      offset: -0.64,-0.23
   - type: CMUVehicleCrayon
     map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep_transport.png
   - type: CMUJeepWreck
@@ -1082,7 +1255,7 @@
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
-      jeep-headlights: !type:ContainerSlot
+      jeep-extinguisher: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -1128,14 +1301,12 @@
         whitelist:
           tags:
           - CMUJeepWindshield
-      jeep-headlights:
-        name: cmu-jeep-part-headlights
-        startingItem: CMUJeepHeadlights
-        disableEject: true
-        swap: false
+      jeep-extinguisher:
+        name: cmu-jeep-part-extinguisher
+        startingItem: CMFireExtinguisherPortable
         whitelist:
-          tags:
-          - CMUJeepHeadlights
+          components:
+          - FireExtinguisher
       jeep-hood:
         name: cmu-jeep-part-hood
         startingItem: CMUJeepHood
@@ -1190,6 +1361,171 @@
       required: false
 
 - type: entity
+  parent: CMUVehicleJeepBase
+  id: CMUVehicleJeepMedical
+  name: medical jeep
+  description: A light, open jeep with a surgical bed across the back and the passenger seat turned to face it, so a medic can treat a casualty on the move. Its crew is fully exposed.
+  components:
+  - type: GridVehicleMover
+    maxSpeed: 8
+  # The passenger rides turned round to the bed; a patient is laid on the bed over the tailgate.
+  - type: CMUVehicleSeats
+    seats:
+    - id: driver
+      name: cmu-vehicle-seat-driver
+      offset: 0.3125,0.25
+      exit: 0.95,0.25
+      door: door_driver
+      pixelOffsets:
+        South: 10,6
+        North: -10,-3
+        East: -8,6
+        West: 8,-8
+      clips:
+        South: 3
+        North: 4
+        East: 2
+        West: 2
+      driver: true
+    - id: passenger
+      name: cmu-vehicle-seat-medic
+      offset: -0.3125,0.25
+      exit: -0.95,0.25
+      door: door_passenger
+      reversed: true
+      pixelOffsets:
+        South: -10,7
+        North: 10,-4
+        East: -8,-8
+        West: 8,6
+      clips:
+        South: 4
+        North: 3
+        East: 2
+        West: 2
+    - id: bed
+      name: cmu-vehicle-seat-bed
+      prototype: CMUVehicleSeatSurgicalBed
+      offset: 0,0.703
+      exit: 0,1.55
+      door: tailgate
+      autoSeat: false
+      pixelOffsets:
+        South: 0,23
+        North: 0,-21
+        East: -28,-1
+        West: 28,-1
+      lyingAngles:
+        South: 90
+        North: -90
+        East: 180
+        West: 0
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/jeep_medical.rsi
+  - type: CMUVehicleOverlay
+    prototype: CMUJeepMedicalOverlay
+  - type: CMUVehicleCrayon
+    map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep_medical.png
+  - type: CMUJeepWreck
+    wreckPrototype: CMUJeepWreckMedical
+  # Containers and slots replace the parent's instead of merging, so the base jeep's are repeated
+  # here with the tailgate's.
+  - type: ContainerContainer
+    containers:
+      wheel-1: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      jeep-spare: !type:ContainerSlot
+      jeep-jerrycan: !type:ContainerSlot
+      jeep-shovel: !type:ContainerSlot
+      jeep-axe: !type:ContainerSlot
+      jeep-windshield: !type:ContainerSlot
+      jeep-extinguisher: !type:ContainerSlot
+      jeep-hood: !type:ContainerSlot
+      jeep-door-driver: !type:ContainerSlot
+      jeep-door-passenger: !type:ContainerSlot
+      jeep-tailgate: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      wheel-1:
+        startingItem: CMUJeepWheel
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+      jeep-spare:
+        name: cmu-jeep-part-spare
+        startingItem: CMUJeepWheel
+        whitelist:
+          tags:
+          - CMUJeepWheel
+      jeep-jerrycan:
+        name: cmu-jeep-part-jerrycan
+        startingItem: RMCFuelCan
+        whitelist:
+          tags:
+          - CMUJerryCan
+      jeep-shovel:
+        name: cmu-jeep-part-shovel
+        startingItem: CMEntrenchingTool
+        whitelist:
+          tags:
+          - Shovel
+      jeep-axe:
+        name: cmu-jeep-part-axe
+        startingItem: RMCFireAxe
+        whitelist:
+          tags:
+          - FireAxe
+      jeep-windshield:
+        name: cmu-jeep-part-windshield
+        startingItem: CMUJeepWindshield
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepWindshield
+      jeep-extinguisher:
+        name: cmu-jeep-part-extinguisher
+        startingItem: CMFireExtinguisherPortable
+        whitelist:
+          components:
+          - FireExtinguisher
+      jeep-hood:
+        name: cmu-jeep-part-hood
+        startingItem: CMUJeepHood
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepHood
+      jeep-door-driver:
+        name: cmu-jeep-part-door-driver
+        startingItem: CMUJeepDoor
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+      jeep-door-passenger:
+        name: cmu-jeep-part-door-passenger
+        startingItem: CMUJeepDoor
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepDoor
+      jeep-tailgate:
+        name: cmu-jeep-part-tailgate
+        startingItem: CMUJeepTailgate
+        disableEject: true
+        swap: false
+        whitelist:
+          tags:
+          - CMUJeepTailgate
+
+- type: entity
   id: CMUJeepOverlay
   categories: [ HideSpawnMenu ]
   components:
@@ -1208,10 +1544,22 @@
       state: door_passenger_closed_overlay
     - map: [ tailgate ]
       state: tailgate_closed_overlay
+    - map: [ taillight_left ]
+      state: taillight_left_overlay_0
+    - map: [ taillight_right ]
+      state: taillight_right_overlay_0
     - map: [ hood ]
       state: hood_closed_overlay
-    - map: [ headlights ]
-      state: headlights_overlay_0
+    - map: [ headlight_left ]
+      state: headlight_left_overlay_0
+    - map: [ headlight_right ]
+      state: headlight_right_overlay_0
+    - map: [ turn_signal_left ]
+      state: turn_signal_left_overlay_0
+    - map: [ turn_signal_right ]
+      state: turn_signal_right_overlay_0
+    - map: [ extinguisher ]
+      state: extinguisher_overlay_0
     - map: [ windshield ]
       state: windshield_up_overlay_0
     - map: [ spare ]
@@ -1226,28 +1574,52 @@
       state: fuel_door_closed_overlay
     - map: [ wheels ]
       state: wheels_overlay_0
-    - map: [ lights ]
-      state: lights_on
+    - map: [ headlight_left_on ]
+      state: headlight_left_on
       shader: unshaded
       visible: false
-    - map: [ headlights_on ]
-      state: headlights_on
+    - map: [ taillight_left_on ]
+      state: taillight_left_on
       shader: unshaded
       visible: false
-    - map: [ brake ]
-      state: brake_on
+    - map: [ brake_left ]
+      state: brake_left
       shader: unshaded
       visible: false
-    - map: [ signal_left ]
-      state: signal_left
+    - map: [ signal_front_left ]
+      state: signal_front_left
       shader: unshaded
       visible: false
-    - map: [ signal_right ]
-      state: signal_right
+    - map: [ signal_rear_left ]
+      state: signal_rear_left
+      shader: unshaded
+      visible: false
+    - map: [ headlight_right_on ]
+      state: headlight_right_on
+      shader: unshaded
+      visible: false
+    - map: [ taillight_right_on ]
+      state: taillight_right_on
+      shader: unshaded
+      visible: false
+    - map: [ brake_right ]
+      state: brake_right
+      shader: unshaded
+      visible: false
+    - map: [ signal_front_right ]
+      state: signal_front_right
+      shader: unshaded
+      visible: false
+    - map: [ signal_rear_right ]
+      state: signal_rear_right
       shader: unshaded
       visible: false
     - map: [ smoke ]
       state: engine_smoke_0
+      visible: false
+    - map: [ fire ]
+      state: engine_fire
+      shader: unshaded
       visible: false
     - map: [ straps ]
       sprite: CMU14/Structures/vehicles/jeep/cargo_straps.rsi
@@ -1279,6 +1651,14 @@
 
 - type: entity
   parent: CMUJeepOverlay
+  id: CMUJeepMedicalOverlay
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/vehicles/jeep/jeep_medical.rsi
+
+- type: entity
+  parent: CMUJeepOverlay
   id: CMUJeepGunnerOverlay
   categories: [ HideSpawnMenu ]
   components:
@@ -1296,10 +1676,22 @@
       state: door_passenger_closed_overlay
     - map: [ tailgate ]
       state: tailgate_closed_overlay
+    - map: [ taillight_left ]
+      state: taillight_left_overlay_0
+    - map: [ taillight_right ]
+      state: taillight_right_overlay_0
     - map: [ hood ]
       state: hood_closed_overlay
-    - map: [ headlights ]
-      state: headlights_overlay_0
+    - map: [ headlight_left ]
+      state: headlight_left_overlay_0
+    - map: [ headlight_right ]
+      state: headlight_right_overlay_0
+    - map: [ turn_signal_left ]
+      state: turn_signal_left_overlay_0
+    - map: [ turn_signal_right ]
+      state: turn_signal_right_overlay_0
+    - map: [ extinguisher ]
+      state: extinguisher_overlay_0
     - map: [ windshield ]
       state: windshield_up_overlay_0
     - map: [ spare ]
@@ -1314,28 +1706,52 @@
       state: fuel_door_closed_overlay
     - map: [ wheels ]
       state: wheels_overlay_0
-    - map: [ lights ]
-      state: lights_on
+    - map: [ headlight_left_on ]
+      state: headlight_left_on
       shader: unshaded
       visible: false
-    - map: [ headlights_on ]
-      state: headlights_on
+    - map: [ taillight_left_on ]
+      state: taillight_left_on
       shader: unshaded
       visible: false
-    - map: [ brake ]
-      state: brake_on
+    - map: [ brake_left ]
+      state: brake_left
       shader: unshaded
       visible: false
-    - map: [ signal_left ]
-      state: signal_left
+    - map: [ signal_front_left ]
+      state: signal_front_left
       shader: unshaded
       visible: false
-    - map: [ signal_right ]
-      state: signal_right
+    - map: [ signal_rear_left ]
+      state: signal_rear_left
+      shader: unshaded
+      visible: false
+    - map: [ headlight_right_on ]
+      state: headlight_right_on
+      shader: unshaded
+      visible: false
+    - map: [ taillight_right_on ]
+      state: taillight_right_on
+      shader: unshaded
+      visible: false
+    - map: [ brake_right ]
+      state: brake_right
+      shader: unshaded
+      visible: false
+    - map: [ signal_front_right ]
+      state: signal_front_right
+      shader: unshaded
+      visible: false
+    - map: [ signal_rear_right ]
+      state: signal_rear_right
       shader: unshaded
       visible: false
     - map: [ smoke ]
       state: engine_smoke_0
+      visible: false
+    - map: [ fire ]
+      state: engine_fire
+      shader: unshaded
       visible: false
     - map: [ hover ]
       state: hood_outline
@@ -1397,6 +1813,58 @@
       enum.VehicleWeaponsUiKey.Key:
         type: VehicleWeaponsBoundUserInterface
 
+# The medical jeep's surgical bed. Whoever is buckled to it lies down, which surgery needs, and it
+# counts as an operating table. The client draws its patient lying on it.
+- type: entity
+  parent: CMUVehicleSeat
+  id: CMUVehicleSeatSurgicalBed
+  categories: [ HideSpawnMenu ]
+  name: surgical bed
+  components:
+  - type: Strap
+    modifyBuckleDrawDepth: false
+    position: Down
+    rotation: -90
+    buckleOnInteractHand: false
+  - type: CMOperatingTable
+
+# The burning engine's flickering glow, spawned on a wrecked jeep's engine bay until it goes up.
+- type: entity
+  id: CMUJeepFireLight
+  categories: [ HideSpawnMenu ]
+  name: engine fire
+  components:
+  - type: PointLight
+    radius: 3.5
+    energy: 2.5
+    color: "#FF8A2A"
+    castShadows: false
+  - type: LightBehaviour
+    behaviours:
+    - !type:RandomizeBehaviour
+      id: flicker
+      interpolate: Nearest
+      minDuration: 0.05
+      maxDuration: 0.15
+      startValue: 1.8
+      endValue: 3.2
+      property: Energy
+      isLooped: true
+      enabled: true
+
+# A burnt-out wreck has nothing left to burn: the fire it leaves under itself doesn't eat it away.
+- type: damageModifierSet
+  id: CMUJeepWreck
+  coefficients:
+    Heat: 0
+    Shock: 1.2
+    Structural: 0.5
+  flatReductions:
+    Blunt: 10
+    Slash: 10
+    Piercing: 10
+    Structural: 10
+
 - type: entity
   abstract: true
   id: CMUJeepWreckBase
@@ -1431,7 +1899,8 @@
   # Like the live jeep, shots pass over it unless it is the target.
   - type: RequireProjectileTarget
   - type: Damageable
-    damageModifierSet: StructuralMetallic
+    damageModifierSet: CMUJeepWreck
+  - type: RMCImmuneToFireTileDamage
   - type: Injurable
     damageContainer: StructuralMarine
   - type: Corrodible
@@ -1475,6 +1944,14 @@
     state: jeep_gunner
 
 - type: entity
+  parent: CMUJeepWreckBase
+  id: CMUJeepWreckMedical
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: jeep_medical
+
+- type: entity
   parent: BaseItem
   id: CMUJeepDebrisWheel
   categories: [ HideSpawnMenu ]
@@ -1509,7 +1986,7 @@
   description: A cracked, sooty headlamp off a wrecked jeep.
   components:
   - type: Sprite
-    state: headlights
+    state: headlight
   - type: Item
     size: Small
 

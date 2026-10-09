@@ -1,0 +1,19 @@
+# Jeep kit crates on the platoons' ASRS catalogs, which list this among their parents; a catalog's
+# categories add up through its parents. A platoon's account opens a round at 20,000: the cheapest
+# kit takes most of it, the gun jeep all of it.
+- type: entity
+  abstract: true
+  id: CMUASRSJeepKits
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Vehicles
+      entries:
+      - cost: 12000
+        crate: CMUCrateJeepKitCargo
+      - cost: 15000
+        crate: CMUCrateJeepKitMedical
+      - cost: 17500
+        crate: CMUCrateJeepKitTransport
+      - cost: 20000
+        crate: CMUCrateJeepKitGunner

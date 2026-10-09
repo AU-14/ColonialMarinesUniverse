@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
@@ -5,21 +6,58 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// Blows the jeep up once damage takes its hull to zero: after a short warning its riders are thrown
-/// clear, the blast from its <c>Explosive</c> goes off, and the jeep and everything fitted to it give
-/// way to a burnt-out wreck, debris and fire. Server only.
+/// Blows the jeep up once damage takes its hull to zero: its engine bursts into flames, with smoke,
+/// sparks and the crackle of the fire, then its riders are thrown clear, the blast from its
+/// <c>Explosive</c> goes off, and the jeep and everything fitted to it give way to a burnt-out wreck,
+/// debris and fire. Server only.
 /// </summary>
 [RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMUJeepWreckComponent : Component
 {
     /// <summary>
-    /// Warning between the hull giving out and the blast.
+    /// The engine fire between the hull giving out and the blast: time enough to bail out.
     /// </summary>
     [DataField]
-    public TimeSpan Delay = TimeSpan.FromSeconds(2);
+    public TimeSpan Delay = TimeSpan.FromSeconds(6);
 
+    /// <summary>
+    /// The fire's crackle, looped on the jeep until it goes up.
+    /// </summary>
     [DataField]
     public SoundSpecifier? WarningSound = new SoundPathSpecifier("/Audio/Effects/burning.ogg");
+
+    /// <summary>
+    /// The engine fire's flickering glow, spawned on the jeep's engine bay.
+    /// </summary>
+    [DataField]
+    public EntProtoId FireLightPrototype = "CMUJeepFireLight";
+
+    /// <summary>
+    /// Where the engine bay is, in vehicle space (facing south).
+    /// </summary>
+    [DataField]
+    public Vector2 EngineBay = new(0f, -0.6f);
+
+    /// <summary>
+    /// Sparks and the bang of something giving way in the burning engine bay, every so often.
+    /// </summary>
+    [DataField]
+    public EntProtoId SparkPrototype = "EffectSparks";
+
+    [DataField]
+    public SoundSpecifier? SparkSound = new SoundCollectionSpecifier("sparks");
+
+    [DataField]
+    public SoundSpecifier? PopSound = new SoundCollectionSpecifier("MetalBreak");
+
+    [DataField]
+    public TimeSpan MinSparkDelay = TimeSpan.FromSeconds(0.6);
+
+    [DataField]
+    public TimeSpan MaxSparkDelay = TimeSpan.FromSeconds(1.5);
+
+    [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
+    public TimeSpan NextSpark;
 
     [DataField]
     public LocId WarningPopup = "cmu-jeep-wreck-warning";

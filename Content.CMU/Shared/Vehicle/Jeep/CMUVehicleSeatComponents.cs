@@ -111,6 +111,26 @@ public sealed partial class CMUVehicleSeatData
     /// </summary>
     [DataField]
     public Dictionary<Direction, float> Clips = new();
+
+    /// <summary>
+    /// The rider faces the vehicle's rear, like the medical jeep's passenger turned to its bed.
+    /// </summary>
+    [DataField]
+    public bool Reversed;
+
+    /// <summary>
+    /// A bed: whoever is on it lies there, front-facing sprite turned this many degrees
+    /// counter-clockwise on screen, per direction. Empty for a seat.
+    /// </summary>
+    [DataField]
+    public Dictionary<Direction, float> LyingAngles = new();
+
+    /// <summary>
+    /// Whether clicking the vehicle can put someone here. A bed is only lain on by choice, or a
+    /// patient laid on it.
+    /// </summary>
+    [DataField]
+    public bool AutoSeat = true;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -136,6 +156,15 @@ public sealed partial class CMUVehicleSeatComponent : Component
 
     [DataField, AutoNetworkedField]
     public string? Door;
+
+    [DataField, AutoNetworkedField]
+    public bool Reversed;
+
+    [DataField, AutoNetworkedField]
+    public Dictionary<Direction, float> LyingAngles = new();
+
+    [DataField, AutoNetworkedField]
+    public bool AutoSeat = true;
 }
 
 [Serializable, NetSerializable]

@@ -1,7 +1,7 @@
 - type: entity
   abstract: false
   id: WYPMCCargoCatalog
-  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor ]
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies, CMUASRSAtmosGoodies, CMUASRSManpad, CMUASRSAntiArmor, CMUASRSJeepKits ]
   components:
   - type: RequisitionsComputer
     categories:

@@ -220,6 +220,9 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
             comp.Lift = data.Lift;
             comp.PixelOffsets = new Dictionary<Direction, Vector2>(data.PixelOffsets);
             comp.Clips = new Dictionary<Direction, float>(data.Clips);
+            comp.Reversed = data.Reversed;
+            comp.LyingAngles = new Dictionary<Direction, float>(data.LyingAngles);
+            comp.AutoSeat = data.AutoSeat;
             Dirty(seat, comp);
 
             var part = EnsureComp<CMUVehiclePartComponent>(seat);
@@ -295,9 +298,10 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
             if (!IsFree(seat))
                 continue;
 
+            var bed = TryComp(seat, out CMUVehicleSeatComponent? seatComp) && seatComp.LyingAngles.Count > 0;
             args.Verbs.Add(new Verb
             {
-                Text = Loc.GetString("cmu-vehicle-seat-verb", ("seat", Name(seat))),
+                Text = Loc.GetString(bed ? "cmu-vehicle-seat-lie-verb" : "cmu-vehicle-seat-verb", ("seat", Name(seat))),
                 Act = () => _buckle.TryBuckle(user, user, seat),
             });
         }
@@ -480,7 +484,7 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
         var best = float.MaxValue;
         foreach (var candidate in ent.Comp.SeatEntities)
         {
-            if (!IsFree(candidate))
+            if (!IsFree(candidate) || TryComp(candidate, out CMUVehicleSeatComponent? seatComp) && !seatComp.AutoSeat)
                 continue;
 
             var distance = (_transform.GetWorldPosition(candidate) - userPos).LengthSquared();
