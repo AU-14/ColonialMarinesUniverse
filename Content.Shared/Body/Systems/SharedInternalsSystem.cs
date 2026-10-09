@@ -321,6 +321,13 @@ public abstract partial class SharedInternalsSystem : EntitySystem
             }
         }
 
+        // cmu edit start: also check satchels, pouches and other worn storage
+        if (CMUFindStoredGasTank((user.Owner, user.Comp1, user.Comp2), out var storedJetpack) is { } stored)
+            return stored;
+
+        found ??= storedJetpack;
+        // cmu edit end
+
         return found;
     }
 }

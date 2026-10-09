@@ -2431,6 +2431,10 @@
 # Add more platoons as needed
 
 - type: lorePrimer
+  id: RuMCPrimerPlatoonBEAR
+  PlatoonInfo: lore-primer-platoon-bear-info
+
+- type: lorePrimer
   id: AU14PrimerPlatoonLACN
   PlatoonInfo: lore-primer-platoon-lacn-info
 

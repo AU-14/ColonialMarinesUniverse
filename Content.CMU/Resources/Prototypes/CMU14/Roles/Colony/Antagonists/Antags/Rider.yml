@@ -154,6 +154,11 @@
     - ActionXenoPsychicWhisper
   - type: XenoPsychicCommunication
     whisperRange: 7
+  # psychic whisper opens its text dialog on the whisperer, no key here means it silently never opens
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
   # Hands exist only so the hatchling can trigger vent entrance interactions;
   # the empty WhitelistPickup keeps those hands from looting anything
   - type: Hands
@@ -508,6 +513,11 @@
     currentLanguage: RiderCant
     defaultLanguage: RiderCant
   - type: AllLanguages
+  # alerts has to be here already or the nv toggle alert never shows at map init
+  - type: Alerts
+  - type: NightVision
+    innate: true
+    alert: XenoNightVision
 
 - type: entity
   id: ActionRiderManifest

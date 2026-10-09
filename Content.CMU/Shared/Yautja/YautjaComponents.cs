@@ -960,6 +960,10 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
     [DataField]
     public TimeSpan NextDrain;
 
+    // visor got shut off because the bracer went away, not because the player turned it off
+    [DataField]
+    public bool VisorWaitingForPower;
+
     [DataField]
     public SlotFlags Slots { get; set; } = SlotFlags.MASK;
 

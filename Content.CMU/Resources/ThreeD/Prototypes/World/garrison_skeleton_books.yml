@@ -1,0 +1,1643 @@
+- type: cmu3DModel
+  id: CMU3DDecorFloorBookPile1
+  label: Scattered book pile
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBookPile1
+  referencePrototype: DecorFloorBookPile1
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: bookpile_1
+  sourceDirections: 1
+  description: 'Eight distinct bound volumes: central layered books, two upright or leaning volumes and two fallen foreground
+    books. Separate covers, page blocks, spines and page-edge lines use the original source palette. Single-frame noRot
+    appearance. Exact book count, inferred back faces, lean and height remain draft.'
+  parts:
+  - min: -0.058166, -0.078453, 0.020168
+    max: 0.201912, 0.110220, 0.047425
+    color: '#6D675F'
+    label: central volume 1 page block
+    yaw: -3.0
+  - min: -0.067954, -0.086656, 0.013754
+    max: 0.211701, 0.118423, 0.018565
+    color: '#5C493D'
+    label: central volume 1 cover -1
+    yaw: -3.0
+  - min: -0.067954, -0.086656, 0.049028
+    max: 0.211701, 0.118423, 0.053838
+    color: '#5C493D'
+    label: central volume 1 cover 1
+    yaw: -3.0
+  - min: -0.070570, -0.079777, 0.013754
+    max: -0.048198, 0.125302, 0.053838
+    color: '#39332C'
+    label: central volume 1 bound spine
+    yaw: -3.0
+  - min: 0.200241, -0.072998, 0.025519
+    max: 0.204902, 0.091066, 0.029247
+    color: '#39332C'
+    label: central volume 1 page edge line -1
+    yaw: -3.0
+  - min: 0.200241, -0.072998, 0.038346
+    max: 0.204902, 0.091066, 0.042074
+    color: '#39332C'
+    label: central volume 1 page edge line 1
+    yaw: -3.0
+  - min: -0.056675, -0.024583, 0.061183
+    max: 0.212074, 0.164091, 0.088441
+    color: '#6D675F'
+    label: central volume 2 page block
+    yaw: 4.0
+  - min: -0.066789, -0.032786, 0.054770
+    max: 0.222188, 0.172294, 0.059581
+    color: '#5C493D'
+    label: central volume 2 cover -1
+    yaw: 4.0
+  - min: -0.066789, -0.032786, 0.090044
+    max: 0.222188, 0.172294, 0.094854
+    color: '#5C493D'
+    label: central volume 2 cover 1
+    yaw: 4.0
+  - min: -0.069347, -0.042260, 0.054770
+    max: -0.046230, 0.162820, 0.094854
+    color: '#39332C'
+    label: central volume 2 bound spine
+    yaw: 4.0
+  - min: 0.210280, -0.002844, 0.066535
+    max: 0.214941, 0.161220, 0.070263
+    color: '#39332C'
+    label: central volume 2 page edge line -1
+    yaw: 4.0
+  - min: 0.210280, -0.002844, 0.079361
+    max: 0.214941, 0.161220, 0.083091
+    color: '#39332C'
+    label: central volume 2 page edge line 1
+    yaw: 4.0
+  - min: -0.069818, 0.029287, 0.102200
+    max: 0.190260, 0.217962, 0.129456
+    color: '#675941'
+    label: central volume 3 page block
+    yaw: -5.0
+  - min: -0.079606, 0.021085, 0.095787
+    max: 0.200049, 0.226164, 0.100596
+    color: '#39332C'
+    label: central volume 3 cover -1
+    yaw: -5.0
+  - min: -0.079606, 0.021085, 0.131060
+    max: 0.200049, 0.226164, 0.135871
+    color: '#39332C'
+    label: central volume 3 cover 1
+    yaw: -5.0
+  - min: -0.081902, 0.032540, 0.095787
+    max: -0.059530, 0.237619, 0.135871
+    color: '#2D2318'
+    label: central volume 3 bound spine
+    yaw: -5.0
+  - min: 0.188271, 0.030185, 0.107550
+    max: 0.192932, 0.194249, 0.111280
+    color: '#2D2318'
+    label: central volume 3 page edge line -1
+    yaw: -5.0
+  - min: 0.188271, 0.030185, 0.120377
+    max: 0.192932, 0.194249, 0.124106
+    color: '#2D2318'
+    label: central volume 3 page edge line 1
+    yaw: -5.0
+  - min: -0.075644, 0.087320, 0.143216
+    max: 0.184434, 0.275993, 0.170473
+    color: '#6D675F'
+    label: central volume 4 page block
+    yaw: 1.0
+  - min: -0.085432, 0.079116, 0.136803
+    max: 0.194223, 0.284197, 0.141612
+    color: '#39332C'
+    label: central volume 4 cover -1
+    yaw: 1.0
+  - min: -0.085432, 0.079116, 0.172076
+    max: 0.194223, 0.284197, 0.176886
+    color: '#39332C'
+    label: central volume 4 cover 1
+    yaw: 1.0
+  - min: -0.088209, 0.076822, 0.136803
+    max: -0.065836, 0.281902, 0.176886
+    color: '#2D2318'
+    label: central volume 4 bound spine
+    yaw: 1.0
+  - min: 0.182923, 0.101908, 0.148567
+    max: 0.187584, 0.265972, 0.152295
+    color: '#2D2318'
+    label: central volume 4 page edge line -1
+    yaw: 1.0
+  - min: 0.182923, 0.101908, 0.161394
+    max: 0.187584, 0.265972, 0.165122
+    color: '#2D2318'
+    label: central volume 4 page edge line 1
+    yaw: 1.0
+  - min: -0.065413, 0.299459, 0.138283
+    max: 0.203334, 0.488132, 0.167441
+    color: '#4A433A'
+    label: upright rear volume page block
+    pitch: 80.0
+    yaw: 90
+  - min: -0.075527, 0.309836, 0.147012
+    max: 0.213448, 0.514916, 0.152158
+    color: '#4A433A'
+    label: upright rear volume cover -1
+    pitch: 80.0
+    yaw: 90
+  - min: -0.075527, 0.272674, 0.153565
+    max: 0.213448, 0.477755, 0.158710
+    color: '#4A433A'
+    label: upright rear volume cover 1
+    pitch: 80.0
+    yaw: 90
+  - min: 0.057401, 0.267671, -0.002333
+    max: 0.080520, 0.472751, 0.040547
+    color: '#39332C'
+    label: upright rear volume bound spine
+    pitch: 80.0
+    yaw: 90
+  - min: 0.066630, 0.342004, 0.282992
+    max: 0.071291, 0.506068, 0.286721
+    color: '#39332C'
+    label: upright rear volume page edge line -1
+    pitch: 80.0
+    yaw: 90
+  - min: 0.066630, 0.328491, 0.285375
+    max: 0.071291, 0.492555, 0.289104
+    color: '#39332C'
+    label: upright rear volume page edge line 1
+    pitch: 80.0
+    yaw: 90
+  - min: -0.332134, 0.066292, 0.116200
+    max: -0.106733, 0.229236, 0.141556
+    color: '#5C493D'
+    label: upright left volume page block
+    yaw: 90
+    pitch: 84.0
+  - min: -0.340618, 0.075523, 0.124926
+    max: -0.098250, 0.252638, 0.129400
+    color: '#4A433A'
+    label: upright left volume cover -1
+    yaw: 90
+    pitch: 84.0
+  - min: -0.340618, 0.042890, 0.128356
+    max: -0.098251, 0.220005, 0.132830
+    color: '#4A433A'
+    label: upright left volume cover 1
+    yaw: 90
+    pitch: 84.0
+  - min: -0.229128, 0.047300, -0.003053
+    max: -0.209739, 0.224414, 0.034234
+    color: '#39332C'
+    label: upright left volume bound spine
+    yaw: 90
+    pitch: 84.0
+  - min: -0.221764, 0.094709, 0.239197
+    max: -0.217104, 0.236400, 0.242926
+    color: '#39332C'
+    label: upright left volume page edge line -1
+    yaw: 90
+    pitch: 84.0
+  - min: -0.221764, 0.082842, 0.240444
+    max: -0.217103, 0.224534, 0.244173
+    color: '#39332C'
+    label: upright left volume page edge line 1
+    yaw: 90
+    pitch: 84.0
+  - min: -0.311603, -0.383789, 0.022909
+    max: -0.051524, -0.195115, 0.055870
+    color: '#5C493D'
+    label: fallen foreground left volume page block
+    yaw: -24.0
+  - min: -0.321390, -0.391992, 0.015153
+    max: -0.041736, -0.186912, 0.020969
+    color: '#4A433A'
+    label: fallen foreground left volume cover -1
+    yaw: -24.0
+  - min: -0.321390, -0.391992, 0.057809
+    max: -0.041736, -0.186912, 0.063626
+    color: '#4A433A'
+    label: fallen foreground left volume cover 1
+    yaw: -24.0
+  - min: -0.312824, -0.338531, 0.015153
+    max: -0.290452, -0.133452, 0.063626
+    color: '#4A433A'
+    label: fallen foreground left volume bound spine
+    yaw: -24.0
+  - min: -0.064330, -0.424717, 0.029770
+    max: -0.059669, -0.260653, 0.033498
+    color: '#4A433A'
+    label: fallen foreground left volume page edge line -1
+    yaw: -24.0
+  - min: -0.064330, -0.424717, 0.045280
+    max: -0.059669, -0.260653, 0.049010
+    color: '#4A433A'
+    label: fallen foreground left volume page edge line 1
+    yaw: -24.0
+  - min: 0.101843, -0.377620, 0.021920
+    max: 0.309905, -0.171796, 0.060588
+    color: '#675941'
+    label: fallen foreground right volume page block
+    yaw: 24.0
+  - min: 0.094012, -0.386569, 0.012823
+    max: 0.317736, -0.162847, 0.019646
+    color: '#4A433A'
+    label: fallen foreground right volume cover -1
+    yaw: 24.0
+  - min: 0.094012, -0.386569, 0.062862
+    max: 0.317736, -0.162847, 0.069685
+    color: '#4A433A'
+    label: fallen foreground right volume cover 1
+    yaw: 24.0
+  - min: 0.100866, -0.429338, 0.012823
+    max: 0.118764, -0.205615, 0.069685
+    color: '#2D2318'
+    label: fallen foreground right volume bound spine
+    yaw: 24.0
+  - min: 0.299194, -0.321611, 0.030291
+    max: 0.303855, -0.142632, 0.034021
+    color: '#2D2318'
+    label: fallen foreground right volume page edge line -1
+    yaw: 24.0
+  - min: 0.299194, -0.321611, 0.048487
+    max: 0.303855, -0.142632, 0.052216
+    color: '#2D2318'
+    label: fallen foreground right volume page edge line 1
+    yaw: 24.0
+  - label: upright rear volume cover inset
+    min: -0.024258, 0.304180, 0.155768
+    max: 0.162178, 0.439346, 0.157725
+    color: '#39332C'
+    yaw: 90
+    pitch: 80
+  - label: upright rear volume cover title panel
+    min: 0.056842, 0.334649, 0.220354
+    max: 0.081079, 0.427867, 0.222310
+    color: '#39332C'
+    yaw: 90
+    pitch: 80
+- type: cmu3DModel
+  id: CMU3DDecorFloorSkeleton
+  label: Skeletal remains / ground
+  status: draft
+  sourcePrototypes:
+  - DecorFloorSkeleton
+  referencePrototype: DecorFloorSkeleton
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: skeleton
+  sourceDirections: 1
+  description: Source-traced side-turned skull, recessed socket, open ribs, vertebrae, pelvic ring and separate bent
+    limbs. Single-frame noRot appearance keeps its fixed source facing. Bone radii, hidden anatomy and depth remain inferred.
+    Ground datum .004; physical pose and fine anatomy remain draft.
+  parts:
+  - min: -0.264676, 0.351829, 0.126677
+    max: -0.204127, 0.391015, 0.165862
+    color: '#8F7E61'
+    label: cranial rim segment 1
+    shape: CylinderX
+    yaw: 13.300987081054448
+    pitch: 26.18378057264889
+  - min: -0.208102, 0.355808, 0.142262
+    max: -0.135464, 0.394994, 0.181447
+    color: '#9F9179'
+    label: cranial rim segment 2
+    shape: CylinderX
+    yaw: -3.5924165553704768
+    pitch: 3.514551189266836
+  - min: -0.139636, 0.342744, 0.135583
+    max: -0.087043, 0.381929, 0.174768
+    color: '#8F7E61'
+    label: cranial rim segment 3
+    shape: CylinderX
+    yaw: -25.86297175210425
+    pitch: -19.79562764836588
+  - min: -0.127042, 0.293610, 0.115545
+    max: -0.046759, 0.332796, 0.154730
+    color: '#6F5C44'
+    label: cranial rim segment 4
+    shape: CylinderX
+    yaw: -83.78597535260599
+    pitch: -16.100635906652506
+  - min: -0.129464, 0.226302, 0.097733
+    max: -0.063817, 0.265488, 0.136918
+    color: '#6F5C44'
+    label: cranial rim segment 5
+    shape: CylinderX
+    yaw: -115.65821205309632
+    pitch: -11.74124306763794
+  - min: -0.180132, 0.315319, 0.039400
+    max: -0.091075, 0.440000, 0.155175
+    color: '#9F9179'
+    label: posterior cranium
+    shape: Ellipsoid
+  - min: -0.261393, 0.321272, 0.152503
+    max: -0.193495, 0.348880, 0.180111
+    color: '#8F7E61'
+    label: orbital rim segment 1
+    shape: CylinderX
+    yaw: 9.652591162501045
+    pitch: 3.760233269448159
+  - min: -0.221703, 0.295713, 0.150277
+    max: -0.158043, 0.323321, 0.177885
+    color: '#9F9179'
+    label: orbital rim segment 2
+    shape: CylinderX
+    yaw: -82.3885170750806
+    pitch: -8.041828618923464
+  - min: -0.258358, 0.263053, 0.141371
+    max: -0.185398, 0.290661, 0.168979
+    color: '#8F7E61'
+    label: orbital rim segment 3
+    shape: CylinderX
+    yaw: -177.75105942232094
+    pitch: -7.01115117705297
+  - min: -0.287278, 0.288612, 0.143598
+    max: -0.231620, 0.316220, 0.171206
+    color: '#8F7E61'
+    label: orbital rim segment 4
+    shape: CylinderX
+    yaw: 92.95249053285882
+    pitch: 13.887194887545988
+  - min: -0.252826, 0.310624, 0.124005
+    max: -0.202063, 0.364058, 0.141817
+    color: '#372A1F'
+    label: recessed eye socket
+    shape: Ellipsoid
+  - min: -0.256941, 0.251329, 0.124005
+    max: -0.189598, 0.282499, 0.155175
+    color: '#8F7E61'
+    label: cheek and nasal bridge segment 1
+    shape: CylinderX
+    yaw: -17.7144137966125
+    pitch: 3.7912638056213566
+  - min: -0.191736, 0.244799, 0.128458
+    max: -0.151830, 0.275969, 0.159628
+    color: '#8F7E61'
+    label: cheek and nasal bridge segment 2
+    shape: CylinderX
+    yaw: 10.731846840506197
+    pitch: 6.4067233003017465
+  - min: -0.153778, 0.253317, 0.124005
+    max: -0.106297, 0.284487, 0.155175
+    color: '#6F5C44'
+    label: cheek and nasal bridge segment 3
+    shape: CylinderX
+    yaw: 12.231078850407473
+    pitch: -16.340627264525406
+  - min: -0.152970, 0.252460, 0.106194
+    max: -0.118237, 0.283630, 0.124005
+    color: '#372A1F'
+    label: recessed nasal opening
+    shape: Ellipsoid
+  - min: -0.244796, 0.231364, 0.077695
+    max: -0.185045, 0.266097, 0.112428
+    color: '#8F7E61'
+    label: lower jaw segment 1
+    shape: CylinderX
+    yaw: -59.083525717631055
+    pitch: -4.273928818224907
+  - min: -0.199678, 0.203817, 0.075469
+    max: -0.138322, 0.238550, 0.110201
+    color: '#8F7E61'
+    label: lower jaw segment 2
+    shape: CylinderX
+    yaw: -3.7152891054287105
+  - min: -0.139709, 0.202967, 0.082148
+    max: -0.103668, 0.237699, 0.116880
+    color: '#8F7E61'
+    label: lower jaw segment 3
+    shape: CylinderX
+    yaw: 3.8963323954693525
+    pitch: 21.75572882460428
+  - min: -0.216980, 0.222156, 0.114654
+    max: -0.204512, 0.244420, 0.136918
+    color: '#8F7E61'
+    label: jaw tooth 1
+  - min: -0.197499, 0.222156, 0.114654
+    max: -0.185031, 0.244420, 0.136918
+    color: '#8F7E61'
+    label: jaw tooth 2
+  - min: -0.178017, 0.222156, 0.114654
+    max: -0.165549, 0.244420, 0.136918
+    color: '#8F7E61'
+    label: jaw tooth 3
+  - min: -0.158536, 0.222156, 0.114654
+    max: -0.146068, 0.244420, 0.136918
+    color: '#8F7E61'
+    label: jaw tooth 4
+  - min: -0.148210, 0.147746, 0.094616
+    max: -0.084035, 0.175354, 0.122224
+    color: '#8F7E61'
+    label: cervical spine segment 1
+    shape: CylinderX
+    yaw: -79.98627245867698
+    pitch: -3.9787228483057215
+  - min: -0.126325, 0.090097, 0.094616
+    max: -0.066957, 0.117705, 0.122224
+    color: '#8F7E61'
+    label: cervical spine segment 2
+    shape: CylinderX
+    yaw: -61.95943353846877
+    pitch: 4.3014286920447455
+  - min: -0.166863, 0.078902, 0.108420
+    max: -0.095995, 0.105619, 0.135137
+    color: '#8F7E61'
+    label: left clavicle segment 1
+    shape: CylinderX
+    yaw: 178.5993624073641
+    pitch: -10.865355324952867
+  - min: -0.224312, 0.061291, 0.090608
+    max: -0.158217, 0.088008, 0.117326
+    color: '#8F7E61'
+    label: left clavicle segment 2
+    shape: CylinderX
+    yaw: -143.60784862051048
+    pitch: -19.68551805259194
+  - min: -0.089192, 0.092250, 0.112873
+    max: 0.012799, 0.118967, 0.139590
+    color: '#8F7E61'
+    label: right clavicle segment 1
+    shape: CylinderX
+    yaw: 7.746241143723409
+    pitch: -7.526138320473398
+  - min: 0.005649, 0.099344, 0.088382
+    max: 0.062676, 0.126062, 0.115099
+    color: '#6F5C44'
+    label: right clavicle segment 2
+    shape: CylinderX
+    yaw: 0.7214200392023953
+    pitch: -38.65759272421295
+  - min: -0.100982, 0.054895, 0.081703
+    max: -0.064469, 0.094971, 0.121779
+    color: '#8F7E61'
+    label: vertebra 1
+    shape: Ellipsoid
+  - min: -0.082336, 0.013150, 0.081703
+    max: -0.045822, 0.053225, 0.121779
+    color: '#9F9179'
+    label: vertebra 2
+    shape: Ellipsoid
+  - min: -0.063690, -0.028596, 0.081703
+    max: -0.027176, 0.011480, 0.121779
+    color: '#8F7E61'
+    label: vertebra 3
+    shape: Ellipsoid
+  - min: -0.045043, -0.070342, 0.081703
+    max: -0.008530, -0.030266, 0.121779
+    color: '#8F7E61'
+    label: vertebra 4
+    shape: Ellipsoid
+  - min: -0.026397, -0.112088, 0.081703
+    max: 0.010117, -0.072012, 0.121779
+    color: '#8F7E61'
+    label: vertebra 5
+    shape: Ellipsoid
+  - min: -0.007750, -0.153833, 0.081703
+    max: 0.028763, -0.113757, 0.121779
+    color: '#8F7E61'
+    label: vertebra 6
+    shape: Ellipsoid
+  - min: -0.144586, 0.039997, 0.106639
+    max: -0.071656, 0.061371, 0.128013
+    color: '#8F7E61'
+    label: rib pair 1 side -1 segment 1
+    shape: CylinderX
+    yaw: -136.9993702468671
+    pitch: 17.775336944585025
+  - min: -0.165540, 0.033636, 0.106639
+    max: -0.120278, 0.055010, 0.128013
+    color: '#8F7E61'
+    label: rib pair 1 side -1 segment 2
+    shape: CylinderX
+    yaw: 118.47027915885761
+    pitch: -29.46562881545199
+  - min: -0.155719, 0.044139, 0.086601
+    max: -0.115488, 0.065513, 0.107975
+    color: '#8F7E61'
+    label: rib pair 1 side -1 segment 3
+    shape: CylinderX
+    yaw: -22.20882456002309
+    pitch: -26.278621490179567
+  - min: -0.085075, 0.064647, 0.106639
+    max: -0.029585, 0.086021, 0.128013
+    color: '#8F7E61'
+    label: rib pair 1 side 1 segment 1
+    shape: CylinderX
+    yaw: 2.1824949613067806
+    pitch: 23.65525416503315
+  - min: -0.038848, 0.058286, 0.106639
+    max: -0.006237, 0.079660, 0.128013
+    color: '#6F5C44'
+    label: rib pair 1 side 1 segment 2
+    shape: CylinderX
+    yaw: -37.96446211812666
+    pitch: -43.05743822919065
+  - min: -0.049963, 0.044139, 0.086601
+    max: -0.009733, 0.065513, 0.107975
+    color: '#8F7E61'
+    label: rib pair 1 side 1 segment 3
+    shape: CylinderX
+    yaw: -157.7911754399769
+    pitch: -26.278621490179567
+  - min: -0.133497, -0.003736, 0.106639
+    max: -0.054692, 0.017637, 0.128013
+    color: '#9F9179'
+    label: rib pair 2 side -1 segment 1
+    shape: CylinderX
+    yaw: -141.2038494630638
+    pitch: 16.41088545054858
+  - min: -0.157743, -0.010098, 0.106639
+    max: -0.111154, 0.011276, 0.128013
+    color: '#8F7E61'
+    label: rib pair 2 side -1 segment 2
+    shape: CylinderX
+    yaw: 122.17193396080098
+    pitch: -28.54717134910581
+  - min: -0.148357, 0.000406, 0.086601
+    max: -0.103592, 0.021779, 0.107975
+    color: '#8F7E61'
+    label: rib pair 2 side -1 segment 3
+    shape: CylinderX
+    yaw: -19.389964259353608
+    pitch: -23.44600788026041
+  - min: -0.066684, 0.020913, 0.106639
+    max: -0.003671, 0.042287, 0.128013
+    color: '#8F7E61'
+    label: rib pair 2 side 1 segment 1
+    shape: CylinderX
+    yaw: 1.8816948764116963
+    pitch: 20.691022806049318
+  - min: -0.012038, 0.014552, 0.106639
+    max: 0.022392, 0.035926, 0.128013
+    color: '#4B3C30'
+    label: rib pair 2 side 1 segment 2
+    shape: CylinderX
+    yaw: -33.92719990775323
+    pitch: -40.29002353200105
+  - min: -0.025680, 0.000406, 0.086601
+    max: 0.019085, 0.021779, 0.107975
+    color: '#8F7E61'
+    label: rib pair 2 side 1 segment 3
+    shape: CylinderX
+    yaw: -160.61003574064637
+    pitch: -23.446007880260435
+  - min: -0.111881, -0.047470, 0.106639
+    max: -0.036065, -0.026096, 0.128013
+    color: '#8F7E61'
+    label: rib pair 3 side -1 segment 1
+    shape: CylinderX
+    yaw: -139.19073991435357
+    pitch: 17.077498402866624
+  - min: -0.134497, -0.053831, 0.106639
+    max: -0.088591, -0.032457, 0.128013
+    color: '#8F7E61'
+    label: rib pair 3 side -1 segment 2
+    shape: CylinderX
+    yaw: 120.35609734473191
+    pitch: -29.01243630538736
+  - min: -0.124891, -0.043328, 0.086601
+    max: -0.082417, -0.021954, 0.107975
+    color: '#8F7E61'
+    label: rib pair 3 side -1 segment 3
+    shape: CylinderX
+    yaw: -20.70808309133416
+    pitch: -24.793303086182046
+  - min: -0.048735, -0.022820, 0.106639
+    max: 0.010497, -0.001446, 0.128013
+    color: '#8F7E61'
+    label: rib pair 3 side 1 segment 1
+    shape: CylinderX
+    yaw: 2.020968080845468
+    pitch: 22.07909190114931
+  - min: 0.001703, -0.029181, 0.106639
+    max: 0.035202, -0.007808, 0.128013
+    color: '#8F7E61'
+    label: rib pair 3 side 1 segment 2
+    shape: CylinderX
+    yaw: -35.84766683630873
+    pitch: -41.65379545270219
+  - min: -0.010675, -0.043328, 0.086601
+    max: 0.031799, -0.021954, 0.107975
+    color: '#6F5C44'
+    label: rib pair 3 side 1 segment 3
+    shape: CylinderX
+    yaw: -159.29191690866585
+    pitch: -24.793303086182046
+  - min: -0.083550, -0.091204, 0.106639
+    max: -0.016027, -0.069830, 0.128013
+    color: '#8F7E61'
+    label: rib pair 4 side -1 segment 1
+    shape: CylinderX
+    yaw: -132.01157339567249
+    pitch: 19.252564906885368
+  - min: -0.101060, -0.097565, 0.106639
+    max: -0.056961, -0.076191, 0.128013
+    color: '#6F5C44'
+    label: rib pair 4 side -1 segment 2
+    shape: CylinderX
+    yaw: 114.49015522266997
+    pitch: -30.3227031526523
+  - min: -0.090833, -0.087062, 0.086601
+    max: -0.054914, -0.065688, 0.107975
+    color: '#6F5C44'
+    label: rib pair 4 side -1 segment 3
+    shape: CylinderX
+    yaw: -25.921524138996826
+    pitch: -29.728249497730758
+  - min: -0.031206, -0.066554, 0.106639
+    max: 0.016957, -0.045180, 0.128013
+    color: '#8F7E61'
+    label: rib pair 4 side 1 segment 1
+    shape: CylinderX
+    yaw: 2.5976843135609924
+    pitch: 27.533766532248492
+  - min: 0.006609, -0.072915, 0.106639
+    max: 0.037586, -0.051541, 0.128013
+    color: '#6F5C44'
+    label: rib pair 4 side 1 segment 2
+    shape: CylinderX
+    yaw: -42.88942304844869
+    pitch: -45.95066499376219
+  - min: -0.001998, -0.087062, 0.086601
+    max: 0.033920, -0.065688, 0.107975
+    color: '#8F7E61'
+    label: rib pair 4 side 1 segment 3
+    shape: CylinderX
+    yaw: -154.07847586100317
+    pitch: -29.728249497730758
+  - min: -0.073704, -0.012623, 0.120888
+    max: -0.022171, 0.011422, 0.144934
+    color: '#9F9179'
+    label: sternal fragments segment 1
+    shape: CylinderX
+    yaw: -67.78816931355371
+  - min: -0.055215, -0.059482, 0.114209
+    max: -0.004480, -0.035436, 0.138254
+    color: '#8F7E61'
+    label: sternal fragments segment 2
+    shape: CylinderX
+    yaw: -70.05206678259286
+    pitch: -15.26608166774941
+  - min: -0.280695, 0.005205, 0.056321
+    max: -0.188108, 0.035485, 0.086601
+    color: '#6F5C44'
+    label: left upper arm segment 1
+    shape: CylinderX
+    yaw: -105.80407107980564
+    pitch: -6.628162007181755
+  - min: -0.281985, -0.079936, 0.044299
+    max: -0.197951, -0.049656, 0.074578
+    color: '#6F5C44'
+    label: left upper arm segment 2
+    shape: CylinderX
+    yaw: -80.34453645462567
+    pitch: -9.146927321037081
+  - min: -0.243831, 0.042638, 0.054852
+    max: -0.199925, 0.086544, 0.098757
+    color: '#6F5C44'
+    label: left upper arm joint 1
+    shape: Ellipsoid
+  - min: -0.254963, -0.127644, 0.030806
+    max: -0.211058, -0.083738, 0.074712
+    color: '#8F7E61'
+    label: left upper arm joint 2
+    shape: Ellipsoid
+  - min: -0.256218, -0.148481, 0.034057
+    max: -0.193105, -0.122654, 0.059884
+    color: '#8F7E61'
+    label: left forearm segment 1
+    shape: CylinderX
+    yaw: -74.3866271238662
+    pitch: -10.570216181985641
+  - min: -0.239106, -0.228567, 0.022925
+    max: -0.104460, -0.202740, 0.048751
+    color: '#8F7E61'
+    label: left forearm segment 2
+    shape: CylinderX
+    yaw: -48.4315100269993
+    pitch: -4.5523881804850745
+  - min: -0.251735, -0.124415, 0.034035
+    max: -0.214286, -0.086967, 0.071483
+    color: '#8F7E61'
+    label: left forearm joint 1
+    shape: Ellipsoid
+  - min: -0.145979, -0.284587, 0.011770
+    max: -0.108530, -0.247138, 0.049219
+    color: '#8F7E61'
+    label: left forearm joint 2
+    shape: Ellipsoid
+  - min: -0.225076, -0.217745, 0.020253
+    max: -0.090660, -0.199933, 0.038065
+    color: '#8F7E61'
+    label: left ulna
+    shape: CylinderX
+    yaw: -48.49531484429563
+    pitch: -1.1389152015490263
+  - min: -0.133855, -0.298313, 0.016691
+    max: -0.070559, -0.277829, 0.037174
+    color: '#8F7E61'
+    label: left hand segment 1
+    shape: CylinderX
+    yaw: -44.92776326246479
+    pitch: -6.462894396078395
+  - min: -0.089089, -0.341479, 0.012238
+    max: -0.031833, -0.320996, 0.032721
+    color: '#4B3C30'
+    label: left hand segment 2
+    shape: CylinderX
+    yaw: -47.0915801569578
+    pitch: -1.7826748352052857
+  - min: 0.039779, 0.111046, 0.048751
+    max: 0.106471, 0.138654, 0.076359
+    color: '#8F7E61'
+    label: right upper arm segment 1
+    shape: CylinderX
+    yaw: -28.22748471065039
+    pitch: -18.692397454700167
+  - min: 0.097071, 0.084291, 0.034057
+    max: 0.141020, 0.111899, 0.061665
+    color: '#6F5C44'
+    label: right upper arm segment 2
+    shape: CylinderX
+    yaw: -33.14881194044982
+    pitch: -10.50801708833862
+  - min: 0.025279, 0.119774, 0.053227
+    max: 0.065310, 0.159805, 0.093258
+    color: '#8F7E61'
+    label: right upper arm joint 1
+    shape: Ellipsoid
+  - min: 0.117119, 0.066265, 0.023838
+    max: 0.157151, 0.106296, 0.063869
+    color: '#6F5C44'
+    label: right upper arm joint 2
+    shape: Ellipsoid
+  - min: 0.134498, 0.067157, 0.025151
+    max: 0.173169, 0.091203, 0.049197
+    color: '#4B3C30'
+    label: right forearm segment 1
+    shape: CylinderX
+    yaw: -23.037706342149715
+    pitch: -20.208611030842064
+  - min: 0.000053, -0.118831, 0.056767
+    max: 0.073837, -0.082318, 0.093280
+    color: '#6F5C44'
+    label: pelvic rim segment 1
+    shape: CylinderX
+    yaw: -10.493862944231584
+    pitch: 4.153017302177966
+  - min: 0.059456, -0.149446, 0.053650
+    max: 0.117408, -0.112932, 0.090163
+    color: '#6F5C44'
+    label: pelvic rim segment 2
+    shape: CylinderX
+    yaw: -57.37624985981657
+    pitch: -11.523824458595232
+  - min: 0.053797, -0.200963, 0.039846
+    max: 0.120283, -0.164450, 0.076359
+    color: '#6F5C44'
+    label: pelvic rim segment 3
+    shape: CylinderX
+    yaw: -121.16984526399705
+    pitch: -13.951918680940631
+  - min: 0.014597, -0.210961, 0.034057
+    max: 0.075992, -0.174447, 0.070571
+    color: '#8F7E61'
+    label: pelvic rim segment 4
+    shape: CylinderX
+    yaw: 144.89408589738613
+    pitch: 4.159178955030003
+  - min: -0.032196, -0.152742, 0.045189
+    max: 0.053209, -0.116228, 0.081703
+    color: '#6F5C44'
+    label: pelvic rim segment 5
+    shape: CylinderX
+    yaw: 103.48757443557909
+    pitch: 12.037622234921624
+  - min: -0.019692, -0.154623, 0.062110
+    max: 0.068536, -0.113657, 0.103077
+    color: '#6F5C44'
+    label: sacrum segment 1
+    shape: CylinderX
+    yaw: -65.56592330472255
+    pitch: -7.540220768779162
+  - min: 0.057907, -0.129606, 0.041627
+    max: 0.166268, -0.096655, 0.074578
+    color: '#6F5C44'
+    label: right thigh segment 1
+    shape: CylinderX
+    yaw: 51.94049826023028
+    pitch: -0.9418264448346325
+  - min: 0.142499, -0.074003, 0.035838
+    max: 0.209696, -0.041052, 0.068789
+    color: '#6F5C44'
+    label: right thigh segment 2
+    shape: CylinderX
+    yaw: 22.927045484852925
+    pitch: -8.382790813896186
+  - min: 0.054801, -0.179674, 0.035103
+    max: 0.102581, -0.131895, 0.082883
+    color: '#6F5C44'
+    label: right thigh joint 1
+    shape: Ellipsoid
+  - min: 0.182822, -0.068468, 0.023526
+    max: 0.230601, -0.020689, 0.071305
+    color: '#6F5C44'
+    label: right thigh joint 2
+    shape: Ellipsoid
+  - min: 0.202178, -0.070548, 0.026932
+    max: 0.252990, -0.043830, 0.053650
+    color: '#6F5C44'
+    label: right shin segment 1
+    shape: CylinderX
+    yaw: -31.138327404394357
+    pitch: -16.28596036079324
+  - min: 0.187341, -0.063949, 0.028046
+    max: 0.226081, -0.025209, 0.066786
+    color: '#6F5C44'
+    label: right shin joint 1
+    shape: Ellipsoid
+  - min: 0.229087, -0.089169, 0.013796
+    max: 0.267827, -0.050429, 0.052536
+    color: '#6F5C44'
+    label: right shin joint 2
+    shape: Ellipsoid
+  - min: -0.002640, -0.234721, 0.031830
+    max: 0.068181, -0.199988, 0.066563
+    color: '#8F7E61'
+    label: left thigh segment 1
+    shape: CylinderX
+    yaw: -101.46455392577094
+    pitch: -8.679142008691178
+  - min: 0.005292, -0.296574, 0.024261
+    max: 0.063033, -0.261842, 0.058993
+    color: '#8F7E61'
+    label: left thigh segment 2
+    shape: CylinderX
+    yaw: -73.13858487390705
+    pitch: -4.422949841758582
+  - min: 0.014547, -0.208229, 0.029359
+    max: 0.064909, -0.157867, 0.079721
+    color: '#8F7E61'
+    label: left thigh joint 1
+    shape: Ellipsoid
+  - min: 0.017330, -0.331936, 0.014219
+    max: 0.067692, -0.281574, 0.064581
+    color: '#8F7E61'
+    label: left thigh joint 2
+    shape: Ellipsoid
+  - min: 0.027581, -0.347377, 0.021589
+    max: 0.093622, -0.320659, 0.048306
+    color: '#8F7E61'
+    label: left shin segment 1
+    shape: CylinderX
+    yaw: -56.43494847916788
+    pitch: -7.750019491797183
+  - min: 0.059323, -0.402812, 0.013574
+    max: 0.120324, -0.376095, 0.040291
+    color: '#9F9179'
+    label: left shin segment 2
+    shape: CylinderX
+    yaw: -68.43849193811863
+    pitch: -6.707174356182085
+  - min: 0.023141, -0.326125, 0.020030
+    max: 0.061881, -0.287385, 0.058770
+    color: '#8F7E61'
+    label: left shin joint 1
+    shape: Ellipsoid
+  - min: 0.081585, -0.436996, 0.004000
+    max: 0.120325, -0.398256, 0.042740
+    color: '#9F9179'
+    label: left shin joint 2
+    shape: Ellipsoid
+  - min: 0.020064, -0.358961, 0.016245
+    max: 0.148451, -0.342931, 0.032276
+    color: '#8F7E61'
+    label: left fibula
+    shape: CylinderX
+    yaw: -64.29695635057992
+    pitch: -1.5899647272603312
+  - min: 0.250126, -0.069731, 0.014910
+    max: 0.271836, -0.057263, 0.027378
+    color: '#6F5C44'
+    label: right toe 1
+    shape: CylinderX
+    yaw: -25.28282741023149
+    pitch: -7.068935073366838
+  - min: 0.084383, -0.433070, 0.015355
+    max: 0.106396, -0.421493, 0.026932
+    color: '#9F9179'
+    label: left toe 1
+    shape: CylinderX
+    yaw: -75.24163981175094
+    pitch: -6.971330091351307
+  - min: 0.249669, -0.077882, 0.014910
+    max: 0.272293, -0.065414, 0.027378
+    color: '#6F5C44'
+    label: right toe 2
+    shape: CylinderX
+    yaw: -29.871853883640153
+    pitch: -6.781892633689632
+  - min: 0.090784, -0.433070, 0.015355
+    max: 0.112797, -0.421493, 0.026932
+    color: '#9F9179'
+    label: left toe 2
+    shape: CylinderX
+    yaw: -75.24163981175094
+    pitch: -6.971330091351307
+  - min: 0.249145, -0.086032, 0.014910
+    max: 0.272816, -0.073564, 0.027378
+    color: '#6F5C44'
+    label: right toe 3
+    shape: CylinderX
+    yaw: -34.07492489154379
+    pitch: -6.480801736633928
+  - min: 0.097185, -0.433070, 0.015355
+    max: 0.119198, -0.421493, 0.026932
+    color: '#9F9179'
+    label: left toe 3
+    shape: CylinderX
+    yaw: -75.24163981175094
+    pitch: -6.971330091351307
+- type: cmu3DModel
+  id: CMU3DDecorFloorSkeletonOver
+  label: Skeletal remains / shoreline
+  status: draft
+  sourcePrototypes:
+  - DecorFloorSkeletonOver
+  referencePrototype: DecorFloorSkeletonOver
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: skeleton
+  sourceDirections: 1
+  description: Source-traced side-turned skull, recessed socket, open ribs, vertebrae, pelvic ring and separate bent
+    limbs. Single-frame noRot appearance keeps its fixed source facing. Bone radii, hidden anatomy and depth remain inferred.
+    Both configured placements overlap a shallow-water corner. A .014 floor datum clears its authored .012 water surface;
+    this is a draft shoreline interpretation, not a generic draw-order-to-height rule.
+  parts:
+  - min: -0.264676, 0.351829, 0.136677
+    max: -0.204127, 0.391015, 0.175862
+    color: '#8F7E61'
+    label: cranial rim segment 1
+    shape: CylinderX
+    yaw: 13.300987081054448
+    pitch: 26.18378057264889
+  - min: -0.208102, 0.355808, 0.152262
+    max: -0.135464, 0.394994, 0.191447
+    color: '#9F9179'
+    label: cranial rim segment 2
+    shape: CylinderX
+    yaw: -3.5924165553704768
+    pitch: 3.514551189266836
+  - min: -0.139636, 0.342744, 0.145583
+    max: -0.087043, 0.381929, 0.184768
+    color: '#8F7E61'
+    label: cranial rim segment 3
+    shape: CylinderX
+    yaw: -25.86297175210425
+    pitch: -19.79562764836588
+  - min: -0.127042, 0.293610, 0.125545
+    max: -0.046759, 0.332796, 0.164730
+    color: '#6F5C44'
+    label: cranial rim segment 4
+    shape: CylinderX
+    yaw: -83.78597535260599
+    pitch: -16.100635906652506
+  - min: -0.129464, 0.226302, 0.107733
+    max: -0.063817, 0.265488, 0.146918
+    color: '#6F5C44'
+    label: cranial rim segment 5
+    shape: CylinderX
+    yaw: -115.65821205309632
+    pitch: -11.74124306763794
+  - min: -0.180132, 0.315319, 0.049400
+    max: -0.091075, 0.440000, 0.165175
+    color: '#9F9179'
+    label: posterior cranium
+    shape: Ellipsoid
+  - min: -0.261393, 0.321272, 0.162503
+    max: -0.193495, 0.348880, 0.190111
+    color: '#8F7E61'
+    label: orbital rim segment 1
+    shape: CylinderX
+    yaw: 9.652591162501045
+    pitch: 3.760233269448159
+  - min: -0.221703, 0.295713, 0.160277
+    max: -0.158043, 0.323321, 0.187885
+    color: '#9F9179'
+    label: orbital rim segment 2
+    shape: CylinderX
+    yaw: -82.3885170750806
+    pitch: -8.041828618923464
+  - min: -0.258358, 0.263053, 0.151371
+    max: -0.185398, 0.290661, 0.178979
+    color: '#8F7E61'
+    label: orbital rim segment 3
+    shape: CylinderX
+    yaw: -177.75105942232094
+    pitch: -7.01115117705297
+  - min: -0.287278, 0.288612, 0.153598
+    max: -0.231620, 0.316220, 0.181206
+    color: '#8F7E61'
+    label: orbital rim segment 4
+    shape: CylinderX
+    yaw: 92.95249053285882
+    pitch: 13.887194887545988
+  - min: -0.252826, 0.310624, 0.134005
+    max: -0.202063, 0.364058, 0.151817
+    color: '#372A1F'
+    label: recessed eye socket
+    shape: Ellipsoid
+  - min: -0.256941, 0.251329, 0.134005
+    max: -0.189598, 0.282499, 0.165175
+    color: '#8F7E61'
+    label: cheek and nasal bridge segment 1
+    shape: CylinderX
+    yaw: -17.7144137966125
+    pitch: 3.7912638056213566
+  - min: -0.191736, 0.244799, 0.138458
+    max: -0.151830, 0.275969, 0.169628
+    color: '#8F7E61'
+    label: cheek and nasal bridge segment 2
+    shape: CylinderX
+    yaw: 10.731846840506197
+    pitch: 6.4067233003017465
+  - min: -0.153778, 0.253317, 0.134005
+    max: -0.106297, 0.284487, 0.165175
+    color: '#6F5C44'
+    label: cheek and nasal bridge segment 3
+    shape: CylinderX
+    yaw: 12.231078850407473
+    pitch: -16.340627264525406
+  - min: -0.152970, 0.252460, 0.116194
+    max: -0.118237, 0.283630, 0.134005
+    color: '#372A1F'
+    label: recessed nasal opening
+    shape: Ellipsoid
+  - min: -0.244796, 0.231364, 0.087695
+    max: -0.185045, 0.266097, 0.122428
+    color: '#8F7E61'
+    label: lower jaw segment 1
+    shape: CylinderX
+    yaw: -59.083525717631055
+    pitch: -4.273928818224907
+  - min: -0.199678, 0.203817, 0.085469
+    max: -0.138322, 0.238550, 0.120201
+    color: '#8F7E61'
+    label: lower jaw segment 2
+    shape: CylinderX
+    yaw: -3.7152891054287105
+  - min: -0.139709, 0.202967, 0.092148
+    max: -0.103668, 0.237699, 0.126880
+    color: '#8F7E61'
+    label: lower jaw segment 3
+    shape: CylinderX
+    yaw: 3.8963323954693525
+    pitch: 21.75572882460428
+  - min: -0.216980, 0.222156, 0.124654
+    max: -0.204512, 0.244420, 0.146918
+    color: '#8F7E61'
+    label: jaw tooth 1
+  - min: -0.197499, 0.222156, 0.124654
+    max: -0.185031, 0.244420, 0.146918
+    color: '#8F7E61'
+    label: jaw tooth 2
+  - min: -0.178017, 0.222156, 0.124654
+    max: -0.165549, 0.244420, 0.146918
+    color: '#8F7E61'
+    label: jaw tooth 3
+  - min: -0.158536, 0.222156, 0.124654
+    max: -0.146068, 0.244420, 0.146918
+    color: '#8F7E61'
+    label: jaw tooth 4
+  - min: -0.148210, 0.147746, 0.104616
+    max: -0.084035, 0.175354, 0.132224
+    color: '#8F7E61'
+    label: cervical spine segment 1
+    shape: CylinderX
+    yaw: -79.98627245867698
+    pitch: -3.9787228483057215
+  - min: -0.126325, 0.090097, 0.104616
+    max: -0.066957, 0.117705, 0.132224
+    color: '#8F7E61'
+    label: cervical spine segment 2
+    shape: CylinderX
+    yaw: -61.95943353846877
+    pitch: 4.3014286920447455
+  - min: -0.166863, 0.078902, 0.118420
+    max: -0.095995, 0.105619, 0.145137
+    color: '#8F7E61'
+    label: left clavicle segment 1
+    shape: CylinderX
+    yaw: 178.5993624073641
+    pitch: -10.865355324952867
+  - min: -0.224312, 0.061291, 0.100608
+    max: -0.158217, 0.088008, 0.127326
+    color: '#8F7E61'
+    label: left clavicle segment 2
+    shape: CylinderX
+    yaw: -143.60784862051048
+    pitch: -19.68551805259194
+  - min: -0.089192, 0.092250, 0.122873
+    max: 0.012799, 0.118967, 0.149590
+    color: '#8F7E61'
+    label: right clavicle segment 1
+    shape: CylinderX
+    yaw: 7.746241143723409
+    pitch: -7.526138320473398
+  - min: 0.005649, 0.099344, 0.098382
+    max: 0.062676, 0.126062, 0.125099
+    color: '#6F5C44'
+    label: right clavicle segment 2
+    shape: CylinderX
+    yaw: 0.7214200392023953
+    pitch: -38.65759272421295
+  - min: -0.100982, 0.054895, 0.091703
+    max: -0.064469, 0.094971, 0.131779
+    color: '#8F7E61'
+    label: vertebra 1
+    shape: Ellipsoid
+  - min: -0.082336, 0.013150, 0.091703
+    max: -0.045822, 0.053225, 0.131779
+    color: '#9F9179'
+    label: vertebra 2
+    shape: Ellipsoid
+  - min: -0.063690, -0.028596, 0.091703
+    max: -0.027176, 0.011480, 0.131779
+    color: '#8F7E61'
+    label: vertebra 3
+    shape: Ellipsoid
+  - min: -0.045043, -0.070342, 0.091703
+    max: -0.008530, -0.030266, 0.131779
+    color: '#8F7E61'
+    label: vertebra 4
+    shape: Ellipsoid
+  - min: -0.026397, -0.112088, 0.091703
+    max: 0.010117, -0.072012, 0.131779
+    color: '#8F7E61'
+    label: vertebra 5
+    shape: Ellipsoid
+  - min: -0.007750, -0.153833, 0.091703
+    max: 0.028763, -0.113757, 0.131779
+    color: '#8F7E61'
+    label: vertebra 6
+    shape: Ellipsoid
+  - min: -0.144586, 0.039997, 0.116639
+    max: -0.071656, 0.061371, 0.138013
+    color: '#8F7E61'
+    label: rib pair 1 side -1 segment 1
+    shape: CylinderX
+    yaw: -136.9993702468671
+    pitch: 17.775336944585025
+  - min: -0.165540, 0.033636, 0.116639
+    max: -0.120278, 0.055010, 0.138013
+    color: '#8F7E61'
+    label: rib pair 1 side -1 segment 2
+    shape: CylinderX
+    yaw: 118.47027915885761
+    pitch: -29.46562881545199
+  - min: -0.155719, 0.044139, 0.096601
+    max: -0.115488, 0.065513, 0.117975
+    color: '#8F7E61'
+    label: rib pair 1 side -1 segment 3
+    shape: CylinderX
+    yaw: -22.20882456002309
+    pitch: -26.278621490179567
+  - min: -0.085075, 0.064647, 0.116639
+    max: -0.029585, 0.086021, 0.138013
+    color: '#8F7E61'
+    label: rib pair 1 side 1 segment 1
+    shape: CylinderX
+    yaw: 2.1824949613067806
+    pitch: 23.65525416503315
+  - min: -0.038848, 0.058286, 0.116639
+    max: -0.006237, 0.079660, 0.138013
+    color: '#6F5C44'
+    label: rib pair 1 side 1 segment 2
+    shape: CylinderX
+    yaw: -37.96446211812666
+    pitch: -43.05743822919065
+  - min: -0.049963, 0.044139, 0.096601
+    max: -0.009733, 0.065513, 0.117975
+    color: '#8F7E61'
+    label: rib pair 1 side 1 segment 3
+    shape: CylinderX
+    yaw: -157.7911754399769
+    pitch: -26.278621490179567
+  - min: -0.133497, -0.003736, 0.116639
+    max: -0.054692, 0.017637, 0.138013
+    color: '#9F9179'
+    label: rib pair 2 side -1 segment 1
+    shape: CylinderX
+    yaw: -141.2038494630638
+    pitch: 16.41088545054858
+  - min: -0.157743, -0.010098, 0.116639
+    max: -0.111154, 0.011276, 0.138013
+    color: '#8F7E61'
+    label: rib pair 2 side -1 segment 2
+    shape: CylinderX
+    yaw: 122.17193396080098
+    pitch: -28.54717134910581
+  - min: -0.148357, 0.000406, 0.096601
+    max: -0.103592, 0.021779, 0.117975
+    color: '#8F7E61'
+    label: rib pair 2 side -1 segment 3
+    shape: CylinderX
+    yaw: -19.389964259353608
+    pitch: -23.44600788026041
+  - min: -0.066684, 0.020913, 0.116639
+    max: -0.003671, 0.042287, 0.138013
+    color: '#8F7E61'
+    label: rib pair 2 side 1 segment 1
+    shape: CylinderX
+    yaw: 1.8816948764116963
+    pitch: 20.691022806049318
+  - min: -0.012038, 0.014552, 0.116639
+    max: 0.022392, 0.035926, 0.138013
+    color: '#4B3C30'
+    label: rib pair 2 side 1 segment 2
+    shape: CylinderX
+    yaw: -33.92719990775323
+    pitch: -40.29002353200105
+  - min: -0.025680, 0.000406, 0.096601
+    max: 0.019085, 0.021779, 0.117975
+    color: '#8F7E61'
+    label: rib pair 2 side 1 segment 3
+    shape: CylinderX
+    yaw: -160.61003574064637
+    pitch: -23.446007880260435
+  - min: -0.111881, -0.047470, 0.116639
+    max: -0.036065, -0.026096, 0.138013
+    color: '#8F7E61'
+    label: rib pair 3 side -1 segment 1
+    shape: CylinderX
+    yaw: -139.19073991435357
+    pitch: 17.077498402866624
+  - min: -0.134497, -0.053831, 0.116639
+    max: -0.088591, -0.032457, 0.138013
+    color: '#8F7E61'
+    label: rib pair 3 side -1 segment 2
+    shape: CylinderX
+    yaw: 120.35609734473191
+    pitch: -29.01243630538736
+  - min: -0.124891, -0.043328, 0.096601
+    max: -0.082417, -0.021954, 0.117975
+    color: '#8F7E61'
+    label: rib pair 3 side -1 segment 3
+    shape: CylinderX
+    yaw: -20.70808309133416
+    pitch: -24.793303086182046
+  - min: -0.048735, -0.022820, 0.116639
+    max: 0.010497, -0.001446, 0.138013
+    color: '#8F7E61'
+    label: rib pair 3 side 1 segment 1
+    shape: CylinderX
+    yaw: 2.020968080845468
+    pitch: 22.07909190114931
+  - min: 0.001703, -0.029181, 0.116639
+    max: 0.035202, -0.007808, 0.138013
+    color: '#8F7E61'
+    label: rib pair 3 side 1 segment 2
+    shape: CylinderX
+    yaw: -35.84766683630873
+    pitch: -41.65379545270219
+  - min: -0.010675, -0.043328, 0.096601
+    max: 0.031799, -0.021954, 0.117975
+    color: '#6F5C44'
+    label: rib pair 3 side 1 segment 3
+    shape: CylinderX
+    yaw: -159.29191690866585
+    pitch: -24.793303086182046
+  - min: -0.083550, -0.091204, 0.116639
+    max: -0.016027, -0.069830, 0.138013
+    color: '#8F7E61'
+    label: rib pair 4 side -1 segment 1
+    shape: CylinderX
+    yaw: -132.01157339567249
+    pitch: 19.252564906885368
+  - min: -0.101060, -0.097565, 0.116639
+    max: -0.056961, -0.076191, 0.138013
+    color: '#6F5C44'
+    label: rib pair 4 side -1 segment 2
+    shape: CylinderX
+    yaw: 114.49015522266997
+    pitch: -30.3227031526523
+  - min: -0.090833, -0.087062, 0.096601
+    max: -0.054914, -0.065688, 0.117975
+    color: '#6F5C44'
+    label: rib pair 4 side -1 segment 3
+    shape: CylinderX
+    yaw: -25.921524138996826
+    pitch: -29.728249497730758
+  - min: -0.031206, -0.066554, 0.116639
+    max: 0.016957, -0.045180, 0.138013
+    color: '#8F7E61'
+    label: rib pair 4 side 1 segment 1
+    shape: CylinderX
+    yaw: 2.5976843135609924
+    pitch: 27.533766532248492
+  - min: 0.006609, -0.072915, 0.116639
+    max: 0.037586, -0.051541, 0.138013
+    color: '#6F5C44'
+    label: rib pair 4 side 1 segment 2
+    shape: CylinderX
+    yaw: -42.88942304844869
+    pitch: -45.95066499376219
+  - min: -0.001998, -0.087062, 0.096601
+    max: 0.033920, -0.065688, 0.117975
+    color: '#8F7E61'
+    label: rib pair 4 side 1 segment 3
+    shape: CylinderX
+    yaw: -154.07847586100317
+    pitch: -29.728249497730758
+  - min: -0.073704, -0.012623, 0.130888
+    max: -0.022171, 0.011422, 0.154934
+    color: '#9F9179'
+    label: sternal fragments segment 1
+    shape: CylinderX
+    yaw: -67.78816931355371
+  - min: -0.055215, -0.059482, 0.124209
+    max: -0.004480, -0.035436, 0.148254
+    color: '#8F7E61'
+    label: sternal fragments segment 2
+    shape: CylinderX
+    yaw: -70.05206678259286
+    pitch: -15.26608166774941
+  - min: -0.280695, 0.005205, 0.066321
+    max: -0.188108, 0.035485, 0.096601
+    color: '#6F5C44'
+    label: left upper arm segment 1
+    shape: CylinderX
+    yaw: -105.80407107980564
+    pitch: -6.628162007181755
+  - min: -0.281985, -0.079936, 0.054299
+    max: -0.197951, -0.049656, 0.084578
+    color: '#6F5C44'
+    label: left upper arm segment 2
+    shape: CylinderX
+    yaw: -80.34453645462567
+    pitch: -9.146927321037081
+  - min: -0.243831, 0.042638, 0.064852
+    max: -0.199925, 0.086544, 0.108757
+    color: '#6F5C44'
+    label: left upper arm joint 1
+    shape: Ellipsoid
+  - min: -0.254963, -0.127644, 0.040806
+    max: -0.211058, -0.083738, 0.084712
+    color: '#8F7E61'
+    label: left upper arm joint 2
+    shape: Ellipsoid
+  - min: -0.256218, -0.148481, 0.044057
+    max: -0.193105, -0.122654, 0.069884
+    color: '#8F7E61'
+    label: left forearm segment 1
+    shape: CylinderX
+    yaw: -74.3866271238662
+    pitch: -10.570216181985641
+  - min: -0.239106, -0.228567, 0.032925
+    max: -0.104460, -0.202740, 0.058751
+    color: '#8F7E61'
+    label: left forearm segment 2
+    shape: CylinderX
+    yaw: -48.4315100269993
+    pitch: -4.5523881804850745
+  - min: -0.251735, -0.124415, 0.044035
+    max: -0.214286, -0.086967, 0.081483
+    color: '#8F7E61'
+    label: left forearm joint 1
+    shape: Ellipsoid
+  - min: -0.145979, -0.284587, 0.021770
+    max: -0.108530, -0.247138, 0.059219
+    color: '#8F7E61'
+    label: left forearm joint 2
+    shape: Ellipsoid
+  - min: -0.225076, -0.217745, 0.030253
+    max: -0.090660, -0.199933, 0.048065
+    color: '#8F7E61'
+    label: left ulna
+    shape: CylinderX
+    yaw: -48.49531484429563
+    pitch: -1.1389152015490263
+  - min: -0.133855, -0.298313, 0.026691
+    max: -0.070559, -0.277829, 0.047174
+    color: '#8F7E61'
+    label: left hand segment 1
+    shape: CylinderX
+    yaw: -44.92776326246479
+    pitch: -6.462894396078395
+  - min: -0.089089, -0.341479, 0.022238
+    max: -0.031833, -0.320996, 0.042721
+    color: '#4B3C30'
+    label: left hand segment 2
+    shape: CylinderX
+    yaw: -47.0915801569578
+    pitch: -1.7826748352052857
+  - min: 0.039779, 0.111046, 0.058751
+    max: 0.106471, 0.138654, 0.086359
+    color: '#8F7E61'
+    label: right upper arm segment 1
+    shape: CylinderX
+    yaw: -28.22748471065039
+    pitch: -18.692397454700167
+  - min: 0.097071, 0.084291, 0.044057
+    max: 0.141020, 0.111899, 0.071665
+    color: '#6F5C44'
+    label: right upper arm segment 2
+    shape: CylinderX
+    yaw: -33.14881194044982
+    pitch: -10.50801708833862
+  - min: 0.025279, 0.119774, 0.063227
+    max: 0.065310, 0.159805, 0.103258
+    color: '#8F7E61'
+    label: right upper arm joint 1
+    shape: Ellipsoid
+  - min: 0.117119, 0.066265, 0.033838
+    max: 0.157151, 0.106296, 0.073869
+    color: '#6F5C44'
+    label: right upper arm joint 2
+    shape: Ellipsoid
+  - min: 0.134498, 0.067157, 0.035151
+    max: 0.173169, 0.091203, 0.059197
+    color: '#4B3C30'
+    label: right forearm segment 1
+    shape: CylinderX
+    yaw: -23.037706342149715
+    pitch: -20.208611030842064
+  - min: 0.000053, -0.118831, 0.066767
+    max: 0.073837, -0.082318, 0.103280
+    color: '#6F5C44'
+    label: pelvic rim segment 1
+    shape: CylinderX
+    yaw: -10.493862944231584
+    pitch: 4.153017302177966
+  - min: 0.059456, -0.149446, 0.063650
+    max: 0.117408, -0.112932, 0.100163
+    color: '#6F5C44'
+    label: pelvic rim segment 2
+    shape: CylinderX
+    yaw: -57.37624985981657
+    pitch: -11.523824458595232
+  - min: 0.053797, -0.200963, 0.049846
+    max: 0.120283, -0.164450, 0.086359
+    color: '#6F5C44'
+    label: pelvic rim segment 3
+    shape: CylinderX
+    yaw: -121.16984526399705
+    pitch: -13.951918680940631
+  - min: 0.014597, -0.210961, 0.044057
+    max: 0.075992, -0.174447, 0.080571
+    color: '#8F7E61'
+    label: pelvic rim segment 4
+    shape: CylinderX
+    yaw: 144.89408589738613
+    pitch: 4.159178955030003
+  - min: -0.032196, -0.152742, 0.055189
+    max: 0.053209, -0.116228, 0.091703
+    color: '#6F5C44'
+    label: pelvic rim segment 5
+    shape: CylinderX
+    yaw: 103.48757443557909
+    pitch: 12.037622234921624
+  - min: -0.019692, -0.154623, 0.072110
+    max: 0.068536, -0.113657, 0.113077
+    color: '#6F5C44'
+    label: sacrum segment 1
+    shape: CylinderX
+    yaw: -65.56592330472255
+    pitch: -7.540220768779162
+  - min: 0.057907, -0.129606, 0.051627
+    max: 0.166268, -0.096655, 0.084578
+    color: '#6F5C44'
+    label: right thigh segment 1
+    shape: CylinderX
+    yaw: 51.94049826023028
+    pitch: -0.9418264448346325
+  - min: 0.142499, -0.074003, 0.045838
+    max: 0.209696, -0.041052, 0.078789
+    color: '#6F5C44'
+    label: right thigh segment 2
+    shape: CylinderX
+    yaw: 22.927045484852925
+    pitch: -8.382790813896186
+  - min: 0.054801, -0.179674, 0.045103
+    max: 0.102581, -0.131895, 0.092883
+    color: '#6F5C44'
+    label: right thigh joint 1
+    shape: Ellipsoid
+  - min: 0.182822, -0.068468, 0.033526
+    max: 0.230601, -0.020689, 0.081305
+    color: '#6F5C44'
+    label: right thigh joint 2
+    shape: Ellipsoid
+  - min: 0.202178, -0.070548, 0.036932
+    max: 0.252990, -0.043830, 0.063650
+    color: '#6F5C44'
+    label: right shin segment 1
+    shape: CylinderX
+    yaw: -31.138327404394357
+    pitch: -16.28596036079324
+  - min: 0.187341, -0.063949, 0.038046
+    max: 0.226081, -0.025209, 0.076786
+    color: '#6F5C44'
+    label: right shin joint 1
+    shape: Ellipsoid
+  - min: 0.229087, -0.089169, 0.023796
+    max: 0.267827, -0.050429, 0.062536
+    color: '#6F5C44'
+    label: right shin joint 2
+    shape: Ellipsoid
+  - min: -0.002640, -0.234721, 0.041830
+    max: 0.068181, -0.199988, 0.076563
+    color: '#8F7E61'
+    label: left thigh segment 1
+    shape: CylinderX
+    yaw: -101.46455392577094
+    pitch: -8.679142008691178
+  - min: 0.005292, -0.296574, 0.034261
+    max: 0.063033, -0.261842, 0.068993
+    color: '#8F7E61'
+    label: left thigh segment 2
+    shape: CylinderX
+    yaw: -73.13858487390705
+    pitch: -4.422949841758582
+  - min: 0.014547, -0.208229, 0.039359
+    max: 0.064909, -0.157867, 0.089721
+    color: '#8F7E61'
+    label: left thigh joint 1
+    shape: Ellipsoid
+  - min: 0.017330, -0.331936, 0.024219
+    max: 0.067692, -0.281574, 0.074581
+    color: '#8F7E61'
+    label: left thigh joint 2
+    shape: Ellipsoid
+  - min: 0.027581, -0.347377, 0.031589
+    max: 0.093622, -0.320659, 0.058306
+    color: '#8F7E61'
+    label: left shin segment 1
+    shape: CylinderX
+    yaw: -56.43494847916788
+    pitch: -7.750019491797183
+  - min: 0.059323, -0.402812, 0.023574
+    max: 0.120324, -0.376095, 0.050291
+    color: '#9F9179'
+    label: left shin segment 2
+    shape: CylinderX
+    yaw: -68.43849193811863
+    pitch: -6.707174356182085
+  - min: 0.023141, -0.326125, 0.030030
+    max: 0.061881, -0.287385, 0.068770
+    color: '#8F7E61'
+    label: left shin joint 1
+    shape: Ellipsoid
+  - min: 0.081585, -0.436996, 0.014000
+    max: 0.120325, -0.398256, 0.052740
+    color: '#9F9179'
+    label: left shin joint 2
+    shape: Ellipsoid
+  - min: 0.020064, -0.358961, 0.026245
+    max: 0.148451, -0.342931, 0.042276
+    color: '#8F7E61'
+    label: left fibula
+    shape: CylinderX
+    yaw: -64.29695635057992
+    pitch: -1.5899647272603312
+  - min: 0.250126, -0.069731, 0.024910
+    max: 0.271836, -0.057263, 0.037378
+    color: '#6F5C44'
+    label: right toe 1
+    shape: CylinderX
+    yaw: -25.28282741023149
+    pitch: -7.068935073366838
+  - min: 0.084383, -0.433070, 0.025355
+    max: 0.106396, -0.421493, 0.036932
+    color: '#9F9179'
+    label: left toe 1
+    shape: CylinderX
+    yaw: -75.24163981175094
+    pitch: -6.971330091351307
+  - min: 0.249669, -0.077882, 0.024910
+    max: 0.272293, -0.065414, 0.037378
+    color: '#6F5C44'
+    label: right toe 2
+    shape: CylinderX
+    yaw: -29.871853883640153
+    pitch: -6.781892633689632
+  - min: 0.090784, -0.433070, 0.025355
+    max: 0.112797, -0.421493, 0.036932
+    color: '#9F9179'
+    label: left toe 2
+    shape: CylinderX
+    yaw: -75.24163981175094
+    pitch: -6.971330091351307
+  - min: 0.249145, -0.086032, 0.024910
+    max: 0.272816, -0.073564, 0.037378
+    color: '#6F5C44'
+    label: right toe 3
+    shape: CylinderX
+    yaw: -34.07492489154379
+    pitch: -6.480801736633928
+  - min: 0.097185, -0.433070, 0.025355
+    max: 0.119198, -0.421493, 0.036932
+    color: '#9F9179'
+    label: left toe 3
+    shape: CylinderX
+    yaw: -75.24163981175094
+    pitch: -6.971330091351307

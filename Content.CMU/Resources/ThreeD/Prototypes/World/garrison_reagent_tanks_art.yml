@@ -1,0 +1,25 @@
+# Generated source-shaped reagent cart drafts; see SOURCES_REAGENT_TANKS.md.
+- type: cmu3DSurface
+  id: CMU3DReagentTankSurface1420
+  atlasIndex: 1420
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DReagentTankSurface1420.png
+- type: cmu3DSurface
+  id: CMU3DReagentTankSurface1421
+  atlasIndex: 1421
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DReagentTankSurface1421.png
+- type: cmu3DSurface
+  id: CMU3DReagentTankSurface1422
+  atlasIndex: 1422
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DReagentTankSurface1422.png
+- type: cmu3DSurface
+  id: CMU3DReagentTankSurface1423
+  atlasIndex: 1423
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DReagentTankSurface1423.png
+- type: cmu3DSurface
+  id: CMU3DReagentTankSurface1424
+  atlasIndex: 1424
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DReagentTankSurface1424.png
+- type: cmu3DSurface
+  id: CMU3DReagentTankSurface1425
+  atlasIndex: 1425
+  texture: /Textures/CMU14/ThreeD/Surfaces/CMU3DReagentTankSurface1425.png

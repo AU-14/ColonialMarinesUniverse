@@ -1,0 +1,267 @@
+- type: npcFaction
+  id: CMUExpeditionHostile
+  hostile:
+  - GOVFOR
+
+- type: startingGear
+  id: CMUExpeditionScavengerGear
+  equipment:
+    head: RMCHeadMilitiaHood
+    jumpsuit: RMCJumpsuitCLFWebbing
+    outerClothing: RMCCoatMilitiaVest
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
+  inhand:
+  - WeaponRifleMAR40
+  storage:
+    back:
+    - RMCMagazineRifleMAR40
+    - RMCMagazineRifleMAR40
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
+    - RMCShovel
+
+- type: entity
+  parent: CMMobHuman
+  id: CMUExpeditionScavenger
+  components:
+  - type: CMUExpeditionAgent
+  - type: InputMover
+  - type: MobMover
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 1
+      RMCSkillConstruction: 1
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: Loadout
+    prototypes: [CMUExpeditionScavengerGear]
+  - type: NpcFactionMember
+    factions: [CMUExpeditionHostile]
+  - type: FixedIdentity
+    name: cmu-expedition-scavenger-identity
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerAggressive
+  components:
+  - type: CMUExpeditionAgent
+    disposition: Aggressive
+    aggression: 0.85
+    courage: 0.8
+    preferredFireRange: 6
+    retreatDamage: 65
+    burstPause: 0.4
+    healOpportunityDelay: 18
+  - type: FixedIdentity
+    name: cmu-expedition-raider-identity
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerCautious
+  components:
+  - type: CMUExpeditionAgent
+    disposition: Cautious
+    aggression: 0.2
+    courage: 0.3
+    preferredFireRange: 10
+    retreatDamage: 45
+    burstSize: 2
+    burstPause: 0.8
+    healOpportunityDelay: 10
+  - type: FixedIdentity
+    name: cmu-expedition-sentry-identity
+
+- type: startingGear
+  id: CMUExpeditionScavengerPoorGear
+  equipment:
+    head: RMCHeadMilitiaBucket
+    jumpsuit: RMCJumpsuitCLFWebbing
+    outerClothing: RMCCoatMilitia
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
+  inhand:
+  - CMWeaponPistolM1984
+  storage:
+    back:
+    - CMMagazinePistolM1984
+    - RMCShovel
+
+- type: startingGear
+  id: CMUExpeditionScavengerRichGear
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
+  inhand:
+  - CMUExpeditionAssaultRifle
+  storage:
+    back:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
+    - RMCShovel
+
+- type: startingGear
+  id: CMUExpeditionScavengerScoutGear
+  equipment:
+    head: RMCHeadMilitiaHood
+    jumpsuit: RMCJumpsuitCLFWebbing
+    outerClothing: RMCCoatMilitiaHarness
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
+  inhand:
+  - RMCWeaponRifleMAR30
+  storage:
+    back:
+    - RMCMagazineRifleMAR40
+    - RMCMagazineRifleMAR40
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
+    - RMCShovel
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerPoor
+  components:
+  - type: CMUExpeditionAgent
+    disposition: Cautious
+    aggression: 0.25
+    courage: 0.3
+    fireRange: 9
+    preferredFireRange: 6
+    retreatDamage: 40
+    burstSize: 2
+    burstPause: 0.7
+  - type: Loadout
+    prototypes: [CMUExpeditionScavengerPoorGear]
+  - type: FixedIdentity
+    name: cmu-expedition-poor-identity
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerRich
+  components:
+  - type: CMUExpeditionAgent
+    aggression: 0.65
+    courage: 0.8
+    retreatDamage: 65
+    burstSize: 4
+    burstPause: 0.45
+    healOpportunityDelay: 18
+  - type: Loadout
+    prototypes: [CMUExpeditionScavengerRichGear]
+  - type: FixedIdentity
+    name: cmu-expedition-rich-identity
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerScout
+  components:
+  - type: CMUExpeditionAgent
+    combatRole: Flanker
+    disposition: Cautious
+    aggression: 0.4
+    courage: 0.55
+    detectionRange: 22
+    preferredFireRange: 10
+    retreatDamage: 45
+    repositionCooldown: 3
+  - type: Loadout
+    prototypes: [CMUExpeditionScavengerScoutGear]
+  - type: FixedIdentity
+    name: cmu-expedition-scout-identity
+
+- type: entity
+  parent: CMGrenadeHighExplosive
+  id: CMUExpeditionBlastGrenade
+  components:
+  - type: CMUExpeditionGrenade
+
+- type: entity
+  parent: CMGrenadeSmoke
+  id: CMUExpeditionSmokeGrenade
+  components:
+  - type: CMUExpeditionGrenade
+    smoke: true
+    safeRadius: 1
+
+- type: radioChannel
+  id: CMUExpedition
+  name: cmu-expedition-radio-channel
+  keycode: 'j'
+  color: '#c4a77d'
+  longRange: false
+  tower: false
+  planet: true
+
+- type: entity
+  parent: CMEncryptionKeyColony
+  id: CMUExpeditionEncryptionKey
+  components:
+  - type: EncryptionKey
+    channels: [CMUExpedition]
+    defaultChannel: CMUExpedition
+
+- type: entity
+  parent: RMCHeadsetDistressCLF
+  id: CMUExpeditionHeadset
+  components:
+  - type: CMUExpeditionRadio
+  - type: TelecomExempt
+  - type: ContainerFill
+    containers:
+      key_slots: [CMUExpeditionEncryptionKey]
+
+- type: stack
+  id: CMUExpeditionFieldDressing
+  name: cmu-expedition-field-dressing-stack
+  spawn: CMUExpeditionFieldDressing
+  maxCount: 3
+
+- type: entity
+  parent: CMBaseHealingItem
+  id: CMUExpeditionFieldDressing
+  components:
+  - type: Sprite
+    state: gauze
+  - type: Item
+    heldPrefix: gauze
+  - type: Healing
+    damage:
+      types:
+        Blunt: -12
+        Slash: -12
+        Piercing: -12
+        Heat: -12
+    bloodlossModifier: -2
+    delay: 3
+    selfHealPenaltyMultiplier: 1
+    healingBeginSound:
+      path: /Audio/_RMC14/Medical/bandage.ogg
+    healingEndSound:
+      path: /Audio/Items/Medical/brutepack_end.ogg
+  - type: Stack
+    stackType: CMUExpeditionFieldDressing
+    count: 3

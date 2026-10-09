@@ -21,7 +21,9 @@ using Content.Shared.GameTicking.Components;
 using Robust.Shared.EntitySerialization.Systems;
 using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
+using Content.Shared._RMC14.Vendors;
 using Content.Shared._RMC14.Ladder;
+using Content.Shared._RMC14.Vendors;
 using Content.Shared.CMU14;
 
 namespace Content.Server.CMU14.Round;
@@ -146,6 +148,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                             // SpawnEntity has no rotation parameter, so spawn attached to keep the marker's rotation
                             var spawned = _entityManager.SpawnAttachedTo(vendorProto.ID, transform.Coordinates, rotation: transform.LocalRotation);
                             SetRequisitionsVendorAccess(spawned, markerComp.Class, shipFaction.Faction);
+                            SetVendorRadioFaction(spawned, shipFaction.Faction);
                             if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawned, out var spawnedPhone))
                             {
                                 if (!string.IsNullOrEmpty(shipFaction.Faction))
@@ -198,6 +201,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 continue;
             var spawnedEnt = _entityManager.SpawnAttachedTo(vendorProto.ID, transform.Coordinates, rotation: transform.LocalRotation);
             SetRequisitionsVendorAccess(spawnedEnt, markerComp.Class, markerComp.Govfor ? "govfor" : "opfor");
+            SetVendorRadioFaction(spawnedEnt, faction);
             if (_entityManager.TryGetComponent<RotaryPhoneComponent>(spawnedEnt, out var spawnedPhone2))
             {
                 spawnedPhone2.Faction = markerComp.Govfor ? "govfor" : "opfor";
@@ -657,8 +661,46 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         return true;
     }
 
+    private void SetVendorRadioFaction(EntityUid vendor, string faction)
+    {
+        var radio = faction switch
+        {
+            "govfor" => "ANPRC117GRadioFilled",
+            "opfor" => "ANPRC117GRadioOPFORFilled",
+            _ => null,
+        };
+        if (radio == null || !TryComp<CMAutomatedVendorComponent>(vendor, out var stock))
+            return;
+
+        // Platoon vendors can serve either side. Vend the matching radio and its installed fill card.
+        var changed = false;
+        foreach (var section in stock.Sections)
+        {
+            foreach (var entry in section.Entries)
+            {
+                if (entry.Id.Id is not ("ANPRC117GRadioFilled" or "ANPRC117GRadioOPFORFilled") ||
+                    entry.Id.Id == radio)
+                    continue;
+
+                entry.Id = radio;
+                changed = true;
+            }
+        }
+
+        if (changed)
+            Dirty(vendor, stock);
+    }
+
     private void SetRequisitionsVendorAccess(EntityUid vendor, PlatoonMarkerClass markerClass, string faction)
     {
+        // spec kit limit is counted per side off this, multi-deck ships can't rely on the grid's faction
+        if (markerClass == PlatoonMarkerClass.SWeapons &&
+            TryComp<CMAutomatedVendorComponent>(vendor, out var automatedVendor))
+        {
+            automatedVendor.Faction = faction;
+            Dirty(vendor, automatedVendor);
+        }
+
         if (markerClass is not (PlatoonMarkerClass.ReqVend or PlatoonMarkerClass.SWeapons) ||
             !TryComp<AccessReaderComponent>(vendor, out var accessReader))
         {

@@ -30,7 +30,7 @@ public sealed class GhostThirdPartyCallSystem : EntitySystem
     [Dependency] private SharedGameTicker _ticker = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
 
-    private ThirdPartyPrototype? _pendingParty;
+    private readonly HashSet<ThirdPartyPrototype> _calledParties = new();
 
     public override void Initialize()
     {
@@ -40,7 +40,7 @@ public sealed class GhostThirdPartyCallSystem : EntitySystem
     }
 
     private void OnRoundRestart(RoundRestartCleanupEvent ev)
-        => _pendingParty = null;
+        => _calledParties.Clear();
 
     /// <summary>Snapshot for the ghost role menu, or null when the feature is disabled by cvar.</summary>
     public GhostThirdPartyCallState? GetState()
@@ -52,7 +52,7 @@ public sealed class GhostThirdPartyCallSystem : EntitySystem
         var (dead, living) = CountPlayers();
         var minutesLeft = MinutesLeft();
         var pool = BuildPool();
-        var pending = IsPending();
+        var pending = PendingParty() != null;
         return new(pool.Count > 0 && !pending
             && GhostThirdPartyCall.MeetsDeadThreshold(dead, living, ratio) && minutesLeft <= 0,
             dead, living, GhostThirdPartyCall.RequiredDead(living, ratio), minutesLeft, pending);
@@ -67,7 +67,7 @@ public sealed class GhostThirdPartyCallSystem : EntitySystem
         if (caller.AttachedEntity is not { } entity || !HasComp<GhostComponent>(entity))
             return;
 
-        if (IsPending() && _pendingParty is { } pending)
+        if (PendingParty() is { } pending)
         {
             Deny(caller, "cmu-ghost-call-deny-pending",
                 ("party", pending.DisplayName ?? pending.ID));
@@ -99,7 +99,7 @@ public sealed class GhostThirdPartyCallSystem : EntitySystem
         }
 
         // Set before spawning: the spawn pushes the menu state and the pending flag must already read true.
-        _pendingParty = pick;
+        _calledParties.Add(pick);
         _thirdParty.SpawnThirdParty(pick, spawn, false);
 
         _adminLog.Add(LogType.EventStarted, LogImpact.Low,
@@ -120,6 +120,8 @@ public sealed class GhostThirdPartyCallSystem : EntitySystem
             // The round's own schedule still brings selected and roundstart parties on its own timer.
             if (party.Abstract || !party.GhostsCallable || party.RoundStart
                 || _auRound.SelectedThirdParties.Contains(party) || queued.Contains(party)
+                || _calledParties.Contains(party)
+                || _auRound.SpawnedThirdParties.Contains(party)
                 || !_auRound.IsThirdPartyAllowedForCurrentContext(party))
                 continue;
 
@@ -129,8 +131,9 @@ public sealed class GhostThirdPartyCallSystem : EntitySystem
         return pool;
     }
 
-    private bool IsPending()
-        => _pendingParty != null && _thirdParty.GetQueuedThirdParties().Contains(_pendingParty);
+    /// <summary>A called party that is still queued; deployment removes it from the queue and reopens the gate.</summary>
+    private ThirdPartyPrototype? PendingParty()
+        => _thirdParty.GetQueuedThirdParties().FirstOrDefault(_calledParties.Contains);
 
     private int MinutesLeft()
     {

@@ -39,6 +39,19 @@ public abstract partial class SharedMoverController
     {
         if (!args.CanMove)
         {
+            // CMU14 Begin: do not resume an old tile slide after being carried, unbuckled, or unstunned.
+            if (TileMovementQuery.TryComp(ent, out var tileMovement))
+            {
+                tileMovement.SlideActive = false;
+                tileMovement.FailureSlideActive = false;
+                tileMovement.WasWeightlessLastTick = false;
+                tileMovement.MovementKeyInitialDownTime = null;
+                tileMovement.CurrentSlideMoveButtons = MoveButtons.None;
+                tileMovement.LastTickLocalCoordinates = null;
+                Dirty(ent, tileMovement);
+            }
+            // CMU14 End
+
             // Remove from active mover query when entity cannot move
             RemCompDeferred<ActiveInputMoverComponent>(ent);
             return;

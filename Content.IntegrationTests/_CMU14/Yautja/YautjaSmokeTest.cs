@@ -5783,7 +5783,8 @@ public sealed class YautjaSmokeTest
                     foreach (var migratedActionId in migratedActionIds)
                         Assert.That(actionIds, Does.Not.Contain(migratedActionId), $"{migratedActionId} belongs to the bracer menu.");
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaOpenMarkPanel"));
-                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaSelfDestruct"));
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaSelfDestruct"),
+                        "self-destruct is a bindable hotkey now, the bracer menu button still works too");
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTranslator"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleBracerIdChip"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaLinkThrallBracer"));

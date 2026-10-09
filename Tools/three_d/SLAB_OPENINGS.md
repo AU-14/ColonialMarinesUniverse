@@ -1,0 +1,19 @@
+# Ladder floor and ceiling openings
+
+`floorOpening` and `ceilingOpening` describe inferred rectangular presentation apertures in an authored model's local XY axes. Each optional object has scalar-vector `min` and `max` fields inside the centered unit tile. These fields do not alter map tiles, collision, roof components, ladder controllers or destinations.
+
+The native adapter accepts only exact, anchored, opaque, single-layer, single-frame source appearances on a unit grid. The source must retain its proven offset, unit scale and rotating appearance. Cardinal facing is measured relative to the grid, so a grid may itself have any world rotation. Noncardinal relative rotations, including temporary deployment shake, retain the original sprite. Unknown layers, source states and shader effects also retain the source sprite.
+
+Floor and ceiling solids are initially captured whole. Only models actually admitted to the snapshot may cut those registered slabs. The adapter stages all fragment replacements before publishing them. If subtraction or the complete snapshot exceeds its budget, the original slabs remain whole and the affected ladder models return to their source sprites. A model omitted for distance/entity/geometry budgets cannot leave an orphan aperture.
+
+Each tile supports at most sixteen openings and 128 disjoint rectangular fragments. Subtraction preserves slab height, material and grid rotation. Overlapping openings subtract their union. Authored model parts and picking UIDs are unchanged.
+
+The saved-map scene pipeline applies the same bounded geometry and static appearance checks. Tiles gain `floorFragments`/`ceilingFragments` in their original `[0,1]` coordinates plus the source UIDs. The browser draws only the remaining floor fragments and interpolates the original tile UVs, including all eight supported source rotation/mirror arrangements. Region GLBs export separate floor solids around the hole. The offline terrain renderer and ordinary region exporter do not yet construct full ceilings; ceiling fragments are metadata for native parity and further review.
+
+The three exact thin cladding types `CMCatwalk`, `CMCatwalkPrison` and `RMCCatwalkHybrisaElevator` can share a floor aperture when their anchored pivot matches the source tile center. Only plain, untilted boxes entirely within Z −.1 to .04 are supported. The adapter subtracts the opening from their geometry, including recessed underplates, while retaining outside material, source IDs and height. Textured, noncardinal or excessive geometry rejects the complete aperture transaction and restores the original sprites/slabs. The replacement cap is 128 parts per cladding entity.
+
+Platforms, pallets, cardboard and wire rails remain present. The cardboard/pallet stack at Redux surface UID12468 requires a separate reviewed composition; a ladder painted over a decorative sprite does not prove a physical hole through its inferred cartons. A local aperture does not reveal the remote map, prove a return endpoint or introduce a climb animation. Physical ladder height, recess depth and opening dimensions remain explicitly inferred draft choices.
+
+Focused verification lives in `CMU3DSlabOpeningTest.cs`, `CMU3DSlabAdmissionTest.cs`, `tests/test_slab_openings.py` and `viewer/viewer.test.mjs`. These check union coverage, rotated grids, fallback/budget behavior, source-state rejection, real export voids, source metadata and unstretched floor artwork. They are offline checks. The user-requested look-around was subsequently relaunched, but interactive acceptance of the new ladder assets remains separate.
+
+Five ladder assemblies are installed at 37 Redux and three classic placements. The saved scenes apply all 40 bounded apertures and clip the three eligible neighboring grates. The Down2 pallet/carton assembly remains deferred; it and unsupported hatch appearances retain their source fallback.

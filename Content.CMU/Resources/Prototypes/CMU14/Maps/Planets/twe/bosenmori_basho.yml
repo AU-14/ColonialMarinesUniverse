@@ -1,0 +1,70 @@
+- type: entity
+  id: AUPlanetBosenmoriBasho
+  name: Bosenmori Basho
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Bosenmori Basho Redux"
+    mapId: BosenmoriBasho
+    inRotation: true
+    lorePrimer: AU14PrimerPlanetBosenmoriBasho
+    allegiance: TWE
+    camouflage: Desert
+    announcement: "The colony of Bosenmori Basho has transmitted an unknown distress call. According to an orbiting satellite, the colony's atmospheric filtration system has failed. Bosenmori Basho has a nitrogen rich atmosphere, all personnel deploying to the surface will need to bring the appropriate equipment."
+    platoonsGovfor:
+    - LACN
+    - USCM
+    - RMC
+    platoonsOpfor:
+    - UPP
+    - BEAR
+    - VAIPO
+    defaultgovfor: USCM
+    defaultopfor: VAIPO
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    threats:
+    - XenoThreat
+    thirdpartyinterval: 1800
+    thirdparties:
+    - IASFSurvBosenmori
+    - IASFSurvBosenmoriPilot
+    - CMUBosenmoriColonists
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+
+- type: lorePrimer
+  id: AU14PrimerPlanetBosenmoriBasho
+  planetText: "Date 2176 - Bosenmori Basho, a TWE controlled 'shake and bake' colony. Its atmosphere is almost pure nitrogen and unbreathable."
+
+- type: entity
+  parent: MarkerBase
+  id: CMUBosenmoriMultiTileVehicleMarker
+  name: multitile vehicle marker
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    visible: false
+
+- type: gameMap
+  id: BosenmoriBasho
+  mapName: "Bosenmori Basho"
+  mapPath: "/Maps/CMU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ0.yml"
+  mapsBelow:
+  - /Maps/CMU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ-1.yml
+  mapsAbove:
+  - /Maps/CMU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ1.yml
+  - /Maps/CMU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ2.yml
+  - /Maps/CMU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ3.yml
+  - /Maps/CMU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ4.yml
+  - /Maps/CMU14/BosenmoriBashoMultiZ/BosenmoriBashoMultiZ5.yml
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    BosenmoriBasho:
+      stationProto: StandardUNMCWarship
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: "Bosenmori Basho"
