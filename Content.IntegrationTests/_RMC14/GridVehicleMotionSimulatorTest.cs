@@ -50,6 +50,9 @@ public sealed class GridVehicleMotionSimulatorTest
     [TestCase(0f, -1f, 0f, 2f, true)]
     [TestCase(0f, 1f, 0f, 2f, false)]
     [TestCase(0f, 0f, 2f, 0f, false)]
+    // CMU14: escape from rest must use direction, even below a millitile per tick.
+    [TestCase(0f, -0.0005f, 0f, 2f, true)]
+    [TestCase(0f, 0.0005f, 0f, 2f, false)]
     public void EmbeddedVehicleCanOnlyMoveAwayFromObstacle(
         float moveX,
         float moveY,
