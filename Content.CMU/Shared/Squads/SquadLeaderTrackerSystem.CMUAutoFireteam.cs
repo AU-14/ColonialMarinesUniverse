@@ -1,7 +1,11 @@
-using System.Text.RegularExpressions;
 using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared.CMU14.Squads;
+using Content.Shared.Bed.Sleep;
 using Content.Shared.Database;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.SSDIndicator;
 using Content.Shared.Roles;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Tracker.SquadLeader;
@@ -10,6 +14,8 @@ namespace Content.Shared._RMC14.Tracker.SquadLeader;
 // leadership components are only writable by SquadLeaderTrackerSystem.
 public sealed partial class SquadLeaderTrackerSystem
 {
+    [Dependency] private MobStateSystem _cmuMobState = default!;
+
     /// <summary>
     /// A new fireteam is opened for every this many people in the squad, up to the fireteam limit.
     /// </summary>
@@ -24,9 +30,6 @@ public sealed partial class SquadLeaderTrackerSystem
         "AU14JobGOVFORRadioTelephoneOperatorUPP",
         "AU14JobGOVFORRadioTelephoneOperatorWYPMC",
     };
-
-    // Paygrades look like "E4", "O-6", "W2" or "E9E" across every faction's rank set.
-    private static readonly Regex CMUPaygradeRegex = new(@"^([EWO])-?(\d+)(\w*)$", RegexOptions.Compiled);
 
     /// <summary>
     /// Puts a squad member who is not in a fireteam into the emptiest open fireteam, opening a new
@@ -105,7 +108,9 @@ public sealed partial class SquadLeaderTrackerSystem
         Dirty(member, fireteamMember);
 
         var currentLeader = leaders[chosen];
-        if (isFireteamLeader && (currentLeader == null || !CMUIsFireteamLeaderJob(currentLeader.Value)))
+        if (isFireteamLeader &&
+            CMUCanAutoLead(member) &&
+            (currentLeader == null || !CMUIsFireteamLeaderJob(currentLeader.Value)))
         {
             if (currentLeader != null)
             {
@@ -115,9 +120,9 @@ public sealed partial class SquadLeaderTrackerSystem
 
             EnsureComp<FireteamLeaderComponent>(member);
         }
-        else if (currentLeader == null)
+        else if (currentLeader == null && CMUPickFireteamLeader(squad, chosen, member) is { } pickedLeader)
         {
-            EnsureComp<FireteamLeaderComponent>(CMUPickFireteamLeader(squad, chosen, member));
+            EnsureComp<FireteamLeaderComponent>(pickedLeader);
         }
 
         var updatedEv = new FireteamMemberUpdatedEvent(member);
@@ -175,15 +180,23 @@ public sealed partial class SquadLeaderTrackerSystem
         }
     }
 
-    private EntityUid CMUPickFireteamLeader(SquadTeamComponent squad, int fireteam, EntityUid newMember)
+    private EntityUid? CMUPickFireteamLeader(SquadTeamComponent squad, int fireteam, EntityUid newMember)
     {
-        var best = newMember;
-        var bestIsLeaderJob = CMUIsFireteamLeaderJob(newMember);
-        var bestScore = CMUPaygradeScore(newMember);
+        EntityUid? best = null;
+        var bestIsLeaderJob = false;
+        var bestScore = int.MinValue;
+        if (CMUCanAutoLead(newMember))
+        {
+            best = newMember;
+            bestIsLeaderJob = CMUIsFireteamLeaderJob(newMember);
+            bestScore = CMUPaygradeScore(newMember);
+        }
+
         foreach (var other in squad.Members)
         {
             if (other == newMember ||
                 HasComp<SquadLeaderComponent>(other) ||
+                !CMUCanAutoLead(other) ||
                 !_fireteamMemberQuery.TryComp(other, out var otherFireteam) ||
                 otherFireteam.Fireteam != fireteam)
             {
@@ -192,7 +205,8 @@ public sealed partial class SquadLeaderTrackerSystem
 
             var isLeaderJob = CMUIsFireteamLeaderJob(other);
             var score = CMUPaygradeScore(other);
-            if ((isLeaderJob && !bestIsLeaderJob) ||
+            if (best == null ||
+                (isLeaderJob && !bestIsLeaderJob) ||
                 (isLeaderJob == bestIsLeaderJob && score > bestScore))
             {
                 best = other;
@@ -204,31 +218,99 @@ public sealed partial class SquadLeaderTrackerSystem
         return best;
     }
 
+    /// <summary>
+    /// Whether someone can be made a squad or fireteam leader automatically: they must be conscious,
+    /// awake and controlled by a player who is not SSD or AFK.
+    /// </summary>
+    public bool CMUCanAutoLead(EntityUid uid)
+    {
+        if (TerminatingOrDeleted(uid) ||
+            !_cmuMobState.IsAlive(uid) ||
+            HasComp<SleepingComponent>(uid) ||
+            !HasComp<ActorComponent>(uid) ||
+            (TryComp(uid, out SSDIndicatorComponent? ssd) && ssd.IsSSD))
+        {
+            return false;
+        }
+
+        var ev = new CMUCanAutoLeadEvent(uid);
+        RaiseLocalEvent(ref ev);
+        return !ev.Cancelled;
+    }
+
     private bool CMUIsFireteamLeaderJob(EntityUid uid)
     {
         return _originalRoleQuery.CompOrNull(uid)?.Job is { } job && CMUFireteamLeaderJobs.Contains(job);
     }
 
-    /// <summary>
-    /// Orders ranks enlisted, then warrant, then officer, then by grade. Unranked people and
-    /// unreadable paygrades sort lowest.
-    /// </summary>
     private int CMUPaygradeScore(EntityUid uid)
     {
-        if (_rank.GetRank(uid)?.Paygrade is not { } paygrade)
-            return -1;
+        return CMURankScore.FromPaygrade(_rank.GetRank(uid)?.Paygrade);
+    }
 
-        var match = CMUPaygradeRegex.Match(paygrade);
-        if (!match.Success)
-            return -1;
-
-        var tier = match.Groups[1].Value switch
+    /// <summary>
+    /// The leader and members of each fireteam in a squad, indexed by fireteam.
+    /// </summary>
+    public (EntityUid? Leader, List<EntityUid> Members)[] CMUGetFireteams(SquadTeamComponent squad)
+    {
+        var fireteams = new (EntityUid? Leader, List<EntityUid> Members)[squad.Fireteams.Fireteams.Length];
+        for (var i = 0; i < fireteams.Length; i++)
         {
-            "W" => 1,
-            "O" => 2,
-            _ => 0,
-        };
+            fireteams[i] = (null, new List<EntityUid>());
+        }
 
-        return tier * 1000 + int.Parse(match.Groups[2].Value) * 10 + (match.Groups[3].Length > 0 ? 1 : 0);
+        foreach (var member in squad.Members)
+        {
+            if (!_fireteamMemberQuery.TryComp(member, out var fireteam) ||
+                fireteam.Fireteam < 0 ||
+                fireteam.Fireteam >= fireteams.Length)
+            {
+                continue;
+            }
+
+            fireteams[fireteam.Fireteam].Members.Add(member);
+            if (_fireteamLeaderQuery.HasComp(member))
+                fireteams[fireteam.Fireteam].Leader = member;
+        }
+
+        return fireteams;
+    }
+
+    /// <summary>
+    /// The fireteam this squad member is in, if any.
+    /// </summary>
+    public int? CMUGetFireteam(EntityUid member)
+    {
+        return _fireteamMemberQuery.TryComp(member, out var fireteam) ? fireteam.Fireteam : null;
+    }
+
+    /// <summary>
+    /// Makes a member of a fireteam its leader, replacing the current leader.
+    /// </summary>
+    public void CMUSetFireteamLeader(Entity<SquadTeamComponent> squad, int fireteam, EntityUid newLeader, string reason)
+    {
+        if (_net.IsClient ||
+            !_fireteamMemberQuery.TryComp(newLeader, out var newLeaderFireteam) ||
+            newLeaderFireteam.Fireteam != fireteam)
+        {
+            return;
+        }
+
+        foreach (var member in squad.Comp.Members)
+        {
+            if (member != newLeader &&
+                _fireteamLeaderQuery.HasComp(member) &&
+                _fireteamMemberQuery.TryComp(member, out var memberFireteam) &&
+                memberFireteam.Fireteam == fireteam)
+            {
+                RemComp<FireteamLeaderComponent>(member);
+            }
+        }
+
+        EnsureComp<FireteamLeaderComponent>(newLeader);
+        _adminLog.Add(LogType.RMCFireteam, $"{ToPrettyString(newLeader)} became leader of fireteam {fireteam}: {reason}");
+
+        SyncFireteams(squad.AsNullable());
+        CMUPointTrackersAtFireteamLeaders(squad.Comp);
     }
 }

@@ -1,4 +1,4 @@
-au14-spawn-role-name-govfor-platoon-commander = Commander (GOVFOR)
+au14-spawn-role-name-govfor-platoon-commander = Commanding Officer (GOVFOR)
 au14-spawn-role-name-govfor-executive-officer = Executive Officer (GOVFOR)
 au14-spawn-role-name-govfor-staff-officer = Staff Officer (GOVFOR)
 au14-spawn-role-name-govfor-platoon-advisor = Advisor (GOVFOR)
