@@ -1,7 +1,5 @@
-# CLF Sapper role (Phase 4). A Guerilla Fighter variant with high construction skill who spawns with
-# a special trap kit. The trap crafting/deploy behavior is layered on in later Phase 4 chunks; this
-# file defines the role itself, cloned from AU14JobCLFGuerilla so it shares the pre-lobby loadout and
-# civilian spawn behavior (the CLF spawn system routes any "CLF" job through the guerilla/safehouse path).
+# CLF Sappers share the Guerilla Fighter's lobby loadout and spawn at the cell's safehouse
+# with high construction skill and a trap kit.
 
 - type: job
   parent: RMCJobRibbonBase
