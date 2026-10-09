@@ -602,11 +602,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         agent.LastMoveFailed = false;
         agent.CoverDestination = destination;
         agent.MoveUntil = now + agent.RepositionTimeout;
-        agent.MoveProgressPosition = Transform(uid).Coordinates;
+        agent.MoveProgressDestination = null;
         agent.MoveProgressAt = now;
         if (state == CMUExpeditionAgentState.Peeking)
             agent.PeekInitialDamage = agent.LastDamage;
-        if (state is CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Retreat &&
+        if (state is CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.Withdraw &&
             agent.LastSeen != null && !_transform.InRange(Transform(uid).Coordinates, destination, 2) && !BuildTacticalRoute(uid, agent, destination))
         {
             agent.MoveUntil = now;
@@ -645,10 +645,9 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
                 agent.CoverAnchor = transform.Coordinates;
             return false;
         }
-        if (agent.MoveProgressPosition is not { } progress || !_transform.InRange(transform.Coordinates, progress, 0.2f))
+        if (UpdateMoveProgress(agent, transform.Coordinates,
+                agent.RouteDestination == destination && agent.Route.TryPeek(out var waypoint) ? waypoint : destination, now))
         {
-            agent.MoveProgressPosition = transform.Coordinates;
-            agent.MoveProgressAt = now;
             // Wading is slower than a dry-ground reposition. Progress, not water contact,
             // earns more time; stalled bodies still fail below and utility actions stay bounded.
             if (TryComp<MovementSpeedModifierComponent>(uid, out var speed) && speed.CurrentSprintSpeed < 1.5f &&
@@ -678,7 +677,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             predicate: entity => entity == observer || entity == target || HasComp<NpcFactionMemberComponent>(entity)) &&
         !SmokeOccludes(Transform(observer).Coordinates, Transform(target).Coordinates);
 
-    private void Move(EntityUid uid, EntityCoordinates destination, bool precise = false)
+    private void Move(EntityUid uid, EntityCoordinates destination, bool precise = false,
+        bool routeWaypoint = false, bool validated = false)
     {
         if (TryComp<CMUExpeditionAgentComponent>(uid, out var blocked) && blocked.State == CMUExpeditionAgentState.Investigate &&
             blocked.FailedPosition is { } failed && _timing.CurTime < blocked.AvoidPositionUntil &&
@@ -700,44 +700,71 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
         if (TryComp<CMUExpeditionAgentComponent>(uid, out var agent) && agent.RouteDestination == destination)
         {
+            var start = Transform(uid).Coordinates;
+            AdvanceRoute(uid, agent.Route, start);
+            // Steering avoidance or a moving obstacle can displace us from a valid segment.
+            // Reconnect from the actual body position instead of pushing through its corner.
+            if (agent.Route.TryPeek(out var next) && !TraversablePassage(uid, start, next) &&
+                !BuildTacticalRoute(uid, agent, destination))
+            {
+                _steering.Unregister(uid);
+                agent.MoveUntil = _timing.CurTime;
+                agent.LastMoveFailed = true;
+                if (agent.State == CMUExpeditionAgentState.Investigate)
+                {
+                    agent.FailedPosition = destination;
+                    agent.AvoidPositionUntil = _timing.CurTime + TimeSpan.FromSeconds(1);
+                    ClearCover(agent);
+                    agent.State = CMUExpeditionAgentState.Watch;
+                }
+                return;
+            }
+            if (agent.Route.TryPeek(out var waypoint))
+                destination = waypoint;
+            routeWaypoint = agent.Route.Count > 1;
+            validated = true;
             if (agent.State == CMUExpeditionAgentState.Investigate)
             {
                 var now = _timing.CurTime;
-                if (agent.MoveProgressPosition is not { } progress || !_transform.InRange(Transform(uid).Coordinates, progress, 0.2f))
-                {
-                    agent.MoveProgressPosition = Transform(uid).Coordinates;
-                    agent.MoveProgressAt = now;
-                }
+                UpdateMoveProgress(agent, start, destination, now);
                 if (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(1.5) ||
                     TryComp<NPCSteeringComponent>(uid, out var pursuit) && pursuit.Status == SteeringStatus.NoPath)
                 {
                     _steering.Unregister(uid);
-                    agent.FailedPosition = destination;
+                    agent.FailedPosition = agent.RouteDestination;
                     agent.AvoidPositionUntil = now + TimeSpan.FromSeconds(1);
                     ClearCover(agent);
                     agent.State = CMUExpeditionAgentState.Watch;
                     return;
                 }
             }
-            // Use the same arrival radius as the steering stop below. A smaller dequeue radius
-            // strands a route between the two thresholds with no active steering.
-            while (agent.Route.TryPeek(out var point) && _transform.InRange(Transform(uid).Coordinates, point, ArrivalRange))
-                agent.Route.Dequeue();
-            if (agent.Route.TryPeek(out var waypoint))
-                destination = waypoint;
         }
-        if (_transform.InRange(Transform(uid).Coordinates, destination, precise ? 0.1f : ArrivalRange))
+        if (_transform.InRange(Transform(uid).Coordinates, destination,
+                routeWaypoint ? CornerArrivalRange : precise ? 0.1f : ArrivalRange))
         {
             _steering.Unregister(uid);
             return;
         }
-        if (TryComp<NPCSteeringComponent>(uid, out var existing) && existing.Status != SteeringStatus.NoPath &&
-            _transform.InRange(existing.Coordinates, destination, 0.1f))
-            return;
+        TryComp<NPCSteeringComponent>(uid, out var existing);
         if (existing?.Status == SteeringStatus.NoPath)
+        {
             _steering.Unregister(uid, existing);
-        var steering = _steering.Register(uid, destination);
-        steering.Range = precise ? 0.1f : 0.18f;
+            existing = null;
+        }
+        var changed = existing == null || existing.Coordinates != destination;
+        var steering = _steering.Register(uid, destination, existing);
+        steering.Range = routeWaypoint ? CornerArrivalRange : precise ? 0.1f : 0.18f;
         steering.ArriveOnLineOfSight = false;
+        // Our body-safe segments already provide a path. A second navmesh route can prune
+        // the corner or seek a different polygon centre; retain native local avoidance only.
+        steering.RepathRange = validated ? float.MaxValue : 1.5f;
+        if (validated)
+        {
+            steering.PathfindToken?.Cancel();
+            steering.PathfindToken = null;
+            steering.CurrentPath.Clear();
+            if (changed)
+                Array.Clear(steering.Interest);
+        }
     }
 }

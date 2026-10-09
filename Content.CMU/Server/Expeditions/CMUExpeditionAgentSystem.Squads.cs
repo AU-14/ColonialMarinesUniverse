@@ -180,36 +180,29 @@ public sealed partial class CMUExpeditionAgentSystem
                 agent.OrderRoute.Enqueue(point);
             agent.Route.Clear();
             agent.RouteDestination = null;
-            agent.OrderProgressPosition = start;
-            agent.OrderProgressAt = now;
             agent.OrderBlocked = false;
         }
-        while (agent.OrderRoute.TryPeek(out var arrived) && _transform.InRange(start, arrived, ArrivalRange))
-            agent.OrderRoute.Dequeue();
+        AdvanceRoute(uid, agent.OrderRoute, start);
         if (!agent.OrderRoute.TryPeek(out var next))
             return true;
-        if (agent.OrderProgressPosition is not { } progress || !_transform.InRange(start, progress, 0.2f))
-        {
-            agent.OrderProgressPosition = start;
-            agent.OrderProgressAt = now;
-        }
-        if (now - agent.OrderProgressAt >= TimeSpan.FromSeconds(2) ||
+        UpdateMoveProgress(agent, start, next, now);
+        if (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(2) ||
             TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath ||
-            !ValidOrderPoint(uid, next) || !TraversablePassage(uid, start, next) || !ClearLane(uid, start, next, 0.35f, movement: true))
+            !TraversablePassage(uid, start, next))
         {
-            BlockOrder();
+            BlockOrder(retrySoon: true);
             return true;
         }
         // The combat leash follows travel progress; contact interrupts orders near this position.
         agent.Home = start;
-        Move(uid, next);
+        Move(uid, next, routeWaypoint: agent.OrderRoute.Count > 1, validated: true);
         return true;
 
-        void BlockOrder()
+        void BlockOrder(bool retrySoon = false)
         {
             agent.OrderRoute.Clear();
             agent.OrderBlocked = true;
-            agent.NextOrderRoute = now + TimeSpan.FromSeconds(3);
+            agent.NextOrderRoute = now + TimeSpan.FromSeconds(retrySoon ? 0.5 : 3);
             _steering.Unregister(uid);
         }
     }

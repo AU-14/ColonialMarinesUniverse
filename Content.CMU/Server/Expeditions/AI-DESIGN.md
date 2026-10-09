@@ -55,11 +55,24 @@ native steering, firearms, physics, factions and medical do-afters execute actio
    a hand and complete a three-second native medical action. Damage, movement, lost
    safety, incapacitation or player possession cancels treatment.
 7. A failed/timed-out movement destination is avoided for eight seconds. A combat move
-   with no 20 cm progress for 1.5 seconds fails early. Pursuit route failures back off for
+   with no new 10 cm closest approach to its current waypoint for 1.5 seconds fails early. Pursuit route failures back off for
    one second. Movement checks use body collision rather than bullet-only obstruction;
    clear traversable route segments skip intermediate tile stops. Exposure penalties are capped
    so overlapping enemy lanes do not multiply into prohibitive detours.
    Destroyed cover, changed threat angles and expired contacts invalidate the current plan.
+
+Ordered travel and tactical manoeuvres use the RMC human's 35 cm circular footprint and a
+continuous swept corridor, including furniture and barricade collision layers. A* edges use
+the actual body radius and smoothed segments prefer 40 cm clearance. Narrow passages retain
+individual cell stops; endpoint connections can use the actual radius beside an obstacle.
+Endpoint tile centres remain available as
+waypoints, allowing an off-centre body to align before joining the route. Within the usual
+25 cm arrival band, a corner is only dequeued when the next segment is clear from the actual
+body position. Otherwise steering approaches within 5 cm of the corner. Validated segments
+use native local avoidance without a second navmesh path overriding the selected waypoints.
+Only a new closest approach resets stall timing; sideways wall jitter does not. Interrupted
+ordered segments retry after 0.5 seconds, while failed searches retain a three-second backoff.
+Route budgets remain 256 cells for tactics and 2048 for orders, with one ordered search per frame.
 
 The distances and timers above are tuning choices for this game, not values claimed by
 the cited papers. The aim is readable, adaptable opposition with ordinary ammunition and
@@ -323,3 +336,17 @@ Manual verification for equipment, water and mobile fire (not yet run):
    the 20-second squad rocket cooldown. Launchers have no reload supply in these loadouts.
 6. Generate an expedition and confirm one short GOVFOR ARES priority assignment when the LZ
    opens. Use the status command during all scenarios and record six-guard search cost.
+
+Manual verification for corner routing (not yet run; build-only follow-up):
+
+1. On both a colony grid and an expedition, order a six-guard squad across 40–100 tiles with
+   multiple wall corners, one-tile corridors, offset doors, barricades and dense trees. Repeat
+   in reverse, from sub-tile spawn offsets and on a rotated grid. Check continuous corner
+   turns, no wall penetration, arrival and resumed patrols after combat interruptions.
+2. Trigger tactical flanks, retreats and radio approaches around the same corners, with moving
+   targets and allies. Check that firing while travelling and native friendly separation remain.
+3. Add/remove a blocking crate during travel. Confirm the route reconnects or reports blocked,
+   retries without an endless wobble, and resumes when a route exists. Repeat through RMC water;
+   native slowdown should still allow progress, while fire, space and hard banks remain blocked.
+4. Record route/search timings with six guards receiving simultaneous long move orders and
+   contact. Cell budgets remain bounded; runtime cost has not been measured for this change.

@@ -7,6 +7,7 @@ using Content.Shared.NPC.Components;
 using Content.Shared.Physics;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Systems;
 
@@ -15,26 +16,32 @@ namespace Content.Server.CMU14.Expeditions;
 public sealed partial class CMUExpeditionAgentSystem
 {
     private static readonly (int X, int Y)[] Neighbors = { (1, 0), (-1, 0), (0, 1), (0, -1) };
+    // RMC humans have a 0.35 m hard body fixture. Planned routes leave extra turning room.
+    private const float AgentBodyRadius = 0.35f;
+    private const float RouteClearance = 0.4f;
+    private const CollisionGroup MovementMask = CollisionGroup.MobMask | CollisionGroup.InteractImpassable |
+        CollisionGroup.BarricadeImpassable | CollisionGroup.BarbedBarricade;
     [Dependency] private SharedPhysicsSystem _physics = default!;
-    private readonly Dictionary<EntityCoordinates, bool> _bodyClearCache = new();
+    private readonly Dictionary<(EntityCoordinates Point, float Radius), bool> _bodyClearCache = new();
 
-    private bool BodyFits(EntityUid uid, EntityCoordinates point)
+    private bool BodyFits(EntityUid uid, EntityCoordinates point, float radius = AgentBodyRadius)
     {
-        if (_bodyClearCache.TryGetValue(point, out var clear))
+        if (_bodyClearCache.TryGetValue((point, radius), out var clear))
             return clear;
         var location = _transform.ToMapCoordinates(point);
         // Rays starting inside a wall do not report an entry hit. Test the body footprint instead.
-        var bounds = new Box2Rotated(Box2.CenteredAround(location.Position, new Vector2(0.58f)), Angle.Zero);
+        // Ignore polygon skin so ordinary physics contact does not invalidate a stance beside a wall.
         var fixtures = new HashSet<FixtureProxy>();
-        _lookup.GetFixturesIntersecting(location.MapId, bounds, fixtures, new FixtureQueryArgs(new QueryFilter
+        _lookup.GetFixturesIntersecting(location.MapId, new PhysShapeCircle(radius),
+            new Robust.Shared.Physics.Transform(location.Position, Angle.Zero), fixtures, new FixtureQueryArgs(new QueryFilter
         {
             LayerBits = 0,
-            MaskBits = (long) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable),
+            MaskBits = (long) MovementMask,
             Flags = QueryFlags.Dynamic | QueryFlags.Static,
-        }));
+        }, IgnoreShapeSkin: true));
         clear = !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide &&
             fixture.Entity != uid && !HasComp<NpcFactionMemberComponent>(fixture.Entity));
-        _bodyClearCache[point] = clear;
+        _bodyClearCache[(point, radius)] = clear;
         return clear;
     }
 
@@ -229,18 +236,36 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.MaxSearchMilliseconds = Math.Max(agent.MaxSearchMilliseconds, agent.LastSearchMilliseconds);
     }
 
-    private bool TraversablePassage(EntityUid uid, EntityCoordinates from, EntityCoordinates to)
+    private bool TraversablePassage(EntityUid uid, EntityCoordinates from, EntityCoordinates to, float radius = AgentBodyRadius)
     {
-        if (_transform.ToMapCoordinates(from).MapId != _transform.ToMapCoordinates(to).MapId)
+        var start = _transform.ToMapCoordinates(from);
+        var end = _transform.ToMapCoordinates(to);
+        if (start.MapId != end.MapId || !BodyFits(uid, from, radius) || !BodyFits(uid, to, radius))
             return false;
-        to = _transform.ToCoordinates(from.EntityId, _transform.ToMapCoordinates(to));
-        for (var step = 0; step <= 16; step++)
+        to = _transform.ToCoordinates(from.EntityId, end);
+        var steps = Math.Max(1, (int) MathF.Ceiling(Vector2.Distance(start.Position, end.Position) * 4));
+        for (var step = 0; step <= steps; step++)
         {
-            var position = Vector2.Lerp(from.Position, to.Position, step / 16f);
-            if (!ValidOrderPoint(uid, new EntityCoordinates(from.EntityId, position)))
+            var position = Vector2.Lerp(from.Position, to.Position, step / (float) steps);
+            if (!GroundSafe(new EntityCoordinates(from.EntityId, position)))
                 return false;
         }
-        return true;
+        var translation = end.Position - start.Position;
+        if (translation.LengthSquared() < 0.0001f)
+            return true;
+        // The rectangle between the two endpoint circles covers the entire swept body,
+        // including diagonal corner grazes between terrain samples.
+        var center = (start.Position + end.Position) / 2;
+        var bounds = new Box2Rotated(Box2.CenteredAround(center, new Vector2(translation.Length(), radius * 2)),
+            translation.ToAngle(), center);
+        var fixtures = new HashSet<FixtureProxy>();
+        _lookup.GetFixturesIntersecting(start.MapId, bounds, fixtures, new FixtureQueryArgs(new QueryFilter
+        {
+            MaskBits = (long) MovementMask,
+            IsIgnored = entity => entity == uid || HasComp<NpcFactionMemberComponent>(entity),
+        }, IgnoreShapeSkin: true));
+        // Sensors (including RMC water) do not become static route walls.
+        return !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide);
     }
 
 

@@ -35,8 +35,6 @@ public sealed partial class CMUExpeditionAgentComponent
     public bool Patrolling;
     public int PatrolIndex;
     public TimeSpan NextOrderRoute;
-    public EntityCoordinates? OrderProgressPosition;
-    public TimeSpan OrderProgressAt;
     public bool OrderBlocked;
     public bool Entrench;
     public EntityUid? WorkItem;
