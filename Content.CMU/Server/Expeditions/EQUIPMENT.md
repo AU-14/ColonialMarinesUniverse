@@ -1,5 +1,8 @@
 # Expedition equipment, perception and logistics
 
+The [squad management panel](SQUADS.md) adds spawn/order controls, doctrines, supply runners,
+medical collection areas and live tactical diagnostics. Open it with `cmu-squads`.
+
 These actions use native weapons, items, storage, interaction checks and do-afters. They apply to
 uncontrolled expedition agents, including squads spawned on ordinary maps. Taking player control
 cancels AI actions. Compilation and content-reference checks do not verify in-game behavior.

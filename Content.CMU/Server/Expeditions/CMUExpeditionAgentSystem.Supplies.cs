@@ -53,13 +53,15 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool WantsSupply(EntityUid uid, EntityUid item, bool lowOnly = false)
     {
+        if (FreshMedicalTool(item))
+            return WantsMedicalTool(uid, item);
         var items = SupplyItems(uid).ToArray();
         if (KnownLootGrenade(item, out var smoke))
             return items.Count(other => KnownLootGrenade(other, out var otherSmoke) && smoke == otherSmoke) < (lowOnly ? 1 : 2);
         if (FreshFlare(item))
             return items.Count(FreshFlare) < (lowOnly ? 1 : 3);
         if (StockDressing(item))
-            return lowOnly ? PersonalDressing(uid) == null : items.Count(StockDressing) < 1;
+            return lowOnly ? PersonalDressing(uid) == null : items.Count(StockDressing) < (HasComp<CMUExpeditionMedicComponent>(uid) ? 3 : 1);
         foreach (var gun in CarriedWeapons(uid))
             if (CompatibleAmmunition(uid, gun, item) && AmmoReserve(uid, gun) <
                 (HasComp<CartridgeAmmoComponent>(item) ? lowOnly ? 4 : 24 : lowOnly ? 1 : 6))
@@ -72,6 +74,9 @@ public sealed partial class CMUExpeditionAgentSystem
         var items = SupplyItems(uid).ToArray();
         if (!items.Contains(item))
             return false;
+        if (FreshMedicalTool(item))
+            return !HasComp<CMUExpeditionMedicComponent>(uid) || items.Count(other => FreshMedicalTool(other) &&
+                HasComp<Content.Shared.Medical.DefibrillatorComponent>(other) == HasComp<Content.Shared.Medical.DefibrillatorComponent>(item)) > 1;
         if (KnownLootGrenade(item, out var smoke))
             return items.Count(other => KnownLootGrenade(other, out var otherSmoke) && smoke == otherSmoke) > 1;
         if (FreshFlare(item))
@@ -87,6 +92,6 @@ public sealed partial class CMUExpeditionAgentSystem
             if (AmmoReserve(uid, gun) - SupplyQuantity(item) < (HasComp<CartridgeAmmoComponent>(item) ? 6 : 1))
                 return false;
         }
-        return compatible;
+        return compatible || HasComp<CartridgeAmmoComponent>(item) || HasComp<BallisticAmmoProviderComponent>(item);
     }
 }

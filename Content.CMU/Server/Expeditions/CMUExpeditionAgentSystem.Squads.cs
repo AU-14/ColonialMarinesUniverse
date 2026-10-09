@@ -86,7 +86,7 @@ public sealed partial class CMUExpeditionAgentSystem
     public bool OrderSquadPoint(EntityUid uid, EntityCoordinates center, string action, List<EntityCoordinates> reserved, Direction? facing = null)
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) || !CanOrderSquadMember(uid) ||
-            !TrySquadCoordinates(center, out center) || Transform(uid).MapUid != Transform(center.EntityId).MapUid ||
+            !TrySquadCoordinates(center, out center) ||
             action == "patrol-add" && agent.PatrolPoints.Count >= 8)
             return false;
         foreach (var point in NearbySquadPositions(center, 4))
@@ -122,6 +122,8 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool FollowOrders(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
+        if (FollowLevelOrder(uid, agent, now))
+            return true;
         if (agent.OrderedDestination is not { } destination)
             return false;
         var start = Transform(uid).Coordinates;
@@ -136,6 +138,8 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.OrderedDestination = null;
             ClearTraffic(agent);
             _steering.Unregister(uid);
+            if (agent.TravelGoal != null)
+                return true;
             if (agent.Patrolling && agent.PatrolPoints.Count >= 2)
             {
                 agent.PatrolIndex = (agent.PatrolIndex + 1) % agent.PatrolPoints.Count;
@@ -158,7 +162,11 @@ public sealed partial class CMUExpeditionAgentSystem
                 return true;
             }
             _orderRouteSearched = true;
-            if (!BuildTacticalRoute(uid, agent, destination, ordered: true))
+            if (BorrowSquadRoute(uid, agent, destination))
+                return true;
+            if (RecoverStraggler(uid, agent, now, out var recoverySearched))
+                return true;
+            if (recoverySearched || !BuildTacticalRoute(uid, agent, destination, ordered: true))
             {
                 BlockOrder();
                 return true;

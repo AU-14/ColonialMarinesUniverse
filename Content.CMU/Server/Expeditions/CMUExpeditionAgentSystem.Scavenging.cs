@@ -79,7 +79,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return !armed && WeaponAmmo(item) > 0 &&
                 !(TryComp<CMUExpeditionWeaponRoleComponent>(item, out var firearm) && firearm.Rocket);
         }
-        return CanStoreSupply(uid, item) && WantsSupply(uid, item);
+        return CanStoreSupply(uid, item) && (WantsSupply(uid, item) || WantsMedicalTool(uid, item) || RunnerNeedsItem(uid, item));
     }
 
     private bool LootApproach(EntityUid uid, EntityUid source, out Robust.Shared.Map.EntityCoordinates point)
@@ -106,7 +106,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var items = new HashSet<EntityUid>();
         foreach (var source in nearby.Where(item => HasComp<StorageComponent>(item) || HasComp<EntityStorageComponent>(item) || _mobs.IsDead(item) ||
                      HasComp<GunComponent>(item) || HasComp<BallisticAmmoProviderComponent>(item) ||
-                     HasComp<CartridgeAmmoComponent>(item) || KnownLootGrenade(item, out _) || FreshFlare(item) || StockDressing(item)).Take(24))
+                     HasComp<CartridgeAmmoComponent>(item) || KnownLootGrenade(item, out _) || FreshFlare(item) || StockDressing(item) || FreshMedicalTool(item)).Take(24))
         {
             items.Add(source);
             if (TryComp<StorageComponent>(source, out var looseStorage))

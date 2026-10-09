@@ -1,5 +1,8 @@
 # Govfor expedition terrain
 
+For the admin squad panel, persistent squad plans, supply runners and multi-level orders,
+see [Squad management](SQUADS.md). Open it with `cmu-squads` or an admin right-click on an agent.
+
 This is CMU's own finite map generator. It does not call `BiomeSystem`, dungeon generation, or
 salvage generation. Existing engine map APIs materialize its output, and existing licensed art
 supplies the tile and object palettes.
@@ -216,8 +219,10 @@ Explicit coordinates remain available: `cmu-expedition-orders <map ID> 1 patrol-
 Cover, flanking, firing, treatment, reloads, rescue, radio and grenades work without expedition
 metadata. Routes use live ground, water/fire entities and collision; expedition plans add terrain
 constraints. Coordinates are attached to the ground grid, including rotated grids and negative
-tile indices. Walking routes stay on one grid and level; they do not board ships, cross between
-separate grids, open closed doors, climb or teleport. Use reachable waypoints around long detours.
+tile indices. Walking routes can cross touching grids with continuous safe ground. Usable doors
+open through native access checks. Cross-level orders use connected native CMU ladders and stairs,
+with actual climbing actions and landing checks. These orders do not board ships or bridge empty
+space. Use reachable waypoints around long detours; see [SQUADS.md](SQUADS.md) for traversal limits.
 Order searches are capped at 2,048 cells, one search per update; blocked routes retry after three
 seconds. A stalled short leg can use a half-tile obstacle detour (384 cells, at most one per frame).
 Leaders briefly wait for lagging members on the same order; an unreachable member keeps retrying without

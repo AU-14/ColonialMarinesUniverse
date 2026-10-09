@@ -43,7 +43,7 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) ||
             !TrySquadCoordinates(destination, out destination) ||
-            Transform(uid).MapUid != Transform(destination.EntityId).MapUid || !ValidOrderPoint(uid, destination))
+            !ValidOrderPoint(uid, destination))
             return false;
         ResetOrders(uid, agent);
         agent.Patrolling = false;
@@ -64,6 +64,19 @@ public sealed partial class CMUExpeditionAgentSystem
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         ClearScavenging(uid, agent);
+        CancelPortalClimb(uid, agent);
+        agent.TravelGoal = null;
+        agent.TravelPortal = null;
+        agent.PortalUntil = TimeSpan.Zero;
+        agent.FailedPortals.Clear();
+        agent.HeardPoint = null;
+        agent.SupplySource = null;
+        agent.DeliveryRecipient = null;
+        agent.DeliveryPoint = null;
+        agent.FailedDeliveries.Clear();
+        agent.NextRegroupRoute = TimeSpan.Zero;
+        agent.DutyUntil = TimeSpan.Zero;
+        Decision(agent, "orders-reset", "explicit-command");
         CancelFlare(uid, agent);
         CancelAimedWeapon(agent);
         agent.SupplyTransfer = null;

@@ -150,6 +150,7 @@ public sealed partial class CMUExpeditionAgentSystem
             (!atShelter || agent.State != CMUExpeditionAgentState.Recover ||
                 ShelteredFromKnownThreats(uid, agent, Transform(uid).Coordinates)))
             return;
+        RememberBadCover(uid, agent, anchor);
         agent.FailedPosition = anchor;
         ReleaseManeuver(uid, agent);
         agent.FightingPosition = null;
@@ -208,7 +209,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var threatPosition = _transform.ToMapCoordinates(threat).Position;
         foreach (var candidate in candidates)
         {
-            if (GrenadeDanger(candidate.Position) || Reserved(uid, candidate.Position) || agent.FailedPosition is { } failed &&
+            if (CoverHistoryCost(agent, candidate.Position) >= 6 || GrenadeDanger(candidate.Position) || Reserved(uid, candidate.Position) || agent.FailedPosition is { } failed &&
                 _timing.CurTime < agent.AvoidPositionUntil && _transform.InRange(candidate.Position, failed, 1.4f))
                 continue;
             if (ShelteredFromKnownThreats(uid, agent, candidate.Position))

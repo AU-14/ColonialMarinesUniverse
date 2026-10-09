@@ -156,7 +156,9 @@ public sealed partial class CMUExpeditionAgentSystem
                 var score = Math.Min(gap, agent.MeleeStandoffRange + 2) - length * 0.15f +
                     (FiringLaneClear(uid, candidate, threat) ? 1 : 0) -
                     ExposureScore(uid, agent, candidate) * (currentGap < 2 ? 0.25f : 0.6f) -
-                    FriendlyCrowding(uid, candidate) * 1.5f;
+                    FriendlyCrowding(uid, candidate) * 1.5f -
+                    (agent.SquadPhase == "anti-rush" && agent.DutyPoint is { } arc ?
+                        Vector2.Distance(_transform.ToMapCoordinates(candidate).Position, _transform.ToMapCoordinates(arc).Position) * .25f : 0);
                 if (score <= bestScore)
                     continue;
                 bestScore = score;

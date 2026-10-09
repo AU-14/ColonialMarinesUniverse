@@ -115,8 +115,13 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.Route.Clear();
         agent.RouteDestination = null;
         if (!TrySquadCoordinates(Transform(uid).Coordinates, out var start) ||
-            !TrySquadCoordinates(destination, out destination) || start.EntityId != destination.EntityId)
+            !TrySquadCoordinates(destination, out destination) || Transform(start.EntityId).MapID != Transform(destination.EntityId).MapID)
             return false;
+        if (start.EntityId != destination.EntityId && Transform(uid).MapUid is { } map)
+        {
+            start = _transform.ToCoordinates(map, _transform.ToMapCoordinates(start));
+            destination = _transform.ToCoordinates(map, _transform.ToMapCoordinates(destination));
+        }
         // A local coordinate window also supports ordinary grids with negative tile indices.
         // No terrain array or expedition component is required for routing.
         var origin = new Vector2i((int) MathF.Floor(Math.Min(start.X, destination.X)) - 16,

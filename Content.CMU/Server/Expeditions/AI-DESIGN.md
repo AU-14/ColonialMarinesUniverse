@@ -94,8 +94,7 @@ Equipped squad headsets share a frozen observation after a short delay, within 4
 Reports retain their original reception deadline when further reports arrive, so a busy
 channel cannot keep delaying the reaction. Accepted snapshots expire after twelve seconds
 and do not reveal an unseen target's current position. Recent visual contact and active
-survival/utility actions take precedence. Recipients acknowledge a new support response
-(at most once per twelve seconds), then approach the reported area in at most eight-metre
+survival/utility actions take precedence. Recipients respond silently and approach the reported area in at most eight-metre
 steps with separate destinations. This keeps each step inside the local search bound even
 when the report came from farther away. Responders remain within their guard leash and
 wait near the reported location if they find no enemy; expired reports release the response.
@@ -217,7 +216,9 @@ Combat interrupts travel and the patrol resumes after contact expires. `move`/`g
 the active patrol. Explicit orders follow bounded, traversable routes (2,048 cells, at most one search
 per update), rechecking live obstruction and retrying blocked travel after three seconds.
 `cmu-expedition-ai-status <map>` displays progress and blocked orders. Long or maze-like routes
-may need intermediate waypoints; separate grids and levels are not traversed. Usable closed doors
+may need intermediate waypoints. Continuous ground can connect touching grids; cross-level orders
+use native CMU ladder/stair chains with bounded retries. See [SQUADS.md](SQUADS.md) for persistent
+plans, route sharing, straggler recovery and traversal limits. Usable closed doors
 are planned as portals, then opened with native interaction and access checks at the doorway.
 
 Door planning checks native access, bolts, welds, power and door-specific opening rules once per

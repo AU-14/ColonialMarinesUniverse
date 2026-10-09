@@ -17,12 +17,13 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void OnObservedMuzzleFlash(Entity<GunComponent> ent, ref GunShotEvent args)
     {
-        if (!_npcs.Enabled || !args.Ammo.Any(ammo => ammo.Shootable is AmmoComponent { MuzzleFlash: not null }))
+        if (!_npcs.Enabled)
             return;
         // Use the same suppression hook as the real effect (including attached silencers).
         var flash = new GunMuzzleFlashAttemptEvent();
         RaiseLocalEvent(ent, ref flash);
-        if (flash.Cancelled)
+        HearShot(ent, ref args, flash.Cancelled);
+        if (flash.Cancelled || !args.Ammo.Any(ammo => ammo.Shootable is AmmoComponent { MuzzleFlash: not null }))
             return;
         var now = _timing.CurTime;
         var origin = _transform.ToMapCoordinates(args.FromCoordinates);
