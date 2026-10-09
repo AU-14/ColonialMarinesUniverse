@@ -1,16 +1,16 @@
 # Stable Garrison Redux model coverage
 
-This pass adds 138 draft model entries and 203 exact world-prototype bindings.
+This pass adds 155 draft model entries and 225 exact world-prototype bindings.
 The audit follows all seven Redux levels, hidden subfloor placements, recursive
-map spawners, faction vendor markers, platoon vehicle catalogs and faction
-terminals. It finds 1,734 valid physical prototype types: 1,726 have exact model
+map spawners, faction vendor markers, platoon vehicle catalogs, every concrete drivable vehicle and faction
+terminals. It finds 1,754 valid physical prototype types: 1,746 have exact model
 bindings, four have conditional sprite-selected models, and four use existing
 native stairs or atmospheric/void presentation. No valid audited type is left
 without one of those paths. This measures bindings, not complete live-state fidelity.
 
 The additions include 110 faction vendor bindings, both cable families and their
 16 connection masks, straight/bent/routed/trunk/Y disposal castings and construction
-poses, 26 supply vehicle variants, 35 mounted turret item variants, oxygen
+poses, 48 drivable vehicle variants, 35 mounted turret item variants, oxygen
 canisters, machinery, shaft walls, ladders, lift platforms and loose map props.
 The flipped router is also modeled so flipping a mapped router keeps its geometry.
 
@@ -22,6 +22,55 @@ changing a hardpoint changes its modeled assembly. Unknown equipment states
 retain the original sprite rather than silently losing equipment.
 
 ![Source art and solid models from front, rear and below](contact-sheet.png)
+
+## Complete drivable fleet pass
+
+All 48 concrete `GridVehicleMover` variants now select one of 42 shaped body
+models, including civilian and admin-spawnable vehicles outside platoon supply
+catalogs. Seventeen body entries are added in this pass; the existing vehicle
+entries are refined. Loaded/armed variants share their source chassis and retain
+separate visible equipment layers.
+
+- APCs and Humvees have sloped armor, cab glass, wheels, access panels and hatches.
+- Military/civilian vans retain their paint and medical, police, delivery,
+  logistics or prisoner details. Loaded trucks have solid crates and drums;
+  garbage and medical trucks use their own cargo bodies.
+- The tracked carrier has an open cargo bay and a separate closed-lid pose.
+- The fighter has a tandem canopy, swept solid wings, forked tail, engine
+  nozzles, landing gear and folded/flight/VTOL poses at its original sprite scale.
+- The TWE tank uses its own 96-pixel source-frame scale. The engineering hull
+  has no turret race. The Blackfoot parachute overlay no longer adds another hull.
+- The marshal and pizza vans use the new layer-aware models; their former static
+  drafts remain available for reference without competing world bindings.
+
+![Representative vehicle models](fleet-overview.png)
+
+Every body was rendered beside its original sprite from the front, rear and
+underside. The gallery also includes the carrier opening and fighter flight poses:
+[1](fleet-01.png), [2](fleet-02.png), [3](fleet-03.png), [4](fleet-04.png),
+[5](fleet-05.png), [6](fleet-06.png), [7](fleet-07.png), [8](fleet-08.png),
+[9](fleet-09.png). Counts are recorded in [fleet-review.json](fleet-review.json).
+These are model renders, not screenshots of a live driving session.
+
+The fleet audit checked exactly one body binding per vehicle, the authored
+sprite scale, every initially visible source layer, positive volume and closed
+primitive geometry, and ground clearance after part rotation. The largest
+initially visible body composition is 86 parts / 2,616 triangles, below the
+128-part limit. This is a geometry count, not an FPS measurement.
+
+The complete Redux batch uses 210 source crops (previously 329), with obsolete
+batch crops removed. All 155 batch GLBs were rebuilt and the complete library's
+2,631 manifest hashes verified. The client-only optional-library load/reset/reload
+integration test passed; affected content projects built through the test wrapper.
+
+Fleet verification commands:
+
+```powershell
+python Tools/three_d/author_redux_coverage.py --skip-reviews
+python Tools/three_d/build_models.py --source Content.CMU/Resources/ThreeD/Prototypes/World/garrison_redux_missing.yml --output .codex/logs/redux-coverage/export --viewer-output .codex/logs/redux-coverage/viewer --no-review
+python Tools/three_d/review_redux_fleet.py
+powershell.exe -NoProfile -File .codex/scripts/run.ps1 test -Project Content.IntegrationTests -Filter 'FullyQualifiedName~OptionalLibraryLoadsOnlyOnClientAndCanReloadAfterPrototypeReset'
+```
 
 ## Tank and Blackfoot refinement
 
@@ -51,7 +100,7 @@ including `CannonRotatesAroundItsTurretWithoutChangingMountAtCardinalBoundaries`
 The client-only library reload integration test also passed against the refined
 assets. The export validator checked the full library and all 2,614 GLB hashes.
 
-## Verification
+## Earlier infrastructure verification
 
 - Content client, shared and server projects built through the repository test wrapper.
 - 14 focused C# cases passed: `CMU3DVehicleAppearanceTest` and `CMU3DAnchorStateTest`.
@@ -95,5 +144,6 @@ prototypes to bind them. `ChunkEntity` is an engine-owned, sprite-less map helpe
 and is excluded from physical-model coverage.
 
 Authoring and source/license notes: [SOURCES_REDUX_COVERAGE.md](../../SOURCES_REDUX_COVERAGE.md).
-The procedural author is `Tools/three_d/author_redux_coverage.py`; the independent
+The procedural authors are `Tools/three_d/author_redux_coverage.py`,
+`Tools/three_d/redux_vehicle_shapes.py` and `Tools/three_d/redux_fleet_shapes.py`; the independent
 coverage audit is `Tools/three_d/redux_coverage.py`.

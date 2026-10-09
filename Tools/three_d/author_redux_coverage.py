@@ -361,6 +361,10 @@ def vehicle_geometry(image, state, rsi, pool, scale=1, body=False, frame=None):
         return []
     rebuilt = redux_vehicle_shapes.rebuild(image, state, rsi, pool, body, frame)
     if rebuilt is not None:
+        if scale != 1:
+            for piece in rebuilt:
+                for key in ('min', 'max'):
+                    piece[key] = [v * scale for v in piece[key]]
         return rebuilt
     w,h=image.size;x0,y0,x1,y1=bounds
     left,right=(x0-w/2)/32*scale,(x1-w/2)/32*scale
@@ -485,12 +489,15 @@ def vehicle_geometry(image, state, rsi, pool, scale=1, body=False, frame=None):
 
 def vehicles(rows,kinds,sources,pool):
     result,images=[],{}
+    previous = yaml.safe_load(MODEL.read_text(encoding='utf-8')) if MODEL.exists() else []
+    references = {m.get('referencePrototype') for m in previous if m.get('vehicleLayers') and m.get('sourcePrototypes')}
     groups=defaultdict(list)
     for row in rows:
-        if 'platoon vehicle supply' in row['origins']:
+        if 'GridVehicleMover' in row['components']:
             groups[json.dumps(row['sprite'],sort_keys=True)].append(row)
     for group in groups.values():
-        row=group[0];sprite=row['sprite'];rsi=sprite['sprite']
+        # Keep published asset IDs when another prototype shares an existing skin.
+        row=next((r for r in group if r['id'] in references), group[0]);sprite=row['sprite'];rsi=sprite['sprite']
         base=(sprite.get('layers') or [sprite])[0]
         scale=float(str(sprite.get('scale','1, 1')).split(',')[0])
         base_rsi=base.get('sprite',rsi);base_state=base['state']
@@ -503,17 +510,19 @@ def vehicles(rows,kinds,sources,pool):
                 state=entry['name']
                 if entry.get('directions',1)==1 and state.isupper():continue
                 image=sources.frame(source,state)
-                is_body=(source==base_rsi and state==base_state) or source==rsi and state in ('stowed','flight','vtol','folded','jetfighter','vtolmode')
+                is_body=(source==base_rsi and state==base_state) or source==rsi and state in ('stowed','flight','vtol','folded','jetfighter','vtolmode','cargo_closed','cargo_open')
                 # Other chassis skins in this shared RSI are not runtime hardpoints.
                 if ('base' in state or state=='hull_wy') and not is_body:continue
+                if not is_body and (state in ('sppvan_medical','sppvan_prisoner','civtruck_1','civtruck_2','civtruck_3') or state.startswith('cargo_debris')):continue
                 # Some stationary wheel overlays are blank because the 2D base
                 # already contains tires. The physical wheel volume still exists.
-                wheel_image=sources.frame(base_rsi,base_state) if state.startswith('wheels_') and not image.getbbox() else image
+                wheel_image=sources.frame(base_rsi,base_state) if state.startswith('wheels_') else image
                 parts=vehicle_geometry(wheel_image,state,source,pool,scale,is_body,
-                                       lambda pose: sources.frame(source,pose))
+                                       lambda pose: sources.frame(source,pose) if pose else sources.frame(base_rsi,base_state))
                 layers.append(dict(rsi=source,state=state,parts=parts))
                 if source==base_rsi and state==base_state or source==rsi and state=='wheels_1':default.extend(deepcopy(parts))
         entry=model(row['id'],[r['id'] for r in group],default,referencePrototype=row['id'],
+                    referenceRsi=base_rsi,referenceState=base_state,
                     useEntityRotation=True,vehicleLayers=layers,
                     vehicleSpriteScale=[scale,scale],vehicleSpriteOffset=[float(v) for v in str(sprite.get('offset','0, 0')).split(',')])
         result.append(entry);images[entry['id']]=sources.compose(sprite)
@@ -553,6 +562,7 @@ def props(rows,kinds,sources,pool):
     by_signature=defaultdict(list)
     for row in rows:
         if (row['models'] or row['conditional'] or row['native'] or
+                'GridVehicleMover' in row['components'] or
                 any(o.startswith('platoon') for o in row['origins']) or
                 row['id'] in PIPE_KINDS or row['id'] in ('RMCCableHeavy','CableApcExtension')):continue
         by_signature[json.dumps(row['sprite'],sort_keys=True)].append(row)
@@ -736,9 +746,9 @@ def main():
     actual=bm.load_models(MODEL)
     note='# Redux missing-model drafts\n\nGenerated with `Tools/three_d/author_redux_coverage.py`. '+str(len(actual))+' solid models, '+str(sum(len(m['sourcePrototypes']) for m in actual))+' exact prototype bindings.\n\n'
     note+='Closed cabinets have backs, sides, plinths, roofs and deep shelves. Original stock art is printed on recessed shelf volumes. Both cable families cover all 16 source connection masks: LV has round insulated cores, while HV follows the armored rectangular conduit artwork. Disposal barrels, collars and junctions have closed sides and undersides, with source routing marks and reciprocal installed/construction poses. Installed channels retain intact floor cladding and obey the original SubFloorHide owner. Geometry height, depth and unseen surfaces are inferred and remain draft. No gameplay prototype, collision, AI or mob equipment is changed.\n\n'
-    note+='Vehicle hulls, wheels and installed hardpoints are separate source-layer assemblies. Mounted turrets bind their installed item through VehicleTurretVisual, follow physical entity yaw, and disappear with the source layer; they do not add equipment to mobs. Blackfoot uses authored fuselage, cockpit, tail and engine volumes with separate stowed, hover and flight poses. Its full-airframe equipment overlays contribute only changed hardware. Tank hulls, tracks, rotating turrets and cannon barrels are separate shaped assemblies. Other aircraft and irregular mounts retain closed silhouette sections. Assemblies remain under the 128-part runtime limit. Vehicle state selection follows the source owner; wheel texture animation and aircraft effect animation are currently represented by static solid poses.\n\n'
+    note+='All concrete GridVehicleMover variants are included, including civilian and admin-spawnable vehicles outside supply catalogs. Vehicle hulls, wheels and installed hardpoints are separate source-layer assemblies. Mounted turrets bind their installed item through VehicleTurretVisual, follow physical entity yaw, and disappear with the source layer; they do not add equipment to mobs. APCs, Humvees, vans, cargo trucks and the tracked carrier use distinct family profiles with source-sized footprints, closed bellies, cab glazing and rear access panels. Cargo crates and drums have their own volumes. The carrier has closed/open bay poses. The fighter has a tandem cockpit, swept solid wings, forked tail, engine nozzles and folded/flight/VTOL poses at the original sprite scale. Blackfoot uses authored fuselage, cockpit, tail and engine volumes with separate stowed, hover and flight poses. Its full-airframe equipment overlays contribute only changed hardware, including the parachute variant. Tank hulls, tracks, rotating turrets and cannon barrels are separate shaped assemblies; the engineering hull has no turret race. Assemblies remain under the 128-part runtime limit. Vehicle state selection follows the source owner; wheel texture animation and aircraft effect animation are currently represented by static solid poses.\n\n'
     note+='Small props rest on their modeled footprint; cylinders, rails, ladders, cabinets and machinery have closed back/side/underside volumes. Lift platforms, gear walls and layered small props are static drafts; this pass does not add a lift travel animation or reproduce every charge/light/stock overlay. Cloned bindings retain the original models and their existing state contracts and artwork licenses.\n\n'
-    note+='The audit includes hidden placements and possible round-setup vendor/vehicle outputs. Exact binding coverage is not proof of live state coverage or final visual approval. It reports unresolved saved-map prototype references separately and never invents gameplay definitions for them. Unrecognized vehicle layers retain their original sprite fallback.\n\n## Source artwork and licenses\n\n'
+    note+='The audit includes hidden placements, possible round-setup vendor/vehicle outputs and all concrete drivable vehicle prototypes. Exact binding coverage is not proof of live state coverage or final visual approval. It reports unresolved saved-map prototype references separately and never invents gameplay definitions for them. Unrecognized vehicle layers retain their original sprite fallback.\n\n## Source artwork and licenses\n\n'
     for rsi,meta in sorted(sources.metadata.items()):
         note+=f"- `{rsi}` — {meta.get('license','see original metadata')}. {meta.get('copyright','See original metadata.')}\n"
     write(DOC,note)

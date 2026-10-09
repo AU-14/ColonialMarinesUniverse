@@ -71,6 +71,16 @@ def collect(kinds, saved_inventory):
                 visit(uid, 'platoon vendor ' + role)
         for uid in platoon.get('vehicleSupplyCatalog', []):
             visit(uid, 'platoon vehicle supply')
+    # Civilian/admin-spawnable variants are not necessarily in a supply catalog.
+    for uid, raw in kinds['entity'].items():
+        if raw.get('abstract'):
+            continue
+        try:
+            components = inventory.component_map(resolver.resolve(uid))
+        except inventory.ResolutionError:
+            continue
+        if 'GridVehicleMover' in components:
+            visit(uid, 'drivable vehicle')
     for uid in ('CMUHospitalEmergencyComputerColony', 'CMUHospitalEmergencyComputerGovfor',
                 'CMUHospitalEmergencyComputerOpfor', 'CMUResearchDataTerminalGovfor', 'CMUResearchDataTerminalOpfor'):
         if uid in kinds['entity']:

@@ -22,7 +22,7 @@ def panel(image, pool, rect, low, high, label, shape='Box'):
     return [part(label, low, high, '#FFFFFF', shape, surface=pool.crop(image, rect), surfaceAxis='XY')]
 
 
-def tank_hull(image, pool):
+def tank_hull(image, pool, turret_race=True):
     x0, y0, x1, y1 = image.getbbox()
     half = (x1-x0)/64
     front, rear = (64-y1)/32, (64-y0)/32
@@ -34,6 +34,8 @@ def tank_hull(image, pool):
          part('rear engine armor', [-half+.23, rear-.55, .72], [half-.23, rear-.08, 1.05], c, 'WedgeYReverse'),
          part('fixed turret race', [-.66, -.66, 1.02], [.66, .66, 1.12], '#303934', 'CylinderZ'),
          part('turret well', [-.56, -.56, 1.105], [.56, .56, 1.115], '#141C19', 'CylinderZ')]
+    if not turret_race:
+        p = [piece for piece in p if piece['label'] not in ('fixed turret race','turret well')]
     # Break the source deck into actual panels. The painted turret socket is not
     # pasted at a second pivot; the circular race above defines the real pivot.
     p += panel(image, pool, (35, 3, 93, 27), [-.9, rear-.79, 1.051], [.9, rear-.09, 1.058], 'engine deck')
@@ -159,7 +161,7 @@ def blackfoot_layer(image, state, pool, frame):
     mode = state.rsplit('_', 1)[-1]
     # Door-gun/recon/radar states include a complete copy of the airframe. Only
     # their changed hardware belongs to the attachment, not another hull volume.
-    if state.startswith(('doorgun_', 'recon_', 'radar_', 'medevac_')):
+    if state.startswith(('doorgun_', 'recon_', 'radar_', 'medevac_', 'para_')):
         base = frame(mode)
         image = image.copy()
         for y in range(image.height):
@@ -182,7 +184,7 @@ def blackfoot_layer(image, state, pool, frame):
             for z in (.82,.94):
                 p.append(part('launcher tube', [x-.043,-1.131,z-.04], [x+.043,-1.125,z+.04], '#18231B', 'CylinderY'))
         return p
-    if state.startswith(('doorgun_', 'recon_', 'radar_', 'medevac_')):
+    if state.startswith(('doorgun_', 'recon_', 'radar_', 'medevac_', 'para_')):
         # The changed pixels are small dorsal modules. Group separate vertical
         # regions so recon's nose camera cannot become a fuselage-length slab.
         x0,y0,x1,y1=image.getbbox()
@@ -217,12 +219,25 @@ def rebuild(image, state, rsi, pool, body, frame):
     if 'Blackfoot/blackfoot.rsi' in rsi:
         return blackfoot_body(image,state,pool) if body else blackfoot_layer(image,state,pool,frame)
     if rsi.endswith(('/tank.rsi','/wytank.rsi','/spptank.rsi','/fv150/exterior.rsi')):
+        # TWE uses a 96px frame; the shared tank profile is authored at 128px.
+        scale = image.width / 128
+        if scale != 1:
+            image = image.resize((128, 128), resample=0)
+        pieces = None
         if body:
-            return tank_hull(image,pool)
-        if state.startswith('wheels_'):
-            return tank_tracks(image)
-        if state.startswith('tank_turret_'):
-            return tank_turret(image,pool)
-        if state.startswith('ltb_cannon_'):
-            return cannon(image)
-    return None
+            pieces = tank_hull(image,pool,state!='aev_base')
+        elif state.startswith('wheels_'):
+            pieces = tank_tracks(image)
+        elif state.startswith('tank_turret_'):
+            pieces = tank_turret(image,pool)
+        elif state.startswith('ltb_cannon_'):
+            pieces = cannon(image)
+        if pieces is not None:
+            for p in pieces:
+                for key in ('min','max'):
+                    p[key] = [v*scale for v in p[key]]
+            return pieces
+        if scale != 1:
+            image = frame(state)
+    from redux_fleet_shapes import rebuild as fleet
+    return fleet(image,state,rsi,pool,body,frame)

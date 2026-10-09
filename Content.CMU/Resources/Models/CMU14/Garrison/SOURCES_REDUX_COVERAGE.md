@@ -1,14 +1,14 @@
 # Redux missing-model drafts
 
-Generated with `Tools/three_d/author_redux_coverage.py`. 138 solid models, 203 exact prototype bindings.
+Generated with `Tools/three_d/author_redux_coverage.py`. 155 solid models, 225 exact prototype bindings.
 
 Closed cabinets have backs, sides, plinths, roofs and deep shelves. Original stock art is printed on recessed shelf volumes. Both cable families cover all 16 source connection masks: LV has round insulated cores, while HV follows the armored rectangular conduit artwork. Disposal barrels, collars and junctions have closed sides and undersides, with source routing marks and reciprocal installed/construction poses. Installed channels retain intact floor cladding and obey the original SubFloorHide owner. Geometry height, depth and unseen surfaces are inferred and remain draft. No gameplay prototype, collision, AI or mob equipment is changed.
 
-Vehicle hulls, wheels and installed hardpoints are separate source-layer assemblies. Mounted turrets bind their installed item through VehicleTurretVisual, follow physical entity yaw, and disappear with the source layer; they do not add equipment to mobs. Blackfoot uses authored fuselage, cockpit, tail and engine volumes with separate stowed, hover and flight poses. Its full-airframe equipment overlays contribute only changed hardware. Tank hulls, tracks, rotating turrets and cannon barrels are separate shaped assemblies. Other aircraft and irregular mounts retain closed silhouette sections. Assemblies remain under the 128-part runtime limit. Vehicle state selection follows the source owner; wheel texture animation and aircraft effect animation are currently represented by static solid poses.
+All concrete GridVehicleMover variants are included, including civilian and admin-spawnable vehicles outside supply catalogs. Vehicle hulls, wheels and installed hardpoints are separate source-layer assemblies. Mounted turrets bind their installed item through VehicleTurretVisual, follow physical entity yaw, and disappear with the source layer; they do not add equipment to mobs. APCs, Humvees, vans, cargo trucks and the tracked carrier use distinct family profiles with source-sized footprints, closed bellies, cab glazing and rear access panels. Cargo crates and drums have their own volumes. The carrier has closed/open bay poses. The fighter has a tandem cockpit, swept solid wings, forked tail, engine nozzles and folded/flight/VTOL poses at the original sprite scale. Blackfoot uses authored fuselage, cockpit, tail and engine volumes with separate stowed, hover and flight poses. Its full-airframe equipment overlays contribute only changed hardware, including the parachute variant. Tank hulls, tracks, rotating turrets and cannon barrels are separate shaped assemblies; the engineering hull has no turret race. Assemblies remain under the 128-part runtime limit. Vehicle state selection follows the source owner; wheel texture animation and aircraft effect animation are currently represented by static solid poses.
 
 Small props rest on their modeled footprint; cylinders, rails, ladders, cabinets and machinery have closed back/side/underside volumes. Lift platforms, gear walls and layered small props are static drafts; this pass does not add a lift travel animation or reproduce every charge/light/stock overlay. Cloned bindings retain the original models and their existing state contracts and artwork licenses.
 
-The audit includes hidden placements and possible round-setup vendor/vehicle outputs. Exact binding coverage is not proof of live state coverage or final visual approval. It reports unresolved saved-map prototype references separately and never invents gameplay definitions for them. Unrecognized vehicle layers retain their original sprite fallback.
+The audit includes hidden placements, possible round-setup vendor/vehicle outputs and all concrete drivable vehicle prototypes. Exact binding coverage is not proof of live state coverage or final visual approval. It reports unresolved saved-map prototype references separately and never invents gameplay definitions for them. Unrecognized vehicle layers retain their original sprite fallback.
 
 ## Source artwork and licenses
 
@@ -18,10 +18,21 @@ The audit includes hidden placements and possible round-setup vendor/vehicle out
 - `CMU14/Structures/Vendors/uscmgearrack.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/obj/structures/machinery/vending.dmi , modified by Hyenh#6078(313846233099927552)
 - `CMU14/Structures/deployableladder.rsi` — CC-BY-SA-3.0. Made by scorchfollower
 - `CMU14/Structures/vehicles/Blackfoot/blackfoot.rsi` — CC-BY-SA-3.0. Taken from CM13 PR #10291 at https://github.com/cmss13-devs/cmss13/blob/040a7c240f53d077c67edc92e2e57a927a477a4a/icons/obj/vehicles/blackfoot.dmi
+- `CMU14/Structures/vehicles/cargo_carrier.rsi` — CC-BY-SA-3.0. Sprites from CM-SS13 cargo.aseprite, contributed by thwompa. Source: https://github.com/thwompa/cmss13/blob/parting-gift/icons/thwomp/cargo.aseprite
 - `CMU14/Structures/vehicles/fv150/exterior.rsi` — CC-BY-SA-3.0. taken from CMSS13-PvE https://github.com/cmss13-devs/cmss13-pve/pull/1276 by github CactusMouth
 - `CMU14/Structures/vehicles/hybrisavehicles/ambulance.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
+- `CMU14/Structures/vehicles/hybrisavehicles/civtruck.rsi` — CC-BY-SA-3.0. Taken from cmss13
 - `CMU14/Structures/vehicles/hybrisavehicles/civvan.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
+- `CMU14/Structures/vehicles/hybrisavehicles/cop_car.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
+- `CMU14/Structures/vehicles/hybrisavehicles/small_truck_blue.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
+- `CMU14/Structures/vehicles/hybrisavehicles/small_truck_blue_cargo.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
+- `CMU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargo.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
+- `CMU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargobarrels.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
+- `CMU14/Structures/vehicles/hybrisavehicles/small_truck_garbage.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
+- `CMU14/Structures/vehicles/hybrisavehicles/small_truck_medical.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
+- `CMU14/Structures/vehicles/hybrisavehicles/small_truck_turquoise_cargo.rsi` — CC-BY-SA-3.0. The files are from CMSS13-PVE
 - `CMU14/Structures/vehicles/hybrisavehicles/van.rsi` — CC-BY-SA-3.0. Taken from cmss13
+- `CMU14/Structures/vehicles/marshalpaddywagon.rsi` — CC-BY-SA-3.0. Made by gixer94 for CMU14
 - `CMU14/Vehicles/Fighter/jetfighter.rsi` — CC-BY-SA-3.0. Original artwork by nzzy on Discord, supplied by the contributor. Folded-wing adaptation by CMU.
 - `Objects/Consumable/Food/Baked/donkpocket.rsi` — CC-BY-SA-3.0. Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/c6e3401f2e7e1e55c57060cdf956a98ef1fefc24. Stonk pocket by Tayrtahn on GitHub. Carp pocket by deltanedas (GitHub). Modified by ps3moira (GitHub). 'moth-box' and 'moth' States by kosticia on GitHub
 - `Objects/Devices/igniter.rsi` — CC-BY-SA-3.0. Taken from tgstation at https://github.com/tgstation/tgstation/blob/9a401d19045574f3ea7f2cf3feebf65989903ccc/icons/obj/assemblies/new_assemblies.dmi, inhands by TiniestShark (github)
@@ -63,16 +74,20 @@ The audit includes hidden placements and possible round-setup vendor/vehicle out
 - `_RMC14/Structures/Power/fusion_reactor.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/edd9c65b095cb55b6739d94587a353a5b3049536/icons/obj/structures/machinery/fusion_eng.dmi
 - `_RMC14/Structures/Power/geothermal_generator.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/edd9c65b095cb55b6739d94587a353a5b3049536/icons/obj/structures/machinery/geothermal.dmi
 - `_RMC14/Structures/Storage/Crates/secure_we_ya.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/7cb618c69b75873f3ce893022fe08d1233b3152d/icons/obj/structures/crates.dmi
+- `_RMC14/Structures/Vehicles/CLF_van.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/clf_van.dmi
 - `_RMC14/Structures/Vehicles/apc.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/apc.dmi
 - `_RMC14/Structures/Vehicles/apc_pmc.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/apc_pmc.dmi
+- `_RMC14/Structures/Vehicles/box_van.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/box_van.dmi
 - `_RMC14/Structures/Vehicles/humvee.rsi` — CC-BY-SA-3.0. Taken from CMSS13 https://github.com/cmss13-devs/cmss13/pull/11308
 - `_RMC14/Structures/Vehicles/humvee_medical.rsi` — CC-BY-SA-3.0. Taken from CMSS13 https://github.com/cmss13-devs/cmss13/pull/11308
 - `_RMC14/Structures/Vehicles/humvee_transport.rsi` — CC-BY-SA-3.0. Taken from CMSS13 https://github.com/cmss13-devs/cmss13/pull/11308
+- `_RMC14/Structures/Vehicles/pizza_van.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/tree/master/icons/obj/vehicles/pizza_van
 - `_RMC14/Structures/Vehicles/sppapc.rsi` — CC-BY-SA-3.0. Taken from CMSS13 https://github.com/cmss13-devs/cmss13-pve/blob/master/icons/obj/vehicles/uppapc.dmi
 - `_RMC14/Structures/Vehicles/spptank.rsi` — CC-BY-SA-3.0. Taken from CMSS13 https://github.com/cmss13-devs/cmss13-pve/blob/master/icons/obj/vehicles/upptank.dmi
 - `_RMC14/Structures/Vehicles/sppvan.rsi` — CC-BY-SA-3.0. Taken from CMSS13 https://github.com/cmss13-devs/cmss13-pve/blob/master/icons/obj/vehicles/uppvan.dmi
 - `_RMC14/Structures/Vehicles/sppvan_logistics.rsi` — CC-BY-SA-3.0. Taken from CMSS13 https://github.com/cmss13-devs/cmss13-pve/blob/master/icons/obj/vehicles/uppvan_logistics.dmi
 - `_RMC14/Structures/Vehicles/tank.rsi` — CC-BY-SA-3.0. Taken from CMSS13 https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/tank.dmi, tank_base, tank_turret_0 and wheels_0/1 by github noctyrnal. aev_base taken from CMSS13-PvE https://github.com/cmss13-devs/cmss13-pve/pull/256 by github AndroBetel
+- `_RMC14/Structures/Vehicles/van.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/tree/master/icons/obj/vehicles/van
 - `_RMC14/Structures/Vehicles/wytank.rsi` — CC-BY-SA-3.0. Taken from CMSS13 https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/tank.dmi, tank_base, tank_turret_0 and wheels_0/1 by github noctyrnal. aev_base taken from CMSS13-PvE https://github.com/cmss13-devs/cmss13-pve/pull/256 by github AndroBetel. Tank pmc color scheme by lopz_174.
 - `_RMC14/Structures/Walls/Barricades/barricade.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/5cf465e72efb6beccd2b78bf263072816a2a60ad/icons/obj/structures/barricades.dmi
 - `_RMC14/Structures/Walls/elevator.rsi` — CC-BY-SA-3.0. Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/turf/elevator.dmi
