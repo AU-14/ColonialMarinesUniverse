@@ -7,7 +7,7 @@
   "newModels": 138,
   "newBindings": 203,
   "maxDefaultParts": 71,
-  "newSurfaces": 347,
+  "newSurfaces": 329,
   "verifiedLibraryExports": 2614,
   "unresolvedMapReferences": {
     "CMUGasPipeStraightAlt2": "Missing prototype: CMUGasPipeStraightAlt2",
@@ -1029,8 +1029,8 @@
       "sourcePrototypes": [
         "VehicleAev"
       ],
-      "parts": 23,
-      "triangles": 796,
+      "parts": 70,
+      "triangles": 2180,
       "vehicleLayerStates": 52,
       "mountedTurrets": []
     },
@@ -1040,8 +1040,8 @@
         "VehicleBlackfootDoorGunVariant",
         "VehicleBlackfootTransport"
       ],
-      "parts": 16,
-      "triangles": 456,
+      "parts": 40,
+      "triangles": 1500,
       "vehicleLayerStates": 33,
       "mountedTurrets": []
     },
@@ -1164,8 +1164,8 @@
       "sourcePrototypes": [
         "VehicleSPPTank"
       ],
-      "parts": 23,
-      "triangles": 796,
+      "parts": 70,
+      "triangles": 2180,
       "vehicleLayerStates": 34,
       "mountedTurrets": []
     },
@@ -1212,9 +1212,9 @@
     {
       "id": "CMU3DReduxVehicleSPPTankTurretMounted",
       "sourcePrototypes": [],
-      "parts": 7,
-      "triangles": 136,
-      "vehicleLayerStates": 1,
+      "parts": 16,
+      "triangles": 436,
+      "vehicleLayerStates": 2,
       "mountedTurrets": [
         "VehicleSPPTankTurret"
       ]
@@ -1294,8 +1294,8 @@
       "sourcePrototypes": [
         "VehicleTank"
       ],
-      "parts": 23,
-      "triangles": 796,
+      "parts": 70,
+      "triangles": 2180,
       "vehicleLayerStates": 52,
       "mountedTurrets": []
     },
@@ -1382,8 +1382,8 @@
     {
       "id": "CMU3DReduxVehicleTankLTBCannonMounted",
       "sourcePrototypes": [],
-      "parts": 6,
-      "triangles": 72,
+      "parts": 4,
+      "triangles": 256,
       "vehicleLayerStates": 1,
       "mountedTurrets": [
         "VehicleTankLTBCannon"
@@ -1414,8 +1414,8 @@
       "sourcePrototypes": [
         "VehicleTankPMC"
       ],
-      "parts": 23,
-      "triangles": 796,
+      "parts": 70,
+      "triangles": 2180,
       "vehicleLayerStates": 49,
       "mountedTurrets": []
     },
@@ -1454,17 +1454,17 @@
       "sourcePrototypes": [
         "VehicleTankTWE"
       ],
-      "parts": 23,
-      "triangles": 796,
+      "parts": 70,
+      "triangles": 2180,
       "vehicleLayerStates": 70,
       "mountedTurrets": []
     },
     {
       "id": "CMU3DReduxVehicleTankTurretMounted",
       "sourcePrototypes": [],
-      "parts": 7,
-      "triangles": 136,
-      "vehicleLayerStates": 1,
+      "parts": 16,
+      "triangles": 436,
+      "vehicleLayerStates": 2,
       "mountedTurrets": [
         "VehicleTankTurret"
       ]
@@ -1472,9 +1472,9 @@
     {
       "id": "CMU3DReduxVehicleTankTurretPMCMounted",
       "sourcePrototypes": [],
-      "parts": 7,
-      "triangles": 136,
-      "vehicleLayerStates": 1,
+      "parts": 16,
+      "triangles": 436,
+      "vehicleLayerStates": 2,
       "mountedTurrets": [
         "VehicleTankTurretPMC"
       ]
@@ -1482,9 +1482,9 @@
     {
       "id": "CMU3DReduxVehicleTankTurretTWEMounted",
       "sourcePrototypes": [],
-      "parts": 7,
-      "triangles": 136,
-      "vehicleLayerStates": 1,
+      "parts": 16,
+      "triangles": 436,
+      "vehicleLayerStates": 2,
       "mountedTurrets": [
         "VehicleTankTurretTWE"
       ]

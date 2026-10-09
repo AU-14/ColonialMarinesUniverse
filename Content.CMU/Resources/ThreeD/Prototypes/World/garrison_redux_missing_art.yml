@@ -448,22 +448,6 @@
   atlasIndex: 3711
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3711.png
 - type: cmu3DSurface
-  id: CMU3DReduxSurface3712
-  atlasIndex: 3712
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3712.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3713
-  atlasIndex: 3713
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3713.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3714
-  atlasIndex: 3714
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3714.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3715
-  atlasIndex: 3715
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3715.png
-- type: cmu3DSurface
   id: CMU3DReduxSurface3716
   atlasIndex: 3716
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3716.png
@@ -507,14 +491,6 @@
   id: CMU3DReduxSurface3726
   atlasIndex: 3726
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3726.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3727
-  atlasIndex: 3727
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3727.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3728
-  atlasIndex: 3728
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3728.png
 - type: cmu3DSurface
   id: CMU3DReduxSurface3729
   atlasIndex: 3729
@@ -640,10 +616,6 @@
   atlasIndex: 3759
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3759.png
 - type: cmu3DSurface
-  id: CMU3DReduxSurface3760
-  atlasIndex: 3760
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3760.png
-- type: cmu3DSurface
   id: CMU3DReduxSurface3761
   atlasIndex: 3761
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3761.png
@@ -652,97 +624,13 @@
   atlasIndex: 3762
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3762.png
 - type: cmu3DSurface
-  id: CMU3DReduxSurface3763
-  atlasIndex: 3763
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3763.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3764
-  atlasIndex: 3764
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3764.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3765
-  atlasIndex: 3765
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3765.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3766
-  atlasIndex: 3766
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3766.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3767
-  atlasIndex: 3767
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3767.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3768
-  atlasIndex: 3768
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3768.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3769
-  atlasIndex: 3769
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3769.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3770
-  atlasIndex: 3770
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3770.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3771
-  atlasIndex: 3771
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3771.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3772
-  atlasIndex: 3772
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3772.png
-- type: cmu3DSurface
   id: CMU3DReduxSurface3773
   atlasIndex: 3773
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3773.png
 - type: cmu3DSurface
-  id: CMU3DReduxSurface3774
-  atlasIndex: 3774
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3774.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3775
-  atlasIndex: 3775
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3775.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3776
-  atlasIndex: 3776
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3776.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3777
-  atlasIndex: 3777
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3777.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3778
-  atlasIndex: 3778
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3778.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3779
-  atlasIndex: 3779
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3779.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3780
-  atlasIndex: 3780
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3780.png
-- type: cmu3DSurface
   id: CMU3DReduxSurface3781
   atlasIndex: 3781
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3781.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3782
-  atlasIndex: 3782
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3782.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3783
-  atlasIndex: 3783
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3783.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3784
-  atlasIndex: 3784
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3784.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3785
-  atlasIndex: 3785
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3785.png
 - type: cmu3DSurface
   id: CMU3DReduxSurface3786
   atlasIndex: 3786
@@ -755,18 +643,6 @@
   id: CMU3DReduxSurface3788
   atlasIndex: 3788
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3788.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3789
-  atlasIndex: 3789
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3789.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3790
-  atlasIndex: 3790
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3790.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3791
-  atlasIndex: 3791
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3791.png
 - type: cmu3DSurface
   id: CMU3DReduxSurface3792
   atlasIndex: 3792
@@ -960,22 +836,6 @@
   atlasIndex: 3839
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3839.png
 - type: cmu3DSurface
-  id: CMU3DReduxSurface3840
-  atlasIndex: 3840
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3840.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3841
-  atlasIndex: 3841
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3841.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3842
-  atlasIndex: 3842
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3842.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3843
-  atlasIndex: 3843
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3843.png
-- type: cmu3DSurface
   id: CMU3DReduxSurface3844
   atlasIndex: 3844
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3844.png
@@ -1068,10 +928,6 @@
   atlasIndex: 3866
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3866.png
 - type: cmu3DSurface
-  id: CMU3DReduxSurface3867
-  atlasIndex: 3867
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3867.png
-- type: cmu3DSurface
   id: CMU3DReduxSurface3868
   atlasIndex: 3868
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3868.png
@@ -1139,58 +995,6 @@
   id: CMU3DReduxSurface3884
   atlasIndex: 3884
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3884.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3885
-  atlasIndex: 3885
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3885.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3886
-  atlasIndex: 3886
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3886.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3887
-  atlasIndex: 3887
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3887.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3888
-  atlasIndex: 3888
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3888.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3889
-  atlasIndex: 3889
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3889.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3890
-  atlasIndex: 3890
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3890.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3891
-  atlasIndex: 3891
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3891.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3892
-  atlasIndex: 3892
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3892.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3893
-  atlasIndex: 3893
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3893.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3894
-  atlasIndex: 3894
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3894.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3895
-  atlasIndex: 3895
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3895.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3896
-  atlasIndex: 3896
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3896.png
-- type: cmu3DSurface
-  id: CMU3DReduxSurface3897
-  atlasIndex: 3897
-  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3897.png
 - type: cmu3DSurface
   id: CMU3DReduxSurface3898
   atlasIndex: 3898
@@ -1387,3 +1191,127 @@
   id: CMU3DReduxSurface3946
   atlasIndex: 3946
   texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3946.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3947
+  atlasIndex: 3947
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3947.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3948
+  atlasIndex: 3948
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3948.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3949
+  atlasIndex: 3949
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3949.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3950
+  atlasIndex: 3950
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3950.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3951
+  atlasIndex: 3951
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3951.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3952
+  atlasIndex: 3952
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3952.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3953
+  atlasIndex: 3953
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3953.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3954
+  atlasIndex: 3954
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3954.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3955
+  atlasIndex: 3955
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3955.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3956
+  atlasIndex: 3956
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3956.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3957
+  atlasIndex: 3957
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3957.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3958
+  atlasIndex: 3958
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3958.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3959
+  atlasIndex: 3959
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3959.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3960
+  atlasIndex: 3960
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3960.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3961
+  atlasIndex: 3961
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3961.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3962
+  atlasIndex: 3962
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3962.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3963
+  atlasIndex: 3963
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3963.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3964
+  atlasIndex: 3964
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3964.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3965
+  atlasIndex: 3965
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3965.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3966
+  atlasIndex: 3966
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3966.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3967
+  atlasIndex: 3967
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3967.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3968
+  atlasIndex: 3968
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3968.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3969
+  atlasIndex: 3969
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3969.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3970
+  atlasIndex: 3970
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3970.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3971
+  atlasIndex: 3971
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3971.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3972
+  atlasIndex: 3972
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3972.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3973
+  atlasIndex: 3973
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3973.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3974
+  atlasIndex: 3974
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3974.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3975
+  atlasIndex: 3975
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3975.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3976
+  atlasIndex: 3976
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3976.png
+- type: cmu3DSurface
+  id: CMU3DReduxSurface3977
+  atlasIndex: 3977
+  texture: /Textures/CMU14/ThreeD/ReduxCoverage/CMU3DReduxSurface3977.png

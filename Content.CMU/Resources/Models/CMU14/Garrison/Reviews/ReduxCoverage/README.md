@@ -23,6 +23,34 @@ retain the original sprite rather than silently losing equipment.
 
 ![Source art and solid models from front, rear and below](contact-sheet.png)
 
+## Tank and Blackfoot refinement
+
+The tank hull now has a sloped glacis, separate skirts, continuous track runs,
+road wheels and a fixed turret race. The turret, hatch, mantlet and cannon are
+separate solids. Turret and attached weapon placement uses a fixed mount in the
+authored source frame, so aiming rotates those parts without moving the hull or
+switching mount offsets at 2D cardinal boundaries.
+
+The Blackfoot now has a shaped fuselage, canopy, forked tail, short wings, side
+doors, landing gear and engine nacelles. Stowed, hover and flight states select
+different engine/gear poses. Door-gun, recon and radar source images contain a
+copy of the whole aircraft; only their changed hardware is modeled as an
+attachment. The earlier aircraft-sized opaque attachment blocks are removed.
+The 2D takeoff screen offset no longer makes the 3D aircraft fall back to a sprite.
+
+![Tank with independently turned turret, and equipped Blackfoot poses](vehicle-refinement.png)
+
+The illustrated tank composition is 90 parts / 2,872 triangles across its hull,
+turret and cannon. The illustrated Blackfoot is 62 parts / 2,076 triangles stowed,
+and 56 parts / 1,848 triangles airborne. These are geometry counts, not an FPS
+benchmark. Solid volumes and source panels were reviewed from front, rear and
+below; live driving and flight still need in-game acceptance.
+
+Refinement verification: all four `CMU3DVehicleAppearanceTest` cases passed,
+including `CannonRotatesAroundItsTurretWithoutChangingMountAtCardinalBoundaries`.
+The client-only library reload integration test also passed against the refined
+assets. The export validator checked the full library and all 2,614 GLB hashes.
+
 ## Verification
 
 - Content client, shared and server projects built through the repository test wrapper.

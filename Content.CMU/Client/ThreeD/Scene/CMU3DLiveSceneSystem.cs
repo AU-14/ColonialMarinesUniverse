@@ -487,6 +487,12 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                     position += model.GroundOffset;
                     renderYaw = CMU3DSceneLayout.RenderYaw(model, candidate.Yaw, candidate.Sprite.NoRotation,
                         candidate.Sprite.SnapCardinals) + (float) candidate.Sprite.Rotation.Theta;
+                    if (model.VehicleTurretPrototypes.Length > 0 &&
+                        TryVehiclePose(candidate.Uid, out var mountPosition, out var mountYaw))
+                    {
+                        position = mountPosition - origin + model.GroundOffset;
+                        renderYaw = CMU3DSceneLayout.RenderYaw(model, (float) mountYaw.Theta, false, false);
+                    }
                     if (model.OpeningFacingTargets.Length > 0)
                         renderYaw = OpeningFacingYaw(candidate.Uid, model, renderYaw);
                     IReadOnlyList<CMU3DModelPart> parts = stateParts ?? model.Parts;

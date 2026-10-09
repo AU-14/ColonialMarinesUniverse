@@ -17639,9 +17639,9 @@
       "label": "VehicleAev",
       "file": "CMU3DReduxVehicleAev.glb",
       "status": "draft",
-      "parts": 23,
-      "triangles": 796,
-      "sha256": "b9b7bdde865d0d4cf908bdc8e10d0d8d8091f69817499e42e6c44e0f52424a02",
+      "parts": 70,
+      "triangles": 2180,
+      "sha256": "3532a116c2cfd232f541a1ceca16ef61eaf28e3f9370f9495dca7c4183ead9c4",
       "sourcePrototypes": [
         "VehicleAev"
       ]
@@ -17651,9 +17651,9 @@
       "label": "VehicleBlackfootDoorGunVariant",
       "file": "CMU3DReduxVehicleBlackfootDoorGunVariant.glb",
       "status": "draft",
-      "parts": 16,
-      "triangles": 456,
-      "sha256": "60590474222f470382cafbe03dbfa14c9802d83007ecbdc343a76621f7fe70ee",
+      "parts": 40,
+      "triangles": 1500,
+      "sha256": "f927a2262c4bf9dc0d7c63a094f09f418499052bcef0628e432641ebfb5ef815",
       "sourcePrototypes": [
         "VehicleBlackfootDoorGunVariant",
         "VehicleBlackfootTransport"
@@ -17784,9 +17784,9 @@
       "label": "VehicleSPPTank",
       "file": "CMU3DReduxVehicleSPPTank.glb",
       "status": "draft",
-      "parts": 23,
-      "triangles": 796,
-      "sha256": "e5ef14074e67b9e402db4138b7af3fd3ffb58ffabf98ca0eaa5dd4d8b1b43c2e",
+      "parts": 70,
+      "triangles": 2180,
+      "sha256": "4846bfa8abcc5b1f0fd04364f45d406ce1a02fe78d07697223537207a1bd9eea",
       "sourcePrototypes": [
         "VehicleSPPTank"
       ]
@@ -17836,9 +17836,9 @@
       "label": "VehicleSPPTankTurretMounted",
       "file": "CMU3DReduxVehicleSPPTankTurretMounted.glb",
       "status": "draft",
-      "parts": 7,
-      "triangles": 136,
-      "sha256": "3ba2710c9f09a1a2927b0ab31d2ccf0847fef21ccfc2e85c5b0e2047f08aa9d7",
+      "parts": 16,
+      "triangles": 436,
+      "sha256": "0a119e3beb96ab5ff8d410a3a94da5f9e538330bd1c3974fab0131fb31269a40",
       "sourcePrototypes": []
     },
     {
@@ -17926,9 +17926,9 @@
       "label": "VehicleTank",
       "file": "CMU3DReduxVehicleTank.glb",
       "status": "draft",
-      "parts": 23,
-      "triangles": 796,
-      "sha256": "3b9fffbfc16e2f8626afb3b41161d652af8bf5dc330fceeb183de669cb919775",
+      "parts": 70,
+      "triangles": 2180,
+      "sha256": "a9ca45c4499096b47317c8ec7578a26c24186255299c2b5844ae435b7d5fb558",
       "sourcePrototypes": [
         "VehicleTank"
       ]
@@ -18018,9 +18018,9 @@
       "label": "VehicleTankLTBCannonMounted",
       "file": "CMU3DReduxVehicleTankLTBCannonMounted.glb",
       "status": "draft",
-      "parts": 6,
-      "triangles": 72,
-      "sha256": "c9137e31ffd3dae8f30b1fb948b3cc43dc5401c63f9541090a730a35dcd9df96",
+      "parts": 4,
+      "triangles": 256,
+      "sha256": "6f735c396a6d54f437aa3e8ab3d16d96de938123ac615d45c190bc1a101f341c",
       "sourcePrototypes": []
     },
     {
@@ -18048,9 +18048,9 @@
       "label": "VehicleTankPMC",
       "file": "CMU3DReduxVehicleTankPMC.glb",
       "status": "draft",
-      "parts": 23,
-      "triangles": 796,
-      "sha256": "787c67d1badbf134a5b3cc79694198ab951b4d9bf5e283c687b44a9d37f4f01f",
+      "parts": 70,
+      "triangles": 2180,
+      "sha256": "b1f4bab65551366cabf5920eb4c058a5f89ecd5b7a41cb3551b3795b1436dc9d",
       "sourcePrototypes": [
         "VehicleTankPMC"
       ]
@@ -18090,9 +18090,9 @@
       "label": "VehicleTankTWE",
       "file": "CMU3DReduxVehicleTankTWE.glb",
       "status": "draft",
-      "parts": 23,
-      "triangles": 796,
-      "sha256": "c1ab9b875c471e1a7a647a90a6cf8ae92ef1706722d83b1dd0695868adde45dd",
+      "parts": 70,
+      "triangles": 2180,
+      "sha256": "fa82a6a615f584ae07d509bd73c2df93d26465f79b46da89c560e597fa72913a",
       "sourcePrototypes": [
         "VehicleTankTWE"
       ]
@@ -18102,9 +18102,9 @@
       "label": "VehicleTankTurretMounted",
       "file": "CMU3DReduxVehicleTankTurretMounted.glb",
       "status": "draft",
-      "parts": 7,
-      "triangles": 136,
-      "sha256": "d0f86c851b57a305d03eb54b0fd926b718965c3581295053fd5c43a9224080e9",
+      "parts": 16,
+      "triangles": 436,
+      "sha256": "45a724a5ee2045b03a43d913046d2db94769e44fdc3dc6145ef4bb3f0463c230",
       "sourcePrototypes": []
     },
     {
@@ -18112,9 +18112,9 @@
       "label": "VehicleTankTurretPMCMounted",
       "file": "CMU3DReduxVehicleTankTurretPMCMounted.glb",
       "status": "draft",
-      "parts": 7,
-      "triangles": 136,
-      "sha256": "452a54a578df04db663dda89d80f0216bf3e85b0057bfb9088fad1fa1ba60c77",
+      "parts": 16,
+      "triangles": 436,
+      "sha256": "3769f55c65855f264ff5dd950f59b82df564dfdbaa0e4ecbe58a887d93ed2ad1",
       "sourcePrototypes": []
     },
     {
@@ -18122,9 +18122,9 @@
       "label": "VehicleTankTurretTWEMounted",
       "file": "CMU3DReduxVehicleTankTurretTWEMounted.glb",
       "status": "draft",
-      "parts": 7,
-      "triangles": 136,
-      "sha256": "e9ef62d0ad49e10b854de4c54c1e58efdf1083b5f436c60d3a28053a6bf72c7d",
+      "parts": 16,
+      "triangles": 436,
+      "sha256": "81d915d1620e286eff5c679c2916e3f7560673cdb599015f61994108ef02458c",
       "sourcePrototypes": []
     },
     {
