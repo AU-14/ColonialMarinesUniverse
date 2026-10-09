@@ -128,6 +128,11 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaBowTest
 {
+    // cmss13 puts pred weapons in suit storage through the armor's allowed list, ss14 needs the item to
+    // list suitStorage too. these checks are about the native equip slot, so mask that extra one off
+    private static SlotFlags NativeSlots(ClothingComponent clothing)
+        => clothing.Slots & ~SlotFlags.SUITSTORAGE;
+
     [Test]
     public async Task YautjaBowArrowPrototypeSuiteExists()
     {
@@ -923,7 +928,7 @@ public sealed class YautjaBowTest
                         Is.EqualTo("An abnormal-sized weapon with an exceptionally tight string. Requires extraordinary strength to draw."));
                     Assert.That(bowItem.Size.Id, Is.EqualTo("Large"),
                         "CMSS13 /obj/item/weapon/gun/bow sets w_class = SIZE_LARGE.");
-                    Assert.That(bowClothing.Slots, Is.EqualTo(SlotFlags.BACK),
+                    Assert.That(NativeSlots(bowClothing), Is.EqualTo(SlotFlags.BACK),
                         "CMSS13 /obj/item/weapon/gun/bow sets flags_equip_slot = SLOT_BACK.");
                     Assert.That(bowGun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto),
                         "CMSS13 bow uses an internal one-shot magazine without burst/full-auto modes.");
@@ -5379,7 +5384,7 @@ public sealed class YautjaBowTest
             try
             {
                 var clothing = entMan.GetComponent<ClothingComponent>(bow);
-                Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BACK));
+                Assert.That(NativeSlots(clothing), Is.EqualTo(SlotFlags.BACK));
             }
             finally
             {
@@ -10773,7 +10778,7 @@ public sealed class YautjaBowTest
                 {
                     Assert.That(meta.EntityName, Is.EqualTo("clan shield"));
                     Assert.That(meta.EntityDescription, Is.EqualTo("A large tribal shield made of a strange metal alloy. The face of the shield bears three skulls, two human, one alien."));
-                    Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BACK));
+                    Assert.That(NativeSlots(clothing), Is.EqualTo(SlotFlags.BACK));
                 });
             }
             finally
@@ -11572,7 +11577,7 @@ public sealed class YautjaBowTest
                     Assert.That(meta.EntityDescription, Is.EqualTo("A compact Yautja device in the shape of a crescent. It can rapidly fire damaging spikes and automatically recharges."));
                     Assert.That(item.Size.Id, Is.EqualTo("Normal"),
                         "CMSS13 /obj/item/weapon/gun/launcher/spike sets w_class = SIZE_MEDIUM.");
-                    Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BELT | SlotFlags.BACK),
+                    Assert.That(NativeSlots(clothing), Is.EqualTo(SlotFlags.BELT | SlotFlags.BACK),
                         "CMSS13 /obj/item/weapon/gun/launcher/spike sets flags_equip_slot = SLOT_WAIST|SLOT_BACK.");
                     Assert.That(ammo.Proto, Is.EqualTo("CMUYautjaSpikeProjectile"));
                     Assert.That(ammo.Capacity, Is.EqualTo(12));
@@ -12059,7 +12064,7 @@ public sealed class YautjaBowTest
                     Assert.That(meta.EntityDescription, Is.EqualTo("A plasma pistol capable of rapid fire. It has an integrated battery. Can be used to set fires, either to braziers or on people."));
                     Assert.That(item.Size.Id, Is.EqualTo("Normal"),
                         "CMSS13 /obj/item/weapon/gun/energy/yautja/plasmapistol sets w_class = SIZE_MEDIUM.");
-                    Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BELT),
+                    Assert.That(NativeSlots(clothing), Is.EqualTo(SlotFlags.BELT),
                         "CMSS13 /obj/item/weapon/gun/energy/yautja/plasmapistol sets flags_equip_slot = SLOT_WAIST.");
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
@@ -12161,7 +12166,7 @@ public sealed class YautjaBowTest
                     Assert.That(meta.EntityDescription, Is.EqualTo("A long-barreled heavy plasma weapon. Intended for combat, not hunting. Has an integrated battery that allows for a functionally unlimited amount of shots to be discharged. Equipped with an internal gyroscopic stabilizer allowing its operator to fire the weapon one-handed if desired."));
                     Assert.That(item.Size.Id, Is.EqualTo("Huge"),
                         "CMSS13 /obj/item/weapon/gun/energy/yautja/plasmarifle sets w_class = SIZE_HUGE.");
-                    Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BACK),
+                    Assert.That(NativeSlots(clothing), Is.EqualTo(SlotFlags.BACK),
                         "CMSS13 /obj/item/weapon/gun/energy/yautja/plasmarifle sets flags_equip_slot = SLOT_BACK.");
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
@@ -12227,7 +12232,7 @@ public sealed class YautjaBowTest
                         "CMSS13 plasma carbine inherits Yautja pred gun hand visuals.");
                     Assert.That(item.HeldPrefix, Is.EqualTo("plasmacarbine"),
                         "CMSS13 plasma carbine sets item_state = \"plasmacarbine\".");
-                    Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BACK),
+                    Assert.That(NativeSlots(clothing), Is.EqualTo(SlotFlags.BACK),
                         "CMSS13 /obj/item/weapon/gun/energy/yautja/plasmacarbine sets flags_equip_slot = SLOT_BACK.");
                     Assert.That(clothing.RsiPath, Is.EqualTo("CMU14/Yautja/pred_guns_back.rsi"),
                         "CMSS13 plasma carbine inherits its back-slot item_state from the Yautja pred gun DMI family.");
@@ -19172,7 +19177,7 @@ public sealed class YautjaBowTest
             Assert.That(entMan.GetComponent<Content.Shared.Tools.Components.ToolComponent>(sword).Qualities.Contains("Slicing"), Is.True);
             Assert.That(item.Size.Id, Is.EqualTo("Large"),
                 "CMSS13 /obj/item/weapon/yautja/sword sets w_class = SIZE_LARGE.");
-            Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BACK),
+            Assert.That(NativeSlots(clothing), Is.EqualTo(SlotFlags.BACK),
                 "CMSS13 /obj/item/weapon/yautja/sword sets flags_equip_slot = SLOT_BACK.");
             Assert.That(melee.AttackRate, Is.EqualTo(1f),
                 "CMSS13 /obj/item/weapon/yautja/sword sets attack_speed = 1 SECONDS.");
@@ -19200,7 +19205,7 @@ public sealed class YautjaBowTest
         {
             Assert.That(entMan.TryGetComponent<ClothingComponent>(uid, out var clothing), Is.True,
                 $"{row.Id} {row.SourcePath} flags_equip_slot local mapping");
-            Assert.That(clothing!.Slots, Is.EqualTo(slots), $"{row.Id} {row.SourcePath} flags_equip_slot local mapping");
+            Assert.That(NativeSlots(clothing!), Is.EqualTo(slots), $"{row.Id} {row.SourcePath} flags_equip_slot local mapping");
         }
         else
         {
@@ -19294,7 +19299,7 @@ public sealed class YautjaBowTest
         if (row.Slots is { } slots)
         {
             var clothing = entMan.GetComponent<ClothingComponent>(uid);
-            Assert.That(clothing.Slots, Is.EqualTo(slots), $"{row.Id} {row.SourcePath} flags_equip_slot local mapping");
+            Assert.That(NativeSlots(clothing), Is.EqualTo(slots), $"{row.Id} {row.SourcePath} flags_equip_slot local mapping");
         }
         else
         {
@@ -19419,7 +19424,7 @@ public sealed class YautjaBowTest
             "CMSS13 /obj/item/weapon/twohanded/yautja/spear source description.");
         Assert.That(item.Size.Id, Is.EqualTo("Large"),
             "CMSS13 /obj/item/weapon/twohanded/yautja inherits w_class = SIZE_LARGE.");
-        Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.BACK),
+        Assert.That(NativeSlots(clothing), Is.EqualTo(SlotFlags.BACK),
             "CMSS13 /obj/item/weapon/twohanded/yautja inherits flags_equip_slot = SLOT_BACK.");
         Assert.That(entMan.HasComponent<YautjaTechItemComponent>(spear), Is.False,
             "CMSS13 hunter spear overrides flags_item to TWOHANDED|ADJACENT_CLICK_DELAY and drops ITEM_PREDATOR.");

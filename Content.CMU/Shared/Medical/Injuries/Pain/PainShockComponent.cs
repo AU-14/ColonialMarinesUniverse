@@ -18,6 +18,14 @@ public sealed partial class PainShockComponent : Component
     [DataField]
     public FixedPoint2 PainMax = 100;
 
+    // tiers below this aren't felt at all, cmss13 preds have every threshold below horrible nulled out
+    [DataField]
+    public PainTier MinimumFeltTier = PainTier.Mild;
+
+    // hardest tier this body actually feels, preds only ever get the distressing slowdown, never shock
+    [DataField]
+    public PainTier MaximumFeltTier = PainTier.Shock;
+
     [DataField]
     public bool InShock;
 
