@@ -54,9 +54,8 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var hand in _hands.EnumerateHands(uid))
             if (_hands.TryGetHeldItem(uid, hand, out var item))
                 yield return item.Value;
-        if (Supplies(uid, out var supplies))
-            foreach (var item in supplies.Container.ContainedEntities)
-                yield return item;
+        foreach (var item in SupplyItems(uid))
+            yield return item;
     }
 
     private EntityUid? MedicalDefib(EntityUid uid) => MedicalItems(uid)
@@ -88,7 +87,7 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     private bool WorkOnPatient(EntityUid uid, CMUExpeditionAgentComponent agent, CMUExpeditionMedicComponent medic,
-        EntityUid patient, TimeSpan now)
+        EntityUid patient, TimeSpan now, bool stabilizeBleeding = false)
     {
         if (!MedicalWorkSafe(uid, agent, medic, patient))
         {
@@ -106,12 +105,13 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         }
         var items = MedicalItems(uid).ToList();
-        var dressing = items.Where(item => UsefulDressing(item, patient)).Cast<EntityUid?>().FirstOrDefault();
+        var dressing = items.Where(item => UsefulDressing(item, patient) &&
+            (!stabilizeBleeding || Comp<HealingComponent>(item).BloodlossModifier < 0)).Cast<EntityUid?>().FirstOrDefault();
         var injector = items.Where(item => UsefulInjection(item, patient)).Cast<EntityUid?>().FirstOrDefault();
         var defib = MedicalDefib(uid);
         var dead = _mobs.IsDead(patient);
         var needsPreparation = dead && defib is { } device && !_defibAdvice.Analyze(device, patient).Sufficient;
-        EntityUid? chosen = !_mobs.IsAlive(patient) && injector != null ? injector :
+        EntityUid? chosen = stabilizeBleeding ? dressing : !_mobs.IsAlive(patient) && injector != null ? injector :
             dead && !needsPreparation ? defib : dressing ?? (dead ? defib : injector);
         if (chosen is not { } item)
         {
@@ -213,7 +213,16 @@ public sealed partial class CMUExpeditionAgentSystem
         medic.Shocks++;
         medic.PatientShocks++;
         if (!_mobs.IsDead(ent.Owner))
+        {
             medic.Revivals++;
+            if (TryComp<CMUExpeditionAgentComponent>(ent.Owner, out var recovered))
+            {
+                recovered.RecoveryUntil = _timing.CurTime + TimeSpan.FromSeconds(20);
+                recovered.Duty = CMUSquadDuty.Recover;
+                recovered.DutyUntil = TimeSpan.Zero;
+                Decision(recovered, "post-revival", "recover-before-advancing");
+            }
+        }
     }
 
     private void OnMedicInjection(Entity<CMUExpeditionMedicalToolComponent> ent, ref HyposprayDoAfterEvent args)

@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Shared._RMC14.Storage;
 using Content.Shared.Lock;
 using Content.Shared.Storage;
+using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -12,6 +13,7 @@ public sealed partial class CMUExpeditionAgentSystem
 {
     [Dependency] private SharedStorageSystem _scavengeStorage = default!;
     [Dependency] private RMCStorageSystem _scavengeRmcStorage = default!;
+    [Dependency] private SharedEntityStorageSystem _supplyCrates = default!;
 
     private bool ScavengeSource(EntityUid uid, EntityUid item, out EntityUid source)
     {
@@ -34,6 +36,12 @@ public sealed partial class CMUExpeditionAgentSystem
                     if (!_mobs.IsDead(source))
                         return false;
                 }
+            }
+            else if (TryComp<EntityStorageComponent>(source, out var crate))
+            {
+                if (TryComp<LockComponent>(source, out var crateLock) && crateLock.Locked ||
+                    !crate.Open && !_supplyCrates.CanOpen(uid, source, silent: true, crate))
+                    return false;
             }
             else if (!_mobs.IsDead(source) ||
                 !_hands.IsHolding(source, item, out _) &&
@@ -64,21 +72,31 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool UsefulLoot(EntityUid uid, EntityUid item, bool armed)
     {
         if (HasComp<GunComponent>(item))
-            return !armed && WeaponAmmo(item) > 0 &&
-                !(TryComp<CMUExpeditionWeaponRoleComponent>(item, out var role) && role.Rocket);
-        if (!Supplies(uid, out var supplies) || !_inventory.TryGetSlotEntity(uid, "back", out var bag) ||
-            !_scavengeStorage.CanInsert(bag.Value, item, out _) ||
-            !_scavengeRmcStorage.CanInsert((bag.Value, supplies), item, uid, out _))
-            return false;
-        if (KnownLootGrenade(item, out var smoke))
-            return !supplies.Container.ContainedEntities.Any(other => KnownLootGrenade(other, out var otherSmoke) && otherSmoke == smoke);
-        foreach (var gun in CarriedWeapons(uid))
         {
-            if (!CompatibleAmmunition(uid, gun, item))
+            if (TryComp<CMUExpeditionWeaponRoleComponent>(item, out var role) && role.Rocket)
+                return Comp<CMUExpeditionAgentComponent>(uid).AntiVehicle && WeaponAmmo(item) > 0 && !HasReadyRocket(uid) &&
+                    (_inventory.CanEquip(uid, item, "suitStorage", out _) || CanStoreSupply(uid, item));
+            return !armed && WeaponAmmo(item) > 0 &&
+                !(TryComp<CMUExpeditionWeaponRoleComponent>(item, out var firearm) && firearm.Rocket);
+        }
+        return CanStoreSupply(uid, item) && (WantsSupply(uid, item) || WantsMedicalTool(uid, item) || RunnerNeedsItem(uid, item));
+    }
+
+    private bool LootApproach(EntityUid uid, EntityUid source, out Robust.Shared.Map.EntityCoordinates point)
+    {
+        point = Transform(uid).Coordinates;
+        if (_interaction.InRangeUnobstructed(uid, source))
+            return true;
+        if (!TrySquadCoordinates(Transform(source).Coordinates, out var center))
+            return false;
+        foreach (var candidate in NearbySquadPositions(center, 1))
+        {
+            if (!ValidOrderPoint(uid, candidate) || !TraversablePassage(uid, point, candidate) ||
+                !_interaction.InRangeUnobstructed(_transform.ToMapCoordinates(candidate), _transform.GetMapCoordinates(source), 2,
+                    predicate: entity => entity == uid || entity == source))
                 continue;
-            var reserve = supplies.Container.ContainedEntities.Count(other => CompatibleAmmunition(uid, gun, other));
-            if (reserve < (HasComp<CartridgeAmmoComponent>(item) ? 12 : 2))
-                return true;
+            point = candidate;
+            return true;
         }
         return false;
     }
@@ -86,13 +104,15 @@ public sealed partial class CMUExpeditionAgentSystem
     private IEnumerable<EntityUid> NearbyLoot(IEnumerable<EntityUid> nearby)
     {
         var items = new HashSet<EntityUid>();
-        foreach (var source in nearby.Where(item => HasComp<StorageComponent>(item) || _mobs.IsDead(item) ||
+        foreach (var source in nearby.Where(item => HasComp<StorageComponent>(item) || HasComp<EntityStorageComponent>(item) || _mobs.IsDead(item) ||
                      HasComp<GunComponent>(item) || HasComp<BallisticAmmoProviderComponent>(item) ||
-                     HasComp<CartridgeAmmoComponent>(item) || KnownLootGrenade(item, out _)).Take(24))
+                     HasComp<CartridgeAmmoComponent>(item) || KnownLootGrenade(item, out _) || FlareSupplyCount(item) > 0 || StockDressing(item) || FreshMedicalTool(item)).Take(24))
         {
             items.Add(source);
             if (TryComp<StorageComponent>(source, out var looseStorage))
                 items.UnionWith(looseStorage.Container.ContainedEntities.Take(32));
+            if (TryComp<EntityStorageComponent>(source, out var crate))
+                items.UnionWith(crate.Contents.ContainedEntities.Take(32));
             if (!_mobs.IsDead(source))
                 continue;
             foreach (var hand in _hands.EnumerateHands(source))
@@ -113,10 +133,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool StoreScavengedSupply(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid item)
     {
-        if (!Supplies(uid, out var supplies) || !_inventory.TryGetSlotEntity(uid, "back", out var bag) ||
-            !_scavengeStorage.CanInsert(bag.Value, item, out _) ||
-            !_scavengeRmcStorage.CanInsert((bag.Value, supplies), item, uid, out _) ||
-            !_scavengeStorage.Insert(bag.Value, item, out _, user: uid))
+        if (!StoreSupply(uid, item))
             return false;
         if (KnownLootGrenade(item, out var smoke))
         {

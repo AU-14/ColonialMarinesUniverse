@@ -44,6 +44,10 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool GroundSafe(EntityCoordinates point)
     {
+        // A route may cross touching grids on the same map. Resolve each sample to the
+        // real supporting grid instead of treating the original grid's edge as a wall.
+        if (!TrySquadCoordinates(point, out point))
+            return false;
         if (!float.IsFinite(point.X) || !float.IsFinite(point.Y) || GrenadeDanger(point) ||
             !TryComp<MapGridComponent>(point.EntityId, out var grid))
             return false;

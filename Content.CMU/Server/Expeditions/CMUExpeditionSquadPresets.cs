@@ -12,6 +12,7 @@ public sealed partial class CMUExpeditionAgentSystem
         ["assault"] = ["CMUExpeditionScavengerAssault"],
         ["support"] = ["CMUExpeditionScavengerSupport"],
         ["marksman"] = ["CMUExpeditionScavengerMarksman"],
+        ["sniper"] = ["CMUExpeditionScavengerSniper"],
         ["rocketeer"] = ["CMUExpeditionScavengerRocketeer"],
         ["medic"] = ["CMUExpeditionScavengerMedic"],
         ["breacher"] = ["CMUExpeditionScavengerBreacher"],

@@ -21,7 +21,10 @@ public sealed partial class CMUExpeditionAgentSystem
     private void OnWeaponEquipped(Entity<CMUExpeditionAgentComponent> ent, ref DidEquipHandEvent args)
     {
         if (!HasComp<ActorComponent>(ent) && HasComp<GunComponent>(args.Equipped))
+        {
             ent.Comp.Rifle = args.Equipped;
+            ent.Comp.RememberedWeapons.Add(args.Equipped);
+        }
     }
 
     private void OnWeaponUnequipped(Entity<CMUExpeditionAgentComponent> ent, ref DidUnequipHandEvent args)
@@ -83,7 +86,33 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool RecoverWeapon(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (SelectHeldRifle(uid, agent))
+        foreach (var carried in CarriedWeapons(uid))
+            agent.RememberedWeapons.Add(carried);
+        agent.RememberedWeapons.RemoveWhere(weapon => !Exists(weapon));
+        var armed = SelectHeldRifle(uid, agent);
+        // A sidearm must not erase our memory of a primary lost to knockdown or a failed
+        // hand operation. Secure nearby owned weapons during a lull, without dropping another.
+        if (armed && agent.Action == null && agent.PendingWeapon == null && agent.Treatment == null &&
+            agent.WorkItem == null && !agent.PreparingWork && agent.FlareItem == null && agent.Target == null &&
+            now - agent.LastHit > TimeSpan.FromSeconds(2) && now >= agent.NextWeaponRecovery)
+        {
+            foreach (var lost in agent.RememberedWeapons)
+            {
+                if (_containers.IsEntityOrParentInContainer(lost) || Transform(lost).Anchored ||
+                    !_interaction.InRangeUnobstructed(uid, lost) || !Visible(uid, lost, 2) ||
+                    TryComp<CMUExpeditionWeaponRoleComponent>(lost, out var role) && role.Rocket && WeaponAmmo(lost) == 0)
+                    continue;
+                agent.NextWeaponRecovery = now + TimeSpan.FromSeconds(2);
+                if (_inventory.TryEquip(uid, lost, "suitStorage", silent: true) || StoreSupply(uid, lost))
+                {
+                    agent.WeaponsRecovered++;
+                    agent.WeaponRecoveryDecision = "secured-lost-primary";
+                    agent.NextWeaponChoice = now;
+                }
+                break;
+            }
+        }
+        if (armed)
         {
             agent.WeaponRecoveryDecision = "armed";
             if (agent.State == CMUExpeditionAgentState.RecoverWeapon)

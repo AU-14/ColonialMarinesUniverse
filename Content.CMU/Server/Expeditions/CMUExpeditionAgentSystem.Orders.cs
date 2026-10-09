@@ -11,6 +11,8 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (uid == other)
             return true;
+        if (VehicleBody(other) && TryComp<CMUExpeditionAgentComponent>(uid, out var driverObserver))
+            return VehicleDisposition(uid, driverObserver, other) < 0;
         if (TryComp<CMUExpeditionAgentComponent>(uid, out var agent) && TryComp<NpcFactionMemberComponent>(other, out var factions))
         {
             if (factions.Factions.Any(f => agent.FriendlyFactions.Contains(f.Id)))
@@ -24,15 +26,16 @@ public sealed partial class CMUExpeditionAgentSystem
     private IEnumerable<EntityUid> ExpeditionHostiles(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         if (agent.TargetFactions.Count == 0)
-            return _factions.GetNearbyHostiles(uid, agent.DetectionRange).Where(other => !IsFriendly(uid, other));
+            return _factions.GetNearbyHostiles(uid, agent.DetectionRange).Where(other => !IsFriendly(uid, other)).Union(HostileVehicles(uid, agent));
         var nearby = new HashSet<EntityUid>();
         var location = _transform.GetMapCoordinates(uid);
         _lookup.GetEntitiesInRange(location.MapId, location.Position, agent.DetectionRange, nearby);
         return nearby.Where(other => other != uid && TryComp<NpcFactionMemberComponent>(other, out var factions) &&
-            factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)) && !IsFriendly(uid, other));
+            factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)) && !IsFriendly(uid, other)).Union(HostileVehicles(uid, agent));
     }
 
     private bool AcceptOrderedContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target) =>
+        VehicleBody(target) ? ArmedVehicle(target) && VehicleDisposition(uid, agent, target) > 0 :
         !IsFriendly(uid, target) && (agent.TargetFactions.Count == 0 ||
             TryComp<NpcFactionMemberComponent>(target, out var member) && member.Factions.Any(f => agent.TargetFactions.Contains(f.Id)));
 
@@ -40,7 +43,7 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) ||
             !TrySquadCoordinates(destination, out destination) ||
-            Transform(uid).MapUid != Transform(destination.EntityId).MapUid || !ValidOrderPoint(uid, destination))
+            !ValidOrderPoint(uid, destination))
             return false;
         ResetOrders(uid, agent);
         agent.Patrolling = false;
@@ -61,8 +64,27 @@ public sealed partial class CMUExpeditionAgentSystem
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         ClearScavenging(uid, agent);
+        CancelPortalClimb(uid, agent);
+        agent.TravelGoal = null;
+        agent.TravelPortal = null;
+        agent.PortalUntil = TimeSpan.Zero;
+        agent.FailedPortals.Clear();
+        agent.HeardPoint = null;
+        agent.SupplySource = null;
+        agent.DeliveryRecipient = null;
+        agent.DeliveryPoint = null;
+        agent.FailedDeliveries.Clear();
+        agent.NextRegroupRoute = TimeSpan.Zero;
+        agent.DutyUntil = TimeSpan.Zero;
+        Decision(agent, "orders-reset", "explicit-command");
+        CancelFlare(uid, agent);
+        CancelAimedWeapon(agent);
+        agent.SupplyTransfer = null;
+        agent.SupplyRecipient = null;
+        agent.FlashPosition = null;
         ReleaseManeuver(uid, agent);
         ClearTraffic(agent);
+        agent.WaitingForDoor = null;
         agent.CoveringFor = null;
         agent.CoveringUntil = TimeSpan.Zero;
         agent.ContactDestination = null;

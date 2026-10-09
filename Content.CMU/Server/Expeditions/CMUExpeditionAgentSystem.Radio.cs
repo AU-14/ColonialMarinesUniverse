@@ -57,9 +57,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 buddy.LastSharedContact == target && now - buddy.LastSharedAt < TimeSpan.FromSeconds(1.5))
                 return;
         var position = Transform(target).Coordinates;
-        var announce = now >= agent.NextRadioAnnouncement &&
-            (agent.LastAnnouncedContact != target || agent.LastAnnouncedPosition is not { } old ||
-                !_transform.InRange(old, position, 6) || now - agent.LastRadioAnnouncement >= TimeSpan.FromSeconds(30));
+        var announce = AnnounceNewContact(uid, agent, target, now);
         if (!announce)
         {
             ShareSilentContact(uid, agent, target, position, headset, ProtoMan.Index(channel), now);
@@ -75,7 +73,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (other != uid && (!SameSquad(uid, agent, other, buddy) ||
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 40)))
                 continue;
-            buddy.NextRadioAnnouncement = now + TimeSpan.FromSeconds(12);
+            buddy.NextRadioAnnouncement = now + TimeSpan.FromSeconds(25);
             buddy.LastAnnouncedContact = target;
             buddy.LastAnnouncedPosition = position;
             buddy.LastRadioAnnouncement = now;
@@ -83,7 +81,7 @@ public sealed partial class CMUExpeditionAgentSystem
         _reports[uid] = (target, Transform(target).Coordinates, now);
         try
         {
-            _radio.SendRadioMessage(uid, Loc.GetString("cmu-expedition-contact-report"), channel, headset, null);
+            _radio.SendRadioMessage(uid, ContactPhrase(agent), channel, headset, null);
         }
         finally
         {

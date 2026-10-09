@@ -12,7 +12,8 @@ public sealed partial class CMUExpeditionAgentSystem
 {
     private float WeaponFireRange(EntityUid uid, CMUExpeditionAgentComponent agent) =>
         _guns.TryGetGun(uid, out var gun) && TryComp<CMUExpeditionWeaponRoleComponent>(gun, out var role)
-            ? Math.Min(agent.FireRange, role.MaximumRange) : agent.FireRange;
+            ? role.Rocket && VehicleAimBody(uid) != null ? agent.FireRange : Math.Min(agent.FireRange, role.MaximumRange)
+            : agent.FireRange;
 
     private int WeaponAmmo(EntityUid weapon)
     {
@@ -29,10 +30,9 @@ public sealed partial class CMUExpeditionAgentSystem
                 weapons.Add(item.Value);
         if (_inventory.TryGetSlotEntity(uid, "suitStorage", out var slung) && HasComp<GunComponent>(slung))
             weapons.Add(slung.Value);
-        if (Supplies(uid, out var supplies))
-            foreach (var item in supplies.Container.ContainedEntities)
-                if (HasComp<GunComponent>(item))
-                    weapons.Add(item);
+        foreach (var item in SupplyItems(uid))
+            if (HasComp<GunComponent>(item))
+                weapons.Add(item);
         return weapons;
     }
 
@@ -66,14 +66,13 @@ public sealed partial class CMUExpeditionAgentSystem
             if (!_hands.IsHolding(uid, pending, out _) && !_hands.TryPickupAnyHand(uid, pending))
                 return false;
             if (current.Owner.IsValid() && current.Owner != pending && !StowWeapon(uid, current) &&
-                !(WeaponAmmo(current) == 0 && _hands.TryDrop(uid, current.Owner)) &&
                 HasComp<GunRequiresWieldComponent>(pending))
             {
                 // Roll back to the source slot rather than discard a still-loaded primary.
                 if (wasSlung)
                     _inventory.TryEquip(uid, pending, "suitStorage", silent: true);
                 else if (Supplies(uid, out var bag))
-                    _hands.TryDropIntoContainer(uid, pending, bag.Container);
+                    StoreOwnedItem(uid, pending, bag);
                 ActivateWeapon(uid, current);
                 agent.WeaponDecision = "stow-blocked";
                 return false;
@@ -113,11 +112,20 @@ public sealed partial class CMUExpeditionAgentSystem
         return true;
     }
 
-    private bool StowWeapon(EntityUid uid, EntityUid weapon) =>
-        TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role) && role.Rocket && WeaponAmmo(weapon) == 0 &&
-            _hands.TryDrop(uid, weapon) ||
-        _inventory.TryEquip(uid, weapon, "suitStorage", silent: true) ||
-        Supplies(uid, out var bag) && _hands.TryDropIntoContainer(uid, weapon, bag.Container);
+    private bool StowWeapon(EntityUid uid, EntityUid weapon)
+    {
+        // Only a spent disposable tube is deliberately discarded. Empty rifles remain useful
+        // after resupply. Failed storage must not strand them on the floor during a swap.
+        if (TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role) && role.Rocket && WeaponAmmo(weapon) == 0)
+            return _hands.TryDrop(uid, weapon);
+        return _inventory.TryEquip(uid, weapon, "suitStorage", silent: true) ||
+            StoreSupply(uid, weapon);
+    }
+
+    private bool StoreOwnedItem(EntityUid uid, EntityUid item, Content.Shared.Storage.StorageComponent bag) =>
+        _scavengeStorage.CanInsert(bag.Owner, item, out _) &&
+        _scavengeRmcStorage.CanInsert((bag.Owner, bag), item, uid, out _) &&
+        _scavengeStorage.Insert(bag.Owner, item, out _, user: uid, stackAutomatically: false) && bag.Container.Contains(item);
 
     private void ActivateWeapon(EntityUid uid, EntityUid weapon)
     {
@@ -145,7 +153,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var distance = Vector2.Distance(_transform.GetWorldPosition(uid), _transform.GetWorldPosition(target));
         if (role != null)
         {
-            if (distance < role.MinimumRange || distance > role.MaximumRange)
+            if (!(role.Rocket && ArmedVehicle(target)) && (distance < role.MinimumRange || distance > role.MaximumRange))
             {
                 if (role.Rocket)
                     return -100;
@@ -178,6 +186,8 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         // Save the one-shot tube for clustered contacts or an entrenched shooter which
         // has punished repeated peeks. A close rush needs the ready firearm instead.
+        if (ArmedVehicle(target) && VehicleDisposition(uid, agent, target) > 0)
+            return true;
         if (agent.RepeatedPeekHits >= 2)
             return true;
         var contacts = 0;
@@ -195,12 +205,22 @@ public sealed partial class CMUExpeditionAgentSystem
         var from = _transform.ToMapCoordinates(start);
         var to = _transform.ToMapCoordinates(destination);
         var distance = Vector2.Distance(from.Position, to.Position);
+        var blastPoint = destination;
+        var vehicle = role.Rocket ? VehicleAimBody(uid) : null;
+        if (vehicle is { } hull)
+        {
+            // Range and explosion safety use the first hull impact, not the centre of a
+            // large APC. A wall or another body before the hull invalidates this rocket.
+            if (!VehicleImpact(uid, hull, start, destination, out blastPoint))
+                return false;
+            distance = Vector2.Distance(from.Position, _transform.ToMapCoordinates(blastPoint).Position);
+        }
         if (distance < role.MinimumRange || distance > role.MaximumRange)
             return false;
         if (!role.Rocket)
             return true;
-        if (_timing.CurTime < agent.NextRocket || !SafeBlast(uid, destination, role.BlastRadius, 0.4f) ||
-            !ClearLane(uid, start, destination, 0.6f))
+        if (_timing.CurTime < agent.NextRocket || !SafeBlast(uid, blastPoint, role.BlastRadius, 0.4f) ||
+            !ClearLane(uid, start, destination, 0.6f, impactBody: vehicle))
             return false;
         // Native CMU backblast affects the two cardinal tiles behind the shooter.
         var rear = (to.Position - from.Position).ToWorldAngle().GetCardinalDir().GetOpposite().ToVec();

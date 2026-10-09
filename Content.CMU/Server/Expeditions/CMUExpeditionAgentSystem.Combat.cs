@@ -21,9 +21,20 @@ public sealed partial class CMUExpeditionAgentSystem
         if (HasComp<ActorComponent>(ent))
             return;
         EnsureComp<CMUExpeditionWeaponComponent>(args.Used);
+        // Native sniper completion must re-check the actual shot destination and visible
+        // target. Flash guesses and radio contacts never authorize an entity-locked shot.
+        if (ent.Comp.AimedWeapon == args.Used &&
+            (ent.Comp.AimedTarget is not { } aimedTarget || ent.Comp.Target != aimedTarget ||
+                !Visible(ent, aimedTarget, ent.Comp.FireRange) || !AcceptOrderedContact(ent, ent.Comp, aimedTarget) ||
+                !TryComp<GunComponent>(args.Used, out var aimedGun) || aimedGun.ShootCoordinates is not { } destination ||
+                !SafeShot(ent, ent.Comp, aimedGun, destination)))
+        {
+            args.Cancel();
+            return;
+        }
         var stationary = ent.Comp.State == CMUExpeditionAgentState.Engage && ent.Comp.Action == null &&
             ent.Comp.PendingWeapon == null && _timing.CurTime < ent.Comp.BurstEnd && ent.Comp.ShotsFired < VolleySize(ent.Comp);
-        if (!_npcs.Enabled || !_mobs.IsAlive(ent) || (!stationary && !MovingShotAllowed(ent, ent.Comp)) ||
+        if (!_npcs.Enabled || !_mobs.IsAlive(ent) || ent.Comp.FlareItem != null || (!stationary && !MovingShotAllowed(ent, ent.Comp)) ||
             !TryComp<GunComponent>(args.Used, out var gun) || !TryAimPoint(ent, ent.Comp, gun, out var point) ||
             !SafeShot(ent, ent.Comp, gun, point))
             args.Cancel();
@@ -43,7 +54,14 @@ public sealed partial class CMUExpeditionAgentSystem
         if (HasComp<ActorComponent>(args.User) || !TryComp<CMUExpeditionAgentComponent>(args.User, out var agent))
             return;
         agent.LastShotAt = _timing.CurTime;
+        if (agent.FiringAtFlash)
+            agent.FlashShots += args.Ammo.Count;
         agent.LastFiredWeapon = ent.Owner;
+        if (agent.AimedWeapon == ent.Owner)
+        {
+            agent.AimedWeapon = null;
+            agent.AimedTarget = null;
+        }
         if (TryComp<CMUExpeditionWeaponRoleComponent>(ent, out var role) && role.Rocket)
         {
             agent.RocketsFired++;
@@ -74,6 +92,8 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void UpdateFire(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
+        if (agent.FlareItem != null || agent.AimedWeapon != null)
+            return;
         if (CanFireWhileMoving(uid, agent))
         {
             UpdateMovingFire(uid, agent, now);
@@ -85,7 +105,8 @@ public sealed partial class CMUExpeditionAgentSystem
         var resuming = agent.State == CMUExpeditionAgentState.HoldAngle ||
             agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor == null;
         var canResume = resuming &&
-            (now >= agent.FireAt || UrgentFire(agent, now)) && agent.Target is { } target && _mobs.IsAlive(target) && Visible(uid, target, agent.FireRange);
+            (now >= agent.FireAt || UrgentFire(agent, now)) &&
+            (agent.Target is { } target && CombatTargetAlive(target) && Visible(uid, target, agent.FireRange) || TryFlashAim(uid, agent, out _));
         if (canResume && UrgentFire(agent, now))
             agent.FireAt = now;
         if (agent.State == CMUExpeditionAgentState.HoldAngle && now >= agent.FireAt && canResume)
@@ -182,7 +203,10 @@ public sealed partial class CMUExpeditionAgentSystem
             _combat.SetInCombatMode(uid, true, combat);
         var direction = _transform.ToMapCoordinates(point).Position - _transform.GetWorldPosition(uid);
         _transform.SetWorldRotation(uid, direction.ToWorldAngle());
-        agent.LastFireCheck = _guns.AttemptShoot(uid, gun, point, agent.Target) ? "trigger-accepted" : "native-trigger-rejected";
+        if (StartAimedWeapon(uid, agent, gun))
+            return;
+        agent.LastFireCheck = _guns.AttemptShoot(uid, gun, point, agent.FiringAtFlash ? null : agent.Target)
+            ? "trigger-accepted" : "native-trigger-rejected";
     }
 
     private void EndBurst(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now, bool allowPress = true)
@@ -228,9 +252,23 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool TryAimPoint(EntityUid uid, CMUExpeditionAgentComponent agent, GunComponent gun, out EntityCoordinates point)
     {
         point = default;
-        if (agent.Target is not { } target || !_mobs.IsAlive(target) ||
-            !Visible(uid, target, agent.FireRange) || !TryComp<TransformComponent>(target, out var transform))
-            return false;
+        agent.FiringAtFlash = false;
+        if (agent.Target is not { } target || !CombatTargetAlive(target) ||
+            !AcceptOrderedContact(uid, agent, target) || !Visible(uid, target, agent.FireRange) ||
+            !TryComp<TransformComponent>(target, out var transform))
+        {
+            // A guessed flash position is unsuitable for blast weapons or homing entity locks.
+            if (TryComp<CMUExpeditionWeaponRoleComponent>(gun.Owner, out var role) && role.Rocket ||
+                !TryFlashAim(uid, agent, out point))
+            {
+                agent.VisionDecision = "no-visible-target-or-flash";
+                return false;
+            }
+            agent.FiringAtFlash = true;
+            agent.VisionDecision = "firing-at-flash-position";
+            return true;
+        }
+        agent.VisionDecision = "visible-target";
         var velocity = TryComp<PhysicsComponent>(target, out var body) ? body.LinearVelocity : Vector2.Zero;
         var from = _transform.GetWorldPosition(uid);
         var position = _transform.GetWorldPosition(transform);
@@ -267,8 +305,9 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         foreach (var entity in nearby)
         {
-            if (entity == uid || entity == agent.Target || !IsFriendly(uid, entity) ||
-                _mobs.IsDead(entity) || !TryComp<TransformComponent>(entity, out var transform) || transform.MapID != from.MapId)
+            if (entity == uid || !IsFriendly(uid, entity) ||
+                _mobs.IsDead(entity) || !TryComp<TransformComponent>(entity, out var transform) || transform.MapID != from.MapId ||
+                IffPassesFriendly(uid, gun.Owner, entity))
                 continue;
             var relative = _transform.GetWorldPosition(transform) - from.Position;
             // Include a teammate about to cross the lane during this bullet's flight.

@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Linq;
 using Content.Server.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
@@ -22,15 +23,17 @@ public sealed partial class CMUExpeditionAgentCommand : LocalizedEntityCommands
         1 => CMUExpeditionCommandCompletion.Maps(EntityManager, shell, here: true, expeditionsOnly: true),
         2 => CMUExpeditionCommandCompletion.Count(),
         3 => CMUExpeditionCommandCompletion.Variants(),
+        4 => CompletionResult.FromHintOptions(CMUExpeditionAgentSystem.OutfitNames.OrderBy(name => name), Loc.GetString("cmu-expedition-hint-outfit")),
         _ => CompletionResult.Empty,
     };
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         var count = 3;
-        var variant = args.Length == 3 ? args[2].ToLowerInvariant() : "mixed";
-        if (args.Length is < 1 or > 3 || args.Length >= 2 && !int.TryParse(args[1], out count) ||
-            count is < 1 or > 12 || !CMUExpeditionAgentSystem.IsSquadVariant(variant))
+        var variant = args.Length >= 3 ? args[2].ToLowerInvariant() : "mixed";
+        var outfit = args.Length >= 4 ? args[3].ToLowerInvariant() : "scavenger";
+        if (args.Length is < 1 or > 4 || args.Length >= 2 && !int.TryParse(args[1], out count) ||
+            count is < 1 or > 12 || !CMUExpeditionAgentSystem.IsSquadVariant(variant) || !CMUExpeditionAgentSystem.IsOutfit(outfit))
         {
             shell.WriteError(Help);
             return;
@@ -73,7 +76,7 @@ public sealed partial class CMUExpeditionAgentCommand : LocalizedEntityCommands
             }
             center = new EntityCoordinates(map, new Vector2(expedition.Plan.Objective.X + 0.5f, expedition.Plan.Objective.Y + 0.5f));
         }
-        var spawned = _agents.SpawnSquad(center, count, variant, out var squad);
+        var spawned = _agents.SpawnSquad(center, count, variant, out var squad, outfit);
         if (spawned == 0)
         {
             shell.WriteError(Loc.GetString("cmu-expedition-ai-no-space"));
@@ -81,5 +84,7 @@ public sealed partial class CMUExpeditionAgentCommand : LocalizedEntityCommands
         }
         shell.WriteLine(Loc.GetString("cmu-expedition-ai-deployed", ("count", spawned), ("requested", count),
             ("variant", variant), ("squad", squad), ("map", EntityManager.GetComponent<TransformComponent>(map).MapID.ToString())));
+        if (outfit != "scavenger")
+            shell.WriteLine(Loc.GetString("cmu-expedition-outfit-applied", ("outfit", outfit)));
     }
 }
