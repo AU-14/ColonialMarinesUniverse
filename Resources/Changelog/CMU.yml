@@ -12233,5 +12233,45 @@
   id: 749
   time: '2026-10-08T22:15:22.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2104
+- author: troytroy400
+  changes:
+  - message: Shift+Middle-click an item in your hand on the hotbar to hold it up for
+      everyone nearby to see, just like in CM13.
+    type: Add
+  - message: Added tan and green boonie hats, work caps and sun caps to the civilian
+      clothing wardrobes.
+    type: Add
+  id: 750
+  time: '2026-10-09T02:53:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2115
+- author: KeiKiyomi
+  changes:
+  - message: Added Z-level bombing
+    type: Add
+  - message: Added Level 1 Penetration to AIM-224A 'Widowmaker', GBU-67 'Keeper II',
+      AGM-99 'Napalm', AGM-184 'Harpoon II', BLU-200 'Dragon's Breath', AGM-227 'Banshee',
+      BLU-176 'Overpressure', CBU-250 'Dinner Spread', AIM-224A 'Double Widow' Rack,
+      AIM-207 'Cutlass' Rack, CBU-607 'Skeet Shooter' Rack, and Anti Tank GAU
+    type: Add
+  - message: Added Level 3 Penetration to GBU-89B 'Postman', GBU-89C/N 'Burning Postman'
+    type: Add
+  - message: Added Level 2 Penetration to all mortar shells
+    type: Add
+  - message: Munitions with a Penetration of 3 can hit THROUGH level 4 ceiling levels
+    type: Add
+  - message: Munitions with a Penetration of 2 can hit through level 3 ceiling levels
+    type: Add
+  - message: Examining a munition tells you its pen power
+    type: Add
+  - message: Invincible walls cannot be busted thru
+    type: Add
+  - message: Added "DropshipZLevelBreach" cvar which allows munitions to penetrate
+    type: Code
+  - message: Added "zLevelPenetration" cvar which determines how much penetration
+      a missile has
+    type: Code
+  id: 751
+  time: '2026-10-09T02:54:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2085
 Name: CMU
 Order: -1
