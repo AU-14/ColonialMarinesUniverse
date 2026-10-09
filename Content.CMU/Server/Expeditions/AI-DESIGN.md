@@ -116,6 +116,10 @@ covering medical work cannot take a movement assignment. Readiness is checked ag
 empty or lost guns, blocked lanes, knockdown, player control, rushes, danger and emergency injury
 release the commitment. The mover stops optional travel and returns fire. Commitments last at most
 six seconds; emergency escapes and lone guards do not wait for nonexistent support.
+Covering shooters retain their visible contact during target selection, and medics defer starting
+optional work while assigned to cover a mover. Empty or obstructed firing states do not monopolize
+the cover-exposure slots. Non-emergency reloads may reserve a shooter when hard shelter is unavailable;
+the native interruptible action still consumes a compatible carried magazine or shell.
 
 New contact retains the original order route and up to two metres of its current leg for at most
 1.25 seconds, provided body clearance, threat exposure and melee separation still permit it.
@@ -159,6 +163,22 @@ Manual verification still required:
 6. Record route/search time with six and twelve guards under simultaneous contact; inspect covered
    moves, support-loss interruptions, traffic state and moving-shot counters. No cost or balance result
    is claimed from compilation.
+
+Follow-up verification for equipment and ammunition exhaustion:
+
+- Spawn `cmu-expedition-ai here 9 mixed` and confirm complete clothing, packs and exactly one initial
+  primary per member. The skirmisher must have an MP5 without an inherited scout rifle or duplicate supplies.
+- Keep a squad in contact for a minute. Expect at most five audible contact callouts, and fewer for an
+  unchanged target; received/accepted report counters should continue increasing between callouts.
+  Remove/disable headsets, use incompatible channels, leave the map or radio range, and verify that silent
+  reports stop as well. A radio report preserves the interrupted order route.
+- Empty the primary at long range with a loaded pistol in the pack. Confirm the pistol is drawn and the
+  guard seeks its usable range. Exhaust both guns, provide shelter or an actual covering shooter, then
+  check reload progress and interruption when the shooter loses its lane, is disarmed or is knocked down.
+- Deplete all carried ammunition. Check safe last-resort grenades/smoke, exclusive retrieval of a loose
+  loaded gun within four metres, rejection of stored/hidden/blocked guns, five-second cancellation and
+  native melee only when an enemy reaches contact distance. Orders, knockdown and player possession
+  must release retrieval claims. Existing grenade and rocket limits remain in force.
 
 Grenades are considered on initial contact with multiple enemies, or as a last resort after
 repeated failed exposures or severe pressure. Reservations cap a squad decision at two

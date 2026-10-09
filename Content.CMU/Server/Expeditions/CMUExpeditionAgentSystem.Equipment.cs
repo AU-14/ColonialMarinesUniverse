@@ -121,9 +121,10 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool StartUtility(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid item, TimeSpan delay)
     {
-        if (!_guns.TryGetGun(uid, out var gun))
+        if (agent.Action == CMUTacticalAction.Reload && !_guns.TryGetGun(uid, out _))
             return false;
-        _wield.TryUnwield(gun.Owner, uid);
+        if (_guns.TryGetGun(uid, out var gun))
+            _wield.TryUnwield(gun.Owner, uid);
         if (!_hands.TryPickupAnyHand(uid, item))
             return false;
         _steering.Unregister(uid);
@@ -132,7 +133,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             NeedHand = true, BreakOnMove = true, BreakOnDamage = true, DamageThreshold = 0.1f,
             ExtraCheck = () => _mobs.IsAlive(uid) && !HasComp<ActorComponent>(uid) && _npcs.Enabled &&
-                (agent.Action != CMUTacticalAction.Reload || TreatmentSafe(uid, agent)),
+                (agent.Action != CMUTacticalAction.Reload || ReloadSafe(uid, agent)),
         };
         return _doAfter.TryStartDoAfter(args, out agent.ActionDoAfter);
     }
@@ -151,7 +152,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         }
         var success = false;
-        if (agent.Action == CMUTacticalAction.Reload && TreatmentSafe(ent, agent) && _guns.TryGetGun(ent, out var gun) &&
+        if (agent.Action == CMUTacticalAction.Reload && ReloadSafe(ent, agent) && _guns.TryGetGun(ent, out var gun) &&
             _itemSlots.TryGetSlot(gun.Owner, "gun_magazine", out var slot) &&
             _itemSlots.CanInsert(gun, slot, item, ent, swap: true))
         {
@@ -165,7 +166,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (success)
                 agent.Reloads++;
         }
-        else if (agent.Action == CMUTacticalAction.Reload && TreatmentSafe(ent, agent) &&
+        else if (agent.Action == CMUTacticalAction.Reload && ReloadSafe(ent, agent) &&
             _guns.TryGetGun(ent, out var tubeGun) && TryComp<BallisticAmmoProviderComponent>(tubeGun, out var tube) &&
             _guns.CanInsertBallistic((tubeGun.Owner, tube), item))
         {

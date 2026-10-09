@@ -67,7 +67,10 @@ public sealed partial class CMUExpeditionAgentSystem
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12))
                 continue;
             members++;
-            if (buddy.State is CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage or CMUExpeditionAgentState.HoldAngle)
+            // Empty/blocked rifles cannot indefinitely monopolize the squad's exposure slots.
+            if (CoveringFireReady(other, buddy, out _) ||
+                buddy.State == CMUExpeditionAgentState.Peeking && _timing.CurTime < buddy.MoveUntil ||
+                buddy.State == CMUExpeditionAgentState.Aim && _timing.CurTime < buddy.FireAt + TimeSpan.FromSeconds(0.5))
                 attacking++;
         }
         // Local attack slots stagger exposure; they are released immediately on retreat, injury, death or possession.

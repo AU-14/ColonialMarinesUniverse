@@ -41,7 +41,8 @@ public sealed partial class CMUExpeditionAgentSystem
         var goal = !armed && spare != null ? CMUTacticalGoal.Rearm : mustHeal ? CMUTacticalGoal.Recover : CMUTacticalGoal.Fight;
 
         // Optional squad work starts between attacks, never in the middle of a peek/withdrawal.
-        var available = agent.State is CMUExpeditionAgentState.Guard or CMUExpeditionAgentState.Recover or CMUExpeditionAgentState.Watch ||
+        var available = agent.State is CMUExpeditionAgentState.Guard or CMUExpeditionAgentState.Recover or CMUExpeditionAgentState.Watch or
+            CMUExpeditionAgentState.OutOfAmmo ||
             agent.State == CMUExpeditionAgentState.HoldAngle && now >= agent.PositionCommittedUntil;
         agent.Casualty = null;
         agent.ActionDestination = null;
@@ -77,7 +78,7 @@ public sealed partial class CMUExpeditionAgentSystem
         // Throwing it never fabricates shelter: live sight and cover checks still decide the next action.
         if (!safe && agent.GrenadeTarget == null && agent.RushTarget == null &&
             (goal is CMUTacticalGoal.Rearm or CMUTacticalGoal.Recover ||
-             goal == CMUTacticalGoal.Fight && agent.Crossfire && agent.Stress >= 0.6f && agent.HasCoveringAlly) &&
+             goal == CMUTacticalGoal.Fight && (!armed || agent.Crossfire && agent.Stress >= 0.6f && agent.HasCoveringAlly)) &&
             now >= agent.NextGrenade && GrenadeDecisionAvailable(uid, agent, now) &&
             Grenade(uid, true) is { } screen && SmokePoint(uid, agent, screen, Transform(uid).Coordinates) is { } screening)
         {
@@ -100,6 +101,11 @@ public sealed partial class CMUExpeditionAgentSystem
         EntityCoordinates? shelter = null;
         if ((!safe && goal is CMUTacticalGoal.Rearm or CMUTacticalGoal.Recover) || goal == CMUTacticalGoal.Rescue)
             shelter = FindPosition(uid, agent, Transform(uid), true)?.Anchor;
+        // No hard shelter: a stationary reload can use a reserved shooter, with immediate
+        // interruption on damage, a rush or lost coverage. Do not make every empty guard wait forever.
+        if (goal == CMUTacticalGoal.Rearm && !safe && shelter == null &&
+            ReloadPressureSafe(uid, agent) && TryReserveManeuver(uid, agent, now))
+            safe = agent.CoveringShooter != null;
         if (goal == CMUTacticalGoal.Rescue && shelter is { } refuge && agent.LastSeen is { } threat)
         {
             var away = refuge.Position - _transform.ToCoordinates(refuge.EntityId, _transform.ToMapCoordinates(threat)).Position;
@@ -168,6 +174,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool StartNextAction(EntityUid uid, CMUExpeditionAgentComponent agent, float damage, TimeSpan now)
     {
+        ClearScavenging(uid, agent);
         var action = agent.Plan.Dequeue();
         agent.Action = action;
         agent.ActionStarted = now;
@@ -190,7 +197,7 @@ public sealed partial class CMUExpeditionAgentSystem
             case A.Reload:
                 agent.State = CMUExpeditionAgentState.Reloading;
                 agent.ActionItem = SpareAmmunition(uid);
-                success = TreatmentSafe(uid, agent) && agent.ActionItem != null;
+                success = ReloadSafe(uid, agent) && agent.ActionItem != null;
                 break;
             case A.Treat:
                 success = TryTreat(uid, agent, damage, now);
@@ -304,6 +311,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.ActionComplete = true;
         if (!agent.ActionComplete)
             return true;
+        ReleaseManeuver(uid, agent);
         agent.Route.Clear();
         agent.RouteDestination = null;
         agent.CoverDestination = null;
@@ -316,6 +324,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void CancelPlan(EntityUid uid, CMUExpeditionAgentComponent agent, bool failed)
     {
+        ClearScavenging(uid, agent);
         ReleaseManeuver(uid, agent);
         CancelMedical(uid, agent, "task-cancelled", failed);
         if (failed && agent.Action is { } action)

@@ -71,6 +71,10 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
                 ("received", agent.ReportsReceived), ("accepted", agent.ReportsAccepted),
                 ("decision", agent.RadioDecision), ("radioContact", agent.ContactFromRadio),
                 ("destination", agent.InvestigationDestination?.ToString() ?? "-")));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-fallback-status",
+                ("callouts", agent.RadioCallouts), ("scavenged", agent.WeaponsScavenged),
+                ("strikes", agent.LastResortStrikes),
+                ("item", agent.ScavengeTarget is { } item ? EntityManager.GetNetEntity(item).ToString() : "-")));
             shell.WriteLine(Loc.GetString("cmu-expedition-ai-survival-status",
                 ("weapon", agent.WeaponRecoveryDecision), ("recovered", agent.WeaponsRecovered),
                 ("spacing", agent.SpacingDecision), ("destination", agent.SpacingDestination?.ToString() ?? "-"),

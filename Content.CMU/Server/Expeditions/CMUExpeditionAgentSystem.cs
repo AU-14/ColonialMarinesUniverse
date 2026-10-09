@@ -73,6 +73,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     private void Stop(Entity<CMUExpeditionAgentComponent> ent)
     {
+        ClearScavenging(ent, ent.Comp);
         ReleaseManeuver(ent, ent.Comp);
         ClearTraffic(ent.Comp);
         ent.Comp.CoveringFor = null;
@@ -197,11 +198,15 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
 
         var hasAmmo = ReadyRifle(uid, agent);
+        if (hasAmmo)
+            ClearScavenging(uid, agent);
         if (hasAmmo && HoldCoveringFire(uid, agent, now))
             return;
         if (hasAmmo && ContinueContactMovement(uid, agent, now))
             return;
         if (RunPlan(uid, agent, hasAmmo, damage, hit, now))
+            return;
+        if (!hasAmmo && RunAmmoFallback(uid, agent, now))
             return;
         // An exhausted weapon should not prevent an otherwise safe relocation or patrol.
         if (!hasAmmo && seen == null && (agent.LastSeen == null || now >= agent.ForgetAt) && agent.OrderedDestination != null)
@@ -222,6 +227,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
         if (agent.State is CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo)
         {
+            if (!hasAmmo && (hit || GrenadeDanger(transform.Coordinates)) && now >= agent.NextRetreat)
+                BeginRetreat(uid, agent, transform, false, now);
             if (ContinueMove(uid, agent, transform, now))
                 return;
             if (TryTreat(uid, agent, damage, now))
@@ -481,6 +488,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         // hiding that contact must not erase the destination halfway through a step-out.
         if (agent.RushTarget is { } rusher)
             seen = rusher;
+        else if (currentVisible && HasCoverCommitment(uid, agent, now))
+        {
+            seen = agent.Target;
+            flankTarget = null;
+        }
         else if (flankTarget is { } flanker)
         {
             if (AssignFlankResponse(uid, agent, flanker, now))
@@ -564,7 +576,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     private static bool CommittedMovement(CMUExpeditionAgentComponent agent) => agent.State is
         CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Withdraw or
         CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.PlanMove or
-        CMUExpeditionAgentState.RecoverWeapon || agent.SpacingDestination != null;
+        CMUExpeditionAgentState.RecoverWeapon or CMUExpeditionAgentState.Scavenge || agent.SpacingDestination != null;
 
     private bool ReadyRifle(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
@@ -575,7 +587,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         EnsureComp<CMUExpeditionWeaponComponent>(gun);
         // Moving between firing positions does not require a free hand. Keep the rifle ready
         // through peeks, withdrawals and flanks instead of restarting its native wield delay.
-        var usingHands = agent.State is CMUExpeditionAgentState.Reloading or CMUExpeditionAgentState.Rescuing or CMUExpeditionAgentState.Throwing or CMUExpeditionAgentState.Healing ||
+        var usingHands = agent.ScavengeTarget != null || agent.State is CMUExpeditionAgentState.Reloading or CMUExpeditionAgentState.Rescuing or CMUExpeditionAgentState.Throwing or CMUExpeditionAgentState.Healing ||
             agent.Action is CMUTacticalAction.GrabCasualty or CMUTacticalAction.DragCasualty;
         if (usingHands || agent.WorkItem != null || agent.PreparingWork || _timing.CurTime < agent.RifleLoweredUntil)
             _wield.TryUnwield(gun.Owner, uid);
