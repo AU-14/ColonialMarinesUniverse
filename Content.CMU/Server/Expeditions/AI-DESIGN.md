@@ -31,6 +31,10 @@ native steering, firearms, physics, factions and medical do-afters execute actio
 1. Observe at 150 ms intervals and store a last-seen coordinate for six seconds. Compare
    usable shots at the four nearest visible targets plus the current one, retaining the
    current target during a viable volley. Never track an unseen target's current position.
+   Retain visible targets through committed movement and utility work, with a 1.5-second
+   minimum between ordinary target switches. Brief sight loss holds the stance for 350 ms
+   without firing; movement destinations survive contact changes. Healing and reloads are
+   not cancelled merely because a different enemy becomes the preferred target.
 2. Keep rifles shouldered during combat movement; lower them for actual utility work.
    Initial aim takes 180 ms and peek aim 80 ms, in addition to native weapon readiness.
    Volleys consume real rounds at the weapon's native rate; cover searches wait until the
@@ -42,6 +46,9 @@ native steering, firearms, physics, factions and medical do-afters execute actio
 4. Move precisely into the firing position, aim briefly, fire the variant's limited volley, return
    to shelter, and reassess. Nearby squadmates reserve different positions and stagger
    peeks with local attack slots.
+   Stop a peek at usable geometry even when a teammate temporarily blocks firing. Stops
+   inside valid shelter tolerate 55 cm of endpoint error, avoiding needless tiny corrections.
+   Coverless recovery resumes aim only with a visible target and no active utility action.
 5. Hits or visible hostile fire passing within 1.5 metres interrupt exposure. Pressure
    delays the next peek; uncovered guards seek a safe refuge when one is reachable.
 6. Wounded guards use their physical three-dose dressing pack while sheltered. They free
@@ -67,9 +74,22 @@ search with danger costs and real collision checks. Physical magazines, dressing
 are finite inventory items. A native pulling joint drags critical squadmates into shelter.
 
 Equipped squad headsets share a frozen observation after a short delay, within 40 metres.
-Reports expire and do not reveal an unseen target's current position. Squads have separate
+Reports retain their original reception deadline when further reports arrive, so a busy
+channel cannot keep delaying the reaction. Accepted snapshots expire after twelve seconds
+and do not reveal an unseen target's current position. Recent visual contact and active
+survival/utility actions take precedence. Recipients acknowledge a new support response
+(at most once per twelve seconds), then approach the reported area in at most eight-metre
+steps with separate destinations. This keeps each step inside the local search bound even
+when the report came from farther away. Responders remain within their guard leash and
+wait near the reported location if they find no enemy; expired reports release the response.
+Pursuit destinations are retained until meaningful contact movement or arrival, with a
+one-second replanning interval and a wider stop band at rifle range.
+
+Squads have separate
 position reservations, staggered attack slots and one flanker at a time. Aggressive, steady
 and cautious dispositions respond to pressure, wounds and nearby support.
+Guards fighting different opponents within the same eight-metre contact area count as
+supporting one another for covering fire and attack slots.
 
 Grenades are considered on initial contact with multiple enemies, or as a last resort after
 repeated failed exposures or severe pressure. Reservations cap a squad decision at two
@@ -111,6 +131,11 @@ Use `style Aggressive`, `style Steady` or `style Cautious` to tune a squad. `tar
 sets explicit target factions; `friendly GOVFOR` protects that faction. `default` restores
 native faction targeting or removes the friendly overrides. Friendly overrides take priority;
 these commands never change the server's global faction relations.
+
+`cmu-expedition-ai-status here` also shows radio reports received/accepted, the latest
+decision and the current approach point. `maintaining-current-action`, `outside-guard-area`,
+`stale-report`, `support-route-blocked` and `watching-reported-area` explain why hearing a
+callout may not result in immediate movement. Acknowledgements do not broadcast contacts.
 
 ## Verification
 

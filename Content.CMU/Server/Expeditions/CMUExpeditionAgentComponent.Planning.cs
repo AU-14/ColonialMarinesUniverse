@@ -53,8 +53,12 @@ public sealed partial class CMUExpeditionAgentComponent
     public EntityCoordinates? RadioPosition;
     public TimeSpan RadioObservedAt;
     public TimeSpan RadioDeliveryAt;
+    [DataField] public TimeSpan RadioMemoryDuration = TimeSpan.FromSeconds(12);
     public bool ContactFromRadio;
     public int ReportsReceived;
+    public int ReportsAccepted;
+    public TimeSpan NextRadioResponse;
+    public string RadioDecision = "idle";
     public int Reloads;
     public int GrenadesThrown;
     public int Rescues;

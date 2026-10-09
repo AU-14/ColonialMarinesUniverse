@@ -6,8 +6,8 @@ This batch creates ten draft solid assemblies with thirteen static authored pose
 
 ## Deliverables
 
-- Editable model definitions: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_natural_final_cloud.yml`
-- Small source-detail surfaces: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_natural_final_cloud_art.yml`
+- Editable model definitions: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_natural_final_cloud.yml`
+- Small source-detail surfaces: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_natural_final_cloud_art.yml`
 - Eight original-pixel PNG crops: `Content.CMU/Resources/Textures/CMU14/ThreeD/natural_final_cloud/`
 - Portable GLBs beside this document, named by their model IDs
 - Source-facing, orbit, reverse and fixed-scale evidence: `Tools/three_d/generated/review/natural-final-cloud/`

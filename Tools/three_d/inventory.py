@@ -111,8 +111,10 @@ def load_prototypes(root: Path) -> tuple[dict[str, dict[str, dict]], list[dict],
     kinds: dict[str, dict[str, dict]] = defaultdict(dict)
     issues: list[dict] = []
     file_count = 0
-    for resource_root in (root / "Resources", root / "Content.CMU/Resources"):
-        for path in sorted((resource_root / "Prototypes").rglob("*.yml")):
+    # Authoring tools need both optional libraries even though gameplay loads them on demand.
+    for prototype_root in (root / "Resources/Prototypes", root / "Content.CMU/Resources/Prototypes",
+                           root / "Content.CMU/Resources/ThreeD/Prototypes"):
+        for path in sorted(prototype_root.rglob("*.yml")):
             file_count += 1
             relative = path.relative_to(root).as_posix()
             try:

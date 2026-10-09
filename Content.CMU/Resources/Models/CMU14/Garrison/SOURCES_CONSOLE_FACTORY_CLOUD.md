@@ -13,8 +13,8 @@ Source definitions, PNGs and metadata remain unchanged.
 
 ## Deliverables
 
-- Canonical models: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_console_factory_cloud.yml`
-- Canonical surfaces: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_console_factory_cloud_art.yml`
+- Canonical models: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_console_factory_cloud.yml`
+- Canonical surfaces: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_console_factory_cloud_art.yml`
 - Original-detail crops: `Content.CMU/Resources/Textures/CMU14/ThreeD/console_factory_cloud/`
 - 21 GLBs in this directory, emitted directly by the unchanged `build_models.glb_bytes`
 - Source-facing, front-orbit, rear-orbit and source/model comparison PNGs under

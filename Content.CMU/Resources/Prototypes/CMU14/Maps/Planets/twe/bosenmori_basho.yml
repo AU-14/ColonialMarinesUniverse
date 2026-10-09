@@ -9,9 +9,10 @@
     lorePrimer: AU14PrimerPlanetBosenmoriBasho
     allegiance: TWE
     camouflage: Desert
-    announcement: "The colony of Bosenmori Basho has gone silent. A response force has been dispatched to investigate the distress signal."
+    announcement: "The colony of Bosenmori Basho has transmitted an unknown distress call. According to an orbiting satellite, the colony's atmospheric filtration system has failed. Bosenmori Basho has a nitrogen rich atmosphere, all personnel deploying to the surface will need to bring the appropriate equipment."
     platoonsGovfor:
-    - WEYU
+    - LACN
+    - USCM
     - RMC
     platoonsOpfor:
     - UPP
@@ -25,25 +26,15 @@
     - XenoThreat
     thirdpartyinterval: 1800
     thirdparties:
-    - FreeCompanyRaiders
-    - USArmy
-    - USArmyAlt
-    - USArmyAlt2
-    - RMCRRT
-    - LACNSniperteam
-    - WYPMCParty
-    - WYPMCPartyAlt
-    - IPIE
-    - IPIESynth
-    - WYHT
-    - ICRCReliefParty
-    - CMBInvestigationParty
+    - IASFSurvBosenmori
+    - IASFSurvBosenmoriPilot
+    - CMUBosenmoriColonists
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 
 - type: lorePrimer
   id: AU14PrimerPlanetBosenmoriBasho
-  planetText: "Date 2176 - Bosenmori Basho, a TWE controlled 'shake and bake' colony."
+  planetText: "Date 2176 - Bosenmori Basho, a TWE controlled 'shake and bake' colony. Its atmosphere is almost pure nitrogen and unbreathable."
 
 - type: entity
   parent: MarkerBase

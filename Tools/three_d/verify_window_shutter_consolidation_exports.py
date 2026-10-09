@@ -326,10 +326,10 @@ def main():
     parser.add_argument('--regions-json', type=Path, default=GENERATED/'interior-regions.json')
     args = parser.parse_args()
     library = {m['id']: m for m in json.loads((GENERATED/'models.json').read_text())['models']}
-    raw = {m['id']: m for m in yaml.load((ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_environment.yml').read_text(),
+    raw = {m['id']: m for m in yaml.load((ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_environment.yml').read_text(),
                                        Loader=yaml.CSafeLoader) if m.get('id') in IDS}
     art = {r['id']: ROOT/'Content.CMU/Resources'/r['texture'].lstrip('/') for r in yaml.load(
-        (ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_window_shutter_art.yml').read_text(), Loader=yaml.CSafeLoader)}
+        (ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_window_shutter_art.yml').read_text(), Loader=yaml.CSafeLoader)}
     assert [len(library[uid]['parts']) for uid in IDS] == [19, 6], 'Wait for the parent EXPORT READY checkpoint'
     models = [verify_model(library[uid], raw[uid], art) for uid in IDS]
     config = json.loads(args.scenes_json.read_text())

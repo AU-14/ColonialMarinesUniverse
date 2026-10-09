@@ -4,7 +4,7 @@ This batch adds 23 draft GLBs / eight exact prototype bindings associated with 2
 
 ## Deliverables and reproduction
 
-- Canonical editable assets: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_outdoor_cloud.yml` and `garrison_outdoor_cloud_art.yml`
+- Canonical editable assets: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_outdoor_cloud.yml` and `garrison_outdoor_cloud_art.yml`
 - Canonical GLBs: the 23 `CMU3D*Cloud.glb` files listed by `Tools/three_d/generated/outdoor-cloud/models/manifest.json`
 - Original unmodified RGBA source crops: `Content.CMU/Resources/Textures/CMU14/ThreeD/outdoor_cloud/`, 14 surfaces at atlas indices 2518–2531
 - Source versus four-orbit comparisons: `Tools/three_d/generated/review/outdoor-cloud/`
@@ -17,7 +17,7 @@ The authoring script writes only the new family YAML and derived images. All GLB
 ```sh
 python reference/outdoor/build_outdoor_assets.py
 python Tools/three_d/build_models.py \
-  --source Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_outdoor_cloud.yml \
+  --source Content.CMU/Resources/ThreeD/Prototypes/World/garrison_outdoor_cloud.yml \
   --output Tools/three_d/generated/outdoor-cloud/models \
   --review-output Tools/three_d/generated/review/outdoor-cloud \
   --viewer-output Tools/three_d/generated/outdoor-cloud/viewer

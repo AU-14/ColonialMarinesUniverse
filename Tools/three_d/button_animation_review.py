@@ -98,7 +98,7 @@ def build_study(root, output):
     output.mkdir(parents=True, exist_ok=True)
     studies = []
     licenses = []
-    source = root / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_architecture.yml'
+    source = root / 'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_architecture.yml'
     authored = {m['id']: validate_model(m) for m in yaml.load(source.read_text(encoding='utf-8'), Loader=yaml.CSafeLoader)
                 if m.get('doorButtonStates')} if source.is_file() else {}
     for name, model_id, label in [('door_button', 'CMU3DOrangeDoorButton', 'Small door control'),

@@ -39,7 +39,6 @@ public sealed partial class CMU3DSceneControl : IViewportControl
         var distance = found ? hit.Distance : Math.Min(SceneRadius, limit);
         target = found ? hit.Source : null;
         PickBillboards(camera.Origin, ray, ref distance, ref target);
-        PickEquipment(camera.Origin, ray, ref distance, ref target);
         var point = camera.Origin + ray * distance;
         var map = target is { } uid && _entities.TryGetComponent(uid, out TransformComponent? transform)
             ? transform.MapID : SceneMap;
