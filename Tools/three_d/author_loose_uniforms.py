@@ -26,7 +26,7 @@ from author_wide_machinery import world_parts, box_bounds
 BASE = ROOT / '.codex/model-batch-baseline994'
 GEN = ROOT / 'Tools/three_d/generated'
 REVIEW = GEN / 'review/loose-uniforms'
-MODEL = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_loose_uniforms.yml'
+MODEL = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_loose_uniforms.yml'
 ART = MODEL.with_name('garrison_loose_uniforms_art.yml')
 TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/LooseUniforms'
 NOTE = ROOT / 'Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_LOOSE_UNIFORMS.md'

@@ -32,6 +32,7 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
     [Dependency] private readonly RMCMapSystem _rmcMap = default!;
     [Dependency] private readonly TagSystem _tag = default!;
     [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private readonly SharedRMCFlammableSystem _flammable = default!;
 
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
@@ -114,6 +115,11 @@ public sealed partial class CMUSpreadingFireSystem : EntitySystem
                     continue;
 
                 var child = Spawn(spawn, target);
+
+                // Spread fire burns as strong as its parent and goes out with it.
+                if (TryComp(child, out TileFireComponent? childFire))
+                    _flammable.MatchTileFire((child, childFire), (uid, fire));
+
                 var childSpread = EnsureComp<CMUSpreadingFireComponent>(child);
                 childSpread.Depth = spread.Depth - 1;
                 childSpread.NextSpread = time + childSpread.SpreadEvery;

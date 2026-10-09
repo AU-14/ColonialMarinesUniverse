@@ -14,8 +14,8 @@ This art-only family contains **26 editable assemblies**, **31 distinct authored
 
 Canonical resources:
 
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_drinks_extra_cloud.yml`
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_drinks_extra_cloud_art.yml`
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_drinks_extra_cloud.yml`
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_drinks_extra_cloud_art.yml`
 - `Content.CMU/Resources/Textures/CMU14/ThreeD/drinks_extra_cloud/`
 - Direct `CMU3D*DrinksExtraCloud*.glb` files beside this document
 - `Tools/three_d/generated/review/drinks-extra-cloud/`: original compositions, source-facing / orbit / rear views, fixed-scale sheet and highlights
@@ -107,3 +107,9 @@ The geometry and exact PNG crop adaptations retain the applicable source attribu
 ## Golden-apple silhouette refinement
 
 The nine-part apple was refined before the next delivery freeze. Its squat golden body now has two integrated, full-depth rounded shoulder volumes and an actual recessed point in front of the stem, rather than a nearly spherical silhouette. Source `#AB401E` and `#E5970D` form the exposed dark lower skirt and short golden heel. Four explicit solid/cavity tests check those regions. All other drink-family GLB bytes remain unchanged. The updated apple, combined review sheets, direct-export evidence, Blender import hashes and delivery manifest were regenerated. Hidden contours and material response remain draft.
+
+## Container simplification (2026-10-09)
+
+Current YAML and matching GLBs use eight-facet small mouth/neck rings and single cylindrical bands at closed bases. Alcohol bottles retain their original body and shoulder segments so curved source labels stay exposed; their default part count falls from 78 to 55. Cup walls and rims, and the cryoxadone beaker walls and lip, use eight joined facets (full coffee cup: 44 to 28 parts; cryoxadone beaker: 40 to 24). Printed can body sections and original source PNGs are retained. Authored sprite poses and unbound studies receive the same geometry changes.
+
+These counts supersede the original delivery geometry. Bindings, colors, state selection, source art, draft status and all attribution/license terms above remain unchanged. See [comparison and measurements](Reviews/ContainerSimplification/README.md).

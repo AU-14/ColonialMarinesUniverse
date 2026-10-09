@@ -17,6 +17,14 @@ public sealed partial class CMUExpeditionAgentCommand : LocalizedEntityCommands
     public override string Description => Loc.GetString("cmd-cmu-expedition-ai-desc");
     public override string Help => Loc.GetString("cmd-cmu-expedition-ai-help");
 
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args) => args.Length switch
+    {
+        1 => CMUExpeditionCommandCompletion.Maps(EntityManager, shell, here: true, expeditionsOnly: true),
+        2 => CMUExpeditionCommandCompletion.Count(),
+        3 => CMUExpeditionCommandCompletion.Variants(),
+        _ => CompletionResult.Empty,
+    };
+
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         var count = 3;

@@ -1,0 +1,47 @@
+- type: entity
+  parent: RMCExtendedEmergencyOxygenTank
+  id: CMUFieldOxygenTank
+  name: field oxygen tank
+  description: A ruggedized, high-capacity oxygen tank built for military field use. Rated for extended operations in hostile atmospheres. It can hold 4 L of gas.
+  components:
+  - type: GasTank
+    air:
+      volume: 4
+      temperature: 293.15
+
+- type: entity
+  parent: CMUFieldOxygenTank
+  id: CMUFieldOxygenTankFilled
+  suffix: Filled
+  components:
+  - type: GasTank
+    releasePressure: 21.3
+    air:
+      volume: 4
+      moles:
+      - 2.293954648 # oxygen
+      temperature: 293.15
+
+- type: entity
+  parent: RMCGasTankOxygen
+  id: CMUFieldGasTankOxygen
+  name: high-capacity oxygen tank
+  description: A large military oxygen tank built for long operations in hostile atmospheres. It can hold 7 L of gas.
+  components:
+  - type: GasTank
+    air:
+      volume: 7
+      temperature: 293.15
+
+- type: entity
+  parent: CMUFieldGasTankOxygen
+  id: CMUFieldGasTankOxygenFilled
+  suffix: Filled
+  components:
+  - type: GasTank
+    releasePressure: 21.3
+    air:
+      volume: 7
+      moles:
+      - 3.932493683 # oxygen
+      temperature: 293.15

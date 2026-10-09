@@ -31,6 +31,9 @@ public sealed class CMU3DAccessTest : GameTest
         EntityUid upper = default;
         EntityUid unsupported = default;
         EntityUid root = default;
+        WeakReference? modelMemory = null;
+        WeakReference? mappingMemory = null;
+        WeakReference? viewportMemory = null;
         try
         {
             await Server.WaitPost(() =>
@@ -75,9 +78,14 @@ public sealed class CMU3DAccessTest : GameTest
                     "The map opt-in must reach the client before the toggle can open its view.");
                 Client.ResolveDependency<IConsoleHost>().ExecuteCommand("cmu3d");
                 Assert.That(eyes.MainViewport, Is.TypeOf<CMU3DSceneControl>());
+                viewportMemory = new WeakReference(eyes.MainViewport);
                 Assert.That(Client.System<CMU3DLiveSceneSystem>().IsOpen, Is.True);
                 Assert.That(Client.System<CMU3DLiveSceneSystem>().Open(), Is.False,
                     "Player first person must not grant access to the administrator workbench.");
+                var model = CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>().First();
+                modelMemory = new WeakReference(model);
+                Assert.That(CProtoMan.TryGetMapping<CMU3DModelPrototype>(model.ID, out var mapping), Is.True);
+                mappingMemory = new WeakReference(mapping);
             });
             await RunTicksSync(10);
             await Server.WaitAssertion(() => Assert.That(
@@ -95,10 +103,20 @@ public sealed class CMU3DAccessTest : GameTest
                 Assert.That(eyes.MainViewport, Is.SameAs(previous), "Toggling off must restore the normal viewport.");
                 scene.FrameUpdate(1);
                 Assert.That(scene.IsOpen, Is.False, "A saved enabled setting must not reopen the view.");
+                Assert.That(CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>(), Is.Empty,
+                    "Closing the last 3D view must unload its geometry instead of retaining it during 2D play.");
             });
             await RunTicksSync(10);
             await Server.WaitAssertion(() => Assert.That(
                 session.ViewSubscriptions.Any(SEntMan.HasComponent<CMU3DViewProbeComponent>), Is.False));
+            // Collect only in the test, after the client callback has left its stack.
+            // The game releases ownership without forcing a collection during a toggle.
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            Assert.That(modelMemory!.IsAlive, Is.False, "Scene/catalog caches must not retain unloaded model objects.");
+            Assert.That(mappingMemory!.IsAlive, Is.False, "Raw YAML must be reclaimable along with the model objects.");
+            Assert.That(viewportMemory!.IsAlive, Is.False, "The closed viewport and its scene encoders must be reclaimable.");
             await Client.WaitPost(() => Client.ResolveDependency<IConsoleHost>().ExecuteCommand("cmu3d"));
             await RunTicksSync(10);
             await Server.WaitAssertion(() =>
@@ -116,6 +134,8 @@ public sealed class CMU3DAccessTest : GameTest
                 scene.FrameUpdate(1);
                 Assert.That(scene.IsOpen, Is.False);
                 Assert.That(eyes.MainViewport, Is.SameAs(previous));
+                Assert.That(CProtoMan.EnumeratePrototypes<CMU3DModelPrototype>(), Is.Empty,
+                    "Leaving a supported map must release the same model data as explicitly toggling off.");
             });
         }
         finally

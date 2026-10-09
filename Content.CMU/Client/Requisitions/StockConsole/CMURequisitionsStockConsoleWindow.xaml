@@ -1,0 +1,18 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
+               Title="{Loc 'cmu-req-stock-console-window-title'}"
+               MinSize="500 700">
+    <BoxContainer Orientation="Vertical">
+        <BoxContainer Orientation="Horizontal">
+            <Label Text="{Loc 'cmu-req-stock-console-search'}" Align="Left" />
+            <LineEdit Name="Search" HorizontalExpand="True" Margin="10 0 0 0" />
+            <Control HorizontalExpand="True" SizeFlagsStretchRatio="0.25" />
+            <Label Name="SummaryLabel" HorizontalExpand="True" Align="Right" />
+            <Button Name="RefreshButton" Text="{Loc 'cmu-req-stock-console-refresh-button'}" Margin="5 0 0 0" />
+        </BoxContainer>
+        <cc:HSeparator Color="#4972A1" />
+        <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" Name="Sections" />
+        </ScrollContainer>
+    </BoxContainer>
+</DefaultWindow>

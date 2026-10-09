@@ -18,6 +18,7 @@
     - HAZOPS
     platoonsOpfor:
     - UPP
+    - BEAR
     - ProdigySF
     - VAIPO
     defaultgovfor: USCM

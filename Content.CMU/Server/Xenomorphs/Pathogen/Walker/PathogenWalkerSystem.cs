@@ -38,6 +38,7 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared.Mind;
 using Content.Shared.Whitelist;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Marines.Skills;
 using Robust.Shared.GameObjects;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared.Body.Part;
@@ -62,6 +63,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private readonly SkillsSystem _skills = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -131,6 +133,12 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         RaiseLocalEvent(target, ref whitelistEv);
 
         EquipMarker(target, walker);
+
+        foreach (var (skill, min) in walker.MinimumSkills)
+        {
+            if (_skills.GetSkill(target, skill) < min)
+                _skills.SetSkill(target, skill, min);
+        }
 
         // If the victim has a connected player, show the offer popup.
         // Otherwise skip straight to ghost role.

@@ -16,7 +16,7 @@ full repository.
   `AU14CivilianEngineerVendor`, `AU14JOGenericVendor`,
   `AU14MilitaryDoctorGenericVendor`, `AU14MilitaryPolicemanGenericVendor`; 71 solid parts
 
-Editable definitions: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_vendor_cloud.yml`.
+Editable definitions: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_vendor_cloud.yml`.
 Surface definitions: sibling `garrison_vendor_cloud_art.yml`.
 The 89 unresampled original-art crops use atlas slots **3700–3788**, reserved by the
 coordinating batch and checked against its existing-surface registry.

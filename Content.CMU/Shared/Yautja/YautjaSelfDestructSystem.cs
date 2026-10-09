@@ -93,14 +93,16 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             return;
 
         args.Handled = true;
+        TryUseSelfDestruct(ent, args.Performer);
+    }
 
-        if (TryGetPulledDeadVictim(args.Performer, out var victim))
-        {
-            TryOpenRemoteDeadVictimSelfDestructDialog(ent, args.Performer, victim);
-            return;
-        }
+    // one entry point for the hotkey and the bracer menu, they used to disagree on the remote case
+    public bool TryUseSelfDestruct(Entity<YautjaBracerComponent> bracer, EntityUid user)
+    {
+        if (TryGetPulledDeadVictim(user, out var victim))
+            return TryOpenRemoteDeadVictimSelfDestructDialog(bracer, user, victim);
 
-        TryOpenSelfDestructDialog(ent, args.Performer);
+        return TryOpenSelfDestructDialog(bracer, user);
     }
 
     private void OnSelfDestructConfirmArm(Entity<YautjaBracerComponent> ent, ref YautjaSelfDestructConfirmArmEvent args)

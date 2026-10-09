@@ -10,7 +10,7 @@ import build_models
 ROOT = Path(__file__).resolve().parents[2]
 RSI = '_RMC14/Structures/Filtration/96x96.rsi'
 SOURCE = ROOT / 'Resources/Textures' / RSI
-PROTOTYPES = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOTYPES = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World'
 MODEL_FILE = PROTOTYPES / 'garrison_waste_distribution.yml'
 SURFACE_FILE = PROTOTYPES / 'garrison_waste_distribution_art.yml'
 TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces'

@@ -22,6 +22,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool TreatmentSafe(EntityUid uid, CMUExpeditionAgentComponent agent) =>
         _npcs.Enabled && !HasComp<ActorComponent>(uid) && _mobs.IsAlive(uid) &&
+        _timing.CurTime - agent.LastHit >= TimeSpan.FromSeconds(0.75) &&
         ShelteredFromKnownThreats(uid, agent, Transform(uid).Coordinates);
 
     private bool TryTreat(EntityUid uid, CMUExpeditionAgentComponent agent, float damage, TimeSpan now)

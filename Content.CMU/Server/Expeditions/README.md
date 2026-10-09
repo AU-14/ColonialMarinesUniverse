@@ -21,7 +21,8 @@ cmu-expedition-visit <map ID>
 ```
 
 `generate` and `scenario` build a map in batches, then automatically open its Govfor dropship
-beacon and announce the recovery operation. `status` reports readiness; `open` remains an
+beacon and issue a short GOVFOR ARES priority recovery assignment using the native faction
+announcement and sound. `status` reports readiness; `open` remains an
 idempotent manual option for maps created through the API. No destination exposes an unfinished
 map. Remove unused maps after evacuating them; their upper levels are removed with the surface.
 
@@ -129,34 +130,81 @@ colony mining and the planet-selection console remain later phases.
 AI cover and route decisions must account for the *current* world, including destroyed objects,
 instead of treating this initial generation plan as an always-correct navigation map.
 
-`cmu-expedition-ai <map ID|here> [count: 1-12] [mixed|regular|poor|rich|scout]` (Admin)
+`cmu-expedition-ai <map ID|here> [count: 1-12] [variant]` (Admin)
 adds a new squad and prints its squad and map IDs. A numeric expedition ID spawns near its objective.
 Use `here` while standing or ghosting over ground on **any map**, including ordinary colony maps.
-Spawning finds dry, clear, unoccupied positions nearby and reports partial deployment if space is limited.
+Spawning finds traversable, clear, unoccupied positions nearby and reports partial deployment if space is limited.
+Guards can cross shallow and deep RMC water at native wading speed, including on ordinary maps.
 
 | Variant | Equipment and behavior |
 | --- | --- |
 | `regular` | MAR-40, militia vest, two spare magazines, blast and smoke grenades |
 | `poor` | Scrapper with a surplus pistol, one spare magazine, patched coat, lower courage, no grenades |
-| `rich` | Salvage baron with reinforced ceramic armor, a loaded pulse rifle, three spare magazines, four-shot volleys, blast and smoke grenades |
+| `rich` | Salvage baron with reinforced armor, modern M41A/2 rifle, three spare magazines, four-shot volleys, blast and smoke grenades |
 | `scout` | Trail scout with a MAR-30 carbine, harness, smoke grenade, longer detection range and cautious positioning |
-| `mixed` | A repeating roster of regulars, scrappers, raiders, scouts, sentries and salvage barons |
+| `assault` | M63 SMG, five-shot volleys, aggressive close-range positioning |
+| `support` | M41AE2 heavy pulse rifle, seven-shot volleys, longer holds at useful range |
+| `marksman` | M4SPR rifle, two-shot volleys, longer detection/fire range, pistol when crowded |
+| `rocketeer` | M63 SMG and a single HE-loaded RPG-36; checks blast/backblast safety and returns to the firearm after firing |
+| `medic` | M63, finite dressings/injector/defibrillator; treatment and covered casualty extraction |
+| `breacher` | Type 23 with heavy slugs, twelve spare shells and a pistol; favors close-range positions |
+| `skirmisher` | MP5, light harness, smoke and pistol; favors covered flanks and flank response |
+| `machinegunner` | M60, two spare belts and pistol; eight-shot volleys and covering-fire preference |
+| `veteran` | AR10, reinforced armor, three spare magazines and pistol; steady mid-range fire |
+| `specialists` | Support, assault, marksman, rocketeer, medic, breacher |
+| `medical` | Medic, support, assault, regular |
+| `raiders` | Breacher, skirmisher, assault, support, medic |
+| `fireteam` | Veteran, machinegunner, skirmisher, medic, marksman |
+| `mixed` | Regular, support, skirmisher, medic, breacher, marksman, rocketeer, veteran, machinegunner |
 
-All variants carry finite dressings, a squad headset and a shovel. They target GOVFOR by default.
+All variants carry finite dressings and a squad headset. Medics use their pack space for medical
+supplies; other roles carry a shovel. Everyone except poor scrappers and medics also carries a backup pistol,
+with physical weapon switching and compatible spare ammo. Shotguns insert physical shells one at a time in safety.
+They target GOVFOR by default. `cmu-expedition-ai here 5 fireteam` spawns one of each fireteam role.
+Mixed compositions repeat in the listed order when more members are requested.
+Every spawnable kit explicitly lists its clothing, headset and pack. Kits do not inherit another
+role's in-hand weapon or backpack contents.
+Press **Tab** for variants with descriptions, counts, live maps and squad IDs. Orders complete actions,
+styles and comma-separated factions. Map commands also complete scenarios, biomes, landforms,
+stories and time arguments; the visit command completes connected players.
+Fire can continue during travel and while waiting in a movement queue; fresh contact and incoming fire bypass the extra AI aim pause.
+Optional manoeuvres reserve a loaded shooter with a usable lane; lost support interrupts the move.
+Covering shooters retain their contact and defer optional medical work until the commitment ends.
+An empty primary immediately permits a loaded backup, including when the target is beyond the backup's
+range. The guard must then reach a usable firing distance. Reloading uses real shelter or a reserved
+covering shooter; damage, close rushes and lost support interrupt an exposed reload.
+Exhausted guards can use safe grenades/smoke and claim nearby loaded firearms, compatible magazines or
+shells, and known HE/smoke grenades within four metres, with a five-second retrieval limit. They can
+loot dead bodies and accessible bags/belts; living or critical bodies and locked storage are excluded.
+Quiet, unordered guards also replenish up to two compatible magazines (or twelve shell items) and one
+grenade of each type. Items remain finite, storage limits apply, and combat interrupts optional scavenging. At contact distance
+they use native weapon-butt or unarmed attacks while attempting to escape, rather than charging into melee.
+Radio snapshots are shared silently every two seconds with duplicate suppression. Audible contact
+callouts are limited to one per local squad every twelve seconds, with unchanged contacts repeated only
+after thirty seconds. There is no chorus of acknowledgements; headset/range/channel and native
+send/receive cancellation checks still apply.
+Useful positions are held across volleys. Narrow passages use stable yielding and passing pockets,
+and new flanks receive one responder (two with six or more nearby members) while other members retain their targets.
+Smoke screens withdrawals/recovery, grenades prioritize clusters, and squad explosive cooldowns
+prevent repeated volleys. See [AI-DESIGN.md](AI-DESIGN.md) for exact conditions and limits.
 Use the printed squad ID in place of `1` below:
 
 ```text
 cmu-expedition-ai here 6 rich
 cmu-expedition-orders here 1 move
-cmu-expedition-orders here 1 guard
+cmu-expedition-orders here 1 guard north
 cmu-expedition-orders here 1 patrol-add
 ```
 
 Move or ghost to another location and repeat `patrol-add` (2-8 points), then use
 `cmu-expedition-orders here 1 patrol-start`. The squad loops the route, pauses for combat and
 resumes afterward. `patrol-stop` holds the current area and keeps the points; `patrol-clear`
-also removes them. `move` and `guard` replace the active patrol. `guard` permits native digging
-on suitable ground or barricade construction with nearby metal after a quiet period.
+also removes them. `move` and `guard` replace the active patrol. Only an explicit `guard` order permits
+digging or nearby-metal construction after a quiet period; spawning a squad never enables it.
+Guard accepts an optional `auto|north|east|south|west` facing after the coordinates (or after `guard`
+with `here`). Auto chooses a clear approach. Each guard selects a nearby spaced position with an open
+firing lane, rear escape and lateral exit, then builds a native directional mound/barricade there.
+Rifles can fire out over directional barricades; their partial protection does not count as safe medical shelter.
 Explicit coordinates remain available: `cmu-expedition-orders <map ID> 1 patrol-add <x> <y>`.
 `style Aggressive`, `friendly GOVFOR` and `target OPFOR` work with either a numeric map or `here`.
 
@@ -166,7 +214,15 @@ constraints. Coordinates are attached to the ground grid, including rotated grid
 tile indices. Walking routes stay on one grid and level; they do not board ships, cross between
 separate grids, open closed doors, climb or teleport. Use reachable waypoints around long detours.
 Order searches are capped at 2,048 cells, one search per update; blocked routes retry after three
-seconds. `cmu-expedition-ai-status <map ID>` includes the order, patrol index and blocked flag.
+seconds. A stalled short leg can use a half-tile obstacle detour (384 cells, at most one per frame).
+Leaders briefly wait for lagging members on the same order; an unreachable member keeps retrying without
+locking the squad forever. `cmu-expedition-ai-status <map ID>` includes the order, patrol index, blocked
+flag, detour/failure counts, construction decision, scavenged supplies and hazard responses.
+
+Alien escape decisions use nearby threats independently of shooting assignments. Last-seen melee
+positions persist for three seconds through smoke, without reading unseen positions or firing blind.
+Smoke is withheld during nearby melee pressure. Visible incoming xeno/biomorph projectiles can trigger
+short sidesteps; persistent acid/fire tiles are avoided and trigger escape when underneath a guard.
 
 Armed scavengers detect visible enemies and use their real loaded weapon with firearm training.
 They shoulder rifles, lead using projectile speed, aim for 0.18 seconds (0.08 after a peek), and fire

@@ -23,7 +23,7 @@ map-fit validation, gameplay conversion, or fidelity approval.
 The 438 named solid nodes use 88 unique, unresampled source crops (98 uses), atlas
 slots **1901–1988**, in `Textures/CMU14/ThreeD/vending_extra_cloud/`. Editable model
 and surface definitions are `garrison_vending_extra_cloud.yml` and
-`garrison_vending_extra_cloud_art.yml` under `Prototypes/CMU14/ThreeD/`.
+`garrison_vending_extra_cloud_art.yml` under `ThreeD/Prototypes/World/`.
 The GLBs in this directory are byte-for-byte output from the unchanged exporter,
 with embedded PNGs, 5,256 total triangles and zero animation clips.
 

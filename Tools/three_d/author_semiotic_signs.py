@@ -9,7 +9,7 @@ import build_models
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / 'Resources/Textures/_RMC14/Structures/Wallmounts/semiotics.rsi'
-PROTOTYPES = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOTYPES = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World'
 TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces'
 MODEL_FILE = PROTOTYPES / 'garrison_semiotic_signs.yml'
 SURFACE_FILE = PROTOTYPES / 'garrison_semiotic_art.yml'

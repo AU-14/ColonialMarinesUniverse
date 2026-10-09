@@ -34,11 +34,17 @@ public sealed partial class VehicleSystem
 
     private void OnCookOffRuptured(Entity<TankCookOffComponent> ent, ref TankCookOffRupturedEvent args)
     {
-        if (_net.IsClient || !TryComp<VehicleInteriorComponent>(ent, out var interior) ||
+        EjectOccupants(ent, ent.Comp.EjectionDistance, ent.Comp.EjectionSpeed);
+    }
+
+    // shared with the OB write-off, which boots the crew the same way
+    public void EjectOccupants(EntityUid vehicle, float distance, float speed)
+    {
+        if (_net.IsClient || !TryComp<VehicleInteriorComponent>(vehicle, out var interior) ||
             interior.MapId == MapId.Nullspace)
             return;
 
-        var origin = _transform.GetMapCoordinates(ent);
+        var origin = _transform.GetMapCoordinates(vehicle);
         if (origin.MapId == MapId.Nullspace)
             return;
 
@@ -71,7 +77,7 @@ public sealed partial class VehicleSystem
                 var candidateDirection = new Vector2(MathF.Cos(candidateAngle), MathF.Sin(candidateAngle));
                 var candidate = origin.Offset(candidateDirection * 2.2f);
                 var coordinates = new EntityCoordinates(_mapSystem.GetMap(origin.MapId), candidate.Position);
-                if (IsExitDestinationBlocked(coordinates, ent, occupant))
+                if (IsExitDestinationBlocked(coordinates, vehicle, occupant))
                     continue;
                 direction = candidateDirection;
                 start = candidate;
@@ -79,8 +85,8 @@ public sealed partial class VehicleSystem
             }
 
             _transform.SetMapCoordinates(occupant, start);
-            UntrackOccupant(occupant, ent);
-            _cookOffThrowing.TryThrow(occupant, direction * ent.Comp.EjectionDistance, ent.Comp.EjectionSpeed,
+            UntrackOccupant(occupant, vehicle);
+            _cookOffThrowing.TryThrow(occupant, direction * distance, speed,
                 recoil: false, playSound: false, doSpin: false);
         }
     }

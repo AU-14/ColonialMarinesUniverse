@@ -157,6 +157,7 @@
   components:
   - type: DropshipAmmo
     travelTime: 3
+    zLevelPenetration: 1
     explosion:
       total: 3000
       slope: 5.5
@@ -169,6 +170,7 @@
   components:
   - type: DropshipAmmo
     travelTime: 2
+    zLevelPenetration: 1
     explosion:
       total: 905
       slope: 15
@@ -181,6 +183,7 @@
   components:
   - type: DropshipAmmo
     travelTime: 6
+    zLevelPenetration: 1
     explosion:
       total: 1780
       slope: 7.2
@@ -197,6 +200,7 @@
   components:
   - type: DropshipAmmo
     travelTime: 5
+    zLevelPenetration: 1
     explosion:
       total: 1850
       slope: 3.2
@@ -209,6 +213,7 @@
   components:
   - type: DropshipAmmo
     travelTime: 5
+    zLevelPenetration: 1
     implosion:
       pullRange: 5.5
       pullDistance: 3.5
@@ -228,6 +233,7 @@
   components:
   - type: DropshipAmmo
     travelTime: 6
+    zLevelPenetration: 1
     explosion:
       total: 2000
       slope: 5.5
@@ -281,11 +287,12 @@
 
 - type: entity
   parent: RMCDropshipMissileExplosionBase
-  id: RMCDropshipMissileExplosionBurningPostman
+  id: RMCDropshipMissileExplosionBurningPostman # CMU14: Postman balance.
   name: GBU-89B NT 'Burning Postman' explosion
   components:
   - type: DropshipAmmo
     travelTime: 12
+    zLevelPenetration: 4
     explosion:
       total: 18000
       slope: 5.5
@@ -301,11 +308,12 @@
 
 - type: entity
   parent: RMCDropshipMissileExplosionBase
-  id: RMCDropshipMissileExplosionPostman
+  id: RMCDropshipMissileExplosionPostman # CMU14: Postman balance.
   name: GBU-89B 'Postman' explosion
   components:
   - type: DropshipAmmo
     travelTime: 12
+    zLevelPenetration: 4
     explosion:
       total: 13000
       slope: 4
@@ -325,6 +333,7 @@
     roundsPerShot: 2
     bulletSpread: 9
     travelTime: 3
+    zLevelPenetration: 1
     explosion:
       total: 3000
       slope: 5.5
@@ -341,6 +350,7 @@
     roundsPerShot: 8
     bulletSpread: 9
     travelTime: 3
+    zLevelPenetration: 1
     explosion:
       total: 3000
       slope: 5.5
@@ -357,6 +367,7 @@
     maxRounds: 12
     roundsPerShot: 12
     bulletSpread: 17
+    zLevelPenetration: 1
     explosion:
       total: 110
       slope: 4
@@ -372,6 +383,7 @@
   components:
   - type: DropshipAmmo
     travelTime: 5
+    zLevelPenetration: 1
     implosion:
       pullRange: 4
       pullDistance: 2.5
@@ -397,6 +409,7 @@
     maxRounds: 6
     roundsPerShot: 6
     bulletSpread: 5
+    zLevelPenetration: 1
     explosion:
       total: 100
       slope: 12
@@ -404,3 +417,22 @@
     impactEffects:
     - RMCEffectExplosionParticle
     - RMCSmokeExplosionProofSmall
+
+- type: entity
+  parent: MarkerBase
+  id: RMCExplosionSmallWithFire
+  name: small explosion
+  suffix: Small blast with fire!
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 18
+    intensitySlope: 20
+    totalIntensity: 120
+    canCreateVacuum: false
+  - type: CMExplosionEffect
+  - type: TileFireOnTrigger
+    spawn: RMCTileFire
+    range: 2
