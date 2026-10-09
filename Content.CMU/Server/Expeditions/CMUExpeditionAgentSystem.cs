@@ -52,8 +52,12 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         SubscribeLocalEvent<CMUExpeditionAgentComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<CMUExpeditionAgentComponent, ShotAttemptedEvent>(OnShotAttempted);
         SubscribeLocalEvent<CMUExpeditionWeaponComponent, GunShotEvent>(OnGunShot);
+
+        // Event ordering is shared by every subscription to this event from this system.
+        var ammoConsumers = new[] { typeof(RMCGunChamberSystem), typeof(SharedGunSystem) };
+        SubscribeLocalEvent<GunComponent, TakeAmmoEvent>(OnObservedGunTakeAmmo, before: ammoConsumers);
         SubscribeLocalEvent<CMUExpeditionWeaponComponent, TakeAmmoEvent>(OnTakeAmmo,
-            before: new[] { typeof(RMCGunChamberSystem), typeof(SharedGunSystem) });
+            before: ammoConsumers);
         InitializeMedicine();
         InitializeMedics();
         InitializeTactics();
