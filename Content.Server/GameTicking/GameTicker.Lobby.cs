@@ -115,16 +115,16 @@ namespace Content.Server.GameTicking
 
             var govforShip = _auRoundSystem.GetSelectedGovforShip();
             var opforShip = _auRoundSystem.GetSelectedOpforShip();
-            var govforShipDisplay = !string.IsNullOrWhiteSpace(govforShip) ? govforShip : "None";
-            var opforShipDisplay = !string.IsNullOrWhiteSpace(opforShip) ? opforShip : "None";
+            var govforShipDisplay = !string.IsNullOrWhiteSpace(govforShip) ? govforShip : Loc.GetString("lobby-info-none");
+            var opforShipDisplay = !string.IsNullOrWhiteSpace(opforShip) ? opforShip : Loc.GetString("lobby-info-none");
 
             var displayPreset = Decoy ?? preset;
             var gmTitle = LocalizeOrRaw(displayPreset.ModeTitle);
             var desc = LocalizeOrRaw(displayPreset.Description);
-            var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name;
-            var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name;
-            var govforPlatoonDisplay = !string.IsNullOrWhiteSpace(govforPlatoon) ? govforPlatoon : "None";
-            var opforPlatoonDisplay = !string.IsNullOrWhiteSpace(opforPlatoon) ? opforPlatoon : "None";
+            var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoonProto ? Loc.GetString(govforPlatoonProto.Name) : null;
+            var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon is { } opforPlatoonProto ? Loc.GetString(opforPlatoonProto.Name) : null;
+            var govforPlatoonDisplay = !string.IsNullOrWhiteSpace(govforPlatoon) ? govforPlatoon : Loc.GetString("lobby-info-none");
+            var opforPlatoonDisplay = !string.IsNullOrWhiteSpace(opforPlatoon) ? opforPlatoon : Loc.GetString("lobby-info-none");
             return Loc.GetString(
                 RunLevel == GameRunLevel.PreRoundLobby
                     ? "game-ticker-get-info-preround-text"
@@ -155,7 +155,7 @@ namespace Content.Server.GameTicking
             if (preset == null)
                 return new List<LobbyRoundInfoField>();
 
-            string Display(string? value) => !string.IsNullOrWhiteSpace(value) ? value : "None";
+            string Display(string? value) => !string.IsNullOrWhiteSpace(value) ? value : Loc.GetString("lobby-info-none");
 
             // Order is the display order - the lobby renders these in sequence, so this list is
             // where the panel's reading order is decided. Planet and gamemode lead because they are
@@ -168,8 +168,8 @@ namespace Content.Server.GameTicking
                 new(Loc.GetString("lobby-info-gamemode"), Display(LocalizeOrRaw(preset.ModeTitle))),
                 new(Loc.GetString("lobby-info-govfor-ship"), Display(_auRoundSystem.GetSelectedGovforShip()), govforColor),
                 new(Loc.GetString("lobby-info-opfor-ship"), Display(_auRoundSystem.GetSelectedOpforShip()), opforColor),
-                new(Loc.GetString("lobby-info-govfor-platoon"), Display(_platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name), govforColor),
-                new(Loc.GetString("lobby-info-opfor-platoon"), Display(_platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name), opforColor),
+                new(Loc.GetString("lobby-info-govfor-platoon"), Display(_platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoonInfo ? Loc.GetString(govforPlatoonInfo.Name) : null), govforColor),
+                new(Loc.GetString("lobby-info-opfor-platoon"), Display(_platoonSpawnRuleSystem.SelectedOpforPlatoon is { } opforPlatoonInfo ? Loc.GetString(opforPlatoonInfo.Name) : null), opforColor),
                 new(Loc.GetString("lobby-info-players"), Loc.GetString(
                     "lobby-info-players-value",
                     ("count", _playerManager.PlayerCount),

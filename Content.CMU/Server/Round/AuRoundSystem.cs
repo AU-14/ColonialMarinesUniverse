@@ -944,12 +944,12 @@ namespace Content.Server.CMU14.Round
                 foreach (var platoonId in govforPlatoons)
                 {
                     var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((platoon.Name, platoon));
+                    optionsplatoons.Add((Loc.GetString(platoon.Name), platoon));
                 }
 
                 var voteopt = new VoteOptions
                 {
-                    Title = "Govfor Vote",
+                    Title = Loc.GetString("au14-vote-title-govfor"),
                     Options = optionsplatoons,
                     Duration = duration
                 };
@@ -969,7 +969,7 @@ namespace Content.Server.CMU14.Round
                     {
                         args.ResolveWinner(winnerId);
                         platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
-                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-govfor"), winnerId.Name);
+                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-govfor"), Loc.GetString(winnerId.Name));
                         _gameTicker.UpdateInfoText();
 
                         // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
@@ -989,7 +989,7 @@ namespace Content.Server.CMU14.Round
                                         return;
 
                                     StartShipVote(winnerId.PossibleShips,
-                                        "Govfor Ship Vote",
+                                        Loc.GetString("au14-vote-title-govfor-ship"),
                                         Loc.GetString("au14-vote-name-govfor-ship"),
                                         SetGovforShip);
                                 });
@@ -1004,12 +1004,12 @@ namespace Content.Server.CMU14.Round
                 foreach (var platoonId in opforPlatoons)
                 {
                     var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((platoon.Name, platoon));
+                    optionsplatoons.Add((Loc.GetString(platoon.Name), platoon));
                 }
 
                 var voteopt = new VoteOptions
                 {
-                    Title = "Opfor Vote",
+                    Title = Loc.GetString("au14-vote-title-opfor"),
                     Options = optionsplatoons,
                     Duration = duration
                 };
@@ -1029,7 +1029,7 @@ namespace Content.Server.CMU14.Round
                     {
                         args.ResolveWinner(winnerId);
                         platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
-                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-opfor"), winnerId.Name);
+                        AnnounceVoteResult(args, Loc.GetString("au14-vote-name-opfor"), Loc.GetString(winnerId.Name));
                         _gameTicker.UpdateInfoText();
 
                         // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
@@ -1049,7 +1049,7 @@ namespace Content.Server.CMU14.Round
                                         return;
 
                                     StartShipVote(winnerId.PossibleShips,
-                                        "Opfor Ship Vote",
+                                        Loc.GetString("au14-vote-title-opfor-ship"),
                                         Loc.GetString("au14-vote-name-opfor-ship"),
                                         SetOpforShip);
                                 });

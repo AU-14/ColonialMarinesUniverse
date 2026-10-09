@@ -898,7 +898,7 @@ namespace Content.Server.GameTicking
                 : Preset != null
                     ? Loc.GetString(Preset.ModeTitle)
                     : string.Empty;
-            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name ?? string.Empty;
+            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoon ? Loc.GetString(govforPlatoon.Name) : string.Empty;
 
             return new RoundStatusWebhookData(
                 RoundId,

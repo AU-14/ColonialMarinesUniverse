@@ -986,7 +986,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
         {
             mode = lift.Comp.Mode;
             busy = lift.Comp.Busy;
-            activeId = string.IsNullOrWhiteSpace(lift.Comp.ActiveVehicleId) ? null : lift.Comp.ActiveVehicleId;
+            activeId = string.IsNullOrWhiteSpace(lift.Comp.ActiveVehicleId) ? null : GetPrototypeName(lift.Comp.ActiveVehicleId);
 
             if (!string.IsNullOrWhiteSpace(selectedId))
             {
@@ -999,7 +999,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
                     overlays = BuildPreviewOverlays(stored);
                 }
 
-                preview = new VehicleSupplyPreviewState(selectedId, selectedCopyIndex, layers, overlays);
+                preview = new VehicleSupplyPreviewState(selectedId, GetPrototypeName(selectedId), selectedCopyIndex, layers, overlays);
             }
         }
 

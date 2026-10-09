@@ -45,7 +45,7 @@ public sealed partial class PlatoonPrototype : IPrototype
     public List<ProtoId<LanguagePrototype>> LearnableLanguages { get; private set; } = new();
 
     [DataField("name", required: true)]
-    public string Name { get; private set; } = string.Empty;
+    public LocId Name { get; private set; } = string.Empty;
 
     [DataField("lorePrimer")]
     public ProtoId<LorePrimerPrototype>? LorePrimer { get; private set; }

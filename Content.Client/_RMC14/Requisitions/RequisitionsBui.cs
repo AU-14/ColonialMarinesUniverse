@@ -52,6 +52,45 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     private const string FavoritesCategory = "#favorites";
     private const string RecentCategory = "#recent";
 
+    private static readonly Dictionary<string, string> CategoryLocKeys = new()
+    {
+        ["Air Defense"] = "rmc-requisitions-category-air-defense",
+        ["Ammo"] = "rmc-requisitions-category-ammo",
+        ["Ammunition"] = "rmc-requisitions-category-ammunition",
+        ["AP Ammo"] = "rmc-requisitions-category-ap-ammo",
+        ["Atmospherics"] = "rmc-requisitions-category-atmospherics",
+        ["Botany"] = "rmc-requisitions-category-botany",
+        ["Civilian Goods"] = "rmc-requisitions-category-civilian-goods",
+        ["Corporate Equipment"] = "rmc-requisitions-category-corporate-equipment",
+        ["Dropship Munitions"] = "rmc-requisitions-category-dropship-munitions",
+        ["Dropship Parts"] = "rmc-requisitions-category-dropship-parts",
+        ["Engineering"] = "rmc-requisitions-category-engineering",
+        ["Explosives"] = "rmc-requisitions-category-explosives",
+        ["Food"] = "rmc-requisitions-category-food",
+        ["Food and Drinks"] = "rmc-requisitions-category-food-and-drinks",
+        ["Furniture"] = "rmc-requisitions-category-furniture",
+        ["Gear"] = "rmc-requisitions-category-gear",
+        ["Machines and Vendors (Wrench Required)"] = "rmc-requisitions-category-machines-and-vendors",
+        ["Materials"] = "rmc-requisitions-category-materials",
+        ["Medical"] = "rmc-requisitions-category-medical",
+        ["Mortar"] = "rmc-requisitions-category-mortar",
+        ["Pouches"] = "rmc-requisitions-category-pouches",
+        ["Research"] = "rmc-requisitions-category-research",
+        ["Specialist Ammo"] = "rmc-requisitions-category-specialist-ammo",
+        ["Supplies"] = "rmc-requisitions-category-supplies",
+        ["Vehicle Ammo"] = "rmc-requisitions-category-vehicle-ammo",
+        ["Weapons"] = "rmc-requisitions-category-weapons",
+        ["WEYSEC Ammo"] = "rmc-requisitions-category-weysec-ammo",
+        ["WEYSEC Gear"] = "rmc-requisitions-category-weysec-gear",
+        ["WEYSEC Weapons"] = "rmc-requisitions-category-weysec-weapons",
+        ["Weyland-Yutani Research"] = "rmc-requisitions-category-weyland-yutani-research",
+    };
+
+    private static string GetLocalizedCategoryName(string category)
+    {
+        return Loc.GetString(CategoryLocKeys[category]);
+    }
+
     protected override void Open()
     {
         base.Open();
@@ -118,26 +157,26 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         {
             case Lowered or Raised when uiState.Busy:
                 platformLabel = $"Platform: {uiState.PlatformLowered}";
-                platformButtonLabel = "ASRS busy";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-busy");
                 platformButtonDisabled = true;
                 break;
             case Lowered:
-                platformButtonLabel = "Raise";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-raise");
                 platformLabel = "Platform: Lowered";
                 raise = true;
                 break;
             case Raised:
-                platformButtonLabel = "Lower";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-lower");
                 platformLabel = "Platform: Raised";
                 raise = false;
                 break;
             case Lowering:
-                platformButtonLabel = "Please wait";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-wait");
                 platformLabel = "Lowering...";
                 platformButtonDisabled = true;
                 break;
             case Raising:
-                platformButtonLabel = "Please wait";
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-wait");
                 platformLabel = "Raising...";
                 platformButtonDisabled = true;
                 break;
@@ -268,7 +307,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         AddItemCategoryButton(Loc.GetString("cmu-asrs-category-favorites"), FavoritesCategory);
         AddItemCategoryButton(Loc.GetString("cmu-asrs-category-recent"), RecentCategory);
         foreach (var category in allCategories)
-            AddItemCategoryButton(category, category);
+            AddItemCategoryButton(GetLocalizedCategoryName(category), category);
 
         view.ItemsContainer.RemoveAllChildren();
         _itemRows.Clear();

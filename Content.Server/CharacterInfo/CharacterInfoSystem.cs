@@ -313,7 +313,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         }
 
         if (!string.IsNullOrWhiteSpace(platoon.Name))
-            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", platoon.Name))); // RuMC edit
+            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", Loc.GetString(platoon.Name)))); // RuMC edit
     }
 
     // cmu edit start

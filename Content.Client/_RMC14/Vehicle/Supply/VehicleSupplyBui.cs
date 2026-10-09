@@ -67,11 +67,14 @@ public sealed class VehicleSupplyBui : BoundUserInterface
             : Loc.GetString("cmu-vehicle-supply-allowance", ("platoon", state.PlatoonName),
                 ("used", state.IssuedVehicles.Count), ("limit", state.VehicleLimit));
         _window.IssuedLabel.Text = string.Join(", ", state.IssuedVehicles);
-        var modeText = state.LiftMode?.ToString() ?? "No lift";
-        var activeText = string.IsNullOrWhiteSpace(state.ActiveVehicleId) ? "none" : state.ActiveVehicleId;
-        var busyText = state.Busy ? "busy" : "idle";
+        var modeText = GetLiftModeLabel(state.LiftMode);
+        var activeText = string.IsNullOrWhiteSpace(state.ActiveVehicleId)
+            ? Loc.GetString("cmu-vehicle-supply-active-none")
+            : state.ActiveVehicleId;
+        var busyText = Loc.GetString(state.Busy ? "cmu-vehicle-supply-status-busy" : "cmu-vehicle-supply-status-idle");
 
-        _window.StatusLabel.Text = $"Lift: {modeText} | Status: {busyText} | Active: {activeText}";
+        _window.StatusLabel.Text = Loc.GetString("cmu-vehicle-supply-status-line",
+            ("lift", modeText), ("status", busyText), ("active", activeText));
 
         var raising = state.LiftMode == VehicleSupplyLiftMode.Raising;
         var lowering = state.LiftMode == VehicleSupplyLiftMode.Lowering;
@@ -153,7 +156,9 @@ public sealed class VehicleSupplyBui : BoundUserInterface
             {
                 var copyToggle = new HardpointButton
                 {
-                    LabelText = _copyExpanded.Contains(vehicleId) ? "Copies v" : "Copies >",
+                    LabelText = _copyExpanded.Contains(vehicleId)
+                        ? Loc.GetString("cmu-vehicle-supply-copies-expanded")
+                        : Loc.GetString("cmu-vehicle-supply-copies-collapsed"),
                     MinSize = new Vector2(110, 0)
                 };
 
@@ -342,7 +347,9 @@ public sealed class VehicleSupplyBui : BoundUserInterface
 
         var expanded = _copyExpanded.Contains(vehicleId);
         container.Visible = expanded;
-        toggle.LabelText = expanded ? "Copies v" : "Copies >";
+        toggle.LabelText = expanded
+            ? Loc.GetString("cmu-vehicle-supply-copies-expanded")
+            : Loc.GetString("cmu-vehicle-supply-copies-collapsed");
     }
 
     private static void ApplySelectionStyle(HardpointButton button, bool selected)
@@ -358,5 +365,18 @@ public sealed class VehicleSupplyBui : BoundUserInterface
         button.DisabledTextColor = HardpointButton.DefaultDisabledTextColor;
 
         button.RefreshStyle();
+    }
+
+    private static string GetLiftModeLabel(VehicleSupplyLiftMode? mode)
+    {
+        return mode switch
+        {
+            null => Loc.GetString("cmu-vehicle-supply-lift-none"),
+            VehicleSupplyLiftMode.Lowered => Loc.GetString("cmu-vehicle-supply-lift-lowered"),
+            VehicleSupplyLiftMode.Raised => Loc.GetString("cmu-vehicle-supply-lift-raised"),
+            VehicleSupplyLiftMode.Lowering => Loc.GetString("cmu-vehicle-supply-lift-lowering"),
+            VehicleSupplyLiftMode.Raising => Loc.GetString("cmu-vehicle-supply-lift-raising"),
+            VehicleSupplyLiftMode.Preparing => Loc.GetString("cmu-vehicle-supply-lift-preparing"),
+        };
     }
 }

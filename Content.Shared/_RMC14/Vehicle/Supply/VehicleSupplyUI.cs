@@ -101,17 +101,20 @@ public sealed class VehicleSupplyLoadoutCategoryState
 public sealed class VehicleSupplyPreviewState
 {
     public string VehicleId;
+    public string Name;
     public int CopyIndex;
     public List<VehicleHardpointLayerState> Layers;
     public List<VehicleSupplyPreviewOverlay> Overlays;
 
     public VehicleSupplyPreviewState(
         string vehicleId,
+        string name,
         int copyIndex,
         List<VehicleHardpointLayerState> layers,
         List<VehicleSupplyPreviewOverlay> overlays)
     {
         VehicleId = vehicleId;
+        Name = name;
         CopyIndex = copyIndex;
         Layers = layers;
         Overlays = overlays;

@@ -1,0 +1,9 @@
+cmu-platoon-uscm-name = US Colonial Marines
+cmu-platoon-lacn-name = Latin American Colonial Navy
+cmu-platoon-upp-name = UPP Naval Infantry
+cmu-platoon-weyu-name = WY PMC
+cmu-platoon-cmbciu-name = CMB Crisis Intervention
+cmu-platoon-hazops-name = USCM Hazardous Operations Unit
+cmu-platoon-prodigysf-name = Prodigy Security Forces
+cmu-platoon-vaipo-name = VAI Primary Operations
+cmu-platoon-rmc-name = TWE Royal Marine Commandos
