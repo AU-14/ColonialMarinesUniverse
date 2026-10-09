@@ -63,6 +63,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
+        CancelVault(agent);
         ClearScavenging(uid, agent);
         CancelPortalClimb(uid, agent);
         agent.TravelGoal = null;
