@@ -43,6 +43,10 @@
       enum.TacticalMapUserUi.Key:
         type: TacticalMapUserBui
   - type: IgnoreXenoWeedsSlowdown
+  # human base slows the puller by the target's weight, preds drag anything at full speed
+  - type: SlowOnPull
+    multiplier: 1
+    slowdowns: []
   - type: Skills
     preset: CMUSkillPresetYautjaWarrior
   - type: Loadout
@@ -260,6 +264,9 @@
   - type: Yautja
   - type: YautjaYoungblood
   - type: IgnoreXenoWeedsSlowdown
+  - type: SlowOnPull
+    multiplier: 1
+    slowdowns: []
   - type: Skills
     preset: CMUSkillPresetYautjaWarrior
   - type: Icon
