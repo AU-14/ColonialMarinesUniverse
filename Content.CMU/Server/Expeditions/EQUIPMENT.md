@@ -34,9 +34,17 @@ Status reports include the applied outfit, supply transfers, flare use, vision d
 - Friendly lanes permit native IFF pass-through only on known non-rocket weapons with matching
   factions and enabled IFF. Trigger interlocks remain blocking. Explosives retain blast checks.
 - Swaps stow the previous gun in its sling or accessible storage before releasing it. A one-handed
-  backup may retain the primary in the other hand; a blocked two-handed swap is rolled back.
+  backup may retain the primary in the other hand when storage is blocked; it fires unwielded
+  until storage becomes available. Wielding requires genuinely empty hands and cannot discard
+  another gun or supplies to make room. A blocked two-handed swap is rolled back.
   Only an empty disposable rocket tube is intentionally discarded. Quiet agents also secure
   remembered dropped weapons within reach while carrying a backup.
+- Empty combatants try a loaded backup, safe reload or nearby compatible ammunition first.
+  Without those, they seek actual shelter and use short, collision-checked escape steps to
+  increase distance or reduce exposure when shelter is unavailable. An active escape step is
+  retained through incoming hits; stopped or failed escapes are reconsidered once per second.
+  They stay within their leash, retain native melee self-defense, and resume ordinary orders
+  and supply routes once contact expires. Trapped agents cannot manufacture an escape or ammunition.
 
 This integrates native [attachment toggles](https://github.com/AU-14/ColonialMarinesUniverse/blob/master/Content.Shared/_RMC14/Attachable/Systems/AttachableToggleableSystem.cs)
 and [aimed shots](https://github.com/AU-14/ColonialMarinesUniverse/blob/master/Content.Shared/_RMC14/Weapons/Ranged/AimedShot/SharedRMCAimedShotSystem.cs).
@@ -103,6 +111,11 @@ may become a new contact. Phrase pools reflect stress, injury, aggression, a clo
 1. Spawn all specialist variants and all ten outfits. Check complete clothing, belt/pouch/pack,
    one primary, sidearm and finite starting supplies. Swap under full storage, empty both weapons,
    knock agents down and disarm them. Check no useful gun is abandoned and recovery respects ownership.
+   In particular, empty a breacher's shotgun with both free and occupied suit storage: it must
+   sling/store the shotgun or retain it while firing the pistol one-handed. Repeat with a full
+   backpack/belt and a utility item occupying the other hand. Exhaust all carried ammunition
+   under fire in open ground and near doors/corners: verify escape progress, blocked-route retries,
+   no walk back to the exposed spawn point, and renewed combat after a real resupply.
 2. In daylight and dark rooms, test roofs, walls, windows, trees, point lights, fading flares and smoke.
    An unseen moving enemy must not be tracked. Fire once in darkness, then move: flash shots must
    remain near the original position and expire after 1.2 seconds. Repeat with a suppressor.

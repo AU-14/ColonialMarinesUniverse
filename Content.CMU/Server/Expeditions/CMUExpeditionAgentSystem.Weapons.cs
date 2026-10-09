@@ -71,8 +71,8 @@ public sealed partial class CMUExpeditionAgentSystem
                 // Roll back to the source slot rather than discard a still-loaded primary.
                 if (wasSlung)
                     _inventory.TryEquip(uid, pending, "suitStorage", silent: true);
-                else if (Supplies(uid, out var bag))
-                    StoreOwnedItem(uid, pending, bag);
+                else
+                    StoreSupply(uid, pending);
                 ActivateWeapon(uid, current);
                 agent.WeaponDecision = "stow-blocked";
                 return false;
@@ -114,12 +114,20 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool StowWeapon(EntityUid uid, EntityUid weapon)
     {
+        _wield.TryUnwield(weapon, uid);
         // Only a spent disposable tube is deliberately discarded. Empty rifles remain useful
         // after resupply. Failed storage must not strand them on the floor during a swap.
         if (TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role) && role.Rocket && WeaponAmmo(weapon) == 0)
             return _hands.TryDrop(uid, weapon);
         return _inventory.TryEquip(uid, weapon, "suitStorage", silent: true) ||
             StoreSupply(uid, weapon);
+    }
+
+    private void StowOtherWeapons(EntityUid uid, EntityUid active)
+    {
+        foreach (var hand in _hands.EnumerateHands(uid))
+            if (_hands.TryGetHeldItem(uid, hand, out var held) && held != active && HasComp<GunComponent>(held))
+                StowWeapon(uid, held.Value);
     }
 
     private bool StoreOwnedItem(EntityUid uid, EntityUid item, Content.Shared.Storage.StorageComponent bag) =>
