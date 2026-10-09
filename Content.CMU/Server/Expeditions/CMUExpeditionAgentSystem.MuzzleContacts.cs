@@ -15,7 +15,6 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void InitializeVision()
     {
-        SubscribeLocalEvent<GunComponent, TakeAmmoEvent>(OnObservedGunTakeAmmo);
         SubscribeLocalEvent<CMUExpeditionShotObserverComponent, GunShotEvent>(OnObservedMuzzleFlash);
     }
 

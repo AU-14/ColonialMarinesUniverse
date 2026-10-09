@@ -52,8 +52,12 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         SubscribeLocalEvent<CMUExpeditionAgentComponent, ComponentShutdown>(OnShutdown);
         SubscribeLocalEvent<CMUExpeditionAgentComponent, ShotAttemptedEvent>(OnShotAttempted);
         SubscribeLocalEvent<CMUExpeditionWeaponComponent, GunShotEvent>(OnGunShot);
+
+        // Event ordering is shared by every subscription to this event from this system.
+        var ammoConsumers = new[] { typeof(RMCGunChamberSystem), typeof(SharedGunSystem) };
+        SubscribeLocalEvent<GunComponent, TakeAmmoEvent>(OnObservedGunTakeAmmo, before: ammoConsumers);
         SubscribeLocalEvent<CMUExpeditionWeaponComponent, TakeAmmoEvent>(OnTakeAmmo,
-            before: new[] { typeof(RMCGunChamberSystem), typeof(SharedGunSystem) });
+            before: ammoConsumers);
         InitializeMedicine();
         InitializeMedics();
         InitializeTactics();
@@ -881,11 +885,14 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     }
 
     private bool Visible(EntityUid observer, EntityUid target, float range) =>
-        _interaction.InRangeUnobstructed(observer, target, range,
+        // Remembered contacts can be deleted between decisions (gibbing, evolution, disconnects).
+        TryComp<TransformComponent>(observer, out var observerTransform) &&
+        TryComp<TransformComponent>(target, out var targetTransform) &&
+        _interaction.InRangeUnobstructed((observer, observerTransform), (target, targetTransform), range,
             CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
             predicate: entity => entity == observer || entity == target || HasComp<NpcFactionMemberComponent>(entity) ||
                 TransparentWindow(entity)) &&
-        !SmokeOccludes(Transform(observer).Coordinates, Transform(target).Coordinates) && CanSpot(observer, target);
+        !SmokeOccludes(observerTransform.Coordinates, targetTransform.Coordinates) && CanSpot(observer, target);
 
     private void Move(EntityUid uid, EntityCoordinates destination, bool precise = false,
         bool routeWaypoint = false, bool validated = false)
