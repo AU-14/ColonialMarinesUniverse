@@ -3,6 +3,7 @@ using Content.Shared.CMU14.GasMask;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
+using Content.Shared.Damage.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -49,6 +50,47 @@ public sealed class InternalsGasProtectionTest
             entities.DeleteEntity(victim);
             entities.DeleteEntity(mask);
             entities.DeleteEntity(tank);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AcidGasOnlyBurnsMobsOnInternals()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        EntityUid victim = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var internalsSystem = entities.System<SharedInternalsSystem>();
+
+            victim = entities.SpawnEntity("CMMobHuman", testMap.GridCoords);
+            var mask = entities.SpawnEntity("ClothingMaskBreath", testMap.GridCoords);
+            var tank = entities.SpawnEntity("OxygenTankFilled", testMap.GridCoords);
+            var internals = entities.EnsureComponent<InternalsComponent>(victim);
+            internalsSystem.ConnectBreathTool((victim, internals), mask);
+            Assert.That(internalsSystem.TryConnectTank((victim, internals), tank), Is.True);
+
+            entities.SpawnEntity("RMCSmokeAcid", testMap.GridCoords);
+        });
+
+        await pair.RunSeconds(2.5f);
+
+        await server.WaitAssertion(() =>
+        {
+            var damage = server.EntMan.GetComponent<DamageableComponent>(victim).Damage.DamageDict;
+            Assert.Multiple(() =>
+            {
+                Assert.That(damage.GetValueOrDefault("Heat"), Is.GreaterThan(Content.Shared.FixedPoint.FixedPoint2.Zero),
+                    "Acid gas should still burn a mob on internals.");
+                Assert.That(damage.GetValueOrDefault("Asphyxiation"), Is.EqualTo(Content.Shared.FixedPoint.FixedPoint2.Zero),
+                    "Acid gas should not choke a mob on internals.");
+            });
         });
 
         await pair.CleanReturnAsync();
