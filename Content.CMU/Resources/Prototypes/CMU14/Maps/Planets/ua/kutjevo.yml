@@ -19,6 +19,7 @@
     - VAIPO
     platoonsOpfor:
     - LACN
+    - BEAR
     - UPP
     defaultgovfor: USCM
     defaultopfor: LACN
