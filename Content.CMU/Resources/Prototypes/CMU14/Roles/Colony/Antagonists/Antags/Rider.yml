@@ -37,6 +37,7 @@
     antagPrototype: RiderRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-rider
 
 - type: antag
   parent: CMUAntagColonyBase

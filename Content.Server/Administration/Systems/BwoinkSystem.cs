@@ -262,6 +262,7 @@ namespace Content.Server.Administration.Systems
             {
                 RaiseNetworkEvent(bwoinkMessage, admin);
             }
+            _cmuTickets.RecordSystemLine(session.UserId, bwoinkMessage); // CMU14: keep connect/leave lines in ticket history
 
             // Enqueue the message for Discord relay
             if (_webhookUrl != string.Empty)
@@ -724,6 +725,7 @@ namespace Content.Server.Administration.Systems
 
             var admins = GetTargetAdmins();
             var adminMsg = await FormatFullMessageForRecipient(forAdmin: true, senderAdmin, senderSession, message);
+            _cmuTickets.OnMessageAccepted(message.UserId, senderSession, adminMsg); // CMU14: AHelp tickets open/record before admins see the line
 
             // Notify all admins
             foreach (var channel in admins)

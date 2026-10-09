@@ -56,6 +56,11 @@
     antagPrototype: FugitiveRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-fugitive
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: prisoner
 
 - type: antag
   parent: CMUAntagColonyBase

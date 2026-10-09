@@ -46,6 +46,7 @@
     antagPrototype: BountyHunterRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-bounty-hunter
 
 - type: antag
   parent: CMUAntagColonyBase

@@ -44,6 +44,7 @@
     antagPrototype: ArsonistRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-arsonist
 
 - type: antag
   parent: CMUAntagColonyBase

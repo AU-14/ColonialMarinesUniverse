@@ -52,6 +52,7 @@
     antagPrototype: SerialKillerRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-serial-killer
 
 - type: antag
   parent: CMUAntagColonyBase

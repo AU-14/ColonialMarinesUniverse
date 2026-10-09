@@ -3,6 +3,11 @@
   abstract: true
   parent: BaseMindRoleAntag
   id: CMUAntagCLFBaseEntity
+  components:
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudCLF
 
 - type: antag
   abstract: true
@@ -23,6 +28,11 @@
     antagPrototype: CLFSubvertedSynthRole
     exclusiveAntag: true
     roleType: TeamAntagonist
+    subtype: cmu-role-subtype-clf-subverted-synth
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: clf_synth
 
 - type: antag
   parent: CMUAntagCLFBase
@@ -40,6 +50,7 @@
     antagPrototype: CLFRecruitRole
     exclusiveAntag: true
     roleType: TeamAntagonist
+    subtype: cmu-role-subtype-clf-recruit
 
 - type: antag
   parent: CMUAntagCLFBase
@@ -57,6 +68,11 @@
     antagPrototype: CLFGuerrillaRole
     exclusiveAntag: true
     roleType: TeamAntagonist
+    subtype: cmu-role-subtype-clf-guerrilla
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: clf_mil
 
 - type: antag
   parent: CMUAntagCLFBase
@@ -73,6 +89,11 @@
     antagPrototype: CLFPhysicianRole
     exclusiveAntag: true
     roleType: TeamAntagonist
+    subtype: cmu-role-subtype-clf-physician
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: clf_med
 
 - type: antag
   parent: CMUAntagCLFBase
@@ -89,6 +110,11 @@
     antagPrototype: CLFSurgeonRole
     exclusiveAntag: true
     roleType: TeamAntagonist
+    subtype: cmu-role-subtype-clf-surgeon
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: clf_med
 
 - type: antag
   parent: CMUAntagCLFBase
@@ -105,6 +131,11 @@
     antagPrototype: CLFLeaderRole
     exclusiveAntag: true
     roleType: TeamAntagonist
+    subtype: cmu-role-subtype-clf-leader
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: clf_sl
 
 - type: antag
   parent: CMUAntagCLFBase

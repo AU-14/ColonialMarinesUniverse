@@ -44,6 +44,7 @@
     antagPrototype: StrikeOrganizerRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-strike-organizer
 
 - type: antag
   parent: CMUAntagColonyBase

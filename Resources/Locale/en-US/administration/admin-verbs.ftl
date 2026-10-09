@@ -4,7 +4,8 @@ edit-solutions-verb-get-data-text = Edit Solutions
 explode-verb-get-data-text = Explode
 ahelp-verb-get-data-text = Message
 admin-verbs-admin-logs-entity = Entity Logs
-admin-verbs-admin-logs-player = Player Logs
+# CMU14: renamed from "Player Logs"
+admin-verbs-admin-logs-player = View Logs
 admin-verbs-teleport-to = Teleport To
 admin-verbs-teleport-here = Teleport Here
 admin-verbs-freeze = Freeze
