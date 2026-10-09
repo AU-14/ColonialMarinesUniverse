@@ -57,7 +57,10 @@ public sealed partial class CMUExpeditionAgentSystem
     private EntityCoordinates? SmokePoint(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid grenade,
         EntityCoordinates protectedPoint)
     {
-        if (agent.LastSeen is not { } contact || _timing.CurTime - agent.LastContact > TimeSpan.FromSeconds(2))
+        // A screen conceals charging aliens as effectively as it conceals us. Do not
+        // blind the squad while a visible/recent melee threat can close through it.
+        if (agent.MeleeThreats.Count > 0 || agent.LastContactWasMelee ||
+            agent.LastSeen is not { } contact || _timing.CurTime - agent.LastContact > TimeSpan.FromSeconds(2))
             return null;
         var origin = _transform.ToMapCoordinates(protectedPoint);
         var delta = _transform.ToMapCoordinates(contact).Position - origin.Position;

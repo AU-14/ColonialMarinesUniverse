@@ -48,7 +48,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 agent.SpacingDestination = step;
                 agent.SpacingDecision = "reducing-crossfire";
                 agent.CrossfireMoves++;
-                Move(uid, step);
+                Move(uid, step, validated: true);
             }
         }
         if (now >= agent.SpacingUntil)
@@ -85,7 +85,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 }
             }
             else
-                Move(uid, destination);
+                Move(uid, destination, validated: true);
         }
         if (agent.SpacingDestination == null && agent.RushTarget != null && now >= agent.NextSpacingSearch)
         {
@@ -95,7 +95,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 agent.SpacingDestination = escape;
                 agent.SpacingMoveUntil = now + TimeSpan.FromSeconds(2);
                 agent.SpacingDecision = "backing-away";
-                Move(uid, escape);
+                Move(uid, escape, validated: true);
             }
             else
                 agent.SpacingDecision = "trapped-returning-fire";
@@ -126,9 +126,9 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private EntityCoordinates? EscapeStep(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates start)
     {
-        if (agent.RushTarget is not { } target)
+        if (agent.RushPosition is not { } rush)
             return null;
-        var threat = _transform.ToCoordinates(start.EntityId, _transform.GetMapCoordinates(target));
+        var threat = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(rush));
         var away = start.Position - threat.Position;
         if (away.LengthSquared() < 0.01f)
             away = Vector2.UnitX;
@@ -155,7 +155,8 @@ public sealed partial class CMUExpeditionAgentSystem
                     continue;
                 var score = Math.Min(gap, agent.MeleeStandoffRange + 2) - length * 0.15f +
                     (FiringLaneClear(uid, candidate, threat) ? 1 : 0) -
-                    ExposureScore(uid, agent, candidate) * (currentGap < 2 ? 0.25f : 0.6f);
+                    ExposureScore(uid, agent, candidate) * (currentGap < 2 ? 0.25f : 0.6f) -
+                    FriendlyCrowding(uid, candidate) * 1.5f;
                 if (score <= bestScore)
                     continue;
                 bestScore = score;

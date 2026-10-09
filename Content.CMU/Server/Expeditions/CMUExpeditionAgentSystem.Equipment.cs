@@ -38,18 +38,23 @@ public sealed partial class CMUExpeditionAgentSystem
             weapon = active;
         if (weapon is not { } gun || !HasComp<GunComponent>(gun) || !Supplies(uid, out var supplies))
             return null;
-        _itemSlots.TryGetSlot(gun, "gun_magazine", out var slot);
-        TryComp<BallisticAmmoProviderComponent>(gun, out var tube);
         foreach (var item in supplies.Container.ContainedEntities)
         {
-            var ammo = new GetAmmoCountEvent();
-            RaiseLocalEvent(item, ref ammo);
-            if (slot != null && ammo.Count > 0 && _itemSlots.CanInsert(gun, slot, item, uid, swap: true) ||
-                tube != null && TryComp<CartridgeAmmoComponent>(item, out var cartridge) && !cartridge.Spent &&
-                _guns.CanInsertBallistic((gun, tube), item))
+            if (CompatibleAmmunition(uid, gun, item))
                 return item;
         }
         return null;
+    }
+
+    private bool CompatibleAmmunition(EntityUid uid, EntityUid gun, EntityUid item)
+    {
+        var ammo = new GetAmmoCountEvent();
+        RaiseLocalEvent(item, ref ammo);
+        return _itemSlots.TryGetSlot(gun, "gun_magazine", out var slot) && ammo.Count > 0 &&
+            _itemSlots.CanInsert(gun, slot, item, uid, swap: true) ||
+            TryComp<BallisticAmmoProviderComponent>(gun, out var tube) &&
+            TryComp<CartridgeAmmoComponent>(item, out var cartridge) && !cartridge.Spent &&
+            _guns.CanInsertBallistic((gun, tube), item);
     }
 
     private EntityUid? Grenade(EntityUid uid, bool smoke)

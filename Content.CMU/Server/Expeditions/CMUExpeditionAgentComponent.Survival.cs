@@ -13,6 +13,12 @@ public sealed partial class CMUExpeditionAgentComponent
     public int WeaponsRecovered;
     public string WeaponRecoveryDecision = "armed";
     public EntityUid? RushTarget;
+    public EntityCoordinates? RushPosition;
+    public readonly Dictionary<EntityUid, (EntityCoordinates Position, TimeSpan Until)> MeleeMemory = new();
+    public TimeSpan NextHazardScan;
+    public TimeSpan NextHazardDodge;
+    public int HazardDodges;
+    public string HazardDecision = "clear";
     public bool LastContactWasMelee;
     public List<(EntityCoordinates Position, Vector2 Velocity)> MeleeThreats = new();
     public TimeSpan SpacingUntil;

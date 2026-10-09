@@ -15,8 +15,10 @@ public sealed partial class CMUExpeditionAgentComponent
     public int SmokesThrown;
     public EntityUid? ScavengeTarget;
     public TimeSpan ScavengeUntil;
+    public TimeSpan ScavengePickupAt;
     public TimeSpan NextScavenge;
     public int WeaponsScavenged;
+    public int SuppliesScavenged;
     public int LastResortStrikes;
 }
 

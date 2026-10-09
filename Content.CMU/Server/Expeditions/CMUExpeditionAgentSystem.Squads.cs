@@ -59,8 +59,6 @@ public sealed partial class CMUExpeditionAgentSystem
             var agent = Comp<CMUExpeditionAgentComponent>(uid);
             agent.Squad = squad;
             agent.Home = positions[i];
-            agent.Entrench = !HasComp<CMUExpeditionMedicComponent>(uid);
-            agent.NextWork = _timing.CurTime + TimeSpan.FromSeconds(20);
             agent.NextThink = _timing.CurTime + TimeSpan.FromSeconds(i * 0.02);
         }
         if (map != null)
@@ -83,7 +81,7 @@ public sealed partial class CMUExpeditionAgentSystem
         return GroundSafe(point) && BodyFits(uid, point);
     }
 
-    public bool OrderSquadPoint(EntityUid uid, EntityCoordinates center, string action, List<EntityCoordinates> reserved)
+    public bool OrderSquadPoint(EntityUid uid, EntityCoordinates center, string action, List<EntityCoordinates> reserved, Direction? facing = null)
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) || !CanOrderSquadMember(uid) ||
             !TrySquadCoordinates(center, out center) || Transform(uid).MapUid != Transform(center.EntityId).MapUid ||
@@ -95,8 +93,10 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             if (action == "patrol-add")
                 agent.PatrolPoints.Add(point);
-            else if (!OrderPosition(uid, point, action == "guard"))
+            else if (!OrderPosition(uid, point, action == "guard", facing))
                 continue;
+            if (action != "patrol-add")
+                agent.OrderRally = center;
             reserved.Add(point);
             return true;
         }
@@ -123,11 +123,14 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.OrderedDestination is not { } destination)
             return false;
         var start = Transform(uid).Coordinates;
+        if (WaitForSquad(uid, agent, now))
+            return true;
         if (_transform.InRange(start, destination, 0.5f))
         {
             agent.Home = destination;
             agent.OrderRoute.Clear();
             agent.OrderBlocked = false;
+            agent.OrderBlockedSince = null;
             agent.OrderedDestination = null;
             ClearTraffic(agent);
             _steering.Unregister(uid);
@@ -168,10 +171,30 @@ public sealed partial class CMUExpeditionAgentSystem
         if (!agent.OrderRoute.TryPeek(out var next))
             return true;
         UpdateMoveProgress(agent, start, next, now);
+        if (agent.LastOrderProgressPosition is not { } progress || !_transform.InRange(start, progress, 0.5f))
+        {
+            agent.LastOrderProgressPosition = start;
+            agent.OrderBlockedSince = null;
+        }
         if (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(2) ||
             TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath ||
             !TraversablePassage(uid, start, next))
         {
+            var detour = new Queue<EntityCoordinates>();
+            if (LocalDetour(uid, agent, next, detour))
+            {
+                var remaining = agent.OrderRoute.Skip(1).ToArray();
+                agent.OrderRoute.Clear();
+                foreach (var point in detour.Concat(remaining))
+                    agent.OrderRoute.Enqueue(point);
+                return true;
+            }
+            var delta = next.Position - start.Position;
+            if (delta.LengthSquared() > 0.01f)
+            {
+                agent.TrafficBlockedPoint = start.Offset(Vector2.Normalize(delta) * Math.Min(1, delta.Length()));
+                agent.AvoidTrafficUntil = now + TimeSpan.FromSeconds(6);
+            }
             BlockOrder(retrySoon: true);
             return true;
         }
@@ -184,6 +207,8 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             agent.OrderRoute.Clear();
             agent.OrderBlocked = true;
+            agent.OrderBlockedSince ??= now;
+            agent.OrderFailures++;
             agent.NextOrderRoute = now + TimeSpan.FromSeconds(retrySoon ? 0.5 : 3);
             _steering.Unregister(uid);
         }

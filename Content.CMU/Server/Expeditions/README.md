@@ -173,8 +173,11 @@ Covering shooters retain their contact and defer optional medical work until the
 An empty primary immediately permits a loaded backup, including when the target is beyond the backup's
 range. The guard must then reach a usable firing distance. Reloading uses real shelter or a reserved
 covering shooter; damage, close rushes and lost support interrupt an exposed reload.
-Exhausted guards can use safe grenades/smoke and claim a visible abandoned loaded firearm within four
-metres, with a five-second retrieval limit. They never take guns from inventories. At contact distance
+Exhausted guards can use safe grenades/smoke and claim nearby loaded firearms, compatible magazines or
+shells, and known HE/smoke grenades within four metres, with a five-second retrieval limit. They can
+loot dead bodies and accessible bags/belts; living or critical bodies and locked storage are excluded.
+Quiet, unordered guards also replenish up to two compatible magazines (or twelve shell items) and one
+grenade of each type. Items remain finite, storage limits apply, and combat interrupts optional scavenging. At contact distance
 they use native weapon-butt or unarmed attacks while attempting to escape, rather than charging into melee.
 Radio snapshots are shared silently every two seconds with duplicate suppression. Audible contact
 callouts are limited to one per local squad every twelve seconds, with unchanged contacts repeated only
@@ -189,15 +192,19 @@ Use the printed squad ID in place of `1` below:
 ```text
 cmu-expedition-ai here 6 rich
 cmu-expedition-orders here 1 move
-cmu-expedition-orders here 1 guard
+cmu-expedition-orders here 1 guard north
 cmu-expedition-orders here 1 patrol-add
 ```
 
 Move or ghost to another location and repeat `patrol-add` (2-8 points), then use
 `cmu-expedition-orders here 1 patrol-start`. The squad loops the route, pauses for combat and
 resumes afterward. `patrol-stop` holds the current area and keeps the points; `patrol-clear`
-also removes them. `move` and `guard` replace the active patrol. `guard` permits native digging
-on suitable ground or barricade construction with nearby metal after a quiet period.
+also removes them. `move` and `guard` replace the active patrol. Only an explicit `guard` order permits
+digging or nearby-metal construction after a quiet period; spawning a squad never enables it.
+Guard accepts an optional `auto|north|east|south|west` facing after the coordinates (or after `guard`
+with `here`). Auto chooses a clear approach. Each guard selects a nearby spaced position with an open
+firing lane, rear escape and lateral exit, then builds a native directional mound/barricade there.
+Rifles can fire out over directional barricades; their partial protection does not count as safe medical shelter.
 Explicit coordinates remain available: `cmu-expedition-orders <map ID> 1 patrol-add <x> <y>`.
 `style Aggressive`, `friendly GOVFOR` and `target OPFOR` work with either a numeric map or `here`.
 
@@ -207,7 +214,15 @@ constraints. Coordinates are attached to the ground grid, including rotated grid
 tile indices. Walking routes stay on one grid and level; they do not board ships, cross between
 separate grids, open closed doors, climb or teleport. Use reachable waypoints around long detours.
 Order searches are capped at 2,048 cells, one search per update; blocked routes retry after three
-seconds. `cmu-expedition-ai-status <map ID>` includes the order, patrol index and blocked flag.
+seconds. A stalled short leg can use a half-tile obstacle detour (384 cells, at most one per frame).
+Leaders briefly wait for lagging members on the same order; an unreachable member keeps retrying without
+locking the squad forever. `cmu-expedition-ai-status <map ID>` includes the order, patrol index, blocked
+flag, detour/failure counts, construction decision, scavenged supplies and hazard responses.
+
+Alien escape decisions use nearby threats independently of shooting assignments. Last-seen melee
+positions persist for three seconds through smoke, without reading unseen positions or firing blind.
+Smoke is withheld during nearby melee pressure. Visible incoming xeno/biomorph projectiles can trigger
+short sidesteps; persistent acid/fire tiles are avoided and trigger escape when underneath a guard.
 
 Armed scavengers detect visible enemies and use their real loaded weapon with firearm training.
 They shoulder rifles, lead using projectile speed, aim for 0.18 seconds (0.08 after a peek), and fire

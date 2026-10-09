@@ -37,6 +37,12 @@ public sealed partial class CMUExpeditionAgentComponent
     public TimeSpan NextOrderRoute;
     public bool OrderBlocked;
     public bool Entrench;
+    public Direction? GuardFacing;
+    public EntityCoordinates? GuardAnchor;
+    public EntityCoordinates? FortificationPoint;
+    public Direction FortificationFacing;
+    public readonly HashSet<EntityUid> ExistingFortifications = new();
+    public string FortificationDecision = "not-ordered";
     public EntityUid? WorkItem;
     public bool PreparingWork;
     public DoAfterId? WorkDoAfter;

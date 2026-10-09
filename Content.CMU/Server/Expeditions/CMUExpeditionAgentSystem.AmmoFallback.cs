@@ -46,8 +46,11 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void ClearScavenging(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
+        if (agent.ScavengeTarget != null)
+            agent.RifleLoweredUntil = TimeSpan.Zero;
         agent.ScavengeTarget = null;
         agent.ScavengeUntil = TimeSpan.Zero;
+        agent.ScavengePickupAt = TimeSpan.Zero;
         if (agent.State == CMUExpeditionAgentState.Scavenge)
         {
             _steering.Unregister(uid);
@@ -55,16 +58,13 @@ public sealed partial class CMUExpeditionAgentSystem
         }
     }
 
-    private bool ScavengeWeaponAvailable(EntityUid uid, EntityUid weapon) =>
-        Exists(weapon) && HasComp<GunComponent>(weapon) && WeaponAmmo(weapon) > 0 &&
-        !Transform(weapon).Anchored && !_containers.IsEntityOrParentInContainer(weapon) &&
-        !(TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role) && role.Rocket) &&
-        Visible(uid, weapon, 4) && GroundSafe(Transform(weapon).Coordinates) && !GrenadeDanger(Transform(weapon).Coordinates);
-
-    private bool RunAmmoFallback(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
+    private bool RunAmmoFallback(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now, bool armed = false)
     {
-        TryLastResortStrike(uid, agent);
+        if (!armed)
+            TryLastResortStrike(uid, agent);
         if (agent.Action != null || agent.PendingWeapon != null || agent.Treatment != null ||
+            agent.WorkItem != null || agent.PreparingWork || HasCoverCommitment(uid, agent, now) ||
+            armed && (agent.OrderedDestination != null || agent.Target != null || now - agent.LastContact < TimeSpan.FromSeconds(8)) ||
             agent.RushTarget != null || GrenadeDanger(Transform(uid).Coordinates))
         {
             ClearScavenging(uid, agent);
@@ -72,8 +72,10 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         var start = Transform(uid).Coordinates;
         if (agent.ScavengeTarget is { } selected &&
-            (now >= agent.ScavengeUntil || !ScavengeWeaponAvailable(uid, selected) ||
-                !_interaction.InRangeUnobstructed(uid, selected) && now - agent.LastHit < TimeSpan.FromSeconds(1)))
+            (now >= agent.ScavengeUntil ||
+                agent.ScavengePickupAt != TimeSpan.Zero && agent.LastHit > agent.ScavengePickupAt ||
+                !ScavengeSource(uid, selected, out var owner) || !UsefulLoot(uid, selected, armed) ||
+                !_interaction.InRangeUnobstructed(uid, owner) && now - agent.LastHit < TimeSpan.FromSeconds(1)))
         {
             ClearScavenging(uid, agent);
             agent.NextScavenge = now + TimeSpan.FromSeconds(2);
@@ -84,14 +86,15 @@ public sealed partial class CMUExpeditionAgentSystem
             var nearby = new HashSet<EntityUid>();
             var map = _transform.GetMapCoordinates(uid);
             _lookup.GetEntitiesInRange(map.MapId, map.Position, 4, nearby);
-            // Only loose physical guns, never inventory theft or fabricated ammunition.
-            foreach (var candidate in nearby.Where(other => HasComp<GunComponent>(other))
-                         .OrderBy(other => Vector2.DistanceSquared(map.Position, _transform.GetWorldPosition(other))).Take(12))
+            foreach (var candidate in NearbyLoot(nearby.OrderBy(other =>
+                         Vector2.DistanceSquared(map.Position, _transform.GetWorldPosition(other))))
+                         .OrderBy(other => HasComp<GunComponent>(other) ? 2 : KnownLootGrenade(other, out _) ? 1 : 0))
             {
-                if (!ScavengeWeaponAvailable(uid, candidate))
+                if (!UsefulLoot(uid, candidate, armed) || !ScavengeSource(uid, candidate, out var source))
                     continue;
-                var point = Transform(candidate).Coordinates;
-                var reachable = _interaction.InRangeUnobstructed(uid, candidate);
+                if (!TrySquadCoordinates(Transform(source).Coordinates, out var point))
+                    continue;
+                var reachable = _interaction.InRangeUnobstructed(uid, source);
                 if (!reachable && (now - agent.LastHit < TimeSpan.FromSeconds(1) ||
                     agent.Home is not { } home || !_transform.InRange(home, point, agent.LeashRange) ||
                     !TraversablePassage(uid, start, point) ||
@@ -106,32 +109,46 @@ public sealed partial class CMUExpeditionAgentSystem
                     continue;
                 agent.ScavengeTarget = candidate;
                 agent.ScavengeUntil = now + TimeSpan.FromSeconds(5);
-                agent.RifleLoweredUntil = now + TimeSpan.FromSeconds(0.3);
-                if (_guns.TryGetGun(uid, out var empty))
-                    _wield.TryUnwield(empty.Owner, uid);
+                agent.RifleLoweredUntil = TimeSpan.Zero;
                 break;
             }
         }
         if (agent.ScavengeTarget is not { } found)
         {
-            agent.WeaponDecision = "empty-seeking-supplies-or-shelter";
+            if (!armed)
+                agent.WeaponDecision = "empty-seeking-supplies-or-shelter";
             return false;
         }
-        if (!_interaction.InRangeUnobstructed(uid, found))
+        if (!ScavengeSource(uid, found, out var lootSource) ||
+            !TrySquadCoordinates(Transform(lootSource).Coordinates, out var lootPoint))
         {
-            var point = Transform(found).Coordinates;
-            if (!TraversablePassage(uid, start, point) ||
-                ExposureScore(uid, agent, point) > ExposureScore(uid, agent, start))
+            ClearScavenging(uid, agent);
+            return false;
+        }
+        if (!_interaction.InRangeUnobstructed(uid, lootSource))
+        {
+            if (!TraversablePassage(uid, start, lootPoint) ||
+                ExposureScore(uid, agent, lootPoint) > ExposureScore(uid, agent, start))
             {
                 ClearScavenging(uid, agent);
                 return false;
             }
             agent.State = CMUExpeditionAgentState.Scavenge;
-            agent.WeaponDecision = "retrieving-abandoned-weapon";
-            Move(uid, point, validated: true);
+            agent.ScavengePickupAt = TimeSpan.Zero;
+            agent.RifleLoweredUntil = TimeSpan.Zero;
+            agent.WeaponDecision = "retrieving-supplies";
+            Move(uid, lootPoint, validated: true);
             return true;
         }
         _steering.Unregister(uid);
+        if (agent.RifleLoweredUntil == TimeSpan.Zero)
+        {
+            if (_guns.TryGetGun(uid, out var held))
+                _wield.TryUnwield(held.Owner, uid);
+            agent.ScavengePickupAt = now;
+            agent.RifleLoweredUntil = now + TimeSpan.FromSeconds(lootSource == found ? 0.25 : 0.8);
+            return true;
+        }
         if (now < agent.RifleLoweredUntil)
             return true;
         _guns.TryGetGun(uid, out var previous);
@@ -139,6 +156,14 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             ClearScavenging(uid, agent);
             return false;
+        }
+        if (!HasComp<GunComponent>(found))
+        {
+            if (!StoreScavengedSupply(uid, agent, found))
+                _hands.TryDrop(uid, found);
+            ClearScavenging(uid, agent);
+            agent.NextScavenge = now + TimeSpan.FromSeconds(2);
+            return true;
         }
         if (previous.Owner.IsValid() && previous.Owner != found && !StowWeapon(uid, previous))
             _hands.TryDrop(uid, previous.Owner);
