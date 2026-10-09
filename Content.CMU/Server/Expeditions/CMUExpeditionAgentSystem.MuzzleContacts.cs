@@ -13,16 +13,23 @@ public sealed partial class CMUExpeditionAgentSystem
 {
     [Dependency] private IRobustRandom _visionRandom = default!;
 
-    private void InitializeVision() => SubscribeLocalEvent<GunComponent, GunShotEvent>(OnObservedMuzzleFlash);
-
-    private void OnObservedMuzzleFlash(Entity<GunComponent> ent, ref GunShotEvent args)
+    private void InitializeVision()
     {
-        if (!_npcs.Enabled)
+        SubscribeLocalEvent<GunComponent, ComponentStartup>(OnObservedGunStartup);
+        SubscribeLocalEvent<CMUExpeditionShotObserverComponent, GunShotEvent>(OnObservedMuzzleFlash);
+    }
+
+    private void OnObservedGunStartup(Entity<GunComponent> ent, ref ComponentStartup args) =>
+        EnsureComp<CMUExpeditionShotObserverComponent>(ent.Owner);
+
+    private void OnObservedMuzzleFlash(Entity<CMUExpeditionShotObserverComponent> ent, ref GunShotEvent args)
+    {
+        if (!_npcs.Enabled || !TryComp<GunComponent>(ent, out var gun))
             return;
         // Use the same suppression hook as the real effect (including attached silencers).
         var flash = new GunMuzzleFlashAttemptEvent();
         RaiseLocalEvent(ent, ref flash);
-        HearShot(ent, ref args, flash.Cancelled);
+        HearShot((ent.Owner, gun), ref args, flash.Cancelled);
         if (flash.Cancelled || !args.Ammo.Any(ammo => ammo.Shootable is AmmoComponent { MuzzleFlash: not null }))
             return;
         var now = _timing.CurTime;
