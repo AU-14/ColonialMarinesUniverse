@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made for CMU (jeep hazard lights, headlight switch and turn signal actions)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "hazards_off"
+    },
+    {
+      "name": "hazards_on"
+    },
+    {
+      "name": "headlights_off"
+    },
+    {
+      "name": "headlights_low"
+    },
+    {
+      "name": "headlights_high"
+    },
+    {
+      "name": "signals_auto_off"
+    },
+    {
+      "name": "signals_auto_on"
+    }
+  ]
+}

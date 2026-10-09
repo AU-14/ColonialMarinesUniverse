@@ -1,6 +1,8 @@
 <#
-  Local jeep test: starts a localhost server on the jeep test map (Sandbox, no lobby) and a client
-  that joins it. Build Content.Server and Content.Client first. Logs go to bin/jeep-test-run.
+  Local jeep test: starts a localhost server on Stable Garrison (no lobby) and a client that joins
+  it. The client spawns as a colonist with the three jeeps and a test kit parked on open ground beside
+  it (cmu.jeep.* in server.toml). The map takes about a minute to load. Build Content.Server and
+  Content.Client first. Logs go to bin/jeep-test-run.
 #>
 param([string] $Username = 'JeepTester')
 $ErrorActionPreference = 'Stop'

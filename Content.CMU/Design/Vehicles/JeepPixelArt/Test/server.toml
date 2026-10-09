@@ -19,9 +19,18 @@ loginlocal = true
 [game]
 hostname = "CMU Jeep Test"
 lobbyenabled = false
-map = "CMUJeepTest"
+map = "StableGarrisonRedux"
 defaultpreset = "Sandbox"
 role_timers = false
+role_whitelist = false
+
+# Content.CMU/Server/Vehicle/Jeep/CMUJeepDevCVars.cs: every joining player spawns as a colonist
+# (Stable Garrison has no Passenger slot) and gets the three jeeps and a test kit on open ground
+# beside them, starting at midday.
+[cmu.jeep]
+dev_kit = true
+dev_job = "AU14JobCivilianColonist"
+dev_daylight = true
 
 [events]
 enabled = false

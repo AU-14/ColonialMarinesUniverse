@@ -1,0 +1,45 @@
+// Repaints a jeep layer in any colour and dirties it. The jeep generator writes its paint pixels with
+// alpha 254 (253 where mud is splashed over the paint); everything else is opaque and keeps its own
+// colours. A paint pixel keeps its shading: its brightness relative to the olive the art was drawn in
+// scales the new colour, so the jeep's lips, faces, seams and outlines all carry over. Dirt falls on
+// every pixel as dust in blotches, growing with how dirty the jeep is; the low, mud-splashed bodywork
+// cakes with mud first. Lit like the sprite.
+
+uniform highp vec4 paint;       // the chosen colour
+uniform highp float painted;    // 1 when the jeep has been resprayed, else it keeps its factory olive
+uniform highp vec4 base;        // the olive "top" tone the art was drawn in
+uniform highp vec4 mud;         // the mud splashed on the low bodywork
+uniform highp float dirt;       // 0 clean to 1 caked
+
+highp float hash(highp vec2 p) {
+    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+
+void fragment() {
+    highp vec4 texel = zTexture(UV);
+    highp float mark = floor(texel.a * 255.0 + 0.5);
+    highp float paintPixel = step(252.5, mark) * step(mark, 254.5);
+    highp float muddy = step(252.5, mark) * step(mark, 253.5);
+
+    highp float shade = zGrayscale(texel.rgb) / max(zGrayscale(base.rgb), 0.001);
+    // Any colour goes, black included: a touch of the art's own light and shadow is added on top,
+    // so even a black paint keeps its panels' edges.
+    highp vec3 lit = max(paint.rgb * shade + vec3((shade - 1.0) * 0.12), vec3(0.0));
+    // A pale colour can't brighten past white; its highlights fade towards white instead.
+    highp float over = clamp(max(lit.r, max(lit.g, lit.b)) - 1.0, 0.0, 1.0);
+    highp vec3 col = mix(min(lit, vec3(1.0)), vec3(1.0), over);
+    col = mix(col, mud.rgb, muddy / 3.0);
+    col = mix(texel.rgb, col, paintPixel * painted);
+
+    // Dust in blotches a few pixels across, with a grain; mud on the low bodywork first.
+    highp vec2 px = floor(UV / TEXTURE_PIXEL_SIZE);
+    highp float n = hash(floor(px / 3.0)) * 0.65 + hash(px) * 0.35;
+    highp float dusty = step(n, dirt * 1.1) * step(0.001, dirt);
+    highp float caked = muddy * step(n, dirt * 1.7) * step(0.001, dirt);
+    highp vec3 dust = vec3(0.62, 0.55, 0.42) * clamp(shade, 0.55, 1.15);
+    highp vec3 mudCol = vec3(0.34, 0.27, 0.18) * clamp(shade, 0.6, 1.1);
+    col = mix(col, dust, dusty * (0.35 + 0.3 * dirt));
+    col = mix(col, mudCol, caked * 0.7);
+
+    COLOR = vec4(col, mix(texel.a, 1.0, paintPixel));
+}

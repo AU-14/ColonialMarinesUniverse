@@ -27,6 +27,15 @@
     },
     {
       "name": "headlights"
+    },
+    {
+      "name": "hood"
+    },
+    {
+      "name": "door"
+    },
+    {
+      "name": "tailgate"
     }
   ]
 }
