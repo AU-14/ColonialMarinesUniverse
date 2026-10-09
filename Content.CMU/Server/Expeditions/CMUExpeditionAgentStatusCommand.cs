@@ -81,6 +81,12 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
             shell.WriteLine(Loc.GetString("cmu-expedition-ai-equipment-status",
                 ("weapon", agent.WeaponDecision), ("switches", agent.WeaponSwitches), ("rockets", agent.RocketsFired),
                 ("grenade", agent.GrenadeDecision), ("smokes", agent.SmokesThrown), ("movingShots", agent.TotalMovingShots)));
+            if (EntityManager.TryGetComponent<CMUExpeditionMedicComponent>(uid, out var medic))
+                shell.WriteLine(Loc.GetString("cmu-expedition-ai-medical-status",
+                    ("decision", medic.Decision), ("phase", medic.Phase.ToString()),
+                    ("patient", medic.Patient is { } patient ? EntityManager.GetNetEntity(patient).ToString() : "-"),
+                    ("covered", medic.Covered), ("doses", medic.Doses), ("shocks", medic.Shocks),
+                    ("revivals", medic.Revivals), ("extractions", medic.Extractions)));
         }
     }
 }

@@ -16,6 +16,8 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (!agent.PlanningEnabled)
             return false;
+        if (agent.Action == null && now < agent.MedicalCoverUntil && armed && !hit && damage < agent.RetreatDamage)
+            return false;
         if (agent.Action != null)
         {
             if (hit || now >= agent.ActionUntil || GrenadeDanger(Transform(uid).Coordinates) && agent.Action != A.TakeCover)
@@ -303,6 +305,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void CancelPlan(EntityUid uid, CMUExpeditionAgentComponent agent, bool failed)
     {
+        CancelMedical(uid, agent, "task-cancelled", failed);
         if (failed && agent.Action is { } action)
         {
             agent.FailedActions[action] = _timing.CurTime + TimeSpan.FromSeconds(8);
@@ -336,6 +339,7 @@ public sealed partial class CMUExpeditionAgentSystem
         while (query.MoveNext(out var other, out var buddy))
         {
             if (other == uid || !_mobs.IsCritical(other) || HasComp<ActorComponent>(other) ||
+                HasComp<CMUExpeditionPatientComponent>(other) ||
                 !SameSquad(uid, agent, other, buddy) || !Visible(uid, other, 10) ||
                 TryComp<PullableComponent>(other, out var pulled) && pulled.Puller != null)
                 continue;
@@ -351,6 +355,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool ValidCasualty(EntityUid uid, CMUExpeditionAgentComponent agent) => agent.Casualty is { } casualty &&
         Exists(casualty) && _mobs.IsCritical(casualty) && !HasComp<ActorComponent>(casualty) &&
+        !HasComp<CMUExpeditionPatientComponent>(casualty) &&
         IsFriendly(uid, casualty) && Transform(uid).MapID == Transform(casualty).MapID;
 
     private bool SquadHasFlanker(EntityUid uid, CMUExpeditionAgentComponent agent)

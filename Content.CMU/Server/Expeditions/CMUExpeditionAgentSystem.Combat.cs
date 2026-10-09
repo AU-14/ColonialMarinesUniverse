@@ -195,6 +195,17 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         }
         ValidateCover(uid, agent, false, now);
+        // A covering shooter can hold a usable lane for a short medical action. Hits, rushes,
+        // empty guns and lost sight still take their ordinary survival paths.
+        if (allowPress && now < agent.MedicalCoverUntil && now - agent.LastHit > TimeSpan.FromSeconds(1) &&
+            agent.RushTarget == null && agent.LastDamage < agent.RetreatDamage && agent.Target is { } target &&
+            Visible(uid, target, agent.FireRange) && _guns.TryGetGun(uid, out var coveringGun) &&
+            WeaponAmmo(coveringGun) > 0 && SafeShot(uid, agent, coveringGun, Transform(target).Coordinates))
+        {
+            agent.State = CMUExpeditionAgentState.HoldAngle;
+            agent.FireAt = now + TimeSpan.FromSeconds(0.35);
+            return;
+        }
         if (allowPress && agent.CoverAnchor != null && agent.Initiative >= 0.75f && agent.Stress < 0.3f &&
             agent.FollowupBursts == 0 && agent.ShotsFired >= VolleySize(agent))
         {

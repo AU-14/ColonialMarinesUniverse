@@ -54,6 +54,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         SubscribeLocalEvent<CMUExpeditionWeaponComponent, TakeAmmoEvent>(OnTakeAmmo,
             before: new[] { typeof(RMCGunChamberSystem), typeof(SharedGunSystem) });
         InitializeMedicine();
+        InitializeMedics();
         InitializeTactics();
         InitializeRadio();
         InitializeEquipment();
@@ -129,6 +130,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     {
         if (agent.Home is not { } home || agent.OrderedDestination == null && !_transform.InRange(transform.Coordinates, home, agent.LeashRange))
         {
+            CancelMedical(uid, agent, "outside-leash");
             CancelTreatment(agent);
             agent.Target = null;
             agent.LastSeen = null;
@@ -175,6 +177,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         UpdateEmotions(uid, agent, damage, now);
         ValidateCover(uid, agent, hit, now);
 
+        if (RunMedic(uid, agent, damage, hit, now))
+            return;
         if (RecoverWeapon(uid, agent, now) || ChooseWeapon(uid, agent, now))
             return;
         if (KeepCombatSpacing(uid, agent, now))

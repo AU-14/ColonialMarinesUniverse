@@ -46,6 +46,7 @@ public sealed partial class CMUExpeditionAgentComponent
     public readonly HashSet<string> FriendlyFactions = new();
     public readonly HashSet<string> TargetFactions = new();
     public TimeSpan NextRescue;
+    public TimeSpan MedicalCoverUntil;
     public TimeSpan NextFlank;
     public TimeSpan NextRadio;
     public EntityUid? RadioTarget;

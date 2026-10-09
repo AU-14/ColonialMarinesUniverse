@@ -278,7 +278,59 @@ movement speed. Cliffs, hard river boundaries, space, fire and grenade hazards s
 Status output includes flank response count, weapon decisions/switches, rockets, smoke decisions
 and shots fired during ordinary travel. These diagnostics support in-game verification below.
 
+## Dedicated field medics
+
+`cmu-expedition-ai here 1 medic` spawns a dedicated medic. `cmu-expedition-ai here 4 medical`
+spawns a medic with support, assault and rifle escorts in the same squad. Mixed squads include
+a medic as their third member; specialist squads include one as their fifth member. These
+roles work on ordinary maps as well as expeditions and respect configured friend/target factions.
+
+Medics triage visible friendly CMU humans within fourteen metres and their existing leash:
+critical patients first, then eligible dead, then injured combatants. An exclusive patient claim
+prevents two medics or an ordinary rescuer from taking the same casualty. A medic can suspend
+travel/combat for care, but injury, rushes, hazards, failed routes and lost cover interrupt it.
+Conscious patients keep fighting and are never dragged; movement interrupts a dressing or injection.
+
+Exposed critical/dead patients are pulled through native physics to real shelter before treatment.
+The approach requires squad shooters with ammunition and usable sight/firing lanes toward the
+known threats. Covering shooters briefly hold their angle between bursts and defer optional
+flanks/grenades; their own injury, rush, empty gun and visibility rules remain active. Cover is
+rechecked every half-second and losing it for one second cancels an exposed rescue. Conscious
+wounded allies can receive care while fighting if both the medical approach and covering fire
+remain viable, without crossfire or recent physical wounds. Smoke does not replace these checks.
+
+Each medic carries nine team dressing doses, a separate self-care dressing, six native revival
+cocktail injections and a normal finite-charge defibrillator. Dressings use native healing
+events; injections use the native hypospray delay and chemical transfer. An existing dose of
+any ingredient prevents another cocktail injection. Dead patients are prepared with dressings
+when the native defibrillator analysis says more treatment is needed, then shocked through the
+normal powered device API with the native recommended energy setting. Heart eligibility, rot,
+permanent death, clothing restrictions, cooldowns, charge consumption and native effects remain in force. Treatment continues after
+revival when useful supplies remain. Each intervention is bounded to 45 seconds, six treatment
+actions and two shocks before reassessment; blocked patients have a short retry backoff.
+
+This is field stabilization, extraction and eligible revival. It does not perform surgery,
+replace organs/limbs, transfuse blood or recover permanently unrevivable bodies. Player possession
+returns all decisions to the player. Medical status reports patient, decision, covering fire,
+treatments, actual shocks, revivals and extractions.
+
 ## Verification
+
+Manual medical verification (not run; build and YAML validation only):
+
+1. Spawn `cmu-expedition-ai here 4 medical` on both map types. Wound one escort while it fires,
+   then put another in critical condition in exposed ground. Confirm covering fire, native
+   pulling, sheltered treatment, physical supply use and returning to previous squad orders.
+2. Repeat with opposing shooters, loss of a covering ally, a rushing alien, a grenade, interrupted
+   pulling, blocked corridors, exhausted supplies, a moving patient and medic knockdown/death.
+   Claims, held tools, medical do-afters and pulls must be released without another free dose.
+3. Provide an eligible dead patient, one above the revival damage threshold, a rotten/permanent
+   corpse, missing/nonfunctional heart, blocked clothing and an empty battery. Confirm preparation,
+   actual charge use, eligible revival and follow-up care; failed attempts must remain bounded.
+4. Have two medics and a player treat the same friendly patient. Confirm one AI claim, no repeated
+   cocktail dosing over existing chemicals, and no interference with a possessed medic's actions.
+5. Use `cmu-expedition-ai-status here` throughout and inspect medical counters. Runtime behavior
+   and search cost still require in-game verification; compilation does not demonstrate these outcomes.
 
 ```text
 dotnet test Content.Tests/Content.Tests.csproj --no-restore --filter FullyQualifiedName~CMUTacticalPlannerTest
