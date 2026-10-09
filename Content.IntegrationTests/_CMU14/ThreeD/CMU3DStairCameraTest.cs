@@ -84,8 +84,8 @@ public sealed class CMU3DStairCameraTest : GameTest
             var z = Server.System<CMUZLevelsSystem>();
             Assert.That(z.TryAddMapsIntoZNetwork(z.CreateZNetwork(), new() { [lower] = 0, [upper] = 1 }), Is.True);
             var stair = SEntMan.SpawnEntity("CMUMultiZStairs", new EntityCoordinates(lower, .5f, .5f));
-            // The prototype anchors on spawn; anchoring again duplicates its snap-grid entry.
-            Assert.That(SComp<TransformComponent>(stair).Anchored, Is.True);
+            // the prototype spawns anchored, anchoring again double-inserts into the snap grid
+            Assert.That(SEntMan.GetComponent<TransformComponent>(stair).Anchored, Is.True);
             observer = SEntMan.SpawnEntity("MobObserver", new EntityCoordinates(lower, .5f, -1.5f));
         });
 

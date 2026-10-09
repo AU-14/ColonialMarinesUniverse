@@ -6,6 +6,9 @@
   placement:
     mode: SnapgridCenter
   components:
+  - type: Tag
+    tags:
+    - HideContextMenu
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/Interiors/general.rsi
     drawdepth: Overdoors
@@ -67,6 +70,7 @@
   - type: RemoveComponents
     components:
     - type: InteractionTransparency
+    - type: Tag
   - type: VehicleAmmoLoader
   - type: UserInterface
     interfaces:
@@ -84,6 +88,10 @@
     position: Stand
     buckleOffset: "0,-0.05"
 
+  - type: RemoveComponents
+    components:
+    - type: Tag
+
 - type: entity
   parent: VehicleInteriorGeneralBase
   id: VehicleInteriorArmorChairUnfold
@@ -94,6 +102,10 @@
   - type: Strap
     position: Stand
     buckleOffset: "0,-0.05"
+
+  - type: RemoveComponents
+    components:
+    - type: Tag
 
 - type: entity
   parent: VehicleInteriorGeneralBase
@@ -106,6 +118,10 @@
     position: Stand
     buckleOffset: "0,-0.05"
 
+  - type: RemoveComponents
+    components:
+    - type: Tag
+
 - type: entity
   parent: VehicleInteriorGeneralBase
   id: VehicleInteriorArmorChairBuckled
@@ -116,6 +132,10 @@
   - type: Strap
     position: Stand
     buckleOffset: "0,-0.05"
+
+  - type: RemoveComponents
+    components:
+    - type: Tag
 
 - type: entity
   parent: VehicleInteriorGeneralBase
@@ -407,6 +427,9 @@
       - id: CMSyringe
         amount: 7
 
+  - type: RemoveComponents
+    components:
+    - type: Tag
 - type: entity
   parent: VehicleInteriorMedVendor
   id: VehicleInteriorMedVendorVend
@@ -479,6 +502,9 @@
         amount: 5
         name: empty blood pack
 
+  - type: RemoveComponents
+    components:
+    - type: Tag
 - type: entity
   parent: VehicleInteriorWallMountedBase
   id: VehicleInteriorBloodVendorVend

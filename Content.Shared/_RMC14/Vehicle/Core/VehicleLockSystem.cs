@@ -44,6 +44,17 @@ public sealed partial class VehicleLockSystem : EntitySystem
         SubscribeLocalEvent<VehicleLockActionComponent, ComponentShutdown>(OnLockActionShutdown);
         SubscribeLocalEvent<VehicleLockComponent, VehicleLockBreakDoAfterEvent>(OnLockBreakDoAfter);
         SubscribeLocalEvent<VehicleLockComponent, VehicleLockRepairDoAfterEvent>(OnLockRepairDoAfter);
+        SubscribeLocalEvent<VehicleLockComponent, VehicleFrameIntegrityChangedEvent>(OnLockFrameIntegrityChanged);
+    }
+
+    private void OnLockFrameIntegrityChanged(Entity<VehicleLockComponent> ent, ref VehicleFrameIntegrityChangedEvent args)
+    {
+        if (_net.IsClient || args.Intact || !ent.Comp.Locked)
+            return;
+
+        ent.Comp.Locked = false;
+        Dirty(ent);
+        RefreshLockAction(ent.Owner, ent.Comp);
     }
 
     private void OnVehicleMapInit(Entity<VehicleEnterComponent> ent, ref MapInitEvent args)
@@ -148,6 +159,12 @@ public sealed partial class VehicleLockSystem : EntitySystem
         {
             _popup.PopupEntity(Loc.GetString("rmc-vehicle-lock-broken-attempt"), ent.Owner, ent.Owner, PopupType.SmallCaution);
             RefreshLockAction(vehicle, lockComp, ent.Comp);
+            return;
+        }
+
+        if (!lockComp.Locked && _vehicle.IsVehicleFrameDestroyed(vehicle))
+        {
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-lock-frame-destroyed"), ent.Owner, ent.Owner, PopupType.SmallCaution);
             return;
         }
 
@@ -414,6 +431,12 @@ public sealed partial class VehicleLockSystem : EntitySystem
         if (!vehicleLock.Locked && vehicleLock.ForcedOpen)
         {
             _popup.PopupEntity(Loc.GetString("rmc-vehicle-lock-too-damaged"), user, user, PopupType.SmallCaution);
+            return true;
+        }
+
+        if (!vehicleLock.Locked && _vehicle.IsVehicleFrameDestroyed(vehicle))
+        {
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-lock-frame-destroyed"), user, user, PopupType.SmallCaution);
             return true;
         }
 
