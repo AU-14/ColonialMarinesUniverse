@@ -1,0 +1,19 @@
+- files: ["jeep_engine_start.wav", "jeep_engine_idle.wav", "jeep_engine_drive.wav", "jeep_engine_rev.wav"]
+  license: "Custom"
+  copyright: "Morris start and run, from Pixabay, under the Pixabay Content License (free to use, credit not required). Cut into the start, a seamless idle loop (and a sped-up copy of it for driving) and a throttle rev; high-passed, level-matched, limited and converted to mono WAV."
+  source: "https://pixabay.com/sound-effects/"
+
+- files: ["jeep_engine_rough.wav", "jeep_engine_rough_drive.wav"]
+  license: "Custom"
+  copyright: "Engine issues, from Pixabay, under the Pixabay Content License (free to use, credit not required). Made into a seamless loop (and a sped-up copy of it for driving) and converted to mono WAV."
+  source: "https://pixabay.com/sound-effects/"
+
+- files: ["jeep_engine_sputter.wav"]
+  license: "Custom"
+  copyright: "Out of fuel, from Pixabay, under the Pixabay Content License (free to use, credit not required). Trimmed to the sputtering, faded out and converted to mono WAV."
+  source: "https://pixabay.com/sound-effects/"
+
+- files: ["jeep_hood_open.wav", "jeep_hood_close.wav", "jeep_windshield.wav"]
+  license: "Custom"
+  copyright: "Hood open, hood close and windshield toggle, from Pixabay, under the Pixabay Content License (free to use, credit not required). Trimmed and converted to mono WAV."
+  source: "https://pixabay.com/sound-effects/"
