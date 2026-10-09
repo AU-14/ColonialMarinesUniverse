@@ -50,8 +50,8 @@ public sealed class CMUExpeditionAgentTest : GameTest
             Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             ally = SEntMan.SpawnEntity("CMMobHuman", origin);
             Server.System<NpcFactionSystem>().AddFaction(ally, CMUExpeditionHostilePrototype);
-            // Isolate the trigger discipline test from the separate cover movement test.
-            SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).NextReposition = SGameTiming.CurTime + TimeSpan.FromMinutes(1);
+            // Keep the firing position fixed so lane-clearing movement cannot bypass the teammate.
+            SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).LeashRange = 0.25f;
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
             rifle = gun.Owner;
             initialAmmo = Ammo();

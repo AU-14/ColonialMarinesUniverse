@@ -131,7 +131,7 @@ public sealed class YautjaBowTest
     private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaLanternPrototype = "CMUYautjaLantern";
     private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMedicompPrototype = "CMUYautjaMedicomp";
     private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaBracerIdChipPrototype = "CMUYautjaBracerIdChip";
-    private static readonly Robust.Shared.Prototypes.ProtoId<StackPrototype> CMUYautjaHealingGelPrototype = "CMUYautjaHealingGel";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHealingGelPrototype = "CMUYautjaHealingGel";
     private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMcasteHerbContainerPrototype = "CMUYautjaMcasteHerbContainer";
     private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMcasteHerbContainerFilledPrototype = "CMUYautjaMcasteHerbContainerFilled";
     private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaSoldierBracersPrototype = "CMUYautjaSoldierBracers";
@@ -3085,7 +3085,7 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 var prototypes = server.ResolveDependency<IPrototypeManager>();
-                spawned = entMan.SpawnEntity("CMUYautjaHealingGel", MapCoordinates.Nullspace);
+                spawned = entMan.SpawnEntity(CMUYautjaHealingGelPrototype, MapCoordinates.Nullspace);
 
                 var metadata = entMan.GetComponent<MetaDataComponent>(spawned);
                 Assert.Multiple(() =>
@@ -3095,7 +3095,8 @@ public sealed class YautjaBowTest
                     Assert.That(metadata.EntityDescription, Is.EqualTo("Used for reloading the healing gun."));
                     Assert.That(entMan.HasComponent<YautjaHealingCapsuleComponent>(spawned), Is.True);
                     Assert.That(entMan.HasComponent<StackComponent>(spawned), Is.False);
-                    Assert.That(prototypes.HasIndex<StackPrototype>(CMUYautjaHealingGelPrototype), Is.False);
+                    // This entity intentionally has no stack prototype with the same ID.
+                    Assert.That(prototypes.HasIndex<StackPrototype>(CMUYautjaHealingGelPrototype.Id), Is.False);
                 });
             });
         }
