@@ -1,11 +1,10 @@
 - type: antagSpecifier
+  parent: CMUAntagSpecifierColonyBase
   id: Cannibal
   prefRoles: [ CannibalRole ]
   jobBlacklistGroup:
-  - AllGovforCommandStaff
   - AllOpforCommandStaff
   - AllCLFJobs
-# - AllColonyDepartmentHeadJobs
   briefing:
     text: cannibal-role-greeting
     color: DarkRed

@@ -1,10 +1,9 @@
 - type: antagSpecifier
+  parent: CMUAntagSpecifierColonyBase
   id: Rider
   prefRoles: [ RiderRole ]
   jobBlacklistGroup:
-  - AllGovforCommandStaff
   - AllOpforCommandStaff
-  - AllColonyDepartmentHeadJobs
   briefing:
     text: rider-role-greeting
     color: SpringGreen

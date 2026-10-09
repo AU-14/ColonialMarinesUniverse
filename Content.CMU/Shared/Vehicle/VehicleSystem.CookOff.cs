@@ -16,7 +16,6 @@ public sealed partial class VehicleSystem
 {
     [Dependency] private SharedBuckleSystem _cookOffBuckle = default!;
     [Dependency] private PullingSystem _cookOffPulling = default!;
-    [Dependency] private ThrowingSystem _cookOffThrowing = default!;
     [Dependency] private SharedContainerSystem _cookOffContainers = default!;
 
     private void InitializeTankCookOff()
@@ -86,7 +85,7 @@ public sealed partial class VehicleSystem
 
             _transform.SetMapCoordinates(occupant, start);
             UntrackOccupant(occupant, vehicle);
-            _cookOffThrowing.TryThrow(occupant, direction * distance, speed,
+            _throwing.TryThrow(occupant, direction * distance, speed,
                 recoil: false, playSound: false, doSpin: false);
         }
     }

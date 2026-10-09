@@ -1,3 +1,4 @@
+using Content.Shared.Mobs.Systems;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace Content.Client.CMU14.ThreeD.Scene;
 /// </summary>
 public sealed partial class CMU3DLiveSceneSystem : EntitySystem
 {
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private IClientAdminManager _admins = default!;
     [Dependency] private Robust.Shared.Network.IClientNetManager _network = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
@@ -187,7 +189,9 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
             return false;
         if (firstPerson || _firstPersonView != null)
         {
-            if (transform.MapUid is not { } map || !HasComp<CMU3DMapComponent>(map))
+            // Use the normal unconscious/dead view, including its visibility restrictions.
+            if (_mobState.IsIncapacitated(controlled) ||
+                transform.MapUid is not { } map || !HasComp<CMU3DMapComponent>(map))
                 return false;
         }
         else if (!_admins.HasFlag(AdminFlags.Debug))

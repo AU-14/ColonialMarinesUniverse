@@ -1,3 +1,4 @@
+using Content.Shared.Standing;
 using System.Numerics;
 using Content.Client.Clickable;
 using Content.Client.Effects;
@@ -146,9 +147,10 @@ public sealed partial class CMU3DSceneControl
             var combat = _entities.HasComponent<ProjectileComponent>(uid) ||
                          _entities.HasComponent<CMU3DCombatVisualComponent>(uid);
             var along = _entities.TryGetComponent(uid, out CMU3DCombatVisualComponent? effect) && effect.AlongTrajectory;
-            var faceCamera = !along && (combat || _entities.HasComponent<MobStateComponent>(uid) ||
+            var prone = _entities.TryGetComponent(uid, out StandingStateComponent? standing) && !standing.Standing;
+            var faceCamera = !prone && !along && (combat || _entities.HasComponent<MobStateComponent>(uid) ||
                                        _entities.HasComponent<EffectVisualsComponent>(uid) || _entities.HasComponent<RMCEffectComponent>(uid));
-            var ground = !faceCamera && !along && _entities.HasComponent<ItemComponent>(uid);
+            var ground = !faceCamera && !along && (prone || _entities.HasComponent<ItemComponent>(uid));
             var planeYaw = faceCamera ? BillboardFacing(transforms.GetWorldPosition(xform), camera)
                 : ground || sprite.NoRotation && !along ? 0f : (float) yaw.Reduced().Theta;
             // Rasterize portraits and beams in their own axes. Applying the 3D plane angle

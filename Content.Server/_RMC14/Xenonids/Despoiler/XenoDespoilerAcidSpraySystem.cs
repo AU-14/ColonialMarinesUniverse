@@ -42,7 +42,7 @@ public sealed partial class XenoDespoilerAcidSpraySystem : EntitySystem
         _damageable.TryChangeDamage(target, comp.Damage, ignoreResistances: false, origin: comp.Caster);
 
         if (comp.Caster is { } caster)
-            _acid.ApplyAcid(target, caster);
+            _acid.ApplyAcid(target, caster, acidTier: comp.StunsOnEmpowered ? 2 : 1); // CMU14
 
         if (comp.StunsOnEmpowered)
         {

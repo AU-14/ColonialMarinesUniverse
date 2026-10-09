@@ -1,3 +1,4 @@
+using Robust.Shared.Map;
 using System.Linq;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Armor;
@@ -265,4 +266,37 @@ public sealed partial class XenoFortifySystem : EntitySystem
         var ev = new XenoFortifiedEvent(xeno.Comp.Fortified);
         RaiseLocalEvent(xeno, ref ev);
     }
+    public bool IsFortified(EntityUid xeno)
+    {
+        return TryComp<XenoFortifyComponent>(xeno, out var fortify) && fortify.Fortified;
+    }
+
+    public bool TryBreakFortify(EntityUid xeno)
+    {
+        if (!TryComp<XenoFortifyComponent>(xeno, out var fortify) || !fortify.Fortified)
+            return false;
+
+        Unfortify((xeno, fortify));
+        return true;
+    }
+
+    public bool TryRelocateFortified(Entity<XenoFortifyComponent?> xeno, EntityCoordinates target)
+    {
+        if (!Resolve(xeno, ref xeno.Comp, false) || !xeno.Comp.Fortified)
+            return false;
+
+        var xform = Transform(xeno);
+
+        if (!xeno.Comp.CanMoveFortified && xform.Anchored)
+        {
+            _transform.Unanchor(xeno.Owner, xform);
+            _transform.SetCoordinates(xeno.Owner, xform, target);
+            _transform.AnchorEntity((xeno.Owner, xform));
+            return true;
+        }
+
+        _transform.SetCoordinates(xeno.Owner, xform, target);
+        return true;
+    }
+
 }
