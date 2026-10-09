@@ -297,6 +297,11 @@ def validate_model(model, *, part_limit=128):
     if 'solutionAppearance' in model:
         from solution_glass_states import validate
         result = validate(result, validate_model)
+    # CMU14: independently visible vehicle hardpoints use the existing source owners.
+    if 'vehicleLayers' in model:
+        from vehicle_states import validate, validate_source
+        result = validate(result, validate_model)
+        validate_source(result, resource_file)
     if any(k in model for k in ('spriteStates', 'sourceSpriteOffset', 'sourceSpriteRotates')):
         from sprite_states import validate
         result = validate(result, validate_model)

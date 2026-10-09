@@ -22,6 +22,8 @@ public sealed partial class CMU3DSceneCatalog
         foreach (var model in models.OrderBy(model => model.Status != "reviewed").ThenBy(model => model.ID, StringComparer.Ordinal))
         {
             _models.TryAdd(model.ID, model);
+            foreach (var turret in model.VehicleTurretPrototypes)
+                _vehicleTurrets.TryAdd(turret, model);
             foreach (var reference in model.SourcePrototypes)
                 _references.TryAdd(reference, model);
             foreach (var reference in model.RandomSpritePrototypes)

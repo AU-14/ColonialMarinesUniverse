@@ -16393,6 +16393,1741 @@
       ]
     },
     {
+      "id": "CMU3DReduxAU14AircrewWeaponsVendor",
+      "label": "AU14AircrewWeaponsVendor",
+      "file": "CMU3DReduxAU14AircrewWeaponsVendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "5f70651081daad5973664d8c79c9034ef2226c7782cb72cf1582e69b22ce3d06",
+      "sourcePrototypes": [
+        "AU14AircrewWeaponsVendor",
+        "AU14CMBCIUWeaponsVendor",
+        "AU14HAZOPSWeaponsVendor",
+        "AU14LACNWeaponsVendor",
+        "AU14RMCAircrewWeaponsVendor",
+        "AU14RMCWeaponsVendor",
+        "AU14UPPWeaponsVendor",
+        "AU14USCMWeaponsVendor",
+        "AU14VAIPOWeaponsVendor",
+        "AU14WYWeaponsVendor",
+        "AU14prodigyWeaponsVendor",
+        "RuMCBEARWeaponsVendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUCommandVendor",
+      "label": "AU14CMBCIUCommandVendor",
+      "file": "CMU3DReduxAU14CMBCIUCommandVendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "1edbbba22ce554412b46dfbbad6876488176de35508e63d4baca477d9cb0d13d",
+      "sourcePrototypes": [
+        "AU14CMBCIUCommandVendor",
+        "AU14HAZOPScommandequipmentvendor",
+        "AU14RMCcommandequipmentvendor",
+        "AU14UPPcommandvendor",
+        "AU14USCMcommandequipmentvendor",
+        "AU14VAIPOcommandequipmentvendor",
+        "AU14WYdirectorequipmentvendor",
+        "AU14prodigycommandequipmentvendor",
+        "RuMCBEARcommandvendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUGunnerVendor",
+      "label": "AU14CMBCIUGunnerVendor",
+      "file": "CMU3DReduxAU14CMBCIUGunnerVendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "83fe7d1b229ad7590af60131675827125533a5db4267da8f2e4e5a38c1f4ef5a",
+      "sourcePrototypes": [
+        "AU14CMBCIUGunnerVendor",
+        "AU14HAZOPSMGequipmentvendor",
+        "AU14RMCSGequipmentvendor",
+        "AU14UPPgunnerequipment",
+        "AU14USCMSGequipmentvendor",
+        "AU14VAIPOSGequipmentvendor",
+        "AU14WYSGequipmentvendor",
+        "AU14prodigySGequipmentvendor",
+        "RuMCBEARgunnerequipment"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUPilotVendor",
+      "label": "AU14CMBCIUPilotVendor",
+      "file": "CMU3DReduxAU14CMBCIUPilotVendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "080c5e5a02ff0cb7c64299333d4ae2d6676e90b2e7ac8f6a00fbd057503e6f22",
+      "sourcePrototypes": [
+        "AU14CMBCIUPilotVendor",
+        "AU14CMBCIUSectionLeader",
+        "AU14CMBCIUSquadLeader",
+        "AU14HAZOPSsectionleaderequipmentvendor",
+        "AU14HAZOPSsquadleaderequipmentvendor",
+        "AU14LACNaircrewvendor",
+        "AU14LACNclothingequipmentvendor",
+        "AU14LACNcommandequipmentvendor",
+        "AU14LACNsquadleaderequipmentvendor",
+        "AU14RMCRTOVendor",
+        "AU14RMCaircrewvendor",
+        "AU14RMCsectionleaderequipmentvendor",
+        "AU14RMCsquadleaderequipmentvendor",
+        "AU14RTOVendor",
+        "AU14UPPSectionLeaderVendor",
+        "AU14UPPSquadLeaderVendor",
+        "AU14UPPaircrewvendor",
+        "AU14USCMVehicleCrewmanVendor",
+        "AU14USCMaircrewvendor",
+        "AU14USCMsectionleaderequipmentvendor",
+        "AU14USCMsquadleaderequipmentvendor",
+        "AU14VAIPOaircrewvendor",
+        "AU14VAIPOsectionleaderequipmentvendor",
+        "AU14VAIPOsquadleaderequipmentvendor",
+        "AU14WYaircrewvendor",
+        "AU14WYsquadleaderequipmentvendor",
+        "AU14WYsupervisorequipmentvendor",
+        "AU14prodigyaircrewvendor",
+        "AU14prodigysectionleaderequipmentvendor",
+        "AU14prodigysquadleaderequipmentvendor",
+        "CMULACNRTOVendor",
+        "RuMCBEARSectionLeaderVendor",
+        "RuMCBEARaircrewvendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIURequisitionVendor",
+      "label": "AU14CMBCIURequisitionVendor",
+      "file": "CMU3DReduxAU14CMBCIURequisitionVendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "f5b8ad1374462030c9917809e00c6f5c7ffaf7013985b9b1aede4d072e0b90e0",
+      "sourcePrototypes": [
+        "AU14CMBCIURequisitionVendor",
+        "AU14HAZOPSRequisitionVendor",
+        "AU14LACNRequisitionVendor",
+        "AU14ProdigyRequisitionVendor",
+        "AU14RMCRequisitionVendor",
+        "AU14UPPRequisitionVendor",
+        "AU14USCMRequisitionVendor",
+        "AU14VAIPORequisitionVendor",
+        "AU14WYPMCRequisitionVendor",
+        "RuMCBEARRequisitionVendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUTacticalMedicVendor",
+      "label": "AU14CMBCIUTacticalMedicVendor",
+      "file": "CMU3DReduxAU14CMBCIUTacticalMedicVendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "0f4917cab4abe54357cf544769de283c664d2392624d05f827f578bdf9c81484",
+      "sourcePrototypes": [
+        "AU14CMBCIUTacticalMedicVendor",
+        "AU14RMCcorpsmanvendor",
+        "AU14UPPMedicalVendor",
+        "AU14USCMcorpsmanvendor",
+        "AU14VAIPOcorpsmanvendor",
+        "AU14WYcorpsmanvendor",
+        "AU14prodigycorpsmanvendor",
+        "RuMCBEARMedicalVendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUapparelvendor",
+      "label": "AU14CMBCIUapparelvendor",
+      "file": "CMU3DReduxAU14CMBCIUapparelvendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "6378a6e366e684db9e61affec0c231cefaea5c57002fd20d23534a80e6571f65",
+      "sourcePrototypes": [
+        "AU14CMBCIUapparelvendor",
+        "AU14HAZOPSclothingequipmentvendor",
+        "AU14RMCclothingequipmentvendor",
+        "AU14UPPclothingapparelvendor",
+        "AU14USCMclothingequipmentvendor",
+        "AU14VAIPOclothingequipmentvendor",
+        "AU14WYclothingequipmentvendor",
+        "AU14prodigyclothingequipmentvendor",
+        "RuMCBEARclothingapparelvendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14ComtechGearVendor",
+      "label": "AU14ComtechGearVendor",
+      "file": "CMU3DReduxAU14ComtechGearVendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "71ecef1c674f8940f7e25eceeb19a1f017141cb29336199a7b333682ba44afd1",
+      "sourcePrototypes": [
+        "AU14ComtechGearVendor",
+        "AU14RMCComtechGearVendor",
+        "CMULACNComtechGearVendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14CorporateASRSElevator",
+      "label": "AU14CorporateASRSElevator",
+      "file": "CMU3DReduxAU14CorporateASRSElevator.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "b65b4a19db23d6665abb78cc0ccbea25482414d2e099178e33e7bb0df9111047",
+      "sourcePrototypes": [
+        "AU14CorporateASRSElevator",
+        "CMCargoElevatorColony",
+        "CMCargoElevatorGovfor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14CrateSecureWeYuClottedSyringesInheritedCratesSecureWeYaCloud",
+      "label": "Secure We Ya source-specific crate",
+      "file": "CMU3DReduxAU14CrateSecureWeYuClottedSyringesInheritedCratesSecureWeYaCloud.glb",
+      "status": "draft",
+      "parts": 24,
+      "triangles": 392,
+      "sha256": "92376e78a25852bc93a595a67aa328abec0e9dcea393cb2dd432310d20a312ac",
+      "sourcePrototypes": [
+        "AU14CrateSecureWeYuClottedSyringes",
+        "AU14CrateSecureWeYuXenoEggs"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14CustomConstructionFrame",
+      "label": "AU14CustomConstructionFrame",
+      "file": "CMU3DReduxAU14CustomConstructionFrame.glb",
+      "status": "draft",
+      "parts": 5,
+      "triangles": 60,
+      "sha256": "78a4a54afcba8e5ea93ccabb13f0a588869468f91aa8606bb8d5ac69e3919f1d",
+      "sourcePrototypes": [
+        "AU14CustomConstructionFrame"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14HAZOPSSpecialWeaponsVendor",
+      "label": "AU14HAZOPSSpecialWeaponsVendor",
+      "file": "CMU3DReduxAU14HAZOPSSpecialWeaponsVendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "cafb6b08f66a77b571acf0a141592ea7ed03a071783c6fd195e325eed4999816",
+      "sourcePrototypes": [
+        "AU14HAZOPSSpecialWeaponsVendor",
+        "AU14LACNSpecialWeaponsVendor",
+        "AU14RMCSpecialWeaponsVendor",
+        "AU14SpecVend",
+        "AU14UPPSpecialWeaponsVendor",
+        "AU14USCMSpecialWeaponsVendor",
+        "AU14WYSpecialWeaponsVendor",
+        "RuMCBEARSpecialWeaponsVendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14LACNMGequipmentvendor",
+      "label": "CMB equipment vendor",
+      "file": "CMU3DReduxAU14LACNMGequipmentvendor.glb",
+      "status": "draft",
+      "parts": 40,
+      "triangles": 480,
+      "sha256": "68818b7619ae3c16eea3b8bb2c88340ddb21db2c3df6980ed29aeaae241d09e1",
+      "sourcePrototypes": [
+        "AU14LACNMGequipmentvendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14LACNcorpsmanvendor",
+      "label": "AU14LACNcorpsmanvendor",
+      "file": "CMU3DReduxAU14LACNcorpsmanvendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "e2c4e32418acb258445dccb4ad86c85e6e762e67c9ed86b3a0c4317bd6ee80de",
+      "sourcePrototypes": [
+        "AU14LACNcorpsmanvendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14LACNequipmentvendor",
+      "label": "AU14LACNequipmentvendor",
+      "file": "CMU3DReduxAU14LACNequipmentvendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "12754efa7b629f1fc52ee98b988783d7ce802869b298a2de38505180ed092506",
+      "sourcePrototypes": [
+        "AU14LACNequipmentvendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14RMCequipmentvendor",
+      "label": "Assorted equipment vendor",
+      "file": "CMU3DReduxAU14RMCequipmentvendor.glb",
+      "status": "draft",
+      "parts": 71,
+      "triangles": 852,
+      "sha256": "6b3312ae8c4214479e11fa7e31aaecabd614823a9b1712abca89ff889d2b39ac",
+      "sourcePrototypes": [
+        "AU14RMCequipmentvendor",
+        "AU14UPPequipmentvendor",
+        "AU14USCMequipmentvendor",
+        "RuMCBEARequipmentvendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14UPPAirCrewWeaponsVendor",
+      "label": "AU14UPPAirCrewWeaponsVendor",
+      "file": "CMU3DReduxAU14UPPAirCrewWeaponsVendor.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 168,
+      "sha256": "70e019c33fa1b9f7466f84e3f415d624b5608a78866b81182d6f6b87dca21ec0",
+      "sourcePrototypes": [
+        "AU14UPPAirCrewWeaponsVendor",
+        "RuMCBEARAirCrewWeaponsVendor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivArmoredTruck",
+      "label": "AU14VehicleCivArmoredTruck",
+      "file": "CMU3DReduxAU14VehicleCivArmoredTruck.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "bd740d7d9039af1ad7208222e125b4a731241b6c1b1253ab0516bed071db278e",
+      "sourcePrototypes": [
+        "AU14VehicleCivArmoredTruck"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivEMSAmbulance",
+      "label": "AU14VehicleCivEMSAmbulance",
+      "file": "CMU3DReduxAU14VehicleCivEMSAmbulance.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "dc60245681626a50ff05c5ad3ce9e9a0212995f9bb2216c7241fd2f7fd7587b8",
+      "sourcePrototypes": [
+        "AU14VehicleCivEMSAmbulance"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivHSVan",
+      "label": "AU14VehicleCivHSVan",
+      "file": "CMU3DReduxAU14VehicleCivHSVan.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "d2aaa0a4b594869a0f33f7d6a55b9083d6b1fcf62419249b6237485cf836844a",
+      "sourcePrototypes": [
+        "AU14VehicleCivHSVan"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivTruck",
+      "label": "AU14VehicleCivTruck",
+      "file": "CMU3DReduxAU14VehicleCivTruck.glb",
+      "status": "draft",
+      "parts": 27,
+      "triangles": 740,
+      "sha256": "b39e68c721b2f8013499c0da3fadeb4b4bbba69fa17dc35c53d93becf91c37cc",
+      "sourcePrototypes": [
+        "AU14VehicleCivTruck"
+      ]
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivVan",
+      "label": "AU14VehicleCivVan",
+      "file": "CMU3DReduxAU14VehicleCivVan.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "eb269a6a76d69ef35cdd0e476b924f83262bd8617745cdcda0ad628da19d62b9",
+      "sourcePrototypes": [
+        "AU14VehicleCivVan"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMBedsheetGrayOrange",
+      "label": "CMBedsheetGrayOrange",
+      "file": "CMU3DReduxCMBedsheetGrayOrange.glb",
+      "status": "draft",
+      "parts": 3,
+      "triangles": 36,
+      "sha256": "53aa7ebfcd5d66b2867c7a5d77d66fe7d599d459e8017aef98469c8b71e01b86",
+      "sourcePrototypes": [
+        "CMBedsheetGrayOrange"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMBedsheetMedical",
+      "label": "CMBedsheetMedical",
+      "file": "CMU3DReduxCMBedsheetMedical.glb",
+      "status": "draft",
+      "parts": 3,
+      "triangles": 36,
+      "sha256": "36dff3e82ad9fb665aaf1abf4b19e099b3e0cb3c008bbebcf39bd3d6640e325c",
+      "sourcePrototypes": [
+        "CMBedsheetMedical"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMBedsheetOrange",
+      "label": "CMBedsheetOrange",
+      "file": "CMU3DReduxCMBedsheetOrange.glb",
+      "status": "draft",
+      "parts": 3,
+      "triangles": 36,
+      "sha256": "95836f5a2d3d149f4c4d9b1689f0977ca6cef9269190426252b6630894e23db5",
+      "sourcePrototypes": [
+        "CMBedsheetOrange"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMBedsheetOrangeFull",
+      "label": "CMBedsheetOrangeFull",
+      "file": "CMU3DReduxCMBedsheetOrangeFull.glb",
+      "status": "draft",
+      "parts": 3,
+      "triangles": 36,
+      "sha256": "8f87a57a4acce6896800bfeacb3bcd220186d3ff9feec89011d4fafcbebc65ad",
+      "sourcePrototypes": [
+        "CMBedsheetOrangeFull"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMBeltUtility",
+      "label": "CMBeltUtility",
+      "file": "CMU3DReduxCMBeltUtility.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "f0b8d06e251293005070c5014d91588dd67774c35d2140ae9f418429649d1455",
+      "sourcePrototypes": [
+        "CMBeltUtility",
+        "CMBeltUtilityFilled"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMGrenadeSmoke",
+      "label": "CMGrenadeSmoke",
+      "file": "CMU3DReduxCMGrenadeSmoke.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 152,
+      "sha256": "f702f52c06deb605908315b51b6f42003fb708c43033141f58429cb3e922712b",
+      "sourcePrototypes": [
+        "CMGrenadeSmoke"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMHandsInsulated",
+      "label": "CMHandsInsulated",
+      "file": "CMU3DReduxCMHandsInsulated.glb",
+      "status": "draft",
+      "parts": 11,
+      "triangles": 132,
+      "sha256": "20aa31df3ffe855003571e103554e22b687a492077f903b716caed61e89314f6",
+      "sourcePrototypes": [
+        "CMHandsInsulated"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMShardGlass",
+      "label": "CMShardGlass",
+      "file": "CMU3DReduxCMShardGlass.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 20,
+      "sha256": "80aa8f007d29459db90354f00ade514cbc2a324d20ae60c7a2798b0a24dcc503",
+      "sourcePrototypes": [
+        "CMShardGlass"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUCanisterOxygen",
+      "label": "CMUCanisterOxygen",
+      "file": "CMU3DReduxCMUCanisterOxygen.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 504,
+      "sha256": "45c88dd2883aac2ba89412d5751e943beeef35995a9d87ec543767c430d70d16",
+      "sourcePrototypes": [
+        "CMUCanisterOxygen"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUDeployableZLevelLadderThroughUp",
+      "label": "CMUDeployableZLevelLadderThroughUp",
+      "file": "CMU3DReduxCMUDeployableZLevelLadderThroughUp.glb",
+      "status": "draft",
+      "parts": 10,
+      "triangles": 536,
+      "sha256": "e2714c9d8511700c8c091e6159c27df4cd654e97e0363058f5167f74515055b2",
+      "sourcePrototypes": [
+        "CMUDeployableZLevelLadderThroughUp"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUFighterGround",
+      "label": "CMUFighterGround",
+      "file": "CMU3DReduxCMUFighterGround.glb",
+      "status": "draft",
+      "parts": 18,
+      "triangles": 480,
+      "sha256": "4d8c7c74980661a149cfe8f5f84c0aac0398b3010b0f19dd6238a6b35aa38d94",
+      "sourcePrototypes": [
+        "CMUFighterGround"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUGeneratorFusionFusionGenerator",
+      "label": "Fusion generator",
+      "file": "CMU3DReduxCMUGeneratorFusionFusionGenerator.glb",
+      "status": "draft",
+      "parts": 36,
+      "triangles": 432,
+      "sha256": "a0d6735ffb5adaa439b428761c8706461718f0b3ff320c4ed9f24e259248a447",
+      "sourcePrototypes": [
+        "CMUGeneratorFusion"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUGeneratorThermoColonyGenerator",
+      "label": "Colony geothermal generator",
+      "file": "CMU3DReduxCMUGeneratorThermoColonyGenerator.glb",
+      "status": "draft",
+      "parts": 44,
+      "triangles": 528,
+      "sha256": "d37d458031a717da9bad7abb7308501d3105d3103265b25bb18cead87b49aa3e",
+      "sourcePrototypes": [
+        "CMUGeneratorThermo"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUHospitalEmergencyComputerColonyAmberDepartmentTerminal",
+      "label": "Amber department CRT terminal",
+      "file": "CMU3DReduxCMUHospitalEmergencyComputerColonyAmberDepartmentTerminal.glb",
+      "status": "draft",
+      "parts": 55,
+      "triangles": 660,
+      "sha256": "4e437986e1e98a07b5afe73a11744959759f8eb9539efd75403a2a7fa8a007da",
+      "sourcePrototypes": [
+        "CMUHospitalEmergencyComputerColony",
+        "CMUHospitalEmergencyComputerGovfor",
+        "CMUHospitalEmergencyComputerOpfor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUMonkeyCubeBox",
+      "label": "CMUMonkeyCubeBox",
+      "file": "CMU3DReduxCMUMonkeyCubeBox.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 24,
+      "sha256": "3895e7c99d45f69fc8f0824019268a5947c7d22252c97c640b6690ba324a213d",
+      "sourcePrototypes": [
+        "CMUMonkeyCubeBox"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalEast",
+      "label": "Research terminal / East",
+      "file": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalEast.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 164,
+      "sha256": "26baf4f858f125ede41eaad2a5494a25a41638c759f1c19b417f44ead07d225f",
+      "sourcePrototypes": [],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 14
+    },
+    {
+      "id": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalNorth",
+      "label": "Research terminal / North",
+      "file": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalNorth.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 164,
+      "sha256": "cc3dbe9b5c2e07ddbd3680405c38f66cb2fe843053859b5bb7055cacbc1a1639",
+      "sourcePrototypes": [],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 14
+    },
+    {
+      "id": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalSouth",
+      "label": "Research terminal / South",
+      "file": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalSouth.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 164,
+      "sha256": "0295a84bce23d98f3a663bff5dc6481685c99cc4b64824b52b9a951250ed9211",
+      "sourcePrototypes": [
+        "CMUResearchDataTerminalGovfor",
+        "CMUResearchDataTerminalOpfor"
+      ],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 14
+    },
+    {
+      "id": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalWest",
+      "label": "Research terminal / West",
+      "file": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalWest.glb",
+      "status": "draft",
+      "parts": 14,
+      "triangles": 164,
+      "sha256": "6a345da40b8e44e8d1a5bb81438793fe700238e2706cd7e08884da4c5ccdb8a1",
+      "sourcePrototypes": [],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 14
+    },
+    {
+      "id": "CMU3DReduxCMUWeaponLauncherM81WorldRMCWeaponLauncherM81Cloud",
+      "label": "M81 closed long-tube world prop",
+      "file": "CMU3DReduxCMUWeaponLauncherM81WorldRMCWeaponLauncherM81Cloud.glb",
+      "status": "draft",
+      "parts": 17,
+      "triangles": 1148,
+      "sha256": "dd1cf7213e9c1cfed32de18923e9809daeb2052ba742e71f412b25177723e0c1",
+      "sourcePrototypes": [
+        "CMUWeaponLauncherM81"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUZLevelHatchThroughDown",
+      "label": "CMUZLevelHatchThroughDown",
+      "file": "CMU3DReduxCMUZLevelHatchThroughDown.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "95ba598a073c6ccaebd7b403c5ccd8c016c84602c80af36bc8921c6b116c2203",
+      "sourcePrototypes": [
+        "CMUZLevelHatchThroughDown",
+        "RMCLadderHatch"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCMUZLevelLadderThroughUp2",
+      "label": "CMUZLevelLadderThroughUp2",
+      "file": "CMU3DReduxCMUZLevelLadderThroughUp2.glb",
+      "status": "draft",
+      "parts": 10,
+      "triangles": 536,
+      "sha256": "4044e20618c135eafb9d43fed8b9e1db04d80492a7e9fde1a0d1feae8c1fc13b",
+      "sourcePrototypes": [
+        "CMUZLevelLadderThroughUp2"
+      ]
+    },
+    {
+      "id": "CMU3DReduxCableApcExtension",
+      "label": "CableApcExtension",
+      "file": "CMU3DReduxCableApcExtension.glb",
+      "status": "draft",
+      "parts": 1,
+      "triangles": 224,
+      "sha256": "4ddf7a4d90184de10409da3621d4bc1fbe6cb15ee19b337d450369f3c5d080fe",
+      "sourcePrototypes": [
+        "CableApcExtension"
+      ],
+      "animationClips": 0,
+      "staticSpriteScenes": 16,
+      "storedFrameParts": 48
+    },
+    {
+      "id": "CMU3DReduxCableApcStack",
+      "label": "CableApcStack",
+      "file": "CMU3DReduxCableApcStack.glb",
+      "status": "draft",
+      "parts": 13,
+      "triangles": 780,
+      "sha256": "51a61098d6f2d04f66434efa344afa93f0443326af25f94e2be2d7279b98d3d7",
+      "sourcePrototypes": [
+        "CableApcStack"
+      ]
+    },
+    {
+      "id": "CMU3DReduxDisposalBend",
+      "label": "DisposalBend",
+      "file": "CMU3DReduxDisposalBend.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 504,
+      "sha256": "d9ad96420781d9a08888037217d0b53333a77d07e85964afe4b7b7bbfc276e2d",
+      "sourcePrototypes": [
+        "DisposalBend"
+      ],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 7
+    },
+    {
+      "id": "CMU3DReduxDisposalBendLoose",
+      "label": "DisposalBendLoose",
+      "file": "CMU3DReduxDisposalBendLoose.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 492,
+      "sha256": "170c6cd927e9512696ffe8cc889c5239b78d9350974b43a7bd6c5e2493bed3ea",
+      "sourcePrototypes": [],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 6
+    },
+    {
+      "id": "CMU3DReduxDisposalPipe",
+      "label": "DisposalPipe",
+      "file": "CMU3DReduxDisposalPipe.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 492,
+      "sha256": "2f0471dda25a30417327078c48de040d5cd77ebbfd379d1b89b9657a3bd5f55d",
+      "sourcePrototypes": [
+        "DisposalPipe"
+      ],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 6
+    },
+    {
+      "id": "CMU3DReduxDisposalPipeBroken",
+      "label": "DisposalPipeBroken",
+      "file": "CMU3DReduxDisposalPipeBroken.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 100,
+      "sha256": "ca6a9a7bbfe6b296b10f9e714e15c21615ce86a7ae5930b4354eaea693265e7f",
+      "sourcePrototypes": [
+        "DisposalPipeBroken"
+      ]
+    },
+    {
+      "id": "CMU3DReduxDisposalPipeLoose",
+      "label": "DisposalPipeLoose",
+      "file": "CMU3DReduxDisposalPipeLoose.glb",
+      "status": "draft",
+      "parts": 5,
+      "triangles": 480,
+      "sha256": "f44f443ad3dc654b21d89d5f87a6aea543db9ffdf1bc5b10e5293fcd5f269e03",
+      "sourcePrototypes": [],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 5
+    },
+    {
+      "id": "CMU3DReduxDisposalRouter",
+      "label": "DisposalRouter",
+      "file": "CMU3DReduxDisposalRouter.glb",
+      "status": "draft",
+      "parts": 9,
+      "triangles": 632,
+      "sha256": "01cea7daa80873c51f318e41a08344a321681e28aada44fff76c021f863dd1cd",
+      "sourcePrototypes": [
+        "DisposalRouter"
+      ],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 9
+    },
+    {
+      "id": "CMU3DReduxDisposalRouterFlipped",
+      "label": "DisposalRouterFlipped",
+      "file": "CMU3DReduxDisposalRouterFlipped.glb",
+      "status": "draft",
+      "parts": 9,
+      "triangles": 632,
+      "sha256": "96a8fcd254620633235acc118930547271011b1fac354365fa796be917fa309b",
+      "sourcePrototypes": [
+        "DisposalRouterFlipped"
+      ],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 9
+    },
+    {
+      "id": "CMU3DReduxDisposalRouterFlippedLoose",
+      "label": "DisposalRouterFlippedLoose",
+      "file": "CMU3DReduxDisposalRouterFlippedLoose.glb",
+      "status": "draft",
+      "parts": 8,
+      "triangles": 620,
+      "sha256": "569bc8de2f977190e6439db81ca7d8534a08083e10c9c77bdf4d4c312e7e154b",
+      "sourcePrototypes": [],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 8
+    },
+    {
+      "id": "CMU3DReduxDisposalRouterLoose",
+      "label": "DisposalRouterLoose",
+      "file": "CMU3DReduxDisposalRouterLoose.glb",
+      "status": "draft",
+      "parts": 8,
+      "triangles": 620,
+      "sha256": "3c2d87da2970729ed55d4eae5b4b438ac1e4b1d42ee9cb9e668a9e677cf502bc",
+      "sourcePrototypes": [],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 8
+    },
+    {
+      "id": "CMU3DReduxDisposalTrunk",
+      "label": "DisposalTrunk",
+      "file": "CMU3DReduxDisposalTrunk.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 504,
+      "sha256": "c6dfe2b8e7849932c6775d61c47c1da8811306a8af9a6bf2b6e8f5fbb4e61a75",
+      "sourcePrototypes": [
+        "DisposalTrunk"
+      ],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 7
+    },
+    {
+      "id": "CMU3DReduxDisposalTrunkLoose",
+      "label": "DisposalTrunkLoose",
+      "file": "CMU3DReduxDisposalTrunkLoose.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 492,
+      "sha256": "b7f4e5a7488c8b606142b8bed4ccf87c6ef3cb99d70de7c753433324b5758eae",
+      "sourcePrototypes": [],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 6
+    },
+    {
+      "id": "CMU3DReduxDisposalYJunction",
+      "label": "DisposalYJunction",
+      "file": "CMU3DReduxDisposalYJunction.glb",
+      "status": "draft",
+      "parts": 9,
+      "triangles": 632,
+      "sha256": "fd8634e0572b32f5cb200f11d053ccdc43abf4ac4fa641ae006582a3a6b2fb2d",
+      "sourcePrototypes": [
+        "DisposalYJunction"
+      ],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 9
+    },
+    {
+      "id": "CMU3DReduxDisposalYJunctionLoose",
+      "label": "DisposalYJunctionLoose",
+      "file": "CMU3DReduxDisposalYJunctionLoose.glb",
+      "status": "draft",
+      "parts": 8,
+      "triangles": 620,
+      "sha256": "98eade2508e72b3c5bc76e58b98a1314ea67deb692cb4ff8a84ba23817636d6a",
+      "sourcePrototypes": [],
+      "animationClips": 0,
+      "staticSpriteScenes": 1,
+      "storedFrameParts": 8
+    },
+    {
+      "id": "CMU3DReduxDoorElectronics",
+      "label": "DoorElectronics",
+      "file": "CMU3DReduxDoorElectronics.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 24,
+      "sha256": "a34dc0c0413741e087fed43abfd3b4b7d3eebea9b64f9dad9acb45e34263edb0",
+      "sourcePrototypes": [
+        "DoorElectronics"
+      ]
+    },
+    {
+      "id": "CMU3DReduxFoodDonkpocket",
+      "label": "FoodDonkpocket",
+      "file": "CMU3DReduxFoodDonkpocket.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 24,
+      "sha256": "98b659653164ec48fc25e20c75ec73137ffec7797bbbbaa0d8005237121a1b84",
+      "sourcePrototypes": [
+        "FoodDonkpocket"
+      ]
+    },
+    {
+      "id": "CMU3DReduxIgniter",
+      "label": "Igniter",
+      "file": "CMU3DReduxIgniter.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 24,
+      "sha256": "0f6e582bf3f6a2b2f800f3a6c83e32edaa587ccc5f040b28183f3148205d059f",
+      "sourcePrototypes": [
+        "Igniter"
+      ]
+    },
+    {
+      "id": "CMU3DReduxProximitySensor",
+      "label": "ProximitySensor",
+      "file": "CMU3DReduxProximitySensor.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 24,
+      "sha256": "95e7d11b8c411bb708be217ae9f7774b3cf26573a19f580150c516f3ae6553e2",
+      "sourcePrototypes": [
+        "ProximitySensor"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCBarricadeHandrailAlt",
+      "label": "RMCBarricadeHandrailAlt",
+      "file": "CMU3DReduxRMCBarricadeHandrailAlt.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "e9892846b77848a09d7b249adb35a8d9900a6681d3a8b0bd38bc8140a0fd3739",
+      "sourcePrototypes": [
+        "RMCBarricadeHandrailAlt"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCBeltHolsterRevolverSpearheadFill",
+      "label": "RMCBeltHolsterRevolverSpearheadFill",
+      "file": "CMU3DReduxRMCBeltHolsterRevolverSpearheadFill.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "20b87fd5ddbdc2818b04de05a221de6dd86e56087bd66f567f7c16b4826e5921",
+      "sourcePrototypes": [
+        "RMCBeltHolsterRevolverSpearheadFill"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCCableHeavy",
+      "label": "RMCCableHeavy",
+      "file": "CMU3DReduxRMCCableHeavy.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 24,
+      "sha256": "53406b7b23f1e060ca71b17ca8128b54809ffe38b99d08a0d9ec44d39caa95a9",
+      "sourcePrototypes": [
+        "RMCCableHeavy"
+      ],
+      "animationClips": 0,
+      "staticSpriteScenes": 16,
+      "storedFrameParts": 64
+    },
+    {
+      "id": "CMU3DReduxRMCDrill",
+      "label": "RMCDrill",
+      "file": "CMU3DReduxRMCDrill.glb",
+      "status": "draft",
+      "parts": 5,
+      "triangles": 112,
+      "sha256": "a87603522ceb990a5a32a213bf90c903cab90e19813af079dbd494dd1430d9a0",
+      "sourcePrototypes": [
+        "RMCDrill"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCElevatorDoorBroken",
+      "label": "RMCElevatorDoorBroken",
+      "file": "CMU3DReduxRMCElevatorDoorBroken.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "ca3316d81309e107d4bd9695c50caf500fbb66ac1f21d1dfa03f7fcfb39f7ef3",
+      "sourcePrototypes": [
+        "RMCElevatorDoorBroken"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCElevatorDoorBrokenRight",
+      "label": "RMCElevatorDoorBrokenRight",
+      "file": "CMU3DReduxRMCElevatorDoorBrokenRight.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "47686e19108070e5a3c969d051f9c4e7aed48474f6c7a70f0041e7ee01e1cb37",
+      "sourcePrototypes": [
+        "RMCElevatorDoorBrokenRight"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCExplosiveBreachingCharge",
+      "label": "RMCExplosiveBreachingCharge",
+      "file": "CMU3DReduxRMCExplosiveBreachingCharge.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 24,
+      "sha256": "aadb916ebc9b8af819e41ac3e13535d8a4c532f40d24a7c0716b03cfb404b97b",
+      "sourcePrototypes": [
+        "RMCExplosiveBreachingCharge"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCFlashlight",
+      "label": "RMCFlashlight",
+      "file": "CMU3DReduxRMCFlashlight.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 204,
+      "sha256": "62d31a876288641eaa1f6c8cb8bcc6b04d4213e198446a9a296441410c27bd09",
+      "sourcePrototypes": [
+        "RMCFlashlight"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCHardhatWhiteAlt",
+      "label": "RMCHardhatWhiteAlt",
+      "file": "CMU3DReduxRMCHardhatWhiteAlt.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 312,
+      "sha256": "f450d2bbff9b3a3d91dbe2983ee8e2119408df84280b0a020ed5f82951da7ac7",
+      "sourcePrototypes": [
+        "RMCHardhatWhiteAlt"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCJumpsuitMarinePatchRMCJumpsuitSunRidersWorldCloud",
+      "label": "RMCJumpsuitSunRiders laid-out uniform",
+      "file": "CMU3DReduxRMCJumpsuitMarinePatchRMCJumpsuitSunRidersWorldCloud.glb",
+      "status": "draft",
+      "parts": 52,
+      "triangles": 1372,
+      "sha256": "39d41de45efc99961e7229786a5b3e162aed4d46df7cca094724959ba5fd1a6c",
+      "sourcePrototypes": [
+        "RMCJumpsuitMarinePatch"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCLampTripodGrey",
+      "label": "RMCLampTripodGrey",
+      "file": "CMU3DReduxRMCLampTripodGrey.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "5d5286dd8e0f2f3a588c37ed156756a94f4403fe1a3d28eeec180ad87e613bde",
+      "sourcePrototypes": [
+        "RMCLampTripodGrey"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCPlatformHybrisaRockCornerSmall",
+      "label": "RMCPlatformHybrisaRockCornerSmall",
+      "file": "CMU3DReduxRMCPlatformHybrisaRockCornerSmall.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 20,
+      "sha256": "3d40186a44baf5b613335aa202fb5f6b291e6f0bebf521c1986159da0320338b",
+      "sourcePrototypes": [
+        "RMCPlatformHybrisaRockCornerSmall"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCell",
+      "label": "RMCPowerCell",
+      "file": "CMU3DReduxRMCPowerCell.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "97275064f0345fcc4b711d3c92e78b0c5b7023c6ed5abbd8c7f901ebfded8e06",
+      "sourcePrototypes": [
+        "RMCPowerCell"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCellCrap",
+      "label": "RMCPowerCellCrap",
+      "file": "CMU3DReduxRMCPowerCellCrap.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "37b21518a6176d193eb00d0194efa892073b907dfe502672792530d39f64950f",
+      "sourcePrototypes": [
+        "RMCPowerCellCrap"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCellHigh",
+      "label": "RMCPowerCellHigh",
+      "file": "CMU3DReduxRMCPowerCellHigh.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "06f836cf0101b8383071fa246a197ce9316800873dfc6efa068a15d8f59eed17",
+      "sourcePrototypes": [
+        "RMCPowerCellHigh"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCellHyper",
+      "label": "RMCPowerCellHyper",
+      "file": "CMU3DReduxRMCPowerCellHyper.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "73b9bb81512987f014b05284d61f7fcfbe10e47bfdf1e4d3936042fe161ca217",
+      "sourcePrototypes": [
+        "RMCPowerCellHyper"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCellSuper",
+      "label": "RMCPowerCellSuper",
+      "file": "CMU3DReduxRMCPowerCellSuper.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "d5975890b21b8ca02028874728698496b9f2971fc0e146320ded5dff12250a36",
+      "sourcePrototypes": [
+        "RMCPowerCellSuper"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCVialBoxRMCVialBoxFullMedicalSmallCloud",
+      "label": "Full six-vial storage box",
+      "file": "CMU3DReduxRMCVialBoxRMCVialBoxFullMedicalSmallCloud.glb",
+      "status": "draft",
+      "parts": 32,
+      "triangles": 1320,
+      "sha256": "22db9c517b92430fa2b313d8c6bd2ca4a054e2c91df811f13d60711943c7664a",
+      "sourcePrototypes": [
+        "RMCVialBox"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCWallElevator",
+      "label": "RMCWallElevator",
+      "file": "CMU3DReduxRMCWallElevator.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "bbaccd4a5286a6dfc1e973c6a00a0b546c9c586bc53c31ac7db6e7c10b675235",
+      "sourcePrototypes": [
+        "RMCWallElevator"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCWallElevatorBroken",
+      "label": "RMCWallElevatorBroken",
+      "file": "CMU3DReduxRMCWallElevatorBroken.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "d1916ffce54a217c0dadf8c175e8fef1a4aa5b2538499a05b8ee992b68e4226f",
+      "sourcePrototypes": [
+        "RMCWallElevatorBroken"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCWallElevatorGearAnimated",
+      "label": "RMCWallElevatorGearAnimated",
+      "file": "CMU3DReduxRMCWallElevatorGearAnimated.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "24b4dbf8f4de589b5f494d76d3a9982e52c01a88524dd7d5ae3c7ca7089e3043",
+      "sourcePrototypes": [
+        "RMCWallElevatorGearAnimated"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRMCWindowFrameStrata",
+      "label": "RMCWindowFrameStrata",
+      "file": "CMU3DReduxRMCWindowFrameStrata.glb",
+      "status": "draft",
+      "parts": 5,
+      "triangles": 60,
+      "sha256": "2411ad5ae5a9f1ffefadd84e810d262ba38c67d16fdada197e9f92507dbea816",
+      "sourcePrototypes": [
+        "RMCWindowFrameStrata"
+      ]
+    },
+    {
+      "id": "CMU3DReduxRemoteSignaller",
+      "label": "RemoteSignaller",
+      "file": "CMU3DReduxRemoteSignaller.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 24,
+      "sha256": "15a59758bd97e73c8cc2276b3c93f1a9750859643526c9bac17503bbf84a3f06",
+      "sourcePrototypes": [
+        "RemoteSignaller"
+      ]
+    },
+    {
+      "id": "CMU3DReduxSteelOre1",
+      "label": "SteelOre1",
+      "file": "CMU3DReduxSteelOre1.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 20,
+      "sha256": "a7896fe9f2fa6b673004b5b103b8d7cb21df56d791bc38e1aa0705e14d294382",
+      "sourcePrototypes": [
+        "SteelOre1"
+      ]
+    },
+    {
+      "id": "CMU3DReduxTWEVehicleTankArtilleryModuleMounted",
+      "label": "TWEVehicleTankArtilleryModuleMounted",
+      "file": "CMU3DReduxTWEVehicleTankArtilleryModuleMounted.glb",
+      "status": "draft",
+      "parts": 2,
+      "triangles": 24,
+      "sha256": "e1029e10cfbd32e3d9bb6208485d791fb02740b4ccb28727e740033201497634",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleAPC",
+      "label": "VehicleAPC",
+      "file": "CMU3DReduxVehicleAPC.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "541ebe6472c683d16e78e4bf8f667d661a2315cfd527bfda220da8e28eb30185",
+      "sourcePrototypes": [
+        "VehicleAPC"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleAPCCommand",
+      "label": "VehicleAPCCommand",
+      "file": "CMU3DReduxVehicleAPCCommand.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "77d11d3fb32cf076469ed6c98c718cafa2339bd41532bc49c552a7a0b86999ab",
+      "sourcePrototypes": [
+        "VehicleAPCCommand"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleAPCMed",
+      "label": "VehicleAPCMed",
+      "file": "CMU3DReduxVehicleAPCMed.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "a869b3188cb26c356fcaa1c462d315fa2e428a4dc243600811ed9c5883e8cff4",
+      "sourcePrototypes": [
+        "VehicleAPCMed"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleAPCPMC",
+      "label": "VehicleAPCPMC",
+      "file": "CMU3DReduxVehicleAPCPMC.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "afa16164826d16ce85e51c5e36e517671fd62da70041f8ef693b5fd6b19d5416",
+      "sourcePrototypes": [
+        "VehicleAPCPMC"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleAev",
+      "label": "VehicleAev",
+      "file": "CMU3DReduxVehicleAev.glb",
+      "status": "draft",
+      "parts": 23,
+      "triangles": 796,
+      "sha256": "b9b7bdde865d0d4cf908bdc8e10d0d8d8091f69817499e42e6c44e0f52424a02",
+      "sourcePrototypes": [
+        "VehicleAev"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleBlackfootDoorGunVariant",
+      "label": "VehicleBlackfootDoorGunVariant",
+      "file": "CMU3DReduxVehicleBlackfootDoorGunVariant.glb",
+      "status": "draft",
+      "parts": 16,
+      "triangles": 456,
+      "sha256": "60590474222f470382cafbe03dbfa14c9802d83007ecbdc343a76621f7fe70ee",
+      "sourcePrototypes": [
+        "VehicleBlackfootDoorGunVariant",
+        "VehicleBlackfootTransport"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleHumvee",
+      "label": "VehicleHumvee",
+      "file": "CMU3DReduxVehicleHumvee.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "e59a9e7a998b886de889918d4fa92c6a54937615229214b7a4af018e65dbbc88",
+      "sourcePrototypes": [
+        "VehicleHumvee"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeCannonMounted",
+      "label": "VehicleHumveeCannonMounted",
+      "file": "CMU3DReduxVehicleHumveeCannonMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "92bbe9854d982a6d36210ca8a74ed19c43eac4110e194fba354b2bef22e4b18d",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeLauncherMounted",
+      "label": "VehicleHumveeLauncherMounted",
+      "file": "CMU3DReduxVehicleHumveeLauncherMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "c489ef33a0bb82fa6705afeddd34e9a3c6ff2974dcac8c0742156de1c58b9aa2",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeMedical",
+      "label": "VehicleHumveeMedical",
+      "file": "CMU3DReduxVehicleHumveeMedical.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "77b28a638cc699f1f3afe55ee5edc480e54b5c20f039c43aa257d60d86f47357",
+      "sourcePrototypes": [
+        "VehicleHumveeMedical"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeTransport",
+      "label": "VehicleHumveeTransport",
+      "file": "CMU3DReduxVehicleHumveeTransport.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "14098d66e0dbd1f976576f9c1ce9df19d3cebd583159ac10b83d18bf4f238c6a",
+      "sourcePrototypes": [
+        "VehicleHumveeTransport"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeTurretMounted",
+      "label": "VehicleHumveeTurretMounted",
+      "file": "CMU3DReduxVehicleHumveeTurretMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "34ee20105121a74350d986b590e2298f6c404b782878f1679e4a5393b73e6ad1",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleLift",
+      "label": "VehicleLift",
+      "file": "CMU3DReduxVehicleLift.glb",
+      "status": "draft",
+      "parts": 4,
+      "triangles": 48,
+      "sha256": "5c87d8428005867f02b9bbf4263cbe6ea5d4358be31eae42181c74a734e2816e",
+      "sourcePrototypes": [
+        "VehicleLift"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPAPC",
+      "label": "VehicleSPPAPC",
+      "file": "CMU3DReduxVehicleSPPAPC.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "08d8953f68ca506f053f453fc3099fbbab7f409917e9aff0f496d2089a27f4fe",
+      "sourcePrototypes": [
+        "VehicleSPPAPC"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPAPCHJ35LauncherMounted",
+      "label": "VehicleSPPAPCHJ35LauncherMounted",
+      "file": "CMU3DReduxVehicleSPPAPCHJ35LauncherMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "1d022f9b6916326306e537783cc056abe488189e7617fe307a64f6baf7eb670e",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPAPCMinigunMounted",
+      "label": "VehicleSPPAPCMinigunMounted",
+      "file": "CMU3DReduxVehicleSPPAPCMinigunMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "158d36ccc9614272913b42c25a18822be6efe2d6354e07d5901093c94857565b",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPAPCTurretMounted",
+      "label": "VehicleSPPAPCTurretMounted",
+      "file": "CMU3DReduxVehicleSPPAPCTurretMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "b85939844ba123ad2af5a286c78a4854ca7cc6d7ec3b25fb4daddfb72b364cb8",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTank",
+      "label": "VehicleSPPTank",
+      "file": "CMU3DReduxVehicleSPPTank.glb",
+      "status": "draft",
+      "parts": 23,
+      "triangles": 796,
+      "sha256": "e5ef14074e67b9e402db4138b7af3fd3ffb58ffabf98ca0eaa5dd4d8b1b43c2e",
+      "sourcePrototypes": [
+        "VehicleSPPTank"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankCupolaMounted",
+      "label": "VehicleSPPTankCupolaMounted",
+      "file": "CMU3DReduxVehicleSPPTankCupolaMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "f43b44b2db30b2bdbce092c97ad0e68226d711f0901411b7bed2b7b02bc3d0f5",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankHJ35TLauncherMounted",
+      "label": "VehicleSPPTankHJ35TLauncherMounted",
+      "file": "CMU3DReduxVehicleSPPTankHJ35TLauncherMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "d712198415c0e9f75bdbcfd374bc0f068ae62d9ef2b49c1db0e177158a4803df",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankP17702Mounted",
+      "label": "VehicleSPPTankP17702Mounted",
+      "file": "CMU3DReduxVehicleSPPTankP17702Mounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "029f31b35580a014e234bc4556dd774ec7942d7e3bca6749db3730ccd0a76dcd",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankRailgunMounted",
+      "label": "VehicleSPPTankRailgunMounted",
+      "file": "CMU3DReduxVehicleSPPTankRailgunMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "a9fbc601e9e9e60601ced92aa20b71284b728f882d110a53685f2f1f8521d4f2",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankTurretMounted",
+      "label": "VehicleSPPTankTurretMounted",
+      "file": "CMU3DReduxVehicleSPPTankTurretMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "3ba2710c9f09a1a2927b0ab31d2ccf0847fef21ccfc2e85c5b0e2047f08aa9d7",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVan",
+      "label": "VehicleSPPVan",
+      "file": "CMU3DReduxVehicleSPPVan.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "ecadebff4cb33c4ef4e526c958a8004e5ede7065e862fcf012ff303399878096",
+      "sourcePrototypes": [
+        "VehicleSPPVan"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanArmed",
+      "label": "VehicleSPPVanArmed",
+      "file": "CMU3DReduxVehicleSPPVanArmed.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "b89879da00e647ed76b4cc1f3692840698b2a25de7a12db81d6c100832e30434",
+      "sourcePrototypes": [
+        "VehicleSPPVanArmed"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanCannonMounted",
+      "label": "VehicleSPPVanCannonMounted",
+      "file": "CMU3DReduxVehicleSPPVanCannonMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "dc6710c02a44661492733c653f675cdad8b28873b2155af588d0664fc9c498e8",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanLogistics",
+      "label": "VehicleSPPVanLogistics",
+      "file": "CMU3DReduxVehicleSPPVanLogistics.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "4595e06dc38a9ff13484ddda7385d43ba3cfb7b2ede59705d10f4bd2824e5a1a",
+      "sourcePrototypes": [
+        "VehicleSPPVanLogistics"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanMedical",
+      "label": "VehicleSPPVanMedical",
+      "file": "CMU3DReduxVehicleSPPVanMedical.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "b75b7c2d154d3bcefb8c7a9faaec8ae67bdb3b01959ea4259f56581b2b18677f",
+      "sourcePrototypes": [
+        "VehicleSPPVanMedical"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanPrisoner",
+      "label": "VehicleSPPVanPrisoner",
+      "file": "CMU3DReduxVehicleSPPVanPrisoner.glb",
+      "status": "draft",
+      "parts": 22,
+      "triangles": 680,
+      "sha256": "90ef2040d342b48ccf16f00873d45de291d9811d4220dde9a5e83cba9a5f0da4",
+      "sourcePrototypes": [
+        "VehicleSPPVanPrisoner"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanTurretMounted",
+      "label": "VehicleSPPVanTurretMounted",
+      "file": "CMU3DReduxVehicleSPPVanTurretMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "b60cc2c35d313a3bd27f5b757e4d5cdf69dbf20a46a265aa3b241d17811ea8a2",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTank",
+      "label": "VehicleTank",
+      "file": "CMU3DReduxVehicleTank.glb",
+      "status": "draft",
+      "parts": 23,
+      "triangles": 796,
+      "sha256": "3b9fffbfc16e2f8626afb3b41161d652af8bf5dc330fceeb183de669cb919775",
+      "sourcePrototypes": [
+        "VehicleTank"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankAceAutocannonMounted",
+      "label": "VehicleTankAceAutocannonMounted",
+      "file": "CMU3DReduxVehicleTankAceAutocannonMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 84,
+      "sha256": "8e652627f8337ea9668b72b0074012cd2598fb0e7ad868ce0b7b199228a021ea",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankAutocannonTWEMounted",
+      "label": "VehicleTankAutocannonTWEMounted",
+      "file": "CMU3DReduxVehicleTankAutocannonTWEMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "92730e762fdf45e3919644b6166a4a4dea86dd52c6ff1453749be251a36dca7a",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankCupolaTWEMounted",
+      "label": "VehicleTankCupolaTWEMounted",
+      "file": "CMU3DReduxVehicleTankCupolaTWEMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "bda0f71497ad9c3a8fe3ea193c82b957ee2e5a83564c646b82e52a3cb6f88fac",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankDragonFlamerMounted",
+      "label": "VehicleTankDragonFlamerMounted",
+      "file": "CMU3DReduxVehicleTankDragonFlamerMounted.glb",
+      "status": "draft",
+      "parts": 9,
+      "triangles": 108,
+      "sha256": "b66d176765d25c05b52116705f8920cf209eab904e8a663d6d137d1b36aa9e06",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankFlamerMounted",
+      "label": "VehicleTankFlamerMounted",
+      "file": "CMU3DReduxVehicleTankFlamerMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "1c3a225071da1da75da87a94ee64f2f2cca30975360be3b41fe028550ea6d56f",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankGrenadeLauncherMounted",
+      "label": "VehicleTankGrenadeLauncherMounted",
+      "file": "CMU3DReduxVehicleTankGrenadeLauncherMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "4bd062ca019243dd1a643f242757fe55d0f897cf4ed282bb45d3d5998d66b261",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankHeavyElectrolaserTWEMounted",
+      "label": "VehicleTankHeavyElectrolaserTWEMounted",
+      "file": "CMU3DReduxVehicleTankHeavyElectrolaserTWEMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "cb758f509a1fe16149273eca60450edbcce68cab9579ecf71ad0acd92252e203",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankLTAAAPMinigunMounted",
+      "label": "VehicleTankLTAAAPMinigunMounted",
+      "file": "CMU3DReduxVehicleTankLTAAAPMinigunMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "7408a6b3a6a7de94ea36c792520264d0815d585e1d35537cd5e732ad9cbc1c26",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankLTBCannonMounted",
+      "label": "VehicleTankLTBCannonMounted",
+      "file": "CMU3DReduxVehicleTankLTBCannonMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "c9137e31ffd3dae8f30b1fb948b3cc43dc5401c63f9541090a730a35dcd9df96",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankM56CupolaMounted",
+      "label": "VehicleTankM56CupolaMounted",
+      "file": "CMU3DReduxVehicleTankM56CupolaMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "9ec90e985a697f7a6c383048b1569ae7ca2dfe8679e68ef85ffc0971072ccc57",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankMountedFlagMounted",
+      "label": "VehicleTankMountedFlagMounted",
+      "file": "CMU3DReduxVehicleTankMountedFlagMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "8b5fb19d9a2d086bbdc8434a4587bfff5c0e43fb4064c1b849952ffae96f814e",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankPMC",
+      "label": "VehicleTankPMC",
+      "file": "CMU3DReduxVehicleTankPMC.glb",
+      "status": "draft",
+      "parts": 23,
+      "triangles": 796,
+      "sha256": "787c67d1badbf134a5b3cc79694198ab951b4d9bf5e283c687b44a9d37f4f01f",
+      "sourcePrototypes": [
+        "VehicleTankPMC"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankRERE700Mounted",
+      "label": "VehicleTankRERE700Mounted",
+      "file": "CMU3DReduxVehicleTankRERE700Mounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "eecfbdb2c82600b2382a08114cad3b6cef3d926e528467c493bd09ce9c6758f3",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankRocketLauncherTWEMounted",
+      "label": "VehicleTankRocketLauncherTWEMounted",
+      "file": "CMU3DReduxVehicleTankRocketLauncherTWEMounted.glb",
+      "status": "draft",
+      "parts": 6,
+      "triangles": 72,
+      "sha256": "0251bd0e6ea5da2f025509f9df124ff043805e2fa7ecbeca15abbb3f606e6926",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankSnowplowTWEMounted",
+      "label": "VehicleTankSnowplowTWEMounted",
+      "file": "CMU3DReduxVehicleTankSnowplowTWEMounted.glb",
+      "status": "draft",
+      "parts": 9,
+      "triangles": 108,
+      "sha256": "7bc838a49669eb42e3eb508fe04a232cdca66bf152abf4046e56cc22574ea05d",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankTWE",
+      "label": "VehicleTankTWE",
+      "file": "CMU3DReduxVehicleTankTWE.glb",
+      "status": "draft",
+      "parts": 23,
+      "triangles": 796,
+      "sha256": "c1ab9b875c471e1a7a647a90a6cf8ae92ef1706722d83b1dd0695868adde45dd",
+      "sourcePrototypes": [
+        "VehicleTankTWE"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankTurretMounted",
+      "label": "VehicleTankTurretMounted",
+      "file": "CMU3DReduxVehicleTankTurretMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "d0f86c851b57a305d03eb54b0fd926b718965c3581295053fd5c43a9224080e9",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankTurretPMCMounted",
+      "label": "VehicleTankTurretPMCMounted",
+      "file": "CMU3DReduxVehicleTankTurretPMCMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "452a54a578df04db663dda89d80f0216bf3e85b0057bfb9088fad1fa1ba60c77",
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankTurretTWEMounted",
+      "label": "VehicleTankTurretTWEMounted",
+      "file": "CMU3DReduxVehicleTankTurretTWEMounted.glb",
+      "status": "draft",
+      "parts": 7,
+      "triangles": 136,
+      "sha256": "e9ef62d0ad49e10b854de4c54c1e58efdf1083b5f436c60d3a28053a6bf72c7d",
+      "sourcePrototypes": []
+    },
+    {
       "id": "CMU3DReinforcedPlasteelBarricade",
       "label": "Reinforced plasteel barricade",
       "file": "CMU3DReinforcedPlasteelBarricade.glb",

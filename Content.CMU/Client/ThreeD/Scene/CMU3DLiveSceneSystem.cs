@@ -384,6 +384,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 }
                 var id = candidate.Meta.EntityPrototype?.ID;
                 var match = id == null ? null : _catalog!.Resolve(id);
+                match = VehicleTurretMatch(candidate.Uid, match);
                 var unsupportedState = false;
                 if (id != null && _catalog!.HasRandomSpriteVariants(id))
                 {
@@ -417,6 +418,8 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 IReadOnlyList<CMU3DModelPart>? stateParts = null;
                 var appearanceKey = string.Empty;
                 var paperOffset = Vector2.Zero;
+                if (match is { } vehicleMatch && vehicleMatch.Model.VehicleLayers.Count > 0)
+                    unsupportedState |= !TryVehicleParts(candidate.Uid, candidate.Sprite, vehicleMatch.Model, out stateParts);
                 if (match is { } paperMatch && paperMatch.Model.WallPaper)
                     unsupportedState |= !paperMatch.Exact ||
                         !TryPaperOffset(candidate.Uid, candidate.Sprite, paperMatch.Model, out paperOffset);
