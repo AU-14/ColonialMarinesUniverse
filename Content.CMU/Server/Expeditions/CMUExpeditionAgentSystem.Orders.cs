@@ -36,7 +36,7 @@ public sealed partial class CMUExpeditionAgentSystem
         !IsFriendly(uid, target) && (agent.TargetFactions.Count == 0 ||
             TryComp<NpcFactionMemberComponent>(target, out var member) && member.Factions.Any(f => agent.TargetFactions.Contains(f.Id)));
 
-    public bool OrderPosition(EntityUid uid, EntityCoordinates destination, bool entrench)
+    public bool OrderPosition(EntityUid uid, EntityCoordinates destination, bool entrench, Direction? facing = null)
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) ||
             !TrySquadCoordinates(destination, out destination) ||
@@ -45,7 +45,13 @@ public sealed partial class CMUExpeditionAgentSystem
         ResetOrders(uid, agent);
         agent.Patrolling = false;
         agent.OrderedDestination = destination;
-        agent.Entrench = entrench;
+        agent.OrderRally = destination;
+        agent.Entrench = entrench && !HasComp<CMUExpeditionMedicComponent>(uid);
+        agent.GuardAnchor = entrench ? destination : null;
+        agent.GuardFacing = facing == null ? null :
+            (facing.Value.ToAngle() - _transform.GetWorldRotation(destination.EntityId)).GetCardinalDir();
+        agent.NextWork = _timing.CurTime + TimeSpan.FromSeconds(3);
+        agent.FortificationDecision = agent.Entrench ? "awaiting-guard-position" : "not-ordered";
         agent.Target = null;
         agent.LastSeen = null;
         agent.PendingWeapon = null;
@@ -54,6 +60,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
+        ClearScavenging(uid, agent);
         ReleaseManeuver(uid, agent);
         ClearTraffic(agent);
         agent.CoveringFor = null;
@@ -64,6 +71,11 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.FightingPosition = null;
         agent.PositionCommittedUntil = TimeSpan.Zero;
         CancelWork(uid, agent);
+        agent.Entrench = false;
+        agent.GuardFacing = null;
+        agent.GuardAnchor = null;
+        agent.FortificationPoint = null;
+        agent.FortificationDecision = "not-ordered";
         CancelPlan(uid, agent, false);
         CancelTreatment(agent);
         agent.Target = null;
@@ -77,6 +89,11 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.OrderRoute.Clear();
         agent.NextOrderRoute = TimeSpan.Zero;
         agent.OrderBlocked = false;
+        agent.OrderBlockedSince = null;
+        agent.LastOrderProgressPosition = null;
+        agent.OrderRally = null;
+        agent.CohesionWaitSince = null;
+        agent.NextCohesionWait = TimeSpan.Zero;
         ClearCover(agent);
         StopSpacing(uid, agent);
         ClearThreatAssessment(agent);

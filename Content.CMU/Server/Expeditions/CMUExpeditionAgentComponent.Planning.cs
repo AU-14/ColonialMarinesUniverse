@@ -37,6 +37,12 @@ public sealed partial class CMUExpeditionAgentComponent
     public TimeSpan NextOrderRoute;
     public bool OrderBlocked;
     public bool Entrench;
+    public Direction? GuardFacing;
+    public EntityCoordinates? GuardAnchor;
+    public EntityCoordinates? FortificationPoint;
+    public Direction FortificationFacing;
+    public readonly HashSet<EntityUid> ExistingFortifications = new();
+    public string FortificationDecision = "not-ordered";
     public EntityUid? WorkItem;
     public bool PreparingWork;
     public DoAfterId? WorkDoAfter;
@@ -57,7 +63,13 @@ public sealed partial class CMUExpeditionAgentComponent
     public bool ContactFromRadio;
     public int ReportsReceived;
     public int ReportsAccepted;
-    public TimeSpan NextRadioResponse;
+    public TimeSpan NextRadioAnnouncement;
+    public EntityUid? LastAnnouncedContact;
+    public EntityCoordinates? LastAnnouncedPosition;
+    public TimeSpan LastRadioAnnouncement;
+    public EntityUid? LastSharedContact;
+    public TimeSpan LastSharedAt;
+    public int RadioCallouts;
     public string RadioDecision = "idle";
     public int Reloads;
     public int GrenadesThrown;

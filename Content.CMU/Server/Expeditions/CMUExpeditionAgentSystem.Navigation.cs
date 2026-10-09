@@ -133,7 +133,12 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.LastRouteCells = expanded;
         agent.LastRouteMilliseconds = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
         if (route == null)
-            return false;
+        {
+            if (!LocalDetour(uid, agent, destination, agent.Route, stalled: false))
+                return false;
+            agent.RouteDestination = destination;
+            return true;
+        }
         if (!BodyFits(uid, destination))
             return false;
         // Keep both endpoint cell centres available: a body offset near a wall may need to
@@ -162,6 +167,11 @@ public sealed partial class CMUExpeditionAgentSystem
             if (furthest < index)
             {
                 agent.Route.Clear();
+                if (LocalDetour(uid, agent, destination, agent.Route, stalled: false))
+                {
+                    agent.RouteDestination = destination;
+                    return true;
+                }
                 return false;
             }
             previous = points[furthest];
@@ -173,7 +183,8 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.MoveProgressAt = _timing.CurTime;
         return true;
 
-        EntityCoordinates Coordinates(int cell) => new(start.EntityId, new Vector2(origin.X + cell % size + 0.5f, origin.Y + cell / size + 0.5f));
+        EntityCoordinates Coordinates(int cell) => cell == first ? start : cell == last ? destination :
+            new(start.EntityId, new Vector2(origin.X + cell % size + 0.5f, origin.Y + cell / size + 0.5f));
         bool Walkable(int cell)
         {
             var point = Coordinates(cell);

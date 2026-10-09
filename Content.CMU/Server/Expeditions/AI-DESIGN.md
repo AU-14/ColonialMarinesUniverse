@@ -67,8 +67,10 @@ Ordered travel and tactical manoeuvres use the RMC human's 35 cm circular footpr
 continuous swept corridor, including furniture and barricade collision layers. A* edges use
 the actual body radius and smoothed segments prefer 40 cm clearance. Narrow passages retain
 individual cell stops; endpoint connections can use the actual radius beside an obstacle.
-Endpoint tile centres remain available as
-waypoints, allowing an off-centre body to align before joining the route. Within the usual
+Endpoint cells use the body's actual start and requested end positions; intermediate tile centres
+remain available as waypoints. A failed short connection or stalled leg can use a half-tile detour
+with 384 expansions, at most one local search per frame and one attempt per agent every three seconds.
+Stall recovery avoids repeating the immediate failed approach. Within the usual
 25 cm arrival band, a corner is only dequeued when the next segment is clear from the actual
 body position. Otherwise steering approaches within 5 cm of the corner. Validated segments
 use native local avoidance without a second navmesh path overriding the selected waypoints.
@@ -116,6 +118,10 @@ covering medical work cannot take a movement assignment. Readiness is checked ag
 empty or lost guns, blocked lanes, knockdown, player control, rushes, danger and emergency injury
 release the commitment. The mover stops optional travel and returns fire. Commitments last at most
 six seconds; emergency escapes and lone guards do not wait for nonexistent support.
+Covering shooters retain their visible contact during target selection, and medics defer starting
+optional work while assigned to cover a mover. Empty or obstructed firing states do not monopolize
+the cover-exposure slots. Non-emergency reloads may reserve a shooter when hard shelter is unavailable;
+the native interruptible action still consumes a compatible carried magazine or shell.
 
 New contact retains the original order route and up to two metres of its current leg for at most
 1.25 seconds, provided body clearance, threat exposure and melee separation still permit it.
@@ -160,6 +166,22 @@ Manual verification still required:
    moves, support-loss interruptions, traffic state and moving-shot counters. No cost or balance result
    is claimed from compilation.
 
+Follow-up verification for equipment and ammunition exhaustion:
+
+- Spawn `cmu-expedition-ai here 9 mixed` and confirm complete clothing, packs and exactly one initial
+  primary per member. The skirmisher must have an MP5 without an inherited scout rifle or duplicate supplies.
+- Keep a squad in contact for a minute. Expect at most five audible contact callouts, and fewer for an
+  unchanged target; received/accepted report counters should continue increasing between callouts.
+  Remove/disable headsets, use incompatible channels, leave the map or radio range, and verify that silent
+  reports stop as well. A radio report preserves the interrupted order route.
+- Empty the primary at long range with a loaded pistol in the pack. Confirm the pistol is drawn and the
+  guard seeks its usable range. Exhaust both guns, provide shelter or an actual covering shooter, then
+  check reload progress and interruption when the shooter loses its lane, is disarmed or is knocked down.
+- Deplete all carried ammunition. Check safe last-resort grenades/smoke, exclusive retrieval of a loose
+  loaded gun within four metres, rejection of living inventories/hidden/blocked guns, five-second cancellation and
+  native melee only when an enemy reaches contact distance. Orders, knockdown and player possession
+  must release retrieval claims. Existing grenade and rocket limits remain in force.
+
 Grenades are considered on initial contact with multiple enemies, or as a last resort after
 repeated failed exposures or severe pressure. Reservations cap a squad decision at two
 throwers in a two-second window; the squad then waits 35 seconds. Smoke for withdrawals and casualty recovery
@@ -180,6 +202,10 @@ armor and combat tuning; see [the command and variant guide](README.md#integrati
 `cmu-expedition-orders <map> <squad> move <x> <y>` moves it to spread positions.
 `cmu-expedition-orders here <squad> move` uses the administrator's current position.
 Replace `move` with `guard` to establish a guard area and entrench after 20 quiet seconds.
+Only that explicit order authorizes construction; spawning a squad does not. Optional guard facing
+(`auto`, `north`, `east`, `south`, `west`) follows the coordinates, or follows `guard` with `here`.
+Auto scores open approaches. Build positions remain within two tiles of the assigned guard anchor,
+with reserved spacing, a forward firing lane, a rear escape and at least one lateral exit.
 Guards use their real shovel to dig and build a mound, or nearby metal to build a native
 barricade. Construction stops on contact, injury, possession or a new order. One completed
 fortification per guard order avoids filling every nearby tile indefinitely.
@@ -187,7 +213,7 @@ fortification per guard order avoids filling every nearby tile indefinitely.
 Add 2-8 locations with `patrol-add` in place of `move`, then issue `patrol-start` without
 coordinates. `patrol-stop` holds the current area; `patrol-clear` also removes the points.
 Combat interrupts travel and the patrol resumes after contact expires. `move`/`guard` replace
-the active patrol. Explicit orders follow bounded, dry routes (2,048 cells, at most one search
+the active patrol. Explicit orders follow bounded, traversable routes (2,048 cells, at most one search
 per update), rechecking live obstruction and retrying blocked travel after three seconds.
 `cmu-expedition-ai-status <map>` displays progress and blocked orders. Long or maze-like routes
 may need intermediate waypoints; separate grids, levels and closed doors are not traversed.
@@ -216,14 +242,19 @@ weapons and bounded traversable routes. Held, stored, hidden, deleted or anchore
 retrieved. A close rush interrupts a distant retrieval, but permits picking up a reachable
 rifle. Failed pickups/routes have retry delays; ammunition is never replaced by recovery.
 
-Visible xenos (including neomorphs) and unarmed melee opponents get an urgent priority inside
-the six-metre standoff, including their projected approach over 0.65 seconds. This priority
-can break an ordinary target lock or utility action. Up to fourteen short escape corridors
-are scored against the closest six visible melee threats, terrain, hazards and squad spacing.
+Visible xenos (including neomorphs) and unarmed melee opponents trigger escape inside the six-metre
+standoff, including their projected approach over 0.65 seconds. Shooting assignments remain separate:
+allies spread fire with a short 0.6-second commitment, while an imminent contact inside 2.2 projected
+metres overrides it. Up to fourteen short escape corridors are scored against the closest six visible
+melee threats, brief last-seen snapshots, terrain, hazards and actual/planned friendly crowding.
 Committed escape steps continue while the rifle fires through the normal aim, ammo, fire-rate,
 wield and friendly-fire checks. There is no speed boost or guaranteed escape from faster aliens.
-If trapped, the guard returns fire. After sight loss it briefly holds the approach and avoids
-walking inside the remembered melee standoff; it does not track an unseen body's movement.
+If trapped, the guard returns fire. Up to eight frozen melee positions persist for three seconds
+through smoke or sight loss, without updating hidden transforms/velocities or permitting blind shots.
+Smoke is withheld while melee threats are visible/recent. Observable incoming xeno/biomorph projectiles
+can trigger a bounded lateral dodge; short-lived spray and persistent acid tiles also inform navigation.
+Hazard escape may cross the unsafe starting patch for at most 1.5 metres, but cannot re-enter hazards
+after reaching safety. It retains full body collision, native movement speed and native shot constraints.
 
 Cover anchors are rechecked against all known threats before use and at volley completion.
 A hit while waiting at an anchor invalidates that location even when geometry reports it
@@ -239,9 +270,10 @@ the same stance. A crowded exposed pair yields one guard between volleys, at mos
 three seconds. Escape destinations are reserved too; physical bodies in other squads are
 avoided without sharing their future-position reservations.
 
-Idle fortification has an explicit preparation state. Retry timers no longer lower rifles,
-and tools are only prepared when usable ground or metal is present. Newly spawned squads
-wait twenty seconds before attempting construction. The survival line in
+Idle fortification has an explicit preparation state. Retry timers do not lower rifles,
+and tools are only prepared after a guard order when usable ground or metal is present. Directional
+RMC barricades permit outward fire; their probabilistic incoming block is not hard shelter for medicine.
+The survival and fieldcraft lines in
 `cmu-expedition-ai-status here` reports weapon recovery, escape decisions, invalidated cover
 and preparation/work state.
 
@@ -414,7 +446,7 @@ into the remembered melee gap, water crossing, fire avoidance and behavior when 
 Keep firing while advancing on a squad: guards must return shots between withdrawals and
 reject an exposed or penetrable shelter instead of repeatedly waiting there. Check crowded
 groups and friendly-fire lanes. Spawn `cmu-expedition-ai here 5 rich` on both dirt and indoor
-flooring and observe idle weapon handling before/after the twenty-second construction delay.
+flooring and confirm that spawning alone never starts construction; then issue an explicit guard order.
 
 For the multiple-attacker follow-up, use two or more hostile riflemen from opposite sides,
 then a larger group from one side and a flanker from another. Add an alien rush during the
@@ -458,3 +490,46 @@ Manual verification for corner routing (not yet run; build-only follow-up):
    native slowdown should still allow progress, while fire, space and hard banks remain blocked.
 4. Record route/search timings with six guards receiving simultaneous long move orders and
    contact. Cell budgets remain bounded; runtime cost has not been measured for this change.
+
+## Guard construction, contact response and field supplies follow-up
+
+Travel/fire state no longer depends on a live steering component: a queued, stopped or failed
+movement can still return fire. A blocked firing lane under pressure permits a deliberate short
+peek; hits wake the next decision and the trigger executor. Utility actions, wielding, fire rate,
+ammunition, visible aim points and friendly-fire checks remain authoritative.
+
+Scavenging checks actual magazine-slot or ballistic compatibility and remaining ammunition. The
+four-metre, five-second claim can include loose items, accessible floor storage and a dead body's
+held items, inventory and one bag/belt layer. Living/critical bodies, locked storage, active grenades
+and unknown ordnance are rejected. HE and smoke with known native behavior can be adopted, while the
+existing squad throw budget remains unchanged. Pickups use hands and finite storage; a body/container
+search takes 0.8 seconds and a loose pickup 0.25 seconds. Loaded guards replenish only while quiet and
+without a travel order. No ammunition is fabricated or transferred from a living squadmate.
+
+Members on the same move order pause for a laggard over eight metres away and over five metres
+behind in progress. Each wait is capped at four seconds with a two-second interval. A member reporting
+blocked travel for over twelve seconds keeps its own retries but cannot permanently hold the squad.
+This is bounded cohesion assistance, not a guarantee of arrival through an unreachable map.
+
+Manual verification for this revision (not run):
+
+1. Spawn `cmu-expedition-ai here 6 mixed` on dirt and indoors. Wait thirty seconds: no mound or
+   idle shovel work should start. Issue `cmu-expedition-orders here <squad> guard north`, then
+   repeat east/south/west/auto and on a rotated grid. Check spaced native structures, their facing,
+   an open rear/lateral escape, actual material consumption and one completed structure per order.
+2. Fight from behind the new mound. Confirm outward bullets pass, incoming shots can penetrate
+   according to native chance, and the AI does not treat the mound alone as safe medical shelter.
+3. Shoot a squad mid-move, while queued and while stuck near a corner. Check prompt return fire,
+   safe lane-clearing peeks, help report delivery and resumption of the retained order after contact.
+4. Exhaust ammunition beside compatible/incompatible/full/empty magazines, shells, a dead body's
+   backpack, a locked bag and a living/critical body. Check exclusive claims, finite pickup/reload,
+   rejection of inaccessible items, storage capacity, timeout, possession and injury interruption.
+   Repeat with native HE/smoke, active grenades and unsupported ordnance.
+5. Rush from two or three directions with xenos/neomorphs, then enter smoke, die in view or retreat
+   behind walls. Check target spread, immediate contact priority, escape spacing, short memory and
+   no blind tracking/shooting. Use spit, slowing spit, spray and lingering acid; check feasible dodges,
+   unsafe-ground escape and no crossing into another acid patch or through solid cover.
+6. Order six/twelve guards past streetlights, traffic lights, furniture, trees and offset corners.
+   Add/remove a blocker and separate one member. Check half-tile detours, bounded waits/retries,
+   rejoining when possible and explicit blocked status when impossible. Repeat through RMC water
+   and during combat; record navigation cost and frame time. Compilation is not runtime validation.

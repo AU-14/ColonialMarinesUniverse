@@ -7,13 +7,11 @@ namespace Content.Server.CMU14.Expeditions;
 public sealed partial class CMUExpeditionAgentSystem
 {
     private bool CanFireWhileMoving(EntityUid uid, CMUExpeditionAgentComponent agent) =>
-        agent.PendingWeapon == null && agent.Treatment == null && agent.WorkItem == null && !agent.PreparingWork &&
+        agent.PendingWeapon == null && agent.ScavengeTarget == null && agent.Treatment == null && agent.WorkItem == null && !agent.PreparingWork &&
         (agent.Action == null || agent.Action is CMUTacticalAction.Flank or CMUTacticalAction.TakeCover) &&
         agent.State is CMUExpeditionAgentState.Guard or CMUExpeditionAgentState.Investigate or
             CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Withdraw or
-            CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.PlanMove &&
-        (TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status != SteeringStatus.NoPath ||
-            agent.TrafficWaitingSince != null && agent.TrafficActiveUntil > _timing.CurTime);
+            CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.PlanMove or CMUExpeditionAgentState.Watch;
 
     private void UpdateMovingFire(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
@@ -40,10 +38,22 @@ public sealed partial class CMUExpeditionAgentSystem
         if (!SafeShot(uid, agent, gun, point))
         {
             agent.LastFireCheck = "moving-lane-blocked";
+            agent.BlockedShotSince ??= now;
+            // A stalled travel leg must not strand a ready rifle behind a pole or ally.
+            // Escape/utility actions retain priority; ordinary contact can step out once.
+            if (agent.Action == null && agent.SpacingDestination == null &&
+                now - agent.BlockedShotSince >= TimeSpan.FromSeconds(0.3) &&
+                (now - agent.LastHit < TimeSpan.FromSeconds(1) ||
+                    !TryComp<NPCSteeringComponent>(uid, out var steering) || steering.Status != SteeringStatus.Moving))
+            {
+                if (TryAdjustPeek(uid, agent, point, now))
+                    agent.ContactDestination = null;
+            }
             return;
         }
-        // This executor does not change navigation state, unregister steering, or wait
-        // for arrival. Native gun systems still enforce wielding, recoil and fire rate.
+        agent.BlockedShotSince = null;
+        // A usable lane needs no stop or arrival. Native gun systems still enforce
+        // wielding, recoil and fire rate; only a blocked lane requests a sidestep above.
         if (TryComp<CombatModeComponent>(uid, out var combat))
             _combat.SetInCombatMode(uid, true, combat);
         var direction = _transform.ToMapCoordinates(point).Position - _transform.GetWorldPosition(uid);

@@ -23,7 +23,8 @@ public sealed partial class CMUExpeditionAgentSystem
     private EntityCoordinates? BlastPoint(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid grenade)
     {
         var opening = _timing.CurTime - agent.FirstContact < TimeSpan.FromSeconds(12);
-        var desperate = agent.RepeatedPeekHits >= 2 || agent.Stress >= 0.8f;
+        var desperate = agent.RepeatedPeekHits >= 2 || agent.Stress >= 0.8f ||
+            !_guns.TryGetGun(uid, out var gun) || WeaponAmmo(gun) == 0;
         if ((!opening && !desperate) || agent.RushTarget != null)
             return null;
         EntityCoordinates? best = null;
@@ -56,7 +57,10 @@ public sealed partial class CMUExpeditionAgentSystem
     private EntityCoordinates? SmokePoint(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid grenade,
         EntityCoordinates protectedPoint)
     {
-        if (agent.LastSeen is not { } contact || _timing.CurTime - agent.LastContact > TimeSpan.FromSeconds(2))
+        // A screen conceals charging aliens as effectively as it conceals us. Do not
+        // blind the squad while a visible/recent melee threat can close through it.
+        if (agent.MeleeThreats.Count > 0 || agent.LastContactWasMelee ||
+            agent.LastSeen is not { } contact || _timing.CurTime - agent.LastContact > TimeSpan.FromSeconds(2))
             return null;
         var origin = _transform.ToMapCoordinates(protectedPoint);
         var delta = _transform.ToMapCoordinates(contact).Position - origin.Position;

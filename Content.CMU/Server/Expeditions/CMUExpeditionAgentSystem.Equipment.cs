@@ -38,18 +38,23 @@ public sealed partial class CMUExpeditionAgentSystem
             weapon = active;
         if (weapon is not { } gun || !HasComp<GunComponent>(gun) || !Supplies(uid, out var supplies))
             return null;
-        _itemSlots.TryGetSlot(gun, "gun_magazine", out var slot);
-        TryComp<BallisticAmmoProviderComponent>(gun, out var tube);
         foreach (var item in supplies.Container.ContainedEntities)
         {
-            var ammo = new GetAmmoCountEvent();
-            RaiseLocalEvent(item, ref ammo);
-            if (slot != null && ammo.Count > 0 && _itemSlots.CanInsert(gun, slot, item, uid, swap: true) ||
-                tube != null && TryComp<CartridgeAmmoComponent>(item, out var cartridge) && !cartridge.Spent &&
-                _guns.CanInsertBallistic((gun, tube), item))
+            if (CompatibleAmmunition(uid, gun, item))
                 return item;
         }
         return null;
+    }
+
+    private bool CompatibleAmmunition(EntityUid uid, EntityUid gun, EntityUid item)
+    {
+        var ammo = new GetAmmoCountEvent();
+        RaiseLocalEvent(item, ref ammo);
+        return _itemSlots.TryGetSlot(gun, "gun_magazine", out var slot) && ammo.Count > 0 &&
+            _itemSlots.CanInsert(gun, slot, item, uid, swap: true) ||
+            TryComp<BallisticAmmoProviderComponent>(gun, out var tube) &&
+            TryComp<CartridgeAmmoComponent>(item, out var cartridge) && !cartridge.Spent &&
+            _guns.CanInsertBallistic((gun, tube), item);
     }
 
     private EntityUid? Grenade(EntityUid uid, bool smoke)
@@ -121,9 +126,10 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool StartUtility(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid item, TimeSpan delay)
     {
-        if (!_guns.TryGetGun(uid, out var gun))
+        if (agent.Action == CMUTacticalAction.Reload && !_guns.TryGetGun(uid, out _))
             return false;
-        _wield.TryUnwield(gun.Owner, uid);
+        if (_guns.TryGetGun(uid, out var gun))
+            _wield.TryUnwield(gun.Owner, uid);
         if (!_hands.TryPickupAnyHand(uid, item))
             return false;
         _steering.Unregister(uid);
@@ -132,7 +138,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             NeedHand = true, BreakOnMove = true, BreakOnDamage = true, DamageThreshold = 0.1f,
             ExtraCheck = () => _mobs.IsAlive(uid) && !HasComp<ActorComponent>(uid) && _npcs.Enabled &&
-                (agent.Action != CMUTacticalAction.Reload || TreatmentSafe(uid, agent)),
+                (agent.Action != CMUTacticalAction.Reload || ReloadSafe(uid, agent)),
         };
         return _doAfter.TryStartDoAfter(args, out agent.ActionDoAfter);
     }
@@ -151,7 +157,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         }
         var success = false;
-        if (agent.Action == CMUTacticalAction.Reload && TreatmentSafe(ent, agent) && _guns.TryGetGun(ent, out var gun) &&
+        if (agent.Action == CMUTacticalAction.Reload && ReloadSafe(ent, agent) && _guns.TryGetGun(ent, out var gun) &&
             _itemSlots.TryGetSlot(gun.Owner, "gun_magazine", out var slot) &&
             _itemSlots.CanInsert(gun, slot, item, ent, swap: true))
         {
@@ -165,7 +171,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (success)
                 agent.Reloads++;
         }
-        else if (agent.Action == CMUTacticalAction.Reload && TreatmentSafe(ent, agent) &&
+        else if (agent.Action == CMUTacticalAction.Reload && ReloadSafe(ent, agent) &&
             _guns.TryGetGun(ent, out var tubeGun) && TryComp<BallisticAmmoProviderComponent>(tubeGun, out var tube) &&
             _guns.CanInsertBallistic((tubeGun.Owner, tube), item))
         {

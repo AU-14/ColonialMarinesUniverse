@@ -38,8 +38,16 @@
     burstLimit: 3
 
 - type: startingGear
-  parent: CMUExpeditionSpecialistGear
   id: CMUExpeditionBreacherGear
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionBreacherShotgun
   storage:
@@ -74,8 +82,16 @@
     name: cmu-expedition-breacher-identity
 
 - type: startingGear
-  parent: CMUExpeditionScavengerScoutGear
   id: CMUExpeditionSkirmisherGear
+  equipment:
+    head: RMCHeadMilitiaHood
+    jumpsuit: RMCJumpsuitCLFWebbing
+    outerClothing: RMCCoatMilitiaHarness
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionSkirmisherSMG
   storage:
@@ -109,8 +125,16 @@
     name: cmu-expedition-skirmisher-identity
 
 - type: startingGear
-  parent: CMUExpeditionSpecialistGear
   id: CMUExpeditionMachinegunnerGear
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionMachineGun
   storage:
@@ -143,8 +167,16 @@
     name: cmu-expedition-machinegunner-identity
 
 - type: startingGear
-  parent: CMUExpeditionSpecialistGear
   id: CMUExpeditionVeteranGear
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionVeteranRifle
   storage:

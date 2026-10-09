@@ -33,7 +33,7 @@ ent-CMUExpeditionScavengerCautious = scavenger sentry
 cmu-expedition-raider-identity = scavenger raider
 cmu-expedition-sentry-identity = scavenger sentry
 cmu-expedition-contact-report = Contact at my last observed position. Cover the approach.
-cmu-expedition-support-response = Copy that contact. Moving to support; cover my approach.
+cmu-expedition-ai-fallback-status = Callouts={ $callouts } scavenged={ $scavenged } melee={ $strikes } retrieving={ $item }
 cmu-expedition-ai-radio-status = Radio: {$received} received / {$accepted} accepted, {$decision}, acting on radio {$radioContact}, approach {$destination}.
 cmu-expedition-ai-survival-status = Survival: weapon {$weapon}, recovered {$recovered}, spacing {$spacing} to {$destination}, rejected cover {$cover}, preparing work {$preparing}, working {$working}.
 cmu-expedition-ai-threat-status = Threats: {$enemies} visible across {$sectors} directions, {$shooters} recent shooters, crossfire {$crossfire}, repositioned {$moves}, flank responses {$responses}, other squadmates engaging this target {$assigned}.
@@ -124,6 +124,8 @@ cmu-expedition-variant-raiders = Shotgun, MP5, assault, support and medic
 cmu-expedition-variant-fireteam = AR10 veteran, M60 gunner, MP5 skirmisher, medic and marksman
 cmu-expedition-order-move = Travel to a point, resume after contact
 cmu-expedition-order-guard = Travel to a point and fortify when safe
+cmu-expedition-hint-guard-facing = Guard facing (map cardinal direction), or auto to select an open approach
+cmu-expedition-ai-fieldcraft-status = Fieldcraft: construction={ $construction }, facing={ $facing }, supplies looted={ $supplies }, hazard={ $hazard }, dodges={ $dodges }, local detours={ $detours }, order failures={ $failures }
 cmu-expedition-order-patrol-add = Add a waypoint (up to eight)
 cmu-expedition-order-patrol-start = Start looping at least two waypoints
 cmu-expedition-order-patrol-stop = Stop patrolling

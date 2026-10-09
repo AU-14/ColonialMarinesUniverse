@@ -78,6 +78,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (other == uid || !SameSquad(uid, agent, other, buddy) || !_mobs.IsAlive(other) || HasComp<ActorComponent>(other) ||
                 buddy.Target is not { } target || buddy.ContactFromRadio || now - buddy.LastContact > TimeSpan.FromSeconds(1) ||
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12) ||
+                (!buddy.MovingFire || now - buddy.LastShotAt > TimeSpan.FromSeconds(0.8)) &&
                 buddy.State is not (CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage or
                     CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.HoldAngle))
                 continue;
@@ -114,6 +115,9 @@ public sealed partial class CMUExpeditionAgentSystem
     private static void ClearThreatAssessment(CMUExpeditionAgentComponent agent)
     {
         agent.RecentShooters.Clear();
+        agent.MeleeMemory.Clear();
+        agent.RushPosition = null;
+        agent.RushTarget = null;
         agent.TargetAssignments.Clear();
         agent.ExposureScores.Clear();
         Array.Clear(agent.ThreatSectors);

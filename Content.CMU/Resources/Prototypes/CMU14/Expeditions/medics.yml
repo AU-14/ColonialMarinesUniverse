@@ -11,8 +11,16 @@
   - type: CMUExpeditionMedicalTool
 
 - type: startingGear
-  parent: CMUExpeditionSpecialistGear
   id: CMUExpeditionMedicGear
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionSMG
   storage:

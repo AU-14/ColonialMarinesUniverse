@@ -43,6 +43,16 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.PendingWeapon == null && HasCoverCommitment(uid, agent, now))
             return false;
         _guns.TryGetGun(uid, out var current);
+        if (current.Owner.IsValid() && WeaponAmmo(current) == 0)
+        {
+            // Bypass an ordinary weapon commitment once on depletion, while retaining
+            // failed-pickup/stow backoff so a blocked swap cannot become a handling loop.
+            if (agent.LastEmptyWeapon != current.Owner)
+                agent.NextWeaponChoice = now;
+            agent.LastEmptyWeapon = current.Owner;
+        }
+        else
+            agent.LastEmptyWeapon = null;
         if (agent.PendingWeapon is { } pending)
         {
             if (now < agent.WeaponSwitchAt)
@@ -56,9 +66,10 @@ public sealed partial class CMUExpeditionAgentSystem
             if (!_hands.IsHolding(uid, pending, out _) && !_hands.TryPickupAnyHand(uid, pending))
                 return false;
             if (current.Owner.IsValid() && current.Owner != pending && !StowWeapon(uid, current) &&
+                !(WeaponAmmo(current) == 0 && _hands.TryDrop(uid, current.Owner)) &&
                 HasComp<GunRequiresWieldComponent>(pending))
             {
-                // Roll back to the source slot; never discard the primary to force a swap.
+                // Roll back to the source slot rather than discard a still-loaded primary.
                 if (wasSlung)
                     _inventory.TryEquip(uid, pending, "suitStorage", silent: true);
                 else if (Supplies(uid, out var bag))
@@ -81,7 +92,7 @@ public sealed partial class CMUExpeditionAgentSystem
         if (now < agent.NextWeaponChoice)
             return false;
         agent.NextWeaponChoice = now + TimeSpan.FromSeconds(0.5);
-        var best = current.Owner.IsValid() ? WeaponScore(uid, agent, current) + 4 : -1;
+        var best = current.Owner.IsValid() ? WeaponScore(uid, agent, current) + (WeaponAmmo(current) > 0 ? 4 : 0) : -1;
         EntityUid? chosen = null;
         foreach (var weapon in CarriedWeapons(uid))
         {
@@ -119,9 +130,14 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (!Exists(weapon) || !TryComp<GunComponent>(weapon, out var gun))
             return -100;
-        if (WeaponAmmo(weapon) == 0 && (!TreatmentSafe(uid, agent) || SpareAmmunition(uid, weapon) == null))
+        var loaded = WeaponAmmo(weapon) > 0;
+        if (!loaded && SpareAmmunition(uid, weapon) == null)
             return -100;
         TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role);
+        // A loaded backup beats an empty primary. An empty but reloadable gun remains an
+        // option even in the open, where the rearm executor must find shelter or coverage.
+        if (!loaded)
+            return role?.Rocket == true ? -100 : 1;
         var score = role?.Priority ?? 20;
         if (agent.Target is not { } target || !Visible(uid, target, agent.FireRange))
             return role?.Rocket == true ? -100 : score;
@@ -130,14 +146,19 @@ public sealed partial class CMUExpeditionAgentSystem
         if (role != null)
         {
             if (distance < role.MinimumRange || distance > role.MaximumRange)
-                return -100;
+            {
+                if (role.Rocket)
+                    return -100;
+                // Select the pistol and manoeuvre into its range instead of refusing to draw it.
+                score -= 8;
+            }
             if (distance < role.CloseRange)
                 score += role.ClosePriority;
             if (role.Rocket && (!RocketOpportunity(uid, agent, target, point) ||
                 !SafeShot(uid, agent, gun, point)))
                 return -100;
         }
-        return score;
+        return Math.Max(2, score);
     }
 
     private bool RocketOpportunity(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target, EntityCoordinates point)

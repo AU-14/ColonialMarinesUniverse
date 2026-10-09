@@ -65,8 +65,7 @@
     blastRadius: 4
 
 - type: startingGear
-  id: CMUExpeditionSpecialistGear
-  abstract: true
+  id: CMUExpeditionAssaultGear
   equipment:
     head: RMCArmorHelmetMercenaryReinforced
     jumpsuit: RMCJumpsuitMercenaryHeavy
@@ -76,10 +75,6 @@
     pocket1: CMUExpeditionFieldDressing
     back: CMUExpeditionFieldPack
     ears: CMUExpeditionHeadset
-
-- type: startingGear
-  parent: CMUExpeditionSpecialistGear
-  id: CMUExpeditionAssaultGear
   inhand:
   - CMUExpeditionSMG
   storage:
@@ -108,8 +103,16 @@
     name: cmu-expedition-assault-identity
 
 - type: startingGear
-  parent: CMUExpeditionSpecialistGear
   id: CMUExpeditionSupportGear
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionSupportRifle
   storage:
@@ -140,8 +143,16 @@
     name: cmu-expedition-support-identity
 
 - type: startingGear
-  parent: CMUExpeditionSpecialistGear
   id: CMUExpeditionMarksmanGear
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
   inhand:
   - CMUExpeditionMarksmanRifle
   storage:
@@ -173,9 +184,16 @@
     name: cmu-expedition-marksman-identity
 
 - type: startingGear
-  parent: CMUExpeditionSpecialistGear
   id: CMUExpeditionRocketeerGear
   equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    ears: CMUExpeditionHeadset
     suitStorage: CMUExpeditionDisposableLauncher
   inhand:
   - CMUExpeditionSMG

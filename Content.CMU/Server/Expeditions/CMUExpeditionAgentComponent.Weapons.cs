@@ -5,6 +5,7 @@ public sealed partial class CMUExpeditionAgentComponent
     public EntityUid? PendingWeapon;
     public TimeSpan WeaponSwitchAt;
     public TimeSpan NextWeaponChoice;
+    public EntityUid? LastEmptyWeapon;
     public int WeaponSwitches;
     public int WeaponBurstLimit = int.MaxValue;
     public string WeaponDecision = "primary";
@@ -12,6 +13,13 @@ public sealed partial class CMUExpeditionAgentComponent
     public int RocketsFired;
     public string GrenadeDecision = "idle";
     public int SmokesThrown;
+    public EntityUid? ScavengeTarget;
+    public TimeSpan ScavengeUntil;
+    public TimeSpan ScavengePickupAt;
+    public TimeSpan NextScavenge;
+    public int WeaponsScavenged;
+    public int SuppliesScavenged;
+    public int LastResortStrikes;
 }
 
 /// <summary>Selection preferences for AI-owned equipment; native guns still execute every shot.</summary>
