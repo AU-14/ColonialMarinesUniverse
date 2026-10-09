@@ -1,0 +1,3937 @@
+# Source-inspected loose ground headwear; draft primitive limitations in SOURCES_HEADWEAR_EXTRA_CLOUD.md.
+- type: cmu3DModel
+  id: CMU3DAU14CivBallCapBlackWorldCloud
+  label: AU14CivBallCapBlack loose icon
+  status: draft
+  sourcePrototypes:
+  - AU14CivBallCapBlack
+  referencePrototype: AU14CivBallCapBlack
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Hats/blackballcap.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Small ball cap with offset projecting bill, open lower band, connected faceted sides and one shallow
+    continuous roof. The trucker pale front panel follows the source. Roof underside and panel seams are inferred;
+    a smooth thin concave shell is unavailable. Ground-item art only. No actor, worn, held, accessory, damaged,
+    tint or animation binding. Hidden depth and underside are inferred; native admission, saved-map fit and fidelity
+    unverified.
+  parts:
+  - label: open lower cap sweatband facet 00
+    min: 0.06305396, 0.03153812, 0.004
+    max: 0.13593791, 0.05253812, 0.032
+    color: '#181719'
+    yaw: 111.230697
+  - label: open lower cap sweatband facet 01
+    min: 0.02187768, 0.07528672, 0.004
+    max: 0.10110605, 0.09628672, 0.032
+    color: '#181719'
+    yaw: 148.714885
+  - label: open lower cap sweatband facet 02
+    min: -0.04142702, 0.0919972, 0.004
+    max: 0.04142702, 0.1129972, 0.032
+    color: '#181719'
+    yaw: 180.0
+  - label: open lower cap sweatband facet 03
+    min: -0.10110605, 0.07528672, 0.004
+    max: -0.02187768, 0.09628672, 0.032
+    color: '#181719'
+    yaw: -148.714885
+  - label: open lower cap sweatband facet 04
+    min: -0.13593791, 0.03153812, 0.004
+    max: -0.06305396, 0.05253812, 0.032
+    color: '#181719'
+    yaw: -111.230697
+  - label: open lower cap sweatband facet 05
+    min: -0.13593791, -0.02253812, 0.004
+    max: -0.06305396, -0.00153812, 0.032
+    color: '#181719'
+    yaw: -68.769303
+  - label: open lower cap sweatband facet 06
+    min: -0.10110605, -0.06628672, 0.004
+    max: -0.02187768, -0.04528672, 0.032
+    color: '#181719'
+    yaw: -31.285115
+  - label: open lower cap sweatband facet 07
+    min: -0.04142702, -0.0829972, 0.004
+    max: 0.04142702, -0.0619972, 0.032
+    color: '#181719'
+    yaw: -0.0
+  - label: open lower cap sweatband facet 08
+    min: 0.02187768, -0.06628672, 0.004
+    max: 0.10110605, -0.04528672, 0.032
+    color: '#181719'
+    yaw: 31.285115
+  - label: open lower cap sweatband facet 09
+    min: 0.06305396, -0.02253812, 0.004
+    max: 0.13593791, -0.00153812, 0.032
+    color: '#181719'
+    yaw: 68.769303
+  - label: connected cap crown panels facet 00
+    min: 0.05755215, 0.02727477, 0.025
+    max: 0.1287766, 0.05327477, 0.081
+    color: '#424242'
+    yaw: 111.2634
+  - label: connected cap crown panels facet 01
+    min: 0.01897004, 0.0681702, 0.025
+    max: 0.09618746, 0.0941702, 0.081
+    color: '#424242'
+    yaw: 148.757838
+  - label: connected cap crown panels facet 02
+    min: -0.04031989, 0.08379086, 0.025
+    max: 0.04031989, 0.10979086, 0.081
+    color: '#424242'
+    yaw: 180.0
+  - label: connected cap crown panels facet 03
+    min: -0.09618746, 0.0681702, 0.025
+    max: -0.01897004, 0.0941702, 0.081
+    color: '#424242'
+    yaw: -148.757838
+  - label: connected cap crown panels facet 04
+    min: -0.1287766, 0.02727477, 0.025
+    max: -0.05755215, 0.05327477, 0.081
+    color: '#424242'
+    yaw: -111.2634
+  - label: connected cap crown panels facet 05
+    min: -0.1287766, -0.02327477, 0.025
+    max: -0.05755215, 0.00272523, 0.081
+    color: '#424242'
+    yaw: -68.7366
+  - label: connected cap crown panels facet 06
+    min: -0.09618746, -0.0641702, 0.025
+    max: -0.01897004, -0.0381702, 0.081
+    color: '#424242'
+    yaw: -31.242162
+  - label: connected cap crown panels facet 07
+    min: -0.04031989, -0.07979086, 0.025
+    max: 0.04031989, -0.05379086, 0.081
+    color: '#424242'
+    yaw: -0.0
+  - label: connected cap crown panels facet 08
+    min: 0.01897004, -0.0641702, 0.025
+    max: 0.09618746, -0.0381702, 0.081
+    color: '#424242'
+    yaw: 31.242162
+  - label: connected cap crown panels facet 09
+    min: 0.05755215, -0.02327477, 0.025
+    max: 0.1287766, 0.00272523, 0.081
+    color: '#424242'
+    yaw: 68.7366
+  - label: continuous shallow cap roof
+    min: -0.111, -0.077, 0.064
+    max: 0.111, 0.107, 0.117
+    color: '#2F2E31'
+    shape: Ellipsoid
+  - label: broad projecting curved bill
+    min: -0.02, -0.195, 0.009
+    max: 0.166, -0.05, 0.03
+    color: '#121212'
+    shape: Ellipsoid
+    yaw: -12
+  - label: bill sewn attachment
+    min: -0.061, -0.091, 0.013
+    max: 0.107, -0.061, 0.035
+    color: '#181719'
+- type: cmu3DModel
+  id: CMU3DAU14CivBallCapBlueTruckerWorldCloud
+  label: AU14CivBallCapBlueTrucker loose icon
+  status: draft
+  sourcePrototypes:
+  - AU14CivBallCapBlueTrucker
+  referencePrototype: AU14CivBallCapBlueTrucker
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Hats/bluetruckercap.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Small ball cap with offset projecting bill, open lower band, connected faceted sides and one shallow
+    continuous roof. The trucker pale front panel follows the source. Roof underside and panel seams are inferred;
+    a smooth thin concave shell is unavailable. Ground-item art only. No actor, worn, held, accessory, damaged,
+    tint or animation binding. Hidden depth and underside are inferred; native admission, saved-map fit and fidelity
+    unverified.
+  parts:
+  - label: open lower cap sweatband facet 00
+    min: 0.06305396, 0.03153812, 0.004
+    max: 0.13593791, 0.05253812, 0.032
+    color: '#252D45'
+    yaw: 111.230697
+  - label: open lower cap sweatband facet 01
+    min: 0.02187768, 0.07528672, 0.004
+    max: 0.10110605, 0.09628672, 0.032
+    color: '#252D45'
+    yaw: 148.714885
+  - label: open lower cap sweatband facet 02
+    min: -0.04142702, 0.0919972, 0.004
+    max: 0.04142702, 0.1129972, 0.032
+    color: '#252D45'
+    yaw: 180.0
+  - label: open lower cap sweatband facet 03
+    min: -0.10110605, 0.07528672, 0.004
+    max: -0.02187768, 0.09628672, 0.032
+    color: '#252D45'
+    yaw: -148.714885
+  - label: open lower cap sweatband facet 04
+    min: -0.13593791, 0.03153812, 0.004
+    max: -0.06305396, 0.05253812, 0.032
+    color: '#252D45'
+    yaw: -111.230697
+  - label: open lower cap sweatband facet 05
+    min: -0.13593791, -0.02253812, 0.004
+    max: -0.06305396, -0.00153812, 0.032
+    color: '#252D45'
+    yaw: -68.769303
+  - label: open lower cap sweatband facet 06
+    min: -0.10110605, -0.06628672, 0.004
+    max: -0.02187768, -0.04528672, 0.032
+    color: '#252D45'
+    yaw: -31.285115
+  - label: open lower cap sweatband facet 07
+    min: -0.04142702, -0.0829972, 0.004
+    max: 0.04142702, -0.0619972, 0.032
+    color: '#252D45'
+    yaw: -0.0
+  - label: open lower cap sweatband facet 08
+    min: 0.02187768, -0.06628672, 0.004
+    max: 0.10110605, -0.04528672, 0.032
+    color: '#252D45'
+    yaw: 31.285115
+  - label: open lower cap sweatband facet 09
+    min: 0.06305396, -0.02253812, 0.004
+    max: 0.13593791, -0.00153812, 0.032
+    color: '#252D45'
+    yaw: 68.769303
+  - label: connected cap crown panels facet 00
+    min: 0.05755215, 0.02727477, 0.025
+    max: 0.1287766, 0.05327477, 0.081
+    color: '#252D45'
+    yaw: 111.2634
+  - label: connected cap crown panels facet 01
+    min: 0.01897004, 0.0681702, 0.025
+    max: 0.09618746, 0.0941702, 0.081
+    color: '#252D45'
+    yaw: 148.757838
+  - label: connected cap crown panels facet 02
+    min: -0.04031989, 0.08379086, 0.025
+    max: 0.04031989, 0.10979086, 0.081
+    color: '#252D45'
+    yaw: 180.0
+  - label: connected cap crown panels facet 03
+    min: -0.09618746, 0.0681702, 0.025
+    max: -0.01897004, 0.0941702, 0.081
+    color: '#252D45'
+    yaw: -148.757838
+  - label: connected cap crown panels facet 04
+    min: -0.1287766, 0.02727477, 0.025
+    max: -0.05755215, 0.05327477, 0.081
+    color: '#252D45'
+    yaw: -111.2634
+  - label: connected cap crown panels facet 05
+    min: -0.1287766, -0.02327477, 0.025
+    max: -0.05755215, 0.00272523, 0.081
+    color: '#252D45'
+    yaw: -68.7366
+  - label: connected cap crown panels facet 06
+    min: -0.09618746, -0.0641702, 0.025
+    max: -0.01897004, -0.0381702, 0.081
+    color: '#252D45'
+    yaw: -31.242162
+  - label: connected cap crown panels facet 07
+    min: -0.04031989, -0.07979086, 0.025
+    max: 0.04031989, -0.05379086, 0.081
+    color: '#252D45'
+    yaw: -0.0
+  - label: connected cap crown panels facet 08
+    min: 0.01897004, -0.0641702, 0.025
+    max: 0.09618746, -0.0381702, 0.081
+    color: '#252D45'
+    yaw: 31.242162
+  - label: connected cap crown panels facet 09
+    min: 0.05755215, -0.02327477, 0.025
+    max: 0.1287766, 0.00272523, 0.081
+    color: '#252D45'
+    yaw: 68.7366
+  - label: continuous shallow cap roof
+    min: -0.111, -0.077, 0.064
+    max: 0.111, 0.107, 0.117
+    color: '#515F8B'
+    shape: Ellipsoid
+  - label: broad projecting curved bill
+    min: -0.02, -0.195, 0.009
+    max: 0.166, -0.05, 0.03
+    color: '#515F8B'
+    shape: Ellipsoid
+    yaw: -12
+  - label: bill sewn attachment
+    min: -0.061, -0.091, 0.013
+    max: 0.107, -0.061, 0.035
+    color: '#252D45'
+  - label: source pale trucker front panel
+    min: -0.072, -0.087, 0.035
+    max: 0.03, -0.062, 0.08
+    color: '#CDCDCD'
+  - label: source colored rear panel
+    min: -0.102, 0.044, 0.031
+    max: 0.102, 0.089, 0.078
+    color: '#252D45'
+- type: cmu3DModel
+  id: CMU3DAU14CivBallCapRedTruckerWorldCloud
+  label: AU14CivBallCapRedTrucker loose icon
+  status: draft
+  sourcePrototypes:
+  - AU14CivBallCapRedTrucker
+  referencePrototype: AU14CivBallCapRedTrucker
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Hats/redtruckercap.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Small ball cap with offset projecting bill, open lower band, connected faceted sides and one shallow
+    continuous roof. The trucker pale front panel follows the source. Roof underside and panel seams are inferred;
+    a smooth thin concave shell is unavailable. Ground-item art only. No actor, worn, held, accessory, damaged,
+    tint or animation binding. Hidden depth and underside are inferred; native admission, saved-map fit and fidelity
+    unverified.
+  parts:
+  - label: open lower cap sweatband facet 00
+    min: 0.06305396, 0.03153812, 0.004
+    max: 0.13593791, 0.05253812, 0.032
+    color: '#6A1B1B'
+    yaw: 111.230697
+  - label: open lower cap sweatband facet 01
+    min: 0.02187768, 0.07528672, 0.004
+    max: 0.10110605, 0.09628672, 0.032
+    color: '#6A1B1B'
+    yaw: 148.714885
+  - label: open lower cap sweatband facet 02
+    min: -0.04142702, 0.0919972, 0.004
+    max: 0.04142702, 0.1129972, 0.032
+    color: '#6A1B1B'
+    yaw: 180.0
+  - label: open lower cap sweatband facet 03
+    min: -0.10110605, 0.07528672, 0.004
+    max: -0.02187768, 0.09628672, 0.032
+    color: '#6A1B1B'
+    yaw: -148.714885
+  - label: open lower cap sweatband facet 04
+    min: -0.13593791, 0.03153812, 0.004
+    max: -0.06305396, 0.05253812, 0.032
+    color: '#6A1B1B'
+    yaw: -111.230697
+  - label: open lower cap sweatband facet 05
+    min: -0.13593791, -0.02253812, 0.004
+    max: -0.06305396, -0.00153812, 0.032
+    color: '#6A1B1B'
+    yaw: -68.769303
+  - label: open lower cap sweatband facet 06
+    min: -0.10110605, -0.06628672, 0.004
+    max: -0.02187768, -0.04528672, 0.032
+    color: '#6A1B1B'
+    yaw: -31.285115
+  - label: open lower cap sweatband facet 07
+    min: -0.04142702, -0.0829972, 0.004
+    max: 0.04142702, -0.0619972, 0.032
+    color: '#6A1B1B'
+    yaw: -0.0
+  - label: open lower cap sweatband facet 08
+    min: 0.02187768, -0.06628672, 0.004
+    max: 0.10110605, -0.04528672, 0.032
+    color: '#6A1B1B'
+    yaw: 31.285115
+  - label: open lower cap sweatband facet 09
+    min: 0.06305396, -0.02253812, 0.004
+    max: 0.13593791, -0.00153812, 0.032
+    color: '#6A1B1B'
+    yaw: 68.769303
+  - label: connected cap crown panels facet 00
+    min: 0.05755215, 0.02727477, 0.025
+    max: 0.1287766, 0.05327477, 0.081
+    color: '#6A1B1B'
+    yaw: 111.2634
+  - label: connected cap crown panels facet 01
+    min: 0.01897004, 0.0681702, 0.025
+    max: 0.09618746, 0.0941702, 0.081
+    color: '#6A1B1B'
+    yaw: 148.757838
+  - label: connected cap crown panels facet 02
+    min: -0.04031989, 0.08379086, 0.025
+    max: 0.04031989, 0.10979086, 0.081
+    color: '#6A1B1B'
+    yaw: 180.0
+  - label: connected cap crown panels facet 03
+    min: -0.09618746, 0.0681702, 0.025
+    max: -0.01897004, 0.0941702, 0.081
+    color: '#6A1B1B'
+    yaw: -148.757838
+  - label: connected cap crown panels facet 04
+    min: -0.1287766, 0.02727477, 0.025
+    max: -0.05755215, 0.05327477, 0.081
+    color: '#6A1B1B'
+    yaw: -111.2634
+  - label: connected cap crown panels facet 05
+    min: -0.1287766, -0.02327477, 0.025
+    max: -0.05755215, 0.00272523, 0.081
+    color: '#6A1B1B'
+    yaw: -68.7366
+  - label: connected cap crown panels facet 06
+    min: -0.09618746, -0.0641702, 0.025
+    max: -0.01897004, -0.0381702, 0.081
+    color: '#6A1B1B'
+    yaw: -31.242162
+  - label: connected cap crown panels facet 07
+    min: -0.04031989, -0.07979086, 0.025
+    max: 0.04031989, -0.05379086, 0.081
+    color: '#6A1B1B'
+    yaw: -0.0
+  - label: connected cap crown panels facet 08
+    min: 0.01897004, -0.0641702, 0.025
+    max: 0.09618746, -0.0381702, 0.081
+    color: '#6A1B1B'
+    yaw: 31.242162
+  - label: connected cap crown panels facet 09
+    min: 0.05755215, -0.02327477, 0.025
+    max: 0.1287766, 0.00272523, 0.081
+    color: '#6A1B1B'
+    yaw: 68.7366
+  - label: continuous shallow cap roof
+    min: -0.111, -0.077, 0.064
+    max: 0.111, 0.107, 0.117
+    color: '#B03232'
+    shape: Ellipsoid
+  - label: broad projecting curved bill
+    min: -0.02, -0.195, 0.009
+    max: 0.166, -0.05, 0.03
+    color: '#B03232'
+    shape: Ellipsoid
+    yaw: -12
+  - label: bill sewn attachment
+    min: -0.061, -0.091, 0.013
+    max: 0.107, -0.061, 0.035
+    color: '#6A1B1B'
+  - label: source pale trucker front panel
+    min: -0.072, -0.087, 0.035
+    max: 0.03, -0.062, 0.08
+    color: '#CDCDCD'
+  - label: source colored rear panel
+    min: -0.102, 0.044, 0.031
+    max: 0.102, 0.089, 0.078
+    color: '#6A1B1B'
+- type: cmu3DModel
+  id: CMU3DAU14CivFedoraGrayWorldCloud
+  label: AU14CivFedoraGray loose icon
+  status: draft
+  sourcePrototypes:
+  - AU14CivFedoraGray
+  referencePrototype: AU14CivFedoraGray
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Hats/fedoragray.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Fedora with broad planar annular brim, eight connected crown panels, dark separate ribbon and a recessed
+    center roof crease. Crown concavity is faceted, not a smooth thin felt shell. Ground-item art only. No actor,
+    worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: broad flat brim facet 00
+    min: 0.18790495, -0.0393314, 0.005
+    max: 0.23400232, 0.0656686, 0.021
+    color: '#1D1B1B'
+    yaw: 98.832975
+  - label: broad flat brim facet 01
+    min: 0.17908664, -0.01350027, 0.005
+    max: 0.22660697, 0.09149973, 0.021
+    color: '#1D1B1B'
+    yaw: 115.576413
+  - label: broad flat brim facet 02
+    min: 0.16195687, 0.01083212, 0.005
+    max: 0.21193249, 0.11583212, 0.021
+    color: '#1D1B1B'
+    yaw: 130.142268
+  - label: broad flat brim facet 03
+    min: 0.13740174, 0.0327307, 0.005
+    max: 0.19031503, 0.1377307, 0.021
+    color: '#1D1B1B'
+    yaw: 142.321415
+  - label: broad flat brim facet 04
+    min: 0.10656177, 0.05135391, 0.005
+    max: 0.16238844, 0.15635391, 0.021
+    color: '#1D1B1B'
+    yaw: 152.51887
+  - label: broad flat brim facet 05
+    min: 0.07076164, 0.06598607, 0.005
+    max: 0.12908639, 0.17098607, 0.021
+    color: '#1D1B1B'
+    yaw: 161.284922
+  - label: broad flat brim facet 06
+    min: 0.0314663, 0.07606487, 0.005
+    max: 0.09159951, 0.18106487, 0.021
+    color: '#1D1B1B'
+    yaw: 169.116999
+  - label: broad flat brim facet 07
+    min: -0.00976248, 0.08120301, 0.005
+    max: 0.05131672, 0.18620301, 0.021
+    color: '#1D1B1B'
+    yaw: 176.427996
+  - label: broad flat brim facet 08
+    min: -0.05131672, 0.08120301, 0.005
+    max: 0.00976248, 0.18620301, 0.021
+    color: '#1D1B1B'
+    yaw: -176.427996
+  - label: broad flat brim facet 09
+    min: -0.09159951, 0.07606487, 0.005
+    max: -0.0314663, 0.18106487, 0.021
+    color: '#1D1B1B'
+    yaw: -169.116999
+  - label: broad flat brim facet 10
+    min: -0.12908639, 0.06598607, 0.005
+    max: -0.07076164, 0.17098607, 0.021
+    color: '#1D1B1B'
+    yaw: -161.284922
+  - label: broad flat brim facet 11
+    min: -0.16238844, 0.05135391, 0.005
+    max: -0.10656177, 0.15635391, 0.021
+    color: '#1D1B1B'
+    yaw: -152.51887
+  - label: broad flat brim facet 12
+    min: -0.19031503, 0.0327307, 0.005
+    max: -0.13740174, 0.1377307, 0.021
+    color: '#1D1B1B'
+    yaw: -142.321415
+  - label: broad flat brim facet 13
+    min: -0.21193249, 0.01083212, 0.005
+    max: -0.16195687, 0.11583212, 0.021
+    color: '#1D1B1B'
+    yaw: -130.142268
+  - label: broad flat brim facet 14
+    min: -0.22660697, -0.01350027, 0.005
+    max: -0.17908664, 0.09149973, 0.021
+    color: '#1D1B1B'
+    yaw: -115.576413
+  - label: broad flat brim facet 15
+    min: -0.23400232, -0.0393314, 0.005
+    max: -0.18790495, 0.0656686, 0.021
+    color: '#1D1B1B'
+    yaw: -98.832975
+  - label: broad flat brim facet 16
+    min: -0.23400232, -0.0656686, 0.005
+    max: -0.18790495, 0.0393314, 0.021
+    color: '#1D1B1B'
+    yaw: -81.167025
+  - label: broad flat brim facet 17
+    min: -0.22660697, -0.09149973, 0.005
+    max: -0.17908664, 0.01350027, 0.021
+    color: '#1D1B1B'
+    yaw: -64.423587
+  - label: broad flat brim facet 18
+    min: -0.21193249, -0.11583212, 0.005
+    max: -0.16195687, -0.01083212, 0.021
+    color: '#1D1B1B'
+    yaw: -49.857732
+  - label: broad flat brim facet 19
+    min: -0.19031503, -0.1377307, 0.005
+    max: -0.13740174, -0.0327307, 0.021
+    color: '#1D1B1B'
+    yaw: -37.678585
+  - label: broad flat brim facet 20
+    min: -0.16238844, -0.15635391, 0.005
+    max: -0.10656177, -0.05135391, 0.021
+    color: '#1D1B1B'
+    yaw: -27.48113
+  - label: broad flat brim facet 21
+    min: -0.12908639, -0.17098607, 0.005
+    max: -0.07076164, -0.06598607, 0.021
+    color: '#1D1B1B'
+    yaw: -18.715078
+  - label: broad flat brim facet 22
+    min: -0.09159951, -0.18106487, 0.005
+    max: -0.0314663, -0.07606487, 0.021
+    color: '#1D1B1B'
+    yaw: -10.883001
+  - label: broad flat brim facet 23
+    min: -0.05131672, -0.18620301, 0.005
+    max: 0.00976248, -0.08120301, 0.021
+    color: '#1D1B1B'
+    yaw: -3.572004
+  - label: broad flat brim facet 24
+    min: -0.00976248, -0.18620301, 0.005
+    max: 0.05131672, -0.08120301, 0.021
+    color: '#1D1B1B'
+    yaw: 3.572004
+  - label: broad flat brim facet 25
+    min: 0.0314663, -0.18106487, 0.005
+    max: 0.09159951, -0.07606487, 0.021
+    color: '#1D1B1B'
+    yaw: 10.883001
+  - label: broad flat brim facet 26
+    min: 0.07076164, -0.17098607, 0.005
+    max: 0.12908639, -0.06598607, 0.021
+    color: '#1D1B1B'
+    yaw: 18.715078
+  - label: broad flat brim facet 27
+    min: 0.10656177, -0.15635391, 0.005
+    max: 0.16238844, -0.05135391, 0.021
+    color: '#1D1B1B'
+    yaw: 27.48113
+  - label: broad flat brim facet 28
+    min: 0.13740174, -0.1377307, 0.005
+    max: 0.19031503, -0.0327307, 0.021
+    color: '#1D1B1B'
+    yaw: 37.678585
+  - label: broad flat brim facet 29
+    min: 0.16195687, -0.11583212, 0.005
+    max: 0.21193249, -0.01083212, 0.021
+    color: '#1D1B1B'
+    yaw: 49.857732
+  - label: broad flat brim facet 30
+    min: 0.17908664, -0.09149973, 0.005
+    max: 0.22660697, 0.01350027, 0.021
+    color: '#1D1B1B'
+    yaw: 64.423587
+  - label: broad flat brim facet 31
+    min: 0.18790495, -0.0656686, 0.005
+    max: 0.23400232, 0.0393314, 0.021
+    color: '#1D1B1B'
+    yaw: 81.167025
+  - label: open eight-sided crown facet 00
+    min: 0.08232912, 0.03550179, 0.014
+    max: 0.18910086, 0.06650179, 0.149
+    color: '#2E2E2D'
+    yaw: 123.63392
+  - label: open eight-sided crown facet 01
+    min: -0.0131859, 0.08500179, 0.014
+    max: 0.12561588, 0.11600179, 0.149
+    color: '#2E2E2D'
+    yaw: 165.538191
+  - label: open eight-sided crown facet 02
+    min: -0.12561588, 0.08500179, 0.014
+    max: 0.0131859, 0.11600179, 0.149
+    color: '#2E2E2D'
+    yaw: -165.538191
+  - label: open eight-sided crown facet 03
+    min: -0.18910086, 0.03550179, 0.014
+    max: -0.08232912, 0.06650179, 0.149
+    color: '#2E2E2D'
+    yaw: -123.63392
+  - label: open eight-sided crown facet 04
+    min: -0.18910086, -0.03450179, 0.014
+    max: -0.08232912, -0.00350179, 0.149
+    color: '#2E2E2D'
+    yaw: -56.36608
+  - label: open eight-sided crown facet 05
+    min: -0.12561588, -0.08400179, 0.014
+    max: 0.0131859, -0.05300179, 0.149
+    color: '#2E2E2D'
+    yaw: -14.461809
+  - label: open eight-sided crown facet 06
+    min: -0.0131859, -0.08400179, 0.014
+    max: 0.12561588, -0.05300179, 0.149
+    color: '#2E2E2D'
+    yaw: 14.461809
+  - label: open eight-sided crown facet 07
+    min: 0.08232912, -0.03450179, 0.014
+    max: 0.18910086, -0.00350179, 0.149
+    color: '#2E2E2D'
+    yaw: 56.36608
+  - label: dark woven crown ribbon facet 00
+    min: 0.08220805, 0.03420889, 0.02
+    max: 0.19263614, 0.06920889, 0.052
+    color: '#171C22'
+    yaw: 123.436026
+  - label: dark woven crown ribbon facet 01
+    min: -0.01431369, 0.08470889, 0.02
+    max: 0.12815788, 0.11970889, 0.052
+    color: '#171C22'
+    yaw: 165.433928
+  - label: dark woven crown ribbon facet 02
+    min: -0.12815788, 0.08470889, 0.02
+    max: 0.01431369, 0.11970889, 0.052
+    color: '#171C22'
+    yaw: -165.433928
+  - label: dark woven crown ribbon facet 03
+    min: -0.19263614, 0.03420889, 0.02
+    max: -0.08220805, 0.06920889, 0.052
+    color: '#171C22'
+    yaw: -123.436026
+  - label: dark woven crown ribbon facet 04
+    min: -0.19263614, -0.03720889, 0.02
+    max: -0.08220805, -0.00220889, 0.052
+    color: '#171C22'
+    yaw: -56.563974
+  - label: dark woven crown ribbon facet 05
+    min: -0.12815788, -0.08770889, 0.02
+    max: 0.01431369, -0.05270889, 0.052
+    color: '#171C22'
+    yaw: -14.566072
+  - label: dark woven crown ribbon facet 06
+    min: -0.01431369, -0.08770889, 0.02
+    max: 0.12815788, -0.05270889, 0.052
+    color: '#171C22'
+    yaw: 14.566072
+  - label: dark woven crown ribbon facet 07
+    min: 0.08220805, -0.03720889, 0.02
+    max: 0.19263614, -0.00220889, 0.052
+    color: '#171C22'
+    yaw: 56.563974
+  - label: front crown top
+    min: -0.155, -0.073, 0.137
+    max: 0.155, -0.041, 0.156
+    color: '#2E2E2D'
+  - label: rear crown top
+    min: -0.155, 0.073, 0.137
+    max: 0.155, 0.107, 0.156
+    color: '#2E2E2D'
+  - label: left creased crown roof
+    min: -0.158, -0.054, 0.139
+    max: -0.035, 0.087, 0.162
+    color: '#484645'
+    pitch: -7
+  - label: right creased crown roof
+    min: 0.035, -0.054, 0.139
+    max: 0.158, 0.087, 0.162
+    color: '#484645'
+    pitch: 7
+  - label: recessed center crown crease
+    min: -0.047, -0.055, 0.131
+    max: 0.047, 0.088, 0.146
+    color: '#2E2E2D'
+- type: cmu3DModel
+  id: CMU3DAU14CivFedoraTanWorldCloud
+  label: AU14CivFedoraTan loose icon
+  status: draft
+  sourcePrototypes:
+  - AU14CivFedoraTan
+  referencePrototype: AU14CivFedoraTan
+  referenceRsi: /Textures/CMU14/Clothing/Civilian/Hats/fedoratan.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Fedora with broad planar annular brim, eight connected crown panels, dark separate ribbon and a recessed
+    center roof crease. Crown concavity is faceted, not a smooth thin felt shell. Ground-item art only. No actor,
+    worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: broad flat brim facet 00
+    min: 0.18790495, -0.0393314, 0.005
+    max: 0.23400232, 0.0656686, 0.021
+    color: '#41382D'
+    yaw: 98.832975
+  - label: broad flat brim facet 01
+    min: 0.17908664, -0.01350027, 0.005
+    max: 0.22660697, 0.09149973, 0.021
+    color: '#41382D'
+    yaw: 115.576413
+  - label: broad flat brim facet 02
+    min: 0.16195687, 0.01083212, 0.005
+    max: 0.21193249, 0.11583212, 0.021
+    color: '#41382D'
+    yaw: 130.142268
+  - label: broad flat brim facet 03
+    min: 0.13740174, 0.0327307, 0.005
+    max: 0.19031503, 0.1377307, 0.021
+    color: '#41382D'
+    yaw: 142.321415
+  - label: broad flat brim facet 04
+    min: 0.10656177, 0.05135391, 0.005
+    max: 0.16238844, 0.15635391, 0.021
+    color: '#41382D'
+    yaw: 152.51887
+  - label: broad flat brim facet 05
+    min: 0.07076164, 0.06598607, 0.005
+    max: 0.12908639, 0.17098607, 0.021
+    color: '#41382D'
+    yaw: 161.284922
+  - label: broad flat brim facet 06
+    min: 0.0314663, 0.07606487, 0.005
+    max: 0.09159951, 0.18106487, 0.021
+    color: '#41382D'
+    yaw: 169.116999
+  - label: broad flat brim facet 07
+    min: -0.00976248, 0.08120301, 0.005
+    max: 0.05131672, 0.18620301, 0.021
+    color: '#41382D'
+    yaw: 176.427996
+  - label: broad flat brim facet 08
+    min: -0.05131672, 0.08120301, 0.005
+    max: 0.00976248, 0.18620301, 0.021
+    color: '#41382D'
+    yaw: -176.427996
+  - label: broad flat brim facet 09
+    min: -0.09159951, 0.07606487, 0.005
+    max: -0.0314663, 0.18106487, 0.021
+    color: '#41382D'
+    yaw: -169.116999
+  - label: broad flat brim facet 10
+    min: -0.12908639, 0.06598607, 0.005
+    max: -0.07076164, 0.17098607, 0.021
+    color: '#41382D'
+    yaw: -161.284922
+  - label: broad flat brim facet 11
+    min: -0.16238844, 0.05135391, 0.005
+    max: -0.10656177, 0.15635391, 0.021
+    color: '#41382D'
+    yaw: -152.51887
+  - label: broad flat brim facet 12
+    min: -0.19031503, 0.0327307, 0.005
+    max: -0.13740174, 0.1377307, 0.021
+    color: '#41382D'
+    yaw: -142.321415
+  - label: broad flat brim facet 13
+    min: -0.21193249, 0.01083212, 0.005
+    max: -0.16195687, 0.11583212, 0.021
+    color: '#41382D'
+    yaw: -130.142268
+  - label: broad flat brim facet 14
+    min: -0.22660697, -0.01350027, 0.005
+    max: -0.17908664, 0.09149973, 0.021
+    color: '#41382D'
+    yaw: -115.576413
+  - label: broad flat brim facet 15
+    min: -0.23400232, -0.0393314, 0.005
+    max: -0.18790495, 0.0656686, 0.021
+    color: '#41382D'
+    yaw: -98.832975
+  - label: broad flat brim facet 16
+    min: -0.23400232, -0.0656686, 0.005
+    max: -0.18790495, 0.0393314, 0.021
+    color: '#41382D'
+    yaw: -81.167025
+  - label: broad flat brim facet 17
+    min: -0.22660697, -0.09149973, 0.005
+    max: -0.17908664, 0.01350027, 0.021
+    color: '#41382D'
+    yaw: -64.423587
+  - label: broad flat brim facet 18
+    min: -0.21193249, -0.11583212, 0.005
+    max: -0.16195687, -0.01083212, 0.021
+    color: '#41382D'
+    yaw: -49.857732
+  - label: broad flat brim facet 19
+    min: -0.19031503, -0.1377307, 0.005
+    max: -0.13740174, -0.0327307, 0.021
+    color: '#41382D'
+    yaw: -37.678585
+  - label: broad flat brim facet 20
+    min: -0.16238844, -0.15635391, 0.005
+    max: -0.10656177, -0.05135391, 0.021
+    color: '#41382D'
+    yaw: -27.48113
+  - label: broad flat brim facet 21
+    min: -0.12908639, -0.17098607, 0.005
+    max: -0.07076164, -0.06598607, 0.021
+    color: '#41382D'
+    yaw: -18.715078
+  - label: broad flat brim facet 22
+    min: -0.09159951, -0.18106487, 0.005
+    max: -0.0314663, -0.07606487, 0.021
+    color: '#41382D'
+    yaw: -10.883001
+  - label: broad flat brim facet 23
+    min: -0.05131672, -0.18620301, 0.005
+    max: 0.00976248, -0.08120301, 0.021
+    color: '#41382D'
+    yaw: -3.572004
+  - label: broad flat brim facet 24
+    min: -0.00976248, -0.18620301, 0.005
+    max: 0.05131672, -0.08120301, 0.021
+    color: '#41382D'
+    yaw: 3.572004
+  - label: broad flat brim facet 25
+    min: 0.0314663, -0.18106487, 0.005
+    max: 0.09159951, -0.07606487, 0.021
+    color: '#41382D'
+    yaw: 10.883001
+  - label: broad flat brim facet 26
+    min: 0.07076164, -0.17098607, 0.005
+    max: 0.12908639, -0.06598607, 0.021
+    color: '#41382D'
+    yaw: 18.715078
+  - label: broad flat brim facet 27
+    min: 0.10656177, -0.15635391, 0.005
+    max: 0.16238844, -0.05135391, 0.021
+    color: '#41382D'
+    yaw: 27.48113
+  - label: broad flat brim facet 28
+    min: 0.13740174, -0.1377307, 0.005
+    max: 0.19031503, -0.0327307, 0.021
+    color: '#41382D'
+    yaw: 37.678585
+  - label: broad flat brim facet 29
+    min: 0.16195687, -0.11583212, 0.005
+    max: 0.21193249, -0.01083212, 0.021
+    color: '#41382D'
+    yaw: 49.857732
+  - label: broad flat brim facet 30
+    min: 0.17908664, -0.09149973, 0.005
+    max: 0.22660697, 0.01350027, 0.021
+    color: '#41382D'
+    yaw: 64.423587
+  - label: broad flat brim facet 31
+    min: 0.18790495, -0.0656686, 0.005
+    max: 0.23400232, 0.0393314, 0.021
+    color: '#41382D'
+    yaw: 81.167025
+  - label: open eight-sided crown facet 00
+    min: 0.08232912, 0.03550179, 0.014
+    max: 0.18910086, 0.06650179, 0.149
+    color: '#5E5240'
+    yaw: 123.63392
+  - label: open eight-sided crown facet 01
+    min: -0.0131859, 0.08500179, 0.014
+    max: 0.12561588, 0.11600179, 0.149
+    color: '#5E5240'
+    yaw: 165.538191
+  - label: open eight-sided crown facet 02
+    min: -0.12561588, 0.08500179, 0.014
+    max: 0.0131859, 0.11600179, 0.149
+    color: '#5E5240'
+    yaw: -165.538191
+  - label: open eight-sided crown facet 03
+    min: -0.18910086, 0.03550179, 0.014
+    max: -0.08232912, 0.06650179, 0.149
+    color: '#5E5240'
+    yaw: -123.63392
+  - label: open eight-sided crown facet 04
+    min: -0.18910086, -0.03450179, 0.014
+    max: -0.08232912, -0.00350179, 0.149
+    color: '#5E5240'
+    yaw: -56.36608
+  - label: open eight-sided crown facet 05
+    min: -0.12561588, -0.08400179, 0.014
+    max: 0.0131859, -0.05300179, 0.149
+    color: '#5E5240'
+    yaw: -14.461809
+  - label: open eight-sided crown facet 06
+    min: -0.0131859, -0.08400179, 0.014
+    max: 0.12561588, -0.05300179, 0.149
+    color: '#5E5240'
+    yaw: 14.461809
+  - label: open eight-sided crown facet 07
+    min: 0.08232912, -0.03450179, 0.014
+    max: 0.18910086, -0.00350179, 0.149
+    color: '#5E5240'
+    yaw: 56.36608
+  - label: dark woven crown ribbon facet 00
+    min: 0.08220805, 0.03420889, 0.02
+    max: 0.19263614, 0.06920889, 0.052
+    color: '#382C24'
+    yaw: 123.436026
+  - label: dark woven crown ribbon facet 01
+    min: -0.01431369, 0.08470889, 0.02
+    max: 0.12815788, 0.11970889, 0.052
+    color: '#382C24'
+    yaw: 165.433928
+  - label: dark woven crown ribbon facet 02
+    min: -0.12815788, 0.08470889, 0.02
+    max: 0.01431369, 0.11970889, 0.052
+    color: '#382C24'
+    yaw: -165.433928
+  - label: dark woven crown ribbon facet 03
+    min: -0.19263614, 0.03420889, 0.02
+    max: -0.08220805, 0.06920889, 0.052
+    color: '#382C24'
+    yaw: -123.436026
+  - label: dark woven crown ribbon facet 04
+    min: -0.19263614, -0.03720889, 0.02
+    max: -0.08220805, -0.00220889, 0.052
+    color: '#382C24'
+    yaw: -56.563974
+  - label: dark woven crown ribbon facet 05
+    min: -0.12815788, -0.08770889, 0.02
+    max: 0.01431369, -0.05270889, 0.052
+    color: '#382C24'
+    yaw: -14.566072
+  - label: dark woven crown ribbon facet 06
+    min: -0.01431369, -0.08770889, 0.02
+    max: 0.12815788, -0.05270889, 0.052
+    color: '#382C24'
+    yaw: 14.566072
+  - label: dark woven crown ribbon facet 07
+    min: 0.08220805, -0.03720889, 0.02
+    max: 0.19263614, -0.00220889, 0.052
+    color: '#382C24'
+    yaw: 56.563974
+  - label: front crown top
+    min: -0.155, -0.073, 0.137
+    max: 0.155, -0.041, 0.156
+    color: '#5E5240'
+  - label: rear crown top
+    min: -0.155, 0.073, 0.137
+    max: 0.155, 0.107, 0.156
+    color: '#5E5240'
+  - label: left creased crown roof
+    min: -0.158, -0.054, 0.139
+    max: -0.035, 0.087, 0.162
+    color: '#82715E'
+    pitch: -7
+  - label: right creased crown roof
+    min: 0.035, -0.054, 0.139
+    max: 0.158, 0.087, 0.162
+    color: '#82715E'
+    pitch: 7
+  - label: recessed center crown crease
+    min: -0.047, -0.055, 0.131
+    max: 0.047, 0.088, 0.146
+    color: '#5E5240'
+- type: cmu3DModel
+  id: CMU3DAU14GogglesM1A1OrangeBallisticWorldCloud
+  label: AU14GogglesM1A1OrangeBallistic loose icon
+  status: draft
+  sourcePrototypes:
+  - AU14GogglesM1A1OrangeBallistic
+  referencePrototype: AU14GogglesM1A1OrangeBallistic
+  referenceRsi: /Textures/CMU14/Clothing/Goggles/m1a1orange.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Orange ballistic goggles face-up with a connected angular wrap frame, wide joined upper amber lens,
+    split lower lenses leaving nose clearance and strap ends. Opaque source colors retained; optical transmission,
+    worn and helmet accessory overlays are not inferred. Ground-item art only. No actor, worn, held, accessory,
+    damaged, tint or animation binding. Hidden depth and underside are inferred; native admission, saved-map fit
+    and fidelity unverified.
+  parts:
+  - label: continuous angular goggle frame 00
+    min: -0.22275, 0.14453125, 0.012
+    max: 0.2165, 0.18671875, 0.068
+    color: '#2F3333'
+  - label: continuous angular goggle frame 01
+    min: 0.19745487, 0.11484375, 0.012
+    max: 0.29629513, 0.15703125, 0.068
+    color: '#2F3333'
+    yaw: -40.815084
+  - label: continuous angular goggle frame 02
+    min: 0.2038125, 0.01171875, 0.012
+    max: 0.3586875, 0.05390625, 0.068
+    color: '#2F3333'
+    yaw: -90.0
+  - label: continuous angular goggle frame 03
+    min: 0.20772641, -0.08828125, 0.012
+    max: 0.29539859, -0.04609375, 0.068
+    color: '#2F3333'
+    yaw: -138.17983
+  - label: continuous angular goggle frame 04
+    min: 0.055375, -0.11484375, 0.012
+    max: 0.225875, -0.07265625, 0.068
+    color: '#2F3333'
+    yaw: 180.0
+  - label: continuous angular goggle frame 05
+    min: 0.00784924, -0.08984375, 0.012
+    max: 0.07652576, -0.04765625, 0.068
+    color: '#2F3333'
+    yaw: 124.508523
+  - label: continuous angular goggle frame 06
+    min: -0.029, -0.06484375, 0.012
+    max: 0.029, -0.02265625, 0.068
+    color: '#2F3333'
+    yaw: 180.0
+  - label: continuous angular goggle frame 07
+    min: -0.079, -0.08984375, 0.012
+    max: -0.0085, -0.04765625, 0.068
+    color: '#2F3333'
+    yaw: -126.869898
+  - label: continuous angular goggle frame 08
+    min: -0.23525, -0.11484375, 0.012
+    max: -0.0585, -0.07265625, 0.068
+    color: '#2F3333'
+    yaw: 180.0
+  - label: continuous angular goggle frame 09
+    min: -0.30049818, -0.08671875, 0.012
+    max: -0.21512682, -0.04453125, 0.068
+    color: '#2F3333'
+    yaw: 133.363423
+  - label: continuous angular goggle frame 10
+    min: -0.354, 0.00703125, 0.012
+    max: -0.21475, 0.04921875, 0.068
+    color: '#2F3333'
+    yaw: 90.0
+  - label: continuous angular goggle frame 11
+    min: -0.30422629, 0.10859375, 0.012
+    max: -0.19889871, 0.15078125, 0.068
+    color: '#2F3333'
+    yaw: 47.602562
+  - label: wide joined upper amber lens
+    min: -0.2375, 0.0015625, 0.027
+    max: 0.2375, 0.134375, 0.048
+    color: '#934A1E'
+  - label: left separate lower amber lens
+    min: -0.240625, -0.071875, 0.027
+    max: -0.040625, 0.009375, 0.05
+    color: '#934A1E'
+  - label: left source lower amber shade
+    min: -0.2328125, -0.0703125, 0.045
+    max: -0.046875, -0.015625, 0.053
+    color: '#E35C00'
+  - label: right separate lower amber lens
+    min: 0.040625, -0.071875, 0.027
+    max: 0.2375, 0.009375, 0.05
+    color: '#934A1E'
+  - label: right source lower amber shade
+    min: 0.0484375, -0.0703125, 0.045
+    max: 0.23125, -0.015625, 0.053
+    color: '#E35C00'
+  - label: source upper protective brow
+    min: -0.215625, 0.13125, 0.025
+    max: 0.209375, 0.1734375, 0.071
+    color: '#2A2E2A'
+  - label: raised protective nose bridge
+    min: -0.0453125, -0.0453125, 0.028
+    max: 0.0453125, 0.003125, 0.065
+    color: '#2F3333'
+  - label: left attached strap
+    min: -0.33898167, -0.0078125, 0.021
+    max: -0.22976833, 0.0328125, 0.045
+    color: '#0F100C'
+    yaw: -98.880659
+  - label: right outward strap
+    min: 0.24770153, 0.0046875, 0.019
+    max: 0.39604847, 0.0609375, 0.042
+    color: '#2E1E15'
+    yaw: -11.560131
+- type: cmu3DModel
+  id: CMU3DAU14HatUSArmyWorldCloud
+  label: AU14HatUSArmy loose icon
+  status: draft
+  sourcePrototypes:
+  - AU14HatUSArmy
+  referencePrototype: AU14HatUSArmy
+  referenceRsi: /Textures/CMU14/Clothing/US_Army/Hats/cavalry.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Small dark cavalry hat with connected open crown, turned annular brim, gold cord and original gold
+    front badge. Faceted sides and a shallow closed roof are a primitive approximation. Ground-item art only. No
+    actor, worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native
+    admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: turned cavalry brim facet 00
+    min: 0.1081953, -0.0, 0.006
+    max: 0.18850274, 0.052, 0.022
+    color: '#394042'
+    yaw: 112.276611
+  - label: turned cavalry brim facet 01
+    min: 0.06177137, 0.04503332, 0.006
+    max: 0.15542667, 0.09703332, 0.022
+    color: '#394042'
+    yaw: 146.81178
+  - label: turned cavalry brim facet 02
+    min: -0.01266256, 0.07103332, 0.006
+    max: 0.09216256, 0.12303332, 0.022
+    color: '#394042'
+    yaw: 170.059169
+  - label: turned cavalry brim facet 03
+    min: -0.09216256, 0.07103332, 0.006
+    max: 0.01266256, 0.12303332, 0.022
+    color: '#394042'
+    yaw: -170.059169
+  - label: turned cavalry brim facet 04
+    min: -0.15542667, 0.04503332, 0.006
+    max: -0.06177137, 0.09703332, 0.022
+    color: '#394042'
+    yaw: -146.81178
+  - label: turned cavalry brim facet 05
+    min: -0.18850274, 0.0, 0.006
+    max: -0.1081953, 0.052, 0.022
+    color: '#394042'
+    yaw: -112.276611
+  - label: turned cavalry brim facet 06
+    min: -0.18850274, -0.052, 0.006
+    max: -0.1081953, 0.0, 0.022
+    color: '#394042'
+    yaw: -67.723389
+  - label: turned cavalry brim facet 07
+    min: -0.15542667, -0.09703332, 0.006
+    max: -0.06177137, -0.04503332, 0.022
+    color: '#394042'
+    yaw: -33.18822
+  - label: turned cavalry brim facet 08
+    min: -0.09216256, -0.12303332, 0.006
+    max: 0.01266256, -0.07103332, 0.022
+    color: '#394042'
+    yaw: -9.940831
+  - label: turned cavalry brim facet 09
+    min: -0.01266256, -0.12303332, 0.006
+    max: 0.09216256, -0.07103332, 0.022
+    color: '#394042'
+    yaw: 9.940831
+  - label: turned cavalry brim facet 10
+    min: 0.06177137, -0.09703332, 0.006
+    max: 0.15542667, -0.04503332, 0.022
+    color: '#394042'
+    yaw: 33.18822
+  - label: turned cavalry brim facet 11
+    min: 0.1081953, -0.052, 0.006
+    max: 0.18850274, -0.0, 0.022
+    color: '#394042'
+    yaw: 67.723389
+  - label: hollow cavalry crown facet 00
+    min: 0.03428642, 0.02533452, 0.018
+    max: 0.10569634, 0.04933452, 0.138
+    color: '#394042'
+    yaw: 117.231663
+  - label: hollow cavalry crown facet 01
+    min: -0.01103048, 0.05833452, 0.018
+    max: 0.06901324, 0.08233452, 0.138
+    color: '#394042'
+    yaw: 161.562057
+  - label: hollow cavalry crown facet 02
+    min: -0.06901324, 0.05833452, 0.018
+    max: 0.01103048, 0.08233452, 0.138
+    color: '#394042'
+    yaw: -161.562057
+  - label: hollow cavalry crown facet 03
+    min: -0.10569634, 0.02533452, 0.018
+    max: -0.03428642, 0.04933452, 0.138
+    color: '#394042'
+    yaw: -117.231663
+  - label: hollow cavalry crown facet 04
+    min: -0.10569634, -0.02133452, 0.018
+    max: -0.03428642, 0.00266548, 0.138
+    color: '#394042'
+    yaw: -62.768337
+  - label: hollow cavalry crown facet 05
+    min: -0.06901324, -0.05433452, 0.018
+    max: 0.01103048, -0.03033452, 0.138
+    color: '#394042'
+    yaw: -18.437943
+  - label: hollow cavalry crown facet 06
+    min: -0.01103048, -0.05433452, 0.018
+    max: 0.06901324, -0.03033452, 0.138
+    color: '#394042'
+    yaw: 18.437943
+  - label: hollow cavalry crown facet 07
+    min: 0.03428642, -0.02133452, 0.018
+    max: 0.10569634, 0.00266548, 0.138
+    color: '#394042'
+    yaw: 62.768337
+  - label: cavalry crown closed roof
+    min: -0.084, -0.052, 0.127
+    max: 0.084, 0.08, 0.148
+    color: '#394042'
+    shape: Ellipsoid
+  - label: gold cavalry cord facet 00
+    min: 0.05461601, 0.02375, 0.03
+    max: 0.10213013, 0.03875, 0.046
+    color: '#B48A26'
+    yaw: 108.066275
+  - label: gold cavalry cord facet 01
+    min: 0.03186598, 0.05362788, 0.03
+    max: 0.08288016, 0.06862788, 0.046
+    color: '#B48A26'
+    yaw: 140.599339
+  - label: gold cavalry cord facet 02
+    min: -0.00611516, 0.07087788, 0.03
+    max: 0.04811516, 0.08587788, 0.046
+    color: '#B48A26'
+    yaw: 167.587055
+  - label: gold cavalry cord facet 03
+    min: -0.04811516, 0.07087788, 0.03
+    max: 0.00611516, 0.08587788, 0.046
+    color: '#B48A26'
+    yaw: -167.587055
+  - label: gold cavalry cord facet 04
+    min: -0.08288016, 0.05362788, 0.03
+    max: -0.03186598, 0.06862788, 0.046
+    color: '#B48A26'
+    yaw: -140.599339
+  - label: gold cavalry cord facet 05
+    min: -0.10213013, 0.02375, 0.03
+    max: -0.05461601, 0.03875, 0.046
+    color: '#B48A26'
+    yaw: -108.066275
+  - label: gold cavalry cord facet 06
+    min: -0.10213013, -0.01075, 0.03
+    max: -0.05461601, 0.00425, 0.046
+    color: '#B48A26'
+    yaw: -71.933725
+  - label: gold cavalry cord facet 07
+    min: -0.08288016, -0.04062788, 0.03
+    max: -0.03186598, -0.02562788, 0.046
+    color: '#B48A26'
+    yaw: -39.400661
+  - label: gold cavalry cord facet 08
+    min: -0.04811516, -0.05787788, 0.03
+    max: 0.00611516, -0.04287788, 0.046
+    color: '#B48A26'
+    yaw: -12.412945
+  - label: gold cavalry cord facet 09
+    min: -0.00611516, -0.05787788, 0.03
+    max: 0.04811516, -0.04287788, 0.046
+    color: '#B48A26'
+    yaw: 12.412945
+  - label: gold cavalry cord facet 10
+    min: 0.03186598, -0.04062788, 0.03
+    max: 0.08288016, -0.02562788, 0.046
+    color: '#B48A26'
+    yaw: 39.400661
+  - label: gold cavalry cord facet 11
+    min: 0.05461601, -0.01075, 0.03
+    max: 0.10213013, 0.00425, 0.046
+    color: '#B48A26'
+    yaw: 71.933725
+  - label: original gold front badge
+    min: -0.017, -0.075, 0.062
+    max: 0.017, -0.062, 0.095
+    color: '#FFFFFF'
+    surface: CMU3DHeadwearExtraCloudArt000
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DAU14UNISCBeretWorldCloud
+  label: AU14UNISCBeret loose icon
+  status: draft
+  sourcePrototypes:
+  - AU14UNISCBeret
+  referencePrototype: AU14UNISCBeret
+  referenceRsi: /Textures/CMU14/Clothing/UNISC/beret.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Loose beret with one smooth slumped convex crown and a connected open lower band. The upper crown
+    is a shallow solid approximation; a complete thin concave cloth shell is outside the primitive contract. Original
+    tiny insignia retained where present. Ground-item art only. No actor, worn, held, accessory, damaged, tint or
+    animation binding. Hidden depth and underside are inferred; native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: open underside felt band facet 00
+    min: 0.06795358, 0.04854687, 0.004
+    max: 0.11198029, 0.06654687, 0.035
+    color: '#21313F'
+    yaw: 115.789233
+  - label: open underside felt band facet 01
+    min: 0.03646978, 0.07330979, 0.004
+    max: 0.09190159, 0.09130979, 0.035
+    color: '#21313F'
+    yaw: 150.98964
+  - label: open underside felt band facet 02
+    min: -0.01266806, 0.08760666, 0.004
+    max: 0.05173056, 0.10560666, 0.035
+    color: '#21313F'
+    yaw: 171.54826
+  - label: open underside felt band facet 03
+    min: -0.06423056, 0.08760666, 0.004
+    max: 0.00016806, 0.10560666, 0.035
+    color: '#21313F'
+    yaw: -171.54826
+  - label: open underside felt band facet 04
+    min: -0.10440159, 0.07330979, 0.004
+    max: -0.04896978, 0.09130979, 0.035
+    color: '#21313F'
+    yaw: -150.98964
+  - label: open underside felt band facet 05
+    min: -0.12448029, 0.04854687, 0.004
+    max: -0.08045358, 0.06654687, 0.035
+    color: '#21313F'
+    yaw: -115.789233
+  - label: open underside felt band facet 06
+    min: -0.12448029, 0.01995313, 0.004
+    max: -0.08045358, 0.03795313, 0.035
+    color: '#21313F'
+    yaw: -64.210767
+  - label: open underside felt band facet 07
+    min: -0.10440159, -0.00480979, 0.004
+    max: -0.04896978, 0.01319021, 0.035
+    color: '#21313F'
+    yaw: -29.01036
+  - label: open underside felt band facet 08
+    min: -0.06423056, -0.01910666, 0.004
+    max: 0.00016806, -0.00110666, 0.035
+    color: '#21313F'
+    yaw: -8.45174
+  - label: open underside felt band facet 09
+    min: -0.01266806, -0.01910666, 0.004
+    max: 0.05173056, -0.00110666, 0.035
+    color: '#21313F'
+    yaw: 8.45174
+  - label: open underside felt band facet 10
+    min: 0.03646978, -0.00480979, 0.004
+    max: 0.09190159, 0.01319021, 0.035
+    color: '#21313F'
+    yaw: 29.01036
+  - label: open underside felt band facet 11
+    min: 0.06795358, 0.01995312, 0.004
+    max: 0.11198029, 0.03795312, 0.035
+    color: '#21313F'
+    yaw: 64.210767
+  - label: continuous slumped felt crown
+    min: -0.1875, -0.0625, 0.028
+    max: 0.125, 0.125, 0.089
+    color: '#466987'
+    shape: Ellipsoid
+    yaw: -15
+  - label: subtle broad upper cloth fold
+    min: -0.109375, -0.00625, 0.074
+    max: 0.05, 0.070625, 0.093
+    color: '#466987'
+    shape: Ellipsoid
+    yaw: 20
+  - label: original UNISC badge
+    min: -0.01625, 0.03025, 0.079
+    max: 0.04575, 0.06225, 0.095
+    color: '#FFFFFF'
+    surface: CMU3DHeadwearExtraCloudArt001
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DAU14USASFSECFORBeretWorldCloud
+  label: AU14USASFSECFORBeret loose icon
+  status: draft
+  sourcePrototypes:
+  - AU14USASFSECFORBeret
+  referencePrototype: AU14USASFSECFORBeret
+  referenceRsi: /Textures/CMU14/Clothing/USASFSecurityForces/beret.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Loose beret with one smooth slumped convex crown and a connected open lower band. The upper crown
+    is a shallow solid approximation; a complete thin concave cloth shell is outside the primitive contract. Original
+    tiny insignia retained where present. Ground-item art only. No actor, worn, held, accessory, damaged, tint or
+    animation binding. Hidden depth and underside are inferred; native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: open underside felt band facet 00
+    min: 0.113116, 0.01358594, 0.004
+    max: 0.18227819, 0.03158594, 0.035
+    color: '#1C1C1C'
+    yaw: 112.864692
+  - label: open underside felt band facet 01
+    min: 0.06453453, 0.05898461, 0.004
+    max: 0.14835966, 0.07698461, 0.035
+    color: '#1C1C1C'
+    yaw: 147.567443
+  - label: open underside felt band facet 02
+    min: -0.01297862, 0.08519555, 0.004
+    max: 0.08297862, 0.10319555, 0.035
+    color: '#1C1C1C'
+    yaw: 170.337511
+  - label: open underside felt band facet 03
+    min: -0.09547862, 0.08519555, 0.004
+    max: 0.00047862, 0.10319555, 0.035
+    color: '#1C1C1C'
+    yaw: -170.337511
+  - label: open underside felt band facet 04
+    min: -0.16085966, 0.05898461, 0.004
+    max: -0.07703453, 0.07698461, 0.035
+    color: '#1C1C1C'
+    yaw: -147.567443
+  - label: open underside felt band facet 05
+    min: -0.19477819, 0.01358594, 0.004
+    max: -0.125616, 0.03158594, 0.035
+    color: '#1C1C1C'
+    yaw: -112.864692
+  - label: open underside felt band facet 06
+    min: -0.19477819, -0.03883594, 0.004
+    max: -0.125616, -0.02083594, 0.035
+    color: '#1C1C1C'
+    yaw: -67.135308
+  - label: open underside felt band facet 07
+    min: -0.16085966, -0.08423461, 0.004
+    max: -0.07703453, -0.06623461, 0.035
+    color: '#1C1C1C'
+    yaw: -32.432557
+  - label: open underside felt band facet 08
+    min: -0.09547862, -0.11044555, 0.004
+    max: 0.00047862, -0.09244555, 0.035
+    color: '#1C1C1C'
+    yaw: -9.662489
+  - label: open underside felt band facet 09
+    min: -0.01297862, -0.11044555, 0.004
+    max: 0.08297862, -0.09244555, 0.035
+    color: '#1C1C1C'
+    yaw: 9.662489
+  - label: open underside felt band facet 10
+    min: 0.06453453, -0.08423461, 0.004
+    max: 0.14835966, -0.06623461, 0.035
+    color: '#1C1C1C'
+    yaw: 32.432557
+  - label: open underside felt band facet 11
+    min: 0.113116, -0.03883594, 0.004
+    max: 0.18227819, -0.02083594, 0.035
+    color: '#1C1C1C'
+    yaw: 67.135308
+  - label: continuous slumped felt crown
+    min: -0.28125, -0.1875, 0.028
+    max: 0.21875, 0.15625, 0.089
+    color: '#3C3C3C'
+    shape: Ellipsoid
+    yaw: 20
+  - label: subtle broad upper cloth fold
+    min: -0.15625, -0.084375, 0.074
+    max: 0.09875, 0.0565625, 0.093
+    color: '#3C3C3C'
+    shape: Ellipsoid
+    yaw: 20
+  - label: original red blue beret badge
+    min: 0.03675, -0.077625, 0.071
+    max: 0.09875, -0.015625, 0.095
+    color: '#FFFFFF'
+    surface: CMU3DHeadwearExtraCloudArt002
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DCMHeadCapSPPUshankaWorldCloud
+  label: CMHeadCapSPPUshanka loose icon
+  status: draft
+  sourcePrototypes:
+  - CMHeadCapSPPUshanka
+  referencePrototype: CMHeadCapSPPUshanka
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Head/SPP/ushanka.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: UPP ushanka with a hollow connected cap band, broad front fur facing, soft roof and lowered side
+    earflaps leaving a real central opening. Exact default unfolded pose; the reciprocal icon-up partner is separate.
+    Fur texture and full concave shell are simplified. Ground-item art only. No actor, worn, held, accessory, damaged,
+    tint or animation binding. Hidden depth and underside are inferred; native admission, saved-map fit and fidelity
+    unverified.
+  parts:
+  - label: ushanka open cap band facet 00
+    min: 0.06359288, 0.01735534, 0.023
+    max: 0.17028075, 0.05335534, 0.114
+    color: '#75663B'
+    yaw: 119.573722
+  - label: ushanka open cap band facet 01
+    min: -0.01485807, 0.06735534, 0.023
+    max: 0.1117317, 0.10335534, 0.114
+    color: '#75663B'
+    yaw: 163.177536
+  - label: ushanka open cap band facet 02
+    min: -0.1117317, 0.06735534, 0.023
+    max: 0.01485807, 0.10335534, 0.114
+    color: '#75663B'
+    yaw: -163.177536
+  - label: ushanka open cap band facet 03
+    min: -0.17028075, 0.01735534, 0.023
+    max: -0.06359288, 0.05335534, 0.114
+    color: '#75663B'
+    yaw: -119.573722
+  - label: ushanka open cap band facet 04
+    min: -0.17028075, -0.05335534, 0.023
+    max: -0.06359288, -0.01735534, 0.114
+    color: '#75663B'
+    yaw: -60.426278
+  - label: ushanka open cap band facet 05
+    min: -0.1117317, -0.10335534, 0.023
+    max: 0.01485807, -0.06735534, 0.114
+    color: '#75663B'
+    yaw: -16.822464
+  - label: ushanka open cap band facet 06
+    min: -0.01485807, -0.10335534, 0.023
+    max: 0.1117317, -0.06735534, 0.114
+    color: '#75663B'
+    yaw: 16.822464
+  - label: ushanka open cap band facet 07
+    min: 0.06359288, -0.05335534, 0.023
+    max: 0.17028075, -0.01735534, 0.114
+    color: '#75663B'
+    yaw: 60.426278
+  - label: ushanka soft connected roof
+    min: -0.149, -0.113, 0.096
+    max: 0.149, 0.113, 0.139
+    color: '#635736'
+    shape: Ellipsoid
+  - label: wide frontal fur facing
+    min: -0.108, -0.122, 0.042
+    max: 0.108, -0.094, 0.096
+    color: '#635736'
+  - label: left hanging open-sided earflap
+    min: -0.176, -0.105, 0.002
+    max: -0.12, 0.07, 0.088
+    color: '#635736'
+  - label: left lowered narrow flap tip
+    min: -0.168, -0.064, 0.001
+    max: -0.128, 0.033, 0.027
+    color: '#2B261B'
+  - label: right hanging open-sided earflap
+    min: 0.12, -0.105, 0.002
+    max: 0.176, 0.07, 0.088
+    color: '#635736'
+  - label: right lowered narrow flap tip
+    min: 0.128, -0.064, 0.001
+    max: 0.168, 0.033, 0.027
+    color: '#2B261B'
+  folded: false
+  alternateFoldModel: CMU3DCMHeadCapSPPUshankaFoldedWorldCloud
+- type: cmu3DModel
+  id: CMU3DCMHeadCapSPPUshankaFoldedWorldCloud
+  label: CMHeadCapSPPUshanka loose icon-up
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMHeadCapSPPUshanka
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Head/SPP/ushanka.rsi
+  referenceState: icon-up
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: UPP ushanka with a hollow connected cap band, broad front fur facing, soft roof and raised earflaps
+    in the actual icon-up folded pose. Fur texture and full concave shell are simplified. Ground-item art only.
+    No actor, worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred;
+    native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: ushanka open cap band facet 00
+    min: 0.06359288, 0.01735534, 0.023
+    max: 0.17028075, 0.05335534, 0.114
+    color: '#75663B'
+    yaw: 119.573722
+  - label: ushanka open cap band facet 01
+    min: -0.01485807, 0.06735534, 0.023
+    max: 0.1117317, 0.10335534, 0.114
+    color: '#75663B'
+    yaw: 163.177536
+  - label: ushanka open cap band facet 02
+    min: -0.1117317, 0.06735534, 0.023
+    max: 0.01485807, 0.10335534, 0.114
+    color: '#75663B'
+    yaw: -163.177536
+  - label: ushanka open cap band facet 03
+    min: -0.17028075, 0.01735534, 0.023
+    max: -0.06359288, 0.05335534, 0.114
+    color: '#75663B'
+    yaw: -119.573722
+  - label: ushanka open cap band facet 04
+    min: -0.17028075, -0.05335534, 0.023
+    max: -0.06359288, -0.01735534, 0.114
+    color: '#75663B'
+    yaw: -60.426278
+  - label: ushanka open cap band facet 05
+    min: -0.1117317, -0.10335534, 0.023
+    max: 0.01485807, -0.06735534, 0.114
+    color: '#75663B'
+    yaw: -16.822464
+  - label: ushanka open cap band facet 06
+    min: -0.01485807, -0.10335534, 0.023
+    max: 0.1117317, -0.06735534, 0.114
+    color: '#75663B'
+    yaw: 16.822464
+  - label: ushanka open cap band facet 07
+    min: 0.06359288, -0.05335534, 0.023
+    max: 0.17028075, -0.01735534, 0.114
+    color: '#75663B'
+    yaw: 60.426278
+  - label: ushanka soft connected roof
+    min: -0.149, -0.113, 0.096
+    max: 0.149, 0.113, 0.139
+    color: '#635736'
+    shape: Ellipsoid
+  - label: wide frontal fur facing
+    min: -0.108, -0.122, 0.042
+    max: 0.108, -0.094, 0.096
+    color: '#635736'
+  - label: left folded-up fur earflap
+    min: -0.172, -0.097, 0.045
+    max: -0.13, 0.091, 0.138
+    color: '#635736'
+  - label: left cloth flap attachment
+    min: -0.178, -0.079, 0.039
+    max: -0.124, 0.079, 0.099
+    color: '#75663B'
+  - label: right folded-up fur earflap
+    min: 0.13, -0.097, 0.045
+    max: 0.172, 0.091, 0.138
+    color: '#635736'
+  - label: right cloth flap attachment
+    min: 0.124, -0.079, 0.039
+    max: 0.178, 0.079, 0.099
+    color: '#75663B'
+  folded: true
+  alternateFoldModel: CMU3DCMHeadCapSPPUshankaWorldCloud
+- type: cmu3DModel
+  id: CMU3DCMHeadDressBluesWorldCloud
+  label: CMHeadDressBlues loose icon
+  status: draft
+  sourcePrototypes:
+  - CMHeadDressBlues
+  referencePrototype: CMHeadDressBlues
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Head/Hats/DressBlues/enlisted.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Dress-blues cap with an open dark headband, broad single white crown, separate black visor and original
+    gold insignia. Thin cap roof curvature and hidden construction are inferred. Ground-item art only. No actor,
+    worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: dress cap open dark headband facet 00
+    min: 0.11479017, 0.022, 0.009
+    max: 0.18937197, 0.049, 0.077
+    color: '#303036'
+    yaw: 111.655651
+  - label: dress cap open dark headband facet 01
+    min: 0.06764015, 0.0696314, 0.009
+    max: 0.15502199, 0.0966314, 0.077
+    color: '#303036'
+    yaw: 145.986688
+  - label: dress cap open dark headband facet 02
+    min: -0.00836336, 0.0971314, 0.009
+    max: 0.08986336, 0.1241314, 0.077
+    color: '#303036'
+    yaw: 169.750269
+  - label: dress cap open dark headband facet 03
+    min: -0.08986336, 0.0971314, 0.009
+    max: 0.00836336, 0.1241314, 0.077
+    color: '#303036'
+    yaw: -169.750269
+  - label: dress cap open dark headband facet 04
+    min: -0.15502199, 0.0696314, 0.009
+    max: -0.06764015, 0.0966314, 0.077
+    color: '#303036'
+    yaw: -145.986688
+  - label: dress cap open dark headband facet 05
+    min: -0.18937197, 0.022, 0.009
+    max: -0.11479017, 0.049, 0.077
+    color: '#303036'
+    yaw: -111.655651
+  - label: dress cap open dark headband facet 06
+    min: -0.18937197, -0.033, 0.009
+    max: -0.11479017, -0.006, 0.077
+    color: '#303036'
+    yaw: -68.344349
+  - label: dress cap open dark headband facet 07
+    min: -0.15502199, -0.0806314, 0.009
+    max: -0.06764015, -0.0536314, 0.077
+    color: '#303036'
+    yaw: -34.013312
+  - label: dress cap open dark headband facet 08
+    min: -0.08986336, -0.1081314, 0.009
+    max: 0.00836336, -0.0811314, 0.077
+    color: '#303036'
+    yaw: -10.249731
+  - label: dress cap open dark headband facet 09
+    min: -0.00836336, -0.1081314, 0.009
+    max: 0.08986336, -0.0811314, 0.077
+    color: '#303036'
+    yaw: 10.249731
+  - label: dress cap open dark headband facet 10
+    min: 0.06764015, -0.0806314, 0.009
+    max: 0.15502199, -0.0536314, 0.077
+    color: '#303036'
+    yaw: 34.013312
+  - label: dress cap open dark headband facet 11
+    min: 0.11479017, -0.033, 0.009
+    max: 0.18937197, -0.006, 0.077
+    color: '#303036'
+    yaw: 68.344349
+  - label: wide continuous white cap roof
+    min: -0.232, -0.143, 0.067
+    max: 0.232, 0.15, 0.116
+    color: '#EBE7E7'
+    shape: Ellipsoid
+  - label: projecting dark dress visor
+    min: -0.145, -0.24, 0.008
+    max: 0.145, -0.041, 0.03
+    color: '#303036'
+    shape: Ellipsoid
+  - label: visor sewn attachment
+    min: -0.126, -0.105, 0.017
+    max: 0.126, -0.07, 0.048
+    color: '#141414'
+  - label: white frontal band
+    min: -0.142, -0.115, 0.057
+    max: 0.142, -0.091, 0.085
+    color: '#EBE7E7'
+  - label: original gold dress-cap insignia
+    min: -0.031, -0.127, 0.056
+    max: 0.031, -0.11, 0.118
+    color: '#FFFFFF'
+    surface: CMU3DHeadwearExtraCloudArt003
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DClothingHeadFishCapWorldCloud
+  label: ClothingHeadFishCap loose icon
+  status: draft
+  sourcePrototypes:
+  - ClothingHeadFishCap
+  referencePrototype: ClothingHeadFishCap
+  referenceRsi: /Textures/Clothing/Head/Hats/fishcap.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'Fish cap resting on its side: broad green crown, thin connected bill and source-exact printed white
+    front panel. No invented wording or fish motif. The convex crown top and hidden shell are simplified. Ground-item
+    art only. No actor, worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are
+    inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: fish cap open underside seam facet 00
+    min: 0.10276585, 0.00375, 0.006
+    max: 0.22420014, 0.03475, 0.043
+    color: '#006533'
+    yaw: 101.596665
+  - label: fish cap open underside seam facet 01
+    min: 0.06857754, 0.0925176, 0.006
+    max: 0.17988845, 0.1235176, 0.043
+    color: '#006533'
+    yaw: 127.44683
+  - label: fish cap open underside seam facet 02
+    min: 0.00626788, 0.1437676, 0.006
+    max: 0.10623212, 0.1747676, 0.043
+    color: '#006533'
+    yaw: 160.716591
+  - label: fish cap open underside seam facet 03
+    min: -0.07223212, 0.1437676, 0.006
+    max: 0.02773212, 0.1747676, 0.043
+    color: '#006533'
+    yaw: -160.716591
+  - label: fish cap open underside seam facet 04
+    min: -0.14588845, 0.0925176, 0.006
+    max: -0.03457754, 0.1235176, 0.043
+    color: '#006533'
+    yaw: -127.44683
+  - label: fish cap open underside seam facet 05
+    min: -0.19020014, 0.00375, 0.006
+    max: -0.06876585, 0.03475, 0.043
+    color: '#006533'
+    yaw: -101.596665
+  - label: fish cap open underside seam facet 06
+    min: -0.19020014, -0.09875, 0.006
+    max: -0.06876585, -0.06775, 0.043
+    color: '#006533'
+    yaw: -78.403335
+  - label: fish cap open underside seam facet 07
+    min: -0.14588845, -0.1875176, 0.006
+    max: -0.03457754, -0.1565176, 0.043
+    color: '#006533'
+    yaw: -52.55317
+  - label: fish cap open underside seam facet 08
+    min: -0.07223212, -0.2387676, 0.006
+    max: 0.02773212, -0.2077676, 0.043
+    color: '#006533'
+    yaw: -19.283409
+  - label: fish cap open underside seam facet 09
+    min: 0.00626788, -0.2387676, 0.006
+    max: 0.10623212, -0.2077676, 0.043
+    color: '#006533'
+    yaw: 19.283409
+  - label: fish cap open underside seam facet 10
+    min: 0.06857754, -0.1875176, 0.006
+    max: 0.17988845, -0.1565176, 0.043
+    color: '#006533'
+    yaw: 52.55317
+  - label: fish cap open underside seam facet 11
+    min: 0.10276585, -0.09875, 0.006
+    max: 0.22420014, -0.06775, 0.043
+    color: '#006533'
+    yaw: 78.403335
+  - label: fish cap continuous side crown
+    min: -0.192, -0.236, 0.027
+    max: 0.25, 0.211, 0.075
+    color: '#007E3F'
+    shape: Ellipsoid
+  - label: flattened green bill
+    min: -0.24375, -0.278125, 0.006
+    max: 0.10625, -0.13125, 0.028
+    color: '#006F37'
+    shape: Ellipsoid
+    yaw: -10
+  - label: bill connected sewn root
+    min: -0.165625, -0.1875, 0.018
+    max: 0.071875, -0.10625, 0.049
+    color: '#006533'
+  - label: original fish-cap printed white front
+    min: -0.189, -0.188, 0.066
+    max: 0.061, 0.156, 0.081
+    color: '#FFFFFF'
+    surface: CMU3DHeadwearExtraCloudArt004
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DClothingHeadHatBeretMedicWorldCloud
+  label: ClothingHeadHatBeretMedic loose icon
+  status: draft
+  sourcePrototypes:
+  - ClothingHeadHatBeretMedic
+  referencePrototype: ClothingHeadHatBeretMedic
+  referenceRsi: /Textures/Clothing/Head/Hats/beret_medic.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Loose beret with one smooth slumped convex crown and a connected open lower band. The upper crown
+    is a shallow solid approximation; a complete thin concave cloth shell is outside the primitive contract. Original
+    tiny insignia retained where present. Ground-item art only. No actor, worn, held, accessory, damaged, tint or
+    animation binding. Hidden depth and underside are inferred; native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: open underside felt band facet 00
+    min: 0.113116, 0.01358594, 0.004
+    max: 0.18227819, 0.03158594, 0.035
+    color: '#4B4B51'
+    yaw: 112.864692
+  - label: open underside felt band facet 01
+    min: 0.06453453, 0.05898461, 0.004
+    max: 0.14835966, 0.07698461, 0.035
+    color: '#4B4B51'
+    yaw: 147.567443
+  - label: open underside felt band facet 02
+    min: -0.01297862, 0.08519555, 0.004
+    max: 0.08297862, 0.10319555, 0.035
+    color: '#4B4B51'
+    yaw: 170.337511
+  - label: open underside felt band facet 03
+    min: -0.09547862, 0.08519555, 0.004
+    max: 0.00047862, 0.10319555, 0.035
+    color: '#4B4B51'
+    yaw: -170.337511
+  - label: open underside felt band facet 04
+    min: -0.16085966, 0.05898461, 0.004
+    max: -0.07703453, 0.07698461, 0.035
+    color: '#4B4B51'
+    yaw: -147.567443
+  - label: open underside felt band facet 05
+    min: -0.19477819, 0.01358594, 0.004
+    max: -0.125616, 0.03158594, 0.035
+    color: '#4B4B51'
+    yaw: -112.864692
+  - label: open underside felt band facet 06
+    min: -0.19477819, -0.03883594, 0.004
+    max: -0.125616, -0.02083594, 0.035
+    color: '#4B4B51'
+    yaw: -67.135308
+  - label: open underside felt band facet 07
+    min: -0.16085966, -0.08423461, 0.004
+    max: -0.07703453, -0.06623461, 0.035
+    color: '#4B4B51'
+    yaw: -32.432557
+  - label: open underside felt band facet 08
+    min: -0.09547862, -0.11044555, 0.004
+    max: 0.00047862, -0.09244555, 0.035
+    color: '#4B4B51'
+    yaw: -9.662489
+  - label: open underside felt band facet 09
+    min: -0.01297862, -0.11044555, 0.004
+    max: 0.08297862, -0.09244555, 0.035
+    color: '#4B4B51'
+    yaw: 9.662489
+  - label: open underside felt band facet 10
+    min: 0.06453453, -0.08423461, 0.004
+    max: 0.14835966, -0.06623461, 0.035
+    color: '#4B4B51'
+    yaw: 32.432557
+  - label: open underside felt band facet 11
+    min: 0.113116, -0.03883594, 0.004
+    max: 0.18227819, -0.02083594, 0.035
+    color: '#4B4B51'
+    yaw: 67.135308
+  - label: continuous slumped felt crown
+    min: -0.28125, -0.1875, 0.028
+    max: 0.21875, 0.15625, 0.089
+    color: '#DBDBDF'
+    shape: Ellipsoid
+    yaw: 20
+  - label: subtle broad upper cloth fold
+    min: -0.15625, -0.084375, 0.074
+    max: 0.09875, 0.0565625, 0.093
+    color: '#DBDBDF'
+    shape: Ellipsoid
+    yaw: 20
+- type: cmu3DModel
+  id: CMU3DClothingHeadHatPartyBlueWorldCloud
+  label: ClothingHeadHatPartyBlue loose icon
+  status: draft
+  sourcePrototypes:
+  - ClothingHeadHatPartyBlue
+  referencePrototype: ClothingHeadHatPartyBlue
+  referenceRsi: /Textures/Clothing/Head/Hats/party_blue.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Eight-sided hollow paper party cone built from connected triangular panels, with a real open base
+    and white wrapping bands. The primitive contract has no true conical shell or UV-wrapped curved surface; angular
+    spiral bands are an explicit approximation of source diagonal stripes. Ground-item art only. No actor, worn,
+    held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: connected triangular cone panel 00.0
+    min: 0.057, -0.05601934, 0.00425503
+    max: 0.071, 0.003, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeY
+    pitch: 20.797877
+  - label: connected triangular cone panel 00.1
+    min: 0.057, -0.003, 0.00425503
+    max: 0.071, 0.05601934, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeYReverse
+    pitch: 20.797877
+  - label: source diagonal white spiral 00.0
+    min: 0.04608259, -0.01193804, 0.12775
+    max: 0.12495005, 0.01406196, 0.14375
+    color: '#FCFCFC'
+    yaw: 85.710272
+    pitch: -11.140935
+  - label: source diagonal white spiral 00.1
+    min: 0.02135249, -0.01193804, 0.23575
+    max: 0.06763861, 0.01406196, 0.25175
+    color: '#FCFCFC'
+    yaw: 81.516201
+    pitch: -21.227075
+  - label: connected triangular cone panel 01.0
+    min: 0.057, -0.003, 0.00425503
+    max: 0.071, 0.05601934, 0.36474497
+    color: '#03317F'
+    shape: WedgeY
+    yaw: 45.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 01.1
+    min: 0.01950967, 0.03449033, 0.00425503
+    max: 0.03350967, 0.09350967, 0.36474497
+    color: '#03317F'
+    shape: WedgeYReverse
+    yaw: 45.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 01.0
+    min: 0.02182962, 0.05184585, 0.11425
+    max: 0.1048584, 0.07784585, 0.13025
+    color: '#FCFCFC'
+    yaw: 130.960385
+    pitch: -10.507341
+  - label: source diagonal white spiral 01.1
+    min: 0.00922032, 0.02283978, 0.22225
+    max: 0.05945557, 0.04883978, 0.23825
+    color: '#FCFCFC'
+    yaw: 127.437795
+    pitch: -19.110421
+  - label: connected triangular cone panel 02.0
+    min: 0.01950967, 0.03449033, 0.00425503
+    max: 0.03350967, 0.09350967, 0.36474497
+    color: '#03317F'
+    shape: WedgeY
+    yaw: 90.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 02.1
+    min: -0.03350967, 0.03449033, 0.00425503
+    max: -0.01950967, 0.09350967, 0.36474497
+    color: '#03317F'
+    shape: WedgeYReverse
+    yaw: 90.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 02.0
+    min: -0.04466166, 0.08277151, 0.10075
+    max: 0.04253774, 0.10877151, 0.11675
+    color: '#FCFCFC'
+    yaw: 176.182981
+    pitch: -9.941093
+  - label: source diagonal white spiral 02.1
+    min: -0.02818124, 0.04175074, 0.20875
+    max: 0.02605732, 0.06775074, 0.22475
+    color: '#FCFCFC'
+    yaw: 173.179638
+    pitch: -17.362612
+  - label: source diagonal white spiral 02.2
+    min: -0.01404071, 0.00072997, 0.31675
+    max: 0.01191679, 0.02672997, 0.33275
+    color: '#FCFCFC'
+    yaw: 150.02161
+    pitch: -52.760062
+  - label: connected triangular cone panel 03.0
+    min: -0.03350967, 0.03449033, 0.00425503
+    max: -0.01950967, 0.09350967, 0.36474497
+    color: '#03317F'
+    shape: WedgeY
+    yaw: 135.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 03.1
+    min: -0.071, -0.003, 0.00425503
+    max: -0.057, 0.05601934, 0.36474497
+    color: '#03317F'
+    shape: WedgeYReverse
+    yaw: 135.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 03.0
+    min: -0.11778632, 0.05759553, 0.08725
+    max: -0.0264084, 0.08359553, 0.10325
+    color: '#FCFCFC'
+    yaw: -138.617643
+    pitch: -9.432112
+  - label: source diagonal white spiral 03.1
+    min: -0.0722327, 0.02858946, 0.19525
+    max: -0.01394989, 0.05458946, 0.21125
+    color: '#FCFCFC'
+    yaw: -141.210545
+    pitch: -15.898212
+  - label: source diagonal white spiral 03.2
+    min: -0.02834636, -0.00041661, 0.30325
+    max: 0.0001759, 0.02558339, 0.31925
+    color: '#FCFCFC'
+    yaw: -156.321793
+    pitch: -43.750406
+  - label: connected triangular cone panel 04.0
+    min: -0.071, -0.003, 0.00425503
+    max: -0.057, 0.05601934, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeY
+    yaw: 180.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 04.1
+    min: -0.071, -0.05601934, 0.00425503
+    max: -0.057, 0.003, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeYReverse
+    yaw: 180.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 04.0
+    min: -0.1538083, -0.01406196, 0.07375
+    max: -0.05824511, 0.01193804, 0.08975
+    color: '#FCFCFC'
+    yaw: -93.438038
+    pitch: -8.972213
+  - label: source diagonal white spiral 04.1
+    min: -0.09618529, -0.01406196, 0.18175
+    max: -0.03382658, 0.01193804, 0.19775
+    color: '#FCFCFC'
+    yaw: -95.700495
+    pitch: -14.655382
+  - label: source diagonal white spiral 04.2
+    min: -0.03978527, -0.01406196, 0.28975
+    max: -0.00818506, 0.01193804, 0.30575
+    color: '#FCFCFC'
+    yaw: -106.43338
+    pitch: -36.679604
+  - label: connected triangular cone panel 05.0
+    min: -0.071, -0.05601934, 0.00425503
+    max: -0.057, 0.003, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeY
+    yaw: 225.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 05.1
+    min: -0.03350967, -0.09350967, 0.00425503
+    max: -0.01950967, -0.03449033, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeYReverse
+    yaw: 225.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 05.0
+    min: -0.12772417, -0.09234888, 0.06025
+    max: -0.02796991, -0.06634888, 0.07625
+    color: '#FCFCFC'
+    yaw: -48.275404
+    pitch: -8.554688
+  - label: source diagonal white spiral 05.1
+    min: -0.08207074, -0.06334281, 0.16825
+    max: -0.01561121, -0.03734281, 0.18425
+    color: '#FCFCFC'
+    yaw: -50.267646
+    pitch: -13.588557
+  - label: source diagonal white spiral 05.2
+    min: -0.0373398, -0.03433675, 0.27625
+    max: -0.00233003, -0.00833675, 0.29225
+    color: '#FCFCFC'
+    yaw: -58.334826
+    pitch: -31.267593
+  - label: connected triangular cone panel 06.0
+    min: -0.03350967, -0.09350967, 0.00425503
+    max: -0.01950967, -0.03449033, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeY
+    yaw: 270.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 06.1
+    min: 0.01950967, -0.09350967, 0.00425503
+    max: 0.03350967, -0.03449033, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeYReverse
+    yaw: 270.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 06.0
+    min: -0.05091323, -0.1292819, 0.04675
+    max: 0.05303715, -0.1032819, 0.06275
+    color: '#FCFCFC'
+    yaw: -3.127447
+    pitch: -8.173985
+  - label: source diagonal white spiral 06.1
+    min: -0.03422818, -0.08826113, 0.15475
+    max: 0.0363521, -0.06226113, 0.17075
+    color: '#FCFCFC'
+    yaw: -4.895744
+    pitch: -12.663579
+  - label: source diagonal white spiral 06.2
+    min: -0.0182564, -0.04724036, 0.26275
+    max: 0.02038032, -0.02124036, 0.27875
+    color: '#FCFCFC'
+    yaw: -11.206705
+    pitch: -27.098139
+  - label: connected triangular cone panel 07.0
+    min: 0.01950967, -0.09350967, 0.00425503
+    max: 0.03350967, -0.03449033, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeY
+    yaw: 315.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 07.1
+    min: 0.057, -0.05601934, 0.00425503
+    max: 0.071, 0.003, 0.36474497
+    color: '#3C64FF'
+    shape: WedgeYReverse
+    yaw: 315.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 07.0
+    min: 0.03252494, -0.09809856, 0.03325
+    max: 0.14067585, -0.07209856, 0.04925
+    color: '#FCFCFC'
+    yaw: 42.007732
+    pitch: -7.825476
+  - label: source diagonal white spiral 07.1
+    min: 0.02023572, -0.06909249, 0.14125
+    max: 0.09495294, -0.04309249, 0.15725
+    color: '#FCFCFC'
+    yaw: 40.427213
+    pitch: -11.854416
+  - label: source diagonal white spiral 07.2
+    min: 0.0073831, -0.04008643, 0.24925
+    max: 0.04979343, -0.01408643, 0.26525
+    color: '#FCFCFC'
+    yaw: 35.34123
+    pitch: -23.832647
+  - label: open paper cone lower edge facet 00
+    min: 0.05350201, 0.03825483, 0.004
+    max: 0.16500766, 0.05225483, 0.024
+    color: '#3C64FF'
+    yaw: 112.5
+  - label: open paper cone lower edge facet 01
+    min: -0.01049799, 0.10225483, 0.004
+    max: 0.10100766, 0.11625483, 0.024
+    color: '#3C64FF'
+    yaw: 157.5
+  - label: open paper cone lower edge facet 02
+    min: -0.10100766, 0.10225483, 0.004
+    max: 0.01049799, 0.11625483, 0.024
+    color: '#3C64FF'
+    yaw: -157.5
+  - label: open paper cone lower edge facet 03
+    min: -0.16500766, 0.03825483, 0.004
+    max: -0.05350201, 0.05225483, 0.024
+    color: '#3C64FF'
+    yaw: -112.5
+  - label: open paper cone lower edge facet 04
+    min: -0.16500766, -0.05225483, 0.004
+    max: -0.05350201, -0.03825483, 0.024
+    color: '#3C64FF'
+    yaw: -67.5
+  - label: open paper cone lower edge facet 05
+    min: -0.10100766, -0.11625483, 0.004
+    max: 0.01049799, -0.10225483, 0.024
+    color: '#3C64FF'
+    yaw: -22.5
+  - label: open paper cone lower edge facet 06
+    min: -0.01049799, -0.11625483, 0.004
+    max: 0.10100766, -0.10225483, 0.024
+    color: '#3C64FF'
+    yaw: 22.5
+  - label: open paper cone lower edge facet 07
+    min: 0.05350201, -0.05225483, 0.004
+    max: 0.16500766, -0.03825483, 0.024
+    color: '#3C64FF'
+    yaw: 67.5
+  - label: small joined cone tip
+    min: -0.01, -0.01, 0.336
+    max: 0.01, 0.01, 0.357
+    color: '#3C64FF'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DClothingHeadHatPartyGreenWorldCloud
+  label: ClothingHeadHatPartyGreen loose icon
+  status: draft
+  sourcePrototypes:
+  - ClothingHeadHatPartyGreen
+  referencePrototype: ClothingHeadHatPartyGreen
+  referenceRsi: /Textures/Clothing/Head/Hats/party_green.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Eight-sided hollow paper party cone built from connected triangular panels, with a real open base
+    and white wrapping bands. The primitive contract has no true conical shell or UV-wrapped curved surface; angular
+    spiral bands are an explicit approximation of source diagonal stripes. Ground-item art only. No actor, worn,
+    held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: connected triangular cone panel 00.0
+    min: 0.057, -0.05601934, 0.00425503
+    max: 0.071, 0.003, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeY
+    pitch: 20.797877
+  - label: connected triangular cone panel 00.1
+    min: 0.057, -0.003, 0.00425503
+    max: 0.071, 0.05601934, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeYReverse
+    pitch: 20.797877
+  - label: source diagonal white spiral 00.0
+    min: 0.04608259, -0.01193804, 0.12775
+    max: 0.12495005, 0.01406196, 0.14375
+    color: '#FCFCFC'
+    yaw: 85.710272
+    pitch: -11.140935
+  - label: source diagonal white spiral 00.1
+    min: 0.02135249, -0.01193804, 0.23575
+    max: 0.06763861, 0.01406196, 0.25175
+    color: '#FCFCFC'
+    yaw: 81.516201
+    pitch: -21.227075
+  - label: connected triangular cone panel 01.0
+    min: 0.057, -0.003, 0.00425503
+    max: 0.071, 0.05601934, 0.36474497
+    color: '#177F03'
+    shape: WedgeY
+    yaw: 45.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 01.1
+    min: 0.01950967, 0.03449033, 0.00425503
+    max: 0.03350967, 0.09350967, 0.36474497
+    color: '#177F03'
+    shape: WedgeYReverse
+    yaw: 45.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 01.0
+    min: 0.02182962, 0.05184585, 0.11425
+    max: 0.1048584, 0.07784585, 0.13025
+    color: '#FCFCFC'
+    yaw: 130.960385
+    pitch: -10.507341
+  - label: source diagonal white spiral 01.1
+    min: 0.00922032, 0.02283978, 0.22225
+    max: 0.05945557, 0.04883978, 0.23825
+    color: '#FCFCFC'
+    yaw: 127.437795
+    pitch: -19.110421
+  - label: connected triangular cone panel 02.0
+    min: 0.01950967, 0.03449033, 0.00425503
+    max: 0.03350967, 0.09350967, 0.36474497
+    color: '#177F03'
+    shape: WedgeY
+    yaw: 90.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 02.1
+    min: -0.03350967, 0.03449033, 0.00425503
+    max: -0.01950967, 0.09350967, 0.36474497
+    color: '#177F03'
+    shape: WedgeYReverse
+    yaw: 90.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 02.0
+    min: -0.04466166, 0.08277151, 0.10075
+    max: 0.04253774, 0.10877151, 0.11675
+    color: '#FCFCFC'
+    yaw: 176.182981
+    pitch: -9.941093
+  - label: source diagonal white spiral 02.1
+    min: -0.02818124, 0.04175074, 0.20875
+    max: 0.02605732, 0.06775074, 0.22475
+    color: '#FCFCFC'
+    yaw: 173.179638
+    pitch: -17.362612
+  - label: source diagonal white spiral 02.2
+    min: -0.01404071, 0.00072997, 0.31675
+    max: 0.01191679, 0.02672997, 0.33275
+    color: '#FCFCFC'
+    yaw: 150.02161
+    pitch: -52.760062
+  - label: connected triangular cone panel 03.0
+    min: -0.03350967, 0.03449033, 0.00425503
+    max: -0.01950967, 0.09350967, 0.36474497
+    color: '#177F03'
+    shape: WedgeY
+    yaw: 135.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 03.1
+    min: -0.071, -0.003, 0.00425503
+    max: -0.057, 0.05601934, 0.36474497
+    color: '#177F03'
+    shape: WedgeYReverse
+    yaw: 135.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 03.0
+    min: -0.11778632, 0.05759553, 0.08725
+    max: -0.0264084, 0.08359553, 0.10325
+    color: '#FCFCFC'
+    yaw: -138.617643
+    pitch: -9.432112
+  - label: source diagonal white spiral 03.1
+    min: -0.0722327, 0.02858946, 0.19525
+    max: -0.01394989, 0.05458946, 0.21125
+    color: '#FCFCFC'
+    yaw: -141.210545
+    pitch: -15.898212
+  - label: source diagonal white spiral 03.2
+    min: -0.02834636, -0.00041661, 0.30325
+    max: 0.0001759, 0.02558339, 0.31925
+    color: '#FCFCFC'
+    yaw: -156.321793
+    pitch: -43.750406
+  - label: connected triangular cone panel 04.0
+    min: -0.071, -0.003, 0.00425503
+    max: -0.057, 0.05601934, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeY
+    yaw: 180.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 04.1
+    min: -0.071, -0.05601934, 0.00425503
+    max: -0.057, 0.003, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeYReverse
+    yaw: 180.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 04.0
+    min: -0.1538083, -0.01406196, 0.07375
+    max: -0.05824511, 0.01193804, 0.08975
+    color: '#FCFCFC'
+    yaw: -93.438038
+    pitch: -8.972213
+  - label: source diagonal white spiral 04.1
+    min: -0.09618529, -0.01406196, 0.18175
+    max: -0.03382658, 0.01193804, 0.19775
+    color: '#FCFCFC'
+    yaw: -95.700495
+    pitch: -14.655382
+  - label: source diagonal white spiral 04.2
+    min: -0.03978527, -0.01406196, 0.28975
+    max: -0.00818506, 0.01193804, 0.30575
+    color: '#FCFCFC'
+    yaw: -106.43338
+    pitch: -36.679604
+  - label: connected triangular cone panel 05.0
+    min: -0.071, -0.05601934, 0.00425503
+    max: -0.057, 0.003, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeY
+    yaw: 225.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 05.1
+    min: -0.03350967, -0.09350967, 0.00425503
+    max: -0.01950967, -0.03449033, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeYReverse
+    yaw: 225.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 05.0
+    min: -0.12772417, -0.09234888, 0.06025
+    max: -0.02796991, -0.06634888, 0.07625
+    color: '#FCFCFC'
+    yaw: -48.275404
+    pitch: -8.554688
+  - label: source diagonal white spiral 05.1
+    min: -0.08207074, -0.06334281, 0.16825
+    max: -0.01561121, -0.03734281, 0.18425
+    color: '#FCFCFC'
+    yaw: -50.267646
+    pitch: -13.588557
+  - label: source diagonal white spiral 05.2
+    min: -0.0373398, -0.03433675, 0.27625
+    max: -0.00233003, -0.00833675, 0.29225
+    color: '#FCFCFC'
+    yaw: -58.334826
+    pitch: -31.267593
+  - label: connected triangular cone panel 06.0
+    min: -0.03350967, -0.09350967, 0.00425503
+    max: -0.01950967, -0.03449033, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeY
+    yaw: 270.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 06.1
+    min: 0.01950967, -0.09350967, 0.00425503
+    max: 0.03350967, -0.03449033, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeYReverse
+    yaw: 270.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 06.0
+    min: -0.05091323, -0.1292819, 0.04675
+    max: 0.05303715, -0.1032819, 0.06275
+    color: '#FCFCFC'
+    yaw: -3.127447
+    pitch: -8.173985
+  - label: source diagonal white spiral 06.1
+    min: -0.03422818, -0.08826113, 0.15475
+    max: 0.0363521, -0.06226113, 0.17075
+    color: '#FCFCFC'
+    yaw: -4.895744
+    pitch: -12.663579
+  - label: source diagonal white spiral 06.2
+    min: -0.0182564, -0.04724036, 0.26275
+    max: 0.02038032, -0.02124036, 0.27875
+    color: '#FCFCFC'
+    yaw: -11.206705
+    pitch: -27.098139
+  - label: connected triangular cone panel 07.0
+    min: 0.01950967, -0.09350967, 0.00425503
+    max: 0.03350967, -0.03449033, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeY
+    yaw: 315.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 07.1
+    min: 0.057, -0.05601934, 0.00425503
+    max: 0.071, 0.003, 0.36474497
+    color: '#3CFF3F'
+    shape: WedgeYReverse
+    yaw: 315.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 07.0
+    min: 0.03252494, -0.09809856, 0.03325
+    max: 0.14067585, -0.07209856, 0.04925
+    color: '#FCFCFC'
+    yaw: 42.007732
+    pitch: -7.825476
+  - label: source diagonal white spiral 07.1
+    min: 0.02023572, -0.06909249, 0.14125
+    max: 0.09495294, -0.04309249, 0.15725
+    color: '#FCFCFC'
+    yaw: 40.427213
+    pitch: -11.854416
+  - label: source diagonal white spiral 07.2
+    min: 0.0073831, -0.04008643, 0.24925
+    max: 0.04979343, -0.01408643, 0.26525
+    color: '#FCFCFC'
+    yaw: 35.34123
+    pitch: -23.832647
+  - label: open paper cone lower edge facet 00
+    min: 0.05350201, 0.03825483, 0.004
+    max: 0.16500766, 0.05225483, 0.024
+    color: '#3CFF3F'
+    yaw: 112.5
+  - label: open paper cone lower edge facet 01
+    min: -0.01049799, 0.10225483, 0.004
+    max: 0.10100766, 0.11625483, 0.024
+    color: '#3CFF3F'
+    yaw: 157.5
+  - label: open paper cone lower edge facet 02
+    min: -0.10100766, 0.10225483, 0.004
+    max: 0.01049799, 0.11625483, 0.024
+    color: '#3CFF3F'
+    yaw: -157.5
+  - label: open paper cone lower edge facet 03
+    min: -0.16500766, 0.03825483, 0.004
+    max: -0.05350201, 0.05225483, 0.024
+    color: '#3CFF3F'
+    yaw: -112.5
+  - label: open paper cone lower edge facet 04
+    min: -0.16500766, -0.05225483, 0.004
+    max: -0.05350201, -0.03825483, 0.024
+    color: '#3CFF3F'
+    yaw: -67.5
+  - label: open paper cone lower edge facet 05
+    min: -0.10100766, -0.11625483, 0.004
+    max: 0.01049799, -0.10225483, 0.024
+    color: '#3CFF3F'
+    yaw: -22.5
+  - label: open paper cone lower edge facet 06
+    min: -0.01049799, -0.11625483, 0.004
+    max: 0.10100766, -0.10225483, 0.024
+    color: '#3CFF3F'
+    yaw: 22.5
+  - label: open paper cone lower edge facet 07
+    min: 0.05350201, -0.05225483, 0.004
+    max: 0.16500766, -0.03825483, 0.024
+    color: '#3CFF3F'
+    yaw: 67.5
+  - label: small joined cone tip
+    min: -0.01, -0.01, 0.336
+    max: 0.01, 0.01, 0.357
+    color: '#3CFF3F'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DClothingHeadHatPartyRedWorldCloud
+  label: ClothingHeadHatPartyRed loose icon
+  status: draft
+  sourcePrototypes:
+  - ClothingHeadHatPartyRed
+  referencePrototype: ClothingHeadHatPartyRed
+  referenceRsi: /Textures/Clothing/Head/Hats/party_red.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Eight-sided hollow paper party cone built from connected triangular panels, with a real open base
+    and white wrapping bands. The primitive contract has no true conical shell or UV-wrapped curved surface; angular
+    spiral bands are an explicit approximation of source diagonal stripes. Ground-item art only. No actor, worn,
+    held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: connected triangular cone panel 00.0
+    min: 0.057, -0.05601934, 0.00425503
+    max: 0.071, 0.003, 0.36474497
+    color: '#FF423C'
+    shape: WedgeY
+    pitch: 20.797877
+  - label: connected triangular cone panel 00.1
+    min: 0.057, -0.003, 0.00425503
+    max: 0.071, 0.05601934, 0.36474497
+    color: '#FF423C'
+    shape: WedgeYReverse
+    pitch: 20.797877
+  - label: source diagonal white spiral 00.0
+    min: 0.04608259, -0.01193804, 0.12775
+    max: 0.12495005, 0.01406196, 0.14375
+    color: '#FCFCFC'
+    yaw: 85.710272
+    pitch: -11.140935
+  - label: source diagonal white spiral 00.1
+    min: 0.02135249, -0.01193804, 0.23575
+    max: 0.06763861, 0.01406196, 0.25175
+    color: '#FCFCFC'
+    yaw: 81.516201
+    pitch: -21.227075
+  - label: connected triangular cone panel 01.0
+    min: 0.057, -0.003, 0.00425503
+    max: 0.071, 0.05601934, 0.36474497
+    color: '#7F0315'
+    shape: WedgeY
+    yaw: 45.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 01.1
+    min: 0.01950967, 0.03449033, 0.00425503
+    max: 0.03350967, 0.09350967, 0.36474497
+    color: '#7F0315'
+    shape: WedgeYReverse
+    yaw: 45.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 01.0
+    min: 0.02182962, 0.05184585, 0.11425
+    max: 0.1048584, 0.07784585, 0.13025
+    color: '#FCFCFC'
+    yaw: 130.960385
+    pitch: -10.507341
+  - label: source diagonal white spiral 01.1
+    min: 0.00922032, 0.02283978, 0.22225
+    max: 0.05945557, 0.04883978, 0.23825
+    color: '#FCFCFC'
+    yaw: 127.437795
+    pitch: -19.110421
+  - label: connected triangular cone panel 02.0
+    min: 0.01950967, 0.03449033, 0.00425503
+    max: 0.03350967, 0.09350967, 0.36474497
+    color: '#7F0315'
+    shape: WedgeY
+    yaw: 90.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 02.1
+    min: -0.03350967, 0.03449033, 0.00425503
+    max: -0.01950967, 0.09350967, 0.36474497
+    color: '#7F0315'
+    shape: WedgeYReverse
+    yaw: 90.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 02.0
+    min: -0.04466166, 0.08277151, 0.10075
+    max: 0.04253774, 0.10877151, 0.11675
+    color: '#FCFCFC'
+    yaw: 176.182981
+    pitch: -9.941093
+  - label: source diagonal white spiral 02.1
+    min: -0.02818124, 0.04175074, 0.20875
+    max: 0.02605732, 0.06775074, 0.22475
+    color: '#FCFCFC'
+    yaw: 173.179638
+    pitch: -17.362612
+  - label: source diagonal white spiral 02.2
+    min: -0.01404071, 0.00072997, 0.31675
+    max: 0.01191679, 0.02672997, 0.33275
+    color: '#FCFCFC'
+    yaw: 150.02161
+    pitch: -52.760062
+  - label: connected triangular cone panel 03.0
+    min: -0.03350967, 0.03449033, 0.00425503
+    max: -0.01950967, 0.09350967, 0.36474497
+    color: '#7F0315'
+    shape: WedgeY
+    yaw: 135.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 03.1
+    min: -0.071, -0.003, 0.00425503
+    max: -0.057, 0.05601934, 0.36474497
+    color: '#7F0315'
+    shape: WedgeYReverse
+    yaw: 135.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 03.0
+    min: -0.11778632, 0.05759553, 0.08725
+    max: -0.0264084, 0.08359553, 0.10325
+    color: '#FCFCFC'
+    yaw: -138.617643
+    pitch: -9.432112
+  - label: source diagonal white spiral 03.1
+    min: -0.0722327, 0.02858946, 0.19525
+    max: -0.01394989, 0.05458946, 0.21125
+    color: '#FCFCFC'
+    yaw: -141.210545
+    pitch: -15.898212
+  - label: source diagonal white spiral 03.2
+    min: -0.02834636, -0.00041661, 0.30325
+    max: 0.0001759, 0.02558339, 0.31925
+    color: '#FCFCFC'
+    yaw: -156.321793
+    pitch: -43.750406
+  - label: connected triangular cone panel 04.0
+    min: -0.071, -0.003, 0.00425503
+    max: -0.057, 0.05601934, 0.36474497
+    color: '#FF423C'
+    shape: WedgeY
+    yaw: 180.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 04.1
+    min: -0.071, -0.05601934, 0.00425503
+    max: -0.057, 0.003, 0.36474497
+    color: '#FF423C'
+    shape: WedgeYReverse
+    yaw: 180.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 04.0
+    min: -0.1538083, -0.01406196, 0.07375
+    max: -0.05824511, 0.01193804, 0.08975
+    color: '#FCFCFC'
+    yaw: -93.438038
+    pitch: -8.972213
+  - label: source diagonal white spiral 04.1
+    min: -0.09618529, -0.01406196, 0.18175
+    max: -0.03382658, 0.01193804, 0.19775
+    color: '#FCFCFC'
+    yaw: -95.700495
+    pitch: -14.655382
+  - label: source diagonal white spiral 04.2
+    min: -0.03978527, -0.01406196, 0.28975
+    max: -0.00818506, 0.01193804, 0.30575
+    color: '#FCFCFC'
+    yaw: -106.43338
+    pitch: -36.679604
+  - label: connected triangular cone panel 05.0
+    min: -0.071, -0.05601934, 0.00425503
+    max: -0.057, 0.003, 0.36474497
+    color: '#FF423C'
+    shape: WedgeY
+    yaw: 225.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 05.1
+    min: -0.03350967, -0.09350967, 0.00425503
+    max: -0.01950967, -0.03449033, 0.36474497
+    color: '#FF423C'
+    shape: WedgeYReverse
+    yaw: 225.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 05.0
+    min: -0.12772417, -0.09234888, 0.06025
+    max: -0.02796991, -0.06634888, 0.07625
+    color: '#FCFCFC'
+    yaw: -48.275404
+    pitch: -8.554688
+  - label: source diagonal white spiral 05.1
+    min: -0.08207074, -0.06334281, 0.16825
+    max: -0.01561121, -0.03734281, 0.18425
+    color: '#FCFCFC'
+    yaw: -50.267646
+    pitch: -13.588557
+  - label: source diagonal white spiral 05.2
+    min: -0.0373398, -0.03433675, 0.27625
+    max: -0.00233003, -0.00833675, 0.29225
+    color: '#FCFCFC'
+    yaw: -58.334826
+    pitch: -31.267593
+  - label: connected triangular cone panel 06.0
+    min: -0.03350967, -0.09350967, 0.00425503
+    max: -0.01950967, -0.03449033, 0.36474497
+    color: '#FF423C'
+    shape: WedgeY
+    yaw: 270.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 06.1
+    min: 0.01950967, -0.09350967, 0.00425503
+    max: 0.03350967, -0.03449033, 0.36474497
+    color: '#FF423C'
+    shape: WedgeYReverse
+    yaw: 270.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 06.0
+    min: -0.05091323, -0.1292819, 0.04675
+    max: 0.05303715, -0.1032819, 0.06275
+    color: '#FCFCFC'
+    yaw: -3.127447
+    pitch: -8.173985
+  - label: source diagonal white spiral 06.1
+    min: -0.03422818, -0.08826113, 0.15475
+    max: 0.0363521, -0.06226113, 0.17075
+    color: '#FCFCFC'
+    yaw: -4.895744
+    pitch: -12.663579
+  - label: source diagonal white spiral 06.2
+    min: -0.0182564, -0.04724036, 0.26275
+    max: 0.02038032, -0.02124036, 0.27875
+    color: '#FCFCFC'
+    yaw: -11.206705
+    pitch: -27.098139
+  - label: connected triangular cone panel 07.0
+    min: 0.01950967, -0.09350967, 0.00425503
+    max: 0.03350967, -0.03449033, 0.36474497
+    color: '#FF423C'
+    shape: WedgeY
+    yaw: 315.0
+    pitch: 20.797877
+  - label: connected triangular cone panel 07.1
+    min: 0.057, -0.05601934, 0.00425503
+    max: 0.071, 0.003, 0.36474497
+    color: '#FF423C'
+    shape: WedgeYReverse
+    yaw: 315.0
+    pitch: 20.797877
+  - label: source diagonal white spiral 07.0
+    min: 0.03252494, -0.09809856, 0.03325
+    max: 0.14067585, -0.07209856, 0.04925
+    color: '#FCFCFC'
+    yaw: 42.007732
+    pitch: -7.825476
+  - label: source diagonal white spiral 07.1
+    min: 0.02023572, -0.06909249, 0.14125
+    max: 0.09495294, -0.04309249, 0.15725
+    color: '#FCFCFC'
+    yaw: 40.427213
+    pitch: -11.854416
+  - label: source diagonal white spiral 07.2
+    min: 0.0073831, -0.04008643, 0.24925
+    max: 0.04979343, -0.01408643, 0.26525
+    color: '#FCFCFC'
+    yaw: 35.34123
+    pitch: -23.832647
+  - label: open paper cone lower edge facet 00
+    min: 0.05350201, 0.03825483, 0.004
+    max: 0.16500766, 0.05225483, 0.024
+    color: '#FF423C'
+    yaw: 112.5
+  - label: open paper cone lower edge facet 01
+    min: -0.01049799, 0.10225483, 0.004
+    max: 0.10100766, 0.11625483, 0.024
+    color: '#FF423C'
+    yaw: 157.5
+  - label: open paper cone lower edge facet 02
+    min: -0.10100766, 0.10225483, 0.004
+    max: 0.01049799, 0.11625483, 0.024
+    color: '#FF423C'
+    yaw: -157.5
+  - label: open paper cone lower edge facet 03
+    min: -0.16500766, 0.03825483, 0.004
+    max: -0.05350201, 0.05225483, 0.024
+    color: '#FF423C'
+    yaw: -112.5
+  - label: open paper cone lower edge facet 04
+    min: -0.16500766, -0.05225483, 0.004
+    max: -0.05350201, -0.03825483, 0.024
+    color: '#FF423C'
+    yaw: -67.5
+  - label: open paper cone lower edge facet 05
+    min: -0.10100766, -0.11625483, 0.004
+    max: 0.01049799, -0.10225483, 0.024
+    color: '#FF423C'
+    yaw: -22.5
+  - label: open paper cone lower edge facet 06
+    min: -0.01049799, -0.11625483, 0.004
+    max: 0.10100766, -0.10225483, 0.024
+    color: '#FF423C'
+    yaw: 22.5
+  - label: open paper cone lower edge facet 07
+    min: 0.05350201, -0.05225483, 0.004
+    max: 0.16500766, -0.03825483, 0.024
+    color: '#FF423C'
+    yaw: 67.5
+  - label: small joined cone tip
+    min: -0.01, -0.01, 0.336
+    max: 0.01, 0.01, 0.357
+    color: '#FF423C'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DClothingHeadHatWeldingWorldCloud
+  label: ClothingHeadHatWelding loose icon
+  status: draft
+  sourcePrototypes:
+  - ClothingHeadHatWelding
+  referencePrototype: ClothingHeadHatWelding
+  referenceRsi: /Textures/Clothing/Head/Welding/welding.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Welding shield lying face-up, with connected upper/lower shield plates and raised sides, rectangular
+    optical bezel, original recessed tinted lens and two side-strap ends. icon-up exists in the RSI but this prototype
+    has no Foldable component; no automatic raised-state binding is invented. Ground-item art only. No actor, worn,
+    held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: upper continuous mask plate
+    min: -0.21875, -0.0125, 0.02
+    max: 0.21875, 0.18125, 0.061
+    color: '#656565'
+    shape: Ellipsoid
+  - label: lower continuous mask plate
+    min: -0.21875, -0.3625, 0.019
+    max: 0.21875, -0.1375, 0.058
+    color: '#656565'
+    shape: Ellipsoid
+  - label: left shield side
+    min: -0.25, -0.28125, 0.014
+    max: -0.16875, 0.09375, 0.074
+    color: '#656565'
+    shape: Ellipsoid
+  - label: right shield side
+    min: 0.16875, -0.28125, 0.014
+    max: 0.25, 0.09375, 0.074
+    color: '#656565'
+    shape: Ellipsoid
+  - label: optical bezel upper
+    min: -0.1875, -0.0125, 0.041
+    max: 0.1875, 0.03125, 0.078
+    color: '#000000'
+  - label: optical bezel lower
+    min: -0.1875, -0.171875, 0.041
+    max: 0.1875, -0.125, 0.078
+    color: '#000000'
+  - label: optical bezel left
+    min: -0.203125, -0.15625, 0.041
+    max: -0.15625, 0.015625, 0.078
+    color: '#000000'
+  - label: optical bezel right
+    min: 0.15625, -0.15625, 0.041
+    max: 0.203125, 0.015625, 0.078
+    color: '#000000'
+  - label: original tinted protective lens
+    min: -0.15625, -0.125, 0.042
+    max: 0.15625, 0.0, 0.052
+    color: '#FFFFFF'
+    surface: CMU3DHeadwearExtraCloudArt005
+    surfaceAxis: XY
+  - label: left side strap attachment
+    min: -0.31675962, -0.1140625, 0.019
+    max: -0.22386538, -0.0890625, 0.041
+    color: '#5E3F1E'
+    yaw: -173.659808
+  - label: left swept strap end
+    min: -0.37095224, -0.096875, 0.019
+    max: -0.30092276, -0.075, 0.039
+    color: '#5E3F1E'
+    yaw: 139.085617
+  - label: right side strap attachment
+    min: 0.22386538, -0.1140625, 0.019
+    max: 0.31675962, -0.0890625, 0.041
+    color: '#5E3F1E'
+    yaw: -6.340192
+  - label: right swept strap end
+    min: 0.30092276, -0.096875, 0.019
+    max: 0.37095224, -0.075, 0.039
+    color: '#5E3F1E'
+    yaw: 40.914383
+- type: cmu3DModel
+  id: CMU3DRMCGlassesMedicalHUDGlassesWorldCloud
+  label: RMCGlassesMedicalHUDGlasses loose icon-on
+  status: draft
+  sourcePrototypes:
+  - RMCGlassesMedicalHUDGlasses
+  referencePrototype: RMCGlassesMedicalHUDGlasses
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Eyes/Glasses/medicalhud.rsi
+  referenceState: icon-on
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: HealthMate optical HUD, activated icon-on first-frame study with original teal monocle pixels. Connected
+    long temple, upright electronics, thin upper brackets and hooked lower support retain source gaps. Default activated=true
+    and four icon-on frames are recorded; blinking and runtime toggle selection are not implemented. Ground-item
+    art only. No actor, worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are
+    inferred; native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: connected medical frame segment 00
+    min: -0.18164345, -0.01796875, 0.023
+    max: -0.11835655, 0.00234375, 0.05
+    color: '#9BA49E'
+    yaw: -47.29061
+  - label: connected medical frame segment 01
+    min: -0.13525, -0.04140625, 0.023
+    max: 0.179, -0.01484375, 0.05
+    color: '#9BA49E'
+  - label: connected medical frame segment 02
+    min: -0.13525, -0.08203125, 0.023
+    max: 0.154, -0.06171875, 0.05
+    color: '#9BA49E'
+  - label: connected medical frame segment 03
+    min: 0.15740862, -0.0890625, 0.023
+    max: 0.25821638, -0.0328125, 0.05
+    color: '#9BA49E'
+    yaw: -45.0
+  - label: connected medical frame segment 04
+    min: 0.21290937, -0.015625, 0.023
+    max: 0.30896563, 0.01875, 0.05
+    color: '#9BA49E'
+    yaw: -62.525568
+  - label: connected medical frame segment 05
+    min: 0.1913125, -0.1390625, 0.023
+    max: 0.3711875, -0.1078125, 0.05
+    color: '#9BA49E'
+    yaw: -90.0
+  - label: connected medical frame segment 06
+    min: 0.23632058, -0.25546875, 0.023
+    max: 0.31680442, -0.23515625, 0.05
+    color: '#39333E'
+    yaw: -97.431408
+  - label: connected medical frame segment 07
+    min: 0.20879898, -0.31015625, 0.023
+    max: 0.28182602, -0.28984375, 0.05
+    color: '#39333E'
+    yaw: -144.782407
+  - label: connected medical frame segment 08
+    min: 0.16458598, -0.30703125, 0.023
+    max: 0.23228902, -0.28671875, 0.05
+    color: '#39333E'
+    yaw: 132.878904
+  - label: temple terminal curl
+    min: -0.17814629, 0.01640625, 0.023
+    max: -0.12810371, 0.03671875, 0.047
+    color: '#39333E'
+    yaw: 41.987212
+  - label: folded temple lower join
+    min: -0.157125, -0.0609375, 0.023
+    max: -0.105375, -0.0390625, 0.047
+    color: '#9BA49E'
+    yaw: -90.0
+  - label: folded temple inner join
+    min: 0.14469864, -0.09375, 0.023
+    max: 0.24592636, -0.071875, 0.047
+    color: '#9BA49E'
+    yaw: -13.570434
+  - label: temple to upright hinge
+    min: 0.23032297, -0.10390625, 0.025
+    max: 0.28530203, -0.06796875, 0.05
+    color: '#9BA49E'
+    yaw: -3.814075
+  - label: upper instrument mast
+    min: 0.1756875, 0.059375, 0.022
+    max: 0.3868125, 0.08125, 0.055
+    color: '#0A0007'
+    yaw: 90.0
+  - label: source frame zero mast indicator
+    min: 0.27125, 0.125, 0.05
+    max: 0.2921875, 0.15625, 0.062
+    color: '#1E5D6C'
+  - label: upper projecting bracket
+    min: 0.27590353, 0.03828125, 0.022
+    max: 0.37409647, 0.05859375, 0.055
+    color: '#39333E'
+    yaw: 14.036243
+  - label: outer bracket end
+    min: 0.36106144, 0.03359375, 0.022
+    max: 0.43893856, 0.05390625, 0.055
+    color: '#39333E'
+    yaw: -26.565051
+  - label: source red upright electronics
+    min: 0.265625, -0.165625, 0.046
+    max: 0.3, -0.03125, 0.063
+    color: '#4C1919'
+  - label: active monocle opaque frame
+    min: -0.0375, -0.25625, 0.016
+    max: 0.225, -0.025, 0.04
+    color: '#0A0007'
+    shape: Ellipsoid
+  - label: original active teal monocle pixels
+    min: -0.03125, -0.25, 0.032
+    max: 0.21875, -0.03125, 0.044
+    color: '#FFFFFF'
+    surface: CMU3DHeadwearExtraCloudArt006
+    surfaceAxis: XY
+  - label: active monocle attached bridge
+    min: 0.20162354, -0.10234375, 0.022
+    max: 0.27650146, -0.07578125, 0.054
+    color: '#9BA49E'
+    yaw: 37.405357
+- type: cmu3DModel
+  id: CMU3DRMCGlassesMedicalHUDGlassesOffWorldCloud
+  label: RMCGlassesMedicalHUDGlasses loose icon
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: RMCGlassesMedicalHUDGlasses
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Eyes/Glasses/medicalhud.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: HealthMate optical HUD, deactivated icon pose without the active monocle disc. Connected long temple,
+    upright electronics, thin upper brackets and hooked lower support retain source gaps. Default activated=true
+    and four icon-on frames are recorded; blinking and runtime toggle selection are not implemented. Ground-item
+    art only. No actor, worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are
+    inferred; native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: connected medical frame segment 00
+    min: -0.18164345, -0.01796875, 0.023
+    max: -0.11835655, 0.00234375, 0.05
+    color: '#9BA49E'
+    yaw: -47.29061
+  - label: connected medical frame segment 01
+    min: -0.13525, -0.04140625, 0.023
+    max: 0.179, -0.01484375, 0.05
+    color: '#9BA49E'
+  - label: connected medical frame segment 02
+    min: -0.13525, -0.08203125, 0.023
+    max: 0.154, -0.06171875, 0.05
+    color: '#9BA49E'
+  - label: connected medical frame segment 03
+    min: 0.15740862, -0.0890625, 0.023
+    max: 0.25821638, -0.0328125, 0.05
+    color: '#9BA49E'
+    yaw: -45.0
+  - label: connected medical frame segment 04
+    min: 0.21290937, -0.015625, 0.023
+    max: 0.30896563, 0.01875, 0.05
+    color: '#9BA49E'
+    yaw: -62.525568
+  - label: connected medical frame segment 05
+    min: 0.1913125, -0.1390625, 0.023
+    max: 0.3711875, -0.1078125, 0.05
+    color: '#9BA49E'
+    yaw: -90.0
+  - label: connected medical frame segment 06
+    min: 0.23632058, -0.25546875, 0.023
+    max: 0.31680442, -0.23515625, 0.05
+    color: '#39333E'
+    yaw: -97.431408
+  - label: connected medical frame segment 07
+    min: 0.20879898, -0.31015625, 0.023
+    max: 0.28182602, -0.28984375, 0.05
+    color: '#39333E'
+    yaw: -144.782407
+  - label: connected medical frame segment 08
+    min: 0.16458598, -0.30703125, 0.023
+    max: 0.23228902, -0.28671875, 0.05
+    color: '#39333E'
+    yaw: 132.878904
+  - label: temple terminal curl
+    min: -0.17814629, 0.01640625, 0.023
+    max: -0.12810371, 0.03671875, 0.047
+    color: '#39333E'
+    yaw: 41.987212
+  - label: folded temple lower join
+    min: -0.157125, -0.0609375, 0.023
+    max: -0.105375, -0.0390625, 0.047
+    color: '#9BA49E'
+    yaw: -90.0
+  - label: folded temple inner join
+    min: 0.14469864, -0.09375, 0.023
+    max: 0.24592636, -0.071875, 0.047
+    color: '#9BA49E'
+    yaw: -13.570434
+  - label: temple to upright hinge
+    min: 0.23032297, -0.10390625, 0.025
+    max: 0.28530203, -0.06796875, 0.05
+    color: '#9BA49E'
+    yaw: -3.814075
+  - label: upper instrument mast
+    min: 0.1756875, 0.059375, 0.022
+    max: 0.3868125, 0.08125, 0.055
+    color: '#0A0007'
+    yaw: 90.0
+  - label: source frame zero mast indicator
+    min: 0.27125, 0.125, 0.05
+    max: 0.2921875, 0.15625, 0.062
+    color: '#096275'
+  - label: upper projecting bracket
+    min: 0.27590353, 0.03828125, 0.022
+    max: 0.37409647, 0.05859375, 0.055
+    color: '#39333E'
+    yaw: 14.036243
+  - label: outer bracket end
+    min: 0.36106144, 0.03359375, 0.022
+    max: 0.43893856, 0.05390625, 0.055
+    color: '#39333E'
+    yaw: -26.565051
+  - label: source red upright electronics
+    min: 0.265625, -0.165625, 0.046
+    max: 0.3, -0.03125, 0.063
+    color: '#4C1919'
+- type: cmu3DModel
+  id: CMU3DRMCGlassesTriMaxYellowFakeWorldCloud
+  label: RMCGlassesTriMaxYellowFake loose icon
+  status: draft
+  sourcePrototypes:
+  - RMCGlassesTriMaxYellowFake
+  referencePrototype: RMCGlassesTriMaxYellowFake
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Eyes/Glasses/trimax_yellow_glasses.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: TriMax yellow glasses with paired broad angular yellow lenses, straight dark upper rims, a separate
+    nose bridge and folded temple arm. Opaque source colors retained; lens transparency and worn shapes unverified.
+    Ground-item art only. No actor, worn, held, accessory, damaged, tint or animation binding. Hidden depth and
+    underside are inferred; native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: left broad yellow lens upper
+    min: -0.315625, -0.053125, 0.022
+    max: -0.0375, 0.025, 0.044
+    color: '#6A5D00'
+  - label: left tapered lower yellow lens
+    min: -0.290625, -0.13125, 0.021
+    max: -0.075, -0.0125, 0.045
+    color: '#6A5D00'
+    shape: Ellipsoid
+  - label: left straight upper rim
+    min: -0.315625, 0.015625, 0.034
+    max: -0.0375, 0.059375, 0.061
+    color: '#0D0D0D'
+  - label: left source gold brow
+    min: -0.309375, 0.00625, 0.047
+    max: -0.05, 0.03125, 0.064
+    color: '#181818'
+  - label: right broad yellow lens upper
+    min: 0.00625, -0.053125, 0.022
+    max: 0.25, 0.025, 0.044
+    color: '#6A5D00'
+  - label: right tapered lower yellow lens
+    min: 0.03125, -0.13125, 0.021
+    max: 0.2125, -0.0125, 0.045
+    color: '#6A5D00'
+    shape: Ellipsoid
+  - label: right straight upper rim
+    min: 0.00625, 0.015625, 0.034
+    max: 0.25, 0.059375, 0.061
+    color: '#0D0D0D'
+  - label: right source gold brow
+    min: 0.0125, 0.00625, 0.047
+    max: 0.2375, 0.03125, 0.064
+    color: '#181818'
+  - label: connected central nose bridge
+    min: -0.059375, -0.03125, 0.026
+    max: 0.03125, 0.00625, 0.056
+    color: '#181818'
+  - label: long folded right temple
+    min: 0.21769947, 0.0265625, 0.032
+    max: 0.35105053, 0.0515625, 0.055
+    color: '#0D0D0D'
+    yaw: -4.289153
+  - label: right downturned earpiece
+    min: 0.32123856, -0.00859375, 0.026
+    max: 0.40063644, 0.01171875, 0.049
+    color: '#0D0D0D'
+    yaw: -66.801409
+- type: cmu3DModel
+  id: CMU3DRMCHeadBeretTSEWorldCloud
+  label: RMCHeadBeretTSE loose icon
+  status: draft
+  sourcePrototypes:
+  - RMCHeadBeretTSE
+  referencePrototype: RMCHeadBeretTSE
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Head/TSE/tse_beret.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Loose beret with one smooth slumped convex crown and a connected open lower band. The upper crown
+    is a shallow solid approximation; a complete thin concave cloth shell is outside the primitive contract. Original
+    tiny insignia retained where present. Ground-item art only. No actor, worn, held, accessory, damaged, tint or
+    animation binding. Hidden depth and underside are inferred; native admission, saved-map fit and fidelity unverified.
+  parts:
+  - label: open underside felt band facet 00
+    min: 0.08270513, 0.03053906, 0.004
+    max: 0.12124197, 0.04853906, 0.035
+    color: '#230C10'
+    yaw: 114.88468
+  - label: open underside felt band facet 01
+    min: 0.05777697, 0.05117482, 0.004
+    max: 0.10492013, 0.06917482, 0.035
+    color: '#230C10'
+    yaw: 149.987057
+  - label: open underside felt band facet 02
+    min: 0.0186194, 0.06308889, 0.004
+    max: 0.0726306, 0.08108889, 0.035
+    color: '#230C10'
+    yaw: 171.201506
+  - label: open underside felt band facet 03
+    min: -0.0226306, 0.06308889, 0.004
+    max: 0.0313806, 0.08108889, 0.035
+    color: '#230C10'
+    yaw: -171.201506
+  - label: open underside felt band facet 04
+    min: -0.05492013, 0.05117482, 0.004
+    max: -0.00777697, 0.06917482, 0.035
+    color: '#230C10'
+    yaw: -149.987057
+  - label: open underside felt band facet 05
+    min: -0.07124197, 0.03053906, 0.004
+    max: -0.03270513, 0.04853906, 0.035
+    color: '#230C10'
+    yaw: -114.88468
+  - label: open underside felt band facet 06
+    min: -0.07124197, 0.00671094, 0.004
+    max: -0.03270513, 0.02471094, 0.035
+    color: '#230C10'
+    yaw: -65.11532
+  - label: open underside felt band facet 07
+    min: -0.05492013, -0.01392482, 0.004
+    max: -0.00777697, 0.00407518, 0.035
+    color: '#230C10'
+    yaw: -30.012943
+  - label: open underside felt band facet 08
+    min: -0.0226306, -0.02583889, 0.004
+    max: 0.0313806, -0.00783889, 0.035
+    color: '#230C10'
+    yaw: -8.798494
+  - label: open underside felt band facet 09
+    min: 0.0186194, -0.02583889, 0.004
+    max: 0.0726306, -0.00783889, 0.035
+    color: '#230C10'
+    yaw: 8.798494
+  - label: open underside felt band facet 10
+    min: 0.05777697, -0.01392482, 0.004
+    max: 0.10492013, 0.00407518, 0.035
+    color: '#230C10'
+    yaw: 30.012943
+  - label: open underside felt band facet 11
+    min: 0.08270513, 0.00671094, 0.004
+    max: 0.12124197, 0.02471094, 0.035
+    color: '#230C10'
+    yaw: 65.11532
+  - label: continuous slumped felt crown
+    min: -0.125, -0.0625, 0.028
+    max: 0.125, 0.09375, 0.089
+    color: '#321117'
+    shape: Ellipsoid
+    yaw: -15
+  - label: subtle broad upper cloth fold
+    min: -0.0625, -0.015625, 0.074
+    max: 0.065, 0.0484375, 0.093
+    color: '#321117'
+    shape: Ellipsoid
+    yaw: 20
+  - label: original pale TSE badge
+    min: 0.005, 0.003625, 0.078
+    max: 0.067, 0.035625, 0.097
+    color: '#FFFFFF'
+    surface: CMU3DHeadwearExtraCloudArt007
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DRMCHeadCapFedoraBrownWorldCloud
+  label: RMCHeadCapFedoraBrown loose icon
+  status: draft
+  sourcePrototypes:
+  - RMCHeadCapFedoraBrown
+  referencePrototype: RMCHeadCapFedoraBrown
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Head/Hats/Fedora/brown.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Fedora with broad planar annular brim, eight connected crown panels, dark separate ribbon and a recessed
+    center roof crease. Crown concavity is faceted, not a smooth thin felt shell. Ground-item art only. No actor,
+    worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: broad flat brim facet 00
+    min: 0.18790495, -0.0393314, 0.005
+    max: 0.23400232, 0.0656686, 0.021
+    color: '#342918'
+    yaw: 98.832975
+  - label: broad flat brim facet 01
+    min: 0.17908664, -0.01350027, 0.005
+    max: 0.22660697, 0.09149973, 0.021
+    color: '#342918'
+    yaw: 115.576413
+  - label: broad flat brim facet 02
+    min: 0.16195687, 0.01083212, 0.005
+    max: 0.21193249, 0.11583212, 0.021
+    color: '#342918'
+    yaw: 130.142268
+  - label: broad flat brim facet 03
+    min: 0.13740174, 0.0327307, 0.005
+    max: 0.19031503, 0.1377307, 0.021
+    color: '#342918'
+    yaw: 142.321415
+  - label: broad flat brim facet 04
+    min: 0.10656177, 0.05135391, 0.005
+    max: 0.16238844, 0.15635391, 0.021
+    color: '#342918'
+    yaw: 152.51887
+  - label: broad flat brim facet 05
+    min: 0.07076164, 0.06598607, 0.005
+    max: 0.12908639, 0.17098607, 0.021
+    color: '#342918'
+    yaw: 161.284922
+  - label: broad flat brim facet 06
+    min: 0.0314663, 0.07606487, 0.005
+    max: 0.09159951, 0.18106487, 0.021
+    color: '#342918'
+    yaw: 169.116999
+  - label: broad flat brim facet 07
+    min: -0.00976248, 0.08120301, 0.005
+    max: 0.05131672, 0.18620301, 0.021
+    color: '#342918'
+    yaw: 176.427996
+  - label: broad flat brim facet 08
+    min: -0.05131672, 0.08120301, 0.005
+    max: 0.00976248, 0.18620301, 0.021
+    color: '#342918'
+    yaw: -176.427996
+  - label: broad flat brim facet 09
+    min: -0.09159951, 0.07606487, 0.005
+    max: -0.0314663, 0.18106487, 0.021
+    color: '#342918'
+    yaw: -169.116999
+  - label: broad flat brim facet 10
+    min: -0.12908639, 0.06598607, 0.005
+    max: -0.07076164, 0.17098607, 0.021
+    color: '#342918'
+    yaw: -161.284922
+  - label: broad flat brim facet 11
+    min: -0.16238844, 0.05135391, 0.005
+    max: -0.10656177, 0.15635391, 0.021
+    color: '#342918'
+    yaw: -152.51887
+  - label: broad flat brim facet 12
+    min: -0.19031503, 0.0327307, 0.005
+    max: -0.13740174, 0.1377307, 0.021
+    color: '#342918'
+    yaw: -142.321415
+  - label: broad flat brim facet 13
+    min: -0.21193249, 0.01083212, 0.005
+    max: -0.16195687, 0.11583212, 0.021
+    color: '#342918'
+    yaw: -130.142268
+  - label: broad flat brim facet 14
+    min: -0.22660697, -0.01350027, 0.005
+    max: -0.17908664, 0.09149973, 0.021
+    color: '#342918'
+    yaw: -115.576413
+  - label: broad flat brim facet 15
+    min: -0.23400232, -0.0393314, 0.005
+    max: -0.18790495, 0.0656686, 0.021
+    color: '#342918'
+    yaw: -98.832975
+  - label: broad flat brim facet 16
+    min: -0.23400232, -0.0656686, 0.005
+    max: -0.18790495, 0.0393314, 0.021
+    color: '#342918'
+    yaw: -81.167025
+  - label: broad flat brim facet 17
+    min: -0.22660697, -0.09149973, 0.005
+    max: -0.17908664, 0.01350027, 0.021
+    color: '#342918'
+    yaw: -64.423587
+  - label: broad flat brim facet 18
+    min: -0.21193249, -0.11583212, 0.005
+    max: -0.16195687, -0.01083212, 0.021
+    color: '#342918'
+    yaw: -49.857732
+  - label: broad flat brim facet 19
+    min: -0.19031503, -0.1377307, 0.005
+    max: -0.13740174, -0.0327307, 0.021
+    color: '#342918'
+    yaw: -37.678585
+  - label: broad flat brim facet 20
+    min: -0.16238844, -0.15635391, 0.005
+    max: -0.10656177, -0.05135391, 0.021
+    color: '#342918'
+    yaw: -27.48113
+  - label: broad flat brim facet 21
+    min: -0.12908639, -0.17098607, 0.005
+    max: -0.07076164, -0.06598607, 0.021
+    color: '#342918'
+    yaw: -18.715078
+  - label: broad flat brim facet 22
+    min: -0.09159951, -0.18106487, 0.005
+    max: -0.0314663, -0.07606487, 0.021
+    color: '#342918'
+    yaw: -10.883001
+  - label: broad flat brim facet 23
+    min: -0.05131672, -0.18620301, 0.005
+    max: 0.00976248, -0.08120301, 0.021
+    color: '#342918'
+    yaw: -3.572004
+  - label: broad flat brim facet 24
+    min: -0.00976248, -0.18620301, 0.005
+    max: 0.05131672, -0.08120301, 0.021
+    color: '#342918'
+    yaw: 3.572004
+  - label: broad flat brim facet 25
+    min: 0.0314663, -0.18106487, 0.005
+    max: 0.09159951, -0.07606487, 0.021
+    color: '#342918'
+    yaw: 10.883001
+  - label: broad flat brim facet 26
+    min: 0.07076164, -0.17098607, 0.005
+    max: 0.12908639, -0.06598607, 0.021
+    color: '#342918'
+    yaw: 18.715078
+  - label: broad flat brim facet 27
+    min: 0.10656177, -0.15635391, 0.005
+    max: 0.16238844, -0.05135391, 0.021
+    color: '#342918'
+    yaw: 27.48113
+  - label: broad flat brim facet 28
+    min: 0.13740174, -0.1377307, 0.005
+    max: 0.19031503, -0.0327307, 0.021
+    color: '#342918'
+    yaw: 37.678585
+  - label: broad flat brim facet 29
+    min: 0.16195687, -0.11583212, 0.005
+    max: 0.21193249, -0.01083212, 0.021
+    color: '#342918'
+    yaw: 49.857732
+  - label: broad flat brim facet 30
+    min: 0.17908664, -0.09149973, 0.005
+    max: 0.22660697, 0.01350027, 0.021
+    color: '#342918'
+    yaw: 64.423587
+  - label: broad flat brim facet 31
+    min: 0.18790495, -0.0656686, 0.005
+    max: 0.23400232, 0.0393314, 0.021
+    color: '#342918'
+    yaw: 81.167025
+  - label: open eight-sided crown facet 00
+    min: 0.08232912, 0.03550179, 0.014
+    max: 0.18910086, 0.06650179, 0.149
+    color: '#463624'
+    yaw: 123.63392
+  - label: open eight-sided crown facet 01
+    min: -0.0131859, 0.08500179, 0.014
+    max: 0.12561588, 0.11600179, 0.149
+    color: '#463624'
+    yaw: 165.538191
+  - label: open eight-sided crown facet 02
+    min: -0.12561588, 0.08500179, 0.014
+    max: 0.0131859, 0.11600179, 0.149
+    color: '#463624'
+    yaw: -165.538191
+  - label: open eight-sided crown facet 03
+    min: -0.18910086, 0.03550179, 0.014
+    max: -0.08232912, 0.06650179, 0.149
+    color: '#463624'
+    yaw: -123.63392
+  - label: open eight-sided crown facet 04
+    min: -0.18910086, -0.03450179, 0.014
+    max: -0.08232912, -0.00350179, 0.149
+    color: '#463624'
+    yaw: -56.36608
+  - label: open eight-sided crown facet 05
+    min: -0.12561588, -0.08400179, 0.014
+    max: 0.0131859, -0.05300179, 0.149
+    color: '#463624'
+    yaw: -14.461809
+  - label: open eight-sided crown facet 06
+    min: -0.0131859, -0.08400179, 0.014
+    max: 0.12561588, -0.05300179, 0.149
+    color: '#463624'
+    yaw: 14.461809
+  - label: open eight-sided crown facet 07
+    min: 0.08232912, -0.03450179, 0.014
+    max: 0.18910086, -0.00350179, 0.149
+    color: '#463624'
+    yaw: 56.36608
+  - label: dark woven crown ribbon facet 00
+    min: 0.08220805, 0.03420889, 0.02
+    max: 0.19263614, 0.06920889, 0.052
+    color: '#171C22'
+    yaw: 123.436026
+  - label: dark woven crown ribbon facet 01
+    min: -0.01431369, 0.08470889, 0.02
+    max: 0.12815788, 0.11970889, 0.052
+    color: '#171C22'
+    yaw: 165.433928
+  - label: dark woven crown ribbon facet 02
+    min: -0.12815788, 0.08470889, 0.02
+    max: 0.01431369, 0.11970889, 0.052
+    color: '#171C22'
+    yaw: -165.433928
+  - label: dark woven crown ribbon facet 03
+    min: -0.19263614, 0.03420889, 0.02
+    max: -0.08220805, 0.06920889, 0.052
+    color: '#171C22'
+    yaw: -123.436026
+  - label: dark woven crown ribbon facet 04
+    min: -0.19263614, -0.03720889, 0.02
+    max: -0.08220805, -0.00220889, 0.052
+    color: '#171C22'
+    yaw: -56.563974
+  - label: dark woven crown ribbon facet 05
+    min: -0.12815788, -0.08770889, 0.02
+    max: 0.01431369, -0.05270889, 0.052
+    color: '#171C22'
+    yaw: -14.566072
+  - label: dark woven crown ribbon facet 06
+    min: -0.01431369, -0.08770889, 0.02
+    max: 0.12815788, -0.05270889, 0.052
+    color: '#171C22'
+    yaw: 14.566072
+  - label: dark woven crown ribbon facet 07
+    min: 0.08220805, -0.03720889, 0.02
+    max: 0.19263614, -0.00220889, 0.052
+    color: '#171C22'
+    yaw: 56.563974
+  - label: front crown top
+    min: -0.155, -0.073, 0.137
+    max: 0.155, -0.041, 0.156
+    color: '#463624'
+  - label: rear crown top
+    min: -0.155, 0.073, 0.137
+    max: 0.155, 0.107, 0.156
+    color: '#463624'
+  - label: left creased crown roof
+    min: -0.158, -0.054, 0.139
+    max: -0.035, 0.087, 0.162
+    color: '#57432D'
+    pitch: -7
+  - label: right creased crown roof
+    min: 0.035, -0.054, 0.139
+    max: 0.158, 0.087, 0.162
+    color: '#57432D'
+    pitch: 7
+  - label: recessed center crown crease
+    min: -0.047, -0.055, 0.131
+    max: 0.047, 0.088, 0.146
+    color: '#463624'
+- type: cmu3DModel
+  id: CMU3DRMCHeadFedoraBrownWorldCloud
+  label: RMCHeadFedoraBrown loose icon
+  status: draft
+  sourcePrototypes:
+  - RMCHeadFedoraBrown
+  referencePrototype: RMCHeadFedoraBrown
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Head/Hats/Fedora/brown_fedora.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: Fedora with broad planar annular brim, eight connected crown panels, dark separate ribbon and a recessed
+    center roof crease. Crown concavity is faceted, not a smooth thin felt shell. Ground-item art only. No actor,
+    worn, held, accessory, damaged, tint or animation binding. Hidden depth and underside are inferred; native admission,
+    saved-map fit and fidelity unverified.
+  parts:
+  - label: broad flat brim facet 00
+    min: 0.18790495, -0.0393314, 0.005
+    max: 0.23400232, 0.0656686, 0.021
+    color: '#342918'
+    yaw: 98.832975
+  - label: broad flat brim facet 01
+    min: 0.17908664, -0.01350027, 0.005
+    max: 0.22660697, 0.09149973, 0.021
+    color: '#342918'
+    yaw: 115.576413
+  - label: broad flat brim facet 02
+    min: 0.16195687, 0.01083212, 0.005
+    max: 0.21193249, 0.11583212, 0.021
+    color: '#342918'
+    yaw: 130.142268
+  - label: broad flat brim facet 03
+    min: 0.13740174, 0.0327307, 0.005
+    max: 0.19031503, 0.1377307, 0.021
+    color: '#342918'
+    yaw: 142.321415
+  - label: broad flat brim facet 04
+    min: 0.10656177, 0.05135391, 0.005
+    max: 0.16238844, 0.15635391, 0.021
+    color: '#342918'
+    yaw: 152.51887
+  - label: broad flat brim facet 05
+    min: 0.07076164, 0.06598607, 0.005
+    max: 0.12908639, 0.17098607, 0.021
+    color: '#342918'
+    yaw: 161.284922
+  - label: broad flat brim facet 06
+    min: 0.0314663, 0.07606487, 0.005
+    max: 0.09159951, 0.18106487, 0.021
+    color: '#342918'
+    yaw: 169.116999
+  - label: broad flat brim facet 07
+    min: -0.00976248, 0.08120301, 0.005
+    max: 0.05131672, 0.18620301, 0.021
+    color: '#342918'
+    yaw: 176.427996
+  - label: broad flat brim facet 08
+    min: -0.05131672, 0.08120301, 0.005
+    max: 0.00976248, 0.18620301, 0.021
+    color: '#342918'
+    yaw: -176.427996
+  - label: broad flat brim facet 09
+    min: -0.09159951, 0.07606487, 0.005
+    max: -0.0314663, 0.18106487, 0.021
+    color: '#342918'
+    yaw: -169.116999
+  - label: broad flat brim facet 10
+    min: -0.12908639, 0.06598607, 0.005
+    max: -0.07076164, 0.17098607, 0.021
+    color: '#342918'
+    yaw: -161.284922
+  - label: broad flat brim facet 11
+    min: -0.16238844, 0.05135391, 0.005
+    max: -0.10656177, 0.15635391, 0.021
+    color: '#342918'
+    yaw: -152.51887
+  - label: broad flat brim facet 12
+    min: -0.19031503, 0.0327307, 0.005
+    max: -0.13740174, 0.1377307, 0.021
+    color: '#342918'
+    yaw: -142.321415
+  - label: broad flat brim facet 13
+    min: -0.21193249, 0.01083212, 0.005
+    max: -0.16195687, 0.11583212, 0.021
+    color: '#342918'
+    yaw: -130.142268
+  - label: broad flat brim facet 14
+    min: -0.22660697, -0.01350027, 0.005
+    max: -0.17908664, 0.09149973, 0.021
+    color: '#342918'
+    yaw: -115.576413
+  - label: broad flat brim facet 15
+    min: -0.23400232, -0.0393314, 0.005
+    max: -0.18790495, 0.0656686, 0.021
+    color: '#342918'
+    yaw: -98.832975
+  - label: broad flat brim facet 16
+    min: -0.23400232, -0.0656686, 0.005
+    max: -0.18790495, 0.0393314, 0.021
+    color: '#342918'
+    yaw: -81.167025
+  - label: broad flat brim facet 17
+    min: -0.22660697, -0.09149973, 0.005
+    max: -0.17908664, 0.01350027, 0.021
+    color: '#342918'
+    yaw: -64.423587
+  - label: broad flat brim facet 18
+    min: -0.21193249, -0.11583212, 0.005
+    max: -0.16195687, -0.01083212, 0.021
+    color: '#342918'
+    yaw: -49.857732
+  - label: broad flat brim facet 19
+    min: -0.19031503, -0.1377307, 0.005
+    max: -0.13740174, -0.0327307, 0.021
+    color: '#342918'
+    yaw: -37.678585
+  - label: broad flat brim facet 20
+    min: -0.16238844, -0.15635391, 0.005
+    max: -0.10656177, -0.05135391, 0.021
+    color: '#342918'
+    yaw: -27.48113
+  - label: broad flat brim facet 21
+    min: -0.12908639, -0.17098607, 0.005
+    max: -0.07076164, -0.06598607, 0.021
+    color: '#342918'
+    yaw: -18.715078
+  - label: broad flat brim facet 22
+    min: -0.09159951, -0.18106487, 0.005
+    max: -0.0314663, -0.07606487, 0.021
+    color: '#342918'
+    yaw: -10.883001
+  - label: broad flat brim facet 23
+    min: -0.05131672, -0.18620301, 0.005
+    max: 0.00976248, -0.08120301, 0.021
+    color: '#342918'
+    yaw: -3.572004
+  - label: broad flat brim facet 24
+    min: -0.00976248, -0.18620301, 0.005
+    max: 0.05131672, -0.08120301, 0.021
+    color: '#342918'
+    yaw: 3.572004
+  - label: broad flat brim facet 25
+    min: 0.0314663, -0.18106487, 0.005
+    max: 0.09159951, -0.07606487, 0.021
+    color: '#342918'
+    yaw: 10.883001
+  - label: broad flat brim facet 26
+    min: 0.07076164, -0.17098607, 0.005
+    max: 0.12908639, -0.06598607, 0.021
+    color: '#342918'
+    yaw: 18.715078
+  - label: broad flat brim facet 27
+    min: 0.10656177, -0.15635391, 0.005
+    max: 0.16238844, -0.05135391, 0.021
+    color: '#342918'
+    yaw: 27.48113
+  - label: broad flat brim facet 28
+    min: 0.13740174, -0.1377307, 0.005
+    max: 0.19031503, -0.0327307, 0.021
+    color: '#342918'
+    yaw: 37.678585
+  - label: broad flat brim facet 29
+    min: 0.16195687, -0.11583212, 0.005
+    max: 0.21193249, -0.01083212, 0.021
+    color: '#342918'
+    yaw: 49.857732
+  - label: broad flat brim facet 30
+    min: 0.17908664, -0.09149973, 0.005
+    max: 0.22660697, 0.01350027, 0.021
+    color: '#342918'
+    yaw: 64.423587
+  - label: broad flat brim facet 31
+    min: 0.18790495, -0.0656686, 0.005
+    max: 0.23400232, 0.0393314, 0.021
+    color: '#342918'
+    yaw: 81.167025
+  - label: open eight-sided crown facet 00
+    min: 0.08232912, 0.03550179, 0.014
+    max: 0.18910086, 0.06650179, 0.149
+    color: '#463624'
+    yaw: 123.63392
+  - label: open eight-sided crown facet 01
+    min: -0.0131859, 0.08500179, 0.014
+    max: 0.12561588, 0.11600179, 0.149
+    color: '#463624'
+    yaw: 165.538191
+  - label: open eight-sided crown facet 02
+    min: -0.12561588, 0.08500179, 0.014
+    max: 0.0131859, 0.11600179, 0.149
+    color: '#463624'
+    yaw: -165.538191
+  - label: open eight-sided crown facet 03
+    min: -0.18910086, 0.03550179, 0.014
+    max: -0.08232912, 0.06650179, 0.149
+    color: '#463624'
+    yaw: -123.63392
+  - label: open eight-sided crown facet 04
+    min: -0.18910086, -0.03450179, 0.014
+    max: -0.08232912, -0.00350179, 0.149
+    color: '#463624'
+    yaw: -56.36608
+  - label: open eight-sided crown facet 05
+    min: -0.12561588, -0.08400179, 0.014
+    max: 0.0131859, -0.05300179, 0.149
+    color: '#463624'
+    yaw: -14.461809
+  - label: open eight-sided crown facet 06
+    min: -0.0131859, -0.08400179, 0.014
+    max: 0.12561588, -0.05300179, 0.149
+    color: '#463624'
+    yaw: 14.461809
+  - label: open eight-sided crown facet 07
+    min: 0.08232912, -0.03450179, 0.014
+    max: 0.18910086, -0.00350179, 0.149
+    color: '#463624'
+    yaw: 56.36608
+  - label: dark woven crown ribbon facet 00
+    min: 0.08220805, 0.03420889, 0.02
+    max: 0.19263614, 0.06920889, 0.052
+    color: '#171C22'
+    yaw: 123.436026
+  - label: dark woven crown ribbon facet 01
+    min: -0.01431369, 0.08470889, 0.02
+    max: 0.12815788, 0.11970889, 0.052
+    color: '#171C22'
+    yaw: 165.433928
+  - label: dark woven crown ribbon facet 02
+    min: -0.12815788, 0.08470889, 0.02
+    max: 0.01431369, 0.11970889, 0.052
+    color: '#171C22'
+    yaw: -165.433928
+  - label: dark woven crown ribbon facet 03
+    min: -0.19263614, 0.03420889, 0.02
+    max: -0.08220805, 0.06920889, 0.052
+    color: '#171C22'
+    yaw: -123.436026
+  - label: dark woven crown ribbon facet 04
+    min: -0.19263614, -0.03720889, 0.02
+    max: -0.08220805, -0.00220889, 0.052
+    color: '#171C22'
+    yaw: -56.563974
+  - label: dark woven crown ribbon facet 05
+    min: -0.12815788, -0.08770889, 0.02
+    max: 0.01431369, -0.05270889, 0.052
+    color: '#171C22'
+    yaw: -14.566072
+  - label: dark woven crown ribbon facet 06
+    min: -0.01431369, -0.08770889, 0.02
+    max: 0.12815788, -0.05270889, 0.052
+    color: '#171C22'
+    yaw: 14.566072
+  - label: dark woven crown ribbon facet 07
+    min: 0.08220805, -0.03720889, 0.02
+    max: 0.19263614, -0.00220889, 0.052
+    color: '#171C22'
+    yaw: 56.563974
+  - label: front crown top
+    min: -0.155, -0.073, 0.137
+    max: 0.155, -0.041, 0.156
+    color: '#463624'
+  - label: rear crown top
+    min: -0.155, 0.073, 0.137
+    max: 0.155, 0.107, 0.156
+    color: '#463624'
+  - label: left creased crown roof
+    min: -0.158, -0.054, 0.139
+    max: -0.035, 0.087, 0.162
+    color: '#57432D'
+    pitch: -7
+  - label: right creased crown roof
+    min: 0.035, -0.054, 0.139
+    max: 0.158, 0.087, 0.162
+    color: '#57432D'
+    pitch: 7
+  - label: recessed center crown crease
+    min: -0.047, -0.055, 0.131
+    max: 0.047, 0.088, 0.146
+    color: '#463624'
+- type: cmu3DModel
+  id: CMU3DRMCHeadUNMCHeadsetWorldCloud
+  label: RMCHeadUNMCHeadset loose icon
+  status: draft
+  sourcePrototypes:
+  - RMCHeadUNMCHeadset
+  referencePrototype: RMCHeadUNMCHeadset
+  referenceRsi: /Textures/_RMC14/Objects/Clothing/Head/Hats/unmc_headset.rsi
+  referenceState: icon
+  sourceDirections: 1
+  placement: surface
+  useEntityRotation: true
+  description: 'UNMC headset laid flat: open segmented metal bow, two separate padded earcups and connected downturned
+    microphone arm. No head-sized solid fill; worn helmet/hat placements remain separate unsupported source art.
+    Ground-item art only. No actor, worn, held, accessory, damaged, tint or animation binding. Hidden depth and
+    underside are inferred; native admission, saved-map fit and fidelity unverified.'
+  parts:
+  - label: open headset bow 0
+    min: -0.19177123, -0.0140625, 0.026
+    max: -0.03947877, 0.0140625, 0.052
+    color: '#909090'
+    yaw: 85.030259
+  - label: open headset bow 1
+    min: -0.12463322, 0.090625, 0.026
+    max: -0.00974178, 0.11875, 0.052
+    color: '#909090'
+    yaw: 37.874984
+  - label: open headset bow 2
+    min: -0.03311819, 0.1046875, 0.026
+    max: 0.06436819, 0.1328125, 0.052
+    color: '#909090'
+    yaw: -24.775141
+  - label: open headset bow 3
+    min: -0.00477753, 0.0078125, 0.026
+    max: 0.16727753, 0.0359375, 0.052
+    color: '#909090'
+    yaw: -72.255328
+  - label: left rectangular earcup
+    min: -0.15625, -0.171875, 0.006
+    max: -0.046875, -0.03125, 0.082
+    color: '#909090'
+  - label: left earcup cushion
+    min: -0.1484375, -0.1625, 0.066
+    max: -0.0546875, -0.040625, 0.095
+    color: '#000000'
+    shape: Ellipsoid
+  - label: left exposed silver cup edge
+    min: -0.153125, -0.15, 0.075
+    max: -0.130625, -0.040625, 0.09
+    color: '#909090'
+  - label: right rectangular earcup
+    min: 0.046875, -0.16875, 0.006
+    max: 0.15625, -0.03125, 0.082
+    color: '#909090'
+  - label: right earcup cushion
+    min: 0.0546875, -0.159375, 0.066
+    max: 0.1484375, -0.040625, 0.095
+    color: '#000000'
+    shape: Ellipsoid
+  - label: right exposed silver cup edge
+    min: 0.05, -0.146875, 0.075
+    max: 0.0725, -0.040625, 0.09
+    color: '#909090'
+  - label: microphone root
+    min: 0.10925268, -0.15, 0.032
+    max: 0.18137232, -0.125, 0.058
+    color: '#000000'
+    yaw: -43.025066
+  - label: downturned microphone stalk
+    min: 0.13952791, -0.19140625, 0.03
+    max: 0.19172209, -0.17109375, 0.052
+    color: '#000000'
+    yaw: -98.130102
+  - label: small microphone end
+    min: 0.13125, -0.21875, 0.032
+    max: 0.175, -0.18125, 0.058
+    color: '#000000'
+    shape: Ellipsoid

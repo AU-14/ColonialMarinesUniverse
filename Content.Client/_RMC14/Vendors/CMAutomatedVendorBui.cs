@@ -441,8 +441,11 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
     private FormattedMessage GetSectionName(CMVendorUserComponent? user, CMVendorSection section)
     {
         var name = new FormattedMessage();
-        name.PushTag(new MarkupNode("bold", new MarkupParameter(section.Name.ToUpperInvariant()), null));
-        name.AddText(section.Name.ToUpperInvariant());
+        // cmu edit start: section names may be locale keys
+        var sectionName = Loc.TryGetString(section.Name, out var localized) ? localized : section.Name;
+        name.PushTag(new MarkupNode("bold", new MarkupParameter(sectionName.ToUpperInvariant()), null));
+        name.AddText(sectionName.ToUpperInvariant());
+        // cmu edit end
 
         if (section.TakeAll != null)
         {

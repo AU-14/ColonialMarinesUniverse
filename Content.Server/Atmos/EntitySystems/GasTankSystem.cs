@@ -51,7 +51,9 @@ public sealed partial class GasTankSystem : SharedGasTankSystem
         else if (entity.Comp.CheckUser)
         {
             entity.Comp.CheckUser = false;
-            if (Transform(entity).ParentUid != entity.Comp.User)
+            // cmu edit start: stay connected while the tank is inside storage the user is carrying
+            if (entity.Comp.User is not { } user || !CMUIsCarriedBy(entity, user))
+            // cmu edit end
             {
                 DisconnectFromInternals(entity, forced: true);
             }

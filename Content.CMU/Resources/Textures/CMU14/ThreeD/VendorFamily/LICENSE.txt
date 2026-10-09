@@ -1,0 +1,3 @@
+CC-BY-SA-3.0
+Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/obj/structures/machinery/vending.dmi; static source-layer compositions for CMU 3D review. See SOURCES_VENDOR_FAMILY.md.
+Original source files and crop records: SOURCES_VENDOR_FAMILY.md and generated/vendor-family-source-audit.json.

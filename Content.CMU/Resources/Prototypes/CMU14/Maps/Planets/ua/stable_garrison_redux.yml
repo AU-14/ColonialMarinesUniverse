@@ -82,6 +82,8 @@
 - type: gameMap
   id: StableGarrisonRedux
   mapName: Stable Garrison
+  zLevelsComponentOverrides:
+  - type: CMU3DMap
   allegiance: UA
   mapPath: /Maps/CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ0.yml
   mapsBelow:

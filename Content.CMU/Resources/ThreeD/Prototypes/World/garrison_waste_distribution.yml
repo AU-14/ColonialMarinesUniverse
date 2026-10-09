@@ -1,0 +1,380 @@
+# Source-specific waste intake decks; not walk-through doors.
+- type: cmu3DModel
+  id: CMU3DFiltrationDistribution
+  label: Waste intake deck
+  status: draft
+  sourcePrototypes:
+  - RMCFiltrationDistribution
+  referencePrototype: RMCFiltrationDistribution
+  referenceRsi: _RMC14/Structures/Filtration/96x96.rsi
+  referenceState: distribution
+  sourceDirections: 1
+  useEntityRotation: true
+  terrainCutoutTargets:
+  - RMCWallKutjevoRockBorder
+  terrainCutoutMin: -1.49, -1.49, 0
+  terrainCutoutMax: 1.49, 1.49, 1.10
+  description: Low blocked waste-intake deck with horizontal source hazard rims, copper channels, recessed screen,
+    and a hollow rusted front hood. The damaged source has missing hood plates and bent collar/shards. Plan remains
+    within the 3x3 collision footprint. Physical height, depth and unseen construction are inferred; static source,
+    no invented animation. See SOURCES_FILTRATION.md.
+  parts:
+  - label: left solid deck
+    min: -1.4900000, -1.4900000, 0.0000000
+    max: -0.5800000, 1.4900000, 0.1800000
+    color: '#646D66'
+  - label: right solid deck
+    min: 0.5300000, -1.4900000, 0.0000000
+    max: 1.4900000, 1.4900000, 0.1800000
+    color: '#646D66'
+  - label: rear solid deck
+    min: -0.5800000, 0.3000000, 0.0000000
+    max: 0.5300000, 1.4900000, 0.1800000
+    color: '#646D66'
+  - label: recessed intake shadow bed
+    min: -0.5800000, -1.4900000, 0.0050000
+    max: 0.5300000, 0.3000000, 0.0250000
+    color: '#101213'
+  - label: rear pale rim
+    min: -1.4900000, 1.4300000, 0.1800000
+    max: 1.4900000, 1.4900000, 0.2200000
+    color: '#89938C'
+  - label: left pale rim
+    min: -1.4900000, -1.4900000, 0.1800000
+    max: -1.4300000, 1.4300000, 0.2200000
+    color: '#89938C'
+  - label: right pale rim
+    min: 1.4300000, -1.4900000, 0.1800000
+    max: 1.4900000, 1.4300000, 0.2200000
+    color: '#89938C'
+  - label: left hazard rail
+    min: -1.0000000, -1.4900000, 0.1800000
+    max: -0.5937500, 0.9800000, 0.3000000
+    color: '#FFFFFF'
+    surface: CMU3DWasteLeftHazard
+    surfaceAxis: XY
+  - label: right hazard rail
+    min: 0.5312500, -1.4900000, 0.1800000
+    max: 0.9687500, 0.9800000, 0.3000000
+    color: '#FFFFFF'
+    surface: CMU3DWasteRightHazard
+    surfaceAxis: XY
+  - label: rear hazard cross rail
+    min: -0.5937500, 0.6000000, 0.1800000
+    max: 0.5312500, 0.9800000, 0.3000000
+    color: '#FFFFFF'
+    surface: CMU3DWasteRearHazard
+    surfaceAxis: XY
+  - label: left copper return channel
+    min: -1.2200000, -1.3800000, 0.1800000
+    max: -1.0000000, 0.4200000, 0.2300000
+    color: '#FFFFFF'
+    surface: CMU3DWasteLeftChannel
+    surfaceAxis: XY
+  - label: right copper return channel
+    min: 0.9687500, -1.3800000, 0.1800000
+    max: 1.1875000, 0.4200000, 0.2300000
+    color: '#FFFFFF'
+    surface: CMU3DWasteRightChannel
+    surfaceAxis: XY
+  - label: rear screen recess
+    min: -0.5600000, -0.3400000, 0.0900000
+    max: 0.5000000, 0.5700000, 0.1050000
+    color: '#FFFFFF'
+    surface: CMU3DWasteGrille
+    surfaceAxis: XY
+  - label: original near deck fascia FrontLeft
+    min: -1.4900000, -1.4900000, 0.0100000
+    max: -0.5937500, -1.4860000, 0.1750000
+    color: '#FFFFFF'
+    surface: CMU3DWasteFrontLeft
+    surfaceAxis: XZ
+  - label: original near deck fascia FrontRight
+    min: 0.5312500, -1.4900000, 0.0100000
+    max: 1.4900000, -1.4860000, 0.1750000
+    color: '#FFFFFF'
+    surface: CMU3DWasteFrontRight
+    surfaceAxis: XZ
+  - label: rear dark manifold bed
+    min: -0.4800000, 1.0100000, 0.1800000
+    max: 0.4500000, 1.2000000, 0.2500000
+    color: '#31251C'
+  - label: rear copper manifold rib
+    min: -0.4200000, 1.0000000, 0.2500000
+    max: -0.3750000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: -0.2500000, 1.0000000, 0.2500000
+    max: -0.2050000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: -0.0800000, 1.0000000, 0.2500000
+    max: -0.0350000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: 0.0900000, 1.0000000, 0.2500000
+    max: 0.1350000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: 0.2600000, 1.0000000, 0.2500000
+    max: 0.3050000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: 0.4000000, 1.0000000, 0.2500000
+    max: 0.4450000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: curved rusty hood segment
+    min: -0.6491981, -1.4800000, 0.2630335
+    max: -0.4571981, -0.4800000, 0.3410335
+    color: '#4D4C4B'
+    pitch: 80
+  - label: curved rusty hood segment
+    min: -0.5862435, -1.4800000, 0.4360000
+    max: -0.3942435, -0.4800000, 0.5140000
+    color: '#79685B'
+    pitch: 60
+  - label: curved rusty hood segment
+    min: -0.4679274, -1.4800000, 0.5770036
+    max: -0.2759274, -0.4800000, 0.6550036
+    color: '#6E3D26'
+    pitch: 40
+  - label: curved rusty hood segment
+    min: -0.3085207, -1.4800000, 0.6690371
+    max: -0.1165207, -0.4800000, 0.7470371
+    color: '#4D514C'
+    pitch: 20
+  - label: curved rusty hood segment
+    min: -0.1272500, -1.4800000, 0.7010000
+    max: 0.0647500, -0.4800000, 0.7790000
+    color: '#4D4C4B'
+    pitch: 0
+  - label: curved rusty hood segment
+    min: 0.0540207, -1.4800000, 0.6690371
+    max: 0.2460207, -0.4800000, 0.7470371
+    color: '#4D4C4B'
+    pitch: -20
+  - label: curved rusty hood segment
+    min: 0.2134274, -1.4800000, 0.5770036
+    max: 0.4054274, -0.4800000, 0.6550036
+    color: '#79685B'
+    pitch: -40
+  - label: curved rusty hood segment
+    min: 0.3317435, -1.4800000, 0.4360000
+    max: 0.5237435, -0.4800000, 0.5140000
+    color: '#6E3D26'
+    pitch: -60
+  - label: curved rusty hood segment
+    min: 0.3946981, -1.4800000, 0.2630335
+    max: 0.5866981, -0.4800000, 0.3410335
+    color: '#4D514C'
+    pitch: -80
+  - label: hood side foot
+    min: -0.5812500, -1.4700000, 0.1600000
+    max: -0.5112500, -0.4800000, 0.2500000
+    color: '#44372C'
+  - label: hood side foot
+    min: 0.4487500, -1.4700000, 0.1600000
+    max: 0.5187500, -0.4800000, 0.2500000
+    color: '#44372C'
+  - label: hood raised seam
+    min: -0.5499467, -1.4300000, 0.4925000
+    max: -0.5119467, -0.4500000, 0.5045000
+    color: '#79685B'
+    pitch: 60
+  - label: hood raised seam
+    min: -0.0502500, -1.4300000, 0.7810000
+    max: -0.0122500, -0.4500000, 0.7930000
+    color: '#79685B'
+    pitch: 0
+  - label: hood raised seam
+    min: 0.4494467, -1.4300000, 0.4925000
+    max: 0.4874467, -0.4500000, 0.5045000
+    color: '#79685B'
+    pitch: -60
+- type: cmu3DModel
+  id: CMU3DFiltrationDistributionDamaged
+  label: Broken waste intake deck
+  status: draft
+  sourcePrototypes:
+  - RMCFiltrationDistributionDamaged
+  referencePrototype: RMCFiltrationDistributionDamaged
+  referenceRsi: _RMC14/Structures/Filtration/96x96.rsi
+  referenceState: distribution-damaged
+  sourceDirections: 1
+  useEntityRotation: true
+  terrainCutoutTargets:
+  - RMCWallKutjevoRockBorder
+  terrainCutoutMin: -1.49, -1.49, 0
+  terrainCutoutMax: 1.49, 1.49, 1.10
+  description: Low blocked waste-intake deck with horizontal source hazard rims, copper channels, recessed screen,
+    and a hollow rusted front hood. The damaged source has missing hood plates and bent collar/shards. Plan remains
+    within the 3x3 collision footprint. Physical height, depth and unseen construction are inferred; static source,
+    no invented animation. See SOURCES_FILTRATION.md.
+  parts:
+  - label: left solid deck
+    min: -1.4900000, -1.4900000, 0.0000000
+    max: -0.5800000, 1.4900000, 0.1800000
+    color: '#646D66'
+  - label: right solid deck
+    min: 0.5300000, -1.4900000, 0.0000000
+    max: 1.4900000, 1.4900000, 0.1800000
+    color: '#646D66'
+  - label: rear solid deck
+    min: -0.5800000, 0.3000000, 0.0000000
+    max: 0.5300000, 1.4900000, 0.1800000
+    color: '#646D66'
+  - label: recessed intake shadow bed
+    min: -0.5800000, -1.4900000, 0.0050000
+    max: 0.5300000, 0.3000000, 0.0250000
+    color: '#181812'
+  - label: rear pale rim
+    min: -1.4900000, 1.4300000, 0.1800000
+    max: 1.4900000, 1.4900000, 0.2200000
+    color: '#89938C'
+  - label: left pale rim
+    min: -1.4900000, -1.4900000, 0.1800000
+    max: -1.4300000, 1.4300000, 0.2200000
+    color: '#89938C'
+  - label: right pale rim
+    min: 1.4300000, -1.4900000, 0.1800000
+    max: 1.4900000, 1.4300000, 0.2200000
+    color: '#89938C'
+  - label: left hazard rail
+    min: -1.0000000, -1.4900000, 0.1800000
+    max: -0.5937500, 0.9800000, 0.3000000
+    color: '#FFFFFF'
+    surface: CMU3DWasteLeftHazard
+    surfaceAxis: XY
+  - label: right hazard rail
+    min: 0.5312500, -1.4900000, 0.1800000
+    max: 0.9687500, 0.9800000, 0.3000000
+    color: '#FFFFFF'
+    surface: CMU3DWasteRightHazard
+    surfaceAxis: XY
+  - label: rear hazard cross rail
+    min: -0.5937500, 0.6000000, 0.1800000
+    max: 0.5312500, 0.9800000, 0.3000000
+    color: '#FFFFFF'
+    surface: CMU3DWasteRearHazard
+    surfaceAxis: XY
+  - label: left copper return channel
+    min: -1.2200000, -1.3800000, 0.1800000
+    max: -1.0000000, 0.4200000, 0.2300000
+    color: '#FFFFFF'
+    surface: CMU3DWasteLeftChannel
+    surfaceAxis: XY
+  - label: right copper return channel
+    min: 0.9687500, -1.3800000, 0.1800000
+    max: 1.1875000, 0.4200000, 0.2300000
+    color: '#FFFFFF'
+    surface: CMU3DWasteRightChannel
+    surfaceAxis: XY
+  - label: rear screen recess
+    min: -0.5600000, -0.3400000, 0.0900000
+    max: 0.5000000, 0.5700000, 0.1050000
+    color: '#FFFFFF'
+    surface: CMU3DWasteGrilleDamaged
+    surfaceAxis: XY
+  - label: original near deck fascia FrontLeft
+    min: -1.4900000, -1.4900000, 0.0100000
+    max: -0.5937500, -1.4860000, 0.1750000
+    color: '#FFFFFF'
+    surface: CMU3DWasteFrontLeft
+    surfaceAxis: XZ
+  - label: original near deck fascia FrontRight
+    min: 0.5312500, -1.4900000, 0.0100000
+    max: 1.4900000, -1.4860000, 0.1750000
+    color: '#FFFFFF'
+    surface: CMU3DWasteFrontRightDamaged
+    surfaceAxis: XZ
+  - label: rear dark manifold bed
+    min: -0.4800000, 1.0100000, 0.1800000
+    max: 0.4500000, 1.2000000, 0.2500000
+    color: '#31251C'
+  - label: rear copper manifold rib
+    min: -0.4200000, 1.0000000, 0.2500000
+    max: -0.3750000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: -0.2500000, 1.0000000, 0.2500000
+    max: -0.2050000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: -0.0800000, 1.0000000, 0.2500000
+    max: -0.0350000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: 0.0900000, 1.0000000, 0.2500000
+    max: 0.1350000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: 0.2600000, 1.0000000, 0.2500000
+    max: 0.3050000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: rear copper manifold rib
+    min: 0.4000000, 1.0000000, 0.2500000
+    max: 0.4450000, 1.2200000, 0.3000000
+    color: '#6E3D26'
+  - label: broken hood remnant
+    min: -0.6491981, -1.4800000, 0.2630335
+    max: -0.4571981, -0.4800000, 0.3410335
+    color: '#4D4C4B'
+    pitch: 80
+  - label: broken hood remnant
+    min: -0.5862435, -1.4800000, 0.4360000
+    max: -0.3942435, -0.4800000, 0.5140000
+    color: '#79685B'
+    pitch: 60
+  - label: broken hood remnant
+    min: -0.4679274, -1.4800000, 0.5770036
+    max: -0.2759274, -0.4800000, 0.6550036
+    color: '#633C2C'
+    pitch: 40
+  - label: broken hood remnant
+    min: 0.2134274, -1.4800000, 0.5770036
+    max: 0.4054274, -0.4800000, 0.6550036
+    color: '#4D514C'
+    pitch: -40
+  - label: broken hood remnant
+    min: 0.3317435, -1.4800000, 0.4360000
+    max: 0.5237435, -0.4800000, 0.5140000
+    color: '#4D4C4B'
+    pitch: -60
+  - label: broken hood remnant
+    min: 0.3946981, -1.4800000, 0.2630335
+    max: 0.5866981, -0.4800000, 0.3410335
+    color: '#4D4C4B'
+    pitch: -80
+  - label: hood side foot
+    min: -0.5812500, -1.4700000, 0.1600000
+    max: -0.5112500, -0.4800000, 0.2500000
+    color: '#44372C'
+  - label: hood side foot
+    min: 0.4487500, -1.4700000, 0.1600000
+    max: 0.5187500, -0.4800000, 0.2500000
+    color: '#44372C'
+  - label: torn left yellow collar
+    min: -0.4175000, -1.4200000, 0.2250000
+    max: -0.3225000, -1.1800000, 0.8750000
+    color: '#979533'
+    pitch: -18
+  - label: bent right collar arm
+    min: 0.2250000, -1.4050000, 0.2050000
+    max: 0.3350000, -1.1350000, 0.7150000
+    color: '#918E2C'
+    pitch: 28
+  - label: collapsed rusty hood plate
+    min: -0.2150000, -1.4200000, 0.1275000
+    max: 0.3550000, -0.8400000, 0.1925000
+    color: '#633C2C'
+    pitch: -16
+  - label: loose dark hood shard
+    min: -0.2950000, -1.0350000, 0.1700000
+    max: 0.0350000, -0.6850000, 0.2300000
+    color: '#4D4C4B'
+    pitch: 35
+  - label: raised broken upper tab
+    min: 0.2000000, -0.6650000, 0.7025000
+    max: 0.4600000, -0.4550000, 0.7575000
+    color: '#979533'
+    pitch: 25

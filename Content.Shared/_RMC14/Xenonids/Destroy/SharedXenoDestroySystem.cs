@@ -113,7 +113,7 @@ public abstract partial class SharedXenoDestroySystem : EntitySystem
             return;
         }
 
-        if (!_area.TryGetArea(target, out var area, out var _) || area.Value.Comp.NoTunnel)
+        if (!_area.TryGetArea(target, out var area, out var _) || !_area.CanDestroyLeapInto(area.Value)) // CMU14
         {
             _popup.PopupClient(Loc.GetString("rmc-destroy-cant-area"), xeno, xeno, PopupType.SmallCaution);
             return;

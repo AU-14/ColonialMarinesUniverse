@@ -1,0 +1,14 @@
+- type: entity
+  parent: RMCToolboxEmergencyFilled
+  id: CMUToolboxEmergencyFilledFlashlights
+  suffix: CMU, Filled, Flashlights
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      storagebase: !type:AllSelector
+        children:
+        - id: CMCrowbar
+        - id: CMRadioHandheld
+        - id: CMUSurvivalKnife
+        - id: RMCFlashlight
+          amount: 4

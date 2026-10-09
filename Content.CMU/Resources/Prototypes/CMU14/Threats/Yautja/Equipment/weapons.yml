@@ -16,7 +16,6 @@
   - type: MeleeWeapon
     wideAnimationRotation: -135
     attackRate: 1
-    wideAttackAllowed: false 
     damage:
       types:
         Blunt: 12
@@ -109,6 +108,7 @@
   - type: Clothing
     slots:
     - belt
+    - suitStorage
   - type: YautjaChainWrapper
   - type: YautjaMeleeXenoInterference
 
@@ -144,6 +144,7 @@
         state: clansword
     slots:
     - back
+    - suitStorage
   - type: YautjaMeleeXenoInterference
 
 - type: entity
@@ -231,6 +232,7 @@
     slots:
     - back
     - belt
+    - suitStorage
   - type: YautjaMeleeXenoInterference
     duration: 15
   - type: YautjaScytheBonusStrike
@@ -272,6 +274,7 @@
         state: cruel_staff
     slots:
     - back
+    - suitStorage
   - type: MeleeWeapon
     attackRate: 1
     damage:
@@ -340,6 +343,7 @@
         state: combistick
     slots:
     - back
+    - suitStorage
   - type: ItemToggle
     activated: true
     soundActivate:
@@ -439,6 +443,7 @@
         state: war_axe
     slots:
     - back
+    - suitStorage
   - type: YautjaMeleeXenoInterference
 
 - type: entity
@@ -472,6 +477,7 @@
   - type: Clothing
     slots:
     - pocket
+    - suitStorage
   - type: YautjaCeremonialDagger
 
 - type: entity
@@ -657,6 +663,7 @@
         state: spearhunter
     slots:
     - back
+    - suitStorage
   - type: YautjaHunterSpearFishing
   - type: RemoveComponents
     components:
@@ -702,6 +709,7 @@
         state: glaive
     slots:
     - back
+    - suitStorage
   - type: YautjaMeleeXenoInterference
 
 - type: entity
@@ -1027,6 +1035,7 @@
     slots:
     - belt
     - back
+    - suitStorage
   - type: Corrodible
     isCorrodible: false
   - type: RMCSelectiveFire
@@ -1104,6 +1113,7 @@
     equippedPrefix: plasmarifle
     slots:
     - back
+    - suitStorage
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -1168,6 +1178,7 @@
   - type: Clothing
     slots:
     - belt
+    - suitStorage
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -1227,6 +1238,7 @@
     equippedPrefix: plasmacarbine
     slots:
     - back
+    - suitStorage
   - type: AmmoCounter
   - type: Gun
     projectileSpeed: 30
@@ -1444,6 +1456,7 @@
     quickEquip: false
     slots:
     - Back
+    - suitStorage
   - type: Gun
     minAngle: 0
     maxAngle: 0

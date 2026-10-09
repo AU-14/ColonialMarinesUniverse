@@ -108,9 +108,9 @@
     - name: Gear
       entries:
       - cost: 300
-        crate: ANPRCFillCardResupplyCrateOPFOR
+        crate: ANPRCFillCardResupplyCrate
       - cost: 1500
-        crate: ANPRCRadioResupplyCrateOPFOR
+        crate: ANPRCRadioResupplyCrate
       - cost: 2500
         crate: AU14CrateMastAntennaHead
       - cost: 1200

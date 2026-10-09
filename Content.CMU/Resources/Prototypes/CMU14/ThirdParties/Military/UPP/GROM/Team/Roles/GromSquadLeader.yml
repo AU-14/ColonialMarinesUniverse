@@ -62,7 +62,7 @@
     UPP_JuniorLieutenant:
       entity: AU14ChevronUPPNIJuniorLieutenant
       requirements: []
-  spawnMenuRoleName: UPP GROM Squad Leader (Survivor)
+  spawnMenuRoleName: UPP GROM Squad Leader
   startingGear: AU14GearUPPGROMSquadleader
   greeting: au14-uppgrom-greeting
   icon: "AU14JobIconUPPGROMSquadLeader"
@@ -96,14 +96,14 @@
   id: AU14GearUPPGROMSquadleader
   equipment:
     id: AU14IDCardUPPGROMSquadleader
-    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    outerClothing: CMUUPPArmorFullMinimalistic
     jumpsuit: AU14FatiguesUPPGROM
     shoes: RMCBootsSPPFilled
     head: AU14UPPBoonie
-    belt: AU14BeltHolsterPistolUPPFull
-    pocket1: AU14PouchSlingBinocs
-    pocket2: AU14PouchIFAKFill
-    back: RMCSatchelSPPFull
+    belt: AU14BeltMedicalUPPFull
+    pocket1: CMUUPPPouchMagazineUPPFull
+    pocket2: RuMCUPPPouchIFAKFill
+    back: CMUUPPNavalInfantrySatchelFull
     ears: RMCHeadsetGROM
     suitstorage: AU14WeaponRifleAG80Filled
 

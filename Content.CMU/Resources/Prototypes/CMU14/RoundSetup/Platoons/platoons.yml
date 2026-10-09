@@ -2431,6 +2431,10 @@
 # Add more platoons as needed
 
 - type: lorePrimer
+  id: RuMCPrimerPlatoonBEAR
+  PlatoonInfo: lore-primer-platoon-bear-info
+
+- type: lorePrimer
   id: AU14PrimerPlatoonLACN
   PlatoonInfo: lore-primer-platoon-lacn-info
 
@@ -2441,10 +2445,6 @@
 - type: lorePrimer
   id: AU14PrimerPlatoonUPP
   PlatoonInfo: lore-primer-platoon-upp-info
-
-- type: lorePrimer
-  id: RuMCPrimerPlatoonBEAR
-  PlatoonInfo: "PMC “BEAR” is a private military company — the “Brigade Expeditionary Army Reserve” of the UPP, which closely cooperates with SOF units. It was formed on the basis of veterans of the Marine Corps and army paratroopers; the core consists of fighters from special units of the UPP troops. They have gained fame for their operations to capture fortified positions and conduct combat in dense urban environments. They carry out all the dirty work where metropolitan forces cannot operate for political reasons."
 
 - type: lorePrimer
   id: AU14PrimerPlatoonWEYU
