@@ -33,7 +33,7 @@ ent-CMUExpeditionScavengerCautious = scavenger sentry
 cmu-expedition-raider-identity = scavenger raider
 cmu-expedition-sentry-identity = scavenger sentry
 cmu-expedition-contact-report = Contact at my last observed position. Cover the approach.
-cmu-expedition-support-response = Copy that contact. Moving to support; cover my approach.
+cmu-expedition-ai-fallback-status = Callouts={ $callouts } scavenged={ $scavenged } melee={ $strikes } retrieving={ $item }
 cmu-expedition-ai-radio-status = Radio: {$received} received / {$accepted} accepted, {$decision}, acting on radio {$radioContact}, approach {$destination}.
 cmu-expedition-ai-survival-status = Survival: weapon {$weapon}, recovered {$recovered}, spacing {$spacing} to {$destination}, rejected cover {$cover}, preparing work {$preparing}, working {$working}.
 cmu-expedition-ai-threat-status = Threats: {$enemies} visible across {$sectors} directions, {$shooters} recent shooters, crossfire {$crossfire}, repositioned {$moves}, flank responses {$responses}, other squadmates engaging this target {$assigned}.

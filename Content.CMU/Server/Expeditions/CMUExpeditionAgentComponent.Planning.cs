@@ -57,7 +57,13 @@ public sealed partial class CMUExpeditionAgentComponent
     public bool ContactFromRadio;
     public int ReportsReceived;
     public int ReportsAccepted;
-    public TimeSpan NextRadioResponse;
+    public TimeSpan NextRadioAnnouncement;
+    public EntityUid? LastAnnouncedContact;
+    public EntityCoordinates? LastAnnouncedPosition;
+    public TimeSpan LastRadioAnnouncement;
+    public EntityUid? LastSharedContact;
+    public TimeSpan LastSharedAt;
+    public int RadioCallouts;
     public string RadioDecision = "idle";
     public int Reloads;
     public int GrenadesThrown;

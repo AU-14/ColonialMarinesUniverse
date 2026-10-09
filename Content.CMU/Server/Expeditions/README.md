@@ -162,11 +162,24 @@ supplies; other roles carry a shovel. Everyone except poor scrappers and medics 
 with physical weapon switching and compatible spare ammo. Shotguns insert physical shells one at a time in safety.
 They target GOVFOR by default. `cmu-expedition-ai here 5 fireteam` spawns one of each fireteam role.
 Mixed compositions repeat in the listed order when more members are requested.
+Every spawnable kit explicitly lists its clothing, headset and pack. Kits do not inherit another
+role's in-hand weapon or backpack contents.
 Press **Tab** for variants with descriptions, counts, live maps and squad IDs. Orders complete actions,
 styles and comma-separated factions. Map commands also complete scenarios, biomes, landforms,
 stories and time arguments; the visit command completes connected players.
 Fire can continue during travel and while waiting in a movement queue; fresh contact and incoming fire bypass the extra AI aim pause.
 Optional manoeuvres reserve a loaded shooter with a usable lane; lost support interrupts the move.
+Covering shooters retain their contact and defer optional medical work until the commitment ends.
+An empty primary immediately permits a loaded backup, including when the target is beyond the backup's
+range. The guard must then reach a usable firing distance. Reloading uses real shelter or a reserved
+covering shooter; damage, close rushes and lost support interrupt an exposed reload.
+Exhausted guards can use safe grenades/smoke and claim a visible abandoned loaded firearm within four
+metres, with a five-second retrieval limit. They never take guns from inventories. At contact distance
+they use native weapon-butt or unarmed attacks while attempting to escape, rather than charging into melee.
+Radio snapshots are shared silently every two seconds with duplicate suppression. Audible contact
+callouts are limited to one per local squad every twelve seconds, with unchanged contacts repeated only
+after thirty seconds. There is no chorus of acknowledgements; headset/range/channel and native
+send/receive cancellation checks still apply.
 Useful positions are held across volleys. Narrow passages use stable yielding and passing pockets,
 and new flanks receive one responder (two with six or more nearby members) while other members retain their targets.
 Smoke screens withdrawals/recovery, grenades prioritize clusters, and squad explosive cooldowns

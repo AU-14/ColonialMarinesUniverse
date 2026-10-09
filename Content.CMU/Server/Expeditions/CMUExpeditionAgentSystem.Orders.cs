@@ -54,6 +54,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
+        ClearScavenging(uid, agent);
         ReleaseManeuver(uid, agent);
         ClearTraffic(agent);
         agent.CoveringFor = null;

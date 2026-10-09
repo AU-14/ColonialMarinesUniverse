@@ -33,6 +33,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.SpacingUntil = now + TimeSpan.FromSeconds(1);
         }
         else if (now >= agent.SpacingUntil && agent.Crossfire && now >= agent.NextCrossfireMove &&
+            !HasCoverCommitment(uid, agent, now) &&
             agent.Action == null && agent.State is CMUExpeditionAgentState.Guard or CMUExpeditionAgentState.Recover or CMUExpeditionAgentState.Watch &&
             now - agent.LastShotAt < TimeSpan.FromSeconds(1.5) &&
             (now - agent.LastHit < TimeSpan.FromSeconds(2) || agent.RecentShooters.Count >= 2))
@@ -99,7 +100,10 @@ public sealed partial class CMUExpeditionAgentSystem
             else
                 agent.SpacingDecision = "trapped-returning-fire";
         }
-        if (ReadyRifle(uid, agent) && agent.Target is { } target && Visible(uid, target, agent.FireRange) &&
+        var armed = ReadyRifle(uid, agent);
+        if (!armed)
+            TryLastResortStrike(uid, agent);
+        if (armed && agent.Target is { } target && Visible(uid, target, agent.FireRange) &&
             agent.State is not (CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage) && now >= agent.FireAt)
             Aim(agent, now, true);
         return true;
@@ -107,6 +111,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void BeginCombatSpacing(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
+        ClearScavenging(uid, agent);
         agent.ContactDestination = null;
         CancelWork(uid, agent);
         CancelPlan(uid, agent, false);

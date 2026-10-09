@@ -31,7 +31,7 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (medic.Patient == null)
         {
-            if (now < medic.NextTriage || agent.Action != null || agent.Treatment != null || agent.PendingWeapon != null ||
+            if (HasCoverCommitment(uid, agent, now) || now < medic.NextTriage || agent.Action != null || agent.Treatment != null || agent.PendingWeapon != null ||
                 agent.State is CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Withdraw or CMUExpeditionAgentState.PlanMove)
                 return false;
             medic.NextTriage = now + TimeSpan.FromSeconds(1);

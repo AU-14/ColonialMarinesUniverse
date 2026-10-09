@@ -91,6 +91,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         }
         if (agent.Rifle is not { } rifle || !Exists(rifle) ||
+            WeaponAmmo(rifle) == 0 && SpareAmmunition(uid, rifle) == null ||
             !TryComp(rifle, out TransformComponent? weaponTransform) ||
             _containers.IsEntityOrParentInContainer(rifle) || weaponTransform.Anchored ||
             !Visible(uid, rifle, agent.WeaponRecoveryRange))

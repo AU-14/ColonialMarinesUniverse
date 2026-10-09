@@ -23,7 +23,8 @@ public sealed partial class CMUExpeditionAgentSystem
     private EntityCoordinates? BlastPoint(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid grenade)
     {
         var opening = _timing.CurTime - agent.FirstContact < TimeSpan.FromSeconds(12);
-        var desperate = agent.RepeatedPeekHits >= 2 || agent.Stress >= 0.8f;
+        var desperate = agent.RepeatedPeekHits >= 2 || agent.Stress >= 0.8f ||
+            !_guns.TryGetGun(uid, out var gun) || WeaponAmmo(gun) == 0;
         if ((!opening && !desperate) || agent.RushTarget != null)
             return null;
         EntityCoordinates? best = null;

@@ -92,8 +92,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return true;
         if (now < agent.ManeuverUntil && TryComp<CMUExpeditionAgentComponent>(shooter, out var buddy) &&
             buddy.CoveringFor == uid && LocalSquadMember(uid, agent, shooter, buddy) &&
-            CoveringFireReady(shooter, buddy, out var target) && agent.LastSeen is { } contact &&
-            _transform.InRange(contact, Transform(target).Coordinates, 5))
+            CoveringFireReady(shooter, buddy, out _) && SharedEngagement(agent, buddy))
         {
             buddy.CoveringUntil = now + TimeSpan.FromSeconds(1);
             return true;
