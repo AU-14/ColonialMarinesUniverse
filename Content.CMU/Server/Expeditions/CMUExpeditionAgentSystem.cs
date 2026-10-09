@@ -13,6 +13,7 @@ using Content.Shared.NPC;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Physics;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Wieldable;
@@ -61,6 +62,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         InitializeEquipment();
         InitializeRecovery();
         InitializeLearning();
+        InitializeVision();
     }
 
     private void OnMobState(Entity<CMUExpeditionAgentComponent> ent, ref MobStateChangedEvent args)
@@ -74,7 +76,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     private void Stop(Entity<CMUExpeditionAgentComponent> ent)
     {
+        CancelAimedWeapon(ent.Comp);
         ClearScavenging(ent, ent.Comp);
+        CancelFlare(ent, ent.Comp);
+        ent.Comp.FlashPosition = null;
+        ent.Comp.FiringAtFlash = false;
         ReleaseManeuver(ent, ent.Comp);
         ClearTraffic(ent.Comp);
         ent.Comp.WaitingForDoor = null;
@@ -92,6 +98,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         ent.Comp.Target = null;
         ent.Comp.LastSeen = null;
         ent.Comp.PendingWeapon = null;
+        ent.Comp.SupplyTransfer = null;
+        ent.Comp.SupplyRecipient = null;
         ent.Comp.MovingFire = false;
         ent.Comp.ContactMoveUntil = TimeSpan.Zero;
         ClearCover(ent.Comp);
@@ -188,8 +196,17 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         ValidateCover(uid, agent, hit, now);
 
         if (AvoidAlienAttack(uid, agent, now))
+        {
+            CancelAimedWeapon(agent);
+            CancelFlare(uid, agent);
+            return;
+        }
+
+        if (MaintainAimedWeapon(uid, agent, now))
             return;
 
+        if (agent.FlareItem != null && RunFlare(uid, agent, now))
+            return;
         if (RunMedic(uid, agent, damage, hit, now))
             return;
         if (RecoverWeapon(uid, agent, now) || ChooseWeapon(uid, agent, now))
@@ -211,11 +228,26 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
                 _guns.TryGetGun(uid, out var scavengeGun) && WeaponAmmo(scavengeGun) > 0))
             return;
         var hasAmmo = ReadyRifle(uid, agent);
+        if (RunFlare(uid, agent, now))
+            return;
+        if (hasAmmo && seen == null && agent.Action == null && agent.Treatment == null && agent.RushTarget == null &&
+            agent.ScavengeTarget == null && agent.SpacingDestination == null && TryFlashAim(uid, agent, out _) &&
+            agent.State is CMUExpeditionAgentState.Guard or CMUExpeditionAgentState.Watch or CMUExpeditionAgentState.Investigate)
+        {
+            _steering.Unregister(uid);
+            ClearCover(agent);
+            Aim(agent, now);
+            return;
+        }
         if (hasAmmo && HoldCoveringFire(uid, agent, now))
+            return;
+        if (ApproachVehicleShot(uid, agent, now))
             return;
         if (hasAmmo && ContinueContactMovement(uid, agent, now))
             return;
         if (RunPlan(uid, agent, hasAmmo, damage, hit, now))
+            return;
+        if (ShareSupplies(uid, agent, now))
             return;
         if ((!hasAmmo || seen == null && agent.Target == null && now - agent.LastContact >= TimeSpan.FromSeconds(8)) &&
             RunAmmoFallback(uid, agent, now, hasAmmo))
@@ -328,7 +360,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         {
             if (agent.State is CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage)
             {
-                if (now - agent.LastContact >= TimeSpan.FromSeconds(0.35))
+                if (now - agent.LastContact >= TimeSpan.FromSeconds(0.35) && !TryFlashAim(uid, agent, out _))
                     EndBurst(uid, agent, now, false);
                 return;
             }
@@ -425,7 +457,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         ExpireMeleeMemory(agent, now);
         foreach (var hostile in ExpeditionHostiles(uid, agent))
         {
-            if (!_mobs.IsAlive(hostile) || !TryComp<TransformComponent>(hostile, out var targetTransform) ||
+            if (!CombatTargetAlive(hostile) || !TryComp<TransformComponent>(hostile, out var targetTransform) ||
                 targetTransform.MapID != transform.MapID || !Visible(uid, hostile, agent.DetectionRange))
                 continue;
             agent.VisibleThreats.Add(targetTransform.Coordinates);
@@ -468,16 +500,19 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var currentUsable = false;
         EntityUid? flankTarget = null;
         var flankScore = float.MaxValue;
+        var readyRocket = agent.AntiVehicle && HasReadyRocket(uid);
         for (var index = 0; index < candidates.Count; index++)
         {
             var (hostile, distance) = candidates[index];
-            if (index >= 4 && hostile != agent.Target && !SectorTarget(agent, hostile) &&
+            if (index >= 4 && hostile != agent.Target && !(readyRocket && ArmedVehicle(hostile)) && !SectorTarget(agent, hostile) &&
                 (index >= 6 || !IsMeleeThreat(hostile)))
                 continue;
             var point = Transform(hostile).Coordinates;
             var usable = armed && _transform.InRange(stance, point, agent.FireRange) &&
                 SafeShot(uid, agent, rifle, point, stance, shotNeighbors);
             var score = distance + (usable ? 0 : agent.DetectionRange + 4);
+            if (readyRocket && ArmedVehicle(hostile))
+                score -= agent.DetectionRange + 8;
             // Spread ordinary fire onto unengaged opponents. Rushers override this below,
             // and the current volley/target commitment still prevents score-driven jitter.
             if (agent.TargetAssignments.TryGetValue(hostile, out var assigned))
@@ -535,7 +570,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             if (currentVisible && (CommittedMovement(agent) || agent.Action != null ||
                 agent.State == CMUExpeditionAgentState.Healing || now < agent.NextTargetSwitch))
                 seen = agent.Target;
-            else if (!currentVisible && !agent.ContactFromRadio && _mobs.IsAlive(agent.Target.Value) && now - agent.LastContact < TimeSpan.FromSeconds(0.45))
+            else if (!currentVisible && !agent.ContactFromRadio && CombatTargetAlive(agent.Target.Value) && now - agent.LastContact < TimeSpan.FromSeconds(0.45))
                 return null;
         }
         if (seen is { } target)
@@ -611,12 +646,18 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         agent.Rifle = gun;
         agent.WeaponBurstLimit = TryComp<CMUExpeditionWeaponRoleComponent>(gun, out var role) ? role.BurstLimit : int.MaxValue;
         EnsureComp<CMUExpeditionWeaponComponent>(gun);
+        ConfigureEquipment(uid, agent, gun);
         // Moving between firing positions does not require a free hand. Keep the rifle ready
         // through peeks, withdrawals and flanks instead of restarting its native wield delay.
         var usingHands = agent.ScavengeTarget != null || agent.State is CMUExpeditionAgentState.Reloading or CMUExpeditionAgentState.Rescuing or CMUExpeditionAgentState.Throwing or CMUExpeditionAgentState.Healing ||
             agent.Action is CMUTacticalAction.GrabCasualty or CMUTacticalAction.DragCasualty;
         if (usingHands || agent.WorkItem != null || agent.PreparingWork || _timing.CurTime < agent.RifleLoweredUntil)
+        {
             _wield.TryUnwield(gun.Owner, uid);
+            foreach (var hand in _hands.EnumerateHands(uid))
+                if (_hands.TryGetHeldItem(uid, hand, out var held) && held != gun.Owner && HasComp<GunComponent>(held))
+                    StowWeapon(uid, held.Value);
+        }
         else if (TryComp<WieldableComponent>(gun, out var wieldable) && !wieldable.Wielded)
             _wield.TryWield((gun.Owner, wieldable), uid);
         var ammo = new GetAmmoCountEvent();
@@ -773,7 +814,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
             predicate: entity => entity == observer || entity == target || HasComp<NpcFactionMemberComponent>(entity) ||
                 TransparentWindow(entity)) &&
-        !SmokeOccludes(Transform(observer).Coordinates, Transform(target).Coordinates);
+        !SmokeOccludes(Transform(observer).Coordinates, Transform(target).Coordinates) && CanSpot(observer, target);
 
     private void Move(EntityUid uid, EntityCoordinates destination, bool precise = false,
         bool routeWaypoint = false, bool validated = false)

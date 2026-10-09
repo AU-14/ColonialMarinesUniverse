@@ -10,6 +10,7 @@ using Content.Shared.Trigger.Components;
 using Content.Shared.Trigger.Systems;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Whitelist;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
@@ -22,6 +23,7 @@ public sealed partial class CMUExpeditionAgentSystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private TriggerSystem _triggers = default!;
     [Dependency] private PullingSystem _pulling = default!;
+    [Dependency] private EntityWhitelistSystem _supplyWhitelist = default!;
     private readonly List<(EntityCoordinates Point, TimeSpan Until, float Radius)> _grenadeHazards = new();
 
     private void InitializeEquipment() => SubscribeLocalEvent<CMUExpeditionAgentComponent, CMUExpeditionUtilityDoAfterEvent>(OnUtilityFinished);
@@ -36,9 +38,9 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (weapon == null && _guns.TryGetGun(uid, out var active))
             weapon = active;
-        if (weapon is not { } gun || !HasComp<GunComponent>(gun) || !Supplies(uid, out var supplies))
+        if (weapon is not { } gun || !HasComp<GunComponent>(gun))
             return null;
-        foreach (var item in supplies.Container.ContainedEntities)
+        foreach (var item in SupplyItems(uid))
         {
             if (CompatibleAmmunition(uid, gun, item))
                 return item;
@@ -54,14 +56,12 @@ public sealed partial class CMUExpeditionAgentSystem
             _itemSlots.CanInsert(gun, slot, item, uid, swap: true) ||
             TryComp<BallisticAmmoProviderComponent>(gun, out var tube) &&
             TryComp<CartridgeAmmoComponent>(item, out var cartridge) && !cartridge.Spent &&
-            _guns.CanInsertBallistic((gun, tube), item);
+            !_supplyWhitelist.IsWhitelistFailOrNull(tube.Whitelist, item);
     }
 
     private EntityUid? Grenade(EntityUid uid, bool smoke)
     {
-        if (!Supplies(uid, out var supplies))
-            return null;
-        foreach (var item in supplies.Container.ContainedEntities)
+        foreach (var item in SupplyItems(uid))
         {
             if (TryComp<CMUExpeditionGrenadeComponent>(item, out var grenade) && grenade.Smoke == smoke &&
                 !HasComp<ActiveTimerTriggerComponent>(item))
@@ -100,7 +100,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (!IsFriendly(uid, entity) || _mobs.IsDead(entity))
                 continue;
             var coordinates = Transform(entity).Coordinates;
-            if (_transform.InRange(coordinates, destination, radius))
+            if (_transform.InRange(coordinates, destination, radius + (VehicleBody(entity) ? 4 : 0)))
                 return false;
             // Consider the current movement heading over the fuse, but cap prediction to avoid absurd velocities.
             if (TryComp<PhysicsComponent>(entity, out var body))

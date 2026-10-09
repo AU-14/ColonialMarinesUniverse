@@ -176,17 +176,22 @@ covering shooter; damage, close rushes and lost support interrupt an exposed rel
 Exhausted guards can use safe grenades/smoke and claim nearby loaded firearms, compatible magazines or
 shells, and known HE/smoke grenades within four metres, with a five-second retrieval limit. They can
 loot dead bodies and accessible bags/belts; living or critical bodies and locked storage are excluded.
-Quiet, unordered guards also replenish up to two compatible magazines (or twelve shell items) and one
-grenade of each type. Items remain finite, storage limits apply, and combat interrupts optional scavenging. At contact distance
+Quiet, unordered guards stock compatible ammunition across belts, pouches and backpacks: up to six
+spare magazines per carried gun or 24 shells, two HE and two smoke grenades, three flares and a reserve dressing.
+They open accessible crates and share surplus with nearby squadmates running low. Items remain finite,
+storage limits apply, and combat interrupts optional scavenging. At contact distance
 they use native weapon-butt or unarmed attacks while attempting to escape, rather than charging into melee.
 Radio snapshots are shared silently every two seconds with duplicate suppression. Audible contact
-callouts are limited to one per local squad every twelve seconds, with unchanged contacts repeated only
-after thirty seconds. There is no chorus of acknowledgements; headset/range/channel and native
+callouts share a 25-second cooldown across nearby friendly squads. A continuously reported enemy is
+announced once; it becomes new again only after 60 seconds without a report. Lines reflect stress,
+injury, aggression and role. There is no chorus of acknowledgements; headset/range/channel and native
 send/receive cancellation checks still apply.
 Useful positions are held across volleys. Narrow passages use stable yielding and passing pockets,
 and new flanks receive one responder (two with six or more nearby members) while other members retain their targets.
 Smoke screens withdrawals/recovery, grenades prioritize clusters, and squad explosive cooldowns
 prevent repeated volleys. See [AI-DESIGN.md](AI-DESIGN.md) for exact conditions and limits.
+See [EQUIPMENT.md](EQUIPMENT.md) for faction outfits, specialist weapons, vehicle targeting,
+light and muzzle-flash perception, resupply rules and the outstanding in-game checks.
 Use the printed squad ID in place of `1` below:
 
 ```text

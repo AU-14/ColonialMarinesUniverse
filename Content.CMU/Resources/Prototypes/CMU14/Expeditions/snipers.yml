@@ -1,0 +1,51 @@
+- type: entity
+  parent: CMM96SSniperRifle
+  id: CMUExpeditionSniperRifle
+  components:
+  - type: CMUExpeditionWeaponRole
+    maximumRange: 18
+    closePriority: -20
+    burstLimit: 1
+
+- type: startingGear
+  id: CMUExpeditionSniperGear
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
+    ears: CMUExpeditionHeadset
+  inhand:
+  - CMUExpeditionSniperRifle
+  storage:
+    back:
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionBlastGrenade
+    - RMCShovel
+    - CMFlare
+    - CMFlare
+    belt:
+    - CMMagazineSniperM96S
+    - CMMagazineSniperM96S
+
+- type: entity
+  parent: CMUExpeditionScavengerMarksman
+  id: CMUExpeditionScavengerSniper
+  components:
+  - type: SniperWhitelist
+  - type: CMUExpeditionAgent
+    fireRange: 18
+    preferredFireRange: 13
+    burstSize: 1
+    burstPause: 0.6
+  - type: Loadout
+    prototypes: [CMUExpeditionSniperGear]
+  - type: FixedIdentity
+    name: cmu-expedition-sniper-identity

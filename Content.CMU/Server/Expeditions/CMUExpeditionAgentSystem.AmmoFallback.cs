@@ -92,7 +92,7 @@ public sealed partial class CMUExpeditionAgentSystem
             {
                 if (!UsefulLoot(uid, candidate, armed) || !ScavengeSource(uid, candidate, out var source))
                     continue;
-                if (!TrySquadCoordinates(Transform(source).Coordinates, out var point))
+                if (!LootApproach(uid, source, out var point))
                     continue;
                 var reachable = _interaction.InRangeUnobstructed(uid, source);
                 if (!reachable && (now - agent.LastHit < TimeSpan.FromSeconds(1) ||
@@ -120,7 +120,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         }
         if (!ScavengeSource(uid, found, out var lootSource) ||
-            !TrySquadCoordinates(Transform(lootSource).Coordinates, out var lootPoint))
+            !LootApproach(uid, lootSource, out var lootPoint))
         {
             ClearScavenging(uid, agent);
             return false;
@@ -141,6 +141,18 @@ public sealed partial class CMUExpeditionAgentSystem
             return true;
         }
         _steering.Unregister(uid);
+        if (TryComp<Content.Shared.Storage.Components.EntityStorageComponent>(lootSource, out var crate) && !crate.Open)
+        {
+            if (!_supplyCrates.TryOpenStorage(uid, lootSource, silent: true))
+            {
+                ClearScavenging(uid, agent);
+                agent.NextScavenge = now + TimeSpan.FromSeconds(3);
+                return false;
+            }
+            agent.CratesOpened++;
+            agent.SupplyDecision = "opened-supply-crate";
+            return true;
+        }
         if (agent.RifleLoweredUntil == TimeSpan.Zero)
         {
             if (_guns.TryGetGun(uid, out var held))
@@ -165,8 +177,25 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.NextScavenge = now + TimeSpan.FromSeconds(2);
             return true;
         }
+        if (TryComp<CMUExpeditionWeaponRoleComponent>(found, out var foundRole) && foundRole.Rocket && previous.Owner.IsValid())
+        {
+            if (!StowWeapon(uid, found))
+                _hands.TryDrop(uid, found);
+            else
+                agent.SuppliesScavenged++;
+            ActivateWeapon(uid, previous);
+            agent.Rifle = previous;
+            agent.WeaponDecision = "restocked-launcher";
+            ClearScavenging(uid, agent);
+            return true;
+        }
         if (previous.Owner.IsValid() && previous.Owner != found && !StowWeapon(uid, previous))
-            _hands.TryDrop(uid, previous.Owner);
+        {
+            _hands.TryDrop(uid, found);
+            ActivateWeapon(uid, previous);
+            ClearScavenging(uid, agent);
+            return false;
+        }
         ActivateWeapon(uid, found);
         agent.Rifle = found;
         agent.WeaponsScavenged++;

@@ -170,8 +170,9 @@ Follow-up verification for equipment and ammunition exhaustion:
 
 - Spawn `cmu-expedition-ai here 9 mixed` and confirm complete clothing, packs and exactly one initial
   primary per member. The skirmisher must have an MP5 without an inherited scout rifle or duplicate supplies.
-- Keep a squad in contact for a minute. Expect at most five audible contact callouts, and fewer for an
-  unchanged target; received/accepted report counters should continue increasing between callouts.
+- Keep nearby friendly squads in contact for a minute. Expect at most three audible contact callouts
+  across those squads, and one for a continuously reported unchanged target; received/accepted
+  report counters should continue increasing between callouts.
   Remove/disable headsets, use incompatible channels, leave the map or radio range, and verify that silent
   reports stop as well. A radio report preserves the interrupted order route.
 - Empty the primary at long range with a loaded pistol in the pack. Confirm the pistol is drawn and the

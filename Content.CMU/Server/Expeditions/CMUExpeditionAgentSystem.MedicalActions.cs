@@ -54,9 +54,8 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var hand in _hands.EnumerateHands(uid))
             if (_hands.TryGetHeldItem(uid, hand, out var item))
                 yield return item.Value;
-        if (Supplies(uid, out var supplies))
-            foreach (var item in supplies.Container.ContainedEntities)
-                yield return item;
+        foreach (var item in SupplyItems(uid))
+            yield return item;
     }
 
     private EntityUid? MedicalDefib(EntityUid uid) => MedicalItems(uid)

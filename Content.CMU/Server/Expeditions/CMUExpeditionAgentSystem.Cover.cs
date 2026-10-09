@@ -49,7 +49,7 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     private bool RayClear(EntityUid uid, MapCoordinates from, MapCoordinates to, bool movement = false, bool shelter = false,
-        bool breakWindows = false)
+        bool breakWindows = false, EntityUid? impactBody = null)
     {
         if (from.MapId != to.MapId)
             return false;
@@ -62,7 +62,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var ray = new CollisionRay(from.Position, Vector2.Normalize(delta), (int) mask);
         // Only the existence of an obstruction matters. Do not collect every hit behind the first wall.
         return !_physics.IntersectRayWithPredicate(from.MapId, ray, delta.Length(),
-            entity => entity == uid || HasComp<NpcFactionMemberComponent>(entity) ||
+            entity => entity == uid || !movement && entity == impactBody || HasComp<NpcFactionMemberComponent>(entity) ||
                 !movement && ((breakWindows || shelter) && WindowAllowsShot(uid, entity) || BarricadeAllowsShot(entity, delta) ||
                     shelter && TryComp<DirectionalBulletBlockerComponent>(entity, out var blocker) && blocker.BlockChance < 1), true).Any();
     }
@@ -82,7 +82,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var end = _transform.ToMapCoordinates(to);
         var delta = end.Position - start.Position;
         if (start.MapId != end.MapId || delta.LengthSquared() < 0.01f || !BodyFits(uid, from) ||
-            !RayClear(uid, start, end, breakWindows: true))
+            !RayClear(uid, start, end, breakWindows: true, impactBody: VehicleAimBody(uid)))
             return false;
         // Clear the body and muzzle around nearby corners, then require a direct line to the
         // target. Trees beside a distant target may catch stray rounds without blocking the shot.
@@ -93,7 +93,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     /// <summary>Three rays leave room for the body's width and the weapon's scatter around a corner.</summary>
     private bool ClearLane(EntityUid uid, EntityCoordinates from, EntityCoordinates to, float endWidth, bool movement = false,
-        bool breakWindows = false)
+        bool breakWindows = false, EntityUid? impactBody = null)
     {
         var start = _transform.ToMapCoordinates(from);
         var end = _transform.ToMapCoordinates(to);
@@ -101,11 +101,11 @@ public sealed partial class CMUExpeditionAgentSystem
         if (start.MapId != end.MapId || delta.LengthSquared() < 0.01f)
             return false;
         var perpendicular = Vector2.Normalize(new Vector2(-delta.Y, delta.X));
-        return RayClear(uid, start, end, movement, breakWindows: breakWindows) &&
+        return RayClear(uid, start, end, movement, breakWindows: breakWindows, impactBody: impactBody) &&
                RayClear(uid, new MapCoordinates(start.Position + perpendicular * 0.3f, start.MapId),
-                   new MapCoordinates(end.Position + perpendicular * endWidth, end.MapId), movement, breakWindows: breakWindows) &&
+                   new MapCoordinates(end.Position + perpendicular * endWidth, end.MapId), movement, breakWindows: breakWindows, impactBody: impactBody) &&
                RayClear(uid, new MapCoordinates(start.Position - perpendicular * 0.3f, start.MapId),
-                   new MapCoordinates(end.Position - perpendicular * endWidth, end.MapId), movement, breakWindows: breakWindows);
+                   new MapCoordinates(end.Position - perpendicular * endWidth, end.MapId), movement, breakWindows: breakWindows, impactBody: impactBody);
     }
 
     private bool Sheltered(EntityUid uid, EntityCoordinates location, EntityCoordinates threat)

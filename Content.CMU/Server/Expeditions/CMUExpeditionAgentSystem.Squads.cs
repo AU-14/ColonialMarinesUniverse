@@ -14,10 +14,10 @@ public sealed partial class CMUExpeditionAgentSystem
 
     public bool CanOrderSquadMember(EntityUid uid) => !HasComp<ActorComponent>(uid) && _mobs.IsAlive(uid);
 
-    public int SpawnSquad(EntityCoordinates center, int count, string variant, out int squad)
+    public int SpawnSquad(EntityCoordinates center, int count, string variant, out int squad, string outfit = "scavenger")
     {
         squad = 0;
-        if (count is < 1 or > 12 || !IsSquadVariant(variant) || !TrySquadCoordinates(center, out center))
+        if (count is < 1 or > 12 || !IsSquadVariant(variant) || !IsOutfit(outfit) || !TrySquadCoordinates(center, out center))
             return 0;
 
         _bodyClearCache.Clear();
@@ -57,6 +57,8 @@ public sealed partial class CMUExpeditionAgentSystem
             var prototype = composition[i % composition.Length];
             var uid = Spawn(prototype, positions[i]);
             var agent = Comp<CMUExpeditionAgentComponent>(uid);
+            if (!ApplySpawnOutfit(uid, outfit))
+                Log.Error($"Expedition outfit {outfit} could not be equipped on {ToPrettyString(uid)}; retained original equipment.");
             agent.Squad = squad;
             agent.Home = positions[i];
             agent.NextThink = _timing.CurTime + TimeSpan.FromSeconds(i * 0.02);
