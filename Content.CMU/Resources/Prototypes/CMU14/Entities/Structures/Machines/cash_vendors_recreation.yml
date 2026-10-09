@@ -632,6 +632,18 @@
       price: 25
     - id: AU14HeadCommandoBeanie
       price: 10
+    - id: CMUCivBoonieHatTan
+      price: 15
+    - id: CMUCivBoonieHatGreen
+      price: 15
+    - id: CMUCivWorkCapTan
+      price: 10
+    - id: CMUCivWorkCapGreen
+      price: 10
+    - id: CMUCivSunCapTan
+      price: 10
+    - id: CMUCivSunCapGreen
+      price: 10
     - id: RMCSunglasses
       price: 15
     - id: RMCHipsterGlasses

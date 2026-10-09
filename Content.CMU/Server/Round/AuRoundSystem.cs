@@ -153,6 +153,13 @@ namespace Content.Server.CMU14.Round
         private List<ThirdPartyPrototype> _selectedThirdParties => _state.SelectedThirdParties;
         public IReadOnlyList<ThirdPartyPrototype> SelectedThirdParties => _state.SelectedThirdParties;
 
+        private HashSet<ThirdPartyPrototype> _spawnedThirdParties => _state.SpawnedThirdParties;
+        public IReadOnlySet<ThirdPartyPrototype> SpawnedThirdParties => _spawnedThirdParties;
+
+        /// <summary>Records a deployed party so no selection path re-picks it this round; the ghost menu and admin tools deploy outside this schedule.</summary>
+        internal void MarkThirdPartySpawned(ThirdPartyPrototype party)
+            => _spawnedThirdParties.Add(party);
+
         public override void Initialize()
         {
 
@@ -239,6 +246,7 @@ namespace Content.Server.CMU14.Round
             _state.SelectedThreat = null;
             _state.ResetDistressSignalThirdPartyLock();
             _selectedThirdParties.Clear();
+            _spawnedThirdParties.Clear();
             var sequenceId = _voteSequenceId;
             var presetVote = StartPresetVote(sequenceId, presetId =>
             {
@@ -576,8 +584,9 @@ namespace Content.Server.CMU14.Round
 
         internal ThirdPartyPrototype? PickWeightedThirdParty(IReadOnlyList<ThirdPartyPrototype> candidates)
         {
+            var pool = candidates.Where(party => !_spawnedThirdParties.Contains(party)).ToList();
             var totalWeight = 0;
-            foreach (var candidate in candidates)
+            foreach (var candidate in pool)
             {
                 totalWeight += Math.Max(1, candidate.weight);
             }
@@ -586,14 +595,14 @@ namespace Content.Server.CMU14.Round
                 return null;
 
             var roll = _random.Next(totalWeight);
-            foreach (var candidate in candidates)
+            foreach (var candidate in pool)
             {
                 roll -= Math.Max(1, candidate.weight);
                 if (roll < 0)
                     return candidate;
             }
 
-            return candidates[candidates.Count - 1];
+            return pool[pool.Count - 1];
         }
 
         public void PreselectThirdPartiesForSelectedThreat()

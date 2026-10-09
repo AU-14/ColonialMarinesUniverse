@@ -23,6 +23,7 @@ using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Rejuvenate;
+using Content.Shared.StatusEffectNew; // CMU14: use the actual roll paralysis deadline.
 using Content.Shared.Temperature;
 using Content.Shared.Throwing;
 using Content.Shared.Timing;
@@ -43,6 +44,7 @@ namespace Content.Server.Atmos.EntitySystems
         [Dependency] private ActionBlockerSystem _actionBlockerSystem = default!;
         [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
         [Dependency] private StunSystem _stunSystem = default!;
+        [Dependency] private StatusEffectsSystem _statusEffects = default!; // CMU14
         [Dependency] private TemperatureSystem _temperatureSystem = default!;
         [Dependency] private SharedIgnitionSourceSystem _ignitionSourceSystem = default!;
         [Dependency] private DamageableSystem _damageableSystem = default!;
@@ -511,13 +513,24 @@ namespace Content.Server.Atmos.EntitySystems
             if (!Resolve(uid, ref flammable))
                 return false;
 
+            // CMU14: allow another roll as soon as its deadline passes, without waiting for the fire tick.
+            if (flammable.ResistCompleteTime <= _timing.CurTime)
+                flammable.ResistCompleteTime = null;
+
             if (!flammable.OnFire || flammable.Resisting || !_actionBlockerSystem.CanInteract(uid, null))
                 return false;
 
             flammable.ResistCompleteTime = _timing.CurTime + flammable.ResistTime;
 
             _popup.PopupEntity(Loc.GetString("flammable-component-resist-message"), uid, uid);
-            _stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime);
+            // CMU14: stun resistance shortens the roll, so its lockout must use the resulting duration too.
+            // _stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime);
+            if (_stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime) &&
+                _statusEffects.TryGetTime(uid, StunSystem.ParalyzeId, out var paralysis) &&
+                paralysis.EndEffectTime is { } endTime)
+            {
+                flammable.ResistCompleteTime = endTime;
+            }
             // CMU14: RMC rolls take their stacks off on the press itself; the window only
             // suppresses the fade so a long pin cannot regrow what the roll removed.
             if (TryComp<OnFireComponent>(uid, out var rmcFire))
