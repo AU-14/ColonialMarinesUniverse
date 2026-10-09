@@ -1,15 +1,12 @@
 {
-  "newModels": 92,
+  "refinedModels": 92,
   "bindings": 104,
-  "triangles": 128444,
-  "maxParts": 73,
-  "maxTriangles": 4008,
+  "triangles": 871060,
+  "maxParts": 124,
+  "maxVisibleParts": 124,
+  "maxTriangles": 23804,
+  "weedParts": 36,
+  "weedTriangles": 432,
   "verifiedLibraryExports": 2915,
-  "rebuiltExports": 95,
-  "glTFValidation": {
-    "assets": 95,
-    "errors": 0,
-    "warnings": 0,
-    "validator": "2.0.0-dev.3.10"
-  }
+  "rebuiltExports": 92
 }

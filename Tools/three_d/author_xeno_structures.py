@@ -13,11 +13,13 @@ from PIL import Image, ImageDraw, ImageFont
 import inventory
 import build_models as bm
 import xeno_shapes as shapes
-from author_redux_coverage import ROOT, WORLD, Sources, serialize, write
+from author_redux_coverage import ROOT, WORLD, Sources, Pool, part, serialize, write
 
 MODEL = WORLD / 'garrison_xeno_structures.yml'
 DELIVERY = ROOT / 'Content.CMU/Resources/Models/CMU14/Garrison'
 REVIEW = DELIVERY / 'Reviews/XenoStructures'
+ART = WORLD / 'garrison_xeno_skin.yml'
+TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/XenoSkin'
 MAINTENANCE = {'XenoTunnelMaint', 'XenoTunnelMaintNoXenoDesc', 'XenoTunnelMaintHybrisa', 'XenoTunnelMaintHybrisaNoXenoDesc'}
 
 
@@ -76,9 +78,18 @@ def geometry(row, rsi, state, frame=0, count=1):
         return shapes.door(progress,pale,'thick' in lower,'weedbound' in lower)
     if kind=='egg':return shapes.egg(state,frame,count,pale)
     if kind=='morpher' and state.startswith('eggmorph_'):
-        number=int(state[-1]);parts=shapes.egg('egg_growing' if number<3 else 'egg')
-        return [{**p,'min':[p['min'][0]*.62,p['min'][1]*.62,p['min'][2]*.62+.5],
-                 'max':[p['max'][0]*.62,p['max'][1]*.62,p['max'][2]*.62+.5]} for p in parts]
+        # Source overlays add pairs of small eggs around the cradle, not one
+        # oversized central egg. Keep the full eight-egg composition below 128.
+        s=shapes.Sculpt(pale)
+        for i in range(2+int(state[-1])*2):
+            a=i*2.4;x,y,_=shapes.polar(.215,a,0);z=.49+(i%3)*.08
+            s.bulb('cradled egg shell',[x,y,z],[.055,.053,.085],'#7D9299')
+            s.bulb('cradled egg crown',[x,y,z+.062],[.037,.035,.045],'#9BA9AC')
+            for j in range(4):
+                b=j*math.tau/4
+                s.vein('small egg seam',[x+.053*math.cos(b),y+.05*math.sin(b),z-.035],
+                       [x+.031*math.cos(b),y+.03*math.sin(b),z+.074],.006,'#BCC4BC','CylinderX')
+        return s.parts
     if state.endswith('_underlay'):
         s=shapes.Sculpt(pale);s.bulb('luminous spore vent',[0,0,.76],[.09,.09,.016],'#B3B284');return s.parts
     return shapes.organ(kind,state,frame,count,pale)
@@ -149,6 +160,48 @@ def build(rows):
     return models,coverage,sources
 
 
+def skin_surfaces(models,rows,sources):
+    """Source relief on solid wall faces and retracting leaves, never billboards."""
+    pool=Pool(art=ART,textures=TEXTURES,prefix='CMU3DXenoSkin',texture_root='/Textures/CMU14/ThreeD/XenoSkin')
+    refs={r['id']:r for r in rows}
+    provenance={}
+    def crop(pixels,rect,rsi,state):
+        uid=pool.crop(pixels,rect)
+        source=dict(rsi=inventory.texture_reference(rsi),state=state,rect=rect,
+                    **{k:v for k,v in metadata(rsi).items() if k in ('license','copyright')})
+        if source not in provenance.setdefault(uid,[]):
+            provenance[uid].append(source)
+        return uid
+    for m in models:
+        row=refs[m['referencePrototype']];kind=classify(row)
+        if kind not in ('wall','door'):
+            continue
+        rsi=m['referenceRsi'];state=m['referenceState']
+        if kind=='wall':
+            if 'membrane' in state.lower():
+                continue
+            pixels=sources.frame(rsi,state)
+            surface=crop(pixels,(0,0,pixels.width,pixels.height),rsi,state)
+            for side in (-1,1):
+                y=side*.502;x=side*.502
+                m['parts'].append(part('source resin skin front and rear',[-.5,y-.003,.01],[.5,y+.003,2.39],
+                                       '#FFFFFF',surface=surface,surfaceAxis='XZ'))
+                m['parts'].append(part('source resin skin sides',[x-.003,-.5,.01],[x+.003,.5,2.39],
+                                       '#FFFFFF',surface=surface,surfaceAxis='YZ'))
+        else:
+            state=row['components']['Door']['closedSpriteState'];pixels=sources.frame(rsi,state)
+            halves=[crop(pixels,(i*pixels.width//2,0,(i+1)*pixels.width//2,pixels.height),rsi,state) for i in range(2)]
+            frames=[m['parts']]+[f['parts'] for states in m.get('xenoStates',{}).values()
+                                      for definition in states.values() for f in definition['frames']]
+            for parts in frames:
+                for p in parts:
+                    if p['label']=='closed contracting membrane':
+                        p.update(surface=halves[0 if sum((p['min'][0],p['max'][0]))<0 else 1],
+                                 surfaceAxis='XZ',color='#FFFFFF')
+    write(ART,'# CMU14: original resin skin detail on solid authored geometry.\n'+yaml.safe_dump(pool.entries,sort_keys=False))
+    write(TEXTURES/'sources.json',json.dumps(provenance,indent=2)+'\n')
+
+
 def review(models,sources):
     font=ImageFont.truetype('C:/Windows/Fonts/segoeui.ttf',15)
     for page in range((len(models)+7)//8):
@@ -196,7 +249,7 @@ def highlights(models):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--inventory',type=Path);args=parser.parse_args()
     kinds=json.loads(args.inventory.read_text()) if args.inventory else inventory.load_prototypes(ROOT)[0]
-    rows=collect(kinds);models,coverage,sources=build(rows)
+    rows=collect(kinds);models,coverage,sources=build(rows);skin_surfaces(models,rows,sources)
     write(MODEL,'# CMU14: authored hive structures; mobs are deliberately excluded.\n'+yaml.safe_dump(serialize(models),sort_keys=False,width=120))
     checked=bm.load_models(MODEL);REVIEW.mkdir(parents=True,exist_ok=True);review(checked,sources);highlights(checked)
     rsis={m['referenceRsi'] for m in models} | {rsi for m in models for rsi in m.get('xenoStates',{})}
