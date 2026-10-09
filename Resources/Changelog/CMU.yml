@@ -12273,5 +12273,203 @@
   id: 751
   time: '2026-10-09T02:54:14.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2085
+- author: rokudara-sen
+  changes:
+  - message: Every platoon can get COMSEC fill cards and radios from ASRS and their
+      command vendor, and OPFOR no longer gets GOVFOR keys
+    type: Fix
+  - message: Synths bleed white again, and their limbs can't be eaten
+    type: Fix
+  - message: Borrowing visor NVGs no longer leaves a green overlay stuck on a synth's
+      built-in night vision
+    type: Fix
+  - message: Riders can't use buttons from Mind's Eye, can end Silence Host early,
+      and Psychic Whisper works again
+    type: Fix
+  - message: Rider abilities now actually go on cooldown
+    type: Tweak
+  - message: The host shows a typing indicator when the Rider speaks through them,
+      and Riders get night vision in Mind's Eye
+    type: Add
+  - message: Orbital strikes destroy vehicles for good instead of leaving them repairable
+    type: Fix
+  - message: The CLF tech tree and objectives consoles can't be blown out of the camp
+    type: Fix
+  - message: GOVFOR and OPFOR each get their own specialist kits
+    type: Fix
+  - message: Colony Fall tribes always spawn with bowmen and a shaman
+    type: Fix
+  - message: Yautja limb trophies, kill counting and duel credit work properly, and
+      butchering no longer deletes the corpse's gear
+    type: Fix
+  - message: Butchered xenos drop real trophies, and headless corpses can't be raised
+      as thralls
+    type: Fix
+  - message: Yautja self-destruct has a hotkey
+    type: Add
+  id: 752
+  time: '2026-10-09T09:40:26.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2102
+- author: TheHellFireo
+  changes:
+  - message: Scavengers recover dropped rifles and avoid repeated exposed-cover, suppression
+      and idle wielding loops.
+    type: Fix
+  - message: Scavengers coordinate covering fire, hold useful firing positions and
+      assign limited flank responders.
+    type: Tweak
+  - message: Scavengers retain safe movement on contact, fire while travelling or
+      queueing, and yield in narrow passages.
+    type: Fix
+  - message: Added breacher, skirmisher, machinegunner and veteran scavengers, plus
+      raider and fireteam compositions.
+    type: Add
+  - message: Added specialist weapons, finite rocket launchers, backup switching and
+      physical shotgun reloads.
+    type: Add
+  - message: Added field medics with covered casualty extraction, treatment and native
+      eligible revival.
+    type: Add
+  - message: Improved smoke screens, grenade targeting and squad explosive discipline.
+    type: Tweak
+  - message: Scavengers cross RMC water at native speed and maintain body clearance
+      on long routes and corners.
+    type: Fix
+  - message: Expedition LZ openings issue a short GOVFOR ARES priority assignment.
+    type: Tweak
+  - message: Added expedition command autocomplete and expanded squad, traffic, combat
+      and medical diagnostics.
+    type: Admin
+  id: 753
+  time: '2026-10-09T11:02:52.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2112
+- author: TheHellFireo
+  changes:
+  - message: Scavenger specialists receive explicit complete equipment without duplicate
+      inherited weapons.
+    type: Fix
+  - message: Scavenger squads use quieter contact reports and retain covering assignments.
+    type: Tweak
+  - message: Scavengers retain return fire during stalled movement and shoot outward
+      over directional barricades.
+    type: Fix
+  - message: Guard construction requires an order and chooses oriented, spaced positions
+      with escape routes.
+    type: Tweak
+  - message: Scavengers recover compatible ammunition, known grenades and equipment
+      from nearby accessible supplies and dead bodies.
+    type: Add
+  - message: Scavengers spread fire against aliens, retain brief threat memory and
+      react to visible projectiles and ground acid.
+    type: Tweak
+  - message: Scavenger travel can use short obstacle detours and bounded waits for
+      lagging squad members.
+    type: Fix
+  - message: Added guard facing completion and construction, scavenging, hazard and
+      navigation diagnostics.
+    type: Admin
+  id: 754
+  time: '2026-10-09T13:14:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2118
+- author: rokudara-sen
+  changes:
+  - message: Yautja plasma weapons no longer explode next to the shooter on their
+      screen
+    type: Fix
+  - message: Aggressive grabs can't be escaped with one click anymore
+    type: Fix
+  - message: Predators pull at full speed, only feel pain near death, can throw who
+      they carry and can put weapons in suit storage
+    type: Fix
+  - message: Thwei mends predator fractures without a splint
+    type: Fix
+  - message: The Yautja mask visor turns back on when the bracer is put back on
+    type: Fix
+  - message: Fully geared predators take explosion and fire damage again instead of
+      being nearly immune
+    type: Tweak
+  - message: Poppers can no longer plant spore sacs through walls, windows, barricades
+      or into space
+    type: Fix
+  - message: Neomorph walkers made from planetside bodies can use guns
+    type: Fix
+  - message: The King's Destroy leap works on the USS Bush
+    type: Fix
+  id: 755
+  time: '2026-10-09T13:14:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2119
+- author: HubaBub
+  changes:
+  - message: GROM (GROM is now a proper squad, with body armor and intact clothing.)
+    type: Tweak
+  id: 756
+  time: '2026-10-09T13:29:37.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2074
+- author: TheHellFireo
+  changes:
+  - message: Reduced the rendering cost of bottles, tableware and other props in 3D
+      mode.
+    type: Fix
+  - message: Added Redux 3D models for infrastructure, vehicles, vehicle interiors
+      and xeno hive structures.
+    type: Add
+  id: 757
+  time: '2026-10-09T13:54:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2114
+- author: ILoveDespoiler
+  changes:
+  - message: Adjusted stats of Despoilers Acid Barrage to make it harder to use mid-combat
+      and better as an area denial/poke tool. Increased Charge Time, Scatter, Projectile
+      Count, Acid Chance, Plasma Cost, and Cooldown. Decreased Damage, Decreased Movement
+      Speed while Charging.
+    type: Tweak
+  id: 758
+  time: '2026-10-09T13:56:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2052
+- author: KeiKiyomi
+  changes:
+  - message: Changed Burning Postman and Normal Postman damage, slope, and range
+    type: Tweak
+  id: 759
+  time: '2026-10-09T14:04:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2084
+- author: TheHellFireo
+  changes:
+  - message: Minor bleeding and a single Moderate bleed now leave tiny droplets without
+      bloody footprints. Multiple Moderate bleeds and heavier bleeding still create
+      normal puddles.
+    type: Tweak
+  - message: Only AU14 tile fires spread to additional tiles or nearby flammable objects.
+    type: Tweak
+  - message: Recurring hijack pipe explosions occur half as often.
+    type: Tweak
+  id: 760
+  time: '2026-10-09T14:26:23.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2121
+- author: TheHellFireo
+  changes:
+  - message: Fixed a startup crash introduced by expedition gunfire perception.
+    type: Fix
+  - message: Expedition specialists retain their primary weapons when switching to
+      a sidearm.
+    type: Fix
+  - message: Expedition combatants seek shelter or create distance when their ammunition
+      is exhausted.
+    type: Fix
+  id: 761
+  time: '2026-10-09T15:59:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2123
+- author: TheHellFireo
+  changes:
+  - message: Rocketeers now spawn with their loaded disposable rocket launcher.
+    type: Fix
+  - message: Expedition AI can correctly stow and retrieve weapons from suit storage.
+    type: Fix
+  - message: Expedition gunfire observation no longer changes unused gun prototypes
+      during map initialization.
+    type: Fix
+  id: 762
+  time: '2026-10-09T16:25:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2125
 Name: CMU
 Order: -1
