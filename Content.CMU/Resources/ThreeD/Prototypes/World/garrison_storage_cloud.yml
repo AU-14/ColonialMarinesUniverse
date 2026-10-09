@@ -321,14 +321,6 @@
     min: -0.46875, -0.416, 0.094
     max: 0.5, -0.41, 0.12
     color: '#8D3A34'
-  - label: lid side fold 1
-    min: -0.46875, -0.4, 0.094
-    max: -0.45475, 0.33, 0.118
-    color: '#622924'
-  - label: lid side fold 2
-    min: 0.486, -0.4, 0.094
-    max: 0.5, 0.33, 0.118
-    color: '#622924'
   placement: surface
   useEntityRotation: true
 - type: cmu3DModel
@@ -485,14 +477,6 @@
     min: -0.46875, -0.416, 0.094
     max: 0.5, -0.41, 0.12
     color: '#75796D'
-  - label: lid side fold 1
-    min: -0.46875, -0.4, 0.094
-    max: -0.45475, 0.33, 0.118
-    color: '#40433B'
-  - label: lid side fold 2
-    min: 0.486, -0.4, 0.094
-    max: 0.5, 0.33, 0.118
-    color: '#40433B'
   placement: surface
   useEntityRotation: true
 - type: cmu3DModel
@@ -650,14 +634,6 @@
     min: -0.5, -0.416, 0.094
     max: 0.5, -0.41, 0.12
     color: '#E7E7D1'
-  - label: lid side fold 1
-    min: -0.5, -0.4, 0.094
-    max: -0.486, 0.33, 0.118
-    color: '#E6E2CA'
-  - label: lid side fold 2
-    min: 0.486, -0.4, 0.094
-    max: 0.5, 0.33, 0.118
-    color: '#E6E2CA'
   placement: surface
   useEntityRotation: true
 - type: cmu3DModel

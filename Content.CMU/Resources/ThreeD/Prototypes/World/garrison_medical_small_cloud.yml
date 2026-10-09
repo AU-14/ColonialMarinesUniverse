@@ -3419,17 +3419,13 @@
     pitch: 4.63607
   - label: middle worn flap cloth panel 1
     min: -0.24, -0.1975, 0.058
-    max: -0.075, -0.0225, 0.072
+    max: 0.09, -0.0225, 0.072
     color: '#649A9A'
   - label: middle worn flap bound rolled seam 1
     min: -0.24, -0.048, 0.061
     max: -0.075, -0.032, 0.077
     color: '#264B4B'
     shape: CylinderX
-  - label: middle worn flap cloth panel 2
-    min: -0.075, -0.1975, 0.058
-    max: 0.09, -0.0225, 0.072
-    color: '#649A9A'
   - label: middle worn flap bound rolled seam 2
     min: -0.075, -0.048, 0.061
     max: 0.09, -0.032, 0.077
@@ -3747,17 +3743,13 @@
           pitch: 4.63607
         - label: middle worn flap cloth panel 1
           min: -0.24, -0.1975, 0.058
-          max: -0.075, -0.0225, 0.072
+          max: 0.09, -0.0225, 0.072
           color: '#649A9A'
         - label: middle worn flap bound rolled seam 1
           min: -0.24, -0.048, 0.061
           max: -0.075, -0.032, 0.077
           color: '#264B4B'
           shape: CylinderX
-        - label: middle worn flap cloth panel 2
-          min: -0.075, -0.1975, 0.058
-          max: 0.09, -0.0225, 0.072
-          color: '#649A9A'
         - label: middle worn flap bound rolled seam 2
           min: -0.075, -0.048, 0.061
           max: 0.09, -0.032, 0.077

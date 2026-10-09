@@ -600,33 +600,33 @@
     min: -2.063, 2.182, -0.4425
     max: -2.037, 2.21, -0.3175
     color: '#31383B'
-  - label: north rib band 1 corrugation 2
-    min: -1.553, 2.182, -0.4425
-    max: -1.527, 2.21, -0.3175
+  - label: upper north machinery housing 1
+    min: -1.86, 1.81, -0.74
+    max: -1.24, 2.31, -0.02
     color: '#31383B'
   - label: north rib band 1 corrugation 3
     min: -1.043, 2.182, -0.4425
     max: -1.017, 2.21, -0.3175
     color: '#31383B'
-  - label: north rib band 1 corrugation 4
-    min: -0.533, 2.182, -0.4425
-    max: -0.507, 2.21, -0.3175
+  - label: upper north machinery housing 2
+    min: -0.77, 1.81, -0.74
+    max: -0.43, 2.31, -0.02
     color: '#31383B'
   - label: north rib band 1 corrugation 5
     min: -0.023, 2.182, -0.4425
     max: 0.003, 2.21, -0.3175
     color: '#31383B'
-  - label: north rib band 1 corrugation 6
-    min: 0.487, 2.182, -0.4425
-    max: 0.513, 2.21, -0.3175
+  - label: upper north machinery housing 3
+    min: 0.04, 1.81, -0.74
+    max: 0.66, 2.31, -0.02
     color: '#31383B'
   - label: north rib band 1 corrugation 7
     min: 0.997, 2.182, -0.4425
     max: 1.023, 2.21, -0.3175
     color: '#31383B'
-  - label: north rib band 1 corrugation 8
-    min: 1.507, 2.182, -0.4425
-    max: 1.533, 2.21, -0.3175
+  - label: upper north machinery housing 4
+    min: 1.12, 1.81, -0.74
+    max: 1.68, 2.31, -0.02
     color: '#31383B'
   - label: north rib band 1 corrugation 9
     min: 2.017, 2.182, -0.4425
@@ -752,10 +752,6 @@
     min: 2.1005, 2.024, -2.38
     max: 2.1395, 2.184, 0.0
     color: '#383F40'
-  - label: upper north machinery housing 1
-    min: -1.86, 1.81, -0.74
-    max: -1.24, 2.31, -0.02
-    color: '#31383B'
   - label: upper north machine recessed face 1
     min: -1.8042, 1.795, -0.68
     max: -1.2958, 1.835, -0.08
@@ -776,10 +772,6 @@
     min: -1.7856, 1.7675, -0.571
     max: -1.3144, 1.8025, -0.549
     color: '#3E4545'
-  - label: upper north machinery housing 2
-    min: -0.77, 1.81, -0.74
-    max: -0.43, 2.31, -0.02
-    color: '#31383B'
   - label: upper north machine recessed face 2
     min: -0.7394, 1.795, -0.68
     max: -0.4606, 1.835, -0.08
@@ -800,10 +792,6 @@
     min: -0.7292, 1.7675, -0.571
     max: -0.4708, 1.8025, -0.549
     color: '#3E4545'
-  - label: upper north machinery housing 3
-    min: 0.04, 1.81, -0.74
-    max: 0.66, 2.31, -0.02
-    color: '#31383B'
   - label: upper north machine recessed face 3
     min: 0.0958, 1.795, -0.68
     max: 0.6042, 1.835, -0.08
@@ -824,10 +812,6 @@
     min: 0.1144, 1.7675, -0.571
     max: 0.5856, 1.8025, -0.549
     color: '#3E4545'
-  - label: upper north machinery housing 4
-    min: 1.12, 1.81, -0.74
-    max: 1.68, 2.31, -0.02
-    color: '#31383B'
   - label: upper north machine recessed face 4
     min: 1.1704, 1.795, -0.68
     max: 1.6296, 1.835, -0.08

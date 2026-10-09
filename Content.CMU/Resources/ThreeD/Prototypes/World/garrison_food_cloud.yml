@@ -25,291 +25,149 @@
     color: '#CDC1B1'
     shape: CylinderZ
   - label: flared hollow ceramic wall 01
-    min: 0.185412, -0.051500, 0.105000
-    max: 0.376588, 0.051500, 0.133000
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
     color: '#BFAE99'
     pitch: 42.03177
-  - label: rolled ceramic rim 01
-    min: 0.334000, -0.049000, 0.166000
-    max: 0.366000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
+    yaw: 0.0
   - label: flared hollow ceramic wall 02
-    min: 0.175838, 0.021228, 0.105000
-    max: 0.367013, 0.124228, 0.133000
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 15.0
     pitch: 42.03177
-  - label: rolled ceramic rim 02
-    min: 0.322074, 0.041587, 0.166000
-    max: 0.354074, 0.139587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 15.0
+    yaw: 30.0
   - label: flared hollow ceramic wall 03
-    min: 0.147765, 0.089000, 0.105000
-    max: 0.338941, 0.192000, 0.133000
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 30.0
     pitch: 42.03177
-  - label: rolled ceramic rim 03
-    min: 0.287109, 0.126000, 0.166000
-    max: 0.319109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 30.0
+    yaw: 60.0
   - label: flared hollow ceramic wall 04
-    min: 0.103109, 0.147197, 0.105000
-    max: 0.294285, 0.250197, 0.133000
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
     color: '#BFAE99'
-    yaw: 45.0
     pitch: 42.03177
-  - label: rolled ceramic rim 04
-    min: 0.231487, 0.198487, 0.166000
-    max: 0.263487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 45.0
+    yaw: 90.0
   - label: flared hollow ceramic wall 05
-    min: 0.044912, 0.191853, 0.105000
-    max: 0.236088, 0.294853, 0.133000
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 60.0
     pitch: 42.03177
-  - label: rolled ceramic rim 05
-    min: 0.159000, 0.254109, 0.166000
-    max: 0.191000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 60.0
+    yaw: 120.0
   - label: flared hollow ceramic wall 06
-    min: -0.022860, 0.219925, 0.105000
-    max: 0.168316, 0.322925, 0.133000
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 75.0
     pitch: 42.03177
-  - label: rolled ceramic rim 06
-    min: 0.074587, 0.289074, 0.166000
-    max: 0.106587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 75.0
+    yaw: 150.0
   - label: flared hollow ceramic wall 07
-    min: -0.095588, 0.229500, 0.105000
-    max: 0.095588, 0.332500, 0.133000
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
     color: '#BFAE99'
-    yaw: 90.0
     pitch: 42.03177
-  - label: rolled ceramic rim 07
-    min: -0.016000, 0.301000, 0.166000
-    max: 0.016000, 0.399000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 90.0
+    yaw: 180.0
   - label: flared hollow ceramic wall 08
-    min: -0.168316, 0.219925, 0.105000
-    max: 0.022860, 0.322925, 0.133000
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 105.0
     pitch: 42.03177
-  - label: rolled ceramic rim 08
-    min: -0.106587, 0.289074, 0.166000
-    max: -0.074587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 105.0
+    yaw: 210.0
   - label: flared hollow ceramic wall 09
-    min: -0.236088, 0.191853, 0.105000
-    max: -0.044912, 0.294853, 0.133000
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 120.0
     pitch: 42.03177
-  - label: rolled ceramic rim 09
-    min: -0.191000, 0.254109, 0.166000
-    max: -0.159000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 120.0
+    yaw: 240.0
   - label: flared hollow ceramic wall 10
-    min: -0.294285, 0.147197, 0.105000
-    max: -0.103109, 0.250197, 0.133000
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
     color: '#BFAE99'
-    yaw: 135.0
     pitch: 42.03177
-  - label: rolled ceramic rim 10
-    min: -0.263487, 0.198487, 0.166000
-    max: -0.231487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 135.0
+    yaw: 270.0
   - label: flared hollow ceramic wall 11
-    min: -0.338941, 0.089000, 0.105000
-    max: -0.147765, 0.192000, 0.133000
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 150.0
     pitch: 42.03177
-  - label: rolled ceramic rim 11
-    min: -0.319109, 0.126000, 0.166000
-    max: -0.287109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 150.0
+    yaw: 300.0
   - label: flared hollow ceramic wall 12
-    min: -0.367013, 0.021228, 0.105000
-    max: -0.175838, 0.124228, 0.133000
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 165.0
     pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
   - label: rolled ceramic rim 12
-    min: -0.354074, 0.041587, 0.166000
-    max: -0.322074, 0.139587, 0.200000
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
     color: '#E6DBCF'
     shape: CylinderY
-    yaw: 165.0
-  - label: flared hollow ceramic wall 13
-    min: -0.376588, -0.051500, 0.105000
-    max: -0.185412, 0.051500, 0.133000
-    color: '#BFAE99'
-    yaw: -180.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 13
-    min: -0.366000, -0.049000, 0.166000
-    max: -0.334000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -180.0
-  - label: flared hollow ceramic wall 14
-    min: -0.367013, -0.124228, 0.105000
-    max: -0.175838, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -165.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 14
-    min: -0.354074, -0.139587, 0.166000
-    max: -0.322074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -165.0
-  - label: flared hollow ceramic wall 15
-    min: -0.338941, -0.192000, 0.105000
-    max: -0.147765, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -150.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 15
-    min: -0.319109, -0.224000, 0.166000
-    max: -0.287109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -150.0
-  - label: flared hollow ceramic wall 16
-    min: -0.294285, -0.250197, 0.105000
-    max: -0.103109, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -135.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 16
-    min: -0.263487, -0.296487, 0.166000
-    max: -0.231487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -135.0
-  - label: flared hollow ceramic wall 17
-    min: -0.236088, -0.294853, 0.105000
-    max: -0.044912, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -120.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 17
-    min: -0.191000, -0.352109, 0.166000
-    max: -0.159000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -120.0
-  - label: flared hollow ceramic wall 18
-    min: -0.168316, -0.322925, 0.105000
-    max: 0.022860, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -105.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 18
-    min: -0.106587, -0.387074, 0.166000
-    max: -0.074587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -105.0
-  - label: flared hollow ceramic wall 19
-    min: -0.095588, -0.332500, 0.105000
-    max: 0.095588, -0.229500, 0.133000
-    color: '#BFAE99'
-    yaw: -90.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 19
-    min: -0.016000, -0.399000, 0.166000
-    max: 0.016000, -0.301000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -90.0
-  - label: flared hollow ceramic wall 20
-    min: -0.022860, -0.322925, 0.105000
-    max: 0.168316, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -75.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 20
-    min: 0.074587, -0.387074, 0.166000
-    max: 0.106587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -75.0
-  - label: flared hollow ceramic wall 21
-    min: 0.044912, -0.294853, 0.105000
-    max: 0.236088, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -60.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 21
-    min: 0.159000, -0.352109, 0.166000
-    max: 0.191000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -60.0
-  - label: flared hollow ceramic wall 22
-    min: 0.103109, -0.250197, 0.105000
-    max: 0.294285, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -45.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 22
-    min: 0.231487, -0.296487, 0.166000
-    max: 0.263487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -45.0
-  - label: flared hollow ceramic wall 23
-    min: 0.147765, -0.192000, 0.105000
-    max: 0.338941, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -30.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 23
-    min: 0.287109, -0.224000, 0.166000
-    max: 0.319109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -30.0
-  - label: flared hollow ceramic wall 24
-    min: 0.175838, -0.124228, 0.105000
-    max: 0.367013, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -15.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 24
-    min: 0.322074, -0.139587, 0.166000
-    max: 0.354074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -15.0
+    yaw: 330.0
 - type: cmu3DModel
   id: CMU3DFoodRiceEggCloud
   referenceRsi: /Textures/CMU14/ThreeD/EquipmentReferences.rsi
@@ -336,291 +194,149 @@
     color: '#CDC1B1'
     shape: CylinderZ
   - label: flared hollow ceramic wall 01
-    min: 0.185412, -0.051500, 0.105000
-    max: 0.376588, 0.051500, 0.133000
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
     color: '#BFAE99'
     pitch: 42.03177
-  - label: rolled ceramic rim 01
-    min: 0.334000, -0.049000, 0.166000
-    max: 0.366000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
+    yaw: 0.0
   - label: flared hollow ceramic wall 02
-    min: 0.175838, 0.021228, 0.105000
-    max: 0.367013, 0.124228, 0.133000
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 15.0
     pitch: 42.03177
-  - label: rolled ceramic rim 02
-    min: 0.322074, 0.041587, 0.166000
-    max: 0.354074, 0.139587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 15.0
+    yaw: 30.0
   - label: flared hollow ceramic wall 03
-    min: 0.147765, 0.089000, 0.105000
-    max: 0.338941, 0.192000, 0.133000
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 30.0
     pitch: 42.03177
-  - label: rolled ceramic rim 03
-    min: 0.287109, 0.126000, 0.166000
-    max: 0.319109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 30.0
+    yaw: 60.0
   - label: flared hollow ceramic wall 04
-    min: 0.103109, 0.147197, 0.105000
-    max: 0.294285, 0.250197, 0.133000
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
     color: '#BFAE99'
-    yaw: 45.0
     pitch: 42.03177
-  - label: rolled ceramic rim 04
-    min: 0.231487, 0.198487, 0.166000
-    max: 0.263487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 45.0
+    yaw: 90.0
   - label: flared hollow ceramic wall 05
-    min: 0.044912, 0.191853, 0.105000
-    max: 0.236088, 0.294853, 0.133000
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 60.0
     pitch: 42.03177
-  - label: rolled ceramic rim 05
-    min: 0.159000, 0.254109, 0.166000
-    max: 0.191000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 60.0
+    yaw: 120.0
   - label: flared hollow ceramic wall 06
-    min: -0.022860, 0.219925, 0.105000
-    max: 0.168316, 0.322925, 0.133000
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 75.0
     pitch: 42.03177
-  - label: rolled ceramic rim 06
-    min: 0.074587, 0.289074, 0.166000
-    max: 0.106587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 75.0
+    yaw: 150.0
   - label: flared hollow ceramic wall 07
-    min: -0.095588, 0.229500, 0.105000
-    max: 0.095588, 0.332500, 0.133000
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
     color: '#BFAE99'
-    yaw: 90.0
     pitch: 42.03177
-  - label: rolled ceramic rim 07
-    min: -0.016000, 0.301000, 0.166000
-    max: 0.016000, 0.399000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 90.0
+    yaw: 180.0
   - label: flared hollow ceramic wall 08
-    min: -0.168316, 0.219925, 0.105000
-    max: 0.022860, 0.322925, 0.133000
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 105.0
     pitch: 42.03177
-  - label: rolled ceramic rim 08
-    min: -0.106587, 0.289074, 0.166000
-    max: -0.074587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 105.0
+    yaw: 210.0
   - label: flared hollow ceramic wall 09
-    min: -0.236088, 0.191853, 0.105000
-    max: -0.044912, 0.294853, 0.133000
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 120.0
     pitch: 42.03177
-  - label: rolled ceramic rim 09
-    min: -0.191000, 0.254109, 0.166000
-    max: -0.159000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 120.0
+    yaw: 240.0
   - label: flared hollow ceramic wall 10
-    min: -0.294285, 0.147197, 0.105000
-    max: -0.103109, 0.250197, 0.133000
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
     color: '#BFAE99'
-    yaw: 135.0
     pitch: 42.03177
-  - label: rolled ceramic rim 10
-    min: -0.263487, 0.198487, 0.166000
-    max: -0.231487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 135.0
+    yaw: 270.0
   - label: flared hollow ceramic wall 11
-    min: -0.338941, 0.089000, 0.105000
-    max: -0.147765, 0.192000, 0.133000
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 150.0
     pitch: 42.03177
-  - label: rolled ceramic rim 11
-    min: -0.319109, 0.126000, 0.166000
-    max: -0.287109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 150.0
+    yaw: 300.0
   - label: flared hollow ceramic wall 12
-    min: -0.367013, 0.021228, 0.105000
-    max: -0.175838, 0.124228, 0.133000
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 165.0
     pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
   - label: rolled ceramic rim 12
-    min: -0.354074, 0.041587, 0.166000
-    max: -0.322074, 0.139587, 0.200000
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
     color: '#E6DBCF'
     shape: CylinderY
-    yaw: 165.0
-  - label: flared hollow ceramic wall 13
-    min: -0.376588, -0.051500, 0.105000
-    max: -0.185412, 0.051500, 0.133000
-    color: '#BFAE99'
-    yaw: -180.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 13
-    min: -0.366000, -0.049000, 0.166000
-    max: -0.334000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -180.0
-  - label: flared hollow ceramic wall 14
-    min: -0.367013, -0.124228, 0.105000
-    max: -0.175838, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -165.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 14
-    min: -0.354074, -0.139587, 0.166000
-    max: -0.322074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -165.0
-  - label: flared hollow ceramic wall 15
-    min: -0.338941, -0.192000, 0.105000
-    max: -0.147765, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -150.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 15
-    min: -0.319109, -0.224000, 0.166000
-    max: -0.287109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -150.0
-  - label: flared hollow ceramic wall 16
-    min: -0.294285, -0.250197, 0.105000
-    max: -0.103109, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -135.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 16
-    min: -0.263487, -0.296487, 0.166000
-    max: -0.231487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -135.0
-  - label: flared hollow ceramic wall 17
-    min: -0.236088, -0.294853, 0.105000
-    max: -0.044912, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -120.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 17
-    min: -0.191000, -0.352109, 0.166000
-    max: -0.159000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -120.0
-  - label: flared hollow ceramic wall 18
-    min: -0.168316, -0.322925, 0.105000
-    max: 0.022860, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -105.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 18
-    min: -0.106587, -0.387074, 0.166000
-    max: -0.074587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -105.0
-  - label: flared hollow ceramic wall 19
-    min: -0.095588, -0.332500, 0.105000
-    max: 0.095588, -0.229500, 0.133000
-    color: '#BFAE99'
-    yaw: -90.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 19
-    min: -0.016000, -0.399000, 0.166000
-    max: 0.016000, -0.301000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -90.0
-  - label: flared hollow ceramic wall 20
-    min: -0.022860, -0.322925, 0.105000
-    max: 0.168316, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -75.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 20
-    min: 0.074587, -0.387074, 0.166000
-    max: 0.106587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -75.0
-  - label: flared hollow ceramic wall 21
-    min: 0.044912, -0.294853, 0.105000
-    max: 0.236088, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -60.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 21
-    min: 0.159000, -0.352109, 0.166000
-    max: 0.191000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -60.0
-  - label: flared hollow ceramic wall 22
-    min: 0.103109, -0.250197, 0.105000
-    max: 0.294285, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -45.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 22
-    min: 0.231487, -0.296487, 0.166000
-    max: 0.263487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -45.0
-  - label: flared hollow ceramic wall 23
-    min: 0.147765, -0.192000, 0.105000
-    max: 0.338941, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -30.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 23
-    min: 0.287109, -0.224000, 0.166000
-    max: 0.319109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -30.0
-  - label: flared hollow ceramic wall 24
-    min: 0.175838, -0.124228, 0.105000
-    max: 0.367013, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -15.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 24
-    min: 0.322074, -0.139587, 0.166000
-    max: 0.354074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -15.0
+    yaw: 330.0
   - label: fried rice mound
     min: -0.301000, -0.284000, 0.125000
     max: 0.301000, 0.284000, 0.243000
@@ -1002,291 +718,149 @@
     color: '#CDC1B1'
     shape: CylinderZ
   - label: flared hollow ceramic wall 01
-    min: 0.185412, -0.051500, 0.105000
-    max: 0.376588, 0.051500, 0.133000
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
     color: '#BFAE99'
     pitch: 42.03177
-  - label: rolled ceramic rim 01
-    min: 0.334000, -0.049000, 0.166000
-    max: 0.366000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
+    yaw: 0.0
   - label: flared hollow ceramic wall 02
-    min: 0.175838, 0.021228, 0.105000
-    max: 0.367013, 0.124228, 0.133000
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 15.0
     pitch: 42.03177
-  - label: rolled ceramic rim 02
-    min: 0.322074, 0.041587, 0.166000
-    max: 0.354074, 0.139587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 15.0
+    yaw: 30.0
   - label: flared hollow ceramic wall 03
-    min: 0.147765, 0.089000, 0.105000
-    max: 0.338941, 0.192000, 0.133000
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 30.0
     pitch: 42.03177
-  - label: rolled ceramic rim 03
-    min: 0.287109, 0.126000, 0.166000
-    max: 0.319109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 30.0
+    yaw: 60.0
   - label: flared hollow ceramic wall 04
-    min: 0.103109, 0.147197, 0.105000
-    max: 0.294285, 0.250197, 0.133000
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
     color: '#BFAE99'
-    yaw: 45.0
     pitch: 42.03177
-  - label: rolled ceramic rim 04
-    min: 0.231487, 0.198487, 0.166000
-    max: 0.263487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 45.0
+    yaw: 90.0
   - label: flared hollow ceramic wall 05
-    min: 0.044912, 0.191853, 0.105000
-    max: 0.236088, 0.294853, 0.133000
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 60.0
     pitch: 42.03177
-  - label: rolled ceramic rim 05
-    min: 0.159000, 0.254109, 0.166000
-    max: 0.191000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 60.0
+    yaw: 120.0
   - label: flared hollow ceramic wall 06
-    min: -0.022860, 0.219925, 0.105000
-    max: 0.168316, 0.322925, 0.133000
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 75.0
     pitch: 42.03177
-  - label: rolled ceramic rim 06
-    min: 0.074587, 0.289074, 0.166000
-    max: 0.106587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 75.0
+    yaw: 150.0
   - label: flared hollow ceramic wall 07
-    min: -0.095588, 0.229500, 0.105000
-    max: 0.095588, 0.332500, 0.133000
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
     color: '#BFAE99'
-    yaw: 90.0
     pitch: 42.03177
-  - label: rolled ceramic rim 07
-    min: -0.016000, 0.301000, 0.166000
-    max: 0.016000, 0.399000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 90.0
+    yaw: 180.0
   - label: flared hollow ceramic wall 08
-    min: -0.168316, 0.219925, 0.105000
-    max: 0.022860, 0.322925, 0.133000
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 105.0
     pitch: 42.03177
-  - label: rolled ceramic rim 08
-    min: -0.106587, 0.289074, 0.166000
-    max: -0.074587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 105.0
+    yaw: 210.0
   - label: flared hollow ceramic wall 09
-    min: -0.236088, 0.191853, 0.105000
-    max: -0.044912, 0.294853, 0.133000
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 120.0
     pitch: 42.03177
-  - label: rolled ceramic rim 09
-    min: -0.191000, 0.254109, 0.166000
-    max: -0.159000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 120.0
+    yaw: 240.0
   - label: flared hollow ceramic wall 10
-    min: -0.294285, 0.147197, 0.105000
-    max: -0.103109, 0.250197, 0.133000
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
     color: '#BFAE99'
-    yaw: 135.0
     pitch: 42.03177
-  - label: rolled ceramic rim 10
-    min: -0.263487, 0.198487, 0.166000
-    max: -0.231487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 135.0
+    yaw: 270.0
   - label: flared hollow ceramic wall 11
-    min: -0.338941, 0.089000, 0.105000
-    max: -0.147765, 0.192000, 0.133000
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 150.0
     pitch: 42.03177
-  - label: rolled ceramic rim 11
-    min: -0.319109, 0.126000, 0.166000
-    max: -0.287109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 150.0
+    yaw: 300.0
   - label: flared hollow ceramic wall 12
-    min: -0.367013, 0.021228, 0.105000
-    max: -0.175838, 0.124228, 0.133000
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 165.0
     pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
   - label: rolled ceramic rim 12
-    min: -0.354074, 0.041587, 0.166000
-    max: -0.322074, 0.139587, 0.200000
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
     color: '#E6DBCF'
     shape: CylinderY
-    yaw: 165.0
-  - label: flared hollow ceramic wall 13
-    min: -0.376588, -0.051500, 0.105000
-    max: -0.185412, 0.051500, 0.133000
-    color: '#BFAE99'
-    yaw: -180.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 13
-    min: -0.366000, -0.049000, 0.166000
-    max: -0.334000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -180.0
-  - label: flared hollow ceramic wall 14
-    min: -0.367013, -0.124228, 0.105000
-    max: -0.175838, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -165.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 14
-    min: -0.354074, -0.139587, 0.166000
-    max: -0.322074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -165.0
-  - label: flared hollow ceramic wall 15
-    min: -0.338941, -0.192000, 0.105000
-    max: -0.147765, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -150.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 15
-    min: -0.319109, -0.224000, 0.166000
-    max: -0.287109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -150.0
-  - label: flared hollow ceramic wall 16
-    min: -0.294285, -0.250197, 0.105000
-    max: -0.103109, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -135.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 16
-    min: -0.263487, -0.296487, 0.166000
-    max: -0.231487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -135.0
-  - label: flared hollow ceramic wall 17
-    min: -0.236088, -0.294853, 0.105000
-    max: -0.044912, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -120.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 17
-    min: -0.191000, -0.352109, 0.166000
-    max: -0.159000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -120.0
-  - label: flared hollow ceramic wall 18
-    min: -0.168316, -0.322925, 0.105000
-    max: 0.022860, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -105.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 18
-    min: -0.106587, -0.387074, 0.166000
-    max: -0.074587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -105.0
-  - label: flared hollow ceramic wall 19
-    min: -0.095588, -0.332500, 0.105000
-    max: 0.095588, -0.229500, 0.133000
-    color: '#BFAE99'
-    yaw: -90.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 19
-    min: -0.016000, -0.399000, 0.166000
-    max: 0.016000, -0.301000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -90.0
-  - label: flared hollow ceramic wall 20
-    min: -0.022860, -0.322925, 0.105000
-    max: 0.168316, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -75.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 20
-    min: 0.074587, -0.387074, 0.166000
-    max: 0.106587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -75.0
-  - label: flared hollow ceramic wall 21
-    min: 0.044912, -0.294853, 0.105000
-    max: 0.236088, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -60.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 21
-    min: 0.159000, -0.352109, 0.166000
-    max: 0.191000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -60.0
-  - label: flared hollow ceramic wall 22
-    min: 0.103109, -0.250197, 0.105000
-    max: 0.294285, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -45.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 22
-    min: 0.231487, -0.296487, 0.166000
-    max: 0.263487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -45.0
-  - label: flared hollow ceramic wall 23
-    min: 0.147765, -0.192000, 0.105000
-    max: 0.338941, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -30.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 23
-    min: 0.287109, -0.224000, 0.166000
-    max: 0.319109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -30.0
-  - label: flared hollow ceramic wall 24
-    min: 0.175838, -0.124228, 0.105000
-    max: 0.367013, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -15.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 24
-    min: 0.322074, -0.139587, 0.166000
-    max: 0.354074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -15.0
+    yaw: 330.0
   - label: rounded rice pudding mound
     min: -0.298000, -0.281500, 0.071000
     max: 0.298000, 0.281500, 0.323000
@@ -1484,291 +1058,149 @@
     color: '#CDC1B1'
     shape: CylinderZ
   - label: flared hollow ceramic wall 01
-    min: 0.185412, -0.051500, 0.105000
-    max: 0.376588, 0.051500, 0.133000
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
     color: '#BFAE99'
     pitch: 42.03177
-  - label: rolled ceramic rim 01
-    min: 0.334000, -0.049000, 0.166000
-    max: 0.366000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
+    yaw: 0.0
   - label: flared hollow ceramic wall 02
-    min: 0.175838, 0.021228, 0.105000
-    max: 0.367013, 0.124228, 0.133000
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 15.0
     pitch: 42.03177
-  - label: rolled ceramic rim 02
-    min: 0.322074, 0.041587, 0.166000
-    max: 0.354074, 0.139587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 15.0
+    yaw: 30.0
   - label: flared hollow ceramic wall 03
-    min: 0.147765, 0.089000, 0.105000
-    max: 0.338941, 0.192000, 0.133000
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 30.0
     pitch: 42.03177
-  - label: rolled ceramic rim 03
-    min: 0.287109, 0.126000, 0.166000
-    max: 0.319109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 30.0
+    yaw: 60.0
   - label: flared hollow ceramic wall 04
-    min: 0.103109, 0.147197, 0.105000
-    max: 0.294285, 0.250197, 0.133000
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
     color: '#BFAE99'
-    yaw: 45.0
     pitch: 42.03177
-  - label: rolled ceramic rim 04
-    min: 0.231487, 0.198487, 0.166000
-    max: 0.263487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 45.0
+    yaw: 90.0
   - label: flared hollow ceramic wall 05
-    min: 0.044912, 0.191853, 0.105000
-    max: 0.236088, 0.294853, 0.133000
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 60.0
     pitch: 42.03177
-  - label: rolled ceramic rim 05
-    min: 0.159000, 0.254109, 0.166000
-    max: 0.191000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 60.0
+    yaw: 120.0
   - label: flared hollow ceramic wall 06
-    min: -0.022860, 0.219925, 0.105000
-    max: 0.168316, 0.322925, 0.133000
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 75.0
     pitch: 42.03177
-  - label: rolled ceramic rim 06
-    min: 0.074587, 0.289074, 0.166000
-    max: 0.106587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 75.0
+    yaw: 150.0
   - label: flared hollow ceramic wall 07
-    min: -0.095588, 0.229500, 0.105000
-    max: 0.095588, 0.332500, 0.133000
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
     color: '#BFAE99'
-    yaw: 90.0
     pitch: 42.03177
-  - label: rolled ceramic rim 07
-    min: -0.016000, 0.301000, 0.166000
-    max: 0.016000, 0.399000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 90.0
+    yaw: 180.0
   - label: flared hollow ceramic wall 08
-    min: -0.168316, 0.219925, 0.105000
-    max: 0.022860, 0.322925, 0.133000
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 105.0
     pitch: 42.03177
-  - label: rolled ceramic rim 08
-    min: -0.106587, 0.289074, 0.166000
-    max: -0.074587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 105.0
+    yaw: 210.0
   - label: flared hollow ceramic wall 09
-    min: -0.236088, 0.191853, 0.105000
-    max: -0.044912, 0.294853, 0.133000
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 120.0
     pitch: 42.03177
-  - label: rolled ceramic rim 09
-    min: -0.191000, 0.254109, 0.166000
-    max: -0.159000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 120.0
+    yaw: 240.0
   - label: flared hollow ceramic wall 10
-    min: -0.294285, 0.147197, 0.105000
-    max: -0.103109, 0.250197, 0.133000
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
     color: '#BFAE99'
-    yaw: 135.0
     pitch: 42.03177
-  - label: rolled ceramic rim 10
-    min: -0.263487, 0.198487, 0.166000
-    max: -0.231487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 135.0
+    yaw: 270.0
   - label: flared hollow ceramic wall 11
-    min: -0.338941, 0.089000, 0.105000
-    max: -0.147765, 0.192000, 0.133000
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 150.0
     pitch: 42.03177
-  - label: rolled ceramic rim 11
-    min: -0.319109, 0.126000, 0.166000
-    max: -0.287109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 150.0
+    yaw: 300.0
   - label: flared hollow ceramic wall 12
-    min: -0.367013, 0.021228, 0.105000
-    max: -0.175838, 0.124228, 0.133000
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 165.0
     pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
   - label: rolled ceramic rim 12
-    min: -0.354074, 0.041587, 0.166000
-    max: -0.322074, 0.139587, 0.200000
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
     color: '#E6DBCF'
     shape: CylinderY
-    yaw: 165.0
-  - label: flared hollow ceramic wall 13
-    min: -0.376588, -0.051500, 0.105000
-    max: -0.185412, 0.051500, 0.133000
-    color: '#BFAE99'
-    yaw: -180.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 13
-    min: -0.366000, -0.049000, 0.166000
-    max: -0.334000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -180.0
-  - label: flared hollow ceramic wall 14
-    min: -0.367013, -0.124228, 0.105000
-    max: -0.175838, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -165.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 14
-    min: -0.354074, -0.139587, 0.166000
-    max: -0.322074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -165.0
-  - label: flared hollow ceramic wall 15
-    min: -0.338941, -0.192000, 0.105000
-    max: -0.147765, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -150.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 15
-    min: -0.319109, -0.224000, 0.166000
-    max: -0.287109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -150.0
-  - label: flared hollow ceramic wall 16
-    min: -0.294285, -0.250197, 0.105000
-    max: -0.103109, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -135.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 16
-    min: -0.263487, -0.296487, 0.166000
-    max: -0.231487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -135.0
-  - label: flared hollow ceramic wall 17
-    min: -0.236088, -0.294853, 0.105000
-    max: -0.044912, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -120.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 17
-    min: -0.191000, -0.352109, 0.166000
-    max: -0.159000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -120.0
-  - label: flared hollow ceramic wall 18
-    min: -0.168316, -0.322925, 0.105000
-    max: 0.022860, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -105.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 18
-    min: -0.106587, -0.387074, 0.166000
-    max: -0.074587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -105.0
-  - label: flared hollow ceramic wall 19
-    min: -0.095588, -0.332500, 0.105000
-    max: 0.095588, -0.229500, 0.133000
-    color: '#BFAE99'
-    yaw: -90.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 19
-    min: -0.016000, -0.399000, 0.166000
-    max: 0.016000, -0.301000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -90.0
-  - label: flared hollow ceramic wall 20
-    min: -0.022860, -0.322925, 0.105000
-    max: 0.168316, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -75.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 20
-    min: 0.074587, -0.387074, 0.166000
-    max: 0.106587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -75.0
-  - label: flared hollow ceramic wall 21
-    min: 0.044912, -0.294853, 0.105000
-    max: 0.236088, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -60.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 21
-    min: 0.159000, -0.352109, 0.166000
-    max: 0.191000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -60.0
-  - label: flared hollow ceramic wall 22
-    min: 0.103109, -0.250197, 0.105000
-    max: 0.294285, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -45.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 22
-    min: 0.231487, -0.296487, 0.166000
-    max: 0.263487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -45.0
-  - label: flared hollow ceramic wall 23
-    min: 0.147765, -0.192000, 0.105000
-    max: 0.338941, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -30.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 23
-    min: 0.287109, -0.224000, 0.166000
-    max: 0.319109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -30.0
-  - label: flared hollow ceramic wall 24
-    min: 0.175838, -0.124228, 0.105000
-    max: 0.367013, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -15.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 24
-    min: 0.322074, -0.139587, 0.166000
-    max: 0.354074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -15.0
+    yaw: 330.0
   - label: kimchi bed
     min: -0.295000, -0.275000, 0.149000
     max: 0.295000, 0.275000, 0.197000
@@ -2003,291 +1435,149 @@
     color: '#CDC1B1'
     shape: CylinderZ
   - label: flared hollow ceramic wall 01
-    min: 0.185412, -0.051500, 0.105000
-    max: 0.376588, 0.051500, 0.133000
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
     color: '#BFAE99'
     pitch: 42.03177
-  - label: rolled ceramic rim 01
-    min: 0.334000, -0.049000, 0.166000
-    max: 0.366000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
+    yaw: 0.0
   - label: flared hollow ceramic wall 02
-    min: 0.175838, 0.021228, 0.105000
-    max: 0.367013, 0.124228, 0.133000
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 15.0
     pitch: 42.03177
-  - label: rolled ceramic rim 02
-    min: 0.322074, 0.041587, 0.166000
-    max: 0.354074, 0.139587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 15.0
+    yaw: 30.0
   - label: flared hollow ceramic wall 03
-    min: 0.147765, 0.089000, 0.105000
-    max: 0.338941, 0.192000, 0.133000
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 30.0
     pitch: 42.03177
-  - label: rolled ceramic rim 03
-    min: 0.287109, 0.126000, 0.166000
-    max: 0.319109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 30.0
+    yaw: 60.0
   - label: flared hollow ceramic wall 04
-    min: 0.103109, 0.147197, 0.105000
-    max: 0.294285, 0.250197, 0.133000
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
     color: '#BFAE99'
-    yaw: 45.0
     pitch: 42.03177
-  - label: rolled ceramic rim 04
-    min: 0.231487, 0.198487, 0.166000
-    max: 0.263487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 45.0
+    yaw: 90.0
   - label: flared hollow ceramic wall 05
-    min: 0.044912, 0.191853, 0.105000
-    max: 0.236088, 0.294853, 0.133000
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 60.0
     pitch: 42.03177
-  - label: rolled ceramic rim 05
-    min: 0.159000, 0.254109, 0.166000
-    max: 0.191000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 60.0
+    yaw: 120.0
   - label: flared hollow ceramic wall 06
-    min: -0.022860, 0.219925, 0.105000
-    max: 0.168316, 0.322925, 0.133000
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 75.0
     pitch: 42.03177
-  - label: rolled ceramic rim 06
-    min: 0.074587, 0.289074, 0.166000
-    max: 0.106587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 75.0
+    yaw: 150.0
   - label: flared hollow ceramic wall 07
-    min: -0.095588, 0.229500, 0.105000
-    max: 0.095588, 0.332500, 0.133000
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
     color: '#BFAE99'
-    yaw: 90.0
     pitch: 42.03177
-  - label: rolled ceramic rim 07
-    min: -0.016000, 0.301000, 0.166000
-    max: 0.016000, 0.399000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 90.0
+    yaw: 180.0
   - label: flared hollow ceramic wall 08
-    min: -0.168316, 0.219925, 0.105000
-    max: 0.022860, 0.322925, 0.133000
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 105.0
     pitch: 42.03177
-  - label: rolled ceramic rim 08
-    min: -0.106587, 0.289074, 0.166000
-    max: -0.074587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 105.0
+    yaw: 210.0
   - label: flared hollow ceramic wall 09
-    min: -0.236088, 0.191853, 0.105000
-    max: -0.044912, 0.294853, 0.133000
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 120.0
     pitch: 42.03177
-  - label: rolled ceramic rim 09
-    min: -0.191000, 0.254109, 0.166000
-    max: -0.159000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 120.0
+    yaw: 240.0
   - label: flared hollow ceramic wall 10
-    min: -0.294285, 0.147197, 0.105000
-    max: -0.103109, 0.250197, 0.133000
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
     color: '#BFAE99'
-    yaw: 135.0
     pitch: 42.03177
-  - label: rolled ceramic rim 10
-    min: -0.263487, 0.198487, 0.166000
-    max: -0.231487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 135.0
+    yaw: 270.0
   - label: flared hollow ceramic wall 11
-    min: -0.338941, 0.089000, 0.105000
-    max: -0.147765, 0.192000, 0.133000
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 150.0
     pitch: 42.03177
-  - label: rolled ceramic rim 11
-    min: -0.319109, 0.126000, 0.166000
-    max: -0.287109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 150.0
+    yaw: 300.0
   - label: flared hollow ceramic wall 12
-    min: -0.367013, 0.021228, 0.105000
-    max: -0.175838, 0.124228, 0.133000
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 165.0
     pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
   - label: rolled ceramic rim 12
-    min: -0.354074, 0.041587, 0.166000
-    max: -0.322074, 0.139587, 0.200000
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
     color: '#E6DBCF'
     shape: CylinderY
-    yaw: 165.0
-  - label: flared hollow ceramic wall 13
-    min: -0.376588, -0.051500, 0.105000
-    max: -0.185412, 0.051500, 0.133000
-    color: '#BFAE99'
-    yaw: -180.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 13
-    min: -0.366000, -0.049000, 0.166000
-    max: -0.334000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -180.0
-  - label: flared hollow ceramic wall 14
-    min: -0.367013, -0.124228, 0.105000
-    max: -0.175838, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -165.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 14
-    min: -0.354074, -0.139587, 0.166000
-    max: -0.322074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -165.0
-  - label: flared hollow ceramic wall 15
-    min: -0.338941, -0.192000, 0.105000
-    max: -0.147765, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -150.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 15
-    min: -0.319109, -0.224000, 0.166000
-    max: -0.287109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -150.0
-  - label: flared hollow ceramic wall 16
-    min: -0.294285, -0.250197, 0.105000
-    max: -0.103109, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -135.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 16
-    min: -0.263487, -0.296487, 0.166000
-    max: -0.231487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -135.0
-  - label: flared hollow ceramic wall 17
-    min: -0.236088, -0.294853, 0.105000
-    max: -0.044912, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -120.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 17
-    min: -0.191000, -0.352109, 0.166000
-    max: -0.159000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -120.0
-  - label: flared hollow ceramic wall 18
-    min: -0.168316, -0.322925, 0.105000
-    max: 0.022860, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -105.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 18
-    min: -0.106587, -0.387074, 0.166000
-    max: -0.074587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -105.0
-  - label: flared hollow ceramic wall 19
-    min: -0.095588, -0.332500, 0.105000
-    max: 0.095588, -0.229500, 0.133000
-    color: '#BFAE99'
-    yaw: -90.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 19
-    min: -0.016000, -0.399000, 0.166000
-    max: 0.016000, -0.301000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -90.0
-  - label: flared hollow ceramic wall 20
-    min: -0.022860, -0.322925, 0.105000
-    max: 0.168316, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -75.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 20
-    min: 0.074587, -0.387074, 0.166000
-    max: 0.106587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -75.0
-  - label: flared hollow ceramic wall 21
-    min: 0.044912, -0.294853, 0.105000
-    max: 0.236088, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -60.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 21
-    min: 0.159000, -0.352109, 0.166000
-    max: 0.191000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -60.0
-  - label: flared hollow ceramic wall 22
-    min: 0.103109, -0.250197, 0.105000
-    max: 0.294285, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -45.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 22
-    min: 0.231487, -0.296487, 0.166000
-    max: 0.263487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -45.0
-  - label: flared hollow ceramic wall 23
-    min: 0.147765, -0.192000, 0.105000
-    max: 0.338941, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -30.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 23
-    min: 0.287109, -0.224000, 0.166000
-    max: 0.319109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -30.0
-  - label: flared hollow ceramic wall 24
-    min: 0.175838, -0.124228, 0.105000
-    max: 0.367013, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -15.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 24
-    min: 0.322074, -0.139587, 0.166000
-    max: 0.354074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -15.0
+    yaw: 330.0
   - label: bisque liquid surface
     min: -0.318000, -0.318000, 0.148500
     max: 0.318000, 0.318000, 0.173500
@@ -2479,291 +1769,149 @@
     color: '#CDC1B1'
     shape: CylinderZ
   - label: flared hollow ceramic wall 01
-    min: 0.185412, -0.051500, 0.105000
-    max: 0.376588, 0.051500, 0.133000
+    min: 0.185412, -0.0973298, 0.105
+    max: 0.376588, 0.0973298, 0.133
     color: '#BFAE99'
     pitch: 42.03177
-  - label: rolled ceramic rim 01
-    min: 0.334000, -0.049000, 0.166000
-    max: 0.366000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
+    yaw: 0.0
   - label: flared hollow ceramic wall 02
-    min: 0.175838, 0.021228, 0.105000
-    max: 0.367013, 0.124228, 0.133000
+    min: 0.1477651, 0.0431702, 0.105
+    max: 0.3389411, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 15.0
     pitch: 42.03177
-  - label: rolled ceramic rim 02
-    min: 0.322074, 0.041587, 0.166000
-    max: 0.354074, 0.139587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 15.0
+    yaw: 30.0
   - label: flared hollow ceramic wall 03
-    min: 0.147765, 0.089000, 0.105000
-    max: 0.338941, 0.192000, 0.133000
+    min: 0.044912, 0.1460233, 0.105
+    max: 0.236088, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 30.0
     pitch: 42.03177
-  - label: rolled ceramic rim 03
-    min: 0.287109, 0.126000, 0.166000
-    max: 0.319109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 30.0
+    yaw: 60.0
   - label: flared hollow ceramic wall 04
-    min: 0.103109, 0.147197, 0.105000
-    max: 0.294285, 0.250197, 0.133000
+    min: -0.095588, 0.1836702, 0.105
+    max: 0.095588, 0.3783298, 0.133
     color: '#BFAE99'
-    yaw: 45.0
     pitch: 42.03177
-  - label: rolled ceramic rim 04
-    min: 0.231487, 0.198487, 0.166000
-    max: 0.263487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 45.0
+    yaw: 90.0
   - label: flared hollow ceramic wall 05
-    min: 0.044912, 0.191853, 0.105000
-    max: 0.236088, 0.294853, 0.133000
+    min: -0.236088, 0.1460233, 0.105
+    max: -0.044912, 0.340683, 0.133
     color: '#BFAE99'
-    yaw: 60.0
     pitch: 42.03177
-  - label: rolled ceramic rim 05
-    min: 0.159000, 0.254109, 0.166000
-    max: 0.191000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 60.0
+    yaw: 120.0
   - label: flared hollow ceramic wall 06
-    min: -0.022860, 0.219925, 0.105000
-    max: 0.168316, 0.322925, 0.133000
+    min: -0.3389411, 0.0431702, 0.105
+    max: -0.1477651, 0.2378298, 0.133
     color: '#BFAE99'
-    yaw: 75.0
     pitch: 42.03177
-  - label: rolled ceramic rim 06
-    min: 0.074587, 0.289074, 0.166000
-    max: 0.106587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 75.0
+    yaw: 150.0
   - label: flared hollow ceramic wall 07
-    min: -0.095588, 0.229500, 0.105000
-    max: 0.095588, 0.332500, 0.133000
+    min: -0.376588, -0.0973298, 0.105
+    max: -0.185412, 0.0973298, 0.133
     color: '#BFAE99'
-    yaw: 90.0
     pitch: 42.03177
-  - label: rolled ceramic rim 07
-    min: -0.016000, 0.301000, 0.166000
-    max: 0.016000, 0.399000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 90.0
+    yaw: 180.0
   - label: flared hollow ceramic wall 08
-    min: -0.168316, 0.219925, 0.105000
-    max: 0.022860, 0.322925, 0.133000
+    min: -0.3389411, -0.2378298, 0.105
+    max: -0.1477651, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 105.0
     pitch: 42.03177
-  - label: rolled ceramic rim 08
-    min: -0.106587, 0.289074, 0.166000
-    max: -0.074587, 0.387074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 105.0
+    yaw: 210.0
   - label: flared hollow ceramic wall 09
-    min: -0.236088, 0.191853, 0.105000
-    max: -0.044912, 0.294853, 0.133000
+    min: -0.236088, -0.340683, 0.105
+    max: -0.044912, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 120.0
     pitch: 42.03177
-  - label: rolled ceramic rim 09
-    min: -0.191000, 0.254109, 0.166000
-    max: -0.159000, 0.352109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 120.0
+    yaw: 240.0
   - label: flared hollow ceramic wall 10
-    min: -0.294285, 0.147197, 0.105000
-    max: -0.103109, 0.250197, 0.133000
+    min: -0.095588, -0.3783298, 0.105
+    max: 0.095588, -0.1836702, 0.133
     color: '#BFAE99'
-    yaw: 135.0
     pitch: 42.03177
-  - label: rolled ceramic rim 10
-    min: -0.263487, 0.198487, 0.166000
-    max: -0.231487, 0.296487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 135.0
+    yaw: 270.0
   - label: flared hollow ceramic wall 11
-    min: -0.338941, 0.089000, 0.105000
-    max: -0.147765, 0.192000, 0.133000
+    min: 0.044912, -0.340683, 0.105
+    max: 0.236088, -0.1460233, 0.133
     color: '#BFAE99'
-    yaw: 150.0
     pitch: 42.03177
-  - label: rolled ceramic rim 11
-    min: -0.319109, 0.126000, 0.166000
-    max: -0.287109, 0.224000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: 150.0
+    yaw: 300.0
   - label: flared hollow ceramic wall 12
-    min: -0.367013, 0.021228, 0.105000
-    max: -0.175838, 0.124228, 0.133000
+    min: 0.1477651, -0.2378298, 0.105
+    max: 0.3389411, -0.0431702, 0.133
     color: '#BFAE99'
-    yaw: 165.0
     pitch: 42.03177
+    yaw: 330.0
+  - label: rolled ceramic rim 01
+    min: 0.334, -0.0985694, 0.166
+    max: 0.366, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 0.0
+  - label: rolled ceramic rim 02
+    min: 0.2871089, 0.0764306, 0.166
+    max: 0.3191089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 30.0
+  - label: rolled ceramic rim 03
+    min: 0.159, 0.2045395, 0.166
+    max: 0.191, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 60.0
+  - label: rolled ceramic rim 04
+    min: -0.016, 0.2514306, 0.166
+    max: 0.016, 0.4485694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 90.0
+  - label: rolled ceramic rim 05
+    min: -0.191, 0.2045395, 0.166
+    max: -0.159, 0.4016783, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 120.0
+  - label: rolled ceramic rim 06
+    min: -0.3191089, 0.0764306, 0.166
+    max: -0.2871089, 0.2735694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 150.0
+  - label: rolled ceramic rim 07
+    min: -0.366, -0.0985694, 0.166
+    max: -0.334, 0.0985694, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 180.0
+  - label: rolled ceramic rim 08
+    min: -0.3191089, -0.2735694, 0.166
+    max: -0.2871089, -0.0764306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 210.0
+  - label: rolled ceramic rim 09
+    min: -0.191, -0.4016783, 0.166
+    max: -0.159, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 240.0
+  - label: rolled ceramic rim 10
+    min: -0.016, -0.4485694, 0.166
+    max: 0.016, -0.2514306, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 270.0
+  - label: rolled ceramic rim 11
+    min: 0.159, -0.4016783, 0.166
+    max: 0.191, -0.2045395, 0.2
+    color: '#E6DBCF'
+    shape: CylinderY
+    yaw: 300.0
   - label: rolled ceramic rim 12
-    min: -0.354074, 0.041587, 0.166000
-    max: -0.322074, 0.139587, 0.200000
+    min: 0.2871089, -0.2735694, 0.166
+    max: 0.3191089, -0.0764306, 0.2
     color: '#E6DBCF'
     shape: CylinderY
-    yaw: 165.0
-  - label: flared hollow ceramic wall 13
-    min: -0.376588, -0.051500, 0.105000
-    max: -0.185412, 0.051500, 0.133000
-    color: '#BFAE99'
-    yaw: -180.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 13
-    min: -0.366000, -0.049000, 0.166000
-    max: -0.334000, 0.049000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -180.0
-  - label: flared hollow ceramic wall 14
-    min: -0.367013, -0.124228, 0.105000
-    max: -0.175838, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -165.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 14
-    min: -0.354074, -0.139587, 0.166000
-    max: -0.322074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -165.0
-  - label: flared hollow ceramic wall 15
-    min: -0.338941, -0.192000, 0.105000
-    max: -0.147765, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -150.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 15
-    min: -0.319109, -0.224000, 0.166000
-    max: -0.287109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -150.0
-  - label: flared hollow ceramic wall 16
-    min: -0.294285, -0.250197, 0.105000
-    max: -0.103109, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -135.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 16
-    min: -0.263487, -0.296487, 0.166000
-    max: -0.231487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -135.0
-  - label: flared hollow ceramic wall 17
-    min: -0.236088, -0.294853, 0.105000
-    max: -0.044912, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -120.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 17
-    min: -0.191000, -0.352109, 0.166000
-    max: -0.159000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -120.0
-  - label: flared hollow ceramic wall 18
-    min: -0.168316, -0.322925, 0.105000
-    max: 0.022860, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -105.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 18
-    min: -0.106587, -0.387074, 0.166000
-    max: -0.074587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -105.0
-  - label: flared hollow ceramic wall 19
-    min: -0.095588, -0.332500, 0.105000
-    max: 0.095588, -0.229500, 0.133000
-    color: '#BFAE99'
-    yaw: -90.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 19
-    min: -0.016000, -0.399000, 0.166000
-    max: 0.016000, -0.301000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -90.0
-  - label: flared hollow ceramic wall 20
-    min: -0.022860, -0.322925, 0.105000
-    max: 0.168316, -0.219925, 0.133000
-    color: '#BFAE99'
-    yaw: -75.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 20
-    min: 0.074587, -0.387074, 0.166000
-    max: 0.106587, -0.289074, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -75.0
-  - label: flared hollow ceramic wall 21
-    min: 0.044912, -0.294853, 0.105000
-    max: 0.236088, -0.191853, 0.133000
-    color: '#BFAE99'
-    yaw: -60.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 21
-    min: 0.159000, -0.352109, 0.166000
-    max: 0.191000, -0.254109, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -60.0
-  - label: flared hollow ceramic wall 22
-    min: 0.103109, -0.250197, 0.105000
-    max: 0.294285, -0.147197, 0.133000
-    color: '#BFAE99'
-    yaw: -45.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 22
-    min: 0.231487, -0.296487, 0.166000
-    max: 0.263487, -0.198487, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -45.0
-  - label: flared hollow ceramic wall 23
-    min: 0.147765, -0.192000, 0.105000
-    max: 0.338941, -0.089000, 0.133000
-    color: '#BFAE99'
-    yaw: -30.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 23
-    min: 0.287109, -0.224000, 0.166000
-    max: 0.319109, -0.126000, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -30.0
-  - label: flared hollow ceramic wall 24
-    min: 0.175838, -0.124228, 0.105000
-    max: 0.367013, -0.021228, 0.133000
-    color: '#BFAE99'
-    yaw: -15.0
-    pitch: 42.03177
-  - label: rolled ceramic rim 24
-    min: 0.322074, -0.139587, 0.166000
-    max: 0.354074, -0.041587, 0.200000
-    color: '#E6DBCF'
-    shape: CylinderY
-    yaw: -15.0
+    yaw: 330.0
   - label: hot chili liquid surface
     min: -0.314000, -0.314000, 0.151000
     max: 0.314000, 0.314000, 0.177000
@@ -2992,285 +2140,214 @@
     color: '#D0D0D0'
     shape: CylinderZ
   - label: shallow sloping dish rim 01
-    min: 0.327836, -0.057500, 0.034500
-    max: 0.427164, 0.057500, 0.050500
+    min: 0.327836, -0.1150043, 0.0345
+    max: 0.427164, 0.1150043, 0.0505
     color: '#E7E7E7'
     pitch: 16.9755
+    yaw: 0.0
+  - label: shallow sloping dish rim 02
+    min: 0.2772606, 0.0737457, 0.0345
+    max: 0.3765886, 0.3037543, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 30.0
+  - label: shallow sloping dish rim 03
+    min: 0.139086, 0.2119203, 0.0345
+    max: 0.238414, 0.4419289, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 60.0
+  - label: shallow sloping dish rim 04
+    min: -0.049664, 0.2624957, 0.0345
+    max: 0.049664, 0.4925043, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 90.0
+  - label: shallow sloping dish rim 05
+    min: -0.238414, 0.2119203, 0.0345
+    max: -0.139086, 0.4419289, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 120.0
+  - label: shallow sloping dish rim 06
+    min: -0.3765886, 0.0737457, 0.0345
+    max: -0.2772606, 0.3037543, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 150.0
+  - label: shallow sloping dish rim 07
+    min: -0.427164, -0.1150043, 0.0345
+    max: -0.327836, 0.1150043, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 180.0
+  - label: shallow sloping dish rim 08
+    min: -0.3765886, -0.3037543, 0.0345
+    max: -0.2772606, -0.0737457, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 210.0
+  - label: shallow sloping dish rim 09
+    min: -0.238414, -0.4419289, 0.0345
+    max: -0.139086, -0.2119203, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 240.0
+  - label: shallow sloping dish rim 10
+    min: -0.049664, -0.4925043, 0.0345
+    max: 0.049664, -0.2624957, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 270.0
+  - label: shallow sloping dish rim 11
+    min: 0.139086, -0.4419289, 0.0345
+    max: 0.238414, -0.2119203, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 300.0
+  - label: shallow sloping dish rim 12
+    min: 0.2772606, -0.3037543, 0.0345
+    max: 0.3765886, -0.0737457, 0.0505
+    color: '#E7E7E7'
+    pitch: 16.9755
+    yaw: 330.0
   - label: plate rolled edge 01
     min: 0.415500, -0.056500, 0.046500
     max: 0.436500, 0.056500, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
-  - label: shallow sloping dish rim 02
-    min: 0.314973, 0.040204, 0.034500
-    max: 0.414301, 0.155204, 0.050500
-    color: '#E7E7E7'
-    yaw: 15.0
-    pitch: 16.9755
   - label: plate rolled edge 02
     min: 0.400984, 0.053757, 0.046500
     max: 0.421984, 0.166757, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 15
-  - label: shallow sloping dish rim 03
-    min: 0.277261, 0.131250, 0.034500
-    max: 0.376588, 0.246250, 0.050500
-    color: '#E7E7E7'
-    yaw: 30.0
-    pitch: 16.9755
   - label: plate rolled edge 03
     min: 0.358427, 0.156500, 0.046500
     max: 0.379427, 0.269500, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 30
-  - label: shallow sloping dish rim 04
-    min: 0.217269, 0.209433, 0.034500
-    max: 0.316597, 0.324433, 0.050500
-    color: '#E7E7E7'
-    yaw: 45.0
-    pitch: 16.9755
   - label: plate rolled edge 04
     min: 0.290727, 0.244727, 0.046500
     max: 0.311727, 0.357727, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 45
-  - label: shallow sloping dish rim 05
-    min: 0.139086, 0.269425, 0.034500
-    max: 0.238414, 0.384425, 0.050500
-    color: '#E7E7E7'
-    yaw: 60.0
-    pitch: 16.9755
   - label: plate rolled edge 05
     min: 0.202500, 0.312427, 0.046500
     max: 0.223500, 0.425427, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 60
-  - label: shallow sloping dish rim 06
-    min: 0.048040, 0.307137, 0.034500
-    max: 0.147368, 0.422137, 0.050500
-    color: '#E7E7E7'
-    yaw: 75.0
-    pitch: 16.9755
   - label: plate rolled edge 06
     min: 0.099757, 0.354984, 0.046500
     max: 0.120757, 0.467984, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 75
-  - label: shallow sloping dish rim 07
-    min: -0.049664, 0.320000, 0.034500
-    max: 0.049664, 0.435000, 0.050500
-    color: '#E7E7E7'
-    yaw: 90.0
-    pitch: 16.9755
   - label: plate rolled edge 07
     min: -0.010500, 0.369500, 0.046500
     max: 0.010500, 0.482500, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 90
-  - label: shallow sloping dish rim 08
-    min: -0.147368, 0.307137, 0.034500
-    max: -0.048040, 0.422137, 0.050500
-    color: '#E7E7E7'
-    yaw: 105.0
-    pitch: 16.9755
   - label: plate rolled edge 08
     min: -0.120757, 0.354984, 0.046500
     max: -0.099757, 0.467984, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 105
-  - label: shallow sloping dish rim 09
-    min: -0.238414, 0.269425, 0.034500
-    max: -0.139086, 0.384425, 0.050500
-    color: '#E7E7E7'
-    yaw: 120.0
-    pitch: 16.9755
   - label: plate rolled edge 09
     min: -0.223500, 0.312427, 0.046500
     max: -0.202500, 0.425427, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 120
-  - label: shallow sloping dish rim 10
-    min: -0.316597, 0.209433, 0.034500
-    max: -0.217269, 0.324433, 0.050500
-    color: '#E7E7E7'
-    yaw: 135.0
-    pitch: 16.9755
   - label: plate rolled edge 10
     min: -0.311727, 0.244727, 0.046500
     max: -0.290727, 0.357727, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 135
-  - label: shallow sloping dish rim 11
-    min: -0.376588, 0.131250, 0.034500
-    max: -0.277261, 0.246250, 0.050500
-    color: '#E7E7E7'
-    yaw: 150.0
-    pitch: 16.9755
   - label: plate rolled edge 11
     min: -0.379427, 0.156500, 0.046500
     max: -0.358427, 0.269500, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 150
-  - label: shallow sloping dish rim 12
-    min: -0.414301, 0.040204, 0.034500
-    max: -0.314973, 0.155204, 0.050500
-    color: '#E7E7E7'
-    yaw: 165.0
-    pitch: 16.9755
   - label: plate rolled edge 12
     min: -0.421984, 0.053757, 0.046500
     max: -0.400984, 0.166757, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: 165
-  - label: shallow sloping dish rim 13
-    min: -0.427164, -0.057500, 0.034500
-    max: -0.327836, 0.057500, 0.050500
-    color: '#E7E7E7'
-    yaw: -180.0
-    pitch: 16.9755
   - label: plate rolled edge 13
     min: -0.436500, -0.056500, 0.046500
     max: -0.415500, 0.056500, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -180
-  - label: shallow sloping dish rim 14
-    min: -0.414301, -0.155204, 0.034500
-    max: -0.314973, -0.040204, 0.050500
-    color: '#E7E7E7'
-    yaw: -165.0
-    pitch: 16.9755
   - label: plate rolled edge 14
     min: -0.421984, -0.166757, 0.046500
     max: -0.400984, -0.053757, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -165
-  - label: shallow sloping dish rim 15
-    min: -0.376588, -0.246250, 0.034500
-    max: -0.277261, -0.131250, 0.050500
-    color: '#E7E7E7'
-    yaw: -150.0
-    pitch: 16.9755
   - label: plate rolled edge 15
     min: -0.379427, -0.269500, 0.046500
     max: -0.358427, -0.156500, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -150
-  - label: shallow sloping dish rim 16
-    min: -0.316597, -0.324433, 0.034500
-    max: -0.217269, -0.209433, 0.050500
-    color: '#E7E7E7'
-    yaw: -135.0
-    pitch: 16.9755
   - label: plate rolled edge 16
     min: -0.311727, -0.357727, 0.046500
     max: -0.290727, -0.244727, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -135
-  - label: shallow sloping dish rim 17
-    min: -0.238414, -0.384425, 0.034500
-    max: -0.139086, -0.269425, 0.050500
-    color: '#E7E7E7'
-    yaw: -120.0
-    pitch: 16.9755
   - label: plate rolled edge 17
     min: -0.223500, -0.425427, 0.046500
     max: -0.202500, -0.312427, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -120
-  - label: shallow sloping dish rim 18
-    min: -0.147368, -0.422137, 0.034500
-    max: -0.048040, -0.307137, 0.050500
-    color: '#E7E7E7'
-    yaw: -105.0
-    pitch: 16.9755
   - label: plate rolled edge 18
     min: -0.120757, -0.467984, 0.046500
     max: -0.099757, -0.354984, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -105
-  - label: shallow sloping dish rim 19
-    min: -0.049664, -0.435000, 0.034500
-    max: 0.049664, -0.320000, 0.050500
-    color: '#E7E7E7'
-    yaw: -90.0
-    pitch: 16.9755
   - label: plate rolled edge 19
     min: -0.010500, -0.482500, 0.046500
     max: 0.010500, -0.369500, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -90
-  - label: shallow sloping dish rim 20
-    min: 0.048040, -0.422137, 0.034500
-    max: 0.147368, -0.307137, 0.050500
-    color: '#E7E7E7'
-    yaw: -75.0
-    pitch: 16.9755
   - label: plate rolled edge 20
     min: 0.099757, -0.467984, 0.046500
     max: 0.120757, -0.354984, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -75
-  - label: shallow sloping dish rim 21
-    min: 0.139086, -0.384425, 0.034500
-    max: 0.238414, -0.269425, 0.050500
-    color: '#E7E7E7'
-    yaw: -60.0
-    pitch: 16.9755
   - label: plate rolled edge 21
     min: 0.202500, -0.425427, 0.046500
     max: 0.223500, -0.312427, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -60
-  - label: shallow sloping dish rim 22
-    min: 0.217269, -0.324433, 0.034500
-    max: 0.316597, -0.209433, 0.050500
-    color: '#E7E7E7'
-    yaw: -45.0
-    pitch: 16.9755
   - label: plate rolled edge 22
     min: 0.290727, -0.357727, 0.046500
     max: 0.311727, -0.244727, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -45
-  - label: shallow sloping dish rim 23
-    min: 0.277261, -0.246250, 0.034500
-    max: 0.376588, -0.131250, 0.050500
-    color: '#E7E7E7'
-    yaw: -30.0
-    pitch: 16.9755
   - label: plate rolled edge 23
     min: 0.358427, -0.269500, 0.046500
     max: 0.379427, -0.156500, 0.067500
     color: '#EFEFEF'
     shape: CylinderY
     yaw: -30
-  - label: shallow sloping dish rim 24
-    min: 0.314973, -0.155204, 0.034500
-    max: 0.414301, -0.040204, 0.050500
-    color: '#E7E7E7'
-    yaw: -15.0
-    pitch: 16.9755
   - label: plate rolled edge 24
     min: 0.400984, -0.166757, 0.046500
     max: 0.421984, -0.053757, 0.067500

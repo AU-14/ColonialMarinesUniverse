@@ -57,9 +57,9 @@
       "label": "AU14CCAFUniform loose world prop",
       "file": "CMU3DAU14CCAFUniformWorldCloud.glb",
       "status": "draft",
-      "parts": 57,
-      "triangles": 652,
-      "sha256": "e0b0d43b84f48dc26f369baba98c63e7f8778d98ea3026130d7170f532454487",
+      "parts": 56,
+      "triangles": 640,
+      "sha256": "941f3b1e33ee56cddc2238f6846812b4303c8a78cd3b8dd6bfea5c6ea50ac671",
       "sourcePrototypes": [
         "AU14CCAFUniform"
       ]
@@ -144,9 +144,9 @@
       "label": "AU14CivilianBaristaClothes laid-out uniform",
       "file": "CMU3DAU14CivilianBaristaClothesWorldCloud.glb",
       "status": "draft",
-      "parts": 42,
-      "triangles": 1200,
-      "sha256": "b4320012867011257e3717d47bfeaeccad962e79e1147b36faaaf341889be0c4",
+      "parts": 41,
+      "triangles": 1188,
+      "sha256": "eb52361f92e31b29c59cd8a37f73232acf68338a48a85bc6a523fc133a22b374",
       "sourcePrototypes": [
         "AU14CivilianBaristaClothes"
       ]
@@ -156,9 +156,9 @@
       "label": "AU14CivilianBoilerSuitCyan laid-out uniform",
       "file": "CMU3DAU14CivilianBoilerSuitCyanWorldCloud.glb",
       "status": "draft",
-      "parts": 56,
-      "triangles": 1368,
-      "sha256": "86d57c29e69218f362d88f0cb152038731d30719eaa1ea3022be9c4ab19704c5",
+      "parts": 55,
+      "triangles": 1356,
+      "sha256": "f5bc283279773539bb9eba594809f8cec3f65cc12fba2df585e7060399c81655",
       "sourcePrototypes": [
         "AU14CivilianBoilerSuitCyan"
       ]
@@ -168,9 +168,9 @@
       "label": "AU14CivilianBoilerSuitDarkBlueSynth laid-out uniform",
       "file": "CMU3DAU14CivilianBoilerSuitDarkBlueSynthWorldCloud.glb",
       "status": "draft",
-      "parts": 56,
-      "triangles": 1368,
-      "sha256": "8f7a4d846a986f659905cf1685d6199d58c0b45584bcd1b459073f97c7a86021",
+      "parts": 55,
+      "triangles": 1356,
+      "sha256": "5a798c1f054b94716298dbc0849f2e3cd399aa80820ef0a0d604fa79878a61ff",
       "sourcePrototypes": [
         "AU14CivilianBoilerSuitDarkBlueSynth"
       ]
@@ -180,9 +180,9 @@
       "label": "AU14CivilianBoilerSuitGray laid-out uniform",
       "file": "CMU3DAU14CivilianBoilerSuitGrayWorldCloud.glb",
       "status": "draft",
-      "parts": 56,
-      "triangles": 1368,
-      "sha256": "a64b9510bc90a2302a70cc63b17df3234ee0c98768308dab9b74415b96b765c6",
+      "parts": 55,
+      "triangles": 1356,
+      "sha256": "89c0abfccf56985501965a1486347aae2dac2cb5b3d797e0de0c2b4d813bd442",
       "sourcePrototypes": [
         "AU14CivilianBoilerSuitGray"
       ]
@@ -192,9 +192,9 @@
       "label": "AU14CivilianBoilerSuitWhite laid-out uniform",
       "file": "CMU3DAU14CivilianBoilerSuitWhiteWorldCloud.glb",
       "status": "draft",
-      "parts": 56,
-      "triangles": 1368,
-      "sha256": "c7a55d85c9ed143c9032f5095db008ea8f2775cd70008a44f87bffa54ff47f32",
+      "parts": 55,
+      "triangles": 1356,
+      "sha256": "0fd672c42522bc3e4cc0eacfd88974b5e06ef9f67c68edf0c38c41447091ad00",
       "sourcePrototypes": [
         "AU14CivilianBoilerSuitWhite"
       ]
@@ -204,24 +204,24 @@
       "label": "AU14CivilianHazardVestKellandMiningCorporation",
       "file": "CMU3DAU14CivilianHazardVestKellandMiningCorporation.glb",
       "status": "draft",
-      "parts": 37,
-      "triangles": 444,
-      "sha256": "8d6947e1735821803a159c97212bc4d2372c3f9f821761f4bf125495543b70c7",
+      "parts": 35,
+      "triangles": 420,
+      "sha256": "15bd59d715ce49e33f7bdc34138dd1d2a1d7506a9d2a7cd0c645f883ddbb895f",
       "sourcePrototypes": [
         "AU14CivilianHazardVestKellandMiningCorporation"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 37
+      "storedFrameParts": 35
     },
     {
       "id": "CMU3DAU14CivilianWorkwearBlueWorldCloud",
       "label": "AU14CivilianWorkwearBlue laid-out uniform",
       "file": "CMU3DAU14CivilianWorkwearBlueWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1436,
-      "sha256": "a161c3023a55f1c323697c497cdf4cc6478457891ca9fb2e80c425cccce4fe13",
+      "parts": 52,
+      "triangles": 1424,
+      "sha256": "d623b4e337a42c9c0822ae3dc4453266fb15a0222ee1dd9f2549994ce6489e81",
       "sourcePrototypes": [
         "AU14CivilianWorkwearBlue"
       ]
@@ -231,9 +231,9 @@
       "label": "AU14CivilianWorkwearGreen laid-out uniform",
       "file": "CMU3DAU14CivilianWorkwearGreenWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1436,
-      "sha256": "777996168b0b83e550965c89d03f4caacd509f8ca873eefb7c006b7f7e9752d1",
+      "parts": 52,
+      "triangles": 1424,
+      "sha256": "b04199865f788767bd0ef5343b80e4e5efd43e6ae8908b577d7f8114eff7f93e",
       "sourcePrototypes": [
         "AU14CivilianWorkwearGreen"
       ]
@@ -243,9 +243,9 @@
       "label": "AU14CivilianWorkwearPink laid-out uniform",
       "file": "CMU3DAU14CivilianWorkwearPinkWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1436,
-      "sha256": "dde5e8ef52fa86e15331128cb490bb31e0fdaf72aeeddde3a891dc44a6693f5f",
+      "parts": 52,
+      "triangles": 1424,
+      "sha256": "33e426b98eaf306067a84044c6efc0156aedbb7952f135aadb5b786ab4a0da4a",
       "sourcePrototypes": [
         "AU14CivilianWorkwearPink"
       ]
@@ -255,9 +255,9 @@
       "label": "AU14CivilianWorkwearYellow laid-out uniform",
       "file": "CMU3DAU14CivilianWorkwearYellowWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1436,
-      "sha256": "ca44930fd565e2527dcb2d4c482937390bdc4b2a003902cd1777847eb3aec521",
+      "parts": 52,
+      "triangles": 1424,
+      "sha256": "89dfe38685cef863cf2ec106fa2c71977a58dd13528fde017a4406b510587341",
       "sourcePrototypes": [
         "AU14CivilianWorkwearYellow"
       ]
@@ -440,9 +440,9 @@
       "label": "AU14LACNUniformCoat laid-out uniform",
       "file": "CMU3DAU14LACNUniformCoatWorldCloud.glb",
       "status": "draft",
-      "parts": 46,
-      "triangles": 1248,
-      "sha256": "7837f93c73161c67a859647fd5f17d875b25da725cf05ae2866ef7463089a2e7",
+      "parts": 44,
+      "triangles": 1224,
+      "sha256": "7784f25120c6d83975a1079990e5988490f4fec992eca0dfe8aa9f4a57400e5f",
       "sourcePrototypes": [
         "AU14LACNUniformCoat"
       ]
@@ -1068,54 +1068,54 @@
       "label": "Autodoc surgical pod / East source",
       "file": "CMU3DAutodocPodCloudEast.glb",
       "status": "draft",
-      "parts": 70,
-      "triangles": 884,
-      "sha256": "ec5e13720f6a096ac2d0080c7732f5bf439a823a8cb08adb5874354a68e5280c",
+      "parts": 59,
+      "triangles": 752,
+      "sha256": "d6d5f303baf597d69832e737463f7d46d1b79b38bb87008088b385bcb06e0478",
       "sourcePrototypes": [],
       "animationClips": 1,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 280
+      "storedFrameParts": 269
     },
     {
       "id": "CMU3DAutodocPodCloudNorth",
       "label": "Autodoc surgical pod / North source",
       "file": "CMU3DAutodocPodCloudNorth.glb",
       "status": "draft",
-      "parts": 70,
-      "triangles": 884,
-      "sha256": "9e470a606c9d8881723353b6a09ba160b5f272b7df83c9ea4c91bb16570c12e6",
+      "parts": 59,
+      "triangles": 752,
+      "sha256": "df6dd926198f8449b899c28d96afe619c715d116927c22f636ea065182b3bace",
       "sourcePrototypes": [],
       "animationClips": 1,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 280
+      "storedFrameParts": 269
     },
     {
       "id": "CMU3DAutodocPodCloudSouth",
       "label": "Autodoc surgical pod / South source",
       "file": "CMU3DAutodocPodCloudSouth.glb",
       "status": "draft",
-      "parts": 70,
-      "triangles": 884,
-      "sha256": "9b9d8346f52b4999eb60d1280c1ae2c811aa02b5a6e546b0e5494a98db20cee9",
+      "parts": 59,
+      "triangles": 752,
+      "sha256": "48e12bae0bca8334c092d57c05dcc001a5d84bd86646531e71c20ee21c2877b0",
       "sourcePrototypes": [
         "CMUAutodocPod"
       ],
       "animationClips": 1,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 280
+      "storedFrameParts": 269
     },
     {
       "id": "CMU3DAutodocPodCloudWest",
       "label": "Autodoc surgical pod / West source",
       "file": "CMU3DAutodocPodCloudWest.glb",
       "status": "draft",
-      "parts": 70,
-      "triangles": 884,
-      "sha256": "45668612d012a2f0e3ac1080e481b8d3d5c05a692f8b38008b2db455cc0ef961",
+      "parts": 59,
+      "triangles": 752,
+      "sha256": "fd6862048809f89d3efb32d15a81b0fa02e95200a85c238fd711870a2b3eea38",
       "sourcePrototypes": [],
       "animationClips": 1,
       "staticSpriteScenes": 2,
-      "storedFrameParts": 280
+      "storedFrameParts": 269
     },
     {
       "id": "CMU3DAutolatheCloud",
@@ -1471,54 +1471,54 @@
       "label": "Freestanding basketball hoop East",
       "file": "CMU3DBasketballHoopAltCloudEast.glb",
       "status": "draft",
-      "parts": 84,
-      "triangles": 4440,
-      "sha256": "0ec0b777c96cbd3208c9888076c6dba9d66f4f9c1764e30a890c28ea765c1ea2",
+      "parts": 76,
+      "triangles": 3928,
+      "sha256": "b53f791eb2410828ab6cff8563945e3aadf35a03364464b043e9a0e93958cf65",
       "sourcePrototypes": [],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 84
+      "storedFrameParts": 76
     },
     {
       "id": "CMU3DBasketballHoopAltCloudNorth",
       "label": "Freestanding basketball hoop North",
       "file": "CMU3DBasketballHoopAltCloudNorth.glb",
       "status": "draft",
-      "parts": 84,
-      "triangles": 4440,
-      "sha256": "a9483d722c384f2309601418e1b8329af39f2317e860c73e2d91d1daffba0f74",
+      "parts": 76,
+      "triangles": 3928,
+      "sha256": "3b92bdb4198b43c72e8e523ed7d01f2b82a46cae13fcf10721c4fa4a08422921",
       "sourcePrototypes": [],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 84
+      "storedFrameParts": 76
     },
     {
       "id": "CMU3DBasketballHoopAltCloudSouth",
       "label": "Freestanding basketball hoop South",
       "file": "CMU3DBasketballHoopAltCloudSouth.glb",
       "status": "draft",
-      "parts": 84,
-      "triangles": 4440,
-      "sha256": "49b123f4af25b3c1edaf2ffbba90be76210af928d11aa4caaead46b002a474eb",
+      "parts": 76,
+      "triangles": 3928,
+      "sha256": "aa85b755b5e3fb60cc57656c2b6fe6549f54af16144fc8a0fb54e94cedf14495",
       "sourcePrototypes": [
         "RMCBasketballHoopAlt"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 84
+      "storedFrameParts": 76
     },
     {
       "id": "CMU3DBasketballHoopAltCloudWest",
       "label": "Freestanding basketball hoop West",
       "file": "CMU3DBasketballHoopAltCloudWest.glb",
       "status": "draft",
-      "parts": 84,
-      "triangles": 4440,
-      "sha256": "7c8f62870ce6e0ff347fa218e43b9c6446585c0a92b9ff58b99a1c2d1639fcc6",
+      "parts": 76,
+      "triangles": 3928,
+      "sha256": "24eb63e38c136008fafefe9e86b7a1283d9b6afeaf46f4256bd9f450326998d4",
       "sourcePrototypes": [],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 84
+      "storedFrameParts": 76
     },
     {
       "id": "CMU3DBed",
@@ -1573,9 +1573,9 @@
       "label": "Brown-band folded linen",
       "file": "CMU3DBedsheetBrown.glb",
       "status": "draft",
-      "parts": 20,
-      "triangles": 240,
-      "sha256": "f9af39561d77f569ff53d8dceda96eec2925fb5e7d62c9edb20cbd6fc714a3b7",
+      "parts": 16,
+      "triangles": 192,
+      "sha256": "dd3001cf3510152c821db154fe7b73fecec8945a40b5ea9d4d75486aa4231fe4",
       "sourcePrototypes": [
         "CMBedsheetBrown"
       ]
@@ -1585,9 +1585,9 @@
       "label": "Gray-band folded linen",
       "file": "CMU3DBedsheetGray.glb",
       "status": "draft",
-      "parts": 20,
-      "triangles": 240,
-      "sha256": "a8e9142ae4b2bf68455b1f405719dbd758633193770ac71bdecd6e19a395179f",
+      "parts": 16,
+      "triangles": 192,
+      "sha256": "a9bd9bb9f0b61ae852d981d7b53f9194e157410c808b08135ef9492eabbf53a1",
       "sourcePrototypes": [
         "CMBedsheetGray"
       ]
@@ -1597,9 +1597,9 @@
       "label": "Green-band folded linen",
       "file": "CMU3DBedsheetGreen.glb",
       "status": "draft",
-      "parts": 20,
-      "triangles": 240,
-      "sha256": "de60fffeb2fc8f38d113feab03054a2b9d2b950b511a518dd63ac4cd398b1c0b",
+      "parts": 16,
+      "triangles": 192,
+      "sha256": "a53049272f97e7286e5f01f5d75ac85340600dc69a77f1b879f249dfafb19f43",
       "sourcePrototypes": [
         "CMBedsheetGreen"
       ]
@@ -1633,9 +1633,9 @@
       "label": "White-band folded linen",
       "file": "CMU3DBedsheetWhite.glb",
       "status": "draft",
-      "parts": 20,
-      "triangles": 240,
-      "sha256": "a24c84946ef3334d87bfd64683eb61db6eb99f9130f6c8d882b77b1570b4b3e4",
+      "parts": 16,
+      "triangles": 192,
+      "sha256": "800b559dca1c976ccbf77b1433a76e04c80b154e66e4765657a5333c649695b0",
       "sourcePrototypes": [
         "CMBedsheetWhite"
       ]
@@ -1657,15 +1657,15 @@
       "label": "Light beer can",
       "file": "CMU3DBeerLiteCan.glb",
       "status": "draft",
-      "parts": 22,
-      "triangles": 420,
-      "sha256": "61e9086f053fd87d546186f81b24765b250622507afc9ee05382694682db3f4a",
+      "parts": 18,
+      "triangles": 372,
+      "sha256": "65beac1fdd3ce979f6b1abaab351dd0e51d7134cb90abb9f9490ea3daf1d4941",
       "sourcePrototypes": [
         "CMDrinkCanBeerLite"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 22
+      "storedFrameParts": 18
     },
     {
       "id": "CMU3DBeigeBlinds",
@@ -1860,9 +1860,9 @@
       "label": "Blue oxygen canister",
       "file": "CMU3DBlueCanisterCloud.glb",
       "status": "draft",
-      "parts": 35,
-      "triangles": 1208,
-      "sha256": "508c70a6a279e5b6d9ce2016a521dc6950fb9fc06f64a762d5771a5d1b01712a",
+      "parts": 31,
+      "triangles": 1160,
+      "sha256": "f42312f5f9e390198c82f41e31148a3c4215f277b2f6d3c9b9bb3c797efcddec",
       "sourcePrototypes": [
         "RMCCanisterBlue"
       ]
@@ -2067,54 +2067,54 @@
       "label": "Body-scanner capsule / East source",
       "file": "CMU3DBodyScannerPodCloudEast.glb",
       "status": "draft",
-      "parts": 87,
-      "triangles": 1088,
-      "sha256": "505b7892af6f3cded7230d6abc7300dc0d40f669bce96f667b577ca922969e8a",
+      "parts": 82,
+      "triangles": 1028,
+      "sha256": "6a5d6dc89e6147b8dca1f435c3cad3f67f781fa93fd3c2bf6a2e09da7653cf9e",
       "sourcePrototypes": [],
       "animationClips": 1,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 318
+      "storedFrameParts": 313
     },
     {
       "id": "CMU3DBodyScannerPodCloudNorth",
       "label": "Body-scanner capsule / North source",
       "file": "CMU3DBodyScannerPodCloudNorth.glb",
       "status": "draft",
-      "parts": 87,
-      "triangles": 1088,
-      "sha256": "40517a559cda64479219baaf9c630853fdf505670903ac7c264c5db0e9ad3479",
+      "parts": 82,
+      "triangles": 1028,
+      "sha256": "d5f6fba47badb69b1126a25a545747e81077cfea6b49c9c0fa5387a38572a0bd",
       "sourcePrototypes": [],
       "animationClips": 1,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 318
+      "storedFrameParts": 313
     },
     {
       "id": "CMU3DBodyScannerPodCloudSouth",
       "label": "Body-scanner capsule / South source",
       "file": "CMU3DBodyScannerPodCloudSouth.glb",
       "status": "draft",
-      "parts": 87,
-      "triangles": 1088,
-      "sha256": "a90d6cb2475e2ff96669364ca4f1f3484247ea239965772fe7d290dbabc8bb95",
+      "parts": 82,
+      "triangles": 1028,
+      "sha256": "51de3315b252eff12cd571f4ef191b64abe58c6d566473975d9821b4e31bfea1",
       "sourcePrototypes": [
         "CMUBodyScannerPod"
       ],
       "animationClips": 1,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 318
+      "storedFrameParts": 313
     },
     {
       "id": "CMU3DBodyScannerPodCloudWest",
       "label": "Body-scanner capsule / West source",
       "file": "CMU3DBodyScannerPodCloudWest.glb",
       "status": "draft",
-      "parts": 87,
-      "triangles": 1088,
-      "sha256": "8c6822f11a549983fa2f4e0cd101f1d20000dfbfc340380a5942f84fa5e97108",
+      "parts": 82,
+      "triangles": 1028,
+      "sha256": "2800985be2b5e789bb7490276ba8cee0e331527d6499db3f493a810c43ac630b",
       "sourcePrototypes": [],
       "animationClips": 1,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 318
+      "storedFrameParts": 313
     },
     {
       "id": "CMU3DBombSuitCloset",
@@ -2987,9 +2987,9 @@
       "label": "CMJumpsuitColonist laid-out uniform",
       "file": "CMU3DCMJumpsuitColonistWorldCloud.glb",
       "status": "draft",
-      "parts": 58,
-      "triangles": 1392,
-      "sha256": "925180cf72212eb28e3673500222464e16b72e4231c778985434022f111b73aa",
+      "parts": 57,
+      "triangles": 1380,
+      "sha256": "dfde213b90c65685653c7ec49ba6368f86133327391b25f7b451ecdcb3f54ea7",
       "sourcePrototypes": [
         "CMJumpsuitColonist"
       ]
@@ -2999,9 +2999,9 @@
       "label": "CMJumpsuitLiaisonField laid-out uniform",
       "file": "CMU3DCMJumpsuitLiaisonFieldWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1436,
-      "sha256": "a749ea207b4ba17ba8e1534cc86fa47125c927a842a8220b4e1ab8d41f412ddc",
+      "parts": 52,
+      "triangles": 1424,
+      "sha256": "3b8bb2188e509a49dda3e9b33f5f5284fa6eb954333055054ac69c19ddc452dc",
       "sourcePrototypes": [
         "CMJumpsuitLiaisonField"
       ]
@@ -3070,9 +3070,9 @@
       "label": "Maintainers remembrance memorial",
       "file": "CMU3DCMMemorialMaintainersDecorFinalCloud.glb",
       "status": "draft",
-      "parts": 14,
-      "triangles": 168,
-      "sha256": "9e5da6b036f1f3f01a7b6634090a32541192c6a89c153a3d00ec8bcb3b76759a",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "bd2fc7a66305e8697447dd4a5836b3a7ff1b2992d4bbf78fdeb48205baab8cad",
       "sourcePrototypes": [
         "CMMemorialMaintainers"
       ]
@@ -3498,9 +3498,9 @@
       "label": "Carrot with greens",
       "file": "CMU3DCarrotRoot.glb",
       "status": "draft",
-      "parts": 108,
-      "triangles": 17196,
-      "sha256": "b1846d48bae6a01050f02a99fce1f343755a41908d554e2934dd20c415813e9b",
+      "parts": 107,
+      "triangles": 17184,
+      "sha256": "ec84b0d8ac122d2d2521031e6a0c97549df98721e8030fc72eb404fdc6ea7d58",
       "sourcePrototypes": [
         "FoodCarrot"
       ]
@@ -3991,15 +3991,15 @@
       "label": "Coffee machine with open dispensing bay",
       "file": "CMU3DCoffeeMachineCloud.glb",
       "status": "draft",
-      "parts": 70,
-      "triangles": 1672,
-      "sha256": "9ed04007f5e51cb86bf01119057aa4f3499634155e247a021a0f929fd779d32b",
+      "parts": 62,
+      "triangles": 1368,
+      "sha256": "cfd27932cdf98137ca5decf0e6d3184f46557b755f548fab16e736986515e62a",
       "sourcePrototypes": [
         "RMCCoffeeMachine"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 70
+      "storedFrameParts": 62
     },
     {
       "id": "CMU3DCoffeeVendor",
@@ -4202,9 +4202,9 @@
       "label": "GOVFOR communications mast",
       "file": "CMU3DCommsMastGovforCloud.glb",
       "status": "draft",
-      "parts": 62,
-      "triangles": 1368,
-      "sha256": "54f5f57b799891661fe1ebdb4000d5c8dcce1796ac54846dec6a4d69d31ac4cf",
+      "parts": 60,
+      "triangles": 1344,
+      "sha256": "83405ec379e88f914f1bc60e619f5e7fb6d92325860b4dd8dad6a7c2d5a8b58f",
       "sourcePrototypes": [
         "AU14CommsMastGovfor"
       ]
@@ -4268,9 +4268,9 @@
       "label": "Vertical blue container bottom module",
       "file": "CMU3DContainerVerticalBottomCloud.glb",
       "status": "draft",
-      "parts": 40,
-      "triangles": 688,
-      "sha256": "e2ac1e2de9127d523509590cf43cf8cbc098447e1620ec74d2267b7d53766a7e",
+      "parts": 39,
+      "triangles": 676,
+      "sha256": "e236dfdf76a47a957ece3f42506ee62e2a9439baea28422ef2bb677195a1729c",
       "sourcePrototypes": [
         "RMCContainerVerticalBottom"
       ]
@@ -4388,9 +4388,9 @@
       "label": "Industrial conveyor belt",
       "file": "CMU3DConveyorBelt.glb",
       "status": "draft",
-      "parts": 42,
-      "triangles": 504,
-      "sha256": "0ea0a47568621c3cdfb90d95a106ad34aed3a75a11d2be270cb249567ffa0062",
+      "parts": 40,
+      "triangles": 480,
+      "sha256": "f0547f6436d6e1a6ec10ef3e407060ed832f3eec56eca5d2f8132553b8f019b5",
       "sourcePrototypes": [
         "ConveyorBelt"
       ]
@@ -5104,9 +5104,9 @@
       "label": "Skeletal remains / ground",
       "file": "CMU3DDecorFloorSkeleton.glb",
       "status": "draft",
-      "parts": 104,
-      "triangles": 10128,
-      "sha256": "9c830d3901b8bc243b9fc634cebcae0788f98559afd8455f250e77574b38fec8",
+      "parts": 101,
+      "triangles": 9456,
+      "sha256": "1db99edafda4fb7a788156eb8aea10720b05cde4dd93d7e15ddfc72924cd7da1",
       "sourcePrototypes": [
         "DecorFloorSkeleton"
       ]
@@ -5116,9 +5116,9 @@
       "label": "Skeletal remains / shoreline",
       "file": "CMU3DDecorFloorSkeletonOver.glb",
       "status": "draft",
-      "parts": 104,
-      "triangles": 10128,
-      "sha256": "b29bd627735c36cd8681cb485bb85d1d5c2f0ce122d86ce2fa08c33701b5ad6b",
+      "parts": 101,
+      "triangles": 9456,
+      "sha256": "6a2ee5b4d8357adff17610fe38a216e9f6975f9b0a835498881d1767d04777fb",
       "sourcePrototypes": [
         "DecorFloorSkeletonOver"
       ]
@@ -5508,13 +5508,13 @@
       "status": "draft",
       "parts": 38,
       "triangles": 560,
-      "sha256": "70f674ef1d7eb0a40739213ee2fd96997cd9a18fb4276c03be1e68c0a09032db",
+      "sha256": "b9f2aba19ef3b3a41b6c16ceb1687e353072bbca9cde618d304efe49b385559d",
       "sourcePrototypes": [
         "DrinkIceGlass"
       ],
       "animationClips": 0,
       "staticSolutionScenes": 15,
-      "storedFrameParts": 583
+      "storedFrameParts": 582
     },
     {
       "id": "CMU3DDrinkIcedCoffeeGlass",
@@ -5710,9 +5710,9 @@
       "label": "Dropship navigation terminal / east",
       "file": "CMU3DDropshipNavigationCloudEast.glb",
       "status": "draft",
-      "parts": 21,
-      "triangles": 252,
-      "sha256": "33964c24e4b086e4bda1a14dd90b757328f179ee73b8e359391e5c9cf5a2bd8e",
+      "parts": 17,
+      "triangles": 204,
+      "sha256": "709687c751069c3c9c29d9cda75bc895e9f8798d25f4168ff63b4de432c53b5d",
       "sourcePrototypes": []
     },
     {
@@ -5742,9 +5742,9 @@
       "label": "Dropship navigation terminal / west",
       "file": "CMU3DDropshipNavigationCloudWest.glb",
       "status": "draft",
-      "parts": 21,
-      "triangles": 252,
-      "sha256": "21f78f13e203c5d70b965d1b2eb3c33d8c1c46f75a424f0a5ecc721ccc86af72",
+      "parts": 17,
+      "triangles": 204,
+      "sha256": "12b4e2d38c57c7a43c28823efacb2c8216027f98a85da4a10f36e73ff49d3b75",
       "sourcePrototypes": []
     },
     {
@@ -6509,9 +6509,9 @@
       "label": "Handheld fire extinguisher",
       "file": "CMU3DFireExtinguisher.glb",
       "status": "draft",
-      "parts": 24,
-      "triangles": 288,
-      "sha256": "f0a907bb4a1b13ee0f4ba413f6889921e687f4234647ee85dde0e3df96ec9943",
+      "parts": 20,
+      "triangles": 240,
+      "sha256": "01e225941ce485c28b116fe2b05f4cb8b2573d57741769812b9dd397eead567d",
       "sourcePrototypes": [
         "CMFireExtinguisher"
       ]
@@ -6804,9 +6804,9 @@
       "label": "Metal folding chair",
       "file": "CMU3DFoldingChair.glb",
       "status": "draft",
-      "parts": 29,
-      "triangles": 348,
-      "sha256": "49bcabc157c090e02d2baf1d2347881d4609ff99b957713cc6c3970ce92eabf8",
+      "parts": 27,
+      "triangles": 324,
+      "sha256": "50a79ca1ddc163aba065a9ea2255895cbc2e782f91b39f4f50a857b308f7857a",
       "sourcePrototypes": [
         "CMChair"
       ]
@@ -6816,9 +6816,9 @@
       "label": "Large empty ceramic bowl",
       "file": "CMU3DFoodBowlBigCloud.glb",
       "status": "draft",
-      "parts": 50,
-      "triangles": 1952,
-      "sha256": "ff0e85c62b0f7a89a5d4abbca4d390f55bd4e77c1d1d29d86c37fb5c8739d9cb",
+      "parts": 26,
+      "triangles": 1040,
+      "sha256": "4b09e8908a2c4a8b4d2edeffc2ed9a41dd75f5a535ad72b8cdaab77401c52650",
       "sourcePrototypes": [
         "FoodBowlBig"
       ]
@@ -6928,9 +6928,9 @@
       "label": "Sashimi, garnish and dipping cup",
       "file": "CMU3DFoodMealSashimiExtraCloud.glb",
       "status": "draft",
-      "parts": 118,
-      "triangles": 14240,
-      "sha256": "9c4dfa0985fa62aaf17200f7e0cf1f7f694dc5f95834c44a9996d1a929e90725",
+      "parts": 102,
+      "triangles": 14048,
+      "sha256": "f455983b518abb591dae95453380488315e97626c3e09d06b0619b057a4d9f8b",
       "sourcePrototypes": [
         "FoodMealSashimi"
       ]
@@ -6976,9 +6976,9 @@
       "label": "Cream red-trim pizza box",
       "file": "CMU3DFoodPizzaBoxCloud.glb",
       "status": "draft",
-      "parts": 15,
-      "triangles": 180,
-      "sha256": "020f4453ca7d4552e95ec618b25568e4094198e0f60616e0861fa3634924ec47",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "cf92aaf8cf6ecfe38457cadfd9cb400dd1a3b82223094f271fc6149d61ec4b93",
       "sourcePrototypes": [
         "FoodBoxPizza",
         "FoodBoxPizzaFilled"
@@ -6999,9 +6999,9 @@
       "label": "Round ceramic dinner plate",
       "file": "CMU3DFoodPlateCloud.glb",
       "status": "draft",
-      "parts": 50,
-      "triangles": 1952,
-      "sha256": "552f008f6b0f7377afb3d3514423198cbb70d73ad413086f7727b070f7bbdbfc",
+      "parts": 38,
+      "triangles": 1808,
+      "sha256": "b5b75ddfc4059fc029b9e14bd404bd2ba3114d479eee6279cde28a8a4bb95622",
       "sourcePrototypes": [
         "FoodPlate"
       ]
@@ -7026,9 +7026,9 @@
       "label": "Egg-fried rice bowl",
       "file": "CMU3DFoodRiceEggCloud.glb",
       "status": "draft",
-      "parts": 113,
-      "triangles": 14792,
-      "sha256": "e67c9855c12686f06d6f98b5579bbe7584cb81a6c5912bb50ed95007d10ac49e",
+      "parts": 89,
+      "triangles": 13880,
+      "sha256": "a12e6e1d1a412ff76755a137c4906acda4154bc26505f807bb0aa9167b9706bb",
       "sourcePrototypes": [
         "FoodRiceEgg"
       ]
@@ -7038,9 +7038,9 @@
       "label": "Rice pudding bowl",
       "file": "CMU3DFoodRicePuddingCloud.glb",
       "status": "draft",
-      "parts": 79,
-      "triangles": 8448,
-      "sha256": "ce715f35b510baa7e8ffe1f5bbcc06119141ad56c6ff2b3e8bfb6ac8869476c6",
+      "parts": 55,
+      "triangles": 7536,
+      "sha256": "a7bcc58d483506754859dd514ceda95d8d4b5f44ebc6d7e2bbda4d641d18807a",
       "sourcePrototypes": [
         "FoodRicePudding"
       ]
@@ -7050,9 +7050,9 @@
       "label": "Kimchi bowl",
       "file": "CMU3DFoodSaladKimchiCloud.glb",
       "status": "draft",
-      "parts": 81,
-      "triangles": 3496,
-      "sha256": "27dac65b1e95ece77db1514be5771c9abea5863c958bf90ca785219c80c668db",
+      "parts": 57,
+      "triangles": 2584,
+      "sha256": "255fba357173b6ea72fcf29cf2561beb9f4bf93d3156cff061f4ab490df478a3",
       "sourcePrototypes": [
         "FoodSaladKimchi"
       ]
@@ -7062,9 +7062,9 @@
       "label": "Bisque bowl",
       "file": "CMU3DFoodSoupBisqueCloud.glb",
       "status": "draft",
-      "parts": 78,
-      "triangles": 8064,
-      "sha256": "0994a9e3a76a011e0ff88c724193d4c6ecfaa98c2618afe7c63c71eeb28576b6",
+      "parts": 54,
+      "triangles": 7152,
+      "sha256": "7f002de2a52e6ce97d5f656e3d7d201a101ef296d70c5b3815fb328ca379895f",
       "sourcePrototypes": [
         "FoodSoupBisque"
       ]
@@ -7074,9 +7074,9 @@
       "label": "Hot chili bowl",
       "file": "CMU3DFoodSoupChiliHotCloud.glb",
       "status": "draft",
-      "parts": 84,
-      "triangles": 8608,
-      "sha256": "f8b8b3b7f94d916b44a6af0a20b4e0b2321a63dbeb568c0d65e3e1ec9cd910fd",
+      "parts": 60,
+      "triangles": 7696,
+      "sha256": "a6392668c858035689b2510e6125fc08a2e3bcffc75a67a450824419c50e88a6",
       "sourcePrototypes": [
         "FoodSoupChiliHot"
       ]
@@ -7923,15 +7923,15 @@
       "label": "Rising Sun cassette: shell, reels and original printed label",
       "file": "CMU3DHandAU14CassetteTapeRisingSunCloud.glb",
       "status": "draft",
-      "parts": 45,
-      "triangles": 2308,
-      "sha256": "a2f6e6d247d2e35b3a5ac77977912b848f46e7961a629b41ff8d4523113ea714",
+      "parts": 37,
+      "triangles": 1796,
+      "sha256": "3bebb6a97f39131bdec5af902c8a912fdedfbf50b9ee40f300a1dd903173aaba",
       "sourcePrototypes": [
         "AU14CassetteTapeRisingSun"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 45
+      "storedFrameParts": 37
     },
     {
       "id": "CMU3DHandCMCrowbarCloud",
@@ -8203,9 +8203,9 @@
       "label": "Hospital privacy screen",
       "file": "CMU3DHospitalPrivacyScreen.glb",
       "status": "draft",
-      "parts": 33,
-      "triangles": 396,
-      "sha256": "70c5c8e49149a020a04b2da306818ba8504e81ea8c096069f174b96f9e000992",
+      "parts": 32,
+      "triangles": 384,
+      "sha256": "e4401e41c5e8255da8a203f3badc29bb861c567a38b4174319c938c958b0da64",
       "sourcePrototypes": [
         "RMCHospitalDivider"
       ]
@@ -8363,9 +8363,9 @@
       "label": "Hybrisa glazed extinguisher cabinet",
       "file": "CMU3DHybrisaExtinguisherCabinet.glb",
       "status": "draft",
-      "parts": 32,
-      "triangles": 384,
-      "sha256": "b591e1328aa94a0e15312be35cf31538f7a498eef1d0025cf3068f9aad2a707c",
+      "parts": 28,
+      "triangles": 336,
+      "sha256": "571b30c44b210f284701b19d86a6c5c318c6a81754d1a93c5b260dd3593979bc",
       "sourcePrototypes": [
         "AU14HybrisaExtinguisherCabinet"
       ]
@@ -8677,54 +8677,54 @@
       "label": "Hypersleep chamber / East source",
       "file": "CMU3DHyperSleepChamberCloudEast.glb",
       "status": "draft",
-      "parts": 87,
-      "triangles": 1088,
-      "sha256": "b370191925c88818f61d604ef096da8b1a0b4b5c1472d384f1b0d6526aa5e582",
+      "parts": 82,
+      "triangles": 1028,
+      "sha256": "87d7db61750b38e7ee2b992f596bcdba8e931afde727871d05008b69f13fcb7d",
       "sourcePrototypes": [],
       "animationClips": 1,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 318
+      "storedFrameParts": 313
     },
     {
       "id": "CMU3DHyperSleepChamberCloudNorth",
       "label": "Hypersleep chamber / North source",
       "file": "CMU3DHyperSleepChamberCloudNorth.glb",
       "status": "draft",
-      "parts": 87,
-      "triangles": 1088,
-      "sha256": "97139f9c8b26cab77c040526cc104ab9dcd43b272656d30bf238763208040358",
+      "parts": 82,
+      "triangles": 1028,
+      "sha256": "a333006fd63100dcfa5a0199ac10f94cc2fd739b831a3014b60115ddcfc4bf66",
       "sourcePrototypes": [],
       "animationClips": 1,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 318
+      "storedFrameParts": 313
     },
     {
       "id": "CMU3DHyperSleepChamberCloudSouth",
       "label": "Hypersleep chamber / South source",
       "file": "CMU3DHyperSleepChamberCloudSouth.glb",
       "status": "draft",
-      "parts": 87,
-      "triangles": 1088,
-      "sha256": "eea2a078926ed5b9b844efd415a30739a671ed66bea6dc7fdc240929bb93d8d7",
+      "parts": 82,
+      "triangles": 1028,
+      "sha256": "332a5c51633b8a4eab4d38733aadc3ab11339ae40432d06b824e590347b06832",
       "sourcePrototypes": [
         "CMHyperSleepChamber"
       ],
       "animationClips": 1,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 318
+      "storedFrameParts": 313
     },
     {
       "id": "CMU3DHyperSleepChamberCloudWest",
       "label": "Hypersleep chamber / West source",
       "file": "CMU3DHyperSleepChamberCloudWest.glb",
       "status": "draft",
-      "parts": 87,
-      "triangles": 1088,
-      "sha256": "45e0503b8642fc457f12a1f97822c686e2f4ea723f08931a00bb5846b038ab4a",
+      "parts": 82,
+      "triangles": 1028,
+      "sha256": "2950135ecc240ecad556be86ed155de709deca8937f555418be622bea264218e",
       "sourcePrototypes": [],
       "animationClips": 1,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 318
+      "storedFrameParts": 313
     },
     {
       "id": "CMU3DIVStand",
@@ -9789,30 +9789,30 @@
       "label": "Kelland Mining Clothes",
       "file": "CMU3DLooseAU14CivilianKellandMiningClothes.glb",
       "status": "draft",
-      "parts": 40,
-      "triangles": 464,
-      "sha256": "134a559f03f35c935f84ff61743cc12435f6a5c3a2e2c291afd180f22412d8b7",
+      "parts": 37,
+      "triangles": 428,
+      "sha256": "29b66e96cc02e1b305e64a9928bea401344d46e9024f96640b1f5192ce063816",
       "sourcePrototypes": [
         "AU14CivilianKellandMiningClothes"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 40
+      "storedFrameParts": 37
     },
     {
       "id": "CMU3DLooseAU14CivilianPrisonJumpsuit",
       "label": "Prison Jumpsuit",
       "file": "CMU3DLooseAU14CivilianPrisonJumpsuit.glb",
       "status": "draft",
-      "parts": 44,
-      "triangles": 512,
-      "sha256": "15084aa7f2725d147f1dcfab4d5c0333da654f672a4019e8ef680d3dd735151d",
+      "parts": 41,
+      "triangles": 476,
+      "sha256": "9f13221113d99e54a13a42e791d74a4fe361afd759678f9672e1028f75e4c250",
       "sourcePrototypes": [
         "AU14CivilianPrisonJumpsuit"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 44
+      "storedFrameParts": 41
     },
     {
       "id": "CMU3DLooseCMBHelmet",
@@ -9858,9 +9858,9 @@
       "label": "Loose cave floor planks 18",
       "file": "CMU3DLooseFloorBoard18.glb",
       "status": "draft",
-      "parts": 29,
-      "triangles": 348,
-      "sha256": "b60a5adbe4e2947393ca8394f3c1cacd9b19b17190077c41daf4d49ad081ce4c",
+      "parts": 27,
+      "triangles": 324,
+      "sha256": "5a3b7bf94bedce5f8d448b8d5696d5b47e66cd3b478a4e2cd2d94d6adde12044",
       "sourcePrototypes": [
         "DecorFloorBoard18"
       ]
@@ -9870,9 +9870,9 @@
       "label": "Loose cave floor planks 19",
       "file": "CMU3DLooseFloorBoard19.glb",
       "status": "draft",
-      "parts": 22,
-      "triangles": 264,
-      "sha256": "179aa73d3a526737db65e3dfa84913b68472d7b5113d9e6d9d5e7e997b5e7244",
+      "parts": 21,
+      "triangles": 252,
+      "sha256": "3a572fc12afec09d0f7339f97592d0052f6f6e7cf633191d05a789863bd59ad8",
       "sourcePrototypes": [
         "DecorFloorBoard19"
       ]
@@ -9894,9 +9894,9 @@
       "label": "Loose cave floor planks 23",
       "file": "CMU3DLooseFloorBoard23.glb",
       "status": "draft",
-      "parts": 30,
-      "triangles": 360,
-      "sha256": "8ff979302b923436a188198609461631db84fc8958188631c545768929cee2f2",
+      "parts": 26,
+      "triangles": 312,
+      "sha256": "26d0d8152e9d539676f2abdc1cd446f53bf716be89dcc7ff0b834b24311f01af",
       "sourcePrototypes": [
         "DecorFloorBoard23"
       ]
@@ -9906,9 +9906,9 @@
       "label": "Loose cave floor planks 3",
       "file": "CMU3DLooseFloorBoard3.glb",
       "status": "draft",
-      "parts": 32,
-      "triangles": 384,
-      "sha256": "a60fd56e50bca3bb48c25f4833b3375b9cd8b5bc990968d8ebb17ee540f361b6",
+      "parts": 31,
+      "triangles": 372,
+      "sha256": "fcf823dabd0d1837524ad499fef1d0a1940565bd382fd03e817c53b45b72701a",
       "sourcePrototypes": [
         "DecorFloorBoard3"
       ]
@@ -9918,9 +9918,9 @@
       "label": "Loose cave floor planks 4",
       "file": "CMU3DLooseFloorBoard4.glb",
       "status": "draft",
-      "parts": 31,
-      "triangles": 372,
-      "sha256": "46999aea7120b7d611d1928f49571195e4f9410c4195d5b9b37ece23d8abfd61",
+      "parts": 29,
+      "triangles": 348,
+      "sha256": "7ec705f6db6b0ccc6e8afe35ac69e9be27983859fe2028935131a8e622ff92f8",
       "sourcePrototypes": [
         "DecorFloorBoard4"
       ]
@@ -10048,15 +10048,15 @@
       "label": "CMB Riot Control uniform",
       "file": "CMU3DLooseRMCSwatCMBUniform.glb",
       "status": "draft",
-      "parts": 44,
-      "triangles": 512,
-      "sha256": "3a3b37a6847f2201d33479e9565b50e2f3927c67735be0614bad825ba276e275",
+      "parts": 39,
+      "triangles": 452,
+      "sha256": "e1ee6c99af99eac5beedd5a04dd4c391fad58e3a5de22f50b656b87e226a1434",
       "sourcePrototypes": [
         "RMCSwatCMBUniform"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 44
+      "storedFrameParts": 39
     },
     {
       "id": "CMU3DLooseSWATVisor",
@@ -10147,9 +10147,9 @@
       "label": "Machine frame / wired",
       "file": "CMU3DMachineFrameReadyCloud.glb",
       "status": "draft",
-      "parts": 68,
-      "triangles": 816,
-      "sha256": "08244d4f4eb281675ca84d390c9c37d1663cf621f626434eb589ed292c017d2c",
+      "parts": 52,
+      "triangles": 624,
+      "sha256": "a1778c82999a5e59c0822e259d71132eb8f684891dee4a8a69ba00b2f8e91b22",
       "sourcePrototypes": [
         "CMMachineFrame"
       ]
@@ -10420,9 +10420,9 @@
       "label": "Two hollow-shell tom drums",
       "file": "CMU3DMaterialLeisureTomDrumsCloud.glb",
       "status": "draft",
-      "parts": 90,
-      "triangles": 4992,
-      "sha256": "bbe7e6604c468bfaf8ca451e675e738e8223be77ea809f172a9b580c47e1c11c",
+      "parts": 74,
+      "triangles": 4384,
+      "sha256": "11f9c52a54efa863e7d3f988048ce579e4f6965e7a9702901f59be15a23421fc",
       "sourcePrototypes": [
         "TomDrumsInstrument"
       ]
@@ -10658,9 +10658,9 @@
       "label": "Large four-screen monitor / East",
       "file": "CMU3DMultiMonitorBigCloudEast.glb",
       "status": "draft",
-      "parts": 37,
-      "triangles": 444,
-      "sha256": "f5fd2496e61fd372afa435afac2addf4fc68cc8ce2f18e7ddd440aafb5dcf464",
+      "parts": 29,
+      "triangles": 348,
+      "sha256": "b3e4c13973abf2546e6205a84fb58b5d1ece59e558c78955edb5ef31bad73203",
       "sourcePrototypes": []
     },
     {
@@ -10668,9 +10668,9 @@
       "label": "Large four-screen monitor / North",
       "file": "CMU3DMultiMonitorBigCloudNorth.glb",
       "status": "draft",
-      "parts": 37,
-      "triangles": 444,
-      "sha256": "632683e553131a55af4dfdfcf32b4b8f4abd055fa749749caac895654c378242",
+      "parts": 28,
+      "triangles": 336,
+      "sha256": "6c98ec2b896b0048569986c80736d23217c8721b8f685a973008724e8409ae4e",
       "sourcePrototypes": []
     },
     {
@@ -10678,9 +10678,9 @@
       "label": "Large four-screen monitor / South",
       "file": "CMU3DMultiMonitorBigCloudSouth.glb",
       "status": "draft",
-      "parts": 37,
-      "triangles": 444,
-      "sha256": "1ceadceadd1058eb479d76f78e53da9beb7cc81c76cbba1cd43d16f4634ad789",
+      "parts": 28,
+      "triangles": 336,
+      "sha256": "12b86a25de7e9e3cf74c691a858e86e501c7157ce263ac572d4ff0c9ec70462c",
       "sourcePrototypes": [
         "RMCMultiMonitorBig"
       ]
@@ -10690,9 +10690,9 @@
       "label": "Large four-screen monitor / West",
       "file": "CMU3DMultiMonitorBigCloudWest.glb",
       "status": "draft",
-      "parts": 37,
-      "triangles": 444,
-      "sha256": "1eb6bb2a4730800895a970423a5026fb090b589c20b5c06624d1bab7b2fd84e7",
+      "parts": 28,
+      "triangles": 336,
+      "sha256": "2ddec0af8e677268d27c9f7abd3068659764344c386858bf2b824bae695c8855",
       "sourcePrototypes": []
     },
     {
@@ -10792,16 +10792,16 @@
       "label": "Orange door control",
       "file": "CMU3DOrangeDoorButton.glb",
       "status": "draft",
-      "parts": 32,
-      "triangles": 384,
-      "sha256": "7652edb6905560b565d14cf2c8a0e63592d481010822a4b6e409b7b1c645f7d0",
+      "parts": 21,
+      "triangles": 252,
+      "sha256": "a54bc4cbdf68a3cb5522d2a523faed41321f57f56da0f126dadb45db97058ed0",
       "sourcePrototypes": [
         "RMCPodDoorButton",
         "RMCPodDoorButtonCommand",
         "RMCPodDoorButtonShip"
       ],
       "animationClips": 2,
-      "storedFrameParts": 591
+      "storedFrameParts": 394
     },
     {
       "id": "CMU3DOrangeDumpster",
@@ -11399,9 +11399,9 @@
       "label": "Pizza Galaxy box",
       "file": "CMU3DPizzaGalaxyBoxCloud.glb",
       "status": "draft",
-      "parts": 15,
-      "triangles": 180,
-      "sha256": "c57c4d40afe9680adbdefca6ade673d6309a4484450c322e1969967e1dd2c4a8",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "f13c54d37371b00808c1ed069a3c39d7549ecc68c343b7a7aab1ebf4a99aa518",
       "sourcePrototypes": [
         "RMCBoxPizzaGalaxyMargherita",
         "RMCBoxPizzaGalaxyMeat",
@@ -11423,9 +11423,9 @@
       "label": "Olive mystery pizza box",
       "file": "CMU3DPizzaRandomBoxCloud.glb",
       "status": "draft",
-      "parts": 15,
-      "triangles": 180,
-      "sha256": "81e563f36df5add6a8c5c190a956ca2df8e4e7dfbd3eae66356af639dded0295",
+      "parts": 13,
+      "triangles": 156,
+      "sha256": "b5cf848a8fb44f7cae47dbc6674f824b5a66e571754de2b454546454305d3fed",
       "sourcePrototypes": [
         "RMCBoxPizzaRandom"
       ]
@@ -11794,9 +11794,9 @@
       "label": "Potted leafy shrub",
       "file": "CMU3DPottedPlant0.glb",
       "status": "draft",
-      "parts": 94,
-      "triangles": 19252,
-      "sha256": "b32d219f1aea6a19710666e1bb8e9d66b356fe547906471fb45a36dc67857f6a",
+      "parts": 93,
+      "triangles": 19028,
+      "sha256": "8fe16ed8114993939a70b8dc0cc00de1a66c599f67c71f549c3554447cb754ee",
       "sourcePrototypes": [
         "CMPottedPlant0"
       ]
@@ -11818,9 +11818,9 @@
       "label": "Broad forked tree in small planter",
       "file": "CMU3DPottedPlant10.glb",
       "status": "draft",
-      "parts": 73,
-      "triangles": 14068,
-      "sha256": "450ddbcb57dfa3b87c8092507c303db3ba650d79cdf6abba1edb152a24c70275",
+      "parts": 72,
+      "triangles": 13844,
+      "sha256": "24d0f5a1ae6a26935f4174a46c3f2f8d4fe749eaa00742c0bcada3200813c889",
       "sourcePrototypes": [
         "CMPottedPlant10"
       ]
@@ -11830,9 +11830,9 @@
       "label": "Small thorned cactus in red planter",
       "file": "CMU3DPottedPlant11.glb",
       "status": "draft",
-      "parts": 49,
-      "triangles": 2488,
-      "sha256": "f68129549cd472ac23b10f9b4af9bb18ae10c03645d3c08cd793fb560fc73693",
+      "parts": 33,
+      "triangles": 2296,
+      "sha256": "ae6d5fade6ecfefaf4d99268409403c701629a55a1ac950c2f6e51a84b4ea123",
       "sourcePrototypes": [
         "CMPottedPlant11"
       ]
@@ -11890,9 +11890,9 @@
       "label": "Two-flowered violet orchid",
       "file": "CMU3DPottedPlant18.glb",
       "status": "draft",
-      "parts": 59,
-      "triangles": 5788,
-      "sha256": "902fb76b0d6f5785de5f488e7207e7556795a4b01caeba6c6cc4b286518be1a9",
+      "parts": 43,
+      "triangles": 5596,
+      "sha256": "bfc03b5c2cfcce9053e7e345a317433610246cd07ffd295e7a44e4787cb813ce",
       "sourcePrototypes": [
         "CMPottedPlant18"
       ]
@@ -11902,9 +11902,9 @@
       "label": "Dense olive tree in dark planter",
       "file": "CMU3DPottedPlant19.glb",
       "status": "draft",
-      "parts": 100,
-      "triangles": 15132,
-      "sha256": "23675b295eba6f227bb4e373721b289ab283e2450137a1defe7cec54d1fdff0b",
+      "parts": 84,
+      "triangles": 14940,
+      "sha256": "b4f2c42e5dc190dcf72c800fbf90156954627c77cf014365dcedb1304b9a9db7",
       "sourcePrototypes": [
         "CMPottedPlant19"
       ]
@@ -11914,9 +11914,9 @@
       "label": "Potted branching palm",
       "file": "CMU3DPottedPlant2.glb",
       "status": "draft",
-      "parts": 70,
-      "triangles": 840,
-      "sha256": "e8de604214caca0eb5d7fbcc81c048fe771844c4469ed2bbc7de241b57ecbddf",
+      "parts": 67,
+      "triangles": 804,
+      "sha256": "44816d7a7d69c29ac849eaf9901d33022ae4bd9203c38e6c29954fe1519a19f0",
       "sourcePrototypes": [
         "CMPottedPlant2"
       ]
@@ -11962,9 +11962,9 @@
       "label": "Narrow lime topiary in silver pot",
       "file": "CMU3DPottedPlant23.glb",
       "status": "draft",
-      "parts": 100,
-      "triangles": 15292,
-      "sha256": "41e64de6ed0cf867b57f79604ebefe29d339728954996e769d02727f32644e21",
+      "parts": 84,
+      "triangles": 15100,
+      "sha256": "8297c0f9bb3b6011a9ac500ea4dc754f2e35bcc98cfbf7114b4e1ca4b67a85ae",
       "sourcePrototypes": [
         "CMPottedPlant23"
       ]
@@ -11974,9 +11974,9 @@
       "label": "Tiered drooping broadleaf plant",
       "file": "CMU3DPottedPlant24.glb",
       "status": "draft",
-      "parts": 98,
-      "triangles": 14844,
-      "sha256": "4fd6e24970f8f5a8304dc26a0cc93982c3bbb253ce609309452ca42932da25a9",
+      "parts": 81,
+      "triangles": 14428,
+      "sha256": "f244a57f00ba2bc30d1fc866b618f17bb51a61c47d4408605839ccb989e310b8",
       "sourcePrototypes": [
         "CMPottedPlant24"
       ]
@@ -12010,9 +12010,9 @@
       "label": "Potted branching cactus",
       "file": "CMU3DPottedPlant28.glb",
       "status": "draft",
-      "parts": 45,
-      "triangles": 540,
-      "sha256": "1c19073d4babb2f814e9c977ceb497820a8f1f60fe3d3ba2cd15bf218e36c6fa",
+      "parts": 44,
+      "triangles": 528,
+      "sha256": "1ad8360eb961c7b9ea9e74ed439d45bf218d74f21e1483c21ef25cbdff780fee",
       "sourcePrototypes": [
         "CMPottedPlant28"
       ]
@@ -12046,9 +12046,9 @@
       "label": "Olive conifer in ochre pot",
       "file": "CMU3DPottedPlant4.glb",
       "status": "draft",
-      "parts": 98,
-      "triangles": 15164,
-      "sha256": "b7562f85496714183719ed43f92f8a19f5727716313fbe5b8b87fdc6a95bc6fb",
+      "parts": 82,
+      "triangles": 14972,
+      "sha256": "98f4d778f9381c254cd5de6d581cd0da1bed6629e0a94a6b8bdb4fcfb365b8b2",
       "sourcePrototypes": [
         "CMPottedPlant4"
       ]
@@ -12058,9 +12058,9 @@
       "label": "Five-branch finger-leaved succulent",
       "file": "CMU3DPottedPlant5.glb",
       "status": "draft",
-      "parts": 81,
-      "triangles": 8956,
-      "sha256": "6e009812b590a878172149dd7f4acf9bf788835ea39d80482ca06d1f67e070a9",
+      "parts": 65,
+      "triangles": 8764,
+      "sha256": "f05a5a8763933f2455873aaa78b840eacc2a3d1c422b1b900982f31567b7b60c",
       "sourcePrototypes": [
         "CMPottedPlant5"
       ]
@@ -12082,9 +12082,9 @@
       "label": "Four pale buds on red stalk",
       "file": "CMU3DPottedPlant7.glb",
       "status": "draft",
-      "parts": 60,
-      "triangles": 6172,
-      "sha256": "6de11771c8de51528296e835f36a6748600013727efb33572139981970be2183",
+      "parts": 44,
+      "triangles": 5980,
+      "sha256": "dfe4f1ad593b974221852405bfaba8de5ce5a04d5962c0d40b0d28d95d1ac246",
       "sourcePrototypes": [
         "CMPottedPlant7"
       ]
@@ -12094,9 +12094,9 @@
       "label": "Round bright-green topiary",
       "file": "CMU3DPottedPlant8.glb",
       "status": "draft",
-      "parts": 51,
-      "triangles": 4316,
-      "sha256": "d1b17158ab1667ee1454df4757fbd069b7cafdf7abcdd328c8e6c20632a3ca8d",
+      "parts": 35,
+      "triangles": 4124,
+      "sha256": "1b6cb3b9cba28c63c92c4958dcec3ded5d8fc74cbdf146a8f7a2ac41e22f8548",
       "sourcePrototypes": [
         "CMPottedPlant8"
       ]
@@ -13620,9 +13620,9 @@
       "label": "RMCCoatSnowSurvivor loose world prop",
       "file": "CMU3DRMCCoatSnowSurvivorWorldCloud.glb",
       "status": "draft",
-      "parts": 50,
-      "triangles": 568,
-      "sha256": "40d8d807ed7cee92a5aba82e91d5bc4b8de28f35690defe393a7780c26be8385",
+      "parts": 47,
+      "triangles": 532,
+      "sha256": "6454971821892f95372742135586872f5bdb726c6846bbc897d7624f64d87ed3",
       "sourcePrototypes": [
         "RMCCoatSnowSurvivor"
       ]
@@ -14361,9 +14361,9 @@
       "label": "RMCJumpsuitBlueWorkwear laid-out uniform",
       "file": "CMU3DRMCJumpsuitBlueWorkwearWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1436,
-      "sha256": "5a23f39d40e0f2fd90de1bd7dc89edc1ce0aa9a96e319b9aa990532a88242675",
+      "parts": 52,
+      "triangles": 1424,
+      "sha256": "1071d8653be9539d64b9e3f0d0ba7500435d8f950b2758243b73f0a2f58adb08",
       "sourcePrototypes": [
         "RMCJumpsuitBlueWorkwear"
       ]
@@ -14373,9 +14373,9 @@
       "label": "RMCJumpsuitKhakiWorkwearJacketless laid-out uniform",
       "file": "CMU3DRMCJumpsuitKhakiWorkwearJacketlessWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1436,
-      "sha256": "fd74e2a9411ac591c23c1afa0e1039229b33a717202234370778b5c627f4d17a",
+      "parts": 52,
+      "triangles": 1424,
+      "sha256": "b9a83acaeb298b3b2f92fd77009df9a0a9b84f4cdcbb4f42bd9bc9aef65bf055",
       "sourcePrototypes": [
         "RMCJumpsuitKhakiWorkwearJacketless"
       ]
@@ -14385,9 +14385,9 @@
       "label": "RMCJumpsuitLiaisonGreenWorkwear laid-out uniform",
       "file": "CMU3DRMCJumpsuitLiaisonGreenWorkwearWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1436,
-      "sha256": "bbe70e153a739a9f958e60160cfea90688482b00115ce4d2fa8baa3971da8ae5",
+      "parts": 52,
+      "triangles": 1424,
+      "sha256": "252b73d717fbbe1cde22c25d269e91a0430f60297cdee9366138a01f4a85b64f",
       "sourcePrototypes": [
         "RMCJumpsuitLiaisonGreenWorkwear"
       ]
@@ -14397,9 +14397,9 @@
       "label": "RMCJumpsuitLiaisonGreyWorkwear laid-out uniform",
       "file": "CMU3DRMCJumpsuitLiaisonGreyWorkwearWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1436,
-      "sha256": "b788f85739022a4f2f5d30a70f9a544a9ba4e9ddd1ae3b08eee5a861d71dfef0",
+      "parts": 52,
+      "triangles": 1424,
+      "sha256": "2771929797586ab70b7963b8051954bb275f9bcb983b24d52aacee7cbb2d7d87",
       "sourcePrototypes": [
         "RMCJumpsuitLiaisonGreyWorkwear"
       ]
@@ -14409,9 +14409,9 @@
       "label": "RMCJumpsuitSunRiders laid-out uniform",
       "file": "CMU3DRMCJumpsuitSunRidersWorldCloud.glb",
       "status": "draft",
-      "parts": 53,
-      "triangles": 1384,
-      "sha256": "19a81c6c07a3e1b428982ece2722a3ad70baaef483a1e8b5c87e294489bc6dbd",
+      "parts": 52,
+      "triangles": 1372,
+      "sha256": "067ef0cd837930c58da207bc7ad5d05d78c9d739ad9fb0da7c316b2ce89ff1d6",
       "sourcePrototypes": [
         "RMCJumpsuitSunRiders"
       ]
@@ -14839,9 +14839,9 @@
       "label": "Industrial machinery 2",
       "file": "CMU3DRMCMachinePropBig2.glb",
       "status": "draft",
-      "parts": 95,
-      "triangles": 2024,
-      "sha256": "7e1e5b0f890deba240c2745c433359b925ee08aa8cc21def76e667b73df78b3e",
+      "parts": 93,
+      "triangles": 2000,
+      "sha256": "9c685ed3a97863133a4f496387da0d4defa53daa6c2b2fd49db6012fe8e81da0",
       "sourcePrototypes": [
         "RMCMachinePropBig2"
       ]
@@ -14951,9 +14951,9 @@
       "label": "RMCMarineUniformDressGeneral laid-out uniform",
       "file": "CMU3DRMCMarineUniformDressGeneralWorldCloud.glb",
       "status": "draft",
-      "parts": 45,
-      "triangles": 1132,
-      "sha256": "a6a55412b6d3e63002cc9ac78e85e96d7b2c5af7f39985b61e188a9ae0725fff",
+      "parts": 43,
+      "triangles": 1108,
+      "sha256": "14448f055f25b10001f9f134611791dff5488f35a0c039985761471a8dc38ac5",
       "sourcePrototypes": [
         "RMCMarineUniformDressGeneral"
       ]
@@ -14978,15 +14978,15 @@
       "label": "Platinum medal with folded ribbon and pendant",
       "file": "CMU3DRMCMedalPlatinumInsigniaExtraCloud.glb",
       "status": "draft",
-      "parts": 14,
-      "triangles": 168,
-      "sha256": "eaf3c6f3d44ca9078c088e9130fe4793a1955b8c7d810f57514fa222153b05fa",
+      "parts": 11,
+      "triangles": 132,
+      "sha256": "e5616557e84edd9c76ad6029b096e74b169d13cb152e9193202868cb7a1658a2",
       "sourcePrototypes": [
         "RMCMedalPlatinum"
       ],
       "animationClips": 1,
       "staticSpriteScenes": 0,
-      "storedFrameParts": 112
+      "storedFrameParts": 88
     },
     {
       "id": "CMU3DRMCOuterClothingExternalWebbingBlackWorldCloud",
@@ -15422,9 +15422,9 @@
       "label": "Mono-Supron CopDestroyed",
       "file": "CMU3DRMCPropVehicleMonoSupronCopDestroyed.glb",
       "status": "draft",
-      "parts": 81,
-      "triangles": 1676,
-      "sha256": "bf2c6ad65c2677fe72af1c53c4294baa28c0b75c54045e024c14a595e2f10adb",
+      "parts": 79,
+      "triangles": 1652,
+      "sha256": "e183b87e0f7feb59a3b188e2174611e4a42a3bc59937c5d5d5114eefcad41a3d",
       "sourcePrototypes": [
         "RMCPropVehicleMonoSupronCopDestroyed"
       ]
@@ -15494,9 +15494,9 @@
       "label": "Mono-Supron PurpleDestroyed",
       "file": "CMU3DRMCPropVehicleMonoSupronPurpleDestroyed.glb",
       "status": "draft",
-      "parts": 79,
-      "triangles": 1652,
-      "sha256": "5a5a4ae69f676689bf6762e76cbc05c4cc5b8bb5d13474ea30eb4698c8690b90",
+      "parts": 77,
+      "triangles": 1628,
+      "sha256": "373338b2cd3278540fa93857c5e6c88b9b735b3a470f8caeba5b07781a95def3",
       "sourcePrototypes": [
         "RMCPropVehicleMonoSupronPurpleDestroyed"
       ]
@@ -15884,15 +15884,15 @@
       "label": "Ripped used stasis bag",
       "file": "CMU3DRMCStasisBagUsedMedicalSmallCloud.glb",
       "status": "draft",
-      "parts": 52,
-      "triangles": 1820,
-      "sha256": "f73455e2452ad0e3fe580bcfeb7ec715b4356f0da460d5bcc302d6dbd13b7d5a",
+      "parts": 51,
+      "triangles": 1808,
+      "sha256": "1340f1c747aff1ed0b43ebf9ce0f893af25ff81fa1746e3c62da0bcfed3bcff6",
       "sourcePrototypes": [
         "RMCStasisBagUsed"
       ],
       "animationClips": 0,
       "staticSpriteScenes": 1,
-      "storedFrameParts": 52
+      "storedFrameParts": 51
     },
     {
       "id": "CMU3DRMCStethoscopeMedicalSmallCloud",
@@ -15998,9 +15998,9 @@
       "label": "Xuanshi red drinks vendor",
       "file": "CMU3DRMCVendorColaSPPInheritedMiscCloud.glb",
       "status": "draft",
-      "parts": 32,
-      "triangles": 384,
-      "sha256": "6cce779cacd1be45d1913e2c42069bdbb02a1223bd239483b232e3f594f2ad50",
+      "parts": 28,
+      "triangles": 336,
+      "sha256": "bdf2d8b8a77a46ebab42d70924a09a450dde06f9d9c10181af31dd003d2af5b7",
       "sourcePrototypes": [
         "RMCVendorColaSPP"
       ]
@@ -16010,9 +16010,9 @@
       "label": "NutriCo AutoDrink tall dispenser",
       "file": "CMU3DRMCVendorNutriCoDrinkInheritedMiscCloud.glb",
       "status": "draft",
-      "parts": 58,
-      "triangles": 696,
-      "sha256": "3e996379c24485f66d2bd2dc02666a5447a6771dd0f3a05e87f39b81a44f7015",
+      "parts": 54,
+      "triangles": 648,
+      "sha256": "a5a86513ee81f893512d33a995c3e9da330ba747080db1a2afeda35b546652b7",
       "sourcePrototypes": [
         "RMCVendorNutriCoDrink"
       ]
@@ -16044,9 +16044,9 @@
       "label": "Weyland-Yutani clipboard with four initial pages",
       "file": "CMU3DRMCWeYaClipboardInheritedMiscCloud.glb",
       "status": "draft",
-      "parts": 12,
-      "triangles": 144,
-      "sha256": "9a0af467122d4cdf9c3c5332e3668a5b628b74194b0f830aa9788bad93029bee",
+      "parts": 10,
+      "triangles": 120,
+      "sha256": "f90b9f42ea993e6fae52f87d5612b1651ef09b8f616ae5d8e2b56ea925a158de",
       "sourcePrototypes": [
         "RMCWeYaClipboard"
       ]
@@ -16334,15 +16334,15 @@
       "label": "Large red door control",
       "file": "CMU3DRedDoorButton.glb",
       "status": "draft",
-      "parts": 56,
-      "triangles": 672,
-      "sha256": "98d2b0cf1b0c2178d10b408064baaa91b6f0aa36bb2d71e6d4ac5359f62897b6",
+      "parts": 31,
+      "triangles": 372,
+      "sha256": "d761daef1316e540790e374a4b08962421a745ffd277d5d633700ec066827ec1",
       "sourcePrototypes": [
         "RMCPodDoorButtonBigRed",
         "RMCPodDoorButtonBigRedShip"
       ],
       "animationClips": 2,
-      "storedFrameParts": 1452
+      "storedFrameParts": 795
     },
     {
       "id": "CMU3DRedGrapeBunch",
@@ -17235,9 +17235,9 @@
       "label": "SA-2X sensor-array tower",
       "file": "CMU3DSensorTowerCloud.glb",
       "status": "draft",
-      "parts": 80,
-      "triangles": 4084,
-      "sha256": "e824b8cb56f6c3f125cd55c5ef76ded26acaa83cf9ad5e1f02a95fb8ce385f23",
+      "parts": 77,
+      "triangles": 4048,
+      "sha256": "1a55a674ba6cd177a385a84d307f5bdfd9b1d702b725f668f23bd1585add5d3d",
       "sourcePrototypes": [
         "AU14SensorTower"
       ]
@@ -17824,9 +17824,9 @@
       "label": "Tripod floodlight",
       "file": "CMU3DSmallFloodlight.glb",
       "status": "draft",
-      "parts": 40,
-      "triangles": 480,
-      "sha256": "46752cd769e7ddb30c861377046ef9e79cfb37e3cbf095795d5bcf0359ffee49",
+      "parts": 39,
+      "triangles": 468,
+      "sha256": "9603667317d061e122ad23437bd1fe593546673719b4bd42c9e0733ae3e16beb",
       "sourcePrototypes": [
         "RMCSmallFloodlight"
       ]
@@ -18160,9 +18160,9 @@
       "label": "Open steel handcuffs",
       "file": "CMU3DSteelHandcuffs.glb",
       "status": "draft",
-      "parts": 117,
-      "triangles": 24936,
-      "sha256": "ed614d15005f75b075b2400830484b07af0218d8431bed2d819d2d6eeeb4813e",
+      "parts": 85,
+      "triangles": 13928,
+      "sha256": "92a893fa8745bb3fbe4a652c77f2b1c4dd120cf2542ad571e379a5f3038c78a2",
       "sourcePrototypes": [
         "RMCHandcuffs"
       ]
@@ -18391,9 +18391,9 @@
       "label": "Tall tripod floodlight",
       "file": "CMU3DTallFloodlight.glb",
       "status": "draft",
-      "parts": 46,
-      "triangles": 552,
-      "sha256": "4a22ee018c7efa82ffafbf8d903d81abe2a061e3b6e68b2b0818b17139e6f28f",
+      "parts": 45,
+      "triangles": 540,
+      "sha256": "a51d4b2205de4bfa84d71c0af26cd15822efb168d57dd30f2a2d1f898a58278c",
       "sourcePrototypes": [
         "AU14TallFloodlight"
       ]
@@ -18590,9 +18590,9 @@
       "label": "Telecom processor unit",
       "file": "CMU3DTelecomProcessorCloud.glb",
       "status": "draft",
-      "parts": 27,
-      "triangles": 324,
-      "sha256": "cb09065bb063645efb1b693da8b281a0748cac8107b5101937716e04e3836de4",
+      "parts": 26,
+      "triangles": 312,
+      "sha256": "b479ea38181f09966619e1388fc969bd3c7878dc87f7c9b389941ab095d346f0",
       "sourcePrototypes": [
         "RMCTelecomProcessorUnit"
       ]
@@ -18602,9 +18602,9 @@
       "label": "Telecom subspace receiver",
       "file": "CMU3DTelecomReceiverCloud.glb",
       "status": "draft",
-      "parts": 23,
-      "triangles": 276,
-      "sha256": "e05712eddf996e7100be697e314e927f40cc09edb08bd122f8eac36632f6ab39",
+      "parts": 22,
+      "triangles": 264,
+      "sha256": "f8fe73fb7c99f781298bb07409862aafaf26ed9a49706545330931b851d3d09d",
       "sourcePrototypes": [
         "RMCTelecomReceiver"
       ]
@@ -18662,9 +18662,9 @@
       "label": "UNBOUND / 5 by 5 open cargo shaft",
       "file": "CMU3DTopologyCargoLoweredStudyCloud.glb",
       "status": "draft",
-      "parts": 99,
-      "triangles": 1188,
-      "sha256": "bfcc029dfa5e3059c4a4f448d28b4af503ada3c4d74629f61aad6b28334eb125",
+      "parts": 95,
+      "triangles": 1140,
+      "sha256": "4bc705c1edaef71a9592761b4cbeafc8ce86ae39ba264b400ad6bf577c597793",
       "sourcePrototypes": []
     },
     {
@@ -18991,9 +18991,9 @@
       "label": "Tripod work lamp",
       "file": "CMU3DTripodLamp.glb",
       "status": "draft",
-      "parts": 13,
-      "triangles": 156,
-      "sha256": "01d4c2661cc183e42f0970068831d9e09b5fcf0d39d9fbdd9a9209232eb6ecb3",
+      "parts": 12,
+      "triangles": 144,
+      "sha256": "ba8d0ad9a6734d93124cb36a6ea0dec6179da2329c0a1e8b9c2633337767e519",
       "sourcePrototypes": [
         "RMCLampTripod"
       ]
@@ -20232,9 +20232,9 @@
       "label": "Weyland-Yutani twin-lid dumpster",
       "file": "CMU3DWeyuDumpster.glb",
       "status": "draft",
-      "parts": 69,
-      "triangles": 828,
-      "sha256": "00590e0717059eacfaa9e7b88c31ba2f4cb34f785db7cbc6bda2a9b12b63d2dd",
+      "parts": 66,
+      "triangles": 792,
+      "sha256": "0f511507fdd5832b89aa00996d17ebbd2902f587c7c5701c4f81e856e65211ea",
       "sourcePrototypes": [
         "AU14DumpsterWeYu"
       ]
@@ -20387,9 +20387,9 @@
       "label": "Wooden coat stand",
       "file": "CMU3DWoodenCoatStand.glb",
       "status": "draft",
-      "parts": 36,
-      "triangles": 432,
-      "sha256": "d533e3680cea3d1470dde1ab79849ad4142ec8b7cad9edc92b94789bacae6885",
+      "parts": 34,
+      "triangles": 408,
+      "sha256": "1f3b9a66abe1ad57800e1eb4cf72d80e3390864f151e78eadbcdf1528349c294",
       "sourcePrototypes": [
         "RMCCoatRack"
       ]
@@ -21570,7 +21570,7 @@
       "status": "draft",
       "parts": 491,
       "triangles": 5892,
-      "sha256": "10c75e669435faccb5219b0e4162bee9f61258bc9f371f6f8123c79367df43a6",
+      "sha256": "bbcf43b97aa7f9834b7e61e0cfc88566bf7aa37555ff67bd0a5ceddc590c0719",
       "sourcePrototypes": [],
       "equipmentOnly": true
     },
@@ -21867,7 +21867,7 @@
       "status": "draft",
       "parts": 405,
       "triangles": 4860,
-      "sha256": "3bdda01e0d9140971533c01f2dab8aaaa9472389752b5107b320047c8c620dcb",
+      "sha256": "ffc5a08ea08332ae8d27aa1aa3e4ddf8e548d9dcc0d8f1af3b72750d91d27d9c",
       "sourcePrototypes": [],
       "equipmentOnly": true
     },
@@ -21966,7 +21966,7 @@
       "status": "draft",
       "parts": 76,
       "triangles": 912,
-      "sha256": "a90c3e5415445a133a345951173df498eb82311a9ce982aabd9cf2c664fb5d27",
+      "sha256": "fa4412948aaa8b4a3bfc418fbc458092e94fa42c7f727736afc5e7fe313ba93d",
       "sourcePrototypes": [],
       "equipmentOnly": true
     },
@@ -24518,7 +24518,7 @@
       "status": "draft",
       "parts": 464,
       "triangles": 5568,
-      "sha256": "feb50266d7f086c91a387dcd15c2376bd32d416a1aba6bb4162bc278cd0f2ad5",
+      "sha256": "454ceff4af5270b97638d594fa3310e9c3ba6994474887033eab3a29fcac8520",
       "sourcePrototypes": [],
       "equipmentOnly": true
     },
@@ -24573,7 +24573,7 @@
       "status": "draft",
       "parts": 486,
       "triangles": 5832,
-      "sha256": "5c376f4add681d3cd12ce5f8dac10ffcabb74cd10f3e23abac92bc11a8bd2f0a",
+      "sha256": "8a73d7b90b6e1c0a4fc76dd1883ca514f7559c0b8ae9b6869ef72fc0b012a040",
       "sourcePrototypes": [],
       "equipmentOnly": true
     },
@@ -25519,7 +25519,7 @@
       "status": "draft",
       "parts": 506,
       "triangles": 6072,
-      "sha256": "03561fc49f999d43f11e3dcfe85ed735375ad7b1ae86666e5e5a6e6dd2b7f973",
+      "sha256": "9fc9278fc6834c149452a31a789c162464e0b0060e556bd09f7a426dd691ff4c",
       "sourcePrototypes": [],
       "equipmentOnly": true
     },
