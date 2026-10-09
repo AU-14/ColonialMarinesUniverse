@@ -23,6 +23,9 @@ namespace Content.IntegrationTests._CMU14.Expeditions;
 [TestFixture, NonParallelizable]
 public sealed class CMUExpeditionAgentTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> GOVFORPrototype = "GOVFOR";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> CMUExpeditionHostilePrototype = "CMUExpeditionHostile";
+
     public override PoolSettings PoolSettings => new() { Dirty = true };
 
     [Test]
@@ -44,9 +47,9 @@ public sealed class CMUExpeditionAgentTest : GameTest
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(-5, 0)));
             var enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             ally = SEntMan.SpawnEntity("CMMobHuman", origin);
-            Server.System<NpcFactionSystem>().AddFaction(ally, "CMUExpeditionHostile");
+            Server.System<NpcFactionSystem>().AddFaction(ally, CMUExpeditionHostilePrototype);
             // Isolate the trigger discipline test from the separate cover movement test.
             SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).NextReposition = SGameTiming.CurTime + TimeSpan.FromMinutes(1);
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
@@ -96,7 +99,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(-4, 0)));
             enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             enemyRifle = SEntMan.SpawnEntity("WeaponRifleMAR40", origin.Offset(new Vector2(5, 0)));
             Assert.That(Server.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>().TryPickupAnyHand(enemy, enemyRifle), Is.True);
             // The initial lane is open, while the far side of this fragment offers real shelter.
@@ -206,7 +209,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
             var origin = new EntityCoordinates(map, new Vector2(lz.X + 0.5f, lz.Y + 0.5f));
             var enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             foreach (var y in new[] { 1, 2, 3, -2, -3, -4 })
             {
                 var coordinates = origin.Offset(new Vector2(-2, y));
@@ -290,7 +293,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
             initialPosition = origin.Offset(new Vector2(-4, 0.3f));
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", initialPosition);
             enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(4, 0.3f)));
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             wall = SEntMan.SpawnEntity("CMUExpeditionHull", origin.Offset(new Vector2(0, 1)));
             SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).NextReposition = SGameTiming.CurTime + TimeSpan.FromMinutes(1);
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
@@ -359,7 +362,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(-4, 0)));
             enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             for (var y = 1; y <= 4; y++)
             {
                 var coordinates = origin.Offset(new Vector2(-2, y));
@@ -444,9 +447,9 @@ public sealed class CMUExpeditionAgentTest : GameTest
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(-7, 0)));
             enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(7, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
-            Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             var ally = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(-7, 2)));
-            Server.System<NpcFactionSystem>().AddFaction(ally, "CMUExpeditionHostile");
+            Server.System<NpcFactionSystem>().AddFaction(ally, CMUExpeditionHostilePrototype);
             for (var y = -3; y <= 3; y++)
                 walls.Add(SEntMan.SpawnEntity("CMUExpeditionHull", origin.Offset(new Vector2(0, y))));
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True, "Loadout must put a usable rifle in hand.");

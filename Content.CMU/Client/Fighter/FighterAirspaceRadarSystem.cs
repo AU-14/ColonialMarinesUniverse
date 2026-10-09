@@ -78,7 +78,7 @@ public sealed partial class FighterAirspaceRadarSystem : EntitySystem
     private void Hide()
     {
         _display?.Orphan();
-        _display?.Dispose();
+        _display?.Release();
         _display = null;
         _shownState = null;
     }

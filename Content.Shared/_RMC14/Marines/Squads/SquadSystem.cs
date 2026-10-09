@@ -410,7 +410,7 @@ public sealed partial class SquadSystem : EntitySystem
         var entBuilder = ImmutableArray.CreateBuilder<EntityPrototype>();
         foreach (var entity in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (entity.HasComponent<SquadTeamComponent>())
+            if (entity.HasComp<SquadTeamComponent>(_compFactory))
                 entBuilder.Add(entity);
         }
 
@@ -478,7 +478,7 @@ public sealed partial class SquadSystem : EntitySystem
     public bool TryEnsureSquad(EntProtoId id, out Entity<SquadTeamComponent> squad)
     {
         if (!_prototypes.TryIndex(id, out var prototype) ||
-            !prototype.HasComponent<SquadTeamComponent>(_compFactory))
+            !prototype.HasComp<SquadTeamComponent>(_compFactory))
         {
             squad = default;
             return false;

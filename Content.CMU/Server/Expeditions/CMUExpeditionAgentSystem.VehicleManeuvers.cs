@@ -19,7 +19,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         var start = Transform(uid).Coordinates;
         var aim = Transform(target).Coordinates;
-        if (SafeShot(uid, agent, rocket, aim))
+        if (SafeShot(uid, agent, (launcher, rocket), aim))
             return false;
         // Search a short, reachable bound to an actual safe launch position. Never chase an
         // unseen vehicle or override a covering commitment simply to spend a rocket.
@@ -29,7 +29,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (_transform.InRange(start, candidate, 0.9f) || !ValidOrderPoint(uid, candidate) ||
                 !_transform.InRange(start, candidate, 3.25f))
                 continue;
-            if (!SafeShot(uid, agent, rocket, aim, candidate) || !TraversablePassage(uid, start, candidate) ||
+            if (!SafeShot(uid, agent, (launcher, rocket), aim, candidate) || !TraversablePassage(uid, start, candidate) ||
                 ExposureScore(uid, agent, candidate) > currentExposure + 1 ||
                 !TryReserveManeuver(uid, agent, now))
                 continue;

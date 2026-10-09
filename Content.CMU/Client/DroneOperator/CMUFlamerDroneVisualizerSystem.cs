@@ -7,7 +7,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.DroneOperator;
 
-public sealed class CMUFlamerDroneVisualizerSystem : EntitySystem
+public sealed partial class CMUFlamerDroneVisualizerSystem : EntitySystem
 {
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private SharedPointLightSystem _lights = default!;

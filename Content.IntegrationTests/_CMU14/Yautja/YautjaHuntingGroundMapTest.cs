@@ -39,6 +39,11 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaHuntingGroundMapTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13Prototype = "CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaYoungbloodLoadoutVendorPrototype = "CMUYautjaYoungbloodLoadoutVendor";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLeftSouthOffset0x16Prototype = "CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLeftSouthOffset0x16";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthVariant02Offset0x16Prototype = "CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthVariant02Offset0x16";
+
     [Test]
     public async Task TeleporterDialogRejectsResponsesFromThePreviousActor()
     {
@@ -157,7 +162,7 @@ public sealed class YautjaHuntingGroundMapTest
                      })
             {
                 var prototype = prototypes.Index<EntityPrototype>(prototypeId);
-                Assert.That(prototype.TryGetComponent<AccessReaderComponent>(out var reader, factory), Is.True, prototypeId);
+                Assert.That(prototype.TryComp<AccessReaderComponent>(out var reader, factory), Is.True, prototypeId);
 
                 var actual = reader!.AccessLists
                     .SelectMany(access => access)
@@ -461,8 +466,8 @@ public sealed class YautjaHuntingGroundMapTest
             var turf = entMan.System<TurfSystem>();
 
             var console = prototypes.Index<EntityPrototype>(
-                "CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13");
-            Assert.That(console.TryGetComponent<YautjaHuntConsoleComponent>(out var consoleComp, factory), Is.True);
+                CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13Prototype);
+            Assert.That(console.TryComp<YautjaHuntConsoleComponent>(out var consoleComp, factory), Is.True);
             var desert = consoleComp!.AvailableDestinations.Single(destination => destination.Id == "desert_moon");
 
             Assert.That(loader.TryLoadMap(
@@ -798,10 +803,10 @@ public sealed class YautjaHuntingGroundMapTest
             Assert.That(map, Is.Not.Null);
             Assert.That(grids, Is.Not.Null);
 
-            var destination = entMan.EntityQuery<YautjaHuntTeleportDestinationComponent, TransformComponent>()
+            var destination = entMan.QueryEntities<YautjaHuntTeleportDestinationComponent, TransformComponent>()
                 .Where(destination =>
-                    destination.Item1.Kind == YautjaHuntTeleporterKind.Ship &&
-                    destination.Item1.Id == "desert_moon")
+                    destination.Item1.Comp.Kind == YautjaHuntTeleporterKind.Ship &&
+                    destination.Item1.Comp.Id == "desert_moon")
                 .Select(destination => destination.Item2.Owner)
                 .Single();
             var teleporter = entMan.SpawnEntity(null, origin.GridCoords);
@@ -861,9 +866,9 @@ public sealed class YautjaHuntingGroundMapTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(
-                "CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13",
+                CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13Prototype,
                 out var console), Is.True);
-            Assert.That(console!.TryGetComponent<YautjaHuntConsoleComponent>(out var component, factory), Is.True);
+            Assert.That(console!.TryComp<YautjaHuntConsoleComponent>(out var component, factory), Is.True);
             Assert.That(component!.Kind, Is.EqualTo(YautjaHuntConsoleKind.HuntingGroundSelection));
             Assert.That(component.AvailableDestinations.Select(destination => destination.Id),
                 Does.Contain("jungle_moon"));
@@ -889,7 +894,7 @@ public sealed class YautjaHuntingGroundMapTest
             var resources = server.ResolveDependency<IResourceManager>();
 
             var selectionConsoles = prototypes.EnumeratePrototypes<EntityPrototype>()
-                .Where(proto => proto.TryGetComponent<YautjaHuntConsoleComponent>(out var component, factory) &&
+                .Where(proto => proto.TryComp<YautjaHuntConsoleComponent>(out var component, factory) &&
                                 component.Kind == YautjaHuntConsoleKind.HuntingGroundSelection)
                 .ToArray();
 
@@ -897,7 +902,7 @@ public sealed class YautjaHuntingGroundMapTest
 
             foreach (var console in selectionConsoles)
             {
-                Assert.That(console.TryGetComponent<YautjaHuntConsoleComponent>(out var component, factory), Is.True);
+                Assert.That(console.TryComp<YautjaHuntConsoleComponent>(out var component, factory), Is.True);
                 var destinations = component!.AvailableDestinations;
 
                 Assert.Multiple(() =>
@@ -1287,12 +1292,12 @@ public sealed class YautjaHuntingGroundMapTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            Assert.That(prototypes.HasIndex<EntityPrototype>("CMUYautjaYoungbloodLoadoutVendor"), Is.True);
+            Assert.That(prototypes.HasIndex<EntityPrototype>(CMUYautjaYoungbloodLoadoutVendorPrototype), Is.True);
 
             var youngWrapper = prototypes.Index<EntityPrototype>(
-                "CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLeftSouthOffset0x16");
+                CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLeftSouthOffset0x16Prototype);
             var adultWrapper = prototypes.Index<EntityPrototype>(
-                "CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthVariant02Offset0x16");
+                CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthVariant02Offset0x16Prototype);
 
             Assert.That(youngWrapper.Parents, Does.Contain("CMUYautjaYoungbloodLoadoutVendor"));
             Assert.That(adultWrapper.Parents, Does.Contain("CMUYautjaLoadoutVendor"));
@@ -1316,8 +1321,8 @@ public sealed class YautjaHuntingGroundMapTest
 
             var rackPrototypes = prototypes.EnumeratePrototypes<EntityPrototype>()
                 .Where(proto => !proto.Abstract &&
-                                proto.TryGetComponent<YautjaGearRackComponent>(out _, factory) &&
-                                proto.TryGetComponent<SpriteComponent>(out _, factory))
+                                proto.TryComp<YautjaGearRackComponent>(out _, factory) &&
+                                proto.TryComp<SpriteComponent>(out _, factory))
                 .ToArray();
 
             Assert.That(rackPrototypes, Is.Not.Empty);

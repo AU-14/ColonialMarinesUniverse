@@ -164,7 +164,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
     {
         if (args.User != null && HasComp<ScopingComponent>(args.User))
         {
-            _popup.PopupClient("You cannot use the night vision optic while using optics.",
+            _popup.PopupEntity("You cannot use the night vision optic while using optics.",
                 args.User.Value,
                 args.User,
                 PopupType.SmallCaution);
@@ -274,7 +274,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
 
         if (item.Comp.Skills != null && !_skills.HasAllSkills(user, item.Comp.Skills))
         {
-            _popup.PopupClient(Loc.GetString("rmc-skills-hud-toggle"), user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-skills-hud-toggle"), user, user, PopupType.MediumCaution);
             return;
         }
 

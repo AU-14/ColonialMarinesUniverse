@@ -124,13 +124,13 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
 
         if (ent.Comp.Queue.Count >= ent.Comp.MaxQueue)
         {
-            _popup.PopupClient(Loc.GetString("rmc-dropship-fabricator-queue-full"), actor, actor, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-dropship-fabricator-queue-full"), actor, actor, PopupType.SmallCaution);
             return;
         }
 
         if (printable.Cost > points.Points)
         {
-            _popup.PopupClient(Loc.GetString("rmc-dropship-fabricator-insufficient-points"), actor, actor, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-dropship-fabricator-insufficient-points"), actor, actor, PopupType.SmallCaution);
             return;
         }
 

@@ -61,7 +61,7 @@ public sealed class MohawkHijackTest
             targetMap = maps.CreateMap();
             var marker = entities.SpawnEntity(null, new EntityCoordinates(targetMap, targetPosition));
             entities.AddComponent<DropshipDestinationComponent>(marker);
-            var nav = entities.EntityQuery<DropshipNavigationComputerComponent>()
+            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .Single(c => entities.GetComponent<TransformComponent>(c.Owner).GridUid == ship);
             var dropship = entities.GetComponent<DropshipComponent>(ship);
             // Exercise the accepted hijack flight without the unrelated orbital
@@ -98,7 +98,7 @@ public sealed class MohawkHijackTest
             Assert.That(mechanisms.SetRampDeployed(ship, true, true), Is.False);
             Assert.That(mechanisms.SetHatchDeployed(ship, true, true), Is.False);
             Assert.That(entities.HasComponent<MohawkRampMovingComponent>(ship), Is.False);
-            Assert.That(entities.EntityQuery<MohawkRampSegmentComponent>().Any(c => c.Lower), Is.False);
+            Assert.That(entities.QueryEntities<MohawkRampSegmentComponent>().Any(c => c.Comp.Lower), Is.False);
             foreach (var point in entities.GetComponent<DropshipComponent>(ship).AttachmentPoints)
                 Assert.That(entities.GetComponent<TransformComponent>(point).GridUid, Is.EqualTo(ship));
         });

@@ -31,6 +31,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaPlaytestRegressionTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<StartingGearPrototype> CMUYautjaHunterGearPrototype = "CMUYautjaHunterGear";
+
     [Test]
     public async Task HunterPullsAMarineAtFullSpeed()
     {
@@ -356,7 +358,7 @@ public sealed class YautjaPlaytestRegressionTest
 
             bare = entMan.SpawnEntity("CMUMobYautja", new MapCoordinates(new System.Numerics.Vector2(0, 200), map.MapId));
             geared = entMan.SpawnEntity("CMUMobYautja", new MapCoordinates(new System.Numerics.Vector2(60, 200), map.MapId));
-            var gear = server.ResolveDependency<IPrototypeManager>().Index<StartingGearPrototype>("CMUYautjaHunterGear");
+            var gear = server.ResolveDependency<IPrototypeManager>().Index<StartingGearPrototype>(CMUYautjaHunterGearPrototype);
             entMan.System<StationSpawningSystem>().EquipStartingGear(geared, gear);
         });
         await pair.RunTicksSync(5);

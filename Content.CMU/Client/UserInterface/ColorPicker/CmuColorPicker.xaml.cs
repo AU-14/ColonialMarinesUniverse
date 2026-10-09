@@ -20,7 +20,7 @@ public sealed partial class CmuColorPicker : Control
     private const string ArrowCollapsed = "▼";
     private const string ArrowExpanded = "▲";
 
-    [Dependency] private readonly ILocalizationManager _localization = default!;
+    [Dependency] private ILocalizationManager _localization = default!;
 
     private Color _color = Color.White;
     private string? _paletteId;

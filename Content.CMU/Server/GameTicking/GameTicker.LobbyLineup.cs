@@ -87,7 +87,7 @@ public sealed partial class GameTicker
             "RadioTelephoneOperator" or "WeaponsSpecialist" or "DroneOperator"))
         {
             if (_prototypeManager.TryIndex(profile.SquadPreference, out var squad) &&
-                squad.TryGetComponent<SquadTeamComponent>(out var team, Factory) &&
+                squad.TryComp<SquadTeamComponent>(out var team, Factory) &&
                 (string.IsNullOrEmpty(force) || string.Equals(team.Group, force, StringComparison.OrdinalIgnoreCase)))
                 return (force + "/" + squad.ID, prefix + squad.Name, team.Color, 10);
 

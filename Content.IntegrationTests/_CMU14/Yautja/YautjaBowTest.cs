@@ -128,6 +128,25 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaBowTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaLanternPrototype = "CMUYautjaLantern";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMedicompPrototype = "CMUYautjaMedicomp";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaBracerIdChipPrototype = "CMUYautjaBracerIdChip";
+    private static readonly Robust.Shared.Prototypes.ProtoId<StackPrototype> CMUYautjaHealingGelPrototype = "CMUYautjaHealingGel";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMcasteHerbContainerPrototype = "CMUYautjaMcasteHerbContainer";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMcasteHerbContainerFilledPrototype = "CMUYautjaMcasteHerbContainerFilled";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaSoldierBracersPrototype = "CMUYautjaSoldierBracers";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaPoweredArmorPrototype = "CMUYautjaPoweredArmor";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaPoweredHelmetPrototype = "CMUYautjaPoweredHelmet";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaMilitaryEncryptionKeyPrototype = "CMUYautjaMilitaryEncryptionKey";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaCannonPackPrototype = "CMUYautjaCannonPack";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHuntingBowPrototype = "CMUYautjaHuntingBow";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaSnareArrowPrototype = "CMUYautjaSnareArrow";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaElderLoadoutVendorPrototype = "CMUYautjaElderLoadoutVendor";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> CMUYautjaPrototype = "CMUYautja";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaPlasmaCarbinePrototype = "CMUYautjaPlasmaCarbine";
+    private static readonly Robust.Shared.Prototypes.ProtoId<SoundCollectionPrototype> RMCFlamerFL3ShootPrototype = "RMCFlamerFL3Shoot";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaDualPlasmaCannonsPrototype = "CMUYautjaDualPlasmaCannons";
+
     // cmss13 puts pred weapons in suit storage through the armor's allowed list, ss14 needs the item to
     // list suitStorage too. these checks are about the native equip slot, so mask that extra one off
     private static SlotFlags NativeSlots(ClothingComponent clothing)
@@ -2572,21 +2591,21 @@ public sealed class YautjaBowTest
         {
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
-            var lanternPrototype = prototypes.Index<EntityPrototype>("CMUYautjaLantern");
+            var lanternPrototype = prototypes.Index<EntityPrototype>(CMUYautjaLanternPrototype);
 
-            Assert.That(lanternPrototype.TryGetComponent<SpriteComponent>(out var lanternSprite, factory), Is.True);
+            Assert.That(lanternPrototype.TryComp<SpriteComponent>(out var lanternSprite, factory), Is.True);
             Assert.That(lanternSprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/_RMC14/Objects/Tools/Light/lantern.rsi")));
             Assert.That(lanternSprite.AllLayers.Select(layer => layer.RsiState.Name).ToArray(),
                 Is.EqualTo(new[] { "lantern", "lantern-on" }));
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaHivebreaker", "CMU14/Yautja/yautja_items.rsi", "emitter-xeno");
 
-            var medicompPrototype = prototypes.Index<EntityPrototype>("CMUYautjaMedicomp");
-            Assert.That(medicompPrototype.TryGetComponent<SpriteComponent>(out var medicompSprite, factory), Is.True);
+            var medicompPrototype = prototypes.Index<EntityPrototype>(CMUYautjaMedicompPrototype);
+            Assert.That(medicompPrototype.TryComp<SpriteComponent>(out var medicompSprite, factory), Is.True);
             Assert.That(
                 medicompSprite!.AllLayers.Select(layer => layer.RsiState.Name).ToArray(),
                 Is.EqualTo(new[] { "medicomp", "medicomp", "medicomp_open" }),
                 "CMSS13 /obj/item/storage/medicomp/update_icon() uses medicomp_open only when contents are empty and medicomp otherwise.");
-            Assert.That(medicompPrototype.TryGetComponent<CMStorageVisualizerComponent>(out var medicompVisuals, factory), Is.True,
+            Assert.That(medicompPrototype.TryComp<CMStorageVisualizerComponent>(out var medicompVisuals, factory), Is.True,
                 "Local medicomp should map CMSS13 update_icon() through contents-based storage visuals.");
             Assert.That(medicompVisuals!.StorageClosed, Is.EqualTo("closedLayer"));
             Assert.That(medicompVisuals.StorageOpen, Is.EqualTo("openLayer"));
@@ -2926,7 +2945,7 @@ public sealed class YautjaBowTest
             try
             {
                 var idChip = SpawnAndTrack(entMan, "CMUYautjaBracerIdChip", spawned);
-                var idPrototype = prototypes.Index<EntityPrototype>("CMUYautjaBracerIdChip");
+                var idPrototype = prototypes.Index<EntityPrototype>(CMUYautjaBracerIdChipPrototype);
                 var idItem = entMan.GetComponent<ItemComponent>(idChip);
                 var idAccess = entMan.GetComponent<AccessComponent>(idChip);
 
@@ -3076,7 +3095,7 @@ public sealed class YautjaBowTest
                     Assert.That(metadata.EntityDescription, Is.EqualTo("Used for reloading the healing gun."));
                     Assert.That(entMan.HasComponent<YautjaHealingCapsuleComponent>(spawned), Is.True);
                     Assert.That(entMan.HasComponent<StackComponent>(spawned), Is.False);
-                    Assert.That(prototypes.HasIndex<StackPrototype>("CMUYautjaHealingGel"), Is.False);
+                    Assert.That(prototypes.HasIndex<StackPrototype>(CMUYautjaHealingGelPrototype), Is.False);
                 });
             });
         }
@@ -3202,7 +3221,7 @@ public sealed class YautjaBowTest
                             AssertNonCorrodible(entMan, uid);
                     }
 
-                    if (prototypes.HasIndex<EntityPrototype>("CMUYautjaMcasteHerbContainer"))
+                    if (prototypes.HasIndex<EntityPrototype>(CMUYautjaMcasteHerbContainerPrototype))
                     {
                         var herbCase = entMan.GetComponent<StorageComponent>(SpawnAndTrack(entMan, "CMUYautjaMcasteHerbContainer", spawned));
                         Assert.That(herbCase.Grid.GetArea(), Is.EqualTo(4),
@@ -3213,7 +3232,7 @@ public sealed class YautjaBowTest
                             "Local predator bruise packs and ointments share the CMUYautjaHerbalMedicine tag.");
                     }
 
-                    if (prototypes.HasIndex<EntityPrototype>("CMUYautjaMcasteHerbContainerFilled"))
+                    if (prototypes.HasIndex<EntityPrototype>(CMUYautjaMcasteHerbContainerFilledPrototype))
                     {
                         var filledHerbs = entMan.GetComponent<StorageFillComponent>(SpawnAndTrack(entMan, "CMUYautjaMcasteHerbContainerFilled", spawned));
                         AssertStorageFill(filledHerbs, new Dictionary<string, int>
@@ -3223,7 +3242,7 @@ public sealed class YautjaBowTest
                         });
                     }
 
-                    if (prototypes.HasIndex<EntityPrototype>("CMUYautjaSoldierBracers"))
+                    if (prototypes.HasIndex<EntityPrototype>(CMUYautjaSoldierBracersPrototype))
                     {
                         var hunter = SpawnAndTrack(entMan, "CMMobHuman", spawned);
                         entMan.EnsureComponent<YautjaComponent>(hunter);
@@ -3242,7 +3261,7 @@ public sealed class YautjaBowTest
                         }), "CMSS13 soldier bracer replaces the inherited bracer_actions list instead of keeping normal hunter bracer actions.");
                     }
 
-                    if (prototypes.HasIndex<EntityPrototype>("CMUYautjaPoweredArmor"))
+                    if (prototypes.HasIndex<EntityPrototype>(CMUYautjaPoweredArmorPrototype))
                     {
                         var poweredArmor = SpawnAndTrack(entMan, "CMUYautjaPoweredArmor", spawned);
                         var speedTier = entMan.GetComponent<RMCArmorSpeedTierComponent>(poweredArmor);
@@ -3255,7 +3274,7 @@ public sealed class YautjaBowTest
                             "Local SLOWDOWN_ARMOR_LOWHEAVY mapping.");
                     }
 
-                    if (prototypes.HasIndex<EntityPrototype>("CMUYautjaPoweredHelmet"))
+                    if (prototypes.HasIndex<EntityPrototype>(CMUYautjaPoweredHelmetPrototype))
                     {
                         var poweredHelmet = SpawnAndTrack(entMan, "CMUYautjaPoweredHelmet", spawned);
                         var resistance = entMan.GetComponent<ParasiteResistanceComponent>(poweredHelmet);
@@ -3272,7 +3291,7 @@ public sealed class YautjaBowTest
                             "CMSS13 powered helmet toggle_zoom() calls zoom(usr, 11, 12).");
                     }
 
-                    if (prototypes.HasIndex<EntityPrototype>("CMUYautjaMilitaryEncryptionKey"))
+                    if (prototypes.HasIndex<EntityPrototype>(CMUYautjaMilitaryEncryptionKeyPrototype))
                     {
                         var encryptionKey = SpawnAndTrack(entMan, "CMUYautjaMilitaryEncryptionKey", spawned);
                         var key = entMan.GetComponent<EncryptionKeyComponent>(encryptionKey);
@@ -3282,7 +3301,7 @@ public sealed class YautjaBowTest
                             "Military communicator should default to the military Yautja channel.");
                     }
 
-                    if (prototypes.HasIndex<EntityPrototype>("CMUYautjaCannonPack"))
+                    if (prototypes.HasIndex<EntityPrototype>(CMUYautjaCannonPackPrototype))
                     {
                         var cannonPack = SpawnAndTrack(entMan, "CMUYautjaCannonPack", spawned);
                         var pack = entMan.GetComponent<YautjaCannonPackComponent>(cannonPack);
@@ -6142,8 +6161,8 @@ public sealed class YautjaBowTest
             var factory = client.EntMan.ComponentFactory;
             var rsiPath = new ResPath("/Textures/CMU14/Yautja/bow.rsi");
 
-            var prototype = prototypes.Index<EntityPrototype>("CMUYautjaHuntingBow");
-            Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
+            var prototype = prototypes.Index<EntityPrototype>(CMUYautjaHuntingBowPrototype);
+            Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True);
             Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(rsiPath),
                 "The Yautja hunting bow should use the imported CMSS13 bow.dmi RSI instead of the generic local bow art.");
 
@@ -6166,8 +6185,8 @@ public sealed class YautjaBowTest
                     $"CMSS13 /obj/item/weapon/gun/bow/update_icon() can select literal {state} visuals.");
             }
 
-            var snarePrototype = prototypes.Index<EntityPrototype>("CMUYautjaSnareArrow");
-            Assert.That(snarePrototype.TryGetComponent<SpriteComponent>(out var snareSprite, factory), Is.True);
+            var snarePrototype = prototypes.Index<EntityPrototype>(CMUYautjaSnareArrowPrototype);
+            Assert.That(snarePrototype.TryComp<SpriteComponent>(out var snareSprite, factory), Is.True);
             var snareTrapLayer = snareSprite!.AllLayers.Single(layer => layer.RsiState.Name == "arrow_trap_active");
             Assert.That(snareTrapLayer.Rsi?.Path, Is.EqualTo(rsiPath),
                 "CMSS13 snare arrows should use the literal bow.dmi trap-active state instead of the generic local hunting-trap overlay.");
@@ -7523,12 +7542,12 @@ public sealed class YautjaBowTest
             {
                 Assert.That(prototype.Name, Is.EqualTo(row.SourceName), $"{row.SourceType} name");
                 Assert.That(prototype.Description, Is.EqualTo(row.SourceDescription), $"{row.SourceType} description");
-                Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, $"{row.SourceType} sprite");
+                Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, $"{row.SourceType} sprite");
                 Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/HunterShip/obj/items/hunter/pred_vendor.rsi")),
                     $"{row.SourceType} imports CMSS13 pred_vendor.dmi");
                 Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo(row.InitialIconState),
                     $"{row.SourceType} initial icon_state");
-                Assert.That(prototype.TryGetComponent<IconComponent>(out var icon, factory), Is.True, $"{row.SourceType} icon");
+                Assert.That(prototype.TryComp<IconComponent>(out var icon, factory), Is.True, $"{row.SourceType} icon");
                 var rsiIcon = (SpriteSpecifier.Rsi) icon!.Icon;
                 Assert.That(rsiIcon.RsiState, Is.EqualTo(row.InitialIconState), $"{row.SourceType} icon state");
             });
@@ -7992,9 +8011,9 @@ public sealed class YautjaBowTest
 
             var falconPrototype = prototypes.Index<EntityPrototype>(badBloodFalcon);
             var deployedPrototype = prototypes.Index<EntityPrototype>(badBloodFalconDeployed);
-            Assert.That(falconPrototype.TryGetComponent<SpriteComponent>(out var falconSprite, factory), Is.True);
+            Assert.That(falconPrototype.TryComp<SpriteComponent>(out var falconSprite, factory), Is.True);
             Assert.That(falconSprite!.AllLayers.First().RsiState.Name, Is.EqualTo("falcon_drone_badblood"));
-            Assert.That(deployedPrototype.TryGetComponent<SpriteComponent>(out var deployedSprite, factory), Is.True);
+            Assert.That(deployedPrototype.TryComp<SpriteComponent>(out var deployedSprite, factory), Is.True);
             Assert.That(deployedSprite!.AllLayers.First().RsiState.Name, Is.EqualTo("falcon_drone_badblood_active"));
         });
 
@@ -8120,7 +8139,7 @@ public sealed class YautjaBowTest
             var entMan = server.EntMan;
             var prototypes = server.ResolveDependency<IPrototypeManager>();
 
-            Assert.That(prototypes.HasIndex<EntityPrototype>("CMUYautjaElderLoadoutVendor"), Is.True,
+            Assert.That(prototypes.HasIndex<EntityPrototype>(CMUYautjaElderLoadoutVendorPrototype), Is.True,
                 "CMSS13 has a dedicated cm_vending_elder_yautja product list.");
 
             var rack = entMan.SpawnEntity("CMUYautjaElderLoadoutVendor", MapCoordinates.Nullspace);
@@ -8351,7 +8370,7 @@ public sealed class YautjaBowTest
             var entMan = server.EntMan;
             var prototypes = server.ResolveDependency<IPrototypeManager>();
 
-            Assert.That(prototypes.HasIndex<EntityPrototype>("CMUYautjaElderLoadoutVendor"), Is.True,
+            Assert.That(prototypes.HasIndex<EntityPrototype>(CMUYautjaElderLoadoutVendorPrototype), Is.True,
                 "CMSS13 has a dedicated cm_vending_elder_yautja product list.");
 
             var rack = entMan.SpawnEntity("CMUYautjaElderLoadoutVendor", MapCoordinates.Nullspace);
@@ -9445,7 +9464,7 @@ public sealed class YautjaBowTest
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
                 BindRecallable(entMan, disc, hunter);
-                faction.AddFaction((friendlyNonYautja, null), "CMUYautja");
+                faction.AddFaction((friendlyNonYautja, null), CMUYautjaPrototype);
                 entMan.System<MobStateSystem>().ChangeMobState(deadPrey, MobState.Dead);
 
                 Assert.That(toggle.TrySetActive((disc, null), true, hunter, false), Is.True);
@@ -12321,9 +12340,9 @@ public sealed class YautjaBowTest
         {
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
-            var prototype = prototypes.Index<EntityPrototype>("CMUYautjaPlasmaCarbine");
+            var prototype = prototypes.Index<EntityPrototype>(CMUYautjaPlasmaCarbinePrototype);
 
-            Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
+            Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True);
             Assert.Multiple(() =>
             {
                 Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/pred_guns.rsi")),
@@ -12808,7 +12827,7 @@ public sealed class YautjaBowTest
                 var flamer = entMan.GetComponent<RMCFlamerAmmoProviderComponent>(defoliator);
                 var slots = entMan.GetComponent<ItemSlotsComponent>(defoliator).Slots["gun_magazine"];
                 var igniter = entMan.GetComponent<RMCIgniterComponent>(defoliator);
-                var fl3 = protoMan.Index<SoundCollectionPrototype>("RMCFlamerFL3Shoot");
+                var fl3 = protoMan.Index<SoundCollectionPrototype>(RMCFlamerFL3ShootPrototype);
                 var files = fl3.PickFiles.Select(path => path.ToString()).ToList();
 
                 Assert.Multiple(() =>
@@ -13012,9 +13031,9 @@ public sealed class YautjaBowTest
         {
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
-            var prototype = prototypes.Index<EntityPrototype>("CMUYautjaDualPlasmaCannons");
+            var prototype = prototypes.Index<EntityPrototype>(CMUYautjaDualPlasmaCannonsPrototype);
 
-            Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
+            Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True);
             Assert.Multiple(() =>
             {
                 Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/mcaste_gear.rsi")),
@@ -13635,7 +13654,7 @@ public sealed class YautjaBowTest
                 {
                     var prototype = prototypes.Index<EntityPrototype>(id);
 
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, id);
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(spritePath), $"{id} world sprite RSI");
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("icon"), $"{id} world icon state");
                     Assert.That(sprite.Color, Is.EqualTo(Color.FromHex("#654321")), $"{id} CMSS13 default cape color");
@@ -14202,7 +14221,7 @@ public sealed class YautjaBowTest
             try
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
-                entMan.GetComponent<TransformComponent>(hunter).LocalRotation = Angle.Zero;
+                entMan.System<SharedTransformSystem>().SetLocalRotation(hunter, Angle.Zero);
 
                 var userDamage = entMan.GetComponent<DamageableComponent>(hunter);
                 var weaponDamage = entMan.GetComponent<DamageableComponent>(combistick);
@@ -14296,7 +14315,7 @@ public sealed class YautjaBowTest
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
                 entMan.EnsureComponent<ProjectileComponent>(projectile);
-                entMan.GetComponent<TransformComponent>(hunter).LocalRotation = Angle.Zero;
+                entMan.System<SharedTransformSystem>().SetLocalRotation(hunter, Angle.Zero);
 
                 var userDamage = entMan.GetComponent<DamageableComponent>(hunter);
                 var weaponDamage = entMan.GetComponent<DamageableComponent>(combistick);
@@ -14530,7 +14549,7 @@ public sealed class YautjaBowTest
             {
                 entMan.EnsureComponent<YautjaComponent>(hunter);
 
-                entMan.GetComponent<TransformComponent>(hunter).LocalRotation = Angle.Zero;
+                entMan.System<SharedTransformSystem>().SetLocalRotation(hunter, Angle.Zero);
                 var userDamage = entMan.GetComponent<DamageableComponent>(hunter);
                 var shieldDamage = entMan.GetComponent<DamageableComponent>(shield);
                 var incoming = new DamageSpecifier { DamageDict = { ["Blunt"] = 10 } };
@@ -15988,7 +16007,7 @@ public sealed class YautjaBowTest
     {
         var prototype = prototypes.Index<EntityPrototype>(id);
 
-        Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
+        Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, id);
         Assert.Multiple(() =>
         {
             Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/pred_guns.rsi")),
@@ -16005,7 +16024,7 @@ public sealed class YautjaBowTest
     {
         var prototype = prototypes.Index<EntityPrototype>(id);
 
-        Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
+        Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, id);
         Assert.Multiple(() =>
         {
             Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/pred_gun_ammo.rsi")),
@@ -16219,7 +16238,7 @@ public sealed class YautjaBowTest
     {
         var prototype = prototypes.Index<EntityPrototype>(id);
 
-        Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
+        Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, id);
         Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/" + spritePath)), $"{id} world sprite RSI");
         Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo(state), $"{id} world icon state");
     }
@@ -16233,7 +16252,7 @@ public sealed class YautjaBowTest
     {
         var prototype = prototypes.Index<EntityPrototype>(id);
 
-        Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, id);
+        Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, id);
 #pragma warning disable RA0002
         Assert.That(clothing!.ClothingVisuals.TryGetValue(slot, out var layers), Is.True,
             $"{id} must define clothing visuals for {slot}.");
@@ -19091,8 +19110,8 @@ public sealed class YautjaBowTest
         var factory = IoCManager.Resolve<IComponentFactory>();
         var expected = prototypes.Index<EntityPrototype>(visualPrototype);
 
-        Assert.That(expected.TryGetComponent<ItemComponent>(out var expectedItem, factory), Is.True, $"{visualPrototype} has item visuals");
-        Assert.That(expected.TryGetComponent<ClothingComponent>(out var expectedClothing, factory), Is.True, $"{visualPrototype} has clothing visuals");
+        Assert.That(expected.TryComp<ItemComponent>(out var expectedItem, factory), Is.True, $"{visualPrototype} has item visuals");
+        Assert.That(expected.TryComp<ClothingComponent>(out var expectedClothing, factory), Is.True, $"{visualPrototype} has clothing visuals");
 
         var actualItem = entMan.GetComponent<ItemComponent>(item.Value);
         var actualClothing = entMan.GetComponent<ClothingComponent>(item.Value);
@@ -19119,8 +19138,8 @@ public sealed class YautjaBowTest
         var factory = IoCManager.Resolve<IComponentFactory>();
         var expected = prototypes.Index<EntityPrototype>(visualPrototype);
 
-        Assert.That(expected.TryGetComponent<ItemComponent>(out var expectedItem, factory), Is.True, $"{visualPrototype} has item visuals");
-        Assert.That(expected.TryGetComponent<ClothingComponent>(out var expectedClothing, factory), Is.True, $"{visualPrototype} has clothing visuals");
+        Assert.That(expected.TryComp<ItemComponent>(out var expectedItem, factory), Is.True, $"{visualPrototype} has item visuals");
+        Assert.That(expected.TryComp<ClothingComponent>(out var expectedClothing, factory), Is.True, $"{visualPrototype} has clothing visuals");
 
         var actualItem = entMan.GetComponent<ItemComponent>(item.Value);
         var actualClothing = entMan.GetComponent<ClothingComponent>(item.Value);
@@ -19374,7 +19393,7 @@ public sealed class YautjaBowTest
     {
         var prototype = prototypes.Index<EntityPrototype>(row.Id);
 
-        Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
+        Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
         Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath(row.SpritePath)),
             $"{row.Id} {row.SourcePath} world sprite RSI local mapping");
         Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo(row.SpriteState),

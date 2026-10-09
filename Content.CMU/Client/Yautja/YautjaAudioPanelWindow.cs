@@ -108,7 +108,7 @@ public sealed class YautjaAudioPanelWindow : DefaultWindow
 
     private void RebuildTabs(IReadOnlyList<string> categories)
     {
-        _tabs.DisposeAllChildren();
+        _tabs.ReleaseChildren();
         foreach (var category in categories)
         {
             var selected = category == _selectedCategory;
@@ -135,7 +135,7 @@ public sealed class YautjaAudioPanelWindow : DefaultWindow
 
     private void RebuildEntries()
     {
-        _entries.DisposeAllChildren();
+        _entries.ReleaseChildren();
         if (_state == null || _selectedCategory == null)
             return;
 

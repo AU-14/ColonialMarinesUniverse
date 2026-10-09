@@ -172,7 +172,7 @@ public sealed partial class LobbyPartyShowControl : Control
             return;
         _sounds.RemoveAll(uid => _entities.Deleted(uid));
         var path = file.StartsWith('/') ? file : "/Audio/CMU14/Fighter/" + file;
-        if (_entities.System<AudioSystem>().PlayGlobal(path,
+        if (_entities.System<AudioSystem>().PlayGlobal(new ResolvedPathSpecifier(path),
                 Filter.Local(), false, AudioParams.Default.WithVolume(volume)) is { } stream)
             _sounds.Add(stream.Entity);
     }
@@ -213,7 +213,7 @@ public sealed partial class LobbyPartyShowControl : Control
         UserInterfaceManager.DeferAction(() =>
         {
             Orphan();
-            Dispose();
+            this.Release();
         });
     }
 

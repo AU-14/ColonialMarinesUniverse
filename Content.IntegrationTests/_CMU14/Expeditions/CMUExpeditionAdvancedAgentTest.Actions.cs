@@ -21,6 +21,8 @@ namespace Content.IntegrationTests._CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAdvancedAgentTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> CMUExpeditionHostilePrototype = "CMUExpeditionHostile";
+
     [Test]
     public async Task ReloadIsInterruptibleConsumesActualMagazinesAndRunsOut()
     {
@@ -85,7 +87,7 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             contact = SEntMan.GetComponent<TransformComponent>(enemy).Coordinates;
             second = SEntMan.SpawnEntity("CMMobHuman", contact.Offset(new Vector2(0, -1)));
             SEntMan.AddComponent<GodmodeComponent>(second);
-            Server.System<NpcFactionSystem>().AddFaction(second, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(second, GOVFORPrototype);
             grenade = Stored(guard).Single(item => SEntMan.TryGetComponent<CMUExpeditionGrenadeComponent>(item, out var kind) && !kind.Smoke);
         });
         await Pair.RunSeconds(0.3f);
@@ -93,7 +95,7 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
         {
             Assert.That(SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State, Is.EqualTo(CMUExpeditionAgentState.Throwing));
             ally = SEntMan.SpawnEntity("CMMobHuman", SEntMan.GetComponent<TransformComponent>(enemy).Coordinates.Offset(new Vector2(0, -2)));
-            Server.System<NpcFactionSystem>().AddFaction(ally, "CMUExpeditionHostile");
+            Server.System<NpcFactionSystem>().AddFaction(ally, CMUExpeditionHostilePrototype);
         });
         await Pair.RunSeconds(1);
         await Server.WaitAssertion(() =>
@@ -117,7 +119,7 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             {
                 var hostile = SEntMan.SpawnEntity("CMMobHuman", contact.Offset(offset));
                 SEntMan.AddComponent<GodmodeComponent>(hostile);
-                Server.System<NpcFactionSystem>().AddFaction(hostile, "GOVFOR");
+                Server.System<NpcFactionSystem>().AddFaction(hostile, GOVFORPrototype);
             }
         });
         var thrown = false;
@@ -169,7 +171,7 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
                 SEntMan.GetComponent<TransformComponent>(arena.Enemy).Coordinates.Offset(new Vector2(0, -1)));
             SEntMan.AddComponent<GodmodeComponent>(second);
             SEntMan.RemoveComponent<StunOnExplosionReceivedComponent>(second);
-            Server.System<NpcFactionSystem>().AddFaction(second, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(second, GOVFORPrototype);
         });
         for (var sample = 0; sample < 150; sample++)
         {

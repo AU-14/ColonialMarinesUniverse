@@ -6,7 +6,7 @@ using Content.Shared.CMU14.Administration;
 
 namespace Content.Server.CMU14.Administration;
 
-public sealed class CMUAdminTabletSystem : EntitySystem
+public sealed partial class CMUAdminTabletSystem : EntitySystem
 {
     [Dependency] private RMCAlertLevelSystem _alertLevel = default!;
     [Dependency] private SharedMarineControlComputerSystem _control = default!;

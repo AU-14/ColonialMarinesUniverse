@@ -508,7 +508,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         ExpireMeleeMemory(agent, now);
         foreach (var hostile in ExpeditionHostiles(uid, agent))
         {
-            if (!CombatTargetAlive(hostile) || !TryComp<TransformComponent>(hostile, out var targetTransform) ||
+            if (!CombatTargetAlive(hostile) || !TryComp(hostile, out TransformComponent? targetTransform) ||
                 targetTransform.MapID != transform.MapID || !Visible(uid, hostile, agent.DetectionRange))
                 continue;
             agent.VisibleThreats.Add(targetTransform.Coordinates);
@@ -886,8 +886,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     private bool Visible(EntityUid observer, EntityUid target, float range) =>
         // Remembered contacts can be deleted between decisions (gibbing, evolution, disconnects).
-        TryComp<TransformComponent>(observer, out var observerTransform) &&
-        TryComp<TransformComponent>(target, out var targetTransform) &&
+        TryComp(observer, out TransformComponent? observerTransform) &&
+        TryComp(target, out TransformComponent? targetTransform) &&
         _interaction.InRangeUnobstructed((observer, observerTransform), (target, targetTransform), range,
             CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
             predicate: entity => entity == observer || entity == target || HasComp<NpcFactionMemberComponent>(entity) ||

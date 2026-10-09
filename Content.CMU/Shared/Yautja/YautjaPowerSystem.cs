@@ -284,7 +284,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
 
         if (action.Comp.RequireMask && !HasActiveMask(args.User))
         {
-            _popup.PopupClient(Loc.GetString("cmu-yautja-mask-required"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-mask-required"), args.User, args.User, PopupType.SmallCaution);
             args.Cancelled = true;
             return;
         }
@@ -464,7 +464,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
     {
         if (_net.IsClient || !popupOnServer)
         {
-            _popup.PopupClient(message, user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(message, user, user, PopupType.MediumCaution);
             return;
         }
 

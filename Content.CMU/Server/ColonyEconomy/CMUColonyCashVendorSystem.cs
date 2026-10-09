@@ -13,7 +13,7 @@ namespace Content.Server.CMU14.ColonyEconomy;
 /// food, drink, cigarette, recreation and clothing vendors on the planet for cash-operated CMU versions.
 /// Ships keep the free ones, since marines don't carry cash.
 /// </summary>
-public sealed class CMUColonyCashVendorSystem : EntitySystem
+public sealed partial class CMUColonyCashVendorSystem : EntitySystem
 {
     [Dependency] private SharedTransformSystem _transform = default!;
 

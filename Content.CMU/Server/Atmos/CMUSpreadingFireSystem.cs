@@ -26,13 +26,13 @@ namespace Content.Server.CMU14.Atmos;
 /// </summary>
 public sealed partial class CMUSpreadingFireSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
-    [Dependency] private readonly SharedRMCFlammableSystem _flammable = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private SharedRMCFlammableSystem _flammable = default!;
 
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";

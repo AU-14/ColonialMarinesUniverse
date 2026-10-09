@@ -23,6 +23,8 @@ namespace Content.IntegrationTests.Tests.Station;
 [TestOf(typeof(StationJobsSystem))]
 public sealed class StationJobsMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> ForceOnForcePrototype = "ForceOnForce";
+
     private const string MapId = "StationJobsMergeMap";
     private static readonly ProtoId<JobPrototype> AegisResearcher = "CMUJobAegisResearcher";
     private static readonly ProtoId<JobPrototype> Govfor = "AU14JobGOVFORSquadRifleman";
@@ -91,7 +93,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         var forced = Server.System<AuJobSelectionSystem>();
         var ticker = Server.System<GameTicker>();
         var map = SProtoMan.Index<GameMapPrototype>(MapId);
-        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype);
         var originalCurrentPreset = ticker.CurrentPreset;
 
         EntityUid station = default;
@@ -259,7 +261,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         {
             await Server.WaitAssertion(() =>
             {
-                SetCurrentPreset(ticker, SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SetCurrentPreset(ticker, SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
                 var flexible = jobs.AssignJobs(profiles, [station]);
                 Assert.That(flexible, Has.Count.EqualTo(6));
                 Assert.That(flexible.Values.Count(v => v.Item1 == Govfor), Is.EqualTo(3));
@@ -291,7 +293,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         var stations = Server.System<StationSystem>();
         var ticker = Server.System<GameTicker>();
         var map = SProtoMan.Index<GameMapPrototype>(MapId);
-        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype);
         var originalCurrentPreset = ticker.CurrentPreset;
 
         EntityUid station = default;
@@ -334,7 +336,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         var stations = Server.System<StationSystem>();
         var ticker = Server.System<GameTicker>();
         var map = SProtoMan.Index<GameMapPrototype>(MapId);
-        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype);
         var originalCurrentPreset = ticker.CurrentPreset;
 
         EntityUid station = default;
@@ -377,7 +379,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         var stations = Server.System<StationSystem>();
         var ticker = Server.System<GameTicker>();
         var map = SProtoMan.Index<GameMapPrototype>(MapId);
-        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype);
         var originalCurrentPreset = ticker.CurrentPreset;
 
         EntityUid station = default;
@@ -421,7 +423,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
         var stations = Server.System<StationSystem>();
         var ticker = Server.System<GameTicker>();
         var map = SProtoMan.Index<GameMapPrototype>(MapId);
-        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype);
         var originalCurrentPreset = ticker.CurrentPreset;
 
         EntityUid station = default;

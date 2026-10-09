@@ -133,7 +133,7 @@ public sealed class ANPRCSideKeyingTest
                 foreach (var id in catalogs)
                 {
                     Assert.That(protoMan.Index<EntityPrototype>(id)
-                        .TryGetComponent(out RequisitionsComputerComponent? asrs, factory), id);
+                        .TryComp(out RequisitionsComputerComponent? asrs, factory), id);
                     var crates = asrs!.Categories.SelectMany(c => c.Entries).Select(e => e.Crate.Id).ToList();
 
                     Assert.That(crates, Does.Contain("ANPRCFillCardResupplyCrate"), id);
@@ -144,7 +144,7 @@ public sealed class ANPRCSideKeyingTest
                 foreach (var id in vendors)
                 {
                     Assert.That(protoMan.Index<EntityPrototype>(id)
-                        .TryGetComponent(out CMAutomatedVendorComponent? vendor, factory), id);
+                        .TryComp(out CMAutomatedVendorComponent? vendor, factory), id);
                     var stock = vendor!.Sections.SelectMany(s => s.Entries).Select(e => e.Id.Id).ToList();
 
                     Assert.That(stock, Does.Contain(IssuedRadio), id);
@@ -177,7 +177,7 @@ public sealed class ANPRCSideKeyingTest
             {
                 foreach (var proto in protoMan.EnumeratePrototypes<EntityPrototype>())
                 {
-                    if (proto.Abstract || !proto.TryGetComponent(out CMAutomatedVendorComponent? vendor, factory))
+                    if (proto.Abstract || !proto.TryComp(out CMAutomatedVendorComponent? vendor, factory))
                         continue;
 
                     var stock = vendor!.Sections.SelectMany(s => s.Entries).Select(e => e.Id.Id).ToList();

@@ -72,7 +72,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 if (Math.Abs(indices.X - fire.X) <= 3 && Math.Abs(indices.Y - fire.Y) <= 3)
                     return false;
         }
-        var anchored = _maps.GetAnchoredEntitiesEnumerator(point.EntityId, grid, indices);
+        var anchored = _maps.GetAnchoredEntities(point.EntityId, grid, indices);
         while (anchored.MoveNext(out var entity))
             if (HasComp<TileFireComponent>(entity) || HasComp<XenoAcidSplatterComponent>(entity) ||
                 HasComp<XenoDespoilerLingeringAcidComponent>(entity) || HasComp<XenoDespoilerAcidSprayComponent>(entity))

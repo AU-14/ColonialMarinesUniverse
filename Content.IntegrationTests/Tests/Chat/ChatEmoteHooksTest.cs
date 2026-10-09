@@ -375,7 +375,7 @@ public sealed class ChatEmoteHooksTest : GameTest
 
     private int AttachedAudioCount(EntityUid source)
     {
-        return CEntMan.EntityQuery<AudioComponent>()
+        return CEntMan.QueryEntities<AudioComponent>()
             .Count(audio => CEntMan.GetComponent<TransformComponent>(audio.Owner).ParentUid == source);
     }
 

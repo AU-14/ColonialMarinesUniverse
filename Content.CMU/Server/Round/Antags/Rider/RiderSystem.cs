@@ -80,41 +80,53 @@ namespace Content.Server.CMU14.Round.Antags.Rider;
 /// </summary>
 public sealed partial class RiderSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IAdminManager _admin = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IConfigurationManager _config = default!;
-    [Dependency] private readonly INetManager _netMan = default!;
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionHostResistPrototype = "ActionHostResist";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderCoaxPrototype = "ActionRiderCoax";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderExitPrototype = "ActionRiderExit";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderLatchPrototype = "ActionRiderLatch";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderManifestPrototype = "ActionRiderManifest";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderMutePrototype = "ActionRiderMute";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderPunishPrototype = "ActionRiderPunish";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderSeizePrototype = "ActionRiderSeize";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderSurgePrototype = "ActionRiderSurge";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderSustainPrototype = "ActionRiderSustain";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderWithdrawPrototype = "ActionRiderWithdraw";
 
-    [Dependency] private readonly SharedCMChatSystem _chat = default!;
-    [Dependency] private readonly ChatSystem _say = default!;
-    [Dependency] private readonly LanguageSystem _language = default!;
-    [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
-    [Dependency] private readonly ActionBlockerSystem _blocker = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly DoAfterSystem _doAfter = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly AlertsSystem _alerts = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedStaminaSystem _stamina = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly SharedTransformSystem _xform = default!;
-    [Dependency] private readonly SharedPainShockSystem _pain = default!;
-    [Dependency] private readonly VisibilitySystem _visibility = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly EuiManager _eui = default!;
-    [Dependency] private readonly DialogSystem _dialog = default!;
-    [Dependency] private readonly RMCMapSystem _rmcMap = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IAdminManager _admin = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IPlayerManager _players = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private INetManager _netMan = default!;
+
+    [Dependency] private SharedCMChatSystem _chat = default!;
+    [Dependency] private ChatSystem _say = default!;
+    [Dependency] private LanguageSystem _language = default!;
+    [Dependency] private SharedCombatModeSystem _combatMode = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private DoAfterSystem _doAfter = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedStaminaSystem _stamina = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SharedPainShockSystem _pain = default!;
+    [Dependency] private VisibilitySystem _visibility = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private EuiManager _eui = default!;
+    [Dependency] private DialogSystem _dialog = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
 
     private const string RiderContainerSlot = "rider_hatchling_slot";
     private static readonly ProtoId<DamageTypePrototype> PunishDamage = "Blunt";
@@ -202,15 +214,15 @@ public sealed partial class RiderSystem : EntitySystem
 
     private void OnHatchlingStartup(Entity<RiderComponent> ent, ref ComponentStartup args)
     {
-        _actions.AddAction(ent, ref ent.Comp.LatchAction, "ActionRiderLatch");
-        _actions.AddAction(ent, ref ent.Comp.PunishAction, "ActionRiderPunish");
-        _actions.AddAction(ent, ref ent.Comp.SeizeAction, "ActionRiderSeize");
-        _actions.AddAction(ent, ref ent.Comp.ExitAction, "ActionRiderExit");
-        _actions.AddAction(ent, ref ent.Comp.SurgeAction, "ActionRiderSurge");
-        _actions.AddAction(ent, ref ent.Comp.CoaxAction, "ActionRiderCoax");
-        _actions.AddAction(ent, ref ent.Comp.SustainAction, "ActionRiderSustain");
-        _actions.AddAction(ent, ref ent.Comp.MuteAction, "ActionRiderMute");
-        _actions.AddAction(ent, ref ent.Comp.ManifestAction, "ActionRiderManifest");
+        _actions.AddAction(ent, ref ent.Comp.LatchAction, ActionRiderLatchPrototype);
+        _actions.AddAction(ent, ref ent.Comp.PunishAction, ActionRiderPunishPrototype);
+        _actions.AddAction(ent, ref ent.Comp.SeizeAction, ActionRiderSeizePrototype);
+        _actions.AddAction(ent, ref ent.Comp.ExitAction, ActionRiderExitPrototype);
+        _actions.AddAction(ent, ref ent.Comp.SurgeAction, ActionRiderSurgePrototype);
+        _actions.AddAction(ent, ref ent.Comp.CoaxAction, ActionRiderCoaxPrototype);
+        _actions.AddAction(ent, ref ent.Comp.SustainAction, ActionRiderSustainPrototype);
+        _actions.AddAction(ent, ref ent.Comp.MuteAction, ActionRiderMutePrototype);
+        _actions.AddAction(ent, ref ent.Comp.ManifestAction, ActionRiderManifestPrototype);
         ent.Comp.NextCrawlResidueAt = _timing.CurTime + TimeSpan.FromSeconds(8);
         ent.Comp.NextChoirAt = _timing.CurTime + TimeSpan.FromSeconds(30);
         ent.Comp.NextSoothePainAt = _timing.CurTime + ent.Comp.SoothePainRefresh;
@@ -296,12 +308,12 @@ public sealed partial class RiderSystem : EntitySystem
         ridden.Rider = ent.Owner;
         ridden.RideStart = _timing.CurTime;
         ridden.Willing = willing;
-        _actions.AddAction(host, ref ridden.ResistAction, "ActionHostResist");
+        _actions.AddAction(host, ref ridden.ResistAction, ActionHostResistPrototype);
 
         // Admin/ghost tell riding the host. Ghost layer, not Rider: manifesting
         // hands the host the Rider bit, and it must not draw markers
         var marker = Spawn("CMURiderLatchedMarker", _xform.GetMoverCoordinates(host));
-        Transform(marker).AttachParent(host);
+        _xform.SetParent(marker, host);
         _visibility.AddLayer(marker, (int) VisibilityFlags.Ghost, false);
         _visibility.RemoveLayer(marker, (int) VisibilityFlags.Normal, false);
         _visibility.RefreshVisibility(marker);
@@ -883,7 +895,7 @@ public sealed partial class RiderSystem : EntitySystem
 
         ent.Comp.SeizeActive = true;
         ent.Comp.SeizeEndsAt = _timing.CurTime + ent.Comp.SeizeDuration;
-        _actions.AddAction(host, ref ent.Comp.SeizeExitAction, "ActionRiderExit");
+        _actions.AddAction(host, ref ent.Comp.SeizeExitAction, ActionRiderExitPrototype);
         _popup.PopupEntity(Loc.GetString("rider-seize-host"), host, host, PopupType.LargeCaution);
         _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
             $"{ToPrettyString(ent):rider} seized {ToPrettyString(host):host}");
@@ -1085,7 +1097,7 @@ public sealed partial class RiderSystem : EntitySystem
         _visibility.RemoveLayer(manifest, (int) VisibilityFlags.Normal, false);
         _visibility.RefreshVisibility(manifest);
         EnsureComp<AlertsComponent>(manifest);
-        _actions.AddAction(manifest, ref ent.Comp.WithdrawAction, "ActionRiderWithdraw");
+        _actions.AddAction(manifest, ref ent.Comp.WithdrawAction, ActionRiderWithdrawPrototype);
 
         // Minds eye is the same body in a different skin: the whole bar comes
         // along, and abilities run on the buried body via the manifest relays

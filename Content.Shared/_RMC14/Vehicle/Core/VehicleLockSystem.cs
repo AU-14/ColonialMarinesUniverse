@@ -220,7 +220,7 @@ public sealed partial class VehicleLockSystem : EntitySystem
         // CMU14: wreck locks are beyond repair too.
         if (_hardpoints.IsWrecked(ent.Owner))
         {
-            _popup.PopupClient(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, args.User);
+            _popup.PopupEntity(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, args.User);
             args.Handled = true;
             return;
         }

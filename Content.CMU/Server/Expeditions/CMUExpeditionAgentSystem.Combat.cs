@@ -27,7 +27,7 @@ public sealed partial class CMUExpeditionAgentSystem
             (ent.Comp.AimedTarget is not { } aimedTarget || ent.Comp.Target != aimedTarget ||
                 !Visible(ent, aimedTarget, ent.Comp.FireRange) || !AcceptOrderedContact(ent, ent.Comp, aimedTarget) ||
                 !TryComp<GunComponent>(args.Used, out var aimedGun) || aimedGun.ShootCoordinates is not { } destination ||
-                !SafeShot(ent, ent.Comp, aimedGun, destination)))
+                !SafeShot(ent, ent.Comp, (args.Used, aimedGun), destination)))
         {
             args.Cancel();
             return;
@@ -35,8 +35,8 @@ public sealed partial class CMUExpeditionAgentSystem
         var stationary = ent.Comp.State == CMUExpeditionAgentState.Engage && ent.Comp.Action == null &&
             ent.Comp.PendingWeapon == null && _timing.CurTime < ent.Comp.BurstEnd && ent.Comp.ShotsFired < VolleySize(ent.Comp);
         if (!_npcs.Enabled || !_mobs.IsAlive(ent) || ent.Comp.FlareItem != null || (!stationary && !MovingShotAllowed(ent, ent.Comp)) ||
-            !TryComp<GunComponent>(args.Used, out var gun) || !TryAimPoint(ent, ent.Comp, gun, out var point) ||
-            !SafeShot(ent, ent.Comp, gun, point))
+            !TryComp<GunComponent>(args.Used, out var gun) || !TryAimPoint(ent, ent.Comp, (args.Used, gun), out var point) ||
+            !SafeShot(ent, ent.Comp, (args.Used, gun), point))
             args.Cancel();
     }
 
@@ -249,13 +249,13 @@ public sealed partial class CMUExpeditionAgentSystem
         }
     }
 
-    private bool TryAimPoint(EntityUid uid, CMUExpeditionAgentComponent agent, GunComponent gun, out EntityCoordinates point)
+    private bool TryAimPoint(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun, out EntityCoordinates point)
     {
         point = default;
         agent.FiringAtFlash = false;
         if (agent.Target is not { } target || !CombatTargetAlive(target) ||
             !AcceptOrderedContact(uid, agent, target) || !Visible(uid, target, agent.FireRange) ||
-            !TryComp<TransformComponent>(target, out var transform))
+            !TryComp(target, out TransformComponent? transform))
         {
             // A guessed flash position is unsuitable for blast weapons or homing entity locks.
             if (TryComp<CMUExpeditionWeaponRoleComponent>(gun.Owner, out var role) && role.Rocket ||
@@ -273,13 +273,13 @@ public sealed partial class CMUExpeditionAgentSystem
         var from = _transform.GetWorldPosition(uid);
         var position = _transform.GetWorldPosition(transform);
         // RMC bullets are usually much faster than the generic NPC controller's assumed 20 m/s.
-        var flight = Math.Min(Vector2.Distance(from, position) / Math.Max(1, gun.ProjectileSpeedModified), 0.4f);
+        var flight = Math.Min(Vector2.Distance(from, position) / Math.Max(1, gun.Comp.ProjectileSpeedModified), 0.4f);
         var map = new MapCoordinates(position + velocity * flight, transform.MapID);
         point = _transform.ToCoordinates(Transform(uid).MapUid!.Value, map);
         return true;
     }
 
-    private bool SafeShot(EntityUid uid, CMUExpeditionAgentComponent agent, GunComponent gun, EntityCoordinates point,
+    private bool SafeShot(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun, EntityCoordinates point,
         EntityCoordinates? origin = null, HashSet<EntityUid>? nearby = null)
     {
         var start = origin ?? Transform(uid).Coordinates;
@@ -290,9 +290,9 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         // Match the next native shot's recoil, including recovery since the previous shot.
         // Using maximum sustained-fire scatter made whole squads wait on empty lanes.
-        var elapsed = (_timing.CurTime - gun.LastFire).TotalSeconds;
-        var scatter = Math.Clamp(gun.CurrentAngle.Theta + gun.AngleIncreaseModified.Theta -
-            gun.AngleDecayModified.Theta * elapsed, gun.MinAngleModified.Theta, gun.MaxAngleModified.Theta);
+        var elapsed = (_timing.CurTime - gun.Comp.LastFire).TotalSeconds;
+        var scatter = Math.Clamp(gun.Comp.CurrentAngle.Theta + gun.Comp.AngleIncreaseModified.Theta -
+            gun.Comp.AngleDecayModified.Theta * elapsed, gun.Comp.MinAngleModified.Theta, gun.Comp.MaxAngleModified.Theta);
         var spread = (float) Math.Tan(Math.Min(scatter, Math.PI / 2) / 2);
         if (!FiringLaneClear(uid, start, point))
             return false;
@@ -306,7 +306,7 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var entity in nearby)
         {
             if (entity == uid || !IsFriendly(uid, entity) ||
-                _mobs.IsDead(entity) || !TryComp<TransformComponent>(entity, out var transform) || transform.MapID != from.MapId ||
+                _mobs.IsDead(entity) || !TryComp(entity, out TransformComponent? transform) || transform.MapID != from.MapId ||
                 IffPassesFriendly(uid, gun.Owner, entity))
                 continue;
             var relative = _transform.GetWorldPosition(transform) - from.Position;
@@ -314,7 +314,7 @@ public sealed partial class CMUExpeditionAgentSystem
             var velocity = TryComp<PhysicsComponent>(entity, out var body) ? body.LinearVelocity : Vector2.Zero;
             for (var sample = 0; sample < 2; sample++)
             {
-                var offset = relative + velocity * (sample * Math.Min(distance / Math.Max(1, gun.ProjectileSpeedModified), 0.4f));
+                var offset = relative + velocity * (sample * Math.Min(distance / Math.Max(1, gun.Comp.ProjectileSpeedModified), 0.4f));
                 var along = Vector2.Dot(offset, direction);
                 if (along < -0.3f || along > distance + 2)
                     continue;

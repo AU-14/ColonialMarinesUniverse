@@ -96,7 +96,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
 
         if (alreadyOn)
         {
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-already-on"), target, args.User, PopupType.SmallCaution);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-already-on"), target, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return;
         }
@@ -117,7 +117,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         };
         var applyStarted = DoAfter.TryStartDoAfter(applyDo);
         if (applyStarted)
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-applying"), target, args.User);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-applying"), target, args.User);
         args.Handled = true;
     }
 
@@ -152,14 +152,14 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
                 Audio.PlayPredicted(ent.Comp.ApplySound, stumpParent, null);
             if (ent.Comp.ConsumedOnApply && Net.IsServer)
                 QueueDel(ent.Owner);
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-applied-stump"), target, args.User);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-applied-stump"), target, args.User);
             return;
         }
 
         var freshApply = !HasComp<CMUTourniquetComponent>(part);
         var ok = ApplyTourniquetToPart(ent, part);
         if (ok && freshApply)
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-applied"), target, args.User);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-applied"), target, args.User);
     }
 
     private void OnPatientGetAltVerbs(Entity<CMUHumanMedicalComponent> patient, ref GetVerbsEvent<AlternativeVerb> args)
@@ -214,7 +214,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         };
         var started = DoAfter.TryStartDoAfter(removeDo);
         if (started)
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-removing"), patient, user);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-removing"), patient, user);
     }
 
     private void OnVerbRemoveDoAfter(Entity<CMUHumanMedicalComponent> patient, ref CMUTourniquetVerbRemoveDoAfterEvent args)
@@ -236,7 +236,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
 
             var stumpRefund = stump.ClampRefund;
             Stumps.SetClamped(stumpParent, stump, false, null);
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-removed"), patient.Owner, args.User);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-removed"), patient.Owner, args.User);
             if (Net.IsServer && stumpRefund is { } stumpProto)
             {
                 var refunded = Spawn(stumpProto, Transform(args.User).Coordinates);
@@ -253,7 +253,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
         if (HasComp<CMUNecroticComponent>(part))
             RemComp<CMUNecroticComponent>(part);
 
-        Popup.PopupPredicted(Loc.GetString("cmu-medical-tourniquet-removed"), patient.Owner, args.User);
+        Popup.PopupBroadcast(Loc.GetString("cmu-medical-tourniquet-removed"), patient.Owner, args.User);
 
         if (Net.IsServer && refundProto is { } proto)
         {

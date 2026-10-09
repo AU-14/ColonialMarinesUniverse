@@ -10,7 +10,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Vehicle;
 
-public sealed class VehicleTotaledSystem : EntitySystem
+public sealed partial class VehicleTotaledSystem : EntitySystem
 {
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

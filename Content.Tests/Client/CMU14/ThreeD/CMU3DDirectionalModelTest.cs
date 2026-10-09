@@ -55,6 +55,7 @@ public sealed class CMU3DDirectionalModelTest
         Assert.That(catalog.WithDirection(null, yaw), Is.Null);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype[] Poses(int directions)
     {
         var names = Enumerable.Range(0, directions).Select(i => $"Paper{i}").ToArray();

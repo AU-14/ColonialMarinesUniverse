@@ -16,11 +16,11 @@ namespace Content.Server.SurveillanceCamera;
 
 public sealed partial class SurveillanceCameraMonitorSystem : EntitySystem
 {
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly CameraNetworkSystem _cameraNetworks = default!;
-    [Dependency] private readonly CameraSessionSystem _cameraSessions = default!;
-    [Dependency] private readonly IConfigurationManager _configuration = default!;
-    [Dependency] private readonly UserInterfaceSystem _userInterface = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private CameraNetworkSystem _cameraNetworks = default!;
+    [Dependency] private CameraSessionSystem _cameraSessions = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private UserInterfaceSystem _userInterface = default!;
 
     public override void Initialize()
     {

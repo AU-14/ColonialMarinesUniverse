@@ -536,7 +536,7 @@ public sealed partial class ColonyAtmWindow
     ///     whole sprite atlas off the GPU. The design script mirrors these keyframes
     ///     (<c>INSERT_KEYS</c>, <c>EJECT_KEYS</c>) for its review GIF.
     /// </remarks>
-    private sealed class ReaderCard : Control
+    private sealed partial class ReaderCard : Control
     {
         // Whether each kind of card is wider than it is tall. Sprites never change shape in a session.
         private static readonly Dictionary<string, bool> Landscape = new();

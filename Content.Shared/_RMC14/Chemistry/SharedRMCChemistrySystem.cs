@@ -128,7 +128,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
                     refillable.Solution = ent.Comp.Solution;
                     ent.Comp.Direction = SolutionTransferDirection.Input;
                     Dirty(ent, refillable);
-                    _popup.PopupClient("Now drawing", ent, user, PopupType.Medium);
+                    _popup.PopupEntity("Now drawing", ent, user, PopupType.Medium);
                 }
                 else
                 {
@@ -137,7 +137,7 @@ public abstract partial class SharedRMCChemistrySystem : EntitySystem
                     drainable.Solution = ent.Comp.Solution;
                     ent.Comp.Direction = SolutionTransferDirection.Output;
                     Dirty(ent, drainable);
-                    _popup.PopupClient("Now dispensing", ent, user, PopupType.Medium);
+                    _popup.PopupEntity("Now dispensing", ent, user, PopupType.Medium);
                 }
             },
         });

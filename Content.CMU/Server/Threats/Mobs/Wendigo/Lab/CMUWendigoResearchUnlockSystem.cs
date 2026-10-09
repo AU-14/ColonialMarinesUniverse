@@ -13,7 +13,7 @@ namespace Content.Server.CMU14.Threats.Mobs.Wendigo.Lab;
 /// Research clearance rewards: every WY Lab clearance increase credits the corporate ASRS account,
 /// and Weyland-Yutani factions unlock the MH32 crate in their ASRS "Research" category at clearance 3.
 /// </summary>
-public sealed class CMUWendigoResearchUnlockSystem : EntitySystem
+public sealed partial class CMUWendigoResearchUnlockSystem : EntitySystem
 {
     public const string MH32Crate = "CMUCrateMH32";
     public const int MH32Cost = 3500;
@@ -23,9 +23,9 @@ public sealed class CMUWendigoResearchUnlockSystem : EntitySystem
     private const string CorporateFaction = "corporate";
     private const string WeylandYutaniPlatoon = "WEYU";
 
-    [Dependency] private readonly RequisitionsSystem _reqsys = default!;
-    [Dependency] private readonly PlatoonSpawnRuleSystem _platoons = default!;
-    [Dependency] private readonly SharedResearchDataTerminalSystem _research = default!;
+    [Dependency] private RequisitionsSystem _reqsys = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
+    [Dependency] private SharedResearchDataTerminalSystem _research = default!;
 
     public override void Initialize()
     {

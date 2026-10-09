@@ -237,7 +237,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             return;
 
         if (args.Popup)
-            _popup.PopupClient(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
     }
 
     private void OnWeaponSeatStrapped(Entity<VehicleWeaponsSeatComponent> ent, ref StrappedEvent args)
@@ -434,7 +434,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         if (TryComp(actor, out VehiclePortGunOperatorComponent? portGunOperator) &&
             portGunOperator.Gun != null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-active"), seat, actor);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-active"), seat, actor);
             return true;
         }
 
@@ -474,7 +474,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             weapons.HardpointOperators.TryGetValue(mountedWeapon.Value, out var currentOperator) &&
             currentOperator != actor)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-weapons-ui-hardpoint-in-use", ("operator", currentOperator)), seat, actor);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-weapons-ui-hardpoint-in-use", ("operator", currentOperator)), seat, actor);
             UpdateWeaponsUiForAllOperators(vehicleUid, weapons, hardpoints, itemSlots);
             return true;
         }

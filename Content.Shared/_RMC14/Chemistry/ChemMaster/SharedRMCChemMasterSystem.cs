@@ -96,13 +96,13 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
             var availableSpace = ent.Comp.MaxPillBottles - pillBottleSlot.Count;
             if (availableSpace <= 0)
             {
-                _popup.PopupClient(Loc.GetString("rmc-chem-master-full-pill-bottles"), ent, args.User);
+                _popup.PopupEntity(Loc.GetString("rmc-chem-master-full-pill-bottles"), ent, args.User);
                 return;
             }
 
             if (boxStorage.StoredItems.Count == 0)
             {
-                _popup.PopupClient(Loc.GetString("rmc-chem-master-pill-bottle-box-empty", ("box", args.Used)), ent, args.User);
+                _popup.PopupEntity(Loc.GetString("rmc-chem-master-pill-bottle-box-empty", ("box", args.Used)), ent, args.User);
                 return;
             }
 
@@ -117,7 +117,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
 
             if (_doAfter.TryStartDoAfter(doAfterArgs))
             {
-                _popup.PopupClient(Loc.GetString("rmc-chem-master-pill-bottle-box-start", ("box", args.Used), ("target", ent)), args.User, args.User);
+                _popup.PopupEntity(Loc.GetString("rmc-chem-master-pill-bottle-box-start", ("box", args.Used), ("target", ent)), args.User, args.User);
             }
             return;
         }
@@ -129,7 +129,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
         var slot = _container.EnsureContainer<Container>(ent, ent.Comp.PillBottleContainer);
         if (slot.Count >= ent.Comp.MaxPillBottles)
         {
-            _popup.PopupClient(Loc.GetString("rmc-chem-master-full-pill-bottles"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-chem-master-full-pill-bottles"), ent, args.User);
             return;
         }
 
@@ -410,7 +410,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
             if (free < ent.Comp.PillAmount)
             {
                 var msg = Loc.GetString("rmc-chem-master-pills-not-enough-space");
-                _popup.PopupClient(msg, args.Actor, PopupType.MediumCaution);
+                _popup.PopupSelf(msg, args.Actor, PopupType.MediumCaution);
                 return;
             }
 
@@ -420,7 +420,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
         if (!_solution.TryGetSolution(ent.Owner, ent.Comp.BufferSolutionId, out var buffer))
         {
             var msg = Loc.GetString("rmc-chem-master-not-enough-space-solution");
-            _popup.PopupClient(msg, args.Actor, PopupType.MediumCaution);
+            _popup.PopupSelf(msg, args.Actor, PopupType.MediumCaution);
             return;
         }
 
@@ -433,7 +433,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
         if (solution <= FixedPoint2.Zero || perPill <= FixedPoint2.Zero)
         {
             var msg = Loc.GetString("rmc-chem-master-not-enough-space-solution");
-            _popup.PopupClient(msg, args.Actor, PopupType.MediumCaution);
+            _popup.PopupSelf(msg, args.Actor, PopupType.MediumCaution);
             return;
         }
 
@@ -588,7 +588,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
             !TryComp(args.Used, out RMCPillBottleTransferComponent? boxComp) ||
             !TryComp(args.Used, out StorageComponent? boxStorage))
         {
-            _popup.PopupClient(Loc.GetString("rmc-chem-master-pill-bottle-box-failed"), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-chem-master-pill-bottle-box-failed"), args.User, args.User);
             return;
         }
 
@@ -598,7 +598,7 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
         var availableSpace = ent.Comp.MaxPillBottles - slot.Count;
         if (availableSpace <= 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-chem-master-full-pill-bottles"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-chem-master-full-pill-bottles"), ent, args.User);
             return;
         }
 
@@ -630,11 +630,11 @@ public abstract partial class SharedRMCChemMasterSystem : EntitySystem
         if (transferred > 0)
         {
             _audio.PlayPredicted(boxComp.InsertPillBottleSound, ent, args.User);
-            _popup.PopupClient(Loc.GetString("rmc-chem-master-pill-bottle-box-complete", ("count", transferred), ("target", ent)), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-chem-master-pill-bottle-box-complete", ("count", transferred), ("target", ent)), args.User, args.User);
         }
         else
         {
-            _popup.PopupClient(Loc.GetString("rmc-chem-master-pill-bottle-box-failed"), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-chem-master-pill-bottle-box-failed"), args.User, args.User);
         }
 
         Dirty(ent);

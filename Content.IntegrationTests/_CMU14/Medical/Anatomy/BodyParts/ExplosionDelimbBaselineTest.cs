@@ -134,7 +134,7 @@ public sealed partial class BlastBalanceProbeComponent : Component
     public float MaxSeveranceFraction;
 }
 
-public sealed class BlastBalanceProbeSystem : EntitySystem
+public sealed partial class BlastBalanceProbeSystem : EntitySystem
 {
     [Dependency] private CMUMedicalBodyIndexSystem _index = default!;
 

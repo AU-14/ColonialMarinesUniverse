@@ -47,7 +47,7 @@ public sealed partial class MultiDeckDropshipSystem
             return false;
         if (!TryComp<MultiDeckDropshipComponent>(ship, out var assembly))
             return true;
-        if (!assembly.Initialized)
+        if (!assembly.DecksInitialized)
             return false;
 
         if (!_map.TryGetMap(coordinates.MapId, out var groundMap))

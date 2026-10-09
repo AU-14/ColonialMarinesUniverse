@@ -65,6 +65,7 @@ public sealed class CMU3DSpriteAppearanceTest
             out _, out _), Is.True);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [TestCase(3, 4, .25f)]
     [TestCase(5, 5, .25f)]
     [TestCase(6, 8, 4f)]
@@ -190,6 +191,7 @@ public sealed class CMU3DSpriteAppearanceTest
 
     private static CMU3DButtonLayer Layer(int frame) => new("/Textures/"+Rsi, "buildingventbig12", frame, true, Color.White, true);
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model()
     {
         var state = new CMU3DSpriteState { Delays = [.4f, .25f, .4f, .25f, 2.5f] };

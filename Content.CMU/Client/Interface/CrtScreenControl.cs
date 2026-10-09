@@ -30,15 +30,15 @@ namespace Content.Client.CMU14.Interface;
 ///     Neither is implemented yet.
 ///     </para>
 /// </remarks>
-public sealed class CrtScreenControl : Control
+public sealed partial class CrtScreenControl : Control
 {
     private const string ShaderId = "CMUCrtTerminal";
 
 
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IClyde _clyde = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     private readonly ShaderInstance? _shader;
 

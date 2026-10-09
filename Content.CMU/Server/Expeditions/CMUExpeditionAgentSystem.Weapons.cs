@@ -134,9 +134,9 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     private bool StoreOwnedItem(EntityUid uid, EntityUid item, Content.Shared.Storage.StorageComponent bag) =>
-        _scavengeStorage.CanInsert(bag.Owner, item, out _) &&
-        _scavengeRmcStorage.CanInsert((bag.Owner, bag), item, uid, out _) &&
-        _scavengeStorage.Insert(bag.Owner, item, out _, user: uid, stackAutomatically: false) && bag.Container.Contains(item);
+        _scavengeStorage.CanInsert(bag.Container.Owner, item, out _) &&
+        _scavengeRmcStorage.CanInsert((bag.Container.Owner, bag), item, uid, out _) &&
+        _scavengeStorage.Insert(bag.Container.Owner, item, out _, user: uid, stackAutomatically: false) && bag.Container.Contains(item);
 
     private void ActivateWeapon(EntityUid uid, EntityUid weapon)
     {
@@ -174,7 +174,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (distance < role.CloseRange)
                 score += role.ClosePriority;
             if (role.Rocket && (!RocketOpportunity(uid, agent, target, point) ||
-                !SafeShot(uid, agent, gun, point)))
+                !SafeShot(uid, agent, (weapon, gun), point)))
                 return -100;
         }
         return Math.Max(2, score);
@@ -208,7 +208,7 @@ public sealed partial class CMUExpeditionAgentSystem
         return false;
     }
 
-    private bool SafeWeaponEffect(EntityUid uid, CMUExpeditionAgentComponent agent, GunComponent gun,
+    private bool SafeWeaponEffect(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun,
         EntityCoordinates start, EntityCoordinates destination)
     {
         if (!TryComp<CMUExpeditionWeaponRoleComponent>(gun.Owner, out var role))

@@ -130,7 +130,7 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
 
     private void Deny(EntityUid user)
     {
-        _popup.PopupClient(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
     }
 
     private void Misuse(EntityUid item, EntityUid user, YautjaTechMisuseKind kind)

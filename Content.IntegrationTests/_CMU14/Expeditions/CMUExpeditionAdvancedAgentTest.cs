@@ -18,6 +18,8 @@ namespace Content.IntegrationTests._CMU14.Expeditions;
 [TestFixture, NonParallelizable]
 public sealed partial class CMUExpeditionAdvancedAgentTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> GOVFORPrototype = "GOVFOR";
+
     public override PoolSettings PoolSettings => new() { Dirty = true };
 
     [Test]
@@ -126,7 +128,7 @@ public sealed partial class CMUExpeditionAdvancedAgentTest : GameTest
         var guard = SEntMan.SpawnEntity(prototype, origin.Offset(new Vector2(-4, 0)));
         var enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
         SEntMan.AddComponent<GodmodeComponent>(enemy);
-        Server.System<NpcFactionSystem>().AddFaction(enemy, "GOVFOR");
+        Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
         for (var y = 1; y <= 4; y++)
         {
             var coordinates = origin.Offset(new Vector2(-2, y));

@@ -133,13 +133,13 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
 
         if (!_interaction.InRangeUnobstructed(ape, target, ape.Comp.Range) || _rmcMap.IsTileBlocked(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-reach"), ape, ape, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-destroy-cant-reach"), ape, ape, PopupType.SmallCaution);
             return;
         }
 
         if (!_area.TryGetArea(target, out Entity<AreaComponent>? area, out _) || !_area.CanDestroyLeapInto(area.Value))
         {
-            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-area"), ape, ape, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-destroy-cant-area"), ape, ape, PopupType.SmallCaution);
             return;
         }
 
@@ -170,7 +170,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
 
         if (!_interaction.InRangeUnobstructed(ape, coords, ape.Comp.Range) || _rmcMap.IsTileBlocked(coords))
         {
-            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-reach"), ape, ape, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-destroy-cant-reach"), ape, ape, PopupType.SmallCaution);
             return;
         }
 

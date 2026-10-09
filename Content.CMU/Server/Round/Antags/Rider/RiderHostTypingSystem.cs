@@ -6,7 +6,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Round.Antags.Rider;
 
-public sealed class RiderHostTypingSystem : EntitySystem
+public sealed partial class RiderHostTypingSystem : EntitySystem
 {
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;

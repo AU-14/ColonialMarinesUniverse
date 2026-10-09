@@ -8,7 +8,7 @@ namespace Content.IntegrationTests.CMU14.Medical.Core;
 /// entity event-bus flushing, component culling, network serialization and client rendering.
 /// Arrays are installed only for an explicit workload, and never allocate in Update.
 /// </summary>
-public sealed class CMUMedicalFrameProbeStartSystem : EntitySystem
+public sealed partial class CMUMedicalFrameProbeStartSystem : EntitySystem
 {
     [Dependency] private IEntitySystemManager _systems = default!;
     public bool Capturing;
@@ -34,7 +34,7 @@ public sealed class CMUMedicalFrameProbeStartSystem : EntitySystem
     }
 }
 
-public sealed class CMUMedicalFrameProbeEndSystem : EntitySystem
+public sealed partial class CMUMedicalFrameProbeEndSystem : EntitySystem
 {
     [Dependency] private IEntitySystemManager _systems = default!;
     [Dependency] private CMUMedicalFrameProbeStartSystem _start = default!;

@@ -301,7 +301,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             _ => throw new ArgumentOutOfRangeException(),
         };
 
-        _popup.PopupClient(msg, ent, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.SmallCaution);
     }
 
     private void OnEvacuationPumpExamined(Entity<EvacuationPumpComponent> ent, ref ExaminedEvent args)
@@ -330,7 +330,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             return;
 
         args.Cancel();
-        _popup.PopupClient("Evacuation has not been authorized.", ent, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity("Evacuation has not been authorized.", ent, args.User, PopupType.SmallCaution);
     }
 
     private void OnEvacuationComputerLaunch(Entity<EvacuationComputerComponent> ent, ref EvacuationComputerLaunchBuiMsg args)
@@ -381,7 +381,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
             if (mobs.Count > maxMobs)
             {
-                _popup.PopupPredicted("The evacuation pod is overloaded with this many people inside!", ent, null, PopupType.LargeCaution);
+                _popup.PopupBroadcast("The evacuation pod is overloaded with this many people inside!", ent, null, PopupType.LargeCaution);
                 ent.Comp.Mode = EvacuationComputerMode.Crashed;
                 Dirty(ent);
 

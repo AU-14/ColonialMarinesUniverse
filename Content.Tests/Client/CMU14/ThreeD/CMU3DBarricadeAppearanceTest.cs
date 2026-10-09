@@ -243,6 +243,7 @@ public sealed class CMU3DBarricadeAppearanceTest
     private static CMU3DBarricadeLayer Layer(string state, bool reinforcement = false) => new(
         reinforcement ? "/Textures/reinforcement.rsi" : "/Textures/body.rsi", state, 0, true, Color.White, true);
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model()
     {
         var model = new CMU3DModelPrototype

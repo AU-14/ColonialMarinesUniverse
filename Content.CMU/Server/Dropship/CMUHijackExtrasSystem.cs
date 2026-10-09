@@ -49,7 +49,7 @@ namespace Content.Server.CMU14.Dropship;
 ///     presets that don't run the classic <see cref="CMDistressSignalRuleComponent"/> rule.
 ///     That rule provides these itself, so this system must stay off while it is active.
 /// </summary>
-public sealed class CMUHijackExtrasSystem : EntitySystem
+public sealed partial class CMUHijackExtrasSystem : EntitySystem
 {
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IConfigurationManager _config = default!;

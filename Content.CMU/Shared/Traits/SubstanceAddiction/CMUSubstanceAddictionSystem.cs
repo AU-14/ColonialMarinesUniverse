@@ -14,7 +14,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Traits.SubstanceAddiction;
 
-public sealed class CMUSubstanceAddictionSystem : EntitySystem
+public sealed partial class CMUSubstanceAddictionSystem : EntitySystem
 {
     [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;

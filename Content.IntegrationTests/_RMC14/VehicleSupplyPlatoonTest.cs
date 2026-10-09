@@ -25,6 +25,9 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class VehicleSupplyPlatoonTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> CMBCIUPrototype = "CMBCIU";
+    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> UPPPrototype = "UPP";
+
     private VehicleSupplySystem Supply => Server.System<VehicleSupplySystem>();
 
     private readonly record struct Depot(Entity<VehicleSupplyConsoleComponent> Console, Entity<VehicleSupplyLiftComponent> Lift);
@@ -264,7 +267,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
             Configure(map.GridCoords);
             Assert.That(State(depot).Available.Select(entry => entry.Id), Does.Contain("VehicleTank"));
             Queue(depot, "VehicleTank");
-            Server.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>("CMBCIU");
+            Server.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(CMBCIUPrototype);
             Complete(depot);
             Assert.That(depot.Lift.Comp.ActiveVehicle, Is.Null);
             Assert.That(State(depot).IssuedVehicles, Is.Empty);
@@ -301,7 +304,7 @@ public sealed class VehicleSupplyPlatoonTest : GameTest
         SEntMan.EnsureComponent<ShipFactionComponent>(coordinates.EntityId).Faction = "govfor";
         var platoons = Server.System<PlatoonSpawnRuleSystem>();
         platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(platoon);
-        platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>("UPP");
+        platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>(UPPPrototype);
     }
 
     private Depot CreateDepot(EntityCoordinates coordinates, string? side = "govfor")

@@ -11,14 +11,14 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server.CMU14.ZLevels.Core;
 
-public sealed class CMUPowerRiserSystem : EntitySystem
+public sealed partial class CMUPowerRiserSystem : EntitySystem
 {
     private const string ScrewingQuality = "Screwing";
     private const string PryingQuality = "Prying";
 
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly CMUZPairingSystem _zPairing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private CMUZPairingSystem _zPairing = default!;
 
     public override void Initialize()
     {
@@ -46,7 +46,7 @@ public sealed class CMUPowerRiserSystem : EntitySystem
                 ? Loc.GetString("cmu-power-riser-role-source")
                 : Loc.GetString("cmu-power-riser-role-sink");
 
-            _popup.PopupClient(Loc.GetString("cmu-power-riser-role-toggled", ("role", localizedRole)), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("cmu-power-riser-role-toggled", ("role", localizedRole)), ent, args.User);
 
             RefreshPair(ent);
         }
@@ -58,7 +58,7 @@ public sealed class CMUPowerRiserSystem : EntitySystem
             Dirty(ent.Owner, paired);
 
             var direction = Loc.GetString(paired.Offset > 0 ? "cmu-z-direction-above" : "cmu-z-direction-below");
-            _popup.PopupClient(Loc.GetString("cmu-power-riser-dir-toggled", ("direction", direction)), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("cmu-power-riser-dir-toggled", ("direction", direction)), ent, args.User);
 
             _zPairing.Unpair((ent.Owner, paired));
             _zPairing.TryPair((ent.Owner, paired));

@@ -308,7 +308,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             BlockDuplicate = true,
         };
         if (DoAfter.TryStartDoAfter(removeDo))
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-cast-removing"), patient, user);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-cast-removing"), patient, user);
     }
 
     private void OnCastVerbRemoveDoAfter(Entity<CMUHumanMedicalComponent> patient, ref CMUCastVerbRemoveDoAfterEvent args)
@@ -327,7 +327,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         RemComp<CMUCastComponent>(part);
         var ev = new CMUCastChangedEvent(part, true);
         RaiseLocalEvent(ref ev);
-        Popup.PopupPredicted(Loc.GetString("cmu-medical-cast-removed"), patient.Owner, args.User);
+        Popup.PopupBroadcast(Loc.GetString("cmu-medical-cast-removed"), patient.Owner, args.User);
     }
 
     /// <summary>

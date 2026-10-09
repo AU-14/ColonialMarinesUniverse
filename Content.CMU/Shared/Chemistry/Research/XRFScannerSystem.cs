@@ -220,14 +220,14 @@ public abstract partial class XRFScannerSystem : EntitySystem
     {
         if (ent.Comp.Processing)
         {
-            _popups.PopupClient(Loc.GetString("research-xrf-scanner-processing"), args.User);
+            _popups.PopupSelf(Loc.GetString("research-xrf-scanner-processing"), args.User);
             return;
         }
         if (_consys.TryGetContainer(ent.Owner, "sample", out var container))
         {
             if (container.Count == 0)
             {
-                _popups.PopupClient(Loc.GetString("research-xrf-scanner-empty"), args.User);
+                _popups.PopupSelf(Loc.GetString("research-xrf-scanner-empty"), args.User);
             }
             else
             {

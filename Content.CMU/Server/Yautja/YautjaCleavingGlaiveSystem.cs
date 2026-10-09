@@ -7,7 +7,7 @@ using Robust.Shared.Containers;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaCleavingGlaiveSystem : EntitySystem
+public sealed partial class YautjaCleavingGlaiveSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedContainerSystem _containers = default!;

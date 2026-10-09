@@ -41,6 +41,6 @@ public sealed class ForceOnForceHijackJoinEui : BaseEui
     {
         _answered = true;
         _window.Close();
-        _window.Dispose();
+        _window.Release();
     }
 }

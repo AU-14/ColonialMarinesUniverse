@@ -87,7 +87,7 @@ public sealed partial class XenoTailLashSystem : EntitySystem
 
         if (!valid)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tail-lash-no-room"), xeno, xeno, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tail-lash-no-room"), xeno, xeno, PopupType.MediumCaution);
             return;
         }
 

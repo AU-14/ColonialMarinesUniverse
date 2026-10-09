@@ -11,7 +11,7 @@ namespace Content.Server.CMU14.Medical;
 /// <summary>
 /// Breathing from an oxygen tank through internals clears suffocation damage half a time faster than normal breathing.
 /// </summary>
-public sealed class CMUOxygenTankRecoverySystem : EntitySystem
+public sealed partial class CMUOxygenTankRecoverySystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedInternalsSystem _internals = default!;

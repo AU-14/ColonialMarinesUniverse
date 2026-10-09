@@ -235,7 +235,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
         if (!_skills.HasAllSkills(args.User, vendor.Comp.RequiredSkills))
         {
-            _popup.PopupClient(Loc.GetString("rmc-skills-no-training", ("target", vendor)), vendor, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-skills-no-training", ("target", vendor)), vendor, args.User);
             args.Cancel();
             return;
         }
@@ -250,7 +250,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
                     TryComp(item, out IdCardOwnerComponent? owner) &&
                     owner.Id != args.User)
                 {
-                    _popup.PopupClient(Loc.GetString("cm-vending-machine-wrong-card"), vendor, args.User);
+                    _popup.PopupEntity(Loc.GetString("cm-vending-machine-wrong-card"), vendor, args.User);
                     args.Cancel();
                     return;
                 }
@@ -297,7 +297,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         if (validJob && validRank)
             return;
 
-        _popup.PopupClient(Loc.GetString("cm-vending-machine-access-denied"), vendor, args.User);
+        _popup.PopupEntity(Loc.GetString("cm-vending-machine-access-denied"), vendor, args.User);
         args.Cancel();
     }
 
@@ -318,14 +318,14 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         args.Handled = true;
         if (!ent.Comp.Hackable)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vending-machine-cannot-hack", ("vendor", ent)), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-vending-machine-cannot-hack", ("vendor", ent)), ent, args.User);
             return;
         }
 
         if (!_skills.HasSkill(args.User, ent.Comp.HackSkill, ent.Comp.HackSkillLevel))
         {
             var msg = Loc.GetString("rmc-vending-machine-hack-no-skill", ("vendor", ent));
-            _popup.PopupClient(msg, ent, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(msg, ent, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -334,7 +334,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         var doAfter = new DoAfterArgs(EntityManager, args.User, delay, ev, ent, ent, args.Used);
         if (_doAfter.TryStartDoAfter(doAfter))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vending-machine-hack-start", ("vendor", ent)), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-vending-machine-hack-start", ("vendor", ent)), ent, args.User);
         }
     }
 
@@ -351,7 +351,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         var msg = ent.Comp.Hacked
             ? Loc.GetString("rmc-vending-machine-hack-finish-remove", ("vendor", ent))
             : Loc.GetString("rmc-vending-machine-hack-finish-restore", ("vendor", ent));
-        _popup.PopupClient(msg, ent, args.User);
+        _popup.PopupEntity(msg, ent, args.User);
 
         if (TryComp(ent, out AccessReaderComponent? accessReader))
         {

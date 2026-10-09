@@ -19,10 +19,10 @@ namespace Content.Client.CMU14.SavedBuilds;
 /// </summary>
 public sealed partial class BuildSaveModeSystem : EntitySystem
 {
-    [Dependency] private  IPlayerManager _player = default!;
-    [Dependency] private  IOverlayManager _overlays = default!;
-    [Dependency] private  SharedMapSystem _mapManager = default!;
-    [Dependency] private  SharedTransformSystem _transform = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private SharedMapSystem _mapManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public const int MaxRadius = 5; // 11x11
 
@@ -202,7 +202,7 @@ public sealed partial class BuildSaveModeSystem : EntitySystem
 
         // Only re-query the server when the player moves to a new tile (the live box follows them),
         // rather than every frame.
-        if (_player.LocalEntity is { } player && EntityManager.EntityExists(player))
+        if (_player.LocalEntity is { } player && Exists(player))
         {
             var map = _transform.GetMapCoordinates(player);
             var tile = new Vector2i((int) MathF.Floor(map.Position.X), (int) MathF.Floor(map.Position.Y));
@@ -224,7 +224,7 @@ public sealed partial class BuildSaveModeSystem : EntitySystem
         if (!Active || args.State != BoundKeyState.Down)
             return false;
 
-        if (!args.EntityUid.IsValid() || !EntityManager.EntityExists(args.EntityUid))
+        if (!args.EntityUid.IsValid() || !Exists(args.EntityUid))
             return false;
 
         var net = GetNetEntity(args.EntityUid);
@@ -288,7 +288,7 @@ public sealed partial class BuildSaveModeSystem : EntitySystem
     private bool TryGetLiveBox(out BuildSelectionBox box)
     {
         box = default;
-        if (_player.LocalEntity is not { } player || !EntityManager.EntityExists(player))
+        if (_player.LocalEntity is not { } player || !Exists(player))
             return false;
 
         box = new BuildSelectionBox

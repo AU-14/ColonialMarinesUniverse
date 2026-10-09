@@ -55,6 +55,7 @@ public sealed class CMU3DSurfaceRearWallTest
         Assert.That(offset.Z, Is.EqualTo(.862f).Within(.00001));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model() => new()
     {
         Placement = "surface",

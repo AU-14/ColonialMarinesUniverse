@@ -50,7 +50,7 @@ public sealed partial class FirewalkSystem : EntitySystem
         if (!_whitelist.IsValid(ent.Comp.Whitelist, args.Performer))
         {
             var popup = Loc.GetString("cm-gun-unskilled", ("gun", ent.Owner));
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.SmallCaution);
             return;
         }
 
@@ -79,7 +79,7 @@ public sealed partial class FirewalkSystem : EntitySystem
 
         EntityManager.AddComponents(user, ent.Comp.AddComponentsOnFirewalk);
         _aura.GiveAura(user, ent.Comp.AuraColor, ent.Comp.FirewalkTime);
-        _popup.PopupClient(Loc.GetString("rmc-firewalk-activate"), user, user, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("rmc-firewalk-activate"), user, user, PopupType.Medium);
     }
 
     public void DisableFirewalk(Entity<FirewalkArmorComponent> ent, EntityUid user)

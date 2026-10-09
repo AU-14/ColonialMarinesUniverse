@@ -71,7 +71,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
         if (oldTile == newTile)
             return;
 
-        var anchored = _map.GetAnchoredEntitiesEnumerator(ev.NewPosition.EntityId, grid, newTile);
+        var anchored = _map.GetAnchoredEntities(ev.NewPosition.EntityId, grid, newTile);
         while (anchored.MoveNext(out var anchoredUid))
         {
             if (!_ladderQuery.TryComp(anchoredUid, out var ladder) ||
@@ -127,7 +127,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
             _audio.PlayPvs(ent.Comp.StartSound, ent);
             var selfMessage = Loc.GetString("cmu-zlevel-ladder-start-self");
             var othersMessage = Loc.GetString("cmu-zlevel-ladder-start-others", ("user", user));
-            _popup.PopupPredicted(selfMessage, othersMessage, user, user);
+            _popup.PopupEntity(selfMessage, othersMessage, user, user);
         }
     }
 
@@ -257,7 +257,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
 
         if (!_zLevels.TryMove(user, offset, worldPosition: ladderPosition))
         {
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-ladder-no-level"), ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-ladder-no-level"), ent, user, PopupType.SmallCaution);
             return;
         }
 
@@ -270,7 +270,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
         var selfMessage = Loc.GetString("cmu-zlevel-ladder-finish-self");
         _audio.PlayPvs(ent.Comp.FinishSound, user);
         var othersMessage = Loc.GetString("cmu-zlevel-ladder-finish-others", ("user", user));
-        _popup.PopupPredicted(selfMessage, othersMessage, user, user);
+        _popup.PopupEntity(selfMessage, othersMessage, user, user);
     }
 
     private void ToggleLook(EntityUid user, Entity<CMUZLevelLadderComponent> ladder, int offset)
@@ -289,7 +289,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
 
         if (!TryGetLookCoordinates(ladder, offset, out var coordinates))
         {
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-ladder-no-level"), ladder, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-ladder-no-level"), ladder, user, PopupType.SmallCaution);
             return;
         }
 

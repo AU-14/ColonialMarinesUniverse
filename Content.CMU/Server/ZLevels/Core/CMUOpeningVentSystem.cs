@@ -13,16 +13,16 @@ using Robust.Shared.Map.Components;
 
 namespace Content.Server.CMU14.ZLevels.Core;
 
-public sealed class CMUOpeningVentSystem : EntitySystem
+public sealed partial class CMUOpeningVentSystem : EntitySystem
 {
     private const string ScrewingQuality = "Screwing";
     private const string PryingQuality = "Prying";
 
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly CMUZPairingSystem _zPairing = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private CMUZPairingSystem _zPairing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {
@@ -70,7 +70,7 @@ public sealed class CMUOpeningVentSystem : EntitySystem
             ent.Comp.IsOpen = !ent.Comp.IsOpen;
 
             var state = Loc.GetString(ent.Comp.IsOpen ? "cmu-opening-vent-open" : "cmu-opening-vent-closed");
-            _popup.PopupClient(Loc.GetString("cmu-opening-vent-toggle-state", ("state", state)), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("cmu-opening-vent-toggle-state", ("state", state)), ent, args.User);
         }
         else if (_tool.HasQuality(args.Used, PryingQuality))
         {
@@ -80,7 +80,7 @@ public sealed class CMUOpeningVentSystem : EntitySystem
             Dirty(ent.Owner, paired);
 
             var direction = Loc.GetString(paired.Offset > 0 ? "cmu-z-direction-above" : "cmu-z-direction-below");
-            _popup.PopupClient(Loc.GetString("cmu-opening-vent-dir-toggled", ("direction", direction)), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("cmu-opening-vent-dir-toggled", ("direction", direction)), ent, args.User);
 
             _zPairing.Unpair((ent.Owner, paired));
             _zPairing.TryPair((ent.Owner, paired));

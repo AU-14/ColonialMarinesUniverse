@@ -24,13 +24,13 @@ namespace Content.Server.CMU14.Round.Antags.Cannibal;
 /// </summary>
 public sealed partial class CannibalMealSystem : EntitySystem
 {
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly WantedSystem _wanted = default!;
-    [Dependency] private readonly ColonyBountySystem _colonyBounty = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly StaminaSystem _stamina = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private WantedSystem _wanted = default!;
+    [Dependency] private ColonyBountySystem _colonyBounty = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private StaminaSystem _stamina = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
 
     private const float BadFoodStaminaDamage = 15f;
 

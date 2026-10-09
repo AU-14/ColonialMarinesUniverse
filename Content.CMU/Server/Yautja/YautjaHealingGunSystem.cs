@@ -42,7 +42,7 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
 
         if (ent.Comp.Loaded)
         {
-            _popup.PopupClient("The healing gun is already loaded.", ent.Owner, args.User);
+            _popup.PopupEntity("The healing gun is already loaded.", ent.Owner, args.User);
             return;
         }
 

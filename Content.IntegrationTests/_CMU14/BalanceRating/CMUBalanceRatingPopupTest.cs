@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using Content.Client.CMU14.BalanceRating;
 using Content.Shared.CMU14.BalanceRating;
 using Robust.Client.GameObjects;
@@ -44,7 +45,7 @@ public sealed class CMUBalanceRatingPopupTest
             }
             finally
             {
-                popup.DisposeAllChildren();
+                popup.ReleaseChildren();
             }
         });
 

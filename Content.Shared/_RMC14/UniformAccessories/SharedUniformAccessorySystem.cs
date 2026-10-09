@@ -240,13 +240,13 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
 
         if (accessoryComp.User is { } accessoryUser && !BelongsToUser(accessoryUser, user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-uniform-accessory-fail"), user, user, PopupType.SmallCaution);
             return false;
         }
 
         if (!holderComp.AllowedCategories.Contains(accessoryComp.Category))
         {
-            _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail-not-allowed"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-uniform-accessory-fail-not-allowed"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -265,7 +265,7 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
 
         if (accessoryDictionary.TryGetValue(accessoryComp.Category, out var amount) && accessoryComp.Limit <= amount)
         {
-            _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail-limit"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-uniform-accessory-fail-limit"), user, user, PopupType.SmallCaution);
             return false;
         }
 

@@ -346,7 +346,8 @@ public sealed partial class AdminVerbSystem
                 Act = () =>
                 {
                     _vomitSystem.Vomit(args.Target, -1000, -1000); // You feel hollow!
-                    _bodySystem.TryGetOrgansWithComponent<TransformComponent>((args.Target, body), out var organs);
+                    var organs = _bodySystem.EnumerateOrgans<TransformComponent>((args.Target, body))
+                        .Select(organ => new Entity<TransformComponent>(organ.Owner, organ.Comp2)).ToList();
                     var baseXform = Transform(args.Target);
                     foreach (var organ in organs)
                     {
@@ -376,7 +377,8 @@ public sealed partial class AdminVerbSystem
                 {
                     var baseXform = Transform(args.Target);
                     var parts = new HashSet<ProtoId<OrganCategoryPrototype>>() { "HandRight", "HandLeft" };
-                    _bodySystem.TryGetOrgansWithComponent<OrganComponent>((args.Target, body), out var organs);
+                    var organs = _bodySystem.EnumerateOrgans<OrganComponent>((args.Target, body))
+                        .Select(organ => new Entity<OrganComponent>(organ.Owner, organ.Comp2)).ToList();
                     foreach (var organ in organs.Where(it => it.Comp.Category is { } category && parts.Contains(category)))
                     {
                         _transformSystem.AttachToGridOrMap(organ);
@@ -401,7 +403,8 @@ public sealed partial class AdminVerbSystem
                 {
                     var baseXform = Transform(args.Target);
                     var parts = new HashSet<ProtoId<OrganCategoryPrototype>>() { "HandRight", "HandLeft" };
-                    _bodySystem.TryGetOrgansWithComponent<OrganComponent>((args.Target, body), out var organs);
+                    var organs = _bodySystem.EnumerateOrgans<OrganComponent>((args.Target, body))
+                        .Select(organ => new Entity<OrganComponent>(organ.Owner, organ.Comp2)).ToList();
                     foreach (var organ in organs.Where(it => it.Comp.Category is { } category && parts.Contains(category)))
                     {
                         _transformSystem.AttachToGridOrMap(organ);
@@ -425,7 +428,8 @@ public sealed partial class AdminVerbSystem
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Mobs/Species/Human/organs.rsi"), "stomach"),
                 Act = () =>
                 {
-                    _bodySystem.TryGetOrgansWithComponent<StomachComponent>((args.Target, body), out var organs);
+                    var organs = _bodySystem.EnumerateOrgans<StomachComponent>((args.Target, body))
+                        .Select(organ => new Entity<StomachComponent>(organ.Owner, organ.Comp2)).ToList();
                     foreach (var entity in organs)
                     {
                         QueueDel(entity.Owner);
@@ -447,7 +451,8 @@ public sealed partial class AdminVerbSystem
                 Icon = new SpriteSpecifier.Rsi(new("/Textures/Mobs/Species/Human/organs.rsi"), "lung-r"),
                 Act = () =>
                 {
-                    _bodySystem.TryGetOrgansWithComponent<LungComponent>((args.Target, body), out var organs);
+                    var organs = _bodySystem.EnumerateOrgans<LungComponent>((args.Target, body))
+                        .Select(organ => new Entity<LungComponent>(organ.Owner, organ.Comp2)).ToList();
                     foreach (var entity in organs)
                     {
                         QueueDel(entity.Owner);

@@ -142,7 +142,7 @@ public sealed partial class BulletBoxSystem : EntitySystem
             _gun.SetBallisticUnspawned((used, used.Comp2), used.Comp2.UnspawnedCount - transfer);
             ent.Comp.Amount += transfer;
         }
-        _popup.PopupClient(Loc.GetString("rmc-bullet-box-transfer-done", ("amount", transfer), ("used", ent)), ent, user);
+        _popup.PopupEntity(Loc.GetString("rmc-bullet-box-transfer-done", ("amount", transfer), ("used", ent)), ent, user);
         Dirty(ent);
         UpdateAppearance(ent);
     }
@@ -182,7 +182,7 @@ public sealed partial class BulletBoxSystem : EntitySystem
         }
         if(popup is not null)
         {
-            _popup.PopupClient(popup, box, user);
+            _popup.PopupEntity(popup, box, user);
             return false;
         }
         return true;

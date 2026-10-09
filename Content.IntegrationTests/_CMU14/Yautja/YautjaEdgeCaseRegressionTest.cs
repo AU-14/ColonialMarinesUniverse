@@ -249,7 +249,7 @@ public sealed class YautjaEdgeCaseRegressionTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var listed = entMan.EntityQuery<GhostRoleComponent>(true).Any(role => role.Owner == prey);
+            var listed = entMan.QueryEntities<GhostRoleComponent>(true).Any(role => role.Owner == prey);
             Assert.Multiple(() =>
             {
                 Assert.That(entMan.GetComponent<TransformComponent>(prey).ParentUid, Is.EqualTo(EntityUid.Invalid),

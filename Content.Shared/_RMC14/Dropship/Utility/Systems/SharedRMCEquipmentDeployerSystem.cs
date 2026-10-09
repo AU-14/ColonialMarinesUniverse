@@ -242,7 +242,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
 
             if (_alert.Get(deployer) < equipmentDeployerComponent.AlertLevelRequired && deploy) // CMU14
             {
-                _popup.PopupClient(Loc.GetString("rmc-sentry-not-emergency", ("deployer", deployer)), deployer, user.Value);
+                _popup.PopupEntity(Loc.GetString("rmc-sentry-not-emergency", ("deployer", deployer)), deployer, user.Value);
                 return false;
             }
         }

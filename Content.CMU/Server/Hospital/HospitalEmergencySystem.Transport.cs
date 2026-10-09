@@ -110,7 +110,7 @@ public sealed partial class HospitalEmergencySystem
             interruptedDropship.Destination == destination && TryComp<FTLComponent>(ship, out var incomplete) &&
             incomplete.State == FTLState.Starting &&
             (TransportUnavailable(incomplete.TargetCoordinates.EntityId) ||
-             !TryComp<TransformComponent>(incomplete.TargetCoordinates.EntityId, out _)))
+             !TryComp(incomplete.TargetCoordinates.EntityId, out TransformComponent? _)))
         {
             var startupStream = incomplete.StartupStream;
             RemComp<FTLComponent>(ship);
@@ -125,7 +125,7 @@ public sealed partial class HospitalEmergencySystem
             Transform(destination).MapUid == mapUid && dropship.Destination == destination &&
             TryComp<FTLComponent>(ship, out var ftl) && ftl.State == FTLState.Starting &&
             !TransportUnavailable(ftl.TargetCoordinates.EntityId) &&
-            TryComp<TransformComponent>(ftl.TargetCoordinates.EntityId, out _) &&
+            TryComp(ftl.TargetCoordinates.EntityId, out TransformComponent? _) &&
             _transform.ToMapCoordinates(ftl.TargetCoordinates).MapId == destinationPosition.MapId &&
             (_transform.ToMapCoordinates(ftl.TargetCoordinates).Position - destinationPosition.Position).LengthSquared() < 0.0001f)
         {
@@ -203,7 +203,7 @@ public sealed partial class HospitalEmergencySystem
 
     private bool HasProtectedTransportContent(HospitalTransportLeaseComponent lease, bool offShuttleOnly = false)
     {
-        var query = EntityManager.AllEntityQueryEnumerator<TransformComponent>();
+        var query = AllEntityQuery<TransformComponent>();
         while (query.MoveNext(out var uid, out var transform))
         {
             var onShuttle = uid != lease.Shuttle &&
@@ -226,7 +226,7 @@ public sealed partial class HospitalEmergencySystem
 
     private bool PendingTransportRetirement(EntityUid uid)
     {
-        while (TryComp<TransformComponent>(uid, out var transform))
+        while (TryComp(uid, out TransformComponent? transform))
         {
             if (TransportUnavailable(uid))
                 return true;
