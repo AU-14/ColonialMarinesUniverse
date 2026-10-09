@@ -1518,13 +1518,9 @@
     min: -0.375, -0.09, 0.19
     max: -0.3125, 0.11, 0.608
     color: '#18191B'
-  - label: sloped screen supporting rib 0
-    min: -0.125, -0.135, 0.266
-    max: -0.09375, 0.14, 0.57
-    color: '#D7224A'
   - label: narrow visible side display 0 substrate
     min: -0.125, -0.148, 0.266
-    max: -0.09375, -0.135, 0.57
+    max: -0.09375, 0.14, 0.57
     color: '#D7224A'
   - label: narrow visible side display 0 source detail
     min: -0.125, -0.149, 0.266
@@ -1532,13 +1528,9 @@
     color: '#FFFFFF'
     surface: CMU3DMachineryExtraCloudArt029
     surfaceAxis: XZ
-  - label: sloped screen supporting rib 1
-    min: -0.09375, -0.135, 0.228
-    max: -0.0625, 0.14, 0.532
-    color: '#BFAC67'
   - label: narrow visible side display 1 substrate
     min: -0.09375, -0.148, 0.228
-    max: -0.0625, -0.135, 0.532
+    max: -0.0625, 0.14, 0.532
     color: '#BFAC67'
   - label: narrow visible side display 1 source detail
     min: -0.09375, -0.149, 0.228
@@ -1546,13 +1538,9 @@
     color: '#FFFFFF'
     surface: CMU3DMachineryExtraCloudArt030
     surfaceAxis: XZ
-  - label: sloped screen supporting rib 2
-    min: -0.0625, -0.135, 0.19
-    max: -0.03125, 0.14, 0.494
-    color: '#D7224A'
   - label: narrow visible side display 2 substrate
     min: -0.0625, -0.148, 0.19
-    max: -0.03125, -0.135, 0.494
+    max: -0.03125, 0.14, 0.494
     color: '#D7224A'
   - label: narrow visible side display 2 source detail
     min: -0.0625, -0.149, 0.19
@@ -1560,13 +1548,9 @@
     color: '#FFFFFF'
     surface: CMU3DMachineryExtraCloudArt029
     surfaceAxis: XZ
-  - label: sloped screen supporting rib 3
-    min: -0.03125, -0.135, 0.152
-    max: 0.0, 0.14, 0.456
-    color: '#867872'
   - label: narrow visible side display 3 substrate
     min: -0.03125, -0.148, 0.152
-    max: 0.0, -0.135, 0.456
+    max: 0, 0.14, 0.456
     color: '#867872'
   - label: narrow visible side display 3 source detail
     min: -0.03125, -0.149, 0.152
@@ -1634,13 +1618,9 @@
     min: 0.3125, -0.09, 0.19
     max: 0.375, 0.11, 0.608
     color: '#18191B'
-  - label: sloped screen supporting rib 0
-    min: 0.09375, -0.135, 0.266
-    max: 0.125, 0.14, 0.57
-    color: '#D7224A'
   - label: narrow visible side display 0 substrate
     min: 0.09375, -0.148, 0.266
-    max: 0.125, -0.135, 0.57
+    max: 0.125, 0.14, 0.57
     color: '#D7224A'
   - label: narrow visible side display 0 source detail
     min: 0.09375, -0.149, 0.266
@@ -1648,13 +1628,9 @@
     color: '#FFFFFF'
     surface: CMU3DMachineryExtraCloudArt033
     surfaceAxis: XZ
-  - label: sloped screen supporting rib 1
-    min: 0.0625, -0.135, 0.228
-    max: 0.09375, 0.14, 0.532
-    color: '#BFAC67'
   - label: narrow visible side display 1 substrate
     min: 0.0625, -0.148, 0.228
-    max: 0.09375, -0.135, 0.532
+    max: 0.09375, 0.14, 0.532
     color: '#BFAC67'
   - label: narrow visible side display 1 source detail
     min: 0.0625, -0.149, 0.228
@@ -1662,13 +1638,9 @@
     color: '#FFFFFF'
     surface: CMU3DMachineryExtraCloudArt034
     surfaceAxis: XZ
-  - label: sloped screen supporting rib 2
-    min: 0.03125, -0.135, 0.19
-    max: 0.0625, 0.14, 0.494
-    color: '#D7224A'
   - label: narrow visible side display 2 substrate
     min: 0.03125, -0.148, 0.19
-    max: 0.0625, -0.135, 0.494
+    max: 0.0625, 0.14, 0.494
     color: '#D7224A'
   - label: narrow visible side display 2 source detail
     min: 0.03125, -0.149, 0.19
@@ -1676,13 +1648,9 @@
     color: '#FFFFFF'
     surface: CMU3DMachineryExtraCloudArt033
     surfaceAxis: XZ
-  - label: sloped screen supporting rib 3
-    min: 0.0, -0.135, 0.152
-    max: 0.03125, 0.14, 0.456
-    color: '#867872'
   - label: narrow visible side display 3 substrate
-    min: 0.0, -0.148, 0.152
-    max: 0.03125, -0.135, 0.456
+    min: 0, -0.148, 0.152
+    max: 0.03125, 0.14, 0.456
     color: '#867872'
   - label: narrow visible side display 3 source detail
     min: 0.0, -0.149, 0.152
@@ -2261,86 +2229,66 @@
     max: 0.27, 0.27, 0.91
     color: '#4281DE'
     shape: Ellipsoid
-  - label: open crown rim segment 0
-    min: 0.175, -0.027, 0.945
-    max: 0.285, 0.027, 1.015
+  - label: open crown rim segment 01
+    min: 0.1606371, -0.027, 0.945
+    max: 0.2993629, 0.027, 1.015
     color: '#4281DE'
     yaw: 90.0
-  - label: open crown rim segment 1
-    min: 0.157492, 0.061017, 0.945
-    max: 0.267492, 0.115017, 1.015
+  - label: open crown rim segment 02
+    min: 0.1298229, 0.088, 0.945
+    max: 0.2685488, 0.142, 1.015
     color: '#4281DE'
-    yaw: 112.5
-  - label: open crown rim segment 2
-    min: 0.107635, 0.135635, 0.945
-    max: 0.217635, 0.189635, 1.015
+    yaw: 120.0
+  - label: open crown rim segment 03
+    min: 0.0456371, 0.1721858, 0.945
+    max: 0.1843629, 0.2261858, 1.015
     color: '#4281DE'
-    yaw: 135.0
-  - label: open crown rim segment 3
-    min: 0.033017, 0.185492, 0.945
-    max: 0.143017, 0.239492, 1.015
-    color: '#4281DE'
-    yaw: 157.5
-  - label: open crown rim segment 4
-    min: -0.055, 0.203, 0.945
-    max: 0.055, 0.257, 1.015
+    yaw: 150.0
+  - label: open crown rim segment 04
+    min: -0.0693629, 0.203, 0.945
+    max: 0.0693629, 0.257, 1.015
     color: '#4281DE'
     yaw: 180.0
-  - label: open crown rim segment 5
-    min: -0.143017, 0.185492, 0.945
-    max: -0.033017, 0.239492, 1.015
+  - label: open crown rim segment 05
+    min: -0.1843629, 0.1721858, 0.945
+    max: -0.0456371, 0.2261858, 1.015
     color: '#4281DE'
-    yaw: 202.5
-  - label: open crown rim segment 6
-    min: -0.217635, 0.135635, 0.945
-    max: -0.107635, 0.189635, 1.015
+    yaw: 210.0
+  - label: open crown rim segment 06
+    min: -0.2685488, 0.088, 0.945
+    max: -0.1298229, 0.142, 1.015
     color: '#4281DE'
-    yaw: 225.0
-  - label: open crown rim segment 7
-    min: -0.267492, 0.061017, 0.945
-    max: -0.157492, 0.115017, 1.015
-    color: '#4281DE'
-    yaw: 247.5
-  - label: open crown rim segment 8
-    min: -0.285, -0.027, 0.945
-    max: -0.175, 0.027, 1.015
+    yaw: 240.0
+  - label: open crown rim segment 07
+    min: -0.2993629, -0.027, 0.945
+    max: -0.1606371, 0.027, 1.015
     color: '#4281DE'
     yaw: 270.0
-  - label: open crown rim segment 9
-    min: -0.267492, -0.115017, 0.945
-    max: -0.157492, -0.061017, 1.015
+  - label: open crown rim segment 08
+    min: -0.2685488, -0.142, 0.945
+    max: -0.1298229, -0.088, 1.015
     color: '#4281DE'
-    yaw: 292.5
+    yaw: 300.0
+  - label: open crown rim segment 09
+    min: -0.1843629, -0.2261858, 0.945
+    max: -0.0456371, -0.1721858, 1.015
+    color: '#4281DE'
+    yaw: 330.0
   - label: open crown rim segment 10
-    min: -0.217635, -0.189635, 0.945
-    max: -0.107635, -0.135635, 1.015
+    min: -0.0693629, -0.257, 0.945
+    max: 0.0693629, -0.203, 1.015
     color: '#4281DE'
-    yaw: 315.0
+    yaw: 0.0
   - label: open crown rim segment 11
-    min: -0.143017, -0.239492, 0.945
-    max: -0.033017, -0.185492, 1.015
+    min: 0.0456371, -0.2261858, 0.945
+    max: 0.1843629, -0.1721858, 1.015
     color: '#4281DE'
-    yaw: 337.5
+    yaw: 30.0
   - label: open crown rim segment 12
-    min: -0.055, -0.257, 0.945
-    max: 0.055, -0.203, 1.015
+    min: 0.1298229, -0.142, 0.945
+    max: 0.2685488, -0.088, 1.015
     color: '#4281DE'
-    yaw: 360.0
-  - label: open crown rim segment 13
-    min: 0.033017, -0.239492, 0.945
-    max: 0.143017, -0.185492, 1.015
-    color: '#4281DE'
-    yaw: 22.5
-  - label: open crown rim segment 14
-    min: 0.107635, -0.189635, 0.945
-    max: 0.217635, -0.135635, 1.015
-    color: '#4281DE'
-    yaw: 45.0
-  - label: open crown rim segment 15
-    min: 0.157492, -0.115017, 0.945
-    max: 0.267492, -0.061017, 1.015
-    color: '#4281DE'
-    yaw: 67.5
+    yaw: 60.0
   - label: crown connected support 0
     min: 0.204, -0.026, 0.845
     max: 0.256, 0.026, 0.95
@@ -3106,10 +3054,6 @@
     min: -0.3125, -0.24, 1.875
     max: 0.3125, 0.24, 1.90625
     color: '#313131'
-  - label: stage 2 lower tie
-    min: -0.3125, -0.24, 1.46875
-    max: 0.3125, 0.24, 1.5
-    color: '#313131'
   - label: stage 3 front upright 7
     min: -0.28125, -0.24, 1.875
     max: -0.25, -0.175, 2.3125
@@ -3129,10 +3073,6 @@
   - label: stage 3 top tie
     min: -0.28125, -0.24, 2.28125
     max: 0.28125, 0.24, 2.3125
-    color: '#313131'
-  - label: stage 3 lower tie
-    min: -0.28125, -0.24, 1.875
-    max: 0.28125, 0.24, 1.90625
     color: '#313131'
   - label: stage 4 front upright 8
     min: -0.25, -0.24, 2.25
@@ -3396,10 +3336,6 @@
     min: 0.0625, -0.245, 0.1875
     max: 0.09375, -0.145, 0.28125
     color: '#7C7C7C'
-  - label: base lower dark panel
-    min: -0.1875, -0.22, 0.1875
-    max: 0.0625, -0.16, 0.28125
-    color: '#595959'
   - label: blue pedestal display substrate
     min: 0.28125, -0.247, 0.40625
     max: 0.40625, -0.24, 0.5625
@@ -3506,10 +3442,6 @@
     min: 0.1875, -0.153, 2.34375
     max: 0.5, 0.153, 2.375
     color: '#444444'
-  - label: lattice cross tie (1, 114)
-    min: 0.1875, -0.153, 1.40625
-    max: 0.5, 0.153, 1.4375
-    color: '#444444'
   - label: lattice diagonal (1, 'front')
     min: 0.312125, -0.156, 1.416861
     max: 0.344125, -0.124, 2.395639
@@ -3569,10 +3501,6 @@
   - label: lattice cross tie (2, 57)
     min: 0.25, -0.118, 3.1875
     max: 0.46875, 0.118, 3.21875
-    color: '#444444'
-  - label: lattice cross tie (2, 84)
-    min: 0.25, -0.118, 2.34375
-    max: 0.46875, 0.118, 2.375
     color: '#444444'
   - label: lattice diagonal (2, 'front')
     min: 0.32775, -0.121, 2.364709

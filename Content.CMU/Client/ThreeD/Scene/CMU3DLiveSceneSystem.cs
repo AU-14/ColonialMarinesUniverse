@@ -384,6 +384,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 }
                 var id = candidate.Meta.EntityPrototype?.ID;
                 var match = id == null ? null : _catalog!.Resolve(id);
+                match = VehicleTurretMatch(candidate.Uid, match);
                 var unsupportedState = false;
                 if (id != null && _catalog!.HasRandomSpriteVariants(id))
                 {
@@ -417,6 +418,11 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 IReadOnlyList<CMU3DModelPart>? stateParts = null;
                 var appearanceKey = string.Empty;
                 var paperOffset = Vector2.Zero;
+                var xenoAnimated = false;
+                if (match is { } xenoMatch && xenoMatch.Model.XenoStates.Count > 0)
+                    unsupportedState |= !TryXenoParts(candidate.Sprite, xenoMatch.Model, out stateParts, out xenoAnimated);
+                if (match is { } vehicleMatch && vehicleMatch.Model.VehicleLayers.Count > 0)
+                    unsupportedState |= !TryVehicleParts(candidate.Uid, candidate.Sprite, vehicleMatch.Model, out stateParts);
                 if (match is { } paperMatch && paperMatch.Model.WallPaper)
                     unsupportedState |= !paperMatch.Exact ||
                         !TryPaperOffset(candidate.Uid, candidate.Sprite, paperMatch.Model, out paperOffset);
@@ -484,6 +490,12 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                     position += model.GroundOffset;
                     renderYaw = CMU3DSceneLayout.RenderYaw(model, candidate.Yaw, candidate.Sprite.NoRotation,
                         candidate.Sprite.SnapCardinals) + (float) candidate.Sprite.Rotation.Theta;
+                    if (model.VehicleTurretPrototypes.Length > 0 &&
+                        TryVehiclePose(candidate.Uid, out var mountPosition, out var mountYaw))
+                    {
+                        position = mountPosition - origin + model.GroundOffset;
+                        renderYaw = CMU3DSceneLayout.RenderYaw(model, (float) mountYaw.Theta, false, false);
+                    }
                     if (model.OpeningFacingTargets.Length > 0)
                         renderYaw = OpeningFacingYaw(candidate.Uid, model, renderYaw);
                     IReadOnlyList<CMU3DModelPart> parts = stateParts ?? model.Parts;
@@ -528,6 +540,12 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                         }
                         else if (model.BackWallMountTargets.Length > 0)
                             position += BackWallMountOffset(candidate.Uid, model, renderYaw, wallOffset);
+                    }
+                    else if (model.WallMounted && HasComp<CMU3DVehicleCabinComponent>(mapUid))
+                    {
+                        // Cabin fixtures are placed directly against custom hull art.
+                        // Undo the ordinary model's half-tile wall-face offset.
+                        position += new Vector2(-MathF.Sin(renderYaw), MathF.Cos(renderYaw)) * .5f;
                     }
                     else if (model.FaceAwayFromWall)
                         renderYaw = ApplianceYaw(candidate.Uid, model, renderYaw);
@@ -588,7 +606,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 if (useModel)
                 {
                     var model = match!.Value.Model;
-                    if (model.SpriteStates.Count > 0 || model.ChargerAppearance != null ||
+                    if (model.SpriteStates.Count > 0 || xenoAnimated || model.ChargerAppearance != null ||
                         model.FoamAppearance != null || model.SolutionAppearance != null)
                         _animatedSprites.Add(candidate.Uid);
                     if (model.Placement == "surface")

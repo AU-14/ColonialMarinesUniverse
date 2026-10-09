@@ -2,7 +2,10 @@
 from copy import deepcopy
 
 FIELDS = ('anchored', 'alternateAnchorModel', 'preserveSlabCladding')
-SOURCES = {'DisposalJunction': 'j1', 'DisposalJunctionFlipped': 'j2', 'DisposalXJunction': 'x'}
+# CMU14: Redux uses the ordinary straight, elbow, trunk and routing castings too.
+SOURCES = {'DisposalJunction': 'j1', 'DisposalJunctionFlipped': 'j2', 'DisposalXJunction': 'x',
+           'DisposalPipe': 's', 'DisposalBend': 'c', 'DisposalTrunk': 't',
+           'DisposalRouter': 'j1s', 'DisposalRouterFlipped': 'j2s', 'DisposalYJunction': 'y'}
 RSI = 'Structures/Piping/disposal.rsi'
 
 
