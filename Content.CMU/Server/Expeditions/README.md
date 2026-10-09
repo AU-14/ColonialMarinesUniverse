@@ -148,7 +148,7 @@ Guards can cross shallow and deep RMC water at native wading speed, including on
 | `assault` | M63 SMG, five-shot volleys, aggressive close-range positioning |
 | `support` | M41AE2 heavy pulse rifle, seven-shot volleys, longer holds at useful range |
 | `marksman` | M4SPR rifle, two-shot volleys, longer detection/fire range, pistol when crowded |
-| `rocketeer` | M63 SMG and a single HE-loaded RPG-36; checks blast/backblast safety and returns to the firearm after firing |
+| `rocketeer` | M63 SMG and a single AT-loaded RPG-36 in suit storage; checks blast/backblast safety and returns to the firearm after firing |
 | `medic` | M63, finite dressings/injector/defibrillator; treatment and covered casualty extraction |
 | `breacher` | Type 23 with heavy slugs, twelve spare shells and a pistol; favors close-range positions |
 | `skirmisher` | MP5, light harness, smoke and pistol; favors covered flanks and flank response |

@@ -380,7 +380,7 @@ for the existing physical reload action. Disarm recovery takes precedence over o
 
 Assault troops use M63 SMGs, support gunners use M41AE2 heavy pulse rifles, marksmen use M4SPR
 rifles, and rich scavengers use the modern M41A/2. All except poor scrappers carry backup pistols.
-Rocketeers carry an SMG, pistol and one HE-loaded RPG-36. The AI uses a conservative
+Rocketeers carry an SMG, pistol and one AT-loaded RPG-36 in suit storage. The AI uses a conservative
 4.5–6 m window within the rocket's native range. It discards the spent tube and selects a firearm again.
 There is no rocket refill. Selection reserves a squad launcher; successful shots impose a
 20-second squad rocket cooldown. Clustered enemies or repeatedly punished peeks justify its use.

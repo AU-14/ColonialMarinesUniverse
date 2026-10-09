@@ -75,7 +75,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             if (TryComp<CMUExpeditionWeaponRoleComponent>(item, out var role) && role.Rocket)
                 return Comp<CMUExpeditionAgentComponent>(uid).AntiVehicle && WeaponAmmo(item) > 0 && !HasReadyRocket(uid) &&
-                    (_inventory.CanEquip(uid, item, "suitStorage", out _) || CanStoreSupply(uid, item));
+                    (_inventory.CanEquip(uid, item, SuitStorageSlot, out _) || CanStoreSupply(uid, item));
             return !armed && WeaponAmmo(item) > 0 &&
                 !(TryComp<CMUExpeditionWeaponRoleComponent>(item, out var firearm) && firearm.Rocket);
         }
