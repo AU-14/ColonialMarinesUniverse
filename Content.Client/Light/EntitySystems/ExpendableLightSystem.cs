@@ -21,6 +21,7 @@ public sealed partial class ExpendableLightSystem : VisualizerSystem<ExpendableL
     private void OnLightShutdown(EntityUid uid, ExpendableLightComponent component, ComponentShutdown args)
     {
         component.PlayingStream = _audioSystem.Stop(component.PlayingStream);
+        RemoveBurnAmbience(uid); // CMU14: release the owned, budgeted burn ambience.
     }
 
     protected override void OnAppearanceChange(EntityUid uid, ExpendableLightComponent comp, ref AppearanceChangeEvent args)
@@ -46,12 +47,15 @@ public sealed partial class ExpendableLightSystem : VisualizerSystem<ExpendableL
         if (!AppearanceSystem.TryGetData<ExpendableLightState>(uid, ExpendableLightVisuals.State, out var state, args.Component))
             return;
 
+        UpdateBurnAmbience((uid, comp), state); // CMU14
         switch (state)
         {
             case ExpendableLightState.Lit:
-                _audioSystem.Stop(comp.PlayingStream);
-                comp.PlayingStream = _audioSystem.PlayPvs(
-                    comp.LoopedSound, uid)?.Entity;
+                // CMU14 Begin: burn audio shares the ambient budget instead of restarting on every appearance change.
+                // _audioSystem.Stop(comp.PlayingStream);
+                // comp.PlayingStream = _audioSystem.PlayPvs(
+                //     comp.LoopedSound, uid)?.Entity;
+                // CMU14 End
 
                 if (SpriteSystem.LayerMapTryGet((uid, args.Sprite), ExpendableLightVisualLayers.Overlay, out var layerIdx, true))
                 {

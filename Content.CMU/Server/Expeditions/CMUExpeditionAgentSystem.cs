@@ -766,10 +766,13 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     }
 
     private bool Visible(EntityUid observer, EntityUid target, float range) =>
-        _interaction.InRangeUnobstructed(observer, target, range,
+        // Remembered contacts can be deleted between decisions (gibbing, evolution, disconnects).
+        TryComp<TransformComponent>(observer, out var observerTransform) &&
+        TryComp<TransformComponent>(target, out var targetTransform) &&
+        _interaction.InRangeUnobstructed((observer, observerTransform), (target, targetTransform), range,
             CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
             predicate: entity => entity == observer || entity == target || HasComp<NpcFactionMemberComponent>(entity)) &&
-        !SmokeOccludes(Transform(observer).Coordinates, Transform(target).Coordinates);
+        !SmokeOccludes(observerTransform.Coordinates, targetTransform.Coordinates);
 
     private void Move(EntityUid uid, EntityCoordinates destination, bool precise = false,
         bool routeWaypoint = false, bool validated = false)
