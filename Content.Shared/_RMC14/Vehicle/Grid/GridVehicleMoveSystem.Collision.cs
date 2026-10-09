@@ -189,256 +189,258 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             LookupFlags.Dynamic | LookupFlags.Static);
         var hitsDepth = _hitsDepth++;
         var hits = _hitsBuffers[hitsDepth];
-        hits.Clear();
-        foreach (var hit in _intersectingPhysics)
+        try
         {
-            hits.Add(hit.Owner);
-        }
-        var movementStart = transform.GetWorldPosition(uid);
-        var movementHalfExtents = aabb.Size * 0.5f;
-        _collisionHitSortBuffers[hitsDepth].Sort(
-            hits,
-            movementStart,
-            tx.Position,
-            movementHalfExtents,
-            _collisionSortBounds ??= GetCollisionSortBounds);
-        var playedCollisionSound = false;
-        var mobHits = new ValueList<EntityUid>(0);
-
-        void AddProbe(bool probeBlocked)
-        {
-            if (!debugEnabled)
-                return;
-
-            AddDebugCollisionProbe(uid, mover, fixtures, tx, aabb, movementAabb, world.MapId, probeBlocked, applyEffects);
-        }
-
-        var isHeavyVehicle = _tag.HasTag(uid, VehicleHeavyTag);
-
-        foreach (var other in hits)
-        {
-            // The containing grid supplies the vehicle's local coordinate space;
-            // its child walls and structures are blockers, but the grid entity
-            // itself must never be treated as one.
-            if (other == uid || other == grid || TerminatingOrDeleted(other) || EntityManager.IsQueuedForDeletion(other))
-                continue;
-
-            if (TryComp(other, out VehicleRideSurfaceRiderComponent? rider) && rider.Vehicle == uid)
-                continue;
-
-            if (ignoredEntities != null && ignoredEntities.Contains(other))
-                continue;
-
-            if (ShouldIgnoreZHighGroundCollision(uid, other))
-                continue;
-
-            // Heavy vehicles (APC/Tank) drive over consoles and similar tagged props
-            // without collision — no block, no damage, no sound. Lighter vehicles bump them.
-            if (isHeavyVehicle && _tag.HasTag(other, VehicleHeavyDriveOverTag))
-                continue;
-
-            var isSmashingNow = IsSmashingCapable(mover);
-
-            if (!TryBuildCollisionCandidate(
-                    uid,
-                    fixtures,
-                    body,
-                    other,
-                    aabb,
-                    movementAabb,
-                    operatorUid,
-                    isSmashingNow,
-                    out var candidate))
+            hits.Clear();
+            foreach (var hit in _intersectingPhysics)
             {
-                continue;
+                hits.Add(hit.Owner);
+            }
+            var movementStart = transform.GetWorldPosition(uid);
+            var movementHalfExtents = aabb.Size * 0.5f;
+            _collisionHitSortBuffers[hitsDepth].Sort(
+                hits,
+                movementStart,
+                tx.Position,
+                movementHalfExtents,
+                _collisionSortBounds ??= GetCollisionSortBounds);
+            var playedCollisionSound = false;
+            var mobHits = new ValueList<EntityUid>(0);
+
+            void AddProbe(bool probeBlocked)
+            {
+                if (!debugEnabled)
+                    return;
+
+                AddDebugCollisionProbe(uid, mover, fixtures, tx, aabb, movementAabb, world.MapId, probeBlocked, applyEffects);
             }
 
-            // A prediction correction or a high-speed impact can occasionally
-            // leave the chassis already overlapping a blocker. Permit only a
-            // step that moves away from blockers present at the starting pose;
-            // this cannot be used to continue driving through the obstruction.
-            if (escapeDirection is { } escapeDelta &&
-                escapeBlockers?.Contains(candidate.Entity) == true &&
-                GridVehicleMotionSimulator.IsMovingAwayFromObstacle(
-                    escapeDelta,
-                    aabb.Center,
-                    candidate.Aabb.Center))
+            var isHeavyVehicle = _tag.HasTag(uid, VehicleHeavyTag);
+
+            foreach (var other in hits)
             {
-                continue;
-            }
+                // The containing grid supplies the vehicle's local coordinate space;
+                // its child walls and structures are blockers, but the grid entity
+                // itself must never be treated as one.
+                if (other == uid || other == grid || TerminatingOrDeleted(other) || EntityManager.IsQueuedForDeletion(other))
+                    continue;
 
-            if (candidate.CollisionClass == VehicleCollisionClass.SoftMob && candidate.IsXeno)
-            {
-                var result = HandleSoftXenoCollision(
-                    uid,
-                    mover,
-                    grid,
-                    world.Position,
-                    world.MapId,
-                    candidate.Entity,
-                    // aabb,
-                    fixtureBounds, // CMU14: push against the rotated hull, not its world-axis bounding box.
-                    candidate.Aabb,
-                    candidate.CollisionAabb,
-                    clearance,
-                    applyEffects,
-                    debugEnabled,
-                    blockers,
-                    wheelDamage,
-                    ref playedCollisionSound);
+                if (TryComp(other, out VehicleRideSurfaceRiderComponent? rider) && rider.Vehicle == uid)
+                    continue;
 
-                if (result == CollisionHandlingResult.Blocked)
-                {
-                    _hitsDepth--;
-                    AddProbe(true);
-                    return false;
-                }
+                if (ignoredEntities != null && ignoredEntities.Contains(other))
+                    continue;
 
-                continue;
-            }
+                if (ShouldIgnoreZHighGroundCollision(uid, other))
+                    continue;
 
-            if (candidate.CollisionClass == VehicleCollisionClass.SoftMob &&
-                candidate.MobState != null &&
-                _standing.IsDown(candidate.Entity))
-            {
-                continue;
-            }
+                // Heavy vehicles (APC/Tank) drive over consoles and similar tagged props
+                // without collision — no block, no damage, no sound. Lighter vehicles bump them.
+                if (isHeavyVehicle && _tag.HasTag(other, VehicleHeavyDriveOverTag))
+                    continue;
 
-            var bumpOpeningDoor = candidate.Door is { BumpOpen: true } &&
-                                  operatorUid != null &&
-                                  HasNoAccessRequirements(candidate.Entity) &&
-                                  !candidate.IsUnpoweredDoor &&
-                                  !isSmashingNow;
+                var isSmashingNow = IsSmashingCapable(mover);
 
-            if (applyEffects && bumpOpeningDoor && candidate.Door is { } door && !_net.IsClient)
-            {
-                if (_door.TryOpen(candidate.Entity, door, operatorUid) && candidate.IsBarricade)
-                {
-                    _door.OnPartialOpen(candidate.Entity, door);
-                }
-            }
-
-            if (candidate.CollisionClass == VehicleCollisionClass.Ignore)
-                continue;
-
-            if (candidate.CollisionClass == VehicleCollisionClass.Breakable)
-            {
-                var plowImpact = GridVehicleMotionSimulator.IsFrontImpact(
-                    tx.Position,
-                    rotation,
-                    localAabb,
-                    candidate.Aabb);
-                var result = HandleBreakableCollision(
-                    uid,
-                    mover,
-                    candidate.Entity,
-                    candidate.CollisionAabb,
-                    candidate.Aabb,
-                    clearance,
-                    world.MapId,
-                    candidate.Door != null,
-                    candidate.IsUnpoweredDoor,
-                    plowImpact,
-                    applyEffects,
-                    debugEnabled,
-                    blockers,
-                    wheelDamage,
-                    ref playedCollisionSound);
-
-                if (result == CollisionHandlingResult.Blocked)
-                {
-                    _hitsDepth--;
-                    AddProbe(true);
-                    return false;
-                }
-
-                continue;
-            }
-
-            if (candidate.CollisionClass == VehicleCollisionClass.Hard)
-            {
-                // A normal bump-open door should stop the vehicle harmlessly while
-                // it opens, just like it stops a walking mob. The server-side
-                // TryOpen above still enforces power, bolts, welds and driver access.
-                if (bumpOpeningDoor)
-                {
-                    AddBlockingCollision(
+                if (!TryBuildCollisionCandidate(
                         uid,
+                        fixtures,
+                        body,
+                        other,
+                        aabb,
+                        movementAabb,
+                        operatorUid,
+                        isSmashingNow,
+                        out var candidate))
+                {
+                    continue;
+                }
+
+                // A prediction correction or a high-speed impact can occasionally
+                // leave the chassis already overlapping a blocker. Permit only a
+                // step that moves away from blockers present at the starting pose;
+                // this cannot be used to continue driving through the obstruction.
+                if (escapeDirection is { } escapeDelta &&
+                    escapeBlockers?.Contains(candidate.Entity) == true &&
+                    GridVehicleMotionSimulator.IsMovingAwayFromObstacle(
+                        escapeDelta,
+                        aabb.Center,
+                        candidate.Aabb.Center))
+                {
+                    continue;
+                }
+
+                if (candidate.CollisionClass == VehicleCollisionClass.SoftMob && candidate.IsXeno)
+                {
+                    var result = HandleSoftXenoCollision(
+                        uid,
+                        mover,
+                        grid,
+                        world.Position,
+                        world.MapId,
+                        candidate.Entity,
+                        // aabb,
+                        fixtureBounds, // CMU14: push against the rotated hull, not its world-axis bounding box.
+                        candidate.Aabb,
+                        candidate.CollisionAabb,
+                        clearance,
+                        applyEffects,
+                        debugEnabled,
+                        blockers,
+                        wheelDamage,
+                        ref playedCollisionSound);
+
+                    if (result == CollisionHandlingResult.Blocked)
+                    {
+                        AddProbe(true);
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                if (candidate.CollisionClass == VehicleCollisionClass.SoftMob &&
+                    candidate.MobState != null &&
+                    _standing.IsDown(candidate.Entity))
+                {
+                    continue;
+                }
+
+                var bumpOpeningDoor = candidate.Door is { BumpOpen: true } &&
+                                      operatorUid != null &&
+                                      HasNoAccessRequirements(candidate.Entity) &&
+                                      !candidate.IsUnpoweredDoor &&
+                                      !isSmashingNow;
+
+                if (applyEffects && bumpOpeningDoor && candidate.Door is { } door && !_net.IsClient)
+                {
+                    if (_door.TryOpen(candidate.Entity, door, operatorUid) && candidate.IsBarricade)
+                    {
+                        _door.OnPartialOpen(candidate.Entity, door);
+                    }
+                }
+
+                if (candidate.CollisionClass == VehicleCollisionClass.Ignore)
+                    continue;
+
+                if (candidate.CollisionClass == VehicleCollisionClass.Breakable)
+                {
+                    var plowImpact = GridVehicleMotionSimulator.IsFrontImpact(
+                        tx.Position,
+                        rotation,
+                        localAabb,
+                        candidate.Aabb);
+                    var result = HandleBreakableCollision(
+                        uid,
+                        mover,
                         candidate.Entity,
                         candidate.CollisionAabb,
                         candidate.Aabb,
                         clearance,
                         world.MapId,
+                        candidate.Door != null,
+                        candidate.IsUnpoweredDoor,
+                        plowImpact,
+                        applyEffects,
                         debugEnabled,
-                        blockers);
-                    _hitsDepth--;
-                    AddProbe(true);
-                    return false;
-                }
+                        blockers,
+                        wheelDamage,
+                        ref playedCollisionSound);
 
-                var plowImpact = GridVehicleMotionSimulator.IsFrontImpact(
-                    tx.Position,
-                    rotation,
-                    localAabb,
-                    candidate.Aabb);
-                var result = HandleHardCollision(
-                    uid,
-                    mover,
-                    grid,
-                    gridPos,
-                    candidate.Entity,
-                    candidate.CollisionAabb,
-                    candidate.Aabb,
-                    clearance,
-                    world.MapId,
-                    candidate.IsVehicle,
-                    plowImpact,
-                    applyEffects,
-                    debugEnabled,
-                    blockers,
-                    wheelDamage,
-                    ref playedCollisionSound);
+                    if (result == CollisionHandlingResult.Blocked)
+                    {
+                        AddProbe(true);
+                        return false;
+                    }
 
-                if (result == CollisionHandlingResult.Blocked)
-                {
-                    _hitsDepth--;
-                    AddProbe(true);
-                    return false;
-                }
-
-                continue;
-            }
-
-            if (applyEffects &&
-                _net.IsClient &&
-                !candidate.IsXeno &&
-                candidate.MobState != null &&
-                ShouldPredictVehicleInteractions(uid))
-            {
-                PredictRunover(uid, candidate.Entity, candidate.MobState);
-            }
-
-            if (applyEffects && !_net.IsClient && candidate.MobState != null)
-            {
-                if (!mobHits.Contains(candidate.Entity))
-                    mobHits.Add(candidate.Entity);
-            }
-        }
-
-        if (!_net.IsClient && mobHits.Count > 0)
-        {
-            foreach (var mobUid in mobHits)
-            {
-                if (!TryComp(mobUid, out MobStateComponent? mob))
                     continue;
+                }
 
-                HandleMobCollision(uid, mobUid, mob, ref playedCollisionSound);
+                if (candidate.CollisionClass == VehicleCollisionClass.Hard)
+                {
+                    // A normal bump-open door should stop the vehicle harmlessly while
+                    // it opens, just like it stops a walking mob. The server-side
+                    // TryOpen above still enforces power, bolts, welds and driver access.
+                    if (bumpOpeningDoor)
+                    {
+                        AddBlockingCollision(
+                            uid,
+                            candidate.Entity,
+                            candidate.CollisionAabb,
+                            candidate.Aabb,
+                            clearance,
+                            world.MapId,
+                            debugEnabled,
+                            blockers);
+                        AddProbe(true);
+                        return false;
+                    }
+
+                    var plowImpact = GridVehicleMotionSimulator.IsFrontImpact(
+                        tx.Position,
+                        rotation,
+                        localAabb,
+                        candidate.Aabb);
+                    var result = HandleHardCollision(
+                        uid,
+                        mover,
+                        grid,
+                        gridPos,
+                        candidate.Entity,
+                        candidate.CollisionAabb,
+                        candidate.Aabb,
+                        clearance,
+                        world.MapId,
+                        candidate.IsVehicle,
+                        plowImpact,
+                        applyEffects,
+                        debugEnabled,
+                        blockers,
+                        wheelDamage,
+                        ref playedCollisionSound);
+
+                    if (result == CollisionHandlingResult.Blocked)
+                    {
+                        AddProbe(true);
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                if (applyEffects &&
+                    _net.IsClient &&
+                    !candidate.IsXeno &&
+                    candidate.MobState != null &&
+                    ShouldPredictVehicleInteractions(uid))
+                {
+                    PredictRunover(uid, candidate.Entity, candidate.MobState);
+                }
+
+                if (applyEffects && !_net.IsClient && candidate.MobState != null)
+                {
+                    if (!mobHits.Contains(candidate.Entity))
+                        mobHits.Add(candidate.Entity);
+                }
             }
-        }
 
-        AddProbe(false);
-        _hitsDepth--;
-        return true;
+            if (!_net.IsClient && mobHits.Count > 0)
+            {
+                foreach (var mobUid in mobHits)
+                {
+                    if (!TryComp(mobUid, out MobStateComponent? mob))
+                        continue;
+
+                    HandleMobCollision(uid, mobUid, mob, ref playedCollisionSound);
+                }
+            }
+
+            AddProbe(false);
+            return true;
+        }
+        finally
+        {
+            _hitsDepth--;
+        }
     }
 
     private bool HasNoAccessRequirements(EntityUid door)
@@ -569,7 +571,56 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (!GetMobBoundsInHullSpace(vehicleBounds, GetCenteredMobAabb(xeno, xenoAabb)).Intersects(vehicleBounds.Box))
             return CollisionHandlingResult.Continue;
 
-        if (ShouldBlockXeno(mover, xeno))
+        if (TryComp(vehicle, out VehicleSqueezeUnderComponent? squeezeUnder) &&
+            _squeezeUnder.CanSqueezeUnder((vehicle, squeezeUnder), xeno))
+        {
+            if (!applyEffects)
+                return CollisionHandlingResult.Continue;
+
+            _squeezeUnder.TryMarkUnder(xeno, (vehicle, squeezeUnder));
+
+            var squeezeVehicleMove = GetVehicleMoveDelta(grid, vehicleWorldPosition, mapId, mover);
+            if (PushMobOutOfVehicle(vehicle, xeno, vehicleBounds, xenoAabb, squeezeVehicleMove))
+                return CollisionHandlingResult.Continue;
+
+            AddBlockingCollision(vehicle, xeno, collisionAabb, xenoAabb, clearance, mapId, debug, blockers);
+            return CollisionHandlingResult.Blocked;
+        }
+
+        var blockResult = GetXenoBlockResult(mover, xeno);
+
+        if (blockResult == XenoBlockResult.Slow || blockResult == XenoBlockResult.ForcePush)
+        {
+            var vehicleMove = GetVehicleMoveDelta(grid, vehicleWorldPosition, mapId, mover);
+            var centeredAabb = GetCenteredMobAabb(xeno, xenoAabb);
+
+            if (!TryGetMobPush(vehicle, xeno, vehicleBounds, centeredAabb, vehicleMove, out var pushTarget))
+            {
+                if (applyEffects)
+                    PlayMobCollisionSound(vehicle, ref playedCollisionSound);
+
+                AddBlockingCollision(vehicle, xeno, collisionAabb, xenoAabb, clearance, mapId, debug, blockers);
+                return CollisionHandlingResult.Blocked;
+            }
+
+            if (applyEffects)
+            {
+                PlayMobCollisionSound(vehicle, ref playedCollisionSound);
+
+                if (!_net.IsClient || ShouldPredictVehicleInteractions(vehicle))
+                    _fortify.TryRelocateFortified(xeno, pushTarget);
+
+                if (blockResult == XenoBlockResult.Slow)
+                {
+                    mover.CurrentSpeed *= FortifiedLightSlowFactor;
+                    Dirty(vehicle, mover);
+                }
+            }
+
+            return CollisionHandlingResult.Continue;
+        }
+
+        if (blockResult == XenoBlockResult.Block)
         {
             if (applyEffects)
             {
@@ -585,8 +636,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return CollisionHandlingResult.Continue;
 
         PlayMobCollisionSound(vehicle, ref playedCollisionSound);
-        var vehicleMove = GetVehicleMoveDelta(grid, vehicleWorldPosition, mapId, mover);
-        if (PushMobOutOfVehicle(vehicle, xeno, vehicleBounds, xenoAabb, vehicleMove))
+        var pushMove = GetVehicleMoveDelta(grid, vehicleWorldPosition, mapId, mover);
+        if (PushMobOutOfVehicle(vehicle, xeno, vehicleBounds, xenoAabb, pushMove))
             return CollisionHandlingResult.Continue;
 
         ApplyCollisionSelfDamage(vehicle, mover, xeno, wheelDamage, 0f);
@@ -631,8 +682,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         // Smashable is gated to specific vehicle tags (e.g. resin walls that only heavy
         // armor can plow through). Anyone else bumps into it like a concrete wall.
         if (smashable != null &&
-            smashable.RequiredVehicleTag is { } requiredTag &&
-            !_tag.HasTag(vehicle, requiredTag))
+            (smashable.MinDestroyWeightClass is { } minDestroy && mover.WeightClass < minDestroy ||
+             smashable.RequiredVehicleTag is { } requiredTag && !_tag.HasTag(vehicle, requiredTag)))
         {
             if (applyEffects)
             {
@@ -659,6 +710,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                 return CollisionHandlingResult.Blocked;
             }
         }
+
+        if (applyEffects && smashable?.MinContinueWeightClass is { } minContinue && mover.WeightClass < minContinue)
+            return CollisionHandlingResult.Blocked;
 
         return CollisionHandlingResult.Continue;
     }
@@ -1401,15 +1455,43 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return damage;
     }
 
+    private enum XenoBlockResult : byte
+    {
+        Push,
+        Block,
+        Slow,
+        ForcePush,
+    }
+
+    private const float FortifiedLightSlowFactor = 1f / 3f;
+
     private bool ShouldBlockXeno(GridVehicleMoverComponent mover, EntityUid xeno)
     {
+        return GetXenoBlockResult(mover, xeno) == XenoBlockResult.Block;
+    }
+
+    private XenoBlockResult GetXenoBlockResult(GridVehicleMoverComponent mover, EntityUid xeno)
+    {
         if (mover.XenoBlockMinimumSize is not { } minSize)
-            return true;
+            return XenoBlockResult.Block;
 
         if (!_size.TryGetSize(xeno, out var size))
-            return true;
+            return XenoBlockResult.Block;
 
-        return size >= minSize;
+        if (size < minSize)
+            return XenoBlockResult.Push;
+
+        if (_fortify.IsFortified(xeno))
+        {
+            return mover.WeightClass switch
+            {
+                VehicleWeightClass.Weak => XenoBlockResult.Block,
+                VehicleWeightClass.Light => XenoBlockResult.Slow,
+                _ => XenoBlockResult.ForcePush,
+            };
+        }
+
+        return XenoBlockResult.Block;
     }
 
     private bool HasBlockingVehicleMob(GridVehicleMoverComponent mover, HashSet<EntityUid> blockers)
@@ -1542,6 +1624,74 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         SetGridPosition(pushed, grid, pushedMover.Position);
         physics.WakeBody(pushed);
         Dirty(pushed, pushedMover);
+        return true;
+    }
+
+    public bool TryShoveVehicle(EntityUid vehicle, EntityUid shover, Vector2 worldDirection)
+    {
+        if (worldDirection.LengthSquared() <= 0f)
+            return false;
+
+        if (!TryComp(vehicle, out VehicleComponent? vehicleComp) || vehicleComp.MovementKind != VehicleMovementKind.Grid)
+            return false;
+
+        if (!TryComp(vehicle, out GridVehicleMoverComponent? mover))
+            return false;
+
+        var xform = Transform(vehicle);
+        if (xform.GridUid is not { } grid || !gridQ.TryComp(grid, out var gridComp))
+            return false;
+
+        TrySyncMoverToCurrentGrid((vehicle, mover), centerOnTile: false, xform);
+        if (mover.SyncedGrid != grid)
+            return false;
+
+        var direction = GetCardinalDirection(worldDirection);
+        if (direction == Vector2i.Zero)
+            return false;
+
+        _vehiclePushIgnored.Clear();
+        _vehiclePushIgnored.Add(shover);
+        var target = mover.Position + direction;
+
+        if (!CanOccupyTransform(
+                vehicle,
+                mover,
+                grid,
+                target,
+                null,
+                Clearance,
+                applyEffects: false,
+                debug: false,
+                ignoredEntities: _vehiclePushIgnored))
+        {
+            return false;
+        }
+
+        if (!CanOccupyTransform(
+                vehicle,
+                mover,
+                grid,
+                target,
+                null,
+                Clearance,
+                applyEffects: true,
+                debug: false,
+                ignoredEntities: _vehiclePushIgnored))
+        {
+            return false;
+        }
+
+        mover.Position = target;
+        mover.CurrentSpeed = 0f;
+        mover.IsCommittedToMove = false;
+        mover.IsPushMove = true;
+        mover.PushDirection = direction;
+        mover.IsMoving = true;
+        UpdateDerivedTileState(grid, gridComp, mover);
+        SetGridPosition(vehicle, grid, mover.Position);
+        physics.WakeBody(vehicle);
+        Dirty(vehicle, mover);
         return true;
     }
 

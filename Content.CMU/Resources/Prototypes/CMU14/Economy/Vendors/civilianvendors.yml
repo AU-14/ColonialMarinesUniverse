@@ -132,6 +132,12 @@
       - id: AU14CivFedoraBrown
       - id: AU14CivFedoraGray
       - id: AU14HeadCommandoBeanie
+      - id: CMUCivBoonieHatTan
+      - id: CMUCivBoonieHatGreen
+      - id: CMUCivWorkCapTan
+      - id: CMUCivWorkCapGreen
+      - id: CMUCivSunCapTan
+      - id: CMUCivSunCapGreen
     - name: Glasses
       choices: { CMUcivilianclothesglasses: 2 }
       entries:

@@ -18,6 +18,7 @@
     - HAZOPS
     platoonsOpfor:
     - LACN
+    - BEAR
     - UPP
     - ProdigySF
     defaultgovfor: WEYU

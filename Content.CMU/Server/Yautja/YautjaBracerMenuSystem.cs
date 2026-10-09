@@ -165,7 +165,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
                 _utility.TryCreateHuntingTrap(ent, args.Actor);
                 break;
             case YautjaBracerPanelCommand.ToggleSelfDestruct:
-                _selfDestruct.TryOpenSelfDestructDialog(ent, args.Actor);
+                _selfDestruct.TryUseSelfDestruct(ent, args.Actor);
                 break;
             case YautjaBracerPanelCommand.ChangeExplosionType:
                 _utility.TryChangeExplosionType(ent, args.Actor);

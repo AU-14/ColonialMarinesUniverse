@@ -472,6 +472,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
     private void OnUserAcidedMapInit(Entity<UserAcidedComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.ExpiresAt = _timing.CurTime + ent.Comp.Duration;
+        ent.Comp.NextDamageAt = _timing.CurTime; // CMU14: anchor ticks to the application time.
         Dirty(ent);
         UpdateAppearance(ent);
 
@@ -530,6 +531,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
 
         acided.Comp.Combo = true;
+        acided.Comp.Tier = 2; // CMU14: share tier identity with Despoiler applications.
 
         if (damage != null)
             acided.Comp.Damage = damage;
@@ -668,7 +670,9 @@ public sealed partial class XenoSpitSystem : EntitySystem
             if (time < acided.NextDamageAt)
                 continue;
 
-            acided.NextDamageAt = time + acided.DamageEvery;
+            // CMU14: scheduling from the current frame accumulates delay and loses damage ticks.
+            // acided.NextDamageAt = time + acided.DamageEvery;
+            acided.NextDamageAt += acided.DamageEvery;
             _damageable.TryChangeDamage(uid, acided.Damage, armorPiercing: acided.ArmorPiercing);
         }
 

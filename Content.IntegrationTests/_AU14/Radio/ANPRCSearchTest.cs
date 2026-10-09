@@ -59,6 +59,38 @@ public sealed class ANPRCSearchTest
         await pair.CleanReturnAsync();
     }
 
+    // the worst case for a single line: said just after the head went past its frequency.
+    // it has to still be fresh a whole pass later, or a quiet net can go unheard by chance
+    [Test]
+    public async Task LineSaidJustBehindTheHeadIsCaughtNextPass()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+        EntityUid pack = default, talker = default;
+        RadioFrequency frequency = default;
+        await server.WaitAssertion(() =>
+        {
+            (_, pack) = SpawnSearcher(server, testMap.GridCoords);
+            talker = server.EntMan.SpawnEntity(null, testMap.GridCoords.Offset(new Vector2(5, 0)));
+            frequency = Frequency(server, OpforBravo);
+        });
+        await Say(pair, talker, OpforBravo);
+        await pair.RunSeconds(0.9f);
+        await server.WaitAssertion(() =>
+        {
+            var khz = frequency.Kilohertz + 1;
+            if (khz > ANPRCRadioComponent.SweepBandMax.Kilohertz)
+                khz = ANPRCRadioComponent.SweepBandMin.Kilohertz;
+            server.EntMan.GetComponent<ANPRCRadioComponent>(pack).SweepPosition = RadioFrequency.FromKilohertz(khz);
+        });
+        await pair.RunSeconds(25);
+        await server.WaitAssertion(() =>
+            Assert.That(server.EntMan.GetComponent<ANPRCRadioComponent>(pack).SweepContacts.ContainsKey(frequency), Is.True,
+                "a line said just after the head passed is still caught on the next pass"));
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task QuietNetFixesAndNeverLosesGroundBetweenLines()
     {

@@ -2752,7 +2752,7 @@
     color: '#96B0A6'
     label: pleated hospital curtain
   - min: -0.0633, -0.0125, 1.7004
-    max: 0.0018, 0.0125, 1.7254
+    max: 0.0633, 0.0125, 1.7254
     color: '#AFC2B7'
     label: upper angled curtain rail
   - min: -0.1247, -0.0125, 1.6861
@@ -2807,10 +2807,6 @@
     max: 0.395, 0, 1.536
     color: '#96B0A6'
     label: pleated hospital curtain
-  - min: -0.0018, -0.0125, 1.7004
-    max: 0.0633, 0.0125, 1.7254
-    color: '#AFC2B7'
-    label: upper angled curtain rail
   - min: 0.0596, -0.0125, 1.6861
     max: 0.1247, 0.0125, 1.7111
     color: '#AFC2B7'

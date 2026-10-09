@@ -296,4 +296,9 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
         if (comp.Chain is { } chain && TerminatingOrDeleted(chain))
             comp.Chain = null;
     }
+    public DamageSpecifier GetCollideDamage(Entity<DamageOnCollideComponent> ent)
+    {
+        return ent.Comp.Damage;
+    }
+
 }

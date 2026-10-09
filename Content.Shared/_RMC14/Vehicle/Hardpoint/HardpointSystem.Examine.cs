@@ -23,7 +23,7 @@ public sealed partial class HardpointSystem
     private void OnHardpointExamined(Entity<HardpointIntegrityComponent> ent, ref ExaminedEvent args)
     {
         // CMU14: distinguish permanent wrecks from ordinary repairable damage.
-        if (IsDestroyedBeyondRepair(ent.Owner))
+        if (IsWrecked(ent.Owner))
         {
             args.PushMarkup(GetWreckMessage(ent.Owner));
             return;

@@ -1,0 +1,3380 @@
+{
+  "maps": {
+    "/Maps/_RMC14/Vehicles/apc_transport_interior.yml": [
+      "VehicleAPC",
+      "VehicleAPCPMC"
+    ],
+    "/Maps/_RMC14/Vehicles/apc_medical_interior.yml": [
+      "VehicleAPCMed"
+    ],
+    "/Maps/_RMC14/Vehicles/apc_command_interior.yml": [
+      "VehicleAPCCommand"
+    ],
+    "/Maps/_RMC14/Vehicles/spp_apc_interior.yml": [
+      "VehicleSPPAPC"
+    ],
+    "/Maps/_RMC14/Vehicles/humvee_interior.yml": [
+      "VehicleHumvee"
+    ],
+    "/Maps/_RMC14/Vehicles/humvee_medical_interior.yml": [
+      "VehicleHumveeMedical"
+    ],
+    "/Maps/_RMC14/Vehicles/humvee_transport_interior.yml": [
+      "VehicleHumveeTransport"
+    ],
+    "/Maps/_RMC14/Vehicles/humvee_arc_interior.yml": [
+      "VehicleHumveeARC"
+    ],
+    "/Maps/_RMC14/Vehicles/tank_interior.yml": [
+      "VehicleTank",
+      "VehicleTankPMC",
+      "VehicleTankTWE"
+    ],
+    "/Maps/CMU14/Vehicles/Interiors/arv.yml": [
+      "VehicleAev"
+    ],
+    "/Maps/_RMC14/Vehicles/spp_tank_interior.yml": [
+      "VehicleSPPTank"
+    ],
+    "/Maps/_RMC14/Vehicles/spp_tank_command_interior.yml": [
+      "VehicleSPPTankCommand"
+    ],
+    "/Maps/_RMC14/Vehicles/van_interior.yml": [
+      "VehicleVan",
+      "VehicleCLFVan"
+    ],
+    "/Maps/_RMC14/Vehicles/box_van_interior.yml": [
+      "VehicleBoxVan",
+      "VehicleCMBPoliceVan"
+    ],
+    "/Maps/_RMC14/Vehicles/pizza_van_interior.yml": [
+      "VehiclePizzaVan"
+    ],
+    "/Maps/_RMC14/Vehicles/spp_van_interior.yml": [
+      "VehicleSPPVan"
+    ],
+    "/Maps/_RMC14/Vehicles/spp_van_armed_interior.yml": [
+      "VehicleSPPVanArmed"
+    ],
+    "/Maps/_RMC14/Vehicles/spp_van_medical_interior.yml": [
+      "VehicleSPPVanMedical"
+    ],
+    "/Maps/_RMC14/Vehicles/spp_van_prisoner_interior.yml": [
+      "VehicleSPPVanPrisoner"
+    ],
+    "/Maps/_RMC14/Vehicles/spp_van_logistics_interior.yml": [
+      "VehicleSPPVanLogistics"
+    ],
+    "/Maps/CMU14/Vehicles/Blackfoot/blackfoot.yml": [
+      "VehicleBlackfoot",
+      "VehicleBlackfootTransport"
+    ],
+    "/Maps/CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml": [
+      "VehicleBlackfootDoorGunVariant",
+      "VehicleBlackfootRecon"
+    ],
+    "/Maps/CMU14/Vehicles/Interiors/van_interior.yml": [
+      "AU14VehicleCivVan",
+      "AU14VehicleCivturquiseCargo",
+      "AU14VehicleCivCivTruck2",
+      "AU14VehicleCivBlueCargoTruck"
+    ],
+    "/Maps/CMU14/Vehicles/Interiors/truck_interior.yml": [
+      "AU14VehicleCivTruck",
+      "AU14VehicleCivArmoredTruck",
+      "AU14VehicleCivCivTruck1",
+      "AU14VehicleCivCivTruck3",
+      "AU14VehicleCivMedTruck",
+      "AU14VehicleCivGarbageTruck",
+      "AU14VehicleCivBrownBarrelsTruck",
+      "AU14VehicleCivBrownCargoTruck",
+      "AU14VehicleCivBlueTruck"
+    ],
+    "/Maps/CMU14/Vehicles/Interiors/PaddyWagonVanEmpty.yml": [
+      "AU14VehicleCivHSVan"
+    ],
+    "/Maps/CMU14/Vehicles/Interiors/Ambulance.yml": [
+      "AU14VehicleCivEMSAmbulance"
+    ],
+    "/Maps/CMU14/Vehicles/Interiors/CopMonoSupron.yml": [
+      "AU14VehicleCivCopMonoSupron"
+    ]
+  },
+  "coverage": [
+    {
+      "id": "AU14IVFoldable",
+      "models": [
+        "CMU3DInteriorAU14IVFoldable"
+      ],
+      "native": null
+    },
+    {
+      "id": "AU14VehicleRadioSet",
+      "models": [
+        "CMU3DInteriorAU14VehicleRadioSet"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMChairComfy",
+      "models": [
+        "CMU3DComfyChairBrown"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMDefibrillator",
+      "models": [
+        "CMU3DInteriorCMDefibrillator"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMEffectGrab",
+      "models": [],
+      "native": "transient grab effect"
+    },
+    {
+      "id": "CMIV",
+      "models": [
+        "CMU3DIVStand"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMPortableSurgicalBed",
+      "models": [
+        "CMU3DPortableSurgicalBedCloud"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMRandomPosterAny",
+      "models": [],
+      "native": "random spawn marker"
+    },
+    {
+      "id": "CMRollerBed",
+      "models": [
+        "CMU3DInteriorCMRollerBed"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMStasisBag",
+      "models": [
+        "CMU3DInteriorCMStasisBag"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMTableReinforcedBlack",
+      "models": [
+        "CMU3DBlackDesk"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUBlackfootAmmoLoader",
+      "models": [
+        "CMU3DInteriorCMUBlackfootAmmoLoader"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUBlackfootAmmoLoaderRight",
+      "models": [
+        "CMU3DInteriorCMUBlackfootAmmoLoaderRight"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUBlackfootCassettePlayer",
+      "models": [
+        "CMU3DInteriorCMUBlackfootCassettePlayer"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUBlackfootChassis",
+      "models": [
+        "CMU3DInteriorCMUBlackfootChassis"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUBlackfootExtinguisherCabinet",
+      "models": [
+        "CMU3DInteriorCMUBlackfootExtinguisherCabinet"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUBlackfootRearDoorButton",
+      "models": [
+        "CMU3DInteriorCMUBlackfootRearDoorButton"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUBlackfootRearExit",
+      "models": [
+        "CMU3DInteriorCMUBlackfootRearExit"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUBlackfootSideExit",
+      "models": [
+        "CMU3DInteriorCMUBlackfootSideExit"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUBlackfootSideExitRight",
+      "models": [
+        "CMU3DInteriorCMUBlackfootSideExitRight"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUDefibrillatorCabinetFilled",
+      "models": [
+        "CMU3DDefibrillatorCabinet"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUFighterCanopy",
+      "models": [
+        "CMU3DInteriorCMUFighterCanopy"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUFighterHull",
+      "models": [
+        "CMU3DInteriorCMUFighterHull"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUFighterObserverSeat",
+      "models": [
+        "CMU3DInteriorCMUFighterObserverSeat"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUFighterPilotSeat",
+      "models": [
+        "CMU3DInteriorCMUFighterPilotSeat"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUSeatBlackfootDoorGunner",
+      "models": [
+        "CMU3DInteriorCMUSeatBlackfootDoorGunner"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUSeatBlackfootPassenger",
+      "models": [
+        "CMU3DInteriorCMUSeatBlackfootPassenger"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUSeatBlackfootPilot",
+      "models": [
+        "CMU3DInteriorCMUSeatBlackfootPilot"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMUTacticalMapTableGovfor",
+      "models": [
+        "CMU3DInteriorCMUTacticalMapTableGovfor"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMWindoor",
+      "models": [
+        "CMU3DWindoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "CMWindoorSecure",
+      "models": [
+        "CMU3DSecureWindoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCBarricadeHandrail",
+      "models": [
+        "CMU3DStandardHandrail"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCBoxPizzaGalaxyMystery",
+      "models": [
+        "CMU3DInteriorRMCBoxPizzaGalaxyMystery"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCComputerIntel",
+      "models": [
+        "CMU3DOldGreenCRTTerminal"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCCrateFreezer",
+      "models": [
+        "CMU3DInheritedCratesFreezerCloud"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCCrateGreen",
+      "models": [
+        "CMU3DInteriorRMCCrateGreen"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCCrateMetalSheets",
+      "models": [
+        "CMU3DInteriorRMCCrateMetalSheets"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCCratePlasteelSheets",
+      "models": [
+        "CMU3DInteriorRMCCratePlasteelSheets"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCGroundsideOperationsConsoleGovfor",
+      "models": [
+        "CMU3DInteriorRMCGroundsideOperationsConsoleGovfor"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCGunRackType71Filled",
+      "models": [
+        "CMU3DInteriorRMCGunRackType71Filled"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCLightFixtureSmallAlwaysPowered",
+      "models": [
+        "CMU3DSmallWallLight"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCLightFixtureSmallBlueAlwaysPoweredOffset",
+      "models": [
+        "CMU3DInteriorRMCLightFixtureSmallBlueAlwaysPoweredOffset"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCOverwatchConsoleGovfor",
+      "models": [
+        "CMU3DInteriorRMCOverwatchConsoleGovfor"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCOverwatchConsoleGovforTOCMapRotating",
+      "models": [
+        "CMU3DInteriorRMCOverwatchConsoleGovforTOCMapRotating"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCOverwatchConsoleGovforTOCShuttle",
+      "models": [
+        "CMU3DInteriorRMCOverwatchConsoleGovforTOCShuttle"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCOverwatchConsoleSPPTOCRotating",
+      "models": [
+        "CMU3DInteriorRMCOverwatchConsoleSPPTOCRotating"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCRollerBedHospitalSheet2",
+      "models": [
+        "CMU3DRMCRollerBedHospitalSheet2"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCRotaryPhoneWallmount",
+      "models": [
+        "CMU3DWallPhone"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatArmored",
+      "models": [
+        "CMU3DInteriorRMCSeatArmored"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatArmoredDriver",
+      "models": [
+        "CMU3DInteriorRMCSeatArmored"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatArmoredPortGunOperator",
+      "models": [
+        "CMU3DInteriorRMCSeatArmored"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatArmoredWeaponsOperator",
+      "models": [
+        "CMU3DInteriorRMCSeatArmored"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatHumveeDriver",
+      "models": [
+        "CMU3DInteriorRMCSeatHumveeDriver"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatHumveePassenger",
+      "models": [
+        "CMU3DInteriorRMCSeatHumveeDriver"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatHumveeWeaponsOperator",
+      "models": [
+        "CMU3DInteriorRMCSeatHumveeDriver"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatTankCommander",
+      "models": [
+        "CMU3DInteriorRMCSeatArmored"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatTankDriver",
+      "models": [
+        "CMU3DInteriorRMCSeatArmored"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatTankGunner",
+      "models": [
+        "CMU3DInteriorRMCSeatArmored"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSeatVehiclePassenger",
+      "models": [
+        "CMU3DInteriorRMCSeatVehiclePassenger"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSecureCaseStrapped",
+      "models": [
+        "CMU3DStrappedCargoCase"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSheetCardboard25",
+      "models": [
+        "CMU3DInteriorRMCSheetCardboard25"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCSpawnerRandomCrateLoot",
+      "models": [],
+      "native": "random spawn marker"
+    },
+    {
+      "id": "RMCTablePrison",
+      "models": [
+        "CMU3DPrisonTable"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCTableTOCEast",
+      "models": [
+        "CMU3DInteriorRMCTableTOCEast"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCTableTOCWest",
+      "models": [
+        "CMU3DInteriorRMCTableTOCWest"
+      ],
+      "native": null
+    },
+    {
+      "id": "RMCWallInvisibleBulletBlocker",
+      "models": [],
+      "native": "invisible collision helper"
+    },
+    {
+      "id": "RMCWallInvisibleBulletLightBlocker",
+      "models": [],
+      "native": "invisible collision helper"
+    },
+    {
+      "id": "SteelBench",
+      "models": [
+        "CMU3DSteelBench"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCApcRight3",
+      "models": [
+        "CMU3DInteriorVehicleAPCApcRight3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCBack2",
+      "models": [
+        "CMU3DInteriorVehicleAPCBack2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCCornerInverseL",
+      "models": [
+        "CMU3DInteriorVehicleAPCCornerInverseL"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCCornerInverseR",
+      "models": [
+        "CMU3DInteriorVehicleAPCCornerInverseR"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCCornerSmallL",
+      "models": [
+        "CMU3DInteriorVehicleAPCCornerSmallL"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCCornerSmallR",
+      "models": [
+        "CMU3DInteriorVehicleAPCCornerSmallR"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCExterior1",
+      "models": [
+        "CMU3DInteriorVehicleAPCExterior1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCExterior3",
+      "models": [
+        "CMU3DInteriorVehicleAPCExterior3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCExteriorDoor",
+      "models": [
+        "CMU3DInteriorVehicleAPCExteriorDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCFront1",
+      "models": [
+        "CMU3DInteriorVehicleAPCFront1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCFront2",
+      "models": [
+        "CMU3DInteriorVehicleAPCFront2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCFront3",
+      "models": [
+        "CMU3DInteriorVehicleAPCFront3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCFront5",
+      "models": [
+        "CMU3DInteriorVehicleAPCFront5"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCFrontRoof1",
+      "models": [
+        "CMU3DInteriorVehicleAPCFrontRoof1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCFrontWheelL",
+      "models": [
+        "CMU3DInteriorVehicleAPCFrontWheelL"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCFrontWheelR",
+      "models": [
+        "CMU3DInteriorVehicleAPCFrontWheelR"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCM56FPWInteriorNorth",
+      "models": [
+        "CMU3DInteriorVehicleAPCM56FPWInteriorNorth"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCM56FPWInteriorSouth",
+      "models": [
+        "CMU3DInteriorVehicleAPCM56FPWInteriorSouth"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCRear1",
+      "models": [
+        "CMU3DInteriorVehicleAPCRear1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCRear3",
+      "models": [
+        "CMU3DInteriorVehicleAPCRear3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCRear6",
+      "models": [
+        "CMU3DInteriorVehicleAPCRear6"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCRearWheelL",
+      "models": [
+        "CMU3DInteriorVehicleAPCRearWheelL"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCRearWheelR",
+      "models": [
+        "CMU3DInteriorVehicleAPCRearWheelR"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCSensors",
+      "models": [
+        "CMU3DInteriorVehicleAPCSensors"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCSupplyVendor",
+      "models": [
+        "CMU3DInteriorVehicleAPCSupplyVendor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCWall",
+      "models": [
+        "CMU3DInteriorVehicleAPCWall"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCWall6",
+      "models": [
+        "CMU3DInteriorVehicleAPCWall6"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCWallDoorFront",
+      "models": [
+        "CMU3DInteriorVehicleAPCWallDoorFront"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCWallSmallR",
+      "models": [
+        "CMU3DInteriorVehicleAPCWallSmallR"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCWallViewport",
+      "models": [
+        "CMU3DInteriorVehicleAPCWallViewport"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCWheelFrontTop2",
+      "models": [
+        "CMU3DInteriorVehicleAPCWheelFrontTop2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCWindshieldBottom",
+      "models": [
+        "CMU3DInteriorVehicleAPCWindshieldBottom"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAPCWindshieldTop",
+      "models": [
+        "CMU3DInteriorVehicleAPCWindshieldTop"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleAmmoLoader",
+      "models": [
+        "CMU3DInteriorVehicleAmmoLoader"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanBack1",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanBack1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanBackground2",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanBackground2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanBackground3",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanBackground3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanExterior1",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanExterior1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanExterior3",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanExterior3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanExteriorDoor",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanExteriorDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanFront1",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanFront1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanFront2",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanFront2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanFront3",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanFront3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanFrontRight2",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanFrontRight2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanFrontRoof1",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanFrontRoof1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanFrontRoof2",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanFrontRoof2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanInteriorDoor",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanInteriorDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanLeft1",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanLeft1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanLeft3",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanLeft3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanRoof2",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanRoof2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanRoof3",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanRoof3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanRoof4",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanRoof4"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleBoxVanRoof5",
+      "models": [
+        "CMU3DInteriorVehicleBoxVanRoof5"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleExitArea",
+      "models": [],
+      "native": "invisible exit trigger"
+    },
+    {
+      "id": "VehicleHumveeAmmoLoader",
+      "models": [
+        "CMU3DInteriorVehicleHumveeAmmoLoader"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeBloodVendor",
+      "models": [
+        "CMU3DInteriorVehicleHumveeBloodVendor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeBloodVendorVend",
+      "models": [
+        "CMU3DInteriorVehicleHumveeBloodVendorVend"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeCarrierBackDoor1",
+      "models": [
+        "CMU3DInteriorVehicleHumveeCarrierBackDoor1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeCarrierBackDoor2",
+      "models": [
+        "CMU3DInteriorVehicleHumveeCarrierBackDoor2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeChassis",
+      "models": [
+        "CMU3DInteriorVehicleHumveeChassis"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeChassisMedical",
+      "models": [
+        "CMU3DInteriorVehicleHumveeChassisMedical"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeChassisTransport",
+      "models": [
+        "CMU3DInteriorVehicleHumveeChassisTransport"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeExitDoor",
+      "models": [
+        "CMU3DInteriorVehicleHumveeExitDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeExitDoorDirectional",
+      "models": [
+        "CMU3DInteriorVehicleHumveeExitDoorDirectional"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeLockerMedical",
+      "models": [
+        "CMU3DInteriorVehicleHumveeLockerMedical"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeViewportDoor",
+      "models": [
+        "CMU3DInteriorVehicleHumveeViewportDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeViewportFrontNorth",
+      "models": [
+        "CMU3DInteriorVehicleHumveeViewportFrontNorth"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleHumveeViewportSmall",
+      "models": [
+        "CMU3DInteriorVehicleHumveeViewportSmall"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorArmorChair",
+      "models": [
+        "CMU3DInteriorVehicleInteriorArmorChair"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorBloodVendor",
+      "models": [
+        "CMU3DInteriorVehicleInteriorBloodVendor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorCamera",
+      "models": [
+        "CMU3DInteriorVehicleInteriorCamera"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorExtinguisher",
+      "models": [
+        "CMU3DInteriorVehicleInteriorExtinguisher"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorExtinguisherClosed",
+      "models": [
+        "CMU3DInteriorVehicleInteriorExtinguisherClosed"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorLocker",
+      "models": [
+        "CMU3DInteriorVehicleInteriorLocker"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorMedVendor",
+      "models": [
+        "CMU3DInteriorVehicleInteriorMedVendor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorMedVendorVend",
+      "models": [
+        "CMU3DInteriorVehicleInteriorMedVendorVend"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorNanomed",
+      "models": [
+        "CMU3DInteriorVehicleInteriorNanomed"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInteriorWallPhone",
+      "models": [
+        "CMU3DVehicleInteriorWallPhoneInheritedMiscCloud"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleInvisibleWall",
+      "models": [],
+      "native": "invisible collision helper"
+    },
+    {
+      "id": "VehicleInvisibleWallNoVision",
+      "models": [],
+      "native": "invisible collision helper"
+    },
+    {
+      "id": "VehiclePizzaVanBackground1",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanBackground1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanBackground3",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanBackground3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanExterior1",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanExterior1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanExterior3",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanExterior3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanExteriorDoor",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanExteriorDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanFront1",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanFront1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanFront3",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanFront3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanFrontLeft2",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanFrontLeft2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanFrontRoof1",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanFrontRoof1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanFrontRoof2",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanFrontRoof2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanInteriorDoor",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanInteriorDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanLeft1",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanLeft1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanLeft2",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanLeft2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanRight3",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanRight3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanRoof2",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanRoof2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanRoof3",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanRoof3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanRoof4",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanRoof4"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanRoof5",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanRoof5"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehiclePizzaVanWindshieldBottom",
+      "models": [
+        "CMU3DInteriorVehiclePizzaVanWindshieldBottom"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPAPCAmmoLoader",
+      "models": [
+        "CMU3DInteriorVehicleSPPAPCAmmoLoader"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPAPCChassis",
+      "models": [
+        "CMU3DInteriorVehicleSPPAPCChassis"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPAPCDoorBack",
+      "models": [
+        "CMU3DInteriorVehicleSPPAPCDoorBack"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPAPCDoorFront",
+      "models": [
+        "CMU3DInteriorVehicleSPPAPCDoorFront"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPTankAmmoLoader",
+      "models": [
+        "CMU3DInteriorVehicleSPPTankAmmoLoader"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPTankChassis",
+      "models": [
+        "CMU3DInteriorVehicleSPPTankChassis"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPTankChassisAlt",
+      "models": [
+        "CMU3DInteriorVehicleSPPTankChassisAlt"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPTankSmallLocker",
+      "models": [
+        "CMU3DInteriorVehicleSPPTankSmallLocker"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPTankSmallLockerAlt",
+      "models": [
+        "CMU3DInteriorVehicleSPPTankSmallLockerAlt"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPVanAmmoLoader",
+      "models": [
+        "CMU3DInteriorVehicleSPPVanAmmoLoader"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPVanChassis",
+      "models": [
+        "CMU3DInteriorVehicleSPPVanChassis"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPVanChassisArmed",
+      "models": [
+        "CMU3DInteriorVehicleSPPVanChassisArmed"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPVanChassisLogistics",
+      "models": [
+        "CMU3DInteriorVehicleSPPVanChassisLogistics"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPVanExteriorDoorUnique",
+      "models": [
+        "CMU3DInteriorVehicleSPPVanExteriorDoorUnique"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPVanInteriorDoor",
+      "models": [
+        "CMU3DInteriorVehicleSPPVanInteriorDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPVanViewportSimple",
+      "models": [
+        "CMU3DInteriorVehicleSPPVanViewportSimple"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleSPPVanViewportSimpleFront",
+      "models": [
+        "CMU3DInteriorVehicleSPPVanViewportSimpleFront"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankAmmoLoader",
+      "models": [
+        "CMU3DInteriorVehicleTankAmmoLoader"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankBack1",
+      "models": [
+        "CMU3DInteriorVehicleTankBack1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankBack2",
+      "models": [
+        "CMU3DInteriorVehicleTankBack2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankBack3",
+      "models": [
+        "CMU3DInteriorVehicleTankBack3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankExitHatch",
+      "models": [],
+      "native": "transparent exit trigger (the source hatch state has no pixels)"
+    },
+    {
+      "id": "VehicleTankExterior1",
+      "models": [
+        "CMU3DInteriorVehicleTankExterior1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankExterior3",
+      "models": [
+        "CMU3DInteriorVehicleTankExterior3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankFront1",
+      "models": [
+        "CMU3DInteriorVehicleTankFront1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankFront2",
+      "models": [
+        "CMU3DInteriorVehicleTankFront2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankFront3",
+      "models": [
+        "CMU3DInteriorVehicleTankFront3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankProp0",
+      "models": [
+        "CMU3DInteriorVehicleTankProp0"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankProp2",
+      "models": [
+        "CMU3DInteriorVehicleTankProp2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankProp3",
+      "models": [
+        "CMU3DInteriorVehicleTankProp3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankProp4",
+      "models": [
+        "CMU3DInteriorVehicleTankProp4"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankProp5",
+      "models": [
+        "CMU3DInteriorVehicleTankProp5"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankProp6",
+      "models": [
+        "CMU3DInteriorVehicleTankProp6"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankProp7",
+      "models": [
+        "CMU3DInteriorVehicleTankProp7"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankProp8Extra",
+      "models": [
+        "CMU3DInteriorVehicleTankProp8Extra"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankTankBack2",
+      "models": [
+        "CMU3DInteriorVehicleTankTankBack2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankTankRight2",
+      "models": [
+        "CMU3DInteriorVehicleTankTankRight2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleTankWall",
+      "models": [
+        "CMU3DInteriorVehicleTankWall"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanBack1",
+      "models": [
+        "CMU3DInteriorVehicleVanBack1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanBack2",
+      "models": [
+        "CMU3DInteriorVehicleVanBack2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanBack3",
+      "models": [
+        "CMU3DInteriorVehicleVanBack3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanBackground2",
+      "models": [
+        "CMU3DInteriorVehicleVanBackground2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanExterior2",
+      "models": [
+        "CMU3DInteriorVehicleVanExterior2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanExteriorDoor",
+      "models": [
+        "CMU3DInteriorVehicleVanExteriorDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanFront1",
+      "models": [
+        "CMU3DInteriorVehicleVanFront1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanFront2",
+      "models": [
+        "CMU3DInteriorVehicleVanFront2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanFront3",
+      "models": [
+        "CMU3DInteriorVehicleVanFront3"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanFrontRoof1",
+      "models": [
+        "CMU3DInteriorVehicleVanFrontRoof1"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanFrontRoof2",
+      "models": [
+        "CMU3DInteriorVehicleVanFrontRoof2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanInteriorDoor",
+      "models": [
+        "CMU3DInteriorVehicleVanInteriorDoor"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanRoof2",
+      "models": [
+        "CMU3DInteriorVehicleVanRoof2"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanWindshieldBottom",
+      "models": [
+        "CMU3DInteriorVehicleVanWindshieldBottom"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleVanWindshieldTop",
+      "models": [
+        "CMU3DInteriorVehicleVanWindshieldTop"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleViewport",
+      "models": [
+        "CMU3DInteriorVehicleViewport"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleViewportSimple",
+      "models": [
+        "CMU3DInteriorVehicleViewportSimple"
+      ],
+      "native": null
+    },
+    {
+      "id": "VehicleViewportUnanchored",
+      "models": [
+        "CMU3DInteriorVehicleViewportUnanchored"
+      ],
+      "native": null
+    }
+  ],
+  "models": [
+    {
+      "id": "CMU3DInteriorAU14IVFoldable",
+      "category": "equipment",
+      "parts": 7,
+      "triangles": 136,
+      "sourcePrototypes": [
+        "AU14IVFoldable"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorAU14IVFoldableFolded",
+      "category": "alternate pose",
+      "parts": 2,
+      "triangles": 24,
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DInteriorAU14VehicleRadioSet",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "AU14VehicleRadioSet"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMDefibrillator",
+      "category": "equipment",
+      "parts": 6,
+      "triangles": 72,
+      "sourcePrototypes": [
+        "CMDefibrillator"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMRollerBed",
+      "category": "existing source-equivalent model",
+      "parts": 27,
+      "triangles": 324,
+      "sourcePrototypes": [
+        "CMRollerBed"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMRollerBedAlternate",
+      "category": "alternate pose",
+      "parts": 37,
+      "triangles": 1224,
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DInteriorCMStasisBag",
+      "category": "equipment",
+      "parts": 2,
+      "triangles": 24,
+      "sourcePrototypes": [
+        "CMStasisBag"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMStasisBagFolded",
+      "category": "alternate pose",
+      "parts": 2,
+      "triangles": 24,
+      "sourcePrototypes": []
+    },
+    {
+      "id": "CMU3DInteriorCMUBlackfootAmmoLoader",
+      "category": "equipment",
+      "parts": 8,
+      "triangles": 252,
+      "sourcePrototypes": [
+        "CMUBlackfootAmmoLoader"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUBlackfootAmmoLoaderRight",
+      "category": "equipment",
+      "parts": 8,
+      "triangles": 252,
+      "sourcePrototypes": [
+        "CMUBlackfootAmmoLoaderRight"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUBlackfootCassettePlayer",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "CMUBlackfootCassettePlayer"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUBlackfootChassis",
+      "category": "hollow chassis",
+      "parts": 20,
+      "triangles": 240,
+      "sourcePrototypes": [
+        "CMUBlackfootChassis"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUBlackfootExtinguisherCabinet",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "CMUBlackfootExtinguisherCabinet"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUBlackfootRearDoorButton",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "CMUBlackfootRearDoorButton"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUBlackfootRearExit",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "CMUBlackfootRearExit"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUBlackfootSideExit",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "CMUBlackfootSideExit"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUBlackfootSideExitRight",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "CMUBlackfootSideExitRight"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUFighterCanopy",
+      "category": "fighter cockpit",
+      "parts": 14,
+      "triangles": 168,
+      "sourcePrototypes": [
+        "CMUFighterCanopy"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUFighterHull",
+      "category": "fighter cockpit",
+      "parts": 39,
+      "triangles": 1268,
+      "sourcePrototypes": [
+        "CMUFighterHull"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUFighterObserverSeat",
+      "category": "crew seat",
+      "parts": 14,
+      "triangles": 168,
+      "sourcePrototypes": [
+        "CMUFighterObserverSeat"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUFighterPilotSeat",
+      "category": "crew seat",
+      "parts": 14,
+      "triangles": 168,
+      "sourcePrototypes": [
+        "CMUFighterPilotSeat"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUSeatBlackfootDoorGunner",
+      "category": "crew seat",
+      "parts": 15,
+      "triangles": 284,
+      "sourcePrototypes": [
+        "CMUSeatBlackfootDoorGunner"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUSeatBlackfootPassenger",
+      "category": "crew seat",
+      "parts": 11,
+      "triangles": 132,
+      "sourcePrototypes": [
+        "CMUSeatBlackfootPassenger"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUSeatBlackfootPilot",
+      "category": "crew seat",
+      "parts": 11,
+      "triangles": 132,
+      "sourcePrototypes": [
+        "CMUSeatBlackfootPilot"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorCMUTacticalMapTableGovfor",
+      "category": "equipment",
+      "parts": 6,
+      "triangles": 72,
+      "sourcePrototypes": [
+        "CMUTacticalMapTableGovfor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCBoxPizzaGalaxyMystery",
+      "category": "existing source-equivalent model",
+      "parts": 13,
+      "triangles": 156,
+      "sourcePrototypes": [
+        "RMCBoxPizzaGalaxyMystery"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCCrateGreen",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "RMCCrateGreen"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCCrateMetalSheets",
+      "category": "existing source-equivalent model",
+      "parts": 18,
+      "triangles": 320,
+      "sourcePrototypes": [
+        "RMCCrateMetalSheets"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCCratePlasteelSheets",
+      "category": "existing source-equivalent model",
+      "parts": 18,
+      "triangles": 320,
+      "sourcePrototypes": [
+        "RMCCratePlasteelSheets"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCGroundsideOperationsConsoleGovfor",
+      "category": "existing source-equivalent model",
+      "parts": 11,
+      "triangles": 132,
+      "sourcePrototypes": [
+        "RMCGroundsideOperationsConsoleGovfor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCGunRackType71Filled",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "RMCGunRackType71Filled"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCLightFixtureSmallBlueAlwaysPoweredOffset",
+      "category": "existing source-equivalent model",
+      "parts": 7,
+      "triangles": 876,
+      "sourcePrototypes": [
+        "RMCLightFixtureSmallBlueAlwaysPoweredOffset"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCOverwatchConsoleGovfor",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "RMCOverwatchConsoleGovfor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCOverwatchConsoleGovforTOCMapRotating",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "RMCOverwatchConsoleGovforTOCMapRotating"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCOverwatchConsoleGovforTOCShuttle",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "RMCOverwatchConsoleGovforTOCShuttle"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCOverwatchConsoleSPPTOCRotating",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "RMCOverwatchConsoleSPPTOCRotating"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCSeatArmored",
+      "category": "crew seat",
+      "parts": 11,
+      "triangles": 132,
+      "sourcePrototypes": [
+        "RMCSeatArmored",
+        "RMCSeatArmoredDriver",
+        "RMCSeatArmoredPortGunOperator",
+        "RMCSeatArmoredWeaponsOperator",
+        "RMCSeatTankCommander",
+        "RMCSeatTankDriver",
+        "RMCSeatTankGunner"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCSeatHumveeDriver",
+      "category": "crew seat",
+      "parts": 11,
+      "triangles": 132,
+      "sourcePrototypes": [
+        "RMCSeatHumveeDriver",
+        "RMCSeatHumveePassenger",
+        "RMCSeatHumveeWeaponsOperator"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCSeatVehiclePassenger",
+      "category": "crew seat",
+      "parts": 11,
+      "triangles": 132,
+      "sourcePrototypes": [
+        "RMCSeatVehiclePassenger"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCSheetCardboard25",
+      "category": "equipment",
+      "parts": 2,
+      "triangles": 24,
+      "sourcePrototypes": [
+        "RMCSheetCardboard25"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCTableTOCEast",
+      "category": "equipment",
+      "parts": 6,
+      "triangles": 72,
+      "sourcePrototypes": [
+        "RMCTableTOCEast"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorRMCTableTOCWest",
+      "category": "equipment",
+      "parts": 6,
+      "triangles": 72,
+      "sourcePrototypes": [
+        "RMCTableTOCWest"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCApcRight3",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleAPCApcRight3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCBack2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCBack2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCCornerInverseL",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCCornerInverseL"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCCornerInverseR",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCCornerInverseR"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCCornerSmallL",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCCornerSmallL"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCCornerSmallR",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCCornerSmallR"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCExterior1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCExterior1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCExterior3",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleAPCExterior3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCExteriorDoor",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCExteriorDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCFront1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCFront1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCFront2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCFront2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCFront3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCFront3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCFront5",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCFront5"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCFrontRoof1",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleAPCFrontRoof1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCFrontWheelL",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCFrontWheelL"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCFrontWheelR",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCFrontWheelR"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCM56FPWInteriorNorth",
+      "category": "equipment",
+      "parts": 7,
+      "triangles": 188,
+      "sourcePrototypes": [
+        "VehicleAPCM56FPWInteriorNorth"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCM56FPWInteriorSouth",
+      "category": "equipment",
+      "parts": 7,
+      "triangles": 188,
+      "sourcePrototypes": [
+        "VehicleAPCM56FPWInteriorSouth"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCRear1",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCRear1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCRear3",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCRear3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCRear6",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCRear6"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCRearWheelL",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCRearWheelL"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCRearWheelR",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCRearWheelR"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCSensors",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "VehicleAPCSensors"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCSupplyVendor",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCSupplyVendor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCWall",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCWall"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCWall6",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCWall6"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCWallDoorFront",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCWallDoorFront"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCWallSmallR",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCWallSmallR"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCWallViewport",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleAPCWallViewport"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCWheelFrontTop2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleAPCWheelFrontTop2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCWindshieldBottom",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleAPCWindshieldBottom"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAPCWindshieldTop",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleAPCWindshieldTop"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleAmmoLoader",
+      "category": "equipment",
+      "parts": 8,
+      "triangles": 252,
+      "sourcePrototypes": [
+        "VehicleAmmoLoader"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanBack1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanBack1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanBackground2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleBoxVanBackground2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanBackground3",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleBoxVanBackground3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanExterior1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanExterior1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanExterior3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanExterior3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanExteriorDoor",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanExteriorDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanFront1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanFront1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanFront2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanFront2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanFront3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanFront3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanFrontRight2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanFrontRight2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanFrontRoof1",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleBoxVanFrontRoof1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanFrontRoof2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleBoxVanFrontRoof2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanInteriorDoor",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanInteriorDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanLeft1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanLeft1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanLeft3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleBoxVanLeft3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanRoof2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleBoxVanRoof2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanRoof3",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleBoxVanRoof3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanRoof4",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleBoxVanRoof4"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleBoxVanRoof5",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleBoxVanRoof5"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeAmmoLoader",
+      "category": "equipment",
+      "parts": 8,
+      "triangles": 252,
+      "sourcePrototypes": [
+        "VehicleHumveeAmmoLoader"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeBloodVendor",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleHumveeBloodVendor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeBloodVendorVend",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleHumveeBloodVendorVend"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeCarrierBackDoor1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleHumveeCarrierBackDoor1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeCarrierBackDoor2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleHumveeCarrierBackDoor2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeChassis",
+      "category": "hollow chassis",
+      "parts": 25,
+      "triangles": 300,
+      "sourcePrototypes": [
+        "VehicleHumveeChassis"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeChassisMedical",
+      "category": "hollow chassis",
+      "parts": 29,
+      "triangles": 348,
+      "sourcePrototypes": [
+        "VehicleHumveeChassisMedical"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeChassisTransport",
+      "category": "hollow chassis",
+      "parts": 25,
+      "triangles": 300,
+      "sourcePrototypes": [
+        "VehicleHumveeChassisTransport"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeExitDoor",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleHumveeExitDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeExitDoorDirectional",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleHumveeExitDoorDirectional"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeLockerMedical",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "VehicleHumveeLockerMedical"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeViewportDoor",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleHumveeViewportDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeViewportFrontNorth",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleHumveeViewportFrontNorth"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleHumveeViewportSmall",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleHumveeViewportSmall"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleInteriorArmorChair",
+      "category": "crew seat",
+      "parts": 11,
+      "triangles": 132,
+      "sourcePrototypes": [
+        "VehicleInteriorArmorChair"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleInteriorBloodVendor",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleInteriorBloodVendor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleInteriorCamera",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleInteriorCamera"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleInteriorExtinguisher",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleInteriorExtinguisher"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleInteriorExtinguisherClosed",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleInteriorExtinguisherClosed"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleInteriorLocker",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "VehicleInteriorLocker"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleInteriorMedVendor",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleInteriorMedVendor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleInteriorMedVendorVend",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleInteriorMedVendorVend"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleInteriorNanomed",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleInteriorNanomed"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanBackground1",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehiclePizzaVanBackground1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanBackground3",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehiclePizzaVanBackground3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanExterior1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanExterior1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanExterior3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanExterior3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanExteriorDoor",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanExteriorDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanFront1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanFront1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanFront3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanFront3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanFrontLeft2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanFrontLeft2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanFrontRoof1",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehiclePizzaVanFrontRoof1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanFrontRoof2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehiclePizzaVanFrontRoof2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanInteriorDoor",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanInteriorDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanLeft1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanLeft1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanLeft2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanLeft2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanRight3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehiclePizzaVanRight3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanRoof2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehiclePizzaVanRoof2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanRoof3",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehiclePizzaVanRoof3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanRoof4",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehiclePizzaVanRoof4"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanRoof5",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehiclePizzaVanRoof5"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehiclePizzaVanWindshieldBottom",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehiclePizzaVanWindshieldBottom"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPAPCAmmoLoader",
+      "category": "equipment",
+      "parts": 8,
+      "triangles": 252,
+      "sourcePrototypes": [
+        "VehicleSPPAPCAmmoLoader"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPAPCChassis",
+      "category": "hollow chassis",
+      "parts": 23,
+      "triangles": 276,
+      "sourcePrototypes": [
+        "VehicleSPPAPCChassis"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPAPCDoorBack",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleSPPAPCDoorBack"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPAPCDoorFront",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleSPPAPCDoorFront"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPTankAmmoLoader",
+      "category": "equipment",
+      "parts": 8,
+      "triangles": 252,
+      "sourcePrototypes": [
+        "VehicleSPPTankAmmoLoader"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPTankChassis",
+      "category": "hollow chassis",
+      "parts": 19,
+      "triangles": 228,
+      "sourcePrototypes": [
+        "VehicleSPPTankChassis"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPTankChassisAlt",
+      "category": "hollow chassis",
+      "parts": 19,
+      "triangles": 228,
+      "sourcePrototypes": [
+        "VehicleSPPTankChassisAlt"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPTankSmallLocker",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "VehicleSPPTankSmallLocker"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPTankSmallLockerAlt",
+      "category": "equipment",
+      "parts": 5,
+      "triangles": 60,
+      "sourcePrototypes": [
+        "VehicleSPPTankSmallLockerAlt"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPVanAmmoLoader",
+      "category": "equipment",
+      "parts": 8,
+      "triangles": 252,
+      "sourcePrototypes": [
+        "VehicleSPPVanAmmoLoader"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPVanChassis",
+      "category": "hollow chassis",
+      "parts": 18,
+      "triangles": 216,
+      "sourcePrototypes": [
+        "VehicleSPPVanChassis"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPVanChassisArmed",
+      "category": "hollow chassis",
+      "parts": 18,
+      "triangles": 216,
+      "sourcePrototypes": [
+        "VehicleSPPVanChassisArmed"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPVanChassisLogistics",
+      "category": "hollow chassis",
+      "parts": 18,
+      "triangles": 216,
+      "sourcePrototypes": [
+        "VehicleSPPVanChassisLogistics"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPVanExteriorDoorUnique",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleSPPVanExteriorDoorUnique"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPVanInteriorDoor",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleSPPVanInteriorDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPVanViewportSimple",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleSPPVanViewportSimple"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleSPPVanViewportSimpleFront",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleSPPVanViewportSimpleFront"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankAmmoLoader",
+      "category": "equipment",
+      "parts": 8,
+      "triangles": 252,
+      "sourcePrototypes": [
+        "VehicleTankAmmoLoader"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankBack1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankBack1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankBack2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankBack2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankBack3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankBack3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankExterior1",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleTankExterior1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankExterior3",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleTankExterior3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankFront1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankFront1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankFront2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankFront2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankFront3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankFront3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankProp0",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankProp0"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankProp2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankProp2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankProp3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankProp3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankProp4",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankProp4"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankProp5",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankProp5"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankProp6",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankProp6"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankProp7",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankProp7"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankProp8Extra",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankProp8Extra"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankTankBack2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankTankBack2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankTankRight2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleTankTankRight2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleTankWall",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleTankWall"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanBack1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleVanBack1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanBack2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleVanBack2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanBack3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleVanBack3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanBackground2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleVanBackground2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanExterior2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleVanExterior2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanExteriorDoor",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleVanExteriorDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanFront1",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleVanFront1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanFront2",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleVanFront2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanFront3",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleVanFront3"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanFrontRoof1",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleVanFrontRoof1"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanFrontRoof2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleVanFrontRoof2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanInteriorDoor",
+      "category": "cabin structure",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleVanInteriorDoor"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanRoof2",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleVanRoof2"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanWindshieldBottom",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleVanWindshieldBottom"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleVanWindshieldTop",
+      "category": "cabin structure",
+      "parts": 3,
+      "triangles": 36,
+      "sourcePrototypes": [
+        "VehicleVanWindshieldTop"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleViewport",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleViewport"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleViewportSimple",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleViewportSimple"
+      ]
+    },
+    {
+      "id": "CMU3DInteriorVehicleViewportUnanchored",
+      "category": "equipment",
+      "parts": 4,
+      "triangles": 48,
+      "sourcePrototypes": [
+        "VehicleViewportUnanchored"
+      ]
+    }
+  ]
+}

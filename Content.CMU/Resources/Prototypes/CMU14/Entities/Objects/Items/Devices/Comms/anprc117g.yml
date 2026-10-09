@@ -224,6 +224,22 @@
       fill_card:
       - ANPRCFillCardOPFOR
 
+# vendor and requisitions stock, set and card both keyed to the side of the ship it turns
+# up on, or of the first marine to pick it up (ANPRCSideKeyingSystem). reads GOVFOR until then
+- type: entity
+  parent: ANPRC117GRadio
+  id: ANPRC117GRadioIssued
+  suffix: Issue, keys to side
+  components:
+  - type: ANPRCSideKeyed
+    variants:
+      govfor: ANPRC117GRadioFilled
+      opfor: ANPRC117GRadioOPFORFilled
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardIssued
+
 - type: entity
   parent: ANPRC117GRadioCLF
   id: ANPRC117GRadioCLFFilled

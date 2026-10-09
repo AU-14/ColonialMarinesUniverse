@@ -39,6 +39,7 @@ using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components; // CMU14
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -257,8 +258,9 @@ public sealed partial class GunSystem : SharedGunSystem
 
         // CMU14: keep the source entity selected by the visible 3D ray.
         var target = firstPerson ? GetNetEntity(firstPersonTarget) : GetBestTarget(_eyeManager.CurrentEye, mousePos);
-        if (!firstPerson && _state.CurrentState is GameplayStateBase screen)
-            target = GetNetEntity(screen.GetClickedEntity(mousePos)) ?? target;
+        if (!firstPerson && _state.CurrentState is GameplayStateBase screen &&
+            screen.GetClickedEntity(mousePos) is { } clicked && CheckFixtures(clicked))
+            target = GetNetEntity(clicked);
 
         if (_player.LocalSession is not { } session)
             return;
@@ -779,6 +781,10 @@ public sealed partial class GunSystem : SharedGunSystem
 
     private bool CheckFixtures(Entity<FixturesComponent?> entity)
     {
+        // CMU14: disabled collision must not hide a shootable target beneath the sprite.
+        if (!TryComp<PhysicsComponent>(entity, out var body) || !body.CanCollide)
+            return false;
+
         if (!Resolve(entity, ref entity.Comp, false))
             return false;
 

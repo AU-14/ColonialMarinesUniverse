@@ -5,6 +5,10 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
   <Import Project="../MSBuild/Content.props" />
+  <!-- CMU14: compile integration coverage alongside CMU-owned features. -->
+  <ItemGroup>
+    <Compile Include="..\Content.CMU\IntegrationTests\**\*.cs" Link="CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NUnit" />
     <PackageReference Include="NUnit3TestAdapter" />

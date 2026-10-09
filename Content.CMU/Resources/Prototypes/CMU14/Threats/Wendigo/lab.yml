@@ -1,0 +1,45 @@
+# Weyland-Yutani lab Wendigo conversion: MH-32 syringe, its shipment crate and mind roles.
+- type: entity
+  parent: BaseSyringe
+  id: CMUSyringeMH32
+  name: MH-32 syringe
+  description: A syringe of Weyland-Yutani experimental compound MH-32. The label reads "Not approved for human trials."
+  components:
+  - type: Solution
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMUMH32
+        Quantity: 15
+  - type: Injector
+    activeModeProtoId: SyringeInjectMode
+    currentTransferAmount: 15
+
+- type: entity
+  id: CMUCrateMH32
+  parent: AU14CrateSecureWeYuXenoEggs
+  name: MH-32 shipment
+  suffix: CMU, MH-32
+  components:
+  - type: StorageFill
+    contents:
+      - id: CMUSyringeMH32
+        amount: 2
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCMUWendigoLab
+  name: Lab Wendigo
+  components:
+  - type: MindRole
+    exclusiveAntag: false
+    roleType: SoloAntagonist
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleCMUWendigoLabTamed
+  name: Tamed Lab Wendigo
+  components:
+  - type: MindRole
+    exclusiveAntag: false
+    roleType: Familiar
