@@ -216,7 +216,45 @@ Combat interrupts travel and the patrol resumes after contact expires. `move`/`g
 the active patrol. Explicit orders follow bounded, traversable routes (2,048 cells, at most one search
 per update), rechecking live obstruction and retrying blocked travel after three seconds.
 `cmu-expedition-ai-status <map>` displays progress and blocked orders. Long or maze-like routes
-may need intermediate waypoints; separate grids, levels and closed doors are not traversed.
+may need intermediate waypoints; separate grids and levels are not traversed. Usable closed doors
+are planned as portals, then opened with native interaction and access checks at the doorway.
+
+Door planning checks native access, bolts, welds, power and door-specific opening rules once per
+agent/door per frame. Physical clearance, spawning, medical stances and peeks still treat closed
+doors as solid. Route smoothing retains full body clearance around door frames. Agents approach
+the first usable door on a leg, request opening once within interaction range, and wait for actual
+collision clearance before continuing. Opening/closing animations suspend the ordinary stuck
+timer for a bounded 2–8 seconds; a rejected or timed-out door is avoided for eight seconds while
+the original order is replanned. Agents don't close doors behind squadmates. This does not add
+key acquisition, forced entry, remote button operation, or vaulting. The status command reports
+the current door decision, successful open requests and failures.
+
+Vision through windows is separate from movement and projectile collision. Clear RMC/full-tile
+and tagged directional windows allow target acquisition; enabled occluders, walls and smoke
+still block sight. Rifle lanes permit firing at a visible enemy through destructible panes:
+normal rounds first damage/break the glass, then reach the enemy. Shattered RMC frames retain
+their native untargeted-projectile pass-through. Indestructible glass blocks fire, while breakable
+glass/frames cannot certify safe medical shelter. Friendly-fire cone checks remain in force on
+both sides of the pane. Grenade paths and rocket blast/backblast checks keep their stricter
+physical obstruction rules.
+
+Door/window runtime verification (not yet run):
+
+1. Order six guards through single and paired RMC doors on an ordinary colony map, then patrol
+   back through auto-closing doors. Confirm they open from either side, queue, resume their
+   original destination, and never toggle an opening/open door closed.
+2. Repeat with denied access, missing power, bolts, welds and a door blocked mid-route. Provide
+   an alternate corridor. Confirm rerouting/backoff; restore access/power and check retry. Hold
+   an opening animation blocked beyond eight seconds and confirm no perpetual waiting loop.
+3. Interrupt door travel with enemy contact. Confirm return fire through a real clear lane,
+   no fire through an opaque closed door, and resumption of the order after contact ends.
+4. Fight through full-tile RMC and directional windows, then their broken frames. Confirm native
+   glass damage/ammo consumption, continued fire after breakage, and no walking through glass.
+   Repeat with indestructible/tinted panes, a wall or shutter behind glass, smoke and a friendly
+   crossing either side: these must still prevent the corresponding sight/shot.
+5. Record route/search timings with six guards traversing several doorways under simultaneous
+   contact. Door permission checks are cached per frame; opening does not restart the route
+   search on each think or prevent covering fire while waiting.
 
 Ground checks use current grid tiles, fire entities and hard body collision. Shallow/deep RMC
 water is traversable with native contact slowdown; sensor fixtures do not block body clearance.

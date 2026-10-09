@@ -79,6 +79,9 @@ public sealed partial class CMUExpeditionAgentStatusCommand : LocalizedEntityCom
                 ("construction", agent.FortificationDecision), ("facing", agent.FortificationFacing.ToString()),
                 ("supplies", agent.SuppliesScavenged), ("hazard", agent.HazardDecision), ("dodges", agent.HazardDodges),
                 ("detours", agent.LocalDetours), ("failures", agent.OrderFailures)));
+            shell.WriteLine(Loc.GetString("cmu-expedition-ai-door-status",
+                ("decision", agent.DoorDecision), ("opened", agent.DoorsOpened), ("failures", agent.DoorFailures),
+                ("door", agent.WaitingForDoor is { } door ? EntityManager.GetNetEntity(door).ToString() : "-")));
             shell.WriteLine(Loc.GetString("cmu-expedition-ai-survival-status",
                 ("weapon", agent.WeaponRecoveryDecision), ("recovered", agent.WeaponsRecovered),
                 ("spacing", agent.SpacingDecision), ("destination", agent.SpacingDestination?.ToString() ?? "-"),

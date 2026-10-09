@@ -176,9 +176,9 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.LastOrderProgressPosition = start;
             agent.OrderBlockedSince = null;
         }
-        if (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(2) ||
-            TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath ||
-            !TraversablePassage(uid, start, next))
+        if (!WaitingAtDoor(uid, agent) && (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(2) ||
+            TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath) ||
+            !RoutePassage(uid, start, next))
         {
             var detour = new Queue<EntityCoordinates>();
             if (LocalDetour(uid, agent, next, detour))

@@ -133,3 +133,4 @@ cmu-expedition-order-patrol-clear = Stop and clear all waypoints
 cmu-expedition-order-style = Change aggression, courage and preferred range
 cmu-expedition-order-friendly = Set friendly faction overrides
 cmu-expedition-order-target = Set target faction overrides
+cmu-expedition-ai-door-status = Doors: { $decision }; waiting for { $door }; opened { $opened }; failed { $failures }.

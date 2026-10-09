@@ -63,6 +63,7 @@ public sealed partial class CMUExpeditionAgentSystem
         ClearScavenging(uid, agent);
         ReleaseManeuver(uid, agent);
         ClearTraffic(agent);
+        agent.WaitingForDoor = null;
         agent.CoveringFor = null;
         agent.CoveringUntil = TimeSpan.Zero;
         agent.ContactDestination = null;

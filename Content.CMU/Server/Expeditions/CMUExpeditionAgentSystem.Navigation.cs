@@ -16,7 +16,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             // A route was validated from the corner's centre. An early turn from the body's
             // current sub-tile position is only safe if the whole next leg still fits.
-            if (route.Count > 1 && !TraversablePassage(uid, position, route.ElementAt(1)))
+            if (route.Count > 1 && !RoutePassage(uid, position, route.ElementAt(1)))
                 break;
             route.Dequeue();
         }
@@ -158,9 +158,9 @@ public sealed partial class CMUExpeditionAgentSystem
             {
                 var radius = index == 0 && !paddedStart || furthest == points.Count - 1 && !paddedEnd
                     ? AgentBodyRadius : RouteClearance;
-                if (TraversablePassage(uid, previous, points[furthest], radius) ||
+                if (RoutePassage(uid, previous, points[furthest], radius) ||
                     // A physically passable narrow corridor keeps its individual cell stops.
-                    furthest == index && TraversablePassage(uid, previous, points[furthest]))
+                    furthest == index && RoutePassage(uid, previous, points[furthest]))
                     break;
                 furthest--;
             }
@@ -191,15 +191,16 @@ public sealed partial class CMUExpeditionAgentSystem
             if (cell != first && agent.TrafficBlockedPoint is { } blocked && _timing.CurTime < agent.AvoidTrafficUntil &&
                 _transform.InRange(point, blocked, 0.8f))
                 return false;
-            if (!ValidOrderPoint(uid, point) ||
+            if (!RoutePoint(uid, point) ||
                 !ordered && (agent.Home is not { } home || !_transform.InRange(home, point, agent.LeashRange) || !_transform.InRange(start, point, 16)))
                 return false;
             return true;
         }
         float Danger(int cell)
         {
+            var doorCost = BodyFits(uid, Coordinates(cell)) ? 0 : 2;
             if (ordered)
-                return 0;
+                return doorCost;
             if (danger.TryGetValue(cell, out var cost))
                 return cost;
             var point = Coordinates(cell);
@@ -224,6 +225,7 @@ public sealed partial class CMUExpeditionAgentSystem
             // Closing to rifle range accepts some exposure; a radio snapshot carries less certainty.
             if (agent.State == CMUExpeditionAgentState.Investigate)
                 cost *= agent.ContactFromRadio ? 0.15f : 0.3f;
+            cost += doorCost;
             danger[cell] = cost;
             return cost;
         }
@@ -231,7 +233,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             var key = a < b ? (a, b) : (b, a);
             if (!passages.TryGetValue(key, out var clear))
-                passages[key] = clear = TraversablePassage(uid, Coordinates(a), Coordinates(b));
+                passages[key] = clear = RoutePassage(uid, Coordinates(a), Coordinates(b));
             return clear;
         }
     }

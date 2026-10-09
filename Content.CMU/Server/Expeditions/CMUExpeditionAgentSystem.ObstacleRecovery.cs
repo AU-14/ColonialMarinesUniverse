@@ -17,7 +17,7 @@ public sealed partial class CMUExpeditionAgentSystem
         if (_localRouteSearched || now < agent.NextLocalDetour ||
             !TrySquadCoordinates(Transform(uid).Coordinates, out var start) ||
             !TrySquadCoordinates(destination, out destination) || start.EntityId != destination.EntityId ||
-            !_transform.InRange(start, destination, 8) || !BodyFits(uid, start) || !ValidOrderPoint(uid, destination))
+            !_transform.InRange(start, destination, 8) || !BodyFits(uid, start) || !RoutePoint(uid, destination))
             return false;
         _localRouteSearched = true;
         agent.NextLocalDetour = now + TimeSpan.FromSeconds(3);
@@ -36,7 +36,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var toward = Vector2.Normalize(destination.Position - start.Position);
         var avoid = start.Position + toward * 0.8f;
         var path = CMUTacticalRoute.Find(size, first, last, Walkable, _ => 0,
-            (a, b) => TraversablePassage(uid, Point(a), Point(b),
+            (a, b) => RoutePassage(uid, Point(a), Point(b),
                 a == first || b == last ? AgentBodyRadius : RouteClearance), out _, 384);
         if (path == null)
             return false;
@@ -58,7 +58,7 @@ public sealed partial class CMUExpeditionAgentSystem
             // A physical stall forbids reusing the same immediate approach for this
             // bounded search. This is a route preference, never collision immunity.
             return (cell == last || !stalled || Vector2.DistanceSquared(point.Position, avoid) > 0.3f * 0.3f) &&
-                ValidOrderPoint(uid, point) && (agent.OrderedDestination != null ||
+                RoutePoint(uid, point) && (agent.OrderedDestination != null ||
                     agent.Home is { } home && _transform.InRange(home, point, agent.LeashRange));
         }
     }

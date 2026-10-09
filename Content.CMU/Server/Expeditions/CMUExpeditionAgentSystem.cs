@@ -77,6 +77,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         ClearScavenging(ent, ent.Comp);
         ReleaseManeuver(ent, ent.Comp);
         ClearTraffic(ent.Comp);
+        ent.Comp.WaitingForDoor = null;
         ent.Comp.CoveringFor = null;
         ent.Comp.CoveringUntil = TimeSpan.Zero;
         ent.Comp.ContactDestination = null;
@@ -105,6 +106,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         _orderRouteSearched = false;
         _localRouteSearched = false;
         _bodyClearCache.Clear();
+        _doorPassageCache.Clear();
+        _windowSightCache.Clear();
         _groundCache.Clear();
         RefreshAcidTiles();
         _smokeTiles.Clear();
@@ -740,8 +743,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
                 agent.State != CMUExpeditionAgentState.PlanMove)
                 agent.MoveUntil = now + agent.RepositionTimeout;
         }
-        if (now >= agent.MoveUntil || now - agent.MoveProgressAt >= TimeSpan.FromSeconds(1.5) ||
-            TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath)
+        if (!WaitingAtDoor(uid, agent) && (now >= agent.MoveUntil || now - agent.MoveProgressAt >= TimeSpan.FromSeconds(1.5) ||
+            TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath))
         {
             if (LocalDetour(uid, agent, destination, agent.Route))
             {
@@ -768,7 +771,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     private bool Visible(EntityUid observer, EntityUid target, float range) =>
         _interaction.InRangeUnobstructed(observer, target, range,
             CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
-            predicate: entity => entity == observer || entity == target || HasComp<NpcFactionMemberComponent>(entity)) &&
+            predicate: entity => entity == observer || entity == target || HasComp<NpcFactionMemberComponent>(entity) ||
+                TransparentWindow(entity)) &&
         !SmokeOccludes(Transform(observer).Coordinates, Transform(target).Coordinates);
 
     private void Move(EntityUid uid, EntityCoordinates destination, bool precise = false,
@@ -798,7 +802,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             AdvanceRoute(uid, agent.Route, start);
             // Steering avoidance or a moving obstacle can displace us from a valid segment.
             // Reconnect from the actual body position instead of pushing through its corner.
-            if (agent.Route.TryPeek(out var next) && !TraversablePassage(uid, start, next) &&
+            if (agent.Route.TryPeek(out var next) && !RoutePassage(uid, start, next) &&
                 !BuildTacticalRoute(uid, agent, destination))
             {
                 _steering.Unregister(uid);
@@ -821,8 +825,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             {
                 var now = _timing.CurTime;
                 UpdateMoveProgress(agent, start, destination, now);
-                if (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(1.5) ||
-                    TryComp<NPCSteeringComponent>(uid, out var pursuit) && pursuit.Status == SteeringStatus.NoPath)
+                if (!WaitingAtDoor(uid, agent) && (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(1.5) ||
+                    TryComp<NPCSteeringComponent>(uid, out var pursuit) && pursuit.Status == SteeringStatus.NoPath))
                 {
                     _steering.Unregister(uid);
                     agent.FailedPosition = agent.RouteDestination;
@@ -839,9 +843,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             _steering.Unregister(uid);
             return;
         }
-        if (TryComp<CMUExpeditionAgentComponent>(uid, out var traveller) &&
-            !QueueMovement(uid, traveller, ref destination))
-            return;
+        if (TryComp<CMUExpeditionAgentComponent>(uid, out var traveller))
+        {
+            if (!PrepareDoorPassage(uid, traveller, ref destination) || !QueueMovement(uid, traveller, ref destination))
+                return;
+        }
         TryComp<NPCSteeringComponent>(uid, out var existing);
         if (existing?.Status == SteeringStatus.NoPath)
         {
