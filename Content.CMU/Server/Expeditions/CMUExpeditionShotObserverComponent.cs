@@ -4,5 +4,5 @@ namespace Content.Server.CMU14.Expeditions;
 /// Gives expedition perception its own directed shot subscription without taking the
 /// GunComponent subscription already owned by the native ghillie system.
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, UnsavedComponent]
 public sealed partial class CMUExpeditionShotObserverComponent : Component;
