@@ -1,11 +1,10 @@
 - type: antagSpecifier
+  parent: CMUAntagSpecifierColonyBase
   id: Arsonist
   prefRoles: [ ArsonistRole ]
   jobBlacklistGroup:
-  - AllGovforJobs
   - AllOpforJobs
   - AllCLFJobs
-# - AllColonyDepartmentHeadJobs
   briefing:
     text: cmu-antag-arsonist-greeting
     color: DarkOrange
