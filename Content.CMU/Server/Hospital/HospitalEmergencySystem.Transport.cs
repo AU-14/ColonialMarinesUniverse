@@ -203,9 +203,23 @@ public sealed partial class HospitalEmergencySystem
 
     private bool HasProtectedTransportContent(HospitalTransportLeaseComponent lease, bool offShuttleOnly = false)
     {
-        var query = AllEntityQuery<TransformComponent>();
-        while (query.MoveNext(out var uid, out var transform))
+        // everything that can match sits under the shuttle grid or one of the leased maps, so walk
+        // those subtrees instead of the whole world. this retries every 2s while a lease is stuck
+        var pending = new Stack<EntityUid>();
+        var seen = new HashSet<EntityUid>();
+        pending.Push(lease.Shuttle);
+        foreach (var map in lease.Maps.Keys)
+            pending.Push(map);
+
+        while (pending.TryPop(out var uid))
         {
+            if (!seen.Add(uid) || !TryComp(uid, out TransformComponent? transform))
+                continue;
+
+            var children = transform.ChildEnumerator;
+            while (children.MoveNext(out var child))
+                pending.Push(child);
+
             var onShuttle = uid != lease.Shuttle &&
                 (transform.GridUid == lease.Shuttle || transform.ParentUid == lease.Shuttle);
             var onOwnedMap = transform.MapUid is { } map && lease.Maps.ContainsKey(map);

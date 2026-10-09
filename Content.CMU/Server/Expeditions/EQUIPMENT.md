@@ -137,3 +137,16 @@ may become a new contact. Phrase pools reflect stress, injury, aggression, a clo
 7. Measure update/search cost with six and twelve agents under simultaneous contact, nearby armed
    vehicles, dense trees and many point lights. Record stuck moves, rejected trigger reasons and
    supply/vision counters. No runtime performance or balance result is claimed from compilation.
+
+Reload response: magazine handling defaults to 0.8 seconds, and shell handling to at least
+0.3 seconds or the weapon's native insert delay, whichever is longer. Empty weapons can request
+rearming before the optional planning tick; an interrupted reload retries after 0.75 seconds
+instead of the generic eight-second action penalty. Existing safety and interruption checks
+still apply. A shotgun stops topping off once it has a live round and a visible enemy. Successful
+reloads immediately ready the rifle and resume a safe known target without a second aim delay;
+native weapon readiness, ammunition and fire-rate checks remain active.
+
+Manual verification (not run locally): empty a rifle and shotgun with compatible reserves,
+with and without contact. Check actual magazine/shell consumption, full quiet top-offs,
+single-shell combat reloads, prompt resumed fire, and recovery after damage, lost covering
+fire, occupied hands, a rush and an explicit order. Native insert delays must still be honored.

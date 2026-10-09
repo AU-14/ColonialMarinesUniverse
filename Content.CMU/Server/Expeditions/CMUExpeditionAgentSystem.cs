@@ -69,6 +69,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         InitializeVision();
         InitializeHearing();
         InitializeSquadPanel();
+        InitializeVaulting();
     }
 
     private void OnMobState(Entity<CMUExpeditionAgentComponent> ent, ref MobStateChangedEvent args)
@@ -82,6 +83,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     private void Stop(Entity<CMUExpeditionAgentComponent> ent)
     {
+        CancelVault(ent.Comp);
         CancelPortalClimb(ent, ent.Comp);
         ent.Comp.SupplySource = null;
         ent.Comp.DeliveryRecipient = null;
@@ -228,6 +230,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         else
             agent.WoundedSince = null;
         UpdateEmotions(uid, agent, damage, now);
+        if (MaintainVault(uid, agent, hit, now))
+            return;
         ValidateCover(uid, agent, hit, now);
 
         if (AvoidAlienAttack(uid, agent, now))
@@ -891,7 +895,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         _interaction.InRangeUnobstructed((observer, observerTransform), (target, targetTransform), range,
             CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
             predicate: entity => entity == observer || entity == target || HasComp<NpcFactionMemberComponent>(entity) ||
-                TransparentWindow(entity)) &&
+                TransparentWindow(entity) || LowBulletCover(entity)) &&
         !SmokeOccludes(observerTransform.Coordinates, targetTransform.Coordinates) && CanSpot(observer, target);
 
     private void Move(EntityUid uid, EntityCoordinates destination, bool precise = false,
@@ -964,8 +968,10 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
         if (TryComp<CMUExpeditionAgentComponent>(uid, out var traveller))
         {
-            if (!PrepareDoorPassage(uid, traveller, ref destination) || !QueueMovement(uid, traveller, ref destination))
+            if (!PrepareVaultPassage(uid, traveller, ref destination)
+                || !PrepareDoorPassage(uid, traveller, ref destination) || !QueueMovement(uid, traveller, ref destination))
                 return;
+            validated |= TraversablePassage(uid, Transform(uid).Coordinates, destination);
         }
         TryComp<NPCSteeringComponent>(uid, out var existing);
         if (existing?.Status == SteeringStatus.NoPath)

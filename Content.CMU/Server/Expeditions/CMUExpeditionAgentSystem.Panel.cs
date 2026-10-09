@@ -68,7 +68,7 @@ public sealed partial class CMUExpeditionAgentSystem
                     $"Fire: {a.LastFireCheck} | Weapon: {a.WeaponDecision}\n" +
                     $"Native fire wait: {nativeDelay:F2}s | AI aim wait: {Math.Max(0, (a.FireAt - _timing.CurTime).TotalSeconds):F2}s\n" +
                     $"Damage: {a.LastDamage:F0} | Ammo: {ammo} | Stress: {a.Stress:F2}\n" +
-                    $"Squad: {a.SquadDecision} | Movement: {a.TrafficDecision} | Door: {a.DoorDecision}\n" +
+                    $"Squad: {a.SquadDecision} | Movement: {a.TrafficDecision} | Door: {a.DoorDecision} | Vault: {a.VaultDecision}\n" +
                     $"Sight: {a.VisionDecision} | Supplies: {a.SupplyDecision}\n" +
                     $"Friendly: {string.Join(",", a.FriendlyFactions)} | Targets: {string.Join(",", a.TargetFactions)}\n" +
                     $"Search: {a.LastRouteMilliseconds:F2} ms / {a.LastRouteCells} cells\n" + string.Join("\n", a.DecisionHistory);

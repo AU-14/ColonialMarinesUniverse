@@ -8,6 +8,8 @@ public sealed partial class CMUExpeditionAgentComponent
 {
     [DataField] public int Squad;
     [DataField] public bool PlanningEnabled = true;
+    [DataField] public TimeSpan MagazineReloadDuration = TimeSpan.FromSeconds(0.8);
+    [DataField] public TimeSpan ShellReloadDuration = TimeSpan.FromSeconds(0.3);
     public CMUTacticalGoal Goal;
     public Queue<CMUTacticalAction> Plan = new();
     public CMUTacticalAction? Action;

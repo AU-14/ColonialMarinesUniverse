@@ -30,6 +30,9 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (!_npcs.Enabled || !TryComp<GunComponent>(ent, out var gun))
             return;
+        // every gun anyone fires lands here, nothing to hear or see it without an agent around
+        if (!EntityQueryEnumerator<CMUExpeditionAgentComponent>().MoveNext(out _, out _))
+            return;
         // Use the same suppression hook as the real effect (including attached silencers).
         var flash = new GunMuzzleFlashAttemptEvent();
         RaiseLocalEvent(ent, ref flash);
