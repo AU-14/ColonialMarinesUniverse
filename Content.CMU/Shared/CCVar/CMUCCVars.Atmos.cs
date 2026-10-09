@@ -5,7 +5,7 @@ namespace Content.Shared.CCVar;
 public sealed partial class CCVars
 {
     /// <summary>
-    /// How many generations ordinary tile fires creep outward from where they were lit.
+    /// How many generations AU14 tile fires creep outward from where they were lit.
     /// Each generation spawns one adjacent fire that gets one less, so reach is depth - 1
     /// tiles. 0 disables creeping for fires that do not carry their own depth in YAML.
     /// </summary>
