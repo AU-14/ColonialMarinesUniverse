@@ -1,12 +1,29 @@
+# Same as CMMaskGas, but with CMU sprites and no camouflage.
 - type: entity
-  parent: CMMaskGas
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
   id: CMUMaskGas
+  name: gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air.
   suffix: CMU
   components:
   - type: Sprite
     sprite: CMU14/Clothing/Masks/gasmask.rsi
+    state: base
   - type: Clothing
     sprite: CMU14/Clothing/Masks/gasmask.rsi
+    slots:
+    - Mask
+    - Suitstorage
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - GasMask
+  - type: MycotoxinProtection
+    fullProtection: false
+  - type: CMUItemStain
+    wornStates:
+      mask: gasmask_blood
 
 - type: entity
   parent: CMUMaskGas
