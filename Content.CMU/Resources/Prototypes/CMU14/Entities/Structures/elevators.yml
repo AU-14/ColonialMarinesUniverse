@@ -1,0 +1,42 @@
+# Give each lift a unique elevatorId on its control and rails. A connected,
+# closed rail loop defines the movable footprint, so it can be irregularly shaped.
+# The controller must be on the platform; destinations need aligned, clear space
+# on the adjacent linked z-level.
+# Contained inventory travels with its owner and does not add to the entity limit.
+# Anchored platform structures remain anchored after travel.
+- type: entity
+  parent: Railing
+  id: CMUElevatorRail
+  name: elevator rail
+  description: Place rails in a continuous, closed outline around an elevator platform. Rails with the same elevator ID define one movable platform.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/railing.rsi
+    offset: 0, 0.5
+    state: raised
+    noRot: true
+  - type: Icon
+    sprite: _RMC14/Structures/railing.rsi
+    state: raised
+  - type: CMUElevatorRail
+
+- type: entity
+  parent: BaseStructure
+  id: CMUElevatorControl
+  name: elevator control
+  description: Use to move the elevator between linked z-levels. The control must be inside its closed rail outline.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: elevator
+    drawdepth: HighFloorObjects
+  - type: InteractionOutline
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
+  - type: CMUElevator
+  - type: CMUElevatorWeightLimit
+    maxEntities: 20

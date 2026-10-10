@@ -1,0 +1,16 @@
+cmu-elevator-title = Elevator control
+cmu-elevator-direction-up = up
+cmu-elevator-direction-down = down
+cmu-elevator-move-confirmation = Move the elevator {$direction} one level?
+cmu-elevator-disabled = The elevator is disabled.
+cmu-elevator-invalid-rail-outline = The elevator needs a closed, connected outline of at least four rails with the control inside it.
+cmu-elevator-no-destination = There is no linked z-level or floor grid in that direction.
+cmu-elevator-destination-blocked = The destination elevator footprint is occupied.
+cmu-elevator-platform-grid-blocked = Another grid on the elevator platform prevents it from moving.
+cmu-elevator-overloaded = The elevator is overloaded and has broken. An engineer must re-enable it.
+cmu-elevator-disable-verb = Disable elevator
+cmu-elevator-enable-verb = Enable elevator
+cmu-elevator-disable-confirmation = Disable this elevator? Only engineering-qualified personnel can enable it again.
+cmu-elevator-enable-confirmation = Re-enable this elevator?
+cmu-elevator-disabled-success = Elevator disabled.
+cmu-elevator-enabled-success = Elevator enabled.
