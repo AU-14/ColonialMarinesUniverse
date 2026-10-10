@@ -21,7 +21,7 @@ public sealed partial class AU14MinimumSkill : IConstructionCondition
     public ConstructionGuideEntry GenerateGuideEntry()
     {
         var prototypes = IoCManager.Resolve<IPrototypeManager>();
-        var skillName = prototypes.TryIndex(Skill, out EntityPrototype? skill) ? skill.Name : Skill.Id;
+        var skillName = prototypes.TryIndex<EntityPrototype>(Skill.Id, out var skill) && skill != null ? skill.Name : Skill.Id;
 
         return new ConstructionGuideEntry
         {
