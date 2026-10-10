@@ -122,6 +122,17 @@ public sealed partial class CMUExpeditionAgentSystem
         CopyExperienceForRound();
         _grenadeHazards.Clear();
         _reports.Clear();
+        // keyed by squad root, and ids get reused after the round flush, so a stale plan could latch onto a new squad
+        _squadPlans.Clear();
+    }
+
+    // back to baseline tactics. learning normally carries between rounds (and to disk), and tests
+    // recycle servers, so without this every case inherited whatever the last ones taught the agents
+    public void ResetLearnedExperience()
+    {
+        _experience.Clear();
+        _roundExperience.Clear();
+        _experienceChanged = false;
     }
 
     public override void Shutdown()
