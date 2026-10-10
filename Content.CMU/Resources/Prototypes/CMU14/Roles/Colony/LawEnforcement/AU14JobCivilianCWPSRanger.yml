@@ -31,7 +31,7 @@
   canBeAntag: false
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
+    time: 14400 # 4 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -39,6 +39,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -83,11 +85,11 @@
     suitstorage: RMCBeltHolsterRevolver
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
-  inhand:
-  - AU14GunCasePistolM44Civ
   storage:
     back:
     - AU14GuidebookLawColonial
+    - CMURecordsTablet
+    - ForensicScanner
 
 - type: entity
   parent: CMSpawnPointJobBase

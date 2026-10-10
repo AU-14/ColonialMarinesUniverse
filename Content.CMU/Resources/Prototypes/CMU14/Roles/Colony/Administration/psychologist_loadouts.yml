@@ -1,0 +1,24 @@
+- type: loadoutGroup
+  id: CMUCivilianPsychologistSpecialization
+  name: au14-loadout-group-role-specific-ID
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - CMUCivilianPsychologistSpecializationDefault
+  - CMUCivilianPsychologistSpecializationTherapist
+  - CMUCivilianPsychologistSpecializationPsychiatrist
+
+- type: loadout
+  id: CMUCivilianPsychologistSpecializationDefault
+  equipment:
+    id: AU14IDCardColonyEthicsAndWellnessAdvisor
+
+- type: loadout
+  id: CMUCivilianPsychologistSpecializationTherapist
+  equipment:
+    id: CMUIDCardColonyTherapist
+
+- type: loadout
+  id: CMUCivilianPsychologistSpecializationPsychiatrist
+  equipment:
+    id: CMUIDCardColonyPsychiatrist

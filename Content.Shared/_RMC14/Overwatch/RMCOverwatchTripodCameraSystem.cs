@@ -144,7 +144,7 @@ public sealed partial class RMCOverwatchTripodCameraSystem : EntitySystem
         _appearance.SetData(ent, RMCOverwatchTripodCameraVisuals.Deployed, true);
         _audio.PlayPredicted(ent.Comp.DeploySound, ent, args.User);
         Dirty(ent);
-        _popup.PopupPredicted(Loc.GetString("rmc-overwatch-tripod-camera-deployed"), ent, args.User);
+        _popup.PopupBroadcast(Loc.GetString("rmc-overwatch-tripod-camera-deployed"), ent, args.User);
     }
 
     private void TryStartPickup(Entity<RMCOverwatchTripodCameraComponent> ent, EntityUid user)
@@ -188,7 +188,7 @@ public sealed partial class RMCOverwatchTripodCameraSystem : EntitySystem
             return;
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-overwatch-tripod-camera-collapsed"), ent);
+        _popup.PopupSelf(Loc.GetString("rmc-overwatch-tripod-camera-collapsed"), ent);
         Collapse(ent);
     }
 
@@ -208,14 +208,14 @@ public sealed partial class RMCOverwatchTripodCameraSystem : EntitySystem
         var damage = args.Damage.GetTotal().Float();
         if (damage >= ent.Comp.DestroyExplosionDamage)
         {
-            _popup.PopupClient(Loc.GetString("rmc-overwatch-tripod-camera-destroyed"), ent);
+            _popup.PopupSelf(Loc.GetString("rmc-overwatch-tripod-camera-destroyed"), ent);
             QueueDel(ent);
             return;
         }
 
         if (damage >= ent.Comp.CollapseExplosionDamage)
         {
-            _popup.PopupClient(Loc.GetString("rmc-overwatch-tripod-camera-collapsed"), ent);
+            _popup.PopupSelf(Loc.GetString("rmc-overwatch-tripod-camera-collapsed"), ent);
             Collapse(ent);
         }
     }
@@ -234,7 +234,7 @@ public sealed partial class RMCOverwatchTripodCameraSystem : EntitySystem
         Dirty(ent);
 
         if (user != null && _hands.TryPickupAnyHand(user.Value, ent))
-            _popup.PopupPredicted(Loc.GetString("rmc-overwatch-tripod-camera-picked-up"), ent, user.Value);
+            _popup.PopupBroadcast(Loc.GetString("rmc-overwatch-tripod-camera-picked-up"), ent, user.Value);
     }
 
     public string GetDisplayLabel(Entity<RMCOverwatchTripodCameraComponent> ent)
@@ -304,13 +304,13 @@ public sealed partial class RMCOverwatchTripodCameraSystem : EntitySystem
 
         if (_hands.GetActiveItem(user) != ent.Owner)
         {
-            _popup.PopupClient(Loc.GetString("rmc-overwatch-tripod-camera-active-hand"), ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-overwatch-tripod-camera-active-hand"), ent, user, PopupType.SmallCaution);
             return false;
         }
 
         if (_container.IsEntityInContainer(user) || HasComp<VehicleInteriorOccupantComponent>(user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-overwatch-tripod-camera-invalid-location"), ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-overwatch-tripod-camera-invalid-location"), ent, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -318,7 +318,7 @@ public sealed partial class RMCOverwatchTripodCameraSystem : EntitySystem
             !_map.CanBuildOn(coordinates) ||
             !_construction.CanBuildAt(coordinates, Name(ent), out _, anchoring: true))
         {
-            _popup.PopupClient(Loc.GetString("rmc-overwatch-tripod-camera-invalid-location"), ent, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-overwatch-tripod-camera-invalid-location"), ent, user, PopupType.SmallCaution);
             return false;
         }
 

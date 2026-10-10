@@ -11,6 +11,8 @@
         crate: RMCCrateEmptySandbags
       - cost: 500
         crate: RMCCrateSandbagsConstructionKit
+      - cost: 600
+        crate: AU14CrateConcreteBags
       - cost: 700
         crate: RMCCrateMetalSheets
       - cost: 800
@@ -86,7 +88,7 @@
       - cost: 10000
         crate: AU14Crate20MMGrenadesFragDoubleRMC
       - cost: 10000
-        crate: RMCCrateBoxAGMI
+        crate: CMUCrateGrenadeBoxAGMI
       - cost: 4000
         crate: AU14Crate20MMGrenadesFragRMC
       - cost: 4000
@@ -109,6 +111,12 @@
         crate: RMCCrateFoodIngredients
     - name: Gear
       entries:
+      - cost: 300
+        crate: ANPRCFillCardResupplyCrate
+      - cost: 1500
+        crate: ANPRCRadioResupplyCrate
+      - cost: 2500
+        crate: AU14CrateMastAntennaHead
       - cost: 1200
         crate: AU14CrateTacticalMonocular
       - cost: 1700
@@ -259,6 +267,8 @@
         stockReplenishDelay: 300
     - name: Weapons
       entries:
+      - cost: 800
+        crate: RMCCrateSU6
       - cost: 850
         crate: RMCCrateXM51
       - cost: 250
@@ -269,24 +279,34 @@
         crate: RMCCrateMOU53
       - cost: 400
         crate: RMCCrateM85A1
+        maxStock: 1
+        stockReplenishDelay: 1200
       - cost: 100
         crate: AU14CrateAssortedKnives
       - cost: 1500
         crate: AU14CrateM5A1SLAW
+        maxStock: 1
+        stockReplenishDelay: 1200
       - cost: 800
         crate: RMCCrateM34
       - cost: 2200
         crate: AU14CrateM7SLAW
+        maxStock: 1
+        stockReplenishDelay: 1200
       - cost: 1500
         crate: RMCCrateML66D
       - cost: 1000
         crate: RMCCrateM2C
       - cost: 1700
         crate: CMUCrateMk86
+        maxStock: 1
+        stockReplenishDelay: 1200
       - cost: 1500
         crate: AU14KitWeaponRXFM
     - name: Ammo
       entries:
+      - cost: 250
+        crate: RMCCrateBoxMagazineSmartPistol
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 250
@@ -300,6 +320,10 @@
       - cost: 600
         crate: RMCCrateBoxMagazineSentryFire
       - cost: 300
+        crate: RMCCrateBoxMagazineSentryFireBlue
+      - cost: 600
+        crate: RMCCrateBoxMagazineSentryFireSmoke
+      - cost: 600
         crate: RMCCrateBoxShellsShotgunSlugs
       - cost: 300
         crate: RMCCrateBoxShellsShotgunFlechette

@@ -5,12 +5,15 @@ using Content.Shared.Explosion.EntitySystems;
 using Robust.Server.GameObjects;
 using Robust.Shared.GameStates;
 using Robust.Shared.Map;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Explosion.EntitySystems;
 
 // This part of the system handled send visual / overlay data to clients.
 public sealed partial class ExplosionSystem
 {
+    // Published on the simulation thread; state generation only reads these snapshots.
+    private readonly Dictionary<EntityUid, (GameTick Tick, ExplosionVisualsState State)> _visualStates = new();
 
     /// <summary>
     /// Initializes the visual parts of this system.
@@ -19,17 +22,41 @@ public sealed partial class ExplosionSystem
     public void InitVisuals()
     {
         SubscribeLocalEvent<ExplosionVisualsComponent, ComponentGetState>(OnGetState);
+        SubscribeLocalEvent<ExplosionVisualsComponent, ComponentRemove>(OnVisualsRemoved);
     }
 
     private void OnGetState(EntityUid uid, ExplosionVisualsComponent component, ref ComponentGetState args)
     {
-        Dictionary<NetEntity, Dictionary<int, List<Vector2i>>> tileLists = new();
+        args.State = _visualStates.TryGetValue(uid, out var published) && published.Tick == component.LastModifiedTick
+            ? published.State
+            : BuildVisualState(component);
+    }
+
+    private void OnVisualsRemoved(Entity<ExplosionVisualsComponent> ent, ref ComponentRemove args)
+    {
+        _visualStates.Remove(ent.Owner);
+    }
+
+    /// <summary>
+    /// Publish after changing visual data, before parallel state generation. Completed flood lists are read-only;
+    /// only the outer grid dictionary changes on grid removal, so each publication owns that dictionary.
+    /// </summary>
+    public void PublishVisualState(Entity<ExplosionVisualsComponent> ent)
+    {
+        Dirty(ent);
+        _visualStates[ent.Owner] = (ent.Comp.LastModifiedTick, BuildVisualState(ent.Comp));
+    }
+
+    private ExplosionVisualsState BuildVisualState(ExplosionVisualsComponent component)
+    {
+        Dictionary<NetEntity, Dictionary<int, List<Vector2i>>> tileLists = new(component.Tiles.Count);
         foreach (var (grid, data) in component.Tiles)
         {
-            tileLists.Add(GetNetEntity(grid), data);
+            if (TryGetNetEntity(grid, out var net) && net != NetEntity.Invalid)
+                tileLists.Add(net.Value, data);
         }
 
-        args.State = new ExplosionVisualsState(
+        return new ExplosionVisualsState(
             component.Epicenter,
             component.ExplosionType,
             component.Intensity,
@@ -58,7 +85,7 @@ public sealed partial class ExplosionSystem
         comp.Intensity = iterationIntensity;
         comp.SpaceMatrix = spaceMatrix;
         comp.SpaceTileSize = spaceData?.TileSize ?? DefaultTileSize;
-        Dirty(explosionEntity, comp);
+        PublishVisualState((explosionEntity, comp));
 
         // Light, sound & visuals may extend well beyond normal PVS range. In principle, this should probably still be
         // restricted to something like the same map, but whatever.

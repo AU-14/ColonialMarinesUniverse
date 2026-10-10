@@ -8,10 +8,10 @@ namespace Content.Shared.CMU;
 
 public sealed partial class DamageEvasionSystem : EntitySystem
 {
-    [Dependency] private readonly EvasionSystem _evasion = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private EvasionSystem _evasion = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private readonly HashSet<EntityUid> _activeEntities = new();
 

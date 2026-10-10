@@ -87,6 +87,7 @@ wanted-list-unknown-reason-label = unknown reason
 wanted-list-initiator-label = [color=darkgray]Initiator:[/color] [color=white]{$initiator}[/color]
 wanted-list-unknown-initiator-label = unknown initiator
 
+# cmu edit start: eliminated shown as deceased
 wanted-list-status-label = [color=darkgray]status:[/color] {$status ->
         [suspected] [color=yellow]suspected[/color]
         [wanted] [color=red]wanted[/color]
@@ -94,9 +95,10 @@ wanted-list-status-label = [color=darkgray]status:[/color] {$status ->
         [paroled] [color=green]paroled[/color]
         [discharged] [color=green]discharged[/color]
         [hostile] [color=darkred]hostile[/color]
-        [eliminated] [color=gray]eliminated[/color]
+        [eliminated] [color=gray]deceased[/color]
         *[other] none
     }
+# cmu edit end
 
 wanted-list-history-table-time-col = Time
 wanted-list-history-table-reason-col = Crime

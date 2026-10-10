@@ -69,7 +69,7 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
 
     private void OnHolderInteractUsing(Entity<UniformAccessoryHolderComponent> ent, ref InteractUsingEvent args)
     {
-        if (!HasComp<UniformAccessoryComponent>(args.Used))
+        if (args.Handled || !HasComp<UniformAccessoryComponent>(args.Used))
             return;
 
         args.Handled = true;
@@ -231,17 +231,22 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
         if (!TryComp(holder, out UniformAccessoryHolderComponent? holderComp))
             return false;
 
+        var attempt = new UniformAccessoryInsertAttemptEvent(holder, user);
+        RaiseLocalEvent(accessory, attempt);
+        if (attempt.Cancelled)
+            return false;
+
         var container = _container.EnsureContainer<Container>(holder, holderComp.ContainerId);
 
         if (accessoryComp.User is { } accessoryUser && !BelongsToUser(accessoryUser, user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-uniform-accessory-fail"), user, user, PopupType.SmallCaution);
             return false;
         }
 
         if (!holderComp.AllowedCategories.Contains(accessoryComp.Category))
         {
-            _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail-not-allowed"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-uniform-accessory-fail-not-allowed"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -260,7 +265,7 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
 
         if (accessoryDictionary.TryGetValue(accessoryComp.Category, out var amount) && accessoryComp.Limit <= amount)
         {
-            _popup.PopupClient(Loc.GetString("rmc-uniform-accessory-fail-limit"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-uniform-accessory-fail-limit"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -293,4 +298,10 @@ public abstract partial class SharedUniformAccessorySystem : EntitySystem
 
         _item.VisualsChanged(accessoryHolder);
     }
+}
+
+public sealed class UniformAccessoryInsertAttemptEvent(EntityUid holder, EntityUid user) : CancellableEntityEventArgs
+{
+    public EntityUid Holder = holder;
+    public EntityUid User = user;
 }

@@ -43,11 +43,12 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
         SubscribeLocalEvent<MultiDeckDropshipComponent, FTLStartedEvent>(OnFlightStarted);
         SubscribeLocalEvent<MultiDeckDropshipComponent, FTLCompletedEvent>(OnFlightCompleted);
         SubscribeLocalEvent<MultiDeckDropshipComponent, ComponentShutdown>(OnShutdown);
+        SubscribeLocalEvent<PhysicsUpdateAfterSolveEvent>(OnPhysicsAfterSolve);
     }
 
     private void OnMapInit(Entity<MultiDeckDropshipComponent> ship, ref MapInitEvent args)
     {
-        if (ship.Comp.Initialized || Transform(ship).MapUid is not { } map)
+        if (ship.Comp.DecksInitialized || Transform(ship).MapUid is not { } map)
             return;
 
         if (ship.Comp.DeckPaths.ContainsKey(0))
@@ -90,7 +91,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
                 }
             }
 
-            ship.Comp.Initialized = true;
+            ship.Comp.DecksInitialized = true;
             Synchronize(ship);
         }
         catch (Exception exception)
@@ -104,7 +105,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
 
     private void OnMove(Entity<MultiDeckDropshipComponent> ship, ref MoveEvent args)
     {
-        if (!ship.Comp.Synchronizing && ship.Comp.Initialized)
+        if (!ship.Comp.Synchronizing && ship.Comp.DecksInitialized)
             _pending.Add(ship);
     }
 
@@ -114,7 +115,16 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
     private void OnFlightCompleted(Entity<MultiDeckDropshipComponent> ship, ref FTLCompletedEvent args)
         => Synchronize(ship);
 
-    public override void Update(float frameTime)
+    public override void Update(float frameTime) => SynchronizePending();
+
+    private void OnPhysicsAfterSolve(ref PhysicsUpdateAfterSolveEvent args)
+    {
+        // Physics moves the cabin after ordinary system updates. Copy its final
+        // position before the next substep and the outgoing network snapshot.
+        SynchronizePending();
+    }
+
+    private void SynchronizePending()
     {
         if (_pending.Count == 0)
             return;
@@ -131,7 +141,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
     /// <summary>Place every deck at the primary grid's world position and rotation.</summary>
     public bool Synchronize(Entity<MultiDeckDropshipComponent> ship)
     {
-        if (!ship.Comp.Initialized || ship.Comp.Synchronizing || Transform(ship).MapUid is not { } map)
+        if (!ship.Comp.DecksInitialized || ship.Comp.Synchronizing || Transform(ship).MapUid is not { } map)
             return false;
 
         var destinations = new List<(int Offset, EntityUid Grid, EntityUid Map)>();
@@ -210,7 +220,7 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
         coordinates = ground;
         if (!TryComp<MultiDeckDropshipComponent>(uid, out var ship))
             return true;
-        if (!ship.Initialized)
+        if (!ship.DecksInitialized)
             return false;
 
         var groundMap = _transform.ToMapCoordinates(ground);
@@ -324,6 +334,6 @@ public sealed partial class MultiDeckDropshipSystem : EntitySystem
                 QueueDel(grid);
         }
         ship.Comp.Decks.Clear();
-        ship.Comp.Initialized = false;
+        ship.Comp.DecksInitialized = false;
     }
 }

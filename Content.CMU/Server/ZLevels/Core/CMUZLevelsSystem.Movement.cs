@@ -49,18 +49,21 @@ public sealed partial class CMUZLevelsSystem
     }
 
     public override void WakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
+        => WakeZPhysics(ent, null);
+
+    private void WakeZPhysics(Entity<CMUZPhysicsComponent?> ent, ZGroundContact? unchangedGround)
     {
         if (!Prof.IsEnabled)
         {
-            WakeZPhysicsCore(ent);
+            WakeZPhysicsCore(ent, unchangedGround);
             return;
         }
 
         using var profile = Prof.Group("CMU Z Wake");
-        WakeZPhysicsCore(ent);
+        WakeZPhysicsCore(ent, unchangedGround);
     }
 
-    private void WakeZPhysicsCore(Entity<CMUZPhysicsComponent?> ent)
+    private void WakeZPhysicsCore(Entity<CMUZPhysicsComponent?> ent, ZGroundContact? unchangedGround)
     {
         if (!_zLevelsEnabled ||
             !Resolve(ent, ref ent.Comp, false))
@@ -75,8 +78,18 @@ public sealed partial class CMUZLevelsSystem
             return;
         }
 
-        Entity<CMUZPhysicsComponent?> distanceEnt = (ent.Owner, ent.Comp);
-        var distance = DistanceToGround(distanceEnt, out var stickyGround);
+        float distance;
+        bool stickyGround;
+        if (unchangedGround is { } ground)
+        {
+            distance = ground.Distance;
+            stickyGround = ground.Sticky;
+        }
+        else
+        {
+            Entity<CMUZPhysicsComponent?> distanceEnt = (ent.Owner, ent.Comp);
+            distance = DistanceToGround(distanceEnt, out stickyGround);
+        }
         if (ShouldSleepZPhysics(
                 distance,
                 stickyGround,

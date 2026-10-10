@@ -22,7 +22,7 @@ namespace Content.Client.CriminalRecords;
 
 // TODO: dedupe shitcode from general records theres a lot
 [GenerateTypedNameReferences]
-public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
+public sealed partial class CriminalRecordsConsoleWindow : Robust.Client.UserInterface.CustomControls.DefaultWindow // cmu edit
 {
     private readonly IPlayerManager _player;
     private readonly IPrototypeManager _proto;
@@ -59,6 +59,7 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
     public CriminalRecordsConsoleWindow(EntityUid console, uint maxLength, IPlayerManager playerManager, IPrototypeManager prototypeManager, IRobustRandom robustRandom, AccessReaderSystem accessReader)
     {
         RobustXamlLoader.Load(this);
+        Content.Client.Lobby.UI.CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true); // cmu edit
 
         Console = console;
         _player = playerManager;
@@ -77,6 +78,10 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
 
         foreach (var item in Enum.GetValues<StationRecordFilterType>())
         {
+            // cmu edit start
+            if (item is StationRecordFilterType.Job or StationRecordFilterType.Species)
+                continue;
+            // cmu edit end
             FilterType.AddItem(GetTypeFilterLocals(item), (int)item);
         }
 
@@ -261,8 +266,10 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
 
         PersonBounty.Text = criminalRecord.Bounty > 0 ? criminalRecord.Bounty.ToString() : na;
         // Show bounty input and set button only if user can edit
-        BountyInput.Visible = _access;
-        BountySetButton.Visible = _access;
+        // cmu edit start: bounties are set by the game only
+        BountyInput.Visible = false;
+        BountySetButton.Visible = false;
+        // cmu edit end
         if (_access)
         {
             BountyInput.Text = criminalRecord.Bounty > 0 ? criminalRecord.Bounty.ToString() : string.Empty;
@@ -321,12 +328,21 @@ public sealed partial class CriminalRecordsConsoleWindow : FancyWindow
         var entry = new QuickDialogEntry(field, QuickDialogEntryType.LongText, prompt, placeholder);
         var entries = new List<QuickDialogEntry>() { entry };
         _reasonDialog = new DialogWindow(title, entries);
+        Content.Client.Lobby.UI.CrtLobbyTheme.Apply(_reasonDialog, useCrtTypography: true); // cmu edit
 
         _reasonDialog.OnConfirmed += responses =>
         {
             var reason = responses[field];
-            if (reason.Length < 1 || reason.Length > _maxLength)
+            // cmu edit start
+            if (reason.Length > _maxLength)
                 return;
+
+            if (string.IsNullOrWhiteSpace(reason))
+            {
+                OnStatusSelected?.Invoke(status);
+                return;
+            }
+            // cmu edit end
 
             OnDialogConfirmed?.Invoke(status, reason);
         };

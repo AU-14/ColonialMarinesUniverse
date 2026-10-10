@@ -16,6 +16,7 @@ public sealed partial class MatchstickSystem : EntitySystem
     [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedIgnitionSourceSystem _ignition = default!;
+    [Dependency] private EntityQuery<MetaDataComponent> _updateMetadataQuery = default!;
 
     public override void Initialize()
     {
@@ -87,11 +88,13 @@ public sealed partial class MatchstickSystem : EntitySystem
     {
         base.Update(frameTime);
 
-        var query = EntityQueryEnumerator<MatchstickComponent>();
+        var query = AllEntityQuery<MatchstickComponent>();
 
         while (query.MoveNext(out var uid, out var match))
         {
-            if (match.State != SmokableState.Lit)
+            // Reject inventory stock before resolving pause metadata, while retaining immediate admin edits.
+            if (match.State != SmokableState.Lit ||
+                !_updateMetadataQuery.TryComp(uid, out var metadata) || metadata.EntityPaused)
                 continue;
 
             // Check if the match has expired.

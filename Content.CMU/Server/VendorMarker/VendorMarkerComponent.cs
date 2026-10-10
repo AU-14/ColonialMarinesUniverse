@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.CMU14;
 using Content.Shared.CMU14.util;
 using Robust.Shared.GameObjects;
@@ -18,6 +19,9 @@ namespace Content.Server.CMU14.VendorMarker
         [DataField("opfor")]
         public bool Opfor { get; set; } = false;
 
+        [DataField("colony")]
+        public bool Colony { get; set; } = false;
+
         [DataField("dropship")]
         public bool DropShip { get; set; } = false;
 
@@ -30,5 +34,9 @@ namespace Content.Server.CMU14.VendorMarker
         // Designates the vendor's job
         [DataField("class")]
         public PlatoonMarkerClass Class { get; set; }
+
+        /// <summary>Offset from an anchored dropship destination marker to the landing grid origin.</summary>
+        [DataField]
+        public Vector2 LandingOffset;
     }
 }

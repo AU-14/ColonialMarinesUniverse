@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Xenonids.Weeds;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
@@ -56,6 +57,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             mover.IsPushMove = false;
             mover.PushDirection = Vector2i.Zero;
         }
+
+        // CMU14: apply terrain drag to both cardinal and analog driving.
+        if (!pushing)
+            ApplyTerrainSlowdown(uid, mover, frameTime);
 
         var moved = pushing
             ? UpdatePushMovement(uid, mover, grid, gridComp, input.Direction, frameTime)
@@ -204,6 +209,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (mover.CurrentSpeed < 0f)
             forward = -forward;
 
+        var speedBeforeMove = mover.CurrentSpeed;
+        var maxSpeedBeforeMove = GetModifiedMaxSpeed(uid, mover);
         var target = mover.Position + forward * travel;
         bool blocked;
         bool moved;
@@ -220,9 +227,31 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             moved = TryMoveContinuous(uid, mover, grid, target, rotation, out blocked);
         }
         if (blocked)
+        {
             mover.CurrentSpeed = 0f;
+            _rmcVehicles.DoInteriorCrashEffect(uid, speedBeforeMove, maxSpeedBeforeMove);
+        }
 
         return moved;
+    }
+
+    private void ApplyTerrainSlowdown(EntityUid uid, GridVehicleMoverComponent mover, float frameTime)
+    {
+        if (mover.WeedsSpeedFactor < 1f)
+        {
+            var coords = Transform(uid).Coordinates;
+            if (_rmcMap.HasAnchoredEntityEnumerator<XenoWeedsComponent>(coords, out _))
+                mover.CurrentSpeed *= MathF.Pow(mover.WeedsSpeedFactor, frameTime);
+        }
+
+        var waterCoords = Transform(uid).Coordinates;
+        if (_rmcMap.HasAnchoredEntityEnumerator<VehicleWaterSlowTileComponent>(waterCoords, out var waterTile) &&
+            _rmcWater.IsActiveWater(waterTile.Owner, uid) &&
+            waterTile.Comp.SpeedFactors.TryGetValue(mover.WeightClass, out var waterFactor) &&
+            waterFactor < 1f)
+        {
+            mover.CurrentSpeed *= MathF.Pow(waterFactor, frameTime);
+        }
     }
 
     private bool UpdatePushMovement(
@@ -282,7 +311,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             travel,
             frameTime,
             out var blocked);
-        if (blocked)
+        if (blocked && !moved)
             mover.CurrentSpeed = 0f;
 
         if (moved && hasInput && mover.PushCooldown > 0f)
@@ -415,6 +444,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             ? mover.CurrentDirection
             : -mover.CurrentDirection;
         var rotation = DirectionToVehicleRotation(mover.CurrentDirection);
+        var speedBeforeMove = mover.CurrentSpeed;
+        var maxSpeedBeforeMove = GetModifiedMaxSpeed(uid, mover);
         var moved = TryMoveWithLaneGuidance(
             uid,
             mover,
@@ -426,7 +457,10 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             frameTime,
             out var blocked);
         if (blocked)
+        {
             mover.CurrentSpeed = 0f;
+            _rmcVehicles.DoInteriorCrashEffect(uid, speedBeforeMove, maxSpeedBeforeMove);
+        }
 
         return moved;
     }
@@ -1640,6 +1674,9 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private void ApplySmashSlowdown(EntityUid vehicle, GridVehicleMoverComponent mover, VehicleSmashableComponent smashable)
     {
         if (smashable.SlowdownDuration <= 0f || smashable.SlowdownMultiplier >= 1f)
+            return;
+
+        if (smashable.SlowdownBelowWeightClass is { } maxWeight && mover.WeightClass >= maxWeight)
             return;
 
         var now = _timing.CurTime;

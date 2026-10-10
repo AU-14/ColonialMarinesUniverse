@@ -24,7 +24,7 @@ public sealed partial class RMCGunBatterySystem : EntitySystem
             return;
 
         args.Cancelled = true;
-        _popup.PopupClient(Loc.GetString("rmc-low-power"), args.User, args.User, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-low-power"), args.User, args.User, PopupType.MediumCaution);
     }
 
     public void SetPowered(Entity<GunDrainBatteryOnShootComponent> gun, bool powered)

@@ -1,0 +1,64 @@
+- type: entity
+  parent:
+  - CMGrenadeHighExplosive
+  - CMGrenadeBase
+  id: RuMCGrenadeTermobaric
+  name: RG35F grenade
+  description: The RG35F hand grenade is filled with Termobaric.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Grenades/RG35F.rsi
+  - type: TriggerOnUse
+    keyOut: startTimer
+  - type: TimerTrigger
+    keysIn:
+    - startTimer
+    keyOut: trigger
+    delay: 4
+    beepSound:
+      path: "/Audio/_RMC14/Explosion/armbomb.ogg"
+      params:
+        volume: -5
+    initialBeepDelay: 0
+    beepInterval: 10
+    popup: null
+  - type: Explosive
+    maxIntensity: 10
+    intensitySlope: 20
+    totalIntensity: 5
+    canCreateVacuum: false
+  - type: CMVocalizeTrigger
+  - type: DeleteOnTrigger
+  - type: TimerTriggerVisuals
+    primingSound:
+      path: /Audio/Effects/Smoke-grenade.ogg
+  - type: SpawnOnTrigger
+    proto: RuMCSmokeTermobaricMini
+  - type: EmitSoundOnTrigger
+    positional: true
+    sound: /Audio/Effects/smoke.ogg
+
+- type: entity
+  parent: RuMCSmokeTermobaricNoSpread
+  id: RuMCSmokeTermobaricMini
+  components:
+  - type: EvenSmoke
+    spawn: RuMCSmokeTermobaricNoSpread
+    initialSpread: 2
+    range: 2
+
+- type: entity
+  parent: RMCPacketGrenadeWhitePhosphorusCompound
+  id: RuCMPacketGrenadeTermobaricUPP
+  name: RG35F Termobaric grenade packet
+  description: It contains three RG35F Termobaric grenades.
+
+- type: entity
+  parent: RuCMPacketGrenadeTermobaricUPP
+  id: RuMCPacketGrenadeTermobaricUPPFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCGrenadeTermobaric
+      amount: 6

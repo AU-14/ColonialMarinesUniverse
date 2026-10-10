@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 09/17/2026 01:40:21
-  entityCount: 21819
+  entityCount: 21813
 maps:
 - 1
 grids:
@@ -457,6 +457,8 @@ entities:
   entities:
   - uid: 1
     components:
+    - type: CMU3DElevation
+      profile: CMU3DStableGarrisonReduxMinus2
     - type: MetaData
       name: Mapping Stable Garrison [-2]
     - type: Transform
@@ -91454,12 +91456,12 @@ entities:
     components:
     - type: Transform
       parent: 1
-      pos: 286,-85.5
+      pos: 286,-86.05
   - uid: 2387
     components:
     - type: Transform
       parent: 1
-      pos: 292,-85.5
+      pos: 292,-86.05
   - uid: 2388
     components:
     - type: Transform
@@ -91516,18 +91518,6 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 270.5,-63.5
-  - uid: 2396
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: 271.5,-63.5
-  - uid: 2397
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: 272.5,-63.5
   - uid: 2398
     components:
     - type: Transform
@@ -91552,18 +91542,6 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 270.5,-62.5
-  - uid: 2402
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: 271.5,-62.5
-  - uid: 2403
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: 272.5,-62.5
   - uid: 2404
     components:
     - type: Transform
@@ -91588,18 +91566,6 @@ entities:
       parent: 1
       rot: -1.5707963267948966 rad
       pos: 270.5,-61.5
-  - uid: 2408
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: 271.5,-61.5
-  - uid: 2409
-    components:
-    - type: Transform
-      parent: 1
-      rot: -1.5707963267948966 rad
-      pos: 272.5,-61.5
   - uid: 3450
     components:
     - type: Transform

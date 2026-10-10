@@ -26,6 +26,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: OPS
     commandElement: true
@@ -56,14 +57,12 @@
     # - type: JobPrefix
     #   prefix: au14-job-prefix-govformoCMBCIU
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMedical
-    time: 36000 # 10 hours
+    time: 10800 # 3 hours
   - !type:AgeRequirement
     requiredAge: 30
   - !type:TraitsRequirement
@@ -77,6 +76,8 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -201,14 +202,12 @@
   id: AU14JobGOVFOROfficerMedicalUPP
   roundForce: UPP
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMedical
-    time: 36000 # 10 hours
+    time: 10800 # 3 hours
   name: Chief Medical Officer
   spawnMenuRoleName: CMO (UPP)
   ranks:
@@ -223,14 +222,12 @@
   id: AU14JobGOVFOROfficerMedicalWYPMC
   roundForce: WYPMC
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMedical
-    time: 36000 # 10 hours
+    time: 10800 # 3 hours
   name: PMC Chief Medical Officer
   spawnMenuRoleName: CMO (WYPMC)
   ranks:

@@ -324,7 +324,7 @@ public sealed partial class ObjectivesSystem : SharedObjectivesSystem
     private void CreateCompletions()
     {
         _objectives = ProtoMan.EnumeratePrototypes<EntityPrototype>()
-            .Where(p => p.HasComponent<ObjectiveComponent>())
+            .Where(p => p.HasComp<ObjectiveComponent>(Factory))
             .Select(p => p.ID)
             .Order();
     }

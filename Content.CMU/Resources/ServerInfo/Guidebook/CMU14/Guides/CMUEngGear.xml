@@ -1,0 +1,30 @@
+<Document>
+  # Engineering Equipment
+
+  <Box>
+    <GuideEntityEmbed Entity="CMWelder" Caption="Blowtorch"/>
+    <GuideEntityEmbed Entity="CMMultitool" Caption="Access tuner"/>
+    <GuideEntityEmbed Entity="CMTRayScanner" Caption="T-ray scanner"/>
+    <GuideEntityEmbed Entity="CMUAtmosScanner" Caption="Atmos scanner"/>
+    <GuideEntityEmbed Entity="RMCShovel" Caption="Shovel"/>
+  </Box>
+
+  ## Essentials
+  Whatever your job, these are worth having on you:
+  - A [bold]tool belt[/bold] with a blowtorch, crowbar, screwdriver, wire cutters, wrench and access tuner (multitool).
+  - [bold]Insulated gloves[/bold], so live wires don't shock you.
+  - [bold]Welding goggles[/bold] or a welding helmet, so welding doesn't blind you.
+  - A [bold]hard hat[/bold] and a flashlight.
+  - [bold]Cable coil[/bold] for wiring, and spare [bold]power cells[/bold].
+  - A stack of [bold]metal[/bold] for quick patch jobs.
+  - An [bold]entrenching tool[/bold] or [bold]shovel[/bold] for digging up dirt to fill sandbags and HESCOs. The entrenching tool folds up small but has to be unfolded before it digs. The shovel is bulky but digs about 30% faster.
+
+  ## Where to Find It
+  - The [bold]Tool Storage Machine[/bold] stocks tools, belts, gloves, welding gear, engineer kits, sentry laptops, scanners, and atmospherics kit: inflatable walls and doors, gas canisters, heaters, scrubbers, pumps, firefighter gear and fire suppressant grenades.
+  - The [bold]Electronics Vendor[/bold] stocks cable, HV, MV and APC wire, multitools, power cells, door and APC electronics, and machine boards such as SMESes, autolathes, rechargers, crystallizers, heaters, freezers and condensers.
+  - The [bold]Circuitboard Vendor[/bold] and [bold]Component Storage Machine[/bold] cover the rest: alarm and firelock electronics, assembly parts like igniters, timers and signallers, and stock parts.
+
+  ## Scanners
+  - The [bold]T-ray scanner[/bold] shows pipes and wires hidden under the floor.
+  - The [bold]atmos scanner[/bold] reads the air where you're standing: pressure, temperature and gas mix.
+</Document>

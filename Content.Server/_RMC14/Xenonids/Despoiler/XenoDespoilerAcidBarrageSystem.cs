@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Server.Audio;
@@ -29,6 +30,7 @@ public sealed partial class XenoDespoilerAcidBarrageSystem : EntitySystem
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private XenoDespoilerCatalyzeFlagSystem _catalyze = default!;
+    [Dependency] private CMUZLevelShootingSystem _zLevelShooting = default!; // CMU14
 
     private EntityQuery<XenoDespoilerComponent> _despoilerQuery;
     private EntityQuery<XenoDespoilerArmedBarrageComponent> _armedQuery;
@@ -112,10 +114,29 @@ public sealed partial class XenoDespoilerAcidBarrageSystem : EntitySystem
         if (!coords.IsValid(EntityManager))
             coords = GetCoordinates(charge.Target);
 
+        // CMU14 Begin: validate cross-level shots before consuming plasma, cooldown or empowerment.
+        if (!coords.IsValid(EntityManager))
+        {
+            ResetBarrage(uid);
+            return;
+        }
+
+        var sourceOrigin = _xform.GetMapCoordinates(uid);
+        var targetMap = _xform.ToMapCoordinates(coords);
+        if (!_zLevelShooting.TryAdjustShotMapCoordinates(uid, sourceOrigin, targetMap, out var origin, out targetMap) ||
+            origin.MapId != targetMap.MapId)
+        {
+            ResetBarrage(uid);
+            return;
+        }
+
+        _zLevelShooting.TryGetProjectileVisualOffset(uid, sourceOrigin, origin, out var visualOffset);
+        // CMU14 End
+
         if (TryGetBarrageAction(uid, out var actionEnt, out var action) &&
             _rmcActions.TryUseAction(uid, actionEnt.Owner, uid))
         {
-            FireVolley(uid, action, charge, coords);
+            FireVolley(uid, action, charge, origin, targetMap, visualOffset); // CMU14
             _actions.SetCooldown((actionEnt.Owner, null), action.PostFireCooldown);
             _catalyze.TakeEmpowerment(uid, comp);
         }
@@ -174,8 +195,10 @@ public sealed partial class XenoDespoilerAcidBarrageSystem : EntitySystem
         return false;
     }
 
+    // CMU14 method: fire from the validated destination level and compensate its visuals.
     private void FireVolley(EntityUid uid, XenoDespoilerAcidBarrageActionComponent action,
-        XenoDespoilerChargingBarrageComponent charge, EntityCoordinates target)
+        XenoDespoilerChargingBarrageComponent charge, MapCoordinates casterMap, MapCoordinates targetMap,
+        Vector2 visualOffset)
     {
         var heldFor = (float)(_timing.CurTime - charge.StartedAt).TotalSeconds;
         var chargeFrac = Math.Clamp(heldFor / action.MaxChargeSeconds, 0f, 1f);
@@ -184,10 +207,6 @@ public sealed partial class XenoDespoilerAcidBarrageSystem : EntitySystem
         count = Math.Clamp(count, action.MinProjectiles, action.MaxProjectiles);
         if (charge.Empowered)
             count += action.EmpowerBonusProjectiles;
-
-        var casterCoords = Transform(uid).Coordinates;
-        var casterMap = _xform.ToMapCoordinates(casterCoords);
-        var targetMap = _xform.ToMapCoordinates(target);
 
         Vector2 aimDir;
         float baseAngle;
@@ -200,12 +219,12 @@ public sealed partial class XenoDespoilerAcidBarrageSystem : EntitySystem
         }
         else
         {
-            var fallback = Transform(uid).LocalRotation.ToWorldVec();
+            var fallback = _xform.GetWorldRotation(uid).ToWorldVec();
             baseAngle = MathF.Atan2(fallback.Y, fallback.X);
             aimDir = Vector2.Normalize(fallback);
         }
 
-        var spawnCoords = casterCoords.Offset(aimDir);
+        var spawnCoords = new MapCoordinates(casterMap.Position + aimDir, casterMap.MapId);
         var scatterRad = MathHelper.DegreesToRadians(action.ScatterDegrees);
         var scaleSpan = action.MaxProjectileScale - action.MinProjectileScale;
 
@@ -241,6 +260,7 @@ public sealed partial class XenoDespoilerAcidBarrageSystem : EntitySystem
 
             _rmcProjectile.SetMaxRange(proj, rangeTiles);
             _gun.ShootProjectile(proj, unit * rangeTiles, Vector2.Zero, uid, uid, speed: action.ProjectileSpeed);
+            _zLevelShooting.ApplyProjectileVisualOffset(proj, visualOffset);
         }
 
         if (action.FireSound is { } sound)

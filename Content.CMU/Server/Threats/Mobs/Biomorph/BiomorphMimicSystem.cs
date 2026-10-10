@@ -152,7 +152,7 @@ public sealed partial class BiomorphMimicSystem : EntitySystem
 
         if (mimic.Comp.AssimilatedPool.Count == 0)
         {
-            _popup.PopupClient(Loc.GetString("biomorph-mimic-transform-no-profiles"), mimic, mimic);
+            _popup.PopupEntity(Loc.GetString("biomorph-mimic-transform-no-profiles"), mimic, mimic);
 
             return;
         }
@@ -359,7 +359,7 @@ public sealed partial class BiomorphMimicSystem : EntitySystem
         _jitter.DoJitter(mimic, reverting.JitterDuration, true, 20, 18);
         _stun.TryParalyze(mimic, reverting.JitterDuration, true);
         _chat.TryEmoteWithChat(mimic, ScreamEmote);
-        _popup.PopupClient(Loc.GetString("biomorph-mimic-transform-revert"), mimic, mimic);
+        _popup.PopupEntity(Loc.GetString("biomorph-mimic-transform-revert"), mimic, mimic);
     }
 
     private void FinishRevert(EntityUid disguisedUid, PolymorphedEntityComponent polymorphed)
@@ -486,7 +486,7 @@ public sealed partial class BiomorphMimicSystem : EntitySystem
         }
         finally
         {
-            EntityManager.DeleteEntity(donor);
+            Del(donor);
         }
 
         _visualBody.ApplyProfileTo(disguised, humanoidProfile);

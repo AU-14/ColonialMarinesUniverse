@@ -7,6 +7,7 @@ using Content.Client.Humanoid;
 using Content.Client.Lobby.UI.Roles;
 using Content.Client.Message;
 using Content.Client.Stylesheets;
+using Content.Shared.CCVar;
 using Content.Shared.CMU14.CharacterDescription;
 using Content.Shared.CMU14.Roles;
 using Content.Shared._RMC14.LinkAccount;
@@ -22,6 +23,7 @@ using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
@@ -34,13 +36,13 @@ public sealed partial class HumanoidProfileEditor
 {
     private const int CharacterDescriptionTabIndex = 1;
     private const int RegulationAppearanceTabIndex = 2;
-    private const int InsurgencyTabIndex = 3;
-    private const int ColonyFallTabIndex = 4;
-    private const int DistressSignalTabIndex = 5;
+    private const int InsurgencyTabIndex = 5;
+    private const int ColonyFallTabIndex = 6;
+    private const int DistressSignalTabIndex = 7;
     // CMU14: Force on Force roles, hijacking, announcements and identification.
-    private const int ForceOnForceTabIndex = 6;
-    private const int TraitsTabIndex = 7;
-    private const int MarkingsTabIndex = 8;
+    private const int ForceOnForceTabIndex = 8;
+    private const int TraitsTabIndex = 3;
+    private const int MarkingsTabIndex = 4;
     private const int NamedItemsTabIndex = 9;
 
     private const float HighJobPreviewScrollDelay = 2.75f;
@@ -64,6 +66,32 @@ public sealed partial class HumanoidProfileEditor
     private string _previewJobSignature = string.Empty;
     private bool _previewJobsDirty = true;
 
+    private void OnCrtDividerColorChanged(string _) => ApplyDividerColors();
+
+    private void OnCrtDividerEnabledChanged(bool _) => ApplyDividerColors();
+
+    private void UnsubscribeDividerColors()
+    {
+        _cfgManager.UnsubValueChanged(CCVars.CrtUiColor, OnCrtDividerColorChanged);
+        _cfgManager.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtDividerEnabledChanged);
+    }
+
+    private void ApplyDividerColors()
+    {
+        ApplyDividerColors(this, StyleNano.CrtGreenDim);
+    }
+
+    private static void ApplyDividerColors(Control control, Color color)
+    {
+        foreach (var child in control.Children)
+        {
+            if (child is HSeparator separator)
+                separator.Color = color;
+
+            ApplyDividerColors(child, color);
+        }
+    }
+
     private void InitializeCmu()
     {
         _componentFactory = IoCManager.Resolve<IComponentFactory>();
@@ -83,6 +111,10 @@ public sealed partial class HumanoidProfileEditor
         // CMU14: Force on Force roles, hijacking, announcements and identification.
         InitializeForceOnForcePreferences();
         TabContainer.OnTabChanged += _ => ReloadPreview(false);
+
+        ApplyDividerColors();
+        _cfgManager.OnValueChanged(CCVars.CrtUiColor, OnCrtDividerColorChanged);
+        _cfgManager.OnValueChanged(CCVars.CrtUiEnabled, OnCrtDividerEnabledChanged);
 
         RefreshAllegiances();
         AllegianceButton.OnItemSelected += args =>
@@ -549,6 +581,7 @@ public sealed partial class HumanoidProfileEditor
         Profile = Profile?.WithOrigin(value is null
             ? (ProtoId<OriginPrototype>?) null
             : new ProtoId<OriginPrototype>(value));
+        CMURecomposeName();
         SetDirty();
     }
 
@@ -779,7 +812,7 @@ public sealed partial class HumanoidProfileEditor
                 if (markings.Count == 0)
                     break;
 
-                CharacterHairPickers.AddChild(new HSeparator { Color = Color.FromHex("#16823E"), Margin = new Thickness(0, 5) });
+                CharacterHairPickers.AddChild(new HSeparator { Color = StyleNano.CrtGreenDim, Margin = new Thickness(0, 5) });
                 CharacterHairPickers.AddChild(new Label { Text = Loc.GetString($"markings-layer-{layer}") });
                 CharacterHairPickers.AddChild(new LayerMarkingPicker(_markingsModel, organ, layer, markings)
                 {
@@ -843,7 +876,7 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshSynthetic()
     {
-        SyntheticContainer.DisposeAllChildren();
+        SyntheticContainer.ReleaseChildren();
         var selector = new RequirementsSelector { Margin = new Thickness(3f, 3f, 3f, 0f) };
         selector.Setup(
             [("humanoid-profile-editor-synthetic-yes-button", 0),
@@ -873,7 +906,10 @@ public sealed partial class HumanoidProfileEditor
         selector.OnSelected += preference =>
         {
             Profile = Profile?.WithSynthetic(preference == 0);
+            CMUUpdateSyntheticNameFields();
+            CMURecomposeName();
             SetDirty();
+            UpdateSaveButton();
             RefreshJobs();
         };
         SyntheticContainer.AddChild(selector);
@@ -907,8 +943,8 @@ public sealed partial class HumanoidProfileEditor
 
     public void RefreshThreatPreferences()
     {
-        ColonyThreatPreferenceList.DisposeAllChildren();
-        DistressThreatPreferenceList.DisposeAllChildren();
+        ColonyThreatPreferenceList.ReleaseChildren();
+        DistressThreatPreferenceList.ReleaseChildren();
         _threatPreferenceButtons.Clear();
         PopulateThreatPreferenceList(ColonyThreatPreferenceList, GamemodeColonyFall);
         PopulateThreatPreferenceList(DistressThreatPreferenceList, GamemodeDistressSignal);
@@ -1011,8 +1047,8 @@ public sealed partial class HumanoidProfileEditor
     {
         if (threat.BlacklistedGamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase)))
             return false;
-        return threat.whitelistedgamemodes.Count == 0 ||
-               threat.whitelistedgamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase));
+        return threat.WhitelistedGamemodes.Count == 0 ||
+               threat.WhitelistedGamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase));
     }
 
     private static string GetThreatDisplayName(ThreatPrototype threat)

@@ -39,6 +39,9 @@ public sealed partial class XenoChargeComponent : Component
     [DataField, AutoNetworkedField]
     public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_block.ogg");
 
+    [DataField]
+    public DamageSpecifier VehicleDamage = new() { DamageDict = new() { { "Blunt", 100 } } };
+
     [DataField, AutoNetworkedField]
     public Vector2? Charge;
 
@@ -51,8 +54,11 @@ public sealed partial class XenoChargeComponent : Component
     /// <summary>
     ///     The intended target of the charge. Intermediate mobs get knocked aside.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    // CMU14 Begin: local bookkeeping has no client consumer and may outlive the target.
+    // [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? PrimaryTarget;
+    // CMU14 End
 
     /// <summary>
     ///     Damage multiplier for intermediate targets knocked aside during charge.

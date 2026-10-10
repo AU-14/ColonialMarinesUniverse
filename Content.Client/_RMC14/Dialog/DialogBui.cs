@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
@@ -83,7 +83,7 @@ public sealed class DialogBui(EntityUid owner, Enum uiKey) : BoundUserInterface(
         container.Message.Text = s.Message.Text;
         container.Message.Visible = container.Message.Text?.Length > 0;
 
-        container.Options.DisposeAllChildren();
+        container.Options.ReleaseChildren();
         var spriteSystem = EntMan.System<SpriteSystem>();
 
         for (var i = 0; i < s.Options.Count; i++)
@@ -208,7 +208,7 @@ public sealed class DialogBui(EntityUid owner, Enum uiKey) : BoundUserInterface(
             OnInputTextChanged(container, string.Empty, s.MinCharacterLimit, s.CharacterLimit, s.SmartCheck);
         }
 
-        _window.Title = string.Empty;
+        _window.Title = s.Title;
         container.MessageLabel.Text = s.Message.Text;
         container.MessageLineEdit.Visible = !s.LargeInput;
         container.MessageTextEdit.Visible = s.LargeInput;

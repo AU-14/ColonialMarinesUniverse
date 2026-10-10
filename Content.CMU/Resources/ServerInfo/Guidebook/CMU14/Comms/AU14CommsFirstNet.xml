@@ -1,156 +1,134 @@
 <Document>
   # Getting On The Net
 
-  This page takes you from spawning in to holding a working conversation on a radio net. It assumes you have never touched the comms system before and explains every step as you take it.
+  This guide covers the basics of using headsets and AN/PRC-117G radios.
 
-  If something does not work, the last section of this page lists what usually causes it.
+  If you are new to the communications system, start here. For detailed radio controls, see the [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] guide.
 
   <Box>
     <GuideEntityEmbed Entity="AU14HeadsetGovforMarineFTL" Caption="Field Headset"/>
     <GuideEntityEmbed Entity="ANPRC117GRadio" Caption="AN/PRC-117G"/>
   </Box>
 
-  ## Step 1: Work out what you are carrying
+  ## Check your equipment
 
-  Almost everybody spawns with a [bold]field headset[/bold] in their ears slot. This is your personal radio and it is all most roles ever need. The CLF are the exception: they wear a concealable earpiece clipped into their clothing instead, which works the same way but has no slot to examine. See [textlink="Field Headsets" link="AU14CommsHeadsets"] for the differences.
+  Most roles begin with a [bold]field headset[/bold] in the ears slot.
 
-  A small number of roles also spawn with an [bold]AN/PRC-117G[/bold] manpack radio in their back slot. It is large, it is obvious in your inventory, and it is the thing that makes everyone else's headset work.
+  This is your personal radio and is sufficient for normal squad communications.
 
-  Open your inventory and check both slots before you do anything else.
+  CLF characters instead use a concealable earpiece attached to their clothing. It works similarly to a headset but does not occupy the ears slot. See [textlink="Field Headsets" link="AU14CommsHeadsets"] for details.
 
-  - [bold]Headset only[/bold] - read step 2, then step 3, then skip to the handset section.
-  - [bold]Headset and manpack[/bold] - read the whole page. You are the reason your squad has comms.
+  Some roles also receive an [bold]AN/PRC-117G[/bold] manpack radio.
 
-  ## Step 2: Understand why radios go dead
+  A manpack can:
 
-  This is the single thing that confuses new players most, so read it before you try to transmit.
+  - transmit on loaded radio nets
+  - provide relay coverage to nearby headsets
+  - carry several radio nets at once
+  - provide access to additional communications functions
 
-  Your headset is not a phone. It does not reach across the map on its own. Combat nets are [bold]relay-gated[/bold]: your headset only works if it is standing near something that anchors the net.
+  If you only have a headset, continue to [bold]Using your headset[/bold].
 
-  Anything on this list will anchor a net:
+  If you also have an AN/PRC, continue through the manpack sections below.
 
-  - A powered AN/PRC worn by a trained operator.
-  - A deployed retransmission station.
-  - A command-post antenna mast.
-  - A powered shipboard communications array.
-  - A vehicle radio aboard a dropship or vehicle, covering little more than the hull.
-  - A field antenna mast raised from ten metal sheets by engineering-trained personnel.
-  - A clandestine base station or a staked-down relay set, if you are with the CLF.
-  - Any mast or array the CLF have spliced a tap into.
+  ## Relay coverage
 
-  If none of those are within range of you, your squad net is dead. Not degraded. Dead. You will speak and nothing will happen.
+  Combat radio nets are [bold]relay-gated[/bold].
 
-  This is why the radio operator matters, and it is why walking away from the person carrying the pack cuts you off. In a squad that is usually your [bold]Fireteam Leader[/bold].
+  A headset cannot communicate across the map by itself. It must be within range of a relay carrying the same net.
 
-  Colony and civilian channels are the exception. They are not gated and work anywhere, which is also why anyone can listen to them.
+  Combat nets can be relayed by:
 
-  ### How far is "near"
+  - a powered AN/PRC worn by a trained operator
+  - a deployed retransmission station
+  - a command-post antenna mast
+  - a powered shipboard communications array
+  - a vehicle radio
+  - an engineering field antenna mast
+  - a CLF clandestine base station
+  - a staked CLF relay set
+  - a mast or array carrying a CLF splice
+
+  Without a suitable relay in range, the combat net cannot transmit or receive through your headset.
+
+  Colony and civilian channels are different.
+
+  They are not relay-gated, but they are also not private.
+
+  ### Relay range
+
+  Standard relay coverage is divided into clear and degraded ranges.
 
   <Table Columns="2" MinForcedColumnWidth="120">
     <ColorBox Color="#263238">
-      <Box Margin="4">[bold]Distance from the anchor[/bold]</Box>
+      <Box Margin="4">[bold]Distance[/bold]</Box>
     </ColorBox>
     <ColorBox Color="#263238">
-      <Box Margin="4">[bold]What you get[/bold]</Box>
+      <Box Margin="4">[bold]Signal[/bold]</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">0-30 tiles</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Clear traffic both ways.</Box>
+      <Box Margin="4">Clear traffic.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">30-45 tiles</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Readable but degraded. Words go missing.</Box>
+      <Box Margin="4">Degraded traffic. Some words may be lost.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">Beyond 45 tiles</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Nothing at all.</Box>
+      <Box Margin="4">No connection.</Box>
     </ColorBox>
   </Table>
 
-  Coverage reaches one level above or below the anchor, so a tunnel or a lower deck usually needs its own relay. Only a shipboard array covers a whole site vertically.
+  Relay coverage normally extends one level above and below the source.
 
-  ### If you are with the CLF
+  Areas separated vertically, such as tunnels or lower decks, may therefore require additional relays.
 
-  The CLF has no communications array and never gets one. Your coverage is either something you build, or something the enemy already built that you tap.
+  Shipboard communications arrays can cover an entire site vertically.
 
-  The cell starts with a manpack, a base station, a splice kit and two relay sets, drawn by the Cell Leader or the Radio Operator - whoever is actually there. The issued manpack comes up already tuned to the cell net and cell command, so it works the moment somebody puts it on. Everything past that is built at the sapper's workbench or paid for out of Special Equipment.
+  ## Using your headset
 
-  <Box>
-    <GuideEntityEmbed Entity="AU14CLFNetSpliceKit" Caption="Splice Kit"/>
-    <GuideEntityEmbed Entity="AU14CommsMastField" Caption="Field Mast"/>
-    <GuideEntityEmbed Entity="AU14CLFBaseStation" Caption="Base Station"/>
-    <GuideEntityEmbed Entity="AU14CLFClandestineRelay" Caption="Relay Set"/>
-  </Box>
-
-  #### Tapping somebody else's mast
-
-  Every fixed mast and array has a feeder junction, and a junction can be spliced. Do it and your cell nets run on that mast at that mast's range. A command-post mast is worth 75 tiles to you. A site array is worth 200.
-
-  A tap [bold]adds[/bold] your nets and takes nothing away. The mast keeps carrying whatever it carried before, for whoever built it. Splicing one does not knock it down, jam it, or cut the garrison off it. If you want a mast gone, break it.
-
-  You need a [bold]net splice kit[/bold], built at the sapper's workbench, and you need to be the [bold]Radio Operator[/bold]. Nobody else is trained for it.
-
-  Use the kit on the mast. Getting the cover off takes several seconds, then the splice panel opens. The trunk carriers are hidden somewhere in the band and you have to find each one:
-
-  - [bold]PROBE[/bold] a position and the panel reports what came back. A strong reading means you are close. A zero means there is no carrier within thirty of where you looked.
-  - [bold]LOCK[/bold] when you think you have it. Within three positions and the carrier is yours. Miss it and you lose two probes and take a large hit to the detection meter.
-  - Probes are shared across the whole job rather than given per carrier. Each one nudges detection a little. A missed lock costs twenty times as much, so probe again rather than guess.
-
-  Sweep coarsely before you do anything else. Three probes spread evenly across the band will always touch a carrier, and from there you walk in on whichever came back strongest.
-
-  Run out of probes, or fill the detection meter, and the job fails. The kit is gone and the junction drops into fault for ninety seconds, during which nobody can splice it again. Bring a second kit if you want a second try, and expect to wait.
-
-  The mast throws sparks the whole time you are working on it, and keeps sparking through the fault. Neither is subtle. Put someone on the approach before you start.
-
-  #### Building your own
-
-  - A [bold]field antenna mast[/bold] is ten metal sheets and eight seconds, and gives 75 tiles clear and 100 degraded. Your Cell Leader, Radio Operator, Guerillas and Machine Gunners all have the engineering skill for it. It is also tall, outdoors only, and anyone can tap it or break it, marines included.
-  - A [bold]clandestine base station[/bold] reaches 55 clear and 80 degraded and can be worked on its handset, which no relay can. It is too heavy to conceal on a person, so the place you hide it is a place worth defending.
-  - A [bold]relay set[/bold] reaches 35 clear and 50 degraded and has no controls on it at all. It is the weakest thing on this list. Use it where there is no mast to tap and no room to raise one, such as inside a building or down a tunnel.
-
-  Only your Cell Leader and Radio Operator can stake down a relay or a base station.
-
-  #### What it costs you
-
-  None of this is hidden from the enemy.
-
-  A [bold]tap[/bold] sits at the foot of the mast where anyone walking past can see it. It can be shot, and anyone can pull it off in eight seconds. Whoever does gets its keying module, which reads your cell's traffic until your leadership orders a recrypto.
-
-  A [bold]relay[/bold] is staked down, not locked down. Anyone can pack one up in three seconds and walk off with that piece of your coverage.
-
-  Put both somewhere nobody has a reason to walk past.
-
-  ## Step 3: Say something on your headset
-
-  With the headset worn in your ears slot, type a colon, the letter h, a space, and your message:
+  With your headset equipped, type:
 
   [color=#a4885c]:h Radio check, over.[/color]
 
-  If the net is anchored and somebody is listening, they will see your message with your callsign in front of it.
+  The important part is:
 
-  Your headset may carry more than one net. Examine the headset to see which prefixes it holds. Common ones:
+  [color=#a4885c]:h[/color]
 
-  - [color=#a4885c]:v[/color] for command, if your headset has the command key.
-  - [color=#a4885c]:a[/color] for Alpha, if your headset has the Alpha key.
+  This sends the following message over the headset's default radio net.
 
-  A headset cannot use a net it does not have the key for. There is no way to add one in the field.
+  If the net has relay coverage, other listeners on that net receive the message under your callsign.
 
-  Note that your [bold]name is never transmitted[/bold]. Everyone on the net sees your callsign instead, friendly or hostile. Face to face speech is unaffected, so people standing next to you still hear you normally.
+  Headsets may contain several nets.
 
-  ## Step 4: Open the radio panel
+  Examine your headset to see its available radio prefixes.
 
-  Everything from here needs an AN/PRC on your back and the training to use it.
+  Common examples include:
 
-  Only these roles can open the panel and transmit through the radio:
+  - [color=#a4885c]:v[/color] - command, if the headset contains the command key
+  - [color=#a4885c]:a[/color] - Alpha, if the headset contains the Alpha key
+
+  A headset can only access nets for which it contains the appropriate key.
+
+  Headset keys cannot normally be added in the field.
+
+  Radio messages use your [bold]callsign[/bold], not your character name.
+
+  Normal face-to-face speech is unaffected.
+
+  ## Using an AN/PRC-117G
+
+  Operating the AN/PRC directly requires radio-operator training.
 
   <Table Columns="2" MinForcedColumnWidth="110">
     <ColorBox Color="#263238">
@@ -164,7 +142,7 @@
       <Box Margin="4">[bold]GOVFOR and OPFOR[/bold]</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Commander, Adjutant, staff officers, engineering officers, intelligence officers, synthetics, squad leaders, Fireteam Leaders, and Radio Traffic Operators.</Box>
+      <Box Margin="4">Commanding Officer, Adjutant, staff officers, engineering officers, intelligence officers, synthetics, squad leaders, Fireteam Leaders, and Radio Traffic Operators.</Box>
     </ColorBox>
 
     <ColorBox>
@@ -175,106 +153,327 @@
     </ColorBox>
   </Table>
 
-  Both regular factions field the same set of trained roles, so a captured enemy pack is useful to the same people on your side.
+  GOVFOR and OPFOR use the same radio training.
 
-  If you are not on that list the panel will not open for you. You have two ways round it: use somebody else's handset, covered further down, or read a [bold]field radio operator's pamphlet[/bold] if one is available, which trains you permanently.
+  A trained operator can therefore operate a captured AN/PRC from either side.
 
-  To open it:
+  Untrained characters cannot open the radio panel or transmit directly through the manpack.
 
-  - Wear the radio in your [bold]back slot[/bold]. It does nothing in a bag or on the floor.
-  - Alt-click the radio, or open its verb menu.
-  - Select [bold]Open Radio Panel[/bold].
+  They can still:
 
-  The panel opens with a status line across the top. Read it now, because it tells you what is wrong before you waste time hunting.
+  - use another operator's handset
+  - gain radio training by reading a [bold]field radio operator's pamphlet[/bold]
 
-  - [bold]READY[/bold] means the radio is worn and has an active net. This is what you want.
-  - [bold]NOT WORN[/bold] means it is not in your back slot.
-  - [bold]NO NET[/bold] means you have not set up a slot yet. That is normal on a fresh radio.
-  - [bold]STBY[/bold] means part of the setup is still incomplete.
+  ### Opening the radio
 
-  ## Step 5: Add your first net
+  To operate the manpack:
 
-  A fresh radio has no nets loaded. You build them yourself, into what the panel calls slots. The radio holds up to [bold]four[/bold].
+  - wear the AN/PRC in your [bold]back slot[/bold]
+  - alt-click the radio, or open its verb menu
+  - select [bold]Open Radio Panel[/bold]
 
-  Work through this in order:
+  A radio in your hands, inside storage, or on the ground does not function as a worn manpack.
 
-  - Select [bold]+ ADD NET[/bold]. An empty slot appears.
-  - Give it a short label, something like [bold]CMD[/bold] or [bold]ALPHA[/bold]. The label is cosmetic. It is only shown on your own radio and it does not pick the net for you.
-  - Select [bold]TUNE[/bold] on that slot.
-  - Open the [bold]NET[/bold] tab and pick a named faction net from the list.
-  - Select the slot row itself so it becomes the [bold]active[/bold] slot.
+  The first time the panel is opened, a short briefing appears.
 
-  That last step catches people out constantly. Adding a net does not select it. The active slot is the one you actually transmit on, and it is the row that is highlighted.
+  [bold]? HELP[/bold] opens the briefing again later.
 
-  Instead of a named net you can enter a raw frequency in the [bold]FREQ[/bold] tab. Frequencies work with or without the decimal point, so [color=#a4885c]1606[/color] and [color=#a4885c]1.606[/color] are the same thing. Use this for tuning to somebody else's net, which is covered in the AN/PRC guide.
+  The status banner below the radio display reports problems preventing normal operation.
 
-  Two more buttons on each slot:
+  A green banner indicates that the radio is ready.
 
-  - [bold]CLEAR[/bold] empties the slot but keeps it and its label.
-  - [bold]DEL[/bold] removes the slot entirely.
+  ## Load your nets
 
-  ## Step 6: Load your COMSEC fill
+  A worn AN/PRC relays every friendly combat net loaded into its memory.
 
-  Most faction nets are meant to be encrypted, and the AN/PRC does not carry its own keys. It reads them off a physical card.
+  Loaded nets therefore affect both the operator and nearby headset users.
 
-  - Find your issued [bold]fill card[/bold] in your kit.
-  - Insert it into the radio's fill card slot.
-  - Check the COMSEC panel. It should read [bold]SECURED[/bold].
+  For normal setup, press:
 
-  If you transmit on a secured faction net with no matching fill, the radio warns you and [bold]sends the message anyway, in the clear[/bold]. It does not stop you. Anyone listening on that frequency reads it, and you light up enemy direction finding while you do it.
+  [bold]LOAD STANDARD NETS[/bold]
 
-  Treat a fill warning as a mistake to fix, not a message to click past.
+  This:
 
-  ## Step 7: Transmit
+  - switches the radio on
+  - loads your squad net
+  - loads your faction's command net
+  - selects your squad net as the working memory
 
-  With a slot active, transmit through the radio the same way you use a headset, but with [color=#a4885c]:r[/color]:
+  Existing manually configured memories are not overwritten.
+
+  The command also does not reset the radio's waveform, encryption state, or output settings.
+
+  ### Loading a net manually
+
+  On the [bold]NETS[/bold] tab:
+
+  - select [bold]+ ADD MEMORY[/bold]
+  - give the memory a short label
+  - select [bold]EDIT[/bold]
+  - choose a net
+  - select [bold]USE[/bold] if you want to transmit through it
+
+  Your squad net is marked [bold][YOUR SQUAD][/bold].
+
+  The working memory is marked [bold]ON AIR[/bold].
+
+  Loading a net does not automatically make it the working memory.
+
+  [color=#a4885c]:r[/color] always transmits through the memory marked [bold]ON AIR[/bold].
+
+  Memories can also be renamed, emptied, or deleted.
+
+  Direct frequencies are configured through the [textlink="expert faceplate" link="AU14CommsANPRCExpert"].
+
+  ## Load your COMSEC fill
+
+  Most faction radio traffic is encrypted.
+
+  The AN/PRC receives its faction encryption key from a physical [bold]COMSEC fill card[/bold].
+
+  To load a fill:
+
+  - find your issued fill card
+  - use it on the radio
+  - open the [bold]SECURITY[/bold] tab
+  - confirm that the radio reads [bold]ENCRYPTED[/bold]
+
+  The radio can still transmit without a valid fill.
+
+  Traffic sent over a secured faction net without the correct fill is transmitted in the clear.
+
+  This means:
+
+  - compatible receivers can read the message
+  - the transmission produces a direction-finding signature
+
+  Check the SECURITY tab if the radio warns about its encryption state.
+
+  ## Transmitting through the manpack
+
+  Once a working memory is selected, type:
 
   [color=#a4885c]:r HAVOC 6, this is ALPHA ROMEO, radio check, over.[/color]
 
-  [color=#a4885c]:r[/color] always goes out on whichever slot is currently active. If you have four nets loaded and speak on the wrong one, that is almost always because you forgot to change the active slot first.
+  [color=#a4885c]:r[/color] transmits through whichever memory is marked [bold]ON AIR[/bold].
 
-  Your transmission goes out under your callsign. A worn radio follows the wearer's assigned callsign automatically, shown on the panel as [bold]AUTO[/bold]. If you have no callsign assigned you will transmit as [bold]UNKNOWN STATION[/bold], which is worth fixing before anyone needs you.
+  The [bold]TALK[/bold] line on the radio display also shows the active transmission net.
 
-  ## Step 8: Confirm it actually works
+  Select another memory with [bold]USE[/bold] before transmitting if you need to change nets.
 
-  Do not assume. Select [bold]RADIO CHECK[/bold] on the panel.
+  A worn radio normally uses the [bold]wearer's callsign[/bold].
 
-  The radio sends [bold]RADIO CHECK, HOW COPY, OVER[/bold] on the active net, then gives you a private report listing which stations hear you clearly and which hear you degraded. That includes everyone on a headset or a clipped earpiece, not only other pack operators, so a CLF cell of earpieces and one manpack still comes back as a full list.
+  The guided panel displays this as [bold]AUTO[/bold].
 
-  This is the fastest way to answer "is my net working" without bothering anyone, and you should run it before you move somewhere new and after you set up.
+  If no callsign is assigned, the radio identifies the operator as [bold]UNKNOWN STATION[/bold].
 
-  If you run it while sitting inside enemy jamming, the report also gives you a bearing to the strongest jammer, which is useful intelligence on its own.
+  ## Radio check
 
-  ## The handset: how everyone else uses your radio
+  The AN/PRC includes a built-in [bold]RADIO CHECK[/bold] function.
 
-  The handset is how someone without radio training talks on a net they do not otherwise have. A squad leader reaching the command net through their Fireteam Leader is the standard case.
+  It transmits:
 
-  To take it:
+  [bold]RADIO CHECK, HOW COPY, OVER[/bold]
 
-  - Stand within about [bold]two and a half tiles[/bold] of the radio or the person wearing it.
-  - Make sure you have a [bold]free hand[/bold]. You cannot take it with both hands full.
-  - Alt-click the wearer, or the deployed radio.
-  - Select [bold]Take Handset[/bold].
+  on the current working net.
 
-  Now read this part carefully, because it surprises people and it has consequences.
+  Afterward, the radio privately reports:
 
-  [bold]While you are holding the handset, anything you say out loud goes out on the net.[/bold] You do not need a prefix. Talking normally to the person next to you transmits it to every station on that net.
+  - which stations received the transmission
+  - whether each station received it clearly or degraded
 
-  To speak without transmitting, [bold]whisper[/bold]. Whispered speech stays off the air.
+  This includes ordinary headset and earpiece users.
 
-  The rest of the handset's behaviour:
+  RADIO CHECK can therefore confirm whether the current net has working coverage without requiring another player to answer manually.
 
-  - It transmits on the radio's [bold]active slot[/bold], whatever the operator last selected.
-  - It uses [bold]your[/bold] callsign, not the radio operator's.
-  - Only one person can hold it at a time.
-  - Walk out of range and the cord yanks out of your hand and disconnects you.
-  - Select [bold]Hang Up Handset[/bold] to return it.
+  If used inside an enemy jammer field, the report also provides an approximate bearing toward the strongest jammer.
 
-  One exception: if you are wearing your own AN/PRC, holding someone else's handset does not open your mic. Your own pack takes priority and normal [color=#a4885c]:r[/color] discipline applies.
+  ## Handset
 
-  ## When it does not work
+  The handset allows someone to use an AN/PRC without radio-operator training.
 
-  Work down this list in order. It is roughly ordered by how often each one is the real problem.
+  It can also provide access to a net that is not available through the user's own headset.
+
+  To take the handset:
+
+  - stand within roughly two and a half tiles of the radio or its wearer
+  - have a free hand
+  - alt-click the wearer or deployed radio
+  - select [bold]Take Handset[/bold]
+
+  [bold]Normal speech while holding the handset is transmitted through the radio.[/bold]
+
+  A radio prefix is not required.
+
+  Whispering remains local and does not transmit.
+
+  The handset:
+
+  - transmits through the radio's ON AIR memory
+  - uses the holder's callsign
+  - can only be held by one person at a time
+  - automatically returns if the holder moves beyond the cord's range
+
+  Select [bold]Hang Up Handset[/bold] to return it manually.
+
+  If you are wearing your own AN/PRC while holding another radio's handset, your own manpack takes priority.
+
+  ## CLF communications
+
+  The CLF do not have a permanent communications array.
+
+  Their combat-net coverage comes from deployable equipment or from hostile communications infrastructure that has been tapped.
+
+  A CLF cell can begin with:
+
+  - an AN/PRC manpack
+  - a clandestine base station
+  - a net splice kit
+  - two relay sets
+
+  These are issued through the Cell Leader or Radio Operator, depending on which roles are present.
+
+  The issued manpack begins tuned to both the cell net and cell command.
+
+  Additional communications equipment can be constructed at a sapper's workbench or purchased through Special Equipment.
+
+  <Box>
+    <GuideEntityEmbed Entity="AU14CLFNetSpliceKit" Caption="Splice Kit"/>
+    <GuideEntityEmbed Entity="AU14CommsMastField" Caption="Field Mast"/>
+    <GuideEntityEmbed Entity="AU14CLFBaseStation" Caption="Base Station"/>
+    <GuideEntityEmbed Entity="AU14CLFClandestineRelay" Caption="Relay Set"/>
+  </Box>
+
+  ### CLF relay equipment
+
+  A [bold]field antenna mast[/bold] provides:
+
+  - 75 tiles of clear coverage
+  - degraded coverage out to 100 tiles
+
+  A field mast:
+
+  - must be constructed outdoors
+  - requires engineering training
+  - requires power
+  - only carries faction nets whose COMSEC key has been loaded into it
+  - can be damaged, re-keyed, or tapped by either side
+
+  Cell Leaders, Radio Operators, Guerillas, and Machine Gunners can construct field masts.
+
+  See [textlink="the AN/PRC-117G guide" link="AU14CommsANPRC"] for mast construction.
+
+  A [bold]clandestine base station[/bold] provides:
+
+  - 55 tiles of clear coverage
+  - degraded coverage out to 80 tiles
+  - a usable handset
+
+  It is too heavy to conceal on a person.
+
+  A [bold]relay set[/bold] provides:
+
+  - 35 tiles of clear coverage
+  - degraded coverage out to 50 tiles
+
+  Relay sets have no local controls and can be useful inside buildings, tunnels, and other areas unsuitable for field masts.
+
+  Only the Cell Leader and Radio Operator can stake down a relay set or base station.
+
+  ### Keying a field mast
+
+  Field antenna masts carry only factions whose COMSEC keys are loaded into the mast.
+
+  To add the CLF key to an existing field mast:
+
+  - open the feed using a screwdriver and wirecutters
+  - use a CLF fill card on the open feed
+  - close the feed with a screwdriver
+  - seal it with a welder
+
+  The mast goes off the air while its feed is open.
+
+  This requires engineering training.
+
+  Using a multitool on an open feed removes all stored keys.
+
+  Adding a CLF key does not remove any existing faction keys.
+
+  ## CLF net splicing
+
+  Fixed communications masts and site arrays can be tapped with a [bold]net splice kit[/bold].
+
+  A successful splice adds CLF combat nets to the structure's existing relay coverage.
+
+  It does not remove or disrupt the nets already carried by the structure.
+
+  A command-post mast provides approximately 75 tiles of coverage.
+
+  A site array provides approximately 200 tiles.
+
+  Splicing requires:
+
+  - a net splice kit
+  - the [bold]Radio Operator[/bold] role
+
+  Use the kit on a compatible mast or array to open the splice interface.
+
+  ### Finding trunk carriers
+
+  The splice interface hides several trunk carriers across the band.
+
+  Use:
+
+  - [bold]PROBE[/bold] - check a position in the band
+  - [bold]LOCK[/bold] - attempt to capture a carrier
+
+  Stronger probe results indicate that a carrier is closer.
+
+  A result of zero means there is no carrier within thirty positions of the selected point.
+
+  A LOCK succeeds if the selected position is within three positions of the carrier.
+
+  Failed locks:
+
+  - consume two probes
+  - significantly increase the detection meter
+
+  Probe uses are shared across the entire attempt.
+
+  If all probes are consumed or the detection meter fills, the splice fails.
+
+  Failure:
+
+  - consumes the splice kit
+  - places the junction into a 90-second fault state
+  - prevents another splice attempt during that period
+
+  The junction produces visible sparks during the splice attempt and fault state.
+
+  ### Protecting CLF relay equipment
+
+  CLF communications equipment is physically vulnerable.
+
+  A completed [bold]splice[/bold] remains visible on the mast.
+
+  Someone standing beside it can:
+
+  - shoot it
+  - remove it
+
+  Removing a splice takes approximately eight seconds and returns its keying module.
+
+  Opening the feed of a spliced [bold]field antenna mast[/bold] also knocks the tap loose, and its keying module drops at the foot of the mast.
+
+  The recovered module can read CLF traffic until CLF leadership performs a recrypto.
+
+  A deployed [bold]relay set[/bold] can also be packed up by anyone.
+
+  Packing it takes approximately three seconds.
+
+  ## Troubleshooting
+
+  If communications are not working, check the following common problems.
 
   <Table Columns="2" MinForcedColumnWidth="120">
     <ColorBox Color="#263238">
@@ -285,73 +484,73 @@
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">Nobody answers on a squad or command net</Box>
+      <Box Margin="4">Nobody answers on a combat net</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">There is no anchor in range. Find your Fireteam Leader, a mast, or an array. This is the answer most of the time.</Box>
-    </ColorBox>
-
-    <ColorBox>
-      <Box Margin="4">[color=#a4885c]:r[/color] goes out on the wrong net</Box>
-    </ColorBox>
-    <ColorBox>
-      <Box Margin="4">The wrong slot is active. Select the row you want first.</Box>
+      <Box Margin="4">Move closer to a relay carrying that net.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">The panel will not open</Box>
+      <Box Margin="4">[color=#a4885c]:r[/color] uses the wrong net</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Your role is not radio trained, or the radio is not in your back slot.</Box>
-    </ColorBox>
-
-    <ColorBox>
-      <Box Margin="4">Traffic arrives broken or full of static</Box>
-    </ColorBox>
-    <ColorBox>
-      <Box Margin="4">You are at the edge of coverage, or you are being jammed. Move closer to the anchor.</Box>
+      <Box Margin="4">Check which memory is marked ON AIR and select the correct memory with USE.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">AN/PRC traffic arrives as pure static</Box>
+      <Box Margin="4">The radio panel will not open</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">One of the two radios does not have matching COMSEC fill.</Box>
+      <Box Margin="4">Check that the AN/PRC is worn in your back slot and that you have radio-operator training.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">A net key is missing from your headset</Box>
+      <Box Margin="4">Traffic is broken or full of static</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Examine it to confirm. You cannot add keys in the field. Use a handset instead.</Box>
+      <Box Margin="4">You may be near the edge of relay coverage or inside a jammer field.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">AN/PRC traffic is pure static</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The transmitting and receiving radios may not have matching COMSEC keys.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Your headset cannot access a net</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Examine the headset and check its installed keys. Use a handset if you need temporary access to another net.</Box>
     </ColorBox>
 
     <ColorBox>
       <Box Margin="4">You transmit as UNKNOWN STATION</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">You have no callsign assigned. Command can assign one from the net directory.</Box>
+      <Box Margin="4">You do not currently have an assigned callsign.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">You said something private and it went out on the net</Box>
+      <Box Margin="4">Local speech is being transmitted</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">You are holding a handset. Hang it up, or whisper.</Box>
+      <Box Margin="4">Check whether you are holding a radio handset. Hang it up or whisper for local speech.</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">The radio has gone completely dead</Box>
+      <Box Margin="4">The AN/PRC stops operating</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Check the battery in its internal slot. Searching and high transmit power drain it quickly.</Box>
+      <Box Margin="4">Check its power cell. Searching and high output power increase battery consumption.</Box>
     </ColorBox>
   </Table>
 
-  ## Where to go next
+  ## Related guides
 
-  - [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] - everything else the manpack does: operating modes, transmit power, retransmission stations, band searching, and intercepting enemy traffic.
-  - [textlink="Field Headsets" link="AU14CommsHeadsets"] - direct frequencies, tuning, and headset-specific behaviour.
-  - [textlink="Voice Procedure" link="AU14CommsVoiceProcedure"] - how to actually word a transmission so it is understood the first time.
-  - [textlink="Comms Quick Reference" link="AU14CommsQuickRef"] - the tables on one page, for when you know what you are doing and just need a number.
+  - [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] - manpack operation, relay coverage, encryption, waveforms, searching, and interception
+  - [textlink="Field Headsets" link="AU14CommsHeadsets"] - headset channels, keys, tuning, and direct frequencies
+  - [textlink="Voice Procedure" link="AU14CommsVoiceProcedure"] - standard radio terminology and message structure
+  - [textlink="Comms Quick Reference" link="AU14CommsQuickRef"] - important communications values and controls
 </Document>

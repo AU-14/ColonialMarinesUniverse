@@ -1,0 +1,31 @@
+<Document>
+  # Criminal Records
+
+  Every character in the round has a record, kept in one database shared by every records computer and tablet.
+
+  <Box>
+    <GuideEntityEmbed Entity="CMURecordsTablet" Caption="Mobile criminal records tablet"/>
+  </Box>
+
+  ## Accessing Records
+  - Use the [bold]criminal records computer[/bold] at your station, or the [bold]mobile criminal records tablet[/bold] in the field.
+  - The tablet needs Marshal, colony administration, colony command or brig access.
+
+  ## Looking People Up
+  - Search for someone by name, or look them up by their fingerprints or DNA.
+  - The [textlink="forensic scanner" link="CMUGuideForensics"] only reports a match for people who are in the records.
+
+  ## Statuses
+  - [bold]Wanted[/bold]: to be arrested. Give a reason.
+  - [bold]Suspect[/bold]: under suspicion. Give a reason.
+  - [bold]Detained[/bold]: in custody.
+  - [bold]Paroled[/bold]: released on conditions.
+  - [bold]Discharged[/bold]: released.
+  - [bold]Hostile[/bold]: a threat to the colony.
+  - [bold]Deceased[/bold]: dead.
+
+  Every status change is announced on the CMB channel, naming the officer who made it.
+
+  ## Crime History
+  Add each charge to the person's history as it's made, so the next officer to look them up knows what they've done.
+</Document>

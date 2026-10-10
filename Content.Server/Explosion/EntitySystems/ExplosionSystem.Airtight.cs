@@ -50,6 +50,8 @@ public sealed partial class ExplosionSystem
         if (!prototypesReloadedEventArgs.Modified.Contains(typeof(ExplosionPrototype)))
             return;
 
+        if (_preparingExplosion != null) _preparationInvalidated = true;
+
         InitAirtightMap();
         ReloadMap();
     }
@@ -125,7 +127,7 @@ public sealed partial class ExplosionSystem
             return;
         }
 
-        ref var tileEntry = ref CollectionsMarshal.GetValueRefOrAddDefault(airtightGrid.Tiles, tile, out var existed);
+        var existed = airtightGrid.Tiles.TryGetValue(tile, out var tileEntry);
         var cacheKey = new ToleranceValues { Values = tolerance };
 
         // Remove previous tolerance reference if necessary.
@@ -134,7 +136,12 @@ public sealed partial class ExplosionSystem
             ref var prevEntry = ref _toleranceData[tileEntry.ToleranceCacheIndex];
             if (prevEntry.Values == cacheKey)
             {
-                // No change.
+                // Rotation can change blocking directions without changing resistance.
+                if (tileEntry.BlockedDirections != blockedDirections)
+                {
+                    tileEntry.BlockedDirections = blockedDirections;
+                    airtightGrid.Tiles[tile] = tileEntry;
+                }
                 return;
             }
 
@@ -159,10 +166,11 @@ public sealed partial class ExplosionSystem
             newCacheEntry.RefCount = 1;
         }
 
-        tileEntry = new TileData
+        airtightGrid.Tiles[tile] = new TileData
         {
             BlockedDirections = blockedDirections,
             ToleranceCacheIndex = newCacheIndex,
+            Tolerances = _toleranceData[newCacheIndex].Values,
         };
     }
 
@@ -313,6 +321,12 @@ public sealed partial class ExplosionSystem
         FixedPoint2 damagePerIntensity,
         SortedDictionary<FixedPoint2, FixedPoint2> damageThresholds)
     {
+        // A blocker can already be past its destruction threshold while deletion is queued.
+        // Negative tolerance would schedule tiles into previous flood iterations, mutating
+        // the collections currently being enumerated.
+        if (damageTarget <= FixedPoint2.Zero)
+            return FixedPoint2.Zero;
+
         var tolerance = damagePerIntensity > 0 ? damageTarget / damagePerIntensity : ToleranceValues.Invulnerable;
         var prevIntensity = FixedPoint2.Zero;
         /*
@@ -346,7 +360,7 @@ public sealed partial class ExplosionSystem
         if (!TryComp(entity, out ExplosionAirtightGridComponent? airtightGrid))
             return;
 
-        foreach (var tile in airtightGrid.Tiles.Values)
+        foreach (var tile in airtightGrid.Tiles.Capture().Values)
         {
             DecrementRefCount(tile.ToleranceCacheIndex);
         }
@@ -359,7 +373,7 @@ public sealed partial class ExplosionSystem
         var enumerator = EntityQueryEnumerator<ExplosionAirtightGridComponent, MapGridComponent>();
         while (enumerator.MoveNext(out var uid, out var airtightComp, out var mapGrid))
         {
-            foreach (var pos in airtightComp.Tiles.Keys)
+            foreach (var pos in airtightComp.Tiles.Capture().Keys)
             {
                 UpdateAirtightMap(uid, pos, mapGrid);
             }

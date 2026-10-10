@@ -124,6 +124,9 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         if (!TryGetVehicle(turretUid, out var vehicle))
             return;
 
+        if (TryComp<VehicleMaintenanceComponent>(vehicle, out var maintenance) && maintenance.ControlsLocked)
+            return;
+
         if (!_net.IsClient)
         {
             if (session.SenderSession.AttachedEntity is not { } user)
@@ -540,6 +543,9 @@ public sealed partial class VehicleTurretSystem : EntitySystem
 
     private void UpdateTurretRotation(EntityUid turretUid, VehicleTurretComponent turret, EntityUid vehicle, float frameTime)
     {
+        if (TryComp<VehicleMaintenanceComponent>(vehicle, out var maintenance) && maintenance.ControlsLocked)
+            return;
+
         if (!turret.RotateToCursor)
             return;
 

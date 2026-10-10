@@ -1,0 +1,83 @@
+- type: entity
+  parent: RuMCUPPPouchTools
+  id: RuMCUPPPouchToolsFull
+  suffix: RuMC, FULL, BEAR
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCWelderPVE
+    - id: CMCrowbarRed
+    - id: CMScrewdriver
+    - id: CMWrench
+
+- type: entity
+  id: RuMCBEARmachinegunPresetGROZA
+  name: PMC BEAR (GROZA) preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ RuMCBEARCapBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARCapBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCBEARCapBlack, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARCapBlack, RMCBootsSPP, CMHandsBrown ]
+      - [ RuMCBEARBoonieBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARBoonieBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCBEARBoonieBlack, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARBoonieBlack, RMCBootsSPP, CMHandsBrown ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPP, CMHandsBrown ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPP, CMHandsBrown ]
+    randomWeapon:
+    - [ RuMCWeaponSMGsPP13MTactical, RuMCUniformBlackBEARFull, RuMCUPPNavalInfantryBeltMachinegunner, RuMCUPPPouchToolsFull ]
+    - [ RuMCWeaponSMGsPP13MTactical, RuMCUniformBlackBEARFull, RuMCUPPNavalInfantryBeltMachinegunner, RuMCUPPPouchToolsFull ]
+    - [ RuMCWeaponSMGsPP13MTactical, RuMCUniformGrayBEARFull, RuMCUPPNavalInfantryBeltMachinegunner,  RuMCUPPPouchToolsFull ]
+    - [ RuMCWeaponSMGsPP13MTactical, RuMCUniformGrayBEARFull, RuMCUPPNavalInfantryBeltMachinegunner, RuMCUPPPouchToolsFull ]
+    - [ RuMCWeaponSMGsPP13MTactical, RuMCUniformBEARFull, RuMCUPPNavalInfantryBeltMachinegunner, RuMCUPPPouchToolsFull ]
+    - [ RuMCWeaponSMGsPP13MTactical, RuMCUniformBEARFull, RuMCUPPNavalInfantryBeltMachinegunner, RuMCUPPPouchToolsFull ]
+    tryEquipRandomWeapon: true
+
+- type: entity
+  id: RuMCBEARPresetGROZA
+  name: PMC BEAR (GROZA) preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ RuMCBEARCapBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARCapBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCBEARCapBlack, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARCapBlack, RMCBootsSPP, CMHandsBrown ]
+      - [ RuMCBEARBoonieBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARBoonieBrown, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCBEARBoonieBlack, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARBoonieBlack, RMCBootsSPP, CMHandsBrown ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPP, CMHandsBrown ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPPBlack, AU14PVEHandsFingerlessBlackGloves ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPPBlack, AU14PVEHandsFingerlessBrownGloves ]
+      - [ RuMCInfantryHelmetBEARFull, RMCBootsSPP, AU14PVEHandsInsulatedBlackMarine ]
+      - [ RuMCBEARInfantryHelmet, RMCBootsSPP, CMHandsBrown ]
+    randomWeapon:
+    - [ RuMCRifleAH12Tactical, RuMCUniformBlackBEARFull, RuMCBeltMagazineAHBEARFull, RuMCPouchMagazineAHBEARFull, ] #1/12
+    - [ RuMCRifleVALTactical, RuMCUniformBlackBEARFull,RuMCBeltMagazineVALBEARFull, RuMCPouchMagazineVALBEARFull, ] #1/12
+    - [ RuMCWeaponSMGsPP13MTactical, RuMCUniformGrayBEARFull,RuMCBeltMagazinePP13BEARFull,  RuMCPouchMagazinePP13BEARFull, ] #1/12
+    - [ RuMCWeaponRifleAK13Tactical, RuMCUniformBEARFull,RuMCBeltMagazineBEARFull, RuMCPouchMagazineBEARFull, ] #1/12
+    - [ RuMCWeaponRifleAK13Tactical_alt1, RuMCUniformGrayBEARFull,RuMCBeltMagazineBEARFull, RuMCPouchMagazineBEARFull, ]
+    - [ RuMCWeaponRifleAK13Tactical_alt2, RuMCUniformBEARFull,RuMCBeltMagazineBEARFull, RuMCPouchMagazineBEARFull, ]
+    - [ RuMCWeaponRifleAK13Tactical, RuMCUniformBEARFull,RuMCBeltMagazineBEARFull, RuMCPouchMagazineBEARFull, ]
+    - [ RuMCWeaponRifleAK13Tactical_alt1, RuMCUniformGrayBEARFull,RuMCBeltMagazineBEARFull, RuMCPouchMagazineBEARFull, ]
+    - [ RuMCWeaponRifleAK13Tactical_alt2, RuMCUniformBEARFull,RuMCBeltMagazineBEARFull, RuMCPouchMagazineBEARFull, ]
+    - [ RuMCWeaponRifleAK13Tactical, RuMCUniformBEARFull,RuMCBeltMagazineBEARFull, RuMCPouchMagazineBEARFull, ]
+    - [ RuMCWeaponRifleAK13Tactical_alt1, RuMCUniformGrayBEARFull,RuMCBeltMagazineBEARFull, RuMCPouchMagazineBEARFull, ]
+    - [ RuMCWeaponRifleAK13Tactical_alt2, RuMCUniformBEARFull,RuMCBeltMagazineBEARFull, RuMCPouchMagazineBEARFull, ]
+    tryEquipRandomWeapon: true

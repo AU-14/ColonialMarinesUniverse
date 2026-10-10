@@ -41,7 +41,7 @@ public sealed partial class MobThresholdSystem : EntitySystem
 
     private void OnGetState(EntityUid uid, MobThresholdsComponent component, ref ComponentGetState args)
     {
-        var thresholds = new Dictionary<FixedPoint2, MobState>();
+        var thresholds = new Dictionary<FixedPoint2, MobState>(component.Thresholds.Count);
         foreach (var (key, value) in component.Thresholds)
         {
             thresholds.Add(key, value);

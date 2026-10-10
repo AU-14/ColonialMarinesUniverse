@@ -41,6 +41,8 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
 
         SubscribeLocalEvent<RMCTelephoneComponent, ListenEvent>(OnListen);
         SubscribeLocalEvent<RMCTelephoneRingEvent>(OnTelephoneRing);
+
+        CMUInitialize(); // cmu edit
     }
 
     private void OnRadioSendAttempt(ref RadioSendAttemptEvent ev)
@@ -124,12 +126,17 @@ public sealed partial class RMCTelephoneSystem : SharedRMCTelephoneSystem
         if (HasComp<RMCTelephoneComponent>(source) || HasComp<XenoComponent>(source))
             return;
 
-        if (!_hands.IsHolding(source, ent))
+        if (!CMUIsHoldingPhone(source, ent)) // cmu edit: mobile phones
             return;
+
+        // cmu edit start: 911 dispatch calls
+        if (CMUHandleEmergencyListen(ent, source, message))
+            return;
+        // cmu edit end
 
         if (ent.Comp.RotaryPhone is not { } rotary ||
             !TryGetOtherPhone(rotary, out var otherPhone) ||
-            !_rmcHands.TryGetHolder(otherPhone, out var holder) ||
+            !CMUTryGetPhoneHolder(otherPhone, out var holder) || // cmu edit: mobile phones
             !TryComp(holder, out ActorComponent? actor))
         {
             return;

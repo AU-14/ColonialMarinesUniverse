@@ -27,6 +27,8 @@
   id: CMUFighterCockpitCrew
   kind: source
   path: /Textures/CMU14/Vehicles/Fighter/cockpit-crew.swsl
+  params:
+    clip_enabled: false
 
 - type: shader
   id: CMUFighterCockpitFrame

@@ -1,0 +1,24 @@
+- type: partySpawn
+  id: RuMCMigrantSpawn
+  leadersToSpawn:
+    RuMCJobMigrant: 1
+  gruntsToSpawn:
+    RuMCJobMigrant: 5
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: Migrant_UPP
+  announceAsSurvivors: true
+  partyspawn: RuMCMigrantSpawn
+  whitelistedGamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 0
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false

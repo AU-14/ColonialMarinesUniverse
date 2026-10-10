@@ -29,12 +29,6 @@
   roundStart: true
 
 - type: Allegiance
-  id: LaselleBionational
-  name: allegiance-laselle-name
-  description: allegiance-laselle-description
-  roundStart: true
-
-- type: Allegiance
   id: WeylandYutani
   name: allegiance-wy-name
   description: allegiance-wy-description

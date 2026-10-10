@@ -4,12 +4,14 @@
   name: M34A2 Longstreet
   description: "An older light tank made for all ground forces of the United Americas, although being phased out due to being outdated by the American Army and the CCAF, the longstreet still remains in service with USCM and LACN detachments in colonial sectors."
   components:
+  - type: TankCookOff # CMU14
   - type: RMCNightVisionVisible # CMU14
     priority: -2
   - type: Vehicle
     movementKind: Grid
     transferDamage: false
   - type: VehicleOperatorDamage
+  - type: VehicleMaintenance
   - type: Clickable
   - type: Tag
     tags:
@@ -32,7 +34,7 @@
     turnDelay: 1
     turnInPlace: true
     turnInPlaceMaxSpeed: 0.5
-    pushCooldown: 2
+    pushCooldown: 1
     canPushVehicles: true
     blockingMobBypassNudgeLimit: 2
     xenoBlockMinimumSize: Immobile
@@ -44,6 +46,7 @@
     wallSmashSlowdownMultiplier: 0.2
     wallSmashSlowdownDuration: 1.5
     speedAtZeroIntegrity: 0.7
+    weightClass: Medium
   - type: VehicleRideSurface
     bounds:
     - -1.3,-1.9,1.3,1.9
@@ -59,6 +62,7 @@
         volume: -5
         pitch: 0.6
   - type: VehicleSound
+    crashSound: /Audio/_RMC14/Effects/metal_crash.ogg
     runningSound:
       path: /Audio/_RMC14/Vehicle/tank_engine_loop.wav
       params:
@@ -152,7 +156,7 @@
     autoRot: true
     offset: "0,0.9"
   - type: Corrodible
-    isCorrodible: false
+    isCorrodible: true
   - type: DoAfter
   - type: UserInterface
     interfaces:
@@ -238,6 +242,9 @@
     - offset: 0,2
       radius: 1
       interiorCoords: 0.5,-1
+  - type: VehicleXenoSize
+    minimumSize: Xeno
+  - type: VehicleDemolition
 
 - type: entity
   parent: VehicleTankBase
@@ -296,6 +303,10 @@
   name: M34A2 Longstreet 'Yutani'
   description: A light tank used by the Yutani Corporation for security and military operations, often seen in colonial sectors where Yutani has a presence.
   components:
+  - type: TankCookOff # CMU14
+    turretSprite:
+      sprite: _RMC14/Structures/Vehicles/wytank.rsi
+      state: tank_turret_0
   - type: HardpointState
   - type: ContainerContainer
     containers:
@@ -391,6 +402,8 @@
   name: M34E1 Armored Engineering Vehicle
   description: An unarmed engineering vehicle built on the chassis of a Longstreet Tank, fitted with a reinforced plow, built for hauling personnel/cargo and clearing enemy defenses without interrupting the flow of combat.
   components:
+  - type: TankCookOff # CMU14
+    enabled: false
   - type: HardpointState
   - type: ContainerContainer
     containers:
@@ -519,6 +532,10 @@
   name: Cheetah 2A Light Tank
   description: A light-weight tank made for all ground forces of the UPP.
   components:
+  - type: TankCookOff # CMU14
+    turretSprite:
+      sprite: _RMC14/Structures/Vehicles/spptank.rsi
+      state: tank_turret_0
   - type: HardpointState
   - type: ContainerContainer
     containers:
@@ -714,6 +731,10 @@
   name: FV150 Hobelar LCT
   description: The FV150 ‘Hobelar’ Light Cavalry Tank is a 6m long, 6m wide, 8m tall support vehicle for the RMC. Originally procured for the Special Air Service operations as an Airborne tank, this model has been made into a support vehicle for the Royal Marines thanks to a change of symbol and technological design. Entrance at the back.
   components:
+  - type: TankCookOff # CMU14
+    turretSprite:
+      sprite: CMU14/Structures/vehicles/fv150/exterior.rsi
+      state: tank_turret_0
   - type: HardpointState
   - type: ContainerContainer
     containers:

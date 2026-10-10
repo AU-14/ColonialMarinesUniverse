@@ -15,13 +15,15 @@ namespace Content.Client.Construction.UI;
 /// </summary>
 public sealed class GreyscaleTextureRect : Control
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ShaderPrototype> GreyscalePrototype = "Greyscale";
+
     private readonly ShaderInstance? _shader;
 
     public Texture? Texture { get; set; }
 
     public GreyscaleTextureRect()
     {
-        if (IoCManager.Resolve<IPrototypeManager>().TryIndex<ShaderPrototype>("Greyscale", out var proto))
+        if (IoCManager.Resolve<IPrototypeManager>().TryIndex<ShaderPrototype>(GreyscalePrototype, out var proto))
             _shader = proto.Instance();
     }
 

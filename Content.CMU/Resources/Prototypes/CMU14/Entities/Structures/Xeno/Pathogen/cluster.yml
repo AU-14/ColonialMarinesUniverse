@@ -32,6 +32,7 @@
     blockOtherWeeds: true
     spreadsOnSemiWeedable: true
   - type: HiveCluster
+    towerReplaceWith: CMU14PathogenPylon
   - type: XenoWeedsSpreading
   - type: HiveConstructionRequiresHiveCore
   - type: HiveConstructionRequiresWeedableSurface

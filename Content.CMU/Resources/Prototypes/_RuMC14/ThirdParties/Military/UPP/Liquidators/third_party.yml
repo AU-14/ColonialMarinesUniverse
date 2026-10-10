@@ -1,0 +1,25 @@
+- type: partySpawn
+  id: LiquidatorSpawn
+  leadersToSpawn:
+    RuMCJobUPPLiquidatorComander: 1
+  gruntsToSpawn:
+    RuMCJobUPPLiquidatorBurner: 3
+    RuMCJobUPPLiquidatorMedic: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: Liquidators
+  announceAsSurvivors: true
+  partyspawn: LiquidatorSpawn
+  whitelistedGamemodes:
+    - insurgency
+    - forceonforce
+    - colonyfall
+  entrymethod: shuttle
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
+  weight: 20
+  minplayers: 0
+  maxplayers: 400
+  ghostsNeeded: 0
+  roundstart: false

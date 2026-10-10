@@ -39,10 +39,10 @@
   roleWeight: 0.25
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:RoleTimeRequirement
     role: AU14JobCivilianOrbitalLawyer
-    time: 18000 # 5 hours
+    time: 7200 # 2 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -50,6 +50,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     AU14RankOrbitalArbiterHS:
     - !type:RoleTimeRequirement
@@ -90,6 +92,7 @@
     - CMPaperBin30
   inhand:
   - AU14BriefcaseLawBundle
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

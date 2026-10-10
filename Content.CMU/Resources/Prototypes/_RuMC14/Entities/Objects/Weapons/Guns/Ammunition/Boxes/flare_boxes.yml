@@ -1,0 +1,89 @@
+#CAS
+- type: entity
+  parent: RuMCBoxFlare
+  id: RuMCBoxFlareCAS
+  name: signal flyer box "GRACH"
+  description: Transport capping box for storage and transportation of signal flyers. Contains 8 sealed packs, each containing 8 cylinders with pyrotechnic composition. The markings on the lid allow for quick identification of the type of flyers without opening the box. Used for supplying assault groups and forward checkpoints. Please note that the box should be stored in a dry place, away from open flames. If moisture enters the box, the contents should be disposed of as the flyers may malfunction.
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RMCBoxMagazinePowerCellsHigh
+  - type: Sprite
+    layers:
+    - state: supply_box_small
+      color: "#4a545c"
+    - state: supply_ammo_full
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+      color: "#b2bdc4"
+    - state: supply_box_small_flare
+      color: "#606e78"
+    - state: supply_box_small_flare_colour
+      color: "#FFA7A7"
+    - state: supply_lid_small_closed
+      map: [ "lid" ]
+      color: "#4a545c"
+    - state: supply_lid_small_closed_marking # "size"_lid - Base Colour
+      map: [ "lid_marking" ]
+      color: "#4a545c"
+    - state: star_supply #star
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: CMItemSlots
+    count: 8
+    slot:
+      whitelist:
+        tags:
+        - RuMCPackFlareRed
+
+- type: entity
+  parent: RuMCBoxFlareCAS
+  id: RuMCBoxFlareCASFilled
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: RuMCPackFlareRed
+
+#Standart
+- type: entity
+  parent: RMCBoxMagazineSupplySmallBase
+  id: RuMCBoxFlare
+  name: signal flyer box
+  description: Transport capping box for storage and transportation of signal flyers. Contains 8 sealed packs, each containing 8 cylinders with pyrotechnic composition. The markings on the lid allow for quick identification of the type of flyers without opening the box. Used for supplying assault groups and forward checkpoints. Please note that the box should be stored in a dry place, away from open flames. If moisture enters the box, the contents should be disposed of as the flyers may malfunction.
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RMCBoxMagazinePowerCellsHigh
+  - type: Sprite
+    layers:
+    - state: supply_box_small
+      color: "#6d7b56"
+    - state: supply_ammo_full
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+      color: "#b2bdc4"
+    - state: supply_box_small_flare
+      color: "#606e78"
+    - state: supply_box_small_flare_colour
+      color: "#F5E6C8"
+    - state: supply_lid_small_closed
+      map: [ "lid" ]
+      color: "#6d7b56"
+    - state: supply_lid_small_closed_marking # "size"_lid - Base Colour
+      map: [ "lid_marking" ]
+      color: "#6d7b56"
+    - state: star_supply #star
+      sprite: _RuMC14/Objects/Weapons/Guns/Ammunition/Boxes/UPP_Boxes.rsi
+      color: "#c62828"
+  - type: CMItemSlots
+    count: 8
+    slot:
+      whitelist:
+        tags:
+        - RuMCPackFlareWhite
+
+- type: entity
+  parent: RuMCBoxFlare
+  id: RuMCBoxFlareFilled
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: RuMCPackFlareWhite

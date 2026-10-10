@@ -1,0 +1,274 @@
+# Generated source-matched desk terminal drafts; see SOURCES_LARGE_COMPUTERS.md.
+- type: cmu3DModel
+  id: CMU3DRMCPropComputerLarge
+  label: Beige desk computer
+  status: draft
+  sourcePrototypes:
+  - RMCPropComputerLarge
+  referencePrototype: RMCPropComputerLarge
+  referenceRsi: _RMC14/Structures/Machines/computer.rsi
+  referenceState: largecomp
+  referenceDirection: 0
+  sourceDirections: 1
+  useEntityRotation: true
+  yawOffset: 0
+  placement: surface
+  groundOffset: 0,0
+  description: Source-sized stepped CRT-style desk terminal with a recessed display, solid rear housing and a separate
+    sloping keyboard deck. Exact source crops preserve the lit, blank and dark-casing variants. Source offset is
+    zero and saved entity yaw is retained. Monitor depth, hidden faces, keyboard slope and physical interpretation
+    of sprite height are inferred. Authored table support remains .86; no gameplay physics changes. Draft; see SOURCES_LARGE_COMPUTERS.md.
+  parts:
+  - label: monitor rear casing
+    min: -0.3125000, 0.0300000, 0.3125000
+    max: 0.3125000, 0.1800000, 0.7500000
+    color: '#867872'
+  - label: stepped upper casing
+    min: -0.2812500, -0.1050000, 0.7500000
+    max: 0.2812500, 0.1800000, 0.7812500
+    color: '#867872'
+  - label: rounded crown step
+    min: -0.2500000, -0.1050000, 0.7812500
+    max: 0.2500000, 0.1800000, 0.8125000
+    color: '#867872'
+  - label: upper bezel housing
+    min: -0.3125000, -0.1050000, 0.6250000
+    max: 0.3125000, 0.0300000, 0.7500000
+    color: '#867872'
+  - label: left bezel housing
+    min: -0.3125000, -0.1050000, 0.4062500
+    max: -0.1875000, 0.0300000, 0.6250000
+    color: '#5E5754'
+  - label: right bezel housing
+    min: 0.1875000, -0.1050000, 0.4062500
+    max: 0.3125000, 0.0300000, 0.6250000
+    color: '#5E5754'
+  - label: lower bezel housing
+    min: -0.3125000, -0.1050000, 0.3125000
+    max: 0.3125000, 0.0300000, 0.4062500
+    color: '#5E5754'
+  - label: original stepped monitor face
+    min: -0.3125000, -0.1090000, 0.3125000
+    max: 0.3125000, -0.1060000, 0.8125000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1360
+    surfaceAxis: XZ
+  - label: recessed display glass
+    min: -0.1875000, -0.0600000, 0.4062500
+    max: 0.1875000, -0.0570000, 0.6250000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1361
+    surfaceAxis: XZ
+  - label: hinge rail
+    min: -0.3125000, -0.0850000, 0.2500000
+    max: 0.3125000, 0.0500000, 0.3125000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1362
+    surfaceAxis: XZ
+  - label: sloping original keyboard deck
+    min: -0.3125000, -0.3000000, 0.0625000
+    max: 0.3125000, 0.0250000, 0.2500000
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLargeComputerSurface1363
+    surfaceAxis: XY
+  - label: keyboard underside
+    min: -0.2812500, -0.3000000, 0.0312500
+    max: 0.2812500, 0.1600000, 0.0625000
+    color: '#5E5754'
+  - label: original front base bevel
+    min: -0.3125000, -0.3030000, 0.0000000
+    max: 0.3125000, -0.3000000, 0.0625000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1364
+    surfaceAxis: XZ
+  - label: source-width supporting foot
+    min: -0.2500000, -0.2950000, 0.0000000
+    max: 0.2500000, 0.1500000, 0.0312500
+    color: '#141414'
+  - label: rear keyboard platform
+    min: -0.2812500, 0.0250000, 0.0625000
+    max: 0.2812500, 0.1600000, 0.2500000
+    color: '#5E5754'
+- type: cmu3DModel
+  id: CMU3DRMCPropComputerLarge0
+  label: Blank-screen desk computer
+  status: draft
+  sourcePrototypes:
+  - RMCPropComputerLarge0
+  referencePrototype: RMCPropComputerLarge0
+  referenceRsi: _RMC14/Structures/Machines/computer.rsi
+  referenceState: largecomp0
+  referenceDirection: 0
+  sourceDirections: 1
+  useEntityRotation: true
+  yawOffset: 0
+  placement: surface
+  groundOffset: 0,0
+  description: Source-sized stepped CRT-style desk terminal with a recessed display, solid rear housing and a separate
+    sloping keyboard deck. Exact source crops preserve the lit, blank and dark-casing variants. Source offset is
+    zero and saved entity yaw is retained. Monitor depth, hidden faces, keyboard slope and physical interpretation
+    of sprite height are inferred. Authored table support remains .86; no gameplay physics changes. Draft; see SOURCES_LARGE_COMPUTERS.md.
+  parts:
+  - label: monitor rear casing
+    min: -0.3125000, 0.0300000, 0.3125000
+    max: 0.3125000, 0.1800000, 0.7500000
+    color: '#867872'
+  - label: stepped upper casing
+    min: -0.2812500, -0.1050000, 0.7500000
+    max: 0.2812500, 0.1800000, 0.7812500
+    color: '#867872'
+  - label: rounded crown step
+    min: -0.2500000, -0.1050000, 0.7812500
+    max: 0.2500000, 0.1800000, 0.8125000
+    color: '#867872'
+  - label: upper bezel housing
+    min: -0.3125000, -0.1050000, 0.6250000
+    max: 0.3125000, 0.0300000, 0.7500000
+    color: '#867872'
+  - label: left bezel housing
+    min: -0.3125000, -0.1050000, 0.4062500
+    max: -0.1875000, 0.0300000, 0.6250000
+    color: '#5E5754'
+  - label: right bezel housing
+    min: 0.1875000, -0.1050000, 0.4062500
+    max: 0.3125000, 0.0300000, 0.6250000
+    color: '#5E5754'
+  - label: lower bezel housing
+    min: -0.3125000, -0.1050000, 0.3125000
+    max: 0.3125000, 0.0300000, 0.4062500
+    color: '#5E5754'
+  - label: original stepped monitor face
+    min: -0.3125000, -0.1090000, 0.3125000
+    max: 0.3125000, -0.1060000, 0.8125000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1360
+    surfaceAxis: XZ
+  - label: recessed display glass
+    min: -0.1875000, -0.0600000, 0.4062500
+    max: 0.1875000, -0.0570000, 0.6250000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1365
+    surfaceAxis: XZ
+  - label: hinge rail
+    min: -0.3125000, -0.0850000, 0.2500000
+    max: 0.3125000, 0.0500000, 0.3125000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1362
+    surfaceAxis: XZ
+  - label: sloping original keyboard deck
+    min: -0.3125000, -0.3000000, 0.0625000
+    max: 0.3125000, 0.0250000, 0.2500000
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLargeComputerSurface1363
+    surfaceAxis: XY
+  - label: keyboard underside
+    min: -0.2812500, -0.3000000, 0.0312500
+    max: 0.2812500, 0.1600000, 0.0625000
+    color: '#5E5754'
+  - label: original front base bevel
+    min: -0.3125000, -0.3030000, 0.0000000
+    max: 0.3125000, -0.3000000, 0.0625000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1364
+    surfaceAxis: XZ
+  - label: source-width supporting foot
+    min: -0.2500000, -0.2950000, 0.0000000
+    max: 0.2500000, 0.1500000, 0.0312500
+    color: '#141414'
+  - label: rear keyboard platform
+    min: -0.2812500, 0.0250000, 0.0625000
+    max: 0.2812500, 0.1600000, 0.2500000
+    color: '#5E5754'
+- type: cmu3DModel
+  id: CMU3DRMCPropComputerLargeDark
+  label: Dark desk computer
+  status: draft
+  sourcePrototypes:
+  - RMCPropComputerLargeDark
+  referencePrototype: RMCPropComputerLargeDark
+  referenceRsi: _RMC14/Structures/Machines/computer.rsi
+  referenceState: largecomp_dark
+  referenceDirection: 0
+  sourceDirections: 1
+  useEntityRotation: true
+  yawOffset: 0
+  placement: surface
+  groundOffset: 0,0
+  description: Source-sized stepped CRT-style desk terminal with a recessed display, solid rear housing and a separate
+    sloping keyboard deck. Exact source crops preserve the lit, blank and dark-casing variants. Source offset is
+    zero and saved entity yaw is retained. Monitor depth, hidden faces, keyboard slope and physical interpretation
+    of sprite height are inferred. Authored table support remains .86; no gameplay physics changes. Draft; see SOURCES_LARGE_COMPUTERS.md.
+  parts:
+  - label: monitor rear casing
+    min: -0.3125000, 0.0300000, 0.3125000
+    max: 0.3125000, 0.1800000, 0.7500000
+    color: '#4E4E4E'
+  - label: stepped upper casing
+    min: -0.2812500, -0.1050000, 0.7500000
+    max: 0.2812500, 0.1800000, 0.7812500
+    color: '#4E4E4E'
+  - label: rounded crown step
+    min: -0.2500000, -0.1050000, 0.7812500
+    max: 0.2500000, 0.1800000, 0.8125000
+    color: '#4E4E4E'
+  - label: upper bezel housing
+    min: -0.3125000, -0.1050000, 0.6250000
+    max: 0.3125000, 0.0300000, 0.7500000
+    color: '#4E4E4E'
+  - label: left bezel housing
+    min: -0.3125000, -0.1050000, 0.4062500
+    max: -0.1875000, 0.0300000, 0.6250000
+    color: '#333333'
+  - label: right bezel housing
+    min: 0.1875000, -0.1050000, 0.4062500
+    max: 0.3125000, 0.0300000, 0.6250000
+    color: '#333333'
+  - label: lower bezel housing
+    min: -0.3125000, -0.1050000, 0.3125000
+    max: 0.3125000, 0.0300000, 0.4062500
+    color: '#333333'
+  - label: original stepped monitor face
+    min: -0.3125000, -0.1090000, 0.3125000
+    max: 0.3125000, -0.1060000, 0.8125000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1366
+    surfaceAxis: XZ
+  - label: recessed display glass
+    min: -0.1875000, -0.0600000, 0.4062500
+    max: 0.1875000, -0.0570000, 0.6250000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1361
+    surfaceAxis: XZ
+  - label: hinge rail
+    min: -0.3125000, -0.0850000, 0.2500000
+    max: 0.3125000, 0.0500000, 0.3125000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1367
+    surfaceAxis: XZ
+  - label: sloping original keyboard deck
+    min: -0.3125000, -0.3000000, 0.0625000
+    max: 0.3125000, 0.0250000, 0.2500000
+    color: '#FFFFFF'
+    shape: WedgeY
+    surface: CMU3DLargeComputerSurface1368
+    surfaceAxis: XY
+  - label: keyboard underside
+    min: -0.2812500, -0.3000000, 0.0312500
+    max: 0.2812500, 0.1600000, 0.0625000
+    color: '#333333'
+  - label: original front base bevel
+    min: -0.3125000, -0.3030000, 0.0000000
+    max: 0.3125000, -0.3000000, 0.0625000
+    color: '#FFFFFF'
+    surface: CMU3DLargeComputerSurface1369
+    surfaceAxis: XZ
+  - label: source-width supporting foot
+    min: -0.2500000, -0.2950000, 0.0000000
+    max: 0.2500000, 0.1500000, 0.0312500
+    color: '#141414'
+  - label: rear keyboard platform
+    min: -0.2812500, 0.0250000, 0.0625000
+    max: 0.2812500, 0.1600000, 0.2500000
+    color: '#333333'

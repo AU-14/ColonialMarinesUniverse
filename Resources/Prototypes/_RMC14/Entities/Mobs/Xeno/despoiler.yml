@@ -99,7 +99,9 @@
   - type: MeleeWeapon
     damage:
       types:
-        Slash: 18
+        Blunt: 6
+        Slash: 6
+        Piercing: 6
         Heat: 7
   - type: XenoDespoiler
     finishingStabBonusByTier:
@@ -111,14 +113,28 @@
         Heat: 30
     - types:
         Heat: 40
-    acidComponents:
-    - type: UserAcided
-      armorPiercing: 40
-      duration: 12
-      damageEvery: 1
+    # CMU14: complete tier effects, totaling 20 / 100 / 262 before armor.
+    # acidComponents:
+    # - type: UserAcided
+    #   armorPiercing: 40
+    #   duration: 12
+    #   damageEvery: 1
+    #   damage:
+    #     types:
+    #       Heat: 1
+    acidTiers:
+    - duration: 20
       damage:
         types:
           Heat: 1
+    - duration: 40
+      damage:
+        types:
+          Heat: 2.5
+    - duration: 40
+      damage:
+        types:
+          Heat: 6.55
   - type: XenoDespoilerHypertension
     maxStacks: 4
     pointsPerStack: 200

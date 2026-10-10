@@ -41,6 +41,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     AU14RankSeniorOrbitalManager:
     - !type:RoleTimeRequirement
@@ -72,6 +74,7 @@
     pocket1: AU14StampOrbitalMan
   inhand:
     - AU14BriefcaseLawBundle
+    - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

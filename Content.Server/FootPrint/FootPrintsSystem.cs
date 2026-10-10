@@ -57,7 +57,10 @@ public sealed partial class FootPrintsSystem : EntitySystem
             || !_map.TryFindGridAt(_transform.GetMapCoordinates((uid, transform)), out var gridUid, out _))
             return;
 
-        var dragging = mobThreshHolds.CurrentThresholdState is MobState.Critical or MobState.Dead;
+        // CMU14: organ-driven incapacity can override the damage-threshold cache.
+        // var dragging = mobThreshHolds.CurrentThresholdState is MobState.Critical or MobState.Dead;
+        var state = TryComp<MobStateComponent>(uid, out var mobState) ? mobState.CurrentState : mobThreshHolds.CurrentThresholdState;
+        var dragging = state is MobState.Critical or MobState.Dead;
         var stepDelta = transform.LocalPosition - component.StepPos;
         var stepSize = dragging ? component.DragSize : component.StepSize;
 

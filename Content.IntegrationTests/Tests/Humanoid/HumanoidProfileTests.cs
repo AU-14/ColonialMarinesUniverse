@@ -20,6 +20,8 @@ namespace Content.IntegrationTests.Tests.Humanoid;
 [TestOf(typeof(HumanoidProfileSystem))]
 public sealed class HumanoidProfileTests : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<SpeciesPrototype> HumanPrototype = "Human";
+
     private static readonly EntProtoId BaseSpecies = "MobHuman";
     private static readonly ProtoId<SpeciesPrototype> SlimePerson = "SlimePerson";
     public static readonly ProtoId<EmoteSoundsPrototype> SlimeVoice = "FemaleSlime";
@@ -85,7 +87,7 @@ public sealed class HumanoidProfileTests : GameTest
                     Gender = Gender.Neuter,
                     Appearance = new HumanoidCharacterAppearanceV1
                     {
-                        HairStyleId = "HumanHairLongBedhead2",
+                        HairStyleId = "HumanHairBob" /* cmu edit */,
                         HairColor = Color.Red,
                         FacialHairStyleId = "HumanFacialHairChin",
                         FacialHairColor = Color.Blue,
@@ -99,7 +101,7 @@ public sealed class HumanoidProfileTests : GameTest
             var converted = export.ToV2();
             var profile = converted.Profile;
             var markings = profile.Appearance.Markings;
-            var expectedVoice = SProtoMan.Index<SpeciesPrototype>("Human").DefaultSoundsBySex[(int)Sex.Female];
+            var expectedVoice = SProtoMan.Index<SpeciesPrototype>(HumanPrototype).DefaultSoundsBySex[(int)Sex.Female];
 
             Assert.Multiple(() =>
             {
@@ -114,7 +116,7 @@ public sealed class HumanoidProfileTests : GameTest
                 Assert.That(profile.Voice, Is.EqualTo(expectedVoice));
 
                 Assert.That(markings["Head"][HumanoidVisualLayers.Hair].Single().MarkingId,
-                    Is.EqualTo("HumanHairLongBedhead2"));
+                    Is.EqualTo("HumanHairBob" /* cmu edit */));
                 Assert.That(markings["Head"][HumanoidVisualLayers.Hair].Single().MarkingColors,
                     Is.EqualTo(new[] { Color.Red }));
                 Assert.That(markings["Head"][HumanoidVisualLayers.FacialHair].Single().MarkingId,
@@ -192,7 +194,7 @@ public sealed class HumanoidProfileTests : GameTest
 
     private void AssertValidProfile(Entity<HumanoidProfileComponent> body, HumanoidCharacterProfile profile)
     {
-        _bodySystem.TryGetOrgansWithComponent<VisualOrganComponent>(body.Owner, out var organs);
+        var organs = _bodySystem.EnumerateOrgans<VisualOrganComponent>(body.Owner).Select(organ => new Robust.Shared.GameObjects.Entity<VisualOrganComponent>(organ.Owner, organ.Comp2)).ToList();
 
         foreach (var (uid, visualOrgan) in organs)
         {
@@ -201,7 +203,7 @@ public sealed class HumanoidProfileTests : GameTest
             Assert.That(visualOrgan.Profile.SkinColor, Is.EqualTo(profile.Appearance.SkinColor), $"Organ {uid} has invalid skin color! Expected: {profile.Appearance.SkinColor} Current: {visualOrgan.Profile.SkinColor}");
         }
 
-        _bodySystem.TryGetOrgansWithComponent<VisualOrganMarkingsComponent>(body.Owner, out var markings);
+        var markings = _bodySystem.EnumerateOrgans<VisualOrganMarkingsComponent>(body.Owner).Select(organ => new Robust.Shared.GameObjects.Entity<VisualOrganMarkingsComponent>(organ.Owner, organ.Comp2)).ToList();
 
         foreach (var (uid, markingOrgan) in markings)
         {

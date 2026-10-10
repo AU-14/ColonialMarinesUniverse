@@ -1,7 +1,8 @@
 using System.Numerics;
-using Content.Client._CMU14.UserInterface.Options;
+using Content.Client.CMU14.UserInterface.Options;
 using Content.Client.Stylesheets;
 using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.Inventory;
 using Content.Shared._RMC14.Input;
 using Content.Shared.CCVar;
 using Content.Shared.Chat.Prototypes;
@@ -262,6 +263,8 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMKeyFunctions.CMHolsterSecondary);
             AddButton(CMKeyFunctions.CMHolsterTertiary);
             AddButton(CMKeyFunctions.CMHolsterQuaternary);
+            AddButton(CMUKeyFunctions.CMUOpenWornStorage); // CMU14
+            AddToggleCvarCheckBox("ui-options-cmu-click-opens-worn-storage", CMUInventoryCVars.ClickOpensWornStorage); // CMU14
             AddButton(CMKeyFunctions.RMCPickUpDroppedItems);
             AddButton(CMKeyFunctions.RMCInteractWithOtherHand);
             AddButton(CMKeyFunctions.RMCRest);
@@ -381,6 +384,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.CameraRotateRight);
             AddButton(EngineKeyFunctions.CameraReset);
             AddButton(ContentKeyFunctions.RotateCameraWithMouse);
+            AddButton(CMUKeyFunctions.CMUToggleFirstPersonMouse); // CMU14
             AddButton(ContentKeyFunctions.ZoomIn);
             AddButton(ContentKeyFunctions.ZoomOut);
             AddButton(ContentKeyFunctions.ResetZoom);

@@ -11,6 +11,8 @@ uniform highp float outerCircleMaxRadius;
 uniform highp float innerCircleRadius;
 uniform highp float innerCircleMaxRadius;
 uniform highp float darknessAlphaOuter;
+// CMU14: screen-space callers supply their quad size; world-space callers retain framebuffer coordinates.
+uniform highp vec2 viewportSize;
 
 const highp float darknessAlphaInner = 0.0;
 
@@ -18,6 +20,10 @@ void fragment() {
 	highp vec2 pixelSize = vec2(1.0/SCREEN_PIXEL_SIZE.x, 1.0/SCREEN_PIXEL_SIZE.y);
 	highp vec2 pixelCenter = pixelSize*0.5;
 	highp float distance = length(FRAGCOORD.xy - pixelCenter);
+    // CMU14: center screen-space gradients within their viewport quad.
+    if (viewportSize.x > 0.0) {
+        distance = length((UV - vec2(0.5)) * viewportSize);
+    }
     
 	highp float innerRadius = innerCircleRadius + time * (innerCircleMaxRadius - innerCircleRadius);
 	highp float outerRadius = outerCircleRadius + time * (outerCircleMaxRadius - outerCircleRadius);

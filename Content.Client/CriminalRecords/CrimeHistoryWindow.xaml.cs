@@ -10,7 +10,7 @@ namespace Content.Client.CriminalRecords;
 /// Window opened when Crime History button is pressed
 /// </summary>
 [GenerateTypedNameReferences]
-public sealed partial class CrimeHistoryWindow : FancyWindow
+public sealed partial class CrimeHistoryWindow : Robust.Client.UserInterface.CustomControls.DefaultWindow // cmu edit
 {
     public Action<string>? OnAddHistory;
     public Action<uint>? OnDeleteHistory;
@@ -22,6 +22,7 @@ public sealed partial class CrimeHistoryWindow : FancyWindow
     public CrimeHistoryWindow(uint maxLength)
     {
         RobustXamlLoader.Load(this);
+        Content.Client.Lobby.UI.CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true); // cmu edit
 
         _maxLength = maxLength;
 

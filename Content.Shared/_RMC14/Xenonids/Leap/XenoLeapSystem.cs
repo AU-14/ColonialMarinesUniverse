@@ -177,7 +177,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
 
         if (args.Cancelled)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-leap-cancelled"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-leap-cancelled"), xeno, xeno);
             return;
         }
 
@@ -193,19 +193,8 @@ public sealed partial class XenoLeapSystem : EntitySystem
             return;
         }
 
-        var leaping = EnsureComp<XenoLeapingComponent>(xeno);
-
-        args.Handled = true;
-
-        leaping.KnockdownRequiresInvisibility = xeno.Comp.KnockdownRequiresInvisibility;
-        leaping.DestroyObjects = xeno.Comp.DestroyObjects;
-        leaping.MoveDelayTime = xeno.Comp.MoveDelayTime;
-        leaping.Damage = xeno.Comp.Damage;
-        leaping.HitEffect = xeno.Comp.HitEffect;
-        leaping.TargetJitterTime = xeno.Comp.TargetJitterTime;
-        leaping.TargetCameraShakeStrength = xeno.Comp.TargetCameraShakeStrength;
-        leaping.IgnoredCollisionGroupLarge = xeno.Comp.IgnoredCollisionGroupLarge;
-        leaping.IgnoredCollisionGroupSmall = xeno.Comp.IgnoredCollisionGroupSmall;
+        // CMU14: create leap state only after validating the path below.
+        // A rejected leap must not leave default destination/timing fields for Update.
 
         _rmcPulling.TryStopAllPullsFromAndOn(xeno);
 
@@ -230,11 +219,24 @@ public sealed partial class XenoLeapSystem : EntitySystem
                 AttemptBlockLeap(result.HitEntity, protection.StunDuration, protection.BlockSound, xeno, _transform.GetMoverCoordinates(xeno), protection.FullProtection))
                 return;
 
-            _popup.PopupClient(Loc.GetString("cmu-xeno-dash-blocked"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cmu-xeno-dash-blocked"), xeno, xeno);
             return;
         }
 
         var impulse = direction.Normalized() * xeno.Comp.Strength * physics.Mass;
+
+        // CMU14: moved after path validation so blocked/invalid attempts have no active leap.
+        var leaping = EnsureComp<XenoLeapingComponent>(xeno);
+        args.Handled = true;
+        leaping.KnockdownRequiresInvisibility = xeno.Comp.KnockdownRequiresInvisibility;
+        leaping.DestroyObjects = xeno.Comp.DestroyObjects;
+        leaping.MoveDelayTime = xeno.Comp.MoveDelayTime;
+        leaping.Damage = xeno.Comp.Damage;
+        leaping.HitEffect = xeno.Comp.HitEffect;
+        leaping.TargetJitterTime = xeno.Comp.TargetJitterTime;
+        leaping.TargetCameraShakeStrength = xeno.Comp.TargetCameraShakeStrength;
+        leaping.IgnoredCollisionGroupLarge = xeno.Comp.IgnoredCollisionGroupLarge;
+        leaping.IgnoredCollisionGroupSmall = xeno.Comp.IgnoredCollisionGroupSmall;
 
         leaping.Origin = _transform.GetMoverCoordinates(xeno);
         leaping.Destination = origin.Offset(direction);
@@ -341,6 +343,9 @@ public sealed partial class XenoLeapSystem : EntitySystem
             return;
 
         if (!TryComp(args.Leaper, out XenoLeapingComponent? leaping))
+            return;
+
+        if (TryComp(args.Leaper, out XenoLeapComponent? leap) && !leap.CanBeShieldBlocked)
             return;
 
         args.Cancelled = AttemptBlockLeap(ent.Owner, ent.Comp.StunDuration, ent.Comp.BlockSound, args.Leaper, leaping.Origin, ent.Comp.FullProtection);
@@ -484,7 +489,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
 
         var selfMessage = Loc.GetString("rmc-obstacle-slam-self", ("object", Identity.Name(blocker, EntityManager, leaper)));
 
-        _popup.PopupClient(selfMessage, leaper, leaper, PopupType.MediumCaution);
+        _popup.PopupEntity(selfMessage, leaper, leaper, PopupType.MediumCaution);
 
         var others = Filter.PvsExcept(leaper).Recipients;
         foreach (var other in others)

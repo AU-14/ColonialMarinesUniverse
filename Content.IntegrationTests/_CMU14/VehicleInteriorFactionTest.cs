@@ -21,6 +21,8 @@ namespace Content.IntegrationTests._CMU14;
 [TestOf(typeof(VehicleSystem))]
 public sealed class VehicleInteriorFactionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> USCMPrototype = "USCM";
+
     public override PoolSettings PoolSettings => new() { Connected = false };
 
     [TestCase("VehicleAPCCommand", "opfor")]
@@ -72,7 +74,7 @@ public sealed class VehicleInteriorFactionTest : GameTest
                 SEntMan.EnsureComponent<ShipFactionComponent>(ship.GridCoords.EntityId).Faction = "opfor";
                 var platoons = Server.System<PlatoonSpawnRuleSystem>();
                 previousPlatoon = platoons.SelectedOpforPlatoon;
-                platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>("USCM");
+                platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>(USCMPrototype);
                 lift = SEntMan.SpawnEntity("VehicleLift", ship.GridCoords);
                 console = SEntMan.SpawnEntity("VehicleSupplyConsole", ship.GridCoords);
                 SEntMan.GetComponent<VehicleSupplyConsoleComponent>(console).Faction = "opfor";

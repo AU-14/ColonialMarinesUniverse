@@ -25,9 +25,9 @@ public sealed partial class CMURestartHeartEffect : EntityEffectBase<CMURestartH
 public sealed partial class CMURestartHeartEntityEffectSystem
     : EntityEffectSystem<MetaDataComponent, CMURestartHeartEffect>
 {
-    [Dependency] private readonly CMUMedicalBodyIndexSystem _medicalIndex = default!;
-    [Dependency] private readonly SharedHeartSystem _heart = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private SharedHeartSystem _heart = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<CMURestartHeartEffect> args)
     {

@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Client.CMU14.ZLevels.Core;
+using Content.Client.CMU14.ThreeD.Scene; // CMU14
 // CMU14
 using Content.Client._RMC14.Language;
 // RMC14
@@ -178,7 +179,8 @@ namespace Content.Client.Chat.UI
             }
 
             var zPassOffset = Vector2.Zero;
-            if (xform.MapID != _eyeManager.CurrentEye.Position.MapId &&
+            var firstPerson = _eyeManager.MainViewport as CMU3DSceneControl; // CMU14
+            if (firstPerson is not { FirstPerson: true } && xform.MapID != _eyeManager.CurrentEye.Position.MapId && // CMU14
                 !_zLevels.TryGetSpeechBubbleZOffset(_senderEntity, out zPassOffset, xform))
             {
                 Modulate = Color.White.WithAlpha(0);
@@ -211,6 +213,17 @@ namespace Content.Client.Chat.UI
 
             var lowerCenter = _eyeManager.WorldToScreen(worldPos) / UIScale +
                               GetScreenPositionOffset(_senderEntity, xform);
+            // CMU14: the affine map projection has no entity height or floor information.
+            if (firstPerson is { FirstPerson: true })
+            {
+                if (!firstPerson.TryProjectHead(_senderEntity, baseOffset, out var head))
+                {
+                    Modulate = Color.White.WithAlpha(0);
+                    return;
+                }
+                lowerCenter = head / UIScale + GetScreenPositionOffset(_senderEntity, xform) - (Parent?.GlobalPosition ?? Vector2.Zero);
+            }
+            // CMU14
             var screenPos = lowerCenter - new Vector2(ContentSize.X / 2, ContentSize.Y + _verticalOffsetAchieved);
             // Round to nearest 0.5
             screenPos = (screenPos * 2).Rounded() / 2;

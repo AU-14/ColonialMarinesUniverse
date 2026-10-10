@@ -60,7 +60,7 @@
   requirements:
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 18000 # 5 hours
+    time: 7200 # 2 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -74,6 +74,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:

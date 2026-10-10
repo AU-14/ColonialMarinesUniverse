@@ -2,6 +2,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.Stack;
 using Content.Server.Shuttles.Events;
 using Content.Server.CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server._RMC14.Dropship;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
@@ -64,6 +65,9 @@ namespace Content.Server.CMU14.Hospital;
 
 public sealed partial class HospitalEmergencySystem : EntitySystem
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageGroupPrototype> BrutePrototype = "Brute";
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageGroupPrototype> BurnPrototype = "Burn";
+
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -88,6 +92,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Blunt = "Blunt";
     private static readonly ProtoId<DamageTypePrototype> Slash = "Slash";
@@ -751,8 +756,9 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         shuttle = default;
         navigationComputer = default;
         returnDestination = default;
-        if (Transform(ent).MapUid is not { } hospitalMap ||
-            !TryComp<MapComponent>(hospitalMap, out var hospitalMapComponent) || ent.Comp.LandingZone is not { } hospitalDestination)
+        if (ent.Comp.LandingZone is not { } hospitalDestination ||
+            Transform(hospitalDestination).MapUid is not { } hospitalMap ||
+            !TryComp<MapComponent>(hospitalMap, out var hospitalMapComponent))
             return false;
         var leaseUid = Spawn(null, MapCoordinates.Nullspace);
         var lease = AddComp<HospitalTransportLeaseComponent>(leaseUid);
@@ -766,7 +772,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         // MapInit can move an existing foreign object onto the new map. Current
         // map membership is insufficient provenance for deleting it later.
         var preexisting = new HashSet<EntityUid>();
-        var existing = EntityManager.AllEntityQueryEnumerator<TransformComponent>();
+        var existing = AllEntityQuery<TransformComponent>();
         while (existing.MoveNext(out var existingUid, out _))
             preexisting.Add(existingUid);
         try
@@ -793,7 +799,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             }
             // Include newly spawned MapInit equipment, but never claim existing
             // visitors/property that an initialization callback moved onto it.
-            var authored = EntityManager.AllEntityQueryEnumerator<TransformComponent>();
+            var authored = AllEntityQuery<TransformComponent>();
             while (authored.MoveNext(out var entity, out var transform))
                 if (!preexisting.Contains(entity) && transform.MapUid is { } authoredMap && lease.Maps.ContainsKey(authoredMap))
                     lease.AuthoredEntities.Add(entity);
@@ -1589,8 +1595,8 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         var remainingDamage = TryComp<DamageableComponent>(patient, out var damageable)
             ? _damage.GetAllDamage((patient, damageable)) : new DamageSpecifier();
         treatmentPending = remainingDamage.AnyPositive();
-        var brute = _prototypes.Index<DamageGroupPrototype>("Brute");
-        var burn = _prototypes.Index<DamageGroupPrototype>("Burn");
+        var brute = _prototypes.Index<DamageGroupPrototype>(BrutePrototype);
+        var burn = _prototypes.Index<DamageGroupPrototype>(BurnPrototype);
         TryComp<CMUSurgeryInProgressComponent>(patient, out var surgery);
         var surgerySiteSeen = false;
         var surgeryTargetMissing = surgery != null && TryComp<HospitalPatientComponent>(patient, out var admission) &&
@@ -1783,7 +1789,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         while (query.MoveNext(out var uid, out _, out _, out var xform))
         {
             var zoneCoords = _transform.GetMapCoordinates(uid, xform);
-            if (zoneCoords.MapId != computerMap)
+            if (!_zLevels.IsSameZNetwork(zoneCoords.MapId, computerMap))
                 continue;
 
             var distance = (zoneCoords.Position - computerCoords.Position).LengthSquared();
@@ -1802,7 +1808,8 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         if (!force && now < ent.Comp.NextLandingZoneRefreshAt)
             return ent.Comp.LandingZone is { } landingZone && !Deleted(landingZone) &&
                 HasComp<DropshipDestinationComponent>(landingZone) &&
-                Transform(landingZone).MapUid == Transform(ent).MapUid;
+                Transform(ent).MapUid is { } computerMap &&
+                _zLevels.IsSameZNetwork(Transform(landingZone).MapUid, computerMap);
 
         var foundLandingZone = FindLandingZone(ent);
         var changed = ent.Comp.LandingZone != foundLandingZone;

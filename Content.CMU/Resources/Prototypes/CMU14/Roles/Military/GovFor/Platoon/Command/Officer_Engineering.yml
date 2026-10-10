@@ -25,6 +25,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: OPS
     commandElement: true
@@ -53,13 +54,13 @@
     #   prefix: au14-job-prefix-govforengineeringWYPMC
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMilitaryEngineering
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 30
   - !type:TraitsRequirement
@@ -73,6 +74,8 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -198,13 +201,13 @@
   roundForce: UPP
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMilitaryEngineering
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   name: Engineering Officer
   spawnMenuRoleName: Engineering Officer (UPP)
   ranks:
@@ -220,13 +223,13 @@
   roundForce: WYPMC
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMilitaryEngineering
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   name: PMC Chief Engineer
   spawnMenuRoleName: Engineering Officer (WYPMC)
   ranks:

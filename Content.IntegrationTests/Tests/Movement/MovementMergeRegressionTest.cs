@@ -32,6 +32,11 @@ namespace Content.IntegrationTests.Tests.Movement;
 [TestOf(typeof(MoverController))]
 public sealed class MovementMergeRegressionTest : MovementTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<CloningSettingsPrototype> TraitsMentalPrototype = "TraitsMental";
+    private static readonly Robust.Shared.Prototypes.ProtoId<CloningSettingsPrototype> TraitsPhysicalPrototype = "TraitsPhysical";
+    private static readonly Robust.Shared.Prototypes.ProtoId<CloningSettingsPrototype> BodyPrototype = "Body";
+    private static readonly Robust.Shared.Prototypes.ProtoId<CloningSettingsPrototype> BaseClonePrototype = "BaseClone";
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: entity
@@ -76,10 +81,10 @@ public sealed class MovementMergeRegressionTest : MovementTest
     {
         await Server.WaitAssertion(() =>
         {
-            var mental = SProtoMan.Index<CloningSettingsPrototype>("TraitsMental");
-            var physical = SProtoMan.Index<CloningSettingsPrototype>("TraitsPhysical");
-            var body = SProtoMan.Index<CloningSettingsPrototype>("Body");
-            var clone = SProtoMan.Index<CloningSettingsPrototype>("BaseClone");
+            var mental = SProtoMan.Index<CloningSettingsPrototype>(TraitsMentalPrototype);
+            var physical = SProtoMan.Index<CloningSettingsPrototype>(TraitsPhysicalPrototype);
+            var body = SProtoMan.Index<CloningSettingsPrototype>(BodyPrototype);
+            var clone = SProtoMan.Index<CloningSettingsPrototype>(BaseClonePrototype);
 
             Assert.Multiple(() =>
             {
@@ -591,6 +596,57 @@ public sealed class MovementMergeRegressionTest : MovementTest
         });
     }
 
+    [TestCase("Plating", true, 0, 1f)]
+    [TestCase("FloorIce", true, 0, 0.05f)]
+    [TestCase(null, true, 1, 1f)]
+    [TestCase(null, false, 1, 0f)]
+    public async Task AnalogFrictionOnlyQueriesVirtualSupportOnEmptyTiles(
+        string? tileId, bool virtualGround, int expectedQueries, float frictionMultiplier)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            _ = Server.System<MovementMergeProbeSystem>();
+            var source = SPlayer;
+            SEntMan.RemoveComponent<CMUTileMovementComponent>(source);
+            SEntMan.EnsureComponent<ActiveInputMoverComponent>(source);
+            var probe = SEntMan.EnsureComponent<MovementMergeProbeComponent>(source);
+            probe.VirtualGround = virtualGround;
+            var input = SEntMan.GetComponent<InputMoverComponent>(source);
+            input.CanMove = true;
+            input.HeldMoveButtons = MoveButtons.None;
+            input.CurTickWalkMovement = Vector2.Zero;
+            input.CurTickSprintMovement = Vector2.Zero;
+
+            var coordinates = SEntMan.GetCoordinates(PlayerCoords);
+            var gridCoordinates = SEntMan.GetComponent<TransformComponent>(source).Coordinates;
+            var tile = tileId == null ? Tile.Empty : new Tile(TileMan[tileId].TileId);
+            MapSystem.SetTile(MapData.Grid, coordinates, tile);
+            // Removing the floor reparents the player to the map. Model a supported entity that
+            // remains attached to its grid over an empty tile, as with Z-level wall/ramp support.
+            Server.System<SharedTransformSystem>().SetCoordinates(source, gridCoordinates);
+            Assert.That(SEntMan.GetComponent<TransformComponent>(source).GridUid, Is.EqualTo(MapData.Grid.Owner),
+                "The empty center tile must retain its surrounding grid for the friction check.");
+
+            var physics = SEntMan.GetComponent<PhysicsComponent>(source);
+            var physicsSystem = Server.System<SharedPhysicsSystem>();
+            physicsSystem.SetBodyStatus(source, physics, BodyStatus.OnGround);
+            physicsSystem.SetLinearVelocity(source, new Vector2(10, 0), body: physics);
+            probe.VirtualGroundEvents = 0;
+            Server.System<MoverController>().UpdateBeforeSolve(false, 0.01f);
+
+            var speed = SEntMan.GetComponent<MovementSpeedModifierComponent>(source);
+            var friction = Math.Max(speed.FrictionNoInput * frictionMultiplier, Server.CfgMan.GetCVar(CCVars.MinFriction));
+            Assert.Multiple(() =>
+            {
+                Assert.That(probe.VirtualGroundEvents, Is.EqualTo(expectedQueries),
+                    "Ordinary tile friction must not request a Z-level support search.");
+                Assert.That(physics.LinearVelocity.X, Is.EqualTo(10 * (1 - 0.01f * friction)).Within(0.0001f),
+                    "Skipping redundant support queries must preserve floor, ice and empty-tile friction.");
+                Assert.That(physics.LinearVelocity.Y, Is.Zero.Within(0.0001f));
+            });
+        });
+    }
+
     private void AssertFriction(EntityUid uid, float friction, float frictionNoInput)
     {
         var component = SEntMan.GetComponent<MovementSpeedModifierComponent>(uid);
@@ -609,6 +665,7 @@ public sealed partial class MovementMergeProbeComponent : Component
     public int EffectiveMoverChanges;
     public bool BlockMovement;
     public bool VirtualGround;
+    public int VirtualGroundEvents;
     public float WalkSpeedModifier = 1;
     public float SprintSpeedModifier = 1;
     public float FrictionModifier = 1;
@@ -665,6 +722,7 @@ public sealed class MovementMergeProbeSystem : EntitySystem
         Entity<MovementMergeProbeComponent> ent,
         ref IsVirtualGroundForMovementEvent args)
     {
+        ent.Comp.VirtualGroundEvents++;
         args.Grounded |= ent.Comp.VirtualGround;
     }
 }

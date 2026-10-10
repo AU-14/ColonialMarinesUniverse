@@ -15,7 +15,7 @@ public sealed partial class RMCActionsSystem : SharedRMCActionsSystem
     [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private RMCActionsManager _manager = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
 
     private readonly Dictionary<(NetUserId User, EntProtoId Id), RMCActionOrderData> _toUpdate = new();
     private string _actionComponentName = string.Empty;

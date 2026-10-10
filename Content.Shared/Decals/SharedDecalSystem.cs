@@ -10,6 +10,8 @@ namespace Content.Shared.Decals
         [Dependency] protected ChunkEntitySystem ChunkEntities = default!;
         [Dependency] protected EntityQuery<DecalChunkComponent> DecalChunkQuery = default!;
 
+        private readonly List<ushort> _predictedSweep = new(); // CMU14: scratch for the predicted-id sweep in OnChunkHandleState
+
         protected bool PvsEnabled;
 
         // Legacy DecalGridComponent data was serialized in 32x32 chunks. Loading code must treat those keys as old
@@ -20,8 +22,13 @@ namespace Content.Shared.Decals
         {
             base.Initialize();
 
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
             SubscribeLocalEvent<DecalGridComponent, ComponentGetState>(OnGetState);
+#pragma warning restore CS0618
             SubscribeLocalEvent<DecalChunkComponent, ComponentStartup>(OnChunkStartup);
+            // CMU14: per decal delta states, one entry per changed decal instead of the whole chunk dictionary
+            SubscribeLocalEvent<DecalChunkComponent, ComponentGetState>(OnChunkGetState);
+            SubscribeLocalEvent<DecalChunkComponent, ComponentHandleState>(OnChunkHandleState);
             SubscribeAllEvent<RequestDecalPlacementEvent>(OnDecalPlacementRequest);
             SubscribeAllEvent<RequestDecalRemovalEvent>(OnDecalRemovalRequest);
         }
@@ -35,7 +42,74 @@ namespace Content.Shared.Decals
             RebuildFreeDecalIds(ent.Comp);
         }
 
+        // CMU14 method
+        private void OnChunkGetState(EntityUid uid, DecalChunkComponent component, ref ComponentGetState args)
+        {
+            // Entering entities are sent from their per entity ack tick, fresh ones from zero, so a delta is always
+            // built against a base the receiver actually has.
+            if (args.FromTick <= component.CreationTick)
+            {
+                args.State = new DecalChunkState(component.Decals);
+                return;
+            }
+
+            var modified = new Dictionary<ushort, Decal>();
+            foreach (var (id, tick) in component.ModifiedTicks)
+            {
+                if (tick >= args.FromTick)
+                    modified.Add(id, component.Decals[id]);
+            }
+
+            var removed = new List<ushort>();
+            foreach (var (id, tick) in component.RemovedTicks)
+            {
+                if (tick >= args.FromTick)
+                    removed.Add(id);
+            }
+
+            args.State = new DecalChunkDeltaState(modified, removed);
+        }
+
+        // CMU14 method
+        private void OnChunkHandleState(EntityUid uid, DecalChunkComponent component, ref ComponentHandleState args)
+        {
+            switch (args.Current)
+            {
+                case DecalChunkDeltaState delta:
+                    foreach (var (id, decal) in delta.ModifiedDecals)
+                        component.Decals[id] = decal;
+
+                    foreach (var id in delta.RemovedDecals)
+                        component.Decals.Remove(id);
+
+                    // CMU14: Auto state handling used to replace the dictionary wholesale, which is what reconciled
+                    // client-predicted ids once the server ack arrived. Delta merge has to sweep the band itself.
+                    _predictedSweep.Clear();
+                    foreach (var id in component.Decals.Keys)
+                    {
+                        if (id >= DecalChunkComponent.MinPredictedDecalId)
+                            _predictedSweep.Add(id);
+                    }
+
+                    foreach (var id in _predictedSweep)
+                        component.Decals.Remove(id);
+
+                    break;
+                case DecalChunkState full:
+                    // CMU14: clone it, the state dict is retained as the rollback base and prediction writes into the component copy
+                    component.Decals = new Dictionary<ushort, Decal>(full.Decals);
+                    break;
+                default:
+                    return;
+            }
+
+            var ev = new AfterAutoHandleStateEvent(args.Current);
+            EntityManager.EventBus.RaiseComponentEvent(uid, component, ref ev);
+        }
+
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
         private void OnGetState(EntityUid uid, DecalGridComponent component, ref ComponentGetState args)
+#pragma warning restore CS0618
         {
             if (PvsEnabled && !args.ReplayState)
                 return;
@@ -47,7 +121,9 @@ namespace Content.Shared.Decals
                 return;
             }
 
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
             var data = new Dictionary<Vector2i, DecalGridComponent.DecalChunk>();
+#pragma warning restore CS0618
             foreach (var (index, chunk) in component.ChunkCollection.ChunkCollection)
             {
                 if (chunk.LastModified >= args.FromTick)

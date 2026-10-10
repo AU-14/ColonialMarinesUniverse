@@ -31,15 +31,16 @@ public sealed partial class RiderRuleComponent : Component;
 /// </summary>
 public sealed partial class RiderRuleSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLogger = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
-    [Dependency] private readonly SharedCMChatSystem _chat = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly RMCPlanetSystem _rmcPlanet = default!;
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedCrashLandSystem _crashLand = default!;
+    [Dependency] private SharedCMChatSystem _chat = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedCrashLandSystem _crashLand = default!;
 
     private const string HatchlingPrototype = "CMURiderHatchling";
 
@@ -140,7 +141,7 @@ public sealed partial class RiderRuleSystem : EntitySystem
         var bestDistance = -1f;
 
         var ventEnumerator = EntityQueryEnumerator<VentCrawlableComponent, TransformComponent>();
-        while (ventEnumerator.MoveNext(out var vent, out var ventXform))
+        while (ventEnumerator.MoveNext(out var ventUid, out var vent, out var ventXform))
         {
             if (!_rmcPlanet.IsOnPlanet(ventXform))
                 continue;
@@ -153,7 +154,7 @@ public sealed partial class RiderRuleSystem : EntitySystem
                 if (playerXform.MapID != ventXform.MapID)
                     continue;
 
-                var distance = (playerXform.WorldPosition - ventXform.WorldPosition).Length();
+                var distance = (_transform.GetWorldPosition(playerXform) - _transform.GetWorldPosition(ventXform)).Length();
                 if (distance < minDistance)
                     minDistance = distance;
             }
@@ -161,7 +162,7 @@ public sealed partial class RiderRuleSystem : EntitySystem
             if (minDistance > bestDistance)
             {
                 bestDistance = minDistance;
-                best = ventXform.Owner;
+                best = ventUid;
             }
         }
 

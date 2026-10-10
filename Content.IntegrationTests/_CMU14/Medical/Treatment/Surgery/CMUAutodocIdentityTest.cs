@@ -2,6 +2,8 @@ using System.IO;
 using System.Numerics;
 using Content.Server.CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Body;
+using Content.Shared.FixedPoint;
 using Content.Shared.Body.Part;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts.Events;
@@ -19,6 +21,58 @@ namespace Content.IntegrationTests.CMU14.Medical.Treatment.Surgery;
 [TestFixture]
 public sealed class CMUAutodocIdentityTest
 {
+    [Test]
+    public async Task ChemicalCommandsRejectReplacementOccupantsAndReplayedViews()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var map = await pair.CreateTestMap();
+        await pair.Server.WaitAssertion(() =>
+        {
+            var em = pair.Server.EntMan;
+            var rig = CreateRig(em, map.GridCoords);
+            var replacement = em.SpawnEntity("CMMobHuman", map.GridCoords);
+            try
+            {
+                rig.Component.AvailableChemicals.Add("Water");
+                var oldContext = Context(em, rig);
+                var bay = em.System<CMUMedicalPatientBaySystem>();
+                Assert.That(bay.TryEjectPatient(rig.Pod, rig.Component.BodyContainer, rig.Patient), Is.True);
+                Assert.That(bay.TryInsertPatient(rig.Pod, rig.Component.BodyContainer, replacement), Is.True);
+                var bloodstream = em.System<SharedRMCBloodstreamSystem>();
+                Assert.That(bloodstream.TryGetChemicalSolution(replacement, out _, out var chemicals), Is.True);
+                var initialVolume = chemicals!.Volume;
+                FixedPoint2 ChemicalVolume()
+                {
+                    Assert.That(bloodstream.TryGetChemicalSolution(replacement, out _, out var current), Is.True);
+                    return current!.Volume;
+                }
+
+                Send(em, rig, new CMUAutodocInjectChemicalMessage(oldContext, "Water", FixedPoint2.New(5)));
+                Send(em, rig, new CMUAutodocToggleDialysisMessage(oldContext));
+                Assert.That(ChemicalVolume(), Is.EqualTo(initialVolume));
+                Assert.That(rig.Component.Filtering, Is.False);
+
+                var currentContext = Context(em, rig);
+                Send(em, rig, new CMUAutodocInjectChemicalMessage(currentContext, "Water", FixedPoint2.New(5)));
+                Assert.That(ChemicalVolume(), Is.EqualTo(initialVolume + FixedPoint2.New(5)));
+                Send(em, rig, new CMUAutodocInjectChemicalMessage(currentContext, "Water", FixedPoint2.New(5)));
+                Assert.That(ChemicalVolume(), Is.EqualTo(initialVolume + FixedPoint2.New(5)));
+
+                currentContext = Context(em, rig);
+                Send(em, rig, new CMUAutodocToggleDialysisMessage(currentContext));
+                Assert.That(rig.Component.Filtering, Is.True);
+                Send(em, rig, new CMUAutodocToggleDialysisMessage(currentContext));
+                Assert.That(rig.Component.Filtering, Is.True);
+            }
+            finally
+            {
+                em.DeleteEntity(replacement);
+                DeleteRig(em, rig);
+            }
+        });
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task ContextlessEjectVerbIsUnavailableAndRecreatedPodRejectsOldCommands()
     {

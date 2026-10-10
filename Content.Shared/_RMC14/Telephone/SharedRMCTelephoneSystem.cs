@@ -142,7 +142,7 @@ public abstract partial class SharedRMCTelephoneSystem : EntitySystem
         StopSound(ent);
 
         _audio.PlayPredicted(RemoteHangupSound, ent, args.Attacker);
-        _popup.PopupClient(Loc.GetString("rmc-dropship-launch-alarm-xeno-shutdown", ("console", ent)), args.Attacker, args.Attacker);
+        _popup.PopupEntity(Loc.GetString("rmc-dropship-launch-alarm-xeno-shutdown", ("console", ent)), args.Attacker, args.Attacker);
     }
 
     private void OnRotaryPhoneDialingInteractUsing(Entity<RotaryPhoneDialingComponent> ent, ref InteractUsingEvent args)
@@ -357,6 +357,15 @@ public abstract partial class SharedRMCTelephoneSystem : EntitySystem
 
     protected virtual void PickupPhone(Entity<RotaryPhoneComponent> rotary, EntityUid telephone, EntityUid user)
     {
+        // cmu edit start: mobile phones keep the handset inside the phone item
+        if (CMUTryParkMobileHandset(rotary, telephone))
+        {
+            EnsureComp<RMCPickedUpPhoneComponent>(telephone);
+            PlayGrabSound(rotary);
+            return;
+        }
+        // cmu edit end
+
         if (_container.TryGetContainer(rotary, rotary.Comp.ContainerId, out var container))
             _container.Remove(telephone, container);
 
@@ -373,6 +382,14 @@ public abstract partial class SharedRMCTelephoneSystem : EntitySystem
         {
             return;
         }
+
+        // cmu edit start: mobile phones keep the handset inside the phone item
+        if (CMUTryReturnMobileHandset(rotary, telephone, container))
+        {
+            PlayGrabSound(rotary);
+            return;
+        }
+        // cmu edit end
 
         if (user != null)
         {

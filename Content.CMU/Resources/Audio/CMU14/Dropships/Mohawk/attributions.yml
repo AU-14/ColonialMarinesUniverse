@@ -1,11 +1,10 @@
 - files:
   - takeoff.ogg
-  license: CC-BY-4.0
+  license: CC0-1.0
   copyright: >-
-    "Spaceship Whoosh 2" by steshystesh, licensed under Creative Commons Attribution
-    4.0 (https://creativecommons.org/licenses/by/4.0/). Downmixed to mono,
+    "Alien ship takeoff" by xilith.com, released under CC0. Downmixed to mono,
     normalized and given short edge fades. See Tools/mohawk/flight_audio.json.
-  source: https://freesound.org/people/steshystesh/sounds/336741/
+  source: https://freesound.org/people/xilith.com/sounds/498344/
 - files:
   - flight.ogg
   license: Custom
@@ -19,15 +18,14 @@
   source: https://pixabay.com/sound-effects/film-special-effects-plasma-engine-fx-33559/
 - files:
   - landing.ogg
-  license: Custom
+  license: CC0-1.0
   copyright: >-
-    Edited ten-second landing mix. Starts at 6 seconds of "super specific landing"
-    by Vospi (CC0-1.0, https://freesound.org/people/Vospi/sounds/439546/),
-    crossfading into "Creaky Thunderous SciFi SpaceShip Landing" by Kalpesh Ajugia
-    (kalsstockmedia), used under the Pixabay Content License
-    (https://pixabay.com/service/terms/). Downmixed to mono; fades and gain adjusted.
-    See Tools/mohawk/landing_audio.json for the source hashes and edit timings.
-  source: https://pixabay.com/sound-effects/film-special-effects-creaky-thunderous-scifi-spaceship-landing-341621/
+    "spaceship takeoff.wav" by pointparkcinema (previewed as "Extended spaceship
+    lift-off"), released under CC0.
+    Uses 15 to 25 seconds of the source for the ten-second landing approach.
+    Downmixed to mono, normalized and faded at both edges.
+    See Tools/mohawk/landing_audio.json for source hash and edit timings.
+  source: https://freesound.org/people/pointparkcinema/sounds/407253/
 - files:
   - freesoundstock_step_ladder.ogg
   license: CC-BY-SA-3.0

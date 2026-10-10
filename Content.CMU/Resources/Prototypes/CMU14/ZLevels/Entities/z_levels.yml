@@ -182,7 +182,7 @@
     state: icon
   - type: Item
     sprite: CMU14/Structures/deployableladder.rsi
-    size: Large
+    size: Normal
   - type: CMUDeployableZLevelLadder
     upLadderPrototype: CMUDeployableZLevelLadderThroughUp
     downLadderPrototype: CMUDeployableZLevelLadderThroughDown

@@ -1,0 +1,497 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/structures/tables.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "rack"
+    },
+    {
+      "name": "tabledir",
+      "directions": 8
+    },
+    {
+      "name": "table"
+    },
+    {
+      "name": "flip1\u002B",
+      "directions": 4
+    },
+    {
+      "name": "flip1-",
+      "directions": 4
+    },
+    {
+      "name": "flip0",
+      "directions": 4
+    },
+    {
+      "name": "flip2",
+      "directions": 4
+    },
+    {
+      "name": "1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "middle"
+    },
+    {
+      "name": "tabledir2",
+      "directions": 4
+    },
+    {
+      "name": "tabledir3",
+      "directions": 8
+    },
+    {
+      "name": "reinftable"
+    },
+    {
+      "name": "reinfflip1\u002B",
+      "directions": 4
+    },
+    {
+      "name": "reinfflip1-",
+      "directions": 4
+    },
+    {
+      "name": "reinfflip0",
+      "directions": 4
+    },
+    {
+      "name": "reinfflip2",
+      "directions": 4
+    },
+    {
+      "name": "reinftabledir",
+      "directions": 8
+    },
+    {
+      "name": "reinf1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "reinf1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "reinfmiddle"
+    },
+    {
+      "name": "reinftabledir2",
+      "directions": 4
+    },
+    {
+      "name": "reinftabledir3",
+      "directions": 8
+    },
+    {
+      "name": "woodtable"
+    },
+    {
+      "name": "woodflip1\u002B",
+      "directions": 4
+    },
+    {
+      "name": "woodflip1-",
+      "directions": 4
+    },
+    {
+      "name": "woodflip0",
+      "directions": 4
+    },
+    {
+      "name": "woodflip2",
+      "directions": 4
+    },
+    {
+      "name": "woodtabledir",
+      "directions": 8
+    },
+    {
+      "name": "wood1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "wood1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "woodmiddle"
+    },
+    {
+      "name": "woodtabledir2",
+      "directions": 4
+    },
+    {
+      "name": "woodtabledir3",
+      "directions": 8
+    },
+    {
+      "name": "gambletable"
+    },
+    {
+      "name": "gambleflip1\u002B",
+      "directions": 4
+    },
+    {
+      "name": "gambleflip1-",
+      "directions": 4
+    },
+    {
+      "name": "gambleflip0",
+      "directions": 4
+    },
+    {
+      "name": "gambleflip2",
+      "directions": 4
+    },
+    {
+      "name": "gambletabledir",
+      "directions": 8
+    },
+    {
+      "name": "gamble1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "gamble1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "gamblemiddle"
+    },
+    {
+      "name": "gambletabledir2",
+      "directions": 4
+    },
+    {
+      "name": "gambletabledir3",
+      "directions": 8
+    },
+    {
+      "name": "almtabledir",
+      "directions": 8
+    },
+    {
+      "name": "alm1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "alm1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "almtabledir2",
+      "directions": 4
+    },
+    {
+      "name": "almtable"
+    },
+    {
+      "name": "almflip1\u002B",
+      "directions": 4
+    },
+    {
+      "name": "almflip1-",
+      "directions": 4
+    },
+    {
+      "name": "almflip0",
+      "directions": 4
+    },
+    {
+      "name": "almflip2",
+      "directions": 4
+    },
+    {
+      "name": "almmiddle"
+    },
+    {
+      "name": "almtabledir3",
+      "directions": 8
+    },
+    {
+      "name": "blacktabledir",
+      "directions": 8
+    },
+    {
+      "name": "black1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "black1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "blacktabledir2",
+      "directions": 4
+    },
+    {
+      "name": "blacktable"
+    },
+    {
+      "name": "blackmiddle"
+    },
+    {
+      "name": "blacktabledir3",
+      "directions": 8
+    },
+    {
+      "name": "prisontabledir",
+      "directions": 8
+    },
+    {
+      "name": "prisontable"
+    },
+    {
+      "name": "prison1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "prison1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "prisonmiddle"
+    },
+    {
+      "name": "prisontabledir2",
+      "directions": 4
+    },
+    {
+      "name": "prisontabledir3",
+      "directions": 8
+    },
+    {
+      "name": "prisonflip1\u002B",
+      "directions": 4
+    },
+    {
+      "name": "prisonflip1-",
+      "directions": 4
+    },
+    {
+      "name": "prisonflip0",
+      "directions": 4
+    },
+    {
+      "name": "prisonflip2",
+      "directions": 4
+    },
+    {
+      "name": "pwoodtable"
+    },
+    {
+      "name": "pwoodflip1\u002B",
+      "directions": 4
+    },
+    {
+      "name": "pwoodflip1-",
+      "directions": 4
+    },
+    {
+      "name": "pwoodflip0",
+      "directions": 4
+    },
+    {
+      "name": "pwoodflip2",
+      "directions": 4
+    },
+    {
+      "name": "pwoodtabledir",
+      "directions": 8
+    },
+    {
+      "name": "pwood1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "pwood1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "pwoodmiddle"
+    },
+    {
+      "name": "pwoodtabledir2",
+      "directions": 4
+    },
+    {
+      "name": "pwoodtabledir3",
+      "directions": 8
+    },
+    {
+      "name": "fwoodtable"
+    },
+    {
+      "name": "fwoodtabledir",
+      "directions": 8
+    },
+    {
+      "name": "fwood1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "fwood1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "fwoodmiddle"
+    },
+    {
+      "name": "fwoodtabledir2",
+      "directions": 4
+    },
+    {
+      "name": "fwoodtabledir3",
+      "directions": 8
+    },
+    {
+      "name": "fbwoodtable"
+    },
+    {
+      "name": "fbwoodtabledir",
+      "directions": 8
+    },
+    {
+      "name": "fbwood1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "fbwood1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "fbwoodmiddle"
+    },
+    {
+      "name": "fbwoodtabledir2",
+      "directions": 4
+    },
+    {
+      "name": "fbwoodtabledir3",
+      "directions": 8
+    },
+    {
+      "name": "reqStable"
+    },
+    {
+      "name": "reqNtable"
+    },
+    {
+      "name": "req_table_free"
+    },
+    {
+      "name": "req_table"
+    },
+    {
+      "name": "req_tabledir",
+      "directions": 8
+    },
+    {
+      "name": "req_1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "req_1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "req_middle"
+    },
+    {
+      "name": "req_tabledir2",
+      "directions": 4
+    },
+    {
+      "name": "req_tabledir3",
+      "directions": 8
+    },
+    {
+      "name": "clothtabledir",
+      "directions": 8
+    },
+    {
+      "name": "cloth1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "cloth1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "clothtabledir2",
+      "directions": 4
+    },
+    {
+      "name": "clothtable"
+    },
+    {
+      "name": "clothmiddle"
+    },
+    {
+      "name": "clothtabledir3",
+      "directions": 8
+    },
+    {
+      "name": "rostockStable"
+    },
+    {
+      "name": "rostockNtable"
+    },
+    {
+      "name": "rostockWtable"
+    },
+    {
+      "name": "rostockEtable"
+    },
+    {
+      "name": "rostock_table_free"
+    },
+    {
+      "name": "rostock_table"
+    },
+    {
+      "name": "rostock_tabledir",
+      "directions": 8
+    },
+    {
+      "name": "rostock_1tilethick",
+      "directions": 8
+    },
+    {
+      "name": "rostock_1tileendtable",
+      "directions": 4
+    },
+    {
+      "name": "rostock_middle"
+    },
+    {
+      "name": "rostock_tabledir2",
+      "directions": 4
+    },
+    {
+      "name": "rostock_tabledir3",
+      "directions": 8
+    },
+    {
+      "name": "hs_table_left"
+    },
+    {
+      "name": "hs_table"
+    },
+    {
+      "name": "hs_table_right"
+    }
+  ]
+}

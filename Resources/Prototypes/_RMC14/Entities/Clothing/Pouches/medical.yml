@@ -27,6 +27,7 @@
       - PillPacket
       components:
       - Hypospray
+      - Injector
 
 - type: entity
   parent: RMCPouchMedicalSoc

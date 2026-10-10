@@ -1,0 +1,31 @@
+<Document>
+  # Roles and Gear
+
+  ## Roles
+  Which agency polices the colony depends on the map.
+  - [bold]CMB Marshal[/bold] and [bold]CMB Deputy[/bold]: the Colonial Marshal Bureau. The Marshal leads, provides the rule of law and executes arrests and warrants; Deputies help.
+  - [bold]Colony Security Leader[/bold] and [bold]Colony Security Officer[/bold]: joint CMB and corporate-backed security, working with both the Marshal Bureau and Weyland-Yutani.
+  - [bold]CWPS Ranger[/bold]: the Colonial Wilderness Preservation Service. Enforces colony law and protects the local ecosystem from poaching, dumping and overfishing.
+  - [bold]NSPA Constable[/bold] and [bold]NSPA Inspector[/bold]: the Neroid Sector Policing Authority.
+  - [bold]PAP Officer[/bold]: the UPP People's Armed Police.
+
+  Law enforcement roles need 5 hours of overall playtime.
+
+  ## Starting Gear
+  <Box>
+    <GuideEntityEmbed Entity="CMBeltSecurityMarshalFilled" Caption="Security belt"/>
+    <GuideEntityEmbed Entity="ForensicScanner" Caption="Forensic scanner"/>
+    <GuideEntityEmbed Entity="CMURecordsTablet" Caption="Records tablet"/>
+  </Box>
+  - [bold]Security belt[/bold]: a taser, a flash, a stun baton, two pairs of handcuffs, a flashbang, a clipboard and a universal recorder.
+  - [bold]Duty pistol[/bold] in a gun case.
+  - [bold]Forensic scanner[/bold]: see [textlink="Forensics" link="CMUGuideForensics"].
+  - [bold]Mobile criminal records tablet[/bold]: see [textlink="Criminal Records" link="CMUGuideLawRecords"].
+  - A copy of the colonial law guidebook, an IFAK, and a pouch with binoculars, a spare pair of handcuffs and a handheld radio.
+
+  ## The Equipment Vendor
+  Your agency's equipment vendor issues duty gear: a uniform, headgear and jacket, a belt, a bag, webbing, two pouches, and one duty weapon case. It also stocks spare handcuffs, zip ties, and prison jumpsuits and shoes for inmates.
+
+  ## Vehicles
+  The police car, the Marshal's paddy wagon and the ambulance have emergency lights. Use the emergency lights action to switch them on, press it again to go from slow to medium to fast, and once more to turn them off.
+</Document>

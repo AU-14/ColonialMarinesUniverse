@@ -23,6 +23,8 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class VehicleSupplyLoadoutTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> USCMPrototype = "USCM";
+
     private const string ConsoleId = "VehicleSupplyConsole";
 
     [Test]
@@ -186,7 +188,7 @@ public sealed class VehicleSupplyLoadoutTest
             AssertEntryGroup(entries, "VehicleSPPTank", "vehicle-tank");
 
             Assert.That(TankHardpoints, Does.Not.Contain("VehicleTankLTBCannon"));
-            Assert.That(SppTankHardpoints, Does.Not.Contain("VehicleSPPTankRailgun"));
+            Assert.That(SppTankHardpoints, Does.Contain("VehicleSPPTankRailgun"));
         });
 
         await pair.CleanReturnAsync();
@@ -249,7 +251,7 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             vehicleIds = console!.Vehicles
-                .Where(v => prototypes.Index<PlatoonPrototype>("USCM").VehicleSupplyCatalog.Contains(v.Vehicle))
+                .Where(v => prototypes.Index<PlatoonPrototype>(USCMPrototype).VehicleSupplyCatalog.Contains(v.Vehicle))
                 .Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
 
             ConfigureUSCM(entMan, map.GridCoords.EntityId);
@@ -300,7 +302,7 @@ public sealed class VehicleSupplyLoadoutTest
             Assert.That(consoleProto!.TryComp<VehicleSupplyConsoleComponent>(out var console, factory), Is.True);
 
             vehicleIds = console!.Vehicles
-                .Where(v => prototypes.Index<PlatoonPrototype>("USCM").VehicleSupplyCatalog.Contains(v.Vehicle))
+                .Where(v => prototypes.Index<PlatoonPrototype>(USCMPrototype).VehicleSupplyCatalog.Contains(v.Vehicle))
                 .Select(v => v.Vehicle.Id.ToLowerInvariant()).ToList();
             lift = entMan.SpawnEntity("VehicleLift", map.GridCoords);
         });
@@ -594,6 +596,7 @@ public sealed class VehicleSupplyLoadoutTest
         "VehicleTankTreads",
         "VehicleTankReinforcedTreads",
         "VehicleSPPTankP17702",
+        "VehicleSPPTankRailgun",
         "VehicleSPPTankHJ35TLauncher",
         "VehicleSPPTankCupola",
         "VehicleSPPTankReactiveArmor",
@@ -692,7 +695,7 @@ public sealed class VehicleSupplyLoadoutTest
             maps.SetTile(grid, comp, new EntityCoordinates(grid, new Vector2(x, y)), tile);
         entMan.EnsureComponent<ShipFactionComponent>(grid).Faction = "govfor";
         entMan.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon =
-            Robust.Shared.IoC.IoCManager.Resolve<IPrototypeManager>().Index<PlatoonPrototype>("USCM");
+            Robust.Shared.IoC.IoCManager.Resolve<IPrototypeManager>().Index<PlatoonPrototype>(USCMPrototype);
     }
 
     private static void ClearVehicleTechUnlocks(IEntityManager entMan)

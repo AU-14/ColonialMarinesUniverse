@@ -1,0 +1,34 @@
+author: troytroy400
+category: CMU
+changes:
+- message: Added a full Medical guide, covering every single medical mechanic in the
+    game.
+  type: Add
+- message: Added a Colony Law Enforcement guide.
+  type: Add
+- message: Added an Engineering guide.
+  type: Add
+- message: Added a Comms and Sensor Towers guide to the Communications guide.
+  type: Add
+- message: Added the ability to hold a patient down for surgery. If you have no pain
+    killers, you can now have someone (who is not the surgeon) hold the patient down
+    to negate the need for painkillers.
+  type: Add
+- message: Breathing from an oxygen tank on internals now clears suffocation damage
+    three times as fast.
+  type: Tweak
+- message: Medical gas masks, anesthetic tanks and medical oxygen tanks are now stocked
+    in the medical supply vendor.
+  type: Add
+- message: Full size shovels now dig 30% faster instead of only 10%.
+  type: Tweak
+- message: Field antenna masts now need power to relay radio, bring your PACMAN or
+    repair those FOB APCs.
+  type: Tweak
+- message: Loreified sentry names/descriotions.
+  type: Tweak
+- message: Removed the outdated Medical V2 guide. The pipe bomb guide has moved into
+    the Engineering guide's Ordnance page.
+  type: Remove
+time: '2026-09-29T22:21:31.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2053

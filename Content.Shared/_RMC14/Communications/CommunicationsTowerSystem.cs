@@ -15,6 +15,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
+using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Content.Shared.Power;
 using Content.Shared.Radio;
@@ -154,7 +155,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
         args.Handled = true;
         var msg = $"You wipe the preexisting frequencies from the {Name(ent)}.";
-        _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
         ent.Comp.Faction = string.Empty;
         ent.Comp.Channels.Clear();
     }
@@ -168,7 +169,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
             return;
 
         var factions = new HashSet<EntProtoId<IFFFactionComponent>>();
-        if (_gunIFF.TryGetFactions(args.User, factions))
+        if (_gunIFF.TryGetFactions(args.User, factions, SlotFlags.IDCARD | SlotFlags.EARS))
         {
             foreach (var faction in factions)
             {
@@ -185,7 +186,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
         args.Handled = true;
         var msg = $"You add your faction's communication frequencies to the {Name(ent)}'s comm list.";
-        _popup.PopupClient(msg, ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.Medium);
         ent.Comp.Faction = factions.FirstOrDefault().ToString() ?? string.Empty;
     }
 
@@ -193,13 +194,13 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
     {
         if (ent.Comp.State == CommunicationsTowerState.Broken)
         {
-            _popup.PopupClient($"{Name(ent)} needs repairs to be turned back on!", ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity($"{Name(ent)} needs repairs to be turned back on!", ent, args.User, PopupType.MediumCaution);
             return;
         }
 
         if (!_rmcPower.IsPowered(ent))
         {
-            _popup.PopupClient($"{Name(ent)} makes a small plaintful beep, and nothing happens. It seems to be out of power.", ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity($"{Name(ent)} makes a small plaintful beep, and nothing happens. It seems to be out of power.", ent, args.User, PopupType.MediumCaution);
             return;
         }
 

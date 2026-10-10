@@ -36,7 +36,7 @@ public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInte
         if (State is not RMCTelephoneBuiState state)
             return;
 
-        _window.Tabs.DisposeAllChildren();
+        _window.Tabs.ReleaseChildren();
         var tabs = new Dictionary<string, BoxContainer>();
         foreach (var phone in state.Phones)
         {
@@ -118,7 +118,14 @@ public sealed class RMCTelephoneBui(EntityUid owner, Enum uiKey) : BoundUserInte
             TabContainer.SetTabTitle(category, categoryName);
         }
 
-        _window.Buttons.DisposeAllChildren();
+        // cmu edit start: 911 dispatch
+        var emergencyTab = Content.Client.CMU14.Telephone.CMUEmergencyCallTab.Create(service =>
+            SendMessage(new Content.Shared.CMU14.Telephone.CMUEmergencyCallBuiMsg(service)));
+        _window.Tabs.AddChild(emergencyTab);
+        TabContainer.SetTabTitle(emergencyTab, Loc.GetString("cmu-911-tab"));
+        // cmu edit end
+
+        _window.Buttons.ReleaseChildren();
         if (state.Dnd)
         {
             var disableDndButton = new Button

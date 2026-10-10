@@ -25,6 +25,9 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkRoundSetupTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> USSBushReduxPrototype = "USSBushRedux";
+    private static readonly Robust.Shared.Prototypes.EntProtoId PlatoonSpawnPrototype = "PlatoonSpawn";
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: entity
@@ -68,7 +71,7 @@ public sealed class MohawkRoundSetupTest
             else
                 platoons.SelectedOpforPlatoon = platoon;
             Assert.That(entities.System<AuRoundSystem>().SetPlanet("CMUMohawkRoundSetupPlanet"), Is.True);
-            var grids = ticker.LoadGameMap(server.ProtoMan.Index<GameMapPrototype>("USSBushRedux"),
+            var grids = ticker.LoadGameMap(server.ProtoMan.Index<GameMapPrototype>(USSBushReduxPrototype),
                 out var mapId, DeserializationOptions.Default with { InitializeMaps = true });
             foreach (var grid in grids)
                 entities.EnsureComponent<ShipFactionComponent>(grid).Faction = faction;
@@ -77,24 +80,24 @@ public sealed class MohawkRoundSetupTest
             configuration.SetCVar(CCVars.FTLStartupTime, 0.5f);
             configuration.SetCVar(CCVars.FTLTravelTime, 1f);
             configuration.SetCVar(CCVars.FTLArrivalTime, 0.5f);
-            Assert.That(ticker.StartGameRule("PlatoonSpawn"), Is.True);
-            var assembly = entities.EntityQuery<MultiDeckDropshipComponent>().Single();
+            Assert.That(ticker.StartGameRule(PlatoonSpawnPrototype), Is.True);
+            var assembly = entities.QueryEntities<MultiDeckDropshipComponent>().Single();
             ship = assembly.Owner;
             Assert.That(entities.GetComponent<MetaDataComponent>(ship).EntityName, Is.EqualTo("Midway"));
-            Assert.That(entities.EntityQuery<DropshipComponent>().Count(), Is.EqualTo(2));
-            foreach (var dropship in entities.EntityQuery<DropshipComponent>())
-                Assert.That(dropship.Destination, Is.Not.Null, "Both the transport and Midway need a hangar pad.");
+            Assert.That(entities.QueryEntities<DropshipComponent>().Count(), Is.EqualTo(2));
+            foreach (var dropship in entities.QueryEntities<DropshipComponent>())
+                Assert.That(dropship.Comp.Destination, Is.Not.Null, "Both the transport and Midway need a hangar pad.");
             Assert.That(entities.GetComponent<DropshipComponent>(ship).Destination, Is.Not.Null,
                 "Round setup must reserve a Bush landing pad for the replacement gunship.");
             destination = entities.GetComponent<DropshipComponent>(ship).Destination!.Value;
             Assert.That(entities.GetComponent<DropshipDestinationComponent>(destination).FactionController, Is.EqualTo(faction));
-            var terminals = entities.EntityQuery<DropshipNavigationComputerComponent>()
+            var terminals = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .Where(nav => entities.GetComponent<TransformComponent>(nav.Owner).GridUid == ship).ToArray();
             Assert.That(terminals, Is.Not.Empty);
             foreach (var terminal in terminals)
                 Assert.That(entities.GetComponent<WhitelistedShuttleComponent>(terminal.Owner).Faction, Is.EqualTo(faction));
             var containers = entities.System<SharedContainerSystem>();
-            Assert.That(entities.EntityQuery<DropshipFabricatorComponent>().Any(), Is.True,
+            Assert.That(entities.QueryEntities<DropshipFabricatorComponent>().Any(), Is.True,
                 "Bush must provide a fabricator for the empty equipment slots.");
             Assert.That(entities.System<DropshipFabricatorSystem>().Printables.Any(id => id.Id == "CMUMohawkM90Ammo"), Is.True,
                 "The chin gun's ammunition must be obtainable through the normal fabricator.");

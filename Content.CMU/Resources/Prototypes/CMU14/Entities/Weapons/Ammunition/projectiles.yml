@@ -4,6 +4,7 @@
   name: LTB APFSDS cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  - type: TankCookOffProjectile # CMU14
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container
@@ -37,6 +38,7 @@
   name: LTB HEAT cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  - type: TankCookOffProjectile # CMU14
   - type: ContainerContainer
     containers:
       cluster-payload: !type:Container

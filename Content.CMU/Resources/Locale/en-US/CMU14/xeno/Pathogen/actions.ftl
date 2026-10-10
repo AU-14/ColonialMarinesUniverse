@@ -7,6 +7,7 @@ cmu-xeno-spore-sac-max = You already have too many spore sacs placed.
 cmu-xeno-spore-sac-place-self = You secrete a spore sac.
 cmu-xeno-spore-sac-place-others = {$xeno} secretes a spore sac!
 cmu-xeno-spore-sac-too-far = That tile is too far away!
+cmu-xeno-spore-sac-blocked = You can't reach that spot to plant a sac.
 cmu-xeno-spore-sac-release = Spore sac quietly releases gas. 
 
 cmu-xeno-spore-cloud-inhale-self = You inhale some weird, musty gas...

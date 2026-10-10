@@ -10,10 +10,17 @@ public sealed partial class CCVars
     /// Replace marine HUD identifiers with a question mark for other factions without a uniform recognized by the viewer.
     /// </summary>
     public static readonly CVarDef<bool> ForceOnForceUnidentifiedMarkerEnabled =
-        CVarDef.Create("cmu.fof.unidentified_marker_enabled", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("cmu.fof.unidentified_marker_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<bool> EnableEvacSfx =
         CVarDef.Create("cmu.game.enable_evac_sfx", false, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Warship fixtures tint, dim or darken with the alert level and hull floodlights go dark on red and black.
+    /// Flipping it restores every managed fixture to its prototype state, turning it on applies each ship's current level.
+    /// </summary>
+    public static readonly CVarDef<bool> EnableWarshipAlertLights =
+        CVarDef.Create("cmu.game.enable_warship_alert_lights", false, CVar.SERVERONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<float> VoteStartDelay =
         CVarDef.Create("cmu.game.vote_start_delay", 60f, CVar.SERVERONLY | CVar.ARCHIVE);

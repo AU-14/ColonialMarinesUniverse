@@ -133,6 +133,9 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (GetAction(action) is not { } ent)
             return;
 
+        if (ent.Comp.Cooldown is { } previous && previous.Start == start && previous.End == end)
+            return;
+
         ent.Comp.Cooldown = new ActionCooldown
         {
             Start = start,
@@ -143,7 +146,7 @@ public abstract partial class SharedActionsSystem : EntitySystem
 
     public void RemoveCooldown(Entity<ActionComponent?>? action)
     {
-        if (GetAction(action) is not { } ent)
+        if (GetAction(action) is not { } ent || ent.Comp.Cooldown == null)
             return;
 
         ent.Comp.Cooldown = null;
@@ -165,6 +168,9 @@ public abstract partial class SharedActionsSystem : EntitySystem
             return;
 
         if (ent.Comp.Cooldown is not { } cooldown)
+            return;
+
+        if (cooldown.End == GameTiming.CurTime)
             return;
 
         ent.Comp.Cooldown = new ActionCooldown
@@ -218,11 +224,15 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (GetAction(action) is not { } ent)
             return;
 
+        var previous = ent.Comp.UseDelay;
         if (ent.Comp.UseDelay != null && lowerDelay != null)
             ent.Comp.UseDelay -= lowerDelay;
 
         if (ent.Comp.UseDelay < TimeSpan.Zero)
             ent.Comp.UseDelay = null;
+
+        if (ent.Comp.UseDelay == previous)
+            return;
 
         UpdateAction(ent);
         DirtyField(ent, ent.Comp, nameof(ActionComponent.UseDelay));

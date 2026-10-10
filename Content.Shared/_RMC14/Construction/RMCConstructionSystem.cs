@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Ladder;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared._RMC14.Water;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Components;
@@ -40,6 +41,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private RMCWaterSystem _water = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
@@ -135,7 +137,10 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (!TryComp(user, out TransformComponent? transform))
             return false;
 
-        if (proto.Skill is { } skill && !_skills.HasSkill(user, skill, proto.RequiredSkillLevel))
+        // CMU14: selected construction recipes also accept specialist training.
+        // if (proto.Skill is { } skill && !_skills.HasSkill(user, skill, proto.RequiredSkillLevel))
+        if (proto.Skill is { } skill && !_skills.HasSkill(user, skill, proto.RequiredSkillLevel) &&
+            !(proto.AlternativeSkill is { } alternative && _skills.HasSkill(user, alternative, proto.AlternativeSkillLevel)))
         {
             var message = Loc.GetString("rmc-construction-untrained-build");
             _popup.PopupEntity(message, ent, user, PopupType.SmallCaution);
@@ -342,7 +347,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         {
             var entity = SpawnAtPosition(entityPrototype, spawnPosition);
             spawnedEnts.Add(entity);
-            _stack.SetCount(entity, count);
+            _stack.SetCount((entity, null), count);
         }
 
         return spawnedEnts;
@@ -438,7 +443,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
 
         if (!CanBuildAt(ent.Owner.ToCoordinates(), Name(ent), out var popup, true))
         {
-            _popup.PopupClient(popup, ent, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, ent, args.User, PopupType.SmallCaution);
             args.Cancel();
         }
     }
@@ -489,6 +494,16 @@ public sealed partial class RMCConstructionSystem : EntitySystem
 
         if (proto.TryComp(out BarricadeComponent? barricade, _componentFactory))
         {
+            var anchored = _rmcMap.GetAnchoredEntitiesEnumerator(coordinates);
+            while (anchored.MoveNext(out var uid))
+            {
+                if (!_water.IsActiveWater(uid, user ?? uid))
+                    continue;
+
+                popup = Loc.GetString("rmc-construction-not-proper-surface", ("construction", proto.Name));
+                return false;
+            }
+
             return !_weaponMount.HasWeaponMountNearbyPopup((gridId, grid), coordinates, proto, user: user);
         }
 

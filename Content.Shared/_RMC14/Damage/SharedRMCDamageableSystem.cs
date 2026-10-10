@@ -41,6 +41,8 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.CMU14.GasMask;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared._RMC14.Smoke;
 using Content.Shared.Storage;
 using Robust.Shared.Containers;
 
@@ -207,18 +209,29 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
 
     private void OnMultiplierFlagsDamageModify(Entity<DamageMultiplierFlagsComponent> ent, ref DamageModifyEvent args)
     {
-        if (!_damageableQuery.HasComp(ent) ||
-            !TryComp(args.Tool, out DamageMultipliersComponent? multComponent))
-        {
+        if (!_damageableQuery.HasComp(ent))
             return;
+
+        if (TryComp(args.Tool, out DamageMultipliersComponent? multComponent))
+        {
+            foreach (var flag in multComponent.Multipliers.Keys)
+            {
+                if ((ent.Comp.Flags & flag) == DamageMultiplierFlag.None)
+                    continue;
+
+                args.Damage *= multComponent.Multipliers[flag];
+            }
         }
 
-        foreach (var flag in multComponent.Multipliers.Keys)
+        if (TryComp(args.Tool, out DamageBoostsComponent? boostComponent))
         {
-            if ((ent.Comp.Flags & flag) == DamageMultiplierFlag.None)
-                continue;
+            foreach (var boost in boostComponent.Boosts)
+            {
+                if ((ent.Comp.Flags & boost.Flags) == DamageMultiplierFlag.None)
+                    continue;
 
-            args.Damage *= multComponent.Multipliers[flag];
+                args.Damage += boost.Damage;
+            }
         }
     }
 
@@ -252,6 +265,17 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             return;
 
         var modifyTotal = args.Damage.GetTotal();
+        // Structural blast damage cannot consume a human's remaining damage budget.
+        // Injurable discards unsupported types when committing the damage.
+        if (TryComp<InjurableComponent>(ent, out var injurable))
+        {
+            modifyTotal = FixedPoint2.Zero;
+            foreach (var (type, amount) in args.Damage.DamageDict)
+            {
+                if (_damageable.CanBeDamagedBy((ent.Owner, injurable), type))
+                    modifyTotal += amount;
+            }
+        }
         var totalDamage = _damageable.GetTotalDamage((ent.Owner, damageable));
         if (modifyTotal <= FixedPoint2.Zero || totalDamage + modifyTotal <= ent.Comp.Max)
             return;
@@ -521,6 +545,17 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         _damageable.TryChangeDamage(target, damageBase, ignoreResistances);
     }
 
+    // CMU14 method
+    private static DamageSpecifier WithoutInhaledDamage(DamageSpecifier damage)
+    {
+        if (!damage.DamageDict.ContainsKey(LethalDamageType))
+            return damage;
+
+        var filtered = new DamageSpecifier(damage);
+        filtered.DamageDict.Remove(LethalDamageType);
+        return filtered;
+    }
+
     public virtual bool TryGetDestroyedAt(EntityUid destructible, [NotNullWhen(true)] out FixedPoint2? destroyed)
     {
         // TODO RMC14
@@ -710,6 +745,10 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
 
                 userDamage.NextDamageAt = time + userDamage.DamageEvery;
 
+                // CMU14: internals keep out the same gases a filter does
+                if (HasComp<GasMaskFilterDamageComponent>(contact) && _mask.IsBreathingInternals(user))
+                    continue;
+
                 //this is horrible
                 if (TryComp<ContainerManagerComponent>(user, out var uinv))
                 {
@@ -772,20 +811,33 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                         continue;
                 }
 
+                if (HasComp<YautjaComponent>(user) &&
+                    HasComp<EvenSmokeComponent>(contact) &&
+                    _random.Prob(0.75f))
+                {
+                    continue;
+                }
+
+                // CMU14 Begin: internals keep smoke out of the lungs, so only the burn on the skin gets through
+                var sealedLungs = HasComp<EvenSmokeComponent>(contact) && _mask.IsBreathingInternals(user);
+
                 if (damage.Damage != null)
-                    DoDamage((contact, damage), user, damage.Damage);
+                    DoDamage((contact, damage), user, sealedLungs ? WithoutInhaledDamage(damage.Damage) : damage.Damage);
 
                 if (damage.ArmorPiercingDamage != null)
-                    DoDamage((contact, damage), user, damage.ArmorPiercingDamage, true, acidic: damage.Acidic);
+                    DoDamage((contact, damage), user, sealedLungs ? WithoutInhaledDamage(damage.ArmorPiercingDamage) : damage.ArmorPiercingDamage, true, acidic: damage.Acidic);
 
-                if (damage.Emotes is { Count: > 0 } emotes)
+                if (!sealedLungs && damage.Emotes is { Count: > 0 } emotes)
                 {
                     var emote = _random.Pick(emotes);
                     DoEmote(user, emote);
                 }
 
-                if (damage.Popup is { } popup && _random.Prob(0.5f))
+                if (sealedLungs && _random.Prob(0.5f))
+                    _popup.PopupEntity(Loc.GetString("cmu-smoke-internals-acid-burns"), user, user, PopupType.SmallCaution);
+                else if (!sealedLungs && damage.Popup is { } popup && _random.Prob(0.5f))
                     _popup.PopupEntity(popup, user, user, PopupType.SmallCaution);
+                // CMU14 End
 
                 _audio.PlayPvs(damage.Sound, user);
 

@@ -67,7 +67,10 @@ public sealed partial class CMUClientStateHealthSystem : EntitySystem
             AppliedTick = _appliedTick,
             AppliedAgeSeconds = _appliedTick == GameTick.Zero ? -1 : (_timing.RealTime - _appliedAt).TotalSeconds,
             BufferedStates = _states.StateCount,
+            ApplicableStates = _states.GetApplicableStateCount(),
             TargetBuffer = _states.TargetBufferSize,
+            EntityCount = EntityManager.EntityCount,
+            CachedServerEntities = _states.GetFullRep().Count,
             // No completed frame samples can produce infinity. Keep application evidence usable.
             AverageFps = double.IsFinite(fps) && fps is >= 0 and <= 10000 ? fps : -1,
         });

@@ -317,11 +317,19 @@
 - type: radioChannel
   id: radioVAI
   name: chat-radio-vai
-  keycode: "z"
+  keycode: "+"
   frequency: 155.9
   color: "#e3580e"
   longRange: true
   tower: true
+
+- type: radioChannel
+  id: radioRaiders
+  name: chat-radio-raiders
+  keycode: "%"
+  frequency: 151.6
+  color: "#b5372b"
+  longRange: true
 
 - type: radioChannel
   id: PART

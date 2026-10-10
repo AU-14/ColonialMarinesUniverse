@@ -1,3 +1,4 @@
+using Content.Shared.CMU14.TacticalMap; // CMU14
 using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.CCVar;
@@ -25,12 +26,19 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SensorTowerSystem _sensorTowers = default!;
 
+    private readonly Stack<Dictionary<int, TacticalMapBlip>> _computerBlipBuffers = new();
+    private static readonly SpriteSpecifier.Rsi CommsIcon = new(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "comms_tower");
+    private static readonly SpriteSpecifier.Rsi SensorIcon = new(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "sensor_tower");
+    private static readonly SpriteSpecifier.Rsi TunnelIcon = new(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "tunnel");
+    private static readonly SpriteSpecifier.Rsi EnemyIcon = new(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "enemy_blip");
+
     public int LineLimit { get; private set; }
 
     // CMU14: Ships loaded for either round faction configure their consoles through their owner.
+    // Stores the faction string raw; every reader normalizes, so writes must not.
     public void SetComputerFaction(Entity<TacticalMapComputerComponent> computer, string? faction)
     {
-        computer.Comp.Faction = NormalizeMapFaction(faction);
+        computer.Comp.Faction = faction;
         Dirty(computer);
     }
 
@@ -194,160 +202,217 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
         // If the computer is tied to a faction, filter what we send accordingly.
         var faction = NormalizeMapFaction(computer.Comp.Faction);
 
-        computer.Comp.Blips = new Dictionary<int, TacticalMapBlip>();
-
-        void AddIf(Func<bool> cond, Dictionary<int, TacticalMapBlip> src)
-        {
-            if (!cond())
-                return;
-            foreach (var kv in src)
-            {
-                computer.Comp.Blips.TryAdd(kv.Key, kv.Value);
-            }
-        }
-
-        // Helpers to check faction selection
+        // CMU14: use the same faction selection for blips, lines, and labels.
         bool WantsMarines() => faction == null || faction == MarinesFaction;
         bool WantsXenos() => faction == null || faction == XenosFaction;
         bool WantsOpfor() => faction == null || faction == OpforFaction;
         bool WantsGovfor() => faction == null || faction == GovforFaction;
         bool WantsClf() => faction == null || faction == ClfFaction;
+        bool WantsYautja() => faction == null || faction is "YAUTJA" or "PREDATOR";
         bool WantsWeYu() => faction == null || faction == WeYuFaction;
-        var sensorsOnline = faction != null && _sensorTowers.HasOnlineSensorForFaction(faction);
 
-        // Add marine blips if desired
-        AddIf(() => WantsMarines() || sensorsOnline, map.MarineBlips);
-
-        // Add xeno blips/structures if desired
-        if (WantsXenos())
+        var blips = _computerBlipBuffers.TryPop(out var buffer) ? buffer : new Dictionary<int, TacticalMapBlip>();
+        try
         {
-            AddIf(() => true, map.XenoBlips);
-            AddIf(() => true, map.XenoStructureBlips);
-        }
 
-        // Add other factions only if desired
-        AddIf(() => WantsOpfor() || sensorsOnline, map.OpforBlips);
-        AddIf(() => WantsGovfor() || sensorsOnline, map.GovforBlips);
-        AddIf(() => WantsClf() || sensorsOnline, map.ClfBlips);
-        AddIf(WantsWeYu, map.WeYuBlips);
-
-            // Ensure infrastructure (comms, sensors, tunnels) is always visible on computers
-        // Track their entity ids so we can exclude them from enemy-sprite replacement.
-        var infraIds = new HashSet<int>();
-        var commsAll = EntityQueryEnumerator<CommunicationsTowerComponent>();
-        while (commsAll.MoveNext(out var commId, out var comm))
-        {
-            var id = commId.Id;
-            infraIds.Add(id);
-            var blip = FindBlipInMapStatic(id, map);
-            if (blip != null)
+            void AddIf(bool include, Dictionary<int, TacticalMapBlip> src)
             {
-                // If the blip lacks an image, attempt to provide a comms-specific image so it doesn't render as a grey placeholder.
-                var image = blip.Value.Image ?? new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "comms_tower");
-                var full = new TacticalMapBlip(blip.Value.Indices, image, blip.Value.Color, blip.Value.Status, blip.Value.Background, blip.Value.HiveLeader);
-                computer.Comp.Blips.TryAdd(id, full);
-            }
-        }
-
-        var sensorsAll = EntityQueryEnumerator<SensorTowerComponent>();
-        while (sensorsAll.MoveNext(out var sensorId, out var sensor))
-        {
-            var id = sensorId.Id;
-            infraIds.Add(id);
-            var blip = FindBlipInMapStatic(id, map);
-            if (blip != null)
-            {
-                var image = blip.Value.Image ?? new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "sensor_tower");
-                var full = new TacticalMapBlip(blip.Value.Indices, image, blip.Value.Color, blip.Value.Status, blip.Value.Background, blip.Value.HiveLeader);
-                computer.Comp.Blips.TryAdd(id, full);
-            }
-        }
-
-        var tunnelsAll = EntityQueryEnumerator<XenoTunnelComponent>();
-        while (tunnelsAll.MoveNext(out var tunId, out var tun))
-        {
-            var id = tunId.Id;
-            infraIds.Add(id);
-            var blip = FindBlipInMapStatic(id, map);
-            if (blip != null)
-            {
-
-                var factionHasSensors = _sensorTowers.HasOnlineSensorForFaction(faction);
-
-                if (WantsXenos() || factionHasSensors)
+                if (!include)
+                    return;
+                foreach (var kv in src)
                 {
-                    var image = blip.Value.Image ?? new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "tunnel");
+                    blips.TryAdd(kv.Key, kv.Value);
+                }
+            }
+
+            var sensorsOnline = faction != null && _sensorTowers.HasOnlineSensorForFaction(faction);
+
+            // Add marine blips if desired
+            AddIf(WantsMarines() || sensorsOnline, map.MarineBlips);
+
+            // Add xeno blips/structures if desired
+            if (WantsXenos())
+            {
+                AddIf(true, map.XenoBlips);
+                AddIf(true, map.XenoStructureBlips);
+            }
+
+            // Add other factions only if desired
+            AddIf(WantsOpfor() || sensorsOnline, map.OpforBlips);
+            AddIf(WantsGovfor() || sensorsOnline, map.GovforBlips);
+            AddIf(WantsClf() || sensorsOnline, map.ClfBlips);
+            AddIf(WantsWeYu(), map.WeYuBlips);
+            AddIf(WantsYautja(), map.YautjaBlips);
+
+                // Ensure infrastructure (comms, sensors, tunnels) is always visible on computers
+            // Track their entity ids so we can exclude them from enemy-sprite replacement.
+            var infraIds = new HashSet<int>();
+            var commsAll = EntityQueryEnumerator<CommunicationsTowerComponent>();
+            while (commsAll.MoveNext(out var commId, out var comm))
+            {
+                var id = commId.Id;
+                infraIds.Add(id);
+                var blip = FindBlipInMapStatic(id, map);
+                if (blip != null)
+                {
+                    // If the blip lacks an image, attempt to provide a comms-specific image so it doesn't render as a grey placeholder.
+                    var image = blip.Value.Image ?? CommsIcon;
                     var full = new TacticalMapBlip(blip.Value.Indices, image, blip.Value.Color, blip.Value.Status, blip.Value.Background, blip.Value.HiveLeader);
-                    computer.Comp.Blips.TryAdd(id, full);
+                    blips.TryAdd(id, full);
                 }
             }
-        }
 
-        void ApplyEnemySpritesToComputer(string computerFaction)
-        {
-            var enemyRsi = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/map_blips.rsi"), "enemy_blip");
-            var keys = computer.Comp.Blips.Keys.ToList();
-            foreach (var id in keys)
+            var sensorsAll = EntityQueryEnumerator<SensorTowerComponent>();
+            while (sensorsAll.MoveNext(out var sensorId, out var sensor))
             {
-                // Never override infrastructure icons with the enemy sprite.
-                if (infraIds.Contains(id))
-                    continue;
-
-                bool isFriendly = false;
-                if (string.IsNullOrEmpty(computerFaction))
+                var id = sensorId.Id;
+                infraIds.Add(id);
+                var blip = FindBlipInMapStatic(id, map);
+                if (blip != null)
                 {
-                    isFriendly = true; // showing all, no need to mark
-                }
-                else
-                {
-                    var up = computerFaction.ToUpperInvariant();
-                    if (up == "MARINES")
-                        isFriendly = map.MarineBlips.ContainsKey(id);
-                    else if (up == "OPFOR")
-                        isFriendly = map.OpforBlips.ContainsKey(id);
-                    else if (up == "GOVFOR")
-                        isFriendly = map.GovforBlips.ContainsKey(id);
-                    else if (up == "CLF")
-                        isFriendly = map.ClfBlips.ContainsKey(id);
-                    else if (up == "WEYU")
-                        isFriendly = map.WeYuBlips.ContainsKey(id);
-                }
-
-                if (!isFriendly)
-                {
-                    var orig = computer.Comp.Blips[id];
-                    var enemy = new TacticalMapBlip(orig.Indices, enemyRsi, orig.Color, orig.Status, orig.Background, false);
-                    computer.Comp.Blips[id] = enemy;
+                    var image = blip.Value.Image ?? SensorIcon;
+                    var full = new TacticalMapBlip(blip.Value.Indices, image, blip.Value.Color, blip.Value.Status, blip.Value.Background, blip.Value.HiveLeader);
+                    blips.TryAdd(id, full);
                 }
             }
+
+            var tunnelsAll = EntityQueryEnumerator<XenoTunnelComponent>();
+            while (tunnelsAll.MoveNext(out var tunId, out var tun))
+            {
+                var id = tunId.Id;
+                infraIds.Add(id);
+                var blip = FindBlipInMapStatic(id, map);
+                if (blip != null)
+                {
+
+                    var factionHasSensors = sensorsOnline;
+
+                    if (WantsXenos() || factionHasSensors)
+                    {
+                        var image = blip.Value.Image ?? TunnelIcon;
+                        var full = new TacticalMapBlip(blip.Value.Indices, image, blip.Value.Color, blip.Value.Status, blip.Value.Background, blip.Value.HiveLeader);
+                        blips.TryAdd(id, full);
+                    }
+                }
+            }
+
+            void ApplyEnemySpritesToComputer(string computerFaction)
+            {
+                var up = computerFaction.ToUpperInvariant();
+                // Replacing an existing dictionary value does not invalidate its enumerator.
+                foreach (var (id, orig) in blips)
+                {
+                    // Never override infrastructure icons with the enemy sprite.
+                    if (infraIds.Contains(id))
+                        continue;
+
+                    bool isFriendly = false;
+                    if (string.IsNullOrEmpty(computerFaction))
+                    {
+                        isFriendly = true; // showing all, no need to mark
+                    }
+                    else
+                    {
+                        if (up == "MARINES")
+                            isFriendly = map.MarineBlips.ContainsKey(id);
+                        else if (up == "OPFOR")
+                            isFriendly = map.OpforBlips.ContainsKey(id);
+                        else if (up == "GOVFOR")
+                            isFriendly = map.GovforBlips.ContainsKey(id);
+                        else if (up == "CLF")
+                            isFriendly = map.ClfBlips.ContainsKey(id);
+                        else if (up == "WEYU")
+                            isFriendly = map.WeYuBlips.ContainsKey(id);
+                        else if (up is "YAUTJA" or "PREDATOR")
+                            isFriendly = map.YautjaBlips.ContainsKey(id);
+                    }
+
+                    if (!isFriendly)
+                    {
+                        var enemy = new TacticalMapBlip(orig.Indices, EnemyIcon, orig.Color, orig.Status, orig.Background, false);
+                        blips[id] = enemy;
+                    }
+                }
+            }
+
+            // Only apply enemy sprites on computers if that faction actually controls active sensors.
+            // Without sensors we should not mark non-friendly humans as enemy on the canvas.
+            if (faction != null && sensorsOnline)
+                ApplyEnemySpritesToComputer(faction);
+
+            if (!DictionaryEqual(computer.Comp.Blips, blips))
+            {
+                // Only publish a new feed revision when its contents change. Never recycle a
+                // published dictionary: UI snapshots and other systems may still reference it.
+                computer.Comp.Blips = new(blips);
+                computer.Comp.BlipRevision++;
+                Dirty(computer);
+            }
         }
-
-        // Only apply enemy sprites on computers if that faction actually controls active sensors.
-        // Without sensors we should not mark non-friendly humans as enemy on the canvas.
-        if (faction != null && _sensorTowers.HasOnlineSensorForFaction(faction))
-            ApplyEnemySpritesToComputer(faction);
-
-        Dirty(computer);
+        finally
+        {
+            blips.Clear();
+            _computerBlipBuffers.Push(blips);
+        }
 
         var lines = EnsureComp<TacticalMapLinesComponent>(computer);
-        // Clear and set only the lines we want
-        lines.MarineLines = WantsMarines() ? map.MarineLines : new();
-        lines.XenoLines = WantsXenos() ? map.XenoLines : new();
-        lines.OpforLines = WantsOpfor() ? map.OpforLines : new();
-        lines.GovforLines = WantsGovfor() ? map.GovforLines : new();
-        lines.ClfLines = WantsClf() ? map.ClfLines : new();
-        lines.WeYuLines = WantsWeYu() ? map.WeYuLines : new();
-        lines.SharedLines = map.SharedLines.ToList();
-        Dirty(computer, lines);
+        var linesChanged = false;
+        linesChanged |= PublishLines(ref lines.MarineLines, WantsMarines() ? map.MarineLines : null);
+        linesChanged |= PublishLines(ref lines.XenoLines, WantsXenos() ? map.XenoLines : null);
+        linesChanged |= PublishLines(ref lines.OpforLines, WantsOpfor() ? map.OpforLines : null);
+        linesChanged |= PublishLines(ref lines.GovforLines, WantsGovfor() ? map.GovforLines : null);
+        linesChanged |= PublishLines(ref lines.ClfLines, WantsClf() ? map.ClfLines : null);
+        linesChanged |= PublishLines(ref lines.WeYuLines, WantsWeYu() ? map.WeYuLines : null);
+        linesChanged |= PublishLines(ref lines.SharedLines, map.SharedLines);
+        if (linesChanged) Dirty(computer, lines);
 
         var labels = EnsureComp<TacticalMapLabelsComponent>(computer);
-        labels.MarineLabels = WantsMarines() ? map.MarineLabels : new();
-        labels.XenoLabels = WantsXenos() ? map.XenoLabels : new();
-        labels.OpforLabels = WantsOpfor() ? map.OpforLabels : new();
-        labels.GovforLabels = WantsGovfor() ? map.GovforLabels : new();
-        labels.ClfLabels = WantsClf() ? map.ClfLabels : new();
-        labels.WeYuLabels = WantsWeYu() ? map.WeYuLabels : new();
-        Dirty(computer, labels);
+        var labelsChanged = false;
+        labelsChanged |= PublishLabels(ref labels.MarineLabels, WantsMarines() ? map.MarineLabels : null);
+        labelsChanged |= PublishLabels(ref labels.XenoLabels, WantsXenos() ? map.XenoLabels : null);
+        labelsChanged |= PublishLabels(ref labels.OpforLabels, WantsOpfor() ? map.OpforLabels : null);
+        labelsChanged |= PublishLabels(ref labels.GovforLabels, WantsGovfor() ? map.GovforLabels : null);
+        labelsChanged |= PublishLabels(ref labels.ClfLabels, WantsClf() ? map.ClfLabels : null);
+        labelsChanged |= PublishLabels(ref labels.WeYuLabels, WantsWeYu() ? map.WeYuLabels : null);
+        if (labelsChanged) Dirty(computer, labels);
+    }
+
+    private static bool DictionaryEqual<TKey, TValue>(Dictionary<TKey, TValue> left, Dictionary<TKey, TValue> right) where TKey : notnull
+    {
+        if (left.Count != right.Count) return false;
+        foreach (var (key, value) in left)
+            if (!right.TryGetValue(key, out var other) || !EqualityComparer<TValue>.Default.Equals(value, other)) return false;
+        return true;
+    }
+
+    private static bool PublishLines(ref List<TacticalMapLine> target, List<TacticalMapLine>? source)
+    {
+        if (source == null)
+        {
+            if (target.Count == 0) return false;
+            target = new();
+        }
+        else
+        {
+            if (!ReferenceEquals(target, source) && target.SequenceEqual(source)) return false;
+            target = new(source);
+        }
+        return true;
+    }
+
+    private static bool PublishLabels(ref Dictionary<Vector2i, string> target, Dictionary<Vector2i, string>? source)
+    {
+        if (source == null)
+        {
+            if (target.Count == 0) return false;
+            target = new();
+        }
+        else
+        {
+            if (!ReferenceEquals(target, source) && DictionaryEqual(target, source)) return false;
+            target = new(source);
+        }
+        return true;
     }
 
     public void OpenComputerMap(Entity<TacticalMapComputerComponent?> computer, EntityUid user)
@@ -361,6 +426,68 @@ public abstract partial class SharedTacticalMapSystem : EntitySystem // CMU14 Cl
 
     public virtual void UpdateUserData(Entity<TacticalMapUserComponent> user, TacticalMapComponent map)
     {
+    }
+
+    public void EnsureTracked(EntityUid uid, bool trackDead)
+    {
+        var tracked = EnsureComp<TacticalMapTrackedComponent>(uid);
+        tracked.TrackDead = trackDead;
+        Dirty(uid, tracked);
+    }
+
+    public void SetIcon(EntityUid uid, SpriteSpecifier.Rsi? icon, SpriteSpecifier.Rsi? background = null)
+    {
+        var iconComp = EnsureComp<TacticalMapIconComponent>(uid);
+        iconComp.Icon = icon;
+        iconComp.Background = background;
+        Dirty(uid, iconComp);
+    }
+
+    public void RemoveIcon(EntityUid uid)
+    {
+        RemCompDeferred<TacticalMapIconComponent>(uid);
+    }
+
+    public void SetYautjaTracked(EntityUid uid, bool enabled)
+    {
+        if (enabled)
+            EnsureComp<YautjaMapTrackedComponent>(uid);
+        else
+            RemComp<YautjaMapTrackedComponent>(uid);
+    }
+
+    public void SetYautjaUser(EntityUid uid, bool enabled)
+    {
+        if (!TryComp<TacticalMapUserComponent>(uid, out var user))
+            return;
+
+        user.Yautja = enabled;
+        Dirty(uid, user);
+    }
+
+    public virtual void RefreshTracked(EntityUid uid)
+    {
+    }
+
+    public bool TryGetBlip(TacticalMapComponent map, string bucket, int entityId, out TacticalMapBlip blip)
+    {
+        var blips = bucket.ToUpperInvariant() switch
+        {
+            "MARINES" or "MARINE" => map.MarineBlips,
+            "XENONIDS" or "XENONID" or "XENOS" or "XENO" => map.XenoBlips,
+            "XENO_STRUCTURE" or "XENOSTRUCTURE" or "XENO_STRUCTURES" => map.XenoStructureBlips,
+            "OPFOR" => map.OpforBlips,
+            "GOVFOR" => map.GovforBlips,
+            "CLF" => map.ClfBlips,
+            "YAUTJA" or "PREDATOR" => map.YautjaBlips,
+            _ => null,
+        };
+
+        if (blips != null)
+            return blips.TryGetValue(entityId, out blip);
+
+        blip = default;
+        return false;
     }
 
     private void ToggleMapUI(Entity<TacticalMapUserComponent> user)

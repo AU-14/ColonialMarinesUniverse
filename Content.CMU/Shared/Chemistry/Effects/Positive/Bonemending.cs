@@ -11,6 +11,10 @@ namespace Content.Shared.CMU14.Chemistry.Effects.Positive;
 
 public sealed partial class Bonemending : RMCChemicalEffect
 {
+    // thwei knits bones without a splint, preds don't carry splints and the cmss13 property never asked for one
+    [DataField]
+    public bool RequiresSet = true;
+
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         => $"Restores [color=green]{PotencyPerSecond * 4}[/color] bone integrity to splinted or cast non-shattered fractures.\n" +
            "Overdoses cause malunion in an existing fracture.\n" +
@@ -18,7 +22,7 @@ public sealed partial class Bonemending : RMCChemicalEffect
 
     protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
         => system.Bone
-            .ChemicallyMendFractures(args.TargetEntity, potency * 4f);
+            .ChemicallyMendFractures(args.TargetEntity, potency * 4f, RequiresSet);
 
     protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
         => system.Bone.ApplyChemicalMalunion(args.TargetEntity);

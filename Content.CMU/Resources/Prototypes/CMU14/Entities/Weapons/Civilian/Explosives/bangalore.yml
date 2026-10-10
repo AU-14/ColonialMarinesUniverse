@@ -8,7 +8,7 @@
     sprite: CMU14/Weapons/Throwable/bangalore.rsi
     state: icon
   - type: Item
-    size: Large
+    size: Normal
     sprite: CMU14/Weapons/Throwable/bangalore.rsi
   - type: Damageable
   - type: Injurable

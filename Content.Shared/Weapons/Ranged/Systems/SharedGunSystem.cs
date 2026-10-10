@@ -282,8 +282,11 @@ public abstract partial class SharedGunSystem : EntitySystem
             return;
 
         ent.Comp.ShotCounter = 0;
-        ent.Comp.ShootCoordinates = null;
-        ent.Comp.Target = null;
+        if (!ent.Comp.BurstActivated)
+        {
+            ent.Comp.ShootCoordinates = null;
+            ent.Comp.Target = null;
+        }
         DirtyField(ent.AsNullable(), nameof(GunComponent.ShotCounter));
     }
 
@@ -374,6 +377,20 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (gun.Comp.NextFire > curTime)
             return null;
 
+        // The trigger counter and the current burst's progress have different lifetimes.
+        // Releasing the trigger or an AI request may reset ShotCounter mid-burst.
+        var allowedShots = gun.Comp.BurstActivated
+            ? gun.Comp.ShotsPerBurstModified - gun.Comp.BurstShotsCount
+            : gun.Comp.SelectedMode switch
+            {
+                SelectiveFire.SemiAuto => 1 - gun.Comp.ShotCounter,
+                SelectiveFire.Burst => gun.Comp.ShotCounter == 0 ? gun.Comp.ShotsPerBurstModified : 0,
+                SelectiveFire.FullAuto => int.MaxValue,
+                _ => throw new ArgumentOutOfRangeException($"No implemented shooting behavior for {gun.Comp.SelectedMode}!"),
+            };
+        if (allowedShots <= 0)
+            return null;
+
         var fireRate = TimeSpan.FromSeconds(1f / gun.Comp.FireRateModified);
 
         if (gun.Comp.SelectedMode == SelectiveFire.Burst || gun.Comp.BurstActivated)
@@ -403,26 +420,7 @@ public abstract partial class SharedGunSystem : EntitySystem
 
         // Get how many shots we're actually allowed to make, due to clip size or otherwise.
         // Don't do this in the loop so we still reset NextFire.
-        if (!gun.Comp.BurstActivated)
-        {
-            switch (gun.Comp.SelectedMode)
-            {
-                case SelectiveFire.SemiAuto:
-                    shots = Math.Min(shots, 1 - gun.Comp.ShotCounter);
-                    break;
-                case SelectiveFire.Burst:
-                    shots = Math.Min(shots, gun.Comp.ShotsPerBurstModified - gun.Comp.ShotCounter);
-                    break;
-                case SelectiveFire.FullAuto:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException($"No implemented shooting behavior for {gun.Comp.SelectedMode}!");
-            }
-        }
-        else
-        {
-            shots = Math.Min(shots, gun.Comp.ShotsPerBurstModified - gun.Comp.ShotCounter);
-        }
+        shots = Math.Min(shots, allowedShots);
 
         var originEntity = HasComp<GunUseGunOriginComponent>(gun) ? gun.Owner : user;
         var fromCoordinates = Transform(originEntity).Coordinates;
@@ -873,6 +871,15 @@ public abstract partial class SharedGunSystem : EntitySystem
             comp.ProjectileSpeedModified = ev.ProjectileSpeed;
             DirtyField(gun, nameof(GunComponent.ProjectileSpeedModified));
         }
+    }
+
+    public void SetFireRate(Entity<GunComponent> gun, float fireRate)
+    {
+        if (MathHelper.CloseTo(gun.Comp.FireRate, fireRate))
+            return;
+
+        gun.Comp.FireRate = fireRate;
+        Dirty(gun.Owner, gun.Comp);
     }
 
     protected abstract void CreateEffect(EntityUid gunUid, MuzzleFlashEvent message, EntityUid? user = null, EntityUid? player = null, Vector2 offset = default, Vector2 originOffset = default);

@@ -1,0 +1,77 @@
+- type: entity
+  parent: [ RMCBaseWeaponShotgun, RMCBaseAttachableHolder ]
+  name: MR35 pump shotgun
+  id: RuMCWeaponShotgunMR35
+  #description: 3dasdaasd
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Weapons/Guns/Shotgun/MR35/inhands.rsi
+    layers:
+    - state: icon
+      sprite: _RuMC14/Objects/Weapons/Guns/Shotgun/MR35/icon.rsi
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Clothing
+    sprite: _RuMC14/Objects/Weapons/Guns/Shotgun/MR35/inhands.rsi
+  - type: Gun
+    shotsPerBurst: 1
+  - type: ShootUseDelay
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 2
+    recoilUnwielded: 4
+    scatterWielded: 15
+    scatterUnwielded: 50
+    baseFireRate: 1.7
+    burstScatterMult: 4
+  - type: BallisticAmmoProvider
+    capacity: 8 # todo change to 9 when bullet chambering is added
+    whitelist:
+      tags:
+      - RMCShellShotgunSlugs
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.15
+    accuracyMultiplierUnwielded: 0.5
+  - type: PumpAction
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentShotgunChoke
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      #rmc-aslot-stock:
+      #  whitelist:
+      #    tags:
+      #    - RMCAttachmentM42A2CollapsibleStock
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentAngledGrip
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentVerticalGrip
+          - RMCAttachmentExtinguisher
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.89, 0
+      rmc-aslot-rail: -0.025, 0.065
+      rmc-aslot-stock: -0.40625, 0.03125
+      rmc-aslot-underbarrel: 0.20, -0.31
+  - type: Tag
+    tags:
+    - RuMCWeaponShotgunMR35
+    - RMCWeaponShotgun
+
+- type: Tag
+  id: RuMCWeaponShotgunMR35

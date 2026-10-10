@@ -1,0 +1,10 @@
+- type: entity
+  id: AU14CrateConcreteBags
+  parent: RMCCrateConstruction
+  name: concrete bags crate
+  description: A crate of concrete bags for pouring concrete barricades.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14ConcreteBag
+      amount: 10

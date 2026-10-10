@@ -1,0 +1,51 @@
+- type: entity
+  parent: CMHeadCap
+  id: RuMCHeadKomisarCap
+  name: komissar cap
+  description: Komissar. Chekist. Policeman. Your worst nightmare. Choose your own name.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/cap/kommisar.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/cap/kommisar.rsi
+  - type: Appearance
+
+- type: entity
+  parent: RMCHeadCapFlippable
+  id: RuMCUPPNavalInfantryCapUshanka
+  name: UPP combat ushanka
+  description: The ushanka, made of thick fabric and durable synthetic fur, can withstand hits from small caliber bullets and shrapnel.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/cap/ushanka.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/cap/ushanka.rsi
+  - type: Foldable
+    unfoldVerbText: fold-strap-verb
+    foldVerbText: fold-unstrap-verb
+  - type: ItemCamouflage
+    camouflageVariations:
+      classic: _RuMC14/Clothing/UPP/cap/ushanka.rsi
+  - type: CMUItemStain
+    wornStates:
+      head: booniehat_blood
+
+- type: entity
+  parent: RuMCUPPNavalInfantryCapUshanka
+  id: RuMCUPPNavalInfantryCapUshankaCommander
+  name: UPP combat ushanka
+  description: The officer’s Ushanka, made of thick fabric and durable, rare fur, can withstand hits from bullets and shrapnel.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Clothing/UPP/cap/ushanka_com.rsi
+  - type: Clothing
+    sprite: _RuMC14/Clothing/UPP/cap/ushanka_com.rsi
+  - type: Foldable
+    unfoldVerbText: fold-strap-verb
+    foldVerbText: fold-unstrap-verb
+  - type: ItemCamouflage
+    camouflageVariations:
+      classic: _RuMC14/Clothing/UPP/cap/ushanka_com.rsi
+  - type: CMUItemStain
+    wornStates:
+      head: booniehat_blood

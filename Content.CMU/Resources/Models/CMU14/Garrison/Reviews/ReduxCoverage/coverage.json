@@ -1,0 +1,1668 @@
+{
+  "physicalTypes": 1754,
+  "exact": 1746,
+  "conditional": 4,
+  "native": 4,
+  "missing": [],
+  "newModels": 155,
+  "newBindings": 225,
+  "maxDefaultParts": 71,
+  "newSurfaces": 210,
+  "verifiedLibraryExports": 2631,
+  "unresolvedMapReferences": {
+    "CMUGasPipeStraightAlt2": "Missing prototype: CMUGasPipeStraightAlt2",
+    "CMUGasThermoMachineFreezer": "Missing prototype: CMUGasThermoMachineFreezer",
+    "CMVentPump": "Missing prototype: CMVentPump",
+    "RMCGasPipeBend": "Missing prototype: RMCGasPipeBend -> GasPipeBend",
+    "RMCGasPipeStraight": "Missing prototype: RMCGasPipeStraight -> GasPipeStraight",
+    "RMCGasPipeTJunction": "Missing prototype: RMCGasPipeTJunction -> GasPipeTJunction"
+  },
+  "models": [
+    {
+      "id": "CMU3DReduxAU14AircrewWeaponsVendor",
+      "sourcePrototypes": [
+        "AU14AircrewWeaponsVendor",
+        "AU14CMBCIUWeaponsVendor",
+        "AU14HAZOPSWeaponsVendor",
+        "AU14LACNWeaponsVendor",
+        "AU14RMCAircrewWeaponsVendor",
+        "AU14RMCWeaponsVendor",
+        "AU14UPPWeaponsVendor",
+        "AU14USCMWeaponsVendor",
+        "AU14VAIPOWeaponsVendor",
+        "AU14WYWeaponsVendor",
+        "AU14prodigyWeaponsVendor",
+        "RuMCBEARWeaponsVendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUCommandVendor",
+      "sourcePrototypes": [
+        "AU14CMBCIUCommandVendor",
+        "AU14HAZOPScommandequipmentvendor",
+        "AU14RMCcommandequipmentvendor",
+        "AU14UPPcommandvendor",
+        "AU14USCMcommandequipmentvendor",
+        "AU14VAIPOcommandequipmentvendor",
+        "AU14WYdirectorequipmentvendor",
+        "AU14prodigycommandequipmentvendor",
+        "RuMCBEARcommandvendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUGunnerVendor",
+      "sourcePrototypes": [
+        "AU14CMBCIUGunnerVendor",
+        "AU14HAZOPSMGequipmentvendor",
+        "AU14RMCSGequipmentvendor",
+        "AU14UPPgunnerequipment",
+        "AU14USCMSGequipmentvendor",
+        "AU14VAIPOSGequipmentvendor",
+        "AU14WYSGequipmentvendor",
+        "AU14prodigySGequipmentvendor",
+        "RuMCBEARgunnerequipment"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUPilotVendor",
+      "sourcePrototypes": [
+        "AU14CMBCIUPilotVendor",
+        "AU14CMBCIUSectionLeader",
+        "AU14CMBCIUSquadLeader",
+        "AU14HAZOPSsectionleaderequipmentvendor",
+        "AU14HAZOPSsquadleaderequipmentvendor",
+        "AU14LACNaircrewvendor",
+        "AU14LACNclothingequipmentvendor",
+        "AU14LACNcommandequipmentvendor",
+        "AU14LACNsquadleaderequipmentvendor",
+        "AU14RMCRTOVendor",
+        "AU14RMCaircrewvendor",
+        "AU14RMCsectionleaderequipmentvendor",
+        "AU14RMCsquadleaderequipmentvendor",
+        "AU14RTOVendor",
+        "AU14UPPSectionLeaderVendor",
+        "AU14UPPSquadLeaderVendor",
+        "AU14UPPaircrewvendor",
+        "AU14USCMVehicleCrewmanVendor",
+        "AU14USCMaircrewvendor",
+        "AU14USCMsectionleaderequipmentvendor",
+        "AU14USCMsquadleaderequipmentvendor",
+        "AU14VAIPOaircrewvendor",
+        "AU14VAIPOsectionleaderequipmentvendor",
+        "AU14VAIPOsquadleaderequipmentvendor",
+        "AU14WYaircrewvendor",
+        "AU14WYsquadleaderequipmentvendor",
+        "AU14WYsupervisorequipmentvendor",
+        "AU14prodigyaircrewvendor",
+        "AU14prodigysectionleaderequipmentvendor",
+        "AU14prodigysquadleaderequipmentvendor",
+        "CMULACNRTOVendor",
+        "RuMCBEARSectionLeaderVendor",
+        "RuMCBEARaircrewvendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIURequisitionVendor",
+      "sourcePrototypes": [
+        "AU14CMBCIURequisitionVendor",
+        "AU14HAZOPSRequisitionVendor",
+        "AU14LACNRequisitionVendor",
+        "AU14ProdigyRequisitionVendor",
+        "AU14RMCRequisitionVendor",
+        "AU14UPPRequisitionVendor",
+        "AU14USCMRequisitionVendor",
+        "AU14VAIPORequisitionVendor",
+        "AU14WYPMCRequisitionVendor",
+        "RuMCBEARRequisitionVendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUTacticalMedicVendor",
+      "sourcePrototypes": [
+        "AU14CMBCIUTacticalMedicVendor",
+        "AU14RMCcorpsmanvendor",
+        "AU14UPPMedicalVendor",
+        "AU14USCMcorpsmanvendor",
+        "AU14VAIPOcorpsmanvendor",
+        "AU14WYcorpsmanvendor",
+        "AU14prodigycorpsmanvendor",
+        "RuMCBEARMedicalVendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14CMBCIUapparelvendor",
+      "sourcePrototypes": [
+        "AU14CMBCIUapparelvendor",
+        "AU14HAZOPSclothingequipmentvendor",
+        "AU14RMCclothingequipmentvendor",
+        "AU14UPPclothingapparelvendor",
+        "AU14USCMclothingequipmentvendor",
+        "AU14VAIPOclothingequipmentvendor",
+        "AU14WYclothingequipmentvendor",
+        "AU14prodigyclothingequipmentvendor",
+        "RuMCBEARclothingapparelvendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14ComtechGearVendor",
+      "sourcePrototypes": [
+        "AU14ComtechGearVendor",
+        "AU14RMCComtechGearVendor",
+        "CMULACNComtechGearVendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14CorporateASRSElevator",
+      "sourcePrototypes": [
+        "AU14CorporateASRSElevator",
+        "CMCargoElevatorColony",
+        "CMCargoElevatorGovfor"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14CrateSecureWeYuClottedSyringesInheritedCratesSecureWeYaCloud",
+      "sourcePrototypes": [
+        "AU14CrateSecureWeYuClottedSyringes",
+        "AU14CrateSecureWeYuXenoEggs"
+      ],
+      "parts": 24,
+      "triangles": 392,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14CustomConstructionFrame",
+      "sourcePrototypes": [
+        "AU14CustomConstructionFrame"
+      ],
+      "parts": 5,
+      "triangles": 60,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14HAZOPSSpecialWeaponsVendor",
+      "sourcePrototypes": [
+        "AU14HAZOPSSpecialWeaponsVendor",
+        "AU14LACNSpecialWeaponsVendor",
+        "AU14RMCSpecialWeaponsVendor",
+        "AU14SpecVend",
+        "AU14UPPSpecialWeaponsVendor",
+        "AU14USCMSpecialWeaponsVendor",
+        "AU14WYSpecialWeaponsVendor",
+        "RuMCBEARSpecialWeaponsVendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14LACNMGequipmentvendor",
+      "sourcePrototypes": [
+        "AU14LACNMGequipmentvendor"
+      ],
+      "parts": 40,
+      "triangles": 480,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14LACNcorpsmanvendor",
+      "sourcePrototypes": [
+        "AU14LACNcorpsmanvendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14LACNequipmentvendor",
+      "sourcePrototypes": [
+        "AU14LACNequipmentvendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14RMCequipmentvendor",
+      "sourcePrototypes": [
+        "AU14RMCequipmentvendor",
+        "AU14UPPequipmentvendor",
+        "AU14USCMequipmentvendor",
+        "RuMCBEARequipmentvendor"
+      ],
+      "parts": 71,
+      "triangles": 852,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14UPPAirCrewWeaponsVendor",
+      "sourcePrototypes": [
+        "AU14UPPAirCrewWeaponsVendor",
+        "RuMCBEARAirCrewWeaponsVendor"
+      ],
+      "parts": 14,
+      "triangles": 168,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivArmoredTruck",
+      "sourcePrototypes": [
+        "AU14VehicleCivArmoredTruck"
+      ],
+      "parts": 59,
+      "triangles": 1528,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivBlueCargoTruck",
+      "sourcePrototypes": [
+        "AU14VehicleCivBlueCargoTruck"
+      ],
+      "parts": 56,
+      "triangles": 1076,
+      "vehicleLayerStates": 8,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivBlueTruck",
+      "sourcePrototypes": [
+        "AU14VehicleCivBlueTruck"
+      ],
+      "parts": 46,
+      "triangles": 956,
+      "vehicleLayerStates": 13,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivBrownBarrelsTruck",
+      "sourcePrototypes": [
+        "AU14VehicleCivBrownBarrelsTruck"
+      ],
+      "parts": 59,
+      "triangles": 1528,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivBrownCargoTruck",
+      "sourcePrototypes": [
+        "AU14VehicleCivBrownCargoTruck"
+      ],
+      "parts": 56,
+      "triangles": 1076,
+      "vehicleLayerStates": 8,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivCivTruck1",
+      "sourcePrototypes": [
+        "AU14VehicleCivCivTruck1"
+      ],
+      "parts": 46,
+      "triangles": 956,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivCivTruck2",
+      "sourcePrototypes": [
+        "AU14VehicleCivCivTruck2"
+      ],
+      "parts": 56,
+      "triangles": 1076,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivCivTruck3",
+      "sourcePrototypes": [
+        "AU14VehicleCivCivTruck3"
+      ],
+      "parts": 59,
+      "triangles": 1528,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivCopMonoSupron",
+      "sourcePrototypes": [
+        "AU14VehicleCivCopMonoSupron"
+      ],
+      "parts": 54,
+      "triangles": 1048,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivEMSAmbulance",
+      "sourcePrototypes": [
+        "AU14VehicleCivEMSAmbulance"
+      ],
+      "parts": 57,
+      "triangles": 1088,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivGarbageTruck",
+      "sourcePrototypes": [
+        "AU14VehicleCivGarbageTruck"
+      ],
+      "parts": 50,
+      "triangles": 1000,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivHSVan",
+      "sourcePrototypes": [
+        "AU14VehicleCivHSVan"
+      ],
+      "parts": 48,
+      "triangles": 980,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivMedTruck",
+      "sourcePrototypes": [
+        "AU14VehicleCivMedTruck"
+      ],
+      "parts": 51,
+      "triangles": 1016,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivTruck",
+      "sourcePrototypes": [
+        "AU14VehicleCivTruck"
+      ],
+      "parts": 46,
+      "triangles": 956,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivVan",
+      "sourcePrototypes": [
+        "AU14VehicleCivVan"
+      ],
+      "parts": 48,
+      "triangles": 980,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxAU14VehicleCivturquiseCargo",
+      "sourcePrototypes": [
+        "AU14VehicleCivturquiseCargo"
+      ],
+      "parts": 56,
+      "triangles": 1076,
+      "vehicleLayerStates": 6,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMBedsheetGrayOrange",
+      "sourcePrototypes": [
+        "CMBedsheetGrayOrange"
+      ],
+      "parts": 3,
+      "triangles": 36,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMBedsheetMedical",
+      "sourcePrototypes": [
+        "CMBedsheetMedical"
+      ],
+      "parts": 3,
+      "triangles": 36,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMBedsheetOrange",
+      "sourcePrototypes": [
+        "CMBedsheetOrange"
+      ],
+      "parts": 3,
+      "triangles": 36,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMBedsheetOrangeFull",
+      "sourcePrototypes": [
+        "CMBedsheetOrangeFull"
+      ],
+      "parts": 3,
+      "triangles": 36,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMBeltUtility",
+      "sourcePrototypes": [
+        "CMBeltUtility",
+        "CMBeltUtilityFilled"
+      ],
+      "parts": 6,
+      "triangles": 72,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMGrenadeSmoke",
+      "sourcePrototypes": [
+        "CMGrenadeSmoke"
+      ],
+      "parts": 4,
+      "triangles": 152,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMHandsInsulated",
+      "sourcePrototypes": [
+        "CMHandsInsulated"
+      ],
+      "parts": 11,
+      "triangles": 132,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMShardGlass",
+      "sourcePrototypes": [
+        "CMShardGlass"
+      ],
+      "parts": 2,
+      "triangles": 20,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUCanisterOxygen",
+      "sourcePrototypes": [
+        "CMUCanisterOxygen"
+      ],
+      "parts": 7,
+      "triangles": 504,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUCargoCarrier",
+      "sourcePrototypes": [
+        "CMUCargoCarrier"
+      ],
+      "parts": 20,
+      "triangles": 700,
+      "vehicleLayerStates": 2,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUDeployableZLevelLadderThroughUp",
+      "sourcePrototypes": [
+        "CMUDeployableZLevelLadderThroughUp"
+      ],
+      "parts": 10,
+      "triangles": 536,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUFighterGround",
+      "sourcePrototypes": [
+        "CMUFighterGround",
+        "CMUFighterGroundLoaded"
+      ],
+      "parts": 35,
+      "triangles": 1856,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUGeneratorFusionFusionGenerator",
+      "sourcePrototypes": [
+        "CMUGeneratorFusion"
+      ],
+      "parts": 36,
+      "triangles": 432,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUGeneratorThermoColonyGenerator",
+      "sourcePrototypes": [
+        "CMUGeneratorThermo"
+      ],
+      "parts": 44,
+      "triangles": 528,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUHospitalEmergencyComputerColonyAmberDepartmentTerminal",
+      "sourcePrototypes": [
+        "CMUHospitalEmergencyComputerColony",
+        "CMUHospitalEmergencyComputerGovfor",
+        "CMUHospitalEmergencyComputerOpfor"
+      ],
+      "parts": 55,
+      "triangles": 660,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUMonkeyCubeBox",
+      "sourcePrototypes": [
+        "CMUMonkeyCubeBox"
+      ],
+      "parts": 2,
+      "triangles": 24,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalEast",
+      "sourcePrototypes": [],
+      "parts": 14,
+      "triangles": 164,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalNorth",
+      "sourcePrototypes": [],
+      "parts": 14,
+      "triangles": 164,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalSouth",
+      "sourcePrototypes": [
+        "CMUResearchDataTerminalGovfor",
+        "CMUResearchDataTerminalOpfor"
+      ],
+      "parts": 14,
+      "triangles": 164,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUResearchDataTerminalGovforResearchTerminalWest",
+      "sourcePrototypes": [],
+      "parts": 14,
+      "triangles": 164,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUWeaponLauncherM81WorldRMCWeaponLauncherM81Cloud",
+      "sourcePrototypes": [
+        "CMUWeaponLauncherM81"
+      ],
+      "parts": 17,
+      "triangles": 1148,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUZLevelHatchThroughDown",
+      "sourcePrototypes": [
+        "CMUZLevelHatchThroughDown",
+        "RMCLadderHatch"
+      ],
+      "parts": 6,
+      "triangles": 72,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCMUZLevelLadderThroughUp2",
+      "sourcePrototypes": [
+        "CMUZLevelLadderThroughUp2"
+      ],
+      "parts": 10,
+      "triangles": 536,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCableApcExtension",
+      "sourcePrototypes": [
+        "CableApcExtension"
+      ],
+      "parts": 1,
+      "triangles": 224,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxCableApcStack",
+      "sourcePrototypes": [
+        "CableApcStack"
+      ],
+      "parts": 13,
+      "triangles": 780,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalBend",
+      "sourcePrototypes": [
+        "DisposalBend"
+      ],
+      "parts": 7,
+      "triangles": 504,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalBendLoose",
+      "sourcePrototypes": [],
+      "parts": 6,
+      "triangles": 492,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalPipe",
+      "sourcePrototypes": [
+        "DisposalPipe"
+      ],
+      "parts": 6,
+      "triangles": 492,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalPipeBroken",
+      "sourcePrototypes": [
+        "DisposalPipeBroken"
+      ],
+      "parts": 4,
+      "triangles": 100,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalPipeLoose",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 480,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalRouter",
+      "sourcePrototypes": [
+        "DisposalRouter"
+      ],
+      "parts": 9,
+      "triangles": 632,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalRouterFlipped",
+      "sourcePrototypes": [
+        "DisposalRouterFlipped"
+      ],
+      "parts": 9,
+      "triangles": 632,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalRouterFlippedLoose",
+      "sourcePrototypes": [],
+      "parts": 8,
+      "triangles": 620,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalRouterLoose",
+      "sourcePrototypes": [],
+      "parts": 8,
+      "triangles": 620,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalTrunk",
+      "sourcePrototypes": [
+        "DisposalTrunk"
+      ],
+      "parts": 7,
+      "triangles": 504,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalTrunkLoose",
+      "sourcePrototypes": [],
+      "parts": 6,
+      "triangles": 492,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalYJunction",
+      "sourcePrototypes": [
+        "DisposalYJunction"
+      ],
+      "parts": 9,
+      "triangles": 632,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDisposalYJunctionLoose",
+      "sourcePrototypes": [],
+      "parts": 8,
+      "triangles": 620,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxDoorElectronics",
+      "sourcePrototypes": [
+        "DoorElectronics"
+      ],
+      "parts": 2,
+      "triangles": 24,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxFoodDonkpocket",
+      "sourcePrototypes": [
+        "FoodDonkpocket"
+      ],
+      "parts": 2,
+      "triangles": 24,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxIgniter",
+      "sourcePrototypes": [
+        "Igniter"
+      ],
+      "parts": 2,
+      "triangles": 24,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxProximitySensor",
+      "sourcePrototypes": [
+        "ProximitySensor"
+      ],
+      "parts": 2,
+      "triangles": 24,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCBarricadeHandrailAlt",
+      "sourcePrototypes": [
+        "RMCBarricadeHandrailAlt"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCBeltHolsterRevolverSpearheadFill",
+      "sourcePrototypes": [
+        "RMCBeltHolsterRevolverSpearheadFill"
+      ],
+      "parts": 6,
+      "triangles": 72,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCCableHeavy",
+      "sourcePrototypes": [
+        "RMCCableHeavy"
+      ],
+      "parts": 2,
+      "triangles": 24,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCDrill",
+      "sourcePrototypes": [
+        "RMCDrill"
+      ],
+      "parts": 5,
+      "triangles": 112,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCElevatorDoorBroken",
+      "sourcePrototypes": [
+        "RMCElevatorDoorBroken"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCElevatorDoorBrokenRight",
+      "sourcePrototypes": [
+        "RMCElevatorDoorBrokenRight"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCExplosiveBreachingCharge",
+      "sourcePrototypes": [
+        "RMCExplosiveBreachingCharge"
+      ],
+      "parts": 2,
+      "triangles": 24,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCFlashlight",
+      "sourcePrototypes": [
+        "RMCFlashlight"
+      ],
+      "parts": 4,
+      "triangles": 204,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCHardhatWhiteAlt",
+      "sourcePrototypes": [
+        "RMCHardhatWhiteAlt"
+      ],
+      "parts": 4,
+      "triangles": 312,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCJumpsuitMarinePatchRMCJumpsuitSunRidersWorldCloud",
+      "sourcePrototypes": [
+        "RMCJumpsuitMarinePatch"
+      ],
+      "parts": 52,
+      "triangles": 1372,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCLampTripodGrey",
+      "sourcePrototypes": [
+        "RMCLampTripodGrey"
+      ],
+      "parts": 6,
+      "triangles": 72,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCPlatformHybrisaRockCornerSmall",
+      "sourcePrototypes": [
+        "RMCPlatformHybrisaRockCornerSmall"
+      ],
+      "parts": 2,
+      "triangles": 20,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCell",
+      "sourcePrototypes": [
+        "RMCPowerCell"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCellCrap",
+      "sourcePrototypes": [
+        "RMCPowerCellCrap"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCellHigh",
+      "sourcePrototypes": [
+        "RMCPowerCellHigh"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCellHyper",
+      "sourcePrototypes": [
+        "RMCPowerCellHyper"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCPowerCellSuper",
+      "sourcePrototypes": [
+        "RMCPowerCellSuper"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCVialBoxRMCVialBoxFullMedicalSmallCloud",
+      "sourcePrototypes": [
+        "RMCVialBox"
+      ],
+      "parts": 32,
+      "triangles": 1320,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCWallElevator",
+      "sourcePrototypes": [
+        "RMCWallElevator"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCWallElevatorBroken",
+      "sourcePrototypes": [
+        "RMCWallElevatorBroken"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCWallElevatorGearAnimated",
+      "sourcePrototypes": [
+        "RMCWallElevatorGearAnimated"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRMCWindowFrameStrata",
+      "sourcePrototypes": [
+        "RMCWindowFrameStrata"
+      ],
+      "parts": 5,
+      "triangles": 60,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxRemoteSignaller",
+      "sourcePrototypes": [
+        "RemoteSignaller"
+      ],
+      "parts": 2,
+      "triangles": 24,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxSteelOre1",
+      "sourcePrototypes": [
+        "SteelOre1"
+      ],
+      "parts": 2,
+      "triangles": 20,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxTWEVehicleTankArtilleryModuleMounted",
+      "sourcePrototypes": [],
+      "parts": 2,
+      "triangles": 24,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "TWEVehicleTankArtilleryModule"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleAPC",
+      "sourcePrototypes": [
+        "VehicleAPC"
+      ],
+      "parts": 47,
+      "triangles": 1536,
+      "vehicleLayerStates": 20,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleAPCCommand",
+      "sourcePrototypes": [
+        "VehicleAPCCommand"
+      ],
+      "parts": 47,
+      "triangles": 1536,
+      "vehicleLayerStates": 20,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleAPCMed",
+      "sourcePrototypes": [
+        "VehicleAPCMed"
+      ],
+      "parts": 47,
+      "triangles": 1536,
+      "vehicleLayerStates": 20,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleAPCPMC",
+      "sourcePrototypes": [
+        "VehicleAPCPMC"
+      ],
+      "parts": 47,
+      "triangles": 1536,
+      "vehicleLayerStates": 38,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleAev",
+      "sourcePrototypes": [
+        "VehicleAev"
+      ],
+      "parts": 68,
+      "triangles": 2052,
+      "vehicleLayerStates": 52,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleBlackfootDoorGunVariant",
+      "sourcePrototypes": [
+        "VehicleBlackfoot",
+        "VehicleBlackfootDoorGunVariant",
+        "VehicleBlackfootRecon",
+        "VehicleBlackfootTransport"
+      ],
+      "parts": 40,
+      "triangles": 1500,
+      "vehicleLayerStates": 33,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleBoxVan",
+      "sourcePrototypes": [
+        "VehicleBoxVan"
+      ],
+      "parts": 48,
+      "triangles": 980,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleCLFVan",
+      "sourcePrototypes": [
+        "VehicleCLFVan"
+      ],
+      "parts": 52,
+      "triangles": 1024,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleCMBPoliceVan",
+      "sourcePrototypes": [
+        "VehicleCMBPoliceVan"
+      ],
+      "parts": 51,
+      "triangles": 1016,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleHumvee",
+      "sourcePrototypes": [
+        "VehicleHumvee",
+        "VehicleHumveeARC"
+      ],
+      "parts": 52,
+      "triangles": 1120,
+      "vehicleLayerStates": 18,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeCannonMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleHumveeCannon",
+        "VehicleHumveeARCCannon"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeLauncherMounted",
+      "sourcePrototypes": [],
+      "parts": 6,
+      "triangles": 280,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleHumveeLauncher"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeMedical",
+      "sourcePrototypes": [
+        "VehicleHumveeMedical"
+      ],
+      "parts": 56,
+      "triangles": 1064,
+      "vehicleLayerStates": 8,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeTransport",
+      "sourcePrototypes": [
+        "VehicleHumveeTransport"
+      ],
+      "parts": 54,
+      "triangles": 1040,
+      "vehicleLayerStates": 8,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleHumveeTurretMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 212,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleHumveeTurret",
+        "VehicleHumveeTurretArmed",
+        "VehicleHumveeARCTurret"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleLift",
+      "sourcePrototypes": [
+        "VehicleLift"
+      ],
+      "parts": 4,
+      "triangles": 48,
+      "vehicleLayerStates": 0,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehiclePizzaVan",
+      "sourcePrototypes": [
+        "VehiclePizzaVan"
+      ],
+      "parts": 50,
+      "triangles": 1004,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPAPC",
+      "sourcePrototypes": [
+        "VehicleSPPAPC"
+      ],
+      "parts": 47,
+      "triangles": 1536,
+      "vehicleLayerStates": 18,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPAPCHJ35LauncherMounted",
+      "sourcePrototypes": [],
+      "parts": 6,
+      "triangles": 280,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleSPPAPCHJ35Launcher",
+        "VehicleTankTowLauncher"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPAPCMinigunMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleSPPAPCMinigun"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPAPCTurretMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 212,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleSPPAPCTurret"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTank",
+      "sourcePrototypes": [
+        "VehicleSPPTank",
+        "VehicleSPPTankCommand"
+      ],
+      "parts": 70,
+      "triangles": 2180,
+      "vehicleLayerStates": 34,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankCupolaMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleSPPTankCupola"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankHJ35TLauncherMounted",
+      "sourcePrototypes": [],
+      "parts": 6,
+      "triangles": 280,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleSPPTankHJ35TLauncher"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankP17702Mounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleSPPTankP17702"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankRailgunMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleSPPTankRailgun"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPTankTurretMounted",
+      "sourcePrototypes": [],
+      "parts": 16,
+      "triangles": 436,
+      "vehicleLayerStates": 2,
+      "mountedTurrets": [
+        "VehicleSPPTankTurret"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVan",
+      "sourcePrototypes": [
+        "VehicleSPPVan"
+      ],
+      "parts": 52,
+      "triangles": 1020,
+      "vehicleLayerStates": 8,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanArmed",
+      "sourcePrototypes": [
+        "VehicleSPPVanArmed"
+      ],
+      "parts": 53,
+      "triangles": 1084,
+      "vehicleLayerStates": 8,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanCannonMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleSPPVanCannon"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanLogistics",
+      "sourcePrototypes": [
+        "VehicleSPPVanLogistics"
+      ],
+      "parts": 52,
+      "triangles": 1020,
+      "vehicleLayerStates": 4,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanMedical",
+      "sourcePrototypes": [
+        "VehicleSPPVanMedical"
+      ],
+      "parts": 58,
+      "triangles": 1092,
+      "vehicleLayerStates": 8,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanPrisoner",
+      "sourcePrototypes": [
+        "VehicleSPPVanPrisoner"
+      ],
+      "parts": 66,
+      "triangles": 1188,
+      "vehicleLayerStates": 8,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleSPPVanTurretMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 212,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleSPPVanTurret"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTank",
+      "sourcePrototypes": [
+        "VehicleTank"
+      ],
+      "parts": 70,
+      "triangles": 2180,
+      "vehicleLayerStates": 52,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankAceAutocannonMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankAceAutocannon"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankAutocannonTWEMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankAutocannonTWE"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankCupolaTWEMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 212,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankCupolaTWE"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankDragonFlamerMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankDragonFlamer"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankFlamerMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankFlamer"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankGrenadeLauncherMounted",
+      "sourcePrototypes": [],
+      "parts": 6,
+      "triangles": 280,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankGrenadeLauncher"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankHeavyElectrolaserTWEMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankHeavyElectrolaserTWE"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankLTAAAPMinigunMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 216,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankLTAAAPMinigun"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankLTBCannonMounted",
+      "sourcePrototypes": [],
+      "parts": 4,
+      "triangles": 256,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankLTBCannon"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankM56CupolaMounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 212,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankM56Cupola"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankMountedFlagMounted",
+      "sourcePrototypes": [],
+      "parts": 6,
+      "triangles": 72,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankMountedFlag"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankPMC",
+      "sourcePrototypes": [
+        "VehicleTankPMC"
+      ],
+      "parts": 70,
+      "triangles": 2180,
+      "vehicleLayerStates": 49,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankRERE700Mounted",
+      "sourcePrototypes": [],
+      "parts": 5,
+      "triangles": 212,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankRERE700"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankRocketLauncherTWEMounted",
+      "sourcePrototypes": [],
+      "parts": 6,
+      "triangles": 280,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankRocketLauncherTWE"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankSnowplowTWEMounted",
+      "sourcePrototypes": [],
+      "parts": 9,
+      "triangles": 108,
+      "vehicleLayerStates": 1,
+      "mountedTurrets": [
+        "VehicleTankSnowplowTWE"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankTWE",
+      "sourcePrototypes": [
+        "VehicleTankTWE"
+      ],
+      "parts": 70,
+      "triangles": 2180,
+      "vehicleLayerStates": 70,
+      "mountedTurrets": []
+    },
+    {
+      "id": "CMU3DReduxVehicleTankTurretMounted",
+      "sourcePrototypes": [],
+      "parts": 16,
+      "triangles": 436,
+      "vehicleLayerStates": 2,
+      "mountedTurrets": [
+        "VehicleTankTurret"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankTurretPMCMounted",
+      "sourcePrototypes": [],
+      "parts": 16,
+      "triangles": 436,
+      "vehicleLayerStates": 2,
+      "mountedTurrets": [
+        "VehicleTankTurretPMC"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleTankTurretTWEMounted",
+      "sourcePrototypes": [],
+      "parts": 16,
+      "triangles": 436,
+      "vehicleLayerStates": 2,
+      "mountedTurrets": [
+        "VehicleTankTurretTWE"
+      ]
+    },
+    {
+      "id": "CMU3DReduxVehicleVan",
+      "sourcePrototypes": [
+        "VehicleVan"
+      ],
+      "parts": 49,
+      "triangles": 988,
+      "vehicleLayerStates": 5,
+      "mountedTurrets": []
+    }
+  ]
+}

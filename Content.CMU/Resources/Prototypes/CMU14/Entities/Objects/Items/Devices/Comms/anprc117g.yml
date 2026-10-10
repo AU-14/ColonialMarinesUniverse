@@ -45,12 +45,18 @@
     dfReportFactions:
     - OPFOR
     - CLF
+    # loaded by the panel's quick setup alongside the wearer's own squad net
+    standardNets:
+    - label: CMD
+      channel: radioGovforCommand
   - type: ANPRCCryptoSlot
   - type: PowerCellSlot
     cellSlotId: cell_slot
+  # the set drains itself (ANPRCRadioSystem.Expert, UpdateBatteryDrain): idle, relaying and every
+  # transmission, so POWER SAVE and EMCON can turn it down. this only keeps the cell slot plumbing
   - type: PowerCellDraw
     enabled: false
-    drawRate: 1
+    drawRate: 0
     useCharge: 0
   - type: ContainerContainer
     containers:
@@ -58,6 +64,14 @@
       antenna: !type:ContainerSlot
       cell_slot: !type:ContainerSlot
       anprc_handset: !type:ContainerSlot
+      storagebase: !type:Container
+  # same bag space as the old AN/PRC-55 pack. the fill card, antenna and cell slots are
+  # tried before the bag, so loading the set never loses a card into the pockets. the bag
+  # stays open to anyone at a planted set, same as any dropped pack
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,4,1
   - type: ItemSlots
     slots:
       fill_card:
@@ -85,6 +99,22 @@
         type: ANPRCRadioBoundUserInterface
       enum.AU14CallsignConsoleUI.Key:
         type: AU14CallsignConsoleBui
+      enum.RMCTelephoneUiKey.Key:
+        type: RMCTelephoneBui
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  # the set is a phone on the RMC exchange, on the same handset it uses for the net. its
+  # side is the fill card's, set by ANPRCRadioSystem.Phone - not whoever is wearing it
+  - type: RotaryPhone
+    category: Field Radio
+    phoneId: AU14ANPRCHandset
+    containerId: anprc_handset
+    tryGetHolderName: false
+  - type: ANPRCPhone
+    coverageChannels:
+      govfor: radioGovforCommand
+      opfor: radioOpforCommand
+      clf: radioCLFCommand
   # every pack carries a viewing copy of the faction's comms net directory,
   # opened from the panel; readOnly locks out edits even for trained operators
   - type: AU14CallsignConsole
@@ -119,6 +149,9 @@
     - RELAY 1
     dfReportFactions:
     - GOVFOR
+    standardNets:
+    - label: CMD
+      channel: radioOpforCommand
   - type: RTORelay
     bridgedChannels:
     - radioOpforAlpha
@@ -144,6 +177,11 @@
     - COURIER
     dfReportFactions:
     - GOVFOR
+    standardNets:
+    - label: CELL
+      channel: radioCLF
+    - label: CMD
+      channel: radioCLFCommand
   - type: RTORelay
     bridgedChannels:
     - radioCLF
@@ -163,6 +201,7 @@
   - type: Item
     size: Invalid
   - type: ANPRCHandset
+  - type: RMCTelephone
   - type: Undisposable
 
 - type: entity
@@ -184,6 +223,22 @@
     containers:
       fill_card:
       - ANPRCFillCardOPFOR
+
+# vendor and requisitions stock, set and card both keyed to the side of the ship it turns
+# up on, or of the first marine to pick it up (ANPRCSideKeyingSystem). reads GOVFOR until then
+- type: entity
+  parent: ANPRC117GRadio
+  id: ANPRC117GRadioIssued
+  suffix: Issue, keys to side
+  components:
+  - type: ANPRCSideKeyed
+    variants:
+      govfor: ANPRC117GRadioFilled
+      opfor: ANPRC117GRadioOPFORFilled
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardIssued
 
 - type: entity
   parent: ANPRC117GRadioCLF
@@ -232,6 +287,10 @@
     - MAGPIE
     dfReportFactions:
     - GOVFOR
+    # a fixed station on a long watch, not a manpack working the net: the old flat 1 charge a second
+    # while relaying, so a high-capacity cell holds the safehouse for well over two hours
+    idleChargePerSecond: 0.5
+    relayChargePerSecond: 0.5
     # comes up tuned so the leader can work it without a trained operator present
     defaultSlots:
     - label: CELL
@@ -284,6 +343,10 @@
     relayOnly: true
     dfReportFactions:
     - GOVFOR
+    # a cache relay is left alone for hours and has no POWER SAVE to reach for. keep it on the
+    # old flat rate, so a high-capacity cell lasts well over two hours
+    idleChargePerSecond: 0.5
+    relayChargePerSecond: 0.5
     defaultSlots:
     - label: CELL
       channel: radioCLF
@@ -292,9 +355,11 @@
   - type: ANPRCCryptoSlot
   - type: PowerCellSlot
     cellSlotId: cell_slot
+  # the set drains itself (ANPRCRadioSystem.Expert, UpdateBatteryDrain): idle, relaying and every
+  # transmission, so POWER SAVE and EMCON can turn it down. this only keeps the cell slot plumbing
   - type: PowerCellDraw
     enabled: false
-    drawRate: 1
+    drawRate: 0
     useCharge: 0
   - type: ContainerContainer
     containers:
@@ -333,3 +398,19 @@
     size: Small
   # content is written by ANPRCRadioSystem when the log is printed
   - type: Paper
+
+- type: entity
+  id: AU14ActionANPRCPhone
+  name: AN/PRC-117G phone
+  description: Call another station on the handset. Answers a ringing set, or hangs up a call in progress.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/phone.rsi
+      state: rpb_phone
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:ANPRCPhoneActionEvent

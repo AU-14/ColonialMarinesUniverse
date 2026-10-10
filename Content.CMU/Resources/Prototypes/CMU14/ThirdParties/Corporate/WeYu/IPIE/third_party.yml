@@ -11,7 +11,7 @@
   id: IPIE
   announceAsSurvivors: true
   partyspawn: IPIESpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
     - forceonforce
@@ -20,7 +20,7 @@
   weight: 20
   minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false
 
 - type: partySpawn
@@ -36,7 +36,7 @@
   id: IPIESynth
   announceAsSurvivors: true
   partyspawn: IPIESynthSpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
     - forceonforce
@@ -45,5 +45,5 @@
   weight: 20
   # minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false

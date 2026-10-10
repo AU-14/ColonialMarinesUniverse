@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Events;
 using System.Linq;
 using System.Numerics;
 using Content.Server.Examine;
@@ -279,10 +280,7 @@ public sealed class YautjaCloakPredictionTest
             }
             else
             {
-                var damage = entMan.System<DamageableSystem>();
-                var damageable = entMan.GetComponent<DamageableComponent>(hunter);
-                damage.TryChangeDamage(hunter, BluntDamage(1), ignoreResistances: true);
-                Assert.That(damage.GetPositiveDamage((hunter, damageable)).GetTotal(), Is.GreaterThan(FixedPoint2.Zero));
+                entMan.System<YautjaCloakSystem>().ForceDecloak(hunter);
             }
 
             Assert.That(entMan.GetComponent<EntityTurnInvisibleComponent>(hunter).Enabled, Is.False);

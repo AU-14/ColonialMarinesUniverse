@@ -1,0 +1,20 @@
+author: troytroy400
+category: CMU
+changes:
+- message: 'Emotes can now include speech in quotes. For example: walks over "I hate
+    it here." The quoted part is treated like normal talking and will be effected
+    by accents, deafness, speech traits, languages, etc.'
+  type: Add
+- message: New chat option "Switch chat back to Local/Dead after sending". After you
+    send a message on another channel, the chat box goes back to Local, or to Dead
+    chat if you're a ghost.
+  type: Add
+- message: New chat option "Center chat input while typing like in CM13". Pressing
+    a chat key moves the chat bar to the middle of the game view while you type and
+    it goes back once you send or cancel.
+  type: Add
+- message: The chat channel selector is now ordered Local > Emotes instead of Local
+    > Whisper to follow the order of common usage/priority.
+  type: Tweak
+time: '2026-09-27T00:45:51.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2033

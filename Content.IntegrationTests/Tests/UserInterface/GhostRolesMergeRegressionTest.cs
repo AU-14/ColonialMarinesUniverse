@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using System.Reflection;
 using System.Numerics;
 using Content.Client.Players.PlayTimeTracking;
@@ -174,7 +175,7 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
                     Is.SameAs(Client.ResolveDependency<IStylesheetManager>().SheetNano),
                     "live ghost role windows follow the rebuilt CRT palette");
 
-                window.Dispose();
+                window.Release();
                 Assert.That(CEntMan.EntityExists(replacement), Is.False,
                     "disposing the window must delete its current job-preview dummy");
                 window = null;
@@ -184,8 +185,8 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
         {
             await Client.WaitPost(() =>
             {
-                rules?.Dispose();
-                window?.Dispose();
+                rules?.Release();
+                window?.Release();
                 Client.CfgMan.SetCVar(CCVars.CrtUiColor, originalColor);
                 Client.CfgMan.SetCVar(CCVars.CrtUiEnabled, originalEnabled);
             });
@@ -234,7 +235,7 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
             }
             finally
             {
-                window.Dispose();
+                window.Release();
             }
         });
     }
@@ -320,6 +321,7 @@ public sealed class GhostRolesMergeRegressionTest : GameTest
             .Invoke(instance, null);
     }
 
+    [Robust.Shared.Analyzers.Virtual] // CMU14: DispatchProxy generates a derived implementation.
     public class RecordingConsoleHost : DispatchProxy
     {
         public List<string> Commands { get; } = new();

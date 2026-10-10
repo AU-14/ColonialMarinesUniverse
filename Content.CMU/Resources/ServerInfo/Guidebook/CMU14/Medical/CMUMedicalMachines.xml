@@ -1,0 +1,38 @@
+<Document>
+  # Medical Machines
+
+  Well-equipped medbays have machines that diagnose, treat and even operate on patients. Each pod needs its console within a few tiles to work.
+
+  ## Body Scanner
+  <Box>
+    <GuideEntityEmbed Entity="CMUBodyScannerPod" Caption="Body scanner pod"/>
+    <GuideEntityEmbed Entity="CMUBodyScannerConsole" Caption="Body scanner console"/>
+  </Box>
+  The body scanner gives a full diagnostic readout of everything wrong with a patient: fractures, internal bleeding, organ damage and more, part by part.
+  - Put the patient in the pod, then use the console. Reading scans needs [bold]surgery training[/bold] (level 1).
+  - [bold]Calibration[/bold]: the console can also calibrate a surgical assist. Tune each scan slice and lock the abnormal readings while the sweep is in the cyan band. You have 2 minutes, and every wrong lock costs you 8 seconds.
+  - Succeed, and your surgery steps on that patient are [bold]twice as fast[/bold] for 10 minutes.
+  - Fail or run out of time, and you're locked out of calibrating that patient for 10 minutes.
+
+  ## Autodoc
+  <Box>
+    <GuideEntityEmbed Entity="CMUAutodocPod" Caption="Autodoc pod"/>
+    <GuideEntityEmbed Entity="CMUAutodocConsole" Caption="Autodoc console"/>
+  </Box>
+  The autodoc operates by itself, so a surgeon can queue up the work and step away.
+  - Put the patient in the pod, then open the console. Queuing procedures needs [bold]surgery training[/bold] (level 2).
+  - Pick a body part and the surgeries it needs, and add them to the queue. It can also run [bold]Repair Wounds / Burns[/bold] as an automated cycle.
+  - Press [bold]Start[/bold]. The pod works through the queue on its own. It's thorough but slow: each step takes the better part of a minute.
+  - [bold]Stop[/bold] pauses it, [bold]Clear[/bold] empties the queue, and [bold]Eject Patient[/bold] takes them out.
+  - The pod counts as an operating table, so its steps never fail because of where the patient is lying.
+
+  ## Cryo Pod
+  <Box>
+    <GuideEntityEmbed Entity="CryoPod" Caption="Cryo pod"/>
+  </Box>
+  The cryo pod chills a patient down and heals them with cryoxadone.
+  - Load a beaker of [bold]cryoxadone[/bold] into the pod, and make sure the pod is supplied with cold gas from a freezer.
+  - Put the patient inside. Once their body temperature drops low enough, the cryoxadone slowly heals brute, burn, toxin and suffocation damage all at once.
+  - Cryoxadone does nothing at normal body temperature. The patient has to be properly cold.
+  - It's slow, but it needs nobody standing over it, so it's good for patients who are stable but badly hurt.
+</Document>

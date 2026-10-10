@@ -1,0 +1,35 @@
+- type: entity
+  parent: CMIDCardBase
+  categories: [ HideSpawnMenu ]
+  id: RuCMIDCardUPPLiquidatorComander
+  name: UPP Liquidator Commander ID card
+  components:
+  - type: PresetIdCard
+    job: RuMCUPPLiquidatorComander
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: RuCMIDCardUPPLiquidatorMedic
+  categories: [ HideSpawnMenu ]
+  name: UPP Liquidator Machinegunner ID card
+  components:
+  - type: PresetIdCard
+    job: RuMCUPPLiquidatorMedic
+  - type: ItemIFF
+    factions:
+    - GOVFOR
+
+- type: entity
+  parent: CMIDCardBase
+  id: RuCMIDCardUPPLiquidatorBurner
+  categories: [ HideSpawnMenu ]
+  name: UPP Liquidator Rifleman ID card
+  components:
+  - type: PresetIdCard
+    job: RuMCUPPLiquidatorBurner
+  - type: ItemIFF
+    factions:
+    - GOVFOR

@@ -238,6 +238,14 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         if (HasComp<CMUDroneAndroidComponent>(args.Body) && HasComp<CMUBrainComponent>(ent))
             return;
 
+        if (TryComp<CMUOrganStabilizedComponent>(ent.Owner, out var stabilized))
+        {
+            if (stabilized.ExpiresAt > Timing.CurTime)
+                return;
+
+            RemComp<CMUOrganStabilizedComponent>(ent.Owner);
+        }
+
         var total = args.Damage.GetTotal();
         if (total <= FixedPoint2.Zero)
             return;

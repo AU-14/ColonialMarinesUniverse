@@ -53,8 +53,8 @@ au14-trait-korean-language-name = Korean Language
 au14-trait-korean-language-desc = You can speak and understand Korean. You instinctively know when to bow and when to use honorifics.
 
 # ├──[ Alternative tongues ]──────────────────────────────────────┤
-au14-trait-portuguese-language-name = Portuguese Language
-au14-trait-portuguese-language-desc = You can speak and understand Portuguese. It’s not Spanish, and you will correct anyone who implies otherwise, usually with an extended nasal sigh and a short history lesson.
+au14-trait-portuguese-language-name = Brazilian Portuguese Language
+au14-trait-portuguese-language-desc = You can speak and understand Brazilian Portuguese. It’s not Spanish, and you will correct anyone who implies otherwise, usually with an extended nasal sigh and a short history lesson.
 
 au14-trait-legalese-language-name = Legalese Language
 au14-trait-legalese-language-desc = You can speak and understand Legalese. Every sentence you utter now requires three sub clauses, a disclaimer, and a binding arbitration clause.
@@ -64,9 +64,6 @@ au14-trait-afrikaans-language-desc = You can speak and understand Afrikaans. Dut
 
 au14-trait-albanian-language-name = Albanian Language
 au14-trait-albanian-language-desc = You can speak and understand Albanian. You are now prepared for one of Europe's most unique languages.
-
-au14-trait-brazilian-language-name = Brazilian Language
-au14-trait-brazilian-language-desc = You can speak and understand Brazilian.
 
 au14-trait-czech-language-name = Czech Language
 au14-trait-czech-language-desc = You can speak and understand Czech. You can finally order a beer with complete confidence.

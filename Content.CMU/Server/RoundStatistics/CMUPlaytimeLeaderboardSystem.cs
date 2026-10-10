@@ -40,16 +40,17 @@ internal sealed record CMUPlaytimeLeaderboardSnapshot(
     ILookup<string, CMUPlaytimeLeaderboardRow> Rows,
     Dictionary<Guid, string> Tags);
 
-public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
+public sealed partial class CMUPlaytimeLeaderboardSystem : EntitySystem
 {
     private const int TopPerRole = 3;
     private const int ChampionsPerSide = 10;
+    private const double MinRoleHours = 10;
     private const string DefaultPrefix = "XX";
 
-    [Dependency] private readonly IServerDbManager _db = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly PlayTimeTrackingManager _playTime = default!;
-    [Dependency] private readonly IServerPreferencesManager _prefs = default!;
+    [Dependency] private IServerDbManager _db = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private PlayTimeTrackingManager _playTime = default!;
+    [Dependency] private IServerPreferencesManager _prefs = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.playtime_leaderboard");
 
@@ -208,6 +209,7 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
                     .OrderByDescending(row => row.Hours)
                     .Take(TopPerRole)
                     .ToList()))
+            .Where(top => top.TotalHours >= MinRoleHours)
             .OrderBy(top => top.Role, StringComparer.OrdinalIgnoreCase)
             .ToList();
     }

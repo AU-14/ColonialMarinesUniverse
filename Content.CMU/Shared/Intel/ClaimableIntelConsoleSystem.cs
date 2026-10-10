@@ -47,7 +47,7 @@ public sealed partial class ClaimableIntelConsoleSystem : EntitySystem
 
         if (_doAfter.TryStartDoAfter(doAfter))
         {
-            _popup.PopupPredicted(
+            _popup.PopupBroadcast(
                 Loc.GetString("cmu-intel-console-claim-start"),
                 ent.Owner,
                 args.User,

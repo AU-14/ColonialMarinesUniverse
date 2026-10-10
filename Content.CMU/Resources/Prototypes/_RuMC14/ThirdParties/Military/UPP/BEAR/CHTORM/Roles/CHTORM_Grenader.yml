@@ -1,0 +1,148 @@
+- type: job
+  parent: CMJobBase
+  id: RuMCUPPBEARGrenader
+  roundSide: ThirdParty
+  roundForce: BEAR
+  roundRole: RuMCUPPBEARGrenader
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_spec
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RuMCSquadBEAR
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 2
+      RMCSkillMedical: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+      RMCSkillFireman: 2
+      RMCSkillPowerLoader: 1
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 3
+      RMCSkillEndurance: 2
+  - type: EquipEntityPreset
+    preset: RuMCBEARPreset
+  - type: JobPrefix
+    prefix: rumc-job-prefix-grenader
+  - type: MarineOrders
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Russian
+    defaultLanguage: Russian
+
+  name: Grenadier
+  description: CHTORM Grenadier
+  playTimeTracker: RuMCJobUPPBEARGrenader
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Private:
+      entity: AU14ChevronUPPNIPrivate
+      requirements: []
+    UPP_Gefreiter:
+      entity: AU14ChevronUPPNIGefreiter
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARGrenader
+        time: 1800 # 0.5 hours
+    UPP_SeniorGefreiter:
+      entity: AU14ChevronUPPNISeniorGefreiter
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARGrenader
+        time: 5400 # 1.5 hours
+    UPP_Corporal:
+      entity: AU14ChevronUPPNICorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARGrenader
+        time: 7200 # 2 hours
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPBEARGrenader
+        time: 10800 # 3 hours
+  spawnMenuRoleName: CHTORM Grenadier
+  startingGear: RuMCGearUPPBEARGrenader
+  greeting: rumc-bear-greeting
+  icon: "RuMCJobIconUPPBEARGrenader"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforCommand
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: RuMCBaseMobSpeciesOrganicUPPBEAR
+  id: RuMCJobUPPBEARGrenader
+  name: CHTORM Grenadier
+  components:
+  - type: EquipEntityPreset
+    preset: RuMCBEARPreset
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: RuMCSquadBEAR
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: CHTORM Grenadier
+    description: Fortification assault specialist. Armed with the RPG-32 with thermobaric rounds. Destroys cover, vehicles, and infantry groups. Operates under the cover of the machine gunner.
+    job: RuMCUPPBEARGrenader
+    raffle:
+      settings: short
+
+- type: startingGear
+  parent: RuMCGearUPPBEARbase
+  id: RuMCGearUPPBEARGrenader
+  equipment:
+    id: RuCMIDCardUPPBEARGrenader
+    ears: RuMCHeadsetBEAR
+    back: AU14SatchelDemoSpecUPP
+  storage:
+    back:
+    - RuMCRocketRPG_Termobaric
+    - RuMCRocketRPG_Termobaric
+    - RuMCRocketRPG_Termobaric
+    - RuMCRocketRPG_Termobaric
+    - RMCRocketHJRA12HE
+    - RMCRocketHJRA12HE
+    - RMCRocketHJRA12HE
+  inhand:
+    - RuMCWeaponLauncherRPG32
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconUPPBEARGrenader
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: upp_spec
+
+- type: playTimeTracker
+  id: RuMCJobUPPBEARGrenader

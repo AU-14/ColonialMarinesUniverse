@@ -32,7 +32,7 @@
     time: 43200 # 12 hours
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentEngineering
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -40,6 +40,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianHeadOfEngineering
@@ -68,6 +70,8 @@
     id: AU14IDCardColonyHeadOfEngineering
     ears: AU14ColonyAdminHeadset
     pocket1: AU14StampHENG
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

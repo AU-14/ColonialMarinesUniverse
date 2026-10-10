@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
 using Content.Client.Stylesheets;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using JetBrains.Annotations;
@@ -689,7 +689,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         var categoryHeader = new FormattedMessage();
         categoryHeader.AddMarkupOrThrow("[bold]CATEGORIES[/bold]");
         _window!.OrderCategoriesView.CategoryHeaderLabel.SetMessage(categoryHeader);
-        _window.OrderCategoriesView.CategoriesContainer.DisposeAllChildren();
+        _window.OrderCategoriesView.CategoriesContainer.ReleaseChildren();
 
         for (var categoryIndex = 0; categoryIndex < computer.Categories.Count; categoryIndex++)
         {
@@ -713,7 +713,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
 
     private void RebuildOrders(RequisitionsComputerComponent computer)
     {
-        _window!.OrderCategoriesView.OrdersContainer.DisposeAllChildren();
+        _window!.OrderCategoriesView.OrdersContainer.ReleaseChildren();
 
         var filter = _window.OrderCategoriesView.SearchBar.Text?.Trim();
         var searching = !string.IsNullOrWhiteSpace(filter);

@@ -120,6 +120,9 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
     private void OnAttemptShoot(Entity<RMCFlamerAmmoProviderComponent> ent, ref AttemptShootEvent args)
     {
+        if (args.Cancelled)
+            return;
+
         if (args.ToCoordinates is not { } toCoordinates ||
             CanShootFlamer(ent, args.FromCoordinates, toCoordinates, out _, out var solution, out _, out _))
         {
@@ -135,6 +138,8 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
         ent.Comp.CantShootPopupLast = time;
         Dirty(ent);
+
+        _audio.PlayPredicted(ent.Comp.DryFireSound, ent, args.User);
 
         if (solution is not { } sol || sol.Comp.Solution.Volume < ent.Comp.CostPer)
         {
@@ -246,7 +251,10 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         ent.Comp.Enabled = !ent.Comp.Enabled;
         Dirty(ent);
 
-        _audio.PlayPredicted(ent.Comp.Sound, ent, args.UserUid);
+        var sound = ent.Comp.Enabled
+            ? ent.Comp.IgniteSound ?? ent.Comp.Sound
+            : ent.Comp.ExtinguishSound ?? ent.Comp.Sound;
+        _audio.PlayPredicted(sound, ent, args.UserUid);
         _appearance.SetData(ent, RMCIgniterVisuals.Ignited, ent.Comp.Enabled);
     }
 
@@ -392,7 +400,9 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
         reagent = _reagent.Index(firstReagent.Value.Reagent.Prototype);
 
-        var maxRange = Math.Min(tank.Value.Comp.MaxRange, reagent.Radius);
+        var maxRange = tank.Value.Comp.IgnoreReagentRange
+            ? tank.Value.Comp.MaxRange
+            : Math.Min(tank.Value.Comp.MaxRange, reagent.Radius);
         var range = Math.Min((volume / flamer.Comp.CostPer).Int(), maxRange);
         if (delta.Length() > maxRange)
             toCoordinates = fromCoordinates.Offset(normalized * range);
@@ -491,13 +501,13 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         {
             if (target.Comp.ReagentWhitelist is { } whitelist && !whitelist.Contains(content.Reagent.Prototype))
             {
-                _popup.PopupClient(Loc.GetString("rmc-flamer-tank-not-whitelisted", ("tank", target)), source, user);
+                _popup.PopupEntity(Loc.GetString("rmc-flamer-tank-not-whitelisted", ("tank", target)), source, user);
                 return;
             }
             if (_reagent.TryIndex(content.Reagent.Prototype, out var reagent) &&
                 (reagent.Intensity <= 0 || reagent.Duration <= 0 || reagent.Radius <= 0))
             {
-                _popup.PopupClient(Loc.GetString("rmc-flamer-tank-not-potent-enough"), source, user);
+                _popup.PopupEntity(Loc.GetString("rmc-flamer-tank-not-potent-enough"), source, user);
                 return;
             }
         }
@@ -512,7 +522,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         );
 
         if (transfer > FixedPoint2.Zero)
-            _popup.PopupClient(Loc.GetString("rmc-flamer-refill", ("refilled", target)), source, user);
+            _popup.PopupEntity(Loc.GetString("rmc-flamer-refill", ("refilled", target)), source, user);
     }
 
     private void RefillTank(Entity<RMCFlamerTankComponent> tank, ref BeforeRangedInteractEvent args)
@@ -576,7 +586,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
             _action.SetIcon(action, new SpriteSpecifier.Rsi(ent.Comp.NumberingResource, n.ToString()));
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-broiler-switch-tank", ("n", n)), ent, args.Performer);
+        _popup.PopupEntity(Loc.GetString("rmc-broiler-switch-tank", ("n", n)), ent, args.Performer);
     }
 
     public void OnBroilerUniqueAction(Entity<RMCCanUseBroilerComponent> ent, ref UniqueActionEvent args)

@@ -1,7 +1,7 @@
 using Content.Client.Lobby;
 using Content.Client.Lobby.UI;
-using Content.Client._CMU14.Interface;
-using Content.Client._CMU14.Lobby;
+using Content.Client.CMU14.Interface;
+using Content.Client.CMU14.Lobby;
 using Content.Client.Stylesheets;
 using Content.Shared.CMU14.Ops.ForceOnForce;
 using Robust.Client.UserInterface;
@@ -59,9 +59,9 @@ public sealed partial class FoFBalanceConfirmUIController : UIController,
     }
 }
 
-public sealed class FoFBalanceConfirmWindow : DefaultWindow
+public sealed partial class FoFBalanceConfirmWindow : DefaultWindow
 {
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     public event Action? Confirmed;
 

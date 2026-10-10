@@ -286,7 +286,7 @@ public sealed class NubodySpeciesBridgeTest : GameTest
             damage.DamageDict["Slash"] = 1000;
             Assert.That(_partHealth.TryApplyPartDamage(human, arm, damage), Is.True);
 
-            var carrier = SEntMan.EntityQuery<MetaDataComponent>()
+            var carrier = SEntMan.QueryEntities<MetaDataComponent>()
                 .Select(meta => meta.Owner)
                 .Single(uid =>
                     SEntMan.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == "DetachedBody" &&
@@ -672,7 +672,8 @@ public sealed class NubodySpeciesBridgeTest : GameTest
             });
         }
 
-        Assert.That(_body.TryGetOrgansWithComponent<VisualOrganComponent>(uid, out var visualOrgans),
+        var visualOrgans = _body.EnumerateOrgans<VisualOrganComponent>(uid).Select(organ => new Robust.Shared.GameObjects.Entity<VisualOrganComponent>(organ.Owner, organ.Comp2)).ToList();
+        Assert.That(visualOrgans.Count > 0,
             Is.True,
             prototype);
         Assert.That(visualOrgans, Is.Not.Empty, prototype);

@@ -34,6 +34,14 @@ namespace Content.Shared._RMC14.Medical.Scanner;
 
 public sealed partial class HealthScannerSystem : EntitySystem
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMBicaridineReagent = "CMBicaridine";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMDexalinReagent = "CMDexalin";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMDyloveneReagent = "CMDylovene";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMEpinephrineReagent = "CMEpinephrine";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> CMKelotaneReagent = "CMKelotane";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> InaprovalineReagent = "Inaprovaline";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Chemistry.Reagent.ReagentPrototype> NutrimentReagent = "Nutriment";
+
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
@@ -96,7 +104,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
         if (delay > TimeSpan.Zero)
         {
             var name = Loc.GetString("zzzz-the", ("ent", target));
-            _popup.PopupClient($"You start fumbling around with {name}...", target, args.User);
+            _popup.PopupEntity($"You start fumbling around with {name}...", target, args.User);
         }
 
         _doAfter.TryStartDoAfter(doAfter);
@@ -164,7 +172,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             !HasComp<MobStateComponent>(target) ||
             !HasComp<MobThresholdsComponent>(target))
         {
-            _popup.PopupClient("You can't analyze that!", target, user);
+            _popup.PopupEntity("You can't analyze that!", target, user);
             return false;
         }
 
@@ -174,12 +182,12 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return false;
         }
 
-        var ev = new HealthScannerAttemptTargetEvent();
+        var ev = new HealthScannerAttemptTargetEvent(Scanner: scanner.Owner); // CMU14: pass the analyzer so targets can allow it
         RaiseLocalEvent(target, ref ev);
         if (ev.Cancelled)
         {
             if (ev.Popup != null)
-                _popup.PopupClient(ev.Popup, target, user);
+                _popup.PopupEntity(ev.Popup, target, user);
 
             return false;
         }
@@ -361,6 +369,11 @@ public sealed partial class HealthScannerSystem : EntitySystem
              _rmcUnrevivable.IsUnrevivable(target) ||
              HasComp<RMCDefibrillatorBlockedComponent>(target));
 
+        // cmu edit start
+        if (_mob.IsDead(target) && !state.PermaDead)
+            state.CMUTimeUntilUnrevivable = _rmcUnrevivable.GetTimeUntilUnrevivable(target);
+        // cmu edit end
+
         FillAdviceReadout(state, chemicals);
     }
 
@@ -377,7 +390,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             {
                 if (state.DeadThreshold + 30 < damage.Total &&
                     chemicals != null &&
-                    !chemicals.ContainsReagent("CMEpinephrine", null))
+                    !chemicals.ContainsReagent(CMEpinephrineReagent, null))
                 {
                     advice.NeedsEpinephrine = true;
                 }
@@ -404,7 +417,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             advice.ShowBloodPack = bloodPercent < 0.85;
             advice.ShowFood = bloodPercent < 0.9 &&
                 chemicals != null &&
-                !chemicals.ContainsReagent("Nutriment", null);
+                !chemicals.ContainsReagent(NutrimentReagent, null);
         }
 
         if (damage.Airloss > 0 && !isDead)
@@ -412,21 +425,21 @@ public sealed partial class HealthScannerSystem : EntitySystem
             advice.ShowCprCrit = damage.Airloss > 10 && isCritical;
             advice.ShowDexalin = damage.Airloss > 30 &&
                 chemicals != null &&
-                !chemicals.ContainsReagent("CMDexalin", null);
+                !chemicals.ContainsReagent(CMDexalinReagent, null);
         }
 
         advice.ShowBicaridine = damage.Brute > 30 &&
             chemicals != null &&
-            !chemicals.ContainsReagent("CMBicaridine", null) &&
+            !chemicals.ContainsReagent(CMBicaridineReagent, null) &&
             !isDead;
         advice.ShowKelotane = damage.Burn > 30 &&
             chemicals != null &&
-            !chemicals.ContainsReagent("CMKelotane", null) &&
+            !chemicals.ContainsReagent(CMKelotaneReagent, null) &&
             !isDead;
         advice.ShowDylovene = damage.Toxin > 10 &&
             chemicals != null &&
-            !chemicals.ContainsReagent("CMDylovene", null) &&
-            !chemicals.ContainsReagent("Inaprovaline", null) &&
+            !chemicals.ContainsReagent(CMDyloveneReagent, null) &&
+            !chemicals.ContainsReagent(InaprovalineReagent, null) &&
             !isDead;
     }
 

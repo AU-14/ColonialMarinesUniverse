@@ -15,6 +15,9 @@
   - type: MarineMapTracked
   - type: XenoMapTracked
   - type: TacticalMapTracked
+  - type: TacticalMapAlwaysVisible
+    visibleToXenos: true
+    visibleAsXenoStructure: true
   - type: ActiveTacticalMapTracked
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -40,6 +43,7 @@
     state: On
     channels:
     - Colony
+    - ColonyMedical
     - radioWEYU
     - radioCMB
     - radioCLF
@@ -133,6 +137,7 @@
     state: Off
     channels:
     - Colony
+    - ColonyMedical
     - radioWEYU
     - radioCMB
     - radioCLF

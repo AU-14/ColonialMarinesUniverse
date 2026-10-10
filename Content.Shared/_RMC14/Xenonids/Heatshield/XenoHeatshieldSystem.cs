@@ -41,9 +41,11 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
     [Dependency] private XenoSystem _xeno = default!;
 
     private const float BileSprayTileRadius = 0.65f;
+    private const int BileSprayLength = 3; // CMU14: triple the original one-row reach.
 
     private readonly HashSet<Entity<FlammableComponent>> _nearbyFlammables = new();
     private readonly HashSet<EntityUid> _bileSprayTargets = new();
+    private readonly List<EntityCoordinates> _bileSprayTiles = new(); // CMU14
 
     public override void Initialize()
     {
@@ -87,19 +89,26 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
             return;
         }
 
+        // CMU14: a selected enemy takes priority over fire on the ground beneath it.
+        if (args.Entity is { } hostile && HasComp<FlammableComponent>(hostile) &&
+            CanUseBileOnEntity(xeno, hostile) && TryUseBileSpray(xeno, args.Target, ref args))
+        {
+            return;
+        }
+
         if (TryExtinguishTileFire(xeno, args.Target, ref args))
             return;
 
         if (args.Entity is { } sameHive && _hive.FromSameHive(xeno.Owner, sameHive))
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-heatshield-vomit-bile-no-fire"), sameHive, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-heatshield-vomit-bile-no-fire"), sameHive, xeno);
             return;
         }
 
         if (TryUseBileSpray(xeno, args.Target, ref args))
             return;
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-heatshield-vomit-bile-no-target"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-heatshield-vomit-bile-no-target"), xeno, xeno);
     }
 
     private bool TryUseBileOnEntity(Entity<XenoHeatshieldComponent> xeno, EntityUid target, ref XenoVomitBileActionEvent args)
@@ -115,20 +124,32 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
         return true;
     }
 
+    // CMU14: include the selected enemy and extend the existing three-wide spray to three rows.
     private bool TryUseBileSpray(Entity<XenoHeatshieldComponent> xeno, EntityCoordinates target, ref XenoVomitBileActionEvent args)
     {
         _bileSprayTargets.Clear();
+        _bileSprayTiles.Clear();
+
+        if (args.Entity is { } selected && HasComp<FlammableComponent>(selected) &&
+            CanUseBileOnEntity(xeno, selected))
+        {
+            _bileSprayTargets.Add(selected);
+        }
 
         var xenoCoords = _transform.GetMoverCoordinates(xeno);
-        if (!TryGetBileSprayVectors(xenoCoords, target, out var forward, out var side))
-            return false;
+        if (TryGetBileSprayVectors(xenoCoords, target, out var forward, out var side))
+        {
+            for (var distance = 1; distance <= BileSprayLength; distance++)
+            {
+                var center = _rmcMap.SnapToGrid(xenoCoords.Offset(forward * distance));
+                _bileSprayTiles.Add(center.Offset(-side));
+                _bileSprayTiles.Add(center);
+                _bileSprayTiles.Add(center.Offset(side));
+            }
 
-        var center = _rmcMap.SnapToGrid(xenoCoords.Offset(forward));
-        var left = center.Offset(-side);
-        var right = center.Offset(side);
-        AddBileSprayTargets(xeno, left);
-        AddBileSprayTargets(xeno, center);
-        AddBileSprayTargets(xeno, right);
+            foreach (var tile in _bileSprayTiles)
+                AddBileSprayTargets(xeno, tile);
+        }
 
         if (_bileSprayTargets.Count == 0)
             return false;
@@ -140,9 +161,8 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
         if (_flammable.IsOnFire((xeno.Owner, null)))
         {
             _audio.PlayPredicted(FireSpewSound, xeno, xeno);
-            SpawnAtPosition(FireSpewEffectPrototype, left);
-            SpawnAtPosition(FireSpewEffectPrototype, center);
-            SpawnAtPosition(FireSpewEffectPrototype, right);
+            foreach (var tile in _bileSprayTiles)
+                SpawnAtPosition(FireSpewEffectPrototype, tile);
         }
 
         foreach (var bileTarget in _bileSprayTargets)
@@ -182,7 +202,7 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
         if (_hive.FromSameHive(xeno.Owner, target))
         {
             _flammable.Extinguish((target, null));
-            _popup.PopupClient(Loc.GetString("cm-xeno-heatshield-vomit-bile-extinguish"), target, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-heatshield-vomit-bile-extinguish"), target, xeno);
             return;
         }
 
@@ -191,7 +211,7 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
         else
             _flammable.AdjustStacks((target, null), 4);
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-heatshield-vomit-bile-hostile"), target, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-heatshield-vomit-bile-hostile"), target, xeno);
     }
 
     private bool TryExtinguishTileFire(Entity<XenoHeatshieldComponent> xeno, EntityCoordinates target, ref XenoVomitBileActionEvent args)
@@ -204,7 +224,7 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
 
         args.Handled = true;
         QueueDel(fire.Owner);
-        _popup.PopupClient(Loc.GetString("cm-xeno-heatshield-vomit-bile-tile"), fire.Owner, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-heatshield-vomit-bile-tile"), fire.Owner, xeno);
         return true;
     }
 
@@ -245,7 +265,7 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
         if (_flammable.IsOnFire((xeno.Owner, null)))
         {
             _flammable.Ignite((xeno.Owner, null), 4, 12, 24, false);
-            _popup.PopupClient(Loc.GetString("cm-xeno-heatshield-self-immolate"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-heatshield-self-immolate"), xeno, xeno);
             return;
         }
 
@@ -256,7 +276,7 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
         };
 
         _doAfter.TryStartDoAfter(doAfter);
-        _popup.PopupClient(Loc.GetString("cm-xeno-heatshield-self-immolate"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-heatshield-self-immolate"), xeno, xeno);
     }
 
     private void OnSelfImmolateDoAfter(Entity<XenoHeatshieldComponent> xeno, ref XenoSelfImmolateDoAfterEvent args)
@@ -275,7 +295,7 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
 
         if (!_flammable.IsOnFire((xeno.Owner, null)))
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-heatshield-thermoregulation-not-burning"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-heatshield-thermoregulation-not-burning"), xeno, xeno);
             return;
         }
 

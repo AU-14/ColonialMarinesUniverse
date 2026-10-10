@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Events;
 #pragma warning disable RA0002 // Observe committed regional health and source-owned resistance values.
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,8 @@ namespace Content.IntegrationTests.CMU14.Medical.Anatomy.BodyParts;
 [TestFixture]
 public sealed class QueuedMedicalExplosionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ExplosionPrototype> RMCPrototype = "RMC";
+
     [TestCase(false, 1f, 1f, 0)]
     [TestCase(true, 1f, 1f, 0)]
     [TestCase(false, 0.5f, 0.8f, 0)]
@@ -88,7 +91,7 @@ public sealed class QueuedMedicalExplosionTest : GameTest
                 }
                 Assert.That(baseline, Has.Count.EqualTo(10));
                 Assert.That(Server.System<DamageableSystem>().GetAllDamage(patient).GetTotal(), Is.EqualTo(FixedPoint2.Zero));
-                var prototype = Server.ProtoMan.Index<ExplosionPrototype>("RMC");
+                var prototype = Server.ProtoMan.Index<ExplosionPrototype>(RMCPrototype);
                 Assert.That(prototype.DamagePerIntensity.DamageDict["Blunt"], Is.EqualTo(FixedPoint2.New(5)));
                 Assert.That(prototype.DamagePerIntensity.DamageDict["Heat"], Is.EqualTo(FixedPoint2.New(5)));
                 Assert.That(prototype.DamagePerIntensity.DamageDict, Has.Count.EqualTo(2));
@@ -213,7 +216,7 @@ public sealed partial class QueuedMedicalExplosionProbeComponent : Component
 public sealed record QueuedExplosionRegionSnapshot(DamageSpecifier Debt, FixedPoint2 Current,
     float BruteResistance, float BurnResistance, int WoundCount, FixedPoint2 WoundDamage);
 
-public sealed class QueuedMedicalExplosionProbeSystem : EntitySystem
+public sealed partial class QueuedMedicalExplosionProbeSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _index = default!;

@@ -28,18 +28,18 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianHeadPhysician
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMedical
-    time: 54000 # 15 hours
+    time: 10800 # 3 hours
   - !type:AgeRequirement
-    requiredAge: 25
+    requiredAge: 30
   - !type:TraitsRequirement
     inverted: true
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilianDoctor: []
   startingGear: AU14GearCivilianHeadPhysician
@@ -62,10 +62,12 @@
 - type: startingGear
   id: AU14GearCivilianHeadPhysician
   equipment:
-    ears: CMHeadsetColony
+    ears: CMUHeadsetColonyMedical
   storage:
     back:
     - AU14StampHPHY
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

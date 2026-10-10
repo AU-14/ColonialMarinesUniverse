@@ -18,8 +18,10 @@ public sealed partial class LadderComponent : Component
     [DataField, AutoNetworkedField]
     public float Range = SharedInteractionSystem.InteractionRange + 0.1f;
 
-    [DataField, AutoNetworkedField]
-    public EntityUid? LastDoAfterEnt;
+    // The last climber can be deleted while its do-after is being cancelled.
+    // Keep a weak network reference rather than resolving a deleted entity during state generation.
+    [ViewVariables, AutoNetworkedField]
+    public NetEntity? LastDoAfterEnt;
 
     [DataField, AutoNetworkedField]
     public ushort? LastDoAfterId;

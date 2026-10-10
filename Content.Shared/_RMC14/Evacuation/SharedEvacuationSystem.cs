@@ -82,6 +82,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         SubscribeLocalEvent<EvacuationDisabledEvent>(OnEvacuationDisabled);
         SubscribeLocalEvent<EvacuationProgressEvent>(OnEvacuationProgress);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<MapRemovedEvent>(OnMapRemoved);
 
         SubscribeLocalEvent<GridSpawnerComponent, MapInitEvent>(OnGridSpawnerMapInit);
 
@@ -111,11 +112,12 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
     private void OnDropshipHijackLanded(ref DropshipHijackLandedEvent ev)
     {
-        var evacuationProgress = EnsureComp<EvacuationProgressComponent>(ev.Map);
+        var trackerMap = GetEvacuationMap(ev.Map); // CMU14: one fuel tracker per multi-deck ship
+        var evacuationProgress = EnsureComp<EvacuationProgressComponent>(trackerMap); // CMU14
         evacuationProgress.DropShipCrashed = true;
         evacuationProgress.VictimFaction = ev.VictimFaction;
         evacuationProgress.IsHumanHijack = ev.IsHumanHijack;
-        Dirty(ev.Map, evacuationProgress);
+        Dirty(trackerMap, evacuationProgress); // CMU14
 
         // Only unlock doors on the victim's ship map
         var doors = EntityQueryEnumerator<EvacuationDoorComponent, TransformComponent>();
@@ -191,6 +193,15 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
+        _map = null;
+        _index = 0;
+    }
+
+    private void OnMapRemoved(MapRemovedEvent ev)
+    {
+        if (_map != ev.MapId)
+            return;
+
         _map = null;
         _index = 0;
     }
@@ -291,7 +302,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             _ => throw new ArgumentOutOfRangeException(),
         };
 
-        _popup.PopupClient(msg, ent, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.SmallCaution);
     }
 
     private void OnEvacuationPumpExamined(Entity<EvacuationPumpComponent> ent, ref ExaminedEvent args)
@@ -320,7 +331,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             return;
 
         args.Cancel();
-        _popup.PopupClient("Evacuation has not been authorized.", ent, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity("Evacuation has not been authorized.", ent, args.User, PopupType.SmallCaution);
     }
 
     private void OnEvacuationComputerLaunch(Entity<EvacuationComputerComponent> ent, ref EvacuationComputerLaunchBuiMsg args)
@@ -371,7 +382,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
             if (mobs.Count > maxMobs)
             {
-                _popup.PopupPredicted("The evacuation pod is overloaded with this many people inside!", ent, null, PopupType.LargeCaution);
+                _popup.PopupBroadcast("The evacuation pod is overloaded with this many people inside!", ent, null, PopupType.LargeCaution);
                 ent.Comp.Mode = EvacuationComputerMode.Crashed;
                 Dirty(ent);
 
@@ -495,6 +506,21 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         return _rmcPower.IsAreaPowered(area, RMCPowerChannel.Equipment);
     }
 
+    // CMU14 method
+    // multi-deck ships could end up with two fuel trackers (CO evacuates on one deck, hijack crashes onto
+    // another) and lifeboats read the empty one
+    public EntityUid GetEvacuationMap(EntityUid map)
+    {
+        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
+        while (query.MoveNext(out var trackerMap, out _))
+        {
+            if (_zLevels.IsSameZNetwork(trackerMap, map))
+                return trackerMap;
+        }
+
+        return map;
+    }
+
     public void TriggerColonyEvacuation(EntityUid planetMapUid)
     {
         if (_net.IsClient)
@@ -516,6 +542,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     {
         if (_net.IsClient) return;
         DebugTools.Assert(map != null);
+        map = GetEvacuationMap(map.Value); // CMU14: one fuel tracker per multi-deck ship
         var progress = EnsureComp<EvacuationProgressComponent>(map.Value);
 
         if (progress.Enabled && progress.EnabledAt is { } enabledAt)

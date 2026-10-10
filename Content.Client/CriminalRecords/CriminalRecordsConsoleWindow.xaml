@@ -1,152 +1,157 @@
-<controls:FancyWindow xmlns="https://spacestation14.io"
-                      xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+<!-- cmu edit: DefaultWindow for the CRT window theme -->
+<DefaultWindow xmlns="https://spacestation14.io"
                       Title="{Loc 'criminal-records-console-window-title'}"
                       MinSize="695 440">
-    <BoxContainer Orientation="Vertical">
+    <!-- cmu edit start: CRT styling -->
+    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
         <BoxContainer Name="AllList"
                       Orientation="Vertical"
                       VerticalExpand="True"
                       HorizontalExpand="True"
+                      SeparationOverride="6"
                       Margin="8">
             <!-- Record search bar -->
-            <BoxContainer Margin="5 5 5 10"
-                          HorizontalExpand="true"
+            <BoxContainer HorizontalExpand="True"
+                          SeparationOverride="6"
                           VerticalAlignment="Center">
                 <OptionButton Name="FilterType"
-                              MinWidth="250"
-                              Margin="0 0 10 0" />
+                              MinWidth="200" />
                 <!-- Populated in constructor -->
                 <LineEdit Name="FilterText"
                           PlaceHolder="{Loc 'criminal-records-filter-placeholder'}"
                           HorizontalExpand="True" />
             </BoxContainer>
             <BoxContainer Orientation="Horizontal"
+                          SeparationOverride="6"
                           VerticalExpand="True">
                 <!-- Record listing -->
-                <BoxContainer Orientation="Vertical"
-                              Margin="10 10"
-                              MinWidth="250"
-                              MaxWidth="250">
-                    <Label Name="RecordListingTitle"
-                           Text="{Loc 'criminal-records-console-records-list-title'}"
-                           HorizontalExpand="True"
-                           Align="Center" />
-                    <Label Name="NoRecords"
-                           Text="{Loc 'criminal-records-console-no-records'}"
-                           HorizontalExpand="True"
-                           Align="Center"
-                           FontColorOverride="DarkGray" />
-                    <ScrollContainer VerticalExpand="True">
-                        <ItemList Name="RecordListing" />
-                        <!-- Populated when loading state -->
-                    </ScrollContainer>
-                </BoxContainer>
-                <Label Name="RecordUnselected"
-                       Text="{Loc 'criminal-records-console-select-record-info'}"
-                       HorizontalExpand="True"
-                       Align="Center"
-                       FontColorOverride="DarkGray" />
-                <!-- Selected record info -->
-                <BoxContainer Name="PersonContainer"
-                        Orientation="Vertical"
-                        VerticalExpand="True"
-                        HorizontalExpand="True"
-                        Margin="5"
-                        Visible="False">
-                    <Label Name="PersonName"
-                           Margin="0 0 0 5"
-                           StyleClasses="LabelBig" />
-                    <BoxContainer Orientation="Horizontal"
-                                  Margin="0 0 0 5">
-                        <Label Text="{Loc 'crew-monitoring-ui-job-label'}"
-                               FontColorOverride="DarkGray" />
-                        <TextureRect Name="PersonJobIcon"
-                                     TextureScale="2 2"
-                                     Margin="6 0"
-                                     VerticalAlignment="Center" />
-                        <Label Name="PersonJob" />
+                <PanelContainer StyleClasses="CrtInsetPanel"
+                                MinWidth="250"
+                                MaxWidth="250"
+                                VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  SeparationOverride="4"
+                                  Margin="4">
+                        <PanelContainer StyleClasses="CrtHeaderPanel">
+                            <Label Name="RecordListingTitle"
+                                   Text="{Loc 'criminal-records-console-records-list-title'}"
+                                   StyleClasses="CrtHeading"
+                                   HorizontalExpand="True"
+                                   Align="Center" />
+                        </PanelContainer>
+                        <Label Name="NoRecords"
+                               Text="{Loc 'criminal-records-console-no-records'}"
+                               StyleClasses="CrtDimText"
+                               HorizontalExpand="True"
+                               Align="Center" />
+                        <ScrollContainer VerticalExpand="True">
+                            <ItemList Name="RecordListing" />
+                            <!-- Populated when loading state -->
+                        </ScrollContainer>
+                        <OptionButton Name="CrewListFilter"
+                                      HorizontalExpand="True" />
                     </BoxContainer>
-                    <BoxContainer Orientation="Horizontal"
-                                  Margin="0 0 0 5">
-                        <Label Text="{Loc 'general-station-record-prints-filter'}"
-                               FontColorOverride="DarkGray" />
-                        <Label Text=":"
-                               Margin="0 0 6 0"
-                               FontColorOverride="DarkGray" />
-                        <Label Name="PersonPrints" />
+                </PanelContainer>
+                <PanelContainer StyleClasses="CrtInsetPanel"
+                                HorizontalExpand="True"
+                                VerticalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True"
+                                  Margin="8">
+                        <Label Name="RecordUnselected"
+                               Text="{Loc 'criminal-records-console-select-record-info'}"
+                               StyleClasses="CrtDimText"
+                               HorizontalExpand="True"
+                               VerticalExpand="True"
+                               Align="Center"
+                               VAlign="Center" />
+                        <!-- Selected record info -->
+                        <BoxContainer Name="PersonContainer"
+                                      Orientation="Vertical"
+                                      VerticalExpand="True"
+                                      HorizontalExpand="True"
+                                      SeparationOverride="4"
+                                      Visible="False">
+                            <PanelContainer StyleClasses="CrtHeaderPanel">
+                                <Label Name="PersonName"
+                                       StyleClasses="CrtHeadingBig" />
+                            </PanelContainer>
+                            <!-- job hidden -->
+                            <BoxContainer Orientation="Horizontal"
+                                          Visible="False">
+                                <Label Text="{Loc 'crew-monitoring-ui-job-label'}"
+                                       StyleClasses="CrtDimText" />
+                                <TextureRect Name="PersonJobIcon"
+                                             TextureScale="2 2"
+                                             Margin="6 0"
+                                             VerticalAlignment="Center" />
+                                <Label Name="PersonJob" StyleClasses="CrtText" />
+                            </BoxContainer>
+                            <BoxContainer Orientation="Horizontal">
+                                <Label Text="{Loc 'general-station-record-prints-filter'}"
+                                       StyleClasses="CrtDimText" />
+                                <Label Text=":"
+                                       Margin="0 0 6 0"
+                                       StyleClasses="CrtDimText" />
+                                <Label Name="PersonPrints" StyleClasses="CrtText" />
+                            </BoxContainer>
+                            <BoxContainer Orientation="Horizontal">
+                                <Label Text="{Loc 'general-station-record-dna-filter'}"
+                                       StyleClasses="CrtDimText" />
+                                <Label Text=":"
+                                       Margin="0 0 6 0"
+                                       StyleClasses="CrtDimText" />
+                                <Label Name="PersonDna" StyleClasses="CrtText" />
+                            </BoxContainer>
+                            <PanelContainer StyleClasses="LowDivider"
+                                            Margin="0 4" />
+                            <BoxContainer Orientation="Horizontal">
+                                <Label Name="StatusLabel"
+                                       Text="{Loc 'criminal-records-console-status'}"
+                                       StyleClasses="CrtDimText" />
+                                <Label Text=":"
+                                       StyleClasses="CrtDimText" />
+                                <Label Name="PersonStatus"
+                                       StyleClasses="CrtText" />
+                                <AnimatedTextureRect Name="PersonStatusTX"
+                                                     Margin="8 0" />
+                                <OptionButton Name="StatusOptionButton"
+                                              MinWidth="130" />
+                                <!-- Populated in constructor -->
+                            </BoxContainer>
+                            <RichTextLabel Name="WantedReason"
+                                           Visible="False"
+                                           MaxWidth="425" />
+                            <BoxContainer Orientation="Horizontal">
+                                <Label Text="{Loc 'Bounty'}"
+                                       StyleClasses="CrtDimText" />
+                                <Label Text=":"
+                                       Margin="0 0 6 0"
+                                       StyleClasses="CrtDimText" />
+                                <Label Name="PersonBounty" StyleClasses="CrtHeading" />
+                                <LineEdit Name="BountyInput" Visible="False" MinWidth="60" Margin="5 0" />
+                                <Button Name="BountySetButton" Text="Set Bounty" Visible="False" Margin="5 0" />
+                            </BoxContainer>
+                            <Control VerticalExpand="True" />
+                            <Button Name="HistoryButton"
+                                    Text="{Loc 'criminal-records-console-crime-history'}"
+                                    StyleClasses="CrtButton"
+                                    HorizontalAlignment="Left" />
+                        </BoxContainer>
                     </BoxContainer>
-                    <BoxContainer Orientation="Horizontal"
-                                  Margin="0 0 0 5">
-                        <Label Text="{Loc 'general-station-record-dna-filter'}"
-                               FontColorOverride="DarkGray" />
-                        <Label Text=":"
-                               Margin="0 0 6 0"
-                               FontColorOverride="DarkGray" />
-                        <Label Name="PersonDna" />
-                    </BoxContainer>
-                    <PanelContainer StyleClasses="LowDivider"
-                                    Margin="0 5 0 5" />
-                    <BoxContainer Orientation="Horizontal"
-                                  Margin="0 5 0 5">
-                        <Label Name="StatusLabel"
-                               Text="{Loc 'criminal-records-console-status'}"
-                               FontColorOverride="DarkGray" />
-                        <Label Text=":"
-                               FontColorOverride="DarkGray" />
-                        <Label Name="PersonStatus"
-                               FontColorOverride="DarkGray" />
-                        <AnimatedTextureRect Name="PersonStatusTX"
-                                             Margin="8 0" />
-                        <OptionButton Name="StatusOptionButton"
-                                      MinWidth="130" />
-                        <!-- Populated in constructor -->
-                    </BoxContainer>
-                    <RichTextLabel Name="WantedReason"
-                                   Visible="False"
-                                   MaxWidth="425" />
-                    <Button Name="HistoryButton"
-                            Text="{Loc 'criminal-records-console-crime-history'}"
-                            Margin="0 5" />
-                    <BoxContainer Orientation="Horizontal"
-                                  Margin="0 0 0 5">
-                        <Label Text="{Loc 'Bounty'}"
-                               FontColorOverride="Gold" />
-                        <Label Text=":"
-                               Margin="0 0 6 0"
-                               FontColorOverride="Gold" />
-                        <Label Name="PersonBounty" FontColorOverride="Gold" />
-                        <LineEdit Name="BountyInput" Visible="False" MinWidth="60" Margin="5 0" />
-                        <Button Name="BountySetButton" Text="Set Bounty" Visible="False" Margin="5 0" />
-                    </BoxContainer>
-                </BoxContainer>
+                </PanelContainer>
             </BoxContainer>
-            <BoxContainer Orientation="Horizontal"
-                          Margin="0 0 0 5">
-                <OptionButton
-                    Name="CrewListFilter"
-                    MinWidth="250"
-                    Margin="10 0 10 0" />
-            </BoxContainer>
-        </BoxContainer>
-        <!-- Footer -->
-        <BoxContainer Orientation="Vertical">
-            <PanelContainer StyleClasses="LowDivider" />
-            <BoxContainer Orientation="Horizontal"
-                          Margin="10 2 5 0"
-                          VerticalAlignment="Bottom">
+            <!-- Footer -->
+            <BoxContainer Orientation="Horizontal">
                 <Label Text="{Loc 'criminal-records-console-flavor-left'}"
-                       StyleClasses="WindowFooterText" />
+                       StyleClasses="CrtDimText" />
                 <Label Text="{Loc 'criminal-records-console-flavor-right'}"
-                       StyleClasses="WindowFooterText"
+                       StyleClasses="CrtDimText"
                        HorizontalAlignment="Right"
-                       HorizontalExpand="True"
-                       Margin="0 0 5 0" />
-                <TextureRect StyleClasses="NTLogoDark"
-                             Stretch="KeepAspectCentered"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Right"
-                             SetSize="19 19" />
+                       HorizontalExpand="True" />
             </BoxContainer>
         </BoxContainer>
-    </BoxContainer>
-</controls:FancyWindow>
+    </PanelContainer>
+    <!-- cmu edit end -->
+</DefaultWindow>

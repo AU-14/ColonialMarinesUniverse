@@ -12,6 +12,8 @@ namespace Content.IntegrationTests.Tests.NPC;
 [TestOf(typeof(NpcFactionSystem))]
 public sealed class NpcFactionMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<NpcFactionPrototype> NpcFactionMergeParentPrototype = "NpcFactionMergeParent";
+
     public override PoolSettings PoolSettings => new()
     {
         Destructive = true,
@@ -95,7 +97,7 @@ public sealed class NpcFactionMergeRegressionTest : GameTest
                     "a faction hostile to its own subtree must never become hostile to itself");
             });
 
-            var parent = SProtoMan.Index<NpcFactionPrototype>("NpcFactionMergeParent");
+            var parent = SProtoMan.Index<NpcFactionPrototype>(NpcFactionMergeParentPrototype);
             var originalParents = parent.Parents;
             try
             {

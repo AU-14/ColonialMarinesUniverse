@@ -114,7 +114,7 @@ public sealed partial class MineDetectorSystem : EntitySystem
                 ent.Comp.Short = !ent.Comp.Short;
                 Dirty(ent);
                 _audio.PlayPredicted(ent.Comp.ToggleSound, ent, user);
-                _popup.PopupClient($"You change the {Name(ent)} to {(ent.Comp.Short ? "short" : "long")} range mode", ent, user);
+                _popup.PopupEntity($"You change the {Name(ent)} to {(ent.Comp.Short ? "short" : "long")} range mode", ent, user);
             },
         });
     }

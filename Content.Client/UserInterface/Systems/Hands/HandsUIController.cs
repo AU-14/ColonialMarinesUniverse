@@ -109,6 +109,13 @@ public sealed partial class HandsUIController : UIController, IOnStateEntered<Ga
             _handsSystem.UIInventoryExamine(hand.SlotName);
             args.Handle();
         }
+        // cmu edit start
+        else if (args.Function == ContentKeyFunctions.Point)
+        {
+            CMUHoldUpItem(hand.SlotName);
+            args.Handle();
+        }
+        // cmu edit end
     }
 
     private void UnloadPlayerHands()

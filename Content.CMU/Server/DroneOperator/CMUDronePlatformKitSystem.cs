@@ -78,7 +78,7 @@ public sealed partial class CMUDronePlatformKitSystem : EntitySystem
                 return false;
         }
 
-        if (!_prototypes.Index(pack).TryGetComponent<StorageFillComponent>(out var manifest, _factory))
+        if (!_prototypes.Index(pack).TryComp<StorageFillComponent>(out var manifest, _factory))
             return false;
 
         Entity<StorageComponent>? destination = null;

@@ -1,0 +1,27 @@
+- type: entity
+  parent: CMRack
+  id: RuMCdumbbells
+  name: dumbbells
+  description: A pair of cast-iron dumbbells. Heavy, simple, and reliable. Perfect for maintaining combat form during long deployments.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Decorations/sport.rsi
+    layers:
+      - state: dumbbells
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 30
+
+- type: entity
+  parent: CMRack
+  id: RuMCbarbell
+  name: barbell
+  description: A heavy barbell with cast-iron plates. Used for deadlifts and bench presses. The only honest training tool in a world of dishonest fights.
+  components:
+  - type: Sprite
+    sprite: _RuMC14/Objects/Decorations/sport.rsi
+    layers:
+      - state: dumbbells_big
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 30

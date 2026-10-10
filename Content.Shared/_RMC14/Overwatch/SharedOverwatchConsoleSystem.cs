@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.Timing;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
@@ -895,9 +896,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
         try
         {
-            var time = _timing.CurTime;
+            var budget = new TimeSliceBudget(_maxProcessTime, 128);
             if (_toProcess.Count > 0)
             {
+                var exhausted = false;
                 foreach (var (squadId, membersQueue) in _toProcess)
                 {
                     if (TerminatingOrDeleted(squadId))
@@ -910,11 +912,15 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
                     if (_squad.TryGetSquadLeader(squadId, out var leader))
                         leaderCoords = _transform.GetMapCoordinates(leader);
 
-                    while (membersQueue.TryDequeue(out var member))
+                    while (membersQueue.Count > 0)
                     {
-                        if (_timing.CurTime > time + _maxProcessTime)
+                        if (!budget.TryConsume())
+                        {
+                            exhausted = true;
                             break;
+                        }
 
+                        var member = membersQueue.Dequeue();
                         if (TerminatingOrDeleted(member))
                             continue;
 
@@ -967,6 +973,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
                     if (membersQueue.Count == 0)
                         _toRemove.Add(squadId);
+
+                    // Keep the unprocessed queues for the next tick. Completed squads are removed below.
+                    if (exhausted)
+                        break;
                 }
 
                 foreach (var squad in _toRemove)
@@ -991,6 +1001,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         {
             _toProcess.Clear();
             throw;
+        }
+        finally
+        {
+            _toRemove.Clear();
         }
     }
 

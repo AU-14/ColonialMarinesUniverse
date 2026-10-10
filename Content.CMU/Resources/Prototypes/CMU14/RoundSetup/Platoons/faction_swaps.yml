@@ -4,7 +4,6 @@
   swaps:
     ANPRC117GRadio: ANPRC117GRadioOPFOR
     AU14TabletGovfor: AU14TabletOpfor
-    fetchreturngovfor: fetchreturnopfor
 # ├──[ Doors ]──────────────────────────────────────────┤
     CMAirlockCommandGovforGlassLocked: CMAirlockCommandOpforGlassLocked
     CMAirlockCommandGovforLocked: CMAirlockCommandOpforLocked

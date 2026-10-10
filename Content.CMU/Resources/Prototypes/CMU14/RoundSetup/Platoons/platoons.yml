@@ -42,12 +42,12 @@
   - VehicleHumveeMedical
   - VehicleBlackfootDoorGunVariant
   - VehicleBlackfootTransport
-  name: LACN Landing Forces
+  name: Latin American Colonial Navy
   lorePrimer: AU14PrimerPlatoonLACN
   Allegiance: UA
   languages:
     - Spanish
-    - Brazilian
+    - Portuguese
   reqlist: LACNCargoCatalog
   vendorSet: LACN
   platoonPatch: /Textures/CMU14/Clothing/Patches/brazilunit_patch.rsi/icon.png
@@ -355,6 +355,343 @@
   #platoonflag: uaflag
   CompatibleDropships:
   - /Maps/CMU14/ShuttlesDropships/Mohawk/midway_deployment.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
+  techTree: CMUIntelTechTree_GOVFOR
+
+- type: platoon
+  id: BEAR
+  vehicleSupplyCatalog:
+  - CMUFighterGround
+  - VehicleSPPTank
+  - VehicleSPPAPC
+  - VehicleSPPVan
+  - VehicleSPPVanArmed
+  - VehicleSPPVanMedical
+  - VehicleSPPVanLogistics
+  - VehicleSPPVanPrisoner
+  name: "PMC 'BEAR'"
+  lorePrimer: RuMCPrimerPlatoonBEAR
+  Allegiance: UPP
+  languages:
+    - Russian
+    - German
+    - Mandarin
+    - Spanish
+    - English
+    - TacticalSignLanguage
+  reqlist: BEARCargoCatalog
+  vendorSet: BEAR
+  platoonPatch: /Textures/_RuMC14/Clothing/Patches/BEAR.rsi/icon.png
+  chevronOverrides:
+    AU14JobPlatCoBase:
+      UPP_Major:
+        entity: AU14ChevronUPPNIMajor
+        requirements: []
+      UPP_JuniorColonel:
+        entity: AU14ChevronUPPNIJuniorColonel
+        requirements: []
+      UPP_Colonel:
+        entity: AU14ChevronUPPNIColonel
+        requirements: []
+
+    AU14JobadvisorBase:
+      UPP_SeniorCommissar:
+        entity: AU14ChevronUPPNISeniorCommisar
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORadvisor
+          time: 36000 # 10 hours
+      UPP_Commissar:
+        entity: AU14ChevronUPPNICommisar
+        requirements: []
+
+    AU14JobAdjutantBase:
+      UPP_Captain:
+        entity: AU14ChevronUPPNICaptain
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORadvisor
+          time: 36000 # 10 hours
+      UPP_SeniorLieutenant:
+        entity: AU14ChevronUPPNISeniorLieutenant
+        requirements: []
+
+    AU14JobOfficerEngiBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOfficerIntelBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOfficerLogisticsBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOfficerMedicalBase:
+      UPP_Lieutenant:
+        entity: AU14ChevronUPPNILieutenant
+        requirements: []
+
+    AU14JobOfficerMPBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobPlatOpBase:
+      UPP_Lieutenant:
+        entity: AU14ChevronUPPNILieutenant
+        requirements: []
+
+    AU14JobVehicleCommanderBase:
+      UPP_FirstSergeant:
+        entity: AU14ChevronUPPNIFirstSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORVehicleCommander
+          time: 36000 #10 hours
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements: []
+
+    AU14JobSectionSergeantBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSectionSergeant
+          time: 36000 #10 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements: []
+
+    AU14JobSquadSergeantBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSquadSergeant
+          time: 36000 #10 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements: []
+
+    AU14JobDCCBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORDCC
+          time: 36000 #10 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements: []
+
+    AU14JobDSPilotBase:
+      UPP_SeniorWarrantOfficer:
+        entity: AU14ChevronUPPNISeniorWarrantOfficer
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORDSPilot
+          time: 36000 #10 hours
+      UPP_WarrantOfficer:
+        entity: AU14ChevronUPPNIWarrantOfficer
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobAuxTechBase:
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORAuxTech
+          time: 86400 # 24 hours
+      UPP_SeniorGefreiter:
+        entity: AU14ChevronUPPNISeniorGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORAuxTech
+          time: 36000 #10 hours
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements: []
+
+    AU14JobEngineeringTechBase:
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFOREngineeringTech
+          time: 86400 # 24 hours
+      UPP_SeniorGefreiter:
+        entity: AU14ChevronUPPNISeniorGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFOREngineeringTech
+          time: 36000 #10 hours
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements: []
+
+    AU14JobSquadCombatTechBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSquadCombatTech
+          time: 36000 #10 hours
+      UPP_Private:
+        entity: AU14ChevronUPPNIPrivate
+        requirements: []
+
+    CMUJobDroneOperatorBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: CMUJobGOVFORDroneOperator
+          time: 36000 #10 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements: []
+
+    AU14JobSquadAutomaticRiflemanBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSquadAutomaticRifleman
+          time: 36000 #10 hours
+      UPP_Private:
+        entity: AU14ChevronUPPNIPrivate
+        requirements: []
+
+    AU14JobSquadRiflemanBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSquadRifleman
+          time: 36000 #10 hours
+      UPP_Private:
+        entity: AU14ChevronUPPNIPrivate
+        requirements: []
+
+    AU14JobWeaponsSpecialistBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORWeaponsSpecialist
+          time: 36000 #10 hours
+      UPP_Private:
+        entity: AU14ChevronUPPNIPrivate
+        requirements: []
+
+    AU14JobMilitaryDoctorBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobNurseBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORNurse
+          time: 86400 # 24 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORNurse
+          time: 36000 #10 hours
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements: []
+
+    AU14JobPlatoonCorpsmanBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements: []
+
+    AU14JobGOVFORCombatCorrespondentBase:
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements: []
+
+    AU14JobRadioTelephoneOperatorBase: # FTL not RTO
+      UPP_Plutonowy:
+        entity: AU14ChevronUPPNIPlutonowy
+        requirements: []
+
+    AU14JobMilitaryPoliceBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORMilitaryPoliceMan
+          time: 86400 # 24 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORMilitaryPoliceMan
+          time: 36000 #10 hours
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements: []
+
+    AU14JobRadioTrafficOperatorBase:
+      UPP_SeniorGefreiter:
+        entity: AU14ChevronUPPNISeniorGefreiter
+        requirements: []
+
+    AU14JobVehicleCrewmanBase:
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORVehicleCrewman
+          time: 36000 #10 hours
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements: []
+
+    AU14JobAuxSupportSynthBase:
+      UPP_WarrantOfficer:
+        entity: AU14ChevronUPPNIWarrantOfficer
+        requirements: []
+
+  possibleships:
+      - USSBushRedux
+  # jobClassOverride:
+  #   SquadRifleman: AU14JobGOVFORSquadRiflemanUPP
+  #   PlatCo: AU14JobGOVFORPlatCoUPP
+  #   PlatOp: AU14JobGOVFORPlatOpUPP
+  #   # SectionSergeant: AU14JobGOVFORSectionSergeantUPP # unused
+  #   SquadSergeant: AU14JobGOVFORSquadSergeantUPP
+  #   RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperatorUPP
+  #   SquadCombatTech: AU14JobGOVFORSquadCombatTechUPP
+  #   SquadAutomaticRifleman: AU14JobGOVFORSquadAutomaticRiflemanUPP
+  #   PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanUPP
+  #   DSPilot: AU14JobGOVFORDSPilotUPP
+  #   DCC: AU14JobGOVFORDCCUPP
+  #   SupportSynth: AU14JobGOVFORAuxSupportSynthUPP
+  CompatibleDropships:
+  - /Maps/CMU14/Shuttles/alamo.yml
   - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
   techTree: CMUIntelTechTree_GOVFOR
 
@@ -1031,6 +1368,12 @@
   - AU14VehicleCivVan
   - AU14VehicleCivEMSAmbulance
   - VehicleBlackfootTransport
+  - VehicleAPC
+  - VehicleAPCMed
+  - VehicleHumvee
+  - VehicleHumveeTransport
+  - VehicleHumveeMedical
+  - VehicleBlackfootDoorGunVariant
   name: CMB Crisis Intervention
   lorePrimer: AU14PrimerPlatoonCMBCIU
   Allegiance: UA
@@ -1249,10 +1592,12 @@
 - type: platoon
   id: HAZOPS
   vehicleSupplyCatalog:
+  - VehicleTank
   - CMUFighterGround
   - VehicleAev
   - VehicleAPC
   - VehicleAPCMed
+  - VehicleHumvee
   - VehicleHumveeMedical
   - VehicleHumveeTransport
   - VehicleBlackfootTransport
@@ -1278,7 +1623,9 @@
   id: ProdigySF
   vehicleSupplyCatalog:
   - CMUFighterGround
+  - VehicleTank
   - VehicleHumvee
+  - VehicleHumveeMedical
   - VehicleHumveeTransport
   - AU14VehicleCivArmoredTruck
   - AU14VehicleCivTruck
@@ -1566,6 +1913,7 @@
   id: VAIPO
   vehicleSupplyCatalog:
   - CMUFighterGround
+  - VehicleTank
   - VehicleAPC
   - VehicleHumvee
   - VehicleHumveeTransport
@@ -1758,6 +2106,7 @@
   vehicleSupplyCatalog:
   - CMUFighterGround
   - VehicleTankTWE
+  - VehicleHumvee
   - VehicleHumveeTransport
   - VehicleHumveeMedical
   name: TWE Royal Marine Commandos
@@ -2082,37 +2431,41 @@
 # Add more platoons as needed
 
 - type: lorePrimer
+  id: RuMCPrimerPlatoonBEAR
+  PlatoonInfo: lore-primer-platoon-bear-info
+
+- type: lorePrimer
   id: AU14PrimerPlatoonLACN
-  PlatoonInfo: "Latin American Colonial Navy, Landing Forces (LACN). A branch of the United Americas' space forces, LACN specializes in rapid deployment and shock tactics for planetary assault and occupation."
+  PlatoonInfo: lore-primer-platoon-lacn-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonUSCM
-  PlatoonInfo: "The United States Colonial Marines (USCM) 4th Division, 13th Strike Group, 13th Regiment, known as the “Lucky Thirteen”, is a Colonial Marine expeditionary force formed to patrol the outer colonies for threats to the United Americas. The Lucky Thirteen is composed primarily of reservists and B-rate troops drawn from the inner UA colonies following the Tychon Tackle. They have been deployed to the Neroid Sector to bolster the United Americas response to the growing number of insurgencies."
+  PlatoonInfo: lore-primer-platoon-uscm-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonUPP
-  PlatoonInfo: "The Union of Progressive Peoples Naval Infantry (UPP), under the 5th Fleet of the 5th Division, is known as the 'North Stars.' Drawn from Chinese (former CANC), Russian, German, and Spanish conscripts, the unit is considered one of the most culturally diverse formations in the UPP, even among the 5th Fleet. The 'North Stars' are regarded as underfunded, even by UPP standards, yet despite this, they continue to demonstrate an undying loyalty to the party."
+  PlatoonInfo: lore-primer-platoon-upp-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonWEYU
-  PlatoonInfo: "The Weyland-Yutani Private Military Company (WEYU PMC), known as the 'Whiteshields', is the organized security force of Weyland-Yutani. While usually reserved for operations directly related to Weyland-Yutani facilities, whether for security or containment, colonial governments have often found hiring them to be more efficient and effective than relying on the local military."
+  PlatoonInfo: lore-primer-platoon-weyu-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonCMBCIU
-  PlatoonInfo: "The Colonial Marshals Bureau Crisis Intervention Unit (CMB CIU) is a specialized unit of deputies and marshals tasked with responding to hostage situations, worker strikes, terrorist incidents, and any other high-profile crisis serious enough to require intervention beyond the capabilities of local law enforcement."
+  PlatoonInfo: lore-primer-platoon-cmbciu-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonHAZOPS
-  PlatoonInfo: "The United States Colonial Marines Hazardous Operations Unit (HAZOPS) specializes in high-risk environments, including chemical, biological, radiological, and explosive threats. HAZOPS teams are trained for rapid response and containment in CBRN conditions."
+  PlatoonInfo: lore-primer-platoon-hazops-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonProdigySF
-  PlatoonInfo: "The Prodigy Corporation Security Forces are a motley group of former military personnel, former law enforcement officers, and independently hired mercenaries employed by the Prodigy Corporation, which contracts them out to whichever faction is willing to pay the most."
+  PlatoonInfo: lore-primer-platoon-prodigysf-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonVAIPO
-  PlatoonInfo: "Vanguard Arrow Inc, 'Primary Operations' (VAIPO). A security detail firm specializing in the protection of high-value targets/assets and rapid response services.  They are United States-based Private Military Company comprised of former UA forces and veterans alike."
+  PlatoonInfo: lore-primer-platoon-vaipo-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonRMC
-  PlatoonInfo: "The Three World Empire Royal Marine Commandos (TWE RMC) are a specialized and highly disciplined force trained in rapid deployment, boarding actions, reconnaissance, sabotage, and precision strikes way behind enemy lines."
+  PlatoonInfo: lore-primer-platoon-rmc-info

@@ -9,7 +9,7 @@ using Content.Shared.Interaction;
 
 namespace Content.Server._RMC14.Medical;
 
-public sealed class RMCHypospraySystem : RMCSharedHypospraySystem
+public sealed partial class RMCHypospraySystem : RMCSharedHypospraySystem
 {
     [Dependency] private InjectorSystem _injector = default!;
 

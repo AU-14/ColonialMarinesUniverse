@@ -40,7 +40,7 @@ public sealed partial class YautjaRecallSystem : EntitySystem
         ent.Comp.YautjaOwner = args.User;
         Dirty(ent);
         args.Handled = true;
-        _popup.PopupClient(
+        _popup.PopupEntity(
             Loc.GetString("cmu-yautja-recall-bound", ("item", ent.Owner)),
             ent.Owner,
             args.User,

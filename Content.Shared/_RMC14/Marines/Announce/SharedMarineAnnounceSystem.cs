@@ -120,7 +120,7 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
 
         if (!_skills.HasSkill(args.Actor, ent.Comp.AnnounceSkill, ent.Comp.AnnounceSkillLevel))
         {
-            _popup.PopupClient(Loc.GetString("rmc-skills-no-training", ("target", ent)), args.Actor, PopupType.MediumCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-skills-no-training", ("target", ent)), args.Actor, PopupType.MediumCaution);
             return;
         }
 
@@ -128,7 +128,7 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         if (_timing.CurTime < ent.Comp.LastAnnouncement + ent.Comp.Cooldown)
         {
             var cooldownMessage = Loc.GetString("rmc-announcement-cooldown", ("seconds", (int) ent.Comp.Cooldown.TotalSeconds));
-            _popup.PopupClient(cooldownMessage, args.Actor, PopupType.SmallCaution);
+            _popup.PopupSelf(cooldownMessage, args.Actor, PopupType.SmallCaution);
             return;
         }
 
@@ -137,7 +137,12 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         if (text.Length > CharacterLimit)
             text = text[..CharacterLimit].Trim();
 
-        AnnounceSigned(args.Actor, text, name: ent.Comp.AnnounceName, faction: ResolveAnnouncementFaction(ent));
+        // CMU14: admin tablets announce under High Command
+        var author = ent.Comp.AnnounceAuthor is { } announceAuthor ? Loc.GetString(announceAuthor) : null;
+        AnnounceSigned(args.Actor, text,
+            author: author,
+            name: ent.Comp.AnnounceName,
+            faction: ResolveAnnouncementFaction(ent));
 
         ent.Comp.LastAnnouncement = time;
         Dirty(ent);
@@ -164,7 +169,7 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
     {
         if (!_skills.HasSkill(args.Actor, ent.Comp.OverwatchSkill, ent.Comp.OverwatchSkillLevel))
         {
-            _popup.PopupClient("You are not trained in overwatch!", args.Actor, PopupType.LargeCaution);
+            _popup.PopupSelf("You are not trained in overwatch!", args.Actor, PopupType.LargeCaution);
             return;
         }
 

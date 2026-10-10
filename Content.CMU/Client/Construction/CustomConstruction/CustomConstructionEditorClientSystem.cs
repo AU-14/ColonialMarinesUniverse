@@ -21,11 +21,11 @@ namespace Content.Client.CMU14.Construction.CustomConstruction;
 /// to the server. Also drives the in-menu "Construction Items Editor" utility: opens the entity selector,
 /// then asks the server to open the editor for the chosen entity (with a client-side admin pre-check).
 /// </summary>
-public sealed class CustomConstructionEditorClientSystem : EntitySystem
+public sealed partial class CustomConstructionEditorClientSystem : EntitySystem
 {
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly ToolPermissionClientSystem _toolPerms = default!;
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private ToolPermissionClientSystem _toolPerms = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
 
     /// <summary>
     /// Client-side pre-check mirroring the server gate: a Host-flagged admin OR a ckey granted this
@@ -134,7 +134,7 @@ public sealed class CustomConstructionEditorClientSystem : EntitySystem
         if (!_zSyncPickActive || args.State != BoundKeyState.Down)
             return false;
 
-        if (!args.EntityUid.IsValid() || !EntityManager.EntityExists(args.EntityUid))
+        if (!args.EntityUid.IsValid() || !Exists(args.EntityUid))
         {
             _popup.PopupCursor(Loc.GetString("au-zsync-pick-no-entity"), PopupType.MediumCaution);
             return true;
