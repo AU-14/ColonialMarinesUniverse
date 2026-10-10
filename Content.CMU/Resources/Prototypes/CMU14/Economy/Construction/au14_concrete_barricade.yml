@@ -180,4 +180,4 @@
   - !type:TileBarricadeClear
   - !type:AU14MinimumSkill
     skill: RMCSkillConstruction
-    level: 4
+    level: 2
