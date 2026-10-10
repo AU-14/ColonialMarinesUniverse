@@ -52,6 +52,16 @@ public sealed class CMUDroneControlSafeguardsTest
         await server.WaitAssertion(() =>
         {
             Assert.That(entities.GetComponent<MindComponent>(mind).VisitingEntity, Is.EqualTo(drone));
+            // bleeding and other passive ticks don't interrupt do-afters, so they mustn't drop the link either
+            var bleed = new DamageSpecifier();
+            bleed.DamageDict.Add("Bloodloss", 1);
+            entities.System<DamageableSystem>().TryChangeDamage(user, bleed, ignoreResistances: true, interruptsDoAfters: false, ignoreGlobalModifiers: true);
+        });
+        await server.WaitRunTicks(3);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entities.GetComponent<MindComponent>(mind).VisitingEntity, Is.EqualTo(drone),
+                "a bleed tick kicked the operator out of the drone");
             ChangeDamage(user, 1);
         });
         await server.WaitRunTicks(3);

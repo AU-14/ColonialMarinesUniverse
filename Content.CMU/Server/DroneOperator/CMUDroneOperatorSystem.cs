@@ -911,7 +911,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
     private void OnPilotingDamageChanged(Entity<CMURemotePilotingComponent> ent, ref DamageChangedEvent args)
     {
-        if (ent.Comp.BlocksInput && args.DamageIncreased)
+        // only real hits kick you out; bleeding, pain and chem ticks don't interrupt do-afters so they don't count here either
+        if (ent.Comp.BlocksInput && args.InterruptsDoAfters)
             QueueEndControlForOperator(ent, Loc.GetString("cmu-drone-control-ended-operator-hurt"));
     }
 
