@@ -124,6 +124,8 @@ public sealed partial class CMUExpeditionAgentSystem
         _reports.Clear();
         // keyed by squad root, and ids get reused after the round flush, so a stale plan could latch onto a new squad
         _squadPlans.Clear();
+        // the plan cadence too, carried over it shifted when the new round's squads got their first roles
+        _nextSquadPlan = TimeSpan.Zero;
     }
 
     // back to baseline tactics. learning normally carries between rounds (and to disk), and tests
