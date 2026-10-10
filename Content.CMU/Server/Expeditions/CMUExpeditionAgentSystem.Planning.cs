@@ -219,11 +219,9 @@ public sealed partial class CMUExpeditionAgentSystem
             case A.GrabCasualty:
                 if (_guns.TryGetGun(uid, out var gun))
                     _wield.TryUnwield(gun.Owner, uid);
-                success = ValidCasualty(uid, agent) && _hands.GetEmptyHandCount(uid) > 0 &&
-                    _transform.InRange(Transform(uid).Coordinates, Transform(agent.Casualty!.Value).Coordinates, 1.5f) &&
-                    _pulling.TryStartPull(uid, agent.Casualty.Value);
+                success = ValidCasualty(uid, agent) &&
+                    _transform.InRange(Transform(uid).Coordinates, Transform(agent.Casualty!.Value).Coordinates, 1.5f);
                 agent.State = CMUExpeditionAgentState.Rescuing;
-                agent.ActionComplete = success;
                 break;
             case A.DragCasualty:
                 if (ValidCasualty(uid, agent) && agent.RescueShelter is { } refuge)
@@ -275,6 +273,21 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             CancelPlan(uid, agent, true);
             return false;
+        }
+        if (agent.Action == A.GrabCasualty && !agent.ActionComplete)
+        {
+            // Unwielding queues the virtual grip for deletion. Let the hand become free
+            // before attempting the native pull, just as for reload/grenade preparation.
+            if (_hands.GetEmptyHandCount(uid) == 0 && now - agent.ActionStarted < TimeSpan.FromSeconds(0.5))
+                return true;
+            if (_hands.GetEmptyHandCount(uid) == 0 ||
+                !_transform.InRange(Transform(uid).Coordinates, Transform(agent.Casualty!.Value).Coordinates, 1.5f) ||
+                !_pulling.TryStartPull(uid, agent.Casualty.Value))
+            {
+                CancelPlan(uid, agent, true);
+                return false;
+            }
+            agent.ActionComplete = true;
         }
         if (agent.State == CMUExpeditionAgentState.PlanMove)
         {

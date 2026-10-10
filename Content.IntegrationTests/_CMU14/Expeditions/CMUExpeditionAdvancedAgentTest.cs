@@ -7,7 +7,9 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Inventory;
+using Content.Shared.Interaction;
 using Content.Shared.NPC.Systems;
+using Content.Shared.Physics;
 using Content.Shared.Stacks;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.GameObjects;
@@ -62,16 +64,23 @@ public sealed partial class CMUExpeditionAdvancedAgentTest : GameTest
         });
     }
 
-    [TestCase("CMUExpeditionScavengerAggressive", true)]
-    [TestCase("CMUExpeditionScavengerCautious", false)]
-    public async Task DispositionChangesExposureAndPressureChangesTheDecision(string prototype, bool presses)
+    [TestCase("CMUExpeditionScavengerAggressive")]
+    [TestCase("CMUExpeditionScavengerCautious")]
+    public async Task InfantryHoldsProductiveAnglesButWithdrawsWhenBadlyWounded(string prototype)
     {
-        EntityUid map = default, guard = default;
-        await Server.WaitAssertion(() => (map, guard, _) = Arena(prototype));
+        EntityUid map = default, guard = default, enemy = default, rifle = default;
+        EntityCoordinates initial = default;
+        var initialAmmo = 0;
+        await Server.WaitAssertion(() =>
+        {
+            (map, guard, enemy) = Arena(prototype);
+            initial = SEntMan.GetComponent<TransformComponent>(guard).Coordinates;
+            Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
+            rifle = gun.Owner;
+            initialAmmo = Ammo(rifle);
+        });
         var heldAngle = false;
-        var withdrew = false;
         var initiative = 0f;
-        var trace = new List<string>();
         for (var sample = 0; sample < 60; sample++)
         {
             await Pair.RunSeconds(0.15f);
@@ -79,15 +88,16 @@ public sealed partial class CMUExpeditionAdvancedAgentTest : GameTest
             {
                 var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
                 heldAngle |= agent.State == CMUExpeditionAgentState.HoldAngle;
-                withdrew |= agent.State == CMUExpeditionAgentState.Withdraw;
                 initiative = agent.Initiative;
-                trace.Add($"{sample}: {agent.State}, pos={SEntMan.GetComponent<TransformComponent>(guard).Coordinates}, anchor={agent.CoverAnchor}, peek={agent.PeekPosition}, dest={agent.CoverDestination}, route={agent.Route.Count}, shots={agent.ShotsFired}, initiative={agent.Initiative}");
             });
         }
         await Server.WaitAssertion(() =>
         {
-            Assert.That(heldAngle, Is.EqualTo(presses), $"A confident raider follows up from the angle; a cautious sentry returns after the short volley.\n{string.Join(Environment.NewLine, trace)}");
-            Assert.That(withdrew, Is.True, "Even aggressive soldiers must eventually return to cover.");
+            Assert.That(heldAngle, Is.True);
+            Assert.That(Ammo(rifle), Is.LessThan(initialAmmo), "A productive stance must deliver real fire.");
+            Assert.That(Server.System<SharedTransformSystem>().InRange(initial,
+                SEntMan.GetComponent<TransformComponent>(guard).Coordinates, 0.5f), Is.True,
+                "An unopposed rifleman should keep a clear firing position across volleys.");
         });
         for (var hit = 0; hit < 3; hit++)
         {
@@ -99,22 +109,24 @@ public sealed partial class CMUExpeditionAdvancedAgentTest : GameTest
             var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
             Assert.That(agent.Emotion, Is.EqualTo(CMUExpeditionEmotion.Shaken));
             Assert.That(agent.Initiative, Is.LessThan(initiative), "Fresh pressure must change decisions rather than just the displayed mood.");
+            Hurt(guard, (int) agent.EmergencyHealDamage - 30);
         });
-        var pressedUnderFire = false;
-        for (var sample = 0; sample < 20; sample++)
+        var sheltered = false;
+        for (var sample = 0; sample < 100 && !sheltered; sample++)
         {
             await Pair.RunSeconds(0.15f);
-            await Server.WaitAssertion(() => pressedUnderFire |=
-                SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State == CMUExpeditionAgentState.HoldAngle);
+            await Server.WaitAssertion(() => sheltered = !Server.System<SharedInteractionSystem>().InRangeUnobstructed(
+                guard, enemy, 100, CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
+                predicate: entity => entity == guard || entity == enemy));
         }
         await Server.WaitAssertion(() =>
         {
-            Assert.That(pressedUnderFire, Is.False, "A shaken soldier must stop extending exposure for another volley.");
+            Assert.That(sheltered, Is.True, "Severe wounds must override position commitment and physically break enemy sight.");
             SEntMan.DeleteEntity(map);
         });
     }
 
-    private (EntityUid Map, EntityUid Guard, EntityUid Enemy) Arena(string prototype)
+    private (EntityUid Map, EntityUid Guard, EntityUid Enemy) Arena(string prototype, bool withCover = true)
     {
         var generator = Server.System<CMUExpeditionSystem>();
         Assert.That(generator.TryGenerate("CMUExpeditionWoodland", 42, CMUExpeditionLandform.RiverValley,
@@ -129,7 +141,7 @@ public sealed partial class CMUExpeditionAdvancedAgentTest : GameTest
         var enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
         SEntMan.AddComponent<GodmodeComponent>(enemy);
         Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
-        for (var y = 1; y <= 4; y++)
+        for (var y = 1; withCover && y <= 4; y++)
         {
             var coordinates = origin.Offset(new Vector2(-2, y));
             SEntMan.SpawnEntity("CMUExpeditionHull", coordinates);

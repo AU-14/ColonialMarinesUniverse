@@ -211,6 +211,10 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void EndBurst(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now, bool allowPress = true)
     {
+        // A completed volley must release its decision window so the pause between
+        // bursts can be used for optional squad actions, even with a short burst pause.
+        if (agent.DecisionOwner == "fire")
+            agent.DecisionUntil = now;
         agent.LostAimSince = null;
         agent.BlockedShotSince = null;
         if (now < agent.SpacingUntil)
@@ -220,15 +224,22 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         }
         ValidateCover(uid, agent, false, now);
+        // A short volley can finish between think updates. Apply its suppression response
+        // here too, before another burst claims the firing position.
+        var covering = HasCoverCommitment(uid, agent, now);
+        var suppressed = !covering && agent.CoverAnchor != null && now < agent.SuppressedUntil &&
+            now >= agent.NextSuppressionResponse && agent.ShotsFired >= Math.Min(2, VolleySize(agent));
+        if (suppressed)
+            agent.NextSuppressionResponse = now + TimeSpan.FromSeconds(3);
         // Keep a productive stance across volleys. A covering commitment also survives ordinary
         // pressure; a lost lane, empty gun, rush, grenade or emergency injury invalidates it.
-        if (allowPress && (HasCoverCommitment(uid, agent, now) || KeepFightingPosition(uid, agent, now)))
+        if (allowPress && !suppressed && (covering || KeepFightingPosition(uid, agent, now)))
         {
             agent.State = CMUExpeditionAgentState.HoldAngle;
             agent.FireAt = now + RecoveryDelay(agent);
             return;
         }
-        if (allowPress && agent.CoverAnchor != null && agent.Initiative >= 0.75f && agent.Stress < 0.3f &&
+        if (allowPress && !suppressed && agent.CoverAnchor != null && agent.Initiative >= 0.75f && agent.Stress < 0.3f &&
             agent.FollowupBursts == 0 && agent.ShotsFired >= VolleySize(agent))
         {
             agent.FollowupBursts++;
