@@ -12630,5 +12630,126 @@
   id: 771
   time: '2026-10-09T23:07:14.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2116
+- author: PoltavskaPraca
+  changes:
+  - message: added construction belts to every comtech vendor and added storage rigs
+      to every corpsman vendor
+    type: Add
+  - message: added belt subtypes for medical storage rig belts for larp purposes
+    type: Add
+  id: 772
+  time: '2026-10-10T08:11:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2094
+- author: rokudara-sen
+  changes:
+  - message: Splints and casts can be removed by the patient or a medic
+    type: Fix
+  - message: The surgical webbing has room for its cast
+    type: Fix
+  - message: Drone operators are no longer kicked out of their drone by bleeding or
+      pain
+    type: Fix
+  - message: Piloted drones speak their operator's languages
+    type: Fix
+  - message: Riders get a clear button to release a seized host early
+    type: Fix
+  - message: Examining Yautja gear no longer shocks or delimbs humans
+    type: Fix
+  - message: Yautja clan masks block neomorph spores
+    type: Fix
+  - message: Fuelled lifeboats on the USS Bush no longer crash onto the planet after
+      an early evacuation order
+    type: Fix
+  - message: Crashing lifeboats land fully on the planet instead of hanging off the
+      map edge
+    type: Fix
+  - message: The OPFOR advisor and platoon commander can open the rank chevron cases
+    type: Fix
+  - message: The UTES-C mount shows its description
+    type: Fix
+  - message: Boots! and Orrery magazines use USCM and WeYu
+    type: Fix
+  - message: Russian text on UPP items and the liquidator role is translated
+    type: Fix
+  id: 773
+  time: '2026-10-10T08:43:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2139
+- author: maertayn
+  changes:
+  - message: The medical storage rig can now hold magazines and documents, an option
+      for the combat-medic, the lifesaver still holds more capacity for the platoon
+      medics.
+    type: Add
+  id: 774
+  time: '2026-10-10T10:17:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2137
+- author: HubaBub
+  changes:
+  - message: New PMC "BEAR" - GOVFOR (UPP special forces, the prototype of the Iron
+      Bear)
+    type: Add
+  - message: Various equipment and weapons have been added for UPP and BEAR, including
+      the IRP Marine of Socialism!
+    type: Add
+  - message: A sprite of some UPP items, pouches, and belts.
+    type: Add
+  - message: Corrected cargo UPP, new boxes with cartridges and magazines.
+    type: Add
+  - message: "The Liquidators squad has been added (an anti\u2011biological group\
+      \ of flamethrower operators, summoned by the UPP ambassador)."
+    type: Add
+  - message: A UPP migrant unit has been added (they are ordered through the UPP ambassador,
+      they cannot speak English, and they have a variety of equipment and skills).
+    type: Add
+  id: 775
+  time: '2026-10-10T10:26:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2058
+- author: troytroy400
+  changes:
+  - message: You can now build concrete barricades. It needs construction skill 2.
+      Lay a frame with 22 metal rods from the construction menu, then pour a concrete
+      bag onto it. Poured concrete takes 10 minutes to harden. While it's wet it's
+      pale grey, has little HP, can't take barbed wire and examining it shows how
+      long is left. Once hardened it's much tougher than a HESCO against bullets and
+      explosives plus has a larger pool of health, but is suspectable to acid damage.
+    type: Add
+  - message: Platoon requisition vendors now stock 15 concrete bags, and a crate of
+      10 concrete bags can be ordered from the requisitions lift for 600.
+    type: Add
+  - message: Breathing from internals with oxygen in the connected tank now protects
+      you from tear gas, pepper spray, mycotoxin, spore clouds and other inhaled gases,
+      the same way a gas mask filter does. Boiler acid gas still burns you while you're
+      on internals, but you won't take oxygen damage, shake or cough.
+    type: Add
+  - message: Added a rebindable "Open worn storage" key (Controls > CMU). Hover over
+      a belt, backpack or pouch slot and press it to open it. It's unbound by default.
+      CM13 player QOL.
+    type: Add
+  - message: Added an option (Controls > CMU) so that clicking worn storage with an
+      empty hand opens it instead of taking it off. CM13 QOL.
+    type: Add
+  - message: Empty weapon kits now despawn after lying on the ground for a minute.
+    type: Tweak
+  - message: The Mohawk's ramp and ladder controls now require GOVFOR or OPFOR pilot,
+      engineering or command access.
+    type: Tweak
+  - message: The IFAK first-aid autoinjector now holds 15u tricordrazine, 6u paracetamol
+      and 6u dexalin. The infantry first aid guide has been updated to match.
+    type: Tweak
+  - message: Snack, drink, cigarette and recreation vendors on GOVFOR and OPFOR ships
+      now take cash or your ID for payment, like the ones on the planet.
+    type: Tweak
+  - message: The SU6 now uses alt-iff and is buffed to be similar in stats to the
+      M4A4. CMB CIU, USCM, VAIPO and RMC now have three SU6 kits in their req vendors
+      and can order more.
+    type: Tweak
+  - message: You no longer start gasping for air until you've taken at least 20 oxygen
+      damage.
+    type: Tweak
+  - message: BEAR has been removed from rotation.
+    type: Remove
+  id: 776
+  time: '2026-10-10T10:42:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2133
 Name: CMU
 Order: -1
