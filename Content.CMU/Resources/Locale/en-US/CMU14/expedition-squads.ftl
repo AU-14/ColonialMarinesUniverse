@@ -70,3 +70,38 @@ cmu-squads-diagnostic-assistance = Assistance: {$decision} | Accepted: {$accepte
 cmu-squads-diagnostic-grenade = Ordnance: {$decision}
 cmu-squads-diagnostic-fire-response = Fire response: {$decision} | Ally pats: {$pats} | Self rolls: {$rolls} | Ground-fire escapes: {$escapes}
 cmu-squads-diagnostic-close-quarters = Teammate clearance steps: {$nudges} | Last-resort melee strikes: {$strikes}
+cmu-squads-condition-player = player-controlled
+cmu-squads-condition-dead = dead
+cmu-squads-condition-critical = critical
+cmu-squads-condition-disabled = AI disabled
+cmu-squads-condition-active = active
+cmu-squads-member-recorded = {$role} · {$duty} · {$condition}
+    Last AI record: {$weapon} — {$ammo} rounds · Damage {$damage} · {$state}
+cmu-squads-diagnostic-recorded = Current condition: {$condition}
+    Last living AI record at {$at}s, sampled {$age}s before control ended.
+    Equipment and remembered lanes below describe that sample, before stop cleanup.
+cmu-squads-diagnostic-recorded-activity = {$state} | {$duty} / {$doctrine} / {$phase}
+    Controller: {$owner} — {$reason}
+    Fire: {$fire} | Weapon decision: {$weaponDecision}
+    Active weapon: {$weapon} | Rounds: {$ammo} | Damage: {$damage} | Stress: {$stress}
+    Native fire wait: {$nativeWait}s | AI aim wait: {$aimWait}s
+    Corner: {$corner} | Remembered lanes: {$lanes}
+cmu-squads-diagnostic-recorded-history = Decisions before AI control ended:
+cmu-squads-diagnostic-recorded-movement = Squad: {$squad} | Traffic: {$traffic} | Door: {$door} | Vault: {$vault}
+    Firing movement: {$movement} | Sustained fire: {$sustained} | Volley: {$volley}
+cmu-squads-diagnostic-lifetime = Lifetime counters and decision timing:
+cmu-squads-diagnostic-lifetime-movement = State changes: {$changes} | Route searches: {$searches} / {$milliseconds} ms
+    Detours: {$detours} | Clearance steps: {$nudges} | Doors opened: {$doors} | Door failures: {$doorFailures}
+    Covered moves: {$covered} | Interrupted moves: {$interrupted}
+cmu-squads-diagnostic-lifetime-combat = Moving shots: {$movingShots} | Reloads: {$reloads} | Grenades: {$grenades}
+    Failed plans: {$failedPlans} | Corner flanks: {$flanks} | Corner staging moves: {$staging}
+cmu-squads-diagnostic-no-record = Current condition: {$condition}. No living AI activity was sampled before control ended.
+cmu-squads-diagnostic-hearing = Last heard: {$kind} | Age: {$age}s (sound alone does not authorize a shot)
+cmu-squads-diagnostic-hearing-none = Last heard: no sound recorded
+cmu-squads-noise-gunfire = gunfire
+cmu-squads-noise-door = door opening
+cmu-squads-treatment-native = Self-treatment: native dose ({$status})
+cmu-squads-treatment-preparing = Self-treatment: freeing a hand | Preparation time remaining: {$remaining}s
+cmu-squads-treatment-idle = Self-treatment: no active dose | Next attempt allowed in {$retry}s
+cmu-squads-medic-task = Medic task: {$phase} — {$decision} | Doses: {$doses} | Shocks: {$shocks}
+cmu-squads-medic-none = Medic task: none

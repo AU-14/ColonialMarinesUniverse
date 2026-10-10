@@ -177,7 +177,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.NextDutyMove = now + TimeSpan.FromSeconds(4);
         if (!TraversablePassage(uid, Transform(uid).Coordinates, point) ||
             ExposureScore(uid, agent, point) > ExposureScore(uid, agent, Transform(uid).Coordinates) ||
-            !TryReserveManeuver(uid, agent, now))
+            !TryReserveManeuver(uid, agent, now, point))
             return false;
         Decision(agent, "squad-move", agent.SquadPhase, 1);
         BeginMove(uid, agent, point, CMUExpeditionAgentState.Reposition, now);

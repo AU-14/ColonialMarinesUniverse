@@ -73,7 +73,9 @@ public sealed partial class CMUExpeditionAgentSystem
                     ? _transform.ToMapCoordinates(p).Position : null;
                 var ammo = _guns.TryGetGun(uid, out var gun) ? WeaponAmmo(gun) : 0;
                 var nativeDelay = gun.Owner.IsValid() ? Math.Max(0, (gun.Comp.NextFire - _timing.CurTime).TotalSeconds) : 0;
-                var condition = HasComp<ActorComponent>(uid) ? "player-controlled" : _mobs.IsDead(uid) ? "dead" : _mobs.IsCritical(uid) ? "critical" : "active";
+                var condition = Loc.GetString(HasComp<ActorComponent>(uid) ? "cmu-squads-condition-player" :
+                    _mobs.IsDead(uid) ? "cmu-squads-condition-dead" : _mobs.IsCritical(uid) ? "cmu-squads-condition-critical" :
+                    a.State == CMUExpeditionAgentState.Disabled ? "cmu-squads-condition-disabled" : "cmu-squads-condition-active");
                 var summary = Loc.GetString("cmu-squads-member-summary", ("role", a.CombatRole), ("duty", a.Duty),
                     ("condition", condition), ("weapon", gun.Owner.IsValid() ? MetaData(gun).EntityName : Loc.GetString("cmu-squads-unarmed")),
                     ("ammo", ammo), ("damage", a.LastDamage.ToString("F0")), ("state", a.State));
@@ -109,6 +111,20 @@ public sealed partial class CMUExpeditionAgentSystem
                     ("pats", a.FirePats), ("rolls", a.FireRolls), ("escapes", a.FireEscapes));
                 detail += "\n" + Loc.GetString("cmu-squads-diagnostic-close-quarters", ("nudges", a.TrafficNudges),
                     ("strikes", a.LastResortStrikes));
+                detail += "\n" + HearingDiagnostic(a.HeardKind, a.HeardAt, _timing.CurTime) + "\n" +
+                    SelfTreatmentDiagnostic(a, _timing.CurTime) + "\n" + MedicalTaskDiagnostic(uid);
+                if (a.DiagnosticsStoppedAt != null)
+                {
+                    if (a.LastLivingDiagnostics is { } recorded)
+                    {
+                        summary = Loc.GetString("cmu-squads-member-recorded", ("role", a.CombatRole), ("duty", recorded.Duty),
+                            ("condition", condition), ("weapon", recorded.WeaponName ?? Loc.GetString("cmu-squads-unarmed")),
+                            ("ammo", recorded.Ammo), ("damage", recorded.Damage.ToString("F0")), ("state", recorded.State));
+                        detail = FrozenDiagnosticDetail(a, recorded, condition);
+                    }
+                    else
+                        detail = Loc.GetString("cmu-squads-diagnostic-no-record", ("condition", condition));
+                }
                 state.Members.Add(new CMUSquadMemberView(GetNetEntity(uid), MetaData(uid).EntityName,
                     (int) Transform(uid).MapID, _transform.GetWorldPosition(uid), Position(a.LastSeen),
                     Position(a.SpacingDestination ?? a.CoverDestination ?? a.OrderedDestination), Position(a.CoverAnchor),

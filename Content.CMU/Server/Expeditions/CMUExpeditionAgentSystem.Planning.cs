@@ -21,7 +21,8 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         if (agent.Action != null)
         {
-            if (hit || now >= agent.ActionUntil || !ManeuverSupported(uid, agent, now) ||
+            if (hit && !(agent.Action == A.TakeCover && ContinuingDangerEscape(uid, agent, now)) ||
+                now >= agent.ActionUntil || !ManeuverSupported(uid, agent, now) ||
                 GrenadeDanger(Transform(uid).Coordinates) && agent.Action != A.TakeCover)
             {
                 CancelPlan(uid, agent, true);
@@ -195,7 +196,7 @@ public sealed partial class CMUExpeditionAgentSystem
             case A.Flank:
                 if (agent.ActionDestination is { } destination &&
                     (action != A.TakeCover || agent.Goal != CMUTacticalGoal.Recover ||
-                        damage >= agent.EmergencyHealDamage || TryReserveManeuver(uid, agent, now)))
+                        damage >= agent.EmergencyHealDamage || TryReserveManeuver(uid, agent, now, destination)))
                     success = StartPlanMove(uid, agent, destination, now);
                 break;
             case A.Reload:
@@ -256,11 +257,15 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool StartPlanMove(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates point, TimeSpan now)
     {
+        if (agent.UncoveredManeuverDestination is { } reserved &&
+            (reserved != point || now >= agent.ManeuverUntil || !SafeUncoveredStep(uid, agent, point)))
+            return false;
         ClearCover(agent);
-        if (!BuildTacticalRoute(uid, agent, point))
+        if (agent.UncoveredManeuverDestination == null && !BuildTacticalRoute(uid, agent, point))
             return false;
         agent.ActiveMoveDestination = point;
-        BeginMove(uid, agent, point, CMUExpeditionAgentState.PlanMove, now);
+        if (!BeginMove(uid, agent, point, CMUExpeditionAgentState.PlanMove, now))
+            return false;
         agent.MoveUntil = agent.ActionUntil;
         return true;
     }

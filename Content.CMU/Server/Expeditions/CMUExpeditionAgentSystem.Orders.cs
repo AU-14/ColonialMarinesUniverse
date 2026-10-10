@@ -116,8 +116,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.OrderBlockedSince = null;
         agent.LastOrderProgressPosition = null;
         agent.OrderRally = null;
-        agent.CohesionWaitSince = null;
-        agent.NextCohesionWait = TimeSpan.Zero;
+        ResetTravelCohesion(agent);
         ClearThreatAssessment(agent);
         agent.State = CMUExpeditionAgentState.Guard;
     }

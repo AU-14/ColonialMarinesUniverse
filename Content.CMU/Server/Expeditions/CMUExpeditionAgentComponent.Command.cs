@@ -30,6 +30,8 @@ public sealed partial class CMUExpeditionAgentComponent
     public float? BaseCourage;
     public TimeSpan? BasePositionCommit;
     public EntityCoordinates? HeardPoint;
+    public string HeardKind = "none";
+    public TimeSpan HeardAt;
     public TimeSpan HeardUntil;
     public TimeSpan NextHearing;
     public EntityUid? SupplySource;

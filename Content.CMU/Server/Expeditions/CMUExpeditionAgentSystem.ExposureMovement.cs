@@ -48,7 +48,8 @@ public sealed partial class CMUExpeditionAgentSystem
         // Permit only one such mover locally, so the whole line does not strafe together.
         var members = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
         while (members.MoveNext(out var other, out var buddy))
-            if (LocalSquadMember(uid, agent, other, buddy) && buddy.ExposedStepUntil > now)
+            if (LocalSquadMember(uid, agent, other, buddy) && (buddy.ExposedStepUntil > now ||
+                buddy.UncoveredManeuverDestination != null && now < buddy.ManeuverUntil))
                 return false;
 
         agent.NextExposedStep = now + TimeSpan.FromSeconds(1);
