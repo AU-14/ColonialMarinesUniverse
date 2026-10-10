@@ -48,7 +48,11 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
 
     private bool _huntingGroundActivated;
+
+    [ViewVariables(VVAccess.ReadWrite)]
     private TimeSpan _nextHuntAt;
+
+    [ViewVariables(VVAccess.ReadWrite)]
     private TimeSpan _nextBloodingAt;
 
     public override void Initialize()

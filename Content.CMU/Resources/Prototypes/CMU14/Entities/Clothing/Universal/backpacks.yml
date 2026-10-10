@@ -1,0 +1,53 @@
+- type: entity
+  parent: CMBackpackMarine
+  id: CMUBackpackAmmoBearer # todo
+  name: ammunition bearer pack
+  description: A stripped down lightweight pack issued to squad ammo bearers. Configured to haul spare magazines, shells and speed loaders for everyone else, with spare room for flares, attachments, MREs and documents.
+  components:
+  - type: Storage
+    # shells are Huge; boxes stay excluded by whitelist, the grid rations the count
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,3 # 16 slots, a size above the standard pack
+    whitelist: # this will need some tweaking to get it as a valuable noob-rifleman carry, ideally an SL assigns the rookie to lug squad supplies
+      tags:
+      - CMMagazinePistol
+      - RMCMagazineRevolver
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+      - CMMagazineSniper
+      - RMCShellShotgun
+      - RMCShellShotgunHDSG
+      - Flare
+      - Binoculars
+      - MRE
+      - CMUIntelDisk
+      - Document
+      - Paper
+      - Write
+      - CMUGasMaskFilter
+      - RMCMiniTank
+      - RMCAttachmentBarrel
+      - RMCAttachmentRail
+      - RMCAttachmentStock
+      - RMCAttachmentUnderbarrel
+      - Grenade
+      - EntrenchingTool
+      components:
+      - BallisticAmmoProvider
+      - Rangefinder
+      - Defibrillator
+      - BarbedWire
+      - EmptySandbag
+      - FullSandbag
+      - RMCFoldingBarricadeStack
+      - MortarShell
+  - type: IgnoreContentsSize
+    # large magazine variants bypass the size limit, mirrors CMBeltMarine
+    items:
+      tags:
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - RMCShellShotgunHDSG
+      - CMMagazineSmg

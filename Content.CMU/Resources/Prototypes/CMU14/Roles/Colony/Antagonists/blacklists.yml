@@ -83,7 +83,6 @@
 
 - type: antagJobBlacklist
   id: AllGovforJobs
-  roundSides: [Govfor]
   jobs:
     - AU14JobGOVFORPlatCo
     - AU14JobGOVFORPlatOp

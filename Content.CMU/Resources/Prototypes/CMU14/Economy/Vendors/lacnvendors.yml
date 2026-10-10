@@ -102,7 +102,7 @@
         amount: 4
       - id: CMULACNBeltUtility
         amount: 5
-      - id: CMUBeltMedicBagLACN
+      - id: CMUBeltMedicalLACN
         amount: 5
     - name: Pouches
       entries:
@@ -1619,6 +1619,7 @@
         name: tactical tools pouch (filled)
       - id: CMULACNBeltToolbeltFilled
         name: LACN toolbelt rig (filled)
+        recommended: true
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:

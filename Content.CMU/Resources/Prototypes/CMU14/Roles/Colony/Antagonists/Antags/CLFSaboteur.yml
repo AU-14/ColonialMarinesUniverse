@@ -1,10 +1,11 @@
 - type: antagSpecifier
-  parent: CMUAntagSpecifierColonyBase
   id: CLFSaboteur
   prefRoles: [ CLFSaboteurRole ]
   jobBlacklistGroup:
+  - AllGovforJobs
   - AllOpforJobs
   - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
   - AllSynthJobs
   briefing:
     text: cmu-antag-clf-saboteur-greeting
