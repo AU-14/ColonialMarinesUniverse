@@ -350,7 +350,7 @@
       - id: CMMaskCoif
         amount: 15
         points: 1
-      - id: CMMaskGas
+      - id: CMUMaskGas
         amount: 5
         points: 3
       - id: CMUGasMaskFilter
