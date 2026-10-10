@@ -102,7 +102,7 @@
         amount: 4
       - id: CMULACNBeltUtility
         amount: 5
-      - id: CMULACNBeltMedical
+      - id: CMUBeltMedicalLACN
         amount: 5
     - name: Pouches
       entries:
@@ -569,7 +569,7 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMULACNBeltMedical
+      - id: CMUBeltMedicalLACN
     - name: General Medical Supplies
       entries:
       - id: AU14HemostaticGauzePacket
@@ -1423,7 +1423,7 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMULACNBeltMedical
+      - id: CMUBeltMedicalLACN
     - name: Medical Webbing
       choices: { CMUPlatoonSurgicalWebbing: 1 }
       entries:

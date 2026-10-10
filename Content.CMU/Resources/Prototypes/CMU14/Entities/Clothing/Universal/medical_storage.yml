@@ -1,0 +1,189 @@
+- type: entity
+  parent: CMBeltBaseStorage
+  id: CMBeltMedical
+  name: M276 pattern medical storage rig
+  # also carries magazines, differentiates from the lifesaver bag
+  description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport bulkier medical supplies and spare ammunition magazines.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/medical.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/medical.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,15,3 # 16 slots
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - GlassBeaker
+      - Bottle
+      - PillPacket
+      - PillCanister
+      - Syringe
+      - CMSurgicalLine
+      - CMSynthGraft
+      - Brutepack
+      - CMBloodPack
+      - Gauze
+      - Ointment
+      - CMOintment
+      - CMTraumaKit
+      - CMBurnKit
+      - CMAutoInjector
+      - CMRollerItem
+      - BodyBag
+      - RMCGlovesLatex
+      - SterileMask
+      - Hypospray
+      - CigPack
+      - RMCPenlight
+      - Flare
+      - RMCMiniTank
+      # New Med
+      # - CMRetractor
+      # - CMHemostat
+      # - CMBoneSaw
+      # - CMCautery
+      # - CMSurgicalDrill
+      # - RMCScalpel
+      # - CMBoneSetter
+      # - CMBoneGel
+      - CMUBoneGraft
+      - CMUCastItem
+      - CMUOrganClamp
+      - CMUSplintItem
+      - CMUCPRMask
+      - CMMagazinePistol
+      - RMCMagazineRevolver
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+      - CMMagazineSniper
+      - RMCShellShotgun
+      - RMCShellShotgunHDSG
+      # field writing and CMU intel documents
+      - Document
+      - Paper
+      - Write
+      - CMUIntelDisk
+      # field sustain and CBRN spares
+      - GasMask
+      - CMUGasMaskFilter
+      - MRE
+      - DrinkGlass
+      components:
+      - CMSurgeryTool # catch-all for above commented out NewMed tags
+      - Hypospray
+      - Defibrillator
+      - Pill
+      - RMCHandLabeler
+      - RMCStethoscope
+      - RMCLighter
+      - BallisticAmmoProvider # speed loaders and other ammo providers
+    blacklist:
+      tags:
+      - RMCAttachmentUnderbarrel # attachments are ammo providers too
+  - type: IgnoreContentsSize
+    # large magazine variants bypass the size limit, mirrors CMBeltMarine
+    items:
+      tags:
+      - CMMagazineRifle
+      - RMCMagazineShotgun
+      - RMCShellShotgunHDSG
+      - CMMagazineSmg
+  - type: FixedItemSizeStorage
+  - type: Tag
+    tags:
+    - RMCBeltMedical
+
+- type: entity
+  parent: CMBeltMedical
+  id: CMBeltMedicBag
+  name: M276 pattern lifesaver bag
+  description: The M276 is standard load-bearing equipment. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,13,5 # 21 slots
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - GlassBeaker
+      - Bottle
+      - PillPacket
+      - PillCanister
+      - Syringe
+      - CMSurgicalLine
+      - CMSynthGraft
+      - Brutepack
+      - CMBloodPack
+      - Gauze
+      - Ointment
+      - CMOintment
+      - CMTraumaKit
+      - CMBurnKit
+      - CMAutoInjector
+      - CMRollerItem
+      - BodyBag
+      - RMCGlovesLatex
+      - SterileMask
+      - Hypospray
+      - CigPack
+      - RMCPenlight
+      - Flare
+      # New Med
+      # - CMRetractor
+      # - CMHemostat
+      # - CMBoneSaw
+      # - CMCautery
+      # - CMSurgicalDrill
+      # - RMCScalpel
+      # - CMBoneSetter
+      # - CMBoneGel
+      - CMUBoneGraft
+      - CMUCastItem
+      - CMUOrganClamp
+      - CMUSplintItem
+      - CMUCPRMask
+      # field writing and CMU intel documents
+      - Document
+      - Paper
+      - Write
+      - CMUIntelDisk
+      # field sustain and CBRN spares
+      - GasMask
+      - CMUGasMaskFilter
+      - MRE
+      - DrinkGlass
+      components:
+      - CMSurgeryTool # catch-all for above commented out NewMed tags
+      - Hypospray
+      - Defibrillator
+      - Pill
+      - RMCHandLabeler
+      - RMCStethoscope
+      - RMCLighter
+  - type: FixedItemSizeStorage
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - PillCanister
+      - PillPacket
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
+      Snow: _RMC14/Objects/Clothing/Belt/medicbag/snow-urban.rsi
+      Desert: _RMC14/Objects/Clothing/Belt/medicbag/desert.rsi
+      Urban: _RMC14/Objects/Clothing/Belt/medicbag/snow-urban.rsi
+      Classic: _RMC14/Objects/Clothing/Belt/medicbag/jungle-classic.rsi
+  - type: Tag
+    tags:
+    - RMCBeltMedical
