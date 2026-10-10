@@ -114,3 +114,10 @@
     - id: CMEpinephrineAutoInjector
     - id: AU14NaloxoneAutoInjector
     - id: CMHealthAnalyzer
+
+- type: entity
+  parent: CMBeltMedical
+  id: CMUBeltMedicalProdigy
+  name: PSC-TM626/2 pattern medical storage rig
+  suffix: CMU
+  description: The PSC-TM626/2 is the standard load-bearing equipment of the Prodigy security forces. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport medical supplies. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.

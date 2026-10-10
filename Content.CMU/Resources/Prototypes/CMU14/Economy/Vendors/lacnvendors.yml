@@ -348,7 +348,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMULACNBeltMedical
+      - id: CMUBeltMedicBagLACN
+        recommended: true
+      - id: CMUBeltMedicalLACN
     - name: General Medical Supplies
       entries:
       - id: CMUSynthBloodPackFull
@@ -446,6 +448,7 @@
       choices: { CMUPlatoonMedicalGloves: 1 }
       entries:
       - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
     - name: Medical Masks
       choices: { CMUPlatoonMedicalMasks: 1 }
       entries:
@@ -1607,6 +1610,11 @@
     - name: Tool Storage
       choices: { CMUCTToolStorage: 1 }
       entries:
+      - id: CMULACNBeltUtilityFilled
+        name: LACN utility tools rig (filled)
+        recommended: true
+      - id: RMCBeltConstruction
+        name: LACN construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
       - id: CMULACNBeltToolbeltFilled

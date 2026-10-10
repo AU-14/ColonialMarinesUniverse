@@ -1035,8 +1035,10 @@
       entries:
       - id: AU14BeltUtilityCombatFilled
         recommended: true
-      - id: AU14PouchToolsFilledComtech
+      - id: RMCBeltConstruction
+        name: BEAR construction rig
       - id: AU14BeltUtilityFilled
+      - id: AU14PouchToolsFilledComtech
     - name: au14-vendor-section-engineering-storage-bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
