@@ -1,4 +1,6 @@
 # Concrete barricade: lay a frame from 20 metal rods, then pour a concrete bag onto it.
+# Fresh concrete is weak for 10 minutes, then hardens into a barricade that outclasses HESCO
+# against bullets and explosives.
 
 - type: constructionGraph
   id: AU14ConcreteBarricadeGraph
@@ -36,7 +38,11 @@
       - tool: Prying
         doAfter: 2
 
+  # Freshly poured; CMUConcreteHardening swaps it for the hardened node's entity.
   - node: built
+    entity: AU14ConcreteBarricadeWet
+
+  - node: hardened
     entity: AU14JerseyBarricadeConstructed
 
 - type: entity
@@ -80,12 +86,73 @@
 
 - type: entity
   parent: AU14JerseyBarricade
-  id: AU14JerseyBarricadeConstructed
-  suffix: Constructed
+  id: AU14ConcreteBarricadeWet
+  name: wet concrete barricade
+  description: A freshly poured concrete barricade. The concrete is still wet and soft, so it won't stop much until it hardens.
+  suffix: Wet
   components:
+  - type: Sprite
+    color: "#b4b4b4"
+  - type: Damageable
+    damageModifierSet: AU14WetConcrete
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: DamageVisuals
+    damageDivisor: 12.5
+  - type: CMUConcreteHardening
+    hardened: AU14JerseyBarricadeConstructed
+    delay: 600
   - type: Construction
     graph: AU14ConcreteBarricadeGraph
     node: built
+
+# Hardened: 1500 HP, takes 60% from bullets (piercing) and 50% from explosions.
+# A HESCO wall has 1125 HP and no resistances, so this holds about 2.2x as many bullets and 2.7x as much
+# explosive damage.
+- type: entity
+  parent: AU14JerseyBarricade
+  id: AU14JerseyBarricadeConstructed
+  suffix: Constructed
+  components:
+  - type: Damageable
+    damageModifierSet: AU14HardenedConcrete
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1500
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: DamageVisuals
+    damageDivisor: 125
+  - type: ExplosionResistance
+    damageCoefficient: 0.5
+  - type: Construction
+    graph: AU14ConcreteBarricadeGraph
+    node: hardened
+
+- type: damageModifierSet
+  id: AU14WetConcrete
+  coefficients:
+    Slash: 1.0
+
+- type: damageModifierSet
+  id: AU14HardenedConcrete
+  coefficients:
+    Piercing: 0.6
 
 - type: construction
   id: AU14ConcreteBarricadeRecipe
