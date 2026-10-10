@@ -194,6 +194,15 @@
   - type: Clickable
   - type: InteractionOutline
   - type: MohawkControl
+  # Checked only by the ramp and ladder controls.
+  - type: AccessReader
+    access:
+    - [ "AU14AccessGovforPilot" ]
+    - [ "AU14AccessGovforEngineering" ]
+    - [ "AU14AccessGovforCommand" ]
+    - [ "AU14AccessOpforPilot" ]
+    - [ "AU14AccessOpforEngineering" ]
+    - [ "AU14AccessOpforCommand" ]
 
 - type: entity
   abstract: true
