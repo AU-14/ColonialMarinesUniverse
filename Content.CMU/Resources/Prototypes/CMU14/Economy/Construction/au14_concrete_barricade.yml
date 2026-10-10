@@ -91,8 +91,13 @@
   description: A freshly poured concrete barricade. The concrete is still wet and soft, so it won't stop much until it hardens.
   suffix: Wet
   components:
+  # Drained of colour so the wet, still-setting concrete reads paler and greyer than the hardened barricade.
   - type: Sprite
-    color: "#b4b4b4"
+    layers:
+    - state: concrete
+      shader: Greyscale
+    - map: [ "acided" ]
+  - type: CMUWetConcrete
   - type: Damageable
     damageModifierSet: AU14WetConcrete
   - type: Destructible
