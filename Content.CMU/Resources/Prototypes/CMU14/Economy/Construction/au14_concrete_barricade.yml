@@ -1,0 +1,105 @@
+# Concrete barricade: lay a frame from 20 metal rods, then pour a concrete bag onto it.
+
+- type: constructionGraph
+  id: AU14ConcreteBarricadeGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: frame
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMRodMetal
+        amount: 20
+        doAfter: 3
+
+  - node: frame
+    entity: AU14ConcreteBarricadeFrame
+    edges:
+    - to: built
+      steps:
+      - tag: AU14ConcreteBag
+        name: construction-graph-tag-au14-concrete-bag
+        icon:
+          sprite: CMU14/Items/cement.rsi
+          state: cementbag1
+        doAfter: 5
+    # Take an unpoured frame back apart for its rods.
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMRodMetal1
+        amount: 20
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+  - node: built
+    entity: AU14JerseyBarricadeConstructed
+
+- type: entity
+  parent: BaseStructure
+  id: AU14ConcreteBarricadeFrame
+  name: concrete barricade frame
+  description: A rebar frame shaped like a concrete barricade. Pour a concrete bag onto it to finish it.
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/concretebarrier.rsi
+    state: concrete
+    color: "#9a9a9a80"
+    drawdepth: WallTops
+  - type: InteractionOutline
+  - type: Rotatable
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape: !type:PhysShapeAabb
+          bounds: "-0.49,-0.55,0.49,-0.45"
+        mask:
+        - FullTileMask
+        layer:
+        - LowImpassable
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: AU14ConcreteBarricadeGraph
+    node: frame
+
+- type: entity
+  parent: AU14JerseyBarricade
+  id: AU14JerseyBarricadeConstructed
+  suffix: Constructed
+  components:
+  - type: Construction
+    graph: AU14ConcreteBarricadeGraph
+    node: built
+
+- type: construction
+  id: AU14ConcreteBarricadeRecipe
+  name: concrete barricade
+  description: A frame of metal rods for a concrete barricade. Pour a concrete bag onto it to finish it.
+  graph: AU14ConcreteBarricadeGraph
+  startNode: start
+  targetNode: built
+  category: construction-category-structures
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
