@@ -251,7 +251,7 @@
         amount: 2
     - name: Gas Mask
       entries:
-      - id: CMMaskGas
+      - id: CMUMaskGas
         amount: 40
       - id: CMMaskPrescriptionGas
         amount: 10
@@ -1222,7 +1222,7 @@
         amount: 2
     - name: Protective Equipment
       entries:
-      - id: CMMaskGas
+      - id: CMUMaskGas
         amount: 30
       - id: CMUGasMaskFilterWY
         amount: 30
