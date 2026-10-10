@@ -1,4 +1,4 @@
-# AU-14: Hand-loaded dropship cannon ammunition.
+# CMU14: Hand-loaded dropship cannon ammunition.
 # The 40mm BOFORS magazines and 105mm Howitzer shells are grabbed BY HAND and
 # then manually loaded into the weapon: click the weapon's attach point with the
 # round in hand to load it, click again with an empty hand to unload it.
@@ -6,12 +6,30 @@
 # dragged or moved with a powerloader, and their contents are pulled out and
 # stowed by hand.
 
+- type: Tag
+  id: CMUBOFORSMagHE
+
+- type: Tag
+  id: CMUBOFORSMagAP
+
+- type: Tag
+  id: CMUBOFORSMagAirburst
+
+- type: Tag
+  id: CMUBOFORSMagHEAT
+
+- type: Tag
+  id: CMUBOFORSMagIncendiary
+
+- type: Tag
+  id: CMUHowitzerShell
+
 # region Hand-loadable ammo base
 
 - type: entity
   abstract: true
   parent: BaseItem
-  id: AU14DropshipAmmoHandLoadable
+  id: CMUDropshipAmmoHandLoadable
   components:
   - type: Item
     size: Huge
@@ -29,8 +47,8 @@
 # region 40mm BOFORS magazines (20 rounds, 5 shots per trigger pull)
 
 - type: entity
-  parent: AU14DropshipAmmoHandLoadable
-  id: AU14DropshipAmmoBOFORSMagHE
+  parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoBOFORSMagHE
   name: 40mm BOFORS HE magazine
   description: A 20-round magazine of 40mm high-explosive BOFORS shells. Loaded by hand into the L/60 40mm BOFORS Autocannon.
   components:
@@ -44,7 +62,7 @@
     state: bofors_40mm_tray_1
   - type: Tag
     tags:
-    - AU14BOFORSMagHE
+    - CMUBOFORSMagHE
   - type: DropshipAmmo
     ammoType: bofors_40mm_he
     rounds: 20
@@ -56,7 +74,7 @@
     fireMissionDelay: 1
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: false
-    weapon: RMCDropshipAttachmentBOFORS
+    weapon: CMUDropshipAttachmentBOFORS
     damage:
       types:
         Blunt: 45
@@ -79,8 +97,8 @@
     cost: 500
 
 - type: entity
-  parent: AU14DropshipAmmoHandLoadable
-  id: AU14DropshipAmmoBOFORSMagAP
+  parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoBOFORSMagAP
   name: 40mm BOFORS AP magazine
   description: A 20-round magazine of 40mm armor-piercing BOFORS shells. Loaded by hand into the L/60 40mm BOFORS Autocannon.
   components:
@@ -94,7 +112,7 @@
     state: bofors_40mm_tray_ap_1
   - type: Tag
     tags:
-    - AU14BOFORSMagAP
+    - CMUBOFORSMagAP
   - type: DropshipAmmo
     ammoType: bofors_40mm_ap
     rounds: 20
@@ -106,7 +124,7 @@
     fireMissionDelay: 1
     zLevelPenetration: 2
     applyEffectsOnPenetrationLevels: false
-    weapon: RMCDropshipAttachmentBOFORS
+    weapon: CMUDropshipAttachmentBOFORS
     damage:
       types:
         Blunt: 40
@@ -126,8 +144,8 @@
     cost: 550
 
 - type: entity
-  parent: AU14DropshipAmmoHandLoadable
-  id: AU14DropshipAmmoBOFORSMagAirburst
+  parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoBOFORSMagAirburst
   name: 40mm BOFORS Airburst magazine
   description: A 20-round magazine of 40mm airburst BOFORS shells that shower a wide area with shrapnel. Loaded by hand into the L/60 40mm BOFORS Autocannon.
   components:
@@ -141,7 +159,7 @@
     state: bofors_40mm_tray_ab_1
   - type: Tag
     tags:
-    - AU14BOFORSMagAirburst
+    - CMUBOFORSMagAirburst
   - type: DropshipAmmo
     ammoType: bofors_40mm_ab
     rounds: 20
@@ -153,7 +171,7 @@
     fireMissionDelay: 1
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: true
-    weapon: RMCDropshipAttachmentBOFORS
+    weapon: CMUDropshipAttachmentBOFORS
     damage:
       types:
         Blunt: 20
@@ -177,8 +195,8 @@
     cost: 550
 
 - type: entity
-  parent: AU14DropshipAmmoHandLoadable
-  id: AU14DropshipAmmoBOFORSMagHEAT
+  parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoBOFORSMagHEAT
   name: 40mm BOFORS HEAT magazine
   description: A 20-round magazine of 40mm high-explosive anti-tank BOFORS shells. Loaded by hand into the L/60 40mm BOFORS Autocannon.
   components:
@@ -192,7 +210,7 @@
     state: bofors_40mm_tray_ht_1
   - type: Tag
     tags:
-    - AU14BOFORSMagHEAT
+    - CMUBOFORSMagHEAT
   - type: DropshipAmmo
     ammoType: bofors_40mm_ht
     rounds: 20
@@ -204,7 +222,7 @@
     fireMissionDelay: 1
     zLevelPenetration: 3
     applyEffectsOnPenetrationLevels: true
-    weapon: RMCDropshipAttachmentBOFORS
+    weapon: CMUDropshipAttachmentBOFORS
     damage:
       types:
         Blunt: 35
@@ -228,8 +246,8 @@
     cost: 600
 
 - type: entity
-  parent: AU14DropshipAmmoHandLoadable
-  id: AU14DropshipAmmoBOFORSMagIncendiary
+  parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoBOFORSMagIncendiary
   name: 40mm BOFORS Incendiary magazine
   description: A 20-round magazine of 40mm incendiary BOFORS shells that set the target area alight. Loaded by hand into the L/60 40mm BOFORS Autocannon.
   components:
@@ -243,7 +261,7 @@
     state: bofors_40mm_tray_in_1
   - type: Tag
     tags:
-    - AU14BOFORSMagIncendiary
+    - CMUBOFORSMagIncendiary
   - type: DropshipAmmo
     ammoType: bofors_40mm_in
     rounds: 20
@@ -255,7 +273,7 @@
     fireMissionDelay: 1
     zLevelPenetration: 1
     applyEffectsOnPenetrationLevels: false
-    weapon: RMCDropshipAttachmentBOFORS
+    weapon: CMUDropshipAttachmentBOFORS
     damage:
       types:
         Blunt: 20
@@ -287,7 +305,7 @@
 
 - type: entity
   abstract: true
-  id: AU14DropshipAmmoBOFORSTray
+  id: CMUDropshipAmmoBOFORSTray
   name: 40mm BOFORS ammo tray
   components:
   - type: Sprite
@@ -321,15 +339,15 @@
     rounds: 3
     maxRounds: 3
     roundsPerShot: 1
-    weapon: RMCDropshipAttachmentBOFORS
+    weapon: CMUDropshipAttachmentBOFORS
   - type: AmmoHolder
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 1200
 
 - type: entity
-  parent: AU14DropshipAmmoBOFORSTray
-  id: AU14DropshipAmmoBOFORSTrayHE
+  parent: CMUDropshipAmmoBOFORSTray
+  id: CMUDropshipAmmoBOFORSTrayHE
   name: 40mm BOFORS HE ammo tray
   description: A heavy tray holding three 20-round 40mm HE magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
@@ -337,32 +355,32 @@
     slots:
       mag1:
         name: Magazine Slot 1
-        startingItem: AU14DropshipAmmoBOFORSMagHE
+        startingItem: CMUDropshipAmmoBOFORSMagHE
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagHE
+          - CMUBOFORSMagHE
       mag2:
         name: Magazine Slot 2
-        startingItem: AU14DropshipAmmoBOFORSMagHE
+        startingItem: CMUDropshipAmmoBOFORSMagHE
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagHE
+          - CMUBOFORSMagHE
       mag3:
         name: Magazine Slot 3
-        startingItem: AU14DropshipAmmoBOFORSMagHE
+        startingItem: CMUDropshipAmmoBOFORSMagHE
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagHE
+          - CMUBOFORSMagHE
 
 - type: entity
-  parent: AU14DropshipAmmoBOFORSTray
-  id: AU14DropshipAmmoBOFORSTrayAP
+  parent: CMUDropshipAmmoBOFORSTray
+  id: CMUDropshipAmmoBOFORSTrayAP
   name: 40mm BOFORS AP ammo tray
   description: A heavy tray holding three 20-round 40mm AP magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
@@ -376,32 +394,32 @@
     slots:
       mag1:
         name: Magazine Slot 1
-        startingItem: AU14DropshipAmmoBOFORSMagAP
+        startingItem: CMUDropshipAmmoBOFORSMagAP
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagAP
+          - CMUBOFORSMagAP
       mag2:
         name: Magazine Slot 2
-        startingItem: AU14DropshipAmmoBOFORSMagAP
+        startingItem: CMUDropshipAmmoBOFORSMagAP
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagAP
+          - CMUBOFORSMagAP
       mag3:
         name: Magazine Slot 3
-        startingItem: AU14DropshipAmmoBOFORSMagAP
+        startingItem: CMUDropshipAmmoBOFORSMagAP
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagAP
+          - CMUBOFORSMagAP
 
 - type: entity
-  parent: AU14DropshipAmmoBOFORSTray
-  id: AU14DropshipAmmoBOFORSTrayAirburst
+  parent: CMUDropshipAmmoBOFORSTray
+  id: CMUDropshipAmmoBOFORSTrayAirburst
   name: 40mm BOFORS Airburst ammo tray
   description: A heavy tray holding three 20-round 40mm airburst magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
@@ -415,32 +433,32 @@
     slots:
       mag1:
         name: Magazine Slot 1
-        startingItem: AU14DropshipAmmoBOFORSMagAirburst
+        startingItem: CMUDropshipAmmoBOFORSMagAirburst
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagAirburst
+          - CMUBOFORSMagAirburst
       mag2:
         name: Magazine Slot 2
-        startingItem: AU14DropshipAmmoBOFORSMagAirburst
+        startingItem: CMUDropshipAmmoBOFORSMagAirburst
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagAirburst
+          - CMUBOFORSMagAirburst
       mag3:
         name: Magazine Slot 3
-        startingItem: AU14DropshipAmmoBOFORSMagAirburst
+        startingItem: CMUDropshipAmmoBOFORSMagAirburst
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagAirburst
+          - CMUBOFORSMagAirburst
 
 - type: entity
-  parent: AU14DropshipAmmoBOFORSTray
-  id: AU14DropshipAmmoBOFORSTrayHEAT
+  parent: CMUDropshipAmmoBOFORSTray
+  id: CMUDropshipAmmoBOFORSTrayHEAT
   name: 40mm BOFORS HEAT ammo tray
   description: A heavy tray holding three 20-round 40mm HEAT magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
@@ -454,32 +472,32 @@
     slots:
       mag1:
         name: Magazine Slot 1
-        startingItem: AU14DropshipAmmoBOFORSMagHEAT
+        startingItem: CMUDropshipAmmoBOFORSMagHEAT
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagHEAT
+          - CMUBOFORSMagHEAT
       mag2:
         name: Magazine Slot 2
-        startingItem: AU14DropshipAmmoBOFORSMagHEAT
+        startingItem: CMUDropshipAmmoBOFORSMagHEAT
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagHEAT
+          - CMUBOFORSMagHEAT
       mag3:
         name: Magazine Slot 3
-        startingItem: AU14DropshipAmmoBOFORSMagHEAT
+        startingItem: CMUDropshipAmmoBOFORSMagHEAT
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagHEAT
+          - CMUBOFORSMagHEAT
 
 - type: entity
-  parent: AU14DropshipAmmoBOFORSTray
-  id: AU14DropshipAmmoBOFORSTrayIncendiary
+  parent: CMUDropshipAmmoBOFORSTray
+  id: CMUDropshipAmmoBOFORSTrayIncendiary
   name: 40mm BOFORS Incendiary ammo tray
   description: A heavy tray holding three 20-round 40mm incendiary magazines for the L/60 BOFORS Autocannon. Too heavy to carry - drag it or move it with a powerloader.
   components:
@@ -493,51 +511,51 @@
     slots:
       mag1:
         name: Magazine Slot 1
-        startingItem: AU14DropshipAmmoBOFORSMagIncendiary
+        startingItem: CMUDropshipAmmoBOFORSMagIncendiary
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagIncendiary
+          - CMUBOFORSMagIncendiary
       mag2:
         name: Magazine Slot 2
-        startingItem: AU14DropshipAmmoBOFORSMagIncendiary
+        startingItem: CMUDropshipAmmoBOFORSMagIncendiary
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagIncendiary
+          - CMUBOFORSMagIncendiary
       mag3:
         name: Magazine Slot 3
-        startingItem: AU14DropshipAmmoBOFORSMagIncendiary
+        startingItem: CMUDropshipAmmoBOFORSMagIncendiary
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14BOFORSMagIncendiary
+          - CMUBOFORSMagIncendiary
 
 # endregion
 
 # region 105mm Howitzer shells (1 shot each, hand loaded)
 
 - type: entity
-  parent: AU14DropshipAmmoHandLoadable
-  id: AU14DropshipAmmoHowitzerHE
+  parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoHowitzerHE
   name: PGU-44/B 105mm High-Explosive shell
   description: The PGU-44/B is a powerful 105mm high-explosive shell designed for destroying fortified positions. It must be hand loaded into the M137 105mm Howitzer.
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/dropship_ammo_64.rsi
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     offset: 0.5, 0.5
     layers:
-    - state: single
+    - state: lbtshell_he
       visible: false
   - type: Icon
-    sprite: _RMC14/Objects/dropship_ammo_64.rsi
-    state: single
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
+    state: lbtshell_he
   - type: Tag
     tags:
-    - AU14HowitzerShell
+    - CMUHowitzerShell
   - type: DropshipAmmo
     ammoType: howitzer_105mm_he
     rounds: 1
@@ -547,7 +565,7 @@
     bulletSpread: 0
     travelTime: 4
     fireMissionDelay: 3
-    weapon: RMCDropshipAttachmentHowitzer
+    weapon: CMUDropshipAttachmentHowitzer
     explosion:
       total: 3000
       slope: 5.5
@@ -561,23 +579,23 @@
     cost: 700
 
 - type: entity
-  parent: AU14DropshipAmmoHandLoadable
-  id: AU14DropshipAmmoHowitzerHEFrag
+  parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoHowitzerHEFrag
   name: PGU-45/B 105mm High-Explosive Fragmentation shell
   description: The PGU-45/B is a 105mm high-explosive fragmentation shell that showers a wide area with lethal shrapnel. It must be hand loaded into the M137 105mm Howitzer.
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/dropship_ammo_64.rsi
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     offset: 0.5, 0.5
     layers:
-    - state: single
+    - state: lbtshell_canister
       visible: false
   - type: Icon
-    sprite: _RMC14/Objects/dropship_ammo_64.rsi
-    state: single
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
+    state: lbtshell_canister
   - type: Tag
     tags:
-    - AU14HowitzerShell
+    - CMUHowitzerShell
   - type: DropshipAmmo
     ammoType: howitzer_105mm_hefrag
     rounds: 1
@@ -587,7 +605,7 @@
     bulletSpread: 0
     travelTime: 4
     fireMissionDelay: 3
-    weapon: RMCDropshipAttachmentHowitzer
+    weapon: CMUDropshipAttachmentHowitzer
     explosion:
       total: 1500
       slope: 8
@@ -606,23 +624,23 @@
     cost: 700
 
 - type: entity
-  parent: AU14DropshipAmmoHandLoadable
-  id: AU14DropshipAmmoHowitzerHEAT
+  parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoHowitzerHEAT
   name: PGU-46/B 105mm High-Explosive Anti-Tank shell
   description: The PGU-46/B is a 105mm high-explosive anti-tank shell built to crack hardened and armored targets. It must be hand loaded into the M137 105mm Howitzer.
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/dropship_ammo_64.rsi
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     offset: 0.5, 0.5
     layers:
-    - state: single
+    - state: lbtshell_heat
       visible: false
   - type: Icon
-    sprite: _RMC14/Objects/dropship_ammo_64.rsi
-    state: single
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
+    state: lbtshell_heat
   - type: Tag
     tags:
-    - AU14HowitzerShell
+    - CMUHowitzerShell
   - type: DropshipAmmo
     ammoType: howitzer_105mm_heat
     rounds: 1
@@ -632,7 +650,7 @@
     bulletSpread: 0
     travelTime: 4
     fireMissionDelay: 3
-    weapon: RMCDropshipAttachmentHowitzer
+    weapon: CMUDropshipAttachmentHowitzer
     armorPiercing: 100
     explosion:
       total: 2000
@@ -647,23 +665,23 @@
     cost: 750
 
 - type: entity
-  parent: AU14DropshipAmmoHandLoadable
-  id: AU14DropshipAmmoHowitzerAirburst
+  parent: CMUDropshipAmmoHandLoadable
+  id: CMUDropshipAmmoHowitzerAirburst
   name: PGU-47/B 105mm High-Explosive Airburst shell
   description: The PGU-47/B is a 105mm high-explosive airburst shell that detonates above the target, scattering bomblets over a wide area. It must be hand loaded into the M137 105mm Howitzer.
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/dropship_ammo_64.rsi
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     offset: 0.5, 0.5
     layers:
-    - state: single
+    - state: lbtshell_canister
       visible: false
   - type: Icon
-    sprite: _RMC14/Objects/dropship_ammo_64.rsi
-    state: single
+    sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
+    state: lbtshell_canister
   - type: Tag
     tags:
-    - AU14HowitzerShell
+    - CMUHowitzerShell
   - type: DropshipAmmo
     ammoType: howitzer_105mm_airburst
     rounds: 8
@@ -673,7 +691,7 @@
     bulletSpread: 9
     travelTime: 4
     fireMissionDelay: 3
-    weapon: RMCDropshipAttachmentHowitzer
+    weapon: CMUDropshipAttachmentHowitzer
     explosion:
       total: 200
       slope: 8
@@ -692,7 +710,7 @@
 # region 105mm Howitzer shell rack (holds 4 shells)
 
 - type: entity
-  id: AU14DropshipAmmoHowitzerRackHE
+  id: CMUDropshipAmmoHowitzerRackHE
   name: M137 105mm HE shell rack
   description: A heavy rack holding four PGU-44/B 105mm high-explosive shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
   components:
@@ -728,42 +746,42 @@
     rounds: 4
     maxRounds: 4
     roundsPerShot: 1
-    weapon: RMCDropshipAttachmentHowitzer
+    weapon: CMUDropshipAttachmentHowitzer
   - type: AmmoHolder
   - type: ItemSlots
     slots:
       shell1:
         name: Shell Slot 1
-        startingItem: AU14DropshipAmmoHowitzerHE
+        startingItem: CMUDropshipAmmoHowitzerHE
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14HowitzerShell
+          - CMUHowitzerShell
       shell2:
         name: Shell Slot 2
-        startingItem: AU14DropshipAmmoHowitzerHE
+        startingItem: CMUDropshipAmmoHowitzerHE
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14HowitzerShell
+          - CMUHowitzerShell
       shell3:
         name: Shell Slot 3
-        startingItem: AU14DropshipAmmoHowitzerHE
+        startingItem: CMUDropshipAmmoHowitzerHE
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14HowitzerShell
+          - CMUHowitzerShell
       shell4:
         name: Shell Slot 4
-        startingItem: AU14DropshipAmmoHowitzerHE
+        startingItem: CMUDropshipAmmoHowitzerHE
         ejectOnInteract: true
         insertOnInteract: true
         whitelist:
           tags:
-          - AU14HowitzerShell
+          - CMUHowitzerShell
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 2000
