@@ -1,7 +1,6 @@
 using System.Numerics;
 using System.Linq;
 using Content.Shared.CMU14.Hearing;
-using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 
@@ -16,11 +15,10 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void OnNearbyGunfire(ref CMUGunFiredEvent args)
     {
-        if (!_npcs.Enabled || !TryComp<GunComponent>(args.Gun, out var gun) ||
-            gun.ShootCoordinates is not { } aim)
+        if (!_npcs.Enabled)
             return;
         var from = _transform.ToMapCoordinates(args.From);
-        var to = _transform.ToMapCoordinates(aim);
+        var to = _transform.ToMapCoordinates(args.To);
         var direction = to.Position - from.Position;
         if (from.MapId != to.MapId || direction.LengthSquared() < 0.01f)
             return;

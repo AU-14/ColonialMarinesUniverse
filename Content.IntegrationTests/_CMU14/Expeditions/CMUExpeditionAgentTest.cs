@@ -26,7 +26,7 @@ namespace Content.IntegrationTests._CMU14.Expeditions;
 [TestFixture, NonParallelizable]
 public sealed class CMUExpeditionAgentTest : GameTest
 {
-    private sealed record VolleyShot(bool Moving, TimeSpan End, int Rounds);
+    private sealed record VolleyShot(bool Moving, TimeSpan Started, int Rounds, int Limit);
 
     private sealed class ShotListenerSystem : EntitySystem
     {
@@ -43,9 +43,10 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 return;
             ent.Comp.Events.GetOrNew(typeof(GunShotEvent)).Add(args);
             // Urgent fire can start the next burst between samples. Record native shots
-            // against their actual stationary/mobile burst window at the firing event.
+            // against their first shot; pressure can extend the end of a live burst.
             ent.Comp.Events.GetOrNew(typeof(VolleyShot)).Add(new VolleyShot(agent.MovingFire,
-                agent.MovingFire ? agent.MovingBurstEnd : agent.BurstEnd, args.Ammo.Count));
+                agent.MovingFire ? agent.FireControlMovingBurstStarted : agent.FireControlBurstStarted, args.Ammo.Count,
+                agent.FireControlVolley > 0 ? agent.FireControlVolley : agent.BurstSize));
         }
     }
 
@@ -108,7 +109,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
     }
 
     [Test]
-    public async Task InfantryPeeksFiresShortBurstsAndPhysicallyReturnsToShelter()
+    public async Task InfantryPeeksFiresBoundedVolleysAndPhysicallyReturnsToShelter()
     {
         EntityUid map = default, guard = default, enemy = default, rifle = default, enemyRifle = default;
         await Server.WaitAssertion(() =>
@@ -210,10 +211,12 @@ public sealed class CMUExpeditionAgentTest : GameTest
             Assert.That(states, Does.Contain(CMUExpeditionAgentState.Peeking));
             Assert.That(states, Does.Contain(CMUExpeditionAgentState.Withdraw));
             var volleys = SEntMan.GetComponent<TestListenerComponent>(rifle).Events[typeof(VolleyShot)]
-                .Cast<VolleyShot>().GroupBy(shot => (shot.Moving, shot.End)).ToArray();
+                .Cast<VolleyShot>().GroupBy(shot => (shot.Moving, shot.Started)).ToArray();
             Assert.That(volleys.Count(group => !group.Key.Moving), Is.GreaterThanOrEqualTo(2), "The guard must complete repeated attacks.");
             Assert.That(coveredVolleys, Is.GreaterThanOrEqualTo(2), "Complete repeated attacks with physical returns to shelter.");
-            Assert.That(volleys.Select(group => group.Sum(shot => shot.Rounds)), Has.All.InRange(1, 3));
+            foreach (var volley in volleys)
+                Assert.That(volley.Sum(shot => shot.Rounds), Is.InRange(1, volley.Max(shot => shot.Limit)),
+                    "Native fire must stay within the chosen volley budget, including sustained fire under pressure.");
             Assert.That(suppressionTested, Is.True);
             SEntMan.DeleteEntity(map);
         });
@@ -256,6 +259,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
                 // Begin with two already-acquired contacts in known shelters to isolate squad scheduling.
                 agent.PlanningEnabled = false;
+                agent.Squad = 7;
                 agent.Target = enemy;
                 agent.LastSeen = SEntMan.GetComponent<TransformComponent>(enemy).Coordinates;
                 agent.LastContact = SGameTiming.CurTime;

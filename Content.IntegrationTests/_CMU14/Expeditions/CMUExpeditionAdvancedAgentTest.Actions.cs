@@ -3,6 +3,7 @@ using Content.Server.CMU14.Expeditions;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.CMU14.Expeditions;
 using Content.Shared._RMC14.Explosion;
+using Content.Shared._RMC14.Weapons.Ranged.Chamber;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage.Components;
 using Content.Shared.Inventory;
@@ -15,6 +16,7 @@ using Content.Shared.Storage;
 using Content.Shared.Throwing;
 using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Ranged.Components;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -38,6 +40,10 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             // Exercise rifle reloads rather than switching to the loadout's backup pistol.
             foreach (var item in Stored(guard).Where(SEntMan.HasComponent<GunComponent>))
                 SEntMan.DeleteEntity(item);
+            // Keep this finite-reserve scenario independent of the balanced squad kit.
+            foreach (var magazine in Stored(guard).Where(item =>
+                         SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40").Skip(2))
+                SEntMan.DeleteEntity(magazine);
             Empty();
         });
         await WaitForUtility(guard, CMUTacticalAction.Reload);
@@ -77,6 +83,11 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
         {
             Assert.That(Server.System<ItemSlotsSystem>().TryEject(rifle, "gun_magazine", guard, out var magazine), Is.True);
             SEntMan.DeleteEntity(magazine!.Value);
+            // Removing an RMC magazine retains a live chambered round.
+            var chamber = SEntMan.GetComponent<RMCGunChamberComponent>(rifle);
+            if (Server.System<SharedContainerSystem>().TryGetContainer(rifle, chamber.ContainerId, out var container))
+                foreach (var round in container.ContainedEntities.ToArray())
+                    SEntMan.DeleteEntity(round);
         }
     }
 
@@ -287,10 +298,14 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
     private List<EntityUid> Stored(EntityUid guard)
     {
         var items = new List<EntityUid>();
-        foreach (var slot in new[] { "back", "belt" })
+        var slots = Server.System<InventorySystem>().GetSlotEnumerator(guard);
+        while (slots.MoveNext(out var slot))
         {
-            Assert.That(Server.System<InventorySystem>().TryGetSlotEntity(guard, slot, out var bag), Is.True);
-            items.AddRange(SEntMan.GetComponent<StorageComponent>(bag!.Value).Container.ContainedEntities);
+            if (slot.ContainedEntity is not { } item)
+                continue;
+            items.Add(item);
+            if (SEntMan.TryGetComponent<StorageComponent>(item, out var storage))
+                items.AddRange(storage.Container.ContainedEntities);
         }
         return items;
     }
