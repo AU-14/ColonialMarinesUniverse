@@ -1,0 +1,28 @@
+<Document>
+  # Powered Work Loaders
+
+  [italic]"I can drive that loader. I have a Class-2 rating."[/italic]
+
+  [bold]Powered work loaders[/bold], or power loaders, are walking mechanized exoskeletons used to lift and move heavy loads. They are found in warehouses, construction sites, ports and military ships everywhere.
+
+  <Box>
+    <GuideEntityEmbed Entity="RMCMechPowerLoader" Caption="Caterpillar P-5000"/>
+    <GuideEntityEmbed Entity="RMCMechPowerLoaderGreen" Caption="John Deere 4300"/>
+    <GuideEntityEmbed Entity="RMCMechPowerLoaderBlue" Caption="Caterpillar P-5200"/>
+  </Box>
+
+  ## Models
+  - [bold]Caterpillar P-5000 Work Loader[/bold]: the classic. Weyland Corp patented the design in 2025 and built the first models itself, before Caterpillar took over production. Old, but trusted everywhere.
+  - [bold]John Deere 4300 Power Loader[/bold]: a licensed take on the P-5000, recognizable by its green and yellow livery.
+  - [bold]Caterpillar P-5200 Work Loader[/bold]: a modernized design meant to outdo the older models in high-end ports and facilities.
+
+  ## Design
+  - A reinforced steel frame carries two heavy-duty arms ending in hydraulic [bold]clamps[/bold] that rotate fully and lock onto standard cargo grips. Cutters, welders and other tools can be fitted to the clamps.
+  - It multiplies its operator's strength thousands of times and can lift loads of up to 4,000 kilograms.
+  - A hydrogen fuel cell on its back powers it, and gyroscopes keep it from toppling while standing still under load. Concrete ballast can be bolted underneath for extra stability on the heaviest jobs.
+  - Its feet are small for its weight, so a fully loaded loader on soft ground can literally sink into it.
+
+  ## Operation
+  - The operator backs in, straps into a harness, pulls down a roll cage and secures their feet. The machine copies every movement of their arms and legs almost instantly.
+  - Operators need the equivalent of a [bold]Class 2[/bold] cargo handling license. Training usually takes around six weeks.
+</Document>

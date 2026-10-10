@@ -10,7 +10,7 @@
 - type: thirdParty
   id: MarineSecurityGuard
   partyspawn: MSGSpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
   entrymethod: shuttle
@@ -18,5 +18,5 @@
   weight: 20
   minplayers: 400
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: false

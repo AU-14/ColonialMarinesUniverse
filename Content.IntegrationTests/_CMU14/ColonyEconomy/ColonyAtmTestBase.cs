@@ -1,5 +1,6 @@
 using Content.Client.CMU14.ColonyEconomy;
 using Content.IntegrationTests.Tests.Interaction;
+using Content.Server.CMU14.ColonyEconomy;
 using Content.Shared.Access.Components;
 using Content.Shared.CMU14.ColonyEconomy;
 using Content.Shared.Stacks;
@@ -9,8 +10,8 @@ using Robust.Shared.GameObjects;
 namespace Content.IntegrationTests.CMU14.ColonyEconomy;
 
 /// <summary>
-///     Helpers for ATM tests driven by a connected player who swipes cards and presses the real
-///     keypad buttons in the client window.
+///     Helpers for ATM tests driven by a connected player who pushes cards into the reader and
+///     presses the real keypad buttons in the client window.
 /// </summary>
 public abstract class ColonyAtmTestBase : InteractionTest
 {
@@ -19,6 +20,14 @@ public abstract class ColonyAtmTestBase : InteractionTest
     protected const string Cash = "RMCSpaceCash";
 
     protected ColonyAtmComponent AtmComp => Comp<ColonyAtmComponent>();
+
+    /// <summary>The card sitting in the target ATM's reader, if any.</summary>
+    protected EntityUid? CardInAtm()
+        => SEntMan.System<ColonyAtmSystem>().GetCard(STarget!.Value);
+
+    /// <summary>Whatever is in the player's active hand.</summary>
+    protected EntityUid? HeldItem()
+        => HandSys.GetActiveItem((SPlayer, Hands));
 
     /// <summary>The last ATM screen the server sent to this client.</summary>
     protected ColonyAtmBuiState ClientAtmState()
@@ -42,15 +51,25 @@ public abstract class ColonyAtmTestBase : InteractionTest
 
     protected async Task Enter() => await Type(string.Empty);
 
-    /// <summary>Presses the DEL key once.</summary>
-    protected async Task Delete()
+    /// <summary>Presses CLEAR once: rubs out the last digit.</summary>
+    protected async Task Clear()
     {
-        await ClickControl<ColonyAtmWindow>(nameof(ColonyAtmWindow.BtnDel));
+        await ClickControl<ColonyAtmWindow>(nameof(ColonyAtmWindow.BtnClear));
         await RunTicks(5);
     }
 
-    /// <summary>Puts a new ID card in hand, gives it a balance and swipes it on the target ATM.</summary>
-    protected async Task<(NetEntity Card, int Pin, int Account)> SwipeNewCard(int balance, EntityUid? owner = null)
+    /// <summary>Presses CANCEL once: backs out of the transaction, or ends the session.</summary>
+    protected async Task Cancel()
+    {
+        await ClickControl<ColonyAtmWindow>(nameof(ColonyAtmWindow.BtnCancel));
+        await RunTicks(5);
+    }
+
+    /// <summary>
+    ///     Puts a new ID card in hand, gives it a balance and pushes it into the target ATM's reader,
+    ///     which keeps it.
+    /// </summary>
+    protected async Task<(NetEntity Card, int Pin, int Account)> InsertNewCard(int balance, EntityUid? owner = null)
     {
         var card = await PlaceInHands(IdCard);
         var comp = Comp<IdCardComponent>(card);
@@ -60,17 +79,19 @@ public abstract class ColonyAtmTestBase : InteractionTest
             comp.OriginalOwner = owner;
         });
 
-        // The card already has its PIN before it ever reaches an ATM; swiping must not change it.
+        // The card already has its PIN before it ever reaches an ATM; inserting must not change it.
         var (pin, account) = (comp.AtmPin, comp.AccountNumber);
-        Assert.That(pin, Is.InRange(1000, 9999), "Card had no PIN before it was swiped");
+        Assert.That(pin, Is.InRange(1000, 9999), "Card had no PIN before it was inserted");
 
         await Interact();
         Assert.Multiple(() =>
         {
-            Assert.That(IsUiOpen(ColonyAtmUi.Key), "Swiping a card did not open the ATM");
+            Assert.That(IsUiOpen(ColonyAtmUi.Key), "Inserting a card did not open the ATM");
             Assert.That(AtmComp.Screen, Is.EqualTo(AtmScreen.PinEntry));
-            Assert.That(comp.AtmPin, Is.EqualTo(pin), "Swiping changed the PIN");
-            Assert.That(comp.AccountNumber, Is.EqualTo(account), "Swiping changed the account number");
+            Assert.That(CardInAtm(), Is.EqualTo(ToServer(card)), "The ATM did not take the card in");
+            Assert.That(HeldItem(), Is.Null, "The card stayed in the player's hand");
+            Assert.That(comp.AtmPin, Is.EqualTo(pin), "Inserting changed the PIN");
+            Assert.That(comp.AccountNumber, Is.EqualTo(account), "Inserting changed the account number");
         });
         return (card, pin, account);
     }
@@ -95,6 +116,23 @@ public abstract class ColonyAtmTestBase : InteractionTest
         while (query.MoveNext(out var uid, out var stack))
         {
             if (stack.StackTypeId == "Dollar" && !SEntMan.System<SharedContainerSystem>().IsEntityInContainer(uid))
+                total += stack.Count;
+        }
+
+        return total;
+    }
+
+    /// <summary>Dollars waiting in the ATM's cash tray.</summary>
+    protected int CashInTray()
+    {
+        var containers = SEntMan.System<SharedContainerSystem>();
+        if (!containers.TryGetContainer(STarget!.Value, ColonyAtmComponent.CashTrayId, out var tray))
+            return 0;
+
+        var total = 0;
+        foreach (var cash in tray.ContainedEntities)
+        {
+            if (SEntMan.TryGetComponent<StackComponent>(cash, out var stack))
                 total += stack.Count;
         }
 

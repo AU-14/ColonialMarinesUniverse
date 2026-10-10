@@ -41,6 +41,10 @@ public sealed class HealthScannerBuiState(
     public string? CMURiderReading;
     public string? CMUWendigoReading; // CMU14: lab Wendigo procedure progress
     public bool CMUExternalBleeding;
+    // cmu edit start
+    public ExternalBleedTier CMUExternalBleedTier;
+    public List<CMUStumpReadout>? CMUStumps;
+    // cmu edit end
     public bool CMUSyntheticPhysiology;
     public HealthScannerDamageReadout Damage = new();
     public HealthScannerAdviceReadout Advice = new();
@@ -118,7 +122,18 @@ public readonly record struct CMUBodyPartReadout(
     bool Eschar,
     bool Splinted,
     bool Cast,
-    bool Tourniquet);
+    bool Tourniquet,
+    // cmu edit start
+    ExternalBleedTier ExternalBleeding = ExternalBleedTier.None);
+    // cmu edit end
+
+// cmu edit start
+[Serializable, NetSerializable]
+public readonly record struct CMUStumpReadout(
+    BodyPartType Type,
+    BodyPartSymmetry Symmetry,
+    bool Clamped);
+// cmu edit end
 
 [Serializable, NetSerializable]
 public readonly record struct CMUOrganReadout(

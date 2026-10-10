@@ -5,7 +5,7 @@
   burrowedLarvaEnabled: true
   lorePrimer: AU14PrimerThreatXeno
   roundstartspawns: XenoThreatSpawns
-  blacklistedgamemodes:
+  blacklistedGamemodes:
    - ColonyFall
   jobScaling: DefaultDistressScale
 
@@ -34,9 +34,9 @@
   lorePrimer: AU14PrimerThreatXeno
   roundstartspawns: XenoThreatSpawnsCF
   thirdpartyinterval: 9100
-  whitelistedgamemodes:
+  whitelistedGamemodes:
   - ColonyFall
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - DistressSignal
   winconditions:
   - KillAllColonistRule

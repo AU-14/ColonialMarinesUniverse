@@ -15,6 +15,8 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
     private const string InsurgencyPreset = "Insurgency";
     private const string ColonyFallPreset = "ColonyFall";
     private const string NoPendingOutcomeSource = "NoPendingOutcome";
+    private const string AddGovforRule = "AddGovfor";
+    private const string AddOpforRule = "AddOpfor";
 
     [Dependency] private AuRoundSystem _auRound = default!;
     [Dependency] private GameTicker _gameTicker = default!;
@@ -121,6 +123,22 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
         }
     }
 
+    public void RecordHiveCollapseRule()
+    {
+        switch (GetCurrentPreset())
+        {
+            case CMURoundStatisticsPreset.ColonyFall:
+                TrySetPendingOutcome(
+                    CMURoundStatisticsWinner.Colonists,
+                    CMURoundStatisticsOutcome.ColonyFallSurvivorVictory,
+                    "HiveCollapseRule");
+                break;
+            case CMURoundStatisticsPreset.DistressSignal:
+                TrySetPendingOutcome(GetDistressHiveCollapseOutcome());
+                break;
+        }
+    }
+
     public void RecordWithdrawal(string? faction, bool isStalemate)
     {
         switch (GetCurrentPreset())
@@ -190,6 +208,14 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             CMURoundStatisticsOutcome.Unknown,
             NoPendingOutcomeSource);
 
+        // Platoon IDs are only real when the preset added that side by gamerule, not planet fallbacks.
+        var govforPlatoon = _gameTicker.IsGameRuleActive(AddGovforRule)
+            ? _platoons.SelectedGovforPlatoon?.ID
+            : null;
+        var opforPlatoon = _gameTicker.IsGameRuleActive(AddOpforRule)
+            ? _platoons.SelectedOpforPlatoon?.ID
+            : null;
+
         var record = new CMURoundOutcomeRecord(
             ev.RoundId,
             preset.Value,
@@ -198,8 +224,8 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             outcome.Value.Source,
             _auRound.SelectedThreat?.ID,
             _auRound.GetSelectedPlanetId(),
-            _platoons.SelectedGovforPlatoon?.ID,
-            _platoons.SelectedOpforPlatoon?.ID,
+            govforPlatoon,
+            opforPlatoon,
             ev.PlayerCount,
             (int) ev.RoundDuration.TotalSeconds,
             DateTime.UtcNow);
@@ -274,6 +300,27 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             CMURoundStatisticsWinner.Govfor,
             CMURoundStatisticsOutcome.MarineMajorXenoWipe,
             source);
+    }
+
+    private PendingRoundOutcome GetDistressHiveCollapseOutcome()
+    {
+        var query = EntityQueryEnumerator<CMDistressSignalRuleComponent>();
+        while (query.MoveNext(out var distress))
+        {
+            if (!distress.Hijack)
+                continue;
+
+            // Post-hijack collapse: the xenos still made it off, so the hijack loss stands.
+            return new PendingRoundOutcome(
+                CMURoundStatisticsWinner.Xeno,
+                CMURoundStatisticsOutcome.XenoMinorHijackLoss,
+                "HiveCollapseRule");
+        }
+
+        return new PendingRoundOutcome(
+            CMURoundStatisticsWinner.Govfor,
+            CMURoundStatisticsOutcome.MarineMinorHiveCollapse,
+            "HiveCollapseRule");
     }
 
     private PendingRoundOutcome GetDistressWithdrawalOutcome(string? faction, bool isStalemate)

@@ -44,6 +44,7 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
 {
     private const int TopPerRole = 3;
     private const int ChampionsPerSide = 10;
+    private const double MinRoleHours = 10;
     private const string DefaultPrefix = "XX";
 
     [Dependency] private readonly IServerDbManager _db = default!;
@@ -208,6 +209,7 @@ public sealed class CMUPlaytimeLeaderboardSystem : EntitySystem
                     .OrderByDescending(row => row.Hours)
                     .Take(TopPerRole)
                     .ToList()))
+            .Where(top => top.TotalHours >= MinRoleHours)
             .OrderBy(top => top.Role, StringComparer.OrdinalIgnoreCase)
             .ToList();
     }

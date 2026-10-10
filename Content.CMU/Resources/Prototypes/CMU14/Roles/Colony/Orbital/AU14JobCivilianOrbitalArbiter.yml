@@ -50,6 +50,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     AU14RankOrbitalArbiterHS:
     - !type:RoleTimeRequirement

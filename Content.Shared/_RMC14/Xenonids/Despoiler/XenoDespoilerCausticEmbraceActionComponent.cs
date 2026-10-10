@@ -35,6 +35,8 @@ public sealed partial class XenoDespoilerCausticEmbraceActionComponent : Compone
     [DataField]
     public float SplashScanSize = 3f;
 
+    public float LeapStrength = 20f;
+
     [DataField]
     public EntProtoId TelegraphProto = "RMCEffectDespoilerCausticTelegraph";
 

@@ -1047,8 +1047,8 @@ public sealed partial class HumanoidProfileEditor
     {
         if (threat.BlacklistedGamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase)))
             return false;
-        return threat.whitelistedgamemodes.Count == 0 ||
-               threat.whitelistedgamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase));
+        return threat.WhitelistedGamemodes.Count == 0 ||
+               threat.WhitelistedGamemodes.Any(mode => mode.Equals(gamemode, StringComparison.OrdinalIgnoreCase));
     }
 
     private static string GetThreatDisplayName(ThreatPrototype threat)

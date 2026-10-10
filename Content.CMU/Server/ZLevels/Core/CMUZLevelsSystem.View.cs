@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.CMU14.ThreeD;
 using Content.Shared.Timing;
 using Microsoft.Extensions.ObjectPool;
 using System.Linq;
@@ -726,7 +727,8 @@ public sealed partial class CMUZLevelsSystem
 
     private bool CanUseZLevelViewOrigin(EntityUid uid)
     {
-        if (TerminatingOrDeleted(uid))
+        // A 3D subscription already covers the full stack; it is not another 2D camera.
+        if (TerminatingOrDeleted(uid) || HasComp<CMU3DViewProbeComponent>(uid))
             return false;
 
         if (Transform(uid).MapUid is not { } map ||
@@ -742,7 +744,7 @@ public sealed partial class CMUZLevelsSystem
 
     private bool IsZLevelProbe(EntityUid uid)
     {
-        return _probeEyeIndex.ContainsKey(uid);
+        return _probeEyeIndex.ContainsKey(uid) || HasComp<CMU3DViewProbeComponent>(uid);
     }
 
     private void QueueDeleteViewerProbeEyes(Entity<CMUZLevelViewerComponent> ent)
