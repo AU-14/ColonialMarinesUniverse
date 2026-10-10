@@ -1912,11 +1912,23 @@
       "directions": 4
     },
     {
+      "name": "seat_driver_open_outline",
+      "directions": 4
+    },
+    {
       "name": "seat_passenger_outline",
       "directions": 4
     },
     {
+      "name": "seat_passenger_open_outline",
+      "directions": 4
+    },
+    {
       "name": "seat_bed_outline",
+      "directions": 4
+    },
+    {
+      "name": "seat_bed_open_outline",
       "directions": 4
     },
     {
@@ -3054,11 +3066,23 @@
       "directions": 4
     },
     {
+      "name": "click_seat_driver_open",
+      "directions": 4
+    },
+    {
       "name": "click_seat_passenger",
       "directions": 4
     },
     {
+      "name": "click_seat_passenger_open",
+      "directions": 4
+    },
+    {
       "name": "click_seat_bed",
+      "directions": 4
+    },
+    {
+      "name": "click_seat_bed_open",
       "directions": 4
     },
     {

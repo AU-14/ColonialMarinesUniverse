@@ -232,7 +232,8 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
 - **Holding an item:** an empty slot the item would go into shows its mask as a faint ghost of what
   goes there, with its `*_outline` on hover; clicking it fits the item there. That picks the side
   for a door or a lamp, which fit either. Clicking the jeep elsewhere fills the first empty slot.
-- **Key:** any jeep key goes in the ignition by clicking the jeep with it; alt-click takes it out.
+- **Key:** any jeep key goes in the ignition by clicking the jeep with it; alt-click takes it out, and
+  so does the driver's key button (`CMUActionJeepEjectKey`), into their hand.
   Without it the engine won't start, and pulling it stops the engine. While someone drives, only
   those aboard can reach it.
 - **Swapping moving parts:** the windshield, hood, doors and tailgate come off screwdriver (screws
@@ -241,8 +242,10 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
   kit hung on it comes off only once that kit is off.
 - **Hover highlight:** `hood_outline` and `fuel_door_outline` highlight those click targets, and
   `seat_<name>_outline` highlights each seat (`driver`, `passenger`, `rear_left`, `rear_right`,
-  `gunner`, as the version has them). Outlines are a white one-pixel rim, which the client tints
-  like the standard hover outline: green in reach, red out of reach.
+  `gunner`, `bed`, as the version has them). With the door beside it (the tailgate for the bed)
+  open or off, more of the seat shows, and `click_seat_<name>_open` and `seat_<name>_open_outline`
+  take in all of it, the cushion too (`SEAT_PANELS`). Outlines are a white one-pixel rim, which the
+  client tints like the standard hover outline: green in reach, red out of reach.
 - **Click maps:** `click_maps/<rsi name>_hood_closed.png` and `_hood_open.png` give the part under
   each pixel, in the same layout as the crayon maps. Alpha marks the jeep and R holds the part id:
 
@@ -284,9 +287,16 @@ curve; `suspension_bob()` in the script is the reference.
 ## Dirt, blood and cleaning
 
 - **Dirt** builds up with distance driven: fastest on bare (diggable) ground, slower on paved ground
-  outdoors, hardly at all indoors. The paint shader shows it as dust in blotches over every pixel,
-  growing with the dirt, and as mud caking the low, mud-splashed bodywork first. It is sent in
-  tenths.
+  outdoors, hardly at all indoors: a thousand tiles of bare ground to the most it gets. It is sent
+  in tenths. The art says where a car gets dirty (`dirt_level`, in jeep space so it keeps its place
+  from every side): the sills and lower doors, the wheel arches and the panels behind the wheels,
+  then the bumpers; the upper body and the hood barely. Smooth noise breaks that into patches. The
+  paint shader spreads the dirt from there as it builds up, dark wet mud where it is thickest and
+  lighter dust at its edges, the tone drifting across the body. Even at its worst most of the jeep
+  stays clean.
+  The windshield dusts over too (`glass_dirt_level`, in its glass's alpha: 78 or 150 less the level),
+  a film that clouds it, thickest low on the panes and into the corners, clear in the arcs the wipers
+  sweep.
 - **Blood** goes on like crayon drawings, from `blood.rsi`, tinted with the bleeder's blood: a splat on
   a rider's seat or the floor in front of it when they take a few points of brute damage, drips
   while they bleed, and splats on the bumper, grille or hood when the jeep runs someone down.
@@ -374,7 +384,7 @@ Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml
 | `Shared/Vehicle/Jeep/CMUVehicleIgnition*` | the ignition key slot: no key, no running |
 | `Shared/Vehicle/Jeep/CMUVehicleFuel*` | fuel use and refuelling from a fuel can at the fuel door; the do-after bar starts at the tank level |
 | `Shared/Vehicle/Jeep/CMUVehicleCargo*` | loading, wrenching down and unloading a crate on the cargo bed, over the tailgate |
-| `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand, 30 charges, 5 a respray) and respraying the jeep with it; the art marks its paint pixels (alpha 254, 253 under mud) |
+| `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand, 30 charges, 5 a respray) and respraying the jeep with it; the art marks its paint pixels with an alpha just under 255 that also carries their dirt level and the art's mud (`PAINT_ALPHA - 2 * level - mud`, 239 to 254), so the shader is always on |
 | `Shared/Vehicle/Jeep/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs` | crayon drawings (up to 50) and blood splashes anchored to the body via `crayon_maps/` |
 | `Shared/Vehicle/Jeep/CMUVehicleGrime*`, `Server/.../CMUVehicleGrimeBuildUpSystem.cs` | dirt from driving, blood from wounded riders and anyone run down, cleaning |
 | `Shared/Vehicle/Jeep/CMUVehicleKitCrate*`, `Server/.../CMUVehicleKitCrateSystem.cs`, `jeep_kit.yml` | kit crates opening into a chassis with its parts, launch-bay rounds, the manual |

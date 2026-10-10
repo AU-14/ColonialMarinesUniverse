@@ -22,6 +22,7 @@ Empty PRIMARY / ATTACH / WHEEL states are the hidden placeholders hardpoint laye
 
 Run: python Content.CMU/Design/Vehicles/JeepPixelArt/jeep_pixel_art.py
 """
+import functools
 import json
 import math
 import os
@@ -100,14 +101,17 @@ GLASS_TINT = (176, 206, 204, 78)
 GLASS_SHINE = (232, 244, 242, 150)
 MUD = (98, 84, 58)
 BODY_MATS = {"od", "od_seam", "frame"}
-# The jeep's paint, which a spray painter recolours in game. Its pixels are written with alpha 254
-# (253 where mud is splashed over it), invisible in the art but read by the paint shader, which
-# keeps their shading and swaps the olive for the chosen colour. The chassis and the wheel rims are
-# painted with the body; kit carried on the jeep keeps its own colours.
+# The jeep's paint, which a spray painter recolours in game. Its pixels are written with alpha just
+# under 255, invisible in the art but read by the paint shader, which keeps their shading and swaps
+# the olive for the chosen colour. The chassis and the wheel rims are painted with the body; kit
+# carried on the jeep keeps its own colours. The alpha also tells the shader how soon the pixel
+# picks up dirt (dirt_level) and whether the art splashes mud over it:
+# PAINT_ALPHA - 2 * level - mud.
 PAINT_MATS = {"od", "od_light", "od_in", "od_seam", "od_flat", "od_in_flat", "frame", "rim", "rim_dk"}
 PAINT_SKIP_PARTS = {"jerrycan", "shovel", "axe", "ammo"}
 PAINT_ALPHA = 254
-PAINT_MUD_ALPHA = 253
+DIRT_LEVELS = 8
+PAINT_MIN_ALPHA = PAINT_ALPHA - 2 * (DIRT_LEVELS - 1) - 1
 # Materials shaded as one flat surface: no lines or highlights between pixels of the same part.
 FLAT_MATS = {"od_flat", "od_in_flat", "white_flat", "red_flat", "red_line_flat"}
 
@@ -1584,6 +1588,98 @@ def nearest_axle(f):
     return FRONT_AXLE if abs(f - FRONT_AXLE) < abs(f - REAR_AXLE) else REAR_AXLE
 
 
+def lattice(x, y, z):
+    h = ((x * 73856093) ^ (y * 19349663) ^ (z * 83492791)) & 0xffffffff
+    h = ((h ^ (h >> 13)) * 1274126177) & 0xffffffff
+    return ((h ^ (h >> 16)) & 0xffff) / 65535.0
+
+
+def smooth_noise(f, r, z, scale):
+    """Value noise in jeep space, in smooth patches about scale voxels across, so dirt keeps its
+    shape on the body from every side."""
+    x, y, w = f / scale, r / scale, z / scale
+    ix, iy, iz = math.floor(x), math.floor(y), math.floor(w)
+    fx, fy, fz = ((t * t * (3 - 2 * t)) for t in (x - ix, y - iy, w - iz))
+
+    def lerp(a, b, t):
+        return a + (b - a) * t
+
+    def edge(a, b):
+        return lerp(lattice(ix + a, iy + b, iz), lattice(ix + a, iy + b, iz + 1), fz)
+
+    return lerp(lerp(edge(0, 0), edge(0, 1), fy), lerp(edge(1, 0), edge(1, 1), fy), fx)
+
+
+def clamp01(v):
+    return max(0.0, min(1.0, v))
+
+
+# Where a car gets dirty: (spread, weight) of the dirt thrown up around and behind each wheel, low on
+# the body, on the bumpers, and the light dust on everything else.
+DIRT_LOW_Z = (6, 15)
+DIRT_ARCH = (2.5, 3.0, 0.95)
+DIRT_SPRAY = (5.0, 6.0, 0.85)
+DIRT_FRONT = 0.8
+DIRT_REAR = 0.8
+DIRT_DUST = 0.06
+
+
+@functools.lru_cache(maxsize=None)
+def dirt_level(f, r, z, part, face):
+    """How soon a paint voxel picks up dirt, 0 first to DIRT_LEVELS - 1 last. The sills and lower
+    doors, the wheel arches and the panels behind the wheels, which take their spray, go first; then
+    the bumpers; the upper body and the top faces only gather a light dust. Smooth noise in jeep
+    space breaks it into patches. A wheel rim only goes by radius, so it keeps its dirt as it turns."""
+    cf, cz = f + 0.5, z + 0.5
+    if part in WHEEL_PARTS:
+        d = math.hypot(cf - nearest_axle(f), cz - WHEEL_Z)
+        e = 0.5 + 0.4 * clamp01((d - 2.0) / 4.0)
+    else:
+        lo, hi = DIRT_LOW_Z
+        e = 0.85 * clamp01((hi - cz) / (hi - lo)) ** 1.3
+        # The wheels throw it on the body's sides, below the fender line.
+        side = clamp01((abs(r + 0.5) - 12) / 5) * clamp01((FENDER + 1 - cz) / 3)
+        for axle in (FRONT_AXLE, REAR_AXLE):
+            df = cf - axle
+            d = math.hypot(df, cz - WHEEL_Z)
+            gap, width, weight = DIRT_ARCH
+            e = max(e, side * weight * math.exp(-((d - WHEEL_R - gap) / width) ** 2))
+            ahead, width, weight = DIRT_SPRAY
+            e = max(e, side * weight * math.exp(-((df + WHEEL_R + ahead) / width) ** 2) * clamp01((17 - cz) / 9))
+        if f >= 26:
+            e = max(e, DIRT_FRONT * clamp01((17 - cz) / 8))
+        if f <= -28:
+            e = max(e, DIRT_REAR * clamp01((19 - cz) / 9))
+        e = max(e * (0.45 if face == "top" else 1.0), DIRT_DUST)
+    n = smooth_noise(f, r, z, 6.0) * 0.65 + smooth_noise(f, r, z, 2.5) * 0.35
+    e = e * (0.45 + 1.1 * n) + (n - 0.5) * 0.12
+    return min(DIRT_LEVELS - 1, int(clamp01(1 - e) * DIRT_LEVELS))
+
+
+# The windshield's wipers hang from its top bar, one per pane: (rows up from the hinge, r) of their
+# pivots, and how far below them they sweep the glass clean.
+WIPERS = ((10.0, -10.0), (10.0, 9.0))
+WIPER_REACH = 7.5
+
+
+@functools.lru_cache(maxsize=None)
+def glass_dirt_level(f, r, z):
+    """How soon a windshield glass voxel dusts over, like dirt_level: thickest along the bottom of
+    the panes and into their corners by the posts, thin in the arcs the wipers sweep. Rows are
+    counted up the glass from its hinge, so it keeps its place folded down or swinging."""
+    v = math.hypot(f + 0.5 - 8.5, z + 0.5 - (HOOD + 1.5))
+    cr = r + 0.5
+    e = 0.45 + 0.35 * clamp01((4 - v) / 3)
+    post = min(abs(cr + 19.5), abs(cr - 19.5), abs(cr))
+    e += 0.2 * clamp01((3 - post) / 3)
+    for pivot, centre in WIPERS:
+        if v < pivot and math.hypot(v - pivot, cr - centre) < WIPER_REACH:
+            e *= 0.35
+    n = smooth_noise(f, r, z, 4.0)
+    e = e * (0.7 + 0.6 * n)
+    return min(DIRT_LEVELS - 1, int(clamp01(1 - e) * DIRT_LEVELS))
+
+
 def wheel_rows(view, part, f, yi, z):
     """Screen rows of a wheel voxel in a front or back view: its own wheel drawn at the steeper
     WHEEL_SCALE, moved so the wheel's centre lands where the view's projection puts it."""
@@ -1672,11 +1768,14 @@ def shade(buf):
         else:
             col = pal["dark"] if (x, y + 1) in edge else pal["front"]
         z = key[2]
-        alpha = PAINT_ALPHA if mat in PAINT_MATS and part not in PAINT_SKIP_PARTS else 255
+        mud = 0
         if mat in BODY_MATS and face == "front" and z <= 9 and (x, y) not in edge:
             if noise(*key) < (10 - z) * 0.07:
                 col = tuple((c * 2 + mc) // 3 for c, mc in zip(col, MUD))
-                alpha = PAINT_MUD_ALPHA if alpha == PAINT_ALPHA else alpha
+                mud = 1
+        alpha = 255
+        if mat in PAINT_MATS and part not in PAINT_SKIP_PARTS:
+            alpha = PAINT_ALPHA - 2 * dirt_level(*key, part, face) - mud
         out[(x, y)] = col + (alpha,)
     return out
 
@@ -1706,17 +1805,24 @@ def bullet_holes(layer, glass_px, rng_seed, count):
                     layer[p] = (236, 242, 238, 200)
 
 
+def dirty_glass(x, y, key):
+    """The windshield's glass colour, its alpha lowered by how soon it dusts over: the paint shader
+    reads glass_dirt_level back from it."""
+    c = glass_color(x, y)
+    return c[:3] + (c[3] - glass_dirt_level(*key),)
+
+
 def layer_of(buf, col, glass, part):
     """Pixels where a part wins the depth test, glass blended over whatever is behind it."""
     layer = {px: col[px] for px, e in buf.items() if e[2] == part}
     glass_px = set()
-    for px, (gd, _, gpart, _, _) in glass.items():
+    for px, (gd, _, gpart, _, key) in glass.items():
         if gpart != part:
             continue
         behind = buf.get(px)
         if behind is not None and behind[0] < gd:
             continue
-        layer[px] = blend(layer.get(px), glass_color(*px))
+        layer[px] = blend(layer.get(px), dirty_glass(*px, key) if part == "windshield" else glass_color(*px))
         glass_px.add(px)
     return layer, glass_px
 
@@ -1831,6 +1937,14 @@ def split_direction(variant, view, dy):
     out = {k: place(v) for k, v in layers.items()}
     out["surface"] = place(surface)
     out["seats"] = {name: set(place({p: 0 for p in pts})) for name, pts in seats.items()}
+    # A door or the tailgate swung open shows more of the seat beside it, all of which takes clicks.
+    out["seats_open"] = {}
+    for name, panel in SEAT_PANELS.items():
+        if panel not in panels(variant) or name not in {n for n, *_ in SEATS[variant]}:
+            continue
+        buf, _ = render(model.without(panel).merged(panel_at(panel, panel_swing(panel)[-1], variant=variant)), view)
+        out["seats_open"][name] = set(place({px: 0 for px, (_, _, part, _, key) in buf.items()
+                                             if part in SEAT_PARTS and seat_at(key, variant) == name}))
     out["wheels_frames"] = [place(f) for f in frames]
     out["hood_swing"] = [place(f) for f in swing]
 
@@ -2243,6 +2357,8 @@ OUTLINE = (255, 255, 255)
 # Seat regions in jeep space (f, r, z ranges) for outlines and click ids, per version. The passenger
 # seat's covers it turned round too, its back then against the dash.
 SEAT_PARTS = {"seat", "seat_back", "rear_bench", "rear_bench_back", "gunner_seat", "litter"}
+# The panel beside a seat: swung open, more of the seat shows (click_seat_<name>_open).
+SEAT_PANELS = {"driver": "door_driver", "passenger": "door_passenger", "bed": "tailgate"}
 SEAT_REGIONS = {
     "driver": ((-16, -3), (-16, -5), (8, 31)),
     "passenger": ((-16, 0), (4, 15), (8, 31)),
@@ -2329,6 +2445,8 @@ def click_masks(variant, per_dir, dy):
             parts[f"{name}_open"] = (f"{panel}_open", d[f"{name}_swing_0"][-1]) if panel else ("shut", d[f"{name}_0"])
         for name, *_ in SEATS[variant]:
             parts[f"seat_{name}"] = ("shut", d["seats"].get(name, set()))
+            if name in d["seats_open"]:
+                parts[f"seat_{name}_open"] = (f"{SEAT_PANELS[name]}_open", d["seats_open"][name])
         for name, (scene, pixels) in parts.items():
             img = scenes[scene]
             mask = {}
@@ -2467,6 +2585,8 @@ def write_rsi(variant, dy):
     save("wheels_outline", [to_image(outline(alpha(per_dir[v]["wheels"]))) for v in DIRS])
     for name, *_ in SEATS[variant]:
         save(f"seat_{name}_outline", [to_image(outline(per_dir[v]["seats"].get(name, set()))) for v in DIRS])
+        if name in per_dir["S"]["seats_open"]:
+            save(f"seat_{name}_open_outline", [to_image(outline(per_dir[v]["seats_open"][name])) for v in DIRS])
     if variant == "gunner":
         save("mgturret_outline", [to_image(outline({(x, y) for x in range(SIZE) for y in range(SIZE)
                                                     if img.getpixel((x, y))[3] > 0})) for img in mg_images()],
@@ -2672,7 +2792,7 @@ def wreck_image(variant, view, per_dir, dy):
             roll = rnd.random()
             lum *= 0.55 if roll < 0.1 else 1.3 if roll > 0.95 else 1.0
             px[x, y] = (round(min(255, lum + 8)), round(min(255, lum * 0.88 + 6)), round(min(255, lum * 0.75 + 4)),
-                        255 if a >= 250 else a)
+                        255 if a >= PAINT_MIN_ALPHA else a)
     return img
 
 
