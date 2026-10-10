@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Linq;
 using Content.Shared._RMC14.Dropship.Fabricator;
 using Robust.Shared.Prototypes;
@@ -91,6 +90,6 @@ public static class CMUDropshipFabricatorCatalog
 
     private static bool Contains(string source, string value)
     {
-        return CultureInfo.CurrentCulture.CompareInfo.IndexOf(source, value, CompareOptions.IgnoreCase) >= 0;
+        return source.Contains(value, StringComparison.CurrentCultureIgnoreCase);
     }
 }
