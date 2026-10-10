@@ -22,7 +22,8 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.ExposureMovementDecision, agent.SustainedFire, agent.FireControlVolley,
             agent.Treatment is { } treatment ? _doAfter.GetStatus(treatment) : null, agent.TreatmentMedicine != null,
             Math.Max(0, ((agent.TreatmentMedicine != null ? agent.TreatmentPreparingUntil : agent.NextHeal) - now).TotalSeconds),
-            medic?.Phase, medic?.Decision ?? "idle", medic?.Doses ?? 0, medic?.Shocks ?? 0);
+            medic?.Phase, medic?.Decision ?? "idle", medic?.Doses ?? 0, medic?.Shocks ?? 0,
+            agent.SquadPhaseReason, agent.RocketDecision, agent.AssaultDecision);
         // Revival or returning control to AI starts a new living record.
         agent.DiagnosticsStoppedAt = null;
         agent.FrozenDecisionHistory = Array.Empty<string>();
@@ -85,6 +86,8 @@ public sealed partial class CMUExpeditionAgentSystem
             Loc.GetString("cmu-squads-diagnostic-recorded-movement", ("squad", recorded.SquadDecision),
                 ("traffic", recorded.TrafficDecision), ("door", recorded.DoorDecision), ("vault", recorded.VaultDecision),
                 ("movement", recorded.FiringMovement), ("sustained", recorded.SustainedFire), ("volley", recorded.Volley)) + "\n" +
+            Loc.GetString("cmu-squads-diagnostic-recorded-assault", ("decision", recorded.AssaultDecision)) + "\n" +
+            Loc.GetString("cmu-squads-diagnostic-rocket", ("decision", recorded.RocketDecision)) + "\n" +
             HearingDiagnostic(recorded.HeardKind, recorded.HeardAt, recorded.At) + "\n" +
             SelfTreatmentDiagnostic(recorded.TreatmentStatus, recorded.PreparingTreatment, recorded.TreatmentWait) + "\n" +
             MedicalTaskDiagnostic(recorded.MedicalPhase, recorded.MedicalDecision, recorded.MedicalDoses, recorded.MedicalShocks) + "\n" +

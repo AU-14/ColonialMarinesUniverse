@@ -87,6 +87,13 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     private void Stop(Entity<CMUExpeditionAgentComponent> ent)
     {
         FreezeLivingDiagnostics(ent, ent.Comp);
+        if (ent.Comp.AssaultDestination != null)
+        {
+            ent.Comp.OrderedDestination = null;
+            ent.Comp.OrderRally = null;
+            ent.Comp.OrderRoute.Clear();
+            ClearAssaultOrder(ent.Comp);
+        }
         ResetSquadOperations(ent, ent.Comp);
         ent.Comp.SupportSquadRoot = null;
         ent.Comp.SupportUntil = TimeSpan.Zero;
@@ -317,7 +324,9 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             return;
         if (!agent.CornerHolding && ApproachVehicleShot(uid, agent, now))
             return;
-        if (hasAmmo && !agent.CornerHolding && ContinueContactMovement(uid, agent, now))
+        if (FollowAssaultOrder(uid, agent, hasAmmo, damage, now))
+            return;
+        if (hasAmmo && agent.AssaultDestination == null && !agent.CornerHolding && ContinueContactMovement(uid, agent, now))
             return;
         if (RunPlan(uid, agent, hasAmmo, damage, hit, now))
             return;
@@ -558,7 +567,12 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var rememberedMelee = 0;
         foreach (var (hostile, distance) in candidates)
         {
-            if (!IsMeleeThreat(hostile) || distance > agent.MeleeStandoffRange + 4)
+            if (!IsMeleeThreat(hostile))
+            {
+                agent.MeleeMemory.Remove(hostile);
+                continue;
+            }
+            if (distance > agent.MeleeStandoffRange + 4)
                 continue;
             if (rememberedMelee++ < 8)
                 RememberMelee(agent, hostile, Transform(hostile).Coordinates, now);

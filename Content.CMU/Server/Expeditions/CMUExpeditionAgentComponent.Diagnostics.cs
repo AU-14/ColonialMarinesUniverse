@@ -18,4 +18,5 @@ public readonly record struct CMUExpeditionDiagnosticSnapshot(TimeSpan At, CMUEx
     string SquadDecision, string TrafficDecision, string DoorDecision, string VaultDecision,
     string FiringMovement, bool SustainedFire, int Volley,
     DoAfterStatus? TreatmentStatus, bool PreparingTreatment, double TreatmentWait,
-    CMUExpeditionMedicalPhase? MedicalPhase, string MedicalDecision, int MedicalDoses, int MedicalShocks);
+    CMUExpeditionMedicalPhase? MedicalPhase, string MedicalDecision, int MedicalDoses, int MedicalShocks,
+    string PhaseReason, string RocketDecision, string AssaultDecision);

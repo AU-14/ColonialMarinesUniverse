@@ -1,15 +1,20 @@
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using Content.Client.Eui;
 using Content.Shared.CMU14.Expeditions;
 using Content.Shared.Eui;
+using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Timing;
+using Robust.Shared.Utility;
 
 namespace Content.Client.CMU14.Expeditions;
 
-public sealed class CMUSquadPanelEui : BaseEui
+public sealed partial class CMUSquadPanelEui : BaseEui
 {
+    [Dependency] private IClipboardManager _clipboard = default!;
+
     private CMUSquadPanelWindow? _window;
     private CMUSquadPanelState _state = new();
     private NetEntity? _member;
@@ -23,6 +28,7 @@ public sealed class CMUSquadPanelEui : BaseEui
         _window = new CMUSquadPanelWindow();
         _window.OnClose += () => SendMessage(new CloseEuiMessage());
         _window.Refresh.OnPressed += _ => Send(CMUSquadPanelAction.Refresh);
+        _window.CopyDiagnostics.OnPressed += _ => CopyDiagnostics();
         _window.Squad.OnItemSelected += args =>
         {
             if (args.Id < 0 || args.Id >= _state.Squads.Count)
@@ -40,6 +46,7 @@ public sealed class CMUSquadPanelEui : BaseEui
         };
         Bind(_window.Spawn, CMUSquadPanelAction.Spawn);
         Bind(_window.Move, CMUSquadPanelAction.Move);
+        Bind(_window.Assault, CMUSquadPanelAction.Assault);
         Bind(_window.Guard, CMUSquadPanelAction.Guard);
         Bind(_window.Hold, CMUSquadPanelAction.Hold);
         Bind(_window.Regroup, CMUSquadPanelAction.Regroup);
@@ -78,11 +85,11 @@ public sealed class CMUSquadPanelEui : BaseEui
         edit.Text = string.Join(",", values);
     }
 
-    private static void Fill(OptionButton button, string[] values, string preferred)
+    private static void Fill(OptionButton button, string[] values, string preferred, Func<string, string>? label = null)
     {
         button.Clear();
         for (var i = 0; i < values.Length; i++)
-            button.AddItem(values[i], i);
+            button.AddItem(label?.Invoke(values[i]) ?? values[i], i);
         if (values.Length > 0)
             button.SelectId(Math.Max(0, Array.IndexOf(values, preferred)));
         button.OnItemSelected += args => button.SelectId(args.Id);
@@ -102,14 +109,14 @@ public sealed class CMUSquadPanelEui : BaseEui
         var map = 0;
         var x = 0f;
         var y = 0f;
-        var usesPoint = action is CMUSquadPanelAction.Spawn or CMUSquadPanelAction.Move or CMUSquadPanelAction.Guard or CMUSquadPanelAction.PatrolAdd;
+        var usesPoint = action is CMUSquadPanelAction.Spawn or CMUSquadPanelAction.Move or CMUSquadPanelAction.Assault or CMUSquadPanelAction.Guard or CMUSquadPanelAction.PatrolAdd;
         if (action == CMUSquadPanelAction.Spawn && (!int.TryParse(w.Count.Text, out count) || count is < 1 or > 12) ||
             usesPoint && !w.Here.Pressed && (!int.TryParse(w.Map.Text, out map) ||
                 !float.TryParse(w.X.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out x) ||
                 !float.TryParse(w.Y.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out y) ||
                 !float.IsFinite(x) || !float.IsFinite(y)))
         {
-            w.Status.Text = Loc.GetString("cmu-squads-invalid");
+            w.Status.SetMessage(Loc.GetString("cmu-squads-invalid"));
             return;
         }
         SendMessage(new CMUSquadPanelMessage
@@ -130,13 +137,15 @@ public sealed class CMUSquadPanelEui : BaseEui
             return;
         var previous = _state;
         _state = panel;
+        _window.CopyDiagnostics.Disabled = panel.Members.Count == 0;
         if (!_optionsLoaded)
         {
             _variants = panel.Variants.ToArray(); _outfits = panel.Outfits.ToArray();
             _doctrines = panel.Doctrines.ToArray(); _factions = panel.Factions.ToArray();
             if (_variants.Length == 0 || _outfits.Length == 0 || _doctrines.Length == 0)
                 return;
-            Fill(_window.Variant, _variants, "mixed"); Fill(_window.Outfit, _outfits, "scavenger");
+            Fill(_window.Variant, _variants, "mixed", value => Loc.GetString($"cmu-squads-variant-{value}"));
+            Fill(_window.Outfit, _outfits, "scavenger");
             Fill(_window.Doctrine, _doctrines, "balanced"); Fill(_window.Faction, _factions, "GOVFOR");
             Fill(_window.OrderDoctrine, _doctrines, panel.CurrentDoctrine);
             _optionsLoaded = true;
@@ -144,8 +153,8 @@ public sealed class CMUSquadPanelEui : BaseEui
                 _window.CommandTabs.CurrentTab = 1;
         }
         if (panel.Status.Length > 0)
-            _window.Status.Text = panel.Status;
-        _window.Overview.Text = panel.Overview.Length > 0 ? panel.Overview : Loc.GetString("cmu-squads-select");
+            _window.Status.SetMessage(FormattedMessage.FromUnformatted(panel.Status));
+        _window.Overview.SetMessage(FormattedMessage.FromUnformatted(panel.Overview.Length > 0 ? panel.Overview : Loc.GetString("cmu-squads-select")));
         _window.AutoPatrol.Pressed = panel.AutomaticPatrol;
         _window.Cooperate.Pressed = panel.Coordinating;
         if (!_window.AimSkill.Grabbed)
@@ -185,13 +194,31 @@ public sealed class CMUSquadPanelEui : BaseEui
         _window.Map.Editable = _window.X.Editable = _window.Y.Editable = !_window.Here.Pressed;
     }
 
+    private void CopyDiagnostics()
+    {
+        if (_window == null || _state.Members.Count == 0)
+            return;
+        var report = new StringBuilder(_state.Overview).AppendLine();
+        foreach (var member in _state.Members)
+        {
+            report.AppendLine().AppendLine(member.Name).AppendLine(member.Summary);
+            report.AppendLine($"{Loc.GetString("cmu-squads-order-label")}: {member.Order}");
+            report.AppendLine($"{Loc.GetString("cmu-squads-tactic-label")}: {member.Tactic} — {member.TacticReason}");
+            report.AppendLine($"{Loc.GetString("cmu-squads-action-label")}: {member.Action}");
+            report.AppendLine($"{Loc.GetString("cmu-squads-status-label")}: {member.Status}");
+            report.AppendLine(member.Detail);
+        }
+        _clipboard.SetText(report.ToString());
+        _window.Status.SetMessage(Loc.GetString("cmu-squads-copied"));
+    }
+
     private void UpdateOrderControls()
     {
         if (_window == null)
             return;
         var disabled = _state.Selected == null || !_state.Members.Any(member => member.Active);
         _window.AimSkill.Disabled = disabled;
-        foreach (var button in new BaseButton[] { _window.Move, _window.Guard, _window.Hold, _window.Regroup,
+        foreach (var button in new BaseButton[] { _window.Move, _window.Assault, _window.Guard, _window.Hold, _window.Regroup,
                      _window.Resupply, _window.PatrolAdd, _window.PatrolStart, _window.PatrolStop, _window.PatrolClear,
                      _window.AutoPatrol, _window.Cooperate, _window.ApplyDoctrine, _window.SetFriendly, _window.SetTarget,
                      _window.AddFriendly, _window.AddTarget })
@@ -207,16 +234,26 @@ public sealed class CMUSquadPanelEui : BaseEui
             index = 0;
         if (index < 0)
         {
-            _window.Detail.Text = Loc.GetString("cmu-squads-select");
-            _window.MemberSummary.Text = "";
+            _window.Detail.SetMessage(Loc.GetString("cmu-squads-select"));
+            _window.MemberSummary.SetMessage("");
+            _window.ActivityHeading.Text = Loc.GetString("cmu-squads-activity-heading");
+            _window.OrderSummary.SetMessage("");
+            _window.TacticSummary.SetMessage("");
+            _window.ActionSummary.SetMessage("");
+            _window.ActivityStatus.SetMessage("");
             _window.Diagram.SetMembers([], null);
             return;
         }
         var selected = _state.Members[index];
         _member = selected.Entity;
         _window.Member.SelectId(index);
-        _window.Detail.Text = selected.Detail;
-        _window.MemberSummary.Text = selected.Summary;
+        _window.Detail.SetMessage(FormattedMessage.FromUnformatted(selected.Detail));
+        _window.MemberSummary.SetMessage(FormattedMessage.FromUnformatted(selected.Summary));
+        _window.ActivityHeading.Text = Loc.GetString(selected.Recorded ? "cmu-squads-activity-recorded" : "cmu-squads-activity-heading");
+        _window.OrderSummary.SetMessage(FormattedMessage.FromUnformatted(selected.Order));
+        _window.TacticSummary.SetMessage(FormattedMessage.FromUnformatted(selected.Tactic + "\n" + selected.TacticReason));
+        _window.ActionSummary.SetMessage(FormattedMessage.FromUnformatted(selected.Action));
+        _window.ActivityStatus.SetMessage(FormattedMessage.FromUnformatted(selected.Status));
         _window.Diagram.SetMembers(_state.Members, selected);
     }
 

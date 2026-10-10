@@ -90,7 +90,11 @@ public sealed partial class CMUExpeditionAgentSystem
         if (from.MapId != to.MapId || delta.LengthSquared() < 0.01f)
             return false;
         var ray = new CollisionRay(from.Position, Vector2.Normalize(delta),
-            (int) (CollisionGroup.BulletImpassable | CollisionGroup.Impassable | CollisionGroup.InteractImpassable));
+            // APC, Humvee and tank hulls use LargeMobLayer instead of wall/bullet layers.
+            // Include it in the first-impact query so a real hull is hittable and a
+            // nearer vehicle cannot be mistaken for an unobstructed launch lane.
+            (int) (CollisionGroup.BulletImpassable | CollisionGroup.Impassable | CollisionGroup.InteractImpassable |
+                CollisionGroup.LargeMobLayer));
         foreach (var hit in _physics.IntersectRayWithPredicate(from.MapId, ray, delta.Length(),
                      entity => entity == uid, returnOnFirstHit: true))
         {

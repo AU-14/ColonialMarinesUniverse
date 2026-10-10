@@ -76,6 +76,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
+        ClearAssaultOrder(agent);
         ResetSquadOperations(uid, agent);
         agent.AutoPatrol = false;
         agent.AutoPatrolAnchor = null;

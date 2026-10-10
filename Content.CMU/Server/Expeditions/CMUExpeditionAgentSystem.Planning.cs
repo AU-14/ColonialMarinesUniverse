@@ -67,7 +67,7 @@ public sealed partial class CMUExpeditionAgentSystem
             {
                 goal = CMUTacticalGoal.Flush;
             }
-            else if (!agent.HoldPosition && !agent.CornerHolding && agent.RecoveryUntil <= now && agent.Duty is not (CMUSquadDuty.Overwatch or CMUSquadDuty.RearGuard or CMUSquadDuty.Medic or CMUSquadDuty.Recover) &&
+            else if (agent.AssaultDestination == null && !agent.HoldPosition && !agent.CornerHolding && agent.RecoveryUntil <= now && agent.Duty is not (CMUSquadDuty.Overwatch or CMUSquadDuty.RearGuard or CMUSquadDuty.Medic or CMUSquadDuty.Recover) &&
                 damage < agent.RetreatDamage && available && armed && !agent.Crossfire && now >= agent.NextFlank && agent.HasCoveringAlly &&
                 (agent.Duty == CMUSquadDuty.Advance || agent.Initiative >= (agent.CombatRole == CMUExpeditionCombatRole.Flanker ? 0.4f : 0.6f) * agent.LearnedFlankCost ||
                     agent.RepeatedPeekHits >= 2) && !SquadHasFlanker(uid, agent) &&
@@ -257,6 +257,8 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool StartPlanMove(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates point, TimeSpan now)
     {
+        if (agent.AssaultDestination != null && agent.Action == A.Flank)
+            return false;
         if (agent.UncoveredManeuverDestination is { } reserved &&
             (reserved != point || now >= agent.ManeuverUntil || !SafeUncoveredStep(uid, agent, point)))
             return false;

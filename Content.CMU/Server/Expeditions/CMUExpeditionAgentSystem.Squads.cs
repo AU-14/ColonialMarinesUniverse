@@ -57,7 +57,7 @@ public sealed partial class CMUExpeditionAgentSystem
             var prototype = composition[i % composition.Length];
             var uid = Spawn(prototype, positions[i]);
             var agent = Comp<CMUExpeditionAgentComponent>(uid);
-            if (!ApplySpawnOutfit(uid, outfit))
+            if (!ApplySpawnOutfit(uid, outfit, i))
                 Log.Error($"Expedition outfit {outfit} could not be equipped on {ToPrettyString(uid)}; retained original equipment.");
             agent.Squad = squad;
             agent.Home = positions[i];
@@ -95,7 +95,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             if (action == "patrol-add")
                 agent.PatrolPoints.Add(point);
-            else if (!OrderPosition(uid, point, action == "guard", facing))
+            else if (action == "assault" ? !OrderAssault(uid, point) : !OrderPosition(uid, point, action == "guard", facing))
                 continue;
             if (action != "patrol-add")
                 agent.OrderRally = center;
@@ -137,6 +137,11 @@ public sealed partial class CMUExpeditionAgentSystem
             ResetTravelCohesion(agent);
             ClearTraffic(agent);
             _steering.Unregister(uid);
+            if (agent.AssaultDestination == destination)
+            {
+                CompleteAssaultOrder(agent);
+                return true;
+            }
             if (agent.TravelGoal != null)
                 return true;
             if (agent.Patrolling && agent.PatrolPoints.Count >= 2)

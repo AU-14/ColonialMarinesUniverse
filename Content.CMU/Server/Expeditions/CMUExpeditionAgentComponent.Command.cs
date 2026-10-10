@@ -9,6 +9,7 @@ public sealed partial class CMUExpeditionAgentComponent
     public string Doctrine = "balanced";
     public CMUSquadDuty Duty;
     public string SquadPhase = "holding";
+    public string SquadPhaseReason = "no-contact";
     public EntityCoordinates? DutyPoint;
     public TimeSpan NextDutyMove;
     public TimeSpan NextRegroupRoute;
