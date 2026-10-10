@@ -375,8 +375,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
-      - id: CMBeltMedicBag
+      - id: CMUBeltMedicBagVAI
+        recommended: true
+      - id: CMUBeltMedicalVAI
     - name: General Medical Supplies
       entries:
       - id: CMUSynthBloodPackFull
@@ -1044,6 +1045,8 @@
         amount: 5
       - id: RMCM2CCase
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54C
@@ -1096,6 +1099,8 @@
         amount: 15
       - id: RMCMagazinePistolM1984HP
         amount: 5
+      - id: RMCMagazinePistolSU6
+        amount: 30
     - name: Magazine Boxes
       entries:
       - id: RMCBoxMagazineRifleM54C
@@ -1258,6 +1263,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

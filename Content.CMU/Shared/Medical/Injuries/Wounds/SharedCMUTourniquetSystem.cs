@@ -196,7 +196,7 @@ public abstract partial class SharedCMUTourniquetSystem : EntitySystem
             args.Verbs.Add(verb);
         }
 
-        Splints.AddCastRemoveVerb(patient, ref args);
+        Splints.AddSupportRemoveVerbs(patient, ref args);
     }
 
     private void StartVerbRemoveDoAfter(EntityUid user, EntityUid patient, EntityUid part, BodyPartType? stumpType = null, BodyPartSymmetry stumpSymmetry = default)

@@ -3,6 +3,9 @@ name: Build & Test Debug
 on:
   # Optional full suite, including bulk entity sweeps and upstream policy tests.
   workflow_dispatch:
+  # CMU14: nightly on master so the tests left out of PR CI still get run
+  schedule:
+    - cron: '0 3 * * *'
 
 permissions:
   contents: read

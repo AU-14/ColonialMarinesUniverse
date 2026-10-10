@@ -78,6 +78,9 @@ public abstract partial class SharedBarbedSystem : EntitySystem
 
     private void OnInteractUsing(Entity<BarbedComponent> ent, ref InteractUsingEvent args)
     {
+        if (args.Handled) // CMU14: respect earlier handlers, such as wet concrete refusing wire
+            return;
+
         if (_xenoAcid.IsMelted(ent))
         {
             var failPopup = Loc.GetString("rmc-construction-melted");

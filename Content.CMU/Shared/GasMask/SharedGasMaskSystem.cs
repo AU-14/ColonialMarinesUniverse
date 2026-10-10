@@ -1,4 +1,7 @@
 using Content.Shared._RMC14.Inventory;
+using Content.Shared.Atmos.Components;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Examine;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared.Containers.ItemSlots;
@@ -11,6 +14,7 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
     private readonly float _epsilon = 0.001f;
 
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedInternalsSystem _internals = default!;
 
     public override void Initialize()
     {
@@ -28,6 +32,18 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
     public bool IsFilterBroken(Entity<GasMaskFilterComponent> ent)
     {
         return ent.Comp.Integrity == 0f || ent.Comp.Integrity <= _epsilon;
+    }
+
+    /// <summary>
+    /// True when the entity is breathing from a connected tank that still has air in it.
+    /// A sealed air supply keeps out gases the same way a working filter does, without wearing anything down.
+    /// </summary>
+    public bool IsBreathingInternals(EntityUid uid)
+    {
+        if (!TryComp<InternalsComponent>(uid, out var internals) || !_internals.AreInternalsWorking(internals))
+            return false;
+
+        return TryComp<GasTankComponent>(internals.GasTankEntity, out var tank) && tank.Air.TotalMoles > 0;
     }
 
     public void DamageFilter(EntityUid uid, GasMaskFilterComponent comp, GasMaskFilterDamageComponent dam)

@@ -144,7 +144,7 @@ public sealed partial class AntagSelectionSystem
         {
             foreach (var groupId in def.JobBlacklistGroup)
             {
-                if (ProtoMan.TryIndex(groupId, out AntagJobBlacklistPrototype? group) && IsJobInBlacklistGroup(job, group)) // CMU14
+                if (ProtoMan.TryIndex(groupId, out AntagJobBlacklistPrototype? group) && group.Jobs.Contains(job))
                     return false;
             }
         }

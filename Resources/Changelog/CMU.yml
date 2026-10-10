@@ -12471,5 +12471,285 @@
   id: 762
   time: '2026-10-09T16:25:00.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2125
+- author: TheHellFireo
+  changes:
+  - message: Improved vehicle acid damage, collisions, wreck demolition, sounds and
+      peeking.
+    type: Fix
+  - message: Fixed tanks becoming stuck against obstacles after ramp unloading.
+    type: Fix
+  - message: Fixed local law-enforcement jobs and accessories, and protected GOVFOR
+      and colony officials from antagonist rolls.
+    type: Fix
+  - message: Fixed Despoiler lingering acid tiers and cash vendors resisting xeno
+      attacks.
+    type: Fix
+  - message: Fixed BEAR IFF, gun targeting through non-colliding props, evolution-menu
+      unlocking and incapacitated 3D presentation.
+    type: Fix
+  - message: Stopped Yautja hunt teleporters warning ghosts.
+    type: Fix
+  id: 763
+  time: '2026-10-09T17:19:28.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2126
+- author: TheHellFireo
+  changes:
+  - message: Removed the six alien eggs from the Yautja ship.
+    type: Map
+  id: 764
+  time: '2026-10-09T17:19:54.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2127
+- author: TheHellFireo
+  changes:
+  - message: Fixed the box van interior's driver seat, exits and collision boundaries.
+    type: Map
+  id: 765
+  time: '2026-10-09T17:20:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2128
+- author: TheHellFireo
+  changes:
+  - message: Fixed the pizza van interior's driver seat, exits and collision boundaries.
+    type: Map
+  id: 766
+  time: '2026-10-09T17:20:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2129
+- author: TheHellFireo
+  changes:
+  - message: Fixed the van interior's driver seat, doors and collision boundaries.
+    type: Map
+  id: 767
+  time: '2026-10-09T17:20:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2130
+- author: rokudara-sen
+  changes:
+  - message: The AN/PRC-117G search receiver no longer sometimes misses a single radio
+      line said just after its sweep went past
+    type: Fix
+  - message: Fixed the flaky 3D stair camera and stun merge tests
+    type: Code
+  id: 768
+  time: '2026-10-09T17:32:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2124
+- author: TheHellFireo
+  changes:
+  - message: Fixed repeated errors from deleted combat targets, gibbing, ghost warps,
+      parasite selection and thrown-item containers.
+    type: Fix
+  - message: Fixed an expedition weapon-event registration error that prevented server
+      startup.
+    type: Fix
+  - message: Fixed interrupted dropship travel loops and unnecessary broadcasts of
+      departure sounds.
+    type: Fix
+  - message: Limited flare burn ambience through the existing nearby-sound budget.
+    type: Fix
+  - message: Reduced the cost of periodic client performance inventories.
+    type: Admin
+  id: 769
+  time: '2026-10-09T18:47:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2122
+- author: rokudara-sen
+  changes:
+  - message: Fixed server lag from gunfire and doors being checked for expedition
+      NPCs in every round
+    type: Fix
+  - message: Fixed server lag from open predator bracer trackers
+    type: Fix
+  - message: Fixed the Ambassador console resending its screen to everyone nearby
+      every tick
+    type: Fix
+  id: 770
+  time: '2026-10-09T20:04:40.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2131
+- author: troytroy400
+  changes:
+  - message: Squad members are now automatically put into fireteams when they join
+      a squad. A new fireteam opens for every 10 people in the squad, up to 3.
+    type: Add
+  - message: Fireteam Leaders who join a squad take command of a fireteam that isn't
+      already led by a Fireteam Leader. Fireteams without one are led by their highest
+      ranking member.
+    type: Add
+  - message: Squads without a living Squad Leader for 10 minutes now promote their
+      highest ranking member to Squad Leader.
+    type: Add
+  - message: Fireteams without a living Fireteam Leader for 7 minutes now promote
+      their highest ranking member to Fireteam Leader.
+    type: Add
+  - message: Squad and Fireteam Leaders who were replaced while dead get their position
+      back once they're revived and back in control of their character.
+    type: Add
+  - message: GOVFOR and OPFOR squad members now have two trackers, one that always
+      points at the Squad Leader and one below it that points at your Fireteam Leader
+      and can be changed in the fireteam menu like normal.
+    type: Add
+  - message: Characters who spawn with regulation tied-back hair can now re-tie it
+      into the other regulation tied-back styles, or untie it into a bob.
+    type: Add
+  - message: The High Command Executive Officer now spawns with a command tablet.
+    type: Add
+  - message: Players who are SSD, AFK, asleep, unconscious or dead are never automatically
+      made Squad or Fireteam Leader.
+    type: Tweak
+  - message: Squad Leaders are now spread so each squad gets one and always take command
+      of the squad they join.
+    type: Tweak
+  - message: Special roles like corpsmen and Fireteam Leaders are now spread evenly
+      across squads and riflemen fill whichever squad has the fewest people.
+    type: Tweak
+  - message: Squad preference no longer affects which squad you join or where you
+      appear in the lobby lineup.
+    type: Tweak
+  - message: The Commander is now called the Commanding Officer.
+    type: Tweak
+  - message: Playtime medals now need 8, 20, 30 and 40 hours in a role for Bronze,
+      Silver, Gold and Platinum. The playtime stats window now shows the medal you'll
+      actually get.
+    type: Tweak
+  - message: Removed the Ruby, Amethyst, Emerald and Prismatic playtime medals.
+    type: Remove
+  - message: Fireteam Leaders now have the auxiliary channel.
+    type: Tweak
+  - message: Platoon Corpsmen and Engineering Techs now have the auxiliary channel.
+    type: Tweak
+  - message: Drone Operators now have the JTAC and auxiliary channels.
+    type: Tweak
+  - message: The Combat Correspondent now spawns with the command headset.
+    type: Tweak
+  - message: Prosthetic limb traits now cost 2 points.
+    type: Tweak
+  - message: Removed "Platoon" from the Commander and Advisor job names.
+    type: Tweak
+  - message: The Commanding Officer, Executive Officer, Advisor, staff officers, Medical
+      Officer, Chief MP, Military Doctors, Military Police and all aircrew now join
+      the Auxiliary squad instead of having no squad.
+    type: Tweak
+  - message: Auxiliary squads no longer add their squad name to your ID, don't use
+      fireteams and their Squad Leader keeps their normal job icon.
+    type: Tweak
+  id: 771
+  time: '2026-10-09T23:07:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2116
+- author: PoltavskaPraca
+  changes:
+  - message: added construction belts to every comtech vendor and added storage rigs
+      to every corpsman vendor
+    type: Add
+  - message: added belt subtypes for medical storage rig belts for larp purposes
+    type: Add
+  id: 772
+  time: '2026-10-10T08:11:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2094
+- author: rokudara-sen
+  changes:
+  - message: Splints and casts can be removed by the patient or a medic
+    type: Fix
+  - message: The surgical webbing has room for its cast
+    type: Fix
+  - message: Drone operators are no longer kicked out of their drone by bleeding or
+      pain
+    type: Fix
+  - message: Piloted drones speak their operator's languages
+    type: Fix
+  - message: Riders get a clear button to release a seized host early
+    type: Fix
+  - message: Examining Yautja gear no longer shocks or delimbs humans
+    type: Fix
+  - message: Yautja clan masks block neomorph spores
+    type: Fix
+  - message: Fuelled lifeboats on the USS Bush no longer crash onto the planet after
+      an early evacuation order
+    type: Fix
+  - message: Crashing lifeboats land fully on the planet instead of hanging off the
+      map edge
+    type: Fix
+  - message: The OPFOR advisor and platoon commander can open the rank chevron cases
+    type: Fix
+  - message: The UTES-C mount shows its description
+    type: Fix
+  - message: Boots! and Orrery magazines use USCM and WeYu
+    type: Fix
+  - message: Russian text on UPP items and the liquidator role is translated
+    type: Fix
+  id: 773
+  time: '2026-10-10T08:43:12.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2139
+- author: maertayn
+  changes:
+  - message: The medical storage rig can now hold magazines and documents, an option
+      for the combat-medic, the lifesaver still holds more capacity for the platoon
+      medics.
+    type: Add
+  id: 774
+  time: '2026-10-10T10:17:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2137
+- author: HubaBub
+  changes:
+  - message: New PMC "BEAR" - GOVFOR (UPP special forces, the prototype of the Iron
+      Bear)
+    type: Add
+  - message: Various equipment and weapons have been added for UPP and BEAR, including
+      the IRP Marine of Socialism!
+    type: Add
+  - message: A sprite of some UPP items, pouches, and belts.
+    type: Add
+  - message: Corrected cargo UPP, new boxes with cartridges and magazines.
+    type: Add
+  - message: "The Liquidators squad has been added (an anti\u2011biological group\
+      \ of flamethrower operators, summoned by the UPP ambassador)."
+    type: Add
+  - message: A UPP migrant unit has been added (they are ordered through the UPP ambassador,
+      they cannot speak English, and they have a variety of equipment and skills).
+    type: Add
+  id: 775
+  time: '2026-10-10T10:26:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2058
+- author: troytroy400
+  changes:
+  - message: You can now build concrete barricades. It needs construction skill 2.
+      Lay a frame with 22 metal rods from the construction menu, then pour a concrete
+      bag onto it. Poured concrete takes 10 minutes to harden. While it's wet it's
+      pale grey, has little HP, can't take barbed wire and examining it shows how
+      long is left. Once hardened it's much tougher than a HESCO against bullets and
+      explosives plus has a larger pool of health, but is suspectable to acid damage.
+    type: Add
+  - message: Platoon requisition vendors now stock 15 concrete bags, and a crate of
+      10 concrete bags can be ordered from the requisitions lift for 600.
+    type: Add
+  - message: Breathing from internals with oxygen in the connected tank now protects
+      you from tear gas, pepper spray, mycotoxin, spore clouds and other inhaled gases,
+      the same way a gas mask filter does. Boiler acid gas still burns you while you're
+      on internals, but you won't take oxygen damage, shake or cough.
+    type: Add
+  - message: Added a rebindable "Open worn storage" key (Controls > CMU). Hover over
+      a belt, backpack or pouch slot and press it to open it. It's unbound by default.
+      CM13 player QOL.
+    type: Add
+  - message: Added an option (Controls > CMU) so that clicking worn storage with an
+      empty hand opens it instead of taking it off. CM13 QOL.
+    type: Add
+  - message: Empty weapon kits now despawn after lying on the ground for a minute.
+    type: Tweak
+  - message: The Mohawk's ramp and ladder controls now require GOVFOR or OPFOR pilot,
+      engineering or command access.
+    type: Tweak
+  - message: The IFAK first-aid autoinjector now holds 15u tricordrazine, 6u paracetamol
+      and 6u dexalin. The infantry first aid guide has been updated to match.
+    type: Tweak
+  - message: Snack, drink, cigarette and recreation vendors on GOVFOR and OPFOR ships
+      now take cash or your ID for payment, like the ones on the planet.
+    type: Tweak
+  - message: The SU6 now uses alt-iff and is buffed to be similar in stats to the
+      M4A4. CMB CIU, USCM, VAIPO and RMC now have three SU6 kits in their req vendors
+      and can order more.
+    type: Tweak
+  - message: You no longer start gasping for air until you've taken at least 20 oxygen
+      damage.
+    type: Tweak
+  - message: BEAR has been removed from rotation.
+    type: Remove
+  id: 776
+  time: '2026-10-10T10:42:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2133
 Name: CMU
 Order: -1

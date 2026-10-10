@@ -191,16 +191,11 @@
       0: Alive
       1200: Dead
   - type: Xeno
-    unlockAt: 99999 #never unlock naturally
-    role: CMXenoWendigo
-    emoteSounds: Wendigo
     actionIds:
     - ActionXenoWatch
     - ActionXenoPunch
     - ActionXenoPounce
     - ActionXenoHeadbite
-    tier: 99
-    hudOffset: -0.15,0.25
   - type: XenoPunch
     damage:
       types:
@@ -217,4 +212,3 @@
         Blunt: 16
         Slash: 16
         Piercing: 16
-    emoteCooldown: 99999

@@ -96,15 +96,15 @@ public sealed class CMUWendigoTransformationTest
             Feed(subject, HumanMeat);
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2));
 
-            // Stabilized Mutagen before the second timer finishes, and under 15u, does nothing.
-            Inject(subject, CMUWendigoTransformationSystem.StabilizedMutagen, 15);
+            // Stabilized Mutagen before the second timer finishes, and an under-dose, does nothing.
+            Inject(subject, CMUWendigoTransformationSystem.StabilizedMutagen, CMUWendigoTransformationSystem.RequiredDose.Float());
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2), "Early mutagen must not advance.");
             Expire(subject);
-            Inject(subject, CMUWendigoTransformationSystem.StabilizedMutagen, 14);
-            Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2), "Under 15u must not advance.");
-            Inject(subject, CMUWendigoTransformationSystem.MH32, 15);
+            Inject(subject, CMUWendigoTransformationSystem.StabilizedMutagen, CMUWendigoTransformationSystem.RequiredDose.Float() - 1);
+            Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2), "Under-dose must not advance.");
+            Inject(subject, CMUWendigoTransformationSystem.MH32, CMUWendigoTransformationSystem.RequiredDose.Float());
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Fed2), "MH-32 out of order must not advance.");
-            Inject(subject, CMUWendigoTransformationSystem.StabilizedMutagen, 15);
+            Inject(subject, CMUWendigoTransformationSystem.StabilizedMutagen, CMUWendigoTransformationSystem.RequiredDose.Float());
             Assert.That(Stage(subject), Is.EqualTo(CMUWendigoSubjectStage.Mutagen));
 
             // From the mutagen stage on, other food no longer aborts.
@@ -177,7 +177,7 @@ public sealed class CMUWendigoTransformationTest
 
             var reagent = tamed ? CMUWendigoTransformationSystem.MH33 : CMUWendigoTransformationSystem.MH32;
             var proto = server.ProtoMan.Index<ReagentPrototype>(reagent);
-            var ev = new ReactionEntityEvent(ReactionMethod.Injection, new ReagentQuantity(reagent, 15), proto, null);
+            var ev = new ReactionEntityEvent(ReactionMethod.Injection, new ReagentQuantity(reagent, CMUWendigoTransformationSystem.RequiredDose), proto, null);
             entMan.EventBus.RaiseLocalEvent(subject, ref ev);
 
             Assert.That(comp.Stage, Is.EqualTo(CMUWendigoSubjectStage.Mutating));
@@ -240,7 +240,7 @@ public sealed class CMUWendigoTransformationTest
 
             var reagent = CMUWendigoTransformationSystem.MH32;
             var proto = server.ProtoMan.Index<ReagentPrototype>(reagent);
-            var ev = new ReactionEntityEvent(ReactionMethod.Injection, new ReagentQuantity(reagent, 15), proto, null);
+            var ev = new ReactionEntityEvent(ReactionMethod.Injection, new ReagentQuantity(reagent, CMUWendigoTransformationSystem.RequiredDose), proto, null);
             entMan.EventBus.RaiseLocalEvent(subject, ref ev);
 
             // Only death cancels the change; being beaten into crit must not.
@@ -278,7 +278,7 @@ public sealed class CMUWendigoTransformationTest
 
             var reagent = CMUWendigoTransformationSystem.MH32;
             var proto = server.ProtoMan.Index<ReagentPrototype>(reagent);
-            var ev = new ReactionEntityEvent(ReactionMethod.Injection, new ReagentQuantity(reagent, 15), proto, null);
+            var ev = new ReactionEntityEvent(ReactionMethod.Injection, new ReagentQuantity(reagent, CMUWendigoTransformationSystem.RequiredDose), proto, null);
             entMan.EventBus.RaiseLocalEvent(subject, ref ev);
             Assert.That(comp.Stage, Is.EqualTo(CMUWendigoSubjectStage.Mutating));
 

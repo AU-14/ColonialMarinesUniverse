@@ -102,7 +102,7 @@
         amount: 4
       - id: CMULACNBeltUtility
         amount: 5
-      - id: CMULACNBeltMedical
+      - id: CMUBeltMedicalLACN
         amount: 5
     - name: Pouches
       entries:
@@ -348,7 +348,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMULACNBeltMedical
+      - id: CMUBeltMedicBagLACN
+        recommended: true
+      - id: CMUBeltMedicalLACN
     - name: General Medical Supplies
       entries:
       - id: CMUSynthBloodPackFull
@@ -446,6 +448,7 @@
       choices: { CMUPlatoonMedicalGloves: 1 }
       entries:
       - id: CMHandsLatex
+      - id: ClothingHandsGlovesNitrile
     - name: Medical Masks
       choices: { CMUPlatoonMedicalMasks: 1 }
       entries:
@@ -566,7 +569,7 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMULACNBeltMedical
+      - id: CMUBeltMedicBagLACN
     - name: General Medical Supplies
       entries:
       - id: AU14HemostaticGauzePacket
@@ -1305,6 +1308,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum
@@ -1420,7 +1425,7 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMULACNBeltMedical
+      - id: CMUBeltMedicBagLACN
     - name: Medical Webbing
       choices: { CMUPlatoonSurgicalWebbing: 1 }
       entries:
@@ -1605,10 +1610,16 @@
     - name: Tool Storage
       choices: { CMUCTToolStorage: 1 }
       entries:
+      - id: AU14BeltUtilityCombatFilled
+        name: LACN utility tools rig (filled)
+        recommended: true
+      - id: RMCBeltConstruction
+        name: LACN construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
       - id: CMULACNBeltToolbeltFilled
         name: LACN toolbelt rig (filled)
+        recommended: true
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:

@@ -1,10 +1,11 @@
 - type: antagSpecifier
-  parent: CMUAntagSpecifierColonyBase
   id: Vigilante
   prefRoles: [ VigilanteRole ]
   jobBlacklistGroup:
+  - AllGovforJobs
   - AllOpforJobs
   - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
   briefing:
     text: cmu-antag-vigilante-greeting
     color: DarkRed

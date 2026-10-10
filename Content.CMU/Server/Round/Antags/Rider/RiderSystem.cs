@@ -87,6 +87,7 @@ public sealed partial class RiderSystem : EntitySystem
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderManifestPrototype = "ActionRiderManifest";
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderMutePrototype = "ActionRiderMute";
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderPunishPrototype = "ActionRiderPunish";
+    private static readonly EntProtoId ActionRiderSeizeReleasePrototype = "ActionRiderSeizeRelease";
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderSeizePrototype = "ActionRiderSeize";
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderSurgePrototype = "ActionRiderSurge";
     private static readonly Robust.Shared.Prototypes.EntProtoId ActionRiderSustainPrototype = "ActionRiderSustain";
@@ -895,7 +896,7 @@ public sealed partial class RiderSystem : EntitySystem
 
         ent.Comp.SeizeActive = true;
         ent.Comp.SeizeEndsAt = _timing.CurTime + ent.Comp.SeizeDuration;
-        _actions.AddAction(host, ref ent.Comp.SeizeExitAction, ActionRiderExitPrototype);
+        _actions.AddAction(host, ref ent.Comp.SeizeExitAction, ActionRiderSeizeReleasePrototype);
         _popup.PopupEntity(Loc.GetString("rider-seize-host"), host, host, PopupType.LargeCaution);
         _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
             $"{ToPrettyString(ent):rider} seized {ToPrettyString(host):host}");

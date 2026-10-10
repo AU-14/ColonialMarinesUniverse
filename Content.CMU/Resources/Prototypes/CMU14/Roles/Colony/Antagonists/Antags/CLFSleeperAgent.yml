@@ -1,8 +1,22 @@
 - type: antagSpecifier
-  parent: CMUAntagSpecifierColonyBase
   id: CLFSleeperAgent
   prefRoles: [ CLFSleeperAgentRole ]
   jobWhitelist:
+  - AU14JobCivilianCorporateLiaison
+  - AU14JobCivilianCMBMarshal
+  - AU14JobCivilianColonyAdministrator
+  - AU14JobGOVFORPlatOp
+  - AU14JobGOVFORAdjutant
+  - AU14JobGOVFORSquadSergeant
+  - AU14JobGOVFORSectionSergeant
+# - AU14JobGOVFORRadioTelephoneOperator
+  - AU14JobGOVFORVehicleCommander
+  - AU14JobGOVFORMilitaryPoliceMan
+  - AU14JobGOVFOROfficerEngi
+  - AU14JobGOVFOROfficerIntel
+  - AU14JobGOVFOROfficerLogistics
+  - AU14JobGOVFOROfficerMedical
+# - AU14JobGOVFORMilitaryDoctor
   - AU14JobOPFORPlatOp
   - AU14JobOPFORAdjutant
   - AU14JobOPFORSquadSergeant

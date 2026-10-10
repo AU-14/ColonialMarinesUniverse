@@ -328,8 +328,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedicBag
       - id: AU14BeltMedicBagBlack
+        recommended: true
+      - id: CMBeltMedicBag
     - name: Medical Equipment
       entries:
       - id: AU14CMDefibrillator

@@ -352,7 +352,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: AU14BeltMedicBagBlack
+      - id: CMUBeltMedicBagPMC
+        recommended: true
+      - id: CMUBeltMedicalPMC
     - name: General Medical Supplies
       entries:
       - id: CMUSynthBloodPackFull
@@ -1244,6 +1246,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum
