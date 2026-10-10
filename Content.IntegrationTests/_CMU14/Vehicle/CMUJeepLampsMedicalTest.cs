@@ -15,6 +15,7 @@ using Content.Shared.Vehicle.Components;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Vehicle;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -22,7 +23,8 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.CMU14.Vehicle;
 
 /// <summary>
-/// The jeep's lamps come off and go on one by one, its key lets it run, the medical jeep lays its
+/// The jeep's lamps come off and go on one by one, its key lets it run, its extinguisher comes out
+/// and goes back, the medical jeep lays its
 /// patient down on an operating table, the kits are on the platoon catalogs in price order, and a
 /// wreck outlasts the fire it leaves under itself.
 /// </summary>
@@ -160,6 +162,40 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
     }
 
     [Test]
+    public async Task ExtinguisherComesOutAndGoesBack()
+    {
+        var (jeep, user) = await SpawnJeep("CMUVehicleJeepCargo");
+        const string slot = "jeep-extinguisher";
+        EntityUid extinguisher = default;
+
+        // From the passenger's front corner, where it is strapped.
+        await Server.WaitPost(() =>
+        {
+            var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
+            SEntMan.System<SharedTransformSystem>().SetCoordinates(user, new EntityCoordinates(grid, -0.45f, -0.3f));
+            extinguisher = Part(jeep, "extinguisher");
+            Hold(user, null);
+            Click(user, extinguisher);
+        });
+        await RunSeconds(3f);
+
+        await Server.WaitPost(() =>
+        {
+            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, slot), Is.Null,
+                "An empty hand should take the extinguisher out.");
+            var held = SEntMan.System<SharedHandsSystem>().GetActiveItem(user);
+            Assert.That(held, Is.Not.Null);
+            Assert.That(SEntMan.GetComponent<MetaDataComponent>(held!.Value).EntityPrototype?.ID, Is.EqualTo("CMFireExtinguisherPortable"));
+            Click(user, extinguisher);
+        });
+        await RunSeconds(3f);
+
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, slot), Is.Not.Null,
+                "The extinguisher should go back where it came from."));
+    }
+
+    [Test]
     public async Task MedicalJeepLaysItsPatientOnAnOperatingTable()
     {
         var (jeep, user) = await SpawnJeep("CMUVehicleJeepMedical");
@@ -238,6 +274,14 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
             var keys = SEntMan.EntityQuery<MetaDataComponent>(true).Count(m => m.EntityPrototype?.ID == "CMUJeepKey");
             // One in the cargo jeep's ignition, one out of the crate.
             Assert.That(keys, Is.EqualTo(2));
+
+            // The crate's extinguisher fits the chassis.
+            var containers = SEntMan.System<SharedContainerSystem>();
+            var extinguisher = SEntMan.EntityQuery<MetaDataComponent>(true)
+                .Where(m => m.EntityPrototype?.ID == "CMFireExtinguisherPortable")
+                .Select(m => m.Owner)
+                .Single(uid => !containers.IsEntityInContainer(uid));
+            Assert.That(SEntMan.System<ItemSlotsSystem>().TryInsert(chassis, "jeep-extinguisher", extinguisher, null), Is.True);
         });
     }
 
