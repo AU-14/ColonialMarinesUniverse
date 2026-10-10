@@ -4,7 +4,7 @@ using Content.Shared.IdentityManagement.Components;
 
 namespace Content.Shared.CMU14.Items;
 
-public sealed class FoldableIdentityBlockerSystem : EntitySystem
+public sealed partial class FoldableIdentityBlockerSystem : EntitySystem
 {
     [Dependency] private IdentitySystem _identity = default!;
 

@@ -17,6 +17,11 @@ public sealed class CMUSquadPanelState : EuiStateBase
     public string Status = "";
     public string Friendlies = "default";
     public string Targets = "default";
+    public string Overview = "";
+    public string CurrentDoctrine = "balanced";
+    public bool AutomaticPatrol;
+    public bool Coordinating;
+    public int AimSkillPercent = 100;
 }
 
 [Serializable, NetSerializable]
@@ -24,13 +29,16 @@ public sealed record CMUSquadSummary(NetEntity Root, string Label);
 
 [Serializable, NetSerializable]
 public sealed record CMUSquadMemberView(NetEntity Entity, string Name, int Map, Vector2 Position,
-    Vector2? Target, Vector2? Destination, Vector2? Cover, List<Vector2> Route, List<Vector2> RejectedCover, string Detail);
+    Vector2? Target, Vector2? Destination, Vector2? Cover, List<Vector2> Route, List<Vector2> RejectedCover,
+    string Summary, string Detail, bool Active, bool Injured);
 
 [Serializable, NetSerializable]
 public enum CMUSquadPanelAction : byte
 {
     Refresh, Select, Spawn, Move, Guard, Hold, Regroup, PatrolAdd, PatrolStart, PatrolStop,
     Resupply, Doctrine, Friendly, Target,
+    PatrolClear, AutoPatrol, Cooperation,
+    AimSkill,
 }
 
 [Serializable, NetSerializable]
@@ -48,4 +56,6 @@ public sealed class CMUSquadPanelMessage : EuiMessageBase
     public float X;
     public float Y;
     public string Facing = "auto";
+    public bool Enabled;
+    public int AimSkillPercent = 100;
 }

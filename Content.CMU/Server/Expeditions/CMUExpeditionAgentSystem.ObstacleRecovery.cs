@@ -11,7 +11,7 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool _localRouteSearched;
 
     private bool LocalDetour(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates destination,
-        Queue<EntityCoordinates> output, bool stalled = true)
+        Queue<EntityCoordinates> output, bool stalled = true, bool allowVaults = true)
     {
         var now = _timing.CurTime;
         if (_localRouteSearched || now < agent.NextLocalDetour ||
@@ -35,9 +35,15 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         var toward = Vector2.Normalize(destination.Position - start.Position);
         var avoid = start.Position + toward * 0.8f;
-        var path = CMUTacticalRoute.Find(size, first, last, Walkable, _ => 0,
-            (a, b) => RoutePassage(uid, Point(a), Point(b),
-                a == first || b == last ? AgentBodyRadius : RouteClearance), out _, 384);
+        var allowVault = false;
+        var path = CMUTacticalRoute.Find(size, first, last, Walkable,
+            cell => KnownDangerCost(agent, Point(cell)), Passage, out _, 384);
+        if (path == null && allowVaults)
+        {
+            allowVault = true;
+            path = CMUTacticalRoute.Find(size, first, last, Walkable,
+                cell => KnownDangerCost(agent, Point(cell)), Passage, out _, 384);
+        }
         if (path == null)
             return false;
         output.Clear();
@@ -58,9 +64,16 @@ public sealed partial class CMUExpeditionAgentSystem
             // A physical stall forbids reusing the same immediate approach for this
             // bounded search. This is a route preference, never collision immunity.
             return (cell == last || !stalled || Vector2.DistanceSquared(point.Position, avoid) > 0.3f * 0.3f) &&
-                RoutePoint(uid, point) && (agent.OrderedDestination != null ||
+                RoutePoint(uid, point, allowVault) &&
+                (!agent.AutoPatrol || agent.AutoPatrolAnchor is not { } anchor ||
+                    _transform.InRange(anchor, point, agent.LeashRange)) &&
+                (agent.TrafficBlockedPoint is not { } blocked || now >= agent.AvoidTrafficUntil ||
+                    !_transform.InRange(point, blocked, 0.8f)) && (agent.OrderedDestination != null ||
                     agent.Home is { } home && _transform.InRange(home, point, agent.LeashRange));
         }
+        bool Passage(int a, int b) => RoutePassage(uid, Point(a), Point(b),
+            a == first || b == last ? AgentBodyRadius : RouteClearance, allowVault) &&
+            KnownDangerPassage(uid, agent, Point(a), Point(b));
     }
 
     private bool WaitForSquad(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)

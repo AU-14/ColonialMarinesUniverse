@@ -18,6 +18,9 @@ namespace Content.IntegrationTests.CMU14.Round;
 [TestFixture]
 public sealed class ShipMarkerSpawningTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> USSBushReduxPrototype = "USSBushRedux";
+    private static readonly Robust.Shared.Prototypes.EntProtoId PlatoonSpawnPrototype = "PlatoonSpawn";
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: entity
@@ -54,7 +57,7 @@ public sealed class ShipMarkerSpawningTest
                 platoons.SelectedOpforPlatoon = platoon;
 
             Assert.That(round.SetPlanet("CMUTestShipMarkerPlanet"), Is.True);
-            var grids = ticker.LoadGameMap(prototypes.Index<GameMapPrototype>("USSBushRedux"),
+            var grids = ticker.LoadGameMap(prototypes.Index<GameMapPrototype>(USSBushReduxPrototype),
                 out var mapId, DeserializationOptions.Default with { InitializeMaps = true });
             Assert.That(grids, Is.Not.Empty);
             foreach (var grid in grids)
@@ -75,7 +78,7 @@ public sealed class ShipMarkerSpawningTest
             }
 
             Assert.That(expected.Count, Is.GreaterThan(20));
-            Assert.That(ticker.StartGameRule("PlatoonSpawn"), Is.True);
+            Assert.That(ticker.StartGameRule(PlatoonSpawnPrototype), Is.True);
 
             var spawned = new List<(EntityCoordinates Coordinates, string Prototype)>();
             var query = entities.AllEntityQueryEnumerator<MetaDataComponent, TransformComponent>();
@@ -145,7 +148,7 @@ public sealed class ShipMarkerSpawningTest
                 entities.SpawnEntity("CMUVMarkerShipHospitalEmergencyComputer", ship.GridCoords);
             }
             entities.SpawnEntity("CMUVMarkerColonyHospitalEmergencyComputer", colony.GridCoords);
-            Assert.That(ticker.StartGameRule("PlatoonSpawn"), Is.True);
+            Assert.That(ticker.StartGameRule(PlatoonSpawnPrototype), Is.True);
 
             var terminals = entities.AllEntityQueryEnumerator<ResearchDataTerminalComponent, TransformComponent>();
             var terminalCount = 0;

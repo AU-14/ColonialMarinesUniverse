@@ -7,6 +7,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaRankSpawnTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipMarkerClanSpawnPrototype = "CMUHunterShipMarkerClanSpawn";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipMarkerPredatorSpawnPrototype = "CMUHunterShipMarkerPredatorSpawn";
+
     [TestCase(YautjaRank.Unblooded, false)]
     [TestCase(YautjaRank.Blooded, false)]
     [TestCase(YautjaRank.Elite, false)]
@@ -45,14 +48,14 @@ public sealed class YautjaRankSpawnTest
         {
             var prototypes = pair.Server.ResolveDependency<IPrototypeManager>();
             var factory = pair.Server.EntMan.ComponentFactory;
-            var clan = prototypes.Index<EntityPrototype>("CMUHunterShipMarkerClanSpawn");
-            var youngblood = prototypes.Index<EntityPrototype>("CMUHunterShipMarkerPredatorSpawn");
+            var clan = prototypes.Index<EntityPrototype>(CMUHunterShipMarkerClanSpawnPrototype);
+            var youngblood = prototypes.Index<EntityPrototype>(CMUHunterShipMarkerPredatorSpawnPrototype);
 
             Assert.Multiple(() =>
             {
-                Assert.That(clan.TryGetComponent<YautjaPredatorSpawnPointComponent>(out var clanPoint, factory), Is.True);
+                Assert.That(clan.TryComp<YautjaPredatorSpawnPointComponent>(out var clanPoint, factory), Is.True);
                 Assert.That(clanPoint!.Kind, Is.EqualTo(YautjaSpawnKind.HunterShipClan));
-                Assert.That(youngblood.TryGetComponent<YautjaPredatorSpawnPointComponent>(out var youngbloodPoint, factory), Is.True);
+                Assert.That(youngblood.TryComp<YautjaPredatorSpawnPointComponent>(out var youngbloodPoint, factory), Is.True);
                 Assert.That(youngbloodPoint!.Kind, Is.EqualTo(YautjaSpawnKind.HuntingGroundsYoungblood));
             });
         });

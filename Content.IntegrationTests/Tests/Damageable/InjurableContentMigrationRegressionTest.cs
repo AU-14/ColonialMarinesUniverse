@@ -16,6 +16,11 @@ namespace Content.IntegrationTests.Tests.Damageable;
 [TestOf(typeof(InjurableComponent))]
 public sealed class InjurableContentMigrationRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMSheetGlassPrototype = "CMSheetGlass";
+    private static readonly Robust.Shared.Prototypes.ProtoId<RandomHumanoidSettingsPrototype> CMUYautjaHunterPrototype = "CMUYautjaHunter";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHealingGunPrototype = "CMUYautjaHealingGun";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaBracerShieldPrototype = "CMUYautjaBracerShield";
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: entity
@@ -68,7 +73,7 @@ public sealed class InjurableContentMigrationRegressionTest : GameTest
                     $"{source} via concrete {representative}");
             }
 
-            var glass = SProtoMan.Index<EntityPrototype>("CMSheetGlass");
+            var glass = SProtoMan.Index<EntityPrototype>(CMSheetGlassPrototype);
             Assert.That(glass.Components.ContainsKey("Material"), Is.True);
             Assert.That(glass.Components.ContainsKey("Damageable"), Is.True);
             Assert.That(glass.Components.ContainsKey("Injurable"), Is.True);
@@ -81,7 +86,7 @@ public sealed class InjurableContentMigrationRegressionTest : GameTest
             AssertThreshold("CMUMobCarpBase", "CMUMobCarpInvasive", 2);
             AssertThreshold("CMUMobYautja", "CMUMobYautja", 5);
 
-            var hunter = SProtoMan.Index<RandomHumanoidSettingsPrototype>("CMUYautjaHunter");
+            var hunter = SProtoMan.Index<RandomHumanoidSettingsPrototype>(CMUYautjaHunterPrototype);
             Assert.That(hunter.Components, Is.Not.Null);
             var hunterDamageable = (DamageableComponent) hunter.Components!["Damageable"].Component;
             var hunterInjurable = (InjurableComponent) hunter.Components["Injurable"].Component;
@@ -89,13 +94,13 @@ public sealed class InjurableContentMigrationRegressionTest : GameTest
             Assert.That(hunterInjurable.DamageContainer?.Id, Is.EqualTo("Biological"));
             Assert.That(hunterInjurable.HealthBarThreshold, Is.EqualTo(FixedPoint2.New(5)));
 
-            var gun = SProtoMan.Index<EntityPrototype>("CMUYautjaHealingGun");
+            var gun = SProtoMan.Index<EntityPrototype>(CMUYautjaHealingGunPrototype);
             var healing = (YautjaHealingGunComponent) gun.Components["YautjaHealingGun"].Component;
             Assert.That(healing.DamageContainers?.Select(container => container.Id),
                 Is.EqualTo(new[] { "Biological" }));
             Assert.That(healing.DamageContainers, Does.Contain(hunterInjurable.DamageContainer!.Value));
             var shield = (InjurableComponent) SProtoMan
-                .Index<EntityPrototype>("CMUYautjaBracerShield")
+                .Index<EntityPrototype>(CMUYautjaBracerShieldPrototype)
                 .Components["Injurable"].Component;
             Assert.That(healing.DamageContainers, Does.Not.Contain(shield.DamageContainer!.Value));
         }

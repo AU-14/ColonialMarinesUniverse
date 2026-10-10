@@ -10,17 +10,17 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Atmos;
 
-public sealed class CMUDayNightAtmosphereSystem : EntitySystem
+public sealed partial class CMUDayNightAtmosphereSystem : EntitySystem
 {
     // Cadence between mixture updates. Relaxation smooths the steps further,
     // so this only bounds overlay refresh traffic, not smoothness.
     private const float UpdateIntervalSeconds = 30f;
 
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly CMUNetworkMapAtmosphereSystem _networkAtmos = default!;
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private CMUNetworkMapAtmosphereSystem _networkAtmos = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private EntityQuery<MapAtmosphereComponent> _mapAtmosQuery = default!;
     private EntityQuery<CMUDayNightAtmosphereComponent> _dayNightQuery = default!;
@@ -44,12 +44,12 @@ public sealed class CMUDayNightAtmosphereSystem : EntitySystem
         }
 
         // One clock per network: a duplicate component would fight this one
-        // every beat, so the first to init keeps it (see Initialized).
+        // every beat, so the first to init keeps it (see CycleStarted).
         foreach (var member in _zLevels.GetAllNetworkMaps(ent.Owner))
         {
             if (member != ent.Owner
                 && _dayNightQuery.TryComp(member, out var other)
-                && other.Initialized)
+                && other.CycleStarted)
             {
                 Log.Warning($"Day-night atmosphere on {ToPrettyString(ent.Owner)} duplicates the one on {ToPrettyString(member)}; removing it.");
                 RemCompDeferred<CMUDayNightAtmosphereComponent>(ent.Owner);
@@ -95,7 +95,7 @@ public sealed class CMUDayNightAtmosphereSystem : EntitySystem
         CaptureBaselines(ent.Owner, ent.Comp, _zLevels.GetAllNetworkMaps(ent.Owner));
         ent.Comp.CycleStart = _timing.CurTime + ent.Comp.PhaseOffset;
         ent.Comp.NextUpdate = _timing.CurTime;
-        ent.Comp.Initialized = true;
+        ent.Comp.CycleStarted = true;
     }
 
     private void CaptureBaselines(EntityUid owner, CMUDayNightAtmosphereComponent comp, List<EntityUid> members)

@@ -5,6 +5,7 @@ public sealed partial class CMUExpeditionAgentComponent
     public EntityUid? PendingWeapon;
     public TimeSpan WeaponSwitchAt;
     public TimeSpan NextWeaponChoice;
+    public TimeSpan NativeWeaponReadyAt;
     public EntityUid? LastEmptyWeapon;
     public int WeaponSwitches;
     public int WeaponBurstLimit = int.MaxValue;
@@ -26,7 +27,7 @@ public sealed partial class CMUExpeditionAgentComponent
 [RegisterComponent]
 public sealed partial class CMUExpeditionWeaponRoleComponent : Component
 {
-    [DataField] public float Priority = 20;
+    [DataField] public float Priority = 30;
     [DataField] public float MinimumRange;
     [DataField] public float MaximumRange = 14;
     [DataField] public float CloseRange = 4;

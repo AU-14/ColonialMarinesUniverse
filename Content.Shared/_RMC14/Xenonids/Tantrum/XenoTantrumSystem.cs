@@ -85,43 +85,43 @@ public sealed partial class XenoTantrumSystem : EntitySystem
 
         if (HasComp<TantrumingComponent>(xeno))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tantrum-fail-raging-self"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tantrum-fail-raging-self"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (!HasComp<XenoComponent>(args.Target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tantrum-fail-not-xeno"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tantrum-fail-not-xeno"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (xeno.Owner == args.Target)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tantrum-fail-self"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tantrum-fail-self"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (!_hive.FromSameHive(xeno.Owner, args.Target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tantrum-fail-wrong-hive"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tantrum-fail-wrong-hive"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (_mob.IsDead(args.Target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tantrum-fail-dead"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tantrum-fail-dead"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (_strain.AreSameStrain(xeno.Owner, args.Target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tantrum-fail-valkyrie"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tantrum-fail-valkyrie"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
         if (HasComp<TantrumingComponent>(args.Target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-tantrum-fail-raging", ("target", args.Target)), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-tantrum-fail-raging", ("target", args.Target)), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -134,7 +134,7 @@ public sealed partial class XenoTantrumSystem : EntitySystem
         var ourRage = EnsureComp<TantrumingComponent>(xeno);
         ourRage.ArmorGain = xeno.Comp.SelfArmorBoost;
         ourRage.ExpireAt = time + xeno.Comp.SelfArmorDuration;
-        _popup.PopupClient(Loc.GetString("rmc-xeno-tantrum-self"), xeno, xeno, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-tantrum-self"), xeno, xeno, PopupType.MediumCaution);
         _audio.PlayPredicted(xeno.Comp.BuffSound, xeno, xeno);
         _aura.GiveAura(xeno, xeno.Comp.EnrageColor, xeno.Comp.SelfArmorDuration);
         _armor.UpdateArmorValue(xeno.Owner);

@@ -43,7 +43,7 @@ public sealed class MohawkFlightFeaturesTest
             entities.AddComponent<DropshipDestinationComponent>(target);
             passenger = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(ship, 0.5f, 0.5f));
             entities.EnsureComponent<ParaDroppableComponent>(passenger);
-            var nav = entities.EntityQuery<DropshipNavigationComputerComponent>().Single();
+            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>().Single();
             Assert.That(entities.System<SharedDropshipSystem>().FlyTo((nav.Owner, nav), target, null,
                 startupTime: 0.5f, hyperspaceTime: 30f), Is.True);
         });
@@ -51,9 +51,9 @@ public sealed class MohawkFlightFeaturesTest
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
-            var terminal = entities.EntityQuery<DropshipTerminalWeaponsComponent>().First(t => !t.Gunnery);
+            var terminal = entities.QueryEntities<DropshipTerminalWeaponsComponent>().First(t => !t.Comp.Gunnery);
 #pragma warning disable RA0002 // Supply a selected target without the unrelated laser-designator setup.
-            terminal.Target = target;
+            terminal.Comp.Target = target;
 #pragma warning restore RA0002
             entities.EventBus.RaiseLocalEvent(terminal.Owner,
                 new DropShipTerminalWeaponsParaDropTargetSelectMsg(true) { Actor = passenger, UiKey = DropshipTerminalWeaponsUi.Key });
@@ -63,9 +63,9 @@ public sealed class MohawkFlightFeaturesTest
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
-            foreach (var door in entities.EntityQuery<DoorComponent>()
-                         .Where(d => d.Location is DoorLocation.Port or DoorLocation.Starboard))
-                Assert.That(door.State, Is.EqualTo(DoorState.Open));
+            foreach (var door in entities.QueryEntities<DoorComponent>()
+                         .Where(d => d.Comp.Location is DoorLocation.Port or DoorLocation.Starboard))
+                Assert.That(door.Comp.State, Is.EqualTo(DoorState.Open));
             Assert.That(entities.GetComponent<MohawkMechanismsComponent>(ship).RampDeployed, Is.False);
 
             // Leave the cabin onto its real FTL map, as a passenger exiting a side hatch does.
@@ -79,9 +79,9 @@ public sealed class MohawkFlightFeaturesTest
         {
             var entities = pair.Server.EntMan;
             Assert.That(entities.HasComponent<ActiveParaDropComponent>(ship), Is.False);
-            foreach (var door in entities.EntityQuery<DoorComponent>()
-                         .Where(d => d.Location is DoorLocation.Port or DoorLocation.Starboard))
-                Assert.That(door.State, Is.EqualTo(DoorState.Closed));
+            foreach (var door in entities.QueryEntities<DoorComponent>()
+                         .Where(d => d.Comp.Location is DoorLocation.Port or DoorLocation.Starboard))
+                Assert.That(door.Comp.State, Is.EqualTo(DoorState.Closed));
             entities.DeleteEntity(passenger);
             entities.DeleteEntity(ship);
             entities.DeleteEntity(ground);
@@ -108,11 +108,11 @@ public sealed class MohawkFlightFeaturesTest
             entities.AddComponent<ShipFactionComponent>(carrier);
             var marker = entities.SpawnEntity(null, new EntityCoordinates(carrier, 10, 10));
             entities.AddComponent<DropshipHijackDestinationComponent>(marker);
-            var nav = entities.EntityQuery<DropshipNavigationComputerComponent>().Single();
+            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>().Single();
             var queen = entities.SpawnEntity("CMXenoQueen", entities.GetComponent<TransformComponent>(nav.Owner).Coordinates.Offset(new(0, -1)));
             entities.EnsureComponent<XenoMaturingComponent>(queen);
 #pragma warning disable RA0002 // Skip the tested-elsewhere three-second console lockout do-after.
-            nav.LockedOutUntil = pair.Server.ResolveDependency<IGameTiming>().CurTime + TimeSpan.FromMinutes(1);
+            nav.Comp.LockedOutUntil = pair.Server.ResolveDependency<IGameTiming>().CurTime + TimeSpan.FromMinutes(1);
 #pragma warning restore RA0002
             var attempt = new ActivateInWorldEvent(queen, nav.Owner, true);
             entities.EventBus.RaiseLocalEvent(nav.Owner, attempt);

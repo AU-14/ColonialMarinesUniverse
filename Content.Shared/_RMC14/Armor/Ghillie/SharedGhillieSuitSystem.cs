@@ -67,7 +67,7 @@ public sealed partial class SharedGhillieSuitSystem : EntitySystem
         if (!_whitelist.IsValid(ent.Comp.Whitelist, args.Performer))
         {
             var popup = Loc.GetString("cm-gun-unskilled", ("gun", ent.Owner));
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.SmallCaution);
             return;
         }
 
@@ -88,7 +88,7 @@ public sealed partial class SharedGhillieSuitSystem : EntitySystem
             {
                 var activatedPopupSelf = Loc.GetString("rmc-ghillie-activate-self");
                 var activatedPopupOthers = Loc.GetString("rmc-ghillie-activate-others", ("user", user));
-                _popup.PopupPredicted(activatedPopupSelf, activatedPopupOthers, user, user, PopupType.Medium);
+                _popup.PopupEntity(activatedPopupSelf, activatedPopupOthers, user, user, PopupType.Medium);
             }
         }
         else
@@ -185,7 +185,7 @@ public sealed partial class SharedGhillieSuitSystem : EntitySystem
 
             var deactivatedPopupSelf = Loc.GetString("rmc-ghillie-fail-self");
             var deactivatedPopupOthers = Loc.GetString("rmc-ghillie-fail-others", ("user", user));
-            _popup.PopupPredicted(deactivatedPopupSelf, deactivatedPopupOthers, user, user, PopupType.Medium);
+            _popup.PopupEntity(deactivatedPopupSelf, deactivatedPopupOthers, user, user, PopupType.Medium);
 
             EnsureComp<RMCNightVisionVisibleComponent>(user);
 

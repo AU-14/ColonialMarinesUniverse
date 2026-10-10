@@ -172,7 +172,7 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
 
         if (!xeno.Comp.DidPopup)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-invisibility-expire"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-invisibility-expire"), xeno, xeno, PopupType.SmallCaution);
             xeno.Comp.DidPopup = true;
             Dirty(xeno);
         }

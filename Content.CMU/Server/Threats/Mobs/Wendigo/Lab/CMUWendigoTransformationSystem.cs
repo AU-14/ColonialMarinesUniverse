@@ -50,26 +50,26 @@ namespace Content.Server.CMU14.Threats.Mobs.Wendigo.Lab;
 /// starving + human meat, human meat, Stabilized Mutagen, human meat, then MH-32 (feral) or MH-33 (tamed).
 /// Each input is only accepted once the previous stage's timer has finished.
 /// </summary>
-public sealed class CMUWendigoTransformationSystem : EntitySystem
+public sealed partial class CMUWendigoTransformationSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminLogManager _adminLog = default!;
-    [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedRMCEmoteSystem _emote = default!;
-    [Dependency] private readonly GhostRoleSystem _ghostRole = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly SharedMindSystem _mind = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly RoleSystem _role = default!;
-    [Dependency] private readonly SatiationSystem _satiation = default!;
-    [Dependency] private readonly SharedSolutionContainerSystem _solution = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private GhostRoleSystem _ghostRole = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private RoleSystem _role = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
+    [Dependency] private SharedSolutionContainerSystem _solution = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public static readonly ProtoId<ReagentPrototype> StabilizedMutagen = "CMUStabilizedMutagen";
     public static readonly ProtoId<ReagentPrototype> MH32 = "CMUMH32";

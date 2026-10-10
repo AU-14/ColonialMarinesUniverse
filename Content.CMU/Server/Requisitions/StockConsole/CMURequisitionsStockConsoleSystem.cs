@@ -9,12 +9,12 @@ namespace Content.Server.CMU14.Requisitions.StockConsole;
 /// <summary>
 /// Fills requisitions stock consoles with what the automated requisitions vendors on the same map have left.
 /// </summary>
-public sealed class CMURequisitionsStockConsoleSystem : EntitySystem
+public sealed partial class CMURequisitionsStockConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
 
     public override void Initialize()
     {

@@ -12,6 +12,7 @@ namespace Content.Tests.Client.CMU14.ThreeD;
 [TestFixture]
 public sealed class CMU3DModelRendererTest
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void LowForegroundDetailDrawsAfterLargeBackgroundPanel()
     {
@@ -88,6 +89,7 @@ public sealed class CMU3DModelRendererTest
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void OverBudgetModelIsRejectedWithoutDrawingPartialGeometry()
     {
@@ -110,6 +112,7 @@ public sealed class CMU3DModelRendererTest
         Assert.That(faces, Is.Not.Empty, "A later small model must recover after a budget rejection.");
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void InvalidPartsCannotCorruptCameraBounds()
     {

@@ -7,6 +7,9 @@ in diagnostics but are excluded from orders. This works on colony and expedition
 
 ## Panel controls
 
+- Orders, Deploy and Relations have separate tabs. The selected member's condition, role,
+  weapon and loaded ammunition stay above the tactical view; detailed controller traces have
+  their own Diagnostics tab. Order buttons disable when no AI-controlled living member is selected.
 - Spawn 1-12 agents: choose composition, clothing and doctrine separately. Clothing and doctrine
   do not change team, native IFF or weapon skills. Spawn reports the actual number deployed.
 - Choose a squad, then Move, Guard / fortify, Hold position, Regroup, or Stand down / resupply.
@@ -15,6 +18,20 @@ in diagnostics but are excluded from orders. This works on colony and expedition
   Move and Hold do not enable construction. Regroup uses the current active leader's location.
 - Add 2-8 patrol points and start/stop the patrol. Existing console commands, including
   `patrol-clear`, remain available. Travel pauses for combat and resumes afterward.
+- **Automatic local patrol** creates short walking/door routes around the squad's current area.
+  It chooses successive shared destinations across 24 sectors within 12 m of its starting
+  anchor, favoring unvisited areas. Actual routes can turn corners and use doors without
+  vaulting. Failed sectors back off for 10-30 seconds; visits also prevent immediate repeats.
+  Two candidate route searches are allowed per operations update. Explicit move/guard/hold
+  orders replace automatic patrol.
+- **Aim skill** applies 0-100% to the selected squad when the slider is released, without a
+  respawn. It changes target leading and stable aim error; 100% preserves full tracking.
+  It does not change native gun spread, damage, recoil, ammunition or friendly-fire interlocks.
+- **Assist nearby friendly squads** permits one available squad to answer another squad's
+  radio contact. Native headset/channel/range/send/receive checks still apply, on the same map
+  and within the existing leash. Assistance prefers a different approach bearing, shares
+  observed danger positions, and can reserve actual covering fire across the two squads.
+  Explicit travel, hold/guard posts, recovery and existing local fights take priority.
 - Select a faction and add it to the friendly/target list, or enter comma-separated prototype IDs,
   then Apply. `default` clears that override. Friendly overrides take priority over target overrides.
   These are targeting orders, not faction membership or IFF reconfiguration.
@@ -23,18 +40,21 @@ in diagnostics but are excluded from orders. This works on colony and expedition
   preferred range and position commitment without accumulating on repeated applications.
 - Live updates refresh once per second. Select a member for health/ammo/stress, duty, state,
   movement/door/supply/fire reasons, native weapon cooldown versus AI aim delay, recent decisions,
-  route-search time/cells and squad-update time.
+  route-search time/cells and squad-update time. Diagnostics also show the decision controller
+  and its reason, decision-time moving average/peak, corner response, patrol coverage/failures,
+  assistance decisions, ordnance plan and current learned risk costs.
 
 The 48 m tactical diagram is a schematic centered on the selected member, not a terrain map or
 click-to-order interface. White circles are same-map members; cyan is the route, red the last
-contact, yellow the destination, green cover and orange rejected cover. Diagnostics are capped
+contact, yellow the destination, green cover and orange rejected cover. Injured members are orange,
+inactive members gray, and the selected member has a cyan ring. Diagnostics are capped
 at 100 squads, 32 members per selected squad, 48 route points and 12 recent decisions per member.
 
 ## Behavior changes
 
 | Area | Implemented behavior |
 | --- | --- |
-| Decision stability | A productive stationary volley keeps ownership of optional decisions. Immediate danger, lost shot clearance, depleted ammunition and urgent injury release it. State changes and reasons enter a bounded history. |
+| Decision stability | A productive stationary volley keeps ownership of optional decisions. Immediate danger, lost shot clearance, depleted ammunition and urgent injury release it. Explicit orders, loss of AI control, incapacitation and leash recovery use one cancellation path for utility work, aim, pending weapons, traffic, spacing and steering. Specific executor reasons survive state transitions. |
 | Shared travel | Members can borrow and revalidate another member's route corridor to a shared rally. Existing queues and spaced destinations remain. After six seconds blocked, an agent can attempt a route toward its active leader, then resume the original destination. Regroup searches have a twelve-second backoff. |
 | Squad plans | A once-per-second coordinator retains ordinary phases for eight seconds and roles for six. Holding, travel, fire-and-move, anti-rush, withdrawal and anti-armor phases assign advance, overwatch, rear guard, medic, recovery and anti-armor duties. Emergencies override ordinary commitments. |
 | Failed cover | Hits while hidden and repeated hits at a peek mark nearby positions unusable for 12-45 seconds. Up to twelve recent failures are retained. Live shelter and firing-lane checks still run. |
@@ -46,6 +66,9 @@ at 100 squads, 32 members per selected squad, 48 route points and 12 recent deci
 | Diagnostics | Server-authorized panel orders and live decision/path/contact/cover inspection, without additional combat chatter. |
 | Connected grids and levels | Same-map routes can cross touching ground grids. Cross-level orders find a chain of native CMU ladders/stairs, approach it, perform real native traversal, and continue the final order. |
 | Hearing | Gunfire and opening doors produce uncertain, temporary investigation points. Walls reduce hearing distance; suppressed gunfire has shorter range. Sound never assigns a firing target, visual contact or muzzle-flash permission. |
+| Held corners | Actual impacts and witnessed casualties mark danger positions. Observed near passes also retain up to eight short fire-lane segments, clipped against sight/solid geometry and expiring after ten seconds. Agents stage away from danger/crowding and elect one available rifleman to probe a safe alternate approach. Failed probes cause a shared pause; safe return fire, reloads, treatment and ordnance retain priority. Reports preserve original expiry. No unseen shooter is revealed. |
+| Corner ordnance | Recent directly observed contacts can support a frozen grenade target after sight is lost. A short, physically traversable alternate throwing stance may be used under shelter or covering fire. Every throw rechecks contact age, direct trajectory, blast distance and friendlies. If HE cannot be positioned safely, available smoke may screen the reachable near side. Grenades are prepared only after staging, with cancellation and expiry. |
+| Hallway traffic | Walking and usable doors are searched before vaulting. Route smoothing cannot replace a walking detour with a vault. A stationary firing teammate can be passed with a short side step then a parallel leg, using actual body clearance. Exposed queues replan sooner. |
 
 Supply trips and deliveries each have a twenty-second deadline. Cache travel is limited to 24 m
 and the guard leash; deliveries start within 14 m and use bounded local routes. Failed recipients
@@ -68,19 +91,43 @@ fortifying guards and members following explicit travel orders do not abandon th
 
 ## Limits and verification
 
-These are bounded extensions to the existing executors and GOAP planner, not persistent learning
-between rounds or a globally optimal multi-agent pathfinder. Native doors, inventories, medicine,
+These are bounded extensions to the existing executors and GOAP planner, not a globally optimal
+multi-agent pathfinder. Anonymous flank/peek outcome averages persist between rounds and adjust
+coarse risk costs by biome and disposition. Observers update immediately and existing peers refresh
+from current-round outcomes every five seconds. Repeated hits in one peek count once. Doctrine
+changes invalidate the previous experience group. These bounded adjustments do not create new
+tactics or change aim skill. Native doors, inventories, medicine,
 weapons, projectile safety and permission checks remain authoritative. Multi-level travel requires
 connected CMU z-level ladders/stairs and safe ground; it does not add vehicle boarding, shuttle travel,
 gap jumping, or arbitrary portal support. Long mazes can still need intermediate waypoints.
+Corner tactics select safe staging and alternate approaches; they do not infer an unseen room's
+layout or schedule a synchronized breach. Native throws cannot bend around walls. Patrol coverage
+is bounded by its fixed anchor/leash rather than attempting unbounded whole-map exploration.
+Decision timings describe individual decision passes, not total server-frame cost or a measured
+performance improvement.
 
-Server/client builds and static file checks are the validation performed for this change. No tests
-or game session were run. The following runtime checks remain required before considering behavior
-verified:
+Server/client builds, static file checks and standalone simulations of the actual shared fire,
+movement and aim policies validate this revision. No integration tests or game session were run.
+In an eight-second synthetic exchange with a 0.1-second native firing interval, the contested policy
+had a 0.11-second largest eligible idle gap versus 0.56 seconds for the ordinary policy; repeated
+0.6-second peeks allowed 30 rounds versus 15. This is a comparison of supplied policy contexts,
+not a before/after measurement of the complete executor (which already shortened recovery under
+urgent fire). The harness rejected firing during a friendly crossing. Synthetic movement
+candidates selected a lateral step when exposed and held useful cover, while aim deviation decreased
+with higher skill. These results describe decision policies, not projectile hits, path clearance,
+survival rates or the full combat state machine. A separate simulation of the actual route finder
+in a synthetic two-wide L-corridor chose a 19-step safe alternative instead of the 15-step dangerous
+approach, returned no route without an alternative, and allowed escape from inside remembered
+danger. Those searches expanded at most 43 cells under the 256-cell tactical budget. The supplied
+geometry and danger field do not exercise native collision or the ECS danger-memory executor.
+The following runtime checks remain outstanding:
 
 1. Open the panel as admin, spawn six `mixed` agents, change selection during live updates and
    issue each order. Check partial spawns, invalid coordinates/factions, destroyed squads, permission
    revocation and a member possessed by a player. Editing a numeric input must not stop refresh/Hold.
+   Set aim skill to 100, 50 and 0 while fighting a moving opponent; verify the selected squad updates
+   on slider release and native spread still applies. Toggle local patrol and friendly assistance;
+   check an idle friendly squad responds while held guards retain their orders.
 2. Repeat with twelve members through doors, streetlights, rotated touching grids, dense trees and
    a narrow corridor. Block one member and kill the leader. Confirm shared routes still obey access,
    progress resumes or reports blocked, and unreachable members do not freeze the others.
@@ -90,6 +137,10 @@ verified:
 4. Attack from two directions during long travel and sustained fire. Watch productive volleys,
    return fire, one advance assignment, rearguard response and emergency interruption. Shoot agents
    behind penetrable cover and at repeated peeks; check orange rejected positions and expiry.
+   Repeat against a held L-corner in a two-wide hallway: witness a front casualty, retain a safe
+   firing position, detour when possible and hold when every approach crosses remembered danger.
+   New incoming fire must replace an invalid escape step promptly. In open ground, check short
+   firing steps with several seconds settled between them; cover and explicit holds prevent strafing.
 5. Rush with two aliens through smoke and around acid patches. Watch separated escape choices,
    limited support redirection and maintained firing lanes. Check that doctrine changes do not
    grant perception, skills, ammunition or IFF changes.
@@ -107,3 +158,31 @@ verified:
 10. Record squad-update and candidate/route-search time for six and twelve agents in simultaneous
     contact. Compare with the pre-change build on the same scene; watch frame spikes during shared
     route rejection, portal searches, supply selection and panel refresh.
+
+## Doorways, fire and close contact
+
+Nearby native doors can be opened toward a known contact or travel destination without waiting
+for the movement planner to cross the investigation standoff radius. Opening resumes as soon as
+native collision clears. At an open threshold, a blocked muzzle cone can request a short, safe
+fore/aft step; friendly bodies alone never authorize opening or moving through an unsafe lane.
+
+Traffic first tries a physical passing pocket. If a stationary friendly agent blocks the corridor,
+it can request a short step aside from that agent. The destination must actually clear the corridor,
+fit the body and preserve terrain/exposure safety. Holds, hand tasks, burning, fire aid and covering
+commitments reject that request. The step preserves ordinary firing and has a fixed 2.5-second
+deadline. Native body collisions and impulses are unchanged; completely packed corridors may still
+have no safe passing position and must use bounded queue/repath behavior.
+
+Fire avoidance checks the body's swept disc against live ignition regions, including diagonal
+corners. An agent already overlapping a fire can leave that initial region while reducing overlap,
+but cannot use escape permission to cross a new patch. A bounded search extends up to six metres
+when trapped inside a larger patch. Native self-extinguishing follows escape; when no exit is found,
+one last-resort roll is allowed per continuous exposure rather than a repeated stand/roll loop.
+
+Safe nearby burning allies can receive native fire pats. One helper claims a casualty briefly,
+uses a reachable free hand and the native cooldown, and cancels on danger, a blocked approach or
+recovery. Hold only permits help already within reach. Diagnostics report fire decisions, pats,
+rolls, escapes, teammate clearance steps and last-resort melee strikes.
+
+These behaviors have source-method and geometry simulations; live door physics, crowded multiplayer
+combat and native fire contact still require gameplay observation. No integration tests were used.

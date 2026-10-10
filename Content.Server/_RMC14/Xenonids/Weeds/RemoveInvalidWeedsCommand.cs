@@ -1,4 +1,4 @@
-﻿using Content.Server.Administration;
+using Content.Server.Administration;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Administration;
 using Content.Shared.Maps;
@@ -27,7 +27,7 @@ public sealed class RemoveInvalidWeedsCommand : ToolshedCommand
             }
 
             var tile = mapSystem.CoordinatesToTile(gridId, grid, xform.Coordinates);
-            var anchored = mapSystem.GetAnchoredEntitiesEnumerator(xform.GridUid.Value, grid, tile);
+            var anchored = mapSystem.GetAnchoredEntities(xform.GridUid.Value, grid, tile);
             if (mapSystem.TryGetTileRef(gridId, grid, tile, out var tileRef) && !turfSystem.GetContentTileDefinition(tileRef).WeedsSpreadable)
             {
                 EntityManager.QueueDeleteEntity(uid);

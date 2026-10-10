@@ -12,6 +12,8 @@ namespace Content.IntegrationTests.CMU14.Expeditions;
 [TestFixture]
 public sealed class CMUDeletedContactTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> GOVFORPrototype = "GOVFOR";
+
     [Test]
     public async Task DeletedContactDoesNotBreakWeaponSelection()
     {
@@ -23,7 +25,7 @@ public sealed class CMUDeletedContactTest : GameTest
                 SEntMan.GetComponent<TransformComponent>(map.Grid.Owner).MapID, Color.White);
             var guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", map.GridCoords);
             var target = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(3, 0)));
-            Server.System<NpcFactionSystem>().AddFaction(target, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(target, GOVFORPrototype);
             var system = Server.System<CMUExpeditionAgentSystem>();
             var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
             system.Update(0);

@@ -37,27 +37,32 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     // Route queries also admit native vaults. Move executes those interactions before steering.
-    private bool RoutePoint(EntityUid uid, EntityCoordinates point) =>
-        GroundSafe(point) && BodyFits(uid, point, planningDoors: true);
+    private bool RoutePoint(EntityUid uid, EntityCoordinates point, bool allowVault = true) =>
+        GroundSafe(point) && BodyFits(uid, point, planningDoors: true, allowVault: allowVault);
 
-    private bool RoutePassage(EntityUid uid, EntityCoordinates from, EntityCoordinates to, float radius = AgentBodyRadius) =>
-        TraversablePassage(uid, from, to, radius, planningDoors: true);
+    private bool RoutePassage(EntityUid uid, EntityCoordinates from, EntityCoordinates to, float radius = AgentBodyRadius,
+        bool allowVault = true) =>
+        TraversablePassage(uid, from, to, radius, planningDoors: true, allowVault: allowVault);
 
     private bool WaitingAtDoor(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         if (agent.WaitingForDoor is not { } door)
             return false;
+        // Partial opening drops collision before the animation finishes. Resume as soon
+        // as the native door permits passage, not when our failure deadline expires.
+        if (!TryComp<PhysicsComponent>(door, out var body) || !body.CanCollide)
+        {
+            agent.WaitingForDoor = null;
+            agent.DoorOpenRequested = false;
+            agent.DoorDecision = "door-clear";
+            PauseTravelClock(agent, _timing.CurTime);
+            return false;
+        }
         if (_timing.CurTime < agent.DoorWaitUntil)
             return true;
         // Expire before the generic stuck check, so a broken opening animation cannot
         // repeatedly win a new route search and restart the same wait.
-        if (TryComp<PhysicsComponent>(door, out var body) && body.CanCollide)
-            RejectDoor(uid, agent, door, _timing.CurTime);
-        else
-        {
-            agent.WaitingForDoor = null;
-            PauseTravelClock(agent, _timing.CurTime);
-        }
+        RejectDoor(uid, agent, door, _timing.CurTime);
         return false;
     }
 
@@ -132,6 +137,17 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.DoorDecision = "approaching-door";
             return true;
         }
+        RequestDoorOpening(uid, agent, doorUid, now);
+        return false;
+    }
+
+    private bool RequestDoorOpening(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid doorUid, TimeSpan now)
+    {
+        if (!CanNavigateDoor(uid, doorUid) || agent.WaitingForDoor == doorUid && now >= agent.DoorWaitUntil)
+        {
+            RejectDoor(uid, agent, doorUid, now);
+            return false;
+        }
         var door = Comp<DoorComponent>(doorUid);
         if (agent.WaitingForDoor != doorUid)
         {
@@ -161,7 +177,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.DoorDecision = "waiting-for-door";
         PauseTravelClock(agent, now);
         _steering.Unregister(uid);
-        return false;
+        return true;
     }
 
     private void RejectDoor(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid door, TimeSpan now)

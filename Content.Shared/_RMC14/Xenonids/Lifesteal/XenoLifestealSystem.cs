@@ -100,7 +100,7 @@ public sealed partial class XenoLifestealSystem : EntitySystem
             _popup.PopupEntity(marineMsg, xeno, marines, true, PopupType.SmallCaution);
 
             var selfMsg = Loc.GetString("rmc-lifesteal-more-self");
-            _popup.PopupClient(selfMsg, xeno, xeno);
+            _popup.PopupEntity(selfMsg, xeno, xeno);
             _aura.GiveAura(xeno, xeno.Comp.AuraColor, TimeSpan.FromSeconds(1));
 
             if (_net.IsServer && xeno.Comp.MaxEffect is { } effect)

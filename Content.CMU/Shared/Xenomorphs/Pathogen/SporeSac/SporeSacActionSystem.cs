@@ -42,7 +42,7 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
         if (!args.Target.TryDistance(EntityManager, _transform.GetMoverCoordinates(xeno), out var dist)
             || dist > xeno.Comp.Range)
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-spore-sac-too-far"),
                 xeno,
                 xeno);
@@ -53,7 +53,7 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
         var coords = args.Target.SnapToGrid(EntityManager);
         if (!CanPlaceAt(xeno, coords))
         {
-            _popup.PopupClient(Loc.GetString("cmu-xeno-spore-sac-blocked"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cmu-xeno-spore-sac-blocked"), xeno, xeno);
             return;
         }
 
@@ -92,7 +92,7 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
 
         if (xeno.Comp.PlacedSacs.Count >= xeno.Comp.MaxSacs)
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-spore-sac-max"),
                 xeno,
                 xeno);
@@ -104,7 +104,7 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
         if (xeno.Comp.PendingCoords is { } pending && !CanPlaceAt(xeno, pending))
         {
             xeno.Comp.PendingCoords = null;
-            _popup.PopupClient(Loc.GetString("cmu-xeno-spore-sac-blocked"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cmu-xeno-spore-sac-blocked"), xeno, xeno);
             return;
         }
 
@@ -128,7 +128,7 @@ public sealed partial class CMUXenoSporeSacSystem : EntitySystem
             xeno.Comp.PlacedSacs.Add(sac);
         }
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu-xeno-spore-sac-place-self"),
             Loc.GetString("cmu-xeno-spore-sac-place-others", ("xeno", xeno.Owner)),
             xeno,

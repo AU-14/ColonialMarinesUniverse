@@ -14,7 +14,8 @@
   - type: CMUExpeditionWeaponRole
     priority: 10
     maximumRange: 9
-    closePriority: 12
+    closeRange: 2
+    closePriority: 6
     burstLimit: 3
 
 - type: entity
@@ -36,7 +37,8 @@
   id: CMUExpeditionSupportRifle
   components:
   - type: CMUExpeditionWeaponRole
-    closePriority: -12
+    closeRange: 2
+    closePriority: -8
     burstLimit: 7
 
 - type: entity
@@ -44,7 +46,8 @@
   id: CMUExpeditionMarksmanRifle
   components:
   - type: CMUExpeditionWeaponRole
-    closePriority: -15
+    closeRange: 2
+    closePriority: -12
     burstLimit: 2
 
 - type: entity
@@ -67,9 +70,9 @@
 - type: startingGear
   id: CMUExpeditionAssaultGear
   equipment:
-    head: RMCArmorHelmetMercenaryReinforced
+    head: RMCArmorHelmetMercenary
     jumpsuit: RMCJumpsuitMercenaryHeavy
-    outerClothing: RMCArmorMercenaryHeavy
+    outerClothing: RMCArmorMercenary
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
@@ -81,15 +84,20 @@
   - CMUExpeditionSMG
   storage:
     back:
-    - CMUExpeditionSidearm
-    - CMMagazinePistolM1984
-    - CMUExpeditionSmokeGrenade
-    - CMUExpeditionBlastGrenade
+    - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineSMGM63
     - CMMagazineSMGM63
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
+    pocket2:
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
 
 - type: entity
   parent: CMUExpeditionScavenger
@@ -109,13 +117,13 @@
 - type: startingGear
   id: CMUExpeditionSupportGear
   equipment:
-    head: RMCArmorHelmetMercenaryReinforced
+    head: RMCArmorHelmetMercenarySupport
     jumpsuit: RMCJumpsuitMercenaryHeavy
     outerClothing: RMCArmorMercenaryHeavy
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMUExpeditionFieldPack
+    back: CMSatchelMarineLogistics
     belt: CMBeltMarine
     pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
@@ -123,15 +131,19 @@
   - CMUExpeditionSupportRifle
   storage:
     back:
-    - CMUExpeditionSidearm
-    - CMMagazinePistolM1984
-    - CMUExpeditionSmokeGrenade
-    - CMUExpeditionBlastGrenade
+    - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineRifleM54CE2
     - CMMagazineRifleM54CE2
+    - CMMagazineRifleM54CE2
+    - CMMagazineRifleM54CE2
+    pocket2:
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
 
 - type: entity
   parent: CMUExpeditionScavenger
@@ -153,9 +165,9 @@
 - type: startingGear
   id: CMUExpeditionMarksmanGear
   equipment:
-    head: RMCArmorHelmetMercenaryReinforced
+    head: RMCArmorHelmetMercenary
     jumpsuit: RMCJumpsuitMercenaryHeavy
-    outerClothing: RMCArmorMercenaryHeavy
+    outerClothing: RMCArmorMercenary
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
@@ -167,15 +179,19 @@
   - CMUExpeditionMarksmanRifle
   storage:
     back:
-    - CMUExpeditionSidearm
-    - CMMagazinePistolM1984
-    - CMUExpeditionSmokeGrenade
-    - CMUExpeditionBlastGrenade
+    - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineRifleM4SPR
     - CMMagazineRifleM4SPR
+    - CMMagazineRifleM4SPR
+    - CMMagazineRifleM4SPR
+    pocket2:
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
 
 - type: entity
   parent: CMUExpeditionScavenger
@@ -198,9 +214,9 @@
 - type: startingGear
   id: CMUExpeditionRocketeerGear
   equipment:
-    head: RMCArmorHelmetMercenaryReinforced
+    head: RMCArmorHelmetMercenarySupport
     jumpsuit: RMCJumpsuitMercenaryHeavy
-    outerClothing: RMCArmorMercenaryHeavy
+    outerClothing: RMCArmorMercenary
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
@@ -213,15 +229,20 @@
   - CMUExpeditionSMG
   storage:
     back:
-    - CMUExpeditionSidearm
-    - CMMagazinePistolM1984
-    - CMUExpeditionSmokeGrenade
-    - CMUExpeditionBlastGrenade
+    - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineSMGM63
     - CMMagazineSMGM63
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
+    pocket2:
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
 
 - type: entity
   parent: CMUExpeditionScavenger

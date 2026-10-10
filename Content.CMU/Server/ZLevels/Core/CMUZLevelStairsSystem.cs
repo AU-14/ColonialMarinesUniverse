@@ -74,7 +74,7 @@ public sealed partial class CMUZLevelStairsSystem : EntitySystem
         EntityUid user,
         MapCoordinates oldUserCoordinates)
     {
-        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        var anchored = _map.GetAnchoredEntities(gridUid, grid, tile);
         while (anchored.MoveNext(out var anchoredUid))
         {
             if (!_stairsQuery.TryComp(anchoredUid, out var stairs))
@@ -114,7 +114,7 @@ public sealed partial class CMUZLevelStairsSystem : EntitySystem
         if (map is null ||
             !_zLevels.TryProjectToZMap(map.Value, stairs.Comp.Offset, landingWorldPosition, out var targetCoordinates, out _))
         {
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-stairs-no-level"), stairs, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-stairs-no-level"), stairs, user, PopupType.SmallCaution);
             return;
         }
 

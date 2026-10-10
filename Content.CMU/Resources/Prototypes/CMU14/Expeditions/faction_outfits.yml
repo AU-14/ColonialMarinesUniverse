@@ -1,4 +1,5 @@
-# Clothing-only spawn profiles. Role equipment and faction orders are independent.
+# Clothing-only spawn profiles. Mobile and heavy roles keep their faction's visual identity.
+# Weapons, supplies and faction orders remain independent of clothing.
 - type: startingGear
   id: CMUExpeditionOutfitUSCM
   equipment:
@@ -68,3 +69,94 @@
     jumpsuit: AU14ProdigyFatigues
     outerClothing: CMUArmorProdigyFlakVest
     head: AU14ProdigyBallisticHelmet
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUSCM
+  id: CMUExpeditionOutfitUSCMMobile
+  equipment:
+    outerClothing: CMArmorM3Light
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUSCM
+  id: CMUExpeditionOutfitUSCMHeavy
+  equipment:
+    outerClothing: CMArmorM3Heavy
+
+- type: startingGear
+  parent: CMUExpeditionOutfitRMC
+  id: CMUExpeditionOutfitRMCMobile
+  equipment:
+    outerClothing: AU14ArmorLightRMC
+
+- type: startingGear
+  parent: CMUExpeditionOutfitRMC
+  id: CMUExpeditionOutfitRMCHeavy
+  equipment:
+    outerClothing: AU14ArmorPointmanRMC
+    head: AU14HeadHelmetRMCHeavy
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUPP
+  id: CMUExpeditionOutfitUPPMobile
+  equipment:
+    outerClothing: AU14UPPArmorMinimalistic
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUPP
+  id: CMUExpeditionOutfitUPPHeavy
+  equipment:
+    outerClothing: AU14UPPArmorBulky
+
+- type: startingGear
+  parent: CMUExpeditionOutfitPMC
+  id: CMUExpeditionOutfitPMCMobile
+  equipment:
+    outerClothing: AU14WYPMCArmorMin
+
+- type: startingGear
+  parent: CMUExpeditionOutfitCLF
+  id: CMUExpeditionOutfitCLFMobile
+  equipment:
+    outerClothing: RMCCoatMilitiaHarness
+
+- type: startingGear
+  parent: CMUExpeditionOutfitCLF
+  id: CMUExpeditionOutfitCLFHeavy
+  equipment:
+    outerClothing: AU14CLFFlakVest
+
+- type: startingGear
+  parent: CMUExpeditionOutfitCMB
+  id: CMUExpeditionOutfitCMBMobile
+  equipment:
+    outerClothing: AU14ArmorBallisticVest
+
+- type: startingGear
+  parent: CMUExpeditionOutfitLACN
+  id: CMUExpeditionOutfitLACNMobile
+  equipment:
+    outerClothing: AU14LACNArmorStandardPadless
+
+- type: startingGear
+  parent: CMUExpeditionOutfitLACN
+  id: CMUExpeditionOutfitLACNHeavy
+  equipment:
+    outerClothing: AU14LACNCommandoArmorPointman
+
+- type: startingGear
+  parent: CMUExpeditionOutfitCCAF
+  id: CMUExpeditionOutfitCCAFMobile
+  equipment:
+    outerClothing: AU14CCAFArmorStripped
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUACG
+  id: CMUExpeditionOutfitUACGMobile
+  equipment:
+    outerClothing: AU14ArmorBallisticVest
+
+- type: startingGear
+  parent: CMUExpeditionOutfitProdigy
+  id: CMUExpeditionOutfitProdigyMobile
+  equipment:
+    outerClothing: CMUArmorProdigyFlakVestAlt

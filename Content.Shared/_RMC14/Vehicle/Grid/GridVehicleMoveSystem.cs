@@ -515,7 +515,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (!IsWithinVehicleBounds(xeno.Owner))
             return;
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-vehicle"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-fortify-cant-vehicle"), xeno, xeno);
         args.Cancelled = true;
     }
 

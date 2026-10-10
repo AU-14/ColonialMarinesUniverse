@@ -166,7 +166,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 return true;
             if (RecoverStraggler(uid, agent, now, out var recoverySearched))
                 return true;
-            if (recoverySearched || !BuildTacticalRoute(uid, agent, destination, ordered: true))
+            if (recoverySearched || !BuildTacticalRoute(uid, agent, destination, ordered: true, allowVaults: !agent.AutoPatrol))
             {
                 BlockOrder();
                 return true;
@@ -188,10 +188,10 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (!WaitingAtDoor(uid, agent) && (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(2) ||
             TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath) ||
-            !RoutePassage(uid, start, next))
+            !RoutePassage(uid, start, next, allowVault: !agent.AutoPatrol) || !KnownDangerPassage(uid, agent, start, next))
         {
             var detour = new Queue<EntityCoordinates>();
-            if (LocalDetour(uid, agent, next, detour))
+            if (LocalDetour(uid, agent, next, detour, allowVaults: !agent.AutoPatrol))
             {
                 var remaining = agent.OrderRoute.Skip(1).ToArray();
                 agent.OrderRoute.Clear();
@@ -199,7 +199,8 @@ public sealed partial class CMUExpeditionAgentSystem
                     agent.OrderRoute.Enqueue(point);
                 return true;
             }
-            var delta = next.Position - start.Position;
+            var localNext = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(next));
+            var delta = localNext.Position - start.Position;
             if (delta.LengthSquared() > 0.01f)
             {
                 agent.TrafficBlockedPoint = start.Offset(Vector2.Normalize(delta) * Math.Min(1, delta.Length()));

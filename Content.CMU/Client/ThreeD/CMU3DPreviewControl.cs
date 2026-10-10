@@ -8,7 +8,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.ThreeD;
 
-public sealed class CMU3DPreviewControl : Control
+public sealed partial class CMU3DPreviewControl : Control
 {
     [Dependency] private IPrototypeManager _prototypes = default!;
     private readonly CMU3DModelRenderer _renderer = new();

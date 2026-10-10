@@ -191,7 +191,7 @@ public sealed partial class XenoNestSystem : EntitySystem
         if (_doAfter.TryStartDoAfter(doAfter))
         {
             var message = Loc.GetString("rmc-xeno-nest-unnest-start", ("target", Identity.Name(nested, EntityManager, user)));
-            _popup.PopupClient(message, user, user);
+            _popup.PopupEntity(message, user, user);
         }
 
         return true;
@@ -382,7 +382,7 @@ public sealed partial class XenoNestSystem : EntitySystem
         _standing.Stand(victim, force: true);
 
         // TODO RMC14 make a method to do this
-        _popup.PopupClient(Loc.GetString("cm-xeno-nest-securing-self", ("target", victim)), args.User, args.User);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-nest-securing-self", ("target", victim)), args.User, args.User);
 
         foreach (var session in Filter.PvsExcept(args.User).Recipients)
         {
@@ -579,7 +579,7 @@ public sealed partial class XenoNestSystem : EntitySystem
             return true;
 
         // TODO RMC14 make a method to do this
-        _popup.PopupClient(Loc.GetString("cm-xeno-nest-pin-self", ("target", victim)), user, user);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-nest-pin-self", ("target", victim)), user, user);
 
         foreach (var session in Filter.PvsExcept(user).Recipients)
         {
@@ -618,7 +618,7 @@ public sealed partial class XenoNestSystem : EntitySystem
             if (!HasComp<XenoNestableComponent>(victim))
             {
                 if (!silent)
-                    _popup.PopupClient(Loc.GetString("cm-xeno-nest-failed", ("target", victim)), surface, user);
+                    _popup.PopupEntity(Loc.GetString("cm-xeno-nest-failed", ("target", victim)), surface, user);
 
                 return false;
             }
@@ -626,7 +626,7 @@ public sealed partial class XenoNestSystem : EntitySystem
             if (_mobState.IsDead(victim.Value))
             {
                 if (!silent)
-                    _popup.PopupClient(Loc.GetString("rmc-xeno-nest-failed-dead", ("target", victim)), surface, user);
+                    _popup.PopupEntity(Loc.GetString("rmc-xeno-nest-failed-dead", ("target", victim)), surface, user);
 
                 return false;
             }
@@ -660,7 +660,7 @@ public sealed partial class XenoNestSystem : EntitySystem
         if (!Resolve(surface, ref surface.Comp) || !IsNestSurfaceFromHiveWeeds((surface.Owner, surface.Comp), priorityDir, user))
         {
             if (!silent)
-                _popup.PopupClient(Loc.GetString("cm-xeno-nest-failed-cant-there"), surface, user);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-nest-failed-cant-there"), surface, user);
 
             return false;
         }
@@ -683,7 +683,7 @@ public sealed partial class XenoNestSystem : EntitySystem
         if (victim != null && !_standing.IsDown(victim.Value))
         {
             if (!silent)
-                _popup.PopupClient(Loc.GetString("cm-xeno-nest-failed-target-resisting", ("target", victim)), victim.Value, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-nest-failed-target-resisting", ("target", victim)), victim.Value, user, PopupType.MediumCaution);
 
             return false;
         }
@@ -714,7 +714,7 @@ public sealed partial class XenoNestSystem : EntitySystem
         if (direction == null)
         {
             if (!silent)
-                _popup.PopupClient(response, surface, user);
+                _popup.PopupEntity(response, surface, user);
 
             return false;
         }

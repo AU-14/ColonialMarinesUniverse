@@ -13,10 +13,10 @@ namespace Content.Server.CMU14.Atmos;
 /// decks read planet air, outdoor relaxation gates on, and the day-night
 /// driver picks them up. Idempotent; runs on every network topology change.
 /// </summary>
-public sealed class CMUNetworkMapAtmosphereSystem : EntitySystem
+public sealed partial class CMUNetworkMapAtmosphereSystem : EntitySystem
 {
-    [Dependency] private readonly AtmosphereSystem _atmosphere = default!;
-    [Dependency] private readonly CMUOutdoorAtmosphereSystem _outdoor = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
+    [Dependency] private CMUOutdoorAtmosphereSystem _outdoor = default!;
 
     private EntityQuery<MapAtmosphereComponent> _mapAtmosQuery = default!;
 

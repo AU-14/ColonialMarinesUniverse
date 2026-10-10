@@ -20,15 +20,19 @@
   - WeaponRifleMAR40
   storage:
     back:
-    - CMUExpeditionBlastGrenade
-    - CMUExpeditionSmokeGrenade
-    - CMUExpeditionSidearm
-    - CMMagazinePistolM1984
+    - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - RMCMagazineRifleMAR40
     - RMCMagazineRifleMAR40
+    - RMCMagazineRifleMAR40
+    - RMCMagazineRifleMAR40
+    pocket2:
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
 
 - type: entity
   parent: CMMobHuman
@@ -95,13 +99,19 @@
     pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
   inhand:
-  - CMWeaponPistolM1984
+  - CMUExpeditionSidearm
   storage:
     back:
+    - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    - CMMagazinePistolM1984
+    pocket2:
+    - CMUExpeditionFieldDressing
 
 - type: startingGear
   id: CMUExpeditionScavengerRichGear
@@ -120,16 +130,20 @@
   - CMUExpeditionAssaultRifle
   storage:
     back:
-    - CMMagazineRifleM54C
-    - CMUExpeditionBlastGrenade
-    - CMUExpeditionSmokeGrenade
-    - CMUExpeditionSidearm
-    - CMMagazinePistolM1984
+    - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineRifleM54C
     - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
+    pocket2:
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
 
 - type: startingGear
   id: CMUExpeditionScavengerScoutGear
@@ -148,14 +162,19 @@
   - RMCWeaponRifleMAR30
   storage:
     back:
-    - CMUExpeditionSmokeGrenade
-    - CMUExpeditionSidearm
-    - CMMagazinePistolM1984
+    - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - RMCMagazineRifleMAR40
     - RMCMagazineRifleMAR40
+    - RMCMagazineRifleMAR40
+    - RMCMagazineRifleMAR40
+    pocket2:
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
 
 - type: entity
   parent: CMUExpeditionScavenger

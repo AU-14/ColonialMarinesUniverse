@@ -940,7 +940,7 @@ public sealed partial class VehicleSystem : EntitySystem
             return;
 
         if (args.Popup)
-            _popup.PopupClient(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
 
         //args.Cancelled = true;
     }

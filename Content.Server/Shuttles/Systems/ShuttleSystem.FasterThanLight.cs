@@ -1080,7 +1080,7 @@ public sealed partial class ShuttleSystem
         var tiles = new HashSet<Vector2i>();
         if (TryComp(uid, out MapGridComponent? shuttleGrid))
         {
-            var enumerator = _mapSystem.GetAllTilesEnumerator(uid, shuttleGrid);
+            var enumerator = _mapSystem.GetAllTiles(uid, shuttleGrid);
             while (enumerator.MoveNext(out var tile))
             {
                 tiles.Add(tile.Value.GridIndices);

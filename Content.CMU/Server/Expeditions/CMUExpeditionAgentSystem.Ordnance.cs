@@ -14,10 +14,10 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool HasGrenadeContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates target)
     {
         foreach (var hostile in ExpeditionHostiles(uid, agent))
-            if (_mobs.IsAlive(hostile) && _transform.InRange(Transform(hostile).Coordinates, target, 3) &&
-                Visible(uid, hostile, agent.DetectionRange))
+            if (_mobs.IsAlive(hostile) && Visible(uid, hostile, agent.DetectionRange) &&
+                _transform.InRange(Transform(hostile).Coordinates, target, 3))
                 return true;
-        return false;
+        return RememberedGrenadeContact(agent, target);
     }
 
     private EntityCoordinates? BlastPoint(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid grenade)
@@ -109,7 +109,7 @@ public sealed partial class CMUExpeditionAgentSystem
             var key = (tile.Value.GridUid, tile.Value.GridIndices);
             if (!_smokeTiles.TryGetValue(key, out var opaque))
             {
-                var anchored = _maps.GetAnchoredEntitiesEnumerator(key.GridUid, grid, key.GridIndices);
+                var anchored = _maps.GetAnchoredEntities(key.GridUid, grid, key.GridIndices);
                 while (anchored.MoveNext(out var entity))
                     if (HasComp<SmokeComponent>(entity) && TryComp<OccluderComponent>(entity, out var occluder) && occluder.Enabled)
                         opaque = true;

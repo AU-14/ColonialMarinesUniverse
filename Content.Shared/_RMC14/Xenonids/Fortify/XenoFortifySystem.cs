@@ -146,7 +146,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
     {
         if (!xeno.Comp.CanHeadbuttFortified && xeno.Comp.Fortified)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-headbutt"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-fortify-cant-headbutt"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -155,7 +155,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
     {
         if (xeno.Comp.Fortified)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-rest"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-fortify-cant-rest"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -164,7 +164,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
     {
         if (xeno.Comp.Fortified)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-tail-sweep"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-fortify-cant-tail-sweep"), xeno, xeno);
             args.Cancelled = true;
         }
     }
@@ -173,7 +173,7 @@ public sealed partial class XenoFortifySystem : EntitySystem
     {
         if (xeno.Comp.Fortified)
         {
-            _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-toggle-crest"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-fortify-cant-toggle-crest"), xeno, xeno);
             args.Cancelled = true;
         }
     }

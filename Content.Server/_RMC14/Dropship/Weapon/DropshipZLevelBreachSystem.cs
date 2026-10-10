@@ -12,7 +12,7 @@ namespace Content.Server._RMC14.Dropship.Weapon;
 /// <summary>
 /// Carves the ceiling tiles crossed by penetrating dropship ordnance into passable z-level openings.
 /// </summary>
-public sealed class DropshipZLevelBreachSystem : EntitySystem
+public sealed partial class DropshipZLevelBreachSystem : EntitySystem
 {
     private static readonly ProtoId<ContentTileDefinition> SpaceTile = ContentTileDefinition.SpaceID;
     private const string BreachMarkerPrototype = "RMCDropshipZLevelBreach";

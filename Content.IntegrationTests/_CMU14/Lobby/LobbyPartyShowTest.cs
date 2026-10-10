@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using System.Linq;
 using System.Numerics;
 using Content.Client.CMU14.Lobby;
@@ -77,7 +78,7 @@ public sealed class LobbyPartyShowTest : GameTest
             finally
             {
                 panel.Orphan();
-                panel.Dispose();
+                panel.Release();
                 Frame();
             }
             Assert.That(ui.WindowRoot.Children.OfType<LobbyPartyShowControl>(), Is.Empty);
@@ -146,7 +147,7 @@ public sealed class LobbyPartyShowTest : GameTest
         }
         finally
         {
-            await Client.WaitPost(() => { panel?.Orphan(); panel?.Dispose(); Frame(); });
+            await Client.WaitPost(() => { panel?.Orphan(); panel?.Release(); Frame(); });
             await Server.WaitPost(() => Server.ResolveDependency<IConfigurationManager>().SetCVar(CCVars.LobbyPartyTimeParade, true));
             await Pair.RunTicksSync(5);
         }
@@ -247,7 +248,7 @@ public sealed class LobbyPartyShowTest : GameTest
         }
         finally
         {
-            await Client.WaitPost(() => { panel?.Orphan(); panel?.Dispose(); });
+            await Client.WaitPost(() => { panel?.Orphan(); panel?.Release(); });
             await Server.WaitPost(() =>
             {
                 ticker.ToggleReady(ServerSession!, false);
@@ -299,7 +300,7 @@ public sealed class LobbyPartyShowTest : GameTest
                 show.Advance(3);
                 // Unready/disconnect deletes the card's preview while its borrowed view is on the stage.
                 cards[0].Orphan();
-                cards[0].Dispose();
+                cards[0].Release();
                 for (var elapsed = 0; elapsed < 30; elapsed++)
                     show.Advance(1);
                 Assert.That(show.Finished, Is.True);
@@ -316,7 +317,7 @@ public sealed class LobbyPartyShowTest : GameTest
             {
                 show?.Release();
                 holder.Orphan();
-                holder.Dispose();
+                holder.Release();
             }
         });
     }

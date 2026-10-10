@@ -15,6 +15,8 @@ namespace Content.IntegrationTests.Tests.Medical;
 [TestOf(typeof(EntityStorageLayingDownOverrideSystem))]
 public sealed class MorgueLayingDownOverrideMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMStasisBagPrototype = "CMStasisBag";
+
     private static readonly EntProtoId EnabledStorage = "MorgueLayingOverrideEnabled";
     private static readonly EntProtoId DisabledStorage = "MorgueLayingOverrideDisabled";
     private static readonly EntProtoId Actor = "MorgueLayingOverrideActor";
@@ -117,14 +119,14 @@ public sealed class MorgueLayingDownOverrideMergeRegressionTest : GameTest
             foreach (var id in DefaultEnabledPrototypes)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<EntityStorageLayingDownOverrideComponent>(
+                Assert.That(prototype.TryComp<EntityStorageLayingDownOverrideComponent>(
                     out var component,
                     factory), Is.True, id.Id);
                 Assert.That(component!.Enabled, Is.True, id.Id);
             }
 
-            var stasis = prototypes.Index<EntityPrototype>("CMStasisBag");
-            Assert.That(stasis.TryGetComponent<EntityStorageLayingDownOverrideComponent>(
+            var stasis = prototypes.Index<EntityPrototype>(CMStasisBagPrototype);
+            Assert.That(stasis.TryComp<EntityStorageLayingDownOverrideComponent>(
                 out var stasisComponent,
                 factory), Is.True);
             Assert.That(stasisComponent!.Enabled, Is.False,

@@ -4,6 +4,7 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentComponent
 {
+    public bool PendingInterruptingDamage;
     public EntityUid? SquadRoot;
     public string Doctrine = "balanced";
     public CMUSquadDuty Duty;
@@ -13,7 +14,15 @@ public sealed partial class CMUExpeditionAgentComponent
     public TimeSpan NextRegroupRoute;
     public TimeSpan DutyUntil;
     public string DecisionOwner = "idle";
+    public string DecisionReason = "idle";
+    public uint DecisionRevision;
     public TimeSpan DecisionUntil;
+    public double LastThinkMilliseconds;
+    public double AverageThinkMilliseconds;
+    public double MaxThinkMilliseconds;
+    public long ThinkSamples;
+    public long StateTransitions;
+    public bool ReturningHome;
     public readonly Queue<string> DecisionHistory = new();
     public readonly List<(EntityCoordinates Point, TimeSpan Until, int Hits)> BadCover = new();
     public float? BasePreferredRange;

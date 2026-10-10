@@ -69,7 +69,7 @@ public sealed partial class XenoCripplingStrikeSystem : EntitySystem
 
         Dirty(xeno, active);
 
-        _popup.PopupClient(Loc.GetString(xeno.Comp.ActivateText), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString(xeno.Comp.ActivateText), xeno, xeno);
         _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
         if (xeno.Comp.AuraColor is { } color)

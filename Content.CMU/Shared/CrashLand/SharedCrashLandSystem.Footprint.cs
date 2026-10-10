@@ -18,7 +18,7 @@ public abstract partial class SharedCrashLandSystem
             return TryGetCrashLandLocation(out location);
 
         var footprint = new List<Vector2i>();
-        var shuttleTiles = _mapSystem.GetAllTilesEnumerator(shuttle, shuttleGrid);
+        var shuttleTiles = _mapSystem.GetAllTiles(shuttle, shuttleGrid);
         while (shuttleTiles.MoveNext(out var tile))
         {
             footprint.Add(tile.Value.GridIndices);

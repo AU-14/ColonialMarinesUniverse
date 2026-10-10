@@ -47,17 +47,26 @@ public sealed class CMUSquadPanelEui : BaseEui
         Bind(_window.PatrolAdd, CMUSquadPanelAction.PatrolAdd);
         Bind(_window.PatrolStart, CMUSquadPanelAction.PatrolStart);
         Bind(_window.PatrolStop, CMUSquadPanelAction.PatrolStop);
+        Bind(_window.PatrolClear, CMUSquadPanelAction.PatrolClear);
+        Bind(_window.AutoPatrol, CMUSquadPanelAction.AutoPatrol);
+        Bind(_window.Cooperate, CMUSquadPanelAction.Cooperation);
         Bind(_window.ApplyDoctrine, CMUSquadPanelAction.Doctrine);
         Bind(_window.SetFriendly, CMUSquadPanelAction.Friendly);
         Bind(_window.SetTarget, CMUSquadPanelAction.Target);
         _window.AddFriendly.OnPressed += _ => Append(_window.Friendlies);
         _window.AddTarget.OnPressed += _ => Append(_window.Targets);
+        _window.Here.OnToggled += _ => UpdatePositionFields();
+        _window.AimSkill.OnValueChanged += value =>
+            _window.AimSkillLabel.Text = Loc.GetString("cmu-squads-aim-skill", ("percent", (int) value.Value));
+        _window.AimSkill.OnReleased += _ => Send(CMUSquadPanelAction.AimSkill);
         Fill(_window.Facing, _facings, "auto");
+        UpdatePositionFields();
+        UpdateOrderControls();
         _window.OpenCentered();
         RefreshLater();
     }
 
-    private void Bind(Button button, CMUSquadPanelAction action) => button.OnPressed += _ => Send(action);
+    private void Bind(BaseButton button, CMUSquadPanelAction action) => button.OnPressed += _ => Send(action);
 
     private void Append(LineEdit edit)
     {
@@ -94,10 +103,11 @@ public sealed class CMUSquadPanelEui : BaseEui
         var x = 0f;
         var y = 0f;
         var usesPoint = action is CMUSquadPanelAction.Spawn or CMUSquadPanelAction.Move or CMUSquadPanelAction.Guard or CMUSquadPanelAction.PatrolAdd;
-        if (action == CMUSquadPanelAction.Spawn && !int.TryParse(w.Count.Text, out count) ||
+        if (action == CMUSquadPanelAction.Spawn && (!int.TryParse(w.Count.Text, out count) || count is < 1 or > 12) ||
             usesPoint && !w.Here.Pressed && (!int.TryParse(w.Map.Text, out map) ||
                 !float.TryParse(w.X.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out x) ||
-                !float.TryParse(w.Y.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out y)))
+                !float.TryParse(w.Y.Text, NumberStyles.Float, CultureInfo.InvariantCulture, out y) ||
+                !float.IsFinite(x) || !float.IsFinite(y)))
         {
             w.Status.Text = Loc.GetString("cmu-squads-invalid");
             return;
@@ -107,7 +117,9 @@ public sealed class CMUSquadPanelEui : BaseEui
             Action = action, Root = _state.Selected, Count = count, Variant = _variants[w.Variant.SelectedId],
             Outfit = _outfits[w.Outfit.SelectedId], Doctrine = _doctrines[w.Doctrine.SelectedId],
             Here = w.Here.Pressed, Map = map, X = x, Y = y, Facing = _facings[w.Facing.SelectedId],
-            Value = action == CMUSquadPanelAction.Doctrine ? _doctrines[w.Doctrine.SelectedId] :
+            Enabled = action == CMUSquadPanelAction.AutoPatrol ? w.AutoPatrol.Pressed : w.Cooperate.Pressed,
+            AimSkillPercent = (int) w.AimSkill.Value,
+            Value = action == CMUSquadPanelAction.Doctrine ? _doctrines[w.OrderDoctrine.SelectedId] :
                 action == CMUSquadPanelAction.Friendly ? w.Friendlies.Text : w.Targets.Text,
         });
     }
@@ -126,10 +138,21 @@ public sealed class CMUSquadPanelEui : BaseEui
                 return;
             Fill(_window.Variant, _variants, "mixed"); Fill(_window.Outfit, _outfits, "scavenger");
             Fill(_window.Doctrine, _doctrines, "balanced"); Fill(_window.Faction, _factions, "GOVFOR");
+            Fill(_window.OrderDoctrine, _doctrines, panel.CurrentDoctrine);
             _optionsLoaded = true;
+            if (panel.Squads.Count == 0)
+                _window.CommandTabs.CurrentTab = 1;
         }
         if (panel.Status.Length > 0)
             _window.Status.Text = panel.Status;
+        _window.Overview.Text = panel.Overview.Length > 0 ? panel.Overview : Loc.GetString("cmu-squads-select");
+        _window.AutoPatrol.Pressed = panel.AutomaticPatrol;
+        _window.Cooperate.Pressed = panel.Coordinating;
+        if (!_window.AimSkill.Grabbed)
+        {
+            _window.AimSkill.SetValueWithoutEvent(panel.AimSkillPercent);
+            _window.AimSkillLabel.Text = Loc.GetString("cmu-squads-aim-skill", ("percent", panel.AimSkillPercent));
+        }
         if (!previous.Squads.SequenceEqual(panel.Squads))
         {
             _window.Squad.Clear();
@@ -149,8 +172,30 @@ public sealed class CMUSquadPanelEui : BaseEui
         {
             _window.Friendlies.Text = panel.Friendlies;
             _window.Targets.Text = panel.Targets;
+            _window.OrderDoctrine.SelectId(Math.Max(0, Array.IndexOf(_doctrines, panel.CurrentDoctrine)));
         }
+        UpdateOrderControls();
         ShowMember();
+    }
+
+    private void UpdatePositionFields()
+    {
+        if (_window == null)
+            return;
+        _window.Map.Editable = _window.X.Editable = _window.Y.Editable = !_window.Here.Pressed;
+    }
+
+    private void UpdateOrderControls()
+    {
+        if (_window == null)
+            return;
+        var disabled = _state.Selected == null || !_state.Members.Any(member => member.Active);
+        _window.AimSkill.Disabled = disabled;
+        foreach (var button in new BaseButton[] { _window.Move, _window.Guard, _window.Hold, _window.Regroup,
+                     _window.Resupply, _window.PatrolAdd, _window.PatrolStart, _window.PatrolStop, _window.PatrolClear,
+                     _window.AutoPatrol, _window.Cooperate, _window.ApplyDoctrine, _window.SetFriendly, _window.SetTarget,
+                     _window.AddFriendly, _window.AddTarget })
+            button.Disabled = disabled;
     }
 
     private void ShowMember()
@@ -163,6 +208,7 @@ public sealed class CMUSquadPanelEui : BaseEui
         if (index < 0)
         {
             _window.Detail.Text = Loc.GetString("cmu-squads-select");
+            _window.MemberSummary.Text = "";
             _window.Diagram.SetMembers([], null);
             return;
         }
@@ -170,6 +216,7 @@ public sealed class CMUSquadPanelEui : BaseEui
         _member = selected.Entity;
         _window.Member.SelectId(index);
         _window.Detail.Text = selected.Detail;
+        _window.MemberSummary.Text = selected.Summary;
         _window.Diagram.SetMembers(_state.Members, selected);
     }
 
@@ -185,7 +232,7 @@ public sealed class CMUSquadPanelEui : BaseEui
     public override void Closed()
     {
         _closed = true;
-        _window?.Dispose();
+        _window?.Release();
         _window = null;
     }
 }

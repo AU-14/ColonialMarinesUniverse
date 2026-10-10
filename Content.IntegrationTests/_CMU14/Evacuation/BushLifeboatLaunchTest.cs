@@ -13,6 +13,7 @@ using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Evacuation;
 
@@ -20,6 +21,8 @@ namespace Content.IntegrationTests.CMU14.Evacuation;
 [TestFixture]
 public sealed class BushLifeboatLaunchTest
 {
+    private static readonly ProtoId<GameMapPrototype> USSBushReduxMap = "USSBushRedux";
+
     // evacuateFirst: the CO hits evacuate during the hijack's red alert, before the dropship crashes into deck 1
     [TestCase(false)]
     [TestCase(true)]
@@ -37,7 +40,7 @@ public sealed class BushLifeboatLaunchTest
             var maps = entities.System<SharedMapSystem>();
             var ticker = entities.System<GameTicker>();
             var zLevels = entities.System<CMUZLevelsSystem>();
-            ticker.LoadGameMap(server.ProtoMan.Index<GameMapPrototype>("USSBushRedux"),
+            ticker.LoadGameMap(server.ProtoMan.Index(USSBushReduxMap),
                 out var mapId, DeserializationOptions.Default with { InitializeMaps = true });
             var ship = maps.GetMap(mapId);
             decks = zLevels.GetAllNetworkMaps(ship);

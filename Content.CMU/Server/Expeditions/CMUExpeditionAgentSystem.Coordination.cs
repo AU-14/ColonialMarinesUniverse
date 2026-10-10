@@ -35,7 +35,7 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     private bool LocalSquadMember(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid other,
-        CMUExpeditionAgentComponent buddy) => other != uid && SameSquad(uid, agent, other, buddy) &&
+        CMUExpeditionAgentComponent buddy) => other != uid && CoordinatedSquadMember(uid, agent, other, buddy) &&
         _mobs.IsAlive(other) && !HasComp<ActorComponent>(other) &&
         _transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 14);
 

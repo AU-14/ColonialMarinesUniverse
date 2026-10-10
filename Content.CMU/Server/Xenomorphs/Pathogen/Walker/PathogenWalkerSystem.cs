@@ -48,22 +48,22 @@ namespace Content.Server.CMU14.Xenomorphs.Pathogen.Walker;
 
 public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IPrototypeManager _protoMgr = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
-    [Dependency] private readonly LanguageSystem _language = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
-    [Dependency] private readonly SkillsSystem _skills = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IPrototypeManager _protoMgr = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private LanguageSystem _language = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private SkillsSystem _skills = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";

@@ -11,10 +11,10 @@ namespace Content.Shared.Trigger.Systems;
 /// <summary>
 /// Handles triggers that require the user to hold an active lighter or blowtorch.
 /// </summary>
-public sealed class TriggerOnIgniterUseSystem : EntitySystem
+public sealed partial class TriggerOnIgniterUseSystem : EntitySystem
 {
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly TriggerSystem _trigger = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
 
     public override void Initialize()
     {

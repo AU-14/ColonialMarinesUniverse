@@ -36,7 +36,7 @@ public sealed class IndependentPerformanceAuditTest : GameTest
                     for (var repeat = 0; repeat < 10; repeat++)
                     for (var i = 0; i < count; i++)
                     {
-                        var query = maps.GetAnchoredEntitiesEnumerator(map.Grid, map.Grid.Comp, new Vector2i(i + 10, 10));
+                        var query = maps.GetAnchoredEntities(map.Grid, map.Grid.Comp, new Vector2i(i + 10, 10));
                         while (query.MoveNext(out _)) total++;
                     }
                     return Stopwatch.GetElapsedTime(start).TotalMilliseconds;

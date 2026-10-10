@@ -13,7 +13,7 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaPreserveEdgeSystem : EntitySystem
+public sealed partial class YautjaPreserveEdgeSystem : EntitySystem
 {
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;

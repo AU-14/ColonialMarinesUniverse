@@ -60,9 +60,15 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool RunAmmoFallback(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now, bool armed = false)
     {
+        if (agent.FlareItem != null || agent.UtilityCleanupItem != null || agent.FireRescueTarget != null || agent.PendingMeleeWeapon != null)
+        {
+            ClearScavenging(uid, agent);
+            return false;
+        }
         if (!armed)
             TryLastResortStrike(uid, agent);
         if (agent.Action != null || agent.PendingWeapon != null || agent.Treatment != null ||
+            agent.LastStandTarget != null || agent.PendingMeleeWeapon != null ||
             agent.WorkItem != null || agent.PreparingWork || HasCoverCommitment(uid, agent, now) ||
             armed && (agent.OrderedDestination != null || agent.Target != null || now - agent.LastContact < TimeSpan.FromSeconds(8)) ||
             agent.RushTarget != null || GrenadeDanger(Transform(uid).Coordinates))
@@ -87,7 +93,7 @@ public sealed partial class CMUExpeditionAgentSystem
             var map = _transform.GetMapCoordinates(uid);
             _lookup.GetEntitiesInRange(map.MapId, map.Position, 4, nearby);
             foreach (var candidate in NearbyLoot(nearby.OrderBy(other =>
-                         Vector2.DistanceSquared(map.Position, _transform.GetWorldPosition(other))))
+                         Vector2.DistanceSquared(map.Position, _transform.GetWorldPosition(other))), !HasUsableCarriedAmmo(uid))
                          .OrderBy(other => HasComp<GunComponent>(other) ? 2 : KnownLootGrenade(other, out _) ? 1 : 0))
             {
                 if (!UsefulLoot(uid, candidate, armed) || !ScavengeSource(uid, candidate, out var source))
@@ -97,7 +103,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 var reachable = _interaction.InRangeUnobstructed(uid, source);
                 if (!reachable && (now - agent.LastHit < TimeSpan.FromSeconds(1) ||
                     agent.Home is not { } home || !_transform.InRange(home, point, agent.LeashRange) ||
-                    !TraversablePassage(uid, start, point) ||
+                    !TraversablePassage(uid, start, point) || !KnownDangerPassage(uid, agent, start, point) ||
                     ExposureScore(uid, agent, point) > ExposureScore(uid, agent, start)))
                     continue;
                 var claimed = false;
@@ -127,7 +133,7 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (!_interaction.InRangeUnobstructed(uid, lootSource))
         {
-            if (!TraversablePassage(uid, start, lootPoint) ||
+            if (!TraversablePassage(uid, start, lootPoint) || !KnownDangerPassage(uid, agent, start, lootPoint) ||
                 ExposureScore(uid, agent, lootPoint) > ExposureScore(uid, agent, start))
             {
                 ClearScavenging(uid, agent);

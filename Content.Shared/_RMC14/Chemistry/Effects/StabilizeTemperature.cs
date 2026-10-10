@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Temperature;
+using Content.Shared._RMC14.Temperature;
 using Content.Shared.EntityEffects;
 using Robust.Shared.Prototypes;
 
@@ -22,7 +22,7 @@ public sealed partial class StabilizeTemperature : EntityEffectBase<StabilizeTem
 public sealed partial class StabilizeTemperatureEntityEffectSystem
     : EntityEffectSystem<MetaDataComponent, StabilizeTemperature>
 {
-    [Dependency] private readonly SharedRMCTemperatureSystem _temperature = default!;
+    [Dependency] private SharedRMCTemperatureSystem _temperature = default!;
 
     protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<StabilizeTemperature> args)
     {

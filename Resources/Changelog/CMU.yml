@@ -12785,5 +12785,35 @@
   id: 777
   time: '2026-10-10T12:43:21.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2141
+- author: flex5hybrid
+  changes:
+  - message: Speech bubbles now refresh their layout correctly when moving between
+      UI scales.
+    type: Fix
+  - message: Corrected the ammunition bearer pack's entrenching-tool storage whitelist.
+    type: Fix
+  - message: Reduced repeated client and server work during chat, radio, treatment
+      and gameplay events.
+    type: Tweak
+  - message: Added regression coverage and performance workloads for larger populations.
+    type: Code
+  id: 778
+  time: '2026-10-10T13:32:44.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2135
+- author: TheHellFireo
+  changes:
+  - message: Cleaned up content build warnings and updated deprecated API usage.
+    type: Code
+  - message: Fixed missing equipped sprites and client resource errors for the M81
+      riot grenade launcher.
+    type: Fix
+  - message: Fixed expedition casualty pickup, suppression responses after short volleys,
+      shelter arrivals, and fortification approaches.
+    type: Fix
+  - message: Fixed the ammo-bearer backpack's entrenching-tool whitelist.
+    type: Fix
+  id: 779
+  time: '2026-10-10T14:28:56.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2132
 Name: CMU
 Order: -1

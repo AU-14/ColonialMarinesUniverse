@@ -325,7 +325,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             BreakOnMove = true,
         };
         if (DoAfter.TryStartDoAfter(removeDo))
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-cast-removing"), patient, user);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-cast-removing"), patient, user);
     }
 
     private void OnCastVerbRemoveDoAfter(Entity<CMUHumanMedicalComponent> patient, ref CMUCastVerbRemoveDoAfterEvent args)
@@ -350,7 +350,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
 
         var ev = new CMUCastChangedEvent(part, true);
         RaiseLocalEvent(ref ev);
-        Popup.PopupPredicted(
+        Popup.PopupBroadcast(
             Loc.GetString(early ? "cmu-medical-cast-removed-early" : "cmu-medical-cast-removed"),
             patient.Owner,
             args.User);
@@ -366,7 +366,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             BreakOnMove = true,
         };
         if (DoAfter.TryStartDoAfter(removeDo))
-            Popup.PopupPredicted(Loc.GetString("cmu-medical-splint-removing"), patient, user);
+            Popup.PopupBroadcast(Loc.GetString("cmu-medical-splint-removing"), patient, user);
     }
 
     private void OnSplintVerbRemoveDoAfter(Entity<CMUHumanMedicalComponent> patient, ref CMUSplintVerbRemoveDoAfterEvent args)
@@ -391,7 +391,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         RemComp<CMUSplintedComponent>(part);
         var ev = new CMUSplintChangedEvent(part, true);
         RaiseLocalEvent(ref ev);
-        Popup.PopupPredicted(Loc.GetString("cmu-medical-splint-removed"), patient.Owner, args.User);
+        Popup.PopupBroadcast(Loc.GetString("cmu-medical-splint-removed"), patient.Owner, args.User);
     }
 
     // aim-picker part first if it has T, otherwise the first part that does

@@ -86,9 +86,9 @@ namespace Content.Server.Power.NodeGroups
             PowerNetSystem?.QueueReconnectApcNet(this);
         }
 
-        protected override void SetNetConnectorNet(IBaseNetConnectorComponent<IApcNet> netConnectorComponent)
+        protected override void SetNetConnectorNet(EntityUid uid, IBaseNetConnectorComponent<IApcNet> netConnectorComponent)
         {
-            netConnectorComponent.Net = this;
+            netConnectorComponent.SetNet(uid, this);
         }
 
         public override string? GetDebugData()

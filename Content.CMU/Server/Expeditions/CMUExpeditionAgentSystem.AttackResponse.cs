@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared.CMU14.Threats.Mobs.Biomorph;
+using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Projectiles;
 using Robust.Shared.Map;
@@ -21,6 +22,9 @@ public sealed partial class CMUExpeditionAgentSystem
             !args.DamageIncreased || !args.InterruptsDoAfters)
             return;
         var now = _timing.CurTime;
+        ent.Comp.PendingInterruptingDamage = true;
+        ent.Comp.LastHit = now;
+        RememberIncomingFire(ent, ent.Comp, Transform(ent).Coordinates, now, hit: true);
         ent.Comp.NextThink = now;
         ent.Comp.ImmediateFireUntil = now + TimeSpan.FromSeconds(0.8);
         ent.Comp.NextMovingBurst = now;
@@ -29,6 +33,9 @@ public sealed partial class CMUExpeditionAgentSystem
         if (args.Origin is { } source && Exists(source) && AcceptOrderedContact(ent, ent.Comp, source) &&
             Visible(ent, source, ent.Comp.DetectionRange))
         {
+            if (args.Impact.Delivery == DamageImpactDelivery.Projectile && !IsMeleeThreat(source))
+                ObserveIncomingLane(ent, ent.Comp, _transform.GetMapCoordinates(ent),
+                    _transform.GetWorldPosition(ent) - _transform.GetWorldPosition(source), now);
             if (!ent.Comp.RecentShooters.ContainsKey(source) && ent.Comp.RecentShooters.Count >= 16)
                 ent.Comp.RecentShooters.Remove(ent.Comp.RecentShooters.MinBy(pair => pair.Value).Key);
             ent.Comp.RecentShooters[source] = now + TimeSpan.FromSeconds(2);
@@ -91,6 +98,10 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool AvoidAlienAttack(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
+        // A validated fire escape already owns its short movement. The fire response
+        // rechecks its ground corridor every think; do not replace it with a smaller dodge.
+        if (agent.FireEscapeDestination != null)
+            return false;
         if (now < agent.NextHazardScan || now < agent.NextHazardDodge)
             return false;
         agent.NextHazardScan = now + TimeSpan.FromSeconds(0.3);

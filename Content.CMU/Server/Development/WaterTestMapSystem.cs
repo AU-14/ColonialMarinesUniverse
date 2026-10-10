@@ -12,7 +12,7 @@ using Content.Shared.Standing;
 
 namespace Content.Server.CMU14.Development;
 
-public sealed class WaterTestMapSystem : EntitySystem
+public sealed partial class WaterTestMapSystem : EntitySystem
 {
     [Dependency] private GameTicker _ticker = default!;
     [Dependency] private StationSystem _station = default!;

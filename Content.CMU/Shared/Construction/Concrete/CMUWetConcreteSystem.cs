@@ -29,6 +29,6 @@ public sealed partial class CMUWetConcreteSystem : EntitySystem
             return;
 
         args.Handled = true;
-        _popup.PopupClient(Loc.GetString("cmu-concrete-wet-no-barbed-wire"), ent, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-concrete-wet-no-barbed-wire"), ent, args.User, PopupType.SmallCaution);
     }
 }

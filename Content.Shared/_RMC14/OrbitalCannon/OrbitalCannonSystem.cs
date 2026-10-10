@@ -236,7 +236,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         {
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient("The tray is already loaded into the cannon!", args.Target, buckled, PopupType.MediumCaution);
+                _popup.PopupEntity("The tray is already loaded into the cannon!", args.Target, buckled, PopupType.MediumCaution);
             }
 
             return;
@@ -247,7 +247,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         {
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient("There is already a warhead loaded!", args.Target, buckled, PopupType.MediumCaution);
+                _popup.PopupEntity("There is already a warhead loaded!", args.Target, buckled, PopupType.MediumCaution);
             }
 
             return;
@@ -257,11 +257,11 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         {
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient($"You can't insert {Name(args.Used)} into the {Name(args.Target)}!", args.Target, buckled, PopupType.MediumCaution);
+                _popup.PopupEntity($"You can't insert {Name(args.Used)} into the {Name(args.Target)}!", args.Target, buckled, PopupType.MediumCaution);
             }
         }
 
-        _popup.PopupClient($"You load {Name(args.Used)} into the {Name(args.Target)}!", args.Target, args.Target, PopupType.Medium);
+        _popup.PopupEntity($"You load {Name(args.Used)} into the {Name(args.Target)}!", args.Target, args.Target, PopupType.Medium);
         _powerLoader.TrySyncHands(args.PowerLoader);
 
         if (_net.IsServer)
@@ -334,7 +334,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         {
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient("The tray is already loaded into the cannon!", buckled, PopupType.MediumCaution);
+                _popup.PopupSelf("The tray is already loaded into the cannon!", buckled, PopupType.MediumCaution);
             }
 
             return;
@@ -345,7 +345,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         {
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient($"A warhead must be placed in the {Name(args.Target)} first.", args.Target, buckled, PopupType.MediumCaution);
+                _popup.PopupEntity($"A warhead must be placed in the {Name(args.Target)} first.", args.Target, buckled, PopupType.MediumCaution);
             }
 
             return;
@@ -356,7 +356,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         {
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient($"The {Name(args.Target)} can't accept more solid fuel!", args.Target, buckled, PopupType.MediumCaution);
+                _popup.PopupEntity($"The {Name(args.Target)} can't accept more solid fuel!", args.Target, buckled, PopupType.MediumCaution);
             }
 
             return;
@@ -366,13 +366,13 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         {
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient($"You can't insert {Name(args.Used)} into the {Name(args.Target)}!", args.Target, buckled, PopupType.MediumCaution);
+                _popup.PopupEntity($"You can't insert {Name(args.Used)} into the {Name(args.Target)}!", args.Target, buckled, PopupType.MediumCaution);
             }
 
             return;
         }
 
-        _popup.PopupClient($"You load {Name(args.Used)} into the {Name(args.Target)}!", args.Target, args.Target, PopupType.Medium);
+        _popup.PopupEntity($"You load {Name(args.Used)} into the {Name(args.Target)}!", args.Target, args.Target, PopupType.Medium);
         _powerLoader.TrySyncHands(args.PowerLoader);
 
         if (_net.IsServer)

@@ -142,7 +142,7 @@ public abstract partial class SharedRMCTelephoneSystem : EntitySystem
         StopSound(ent);
 
         _audio.PlayPredicted(RemoteHangupSound, ent, args.Attacker);
-        _popup.PopupClient(Loc.GetString("rmc-dropship-launch-alarm-xeno-shutdown", ("console", ent)), args.Attacker, args.Attacker);
+        _popup.PopupEntity(Loc.GetString("rmc-dropship-launch-alarm-xeno-shutdown", ("console", ent)), args.Attacker, args.Attacker);
     }
 
     private void OnRotaryPhoneDialingInteractUsing(Entity<RotaryPhoneDialingComponent> ent, ref InteractUsingEvent args)

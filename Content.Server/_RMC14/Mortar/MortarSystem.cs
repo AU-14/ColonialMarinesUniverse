@@ -333,7 +333,7 @@ public sealed partial class MortarSystem : SharedMortarSystem
         if (_container.TryGetContainer(mortar, mortar.Comp.ContainerId, out var container) &&
             !_container.CanInsert(shell, container))
         {
-            _popup.PopupClient(Loc.GetString("rmc-mortar-cant-insert", ("shell", shell), ("mortar", mortar)), user, user, SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-mortar-cant-insert", ("shell", shell), ("mortar", mortar)), user, user, SmallCaution);
             return false;
         }
 

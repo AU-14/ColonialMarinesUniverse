@@ -208,7 +208,7 @@ public abstract partial class SharedVultureAimSystem : EntitySystem
 
         if (ent.Comp.BreathCooldownEndsAt > Timing.CurTime)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vulture-breath-cooldown"), args.Performer, args.Performer, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-vulture-breath-cooldown"), args.Performer, args.Performer, PopupType.SmallCaution);
             args.Handled = true;
             return;
         }
@@ -295,7 +295,7 @@ public abstract partial class SharedVultureAimSystem : EntitySystem
             return true;
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-vulture-must-scope"), args.Performer, args.Performer, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-vulture-must-scope"), args.Performer, args.Performer, PopupType.SmallCaution);
         args.Handled = true;
         return false;
     }

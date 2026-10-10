@@ -162,7 +162,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     {
         if (requireTechUser && !CanUseYautjaCloak(user))
         {
-            _popup.PopupClient(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
             return false;
         }
 
@@ -173,7 +173,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         }
         else if (!_power.TryGetWornBracer(user, out bracer))
         {
-            _popup.PopupClient(Loc.GetString("cmu-yautja-not-enough-power"), user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-not-enough-power"), user, user, PopupType.MediumCaution);
             return false;
         }
 
@@ -183,7 +183,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         {
             if (GetDamageOverTimeBlocker(user) is { } blocker)
             {
-                _popup.PopupClient(Loc.GetString(GetDamageOverTimePopup(blocker)), user, user, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString(GetDamageOverTimePopup(blocker)), user, user, PopupType.MediumCaution);
                 return false;
             }
 
@@ -191,14 +191,14 @@ public sealed partial class YautjaCloakSystem : EntitySystem
                 _timing.CurTime < bracer.Comp.CloakCooldownUntil)
             {
                 var remaining = (int) Math.Ceiling((bracer.Comp.CloakCooldownUntil - _timing.CurTime).TotalSeconds);
-                _popup.PopupClient(Loc.GetString("cmu-yautja-cloak-cooldown", ("seconds", remaining)), user, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cmu-yautja-cloak-cooldown", ("seconds", remaining)), user, user, PopupType.SmallCaution);
                 return false;
             }
 
             if (_timing.CurTime < bracer.Comp.CloakCombatLockoutUntil)
             {
                 var remaining = (int) Math.Ceiling((bracer.Comp.CloakCombatLockoutUntil - _timing.CurTime).TotalSeconds);
-                _popup.PopupClient(
+                _popup.PopupEntity(
                     Loc.GetString("cmu-yautja-cloak-blocked-combat", ("seconds", remaining)),
                     user,
                     user,
@@ -293,7 +293,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             SpawnCloakEffects(user, bracer.Comp.CloakEffect);
 
             var popupOthers = Loc.GetString("rmc-cloak-activate-others", ("user", YautjaDisplayName(user)));
-            _popup.PopupPredicted(Loc.GetString("rmc-cloak-activate-self"), popupOthers, user, user, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("rmc-cloak-activate-self"), popupOthers, user, user, PopupType.Medium);
 
             if (_net.IsServer)
                 _audio.PlayPvs(bracer.Comp.CloakOnSound, user);
@@ -320,7 +320,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             var otherPopup = forced
                 ? Loc.GetString("rmc-cloak-forced-deactivate-others", ("user", YautjaDisplayName(user)))
                 : Loc.GetString("rmc-cloak-deactivate-others", ("user", YautjaDisplayName(user)));
-            _popup.PopupPredicted(selfPopup, otherPopup, user, user, PopupType.Medium);
+            _popup.PopupEntity(selfPopup, otherPopup, user, user, PopupType.Medium);
 
             ToggleLayers(user, bracer.Comp.CloakedHideLayers, true);
             RestoreContextMenu(user);

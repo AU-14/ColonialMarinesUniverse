@@ -23,11 +23,11 @@ public sealed class YautjaMaskSporeProtectionTest : GameTest
             {
                 foreach (var proto in SProtoMan.EnumeratePrototypes<EntityPrototype>())
                 {
-                    if (proto.Abstract || !proto.TryGetComponent<YautjaMaskComponent>(out _, factory))
+                    if (proto.Abstract || !proto.TryComp<YautjaMaskComponent>(out _, factory))
                         continue;
 
                     checkedMasks++;
-                    Assert.That(proto.TryGetComponent<MycotoxinProtectionComponent>(out var protection, factory), Is.True,
+                    Assert.That(proto.TryComp<MycotoxinProtectionComponent>(out var protection, factory), Is.True,
                         $"{proto.ID} doesn't protect against spores");
                     Assert.That(protection?.FullProtection, Is.True, $"{proto.ID} should be a full seal");
                 }

@@ -7,7 +7,7 @@ namespace Content.Shared.CMU14.Roles;
 ///     Bonus items handed to Distress Signal roundstart survivors when their party spawns.
 ///     Skill-gated entries only apply to survivors meeting the skill level.
 /// </summary>
-[Prototype("survivorSupplement")]
+[Prototype]
 public sealed partial class SurvivorSupplementPrototype : IPrototype
 {
     [IdDataField]

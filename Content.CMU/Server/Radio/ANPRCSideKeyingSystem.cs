@@ -15,7 +15,7 @@ namespace Content.Server.CMU14.Radio;
 ///     is copied onto the entity in place rather than swapped in, since a vendor equips the very entity
 ///     it spawned.
 /// </summary>
-public sealed class ANPRCSideKeyingSystem : EntitySystem
+public sealed partial class ANPRCSideKeyingSystem : EntitySystem
 {
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
@@ -73,13 +73,13 @@ public sealed class ANPRCSideKeyingSystem : EntitySystem
         ent.Comp.Keyed = true;
 
         if (TryComp(ent, out ANPRCFillCardComponent? card) &&
-            variant.TryGetComponent(out ANPRCFillCardComponent? cardSource, _compFactory))
+            variant.TryComp(out ANPRCFillCardComponent? cardSource, _compFactory))
         {
             _crypto.KeyFillCard((ent, card), cardSource.Faction, cardSource.Designation);
         }
 
         if (TryComp(ent, out ANPRCRadioComponent? radio) &&
-            variant.TryGetComponent(out ANPRCRadioComponent? radioSource, _compFactory))
+            variant.TryComp(out ANPRCRadioComponent? radioSource, _compFactory))
         {
             radio.OperatorFaction = radioSource.OperatorFaction;
             radio.CallsignPresets = new List<string>(radioSource.CallsignPresets);
@@ -89,14 +89,14 @@ public sealed class ANPRCSideKeyingSystem : EntitySystem
         }
 
         if (TryComp(ent, out RTORelayComponent? relay) &&
-            variant.TryGetComponent(out RTORelayComponent? relaySource, _compFactory))
+            variant.TryComp(out RTORelayComponent? relaySource, _compFactory))
         {
             relay.BridgedChannels = new(relaySource.BridgedChannels);
             Dirty(ent, relay);
         }
 
         if (TryComp(ent, out AU14CallsignConsoleComponent? directory) &&
-            variant.TryGetComponent(out AU14CallsignConsoleComponent? directorySource, _compFactory))
+            variant.TryComp(out AU14CallsignConsoleComponent? directorySource, _compFactory))
         {
             directory.Faction = directorySource.Faction;
             Dirty(ent, directory);

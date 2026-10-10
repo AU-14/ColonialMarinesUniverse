@@ -15,7 +15,7 @@ namespace Content.Server.CMU14.Intel;
 /// Data disks are the intel computer's own job. Using one on an intel computer opens its decryption: crack the
 /// code and the disk uploads for that computer's faction. There's no limit on attempts.
 /// </summary>
-public sealed class CMUIntelDataDiskSystem : EntitySystem
+public sealed partial class CMUIntelDataDiskSystem : EntitySystem
 {
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;

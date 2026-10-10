@@ -59,9 +59,9 @@ public sealed partial class FoFBalanceConfirmUIController : UIController,
     }
 }
 
-public sealed class FoFBalanceConfirmWindow : DefaultWindow
+public sealed partial class FoFBalanceConfirmWindow : DefaultWindow
 {
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     public event Action? Confirmed;
 

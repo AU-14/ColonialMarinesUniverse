@@ -6,7 +6,7 @@ using Robust.Shared.Configuration;
 
 namespace Content.Client.CMU14.Ghost;
 
-public sealed class CMUGhostColorSystem : EntitySystem
+public sealed partial class CMUGhostColorSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IPlayerManager _player = default!;

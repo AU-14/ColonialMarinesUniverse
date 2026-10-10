@@ -136,7 +136,7 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         _window.CancelButton.Button.Disabled = true;
         _window.LaunchButton.Button.Disabled = true;
 
-        _window.DestinationsContainer.DisposeAllChildren();
+        _window.DestinationsContainer.ReleaseChildren();
 
         DropshipButton DestinationButton(string name, bool disabled, Action onPressed)
         {
@@ -243,7 +243,7 @@ public sealed partial class DropshipNavigationBui : BoundUserInterface
         _window.CancelButton.Visible = true;
         _window.LaunchButton.Visible = true;
 
-        _window.DestinationsContainer.DisposeAllChildren();
+        _window.DestinationsContainer.ReleaseChildren();
         _destinations.Clear();
 
         var status = new DropshipButton
