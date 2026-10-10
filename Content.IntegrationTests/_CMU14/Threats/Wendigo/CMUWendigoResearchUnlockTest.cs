@@ -66,19 +66,19 @@ public sealed class CMUWendigoResearchUnlockTest : GameTest
                 var start = CorporateBalance();
 
                 research.UpdateClearance(0, 2, "corporate");
-                Assert.That(CorporateBalance(), Is.EqualTo(start + 500));
+                Assert.That(CorporateBalance(), Is.EqualTo(start + CMUWendigoResearchUnlockSystem.ClearanceIncreaseReward));
 
                 research.UpdateClearance(0, 3, "corporate");
-                Assert.That(CorporateBalance(), Is.EqualTo(start + 1000));
+                Assert.That(CorporateBalance(), Is.EqualTo(start + 2 * CMUWendigoResearchUnlockSystem.ClearanceIncreaseReward));
 
                 research.UpdateClearance(7, -1, "corporate");
-                Assert.That(CorporateBalance(), Is.EqualTo(start + 1000), "Credit-only updates must not pay out.");
+                Assert.That(CorporateBalance(), Is.EqualTo(start + 2 * CMUWendigoResearchUnlockSystem.ClearanceIncreaseReward), "Credit-only updates must not pay out.");
 
                 research.UpdateClearance(0, 3, "corporate");
-                Assert.That(CorporateBalance(), Is.EqualTo(start + 1000), "An unchanged clearance must not pay out.");
+                Assert.That(CorporateBalance(), Is.EqualTo(start + 2 * CMUWendigoResearchUnlockSystem.ClearanceIncreaseReward), "An unchanged clearance must not pay out.");
 
                 research.UpdateClearance(0, 1, "corporate");
-                Assert.That(CorporateBalance(), Is.EqualTo(start + 1000), "A decrease must not pay out.");
+                Assert.That(CorporateBalance(), Is.EqualTo(start + 2 * CMUWendigoResearchUnlockSystem.ClearanceIncreaseReward), "A decrease must not pay out.");
             }
             finally
             {
@@ -109,7 +109,7 @@ public sealed class CMUWendigoResearchUnlockTest : GameTest
                 var entry = comp.Categories
                     .First(category => category.Name == CMUWendigoResearchUnlockSystem.ResearchCategory)
                     .Entries.Single(e => e.Crate.Id == CMUWendigoResearchUnlockSystem.MH32Crate);
-                Assert.That(entry.Cost, Is.EqualTo(3500));
+                Assert.That(entry.Cost, Is.EqualTo(CMUWendigoResearchUnlockSystem.MH32Cost));
 
                 research.UpdateClearance(0, 3, "corporate");
                 research.UpdateClearance(0, 4, "corporate");
