@@ -36,7 +36,7 @@
   requirements:
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 28800 # 8 hours
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
