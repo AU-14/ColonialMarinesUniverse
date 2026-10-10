@@ -11,11 +11,26 @@
       "name": "base"
     },
     {
+      "name": "camo"
+    },
+    {
+      "name": "equipped-MASK-color",
+      "directions": 4
+    },
+    {
       "name": "equipped-MASK",
       "directions": 4
     },
     {
+      "name": "inhand-left-color",
+      "directions": 4
+    },
+    {
       "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right-color",
       "directions": 4
     },
     {

@@ -1,4 +1,4 @@
-# Same as CMMaskGas, but with CMU sprites and no camouflage.
+# Same as CMMaskGas, but with CMU sprites. The camo layers are drawn as-is instead of being tinted per map.
 - type: entity
   parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
   id: CMUMaskGas
@@ -8,14 +8,28 @@
   components:
   - type: Sprite
     sprite: CMU14/Clothing/Masks/gasmask.rsi
-    state: base
+    layers:
+    - state: base
+    - state: camo
   - type: Clothing
     sprite: CMU14/Clothing/Masks/gasmask.rsi
     slots:
     - Mask
     - Suitstorage
+    clothingVisuals:
+      mask:
+      - state: equipped-MASK
+      - state: equipped-MASK-color
   - type: Item
     size: Small
+    sprite: CMU14/Clothing/Masks/gasmask.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      - state: inhand-left-color
+      right:
+      - state: inhand-right
+      - state: inhand-right-color
   - type: Tag
     tags:
     - GasMask
@@ -43,6 +57,8 @@
   - type: Sprite
     sprite: CMU14/Clothing/Masks/gasmask_black.rsi
   - type: Clothing
+    sprite: CMU14/Clothing/Masks/gasmask_black.rsi
+  - type: Item
     sprite: CMU14/Clothing/Masks/gasmask_black.rsi
 
 - type: entity
