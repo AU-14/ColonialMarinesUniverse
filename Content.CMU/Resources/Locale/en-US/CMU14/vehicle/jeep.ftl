@@ -44,6 +44,7 @@ cmu-jeep-engine-examine = The engine is at {$percent}%.
 cmu-jeep-engine-fine = The engine doesn't need any work.
 cmu-jeep-part-fine = There's nothing to fix on the {$part}.
 cmu-jeep-wreck-warning = Flames burst from under {THE($vehicle)}'s hood! Get clear before it goes up!
+cmu-jeep-hull-wrecked = {CAPITALIZE(THE($vehicle))} buckles and sags on its wheels. It won't go any further until the hull is repaired.
 cmu-vehicle-cargo-load-verb = Load crate
 cmu-vehicle-cargo-unload-verb = Unload crate
 cmu-vehicle-cargo-secured = You wrench the crate down.
@@ -74,6 +75,10 @@ cmu-jeep-headlights-broken = You flick the switch, but the headlights stay dark.
 
 cmu-vehicle-ignition-examine-key = The key is in the ignition.
 cmu-vehicle-ignition-examine-no-key = There's no key in the ignition.
+cmu-vehicle-ignition-examine-code = Its ignition takes key J-{$code}.
+cmu-vehicle-ignition-wrong-key = That key doesn't fit {THE($vehicle)}'s ignition.
+cmu-vehicle-key-examine-code = It's cut for jeep J-{$code}.
+cmu-vehicle-key-examine-blank = It's a blank: the first jeep it goes into takes it.
 
 cmu-vehicle-grime-clean = It's already clean.
 cmu-vehicle-grime-scrubbed = You scrub {THE($vehicle)} clean.
@@ -104,6 +109,6 @@ cmu-jeep-assembly-manual =
 
     {"["}bold]6. Fuel.[/bold] Open the fuel door on the right rear quarter and use the second fuel can on it.
 
-    {"["}bold]7. Key.[/bold] Put the key in the ignition. Without it the engine won't start, and taking it out stops it. At the wheel, your key button pulls it out into your hand.
+    {"["}bold]7. Key.[/bold] Put the key in the ignition. The first key in becomes this jeep's own, and only it fits after that. Without it the engine won't start, and taking it out stops it. At the wheel, your key button pulls it out into your hand.
 
     {"["}bold]Driving.[/bold] Doors open let the crew in and out at once; over a shut door it takes a moment. The headlight switch cycles low beam, high beam and off. Lower the tailgate to load or unload a crate. On the medical jeep, drag a casualty onto the surgical bed over the lowered tailgate; the medic's seat faces the bed.

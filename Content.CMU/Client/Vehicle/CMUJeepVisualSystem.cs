@@ -1,6 +1,8 @@
 using System.Linq;
+using Content.Client.Clickable;
 using Content.Client.CombatMode;
 using Content.Client.Gameplay;
+using Content.Client.Interactable.Components;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CMU14.Vehicle.Jeep;
 using Content.Shared.Containers.ItemSlots;
@@ -34,12 +36,15 @@ public sealed class CMUJeepVisualSystem : EntitySystem
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private VehicleTurretSystem _turret = default!;
 
     // Frames times frame delay of the generated swing states.
     private static readonly TimeSpan HoodSwing = TimeSpan.FromSeconds(7 * 0.07);
     private static readonly TimeSpan WindshieldSwing = TimeSpan.FromSeconds(5 * 0.07);
     private static readonly TimeSpan FuelDoorSwing = TimeSpan.FromSeconds(4 * 0.07);
     private static readonly TimeSpan PanelSwing = TimeSpan.FromSeconds(5 * 0.07);
+    // A wrecked hull pops the shut hood ajar: the third frame of its opening swing.
+    private const float PoppedHoodTime = 2 * 0.07f + 0.01f;
 
     private static readonly string[] Panels = [CMUJeepSystem.DriverDoor, CMUJeepSystem.PassengerDoor, CMUJeepSystem.Tailgate];
 
@@ -140,7 +145,19 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             Animate((uid, sprite), overlay, "hood", hood, jeep.HoodOpen, HoodSwing,
                 "hood_open", "hood_closed", "hood_opening", "hood_closing", "hood_raised");
             var lidRaised = jeep.HoodOpen || hood.Start != null;
-            var glass = jeep.WindshieldDamaged ? "1" : "0";
+            // A wrecked hull shows at a glance: the hood popped ajar, the windshield cracked, the body
+            // sagging on its wheels (CMUVehicleOverlayVisualSystem) and the frame damage at its worst.
+            var hullWrecked = _jeepSystem.IsHullWrecked(uid);
+            if (hullWrecked && !lidRaised)
+            {
+                SetState((uid, sprite), "hood", "hood_opening", PoppedHoodTime);
+                if (overlay != null)
+                    SetState(overlay.Value, "hood_raised", "hood_opening_overlay", PoppedHoodTime);
+
+                lidRaised = true;
+            }
+
+            var glass = jeep.WindshieldDamaged || hullWrecked ? "1" : "0";
             Animate((uid, sprite), overlay, "windshield", SwingOf(swings, "windshield"), jeep.WindshieldDown, WindshieldSwing,
                 $"windshield_down_{glass}", $"windshield_up_{glass}", $"windshield_folding_{glass}", $"windshield_raising_{glass}");
 
@@ -232,6 +249,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
         }
 
         var combat = _combat.IsInCombatMode();
+        UpdateTurrets(combat);
         var parts = EntityQueryEnumerator<CMUVehiclePartComponent, SpriteComponent, TransformComponent>();
         while (parts.MoveNext(out var uid, out var part, out var sprite, out var xform))
         {
@@ -272,6 +290,35 @@ public sealed class CMUJeepVisualSystem : EntitySystem
     /// Shows a swinging part's state on the jeep and its overlay. Out of its off state the overlay
     /// draws it from the raisedKey layer, if given.
     /// </summary>
+    /// <summary>
+    /// A jeep's turret takes clicks and outlines on hover, so an ammo box can be used on it to load its
+    /// gun. In combat mode clicks go through it, to fire.
+    /// </summary>
+    private void UpdateTurrets(bool combat)
+    {
+        var turrets = EntityQueryEnumerator<VehicleTurretVisualComponent>();
+        while (turrets.MoveNext(out var uid, out var visual))
+        {
+            if (!TryGetEntity(visual.Turret, out var turret) ||
+                !_turret.TryGetVehicle(turret.Value, out var vehicle) ||
+                !HasComp<CMUJeepComponent>(vehicle))
+            {
+                continue;
+            }
+
+            if (combat)
+            {
+                RemComp<ClickableComponent>(uid);
+                RemComp<InteractionOutlineComponent>(uid);
+            }
+            else
+            {
+                EnsureComp<ClickableComponent>(uid);
+                EnsureComp<InteractionOutlineComponent>(uid);
+            }
+        }
+    }
+
     private void Animate(
         Entity<SpriteComponent> jeep,
         Entity<SpriteComponent>? overlay,

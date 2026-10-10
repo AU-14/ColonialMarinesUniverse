@@ -6,7 +6,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// Blows the jeep up once damage takes its hull to zero: its engine bursts into flames, with smoke,
+/// Blows the jeep up once damage destroys its engine: the engine bursts into flames, with smoke,
 /// sparks and the crackle of the fire, then its riders are thrown clear, the blast from its
 /// <c>Explosive</c> goes off, and the jeep and everything fitted to it give way to a burnt-out wreck,
 /// debris and fire. Server only.
@@ -15,7 +15,7 @@ namespace Content.Shared.CMU14.Vehicle.Jeep;
 public sealed partial class CMUJeepWreckComponent : Component
 {
     /// <summary>
-    /// The engine fire between the hull giving out and the blast: time enough to bail out.
+    /// The engine fire between the engine giving out and the blast: time enough to bail out.
     /// </summary>
     [DataField]
     public TimeSpan Delay = TimeSpan.FromSeconds(6);
@@ -61,6 +61,12 @@ public sealed partial class CMUJeepWreckComponent : Component
 
     [DataField]
     public LocId WarningPopup = "cmu-jeep-wreck-warning";
+
+    /// <summary>
+    /// Shown when the hull gives out: the jeep won't go any further, but doesn't burn.
+    /// </summary>
+    [DataField]
+    public LocId HullWreckedPopup = "cmu-jeep-hull-wrecked";
 
     [DataField]
     public EntProtoId WreckPrototype = "CMUJeepWreckCargo";
@@ -114,7 +120,7 @@ public sealed partial class CMUJeepWreckComponent : Component
     public float CrateThrowSpeed = 4f;
 
     /// <summary>
-    /// When the warned jeep goes up; null while its hull holds.
+    /// When the warned jeep goes up; null while its engine holds.
     /// </summary>
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoPausedField]
     public TimeSpan? DetonateAt;
@@ -134,6 +140,12 @@ public sealed partial class CMUJeepWreckComponent : Component
 
     [ViewVariables]
     public float LastMaxHull = -1f;
+
+    /// <summary>
+    /// Engine integrity when last checked: the engine dying under it sets the jeep alight.
+    /// </summary>
+    [ViewVariables]
+    public float LastEngine;
 
     /// <summary>
     /// Damaged since the last check, so a hull already at zero still goes up when hit again.

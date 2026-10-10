@@ -24,10 +24,10 @@ using Robust.Shared.Timing;
 namespace Content.Server.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// Turns a jeep whose hull damage has brought to zero into a burning wreck: its engine bursts into
+/// Turns a jeep whose engine damage has destroyed into a burning wreck: the engine bursts into
 /// flames, throwing sparks while the fire crackles, then its riders are thrown clear, a loaded crate
 /// goes off the back, the jeep's explosive goes off, and the jeep with every part fitted to it is
-/// replaced by a wreck, debris, oil and fire.
+/// replaced by a wreck, debris, oil and fire. A wrecked hull alone only stops the jeep.
 /// </summary>
 public sealed class CMUJeepWreckSystem : EntitySystem
 {
@@ -89,12 +89,25 @@ public sealed class CMUJeepWreckSystem : EntitySystem
                           (wreck.LastHull > 0f &&
                            hull.Integrity < wreck.LastHull &&
                            MathF.Abs(hull.MaxIntegrity - wreck.LastMaxHull) < 0.01f);
+            var hullBroke = damaged && wreck.LastHull > 0f && hull.MaxIntegrity > 0f && hull.Integrity <= 0f;
 
             wreck.Hit = false;
             wreck.LastHull = hull.Integrity;
             wreck.LastMaxHull = hull.MaxIntegrity;
 
-            if (damaged && hull.MaxIntegrity > 0f && hull.Integrity <= 0f)
+            // A wrecked hull leaves the jeep dead where it stands; only its engine giving out sets it alight.
+            if (hullBroke)
+            {
+                _popup.PopupEntity(Loc.GetString(wreck.HullWreckedPopup, ("vehicle", uid)), uid, Filter.Pvs(uid), true,
+                    PopupType.MediumCaution);
+            }
+
+            if (!TryComp(uid, out CMUJeepComponent? jeep))
+                continue;
+
+            var engineDied = wreck.LastEngine > 0f && jeep.EngineIntegrity <= 0f;
+            wreck.LastEngine = jeep.EngineIntegrity;
+            if (engineDied)
                 Arm((uid, wreck));
         }
 

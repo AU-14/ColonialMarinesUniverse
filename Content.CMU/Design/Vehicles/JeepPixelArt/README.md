@@ -42,7 +42,9 @@ Screen x is the world x and screen y is `-depth * DEPTH_SCALE - z * HEIGHT_SCALE
 Robust y-sorts sprites by the bottom of their whole frame. Overlay-entity states (`*overlay*`,
 lights, signals, smoke, outlines) are stored slid down per direction (`overlay_slide_px` in
 `seat_offsets.json`) and drawn back up by the overlay's `directionOffsets`, so the overlay sorts at
-the jeep's near edge: people in front draw over it, riders under it.
+the jeep's near edge: people in front draw over it, riders under it. Anyone else near the jeep, not riding it, is drawn
+wholly in front of or behind it: below its near edge on screen over the whole jeep, otherwise under
+it, back at their own depth once clear.
 
 ## RSIs
 
@@ -194,7 +196,7 @@ follows it, so F (the "Flip object" / "Holster primary" binding) moves the same 
 is a child entity of the jeep with its own cone-masked light (`light_masks/`) and haze sprite
 (`jeep_beams.rsi`), lit only through fitted, intact headlights. The haze's shader shows it only
 where its own light lands above the map's ambient light, so walls cut it off and daylight hides it.
-The beams start at the headlights the art draws in each direction
+The haze keeps every alpha step, because coarser steps show as rings at night. The beams start at the headlights the art draws in each direction
 (`headlight_lamp_anchor_px` in `seat_offsets.json`); each headlight has its own low and high beam, its light kept on the lens the art draws. The overlay also has unshaded states for the
 lamps themselves, one per lamp and side (`LIT_STATES`), each shown only while that lamp is fitted
 and intact:
@@ -232,8 +234,13 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
 - **Holding an item:** an empty slot the item would go into shows its mask as a faint ghost of what
   goes there, with its `*_outline` on hover; clicking it fits the item there. That picks the side
   for a door or a lamp, which fit either. Clicking the jeep elsewhere fills the first empty slot.
-- **Key:** any jeep key goes in the ignition by clicking the jeep with it; alt-click takes it out, and
-  so does the driver's key button (`CMUActionJeepEjectKey`), into their hand.
+- **Key:** a jeep's key goes in the ignition by clicking the jeep with it; alt-click takes it out, and
+  so does the driver's key button (`CMUActionJeepEjectKey`), into their hand. Each jeep's key is cut
+  for it alone (`CMUVehicleKey`, the ignition's `KeyCode`, shown on examine as J-1234): a jeep that
+  comes with its key cuts it with a new code; a kit's chassis takes the first key put in, and a blank
+  key becomes its own.
+- **Gun ammo:** an ammo box used on the gun jeep's turret, or anywhere on the jeep, loads its gun, as
+  the box's own transfer. Outside combat mode the turret takes clicks and outlines on hover.
   Without it the engine won't start, and pulling it stops the engine. While someone drives, only
   those aboard can reach it.
 - **Swapping moving parts:** the windshield, hood, doors and tailgate come off screwdriver (screws
@@ -318,9 +325,20 @@ jeep's turned end for end (`REVERSED_SEATS`), its back against the dash, so the 
   west (head down facing east, up facing west), the near wall over their lower half.
 - The rear-facing medic is drawn with their back to the camera facing south (`Reversed`).
 
-## Burning wreck
+## Wrecked hull and burning wreck
 
-When damage takes the hull to zero, the engine catches fire (`CMUJeepComponent.Burning`): flames
+The hull (the fitted hardpoints' integrity, the wheel set's 60 on the cargo and transport jeeps) and
+the engine (50) wear separately. Hits wear both. A crash wears the hull by the mover's
+`wallSmashHullDamage` scaled with impact speed (`CMUVehicleCrash`): a third of it at
+`wallSmashMinSpeed`, all of it at top speed, so 10 to 30, and only on the wheel set, so a crash
+never wrecks the gun (`WheelsOnly`; running someone over too); it wears the engine by a fifth of
+that (`EngineCrashShare`). The engine smokes below half and heavily below a fifth.
+
+When the hull gives out the jeep won't run, but doesn't burn: it sags on its shredded tyres with the
+hood popped ajar, the windshield cracked and the frame damage at its worst, until the hull is
+repaired.
+
+When damage destroys the engine, it catches fire (`CMUJeepComponent.Burning`): flames
 lick out from under the hood and through the grille (`engine_fire`, 8 frames at 0.08 s, over the
 heavy smoke), a flickering orange glow lights it, the fire crackles, and sparks fly from the engine
 bay with now and then a bang. After six seconds it goes up and leaves a wreck from
@@ -420,9 +438,32 @@ The admin command `jeepkit [username]` parks another set next to a player on any
 
 `seat_offsets.json` has pixel offsets (x right, y up, from the vehicle origin) per direction for:
 - each rider seat,
-- the turret pivot (`pixelOffsetSouth` etc.) and its muzzle (`mgturret_muzzle_px`: along the barrel
-  and up the screen, the `GunMuzzleOffset` of the gun),
+- the turret pivot (`pixelOffsetSouth` etc.), where the turret is drawn. The gun fires from where it
+  really is instead (`CMUVehicleGunOrigin`): `MG_PIVOT` on the jeep, 16 voxels behind the middle, out
+  along the aim by `MG_MUZZLE`'s 21 px, the same from every camera rotation (the drawn offsets are per
+  screen direction, so a muzzle built from them drifts once the camera turns). In side views the shots
+  start a little under the barrel, where the art lifts the gun.
 - the crate sprite in the cargo slot,
 - the headlights, where the beams start.
 
 Regenerate it together with the sprites.
+
+## Diagonals (not in use)
+
+The jeep is 4-directional. `jeep_diagonals.py` keeps a prototype of the four diagonal views for a
+possible 8-direction jeep later; it writes `jeep_diagonals.png` (all eight views in turning order,
+per version) and nothing else. It turns the voxel model 45 degrees into a world grid and renders it
+with the cardinal `render()`, with its own camera close to E/W and the jeep squeezed across, and
+only outlines real edges. Before it could ship:
+- Art: 1-voxel details (hood ribs, seams, grille slats, the medical cross) break into stray lines
+  and ragged pixels; no windshield glass; the wheels read as dark lumps.
+- Generator: every layer, overlay split, mask, outline and offset for the diagonals, with
+  `DIRS` in Robust's 8-direction order (S, N, E, W, SE, SW, NE, NW). The per-view tables
+  (`ATTACHMENTS`, `*_OVER`, `"EW"`/`"SN"` tests) are letter strings tested by substring, which a
+  two-letter view would match wrongly: they need to become sets first. The crayon map's one face
+  bit can't tell the two side faces a diagonal shows apart, so its format and the C# decoder change.
+- Game: one 8-way direction pick shared by every jeep visual system and the shared crayon code,
+  diagonal entries in every per-direction YAML block, and two fixes outside the jeep: the engine's
+  `ClickableSystem` throws on a diagonal frame when a sprite has click bounds, and RMC's turret
+  pivot offsets only know four directions. The jeep steers to any angle, so a diagonal alignment
+  assist would let the diagonal frames show untilted.

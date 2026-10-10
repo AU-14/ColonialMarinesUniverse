@@ -1,12 +1,17 @@
 using System.Numerics;
 using System.Linq;
 using Content.Client._RMC14.Vehicle;
+using Content.Client._RMC14.Sprite;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.Buckle.Components;
+using Content.Shared.Mobs.Components;
 using Content.Shared.CMU14.Vehicle.Jeep;
 using Content.Shared.Vehicle.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Shared.Graphics.RSI;
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using DrawDepth = Content.Shared.DrawDepth.DrawDepth;
 
@@ -20,12 +25,18 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 {
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private CMUJeepSystem _jeep = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VehicleTurretSystem _turret = default!;
 
     private const float PixelsPerMeter = 32f;
+    // How far a wrecked hull sags on its wheels, in pixels.
+    private const float HullSag = 2f;
+    // Half the height of a vehicle frame, in pixels.
+    private const float FrameHalf = 48f;
     private const float StoppedSpeed = 0.05f;
     private const float TurningDegrees = 5f;
     // Both signal states blink on the same two-frame cycle; this keeps every lamp in step.
@@ -40,11 +51,36 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
     // This frame's body lift per vehicle, in the vehicle's frame, for its mounted turrets to follow.
     private readonly Dictionary<EntityUid, (Vector2 Lift, Direction Direction)> _lifts = new();
 
+    // Client-side glows each overlay's vehicle throws from its lamps: rear left, rear right, front
+    // left, front right. The tail lights glow dim red, brighter braking; the turn signals amber.
+    private static readonly EntProtoId GlowPrototype = "CMUJeepLampGlow";
+    private static readonly string[] GlowLamps = ["taillight_left", "taillight_right", "turn_signal_left", "turn_signal_right"];
+    private static readonly Color TailGlow = Color.FromHex("#FF2A1A");
+    private static readonly Color SignalGlow = Color.FromHex("#FFA62A");
+    private const float TailEnergy = 1f;
+    private const float BrakeEnergy = 1.8f;
+    private const float SignalEnergy = 1.5f;
+    // How far out from its lamp a glow sits, in tiles, so it lights the ground past the bumper rather
+    // than under the jeep.
+    private const float GlowReach = 0.35f;
+    private readonly Dictionary<EntityUid, EntityUid?[]> _glows = new();
+
     public override void Initialize()
     {
         UpdatesAfter.Add(typeof(VehicleExactCardinalDirectionSystem));
         UpdatesAfter.Add(typeof(VehicleTurretVisualSystem));
         UpdatesAfter.Add(typeof(VehicleWheelVisualizerSystem));
+        UpdatesAfter.Add(typeof(RMCSpriteSystem));
+        SubscribeLocalEvent<CMUVehicleOverlayVisualsComponent, ComponentShutdown>((uid, _, _) => RemoveGlows(uid));
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        foreach (var overlay in _glows.Keys.ToList())
+        {
+            RemoveGlows(overlay);
+        }
     }
 
     public override void FrameUpdate(float frameTime)
@@ -59,6 +95,8 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
 
             var vehicle = xform.ParentUid;
             var bob = CMUVehicleBob.Offset(vehicle, CompOrNull<GridVehicleMoverComponent>(vehicle), _timing.CurTime);
+            if (_jeep.IsHullWrecked(vehicle))
+                bob -= HullSag;
             var lift = (-direction.ToAngle()).RotateVec(new Vector2(0f, bob / PixelsPerMeter));
             _lifts[vehicle] = (lift, direction);
             ApplyDirection(ent, visuals, direction, bob);
@@ -69,6 +107,66 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         }
 
         BobTurrets();
+        UpdateMobDepths();
+    }
+
+    // How near a vehicle overlay mobs are sorted against it, and how far below a mob's centre its
+    // feet are, in tiles.
+    private const float MobDepthRange = 3.5f;
+    private const float MobFeet = 0.4f;
+
+    // Mobs near a vehicle, with the depth they had before it sorted them.
+    private readonly Dictionary<EntityUid, int> _mobDepths = new();
+    private readonly HashSet<EntityUid> _nearMobs = new();
+
+    /// <summary>
+    /// The vehicle is drawn in two depths around its crew (body under them, overlay over them), so
+    /// anyone else nearby goes wholly in front or wholly behind it: below its near edge on screen they
+    /// draw over the whole vehicle, otherwise under it. A mob's feet decide: standing against the
+    /// vehicle's near side, its centre is still above the edge. They get their own depth back once clear.
+    /// </summary>
+    private void UpdateMobDepths()
+    {
+        _nearMobs.Clear();
+        var eye = _eye.CurrentEye.Rotation;
+        var overlays = EntityQueryEnumerator<CMUVehicleOverlayVisualsComponent, TransformComponent>();
+        while (overlays.MoveNext(out _, out var visuals, out var xform))
+        {
+            var centre = _transform.GetMapCoordinates(xform);
+            var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(_transform.GetWorldRotation(xform) + eye);
+            visuals.DirectionOffsets.TryGetValue(direction, out var slide);
+            // The overlay's states are slid so their frame ends at the vehicle's near edge.
+            var nearEdge = (FrameHalf - slide.Y) / PixelsPerMeter;
+            foreach (var mob in _lookup.GetEntitiesInRange<MobStateComponent>(centre, MobDepthRange))
+            {
+                if (!TryComp(mob, out SpriteComponent? sprite))
+                    continue;
+
+                // Riders are the crew's depth, which RMC's buckle keeps.
+                if (TryComp(mob, out BuckleComponent? buckle) && buckle.Buckled)
+                {
+                    _mobDepths.Remove(mob);
+                    continue;
+                }
+
+                var below = -eye.RotateVec(_transform.GetWorldPosition(mob.Owner) - centre.Position).Y;
+                var depth = below + MobFeet > nearEdge ? (int) DrawDepth.OverMobs : (int) DrawDepth.BelowMobs;
+                _mobDepths.TryAdd(mob, sprite.DrawDepth);
+                _nearMobs.Add(mob);
+                if (sprite.DrawDepth != depth)
+                    _sprite.SetDrawDepth((mob, sprite), depth);
+            }
+        }
+
+        foreach (var (mob, depth) in _mobDepths)
+        {
+            if (_nearMobs.Contains(mob))
+                continue;
+
+            _mobDepths.Remove(mob);
+            if (TryComp(mob, out SpriteComponent? sprite))
+                _sprite.SetDrawDepth((mob, sprite), depth);
+        }
     }
 
     /// <summary>
@@ -266,6 +364,65 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         {
             if (_sprite.LayerMapTryGet(ent.AsNullable(), key, out var index, false))
                 _sprite.LayerSetAnimationTime(ent.AsNullable(), index, blink);
+        }
+
+        // The signal states show their lit frame for the first half of each blink.
+        var blinkOn = blink < SignalPeriod / 2;
+        UpdateGlows(ent.Owner, vehicle, lightsOn, braking, left && blinkOn, right && blinkOn);
+    }
+
+    /// <summary>
+    /// Lights the ground around the lamps that are lit: a dim red round each working tail light (with
+    /// the lights on, brighter while braking), amber round a blinking turn signal, front and rear.
+    /// </summary>
+    private void UpdateGlows(EntityUid overlay, EntityUid vehicle, bool lightsOn, bool braking, bool leftBlink, bool rightBlink)
+    {
+        if (!_glows.TryGetValue(overlay, out var glows))
+            _glows[overlay] = glows = new EntityUid?[GlowLamps.Length];
+
+        for (var i = 0; i < GlowLamps.Length; i++)
+        {
+            var lamp = GlowLamps[i];
+            var blinking = lamp.EndsWith("left") ? leftBlink : rightBlink;
+            var works = _jeep.LampWorks(vehicle, lamp);
+            Color? colour = null;
+            var energy = 0f;
+            if (works && blinking)
+                (colour, energy) = (SignalGlow, SignalEnergy);
+            else if (works && lamp.StartsWith("taillight") && braking)
+                (colour, energy) = (TailGlow, BrakeEnergy);
+            else if (works && lamp.StartsWith("taillight") && lightsOn)
+                (colour, energy) = (TailGlow, TailEnergy);
+
+            if (glows[i] is not { } glow || TerminatingOrDeleted(glow))
+            {
+                if (colour == null || !_jeep.TryGetLamp(vehicle, lamp, out var data))
+                    continue;
+
+                // The jeep faces -y in its own space: tail lights reach back (+y), signals forward.
+                var reach = new Vector2(0f, lamp.StartsWith("taillight") ? GlowReach : -GlowReach);
+                glow = Spawn(GlowPrototype, new EntityCoordinates(vehicle, data.Offset + reach));
+                glows[i] = glow;
+            }
+
+            _lights.SetEnabled(glow, colour != null);
+            if (colour is { } c)
+            {
+                _lights.SetColor(glow, c);
+                _lights.SetEnergy(glow, energy);
+            }
+        }
+    }
+
+    private void RemoveGlows(EntityUid overlay)
+    {
+        if (!_glows.Remove(overlay, out var glows))
+            return;
+
+        foreach (var glow in glows)
+        {
+            if (glow is { } uid && !TerminatingOrDeleted(uid))
+                QueueDel(uid);
         }
     }
 

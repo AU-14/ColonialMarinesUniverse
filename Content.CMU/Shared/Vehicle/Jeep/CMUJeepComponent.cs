@@ -64,6 +64,12 @@ public sealed partial class CMUJeepComponent : Component
     /// <summary>
     /// Engine integrity fractions below which it smokes lightly and heavily.
     /// </summary>
+    /// <summary>
+    /// Share of a crash's hull damage that also wears the engine.
+    /// </summary>
+    [DataField]
+    public float EngineCrashShare = 0.2f;
+
     [DataField]
     public float EngineSmokeFraction = 0.5f;
 

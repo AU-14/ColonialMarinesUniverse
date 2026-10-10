@@ -1554,6 +1554,9 @@ HOOD_SHOULDERS = (-9, 8)
 # the headlights or tail lights; this much depth puts them ahead of everything else. The lamps at
 # that end (fender markers, tail lamps) stay in front of the tyres, smashed or whole.
 NEAR_WHEEL_PRIORITY = 1000.0
+# Facing south the front tyres' top rows would land on the fenders and cut their front corners; the
+# fenders stay over them, square to the front as the side views show them.
+FENDER_OVER_TYRE_VIEWS = {"S"}
 LAMP_MATERIALS = {"amber", "red", "lit", "lit_red", "lit_amber", "lit_brake", "char"}
 LAMP_PARTS = set(LAMPS) | {"lights"}
 # Ties between faces at the same depth go to the higher voxel: in the flattened views two heights
@@ -1703,6 +1706,7 @@ def render(model, view, parts=None):
     buf = Buffer()
     glass = Buffer()
     buf.view = glass.view = view
+    fender_first = view in FENDER_OVER_TYRE_VIEWS
     for key, (mat, part) in model.vox.items():
         if parts is not None and part not in parts:
             continue
@@ -1732,6 +1736,10 @@ def render(model, view, parts=None):
         for xi in range(x0, x1 + 1):
             for face, row, d in faces + [("front", -(near + 1), depth)]:
                 cur = target.get((xi, row))
+                if fender_first and cur is not None and {cur[2], part} == {"fender", "wheel"}:
+                    if part == "fender":
+                        target[(xi, row)] = (d, mat, part, face, key)
+                    continue
                 if cur is None or d < cur[0]:
                     target[(xi, row)] = (d, mat, part, face, key)
     return buf, glass
@@ -2852,7 +2860,8 @@ def beam_image(kind):
             angle = math.degrees(math.atan2(abs(dx), dy + BEAM_APEX_BACK))
             across = 1 - smoothstep(b["inner"], b["outer"], angle)
             along = (1 - d / length) ** 1.6
-            a = round(b["peak"] * across * along / 6) * 6
+            # Every alpha step is kept: coarser steps show as rings in the dark.
+            a = round(b["peak"] * across * along)
             if a > 0:
                 px[x, y] = BEAM_COLOUR + (a,)
     return img

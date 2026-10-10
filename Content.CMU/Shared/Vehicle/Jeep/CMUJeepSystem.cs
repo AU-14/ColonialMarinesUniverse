@@ -64,6 +64,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
         SubscribeLocalEvent<CMUJeepComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<CMUJeepComponent, DamageModifyEvent>(OnDamageModify, before: [typeof(HardpointSystem)]);
         SubscribeLocalEvent<CMUJeepComponent, VehicleCanRunEvent>(OnCanRun);
+        SubscribeLocalEvent<CMUJeepComponent, CMUVehicleCrashedEvent>(OnCrashed);
         SubscribeLocalEvent<CMUJeepComponent, PreventCollideEvent>(OnPreventCollide, after: [typeof(RequireProjectileTargetSystem)]);
         SubscribeLocalEvent<CMUJeepComponent, EntInsertedIntoContainerMessage>(OnSlotsChanged);
         SubscribeLocalEvent<CMUJeepComponent, EntRemovedFromContainerMessage>(OnSlotsChanged);
@@ -102,10 +103,32 @@ public sealed partial class CMUJeepSystem : EntitySystem
         RefreshParts(ent);
     }
 
+    /// <summary>
+    /// A dead engine won't run, and neither will a jeep whose hull is wrecked.
+    /// </summary>
     private void OnCanRun(Entity<CMUJeepComponent> ent, ref VehicleCanRunEvent args)
     {
-        if (ent.Comp.EngineIntegrity <= 0f)
+        if (ent.Comp.EngineIntegrity <= 0f || IsHullWrecked(ent))
             args.CanRun = false;
+    }
+
+    public bool IsHullWrecked(EntityUid vehicle)
+    {
+        return TryComp(vehicle, out HardpointIntegrityComponent? hull) &&
+               hull.MaxIntegrity > 0f &&
+               hull.Integrity <= 0f;
+    }
+
+    /// <summary>
+    /// A crash shakes the engine too, by a share of what it does to the hull.
+    /// </summary>
+    private void OnCrashed(Entity<CMUJeepComponent> ent, ref CMUVehicleCrashedEvent args)
+    {
+        if (_net.IsClient || ent.Comp.EngineIntegrity <= 0f)
+            return;
+
+        ent.Comp.EngineIntegrity = MathF.Max(0f, ent.Comp.EngineIntegrity - args.HullDamage * ent.Comp.EngineCrashShare);
+        Dirty(ent);
     }
 
     /// <summary>

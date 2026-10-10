@@ -173,13 +173,14 @@
   parent: BaseItem
   id: CMUJeepKey
   name: jeep key
-  description: An ignition key for a military jeep. Any jeep takes it; without it in the ignition the engine won't start.
+  description: An ignition key for a military jeep, cut for one jeep alone; without it in the ignition the engine won't start.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Misc/vehicle_key.rsi
     state: key
   - type: Item
     size: Tiny
+  - type: CMUVehicleKey
   - type: Tag
     tags:
     - CMUJeepKey
@@ -392,17 +393,12 @@
   # from the pivot whichever way it points, and 21 px out along the barrel (jeep_pixel_art.py
   # MG_MUZZLE). The lift is a directional offset that doesn't turn; the length is the muzzle offset,
   # which turns with the barrel. Shots and the flash both start there.
-  - type: GunMuzzleOffset
-    useDirectionalOffsets: true
-    rotateDirectionalOffsets: false
-    offset: "0,0.0625"
-    offsetNorth: "0,0.0625"
-    offsetEast: "0,0.0625"
-    offsetSouth: "0,0.0625"
-    offsetWest: "0,0.0625"
-    muzzleOffset: "0,-0.65625"
-    useAimDirection: false
-    useContainerOwner: false
+  # Shots and the muzzle flash start at the gun's pivot on the jeep (the art's MG_PIVOT, 16 voxels
+  # behind the middle) out along the aim by the barrel (MG_MUZZLE, 21 px), the same from every camera
+  # rotation.
+  - type: CMUVehicleGunOrigin
+    pivot: "0,0.5"
+    barrel: 0.65625
 
 - type: entity
   id: CMUVehicleJeepBase
@@ -684,7 +680,8 @@
     pushCooldown: 2
     xenoBlockMinimumSize: Xeno
     xenoPushMinimumSize: Immobile
-    # Crashes as hard as RMC's van, a little gentler on the hull.
+    # Crashes as hard as RMC's van, a little gentler on the hull: CMUVehicleCrash below scales the
+    # hull damage with impact speed, from a third of it at wallSmashMinSpeed to all of it at maxSpeed.
     canSmashWalls: true
     wallSmashMinSpeed: 5
     wallSmashWheelDamage: 0.8
@@ -699,6 +696,7 @@
     mobCrashImmobileMinSpeed: 5
     xenoMobCrashImmobileDuration: 8
     xenoMobCrashImmobileMinSpeed: 5
+  - type: CMUVehicleCrash
   - type: VehicleOvercharge
     speedMultiplier: 1.55
     duration: 3
@@ -1865,6 +1863,21 @@
     rotation: -90
     buckleOnInteractHand: false
   - type: CMOperatingTable
+
+# The dim glow a lit tail light, brake light or turn signal throws on the ground around it. The
+# client spawns one on each lamp and switches, colours and blinks it with the lamp's lit state.
+- type: entity
+  id: CMUJeepLampGlow
+  categories: [ HideSpawnMenu ]
+  name: lamp glow
+  components:
+  - type: PointLight
+    enabled: false
+    radius: 2
+    energy: 1
+    softness: 1
+    color: "#FF2A1A"
+    castShadows: false
 
 # The burning engine's flickering glow, spawned on a wrecked jeep's engine bay until it goes up.
 - type: entity

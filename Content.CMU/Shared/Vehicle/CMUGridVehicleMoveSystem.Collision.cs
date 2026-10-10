@@ -1,4 +1,5 @@
 using System;
+using Content.Shared.CMU14.Vehicle.Jeep;
 using Content.Shared._RMC14.Crate;
 using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Vehicle;
@@ -33,6 +34,45 @@ public sealed partial class GridVehicleMoverSystem
         return false;
     }
 
+    /// <summary>
+    /// The share of full crash damage a vehicle takes at its current speed, if it scales its crashes.
+    /// </summary>
+    private float CMUCrashScale(EntityUid vehicle, GridVehicleMoverComponent mover)
+    {
+        if (!TryComp(vehicle, out CMUVehicleCrashComponent? crash))
+            return 1f;
+
+        var minSpeed = MathF.Max(mover.CollisionDamageMinSpeed, mover.WallSmashMinSpeed);
+        return CMUVehicleCrashComponent.Scale(MathF.Abs(mover.CurrentSpeed), minSpeed, mover.MaxSpeed, crash.MinDamageFraction);
+    }
+
+    private void CMUScaleCrash(EntityUid vehicle, GridVehicleMoverComponent mover, ref float wheelDamage, ref float hullDamage)
+    {
+        var scale = CMUCrashScale(vehicle, mover);
+        wheelDamage *= scale;
+        hullDamage *= scale;
+    }
+
+    /// <summary>
+    /// A crash's hull damage: only the wheels for a vehicle whose crashes spare its guns.
+    /// </summary>
+    private void CMUDamageCrashHull(EntityUid vehicle, float hullDamage)
+    {
+        if (TryComp(vehicle, out CMUVehicleCrashComponent? crash) && crash.WheelsOnly)
+            _hardpoints.CMUDamageHullWheels(vehicle, hullDamage);
+        else
+            _hardpoints.DamageVehicleHull(vehicle, hullDamage);
+    }
+
+    private void CMUOnCrashed(EntityUid vehicle, float hullDamage)
+    {
+        if (hullDamage <= 0f)
+            return;
+
+        var ev = new CMUVehicleCrashedEvent(hullDamage);
+        RaiseLocalEvent(vehicle, ref ev);
+    }
+
     private void CMUApplyVehicleCollision(
         EntityUid vehicle,
         GridVehicleMoverComponent mover,
@@ -52,13 +92,15 @@ public sealed partial class GridVehicleMoverSystem
         var multiplier = HasPlowInstalled(vehicle) ? mover.WallSmashPlowDamageMultiplier : 1f;
         // Reuse the impact contact guard for both sides. Repeated movement probes
         // must not transfer another hit to the other hull or its operator.
+        // The other vehicle takes the hit as hard as this one does.
+        var scale = CMUCrashScale(vehicle, mover);
         if (ApplyCollisionSelfDamage(vehicle, mover, target,
                 mover.WallSmashWheelDamage * multiplier,
                 mover.WallSmashHullDamage * multiplier) && mover.WallSmashHullDamage > 0f)
         {
             var damage = new DamageSpecifier
             {
-                DamageDict = { [CollisionDamageType] = (double) mover.WallSmashHullDamage },
+                DamageDict = { [CollisionDamageType] = (double) (mover.WallSmashHullDamage * scale) },
             };
             // Keep normal damage routing so armor, hardpoints and the operator
             // receive a vehicle impact, rather than raw wall-destruction damage.

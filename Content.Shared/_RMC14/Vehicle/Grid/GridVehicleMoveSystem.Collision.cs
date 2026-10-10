@@ -794,7 +794,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var selfDamageMult = HasPlowInstalled(vehicle) ? mover.WallSmashPlowDamageMultiplier : 1f;
         var hull = mover.MobCollisionHullDamage * selfDamageMult;
         if (hull > 0f)
-            _hardpoints.DamageVehicleHull(vehicle, hull);
+            CMUDamageCrashHull(vehicle, hull); // CMU14
     }
 
     /// <summary>
@@ -840,10 +840,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             !_collisionDamageContacts.TryStart(vehicle, target, vehicleBounds, targetBounds))
             return false;
 
+        CMUScaleCrash(vehicle, mover, ref wheelDamage, ref hullDamage);
         if (wheelDamage > 0f)
             _wheels.DamageWheels(vehicle, wheelDamage);
         if (hullDamage > 0f)
-            _hardpoints.DamageVehicleHull(vehicle, hullDamage);
+            CMUDamageCrashHull(vehicle, hullDamage);
+        CMUOnCrashed(vehicle, hullDamage);
         return true;
     }
 
