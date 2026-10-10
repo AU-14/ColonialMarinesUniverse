@@ -200,6 +200,7 @@
   description: A huge chunk of reinforced metal used to separate rooms.
   abstract: true
   components:
+  - type: VehicleReinforcedObstacle
   - type: Sprite
     sprite: _RMC14/Structures/Walls/rwall.rsi
   - type: Icon

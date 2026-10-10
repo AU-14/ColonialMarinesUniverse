@@ -42,9 +42,20 @@ public sealed partial class HumanoidProfileEditor
     {
         foreach (var (gamemode, jobId, selector) in _jobPriorities)
         {
-            var priority = Profile?.GetJobPriorityForGamemode(gamemode, jobId) ?? JobPriority.Never;
+            // CMU14: faction gameplay fixes.
+            var priority = gamemode == GamemodeForceOnForce && _prototypeManager.TryIndex<JobPrototype>(jobId, out var job)
+                ? Profile?.GetForceOnForceJobPriority(job, _prototypeManager) ?? JobPriority.Never
+                : Profile?.GetJobPriorityForGamemode(gamemode, jobId) ?? JobPriority.Never;
             selector.Select((int) priority);
         }
+    // CMU14: faction gameplay fixes.
+    }
+
+    private void SetJobPriority(string gamemode, string jobId, JobPriority priority)
+    {
+        Profile = gamemode == GamemodeForceOnForce && _prototypeManager.TryIndex<JobPrototype>(jobId, out var job)
+            ? Profile?.WithForceOnForceJobPriority(job, priority, _prototypeManager)
+            : Profile?.WithGamemodeJobPriority(gamemode, jobId, priority);
     }
 
     public void RefreshLoadouts()
@@ -225,7 +236,8 @@ public sealed partial class HumanoidProfileEditor
         selector.OnSelected += selectedPriority =>
         {
             var selectedJobPriority = (JobPriority) selectedPriority;
-            Profile = Profile?.WithGamemodeJobPriority(gamemode, job.ID, selectedJobPriority);
+            // CMU14: faction gameplay fixes.
+            SetJobPriority(gamemode, job.ID, selectedJobPriority);
 
             foreach (var (otherGamemode, jobId, other) in _jobPriorities)
             {
@@ -242,7 +254,8 @@ public sealed partial class HumanoidProfileEditor
                     continue;
 
                 other.Select((int) JobPriority.Medium);
-                Profile = Profile?.WithGamemodeJobPriority(gamemode, jobId, JobPriority.Medium);
+                // CMU14: faction gameplay fixes.
+                SetJobPriority(gamemode, jobId, JobPriority.Medium);
             }
 
             ReloadPreview();
@@ -306,6 +319,8 @@ public sealed partial class HumanoidProfileEditor
 
     private IEnumerable<BoxContainer> GetGamemodeJobLists()
     {
+        // CMU14: shared FoF role priorities.
+        yield return FoFJobList;
         yield return InsurgencyGovernmentJobList;
         yield return InsurgencyInsurgentJobList;
         yield return InsurgencyCivilianJobList;
@@ -374,6 +389,14 @@ public sealed partial class HumanoidProfileEditor
         JobPrototype job,
         string departmentName)
     {
+        // CMU14: shared FoF role priorities.
+        if (department.Faction == "govfor")
+        {
+            var (key, title) = GetMilitaryJobSegment(job);
+            // CMU14: faction gameplay fixes.
+            yield return (FoFJobList, GamemodeForceOnForce, $"fof-{key}", title);
+        }
+
         if (department.Faction == "govfor")
         {
             var (segmentKey, segmentTitle) = GetMilitaryJobSegment(job);
@@ -425,9 +448,11 @@ public sealed partial class HumanoidProfileEditor
 
         if (!IsRoundStartThreatAssignmentJob(job))
             yield break;
-
-        yield return (ColonyThreatJobList, GamemodeColonyFall, "colony-threat", "Threat Jobs");
-        yield return (DistressThreatJobList, GamemodeDistressSignal, "distress-threat", "Threat Jobs");
+        // CMU14 hardcode Localization Begin: fix hardcode localization for forks    
+        var threatJobsTitle = Loc.GetString("humanoid-profile-editor-threat-jobs-section");
+        yield return (ColonyThreatJobList, GamemodeColonyFall, "colony-threat", threatJobsTitle);
+        yield return (DistressThreatJobList, GamemodeDistressSignal, "distress-threat", threatJobsTitle);
+        // CMU14 hardcode Localization End 
     }
 
     private static int CompareDepartmentsForCharacterSetup(DepartmentPrototype? x, DepartmentPrototype? y)
@@ -479,6 +504,8 @@ public sealed partial class HumanoidProfileEditor
         var id = job.ID;
         var name = job.LocalizedName;
 
+        if (job.RoundRole is "DropshipPilot" or "DropshipCrewChief") // CMU14: flightcrew section
+            return ("flightcrew", Loc.GetString("cmu-humanoid-profile-editor-segment-flightcrew"));
         if (id is "AU14JobGOVFORVehicleCommander")
             return ("flight", Loc.GetString("humanoid-profile-editor-segment-flight"));
         if (ContainsAny(id, name, "MilitaryDoctor"))
@@ -523,10 +550,11 @@ public sealed partial class HumanoidProfileEditor
         {
             "command" => 0,
             "officer" => 1,
-            "flight" => 2,
-            "support" => 3,
-            "leader" => 4,
-            _ => 5,
+            "flightcrew" => 2, // CMU14: flightcrew section
+            "flight" => 3,
+            "support" => 4,
+            "leader" => 5,
+            _ => 6,
         };
     }
 
@@ -713,26 +741,32 @@ public sealed partial class HumanoidProfileEditor
     {
         if (platoon.ChevronOverrides != null)
         {
-            foreach (var (overrideJob, overrideChevrons) in platoon.ChevronOverrides)
-            {
-                if (!JobInheritsFrom(job.ID, overrideJob.Id))
-                    continue;
+            // CMU14: prefer the override for the closest ancestor job, not the first match
+            var best = platoon.ChevronOverrides
+                .Select(pair => (Chevrons: pair.Value, Distance: InheritanceDistance(job.ID, pair.Key.Id)))
+                .Where(pair => pair.Distance != null)
+                .OrderBy(pair => pair.Distance)
+                .FirstOrDefault();
 
-                return overrideChevrons.ToDictionary(pair => pair.Key.Id, pair => pair.Value);
-            }
+            if (best.Chevrons != null)
+                return best.Chevrons.ToDictionary(pair => pair.Key.Id, pair => pair.Value);
         }
 
         return job.Chevrons;
     }
 
-    private bool JobInheritsFrom(string jobId, string ancestorId)
+    // CMU14 method
+    private int? InheritanceDistance(string jobId, string ancestorId)
     {
         if (jobId == ancestorId)
-            return true;
+            return 0;
         if (!_prototypeManager.TryIndex<JobPrototype>(jobId, out var job) || job.Parents == null)
-            return false;
+            return null;
 
-        return job.Parents.Any(parent => JobInheritsFrom(parent, ancestorId));
+        return job.Parents
+            .Select(parent => InheritanceDistance(parent, ancestorId))
+            .Where(distance => distance != null)
+            .Min() + 1;
     }
 
     private (bool Unlocked, string? RequirementsText) EvaluateChevronRequirements(

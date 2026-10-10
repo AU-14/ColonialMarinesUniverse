@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.Station.Components;
 
 namespace Content.Shared._RMC14.CrewManifest;
@@ -20,7 +21,7 @@ public abstract class SharedRMCCrewManifestSystem : EntitySystem
         var stations = EntityQueryEnumerator<StationMemberComponent>();
         while (stations.MoveNext(out var stationId, out var stationComp))
         {
-            if (!HasComp<AlmayerComponent>(stationId))
+            if (!HasComp<WarshipComponent>(stationId)) // CMU14
                 continue;
 
             OpenCrewManifest(args.User, stationComp.Station);

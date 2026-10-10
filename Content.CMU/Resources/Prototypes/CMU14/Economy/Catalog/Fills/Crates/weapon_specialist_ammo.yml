@@ -10,6 +10,27 @@
 
 - type: entity
   parent: RMCCrateAmmo
+  id: CMUCrateMagazineL144SH
+  name: L144 LRR Squash-Head Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineSniperL144SH
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateMagazineL144
+  name: L144 LRR Squash-Head Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineSniperL144
+      amount: 5
+
+
+- type: entity
+  parent: RMCCrateAmmo
   id: AU14CrateMagazineType88
   name: Type 88 DMR Magazine Crate (x5)
   components:

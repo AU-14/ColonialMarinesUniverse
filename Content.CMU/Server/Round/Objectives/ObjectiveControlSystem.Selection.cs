@@ -209,6 +209,32 @@ public sealed partial class ObjectiveControlSystem
         return true;
     }
 
+    /// <summary>Admin mid-round activation: all inactive hotspots, or a specific objective prototype.</summary>
+    public int ActivateInactiveObjectives(string? protoId)
+    {
+        if (_planetMapId == MapId.Nullspace)
+            return 0;
+
+        var planetMaps = _zLevels.GetAllNetworkMapIds(_planetMapId);
+        var activated = 0;
+        foreach (var (uid, comp) in _allObjectives)
+        {
+            if (comp.Active || !Exists(uid) || !planetMaps.Contains(Transform(uid).MapID))
+                continue;
+
+            if (protoId != null && MetaData(uid).EntityPrototype?.ID != protoId)
+                continue;
+
+            if (protoId == null && !HasComp<HotspotObjectiveComponent>(uid))
+                continue;
+
+            if (ActivateObjective(uid, comp))
+                activated++;
+        }
+
+        return activated;
+    }
+
     private void TryLateActivateObjective(EntityUid uid)
     {
         if (!Exists(uid) || TerminatingOrDeleted(uid))

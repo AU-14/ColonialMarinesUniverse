@@ -23,4 +23,7 @@ public sealed partial class TacticalMapLinesComponent : Component
 
     [DataField, AutoNetworkedField] // CMU14
     public List<TacticalMapLine> WeYuLines = new();
+
+    [DataField, AutoNetworkedField] // CMU14: lines every viewer gets, ghosts included
+    public List<TacticalMapLine> SharedLines = new();
 }

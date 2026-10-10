@@ -5,14 +5,14 @@
   name: au14-job-name-govforlogistics
   description: au14-job-description-govforlogistics
   icon: "AU14JobIconGovLO"
-  spawnMenuRoleName: Logistics Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-logistics-officer
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFOROfficerLogistics
   dummyStartingGear: AU14GearGOVFOROfficerLogisticsDummy
   playTimeTracker: AU14JobGOVFOROfficerLogistics
   requireAdminNotify: true
   canBeAntag: false
-  displayWeight: 6
+  displayWeight: 7
   accessGroups:
   - AU14GovforCommand
   - AU14GovforAuxTech
@@ -26,6 +26,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: OPS
     commandElement: true
@@ -56,6 +57,9 @@
     #   prefix: au14-job-prefix-govforlogisticsCMBCIU
   requirements:
   - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 25
@@ -70,6 +74,8 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -104,6 +110,8 @@
   - aulegacygroupcommand
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+  useLoadoutOfJob: AU14JobGOVFOROfficerLogistics
+
 - type: startingGear
   id: AU14GearGOVFOROfficerLogistics
   equipment:
@@ -202,7 +210,12 @@
   parent: AU14JobOfficerLogisticsBase
   id: AU14JobGOVFOROfficerLogisticsUPP
   roundForce: UPP
-  requirements: []
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   name: Logistics Officer
   spawnMenuRoleName: Logistics Officer (UPP)
   ranks:
@@ -216,7 +229,12 @@
   parent: AU14JobOfficerLogisticsBase
   id: AU14JobGOVFOROfficerLogisticsWYPMC
   roundForce: WYPMC
-  requirements: []
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   name: PMC Logistics Adjutant
   spawnMenuRoleName: Logistics Officer (WYPMC)
   ranks:

@@ -50,7 +50,7 @@ public sealed partial class AUFusionCellExpirySystem : EntitySystem
             {
                 if (TryComp<RMCFusionReactorComponent>(container.Owner, out _))
                 {
-                    _popup.PopupEntity("The fusion cell sputters and dies — it has expired.", container.Owner, PopupType.MediumCaution);
+                    _popup.PopupEntity(Loc.GetString("cmu-fusion-cell-expired"), container.Owner, PopupType.MediumCaution);
                     _container.Remove(uid, container, destination: Transform(container.Owner).Coordinates);
                 }
             }

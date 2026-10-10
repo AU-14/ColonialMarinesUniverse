@@ -54,6 +54,7 @@
   id: SquadGovforIntel
   name: Auxiliary
   components:
+  - type: CMUAuxiliarySquad
   - type: AU14SquadCallsign
     word: LONGBOW
   - type: SquadTeam

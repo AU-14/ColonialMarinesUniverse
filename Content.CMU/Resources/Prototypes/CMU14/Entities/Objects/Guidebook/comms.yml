@@ -1,47 +1,71 @@
 - type: guideEntry
   parent: RMC
   id: AU14Comms
-  name: Communications Reference
+  name: cmu-guide-entry-comms
   text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsIndex.xml"
   priority: 2
   children:
   - AU14CommsFirstNet
   - AU14CommsANPRC
+  - AU14CommsANPRCGuided
+  - AU14CommsANPRCExpert
   - AU14CommsHeadsets
   - AU14CommsVoiceProcedure
   - AU14CommsQuickRef
+  - CMUGuideTowers
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideTowers
+  name: cmu-guide-entry-towers
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Comms/CMUTowers.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsFirstNet
-  name: Getting On The Net
+  name: cmu-guide-entry-comms-network
   priority: 0
   text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsFirstNet.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsANPRC
-  name: "AN/PRC-117G Radio"
+  name: cmu-guide-entry-comms-anprc
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsANPRC.xml"
 
 - type: guideEntry
   parent: RMC
+  id: AU14CommsANPRCGuided
+  name: cmu-guide-entry-comms-anprc-guided
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsANPRCGuided.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14CommsANPRCExpert
+  name: cmu-guide-entry-comms-anprc-expert
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsANPRCExpert.xml"
+
+- type: guideEntry
+  parent: RMC
   id: AU14CommsHeadsets
-  name: Field Headsets
+  name: cmu-guide-entry-comms-headsets
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsHeadsets.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsVoiceProcedure
-  name: Voice Procedure
+  name: cmu-guide-entry-comms-voice
   priority: 3
   text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsVoiceProcedure.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsQuickRef
-  name: Comms Quick Reference
+  name: cmu-guide-entry-comms-quick-reference
   priority: 4
   text: "/ServerInfo/Guidebook/CMU14/Comms/AU14CommsQuickRef.xml"

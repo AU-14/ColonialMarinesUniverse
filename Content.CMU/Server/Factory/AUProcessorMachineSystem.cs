@@ -120,7 +120,10 @@ public sealed partial class AUProcessorMachineSystem : EntitySystem
         comp.TimeRemaining = 0f;
         comp.PendingItem = null;
 
-        _popup.PopupEntity($"The {Name(uid)} belches flame and seizes up! It needs repairs.", uid, PopupType.LargeCaution);
+        _popup.PopupEntity(
+            Loc.GetString("cmu-processor-machine-broken", ("machine", Name(uid))),
+            uid,
+            PopupType.LargeCaution);
     }
 
     private void OnDamageChanged(EntityUid uid, AUProcessorMachineComponent comp, DamageChangedEvent args)
@@ -132,6 +135,9 @@ public sealed partial class AUProcessorMachineSystem : EntitySystem
             return;
 
         comp.IsBroken = false;
-        _popup.PopupEntity($"The {Name(uid)} hums back to life.", uid, PopupType.Medium);
+        _popup.PopupEntity(
+            Loc.GetString("cmu-processor-machine-repaired", ("machine", Name(uid))),
+            uid,
+            PopupType.Medium);
     }
 }

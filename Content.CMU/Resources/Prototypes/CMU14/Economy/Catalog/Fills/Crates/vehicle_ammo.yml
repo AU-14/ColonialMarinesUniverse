@@ -138,3 +138,8 @@
       amount: 1
     - id: CMUAmmoBoxGrenadeLauncherHIAM
       amount: 1
+- type: entity
+  parent: RMCCrateVehicleAmmoGrenadeLauncher
+  id: CMUCrateBlackfootM866Ammo
+  name: M866 Blackfoot door gun ammunition crate (x5)
+  description: Five high-explosive grenade magazines for the Blackfoot's M866 automatic grenade launcher.

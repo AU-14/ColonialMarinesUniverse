@@ -19,6 +19,10 @@
   - type: WirelessNetworkConnection
     range: 200
   - type: DeviceList
+  - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+    idleLoad: 0
+    activeLoad: 100
+    channel: Environment
   - type: DeviceNetworkRequiresPower
   - type: DeviceLinkSource
     ports:

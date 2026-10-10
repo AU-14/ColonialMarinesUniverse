@@ -32,6 +32,7 @@
           True: { visible: false }
           False: { visible: true }
   - type: ApcPowerReceiver
+    powerLoad: 4 # CMU14
   - type: RMCPowerReceiver
     idleLoad: 2
     activeLoad: 4

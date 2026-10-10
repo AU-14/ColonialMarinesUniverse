@@ -6,17 +6,17 @@
     edges:
     - to: pipe
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     - to: tagger
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     - to: signaller
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
       - material: Cable
@@ -24,50 +24,50 @@
         doAfter: 1
     - to: trunk
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     # DisposalRouter
     - to: router
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     - to: routerflipped
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     # DisposalJunction
     - to: junction
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     - to: junctionflipped
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     - to: yJunction
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     - to: xJunction
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     - to: bend
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
     # DisposalSignalRouter
     - to: signal_router
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
       - material: Cable
@@ -75,7 +75,7 @@
         doAfter: 1
     - to: signal_router_flipped
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
       - material: Cable
@@ -87,7 +87,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
       - !type:DestroyEntity
       steps:
       - tool: Welding
@@ -98,7 +98,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -110,7 +110,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -122,7 +122,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:SpawnPrototype
         prototype: CableApcStack1 # I have no idea why this does not work
@@ -136,7 +136,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -149,7 +149,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -161,7 +161,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -174,7 +174,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -190,7 +190,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -206,7 +206,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -222,7 +222,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -239,7 +239,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DestroyEntity
       steps:
@@ -252,7 +252,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:SpawnPrototype
         prototype: CableApcStack1
@@ -266,7 +266,7 @@
     - to: start
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:SpawnPrototype
         prototype: CableApcStack1

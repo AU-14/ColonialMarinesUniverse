@@ -1,0 +1,17 @@
+author: maertayn
+category: CMU
+changes:
+- message: Govfor announcement to the colony when they are evacuating (round is ending)
+  type: Add
+- message: Add full threat lists to every planet that supports their spawns
+  type: Tweak
+- message: Differentiate repeating objectives with a blue hue instead of showing a
+    perpetual uncompleted
+  type: Tweak
+- message: Civilian vehicles should now have wheels attached by default
+  type: Fix
+- message: Kill objectives not working for post-round start threats (threat vote &
+    late joins)
+  type: Fix
+time: '2026-08-24T02:23:18.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1862

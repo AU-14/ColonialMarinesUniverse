@@ -15,14 +15,14 @@ namespace Content.Server.CMU14.SavedBuilds;
 public sealed class SaveBuildCommand : IConsoleCommand
 {
     public string Command => "savebuild";
-    public string Description => "Save the player-built entities in a box around you to a shareable file.";
-    public string Help => "savebuild <name> [radius 0-5]";
+    public string Description => Loc.GetString("cmu-cmd-savebuild-desc");
+    public string Help => Loc.GetString("cmu-cmd-savebuild-help");
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (shell.Player is not { } player)
         {
-            shell.WriteError("This command can only be run by a player.");
+            shell.WriteError(Loc.GetString("cmu-cmd-savebuild-player-only"));
             return;
         }
 
@@ -35,7 +35,7 @@ public sealed class SaveBuildCommand : IConsoleCommand
         var radius = 2;
         if (args.Length >= 2 && !int.TryParse(args[1], out radius))
         {
-            shell.WriteError("Radius must be a number.");
+            shell.WriteError(Loc.GetString("cmu-cmd-savebuild-radius-number"));
             return;
         }
 

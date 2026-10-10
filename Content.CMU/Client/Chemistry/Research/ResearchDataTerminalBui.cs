@@ -26,6 +26,7 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
     {
         base.Open();
         _window = this.CreateWindow<ResearchDataTerminalWindow>();
+        _window.ReduceCooldown.OnPressed += _ => SendPredictedMessage(new CMUResearchReduceCooldownBuiMsg());
         _window.Reprint.OnPressed += _ => SendPredictedMessage(PrintLast);
         _window.Upgrade.OnPressed += _ => SendPredictedMessage(UpgradeAttempt);
         if (State is ResearchDataTerminalBuiState s)
@@ -59,12 +60,16 @@ public sealed partial class ResearchDataTerminalBui(EntityUid owner, Enum uiKey)
         _window.Tabs.SetTabTitle(0, Loc.GetString("research-data-ui-manage"));
         _window.Tabs.SetTabTitle(1, Loc.GetString("research-data-ui-view"));
         _window.NextUpdate = state.NextUpdate;
+        _window.ReduceCooldown.Disabled = !state.Picked || state.Credits < 1 || state.NextUpdate <= _time.CurTime;
         _window.TimeLeftBar.MaxValue = (float)(state.NextUpdate - state.LastTime).TotalMilliseconds;
         _window.ChemContainer.RemoveAllChildren();
-        if (state.Credits >= state.UpgradeCost && state.Clearance != 6)
+        var xLocked = state.XLockedUntil is not null && _time.CurTime < state.XLockedUntil.Value;
+        if (state.Credits >= state.UpgradeCost && state.Clearance != 6 && !xLocked)
             _window.Upgrade.Disabled = false;
         else _window.Upgrade.Disabled = true;
-        _window.UpgradeText.Text = Loc.GetString("research-data-ui-improve", ("NUM", state.UpgradeCost));
+        _window.UpgradeText.Text = xLocked
+            ? Loc.GetString("research-data-ui-improve-locked", ("TIME", Math.Ceiling((state.XLockedUntil!.Value - _time.CurTime).TotalMinutes)))
+            : Loc.GetString("research-data-ui-improve", ("NUM", state.UpgradeCost));
         StyleBoxFlat panel = new();
         panel.BackgroundColor = Color.FromHex("#0f0f00");
         panel.BorderColor = Color.FromHex("#ffbf00");

@@ -48,6 +48,25 @@
     - state: "base"
   - type: InteractionOutline
   - type: Appearance
+  - type: Damageable
+    damageModifierSet: GlassReinforcedMod
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger: !type:DamageTrigger
+        damage: 175
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetMetal1:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
 
 # Base for cash vendors that also have shopkeeper stock management
 - type: entity
@@ -230,6 +249,15 @@
     - id: RMCFoodSnackBarcaridine
       name: Barcaridine Bar
       price: 4
+    - id: RMCFoodSnackBoonieBar
+      name: Boonie Bars
+      price: 6
+    - id: RMCFoodSnackHUNK
+      name: HUNK Bar
+      price: 8
+    - id: CMMarineProteinBar
+      name: Protein Bar
+      price: 2
 
 # Prepared meals vendor — mirrors ColMarTechFood
 - type: entity
@@ -420,6 +448,123 @@
     - id: CMPen
       name: Pen
       price: 1
+    - id: AU14CassetteTapeUnitedAmericasVol1
+      name: Cassette (United Americas Vol. 1)
+      price: 5
+    - id: AU14CassetteTapeUnitedAmericasVol2
+      name: Cassette (United Americas Vol. 2)
+      price: 5
+    - id: RMCMagazineBootsN160
+      name: Boots! Magazine (Issue 160)
+      price: 4
+    - id: RMCMagazineBootsN07
+      name: Boots! Magazine (Issue 07)
+      price: 4
+    - id: RMCMagazineBootsN45
+      name: Boots! Magazine (Issue 45)
+      price: 4
+    - id: RMCMagazineBootsN54
+      name: Boots! Magazine (Issue 54)
+      price: 4
+    - id: RMCMagazineBootsN55
+      name: Boots! Magazine (Issue 55)
+      price: 4
+    - id: RMCMagazineBootsN58
+      name: Boots! Magazine (Issue 58)
+      price: 4
+    - id: RMCMagazineBootsN70
+      name: Boots! Magazine (Issue 70)
+      price: 4
+    - id: RMCMagazineBootsN113
+      name: Boots! Magazine (Issue 113)
+      price: 4
+    - id: RMCMagazineBootsN117
+      name: Boots! Magazine (Issue 117)
+      price: 4
+    - id: RMCMagazineBootsN120
+      name: Boots! Magazine (Issue 120)
+      price: 4
+    - id: RMCMagazineBootsN125
+      name: Boots! Magazine (Issue 125)
+      price: 4
+    - id: RMCMagazineBootsN131
+      name: Boots! Magazine (Issue 131)
+      price: 4
+    - id: RMCMagazineBootsN150
+      name: Boots! Magazine (Issue 150)
+      price: 4
+    - id: RMCMagazineBootsN189
+      name: Boots! Magazine (Issue 189)
+      price: 4
+    - id: RMCMagazineWeYaOrreryN34
+      name: Orrery Magazine (Issue 34)
+      price: 5
+    - id: RMCMagazineWeYaOrrery
+      name: Orrery Magazine
+      price: 5
+    - id: RMCMagazineWeYaOrreryN175
+      name: Orrery Magazine (Issue 175)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN184
+      name: Orrery Magazine (Issue 184)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN202
+      name: Orrery Magazine (Issue 202)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN217
+      name: Orrery Magazine (Issue 217)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN220
+      name: Orrery Magazine (Issue 220)
+      price: 5
+    - id: RMCMagazineWeYaOrreryN258
+      name: Orrery Magazine (Issue 258)
+      price: 5
+    - id: RMCClothingNeckLGBTPin
+      name: LGBT Pin
+      price: 3
+    - id: RMCClothingNeckAromanticPin
+      name: Aromantic Pin
+      price: 3
+    - id: RMCClothingNeckAsexualPin
+      name: Asexual Pin
+      price: 3
+    - id: RMCClothingNeckBisexualPin
+      name: Bisexual Pin
+      price: 3
+    - id: RMCClothingNeckGayPin
+      name: Gay Pin
+      price: 3
+    - id: RMCClothingNeckIntersexPin
+      name: Intersex Pin
+      price: 3
+    - id: RMCClothingNeckLesbianPin
+      name: Lesbian Pin
+      price: 3
+    - id: RMCClothingNeckNonBinaryPin
+      name: Non-Binary Pin
+      price: 3
+    - id: RMCClothingNeckPansexualPin
+      name: Pansexual Pin
+      price: 3
+    - id: RMCClothingNeckOmnisexualPin
+      name: Omnisexual Pin
+      price: 3
+    - id: RMCClothingNeckTransPin
+      name: Trans Pin
+      price: 3
+    - id: RMCClothingNeckAutismPin
+      name: Autism Pin
+      price: 3
+    - id: RMCClothingNeckGoldAutismPin
+      name: Gold Autism Pin
+      price: 3
+    - id: RMCSpaceGrunts
+      name: Space Grunts
+      price: 15
+    - id: CMUUniversalPaperTool
+      name: Universal Paper Tool
+      price: 35
 
 # Cigarette machine
 - type: entity
@@ -438,6 +583,12 @@
   - type: AU14CashVendor
     percentToColony: 0.6
     items:
+    - id: PackPaperRolling
+      name: Rolling Paper
+      price: 2
+    - id: PackPaperRollingFilters
+      name: Rolling Paper and Filters
+      price: 3
     - id: RMCCigarettePackLuckySloths
       name: Lucky Sloths
       price: 5
@@ -519,9 +670,42 @@
     - id: RMCHelmetWelding
       name: Welding Helmet
       price: 25
-    - id: CMTRayScanner
-      name: T-Ray Scanner
+    - id: CMMultitool
+      name: Access Tuner
       price: 15
+    - id: CMTRayScanner
+      name: PS-9 Survey Unit
+      price: 15
+    - id: CMFireExtinguisher
+      name: Fire Extinguisher
+      price: 10
+    - id: RemoteSignaller
+      name: Remote Signaller
+      price: 10
+    - id: Igniter
+      name: Igniter
+      price: 8
+    - id: AU14MaintenanceJackSpecialAdmin
+      name: Special Maintenance Jack
+      price: 45
+    - id: CableApcStack
+      name: LV Cable Coil
+      price: 10
+    - id: CableMVStack
+      name: MV Cable Coil
+      price: 15
+    - id: CableHVStack
+      name: HV Cable Coil
+      price: 20
+    - id: RMCGeigerCounter
+      name: Geiger Counter
+      price: 20
+    - id: AirGrenade
+      name: Air Grenade
+      price: 20
+    - id: CMUFireSuppressantGrenade
+      name: Fire Suppression Grenade
+      price: 20
 
 # circuitboard - mirrors CMVendorCircuits
 - type: entity
@@ -558,6 +742,36 @@
     - id: CMUCircuitboardRecharger
       name: Recharger Circuit Board
       price: 75
+    - id: AirAlarmElectronics
+      name: Air Alarm Electronics
+      price: 20
+    - id: FireAlarmElectronics
+      name: Fire Alarm Electronics
+      price: 20
+    - id: CMUThermomachineHeaterMachineCircuitBoard
+      name: Heater Thermomachine Board
+      price: 50
+    - id: CMUThermomachineFreezerMachineCircuitBoard
+      name: Freezer Thermomachine Board
+      price: 50
+    - id: CMUCondenserMachineCircuitBoard
+      name: Condenser Board
+      price: 50
+    - id: CMUCrystallizerMachineCircuitboard
+      name: Gas Crystallizer Board
+      price: 60
+    - id: CMUPipeRiserMachineCircuitboard
+      name: Pipe Riser Board
+      price: 40
+    - id: CMUOpeningVentMachineCircuitboard
+      name: Opening Vent Board
+      price: 40
+    - id: CMUPowerRiserMachineCircuitboard
+      name: Power Riser Board
+      price: 40
+    - id: CMUAutoTransferSwitchMachineCircuitboard
+      name: Automatic Transfer Switch Board
+      price: 50
 #      - id: CMCircuitboardDispenserBooze
 #        amount: 2
 #      - id: CMCircuitboardDispenserSoda
@@ -636,6 +850,9 @@
     - id: AU14CMDefibrillator
       name: Defibrillator
       price: 60
+    - id: CMUMaskCPR
+      name: CPR Mask
+      price: 10
     - id: CMSyringe
       name: Syringe
       price: 5
@@ -825,6 +1042,9 @@
     - id: RMCBoxSterileMask
       name: Sterile Mask Box
       price: 8
+    - id: CMUMaskCPR
+      name: CPR Mask
+      price: 10
     - id: RMCBoxLatexGloves
       name: Latex Glove Box
       price: 8

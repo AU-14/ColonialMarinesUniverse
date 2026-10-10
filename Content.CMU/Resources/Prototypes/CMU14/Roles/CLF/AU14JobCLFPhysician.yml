@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCLFPhysician
   roundSide: ThirdParty
   roundForce: CLF
@@ -7,6 +7,7 @@
   roundComponents:
   - type: NpcFactionMember
     factions:
+    - AUColonist
     - CLF
   - type: CLFMember
     statusIcon: CLFFactionMedic
@@ -17,7 +18,7 @@
       RMCSkillDomestics: 1
       RMCSkillMedical: 3
       RMCSkillResearch: 1
-      RMCSkillSurgery: 2
+      RMCSkillSurgery: 4
       RMCSkillFirearms: 2
       RMCSkillPolice: 1
       RMCSkillSpecialistWeapons: 1
@@ -41,6 +42,12 @@
   ignoreAllegiance: true
   playTimeTracker: AU14JobCLFPhysician
   requirements:
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentColonialLiberationFront
+    time: 18000 # 5 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:

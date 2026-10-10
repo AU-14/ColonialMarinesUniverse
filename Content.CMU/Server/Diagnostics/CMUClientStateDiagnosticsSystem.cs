@@ -20,7 +20,8 @@ namespace Content.Server.CMU14.Diagnostics;
 /// </summary>
 public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
 {
-    public const string SawmillName = "cmu.client_state";
+    internal const string SawmillId = "cmu.client_state";
+    protected override string SawmillName => SawmillId;
     private const int MaxDetailsPerWindow = 8;
     private const int MaxSummarySamples = 8;
     private static readonly TimeSpan ReportInterval = TimeSpan.FromSeconds(30);
@@ -305,7 +306,9 @@ public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
             !double.IsFinite(msg.AverageFps) || msg.AppliedAgeSeconds < -1 || msg.AppliedAgeSeconds > 86400 ||
             msg.AppliedTick != GameTick.Zero && msg.AppliedAgeSeconds < 0 ||
             msg.AverageFps < -1 || msg.AverageFps > 10000 ||
-            msg.BufferedStates < 0 || msg.BufferedStates > 65536 || msg.TargetBuffer < 0 || msg.TargetBuffer > 65536)
+            msg.BufferedStates < 0 || msg.BufferedStates > 65536 || msg.TargetBuffer < 0 || msg.TargetBuffer > 65536 ||
+            msg.ApplicableStates < 0 || msg.ApplicableStates > 65536 ||
+            msg.EntityCount < 0 || msg.EntityCount > 10000000 || msg.CachedServerEntities < 0 || msg.CachedServerEntities > 10000000)
             return;
 
         var now = _timing.RealTime;
@@ -318,6 +321,7 @@ public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
         {
             AppliedTick = msg.AppliedTick, AppliedAgeSeconds = msg.AppliedAgeSeconds,
             BufferedStates = msg.BufferedStates, TargetBuffer = msg.TargetBuffer, AverageFps = msg.AverageFps,
+            ApplicableStates = msg.ApplicableStates, EntityCount = msg.EntityCount, CachedServerEntities = msg.CachedServerEntities,
         };
         if (_ticker.RunLevel == GameRunLevel.InRound && !_timing.Paused &&
             msg.AppliedTick != GameTick.Zero && msg.AppliedAgeSeconds >= 10 &&
@@ -382,7 +386,8 @@ public sealed class CMUClientStateDiagnosticsSystem : EntitySystem
             $"clientAppliedState=client-reported clientAppliedTick={health.AppliedTick} ",
             $"clientAppliedAgeSeconds={health.AppliedAgeSeconds:F2} clientAppliedLagTicks={Math.Max(0, (long)_timing.CurTick.Value - health.AppliedTick.Value)} ",
             $"healthReportAgeSeconds={Age(now, trace.HealthAt)} bufferedStates={health.BufferedStates} ",
-            $"targetBuffer={health.TargetBuffer} clientAvgFps={health.AverageFps:F2}");
+            $"applicableStates={health.ApplicableStates} targetBuffer={health.TargetBuffer} clientAvgFps={health.AverageFps:F2} ",
+            $"clientEntities={health.EntityCount} clientCachedServerEntities={health.CachedServerEntities}");
     }
 
     private void WriteRecentErrors(TimeSpan now)

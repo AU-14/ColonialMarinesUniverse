@@ -25,7 +25,9 @@
     govforinship: true
     opforinship: true
     daycycleenabled: true
+    thirdpartyinterval: 1800
     thirdparties:
+    - FreeCompanyRaiders
     - TWEParamarinesSurv
     - ProdigySurvLarge
     - ProdigySurvMedium
@@ -44,6 +46,9 @@
     - cultistThirdPartyNoQueen
     - UPPGROM
     - UPPGROMAlt
+    - CHTORM_PMC_BEAR
+    - GROZA_PMC_BEAR
+    - SKALA_PMC_BEAR
     - UPPGROMAlt2
     - FORECON
     - FORECONAlt
@@ -55,12 +60,10 @@
     - FORECONFirstRecon
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     threats:
     - XenoThreat
     - NeomorphsThreat
-    # - AbominationsThreatDS # no xenocf markers
-    - ApeThreatDS
     # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers

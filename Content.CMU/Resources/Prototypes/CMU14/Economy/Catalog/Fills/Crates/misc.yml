@@ -61,7 +61,7 @@
   description: A crate containing a computer linked to Weyland-Yutani's research servers.
   components:
   - type: SpawnOnTerminate
-    spawn: CMUResearchDataTerminal
+    spawn: CMUResearchDataTerminalCorporate
 
 - type: entity
   parent: RMCSecureCaseMedicalBig
@@ -391,3 +391,30 @@
       amount: 1
     - id: AU14BoxHIDPUPP
       amount: 1
+
+- type: entity
+  parent: CMUCrateResearchTerminal
+  id: CMUCrateResearchTerminalGovfor
+  name: GOVFOR research data terminal crate
+  description: A crate containing a computer linked to the GOVFOR research network.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUResearchDataTerminalGovfor
+
+- type: entity
+  parent: CMUCrateResearchTerminal
+  id: CMUCrateResearchTerminalOpfor
+  name: OPFOR research data terminal crate
+  description: A crate containing a computer linked to the OPFOR research network.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUResearchDataTerminalOpfor
+
+- type: entity
+  parent: CMUCrateResearchTerminal
+  id: CMUCrateResearchTerminalColony
+  name: colony research data terminal crate
+  description: A crate containing a computer linked to the colony research network.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUResearchDataTerminalColony

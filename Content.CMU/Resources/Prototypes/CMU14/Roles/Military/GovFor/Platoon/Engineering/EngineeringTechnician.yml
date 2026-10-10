@@ -1,11 +1,12 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 1
   id: AU14JobEngineeringTechBaseAbstract
   name: au14-job-name-govforengineeringtech
   description: au14-job-description-govforengineeringtech
   icon: "AU14JobIconGovCT"
-  spawnMenuRoleName: Engineering Technician (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-engineering-technician-govfor 
   startingGear: AU14GearGOVFOREngineeringTech
   dummyStartingGear: AU14GearGOVFOREngineeringTechDummy
   playTimeTracker: AU14JobGOVFOREngineeringTech
@@ -28,6 +29,12 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_ct
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
+        state: ct
 
   requirements:
   - !type:TraitsRequirement
@@ -38,6 +45,8 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -70,7 +79,7 @@
     shoes: CMBootsBlackFilled
     head: RMCHardhatOrange
     jumpsuit: CMJumpsuitMaintTech
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforMarineAuxiliary
 
 - type: startingGear
   id: AU14GearGOVFOREngineeringTechDummy
@@ -79,7 +88,7 @@
     shoes: CMBootsBlackFilled
     head: RMCHardhatOrange
     jumpsuit: CMJumpsuitMaintTech
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforMarineAuxiliary
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -111,3 +120,47 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+
+- type: job
+  parent: AU14JobEngineeringTechBase
+  id: AU14JobOPFOREngineeringTech
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORCT"
+  spawnMenuRoleName: Engineering Technician (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOPFOREngineeringTech
+  dummyStartingGear: AU14GearOPFOREngineeringTechDummy
+  accessGroups:
+  - AU14OpforEngineer
+  useLoadoutOfJob: AU14JobGOVFOREngineeringTech
+
+- type: startingGear
+  id: AU14GearOPFOREngineeringTech
+  equipment:
+    id: AU14IDCardOPFOREngineeringTech
+    ears2: RMCM5CameraGear
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatOrange
+    jumpsuit: CMJumpsuitMaintTech
+    ears: CMUHeadsetOpforMarineAuxiliary
+
+- type: startingGear
+  id: AU14GearOPFOREngineeringTechDummy
+  equipment:
+    outerClothing: RMCHazardVest
+    shoes: CMBootsBlackFilled
+    head: RMCHardhatOrange
+    jumpsuit: CMJumpsuitMaintTech
+    ears: CMUHeadsetOpforMarineAuxiliary
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFOREngineeringTech
+  name: Spawn Point OPFOR Engineering Technician
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFOREngineeringTech
+  - type: Sprite
+    state: syn_spawn

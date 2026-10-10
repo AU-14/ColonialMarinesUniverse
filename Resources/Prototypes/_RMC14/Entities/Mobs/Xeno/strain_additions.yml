@@ -197,22 +197,23 @@
     - ActionXenoRapture
     - ActionXenoReaperRedGas
     - ActionXenoDevolve
-    tier: 3
+    tier: 2 # CMU14 modified
     hudOffset: -0.1,0.1
-    unlockAt: 900
+    unlockAt: 540 # CMU14 modified
+  - type: XenoHeavy # CMU14 modified
   - type: XenoDevolve
-    devolvesTo:
-    - CMXenoCarrier
+    devolvesTo: # CMU14 modified
+    - CMXenoDrone
   - type: XenoAcid
-  - type: XenoPlasma
-    plasma: 500
-    maxPlasma: 500
+  - type: XenoPlasma # CMU14 modified
+    plasma: 900
+    maxPlasma: 900
     plasmaRegenOnWeeds: 4
   - type: XenoPheromones
     pheromonesMultiplier: 3
     pheroSuffix: strong
   - type: CMArmor
-    xenoArmor: 0
+    xenoArmor: 10 # CMU14 modified
     explosionArmor: 20
   - type: RMCXenoDamageVisuals
     prefix: reaper

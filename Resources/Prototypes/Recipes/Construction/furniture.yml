@@ -2,6 +2,7 @@
 - type: construction
   abstract: true
   id: BaseFurniture
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM
   category: construction-category-furniture
   placementMode: SnapgridCenter
 

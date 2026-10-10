@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Medical.Injuries.Wounds.Events; // CMU14
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Examine;
 using Content.Shared._RMC14.Medical.Stasis;
@@ -599,7 +600,7 @@ public sealed partial class BloodstreamSystem : EntitySystem
     /// <summary>
     /// Removes blood by spilling out the bloodstream.
     /// </summary>
-    public bool TryBleedOut(Entity<BloodstreamComponent?> ent, FixedPoint2 amount)
+    public bool TryBleedOut(Entity<BloodstreamComponent?> ent, FixedPoint2 amount, bool cmuWoundBleed = false) // CMU14
     {
         if (!Resolve(ent, ref ent.Comp, logMissing: false)
             || !_solutionContainer.ResolveSolution(ent.Owner, ent.Comp.BloodSolutionName, ref ent.Comp.BloodSolution)
@@ -631,7 +632,12 @@ public sealed partial class BloodstreamSystem : EntitySystem
                 _solutionContainer.UpdateChemicals(ent.Comp.BloodSolution.Value);
             }
 
-            _puddle.TrySpillAt(ent.Owner, tempSolution, out _, sound: false);
+            // CMU14: wound bleeding can leave non-transferable droplets instead of a puddle.
+            var spill = new CMUWoundBloodSpillEvent(tempSolution);
+            if (cmuWoundBleed)
+                RaiseLocalEvent(ent.Owner, ref spill);
+            if (!spill.Handled)
+                _puddle.TrySpillAt(ent.Owner, tempSolution, out _, sound: false);
 
             tempSolution.RemoveAllSolution();
         }

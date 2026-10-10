@@ -5,11 +5,11 @@
   name: au14-job-name-govforweaponsspecialist
   description: au14-job-description-govforweaponsspecialist
   icon: "AU14JobIconGovWeaponsSpecialist"
-  spawnMenuRoleName: Weapons Specialist (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-weapons-specialist-govfor 
   startingGear: AU14GearGOVFORWeaponsSpecialist
   dummyStartingGear: AU14GearGOVFORRiflemanDummy
   playTimeTracker: AU14JobGOVFORWeaponsSpecialist
-  displayWeight: 4
+  displayWeight: 1
   accessGroups:
   - AU14GovforWeaponsSpecialist
 
@@ -29,8 +29,17 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_ws
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
+        state: ws
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 36000 # 10 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -43,6 +52,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -105,3 +116,41 @@
   - CannedDrinksAU14
   - SmokablesRMC
   - WeaponsRMC
+
+- type: job
+  parent: AU14JobWeaponsSpecialistBase
+  id: AU14JobOPFORWeaponsSpecialist
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORWeaponsSpecialist"
+  spawnMenuRoleName: Weapons Specialist (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearopforWeaponsSpecialist
+  dummyStartingGear: AU14GearopforWeaponsSpecialistDummy
+  accessGroups:
+  - AU14OpforWeaponsSpecialist
+  useLoadoutOfJob: AU14JobGOVFORWeaponsSpecialist
+
+- type: startingGear
+  id: AU14GearopforWeaponsSpecialist
+  equipment:
+    id: AU14IDCardOPFORWeaponsSpecialist
+    ears: AU14HeadsetOpforMarine
+
+- type: startingGear
+  id: AU14GearopforWeaponsSpecialistDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORWeaponsSpecialist
+  name: Spawn Point OPFOR Weapons Specialist
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORWeaponsSpecialist
+  - type: Sprite
+    state: syn_spawn

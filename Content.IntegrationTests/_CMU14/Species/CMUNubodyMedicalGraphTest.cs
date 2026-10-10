@@ -133,7 +133,7 @@ public sealed class CMUNubodyMedicalGraphTest : GameTest
             "AU14MobWorkingJoeColony",
             "WorkingJoe",
             WorkingJoeExternalOrgans,
-            "Mobs/WorkingJoe/parts.rsi",
+            "CMU14/Mobs/WorkingJoe/parts.rsi",
             allExternalPartsHaveBones: true,
             syntheticAppearance: true);
     }

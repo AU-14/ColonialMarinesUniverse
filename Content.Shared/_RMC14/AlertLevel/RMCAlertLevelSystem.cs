@@ -3,6 +3,8 @@ using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Doors;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines; // CMU14
+using Content.Shared.CMU14.ZLevels.Core.EntitySystems; // CMU14
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -13,6 +15,8 @@ using Content.Shared.Lock;
 using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map; // CMU14
+using Robust.Shared.Map.Components; // CMU14: MapComponent moved namespaces upstream
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -30,6 +34,7 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
     [Dependency] private LockSystem _lock = default!;
     [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; // CMU14
 
     private EntityQuery<GhostComponent> _ghostQuery;
 
@@ -38,8 +43,28 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<DropshipHijackLandedEvent>(OnDropshipHijackLanded);
+        SubscribeLocalEvent<WarshipComponent, ComponentInit>(OnWarshipInit); // CMU14
 
         _ghostQuery = GetEntityQuery<GhostComponent>();
+    }
+
+    // CMU14 method
+    private void OnWarshipInit(Entity<WarshipComponent> ent, ref ComponentInit args)
+    {
+        // WarshipComponent sits on the ship's grid, the alert level belongs on its map so map
+        // scoped reads hit. A grid tagged off the primary deck still arms the primary.
+        if (!_net.IsServer)
+            return;
+
+        // CMU14: EntityUid == is a custom operator, so == null does not narrow for the compiler
+        if (Transform(ent).MapUid is not { } map)
+            return;
+
+        if (_zLevels.TryGetZNetwork(map, out var network)
+            && _zLevels.TryGetMapAtDepth(network.Value, 0, out var primary))
+            map = primary;
+
+        EnsureComp<RMCAlertLevelComponent>(map);
     }
 
     private void OnDropshipHijackLanded(ref DropshipHijackLandedEvent ev)
@@ -48,22 +73,52 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
         // Set(RMCAlertLevels.Red);
     }
 
-    private bool TryGetAlertLevel(out Entity<RMCAlertLevelComponent> alert)
+    // CMU14 Per-warship alert levels Begin
+    private bool TryGetAlertLevel(EntityUid? context, out Entity<RMCAlertLevelComponent> alert)
     {
-        var query = EntityQueryEnumerator<RMCAlertLevelComponent>();
-        while (query.MoveNext(out var uid, out var comp))
+        // A context entity resolves to its own ship's map first
+        if (context != null
+            && EntityManager.TransformQuery.CompOrNull(context.Value)?.MapUid is { } map
+            && TryComp<RMCAlertLevelComponent>(map, out var shipAlert))
         {
-            alert = (uid, comp);
+            alert = (map, shipAlert);
             return true;
         }
 
+        // A multi-z warship keeps its component on the primary deck, so other decks resolve through the z-network
+        if (context != null
+            && EntityManager.TransformQuery.CompOrNull(context.Value)?.MapUid is { } networkMap)
+        {
+            foreach (var member in _zLevels.GetAllNetworkMaps(networkMap))
+            {
+                if (member == networkMap
+                    || !TryComp<RMCAlertLevelComponent>(member, out var networkAlert))
+                    continue;
+
+                alert = (member, networkAlert);
+                return true;
+            }
+        }
+
+        // Lowest uid wins so two warships never race the enumeration order
+        EntityUid? best = null;
         alert = default;
-        return false;
+        var query = EntityQueryEnumerator<RMCAlertLevelComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            if (best == null || uid.CompareTo(best.Value) < 0)
+            {
+                best = uid;
+                alert = (uid, comp);
+            }
+        }
+
+        return best != null;
     }
 
-    private Entity<RMCAlertLevelComponent> EnsureAlertLevel()
+    private Entity<RMCAlertLevelComponent> EnsureAlertLevel(EntityUid? context)
     {
-        if (TryGetAlertLevel(out var alert))
+        if (TryGetAlertLevel(context, out var alert))
             return alert;
 
         var uid = Spawn();
@@ -71,22 +126,22 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
         return (uid, comp);
     }
 
-    public RMCAlertLevels? Get()
+    public RMCAlertLevels? Get(EntityUid? context = null)
     {
-        if (!TryGetAlertLevel(out var alert))
+        if (!TryGetAlertLevel(context, out var alert))
             return null;
 
         return alert.Comp.Level;
     }
 
-    public bool IsRedOrDeltaAlert()
-    {
-        return Get() == RMCAlertLevels.Red || Get() ==  RMCAlertLevels.Delta;
-    }
+    public bool IsRedOrDeltaAlert(EntityUid? context = null)
+        => Get(context) is { } level && level >= RMCAlertLevels.Red;
+    // CMU14 End
 
-    public void Set(RMCAlertLevels level, EntityUid? user, bool playSound = true, bool sendAnnouncement = true)
+    public void Set(RMCAlertLevels level, EntityUid? user, bool playSound = true, bool sendAnnouncement = true,
+        EntityUid? context = null) // CMU14: context scopes the ship without naming the map as the actor
     {
-        var ent = EnsureAlertLevel();
+        var ent = EnsureAlertLevel(context ?? user); // CMU14
         if (ent.Comp.Level == level)
             return;
 
@@ -97,6 +152,10 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
             RMCAlertLevels.Blue when ent.Comp.Level > RMCAlertLevels.Blue => (ent.Comp.BlueLoweredSound, ent.Comp.BlueLoweredMessage, null),
             RMCAlertLevels.Red when ent.Comp.Level < RMCAlertLevels.Red => (ent.Comp.RedElevatedSound, ent.Comp.RedElevatedMessage, null),
             RMCAlertLevels.Red when ent.Comp.Level > RMCAlertLevels.Red => (ent.Comp.RedLoweredSound, ent.Comp.RedLoweredMessage, null),
+            // CMU14 Begin: darkened ship
+            RMCAlertLevels.Black when ent.Comp.Level < RMCAlertLevels.Black => (ent.Comp.BlackElevatedSound, ent.Comp.BlackElevatedMessage, null),
+            RMCAlertLevels.Black when ent.Comp.Level > RMCAlertLevels.Black => (ent.Comp.BlackLoweredSound, ent.Comp.BlackLoweredMessage, null),
+            // CMU14 End
             RMCAlertLevels.Delta => (ent.Comp.DeltaSound, ent.Comp.DeltaAnnouncement, ent.Comp.DeltaAnnouncement),
             _ => (null, null, null),
         };
@@ -104,28 +163,24 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
         ent.Comp.Level = level;
         Dirty(ent);
 
-        _adminLog.Add(LogType.RMCAlertLevel, $"{ToPrettyString(user)} set alert level to {level}");
-
-        var almayers = new HashSet<EntityUid>();
-        var almayerQuery = EntityQueryEnumerator<AlmayerComponent>();
-        while (almayerQuery.MoveNext(out var uid, out _))
-        {
-            almayers.Add(uid);
-        }
-
+        // CMU14
         if (user != null)
-        {
-            foreach (var almayer in almayers)
-            {
-                _aresCore.CreateARESLog(almayer, LogCat, (string) $"{Name(user.Value)} set the alert level to: {level}");
-            }
-        }
+            _adminLog.Add(LogType.RMCAlertLevel, $"{ToPrettyString(user)} set alert level to {level}");
+        else
+            _adminLog.Add(LogType.RMCAlertLevel, $"Alert level set to {level}");
 
         var transformQuery = EntityManager.TransformQuery;
+        // CMU14: side effects stay on the warship whose level changed, ghosts still hear everything
+        // The holder is the armed warship map, free fallback entities stay global
+        var shipMap = HasComp<MapComponent>(ent) ? ent.Owner : (EntityUid?) null;
+
+        if (user != null && shipMap != null)
+            _aresCore.CreateARESLog(shipMap.Value, LogCat, (string) $"{Name(user.Value)} set the alert level to: {level}");
+
         var filter = Filter.Empty()
             .AddWhereAttachedEntity(entity =>
             {
-                if (transformQuery.CompOrNull(entity)?.MapUid is { } map && almayers.Contains(map))
+                if (shipMap != null && _zLevels.IsSameZNetwork(transformQuery.CompOrNull(entity)?.MapUid, shipMap.Value)) // CMU14
                     return true;
 
                 if (_ghostQuery.HasComp(entity))
@@ -143,25 +198,23 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
         // Send announcement if sendAnnouncement == true
         if (sendAnnouncement)
         {
-            if (announcement != null)
+            // CMU14: chat carries the announcement like the other priority broadcasts.
+            // MarineCommon radio is unused on this fork so only ghosts would ever hear it.
+            var locId = announcement ?? message;
+            if (locId != null)
             {
-                var text = Loc.GetString(announcement);
-                _marineAnnounce.AnnounceToMarines(text);
-                _marineAnnounce.AnnounceAlertLevel(level, text, filter);
-            }
-            else if (message != null)
-            {
-                var text = Loc.GetString(message.Value);
-                if (_aresCore.TryGetMarineARES(out var ares) && ares != null)
-                    _marineAnnounce.AnnounceRadio(ares.Value.Owner, text, ent.Comp.RadioChannel);
-
+                var text = Loc.GetString(locId.Value);
+                _marineAnnounce.AnnounceToMarines(text, filter: filter);
                 _marineAnnounce.AnnounceAlertLevel(level, text, filter);
             }
         }
 
-        var unlockQuery = EntityQueryEnumerator<RMCUnlockOnAlertLevelComponent, LockComponent>();
-        while (unlockQuery.MoveNext(out var uid, out var unlock, out var lockComp))
+        var unlockQuery = EntityQueryEnumerator<RMCUnlockOnAlertLevelComponent, LockComponent, TransformComponent>();
+        while (unlockQuery.MoveNext(out var uid, out var unlock, out var lockComp, out var unlockXform))
         {
+            if (shipMap != null && !_zLevels.IsSameZNetwork(unlockXform.MapUid, shipMap.Value)) // CMU14
+                continue;
+
             if (unlock.Level <= level)
             {
                 _lock.Unlock(uid, null, lockComp);
@@ -174,10 +227,13 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
             }
         }
 
-        var openQuery = EntityQueryEnumerator<RMCOpenOnAlertLevelComponent, DoorComponent, RMCPodDoorComponent>();
-        while (openQuery.MoveNext(out var uid, out var unlock, out var door, out var podDoor))
+        var openQuery = EntityQueryEnumerator<RMCOpenOnAlertLevelComponent, DoorComponent, RMCPodDoorComponent, TransformComponent>();
+        while (openQuery.MoveNext(out var uid, out var unlock, out var door, out var podDoor, out var openXform))
         {
             if (unlock.Id != podDoor.Id)
+                continue;
+
+            if (shipMap != null && !_zLevels.IsSameZNetwork(openXform.MapUid, shipMap.Value)) // CMU14
                 continue;
 
             if (unlock.Level <= level)
@@ -186,13 +242,16 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
                 _door.TryClose(uid, door);
         }
 
-        var displays = EntityQueryEnumerator<RMCAlertLevelDisplayComponent>();
-        while (displays.MoveNext(out var uid, out _))
+        var displays = EntityQueryEnumerator<RMCAlertLevelDisplayComponent, TransformComponent>();
+        while (displays.MoveNext(out var uid, out _, out var displayXform))
         {
+            if (shipMap != null && !_zLevels.IsSameZNetwork(displayXform.MapUid, shipMap.Value)) // CMU14
+                continue;
+
             _appearance.SetData(uid, RMCAlertLevelsVisuals.Alert, level);
         }
 
-        var ev = new RMCAlertLevelChangedEvent(ent.Comp.Level);
+        var ev = new RMCAlertLevelChangedEvent(ent.Comp.Level, shipMap); // CMU14
         RaiseLocalEvent(ent, ref ev, true);
     }
 }

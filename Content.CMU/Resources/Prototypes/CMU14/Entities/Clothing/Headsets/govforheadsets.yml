@@ -153,6 +153,7 @@
       key_slots:
       - AU14EncryptionKeyGovfor
       - AU14EncryptionKeyGovforJTAC
+      - AU14EncryptionKeyGovforIntel
 
 - type: entity
   parent: AU14HeadsetGovforMarine
@@ -165,6 +166,31 @@
       key_slots:
       - AU14EncryptionKeyGovfor
       - AU14EncryptionKeyGovforJTAC
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: CMUHeadsetGovforMarineAuxiliary
+  name: GOVFOR squad auxiliary radio headset
+  description: This is used by GOVFOR squad corpsmen and engineers to communicate on the radio, including the auxiliary channel.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforIntel
+
+- type: entity
+  parent: AU14HeadsetGovforMarine
+  id: CMUHeadsetGovforDroneOperator
+  name: GOVFOR drone operator radio headset
+  description: This is used by GOVFOR drone operators to communicate on the radio, including the JTAC and auxiliary channels.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyGovfor
+      - AU14EncryptionKeyGovforJTAC
+      - AU14EncryptionKeyGovforIntel
 
 - type: entity
   parent: RMCHeadsetShip

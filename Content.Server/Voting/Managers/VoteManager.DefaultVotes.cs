@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using Content.Server.Administration;
 using Content.Server.Administration.Managers;
+using Content.Server.CMU14.Round; // CMU14
 using Content.Server.Discord.WebhookMessages;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
@@ -609,7 +610,7 @@ namespace Content.Server.Voting.Managers
             {
                 if(!preset.ShowInVote)
                     continue;
-#if !DEBUG
+#if !DEBUG && !TOOLS
                 if(_playerManager.PlayerCount < (preset.MinPlayers ?? int.MinValue))
                     continue;
 
@@ -618,6 +619,8 @@ namespace Content.Server.Voting.Managers
 #endif
                 presets[preset.ID] = preset.ModeTitle;
             }
+
+            _entityManager.System<CMUPresetVoteSystem>().RemoveLastPlayedPreset(presets); // CMU14
             return presets;
         }
     }

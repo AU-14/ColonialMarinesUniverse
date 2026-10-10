@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU14.Marines;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Movement.Pulling.Components;
@@ -19,14 +20,14 @@ public abstract partial class SharedCMUFallingSystem : EntitySystem
     [Dependency] private IEntityManager _entityManager = default!;
 
     private EntityQuery<ActorComponent> _actorQuery;
-    private EntityQuery<AlmayerComponent> _almayerQuery;
+    private EntityQuery<WarshipComponent> _almayerQuery;
     private EntityQuery<DropshipComponent> _dropshipQuery;
     private EntityQuery<MapGridComponent> _mapGridQuery;
 
     public override void Initialize()
     {
         _actorQuery = GetEntityQuery<ActorComponent>();
-        _almayerQuery = GetEntityQuery<AlmayerComponent>();
+        _almayerQuery = GetEntityQuery<WarshipComponent>();
         _dropshipQuery = GetEntityQuery<DropshipComponent>();
         _mapGridQuery = GetEntityQuery<MapGridComponent>();
 

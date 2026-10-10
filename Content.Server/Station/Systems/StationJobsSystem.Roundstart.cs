@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
+using Content.Server.CMU14.Ops.ForceOnForce; // CMU14
 using Content.Server.CMU14.Round;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
@@ -97,6 +98,11 @@ public sealed partial class StationJobsSystem
         if (profiles.Count == 0)
             return new();
 
+// CMU14: Force on Force roles, hijacking, announcements and identification.
+
+        if (IsForceOnForce)
+            return AssignForceOnForceJobs(profiles, stations);
+
         // We need to modify this collection later, so make a copy of it.
         profiles = profiles.ShallowClone();
 
@@ -145,6 +151,42 @@ public sealed partial class StationJobsSystem
         foreach (var player in forcedToRemove)
         {
             profiles.Remove(player);
+        }
+
+        // CMU14: FoF balances teams by dealing players randomly into even GOVFOR/OPFOR sides
+        // instead of trusting faction preferences. Each preference is mapped to the assigned
+        // side's equivalent job so specialist roles and job weights still fill normally.
+        var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
+        if (presetId != null && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase))
+        {
+            var hasGovfor = false;
+            var hasOpfor = false;
+            foreach (var station in stations)
+            {
+                foreach (var job in GetJobs(station).Keys)
+                {
+                    if (job.Id.Contains("OPFOR"))
+                        hasOpfor = true;
+                    else if (job.Id.Contains("GOVFOR"))
+                        hasGovfor = true;
+                }
+            }
+
+            if (hasGovfor && hasOpfor)
+            {
+                var pool = profiles.Keys.ToList();
+                _random.Shuffle(pool);
+                var nextGovfor = true;
+                foreach (var player in pool)
+                {
+                    var profile = profiles[player];
+                    var target = nextGovfor ? "GOVFOR" : "OPFOR";
+                    var rewritten = FofJobs.MapSide(profile.JobPriorities, target, keepNeutral: true, ProtoMan);
+                    profiles[player] = profile.WithJobPriorities(rewritten);
+                    nextGovfor = !nextGovfor;
+                }
+                _forceOnForceNextGovfor = nextGovfor;
+            }
         }
 
         // The maximum jobs left on each station. This is modified as players are assigned.
@@ -320,6 +362,15 @@ public sealed partial class StationJobsSystem
         // Determine the current preset so we can apply gamemode specific overflow behaviour.
         var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
 
+        // CMU14: Force on Force roles, hijacking, announcements and identification.
+        // The joint roll has already considered both fallback options and team capacities.
+        if (IsForceOnForce)
+        {
+            foreach (var player in allPlayersToAssign)
+                assignedJobs.TryAdd(player, (null, EntityUid.Invalid));
+            return;
+        }
+
         foreach (var player in allPlayersToAssign)
         {
             if (assignedJobs.ContainsKey(player))
@@ -360,7 +411,6 @@ public sealed partial class StationJobsSystem
                 // Helper proto ids for common roles
                 var protoColonist = new ProtoId<JobPrototype>("AU14JobCivilianColonist");
                 var protoGovRifle = new ProtoId<JobPrototype>("AU14JobGOVFORSquadRifleman");
-                var protoOpfRifle = new ProtoId<JobPrototype>("AU14JobOPFORSquadRifleman");
 
                 var stationOverflows = GetOverflowJobs(station)
                     .Where(allowedJobs.Contains)
@@ -401,34 +451,20 @@ public sealed partial class StationJobsSystem
                     }
                 }
 
-                // Force on Force: alternate between GOVFOR and OPFOR rifleman and prefer the ship station for that faction
+                // CMU14 Force on Force: overflow sees raw prefs, so a dealt-side slot remaps the
+                // opposite side's picks onto its mirrors. Queues for the dealt side pass through.
                 if (chosenOverflow == null && !string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var wantGov = _forceOnForceNextGovfor;
-                    var wantProto = wantGov ? protoGovRifle : protoOpfRifle;
+                    var target = wantGov ? "GOVFOR" : "OPFOR";
+                    var banned = bannedRoles == null
+                        ? new HashSet<ProtoId<JobPrototype>>()
+                        : bannedRoles.Select(role => new ProtoId<JobPrototype>(role)).ToHashSet();
 
-                    // If this station matches the faction we want, pick it.
-                    if (stationFaction.TryGetValue(station, out var faction) && faction != null && ((wantGov && faction == "govfor") || (!wantGov && faction == "opfor")))
-                    {
-                        var jobs = GetJobs(station);
-                        if (allowedJobs.Contains(wantProto) &&
-                            (jobs.ContainsKey(wantProto) || stationOverflows.Contains(wantProto)))
-                            chosenOverflow = wantProto;
-                    }
-                    else
-                    {
-                        // Otherwise, if the station has the job in overflow or regular jobs, pick it as fallback.
-                        if (allowedJobs.Contains(wantProto) &&
-                            stationOverflows.Contains(wantProto))
-                            chosenOverflow = wantProto;
-                        else
-                        {
-                            var jobs = GetJobs(station);
-                            if (allowedJobs.Contains(wantProto) &&
-                                jobs.ContainsKey(wantProto))
-                                chosenOverflow = wantProto;
-                        }
-                    }
+                    var priorities = FofJobs.MapSide(profile.JobPriorities, target, keepNeutral: false, ProtoMan);
+
+                    if (PickBestAvailableJobWithPriority(station, priorities, true, banned) is { } picked)
+                        chosenOverflow = picked;
 
                     // If we successfully chose one, flip the toggle for the next assignment
                     if (chosenOverflow != null)
@@ -439,10 +475,20 @@ public sealed partial class StationJobsSystem
                 if (chosenOverflow == null)
                 {
                     var overflows = stationOverflows.ToList();
+                    // CMU14
+                    var fofFallback = !string.IsNullOrEmpty(presetId) && presetId.Equals("ForceOnForce", StringComparison.InvariantCultureIgnoreCase);
+                    if (fofFallback)
+                    {
+                        var wrong = _forceOnForceNextGovfor ? "OPFOR" : "GOVFOR";
+                        overflows.RemoveAll(id => id.Id.Contains(wrong));
+                    }
+
                     _random.Shuffle(overflows);
                     if (overflows.Count == 0)
                         continue;
                     chosenOverflow = overflows[0];
+                    if (fofFallback)
+                        _forceOnForceNextGovfor = !_forceOnForceNextGovfor;
                 }
 
                 assignedJobs.Add(player, (chosenOverflow, station));
@@ -515,6 +561,11 @@ public sealed partial class StationJobsSystem
 
                 if (!(roleBans == null || !roleBans.Contains(jobId))) //TODO: Replace with IsRoleBanned
                     continue;
+
+                // cmu edit start: military physical standards
+                if (!Content.Shared.CMU14.Roles.CMUMilitaryHeightRequirement.Check(job, EntityManager.ComponentFactory, profile, out _))
+                    continue;
+                // cmu edit end
 
                 if (!outputDict.TryGetValue(jobId, out var priorities))
                 {

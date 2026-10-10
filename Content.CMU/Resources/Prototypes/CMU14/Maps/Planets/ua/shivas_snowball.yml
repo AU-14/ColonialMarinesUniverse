@@ -25,7 +25,9 @@
     govforinship: true
     opforinship: true
     daycycleenabled: true
+    thirdpartyinterval: 1800
     thirdparties:
+    - FreeCompanyRaiders
     - ProdigySurvLarge
     - ProdigySurvMedium
     - ProdigySurvSmall
@@ -54,12 +56,10 @@
     - ProfessorVonBandolier
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     threats:
     - XenoThreat
     - NeomorphsThreat
-    # - AbominationsThreatDS # no xenocf markers
-    - ApeThreatDS
     # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers
@@ -83,6 +83,9 @@
   - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ-1.yml
   mapsAbove:
   - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ1.yml
+  - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ2.yml
+  - /Maps/CMU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ3.yml
+
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

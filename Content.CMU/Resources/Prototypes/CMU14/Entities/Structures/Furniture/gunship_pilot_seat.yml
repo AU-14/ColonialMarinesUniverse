@@ -13,4 +13,4 @@
     state: pilot-chair
   - type: GunshipPilotSeat
   - type: AccessReader
-    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ] ]
+    access: [ [ "AU14AccessGovforFTL" ], [ "AU14AccessGovforPilot" ], ["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"] ]

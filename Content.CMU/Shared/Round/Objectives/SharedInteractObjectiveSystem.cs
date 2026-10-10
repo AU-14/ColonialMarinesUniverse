@@ -73,7 +73,11 @@ public sealed partial class SharedInteractObjectiveSystem : EntitySystem
             if (toolUsed == null || !TryComp<ToolComponent>(toolUsed.Value, out var toolComp)
                                  || !toolComp.Qualities.Contains(requiredTool))
             {
-                _popup.PopupEntity($"You need a {requiredTool} for this step.", targetUid, user, PopupType.SmallCaution);
+                _popup.PopupEntity(
+                    Loc.GetString("cmu-interact-objective-need-tool", ("tool", requiredTool)),
+                    targetUid,
+                    user,
+                    PopupType.SmallCaution);
                 return false;
             }
         }
@@ -128,24 +132,37 @@ public sealed partial class SharedInteractObjectiveSystem : EntitySystem
                 var entityCompletions = tracker.CompletionsPerFaction.GetValueOrDefault(faction, 0);
                 if (entityCompletions >= interactComp.CompletionsPerEnt)
                 {
-                    args.PushMarkup("[color=green]This has already been completed.[/color]");
+                    args.PushMarkup(Loc.GetString("cmu-interact-objective-completed"));
                     return;
                 }
             }
             var currentInteractions = !string.IsNullOrEmpty(faction) ? GetCurrentInteractions(tracker, faction) : 0;
             var requiredTool = GetRequiredTool(interactComp, currentInteractions);
             args.PushMarkup(requiredTool != null
-                ? $"Use a [color=cyan]{requiredTool}[/color] on this."
-                : "Use an [color=cyan]empty hand[/color] to interact with this.");
+                ? Loc.GetString("cmu-interact-objective-use-tool", ("tool", requiredTool))
+                : Loc.GetString("cmu-interact-objective-use-empty-hand"));
 
             if (interactComp.Tools is { Count: > 1 })
-                args.PushMarkup($"Tools needed: {string.Join(", ", interactComp.Tools.Select(t => $"[color=cyan]{t}[/color]"))}");
+            {
+                var tools = string.Join(", ", interactComp.Tools.Select(t => $"[color=cyan]{t}[/color]"));
+                args.PushMarkup(Loc.GetString("cmu-interact-objective-tools-needed", ("tools", tools)));
+            }
             if (interactComp.Skills.Count > 0)
-                args.PushMarkup($"Requires skills: {string.Join(", ", interactComp.Skills.Select(s => $"[color=yellow]{s}[/color]"))}");
+            {
+                var skills = string.Join(", ", interactComp.Skills.Select(s => $"[color=yellow]{s}[/color]"));
+                args.PushMarkup(Loc.GetString("cmu-interact-objective-skills-required", ("skills", skills)));
+            }
             if (interactComp.Access.Count > 0)
-                args.PushMarkup($"Requires access: {string.Join(", ", interactComp.Access.Select(a => $"[color=yellow]{a}[/color]"))}");
+            {
+                var access = string.Join(", ", interactComp.Access.Select(a => $"[color=yellow]{a}[/color]"));
+                args.PushMarkup(Loc.GetString("cmu-interact-objective-access-required", ("access", access)));
+            }
             if (interactComp.InteractionsNeeded > 1 && !string.IsNullOrEmpty(faction))
-                args.PushMarkup($"Progress: [color=white]{currentInteractions}[/color]/[color=white]{interactComp.InteractionsNeeded}[/color] interactions.");
+            {
+                args.PushMarkup(Loc.GetString("cmu-interact-objective-progress",
+                    ("current", currentInteractions),
+                    ("needed", interactComp.InteractionsNeeded)));
+            }
         }
     }
 }

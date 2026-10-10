@@ -1,3 +1,4 @@
+using Content.Shared.Damage.Components;
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
@@ -733,8 +734,12 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
                 string? wallProto = null;
                 foreach (var anchored in _map.GetAnchoredEntities(sourceGridUid, sourceGrid, sourceTile))
                 {
+                    // Anchored entities can be deleted mid-shutdown; MetaData throws on those.
+                    if (!TryComp<MetaDataComponent>(anchored, out var anchoredMeta))
+                        continue;
+
                     // Admin-editable border set (Z-Sync Lists tool) - see TryGetBorderWallAbove.
-                    if (MetaData(anchored).EntityPrototype is { } proto && _borderSync.ShouldReflect(proto.ID))
+                    if (anchoredMeta.EntityPrototype is { } proto && _borderSync.ShouldReflect(proto.ID))
                     {
                         wallProto = proto.ID;
                         break;
@@ -787,7 +792,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
             if (_ghostQuery.HasComponent(uid))
                 continue;
 
-            if (xform.MapUid is not { } mapUid)
+            if (xform.MapUid is not { } mapUid || !IsEnabledOn(mapUid))
                 continue;
 
             if (!TryComp<ZGeneratedStoneComponent>(mapUid, out var stone) ||

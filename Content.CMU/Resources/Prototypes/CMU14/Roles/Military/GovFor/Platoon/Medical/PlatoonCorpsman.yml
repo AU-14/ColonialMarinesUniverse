@@ -5,13 +5,13 @@
   name: au14-job-name-govforplatooncorpsman
   description: au14-job-description-govforplatooncorpsman
   icon: "AU14JobIconCorpsman"
-  spawnMenuRoleName: Hospital Corpsman (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-hospital-corpsman-govfor 
   startingGear: AU14GearGOVFORPlatoonCorpsman
   dummyStartingGear: AU14GearGOVFORCorpsmanDummy
   playTimeTracker: AU14JobGOVFORPlatoonCorpsman
   overwatchRoleName: au14-job-name-govforplatooncorpsman-plural
   overwatchSortPriority: -2
-  displayWeight: 3
+  displayWeight: 2
   accessGroups:
   - AU14GovforCorpsman
   - AU14GovforSquad
@@ -90,6 +90,9 @@
       prefix: au14-job-prefix-AU14JobGOVFORPlatoonCorpsmanCMBCIU
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -102,6 +105,8 @@
     - CMUProstheticRightLeg
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -117,7 +122,7 @@
   id: AU14GearGOVFORPlatoonCorpsman
   equipment:
     id: AU14JobIDCardGOVFORPlatoonCorpsman
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforMarineAuxiliary
 
 - type: startingGear
   id: AU14GearGOVFORCorpsmanDummy
@@ -127,7 +132,7 @@
     shoes: CMBootsBlack
     head: AU14JungleM10CorpsmanHelmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforMarineAuxiliary
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -173,12 +178,13 @@
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORPlatoonCorpsman
 
 - type: startingGear
   id: AU14GearopforPlatoonCorpsman
   equipment:
     id: AU14JobIDCardOPFORPlatoonCorpsman
-    ears: AU14HeadsetOpforMarine
+    ears: CMUHeadsetOpforMarineAuxiliary
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -198,7 +204,7 @@
     shoes: CMBootsBlack
     head: AU14JungleM10CorpsmanHelmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetOpforMarine
+    ears: CMUHeadsetOpforMarineAuxiliary
 
 - type: job
   parent: AU14JobPlatoonCorpsmanBase

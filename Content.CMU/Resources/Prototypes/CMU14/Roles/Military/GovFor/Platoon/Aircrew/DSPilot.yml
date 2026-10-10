@@ -5,13 +5,13 @@
   name: au14-job-name-govfordspilot
   description: au14-job-description-govfordspilot
   icon: "AU14JobIconPilotOfficer"
-  spawnMenuRoleName: Pilot Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-pilot-officer
   startingGear: AU14GearGOVFORDSPilot
   dummyStartingGear: AU14GearGOVFORDSPilotDummy
   playTimeTracker: AU14JobGOVFORDSPilot
   requireAdminNotify: true
   canBeAntag: false
-  displayWeight: 6
+  displayWeight: 4
   accessGroups:
   - AU14GovforPilot
   - AU14GovforCorpsman
@@ -93,6 +93,9 @@
       prefix: au14-job-prefix-AU14JobGOVFORDSPilotWYPMC
 
   requirements:
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsFlightCrew
+    time: 10800 # 3 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -106,6 +109,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -158,9 +163,15 @@
 - type: job
   parent: AU14JobDSPilotBase
   id: AU14JobGOVFORDSPilot
+  name: au14-job-name-govfortransportpilot
+  description: au14-job-description-govfortransportpilot
+  spawnMenuRoleName: au14-spawn-role-name-govfor-transport-pilot
   hidden: false
   setPreference: true
   basePlaytimeTracker: true
+  roundComponents:
+  - type: JobPrefix
+    prefix: au14-job-prefix-govfortransportpilot
 
 - type: roleLoadout
   id: JobAU14JobGOVFORDSPilot
@@ -183,7 +194,9 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORPilotOfficer"
-  spawnMenuRoleName: Pilot Officer (OPFOR)
+  name: au14-job-name-govfortransportpilot
+  description: au14-job-description-govfortransportpilot
+  spawnMenuRoleName: au14-spawn-role-name-opfor-transport-pilot
   supervisors: au14-job-supervisors-opfor
   startingGear: AU14GearopforDSPilot
   dummyStartingGear: AU14GearopforDSPilotDummy
@@ -191,6 +204,10 @@
   - AU14OpforPilot
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORDSPilot
+  roundComponents:
+  - type: JobPrefix
+    prefix: au14-job-prefix-govfortransportpilot
 
 - type: startingGear
   id: AU14GearopforDSPilot
@@ -272,3 +289,130 @@
       role: AU14JobGOVFORDSPilot
       time: 108000 # 30 hours
     AU14RankWeYuCrewChief: []
+
+# Flight crew roles. Same access, skills, ranks and playtime as the transport pilot; only the title changes.
+
+- type: job
+  parent: AU14JobGOVFORDSPilot
+  id: AU14JobGOVFORGunshipPilot
+  forceOnForcePreferenceRole: GunshipPilot
+  name: au14-job-name-govforgunshippilot
+  description: au14-job-description-govforgunshippilot
+  spawnMenuRoleName: au14-spawn-role-name-govfor-gunship-pilot
+  startingGear: AU14GearGOVFORGunshipPilot
+  useLoadoutOfJob: AU14JobGOVFORDSPilot
+  roundComponents:
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforgunshippilot
+
+- type: startingGear
+  parent: AU14GearGOVFORDSPilot
+  id: AU14GearGOVFORGunshipPilot
+  equipment:
+    id: AU14IDCardGOVFORGunshipPilot
+    ears: AU14HeadsetGovforCommand
+
+- type: job
+  parent: AU14JobOPFORDSPilot
+  id: AU14JobOPFORGunshipPilot
+  forceOnForcePreferenceRole: GunshipPilot
+  name: au14-job-name-govforgunshippilot
+  description: au14-job-description-govforgunshippilot
+  spawnMenuRoleName: au14-spawn-role-name-opfor-gunship-pilot
+  startingGear: AU14GearOPFORGunshipPilot
+  roundComponents:
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforgunshippilot
+
+- type: startingGear
+  parent: AU14GearopforDSPilot
+  id: AU14GearOPFORGunshipPilot
+  equipment:
+    id: AU14IDCardOPFORGunshipPilot
+    ears: AU14HeadsetOpforCommand
+
+- type: job
+  parent: AU14JobGOVFORDSPilot
+  id: AU14JobGOVFORFighterPilot
+  forceOnForcePreferenceRole: FighterPilot
+  name: au14-job-name-govforfighterpilot
+  description: au14-job-description-govforfighterpilot
+  spawnMenuRoleName: au14-spawn-role-name-govfor-fighter-pilot
+  startingGear: AU14GearGOVFORFighterPilot
+  chevrons:
+    RMCRankSecondLT:
+      entity: AU14ChevronSecondLT
+      requirements: []
+  useLoadoutOfJob: AU14JobGOVFORDSPilot
+  roundComponents:
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforfighterpilot
+
+- type: startingGear
+  parent: AU14GearGOVFORDSPilot
+  id: AU14GearGOVFORFighterPilot
+  equipment:
+    id: AU14IDCardGOVFORFighterPilot
+    ears: AU14HeadsetGovforCommand
+
+- type: job
+  parent: AU14JobOPFORDSPilot
+  id: AU14JobOPFORFighterPilot
+  forceOnForcePreferenceRole: FighterPilot
+  name: au14-job-name-govforfighterpilot
+  description: au14-job-description-govforfighterpilot
+  spawnMenuRoleName: au14-spawn-role-name-opfor-fighter-pilot
+  startingGear: AU14GearOPFORFighterPilot
+  chevrons:
+    RMCRankSecondLT:
+      entity: AU14ChevronSecondLT
+      requirements: []
+  roundComponents:
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforfighterpilot
+
+- type: startingGear
+  parent: AU14GearopforDSPilot
+  id: AU14GearOPFORFighterPilot
+  equipment:
+    id: AU14IDCardOPFORFighterPilot
+    ears: AU14HeadsetOpforCommand
+
+- type: job
+  parent: AU14JobGOVFORDSPilot
+  id: AU14JobGOVFORFighterSystemsOfficer
+  forceOnForcePreferenceRole: FighterSystemsOfficer
+  name: au14-job-name-govforfightersystemsofficer
+  description: au14-job-description-govforfightersystemsofficer
+  spawnMenuRoleName: au14-spawn-role-name-govfor-fighter-systems-officer
+  startingGear: AU14GearGOVFORFighterSystemsOfficer
+  useLoadoutOfJob: AU14JobGOVFORDSPilot
+  roundComponents:
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforfightersystemsofficer
+
+- type: startingGear
+  parent: AU14GearGOVFORDSPilot
+  id: AU14GearGOVFORFighterSystemsOfficer
+  equipment:
+    id: AU14IDCardGOVFORFighterSystemsOfficer
+    ears: AU14HeadsetGovforCommand
+
+- type: job
+  parent: AU14JobOPFORDSPilot
+  id: AU14JobOPFORFighterSystemsOfficer
+  forceOnForcePreferenceRole: FighterSystemsOfficer
+  name: au14-job-name-govforfightersystemsofficer
+  description: au14-job-description-govforfightersystemsofficer
+  spawnMenuRoleName: au14-spawn-role-name-opfor-fighter-systems-officer
+  startingGear: AU14GearOPFORFighterSystemsOfficer
+  roundComponents:
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforfightersystemsofficer
+
+- type: startingGear
+  parent: AU14GearopforDSPilot
+  id: AU14GearOPFORFighterSystemsOfficer
+  equipment:
+    id: AU14IDCardOPFORFighterSystemsOfficer
+    ears: AU14HeadsetOpforCommand

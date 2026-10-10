@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.CMU14.Round;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.GameTicking;
@@ -7,10 +8,11 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
-using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared.CMU14.Threats.Mobs.Biomorph;
 using Content.Shared.CMU14.util;
 using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
@@ -31,8 +33,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
-using AbominationMimicComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationMimicComponent;
+using BiomorphComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphComponent;
 using ApeComponent = Content.Shared.CMU14.Threats.Mobs.Ape.ApeComponent;
 using TribalComponent = Content.Shared.CMU14.Threats.Mobs.Tribal.TribalComponent;
 
@@ -47,6 +48,7 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -80,6 +82,13 @@ public sealed partial class ThreatSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRunLevelChanged);
+        SubscribeLocalEvent<ThreatComponent, NewXenoEvolvedEvent>(OnThreatEvolved);
+    }
+
+    private void OnThreatEvolved(Entity<ThreatComponent> ent, ref NewXenoEvolvedEvent args)
+    {
+        if (ent.Comp.ObjectiveJob is { } job)
+            AddThreatFaction(args.NewXeno, job);
     }
 
     public override void Update(float frameTime)
@@ -596,6 +605,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
                         spawnedList?.Add(ent);
                         _forceInterest.TrackRole(ent);
@@ -654,8 +664,10 @@ public sealed partial class ThreatSystem : EntitySystem
 
                     try
                     {
+                        using var cost = _performance.MeasureOperation("threat-extra-body-spawn", protoId);
                         EntityUid ent = _entityManager.SpawnEntity(protoId, coords);
                         spawnedMembers.Add(ent);
+                        AddThreatFaction(ent, ThreatMemberJobId);
                         spawned++;
                     }
                     catch (Exception ex)
@@ -666,6 +678,15 @@ public sealed partial class ThreatSystem : EntitySystem
 
                 return spawned;
             }
+
+            // short on markers? share them out per body type, otherwise the first type listed eats
+            // all of them and you get a tribe of spearmen with no bows or shaman
+            int leaderMarkerBudget = leaderMarkers.Count;
+            if (leaderReq > leaderMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(leaderBodies, ref leaderMarkerBudget);
+            int memberMarkerBudget = memberMarkers.Count;
+            if (memberReq > memberMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(memberBodies, ref memberMarkerBudget);
 
             // Spawn leaders — each entity proto gets its own scaled count
             foreach ((string protoId, int count) in leaderBodies)
@@ -680,6 +701,11 @@ public sealed partial class ThreatSystem : EntitySystem
             }
 
             _sawmill.Debug($"[DEBUG] Spawned {spawnedMembers.Count} threat members.");
+
+            foreach (var leader in spawnedLeaders)
+                AddThreatFaction(leader, ThreatLeaderJobId);
+            foreach (var member in spawnedMembers)
+                AddThreatFaction(member, ThreatMemberJobId);
 
             // Spawn other entities
             var spawnedEntities = 0;
@@ -943,7 +969,7 @@ public sealed partial class ThreatSystem : EntitySystem
         AddStartingMindRole(entity, mind.Value);
         _roles.MindAddRole(mind.Value, ThreatMindRoleId, silent: true);
 
-        AddThreatFaction(entity);
+        AddThreatFaction(entity, jobId);
 
         if (ghostRole != null) _ghostRole.UnregisterGhostRole((entity, ghostRole));
 
@@ -968,7 +994,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
     private void MakeThreatGhostRole(EntityUid entity, ProtoId<JobPrototype> jobId)
     {
-        AddThreatFaction(entity);
+        AddThreatFaction(entity, jobId);
 
         var ghostRole = EnsureComp<GhostRoleComponent>(entity);
         ghostRole.RoleName = jobId == ThreatLeaderJobId
@@ -983,23 +1009,12 @@ public sealed partial class ThreatSystem : EntitySystem
         _forceInterest.TrackRole(entity);
     }
 
-    private void AddThreatFaction(EntityUid entity)
+    private void AddThreatFaction(EntityUid entity, ProtoId<JobPrototype> jobId)
     {
-        EnsureComp<ThreatComponent>(entity);
+        EnsureComp<ThreatComponent>(entity).ObjectiveJob = jobId;
         EnsureComp<NpcFactionMemberComponent>(entity);
         _npcFaction.AddFaction((entity, CompOrNull<NpcFactionMemberComponent>(entity)), threatNPCFaction);
         RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(entity));
-    }
-
-    internal bool HasCrashedDropship()
-    {
-        EntityQueryEnumerator<DropshipComponent> dropships = EntityQueryEnumerator<DropshipComponent>();
-        while (dropships.MoveNext(out _, out DropshipComponent? dropship))
-        {
-            return dropship.Crashed;
-        }
-
-        return false;
     }
 
     internal bool IsExcludedFromVictory(EntityUid uid, MobStateComponent mobState)
@@ -1009,8 +1024,8 @@ public sealed partial class ThreatSystem : EntitySystem
             || HasComp<YautjaComponent>(uid)
             || HasComp<ApeComponent>(uid)
             || HasComp<TribalComponent>(uid)
-            || HasComp<AbominationComponent>(uid)
-            || HasComp<AbominationMimicComponent>(uid))
+            || HasComp<BiomorphComponent>(uid)
+            || HasComp<BiomorphMimicComponent>(uid))
             return true;
 
         if (HasComp<SynthComponent>(uid))

@@ -21,7 +21,7 @@
   description: au14-wysurv-description
   ranks:
     AU14RankWeYuOperator: []
-  spawnMenuRoleName: WY PMC Combat Engineer (Survivor)
+  spawnMenuRoleName: cmu-spawn-role-wy-pmc-combat-engineer-survivor 
   startingGear: AU14GearWYPSurvEngineer
   greeting: au14-wysurv-greeting
   icon: "RMCJobIconPMCEngineer"

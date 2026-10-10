@@ -144,10 +144,12 @@ public sealed class AlertsMergeRegressionTest : GameTest
                 var alerts = Client.System<ClientAlertsSystem>();
                 var probe = CEntMan.GetComponent<AlertsMergeProbeComponent>(clientPlayer);
 
+                // Normal prediction may have replayed since its first client pass.
+                var normalClicks = probe.Clicks;
                 alerts.AlertClickedAlt("HiveTracker");
                 Assert.Multiple(() =>
                 {
-                    Assert.That(probe.Clicks, Is.EqualTo(1),
+                    Assert.That(probe.Clicks, Is.EqualTo(normalClicks),
                         "alt validation must not invoke the normal ClickEvent");
                     Assert.That(probe.AltClicks, Is.EqualTo(1));
                 });

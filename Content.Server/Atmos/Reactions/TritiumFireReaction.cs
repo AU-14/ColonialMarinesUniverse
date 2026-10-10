@@ -1,7 +1,9 @@
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.CMU14.Atmos.Reactions; // CMU14: gas fires spawn RMC tile fires
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Reactions;
 using JetBrains.Annotations;
+using Robust.Shared.Prototypes; // CMU14
 
 namespace Content.Server.Atmos.Reactions
 {
@@ -9,6 +11,8 @@ namespace Content.Server.Atmos.Reactions
     [DataDefinition]
     public sealed partial class TritiumFireReaction : IGasReactionEffect
     {
+        private static readonly EntProtoId TileFire = "CMUTileFireTritium"; // CMU14: green fire, the anti-xeno variant, and radioactive while it burns
+
         public ReactionResult React(GasMixture mixture, IGasMixtureHolder? holder, AtmosphereSystem atmosphereSystem, float heatScale)
         {
             var energyReleased = 0f;
@@ -64,6 +68,7 @@ namespace Content.Server.Atmos.Reactions
                 if (temperature > Atmospherics.FireMinimumTemperatureToExist)
                 {
                     atmosphereSystem.HotspotExpose(location, temperature, mixture.Volume);
+                    CMUGasFireBridge.SpawnTileFire(location, TileFire); // CMU14
                 }
             }
 

@@ -40,6 +40,11 @@ public sealed partial class RMCApcComponent : Component
     [DataField, AutoNetworkedField]
     public string CellContainerSlot = "rmc_apc_power_cell";
 
+    // Taking or inserting a power cell is deliberate maintenance work, not a free
+    // instant swap; saboteurs and engineers both pay the same cost. Scales with Skill.
+    [DataField, AutoNetworkedField]
+    public TimeSpan CellDelay = TimeSpan.FromSeconds(7);
+
     [DataField, AutoNetworkedField]
     public EntProtoId<PowerCellComponent>? StartingCell = "RMCPowerCellHigh";
 

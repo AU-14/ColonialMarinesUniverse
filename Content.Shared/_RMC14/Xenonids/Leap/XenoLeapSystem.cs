@@ -35,6 +35,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Physics; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.Pulling.Events;
 using Content.Shared.Standing;
@@ -192,19 +193,8 @@ public sealed partial class XenoLeapSystem : EntitySystem
             return;
         }
 
-        var leaping = EnsureComp<XenoLeapingComponent>(xeno);
-
-        args.Handled = true;
-
-        leaping.KnockdownRequiresInvisibility = xeno.Comp.KnockdownRequiresInvisibility;
-        leaping.DestroyObjects = xeno.Comp.DestroyObjects;
-        leaping.MoveDelayTime = xeno.Comp.MoveDelayTime;
-        leaping.Damage = xeno.Comp.Damage;
-        leaping.HitEffect = xeno.Comp.HitEffect;
-        leaping.TargetJitterTime = xeno.Comp.TargetJitterTime;
-        leaping.TargetCameraShakeStrength = xeno.Comp.TargetCameraShakeStrength;
-        leaping.IgnoredCollisionGroupLarge = xeno.Comp.IgnoredCollisionGroupLarge;
-        leaping.IgnoredCollisionGroupSmall = xeno.Comp.IgnoredCollisionGroupSmall;
+        // CMU14: create leap state only after validating the path below.
+        // A rejected leap must not leave default destination/timing fields for Update.
 
         _rmcPulling.TryStopAllPullsFromAndOn(xeno);
 
@@ -219,7 +209,34 @@ public sealed partial class XenoLeapSystem : EntitySystem
         var length = direction.Length();
         var distance = Math.Clamp(length, 0.1f, xeno.Comp.Range.Float());
         direction *= distance / length;
+
+        // CMU14: dashes must not cross barricade lines; the flight only stops on a
+        // direct fixture hit, so check the path up front. Barbed wire keeps its block.
+        var ray = new CollisionRay(origin.Position, direction.Normalized(), (int) CollisionGroup.BarricadeImpassable);
+        foreach (var result in _physics.IntersectRayWithPredicate(origin.MapId, ray, distance, e => !Transform(e).Anchored))
+        {
+            if (TryComp(result.HitEntity, out RMCLeapProtectionComponent? protection) &&
+                AttemptBlockLeap(result.HitEntity, protection.StunDuration, protection.BlockSound, xeno, _transform.GetMoverCoordinates(xeno), protection.FullProtection))
+                return;
+
+            _popup.PopupClient(Loc.GetString("cmu-xeno-dash-blocked"), xeno, xeno);
+            return;
+        }
+
         var impulse = direction.Normalized() * xeno.Comp.Strength * physics.Mass;
+
+        // CMU14: moved after path validation so blocked/invalid attempts have no active leap.
+        var leaping = EnsureComp<XenoLeapingComponent>(xeno);
+        args.Handled = true;
+        leaping.KnockdownRequiresInvisibility = xeno.Comp.KnockdownRequiresInvisibility;
+        leaping.DestroyObjects = xeno.Comp.DestroyObjects;
+        leaping.MoveDelayTime = xeno.Comp.MoveDelayTime;
+        leaping.Damage = xeno.Comp.Damage;
+        leaping.HitEffect = xeno.Comp.HitEffect;
+        leaping.TargetJitterTime = xeno.Comp.TargetJitterTime;
+        leaping.TargetCameraShakeStrength = xeno.Comp.TargetCameraShakeStrength;
+        leaping.IgnoredCollisionGroupLarge = xeno.Comp.IgnoredCollisionGroupLarge;
+        leaping.IgnoredCollisionGroupSmall = xeno.Comp.IgnoredCollisionGroupSmall;
 
         leaping.Origin = _transform.GetMoverCoordinates(xeno);
         leaping.Destination = origin.Offset(direction);
@@ -326,6 +343,9 @@ public sealed partial class XenoLeapSystem : EntitySystem
             return;
 
         if (!TryComp(args.Leaper, out XenoLeapingComponent? leaping))
+            return;
+
+        if (TryComp(args.Leaper, out XenoLeapComponent? leap) && !leap.CanBeShieldBlocked)
             return;
 
         args.Cancelled = AttemptBlockLeap(ent.Owner, ent.Comp.StunDuration, ent.Comp.BlockSound, args.Leaper, leaping.Origin, ent.Comp.FullProtection);
@@ -668,6 +688,19 @@ public sealed partial class XenoLeapSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var time = _timing.CurTime;
+
+        // CMU14: a deleted leap target leaves LastHit dangling, which spams PVS resolve errors.
+        var leapers = EntityQueryEnumerator<XenoLeapComponent>();
+        while (leapers.MoveNext(out var uid, out var leap))
+        {
+            if (leap.LastHit is { } last && TerminatingOrDeleted(last))
+            {
+                leap.LastHit = null;
+                leap.LastHitAt = null;
+                Dirty(uid, leap);
+            }
+        }
+
         var leaping = EntityQueryEnumerator<XenoLeapingComponent>();
         while (leaping.MoveNext(out var uid, out var comp))
         {

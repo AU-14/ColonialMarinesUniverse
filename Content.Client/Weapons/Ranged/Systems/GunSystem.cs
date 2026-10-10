@@ -39,6 +39,7 @@ using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components; // CMU14
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -104,6 +105,7 @@ public sealed partial class GunSystem : SharedGunSystem
     }
 
     private bool _spreadOverlay;
+    private bool _fireInputHandled;
 
     public override void Initialize()
     {
@@ -149,6 +151,10 @@ public sealed partial class GunSystem : SharedGunSystem
                 continue;
 
             var ent = Spawn(HitscanProto, coords);
+            // CMU14: the stretched travel sprite follows the shot axis only in an active 3D view.
+            if (EntityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>().IsOpen)
+                EnsureComp<CMU14.ThreeD.Scene.CMU3DCombatVisualComponent>(ent).AlongTrajectory = a.Distance != 1;
+            // CMU14
             var sprite = Comp<SpriteComponent>(ent);
 
             var xform = Transform(ent);
@@ -193,6 +199,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
         if (entityNull == null || !TryComp<CombatModeComponent>(entityNull, out var combat) || !combat.IsInCombatMode)
         {
+            _fireInputHandled = false;
             return;
         }
 
@@ -200,22 +207,41 @@ public sealed partial class GunSystem : SharedGunSystem
 
         if (!TryGetGun(entity, out var gun))
         {
+            _fireInputHandled = false;
             return;
         }
 
         var useKey = gun.Comp.UseKey ? EngineKeyFunctions.Use : EngineKeyFunctions.UseSecondary;
+        var fireInputDown = _inputSystem.CmdStates.GetState(useKey) == BoundKeyState.Down;
 
-        if (_inputSystem.CmdStates.GetState(useKey) != BoundKeyState.Down && !gun.Comp.BurstActivated)
+        if (!fireInputDown && !gun.Comp.BurstActivated)
         {
+            _fireInputHandled = false;
             if (gun.Comp.ShotCounter != 0)
                 RaisePredictiveEvent(new RequestStopShootEvent { Gun = GetNetEntity(gun) });
             return;
         }
 
         if (gun.Comp.NextFire > Timing.CurTime)
+        {
+            if (fireInputDown && !_fireInputHandled)
+            {
+                _fireInputHandled = true;
+                var cooldownAttempt = new GunCooldownAttemptEvent(entity, gun);
+                RaiseLocalEvent(gun.Owner, ref cooldownAttempt);
+            }
+
             return;
+        }
+
+        if (fireInputDown)
+            _fireInputHandled = true;
 
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
+        // CMU14: use the perspective ray for captured and released aiming.
+        var firstPerson = EntityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>()
+            .TryFirstPersonAim(out var firstPersonAim, out var firstPersonTarget);
+        if (firstPerson) mousePos = firstPersonAim;
 
         if (mousePos.MapId == MapId.Nullspace)
         {
@@ -225,14 +251,16 @@ public sealed partial class GunSystem : SharedGunSystem
             return;
         }
 
-        // Define target coordinates relative to the user or gun so network latency on moving grids
-        // does not distort the requested target location.
+        // CMU14: Keep aim on the moving grid without depending on the shooter's facing.
         var coordinateEntity = HasComp<GunUseGunOriginComponent>(gun.Owner) ? gun.Owner : entity;
-        var coordinates = TransformSystem.ToCoordinates(coordinateEntity, mousePos);
+        // var coordinates = TransformSystem.ToCoordinates(coordinateEntity, mousePos); // CMU14
+        var coordinates = GetAimCoordinates(TransformSystem, coordinateEntity, mousePos); // CMU14
 
-        var target = GetBestTarget(_eyeManager.CurrentEye, mousePos);
-        if (_state.CurrentState is GameplayStateBase screen)
-            target = GetNetEntity(screen.GetClickedEntity(mousePos)) ?? target;
+        // CMU14: keep the source entity selected by the visible 3D ray.
+        var target = firstPerson ? GetNetEntity(firstPersonTarget) : GetBestTarget(_eyeManager.CurrentEye, mousePos);
+        if (!firstPerson && _state.CurrentState is GameplayStateBase screen &&
+            screen.GetClickedEntity(mousePos) is { } clicked && CheckFixtures(clicked))
+            target = GetNetEntity(clicked);
 
         if (_player.LocalSession is not { } session)
             return;
@@ -360,7 +388,7 @@ public sealed partial class GunSystem : SharedGunSystem
                     if (!cartridge.DeleteOnSpawn &&
                         !Containers.IsEntityInContainer(ent!.Value))
                     {
-                        EjectCartridge(ent.Value, angle);
+                        EjectCartridge(ent.Value, angle, ejectCoordinates: Transform(gun).Coordinates); // CMU14
                     }
 
                     if (IsClientSide(ent!.Value))
@@ -529,6 +557,10 @@ public sealed partial class GunSystem : SharedGunSystem
         }
 
         var ent = Spawn(message.Prototype, coordinates);
+        // CMU14: ordinary 2D effects do not need 3D presentation components.
+        if (EntityManager.System<CMU14.ThreeD.Scene.CMU3DLiveSceneSystem>().IsOpen)
+            EnsureComp<CMU14.ThreeD.Scene.CMU3DCombatVisualComponent>(ent);
+        // CMU14
         TransformSystem.SetWorldRotationNoLerp(ent, message.Angle);
 
         // CMU14: anchor UGV flashes to the independently aimed, elevated barrel sprite.
@@ -749,6 +781,10 @@ public sealed partial class GunSystem : SharedGunSystem
 
     private bool CheckFixtures(Entity<FixturesComponent?> entity)
     {
+        // CMU14: disabled collision must not hide a shootable target beneath the sprite.
+        if (!TryComp<PhysicsComponent>(entity, out var body) || !body.CanCollide)
+            return false;
+
         if (!Resolve(entity, ref entity.Comp, false))
             return false;
 

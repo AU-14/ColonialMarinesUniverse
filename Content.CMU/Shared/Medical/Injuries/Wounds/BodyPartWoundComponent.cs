@@ -12,6 +12,8 @@ namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 [Access(typeof(SharedCMUWoundsSystem), typeof(CMUWoundLedgerSystem))]
 public sealed partial class BodyPartWoundComponent : Component
 {
+    internal Action<BodyPartWoundComponent>? ScheduleChanged;
+    internal EntityUid ScheduledOwner;
     /// <summary>
     ///     The sole source of truth for wound and treatment state. Callers
     ///     cross <see cref="CMUWoundLedgerSystem"/> instead of mutating it.
@@ -23,14 +25,44 @@ public sealed partial class BodyPartWoundComponent : Component
     internal ulong Revision;
 
     [DataField]
-    public ExternalBleedTier ExternalBleeding;
+    public ExternalBleedTier ExternalBleeding
+    {
+        get => _externalBleeding;
+        set
+        {
+            _externalBleeding = value;
+            ScheduleChanged?.Invoke(this);
+        }
+    }
+
+    private ExternalBleedTier _externalBleeding;
 
     [DataField, AutoPausedField]
     public TimeSpan ExternalBleedSuppressedUntil;
 
     [DataField, AutoPausedField]
-    public TimeSpan NextExternalBleedTick;
+    public TimeSpan NextExternalBleedTick
+    {
+        get => _nextExternalBleedTick;
+        set
+        {
+            _nextExternalBleedTick = value;
+            ScheduleChanged?.Invoke(this);
+        }
+    }
+
+    private TimeSpan _nextExternalBleedTick;
 
     [DataField, AutoPausedField]
-    public TimeSpan NextHealTick;
+    public TimeSpan NextHealTick
+    {
+        get => _nextHealTick;
+        set
+        {
+            _nextHealTick = value;
+            ScheduleChanged?.Invoke(this);
+        }
+    }
+
+    private TimeSpan _nextHealTick;
 }

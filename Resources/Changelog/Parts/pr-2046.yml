@@ -1,0 +1,12 @@
+author: OverusedMeme
+category: CMU
+changes:
+- message: Added missing Sentry Incinerator Fuel Tanks for the 60-FP & 55-FA Flame
+    Sentries, you'll now find them orderable through all GOVFOR factions ASRS.
+  type: Add
+- message: Replaced improper 45-FM fuel tank with the proper 55-FA fuel tank for the
+    base 55-FA Assault Flamer Sentry opition for Combat Techs. If you upgrade your
+    Flame Sentry, remember to order its specific fuel tank at Req!
+  type: Tweak
+time: '2026-10-07T10:24:47.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2046

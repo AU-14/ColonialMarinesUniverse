@@ -225,7 +225,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
     private void OnStorageGetState(EntityUid uid, StorageComponent component, ref ComponentGetState args)
     {
-        var storedItems = new Dictionary<NetEntity, ItemStorageLocation>();
+        var storedItems = new Dictionary<NetEntity, ItemStorageLocation>(component.StoredItems.Count);
 
         foreach (var (ent, location) in component.StoredItems)
         {
@@ -942,6 +942,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
         UpdateUI((entity, entity.Comp));
     }
 
+    // CMU14 method: removal maintains occupancy immediately and supports deferred compaction.
     private void OnEntRemoved(Entity<StorageComponent> entity, ref EntRemovedFromContainerMessage args)
     {
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
@@ -961,29 +962,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
         UpdateAppearance((entity, entity.Comp, null));
         UpdateUI((entity, entity.Comp));
 
-        var items = new List<(EntityUid Id, ItemStorageLocation Location)>();
-        foreach (var (item, location) in entity.Comp.StoredItems)
-        {
-            items.Add((item, location));
-        }
-
-        items.Sort(static (a, b) =>
-        {
-            var x = a.Location.Position.Y.CompareTo(b.Location.Position.Y);
-            if (x != 0)
-                return x;
-
-            return a.Location.Position.X.CompareTo(b.Location.Position.X);
-        });
-
-        foreach (var (item, location) in items)
-        {
-            if (CMInventoryExtensions.TryGetFirst(entity, item, out var newLocation) &&
-                location != newLocation)
-            {
-                TrySetItemStorageLocation(item, (entity, entity), newLocation);
-            }
-        }
+        RepackStorage(entity); // CMU14: compact once when a synchronous removal batch completes.
     }
 
     private void OnInsertAttempt(EntityUid uid, StorageComponent component, ContainerIsInsertingAttemptEvent args)

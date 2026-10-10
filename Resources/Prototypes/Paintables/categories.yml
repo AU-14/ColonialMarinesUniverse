@@ -8,6 +8,7 @@
   id: Canisters
   groups:
   - Canisters
+  - CMUCanisters # CMU14
 
 - type: paintableGroupCategory
   id: Crates

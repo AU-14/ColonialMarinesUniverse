@@ -1,10 +1,12 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
+  displayWeight: 14
   id: AU14JobCivilianColonySynthetic
   roundSide: Civilian
   roundForce: COLONY
   roundRole: CivilianColonySynthetic
   roundComponents:
+  - type: RegulationAppearance
   - type: Language
     preset: AU14LanguagePresetSynth
   - type: LanguageLearning

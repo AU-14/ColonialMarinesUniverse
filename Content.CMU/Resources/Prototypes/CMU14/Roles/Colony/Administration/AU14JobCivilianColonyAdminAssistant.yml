@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianColonyAdminAssistant
   roundSide: Civilian
   roundForce: COLONY
@@ -40,6 +40,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     AU14RankColonySeniorAdminAssistant:
     - !type:RoleTimeRequirement
@@ -62,7 +64,7 @@
   - AU14AccessColonyMarshall
   roleWeight: 0.25
   weight: 10 # priority role
-  displayWeight: 9
+  displayWeight: 20
 
 - type: startingGear
   id: AU14GearCivilianColonyAdminAssistant
@@ -77,8 +79,10 @@
     - RMCRadioHandheldColonyOff
     - CMPaperBin30
     - CMPaperBin30
+    - AU14StampDepAdmin  
   inhand:
     - AU14BriefcaseLawBundle
+    - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

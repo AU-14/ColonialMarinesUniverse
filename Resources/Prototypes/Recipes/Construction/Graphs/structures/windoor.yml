@@ -9,7 +9,7 @@
       - !type:SetAnchor
         value: false
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 4
         doAfter: 2
 
@@ -24,7 +24,7 @@
       conditions:
       - !type:EntityAnchored {}
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 5
         doAfter: 1
 
@@ -53,7 +53,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 4
       - !type:DeleteEntity {}
       steps:
@@ -77,7 +77,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetGlass1
+        prototype: CMSheetGlass1 # CMU14: refund fork glass
         amount: 5
       steps:
       - tool: Screwing
@@ -138,7 +138,7 @@
       conditions:
       - !type:WirePanel {}
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 2
 
@@ -221,7 +221,7 @@
       conditions:
       - !type:WirePanel {}
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 2
 
@@ -304,7 +304,7 @@
       conditions:
       - !type:WirePanel {}
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 2
 
@@ -319,7 +319,7 @@
     - to: windoor
       completed:
       - !type:GivePrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       conditions:
       - !type:WirePanel {}
@@ -332,7 +332,7 @@
     - to: pwindoor
       completed:
       - !type:GivePrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       conditions:
       - !type:WirePanel {}
@@ -345,7 +345,7 @@
     - to: uwindoor
       completed:
       - !type:GivePrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       conditions:
       - !type:WirePanel {}

@@ -30,6 +30,7 @@
     sprite: CMU14/Clothing/WY_PMC/pmchelmet_closed.rsi
   - type: Clothing
     sprite: CMU14/Clothing/WY_PMC/pmchelmet_closed.rsi
+    equippedPrefix: off
   - type: CMArmor
     bullet: 25
     bio: 25
@@ -57,6 +58,7 @@
     sprite: CMU14/Clothing/WY_PMC/pmchelmet_engi.rsi
   - type: Clothing
     sprite: CMU14/Clothing/WY_PMC/pmchelmet_engi.rsi
+    equippedPrefix: off
   - type: MycotoxinProtection
     fullProtection: true
 

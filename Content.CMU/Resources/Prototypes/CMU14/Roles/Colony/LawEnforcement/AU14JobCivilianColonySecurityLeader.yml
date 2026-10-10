@@ -1,6 +1,19 @@
 - type: job
   parent: AU14JobLEOBase
+  displayWeight: 18
   id: AU14JobCivilianColonySecurityLeader
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsSecurity
+    time: 36000 # 10 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: COLONY_SECURITY
   roundRole: CivilianColonySecurityLeader
@@ -66,11 +79,11 @@
     suitstorage: AU14BeltHolsterPistolBlack
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
-  inhand:
-  - RMCGunCasePistolM1984
   storage:
     back:
     - AU14GuidebookLawColonial
+    - CMURecordsTablet
+    - ForensicScanner
 
 - type: entity
   parent: CMSpawnPointJobBase

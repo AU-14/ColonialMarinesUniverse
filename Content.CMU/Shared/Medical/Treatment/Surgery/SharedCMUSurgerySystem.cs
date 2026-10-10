@@ -41,6 +41,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
     [Dependency] protected SharedCMUShrapnelSystem Shrapnel = default!;
     [Dependency] protected SharedCMUWoundsSystem Wounds = default!;
+    [Dependency] protected SharedCMUOpenStumpSystem Stumps = default!;
 
     private bool _medicalEnabled;
     private bool _surgeryEnabled;
@@ -56,6 +57,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         typeof(CMUSurgeryStepRemoveLimbEffectComponent),
         typeof(CMUSurgeryStepDebrideEscharEffectComponent),
         typeof(CMUSurgeryStepResolveTraitEffectComponent),
+        typeof(CMUSurgeryStepCloseStumpEffectComponent),
     ];
 
     public override void Initialize()
@@ -67,6 +69,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         SubscribeLocalEvent<CMUOrganDamagedSurgeryConditionComponent, CMSurgeryStepCompleteCheckEvent>(OnOrganDamagedCompleteCheck);
         SubscribeLocalEvent<CMUInternalBleedingSurgeryConditionComponent, CMSurgeryValidEvent>(OnInternalBleedingValid);
         SubscribeLocalEvent<CMUEscharSurgeryConditionComponent, CMSurgeryValidEvent>(OnEscharValid);
+        SubscribeLocalEvent<CMUOpenStumpSurgeryConditionComponent, CMSurgeryValidEvent>(OnOpenStumpValid);
         SubscribeLocalEvent<CMUSurgicalTraitConditionComponent, CMSurgeryValidEvent>(OnSurgicalTraitValid);
         SubscribeLocalEvent<CMUSurgicalTraitConditionComponent, CMSurgeryStepCompleteCheckEvent>(OnSurgicalTraitCompleteCheck);
 
@@ -80,6 +83,7 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
         SubscribeLocalEvent<CMUSurgeryStepRemoveLimbEffectComponent, CMSurgeryStepEvent>(OnRemoveLimbStep);
         SubscribeLocalEvent<CMUSurgeryStepDebrideEscharEffectComponent, CMSurgeryStepEvent>(OnDebrideEscharStep);
         SubscribeLocalEvent<CMUSurgeryStepResolveTraitEffectComponent, CMSurgeryStepEvent>(OnResolveSurgicalTraitStep);
+        SubscribeLocalEvent<CMUSurgeryStepCloseStumpEffectComponent, CMSurgeryStepEvent>(OnCloseStumpStep);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.SurgeryEnabled, v => _surgeryEnabled = v, true);
@@ -184,6 +188,25 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     {
         if (!HasComp<InternalBleedingComponent>(args.Part))
             args.Cancelled = true;
+    }
+
+    private void OnOpenStumpValid(Entity<CMUOpenStumpSurgeryConditionComponent> ent, ref CMSurgeryValidEvent args)
+    {
+        if (!HasComp<CMUOpenStumpComponent>(args.Part))
+            args.Cancelled = true;
+    }
+
+    private void OnCloseStumpStep(Entity<CMUSurgeryStepCloseStumpEffectComponent> ent, ref CMSurgeryStepEvent args)
+    {
+        if (!IsSurgeryEnabled())
+            return;
+        if (!HasComp<CMUOpenStumpComponent>(args.Part))
+        {
+            args.Failed = true;
+            return;
+        }
+
+        Stumps.CloseAllStumps(args.Part);
     }
 
     private void OnEscharValid(Entity<CMUEscharSurgeryConditionComponent> ent, ref CMSurgeryValidEvent args)
@@ -335,16 +358,24 @@ public abstract partial class SharedCMUSurgerySystem : EntitySystem
     {
         if (!IsSurgeryEnabled())
             return;
-        if (!SurgicalTraits.RemoveTrait(args.Part, ent.Comp.Trait))
+        if (!TryResolveSurgicalTrait(args.Part, ent.Comp.Trait))
         {
             args.Failed = true;
             return;
         }
+    }
 
-        if (ent.Comp.Trait == CMUSurgicalTrait.VascularTear)
-            Wounds.SuppressInternalBleed(args.Part);
-        else if (ent.Comp.Trait == CMUSurgicalTrait.EmbeddedForeignBody)
-            Shrapnel.TryClearShrapnel(args.Part);
+    public bool TryResolveSurgicalTrait(EntityUid part, CMUSurgicalTrait trait)
+    {
+        if (!SurgicalTraits.RemoveTrait(part, trait))
+            return false;
+
+        if (trait == CMUSurgicalTrait.VascularTear)
+            Wounds.SuppressInternalBleed(part);
+        else if (trait == CMUSurgicalTrait.EmbeddedForeignBody)
+            Shrapnel.TryClearShrapnel(part);
+
+        return true;
     }
 
     protected virtual void ApplyOrganRemovalSideEffects(EntityUid user, EntityUid body, EntityUid organ, string slot)

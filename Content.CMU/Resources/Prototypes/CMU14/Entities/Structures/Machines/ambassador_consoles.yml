@@ -41,13 +41,13 @@
   - type: AccessReader
     access: [["AU14AccessColonyAmbassador"]]
 
-# UPP Ambassador Console - Can call in GROM
+# UPP Ambassador Console - Can call in GROM and BEAR
 - type: entity
   id: AU14AmbassadorConsoleUPP
   parent: AU14AmbassadorConsoleBase
   name: UPP diplomatic console
-  description: A Union of Progressive Peoples diplomatic console. Can request GROM special forces support.
-  suffix: UPP, GROM
+  description: A Union of Progressive Peoples diplomatic console. Can request GROM special forces or BEAR PMC support.
+  suffix: UPP, GROM, BEAR
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
@@ -61,6 +61,12 @@
       UPPGROM: 7500
       UPPGROMAlt: 6000
       UPPGROMAlt2: 4500
+      CHTORM_PMC_BEAR: 7500
+      GROZA_PMC_BEAR: 6000
+      SKALA_PMC_BEAR: 4500
+      Liquidators: 4500 #only flamethrowers
+      Migrant_UPP: 1000 #They don’t speak English.
+
 
 # UA Ambassador Console - Can call in US Army
 - type: entity
@@ -101,6 +107,7 @@
     replenishInterval: 60
     callableParties:
       RMCRRT: 9000
+      SAS: 7000
       NSPAInvestigationParty: 5000
 
 # Independent Systems Ambassador Console
@@ -119,4 +126,6 @@
     budget: 500
     replenishAmount: 10
     replenishInterval: 60
+    callableParties:
+      Freelancers: 4500
 

@@ -17,4 +17,10 @@ There are three machines involved in research.
 
 All three of them can be obtained at any ASRS elevator.
 
+GOVFOR, OPFOR, the colony, and Weyland-Yutani have independent research networks. Each faction's ASRS supplies its own terminal. Contract offers, cooldowns, research points, clearance, and saved reports are shared only within that faction.
+
+Scanning chemicals awards research points to the scanner's faction. Synthesis simulators use the nearest research terminal on the same map, so place your faction's terminal beside your simulator.
+
+After taking a chemical contract, use the cooldown button to spend 1 research point and remove 60 seconds from the remaining wait. You can repeat this purchase while points and cooldown remain. Removing the last seconds immediately refreshes the contract offers.
+
 </Document>

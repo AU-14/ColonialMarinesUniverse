@@ -1472,6 +1472,7 @@ public sealed class RMCHumanPrototypeRegressionTest
 
             entMan.EnsureComponent<SynthComponent>(patient);
             skills.SetSkill(surgeon, "RMCSkillSurgery", 3);
+            skills.SetSkill(surgeon, "RMCSkillConstruction", 3); // CMU14: synth repair with construction-scaled doafter
             standing.Down(patient, playSound: false, dropHeldItems: false, force: true);
 
             foreach (var (partUid, part) in body.GetBodyChildren(patient))
@@ -1498,7 +1499,8 @@ public sealed class RMCHumanPrototypeRegressionTest
             });
         });
 
-        await server.WaitRunTicks(5);
+        // CMU14: 3.5s doafter (7s base * 0.5 construction multiplier), 60 tps
+        await server.WaitRunTicks(300);
 
         await server.WaitAssertion(() =>
         {

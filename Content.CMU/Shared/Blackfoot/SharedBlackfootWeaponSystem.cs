@@ -50,14 +50,14 @@ public sealed partial class SharedBlackfootWeaponSystem : EntitySystem
     {
         if (!CanFireInState(flight.State))
         {
-            reason = flight.State switch
+            reason = Loc.GetString(flight.State switch
             {
-                BlackfootFlightState.Stowed => "The Blackfoot is stowed.",
-                BlackfootFlightState.TakingOff => "The Blackfoot weapons are safed during takeoff.",
-                BlackfootFlightState.Landing => "The Blackfoot weapons are safed during landing.",
-                BlackfootFlightState.Crashed => "The Blackfoot is too damaged to fire.",
-                _ => "The Blackfoot cannot fire in the current flight state.",
-            };
+                BlackfootFlightState.Stowed => "cmu-blackfoot-weapon-stowed",
+                BlackfootFlightState.TakingOff => "cmu-blackfoot-weapon-taking-off",
+                BlackfootFlightState.Landing => "cmu-blackfoot-weapon-landing",
+                BlackfootFlightState.Crashed => "cmu-blackfoot-weapon-crashed",
+                _ => "cmu-blackfoot-weapon-invalid-state",
+            });
             return false;
         }
 
@@ -65,20 +65,20 @@ public sealed partial class SharedBlackfootWeaponSystem : EntitySystem
             stealth.Enabled &&
             stealth.DisableWeapons)
         {
-            reason = "The Blackfoot cannot fire while stealth is active.";
+            reason = Loc.GetString("cmu-blackfoot-weapon-stealth");
             return false;
         }
 
         if (IsDoorGun(hardpointType) &&
             (!TryComp(vehicle, out BlackfootRearDoorComponent? rearDoor) || !rearDoor.Open))
         {
-            reason = "Open the rear door before firing the door gun.";
+            reason = Loc.GetString("cmu-blackfoot-weapon-rear-door");
             return false;
         }
 
         if (IsLauncher(hardpointType) && !IsAirborneWeaponState(flight.State))
         {
-            reason = "The Blackfoot launchers can only fire while airborne.";
+            reason = Loc.GetString("cmu-blackfoot-weapon-launcher-airborne");
             return false;
         }
 

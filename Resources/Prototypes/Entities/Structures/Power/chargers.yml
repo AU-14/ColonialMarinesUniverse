@@ -102,7 +102,7 @@
           - PotatoBattery
   - type: ApcPowerReceiver
     needsPower: false # TODO RMC14
-    powerLoad: 0
+    powerLoad: 1
   - type: Item
     size: Ginormous
   - type: MultiHandedItem

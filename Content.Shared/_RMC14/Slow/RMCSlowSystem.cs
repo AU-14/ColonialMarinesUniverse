@@ -48,18 +48,20 @@ public sealed partial class RMCSlowSystem : EntitySystem
         SubscribeLocalEvent<RMCSpeciesSlowdownModifierComponent, StatusEffectEndedEvent>(OnModifierEffectEnd);
     }
 
-    public bool TrySlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false)
+    public bool TrySlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false, bool ignoreImmunity = false)
     {
-        // CMU Related Change
-        if (IsRegularYautja(ent))
+        // CMU14: yautja shrug slows by design; the medicomp's self-treatment slow is
+        // CMSS13 parity (mcomp_wounds Slow(300)) and opts back in with ignoreImmunity
+        if (!ignoreImmunity && IsRegularYautja(ent))
             return false;
 
-        if (!TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow))
+        TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow);
+        if (slow == null && !ignoreImmunity)
             return false;
 
         var chemical = new GetChemicalStunTimeMultiplierEvent();
         RaiseLocalEvent(ent, ref chemical);
-        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * MathF.Max(0f, chemical.Multiplier);
+        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow?.DurationMultiplier ?? 1) * MathF.Max(0f, chemical.Multiplier);
         var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCSlowdownComponent>(ent);
@@ -74,21 +76,23 @@ public sealed partial class RMCSlowSystem : EntitySystem
         return true;
     }
 
-    public bool TrySuperSlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false)
+    public bool TrySuperSlowdown(EntityUid ent, TimeSpan duration, bool refresh = true, bool ignoreDurationModifier = false, bool ignoreImmunity = false)
     {
-        // CMU Related Change
-        if (IsRegularYautja(ent))
+        // CMU14: yautja shrug slows by design; the medicomp's self-treatment super slow is
+        // CMSS13 parity (mcomp_wounds Superslow(150)) and opts back in with ignoreImmunity
+        if (!ignoreImmunity && IsRegularYautja(ent))
             return false;
 
         if (_timing.ApplyingState)
             return false;
 
-        if (!TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow))
+        TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow);
+        if (slow == null && !ignoreImmunity)
             return false;
 
         var chemical = new GetChemicalStunTimeMultiplierEvent();
         RaiseLocalEvent(ent, ref chemical);
-        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * MathF.Max(0f, chemical.Multiplier);
+        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow?.DurationMultiplier ?? 1) * MathF.Max(0f, chemical.Multiplier);
         var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCSuperSlowdownComponent>(ent);
@@ -274,6 +278,11 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
     private void OnModifierEffectEnd(Entity<RMCSpeciesSlowdownModifierComponent> ent, ref StatusEffectEndedEvent args)
     {
+        // CMU14: fires from knockdown component shutdown inside client prediction resets. Re-adding
+        // the networked visuals mid-rollback breaks the reset (collection modified, diverged state).
+        if (_timing.ApplyingState)
+            return;
+
         if (!ent.Comp.StatusesToUpdateOn.Contains(args.Key))
             return;
 

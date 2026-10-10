@@ -1,6 +1,5 @@
 using Content.Server.Antag.Components;
 using Content.Server.Antag.Selectors;
-using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.Antag;
@@ -12,8 +11,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.GameRules;
 
-[TestFixture]
+[TestFixture] // CMU14
 public sealed class AntagSpecifierMigrationTest : AntagTest
+// CMU14 Owned Class / Test Fixture: I sure love a good pinning test
 {
     private static readonly string[] MigratedRules =
     [
@@ -28,16 +28,17 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
         "CLFSleeperAgent",
     ];
 
-    private static readonly HashSet<string> GroupRestricted =
-    [
-        "RunawaySynth",
-        "Fugitive",
-        "DrugDealer",
-        "CorporateSpy",
-        "CLFVeteran",
-        "StrikeOrganizer",
-        "SerialKiller",
-    ];
+    private static readonly Dictionary<string, string[]> JobBlacklistGroups = new()
+    {
+        ["RunawaySynth"] = ["AllGovforCommandStaff", "AllOpforCommandStaff"],
+        ["Fugitive"] = ["AllGovforJobs", "AllOpforJobs", "AllCLFJobs", "AllWeYuJobs", "AllSynthJobs"],
+        ["DrugDealer"] = ["AllGovforJobs", "AllOpforJobs", "AllCLFJobs", "AllWeYuJobs", "AllSynthJobs"],
+        ["CorporateSpy"] = ["AllGovforJobs", "AllOpforJobs", "AllCLFJobs"],
+        ["CLFVeteran"] = ["AllGovforJobs", "AllOpforJobs", "AllCLFJobs", "AllSynthJobs"],
+        ["StrikeOrganizer"] = ["AllGovforJobs", "AllOpforJobs", "AllCLFJobs", "AllWeYuJobs"],
+        ["Cannibal"] = ["AllGovforCommandStaff", "AllOpforCommandStaff", "AllCLFJobs"],
+        ["SerialKiller"] = ["AllGovforJobs", "AllOpforJobs", "AllCLFJobs", "AllSynthJobs"],
+    };
 
     private static readonly Dictionary<string, string> Roles = new()
     {
@@ -54,13 +55,13 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
 
     private static readonly Dictionary<string, string[]> Components = new()
     {
-        ["RunawaySynth"] = ["RunawaySynth", "Skills", "Synth", "ColonyBounty"],
+        ["RunawaySynth"] = ["RunawaySynth", "Synth", "ColonyBounty"],
         ["Fugitive"] = ["Fugitive", "ColonyBounty"],
         ["DrugDealer"] = ["DrugDealer", "ColonyBounty"],
-        ["CorporateSpy"] = ["CorporateAgent", "ColonyBounty"],
-        ["CLFVeteran"] = ["CLFVeteran", "Skills", "ColonyBounty"],
-        ["StrikeOrganizer"] = ["StrikeOrganizer"],
-        ["Cannibal"] = ["Cannibal"],
+        ["CorporateSpy"] = ["CorporateAgent", "ColonyBounty", "SynthGunAccess"],
+        ["CLFVeteran"] = ["CLFVeteran", "ColonyBounty"],
+        ["StrikeOrganizer"] = ["StrikeOrganizer", "SynthGunAccess"],
+        ["Cannibal"] = ["Cannibal", "SynthGunAccess"],
         ["SerialKiller"] = ["SerialKiller", "ColonyBounty"],
         ["CLFSleeperAgent"] = ["CLFSleeperAgent"],
     };
@@ -80,15 +81,27 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
 
     private static readonly Dictionary<string, string?> StartingGear = new()
     {
-        ["RunawaySynth"] = null,
+        ["RunawaySynth"] = "AU14GearRunawaySynth",
         ["Fugitive"] = "AU14GearFugitive",
-        ["DrugDealer"] = "AU14GearDrugDealer",
+        ["DrugDealer"] = "CMUGearDrugDealer",
         ["CorporateSpy"] = "AU14GearCorporateSpy",
         ["CLFVeteran"] = "AU14GearCLFVeteran",
         ["StrikeOrganizer"] = "AU14GearStrikeOrganizer",
         ["Cannibal"] = "AU14GearCannibal",
-        ["SerialKiller"] = null,
+        ["SerialKiller"] = "AU14GearSerialKiller",
         ["CLFSleeperAgent"] = null,
+    };
+
+    private static readonly Dictionary<string, (int Min, int Max)> RandomCounts = new()
+    {
+        ["RunawaySynth"] = (1, 3),
+        ["Fugitive"] = (1, 3),
+        ["DrugDealer"] = (1, 2),
+        ["CLFVeteran"] = (1, 2),
+        ["StrikeOrganizer"] = (1, 2),
+        ["Cannibal"] = (1, 2),
+        ["SerialKiller"] = (1, 2),
+        ["CLFSleeperAgent"] = (1, 2),
     };
 
     private static readonly Dictionary<string, (string Text, Color Color)> Briefings = new()
@@ -110,7 +123,7 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
   id: AntagMigrationReplacement
   prefRoles: [ RunawaySynthRole ]
   jobBlacklist: [ AU14JobCLFGuerilla ]
-  jobBlacklistGroup: [ AllGovforJobs ]
+  jobBlacklistGroup: [ AllGovforJobs, AllOpforJobs ]
 
 - type: entity
   id: AntagMigrationReplacementRule
@@ -136,11 +149,25 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
                 Assert.That(rule.TryGetComponent<AntagSelectionComponent>(out var selection, SEntMan.ComponentFactory),
                     Is.True, id);
                 var selector = selection!.Antags.Single();
+                if (RandomCounts.TryGetValue(id, out var range))
+                {
+                    Assert.That(selector, Is.TypeOf<RandomAntagCount>(), id);
+                    var random = (RandomAntagCount) selector;
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That((int) random.Range.Min, Is.EqualTo(range.Min), id);
+                        Assert.That((int) random.Range.Max, Is.EqualTo(range.Max), id);
+                    });
+                }
+                else
+                {
+                    Assert.That(selector, Is.TypeOf<FixedAntagCount>(), id);
+                    Assert.That(((FixedAntagCount) selector).Count, Is.EqualTo(1), id);
+                }
+
                 Assert.Multiple(() =>
                 {
                     Assert.That(selection.SelectionTime, Is.EqualTo(AntagSelectionTime.JobsAssigned), id);
-                    Assert.That(selector, Is.TypeOf<FixedAntagCount>(), id);
-                    Assert.That(((FixedAntagCount) selector).Count, Is.EqualTo(1), id);
                     Assert.That(selector.Proto.Id, Is.EqualTo(id), id);
                     Assert.That(specifier.PrefRoles.Select(role => role.Id), Is.EqualTo(new[] { Roles[id] }), id);
                     Assert.That(specifier.Components.Keys, Is.EquivalentTo(Components[id]), id);
@@ -152,15 +179,10 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
                 else
                     Assert.That(specifier.MindRoles, Is.Null, id);
 
-                if (GroupRestricted.Contains(id))
-                {
-                    Assert.That(specifier.JobBlacklistGroup?.Select(group => group.Id),
-                        Is.EquivalentTo(new[] { "AllGovforJobs", "AllOpforJobs" }), id);
-                }
+                if (JobBlacklistGroups.TryGetValue(id, out var groups))
+                    Assert.That(specifier.JobBlacklistGroup?.Select(group => group.Id), Is.EquivalentTo(groups), id);
                 else
-                {
                     Assert.That(specifier.JobBlacklistGroup, Is.Null, id);
-                }
 
                 if (Briefings.TryGetValue(id, out var briefing))
                 {
@@ -179,37 +201,45 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
             }
 
             var veteran = SProtoMan.Index<AntagSpecifierPrototype>("CLFVeteran");
-            Assert.That(veteran.JobBlacklist?.Select(job => job.Id), Is.EquivalentTo(new[]
-            {
-                "AU14JobCLFGuerilla",
-                "AU14JobCLFSapper",
-                "AU14JobCLFCellLeader",
-                "AU14JobCLFRadioOperator",
-                "AU14JobCLFPhysician",
-                "AU14JobCLFSurgeon",
-            }));
-            Assert.That(SProtoMan.Index<AntagSpecifierPrototype>("Cannibal").JobWhitelist?.Select(job => job.Id),
-                Is.EquivalentTo(new[] { "AU14JobCivilianFoodServiceWorker" }));
+            Assert.That(veteran.JobBlacklist, Is.Null);
+            Assert.That(SProtoMan.Index<AntagSpecifierPrototype>("Cannibal").JobWhitelist, Is.Null);
             Assert.That(SProtoMan.Index<AntagSpecifierPrototype>("CLFSleeperAgent").JobWhitelist?.Select(job => job.Id),
                 Is.EquivalentTo(new[]
                 {
+                    "AU14JobCivilianCorporateLiaison",
+                    "AU14JobCivilianCMBMarshal",
+                    "AU14JobCivilianColonyAdministrator",
+                    "AU14JobGOVFORPlatOp",
+                    "AU14JobGOVFORAdjutant",
                     "AU14JobGOVFORSquadSergeant",
                     "AU14JobGOVFORSectionSergeant",
-                    "AU14JobGOVFORPlatOp",
+                    "AU14JobGOVFORVehicleCommander",
                     "AU14JobGOVFORMilitaryPoliceMan",
+                    "AU14JobGOVFOROfficerEngi",
+                    "AU14JobGOVFOROfficerIntel",
+                    "AU14JobGOVFOROfficerLogistics",
+                    "AU14JobGOVFOROfficerMedical",
+                    "AU14JobOPFORPlatOp",
+                    "AU14JobOPFORAdjutant",
+                    "AU14JobOPFORSquadSergeant",
+                    "AU14JobOPFORSectionSergeant",
+                    "AU14JobOPFORVehicleCommander",
+                    "AU14JobOPFORMilitaryPoliceMan",
+                    "AU14JobOPFOROfficerEngi",
+                    "AU14JobOPFOROfficerIntel",
+                    "AU14JobOPFOROfficerLogistics",
+                    "AU14JobOPFOROfficerMedical",
                 }));
 
             var runaway = SProtoMan.Index<AntagSpecifierPrototype>("RunawaySynth");
             var synth = (SynthComponent) runaway.Components["Synth"].Component;
-            var runawaySkills = (SkillsComponent) runaway.Components["Skills"].Component;
-            var veteranSkills = (SkillsComponent) veteran.Components["Skills"].Component;
             Assert.Multiple(() =>
             {
                 Assert.That(synth.ChangeBrain, Is.False);
                 Assert.That(synth.CanUseGuns, Is.True);
                 Assert.That(synth.HideGeneration, Is.True);
                 Assert.That(synth.UseHumanHealthIcons, Is.True);
-                Assert.That(runawaySkills.Skills.ToDictionary(pair => pair.Key.Id, pair => pair.Value),
+                Assert.That(runaway.StartingSkills.ToDictionary(pair => pair.Key.Id, pair => pair.Value),
                     Is.EquivalentTo(new Dictionary<string, int>
                     {
                         ["RMCSkillCqc"] = 4,
@@ -231,18 +261,18 @@ public sealed class AntagSpecifierMigrationTest : AntagTest
                         ["RMCSkillDomestics"] = 2,
                         ["RMCSkillNavigations"] = 1,
                     }));
-                Assert.That(veteranSkills.Skills.ToDictionary(pair => pair.Key.Id, pair => pair.Value),
+                Assert.That(veteran.StartingSkills.ToDictionary(pair => pair.Key.Id, pair => pair.Value),
                     Is.EquivalentTo(new Dictionary<string, int>
                     {
                         ["RMCSkillFirearms"] = 3,
                         ["RMCSkillMeleeWeapons"] = 3,
-                        ["RMCSkillCqc"] = 3,
+                        ["RMCSkillCqc"] = 4,
                         ["RMCSkillEndurance"] = 3,
-                        ["RMCSkillFireman"] = 3,
+                        ["RMCSkillFireman"] = 4,
                         ["RMCSkillConstruction"] = 3,
-                        ["RMCSkillLeadership"] = 3,
+                        ["RMCSkillLeadership"] = 2,
                         ["RMCSkillMedical"] = 3,
-                        ["RMCSkillPolice"] = 1,
+                        ["RMCSkillPolice"] = 2,
                         ["RMCSkillSurgery"] = 3,
                     }));
             });

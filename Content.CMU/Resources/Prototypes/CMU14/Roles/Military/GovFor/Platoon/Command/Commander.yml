@@ -5,7 +5,7 @@
   name: au14-job-name-govforplatco
   description: au14-job-description-govforplatco
   icon: "AU14JobIconPlatCo"
-  spawnMenuRoleName: Platoon Commander (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-platoon-commander
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFORPlatCo
   dummyStartingGear: AU14GearGOVFORPlatCoDummy
@@ -41,6 +41,7 @@
     prefix: au14-job-prefix-govforplatco
   - type: AU14SilenceOrderAbility
   - type: AU14CallToAttentionAbility
+    canCall: false
     attentionFocusPriority: 300
   - type: AU14CallToAttentionImmune
   - type: RMCSpeechBubbleSpecificStyle
@@ -81,6 +82,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -112,7 +115,7 @@
   roundSide: Opfor
   roundForce: OPFOR
   icon: "AU14JobIconOPFORPlatCo"
-  spawnMenuRoleName: Platoon Commander (OPFOR)
+  spawnMenuRoleName: Commanding Officer (OPFOR)
   supervisors: au14-job-supervisors-opforplatco
   startingGear: AU14GearOPFORPlatCo
   dummyStartingGear: AU14GearOPFORPlatCoDummy
@@ -120,6 +123,8 @@
   - AU14OpforCommand
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+  useLoadoutOfJob: AU14JobGOVFORPlatCo
+
 - type: startingGear
   id: AU14GearGOVFORPlatCo
   equipment:
@@ -201,8 +206,8 @@
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoCMBCIU
   roundForce: CMBCIU
-  name: Platoon Commander
-  spawnMenuRoleName: Platoon Commander (CMBCIU)
+  name: Commanding Officer
+  spawnMenuRoleName: Commanding Officer (CMBCIU)
   ranks:
     AU14RankCMBMarshal: []
 
@@ -212,15 +217,15 @@
   roundForce: RMC
   name: au14-job-name-govforplatcoRMC
   description: au14-job-description-govforplatco
-  spawnMenuRoleName: Platoon Commander (TWE RMC)
+  spawnMenuRoleName: Commanding Officer (TWE RMC)
 
 - type: job
   parent: AU14JobPlatCoBase
   id: AU14JobGOVFORPlatCoUPP
   roundForce: UPP
   requirements: []
-  name: Platoon Commander
-  spawnMenuRoleName: Platoon Commander (UPP)
+  name: Commanding Officer
+  spawnMenuRoleName: Commanding Officer (UPP)
   ranks:
     UPP_Captain:
     - !type:RoleTimeRequirement
@@ -238,7 +243,7 @@
   roundForce: WYPMC
   requirements: []
   name: PMC Operations Director
-  spawnMenuRoleName: Platoon Commander (WYPMC)
+  spawnMenuRoleName: Commanding Officer (WYPMC)
   ranks:
     AU14RankWeYuCommanderSenior:
     - !type:RoleTimeRequirement

@@ -5,11 +5,33 @@
   description: Standard issue LACN boots.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/lacnboots.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi
+    layers:
+    - state: icon
   - type: Clothing
-    sprite: CMU14/Clothing/LACN/lacnboots.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/NonCamo/LACNbootsbrown.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNbootsblack.rsi
 
 - type: entity
   parent: [RMCItemSlotM5Bayonet, CMBootsJungle]
   id: AU14LACNBootsFilled
   suffix: Filled
+
+- type: entity
+  parent: CMBootsBlack
+  id: CMULACNBootsWhite
+  name: LACN white boots
+  description: White boots worn by LACN crew aboard ship.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Shared/LACNbootswhite.rsi
+    layers:
+    - state: icon
+  - type: Clothing
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Shared/LACNbootswhite.rsi

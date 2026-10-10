@@ -34,7 +34,7 @@ public sealed class PowerNetMergeRegressionTest : GameTest
     idleLoad: 5
     batteryRechargeRate: 20
   - type: Battery
-    netSync: false
+    netsync: false
     maxCharge: 100
     startingCharge: 10
   - type: PowerNetMergeProbe

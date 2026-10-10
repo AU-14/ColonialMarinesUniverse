@@ -267,10 +267,15 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
       - id: CMBeltMedicBag
+        recommended: true
+      - id: CMBeltMedical
     - name: General Medical Supplies
       entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 60
       - id: AU14Tourniquet
@@ -407,6 +412,8 @@
       choices: { CMUPlatoonAirCrewHeadgear: 1 }
       entries:
       - id: AU14USASFAirCrewHelmet
+      - id: AU14JungleM50Helmet
+      - id: AU14CamoM50Helmet
       - id: AU14USASFCap
     - name: Flight Visor
       choices: { CMUPlatoonAirCrewFlightVisor: 1 }
@@ -613,10 +620,6 @@
         name: Black Beret
       - id: AU14CamoPatrolCap
         amount: 10
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTO
-        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill
@@ -629,8 +632,10 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
-      - id: ANPRC117GRadioFilled
+      - id: ANPRC117GRadioIssued
         amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
       - id: ANPRCMastAntenna
         amount: 1
       - id: RMCExplosiveBreachingCharge
@@ -963,6 +968,8 @@
         name: infantry first aid kit (Full)
         recommended: true
         amount: 30
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
       - id: AU14Tourniquet
@@ -1061,6 +1068,12 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
+    - name: Hearing Protection
+      entries:
+      - id: CMUHeadElectronicHearingProtection
+        amount: 60
     - name: Optics
       entries:
       - id: RMCLaserDesignatorPVE
@@ -1109,6 +1122,11 @@
       - id: RMCBoxPackFlareCAS
       - id: RMCFulton20
       - id: RMCOverwatchCameraTripod
+    # a working set gets through a cell in under an hour. the operator carries spares
+    - name: Spare Batteries
+      entries:
+      - id: RMCPowerCellHigh
+        amount: 3
 
 # AirCrew Weapons (universal)
 - type: entity
@@ -1184,10 +1202,12 @@
       - id: AU14BeltUtilityCombatFilled
         name: M276 pattern combat toolbelt rig (filled)
         recommended: true
-      - id: AU14PouchToolsFilledComtech
-        name: tactical tools pouch (filled)
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
@@ -1214,16 +1234,18 @@
         recommended: true
       - id: AU14HescoKit
         name: HESCO barricade kit
-        points: 4
+        points: 2
         recommended: true
       - id: CMSandbagEmpty50
         name: sandbags x50
-        points: 4
+        points: 2
       - id: RMCPlankWood
         name: wood x50
-        points: 2
+        points: 1
     - name: Engineering Supplies
       entries:
+      - id: RMCCableCoil
+        points: 1
       - id: CMFoldingBarricadesMB6x3
         name: MB-6 folding barricade x3
         points: 2
@@ -1267,7 +1289,7 @@
         points: 6
         recommended: true
       - id: RMCExplosiveBreachingCharge
-        points: 6
+        points: 5
       - id: RMCPacketGrenadeMetalFoamFilled
         points: 8
       - id: RMCRocketM5510Brute
@@ -1316,6 +1338,8 @@
       entries:
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
@@ -1353,7 +1377,7 @@
   parent: CMVendorBundleRiflemanApparel
   id: AU14VendorBundleCombatTechnicianEssentials
   name: essential engineer set
-  description: Contains 50 metal, 50 plasteel, 50 sandbags, a shovel, a high-capacity power cell, an overwatch camera tripod, a light replacer, a deployable ladder, a welding visor, welding goggles, and a nailgun.
+  description: Contains 50 metal, 50 plasteel, 50 sandbags, a mine detector, a shovel, a high-capacity power cell, an overwatch camera tripod, a light replacer, a deployable ladder, a welding visor, welding goggles, and a nailgun.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Tools/wrench.rsi
@@ -1376,6 +1400,7 @@
     - RMCSentryLaptop
     - RMCOverwatchCameraTripod
     - AU14ToolShovel
+    - MineDetector
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel
@@ -1501,6 +1526,7 @@
   name: USCM automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]
   - type: Sprite
@@ -1541,6 +1567,8 @@
         amount: 5
       - id: RMCML66DCase
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
@@ -1595,6 +1623,8 @@
         amount: 100
       - id: RMCSpeedLoader44Marksman
         amount: 10
+      - id: RMCMagazinePistolSU6
+        amount: 30
     - name: Magazine Boxes
       entries:
       - id: CMUBoxMagazineRifleM54CMK1
@@ -1619,6 +1649,8 @@
         amount: 5
     - name: explosives
       entries:
+      - id: CMUBoxGrenadeTraining
+        amount: 1
       - id: CMPacketGrenadeHighExplosiveFilled
         amount: 6
       - id: RMCPacketGrenadeIncendiaryFilled
@@ -1630,6 +1662,16 @@
       - id: RMCPacketGrenadeWhitePhosphorusFilled
         amount: 3
       - id: CMPacketGrenadeFragOldFilled
+        amount: 2
+      - id: CMUPacketGrenadeBFABFilled
+        amount: 2
+      - id: CMUPacketGrenadeCanisterFilled
+        amount: 2
+      - id: CMUPacketGrenadeSmokeGreenFilled
+        amount: 2
+      - id: CMUPacketGrenadeSmokeRedFilled
+        amount: 2
+      - id: CMUPacketGrenadeElectroshockFilled
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
@@ -1657,6 +1699,8 @@
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12
+      - id: AU14Bangalore
+        amount: 2
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel
@@ -1713,6 +1757,12 @@
         amount: 10
       - id: RMCPouchMagazinePistolLarge
         amount: 10
+      - id: RMCPouchGeneralLarge
+        amount: 5
+      - id: RMCPouchDocument
+        amount: 5
+      - id: RMCPouchShotgunLarge
+        amount: 5
     - name: Devices
       entries:
       - id: RMCIntelDetector
@@ -1723,12 +1773,26 @@
         amount: 4
       - id: RMCSentryLaptop
         amount: 4
-    - name: RTO Packs
-      entries:
-      - id: AU14BackpackRTOPackJungle
+      - id: MineDetector
         amount: 2
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
+      - id: CMUDeployableZLevelLadder
+        amount: 2
+    - name: Protective Equipment
+      entries:
+      - id: CMMaskGas
+        amount: 30
+      - id: CMUGasMaskFilter
+        amount: 30
+      - id: CMUFieldGasTankOxygenFilled
+        amount: 15
+    - name: Radio Equipment
+      entries:
+      - id: ANPRC117GRadio
+        amount: 3
+      - id: ANPRCWhipAntenna
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 2
     - name: Materials
       entries:
       - id: CMSheetMetal
@@ -1739,6 +1803,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

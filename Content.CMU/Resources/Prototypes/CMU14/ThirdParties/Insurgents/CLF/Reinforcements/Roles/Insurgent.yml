@@ -46,7 +46,7 @@
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCLFGuerilla
-  spawnMenuRoleName: CLF Guerilla Fighter (Reinforcements)
+  spawnMenuRoleName: cmu-spawn-role-clf-guerilla-fighter-reinforcements 
   icon: "CMJobIconEmpty"
   requireAdminNotify: false
   joinNotifyCrew: false

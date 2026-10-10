@@ -6,7 +6,7 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalCyan
@@ -27,7 +27,7 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalBlue
@@ -47,7 +47,7 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalYellow
@@ -67,7 +67,7 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalPink
@@ -87,7 +87,7 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalOrange
@@ -107,7 +107,7 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalBlack
@@ -127,7 +127,7 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalRed
@@ -147,7 +147,7 @@
       edges:
         - to: icon
           steps:
-            - material: Glass
+            - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
               amount: 1
               doAfter: 1
             - tag: CrystalGreen
@@ -167,7 +167,7 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalCyan
@@ -188,7 +188,7 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalBlue
@@ -208,7 +208,7 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalYellow
@@ -228,7 +228,7 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalPink
@@ -248,7 +248,7 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalOrange
@@ -268,7 +268,7 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalBlack
@@ -288,7 +288,7 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalRed
@@ -308,7 +308,7 @@
     edges:
     - to: icon
       steps:
-      - material: Glass
+      - material: CMGlass # CMU14: fork glass (CMSheetGlass), not upstream Glass
         amount: 1
         doAfter: 1
       - tag: CrystalGreen

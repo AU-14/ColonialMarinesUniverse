@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobLEOLeaderBase
+  displayWeight: 18
   id: AU14JobCivilianNSPAInspector
   roundSide: Civilian
   roundForce: NSPA
@@ -37,10 +38,17 @@
   setPreference: false
   canBeAntag: false
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsSecurity
+    time: 36000 # 10 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -74,12 +82,12 @@
     suitstorage: AU14BeltHolsterPistolBlack
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
-  inhand:
-  - AU14GunCasePistolL45
   storage:
     back:
     - AU14GuidebookLawColonial
     - AU14StampNSPA
+    - CMURecordsTablet
+    - ForensicScanner
 
 - type: entity
   parent: CMSpawnPointJobBase

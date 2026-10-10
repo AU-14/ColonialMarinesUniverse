@@ -1,4 +1,4 @@
-﻿#table parts
+#table parts
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateBoxGamblingTableParts
@@ -419,6 +419,60 @@
 
 - type: entity
   parent: RMCCrateBase
+  id: CMUCrateMobilePhones
+  name: Mobile Phone Crate (5x mobile phone)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMobilePhone
+      amount: 5
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateColonyHeadsets
+  name: Colony Headset Crate (5x colony headset)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHeadsetColony
+      amount: 5
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxTPR9Civilian
+  name: TPR9 civilian handgun crate (x1 TPR9 civilian handgun, x4 M4A3 magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponPistolTPR9Civilian
+      amount: 1
+    - id: CMMagazinePistolM1984
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxKramerCivilian
+  name: Kramer civilian rifle crate (x1 Kramer civilian rifle, x4 Kramer magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponRifleKramerCivilian
+      amount: 1
+    - id: AU14WeaponRifleKramerMagazineStandard
+      amount: 4
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUCrateBoxKramerMagazines
+  name: Kramer magazine crate (x6 Kramer magazine)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleKramerMagazineStandard
+      amount: 6
+
+- type: entity
+  parent: RMCCrateBase
   id: AU14CrateBoxCivBinocs
   name: Binoculars Crate (3x binoculars)
   components:
@@ -440,16 +494,22 @@
 - type: entity
   parent: RMCCrateBase
   id: AU14CrateBoxFirefighting
-  name: Firefighting Crate (3x firefighter helmet, 3x Firefighting Turnout Gear, 6x fire extinguisher)
+  name: Firefighting Crate (3x fire helmet, 2x firesuit, 3x turnout gear, 5x suppression grenade, 6x fire extinguisher, 1x fire-axe)
   components:
   - type: StorageFill
     contents:
-    - id: RMCHardhatRed
+    - id: CMUFireHelmet
       amount: 3
+    - id: CMUSuitFirefighter
+      amount: 2
     - id: AU14CivilianTurnoutGear
       amount: 3
+    - id: CMUFireSuppressantGrenade
+      amount: 5
     - id: CMFireExtinguisher
       amount: 6
+    - id: RMCFireAxe
+      amount: 1
 
 - type: entity
   parent: RMCCrateBase

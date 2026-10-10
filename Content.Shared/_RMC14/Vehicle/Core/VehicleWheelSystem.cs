@@ -1,5 +1,6 @@
 using System;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Examine; // CMU14
 using Content.Shared.Popups;
 using Content.Shared.Tools.Components;
 using Content.Shared.Vehicle;
@@ -34,6 +35,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
         SubscribeLocalEvent<VehicleWheelSlotsComponent, EntInsertedIntoContainerMessage>(OnWheelInserted);
         SubscribeLocalEvent<VehicleWheelSlotsComponent, EntRemovedFromContainerMessage>(OnWheelRemoved);
         SubscribeLocalEvent<VehicleWheelSlotsComponent, VehicleCanRunEvent>(OnVehicleCanRun);
+        SubscribeLocalEvent<VehicleWheelSlotsComponent, ExaminedEvent>(OnWheelsExamined); // CMU14: empty wheel slots read as unrepairable otherwise (BUG-599)
     }
 
     private void OnWheelInit(Entity<VehicleWheelSlotsComponent> ent, ref ComponentInit args)
@@ -73,6 +75,28 @@ public sealed partial class VehicleWheelSystem : EntitySystem
 
         if (!HasAllWheels(ent.Owner, ent.Comp))
             args.CanRun = false;
+    }
+
+    // CMU14 method
+    private void OnWheelsExamined(Entity<VehicleWheelSlotsComponent> ent, ref ExaminedEvent args)
+    {
+        if (HasEmptyWheelSlot(ent.Owner, ent.Comp))
+            args.PushMarkup(Loc.GetString("cmu-vehicle-wheel-missing"));
+    }
+
+    // CMU14 method
+    private bool HasEmptyWheelSlot(EntityUid uid, VehicleWheelSlotsComponent component, ItemSlotsComponent? itemSlots = null)
+    {
+        if (!Resolve(uid, ref itemSlots, false))
+            return false;
+
+        foreach (var slotId in component.Slots)
+        {
+            if (!_itemSlots.TryGetSlot((uid, itemSlots), slotId, out var slot) || !slot.HasItem)
+                return true;
+        }
+
+        return false;
     }
 
     private void EnsureSlots(EntityUid uid, VehicleWheelSlotsComponent component, ItemSlotsComponent? itemSlots = null)
@@ -236,6 +260,14 @@ public sealed partial class VehicleWheelSystem : EntitySystem
         return integrity.Integrity > 0f;
     }
 
+    public bool HasAnyFunctionalWheel(EntityUid vehicle)
+    {
+        if (!TryComp(vehicle, out VehicleWheelSlotsComponent? wheels))
+            return false;
+
+        return GetFunctionalWheelCount(vehicle, wheels) > 0;
+    }
+
     public void DamageWheels(EntityUid vehicle, float amount)
     {
         if (amount <= 0f || !TryComp(vehicle, out VehicleWheelSlotsComponent? wheels))
@@ -253,6 +285,37 @@ public sealed partial class VehicleWheelSystem : EntitySystem
                 continue;
 
             if (_hardpoints.DamageHardpoint(vehicle, wheel, amount, skipWheelUpdate: true))
+                changed = true;
+        }
+
+        if (!changed)
+            return;
+
+        UpdateAppearance(vehicle, wheels);
+        RefreshCanRun(vehicle);
+    }
+
+    public void DamageWheelsCorrosive(EntityUid vehicle, float amount, float acidResistantMultiplier)
+    {
+        if (amount <= 0f || !TryComp(vehicle, out VehicleWheelSlotsComponent? wheels))
+            return;
+
+        if (!TryComp(vehicle, out ItemSlotsComponent? itemSlots))
+            return;
+
+        var changed = false;
+
+        foreach (var slotId in wheels.Slots)
+        {
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slotId, out var slot) ||
+                slot.Item is not { } wheel)
+                continue;
+
+            var wheelAmount = amount;
+            if (TryComp(wheel, out VehicleWheelItemComponent? wheelItem) && wheelItem.AcidResistant)
+                wheelAmount *= acidResistantMultiplier;
+
+            if (_hardpoints.DamageHardpoint(vehicle, wheel, wheelAmount, skipWheelUpdate: true))
                 changed = true;
         }
 

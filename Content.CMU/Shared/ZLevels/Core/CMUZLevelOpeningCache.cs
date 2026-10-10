@@ -131,7 +131,8 @@ public sealed class CMUZLevelOpeningCache
                 for (var chunkY = startChunk.Y; chunkY <= endChunk.Y; chunkY++)
                 {
                     var chunk = new Vector2i(chunkX, chunkY);
-                    if (!ChunkHasOpening(grid, chunk, map, tileDefinition))
+                    var cached = GetChunkOpenings(grid, chunk, map, tileDefinition);
+                    if (!cached.HasOpening)
                         continue;
 
                     if (openingBounds == null)
@@ -163,8 +164,8 @@ public sealed class CMUZLevelOpeningCache
                     var tileStartY = Math.Max(startY, tileStart.Y);
                     var tileEndY = Math.Min(endY, tileEnd.Y - 1);
 
-                    var openings = GetOpeningTilesInBounds(
-                        grid, chunk, tileStartX, tileEndX, tileStartY, tileEndY, map, tileDefinition);
+                    var openings = new OpeningTileEnumerator(grid, tileStart, _chunkSize,
+                        tileStartX, tileEndX, tileStartY, tileEndY, cached, map, tileDefinition);
                     while (openings.MoveNext(out var openingTile))
                     {
                         var localTileBounds = tileSize == 1
@@ -269,7 +270,8 @@ public sealed class CMUZLevelOpeningCache
                 for (var chunkY = startChunk.Y; chunkY <= endChunk.Y; chunkY++)
                 {
                     var chunk = new Vector2i(chunkX, chunkY);
-                    if (!ChunkHasOpening(grid, chunk, map, tileDefinition))
+                    var cached = GetChunkOpenings(grid, chunk, map, tileDefinition);
+                    if (!cached.HasOpening)
                         continue;
 
                     var chunkStart = chunk * _chunkSize;
@@ -279,8 +281,11 @@ public sealed class CMUZLevelOpeningCache
                     var tileStartY = Math.Max(startY, chunkStart.Y);
                     var tileEndY = Math.Min(endY, chunkEnd.Y - 1);
 
-                    var openings = GetOpeningTilesInBounds(
-                        grid, chunk, tileStartX, tileEndX, tileStartY, tileEndY, map, tileDefinition);
+                    if (edgeOnly && _chunkSize == DefaultChunkSize)
+                        cached = FilterEdgeCandidates(cached, chunkStart, localSourcePosition);
+
+                    var openings = new OpeningTileEnumerator(grid, chunkStart, _chunkSize,
+                        tileStartX, tileEndX, tileStartY, tileEndY, cached, map, tileDefinition);
                     while (openings.MoveNext(out var openingTile))
                     {
                         if (edgeOnly &&
@@ -547,6 +552,9 @@ public sealed class CMUZLevelOpeningCache
         if (_chunkSize == DefaultChunkSize)
         {
             var chunkStart = chunk * DefaultChunkSize;
+            if (edgeOnly)
+                cached = FilterEdgeCandidates(cached, chunkStart, localSourcePosition);
+
             var tileStartX = Math.Max(startX, chunkStart.X);
             var tileEndX = Math.Min(endX, chunkStart.X + DefaultChunkSize - 1);
             var tileStartY = Math.Max(startY, chunkStart.Y);
@@ -614,6 +622,34 @@ public sealed class CMUZLevelOpeningCache
         }
     }
 
+    private static CachedChunk FilterEdgeCandidates(CachedChunk cached, Vector2i chunkStart, Vector2 localSource)
+    {
+        // Fragmented chunks may have no interior candidates to reject.
+        if (cached.EdgeCandidateMask == cached.OpeningMask)
+            return cached;
+
+        // At extreme coordinates, float tile centers can round onto a neighboring tile.
+        // Keep the full scan there so the near-center exception below remains conservative.
+        if (!float.IsFinite(localSource.X) || !float.IsFinite(localSource.Y) ||
+            Math.Abs(localSource.X) >= 8388608f || Math.Abs(localSource.Y) >= 8388608f)
+        {
+            return cached;
+        }
+
+        var candidates = cached.EdgeCandidateMask;
+
+        // IsOpeningEdgeTile also accepts a source at the center of a missing tile.
+        var sourceX = (int) MathF.Floor(localSource.X);
+        var sourceY = (int) MathF.Floor(localSource.Y);
+        if (sourceX >= chunkStart.X && sourceX < chunkStart.X + DefaultChunkSize &&
+            sourceY >= chunkStart.Y && sourceY < chunkStart.Y + DefaultChunkSize)
+        {
+            candidates |= OpeningMaskBit(chunkStart, sourceX, sourceY);
+        }
+
+        return cached with { OpeningMask = cached.OpeningMask & candidates };
+    }
+
     private static void TryUseNearestOpeningTile(
         Entity<MapGridComponent> grid,
         Vector2i openingTile,
@@ -679,7 +715,13 @@ public sealed class CMUZLevelOpeningCache
             }
         }
 
-        return new CachedChunk(hasOpening, openingMask);
+        // Only interior tiles with a closed cardinal neighbor can be edges. Keep every
+        // boundary tile for live cross-chunk checks, avoiding neighbor invalidation.
+        const ulong boundaryMask = 0xff818181818181ffUL;
+        var closed = ~openingMask;
+        var edgeCandidates = openingMask &
+                             (boundaryMask | (closed << 1) | (closed >> 1) | (closed << 8) | (closed >> 8));
+        return new CachedChunk(hasOpening, openingMask, edgeCandidates);
     }
 
     private static ulong OpeningMaskBit(Vector2i chunkStart, int tileX, int tileY)
@@ -733,7 +775,7 @@ public sealed class CMUZLevelOpeningCache
         public readonly Dictionary<Vector2i, CachedChunk> Chunks = new();
     }
 
-    private readonly record struct CachedChunk(bool HasOpening, ulong OpeningMask);
+    private readonly record struct CachedChunk(bool HasOpening, ulong OpeningMask, ulong EdgeCandidateMask);
 
     /// <summary>Value cursor avoids captured query/grid closures and cached visitor delegates.</summary>
     private struct OpeningTileEnumerator

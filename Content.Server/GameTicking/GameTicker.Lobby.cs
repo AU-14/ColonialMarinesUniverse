@@ -185,7 +185,8 @@ namespace Content.Server.GameTicking
         private TickerLobbyStatusEvent GetStatusMsg(ICommonSession session)
         {
             _playerGameStatuses.TryGetValue(session.UserId, out var status);
-            return new TickerLobbyStatusEvent(RunLevel != GameRunLevel.PreRoundLobby, LobbyBackground, status == PlayerGameStatus.ReadyToPlay, _roundStartTime, RoundPreloadTime, RoundStartTimeSpan, Paused);
+            // CMU14: map preload status.
+            return new TickerLobbyStatusEvent(RunLevel != GameRunLevel.PreRoundLobby, LobbyBackground, status == PlayerGameStatus.ReadyToPlay, _roundStartTime, RoundPreloadTime, RoundStartTimeSpan, Paused, _map.MapExists(DefaultMap));
         }
 
         private void SendStatusToAll()
@@ -198,7 +199,7 @@ namespace Content.Server.GameTicking
 
         private TickerLobbyInfoEvent GetInfoMsg()
         {
-            return new (GetInfoText(), GetRoundInfoFields());
+            return new (GetInfoText(), GetRoundInfoFields(), GetLobbyLineup());
         }
 
         private TickerRoundStatusEvent GetRoundStatusMsg()
@@ -313,6 +314,7 @@ namespace Content.Server.GameTicking
                     continue;
                 RaiseNetworkEvent(GetStatusMsg(playerSession), playerSession.Channel);
             }
+            UpdateInfoText();
         }
 
         public void ToggleReady(ICommonSession player, bool ready)

@@ -1001,6 +1001,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 wrapper.Map.Lines.AddRange(lines.ClfLines);
             if (faction == "WEYU")
                 wrapper.Map.Lines.AddRange(lines.WeYuLines);
+            wrapper.Map.Lines.AddRange(lines.SharedLines); // CMU14
         }
 
         var labels = EntMan.GetComponentOrNull<TacticalMapLabelsComponent>(Owner);

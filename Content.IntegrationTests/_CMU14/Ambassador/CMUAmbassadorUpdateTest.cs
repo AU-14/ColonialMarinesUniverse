@@ -76,8 +76,8 @@ public sealed class CMUAmbassadorUpdateTest
                 Assert.That(reopened!.Budget, Is.EqualTo(105));
                 ui.CloseUi(second, AmbassadorConsoleUi.Key, actor);
 
-                Assert.That(ui.TryOpenUi(second, AmbassadorThirdPartyUi.Key, actor), Is.True);
                 a.Budget = b.Budget = 205;
+                Assert.That(ui.TryOpenUi(second, AmbassadorThirdPartyUi.Key, actor), Is.True);
                 system.Update(0f);
                 Assert.That(ui.TryGetUiState<AmbassadorThirdPartyBuiState>(second, AmbassadorThirdPartyUi.Key, out var parties), Is.True);
                 Assert.That(parties!.Budget, Is.EqualTo(205));

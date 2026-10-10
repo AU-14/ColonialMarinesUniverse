@@ -1,0 +1,23 @@
+# Phoron production, a refined high-tier plasma. N2 is consumed 1 per 2 plasma reacted.
+- type: gasReaction
+  id: PhoronProduction
+  priority: 3
+  minimumTemperature: 773.15
+  maximumTemperature: 1400
+  minimumRequirements:
+    Plasma: 0.01
+    Nitrogen: 0.01
+  effects:
+  - !type:PhoronProductionReaction {}
+
+# Phoron fire burns hotter than plasma. Refinement demands oxygen discipline.
+# Priority -3 keeps the fire ladder deterministic (tritium -1, plasma -2).
+- type: gasReaction
+  id: PhoronFire
+  priority: -3
+  minimumTemperature: 673.15
+  minimumRequirements:
+    Oxygen: 0.01
+    Phoron: 0.01
+  effects:
+  - !type:PhoronFireReaction {}

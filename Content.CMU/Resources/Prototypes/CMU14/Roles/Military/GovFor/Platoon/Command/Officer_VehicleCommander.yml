@@ -1,11 +1,12 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 6
   id: AU14JobVehicleCommanderBaseAbstract
   name: au14-job-name-vehiclecommander
   description: au14-job-description-vehiclecommander
   icon: "AU14JobIconGovTankCommander"
-  spawnMenuRoleName: Vehicle Commander (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-vehicle-commander
   startingGear: AU14GearGOVFORVehicleCommander
   dummyStartingGear: AU14GearGOVFORVehicleCommanderDummy
   playTimeTracker: AU14JobGOVFORVehicleCommander
@@ -22,6 +23,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: "6"
     commandElement: true
@@ -50,7 +52,16 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_vcc
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
+        state: vcc
   requirements:
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsVehicleCrew
+    time: 18000 # 5 hours
 #  - !type:RoleTimeRequirement
 #    role: AU14JobGOVFORVehicleCrewman
 #    time: 14400 # 4 hours
@@ -70,6 +81,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -130,6 +143,44 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+
+- type: job
+  parent: AU14JobVehicleCommanderBase
+  id: AU14JobOPFORVehicleCommander
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORTankCommander"
+  spawnMenuRoleName: Vehicle Commander (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearOPFORVehicleCommander
+  dummyStartingGear: AU14GearOPFORVehicleCommanderDummy
+  accessGroups:
+  - AU14OpforVehicleCrew
+  useLoadoutOfJob: AU14JobGOVFORVehicleCommander
+
+- type: startingGear
+  id: AU14GearOPFORVehicleCommander
+  equipment:
+    id: AU14IDCardOPFORVehicleCommander
+    ears: AU14HeadsetOpforCommand
+    head: AU14CamoM50Helmet
+
+- type: startingGear
+  id: AU14GearOPFORVehicleCommanderDummy
+  equipment:
+    id: AU14IDCardOPFORVehicleCommander
+    ears: AU14HeadsetOpforCommand
+    head: AU14CamoM50Helmet
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointOPFORVehicleCommander
+  name: Spawn Point OPFOR Vehicle Commander
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORVehicleCommander
+  - type: Sprite
+    state: syn_spawn
 
 - type: startingGear
   id: AU14GearGOVFORVehicleCommanderDummy

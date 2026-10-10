@@ -365,7 +365,10 @@ namespace Content.IntegrationTests.Tests
 
                 var grids = mapSystem.GetAllGrids(mapId).ToList();
                 var gridUids = grids.Select(o => o.Owner).ToList();
-                targetGrid = gridUids.First();
+
+                // CMU14: always-spawned escape pods (SharedEvacuationSystem) add non-member
+                // grids to ship maps, so First() can be a pod.
+                //targetGrid = gridUids.First();
 
                 foreach (var grid in grids)
                 {
@@ -380,6 +383,20 @@ namespace Content.IntegrationTests.Tests
                         largest = area;
                         targetGrid = gridEnt;
                     }
+                }
+
+                // CMU14: if the load map enumerated no station grid, take the largest member
+                // grid from the station's own registry so the lookups below cannot hit a pod.
+                if (targetGrid is null
+                    || !memberQuery.HasComponent(targetGrid.Value))
+                {
+                    targetGrid = entManager.EntityQuery<StationDataComponent>(true)
+                        .SelectMany(d => d.Grids)
+                        .Where(memberQuery.HasComponent)
+                        .OrderByDescending(g => entManager.GetComponent<MapGridComponent>(g).LocalAABB.Width
+                            * entManager.GetComponent<MapGridComponent>(g).LocalAABB.Height)
+                        .Cast<EntityUid?>()
+                        .FirstOrDefault();
                 }
 
                 // Test shuttle can dock.

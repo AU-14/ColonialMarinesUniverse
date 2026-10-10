@@ -117,9 +117,14 @@
 - type: entity
   parent: RMCBaseTesla
   id: RMCTesla
-  name: UN 21S tesla coil
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 21S tesla coil
+  # cmu edit end
   description: A perfected way of producing high-voltage, low-current and high-frequency electricity. Minor modifications allow it to only hit hostile targets with a devastating shock.
   components:
+  - type: UserIFF
+    factions: []
+  - type: EntityIFF
   - type: Icon
     sprite: _RMC14/Objects/Weapons/Sentries/tesla.rsi
     state: normal_tesla_coil_handheld
@@ -127,9 +132,14 @@
 - type: entity
   parent: RMCTesla
   id: RMCTeslaMicro
-  name: UN 25S micro tesla coil
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 25S micro tesla coil
+  # cmu edit end
   description: A perfected way of producing high-voltage, low-current and high-frequency electricity. Minor modifications allow it to only hit hostile targets with a devastating shock. This one is smaller and more lightweight.
   components:
+  - type: UserIFF
+    factions: []
+  - type: EntityIFF
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Sentries/tesla.rsi
     drawdepth: Mobs
@@ -184,9 +194,14 @@
 - type: entity
   parent: RMCTesla
   id: RMCTeslaOverclocked
-  name: UN 21S overclocked tesla coil
+  # cmu edit start: no UA/UN prefix on sentry names
+  name: 21S overclocked tesla coil
+  # cmu edit end
   description: A perfected way of producing high-voltage, low-current and high-frequency electricity. Minor modifications allow it to only hit hostile targets with a devastating shock. This one is significantly overclocked, providing a lot more voltage at the cost of speed.
   components:
+  - type: UserIFF
+    factions: []
+  - type: EntityIFF
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Sentries/tesla.rsi
     drawdepth: Mobs
@@ -225,6 +240,7 @@
   name: L10D tesla coil
   suffix: PVE, RCM IFF
   components:
+  - type: EntityIFF
   - type: UserIFF
     factions:
     - FactionTSE

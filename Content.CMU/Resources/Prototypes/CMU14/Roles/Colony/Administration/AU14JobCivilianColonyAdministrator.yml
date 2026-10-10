@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianColonyAdministrator
   roundSide: Civilian
   roundForce: COLONY
@@ -42,6 +42,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     AU14RankColonySeniorAdministrator:
     - !type:RoleTimeRequirement
@@ -65,7 +67,7 @@
   - AU14AccessColonyAdministrator
   - AU14AccessColonyMarshall
   roleWeight: 0.25
-  displayWeight: 10
+  displayWeight: 22
 
 - type: startingGear
   id: AU14GearCivilianColonyAdministrator
@@ -78,6 +80,7 @@
     pocket2: AU14StampAdmin
   inhand:
   - RMCRadioHandheldColonyOff
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

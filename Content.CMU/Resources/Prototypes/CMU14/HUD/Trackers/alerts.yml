@@ -23,7 +23,7 @@
     state: trackon-west_esl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_esl
-  description: Tracks the US Army Squad Leader.
+  description: cmu-alert-tracker-usarmy-desc
 
 - type: alert
   parent: SquadTracker
@@ -50,7 +50,7 @@
     state: trackon-west_esl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_esl
-  description: Tracks the US Army Squad Leader.
+  description: cmu-alert-tracker-32nd-arm-desc
 
 - type: alert
   parent: SquadTracker
@@ -77,7 +77,7 @@
     state: trackon-west_fsl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fsl
-  description: Tracks the GROM Squad Leader.
+  description: cmu-alert-tracker-grom-desc
 
 - type: alert
   parent: SquadTracker
@@ -104,8 +104,8 @@
     state: trackon-west_troopcommander
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_troopcommander
-  name: Royal Squad Tracker
-  description: Tracks the Troop Commander
+  name: cmu-alert-tracker-rrt-name
+  description: cmu-alert-tracker-rrt-desc
 
 - type: alert
   parent: SquadTracker
@@ -132,7 +132,7 @@
     state: trackon-west_esl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_esl
-  description: Tracks the First Recon Squad Leader.
+  description: cmu-alert-tracker-first-recon-desc
 
 - type: alert
   parent: SquadTracker
@@ -159,7 +159,7 @@
     state: trackon-west_fsl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fsl
-  description: Tracks the Colonial Guard Squad Leader.
+  description: cmu-alert-tracker-colonial-guard-desc
 
 - type: alert
   parent: SquadTracker
@@ -186,7 +186,7 @@
     state: trackon-west_fsl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fsl
-  description: Tracks the Territorial Defense Squad Leader.
+  description: cmu-alert-tracker-territorial-defense-desc
 
 - type: alert
   parent: SquadTracker
@@ -213,7 +213,7 @@
     state: trackon-west_fsl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fsl
-  description: Tracks the LACN Commando Squad Leader.
+  description: cmu-alert-tracker-lacn-commando-desc
 
 - type: alert
   parent: SquadTracker
@@ -240,7 +240,7 @@
     state: trackon-west_fsl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fsl
-  description: Tracks the VAIPO Squad Leader.
+  description: cmu-alert-tracker-vaipo-desc
 
 - type: alert
   parent: SquadTracker
@@ -267,7 +267,7 @@
     state: trackon-west_fsl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fsl
-  description: Tracks the VAISO Squad Leader.
+  description: cmu-alert-tracker-vaiso-desc
 
 - type: alert
   parent: SquadTracker
@@ -294,7 +294,7 @@
     state: trackon-west_fsl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fsl
-  description: Tracks the VAISP Squad Leader.
+  description: cmu-alert-tracker-vaisp-desc
 
 - type: alert
   parent: SquadTracker
@@ -321,4 +321,4 @@
     state: trackon-west_fsl
   - sprite: /Textures/_RMC14/Interface/Alerts/marine_tracker.rsi
     state: trackon-southwest_fsl
-  description: Tracks the Marine Guard Squad Leader.
+  description: cmu-alert-tracker-msg-desc

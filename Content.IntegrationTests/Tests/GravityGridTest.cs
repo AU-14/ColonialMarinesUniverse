@@ -26,7 +26,9 @@ namespace Content.IntegrationTests.Tests
     idlePower: 50
     chargeRate: 1000000000 # Set this really high so it discharges in a single tick.
     activePower: 500
+  # CMU14: needsPower false at startup keeps RMCPowerSystem from claiming this dummy for area power
   - type: ApcPowerReceiver
+    needsPower: false
   - type: UserInterface
 ";
         [Test]

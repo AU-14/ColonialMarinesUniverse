@@ -26,6 +26,7 @@ using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Nutrition.EntitySystems;
@@ -118,6 +119,11 @@ public sealed partial class IngestionSystem : EntitySystem
     private void OnEdibleInteract(Entity<EdibleComponent> entity, ref AfterInteractEvent args)
     {
         if (args.Handled || args.Target == null || !args.CanReach)
+            return;
+
+        // CMU14: severed limbs and organs are surgery items first. An
+        // unclaimed click on a patient must not start a force-feed (BUG-638).
+        if (HasComp<OrganComponent>(entity))
             return;
 
         args.Handled = TryIngest(args.User, args.Target.Value, entity);
@@ -488,7 +494,12 @@ public sealed partial class IngestionSystem : EntitySystem
 
         var edible = ProtoMan.Index(entity.Comp.Edible);
 
-        _audio.PlayPredicted(entity.Comp.UseSound ?? edible.UseSound, args.Target, args.User);
+        // CMU14: the local eater still hears bites completed outside client prediction.
+        var sound = entity.Comp.UseSound ?? edible.UseSound;
+        if (_net.IsClient && !_timing.IsFirstTimePredicted)
+            _audio.PlayPvs(sound, args.Target);
+        else
+            _audio.PlayPredicted(sound, args.Target, args.User);
 
         var flavors = _flavorProfile.GetLocalizedFlavorsMessage(entity.Owner, args.Target, args.Split);
 
@@ -538,7 +549,7 @@ public sealed partial class IngestionSystem : EntitySystem
             _forensics.TransferDna(entity, args.Target, false);
 
             // CMU14: Let players choose whether eating and drinking continue automatically.
-            args.Repeat = !args.ForceFed && ShouldAutoIngest(entity);
+            args.Repeat = !args.ForceFed && ShouldAutoIngest(args.User);
             return;
         }
 

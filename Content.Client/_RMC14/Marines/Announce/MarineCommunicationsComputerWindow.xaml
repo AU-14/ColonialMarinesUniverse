@@ -1,7 +1,8 @@
-﻿<controls:MarineCommunicationsComputerWindow
+<controls:MarineCommunicationsComputerWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Marines.Announce"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
+    xmlns:ui="clr-namespace:Content.Client.UserInterface.Controls"
     Title="Groundside Operations"
     MinSize="400 350">
     <PanelContainer StyleClasses="BackgroundDark">
@@ -18,9 +19,23 @@
             <Button Name="MedalButton" Access="Public" Text="Give a medal" StyleClasses="OpenBoth" />
             <Button Name="TacticalMapButton" Access="Public" Text="Tactical Map" StyleClasses="OpenBoth" />
             <Button Name="OverwatchButton" Access="Public" Text="Overwatch" StyleClasses="OpenBoth" />
+            <!-- CMU14: faction command bombardment controls. -->
+            <BoxContainer Name="BombardmentSection" Access="Public" Orientation="Vertical" Visible="False">
+                <OptionButton Name="BombardmentVariant" Access="Public" />
+                <Button Name="BombardmentButton" Access="Public" Text="{Loc 'cmu-fof-bombardment-launch'}" />
+            </BoxContainer>
             <cc:HSeparator Color="#4972A1" Margin="0 5" />
             <Button Name="EchoButton" Access="Public" Text="Designate Echo Squad" StyleClasses="OpenBoth" />
             <cc:HSeparator Name="EchoSeparator" Access="Public" Color="#4972A1" Margin="0 5" />
+            <!-- CMU14: admin tablet alert level and faction controls. -->
+            <BoxContainer Name="AdminSection" Access="Public" Orientation="Vertical" Visible="False">
+                <cc:HSeparator Color="#4972A1" Margin="0 5" />
+                <Label Name="AlertLevelCurrent" Access="Public" />
+                <OptionButton Name="AlertLevelOption" Access="Public" HorizontalExpand="True" />
+                <ui:ConfirmButton Name="AlertLevelButton" Access="Public" Text="{Loc 'rmc-alert-change-level'}"
+                        StyleClasses="OpenBoth" TextAlign="Left" />
+                <Button Name="TabletFactionButton" Access="Public" StyleClasses="OpenBoth" TextAlign="Left" />
+            </BoxContainer>
             <Button Name="EvacuationButton" Access="Public" HorizontalExpand="True"
                     StyleClasses="OpenBoth" TextAlign="Left" />
             <cc:HSeparator Color="#4972A1" Margin="0 5" />

@@ -393,13 +393,13 @@
     table: !type:GroupSelector
       prob: 0.9
       children:
-      - id: AirCanister
-      - id: NitrogenCanister
-      - id: OxygenCanister
-      - id: CarbonDioxideCanister
-      - id: PlasmaCanister
+      - id: CMUCanisterAir
+      - id: CMUCanisterNitrogen
+      - id: CMUCanisterOxygen
+      - id: CMUCanisterCarbonDioxide
+      - id: CMUCanisterPlasma
         weight: 0.25
-      - id: NitrousOxideCanister
+      - id: CMUCanisterNitrousOxide
         weight: 0.25
 
 - type: entityTable

@@ -72,6 +72,9 @@ public sealed partial class CMUBodyScannerSystem : EntitySystem
                 continue;
             }
 
+            if (Paused(console))
+                continue;
+
             RefreshUi(console, comp);
         }
 

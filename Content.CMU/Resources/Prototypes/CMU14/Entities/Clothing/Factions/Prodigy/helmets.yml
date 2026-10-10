@@ -8,6 +8,7 @@
     sprite: CMU14/Clothing/ProdigySecurityForces/helmet.rsi
   - type: Clothing
     sprite: CMU14/Clothing/ProdigySecurityForces/helmet.rsi
+    equippedPrefix: off
   - type: PointLight
     color: "#FFFFFF"
 

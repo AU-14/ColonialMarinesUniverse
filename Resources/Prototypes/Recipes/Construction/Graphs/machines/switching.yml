@@ -6,7 +6,7 @@
   - node: start
     actions:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:SpawnPrototype
         prototype: CableApcStack1
@@ -17,7 +17,7 @@
         completed:
           - !type:SnapToGrid {}
         steps:
-          - material: Steel
+          - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
             amount: 2
             doAfter: 1
           - material: Cable
@@ -39,7 +39,7 @@
       edges:
         - to: LightSwitchNode
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 2.0
             - material: Cable
@@ -53,7 +53,7 @@
               doAfter: 2.0
           completed:
             - !type:GivePrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
             - !type:GivePrototype
               prototype: CableApcStack1
@@ -68,7 +68,7 @@
       edges:
         - to: SignalSwitchNode
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 2.0
             - material: Cable
@@ -82,7 +82,7 @@
               doAfter: 2.0
           completed:
             - !type:GivePrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
             - !type:GivePrototype
               prototype: CableApcStack1
@@ -97,7 +97,7 @@
       edges:
         - to: SignalButtonNode
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 2.0
             - material: Cable
@@ -111,7 +111,7 @@
               doAfter: 2.0
           completed:
             - !type:GivePrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
             - !type:GivePrototype
               prototype: CableApcStack1
@@ -126,7 +126,7 @@
       edges:
         - to: LightSwitchDirectionalNode
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 2.0
             - material: Cable
@@ -140,7 +140,7 @@
               doAfter: 2.0
           completed:
             - !type:GivePrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
             - !type:GivePrototype
               prototype: CableApcStack1
@@ -155,7 +155,7 @@
       edges:
         - to: SignalSwitchDirectionalNode
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 2.0
             - material: Cable
@@ -169,7 +169,7 @@
               doAfter: 2.0
           completed:
             - !type:GivePrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
             - !type:GivePrototype
               prototype: CableApcStack1
@@ -184,7 +184,7 @@
       edges:
         - to: SignalButtonDirectionalNode
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 2.0
             - material: Cable
@@ -198,7 +198,7 @@
               doAfter: 2.0
           completed:
             - !type:GivePrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 1
             - !type:GivePrototype
               prototype: CableApcStack1

@@ -33,7 +33,7 @@
   - type: Marine
     Faction: govfor
 
-  name: IPIE Personal Protection Officer
+  name: au14-job-name-ipie-ppo
   description: au14-ipie-ppo-description
   playTimeTracker: AU14JobIPIEPPO
   ranks:

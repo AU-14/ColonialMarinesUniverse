@@ -1,0 +1,29 @@
+- type: entity
+  parent: ActionXenoBase
+  id: CMUActionBoilerWatchAirspace
+  name: Look at airspace
+  description: Watch your current sector and automatically launch plasma at aircraft passing overhead. Each shot costs 200 plasma, needs two seconds of stationary acquisition under open sky, and has a fifteen-second cooldown. Toggle again to stop.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: bombard
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:FighterBoilerWatchAirspaceEvent
+
+- type: entity
+  id: CMUFighterBoilerPlasma
+  name: ascending plasma
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: FighterPlasmaVisual
+  - type: PointLight
+    color: "#93FF42"
+    radius: 4
+    energy: 2
+  - type: TimedDespawn
+    lifetime: 6

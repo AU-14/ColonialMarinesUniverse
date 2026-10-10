@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Content.Shared._RMC14.PowerLoader;
+using Content.Shared._RMC14.Xenonids; // CMU14
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
@@ -9,6 +10,7 @@ using Content.Shared.Popups;
 using Content.Shared.Tools;
 using Content.Shared.Tools.Systems;
 using Content.Shared.UserInterface;
+using Content.Shared.Verbs;
 using Content.Shared.Vehicle;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
@@ -21,6 +23,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
     private static readonly ProtoId<ToolQualityPrototype> VanRemoveToolQuality = "Prying";
 
     private readonly HashSet<(EntityUid Owner, string SlotId)> _completingRemovals = new();
+    [Dependency] private Robust.Shared.Network.INetManager _net = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private HardpointSystem _hardpoints = default!;
@@ -30,11 +33,14 @@ public sealed partial class HardpointSlotSystem : EntitySystem
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private VehicleSystem _rmcVehicles = default!; // CMU14
 
+    // CMU14 method: vehicle damage and usability.
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeLocalEvent<HardpointSlotsComponent, GetVerbsEvent<AlternativeVerb>>(OnMaintenanceVerb);
         SubscribeLocalEvent<HardpointSlotsComponent, ItemSlotInsertAttemptEvent>(OnInsertAttempt);
         SubscribeLocalEvent<HardpointSlotsComponent, HardpointInsertDoAfterEvent>(OnInsertDoAfter);
         SubscribeLocalEvent<HardpointSlotsComponent, InteractUsingEvent>(OnSlotsInteractUsing, before: new[] { typeof(ItemSlotsSystem) });
@@ -50,6 +56,20 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         SubscribeLocalEvent<HardpointItemComponent, PowerLoaderInteractEvent>(OnHardpointPowerLoaderInteract);
     }
 
+    // CMU14 method: vehicle damage and usability.
+    private void OnMaintenanceVerb(Entity<HardpointSlotsComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract || HasComp<XenoComponent>(args.User))
+            return;
+
+        var user = args.User;
+        args.Verbs.Add(new AlternativeVerb
+        {
+            Text = Loc.GetString("rmc-hardpoint-maintenance-verb"),
+            Act = () => TryOpenHardpointUi(ent, user),
+        });
+    }
+
     private void OnHardpointEjectAttempt(Entity<HardpointSlotsComponent> ent, ref ItemSlotEjectAttemptEvent args)
     {
         if (args.Slot.ID is not { } slotId)
@@ -62,25 +82,54 @@ public sealed partial class HardpointSlotSystem : EntitySystem
             args.Cancelled = true;
     }
 
-    private void OnSlotsInteractHand(Entity<HardpointSlotsComponent> ent, ref InteractHandEvent args)
+    private void OnSlotsInteractHand(Entity<HardpointSlotsComponent> ent, ref InteractHandEvent args) // CMU14 Method
     {
-        if (!args.Handled)
-            args.Handled = TryOpenHardpointUiForPowerLoader(ent, args.User);
+        if (args.Handled)
+            return;
+
+        // entry point must fall through to VehicleSystem boarding first
+        if (_rmcVehicles.TryFindEntryPoint(ent.Owner, args.User, out _))
+            return;
+
+        args.Handled = TryOpenHardpointUi(ent, args.User); // no powerloader needed
     }
 
-    private void OnSlotsActivateInWorld(Entity<HardpointSlotsComponent> ent, ref ActivateInWorldEvent args)
+    private void OnSlotsActivateInWorld(Entity<HardpointSlotsComponent> ent, ref ActivateInWorldEvent args) // CMU14 Method
     {
-        if (!args.Handled)
-            args.Handled = TryOpenHardpointUiForPowerLoader(ent, args.User);
+        if (args.Handled)
+            return;
+
+        if (!_powerLoader.TryGetActivePowerLoader(args.User, out _))
+            return;
+
+        args.Handled = TryOpenHardpointUi(ent, args.User);
     }
 
-    private bool TryOpenHardpointUiForPowerLoader(Entity<HardpointSlotsComponent> ent, EntityUid user)
+    // CMU14 Begin: powerloader-only gate disabled, players open the hardpoint menu bare-handed again
+    //private bool TryOpenHardpointUiForPowerLoader(Entity<HardpointSlotsComponent> ent, EntityUid user)
+    //{
+    //    if (!_powerLoader.TryGetInteractionUser(user, out var actor) ||
+    //        !_powerLoader.TryGetActivePowerLoader(user, out _))
+    //    {
+    //        return false;
+    //    }
+    //
+    //    if (!_ui.TryOpenUi(ent.Owner, HardpointUiKey.Key, actor))
+    //        return false;
+    //
+    //    _hardpoints.UpdateHardpointUi(ent.Owner, ent.Comp);
+    //    return true;
+    //}
+    // CMU14 End
+
+    private bool TryOpenHardpointUi(Entity<HardpointSlotsComponent> ent, EntityUid user) // CMU14 Method
     {
-        if (!_powerLoader.TryGetInteractionUser(user, out var actor) ||
-            !_powerLoader.TryGetActivePowerLoader(user, out _))
-        {
+        // CMU14: xenos could otherwise strip hardpoints
+        if (HasComp<XenoComponent>(user))
             return false;
-        }
+
+        if (!_powerLoader.TryGetInteractionUser(user, out var actor))
+            return false;
 
         if (!_ui.TryOpenUi(ent.Owner, HardpointUiKey.Key, actor))
             return false;
@@ -111,6 +160,13 @@ public sealed partial class HardpointSlotSystem : EntitySystem
 
     private void OnInsertAttempt(Entity<HardpointSlotsComponent> ent, ref ItemSlotInsertAttemptEvent args)
     {
+        // CMU14: also catches installs started before it got wrecked
+        if (_hardpoints.IsWrecked(ent.Owner))
+        {
+            args.Cancelled = true;
+            return;
+        }
+
         if (args.User == null)
             return;
 
@@ -219,6 +275,13 @@ public sealed partial class HardpointSlotSystem : EntitySystem
     {
         if (!HasComp<HardpointItemComponent>(used))
             return false;
+
+        // CMU14: fresh parts don't bring a wreck back
+        if (_hardpoints.IsWrecked(ent.Owner))
+        {
+            _popup.PopupClient(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, user);
+            return true;
+        }
 
         var state = EnsureState(ent.Owner);
         CleanupStaleInsertTracking(ent.Owner, state, "interact-using");
@@ -415,6 +478,19 @@ public sealed partial class HardpointSlotSystem : EntitySystem
             return;
         }
 
+        if (TryComp(ejectedItem.Value, out HardpointIntegrityComponent? ejectedIntegrity) && ejectedIntegrity.Integrity <= 0f)
+        {
+            if (_net.IsServer)
+            {
+                _popup.PopupEntity(Loc.GetString("rmc-hardpoint-disintegrates", ("item", ejectedItem.Value)), finalLocation.Owner, PopupType.MediumCaution);
+                QueueDel(ejectedItem.Value);
+            }
+
+            SetErrorAndRefresh(null);
+            _hardpoints.RefreshCanRun(ent.Owner);
+            return;
+        }
+
         if (needsPowerLoader)
         {
             if (!_powerLoader.TryPickupWithActiveHand(args.User, ejectedItem.Value))
@@ -435,6 +511,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         _hardpoints.RefreshCanRun(ent.Owner);
     }
 
+    // CMU14 method: vehicle damage and usability.
     private void TryStartHardpointRemoval(
         EntityUid uid,
         HardpointSlotsComponent component,
@@ -545,7 +622,9 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         {
             if (!TryGetHardpointRemovalTool(user, location.Slots, out var tool))
             {
-                const string error = "You need a prying tool to remove this hardpoint.";
+                var error = Loc.GetString(IsVanHardpointFamily(location.Slots)
+                    ? "rmc-hardpoint-removal-prying-tool"
+                    : "rmc-hardpoint-removal-tool");
                 _popup.PopupEntity(error, user, user);
                 SetError(error);
                 RefreshUi();

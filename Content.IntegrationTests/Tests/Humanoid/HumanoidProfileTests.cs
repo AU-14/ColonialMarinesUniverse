@@ -59,9 +59,8 @@ public sealed class HumanoidProfileTests : GameTest
             Assert.That(humanoidComponent.Species, Is.EqualTo(SlimePerson));
             Assert.That(humanoidComponent.Voice, Is.EqualTo(SlimeVoice));
 
-            var speciesProto = SProtoMan.Index(humanoidComponent.Species);
-
-            Assert.That(speciesProto.DefaultSoundsBySex[(int)Sex.Female], Is.EqualTo(voiceComponent.EmoteSounds));
+            Assert.That(voiceComponent.EmoteSounds, Is.EqualTo(SlimeVoice),
+                "the selected profile voice overrides the species default sound bank");
         });
     }
 
@@ -86,7 +85,7 @@ public sealed class HumanoidProfileTests : GameTest
                     Gender = Gender.Neuter,
                     Appearance = new HumanoidCharacterAppearanceV1
                     {
-                        HairStyleId = "HumanHairLongBedhead2",
+                        HairStyleId = "HumanHairBob" /* cmu edit */,
                         HairColor = Color.Red,
                         FacialHairStyleId = "HumanFacialHairChin",
                         FacialHairColor = Color.Blue,
@@ -115,7 +114,7 @@ public sealed class HumanoidProfileTests : GameTest
                 Assert.That(profile.Voice, Is.EqualTo(expectedVoice));
 
                 Assert.That(markings["Head"][HumanoidVisualLayers.Hair].Single().MarkingId,
-                    Is.EqualTo("HumanHairLongBedhead2"));
+                    Is.EqualTo("HumanHairBob" /* cmu edit */));
                 Assert.That(markings["Head"][HumanoidVisualLayers.Hair].Single().MarkingColors,
                     Is.EqualTo(new[] { Color.Red }));
                 Assert.That(markings["Head"][HumanoidVisualLayers.FacialHair].Single().MarkingId,

@@ -1,0 +1,28 @@
+// CC0-1.0. Fighter exhaust, hot tracers and eroded smoke. Based on CMU's cascade particle kernel.
+light_mode unshaded;
+uniform highp float clock;
+
+highp float fighterHash(highp vec2 p) {
+    return fract(sin(dot(p, vec2(127.1,311.7)))*43758.5453);
+}
+highp float fighterNoise(highp vec2 p) {
+    highp vec2 cell=floor(p);
+    highp vec2 f=fract(p);
+    f=f*f*(3.0-2.0*f);
+    return mix(mix(fighterHash(cell),fighterHash(cell+vec2(1.0,0.0)),f.x),
+        mix(fighterHash(cell+vec2(0.0,1.0)),fighterHash(cell+vec2(1.0)),f.x),f.y);
+}
+void fragment() {
+    highp vec2 p=UV*2.0-1.0;
+    highp float radius=dot(p,p);
+    highp float edge=1.0-smoothstep(0.3,1.0,radius);
+    highp float opacity;
+    if (UV2.x>0.5) {
+        highp vec2 drift=p*3.0+vec2(UV2.y*37.0,clock*0.3);
+        highp float cloud=fighterNoise(drift)*0.65+fighterNoise(drift*2.1)*0.35;
+        opacity=edge*smoothstep(0.2,0.7,cloud)*0.85;
+    } else {
+        opacity=edge*(exp(-radius*7.0)*0.85+exp(-radius*2.2)*0.15);
+    }
+    COLOR=vec4(vec3(1.0),opacity);
+}

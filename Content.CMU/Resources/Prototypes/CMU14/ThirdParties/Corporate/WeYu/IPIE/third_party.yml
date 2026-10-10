@@ -11,15 +11,16 @@
   id: IPIE
   announceAsSurvivors: true
   partyspawn: IPIESpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
+    - forceonforce
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml
   weight: 20
   minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false
 
 - type: partySpawn
@@ -35,13 +36,14 @@
   id: IPIESynth
   announceAsSurvivors: true
   partyspawn: IPIESynthSpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
+    - forceonforce
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml
   weight: 20
-  minplayers: 30
+  # minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false

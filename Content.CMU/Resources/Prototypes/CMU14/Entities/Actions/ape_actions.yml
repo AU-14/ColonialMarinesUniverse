@@ -35,6 +35,7 @@
       map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
+    checkCanAccess: false
     deselectOnMiss: false
   - type: WorldTargetAction
     event: !type:Content.Shared.CMU14.Threats.Mobs.Ape.ApeDestroyActionEvent
@@ -101,3 +102,63 @@
     event: !type:Content.Shared.CMU14.Threats.Mobs.Ape.ApeXenoHeadbiteActionEvent
   - type: ActionBlockIfResting
   - type: XenoOffensiveAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionApeLimbRip
+  name: Rip Limb
+  description: Tear a limb off a dead body. Limbs make fine throwing material.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: gut
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: false
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Ape.ApeLimbRipActionEvent
+    toggleOutline: false
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionApeHurl
+  name: Hurl Debris
+  description: Rip out a chunk of debris and hurl it at the target. Hits hard, stuns mobs, damages barricades, and reaches the z-level above.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 6
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+      map: ["enum.ActionVisuals.Icon"]
+  - type: TargetAction
+    range: 15
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared.CMU14.Threats.Mobs.Ape.ApeHurlActionEvent
+
+- type: entity
+  parent: BaseItem
+  id: CMUApeDebrisRock
+  name: hurled debris
+  description: A hefty chunk of rock, torn from the ground by something very strong.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Objects/Decoration/Flora/flora_rockssolid.rsi
+    state: rocksolid01
+  - type: Item
+    size: Normal
+  - type: DamageOtherOnHit
+    damage:
+      types:
+        Blunt: 25
+        Structural: 150

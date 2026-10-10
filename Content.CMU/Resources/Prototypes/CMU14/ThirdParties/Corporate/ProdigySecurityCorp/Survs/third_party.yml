@@ -1,7 +1,7 @@
 - type: partySpawn
   id: ProdigySurvSpawnLarge
   leadersToSpawn:
-    CMU14JobCivilianProdigyGuardLeaderSurv: 1
+    CMU14JobProdigySurvGoonLeader: 1
   gruntsToSpawn:
     CMU14JobProdigySurvMedic: 2
     CMU14JobProdigySurvGoon: 5
@@ -14,7 +14,7 @@
   announceAsSurvivors: true
   displayName: Prodigy Survivors
   partyspawn: ProdigySurvSpawnLarge
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -22,7 +22,7 @@
   weight: 25
   minplayers: 100
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -41,7 +41,7 @@
   announceAsSurvivors: true
   displayName: Prodigy Survivors
   partyspawn: ProdigySurvSpawnMedium
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -49,7 +49,7 @@
   weight: 25
   minplayers: 51
   maxplayers: 99
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -68,7 +68,7 @@
   announceAsSurvivors: true
   displayName: Prodigy Survivors
   partyspawn: ProdigySurvSpawnSmall
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
@@ -76,5 +76,5 @@
   weight: 25
   minplayers: 25
   maxplayers: 50
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true

@@ -74,6 +74,8 @@ namespace Content.Server.NPC.Pathfinding
         /// </summary>
         private const int PathTickLimit = 256;
 
+        private readonly ParallelOptions _parallelOptions = new();
+
         private int _portalIndex;
         private readonly Dictionary<int, PathPortal> _portals = new();
 
@@ -101,10 +103,8 @@ namespace Content.Server.NPC.Pathfinding
         public override void Update(float frameTime)
         {
             base.Update(frameTime);
-            var options = new ParallelOptions()
-            {
-                MaxDegreeOfParallelism = _parallel.ParallelProcessCount,
-            };
+            var options = _parallelOptions;
+            options.MaxDegreeOfParallelism = _parallel.ParallelProcessCount;
 
             var profiling = _prof.IsEnabled;
             if (profiling)
@@ -120,48 +120,77 @@ namespace Content.Server.NPC.Pathfinding
             _stopwatch.Restart();
             var queued = _pathRequests.Count;
             var amount = Math.Min(PathTickLimit, _pathRequests.Count);
+            if (amount == 0)
+            {
+                if (profiling)
+                {
+                    _prof.WriteValue("PathfinderSystem Queued Requests", 0);
+                    _prof.WriteValue("PathfinderSystem Processed Requests", 0);
+                    _prof.WriteValue("PathfinderSystem Continuing Requests", 0);
+                    _prof.WriteValue("PathfinderSystem Completed Requests", 0);
+                    _prof.WriteValue("PathfinderSystem NoPath Requests", 0);
+                }
+                return;
+            }
+
             var results = ArrayPool<PathResult>.Shared.Rent(amount);
-
-            if (profiling)
+            try
             {
-                using var profile = _prof.Group("PathfinderSystem.ProcessRequests");
-                Parallel.For(0, amount, options, i =>
+                if (profiling)
                 {
-                    ProcessPathRequest(results, i);
-                });
-            }
-            else
-            {
-                Parallel.For(0, amount, options, i =>
+                    using var profile = _prof.Group("PathfinderSystem.ProcessRequests");
+                    ProcessPathRequests(results, amount, options);
+                }
+                else
                 {
-                    ProcessPathRequest(results, i);
-                });
+                    ProcessPathRequests(results, amount, options);
+                }
+
+                var continuing = 0;
+                var completed = 0;
+                var noPath = 0;
+
+                if (profiling)
+                {
+                    using var profile = _prof.Group("PathfinderSystem.CleanupRequests");
+                    CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+                }
+                else
+                {
+                    CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+                }
+
+                if (profiling)
+                {
+                    _prof.WriteValue("PathfinderSystem Queued Requests", queued);
+                    _prof.WriteValue("PathfinderSystem Processed Requests", amount);
+                    _prof.WriteValue("PathfinderSystem Continuing Requests", continuing);
+                    _prof.WriteValue("PathfinderSystem Completed Requests", completed);
+                    _prof.WriteValue("PathfinderSystem NoPath Requests", noPath);
+                }
+
             }
-
-            var continuing = 0;
-            var completed = 0;
-            var noPath = 0;
-
-            if (profiling)
+            finally
             {
-                using var profile = _prof.Group("PathfinderSystem.CleanupRequests");
-                CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+                ArrayPool<PathResult>.Shared.Return(results);
             }
-            else
+        }
+
+        private void ProcessPathRequests(PathResult[] results, int amount, ParallelOptions options)
+        {
+            // A single request cannot benefit from worker scheduling.
+            if (amount == 1)
             {
-                CleanupPathRequests(results, amount, ref continuing, ref completed, ref noPath);
+                ProcessPathRequest(results, 0);
+                return;
             }
 
-            if (profiling)
-            {
-                _prof.WriteValue("PathfinderSystem Queued Requests", queued);
-                _prof.WriteValue("PathfinderSystem Processed Requests", amount);
-                _prof.WriteValue("PathfinderSystem Continuing Requests", continuing);
-                _prof.WriteValue("PathfinderSystem Completed Requests", completed);
-                _prof.WriteValue("PathfinderSystem NoPath Requests", noPath);
-            }
+            ProcessPathRequestsParallel(results, amount, options);
+        }
 
-            ArrayPool<PathResult>.Shared.Return(results);
+        private void ProcessPathRequestsParallel(PathResult[] results, int amount, ParallelOptions options)
+        {
+            Parallel.For(0, amount, options, i => ProcessPathRequest(results, i));
         }
 
         private void ProcessPathRequest(PathResult[] results, int i)

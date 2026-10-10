@@ -25,7 +25,8 @@ public sealed class WizdenContentFreeze : GameTest
         var protoMan = server.ProtoMan;
 
         var recipesCount = protoMan.Count<FoodRecipePrototype>();
-        var recipesLimit = 218;
+        // CMU includes the imported RMC recipe catalog as well as the upstream recipes.
+        var recipesLimit = 265;
 
         if (recipesCount > recipesLimit)
         {

@@ -2,12 +2,12 @@
     xmlns="https://spacestation14.io"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="clr-namespace:Content.Client.CMU14.ColonyEconomy"
-    Title="Budget Console" MinSize="450 420">
+    Title="{Loc budget-console-title}" MinSize="450 420">
     <BoxContainer Orientation="Vertical" SeparationOverride="4">
-        <Label Name="BudgetLabel" Access="Public" Text="Current Budget: $0.00" />
+        <Label Name="BudgetLabel" Access="Public" Text="" />
 
         <!-- Withdraw Cash -->
-        <Label Text="Withdraw Cash:" StyleClasses="LabelSubText" />
+        <Label Text="{Loc budget-console-withdraw-cash}" StyleClasses="LabelSubText" />
         <BoxContainer Orientation="Horizontal" SeparationOverride="4">
             <Button Name="Withdraw100" Access="Public" Text="$100"
                     StyleClasses="OpenBoth" HorizontalExpand="True" Margin="0 2" />
@@ -18,13 +18,13 @@
         </BoxContainer>
 
         <!-- Dispense Salaries -->
-        <Button Name="DispenseSalariesButton" Access="Public" Text="Dispense All Salaries"
+        <Button Name="DispenseSalariesButton" Access="Public" Text="{Loc budget-console-dispense-salaries}"
                 Margin="0 4" />
 
         <!-- Transfer to Department -->
-        <Label Text="Transfer to Department:" StyleClasses="LabelSubText" />
+        <Label Text="{Loc budget-console-transfer-department}" StyleClasses="LabelSubText" />
         <BoxContainer Orientation="Horizontal" SeparationOverride="4">
-            <LineEdit Name="TransferAmountInput" Access="Public" PlaceHolder="Amount"
+            <LineEdit Name="TransferAmountInput" Access="Public" PlaceHolder="{Loc budget-console-amount-placeholder}"
                       HorizontalExpand="True" SizeFlagsStretchRatio="1" />
         </BoxContainer>
         <ScrollContainer VerticalExpand="True" HScrollEnabled="False" MinSize="0 120">

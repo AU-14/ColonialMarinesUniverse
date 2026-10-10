@@ -126,6 +126,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         SubscribeLocalEvent<ActivePowerLoaderPilotComponent, StunnedEvent>(OnActivePilotStunned);
         SubscribeLocalEvent<ActivePowerLoaderPilotComponent, MobStateChangedEvent>(OnActivePilotMobStateChanged);
 
+        SubscribeLocalEvent<DropshipWeaponPointComponent, EntInsertedIntoContainerMessage>(OnWeaponPointContainerInserted); // CMU14
         SubscribeLocalEvent<DropshipWeaponPointComponent, EntRemovedFromContainerMessage>(OnWeaponPointContainerChanged);
         SubscribeLocalEvent<DropshipUtilityPointComponent, EntRemovedFromContainerMessage>(OnUtilityPointContainerChanged);
         SubscribeLocalEvent<DropshipEnginePointComponent, EntRemovedFromContainerMessage>(OnEnginePointContainerChanged);
@@ -547,6 +548,10 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         if (!TryGetPointContainer(args, out var user, out _, out var contained, out var slot))
             return;
 
+        // CMU14: enforce fixed mounts again when the removal finishes.
+        if (ent.Comp.FixedWeapon && slot.ID == ent.Comp.WeaponContainerSlotId)
+            return;
+
         _container.Remove(contained, slot);
 
         if (TryComp(contained, out DropshipAmmoComponent? ammo) &&
@@ -880,6 +885,11 @@ public sealed partial class PowerLoaderSystem : EntitySystem
     [NotNullWhen(true)] out ContainerSlot? slot)
     {
         slot = null;
+        // CMU14: ammunition remains removable on a fixed weapon mount.
+        if (TryComp<DropshipWeaponPointComponent>(target, out var point) &&
+            point.FixedWeapon && containerId == point.WeaponContainerSlotId)
+            return false;
+
         if (!Resolve(user, ref user.Comp, false))
         {
             return false;
@@ -1395,6 +1405,14 @@ public sealed partial class PowerLoaderSystem : EntitySystem
             return;
 
         args.SlotId = slot.ID;
+    }
+
+    // CMU14 method: include mapped equipment in appearance updates.
+    private void OnWeaponPointContainerInserted(Entity<DropshipWeaponPointComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        // Map fills and other normal container insertions also install weapons;
+        // they do not pass through the power-loader do-after completion handler.
+        SyncAppearance(ent.Owner);
     }
 
     private void OnWeaponPointContainerChanged(Entity<DropshipWeaponPointComponent> ent, ref EntRemovedFromContainerMessage args)

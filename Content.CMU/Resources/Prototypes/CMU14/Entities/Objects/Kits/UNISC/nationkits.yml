@@ -126,7 +126,6 @@
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: StorageFill
     contents:
-    - id: AU14LACNUniformCoat
     - id: AU14LACNUniform
     - id: AU14LACNBoots
     - id: AU14LACNNavyCap
@@ -157,8 +156,7 @@
     - id: AU14HeadBeretRMC
     - id: RMCHeadRoyalBeanie
     - id: AU14HandsRMC
-    - id: AU14FatiguesDesertRMC
-    - id: AU14FatiguesBlackRMC
+    - id: CMUFatiguesRMC
     - id: RMCBootsRoyal
     - id: RMCTantoA
     - id: AU14WeaponRifleL90
@@ -272,8 +270,7 @@
     - id: RMCHeadRoyalBeanie
     - id: AU14HandsRMC
     - id: AU14FatiguesServiceRMC
-    - id: AU14FatiguesBlackRMCTeamlead
-    - id: AU14FatiguesDesertRMCTeamlead
+    - id: CMUFatiguesRMCTeamlead
     - id: RMCBootsRoyal
     - id: RMCTantoA
     - id: RMCWeaponPistolL54Empty

@@ -29,7 +29,8 @@ namespace Content.Server.Atmos.Portable
             Gas.WaterVapor,
             Gas.Ammonia,
             Gas.NitrousOxide,
-            Gas.Frezon
+            Gas.Frezon,
+            Gas.Phoron // CMU14: refined plasma
         };
 
         [ViewVariables(VVAccess.ReadWrite)]

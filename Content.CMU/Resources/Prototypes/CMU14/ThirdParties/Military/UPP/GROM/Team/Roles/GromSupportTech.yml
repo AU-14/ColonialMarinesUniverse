@@ -68,7 +68,7 @@
     UPP_Plutonowy:
       entity: AU14ChevronUPPNIPlutonowy
       requirements: []
-  spawnMenuRoleName: UPP GROM Support Tech (Survivor)
+  spawnMenuRoleName: UPP GROM Support Tech
   startingGear: AU14GearUPPGROMSupportTech
   greeting: au14-uppgrom-greeting
   icon: "CMJobIconEmpty"
@@ -102,7 +102,7 @@
   id: AU14GearUPPGROMSupportTech
   equipment:
     id: AU14IDCardUPPGROMSupportTech
-    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    outerClothing: CMUUPPArmorFull
     jumpsuit: AU14FatiguesUPPGROM
     hands: CMHandsBrown
     shoes: RMCBootsSPPFilled
@@ -110,7 +110,7 @@
     head: AU14UPPPatrolCap
     belt: AU14BeltMedicalUPPFullSupportTech
     pocket1: AU14PouchToolsFilledComtech
-    pocket2: RMCPouchMagazineUPPFull
+    pocket2: CMUUPPPouchMagazineUPPFull
     back: AU14CMDefibrillator
     ears: RMCHeadsetGROM
     suitstorage: AU14WeaponRifleAG80Filled

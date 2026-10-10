@@ -1,4 +1,5 @@
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Sporecaster;
+using Content.Shared.CMU14.GasMask;
 using Content.Shared.CMU14.Xenomorphs.Pathogen.Mycotoxin;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -30,6 +31,7 @@ public sealed class CMUPathogenSporecasterSystem : EntitySystem
     [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly SharedGasMaskSystem _gasMask = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly Content.Shared.CMU14.Medical.Injuries.Wounds.SharedCMUWoundsSystem _wounds = default!;
@@ -163,6 +165,9 @@ public sealed class CMUPathogenSporecasterSystem : EntitySystem
     {
         if (HasOpenWound(target))
             return false;
+
+        if (_gasMask.IsBreathingInternals(target))
+            return true;
 
         MycotoxinProtectionComponent? single = null;
         var count = 0;

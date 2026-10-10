@@ -4,6 +4,9 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: PropCaller
+  - type: Language # CMU14: aghosts must speak any language over phones and radios
+    defaultLanguage: English
+  - type: AllLanguages
   - type: Loadout
     prototypes: [ RMCMobAghostGear ]
   - type: IntrinsicUI
@@ -11,21 +14,25 @@
 
 - type: startingGear
   parent: MobAghostGear
-  id: RMCMobAghostGear
+  id: RMCMobAghostGear # CMU14
   equipment:
     back: ClothingBackpackSatchelHolding
     id: RMCAdminPDA
   storage:
     back:
-    - RMCAdminAccessConfigurator
+    - CMUAdminAccessConfigurator
     - HandheldHealthAnalyzer
     - CMHealthAnalyzer
     - DoorRemoteAll
     - AdminHypo
     - MeleeDebug200
-    - MeleeDebugGibInsane # CMU14
-    - ToolDebug
-    - AU14TabletGovfor
-    - AU14TabletOpfor
+    - MeleeDebugGibInsane
+    - CMUDebugLightningStick
+#   - ToolDebug
+    - AU14MaintenanceJackSpecialAdmin
+    - CMUCommandTabletAdmin # CMU14
     - RMCWelderAdmin
     - CMMultitool
+    - CMTRayScanner
+    - CMUAtmosScanner
+    - HolofanProjectorDebug

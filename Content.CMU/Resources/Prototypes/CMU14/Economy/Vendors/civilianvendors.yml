@@ -50,6 +50,13 @@
       - id: CMJumpsuitLiaison
       - id: CMJumpsuitLiaisonBlazer
       - id: CMJumpsuitLiaisonCharcoal
+    - name: Ties
+      choices: { CMUcivilianclothestie: 1 }
+      entries:
+      - id: ClothingNeckTieRed
+      - id: ClothingNeckTieDet
+      - id: ClothingNeckTieSci
+      - id: ClothingNeckTieSerious
     - name: Flannels
       choices: { CMUcivilianflannel: 1 }
       entries:
@@ -125,6 +132,12 @@
       - id: AU14CivFedoraBrown
       - id: AU14CivFedoraGray
       - id: AU14HeadCommandoBeanie
+      - id: CMUCivBoonieHatTan
+      - id: CMUCivBoonieHatGreen
+      - id: CMUCivWorkCapTan
+      - id: CMUCivWorkCapGreen
+      - id: CMUCivSunCapTan
+      - id: CMUCivSunCapGreen
     - name: Glasses
       choices: { CMUcivilianclothesglasses: 2 }
       entries:
@@ -184,7 +197,7 @@
       takeAll: CMUEngineeringClothes
       entries:
       - id: AU14CivilianWeYuEngineerClothes
-      - id: AU14CivilianFullSuitWeYuEngineer
+      - id: CMUClothingOuterSuitEngineer
       - id: RMCWeldingGoggles
     - name: Waste Management Clothing
       takeAll: CMUEngineeringClothesWM
@@ -217,6 +230,18 @@
       - id: RMCPouchElectronics
       - id: RMCPouchConstruction
       - id: RMCWebbingDropPouch
+    - name: Atmospherics
+      choices: { CMUEngineerAtmosGear: 5 }
+      entries:
+      - id: CMUAtmosScanner
+        name: gas analyzer
+      - id: CMUInflatableWallFolded
+        name: inflatable walls x25
+      - id: CMSheetMetal50
+        name: metal sheets x50
+      - id: CMUCanisterAir
+      - id: RMCAirScrubberPortable
+      - id: RMCSpaceHeater
     - name: Miscellaneous
       takeAll: CMUEngineeringMisc
       entries:
@@ -303,8 +328,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedicBag
       - id: AU14BeltMedicBagBlack
+        recommended: true
+      - id: CMBeltMedicBag
     - name: Medical Equipment
       entries:
       - id: AU14CMDefibrillator
@@ -315,7 +341,7 @@
 - type: entity
   parent: ColMarTechBase
   id: AU14CivilianEmergencyResponderOfficerVendor
-  name: Civilian Emergency Response Officer Vendor
+  name: Civilian Paramedic Vendor
   description: A wardrobe containing all the clothes and supplies an ERO would ever need.
   suffix: Civ
   components:
@@ -501,3 +527,7 @@
       - id: RMCFlashlightPen
       - id: AU14CMDefibrillator
       - id: RMCSynthResetKey
+    - name: Synthetic Supplies
+      entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2

@@ -1,0 +1,3085 @@
+# Four fixed-facing wide machinery drafts; exact source states and original timing.
+- type: cmu3DModel
+  id: CMU3DRMCMachinePropBig3
+  label: Hybrisa wide machinery 3
+  status: draft
+  sourcePrototypes:
+  - RMCMachinePropBig3
+  referencePrototype: RMCMachinePropBig3
+  referenceRsi: _RMC14/Structures/hybrisa_machine_props.rsi
+  referenceState: buildingventbig3
+  referenceDirection: 0
+  sourceDirections: 1
+  sourceSpriteOffset: 0.5,0.5
+  groundOffset: 0,0
+  useEntityRotation: false
+  yawOffset: 0
+  description: Source-specific cabinet solids and physically recessed controls/intakes with exact source frame surfaces.
+    The left pivot and rightward footprint include Sprite.offset.X once in local X; noRot fixes visual yaw while
+    saved physics remains unchanged. Source height at 32 pixels per tile, shallow depth, plain rear faces, segmented
+    fan lips and base Z .04 are inferred. ON frame timing and static OFF resources follow the source without inventing
+    a power controller or fan rotation. Draft; native source-clock and packing evidence is tracked separately. CC-BY-SA-3.0
+    CM-SS13 artwork; see SOURCES_WIDE_MACHINERY.md.
+  parts:
+  - label: left service cabinet
+    min: -0.2812500, -0.2050000, 0.0400000
+    max: 0.3750000, 0.2000000, 1.1025000
+    color: '#454744'
+  - label: left raised cap
+    min: -0.2500000, -0.2150000, 1.0712500
+    max: 0.3437500, 0.2100000, 1.1337500
+    color: '#454744'
+  - label: left top casting
+    min: -0.3125000, -0.2440000, 0.7900000
+    max: 0.4062500, -0.2410000, 1.1337500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1250
+    surfaceAxis: XZ
+  - label: left recessed grille
+    min: -0.3125000, -0.2330000, 0.3212500
+    max: 0.4062500, -0.2300000, 0.7900000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1251
+    surfaceAxis: XZ
+  - label: left status controls
+    min: -0.3125000, -0.2490000, 0.0400000
+    max: 0.4062500, -0.2460000, 0.3212500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1252
+    surfaceAxis: XZ
+  - label: monitor rear cabinet
+    min: 0.4375000, -0.0550000, 0.0400000
+    max: 1.2812500, 0.2000000, 0.9462500
+    color: '#454744'
+  - label: top bezel
+    min: 0.4062500, -0.2200000, 0.7275000
+    max: 1.3125000, 0.2000000, 0.9775000
+    color: '#454744'
+  - label: left bezel
+    min: 0.4062500, -0.2200000, 0.0400000
+    max: 0.7500000, 0.2000000, 0.7275000
+    color: '#454744'
+  - label: right bezel
+    min: 1.1250000, -0.2200000, 0.0400000
+    max: 1.3125000, 0.2000000, 0.7275000
+    color: '#454744'
+  - label: lower screen shelf
+    min: 0.7500000, -0.2200000, 0.0400000
+    max: 1.1250000, 0.2000000, 0.4775000
+    color: '#454744'
+  - label: monitor casting and bezel
+    min: 0.4062500, -0.2490000, 0.0400000
+    max: 1.3125000, -0.2460000, 0.9775000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1253
+    surfaceAxis: XZ
+  - label: recessed green display
+    min: 0.7500000, -0.2100000, 0.4775000
+    max: 1.1250000, -0.2070000, 0.7275000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1254
+    surfaceAxis: XZ
+  spriteStates:
+    buildingventbig3:
+      frames:
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#454744'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#454744'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1251
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1252
+          surfaceAxis: XZ
+        - label: monitor rear cabinet
+          min: 0.4375000, -0.0550000, 0.0400000
+          max: 1.2812500, 0.2000000, 0.9462500
+          color: '#454744'
+        - label: top bezel
+          min: 0.4062500, -0.2200000, 0.7275000
+          max: 1.3125000, 0.2000000, 0.9775000
+          color: '#454744'
+        - label: left bezel
+          min: 0.4062500, -0.2200000, 0.0400000
+          max: 0.7500000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: right bezel
+          min: 1.1250000, -0.2200000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: lower screen shelf
+          min: 0.7500000, -0.2200000, 0.0400000
+          max: 1.1250000, 0.2000000, 0.4775000
+          color: '#454744'
+        - label: monitor casting and bezel
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3125000, -0.2460000, 0.9775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1253
+          surfaceAxis: XZ
+        - label: recessed green display
+          min: 0.7500000, -0.2100000, 0.4775000
+          max: 1.1250000, -0.2070000, 0.7275000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1254
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#454744'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#454744'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1251
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1255
+          surfaceAxis: XZ
+        - label: monitor rear cabinet
+          min: 0.4375000, -0.0550000, 0.0400000
+          max: 1.2812500, 0.2000000, 0.9462500
+          color: '#454744'
+        - label: top bezel
+          min: 0.4062500, -0.2200000, 0.7275000
+          max: 1.3125000, 0.2000000, 0.9775000
+          color: '#454744'
+        - label: left bezel
+          min: 0.4062500, -0.2200000, 0.0400000
+          max: 0.7500000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: right bezel
+          min: 1.1250000, -0.2200000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: lower screen shelf
+          min: 0.7500000, -0.2200000, 0.0400000
+          max: 1.1250000, 0.2000000, 0.4775000
+          color: '#454744'
+        - label: monitor casting and bezel
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3125000, -0.2460000, 0.9775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1253
+          surfaceAxis: XZ
+        - label: recessed green display
+          min: 0.7500000, -0.2100000, 0.4775000
+          max: 1.1250000, -0.2070000, 0.7275000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1256
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#454744'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#454744'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1251
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1257
+          surfaceAxis: XZ
+        - label: monitor rear cabinet
+          min: 0.4375000, -0.0550000, 0.0400000
+          max: 1.2812500, 0.2000000, 0.9462500
+          color: '#454744'
+        - label: top bezel
+          min: 0.4062500, -0.2200000, 0.7275000
+          max: 1.3125000, 0.2000000, 0.9775000
+          color: '#454744'
+        - label: left bezel
+          min: 0.4062500, -0.2200000, 0.0400000
+          max: 0.7500000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: right bezel
+          min: 1.1250000, -0.2200000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: lower screen shelf
+          min: 0.7500000, -0.2200000, 0.0400000
+          max: 1.1250000, 0.2000000, 0.4775000
+          color: '#454744'
+        - label: monitor casting and bezel
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3125000, -0.2460000, 0.9775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1253
+          surfaceAxis: XZ
+        - label: recessed green display
+          min: 0.7500000, -0.2100000, 0.4775000
+          max: 1.1250000, -0.2070000, 0.7275000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1258
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#454744'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#454744'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1251
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1259
+          surfaceAxis: XZ
+        - label: monitor rear cabinet
+          min: 0.4375000, -0.0550000, 0.0400000
+          max: 1.2812500, 0.2000000, 0.9462500
+          color: '#454744'
+        - label: top bezel
+          min: 0.4062500, -0.2200000, 0.7275000
+          max: 1.3125000, 0.2000000, 0.9775000
+          color: '#454744'
+        - label: left bezel
+          min: 0.4062500, -0.2200000, 0.0400000
+          max: 0.7500000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: right bezel
+          min: 1.1250000, -0.2200000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: lower screen shelf
+          min: 0.7500000, -0.2200000, 0.0400000
+          max: 1.1250000, 0.2000000, 0.4775000
+          color: '#454744'
+        - label: monitor casting and bezel
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3125000, -0.2460000, 0.9775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1253
+          surfaceAxis: XZ
+        - label: recessed green display
+          min: 0.7500000, -0.2100000, 0.4775000
+          max: 1.1250000, -0.2070000, 0.7275000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1260
+          surfaceAxis: XZ
+      delays:
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+    buildingventbig3_off:
+      frames:
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#454744'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#454744'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1251
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1261
+          surfaceAxis: XZ
+        - label: monitor rear cabinet
+          min: 0.4375000, -0.0550000, 0.0400000
+          max: 1.2812500, 0.2000000, 0.9462500
+          color: '#454744'
+        - label: top bezel
+          min: 0.4062500, -0.2200000, 0.7275000
+          max: 1.3125000, 0.2000000, 0.9775000
+          color: '#454744'
+        - label: left bezel
+          min: 0.4062500, -0.2200000, 0.0400000
+          max: 0.7500000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: right bezel
+          min: 1.1250000, -0.2200000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.7275000
+          color: '#454744'
+        - label: lower screen shelf
+          min: 0.7500000, -0.2200000, 0.0400000
+          max: 1.1250000, 0.2000000, 0.4775000
+          color: '#454744'
+        - label: monitor casting and bezel
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3125000, -0.2460000, 0.9775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1253
+          surfaceAxis: XZ
+        - label: recessed green display
+          min: 0.7500000, -0.2100000, 0.4775000
+          max: 1.1250000, -0.2070000, 0.7275000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1262
+          surfaceAxis: XZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCMachinePropBig5
+  label: Hybrisa wide machinery 5
+  status: draft
+  sourcePrototypes:
+  - RMCMachinePropBig5
+  referencePrototype: RMCMachinePropBig5
+  referenceRsi: _RMC14/Structures/hybrisa_machine_props.rsi
+  referenceState: buildingventbig5
+  referenceDirection: 0
+  sourceDirections: 1
+  sourceSpriteOffset: 0.5,0.5
+  groundOffset: 0,0
+  useEntityRotation: false
+  yawOffset: 0
+  description: Source-specific cabinet solids and physically recessed controls/intakes with exact source frame surfaces.
+    The left pivot and rightward footprint include Sprite.offset.X once in local X; noRot fixes visual yaw while
+    saved physics remains unchanged. Source height at 32 pixels per tile, shallow depth, plain rear faces, segmented
+    fan lips and base Z .04 are inferred. ON frame timing and static OFF resources follow the source without inventing
+    a power controller or fan rotation. Draft; native source-clock and packing evidence is tracked separately. CC-BY-SA-3.0
+    CM-SS13 artwork; see SOURCES_WIDE_MACHINERY.md.
+  parts:
+  - label: left vent housing
+    min: -0.1562500, -0.2000000, 0.0400000
+    max: 0.4687500, 0.2000000, 1.0712500
+    color: '#4B4D4A'
+  - label: right fan and grille housing
+    min: 0.5000000, -0.1700000, 0.0400000
+    max: 1.1875000, 0.2000000, 1.1025000
+    color: '#4B4D4A'
+  - label: left stepped cap
+    min: -0.0937500, -0.2000000, 1.0400000
+    max: 0.4375000, 0.2100000, 1.1337500
+    color: '#4B4D4A'
+  - label: right stepped cap
+    min: 0.5312500, -0.2000000, 1.0400000
+    max: 1.0937500, 0.2100000, 1.1337500
+    color: '#4B4D4A'
+  - label: left top intake
+    min: -0.1875000, -0.2490000, 0.7900000
+    max: 0.5000000, -0.2460000, 1.1337500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1263
+    surfaceAxis: XZ
+  - label: left lower grille
+    min: -0.1875000, -0.2330000, 0.3212500
+    max: 0.5000000, -0.2300000, 0.7900000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1264
+    surfaceAxis: XZ
+  - label: left lower controls
+    min: -0.1875000, -0.2490000, 0.0400000
+    max: 0.5000000, -0.2460000, 0.3212500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1265
+    surfaceAxis: XZ
+  - label: right service face and fan surround
+    min: 0.5000000, -0.2490000, 0.0400000
+    max: 1.2187500, -0.2460000, 1.1650000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1266
+    surfaceAxis: XZ
+  - label: recessed circular fan artwork
+    min: 0.8125000, -0.2050000, 0.6025000
+    max: 1.1250000, -0.2020000, 0.9150000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1267
+    surfaceAxis: XZ
+  - label: inferred recessed fan lip
+    min: 1.1130000, -0.2500000, 0.7168829
+    max: 1.1370000, -0.2280000, 0.8006171
+    color: '#4B4D4A'
+    pitch: 0.0
+  - label: inferred recessed fan lip
+    min: 1.0920665, -0.2500000, 0.7950079
+    max: 1.1160665, -0.2280000, 0.8787421
+    color: '#4B4D4A'
+    pitch: 30.0
+  - label: inferred recessed fan lip
+    min: 1.0348750, -0.2500000, 0.8521994
+    max: 1.0588750, -0.2280000, 0.9359335
+    color: '#4B4D4A'
+    pitch: 60.0
+  - label: inferred recessed fan lip
+    min: 0.9567500, -0.2500000, 0.8731329
+    max: 0.9807500, -0.2280000, 0.9568671
+    color: '#4B4D4A'
+    pitch: -90.0
+  - label: inferred recessed fan lip
+    min: 0.8786250, -0.2500000, 0.8521994
+    max: 0.9026250, -0.2280000, 0.9359335
+    color: '#4B4D4A'
+    pitch: -60.0
+  - label: inferred recessed fan lip
+    min: 0.8214335, -0.2500000, 0.7950079
+    max: 0.8454335, -0.2280000, 0.8787421
+    color: '#4B4D4A'
+    pitch: -30.0
+  - label: inferred recessed fan lip
+    min: 0.8005000, -0.2500000, 0.7168829
+    max: 0.8245000, -0.2280000, 0.8006171
+    color: '#4B4D4A'
+    pitch: 0.0
+  - label: inferred recessed fan lip
+    min: 0.8214335, -0.2500000, 0.6387579
+    max: 0.8454335, -0.2280000, 0.7224921
+    color: '#4B4D4A'
+    pitch: 30.0
+  - label: inferred recessed fan lip
+    min: 0.8786250, -0.2500000, 0.5815665
+    max: 0.9026250, -0.2280000, 0.6653006
+    color: '#4B4D4A'
+    pitch: 60.0
+  - label: inferred recessed fan lip
+    min: 0.9567500, -0.2500000, 0.5606329
+    max: 0.9807500, -0.2280000, 0.6443671
+    color: '#4B4D4A'
+    pitch: -90.0
+  - label: inferred recessed fan lip
+    min: 1.0348750, -0.2500000, 0.5815665
+    max: 1.0588750, -0.2280000, 0.6653006
+    color: '#4B4D4A'
+    pitch: -60.0
+  - label: inferred recessed fan lip
+    min: 1.0920665, -0.2500000, 0.6387579
+    max: 1.1160665, -0.2280000, 0.7224921
+    color: '#4B4D4A'
+    pitch: -30.0
+  spriteStates:
+    buildingventbig5:
+      frames:
+      - parts:
+        - label: left vent housing
+          min: -0.1562500, -0.2000000, 0.0400000
+          max: 0.4687500, 0.2000000, 1.0712500
+          color: '#4B4D4A'
+        - label: right fan and grille housing
+          min: 0.5000000, -0.1700000, 0.0400000
+          max: 1.1875000, 0.2000000, 1.1025000
+          color: '#4B4D4A'
+        - label: left stepped cap
+          min: -0.0937500, -0.2000000, 1.0400000
+          max: 0.4375000, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: right stepped cap
+          min: 0.5312500, -0.2000000, 1.0400000
+          max: 1.0937500, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: left top intake
+          min: -0.1875000, -0.2490000, 0.7900000
+          max: 0.5000000, -0.2460000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1263
+          surfaceAxis: XZ
+        - label: left lower grille
+          min: -0.1875000, -0.2330000, 0.3212500
+          max: 0.5000000, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1264
+          surfaceAxis: XZ
+        - label: left lower controls
+          min: -0.1875000, -0.2490000, 0.0400000
+          max: 0.5000000, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1265
+          surfaceAxis: XZ
+        - label: right service face and fan surround
+          min: 0.5000000, -0.2490000, 0.0400000
+          max: 1.2187500, -0.2460000, 1.1650000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1266
+          surfaceAxis: XZ
+        - label: recessed circular fan artwork
+          min: 0.8125000, -0.2050000, 0.6025000
+          max: 1.1250000, -0.2020000, 0.9150000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1267
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.1130000, -0.2500000, 0.7168829
+          max: 1.1370000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.7950079
+          max: 1.1160665, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.8521994
+          max: 1.0588750, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.8731329
+          max: 0.9807500, -0.2280000, 0.9568671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.8521994
+          max: 0.9026250, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.7950079
+          max: 0.8454335, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.8005000, -0.2500000, 0.7168829
+          max: 0.8245000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.6387579
+          max: 0.8454335, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.5815665
+          max: 0.9026250, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.5606329
+          max: 0.9807500, -0.2280000, 0.6443671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.5815665
+          max: 1.0588750, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.6387579
+          max: 1.1160665, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: -30.0
+      - parts:
+        - label: left vent housing
+          min: -0.1562500, -0.2000000, 0.0400000
+          max: 0.4687500, 0.2000000, 1.0712500
+          color: '#4B4D4A'
+        - label: right fan and grille housing
+          min: 0.5000000, -0.1700000, 0.0400000
+          max: 1.1875000, 0.2000000, 1.1025000
+          color: '#4B4D4A'
+        - label: left stepped cap
+          min: -0.0937500, -0.2000000, 1.0400000
+          max: 0.4375000, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: right stepped cap
+          min: 0.5312500, -0.2000000, 1.0400000
+          max: 1.0937500, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: left top intake
+          min: -0.1875000, -0.2490000, 0.7900000
+          max: 0.5000000, -0.2460000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1263
+          surfaceAxis: XZ
+        - label: left lower grille
+          min: -0.1875000, -0.2330000, 0.3212500
+          max: 0.5000000, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1264
+          surfaceAxis: XZ
+        - label: left lower controls
+          min: -0.1875000, -0.2490000, 0.0400000
+          max: 0.5000000, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1268
+          surfaceAxis: XZ
+        - label: right service face and fan surround
+          min: 0.5000000, -0.2490000, 0.0400000
+          max: 1.2187500, -0.2460000, 1.1650000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1266
+          surfaceAxis: XZ
+        - label: recessed circular fan artwork
+          min: 0.8125000, -0.2050000, 0.6025000
+          max: 1.1250000, -0.2020000, 0.9150000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1267
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.1130000, -0.2500000, 0.7168829
+          max: 1.1370000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.7950079
+          max: 1.1160665, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.8521994
+          max: 1.0588750, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.8731329
+          max: 0.9807500, -0.2280000, 0.9568671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.8521994
+          max: 0.9026250, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.7950079
+          max: 0.8454335, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.8005000, -0.2500000, 0.7168829
+          max: 0.8245000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.6387579
+          max: 0.8454335, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.5815665
+          max: 0.9026250, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.5606329
+          max: 0.9807500, -0.2280000, 0.6443671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.5815665
+          max: 1.0588750, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.6387579
+          max: 1.1160665, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: -30.0
+      - parts:
+        - label: left vent housing
+          min: -0.1562500, -0.2000000, 0.0400000
+          max: 0.4687500, 0.2000000, 1.0712500
+          color: '#4B4D4A'
+        - label: right fan and grille housing
+          min: 0.5000000, -0.1700000, 0.0400000
+          max: 1.1875000, 0.2000000, 1.1025000
+          color: '#4B4D4A'
+        - label: left stepped cap
+          min: -0.0937500, -0.2000000, 1.0400000
+          max: 0.4375000, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: right stepped cap
+          min: 0.5312500, -0.2000000, 1.0400000
+          max: 1.0937500, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: left top intake
+          min: -0.1875000, -0.2490000, 0.7900000
+          max: 0.5000000, -0.2460000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1263
+          surfaceAxis: XZ
+        - label: left lower grille
+          min: -0.1875000, -0.2330000, 0.3212500
+          max: 0.5000000, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1264
+          surfaceAxis: XZ
+        - label: left lower controls
+          min: -0.1875000, -0.2490000, 0.0400000
+          max: 0.5000000, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1269
+          surfaceAxis: XZ
+        - label: right service face and fan surround
+          min: 0.5000000, -0.2490000, 0.0400000
+          max: 1.2187500, -0.2460000, 1.1650000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1266
+          surfaceAxis: XZ
+        - label: recessed circular fan artwork
+          min: 0.8125000, -0.2050000, 0.6025000
+          max: 1.1250000, -0.2020000, 0.9150000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1267
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.1130000, -0.2500000, 0.7168829
+          max: 1.1370000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.7950079
+          max: 1.1160665, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.8521994
+          max: 1.0588750, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.8731329
+          max: 0.9807500, -0.2280000, 0.9568671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.8521994
+          max: 0.9026250, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.7950079
+          max: 0.8454335, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.8005000, -0.2500000, 0.7168829
+          max: 0.8245000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.6387579
+          max: 0.8454335, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.5815665
+          max: 0.9026250, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.5606329
+          max: 0.9807500, -0.2280000, 0.6443671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.5815665
+          max: 1.0588750, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.6387579
+          max: 1.1160665, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: -30.0
+      - parts:
+        - label: left vent housing
+          min: -0.1562500, -0.2000000, 0.0400000
+          max: 0.4687500, 0.2000000, 1.0712500
+          color: '#4B4D4A'
+        - label: right fan and grille housing
+          min: 0.5000000, -0.1700000, 0.0400000
+          max: 1.1875000, 0.2000000, 1.1025000
+          color: '#4B4D4A'
+        - label: left stepped cap
+          min: -0.0937500, -0.2000000, 1.0400000
+          max: 0.4375000, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: right stepped cap
+          min: 0.5312500, -0.2000000, 1.0400000
+          max: 1.0937500, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: left top intake
+          min: -0.1875000, -0.2490000, 0.7900000
+          max: 0.5000000, -0.2460000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1263
+          surfaceAxis: XZ
+        - label: left lower grille
+          min: -0.1875000, -0.2330000, 0.3212500
+          max: 0.5000000, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1264
+          surfaceAxis: XZ
+        - label: left lower controls
+          min: -0.1875000, -0.2490000, 0.0400000
+          max: 0.5000000, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1270
+          surfaceAxis: XZ
+        - label: right service face and fan surround
+          min: 0.5000000, -0.2490000, 0.0400000
+          max: 1.2187500, -0.2460000, 1.1650000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1266
+          surfaceAxis: XZ
+        - label: recessed circular fan artwork
+          min: 0.8125000, -0.2050000, 0.6025000
+          max: 1.1250000, -0.2020000, 0.9150000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1267
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.1130000, -0.2500000, 0.7168829
+          max: 1.1370000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.7950079
+          max: 1.1160665, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.8521994
+          max: 1.0588750, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.8731329
+          max: 0.9807500, -0.2280000, 0.9568671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.8521994
+          max: 0.9026250, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.7950079
+          max: 0.8454335, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.8005000, -0.2500000, 0.7168829
+          max: 0.8245000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.6387579
+          max: 0.8454335, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.5815665
+          max: 0.9026250, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.5606329
+          max: 0.9807500, -0.2280000, 0.6443671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.5815665
+          max: 1.0588750, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.6387579
+          max: 1.1160665, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: -30.0
+      - parts:
+        - label: left vent housing
+          min: -0.1562500, -0.2000000, 0.0400000
+          max: 0.4687500, 0.2000000, 1.0712500
+          color: '#4B4D4A'
+        - label: right fan and grille housing
+          min: 0.5000000, -0.1700000, 0.0400000
+          max: 1.1875000, 0.2000000, 1.1025000
+          color: '#4B4D4A'
+        - label: left stepped cap
+          min: -0.0937500, -0.2000000, 1.0400000
+          max: 0.4375000, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: right stepped cap
+          min: 0.5312500, -0.2000000, 1.0400000
+          max: 1.0937500, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: left top intake
+          min: -0.1875000, -0.2490000, 0.7900000
+          max: 0.5000000, -0.2460000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1263
+          surfaceAxis: XZ
+        - label: left lower grille
+          min: -0.1875000, -0.2330000, 0.3212500
+          max: 0.5000000, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1264
+          surfaceAxis: XZ
+        - label: left lower controls
+          min: -0.1875000, -0.2490000, 0.0400000
+          max: 0.5000000, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1270
+          surfaceAxis: XZ
+        - label: right service face and fan surround
+          min: 0.5000000, -0.2490000, 0.0400000
+          max: 1.2187500, -0.2460000, 1.1650000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1271
+          surfaceAxis: XZ
+        - label: recessed circular fan artwork
+          min: 0.8125000, -0.2050000, 0.6025000
+          max: 1.1250000, -0.2020000, 0.9150000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1267
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.1130000, -0.2500000, 0.7168829
+          max: 1.1370000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.7950079
+          max: 1.1160665, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.8521994
+          max: 1.0588750, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.8731329
+          max: 0.9807500, -0.2280000, 0.9568671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.8521994
+          max: 0.9026250, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.7950079
+          max: 0.8454335, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.8005000, -0.2500000, 0.7168829
+          max: 0.8245000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.6387579
+          max: 0.8454335, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.5815665
+          max: 0.9026250, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.5606329
+          max: 0.9807500, -0.2280000, 0.6443671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.5815665
+          max: 1.0588750, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.6387579
+          max: 1.1160665, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: -30.0
+      delays:
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+    buildingventbig5_off:
+      frames:
+      - parts:
+        - label: left vent housing
+          min: -0.1562500, -0.2000000, 0.0400000
+          max: 0.4687500, 0.2000000, 1.0712500
+          color: '#4B4D4A'
+        - label: right fan and grille housing
+          min: 0.5000000, -0.1700000, 0.0400000
+          max: 1.1875000, 0.2000000, 1.1025000
+          color: '#4B4D4A'
+        - label: left stepped cap
+          min: -0.0937500, -0.2000000, 1.0400000
+          max: 0.4375000, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: right stepped cap
+          min: 0.5312500, -0.2000000, 1.0400000
+          max: 1.0937500, 0.2100000, 1.1337500
+          color: '#4B4D4A'
+        - label: left top intake
+          min: -0.1875000, -0.2490000, 0.7900000
+          max: 0.5000000, -0.2460000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1263
+          surfaceAxis: XZ
+        - label: left lower grille
+          min: -0.1875000, -0.2330000, 0.3212500
+          max: 0.5000000, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1264
+          surfaceAxis: XZ
+        - label: left lower controls
+          min: -0.1875000, -0.2490000, 0.0400000
+          max: 0.5000000, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1272
+          surfaceAxis: XZ
+        - label: right service face and fan surround
+          min: 0.5000000, -0.2490000, 0.0400000
+          max: 1.2187500, -0.2460000, 1.1650000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1266
+          surfaceAxis: XZ
+        - label: recessed circular fan artwork
+          min: 0.8125000, -0.2050000, 0.6025000
+          max: 1.1250000, -0.2020000, 0.9150000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1267
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.1130000, -0.2500000, 0.7168829
+          max: 1.1370000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.7950079
+          max: 1.1160665, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.8521994
+          max: 1.0588750, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.8731329
+          max: 0.9807500, -0.2280000, 0.9568671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.8521994
+          max: 0.9026250, -0.2280000, 0.9359335
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.7950079
+          max: 0.8454335, -0.2280000, 0.8787421
+          color: '#4B4D4A'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.8005000, -0.2500000, 0.7168829
+          max: 0.8245000, -0.2280000, 0.8006171
+          color: '#4B4D4A'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.8214335, -0.2500000, 0.6387579
+          max: 0.8454335, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.8786250, -0.2500000, 0.5815665
+          max: 0.9026250, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.9567500, -0.2500000, 0.5606329
+          max: 0.9807500, -0.2280000, 0.6443671
+          color: '#4B4D4A'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 1.0348750, -0.2500000, 0.5815665
+          max: 1.0588750, -0.2280000, 0.6653006
+          color: '#4B4D4A'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 1.0920665, -0.2500000, 0.6387579
+          max: 1.1160665, -0.2280000, 0.7224921
+          color: '#4B4D4A'
+          pitch: -30.0
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCMachinePropBig6
+  label: Hybrisa wide machinery 6
+  status: draft
+  sourcePrototypes:
+  - RMCMachinePropBig6
+  referencePrototype: RMCMachinePropBig6
+  referenceRsi: _RMC14/Structures/hybrisa_machine_props.rsi
+  referenceState: buildingventbig6
+  referenceDirection: 0
+  sourceDirections: 1
+  sourceSpriteOffset: 0.5,0.5
+  groundOffset: 0,0
+  useEntityRotation: false
+  yawOffset: 0
+  description: Source-specific cabinet solids and physically recessed controls/intakes with exact source frame surfaces.
+    The left pivot and rightward footprint include Sprite.offset.X once in local X; noRot fixes visual yaw while
+    saved physics remains unchanged. Source height at 32 pixels per tile, shallow depth, plain rear faces, segmented
+    fan lips and base Z .04 are inferred. ON frame timing and static OFF resources follow the source without inventing
+    a power controller or fan rotation. Draft; native source-clock and packing evidence is tracked separately. CC-BY-SA-3.0
+    CM-SS13 artwork; see SOURCES_WIDE_MACHINERY.md.
+  parts:
+  - label: left service cabinet
+    min: -0.2812500, -0.2050000, 0.0400000
+    max: 0.3750000, 0.2000000, 1.1025000
+    color: '#2F302F'
+  - label: left raised cap
+    min: -0.2500000, -0.2150000, 1.0712500
+    max: 0.3437500, 0.2100000, 1.1337500
+    color: '#2F302F'
+  - label: left top casting
+    min: -0.3125000, -0.2440000, 0.7900000
+    max: 0.4062500, -0.2410000, 1.1337500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1250
+    surfaceAxis: XZ
+  - label: left recessed grille
+    min: -0.3125000, -0.2330000, 0.3212500
+    max: 0.4062500, -0.2300000, 0.7900000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1273
+    surfaceAxis: XZ
+  - label: left status controls
+    min: -0.3125000, -0.2490000, 0.0400000
+    max: 0.4062500, -0.2460000, 0.3212500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1274
+    surfaceAxis: XZ
+  - label: rack rear wall
+    min: 0.4375000, 0.0100000, 0.0712500
+    max: 1.3125000, 0.2000000, 0.6962500
+    color: '#2F302F'
+  - label: rack left jamb
+    min: 0.4375000, -0.2250000, 0.0400000
+    max: 0.5312500, 0.2000000, 0.6962500
+    color: '#2F302F'
+  - label: rack right jamb
+    min: 1.2187500, -0.2250000, 0.0400000
+    max: 1.3125000, 0.2000000, 0.6962500
+    color: '#2F302F'
+  - label: rack top vent
+    min: 0.5312500, -0.2250000, 0.4775000
+    max: 1.2187500, 0.2000000, 0.6962500
+    color: '#2F302F'
+  - label: rack base ports
+    min: 0.5312500, -0.2250000, 0.0400000
+    max: 1.2187500, 0.2000000, 0.2275000
+    color: '#2F302F'
+  - label: rack opening frame and ports
+    min: 0.4062500, -0.2490000, 0.0400000
+    max: 1.3437500, -0.2460000, 0.7587500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1275
+    surfaceAxis: XZ
+  - label: rack dark recess and status row
+    min: 0.5312500, -0.1800000, 0.2275000
+    max: 1.2187500, -0.1770000, 0.4775000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1276
+    surfaceAxis: XZ
+  spriteStates:
+    buildingventbig6:
+      frames:
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#2F302F'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#2F302F'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1274
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#2F302F'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3437500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1275
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1276
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#2F302F'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#2F302F'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1277
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#2F302F'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3437500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1275
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1278
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#2F302F'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#2F302F'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#2F302F'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3437500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1275
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1280
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#2F302F'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#2F302F'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#2F302F'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3437500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1275
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1281
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#2F302F'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#2F302F'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#2F302F'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3437500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1275
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1282
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#2F302F'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#2F302F'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#2F302F'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3437500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1275
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1283
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#2F302F'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#2F302F'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#2F302F'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3437500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1275
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1284
+          surfaceAxis: XZ
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#2F302F'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#2F302F'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#2F302F'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3437500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1275
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1284
+          surfaceAxis: XZ
+      delays:
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+      - 4
+    buildingventbig6_off:
+      frames:
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#2F302F'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#2F302F'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.1337500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1250
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1285
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#2F302F'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#2F302F'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.3437500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1275
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1286
+          surfaceAxis: XZ
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DRMCMachinePropBig7
+  label: Hybrisa wide machinery 7
+  status: draft
+  sourcePrototypes:
+  - RMCMachinePropBig7
+  referencePrototype: RMCMachinePropBig7
+  referenceRsi: _RMC14/Structures/hybrisa_machine_props.rsi
+  referenceState: buildingventbig7
+  referenceDirection: 0
+  sourceDirections: 1
+  sourceSpriteOffset: 0.5,0.5
+  groundOffset: 0,0
+  useEntityRotation: false
+  yawOffset: 0
+  description: Source-specific cabinet solids and physically recessed controls/intakes with exact source frame surfaces.
+    The left pivot and rightward footprint include Sprite.offset.X once in local X; noRot fixes visual yaw while
+    saved physics remains unchanged. Source height at 32 pixels per tile, shallow depth, plain rear faces, segmented
+    fan lips and base Z .04 are inferred. ON frame timing and static OFF resources follow the source without inventing
+    a power controller or fan rotation. Draft; native source-clock and packing evidence is tracked separately. CC-BY-SA-3.0
+    CM-SS13 artwork; see SOURCES_WIDE_MACHINERY.md.
+  parts:
+  - label: left service cabinet
+    min: -0.2812500, -0.2050000, 0.0400000
+    max: 0.3750000, 0.2000000, 1.1025000
+    color: '#484A47'
+  - label: left raised cap
+    min: -0.2500000, -0.2150000, 1.0712500
+    max: 0.3437500, 0.2100000, 1.1337500
+    color: '#484A47'
+  - label: left top casting
+    min: -0.3125000, -0.2440000, 0.7900000
+    max: 0.4062500, -0.2410000, 1.5087500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1287
+    surfaceAxis: XZ
+  - label: left recessed grille
+    min: -0.3125000, -0.2330000, 0.3212500
+    max: 0.4062500, -0.2300000, 0.7900000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1273
+    surfaceAxis: XZ
+  - label: left status controls
+    min: -0.3125000, -0.2490000, 0.0400000
+    max: 0.4062500, -0.2460000, 0.3212500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1274
+    surfaceAxis: XZ
+  - label: rack rear wall
+    min: 0.4375000, 0.0100000, 0.0712500
+    max: 1.3125000, 0.2000000, 0.6962500
+    color: '#484A47'
+  - label: rack left jamb
+    min: 0.4375000, -0.2250000, 0.0400000
+    max: 0.5312500, 0.2000000, 0.6962500
+    color: '#484A47'
+  - label: rack right jamb
+    min: 1.2187500, -0.2250000, 0.0400000
+    max: 1.3125000, 0.2000000, 0.6962500
+    color: '#484A47'
+  - label: rack top vent
+    min: 0.5312500, -0.2250000, 0.4775000
+    max: 1.2187500, 0.2000000, 0.6962500
+    color: '#484A47'
+  - label: rack base ports
+    min: 0.5312500, -0.2250000, 0.0400000
+    max: 1.2187500, 0.2000000, 0.2275000
+    color: '#484A47'
+  - label: rack opening frame and ports
+    min: 0.4062500, -0.2490000, 0.0400000
+    max: 1.4062500, -0.2460000, 0.7587500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1288
+    surfaceAxis: XZ
+  - label: rack dark recess and status row
+    min: 0.5312500, -0.1800000, 0.2275000
+    max: 1.2187500, -0.1770000, 0.4775000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1276
+    surfaceAxis: XZ
+  - label: upper fan rear case
+    min: 0.4375000, -0.0600000, 0.7587500
+    max: 1.3437500, 0.2000000, 1.5400000
+    color: '#484A47'
+  - label: upper fan crown
+    min: 0.5625000, -0.0600000, 1.5400000
+    max: 1.2187500, 0.2000000, 1.6650000
+    color: '#484A47'
+  - label: upper fan casting and lower vent
+    min: 0.4062500, -0.2390000, 0.7587500
+    max: 1.3750000, -0.2360000, 1.6962500
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1289
+    surfaceAxis: XZ
+  - label: recessed fan source face
+    min: 0.7187500, -0.1900000, 1.2900000
+    max: 1.0312500, -0.1870000, 1.6025000
+    color: '#FFFFFF'
+    surface: CMU3DWideMachinerySurface1290
+    surfaceAxis: XZ
+  - label: inferred recessed fan lip
+    min: 1.0192500, -0.2500000, 1.4043829
+    max: 1.0432500, -0.2280000, 1.4881171
+    color: '#484A47'
+    pitch: 0.0
+  - label: inferred recessed fan lip
+    min: 0.9983165, -0.2500000, 1.4825079
+    max: 1.0223165, -0.2280000, 1.5662421
+    color: '#484A47'
+    pitch: 30.0
+  - label: inferred recessed fan lip
+    min: 0.9411250, -0.2500000, 1.5396994
+    max: 0.9651250, -0.2280000, 1.6234335
+    color: '#484A47'
+    pitch: 60.0
+  - label: inferred recessed fan lip
+    min: 0.8630000, -0.2500000, 1.5606329
+    max: 0.8870000, -0.2280000, 1.6443671
+    color: '#484A47'
+    pitch: -90.0
+  - label: inferred recessed fan lip
+    min: 0.7848750, -0.2500000, 1.5396994
+    max: 0.8088750, -0.2280000, 1.6234335
+    color: '#484A47'
+    pitch: -60.0
+  - label: inferred recessed fan lip
+    min: 0.7276835, -0.2500000, 1.4825079
+    max: 0.7516835, -0.2280000, 1.5662421
+    color: '#484A47'
+    pitch: -30.0
+  - label: inferred recessed fan lip
+    min: 0.7067500, -0.2500000, 1.4043829
+    max: 0.7307500, -0.2280000, 1.4881171
+    color: '#484A47'
+    pitch: 0.0
+  - label: inferred recessed fan lip
+    min: 0.7276835, -0.2500000, 1.3262579
+    max: 0.7516835, -0.2280000, 1.4099921
+    color: '#484A47'
+    pitch: 30.0
+  - label: inferred recessed fan lip
+    min: 0.7848750, -0.2500000, 1.2690665
+    max: 0.8088750, -0.2280000, 1.3528006
+    color: '#484A47'
+    pitch: 60.0
+  - label: inferred recessed fan lip
+    min: 0.8630000, -0.2500000, 1.2481329
+    max: 0.8870000, -0.2280000, 1.3318671
+    color: '#484A47'
+    pitch: -90.0
+  - label: inferred recessed fan lip
+    min: 0.9411250, -0.2500000, 1.2690665
+    max: 0.9651250, -0.2280000, 1.3528006
+    color: '#484A47'
+    pitch: -60.0
+  - label: inferred recessed fan lip
+    min: 0.9983165, -0.2500000, 1.3262579
+    max: 1.0223165, -0.2280000, 1.4099921
+    color: '#484A47'
+    pitch: -30.0
+  spriteStates:
+    buildingventbig7:
+      frames:
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#484A47'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#484A47'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.5087500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1287
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1274
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#484A47'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.4062500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1288
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1276
+          surfaceAxis: XZ
+        - label: upper fan rear case
+          min: 0.4375000, -0.0600000, 0.7587500
+          max: 1.3437500, 0.2000000, 1.5400000
+          color: '#484A47'
+        - label: upper fan crown
+          min: 0.5625000, -0.0600000, 1.5400000
+          max: 1.2187500, 0.2000000, 1.6650000
+          color: '#484A47'
+        - label: upper fan casting and lower vent
+          min: 0.4062500, -0.2390000, 0.7587500
+          max: 1.3750000, -0.2360000, 1.6962500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1289
+          surfaceAxis: XZ
+        - label: recessed fan source face
+          min: 0.7187500, -0.1900000, 1.2900000
+          max: 1.0312500, -0.1870000, 1.6025000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1290
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.0192500, -0.2500000, 1.4043829
+          max: 1.0432500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.4825079
+          max: 1.0223165, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.5396994
+          max: 0.9651250, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.5606329
+          max: 0.8870000, -0.2280000, 1.6443671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.5396994
+          max: 0.8088750, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.4825079
+          max: 0.7516835, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.7067500, -0.2500000, 1.4043829
+          max: 0.7307500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.3262579
+          max: 0.7516835, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.2690665
+          max: 0.8088750, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.2481329
+          max: 0.8870000, -0.2280000, 1.3318671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.2690665
+          max: 0.9651250, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.3262579
+          max: 1.0223165, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: -30.0
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#484A47'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#484A47'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.5087500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1287
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1277
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#484A47'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.4062500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1288
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1278
+          surfaceAxis: XZ
+        - label: upper fan rear case
+          min: 0.4375000, -0.0600000, 0.7587500
+          max: 1.3437500, 0.2000000, 1.5400000
+          color: '#484A47'
+        - label: upper fan crown
+          min: 0.5625000, -0.0600000, 1.5400000
+          max: 1.2187500, 0.2000000, 1.6650000
+          color: '#484A47'
+        - label: upper fan casting and lower vent
+          min: 0.4062500, -0.2390000, 0.7587500
+          max: 1.3750000, -0.2360000, 1.6962500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1291
+          surfaceAxis: XZ
+        - label: recessed fan source face
+          min: 0.7187500, -0.1900000, 1.2900000
+          max: 1.0312500, -0.1870000, 1.6025000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1290
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.0192500, -0.2500000, 1.4043829
+          max: 1.0432500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.4825079
+          max: 1.0223165, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.5396994
+          max: 0.9651250, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.5606329
+          max: 0.8870000, -0.2280000, 1.6443671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.5396994
+          max: 0.8088750, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.4825079
+          max: 0.7516835, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.7067500, -0.2500000, 1.4043829
+          max: 0.7307500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.3262579
+          max: 0.7516835, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.2690665
+          max: 0.8088750, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.2481329
+          max: 0.8870000, -0.2280000, 1.3318671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.2690665
+          max: 0.9651250, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.3262579
+          max: 1.0223165, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: -30.0
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#484A47'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#484A47'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.5087500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1287
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#484A47'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.4062500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1288
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1280
+          surfaceAxis: XZ
+        - label: upper fan rear case
+          min: 0.4375000, -0.0600000, 0.7587500
+          max: 1.3437500, 0.2000000, 1.5400000
+          color: '#484A47'
+        - label: upper fan crown
+          min: 0.5625000, -0.0600000, 1.5400000
+          max: 1.2187500, 0.2000000, 1.6650000
+          color: '#484A47'
+        - label: upper fan casting and lower vent
+          min: 0.4062500, -0.2390000, 0.7587500
+          max: 1.3750000, -0.2360000, 1.6962500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1292
+          surfaceAxis: XZ
+        - label: recessed fan source face
+          min: 0.7187500, -0.1900000, 1.2900000
+          max: 1.0312500, -0.1870000, 1.6025000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1290
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.0192500, -0.2500000, 1.4043829
+          max: 1.0432500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.4825079
+          max: 1.0223165, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.5396994
+          max: 0.9651250, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.5606329
+          max: 0.8870000, -0.2280000, 1.6443671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.5396994
+          max: 0.8088750, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.4825079
+          max: 0.7516835, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.7067500, -0.2500000, 1.4043829
+          max: 0.7307500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.3262579
+          max: 0.7516835, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.2690665
+          max: 0.8088750, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.2481329
+          max: 0.8870000, -0.2280000, 1.3318671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.2690665
+          max: 0.9651250, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.3262579
+          max: 1.0223165, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: -30.0
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#484A47'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#484A47'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.5087500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1287
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#484A47'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.4062500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1288
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1281
+          surfaceAxis: XZ
+        - label: upper fan rear case
+          min: 0.4375000, -0.0600000, 0.7587500
+          max: 1.3437500, 0.2000000, 1.5400000
+          color: '#484A47'
+        - label: upper fan crown
+          min: 0.5625000, -0.0600000, 1.5400000
+          max: 1.2187500, 0.2000000, 1.6650000
+          color: '#484A47'
+        - label: upper fan casting and lower vent
+          min: 0.4062500, -0.2390000, 0.7587500
+          max: 1.3750000, -0.2360000, 1.6962500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1293
+          surfaceAxis: XZ
+        - label: recessed fan source face
+          min: 0.7187500, -0.1900000, 1.2900000
+          max: 1.0312500, -0.1870000, 1.6025000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1290
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.0192500, -0.2500000, 1.4043829
+          max: 1.0432500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.4825079
+          max: 1.0223165, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.5396994
+          max: 0.9651250, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.5606329
+          max: 0.8870000, -0.2280000, 1.6443671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.5396994
+          max: 0.8088750, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.4825079
+          max: 0.7516835, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.7067500, -0.2500000, 1.4043829
+          max: 0.7307500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.3262579
+          max: 0.7516835, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.2690665
+          max: 0.8088750, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.2481329
+          max: 0.8870000, -0.2280000, 1.3318671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.2690665
+          max: 0.9651250, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.3262579
+          max: 1.0223165, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: -30.0
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#484A47'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#484A47'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.5087500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1287
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#484A47'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.4062500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1288
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1282
+          surfaceAxis: XZ
+        - label: upper fan rear case
+          min: 0.4375000, -0.0600000, 0.7587500
+          max: 1.3437500, 0.2000000, 1.5400000
+          color: '#484A47'
+        - label: upper fan crown
+          min: 0.5625000, -0.0600000, 1.5400000
+          max: 1.2187500, 0.2000000, 1.6650000
+          color: '#484A47'
+        - label: upper fan casting and lower vent
+          min: 0.4062500, -0.2390000, 0.7587500
+          max: 1.3750000, -0.2360000, 1.6962500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1294
+          surfaceAxis: XZ
+        - label: recessed fan source face
+          min: 0.7187500, -0.1900000, 1.2900000
+          max: 1.0312500, -0.1870000, 1.6025000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1290
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.0192500, -0.2500000, 1.4043829
+          max: 1.0432500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.4825079
+          max: 1.0223165, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.5396994
+          max: 0.9651250, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.5606329
+          max: 0.8870000, -0.2280000, 1.6443671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.5396994
+          max: 0.8088750, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.4825079
+          max: 0.7516835, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.7067500, -0.2500000, 1.4043829
+          max: 0.7307500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.3262579
+          max: 0.7516835, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.2690665
+          max: 0.8088750, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.2481329
+          max: 0.8870000, -0.2280000, 1.3318671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.2690665
+          max: 0.9651250, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.3262579
+          max: 1.0223165, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: -30.0
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#484A47'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#484A47'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.5087500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1287
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#484A47'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.4062500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1288
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1283
+          surfaceAxis: XZ
+        - label: upper fan rear case
+          min: 0.4375000, -0.0600000, 0.7587500
+          max: 1.3437500, 0.2000000, 1.5400000
+          color: '#484A47'
+        - label: upper fan crown
+          min: 0.5625000, -0.0600000, 1.5400000
+          max: 1.2187500, 0.2000000, 1.6650000
+          color: '#484A47'
+        - label: upper fan casting and lower vent
+          min: 0.4062500, -0.2390000, 0.7587500
+          max: 1.3750000, -0.2360000, 1.6962500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1291
+          surfaceAxis: XZ
+        - label: recessed fan source face
+          min: 0.7187500, -0.1900000, 1.2900000
+          max: 1.0312500, -0.1870000, 1.6025000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1290
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.0192500, -0.2500000, 1.4043829
+          max: 1.0432500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.4825079
+          max: 1.0223165, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.5396994
+          max: 0.9651250, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.5606329
+          max: 0.8870000, -0.2280000, 1.6443671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.5396994
+          max: 0.8088750, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.4825079
+          max: 0.7516835, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.7067500, -0.2500000, 1.4043829
+          max: 0.7307500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.3262579
+          max: 0.7516835, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.2690665
+          max: 0.8088750, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.2481329
+          max: 0.8870000, -0.2280000, 1.3318671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.2690665
+          max: 0.9651250, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.3262579
+          max: 1.0223165, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: -30.0
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#484A47'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#484A47'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.5087500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1287
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1279
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#484A47'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.4062500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1288
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1284
+          surfaceAxis: XZ
+        - label: upper fan rear case
+          min: 0.4375000, -0.0600000, 0.7587500
+          max: 1.3437500, 0.2000000, 1.5400000
+          color: '#484A47'
+        - label: upper fan crown
+          min: 0.5625000, -0.0600000, 1.5400000
+          max: 1.2187500, 0.2000000, 1.6650000
+          color: '#484A47'
+        - label: upper fan casting and lower vent
+          min: 0.4062500, -0.2390000, 0.7587500
+          max: 1.3750000, -0.2360000, 1.6962500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1289
+          surfaceAxis: XZ
+        - label: recessed fan source face
+          min: 0.7187500, -0.1900000, 1.2900000
+          max: 1.0312500, -0.1870000, 1.6025000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1290
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.0192500, -0.2500000, 1.4043829
+          max: 1.0432500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.4825079
+          max: 1.0223165, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.5396994
+          max: 0.9651250, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.5606329
+          max: 0.8870000, -0.2280000, 1.6443671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.5396994
+          max: 0.8088750, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.4825079
+          max: 0.7516835, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.7067500, -0.2500000, 1.4043829
+          max: 0.7307500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.3262579
+          max: 0.7516835, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.2690665
+          max: 0.8088750, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.2481329
+          max: 0.8870000, -0.2280000, 1.3318671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.2690665
+          max: 0.9651250, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.3262579
+          max: 1.0223165, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: -30.0
+      delays:
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+      - 0.25
+      - 4
+    buildingventbig7_off:
+      frames:
+      - parts:
+        - label: left service cabinet
+          min: -0.2812500, -0.2050000, 0.0400000
+          max: 0.3750000, 0.2000000, 1.1025000
+          color: '#484A47'
+        - label: left raised cap
+          min: -0.2500000, -0.2150000, 1.0712500
+          max: 0.3437500, 0.2100000, 1.1337500
+          color: '#484A47'
+        - label: left top casting
+          min: -0.3125000, -0.2440000, 0.7900000
+          max: 0.4062500, -0.2410000, 1.5087500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1287
+          surfaceAxis: XZ
+        - label: left recessed grille
+          min: -0.3125000, -0.2330000, 0.3212500
+          max: 0.4062500, -0.2300000, 0.7900000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1273
+          surfaceAxis: XZ
+        - label: left status controls
+          min: -0.3125000, -0.2490000, 0.0400000
+          max: 0.4062500, -0.2460000, 0.3212500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1285
+          surfaceAxis: XZ
+        - label: rack rear wall
+          min: 0.4375000, 0.0100000, 0.0712500
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack left jamb
+          min: 0.4375000, -0.2250000, 0.0400000
+          max: 0.5312500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack right jamb
+          min: 1.2187500, -0.2250000, 0.0400000
+          max: 1.3125000, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack top vent
+          min: 0.5312500, -0.2250000, 0.4775000
+          max: 1.2187500, 0.2000000, 0.6962500
+          color: '#484A47'
+        - label: rack base ports
+          min: 0.5312500, -0.2250000, 0.0400000
+          max: 1.2187500, 0.2000000, 0.2275000
+          color: '#484A47'
+        - label: rack opening frame and ports
+          min: 0.4062500, -0.2490000, 0.0400000
+          max: 1.4062500, -0.2460000, 0.7587500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1288
+          surfaceAxis: XZ
+        - label: rack dark recess and status row
+          min: 0.5312500, -0.1800000, 0.2275000
+          max: 1.2187500, -0.1770000, 0.4775000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1286
+          surfaceAxis: XZ
+        - label: upper fan rear case
+          min: 0.4375000, -0.0600000, 0.7587500
+          max: 1.3437500, 0.2000000, 1.5400000
+          color: '#484A47'
+        - label: upper fan crown
+          min: 0.5625000, -0.0600000, 1.5400000
+          max: 1.2187500, 0.2000000, 1.6650000
+          color: '#484A47'
+        - label: upper fan casting and lower vent
+          min: 0.4062500, -0.2390000, 0.7587500
+          max: 1.3750000, -0.2360000, 1.6962500
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1289
+          surfaceAxis: XZ
+        - label: recessed fan source face
+          min: 0.7187500, -0.1900000, 1.2900000
+          max: 1.0312500, -0.1870000, 1.6025000
+          color: '#FFFFFF'
+          surface: CMU3DWideMachinerySurface1290
+          surfaceAxis: XZ
+        - label: inferred recessed fan lip
+          min: 1.0192500, -0.2500000, 1.4043829
+          max: 1.0432500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.4825079
+          max: 1.0223165, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.5396994
+          max: 0.9651250, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.5606329
+          max: 0.8870000, -0.2280000, 1.6443671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.5396994
+          max: 0.8088750, -0.2280000, 1.6234335
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.4825079
+          max: 0.7516835, -0.2280000, 1.5662421
+          color: '#484A47'
+          pitch: -30.0
+        - label: inferred recessed fan lip
+          min: 0.7067500, -0.2500000, 1.4043829
+          max: 0.7307500, -0.2280000, 1.4881171
+          color: '#484A47'
+          pitch: 0.0
+        - label: inferred recessed fan lip
+          min: 0.7276835, -0.2500000, 1.3262579
+          max: 0.7516835, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: 30.0
+        - label: inferred recessed fan lip
+          min: 0.7848750, -0.2500000, 1.2690665
+          max: 0.8088750, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: 60.0
+        - label: inferred recessed fan lip
+          min: 0.8630000, -0.2500000, 1.2481329
+          max: 0.8870000, -0.2280000, 1.3318671
+          color: '#484A47'
+          pitch: -90.0
+        - label: inferred recessed fan lip
+          min: 0.9411250, -0.2500000, 1.2690665
+          max: 0.9651250, -0.2280000, 1.3528006
+          color: '#484A47'
+          pitch: -60.0
+        - label: inferred recessed fan lip
+          min: 0.9983165, -0.2500000, 1.3262579
+          max: 1.0223165, -0.2280000, 1.4099921
+          color: '#484A47'
+          pitch: -30.0
+      delays:
+      - 1

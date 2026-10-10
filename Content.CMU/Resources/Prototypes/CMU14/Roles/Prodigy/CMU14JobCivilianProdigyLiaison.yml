@@ -10,6 +10,12 @@
 - type: job
   parent: CMU14JobCivilianProdigyLiaisonBase
   id: CMU14JobCivilianProdigyLiaison
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: PSC
   roundRole: CivilianProdigyLiaison
@@ -69,7 +75,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
-  spawnMenuRoleName: Prodigy Liaison (CMU)
+  spawnMenuRoleName: cmu-spawn-role-prodigy-liaison-cmu 
   accessGroups:
   - Colonist
   - auadmin

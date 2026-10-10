@@ -19,12 +19,8 @@ public sealed partial class AU14ClfCommsCommand : IConsoleCommand
     [Dependency] private IChatManager _chat = default!;
 
     public string Command => "clfcomms";
-
-    public string Description =>
-        "Toggles the AU14 comms system over the CLF/INSFOR nets. Off means the cell's channels " +
-        "work like stock radio: no coverage requirement, no static, no callsigns.";
-
-    public string Help => "Usage: clfcomms [on|off]. With no argument, reports the current state.";
+    public string Description => Loc.GetString("cmu-cmd-clfcomms-desc");
+    public string Help => Loc.GetString("cmu-cmd-clfcomms-help");
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -38,47 +34,49 @@ public sealed partial class AU14ClfCommsCommand : IConsoleCommand
 
         if (args.Length == 0)
         {
-            shell.WriteLine(current
-                ? "CLF comms: ON. The cell's nets are anchor-gated and run under the full comms system."
-                : "CLF comms: OFF. The cell's nets are running as stock radio.");
+            shell.WriteLine(Loc.GetString(current
+                ? "cmu-cmd-clfcomms-status-on"
+                : "cmu-cmd-clfcomms-status-off"));
 
             if (!_config.GetCVar(AU14CCVars.NewCommsSystem))
-                shell.WriteLine("Note: the master switch (au14.new_comms_system) is off, so this does nothing right now.");
+                shell.WriteLine(Loc.GetString("cmu-cmd-clfcomms-master-off"));
 
             return;
         }
 
         if (!TryParseState(args[0], out var wanted))
         {
-            shell.WriteError($"Could not read '{args[0]}'. Use on or off.");
+            shell.WriteError(Loc.GetString("cmu-cmd-clfcomms-invalid-state", ("value", args[0])));
             return;
         }
 
         if (wanted == current)
         {
-            shell.WriteLine($"CLF comms are already {(current ? "on" : "off")}.");
+            shell.WriteLine(Loc.GetString("cmu-cmd-clfcomms-already",
+                ("state", Loc.GetString(current ? "cmu-cmd-clfcomms-state-on" : "cmu-cmd-clfcomms-state-off"))));
             return;
         }
 
         _config.SetCVar(AU14CCVars.NewCommsSystemClf, wanted);
 
-        // the rest of the admin team should not have to work out why the insurgents
-        // suddenly hear each other across the whole map
-        var who = shell.Player?.Name ?? "The server";
+        // The rest of the admin team should not have to work out why the insurgents
+        // suddenly hear each other across the whole map.
+        var who = shell.Player?.Name ?? Loc.GetString("cmu-cmd-clfcomms-server");
 
-        _chat.SendAdminAnnouncement(wanted
-            ? $"{who} turned the comms system back on for CLF/INSFOR."
-            : $"{who} turned the comms system off for CLF/INSFOR - their nets are stock radio now.");
+        _chat.SendAdminAnnouncement(Loc.GetString(wanted
+                ? "cmu-cmd-clfcomms-admin-on"
+                : "cmu-cmd-clfcomms-admin-off",
+            ("user", who)));
 
-        shell.WriteLine(wanted
-            ? "CLF comms ON. The cell is back under coverage rules, static and callsigns."
-            : "CLF comms OFF. The cell's nets now reach anywhere, unmasked and unjammed.");
+        shell.WriteLine(Loc.GetString(wanted
+            ? "cmu-cmd-clfcomms-result-on"
+            : "cmu-cmd-clfcomms-result-off"));
     }
 
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         return args.Length == 1
-            ? CompletionResult.FromHintOptions(["on", "off"], "on|off")
+            ? CompletionResult.FromHintOptions(["on", "off"], Loc.GetString("cmu-cmd-clfcomms-hint"))
             : CompletionResult.Empty;
     }
 

@@ -356,7 +356,14 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
         var reagent = reagents[ent.Comp.PickedRecipeChem];
         if (reagent is not null && reagent.Class >= ReagentClass.Rare)
             credloss--;
-        _dat.UpdateClearance(_dat.Credits - credloss, -1);
+        var faction = _dat.GetFaction(ent.Owner);
+        if (_dat.GetCredits(faction) < credloss)
+        {
+            ent.Comp.Stage = ChemSimulatorStage.Failure;
+            UpdateAppearance(ent.Owner, ent.Comp);
+            return;
+        }
+        _dat.UpdateClearance(_dat.GetCredits(faction) - credloss, -1, faction);
         chem.Recipe = recipe.Recipe;
         _simulations.Add(chem.ID);
 
@@ -390,7 +397,7 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
     private void Print(Entity<ChemSimulatorComponent> ent, string ID)
     {
         //todo: sound
-        var dat = _gen.CreateReport(ID);
+        var dat = _gen.CreateReport(ID, clearance: _dat.GetClearance(_dat.GetFaction(ent.Owner)));
         TrySpawnNextTo("CMUResearchReportSynthesis", ent.Owner, out var paper);
         if (paper is null || dat is null)
             return;
@@ -414,7 +421,8 @@ public sealed partial class ServerChemSimulatorSystem : SharedChemicalSimulatorS
         _paper.SetContent(realpaper, contents);
         if (repcomp is not null && repcomp.Data is not null)
         {
-            _dat.ResearchData.TryAdd(_dat.ResearchData.Count - 1,
+            var reports = _dat.GetResearch(_dat.GetFaction(ent.Owner)).Reports;
+            reports.TryAdd(reports.Count,
                 (ID, contents, _time.CurTime, true, repcomp.Data.Value, repcomp.Valid, repcomp.Completed));
         }
         DirtyEntity(realpaper);

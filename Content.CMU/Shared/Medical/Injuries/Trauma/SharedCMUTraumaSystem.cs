@@ -7,8 +7,9 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.ClawSharpness;
 using Robust.Shared.Configuration;
 using Robust.Shared.Random;
-using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using BiomorphComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphComponent;
 using Content.Shared.CMU14.Medical.Core;
+using Content.Shared.CMU14.Threats.Mobs.Biomorph;
 
 namespace Content.Shared.CMU14.Medical.Injuries.Trauma;
 
@@ -22,7 +23,7 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
 
     private EntityQuery<XenoComponent> _xenoQuery;
     private EntityQuery<XenoClawsComponent> _xenoClawsQuery;
-    private EntityQuery<AbominationComponent> _abominationQuery;
+    private EntityQuery<BiomorphComponent> _biomorphQuery;
 
     private CMUTraumaContactSettings _settings = CMUTraumaContactSettings.Default;
 
@@ -32,7 +33,7 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
 
         _xenoQuery = GetEntityQuery<XenoComponent>();
         _xenoClawsQuery = GetEntityQuery<XenoClawsComponent>();
-        _abominationQuery = GetEntityQuery<AbominationComponent>();
+        _biomorphQuery = GetEntityQuery<BiomorphComponent>();
 
         _cfg.OnValueChanged(CMUMedicalCCVars.BoneProjectileHighDamageThreshold, v => _settings = _settings with { BallisticHighDamageThreshold = (FixedPoint2)v }, true);
         _cfg.OnValueChanged(CMUMedicalCCVars.TraumaMeleeHighDamageThreshold, v => _settings = _settings with { MeleeHighDamageThreshold = (FixedPoint2)v }, true);
@@ -204,7 +205,7 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
         if (impact.Contact == DamageImpactContact.Crush)
             return impact.WithMinimumEnergy(DamageImpactEnergy.High);
 
-        if (TryGetAbominationSource(origin, tool))
+        if (TryGetBiomorphSource(origin, tool))
         {
             return impact with
             {
@@ -266,12 +267,12 @@ public sealed partial class SharedCMUTraumaSystem : EntitySystem
         return false;
     }
 
-    private bool TryGetAbominationSource(EntityUid? origin, EntityUid? tool)
+    private bool TryGetBiomorphSource(EntityUid? origin, EntityUid? tool)
     {
-        if (origin is { } originUid && _abominationQuery.HasComp(originUid))
+        if (origin is { } originUid && _biomorphQuery.HasComp(originUid))
             return true;
 
-        return tool is { } toolUid && _abominationQuery.HasComp(toolUid);
+        return tool is { } toolUid && _biomorphQuery.HasComp(toolUid);
     }
 
     private CMUTraumaMechanism InferMechanism(DamageSpecifier damage, EntityUid? tool)

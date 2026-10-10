@@ -10,11 +10,8 @@ public sealed partial class CMUClientPerformanceCommand : IConsoleCommand
     [Dependency] private IResourceManager _resources = default!;
 
     public string Command => "cmu_client_perf";
-    public string Description => "Captures detailed client FPS, allocation, rendering and prediction diagnostics to a local log file.";
-    public string Help => "Usage: cmu_client_perf [start [seconds=120] [spike_ms=33.333]] | stop | report | status | open | help\n" +
-                          "Run with no arguments, close the console and reproduce the FPS drop. Capture stops automatically.\n" +
-                          "Use stop to finish early, report for a detailed checkpoint, and open to find the .log file to share.\n" +
-                          "Duration: 5–1800s. Spike threshold: 1–10000ms (decimal point). Profiling adds overhead while enabled.";
+    public string Description => Loc.GetString("cmu-cmd-client-perf-desc");
+    public string Help => Loc.GetString("cmu-cmd-client-perf-help");
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -39,7 +36,7 @@ public sealed partial class CMUClientPerformanceCommand : IConsoleCommand
             }
             if (!_entities.EntitySysManager.TryGetEntitySystem(typeof(CMUClientPerformanceSystem), out var system))
             {
-                shell.WriteError("Join a server before capturing client performance. Use cmu_client_perf open to find earlier captures.");
+                shell.WriteError(Loc.GetString("cmu-cmd-client-perf-join-server"));
                 return;
             }
             var diagnostics = (CMUClientPerformanceSystem) system;
@@ -61,7 +58,7 @@ public sealed partial class CMUClientPerformanceCommand : IConsoleCommand
         }
         catch (Exception e)
         {
-            shell.WriteError($"Client performance diagnostics failed: {e.Message}");
+            shell.WriteError(Loc.GetString("cmu-cmd-client-perf-failed", ("error", e.Message)));
         }
     }
 

@@ -48,7 +48,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private SharedContentEyeSystem _eyeSystem = default!;
+    [Dependency] private VehicleGunnerViewSystem _gunnerView = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -267,6 +267,10 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         operatorComp.HardpointActions.Clear();
         Dirty(args.Buckle.Owner, operatorComp);
 
+        var watching = EnsureComp<VehicleWatchingComponent>(args.Buckle.Owner);
+        watching.Watching = vehicleUid;
+        Dirty(args.Buckle.Owner, watching);
+
         RefreshOperatorSelectedWeapons(vehicleUid, weapons);
         RefreshHardpointActions(args.Buckle.Owner, vehicleUid, weapons, operatorComp);
 
@@ -291,6 +295,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             ClearHardpointActions(args.Buckle.Owner, operatorComp);
 
         RemCompDeferred<VehicleWeaponsOperatorComponent>(args.Buckle.Owner);
+        RemCompDeferred<VehicleWatchingComponent>(args.Buckle.Owner);
         _ui.CloseUi(ent.Owner, VehicleWeaponsUiKey.Key, args.Buckle.Owner);
         UpdateGunnerView(args.Buckle.Owner, ent.Owner, ent.Comp, removeOnly: true);
 
@@ -561,6 +566,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         }
     }
 
+    // CMU14 method: vehicle damage and usability.
     private void UpdateGunnerView(
         EntityUid user,
         EntityUid vehicle,
@@ -572,7 +578,7 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
         if (removeOnly)
         {
             if (RemCompDeferred<VehicleGunnerViewUserComponent>(user))
-                _eyeSystem.UpdatePvsScale(user);
+                _gunnerView.RefreshView(user, removing: true);
 
             return;
         }
@@ -612,12 +618,12 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             view.CursorOffsetSpeed = cursorOffsetSpeed;
             view.CursorPvsIncrease = cursorPvsIncrease;
             Dirty(user, view);
-            _eyeSystem.UpdatePvsScale(user);
+            _gunnerView.RefreshView(user);
             return;
         }
 
         if (RemCompDeferred<VehicleGunnerViewUserComponent>(user))
-            _eyeSystem.UpdatePvsScale(user);
+            _gunnerView.RefreshView(user, removing: true);
     }
 
     private static bool HasBaseGunnerView(VehicleWeaponsSeatComponent seatComp)
@@ -799,13 +805,6 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             return false;
         }
 
-        if (weapons.OperatorSelections.TryGetValue(operatorUid, out var selectedWeapon) &&
-            IsSelectableMountedWeapon(vehicle, selectedWeapon))
-        {
-            weapon = selectedWeapon;
-            return true;
-        }
-
         if (TryComp(operatorUid, out VehicleWeaponsOperatorComponent? operatorComp) &&
             operatorComp.Vehicle == vehicle &&
             operatorComp.SelectedWeapon is { } operatorWeapon &&
@@ -814,6 +813,13 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             IsSelectableMountedWeapon(vehicle, operatorWeapon))
         {
             weapon = operatorWeapon;
+            return true;
+        }
+
+        if (weapons.OperatorSelections.TryGetValue(operatorUid, out var selectedWeapon) &&
+            IsSelectableMountedWeapon(vehicle, selectedWeapon))
+        {
+            weapon = selectedWeapon;
             return true;
         }
 
@@ -839,19 +845,6 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             return false;
         }
 
-        foreach (var entry in weapons.OperatorSelections)
-        {
-            if (!Exists(entry.Key) ||
-                entry.Value != weapon ||
-                !IsSelectableMountedWeapon(vehicle, entry.Value))
-            {
-                continue;
-            }
-
-            operatorUid = entry.Key;
-            return true;
-        }
-
         var query = EntityQueryEnumerator<VehicleWeaponsOperatorComponent>();
         while (query.MoveNext(out var candidateUid, out var operatorComp))
         {
@@ -862,6 +855,19 @@ public sealed partial class VehicleWeaponsSystem : EntitySystem
             }
 
             operatorUid = candidateUid;
+            return true;
+        }
+
+        foreach (var entry in weapons.OperatorSelections)
+        {
+            if (!Exists(entry.Key) ||
+                entry.Value != weapon ||
+                !IsSelectableMountedWeapon(vehicle, entry.Value))
+            {
+                continue;
+            }
+
+            operatorUid = entry.Key;
             return true;
         }
 

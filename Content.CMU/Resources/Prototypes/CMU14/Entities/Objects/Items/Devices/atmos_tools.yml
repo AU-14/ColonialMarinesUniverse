@@ -1,0 +1,73 @@
+- type: entity
+  parent: BaseItem
+  name: '"Canary" AS-5 atmos scanner'
+  id: CMUAtmosScanner
+  description: A bulky, awkward device. Gives a readout of the local atmospheric composition. Field crews call it the Canary, after the bird it replaced. Unlike the bird, it only dies when you do.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/atmos_scanner.rsi
+    layers:
+    - state: icon
+  - type: GasAnalyzer
+  - type: RMCLoreExaminable
+    content: rmc-lore-examinable-atmospheric-composition-scanner
+  - type: ActivatableUI
+    inHandsOnly: true
+    singleUser: true
+    requireActiveHand: false
+    key: enum.GasAnalyzerUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.GasAnalyzerUiKey.Key:
+        type: GasAnalyzerBoundUserInterface
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.GasAnalyzerVisuals.Enabled:
+        enabled:
+          True: { state: working }
+          False: { state: icon }
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 30
+      CMGlass: 20
+
+- type: entity
+  parent: trayScanner
+  id: CMTRayScanner
+  name: '"Deep Ear" PS-9 pulse survey unit'
+  description: A chunky survey unit. Pulses low-frequency sound through the deck and paints sub-floor infrastructure, pipes and cables alike, onto a small green CRT. The four-pound manual reassures you it is perfectly safe to operate.
+  suffix: trayScanner
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/t-ray.rsi
+    layers:
+    - state: tray-off
+      map: [ "base" ]
+  - type: TrayScanner
+    range: 1
+  - type: Item
+    sprite: _RMC14/Objects/Tools/t-ray.rsi
+    storedRotation: 0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.TrayScannerVisual.Visual:
+        base:
+          On: { state: tray-on }
+          Off: { state: tray-off }
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/multitool_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/multitool_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/multitool_drop.ogg
+      params:
+        volume: -4

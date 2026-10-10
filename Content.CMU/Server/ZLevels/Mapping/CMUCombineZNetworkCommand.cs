@@ -16,18 +16,19 @@ public sealed partial class CMUCombineZNetworkCommand : LocalizedEntityCommands
     [Dependency] private MetaDataSystem _meta = default!;
 
     public override string Command => "znetwork-combine";
-    public override string Description => "Connects a number of maps into a common network of z-levels. Does not work if one of the maps is already in the z-level network";
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
-        return CompletionResult.FromHintOptions(CompletionHelper.MapIds(_entities), "Map Id in order from ground to sky");
+        return CompletionResult.FromHintOptions(
+            CompletionHelper.MapIds(_entities),
+            Loc.GetString("cmu-cmd-znetwork-combine-map-hint"));
     }
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length < 2)
         {
-            shell.WriteError("Not enough maps to form a network of levels");
+            shell.WriteError(Loc.GetString("cmu-cmd-znetwork-combine-not-enough"));
             return;
         }
 
@@ -36,7 +37,7 @@ public sealed partial class CMUCombineZNetworkCommand : LocalizedEntityCommands
         {
             if (!int.TryParse(arg, out var mapIdInt))
             {
-                shell.WriteError($"Cannot parse `{arg}` into mapId");
+                shell.WriteError(Loc.GetString("cmu-cmd-znetwork-combine-parse-map", ("value", arg)));
                 return;
             }
 
@@ -44,19 +45,19 @@ public sealed partial class CMUCombineZNetworkCommand : LocalizedEntityCommands
 
             if (mapId == MapId.Nullspace)
             {
-                shell.WriteError($"Cannot parse NullSpace");
+                shell.WriteError(Loc.GetString("cmu-cmd-znetwork-combine-nullspace"));
                 return;
             }
 
             if (!_map.MapExists(mapId))
             {
-                shell.WriteError($"Map {mapId} dont exist");
+                shell.WriteError(Loc.GetString("cmu-cmd-znetwork-combine-map-missing", ("mapId", mapId.ToString())));
                 return;
             }
 
             if (maps.Contains(mapId))
             {
-                shell.WriteError($"Duplication maps: {mapId}");
+                shell.WriteError(Loc.GetString("cmu-cmd-znetwork-combine-duplicate", ("mapId", mapId.ToString())));
                 return;
             }
 
@@ -64,20 +65,26 @@ public sealed partial class CMUCombineZNetworkCommand : LocalizedEntityCommands
         }
 
         var network = _zLevels.CreateZNetwork();
-        _meta.SetEntityName(network, $"Combined zNetwork: {network.Owner.Id}");
+        _meta.SetEntityName(network, Loc.GetString("cmu-cmd-znetwork-combine-name", ("id", network.Owner.Id)));
         var counter = 0;
         Dictionary<EntityUid, int> dict = new();
         foreach (var findMap in maps)
         {
-            dict.Add( _map.GetMap(findMap), counter);
+            dict.Add(_map.GetMap(findMap), counter);
             counter++;
         }
 
         var success = _zLevels.TryAddMapsIntoZNetwork(network, dict);
 
         if (success)
-            shell.WriteLine($"Created z-level network! Z-Network entity: {network}");
+        {
+            shell.WriteLine(Loc.GetString("cmu-cmd-znetwork-combine-success",
+                ("network", network.ToString())));
+        }
         else
-            shell.WriteLine($"Created z-level network {network}, but something went wrong!");
+        {
+            shell.WriteLine(Loc.GetString("cmu-cmd-znetwork-combine-partial-failure",
+                ("network", network.ToString())));
+        }
     }
 }

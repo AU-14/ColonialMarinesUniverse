@@ -32,6 +32,11 @@
     mode: AlignAtmosPipeLayers
   components:
     - type: ApcPowerReceiver
+      powerLoad: 200 # CMU14: load-0 receivers never grid-power
+    - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+      idleLoad: 0
+      activeLoad: 200
+      channel: Environment
     - type: ExtensionCableReceiver
     - type: DeviceNetwork
       prefix: device-address-prefix-vent
@@ -138,6 +143,11 @@
     mode: AlignAtmosPipeLayers
   components:
     - type: ApcPowerReceiver
+      powerLoad: 1000 # CMU14: load-0 receivers never grid-power
+    - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+      idleLoad: 0
+      activeLoad: 1000
+      channel: Environment
     - type: ExtensionCableReceiver
     - type: DeviceNetwork
       prefix: device-address-prefix-scrubber
@@ -259,6 +269,10 @@
     - type: PipeColorVisuals
     - type: Rotatable
     - type: GasThermoMachine
+    - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+      idleLoad: 0
+      activeLoad: 2000
+      channel: Environment
     - type: AtmosPipeColor
     - type: AtmosDevice
     - type: UserInterface
@@ -516,6 +530,10 @@
   - type: PipeRestrictOverlap
   - type: ApcPowerReceiver
     powerLoad: 10000
+  - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+    idleLoad: 0
+    activeLoad: 10000
+    channel: Environment
   - type: Machine
     board: CondenserMachineCircuitBoard
   - type: WiresPanel

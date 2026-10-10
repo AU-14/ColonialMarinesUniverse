@@ -10,6 +10,10 @@
     enabled: false
     usesApcPower: true
   - type: ExtensionCableReceiver
+  - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+    idleLoad: 0
+    activeLoad: 100
+    channel: Environment
   - type: DeviceNetwork
     deviceNetId: AtmosDevices
     receiveFrequencyId: AtmosMonitor

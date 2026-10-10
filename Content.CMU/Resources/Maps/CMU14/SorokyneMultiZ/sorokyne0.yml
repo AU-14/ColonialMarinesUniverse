@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/16/2026 22:52:10
-  entityCount: 31156
+  entityCount: 31160
 maps:
 - 1
 grids:
@@ -48185,6 +48185,23 @@ entities:
     - type: Transform
       pos: 66.5,26.5
       parent: 1
+- proto: CMUSpawnPointCivilianAtmosian
+  entities:
+  - uid: 31188
+    components:
+    - type: Transform
+      pos: 79.5,65.5
+      parent: 1
+  - uid: 31189
+    components:
+    - type: Transform
+      pos: 107.5,107.5
+      parent: 1
+  - uid: 31190
+    components:
+    - type: Transform
+      pos: 66.5,26.5
+      parent: 1
 - proto: AU14SpawnPointCivilianEthicsAndWellnessAdvisor
   entities:
   - uid: 140
@@ -53485,6 +53502,9 @@ entities:
     components:
     - type: MetaData
       name: 'LZ1: Sorokyne Strata'
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
+      multiDeckOffset: 1,0
     - type: Transform
       pos: 10.5,108.5
       parent: 1
@@ -53492,6 +53512,8 @@ entities:
   entities:
   - uid: 1004
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: South West Landing Zone
     - type: Transform
@@ -53499,6 +53521,8 @@ entities:
       parent: 1
   - uid: 1005
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Western Clearing
     - type: Transform
@@ -53506,6 +53530,8 @@ entities:
       parent: 1
   - uid: 1006
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: Maintenance LZ
     - type: Transform
@@ -53513,6 +53539,8 @@ entities:
       parent: 1
   - uid: 1007
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Carp Lake
     - type: Transform
@@ -70497,7 +70525,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCArmorSPPFirefighter
+- proto: CMUArmorFirefighterUPP
   entities:
   - uid: 915
     components:
@@ -82628,7 +82656,7 @@ entities:
     - type: Transform
       pos: 217.5,138.5
       parent: 1
-- proto: RMCGeneratorFusion
+- proto: CMUGeneratorFusion
   entities:
   - uid: 5047
     components:
@@ -82727,7 +82755,7 @@ entities:
     - type: Transform
       pos: 37.5,115.5
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 5066
     components:
@@ -89403,7 +89431,7 @@ entities:
     - type: Transform
       pos: 68.5,116.5
       parent: 1
-- proto: RMCInflatableWallFolded
+- proto: CMUInflatableWallFolded
   entities:
   - uid: 6288
     components:
@@ -210608,4 +210636,17 @@ entities:
     - type: Transform
       pos: 160.5,15.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000009
+    components:
+    - type: MetaData
+      name: Sorokyne Strata ground relay
+    - type: Transform
+      pos: 197.5,99.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: sorokyne.ground.relay
+      displayName: Sorokyne Strata Ground Relay
 ...

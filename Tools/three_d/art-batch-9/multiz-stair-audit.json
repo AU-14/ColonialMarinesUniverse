@@ -1,0 +1,402 @@
+[
+  {
+    "level": -2,
+    "stair": 770,
+    "tile": [
+      274,
+      -61
+    ],
+    "approachTiles": 0,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0.39,
+    "upperExitHeight": -0.7800000000000002,
+    "flightTiles": 1
+  },
+  {
+    "level": -2,
+    "stair": 771,
+    "tile": [
+      273,
+      -61
+    ],
+    "approachTiles": 0,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0.39,
+    "upperExitHeight": -0.7800000000000002,
+    "flightTiles": 1
+  },
+  {
+    "level": -2,
+    "stair": 772,
+    "tile": [
+      275,
+      -61
+    ],
+    "approachTiles": 0,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0.39,
+    "upperExitHeight": -0.7800000000000002,
+    "flightTiles": 1
+  },
+  {
+    "level": -1,
+    "stair": 17,
+    "tile": [
+      271,
+      -64
+    ],
+    "approachTiles": 1,
+    "landingTiles": 1,
+    "suppressedProjections": [],
+    "footHeight": 0,
+    "upperExitHeight": -0.7800000000000002,
+    "flightTiles": 3
+  },
+  {
+    "level": -1,
+    "stair": 9838,
+    "tile": [
+      271,
+      -63
+    ],
+    "approachTiles": 1,
+    "landingTiles": 1,
+    "suppressedProjections": [],
+    "footHeight": 0,
+    "upperExitHeight": -0.7800000000000002,
+    "flightTiles": 3
+  },
+  {
+    "level": -1,
+    "stair": 10262,
+    "tile": [
+      271,
+      -62
+    ],
+    "approachTiles": 1,
+    "landingTiles": 1,
+    "suppressedProjections": [],
+    "footHeight": 0,
+    "upperExitHeight": -0.7800000000000002,
+    "flightTiles": 3
+  },
+  {
+    "level": 0,
+    "stair": 30,
+    "tile": [
+      69,
+      -23
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      37520
+    ],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 31,
+    "tile": [
+      69,
+      -25
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      37456
+    ],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 245,
+    "tile": [
+      69,
+      -24
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      36442
+    ],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 247,
+    "tile": [
+      201,
+      -73
+    ],
+    "approachTiles": 2,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0,
+    "upperExitHeight": 0.0,
+    "flightTiles": 3
+  },
+  {
+    "level": 0,
+    "stair": 262,
+    "tile": [
+      200,
+      -73
+    ],
+    "approachTiles": 2,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0,
+    "upperExitHeight": 0.0,
+    "flightTiles": 3
+  },
+  {
+    "level": 0,
+    "stair": 425,
+    "tile": [
+      167,
+      -81
+    ],
+    "approachTiles": 1,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0.39,
+    "upperExitHeight": -0.7800000000000002,
+    "flightTiles": 2
+  },
+  {
+    "level": 0,
+    "stair": 428,
+    "tile": [
+      167,
+      -82
+    ],
+    "approachTiles": 1,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0.39,
+    "upperExitHeight": -0.7800000000000002,
+    "flightTiles": 2
+  },
+  {
+    "level": 0,
+    "stair": 441,
+    "tile": [
+      220,
+      -94
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      365
+    ],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 443,
+    "tile": [
+      220,
+      -93
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      364
+    ],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 445,
+    "tile": [
+      220,
+      -92
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      442
+    ],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 1399,
+    "tile": [
+      285,
+      -104
+    ],
+    "approachTiles": 0,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0.78,
+    "upperExitHeight": -0.3900000000000001,
+    "flightTiles": 1
+  },
+  {
+    "level": 0,
+    "stair": 1404,
+    "tile": [
+      284,
+      -104
+    ],
+    "approachTiles": 0,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0.78,
+    "upperExitHeight": -0.3900000000000001,
+    "flightTiles": 1
+  },
+  {
+    "level": 0,
+    "stair": 1406,
+    "tile": [
+      286,
+      -104
+    ],
+    "approachTiles": 0,
+    "landingTiles": 0,
+    "suppressedProjections": [],
+    "footHeight": 0.78,
+    "upperExitHeight": -0.3900000000000001,
+    "flightTiles": 1
+  },
+  {
+    "level": 0,
+    "stair": 6643,
+    "tile": [
+      176,
+      -160
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 6645,
+    "tile": [
+      181,
+      -112
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      13140
+    ],
+    "footHeight": 0.78,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 6650,
+    "tile": [
+      182,
+      -112
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      13122
+    ],
+    "footHeight": 0.78,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 6651,
+    "tile": [
+      180,
+      -112
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      13138
+    ],
+    "footHeight": 0.78,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 10624,
+    "tile": [
+      230,
+      -128
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      14111
+    ],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 12310,
+    "tile": [
+      176,
+      -158
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 12391,
+    "tile": [
+      176,
+      -159
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  },
+  {
+    "level": 0,
+    "stair": 15112,
+    "tile": [
+      230,
+      -129
+    ],
+    "approachTiles": 2,
+    "landingTiles": 1,
+    "suppressedProjections": [
+      6382
+    ],
+    "footHeight": 0.39,
+    "upperExitHeight": 0.0,
+    "flightTiles": 4
+  }
+]

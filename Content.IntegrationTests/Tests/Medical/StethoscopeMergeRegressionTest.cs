@@ -185,6 +185,8 @@ public sealed class StethoscopeMergeRegressionTest : GameTest
         {
             user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             stethoscope = SEntMan.SpawnEntity("ClothingNeckStethoscope", map.GridCoords);
+            // Exercise the generic tool; live dual-component tools are owned by the RMC examiner.
+            SEntMan.RemoveComponent<Content.Shared._RMC14.Medical.Scanner.RMCStethoscopeComponent>(stethoscope);
             target = SEntMan.SpawnEntity("StethoscopeMergeOrganic", map.GridCoords);
             Server.System<DamageableSystem>().TryChangeDamage(target, Damage(20));
         });

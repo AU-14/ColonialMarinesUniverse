@@ -44217,7 +44217,7 @@ entities:
       parent: 1
     - type: WarpPoint
       location: Pratchett - Main Deck
-- proto: WehMedipen
+- proto: WehMedipenTiny
   entities:
   - uid: 6239
     components:

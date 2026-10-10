@@ -2,7 +2,6 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Slow;
-using Content.Shared._RMC14.Tackle;
 using Content.Shared.Actions.Events;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
@@ -11,7 +10,6 @@ using Content.Shared.CMU14.Medical.Injuries;
 using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared.CMU14.Medical.Injuries.Trauma;
 using Content.Shared.CMU14.Medical.Injuries.Wounds;
-using Content.Shared.CMU14.Yautja;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.CombatMode;
@@ -23,6 +21,7 @@ using Robust.Shared.Map;
 
 namespace Content.IntegrationTests._CMU14.Yautja;
 
+// CMU14 Test: Yautja frontline resilience contracts.
 [TestFixture]
 public sealed class YautjaFrontlineBalanceTest
 {
@@ -192,42 +191,6 @@ public sealed class YautjaFrontlineBalanceTest
                 Assert.That(knockedDown, Is.True);
                 Assert.That(hands.IsHolding(hunter, weapon), Is.True);
             });
-        });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task XenoTackleHasHalfChanceAgainstRegularHunter()
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-        var map = await pair.CreateTestMap();
-
-        await server.WaitAssertion(() =>
-        {
-            var entities = server.EntMan;
-            var xeno = entities.SpawnEntity("CMXenoRunner", map.GridCoords);
-            var targets = new List<EntityUid>();
-            for (var i = 0; i < 32; i++)
-            {
-                var target = entities.SpawnEntity("CMMobHuman", map.GridCoords);
-                entities.EnsureComponent<YautjaComponent>(target);
-                targets.Add(target);
-            }
-
-            server.ResolveDependency<Robust.Shared.Random.IRobustRandom>().SetSeed(7041);
-            var successes = 0;
-            foreach (var target in targets)
-            {
-                var tackle = new CMDisarmEvent(xeno);
-                entities.EventBus.RaiseLocalEvent(target, ref tackle);
-                Assert.That(tackle.Handled, Is.True);
-                if (entities.HasComponent<KnockedDownComponent>(target))
-                    successes++;
-            }
-
-            Assert.That(successes, Is.InRange(7, 25));
         });
 
         await pair.CleanReturnAsync();

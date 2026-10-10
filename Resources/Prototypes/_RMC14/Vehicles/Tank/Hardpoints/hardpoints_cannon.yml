@@ -1,9 +1,15 @@
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankLTBCannon
+  id: VehicleTankLTBCannon # CMU14
   name: LTB cannon
   description: A light tank cannon hardpoint.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: ltb_cannon
   - type: HardpointItem
@@ -14,8 +20,11 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 550
+    integrity: 550
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
     pixelOffsetNorth: "0,30"
@@ -67,6 +76,12 @@
   name: LTAAAP minigun
   description: A light anti-air minigun hardpoint.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: ltaaap_minigun
   - type: HardpointItem
@@ -77,6 +92,7 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 400
+    integrity: 400
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     fireWhileRotatingGraceDegrees: 180
@@ -120,6 +136,7 @@
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 4
     accuracyMultiplierUnwielded: 4
+    modifiedAccuracyMultiplier: 4
   - type: BallisticAmmoProvider
     cycleable: false
     proto: VehicleCartridgeLTAAAP
@@ -147,10 +164,16 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankAceAutocannon
+  id: VehicleTankAceAutocannon # CMU14
   name: ACE autocannon
   description: An ACE autocannon hardpoint.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: ace_autocannon
   - type: HardpointItem
@@ -161,8 +184,11 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 550
+    integrity: 550
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     showOverlay: true
     useDirectionalOffsets: true
@@ -216,10 +242,16 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankAutocannonTWE
+  id: VehicleTankAutocannonTWE # CMU14
   name: Improper L26A2 45mm Autocannon
   description: Tosubishi Heavy Industrial Manufacturing main gun for the FV150. Its rapid fire rate and multipurpose ammunition offers stopping power against infantry, structures, and medium armor. Careful use can even disable tanks.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: CMU14/Structures/vehicles/fv150/icons.rsi
     state: heavy_autocannon
@@ -231,8 +263,11 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     showOverlay: true
     useDirectionalOffsets: true
@@ -284,10 +319,16 @@
     damagedVehicleState: heavy_autocannon_1
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankHeavyElectrolaserTWE
+  id: VehicleTankHeavyElectrolaserTWE # CMU14
   name: Improper L215A1 Heavy Electrolaser
   description: An experimental prototype made by Tosubishi Heavy Industrial Manufacturing. An arcing electroshock laser assisted cannon, currently going through field testing. Theoretically it has limitless firing potential, as long as it is powered.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: CMU14/Structures/vehicles/fv150/icons.rsi
     state: heavy_electrolaser
@@ -299,8 +340,11 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 500
+    integrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     offsetRotatesWithTurret: true
     showOverlay: true
     useDirectionalOffsets: true
@@ -351,10 +395,16 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankDragonFlamer
+  id: VehicleTankDragonFlamer # CMU14
   name: DRGN flamer
   description: A DRGN flamer hardpoint.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     state: drgn_flamer
   - type: HardpointItem
@@ -365,8 +415,11 @@
     repairRate: 0.01
   - type: HardpointIntegrity
     maxIntegrity: 450
+    integrity: 450
   - type: VehicleTurretAttachment
   - type: VehicleTurret
+    useBarrelDirectionForShots: true
+    fireWhileRotatingGraceDegrees: 180
     showOverlay: true
     overlayRsi: _RMC14/Structures/Vehicles/tank.rsi
     overlayState: drgn_flamer_0

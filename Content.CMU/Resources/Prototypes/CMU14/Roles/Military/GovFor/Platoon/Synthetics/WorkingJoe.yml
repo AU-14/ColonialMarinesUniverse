@@ -8,11 +8,11 @@
   roundProfiles:
   - AU14RoundJobProfileWorkingJoe
   icon: "AU14JobIconGovWorkingJoe"
-  spawnMenuRoleName: Working Joe (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-working-joe-govfor 
   supervisors: au14-job-supervisors-workingjoe-military
   usePlayerProfile: false
   jobEntity: AU14MobWorkingJoeGOVFOR
-  displayWeight: -1
+  displayWeight: -2
   accessGroups:
   - AU14GovforCommand
   - AUPrisonStaff
@@ -31,11 +31,11 @@
   roundProfiles:
   - AU14RoundJobProfileWorkingJoe
   icon: "AU14JobIconOPFORWorkingJoe"
-  spawnMenuRoleName: Working Joe (OPFOR)
+  spawnMenuRoleName: cmu-spawn-role-working-joe-opfor
   supervisors: au14-job-supervisors-workingjoe-military
   usePlayerProfile: false
   jobEntity: AU14MobWorkingJoeOPFOR
-  displayWeight: -1
+  displayWeight: -2
   accessGroups:
   - AU14OpforCommand
   - AUPrisonStaff

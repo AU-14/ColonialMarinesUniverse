@@ -36,8 +36,8 @@
   - type: Physics
     bodyType: KinematicController
   - type: Clickable
-  - type: CMUZPhysics # RuMC edit
-  - type: CMUVehicleZTraversal # RuMC edit
+  - type: CMUZPhysics 
+  - type: CMUVehicleZTraversal 
   - type: Fixtures
     fixtures:
       fix1:
@@ -171,6 +171,8 @@
     skills:
       all:
         RMCSkillPowerLoader: 1
+  - type: CMUVehicleZTraversal
+    canUseStairs: true
   - type: Hands
   - type: GiveHands
     hands:

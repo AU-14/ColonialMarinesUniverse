@@ -3,7 +3,7 @@
 # This loads whenever TOOLS is defined: Debug, DebugOpt and Tools builds; not Release
 # LoadBuildConfigPresets() and config.preset_development=true config.preset_debug=true
 [build]
-engine_version = "v289.0.0"
+engine_version = "v290.0.0"
 
 [game]
 defaultpreset = "Insurgency"
@@ -14,6 +14,10 @@ role_timers = false
 role_whitelist = false
 admin_job_tracking = true
 role_loadout_timers = false
+
+[cmu]
+# enable in-game: "> cvar cmu.server_performance.log_enabled true"
+server_performance.log_enabled = false
 
 [rmc]
 distress_xenos_minimum = 0  # stop blocking distress testing

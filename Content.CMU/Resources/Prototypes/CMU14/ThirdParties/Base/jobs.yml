@@ -5,6 +5,9 @@
   description: au-job-description-third-party-leader
   setPreference: true
   playTimeTracker: AUJobThirdPartyLeader
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
   hidden: false
   supervisors: cm-job-supervisors-nobody
   icon: "AU14JobIconThirdPartyLeader"

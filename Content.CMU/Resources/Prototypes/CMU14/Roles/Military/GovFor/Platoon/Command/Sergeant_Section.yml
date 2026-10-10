@@ -14,7 +14,7 @@
   overwatchSortPriority: -6
   overwatchShowName: true
   canBeAntag: false
-  displayWeight: 7
+  displayWeight: 6
   accessGroups:
   - AU14GovforCommand
 
@@ -26,6 +26,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: "7"
     commandElement: true
@@ -119,6 +120,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -199,6 +202,7 @@
   dummyStartingGear: AU14GearopforPlatoonSergantDummy
   accessGroups:
   - AU14OpforCommand
+  useLoadoutOfJob: AU14JobGOVFORSectionSergeant
 
 - type: startingGear
   id: AU14GearopforSectionSergeant

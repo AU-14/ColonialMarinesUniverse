@@ -1,5 +1,6 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
+  displayWeight: 8
   id: AU14JobCivilianNurse
   roundSide: Civilian
   roundForce: COLONY
@@ -11,7 +12,7 @@
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1
       RMCSkillMedical: 2
-      RMCSkillSurgery: 1
+      RMCSkillSurgery: 2
       RMCSkillFirearms: 2
   - type: JobPrefix
     prefix: au14-job-prefix-nurse
@@ -40,6 +41,7 @@
 - type: startingGear
   id: AU14GearCivilianNurse
   equipment:
+    ears: CMUHeadsetColonyMedical
     id: AU14IDCardColonyNurse
 
 - type: entity

@@ -4,6 +4,7 @@
   description: A free-look projection of the dropship's nav console.
   categories: [ HideSpawnMenu, DoNotMap ]
   components:
+  - type: GravityAffected
   - type: Sprite
     visible: false
   - type: Visibility
@@ -102,3 +103,41 @@
     sound:
       path: /Audio/CMU14/Blackfoot/exteriorflight.ogg
   - type: DropshipTacticalHoverDownwash
+
+- type: entity
+  id: CMUGunshipTacticalHoverShadow
+  name: gunship hover shadow
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DropshipTacticalHoverShadow
+  - type: AmbientSound
+    range: 18
+    volume: -12
+    sound:
+      path: /Audio/CMU14/Dropships/Gunship/hover_rocket.ogg
+
+- type: entity
+  id: CMUGunshipTacticalHoverDownwash
+  name: gunship lift exhaust
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: DropshipTacticalHoverDownwash
+    jetExhaust: true
+  - type: PointLight
+    color: "#49bfff"
+    radius: 4
+    energy: 2.5
+    softness: 1
+    offset: 0,-1.55
+
+- type: entity
+  id: CMUGunshipTacticalHoverNozzleLight
+  name: gunship lift nozzle light
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    color: "#79dfff"
+    radius: 3.5
+    energy: 2
+    softness: 1
+    castShadows: false

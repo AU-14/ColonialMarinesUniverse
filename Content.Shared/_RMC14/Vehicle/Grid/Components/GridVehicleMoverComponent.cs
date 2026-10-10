@@ -1,3 +1,4 @@
+using Robust.Shared.Serialization;
 using System;
 using System.Numerics;
 using Content.Shared._RMC14.Stun;
@@ -83,11 +84,29 @@ public sealed partial class GridVehicleMoverComponent : Component
     [DataField, AutoNetworkedField]
     public float ReverseAcceleration = 4f;
 
+    [DataField, AutoNetworkedField]
+    public float WeedsSpeedFactor = 1f;
+
     /// <summary>
     /// maximum chassis rotation speed while steering, in degrees per second
     /// </summary>
     [DataField, AutoNetworkedField]
     public float MaxRotationSpeedDegrees = 22.5f;
+
+    [DataField, AutoNetworkedField]
+    public float AlignmentAssistDegrees; // CMU14: maximum near-cardinal correction angle.
+
+    [DataField, AutoNetworkedField]
+    public float AlignmentAssistMaxSpeed = 1.5f; // CMU14: only assist at parking speeds.
+
+    [DataField, AutoNetworkedField]
+    public float FullSpeedIntegrityFraction = 0.7f; // CMU14: minor wear does not reduce speed.
+
+    [DataField, AutoNetworkedField]
+    public float MinimumDamageSpeedMultiplier = 0.35f; // CMU14: floor for combined damage penalties.
+
+    [DataField, AutoNetworkedField]
+    public bool IgnoreLightObstacleDamage; // CMU14: harmless unreinforced smashable props.
 
     /// <summary>
     /// chassis angular acceleration while steering, in degrees per second squared
@@ -165,7 +184,7 @@ public sealed partial class GridVehicleMoverComponent : Component
     /// delay before the vehicle can be pushed again
     /// </summary>
     [DataField, AutoNetworkedField]
-    public float PushCooldown = 2f;
+    public float PushCooldown = 1f;
 
     /// <summary>
     /// minimum speed applied when a xeno shove starts
@@ -259,6 +278,9 @@ public sealed partial class GridVehicleMoverComponent : Component
     [DataField, AutoNetworkedField]
     public RMCSizes? XenoBlockMinimumSize;
 
+    [DataField, AutoNetworkedField]
+    public VehicleWeightClass WeightClass = VehicleWeightClass.Weak;
+
     /// <summary>
     /// whether xenos are allowed to push this vehicle
     /// </summary>
@@ -322,13 +344,17 @@ public sealed partial class GridVehicleMoverComponent : Component
     [DataField]
     public float WallSmashDamage = 75f;
 
-    /// <summary>Wheel (or tread) damage dealt back to the vehicle per collision tick while ramming.</summary>
+    /// <summary>Wheel or tread damage dealt back to the vehicle once per damaging impact.</summary>
     [DataField]
     public float WallSmashWheelDamage = 0.25f;
 
-    /// <summary>Hull damage dealt back to the vehicle per collision tick while ramming.</summary>
+    /// <summary>Total hull damage shared across modules once per damaging impact.</summary>
     [DataField]
     public float WallSmashHullDamage = 5f;
+
+    /// <summary>Contacts below this speed cannot damage the vehicle.</summary>
+    [DataField]
+    public float CollisionDamageMinSpeed = 0.5f;
 
     /// <summary>
     /// Multiplier applied to the vehicle's own tread/hull damage when a plow is installed
@@ -409,4 +435,13 @@ public sealed partial class GridVehicleMoverComponent : Component
     /// <summary>Server-tracked: vehicle cannot accelerate until this time. Not for YAML.</summary>
     [AutoNetworkedField]
     public TimeSpan ImmobileUntil;
+}
+
+[Serializable, NetSerializable]
+public enum VehicleWeightClass : byte
+{
+    Weak,
+    Light,
+    Medium,
+    Heavy,
 }

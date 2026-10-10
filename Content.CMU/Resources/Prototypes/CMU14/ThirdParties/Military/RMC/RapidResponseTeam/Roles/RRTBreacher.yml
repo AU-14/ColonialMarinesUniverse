@@ -61,7 +61,7 @@
   equipment:
     id: AU14IDCardRMCRRTBreacher
     outerClothing: AU14ArmorPointmanRMC
-    jumpsuit: AU14FatiguesBlackRMC
+    jumpsuit: CMUFatiguesRMC
     shoes: RMCBootsRoyalFilled
     eyes: AU14GogglesM1A1Ballistic
     mask: RMCMaskScarfTan

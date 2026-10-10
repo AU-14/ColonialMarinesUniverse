@@ -29,6 +29,11 @@ It never automatically invokes `serverperf deep` or retains per-entity details. 
 
 `profile-frame-sample` attributes work and allocations to a specific profiler frame `index`; use it before comparing the older aggregate `profile-sample` rows. Nested scope timings are inclusive and must not be summed. A partial frame can still have missing scopes, and its missing time must remain unattributed.
 
+Frame selection reserves the newest completed frame first, including input-only frames, then the newest
+tick-bearing frame when different. Slow and allocation-heavy historical frames fill the remaining budget.
+Candidates that exceed the remaining event budget are skipped so smaller frames can still fit. If the
+newest frame alone exceeds the budget, only its bounded tail is read and the report marks it partial.
+
 `operation` records retain slow player-spawn, storage-fill and requisitions work independently of the profiler ring, including the job or storage prototype, start tick, elapsed time and main-thread allocations. At most 32 recent operations are retained; reports discard entries older than two seconds. These scopes cover synchronous work, including synchronous work entered from an async continuation, and do not identify every possible callback.
 
 `runtime-window` reports process-wide GC pause time since the previous diagnostics update. Its `windowMs` defines the interval; it is not a per-method or exact-profiler-frame measurement. This helps distinguish GC pauses from CPU work without guessing from allocation counts alone.
@@ -47,7 +52,8 @@ The principal records are:
 | Record | Meaning |
 | --- | --- |
 | `startup` | Effective startup state, profiler state, metrics state, and main thresholds. |
-| `runtime-metrics-disabled` | Retained heap/RSS/thread-pool counters need external metrics; GC pause windows remain available. |
+| `runtime-metrics-disabled` | Continuous external metrics are disabled; bounded memory log samples and GC pause windows remain available. |
+| `memory` | Server process RSS/private bytes, estimated managed memory, heap/fragmentation at last GC, allocation rate, GC counts and thread-pool queue. |
 | `tracking-reset` / `epoch-reset` | Bounded ECS counters and rate windows were safely re-anchored. |
 | `heartbeat` | Healthy/warmup scalar snapshot. Absence is externally alertable. |
 | `baseline-refresh` | New healthy prototype/component churn comparison point. |
@@ -118,6 +124,19 @@ generation/serialization/sending; it does not separate those substeps or identif
 `phase-window` spans reports; its maxima can belong to different ticks. The `stall` row instead uses the
 latest input-to-input window, which includes the next frame's input work and does not exactly equal `frameMs`.
 
+Detailed reports also emit eight `pvs-stage-window` rows from the engine's existing process-wide histogram.
+They cover chunk gathering/updating, state serialization, compression/sending, dirty cleanup, history culling,
+and synchronous ACK/leave processing. `calls`, `totalMs`, and `avgMs` are deltas since the previous detail report
+or diagnostics reset; `windowSeconds` uses real time. They work with the profiler and metrics HTTP endpoint
+disabled, so `cmuperf report` can collect these timings without a full profiler-buffer copy. The reader caches
+eight metric children and reads their counters only when reporting; it does not scrape the registry.
+
+These stages are not a complete additive breakdown of `post-tick-and-state-send`. Serialization includes
+state construction and replay work; sending includes compression and queueing. Async ACK/leave processing is
+not timed by these engine histograms. `status=no-observations` with `totalMs=unavailable` means no timed calls,
+not zero cost. `pvsAsync` records the setting at report time. The collectors are shared by all servers in a
+process, and count/sum reads are not atomic; test servers should use isolated registries for sampler tests.
+
 ## Admin commands
 
 ```text
@@ -142,6 +161,10 @@ serverperf clear
 ```
 
 Run `serverperf deep` after recovery or during a controlled reproduction. It performs full-world scans and can make an already overloaded server worse. Its comparison snapshot is intentionally retained until replaced or `serverperf clear` is used.
+
+The profiler readers in `lagprofile` and `serverperf` aggregate completed frames directly on the server
+main thread before printing. They do not clone the entire profiler ring. `lagprofile stop 0` still parses
+all retained frames since capture started, so prefer a finite frame count during an active stall.
 
 ## Configuration
 
@@ -173,7 +196,7 @@ All automatic-monitor CVars are server-only and archived. In the table, the firs
 | `receive_mib_per_second` | `10` | Inbound traffic trigger. |
 | `allocation_mib_per_frame` | `32` | Profiled main-thread allocation trigger. |
 | `enable_profiler` | `true` | Enables the profiler during diagnostics startup if it is off. |
-| `profile_frames` | `8` | Maximum selected frames in a detail report, mixing slowest, highest-allocation, recent tick-bearing, and newest frames. |
+| `profile_frames` | `8` | Maximum selected frames in a detail report, prioritizing newest and recent tick-bearing frames before historical slow/allocation-heavy frames. |
 | `profile_max_events` | `65536` | Hard profiler parse bound. |
 | `report_top` | `10` | Rows per detail category, clamped to 1–25. |
 | `detail_cooldown` | `120` s | Minimum spacing between automatic detail reports. |
@@ -209,14 +232,16 @@ client_state_health_enabled = true
 
 The correct logging key is `cmu.server_performance.log_enabled`; the old
 `log.cmu.server_performance.log_enabled` key is invalid. These content changes must be deployed to both
-server and clients for application-progress reports. Runtime metrics below still need external scraping;
-the diagnostic logger measures process-wide GC pause windows but does not measure retained heap.
+server and clients for application-progress reports. Runtime metrics below need external scraping for
+continuous history; the diagnostic logger also includes bounded process-memory and GC samples.
 
 Increasing profiler rings preserves more pre-trigger history but consumes more fixed memory and makes a report scan larger. The automatic parser still caps frames and events.
 
 ## Runtime and process telemetry
 
-The diagnostics manager under `Content.CMU/Server` is compiled into `Content.Server`, which runs without the client sandbox and can read GC pause and allocation counters. Server gameplay code calls its bounded operation scopes through the diagnostics interface. Client and shared code keep using the sandbox-compatible engine profiler. The automatic logs do not report retained managed heap, process working set/private bytes, CPU, handles, thread count, or thread-pool starvation.
+The diagnostics manager under `Content.CMU/Server` is compiled into `Content.Server`, which runs without the client sandbox. It samples process working set/private bytes, estimated managed memory, GC heap/fragmentation/committed memory, allocation rate, collection counts and thread-pool counters at most once every five seconds. It never forces collection. Heartbeats, incident rows, sync context, `cmuperf status`, and detailed reports include these samples with their age. OS counters use `-1` when unavailable. Fields ending in `AtLastGc` describe the last completed GC, not the current frame; `gcIndex` identifies that GC. `managedBytes` is an estimate and can include collectible objects. These are server process measurements, not client RAM usage or proof of a leak.
+
+Server gameplay code calls bounded operation scopes through the diagnostics interface. Client and shared code keep using sandbox-compatible counters. CPU, handles and continuous memory history still require external telemetry.
 
 Use the existing engine metrics endpoint for that layer:
 
@@ -293,3 +318,14 @@ When the monitor opens a sustained memory/performance incident:
 - Metrics use no player, UID, prototype, component, map, round, or incident labels.
 - Player identities are never written by this monitor.
 - A one-time world count seed occurs at startup/re-enable/entity flush; incident capture itself does not scan the world.
+
+
+## Physics and power attribution
+
+The Debug-admin command cmuperf physics writes controller timing windows and an explicit physics-body census. Automatic detailed reports read only the controller counters; they do not run this census.
+
+Controller rows use the engine's existing before-solve and after-solve histograms. Recording requires metrics.enabled = true; the command does not change that setting. Rows include metricsEnabled, calls, observed total/average milliseconds, and window duration. Disabled capture with no observations emits one metrics-disabled row. Other unobserved timers use no-observations with unavailable costs. Windows begin at diagnostics initialization/reset or the previous drain. Timers are process-wide and may overlap other profiler scopes; their sum is not total physics time.
+
+The manual census includes paused bodies and reports total body count, awake count, collision-enabled count, sleep-disabled count, and contact-edge count. It logs at most 20 prototype/body-type groups, ordered by contact edges, awake count, then population. Contact edges can count the same contact on both bodies and include non-touching contacts; they are not unique collisions, callback rates, or wake-event counts. No entity identifiers are retained or logged. censusMs exposes the scan's own cost; use it sparingly on a busy server.
+
+Power profiling now separates Reconnect, Battery PreSync, Solver, Battery PostSync, APC Receivers, Consumers, and Network Batteries, each with the CMU Power prefix. These are nested profiler scopes with the existing profiler's enablement and retention limits. Battery synchronization, charge updates, and consumer-notification semantics are unchanged.

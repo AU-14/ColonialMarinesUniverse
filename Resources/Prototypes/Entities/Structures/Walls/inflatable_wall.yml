@@ -31,6 +31,10 @@
       - !type:PlaySoundBehavior
         sound:
           path: /Audio/Effects/balloon-pop.ogg
+  - type: InteractedBlacklist # CMU14
+    blacklist:
+      components:
+      - Xeno
   - type: DisassembleOnAltVerb
     prototypeToSpawn: InflatableWallStack1
     disassembleTime: 3
@@ -80,6 +84,10 @@
       path: /Audio/Misc/zip.ogg
     closeSound:
       path: /Audio/Misc/zip.ogg
+  - type: InteractedBlacklist # CMU14
+    blacklist:
+      components:
+      - Xeno
   - type: Appearance
   - type: Airtight
   - type: Damageable

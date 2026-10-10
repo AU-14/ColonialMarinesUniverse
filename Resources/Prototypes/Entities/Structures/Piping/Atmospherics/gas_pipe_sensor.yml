@@ -46,6 +46,11 @@
   - type: AtmosMonitoringConsoleDevice
     navMapBlip: GasPipeSensor
   - type: ApcPowerReceiver
+    powerLoad: 20 # CMU14: load-0 receivers never grid-power
+  - type: RMCPowerReceiver # CMU14: dual-power, RMC area power or CMUMapUsesTilePower grids
+    idleLoad: 0
+    activeLoad: 20
+    channel: Environment
   - type: ExtensionCableReceiver
   - type: Construction
     graph: !type:CreateVariants

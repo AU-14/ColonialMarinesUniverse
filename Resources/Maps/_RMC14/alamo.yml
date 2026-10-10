@@ -104,7 +104,7 @@ entities:
           volume: -1
         path: /Audio/_RMC14/Dropship/dropship_incoming.ogg
     - type: ImplicitRoof
-- proto: AtmosDeviceFanTiny
+- proto: RMCTinyFan
   entities:
   - uid: 3
     components:
@@ -1213,13 +1213,13 @@ entities:
   - uid: 110
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad # CMU14: consoles inherit marker rotation, faces the cockpit seats
       pos: 1.5,10.5
       parent: 2
   - uid: 111
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad # CMU14: consoles inherit marker rotation, faces the cockpit seats
       pos: -0.5,10.5
       parent: 2
 - proto: dropshipweaponsvmarker
@@ -1227,7 +1227,7 @@ entities:
   - uid: 112
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad # CMU14: consoles inherit marker rotation, faces the cockpit seats
       pos: 0.5,10.5
       parent: 2
 

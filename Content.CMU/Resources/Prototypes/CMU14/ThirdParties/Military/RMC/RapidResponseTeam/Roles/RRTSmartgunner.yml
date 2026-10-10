@@ -51,7 +51,7 @@
   equipment:
     id: AU14IDCardRMCRRTSmartgunner
     outerClothing: AU14ArmorSmartGunDesertCombatHarnessRMC
-    jumpsuit: AU14FatiguesBlackRMC
+    jumpsuit: CMUFatiguesRMC
     shoes: RMCBootsRoyalFilled
     mask: RMCMaskScarfTan
     head: AU14HeadHelmetRMCHeavy

@@ -102,3 +102,15 @@
     sprite: CMU14/Clothing/RMC/helmets/pilot_alt.rsi
   - type: Clothing
     sprite: CMU14/Clothing/RMC/helmets/pilot_alt.rsi
+
+- type: entity
+  parent: RMCMarineHelmetBase
+  id: AU14HeadHelmetL1Black
+  name: L1 pattern ballistic helmet
+  suffix: AU14
+  description: An older model helmet designed for TWE military. This one is painted in tactical black colour.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Clothing/TWE/l1ballistic_black.rsi
+  - type: Clothing
+    sprite: CMU14/Objects/Clothing/TWE/l1ballistic_black.rsi

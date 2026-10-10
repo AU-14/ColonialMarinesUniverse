@@ -36,6 +36,8 @@ research-report-element = [italic] - {$NAME}[/italic]
 research-report-unable-analyze = [italic]ERROR: Unable to analyze emission spectrum of sample.[/italic]
 
 xrf-report-error = Analysis of ERROR
+research-xrf-scanner-conflict = The sample was removed before the scan could begin.
+xrf-scanner-vial-name = vial ({ $reagent })
 
 research-report-analysis-name = Analysis of {$NAME1}{$NAME2}
 
@@ -97,6 +99,7 @@ research-data-ui-reprint = [color=#ffbf00][head=3]Reprint Last Contract[/head][/
 research-data-ui-contracts = [color=#ffbf00][head=3]Chemical Contracts[/head][/color]
 research-data-ui-scan-time-idx = [color=#ffbf00][bold]{$TIME}[/bold][/color]
 research-data-ui-improve = [color=#ffbf00][head=3]Improve: {$NUM}CR[/head][/color]
+research-data-ui-improve-locked = {"["}color=#ffbf00][head=3]X clearance in {$TIME}m[/head][/color]
 ui-research-data-terminal-name = Research Data Terminal
 
 research-data-ui-read = [color=#ffbf00][bold]Read[/bold][/color]
@@ -133,3 +136,5 @@ research-sim-ui-no-data = [color=black][bold]No data inserted![/bold][/color]
 research-sim-ui-target-data = [head=3]Target Data[/head]
 research-sim-ui-reference-data = [head=3]Reference Data[/head]
 research-sim-ui-price = [bold]Price of the operation: {$COST}[/bold]
+
+cmu-research-reduce-cooldown = [color=#ffbf00][head=3]-60s 1CR[/head][/color]

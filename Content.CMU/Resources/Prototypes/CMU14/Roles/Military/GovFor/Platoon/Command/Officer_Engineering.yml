@@ -5,13 +5,13 @@
   name: au14-job-name-govforengineering
   description: au14-job-description-govforengineering
   icon: "AU14JobIconGovEO"
-  spawnMenuRoleName: Engineering Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-engineering-officer
   startingGear: AU14GearGOVFOROfficerEngi
   dummyStartingGear: AU14GearGOVFOROfficerEngiDummy
   playTimeTracker: AU14JobGOVFOROfficerEngi
   requireAdminNotify: true
   canBeAntag: false
-  displayWeight: 6
+  displayWeight: 7
   accessGroups:
   - AU14GovforCommand
   - AU14GovforEngineer
@@ -25,6 +25,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: OPS
     commandElement: true
@@ -53,7 +54,13 @@
     #   prefix: au14-job-prefix-govforengineeringWYPMC
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 18000
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 36000 # 10 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMilitaryEngineering
+    time: 36000 # 10 hours
   - !type:AgeRequirement
     requiredAge: 30
   - !type:TraitsRequirement
@@ -67,6 +74,8 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -101,6 +110,8 @@
   - aulegacygroupcommand
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+  useLoadoutOfJob: AU14JobGOVFOROfficerEngi
+
 - type: startingGear
   id: AU14GearGOVFOROfficerEngi
   equipment:
@@ -188,7 +199,15 @@
   parent: AU14JobOfficerEngiBase
   id: AU14JobGOVFOROfficerEngiUPP
   roundForce: UPP
-  requirements: []
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 36000 # 10 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMilitaryEngineering
+    time: 36000 # 10 hours
   name: Engineering Officer
   spawnMenuRoleName: Engineering Officer (UPP)
   ranks:
@@ -202,7 +221,15 @@
   parent: AU14JobOfficerEngiBase
   id: AU14JobGOVFOROfficerEngiWYPMC
   roundForce: WYPMC
-  requirements: []
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 36000 # 10 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMilitaryEngineering
+    time: 36000 # 10 hours
   name: PMC Chief Engineer
   spawnMenuRoleName: Engineering Officer (WYPMC)
   ranks:

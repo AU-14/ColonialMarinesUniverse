@@ -1,0 +1,484 @@
+# field-built antenna mast. a real job for engineering-trained personnel: lay a footing
+# on open ground, raise and weld a lattice, guy it, fit an antenna head that has to come
+# from requisitions (or be built at great expense), tune the feed, key it to a side with a
+# COMSEC fill card and seal it. the finished mast only carries the nets it was keyed for.
+# taking one over means opening the feed back up, loading your own card and sealing it again
+
+- type: rmcConstruction
+  id: AU14CommsMastFieldBuild
+  name: antenna mast parts
+  prototype: AU14CommsMastField
+  noRotate: true
+  skill: RMCSkillEngineer
+  requiredSkillLevel: 2
+  alternativeSkill: RMCSkillJtac
+  alternativeSkillLevel: 4
+  listed:
+  - AU14CommsMastFootingBuild
+  - AU14MastAntennaHeadFrameBuild
+
+- type: rmcConstruction
+  id: AU14CommsMastFootingBuild
+  name: mast footing
+  prototype: AU14CommsMastFooting
+  noRotate: true
+  doAfterTime: 30
+  doAfterTimeMin: 20
+  materialCost: 40
+  skill: RMCSkillEngineer
+  requiredSkillLevel: 2
+  alternativeSkill: RMCSkillJtac
+  alternativeSkillLevel: 4
+
+- type: rmcConstruction
+  id: AU14MastAntennaHeadFrameBuild
+  name: antenna head frame
+  prototype: AU14MastAntennaHeadFrame
+  noRotate: true
+  doAfterTime: 20
+  doAfterTimeMin: 10
+  materialCost: 20
+  skill: RMCSkillEngineer
+  requiredSkillLevel: 2
+  alternativeSkill: RMCSkillJtac
+  alternativeSkillLevel: 4
+  ignoreBuildRestrictions: true
+  restrictedCollisionGroup: null
+
+# --- the antenna head ---------------------------------------------------------------------
+- type: entity
+  parent: BaseItem
+  id: AU14MastAntennaHead
+  name: mast antenna head
+  description: >-
+    A high-gain antenna head with its feedhorn, balun and lightning arrestor already
+    fitted, crated for carriage. It takes both arms and will not go in a bag - somebody
+    has to walk it out to the mast.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Radio/anprc117g.rsi
+    state: antenna_m
+  - type: Item
+    size: Huge
+  - type: Tag
+    tags:
+    - AU14MastAntennaHead
+  - type: StaticPrice
+    price: 2500
+  # the last node of the field-built head's graph. construction swaps the frame for this
+  # entity and needs it to sit on the same graph, or the swap throws halfway and the frame
+  # is simply gone
+  - type: Construction
+    graph: AU14MastAntennaHeadGraph
+    node: head
+
+# built in the field instead of ordered. every board, sheet and metre of cable in it is
+# something the platoon will not have for anything else - that is the point
+- type: entity
+  parent: BaseItem
+  id: AU14MastAntennaHeadFrame
+  name: antenna head frame
+  description: >-
+    A bare metal skeleton for a mast antenna head. Turning it into something that will
+    actually radiate takes a great deal of plasteel, a stack of circuit boards and a lot
+    of careful wiring.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Radio/anprc117g.rsi
+    state: antenna_m
+    color: "#8a8f96"
+  - type: Item
+    size: Huge
+  - type: AU14MastAssembly
+  - type: Construction
+    graph: AU14MastAntennaHeadGraph
+    node: frame
+    defaultTarget: head
+
+- type: constructionGraph
+  id: AU14MastAntennaHeadGraph
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity
+
+  - node: frame
+    entity: AU14MastAntennaHeadFrame
+    edges:
+    - to: plated
+      steps:
+      - material: CMPlasteel
+        amount: 20
+        doAfter: 20
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 15
+      - !type:DeleteEntity
+      steps:
+      - tool: Anchoring
+        doAfter: 10
+
+  - node: plated
+    entity: AU14MastAntennaHeadFrame
+    edges:
+    - to: boardOne
+      steps:
+      - tag: RMCCircuitboard
+        name: "circuit board"
+        icon:
+          sprite: _RMC14/Objects/Misc/module.rsi
+          state: door_electronics
+        doAfter: 8
+
+  - node: boardOne
+    entity: AU14MastAntennaHeadFrame
+    edges:
+    - to: boardTwo
+      steps:
+      - tag: RMCCircuitboard
+        name: "circuit board"
+        icon:
+          sprite: _RMC14/Objects/Misc/module.rsi
+          state: door_electronics
+        doAfter: 8
+
+  - node: boardTwo
+    entity: AU14MastAntennaHeadFrame
+    edges:
+    - to: boardThree
+      steps:
+      - tag: RMCCircuitboard
+        name: "circuit board"
+        icon:
+          sprite: _RMC14/Objects/Misc/module.rsi
+          state: door_electronics
+        doAfter: 8
+
+  - node: boardThree
+    entity: AU14MastAntennaHeadFrame
+    edges:
+    - to: boards
+      steps:
+      - tag: RMCCircuitboard
+        name: "circuit board"
+        icon:
+          sprite: _RMC14/Objects/Misc/module.rsi
+          state: door_electronics
+        doAfter: 8
+
+  - node: boards
+    entity: AU14MastAntennaHeadFrame
+    edges:
+    - to: wired
+      steps:
+      - material: RMCCable
+        amount: 30
+        doAfter: 20
+
+  - node: wired
+    entity: AU14MastAntennaHeadFrame
+    edges:
+    - to: shelled
+      steps:
+      - material: CMPlasteel
+        amount: 20
+        doAfter: 20
+      - tool: Welding
+        doAfter: 20
+        fuel: 20
+
+  - node: shelled
+    entity: AU14MastAntennaHeadFrame
+    edges:
+    - to: head
+      steps:
+      - tool: Pulsing
+        doAfter: 30
+
+  - node: head
+    entity: AU14MastAntennaHead
+
+# --- mast assembly graph ------------------------------------------------------------------
+- type: constructionGraph
+  id: AU14CommsMastGraph
+  start: start
+  graph:
+  - node: start
+    actions:
+    - !type:DeleteEntity
+
+  - node: footing
+    entity: AU14CommsMastFooting
+    edges:
+    - to: braced
+      steps:
+      - tool: Anchoring
+        doAfter: 15
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 25
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 10
+
+  - node: braced
+    entity: AU14CommsMastFooting
+    edges:
+    - to: lattice
+      steps:
+      - material: CMRodMetal
+        amount: 30
+        doAfter: 35
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 25
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 10
+
+  - node: lattice
+    entity: AU14CommsMastLattice
+    edges:
+    - to: welded
+      steps:
+      - tool: Welding
+        doAfter: 25
+        fuel: 15
+    - to: braced
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMRodMetal1
+        amount: 20
+      steps:
+      - tool: Prying
+        doAfter: 15
+
+  - node: welded
+    entity: AU14CommsMastLattice
+    edges:
+    - to: guyed
+      steps:
+      - material: RMCCable
+        amount: 15
+        doAfter: 25
+
+  - node: guyed
+    entity: AU14CommsMastLattice
+    edges:
+    - to: head
+      steps:
+      - tag: AU14MastAntennaHead
+        name: "mast antenna head"
+        icon:
+          sprite: CMU14/Objects/Radio/anprc117g.rsi
+          state: antenna_m
+        doAfter: 20
+
+  # head is fitted, feed not yet run. prying it back off returns the head intact
+  - node: head
+    entity: AU14CommsMastRigged
+    edges:
+    - to: feedOpen
+      steps:
+      - material: CMPlasteel
+        amount: 10
+        doAfter: 20
+      - tool: Pulsing
+        doAfter: 25
+    - to: guyed
+      completed:
+      - !type:SpawnPrototype
+        prototype: AU14MastAntennaHead
+      steps:
+      - tool: Prying
+        doAfter: 20
+
+  # feed run and tuned, panel open. keys go in (fill card) or get wiped (multitool) only
+  # here, see AU14MastAssemblySystem. sealing needs at least one key loaded. tearing the
+  # mast down from here salvages the head along with the metal
+  - node: feedOpen
+    entity: AU14CommsMastRigged
+    edges:
+    - to: mast
+      conditions:
+      - !type:AU14MastKeyed
+      steps:
+      - tool: Screwing
+        doAfter: 10
+      - tool: Welding
+        doAfter: 15
+        fuel: 5
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 30
+      - !type:SpawnPrototype
+        prototype: CMRodMetal1
+        amount: 15
+      - !type:SpawnPrototype
+        prototype: AU14MastAntennaHead
+      - !type:DeleteEntity
+      steps:
+      - tool: Cutting
+        doAfter: 15
+      - tool: Anchoring
+        doAfter: 25
+
+  # sealed and relaying. opening the feed back up - to re-key it for another side, or to
+  # tear it down - takes the mast off the air until it is sealed again
+  - node: mast
+    entity: AU14CommsMastField
+    edges:
+    - to: feedOpen
+      steps:
+      - tool: Screwing
+        doAfter: 15
+      - tool: Cutting
+        doAfter: 15
+
+# --- half-built stages --------------------------------------------------------------------
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: AU14CommsMastStageBase
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 200
+        mask:
+        - MobLayer
+  - type: Damageable
+    damageModifierSet: null
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: MaxDamage
+    max: 150
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 140
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: AU14MastAssembly
+
+# the COMSEC key set, shared by the untuned and the finished mast so the keys survive the
+# construction swap between them. a card for a faction not listed here is refused
+- type: entity
+  abstract: true
+  id: AU14MastKeyedBase
+  components:
+  - type: AU14MastKey
+    factionChannels:
+      govfor:
+      - radioGovforAlpha
+      - radioGovforBravo
+      - radioGovforCharlie
+      - radioGovforCommand
+      - radioGovforIntel
+      - radioGovforJTAC
+      - radioGovforMILP
+      opfor:
+      - radioOpforAlpha
+      - radioOpforBravo
+      - radioOpforCharlie
+      - radioOpforCommand
+      - radioOpforIntel
+      - radioOpforJTAC
+      - radioOpforMILP
+      clf:
+      - radioCLF
+      - radioCLFCommand
+
+- type: entity
+  parent: AU14CommsMastStageBase
+  id: AU14CommsMastFooting
+  name: mast footing
+  description: >-
+    A staked baseplate with its earth mat pegged out around it. Nothing on it yet -
+    the sections have to go up before this is any use to anyone.
+  suffix: Field-Built, Stage 1
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Walls/girder.rsi
+    state: girder
+  - type: AU14MastSite
+  - type: Construction
+    graph: AU14CommsMastGraph
+    node: footing
+    defaultTarget: mast
+
+- type: entity
+  parent: AU14CommsMastStageBase
+  id: AU14CommsMastLattice
+  name: half-raised antenna mast
+  description: >-
+    Rod sections bolted up into a lattice, leaning on its own weight. Until the joints
+    are welded and the guys are on it, the first strong gust owns it.
+  suffix: Field-Built, Stage 2
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/communications_tower_alt.rsi
+    offset: 0, 1
+    state: comm_tower_destroyed
+  - type: Construction
+    graph: AU14CommsMastGraph
+    node: lattice
+    defaultTarget: mast
+
+- type: entity
+  parent: [ AU14CommsMastStageBase, AU14MastKeyedBase ]
+  id: AU14CommsMastRigged
+  name: untuned antenna mast
+  description: >-
+    Raised, guyed and topped with its antenna head, but the feed panel is open and
+    nothing is sealed. It carries no traffic at all like this.
+  suffix: Field-Built, Stage 3
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/communications_tower_alt.rsi
+    offset: 0, 1
+    state: comm_tower_off
+    color: "#8d9096"
+  - type: MaxDamage
+    max: 300
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 280
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: AU14CommsMastGraph
+    node: head
+    defaultTarget: mast

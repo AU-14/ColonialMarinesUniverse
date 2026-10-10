@@ -19,6 +19,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 using ThirdPartySystem = Content.Server.CMU14.Ops.ThirdParty.ThirdPartySystem;
 
 namespace Content.Server.CMU14.Ambassador;
@@ -38,13 +39,17 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     [Dependency] private ColonyEconomy.AdminConsoleSystem _adminConsole = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+
+    private static readonly TimeSpan UiRefreshInterval = TimeSpan.FromSeconds(1);
+
+    private readonly HashSet<string> _tickedFactions = new();
+    private TimeSpan _nextUiRefresh;
 
     private static readonly SoundSpecifier MarineAnnouncementSound =
         new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
 
     private static readonly ProtoId<TagPrototype> CurrencyTag = "Currency";
-
-    private readonly HashSet<string> _tickedFactions = new();
 
     public override void Initialize()
     {
@@ -100,6 +105,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
             comp.SignalBoostTimer = source.SignalBoostTimer;
             comp.SignalJamActive = source.SignalJamActive;
             comp.SignalJamTimer = source.SignalJamTimer;
+            // this runs every tick, don't reallocate the set unless it actually changed
             if (!comp.CalledParties.SetEquals(source.CalledParties))
                 comp.CalledParties = new HashSet<string>(source.CalledParties);
         }
@@ -111,6 +117,11 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     private void UpdateAllFactionUi(AmbassadorConsoleComponent source)
     {
         SyncFaction(source);
+        RefreshFactionUi(source);
+    }
+
+    private void RefreshFactionUi(AmbassadorConsoleComponent source)
+    {
         var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
@@ -125,14 +136,24 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        // the economy panel reads other consoles (taxes, tariffs), so open UIs still get a slow refresh
+        var refreshUi = _timing.CurTime >= _nextUiRefresh;
+        if (refreshUi)
+            _nextUiRefresh = _timing.CurTime + UiRefreshInterval;
+
         // Only tick one console per faction to avoid double-charging.
         _tickedFactions.Clear();
 
         var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
+            // the faction's first console refreshes every console in the faction below
             if (!_tickedFactions.Add(comp.FactionName))
                 continue;
+
+            var oldBudget = comp.Budget;
+            var oldEffects = (comp.EmbargoActive, comp.TradePactActive, comp.CommsJamActive,
+                comp.SignalBoostActive, comp.SignalJamActive);
 
             comp.ReplenishTimer += frameTime;
             if (comp.ReplenishTimer >= comp.ReplenishInterval)
@@ -151,7 +172,9 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                     {
                         comp.Budget = 0;
                         comp.EmbargoActive = false;
-                        AnnounceStatus($"Trade embargo by {comp.FactionName} has ended due to insufficient funds.", comp.FactionName);
+                        AnnounceStatus(
+                            Loc.GetString("ambassador-console-embargo-ended-no-funds", ("faction", comp.FactionName)),
+                            comp.FactionName);
                     }
                 }
             }
@@ -166,7 +189,9 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                     {
                         comp.Budget = 0;
                         comp.TradePactActive = false;
-                        AnnounceStatus($"Trade pact by {comp.FactionName} has ended due to insufficient funds.", comp.FactionName);
+                        AnnounceStatus(
+                            Loc.GetString("ambassador-console-trade-pact-ended-no-funds", ("faction", comp.FactionName)),
+                            comp.FactionName);
                     }
                 }
             }
@@ -181,7 +206,9 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
                     {
                         comp.Budget = 0;
                         comp.CommsJamActive = false;
-                        AnnounceStatus($"Communications jamming by {comp.FactionName} has ended due to insufficient funds.", comp.FactionName);
+                        AnnounceStatus(
+                            Loc.GetString("ambassador-console-comms-jam-ended-no-funds", ("faction", comp.FactionName)),
+                            comp.FactionName);
                     }
                 }
             }
@@ -215,13 +242,23 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
             }
 
             UpdateSignalModifier();
-            UpdateAllFactionUi(comp);
+            SyncFaction(comp);
+
+            // used to rebuild and resend the BUI state every tick, which dirtied the UI
+            // component and shipped it to everyone near the console 30 times a second
+            var changed = comp.Budget != oldBudget ||
+                          oldEffects != (comp.EmbargoActive, comp.TradePactActive, comp.CommsJamActive,
+                              comp.SignalBoostActive, comp.SignalJamActive);
+            if (changed || refreshUi)
+                RefreshFactionUi(comp);
         }
     }
 
     private void AnnounceStatus(string message, string? factionName = null)
     {
-        var sender = factionName != null ? $"{factionName} Embassy" : "Ambassador Console";
+        var sender = factionName != null
+            ? Loc.GetString("ambassador-console-embassy-sender", ("faction", factionName))
+            : Loc.GetString("ambassador-console-default-sender");
         _chat.DispatchGlobalAnnouncement(message, sender, playSound: true, announcementSound: MarineAnnouncementSound);
     }
 
@@ -305,35 +342,35 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
 
     private void UpdateUiState(EntityUid uid, AmbassadorConsoleComponent comp)
     {
-        // Opening either window publishes its current state immediately. Closed
-        // windows need no economy/party projection or network state each tick.
-        var consoleOpen = _ui.IsUiOpen(uid, AmbassadorConsoleUi.Key);
-        var thirdPartyOpen = _ui.IsUiOpen(uid, AmbassadorThirdPartyUi.Key);
-        if (!consoleOpen && !thirdPartyOpen)
-            return;
+        // nobody's looking, OnUiOpened rebuilds it on open anyway
+        if (_ui.IsUiOpen(uid, AmbassadorConsoleUi.Key))
+            SetConsoleState(uid, comp);
 
-        if (consoleOpen)
-        {
-            var econ = _adminConsole.BuildEconomyStatus();
-            // Use cached radar results (blank until scanned)
-            var state = new AmbassadorConsoleBuiState(
-                comp.Budget, comp.EmbargoActive, comp.TradePactActive, comp.CommsJamActive,
-                comp.SignalBoostActive, comp.SignalJamActive,
-                comp.LastRadarScanResults, econ,
-                comp.FactionName,
-                comp.EmbargoCostPerMinute,
-                comp.TradePactCostPerMinute,
-                comp.CommsJamCostPerMinute,
-                comp.SignalBoostCostPerMinute,
-                comp.SignalJamCostPerMinute,
-                comp.BroadcastCost,
-                comp.RadarScanCost);
-            _ui.SetUiState(uid, AmbassadorConsoleUi.Key, state);
-        }
+        if (_ui.IsUiOpen(uid, AmbassadorThirdPartyUi.Key))
+            SetThirdPartyState(uid, comp);
+    }
 
-        if (!thirdPartyOpen)
-            return;
+    private void SetConsoleState(EntityUid uid, AmbassadorConsoleComponent comp)
+    {
+        var econ = _adminConsole.BuildEconomyStatus();
+        // Use cached radar results (blank until scanned)
+        var state = new AmbassadorConsoleBuiState(
+            comp.Budget, comp.EmbargoActive, comp.TradePactActive, comp.CommsJamActive,
+            comp.SignalBoostActive, comp.SignalJamActive,
+            comp.LastRadarScanResults, econ,
+            comp.FactionName,
+            comp.EmbargoCostPerMinute,
+            comp.TradePactCostPerMinute,
+            comp.CommsJamCostPerMinute,
+            comp.SignalBoostCostPerMinute,
+            comp.SignalJamCostPerMinute,
+            comp.BroadcastCost,
+            comp.RadarScanCost);
+        _ui.SetUiState(uid, AmbassadorConsoleUi.Key, state);
+    }
 
+    private void SetThirdPartyState(EntityUid uid, AmbassadorConsoleComponent comp)
+    {
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)
         {
@@ -381,11 +418,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (comp.Budget < cost) return;
         if (!_proto.TryIndex<ThirdPartyPrototype>(msg.ThirdPartyId, out var partyProto)) return;
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto)) return;
-        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
-        {
-            _popup.PopupEntity("Unable to dispatch support at this time.", uid, msg.Actor);
-            return;
-        }
+        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
 
         comp.Budget -= cost;
         comp.CalledParties.Add(msg.ThirdPartyId);
@@ -399,11 +432,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         {
             comp.EmbargoTimer = 0f;
             comp.TradePactActive = false;
-            AnnounceStatus($"A trade embargo has been activated by {comp.FactionName}. Submission point payouts are reduced by 20%.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-embargo-enabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         else
         {
-            AnnounceStatus($"The trade embargo by {comp.FactionName} has been lifted.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-embargo-disabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         UpdateAllFactionUi(comp);
     }
@@ -415,11 +452,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         {
             comp.TradePactTimer = 0f;
             comp.EmbargoActive = false;
-            AnnounceStatus($"A trade pact has been activated by {comp.FactionName}. Submission point payouts are increased by 20%.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-trade-pact-enabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         else
         {
-            AnnounceStatus($"The trade pact by {comp.FactionName} has ended.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-trade-pact-disabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         UpdateAllFactionUi(comp);
     }
@@ -453,7 +494,7 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(msg.Message)) return;
         if (comp.Budget < comp.BroadcastCost) return;
         comp.Budget -= comp.BroadcastCost;
-        var sender = $"{comp.FactionName} Embassy";
+        var sender = Loc.GetString("ambassador-console-embassy-sender", ("faction", comp.FactionName));
         _chat.DispatchGlobalAnnouncement(msg.Message, sender, playSound: true, announcementSound: MarineAnnouncementSound);
         _radio.SendRadioMessage(uid, msg.Message, "colonyAlert", uid);
         UpdateAllFactionUi(comp);
@@ -465,11 +506,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         if (comp.CommsJamActive)
         {
             comp.CommsJamTimer = 0f;
-            AnnounceStatus($"Planeside communications have been jammed by {comp.FactionName}. All radio transmissions are blocked.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-comms-jam-enabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         else
         {
-            AnnounceStatus($"Communications jamming by {comp.FactionName} has been disabled. Radio transmissions are restored.", comp.FactionName);
+            AnnounceStatus(
+                Loc.GetString("ambassador-console-comms-jam-disabled", ("faction", comp.FactionName)),
+                comp.FactionName);
         }
         UpdateAllFactionUi(comp);
     }

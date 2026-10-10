@@ -1,12 +1,12 @@
 - type: guideEntry
   parent: RMC
   id: AU14SOP
-  name: Military Standard Operating Procedure
+  name: cmu-guide-entry-sop
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOP.xml"
   priority: 3
   children:
   - AU14SOPRulesofEngagement
-  - AU14SOPRankStructure
+  - AU14SOPDepartments
   - AU14SOPEquipmentAndPersonnel
   - AU14SOPCommand
   - AU14SOPDropshipsandAircraft
@@ -17,55 +17,64 @@
 - type: guideEntry
   parent: RMC
   id: AU14SOPRulesofEngagement
-  name: Rules of Engagement
+  name: cmu-guide-entry-sop-roe
   priority: 0
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPRulesofEngagement.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPEquipmentAndPersonnel
-  name: Equipment and Personnel
+  name: cmu-guide-entry-sop-equipment
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPEquipmentAndPersonnel.xml"
+  children:
+  - AU14SOPPhysicalStandards
+
+- type: guideEntry
+  parent: RMC
+  id: AU14SOPPhysicalStandards
+  name: cmu-guide-entry-sop-physical-standards
+  text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPPhysicalStandards.xml"
+  priority: 3
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPCommand
-  name: Command Regulations
+  name: cmu-guide-entry-sop-command
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPCommand.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPDropshipsandAircraft
-  name: Dropships and Aircraft
+  name: cmu-guide-entry-sop-dropships
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPDropshipsandAircraft.xml"
 
 - type: guideEntry
   parent: RMC
-  id: AU14SOPRankStructure
-  name: Rank Structure
+  id: AU14SOPDepartments
+  name: cmu-guide-entry-sop-departments
   priority: 1
-  text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPRankStructure.xml"
+  text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPDepartments.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPThirdParty
-  name: Third-Party Regulations
+  name: cmu-guide-entry-sop-third-party
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPThirdParty.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPVehicles
-  name: Vehicles
+  name: cmu-guide-entry-sop-vehicles
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPVehicles.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPDeployment
-  name: Deployment
+  name: cmu-guide-entry-sop-deployment
   priority: 1
   text: "/ServerInfo/Guidebook/CMU14/SOP/AU14SOPDeployment.xml"

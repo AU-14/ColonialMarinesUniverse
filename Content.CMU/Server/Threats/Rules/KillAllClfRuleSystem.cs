@@ -94,7 +94,7 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
         int eliminated = 0, total = 0;
         int requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         bool countArrests = ruleComp.Arrest;
-        bool crashedDropship = _threatRuleHelper.HasCrashedDropship();
+        bool hijackLanded = _threatRuleHelper.HasLandedDropshipHijack();
 
         EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent> query = _entMan
             .EntityQueryEnumerator<MobStateComponent, NpcFactionMemberComponent>();
@@ -110,12 +110,12 @@ public sealed partial class KillAllClfRuleSystem : GameRuleSystem<KillAllClfRule
             if (_threatRuleHelper.IsEvacuated(uid))
                 continue;
 
-            if (crashedDropship && _rmcPlanet.IsOnPlanet(Transform(uid)) && mobState.CurrentState != MobState.Dead)
+            if (hijackLanded && _rmcPlanet.IsOnPlanet(Transform(uid)) && !_threatRuleHelper.IsEliminated(uid, mobState))
                 continue;
 
             total++;
 
-            if (mobState.CurrentState == MobState.Dead)
+            if (_threatRuleHelper.IsEliminated(uid, mobState))
                 eliminated++;
             else if (HasPrisonJumpsuit(uid)
                 || (countArrests && ((TryComp(uid, out CuffableComponent? cuffable)

@@ -94,6 +94,12 @@
     whitelist:
       components:
       - PyroWhitelist
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentExtinguisher
 
 - type: Tag
   id: AU14WeaponFlamerM240A2HAZOPS
@@ -115,7 +121,7 @@
       map: [ "enum.SolutionContainerLayers.Fill" ]
   - type: RMCFlamerTank
     maxIntensity: 70
-    maxRange: 7
+    maxRange: 10
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
@@ -150,7 +156,7 @@
       map: [ "enum.SolutionContainerLayers.Fill" ]
   - type: RMCFlamerTank
     maxIntensity: 70
-    maxRange: 7
+    maxRange: 10
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:
@@ -185,7 +191,7 @@
       map: [ "enum.SolutionContainerLayers.Fill" ]
   - type: RMCFlamerTank
     maxIntensity: 70
-    maxRange: 6
+    maxRange: 7
   - type: SolutionContainerManager
     solutions:
       rmc_flamer_tank:

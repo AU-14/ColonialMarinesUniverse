@@ -19,7 +19,7 @@ internal sealed class CMURecentServerErrors : ILogHandler
 
     public void Log(string sawmillName, LogEvent message)
     {
-        if (message.Level < LogEventLevel.Error || sawmillName == CMUClientStateDiagnosticsSystem.SawmillName)
+        if (message.Level < LogEventLevel.Error || sawmillName == CMUClientStateDiagnosticsSystem.SawmillId)
             return;
 
         lock (_lock)

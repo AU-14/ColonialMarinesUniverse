@@ -122,10 +122,21 @@ public sealed partial class RMCMagneticSystem : EntitySystem
         receivingItem = ev.ReceivingItem;
         receivingContainer = ev.ReceivingContainer;
 
-        // CMU14: receivers must see the event even without a magnetic field, or the broiler never reclaims a dropped flamer.
-        // A regular sling falls back to the wearer when no receiver handled it.
+        // CMU14 Sling Return Begin: receivers must see the event even without a magnetic field.
+        // A regular sling can fall back to the wearer only while its destination is free.
         if (!ent.Comp.NeedsMagneticField && magnetizer == default)
-            magnetizer = user;
+        {
+            var slots = _inventory.GetSlotEnumerator(user, ent.Comp.MagnetizeToSlots & SlotFlags.SUITSTORAGE);
+            while (slots.MoveNext(out var slot))
+            {
+                if (slot.Count > 0)
+                    continue;
+
+                magnetizer = user;
+                break;
+            }
+        }
+        // CMU14 End
 
         return magnetizer != default;
     }
@@ -299,38 +310,45 @@ public sealed partial class RMCMagneticSystem : EntitySystem
 
             var user = comp.User;
             var magnetizer = comp.Magnetizer;
-            if (!TerminatingOrDeleted(user) && !TerminatingOrDeleted(magnetizer))
+            // CMU14: dead references can never receive the item, and while they last they
+            // spam PVS resolve errors on every state send.
+            if (TerminatingOrDeleted(user)
+                || TerminatingOrDeleted(magnetizer)
+                || (comp.ReceivingItem is { } receiving && TerminatingOrDeleted(receiving)))
             {
-                if (comp.ReceivingItem is { } insertInto)
+                RemCompDeferred<RMCReturnToInventoryComponent>(uid);
+                continue;
+            }
+
+            if (comp.ReceivingItem is { } insertInto)
+            {
+                if (_container.TryGetContainer(insertInto, comp.ReceivingContainer, out var container) &&
+                    _container.Insert(uid, container, force: true))
                 {
-                    if (_container.TryGetContainer(insertInto, comp.ReceivingContainer, out var container) &&
-                        _container.Insert(uid, container, force: true))
+                    var popup = Loc.GetString("rmc-magnetize-return",
+                        ("item", uid),
+                        ("magnetizer", insertInto));
+                    _popup.PopupClient(popup, user, user, PopupType.Medium);
+
+                    comp.Returned = true;
+                    Dirty(uid, comp);
+                }
+            }
+            else
+            {
+                var slots = _inventory.GetSlotEnumerator(user, SlotFlags.SUITSTORAGE);
+                while (slots.MoveNext(out var slot))
+                {
+                    if (_inventory.TryEquip(user, uid, slot.ID, silent: true, force: true)) // CMU14: a failed automatic return should not spam equip errors.
                     {
                         var popup = Loc.GetString("rmc-magnetize-return",
                             ("item", uid),
-                            ("magnetizer", insertInto));
+                            ("magnetizer", magnetizer));
                         _popup.PopupClient(popup, user, user, PopupType.Medium);
 
                         comp.Returned = true;
                         Dirty(uid, comp);
-                    }
-                }
-                else
-                {
-                    var slots = _inventory.GetSlotEnumerator(user, SlotFlags.SUITSTORAGE);
-                    while (slots.MoveNext(out var slot))
-                    {
-                        if (_inventory.TryEquip(user, uid, slot.ID, force: true))
-                        {
-                            var popup = Loc.GetString("rmc-magnetize-return",
-                                ("item", uid),
-                                ("magnetizer", magnetizer));
-                            _popup.PopupClient(popup, user, user, PopupType.Medium);
-
-                            comp.Returned = true;
-                            Dirty(uid, comp);
-                            break;
-                        }
+                        break;
                     }
                 }
             }

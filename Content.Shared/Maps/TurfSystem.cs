@@ -126,7 +126,8 @@ public sealed partial class TurfSystem : EntitySystem
         CollisionGroup mask,
         MapGridComponent? grid = null,
         TransformComponent? gridXform = null,
-        float minIntersectionArea = 0.1f)
+        float minIntersectionArea = 0.1f,
+        Func<EntityUid, bool>? ignore = null) // CMU14: construction may clear specific obstructions.
     {
         if (!Resolve(gridUid, ref grid, ref gridXform))
             return false;
@@ -147,6 +148,9 @@ public sealed partial class TurfSystem : EntitySystem
         _entityLookup.GetEntitiesIntersecting(gridUid, worldBox, _tileBlockedIntersecting, LookupFlags.Dynamic | LookupFlags.Static);
         foreach (var ent in _tileBlockedIntersecting)
         {
+            if (ignore?.Invoke(ent) == true) // CMU14
+                continue;
+
             if (!_fixtureQuery.TryGetComponent(ent, out var fixtures))
                 continue;
 

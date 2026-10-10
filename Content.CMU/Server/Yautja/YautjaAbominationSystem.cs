@@ -3,12 +3,14 @@ using Content.Server.Chat.Managers;
 using Content.Server._RMC14.Xenonids.Leap;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Actions;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
@@ -20,9 +22,11 @@ using Content.Shared.Popups;
 using Content.Shared.StatusIcon.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Weapons.Melee;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -34,6 +38,8 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
     private static readonly SpriteSpecifier.Rsi FrenzySingleIcon = new(new ResPath("_RMC14/Actions/xeno_actions.rsi"), "rav_eviscerate");
     private static readonly SpriteSpecifier.Rsi FrenzyAreaIcon = new(new ResPath("_RMC14/Actions/xeno_actions.rsi"), "spin_slash");
 
+    private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
+
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private IChatManager _chat = default!;
@@ -43,6 +49,7 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private XenoParasiteSystem _parasite = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private ISharedPlayerManager _players = default!;
     [Dependency] private SharedStunSystem _stun = default!;
@@ -66,7 +73,8 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
         SubscribeLocalEvent<YautjaAbominationComponent, YautjaAbominationSmashActionEvent>(OnSmash);
         SubscribeLocalEvent<YautjaAbominationComponent, YautjaAbominationFrenzyActionEvent>(OnFrenzy);
 
-        SubscribeLocalEvent<YautjaComponent, DamageModifyEvent>(OnYautjaDamageModify);
+        // the armor piercing below only works if it's set before clan armor reads it
+        SubscribeLocalEvent<YautjaComponent, DamageModifyEvent>(OnYautjaDamageModify, before: [typeof(CMArmorSystem)]);
         SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobStateChanged);
 
         SubscribeLocalEvent<YautjaAbominationRushComponent, RefreshMovementSpeedModifiersEvent>(OnRushRefreshSpeed);
@@ -120,13 +128,44 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
 
     private void OnYautjaDamageModify(Entity<YautjaComponent> ent, ref DamageModifyEvent args)
     {
-        if (args.Origin is not { } origin ||
-            !TryComp(origin, out YautjaAbominationComponent? abomination))
+        if (args.Origin is { } origin &&
+            TryComp(origin, out YautjaAbominationComponent? abomination))
         {
-            return;
+            args.Damage *= abomination.YautjaDamageMultiplier;
         }
 
-        args.Damage *= abomination.YautjaDamageMultiplier;
+        // CMSS13 applies xeno melee after the hunter's species modifier. In the
+        // CMU armor model ordinary claw damage otherwise rounds to zero against
+        // clan armor, so give only xeno melee the equivalent penetration.
+        if (args.Origin is { } xeno &&
+            HasComp<XenoComponent>(xeno) &&
+            args.Tool is { } tool &&
+            HasComp<MeleeWeaponComponent>(tool))
+        {
+            // Clan armour is 35-40 melee armour, and the armour curve still
+            // rounds low residual damage down to zero. Xeno melee is the
+            // CMSS13 exception: claws cut through the clan armour instead of
+            // producing the metal/no-damage impact sound.
+            args.ArmorPiercing += 100;
+        }
+
+        // rmc fire ignores resistances for everyone except preds and synths, so preds keep their 0.65 heat.
+        // that also ran fire ticks through stacked bio armor, which flattens ~2 damage ticks to nothing.
+        // cmss13 never armored fire, so pierce it like the claws above
+        if (args.Origin == ent.Owner && IsOnlyBurn(args.Damage))
+            args.ArmorPiercing += 100;
+    }
+
+    private bool IsOnlyBurn(DamageSpecifier damage)
+    {
+        var burn = _prototypeManager.Index(BurnGroup).DamageTypes;
+        foreach (var (type, amount) in damage.DamageDict)
+        {
+            if (amount > FixedPoint2.Zero && !burn.Contains(type))
+                return false;
+        }
+
+        return damage.GetTotal() > FixedPoint2.Zero;
     }
 
     private void OnAnyMobStateChanged(MobStateChangedEvent args)

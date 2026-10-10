@@ -319,5 +319,6 @@
 - type: tile
   parent: CMFloorPlate
   id: CMFloorOuterHullPlate
-  name: tiles-cm-plate
+  name: tiles-cm-outer-hull-plate # CMU14
   sprite: /Textures/_RMC14/Tiles/almayer/outerhull.png
+  isSpace: True # CMU14

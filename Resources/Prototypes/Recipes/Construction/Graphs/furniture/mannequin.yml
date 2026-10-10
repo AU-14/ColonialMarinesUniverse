@@ -12,7 +12,7 @@
           steps:
             - material: WoodPlank
               amount: 5
-            - material: MetalRod
+            - material: CMRodMetal # CMU14: fork rods (CMRodMetal), not upstream MetalRod
               amount: 2
               doAfter: 2
     - node: mannequin
@@ -25,7 +25,7 @@
               prototype: MaterialWoodPlank
               amount: 5
             - !type:SpawnPrototype
-              prototype: PartRodMetal
+              prototype: CMRodMetal # CMU14: refund fork rods
               amount: 2
           steps:
             - tool: Screwing

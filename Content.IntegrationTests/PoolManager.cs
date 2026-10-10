@@ -127,10 +127,15 @@ public static partial class PoolManager
             systems.LoadExtraSystemType<TestDestructibleListenerSystem>();
         };
 
-        var server = new RobustIntegrationTest.ServerIntegrationInstance(options);
-        await server.WaitIdleAsync();
-        server.Resolve<ILogManager>().GetSawmill("loc").Level = LogLevel.Error;
-        server.CfgMan.OnValueChanged(RTCVars.FailureLogLevel, value => logHandler.FailureLevel = value, true);
+        var server = await PrototypeStartup.Start(
+            () => new RobustIntegrationTest.ServerIntegrationInstance(options),
+            async instance =>
+            {
+                await instance.WaitIdleAsync();
+                instance.Resolve<ILogManager>().GetSawmill("loc").Level = LogLevel.Error;
+                instance.CfgMan.OnValueChanged(RTCVars.FailureLogLevel, value => logHandler.FailureLevel = value, true);
+            },
+            testOut);
         return (server, logHandler);
     }
 

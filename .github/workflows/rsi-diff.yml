@@ -19,29 +19,65 @@ jobs:
   diff:
     name: Diff
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-
-      - name: Get changed files
-        id: files
-        uses: Ana06/get-changed-files@v2.3.0
         with:
-          format: 'space-delimited'
-          filter: |
-            **.rsi
-            **.png
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+          sparse-checkout: .github
 
       - name: Diff changed RSIs
         id: diff
-        uses: space-wizards/RSIDiffBot@v1.1
+        uses: actions/github-script@v9.0.0
         with:
-          modified: ${{ steps.files.outputs.modified }}
-          removed: ${{ steps.files.outputs.removed }}
-          added: ${{ steps.files.outputs.added }}
-          basename: ${{ github.event.pull_request.base.repo.full_name }}
-          basesha: ${{ github.event.pull_request.base.sha }}
-          headname: ${{ github.event.pull_request.head.repo.full_name }}
-          headsha: ${{ github.event.pull_request.head.sha }}
+          script: |
+            const { execFileSync } = require('node:child_process');
+            const pr = context.payload.pull_request;
+            // Never check out or execute PR code in pull_request_target.
+            execFileSync('git', ['fetch', '--quiet', '--no-tags', '--filter=blob:none', 'origin', pr.head.sha]);
+            const records = execFileSync('git', [
+              'diff', '--no-ext-diff', '--no-textconv', '--no-renames', '--name-status', '-z',
+              '--diff-filter=ADM', `${pr.base.sha}...${pr.head.sha}`, '--', ':(glob)**/*.rsi/*.png'
+            ], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }).split('\0');
+            const groups = new Map();
+            let total = 0;
+            for (let i = 0; i + 1 < records.length; i += 2) {
+              const [status, path] = records.slice(i, i + 2);
+              const rsi = path.slice(0, path.lastIndexOf('/'));
+              if (!groups.has(rsi)) groups.set(rsi, []);
+              groups.get(rsi).push({ status, path });
+              total++;
+            }
+
+            const escape = text => text.replace(/[&<>"'|`\r\n]/g, c => `&#${c.charCodeAt(0)};`);
+            const image = (ref, path) => {
+              const encoded = path.split('/').map(segment => encodeURIComponent(segment)
+                .replace(/[!'()*]/g, c => `%${c.charCodeAt(0).toString(16).toUpperCase()}`)).join('/');
+              return `![](https://raw.githubusercontent.com/${ref.repo.full_name}/${ref.sha}/${encoded})`;
+            };
+            let summary = `RSI Diff Bot; head commit ${pr.head.sha} merging into ${pr.base.sha}\n\n`;
+            let shown = 0;
+            // Leave room below GitHub's comment-size limit for the omitted-file notice.
+            for (const [rsi, changes] of groups) {
+              const heading = `<details><summary>${escape(rsi)}</summary>\n\n| State | Old | New | Status |\n| --- | --- | --- | --- |\n`;
+              const footer = '\n</details>\n\n';
+              let rows = '';
+              for (const { status, path } of changes) {
+                const name = escape(path.slice(path.lastIndexOf('/') + 1, -4));
+                const oldImage = status === 'A' ? '' : image(pr.base, path);
+                const newImage = status === 'D' ? '' : image(pr.head, path);
+                const label = { A: 'Added', D: 'Removed', M: 'Modified' }[status];
+                const row = `| <code>${name}</code> | ${oldImage} | ${newImage} | ${label} |\n`;
+                if (summary.length + heading.length + rows.length + row.length + footer.length > 60000) break;
+                rows += row;
+                shown++;
+              }
+              if (rows) summary += heading + rows + footer;
+              if (summary.length > 59000 || !rows) break;
+            }
+            summary += `Showing ${shown} of ${total} changed sprite files. [View all changes](${pr.html_url}/files).`;
+            core.setOutput('summary-details', summary);
 
       - name: Potentially find comment
         uses: peter-evans/find-comment@v4.0.0

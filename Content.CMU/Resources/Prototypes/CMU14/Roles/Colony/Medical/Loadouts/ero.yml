@@ -6,11 +6,6 @@
     id: AU14IDCardColonyEmergencyResponseOfficer
 
 - type: loadout
-  id: ColonyEmergencyResponseOfficerSpecializationParamedicAU14
-  equipment:
-    id: AU14IDCardColonyEmergencyResponseOfficerParamedic
-
-- type: loadout
   id: ColonyEmergencyResponseOfficerSpecializationFirefighterAU14
   equipment:
     id: AU14IDCardColonyEmergencyResponseOfficerFirefighter
@@ -23,7 +18,7 @@
     - RMCRadioHandheldColonyOff
     - CMFireExtinguisherPortable
   equipment:
-    ears: RMCFlashlightPen
+    ears2: RMCFlashlightPen
     suitstorage: RMCFireAxe
     eyes: RMCGlassesMedicalHUDGlasses
   inhand:

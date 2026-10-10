@@ -1,8 +1,11 @@
 using Content.Server.Atmos.EntitySystems;
+using Content.Server.CMU14.Fire;
+using Content.Shared.CMU14.Fire;
 using Content.Shared.Atmos;
 using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
+using Content.Shared.Maps;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
 
@@ -22,6 +25,16 @@ namespace Content.Server.Chemistry.TileReactions
         {
             if (reactVolume <= FixedPoint2.Zero || tile.Tile.IsEmpty)
                 return FixedPoint2.Zero;
+
+            // CMU14: extinguish loose burning items.
+            // Loose items do not collide with extinguisher vapour. Apply its tile
+            // reaction to their fire state too, even without an atmospheric hotspot.
+            var fires = entityManager.System<AU14FireSpreadSystem>();
+            foreach (var uid in entityManager.System<EntityLookupSystem>().GetEntitiesInTile(tile, LookupFlags.All))
+            {
+                if (entityManager.TryGetComponent<FlamabilityComponent>(uid, out var burning) && burning.OnFire)
+                    fires.Extinguish(uid, burning);
+            }
 
             var atmosphereSystem = entityManager.System<AtmosphereSystem>();
 

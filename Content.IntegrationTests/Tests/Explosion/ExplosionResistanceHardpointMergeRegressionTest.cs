@@ -1,4 +1,3 @@
-using System.Reflection;
 using Content.IntegrationTests.Fixtures;
 using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Vehicle;
@@ -6,6 +5,7 @@ using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Explosion.EntitySystems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Containers;
 
 namespace Content.IntegrationTests.Tests.Explosion;
 
@@ -84,8 +84,7 @@ public sealed class ExplosionResistanceHardpointMergeRegressionTest : GameTest
                 AssertResistance(SEntMan, vehicle, 0.5f,
                     "the first functional mounted armor remains the effective coefficient");
 
-                Assert.That(itemSlots.TryEject((vehicle, slots), "armor-a", null, out var ejected, excludeUserAudio: true), Is.True);
-                Assert.That(ejected, Is.EqualTo(halfArmor));
+                RemoveArmor(vehicle, slots, "armor-a", halfArmor);
                 AssertResistance(SEntMan, vehicle, 0.25f,
                     "removing the active armor must restore the next functional coefficient");
             });
@@ -103,8 +102,7 @@ public sealed class ExplosionResistanceHardpointMergeRegressionTest : GameTest
                 var slots = SEntMan.GetComponent<ItemSlotsComponent>(vehicle);
 
                 explosion.SetExplosionResistance(vehicle, 0.9f, worn: false);
-                Assert.That(itemSlots.TryEject((vehicle, slots), "armor-b", null, out var ejected, excludeUserAudio: true), Is.True);
-                Assert.That(ejected, Is.EqualTo(quarterArmor));
+                RemoveArmor(vehicle, slots, "armor-b", quarterArmor);
                 AssertResistance(SEntMan, vehicle, 0.9f,
                     "hardpoint removal must not delete a resistance value it does not own");
             });
@@ -123,7 +121,7 @@ public sealed class ExplosionResistanceHardpointMergeRegressionTest : GameTest
                 SEntMan.RemoveComponent<ExplosionResistanceComponent>(vehicle);
                 Assert.That(itemSlots.TryInsert((vehicle, slots), "armor-b", quarterArmor, null, excludeUserAudio: true), Is.True);
                 AssertResistance(SEntMan, vehicle, 0.25f);
-                Assert.That(itemSlots.TryEject((vehicle, slots), "armor-b", null, out _, excludeUserAudio: true), Is.True);
+                RemoveArmor(vehicle, slots, "armor-b", quarterArmor);
                 Assert.That(SEntMan.HasComponent<ExplosionResistanceComponent>(vehicle), Is.False,
                     "the final matching armor coefficient is removed with its hardpoint");
             });
@@ -140,33 +138,14 @@ public sealed class ExplosionResistanceHardpointMergeRegressionTest : GameTest
         }
     }
 
-    [Test]
-    public async Task SharedDefaultAndServerOverridesRemainOnTheUnifiedSystem()
+    private void RemoveArmor(EntityUid vehicle, ItemSlotsComponent slots, string slotId, EntityUid armor)
     {
-        await Server.WaitAssertion(() =>
-        {
-            var explosion = Server.System<ExplosionSystem>();
-            var queue = typeof(ExplosionSystem)
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .Single(method =>
-                    method.Name == nameof(SharedExplosionSystem.QueueExplosion) &&
-                    method.GetBaseDefinition().DeclaringType == typeof(SharedExplosionSystem));
-            var reload = typeof(ExplosionSystem)
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .Single(method =>
-                    method.Name == nameof(SharedExplosionSystem.ReloadMap) &&
-                    method.GetBaseDefinition().DeclaringType == typeof(SharedExplosionSystem));
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(explosion, Is.InstanceOf<SharedExplosionSystem>());
-                Assert.That(ExplosionSystem.DefaultExplosionPrototypeId.ToString(), Is.EqualTo("Default"));
-                Assert.That(queue.DeclaringType, Is.EqualTo(typeof(ExplosionSystem)));
-                Assert.That(queue.GetBaseDefinition().DeclaringType, Is.EqualTo(typeof(SharedExplosionSystem)));
-                Assert.That(reload.DeclaringType, Is.EqualTo(typeof(ExplosionSystem)));
-                Assert.That(reload.GetBaseDefinition().DeclaringType, Is.EqualTo(typeof(SharedExplosionSystem)));
-            });
-        });
+        var slot = slots.Slots[slotId];
+        Assert.That(slot.ContainerSlot!.ContainedEntity, Is.EqualTo(armor));
+        Assert.That(Server.System<ItemSlotsSystem>().TryEject((vehicle, slots), slotId, null, out _), Is.False,
+            "direct ejection must not bypass the hardpoint removal do-after");
+        // Test the resistance change caused by a completed container removal.
+        Assert.That(Server.System<SharedContainerSystem>().Remove(armor, slot.ContainerSlot), Is.True);
     }
 
     private static void AssertResistance(

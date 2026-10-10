@@ -115,3 +115,14 @@
   parent: HamtrCentralElectronics
   id: HamtrPeripheralsElectronics
   result: HamtrPeripheralsElectronics
+
+# CMU14: colony-buildable atmos computer boards (crated in CMUCrateEngineeringWiring)
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: AlertsComputerCircuitboard
+  result: AlertsComputerCircuitboard
+
+- type: latheRecipe
+  parent: BaseCircuitboardRecipe
+  id: AtmosMonitoringComputerCircuitboard
+  result: AtmosMonitoringComputerCircuitboard

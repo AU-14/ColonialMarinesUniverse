@@ -3,6 +3,7 @@
   description: Yep, it's a tree.
   abstract: true
   components:
+  - type: ResinClearable # CMU14
   - type: SpriteFade
   - type: Clickable
   - type: OreVein
@@ -65,6 +66,11 @@
         acts: [ "Destruction" ]
   - type: RMCMesonsNonviewable
 
+  - type: VehicleSmashable
+    minDestroyWeightClass: Light
+    slowdownBelowWeightClass: Medium
+    slowdownMultiplier: 0.5
+    slowdownDuration: 0.4
 - type: entity
   parent: RMCBaseTree
   id: RMCBaseTreeSnow

@@ -17,6 +17,7 @@ using Content.Shared.Destructible;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Buckle;
 using Content.Shared.Storage.EntitySystems;
+using Content.Shared.Storage.Components;
 using Content.Shared._RMC14.Xenonids.Acid;
 using Content.Shared._RMC14.Xenonids.Spray;
 using Robust.Shared.Audio.Systems;
@@ -660,7 +661,8 @@ public sealed partial class RMCDeploySystem : EntitySystem
                     continue;
 
                 // Prevents abuse when folding entities in cabinets, etc.
-                _entityStorage.EmptyContents(childUid);
+                if (TryComp<EntityStorageComponent>(childUid, out var childStorage))
+                    _entityStorage.EmptyContents(childUid, childStorage);
 
                 // Unbuckle all entities strapped to the child entity
                 TryUnbuckleAll(childUid);

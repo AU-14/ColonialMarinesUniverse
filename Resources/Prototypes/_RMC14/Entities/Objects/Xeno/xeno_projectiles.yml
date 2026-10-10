@@ -286,6 +286,10 @@
     popup: rmc-glob-land
     popupType: LargeCaution
     spawnOffset: -0.5
+  # CMU14: xeno feedback and lifecycle.
+  - type: DropshipAcidProjectile
+    damagePerSecond: 20
+    duration: 12
   - type: ProjectileMaxRange
     max: 10
   - type: XenoSlowingSpitProjectile

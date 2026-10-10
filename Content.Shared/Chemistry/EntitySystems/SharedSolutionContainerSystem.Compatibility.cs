@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Chemistry.Components.SolutionManager;
 using Robust.Shared.Containers;
+#pragma warning disable CS0612 // CMU14
 
 namespace Content.Shared.Chemistry.EntitySystems;
 
@@ -77,4 +78,5 @@ public abstract partial class SharedSolutionContainerSystem
         container.Comp.Solutions = null;
         RemCompDeferred<SolutionContainerManagerComponent>(container);
     }
+#pragma warning restore CS0612 // CMU14
 }

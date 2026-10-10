@@ -153327,7 +153327,7 @@ entities:
     - type: Transform
       pos: -28.5,107.5
       parent: 1
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 1020
     components:

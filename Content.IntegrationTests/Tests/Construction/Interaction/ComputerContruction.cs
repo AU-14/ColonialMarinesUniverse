@@ -16,7 +16,7 @@ public sealed class ComputerConstruction : InteractionTest
         await StartConstruction(Computer);
 
         // Initial interaction (ghost turns into real entity)
-        await InteractUsing(Steel, 5);
+        await InteractUsing(CMSteel, 5); // CMU14
         ClientAssertPrototype(ComputerFrame, Target);
 
         // Perform construction steps
@@ -25,7 +25,7 @@ public sealed class ComputerConstruction : InteractionTest
             IdBoard,
             Screw,
             (Cable, 5),
-            (Glass, 2),
+            (CMGlass, 2), // CMU14
             Screw);
 
         // Construction finished, target entity was replaced with a new one:
@@ -58,8 +58,8 @@ public sealed class ComputerConstruction : InteractionTest
         await AssertEntityLookup(
             IdBoard,
             (Cable, 5),
-            (Steel, 5),
-            (Glass, 2));
+            (CMSteel, 5), // CMU14
+            (CMGlass, 2));
     }
 
     [Test]
@@ -87,7 +87,7 @@ public sealed class ComputerConstruction : InteractionTest
             "CargoRequestComputerCircuitboard",
             Screw,
             (Cable, 5),
-            (Glass, 2),
+            (CMGlass, 2), // CMU14
             Screw);
 
         // Construction finished, target entity was replaced with a new one:

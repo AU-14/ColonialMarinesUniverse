@@ -1063,3 +1063,23 @@
     state: med4
   - type: Area
     minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonFacilityCaverns
+  name: Albacetrie - Facility Caverns
+  components:
+  - type: Sprite
+    state: med4
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewerCaverns
+  name: Albacetrie - Sewer Caverns
+  components:
+  - type: Sprite
+    state: med4
+  - type: Area
+    minimapColor: '#016f6f'

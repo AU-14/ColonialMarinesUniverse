@@ -13,6 +13,12 @@
   name: Prodigy Armed Repair Team specialized fatigues
   description: Standard-issue Prodigy Armed Repair Team fatigues. The PART-SF is a specialized uniform designed for Prodigy Security Corp's Armed Repair Teams, who are responsible for maintaining and repairing equipment in high-risk environments. The uniform features reinforced padding on the knees and elbows, as well as multiple pockets for carrying tools and supplies. It also includes a built-in harness system for attaching additional gear and equipment.
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Storage
     maxItemSize: Normal
     grid:
@@ -29,6 +35,12 @@
   name: Prodigy Armed Repair Team Synthetic fatigues
   description: Standard-issue Prodigy Armed Repair Team fatigues for Synthetics. The PART-SF is a specialized uniform designed for Prodigy Security Corp's Armed Repair Teams, who are responsible for maintaining and repairing equipment in high-risk environments. The uniform features reinforced padding on the knees and elbows, as well as multiple pockets for carrying tools and supplies. It also includes a built-in harness system for attaching additional gear and equipment.
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Tag
     tags:
     - ProdigyUniformSynth
@@ -75,6 +87,12 @@
   name: grey jumpsuit
   description: Grey working one-piece boilersuit. Looks like a solid piece of gear, made out of ripstop fabric. The label says "PRODIGY CORP. RIPSTOP. FR. IS. AS. DO NOT BLEACH.". Has quite a few pockets, though some of them are for design purposes only.
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: CMU14/Objects/Clothing/Prodigy/greyjumpsuit.rsi
   - type: Storage

@@ -5,7 +5,7 @@
   name: au14-job-name-govforsquadsergeant
   description: au14-job-description-govforsquadsergeant
   icon: "AU14JobIconSquadSgt"
-  spawnMenuRoleName: Squad Leader (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-squad-leader-govfor 
   startingGear: AU14GearGOVFORSquadSergeant
   dummyStartingGear: AU14GearGOVFORSquadSergeantDummy
   playTimeTracker: AU14JobGOVFORSquadSergeant
@@ -13,7 +13,7 @@
   overwatchShowName: true
   overwatchSortPriority: -5
   canBeAntag: false
-  displayWeight: 6
+  displayWeight: 5
   accessGroups:
   - AU14GovforFTL
 
@@ -25,6 +25,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     suffix: ACTUAL
     radioTag: SL
@@ -62,6 +63,12 @@
       prefix: au14-job-prefix-AU14JobGOVFORSquadSergeantCMBCIU
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORRadioTelephoneOperator
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -77,6 +84,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -158,6 +167,7 @@
   dummyStartingGear: AU14GearOpforSquadSergeantDummy
   accessGroups:
   - AU14OpforFTL
+  useLoadoutOfJob: AU14JobGOVFORSquadSergeant
 
 - type: startingGear
   id: AU14GearOpforSquadSergeant
@@ -188,7 +198,7 @@
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantCMBCIU
   roundForce: CMBCIU
-  name: Team Leader
+  name: cmu-job-name-team-leader 
   spawnMenuRoleName: Squad Leader (CMBCIU)
   overwatchRoleName: Squad Leader
   ranks:
@@ -206,7 +216,13 @@
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantUPP
   roundForce: UPP
-  requirements: []
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORRadioTelephoneOperator
+    time: 18000 # 5 hours
   spawnMenuRoleName: Squad Leader (UPP)
   overwatchRoleName: Squad Leader
   ranks:
@@ -216,7 +232,13 @@
   parent: AU14JobSquadSergeantBase
   id: AU14JobGOVFORSquadSergeantWYPMC
   roundForce: WYPMC
-  requirements: []
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
+  - !type:RoleTimeRequirement
+    role: AU14JobGOVFORRadioTelephoneOperator
+    time: 18000 # 5 hours
   name: PMC Squad Leader
   ranks:
     AU14RankWeYuEnforcerSenior:

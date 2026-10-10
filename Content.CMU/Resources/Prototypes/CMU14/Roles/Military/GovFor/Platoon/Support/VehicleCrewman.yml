@@ -1,11 +1,12 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 2
   id: AU14JobVehicleCrewmanBaseAbstract
   name: au14-job-name-vehiclecrewman
   description: au14-job-description-vehiclecrewman
   icon: "AU14JobIconGovTankCrewman"
-  spawnMenuRoleName: Vehicle Crewman (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-vehicle-crewman
   startingGear: AU14GearGOVFORVehicleCrewman
   dummyStartingGear: AU14GearGOVFORVehicleCrewmanDummy
   playTimeTracker: AU14JobGOVFORVehicleCrewman
@@ -33,6 +34,9 @@
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: govfor_vc
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 43200 # 12 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -42,6 +46,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -79,8 +85,8 @@
   dummyStartingGear: AU14GearOPFORVehicleCrewmanDummy
   accessGroups:
   - AU14OpforVehicleCrew
+  useLoadoutOfJob: AU14JobGOVFORVehicleCrewman
 
-# ├──[ Starting Gear ]───────────────────────────────────────────────┤
 - type: startingGear
   id: AU14GearGOVFORVehicleCrewman
   equipment:

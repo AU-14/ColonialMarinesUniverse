@@ -102,7 +102,7 @@
     proto: CMCCartridgeGPMGTWE
     capacity: 250
   - type: Sprite
-    sprite: CMU14/Objects/Weapons/Guns/LMGs/twe_GPMG.rsi
+    sprite: CMU14/Weapons/Guns/Ammo/Magazines/twe_GPMG.rsi
     layers:
     - state: mag-0
       map: ["enum.GunVisualLayers.Base"]

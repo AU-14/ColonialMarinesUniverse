@@ -1,0 +1,137 @@
+<LayoutContainer xmlns="https://spacestation14.io"
+                 xmlns:viewport="clr-namespace:Content.Client.Viewport"
+                 xmlns:fighter="clr-namespace:Content.Client.CMU14.Fighter"
+                 InheritChildMeasure="False" RectClipContent="True" HorizontalExpand="True" VerticalExpand="True" MouseFilter="Ignore">
+    <LayoutContainer Name="ExteriorScene" InheritChildMeasure="False" LayoutContainer.AnchorRight="1" LayoutContainer.AnchorBottom="1" MouseFilter="Ignore">
+        <viewport:ScalingViewport Name="Exterior" RenderZLevels="True" ApplyZLevelBlur="False" StretchMode="Nearest" RenderScaleMode="Fixed" MouseFilter="Ignore" LayoutContainer.AnchorRight="1" LayoutContainer.AnchorBottom="1" />
+    </LayoutContainer>
+    <fighter:FighterShipControl Name="Ship" MouseFilter="Ignore" />
+    <fighter:FighterEffectsControl Name="Effects" MouseFilter="Ignore" LayoutContainer.AnchorRight="1" LayoutContainer.AnchorBottom="1" />
+    <fighter:FighterHandoffControl Name="Handoff" MouseFilter="Ignore" LayoutContainer.AnchorRight="1" LayoutContainer.AnchorBottom="1" />
+
+    <BoxContainer Name="LeftColumn" Orientation="Vertical" SeparationOverride="8">
+        <PanelContainer Name="ViewPanel" VerticalExpand="True">
+            <LayoutContainer InheritChildMeasure="False" Margin="8">
+                <BoxContainer Name="RoutePanel" Orientation="Vertical" SeparationOverride="5" LayoutContainer.AnchorRight="1" LayoutContainer.AnchorBottom="1">
+                    <BoxContainer MinHeight="28" MaxHeight="28" SeparationOverride="6">
+                        <fighter:FighterCockpitReadout Name="RouteTitle" Text="{Loc 'cmu-fighter-airspace'}" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="AirCover" Text="{Loc 'cmu-fighter-cover'}" MinWidth="82" />
+                    </BoxContainer>
+                    <LayoutContainer Name="ChartHost" InheritChildMeasure="False" VerticalExpand="True" />
+                    <BoxContainer Name="RouteEditing" MinHeight="28" MaxHeight="28" SeparationOverride="4">
+                        <fighter:FighterCockpitButton Name="Entry" Text="{Loc 'cmu-fighter-entry'}" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="Exit" Text="{Loc 'cmu-fighter-exit'}" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="Apply" Text="{Loc 'cmu-fighter-apply'}" HorizontalExpand="True" />
+                    </BoxContainer>
+                    <fighter:FighterCockpitReadout Name="CoverageHelp" Visible="False" Text="{Loc 'cmu-fighter-cover-instruction'}" MinHeight="30" MaxHeight="30" />
+                    <fighter:FighterCockpitButton Name="Launch" Text="{Loc 'cmu-fighter-launch'}" MinHeight="30" MaxHeight="30" />
+                    <fighter:FighterCockpitReadout Name="RouteStatus" MinHeight="30" MaxHeight="30" />
+                </BoxContainer>
+                <BoxContainer Name="TargetingControls" Visible="False" Orientation="Vertical" SeparationOverride="4" LayoutContainer.AnchorRight="1" LayoutContainer.AnchorBottom="1">
+                    <fighter:FighterCockpitReadout Name="Feed" MinHeight="20" MaxHeight="20" />
+                    <BoxContainer MinHeight="28" MaxHeight="28" SeparationOverride="4">
+                        <fighter:FighterCockpitButton Name="NormalVision" Text="{Loc 'cmu-fighter-vision-normal'}" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="NightVision" Text="{Loc 'cmu-fighter-vision-night'}" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="ThermalVision" Text="{Loc 'cmu-fighter-vision-thermal'}" HorizontalExpand="True" />
+                    </BoxContainer>
+                    <LayoutContainer Name="Scene" InheritChildMeasure="False" RectClipContent="True" VerticalExpand="True" MouseFilter="Ignore">
+                        <viewport:ScalingViewport Name="Ground" RenderZLevels="True" ApplyZLevelBlur="False" StretchMode="Nearest" RenderScaleMode="Fixed" MouseFilter="Ignore" LayoutContainer.AnchorRight="1" LayoutContainer.AnchorBottom="1" />
+                    </LayoutContainer>
+                    <fighter:FighterCockpitReadout Name="ThermalStatus" MinHeight="18" MaxHeight="18" />
+                    <fighter:FighterCockpitReadout Name="SensorStatus" MinHeight="30" MaxHeight="30" MouseFilter="Pass" />
+                    <BoxContainer MinHeight="28" MaxHeight="28" SeparationOverride="4">
+                        <fighter:FighterCockpitButton Name="CameraLock" Text="{Loc 'cmu-fighter-lock'}" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="CameraZoom" Text="{Loc 'cmu-fighter-console-zoom'}" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="Mark" Text="{Loc 'cmu-fighter-console-mark'}" HorizontalExpand="True" />
+                    </BoxContainer>
+                </BoxContainer>
+            </LayoutContainer>
+        </PanelContainer>
+
+        <PanelContainer Name="LoadoutPanel" MinHeight="188" MaxHeight="220">
+            <BoxContainer SeparationOverride="8" Margin="8">
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" SizeFlagsStretchRatio="1">
+                    <fighter:FighterCockpitReadout Text="{Loc 'cmu-fighter-targets-heading'}" MinHeight="20" MaxHeight="20" />
+                    <ScrollContainer HScrollEnabled="False" VerticalExpand="True">
+                        <BoxContainer Name="TargetList" Orientation="Vertical" SeparationOverride="3" />
+                    </ScrollContainer>
+                    <fighter:FighterCockpitReadout Name="Observation" MinHeight="28" MaxHeight="28" />
+                    <BoxContainer MinHeight="32" MaxHeight="32" SeparationOverride="4">
+                        <fighter:FighterCockpitButton Name="Laser" Text="{Loc 'cmu-fighter-laser'}" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="Flares" Text="{Loc 'cmu-fighter-flares-short'}" Disabled="True" HorizontalExpand="True" />
+                    </BoxContainer>
+                </BoxContainer>
+                <BoxContainer Orientation="Vertical" SeparationOverride="4" HorizontalExpand="True" SizeFlagsStretchRatio="1.6">
+                    <fighter:FighterCockpitReadout Text="{Loc 'cmu-fighter-weapons-heading'}" MinHeight="20" MaxHeight="20" />
+                    <LayoutContainer Name="WeaponSlots" InheritChildMeasure="False" MinHeight="50" MaxHeight="50" />
+                    <fighter:FighterCockpitReadout Name="WeaponName" MinHeight="28" MaxHeight="28" MouseFilter="Pass" />
+                    <BoxContainer Name="RunAssist" Visible="False" MinHeight="28" MaxHeight="28" SeparationOverride="4">
+                        <fighter:FighterCockpitButton Name="PrepareRun" Text="{Loc 'cmu-fighter-prepare-run'}" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="QueueFire" Text="{Loc 'cmu-fighter-queue-fire'}" HorizontalExpand="True" />
+                    </BoxContainer>
+                    <fighter:FighterCockpitReadout Name="FireStatus" MinHeight="24" MaxHeight="24" />
+                    <BoxContainer Name="FireControls" MinHeight="32" MaxHeight="32" SeparationOverride="4">
+                        <fighter:FighterCockpitButton Name="Gau" Text="{Loc 'cmu-fighter-kind-gau'}" MinWidth="52" />
+                        <fighter:FighterCockpitButton Name="Fire" Text="{Loc 'cmu-fighter-fire-button'}" Disabled="True" HorizontalExpand="True" />
+                    </BoxContainer>
+                </BoxContainer>
+            </BoxContainer>
+        </PanelContainer>
+    </BoxContainer>
+
+    <PanelContainer Name="ControlsPanel">
+        <ScrollContainer HScrollEnabled="False">
+        <BoxContainer Name="ControlsContent" Orientation="Vertical" SeparationOverride="8" Margin="10" VerticalAlignment="Top">
+            <BoxContainer Name="Tabs" SeparationOverride="5" MinHeight="36" MaxHeight="36">
+                <fighter:FighterCockpitButton Name="FlightTab" Text="{Loc 'cmu-fighter-console-route'}" HorizontalExpand="True" />
+                <fighter:FighterCockpitButton Name="TargetingTab" Text="{Loc 'cmu-fighter-tab-targeting'}" HorizontalExpand="True" />
+            </BoxContainer>
+            <BoxContainer Name="FlightSettings" Orientation="Vertical" SeparationOverride="4">
+                <fighter:FighterCockpitReadout Name="HeightLabel" MinHeight="22" MaxHeight="22" />
+                <PanelContainer Name="AltitudeSwitch" MinHeight="36" MaxHeight="36">
+                    <BoxContainer SeparationOverride="0">
+                        <fighter:FighterCockpitButton Name="LowAltitude" Text="{Loc 'cmu-fighter-preset-alt-low'}" Segmented="True" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="MediumAltitude" Text="{Loc 'cmu-fighter-preset-alt-medium'}" Segmented="True" SegmentDivider="True" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="HighAltitude" Text="{Loc 'cmu-fighter-preset-alt-high'}" Segmented="True" SegmentDivider="True" HorizontalExpand="True" />
+                    </BoxContainer>
+                </PanelContainer>
+                <fighter:FighterCockpitReadout Name="SpeedLabel" MinHeight="22" MaxHeight="22" />
+                <PanelContainer Name="SpeedSwitch" MinHeight="36" MaxHeight="36">
+                    <BoxContainer SeparationOverride="0">
+                        <fighter:FighterCockpitButton Name="NearStall" Text="{Loc 'cmu-fighter-preset-speed-stall'}" Segmented="True" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="Cruise" Text="{Loc 'cmu-fighter-preset-speed-cruise'}" Segmented="True" SegmentDivider="True" HorizontalExpand="True" />
+                        <fighter:FighterCockpitButton Name="Afterburner" Text="{Loc 'cmu-fighter-preset-speed-afterburner'}" Segmented="True" SegmentDivider="True" HorizontalExpand="True" />
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+            <BoxContainer Name="MissionActions" MinHeight="42" MaxHeight="42" SeparationOverride="10" Margin="0 4 0 4">
+                <fighter:FighterCockpitButton Name="Leave" Text="{Loc 'cmu-fighter-unbuckle'}" HorizontalExpand="True" />
+                <fighter:FighterCockpitButton Name="Return" Text="{Loc 'cmu-fighter-takeoff'}" HorizontalExpand="True" />
+            </BoxContainer>
+            <fighter:FighterCockpitReadout Name="RoleTitle" MinHeight="20" MaxHeight="20" />
+            <fighter:FighterCockpitReadout Name="FlightDisplay" MinHeight="36" MaxHeight="36" />
+            <fighter:FighterCockpitReadout Name="FlightHelp" MinHeight="38" MaxHeight="38" />
+            <fighter:FighterCockpitButton Name="StopObserving" Visible="False" Text="{Loc 'cmu-fighter-stop-observing'}" MinHeight="36" MaxHeight="36" />
+            <fighter:FighterCockpitButton Name="Swap" Text="{Loc 'cmu-fighter-swap'}" MinHeight="28" MaxHeight="28" />
+        </BoxContainer>
+        </ScrollContainer>
+    </PanelContainer>
+
+    <PanelContainer Name="IncomingPanel" Visible="False" LayoutContainer.AnchorLeft=".33" LayoutContainer.AnchorRight=".67" LayoutContainer.AnchorTop=".30" LayoutContainer.AnchorBottom=".53">
+        <BoxContainer Orientation="Vertical" SeparationOverride="5" Margin="9">
+            <fighter:FighterCockpitReadout Name="IncomingTitle" Warning="True" VerticalExpand="True" />
+            <fighter:FighterCockpitReadout Name="IncomingStatus" MinHeight="24" MaxHeight="28" />
+            <fighter:FighterCockpitButton Name="IncomingFlares" Text="{Loc 'cmu-fighter-flares'}" MinHeight="44" MaxHeight="54" VerticalExpand="True" />
+        </BoxContainer>
+    </PanelContainer>
+    <PanelContainer Name="EjectPanel" Visible="False" LayoutContainer.AnchorLeft=".25" LayoutContainer.AnchorRight=".72" LayoutContainer.AnchorTop=".30" LayoutContainer.AnchorBottom=".62">
+        <BoxContainer Orientation="Vertical" SeparationOverride="8" Margin="14">
+            <fighter:FighterCockpitReadout Text="{Loc 'cmu-fighter-eject-warning'}" Warning="True" MinHeight="30" />
+            <fighter:FighterCockpitReadout Name="EjectWarning" VerticalExpand="True" />
+            <BoxContainer SeparationOverride="10" MinHeight="48">
+                <fighter:FighterCockpitButton Name="CancelEject" Text="{Loc 'cmu-fighter-eject-cancel'}" HorizontalExpand="True" />
+                <fighter:FighterCockpitButton Name="ConfirmEject" Text="{Loc 'cmu-fighter-eject-confirm'}" HorizontalExpand="True" />
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</LayoutContainer>

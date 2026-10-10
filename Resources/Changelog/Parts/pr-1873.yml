@@ -1,0 +1,8 @@
+author: potatoed6
+category: CMU
+changes:
+- message: fixed ranks not being overriden (CO in specific) also now they will display
+    correctly on ARES announcement
+  type: Fix
+time: '2026-08-28T13:36:21.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1873

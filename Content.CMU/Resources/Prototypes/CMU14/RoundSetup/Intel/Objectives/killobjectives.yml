@@ -1,3 +1,6 @@
+# Split per faction so each side races its own kill counter: a completion on one side no
+# longer resets the other's progress. Placed map copies of killteamobjective become the
+# GOVFOR instance; catalog spawns cover maps without a placement and the OPFOR twin.
 - type: entity
   name: Kill enemies Objective
   parent: MarkerBase
@@ -7,21 +10,44 @@
     state: red
   - type: CMUObjective
     id: killteamobjbasic
-    factionNeutral: true
+    factionNeutral: false
+    allowedPresets:
+    - ForceOnForce
+    factions:
+    - govfor
+    repeating: true
+    objectiveLevel: 1
+    customPoints: 5
+    objectiveDescription: "Kill the enemy"
+    nextTierObjective: destroy_mineable_solaris_steel
+  - type: KillObjective
+    factionToKill: opfor
+    killCount: 2
+    catalog: true
+
+- type: entity
+  name: Kill enemies Objective
+  parent: MarkerBase
+  id: killteamobjectiveopfor
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjective
+    id: killteamobjbasicopfor
+    factionNeutral: false
     allowedPresets:
     - ForceOnForce
     factions:
     - opfor
-    - govfor
     repeating: true
     objectiveLevel: 1
-    customPoints: 15
-    maxRepeatable: 1
+    customPoints: 5
     objectiveDescription: "Kill the enemy"
     nextTierObjective: destroy_mineable_solaris_steel
   - type: KillObjective
     factionToKill: govfor
     killCount: 2
+    catalog: true
 
 - type: entity
   name: "Kill the OPFOR Commander (FOF)"
@@ -241,6 +267,7 @@
     factionToKill: THREAT
     killCount: 1
     specificJob: AU14JobThreatLeader
+    requireFactionKill: true
 
 - type: entity
   name: "Kill the threat (DS)"
@@ -256,15 +283,17 @@
     - DistressSignal
     factions:
     - govfor
-    repeating: true
+    repeating: true # no maxRepeatable, so it never runs out
     objectiveLevel: 1
-    customPoints: 10
+    customPoints: 2
     objectiveDescription: "Eliminate the threat."
     roundEndMessage: "By killing the threat."
+  # Any THREAT-descended creature counts (burrowed larvae, hugger-born xenos, evolutions), not
+  # just the handful of bodies tagged as members at round start.
   - type: KillObjective
     factionToKill: THREAT
     killCount: 1
-    specificJob: AU14JobThreatMember
+    requireFactionKill: true
 
 - type: entity
   name: Kill the Carp

@@ -1,11 +1,12 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: -1
   id: AU14JobAuxTechBaseAbstract
   name: au14-job-name-govforAuxTech
   description: au14-job-description-govforAuxTech
   icon: "AU14JobIconAuxTech"
-  spawnMenuRoleName: Logistics Technician (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-logistics-technician-govfor 
   startingGear: AU14GearGOVFORAuxTech
   dummyStartingGear: AU14GearGOVFORAuxTechDummy
   playTimeTracker: AU14JobGOVFORAuxTech
@@ -48,6 +49,8 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -141,6 +144,7 @@
   dummyStartingGear: AU14GearOPFORAuxTechDummy
   accessGroups:
   - AU14OpforAuxTech
+  useLoadoutOfJob: AU14JobGOVFORAuxTech
 
 - type: startingGear
   id: AU14GearOPFORAuxTech

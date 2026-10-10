@@ -1,8 +1,10 @@
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.Gravity;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Stunnable;
+using Content.Shared.Gravity;
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests.Tests.Stunnable;
@@ -46,12 +48,21 @@ public sealed class StunTriggerMergeRegressionTest : GameTest
     public async Task AreaTriggerSelectsMobStateInsteadOfSourceOrSizeOnlyDecoy()
     {
         var map = await Pair.CreateTestMap();
+        EntityUid source = default;
+        EntityUid decoy = default;
+        EntityUid target = default;
 
         await Server.WaitAssertion(() =>
         {
-            var source = SSpawnAtPosition("StunTriggerMergeSource", map.GridCoords);
-            var decoy = SSpawnAtPosition("StunTriggerMergeDecoy", map.GridCoords.Offset(new Vector2(0.1f, 0)));
-            var target = SSpawnAtPosition("StunTriggerMergeTarget", map.GridCoords.Offset(new Vector2(0.2f, 0)));
+            SEntMan.System<GravitySystem>().EnableGravity(map.MapUid,
+                SEntMan.EnsureComponent<GravityComponent>(map.MapUid));
+            source = SSpawnAtPosition("StunTriggerMergeSource", map.GridCoords);
+            decoy = SSpawnAtPosition("StunTriggerMergeDecoy", map.GridCoords.Offset(new Vector2(0.1f, 0)));
+            target = SSpawnAtPosition("StunTriggerMergeTarget", map.GridCoords.Offset(new Vector2(0.2f, 0)));
+        });
+        await Pair.RunTicksSync(2); // Populate the spatial lookup before the area query.
+        await Server.WaitAssertion(() =>
+        {
             var trigger = new RMCTriggerEvent(null, false);
             SEntMan.EventBus.RaiseLocalEvent(source, ref trigger);
 

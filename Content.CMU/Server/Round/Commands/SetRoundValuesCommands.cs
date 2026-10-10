@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Content.Server.Administration;
+using Content.Server.GameTicking;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration;
 using Content.Shared.CMU14.util;
@@ -22,6 +23,7 @@ namespace Content.Server.CMU14.Round.Commands
             {
                 var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
                 roundSystem.SetOpforShip(args[1]);
+                roundSystem.StopVoteSequence();
                 shell.WriteLine($"Opfor ship set to: {args[1]}");
                 return;
             }
@@ -40,6 +42,8 @@ namespace Content.Server.CMU14.Round.Commands
                 return;
             }
             platoonSys.SelectedOpforPlatoon = platoon;
+            sysMan.GetEntitySystem<AuRoundSystem>().StopVoteSequence();
+            sysMan.GetEntitySystem<GameTicker>().UpdateInfoText();
             shell.WriteLine($"Opfor platoon set to: {platoon.Name} ({platoon.ID})");
         }
 
@@ -60,6 +64,7 @@ namespace Content.Server.CMU14.Round.Commands
             {
                 var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
                 roundSystem.SetGovforShip(args[1]);
+                roundSystem.StopVoteSequence();
                 shell.WriteLine($"Govfor ship set to: {args[1]}");
                 return;
             }
@@ -78,6 +83,8 @@ namespace Content.Server.CMU14.Round.Commands
                 return;
             }
             platoonSys.SelectedGovforPlatoon = platoon;
+            sysMan.GetEntitySystem<AuRoundSystem>().StopVoteSequence();
+            sysMan.GetEntitySystem<GameTicker>().UpdateInfoText();
             shell.WriteLine($"Govfor platoon set to: {platoon.Name} ({platoon.ID})");
         }
 
@@ -101,6 +108,7 @@ namespace Content.Server.CMU14.Round.Commands
             }
             var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
             roundSystem.SetOpforShip(args[0]);
+            roundSystem.StopVoteSequence();
             shell.WriteLine($"Opfor ship set to: {args[0]}");
         }
 
@@ -124,6 +132,7 @@ namespace Content.Server.CMU14.Round.Commands
             }
             var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
             roundSystem.SetGovforShip(args[0]);
+            roundSystem.StopVoteSequence();
             shell.WriteLine($"Govfor ship set to: {args[0]}");
         }
 
@@ -147,7 +156,10 @@ namespace Content.Server.CMU14.Round.Commands
             }
             var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
             if (roundSystem.SetPlanet(args[0]))
+            {
+                roundSystem.StopVoteSequence();
                 shell.WriteLine($"Planet set to: {args[0]}");
+            }
             else
                 shell.WriteError($"Planet prototype not found: {args[0]}");
         }

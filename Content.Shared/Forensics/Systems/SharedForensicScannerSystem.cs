@@ -30,6 +30,9 @@ public sealed partial class SharedForensicScannerSystem : EntitySystem
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private ForensicsSystem _forensicsSystem = default!;
     [Dependency] private TagSystem _tag = default!;
+    // cmu edit start
+    [Dependency] private Robust.Shared.Network.INetManager _net = default!;
+    // cmu edit end
 
     private static readonly ProtoId<TagPrototype> DNASolutionScannableTag = "DNASolutionScannable";
 
@@ -75,6 +78,23 @@ public sealed partial class SharedForensicScannerSystem : EntitySystem
                 scanner.Comp.DNAs.AddRange(_forensicsSystem.GetSolutionsDNA(args.Args.Target.Value));
             }
 
+            // cmu edit start
+            if (TryComp<DnaComponent>(args.Args.Target, out var targetDna) &&
+                targetDna.DNA != null &&
+                !scanner.Comp.DNAs.Contains(targetDna.DNA))
+            {
+                scanner.Comp.DNAs.Add(targetDna.DNA);
+            }
+
+            if (TryComp<FingerprintComponent>(args.Args.Target, out var targetPrint) &&
+                targetPrint.Fingerprint != null &&
+                _forensicsSystem.CanAccessFingerprint(args.Args.Target.Value, out _) &&
+                !scanner.Comp.Fingerprints.Contains(targetPrint.Fingerprint))
+            {
+                scanner.Comp.Fingerprints.Add(targetPrint.Fingerprint);
+            }
+            // cmu edit end
+
             scanner.Comp.LastScannedName = Identity.Name(args.Args.Target.Value, EntityManager, args.Args.User);
 
             DirtyFields(scanner.AsNullable(),
@@ -85,8 +105,9 @@ public sealed partial class SharedForensicScannerSystem : EntitySystem
                 nameof(ForensicScannerComponent.Residues),
                 nameof(ForensicScannerComponent.LastScannedName));
 
-            var scanned = new ForensicScannerScannedEvent(args.Args.Target.Value);
-            RaiseLocalEvent(scanner.Owner, ref scanned);
+            // CMU14: event carries the scanner for broadcast consumers
+            var scanned = new ForensicScannerScannedEvent(scanner, args.Args.Target.Value);
+            RaiseLocalEvent(scanner.Owner, ref scanned, true); // cmu edit: broadcast too, for the colony bounty and forensics systems
         }
 
         OpenUserInterface(args.Args.User, scanner);
@@ -175,7 +196,9 @@ public sealed partial class SharedForensicScannerSystem : EntitySystem
 
     private void OpenUserInterface(EntityUid user, Entity<ForensicScannerComponent> scanner)
     {
-        _uiSystem.OpenUi(scanner.Owner, ForensicScannerUiKey.Key, user, true);
+        // cmu edit start
+        _uiSystem.OpenUi(scanner.Owner, ForensicScannerUiKey.Key, user, _net.IsClient);
+        // cmu edit end
 
         UpdateUi(scanner);
     }

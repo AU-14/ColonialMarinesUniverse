@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 04/11/2026 14:32:54
-  entityCount: 5991
+  entityCount: 5992
 maps:
 - 1
 grids:
@@ -153,7 +153,7 @@ entities:
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
-    - type: Almayer
+    - type: Warship
     - type: MapGrid
       chunks:
         0,0:
@@ -25149,7 +25149,7 @@ entities:
     - type: Transform
       pos: -29.475073,7.5553737
       parent: 1
-- proto: GasMinerNitrogenStation
+- proto: CMUGasMinerNitrogenPortable
   entities:
   - uid: 4217
     components:
@@ -25157,7 +25157,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 76.5,-28.5
       parent: 1
-- proto: GasMinerOxygenStation
+- proto: CMUGasMinerOxygenPortable
   entities:
   - uid: 4218
     components:
@@ -25165,7 +25165,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 80.5,-28.5
       parent: 1
-- proto: GasMixer
+- proto: CMUGasMixer
   entities:
   - uid: 4219
     components:
@@ -25173,7 +25173,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 82.5,-26.5
       parent: 1
-- proto: GasOutletInjector
+- proto: CMUOutletInjector
   entities:
   - uid: 4220
     components:
@@ -25186,7 +25186,7 @@ entities:
     - type: Transform
       pos: 81.5,13.5
       parent: 1
-- proto: GasPassiveVent
+- proto: CMUPassiveVent
   entities:
   - uid: 4222
     components:
@@ -25219,7 +25219,7 @@ entities:
     - type: Transform
       pos: 83.5,13.5
       parent: 1
-- proto: GasPressurePump
+- proto: CMUGasPressurePump
   entities:
   - uid: 4227
     components:
@@ -25910,7 +25910,7 @@ entities:
     - type: Transform
       pos: -32.86621,8.684347
       parent: 1
-- proto: RMCGasPipeBend
+- proto: CMUGasPipeBend
   entities:
   - uid: 4346
     components:
@@ -26176,7 +26176,7 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#990000FF'
-- proto: RMCGasPipeFourway
+- proto: CMUGasPipeFourway
   entities:
   - uid: 4381
     components:
@@ -26220,7 +26220,7 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#0055CCFF'
-- proto: RMCGasPipeStraight
+- proto: CMUGasPipeStraight
   entities:
   - uid: 4387
     components:
@@ -34896,7 +34896,7 @@ entities:
       parent: 1
     - type: AtmosPipeColor
       color: '#0055CCFF'
-- proto: RMCGasPipeTJunction
+- proto: CMUGasPipeTJunction
   entities:
   - uid: 5513
     components:
@@ -37908,4 +37908,17 @@ entities:
       text: brig
     - type: WarpPoint
       location: Savannah brig
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 5992
+    components:
+    - type: MetaData
+      name: Fiorina ground relay
+    - type: Transform
+      pos: -9.5,-12.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: fiorina.ground.relay
+      displayName: Fiorina Ground Relay
 ...

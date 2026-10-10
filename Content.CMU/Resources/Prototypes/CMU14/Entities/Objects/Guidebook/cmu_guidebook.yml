@@ -1,0 +1,1060 @@
+- type: guideEntry
+  parent: RMC
+  id: CMUGuidebook
+  name: cmu-guide-entry-cmu
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/CMUGuidebook.xml"
+  children:
+  - AU14Comms
+  - CMUGuideMortar
+  - CMUGuideExplosives
+  - CMUGuideMedical
+  - CMUGuideLawEnforcement
+  - CMUGuideEngineering
+  - CMUGuideIntelObjectives
+  - CMUResearchIndex
+  - CMUGuideRoleRider
+  - CMUChemicals
+  - CMUGuideCooking
+  - CMUGuideLore
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideIntelObjectives
+  name: cmu-guide-entry-intel-objectives
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/Intel/CMUIntelObjectives.xml"
+  children:
+  - CMUGuideObjectives
+  - CMUGuideObjectivePoints
+  - CMUGuideIntel
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideObjectives
+  name: cmu-guide-entry-objectives
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Guides/Intel/CMUObjectives.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideObjectivePoints
+  name: cmu-guide-entry-objective-points
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/Intel/CMUObjectivePoints.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideIntel
+  name: cmu-guide-entry-intel
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/Intel/CMUIntel.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMortar
+  name: cmu-guide-entry-mortar
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUMortar.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideExplosives
+  name: cmu-guide-entry-explosives
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUExplosives.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngineering
+  name: cmu-guide-entry-engineering
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngineering.xml"
+  children:
+  - CMUGuideEngGear
+  - CMUGuideEngConstruction
+  - CMUGuideEngPower
+  - CMUGuideEngAtmos
+  - CMUGuideEngHazards
+  - CMUGuideEngFortify
+  - CMUGuideEngSentries
+  - CMUGuideEngBreach
+  - CMUGuideEngVehicles
+  - CMUGuideEngSynths
+  - CMUGuideEngOrdnance
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngGear
+  name: cmu-guide-entry-eng-gear
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngGear.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngConstruction
+  name: cmu-guide-entry-eng-construction
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngConstruction.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngPower
+  name: cmu-guide-entry-eng-power
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngPower.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngAtmos
+  name: cmu-guide-entry-eng-atmos
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngAtmos.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngHazards
+  name: cmu-guide-entry-eng-hazards
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngHazards.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngFortify
+  name: cmu-guide-entry-eng-fortify
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngFortify.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngSentries
+  name: cmu-guide-entry-eng-sentries
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngSentries.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngBreach
+  name: cmu-guide-entry-eng-breach
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngBreach.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngVehicles
+  name: cmu-guide-entry-eng-vehicles
+  priority: 8
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngVehicles.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngSynths
+  name: cmu-guide-entry-eng-synths
+  priority: 9
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngSynths.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideEngOrdnance
+  name: cmu-guide-entry-eng-ordnance
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUEngOrdnance.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawEnforcement
+  name: cmu-guide-entry-law-enforcement
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawEnforcement.xml"
+  children:
+  - CMUGuideLawRoles
+  - CMUGuideLawBasics
+  - CMUGuideLawDispatch
+  - CMUGuideLawRecords
+  - CMUGuideLawArrests
+  - CMUGuideForensics
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawRoles
+  name: cmu-guide-entry-law-roles
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawRoles.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawBasics
+  name: cmu-guide-entry-law-basics
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawBasics.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawDispatch
+  name: cmu-guide-entry-law-dispatch
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawDispatch.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawRecords
+  name: cmu-guide-entry-law-records
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawRecords.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLawArrests
+  name: cmu-guide-entry-law-arrests
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMULawArrests.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideForensics
+  name: cmu-guide-entry-forensics
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUForensics.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedical
+  name: cmu-guide-entry-medical
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedical.xml"
+  children:
+  - CMUGuideMedicalInfantry
+  - CMUGuideMedicalDiagnosis
+  - CMUGuideMedicalWounds
+  - CMUGuideMedicalFieldCare
+  - CMUGuideMedicalBones
+  - CMUGuideMedicalPain
+  - CMUGuideMedicalOrgans
+  - CMUGuideMedicalSurgery
+  - CMUGuideMedicalResuscitation
+  - CMUGuideMedications
+  - CMUGuideMedicalMachines
+  - CMUGuideDefibrillators
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalInfantry
+  name: cmu-guide-entry-medical-infantry
+  priority: -1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalInfantry.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalDiagnosis
+  name: cmu-guide-entry-medical-diagnosis
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalDiagnosis.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalWounds
+  name: cmu-guide-entry-medical-wounds
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalWounds.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalFieldCare
+  name: cmu-guide-entry-medical-field-care
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalFieldCare.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalBones
+  name: cmu-guide-entry-medical-bones
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalBones.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalPain
+  name: cmu-guide-entry-medical-pain
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalPain.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalOrgans
+  name: cmu-guide-entry-medical-organs
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalOrgans.xml"
+  children:
+  - CMUGuideHearingLoss
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalSurgery
+  name: cmu-guide-entry-medical-surgery
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalSurgery.xml"
+  children:
+  - CMUGuideSurgeryOpening
+  - CMUGuideSurgeryFractures
+  - CMUGuideSurgeryBleeding
+  - CMUGuideSurgeryOrgans
+  - CMUGuideSurgeryLimbs
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryOpening
+  name: cmu-guide-entry-surgery-opening
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryOpening.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryFractures
+  name: cmu-guide-entry-surgery-fractures
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryFractures.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryBleeding
+  name: cmu-guide-entry-surgery-bleeding
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryBleeding.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryOrgans
+  name: cmu-guide-entry-surgery-organs
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryOrgans.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideSurgeryLimbs
+  name: cmu-guide-entry-surgery-limbs
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Surgery/CMUSurgeryLimbs.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalResuscitation
+  name: cmu-guide-entry-medical-resuscitation
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalResuscitation.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedicalMachines
+  name: cmu-guide-entry-medical-machines
+  priority: 9
+  text: "/ServerInfo/Guidebook/CMU14/Medical/CMUMedicalMachines.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedications
+  name: cmu-guide-entry-medications
+  priority: 8
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedications.xml"
+  children:
+  - CMUGuideMedsBrute
+  - CMUGuideMedsBurn
+  - CMUGuideMedsToxin
+  - CMUGuideMedsSuffocation
+  - CMUGuideMedsPain
+  - CMUGuideMedsOrgans
+  - CMUGuideMedsOther
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsBrute
+  name: cmu-guide-entry-meds-brute
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsBrute.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsBurn
+  name: cmu-guide-entry-meds-burn
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsBurn.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsToxin
+  name: cmu-guide-entry-meds-toxin
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsToxin.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsSuffocation
+  name: cmu-guide-entry-meds-suffocation
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsSuffocation.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsPain
+  name: cmu-guide-entry-meds-pain
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsPain.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsOrgans
+  name: cmu-guide-entry-meds-organs
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsOrgans.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideMedsOther
+  name: cmu-guide-entry-meds-other
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Medical/Medications/CMUMedsOther.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideDefibrillators
+  name: cmu-guide-entry-defibrillators
+  priority: 8
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUDefibrillators.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUChemicals
+  name: guide-entry-chemicals
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Chemicals/CMUChemicals.xml"
+  children:
+  - CMUMedicine
+  - CMUOrdinanceChemicals
+  filterEnabled: True
+
+- type: guideEntry
+  parent: RMC
+  id: CMUMedicine
+  name: guide-entry-medicine
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Chemicals/CMUMedicine.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  parent: RMC
+  id: CMUOrdinanceChemicals
+  name: "OT Chemicals"
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Chemicals/CMUOrdinanceChemicals.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLore
+  name: cmu-guide-entry-lore
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/CMULore.xml"
+  children:
+  - CMUGuideLoreQuickstart
+  - CMUGuideLoreFactions
+  - CMUGuideLoreOrganisms
+  - CMUGuideLoreTechnologies
+  - CMUGuideLoreLocations
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreOrganisms
+  name: cmu-guide-entry-lore-organisms
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreOrganisms.xml"
+  children:
+  - CMUGuideLoreHunters
+  - CMUGuideLoreAliens
+  - CMUGuideLorePathogen
+  - CMUGuideLoreBiomorphs
+  - CMUGuideLoreApes
+  - CMUGuideLoreTribals
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreFactions
+  name: cmu-guide-entry-lore-factions
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/CMULoreFactions.xml"
+  children:
+  - CMUGuideLoreUA
+  - CMUGuideLoreUPP
+  - CMUGuideLoreTWE
+  - CMUGuideLoreCCA
+  - CMUGuideLoreICSC
+  - CMUGuideLoreUN
+  - CMUGuideLoreICC
+  - CMUGuideLoreWY
+  - CMUGuideLoreCorporations
+  - CMUGuideLoreCLF
+  - CMUGuideLorePMC
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUA
+  name: cmu-guide-entry-lore-ua
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/CMULoreUA.xml"
+  children:
+  - CMUGuideLoreUAPolitics
+  - CMUGuideLoreUSCM
+  - CMUGuideLoreCMB
+  - CMUGuideLoreOrgLACN
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUPP
+  name: cmu-guide-entry-lore-upp
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UPP/CMULoreUPP.xml"
+  children:
+  - CMUGuideLoreOrgUPPNI
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreTWE
+  name: cmu-guide-entry-lore-twe
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/TWE/CMULoreTWE.xml"
+  children:
+  - CMUGuideLoreOrgRMC
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreCCA
+  name: cmu-guide-entry-lore-cca
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/OtherNations/CMULoreCCA.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreICSC
+  name: cmu-guide-entry-lore-icsc
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/OtherNations/CMULoreICSC.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreWY
+  name: cmu-guide-entry-lore-wy
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/Corporations/CMULoreWY.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreCLF
+  name: cmu-guide-entry-lore-clf
+  priority: 8
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/Movements/CMULoreCLF.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePMC
+  name: cmu-guide-entry-lore-pmc
+  priority: 9
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/PMC/CMULorePMC.xml"
+  children:
+  - CMUGuideLoreWYPMC
+  - CMUGuideLoreVAI
+  - CMUGuideLoreFreelancers
+  - CMUGuideLoreOrgPRODIGYSS
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreVAI
+  name: cmu-guide-entry-lore-vai
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/PMC/CMULoreVAI.xml"
+  children:
+  - CMUGuideLorePlatoonVAIPO
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreHunters
+  name: cmu-guide-entry-lore-hunters
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreHunters.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreFreelancers
+  name: cmu-guide-entry-lore-freelancers
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/PMC/CMULoreFreelancers.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreWYPMC
+  name: cmu-guide-entry-lore-wypmc
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/PMC/CMULoreWYPMC.xml"
+  children:
+  - CMUGuideLorePlatoonWEYU
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreAliens
+  name: cmu-guide-entry-lore-aliens
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreAliens.xml"
+  children:
+  - CMUGuideLoreCultists
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePathogen
+  name: cmu-guide-entry-lore-pathogen
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULorePathogen.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreICC
+  name: cmu-guide-entry-lore-icc
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/International/CMULoreICC.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreCMB
+  name: cmu-guide-entry-lore-cmb
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/CMULoreCMB.xml"
+  children:
+  - CMUGuideLorePlatoonCMBCIU
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreEarthMap
+  name: cmu-guide-entry-lore-earthmap
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Lore/CMULoreEarthMap.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreGalaxyMap
+  name: cmu-guide-entry-lore-galaxymap
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/CMULoreGalaxyMap.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUSCM
+  name: cmu-guide-entry-lore-uscm
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/CMULoreUSCM.xml"
+  children:
+  - CMUGuideLorePlatoonUSCM
+  - CMUGuideLorePlatoonHAZOPS
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreCorporations
+  name: cmu-guide-entry-lore-corporations
+  priority: 7
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/Corporations/CMULoreCorporations.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreTechnologies
+  name: cmu-guide-entry-lore-technologies
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Technologies/CMULoreTechnologies.xml"
+  children:
+  - CMUGuideLoreSynthetics
+  - CMUGuideLoreStasis
+  - CMUGuideLorePowerLoaders
+  - CMUGuideLoreAtmosProcessors
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreSynthetics
+  name: cmu-guide-entry-lore-synthetics
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Technologies/CMULoreSynthetics.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreStasis
+  name: cmu-guide-entry-lore-stasis
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Technologies/CMULoreStasis.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePowerLoaders
+  name: cmu-guide-entry-lore-powerloaders
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Technologies/CMULorePowerLoaders.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreAtmosProcessors
+  name: cmu-guide-entry-lore-atmosprocessors
+  priority: 3
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Technologies/CMULoreAtmosProcessors.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePlatoonUSCM
+  name: cmu-guide-entry-lore-platoon-uscm
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/Units/CMULorePlatoonUSCM.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePlatoonHAZOPS
+  name: cmu-guide-entry-lore-platoon-hazops
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/Units/CMULorePlatoonHAZOPS.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePlatoonLACN
+  name: cmu-guide-entry-lore-platoon-lacn
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/Units/CMULorePlatoonLACN.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePlatoonUPP
+  name: cmu-guide-entry-lore-platoon-upp
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UPP/Units/CMULorePlatoonUPP.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePlatoonRMC
+  name: cmu-guide-entry-lore-platoon-rmc
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/TWE/Units/CMULorePlatoonRMC.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePlatoonWEYU
+  name: cmu-guide-entry-lore-platoon-weyu
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/PMC/Units/CMULorePlatoonWEYU.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePlatoonCMBCIU
+  name: cmu-guide-entry-lore-platoon-cmbciu
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/Units/CMULorePlatoonCMBCIU.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePlatoonPRODIGYSF
+  name: cmu-guide-entry-lore-platoon-prodigysf
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/PMC/Units/CMULorePlatoonPRODIGYSF.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLorePlatoonVAIPO
+  name: cmu-guide-entry-lore-platoon-vaipo
+  priority: 10
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/PMC/Units/CMULorePlatoonVAIPO.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideCooking
+  name: cmu-guide-entry-cooking
+  priority: 8
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUCooking.xml"
+  filterEnabled: True
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreOrgLACN
+  name: cmu-guide-entry-lore-org-lacn
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/CMULoreOrgLACN.xml"
+  children:
+  - CMUGuideLorePlatoonLACN
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreOrgUPPNI
+  name: cmu-guide-entry-lore-org-uppni
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UPP/CMULoreOrgUPPNI.xml"
+  children:
+  - CMUGuideLorePlatoonUPP
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreOrgRMC
+  name: cmu-guide-entry-lore-org-rmc
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/TWE/CMULoreOrgRMC.xml"
+  children:
+  - CMUGuideLorePlatoonRMC
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreOrgPRODIGYSS
+  name: cmu-guide-entry-lore-org-prodigyss
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/PMC/CMULoreOrgPRODIGYSS.xml"
+  children:
+  - CMUGuideLorePlatoonPRODIGYSF
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUNISC
+  name: cmu-guide-entry-lore-unisc
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/International/CMULoreUNISC.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUN
+  name: cmu-guide-entry-lore-un
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/International/CMULoreUN.xml"
+  children:
+  - CMUGuideLoreUNISC
+  - CMUGuideLoreICRC
+  - CMUGuideLoreIHRO
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreQuickstart
+  name: cmu-guide-entry-lore-quickstart
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/CMULoreQuickstart.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreICRC
+  name: cmu-guide-entry-lore-icrc
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/International/CMULoreICRC.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreBiomorphs
+  name: cmu-guide-entry-lore-biomorphs
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreBiomorphs.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocations
+  name: cmu-guide-entry-lore-locations
+  priority: 4
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocations.xml"
+  children:
+  - CMUGuideLoreGalaxyMap
+  - CMUGuideLoreEarthMap
+  - CMUGuideLoreNeroidSector
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocHopesRetreat
+  name: cmu-guide-entry-lore-loc-hopes-retreat
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocHopesRetreat.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocHybrisaMetropolitan
+  name: cmu-guide-entry-lore-loc-hybrisa-metropolitan
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocHybrisaMetropolitan.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocTrijent
+  name: cmu-guide-entry-lore-loc-trijent
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocTrijent.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocBarkersLament
+  name: cmu-guide-entry-lore-loc-barkers-lament
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocBarkersLament.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocBosenmoriBasho
+  name: cmu-guide-entry-lore-loc-bosenmori-basho
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocBosenmoriBasho.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocChancesClaim
+  name: cmu-guide-entry-lore-loc-chances-claim
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocChancesClaim.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocCorsatStation
+  name: cmu-guide-entry-lore-loc-corsat-station
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocCorsatStation.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocFiorina
+  name: cmu-guide-entry-lore-loc-fiorina
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocFiorina.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocFlight
+  name: cmu-guide-entry-lore-loc-flight
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocFlight.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocKutjevo
+  name: cmu-guide-entry-lore-loc-kutjevo
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocKutjevo.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocLv624
+  name: cmu-guide-entry-lore-loc-lv624
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocLv624.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocPortNereid
+  name: cmu-guide-entry-lore-loc-port-nereid
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocPortNereid.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocShepherdsPride
+  name: cmu-guide-entry-lore-loc-shepherds-pride
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocShepherdsPride.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocShivasSnowball
+  name: cmu-guide-entry-lore-loc-shivas-snowball
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocShivasSnowball.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocSolarisGulch
+  name: cmu-guide-entry-lore-loc-solaris-gulch
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocSolarisGulch.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocStableGarrison
+  name: cmu-guide-entry-lore-loc-stable-garrison
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocStableGarrison.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreLocSorokyneStrata
+  name: cmu-guide-entry-lore-loc-sorokyne-strata
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreLocSorokyneStrata.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreNeroidSector
+  name: cmu-guide-entry-lore-neroid-sector
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Locations/CMULoreNeroidSector.xml"
+  children:
+  - CMUGuideLoreLocBarkersLament
+  - CMUGuideLoreLocBosenmoriBasho
+  - CMUGuideLoreLocChancesClaim
+  - CMUGuideLoreLocCorsatStation
+  - CMUGuideLoreLocFiorina
+  - CMUGuideLoreLocFlight
+  - CMUGuideLoreLocHopesRetreat
+  - CMUGuideLoreLocHybrisaMetropolitan
+  - CMUGuideLoreLocKutjevo
+  - CMUGuideLoreLocLv624
+  - CMUGuideLoreLocPortNereid
+  - CMUGuideLoreLocTrijent
+  - CMUGuideLoreLocShepherdsPride
+  - CMUGuideLoreLocShivasSnowball
+  - CMUGuideLoreLocSolarisGulch
+  - CMUGuideLoreLocSorokyneStrata
+  - CMUGuideLoreLocStableGarrison
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUADoves
+  name: cmu-guide-entry-lore-ua-doves
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/Politics/CMULoreDoves.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUAHawks
+  name: cmu-guide-entry-lore-ua-hawks
+  priority: 1
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/Politics/CMULoreHawks.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUAMagpies
+  name: cmu-guide-entry-lore-ua-magpies
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/Politics/CMULoreMagpies.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreUAPolitics
+  name: cmu-guide-entry-lore-ua-politics
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/UA/Politics/CMULoreUAPolitics.xml"
+  children:
+  - CMUGuideLoreUADoves
+  - CMUGuideLoreUAHawks
+  - CMUGuideLoreUAMagpies
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreApes
+  name: cmu-guide-entry-lore-apes
+  priority: 5
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreApes.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreIHRO
+  name: cmu-guide-entry-lore-ihro
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Factions/International/CMULoreIHRO.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreCultists
+  name: cmu-guide-entry-lore-cultists
+  priority: 0
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreCultists.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideLoreTribals
+  name: cmu-guide-entry-lore-tribals
+  priority: 6
+  text: "/ServerInfo/Guidebook/CMU14/Lore/Organisms/CMULoreTribals.xml"

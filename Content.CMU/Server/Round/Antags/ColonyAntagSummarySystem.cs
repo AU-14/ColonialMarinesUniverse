@@ -1,14 +1,17 @@
 using Content.Server.Antag;
 using Content.Server.Antag.Components;
-using Content.Server.CMU14.Round.Antags.Cannibal;
 using Content.Server.CMU14.Round.Antags.StrikeOrganizer;
 using Content.Server.GameTicking;
 using Content.Server.Roles;
 using Content.Shared.CMU14.Round.Antags.Arsonist;
 using Content.Shared.CMU14.Round.Antags.BountyHunter;
+using Content.Shared.CMU14.Round.Antags.Cannibal;
 using Content.Shared.CMU14.Round.Antags.CLFSaboteur;
 using Content.Shared.CMU14.Round.Antags.ColonyBounty;
 using Content.Shared.CMU14.Round.Antags.CorporateAgent;
+using Content.Shared.CMU14.Round.Antags.Replicant;
+using Content.Server.CMU14.Round.Antags.Rider;
+using Content.Shared.CMU14.Round.Antags.Rider;
 using Content.Shared.CMU14.Round.Antags.StrikeOrganizer;
 using Content.Shared.CMU14.Round.Antags.Vigilante;
 using Content.Shared.Mind;
@@ -41,7 +44,7 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
         while (rules.MoveNext(out var ruleUid, out _))
         {
             if (MetaData(ruleUid).EntityPrototype is not { } proto
-                || !ColonyAntagsRuleSystem.AntagRulePrototypes.ContainsKey(proto.ID))
+                || !ColonyAntagsRuleSystem.IsColonyAntagRule(proto.ID))
                 continue;
 
             foreach (var (mind, data, name) in _antag.GetAntagIdentifiers(ruleUid))
@@ -90,7 +93,8 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
         if (lines.Count == 0)
             return;
 
-        args.AddLine("[color=#b0901b][bold]Colony Underworld[/bold][/color]");
+        args.AddLine(string.Empty);
+        args.AddLine(Loc.GetString("cmu-summary-header"));
         foreach (var line in lines)
             args.AddLine(line);
     }
@@ -108,6 +112,34 @@ public sealed partial class ColonyAntagSummarySystem : EntitySystem
             return agent.Completed
                 ? Loc.GetString("cmu-summary-detail-agent-complete", ("corporation", agent.Corporation))
                 : Loc.GetString("cmu-summary-detail-agent-failed", ("corporation", agent.Corporation));
+
+        if (EntityManager.TryGetComponent<ReplicantComponent>(body, out var replicant))
+            return replicant.Transformed
+                ? Loc.GetString("cmu-summary-detail-replicant-replaced", ("target", replicant.TargetName ?? string.Empty))
+                : Loc.GetString("cmu-summary-detail-replicant-never");
+
+        if (body is { } riderBody
+            && EntityManager.TryGetComponent<RiderComponent>(riderBody, out var rider))
+        {
+            var win = EntityManager.System<RiderSystem>().EvaluateWin((riderBody, rider));
+            var key = rider.Flavor switch
+            {
+                RiderFlavor.Leapfrog => win
+                    ? "cmu-summary-detail-rider-leapfrog-win"
+                    : "cmu-summary-detail-rider-leapfrog-fail",
+                RiderFlavor.Puppeteer => win
+                    ? "cmu-summary-detail-rider-puppeteer-win"
+                    : "cmu-summary-detail-rider-puppeteer-fail",
+                _ => rider.Host != null
+                    ? "cmu-summary-detail-rider-riding"
+                    : "cmu-summary-detail-rider-free",
+            };
+
+            return Loc.GetString(key,
+                ("hosts", rider.HostsRidden),
+                ("credited", rider.CreditedHosts),
+                ("minutes", (int) rider.TotalRideTime.TotalMinutes));
+        }
 
         if (EntityManager.TryGetComponent<CLFSaboteurComponent>(body, out var saboteur)
             && saboteur.Count > 0)

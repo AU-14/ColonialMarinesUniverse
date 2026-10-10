@@ -7,37 +7,37 @@
     edges:
     - to: half
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 1
         doAfter: 1
 
     - to: straight
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 1
         doAfter: 1
 
     - to: bend
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 1
         doAfter: 1
 
     - to: tjunction
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 1
         doAfter: 1
 
     - to: fourway
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 1
         doAfter: 1
 
   - node: half
     entity: !type:CreateVariants
-      values: [ GasPipeHalf, GasPipeHalfAlt1, GasPipeHalfAlt2 ]
+      values: [ CMUGasPipeHalf, CMUGasPipeHalfAlt1, CMUGasPipeHalfAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -45,7 +45,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 1
       - !type:DeleteEntity
       steps:
@@ -54,7 +54,7 @@
 
   - node: straight
     entity: !type:CreateVariants
-      values: [ GasPipeStraight, GasPipeStraightAlt1, GasPipeStraightAlt2 ]
+      values: [ CMUGasPipeStraight, CMUGasPipeStraightAlt1, CMUGasPipeStraightAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -62,7 +62,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 1
       - !type:DeleteEntity
       steps:
@@ -71,7 +71,7 @@
 
   - node: bend
     entity: !type:CreateVariants
-      values: [ GasPipeBend, GasPipeBendAlt1, GasPipeBendAlt2 ]
+      values: [ CMUGasPipeBend, CMUGasPipeBendAlt1, CMUGasPipeBendAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -79,7 +79,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 1
       - !type:DeleteEntity
       steps:
@@ -88,7 +88,7 @@
 
   - node: tjunction
     entity: !type:CreateVariants
-      values: [ GasPipeTJunction, GasPipeTJunctionAlt1, GasPipeTJunctionAlt2 ]
+      values: [ CMUGasPipeTJunction, CMUGasPipeTJunctionAlt1, CMUGasPipeTJunctionAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -96,7 +96,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 1
       - !type:DeleteEntity
       steps:
@@ -105,7 +105,7 @@
 
   - node: fourway
     entity: !type:CreateVariants
-      values: [ GasPipeFourway, GasPipeFourwayAlt1, GasPipeFourwayAlt2 ]
+      values: [ CMUGasPipeFourway, CMUGasPipeFourwayAlt1, CMUGasPipeFourwayAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -113,7 +113,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 1
       - !type:DeleteEntity
       steps:

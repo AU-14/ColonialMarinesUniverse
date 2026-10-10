@@ -15,11 +15,11 @@
   announceAsSurvivors: true
   partyspawn: ParamarinesSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
   weight: 15
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 3
+  ghostsNeeded: 3
   roundstart: false
 
 - type: partySpawn
@@ -38,11 +38,11 @@
   announceAsSurvivors: true
   partyspawn: ParamarinesCommandSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_response_shuttle.yml
   weight: 5
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false
 
 - type: thirdParty
@@ -51,10 +51,10 @@
   displayName: TWE Royal Paramarines (Survivors)
   entrymethod: ground
   weight: 5
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
   announcearrival: ''
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - colonyfall

@@ -23,9 +23,7 @@ public sealed partial class VigilanteSystem : EntitySystem
     }
 
     private void OnVigilanteSpawned(EntityUid uid, VigilanteComponent comp, ComponentStartup args)
-    {
-        comp.NextFax = _timing.CurTime + comp.FaxDelay;
-    }
+        => comp.NextFax = _timing.CurTime + comp.FaxDelay;
 
     public override void Update(float frameTime)
     {

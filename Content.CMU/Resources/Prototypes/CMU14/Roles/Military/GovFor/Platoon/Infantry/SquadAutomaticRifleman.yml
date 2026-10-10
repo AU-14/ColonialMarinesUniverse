@@ -1,11 +1,12 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 0
   id: AU14JobSquadAutomaticRiflemanBaseAbstract
   name: au14-job-name-govforsquadautomaticrifleman
   description: au14-job-description-govforsquadautomaticrifleman
   icon: "AU14JobIconAFN"
-  spawnMenuRoleName: Automatic Rifleman (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-automatic-rifleman-govfor 
   startingGear: AU14GearGOVFORSquadAutomaticRifleman
   dummyStartingGear: AU14GearGOVFORAutoRiflemanDummy
   playTimeTracker: AU14JobGOVFORSquadAutomaticRifleman
@@ -64,6 +65,9 @@
       prefix: au14-job-prefix-AU14JobGOVFORSquadAutomaticRiflemanWYPMC
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 36000 # 10 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -77,6 +81,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -152,6 +158,7 @@
   dummyStartingGear: AU14GearopforAutoRiflemanDummy
   accessGroups:
   - AU14OpforGunner
+  useLoadoutOfJob: AU14JobGOVFORSquadAutomaticRifleman
 
 - type: startingGear
   id: AU14GearopforSquadAutomaticRifleman

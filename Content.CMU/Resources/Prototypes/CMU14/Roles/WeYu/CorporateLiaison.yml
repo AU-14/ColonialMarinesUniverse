@@ -10,6 +10,17 @@
 - type: job
   parent: AU14JobCivilianCorporateLiaisonBase
   id: AU14JobCivilianCorporateLiaison
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
+  - !type:DepartmentTimeRequirement
+    department: AU14DepartmentCorporate
+    time: 18000 # 5 hours
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: WY
   roundRole: CivilianCorporateLiaison
@@ -66,7 +77,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
-  spawnMenuRoleName: WY Liaison (CMU)
+  spawnMenuRoleName: au14-spawn-role-name-wy-liaison
   accessGroups:
   - Colonist
   - auadmin
@@ -88,6 +99,7 @@
     pocket1: AU14StampLiaison
   inhand:
   - RMCPortableVendorCorporate
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

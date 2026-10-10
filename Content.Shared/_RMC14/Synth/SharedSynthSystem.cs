@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Damage; // CMU14
 using Content.Shared._RMC14.IdentityManagement;
+using Content.Shared._RMC14.Marines.Skills; // CMU14
 using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared._RMC14.Medical.Unrevivable;
@@ -36,6 +37,7 @@ namespace Content.Shared._RMC14.Synth;
 public abstract partial class SharedSynthSystem : EntitySystem
 {
     private static readonly TimeSpan UnableUsePopupCooldown = TimeSpan.FromSeconds(1);
+    private static readonly EntProtoId<SkillDefinitionComponent> ConstructionSkill = "RMCSkillConstruction"; // CMU14
     private static readonly ProtoId<DamageGroupPrototype>[] SynthImmuneGroups = ["Toxin", "Airloss"]; // CMU14
     private readonly HashSet<ProtoId<DamageTypePrototype>> _synthImmuneTypes = new(); // CMU14
 
@@ -50,6 +52,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
     [Dependency] private RMCStatusEffectSystem _rmcStatusEffects = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private SkillsSystem _skills = default!; // CMU14
     [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
@@ -278,7 +281,9 @@ public abstract partial class SharedSynthSystem : EntitySystem
         }
 
         var ev = new RMCSynthRepairEvent();
-        var repairTime = selfRepair ? synth.Comp.SelfRepairTime : synth.Comp.RepairTime;
+        var repairTime = selfRepair
+            ? synth.Comp.SelfRepairTime
+            : synth.Comp.RepairTime * _skills.GetSkillDelayMultiplier(user, ConstructionSkill); // CMU14
         var doAfter = new DoAfterArgs(EntityManager, user, repairTime, ev, synth, used: args.Used)
         {
             BreakOnMove = true,

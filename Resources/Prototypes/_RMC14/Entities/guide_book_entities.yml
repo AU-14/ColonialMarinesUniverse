@@ -219,6 +219,7 @@
   components:
   - type: RemoveComponents
     components:
+    - type: RMCGibOnDeath
     - type: EmitSoundOnSpawn
       sound:
         path: /Audio/_RMC14/Xeno/alien_queen_command.ogg

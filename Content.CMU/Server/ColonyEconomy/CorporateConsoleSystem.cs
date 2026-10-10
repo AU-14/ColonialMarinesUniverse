@@ -114,15 +114,10 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         if (Math.Abs(oldTariff - clamped) > 0.01f)
         {
             var sound = new Robust.Shared.Audio.SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-            //_chat.DispatchGlobalAnnouncement(
-            //    $"Corporate transit tariff has been set to {clamped:F0}%. Submission payouts to the colony have been adjusted.",
-            //    "Corporate Affairs",
-            //    playSound: true,
-            //    announcementSound: sound); // CMU14: xenos must not receive colony announcements
             _chat.DispatchFilteredAnnouncement(
-                ColonyAnnouncements.Recipients(EntityManager), // CMU14
-                $"Corporate transit tariff has been set to {clamped:F0}%. Submission payouts to the colony have been adjusted.",
-                sender: "Corporate Affairs",
+                ColonyAnnouncements.Recipients(EntityManager),
+                Loc.GetString("corporate-console-tariff-announcement", ("percent", $"{clamped:F0}")),
+                sender: Loc.GetString("corporate-console-announcement-sender"),
                 playSound: true,
                 announcementSound: sound);
         }
@@ -145,11 +140,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         if (!_proto.TryIndex(partyProto.PartySpawn, out var spawnProto))
             return;
 
-        if (!_thirdParty.SpawnThirdParty(partyProto, spawnProto, false))
-        {
-            _popup.PopupEntity("Unable to dispatch support at this time.", uid, msg.Actor);
-            return;
-        }
+        _thirdParty.SpawnThirdParty(partyProto, spawnProto, false);
 
         // Deduct from ALL corporate consoles (they share one budget)
         var q = EntityQueryEnumerator<CorporateConsoleComponent>();

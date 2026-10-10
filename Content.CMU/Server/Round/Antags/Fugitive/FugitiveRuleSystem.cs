@@ -1,8 +1,7 @@
 using Content.Server.CMU14.Systems;
 using Content.Server.GameTicking.Rules;
 using Content.Server.CMU14.Round.Antags.ColonyBounty;
-using Content.Shared.Paper;
-using Robust.Shared.Maths;
+using Robust.Shared.GameObjects;
 
 namespace Content.Server.CMU14.Round.Antags.Fugitive;
 
@@ -17,19 +16,5 @@ public sealed partial class FugitiveRuleSystem : GameRuleSystem<FugitiveRuleComp
     }
 
     private void OnFugitiveSpawned(EntityUid uid, FugitiveComponent component, ComponentStartup args)
-    {
-        var name = EntityManager.GetComponentOrNull<MetaDataComponent>(uid)?.EntityName ?? "Fugitive";
-
-        _wantedSystem.SendFaxToGroup(
-            ColonyCmbFax.MarshalBureauFaxGroup,
-            "Fugitive Alert",
-            ColonyCmbFax.Build("Fugitive Alert",
-                $"A long time criminal, [bold]{name}[/bold], has been located hiding out near your duty station. " +
-                "He has a sizeable bounty and is wanted ALIVE. Bring him in and get that bounty, more information on your records console."),
-            "paper_stamp-cmb",
-            new List<StampDisplayInfo>
-            {
-                new() { StampedColor = Color.FromHex("#b0901b"), StampedName = "CMB" },
-            }, ColonyCmbFax.CmbPaperPrototype);
-    }
+        => _wantedSystem.SendPaperToGroup(ColonyCmbFax.MarshalBureauFaxGroup, "AUPaperFugitive");
 }

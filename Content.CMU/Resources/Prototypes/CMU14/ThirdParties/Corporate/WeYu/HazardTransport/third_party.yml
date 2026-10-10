@@ -13,13 +13,14 @@
   id: WYHT
   announceAsSurvivors: true
   partyspawn: WYHTSpawn
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
+    - forceonforce
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml
   weight: 20
-  minplayers: 30
+  # minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 5
+  ghostsNeeded: 5
   roundstart: false

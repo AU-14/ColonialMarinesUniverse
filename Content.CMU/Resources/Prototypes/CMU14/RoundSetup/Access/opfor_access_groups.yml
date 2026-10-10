@@ -28,6 +28,13 @@
   id: AU14OpforSquad
 
 - type: accessGroup
+  id: AU14OpforWeaponsSpecialist
+  tags:
+  - AU14AccessOpforSquadWeaponsSpecialist
+  - AU14AccessOpforSquad
+  - AU14AccessOpfor
+
+- type: accessGroup
   id: AU14OpforFTL
   tags:
   - AU14AccessOpfor
@@ -76,3 +83,17 @@
   tags:
   - AU14AccessOpfor
   - AU14AccessOpforMedical
+
+- type: accessGroup
+  id: AU14OpforCommandNoLogistics
+  tags:
+  - AU14AccessOpfor
+  - AU14AccessOpforSquad
+  - AU14AccessOpforCommand
+  - AU14AccessOpforSecurity
+  - AU14AccessOpforFTL
+  - AU14AccessOpforMedical
+  - AU14AccessOpforEngineering
+  - AU14AccessOpforGunner
+  - AU14AccessOpforPilot
+  - AU14AccessOpforVehicleCrew

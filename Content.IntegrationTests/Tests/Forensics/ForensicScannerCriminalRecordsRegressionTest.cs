@@ -59,6 +59,9 @@ public sealed class ForensicScannerCriminalRecordsRegressionTest : GameTest
                 [map.Grid.Owner],
                 "Records",
                 gameMap);
+            // cmu edit start
+            station = Server.System<Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem>().GetRecords()!.Value;
+            // cmu edit end
             scanner = SEntMan.SpawnEntity("ForensicScanner", map.GridCoords);
             humanoid = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             nonHumanoid = SEntMan.SpawnEntity("ForensicScannerRecordsNonHumanoid", map.GridCoords);
@@ -80,7 +83,7 @@ public sealed class ForensicScannerCriminalRecordsRegressionTest : GameTest
                 scannerComponent.Fingerprints.Clear();
                 scannerComponent.Fingerprints.Add("PRINT-ONE");
 
-                var firstScan = new ForensicScannerScannedEvent(humanoid);
+                var firstScan = new ForensicScannerScannedEvent(scanner, humanoid); // CMU14
                 SEntMan.EventBus.RaiseLocalEvent(scanner, ref firstScan);
 
                 var general = records.GetRecordsOfType<GeneralStationRecord>(station).ToArray();
@@ -100,7 +103,7 @@ public sealed class ForensicScannerCriminalRecordsRegressionTest : GameTest
                 scannerComponent.DNAs.Add("DNA-TWO");
                 scannerComponent.Fingerprints.Clear();
                 scannerComponent.Fingerprints.Add("PRINT-TWO");
-                var rescan = new ForensicScannerScannedEvent(humanoid);
+                var rescan = new ForensicScannerScannedEvent(scanner, humanoid); // CMU14
                 SEntMan.EventBus.RaiseLocalEvent(scanner, ref rescan);
 
                 general = records.GetRecordsOfType<GeneralStationRecord>(station).ToArray();
@@ -113,7 +116,7 @@ public sealed class ForensicScannerCriminalRecordsRegressionTest : GameTest
                     Assert.That(general[0].Item2.Fingerprint, Is.EqualTo("PRINT-TWO"));
                 });
 
-                var nonHumanoidScan = new ForensicScannerScannedEvent(nonHumanoid);
+                var nonHumanoidScan = new ForensicScannerScannedEvent(scanner, nonHumanoid); // CMU14
                 SEntMan.EventBus.RaiseLocalEvent(scanner, ref nonHumanoidScan);
                 Assert.Multiple(() =>
                 {

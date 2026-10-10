@@ -29,6 +29,7 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: >
       vars.DONT_UPDATE_CHANGELOG != 'true'
       && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
@@ -61,6 +62,7 @@ jobs:
   discord-webhook:
     name: Discord webhook
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: update
     if: needs.update.outputs.changes_detected == 'true'
     permissions:

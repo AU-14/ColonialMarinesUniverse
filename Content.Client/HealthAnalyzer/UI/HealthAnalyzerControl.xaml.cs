@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Client.CMU14.Temperature; // CMU14
 using Content.Shared.Atmos;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
@@ -89,8 +90,9 @@ public sealed partial class HealthAnalyzerControl : BoxContainer
 
         // Basic Diagnostic
 
+        // CMU14: client temperature unit preference
         TemperatureLabel.Text = !float.IsNaN(state.Temperature)
-            ? $"{state.Temperature - Atmospherics.T0C:F1} °C ({state.Temperature:F1} K)"
+            ? $"{TemperatureDisplay.FromKelvin(state.Temperature):F1} °{TemperatureDisplay.Unit} ({state.Temperature:F1} K)"
             : Loc.GetString("health-analyzer-window-entity-unknown-value-text");
 
         BloodLabel.Text = !float.IsNaN(state.BloodLevel)

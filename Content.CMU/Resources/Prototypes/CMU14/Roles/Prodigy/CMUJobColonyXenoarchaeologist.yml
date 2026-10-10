@@ -26,7 +26,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: cmu-colony-supervisors-colonist
-  spawnMenuRoleName: Colony Xenoarchaeologist (CMU)
+  spawnMenuRoleName: cmu-spawn-role-colony-xenoarchaeologist-cmu 
   accessGroups:
   - Colonist
   roleWeight: 0.25

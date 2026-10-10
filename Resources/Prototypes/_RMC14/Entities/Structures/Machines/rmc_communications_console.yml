@@ -68,7 +68,7 @@
     key: enum.MarineCommunicationsComputerUI.Key
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
-    access: [ [ "AU14AccessGovforCommand" ] ]
+    access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ] # CMU14
   - type: UserInterface
     interfaces:
       enum.MarineCommunicationsComputerUI.Key:
@@ -184,7 +184,7 @@
     key: enum.TacticalMapComputerUi.Key
   - type: ActivatableUIRequiresAccess
   - type: AccessReader
-    access: [ [ "AU14AccessGovforCommand" ] ]
+    access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ] # CMU14
   - type: UserInterface
     interfaces:
       enum.TacticalMapComputerUi.Key:

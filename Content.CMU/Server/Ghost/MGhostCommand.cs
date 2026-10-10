@@ -19,8 +19,6 @@ public sealed partial class MGhostCommand : LocalizedCommands
     [Dependency] private IEntityManager _entities = default!;
 
     public override string Command => "mghost";
-    public override string Description => "Makes you a Mentor Ghost.";
-    public override string Help => "mghost";
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {

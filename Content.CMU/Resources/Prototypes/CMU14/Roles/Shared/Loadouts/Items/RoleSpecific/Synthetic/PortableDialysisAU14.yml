@@ -1,5 +1,4 @@
 - type: loadout
   id: PortableDialysisAU14
-  cost: 15
   inhand:
   - RMCPortableDialysis

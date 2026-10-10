@@ -4,6 +4,7 @@
   id: BaseMachine
   category: construction-category-machines
   placementMode: SnapgridCenter
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM (inherited by all machine/computer recipes)
   conditions:
   - !type:TileNotBlocked
 

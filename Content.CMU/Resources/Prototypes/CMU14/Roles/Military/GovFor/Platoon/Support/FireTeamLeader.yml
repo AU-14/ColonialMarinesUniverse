@@ -5,13 +5,13 @@
   name: au14-job-name-radiotelephoneoperator
   description: au14-job-description-radiotelephoneoperator
   icon: "AU14JobIconFTL"
-  spawnMenuRoleName: Fireteam Leader (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-fireteam-leader-govfor 
   startingGear: AU14GearGOVFORRadioTelephoneOperator
   dummyStartingGear: AU14GearGOVFORRadioTelephoneOperatorDummy
   playTimeTracker: AU14JobGOVFORRadioTelephoneOperator
   overwatchSortPriority: -3
   overwatchRoleName: Fire Team Leaders
-  displayWeight: 5
+  displayWeight: 3
   accessGroups:
   - AU14GovforFTL
 
@@ -23,6 +23,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: AU14CallsignRole
     radioTag: FTL
   - type: ANPRCRadioUser # radio trained so an FTL can run the manpack if the RTO drops, they don't spawn with one
@@ -73,6 +74,9 @@
       prefix: au14-job-prefix-AU14JobGOVFORRadioTelephoneOperatorWYPMC
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -86,6 +90,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -155,6 +161,7 @@
   supervisors: au14-job-supervisors-opfor
   accessGroups:
   - AU14OpforFTL
+  useLoadoutOfJob: AU14JobGOVFORRadioTelephoneOperator
 
 - type: startingGear
   id: AU14GearopforRadioTelephoneOperator

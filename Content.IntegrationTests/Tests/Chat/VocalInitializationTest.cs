@@ -13,6 +13,7 @@ public sealed class VocalInitializationTest : GameTest
 {
     private static readonly object[][] ProfileVoices =
     [
+        ["AU14MobWorkingJoeColony", "WorkingJoe", "AU14WorkingJoeSounds"],
         ["CMMobHuman", "Human", "RMCMaleHuman"],
         ["CMMobAvali", "Avali", "RMCMaleAvali"],
         ["CMMobArachnid", "Arachnid", "RMCUnisexArachnid"],
@@ -32,7 +33,6 @@ public sealed class VocalInitializationTest : GameTest
 
     private static readonly object[][] SeededNonProfileVoices =
     [
-        ["AU14MobWorkingJoeColony", "AU14WorkingJoeSounds"],
         ["CMMobSmallHostKobold", "MaleReptilian"],
         ["RMCMobSmallHostFarwa", "RMCMaleVulpkanin"],
         ["RMCMobSmallHostNeaera", "RMCMaleSkrell"],

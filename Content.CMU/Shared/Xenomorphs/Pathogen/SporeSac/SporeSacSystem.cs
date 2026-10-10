@@ -26,6 +26,9 @@ public sealed partial class CMUPathogenSporeSacSystem : EntitySystem
 
     private void OnStartCollide(Entity<CMUPathogenSporeSacComponent> sac, ref StartCollideEvent args)
     {
+        if (!_net.IsServer)
+            return;
+
         if (sac.Comp.Status != SporeSacStatus.Waiting)
             return;
 

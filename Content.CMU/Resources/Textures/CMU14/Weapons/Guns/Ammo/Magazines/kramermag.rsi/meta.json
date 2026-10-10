@@ -1,20 +1,20 @@
 {
   "version": 1,
-  "license": "CC-BY-SA-3.0",
-  "copyright": "Made by patogrone for AU14",
+  "license": "CC-BY-NC-SA-3.0",
+  "copyright": "Made by PatoGrone",
   "size": {
-    "x": 64,
-    "y": 64
+    "x": 32,
+    "y": 32
   },
   "states": [
+    {
+      "name": "base"
+    },
     {
       "name": "mag-1"
     },
     {
       "name": "ammo_band"
-    },
-    {
-      "name": "base"
     }
   ]
 }

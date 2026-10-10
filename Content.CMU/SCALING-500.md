@@ -1,5 +1,11 @@
 # Серверная производительность: цель 500+ игроков
 
+This report records historical measurements on base `2044182137`. PR 2135 now
+incorporates master `101156f22f` and retains its sandbox-compatible pooled
+reagent lists instead of the original `ArrayPool` helper. See
+[the integration report](PERFORMANCE-20261009.md) for the current-base changes.
+The measurements below have not been repeated on the integrated revision.
+
 Рабочая ветка: `codex/performance-500`, основа `2044182137`.
 Проблема: задержки действий у всех игроков. Профиль боевого сервера и его
 характеристики пока отсутствуют; причина реальных задержек не установлена.

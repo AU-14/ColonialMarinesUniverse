@@ -28,8 +28,6 @@
     # threats:
     # - XenoThreat # map has no threat spawn markers
     # - NeomorphsThreat # map has no threat spawn markers
-    # - AbominationsThreatDS # no xenocf markers
-    # - ApeThreatDS # map has no threat spawn markers
     # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers
@@ -64,7 +62,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     joboverrides:
       AU14JobLEOLeaderBase: AU14JobCivilianNSPAInspector
       AU14JobLEOBase: AU14JobCivilianNSPAConstable
@@ -121,6 +119,7 @@
 
             AU14JobCivilianHeadOfEngineering: [1, 1]
             AU14JobCivilianEngineer: [5, 5]
+            CMUJobCivilianAtmosian: [1, 2]
 
             # Medical
             AU14JobCivilianHeadPhysician: [1, 1]

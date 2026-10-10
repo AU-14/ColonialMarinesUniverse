@@ -1,0 +1,111 @@
+- type: antagSpecifier
+  id: Replicant
+  prefRoles: [ ReplicantRole ]
+  jobBlacklistGroup:
+  - AllGovforCommandStaff
+  - AllOpforCommandStaff
+  briefing:
+    text: replicant-role-greeting
+    color: MediumOrchid
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearReplicant
+  startingSkills:
+    RMCSkillCqc: 2
+    RMCSkillEngineer: 2
+    RMCSkillConstruction: 2
+    RMCSkillOverwatch: 1
+    RMCSkillMedical: 2
+    RMCSkillSurgery: 2
+    RMCSkillResearch: 1
+    RMCSkillMeleeWeapons: 1
+    RMCSkillPilot: 1
+    RMCSkillPolice: 1
+    RMCSkillFireman: 3
+    RMCSkillFirearms: 1
+    RMCSkillPowerLoader: 1
+    RMCSkillVehicles: 1
+    RMCSkillJtac: 2
+    RMCSkillIntel: 1
+    RMCSkillDomestics: 1
+    RMCSkillNavigations: 1
+  components:
+  - type: Replicant
+  - type: Synth
+    changeBrain: false
+    canUseGuns: true
+    hideGeneration: true
+    useHumanHealthIcons: true
+  - type: ColonyBounty
+    bounty: 2600
+    reason: Malfunctioning synthetic infiltrator - assume no identity is genuine
+    recordName: Synth Infiltrator (Unknown)
+    capturedFaxPaper: CMUPaperColonyAntagCaptured
+  mindRoles:
+  - MindRoleReplicant
+
+- type: entity
+  id: Replicant
+  parent: BaseGameRule
+  components:
+  - type: GameRule
+  - type: ReplicantRule
+  - type: AntagSelection
+    selectionTime: JobsAssigned
+    antags:
+    - !type:FixedAntagCount
+      proto: Replicant
+      count: 1
+
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleReplicant
+  name: Synth Replicant Mind Role
+  components:
+  - type: MindRole
+    antagPrototype: ReplicantRole
+    exclusiveAntag: true
+    roleType: SoloAntagonist
+
+- type: antag
+  parent: CMUAntagColonyBase
+  id: ReplicantRole
+  name: roles-antag-replicant-name
+  setPreference: true
+  objective: roles-antag-replicant-objective
+
+- type: startingGear
+  id: AU14GearReplicant
+  equipment:
+    pocket1: CMUForgedTransponder
+  storage:
+    back:
+    - CMUPaperWantedSynthInfiltrator
+    - RMCLighter
+
+- type: entity
+  parent: BaseItem
+  id: CMUForgedTransponder
+  name: unformatted transponder card
+  description: A programmable identification transponder. Its writable surface is still blank.
+  components:
+  - type: ForgedTransponder
+  - type: Item
+    size: Tiny
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/id.rsi
+    state: id_generic
+
+- type: entity
+  id: ActionReplicantAssumeIdentity
+  name: Assume Identity
+  description: Pick a member of the crew and quietly become them. The copy takes time and stillness.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/CMIDs/id.rsi
+      state: plain
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:ReplicantTransformActionEvent

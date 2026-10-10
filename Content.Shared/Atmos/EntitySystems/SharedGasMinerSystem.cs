@@ -1,4 +1,5 @@
 using Content.Shared.Atmos.Components;
+using Content.Shared.CMU14.Atmos; // CMU14
 using Content.Shared.Examine;
 using Content.Shared.Temperature;
 
@@ -24,8 +25,23 @@ public abstract partial class SharedGasMinerSystem : EntitySystem
 
         using (args.PushGroup(nameof(GasMinerComponent)))
         {
+            // CMU14: mixture miners should describe every gas they emit.
+            var gasName = Loc.GetString(_sharedAtmosphereSystem.GetGas(component.SpawnGas).Name);
+            if (TryComp<CMUGasMinerMixtureComponent>(ent, out var mixture))
+            {
+                var gasNames = new List<string>();
+                foreach (var (gas, weight) in mixture.Gases)
+                {
+                    if (weight > 0f && float.IsFinite(weight))
+                        gasNames.Add(Loc.GetString(_sharedAtmosphereSystem.GetGas(gas).Name));
+                }
+
+                if (gasNames.Count > 0)
+                    gasName = string.Join(", ", gasNames);
+            }
+
             args.PushMarkup(Loc.GetString("gas-miner-mines-text",
-                ("gas", Loc.GetString(_sharedAtmosphereSystem.GetGas(component.SpawnGas).Name))));
+                ("gas", gasName)));
 
             args.PushText(Loc.GetString("gas-miner-amount-text",
                 ("moles", $"{component.SpawnAmount:0.#}")));

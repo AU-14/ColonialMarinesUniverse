@@ -49,6 +49,7 @@ using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Profiling; // CMU14
 using Robust.Shared.Random;
+using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Timing;
 using static Content.Shared._RMC14.Requisitions.Components.RequisitionsElevatorMode;
 
@@ -77,6 +78,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     [Dependency] private ProfManager _profiler = default!;
     [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     // CMU14 End
+    [Dependency] private ISerializationManager _serialization = default!;
 
     private static readonly EntProtoId AccountId = "RMCASRSAccount";
     private static readonly EntProtoId PaperRequisitionInvoice = "RMCPaperRequisitionInvoice";
@@ -89,6 +91,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     private bool _sellCargoRewards;
 
     private readonly HashSet<Entity<MobStateComponent>> _toPit = new();
+    private readonly List<EntityUid> _stockUiUpdates = new();
 
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabRequisitionsLogs";
 
@@ -102,7 +105,6 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         SubscribeLocalEvent<ColonyAtmComponent, EntInsertedIntoContainerMessage>(OnMoneyInserted);
 
         SubscribeLocalEvent<RequisitionsComputerComponent, MapInitEvent>(OnComputerMapInit);
-        SubscribeLocalEvent<RequisitionsComputerComponent, ComponentStartup>(OnComputerStartup);
         SubscribeLocalEvent<RequisitionsComputerComponent, ComponentShutdown>(OnComputerShutdown);
         SubscribeLocalEvent<RequisitionsComputerComponent, BeforeActivatableUIOpenEvent>(OnComputerBeforeActivatableUIOpen);
 
@@ -118,12 +120,6 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         Subs.CVar(_config, AU14CCVars.SellCargoRewards, v => _sellCargoRewards = v, true);
     }
 
-    private void OnComputerStartup(EntityUid uid, RequisitionsComputerComponent comp, ComponentStartup args)
-    {
-        ApplyPlatoonCatalogToComputer(uid, comp);
-        ResetStock((uid, comp));
-    }
-
     private void OnComputerMapInit(EntityUid uid, RequisitionsComputerComponent comp, MapInitEvent args)
     {
         // Assign a faction-specific account where applicable
@@ -132,6 +128,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         // Also apply platoon catalog in case the console needs a custom catalog based on current round
         ApplyPlatoonCatalogToComputer(uid, comp);
         AddXRFToCatalog(uid, comp);
+        var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(); RaiseLocalEvent(uid, ref catalogBuilt); // CMU14
         ResetStock((uid, comp));
         Dirty(uid, comp);
     }
@@ -159,6 +156,31 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 break;
         }
         AddEntryToCategory(ent, null, "Research", entry);
+        AddResearchTerminalToCatalog(ent, comp); // CMU14
+    }
+
+    // CMU14 method: supply the terminal for this ASRS faction, including map-authored catalogs.
+    private void AddResearchTerminalToCatalog(EntityUid ent, RequisitionsComputerComponent comp)
+    {
+        var terminal = comp.Faction switch
+        {
+            "govfor" => "CMUCrateResearchTerminalGovfor",
+            "opfor" => "CMUCrateResearchTerminalOpfor",
+            "colony" => "CMUCrateResearchTerminalColony",
+            "corporate" => "CMUCrateResearchTerminal",
+            _ => null,
+        };
+        if (terminal == null)
+            return;
+        // Catalog prototypes and other consoles can share category instances.
+        comp.Categories = comp.Categories.Select(category => new RequisitionsCategory
+        {
+            Name = category.Name,
+            Entries = category.Entries.Where(entry => !entry.Crate.Id.StartsWith("CMUCrateResearchTerminal", StringComparison.Ordinal)).ToList(),
+        }).ToList();
+        if (!comp.Categories.Any(category => category.Name == "Research"))
+            comp.Categories.Add(new RequisitionsCategory { Name = "Research" });
+        AddEntryToCategory(ent, comp, "Research", new RequisitionsEntry { Cost = 100, Crate = terminal });
     }
 
     private void ApplyPlatoonCatalogToComputer(EntityUid consoleUid, RequisitionsComputerComponent comp)
@@ -207,9 +229,10 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             return;
         }
 
-        comp.Categories = catalogComp.Categories != null
-            ? new List<RequisitionsCategory>(catalogComp.Categories)
-            : new List<RequisitionsCategory>();
+        // Each console adds faction-specific entries. Do not mutate the prototype or another
+        // console's entries through a shallow copy of its category list.
+        comp.Categories = _serialization.CreateCopy(catalogComp.Categories, notNullableOverride: true);
+        comp.StockEntriesInitialized = false;
 
         Dirty(consoleUid, comp);
         Log.Debug($"[Requisitions] Applied catalog {catalogProtoId} to console {consoleUid}");
@@ -558,12 +581,16 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
             var query = EntityQueryEnumerator<RequisitionsCustomDeliveryComponent>();
 
-            while (query.MoveNext(out var entityUid, out _))
+            while (query.MoveNext(out var entityUid, out var deliveryComp)) // CMU14
             {
                 // If elevator is full, abort and break out of the loop. Any remaining custom deliveries will be on
                 // the next elevator shipment.
                 if (remainingDeliveries <= 0)
                     break;
+
+                if (!string.IsNullOrEmpty(deliveryComp.Faction) // CMU14
+                    && !deliveryComp.Faction.Equals(comp.Faction, StringComparison.OrdinalIgnoreCase))
+                    continue;
 
                 // Remove the component so it doesn't get "delivered" again next elevator cycle.
                 RemCompDeferred<RequisitionsCustomDeliveryComponent>(entityUid);
@@ -668,6 +695,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         var time = _timing.CurTime;
         var updateUI = false;
+        _stockUiUpdates.Clear();
         var accounts = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (accounts.MoveNext(out var uid, out var account))
         {
@@ -737,7 +765,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         while (computers.MoveNext(out var uid, out var computer))
         {
             if (ProcessStock((uid, computer), time))
-                updateUI = true;
+                _stockUiUpdates.Add(uid);
         }
 
         var elevators = EntityQueryEnumerator<RequisitionsElevatorComponent>();
@@ -775,12 +803,23 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         if (updateUI)
             SendUIStateAll();
+        else
+        {
+            // A stock countdown belongs to one terminal. Account/elevator changes still refresh
+            // all affected state through the existing global path.
+            foreach (var uid in _stockUiUpdates)
+            {
+                if (TryComp<RequisitionsComputerComponent>(uid, out var computer))
+                    SendUIState((uid, computer));
+            }
+        }
     }
 
     private void ResetStock(Entity<RequisitionsComputerComponent> computer)
     {
         RebuildItemizedCatalog(computer);
         computer.Comp.Stock.Clear();
+        computer.Comp.StockEntriesInitialized = false;
         EnsureStockEntries(computer, _timing.CurTime);
     }
 
@@ -791,6 +830,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private void EnsureStockEntries(Entity<RequisitionsComputerComponent> computer, TimeSpan time)
     {
+        if (computer.Comp.StockEntriesInitialized)
+            return;
+
         var validKeys = new HashSet<(int Category, int Order)>();
 
         for (var categoryIndex = 0; categoryIndex < computer.Comp.Categories.Count; categoryIndex++)
@@ -828,6 +870,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             if (!validKeys.Contains(key))
                 computer.Comp.Stock.Remove(key);
         }
+
+        computer.Comp.StockEntriesInitialized = true;
     }
 
     private TimeSpan GetNextStockReplenish(TimeSpan time, RequisitionsEntry entry)
@@ -1097,6 +1141,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private void OnMoneyInserted(EntityUid uid, ColonyAtmComponent comp, EntInsertedIntoContainerMessage args)
     {
+        // CMU14: the colony ATM holds the customer's ID card, and the cash it pays out until it is taken,
+        // in containers of their own; neither is a payment.
+        if (args.Container.ID is ColonyAtmComponent.CardSlotId or ColonyAtmComponent.CashTrayId)
+            return;
+
         int stackCount = 1;
         if (TryComp(args.Entity, out StackComponent? stack))
             stackCount = stack.Count;
@@ -1179,6 +1228,8 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         while (computers.MoveNext(out var uid, out var comp))
         {
             ApplyPlatoonCatalogToComputer(uid, comp);
+            AddResearchTerminalToCatalog(uid, comp); // CMU14
+            var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(); RaiseLocalEvent(uid, ref catalogBuilt); // CMU14
             ResetStock((uid, comp));
             Dirty(uid, comp);
         }

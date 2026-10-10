@@ -1,8 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared._RMC14.Xenonids.Construction.FloorResin; // CMU14
+using Content.Shared._RMC14.Xenonids.Hive; // CMU14
+using Content.Shared._RMC14.Xenonids.Weeds; // CMU14
 using Content.Shared.CMU14.AllianceConsole;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs; // CMU14
+using Content.Shared.Mobs.Components; // CMU14
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes; // CMU14
 using Content.Shared.Weapons.Ranged.Components;
@@ -10,6 +15,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Physics; // CMU14
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Sentry;
@@ -301,14 +307,16 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         // This covers corporate NPCs, synthetics, and other entities that do not carry an ID.
         if (TryComp<NpcFactionMemberComponent>(target, out var targetFaction))
         {
+            // CMU14: hidden factions (CLF) are invisible to sentries. A disguised insurgent
+            // must be judged exactly like the colonist they appear to be.
             foreach (var allianceFriendly in sentry.Comp.AllianceFriendlyNpcFactions)
             {
-                if (targetFaction.Factions.Contains(allianceFriendly))
+                if (HasVisibleFaction(targetFaction, allianceFriendly.Id))
                     return false;
             }
             foreach (var faction in sentry.Comp.FriendlyFactions)
             {
-                if (targetFaction.Factions.Contains(faction))
+                if (HasVisibleFaction(targetFaction, faction))
                     return false;
             }
         }
@@ -331,8 +339,27 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         return false;
     }
 
+    // CMU14 Method: true only when the member holds the faction and that faction is
+    // not hidden. Unknown faction protos count as visible.
+    private bool HasVisibleFaction(NpcFactionMemberComponent member, string faction)
+    {
+        foreach (var f in member.Factions)
+        {
+            if (f.Id != faction)
+                continue;
+
+            return !_prototypes.TryIndex(f, out NpcFactionPrototype? proto) || !proto.Hidden;
+        }
+
+        return false;
+    }
+
     public IEnumerable<EntityUid> GetNearbyIffHostiles(Entity<SentryTargetingComponent> ent, float range)
     {
+        // CMU14: an unconfigured sentry targets no one, matching IsValidTarget
+        if (ent.Comp.FriendlyFactions.Count == 0)
+            yield break;
+
         BuildFriendlyIff(ent.Comp);
 
         // Check every friendly NPC faction so entities without wearable IFF are still protected.
@@ -354,6 +381,20 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         foreach (var target in _factionLookupBuffer)
             _candidateLookupBuffer.Add(target.Owner);
 
+        // CMU14: with a living hostile mob in range, structures drop out of the set
+        // entirely so turrets never farm resin while a xeno closes in
+        var hostileMobNearby = false;
+        foreach (var candidate in _candidateLookupBuffer)
+        {
+            if (!IsFriendlyTarget(candidate)
+                && TryComp<MobStateComponent>(candidate, out var scanMob)
+                && scanMob.CurrentState != MobState.Dead)
+            {
+                hostileMobNearby = true;
+                break;
+            }
+        }
+
         foreach (var target in _candidateLookupBuffer)
         {
             if (target == ent.Owner)
@@ -362,28 +403,51 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
             if (_container.IsEntityInContainer(target))
                 continue;
 
+            // CMU14: invincible hive structures void all sentry damage
+            if (HasComp<InvincibleHiveStructureComponent>(target))
+                continue;
+
+            // CMU14: replaces the per-component weed and resin filters. Projectiles only
+            // collide with hard fixtures (SharedProjectileSystem), so entities without one
+            // are overflown by sentry fire and must never be locked as targets
+            //if (HasComp<XenoWeedsComponent>(target)
+            //    || HasComp<ResinSlowdownModifierComponent>(target)
+            //    || HasComp<ResinSpeedupModifierComponent>(target))
+            //    continue;
+
+            // CMU14: mobs are always eligible, structures need a fixture bullets can hit
+            if (!HasComp<MobStateComponent>(target) && !HasHardFixture(target))
+                continue;
+
             // CMU14: factions flagged sentryProtected are never valid targets (e.g. Provost Office)
             if (TryComp<NpcFactionMemberComponent>(target, out var protectedNpc) && IsSentryProtected(protectedNpc))
                 continue;
 
-            if (IsFriendlyByIff(target))
+            if (IsFriendlyTarget(target))
                 continue;
 
-            if (_friendlyNpcFactionBuffer.Count > 0 &&
-                TryComp<NpcFactionMemberComponent>(target, out var targetNpc))
-            {
-                var isFriendly = false;
-                foreach (var f in targetNpc.Factions)
-                {
-                    if (_friendlyNpcFactionBuffer.Contains(f.Id))
-                    {
-                        isFriendly = true;
-                        break;
-                    }
-                }
-                if (isFriendly)
-                    continue;
-            }
+            // CMU14: replaced by IsFriendlyTarget above.
+            //if (IsFriendlyByIff(target))
+            //    continue;
+            //if (_friendlyNpcFactionBuffer.Count > 0 &&
+            //    TryComp<NpcFactionMemberComponent>(target, out var targetNpc))
+            //{
+            //    var isFriendly = false;
+            //    foreach (var f in targetNpc.Factions)
+            //    {
+            //        if (_friendlyNpcFactionBuffer.Contains(f.Id))
+            //        {
+            //            isFriendly = true;
+            //            break;
+            //        }
+            //    }
+            //    if (isFriendly)
+            //        continue;
+            //}
+
+            // CMU14: mobs out-priority structures
+            if (hostileMobNearby && !HasComp<MobStateComponent>(target))
+                continue;
 
             yield return target;
         }
@@ -394,6 +458,41 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         _friendlyIffBuffer.Clear();
         _targetIffBuffer.Clear();
         _friendlyNpcFactionBuffer.Clear();
+    }
+
+    // CMU14 Method
+    private bool IsFriendlyTarget(EntityUid target)
+    {
+        if (IsFriendlyByIff(target))
+            return true;
+
+        if (_friendlyNpcFactionBuffer.Count > 0
+            && TryComp<NpcFactionMemberComponent>(target, out var targetNpc))
+        {
+            foreach (var f in targetNpc.Factions)
+            {
+                // CMU14: hidden membership can never make a target friendly to the sentry
+                if (_friendlyNpcFactionBuffer.Contains(f.Id) && HasVisibleFaction(targetNpc, f.Id))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    // CMU14 Method
+    private bool HasHardFixture(EntityUid target)
+    {
+        if (!TryComp<FixturesComponent>(target, out var fixtures))
+            return false;
+
+        foreach (var fixture in fixtures.Fixtures.Values)
+        {
+            if (fixture.Hard)
+                return true;
+        }
+
+        return false;
     }
 
     private void ApplyTargeting(Entity<SentryTargetingComponent> ent)

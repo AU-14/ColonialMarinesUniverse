@@ -363,7 +363,16 @@
   name: criminal records computer
   description: This can be used to check criminal records. Only security can modify them.
   components:
+  - type: ContainerContainer
+    containers:
+      board: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  # cmu edit start
   - type: CriminalRecordsConsole
+    securityChannel: radioCMB
+  # cmu edit end
   - type: UserInterface
     interfaces:
       enum.CriminalRecordsConsoleKey.Key:

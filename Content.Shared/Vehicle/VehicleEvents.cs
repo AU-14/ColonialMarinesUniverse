@@ -31,6 +31,16 @@ public readonly record struct VehicleOperatorSetEvent(EntityUid? NewOperator, En
 [ByRefEvent]
 public record struct VehicleCanRunEvent(Entity<VehicleComponent> Vehicle, bool CanRun = true);
 
+// CMU14 event
+/// <summary>Optional controls supplied by a vehicle console or docking assist.</summary>
+[ByRefEvent]
+public record struct VehicleDriveInputEvent
+{
+    public bool Handled;
+    public float Throttle;
+    public float Steering;
+}
+
 /// <summary>
 /// Allows vehicle-specific systems to veto interaction-based entry.
 /// </summary>

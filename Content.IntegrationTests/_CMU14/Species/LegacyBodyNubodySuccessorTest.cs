@@ -160,7 +160,7 @@ public sealed class LegacyBodyNubodySuccessorTest : GameTest
                     Assert.That(SEntMan.HasComponent<PassiveDamageComponent>(human), Is.False);
                     Assert.That(SEntMan.HasComponent<PerishableComponent>(human), Is.False);
                     Assert.That(SEntMan.HasComponent<TemperatureDamageComponent>(human), Is.False);
-                    Assert.That(SEntMan.HasComponent<StunVisualsComponent>(human), Is.False);
+                    Assert.That(SEntMan.HasComponent<StunVisualsComponent>(human), Is.True);
                 });
             }
             finally

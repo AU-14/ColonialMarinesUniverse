@@ -8,7 +8,7 @@
           completed:
             - !type:SnapToGrid { }
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 5
               doAfter: 1
     - node: toilet
@@ -17,7 +17,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 5
             - !type:EmptyAllContainers {}
             - !type:DestroyEntity {}

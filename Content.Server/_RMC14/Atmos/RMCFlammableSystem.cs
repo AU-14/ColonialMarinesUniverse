@@ -24,6 +24,12 @@ public sealed partial class RMCFlammableSystem : SharedRMCFlammableSystem
         if (maxStacks != null && stacks > maxStacks)
             stacks = maxStacks.Value;
 
+        // CMU14: SetFireStacks also clamps to the mob's MaximumFireStacks, wizden default 10,
+        // which defeated the fuel's own maxStacks and made every fuel equally easy to put out.
+        if (maxStacks is { } max
+            && max > flammable.Comp.MaximumFireStacks)
+            flammable.Comp.MaximumFireStacks = max;
+
         _flammable.SetFireStacks(flammable, stacks, flammable);
         _flammable.Ignite(flammable.Owner, flammable.Owner, flammable.Comp);
         if (!flammable.Comp.OnFire)

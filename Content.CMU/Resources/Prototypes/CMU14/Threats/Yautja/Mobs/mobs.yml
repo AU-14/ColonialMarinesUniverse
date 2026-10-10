@@ -1,10 +1,16 @@
 - type: entity
   save: false
-  parent: [ AppearanceYautja, CMMobHuman ]
+  parent: [AppearanceYautja, CMMobHuman]
   id: CMUMobYautja
   name: Yautja Hunter
   suffix: Yautja, Event
   components:
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: CMUYautjaHunger
+      Thirst:
+        prototype: CMUYautjaThirst
   - type: Language
     spokenLanguages:
     - Yautja
@@ -15,19 +21,37 @@
     currentLanguage: Yautja
     defaultLanguage: Yautja
   - type: Yautja
-  - type: YautjaHeatResistance
+    xenoTackleSuccessChance: 0.75
+    xenoTackleSuccessesRequired: 3
+    xenoTackleExpireAfter: 10
+  - type: YautjaLimbRegeneration
+    requiredSeverAttempts: 2
+    severAttemptWindow: 30
+    regrowDelay: 300
+  - type: TacticalMapTracked
+    trackDead: true
+  - type: YautjaMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: leader
+  - type: TacticalMapUser
+    actionId: CMUActionYautjaOpenTacticalMap
+    liveUpdate: true
+  - type: UserInterface
+    interfaces:
+      enum.TacticalMapUserUi.Key:
+        type: TacticalMapUserBui
   - type: IgnoreXenoWeedsSlowdown
+  # human base slows the puller by the target's weight, preds drag anything at full speed
+  - type: SlowOnPull
+    multiplier: 1
+    slowdowns: []
   - type: Skills
-    skills:
-      RMCSkillMedical: 3
-      RMCSkillSurgery: 2
+    preset: CMUSkillPresetYautjaWarrior
   - type: Loadout
     prototypes:
-    - CMUYautjaHunterGear
-    - CMUYautjaHunterGearBronze
-    - CMUYautjaHunterGearSilver
-    - CMUYautjaHunterGearCrimson
-    - CMUYautjaHunterGearBone
+    - CMUYautjaHunterSpawnGear
   - type: Icon
     sprite: CMU14/Yautja/body.rsi
     state: full
@@ -81,6 +105,10 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 3.7
     baseSprintSpeed: 7.1
+  # cmss13 /datum/pain/yautja: nothing until horrible, and horrible only gives the distressing slowdown
+  - type: PainShock
+    minimumFeltTier: Shock
+    maximumFeltTier: Severe
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -94,8 +122,6 @@
     emoteCooldown: 8
     hiddenFromChatWindow: true
   - type: MotionDetectorTracked
-  - type: DropshipHijacker
-    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja
@@ -105,6 +131,7 @@
   components:
   - type: YautjaBadBlood
   - type: Yautja
+    npcFaction: CMUYautjaBadBlood
     skinHueMin: 0.0
     skinHueMax: 0.03
     skinSaturationMin: 0.4
@@ -134,6 +161,8 @@
     - CMUYautjaBadBloodGruntGear19
     - CMUYautjaBadBloodGruntGear20
     - CMUYautjaBadBloodGruntGear21
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: CMUMobYautja
@@ -143,6 +172,7 @@
   components:
   - type: YautjaBadBlood
   - type: Yautja
+    npcFaction: CMUYautjaBadBlood
     skinHueMin: 0.0
     skinHueMax: 0.03
     skinSaturationMin: 0.4
@@ -167,9 +197,148 @@
     - CMUYautjaBadBloodLeaderGear14
     - CMUYautjaBadBloodLeaderGear15
     - CMUYautjaBadBloodLeaderGear16
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
 
 - type: entity
   parent: AppearanceYautja
   id: CMUMobYautjaDummy
   name: Yautja Dummy
-  categories: [ HideSpawnMenu ]
+  categories: [HideSpawnMenu]
+- type: entity
+  parent: CMUMobYautja
+  id: CMUMobYautjaMilitaryCasteSoldier
+  name: Yautja Military Caste Soldier
+  suffix: Yautja, Military Caste, Event
+  components:
+  - type: YautjaMilitaryCaste
+    caste: Soldier
+  - type: Loadout
+    prototypes:
+    - CMUYautjaMilitaryCasteSoldierGear
+
+- type: entity
+  parent: CMUMobYautja
+  id: CMUMobYautjaMilitaryCasteEnforcer
+  name: Yautja Military Caste Enforcer
+  suffix: Yautja, Military Caste, Event
+  components:
+  - type: YautjaMilitaryCaste
+    caste: Enforcer
+  - type: Loadout
+    prototypes:
+    - CMUYautjaMilitaryCasteEnforcerGear
+
+- type: entity
+  parent: CMUMobYautja
+  id: CMUMobYautjaBadBlood
+  name: Yautja Bad Blood
+  suffix: Yautja, Bad Blood, Event
+  components:
+  - type: YautjaBadBlood
+  - type: DropshipHijacker
+    hijackDoAfterSeconds: 15
+  - type: Yautja
+    npcFaction: CMUYautjaBadBlood
+  - type: NpcFactionMember
+    factions:
+    - CMUYautjaBadBlood
+  - type: Loadout
+    prototypes:
+    - CMUYautjaBadBloodSpawnGear
+
+- type: entity
+  save: false
+  parent:
+  - AppearanceYautja
+  - CMMobHuman
+  id: CMUMobYautjaYoungblood
+  name: Yautja Youngblood
+  suffix: Yautja, Youngblood, Event
+  components:
+  - type: Language
+    spokenLanguages:
+    - Yautja
+    - Xeno
+    understoodLanguages:
+    - Yautja
+    - Xeno
+    currentLanguage: Yautja
+    defaultLanguage: Yautja
+  - type: Yautja
+  - type: YautjaYoungblood
+  - type: IgnoreXenoWeedsSlowdown
+  - type: SlowOnPull
+    multiplier: 1
+    slowdowns: []
+  - type: Skills
+    preset: CMUSkillPresetYautjaWarrior
+  - type: Icon
+    sprite: CMU14/Yautja/body.rsi
+    state: full
+  - type: FixedIdentity
+    name: species-name-yautja
+  - type: Speech
+    speechSounds: CMUYautjaSpeech
+    allowedEmotes:
+    - Scream
+    - Laugh
+    - Growl
+    - Warcry
+    - CMUYautjaClick
+    - CMUYautjaRoar
+    - CMUYautjaLaugh
+    - CMUYautjaGrowl
+    - CMUYautjaPain
+    - CMUYautjaDeathCry
+    - CMUYautjaDeathLaugh
+  - type: Vocal
+  - type: Body
+  - type: MeleeWeapon
+    soundHit:
+      collection: Punch
+    angle: 0
+    animation: WeaponArcFist
+    attackRate: 1.15
+    damage:
+      types:
+        Blunt: 12
+        Structural: 3
+  - type: Damageable
+    damageModifierSet: CMUYautja
+  - type: Injurable
+    damageContainer: Biological
+    healthBarThreshold: 5
+  - type: Bloodstream
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: CMUYautjaBlood
+        Quantity: 650
+    maxBleedAmount: 35
+    bleedReductionAmount: 0
+    bloodRefreshAmount: 0.2
+    bloodlossDamage:
+      types:
+        Bloodloss: 0.35
+    bloodlossHealDamage:
+      types:
+        Bloodloss: -1
+    damageBleedModifiers: CMBloodlossHuman
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.4
+    baseSprintSpeed: 8.4
+  - type: PainShock
+    minimumFeltTier: Shock
+    maximumFeltTier: Severe
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      240: Critical
+      340: Dead
+  - type: MaxDamage
+    max: 900
+  - type: EmoteOnDamage
+    emotes:
+    - CMUYautjaPain
+    emoteCooldown: 8
+    hiddenFromChatWindow: true

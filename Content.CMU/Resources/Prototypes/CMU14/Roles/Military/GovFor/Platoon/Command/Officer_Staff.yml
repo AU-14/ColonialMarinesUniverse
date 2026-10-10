@@ -5,7 +5,7 @@
   name: au14-job-name-govforplatop
   description: au14-job-description-govforplatop
   icon: "AU14JobIconOpsOfc"
-  spawnMenuRoleName: Staff Officer (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-staff-officer
   startingGear: AU14GearGOVFORPlatOp
   dummyStartingGear: AU14GearGOVFORPlatOpDummy
   playTimeTracker: AU14JobGOVFORPlatOp
@@ -54,6 +54,11 @@
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORPlatOpWYPMC
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 43200 # 12 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -67,6 +72,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -100,6 +107,8 @@
   - AU14OpforCommand
 
 # ├──[ Starting Gear ]───────────────────────────────────────────────┤
+  useLoadoutOfJob: AU14JobGOVFORPlatOp
+
 - type: startingGear
   id: AU14GearGOVFORPlatOp
   equipment:
@@ -182,7 +191,12 @@
   parent: AU14JobPlatOpBase
   id: AU14JobGOVFORPlatOpUPP
   roundForce: UPP
-  requirements: []
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 43200 # 12 hours
   name: Staff Officer
   spawnMenuRoleName: Staff Officer (UPP)
   ranks:
@@ -196,7 +210,12 @@
   parent: AU14JobPlatOpBase
   id: AU14JobGOVFORPlatOpWYPMC
   roundForce: WYPMC
-  requirements: []
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 43200 # 12 hours
   name: PMC Operations Adjutant
   description: au14-job-description-govforplatop
   spawnMenuRoleName: Staff Officer (WYPMC)

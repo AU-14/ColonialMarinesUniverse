@@ -4,11 +4,17 @@
   jobBlacklistGroup:
   - AllGovforJobs
   - AllOpforJobs
+  - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
+  - AllSynthJobs
   briefing:
     text: cmu-antag-clf-saboteur-greeting
     color: OliveDrab
     sound: "/Audio/Ambience/Antag/headrev_start.ogg"
   startingGear: CMUGearCLFSaboteur
+  startingSkills:
+    RMCSkillEngineer: 4
+    RMCSkillConstruction: 3
   components:
   - type: CLFSaboteur
     sabotageGoal: 12
@@ -51,17 +57,31 @@
     pocket2: CMMultitool
   storage:
     back:
-    - RMCExplosivePlastic
-    - RMCExplosivePlastic
-    - RMCExplosivePlastic
-    - RMCExplosivePlastic
-    - RMCExplosivePlastic
-    - RMCExplosivePlastic
-    - AU14RemoteSignallerAdvanced
-    - AU14IEDLarge
-    - AU14IEDLarge
-    - AU14IED
-    - AU14IED
+    - CMUCaseCLFSaboteur
+
+# The whole loadout ships in one box so a dropped satchel doesn't scatter explosives
+- type: entity
+  parent: RMCBoxCardboard
+  id: CMUCaseCLFSaboteur
+  name: unmarked supply box
+  description: A cardboard box. Something dense shifts inside when you lift it.
+  components:
+  - type: IgnoreContentsSize
+    items:
+      sizes:
+      - Huge
+  - type: Storage
+    grid:
+    - 0,0,19,3
+  - type: StorageFill
+    contents:
+    - id: RMCExplosivePlastic
+      amount: 6
+    - id: AU14RemoteSignallerAdvanced
+    - id: AU14IEDLarge
+      amount: 2
+    - id: AU14IED
+      amount: 2
 
 - type: entity
   parent: CMSatchel
@@ -71,7 +91,7 @@
   - type: IgnoreContentsSize
     items:
       sizes:
-      - Huge
+      - Large
   - type: Storage
     grid:
     - 0,0,19,3

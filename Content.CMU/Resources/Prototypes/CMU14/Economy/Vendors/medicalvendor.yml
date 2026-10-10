@@ -131,14 +131,20 @@
         amount: 3
       - id: RMCBoxLatexGloves
         amount: 3
-      - id: RMCDefibrillatorCompact
-        amount: 2
+      - id: CMUDefibrillatorCompact
+        amount: 1
       - id: AU14CMDefibrillator
         amount: 10
       - id: CMHealthAnalyzer
         amount: 25
       - id: RMCVial
         amount: 35
+      - id: CMMaskGasMedical
+        amount: 6
+      - id: CMAnestheticTankFilled
+        amount: 4
+      - id: CMUMedicalOxygenTankFilled
+        amount: 6
      # FixOVien
 
 - type: entity
@@ -173,11 +179,16 @@
       entries:
       - id: CMBloodPackFull
         amount: 45
+      - id: CMUSynthBloodPackFull
+        amount: 6
     - name: Empty Packs
       entries:
       - id: CMBloodPack
         amount: 65
         name: empty blood pack
+      - id: CMUSynthBloodPack
+        amount: 10
+        name: empty synthetic blood pack
 
 - type: entity
   parent: ColMarTechBaseAnchorable
@@ -209,11 +220,16 @@
       entries:
       - id: CMBloodPackFull
         amount: 6
+      - id: CMUSynthBloodPackFull
+        amount: 2
     - name: Miscellaneous
       entries:
       - id: CMBloodPack
         amount: 20
         name: empty blood pack
+      - id: CMUSynthBloodPack
+        amount: 4
+        name: empty synthetic blood pack
 
 - type: entity
   parent: AU14VendorBloodField

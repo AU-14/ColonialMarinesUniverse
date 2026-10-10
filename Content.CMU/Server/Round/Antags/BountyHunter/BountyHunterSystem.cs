@@ -18,7 +18,7 @@ namespace Content.Server.CMU14.Round.Antags.BountyHunter;
 public sealed partial class BountyHunterSystem : EntitySystem
 {
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
-    [Dependency] private readonly StationSystem _station = default!;
+    [Dependency] private Content.Shared.CMU14.CriminalRecords.CMUUniversalRecordsSystem _universalRecords = default!;
     [Dependency] private readonly StationRecordsSystem _stationRecords = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
@@ -28,9 +28,7 @@ public sealed partial class BountyHunterSystem : EntitySystem
     }
 
     private void OnHunterSpawned(EntityUid uid, BountyHunterComponent comp, ComponentStartup args)
-    {
-        comp.NextFax = _timing.CurTime + comp.FaxDelay;
-    }
+        => comp.NextFax = _timing.CurTime + comp.FaxDelay;
 
     public override void Update(float frameTime)
     {
@@ -48,7 +46,7 @@ public sealed partial class BountyHunterSystem : EntitySystem
     private string BuildTargetList(EntityUid hunter, BountyHunterComponent comp)
     {
         var lines = new List<string>();
-        var station = _station.GetOwningStation(hunter);
+        var station = _universalRecords.GetRecords();
         if (station != null)
         {
             foreach (var (key, record) in _stationRecords.GetRecordsOfType<CriminalRecord>(station.Value))

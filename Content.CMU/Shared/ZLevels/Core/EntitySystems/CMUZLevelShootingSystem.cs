@@ -32,6 +32,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         SubscribeLocalEvent<GunComponent, ItemUnwieldedEvent>(OnGunUnwielded);
         SubscribeLocalEvent<CMUZLevelViewerComponent, CMUZLevelLookUpEnabledEvent>(OnLookUpEnabled);
+        SubscribeLocalEvent<CMUZLevelViewerComponent, CMUZLevelAdjustShotEvent>(OnAdjustShot);
+        SubscribeLocalEvent<CMUZLevelShooterComponent, CMUZLevelAdjustShotEvent>(OnAdjustShot);
 
         CommandBinds.Builder
             .Bind(CMUKeyFunctions.CMUToggleShootDownZLevel,
@@ -63,6 +65,28 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             PopupSelf(args.User, "cmu-zlevel-shoot-down-disabled-unwield");
         }
 
+    }
+
+    private void OnAdjustShot<T>(Entity<T> ent, ref CMUZLevelAdjustShotEvent args)
+        where T : IComponent
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+        if (!TryAdjustShotCoordinates(
+                args.User,
+                args.FromCoordinates,
+                args.ToCoordinates,
+                out var adjustedFrom,
+                out var adjustedTo))
+        {
+            args.Cancel();
+            return;
+        }
+
+        args.FromCoordinates = adjustedFrom;
+        args.ToCoordinates = adjustedTo;
     }
 
     private void ToggleShootDown(EntityUid user)
@@ -193,6 +217,16 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         var fromMap = _transform.ToMapCoordinates(fromCoordinates);
         var toMap = _transform.ToMapCoordinates(toCoordinates);
+
+        // Open air between shooter and target: nothing to shoot through, so skip the
+        // opening hunt and range clamp (straight shots at hovering dropships).
+        if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value, fromMap.Position, toMap.Position))
+        {
+            adjustedFromCoordinates = _transform.ToCoordinates(new MapCoordinates(fromMap.Position, map.MapId));
+            adjustedToCoordinates = _transform.ToCoordinates(new MapCoordinates(toMap.Position, map.MapId));
+            return true;
+        }
+
         var clampedTo = ClampCrossZShotTarget(fromMap.Position, toMap.Position);
         if (!_zLevels.TryFindZShotOpening(
                 shooterMap.Value,
@@ -232,7 +266,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         MapCoordinates fromCoordinates,
         MapCoordinates toCoordinates,
         out MapCoordinates adjustedFromCoordinates,
-        out MapCoordinates adjustedToCoordinates)
+        out MapCoordinates adjustedToCoordinates,
+        float? maximumRange = null)
     {
         adjustedFromCoordinates = fromCoordinates;
         adjustedToCoordinates = toCoordinates;
@@ -251,7 +286,16 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return false;
         }
 
-        var clampedTo = ClampCrossZShotTarget(fromCoordinates.Position, toCoordinates.Position);
+        // Open air between shooter and target: nothing to shoot through, so skip the
+        // opening hunt and range clamp (straight shots at hovering dropships).
+        if (_zLevels.IsZShotPathOpen(offset < 0 ? shooterMap.Value : targetMap.Value, fromCoordinates.Position, toCoordinates.Position))
+        {
+            adjustedFromCoordinates = new MapCoordinates(fromCoordinates.Position, map.MapId);
+            adjustedToCoordinates = new MapCoordinates(toCoordinates.Position, map.MapId);
+            return true;
+        }
+
+        var clampedTo = ClampCrossZShotTarget(fromCoordinates.Position, toCoordinates.Position, maximumRange ?? CrossZShotRange);
         if (!_zLevels.TryFindZShotOpening(
                 shooterMap.Value,
                 targetMap.Value,
@@ -278,7 +322,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             out var projectileTo);
 
         adjustedFromCoordinates = new MapCoordinates(projectileFrom, map.MapId);
-        adjustedToCoordinates = new MapCoordinates(projectileTo, map.MapId);
+        // Lobbed bombard shots retain their aimed landing point beyond the opening.
+        adjustedToCoordinates = new MapCoordinates(maximumRange != null ? clampedTo : projectileTo, map.MapId);
         return true;
     }
 
@@ -399,10 +444,10 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         out Vector2 projectileFrom,
         out Vector2 projectileTo)
     {
-        projectileFrom = NudgeOpeningTowardSource(opening, from);
-        var direction = to - from;
+        projectileFrom = opening;
+        var direction = to - opening;
         if (direction.LengthSquared() <= 0.001f)
-            direction = clampedTo - projectileFrom;
+            direction = clampedTo - opening;
 
         if (direction.LengthSquared() <= 0.001f)
         {
@@ -410,7 +455,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return;
         }
 
-        var distance = Math.Max(1f, Vector2.Distance(projectileFrom, clampedTo));
+        var distance = Math.Max(1f, direction.Length());
         projectileTo = projectileFrom + Vector2.Normalize(direction) * distance;
     }
 
@@ -428,15 +473,15 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         return opening + Vector2.Normalize(sourceDirection) * CrossZOpeningSourceNudge;
     }
 
-    private static Vector2 ClampCrossZShotTarget(Vector2 from, Vector2 to)
+    private static Vector2 ClampCrossZShotTarget(Vector2 from, Vector2 to, float range = CrossZShotRange)
     {
         var delta = to - from;
         var distance = delta.Length();
 
-        if (distance <= CrossZShotRange || distance <= 0.001f)
+        if (distance <= range || distance <= 0.001f)
             return to;
 
-        return from + delta / distance * CrossZShotRange;
+        return from + delta / distance * range;
     }
 
     private void PopupSelf(EntityUid user, string message)
@@ -461,4 +506,16 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         return 0;
     }
+}
+
+[ByRefEvent]
+public sealed class CMUZLevelAdjustShotEvent(
+    EntityUid user,
+    EntityCoordinates fromCoordinates,
+    EntityCoordinates toCoordinates) : CancellableEntityEventArgs
+{
+    public EntityUid User = user;
+    public EntityCoordinates FromCoordinates = fromCoordinates;
+    public EntityCoordinates ToCoordinates = toCoordinates;
+    public bool Handled;
 }

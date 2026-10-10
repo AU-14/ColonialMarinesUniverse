@@ -10,7 +10,7 @@ namespace Content.IntegrationTests.Tests.Atmos;
 [TestFixture]
 public sealed class GridJoinTest : AtmosTest
 {
-    private readonly EntProtoId _canisterProtoId = "AirCanister";
+    private readonly EntProtoId _canisterProtoId = "CMUCanisterAir"; // CMU14
 
     [SidedDependency(Side.Server)] private readonly AtmosDeviceSystem _atmosDeviceSystem = default!;
     [SidedDependency(Side.Server)] private readonly SharedTransformSystem _transformSystem = default!;

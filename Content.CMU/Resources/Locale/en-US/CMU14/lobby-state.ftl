@@ -39,3 +39,4 @@ cmu-lobby-clock-docked = Round in {$time}
 cmu-lobby-clock-docked-paused = Round start paused
 cmu-lobby-clock-docked-soon = Round starts soon
 cmu-lobby-clock-docked-now = Round starting now
+cmu-lobby-clock-loading-map = Loading map…

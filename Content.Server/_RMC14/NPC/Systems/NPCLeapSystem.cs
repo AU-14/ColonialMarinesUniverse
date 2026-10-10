@@ -29,10 +29,10 @@ public sealed partial class NPCLeapSystem : EntitySystem
 
     private void OnShutdown(Entity<NPCLeapComponent> ent, ref ComponentShutdown args)
     {
-        if (ent.Comp.CurrentDoAfter != null)
-        {
+        // CMU14: ended doafters are culled from the component dict after ~0.5s, so only
+        // cancel one still running or the lookup logs an invalid-id error
+        if (_doafter.IsRunning(ent.Comp.CurrentDoAfter))
             _doafter.Cancel(ent.Comp.CurrentDoAfter);
-        }
     }
 
     public override void Update(float frameTime)
@@ -45,18 +45,22 @@ public sealed partial class NPCLeapSystem : EntitySystem
 
             if (!_xformQuery.TryGetComponent(comp.Target, out var targetXform))
             {
+                // CMU14: clear the stale leap id or the shutdown cancel later hits a culled doafter
+                comp.CurrentDoAfter = null;
                 comp.Status = LeapStatus.TargetUnreachable;
                 continue;
             }
 
             if (targetXform.MapID != xform.MapID)
             {
+                comp.CurrentDoAfter = null; // CMU14
                 comp.Status = LeapStatus.TargetUnreachable;
                 continue;
             }
 
             if (!TryComp<DoAfterComponent>(uid, out var after))
             {
+                comp.CurrentDoAfter = null; // CMU14
                 comp.Status = LeapStatus.Unspecified;
                 continue;
             }

@@ -62,6 +62,8 @@
   icon: "RMCJobIconPMCGoonStandard"
   requireAdminNotify: false
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -70,7 +72,7 @@
     - Epilepsy
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-wy
-  spawnMenuRoleName: WY Corporate Goon (CMU)
+  spawnMenuRoleName: au14-spawn-role-name-wy-corporate-goon
   accessGroups:
   - auwy
   - AUPrisonStaff

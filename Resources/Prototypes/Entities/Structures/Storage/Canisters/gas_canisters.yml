@@ -263,6 +263,7 @@
       temperature: 72
   - type: AccessReader
     access: [["Atmospherics"]]
+  - type: CargoSellWhitelist # CMU14
 
 - type: entity
   parent: GasCanister
@@ -315,6 +316,7 @@
       temperature: 72
   - type: AccessReader
     access: [["Atmospherics"]]
+  - type: CargoSellWhitelist # CMU14
 
 - type: entity
   parent: GasCanister
@@ -369,6 +371,7 @@
       temperature: 72
   - type: AccessReader
     access: [["Atmospherics"]]
+  - type: CargoSellWhitelist # CMU14
 
 - type: entity
   parent: GasCanister
@@ -408,6 +411,7 @@
               max: 1
     - type: Lock
       locked: true
+    - type: CargoSellWhitelist # CMU14
 
 - type: entity
   parent: GasCanister
@@ -447,6 +451,7 @@
               max: 1
     - type: Lock
       locked: true
+    - type: CargoSellWhitelist # CMU14
 
 - type: entity
   parent: GasCanister
@@ -484,6 +489,7 @@
             WaterVaporCanisterBroken:
               min: 1
               max: 1
+    - type: CargoSellWhitelist # CMU14
 
 - type: entity
   parent: GasCanister
@@ -523,6 +529,7 @@
               max: 1
     - type: Lock
       locked: true
+    - type: CargoSellWhitelist # CMU14
 
 - type: entity
   parent: GasCanister
@@ -601,6 +608,7 @@
             max: 1
   - type: Lock
     locked: true
+  - type: CargoSellWhitelist # CMU14
 
 
 - type: entity

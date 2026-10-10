@@ -174,7 +174,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return false;
         }
 
-        var ev = new HealthScannerAttemptTargetEvent();
+        var ev = new HealthScannerAttemptTargetEvent(Scanner: scanner.Owner); // CMU14: pass the analyzer so targets can allow it
         RaiseLocalEvent(target, ref ev);
         if (ev.Cancelled)
         {
@@ -360,6 +360,11 @@ public sealed partial class HealthScannerSystem : EntitySystem
              _rotting.IsRotten(target) ||
              _rmcUnrevivable.IsUnrevivable(target) ||
              HasComp<RMCDefibrillatorBlockedComponent>(target));
+
+        // cmu edit start
+        if (_mob.IsDead(target) && !state.PermaDead)
+            state.CMUTimeUntilUnrevivable = _rmcUnrevivable.GetTimeUntilUnrevivable(target);
+        // cmu edit end
 
         FillAdviceReadout(state, chemicals);
     }

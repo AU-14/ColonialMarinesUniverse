@@ -16,11 +16,11 @@
   announceAsSurvivors: true
   partyspawn: UPPLineSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
   weight: 20
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 4
+  ghostsNeeded: 4
   roundstart: false
 
 - type: partySpawn
@@ -38,11 +38,11 @@
   announceAsSurvivors: true
   partyspawn: UPPLineCommandoSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
   weight: 10
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false
 
 - type: thirdParty
@@ -51,10 +51,10 @@
   displayName: UPP Line Infantry (Survivors)
   entrymethod: ground
   weight: 5
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
   announcearrival: ''
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - colonyfall

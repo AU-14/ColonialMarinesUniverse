@@ -1,3 +1,5 @@
+using Content.Shared.Weapons.Ranged.Components; // CMU14
+using Content.Shared.CMU14.Items; // CMU14
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Item;
 using Content.Shared.Examine;
@@ -196,6 +198,15 @@ public abstract partial class SharedItemSystem : EntitySystem
 
         if (_fixedItemSizeStorageQuery.TryComp(storage, out var fixedComp))
         {
+            // CMU14: empty magazines take a smaller slot in storages like the dump pouch
+            if (TryComp(storage, out CMUEmptyMagazineStorageComponent? emptyStorage) &&
+                TryComp(uid, out BallisticAmmoProviderComponent? ballistic) &&
+                ballistic.UnspawnedCount + (ballistic.Container?.ContainedEntities.Count ?? 0) == 0)
+            {
+                emptyStorage.CachedEmptyShape ??= [Box2i.FromDimensions(Vector2i.Zero, emptyStorage.EmptySize - Vector2i.One)];
+                return emptyStorage.CachedEmptyShape;
+            }
+
             fixedComp.CachedSize ??= [Box2i.FromDimensions(Vector2i.Zero, fixedComp.Size - Vector2i.One)];
             return fixedComp.CachedSize;
         }
@@ -222,28 +233,13 @@ public abstract partial class SharedItemSystem : EntitySystem
     /// <summary>
     /// Gets the shape of an item, adjusting for rotation and offset.
     /// </summary>
+    // CMU14 method: avoid shape copies and boxed enumerators on repeated placement checks.
     public IReadOnlyList<Box2i> GetAdjustedItemShape(Entity<StorageComponent?> storage, Entity<ItemComponent?> entity, Angle rotation, Vector2i position)
     {
         if (!Resolve(entity, ref entity.Comp))
             return new Box2i[] { };
 
-        var shapes = GetItemShape(storage, entity);
-        var boundingShape = shapes.GetBoundingBox();
-        var boundingCenter = ((Box2) boundingShape).Center;
-        var matty = Matrix3Helpers.CreateTransform(boundingCenter, rotation);
-        var drift = boundingShape.BottomLeft - matty.TransformBox(boundingShape).BottomLeft;
-
-        var adjustedShapes = new List<Box2i>();
-        foreach (var shape in shapes)
-        {
-            var transformed = matty.TransformBox(shape).Translated(drift);
-            var floored = new Box2i(transformed.BottomLeft.Floored(), transformed.TopRight.Floored());
-            var translated = floored.Translated(position);
-
-            adjustedShapes.Add(translated);
-        }
-
-        return adjustedShapes;
+        return CMUAdjustItemShape(GetItemShape(storage, entity), rotation, position);
     }
 
     /// <summary>

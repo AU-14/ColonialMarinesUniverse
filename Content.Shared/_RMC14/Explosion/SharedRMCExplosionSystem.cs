@@ -99,6 +99,18 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         args.DamageCoefficient *= resistance;
     }
 
+    // cmu edit start
+    public void ApplyExplosionStunOnly(
+        Entity<StunOnExplosionReceivedComponent> ent,
+        ProtoId<ExplosionPrototype> explosion,
+        MapCoordinates epicenter,
+        Content.Shared.Damage.DamageSpecifier wouldBeDamage)
+    {
+        var ev = new ExplosionReceivedEvent(explosion, epicenter, wouldBeDamage);
+        OnStunOnExplosionReceivedBeforeExplode(ent, ref ev);
+    }
+    // cmu edit end
+
     public void ChangeExplosionStunResistance(EntityUid ent, StunOnExplosionReceivedComponent? comp, bool isStunnable)
     {
         if (!Resolve(ent, ref comp, false))
@@ -243,7 +255,7 @@ public abstract partial class SharedRMCExplosionSystem : EntitySystem
         if (ent.Comp.Explosion is { } explosion)
             SpawnNextToOrDrop(explosion, ent);
 
-        if (ent.Comp.MaxShrapnel > 0)
+        if (ent.Comp.MaxShrapnel > 0 && Transform(ent).GridUid != null) // CMU14
         {
             foreach (var effect in ent.Comp.ShrapnelEffects)
             {

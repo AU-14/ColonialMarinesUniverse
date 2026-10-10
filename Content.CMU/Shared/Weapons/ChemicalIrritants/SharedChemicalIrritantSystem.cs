@@ -1,4 +1,3 @@
-using Content.Shared.CMU14.Threats.Mobs.Abomination;
 using Content.Shared.CMU14.GasMask;
 using Content.Shared._RMC14.BlurredVision;
 using Content.Shared._RMC14.Slow;
@@ -26,7 +25,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
-using AbominationComponent = Content.Shared.CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using BiomorphComponent = Content.Shared.CMU14.Threats.Mobs.Biomorph.BiomorphComponent;
 using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared.CMU14.ChemicalIrritants;
@@ -135,6 +134,9 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         if (IsImmuneToIrritants(victim))
             return;
 
+        if (_mask.IsBreathingInternals(victim))
+            return;
+
         if (TryGetFilterFromMask(victim, out var filterId, out var filter))
         {
             var filterDamage = new GasMaskFilterDamageComponent
@@ -168,7 +170,6 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
 
     private void UpdateIrritantExposure(EntityUid victim, ChemicalIrritantComponent chem)
     {
-
         if (_mobState.IsDead(victim))
         {
             RemCompDeferred<ChemicalIrritantComponent>(victim);
@@ -235,6 +236,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
             if (_random.Prob(profile.SevereSlowChance))
                 _slow.TrySlowdown(victim, profile.SevereSlowTime);
         }
+
         // High-dose trip/fall
         if (chem.IrritantAmount >= profile.TripThreshold &&
             _random.Prob(profile.TripChance) &&
@@ -243,7 +245,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
             chem.LastTripTime = time;
             _stun.TryParalyze(victim, profile.TripStunTime, true);
 
-            _popup.PopupEntity(Loc.GetString("You stumble and trip."), victim, victim, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-chemical-irritant-trip"), victim, victim, PopupType.MediumCaution);
         }
 
         // Exposure message (rate-limited)
@@ -251,10 +253,10 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         {
             chem.LastMessage = time;
 
-            var message = _random.Pick(profile.ExposureMessages);
+            var messageId = _random.Pick(profile.ExposureMessages);
 
             _popup.PopupEntity(
-                message,
+                Loc.GetString(messageId),
                 victim,
                 victim,
                 PopupType.SmallCaution);
@@ -265,8 +267,9 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
     {
         return HasComp<SynthComponent>(victim)
             || HasComp<XenoComponent>(victim)
-            || HasComp<AbominationComponent>(victim);
+            || HasComp<BiomorphComponent>(victim);
     }
+
     private bool TryGetFilterFromMask(EntityUid victim, out EntityUid filterId, out GasMaskFilterComponent filter)
     {
         filterId = EntityUid.Invalid;
@@ -307,6 +310,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
 
         return false;
     }
+
     public void ReduceIrritant(EntityUid victim, float amount)
     {
         if (!TryComp<ChemicalIrritantComponent>(victim, out var chem))
@@ -323,6 +327,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
 
         Dirty(victim, chem);
     }
+
     private bool TryGetFilterFromItem(EntityUid item, out EntityUid filterId, out GasMaskFilterComponent filter)
     {
         filterId = EntityUid.Invalid;
@@ -361,7 +366,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         if (IsImmuneToIrritants(victim))
             return;
 
-        if (TryGetFilterFromMask(victim, out _, out _))
+        if (_mask.IsBreathingInternals(victim) || TryGetFilterFromMask(victim, out _, out _))
             return;
 
         var alreadyExposed = EnsureComp<ChemicalIrritantComponent>(victim, out var chem);

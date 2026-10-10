@@ -6,7 +6,7 @@
     edges:
     - to: manifold
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
@@ -19,7 +19,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 1
       - !type:DeleteEntity
       steps:
@@ -27,7 +27,7 @@
         doAfter: 1
 
   - node: manifold
-    entity: GasPipeManifold
+    entity: CMUGasPipeManifold # CMU14: slot-0 cmu clone
     edges:
     - to: start
       conditions:
@@ -35,7 +35,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:

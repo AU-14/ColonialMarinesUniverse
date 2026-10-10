@@ -37,6 +37,7 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
         [Dependency] private ISharedAdminLogManager _adminLogger = default!;
         [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
         [Dependency] private DeviceNetworkSystem _deviceNetSystem = default!;
+        [Dependency] private AtmosDeviceNetworkSystem _atmosDevNet = default!; // CMU14
         [Dependency] private DeviceLinkSystem _signalSystem = default!;
         [Dependency] private NodeContainerSystem _nodeContainer = default!;
         [Dependency] private SharedAmbientSoundSystem _ambientSoundSystem = default!;
@@ -213,6 +214,11 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems
 
         private void OnPowerChanged(EntityUid uid, GasVentPumpComponent component, ref PowerChangedEvent args)
         {
+            if (args.Powered) // CMU14
+            {
+                _atmosDevNet.Register(uid, null);
+                _atmosDevNet.Sync(uid, null);
+            }
             UpdateState(uid, component);
         }
 

@@ -83,6 +83,9 @@
       - IdCard
       tags:
       - HighRiskItem
+      # Sheets carry no Material component, so the component blacklist never matches them;
+      # reclaiming a sheet is a recycle loop (ReclaimerLoopTest).
+      - Sheet
     sound:
       path: /Audio/Effects/saw.ogg
       params:

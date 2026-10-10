@@ -422,6 +422,12 @@
   name: Personal Body Armor System
   description: The Personnel Body Armor System is the standard issue armor of the US Army, adopted over the M4 series pattern armor during field trials. Surprisingly uncomfortable, but offering far superior protection to the M3 or M4 series armor. At four times the price.
   components:
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: Sprite
     sprite: CMU14/Clothing/US_Army/Armor/armor.rsi
   - type: StorageFill

@@ -1,4 +1,4 @@
-﻿using Content.Shared.Damage;
+using Content.Shared.Damage;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -16,7 +16,7 @@ public sealed partial class XenoAcidBlastComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan Delay = TimeSpan.FromSeconds(1.35);
 
-    [DataField, AutoNetworkedField]
+    [DataField(readOnly: true), AutoNetworkedField]
     public TimeSpan Activation = TimeSpan.Zero;
 
     [DataField, AutoNetworkedField]

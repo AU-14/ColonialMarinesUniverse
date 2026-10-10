@@ -1,5 +1,6 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
+  displayWeight: 16
   id: AU14JobCivilianHeadOfService
   roundSide: Civilian
   roundForce: COLONY
@@ -25,11 +26,11 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianHeadOfService
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentServices
     time: 36000 # 10 hours
-  - !type:OverallPlaytimeRequirement
-    time: 86400 # 24 hours
   - !type:AgeRequirement
     requiredAge: 23
   - !type:TraitsRequirement
@@ -37,6 +38,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianHeadOfService
@@ -60,6 +63,8 @@
     id: AU14IDCardColonyHeadOfService
     outerClothing: RMCMedicalApron
     pocket1: AU14StampHOS
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

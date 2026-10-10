@@ -14,7 +14,7 @@ public sealed class MachineConstruction : InteractionTest
     public async Task ConstructProtolathe()
     {
         await StartConstruction(MachineFrame);
-        await InteractUsing(Steel, 5);
+        await InteractUsing(CMSteel, 5); // CMU14
         ClientAssertPrototype(Unfinished, Target);
         await Interact(Wrench, Cable);
         AssertPrototype(MachineFrame);
@@ -33,7 +33,7 @@ public sealed class MachineConstruction : InteractionTest
         await Interact(Wrench, Screw);
         AssertDeleted();
         await AssertEntityLookup(
-            (Steel, 5),
+            (CMSteel, 5), // CMU14
             (Cable, 1),
             (Beaker, 2),
             (Manipulator1, 4),
@@ -51,7 +51,7 @@ public sealed class MachineConstruction : InteractionTest
         // Change it into an autolathe
         await InteractUsing("AutolatheMachineCircuitboard");
         AssertPrototype(MachineFrame);
-        await Interact(Manipulator1, Manipulator1, Manipulator1, Manipulator1, Glass, Screw);
+        await Interact(Manipulator1, Manipulator1, Manipulator1, Manipulator1, Glass, Screw); // CMU14: board wants upstream Glass
         AssertPrototype("Autolathe");
     }
 }

@@ -1,0 +1,146 @@
+- type: entity
+  parent: RMCM2CMount
+  id: CMUKramerEmplacedMGMount
+  name: Kramer emplaced machine gun
+  description: A Kramer Light Support Weapon built onto a folding tripod. The fixed mount keeps it as steady as a deployed bipod, and its IFF lock refuses to fire while friendlies are in the line of fire.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/krameremplacedmg/krameremplacedicon.rsi
+    state: kramermg
+    layers:
+    - sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/krameremplacedmg/krameremplaced32x32.rsi
+      state: kramermg
+      map: [ "enum.WeaponMountComponentVisualLayers.Mounted" ]
+      visible: false
+    - sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/krameremplacedmg/krameremplaced32x32.rsi
+      state: kramermg-magazine-1
+      map: [ "enum.WeaponMountComponentVisualLayers.MountedAmmo" ]
+      visible: false
+    - state: kramermg
+      map: [ "enum.WeaponMountComponentVisualLayers.Folded" ]
+      visible: false
+    - state: kramermg-broken
+      map: [ "enum.WeaponMountComponentVisualLayers.Broken" ]
+      visible: false
+    - state: mag-0
+      map: [ "enum.WeaponMountComponentVisualLayers.FoldedAmmo" ]
+      visible: false
+    - sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/krameremplacedmg/krameremplaced32x32.rsi
+      state: kramermg-overheat
+      map: [ "enum.WeaponMountComponentVisualLayers.Overheated" ]
+      visible: false
+  - type: Item
+    size: Huge
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/krameremplacedmg/krameremplaced32x32.rsi
+  - type: Clothing
+    slots: NONE
+  - type: WeaponMount
+    fixedWeaponPrototype: "CMUMachineGunKramerEmplaced"
+    isWeaponSecured: true
+    isWeaponLocked: true
+    canRotateWithoutTool: true
+    mountOnDeploy: false
+    mountExclusionAreaSize: 0
+    barricadeExclusionAreaSize: 2
+    assembleDelay: 3
+    undeploySound: null
+    acidableWhileUndeployed: true
+  - type: Tag
+    tags:
+    - CMUKramerEmplacedMGMount
+
+- type: entity
+  parent: RMCMachineGunM2C
+  id: CMUMachineGunKramerEmplaced
+  categories: [ HideSpawnMenu ]
+  name: Kramer emplaced machine gun
+  description: The top half of a Kramer emplaced machine gun. It is not much use without its tripod.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/krameremplacedmg/krameremplacedicon.rsi
+    layers:
+    - state: kramermg
+    - state: mag-0
+      map: [ "enum.GunVisualLayers.Mag" ]
+  - type: Item
+    sprite: CMU14/Weapons/Guns/LACN/LACNRedux/LACN/krameremplacedmg/krameremplaced32x32.rsi
+  - type: Clothing
+    slots: NONE
+  - type: Gun
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - FullAuto
+    soundGunshot:
+      collection: CMM54CShoot
+    soundEmpty:
+      path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - FullAuto
+    recoilWielded: 0
+    recoilUnwielded: 0
+    scatterWielded: 4
+    scatterUnwielded: 4
+    baseFireRate: 13
+    burstScatterMult: 1
+    modifiers:
+      FullAuto:
+        fireDelay: 0
+        maxScatterModifier: 26
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 1
+        shotsToMaxScatter: 4
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.25
+    accuracyMultiplierUnwielded: 1.25
+  - type: GunDamageModifier
+    multiplier: 1.05
+  - type: GunIFF
+    enabled: true
+    preventFriendlyFire: true
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14WeaponRifleKramerMagazineLSWStandard
+          - AU14WeaponRifleKramerMagazineLSWAP
+  - type: Tag
+    tags:
+    - CMUMachineGunKramerEmplaced
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: CMUKramerEmplacedMGCase
+  name: Kramer emplaced machine gun case
+  description: A gun case containing the Kramer emplaced machine gun and its tripod. Comes with three standard and one AP Kramer LSW box magazines.
+  components:
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,1
+    whitelist:
+      tags:
+      - CMUKramerEmplacedMGMount
+      - AU14WeaponRifleKramerMagazineLSWStandard
+      - AU14WeaponRifleKramerMagazineLSWAP
+      - RMCSkillPamphlet
+  - type: StorageFill
+    contents:
+    - id: RMCPamphletHeavyMachineGunner
+    - id: CMUKramerEmplacedMGMount
+    - id: AU14WeaponRifleKramerMagazineLSWStandard
+      amount: 3
+    - id: AU14WeaponRifleKramerMagazineLSWAP
+
+- type: Tag
+  id: CMUKramerEmplacedMGMount
+
+- type: Tag
+  id: CMUMachineGunKramerEmplaced

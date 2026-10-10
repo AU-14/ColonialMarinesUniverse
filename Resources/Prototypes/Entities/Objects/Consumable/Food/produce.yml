@@ -911,6 +911,11 @@
     heldPrefix: produce
   - type: Produce
     plantId: PotatoPlants
+  - type: Extractable # CMU14: potatoes juice into JuicePotato
+    juiceSolution:
+      reagents:
+      - ReagentId: JuicePotato
+        Quantity: 10
   - type: Tag
     tags:
     - Potato

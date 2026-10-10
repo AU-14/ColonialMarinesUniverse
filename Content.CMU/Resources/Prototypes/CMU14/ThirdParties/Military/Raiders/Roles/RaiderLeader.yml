@@ -55,19 +55,19 @@
 - type: startingGear
   id: CMUGearRaiderLeader
   equipment:
-    head: RMCArmorHelmetMARSOC
+    head: CMUArmorHelmetRaider
     mask: RMCMaskBalaclavaMARSOC
-    ears: RMCHeadsetMARSOC
-    jumpsuit: CMUJumpsuitRaiderWebbingBuckshot
-    outerClothing: CMUArmorRaiderXM40
+    ears: CMUHeadsetRaider
+    jumpsuit: CMUJumpsuitRaider
+    outerClothing: CMUArmorRaider
     gloves: CMHandsBlackMarine
     shoes: CMBootsBlackFilled
     suitstorage: CMUWeaponRifleXM40Raider
     id: CMUIDCardRaiderLeader
-    belt: RMCWeaponShotgunXM38Filled
+    belt: RMCBeltMarineMK2
     back: CMUSatchelRaider
-    pocket1: RMCPouchMedicalSocMarineRaiderFill
-    pocket2: RMCPouchToolsSocMarineRaiderFill
+    pocket1: RMCPouchFirstAidERTFill
+    pocket2: CMUPouchToolsRaiderFill
 
 - type: playTimeTracker
   id: CMUJobRaiderLeader

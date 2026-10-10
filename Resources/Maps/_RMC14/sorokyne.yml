@@ -64268,7 +64268,7 @@ entities:
         - Gun
         - CassettePlayer
     - type: InsideEntityStorage
-- proto: RMCArmorSPPFirefighter
+- proto: CMUArmorFirefighterUPP # CMU14
   entities:
   - uid: 789
     components:
@@ -94391,7 +94391,7 @@ entities:
     - type: Transform
       pos: 158.5,87.5
       parent: 1
-- proto: RMCInflatableDoor
+- proto: CMUInflatableDoor # CMU14
   entities:
   - uid: 6962
     components:
@@ -94528,7 +94528,7 @@ entities:
     - type: Transform
       pos: 69.5,36.5
       parent: 1
-- proto: RMCInflatableDoorBroken
+- proto: CMUInflatableDoorBroken # CMU14
   entities:
   - uid: 6989
     components:
@@ -94655,7 +94655,7 @@ entities:
     - type: Transform
       pos: 108.5,70.5
       parent: 1
-- proto: RMCInflatableWall
+- proto: CMUInflatableWall # CMU14
   entities:
   - uid: 7014
     components:
@@ -94792,7 +94792,7 @@ entities:
     - type: Transform
       pos: 70.5,36.5
       parent: 1
-- proto: RMCInflatableWallBroken
+- proto: CMUInflatableWallBroken # CMU14
   entities:
   - uid: 7041
     components:
@@ -94864,7 +94864,7 @@ entities:
     - type: Transform
       pos: 56.5,34.5
       parent: 1
-- proto: RMCInflatableWallFolded
+- proto: CMUInflatableWallFolded # CMU14
   entities:
   - uid: 7055
     components:

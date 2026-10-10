@@ -15,6 +15,19 @@
   name: SPP tank turret
   description: A tank turret configured for SPP armor.
   components:
+  - type: HardpointState
+  - type: ContainerContainer
+    containers:
+      turret-cannon: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+      turret-launcher: !type:ContainerSlot
+        ent: null
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 450
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/spptank.rsi
     state: tank_turret_0
@@ -69,6 +82,16 @@
   name: P-17702 rotary cannon
   description: An SPP rotary cannon tank hardpoint.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: RMCWeaponAccuracy
+    modifiedAccuracyMultiplier: 4
+  - type: HardpointIntegrity
+    integrity: 400
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/spptank.rsi
     state: p17702
@@ -108,6 +131,14 @@
   name: SPP railgun
   description: A railgun hardpoint for SPP tank turrets.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 550
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/spptank.rsi
     state: railgun
@@ -143,6 +174,14 @@
   name: HJ35T launcher
   description: An SPP anti-armor launcher for tank turrets.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 500
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/spptank.rsi
     state: hj35tlauncher
@@ -179,6 +218,14 @@
   name: T60P3M cupola
   description: A cupola-mounted weapon fitted to SPP armor.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 350
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/spptank.rsi
     state: t60p3m
@@ -218,6 +265,8 @@
   name: reactive armor plating
   description: Reactive armor plating for an SPP tank.
   components:
+  - type: HardpointIntegrity
+    integrity: 1000
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/spptank.rsi
     state: reactive_armor
@@ -233,6 +282,14 @@
   name: SPP smoke launcher
   description: A smoke launcher support attachment for an SPP tank.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 100
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/spptank.rsi
     state: turret_slauncher
@@ -248,6 +305,14 @@
   name: SPP flare module
   description: A flare launcher support attachment for an SPP tank.
   components:
+  - type: ContainerContainer
+    containers:
+      ballistic-ammo: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
+  - type: HardpointIntegrity
+    integrity: 500
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/hardpoints/spptank.rsi
     state: turret_slauncher_e
@@ -263,6 +328,8 @@
   name: SPP warning array
   description: An integrated weapons sensor array for SPP tank support slots.
   components:
+  - type: HardpointIntegrity
+    integrity: 250
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/spptank.rsi
     state: warray_0
@@ -278,6 +345,8 @@
   name: SPP overdrive enhancer
   description: An overdrive enhancer support attachment for an SPP tank.
   components:
+  - type: HardpointIntegrity
+    integrity: 250
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/spptank.rsi
     state: odrive_enhancer_0
@@ -293,6 +362,8 @@
   name: SPP artillery module
   description: An artillery support module for an SPP tank.
   components:
+  - type: HardpointIntegrity
+    integrity: 250
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/spptank.rsi
     state: artillerymod_0

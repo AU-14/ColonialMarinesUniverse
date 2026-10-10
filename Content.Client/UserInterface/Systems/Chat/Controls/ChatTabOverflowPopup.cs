@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Chat;
 using Robust.Client.Graphics;
@@ -53,7 +53,7 @@ public sealed class ChatTabOverflowPopup : Popup
             var active = string.Equals(tab.Id, activeTabId, StringComparison.OrdinalIgnoreCase);
             var button = new Button
             {
-                Text = tab.Title,
+                Text = ChatUserSettings.GetDisplayTitle(tab), // CMU14 hardcode Localization 
                 ToggleMode = true,
                 Pressed = active,
                 HorizontalExpand = true,

@@ -1,0 +1,5 @@
+# Inferred presentation heights; regenerate with Tools/three_d/author_elevation.py.
+- type: cmu3DElevation
+  id: CMU3DStableGarrisonRedux3
+  regions: []
+  ramps: []

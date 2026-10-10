@@ -56,7 +56,7 @@
     UPP_Sergeant:
       entity: AU14ChevronUPPNISergeant
       requirements: []
-  spawnMenuRoleName: UPP GROM Marksman (Survivor)
+  spawnMenuRoleName: UPP GROM Marksman
   startingGear: AU14GearUPPGROMMarksman
   greeting: au14-uppgrom-greeting
   icon: "CMJobIconEmpty"
@@ -90,16 +90,19 @@
   id: AU14GearUPPGROMMarksman
   equipment:
     id: AU14IDCardUPPGROMMarksman
-    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    outerClothing: CMUUPPArmorFullMinimalistic
     jumpsuit: AU14FatiguesUPPGROM
     shoes: RMCBootsSPPFilled
     head: AU14UPPBoonie
     belt: AU14BeltHolsterPistolUPPFull
-    pocket1: AU14PouchIFAKFill
-    pocket2: AU14PouchIFAKFill
-    back: RMCSatchelSPPFullMarksman
+    pocket1: CMUUPPPouchMagazineUPPFullMarksman
+    pocket2: RuMCUPPPouchIFAKFill
+    back: CMUUPPNavalInfantrySatchelFullMarksman
     ears: RMCHeadsetGROM
     suitstorage: RMCWeaponRifleAK4047
+  storage:
+    back:
+    - RMCAttachmentS84xTelescopicScope
 
 - type: playTimeTracker
   id: AU14JobUPPGROMMarksman

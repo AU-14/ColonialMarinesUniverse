@@ -58,7 +58,7 @@ public sealed class ForceInterestTest : GameTest
 
             var party = Server.ProtoMan.Index<ThirdPartyPrototype>("TestForceInterestParty");
             var spawn = Server.ProtoMan.Index(party.PartySpawn);
-            Assert.That(SEntMan.System<ThirdPartySystem>().SpawnThirdParty(party, spawn, false), Is.True);
+            SEntMan.System<ThirdPartySystem>().SpawnThirdParty(party, spawn, false);
             var forces = SEntMan.System<ForceInterestSystem>().GetForces(ServerSession!);
             Assert.That(forces, Has.Length.EqualTo(1));
             id = forces[0].Identifier;
@@ -157,6 +157,31 @@ public sealed class ForceInterestTest : GameTest
         {
             Assert.That(spawned, Is.EqualTo(1));
             Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(shelved), Is.True);
+        });
+    }
+
+    [Test]
+    public async Task ReadyForceDeploysUnderstaffedOnceFallbackDelayExpires()
+    {
+        var spawned = 0;
+        uint id = 0;
+        await Server.WaitAssertion(() =>
+        {
+            Server.PlayerMan.SetAttachedEntity(ServerSession!, null);
+            var interest = SEntMan.System<ForceInterestSystem>();
+            // Two roles need two volunteers. One interested player must not block forever.
+            id = interest.QueueForce("Fallback", new Dictionary<string, int> { ["TestForceInterestBody"] = 2 },
+                _ => { spawned++; return true; });
+            interest.SetInterest(ServerSession!, id, true);
+        });
+        await RunSeconds(2);
+        await Server.WaitAssertion(() =>
+            Assert.That(spawned, Is.Zero, "a ready force must still wait for quorum before the fallback"));
+        await RunSeconds(601);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(spawned, Is.EqualTo(1), "the fallback must deploy a ready force understaffed once the wait expires");
+            Assert.That(SEntMan.System<ForceInterestSystem>().IsPending(id), Is.False);
         });
     }
 

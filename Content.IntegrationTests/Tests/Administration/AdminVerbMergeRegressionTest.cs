@@ -151,6 +151,7 @@ public sealed class AdminVerbMergeRegressionTest : GameTest
                             : job.LocalizedName,
                     })
                     .OrderBy(entry => entry.Text, StringComparer.Ordinal)
+                    .ThenBy(entry => entry.Job.ID, StringComparer.Ordinal)
                     .ToArray();
 
                 Assert.That(dialog.Options, Has.Count.EqualTo(expected.Length));

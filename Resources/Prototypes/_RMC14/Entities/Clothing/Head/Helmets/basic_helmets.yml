@@ -103,6 +103,8 @@
   - type: Tag
     tags:
     - RMCHelmet
+  - type: FireProtection # CMU14: small fire resistance
+    reduction: 0.05
 
 - type: entity
   parent: RMCHelmetBase

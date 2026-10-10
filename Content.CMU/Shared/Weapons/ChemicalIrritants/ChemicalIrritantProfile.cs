@@ -74,13 +74,16 @@ public sealed partial class ChemicalIrritantProfile
     [DataField]
     public TimeSpan MinimumDelayBetweenTrips = TimeSpan.FromSeconds(5);
     
+    /// <summary>
+    /// Fluent localization IDs shown to exposed entities.
+    /// </summary>
     [DataField]
     public List<string> ExposureMessages = new()
     {
-        "Your eyes sting!",
-        "Your lungs burn!",
-        "You cough uncontrollably!",
-        "Your skin burns!",
-        "You gasp for air!"
+        "cmu-chemical-irritant-exposure-eyes-sting",
+        "cmu-chemical-irritant-exposure-lungs-burn",
+        "cmu-chemical-irritant-exposure-cough",
+        "cmu-chemical-irritant-exposure-skin-burns",
+        "cmu-chemical-irritant-exposure-gasp"
     };
 }

@@ -44,3 +44,26 @@
   components:
   - type: CMItemSlots
     startingItem: AU14MRETWERMC
+
+- type: entity
+  parent: AU14MRETWERMC
+  id: CMUMRELACN
+  name: LACN ration pack
+  description: A Latin American Colonial Navy field ration. It has a long shelf life and a hearty selection of meals.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/mre_weya.rsi
+
+- type: entity
+  parent: RMCBoxMREEmpty
+  id: CMUBoxMRELACNEmpty
+  name: box of LACN MREs (x12)
+
+- type: entity
+  parent: CMUBoxMRELACNEmpty
+  id: CMUBoxMRELACN
+  name: box of LACN MREs (x12)
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: CMUMRELACN

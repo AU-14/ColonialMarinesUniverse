@@ -16,6 +16,9 @@ public sealed partial class TacticalMapComputerComponent : Component
     [DataField, AutoNetworkedField]
     public Dictionary<int, TacticalMapBlip> Blips = new();
 
+    /// <summary>Local revision of feeds published by UpdateMapData; not a permission token.</summary>
+    public ulong BlipRevision;
+
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan NextUpdate;
 
@@ -33,6 +36,12 @@ public sealed partial class TacticalMapComputerComponent : Component
 
     [DataField("faction"), AutoNetworkedField]
     public string? Faction;
+
+    /// <summary>
+    ///     Whether this computer exposes the drawing/label canvas. Tactical globes are read-only map displays.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool AllowCanvas = true;
 
     /// <summary>Squad blips for overwatch consoles assigned to a squad.</summary>
     [DataField, AutoNetworkedField]

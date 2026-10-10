@@ -2,9 +2,9 @@ au14-department-govforces-description = Government Forces
 au14-department-govforces = Government Forces
 
 au14-job-supervisors-govforplatco = High Command
-au14-job-supervisors-govfor = Platoon Commander
+au14-job-supervisors-govfor = Commanding Officer
 
-au14-job-name-govforplatco = Commander
+au14-job-name-govforplatco = Commanding Officer
 au14-job-description-govforplatco = Command the unit. Manage strategy, unit coordination and liaise with command from the CIC.
 au14-job-prefix-govforplatco = CMNDR
 
@@ -13,7 +13,7 @@ au14-job-description-govforadjutant = Stand ready to assume command. Handle unit
 au14-job-prefix-govforadjutant = XO
 
 au14-job-name-govforplatop = Staff Officer
-au14-job-description-govforplatop = Plan operations and track the battlefield. Turn the Commander's intent into orders, assist with coordination, and operational oversight.
+au14-job-description-govforplatop = Plan operations and track the battlefield. Turn the Commanding Officer's intent into orders, assist with coordination, and operational oversight.
 au14-job-prefix-govforplatop = SO
 
 au14-job-name-govforengineering = Engineering Officer
@@ -21,7 +21,7 @@ au14-job-description-govforengineering = Keep the unit's structures, assets and 
 au14-job-prefix-govforengineering = EO
 
 au14-job-name-govforintel = Intelligence Officer
-au14-job-description-govforintel = Assist the Commander with intelligence.
+au14-job-description-govforintel = Assist the Commanding Officer with intelligence.
 au14-job-prefix-govforintel = IO
 
 au14-job-name-govforlogistics = Logistics Officer
@@ -39,6 +39,22 @@ au14-job-prefix-govforpolicechief = CMP
 au14-job-name-govfordspilot = Dropship Pilot
 au14-job-description-govfordspilot = Fly the dropship. Insert troops, extract casualties, and deliver fire support.
 au14-job-prefix-govfordspilot = DP
+
+au14-job-name-govfortransportpilot = Transport Pilot
+au14-job-description-govfortransportpilot = Fly the dropship. Insert troops, extract casualties, and move supplies between the ship and the front.
+au14-job-prefix-govfortransportpilot = TP
+
+au14-job-name-govforgunshippilot = Gunship Pilot
+au14-job-description-govforgunshippilot = Fly the gunship. Provide close air support and suppress enemy positions.
+au14-job-prefix-govforgunshippilot = GP
+
+au14-job-name-govforfighterpilot = Fighter Pilot
+au14-job-description-govforfighterpilot = Fly the fighter. Win air superiority, intercept enemy aircraft and mark targets.
+au14-job-prefix-govforfighterpilot = FP
+
+au14-job-name-govforfightersystemsofficer = Fighter Systems Officer
+au14-job-description-govforfightersystemsofficer = Crew the fighter's back seat. Run its weapon systems and strike targets.
+au14-job-prefix-govforfightersystemsofficer = FSO
 
 au14-job-name-govfordcc = Dropship Crew Chief
 au14-job-description-govfordcc = Maintain the dropships. Coordinate cargo, passengers, and assist the pilots.
@@ -156,7 +172,7 @@ au14-job-prefix-govforsquadsergeantRMC = SC
 au14-job-name-govforsquadautomaticriflemanRMC = Machinegunner
 au14-job-prefix-govforsquadautomaticriflemanRMC = MG
 au14-job-name-govforauxsupportsynthRMC = Support Synthetic
-au14-job-name-govforplatcoRMC = Commander
+au14-job-name-govforplatcoRMC = Commanding Officer
 au14-job-name-govforplatooncorpsmanRMC = Hospital Corpsman
 au14-job-name-govfordccRMC = Dropship Chief Crew
 au14-job-name-govforplatopRMC = Staff Officer

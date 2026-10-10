@@ -21,7 +21,7 @@ public sealed partial class ExplosionAirtightGridComponent : Component
     /// Intentionally not saved.
     /// </remarks>
     [ViewVariables]
-    public readonly Dictionary<Vector2i, TileData> Tiles = new();
+    public readonly ExplosionTileMap<TileData> Tiles = new();
 
     /// <summary>
     ///     Data struct that describes the explosion-blocking airtight entities on a tile.
@@ -32,6 +32,9 @@ public sealed partial class ExplosionAirtightGridComponent : Component
         /// Which index into the tolerance cache of <see cref="ExplosionSystem"/> this tile is using.
         /// </summary>
         public required int ToleranceCacheIndex;
+
+        // The values are immutable. Snapshots retain them independently of recycled cache indices.
+        public required ToleranceValues Tolerances;
 
         /// <summary>
         /// Which directions this tile is blocking explosions in. Bitflag field.

@@ -16,6 +16,8 @@
 - type: vendingMachineInventory
   id: AU14VendorKoorCigs
   startingInventory:
+    PackPaperRolling: 20
+    PackPaperRollingFilters: 10
     AU14CigaretteKoorlander: 50
     AU14CigaretteLadyFingers: 20
     RMCMatchboxFull: 15
@@ -361,6 +363,7 @@
     - AU14JobOPFORMilitaryDoctor
     - AU14JobOPFOROfficerMedical
     - AU14JobOPFORAuxSupportSynth
+    - AU14JobOPFORNurse
     sections:
     - name: Essential Equipment
       takeAll: CMUEssentialEquipment
@@ -400,7 +403,9 @@
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
       - id: CMBeltMedicBag
+        recommended: true
       - id: AU14BeltMedicBagBlack
+      - id: CMBeltMedical
     - name: Medical Webbing
       choices: { CMUPlatoonSurgicalWebbing: 1 }
       entries:
@@ -414,6 +419,10 @@
       choices: { CMUPlatoonMedicalMasks: 1 }
       entries:
       - id: CMMaskSterile
+    - name: Synthetic Supplies
+      entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
 
 - type: entity
   parent: CMVendorBundleRiflemanApparel
@@ -444,6 +453,7 @@
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORWeaponsSpecialist
+    - AU14JobOPFORWeaponsSpecialist
     pointsType: Specialist
     sections:
     - name: Weapons Specialist Sets
@@ -501,5 +511,6 @@
   - type: AccessReader
     access:
     - [ "AU14AccessGovforSquadWeaponsSpecialist" ]
+    - [ "AU14AccessOpforSquadWeaponsSpecialist" ]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/specialist_gear.rsi

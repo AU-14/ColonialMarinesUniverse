@@ -48,7 +48,9 @@
       entries:
       - id: AU14WYPMCHelmet
         amount: 40
-      - id: AU14HelmetGarbRiotVisor
+      - id: CMUHelmetGarbPMCPlatemask
+        amount: 40
+      - id: CMUHelmetGarbPMCGoggles
         amount: 40
       - id: AU14WYPMCBallCap
         amount: 20
@@ -67,6 +69,22 @@
       - id: AU14WYPMCArmor
         amount: 40
       - id: AU14WYPMCArmorMin
+        amount: 30
+      - id: CMUHelmetGarbPMCNeckerchief
+        amount: 40
+      - id: CMUHelmetGarbPMCPads
+        amount: 40
+      - id: CMUHelmetGarbPMCPadsAlt
+        amount: 30
+      - id: CMUHelmetGarbPMCBraces
+        amount: 40
+      - id: CMUHelmetGarbPMCBracesAlt
+        amount: 30
+      - id: CMUHelmetGarbPMCLapPanel
+        amount: 40
+      - id: CMUHelmetGarbPMCKneepads
+        amount: 40
+      - id: CMUHelmetGarbPMCGreaves
         amount: 30
     - name: Backpack
       entries:
@@ -194,10 +212,10 @@
     sections:
     - name: Food
       entries:
-      - id: CMMRE
+      - id: RMCMREWeYa
         name: MRE
         amount: 30
-      - id: RMCBoxMRE
+      - id: RMCBoxMREWEYA
         amount: 5
     - name: Tools
       entries:
@@ -241,11 +259,15 @@
         amount: 40
       - id: AU14PouchGasMaskBag
         amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill
         name: infantry first aid kit (Full)
         recommended: true
+        amount: 30
+      - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 40
@@ -330,9 +352,15 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: AU14BeltMedicBagBlack
+      - id: CMUBeltMedicBagPMC
+        recommended: true
+      - id: CMUBeltMedicalPMC
     - name: General Medical Supplies
       entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
+      - id: CMUMaskCPR
+        amount: 30
       - id: AU14HemostaticGauzePacket
         amount: 60
       - id: AU14Tourniquet
@@ -472,6 +500,14 @@
       - id: RMCArmorHelmetSecurity
       - id: AU14WYPMCBallCap
       - id: RMCM5CameraGear
+    - name: Flight Visor
+      choices: { CMUPlatoonAirCrewFlightVisor: 1 }
+      entries:
+      - id: AU14GogglesLAH99VisorHighTech
+    - name: Flight Mask
+      choices: { CMUPlatoonAirCrewFlightMask: 1 }
+      entries:
+      - id: AU14MaskUSASFPilotOxygen
     - name: Webbings
       choices: { CMUPlatoonAirCrewWebbings: 1 }
       entries:
@@ -662,6 +698,12 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
+      - id: ANPRC117GRadioIssued
+        amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 1
       - id: ArmorHelmetPMCFieldOfficer
         amount: 3
       - id: RMCExplosiveBreachingCharge
@@ -713,8 +755,8 @@
       takeAll: CMUAREssentialEquipmentClothing
       entries:
       - id: RMCJumpsuitVeteranPMCGunner
-      - id: CMArmorM4PMCSmartGunHarness
-      - id: ArmorHelmetPMCGunner
+      - id: CMU14WYPMCArmorSmarGunHarness
+      - id: AU14ArmorHelmetPMCTactical
     - name: Smartgun Munitions
       entries:
       - id: RMCMagazineSmartGun
@@ -875,6 +917,7 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
+      - id: CMU14KitWeaponM41AMK1PMC
       - id: CMUGunCaseRifleNSG23
       - id: AU14KitWeaponFP9000
       - id: AU14KitWeaponM39B2
@@ -885,6 +928,8 @@
       - id: RMCMagazineSMGFP9000
         amount: 60
       - id: CMMagazineSMGM63
+        amount: 60
+      - id: CMMagazineRifleM54CMK1
         amount: 60
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
@@ -964,6 +1009,7 @@
   name: We-Yu PMC automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]
   - type: Sprite
@@ -983,6 +1029,8 @@
       - id: RMCWeaponSMGM63B2
         amount: 20
       - id: RMCWeaponRifleSSG45NoLockStripped
+        amount: 20
+      - id: CMU14WeaponRifleM41AMK1PMC
         amount: 20
     - name: standard issue secondaries
       entries:
@@ -1024,6 +1072,12 @@
         amount: 30
       - id: RMCMagazineRifleSSG45
         amount: 100
+      - id: CMMagazineRifleM54CMK1
+        amount: 100
+      - id: CMMagazineRifleM54CMK1AP
+        amount: 10
+      - id: CMMagazineRifleM54CMK1Tracer
+        amount: 5
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette
@@ -1060,6 +1114,8 @@
         amount: 5
     - name: explosives
       entries:
+      - id: CMUBoxGrenadeTraining
+        amount: 1
       - id: CMPacketGrenadeHighExplosiveFilled
         amount: 6
       - id: AU14PacketGrenadeFragM12Filled
@@ -1096,12 +1152,12 @@
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12
+      - id: AU14Bangalore
+        amount: 2
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel
         amount: 5
-      - id: RMCAttachmentShotgunChoke
-        amount: 3
     - name: Rail Attachments
       entries:
       - id: RMCAttachmentTwoPointSling
@@ -1144,6 +1200,12 @@
         amount: 10
       - id: RMCPouchMagazinePistolLarge
         amount: 10
+      - id: RMCPouchGeneralLarge
+        amount: 5
+      - id: RMCPouchDocument
+        amount: 5
+      - id: RMCPouchShotgunLarge
+        amount: 5
     - name: Devices
       entries:
       - id: RMCIntelDetector
@@ -1154,14 +1216,26 @@
         amount: 4
       - id: RMCSentryLaptop
         amount: 4
-    - name: RTO Packs
+      - id: MineDetector
+        amount: 2
+      - id: CMUDeployableZLevelLadder
+        amount: 2
+    - name: Protective Equipment
       entries:
-      - id: AU14BackpackRTOPackJungle
-        amount: 1
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
-      - id: AU14BackpackRTOPackGray
-        amount: 1
+      - id: CMMaskGas
+        amount: 30
+      - id: CMUGasMaskFilterWY
+        amount: 30
+      - id: CMUFieldGasTankOxygenFilled
+        amount: 15
+    - name: Radio Equipment
+      entries:
+      - id: ANPRC117GRadio
+        amount: 3
+      - id: ANPRCWhipAntenna
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 2
     - name: Materials
       entries:
       - id: CMSheetMetal
@@ -1172,6 +1246,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

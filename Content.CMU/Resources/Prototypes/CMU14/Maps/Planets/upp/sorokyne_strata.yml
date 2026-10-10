@@ -25,7 +25,9 @@
     govforinship: true
     opforinship: true
     daycycleenabled: true
+    thirdpartyinterval: 1800
     thirdparties:
+    - FreeCompanyRaiders
     - UPPLineSquadSurv
     - ProdigySurvLarge
     - ProdigySurvMedium
@@ -34,6 +36,9 @@
     - cultistThirdParty
     - UPPGROM
     - UPPGROMAlt
+    - CHTORM_PMC_BEAR
+    - GROZA_PMC_BEAR
+    - SKALA_PMC_BEAR
     - UPPGROMAlt2
     - CLFSurvsBig
     - CLFSurvsMedium
@@ -53,18 +58,16 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     threats:
     - XenoThreat
     - NeomorphsThreat
-    - AbominationsThreatDS
-    - ApeThreatDS
     # - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF
     - CultistThreatCF
     - WendigoThreatCF
-    - AbominationsThreatCF
+    - BiomorphsThreatCF
     - TribalsThreatCF
     - ApeThreatCF
     jobScalingFof: DefaultGovforOpforScale
@@ -127,6 +130,7 @@
 
             AU14JobCivilianHeadOfEngineering: [1, 1]
             AU14JobCivilianEngineer: [5, 5]
+            CMUJobCivilianAtmosian: [1, 2]
 
             # Medical
             AU14JobCivilianHeadPhysician: [1, 1]

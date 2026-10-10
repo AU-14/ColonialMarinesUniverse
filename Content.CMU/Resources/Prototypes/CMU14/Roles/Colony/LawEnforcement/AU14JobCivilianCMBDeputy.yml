@@ -1,5 +1,6 @@
 - type: job
   parent: AU14JobLEOBase
+  displayWeight: 14
   id: AU14JobCivilianCMBDeputy
   roundSide: Civilian
   roundForce: CMB
@@ -29,6 +30,8 @@
   setPreference: false
   canBeAntag: false
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -36,6 +39,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -76,15 +81,15 @@
     shoes: RMCBootsPMCFilled
     id: AU14IDCardColonyCMBDeputy
     ears: AU14CMBHeadset
-    outerClothing: RMCCoatSnowSurvivorCMBDeputy
+    outerClothing: RMCCoatBureauDeputy
     suitstorage: AU14BeltHolsterPistolBlack
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
-  inhand:
-  - RMCGunCasePistolM1984
   storage:
     back:
     - AU14GuidebookLawColonial
+    - ForensicScanner
+    - CMURecordsTablet
 
 - type: entity
   parent: CMSpawnPointJobBase

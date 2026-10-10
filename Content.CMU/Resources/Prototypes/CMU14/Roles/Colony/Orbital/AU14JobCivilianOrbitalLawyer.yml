@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCivilianOrbitalLawyer
   roundSide: Civilian
   roundForce: ORBITAL
@@ -34,6 +34,8 @@
   - Colonist
   - auorbitallaw
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -81,6 +83,7 @@
     - CMPaperBin30
   inhand:
   - AU14BriefcaseLawBundle
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

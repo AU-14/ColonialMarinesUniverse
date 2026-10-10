@@ -5,7 +5,14 @@
   description: Standard-issue LACN landing forces fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/Uniforms/lacnuniform.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNstandarduniform.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNstandarduniform.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Infantry/Desert/LACNstandarduniform.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Infantry/Snow/LACNstandarduniform.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Infantry/Jungle/LACNstandarduniform.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Infantry/Urban/LACNstandarduniform.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
@@ -32,4 +39,92 @@
   description: A standard LACN Aircrew Jumpsuit. It has shards of light Kevlar to help protect against shrapnel.
   components:
   - type: Sprite
-    sprite: CMU14/Clothing/LACN/PilotGear/uniform.rsi
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Flightcrew/LACNshipjumpsuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMULACNCommandoUniform
+  name: LACN commando fatigues
+  description: Mixed-pattern fatigues worn by the Naval Commandos of the LACN. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNmixedjungleuniform.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNmixedjungleuniform.rsi
+      Desert: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNmixedjungleuniform.rsi
+      Snow: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNmixedsnowuniform.rsi
+      Classic: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNmixedjungleuniform.rsi
+      Urban: CMU14/Clothing/LACN/LACNRedux/Commandos/LACNmixedjungleuniform.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMULACNEngineerFieldUniform
+  name: LACN engineering field uniform
+  description: A field uniform worn by LACN shipboard engineering personnel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Engineering/LACNengifieldjacket.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMULACNEngineerJumpsuit
+  name: LACN engineering coveralls
+  description: Work coveralls worn by LACN shipboard engineering personnel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Engineering/LACNengijumpsuit.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMULACNMedicalFieldUniform
+  name: LACN medical field uniform
+  description: A field uniform worn by LACN shipboard medical personnel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Medical/LACNmedfieldjacket.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMULACNRequisitionsFieldUniform
+  name: LACN requisitions field uniform
+  description: A field uniform worn by LACN requisitions and logistics personnel.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Requisitions/LACNreqfieldjacket.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMULACNMPUniform
+  name: LACN military police uniform
+  description: A uniform worn by the LACN shipboard military police.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/MilitaryPolice/LACNMPuniform.rsi
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: CMULACNServiceUniform
+  name: LACN service uniform
+  description: A service uniform worn by commissioned officers of the Latin American Colonial Navy.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Officers/LACNserviceuniform.rsi
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: CMULACNMedicalScrubs
+  name: LACN medical scrubs
+  description: Scrubs worn by LACN shipboard medical personnel. They're made of a special fiber that provides minor protection against biohazards.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Medical/LACNmedscrubs.rsi
+
+- type: entity
+  parent: RMCMarineUniformBase
+  id: CMULACNSurgicalScrubs
+  name: LACN surgical scrubs
+  description: Surgical scrubs worn by LACN shipboard medical personnel. They're made of a special fiber that provides minor protection against biohazards.
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/LACN/LACNRedux/Shipside/Medical/LACNmedscrubs2.rsi

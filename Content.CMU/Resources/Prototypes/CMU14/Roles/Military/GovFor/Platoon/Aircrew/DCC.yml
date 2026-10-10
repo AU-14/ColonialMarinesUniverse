@@ -1,11 +1,12 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 3
   id: AU14JobDCCBaseAbstract
   name: au14-job-name-govfordcc
   description: au14-job-description-govfordcc
   icon: "AU14JobIconDCC"
-  spawnMenuRoleName: Dropship Crew Chief (GOVFOR)
+  spawnMenuRoleName: au14-spawn-role-name-govfor-dropship-crew-chief
   startingGear: AU14GearGOVFORDCC
   dummyStartingGear: AU14GearGOVFORDCCDummy
   playTimeTracker: AU14JobGOVFORDCC
@@ -90,6 +91,9 @@
       prefix: au14-job-prefix-AU14JobGOVFORDCCWYPMC
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -103,6 +107,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -180,6 +186,7 @@
   - AU14OpforPilot
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORDCC
 
 - type: startingGear
   id: AU14GearopforDCC

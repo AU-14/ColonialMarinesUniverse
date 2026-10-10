@@ -48,6 +48,21 @@ public sealed partial class RMCUnrevivableSystem : EntitySystem
         return HasComp<UnrevivableComponent>(uid);
     }
 
+    // cmu edit start
+    public TimeSpan? GetTimeUntilUnrevivable(EntityUid uid)
+    {
+        if (IsUnrevivable(uid) ||
+            !TryComp<RMCRevivableComponent>(uid, out var revivable) ||
+            revivable.UnrevivableAt is not { } deadline)
+        {
+            return null;
+        }
+
+        var remaining = deadline - _timing.CurTime;
+        return remaining < TimeSpan.Zero ? TimeSpan.Zero : remaining;
+    }
+    // cmu edit end
+
     public void MakeUnrevivable(Entity<RMCRevivableComponent?> ent, bool killLarva = true)
     {
         if (!Resolve(ent.Owner, ref ent.Comp, false))

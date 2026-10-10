@@ -7,31 +7,31 @@
     edges:
     - to: ventpump
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: passivevent
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: ventscrubber
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
     - to: outletinjector
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 1
 
   - node: ventpump
     entity: !type:CreateVariants
-      values: [ GasVentPump, GasVentPumpAlt1, GasVentPumpAlt2 ]
+      values: [ CMVentPump, CMVentPumpAlt1, CMVentPumpAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -39,7 +39,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -50,7 +50,7 @@
 
   - node: passivevent
     entity: !type:CreateVariants
-      values: [ GasPassiveVent, GasPassiveVentAlt1, GasPassiveVentAlt2 ]
+      values: [ CMUPassiveVent, CMUPassiveVentAlt1, CMUPassiveVentAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -58,7 +58,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -69,7 +69,7 @@
 
   - node: ventscrubber
     entity: !type:CreateVariants
-      values: [ GasVentScrubber, GasVentScrubberAlt1, GasVentScrubberAlt2 ]
+      values: [ CMVentScrubber, CMVentScrubberAlt1, CMVentScrubberAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -77,7 +77,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:
@@ -88,7 +88,7 @@
 
   - node: outletinjector
     entity: !type:CreateVariants
-      values: [ GasOutletInjector, GasOutletInjectorAlt1, GasOutletInjectorAlt2 ]
+      values: [ CMUOutletInjector, CMUOutletInjectorAlt1, CMUOutletInjectorAlt2 ] # CMU14
     edges:
     - to: start
       conditions:
@@ -96,7 +96,7 @@
         anchored: false
       completed:
       - !type:SpawnPrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity
       steps:

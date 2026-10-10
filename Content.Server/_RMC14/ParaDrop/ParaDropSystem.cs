@@ -1,6 +1,7 @@
 using Content.Server._RMC14.Dropship;
 using Content.Shared.Doors.Components;
 using Content.Shared.ParaDrop;
+using Content.Shared.CMU14.Dropship.MultiDeck;
 
 namespace Content.Server._RMC14.ParaDrop;
 
@@ -16,6 +17,8 @@ public sealed partial class ParaDropSystem: SharedParaDropSystem
 
     private void OnActiveParaDropShutdown(Entity<ActiveParaDropComponent> ent, ref ComponentShutdown args)
     {
+        var changed = new DropshipParadropChangedEvent(false);
+        RaiseLocalEvent(ent, ref changed);
         var enumerator = Transform(ent).ChildEnumerator;
         while (enumerator.MoveNext(out var child))
         {

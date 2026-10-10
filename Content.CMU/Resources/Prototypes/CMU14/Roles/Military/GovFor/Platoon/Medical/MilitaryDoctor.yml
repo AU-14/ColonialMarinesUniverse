@@ -2,6 +2,7 @@
   abstract: true
   parent: AU14JobMilitaryBaseAbstract
   id: AU14JobMilitaryDoctorBase
+  displayWeight: 6
   roundRole: MilitaryDoctor
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
@@ -23,6 +24,9 @@
         sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
         state: doctor
   requirements:
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -33,6 +37,8 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -105,6 +111,7 @@
   accessGroups:
   - AU14OpforCorpsman
   - AU14OpforSquad
+  useLoadoutOfJob: AU14JobGOVFORMilitaryDoctor
 
 - type: startingGear
   id: AU14GearOPFORMilitaryDoctor
@@ -117,9 +124,9 @@
     pocket2: AU14PouchAutoinjectorFilledMilitaryDoctor
     back: AU14SatchelMilitaryDoctor
     outerClothing: RMCLabcoat
-    ears: AU14HeadsetGovforAuxiliary
+    ears: AU14HeadsetOpforAuxiliary
     ears2: RMCM5CameraGear
-    id: AU14IDCardGOVFORDoctor
+    id: AU14IDCardOPFORDoctor
     neck: ClothingNeckStethoscope
     eyes: RMCGlassesMedicalHUDGlasses
   inhand:

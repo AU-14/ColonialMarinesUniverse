@@ -11,50 +11,44 @@ public sealed partial class CMUDeleteZNetworkCommand : LocalizedEntityCommands
     [Dependency] private IEntityManager _entities = default!;
 
     public override string Command => "znetwork-delete";
-    public override string Description => "Delete all maps into selected zNetwork + zNetwork entity";
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
     {
         var options = new List<CompletionOption>();
         var query = _entities.EntityQueryEnumerator<CMUZLevelsNetworkComponent, MetaDataComponent>();
-        while (query.MoveNext(out var uid, out var zLevelComp, out var meta))
+        while (query.MoveNext(out var uid, out _, out var meta))
         {
             options.Add(new CompletionOption(_entities.GetNetEntity(uid).ToString(), meta.EntityName));
         }
-        return CompletionResult.FromHintOptions(options, "zNetwork net entity");
+        return CompletionResult.FromHintOptions(options, Loc.GetString("cmu-cmd-znetwork-entity-hint"));
     }
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length != 1)
         {
-            shell.WriteError("Wrong arguments count.");
+            shell.WriteError(Loc.GetString("shell-wrong-arguments-number"));
             return;
         }
 
-        // get the target
         EntityUid? target;
-
         if (!NetEntity.TryParse(args[0], out var targetNet) ||
             !_entities.TryGetEntity(targetNet, out target))
         {
-            shell.WriteError($"Unable to find entity {args[0]}");
+            shell.WriteError(Loc.GetString("cmu-cmd-znetwork-entity-missing", ("entity", args[0])));
             return;
         }
 
         if (!_entities.TryGetComponent<CMUZLevelsNetworkComponent>(target, out var levelComp))
         {
-            shell.WriteError($"Target entity doesnt have CMUZLevelsNetworkComponent {args[0]}");
+            shell.WriteError(Loc.GetString("cmu-cmd-znetwork-component-missing", ("entity", args[0])));
             return;
         }
 
-        //Delete all maps
-        foreach (var (depth, mapUid) in levelComp.ZLevels)
-        {
+        foreach (var (_, mapUid) in levelComp.ZLevels)
             _entities.QueueDeleteEntity(mapUid);
-        }
-        _entities.QueueDeleteEntity(target);
 
-        shell.WriteLine("ZNetwork and all its maps deleted.");
+        _entities.QueueDeleteEntity(target);
+        shell.WriteLine(Loc.GetString("cmu-cmd-znetwork-delete-success"));
     }
 }

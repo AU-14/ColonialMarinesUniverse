@@ -1,0 +1,61 @@
+# Machine boards for the cross-deck z-level infrastructure: opening vents,
+# pipe risers, power risers, and the automatic transfer switch.
+# Parts pools only use stacks obtainable in CM rounds: CMSteel, RMCCable,
+# CMGlass. Upstream Manipulator/Cable/Glass are R&D or NT-supply goods this
+# fork never stocks, and empty pools build for free.
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUOpeningVentMachineCircuitboard
+  name: opening vent machine board
+  description: A machine printed circuit board for a cross-deck opening vent.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUOpeningVentDown
+    stackRequirements:
+      CMSteel: 1
+      RMCCable: 1
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUPipeRiserMachineCircuitboard
+  name: pipe riser machine board
+  description: A machine printed circuit board for a cross-deck pipe riser.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUPipeRiserUp
+    stackRequirements:
+      CMSteel: 1
+      RMCCable: 1
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUPowerRiserMachineCircuitboard
+  name: power riser machine board
+  description: A machine printed circuit board for a cross-deck HV power riser.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUPowerRiserDown
+    stackRequirements:
+      CMSteel: 2
+      RMCCable: 2
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUAutoTransferSwitchMachineCircuitboard
+  name: automatic transfer switch machine board
+  description: A machine printed circuit board for an automatic transfer switch.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMUAutoTransferSwitch
+    stackRequirements:
+      CMSteel: 1
+      RMCCable: 2
+      CMGlass: 1

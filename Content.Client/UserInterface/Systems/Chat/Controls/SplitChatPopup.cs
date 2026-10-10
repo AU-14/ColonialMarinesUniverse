@@ -112,7 +112,7 @@ public sealed class SplitChatPopup : Popup
         foreach (var tab in tabs)
         {
             var capturedId = tab.Id;
-            var button = CreateItemButton(tab.Title);
+            var button = CreateItemButton(ChatUserSettings.GetDisplayTitle(tab)); // CMU14 hardcode Localization 
             button.Pressed = splitEnabled && string.Equals(tab.Id, activeTabId, StringComparison.OrdinalIgnoreCase);
             button.OnPressed += _ =>
             {

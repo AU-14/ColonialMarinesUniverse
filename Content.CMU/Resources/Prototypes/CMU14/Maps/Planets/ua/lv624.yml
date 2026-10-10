@@ -22,7 +22,7 @@
     - VAIPO
     defaultgovfor: USCM
     defaultopfor: UPP
-    govforinship: false
+    govforinship: true
     opforinship: true
     daycycleenabled: true
     thirdparties:
@@ -54,7 +54,7 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     - tribalThirdParty
     - DrugSmuggler
     - CMBParoleeTransport
@@ -68,8 +68,6 @@
     # threats:
     # - XenoThreat # map has no threat spawn markers
     # - NeomorphsThreat # map has no threat spawn markers
-    # - AbominationsThreatDS # no xenocf markers
-    # - ApeThreatDS # map has no threat spawn markers
     # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers
@@ -91,7 +89,7 @@
 - type: gameMap
   id: LV624
   mapName: LV-624
-  mapPath: /Maps/CMU14/LV624.yml
+  mapPath: /Maps/CMU14/Legacy/LV624.yml
   minPlayers: 0
   maxPlayers: 65
   maxRandomOffset: 0
@@ -138,6 +136,7 @@
 
             AU14JobCivilianHeadOfEngineering: [1, 1]
             AU14JobCivilianEngineer: [4, 4]
+            CMUJobCivilianAtmosian: [1, 2]
 
             # Medical
             AU14JobCivilianHeadPhysician: [1, 1]

@@ -5,6 +5,7 @@ using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
@@ -50,6 +51,10 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
         if (ev.NewMobState != MobState.Dead)
             return;
 
+        // Lab-made Wendigos never decide the round.
+        if (HasComp<CMUWendigoLabMadeComponent>(ev.Target))
+            return;
+
         CheckVictoryCondition();
     }
 
@@ -62,15 +67,19 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
 
         int requiredPercentXeno = Math.Clamp(ruleComp.PercentXeno, 1, 100);
         int requiredPercentCultist = Math.Clamp(ruleComp.PercentCultist, 1, 100);
-        bool crashedDropship = _threatRuleHelper.HasCrashedDropship();
+        bool hijackLanded = _threatRuleHelper.HasLandedDropshipHijack();
         int totalXeno = 0, deadXeno = 0;
         int totalCultist = 0, deadCultist = 0;
 
         EntityQueryEnumerator<MobStateComponent> query = _entMan.EntityQueryEnumerator<MobStateComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState))
         {
-            // Planet-side survivors stop counting once a dropship has crashed; the endgame is ship-side
-            if (crashedDropship &&
+            // Lab-made Wendigos contribute to no counter.
+            if (_entMan.HasComponent<CMUWendigoLabMadeComponent>(uid))
+                continue;
+
+            // Planet-side survivors stop counting after the hijack lands; the endgame is ship-side.
+            if (hijackLanded &&
                 mobState.CurrentState != MobState.Dead &&
                 _rmcPlanet.IsOnPlanet(Transform(uid)))
             {

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared.Timing;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
@@ -89,6 +90,13 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     private readonly HashSet<Entity<SquadTeamComponent>> _toRemove = new();
 
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
+
+    // CMU14: Round setup can assign a loaded ship to either faction.
+    public void SetGroup(Entity<OverwatchConsoleComponent> console, string group)
+    {
+        console.Comp.Group = group;
+        Dirty(console);
+    }
 
     public override void Initialize()
     {
@@ -432,46 +440,64 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         if (args.Target == default || !TryGetEntity(args.Target, out var target))
             return;
 
-        Entity<OverwatchCameraComponent?> camera;
-        if (TryGetAccessibleMemberSquad(ent.Comp, target.Value, out _) &&
-            _inventory.TryGetInventoryEntity<OverwatchCameraComponent>(target.Value, out var marineCamera))
+        ToggleWatchFromConsole(ent, args.Actor, target.Value);
+    }
+
+    // CMU14: Tactical map shortcuts share the console's faction and equipment checks.
+    public bool TryGetWatchCamera(OverwatchConsoleComponent console, EntityUid target, out Entity<OverwatchCameraComponent?> camera)
+    {
+        if (TryGetAccessibleMemberSquad(console, target, out _) &&
+            _inventory.TryGetInventoryEntity<OverwatchCameraComponent>(target, out var marineCamera))
         {
             camera = marineCamera;
+            return true;
         }
-        else if (TryComp(target, out RMCOverwatchTripodCameraComponent? tripod) &&
+        if (TryComp(target, out RMCOverwatchTripodCameraComponent? tripod) &&
                  tripod.Deployed &&
                  tripod.Squad is { } tripodSquad &&
                  TryComp(tripodSquad, out SquadTeamComponent? tripodTeam) &&
-                 CanAccessSquad(ent.Comp, tripodTeam) &&
+                 CanAccessSquad(console, tripodTeam) &&
                  TryComp(target, out OverwatchCameraComponent? tripodCamera))
         {
-            camera = (target.Value, tripodCamera);
+            camera = (target, tripodCamera);
+            return true;
         }
-        else
-        {
-            return;
-        }
+        camera = default;
+        return false;
+    }
 
-        if (HasComp<ScopingComponent>(args.Actor))
+    public void ToggleWatchFromConsole(Entity<OverwatchConsoleComponent> console, EntityUid actor, EntityUid target)
+    {
+        if (!TryGetWatchCamera(console.Comp, target, out var camera))
+            return;
+
+        if (HasComp<ScopingComponent>(actor))
         {
             if (_net.IsServer)
             {
-                _popup.PopupCursor("You're too busy peering through optics.", args.Actor, PopupType.MediumCaution);
+                _popup.PopupCursor("You're too busy peering through optics.", actor, PopupType.MediumCaution);
             }
             return;
         }
 
         if (_net.IsServer &&
-            TryComp(args.Actor, out OverwatchWatchingComponent? watching) &&
+            TryComp(actor, out OverwatchWatchingComponent? watching) &&
             watching.Watching == camera.Owner &&
-            TryComp(args.Actor, out ActorComponent? actor) &&
-            TryComp(args.Actor, out EyeComponent? eye))
+            TryComp(actor, out ActorComponent? player) &&
+            TryComp(actor, out EyeComponent? eye))
         {
-            Unwatch((args.Actor, eye), actor.PlayerSession);
+            Unwatch((actor, eye), player.PlayerSession);
             return;
         }
 
-        Watch(args.Actor, camera);
+        Watch(actor, camera);
+    }
+
+    public void StopWatchingCamera(EntityUid actor, EntityUid camera)
+    {
+        if (TryComp(actor, out OverwatchWatchingComponent? watching) && watching.Watching == camera &&
+            TryComp(actor, out ActorComponent? player))
+            Unwatch(actor, player.PlayerSession);
     }
 
     private void OnOverwatchHideBui(Entity<OverwatchConsoleComponent> ent, ref OverwatchConsoleHideBuiMsg args)
@@ -870,9 +896,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
         try
         {
-            var time = _timing.CurTime;
+            var budget = new TimeSliceBudget(_maxProcessTime, 128);
             if (_toProcess.Count > 0)
             {
+                var exhausted = false;
                 foreach (var (squadId, membersQueue) in _toProcess)
                 {
                     if (TerminatingOrDeleted(squadId))
@@ -885,11 +912,15 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
                     if (_squad.TryGetSquadLeader(squadId, out var leader))
                         leaderCoords = _transform.GetMapCoordinates(leader);
 
-                    while (membersQueue.TryDequeue(out var member))
+                    while (membersQueue.Count > 0)
                     {
-                        if (_timing.CurTime > time + _maxProcessTime)
+                        if (!budget.TryConsume())
+                        {
+                            exhausted = true;
                             break;
+                        }
 
+                        var member = membersQueue.Dequeue();
                         if (TerminatingOrDeleted(member))
                             continue;
 
@@ -942,6 +973,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
                     if (membersQueue.Count == 0)
                         _toRemove.Add(squadId);
+
+                    // Keep the unprocessed queues for the next tick. Completed squads are removed below.
+                    if (exhausted)
+                        break;
                 }
 
                 foreach (var squad in _toRemove)
@@ -966,6 +1001,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         {
             _toProcess.Clear();
             throw;
+        }
+        finally
+        {
+            _toRemove.Clear();
         }
     }
 

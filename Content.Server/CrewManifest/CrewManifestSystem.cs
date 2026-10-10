@@ -220,6 +220,10 @@ public sealed partial class CrewManifestSystem : EntitySystem
     /// <param name="station"></param>
     private void BuildCrewManifest(EntityUid station)
     {
+        // cmu edit start: the universal criminal records holder is not a station
+        if (!HasComp<StationDataComponent>(station))
+            return;
+        // cmu edit end
         _queuedManifests.Add(station);
     }
 

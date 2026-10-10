@@ -8,9 +8,12 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Atmos.Components;
+using Content.Shared.FixedPoint;
+using Content.Shared.Examine;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
+using Content.Shared.Light.Components;
 using Content.Shared.Mobs;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
@@ -19,7 +22,12 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
+using Content.Shared.Tag;
+using Content.Shared.Weather;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
@@ -32,26 +40,41 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedHideableHumanoidLayersSystem _humanoidLayers = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private TagSystem _tags = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedWeatherSystem _weather = default!;
     [Dependency] private YautjaPowerSystem _power = default!;
+
+    private static readonly ProtoId<TagPrototype> HideContextMenuTag = "HideContextMenu";
+
+    // Rain weather only. New rain prototypes must be added here or the cloak ignores them.
+    private static readonly EntProtoId[] RainWeathers =
+    [
+        "RMCHybrisaRain", "RMCHybrisaRainLight", "RMCHybrisaRainVeryLight",
+        "RMCTrijentRainLight", "RMCStrataStorm", "RMCStrataStormLight",
+        "RMCStrataStormVeryLight", "CMUWeatherAcidRain",
+    ];
 
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaBracerComponent, YautjaToggleCloakActionEvent>(OnToggleCloak);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaBracerUnequippedEvent>(OnBracerUnequipped);
+        SubscribeLocalEvent<YautjaBracerComponent, EntGotInsertedIntoContainerMessage>(OnBracerInsertedIntoContainer);
 
         SubscribeLocalEvent<YautjaComponent, VaporHitEvent>(OnVaporHit);
         SubscribeLocalEvent<YautjaComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<YautjaComponent, XenoDevouredEvent>(OnDevour);
         SubscribeLocalEvent<YautjaComponent, XenoParasiteInfectEvent>(OnParasiteInfect);
-        SubscribeLocalEvent<YautjaComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<YautjaComponent, ExamineAttemptEvent>(OnExamineAttempt);
         SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnAnyDamageChanged);
         SubscribeLocalEvent<ProjectileComponent, ProjectileHitEvent>(OnProjectileHit);
     }
@@ -65,12 +88,27 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         var query = EntityQueryEnumerator<YautjaBracerComponent>();
         while (query.MoveNext(out var uid, out var bracer))
         {
-            if (bracer.CloakDuration <= TimeSpan.Zero ||
-                bracer.User is not { } user ||
-                !HasComp<EntityActiveInvisibleComponent>(user))
-            {
+            if (bracer.User is not { } user
+                || !HasComp<EntityActiveInvisibleComponent>(user))
                 continue;
+
+            // Rain flicker is edge triggered. The tell fires once per transition.
+            if (TryComp<ThermalCloakUserComponent>(user, out var cloakUser)
+                && cloakUser.Malfunction != IsExposedToRain(user))
+            {
+                cloakUser.Malfunction = !cloakUser.Malfunction;
+                if (cloakUser.Malfunction)
+                {
+                    if (bracer.CloakWarningSound != null)
+                        _audio.PlayEntity(bracer.CloakWarningSound, user, user);
+                    _popup.PopupEntity(Loc.GetString("cmu-yautja-cloak-sputter-rain"), user, user, PopupType.MediumCaution);
+                }
+
+                Dirty(user, cloakUser);
             }
+
+            if (bracer.CloakDuration <= TimeSpan.Zero)
+                continue;
 
             if (!bracer.CloakWarningPlayed &&
                 bracer.CloakWarningSound != null &&
@@ -106,9 +144,23 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         TryToggleCloak(args.Performer, ent);
     }
 
+    public bool TryToggleCloakForced(Entity<YautjaBracerComponent> bracer, EntityUid user, FixedPoint2 powerCost)
+    {
+        return TryToggleCloak(user, bracer, requireTechUser: false, powerCost);
+    }
+
     private bool TryToggleCloak(EntityUid user, Entity<YautjaBracerComponent>? bracerEnt = null)
     {
-        if (!CanUseYautjaCloak(user))
+        return TryToggleCloak(user, bracerEnt, requireTechUser: true, 25);
+    }
+
+    private bool TryToggleCloak(
+        EntityUid user,
+        Entity<YautjaBracerComponent>? bracerEnt,
+        bool requireTechUser,
+        FixedPoint2 powerCost)
+    {
+        if (requireTechUser && !CanUseYautjaCloak(user))
         {
             _popup.PopupClient(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
             return false;
@@ -154,13 +206,13 @@ public sealed partial class YautjaCloakSystem : EntitySystem
                 return false;
             }
 
-            if (!_power.HasPowerPopup(user, 25))
+            if (!_power.HasPowerPopup(user, powerCost))
                 return false;
         }
 
         if (TrySetInvisibility(bracer, user, enabling, false) && enabling)
         {
-            _power.TryRemovePower(user, 25);
+            _power.TryRemovePower(user, powerCost, popup: false);
 
             if (bracer.Comp.CloakDuration > TimeSpan.Zero)
             {
@@ -191,17 +243,29 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         _actions.SetToggled(ent.Comp.ToggleCloakAction, false);
     }
 
+    private void OnBracerInsertedIntoContainer(Entity<YautjaBracerComponent> ent, ref EntGotInsertedIntoContainerMessage args)
+    {
+        if (ent.Comp.User is not { } user)
+            return;
+
+        TrySetInvisibility(ent, user, false, true);
+        _actions.SetToggled(ent.Comp.ToggleCloakAction, false);
+    }
+
     private bool TrySetInvisibility(Entity<YautjaBracerComponent> bracer, EntityUid user, bool enabling, bool forced)
     {
         if (Deleted(user) || Terminating(user))
             return false;
 
-        var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
-        turnInvisible.RestrictWeapons = bracer.Comp.CloakRestrictWeapons;
-        turnInvisible.UncloakWeaponLock = bracer.Comp.CloakUncloakWeaponLock;
-
-        if (enabling && !HasComp<EntityActiveInvisibleComponent>(user))
+        if (enabling)
         {
+            if (HasComp<EntityActiveInvisibleComponent>(user))
+                return false;
+
+            var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
+            turnInvisible.RestrictWeapons = bracer.Comp.CloakRestrictWeapons;
+            turnInvisible.UncloakWeaponLock = bracer.Comp.CloakUncloakWeaponLock;
+
             var activeInvisibility = EnsureComp<EntityActiveInvisibleComponent>(user);
             var cloakUser = EnsureComp<ThermalCloakUserComponent>(user);
             cloakUser.Opacity = bracer.Comp.CloakOpacity;
@@ -225,6 +289,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
                 EnsureComp<EntityIFFComponent>(user);
 
             ToggleLayers(user, bracer.Comp.CloakedHideLayers, false);
+            HideFromContextMenu(user);
             SpawnCloakEffects(user, bracer.Comp.CloakEffect);
 
             var popupOthers = Loc.GetString("rmc-cloak-activate-others", ("user", YautjaDisplayName(user)));
@@ -238,6 +303,10 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 
         if (!enabling && TryComp<EntityActiveInvisibleComponent>(user, out var invisible))
         {
+            var turnInvisible = EnsureComp<EntityTurnInvisibleComponent>(user);
+            turnInvisible.RestrictWeapons = bracer.Comp.CloakRestrictWeapons;
+            turnInvisible.UncloakWeaponLock = bracer.Comp.CloakUncloakWeaponLock;
+
             invisible.Opacity = 1;
             Dirty(user, invisible);
 
@@ -254,6 +323,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             _popup.PopupPredicted(selfPopup, otherPopup, user, user, PopupType.Medium);
 
             ToggleLayers(user, bracer.Comp.CloakedHideLayers, true);
+            RestoreContextMenu(user);
             SpawnCloakEffects(user, bracer.Comp.UncloakEffect);
 
             if (bracer.Comp.CloakHideNightVision)
@@ -274,6 +344,22 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         return false;
     }
 
+    private void HideFromContextMenu(EntityUid user)
+    {
+        if (!_tags.AddTag(user, HideContextMenuTag))
+            return;
+
+        EnsureComp<YautjaCloakContextHiddenComponent>(user);
+    }
+
+    private void RestoreContextMenu(EntityUid user)
+    {
+        if (!RemComp<YautjaCloakContextHiddenComponent>(user))
+            return;
+
+        _tags.RemoveTag(user, HideContextMenuTag);
+    }
+
     public void ForceDecloak(EntityUid user)
     {
         // Damage and mob-state events also fire while restoring replicated state. The server's
@@ -291,6 +377,8 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         _actions.SetToggled(bracer.Comp.ToggleCloakAction, false);
     }
 
+    // Taking a hit must not break the cloak by itself: a hunter can stay hidden
+    // to decline a fight. The rare projectile roll below is the only gunfire strip.
     private void OnProjectileHit(Entity<ProjectileComponent> ent, ref ProjectileHitEvent args)
     {
         if (_net.IsClient ||
@@ -337,16 +425,25 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         ForceDecloak(ent.Owner);
     }
 
-    private void OnDamageChanged(Entity<YautjaComponent> ent, ref DamageChangedEvent args)
+    private void OnExamineAttempt(Entity<YautjaComponent> ent, ref ExamineAttemptEvent args)
     {
-        if (args.DamageDelta?.AnyPositive() != true)
+        if (args.Cancelled ||
+            !TryComp(ent, out EntityTurnInvisibleComponent? cloak) ||
+            !cloak.Enabled)
+        {
             return;
+        }
 
-        ForceDecloak(ent.Owner);
+        args.Cancel();
     }
 
     private void OnAnyDamageChanged(Entity<DamageableComponent> target, ref DamageChangedEvent args)
     {
+        // Active acid burns the cloak off; plain hits still do not (see OnProjectileHit)
+        if (HasComp<UserAcidedComponent>(target)
+            && args.DamageDelta?.AnyPositive() == true)
+            ForceDecloak(target);
+
         if (_net.IsClient ||
             args.Origin is not { } origin ||
             args.DamageDelta?.AnyPositive() != true ||
@@ -375,6 +472,33 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         Dirty(bracer);
     }
 
+    private bool IsExposedToRain(EntityUid user)
+    {
+        var xform = Transform(user);
+        // Live weather status only. Maps without a rain event never reach the tile check.
+        var raining = false;
+        foreach (var proto in RainWeathers)
+        {
+            if (_weather.HasWeather(xform.MapID, proto))
+            {
+                raining = true;
+                break;
+            }
+        }
+
+        // No grid means floating free. Containers block the sky even on a grid.
+        if (!raining
+            || xform.GridUid is not { } gridUid
+            || _container.IsEntityInContainer(user)
+            || !TryComp<MapGridComponent>(gridUid, out var grid))
+        {
+            return false;
+        }
+
+        var tile = _map.GetTileRef(gridUid, grid, xform.Coordinates);
+        return _weather.CanWeatherAffect((gridUid, grid, CompOrNull<RoofComponent>(gridUid)), tile);
+    }
+
     public YautjaCloakDotBlocker? GetDamageOverTimeBlocker(EntityUid user)
     {
         if (HasComp<UserAcidedComponent>(user))
@@ -392,6 +516,9 @@ public sealed partial class YautjaCloakSystem : EntitySystem
             return YautjaCloakDotBlocker.Other;
         }
 
+        if (IsExposedToRain(user))
+            return YautjaCloakDotBlocker.Water;
+
         return null;
     }
 
@@ -401,6 +528,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
         {
             YautjaCloakDotBlocker.Acid => "cmu-yautja-cloak-blocked-acid",
             YautjaCloakDotBlocker.Fire => "cmu-yautja-cloak-blocked-fire",
+            YautjaCloakDotBlocker.Water => "cmu-yautja-cloak-blocked-water",
             _ => "cmu-yautja-cloak-blocked-dot",
         };
     }
@@ -459,4 +587,5 @@ public enum YautjaCloakDotBlocker : byte
     Acid,
     Fire,
     Other,
+    Water,
 }

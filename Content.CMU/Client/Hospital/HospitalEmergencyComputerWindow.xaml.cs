@@ -17,32 +17,42 @@ public sealed partial class HospitalEmergencyComputerWindow : DefaultWindow
     {
         StatusLabel.Text = state.StatusText;
         LandingZoneLabel.Text = state.HasLandingZone
-            ? "Landing zone: linked"
-            : "Landing zone: unavailable";
+            ? Loc.GetString("hospital-emergency-landing-zone-linked")
+            : Loc.GetString("hospital-emergency-landing-zone-unavailable");
 
         IncidentReportLabel.Text = string.IsNullOrWhiteSpace(state.IncidentReport)
-            ? "No active incident."
+            ? Loc.GetString("hospital-emergency-no-active-incident")
             : state.IncidentReport;
 
         CasualtiesLabel.Text = state.Casualties.ToString();
-        SeverityLabel.Text = state.Severity == 0 ? "--" : $"{state.Severity} / 3";
-        RewardLabel.Text = $"${state.Reward}";
-        PatientsLabel.Text = $"{state.ActivePatients} active / {state.FullyHealedPatients} cleared";
-        TimerLabel.Text = state.SecondsRemaining > 0 ? $"{state.SecondsRemaining}s" : "--";
+        SeverityLabel.Text = state.Severity == 0
+            ? "--"
+            : Loc.GetString("hospital-emergency-severity-value", ("severity", state.Severity));
+        RewardLabel.Text = Loc.GetString("hospital-emergency-reward-value", ("amount", state.Reward));
+        PatientsLabel.Text = Loc.GetString("hospital-emergency-patients-value",
+            ("active", state.ActivePatients),
+            ("cleared", state.FullyHealedPatients));
+        TimerLabel.Text = state.SecondsRemaining > 0
+            ? Loc.GetString("hospital-emergency-timer-seconds", ("seconds", state.SecondsRemaining))
+            : "--";
 
         var vipAudit = state.LastVipPenalty > 0
-            ? $", ${state.LastVipPenalty} VIP penalty"
+            ? Loc.GetString("hospital-emergency-audit-vip-penalty", ("amount", state.LastVipPenalty))
             : string.Empty;
         var deathAudit = state.LastPermanentDeathPenalty > 0
-            ? $", ${state.LastPermanentDeathPenalty} death penalty"
+            ? Loc.GetString("hospital-emergency-audit-death-penalty", ("amount", state.LastPermanentDeathPenalty))
             : string.Empty;
 
         AuditLabel.Text = state.LastPayout > 0 ||
             state.LastMissedInjuries > 0 ||
             state.LastVipPenalty > 0 ||
             state.LastPermanentDeathPenalty > 0
-            ? $"Last audit: ${state.LastPayout} paid, {state.LastMissedInjuries} missed injuries{vipAudit}{deathAudit}"
-            : "Last audit: no payout recorded";
+            ? Loc.GetString("hospital-emergency-audit-summary",
+                ("payout", state.LastPayout),
+                ("missed", state.LastMissedInjuries),
+                ("vip", vipAudit),
+                ("death", deathAudit))
+            : Loc.GetString("hospital-emergency-audit-none");
 
         ApproveLandingButton.Disabled = !state.CanApproveLanding;
         SkipContractButton.Disabled = !state.CanSkipContract;

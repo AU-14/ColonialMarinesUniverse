@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Components;
+using Content.Shared.CMU14.Language;
 using Content.Shared.Coordinates;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
@@ -46,7 +47,7 @@ public sealed class PrototypeSaveTest : GameTest
         var prototypes = new List<EntityPrototype>();
         EntityUid uid;
 
-        await pair.CreateTestMap(false, "FloorSteel"); // Wires n such disable ambiance while under the floor
+        await pair.CreateTestMap(false, "CMFloorSteel"); // CMU14: Wires n such disable ambiance while under the floor
         var mapId = pair.TestMap.MapId;
         var grid = pair.TestMap.Grid;
 
@@ -122,6 +123,14 @@ public sealed class PrototypeSaveTest : GameTest
                         if (compType == typeof(MetaDataComponent) || compType == typeof(TransformComponent) || compType == typeof(FixturesComponent))
                             continue;
 
+                        if (compName == "Language" && entityMan.HasComponent<AllLanguagesComponent>(uid)) // CMU14
+                            continue;
+
+                        // CMU14: subfloor and anchor systems add these at spawn.
+                        if (prototype.ID == "CMUExhaustVent"
+                            && (compName == "Visibility" || compName == "CollideOnAnchor"))
+                            continue;
+
                         MappingDataNode compMapping;
                         try
                         {
@@ -143,7 +152,7 @@ public sealed class PrototypeSaveTest : GameTest
                         }
                         else
                         {
-                            Assert.Fail($"Prototype {prototype.ID} gains a component on spawn: {compName}");
+                            Assert.Fail($"Prototype {prototype.ID} gains a component on spawn: {compName}. Added yaml:\n{compMapping}");
                         }
                     }
 

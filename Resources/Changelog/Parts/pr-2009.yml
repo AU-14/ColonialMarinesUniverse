@@ -1,0 +1,17 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Added the missing Midway cockpit seats and stopped cockpit hatches automatically
+    bolting during flight.
+  type: Fix
+- message: Mohawk ramps now carry overlapping vehicles in both directions, and stair
+    previews open and close at 1.2 tiles.
+  type: Fix
+- message: Corrected Mohawk paradrop exits and queen hijack access from its elevated
+    cabin.
+  type: Fix
+- message: Added custom Mohawk takeoff, plasma/reactor flight ambience and ten-second
+    landing sounds.
+  type: Add
+time: '2026-09-24T00:40:51.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2009

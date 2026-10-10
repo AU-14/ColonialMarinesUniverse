@@ -110,6 +110,7 @@
       dps: 20
       expendableLightDps: 23.4375
 
+      vehicleDamage: 50
 - type: entity
   id: ActionXenoRegurgitate
   parent: ActionXenoBase

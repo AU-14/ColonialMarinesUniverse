@@ -84,3 +84,7 @@
 - type: cameraNetwork
   id: RMCTelevision
   name: rmc-television-title
+
+- type: cameraNetwork
+  id: RMCMortarCamera
+  name: rmc-mortar-camera-network

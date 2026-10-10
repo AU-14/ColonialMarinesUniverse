@@ -6,7 +6,7 @@
     edges:
     - to: assembly
       steps:
-      - material: Steel
+      - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
         amount: 2
         doAfter: 2.0
 
@@ -23,7 +23,7 @@
     - to: start
       completed:
       - !type:GivePrototype
-        prototype: SheetSteel1
+        prototype: CMSheetMetal1 # CMU14: refund fork metal
         amount: 2
       - !type:DeleteEntity {}
       steps:
@@ -85,7 +85,7 @@
     edges:
     - to: assembly
       steps:
-      - material: Plastic
+      - material: RMCPlastic # CMU14: fork plastic (RMCSheetPlastic), not upstream Plastic
         amount: 2
         doAfter: 2.0
 
@@ -102,7 +102,7 @@
     - to: start
       completed:
       - !type:GivePrototype
-        prototype: SheetPlastic1
+        prototype: RMCSheetPlastic1 # CMU14: refund fork plastic, matches the input fork above
         amount: 2
       - !type:DeleteEntity {}
       steps:

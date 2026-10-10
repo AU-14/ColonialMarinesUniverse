@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Numerics;
-using Content.Client._CMU14.UserInterface.ColorPicker;
+using Content.Client.CMU14.UserInterface.ColorPicker;
 using Content.Client._RMC14;
 using Content.Client.ContextMenu.UI;
 using Content.Client.Examine;

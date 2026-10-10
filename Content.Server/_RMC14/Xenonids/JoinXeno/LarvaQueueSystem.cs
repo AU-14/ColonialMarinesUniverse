@@ -45,6 +45,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     private static readonly ProtoId<TagPrototype> LarvaTag = "RMCXenoLarva";
     private static readonly ProtoId<JobPrototype> LarvaRole = "CMXenoLarva";
     private static readonly ProtoId<JobPrototype> BloodbursterRole = "CMUJobPathogenBloodburster";
+    private static readonly ProtoId<JobPrototype> PopperRole = "CMU14JobPathogenPopper";
     private static readonly TimeSpan ClaimConfirmDuration = TimeSpan.FromSeconds(30);
 
     private readonly Dictionary<EntityUid, LarvaQueueState> _queues = [];
@@ -178,6 +179,10 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return;
 
         CancelPendingClaim(ev.Player.UserId, timedOut: false);
+
+        if (IsQueueRetainedRole(ev.Entity)) // CMU14
+            return;
+
         RemoveFromAllQueues(ev.Player.UserId);
     }
 
@@ -338,7 +343,9 @@ public sealed partial class LarvaQueueSystem : EntitySystem
     {
         if (!TryComp(uid, out BursterComponent? burster) ||
             !TryComp(burster.BurstFrom, out VictimInfectedComponent? infected) ||
-            infected.SpawnedLarva != uid ||
+            // CMU14: BurstFrom is available during initialization, before SpawnLarva can store its return value.
+            // infected.SpawnedLarva != uid ||
+            (infected.SpawnedLarva is { } linkedLarva && linkedLarva != uid) ||
             !(infected.InfectorWantsLarva || infected.InfectorLarvaClaimPending) ||
             infected.InfectorUser is not { } userId)
         {
@@ -395,7 +402,8 @@ public sealed partial class LarvaQueueSystem : EntitySystem
             return false;
         }
 
-        return xeno.Role != LesserDroneRole;
+        // CMU14: xeno feedback and lifecycle.
+        return xeno.Role != LesserDroneRole && xeno.Role != PopperRole;
     }
 
     private bool TryOfferEntityClaim(EntityUid uid, Entity<HiveComponent> hive, LarvaQueueState queue)
@@ -431,6 +439,17 @@ public sealed partial class LarvaQueueSystem : EntitySystem
                 Loc.GetString("rmc-xeno-larva-queue-burrowed-larva"));
             return true;
         }
+
+        return false;
+    }
+
+    private bool IsQueueRetainedRole(EntityUid entity) // CMU14
+    {
+        if (HasComp<XenoParasiteComponent>(entity))
+            return true;
+
+        if (TryComp(entity, out XenoComponent? xeno))
+            return xeno.Role == LesserDroneRole;
 
         return false;
     }
@@ -500,7 +519,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
 
         if (!_player.TryGetSessionById(ev.UserId, out var session) ||
             session.AttachedEntity is not { } attached ||
-            !_ghostQuery.HasComp(attached))
+            !_ghostQuery.HasComp(attached) && !IsQueueRetainedRole(attached)) // CMU14
         {
             TryClaimNextForHive(pending.Hive);
             return;
@@ -690,7 +709,8 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         if (!_player.TryGetSessionById(userId, out session!))
             return false;
 
-        if (session.AttachedEntity is { } attached && _ghostQuery.HasComp(attached))
+        if (session.AttachedEntity is { } attached &&
+            (_ghostQuery.HasComp(attached) || IsQueueRetainedRole(attached))) // CMU14
             return true;
 
         RemoveFromAllQueues(userId);

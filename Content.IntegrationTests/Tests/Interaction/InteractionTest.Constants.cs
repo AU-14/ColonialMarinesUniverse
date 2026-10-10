@@ -8,8 +8,11 @@ namespace Content.IntegrationTests.Tests.Interaction;
 public abstract partial class InteractionTest
 {
     // Tiles
-    protected const string Floor = "FloorSteel";
-    protected const string FloorItem = "FloorTileItemSteel";
+    // CMU14: CM floor protos replace the upstream floor tiles
+    // protected const string Floor = "FloorSteel";
+    // protected const string FloorItem = "FloorTileItemSteel";
+    protected const string Floor = "CMFloorSteel";
+    protected const string FloorItem = "CMTileItemSteel";
     protected const string Plating = "Plating";
     protected const string PlatingRCD = "PlatingRCD";
     protected const string Lattice = "Lattice";
@@ -32,6 +35,16 @@ public abstract partial class InteractionTest
     protected const string Plastic = "Plastic";
     protected const string Cable = "Cable";
     protected const string Rod = "MetalRod";
+    // CMU14: fork sheets. CMU construction graphs consume these, not the upstream stacks above.
+    protected const string CMSteel = "CMSteel";
+    protected const string CMGlass = "CMGlass";
+    protected const string CMRodMetal = "CMRodMetal";
+    protected const string CMFloorSteel = "CMFloorSteel";
+    protected const string CMPlating = "CMFloorPlating";
+    protected const string CMTileItemSteel = "CMTileItemSteel";
+    protected const string CMSheetMetal1 = "CMSheetMetal1";
+    protected const string CMRodMetal10 = "CMRodMetal10";
+    protected const string CMGlassReinforced = "CMGlassReinforced";
 
     // Parts
     protected const string Manipulator1 = "MicroManipulatorStockPart";

@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: RMCBasketballHoop
   name: basketball hoop
   description: Boom, Shakalaka!
@@ -7,6 +7,7 @@
   components:
   - type: Physics
     bodyType: Static
+    canCollide: False
   - type: Clickable
   - type: InteractionOutline
   - type: Sprite
@@ -18,5 +19,7 @@
   id: RMCBasketballHoopAlt
   suffix: Alt
   components:
+  - type: Physics
+    canCollide: False
   - type: Sprite
     state: hoop_alt

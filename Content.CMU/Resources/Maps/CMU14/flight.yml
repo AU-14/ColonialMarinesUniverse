@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 01/27/2026 01:39:51
-  entityCount: 47878
+  entityCount: 47769
 maps:
 - 1
 grids:
@@ -69188,6 +69188,23 @@ entities:
       pos: 13.5,-11.5
       parent: 1
   - uid: 810
+    components:
+    - type: Transform
+      pos: 13.5,-13.5
+      parent: 1
+- proto: CMUSpawnPointCivilianAtmosian
+  entities:
+  - uid: 47880
+    components:
+    - type: Transform
+      pos: 13.5,-15.5
+      parent: 1
+  - uid: 47881
+    components:
+    - type: Transform
+      pos: 13.5,-11.5
+      parent: 1
+  - uid: 47882
     components:
     - type: Transform
       pos: 13.5,-13.5
@@ -296158,7 +296175,7 @@ entities:
     - type: Transform
       pos: -40.5,60.5
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 45454
     components:
@@ -309910,4 +309927,17 @@ entities:
     - type: Transform
       pos: 20.5,353.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000007
+    components:
+    - type: MetaData
+      name: Flight ground relay
+    - type: Transform
+      pos: -15.5,440.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: flight.ground.relay
+      displayName: Flight Ground Relay
 ...

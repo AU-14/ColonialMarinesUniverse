@@ -1,0 +1,56 @@
+- type: entity
+  parent: AU14MagazineRifleAG80
+  id: RuMCMagazineRifleAG80Tracer
+  name: "AG80 magazine (9.7x16mm Tracer)"
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleAG80
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifle97x16mm
+      - RuMCCartridgeRifle97x16mmTracer
+    proto: RuMCCartridgeRifle97x16mmTracer
+    capacity: 60
+  - type: Sprite
+    sprite: CMU14/Weapons/Guns/Ammo/Magazines/ag80.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsRifleAG80
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: RuMCCartridgeRifle97x16mmTracer
+  name: 9.7x16mm Tracer
+  components:
+  - type: CartridgeAmmo
+    proto: RuMCBullet97x16mmTracer
+  - type: Tag
+    tags:
+    - Cartridge
+    - RuMCCartridgeRifle97x16mmTracer
+
+- type: entity
+  parent: BulletRifle97x16mm
+  id: RuMCBullet97x16mmTracer
+  name: bullet (9.7x16mm Tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: PointLight
+    enabled: true
+    color: "#00ff66"
+    radius: 2
+    energy: 8.0
+
+- type: Tag
+  id: RuMCCartridgeRifle97x16mmTracer

@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/14/2026 09:35:04
-  entityCount: 40190
+  entityCount: 40197
 maps:
 - 1
 grids:
@@ -58897,7 +58897,7 @@ entities:
           showEnts: False
           occludes: True
           ent: 14
-- proto: AU14DrugDealerDrugBackpack
+- proto: CMUDrugDealerDrugBackpack
   entities:
   - uid: 66
     components:
@@ -59123,6 +59123,38 @@ entities:
       pos: 43.5,43.5
       parent: 1
   - uid: 105
+    components:
+    - type: Transform
+      pos: 42.5,43.5
+      parent: 1
+- proto: CMUSpawnPointCivilianAtmosian
+  entities:
+  - uid: 40211
+    components:
+    - type: Transform
+      pos: 43.5,44.5
+      parent: 1
+  - uid: 40212
+    components:
+    - type: Transform
+      pos: 43.5,42.5
+      parent: 1
+  - uid: 40213
+    components:
+    - type: Transform
+      pos: 42.5,42.5
+      parent: 1
+  - uid: 40214
+    components:
+    - type: Transform
+      pos: 42.5,44.5
+      parent: 1
+  - uid: 40215
+    components:
+    - type: Transform
+      pos: 43.5,43.5
+      parent: 1
+  - uid: 40216
     components:
     - type: Transform
       pos: 42.5,43.5
@@ -179198,7 +179230,7 @@ entities:
     - type: Transform
       pos: 9.483047,91.48619
       parent: 1
-- proto: RMCCanisterRedWhite
+- proto: CMUCanisterNitrousOxide
   entities:
   - uid: 18262
     components:
@@ -197005,7 +197037,7 @@ entities:
       parent: 1
     missingComponents:
     - EvacuationPump
-- proto: RMCGasPipeBend
+- proto: CMUGasPipeBend
   entities:
   - uid: 21357
     components:
@@ -197031,7 +197063,7 @@ entities:
           showEnts: False
           occludes: True
           ents: []
-- proto: RMCGasPipeStraight
+- proto: CMUGasPipeStraight
   entities:
   - uid: 21359
     components:
@@ -197101,7 +197133,7 @@ entities:
           showEnts: False
           occludes: True
           ents: []
-- proto: RMCGasPipeTJunction
+- proto: CMUGasPipeTJunction
   entities:
   - uid: 21365
     components:
@@ -197163,7 +197195,7 @@ entities:
     - type: Transform
       pos: 38.757423,-1.4614179
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 21378
     components:
@@ -272322,4 +272354,17 @@ entities:
     - type: Transform
       pos: 44.47687,75.77165
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000004
+    components:
+    - type: MetaData
+      name: Port Nereid ground relay
+    - type: Transform
+      pos: -4.5,39.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: port-nereid.ground.relay
+      displayName: Port Nereid Ground Relay
 ...

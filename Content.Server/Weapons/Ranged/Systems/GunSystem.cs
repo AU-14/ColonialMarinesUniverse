@@ -125,7 +125,7 @@ public sealed partial class GunSystem : SharedGunSystem
                     if (!cartridge.DeleteOnSpawn &&
                         !Containers.IsEntityInContainer(cartridgeUid))
                     {
-                        EjectCartridge(cartridgeUid, angle);
+                        EjectCartridge(cartridgeUid, angle, ejectCoordinates: Transform(gun).Coordinates); // CMU14
                     }
 
                     Dirty(cartridgeUid, cartridge);

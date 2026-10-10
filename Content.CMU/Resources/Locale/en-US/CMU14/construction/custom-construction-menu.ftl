@@ -256,6 +256,7 @@ au14-toolperm-ckey-placeholder = ckey...
 au14-toolperm-grant = Grant
 au14-toolperm-users-header = Users with permissions (click a ckey to expand)
 au14-toolperm-none = Nobody has tool grants yet.
+au14-toolperm-user-header = { $ckey } ({ $count })
 au14-toolperm-remove = Remove
 au14-toolperm-tool-construction = Construction Items Editor
 au14-toolperm-tool-mass = Mass Entity Editor

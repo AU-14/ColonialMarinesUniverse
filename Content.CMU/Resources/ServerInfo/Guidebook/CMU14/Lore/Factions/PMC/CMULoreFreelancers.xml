@@ -1,0 +1,20 @@
+<Document>
+  # Freelancers
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="CMUGearFreelancerStandard" Caption="Freelancer"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearFreelancerMedic" Caption="Medic"/>
+    <CMUGuideOutfitEmbed Gear="CMUGearFreelancerLeader" Caption="Leader"/>
+  </Box>
+
+  The [bold]Freelancers[/bold] are mercenaries who fight for whoever pays. Whether they're your best friend or your worst enemy depends entirely on who signed the contract.
+
+  ## Origins
+  When the UA military briefly pulled out of the [bold]Neroid Sector[/bold], the Freelancers stepped into the power vacuum they left behind. The UPP couldn't move in without it being seen as an invasion, so the mercenaries filled the gap instead. Many colonists now see them as the closest thing to law and order in the sector.
+
+  ## How They Operate
+  - They arm themselves with a mix of legal and illegal weapons and munitions, much of it salvaged from the UA's abandoned bases and stockpiles. They are reasonably well equipped, if not quite a match for most forces in the Neroid Sector.
+  - They run [bold]Irkala Station[/bold], a space station at the heart of the Neroid Sector that serves as their main trading hub.
+  - They fight whoever they are paid to fight, as long as the terms of the contract are met. Their usual price is [bold]salvage rights[/bold] to whatever ships, settlements and facilities get destroyed along the way.
+  - A contract is a contract, but there's always room for a better offer. Some Freelancer crews will defend those who pay them; others will turn on them and take the money instead.
+</Document>

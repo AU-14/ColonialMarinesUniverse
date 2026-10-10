@@ -8,7 +8,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._RMC14.Xenonids.Weeds;
 
 // TODO RMC14 field deltas for auto states
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 [Access(typeof(SharedXenoWeedsSystem), typeof(HiveBoonSystem), typeof(WeedboundWallSystem))]
 public sealed partial class XenoWeedsComponent : Component
 {
@@ -27,49 +27,49 @@ public sealed partial class XenoWeedsComponent : Component
     /// <summary>
     /// How much health is healed when the weeds stop spreading.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public DamageSpecifier HealOnStopSpreading = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool HasHealed = false;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool IsSource = true;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? Source;
 
     [DataField]
     public EntProtoId Spawns = "XenoWeeds";
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public List<EntityUid> Spread = new();
 
     /// <summary>
     /// All anchored entities with Weedable component adjacent to this entity
     /// are added here.
     /// </summary>
-    [DataField, AutoNetworkedField]
+    [DataField]
     public List<EntityUid> LocalWeeded = new();
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan MinRandomDelete = TimeSpan.FromSeconds(9);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public TimeSpan MaxRandomDelete = TimeSpan.FromSeconds(10);
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool SpreadsOnSemiWeedable;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public float FruitGrowthMultiplier = 1.0f;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int Level = 1;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public bool BlockOtherWeeds;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public List<EntityUid> WeedboundStructures = new();
 }

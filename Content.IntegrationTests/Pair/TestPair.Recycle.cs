@@ -44,7 +44,7 @@ public sealed partial class TestPair
     {
         // Move to pre-round lobby. Required to toggle dummy ticker on and off
         var gameTicker = Server.System<GameTicker>();
-        if (gameTicker.RunLevel != GameRunLevel.PreRoundLobby)
+        // if (gameTicker.RunLevel != GameRunLevel.PreRoundLobby) // CMU14
         {
             await testOut.WriteLineAsync($"Recycling: {Watch.Elapsed.TotalMilliseconds} ms: Restarting round.");
             Server.CfgMan.SetCVar(CCVars.GameDummyTicker, false);

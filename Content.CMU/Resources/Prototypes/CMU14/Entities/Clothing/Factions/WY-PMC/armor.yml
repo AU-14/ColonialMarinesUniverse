@@ -17,6 +17,13 @@
     sprite: CMU14/Clothing/WY_PMC/wypmclightarmor.rsi
 
 - type: entity
+  parent: CMArmorM4PMCSmartGunHarness
+  id: CMU14WYPMCArmorSmarGunHarness
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/WY_PMC/wypmcheavyarmor.rsi
+
+- type: entity
   parent: RMCBaseBioSuit
   id: AU14SuitBioWeYu
   name: WeYu-TSS MK I - bio suit

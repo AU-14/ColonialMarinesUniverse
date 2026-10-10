@@ -36,20 +36,20 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
   result: LatheMergeResult
   completetime: 99
   materials:
-    Steel: 10
+    CMSteel: 10 # CMU14
 
 - type: latheRecipe
   id: LatheMergeOtherRecipe
   result: LatheMergeResult
   completetime: 99
   materials:
-    Steel: 20
+    CMSteel: 20 # CMU14
 
 - type: latheRecipe
   id: LatheMergeInsufficientRecipe
   result: LatheMergeResult
   materials:
-    Steel: 10
+    CMSteel: 10 # CMU14
     Plastic: 20
 
 - type: latheRecipePack
@@ -69,7 +69,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
     timeMultiplier: 1.5
   - type: MaterialStorage
     storage:
-      Steel: 100
+      CMSteel: 100 # CMU14
       Plastic: 5
   - type: ApcPowerReceiver
   - type: Appearance
@@ -116,7 +116,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
                 Assert.That(component.Queue.First!.Value.ItemsRequested, Is.EqualTo(6));
                 Assert.That(component.Queue.First.Value.ItemsPrinted, Is.Zero);
                 Assert.That(Pending(component), Is.EqualTo(6));
-                Assert.That(Material(lathe, "Steel"), Is.EqualTo(70),
+                Assert.That(Material(lathe, "CMSteel"), Is.EqualTo(70), // CMU14
                     "the accepted six discounted items must debit exactly 6 * 5 material");
             });
 
@@ -126,7 +126,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(Pending(component), Is.EqualTo(6));
-                Assert.That(Material(lathe, "Steel"), Is.EqualTo(70),
+                Assert.That(Material(lathe, "CMSteel"), Is.EqualTo(70), // CMU14
                     "a full queue request must not debit any material");
             });
 
@@ -152,7 +152,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
                 Assert.That(component.Queue.First.Value.ItemsPrinted, Is.EqualTo(1));
                 Assert.That(Pending(component), Is.EqualTo(6),
                     "starting one item must make room for exactly one new pending item");
-                Assert.That(Material(lathe, "Steel"), Is.EqualTo(65));
+                Assert.That(Material(lathe, "CMSteel"), Is.EqualTo(65)); // CMU14
             });
             AssertUi(lathe, Recipe, Recipe, 1, 7);
         });
@@ -172,7 +172,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
             {
                 Assert.That(_lathe.TryAddToQueue(insufficientLathe, recipe, 1, insufficient), Is.False);
                 Assert.That(insufficient.Queue, Is.Empty);
-                Assert.That(Material(insufficientLathe, "Steel"), Is.EqualTo(100));
+                Assert.That(Material(insufficientLathe, "CMSteel"), Is.EqualTo(100)); // CMU14
                 Assert.That(Material(insufficientLathe, "Plastic"), Is.EqualTo(5),
                     "failure on the second material must not partially debit the first");
             });
@@ -182,7 +182,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
             var component = SEntMan.GetComponent<LatheComponent>(lathe);
             Assert.That(_lathe.TryAddToQueue(lathe, SProtoMan.Index<LatheRecipePrototype>(Recipe), 2, component), Is.True);
             Assert.That(_lathe.TryAddToQueue(lathe, SProtoMan.Index<LatheRecipePrototype>(OtherRecipe), 3, component), Is.True);
-            Assert.That(Material(lathe, "Steel"), Is.EqualTo(60));
+            Assert.That(Material(lathe, "CMSteel"), Is.EqualTo(60)); // CMU14
 
             var move = new LatheMoveRequestMessage(1, -1) { Actor = user };
             _lathe.OnLatheMoveRequestMessage(lathe, component, ref move);
@@ -196,7 +196,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
             {
                 Assert.That(component.Queue.Select(batch => (string) batch.Recipe),
                     Is.EqualTo(new[] { Recipe }));
-                Assert.That(Material(lathe, "Steel"), Is.EqualTo(90),
+                Assert.That(Material(lathe, "CMSteel"), Is.EqualTo(90), // CMU14
                     "deleting the three-item adjusted-cost10 batch must refund exactly 30");
             });
             AssertUi(lathe, Recipe, Recipe, 0, 2);
@@ -222,7 +222,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
             Assert.That(_lathe.TryStartProducing(powerLossLathe, powerLoss), Is.True);
             Assert.That(powerLoss.Queue, Is.Empty,
                 "starting a one-item batch must exercise the empty-queue power-loss branch");
-            Assert.That(Material(powerLossLathe, "Steel"), Is.EqualTo(95));
+            Assert.That(Material(powerLossLathe, "CMSteel"), Is.EqualTo(95)); // CMU14
 
             Power(powerLossLathe, false);
             var lostPower = new PowerChangedEvent(false, 0);
@@ -232,7 +232,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
                 Assert.That(powerLoss.CurrentRecipe, Is.Null);
                 Assert.That(powerLoss.Queue, Has.Count.EqualTo(1));
                 Assert.That(Pending(powerLoss), Is.EqualTo(1));
-                Assert.That(Material(powerLossLathe, "Steel"), Is.EqualTo(95),
+                Assert.That(Material(powerLossLathe, "CMSteel"), Is.EqualTo(95), // CMU14
                     "power loss pauses and requeues the paid item without refunding it");
             });
 
@@ -241,7 +241,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
             Assert.Multiple(() =>
             {
                 Assert.That(powerLoss.Queue, Is.Empty);
-                Assert.That(Material(powerLossLathe, "Steel"), Is.EqualTo(100),
+                Assert.That(Material(powerLossLathe, "CMSteel"), Is.EqualTo(100), // CMU14
                     "deleting the paused item must return exactly the original debit, with no arbitrage");
             });
 
@@ -255,14 +255,14 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
                 resume), Is.True);
             Assert.That(_lathe.TryStartProducing(resumeLathe, resume), Is.True);
             _lathe.AbortProduction(resumeLathe, resume);
-            Assert.That(Material(resumeLathe, "Steel"), Is.EqualTo(95));
+            Assert.That(Material(resumeLathe, "CMSteel"), Is.EqualTo(95)); // CMU14
             Assert.That(Pending(resume), Is.EqualTo(1));
             Assert.That(_lathe.TryStartProducing(resumeLathe, resume), Is.True);
             Assert.Multiple(() =>
             {
                 Assert.That(resume.Queue, Is.Empty);
                 Assert.That(resume.CurrentRecipe, Is.EqualTo((ProtoId<LatheRecipePrototype>) Recipe));
-                Assert.That(Material(resumeLathe, "Steel"), Is.EqualTo(95),
+                Assert.That(Material(resumeLathe, "CMSteel"), Is.EqualTo(95), // CMU14
                     "resuming a paid item must not debit it a second time");
             });
 
@@ -282,7 +282,7 @@ public sealed class LatheQueueMergeRegressionTest : GameTest
                 Assert.That(userAbort.CurrentRecipe, Is.Null);
                 Assert.That(userAbort.Queue, Is.Empty,
                     "manual cancellation refunds the in-flight item instead of requeuing it");
-                Assert.That(Material(userAbortLathe, "Steel"), Is.EqualTo(100));
+                Assert.That(Material(userAbortLathe, "CMSteel"), Is.EqualTo(100)); // CMU14
             });
         });
     }

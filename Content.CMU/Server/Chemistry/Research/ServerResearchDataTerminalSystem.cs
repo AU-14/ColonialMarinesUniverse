@@ -6,6 +6,7 @@ using Content.Server.GameTicking;
 using Content.Shared.CMU14.Chemistry.Reagents;
 using Content.Shared.CMU14.Chemistry.Research;
 using Content.Shared.CMU14.Chemistry.Reagent;
+using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CCVar;
@@ -27,40 +28,40 @@ namespace Content.Server.CMU14.Chemistry.Research;
 
 public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDataTerminalSystem
 {
-    [ViewVariables(VVAccess.ReadOnly)]
-    private List<GeneratedReagentData> _selectable = [];
+    public sealed class FactionResearch
+    {
+        public List<GeneratedReagentData> Selectable = [];
+        public HashSet<string> CompletedChemicals = [];
+        public TimeSpan NextReroll;
+        public TimeSpan LastTime;
+        public bool Picked;
+        public string LastPickName = string.Empty;
+        public string LastPick = string.Empty;
+        public Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> Reports = [];
+    }
 
-    public List<GeneratedReagentData> Selectable { get => _selectable; }
+    [Dependency] private readonly Content.Server.CMU14.Threats.Mobs.Wendigo.Lab.CMUWendigoResearchUnlockSystem _wendigoUnlock = default!;
 
-    [ViewVariables(VVAccess.ReadOnly)]
-    public List<string> IDS = [];
-    public TimeSpan NextReroll = TimeSpan.Zero;
+    private readonly Dictionary<string, FactionResearch> _factions = new(StringComparer.OrdinalIgnoreCase);
+    public FactionResearch GetResearch(string faction)
+    {
+        if (!_factions.TryGetValue(faction, out var research))
+            _factions[faction] = research = new FactionResearch();
+        return research;
+    }
 
-    [ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan RerollTime = TimeSpan.FromSeconds(180); //3 minutes
-    [ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan PickedRerollTime = TimeSpan.FromSeconds(360); //6 minutes
-
-    public TimeSpan LastTime = TimeSpan.Zero;
-
-    private string LastPickName = string.Empty;
-    private string LastPick = string.Empty;
-
-    private bool Picked = false;
-
-    private bool ready = false;
-    [ViewVariables(VVAccess.ReadOnly)]
-    public int ResearchChemAmount = 6; // for sanity
-
-    [ViewVariables(VVAccess.ReadOnly)]
+    public List<GeneratedReagentData> Selectable => GetResearch("corporate").Selectable;
+    public TimeSpan NextReroll => GetResearch("corporate").NextReroll;
+    public Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> ResearchData => GetResearch("corporate").Reports;
+    public TimeSpan RerollTime = TimeSpan.FromSeconds(180);
+    public TimeSpan PickedRerollTime = TimeSpan.FromSeconds(360);
+    public int ResearchChemAmount = 6;
     public float ResearchCashRewardMult = 500;
+    private bool ready;
+    private int _nextContractId;
 
-    /// <summary>
-    /// legend = (ID, text, scan/sim time, scan or sim, data, valid, completed)
-    /// </summary>
     [ViewVariables(VVAccess.ReadOnly)]
-    public Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> ResearchData = [];
-
+    public TimeSpan XClearanceLockout = TimeSpan.FromMinutes(40);
 
     [Dependency] private ServerReagentGeneratorSystem _generator = default!;
     [Dependency] private IGameTiming _timer = default!;
@@ -77,25 +78,25 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     [Dependency] private ILogManager _logman = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private XRFScannerSystem _scanner = default!;
+    [Dependency] private SharedGameTicker _ticker = default!;
 
     private Dictionary<Entity<ResearchDataTerminalComponent>, int> _printing = [];
     private HashSet<Entity<ResearchDataTerminalComponent>> _printingLast = [];
 
     private ISawmill _sawmill = default!;
 
-    private bool _upgrading = false;
-    private NetEntity _cipherPicker = NetEntity.Invalid;
     public override void Initialize()
     {
         base.Initialize();
         _sawmill = _logman.GetSawmill("reagent");
-        SubscribeLocalEvent<UpdateResearchConsoleEvent>(OnTerminalUpdate);
+
         SubscribeLocalEvent<PostGameMapLoad>(OnLoadingMaps);
         SubscribeLocalEvent<ResearchDataTerminalComponent, BoundUIOpenedEvent>(OnUiOpen);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnCleanup);
         Subs.BuiEvents<ResearchDataTerminalComponent>(ResearchDataTerminalUI.Key, subs =>
         {
             subs.Event<ResearchDataTerminalAttemptUpgradeBuiMsg>(OnUpgradeAttempt);
+            subs.Event<CMUResearchReduceCooldownBuiMsg>(OnReduceCooldown);
             subs.Event<ResearchDataTerminalPickChemBuiMsg>(OnPickChem);
             subs.Event<ResearchDataTerminalPrintLastBuiMsg>(OnPrintLast);
             subs.Event<ResearchDataTerminalPrintChemBuiMsg>(OnPrintRequest);
@@ -104,35 +105,37 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         Subs.CVar(_cfg, CCVars.RefreshTime, time => RerollTime = TimeSpan.FromSeconds(time), true);
         Subs.CVar(_cfg, CCVars.TerminalChems, chems => ResearchChemAmount = chems, true);
         Subs.CVar(_cfg, CCVars.CashRewardMult, dosh => ResearchCashRewardMult = dosh, true);
+        Subs.CVar(_cfg, CCVars.XClearanceLockout, t => XClearanceLockout = TimeSpan.FromSeconds(t), true);
     }
 
-    private void OnTerminalUpdate(UpdateResearchConsoleEvent args)
+    protected override void OnResearchBalanceChanged(string faction) => UpdateFactionUI(faction);
+
+    protected override void OnClearanceChanged(string faction, int oldClearance, int newClearance) =>
+        _wendigoUnlock.OnClearanceChanged(faction, oldClearance, newClearance);
+
+    private void UpdateFactionUI(string faction, bool announce = false)
     {
         var query = EntityQueryEnumerator<ResearchDataTerminalComponent>();
-        Picked = false;
         while (query.MoveNext(out var uid, out var comp))
         {
-            _chat.TrySendInGameICMessage(uid, Loc.GetString("research-chem-terminal-update"),
-            InGameICChatType.Speak, false, ignoreActionBlocker: true);
-            UpdateUI(uid);
+            if (!string.Equals(comp.Faction, faction, StringComparison.OrdinalIgnoreCase))
+                continue;
+            if (announce)
+                _chat.TrySendInGameICMessage(uid, Loc.GetString("research-chem-terminal-update"),
+                    InGameICChatType.Speak, false, ignoreActionBlocker: true);
+            UpdateUI((uid, comp));
         }
     }
 
     private void OnCleanup(RoundRestartCleanupEvent args)
     {
         ready = false;
-        Clearance = 1;
-        Credits = 0;
         DDIDiscovered = false;
-        _upgrading = false;
-        NextReroll = TimeSpan.Zero;
-        LastTime = TimeSpan.Zero;
-        ResearchData.Clear();
-        LastPick = string.Empty;
-        LastPickName = string.Empty;
+        _factions.Clear();
+        _nextContractId = 0;
+        ResetResearchAccounts();
         _printing.Clear();
         _printingLast.Clear();
-        _cipherPicker = NetEntity.Invalid;
     }
 
     public void OnLoadingMaps(PostGameMapLoad args)
@@ -141,107 +144,75 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     }
 
 
+    private int UpgradeCost(string faction)
+    {
+        var clearance = GetClearance(faction);
+        return (_researchLevelIncreaseMult * clearance) + 1;
+    }
+
     private void OnUpgradeAttempt(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalAttemptUpgradeBuiMsg args)
     {
-        int cost = 1;
-        if (Clearance == 5)
+        var faction = ent.Comp.Faction;
+        var clearance = GetClearance(faction);
+        if (clearance == 5 && _ticker.RoundDuration() < XClearanceLockout)
         {
-            cost = 5;
+            UpdateUI(ent);
+            return;
         }
-        else cost = (_researchLevelIncreaseMult * Clearance) + 1;
-        if (Credits >= cost)
+        var cost = UpgradeCost(faction);
+        if (clearance >= 6 || GetCredits(faction) < cost)
+            return;
+        UpdateClearance(GetCredits(faction) - cost, clearance + 1, faction);
+        if (clearance == 5)
         {
-            if (Clearance == 5)
+            if (TryGetCipherElevator(ent.Owner, args.Actor, out var elevator))
             {
-                NetEntity net = GetNetEntity(ent.Owner);
-                _cipherPicker = net;
+                elevator.Comp.Orders.Add(new RequisitionsEntry { Cost = 0, Crate = "CMUCrateSecureCipheringExperiment" });
+                SpawnNextToOrDrop("CMUCipherHintPaperInformDeliv", ent.Owner);
             }
-            _upgrading = true;
+            else
+                SpawnNextToOrDrop("CMUCipherHintPaper", ent.Owner);
         }
-        UpdateUI(ent);
+        UpdateFactionUI(faction);
     }
+
+    public bool ReduceCooldown(string faction)
+    {
+        var research = GetResearch(faction);
+        if (!research.Picked || research.NextReroll <= _timer.CurTime || GetCredits(faction) < 1)
+            return false;
+        UpdateClearance(GetCredits(faction) - 1, -1, faction);
+        research.NextReroll = TimeSpan.FromTicks(Math.Max(_timer.CurTime.Ticks,
+            (research.NextReroll - TimeSpan.FromSeconds(60)).Ticks));
+        if (research.NextReroll <= _timer.CurTime)
+            RerollChems(faction);
+        UpdateFactionUI(faction);
+        return true;
+    }
+
+    private void OnReduceCooldown(Entity<ResearchDataTerminalComponent> ent, ref CMUResearchReduceCooldownBuiMsg args)
+    {
+        ReduceCooldown(ent.Comp.Faction);
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
-        if (_upgrading)
-        {
-            int cost = 1;
-            if (Clearance == 5)
-            {
-                cost = 5;
-            }
-            else cost = (_researchLevelIncreaseMult * Clearance) + 1;
-            if (Clearance < 6)
-            {
-                bool ciph = false;
-                if (Clearance + 1 == 6)
-                {
-                    ciph = true;
-                }
-                UpdateClearance(Credits - cost, Clearance + 1);
-                var query = EntityQueryEnumerator<ResearchDataTerminalComponent>();
-                EntityUid cip = GetEntity(_cipherPicker);
-                while(query.MoveNext(out var ent, out var comp))
-                {
-                    UpdateUI(ent);
-                    if (ciph)
-                    {
-                        if (ent == cip)
-                        {
-                            var xrf = GetNearestXRF(cip);
-                            if (xrf == EntityUid.Invalid)
-                                SpawnNextToOrDrop("CMUCipherHintPaper", ent);
-                            else
-                            {
-                                var elev = _scanner.GetFactionElevator(xrf, null);
-                                if (elev == NetEntity.Invalid)
-                                    SpawnNextToOrDrop("CMUCipherHintPaper", ent);
-                                else
-                                {
-                                    var elevint = GetEntity(elev);
-                                    if (!TryComp<RequisitionsElevatorComponent>(elevint, out var elevcomp))
-                                        SpawnNextToOrDrop("CMUCipherHintPaper", ent);
-                                    else
-                                    {
-                                        var order = new RequisitionsEntry();
-                                        order.Cost = 0;
-                                        order.Crate = "CMUCrateSecureCipheringExperiment";
-                                        elevcomp.Orders.Add(order);
-                                        SpawnNextToOrDrop("CMUCipherHintPaperInformDeliv", ent);
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            SpawnNextToOrDrop("CMUCipherHintPaperNoSpawn", ent);
-                        }
-                    }
-                }
-            }
-            _upgrading = false;
-        }
-        if (_printingLast.Count > 0)
-        {
-            foreach(var printee in _printingLast)
-            {
-                PrintLast(printee);
-                _printingLast.Remove(printee);
-            }
-        }
-        if (_printing.Count > 0)
-        {
-            foreach(var printee in _printing)
-            {
-                PrintData(printee.Key, printee.Value);
-                _printing.Remove(printee.Key);
-            }
-        }
+        foreach (var printee in _printingLast)
+            PrintLast(printee);
+        _printingLast.Clear();
+        foreach (var printee in _printing)
+            PrintData(printee.Key, printee.Value);
+        _printing.Clear();
         if (!ready)
             return;
-        if (_timer.CurTime >= NextReroll)
+        // Initialize accounts even when their terminals are delivered later in the round.
+        foreach (var faction in new[] { "corporate", "govfor", "opfor", "colony" })
+            GetResearch(faction);
+        foreach (var (faction, research) in _factions.ToArray())
         {
-            RerollChems();
+            if (_timer.CurTime >= research.NextReroll)
+                RerollChems(faction);
         }
     }
 
@@ -271,12 +242,12 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     public void CompleteChemical(ReagentPrototype proto, string faction, EntityUid? scanner)
     {
-        _generator.IdentifiedChemicals.Add(proto.ID, proto.Reward);
-        var ev = new UpdateDataTerminalClearanceEvent(-1, Credits + proto.Reward);
-        RaiseLocalEvent(ev);
-        RaiseNetworkEvent(ev);
-        var ncv = new IdentifyChemicalEvent(proto.ID, proto.Reward);
-        RaiseNetworkEvent(ncv);
+        if (!GetResearch(faction).CompletedChemicals.Add(proto.ID))
+            return;
+        // Chemical definitions are global, but each faction earns its own first-scan reward.
+        if (_generator.IdentifiedChemicals.TryAdd(proto.ID, proto.Reward))
+            RaiseNetworkEvent(new IdentifyChemicalEvent(proto.ID, proto.Reward));
+        UpdateClearance(GetCredits(faction) + proto.Reward, -1, faction);
         if (faction != string.Empty)
         {
             if (string.Equals(faction, "corporate", StringComparison.OrdinalIgnoreCase))
@@ -334,64 +305,61 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     private void UpdateUI(Entity<ResearchDataTerminalComponent> ent)
     {
-        int cost = 1;
-        if (Clearance == 5)
-        {
-            cost = 5;
-        }
-        else cost = (_researchLevelIncreaseMult * Clearance) + 1;
+        var faction = ent.Comp.Faction;
+        var research = GetResearch(faction);
+        TimeSpan? xLockedUntil = null;
+        if (GetClearance(faction) == 5 && _ticker.RoundDuration() < XClearanceLockout)
+            xLockedUntil = _timer.CurTime + (XClearanceLockout - _ticker.RoundDuration());
         var state = new ResearchDataTerminalBuiState(
-            ids: _selectable,
-            data: ResearchData,
-            nextUpdate: NextReroll,
-            lastTime: LastTime,
-            credits: Credits,
-            clearance: Clearance,
-            upgradecost: cost,
-            picked: Picked);
+            ids: research.Selectable.ToList(),
+            data: new(research.Reports),
+            nextUpdate: research.NextReroll,
+            lastTime: research.LastTime,
+            credits: GetCredits(faction),
+            clearance: GetClearance(faction),
+            upgradecost: UpgradeCost(faction),
+            xLockedUntil: xLockedUntil,
+            picked: research.Picked);
         _ui.SetUiState(ent.Owner, ResearchDataTerminalUI.Key, state);
     }
-    private void UpdateUI(EntityUid ent)
+
+    /// <summary>
+    /// Atomically reserves one contract for a faction before contract generation raises further events.
+    /// </summary>
+    public bool TryReserveContract(string faction, string id, out GeneratedReagentData reagent)
     {
-        int cost = 1;
-        if (Clearance == 5)
+        var research = GetResearch(faction);
+        var index = research.Selectable.FindIndex(candidate => candidate.ID == id);
+        if (research.Picked || index < 0)
         {
-            cost = 5;
+            reagent = default;
+            return false;
         }
-        else cost = (_researchLevelIncreaseMult * Clearance) + 1;
-        var state = new ResearchDataTerminalBuiState(
-            ids: _selectable,
-            data: ResearchData,
-            nextUpdate: NextReroll,
-            lastTime: LastTime,
-            credits: Credits,
-            clearance: Clearance,
-            upgradecost: cost,
-            picked: Picked);
-        _ui.SetUiState(ent, ResearchDataTerminalUI.Key, state);
+
+        reagent = research.Selectable[index];
+        research.Picked = true;
+        research.NextReroll = _timer.CurTime + PickedRerollTime;
+        research.LastTime = _timer.CurTime;
+        research.Selectable.RemoveAt(index);
+
+        // Push the lock before contract generation can raise any further events. Open windows on every
+        // same-faction terminal are disabled together, and stale requests are rejected above.
+        UpdateFactionUI(faction);
+        return true;
     }
-    public void PickChem(string id, Entity<ResearchDataTerminalComponent>? ent = null)
+
+    public bool PickChem(string id, Entity<ResearchDataTerminalComponent>? ent = null)
     {
-        Picked = true;
-        foreach (var reagent in _selectable)
-        {
-            if (reagent.ID == id)
-            {
-                LegalizeChem(reagent);
-                _selectable.Remove(reagent);
-                IDS.Remove(reagent.ID);
-                if (ent is not null)
-                {
-                    PrintContract(ent.Value, reagent.ID);
-                }
-                NextReroll = _timer.CurTime + PickedRerollTime;
-                LastTime = _timer.CurTime;
-                var ev = new UpdateResearchConsoleEvent(_selectable, NextReroll);
-                RaiseNetworkEvent(ev);
-                break;
-            }
-        }
+        var faction = ent?.Comp.Faction ?? "corporate";
+        if (!TryReserveContract(faction, id, out var reagent))
+            return false;
+
+        LegalizeChem(reagent);
+        if (ent is { } terminal)
+            PrintContract(terminal, reagent.ID);
+        return true;
     }
+
     private void OnPickChem(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPickChemBuiMsg args)
     {
         PickChem(args.Pick, ent);
@@ -400,25 +368,26 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     private void OnPrintLast(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPrintLastBuiMsg args)
     {
-        
+
         _printingLast.Add(ent);
     }
 
     private void OnPrintRequest(Entity<ResearchDataTerminalComponent> ent, ref ResearchDataTerminalPrintChemBuiMsg args)
     {
         //_sawmill.Info($"WE ARE TRYING TO PRINT INDEX {args.Index}");
-        _printing.Add(ent, args.Index);
+        _printing[ent] = args.Index;
     }
 
     private void PrintLast(Entity<ResearchDataTerminalComponent> ent)
     {
-        if (LastPickName == string.Empty || LastPick == string.Empty)
+        var research = GetResearch(ent.Comp.Faction);
+        if (research.LastPickName == string.Empty || research.LastPick == string.Empty)
             return;
-        string name = Loc.GetString("research-data-synthesis-name", ("NAME", LastPickName));
+        string name = Loc.GetString("research-data-synthesis-name", ("NAME", research.LastPickName));
         var paper = SpawnNextToOrDrop("CMUWYPaper", ent.Owner);
         _mets.SetEntityName(paper, name);
         //unparity, because the experiment number is re-randomized
-        _paper.SetContent(paper, LastPick);
+        _paper.SetContent(paper, research.LastPick);
         RemCompDeferred<ResearchReportComponent>(paper);
     }
 
@@ -494,13 +463,17 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             report.Completed = true;
             DirtyEntity(paper);
         }
-        LastPickName = dat.Name;
-        LastPick = text;
+        if (!materializable)
+        {
+            var research = GetResearch(GetFaction(source));
+            research.LastPickName = dat.Name;
+            research.LastPick = text;
+        }
         return paper;
     }
     private void PrintData(Entity<ResearchDataTerminalComponent> ent, int idx)
     {
-        if (ResearchData.TryGetValue(idx, out var value))
+        if (GetResearch(ent.Comp.Faction).Reports.TryGetValue(idx, out var value))
         {
             string name = string.Empty;
             if (value.Item4)
@@ -521,6 +494,38 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         }
     }
 
+    private bool TryGetCipherElevator(EntityUid terminal, EntityUid actor, out Entity<RequisitionsElevatorComponent> elevator)
+    {
+        if (TryComp<MarineComponent>(actor, out var marine)
+            && !string.IsNullOrEmpty(marine.Faction))
+        {
+            var actorQuery = EntityQueryEnumerator<RequisitionsElevatorComponent>();
+            while (actorQuery.MoveNext(out var elevUid, out var elevComp))
+            {
+                if (elevComp.Faction.Equals(marine.Faction, StringComparison.OrdinalIgnoreCase))
+                {
+                    elevator = (elevUid, elevComp);
+                    return true;
+                }
+            }
+        }
+
+        var xrf = GetNearestXRF(terminal);
+        if (xrf != EntityUid.Invalid)
+        {
+            var net = _scanner.GetFactionElevator(xrf, null);
+            if (net != NetEntity.Invalid
+                && TryComp<RequisitionsElevatorComponent>(GetEntity(net), out var xrfComp))
+            {
+                elevator = (GetEntity(net), xrfComp);
+                return true;
+            }
+        }
+
+        elevator = default;
+        return false;
+    }
+
     public EntityUid GetNearestXRF(EntityUid ent)
     {
         if (!TryComp(ent, out TransformComponent? excomp))
@@ -529,8 +534,10 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         List<(EntityUid, TransformComponent)> scanners = [];
         EntityUid closest = EntityUid.Invalid;
         float closestDistance = float.MaxValue;
-        while (scannersq.MoveNext(out var xent, out _))
+        while (scannersq.MoveNext(out var xent, out var scanner))
         {
+            if (!string.Equals(scanner.Faction, GetFaction(ent), StringComparison.OrdinalIgnoreCase))
+                continue;
             if (!TryComp(xent, out TransformComponent? xcomp))
                 continue;
             if (excomp.MapUid != xcomp.MapUid)
@@ -546,10 +553,11 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     }
 
 
-    private void RerollChems()
+    private void RerollChems(string faction)
     {
-        _selectable.Clear();
-        IDS.Clear();
+        var research = GetResearch(faction);
+        research.Selectable.Clear();
+        research.Picked = false;
         for (int i = 0; i < ResearchChemAmount; i++)
         {
             GeneratedReagentData data = new();
@@ -557,6 +565,8 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             data.Effects = [];
             data.Class = ReagentClass.Ultra;
             _generator.GenerateName(ref data);
+            // Offers are generated before registration; reserve a unique ID across faction pools.
+            data.ID = $"{data.ID}-{faction}-{_nextContractId++}";
             data.GenTier = _random.Next(1, 4);
             _generator.GenerateStats(ref data);
 
@@ -587,13 +597,10 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
                     break;
             }
             data.PropertyHint = _random.Pick(data.Effects.Keys);
-            _selectable.Add(data);
-            IDS.Add(data.ID);
+            research.Selectable.Add(data);
         }
-        NextReroll = _timer.CurTime + RerollTime;
-        LastTime = _timer.CurTime;
-        var ev = new UpdateResearchConsoleEvent(_selectable, NextReroll);
-        RaiseLocalEvent(ev);
-        RaiseNetworkEvent(ev);
+        research.NextReroll = _timer.CurTime + RerollTime;
+        research.LastTime = _timer.CurTime;
+        UpdateFactionUI(faction, announce: true);
     }
 }

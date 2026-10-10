@@ -33,7 +33,7 @@
 - type: entity
   id: ActionFindParasite
   name: Find Parasite
-  description: Find Ghostrolable Parasites
+  description: Find Ghostrollable Parasites
   components:
   - type: Action
     checkCanInteract: false

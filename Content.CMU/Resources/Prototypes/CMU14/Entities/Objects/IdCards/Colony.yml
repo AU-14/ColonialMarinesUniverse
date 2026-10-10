@@ -277,7 +277,7 @@
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyFreightSystemsSpecialist
-  name: freight systems specialist ID card
+  name: logistics specialist ID card
   components:
   - type: PresetIdCard
     job: AU14JobCivilianFreightSystemsSpecialist
@@ -292,8 +292,16 @@
 
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
+  id: CMUIDCardCivilianAtmosian
+  name: atmospheric technician ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobCivilianAtmosian
+
+- type: entity
+  parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyWasteManagementSpecialist
-  name: waste management specialist ID card
+  name: waste management ID card
   components:
   - type: PresetIdCard
     job: AU14JobCivilianWasteManagementSpecialist
@@ -362,34 +370,42 @@
 - type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyEthicsAndWellnessAdvisor
-  name: ethics and wellness advisor ID card
+  name: psychologist ID card
   components:
   - type: PresetIdCard
     job: AU14JobCivilianEthicsAndWellnessAdvisor
 
 - type: entity
+  parent: AU14IDCardColonyEthicsAndWellnessAdvisor
+  id: CMUIDCardColonyTherapist
+  name: therapist ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Therapist
+
+- type: entity
+  parent: AU14IDCardColonyEthicsAndWellnessAdvisor
+  id: CMUIDCardColonyPsychiatrist
+  name: psychiatrist ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Psychiatrist
+
+- type: entity
   parent: AU14IDCardBaseCivilianNoIFF
   id: AU14IDCardColonyEmergencyResponseOfficer
-  name: emergency response officer ID card
+  name: paramedic ID card
   components:
   - type: PresetIdCard
     job: AU14JobCivilianEmergencyResponseOfficer
 
 - type: entity
   parent: AU14IDCardColonyEmergencyResponseOfficer
-  id: AU14IDCardColonyEmergencyResponseOfficerParamedic
-  name: emergency response paramedic ID card
-  components:
-  - type: JobTitleChanger
-    jobTitle: Emergency Response Paramedic
-
-- type: entity
-  parent: AU14IDCardColonyEmergencyResponseOfficer
   id: AU14IDCardColonyEmergencyResponseOfficerFirefighter
-  name: emergency response firefighter ID card
+  name: firefighter ID card
   components:
   - type: JobTitleChanger
-    jobTitle: Emergency Response Firefighter
+    jobTitle: Firefighter
 
 # ├──[ COLONY ]──────────────────────────────────────────────────────┤
 - type: entity

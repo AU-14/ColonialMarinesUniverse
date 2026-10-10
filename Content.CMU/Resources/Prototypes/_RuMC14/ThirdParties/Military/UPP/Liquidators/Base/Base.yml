@@ -1,0 +1,25 @@
+- type: entity
+  parent: RMCHeadsetMarine
+  id: RuMCHeadsetLiquidator
+  name: UPP Liquidator headset
+  description: Issued exclusively to UPP Special Forces such as Liquidator.
+  suffix: RuMC, Liquidator
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/headsets.rsi
+    state: soc_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - CMEncryptionKeyColony
+      - AU14EncryptionKeyUPPAmb
+  - type: RMCHeadset
+    channels:
+    - UPPSOF
+  - type: GrantSquadLeaderTracker
+    defaultMode: SquadLeader
+    trackerModes:
+    - LiquidatorCommandingOfficer
+    - SquadLeader
+    - BattleBuddy
+    - PrimaryLandingZone

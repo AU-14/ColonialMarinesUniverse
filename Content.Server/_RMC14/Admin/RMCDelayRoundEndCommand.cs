@@ -1,5 +1,7 @@
 using Content.Server.Administration;
 using Content.Server.Chat.Managers;
+using Content.Server.GameTicking; // CMU14
+using Content.Server.RoundEnd; // CMU14
 using Content.Shared._RMC14.CCVar;
 using Content.Shared.Administration;
 using Content.Shared.Chat;
@@ -16,6 +18,8 @@ public sealed partial class RMCDelayRoundEndCommand : LocalizedEntityCommands
 {
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private GameTicker _gameTicker = default!; // CMU14
+    [Dependency] private RoundEndSystem _roundEndSystem = default!; // CMU14
 
     public override string Command => "rmcdelayroundend";
     public override string Description => "Delay the round end.";
@@ -47,6 +51,9 @@ public sealed partial class RMCDelayRoundEndCommand : LocalizedEntityCommands
         _chatManager.SendAdminAnnouncement($"{shell.Player}, has set the round end delay to {!currentValue}");
 
         _cfg.SetCVar(RMCCVars.RMCDelayRoundEnd, !currentValue);
+
+        if (currentValue && _gameTicker.RunLevel == GameRunLevel.PostRound) // CMU14
+            _roundEndSystem.EndRound();
 
         if (silent)
             return;

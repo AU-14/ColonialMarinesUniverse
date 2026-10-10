@@ -2,6 +2,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.Stack;
 using Content.Server.Shuttles.Events;
 using Content.Server.CMU14.Ops.ThirdParty;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server._RMC14.Dropship;
 using Content.Shared.CMU14.Medical.Anatomy.Bones;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
@@ -88,6 +89,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Blunt = "Blunt";
     private static readonly ProtoId<DamageTypePrototype> Slash = "Slash";
@@ -751,8 +753,9 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         shuttle = default;
         navigationComputer = default;
         returnDestination = default;
-        if (Transform(ent).MapUid is not { } hospitalMap ||
-            !TryComp<MapComponent>(hospitalMap, out var hospitalMapComponent) || ent.Comp.LandingZone is not { } hospitalDestination)
+        if (ent.Comp.LandingZone is not { } hospitalDestination ||
+            Transform(hospitalDestination).MapUid is not { } hospitalMap ||
+            !TryComp<MapComponent>(hospitalMap, out var hospitalMapComponent))
             return false;
         var leaseUid = Spawn(null, MapCoordinates.Nullspace);
         var lease = AddComp<HospitalTransportLeaseComponent>(leaseUid);
@@ -1783,7 +1786,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         while (query.MoveNext(out var uid, out _, out _, out var xform))
         {
             var zoneCoords = _transform.GetMapCoordinates(uid, xform);
-            if (zoneCoords.MapId != computerMap)
+            if (!_zLevels.IsSameZNetwork(zoneCoords.MapId, computerMap))
                 continue;
 
             var distance = (zoneCoords.Position - computerCoords.Position).LengthSquared();
@@ -1802,7 +1805,8 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         if (!force && now < ent.Comp.NextLandingZoneRefreshAt)
             return ent.Comp.LandingZone is { } landingZone && !Deleted(landingZone) &&
                 HasComp<DropshipDestinationComponent>(landingZone) &&
-                Transform(landingZone).MapUid == Transform(ent).MapUid;
+                Transform(ent).MapUid is { } computerMap &&
+                _zLevels.IsSameZNetwork(Transform(landingZone).MapUid, computerMap);
 
         var foundLandingZone = FindLandingZone(ent);
         var changed = ent.Comp.LandingZone != foundLandingZone;

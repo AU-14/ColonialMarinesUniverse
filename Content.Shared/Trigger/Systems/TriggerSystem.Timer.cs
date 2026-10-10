@@ -5,6 +5,8 @@ using Content.Shared.Verbs;
 using Robust.Shared.Audio;
 using Robust.Shared.Random;
 
+using Robust.Shared.GameStates;
+
 namespace Content.Shared.Trigger.Systems;
 
 public sealed partial class TriggerSystem
@@ -45,6 +47,8 @@ public sealed partial class TriggerSystem
 
     private void InitializeTimer()
     {
+        SubscribeLocalEvent<TimerTriggerComponent, ComponentGetState>(OnTimerGetState);
+        SubscribeLocalEvent<TimerTriggerComponent, ComponentHandleState>(OnTimerHandleState);
         SubscribeLocalEvent<RepeatingTriggerComponent, MapInitEvent>(OnRepeatInit);
         SubscribeLocalEvent<RandomTimerTriggerComponent, MapInitEvent>(OnRandomInit);
         SubscribeLocalEvent<TimerTriggerComponent, ComponentShutdown>(OnTimerShutdown);

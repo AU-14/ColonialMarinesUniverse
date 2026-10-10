@@ -62,6 +62,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _mobThresholds = default!; // CMU14: caste-relative evolution health.
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -317,7 +318,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             args.Handled ||
             args.Cancelled ||
             !_mind.TryGetMind(xeno, out _, out _) ||
-            !CanEvolvePopup(xeno, args.Choice))
+            // CMU14: !CanEvolvePopup(xeno, args.Choice))
+            !CanEvolvePopup(xeno, args.Choice) ||
+            !DamagedCheckPopup(xeno, false))
         {
             return;
         }
@@ -495,9 +498,18 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
     private bool DamagedCheckPopup(EntityUid xeno, bool predicted = true, bool doPopup = true)
     {
-        if (!TryComp(xeno, out DamageableComponent? damageable) ||
-            _damageable.GetTotalDamage((xeno, damageable)) <= 1)
+        // CMU14: use the same health maximum as the xeno HUD (critical threshold, then death).
+        // if (!TryComp(xeno, out DamageableComponent? damageable) ||
+        //     _damageable.GetTotalDamage((xeno, damageable)) <= 1)
+        if (!TryComp(xeno, out DamageableComponent? damageable))
             return true;
+
+        var maxDamage = _mobThresholds.TryGetIncapThreshold(xeno, out var maxHealth)
+            ? maxHealth.Value / 2
+            : (FixedPoint2) 1;
+        if (_damageable.GetTotalDamage((xeno, damageable)) <= maxDamage)
+            return true;
+        // CMU14 End
 
         if (predicted)
             _popup.PopupClient(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
@@ -1003,10 +1015,15 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         }
 
         FixedPoint2? evoOverride = null;
+        var overrideIgnoresGranter = false; // CMU14
         var overrides = EntityQueryEnumerator<EvolutionOverrideComponent>();
         while (overrides.MoveNext(out var comp))
         {
-            evoOverride = comp.Amount;
+            // CMU14: xeno feedback and lifecycle.
+            // Overrides can overlap (for example a hive boon and the hijack surge).
+            // Entity iteration order must not let the weaker effect mask the stronger one.
+            evoOverride = evoOverride is { } previous ? FixedPoint2.Max(previous, comp.Amount) : comp.Amount;
+            overrideIgnoresGranter |= comp.IgnoreGranter; // CMU14
         }
 
         var evolution = EntityQueryEnumerator<XenoEvolutionComponent>();
@@ -1051,7 +1068,9 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
                 if (needsOvipositor && HasEvolutionIgnoreGranter(uid))
                     hasGranter = true;
 
-                if (needsOvipositor && comp.RequiresGranter && !hasGranter)
+                // CMU14: the timed hijack surge also grants evolution without an ovipositor.
+                // if (needsOvipositor && comp.RequiresGranter && !hasGranter)
+                if (needsOvipositor && comp.RequiresGranter && !hasGranter && !overrideIgnoresGranter)
                     continue;
 
                 SetPoints((uid, comp), comp.Points + gain);

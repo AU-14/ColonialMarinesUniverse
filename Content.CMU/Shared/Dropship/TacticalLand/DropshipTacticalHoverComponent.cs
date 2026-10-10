@@ -34,6 +34,10 @@ public sealed partial class DropshipTacticalHoverComponent : Component
     /// </summary>
     public float GunshipAngularVelocityDegrees;
 
+    /// <summary>Applied local maneuver thrust, used by the projected exhaust visuals.</summary>
+    public Vector2 GunshipVisualThrust;
+    public float GunshipVisualTurn;
+
     /// <summary>
     /// Unconsumed server time retained by the fixed-step flight simulation.
     /// </summary>
@@ -139,6 +143,9 @@ public sealed partial class DropshipTacticalHoverComponent : Component
     [DataField]
     public List<EntityUid> Downwashes = new();
 
+    /// <summary>Light on the actual ship, separate from the projected ground impact lights.</summary>
+    public List<EntityUid> NozzleLights = new();
+
     [DataField]
     public EntProtoId ShadowPrototype = "CMUDropshipTacticalHoverShadow";
 
@@ -148,7 +155,7 @@ public sealed partial class DropshipTacticalHoverComponent : Component
 
 public readonly record struct DropshipTerrainAnchorPose(Vector2 Position, Angle Rotation);
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true)]
 public sealed partial class DropshipTacticalHoverShadowComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -156,6 +163,15 @@ public sealed partial class DropshipTacticalHoverShadowComponent : Component
 
     [DataField, AutoNetworkedField]
     public Vector2i Footprint = new(9, 17);
+
+    [AutoNetworkedField]
+    public Box2 HullBounds;
+
+    [AutoNetworkedField]
+    public List<DropshipShadowTile> Tiles = new();
+
+    [AutoNetworkedField]
+    public List<DropshipShadowPart> Parts = new();
 
     [DataField, AutoNetworkedField]
     public int ProjectedMapOffset = -1;
@@ -165,10 +181,17 @@ public sealed partial class DropshipTacticalHoverShadowComponent : Component
 public sealed partial class DropshipTacticalHoverDownwashComponent : Component
 {
     [DataField, AutoNetworkedField]
+    public bool JetExhaust;
+
+    [DataField, AutoNetworkedField]
     public EntityUid? Dropship;
 
     [DataField, AutoNetworkedField]
     public Vector2 Offset;
+
+    /// <summary>Local force at this nozzle; exhaust points in the opposite direction.</summary>
+    [AutoNetworkedField]
+    public Vector2 ManeuverThrust;
 
     [DataField, AutoNetworkedField]
     public int ProjectedMapOffset = -1;

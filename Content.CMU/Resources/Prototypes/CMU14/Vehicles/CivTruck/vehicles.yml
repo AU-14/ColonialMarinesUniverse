@@ -21,7 +21,7 @@
   - type: VehicleSound
     collisionSoundCooldown: 1.5
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/van_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 10
@@ -60,7 +60,7 @@
   - type: VehicleSound
     collisionSoundCooldown: 1.5
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -99,7 +99,7 @@
   - type: VehicleSound
     collisionSoundCooldown: 1.5
   - type: VehicleEnter
-    interiorPath: /Maps/CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/CMU14/Vehicles/Interiors/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4

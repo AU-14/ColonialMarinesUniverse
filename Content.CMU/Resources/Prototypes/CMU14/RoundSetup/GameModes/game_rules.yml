@@ -39,7 +39,10 @@
       AU14JobGOVFOROfficerEngi: 1
       AU14JobGOVFORVehicleCrewman: 2
       AU14JobGOVFORVehicleCommander: 1
-      AU14JobGOVFORDSPilot: 2
+      AU14JobGOVFORDSPilot: 1
+      AU14JobGOVFORGunshipPilot: 1
+      AU14JobGOVFORFighterPilot: 1
+      AU14JobGOVFORFighterSystemsOfficer: 1
       AU14JobGOVFORDCC: 2
       AU14JobGOVFORAuxSupportSynth: 2
       AU14JobGOVFORWorkingJoe: 1
@@ -62,20 +65,26 @@
       AU14JobOPFORRadioTelephoneOperator: 3
       AU14JobOPFORRadioTrafficOperator: 3
       AU14JobOPFORSquadRifleman: 75
-#     CMUJobOPFORDroneOperator: 1
-#     AU14JobOPFORWeaponsSpecialist: 3 # TODO
+      CMUJobOPFORDroneOperator: 1
+      AU14JobOPFORWeaponsSpecialist: 3
       AU14JobOPFORSquadAutomaticRifleman: 3
       AU14JobOPFORSquadCombatTech: 6
+      AU14JobOPFOREngineeringTech: 2
       AU14JobOPFOROfficerLogistics: 1
       AU14JobOPFORAuxTech: 1
       AU14JobOPFOROfficerMedical: 1
       AU14JobOPFORMilitaryDoctor: 3
       AU14JobOPFORPlatoonCorpsman: 9
+      AU14JobOPFORNurse: 2
       AU14JobOPFOROfficerMP: 1
       AU14JobOPFORMilitaryPoliceMan: 2
       AU14JobOPFOROfficerEngi: 1
       AU14JobOPFORVehicleCrewman: 2
-      AU14JobOPFORDSPilot: 2
+      AU14JobOPFORVehicleCommander: 1
+      AU14JobOPFORDSPilot: 1
+      AU14JobOPFORGunshipPilot: 1
+      AU14JobOPFORFighterPilot: 1
+      AU14JobOPFORFighterSystemsOfficer: 1
       AU14JobOPFORDCC: 2
       AU14JobOPFORAuxSupportSynth: 2
       AU14JobOPFORWorkingJoe: 1
@@ -100,10 +109,9 @@
     jobs:
       AU14JobCLFCellLeader: 1
       AU14JobCLFRadioOperator: 1
-      AU14JobCLFPhysician: 1
-      AU14JobCLFSurgeon: 1
-      AU14JobCLFGuerilla: 3
-      AU14JobCLFSapper: 1
+      AU14JobCLFPhysician: 2
+      AU14JobCLFGuerilla: 2
+      AU14JobCLFSapper: 2
 
 - type: entity
   id: ColonyAntags

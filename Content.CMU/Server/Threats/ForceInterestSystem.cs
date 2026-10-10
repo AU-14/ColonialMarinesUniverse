@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Diagnostics.Performance;
 using Content.Server.GameTicking;
 using Content.Shared.GameTicking;
 using Content.Server.Ghost.Roles;
@@ -22,6 +23,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
 {
     [Dependency] private IComponentFactory _factory = default!;
     [Dependency] private GhostRoleSystem _ghostRole = default!;
+    [Dependency] private ICMUServerPerformanceDiagnostics _performance = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -29,6 +31,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
     private static readonly TimeSpan ClaimDuration = TimeSpan.FromSeconds(240);
     private static readonly TimeSpan RefreshInterval = TimeSpan.FromSeconds(1);
     private static readonly TimeSpan RetryInterval = TimeSpan.FromSeconds(30);
+    private static readonly TimeSpan FallbackDeployDelay = TimeSpan.FromMinutes(10);
     private readonly Dictionary<uint, PendingForce> _forces = new();
     private readonly Dictionary<EntityUid, TimeSpan> _unclaimed = new();
     private readonly ISawmill _sawmill = Logger.GetSawmill("force-interest");
@@ -88,6 +91,8 @@ public sealed partial class ForceInterestSystem : EntitySystem
     {
         var id = ++_nextIdentifier;
         var pending = new PendingForce(name, bodies, spawn, ready, fallbackJobs);
+        if (ready)
+            pending.ReadyAt = _timing.CurTime;
         _forces.Add(id, pending);
         if (interested != null)
         {
@@ -108,6 +113,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
             return;
 
         force.Ready = true;
+        force.ReadyAt = _timing.CurTime;
         _ghostRole.UpdateAllEui();
     }
 
@@ -151,14 +157,20 @@ public sealed partial class ForceInterestSystem : EntitySystem
         foreach (var (id, force) in _forces.ToArray())
         {
             changed |= force.Interested.RemoveWhere(player => !CanJoin(force, player)) > 0;
-            if (!force.Ready || force.RetryAt > _timing.CurTime ||
-                force.Interested.Count < ForceInterest.RequiredPlayers(force.TotalRoles))
+            if (!force.Ready || force.RetryAt > _timing.CurTime)
+                continue;
+
+            // Interest gets first crack at filling the force. Once the wait expires it deploys
+            // with whoever signed up rather than sitting in the menu for the rest of the round.
+            if (force.Interested.Count < ForceInterest.RequiredPlayers(force.TotalRoles)
+                && _timing.CurTime < force.ReadyAt + FallbackDeployDelay)
                 continue;
 
             // Remove before invoking game code, which can queue additional forces.
             _forces.Remove(id);
             try
             {
+                using var cost = _performance.MeasureOperation("force-deployment");
                 if (!force.Spawn(force.Interested))
                 {
                     force.RetryAt = _timing.CurTime + RetryInterval;
@@ -231,6 +243,7 @@ public sealed partial class ForceInterestSystem : EntitySystem
         public readonly IReadOnlyDictionary<string, ProtoId<JobPrototype>>? FallbackJobs = fallbackJobs;
         public readonly HashSet<NetUserId> Interested = new();
         public bool Ready = ready;
+        public TimeSpan ReadyAt;
         public TimeSpan RetryAt;
     }
 }

@@ -1,0 +1,678 @@
+# Cash-operated CMU versions of the free food, drink, cigarette and recreation vendors.
+# They replace the free ones on colony maps; ships keep the free versions since marines carry no cash.
+
+- type: entity
+  id: CMUCashVendorBooze
+  parent: AU14CashVendorBase
+  name: Booze-O-Mat
+  description: A Weyland-Yutani licensed liquor dispenser. Insert cash to purchase a drink. Prices subject to colonial sales tax.
+  suffix: Cash, Booze
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/boozeomat.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: CMDrinkCanAle
+      name: Ale (Can)
+      price: 3
+    - id: CMDrinkCanBeerLite
+      name: Beer (Can)
+      price: 3
+    - id: RMCDrinkAlcoholGrenadine
+      name: Grenadine
+      price: 6
+    - id: RMCDrinkAlcoholTequila
+      name: Tequila
+      price: 18
+    - id: RMCDrinkAlcoholRum
+      name: Rum
+      price: 16
+    - id: RMCDrinkAlcoholCognac
+      name: Cognac
+      price: 30
+    - id: RMCDrinkAlcoholDavenport
+      name: Davenport Whiskey
+      price: 24
+    - id: RMCDrinkAlcoholPurpleWine
+      name: Wine
+      price: 14
+    - id: RMCDrinkAlcoholMelonLiquor
+      name: Melon Liquor
+      price: 14
+    - id: RMCDrinkAlcoholGin
+      name: Gin
+      price: 16
+    - id: RMCDrinkAlcoholAbsinthe
+      name: Absinthe
+      price: 28
+    - id: RMCDrinkAlcoholVodka
+      name: Vodka
+      price: 14
+    - id: CMDrinkCanFruitBeer
+      name: Fruit Beer (Can)
+      price: 2
+    - id: DrinkJuiceLimeCarton
+      name: Lime Juice
+      price: 3
+    - id: DrinkCreamCarton
+      name: Cream
+      price: 3
+    - id: DrinkJuiceOrangeCarton
+      name: Orange Juice
+      price: 3
+    - id: CMDrinkCanSoda
+      name: Soda Water (Can)
+      price: 2
+    - id: DrinkJuiceTomatoCarton
+      name: Tomato Juice
+      price: 3
+    - id: CMDrinkCanTonic
+      name: Tonic Water (Can)
+      price: 2
+    - id: CMMetalFlask
+      name: Metal Flask (Empty)
+      price: 12
+    - id: DrinkGlass
+      name: Drinking Glass
+      price: 1
+    - id: RMCDrinkGlass
+      name: Tumbler
+      price: 1
+    - id: CMMarineFlask
+      name: Marine Flask (Empty)
+      price: 10
+
+- type: entity
+  id: CMUCashVendorSodaSoviet
+  parent: AU14CashVendorBase
+  name: BODA
+  description: A UPP-made soda machine. Insert cash to purchase a drink.
+  suffix: Cash, BODA
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/sovietsoda.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: CMDrinkCanBoda
+      name: Boda
+      price: 2
+    - id: CMDrinkCanBodaPlyus
+      name: Boda Plyus
+      price: 3
+
+- type: entity
+  id: CMUCashVendorCoffeeSimple
+  parent: AU14CashVendorBase
+  name: Hot Coffee Machine
+  description: A basic hot drinks machine. Insert cash to purchase coffee or cocoa.
+  suffix: Cash, Coffee
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: RMCDrinkCoffee
+      name: Coffee
+      price: 2
+    - id: RMCDrinkHotCocoa
+      name: Hot Cocoa
+      price: 3
+
+- type: entity
+  id: CMUCashVendorSnackSimple
+  parent: AU14CashVendorBase
+  name: Hot Foods Machine
+  description: A basic hot foods machine. Insert cash to purchase a packaged meal.
+  suffix: Cash, Hot Foods
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/snack.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: RMCFoodSnackCheeseburgerPackaged
+      name: Cheeseburger (Packaged)
+      price: 5
+    - id: RMCFoodSnackBurritoPackaged
+      name: Burrito (Packaged)
+      price: 5
+    - id: RMCFoodSnackHotdogPackaged
+      name: Hotdog (Packaged)
+      price: 5
+
+- type: entity
+  id: CMUCashVendorColaSPP
+  parent: AU14CashVendorBase
+  name: Xuanshi Drinks
+  description: A soft drink machine stocked for the Union. Insert cash to purchase a cold drink.
+  suffix: Cash, Xuanshi
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/spp_cola.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: CMDrinkCanBobdaClassic
+      price: 2
+    - id: CMDrinkCanBobdaCherry
+      price: 2
+    - id: CMDrinkCanBobdaLime
+      price: 2
+    - id: CMDrinkCanBobdaGrape
+      price: 2
+    - id: CMDrinkCanBobdaBlue
+      price: 2
+    - id: CMDrinkCanBobdaPeach
+      price: 2
+    - id: CMDrinkCanBobdaCranberry
+      price: 2
+    - id: CMDrinkCanBobdaVanilla
+      price: 2
+    - id: CMDrinkCanBobdaPineapple
+      price: 2
+    - id: CMDrinkCanBobdaClassicDiet
+      price: 2
+    - id: CMDrinkCanBobdaCherryDiet
+      price: 2
+    - id: CMDrinkCanBobdaLimeDiet
+      price: 2
+    - id: CMDrinkCanBobdaGrapeDiet
+      price: 2
+    - id: CMDrinkCanBobdaBlueDiet
+      price: 2
+    - id: CMDrinkCanBobdaPeachDiet
+      price: 2
+    - id: CMDrinkCanBobdaCranberryDiet
+      price: 2
+    - id: CMDrinkCanBobdaVanillaDiet
+      price: 2
+    - id: CMDrinkCanBobdaPineappleDiet
+      price: 2
+    - id: CMDrinkCanCola
+      price: 2
+
+- type: entity
+  id: CMUCashVendorColaResearch
+  parent: AU14CashVendorBase
+  name: Souto Softdrinks
+  description: A softdrink vending machine by Souto Soda Company. Insert cash to purchase a cold drink.
+  suffix: Cash, Souto
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/cola.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: CMDrinkCanBobdaClassic
+      price: 2
+    - id: CMDrinkCanBobdaCherry
+      price: 2
+    - id: CMDrinkCanBobdaLime
+      price: 2
+    - id: CMDrinkCanBobdaGrape
+      price: 2
+    - id: CMDrinkCanBobdaBlue
+      price: 2
+    - id: CMDrinkCanBobdaPeach
+      price: 2
+    - id: CMDrinkCanBobdaCranberry
+      price: 2
+    - id: CMDrinkCanBobdaVanilla
+      price: 2
+    - id: CMDrinkCanBobdaPineapple
+      price: 2
+
+- type: entity
+  id: CMUCashVendorKoorCigs
+  parent: AU14CashVendorBase
+  name: Koorlander Cigarette Machine
+  description: A Koorlander branded cigarette machine. Insert cash to purchase tobacco. Smoking kills.
+  suffix: Cash, Koorlander
+  components:
+  - type: Sprite
+    sprite: CMU14/Structures/Vendors/koorcigs.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: PackPaperRolling
+      name: Rolling Paper
+      price: 2
+    - id: PackPaperRollingFilters
+      name: Rolling Paper and Filters
+      price: 3
+    - id: AU14CigaretteKoorlander
+      name: Koorlander
+      price: 4
+    - id: AU14CigaretteLadyFingers
+      name: Lady Fingers
+      price: 5
+    - id: RMCMatchboxFull
+      name: Matchbox
+      price: 2
+    - id: RMCZippo
+      name: Zippo
+      price: 15
+
+- type: entity
+  id: CMUCashVendorCigsWeYa
+  parent: AU14CashVendorBase
+  name: Weyland-Yutani Brand Cigarette Machine
+  description: A Weyland-Yutani branded cigarette machine stocked with premium brands. Insert cash to purchase tobacco. Smoking kills.
+  suffix: Cash, WeYa Cigs
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/weya_cigs.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: RMCCigarettePackWeYaGold
+      name: We-Ya Gold
+      price: 8
+    - id: RMCCigarettePackEmeraldGreens
+      name: Emerald Greens
+      price: 6
+    - id: RMCCigarettePackArcturianAce
+      name: Arcturian Ace
+      price: 7
+    - id: RMCCigarettePackExecutiveSelect
+      name: Executive Select
+      price: 12
+    - id: RMCShioRoyalsTube
+      name: Shio Royals
+      price: 10
+    - id: RMCMatchboxFull
+      name: Matchbox
+      price: 2
+    - id: CMExecutiveSelectMatchbook
+      name: Executive Select Matchbook
+      price: 3
+    - id: CMExecutiveWEYAMatchbook
+      name: We-Ya Matchbook
+      price: 2
+    - id: RMCLighter
+      name: Lighter
+      price: 5
+    - id: RMCZippoExec
+      name: Executive Zippo
+      price: 45
+
+- type: entity
+  id: CMUCashVendorCigsElectro
+  parent: AU14CashVendorBase
+  name: Electro Brand Cigarette Machine
+  description: An Electro branded cigarette machine. Insert cash to purchase tobacco. Smoking kills.
+  suffix: Cash, Electro Cigs
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/electro_cigs.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: RMCCigarettePackElectroGolds
+      name: Electro Golds
+      price: 6
+    - id: RMCCigarettePackLuckySloths
+      name: Lucky Sloths
+      price: 5
+    - id: RMCCigarettePackLadyFingers
+      name: Lady Fingers
+      price: 5
+    - id: RMCCigarettePackSolRedsTurquoise
+      name: Sol Reds (Turquoise)
+      price: 6
+    - id: RMCCigarettePackSolRedsYellow
+      name: Sol Reds (Yellow)
+      price: 6
+    - id: RMCTarbackTube
+      name: Tarback Tube
+      price: 5
+    - id: RMCMatchboxFull
+      name: Matchbox
+      price: 2
+    - id: CMElectroMatchbook
+      name: Electro Matchbook
+      price: 2
+    - id: CMBrownMatchBook
+      name: Matchbook
+      price: 1
+    - id: RMCLighter
+      name: Lighter
+      price: 5
+    - id: RMCZippo
+      name: Zippo
+      price: 15
+
+- type: entity
+  id: CMUCashVendorCigsSPP
+  parent: AU14CashVendorBase
+  name: Komandir Cigarettes Vendor
+  description: A cigarette machine stocked for the Union. Insert cash to purchase tobacco. Smoking kills.
+  suffix: Cash, Komandir Cigs
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/spp_cigs.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: RMCCigarettePackLuckySloths
+      name: Lucky Sloths
+      price: 5
+    - id: AU14CigarettePackBalajj
+      name: Balajj
+      price: 5
+    - id: RMCCigarettePackWeYaGold
+      name: We-Ya Gold
+      price: 8
+    - id: RMCCigarettePackExecutiveSelect
+      name: Executive Select
+      price: 12
+    - id: RMCCigarCase
+      name: Cigar Case
+      price: 20
+    - id: RMCTarbackTube
+      name: Tarback Tube
+      price: 5
+    - id: RMCMatchboxFull
+      name: Matchbox
+      price: 2
+    - id: RMCLighter
+      name: Lighter
+      price: 5
+    - id: RMCZippoGold
+      name: Gold Zippo
+      price: 30
+
+- type: entity
+  id: CMUCashVendorChess
+  parent: AU14CashVendorBase
+  name: Chess-o-mat
+  description: A vending machine for chess sets. The pieces are miniature bottles of vodka. Insert cash to purchase.
+  suffix: Cash, Chess
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/chessomat.rsi
+    layers:
+    - state: "off"
+    - state: "normal-unshaded"
+      shader: unshaded
+  - type: AU14CashVendor
+    allowDepartmentBudget: true
+    items:
+    - id: ChessBoard
+      name: Chess Board
+      price: 15
+    - id: RMCDrinkAlcoholVodkaChessWhitePawn
+      name: White Pawn
+      price: 3
+    - id: RMCDrinkAlcoholVodkaChessWhiteBishop
+      name: White Bishop
+      price: 4
+    - id: RMCDrinkAlcoholVodkaChessWhiteKnight
+      name: White Knight
+      price: 4
+    - id: RMCDrinkAlcoholVodkaChessWhiteRook
+      name: White Rook
+      price: 4
+    - id: RMCDrinkAlcoholVodkaChessWhiteKing
+      name: White King
+      price: 6
+    - id: RMCDrinkAlcoholVodkaChessWhiteQueen
+      name: White Queen
+      price: 6
+
+- type: entity
+  id: CMUCashVendorCivilianClothing
+  parent: AU14CashVendorBase
+  name: Civilian Clothing Wardrobe
+  description: A wardrobe containing all the clothes a civilian would ever need. Insert cash or carry your ID to buy.
+  suffix: Cash, Clothing
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/corp_wardrobe.rsi
+    layers:
+    - state: "base"
+  - type: AU14CashVendor
+    items:
+    - id: RMCShoesBlack
+      price: 15
+    - id: RMCShoesBlue
+      price: 15
+    - id: RMCShoesBrown
+      price: 15
+    - id: RMCShoesGreen
+      price: 15
+    - id: RMCShoesOrange
+      price: 15
+    - id: RMCShoesPurple
+      price: 15
+    - id: RMCShoesRed
+      price: 15
+    - id: RMCShoesWhite
+      price: 15
+    - id: RMCShoesYellow
+      price: 15
+    - id: RMCBootsPMC
+      price: 35
+    - id: RMCBootsVanBandolier
+      price: 30
+    - id: RMCShoesLaceupBrown
+      price: 25
+    - id: RMCShoesLaceup
+      price: 25
+    - id: RMCShoesLeather
+      price: 30
+    - id: AU14CivilianWorkwearYellow
+      price: 20
+    - id: RMCJumpsuitLiaisonGreyWorkwear
+      price: 20
+    - id: AU14CivilianWorkwearPink
+      price: 20
+    - id: AU14CivilianWorkwearBlue
+      price: 20
+    - id: AU14CivilianWorkwearGreen
+      price: 20
+    - id: CMJumpsuitLiaisonBlack
+      price: 60
+    - id: CMJumpsuitLiaisonBlue
+      price: 60
+    - id: CMJumpsuitLiaisonBrown
+      price: 60
+    - id: CMJumpsuitLiaisonField
+      price: 55
+    - id: CMJumpsuitLiaisonIvy
+      price: 60
+    - id: CMJumpsuitLiaisonCorporateFormal
+      price: 80
+    - id: CMJumpsuitLiaisonFormal
+      price: 80
+    - id: CMJumpsuitLiaison
+      price: 60
+    - id: CMJumpsuitLiaisonBlazer
+      price: 70
+    - id: CMJumpsuitLiaisonCharcoal
+      price: 60
+    - id: ClothingNeckTieRed
+      price: 10
+    - id: ClothingNeckTieDet
+      price: 10
+    - id: ClothingNeckTieSci
+      price: 10
+    - id: ClothingNeckTieSerious
+      price: 10
+    - id: AU14CivilianFlannelWhite
+      price: 18
+    - id: AU14CivilianFlannelRed
+      price: 18
+    - id: AU14CivilianFlannelPurple
+      price: 18
+    - id: AU14CivilianFloralRed
+      price: 18
+    - id: AU14CivilianFloralBlue
+      price: 18
+    - id: AU14CivilianFloralYellow
+      price: 18
+    - id: RMCJumpsuitDutchBandolier
+      price: 40
+    - id: RMCJumpsuitCivilian
+      price: 25
+    - id: CMJumpsuitColonist
+      price: 15
+    - id: CMJumpsuitTShirtWhite
+      price: 8
+    - id: CMJumpsuitTShirtGray
+      price: 8
+    - id: CMJumpsuitTShirtRed
+      price: 8
+    - id: RMCJacketCorporateKhaki
+      price: 50
+    - id: RMCJacketCorporateBlack
+      price: 50
+    - id: RMCJacketCorporateBlue
+      price: 50
+    - id: RMCJacketCorporateBrown
+      price: 50
+    - id: AU14CivilianJacketGrayPufferVest
+      price: 30
+    - id: AU14CivilianJacketKhakiPufferVest
+      price: 30
+    - id: AU14CivilianJacketTanPufferVest
+      price: 30
+    - id: AU14CivilianJacketGrayPufferJacket
+      price: 45
+    - id: AU14CivilianJacketOrangePufferJacket
+      price: 45
+    - id: AU14CivilianJacketKhakiPufferJacket
+      price: 45
+    - id: AU14WindbreakerBlue
+      price: 30
+    - id: RMCJacketWindbreakerGrey
+      price: 30
+    - id: RMCJacketWindbreaker
+      price: 30
+    - id: RMCJacketWindbreakerFirstResponder
+      price: 30
+    - id: RMCJacketWindbreakerBrown
+      price: 30
+    - id: AU14CivilianJacketBlueParka
+      price: 50
+    - id: AU14CivilianJacketGreenParka
+      price: 50
+    - id: AU14CivilianJacketRedParka
+      price: 50
+    - id: AU14CivilianJacketYellowParka
+      price: 50
+    - id: AU14CivilianTanTrenchCoat
+      price: 60
+    - id: AU14CivilianBrownTrenchCoat
+      price: 60
+    - id: AU14CivilianGrayTrenchCoat
+      price: 60
+    - id: AU14CivilianJacketBomberJacket
+      price: 55
+    - id: AU14CivilianJacketOldCoat
+      price: 20
+    - id: AU14CivilianJacketSnowSuit
+      price: 70
+    - id: AU14CivBallCapBlack
+      price: 10
+    - id: AU14CivBallCapBlueTrucker
+      price: 10
+    - id: AU14CivBallCapRedTrucker
+      price: 10
+    - id: AU14USCMVeteranCap
+      price: 15
+    - id: AU14CivFedoraTan
+      price: 25
+    - id: AU14CivFedoraBrown
+      price: 25
+    - id: AU14CivFedoraGray
+      price: 25
+    - id: AU14HeadCommandoBeanie
+      price: 10
+    - id: CMUCivBoonieHatTan
+      price: 15
+    - id: CMUCivBoonieHatGreen
+      price: 15
+    - id: CMUCivWorkCapTan
+      price: 10
+    - id: CMUCivWorkCapGreen
+      price: 10
+    - id: CMUCivSunCapTan
+      price: 10
+    - id: CMUCivSunCapGreen
+      price: 10
+    - id: RMCSunglasses
+      price: 15
+    - id: RMCHipsterGlasses
+      price: 20
+    - id: RMCSunglassesBig
+      price: 15
+    - id: AU14GlassesPersonalOrange
+      price: 20
+    - id: RMCGlassesAviators
+      price: 30
+    - id: RMCGlassesTriMaxYellow
+      price: 25
+    - id: RMCGlassesTriMaxBlack
+      price: 25
+    - id: RMCGlassesTriMaxBronze
+      price: 25
+    - id: AU14GlassesBiMexOrange
+      price: 25
+    - id: CMHandsBrown
+      price: 12
+    - id: CMHandsLightBrown
+      price: 12
+    - id: CMSatchel
+      price: 30
+    - id: AU14SlingSatchelBlack
+      price: 25
+    - id: AU14SlingSatchelBlue
+      price: 25
+    - id: RMCBeltUtilityGeneral
+      price: 20
+    - id: RMCPouchGeneral
+      price: 10

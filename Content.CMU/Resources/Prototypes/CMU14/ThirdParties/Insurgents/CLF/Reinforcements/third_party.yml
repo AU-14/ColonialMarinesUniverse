@@ -12,11 +12,11 @@
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntel
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_clf_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 
 - type: partySpawn
@@ -31,11 +31,11 @@
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntelMachineGunner
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_clf_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 
 - type: partySpawn
@@ -50,11 +50,11 @@
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntelEngineer
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_clf_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 
 - type: partySpawn
@@ -69,11 +69,11 @@
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntelSpecialist
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_clf_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false
 
 - type: thirdParty
@@ -82,10 +82,10 @@
   displayName: CLF Insurgent Cell (Survivors)
   entrymethod: ground
   weight: 8
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
   announcearrival: ''
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - colonyfall

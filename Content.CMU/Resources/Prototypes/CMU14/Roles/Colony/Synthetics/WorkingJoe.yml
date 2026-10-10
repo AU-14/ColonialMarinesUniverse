@@ -1,6 +1,6 @@
 - type: job
   abstract: true
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobWorkingJoeBase
   name: au14-job-name-workingjoe
   description: au14-job-description-workingjoe
@@ -91,6 +91,7 @@
 
 - type: job
   parent: AU14JobWorkingJoeBase
+  displayWeight: 4
   id: AU14JobColonyWorkingJoe
   roundSide: Civilian
   roundForce: WORKING_JOE
@@ -110,7 +111,7 @@
     - CMUProstheticLeftLeg
     - CMUProstheticRightLeg
   icon: "AU14JobIconColonyWorkingJoe"
-  spawnMenuRoleName: Working Joe (Colony)
+  spawnMenuRoleName: au14-spawn-role-name-working-joe-colony
   supervisors: au14-job-supervisors-workingjoe-colony
   usePlayerProfile: false
   jobEntity: AU14MobWorkingJoeColony
@@ -134,6 +135,7 @@
 
 - type: job
   parent: AU14JobColonyWorkingJoe
+  displayWeight: 4
   id: AU14JobColonyWorkingJoeHazmat
   roundSide: Civilian
   roundForce: WORKING_JOE
@@ -144,7 +146,7 @@
   - type: Loadout
     prototypes: [ AU14GearColonyWorkingJoeHazmat ]
 
-  spawnMenuRoleName: Working Joe (Hazmat)
+  spawnMenuRoleName: cmu-spawn-role-working-joe-hazmat
   dummyStartingGear: AU14GearColonyWorkingJoeHazmat
 
 - type: startingGear

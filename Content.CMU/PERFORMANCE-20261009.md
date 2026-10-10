@@ -1,5 +1,20 @@
 # Проверка производительности CMU — 2026-10-09–10
 
+## Current-base integration — 2026-10-10
+
+PR 2135 now incorporates master `101156f22f`. Metabolism retains master's
+sandbox-compatible, per-system pool of reagent lists and its
+`MetabolismSnapshotReuseTest` coverage. The redundant `ArrayPool` helper and
+its helper-only tests were removed because the engine sandbox rejects that API.
+Diplomacy retains master's change-driven and one-second UI refresh schedule;
+callsigns and radio retain the newer hearing behavior.
+
+The measurements and commands below describe the original `2044182137`-based
+implementation. They are historical evidence, including commands for the removed
+snapshot helper, and are not measurements of the integrated revision.
+
+## Historical validation
+
 Изменения выполнены в `codex/performance-500` поверх текущего рабочего дерева.
 Ранее внесённые оптимизации радио, метаболизма, питания и черт сохранены.
 Двигатель и его подмодули не изменялись.

@@ -110,7 +110,7 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
                 continue;
             }
 
-            if (mobState.CurrentState == MobState.Dead)
+            if (_threatRuleHelper.IsEliminated(uid, mobState))
                 eliminated++;
             else if (HasPrisonJumpsuit(uid)
                 || (countArrests

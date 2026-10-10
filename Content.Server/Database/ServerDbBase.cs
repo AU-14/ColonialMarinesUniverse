@@ -12,6 +12,11 @@ using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.IP;
 using Content.Shared.CMU14.BalanceRating;
+using Content.Shared.CMU14.Yautja;
+using Content.Shared._RMC14.NamedItems;
+using Content.Shared.Administration.Logs;
+using Content.Shared.CMU14.Allegiance;
+using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.RoundStatistics;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Construction.Prototypes;
@@ -33,6 +38,21 @@ namespace Content.Server.Database
         private readonly ISawmill _opsLog;
         public event Action<DatabaseNotification>? OnNotificationReceived;
         private readonly ISerializationManager _serialization;
+        // Bound the lock count while serializing overlapping edits/selection/deletion for each player.
+        private readonly SemaphoreSlim[] _preferenceWriteLocks = Enumerable.Range(0, 64)
+            .Select(_ => new SemaphoreSlim(1, 1)).ToArray();
+
+        private async Task<PreferenceWriteGuard> LockPreferencesAsync(NetUserId userId)
+        {
+            var semaphore = _preferenceWriteLocks[(uint) userId.GetHashCode() % (uint) _preferenceWriteLocks.Length];
+            await semaphore.WaitAsync();
+            return new PreferenceWriteGuard(semaphore);
+        }
+
+        private readonly struct PreferenceWriteGuard(SemaphoreSlim semaphore) : IDisposable
+        {
+            public void Dispose() => semaphore.Release();
+        }
 
         /// <param name="opsLog">Sawmill to trace log database operations to.</param>
         public ServerDbBase(ISawmill opsLog, ISerializationManager serialization)
@@ -65,6 +85,7 @@ namespace Content.Server.Database
 
         public async Task SaveSelectedCharacterIndexAsync(NetUserId userId, int index)
         {
+            using var preferencesLock = await LockPreferencesAsync(userId);
             await using var db = await GetDb();
 
             // Profile edits and selection messages are handled asynchronously. Make the FK check part of the
@@ -100,18 +121,20 @@ namespace Content.Server.Database
 
         public async Task SaveCharacterSlotAsync(NetUserId userId, HumanoidCharacterProfile? humanoid, int slot)
         {
+            using var preferencesLock = await LockPreferencesAsync(userId);
             await using var db = await GetDb();
+            await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
 
             if (humanoid is null)
             {
                 await DeleteCharacterSlot(db.DbContext, userId, slot);
                 await db.DbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return;
             }
 
-            // EF can insert the replacement high-priority job before deleting the old one. PostgreSQL's
-            // filtered unique index checks each statement, so flush removals first in the same transaction.
-            await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
+            // EF can insert replacement jobs/traits before deleting old rows. PostgreSQL's
+            // unique indexes check each statement, so flush removals first in the same transaction.
             var oldProfile = db.DbContext.Profile
                 .Include(p => p.Preference)
                 .Where(p => p.Preference.UserId == userId.UserId)
@@ -126,9 +149,10 @@ namespace Content.Server.Database
                 .AsSplitQuery()
                 .SingleOrDefault(h => h.Slot == slot);
 
-            if (oldProfile is { Jobs.Count: > 0 })
+            if (oldProfile != null && (oldProfile.Jobs.Count > 0 || oldProfile.Traits.Count > 0))
             {
                 oldProfile.Jobs.Clear();
+                oldProfile.Traits.Clear();
                 await db.DbContext.SaveChangesAsync();
             }
 
@@ -161,11 +185,28 @@ namespace Content.Server.Database
                 return;
             }
 
+            if (profile.Preference.SelectedCharacterSlot == slot)
+            {
+                var replacement = await db.Profile
+                    .Where(p => p.PreferenceId == profile.PreferenceId && p.Slot != slot)
+                    .OrderBy(p => p.Slot)
+                    .Select(p => (int?) p.Slot)
+                    .FirstOrDefaultAsync();
+
+                // Preferences must always select an existing character, including when stale UI messages arrive.
+                if (replacement == null)
+                    return;
+
+                profile.Preference.SelectedCharacterSlot = replacement.Value;
+                await db.SaveChangesAsync();
+            }
+
             db.Profile.Remove(profile);
         }
 
         public async Task<Preference> InitPrefsAsync(NetUserId userId, HumanoidCharacterProfile defaultProfile)
         {
+            using var preferencesLock = await LockPreferencesAsync(userId);
             await using var db = await GetDb();
 
             var profile = ConvertProfiles((HumanoidCharacterProfile) defaultProfile, 0);
@@ -188,12 +229,20 @@ namespace Content.Server.Database
 
         public async Task DeleteSlotAndSetSelectedIndex(NetUserId userId, int deleteSlot, int newSlot)
         {
+            using var preferencesLock = await LockPreferencesAsync(userId);
             await using var db = await GetDb();
+            await using var transaction = await db.DbContext.Database.BeginTransactionAsync();
 
-            await DeleteCharacterSlot(db.DbContext, userId, deleteSlot);
+            if (deleteSlot == newSlot || !await db.DbContext.Profile
+                    .AnyAsync(p => p.Preference.UserId == userId.UserId && p.Slot == newSlot))
+                return;
+
             await SetSelectedCharacterSlotAsync(userId, newSlot, db.DbContext);
-
+            // Release the selected-profile FK before deleting its previous target.
             await db.DbContext.SaveChangesAsync();
+            await DeleteCharacterSlot(db.DbContext, userId, deleteSlot);
+            await db.DbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
 
         public async Task SaveAdminOOCColorAsync(NetUserId userId, Color color)
@@ -379,15 +428,19 @@ namespace Content.Server.Database
                 ? null
                 : JsonSerializer.Serialize(humanoid.ThreatPreferences.Select(t => t.Id).OrderBy(id => id));
             profile.GamemodeJobPriorities = SerializeGamemodeJobPriorities(humanoid.GamemodeJobPriorities);
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            profile.FoFSide = (int) humanoid.FoFSide;
+            profile.FoFFallback = (int) humanoid.FoFFallback;
             profile.GamemodeAntagPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeAntagPreferences);
             profile.GamemodeThreatPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeThreatPreferences);
+            profile.YautjaProfile = YautjaProfileSerializer.SerializeYautjaProfile(humanoid.YautjaProfile);
             profile.RankPreferences = humanoid.RankPreferences.Count == 0
                 ? null
                 : JsonSerializer.Serialize(
                     humanoid.RankPreferences.ToDictionary(
-                        kvp => kvp.Key,
-                        kvp => kvp.Value.Where(p => p.Value != null)
-                                        .ToDictionary(p => p.Key, p => p.Value)));
+                         kvp => kvp.Key,
+                         kvp => kvp.Value.Where(p => p.Value != null)
+                                         .ToDictionary(p => p.Key, p => p.Value)));
 
             return profile;
         }
@@ -571,8 +624,8 @@ namespace Content.Server.Database
 
             var players = updates.Select(u => u.User.UserId).Distinct().ToArray();
             var dbTimes = (await db.DbContext.PlayTime
-                    .Where(p => players.Contains(p.PlayerId))
-                    .ToArrayAsync())
+                .Where(p => players.Contains(p.PlayerId))
+                .ToArrayAsync())
                 .GroupBy(p => p.PlayerId)
                 .ToDictionary(g => g.Key, g => g.ToDictionary(p => p.Tracker, p => p));
 
@@ -654,6 +707,31 @@ namespace Content.Server.Database
                 .SingleOrDefaultAsync(p => p.UserId == userId.UserId, cancel);
 
             return record == null ? null : MakePlayerRecord(record);
+        }
+
+        public async Task<YautjaRank?> GetYautjaRank(Guid userId)
+        {
+            await using var db = await GetDb();
+
+            return await db.DbContext.Player
+                .Where(player => player.UserId == userId)
+                .Select(player => player.YautjaRank.HasValue
+                    ? (YautjaRank?) player.YautjaRank.Value
+                    : null)
+                .SingleOrDefaultAsync();
+        }
+
+        public async Task SetYautjaRank(Guid userId, YautjaRank rank)
+        {
+            await using var db = await GetDb();
+
+            var player = await db.DbContext.Player
+                .SingleOrDefaultAsync(entry => entry.UserId == userId);
+            if (player == null)
+                throw new InvalidOperationException($"Cannot set Yautja rank for unknown player {userId}.");
+
+            player.YautjaRank = (int) rank;
+            await db.DbContext.SaveChangesAsync();
         }
 
         protected async Task<bool> PlayerRecordExists(DbGuard db, NetUserId userId)
@@ -1142,6 +1220,27 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 records.Take(Math.Max(0, recentRounds)).ToList());
         }
 
+        // CMU14 method: flat playtime rows for the cmuleaderboard panel
+        public async Task<List<CMUPlaytimeLeaderboardRow>> GetCMUPlaytimeLeaderboardRows(
+            IReadOnlyCollection<string> trackers,
+            CancellationToken cancel = default)
+        {
+            await using var db = await GetDb();
+
+            var rows = await db.DbContext.PlayTime
+                .AsNoTracking()
+                .Where(time => trackers.Contains(time.Tracker))
+                .Join(db.DbContext.Player,
+                    time => time.PlayerId,
+                    player => player.UserId,
+                    (time, player) => new { time.Tracker, time.TimeSpent, player.UserId, player.LastSeenUserName })
+                .ToListAsync(cancel);
+
+            return rows
+                .Select(row => new CMUPlaytimeLeaderboardRow(row.UserId, row.Tracker, row.LastSeenUserName, row.TimeSpent.TotalHours))
+                .ToList();
+        }
+
         private CMURoundOutcomeRecord MakeCMURoundOutcomeRecord(CMURoundOutcome outcome)
         {
             var preset = Enum.TryParse(outcome.PresetId, out CMURoundStatisticsPreset parsedPreset)
@@ -1153,6 +1252,11 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             var result = Enum.TryParse(outcome.Outcome, out CMURoundStatisticsOutcome parsedOutcome)
                 ? parsedOutcome
                 : CMURoundStatisticsOutcome.Unknown;
+
+            // CMU14: rounds ended by the hive collapse rule used to record as marine major, reclassify by source
+            if (result == CMURoundStatisticsOutcome.MarineMajorXenoWipe
+                && outcome.Source == "HiveCollapseRule")
+                result = CMURoundStatisticsOutcome.MarineMinorHiveCollapse;
 
             return new CMURoundOutcomeRecord(
                 outcome.RoundId,
@@ -1506,44 +1610,8 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             return new ServerRecord(server.Id, server.Name);
         }
 
-        public async Task AddAdminLogs(List<AdminLog> logs)
-        {
-            const int maxRetryAttempts = 5;
-            var initialRetryDelay = TimeSpan.FromSeconds(5);
-
-            DebugTools.Assert(logs.All(x => x.RoundId > 0), "Adding logs with invalid round ids.");
-
-            var attempt = 0;
-            var retryDelay = initialRetryDelay;
-
-            while (attempt < maxRetryAttempts)
-            {
-                try
-                {
-                    await using var db = await GetDb();
-                    db.DbContext.AdminLog.AddRange(logs);
-                    await db.DbContext.SaveChangesAsync();
-                    _opsLog.Debug($"Successfully saved {logs.Count} admin logs.");
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    attempt += 1;
-                    _opsLog.Error($"Attempt {attempt} failed to save logs: {ex}");
-
-                    if (attempt >= maxRetryAttempts)
-                    {
-                        _opsLog.Error($"Max retry attempts reached. Failed to save {logs.Count} admin logs.");
-                        throw;
-                    }
-
-                    _opsLog.Warning($"Retrying in {retryDelay.TotalSeconds} seconds...");
-                    await Task.Delay(retryDelay);
-
-                    retryDelay *= 2;
-                }
-            }
-        }
+        // CMU14 method: reconcile an ambiguously committed batch before replaying it.
+        public Task AddAdminLogs(List<AdminLog> logs) => SaveAdminLogsIdempotently(logs);
 
         protected abstract IQueryable<AdminLog> StartAdminLogsQuery(ServerDbContext db, LogFilter? filter = null);
 
@@ -2363,6 +2431,70 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 .Include(p => p.Player)
                 .Include(p => p.Tier)
                 .ToListAsync();
+        }
+
+        public async Task<List<RMCPatronTier>> GetPatronTiers()
+        {
+            await using var db = await GetDb();
+            return await db.DbContext.RMCPatronTiers
+                .Include(t => t.Patrons)
+                .OrderBy(t => t.Priority)
+                .ThenBy(t => t.Name)
+                .ToListAsync();
+        }
+
+        public async Task UpsertPatronTier(
+            string name,
+            ulong discordRole,
+            int priority,
+            bool showOnCredits,
+            bool ghostColor,
+            bool namedItems,
+            bool figurines,
+            bool lobbyMessage,
+            bool roundEndShoutout)
+        {
+            await using var db = await GetDb();
+            var tier = await db.DbContext.RMCPatronTiers.FirstOrDefaultAsync(t => t.DiscordRole == discordRole);
+            if (tier == null)
+            {
+                tier = new RMCPatronTier { DiscordRole = discordRole };
+                db.DbContext.RMCPatronTiers.Add(tier);
+            }
+
+            tier.Name = name;
+            tier.Priority = priority;
+            tier.ShowOnCredits = showOnCredits;
+            tier.GhostColor = ghostColor;
+            tier.NamedItems = namedItems;
+            tier.Figurines = figurines;
+            tier.LobbyMessage = lobbyMessage;
+            tier.RoundEndShoutout = roundEndShoutout;
+
+            await db.DbContext.SaveChangesAsync();
+        }
+
+        public async Task<SetPatronTierResult> SetPatronTier(Guid player, string tierName)
+        {
+            await using var db = await GetDb();
+            var tier = await db.DbContext.RMCPatronTiers
+                .FirstOrDefaultAsync(t => t.Name == tierName);
+            if (tier == null)
+                return SetPatronTierResult.TierNotFound;
+
+            if (!await db.DbContext.Player.AnyAsync(p => p.UserId == player))
+                return SetPatronTierResult.PlayerNotFound;
+
+            var patron = await db.DbContext.RMCPatrons.FirstOrDefaultAsync(p => p.PlayerId == player);
+            if (patron == null)
+            {
+                patron = new RMCPatron { PlayerId = player };
+                db.DbContext.RMCPatrons.Add(patron);
+            }
+
+            patron.TierId = tier.Id;
+            await db.DbContext.SaveChangesAsync();
+            return SetPatronTierResult.Success;
         }
 
         public async Task SetGhostColor(Guid player, System.Drawing.Color? color)

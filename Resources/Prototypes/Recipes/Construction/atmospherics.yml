@@ -6,6 +6,7 @@
   category: construction-category-atmospherics
   objectType: Structure
   canRotate: true
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM
 
 - type: construction
   abstract: true

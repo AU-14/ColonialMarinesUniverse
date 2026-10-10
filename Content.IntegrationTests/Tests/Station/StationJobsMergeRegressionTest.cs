@@ -30,6 +30,10 @@ public sealed class StationJobsMergeRegressionTest : GameTest
     private static readonly ProtoId<JobPrototype> ThreatLeader = "AU14JobThreatLeader";
     private static readonly ProtoId<JobPrototype> ThreatMember = "AU14JobThreatMember";
     private static readonly ProtoId<JobPrototype> ThirdPartyLeader = "AU14JobThirdPartyLeader";
+    private static readonly ProtoId<JobPrototype> GovforSaw = "AU14JobGOVFORSquadAutomaticRifleman";
+    private static readonly ProtoId<JobPrototype> OpforSaw = "AU14JobOPFORSquadAutomaticRifleman";
+    private static readonly ProtoId<JobPrototype> GovforNurse = "AU14JobGOVFORNurse";
+    private static readonly ProtoId<JobPrototype> OpforNurse = "AU14JobOPFORNurse";
 
     [TestPrototypes]
     private const string Prototypes = $@"
@@ -48,6 +52,15 @@ public sealed class StationJobsMergeRegressionTest : GameTest
           AU14JobCivilianColonist: [-1, -1]
           AU14JobGOVFORSquadRifleman: [-1, -1]
           AU14JobOPFORSquadRifleman: [-1, -1]
+          AU14JobGOVFORSquadAutomaticRifleman: [-1, -1]
+          AU14JobOPFORSquadAutomaticRifleman: [-1, -1]
+    MergeGovOnly:
+      mapNameTemplate: MergeGovOnly
+      stationProto: StandardNanotrasenStation
+      components:
+      - type: StationJobs
+        availableJobs:
+          AU14JobGOVFORSquadRifleman: [-1, -1]
 
 - type: entity
   id: StationJobsMergeAnyJobSpawn
@@ -70,7 +83,8 @@ public sealed class StationJobsMergeRegressionTest : GameTest
 ";
 
     [Test]
-    public async Task ForcedAssignmentsOverflowAlternationAndRoundStartSlotsRemainDistinct()
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    public async Task ForcedAssignmentsRoundStartSlotsAndForceOnForceOverflowRemainDistinct()
     {
         var jobs = Server.System<StationJobsSystem>();
         var stations = Server.System<StationSystem>();
@@ -148,11 +162,13 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                     [station]);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(firstPass[dummies[3].UserId].Item1, Is.EqualTo((ProtoId<JobPrototype>?) Govfor));
-                    Assert.That(firstPass[dummies[4].UserId].Item1, Is.EqualTo((ProtoId<JobPrototype>?) Opfor));
+                    // CMU14: Force on Force roles, hijacking, announcements and identification.
+                    Assert.That(firstPass[dummies[3].UserId].Item1, Is.Null);
+                    Assert.That(firstPass[dummies[4].UserId].Item1, Is.Null);
                 });
 
-                // AssignJobs is the round boundary and must reset the alternating side to GOVFOR.
+                // CMU14: Force on Force roles, hijacking, announcements and identification.
+                // The legacy overflow pass must never bypass the joint FoF roll or its fallback limits.
                 jobs.AssignJobs(new Dictionary<NetUserId, HumanoidCharacterProfile>(), [station]);
                 var resetPass = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
                 jobs.AssignOverflowJobs(
@@ -160,7 +176,8 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                     new[] { dummies[5].UserId },
                     overflowProfiles,
                     [station]);
-                Assert.That(resetPass[dummies[5].UserId].Item1, Is.EqualTo((ProtoId<JobPrototype>?) Govfor));
+                // CMU14: Force on Force roles, hijacking, announcements and identification.
+                Assert.That(resetPass[dummies[5].UserId].Item1, Is.Null);
             });
         }
         finally
@@ -201,6 +218,7 @@ public sealed class StationJobsMergeRegressionTest : GameTest
             await Server.WaitAssertion(() =>
             {
                 SetCurrentPreset(ticker, preset);
+                jobs.AssignJobs(new Dictionary<NetUserId, HumanoidCharacterProfile>(), [station]); // CMU14
                 var blocked = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
                 jobs.AssignOverflowJobs(ref blocked, profiles.Keys, profiles, [station]);
                 Assert.That(blocked[player], Is.EqualTo(((ProtoId<JobPrototype>?) null, EntityUid.Invalid)),
@@ -209,14 +227,284 @@ public sealed class StationJobsMergeRegressionTest : GameTest
                 profiles[player] = profiles[player].WithJobPriority(Opfor, JobPriority.Low);
                 var accepted = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
                 jobs.AssignOverflowJobs(ref accepted, profiles.Keys, profiles, [station]);
-                Assert.That(accepted[player], Is.EqualTo(((ProtoId<JobPrototype>?) Opfor, station)),
-                    "An accepted overflow role must remain available when the mode's usual role is Never.");
+                // CMU14: Force on Force roles, hijacking, announcements and identification.
+                var expected = presetId == "ForceOnForce"
+                    ? ((ProtoId<JobPrototype>?) null, EntityUid.Invalid)
+                    : ((ProtoId<JobPrototype>?) Opfor, station);
+                Assert.That(accepted[player], Is.EqualTo(expected),
+                    "FoF fallback belongs to its balanced joint roll; other modes retain their accepted overflow roles.");
             });
         }
         finally
         {
             await Server.WaitPost(() => SetCurrentPreset(ticker, originalPreset));
         }
+    }
+
+    [Test]
+    public async Task ForceOnForceRollBalancesFlexiblePlayersAndLeavesStrictOverflowInLobby()
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var originalPreset = ticker.CurrentPreset;
+        EntityUid station = default;
+        await Server.WaitPost(() => station = stations.InitializeNewStation(map.Stations["Merge"], null, "FoF", map));
+        var players = await Server.AddDummySessions(6);
+        var profiles = players.ToDictionary(p => p.UserId, _ => new HumanoidCharacterProfile()
+            .WithForceOnForcePreferences(ForceOnForceSide.Govfor, ForceOnForceFallback.OtherSide)
+            .WithGamemodeJobPriority("ForceOnForce", Govfor, JobPriority.High));
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                var flexible = jobs.AssignJobs(profiles, [station]);
+                Assert.That(flexible, Has.Count.EqualTo(6));
+                Assert.That(flexible.Values.Count(v => v.Item1 == Govfor), Is.EqualTo(3));
+                Assert.That(flexible.Values.Count(v => v.Item1 == Opfor), Is.EqualTo(3));
+                foreach (var player in players)
+                    profiles[player.UserId] = profiles[player.UserId]
+                        .WithForceOnForcePreferences(ForceOnForceSide.Govfor, ForceOnForceFallback.StayInLobby);
+                profiles[players[0].UserId] = new HumanoidCharacterProfile()
+                    .WithForceOnForcePreferences(ForceOnForceSide.Opfor, ForceOnForceFallback.StayInLobby)
+                    .WithGamemodeJobPriority("ForceOnForce", Opfor, JobPriority.High);
+                var strict = jobs.AssignJobs(profiles, [station]);
+                Assert.That(strict, Has.Count.EqualTo(3));
+                Assert.That(strict.Values.Count(v => v.Item1 == Govfor), Is.EqualTo(2));
+                Assert.That(strict.Values.Count(v => v.Item1 == Opfor), Is.EqualTo(1));
+                jobs.AssignOverflowJobs(ref strict, profiles.Keys, profiles, [station]);
+                Assert.That(strict.Values.Count(v => v.Item1 == null), Is.EqualTo(3));
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => SetCurrentPreset(ticker, originalPreset));
+        }
+    }
+
+    [Test]
+    public async Task JointRollRemapsGovforRoleOnlyWithOtherSideFallback()
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var originalCurrentPreset = ticker.CurrentPreset;
+
+        EntityUid station = default;
+        await Server.WaitPost(() =>
+        {
+            station = stations.InitializeNewStation(map.Stations["Merge"], null, "Merge", map);
+        });
+
+        var dummies = await Server.AddDummySessions(2);
+        var govforOnlyProfiles = dummies.ToDictionary(
+            session => session.UserId,
+            _ => new HumanoidCharacterProfile()
+                .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>())
+                .WithForceOnForcePreferences(ForceOnForceSide.Govfor, ForceOnForceFallback.OtherSide)
+                .WithGamemodeJobPriority("ForceOnForce", GovforSaw, JobPriority.Low)
+                .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, forceOnForce);
+                var assigned = jobs.AssignJobs(govforOnlyProfiles, [station]);
+                Assert.That(assigned.Values.Select(v => v.Item1),
+                    Is.EquivalentTo(new ProtoId<JobPrototype>?[] { GovforSaw, OpforSaw }),
+                    "the explicit other-side fallback preserves the requested role while balancing sides");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => SetCurrentPreset(ticker, originalCurrentPreset));
+        }
+    }
+
+    // CMU14 OverflowDealtGovforRemapsQueuedOpforRoles Begin
+    [Test]
+    public async Task JointRollRemapsOpforRoleOnlyWithOtherSideFallback()
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var originalCurrentPreset = ticker.CurrentPreset;
+
+        EntityUid station = default;
+        await Server.WaitPost(() =>
+        {
+            station = stations.InitializeNewStation(map.Stations["Merge"], null, "Merge", map);
+        });
+
+        var dummies = await Server.AddDummySessions(2);
+        var opforOnlyProfiles = dummies.ToDictionary(
+            session => session.UserId,
+            _ => new HumanoidCharacterProfile()
+                .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>())
+                .WithForceOnForcePreferences(ForceOnForceSide.Opfor, ForceOnForceFallback.OtherSide)
+                .WithGamemodeJobPriority("ForceOnForce", OpforSaw, JobPriority.Low)
+                .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, forceOnForce);
+                var assigned = jobs.AssignJobs(opforOnlyProfiles, [station]);
+                Assert.That(assigned.Values.Select(v => v.Item1),
+                    Is.EquivalentTo(new ProtoId<JobPrototype>?[] { GovforSaw, OpforSaw }),
+                    "the explicit other-side fallback preserves the requested role while balancing sides");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => SetCurrentPreset(ticker, originalCurrentPreset));
+        }
+    }
+    // CMU14 End
+
+    [Test]
+    public async Task StrictOpforPreferenceIsNotCapturedByGovforOnlyStations()
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var originalCurrentPreset = ticker.CurrentPreset;
+
+        EntityUid station = default;
+        await Server.WaitPost(() =>
+        {
+            station = stations.InitializeNewStation(map.Stations["MergeGovOnly"], null, "MergeGovOnly", map);
+        });
+
+        var dummies = await Server.AddDummySessions(2);
+        var profiles = dummies.ToDictionary(
+            session => session.UserId,
+            _ => new HumanoidCharacterProfile()
+                .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>())
+                .WithForceOnForcePreferences(ForceOnForceSide.Opfor, ForceOnForceFallback.StayInLobby)
+                .WithGamemodeJobPriority("ForceOnForce", Opfor, JobPriority.Low)
+                .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, forceOnForce);
+                var assigned = jobs.AssignJobs(profiles, [station]);
+                Assert.That(assigned, Is.Empty, "a strict OPFOR preference cannot use GOVFOR-only station slots");
+                jobs.AssignOverflowJobs(ref assigned, profiles.Keys, profiles, [station]);
+                Assert.That(assigned.Values, Is.All.EqualTo(((ProtoId<JobPrototype>?) null, EntityUid.Invalid)),
+                    "legacy overflow must not bypass the player's side restriction");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() => SetCurrentPreset(ticker, originalCurrentPreset));
+        }
+    }
+
+    [Test]
+    // CMU14: FoF uses its own role tab and explicit fallback preferences.
+    public async Task AssignJobsForceOnForceIgnoresInsurgencyPreferences()
+    {
+        var jobs = Server.System<StationJobsSystem>();
+        var stations = Server.System<StationSystem>();
+        var ticker = Server.System<GameTicker>();
+        var map = SProtoMan.Index<GameMapPrototype>(MapId);
+        var forceOnForce = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+        var originalCurrentPreset = ticker.CurrentPreset;
+
+        EntityUid station = default;
+        await Server.WaitPost(() =>
+        {
+            station = stations.InitializeNewStation(map.Stations["Merge"], null, "Merge", map);
+        });
+
+        var dummies = await Server.AddDummySessions(2);
+        // Conflicting Insurgency preferences must not leak into the independent FoF roll.
+        var profiles = dummies.ToDictionary(
+            session => session.UserId,
+            _ => new HumanoidCharacterProfile()
+                .WithForceOnForcePreferences(ForceOnForceSide.Govfor, ForceOnForceFallback.OtherSide)
+                .WithGamemodeJobPriority("Insurgency", GovforSaw, JobPriority.High)
+                .WithGamemodeJobPriority("ForceOnForce", GovforNurse, JobPriority.High)
+                .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow));
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                SetCurrentPreset(ticker, forceOnForce);
+
+                foreach (var nurse in new[] { GovforNurse, OpforNurse })
+                {
+                    Assert.That(jobs.TrySetJobSlot(station, nurse.Id, 1, true), Is.True);
+                    jobs.SetRoundStartJobSlot(station, nurse, 1);
+                }
+
+                var flattened = profiles.ToDictionary(
+                    pair => pair.Key,
+                    pair => pair.Value.WithJobPriorities(
+                        pair.Value.GetJobPrioritiesForGamemode("ForceOnForce")));
+
+                var assigned = jobs.AssignJobs(flattened, [station]);
+                Assert.That(assigned, Has.Count.EqualTo(2),
+                    "a queued nurse preference must translate into a nurse assignment, not overflow");
+                var dealt = new[]
+                {
+                    assigned[dummies[0].UserId].Item1,
+                    assigned[dummies[1].UserId].Item1,
+                };
+                Assert.That(dealt, Is.EquivalentTo(new ProtoId<JobPrototype>?[] { GovforNurse, OpforNurse }),
+                    "the FoF nurse preference and explicit other-side fallback take priority over the Insurgency role");
+            });
+        }
+        finally
+        {
+            await Server.WaitPost(() =>
+            {
+                SEntMan.DeleteEntity(station);
+                SetCurrentPreset(ticker, originalCurrentPreset);
+            });
+        }
+    }
+
+    [Test]
+    public async Task EveryQueueableSideJobHasAnOpposingSideMirror()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var missing = new List<string>();
+            foreach (var job in SProtoMan.EnumeratePrototypes<JobPrototype>())
+            {
+                if (job.Abstract || !job.SetPreference || job.Hidden)
+                    continue;
+
+                foreach (var (source, mirror) in new[] { ("GOVFOR", "OPFOR"), ("OPFOR", "GOVFOR") })
+                {
+                    if (!job.ID.Contains(source))
+                        continue;
+
+                    var twin = job.ID.Replace(source, mirror);
+                    if (!SProtoMan.HasIndex<JobPrototype>(twin))
+                        missing.Add($"{job.ID} -> {twin}");
+                }
+            }
+
+            Assert.That(missing, Is.Empty,
+                "ForceOnForce side mirroring swaps GOVFOR/OPFOR in queued job ids, so every "
+                + "queueable side job needs its mirror: " + string.Join(", ", missing));
+        });
     }
 
     [Test]

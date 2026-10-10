@@ -76,8 +76,10 @@ public sealed partial class AttachableIFFSystem : EntitySystem
             return;
 
         // CMU14: attachable IFF follows the gun's toggle when the gun has one
-        if (TryComp<GunIFFComponent>(ent, out var gunIff) && !gunIff.Enabled)
+        // cmu edit start
+        if (HasComp<IFFToggleComponent>(ent) && TryComp<GunIFFComponent>(ent, out var gunIff) && !gunIff.Enabled)
             return;
+        // cmu edit end
 
         CheckPreventFriendlyFire(ent.Owner, ref args);
     }

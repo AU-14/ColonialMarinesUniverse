@@ -34,6 +34,8 @@ public sealed class LobbyLifecycleRegressionTest : GameTest
     {
         var userId = Client.User!.Value;
         var serverNet = Server.ResolveDependency<IServerNetManager>();
+        var stateManager = Client.ResolveDependency<IStateManager>();
+        var configuration = Client.ResolveDependency<IConfigurationManager>();
         Dictionary<Type, ProcessMessage> callbacks = null!;
         ProcessMessage originalCallback = null!;
         var messageCount = 0;
@@ -53,8 +55,6 @@ public sealed class LobbyLifecycleRegressionTest : GameTest
         {
             var allegiance = SEntMan.System<AllegianceSystem>();
             var clientNet = Client.ResolveDependency<IClientNetManager>();
-            var stateManager = Client.ResolveDependency<IStateManager>();
-            var configuration = Client.ResolveDependency<IConfigurationManager>();
             LobbyState initialLobby = null!;
 
             await Client.WaitAssertion(() =>
@@ -137,6 +137,15 @@ public sealed class LobbyLifecycleRegressionTest : GameTest
         finally
         {
             await Server.WaitAssertion(() => callbacks[typeof(MsgIgnoreAllegiance)] = originalCallback);
+            // Return the pooled client in the lobby state requested by PoolSettings.
+            await Client.WaitPost(() => stateManager.RequestStateChange<LobbyState>());
+            await Pair.ReallyBeIdle(2);
+            await Pair.RunTicksSync(2);
+            await Client.WaitAssertion(() =>
+            {
+                Assert.That(stateManager.CurrentState, Is.TypeOf<LobbyState>());
+                AssertCharacterSetupSubscriptions(configuration, 1);
+            });
         }
     }
 

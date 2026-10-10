@@ -1,8 +1,12 @@
 using Content.Client.UserInterface.Controls;
+using Content.Shared._RMC14.AlertLevel; // CMU14: admin tablet alert level control
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.ControlComputer;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.TacticalMap;
+using Content.Shared.CMU14.Administration; // CMU14: admin tablet alert level control
+using Content.Shared.CMU14.ForceOnForce;
+using Robust.Client.Player;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 using Robust.Shared.Utility;
@@ -18,6 +22,8 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
     private MarineAnnounceSystem? _marineAnnounce;
 
     private bool _confirmingEvacuation;
+    // CMU14: Force on Force roles, hijacking, announcements and identification.
+    private bool _confirmingBombardment;
 
     protected override void Open()
     {
@@ -26,6 +32,20 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
             return;
 
         _window = this.CreateWindow<MarineCommunicationsComputerWindow>();
+
+// CMU14: Force on Force roles, hijacking, announcements and identification.
+
+        for (var variant = 0; variant < 4; variant++)
+            _window.BombardmentVariant.AddItem(Loc.GetString($"cmu-fof-bombardment-variant-{variant}"), variant);
+        _window.BombardmentVariant.OnItemSelected += args => _window.BombardmentVariant.SelectId(args.Id);
+        _window.BombardmentButton.OnPressed += _ =>
+        {
+            if (_confirmingBombardment)
+                SendMessage(new ForceOnForceBombardmentMessage(_window.BombardmentVariant.SelectedId));
+            _confirmingBombardment = !_confirmingBombardment;
+            _window.BombardmentButton.Text = Loc.GetString(_confirmingBombardment
+                ? "cmu-fof-bombardment-confirm" : "cmu-fof-bombardment-launch");
+        };
 
         if (EntMan.TryGetComponent(Owner, out MarineCommunicationsComputerComponent? communications) &&
             communications.CanGiveMedals)
@@ -47,6 +67,24 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
             computer.CanCreateEcho)
         {
             _window.EchoButton.OnPressed += _ => SendPredictedMessage(new MarineCommunicationsEchoSquadMsg());
+        }
+
+        // CMU14: admin tablet alert level and faction controls
+        if (EntMan.HasComponent<CMUAdminTabletComponent>(Owner))
+        {
+            _window.Tablet = Owner;
+            for (var level = 0; level <= (int) RMCAlertLevels.Delta; level++)
+            {
+                var name = Loc.GetString($"rmc-alert-{((RMCAlertLevels) level).ToString().ToLowerInvariant()}");
+                _window.AlertLevelOption.AddItem(name, level);
+            }
+            var current = (int) (EntMan.System<RMCAlertLevelSystem>().Get(Owner) ?? RMCAlertLevels.Green);
+            _window.AlertLevelOption.SelectId(current);
+            _window.AlertLevelOption.OnItemSelected += args => _window.AlertLevelOption.SelectId(args.Id);
+            _window.AlertLevelButton.OnPressed += _ =>
+                SendMessage(new CMUAdminTabletSetAlertLevelMsg((RMCAlertLevels) _window.AlertLevelOption.SelectedId));
+            _window.TabletFactionButton.OnPressed += _ => SendMessage(new CMUAdminTabletToggleFactionMsg());
+            _window.AdminSection.Visible = true;
         }
 
         if (EntMan.TryGetComponent(Owner, out MarineCommunicationsComputerComponent? communicationsEvac) &&
@@ -97,6 +135,13 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
 
         if (State is MarineCommunicationsComputerBuiState s)
         {
+            // CMU14: Force on Force roles, hijacking, announcements and identification.
+            var local = IoCManager.Resolve<IPlayerManager>().LocalEntity;
+            _window.BombardmentSection.Visible = s.ForceOnForce && local is { } user &&
+                EntMan.System<ForceOnForceSystem>().CanCommand(user);
+            // CMU14: without an opfor gamerule there is no opfor side to switch to
+            if (_window.AdminSection.Visible)
+                _window.TabletFactionButton.Disabled = !s.ForceOnForce;
             _window.LandingZonesContainer.DisposeAllChildren();
             _window.PlanetName.Text = s.Planet;
             _window.OperationName.Text = s.Operation;

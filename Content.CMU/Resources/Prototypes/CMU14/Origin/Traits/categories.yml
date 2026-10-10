@@ -2,3 +2,8 @@
   id: LanguageTraits
   name: trait-category-language
   maxTraitPoints: 2
+
+- type: traitCategory
+  id: CMUDrinkingTraits
+  name: cmu-trait-category-drinking
+  maxTraitPoints: 1

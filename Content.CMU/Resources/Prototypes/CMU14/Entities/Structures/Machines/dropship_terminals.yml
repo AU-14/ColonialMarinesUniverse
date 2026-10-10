@@ -1,0 +1,23 @@
+# Faction-owned dropship recall terminals. The OpforShipSwaps table converts the Govfor
+# variant on any grid that flies Opfor, so mappers place the Govfor one on both warships
+# and FOBs. Access is faction-locked; the other side needs a looted ID card to use one.
+- type: entity
+  parent: CMComputerDropshipNavigationPlanetside
+  id: CMComputerDropshipTerminalGovfor
+  name: dropship recall terminal
+  suffix: Govfor
+  components:
+  - type: DropshipTerminal
+    faction: govfor
+  - type: AccessReader
+    access: [["AU14AccessGovforFTL"], ["AU14AccessGovforPilot"], ["AU14AccessGovforSecurity"]]
+
+- type: entity
+  parent: CMComputerDropshipTerminalGovfor
+  id: CMComputerDropshipTerminalOpfor
+  suffix: Opfor
+  components:
+  - type: DropshipTerminal
+    faction: opfor
+  - type: AccessReader
+    access: [["AU14AccessOpforFTL"], ["AU14AccessOpforPilot"], ["AU14AccessOpforSecurity"]]

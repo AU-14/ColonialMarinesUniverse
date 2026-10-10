@@ -1,5 +1,5 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
   id: AU14JobCLFRadioOperator
   roundSide: ThirdParty
   roundForce: CLF
@@ -9,6 +9,7 @@
     suffix: ROMEO
   - type: NpcFactionMember
     factions:
+    - AUColonist
     - CLF
   - type: CLFMember
   - type: ANPRCRadioUser
@@ -46,6 +47,8 @@
   playTimeTracker: AU14JobCLFRadioOperator
   basePlaytimeTracker: true
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -60,7 +63,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-clflrs
-  spawnMenuRoleName: CLF Radio Operator (CMU)
+  spawnMenuRoleName: cmu-spawn-role-clf-radio-operator-cmu 
   accessGroups:
   - Colonist
   roleWeight: 0.25

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server.CMU14.ZLevels.Core;
 using Content.Server.GameTicking.Presets;
 using Content.Shared._RMC14.Teleporter;
 using Content.Shared.Maps;
@@ -17,7 +18,7 @@ public sealed class BosenmoriMapTest
     private static readonly ProtoId<GameMapPrototype> Bosenmori = "BosenmoriBasho";
 
     [Test]
-    public async Task DistressMapLoadsWithPairedDirectionalProjections()
+    public async Task DistressMapLoadsLinkedLevelsWithoutOrphanedProjections()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
@@ -35,11 +36,34 @@ public sealed class BosenmoriMapTest
             Assert.That(map, Is.Not.Null);
             Assert.That(grids, Is.Not.Empty);
 
+            // Bosenmori uses actual Z levels instead of off-map projection rooms.
+            Assert.That(mapPrototype.MapsAbove, Is.Not.Empty);
+            Assert.That(mapPrototype.MapsBelow, Is.Not.Empty);
+            var levels = new Dictionary<EntityUid, int> { [map!.Value.Owner] = 0 };
+            for (var index = 0; index < mapPrototype.MapsAbove.Count; index++)
+            {
+                Assert.That(loader.TryLoadMap(mapPrototype.MapsAbove[index], out var upper, out _, options), Is.True);
+                levels.Add(upper!.Value.Owner, index + 1);
+            }
+            for (var index = 0; index < mapPrototype.MapsBelow.Count; index++)
+            {
+                Assert.That(loader.TryLoadMap(mapPrototype.MapsBelow[index], out var lower, out _, options), Is.True);
+                levels.Add(lower!.Value.Owner, -index - 1);
+            }
+            var zLevels = server.System<CMUZLevelsSystem>();
+            var network = zLevels.CreateZNetwork();
+            Assert.That(zLevels.TryAddMapsIntoZNetwork(network, levels), Is.True);
+            foreach (var (level, offset) in levels)
+            {
+                Assert.That(zLevels.TryMapOffset(map.Value.Owner, offset, out var linked), Is.True);
+                Assert.That(linked!.Value.Owner, Is.EqualTo(level), $"Level {offset} must be reachable from the ground map.");
+            }
+
             var viewers = new Dictionary<string, List<RMCTeleporterViewerComponent>>();
             var query = server.EntMan.AllEntityQueryEnumerator<RMCTeleporterViewerComponent, TransformComponent>();
             while (query.MoveNext(out _, out var viewer, out var transform))
             {
-                if (transform.MapUid != map!.Value.Owner)
+                if (transform.MapUid is not { } viewerMap || !levels.ContainsKey(viewerMap))
                     continue;
 
                 Assert.That(viewer.Id, Is.Not.Empty);
@@ -52,7 +76,6 @@ public sealed class BosenmoriMapTest
                 group.Add(viewer);
             }
 
-            Assert.That(viewers, Is.Not.Empty, "The map must retain its projection links.");
             foreach (var (id, group) in viewers)
             {
                 Assert.That(group, Has.Count.EqualTo(2), $"Projection {id} must have both endpoints.");
@@ -60,7 +83,9 @@ public sealed class BosenmoriMapTest
                     $"Projection {id} must render in exactly one direction.");
             }
 
-            server.System<SharedMapSystem>().DeleteMap(map!.Value.Comp.MapId);
+            foreach (var level in levels.Keys)
+                server.EntMan.DeleteEntity(level);
+            server.EntMan.DeleteEntity(network);
         });
 
         await pair.CleanReturnAsync();

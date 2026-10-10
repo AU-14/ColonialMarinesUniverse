@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 14
   id: AU14JobCivilianPaPOfficer
   roundSide: Civilian
   roundForce: PAP
@@ -31,6 +32,8 @@
   setPreference: false
   canBeAntag: false
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -38,6 +41,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   playTimeTracker: AU14JobCivilianPaPOfficer
   ranks:
     RMCRankCivilian: []
@@ -76,11 +81,11 @@
     suitstorage: AU14BeltHolsterPistolBlack
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchGeneralLargeLEOFilled
-  inhand:
-  - AU14GunCasePistolT73
   storage:
     back:
     - AU14GuidebookLawColonial
+    - CMURecordsTablet
+    - ForensicScanner
 
 - type: entity
   parent: CMSpawnPointJobBase

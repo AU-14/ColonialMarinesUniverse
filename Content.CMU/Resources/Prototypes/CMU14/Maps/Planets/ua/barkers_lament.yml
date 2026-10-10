@@ -25,6 +25,7 @@
     govforinship: false
     opforinship: true
     daycycleenabled: true
+    thirdpartyinterval: 1800
     thirdparties:
     - DiplomaticAttachesSurv
     - ICRCReliefParty
@@ -40,7 +41,7 @@
     - ICRCReliefParty
     - UACGLostTeam
     - USArmy
-    - abominationThirdParty
+    - biomorphThirdParty
     - tribalThirdParty
     - DrugSmuggler
     - CMBParoleeTransport
@@ -54,14 +55,12 @@
     threats:
     - XenoThreat
     - NeomorphsThreat
-    - AbominationsThreatDS
-    - ApeThreatDS
     # - BadBloodClanThreat
     - XenoThreatCF
     - NeomorphsThreatCF
     - CultistThreatCF
     - WendigoThreatCF
-    - AbominationsThreatCF
+    - BiomorphsThreatCF
     - TribalsThreatCF
     - ApeThreatCF
     joboverrides:
@@ -133,6 +132,7 @@
 
             AU14JobCivilianHeadOfEngineering: [1, 1]
             AU14JobCivilianEngineer: [5, 5]
+            CMUJobCivilianAtmosian: [1, 2]
 
             # Medical
             AU14JobCivilianHeadPhysician: [1, 1]

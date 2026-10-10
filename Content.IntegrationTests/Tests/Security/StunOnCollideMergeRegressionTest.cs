@@ -86,6 +86,9 @@ public sealed class StunOnCollideMergeRegressionTest : GameTest
             blacklisted = SEntMan.SpawnEntity(BlacklistedTarget, map.GridCoords);
 
             SEntMan.EnsureComponent<YautjaComponent>(yautja);
+            // Bad Blood lacks the regular Yautja's intrinsic stun and slow immunity.
+            // This isolates the projectile's Taser gate from those separate protections.
+            SEntMan.EnsureComponent<YautjaBadBloodComponent>(yautjaUntagged);
             SEntMan.EnsureComponent<YautjaComponent>(yautjaUntagged);
         });
         await Pair.RunTicksSync(2);
@@ -102,7 +105,7 @@ public sealed class StunOnCollideMergeRegressionTest : GameTest
             AssertStunState(normal, true,
                 "the same Taser-tagged projectile must retain the upstream stun flow for a normal target");
             AssertStunState(yautjaUntagged, true,
-                "the Yautja immunity must be limited to projectiles carrying the Taser tag");
+                "an untagged projectile must retain the stun flow for a vulnerable Bad Blood Yautja");
             AssertStunState(blacklisted, false,
                 "the upstream blacklist must still skip targets before the fork immunity check and all effects");
         });

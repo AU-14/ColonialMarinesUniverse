@@ -211,7 +211,7 @@ public sealed partial class SolutionTransferSystem : EntitySystem
             return;
 
         // Have to check again, in case something has changed.
-        if (!CanRecieve(ent, target, out var ownerSoln, out var targetSoln, out var solution))
+        if (!CanRecieve(ent, target, out var targetSoln, out var ownerSoln, out var solution))
             return;
 
         RefillTransfer(new SolutionTransferData(args.User, target, targetSoln.Value, ent.Owner, ownerSoln.Value, args.Amount), solution);

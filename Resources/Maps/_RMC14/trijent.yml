@@ -156883,14 +156883,14 @@ entities:
     - type: Transform
       pos: 117.53275,-163.2612
       parent: 1
-- proto: RMCInflatableWallFolded
+- proto: CMUInflatableWallFolded # CMU14
   entities:
   - uid: 15736
     components:
     - type: Transform
       pos: 55.5792,-72.57634
       parent: 1
-- proto: RMCInflatableWallFolded1
+- proto: CMUInflatableWallFolded1 # CMU14
   entities:
   - uid: 15737
     components:

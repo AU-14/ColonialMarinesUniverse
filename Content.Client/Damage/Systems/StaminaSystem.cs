@@ -77,7 +77,7 @@ public sealed partial class StaminaSystem : SharedStaminaSystem
 
     private void StopAnimation(Entity<StaminaComponent, SpriteComponent?> entity)
     {
-        if(!Resolve(entity, ref entity.Comp2))
+        if (!Resolve(entity, ref entity.Comp2, logMissing: false))
             return;
 
         _animation.Stop(entity.Owner, StaminaAnimationKey);

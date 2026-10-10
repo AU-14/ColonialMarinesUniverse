@@ -94,3 +94,23 @@
   - type: StorageFill
     contents:
     - id: RMCBoxMagazineRifleL42AAP
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateBoxMagazineRifleM16AP
+  name: Magazine box (M16, 10x AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineRifleM16AP
+      amount: 12
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateBoxMagazineRifleM16APExt
+  name: Magazine box (M16, 10x Extended AP mags)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMagazineRifleM16APExt
+      amount: 12

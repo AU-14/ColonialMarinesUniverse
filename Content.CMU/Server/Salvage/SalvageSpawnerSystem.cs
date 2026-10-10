@@ -26,7 +26,7 @@ public sealed partial class SalvageSpawnerSystem : EntitySystem
         if (comp.Loot.Count == 0)
             return;
 
-        _popup.PopupEntity("You rummage through the debris...", uid, args.User);
+        _popup.PopupEntity(Loc.GetString("salvage-spawner-rummage"), uid, args.User);
 
         var doAfterArgs = new DoAfterArgs(
             EntityManager,
@@ -54,6 +54,6 @@ public sealed partial class SalvageSpawnerSystem : EntitySystem
         var user = args.User;
         var pick = _random.Pick(comp.Loot);
         Spawn(pick, Transform(user).Coordinates);
-        _popup.PopupEntity("You find something worth salvaging!", uid, user);
+        _popup.PopupEntity(Loc.GetString("salvage-spawner-found"), uid, user);
     }
 }

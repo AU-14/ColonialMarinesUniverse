@@ -134,7 +134,7 @@
       amount: 10
     Water:
       amount: 5
-    Sugar:
+    RMCSugar: # CMU14: fork sugar reagent, not upstream Sugar
       amount: 5
   effects:
     - !type:SpawnEntity

@@ -1,0 +1,77 @@
+name: Retry interrupted CI
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  actions: write
+
+concurrency:
+  group: ci-retry-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+
+jobs:
+  retry:
+    if: github.event.workflow_run.conclusion == 'failure' && github.event.workflow_run.run_attempt < 3
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # This runs with write permission even for fork PRs. Read GitHub metadata and
+      # logs only; never check out or execute code/artifacts from the triggering run.
+      - name: Retry after CI has finished
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const triggered = context.payload.workflow_run;
+            const repo = context.repo;
+            const { data: run } = await github.rest.actions.getWorkflowRun({
+              ...repo, run_id: triggered.id,
+            });
+            if (run.status !== 'completed' || run.conclusion !== 'failure' ||
+                run.run_attempt !== triggered.run_attempt || run.run_attempt >= 3) {
+              core.info('Run has already changed or exhausted its retries.');
+              return;
+            }
+
+            const { data: recent } = await github.rest.actions.listWorkflowRuns({
+              ...repo, workflow_id: run.workflow_id,
+              branch: run.head_branch, event: run.event, per_page: 100,
+            });
+            if (recent.workflow_runs.some(other => other.id > run.id &&
+                other.head_repository?.full_name === run.head_repository?.full_name)) {
+              core.info('A newer CI run has superseded this run.');
+              return;
+            }
+
+            const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRunAttempt, {
+              ...repo, run_id: run.id, attempt_number: run.run_attempt, per_page: 100,
+            });
+            const failed = jobs.filter(job => job.conclusion === 'failure' &&
+              job.name !== 'Required Checks');
+            if (failed.length === 0)
+              return;
+
+            for (const job of failed) {
+              if (!job.name.startsWith('Testcases / ')) {
+                core.info('A failure outside integration tests requires attention.');
+                return;
+              }
+
+              const { data } = await github.rest.actions.downloadJobLogsForWorkflowRun({
+                ...repo, job_id: job.id,
+              });
+              const log = typeof data === 'string' ? data : Buffer.from(data).toString('utf8');
+              const shutdown = /Z\s+##\[error\]The runner has received a shutdown signal\./m;
+              const testFailure = /Z\s+Failed .+ \[|Failed!\s+-\s+Failed:\s+[1-9]/m;
+              if (!shutdown.test(log) || testFailure.test(log)) {
+                core.info('A test failed or the runner-shutdown signature is absent.');
+                return;
+              }
+            }
+
+            // The source workflow is completed now, so GitHub accepts the retry.
+            // Successful jobs stay completed; Required Checks runs again afterwards.
+            await github.rest.actions.reRunWorkflowFailedJobs({ ...repo, run_id: run.id });
+            core.info(`Requested retry ${run.run_attempt + 1} for CI run ${run.id}.`);

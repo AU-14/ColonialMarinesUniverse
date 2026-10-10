@@ -85,8 +85,8 @@ public sealed class KeyedTimerMigrationTest
                 ("CMGrenadeHighExplosive", 4, false),
                 ("CMGrenadeSmoke", 2.5, false),
                 ("RMCGrenadeTraining", 4, false),
-                ("RMCGrenadeIncendiary", 4, true),
-                ("RMCGrenadeWhitePhosphorus", 2, true),
+                ("RMCGrenadeIncendiary", 4, false),
+                ("RMCGrenadeWhitePhosphorus", 2, false),
                 ("AU1420MMGrenadeL101A2", 2, false),
                 ("AU14GrenadeNeuroRMC", 3.5, false),
                 ("CMU14TearGasGrenade", 4.5, false),
@@ -167,7 +167,7 @@ public sealed class KeyedTimerMigrationTest
         await server.WaitAssertion(() =>
         {
             var resources = server.ResolveDependency<IResourceManager>();
-            using var file = resources.ContentFileRead(new ResPath("/Maps/CMU14/gixenscaverns.yml"));
+            using var file = resources.ContentFileRead(new ResPath("/Maps/CMU14/Legacy/gixenscaverns.yml"));
             using var reader = new StreamReader(file);
             var yaml = new YamlStream();
             yaml.Load(reader);

@@ -179,3 +179,17 @@
   icon:
     sprite: CMU14/Interface/au14opforjobicons.rsi
     state: vc
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORWeaponsSpecialist
+  icon:
+    sprite: CMU14/Interface/au14opforjobicons.rsi
+    state: ws
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: AU14JobIconOPFORTankCommander
+  icon:
+    sprite: CMU14/Interface/au14opforjobicons.rsi
+    state: vcc

@@ -58,12 +58,10 @@
     - WYHT
     - WYPMCParty
     - WYPMCPartyAlt
-    - abominationThirdParty
+    - biomorphThirdParty
     # threats:
     # - XenoThreat # map has no threat spawn markers
     # - NeomorphsThreat # map has no threat spawn markers
-    # - AbominationsThreatDS # no xenocf markers
-    # - ApeThreatDS # map has no threat spawn markers
     # - BadBloodClanThreat
     # - XenoThreatCF # no xenocf markers
     # - NeomorphsThreatCF # no xenocf markers
@@ -88,7 +86,7 @@
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    fiorina:
+    Almayer: # Matches the grid's BecomesStation ID in fiorina.yml.
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup

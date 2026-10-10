@@ -130,12 +130,12 @@ public sealed class CameraNetworkPrototypeTest
             AssertAnchored(prototypes, factory, "CMUSurveillanceCameraColonyWEYU");
             AssertAnchored(prototypes, factory, "CMUMonitorCameraColonyCMB");
             AssertReceiver(prototypes, factory, "CMUMonitorCameraColonyWEYUSpy", ["CMUSurveillanceCameraColonyCMB", "CMUSurveillanceCameraColonyWEYU"], CameraSourceKinds.Rmc);
+            AssertReceiver(prototypes, factory, "RMCMortarKit", ["RMCMortarCamera"], CameraSourceKinds.Rmc);
+            AssertReceiver(prototypes, factory, "AU14MortarKitRMC", ["RMCMortarCamera"], CameraSourceKinds.Rmc);
+            AssertMember(prototypes, factory, "RMCMortarCamera", ["RMCMortarCamera"], CameraSourceKinds.Rmc, false);
+            AssertMember(prototypes, factory, "AU14MortarCameraRMC", ["RMCMortarCamera"], CameraSourceKinds.Rmc, false);
             foreach (var id in new[]
             {
-                "RMCMortarCamera",
-                "RMCMortarKit",
-                "AU14MortarCameraRMC",
-                "AU14MortarKitRMC",
                 "RMCFlareCAS",
                 "RMCAirFlareCAS",
                 "RMCLaserDesignatorTarget",
@@ -173,36 +173,6 @@ public sealed class CameraNetworkPrototypeTest
                             .Nodes["Television"].Entity.GetId(null, null, new(server.EntMan)),
                         Is.EqualTo("WallmountTelevision"));
                 });
-            });
-        }
-        finally
-        {
-            server.Dispose();
-        }
-    }
-
-    [Test]
-    public async Task CmuAndRmcCamerasExposeSelectableLogicalNetworks()
-    {
-        var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
-        try
-        {
-            await server.WaitAssertion(() =>
-            {
-                var prototypes = server.ResolveDependency<IPrototypeManager>();
-                var factory = server.EntMan.ComponentFactory;
-
-                foreach (var id in new[] { "CMUSurveillanceCameraColonyCMB", "RMCSurveillanceCameraAlmayer" })
-                {
-                    var prototype = prototypes.Index<EntityPrototype>(id);
-                    Assert.That(prototype.TryComp<SurveillanceCameraComponent>(out var camera, factory), Is.True, id);
-                    Assert.That(camera!.AvailableNetworks.Count, Is.GreaterThan(1), id);
-                    Assert.That(camera.NetworkSet, Is.False, id);
-                    Assert.That(camera.AvailableNetworks.All(network =>
-                        prototypes.TryIndex<CameraNetworkPrototype>(network, out var networkPrototype) && networkPrototype.Configurable),
-                        Is.True,
-                        id);
-                }
             });
         }
         finally
@@ -399,10 +369,6 @@ public sealed class CameraNetworkPrototypeTest
                 var factory = server.EntMan.ComponentFactory;
                 foreach (var id in new[]
                 {
-                    "RMCMortarCamera",
-                    "RMCMortarKit",
-                    "AU14MortarCameraRMC",
-                    "AU14MortarKitRMC",
                     "RMCFlareCAS",
                     "RMCAirFlareCAS",
                     "RMCLaserDesignatorTarget",

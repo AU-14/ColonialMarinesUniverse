@@ -184,10 +184,12 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
 
                 foreach (var entProto in entProtos)
                 {
-                    var spawnedEntity = Spawn(entProto, coords);
+                    // Spawn only what can actually be placed; an orphaned kit item would
+                    // drop at the player's feet and out a covert antag.
                     if (slotEnt == null || storage == null)
                         continue;
 
+                    var spawnedEntity = Spawn(entProto, coords); // CMU14
                     if (TryComp(spawnedEntity, out ItemComponent? item))
                     {
                         var ev = new CMStorageItemFillEvent((spawnedEntity, item), storage);

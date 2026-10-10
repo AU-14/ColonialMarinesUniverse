@@ -8,17 +8,17 @@
       edges:
         - to: chair
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
         - to: stool
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
         - to: stoolBar
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 1
               doAfter: 1
         - to: chairBrass
@@ -28,22 +28,22 @@
               doAfter: 1
         - to: chairOffice
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
         - to: chairOfficeDark
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
         - to: chairComfy
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
         - to: chairPilotSeat
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
         - to: chairWood
@@ -58,14 +58,14 @@
               doAfter: 1
         - to: chairFolding
           steps:
-            - material: Plastic
+            - material: RMCPlastic # CMU14: fork plastic (RMCSheetPlastic), not upstream Plastic
               amount: 1
               doAfter: 1
-            - material: MetalRod
+            - material: CMRodMetal # CMU14: fork rods (CMRodMetal), not upstream MetalRod
               amount: 2
         - to: chairSteelBench
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
         - to: stoolCard
@@ -80,14 +80,14 @@
               doAfter: 2
         - to: redComfBench
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
             - material: Cloth
               amount: 1
         - to: blueComfBench
           steps:
-            - material: Steel
+            - material: CMSteel # CMU14: fork metal (CMSheetMetal), not upstream Steel
               amount: 2
               doAfter: 1
             - material: Cloth
@@ -99,7 +99,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
           steps:
             - tool: Screwing
               doAfter: 1
@@ -110,7 +110,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
           steps:
             - tool: Screwing
               doAfter: 1
@@ -121,7 +121,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
           steps:
             - tool: Screwing
               doAfter: 1
@@ -143,7 +143,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
           steps:
             - tool: Screwing
@@ -155,7 +155,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
           steps:
             - tool: Screwing
@@ -167,7 +167,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
           steps:
             - tool: Screwing
@@ -179,7 +179,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
           steps:
             - tool: Screwing
@@ -215,10 +215,10 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetPlastic1
+              prototype: RMCSheetPlastic1 # CMU14: refund fork plastic
               amount: 1
             - !type:SpawnPrototype
-              prototype: PartRodMetal1
+              prototype: CMRodMetal1 # CMU14: refund fork rods
               amount: 2
           steps:
             - tool: Screwing
@@ -230,7 +230,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
           steps:
             - tool: Screwing
@@ -268,7 +268,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
             - !type:SpawnPrototype
               prototype: MaterialCloth1
@@ -285,7 +285,7 @@
         - to: start
           completed:
             - !type:SpawnPrototype
-              prototype: SheetSteel1
+              prototype: CMSheetMetal1 # CMU14: refund fork metal
               amount: 2
             - !type:SpawnPrototype
               prototype: MaterialCloth1

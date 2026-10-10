@@ -278,7 +278,8 @@ namespace Content.Shared.Chemistry.Reaction
                     return;
             }
 
-            Log.Error($"{nameof(Solution)} {soln.Owner} could not finish reacting in under {MaxReactionIterations} loops.");
+            Log.Error($"{nameof(Solution)} {soln.Owner} on {ToPrettyString(Transform(soln).ParentUid)} could not finish reacting in under {MaxReactionIterations} loops. " +
+                      $"Reagents: {string.Join(", ", soln.Comp.Solution.Contents)}. Reactions: {string.Join(", ", reactions.Select(reaction => reaction.ID))}");
         }
     }
 

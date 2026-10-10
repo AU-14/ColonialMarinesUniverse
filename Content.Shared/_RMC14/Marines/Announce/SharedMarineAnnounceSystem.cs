@@ -52,6 +52,13 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
 
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
 
+    // CMU14: Vehicle interiors inherit their supplying faction.
+    public void SetComputerFaction(Entity<MarineCommunicationsComputerComponent> computer, string faction)
+    {
+        computer.Comp.Faction = faction;
+        Dirty(computer);
+    }
+
     public override void Initialize()
     {
         SubscribeLocalEvent<MarineCommunicationsComputerComponent, EchoSquadReasonEvent>(OnEchoSquadReason);
@@ -130,7 +137,12 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         if (text.Length > CharacterLimit)
             text = text[..CharacterLimit].Trim();
 
-        AnnounceSigned(args.Actor, text, name: ent.Comp.AnnounceName, faction: ResolveAnnouncementFaction(ent));
+        // CMU14: admin tablets announce under High Command
+        var author = ent.Comp.AnnounceAuthor is { } announceAuthor ? Loc.GetString(announceAuthor) : null;
+        AnnounceSigned(args.Actor, text,
+            author: author,
+            name: ent.Comp.AnnounceName,
+            faction: ResolveAnnouncementFaction(ent));
 
         ent.Comp.LastAnnouncement = time;
         Dirty(ent);
@@ -192,9 +204,10 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
     public void AnnounceARES(
         EntityUid? source,
         string message,
-        SoundSpecifier? sound = null)
+        SoundSpecifier? sound = null,
+        string? faction = null) // CMU14: optional GOVFOR/OPFOR recipient filter.
     {
-        AnnounceARESStaging(source, message, sound, "rmc-announcement-ares-command");
+        AnnounceARESStaging(source, message, sound, "rmc-announcement-ares-command", faction); // CMU14
     }
 
     public virtual void AnnounceSquad(

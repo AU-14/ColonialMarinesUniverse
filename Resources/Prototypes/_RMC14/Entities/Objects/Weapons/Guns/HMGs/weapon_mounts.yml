@@ -94,6 +94,10 @@
   suffix: Dropship
   categories: [ HideSpawnMenu ]
   components:
+  - type: Fixtures # CMU14
+    fixtures: {}
+  - type: Physics # CMU14: empty fixtures make init disable collision; declared so saves match
+    canCollide: false
   - type: WeaponMount
     occupiedDrawDepth: Overdoors
     emptyDrawDepth: Overdoors

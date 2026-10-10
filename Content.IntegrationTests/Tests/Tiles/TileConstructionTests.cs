@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Tests.Interaction;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
 namespace Content.IntegrationTests.Tests.Tiles;
@@ -87,38 +88,56 @@ public sealed class TileConstructionTests : InteractionTest
         await AssertTile(Plating);
         AssertGridCount(1);
 
-        // Plating -> Tile
+        // CMU14: CM floors only tile over CM plating, so lay the matching subfloor first
+        await SetTile(CMPlating);
+
+        // CM plating -> Tile
         await InteractUsing(FloorItem);
         Assert.That(HandSys.GetActiveItem((SEntMan.GetEntity(Player), Hands)), Is.Null);
         await AssertTile(Floor);
         AssertGridCount(1);
 
-        // Tile -> Plating
+        // Tile -> CM plating
         await InteractUsing(Pry);
-        await AssertTile(Plating);
+        await AssertTile(CMPlating);
         AssertGridCount(1);
 
-        await AssertEntityLookup((FloorItem, 1));
+        await AssertTileItemReturned();
     }
 
     /// <summary>
-    /// Test snowPlating -> floor -> snowPlating using tilestacking
+    /// Test CM plating -> floor -> CM plating using tile stacking.
+    /// CMU14: CM floor tiles only place over CM plating, so the snow plating case does not exist for them.
     /// </summary>
     [Test]
     public async Task BrassPlatingPlace()
     {
-        await SetTile(PlatingSnow);
+        await SetTile(CMPlating);
 
-        // Snow Plating -> Tile
+        // CM plating -> Tile
         await InteractUsing(FloorItem);
         Assert.That(HandSys.GetActiveItem((SEntMan.GetEntity(Player), Hands)), Is.Null);
         await AssertTile(Floor);
         AssertGridCount(1);
 
-        // Tile -> Snow Plating
+        // Tile -> CM plating
         await InteractUsing(Pry);
-        await AssertTile(PlatingSnow);
+        await AssertTile(CMPlating);
         AssertGridCount(1);
+        await AssertTileItemReturned();
+    }
+
+    // CMU14: the pried tile can end up in a hand (auto pickup) or on the floor
+    // depending on pickup timing; require the tile item to exist either way.
+    private async Task AssertTileItemReturned()
+    {
+        var player = SEntMan.GetEntity(Player);
+        foreach (var held in HandSys.EnumerateHeld((player, Hands)))
+        {
+            if (SEntMan.GetComponent<MetaDataComponent>(held).EntityPrototype?.ID == FloorItem)
+                return;
+        }
+
         await AssertEntityLookup((FloorItem, 1));
     }
 }

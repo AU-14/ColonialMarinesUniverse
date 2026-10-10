@@ -113,10 +113,11 @@
     canEvolveWithoutGranter: true
     max: 200
     evolvesTo:
+    - CMXenoReaper # CMU14
     - CMXenoCarrier
     - CMXenoBurrower
     - CMXenoHivelord
-    earlyEvolvesTo:
+    # earlyEvolvesTo: # CMU14: combat tier 2 evolutions remain available after marines land
     - CMXenoLurker
     - CMXenoSpitter
     - CMXenoWarrior

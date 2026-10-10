@@ -413,13 +413,16 @@ public sealed partial class XenoSpitSystem : EntitySystem
             predicted: false
         );
 
+        if (!args.Handled)
+            return; // CMU14: failed casts (e.g. blocked cross-z shots) must not start the cooldown
+
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoAcidBallActionEvent>(ent))
         {
             _actions.SetCooldown(action.AsNullable(), ent.Comp.Cooldown);
         }
 
-        if (!args.Handled)
-            return;
+        // if (!args.Handled) // CMU14
+        //     return;
 
         _popup.PopupClient(Loc.GetString("rmc-xeno-acid-ball-shoot-self"), ent, ent);
     }
@@ -469,6 +472,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
     private void OnUserAcidedMapInit(Entity<UserAcidedComponent> ent, ref MapInitEvent args)
     {
         ent.Comp.ExpiresAt = _timing.CurTime + ent.Comp.Duration;
+        ent.Comp.NextDamageAt = _timing.CurTime; // CMU14: anchor ticks to the application time.
         Dirty(ent);
         UpdateAppearance(ent);
 
@@ -527,6 +531,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
 
         acided.Comp.Combo = true;
+        acided.Comp.Tier = 2; // CMU14: share tier identity with Despoiler applications.
 
         if (damage != null)
             acided.Comp.Damage = damage;
@@ -665,7 +670,9 @@ public sealed partial class XenoSpitSystem : EntitySystem
             if (time < acided.NextDamageAt)
                 continue;
 
-            acided.NextDamageAt = time + acided.DamageEvery;
+            // CMU14: scheduling from the current frame accumulates delay and loses damage ticks.
+            // acided.NextDamageAt = time + acided.DamageEvery;
+            acided.NextDamageAt += acided.DamageEvery;
             _damageable.TryChangeDamage(uid, acided.Damage, armorPiercing: acided.ArmorPiercing);
         }
 

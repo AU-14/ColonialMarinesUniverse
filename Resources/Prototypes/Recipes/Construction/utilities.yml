@@ -75,6 +75,7 @@
   id: DisposalUnit
   graph: DisposalMachine
   targetNode: disposal_unit
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM (inherited by MailingUnit)
 
 - type: construction
   parent: DisposalUnit
@@ -86,6 +87,7 @@
   id: DisposalPipe
   graph: DisposalPipe
   targetNode: pipe
+  isCM: true # CMU14: menu-visible; inherited by tagger/signaller/router/junction recipes
 
 - type: construction
   parent: DisposalPipe

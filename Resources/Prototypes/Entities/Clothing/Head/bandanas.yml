@@ -43,47 +43,77 @@
   id: ClothingHeadBandBlack
   name: black bandana
 
+  components:
+  - type: HideLayerClothing
+    layers: {}
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandBlue]
   id: ClothingHeadBandBlue
   name: blue bandana
 
+  components:
+  - type: HideLayerClothing
+    layers: {}
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandBotany]
   id: ClothingHeadBandBotany
   name: botany bandana
 
+  components:
+  - type: HideLayerClothing
+    layers: {}
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandGold]
   id: ClothingHeadBandGold
   name: gold bandana
 
+  components:
+  - type: HideLayerClothing
+    layers: {}
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandGreen]
   id: ClothingHeadBandGreen
   name: green bandana
 
+  components:
+  - type: HideLayerClothing
+    layers: {}
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandGrey]
   id: ClothingHeadBandGrey
   name: grey bandana
 
+  components:
+  - type: HideLayerClothing
+    layers: {}
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandRed]
   id: ClothingHeadBandRed
   name: red bandana
 
+  components:
+  - type: HideLayerClothing
+    layers: {}
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandSkull]
   id: ClothingHeadBandSkull
   name: skull bandana
 
+  components:
+  - type: HideLayerClothing
+    layers: {}
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandMerc]
   id: ClothingHeadBandMerc
   name: mercenary bandana
 
+  components:
+  - type: HideLayerClothing
+    layers: {}
 - type: entity
   parent: [ClothingHeadBandBase, ClothingMaskBandBrown]
   id: ClothingHeadBandBrown
   name: brown bandana
+  components:
+  - type: HideLayerClothing
+    layers: {}

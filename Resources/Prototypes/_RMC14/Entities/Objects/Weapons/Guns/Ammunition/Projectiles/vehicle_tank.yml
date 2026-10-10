@@ -4,6 +4,12 @@
   name: LTB HESH cannon shell
   categories: [ HideSpawnMenu ]
   components:
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+        ents: []
+        showEnts: False
+        occludes: True
   - type: DeleteOnFixedDistanceStop
   - type: TriggerOnCollide
     fixtureID: projectile

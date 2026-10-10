@@ -2,6 +2,9 @@ using System.Linq;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using Content.Shared.CMU14.Dropship.AttachmentPoint;
+using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.Buckle.Components; // CMU14
+using Content.Shared.CMU14.ZLevels.Ordnance;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Atmos;
@@ -78,6 +81,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private AreaSystem _area = default!;
+    [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ISharedChatManager _chat = default!;
     [Dependency] private IConfigurationManager _config = default!;
@@ -419,8 +423,12 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             {
                 RemovePvsActors((uid, terminal));
                 SetTarget((uid, terminal), null);
-                TrySetCameraTarget(uid, null);
+                // TrySetCameraTarget(uid, null); // CMU14: the camera can follow a different target
             }
+
+            // CMU14: camera and weapon selections have independent lifetimes.
+            if (terminal.CameraTarget == ent)
+                TrySetCameraTarget(uid, null);
 
             var targets = terminal.Targets;
             if (HasComp<MedevacStretcherComponent>(ent))
@@ -705,7 +713,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
         var offset = ClampOffset(ent);
         var coordinates = _transform.GetMoverCoordinates(target).SnapToGrid(EntityManager).Offset(offset);
-        if (!CasDebug && !_area.CanCAS(coordinates))
+        if (weapon is not { } weaponEntity ||
+            !TryGetWeaponAmmo((weaponEntity, weaponComp), out var ammo) ||
+            (!CasDebug && !CanFireAtCoordinate(coordinates, ammo.Comp.ZLevelPenetration)))
         {
             var msg = Loc.GetString("rmc-laser-designator-not-cas");
             _popup.PopupCursor(msg, actor);
@@ -763,6 +773,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             Implosion = ammo.Implosion,
             Fire = ammo.Fire,
             SoundEveryShots = ammo.SoundEveryShots,
+            ZLevelPenetration = ammo.ZLevelPenetration,
+            ApplyEffectsOnPenetrationLevels = ammo.ApplyEffectsOnPenetrationLevels,
+            TargetLowestZLevel = ammo.TargetLowestZLevel,
         };
 
         AddComp(inFlight, inFlightComp, true);
@@ -1004,7 +1017,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         // Can't drop underground
         if (!CasDebug)
         {
-            if (!_area.CanCAS(coordinates))
+            if (!CanFireAtCoordinate(coordinates, 0))
             {
                 if (_net.IsClient)
                 {
@@ -1035,6 +1048,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             var paraDrop = EnsureComp<ActiveParaDropComponent>(dropship);
             paraDrop.DropTarget = ent.Comp.Target;
             Dirty(dropship, paraDrop);
+            var changed = new DropshipParadropChangedEvent(true);
+            RaiseLocalEvent(dropship, ref changed);
         }
         else
         {
@@ -1136,7 +1151,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             if (!IsValidTarget(target))
                 return;
 
-            if (!_area.CanCAS(target.ToCoordinates()))
+            if (!CanFireAtCoordinate(target.ToCoordinates(), 0))
             {
                 var msg = Loc.GetString("rmc-laser-designator-not-cas");
                 _popup.PopupCursor(msg, args.Actor);
@@ -1571,7 +1586,8 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         var xform = Transform(ent);
-        if (!CasDebug && !HasComp<RMCPlanetComponent>(xform.GridUid))
+        // CMU14: aircraft landing and protected CAS.
+        if (!CasDebug && !IsPlanetTarget(xform))
             return false;
         if (!ent.Comp.IsTargetableByWeapons)
         {
@@ -1579,6 +1595,24 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
 
         return true;
+    }
+
+    // CMU14: aircraft landing and protected CAS.
+    private bool IsPlanetTarget(TransformComponent xform)
+    {
+        if (HasComp<RMCPlanetComponent>(xform.GridUid) || HasComp<RMCPlanetComponent>(xform.MapUid))
+            return true;
+
+        if (xform.MapUid is not { } map || !_zLevels.TryGetZNetwork(map, out var network))
+            return false;
+
+        foreach (var (_, member) in _zLevels.GetOrderedNetworkMaps(network.Value))
+        {
+            if (HasComp<RMCPlanetComponent>(member))
+                return true;
+        }
+
+        return false;
     }
 
     public string GetUserAbbreviation(EntityUid user, int id)
@@ -1817,7 +1851,15 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
                 var landing = flight.Target.Offset(spread);
 
+                // Dispersion can move a permitted target underneath a protected
+                // ceiling. Check the actual impact before applying any payload.
+                if (!CasDebug && !CanFireAtCoordinate(landing, flight.ZLevelPenetration))
+                    continue;
+
                 var targetMap = _transform.ToMapCoordinates(landing.SnapToGrid(EntityManager));
+        // CMU14: publish the actual dispersed payload impact for fighter effects.
+        var impact = new DropshipWeaponImpactEvent(targetMap);
+        RaiseLocalEvent(uid, ref impact);
 
                 foreach (var effect in flight.ImpactEffects)
                 {
@@ -1866,40 +1908,236 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                                 break;
 
                             var tile = _random.PickAndTake(tiles);
-                            var coords = flight.Target.Offset(tile);
+                            // CMU14: aircraft landing and protected CAS.
+                            var coords = landing.Offset(tile);
                             _rmcFlammable.SpawnFire(coords,
                                 flight.Fire.Type,
                                 chain,
                                 flight.Fire.Range,
                                 flight.Fire.Intensity,
                                 flight.Fire.Duration,
-                                out _
+                                out _,
+                                canSpawn: CanSpawnCASFire
                             );
                         }
                     }
                     else
                     {
                         _rmcFlammable.SpawnFireLines(flight.Fire.Type,
-                            flight.Target,
+                            landing,
                             flight.Fire.CardinalRange,
                             flight.Fire.OrdinalRange,
                             flight.Fire.Intensity,
-                            flight.Fire.Duration);
+                            flight.Fire.Duration,
+                            canSpawn: CanSpawnCASFire);
 
                         for (var x = -flight.Fire.Range; x <= flight.Fire.Range; x++)
                         {
                             for (var y = -flight.Fire.Range; y <= flight.Fire.Range; y++)
                             {
-                                var coords = flight.Target.Offset(new Vector2(x, y));
+                                var coords = landing.Offset(new Vector2(x, y));
                                 _rmcFlammable.SpawnFire(coords,
                                     flight.Fire.Type,
                                     chain,
                                     flight.Fire.Range,
                                     flight.Fire.Intensity,
                                     flight.Fire.Duration,
-                                    out _
+                                    out _,
+                                    canSpawn: CanSpawnCASFire
                                 );
                             }
+                        }
+                    }
+                }
+
+                // Apply effects on intermediate z-levels if configured
+                if (flight.ApplyEffectsOnPenetrationLevels && flight.ZLevelPenetration > 0)
+                {
+                    var mapId = targetMap.MapId;
+                    if (_map.TryGetMap(mapId, out var sourceMap) && sourceMap is { } sourceMapUid)
+                    {
+                        var worldPos = targetMap.Position;
+                        var lastReachableLevel = 0;
+
+                        for (var offset = 1; offset <= flight.ZLevelPenetration; offset++)
+                        {
+                            if (!_zLevels.TryMapOffset((sourceMapUid, null), offset, out _, out var targetMapComp))
+                                break;
+
+                            // Check if there's an opening to this level
+                            if (_zLevels.TryFindZShotOpening(
+                                    sourceMapUid,
+                                    targetMapComp.Owner,
+                                    offset,
+                                    worldPos,
+                                    worldPos,
+                                    out _,
+                                    preferOpeningAwayFromSource: true,
+                                    maxSourceDistanceFromOpeningEdgeTiles: 2f))
+                            {
+                                lastReachableLevel = offset;
+                                var levelCoordinates = new MapCoordinates(worldPos, targetMapComp.MapId);
+
+                                // Apply explosion to this level
+                                if (flight.Explosion != null)
+                                {
+                                    _rmcExplosion.QueueExplosion(levelCoordinates,
+                                        flight.Explosion.Type,
+                                        flight.Explosion.Total,
+                                        flight.Explosion.Slope,
+                                        flight.Explosion.Max,
+                                        uid,
+                                        canCreateVacuum: false
+                                    );
+                                }
+
+                                // Apply fire to this level
+                                if (flight.Fire != null)
+                                {
+                                    var chain = _onCollide.SpawnChain();
+                                    var coords = new EntityCoordinates(targetMapComp.Owner, worldPos);
+
+                                    if (flight.Fire.Total is { } total)
+                                    {
+                                        var tiles = new List<Vector2i>();
+                                        for (var x = -flight.Fire.Range; x <= flight.Fire.Range; x++)
+                                        {
+                                            for (var y = -flight.Fire.Range; y <= flight.Fire.Range; y++)
+                                            {
+                                                tiles.Add((x, y));
+                                            }
+                                        }
+
+                                        for (var i = 0; i < total; i++)
+                                        {
+                                            if (tiles.Count == 0)
+                                                break;
+
+                                            var tile = _random.PickAndTake(tiles);
+                                            var fireCoords = coords.Offset(new Vector2(tile.X, tile.Y));
+                                            _rmcFlammable.SpawnFire(fireCoords,
+                                                flight.Fire.Type,
+                                                chain,
+                                                flight.Fire.Range,
+                                                flight.Fire.Intensity,
+                                                flight.Fire.Duration,
+                                                out _,
+                                                canSpawn: CanSpawnCASFire
+                                            );
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+
+                        // If penetration wasn't enough to reach the target, detonate at the last reachable level
+                        if (lastReachableLevel < flight.ZLevelPenetration && lastReachableLevel > 0)
+                        {
+                            // Already applied effects above, just ensure it detonated
+                            continue;
+                        }
+                    }
+                }
+
+                // Target the lowest z-level with tiles if configured
+                if (flight.TargetLowestZLevel)
+                {
+                    var mapId = targetMap.MapId;
+                    if (_map.TryGetMap(mapId, out var sourceMap) && sourceMap is { } sourceMapUid)
+                    {
+                        var worldPos = targetMap.Position;
+                        var lowestLevel = 0;
+                        var lowestLevelMap = sourceMapUid;
+                        var lowestLevelMapComp = EntityManager.GetComponent<MapComponent>(sourceMapUid);
+
+                        // Find the lowest z-level with an opening/tiles
+                        for (var offset = 1; offset <= 10; offset++) // Search up to 10 levels down
+                        {
+                            if (!_zLevels.TryMapOffset((sourceMapUid, null), offset, out _, out var nextMapComp))
+                                break;
+
+                            // Check if there's an opening to this level
+                            if (_zLevels.TryFindZShotOpening(
+                                    sourceMapUid,
+                                    nextMapComp.Owner,
+                                    offset,
+                                    worldPos,
+                                    worldPos,
+                                    out _,
+                                    preferOpeningAwayFromSource: true,
+                                    maxSourceDistanceFromOpeningEdgeTiles: 2f))
+                            {
+                                lowestLevel = offset;
+                                lowestLevelMap = nextMapComp.Owner;
+                                lowestLevelMapComp = nextMapComp;
+                            }
+                            else
+                            {
+                                // No opening at this level, so previous level was the lowest
+                                break;
+                            }
+                        }
+
+                        // Apply effects at the lowest level with tiles
+                        if (lowestLevel > 0)
+                        {
+                            var levelCoordinates = new MapCoordinates(worldPos, lowestLevelMapComp.MapId);
+
+                            // Apply explosion to lowest level
+                            if (flight.Explosion != null)
+                            {
+                                _rmcExplosion.QueueExplosion(levelCoordinates,
+                                    flight.Explosion.Type,
+                                    flight.Explosion.Total,
+                                    flight.Explosion.Slope,
+                                    flight.Explosion.Max,
+                                    uid,
+                                    canCreateVacuum: false
+                                );
+                            }
+
+                            // Apply fire to lowest level
+                            if (flight.Fire != null)
+                            {
+                                var chain = _onCollide.SpawnChain();
+                                var coords = new EntityCoordinates(lowestLevelMap, worldPos);
+
+                                if (flight.Fire.Total is { } total)
+                                {
+                                    var tiles = new List<Vector2i>();
+                                    for (var x = -flight.Fire.Range; x <= flight.Fire.Range; x++)
+                                    {
+                                        for (var y = -flight.Fire.Range; y <= flight.Fire.Range; y++)
+                                        {
+                                            tiles.Add((x, y));
+                                        }
+                                    }
+
+                                    for (var i = 0; i < total; i++)
+                                    {
+                                        if (tiles.Count == 0)
+                                            break;
+
+                                        var tile = _random.PickAndTake(tiles);
+                                        var fireCoords = coords.Offset(new Vector2(tile.X, tile.Y));
+                                        _rmcFlammable.SpawnFire(fireCoords,
+                                            flight.Fire.Type,
+                                            chain,
+                                            flight.Fire.Range,
+                                            flight.Fire.Intensity,
+                                            flight.Fire.Duration,
+                                            out _,
+                                            canSpawn: CanSpawnCASFire
+                                        );
+                                    }
+                                }
+                            }
+
+                            continue; // Skip normal target-level explosion/fire
                         }
                     }
                 }
@@ -1949,6 +2187,71 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     {
         return !HasComp<ThrownItemComponent>(uid) &&
                _zLevels.DistanceToGround(uid, out _) <= 0;
+    }
+
+    // CMU14: aircraft landing and protected CAS.
+    private bool CanSpawnCASFire(EntityCoordinates coordinates) => CasDebug || _area.CanCAS(coordinates);
+
+    public static bool CanHitCeilingLevel(int zLevelPenetration, short ceilingLevel)
+    {
+        return ceilingLevel switch
+        {
+            <= 2 => true,
+            3 => zLevelPenetration >= 1,
+            4 => zLevelPenetration >= 3,
+            _ => false,
+        };
+    }
+
+    private bool CanFireAtCoordinate(EntityCoordinates coordinates, int zLevelPenetration = 0)
+    {
+        if (CasDebug || _area.CanCAS(coordinates))
+            return true;
+
+        if (zLevelPenetration <= 0)
+            return false;
+
+        var mapCoordinates = _transform.ToMapCoordinates(coordinates);
+        var impactResolved = _topDownOrdnance.TryResolveImpactColumn(
+            mapCoordinates,
+            CMUTopDownOrdnanceKind.OrbitalBombardment,
+            out _);
+
+        var ceilingLevel = !impactResolved ? (short) 4 : (short) 3;
+
+        // If impact column couldn't be resolved (walls blocking) but weapon has penetration,
+        // allow it to shoot through - treat it as penetrable obstacle
+        if (!impactResolved && zLevelPenetration >= 1)
+            ceilingLevel = (short) 3;
+
+        if (!CanHitCeilingLevel(zLevelPenetration, ceilingLevel))
+            return false;
+
+        var mapId = mapCoordinates.MapId;
+        if (!_map.TryGetMap(mapId, out var sourceMap) || sourceMap is not { } sourceMapUid)
+            return false;
+
+        var worldPos = mapCoordinates.Position;
+        for (var offset = 1; offset <= zLevelPenetration; offset++)
+        {
+            if (!_zLevels.TryMapOffset((sourceMapUid, null), offset, out var targetMap))
+                continue;
+
+            if (_zLevels.TryFindZShotOpening(
+                    sourceMapUid,
+                    targetMap.Value.Owner,
+                    offset,
+                    worldPos,
+                    worldPos,
+                    out _,
+                    preferOpeningAwayFromSource: true,
+                    maxSourceDistanceFromOpeningEdgeTiles: 2f))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static Angle GetImpactEffectRotation(Angle randomRotation, bool hasOccluder)
@@ -2346,9 +2649,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         return CanFireMissionAt(targetCoordinates, user);
     }
 
-    private bool CanFireMissionAt(EntityCoordinates targetCoordinates, EntityUid? actor)
+    private bool CanFireMissionAt(EntityCoordinates targetCoordinates, EntityUid? actor, int zLevelPenetration = 0)
     {
-        if (CasDebug || _area.CanCAS(targetCoordinates))
+        if (CasDebug || _area.CanCAS(targetCoordinates) || CanFireAtCoordinate(targetCoordinates, zLevelPenetration))
             return true;
 
         if (actor != null)
@@ -2378,8 +2681,27 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!Resolve(weapon, ref weaponComp, false))
             return false;
 
+        // CMU14 Begin: fixed chin weapons require their dedicated gunnery station.
+        if (weaponComp.GunneryOnly && terminalComp?.Gunnery != true)
+        {
+            if (actor is { } operatorUid)
+                _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-only"), weapon, operatorUid);
+            return false;
+        }
+
+        if (weaponComp.GunneryOnly && actor is { } gunner &&
+            (!TryComp<BuckleComponent>(gunner, out var buckle) || !HasComp<MohawkGunnerySeatComponent>(buckle.BuckledTo)))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-seat"), weapon, gunner);
+            return false;
+        }
+        // CMU14 End
+
+        if (!TryGetWeaponAmmo((weapon, weaponComp), out var ammo))
+            return false;
+
         if (strikeType == DropshipWeaponStrikeType.FireMission &&
-            !CanFireMissionAt(targetCoordinates, actor))
+            !CanFireMissionAt(targetCoordinates, actor, ammo.Comp.ZLevelPenetration))
         {
             return false;
         }
@@ -2406,6 +2728,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         if (weapon.DirectFireOnly)
+            return false;
+
+        if (weapon.GunneryOnly && strikeType == DropshipWeaponStrikeType.FireMission) // CMU14: manual gunnery only
             return false;
 
         Entity<DropshipComponent> dropship = default;
@@ -2555,6 +2880,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             Implosion = ev.Implosion,
             Fire = ev.Fire,
             SoundEveryShots = ev.SoundEveryShots,
+            ZLevelPenetration = ammo.Comp.ZLevelPenetration,
+            ApplyEffectsOnPenetrationLevels = ammo.Comp.ApplyEffectsOnPenetrationLevels,
+            TargetLowestZLevel = ammo.Comp.TargetLowestZLevel,
             MarkerDuration = markerDuration,
         };
         AddComp(inFlight, inFlightComp, true);
@@ -2598,3 +2926,8 @@ public record struct DropshipWeaponShotEvent(
     RMCFire? Fire,
     int SoundEveryShots
 );
+
+// CMU14 event
+/// <summary>Raised at an actual dropship payload impact for world presentation.</summary>
+[ByRefEvent]
+public record struct DropshipWeaponImpactEvent(MapCoordinates Coordinates);

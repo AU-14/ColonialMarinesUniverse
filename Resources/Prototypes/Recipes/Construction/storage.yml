@@ -12,6 +12,7 @@
   parent: BaseStorageStructure
   id: BaseShelf
   graph: Shelf
+  isCM: true # CMU14: menu-visible; the presenter filters recipes on IsCM (inherited by all shelf recipes)
   canBuildInImpassable: true
   conditions:
   - !type:WallmountCondition

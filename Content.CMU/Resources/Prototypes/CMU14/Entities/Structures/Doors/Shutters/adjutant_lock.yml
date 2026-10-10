@@ -19,4 +19,4 @@
   - type: RMCDoorButton
     id: cmu_adjutant_lock
   - type: AccessReader
-    access: [ [ "AU14AccessGovforCommand" ] ]
+    access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]

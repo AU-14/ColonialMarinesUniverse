@@ -236,6 +236,7 @@ namespace Content.Server.GameTicking
             }
 
             LoadAdminFaxHubMap();
+            SendStatusToAll();
         }
 
         private static readonly ResPath AdminFaxHubMapPath = new("/Maps/CMU14/Admin/adminfaxhub.yml");
@@ -513,7 +514,10 @@ namespace Content.Server.GameTicking
 
             // Just in case it hasn't been loaded previously we'll try loading it.
             _sawmill.Debug("[RoundStart] Loading maps.");
-            LoadMaps();
+            // CMU14 Begin: preserve stage costs when a long lifecycle frame overwrites profiler history.
+            using (_cmuPerformance.MeasureOperation("round-load-maps"))
+                LoadMaps();
+            // CMU14 End
             _sawmill.Debug($"[RoundStart] Map load complete. defaultMap={DefaultMap}");
             // map has been selected so update the lobby info text
             // applies to players who didn't ready up
@@ -536,10 +540,17 @@ namespace Content.Server.GameTicking
 
             // MapInitialize *before* spawning players, our codebase is too shit to do it afterwards...
             _sawmill.Debug($"[RoundStart] Initializing default map {DefaultMap}.");
-            _map.InitializeMap(DefaultMap);
-            _power.RecalculatePower();
+            // CMU14 Begin: separate map initialization and power from player spawning.
+            using (_cmuPerformance.MeasureOperation("round-map-init"))
+                _map.InitializeMap(DefaultMap);
+            using (_cmuPerformance.MeasureOperation("round-power-init"))
+                _power.RecalculatePower();
+            // CMU14 End
             _sawmill.Debug("[RoundStart] Spawning players.");
-            SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
+            // CMU14 Begin
+            using (_cmuPerformance.MeasureOperation("round-player-spawns"))
+                SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
+            // CMU14 End
             _roundStartDateTime = DateTime.UtcNow;
             RunLevel = GameRunLevel.InRound;
             _sawmill.Info(
@@ -716,10 +727,14 @@ namespace Content.Server.GameTicking
                 {
                     // Note that contentPlayerData?.Name sticks around after the player is disconnected.
                     // This is as opposed to ply?.Name which doesn't.
-                    PlayerOOCName = contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
+                    // cmu edit start: players can hide their username from the round-end summary
+                    PlayerOOCName = _cmuRoundEndAnonymity.IsHidden(userId)
+                        ? Loc.GetString("cmu-round-end-hidden-username")
+                        : contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
+                    // cmu edit end
                     // Character name takes precedence over current entity name
                     PlayerICName = playerIcName,
-                    PlayerGuid = userId,
+                    PlayerGuid = _cmuRoundEndAnonymity.IsHidden(userId) ? null : userId, // cmu edit: don't leak the account of a hidden player
                     PlayerNetEntity = GetNetEntity(entity),
                     Role = antag
                         ? roles.First(role => role.Antagonist).Name

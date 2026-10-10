@@ -1,0 +1,144 @@
+- type: job
+  parent: CMJobBase
+  id: RuMCUPPLiquidatorComander
+  roundSide: ThirdParty
+  roundForce: UPP
+  roundRole: RuMCUPPLiquidatorComander
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_sl_a
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - RuMCSquadLiquidator
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillPowerLoader: 1
+      RMCSkillEngineer: 3
+      RMCSkillConstruction: 3
+      RMCSkillFirearms: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillMedical: 1
+      RMCSkillPilot: 1
+      RMCSkillPolice: 2
+      RMCSkillFireman: 4
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 1
+      RMCSkillEndurance: 4
+      RMCSkillLeadership: 3
+  - type: JobPrefix
+    prefix: rumc-job-prefix-rifleman
+  - type: MarineOrders
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    understoodLanguages:
+    - Polish
+    - English
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    currentLanguage: Russian
+    defaultLanguage: Russian
+
+  name: Comander
+  description: Liquidator Comander
+  playTimeTracker: RuMCJobUPPLiquidatorComander
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy
+      requirements: []
+    UPP_Sergeant:
+      entity: AU14ChevronUPPNISergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPLiquidatorComander
+        time: 1800 # 0.5 hours
+    UPP_SeniorSergeant:
+      entity: AU14ChevronUPPNISeniorSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPLiquidatorComander
+        time: 5400 # 1.5 hours
+    UPP_JuniorLieutenant:
+      entity: AU14ChevronUPPNIJuniorLieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPLiquidatorComander
+        time: 7200 # 2 hours
+    UPP_Lieutenant:
+      entity: AU14ChevronUPPNILieutenant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: RuMCJobUPPLiquidatorComander
+        time: 10800 # 3 hours
+  spawnMenuRoleName: Liquidator Comander
+  startingGear: RuMCGearUPPLiquidatorComander
+  greeting: rumc-liquidator-greeting
+  icon: "RuMCJobIconUPPLiquidatorComander"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-govfor
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: RuMCBaseMobSpeciesOrganicUPPBEAR
+  id: RuMCJobUPPLiquidatorComander
+  name: Liquidator Comander
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: RuMCSquadLiquidator
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Liquidator Comander
+    description: You are part of a UPP liquidator team! Your job is to burn every biological threat on the colony to the ground. Not one step back!
+    job: RuMCUPPLiquidatorComander
+    raffle:
+      settings: short
+
+- type: startingGear
+  parent: RuMCGearUPPBEARbase
+  id: RuMCGearUPPLiquidatorComander
+  equipment:
+    id: RuCMIDCardUPPLiquidatorComander
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: CMJumpsuitSPPEngi
+    shoes: RMCBootsSPPFilled
+    head: RMCHardhatOrange
+    belt: AU14BeltUtilityFilled
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: RMCBackpackBroilerUPP
+    ears: RuMCHeadsetLiquidator
+    suitstorage: RMCWeaponFlamerSpecUPP
+  inhand:
+    - AU14CBRNKitUPP
+    - RuMCTankFlamerRLargeUPP
+    - RuMCTankFlamerRLargeUPP
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RuMCJobIconUPPLiquidatorComander
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: upp_sl_a
+
+- type: playTimeTracker
+  id: RuMCJobUPPLiquidatorComander

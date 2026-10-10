@@ -27,7 +27,7 @@ public sealed partial class LungsComponent : Component
         { OrganDamageStage.Dead,    FixedPoint2.New(5)  },
     };
 
-    [DataField, AutoPausedField]
+    [DataField(readOnly: true), AutoPausedField]
     public TimeSpan NextAsphyxTick;
 
     [DataField]
@@ -46,7 +46,7 @@ public sealed partial class LungsComponent : Component
     [DataField]
     public FixedPoint2 BloodLossPerCough = FixedPoint2.New(2.5);
 
-    [DataField, AutoPausedField]
+    [DataField(readOnly: true), AutoPausedField]
     public TimeSpan NextBloodCoughCheck;
 }
 

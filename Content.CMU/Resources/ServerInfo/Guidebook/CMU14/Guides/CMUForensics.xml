@@ -1,0 +1,80 @@
+<Document>
+  # Forensics
+
+  Almost everything people touch or bleed on leaves evidence behind. The forensic scanner reads that evidence, and the criminal records computer tells you who it belongs to.
+
+  <Box>
+    <GuideEntityEmbed Entity="ForensicScanner" Caption="Forensic scanner"/>
+    <GuideEntityEmbed Entity="ComputerCriminalRecords" Caption="Criminal records computer"/>
+    <GuideEntityEmbed Entity="CMURecordsTablet" Caption="Mobile criminal records tablet"/>
+  </Box>
+
+  ## Getting a Scanner
+  - Colony law enforcement start with one in their bag: CMB Marshals and Deputies, Colony Security, CWPS Rangers, NSPA Constables and Inspectors, and PaP Officers.
+  - They also start with a [bold]mobile criminal records tablet[/bold], a handheld version of the criminal records computer.
+
+  ## What Gets Left Behind
+  - [bold]Fingerprints[/bold]: touching or picking something up with bare hands leaves your fingerprints on it.
+  - [bold]DNA[/bold]: touching something with bare hands also leaves your DNA. So does bleeding: blood puddles carry the DNA of whoever they came from. Melee weapons pick up the DNA of the people they hit.
+  - [bold]Fibers[/bold]: wearing gloves stops fingerprints and touch DNA, but gloves leave fibers of their material and colour instead.
+  - [bold]Residues[/bold]: some cleaning products leave a residue behind.
+  - [bold]Gunshot residue[/bold]: firing a gun leaves gunshot residue on your hands, or on your gloves if you're wearing them. It fades after about 5 minutes.
+  - [bold]Hair and skin[/bold]: fighting, grabbing or doing CPR on someone leaves your DNA on their clothes, and theirs on yours. Gloves don't stop this, so a victim's clothes can carry their attacker's DNA.
+
+  Evidence can be wiped off with soap. The soap leaves its own residue, which is a clue that someone cleaned up. Blood puddles have to be mopped up to get rid of the DNA in them.
+
+  ## Scanning
+  - Hold the scanner and click on an item, a puddle or a person, or right-click them and choose the scan option.
+  - Stand still for 3 seconds. The results window opens when the scan finishes.
+  - Scanning an [bold]item or puddle[/bold] shows the fingerprints, fibers, DNA and residues on it.
+  - Scanning a [bold]person[/bold] shows their own DNA, their fingerprints if they aren't wearing gloves, any hair and skin DNA left on their clothes, and gunshot residue if they've fired a gun recently.
+  - Scanning a [bold]person or body[/bold] also gives a full injury report, and a body gets a cause and time of death. See the results window below.
+  - Use the scanner in your hand to reopen the last results.
+
+  ## The Results Window
+  The name of whatever you scanned is shown at the top, followed by a set of cards. A card only appears when it has something to show.
+
+  ### Death
+  Only shown for bodies.
+  - [bold]Cause of death[/bold]: the most likely cause, worked out at the moment they died, so healing or moving the body afterwards doesn't change it. Possible causes include gunshot wounds, stab wounds, lacerations, blunt force trauma, explosive trauma, burns, blood loss, asphyxiation, poisoning and decapitation. It reads "Undetermined" if nothing stands out.
+  - [bold]Time since death[/bold]: exact to the minute for the first 10 minutes, then rounded to the nearest 5 minutes.
+
+  ### Record Matches
+  Everyone on the criminal records whose fingerprints or DNA match the scan. The scanner beeps and shows "Match" as soon as it finds one, so you often won't need to search at all.
+
+  ### Evidence
+  Fingerprints, DNA, fibers and residues, including gunshot residue. Every fingerprint and DNA entry has a [color=#FFA500]Copy[/color] button that copies the value to your clipboard, so you can paste it straight into the records search with [bold]Ctrl+V[/bold].
+
+  ### Injuries
+  Shown for people and bodies, listed by body part from head to feet. Each line has a severity tag:
+  - [color=#7FBF7F]MINOR[/color], [color=#E0C050]MODERATE[/color], [color=#E08A3C]SEVERE[/color] and [color=#E05A4F]CRITICAL[/color] for injuries, and [color=#9A9A9A]MISSING[/color] for limbs that are gone.
+  - [bold]Wounds[/bold] are grouped by type (gunshot, stab, laceration, blunt trauma, burn, blast, shrapnel, surgical incision, bruise) with a count, the worst one, and whether they were treated.
+  - [bold]Bleeding[/bold], internal and external, with how bad the external bleeding is.
+  - [bold]Fractures[/bold], from hairline to shattered.
+  - [bold]Shrapnel[/bold] still lodged in the body, with the number of fragments.
+  - [bold]Missing limbs[/bold].
+
+  ### Buttons
+  - [bold]Print[/bold] makes a paper report of the fingerprints, fibers, DNA and residues, for evidence lockers or case files. It has a short cooldown.
+  - [bold]Clear[/bold] wipes the current results.
+
+  ## Searching the Records
+  Every colonist and CLF member has a record with their fingerprints and DNA, so any evidence can be traced back to a person.
+
+  - Open a criminal records computer or the mobile tablet. You need CMB, security or colony command access.
+  - Pick [bold]Fingerprints[/bold] or [bold]DNA[/bold] in the filter dropdown at the top.
+  - Paste the value you copied into the search box. The list narrows to the matching person.
+  - Select them to see their record and status, and to set them as Suspect, Wanted and so on.
+
+  ## Automatic Evidence Logging
+  - When you scan an item that has the fingerprints or DNA of someone who is [color=#FF0000]Wanted[/color], a note is added to their crime history automatically. It records what kind of evidence it was and which item it was found on.
+  - Scanning a person directly also adds or updates their record on the computer.
+
+  ## Tips
+  - Scan everything at a crime scene before it gets moved or cleaned: weapons, doors, blood and casings.
+  - Gloves mean no prints, but check for fibers and blood DNA instead.
+  - Several people's prints can be on the same item, and the most recent ones aren't always the culprit's.
+  - At a body, compare the wounds with the cause of death. Gunshot wounds point to a shooter, so check nearby people for gunshot residue. Stab wounds point to a blade, so scan any knives for the victim's DNA.
+  - Scan a body's clothes by scanning the body itself. Hair and skin from their attacker shows up in the DNA list.
+  - The time since death tells you who could have been there. Check it against the shot alert system's reports and anyone's alibi.
+</Document>

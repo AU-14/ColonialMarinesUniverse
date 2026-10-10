@@ -18,11 +18,11 @@
   announceAsSurvivors: true
   partyspawn: WYPMCPartySpawn
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml
   weight: 20
-  minplayers: 30
+  # minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 8
+  ghostsNeeded: 8
   roundstart: false
 
 - type: partySpawn
@@ -43,9 +43,9 @@
   announceAsSurvivors: true
   partyspawn: WYPMCPartySpawnAlt
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_pmc_shuttle.yml
   weight: 20
   minplayers: 30
   maxplayers: 400
-  GhostsNeeded: 6
+  ghostsNeeded: 6
   roundstart: false

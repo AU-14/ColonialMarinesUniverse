@@ -1,7 +1,8 @@
 using System.Numerics;
-using Content.Client._CMU14.UserInterface.Options;
+using Content.Client.CMU14.UserInterface.Options;
 using Content.Client.Stylesheets;
 using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.Inventory;
 using Content.Shared._RMC14.Input;
 using Content.Shared.CCVar;
 using Content.Shared.Chat.Prototypes;
@@ -202,22 +203,21 @@ namespace Content.Client.Options.UI.Tabs
             };
             // CMU14 --end
             
+            CmuOptionSection? section = null;
+
             void AddTo(Control child)
             {
-                KeybindsContainer.AddChild(child); //CMU 14
+                if (section == null)
+                    KeybindsContainer.AddChild(child);
+                else
+                    section.AddOption(child);
             }
 
             void AddHeader(string headerContents)
-            {   //CMU14 --start
-                var headerLabel = new Label 
-                {
-                    Text = Loc.GetString(headerContents),
-                    Margin = new Thickness(0, 10, 0, 5)
-                };
-                headerLabel.AddStyleClass("LabelHeading");
-                AddTo(headerLabel);
-                _allControls.Add(headerLabel);
-                //CMU14 --end
+            {
+                section = new CmuOptionSection { Title = Loc.GetString(headerContents) };
+                KeybindsContainer.AddChild(section);
+                _allControls.Add(section);
             }
 
             void AddButton(BoundKeyFunction function)
@@ -263,6 +263,8 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMKeyFunctions.CMHolsterSecondary);
             AddButton(CMKeyFunctions.CMHolsterTertiary);
             AddButton(CMKeyFunctions.CMHolsterQuaternary);
+            AddButton(CMUKeyFunctions.CMUOpenWornStorage); // CMU14
+            AddToggleCvarCheckBox("ui-options-cmu-click-opens-worn-storage", CMUInventoryCVars.ClickOpensWornStorage); // CMU14
             AddButton(CMKeyFunctions.RMCPickUpDroppedItems);
             AddButton(CMKeyFunctions.RMCInteractWithOtherHand);
             AddButton(CMKeyFunctions.RMCRest);
@@ -349,7 +351,7 @@ namespace Content.Client.Options.UI.Tabs
                     }
                 };
 
-                KeybindsContainer.AddChild(row); // CMU14
+                AddTo(row);
                 _allControls.Add(row); // CMU14
             }
             // CMU14
@@ -382,6 +384,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.CameraRotateRight);
             AddButton(EngineKeyFunctions.CameraReset);
             AddButton(ContentKeyFunctions.RotateCameraWithMouse);
+            AddButton(CMUKeyFunctions.CMUToggleFirstPersonMouse); // CMU14
             AddButton(ContentKeyFunctions.ZoomIn);
             AddButton(ContentKeyFunctions.ZoomOut);
             AddButton(ContentKeyFunctions.ResetZoom);
@@ -619,36 +622,7 @@ namespace Content.Client.Options.UI.Tabs
                 }
             }
 
-            for (var i = 0; i < _allControls.Count; i++)
-            {
-                var control = _allControls[i];
-
-                if (control is Label label && label.HasStyleClass("LabelHeading"))
-                {
-                    var hasMatchingUnder = false;
-                    for (var j = i + 1; j < _allControls.Count; j++)
-                    {
-                        var nextControl = _allControls[j];
-                        if (nextControl is Label nextLabel && nextLabel.HasStyleClass("LabelHeading"))
-                            break;
-
-                        if (matchingControls.Contains(nextControl))
-                        {
-                            hasMatchingUnder = true;
-                            break;
-                        }
-                    }
-                    control.Visible = hasMatchingUnder;
-                }
-                else if (control is CheckBox)
-                {
-                    control.Visible = false;
-                }
-                else
-                {
-                    control.Visible = matchingControls.Contains(control);
-                }
-            }
+            ApplySearchResults(matchingControls);
 
             _searchingByKey = false;
         }
@@ -660,9 +634,10 @@ namespace Content.Client.Options.UI.Tabs
             if (string.IsNullOrWhiteSpace(searchText))
             {
                 foreach (var control in _allControls)
-                {
                     control.Visible = true;
-                }
+                foreach (var (section, expanded) in _unfilteredExpansion)
+                    section.Expanded = expanded;
+                _unfilteredExpansion.Clear();
                 return;
             }
 
@@ -706,31 +681,28 @@ namespace Content.Client.Options.UI.Tabs
                 }
             }
 
-            for (var i = 0; i < _allControls.Count; i++)
+            ApplySearchResults(matchingControls);
+        }
+
+        private readonly Dictionary<CmuOptionSection, bool> _unfilteredExpansion = new();
+
+        private void ApplySearchResults(IReadOnlySet<Control> matchingControls)
+        {
+            CmuOptionSection? section = null;
+            foreach (var control in _allControls)
             {
-                var control = _allControls[i];
-
-                if (control is Label label && label.HasStyleClass("LabelHeading"))
+                if (control is CmuOptionSection nextSection)
                 {
-                    var hasMatchingUnder = false;
-                    for (var j = i + 1; j < _allControls.Count; j++)
-                    {
-                        var nextControl = _allControls[j];
-                        if (nextControl is Label nextLabel && nextLabel.HasStyleClass("LabelHeading"))
-                            break;
+                    section = nextSection;
+                    _unfilteredExpansion.TryAdd(section, section.Expanded);
+                    section.Visible = false;
+                    section.Expanded = true;
+                    continue;
+                }
 
-                        if (matchingControls.Contains(nextControl))
-                        {
-                            hasMatchingUnder = true;
-                            break;
-                        }
-                    }
-                    control.Visible = hasMatchingUnder;
-                }
-                else
-                {
-                    control.Visible = matchingControls.Contains(control);
-                }
+                control.Visible = matchingControls.Contains(control);
+                if (control.Visible && section != null)
+                    section.Visible = true;
             }
         }
         // CMU14 --end

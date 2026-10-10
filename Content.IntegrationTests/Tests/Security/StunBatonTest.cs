@@ -29,7 +29,7 @@ public sealed class StunBatonTests : InteractionTest
 
     private static readonly (EntProtoId Id, double RmcDamage, bool HasToggle)[] RmcBatons =
     [
-        ("RMCWeaponTaser", 15, false),
+        ("RMCWeaponTaser", 100, false), // CMU14: charged drive stuns incapacitate a healthy human.
         ("CMStunbaton", 30, true),
     ];
 
@@ -112,6 +112,9 @@ public sealed class StunBatonTests : InteractionTest
             var cancelled = RmcStaminaTarget();
             var ineligible = SEntMan.SpawnEntity(null, MapData.GridCoords);
             SEntMan.EnsureComponent<YautjaComponent>(immune);
+            // Keep an eligible stamina target so the test exercises Taser immunity,
+            // rather than passing solely because Yautja initialization removes stamina.
+            SEntMan.EnsureComponent<RMCStaminaComponent>(immune).Current = 100;
 
             Assert.That(ItemToggleSys.TryActivate(baton, SPlayer), Is.True);
             Assert.Multiple(() =>
@@ -183,6 +186,7 @@ public sealed class StunBatonTests : InteractionTest
     [Description("Checks that an activated stun baton stuns the target")]
     public async Task StunBatonTest()
     {
+        await AddGravity(MapData.MapUid);
         // Prevent the test mob from suffocating.
         await AddAtmosphere();
 
@@ -202,7 +206,7 @@ public sealed class StunBatonTests : InteractionTest
 
         // Spawn a target mob.
         await SpawnTarget(HumanProtoId);
-        SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value);
+        await Server.WaitPost(() => SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value));
         var standingStateComp = Comp<StandingStateComponent>();
         var staminaComp = Comp<StaminaComponent>();
         Entity<DamageableComponent> mob = (STarget.Value, Comp<DamageableComponent>());
@@ -276,7 +280,7 @@ public sealed class StunBatonTests : InteractionTest
 
         // Spawn a target mob.
         await SpawnTarget(HumanProtoId);
-        SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value);
+        await Server.WaitPost(() => SEntMan.EnsureComponent<StaminaComponent>(STarget!.Value));
         var standingStateComp = Comp<StandingStateComponent>();
         var staminaComp = Comp<StaminaComponent>();
         Entity<DamageableComponent> mob = (STarget.Value, Comp<DamageableComponent>());

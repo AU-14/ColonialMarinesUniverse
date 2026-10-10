@@ -1687,7 +1687,7 @@
     nutrientConsumption: 0.5
   - type: PlantChemicals
     chemicals:
-      Amatoxin:
+      CMUAmatoxin: # CMU14: fly amanita is a direct botanical amatoxin source
         min: 1
         max: 10
         potencyDivisor: 12

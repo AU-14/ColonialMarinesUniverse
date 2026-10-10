@@ -1,0 +1,687 @@
+# CMU atmospherics buildables
+# ├──[ Pipes (GasPipe graph) ]───────────────────────────────────────┤
+- type: entity
+  parent: GasPipeHalf
+  id: !type:CreateVariants
+    values: [ CMUGasPipeHalf, CMUGasPipeHalfAlt1, CMUGasPipeHalfAlt2 ]
+  suffix: CMU Capped
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: VentCrawlable
+    travelDirection: South
+  - type: VentExit
+  - type: RMCHijackRandomDamageTarget
+    category: Pipe
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+
+- type: entity
+  parent: GasPipeStraight
+  id: !type:CreateVariants
+    values: [ CMUGasPipeStraight, CMUGasPipeStraightAlt1, CMUGasPipeStraightAlt2 ]
+  suffix: CMU Straight
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: VentCrawlable
+    travelDirection: Longitudinal
+  - type: VentExit
+  - type: RMCHijackRandomDamageTarget
+    category: Pipe
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+
+- type: entity
+  parent: GasPipeBend
+  id: !type:CreateVariants
+    values: [ CMUGasPipeBend, CMUGasPipeBendAlt1, CMUGasPipeBendAlt2 ]
+  suffix: CMU Bend
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: VentCrawlable
+    travelDirection: SWBend
+  - type: VentExit
+  - type: RMCHijackRandomDamageTarget
+    category: Pipe
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+
+- type: entity
+  parent: GasPipeTJunction
+  id: !type:CreateVariants
+    values: [ CMUGasPipeTJunction, CMUGasPipeTJunctionAlt1, CMUGasPipeTJunctionAlt2 ]
+  suffix: CMU Tee
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: VentCrawlable
+    travelDirection: TSouth
+  - type: VentExit
+  - type: RMCHijackRandomDamageTarget
+    category: Pipe
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+
+- type: entity
+  parent: GasPipeFourway
+  id: !type:CreateVariants
+    values: [ CMUGasPipeFourway, CMUGasPipeFourwayAlt1, CMUGasPipeFourwayAlt2 ]
+  suffix: CMU 4Way
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: VentCrawlable
+    travelDirection: Fourway
+  - type: VentExit
+  - type: RMCHijackRandomDamageTarget
+    category: Pipe
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+
+# ├──[ Unary devices (GasUnary graph) ]──────────────────────────────┤
+- type: entity
+  parent: GasVentPump
+  id: !type:CreateVariants
+    values: [ CMVentPump, CMVentPumpAlt1, CMVentPumpAlt2 ]
+  name: AV-1 air vent
+  description: A floor grate wired into the pipe network. Pushes air in, pulls air out, whichever the atmos tech asked for last.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _RMC14/Structures/Piping/Atmospherics/vent_pump.rsi
+    layers:
+    - state: pipeFourway
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      map: [ "enum.PipeVisualLayers.Pipe" ]
+    - state: off
+      map: [ "enabled", "enum.SubfloorLayers.FirstLayer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.VentPumpVisuals.State:
+        enabled:
+          Off: { state: off }
+          In: { state: in }
+          Out: { state: on }
+          Welded: { state: welded }
+          Lockout: { state: off }
+  - type: VentCrawlable
+    travelDirection: Fourway
+  - type: VentExit
+  - type: VentEntrance
+  - type: RMCMesonsNonviewable
+  - type: CollideOnAnchor
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasVentScrubber
+  id: !type:CreateVariants
+    values: [ CMVentScrubber, CMVentScrubberAlt1, CMVentScrubberAlt2 ]
+  name: AS-1 air scrubber
+  description: The wall-mounted half of the Maid line. Pulls the bad half out of the air for the pipes to deal with; chokes on plasma and phoron.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: Sprite
+    drawdepth: FloorObjects
+    sprite: _RMC14/Structures/Piping/Atmospherics/vent_scrubber.rsi
+    layers:
+    - state: pipeFourway
+      sprite: Structures/Piping/Atmospherics/pipe.rsi
+      map: [ "enum.PipeVisualLayers.Pipe" ]
+    - state: off
+      map: [ "enabled", "enum.SubfloorLayers.FirstLayer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.ScrubberVisuals.State:
+        enabled:
+          Off: { state: off }
+          Scrub: { state: on }
+          Siphon: { state: in }
+          WideScrub: { state: on }
+          Welded: { state: welded }
+  - type: VentCrawlable
+    travelDirection: Fourway
+  - type: VentExit
+  - type: VentEntrance
+  - type: RMCMesonsNonviewable
+  - type: CollideOnAnchor
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: NodeContainer
+    nodes:
+      pipe:
+        !type:PipeNode
+        nodeGroupID: Pipe
+        pipeDirection: Fourway
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasPassiveVent
+  id: !type:CreateVariants
+    values: [ CMUPassiveVent, CMUPassiveVentAlt1, CMUPassiveVentAlt2 ]
+  name: PV-0 passive vent
+  description: An open hole in the pipe. No pump, no power, no opinions. Gas goes wherever pressure pushes it, which is how it earned the name.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: VentCrawlable
+    travelDirection: South
+  - type: VentExit
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasOutletInjector
+  id: !type:CreateVariants
+    values: [ CMUOutletInjector, CMUOutletInjectorAlt1, CMUOutletInjectorAlt2 ]
+  name: AI-1 air injector
+  description: Injects pipe gas into a room whether the room asked for it or not.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: VentCrawlable
+    travelDirection: South
+  - type: VentExit
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+# ├──[ Binary devices (GasBinary graph) ]────────────────────────────┤
+- type: entity
+  parent: GasPressurePump
+  id: !type:CreateVariants
+    values: [ CMUGasPressurePump, CMUGasPressurePumpAlt1, CMUGasPressurePumpAlt2 ]
+  name: GP-1 gas pump
+  description: Moves gas down the line at a pressure you set, all shift, every shift.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasVolumePump
+  id: !type:CreateVariants
+    values: [ CMUGasVolumePump, CMUGasVolumePumpAlt1, CMUGasVolumePumpAlt2 ]
+  name: GV-2 volumetric gas pump
+  description: Like the Pusher, but it moves gas by volume and asks fewer questions about what is downstream.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasPassiveGate
+  id: !type:CreateVariants
+    values: [ CMUGasPassiveGate, CMUGasPassiveGateAlt1, CMUGasPassiveGateAlt2 ]
+  name: PG-1 passive gate
+  description: A one-way valve that runs without power. Gas passes politely and never doubles back.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasValve
+  id: !type:CreateVariants
+    values: [ CMUGasValve, CMUGasValveAlt1, CMUGasValveAlt2 ]
+  name: MV-1 manual valve
+  description: A pipe with a hand-operated valve and nothing smart about it. Where the gas goes is decided by whoever walks over.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: SignalControlledValve
+  id: !type:CreateVariants
+    values: [ CMUSignalControlledValve, CMUSignalControlledValveAlt1, CMUSignalControlledValveAlt2 ]
+  name: V-2 signal valve
+  description: A valve that opens and closes when the wires tell it to. It has never once argued.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasPressureRegulator
+  id: !type:CreateVariants
+    values: [ CMUGasPressureRegulator, CMUGasPressureRegulatorAlt1, CMUGasPressureRegulatorAlt2 ]
+  name: PR-3 inlet pressure regulator
+  description: Releases gas downstream once the inlet pressure clears its setpoint, and not one kPa sooner. Nothing moves until the terms are met.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasPort
+  id: !type:CreateVariants
+    values: [ CMUGasPort, CMUGasPortAlt1, CMUGasPortAlt2 ]
+  name: CP-1 connector port
+  description: A latching point for canisters and portable machines. Park, latch, and let the pipes do the hauling.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasDualPortVentPump
+  id: !type:CreateVariants
+    values: [ CMUGasDualPortVentPump, CMUGasDualPortVentPumpAlt1, CMUGasDualPortVentPumpAlt2 ]
+  name: DV-3 dual-port air vent
+  description: The Breath line's dual-port model. Breathes in and out at the same time, no waiting in between.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: HeatExchanger
+  id: !type:CreateVariants
+    values: [ CMUHeatExchanger, CMUHeatExchangerAlt1, CMUHeatExchangerAlt2 ]
+  name: HX-1 heat exchanger
+  description: Transfers heat between the pipe and its surroundings without the gas changing hands.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    numberOfPipeLayers: 3
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: HeatExchangerBend
+  id: !type:CreateVariants
+    values: [ CMUHeatExchangerBend, CMUHeatExchangerBendAlt1, CMUHeatExchangerBendAlt2 ]
+  name: HX-1B heat exchanger bend
+  description: The Middleman, bent for corners. Same terms, different angle.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    numberOfPipeLayers: 3
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+# ├──[ Trinary devices (GasTrinary graph) ]──────────────────────────┤
+- type: entity
+  parent: GasFilter
+  id: !type:CreateVariants
+    values: [ CMUGasFilter, CMUGasFilterAlt1, CMUGasFilterAlt2 ]
+  name: GF-4 gas filter
+  description: Sends one chosen gas down the side line and everyone else straight ahead. The list changes nightly.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasFilterFlipped
+  id: !type:CreateVariants
+    values: [ CMUGasFilterFlipped, CMUGasFilterFlippedAlt1, CMUGasFilterFlippedAlt2 ]
+  name: GF-4F gas filter
+  description: The Bouncer, mirrored. Same list, door on the other side.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasMixer
+  id: !type:CreateVariants
+    values: [ CMUGasMixer, CMUGasMixerAlt1, CMUGasMixerAlt2 ]
+  name: GM-4 gas mixer
+  description: Blends two lines into one at a ratio you set. The house special is 'breathable'.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasMixerFlipped
+  id: !type:CreateVariants
+    values: [ CMUGasMixerFlipped, CMUGasMixerFlippedAlt1, CMUGasMixerFlippedAlt2 ]
+  name: GM-4F gas mixer
+  description: The Bartender, mirrored. Same recipes, bottles on the other side.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: PressureControlledValve
+  id: !type:CreateVariants
+    values: [ CMUPressureControlledValve, CMUPressureControlledValveAlt1, CMUPressureControlledValveAlt2 ]
+  name: PV-3 pneumatic valve
+  description: A valve that takes its orders from pressure instead of people, opening once the control pipe out-pressures the output by about an atmosphere. Unlike the Yes Man, it argues.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+# ├──[ Sensors and manifolds (GasPipeSensor / GasPipeSpecial graphs) ]─┤
+- type: entity
+  parent: GasPipeSensor
+  id: !type:CreateVariants
+    values: [ CMUGasPipeSensor, CMUGasPipeSensorAlt1, CMUGasPipeSensorAlt2 ]
+  name: PS-1 gas pipe sensor
+  description: Bolts onto a pipe and reports everything moving through it to the nearest console. Discretion not included.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi
+
+- type: entity
+  parent: GasPipeManifold
+  id: !type:CreateVariants
+    values: [ CMUGasPipeManifold, CMUGasPipeManifoldAlt1, CMUGasPipeManifoldAlt2 ]
+  name: PM-1 gas pipe manifold
+  description: Joins pipes of different configurations at one junction. Everyone gets through, eventually.
+  categories: !type:CreateVariants
+    sequences: [ [ ], [ HideSpawnMenu ], [ HideSpawnMenu ] ]
+  placement:
+    mode: AlignAtmosPipeLayers
+  components:
+  - type: AtmosPipeLayers
+    pipeLayer: !type:CreateVariants
+      values: [ 0, 1, 2 ]
+    spriteLayersRsiPaths:
+      enum.PipeVisualLayers.Pipe:
+        Primary: Structures/Piping/Atmospherics/pipe.rsi
+        Secondary: Structures/Piping/Atmospherics/pipe_alt1.rsi
+        Tertiary: Structures/Piping/Atmospherics/pipe_alt2.rsi

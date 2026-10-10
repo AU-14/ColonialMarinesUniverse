@@ -199,23 +199,23 @@ public sealed partial class AreaEchoSystem : EntitySystem
         magnitude = 0f;
         var transformComponent = entity.Comp;
 
-        // get either the grid or other parent entity this entity is on, and it's rotation
-        var entityHierarchy = TryGetHierarchyBeforeMap(entity);
-        if (entityHierarchy.Count <= 1) // hierarchy always starts with our entity. if it only has our entity, it means the next parent was the map, which we don't want
+        // cmu edit start: find the grid through GridUid. Planet maps and the USS Bush keep their grid on the map entity
+        // itself, so walking up to "the entity before the map" never found a grid and those maps never echoed.
+        if (transformComponent.GridUid is not { } entityGrid ||
+            !_gridQuery.TryGetComponent(entityGrid, out var gridComponent))
             return false; // means this entity is in space/otherwise not on a grid
 
-        // at this point, we know that we are somewhere on a grid
+        // this is the last entity, or this entity itself, that this entity has, before the parent is the grid. e.g.: if a sound is inside a crate, this will be the crate; if the sound is just on the grid, this will be the sound
+        var lastEntityBeforeGrid = entity;
+        while (lastEntityBeforeGrid.Comp.ParentUid != entityGrid)
+        {
+            var parent = lastEntityBeforeGrid.Comp.ParentUid;
+            if (!parent.IsValid())
+                return false;
 
-        // e.g.: if a sound is inside a crate, this will now be the grid the crate is on; if the sound is just on the grid, this will be the grid that the sound is on.
-        var entityGrid = entityHierarchy.Last();
-
-        // this is the last entity, or this entity itself, that this entity has, before the parent is a grid/map. e.g.: if a sound is inside a crate, this will be the crate; if the sound is just on the grid, this will be the sound
-        var lastEntityBeforeGrid = entityHierarchy[^2]; // `l[^x]` is analogous to `l[l.Count - x]`
-        // `lastEntityBeforeGrid` is obviously directly before `entityGrid`
-        // the earlier guard clause makes sure this will always be valid
-
-        if (!_gridQuery.TryGetComponent(entityGrid, out var gridComponent))
-            return false;
+            lastEntityBeforeGrid = (parent, Transform(parent));
+        }
+        // cmu edit end
 
         var checkRoof = _roofQuery.TryGetComponent(entityGrid, out var roofComponent);
         var tileRef = _mapSystem.GetTileRef(entityGrid, gridComponent, lastEntityBeforeGrid.Comp.Coordinates);
@@ -455,7 +455,7 @@ public sealed partial class AreaEchoSystem : EntitySystem
             }
 
             if (bestPreset != null)
-                _audioEffectSystem.TryAddEffect(entity, DistancePresets[0].Item2);
+                _audioEffectSystem.TryAddEffect(entity, bestPreset.Value); // cmu edit: use the preset picked for the area size, not always the smallest
         }
         else
             _audioEffectSystem.TryRemoveEffect(entity);

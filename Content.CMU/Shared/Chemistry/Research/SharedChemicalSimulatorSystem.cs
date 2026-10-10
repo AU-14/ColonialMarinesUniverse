@@ -85,14 +85,12 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             if (targetCon.Count == 0 && reportComp.Data is not null)
             {
                 _con.Insert(args.Used, targetCon);
-                ent.Comp.Ready = CheckReady(ent);
             }
             else if ((ent.Comp.Mode == ChemSimulatorMode.Relate || ent.Comp.Mode == ChemSimulatorMode.Add) &&
                 referenceCon.Count == 0 && reportComp.Data is not null)
             {
                 ent.Comp.TargetProperty = null;
                 _con.Insert(args.Used, referenceCon);
-                ent.Comp.Ready = CheckReady(ent);
             }
             else
             {
@@ -110,6 +108,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             return;
         }
         UpdatePropertyCosts(ent);
+        ent.Comp.Ready = CheckReady(ent);
         ent.Comp.InsertTimeRemaining = ent.Comp.InsertTime;
         if (_net.IsClient)
             return;
@@ -201,7 +200,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             }
             if (ent.Comp.TargetProperty is not null && ent.Comp.Mode != ChemSimulatorMode.Add)
             {
-                if (ent.Comp.PropertyCosts[ent.Comp.TargetProperty] > _dat.Credits)
+                if (ent.Comp.PropertyCosts[ent.Comp.TargetProperty] > _dat.GetCredits(_dat.GetFaction(ent.Owner)))
                 {
                     ent.Comp.StatusBar = Loc.GetString("research-sim-status-insufficient-funds");
                     Dirty(ent);
@@ -216,7 +215,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                 if (ent.Comp.Mode == ChemSimulatorMode.Amplify)
                 {
                     if (targcomp.Data.Value.Effects[ent.Comp.TargetProperty] >=
-                        _dat.Clearance*2 + 2 && _dat.Clearance < 5)
+                        _dat.GetClearance(_dat.GetFaction(ent.Owner))*2 + 2 && _dat.GetClearance(_dat.GetFaction(ent.Owner)) < 5)
                     {
                         ent.Comp.StatusBar = Loc.GetString("research-sim-status-insufficient-clearance-amplify");
                         Dirty(ent);
@@ -326,7 +325,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
                     }
                     if (ent.Comp.Mode == ChemSimulatorMode.Add)
                     {
-                        if (ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty] > _dat.Credits)
+                        if (ent.Comp.PropertyCosts[ent.Comp.ReferenceProperty] > _dat.GetCredits(_dat.GetFaction(ent.Owner)))
                         {
                             ent.Comp.StatusBar = Loc.GetString("research-sim-status-insufficient-funds");
                             Dirty(ent);
@@ -500,7 +499,7 @@ public abstract partial class SharedChemicalSimulatorSystem : EntitySystem
             statusBar: ent.Comp.StatusBar,
             targprop: ent.Comp.TargetProperty,
             refprop: ent.Comp.ReferenceProperty,
-            credits: _dat.Credits,
+            credits: _dat.GetCredits(_dat.GetFaction(ent.Owner)),
             overdose: ent.Comp.Overdose,
             recipePicked: ent.Comp.PickedRecipeChem,
             recipeOptions: ent.Comp.RecipeChemOptions,

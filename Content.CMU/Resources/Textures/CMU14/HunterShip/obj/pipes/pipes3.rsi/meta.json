@@ -1,0 +1,728 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/pipes/pipes3.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "intact",
+      "directions": 8
+    },
+    {
+      "name": "intact-db",
+      "directions": 8
+    },
+    {
+      "name": "intact-f",
+      "directions": 8
+    },
+    {
+      "name": "intact-f-lb",
+      "directions": 8
+    },
+    {
+      "name": "intact-f-db",
+      "directions": 8
+    },
+    {
+      "name": "exposed",
+      "directions": 4
+    },
+    {
+      "name": "exposed-db",
+      "directions": 4
+    },
+    {
+      "name": "exposed-f",
+      "directions": 4
+    },
+    {
+      "name": "exposed-f-db",
+      "directions": 4
+    },
+    {
+      "name": "exposed-f-lb",
+      "directions": 4
+    },
+    {
+      "name": "one-way",
+      "directions": 4
+    },
+    {
+      "name": "one-way-db",
+      "directions": 4
+    },
+    {
+      "name": "connector",
+      "directions": 4
+    },
+    {
+      "name": "connector-f",
+      "directions": 4
+    },
+    {
+      "name": "high_capacity",
+      "directions": 8
+    },
+    {
+      "name": "high_low",
+      "directions": 4
+    },
+    {
+      "name": "meterX",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "meter0"
+    },
+    {
+      "name": "meter1"
+    },
+    {
+      "name": "meter2"
+    },
+    {
+      "name": "meter3"
+    },
+    {
+      "name": "meter4"
+    },
+    {
+      "name": "meter5"
+    },
+    {
+      "name": "meter6"
+    },
+    {
+      "name": "meter7"
+    },
+    {
+      "name": "meter8"
+    },
+    {
+      "name": "meter9"
+    },
+    {
+      "name": "meter10"
+    },
+    {
+      "name": "meter11"
+    },
+    {
+      "name": "meter12"
+    },
+    {
+      "name": "meter13"
+    },
+    {
+      "name": "meter14"
+    },
+    {
+      "name": "meter15"
+    },
+    {
+      "name": "meter16",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "meter17"
+    },
+    {
+      "name": "meter18",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "manifold",
+      "directions": 4
+    },
+    {
+      "name": "manifold-db",
+      "directions": 4
+    },
+    {
+      "name": "manifold-f",
+      "directions": 4
+    },
+    {
+      "name": "manifold-f-db",
+      "directions": 4
+    },
+    {
+      "name": "circ-run",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "circ-slow",
+      "directions": 4,
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "circ-off",
+      "directions": 4
+    },
+    {
+      "name": "circ-p",
+      "directions": 4
+    },
+    {
+      "name": "vent",
+      "directions": 4
+    },
+    {
+      "name": "vent-db",
+      "directions": 4
+    },
+    {
+      "name": "inlet",
+      "directions": 4
+    },
+    {
+      "name": "trunk",
+      "directions": 4
+    },
+    {
+      "name": "compressor",
+      "directions": 4
+    },
+    {
+      "name": "turbine",
+      "directions": 4
+    },
+    {
+      "name": "comp-o1",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "comp-o2",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "comp-o3",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "comp-o4",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "turb-o",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "inlet_filter-4",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "inlet_filter-3",
+      "directions": 4,
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.1
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.1
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.1
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "inlet_filter-2",
+      "directions": 4,
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.1
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.1
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.1
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "inlet_filter-1",
+      "directions": 4,
+      "delays": [
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.1
+        ],
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.1
+        ],
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.1
+        ],
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "inlet_filter-0",
+      "directions": 4
+    },
+    {
+      "name": "vent_filter-0",
+      "directions": 4
+    },
+    {
+      "name": "vent_filter-4",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "vent_filter-3",
+      "directions": 4,
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "vent_filter-2",
+      "directions": 4,
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ],
+        [
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "vent_filter-1",
+      "directions": 4,
+      "delays": [
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ],
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "discon",
+      "directions": 4
+    },
+    {
+      "name": "intact-y",
+      "directions": 8
+    },
+    {
+      "name": "intact-y-f",
+      "directions": 8
+    },
+    {
+      "name": "intact-g",
+      "directions": 8
+    },
+    {
+      "name": "intact-g-f",
+      "directions": 8
+    },
+    {
+      "name": "intact-r",
+      "directions": 8
+    },
+    {
+      "name": "intact-r-f",
+      "directions": 8
+    },
+    {
+      "name": "intact-b",
+      "directions": 8
+    },
+    {
+      "name": "intact-b-f",
+      "directions": 8
+    },
+    {
+      "name": "intact-c",
+      "directions": 8
+    },
+    {
+      "name": "intact-c-f",
+      "directions": 8
+    },
+    {
+      "name": "intact-p",
+      "directions": 8
+    },
+    {
+      "name": "intact-p-f",
+      "directions": 8
+    },
+    {
+      "name": "exposed10",
+      "directions": 8
+    },
+    {
+      "name": "exposed01",
+      "directions": 8
+    },
+    {
+      "name": "cap",
+      "directions": 4
+    },
+    {
+      "name": "cap-f",
+      "directions": 4
+    },
+    {
+      "name": "cap-supply",
+      "directions": 4
+    },
+    {
+      "name": "cap-f-supply",
+      "directions": 4
+    },
+    {
+      "name": "cap-scrubbers",
+      "directions": 4
+    },
+    {
+      "name": "cap-f-scrubbers",
+      "directions": 4
+    }
+  ]
+}

@@ -22,14 +22,14 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: New Colonist
+  name: cmu-job-name-new-colonist 
   description: Wether by choice, necessity or force you have arrived in orbit of this colony to establish your new life on the frontier. Time to get to work.
   setPreference: true
   playTimeTracker: AU14JobReturningColonistPlaytime
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianColonist
-  spawnMenuRoleName: Colonist (3rd party)
+  spawnMenuRoleName: cmu-spawn-role-colonist-3rd-party 
   icon: "CMJobIconEmpty"
   requireAdminNotify: false
   joinNotifyCrew: false

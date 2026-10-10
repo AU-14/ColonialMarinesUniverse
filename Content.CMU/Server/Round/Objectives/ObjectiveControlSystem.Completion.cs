@@ -4,6 +4,7 @@ using Content.Shared.CMU14.Round.Objectives.Components;
 using Content.Shared.CMU14.Round.Objectives.Type;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Vendors;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
 
 namespace Content.Server.CMU14.Round.Objectives;
@@ -17,7 +18,9 @@ public sealed partial class ObjectiveControlSystem
 
     public void CompleteObjectiveForFaction(EntityUid uid, CMUObjectiveComponent objective, string completingFaction, bool awardPoints = true, ISawmill? sawmill = null)
     {
-        if (_planetMapId == MapId.Nullspace || Transform(uid).MapID != _planetMapId)
+        // Any z-level of the planet counts; objectives placed on an upper or lower level of a
+        // multi-Z planet were otherwise impossible to complete.
+        if (_planetMapId == MapId.Nullspace || !_zLevels.IsSameZNetwork(Transform(uid).MapID, _planetMapId))
             return;
 
         if (objective.StatusesPerFaction.ContainsValue(CMUObjectiveComponent.ObjectiveStatus.Completed))
@@ -52,7 +55,17 @@ public sealed partial class ObjectiveControlSystem
             MarkAllFactionsCompleted(objective, factionKey);
             Dirty(uid, objective);
             _logs.Debug($"[OBJ-REPEAT] Objective '{objective.ObjectiveDescription}' reached max repeats ({maxRepeat}), marking as completed.");
-            _objConsole.RefreshConsolesForFaction(completingFaction);
+            // Neutral objectives flip every listed faction to Completed here, so every listed
+            // faction's console needs refreshing, not just the completer's.
+            if (objective.FactionNeutral)
+            {
+                foreach (var faction in objective.Factions)
+                    _objConsole.RefreshConsolesForFaction(faction);
+            }
+            else
+            {
+                _objConsole.RefreshConsolesForFaction(completingFaction);
+            }
             return;
         }
 
@@ -151,13 +164,29 @@ public sealed partial class ObjectiveControlSystem
     }
 
     public void AwardPointsToFaction(string faction, CMUObjectiveComponent objective)
-        => ApplyWinPoints(faction, objective.CustomPoints == 0
+    {
+        if (objective.FractionalPoints > 0)
+        {
+            ApplyWinPoints(faction, FixedPoint2.New(objective.FractionalPoints));
+            return;
+        }
+
+        ApplyWinPoints(faction, objective.CustomPoints == 0
             ? (objective.ObjectiveLevel == 1 ? 5 : 20)
             : objective.CustomPoints);
+    }
+
+    /// <summary>What an objective is worth per completion, for display.</summary>
+    public static float GetDisplayPoints(CMUObjectiveComponent objective)
+        => objective.FractionalPoints > 0
+            ? objective.FractionalPoints
+            : objective.CustomPoints != 0 ? objective.CustomPoints : (objective.ObjectiveLevel == 1 ? 5 : 20);
 
     public void AwardRawPointsToFaction(string faction, int points) => ApplyWinPoints(faction, points);
 
-    private void ApplyWinPoints(string faction, int points)
+    public void AwardRawPointsToFaction(string faction, FixedPoint2 points) => ApplyWinPoints(faction, points);
+
+    private void ApplyWinPoints(string faction, FixedPoint2 points)
     {
         if (GetOrReselectObjMaster() is not { } master)
             return;
@@ -166,7 +195,7 @@ public sealed partial class ObjectiveControlSystem
         var data = master.GetOrCreateFactionData(key);
         data.CurrentWinPoints += points;
         DirtyObjectiveMaster();
-        _vendorSystem.UpdateVendorFactionPointsCache(key, data.CurrentWinPoints);
+        _vendorSystem.UpdateVendorFactionPointsCache(key, data.CurrentWinPoints.Int());
         _intel.UpdateTree(_intel.EnsureTechTree(key));
 
         if (!master.FactionsGivenFinalObjective.Contains(key) && data.CurrentWinPoints >= data.RequiredWinPoints)
@@ -227,6 +256,18 @@ public sealed partial class ObjectiveControlSystem
         {
             _logs.Warning($"[OBJ-TIER] Next tier prototype '{protoIdStr}' does not contain a CMUObjectiveComponent or is missing!");
             return;
+        }
+
+        // Repeating objectives re-unlock the tier on every completion; one live copy per
+        // faction is enough, and neutral tiers are shared so any active copy blocks.
+        foreach (var (uid, comp) in _allObjectives)
+        {
+            if (!comp.Active || !Exists(uid) || MetaData(uid).EntityPrototype?.ID != protoIdStr)
+                continue;
+
+            if (string.IsNullOrEmpty(comp.Faction)
+                || comp.Faction.Equals(completingFaction, StringComparison.OrdinalIgnoreCase))
+                return;
         }
 
         var newEnt = Spawn(protoIdStr, completedXform.Coordinates);

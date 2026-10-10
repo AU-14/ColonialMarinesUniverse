@@ -16,16 +16,16 @@
   id: UPPGROM
   announceAsSurvivors: true
   partyspawn: UPPGROMSpawn
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
   weight: 100
   minplayers: 100
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -46,16 +46,16 @@
   id: UPPGROMAlt
   announceAsSurvivors: true
   partyspawn: UPPGROMSpawnAlt
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
   weight: 100
   minplayers: 25
   maxplayers: 50
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
 
 - type: partySpawn
@@ -76,14 +76,14 @@
   id: UPPGROMAlt2
   announceAsSurvivors: true
   partyspawn: UPPGROMSpawnAlt2
-  blacklistedgamemodes:
+  blacklistedGamemodes:
     - insurgency
     - forceonforce
     - colonyfall
   entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/CMU14/Vehicles/Dropships/rmc_ert_spp_shuttle.yml
   weight: 100
   minplayers: 51
   maxplayers: 99
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true

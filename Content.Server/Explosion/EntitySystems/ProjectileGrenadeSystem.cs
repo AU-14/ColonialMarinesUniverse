@@ -18,6 +18,9 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private TransformSystem _transformSystem = default!;
+    // cmu edit start
+    [Dependency] private Content.Server.CMU14.Explosion.CMUGrenadeBodyBlockSystem _cmuGrenadeBodyBlock = default!;
+    // cmu edit end
 
     // RMC14
     private readonly List<EntityUid> _spawned = new();
@@ -52,7 +55,7 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
     /// </summary>
     private void OnFragTrigger(Entity<ProjectileGrenadeComponent> entity, ref TriggerEvent args)
     {
-        if (args.Key != entity.Comp.TriggerKey)
+        if (args.Key != null && args.Key != entity.Comp.TriggerKey) // CMU14: null triggers activate every payload, including airbursts.
             return;
 
         FragmentIntoProjectiles(entity.Owner, entity.Comp);
@@ -65,6 +68,15 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
     /// </summary>
     private void FragmentIntoProjectiles(EntityUid uid, ProjectileGrenadeComponent component)
     {
+        // cmu edit start
+        _cmuGrenadeBodyBlock.TrySeverHoldingHand(uid);
+        if (_cmuGrenadeBodyBlock.TryAbsorbShrapnel(uid, component))
+        {
+            QueueDel(uid);
+            return;
+        }
+        // cmu edit end
+
         var grenadeCoord = _transformSystem.GetMapCoordinates(uid);
         var shootCount = 0;
         var totalCount = component.Container.ContainedEntities.Count + component.UnspawnedCount;

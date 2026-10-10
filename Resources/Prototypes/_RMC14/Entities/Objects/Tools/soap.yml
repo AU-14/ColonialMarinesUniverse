@@ -51,8 +51,6 @@
   components:
   - type: Sprite
     state: soap_deluxe
-  - type: SolutionContainerVisuals
-    fillBaseName: deluxe-
   - type: Item
     heldPrefix: deluxe
   - type: Residue
@@ -67,8 +65,6 @@
   components:
   - type: Sprite
     state: soap_syndie
-  - type: SolutionContainerVisuals
-    fillBaseName: syndie-
   - type: Item
     heldPrefix: syndie
   - type: Residue
@@ -87,8 +83,6 @@
   components:
   - type: Sprite
     state: soap_nt
-  - type: SolutionContainerVisuals
-    fillBaseName: weya-
   - type: Item
     heldPrefix: weya
   - type: Residue

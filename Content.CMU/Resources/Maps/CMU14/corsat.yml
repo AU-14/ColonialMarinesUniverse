@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 05/06/2026 02:13:41
-  entityCount: 19497
+  entityCount: 19498
 maps:
 - 1
 grids:
@@ -74495,6 +74495,8 @@ entities:
   entities:
   - uid: 1919
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: opfor
     - type: MetaData
       name: 'LZ1: Gamma Landing Zone'
     - type: Transform
@@ -74502,6 +74504,8 @@ entities:
       parent: 1
   - uid: 1920
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: govfor
     - type: MetaData
       name: 'LZ2: Sigma Landing Zone'
     - type: Transform
@@ -74511,6 +74515,8 @@ entities:
   entities:
   - uid: 1921
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Snow Terrarium
     - type: Transform
@@ -74518,6 +74524,8 @@ entities:
       parent: 1
   - uid: 1922
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Jungle Terrarium
     - type: Transform
@@ -74525,6 +74533,8 @@ entities:
       parent: 1
   - uid: 1923
     components:
+    - type: DropshipDestination
+      forceOnForceFaction: thirdparty
     - type: MetaData
       name: Mesa Terrarium
     - type: Transform
@@ -111456,7 +111466,7 @@ entities:
     - type: Transform
       pos: 19.5,-122.5
       parent: 1
-- proto: RMCCanisterBase
+- proto: CMUCanisterPhoron
   entities:
   - uid: 9077
     components:
@@ -111493,7 +111503,7 @@ entities:
     - type: Transform
       pos: 31.5,-121.5
       parent: 1
-- proto: RMCCanisterBlack
+- proto: CMUCanisterCarbonDioxide
   entities:
   - uid: 9084
     components:
@@ -111520,7 +111530,7 @@ entities:
     - type: Transform
       pos: 138.5,-115.5
       parent: 1
-- proto: RMCCanisterBlue
+- proto: CMUCanisterOxygen
   entities:
   - uid: 9089
     components:
@@ -111547,7 +111557,7 @@ entities:
     - type: Transform
       pos: 128.5,-89.5
       parent: 1
-- proto: RMCCanisterGrey
+- proto: CMUCanisterAir
   entities:
   - uid: 9094
     components:
@@ -111599,7 +111609,7 @@ entities:
     - type: Transform
       pos: 142.5,-114.5
       parent: 1
-- proto: RMCCanisterOrange
+- proto: CMUCanisterPlasma
   entities:
   - uid: 9104
     components:
@@ -111611,7 +111621,7 @@ entities:
     - type: Transform
       pos: 31.5,-120.5
       parent: 1
-- proto: RMCCanisterRed
+- proto: CMUCanisterNitrogen
   entities:
   - uid: 9106
     components:
@@ -114789,7 +114799,7 @@ entities:
     - type: Transform
       pos: 89.5,-90.5
       parent: 1
-- proto: RMCGeneratorFusionColony
+- proto: CMUGeneratorThermo
   entities:
   - uid: 9663
     components:
@@ -167764,4 +167774,17 @@ entities:
     - type: Transform
       pos: 4.5,-51.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 19498
+    components:
+    - type: MetaData
+      name: Corsat ground relay
+    - type: Transform
+      pos: 45.5,-148.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: corsat.ground.relay
+      displayName: Corsat Ground Relay
 ...

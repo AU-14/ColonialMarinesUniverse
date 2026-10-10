@@ -44,7 +44,6 @@
   name: origin-ua-brazil-name
   description: origin-ua-brazil-description
   languages:
-    - Brazilian
     - Portuguese
   roundStart: true
 
@@ -54,6 +53,14 @@
   description: origin-ua-argentina-description
   languages:
     - Spanish
+  roundStart: true
+
+- type: Origin
+  id: UAArtificialWomb
+  name: origin-ua-artificial-womb-name
+  description: origin-ua-artificial-womb-description
+  languages:
+    - TacticalSignLanguage
   roundStart: true
 
 # Three World Empire

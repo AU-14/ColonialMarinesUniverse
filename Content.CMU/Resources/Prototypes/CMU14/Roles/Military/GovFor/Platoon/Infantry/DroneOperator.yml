@@ -1,11 +1,12 @@
 - type: job
   abstract: true
   parent: AU14JobMilitaryBase
+  displayWeight: 1
   id: CMUJobDroneOperatorBaseAbstract
   name: cmu-job-name-govfordroneoperator
   description: cmu-job-description-govfordroneoperator
   icon: "AU14JobIconGovRifleman"
-  spawnMenuRoleName: Drone Operator (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-drone-operator-govfor 
   startingGear: CMUGearGOVFORDroneOperator
   dummyStartingGear: CMUGearGOVFORDroneOperatorDummy
   playTimeTracker: CMUJobGOVFORDroneOperator
@@ -29,8 +30,17 @@
     icon:
       sprite: /Textures/CMU14/Interface/au14govforjobicons.rsi
       state: rifleman
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/CMU14/Interface/au14opforjobicons.rsi
+        state: rifleman
 
   requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMUDepartmentsMilitary
+    time: 36000 # 10 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -39,6 +49,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -60,7 +72,7 @@
   id: CMUGearGOVFORDroneOperator
   equipment:
     id: CMUIDCardDroneOperator
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforDroneOperator
 
 - type: startingGear
   id: CMUGearGOVFORDroneOperatorDummy
@@ -69,7 +81,7 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforDroneOperator
     back: CMUDroneOperatorChoicePackFilled
 
 - type: entity
@@ -129,7 +141,54 @@
   equipment:
     back: CMUDroneOperatorChoicePackFilled
 
-- type: loadout
-  id: CMUCombatDroneOperatorPackLoadout
+- type: job
+  parent: CMUJobDroneOperatorBase
+  id: CMUJobOPFORDroneOperator
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORRifleman"
+  spawnMenuRoleName: Drone Operator (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: CMUGearOPFORDroneOperator
+  dummyStartingGear: CMUGearOPFORDroneOperatorDummy
+  accessGroups:
+  - AU14OpforSquad
+  ignoreAllegiance: true
+  useLoadoutOfJob: CMUJobGOVFORDroneOperator
+
+- type: startingGear
+  id: CMUGearOPFORDroneOperator
   equipment:
+    id: CMUIDCardOPFORDroneOperator
+    ears: CMUHeadsetOpforDroneOperator
+
+- type: startingGear
+  id: CMUGearOPFORDroneOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: CMUHeadsetOpforDroneOperator
     back: CMUDroneOperatorChoicePackFilled
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMUIDCardOPFORDroneOperator
+  name: drone operator ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobOPFORDroneOperator
+  - type: ItemIFF
+    factions:
+    - OPFOR
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointOPFORDroneOperator
+  name: Spawn Point OPFOR Drone Operator
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobOPFORDroneOperator
+  - type: Sprite
+    state: syn_spawn

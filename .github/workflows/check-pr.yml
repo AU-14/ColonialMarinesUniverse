@@ -20,7 +20,15 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
+    # Only check out trusted base code; read the PR head as Git data.
+    - uses: actions/checkout@v7
+      with:
+        ref: ${{ github.event.pull_request.base.sha }}
+        fetch-depth: 0
+        sparse-checkout: .github
+
     - name: Check PR and post one advisory comment
       uses: actions/github-script@v9.0.0
       with:
@@ -64,13 +72,14 @@ jobs:
               messages.push(`<!-- check-pr:template -->\n\n${template.join('\n\n')}`);
           }
 
-          // the raw diff is the merge-base diff with no file cap, unlike pulls.listFiles
-          const diff = (await github.rest.pulls.get({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: pr.number,
-            mediaType: { format: 'diff' }
-          })).data;
+          // GitHub caps raw diffs at 300 files and the file-list API at 3000.
+          const { execFileSync } = require('node:child_process');
+          execFileSync('git', ['fetch', '--quiet', '--no-tags', '--filter=blob:none', 'origin', pr.head.sha]);
+          const diff = execFileSync('git', [
+            'diff', '--no-ext-diff', '--no-textconv', '--submodule=short', '--ignore-submodules=none',
+            `${pr.base.sha}...${pr.head.sha}`, '--',
+            'Resources/Changelog/CMU.yml', 'Resources/Changelog/Parts', 'RobustToolbox', 'RSI.NET'
+          ], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
           const sections = ('\n' + diff).split('\ndiff --git ');
 
           // manual edits to the generated changelog files
@@ -178,6 +187,7 @@ jobs:
     permissions:
       pull-requests: write
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     if: (github.event.action == 'opened' || github.event.action == 'ready_for_review')
       && (github.head_ref == 'master' || github.head_ref == 'main' || github.head_ref == 'develop' || github.head_ref == 'stable' || github.head_ref == 'staging')
       && github.event.pull_request.head.repo.fork

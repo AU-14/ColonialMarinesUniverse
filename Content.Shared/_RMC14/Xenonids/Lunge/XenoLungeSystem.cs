@@ -9,12 +9,15 @@ using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.Movement.Pulling.Systems;
+using Content.Shared.Physics; // CMU14
+using Content.Shared.Popups; // CMU14
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Network;
+using Robust.Shared.Physics; // CMU14
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -40,6 +43,7 @@ public sealed partial class XenoLungeSystem : EntitySystem
     [Dependency] private RMCObstacleSlammingSystem _rmcObstacleSlamming = default!;
     [Dependency] private XenoLeapSystem _leap = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private SharedPopupSystem _popup = default!; // CMU14
 
     private EntityQuery<PhysicsComponent> _physicsQuery;
     private EntityQuery<ThrownItemComponent> _thrownItemQuery;
@@ -114,6 +118,19 @@ public sealed partial class XenoLungeSystem : EntitySystem
         var targetCoords = _rmcLagCompensation.GetCoordinates(target, xeno);
         var diff = targetCoords.Position - origin.Position;
         diff = diff.Normalized() * xeno.Comp.Range;
+
+        // CMU14: lunges must not cross barricade lines; the throw only stops on a
+        // direct fixture hit, so check the path up front. Barbed wire keeps its block.
+        var ray = new CollisionRay(origin.Position, diff.Normalized(), (int) CollisionGroup.BarricadeImpassable);
+        foreach (var result in _physics.IntersectRayWithPredicate(origin.MapId, ray, diff.Length(), e => !Transform(e).Anchored))
+        {
+            if (TryComp(result.HitEntity, out RMCLeapProtectionComponent? protection) &&
+                _leap.AttemptBlockLeap(result.HitEntity, protection.StunDuration, protection.BlockSound, xeno, _transform.GetMoverCoordinates(xeno), protection.FullProtection))
+                return;
+
+            _popup.PopupClient(Loc.GetString("cmu-xeno-dash-blocked"), xeno, xeno);
+            return;
+        }
 
         var active = EnsureComp<XenoActiveLungeComponent>(xeno);
         active.Origin = origin;

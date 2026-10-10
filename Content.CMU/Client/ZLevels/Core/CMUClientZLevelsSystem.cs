@@ -8,6 +8,7 @@ using Content.Shared.Camera;
 using Robust.Client.ComponentTrees;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Placement;
 using Robust.Client.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
@@ -24,9 +25,11 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private CMUZLevelSpriteCullingSystem _culling = default!;
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlacementManager _placement = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
     public static float ZLevelOffset = CMUSharedZLevelsSystem.ZLevelVisualOffset;
@@ -42,6 +45,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         InitializePresentation();
 
         _overlay.AddOverlay(new CMUZLevelBlurOverlay());
+        _overlay.AddOverlay(new CMUZOverheadEntityOverlay());
         _visibleEntityOverlay = new CMUZLevelVisibleEntityOverlay();
         _overlay.AddOverlay(_visibleEntityOverlay);
 
@@ -142,6 +146,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         base.Shutdown();
         _presentationCandidates.Clear();
         _overlay.RemoveOverlay<CMUZLevelBlurOverlay>();
+        _overlay.RemoveOverlay<CMUZOverheadEntityOverlay>();
 
         if (_visibleEntityOverlay is not null && _overlay.HasOverlay<CMUZLevelVisibleEntityOverlay>())
             _overlay.RemoveOverlay(_visibleEntityOverlay);

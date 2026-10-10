@@ -22,6 +22,14 @@ public sealed partial class LayerMarkingPicker : BoxContainer
     private List<ISearchableControl> _searchable = new();
     private const int _columnWidth = 500;
 
+    // cmu edit start
+    public bool ShowFooter
+    {
+        get => Footer.Visible;
+        set => Footer.Visible = value;
+    }
+    // cmu edit end
+
     public LayerMarkingPicker(MarkingsViewModel markingsModel, ProtoId<OrganCategoryPrototype> organ, HumanoidVisualLayers layer, IReadOnlyDictionary<string, MarkingPrototype> allMarkings)
     {
         RobustXamlLoader.Load(this);

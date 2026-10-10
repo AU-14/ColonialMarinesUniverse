@@ -103,7 +103,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
 
         _serverTab = msg.Tab; // CMU14
         window.UpdateWarps(msg.Warps);
-        window.Populate();
+        window.Populate(_serverTab); // CMU14
     }
 
     private void OnWarpsReset()

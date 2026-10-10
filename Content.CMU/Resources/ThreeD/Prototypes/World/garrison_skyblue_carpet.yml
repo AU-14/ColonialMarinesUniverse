@@ -1,0 +1,123 @@
+- type: cmu3DModel
+  id: CMU3DSkyBlueCarpet
+  label: Sky blue carpet, connected corners
+  status: draft
+  sourcePrototypes:
+  - CarpetSBlue
+  referencePrototype: CarpetSBlue
+  referenceRsi: /Textures/CMU14/ThreeD/SkyBlueCarpetReferences.rsi
+  referenceState: isolated
+  sourceDirections: 1
+  cornerSurfaces:
+  - CMU3DSkyBlueCarpetSurface01
+  - CMU3DSkyBlueCarpetSurface02
+  - CMU3DSkyBlueCarpetSurface03
+  - CMU3DSkyBlueCarpetSurface04
+  - CMU3DSkyBlueCarpetSurface05
+  - CMU3DSkyBlueCarpetSurface06
+  - CMU3DSkyBlueCarpetSurface07
+  - CMU3DSkyBlueCarpetSurface08
+  - CMU3DSkyBlueCarpetSurface01
+  - CMU3DSkyBlueCarpetSurface02
+  - CMU3DSkyBlueCarpetSurface03
+  - CMU3DSkyBlueCarpetSurface04
+  - CMU3DSkyBlueCarpetSurface05
+  - CMU3DSkyBlueCarpetSurface06
+  - CMU3DSkyBlueCarpetSurface07
+  - CMU3DSkyBlueCarpetSurface08
+  - CMU3DSkyBlueCarpetSurface07
+  - CMU3DSkyBlueCarpetSurface08
+  - CMU3DSkyBlueCarpetSurface06
+  - CMU3DSkyBlueCarpetSurface05
+  - CMU3DSkyBlueCarpetSurface09
+  - CMU3DSkyBlueCarpetSurface10
+  - CMU3DSkyBlueCarpetSurface11
+  - CMU3DSkyBlueCarpetSurface12
+  - CMU3DSkyBlueCarpetSurface07
+  - CMU3DSkyBlueCarpetSurface08
+  - CMU3DSkyBlueCarpetSurface06
+  - CMU3DSkyBlueCarpetSurface05
+  - CMU3DSkyBlueCarpetSurface13
+  - CMU3DSkyBlueCarpetSurface13
+  - CMU3DSkyBlueCarpetSurface13
+  - CMU3DSkyBlueCarpetSurface13
+  description: Original eight-neighbour corner artwork on four thin solid fabric quadrants. Source borders and grid
+    orientation are retained. Thickness 0.012 tiles is inferred; the isolated reference is not every saved appearance.
+    See SOURCES_SKYBLUE_CARPET.md.
+  parts:
+  - label: SE carpet quadrant
+    min: 0, -0.5, 0
+    max: 0.5, 0, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DSkyBlueCarpetSurface01
+    surfaceAxis: XY
+  - label: NE carpet quadrant
+    min: 0, 0, 0
+    max: 0.5, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DSkyBlueCarpetSurface03
+    surfaceAxis: XY
+  - label: NW carpet quadrant
+    min: -0.5, 0, 0
+    max: 0, 0.5, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DSkyBlueCarpetSurface02
+    surfaceAxis: XY
+  - label: SW carpet quadrant
+    min: -0.5, -0.5, 0
+    max: 0, 0, 0.012
+    color: '#FFFFFF'
+    surface: CMU3DSkyBlueCarpetSurface04
+    surfaceAxis: XY
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface01
+  atlasIndex: 1700
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface01.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface02
+  atlasIndex: 1701
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface02.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface03
+  atlasIndex: 1702
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface03.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface04
+  atlasIndex: 1703
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface04.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface05
+  atlasIndex: 1704
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface05.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface06
+  atlasIndex: 1705
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface06.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface07
+  atlasIndex: 1706
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface07.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface08
+  atlasIndex: 1707
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface08.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface09
+  atlasIndex: 1708
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface09.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface10
+  atlasIndex: 1709
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface10.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface11
+  atlasIndex: 1710
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface11.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface12
+  atlasIndex: 1711
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface12.png
+- type: cmu3DSurface
+  id: CMU3DSkyBlueCarpetSurface13
+  atlasIndex: 1712
+  texture: /Textures/CMU14/ThreeD/SkyBlueCarpet/CMU3DSkyBlueCarpetSurface13.png

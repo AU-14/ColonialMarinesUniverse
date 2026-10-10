@@ -1,0 +1,11 @@
+<Project>
+  <!-- Preserve each dependency's own early properties while isolating this local trial's intermediates. -->
+  <PropertyGroup>
+    <_FighterOriginalProps>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildProjectDirectory)'))</_FighterOriginalProps>
+  </PropertyGroup>
+  <Import Project="$(_FighterOriginalProps)" Condition="'$(_FighterOriginalProps)' != ''" />
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)../../obj/FighterTest/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
+    <DefaultItemExcludes>$(DefaultItemExcludes);obj/**;bin/**</DefaultItemExcludes>
+  </PropertyGroup>
+</Project>

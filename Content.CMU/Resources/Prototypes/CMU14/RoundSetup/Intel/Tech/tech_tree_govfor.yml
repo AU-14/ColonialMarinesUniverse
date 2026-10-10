@@ -46,26 +46,30 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Unlock Civilian Vehicle Pool
-          description: Unlocks commandeered civilian vehicles for vehicle supply. Requires a vehicle lift.
-          cost: 8
+        - name: S&R K9 Team
+          description: Summon a search-and-rescue handler and their canine companion.
+          cost: 6
           events:
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivVan
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivTruck
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivArmoredTruck
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivHSVan
-          - !type:TechUnlockVehicleEvent
-            unlock: AU14VehicleCivEMSAmbulance
+          - !type:TechPartySpawnEvent
+            thirdPartyId: AU14IntelThirdPartyK9
           - !type:TechAnnounceEvent
-            author: SPECIAL ASSETS AUTHORIZED
-            message: Requisitioned civilian vehicles have been authorised for this operation.
+            author: INTEL OPERATIONS
+            message: A search-and-rescue K9 team has been dispatched to aid with the operation.
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
-            state: misc
+            state: medic_qol
+        - name: ICRC Relief Party
+          description: Summon a Red Cross relief party. Neutral medics for everyone.
+          cost: 15
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ICRCReliefParty
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: An ICRC relief party has been dispatched to provide humanitarian aid.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
         - name: Unlock Tier 2
           description: Transitions the tree to another tier.
           cost: 3
@@ -95,30 +99,6 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: ICRC Relief Party
-          description: Summon a Red Cross relief party. Neutral medics for everyone.
-          cost: 15
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: ICRCReliefParty
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: An ICRC relief party has been dispatched to provide humanitarian aid.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: beacon
-        - name: S&R K9 Team
-          description: Summon a search-and-rescue handler and their canine companion.
-          cost: 15
-          events:
-          - !type:TechPartySpawnEvent
-            thirdPartyId: AU14IntelThirdPartyK9
-          - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A search-and-rescue K9 team has been dispatched to aid with the operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: medic_qol
         - name: Dropship Fabricator Budget
           description: Distributes resources to the dropship part fabricator.
           cost: 12
@@ -145,19 +125,6 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Additional M2420 JTMV Armed
-          description: Adds an extra armed humvee to vehicle supply lifts. Requires a vehicle lift.
-          cost: 18
-          events:
-          - !type:TechUnlockVehicleEvent
-            unlock: VehicleHumvee
-            additional: true
-          - !type:TechAnnounceEvent
-            author: SPECIAL ASSETS AUTHORIZED
-            message: Armed humvee deployment has been authorised for this operation.
-          icon:
-            sprite: _RMC14/Interface/tech_tree.rsi
-            state: humvee
         - name: Unlock Tier 3
           description: Transitions the tree to another tier.
           cost: 5
@@ -180,7 +147,7 @@
           cost: 25
           events:
           - !type:TechPartySpawnEvent
-            thirdPartyId: USArmy
+            thirdPartyId: CMUUSArmyReinforcements
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A US Army infantry squad has been dispatched to aid with the operation.

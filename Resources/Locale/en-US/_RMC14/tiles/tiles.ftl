@@ -3,6 +3,7 @@ tiles-cm-default-no-weeds = metal tile (no weeds)
 tiles-rmc-underplating-no-weeds = plating (no weeds)
 tiles-rmc-empty = empty space
 tiles-cm-plate = metal plate tile
+tiles-cm-outer-hull-plate = outer hull plate tile (Space)
 tiles-rmc-mono = mono tile
 tiles-cm-office = office tile
 tiles-cm-sterile = metal sterile tile
@@ -59,7 +60,7 @@ tiles-cm-floor = floor
 tiles-rmc-striped = striped tile
 tiles-rmc-research = research containment tile
 tiles-rmc-tcomms = tcomms tile
-tiles-rmc-outer-hull = outer hull tile
+tiles-rmc-outer-hull = outer hull tile (Space)
 
 tiles-rmc-escape-pod = escape pod tile
 

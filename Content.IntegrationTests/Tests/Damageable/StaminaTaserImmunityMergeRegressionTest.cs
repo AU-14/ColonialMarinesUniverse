@@ -18,6 +18,8 @@ public sealed class StaminaTaserImmunityMergeRegressionTest : GameTest
 - type: entity
   id: StaminaMergeTarget
   components:
+  - type: MobState
+  - type: MovementSpeedModifier
   - type: Stamina
     decay: 0
     baseCritThreshold: 100
@@ -74,6 +76,11 @@ public sealed class StaminaTaserImmunityMergeRegressionTest : GameTest
                 SEntMan.EnsureComponent<YautjaComponent>(hitPlain);
                 SEntMan.EnsureComponent<YautjaComponent>(collideImmune);
                 SEntMan.EnsureComponent<YautjaComponent>(collidePlain);
+
+                // CMU14: Yautja startup removes stamina. Restore it on these synthetic
+                // targets so this test still exercises the tagged hit paths themselves.
+                foreach (var target in new[] { hitImmune, hitPlain, collideImmune, collidePlain })
+                    SEntMan.EnsureComponent<StaminaComponent>(target).Decay = 0;
 
                 RaiseMeleeHit(taserHit, hitImmune);
                 RaiseMeleeHit(taserHit, hitNormal);

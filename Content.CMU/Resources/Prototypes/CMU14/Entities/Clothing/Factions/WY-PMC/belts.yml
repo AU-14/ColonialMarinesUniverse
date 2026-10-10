@@ -1,0 +1,13 @@
+- type: entity
+  parent: AU14BeltMedicBagBlack
+  id: CMUBeltMedicBagPMC
+  name: W-Y PMC lifesaver belt
+  suffix: CMU, Black, Empty
+  description: The W-Y PMC lifesaver belt is the standard load-bearing equipment for many W-Y PMC field medical technicians. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport medical supplies. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.
+
+- type: entity
+  parent: CMBeltMedical
+  id: CMUBeltMedicalPMC
+  name: W-Y PMC medical storage rig
+  suffix: CMU, Empty
+  description: The W-Y PMC medical storage rig is the standard load-bearing equipment for many W-Y PMC field medical technicians. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport medical supplies. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Client.CMU14.Temperature; // CMU14
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -226,7 +227,9 @@ namespace Content.Client.Atmos.UI
                 {
                     Text = Loc.GetString("gas-analyzer-window-temperature-val-text",
                         ("tempK", $"{gasMix.Temperature:0.0}"),
-                        ("tempC", $"{TemperatureHelpers.KelvinToCelsius(gasMix.Temperature):0.0}")),
+                        // CMU14: client temperature unit preference
+                        ("tempC", $"{TemperatureDisplay.FromKelvin(gasMix.Temperature):0.0}"),
+                        ("unit", TemperatureDisplay.Unit)),
                     Align = Label.AlignMode.Right,
                     HorizontalExpand = true
                 });

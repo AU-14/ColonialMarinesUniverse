@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.CMU14.Round;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
+using Content.Server.Preferences.Managers;
 using Content.Server.Voting;
 using Content.Server.Voting.Managers;
 using Content.Shared.CMU14.Threats;
@@ -26,6 +27,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
     [Dependency] private AuJobSelectionSystem _jobSelection = default!;
     [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
     [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IServerPreferencesManager _prefs = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
@@ -317,7 +319,26 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         _auRound.SetSelectedThreat(selected);
         RecordVotedThreat(selected);
         _auRound.PreselectThirdPartiesForSelectedThreat();
-        MoveHeldPlayersToObservers(prepared.HeldPlayers, selected);
+
+        // The pool check only covers the candidate list; each held voter must still consent to the winner.
+        List<NetUserId> consenting = new(prepared.HeldPlayers.Count);
+        List<NetUserId> optedOut = new();
+        foreach (NetUserId playerId in prepared.HeldPlayers)
+        {
+            if (AllowsThreat(playerId, selected, prepared.PresetId))
+                consenting.Add(playerId);
+            else
+                optedOut.Add(playerId);
+        }
+
+        if (optedOut.Count > 0)
+        {
+            ThreatSystem.RemoveThreatJobAssignments(assignedJobs, consenting.ToHashSet());
+            ReleaseOptedOutPlayers(optedOut, selected);
+            Sawmill.Info($"[ThreatVoteSystem] {optedOut.Count} of {prepared.HeldPlayers.Count} held player(s) opted out of voted threat '{selected.ID}' and were returned to the lobby.");
+        }
+
+        MoveHeldPlayersToObservers(consenting, selected);
 
         try
         {
@@ -325,7 +346,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             _threat.SpawnThreatFromVote(selected,
                 prepared.MapId,
                 assignedJobs,
-                prepared.HeldPlayers,
+                consenting,
                 prepared.PlayerCount);
         }
         catch (Exception threatEx)
@@ -350,6 +371,33 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         }
     }
 
+    // Same consent rule as the pool check: no explicit threat preferences means open to all.
+    private bool AllowsThreat(NetUserId playerId, ThreatPrototype threat, string presetId)
+    {
+        if (_prefs.GetPreferencesOrNull(playerId)?.SelectedCharacter is not HumanoidCharacterProfile profile)
+            return true;
+
+        IReadOnlySet<ProtoId<ThreatPrototype>> preferences = profile.GetThreatPreferencesForGamemode(presetId);
+
+        return preferences.Count == 0
+            || preferences.Any(preference => preference.Id.Equals(threat.ID, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void ReleaseOptedOutPlayers(IReadOnlyCollection<NetUserId> optedOut, ThreatPrototype selected)
+    {
+        string name = GetLocalizedThreatDisplayName(selected.ID);
+        foreach (NetUserId playerId in optedOut)
+        {
+            if (!_player.TryGetSessionById(playerId, out ICommonSession? session))
+                continue;
+
+            _chat.DispatchServerMessage(session,
+                Loc.GetString("au14-threat-vote-opted-out-return-to-lobby", ("threat", name)));
+        }
+
+        ReleaseHeldPlayersToLobby(optedOut, selected.ID, "they opted out of the voted threat");
+    }
+
     private void MoveHeldPlayersToObservers(IReadOnlyCollection<NetUserId> heldPlayers, ThreatPrototype selected)
     {
         bool isColonyFall = string.Equals(_auRound.SelectedPreset?.ID, "ColonyFall",
@@ -370,6 +418,12 @@ public sealed partial class ThreatVoteSystem : EntitySystem
                     Loc.GetString("au14-threat-vote-colony-fall-observer-warning",
                         ("min", minMinutes),
                         ("max", maxMinutes)));
+            }
+            else
+            {
+                _chat.DispatchServerMessage(session,
+                    Loc.GetString("au14-threat-vote-observer-notice",
+                        ("threat", GetLocalizedThreatDisplayName(selected.ID))));
             }
         }
     }

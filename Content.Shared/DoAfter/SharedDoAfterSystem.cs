@@ -236,6 +236,10 @@ public abstract partial class SharedDoAfterSystem : EntitySystem
             return DoAfterStatus.Finished;
         }
 
+        // CMU14: InstantDoAfters users (aghosts) never store the doAfter. Awaiting it would hang forever.
+        if (_tag.HasTag(doAfter.User, InstantDoAftersTag))
+            return DoAfterStatus.Finished;
+
         var tcs = new TaskCompletionSource<DoAfterStatus>();
         component.AwaitedDoAfters.Add(id.Value.Index, tcs);
         return await tcs.Task;

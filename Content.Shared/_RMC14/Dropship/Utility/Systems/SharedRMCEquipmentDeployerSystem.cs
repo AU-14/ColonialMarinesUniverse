@@ -240,7 +240,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
             if (_entityWhitelist.IsWhitelistPass(equipmentDeployerComponent.Blacklist, user.Value))
                 return false;
 
-            if (_alert.Get() < equipmentDeployerComponent.AlertLevelRequired && deploy)
+            if (_alert.Get(deployer) < equipmentDeployerComponent.AlertLevelRequired && deploy) // CMU14
             {
                 _popup.PopupClient(Loc.GetString("rmc-sentry-not-emergency", ("deployer", deployer)), deployer, user.Value);
                 return false;
@@ -273,8 +273,11 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
                     _transform.SetLocalRotation(deployingEntity.Value, Transform(deployingEntity.Value).LocalRotation + Angle.FromDegrees(rotationOffset));
 
                 _dropship.TryGetGridFaction(deployer, out var faction);
-                _sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction);
-                if (HasComp<SentryTargetingComponent>(deployingEntity.Value))
+                // CMU14: an unconfigured turret stays asleep instead of treating everything as hostile.
+                //_sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction);
+                //if (HasComp<SentryTargetingComponent>(deployingEntity.Value))
+                //    _rmcNpc.WakeNPC(deployingEntity.Value);
+                if (_sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction))
                     _rmcNpc.WakeNPC(deployingEntity.Value);
             }
         }

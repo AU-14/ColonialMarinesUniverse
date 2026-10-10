@@ -70,6 +70,8 @@ public sealed class MedicalCacheConfigurationTest
                 Assert.That(entities.System<SharedBoneSystem>().SeedFracture(leg, FractureSeverity.Simple), Is.True);
                 Assert.That(index.TryGetOrgan<EyesComponent>(patient, out var eyes), Is.True);
                 Assert.That(index.TryGetOrgan<CMUBrainComponent>(patient, out var brain), Is.True);
+                // Random disorientation can drop the gun independently of the cached aim penalty.
+                entities.GetComponent<CMUBrainComponent>(brain).DamagedDisorientationChance = 0;
                 DamageOrgan(entities, patient, eyes, OrganDamageStage.Failing);
                 DamageOrgan(entities, patient, brain, OrganDamageStage.Damaged);
             });
@@ -144,6 +146,8 @@ public sealed class MedicalCacheConfigurationTest
 
     private static Projection ReadProjection(IEntityManager entities, EntityUid patient, EntityUid weapon)
     {
+        Assert.That(entities.System<SharedHandsSystem>().IsHolding(patient, weapon), Is.True,
+            "The cache projection fixture requires the patient to keep holding its weapon.");
         var aim = entities.GetComponent<CMUAimAccuracyComponent>(patient);
         Assert.That(aim.SpreadMultiplier, Is.EqualTo(aim.SwayMultiplier));
         return new Projection(entities.GetComponent<MovementSpeedModifierComponent>(patient).CurrentWalkSpeed,

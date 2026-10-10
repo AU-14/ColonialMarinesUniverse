@@ -164,6 +164,14 @@ public sealed partial class HumanoidCharacterAppearance
         if (layerLimits is null)
             return new();
 
+        // cmu edit start
+        if (layer != HumanoidVisualLayers.Hair &&
+            layer != HumanoidVisualLayers.FacialHair)
+        {
+            return new();
+        }
+        // cmu edit end
+
         if (layer == HumanoidVisualLayers.Hair ||
             layer == HumanoidVisualLayers.FacialHair)
         {

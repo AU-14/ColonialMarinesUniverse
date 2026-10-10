@@ -66,6 +66,10 @@ def main():
     entries_list: List[Any] = current_data.get("Entries", [])
     max_id = max(map(lambda e: e["id"], entries_list), default=0)
 
+    # Cancelled runs and the daily cron re-parse the same PR window; a part
+    # already in the file must not append a second copy.
+    existing = {(e.get("author"), e.get("time"), e.get("url")) for e in entries_list}
+
     for partname in os.listdir(args.parts_dir):
         if not partname.endswith(".yml"):
             continue
@@ -88,6 +92,10 @@ def main():
         changes = partyaml["changes"]
         url = partyaml.get("url")
 
+        if (author, time, url) in existing:
+            print(f"Skipping: already in changelog ({url})")
+            continue
+
         if not isinstance(changes, list):
             changes = [changes]
 
@@ -105,6 +113,7 @@ def main():
                     "url": url,
                 }
             )
+            existing.add((author, time, url))
         os.remove(partpath)
     print(f"Have {len(entries_list)} changelog entries")
 

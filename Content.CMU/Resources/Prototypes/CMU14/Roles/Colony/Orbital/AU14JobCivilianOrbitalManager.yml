@@ -1,5 +1,6 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
+  displayWeight: 18
   id: AU14JobCivilianOrbitalManager
   roundSide: Civilian
   roundForce: ORBITAL
@@ -40,6 +41,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     AU14RankSeniorOrbitalManager:
     - !type:RoleTimeRequirement
@@ -71,6 +74,7 @@
     pocket1: AU14StampOrbitalMan
   inhand:
     - AU14BriefcaseLawBundle
+    - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

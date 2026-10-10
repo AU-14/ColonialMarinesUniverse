@@ -1,13 +1,14 @@
-﻿<controls:DropshipHijackerWindow
+<!-- CMU14: one hijack action; destination selection remains on the server. -->
+<controls:DropshipHijackerWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Dropship"
     xmlns:cc="clr-namespace:Content.Client.Administration.UI.CustomControls"
     Title="{Loc cmu-dropship-hijack-title}"
-    MinSize="200 300">
+    MinSize="300 160">
     <BoxContainer Orientation="Vertical">
         <RichTextLabel Name="Header" Access="Public" />
         <cc:HSeparator Color="#4972A1" Margin="0 0 0 5" />
-        <BoxContainer Name="Destinations" Access="Public" Orientation="Vertical" />
+        <Button Name="InitiateHijackButton" Access="Public" Text="{Loc cmu-dropship-hijack-initiate}" StyleClasses="OpenBoth" />
         <cc:HSeparator Name="DeclineSeparator" Access="Public" Color="#4972A1" Margin="0 5 0 5" />
         <Button Name="DeclineHijackButton" Access="Public" Text="{Loc cmu-dropship-hijack-decline}" StyleClasses="OpenBoth" />
     </BoxContainer>

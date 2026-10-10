@@ -35,6 +35,25 @@ entities:
     - type: Transform
     - type: Map
       mapPaused: True
+    - type: MapAtmosphere
+      space: True
+      mixture:
+        volume: 2500
+        immutable: True
+        temperature: 2.725
+        moles:
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
+        - 0
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
@@ -157,7 +176,7 @@ entities:
       arrivalSound: !type:SoundPathSpecifier
         path: /Audio/_RMC14/Machines/Shuttle/engine_landing.ogg
     - type: ImplicitRoof
-- proto: AtmosDeviceFanTiny
+- proto: RMCTinyFan
   entities:
   - uid: 14
     components:
@@ -892,13 +911,13 @@ entities:
   - uid: 8
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad
       pos: 1.5,7.5
       parent: 2
   - uid: 129
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad
       pos: -0.5,7.5
       parent: 2
 - proto: dropshipweaponsvmarker
@@ -906,7 +925,7 @@ entities:
   - uid: 130
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
+      rot: 0 rad
       pos: 0.5,7.5
       parent: 2
 - proto: RMCEngineAttachmentPoint

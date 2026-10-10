@@ -1,10 +1,12 @@
 - type: job
   parent: AU14JobMilitaryBase
+  displayWeight: 9
   id: CMUJobGOVFORAdjutantDress
   roundRole: AdjutantDress
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: Skills
     skills:
       RMCSkillConstruction: 2
@@ -34,7 +36,7 @@
   playTimeTracker: CMUJobGOVFORAdjutantDress
   startingGear: CMUGearGOVFORAdjutantDress
   icon: RMCJobIconUNMCAdjutant
-  spawnMenuRoleName: High Command Adjutant, Dress Uniform (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-high-command-adjutant-dress-uniform-govfor 
   ranks:
     RMCRankCivilian: []
   joinNotifyCrew: true
@@ -61,6 +63,7 @@
     pocket2: RMCPouchDocument
   inhand:
   - CMPenFountain
+  - AU14TabletGovfor
 
 - type: playTimeTracker
   id: CMUJobGOVFORAdjutantDress
@@ -78,11 +81,13 @@
 
 - type: job
   parent: AU14JobMilitaryBase
+  displayWeight: 10
   id: CMUJobGOVFORBrigadierGeneral
   roundRole: BrigadierGeneral
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallToAttentionAbility
   - type: Skills
     skills:
       RMCSkillConstruction: 2
@@ -113,7 +118,7 @@
   playTimeTracker: CMUJobGOVFORBrigadierGeneral
   startingGear: CMUGearGOVFORBrigadierGeneral
   icon: RMCJobIconUNMCBrigadierGeneral
-  spawnMenuRoleName: Brigadier General (GOVFOR, event VIP)
+  spawnMenuRoleName: cmu-spawn-role-brigadier-general-govfor-event-vip 
   ranks:
     RMCRankCivilian: []
   joinNotifyCrew: true
@@ -184,7 +189,7 @@
   playTimeTracker: CMUJobGOVFORVipEscort
   startingGear: CMUGearGOVFORVipEscort
   icon: AU14JobIconMP
-  spawnMenuRoleName: VIP Escort Detail (GOVFOR)
+  spawnMenuRoleName: cmu-spawn-role-vip-escort-detail-govfor 
   ranks:
     RMCRankCivilian: []
   joinNotifyCrew: false
@@ -219,5 +224,228 @@
   components:
   - type: SpawnPoint
     job_id: CMUJobGOVFORVipEscort
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobMilitaryBase
+  displayWeight: 9
+  id: CMUJobOPFORAdjutantDress
+  roundSide: Opfor
+  roundForce: OPFOR
+  roundRole: AdjutantDress
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: AU14CallToAttentionAbility
+  - type: Skills
+    skills:
+      RMCSkillConstruction: 2
+      RMCSkillEndurance: 1
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 1
+      RMCSkillIntel: 1
+      RMCSkillJtac: 3
+      RMCSkillMedical: 2
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 1
+      RMCSkillPowerLoader: 1
+      RMCSkillSurgery: 1
+      RMCSkillVehicles: 2
+  - type: JobPrefix
+    prefix: cmu-govfor-prefix-adjutant-dress
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/cmuopforblips.rsi
+      state: adj
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_shipside
+  name: cmu-govfor-name-adjutant-dress
+  description: cmu-govfor-description-adjutant-dress
+  playTimeTracker: CMUJobGOVFORAdjutantDress
+  startingGear: CMUGearOPFORAdjutantDress
+  icon: RMCJobIconUNMCAdjutant
+  spawnMenuRoleName: cmu-spawn-role-high-command-adjutant-dress-uniform-opfor 
+  ranks:
+    RMCRankCivilian: []
+  joinNotifyCrew: true
+  supervisors: au14-job-supervisors-opfor
+  accessGroups:
+  - AU14OpforCommand
+  roleWeight: 0.25
+  hidden: false
+  setPreference: true
+
+- type: startingGear
+  id: CMUGearOPFORAdjutantDress
+  equipment:
+    jumpsuit: CMJumpsuitBO
+    outerClothing: CMCoatXOFormal
+    shoes: RMCShoesLaceup
+    head: CMHeadCapPeakedService
+    id: CMUIDCardOPFORAdjutantDress
+    ears: CMHeadsetHighCommand
+    eyes: RMCSunglasses
+    back: CMSatchel
+    belt: RMCMK80BeltFilled
+    pocket1: RMCPouchGeneralLarge
+    pocket2: RMCPouchDocument
+  inhand:
+  - CMPenFountain
+  - AU14TabletOpfor
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointOPFORAdjutantDress
+  name: Spawn Point OPFOR High Command Adjutant, Dress Uniform
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobOPFORAdjutantDress
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobMilitaryBase
+  displayWeight: 10
+  id: CMUJobOPFORBrigadierGeneral
+  roundSide: Opfor
+  roundForce: OPFOR
+  roundRole: BrigadierGeneral
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: AU14CallToAttentionAbility
+  - type: Skills
+    skills:
+      RMCSkillConstruction: 2
+      RMCSkillEndurance: 2
+      RMCSkillEngineer: 2
+      RMCSkillFirearms: 3
+      RMCSkillFireman: 1
+      RMCSkillIntel: 3
+      RMCSkillJtac: 3
+      RMCSkillLeadership: 3
+      RMCSkillMedical: 2
+      RMCSkillOverwatch: 3
+      RMCSkillPolice: 2
+      RMCSkillPowerLoader: 1
+      RMCSkillSurgery: 1
+      RMCSkillVehicles: 2
+  - type: JobPrefix
+    prefix: cmu-govfor-prefix-brigadier-general
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/cmuopforblips.rsi
+      state: platco
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_shipside
+  name: cmu-govfor-name-brigadier-general
+  description: cmu-govfor-description-brigadier-general
+  playTimeTracker: CMUJobGOVFORBrigadierGeneral
+  startingGear: CMUGearOPFORBrigadierGeneral
+  icon: RMCJobIconUNMCBrigadierGeneral
+  spawnMenuRoleName: cmu-spawn-role-brigadier-general-opfor-event-vip 
+  ranks:
+    RMCRankCivilian: []
+  joinNotifyCrew: true
+  supervisors: au14-job-supervisors-opfor
+  accessGroups:
+  - AU14OpforCommand
+  roleWeight: 0.25
+  hidden: false
+  setPreference: true
+
+- type: startingGear
+  id: CMUGearOPFORBrigadierGeneral
+  equipment:
+    jumpsuit: CMJumpsuitGeneral
+    outerClothing: RMCCoatJacketGeneralFilled
+    shoes: RMCBootsCBRN
+    head: RMCHeadCapGeneral
+    id: CMUIDCardOPFORBrigadierGeneral
+    ears: CMHeadsetHighCommand
+    eyes: RMCSunglasses
+    gloves: RMCHandsVeteranCBRN
+    back: RMCSatchelLightpackFilledHighCommand
+    belt: RMCMatebaBeltLuxuriousFilled
+    pocket1: RMCPouchMagazinePistolLargeFilledHighCommand
+    pocket2: RMCPouchGeneralLarge
+  inhand:
+  - RMCHeadBeretGeneral
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointOPFORBrigadierGeneral
+  name: Spawn Point OPFOR Brigadier General
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobOPFORBrigadierGeneral
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobMilitaryBase
+  id: CMUJobOPFORVipEscort
+  roundSide: Opfor
+  roundForce: OPFOR
+  roundRole: VipEscort
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 3
+      RMCSkillCqc: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 2
+  - type: JobPrefix
+    prefix: cmu-govfor-prefix-vip-escort
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/cmuopforblips.rsi
+      state: mp
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_shipside
+  name: cmu-govfor-name-vip-escort
+  description: cmu-govfor-description-vip-escort
+  playTimeTracker: CMUJobGOVFORVipEscort
+  startingGear: CMUGearOPFORVipEscort
+  icon: AU14JobIconMP
+  spawnMenuRoleName: cmu-spawn-role-vip-escort-detail-opfor 
+  ranks:
+    RMCRankCivilian: []
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-opfor
+  accessGroups:
+  - AU14OpforCommand
+  roleWeight: 0.25
+  hidden: false
+  setPreference: true
+
+- type: startingGear
+  id: CMUGearOPFORVipEscort
+  equipment:
+    jumpsuit: AU14MarineUniformDressEnlistedD
+    shoes: RMCShoesLaceupDress
+    head: CMHeadDressBlues
+    belt: CMBeltSecurityMP
+    back: CMSatchel
+    ears: AU14HeadsetOpforCommand
+    pocket1: RMCPouchDocument
+    pocket2: RMCPouchGeneralLarge
+    id: CMUIDCardOPFORVipEscort
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointOPFORVipEscort
+  name: Spawn Point OPFOR VIP Escort Detail
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobOPFORVipEscort
   - type: Sprite
     state: syn_spawn

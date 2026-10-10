@@ -1,5 +1,6 @@
 - type: job
-  parent: CMJobBase
+  parent: RMCJobRibbonBase
+  displayWeight: 18
   id: AU14JobCivilianHeadOfEngineering
   roundSide: Civilian
   roundForce: COLONY
@@ -27,11 +28,11 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianHeadOfEngineering
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
   - !type:DepartmentTimeRequirement
     department: AU14DepartmentEngineering
     time: 36000 # 10 hours
-  - !type:OverallPlaytimeRequirement
-    time: 86400 # 24 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -39,6 +40,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   startingGear: AU14GearCivilianHeadOfEngineering
@@ -49,6 +52,7 @@
   supervisors: au14-job-supervisors-colonyadministrator
   accessGroups:
   - Colonist
+  - auadmin
   - auengi
   - CMCargoTech
   - auheadsofcolony
@@ -61,11 +65,13 @@
   id: AU14GearCivilianHeadOfEngineering
   equipment:
     head: RMCHardhatBlue
-    jumpsuit: AU14CivilianWeYuEngineerFormanClothes
+    jumpsuit: CMUJumpsuitCivilianForeman
     shoes: RMCBootsCorporate
     id: AU14IDCardColonyHeadOfEngineering
     ears: AU14ColonyAdminHeadset
     pocket1: AU14StampHENG
+  inhand:
+  - CMUMobilePhone
 
 - type: entity
   parent: CMSpawnPointJobBase

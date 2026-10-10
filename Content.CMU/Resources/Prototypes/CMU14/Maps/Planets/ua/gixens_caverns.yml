@@ -42,7 +42,7 @@
   id: GixensCaverns
   mapName: Gixens Caverns
   allegiance: UA
-  mapPath: /Maps/CMU14/gixenscaverns.yml
+  mapPath: /Maps/CMU14/Legacy/gixenscaverns.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

@@ -28,8 +28,9 @@
   requiresGovforVote: true
   supportedPlanets:
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
+# - CMUPlanetStableGarrisonDistress # govfor spawns planetside
 # - AUPlanetShepherdsPride # lot of forests/chokes
-  - CMUPlanetHopesRetreat
+# - CMUPlanetHopesRetreat # govfor spawns planetside
   - AUPlanetBosenmoriBasho
 # - AUPlanetLV747 # Solaris Gulch
 # - AUPlanetLV759 # Hybrisa Metro # missing threat spawns, scenario fails
@@ -81,6 +82,7 @@
   showInVote: true
   description: Two units face each other in combat.
   minPlayers: 80
+  burrowedLarvaEnabled: false
   requiresOpforVote: true
   requiresGovforVote: true
   thirdPartyAutoSpawn: true
@@ -88,13 +90,7 @@
   thirdPartyRatio: 0.10
   maxThirdParties: 4
   supportedPlanets:
-  - SharedPlanetPool # Only Maintained maps can process feedback (Shep doesn't have base)
-# - AUPlanetGixensCaverns
-# - AUPlanetFlight
-# - AUPlanetLV759 # Hybrisa Metro
-# - AUPlanetCorsatStation
-# - AUPlanetSorokyne
-# - AUPlanetTrijent
+  - ForceOnForcePlanetPool
   rules:
   - AuVoteRule
   - PlatoonSpawn

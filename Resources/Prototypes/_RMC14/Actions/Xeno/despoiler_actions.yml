@@ -13,26 +13,26 @@
   - type: InstantAction
     event: !type:XenoDespoilerAcidBarrageActionEvent
   - type: XenoDespoilerAcidBarrageAction
-    maxChargeSeconds: 3
+    maxChargeSeconds: 5
     minProjectiles: 1
-    maxProjectiles: 8
-    empowerBonusProjectiles: 6
-    scatterDegrees: 30
-    chargingSpeedMultiplier: 0.5
+    maxProjectiles: 10
+    empowerBonusProjectiles: 5
+    scatterDegrees: 60
+    chargingSpeedMultiplier: 0.4
     projectileId: RMCProjectileDespoilerAcidShot
-    lingeringAcidChance: 0.25
+    lingeringAcidChance: 1.0
     projectileSpeed: 12
-    minRangeTiles: 1
+    minRangeTiles: 2
     maxRangeTiles: 6
     minProjectileScale: 0.9
     maxProjectileScale: 1.33
-    postFireCooldown: 12
+    postFireCooldown: 15
     chargeSound:
       path: /Audio/_RMC14/Xeno/acid_sizzle1.ogg
     fireSound:
       path: /Audio/_RMC14/Xeno/alien_spitacid2.ogg
   - type: XenoActionPlasma
-    cost: 100
+    cost: 75
 
 - type: entity
   parent: ActionXenoBase
@@ -68,7 +68,7 @@
     pounceSound:
       path: /Audio/_RMC14/Xeno/alien_roar1.ogg
   - type: XenoActionPlasma
-    cost: 100
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -98,7 +98,7 @@
     castSound:
       path: /Audio/_RMC14/Xeno/acid_sizzle3.ogg
   - type: XenoActionPlasma
-    cost: 100
+    cost: 50
 
 - type: entity
   parent: ActionXenoBase
@@ -116,6 +116,6 @@
   - type: InstantAction
     event: !type:XenoDespoilerCatalyzeActionEvent
   - type: XenoDespoilerCatalyzeAction
-    hypertensionCost: 2
-    buffDuration: 10
+    hypertensionCost: 1
+    buffDuration: 15
     visualProto: RMCEffectDespoilerCatalyze

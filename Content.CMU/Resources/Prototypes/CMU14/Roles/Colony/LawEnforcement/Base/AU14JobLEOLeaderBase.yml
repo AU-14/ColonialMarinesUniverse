@@ -1,5 +1,6 @@
 - type: job
   parent: CMJobBase
+  displayWeight: 4
   id: AU14JobLEOLeaderBase
   name: au14-job-name-leoleader
   description: au14-job-description-leoleader
@@ -15,6 +16,11 @@
   - AU14AccessColonyHeadEngineer
   - AU14AccessColonyHeadOfService
   requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 43200 # 12 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsSecurity
+    time: 36000 # 10 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -22,6 +28,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundComponents:
   - type: MarineOrders
 

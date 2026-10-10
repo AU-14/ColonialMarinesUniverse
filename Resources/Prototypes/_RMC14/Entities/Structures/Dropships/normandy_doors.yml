@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCDropshipDoorBase
   id: CMNormandyDoor
   name: lexington crew hatch
@@ -56,11 +56,3 @@
   - type: RemoveComponents
     components:
     - type: DoorBolt
-
-- type: entity
-  parent: CMNormandyCockpit
-  id: CMNormandyCockpitOpfor
-  suffix: Normandy, Opfor
-  components:
-  - type: AccessReader
-    access: [ [ "AU14AccessOpforPilot" ] ]

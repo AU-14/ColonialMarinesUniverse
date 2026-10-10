@@ -3004,6 +3004,7 @@ entities:
     - type: Transform
     - type: Map
       mapPaused: True
+    - type: CMUMapUsesTilePower # CMU14: station runs the wizden grid, not RMC area power
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree

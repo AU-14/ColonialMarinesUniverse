@@ -94,7 +94,7 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
         int eliminated = 0, total = 0;
         int requiredPercent = Math.Clamp(ruleComp.Percent, 1, 100);
         bool countArrests = ruleComp.Arrest;
-        bool crashedDropship = _threatRuleHelper.HasCrashedDropship();
+        bool hijackLanded = _threatRuleHelper.HasLandedDropshipHijack();
 
         EntityQueryEnumerator<MobStateComponent, HumanoidProfileComponent> query = _entMan
             .EntityQueryEnumerator<MobStateComponent, HumanoidProfileComponent>();
@@ -111,10 +111,10 @@ public sealed partial class KillAllHumanRuleSystem : GameRuleSystem<KillAllHuman
                 continue;
             }
 
-            if (crashedDropship && _rmcPlanet.IsOnPlanet(Transform(uid)) && mobState.CurrentState != MobState.Dead)
+            if (hijackLanded && _rmcPlanet.IsOnPlanet(Transform(uid)) && !_threatRuleHelper.IsEliminated(uid, mobState))
                 continue;
 
-            if (mobState.CurrentState == MobState.Dead)
+            if (_threatRuleHelper.IsEliminated(uid, mobState))
                 eliminated++;
 
             else if (HasPrisonJumpsuit(uid)

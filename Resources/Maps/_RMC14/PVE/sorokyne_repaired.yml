@@ -61161,7 +61161,7 @@ entities:
         - Gun
         - CassettePlayer
     - type: InsideEntityStorage
-- proto: RMCArmorSPPFirefighter
+- proto: CMUArmorFirefighterUPP # CMU14
   entities:
   - uid: 787
     components:
@@ -81091,7 +81091,7 @@ entities:
     - type: Transform
       pos: 68.5,116.5
       parent: 1
-- proto: RMCInflatableWallFolded
+- proto: CMUInflatableWallFolded # CMU14
   entities:
   - uid: 7300
     components:

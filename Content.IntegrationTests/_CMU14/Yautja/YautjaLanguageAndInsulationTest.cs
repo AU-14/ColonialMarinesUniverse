@@ -53,8 +53,13 @@ public sealed class YautjaLanguageAndInsulationTest
                 {
                     AssertNativeLanguages(entMan, language, hunter);
 
-                    Assert.That(inventory.TryUnequip(hunter, "mask", force: true), Is.True);
-                    Assert.That(inventory.TryUnequip(hunter, "gloves", force: true), Is.True);
+                    foreach (var slot in new[] { "mask", "gloves" })
+                    {
+                        if (inventory.TryGetSlotEntity(hunter, slot, out _))
+                            Assert.That(inventory.TryUnequip(hunter, slot, force: true), Is.True);
+
+                        Assert.That(inventory.TryGetSlotEntity(hunter, slot, out _), Is.False);
+                    }
                     language.UpdateEntityLanguages(hunter);
 
                     AssertNativeLanguages(entMan, language, hunter);

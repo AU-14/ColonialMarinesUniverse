@@ -6,7 +6,7 @@
   suffix: Filled
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/mp5.rsi
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/mp5.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -23,7 +23,7 @@
           tags:
           - CMUMagazineSMGMP5Drum
   - type: Clothing
-    sprite: _RMC14/Objects/Weapons/Guns/SMGs/mp5.rsi
+    sprite: CMU14/Objects/Weapons/Guns/SMGs/mp5.rsi
   - type: Gun
     shotsPerBurst: 3
     soundGunshot:
@@ -90,6 +90,12 @@
           - RMCAttachmentS5MicroRedDotSight
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS42xTelescopicMiniscope
+      rmc-aslot-stock:
+        startingAttachable: RMCAttachmentM54CStockSolid
+        locked: true
+        whitelist:
+          tags:
+          - RMCAttachmentM54CStockSolid
       rmc-aslot-underbarrel:
         whitelist:
           tags:
@@ -103,9 +109,10 @@
         - RMCAttachmentM203GrenadeLauncher
   - type: AttachableHolderVisuals
     offsets:
-      rmc-aslot-barrel: 0.84, 0
-      rmc-aslot-rail: 0.032, 0.09
-      rmc-aslot-underbarrel: 0.45, -0.31
+      rmc-aslot-barrel: 0.785, 0.085
+      rmc-aslot-rail: 0, 0.09
+      rmc-aslot-underbarrel: 0.4, -0.3125
+      rmc-aslot-stock: -0.69, 0.01
   - type: GunDamageModifier
     multiplier: 1.2
 

@@ -1,4 +1,7 @@
 using System.Numerics;
+using Content.Server.CMU14.ThreeD;
+using Content.Shared.Timing;
+using Microsoft.Extensions.ObjectPool;
 using System.Linq;
 using Content.Shared.CMU14.ZLevels;
 using Content.Shared.CMU14.ZLevels.Core;
@@ -47,11 +50,21 @@ public sealed partial class CMUZLevelsSystem
     private readonly HashSet<EntityUid> _viewSubscriptionViewers = new();
     private readonly Dictionary<(EntityUid View, ICommonSession Session), EntityUid?> _viewProbeSubscriptions = new();
     private readonly CMUZLevelOpeningCache _zOpeningCache = new();
+    private readonly Queue<EntityUid> _pendingProbeViewers = new();
+    private readonly HashSet<EntityUid> _queuedProbeViewers = new();
+    private readonly HashSet<EntityUid> _invalidatedProbeViewers = new();
+    private TimeSpan _probeRefreshBudget = TimeSpan.FromMilliseconds(2);
+    private readonly ObjectPool<List<KeyValuePair<(EntityUid View, ICommonSession Session), EntityUid?>>> _subscriptionSnapshots =
+        new DefaultObjectPool<List<KeyValuePair<(EntityUid View, ICommonSession Session), EntityUid?>>>(
+            new DefaultPooledObjectPolicy<List<KeyValuePair<(EntityUid View, ICommonSession Session), EntityUid?>>>());
+    private readonly ObjectPool<List<EntityUid>> _viewerSnapshots =
+        new DefaultObjectPool<List<EntityUid>>(new DefaultPooledObjectPolicy<List<EntityUid>>());
     private readonly List<int> _wantedProbeDepths = new();
     private readonly List<int> _probeDepthsToRemove = new();
     private readonly List<(Vector2 Center, float Distance)> _probeOpeningCandidates = new();
     private readonly List<Entity<MapGridComponent>> _probeOpeningGrids = new();
     private readonly List<Vector2> _stairPreviewPositions = new(CMUZLevelViewerComponent.MaxStairPreviewPositions);
+    private List<Entity<MapGridComponent>> _stairPreviewGrids = new();
     private int _profilePvsSkippedViewers;
     private int _profilePvsWantedDepths;
     private int _profilePvsExistingProbeEyes;
@@ -71,17 +84,21 @@ public sealed partial class CMUZLevelsSystem
     private int _profilePvsOpeningNearTileBoundsChecks;
     private EntityQuery<MapGridComponent> _viewGridQuery;
     private EntityQuery<CMUZLevelHighGroundComponent> _viewHighGroundQuery;
+    private EntityQuery<CMUZLevelStairsComponent> _viewStairsQuery;
 
     private void InitView()
     {
         _viewGridQuery = GetEntityQuery<MapGridComponent>();
         _viewHighGroundQuery = GetEntityQuery<CMUZLevelHighGroundComponent>();
+        _viewStairsQuery = GetEntityQuery<CMUZLevelStairsComponent>();
 
         Subs.CVar(_config, CMUZLevelsCVars.Enabled, OnZLevelsEnabledChanged, true);
         Subs.CVar(_config, CMUZLevelsCVars.MaxRenderDepth, OnMaxRenderDepthChanged, true);
         Subs.CVar(_config, CMUZLevelsCVars.MaxViewProbesPerPlayer, OnMaxViewProbesChanged, true);
         Subs.CVar(_config, CMUZLevelsCVars.MinProbePvsScale, OnMinProbePvsScaleChanged, true);
         Subs.CVar(_config, CMUZLevelsCVars.ProbeUpdateHz, OnProbeUpdateHzChanged, true);
+        Subs.CVar(_config, CMUZLevelsCVars.ProbeBudgetMs,
+            value => _probeRefreshBudget = TimeSpan.FromMilliseconds(Math.Clamp(value, 0.1f, 20f)), true);
 
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
         SubscribeLocalEvent<PlayerDetachedEvent>(OnPlayerDetached);
@@ -104,32 +121,43 @@ public sealed partial class CMUZLevelsSystem
         if (!_zLevelsEnabled)
             return;
 
-        if (_gameTiming.CurTime < _nextZLevelViewerUpdate)
+        // Move existing eyes every tick even while expensive visibility discovery is queued.
+        // A map/parent transfer must first discard probes into the old map after transform recursion ends.
+        foreach (var uid in _invalidatedProbeViewers)
         {
-            UpdateMovedViewerProbeEyes();
-            return;
+            if (TerminatingOrDeleted(uid) || !TryComp(uid, out CMUZLevelViewerComponent? viewer)) continue;
+            ClearViewerProbes((uid, viewer));
+            QueueProbeRefresh(uid);
+        }
+        _invalidatedProbeViewers.Clear();
+        UpdateMovedViewerProbeEyes();
+
+        if (_gameTiming.CurTime >= _nextZLevelViewerUpdate)
+        {
+            _nextZLevelViewerUpdate = _gameTiming.CurTime + _zLevelViewerUpdateRate;
+            ReconcileViewSubscriptions();
+            var query = EntityQueryEnumerator<CMUZLevelViewerComponent, TransformComponent>();
+            while (query.MoveNext(out var uid, out _, out _))
+                QueueProbeRefresh(uid);
         }
 
-        _movedViewerProbeEyes.Clear();
-        _nextZLevelViewerUpdate = _gameTiming.CurTime + _zLevelViewerUpdateRate;
-        ReconcileViewSubscriptions();
-
+        if (_pendingProbeViewers.Count == 0) return;
         using var profile = Prof.Group("CMU Z PVS Probes");
         var profiling = Prof.IsEnabled;
-        if (profiling)
-            ResetPvsProfileCounters();
+        if (profiling) ResetPvsProfileCounters();
 
         var viewers = 0;
         var probeEyes = 0;
-        var query = EntityQueryEnumerator<CMUZLevelViewerComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var viewer, out var xform))
+        var budget = new TimeSliceBudget(_probeRefreshBudget, 64);
+        while (_pendingProbeViewers.Count > 0 && budget.TryConsume())
         {
+            var uid = _pendingProbeViewers.Dequeue();
+            _queuedProbeViewers.Remove(uid);
+            if (TerminatingOrDeleted(uid) || !TryComp(uid, out CMUZLevelViewerComponent? viewer) ||
+                !TryComp(uid, out TransformComponent? xform) || MetaData(uid).EntityPaused) continue;
             viewers++;
             SyncViewerProbes((uid, viewer), xform);
-
-            var globalPos = _transform.GetWorldPosition(xform);
-            var eyeOffset = GetViewerProbeOffset(uid);
-            probeEyes += UpdateProbeEyes(uid, viewer, globalPos, eyeOffset);
+            probeEyes += UpdateProbeEyes(uid, viewer, _transform.GetWorldPosition(xform), GetViewerProbeOffset(uid));
         }
 
         if (!profiling)
@@ -137,7 +165,14 @@ public sealed partial class CMUZLevelsSystem
 
         Prof.WriteValue("CMU Z PVS Viewers", viewers);
         Prof.WriteValue("CMU Z PVS Probe Eyes", probeEyes);
+        Prof.WriteValue("CMU Z PVS Queued Viewers", _pendingProbeViewers.Count);
         WritePvsProfileCounters();
+    }
+
+    private void QueueProbeRefresh(EntityUid uid)
+    {
+        if (_queuedProbeViewers.Add(uid))
+            _pendingProbeViewers.Enqueue(uid);
     }
 
     private void ResetPvsProfileCounters()
@@ -257,6 +292,7 @@ public sealed partial class CMUZLevelsSystem
         _extraViewerProbeSubscribers.Remove(ent);
         _movedViewerProbeEyes.Remove(ent);
         _viewSubscriptionViewers.Remove(ent);
+        _invalidatedProbeViewers.Remove(ent);
         foreach (var (key, origin) in _viewProbeSubscriptions.ToArray())
         {
             if (origin == ent.Owner)
@@ -311,6 +347,7 @@ public sealed partial class CMUZLevelsSystem
         // changing an entire grid's map. Refreshing here may spawn or remove a probe
         // eye and modify that transform hierarchy while it is still being enumerated.
         // Force a full refresh on the next system update, after the transfer finishes.
+        _invalidatedProbeViewers.Add(ent.Owner);
         _nextZLevelViewerUpdate = TimeSpan.Zero;
     }
 
@@ -321,6 +358,7 @@ public sealed partial class CMUZLevelsSystem
         // eyes while that transform hierarchy is still being enumerated,
         // producing invalid client prediction state. Refresh after the
         // transfer for the same reason as OnViewerMapUidChanged above.
+        _invalidatedProbeViewers.Add(ent.Owner);
         _nextZLevelViewerUpdate = TimeSpan.Zero;
     }
 
@@ -415,8 +453,9 @@ public sealed partial class CMUZLevelsSystem
             return;
         }
 
-        var stairPreviewUp = CanPreviewUpperZFromStair((ent.Owner, ent.Comp), xform, map.Value, globalPos, _stairPreviewPositions);
-        SetStairPreviewUp(ent, stairPreviewUp, _stairPreviewPositions);
+        var stairPreviewUp = CanPreviewUpperZFromStair((ent.Owner, ent.Comp), xform, map.Value, globalPos,
+            _stairPreviewPositions, out var previewGrid);
+        SetStairPreviewUp(ent, stairPreviewUp, _stairPreviewPositions, previewGrid);
         BuildWantedProbeDepths(map.Value, probeGlobalPos, _wantedProbeDepths, stairPreviewUp);
 
         if (!_viewerProbeEyes.TryGetValue(ent.Owner, out var probes))
@@ -618,30 +657,44 @@ public sealed partial class CMUZLevelsSystem
     {
         // Remember the origin actually subscribed, even after the camera changes
         // container/map. Engine component shutdown does not emit unsubscribe events.
-        foreach (var (key, previous) in _viewProbeSubscriptions.ToArray())
+        var subscriptions = _subscriptionSnapshots.Get();
+        var viewers = _viewerSnapshots.Get();
+        try
         {
-            var live = !TerminatingOrDeleted(key.View) && key.Session.ViewSubscriptions.Contains(key.View);
-            EntityUid? current = live && TryResolveZLevelViewOrigin(key.View, out var viewer) ? viewer : null;
-            if (current != previous)
+            subscriptions.AddRange(_viewProbeSubscriptions);
+            foreach (var (key, previous) in subscriptions)
             {
-                if (previous is { } oldOrigin)
-                    RemoveExtraViewerProbeSubscriber(oldOrigin, key.Session);
-                _viewProbeSubscriptions[key] = current;
-                if (current is { } newOrigin)
-                    AddExtraViewerProbeSubscriber(newOrigin, key.Session);
+                var live = !TerminatingOrDeleted(key.View) && key.Session.ViewSubscriptions.Contains(key.View);
+                EntityUid? current = live && TryResolveZLevelViewOrigin(key.View, out var viewer) ? viewer : null;
+                if (current != previous)
+                {
+                    if (previous is { } oldOrigin)
+                        RemoveExtraViewerProbeSubscriber(oldOrigin, key.Session);
+                    _viewProbeSubscriptions[key] = current;
+                    if (current is { } newOrigin)
+                        AddExtraViewerProbeSubscriber(newOrigin, key.Session);
+                }
+                if (!live)
+                    _viewProbeSubscriptions.Remove(key);
             }
-            if (!live)
-                _viewProbeSubscriptions.Remove(key);
-        }
 
-        // Reconcile all ownership reasons before removing components, so migrating
-        // subscriptions within one refresh cannot leave a deferred removal behind.
-        foreach (var viewer in _viewSubscriptionViewers.ToArray())
+            // Reconcile all ownership reasons before removing components, so migrating
+            // subscriptions within one refresh cannot leave a deferred removal behind.
+            viewers.AddRange(_viewSubscriptionViewers);
+            foreach (var viewer in viewers)
+            {
+                if (HasViewerProbeSubscribers(viewer))
+                    continue;
+                _viewSubscriptionViewers.Remove(viewer);
+                RemComp<CMUZLevelViewerComponent>(viewer);
+            }
+        }
+        finally
         {
-            if (HasViewerProbeSubscribers(viewer))
-                continue;
-            _viewSubscriptionViewers.Remove(viewer);
-            RemComp<CMUZLevelViewerComponent>(viewer);
+            subscriptions.Clear();
+            viewers.Clear();
+            _subscriptionSnapshots.Return(subscriptions);
+            _viewerSnapshots.Return(viewers);
         }
     }
 
@@ -674,7 +727,8 @@ public sealed partial class CMUZLevelsSystem
 
     private bool CanUseZLevelViewOrigin(EntityUid uid)
     {
-        if (TerminatingOrDeleted(uid))
+        // A 3D subscription already covers the full stack; it is not another 2D camera.
+        if (TerminatingOrDeleted(uid) || HasComp<CMU3DViewProbeComponent>(uid))
             return false;
 
         if (Transform(uid).MapUid is not { } map ||
@@ -690,7 +744,7 @@ public sealed partial class CMUZLevelsSystem
 
     private bool IsZLevelProbe(EntityUid uid)
     {
-        return _probeEyeIndex.ContainsKey(uid);
+        return _probeEyeIndex.ContainsKey(uid) || HasComp<CMU3DViewProbeComponent>(uid);
     }
 
     private void QueueDeleteViewerProbeEyes(Entity<CMUZLevelViewerComponent> ent)
@@ -769,17 +823,21 @@ public sealed partial class CMUZLevelsSystem
         }
 
         var lowerDepth = Math.Min(_maxRenderDepth, MaxZLevelsBelowRendering);
+        var checkingMap = map;
 
         for (var i = 1; i <= lowerDepth && remainingProbes > 0; i++)
         {
-            if (!TryMapOffset(map, -i, out _))
+            if (!TryMapOffset(map, -i, out var lowerMap))
                 break;
 
-            if (!HasZOpeningPath(map, globalPos, -i, requireVisibleFirstStep: true))
+            // Earlier steps have already succeeded during this refresh. Only the viewer's own
+            // floor needs the expensive visible-aperture search; check each lower floor once.
+            if (!HasZOpeningPath(checkingMap, globalPos, -1, requireVisibleFirstStep: i == 1))
                 break;
 
             depths.Add(-i);
             remainingProbes--;
+            checkingMap = lowerMap.Value;
         }
 
         if (remainingProbes <= 0)
@@ -804,13 +862,14 @@ public sealed partial class CMUZLevelsSystem
         TransformComponent viewerXform,
         EntityUid map,
         Vector2 globalPos,
-        List<Vector2> previewPositions)
+        List<Vector2> previewPositions,
+        out EntityUid? previewGrid)
     {
         if (!Prof.IsEnabled)
-            return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions);
+            return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions, out previewGrid);
 
         using var profile = Prof.Group("CMU Z PVS StairPreview");
-        return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions);
+        return CanPreviewUpperZFromStairCore(viewer, viewerXform, map, globalPos, previewPositions, out previewGrid);
     }
 
     private bool CanPreviewUpperZFromStairCore(
@@ -818,67 +877,106 @@ public sealed partial class CMUZLevelsSystem
         TransformComponent viewerXform,
         EntityUid map,
         Vector2 globalPos,
-        List<Vector2> previewPositions)
+        List<Vector2> previewPositions,
+        out EntityUid? previewGrid)
     {
         previewPositions.Clear();
+        previewGrid = null;
 
-        if (!TryMapUp(map, out _) ||
-            !_viewGridQuery.TryComp(map, out var grid))
-        {
+        if (!TryMapUp(map, out var upperMap))
             return false;
-        }
 
         var origin = new MapCoordinates(globalPos, viewerXform.MapID);
-        var centerTile = _map.WorldToTile(map, grid, globalPos);
-        var tileRadius = Math.Max(1, (int) MathF.Ceiling(StairPreviewProbeRadius / grid.TileSize));
         var profiling = Prof.IsEnabled;
+        var nearestFullGrid = float.MaxValue;
 
-        for (var x = -tileRadius; x <= tileRadius; x++)
+        // Dropship ramps are anchored to moving grids, even when the viewer is
+        // standing on an overlapping landing pad. Search every nearby grid.
+        _stairPreviewGrids.Clear();
+        _map.FindGridsIntersecting(viewerXform.MapID,
+            Box2.CenteredAround(globalPos, new Vector2(StairPreviewProbeRadius * 2)),
+            ref _stairPreviewGrids, approx: true, includeMap: true);
+        foreach (var (gridUid, grid) in _stairPreviewGrids)
         {
-            for (var y = -tileRadius; y <= tileRadius; y++)
+            var centerTile = _map.WorldToTile(gridUid, grid, globalPos);
+            var tileRadius = Math.Max(1, (int) MathF.Ceiling(StairPreviewProbeRadius / grid.TileSize));
+            for (var x = -tileRadius; x <= tileRadius; x++)
             {
-                if (profiling)
-                    _profilePvsStairTiles++;
-
-                var tile = centerTile + new Vector2i(x, y);
-                var query = _map.GetAnchoredEntitiesEnumerator(map, grid, tile);
-                while (query.MoveNext(out var uid))
+                for (var y = -tileRadius; y <= tileRadius; y++)
                 {
                     if (profiling)
-                        _profilePvsStairAnchored++;
+                        _profilePvsStairTiles++;
 
-                    if (uid is not { } highGroundUid ||
-                        !_viewHighGroundQuery.TryComp(highGroundUid, out var highGround) ||
-                        !highGround.PreviewUpLevel ||
-                        highGround.SupportOnlyFromAbove ||
-                        highGround.PreviewRange <= 0f)
+                    var tile = centerTile + new Vector2i(x, y);
+                    var query = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+                    while (query.MoveNext(out var uid))
                     {
-                        continue;
-                    }
+                        if (profiling)
+                            _profilePvsStairAnchored++;
 
-                    var target = _transform.GetMapCoordinates(highGroundUid);
-                    var range = Math.Min(highGround.PreviewRange + 0.05f, ExamineSystemShared.MaxRaycastRange);
-                    if (highGround.PreviewRange + 0.05f > ExamineSystemShared.MaxRaycastRange)
-                        Logger.GetSawmill("content").Warning($"CanPreviewUpperZFromStairCore: range ({highGround.PreviewRange + 0.05f}) exceeds max raycast range ({ExamineSystemShared.MaxRaycastRange})!");
+                        if (uid is not { } highGroundUid)
+                        {
+                            continue;
+                        }
 
-                    if (Vector2.DistanceSquared(origin.Position, target.Position) > range * range)
-                        continue;
+                        var hasHighGround = _viewHighGroundQuery.TryComp(highGroundUid, out var highGround);
+                        var isUpperZStair = _viewStairsQuery.TryComp(highGroundUid, out var stairs) && stairs.Offset > 0;
+                        if (!isUpperZStair && !hasHighGround)
+                            continue;
 
-                    if (profiling)
-                    {
-                        _profilePvsStairCandidates++;
-                        _profilePvsStairLosChecks++;
-                    }
+                        float range;
+                        if (hasHighGround && highGround is { } highGroundComp)
+                        {
+                            if (!highGroundComp.PreviewUpLevel ||
+                                highGroundComp.SupportOnlyFromAbove ||
+                                highGroundComp.PreviewRange <= 0f)
+                            {
+                                continue;
+                            }
 
-                    if (_examine.InRangeUnOccluded(origin, target, range, ent => ent == viewer.Owner || ent == highGroundUid))
-                    {
-                        AddStairPreviewPosition(previewPositions, target.Position);
-                        if (previewPositions.Count >= CMUZLevelViewerComponent.MaxStairPreviewPositions)
-                            return true;
+                            range = Math.Min(highGroundComp.PreviewRange + 0.05f, ExamineSystemShared.MaxRaycastRange);
+                            if (highGroundComp.PreviewRange + 0.05f > ExamineSystemShared.MaxRaycastRange)
+                                Logger.GetSawmill("content").Warning($"CanPreviewUpperZFromStairCore: range ({highGroundComp.PreviewRange + 0.05f}) exceeds max raycast range ({ExamineSystemShared.MaxRaycastRange})!");
+                        }
+                        else
+                        {
+                            range = Math.Min(StairPreviewProbeRadius, ExamineSystemShared.MaxRaycastRange);
+                        }
+
+                        var target = _transform.GetMapCoordinates(highGroundUid);
+
+                        var previewRange = highGround?.PreviewRange ?? StairPreviewProbeRadius;
+                        if (Vector2.DistanceSquared(origin.Position, target.Position) > previewRange * previewRange)
+                            continue;
+
+                        if (profiling)
+                        {
+                            _profilePvsStairCandidates++;
+                            _profilePvsStairLosChecks++;
+                        }
+
+                        if (_examine.InRangeUnOccluded(origin, target, range,
+                                (Viewer: viewer.Owner, HighGround: highGroundUid),
+                                static (ent, state) => ent == state.Viewer || ent == state.HighGround))
+                        {
+                            if (previewPositions.Count < CMUZLevelViewerComponent.MaxStairPreviewPositions)
+                                AddStairPreviewPosition(previewPositions, target.Position);
+
+                            var distance = Vector2.DistanceSquared(origin.Position, target.Position);
+                            if (highGround?.PreviewGrid is { } fullGrid &&
+                                _viewGridQuery.HasComp(fullGrid) &&
+                                Transform(fullGrid).MapUid == upperMap.Value.Owner &&
+                                distance < nearestFullGrid)
+                            {
+                                previewGrid = fullGrid;
+                                nearestFullGrid = distance;
+                            }
+                        }
                     }
                 }
             }
         }
+        _stairPreviewGrids.Clear();
 
         return previewPositions.Count > 0;
     }
@@ -897,24 +995,32 @@ public sealed partial class CMUZLevelsSystem
     private void SetStairPreviewUp(
         Entity<CMUZLevelViewerComponent> viewer,
         bool enabled,
-        IReadOnlyList<Vector2>? previewPositions = null)
+        IReadOnlyList<Vector2>? previewPositions = null,
+        EntityUid? previewGrid = null)
     {
         if (Prof.IsEnabled)
         {
             using var profile = Prof.Group("CMU Z PVS SetStairPreview");
-            SetStairPreviewUpCore(viewer, enabled, previewPositions);
+            SetStairPreviewUpCore(viewer, enabled, previewPositions, previewGrid);
             return;
         }
 
-        SetStairPreviewUpCore(viewer, enabled, previewPositions);
+        SetStairPreviewUpCore(viewer, enabled, previewPositions, previewGrid);
     }
 
     private void SetStairPreviewUpCore(
         Entity<CMUZLevelViewerComponent> viewer,
         bool enabled,
-        IReadOnlyList<Vector2>? previewPositions = null)
+        IReadOnlyList<Vector2>? previewPositions = null,
+        EntityUid? previewGrid = null)
     {
         var changed = false;
+        var fullGrid = enabled ? previewGrid : null;
+        if (viewer.Comp.StairPreviewGrid != fullGrid)
+        {
+            viewer.Comp.StairPreviewGrid = fullGrid;
+            changed = true;
+        }
 
         if (viewer.Comp.StairPreviewUp != enabled)
         {
@@ -1139,7 +1245,12 @@ public sealed partial class CMUZLevelsSystem
         _zLevelsEnabled = enabled;
 
         if (!enabled)
+        {
             _zOpeningCache.Clear();
+            _pendingProbeViewers.Clear();
+            _queuedProbeViewers.Clear();
+            _invalidatedProbeViewers.Clear();
+        }
 
         RefreshViewers();
     }

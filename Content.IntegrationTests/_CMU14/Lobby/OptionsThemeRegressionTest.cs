@@ -5,8 +5,8 @@ using Content.Client.UserInterface.Systems.Chat.Widgets;
 using Content.Shared.Chat;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using Content.Client._CMU14.Interface;
-using Content.Client._CMU14.UserInterface.Options;
+using Content.Client.CMU14.Interface;
+using Content.Client.CMU14.UserInterface.Options;
 using Content.Client.Lobby;
 using Content.Client.Options.UI;
 using Content.Client.Options.UI.Tabs;
@@ -58,6 +58,16 @@ public sealed class OptionsThemeRegressionTest : GameTest
             Assert.That(emotePicker.VisibleInTree, Is.True);
             emotes.Expanded = false;
             Assert.That(emotePicker.VisibleInTree, Is.False);
+
+            var search = keybinds.FindControl<LineEdit>("SearchBar");
+            search.InsertAtCursor(Loc.GetString("cmu-ui-options-emote-slot-1"));
+            Assert.That(emotes.Expanded, Is.True);
+            Assert.That(emotePicker.VisibleInTree, Is.True);
+            Assert.That(general.Visible, Is.False);
+            search.SelectionStart = 0;
+            search.InsertAtCursor(string.Empty);
+            Assert.That(emotes.Expanded, Is.False);
+            Assert.That(general.Visible, Is.True);
 
             var cmu = menu.FindControl<CmuTab>("CmuTab");
             var accessibility = menu.FindControl<AccessibilityTab>("AccessibilityTab");
