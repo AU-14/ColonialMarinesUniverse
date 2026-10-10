@@ -10961,18 +10961,14 @@ public sealed class YautjaSmokeTest
             await pair.ReallyBeIdle(10);
             await AssertClientHasPopup(
                 client,
-                "You activate the timer. May Guan Thwei's final hunt be swift.");
+                "You activate the timer. May Guan Thwei's final hunt be swift.",
+                "A'ke Ret has triggered Guan Thwei's bracer's self-destruction sequence.");
 
             await server.WaitPost(() =>
             {
                 var session = server.PlayerMan.Sessions.Single();
                 server.PlayerMan.SetAttachedEntity(session, listener);
             });
-
-            await pair.ReallyBeIdle(10);
-            await AssertClientHasPopup(
-                client,
-                "A'ke Ret has triggered Guan Thwei's bracer's self-destruction sequence.");
 
             await server.WaitPost(() =>
             {
@@ -19630,7 +19626,7 @@ public sealed class YautjaSmokeTest
             "CMSS13 /obj/item/falcon_drone flags_item includes ITEM_PREDATOR.");
         Assert.That(tech!.DamageMultiplier, Is.EqualTo(1f),
             "ITEM_PREDATOR marks ownership/access here; the source drone is not a damage-scaling weapon.");
-        Assert.That(tech.BlockPickup, Is.True, "CMSS13 ITEM_PREDATOR local pickup restriction.");
+        Assert.That(tech.BlockPickup, Is.False, "CM-SS13 ITEM_PREDATOR only tracks the item (yautja_tracked_item); it does not block pickup.");
         Assert.That(tech.BlockUse, Is.True, "CMSS13 ITEM_PREDATOR local use restriction.");
     }
 
@@ -19649,7 +19645,7 @@ public sealed class YautjaSmokeTest
             "CMSS13 /obj/item/trash/falcon_drone flags_item includes ITEM_PREDATOR.");
         Assert.That(tech!.DamageMultiplier, Is.EqualTo(1f),
             "Falcon trash is ITEM_PREDATOR wreckage, not a damage-scaling weapon.");
-        Assert.That(tech.BlockPickup, Is.True, "CMSS13 ITEM_PREDATOR local pickup restriction.");
+        Assert.That(tech.BlockPickup, Is.False, "CM-SS13 ITEM_PREDATOR only tracks the item (yautja_tracked_item); it does not block pickup.");
         Assert.That(tech.BlockUse, Is.False, "Falcon trash has no active use surface.");
     }
 

@@ -2,14 +2,8 @@
   abstract: true
   id: RMCBaseMeleeWeapon
   components:
-  - type: MeleeDamageMultiplier
-    whitelist:
-      components:
-      - Xeno
   - type: MeleeWeapon
     angle: 0
-  - type: CMArmorPiercing
-    amount: 20
   - type: InteractedBlacklist
     blacklist:
       components:

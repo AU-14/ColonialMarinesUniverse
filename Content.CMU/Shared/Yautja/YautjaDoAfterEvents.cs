@@ -224,5 +224,7 @@ public sealed partial class YautjaTrapArmDoAfterEvent : SimpleDoAfterEvent;
 
 public sealed partial class YautjaTrapBreakFreeAlertEvent : BaseAlertEvent;
 
+public sealed partial class YautjaSelfDestructAlertEvent : BaseAlertEvent;
+
 [Serializable, NetSerializable]
 public sealed partial class YautjaTrapBreakFreeDoAfterEvent : SimpleDoAfterEvent;

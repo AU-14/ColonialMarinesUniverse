@@ -2481,8 +2481,8 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/device/badblood_enthraller flags_item = ITEM_PREDATOR.");
                     Assert.That(hivebreakerTech!.DamageMultiplier, Is.EqualTo(1f),
                         "The hivebreaker is a tiny device with source force = 1 and should not inherit weapon-style YautjaTechItem damage scaling.");
-                    Assert.That(hivebreakerTech.BlockPickup, Is.True,
-                        "CMSS13 ITEM_PREDATOR should keep hivebreaker pickup restricted to local Yautja-tech users.");
+                    Assert.That(hivebreakerTech.BlockPickup, Is.False,
+                        "CM-SS13 ITEM_PREDATOR only tracks the item (yautja_tracked_item); it does not block pickup.");
                     Assert.That(hivebreakerTech.BlockUse, Is.True,
                         "CMSS13 ITEM_PREDATOR should keep hivebreaker use restricted to local Yautja-tech users.");
                     Assert.That(hivebreakerTech.BlockMelee, Is.True);
@@ -10304,7 +10304,7 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/clothing/under/chainshirt/thrall source description.");
                     Assert.That(chainshirtClothing.Slots, Is.EqualTo(SlotFlags.INNERCLOTHING),
                         "CMSS13 thrall chainshirt inherits the chainshirt under-clothing slot.");
-                    AssertCmss13ArmorStats(entMan, chainshirt, "CMUYautjaThrallChainshirt", new Cmss13ProtectionStats(10, 35, 40, 30));
+                    AssertCmss13ArmorStats(entMan, chainshirt, "CMUYautjaThrallChainshirt", new Cmss13ProtectionStats(10, 15, 20, 25));
                     AssertThrallEquipmentAccessible(entMan, chainshirt);
                     AssertNonCorrodible(entMan, chainshirt);
 
@@ -10942,8 +10942,8 @@ public sealed class YautjaBowTest
                         "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
                     if (tech != null)
                     {
-                        Assert.That(tech.BlockPickup, Is.True,
-                            "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
+                        Assert.That(tech.BlockPickup, Is.False,
+                            "CM-SS13 ITEM_PREDATOR only tracks the item (yautja_tracked_item); it does not block pickup.");
                         Assert.That(tech.BlockUse, Is.True,
                             "CMSS13 /obj/item/clothing/suit/armor/yautja/hunter/full sets flags_item = ITEM_PREDATOR.");
                         Assert.That(tech.BlockMelee, Is.True,
@@ -11585,7 +11585,7 @@ public sealed class YautjaBowTest
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
                     AssertSoundPath(gun.SoundGunshot!, "/Audio/CMU14/Yautja/woodhit.ogg");
                     Assert.That(entMan.HasComponent<WieldableComponent>(launcher), Is.True);
-                    Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(launcher), Is.True,
+                    Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(launcher), Is.False,
                         "CMSS13 /obj/item/weapon/gun/launcher/spike sets flags_item = ITEM_PREDATOR|TWOHANDED.");
                     AssertNonCorrodible(entMan, launcher);
                 });
@@ -12079,7 +12079,7 @@ public sealed class YautjaBowTest
                     Assert.That(fireModes.FireModes[1].FireCost, Is.EqualTo(5),
                         "CMSS13 incendiary mode sets shot_cost = 5.");
                     Assert.That(entMan.HasComponent<WieldableComponent>(pistol), Is.True);
-                    Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(pistol), Is.True,
+                    Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(pistol), Is.False,
                         "CMSS13 plasma pistol sets flags_item = ITEM_PREDATOR|IGNITING_ITEM|TWOHANDED.");
                     AssertIncendiaryPayload(entMan,
                         incendiaryBolt,
@@ -12973,7 +12973,7 @@ public sealed class YautjaBowTest
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
                     AssertSoundPath(gun.SoundGunshot!, "/Audio/CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
-                    Assert.That(tech.BlockPickup, Is.True);
+                    Assert.That(tech.BlockPickup, Is.False);
                     Assert.That(tech.ShootDeniedPopup.Id, Is.EqualTo("cmu-yautja-spike-launcher-denied"));
                     Assert.That(linked.Projectile.Id, Is.EqualTo("CMUYautjaCasterLanceBolt"),
                         "CMSS13 source uses /datum/ammo/energy/yautja/caster/lance; local keeps a named lance-equivalent that currently inherits the closest located caster-lethal payload until the exact lance datum is located.");
@@ -15801,7 +15801,7 @@ public sealed class YautjaBowTest
         IEntityManager entMan,
         EntityUid item,
         string id,
-        bool blockPickup = true)
+        bool blockPickup = false)
     {
         Assert.That(entMan.TryGetComponent<YautjaTechItemComponent>(item, out var tech), Is.True,
             $"{id} source flags_item = ITEM_PREDATOR mapping");
@@ -16079,7 +16079,7 @@ public sealed class YautjaBowTest
         string description,
         SlotFlags slots,
         string spritePath,
-        bool blockPickup = true,
+        bool blockPickup = false,
         bool humanAccessible = false)
     {
         var item = EntityPrototypeIds(entMan, id).Single();
@@ -16121,7 +16121,7 @@ public sealed class YautjaBowTest
         string spritePath,
         Cmss13ArmorStats stats,
         float? antiHugMaxCount = null,
-        bool blockPickup = true)
+        bool blockPickup = false)
     {
         var item = EntityPrototypeIds(entMan, id).Single();
         var meta = entMan.GetComponent<MetaDataComponent>(item);
@@ -16188,7 +16188,7 @@ public sealed class YautjaBowTest
             $"{id} source flags_item = ITEM_PREDATOR mapping");
         if (tech != null)
         {
-            Assert.That(tech.BlockPickup, Is.True, $"{id} source ITEM_PREDATOR pickup restriction");
+            Assert.That(tech.BlockPickup, Is.False, $"{id} source ITEM_PREDATOR pickup restriction");
             Assert.That(tech.BlockUse, Is.True, $"{id} source ITEM_PREDATOR use restriction");
             Assert.That(tech.BlockMelee, Is.True, $"{id} source ITEM_PREDATOR melee restriction");
             Assert.That(tech.BlockThrow, Is.True, $"{id} source ITEM_PREDATOR throw restriction");
@@ -16262,7 +16262,7 @@ public sealed class YautjaBowTest
         string description,
         string size,
         bool sourceUnacidable,
-        bool blockPickup = true)
+        bool blockPickup = false)
     {
         var meta = entMan.GetComponent<MetaDataComponent>(uid);
         var item = entMan.GetComponent<ItemComponent>(uid);
@@ -16569,7 +16569,7 @@ public sealed class YautjaBowTest
         string name,
         string description,
         SlotFlags slots,
-        bool blockPickup = true)
+        bool blockPickup = false)
     {
         var meta = entMan.GetComponent<MetaDataComponent>(item);
         var clothing = entMan.GetComponent<ClothingComponent>(item);
@@ -16755,7 +16755,7 @@ public sealed class YautjaBowTest
         Cmss13ProtectionStats? Stats,
         bool ItemPredator,
         bool Unacidable,
-        bool BlockPickup = true,
+        bool BlockPickup = false,
         bool CheckDescription = true);
 
     private static IEnumerable<(string Id, int Price, string Source)> Cmss13RemainingBlackMarketPriceRows()
@@ -17507,14 +17507,14 @@ public sealed class YautjaBowTest
         SlotFlags Slots,
         Cmss13ProtectionStats Stats,
         bool SourceUnacidable,
-        bool BlockPickup = true,
+        bool BlockPickup = false,
         float? AntiHugMaxCount = null,
         bool SourceArmorAllowedList = false);
 
     private static IEnumerable<AdultMandatoryArmorAndMeshRow> Cmss13AdultMandatoryArmorAndMeshRows()
     {
-        // Local CMArmor has no laser, energy, rad or internaldamage fields. Bio and explosion follow the
-        // shipped CMU prototypes; melee and bullet keep the rebase balance.
+        // Local CMArmor has no laser, energy, rad or internaldamage fields. The mesh rows follow CM-SS13
+        // exactly for melee, bullet, bio and bomb; the other wearable rows keep the rebase balance.
         const int low = 10;
         const int mediumLow = 35;
         const int medium = 40;
@@ -17526,7 +17526,7 @@ public sealed class YautjaBowTest
             "ancient alien mesh suit",
             "A strange alloy weave in the form of a vest. It feels cold with an alien weight.",
             SlotFlags.INNERCLOTHING,
-            new Cmss13ProtectionStats(low, mediumLow, 20, 30),
+            new Cmss13ProtectionStats(low, 15, 20, 25),
             false);
 
         yield return new AdultMandatoryArmorAndMeshRow(
@@ -17534,7 +17534,7 @@ public sealed class YautjaBowTest
             "body mesh",
             "A set of very fine chainlink in a meshwork for comfort and utility.",
             SlotFlags.INNERCLOTHING,
-            new Cmss13ProtectionStats(low, medium, 25, 35),
+            new Cmss13ProtectionStats(low, 20, 25, 30),
             false);
 
         yield return new AdultMandatoryArmorAndMeshRow(
@@ -17654,7 +17654,7 @@ public sealed class YautjaBowTest
         int ExplosionArmor,
         string DamagedExamineText,
         bool SourceUnacidable,
-        bool BlockPickup = true,
+        bool BlockPickup = false,
         float? AntiHugMaxCount = null);
 
     private static IEnumerable<StrandedScalableEquipmentRow> Cmss13StrandedScalableEquipmentRows()
@@ -17671,9 +17671,9 @@ public sealed class YautjaBowTest
             "A set of very fine chainlink in a meshwork for comfort and utility.",
             SlotFlags.INNERCLOTHING,
             low,
-            mediumLow,
+            15,
             20,
-            35,
+            25,
             "It has been worn from long use and poor maintenance.",
             false);
 

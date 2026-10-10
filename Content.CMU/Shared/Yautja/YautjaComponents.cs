@@ -830,6 +830,9 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? SelfDestructArmStream;
 
     [ViewVariables]
+    public EntityUid? SelfDestructWarningStream;
+
+    [ViewVariables]
     public EntityUid? SelfDestructLaughStream;
 
     [DataField]
@@ -1564,11 +1567,14 @@ public sealed partial class YautjaCasterProjectileRefundComponent : Component
 [RegisterComponent, NetworkedComponent]
 public sealed partial class YautjaTechItemComponent : Component
 {
+    // Scales projectile/ranged damage and melee stamina damage. Melee *health* damage is deliberately
+    // excluded: CM-SS13 gives Yautja gear no melee damage bonus, and stacking one with the xeno-melee
+    // armour config over-scaled it.
     [DataField]
     public float DamageMultiplier = 1.5f;
 
     [DataField]
-    public bool BlockPickup = true;
+    public bool BlockPickup = false;
 
     [DataField]
     public bool BlockUse = true;

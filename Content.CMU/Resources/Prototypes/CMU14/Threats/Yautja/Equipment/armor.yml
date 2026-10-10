@@ -775,10 +775,10 @@
   - type: Clothing
     sprite: CMU14/Yautja/body_mesh.rsi
   - type: CMArmor
-    melee: 10
-    bullet: 40
+    melee: 10 # CM-SS13 hunter melee LOW
+    bullet: 20 # CM-SS13 hunter bullet MEDIUM
     bio: 25 # CM-SS13 hunter MEDIUMHIGH
-    explosionArmor: 35 # CM-SS13 hunter bomb HIGH
+    explosionArmor: 30 # CM-SS13 hunter bomb HIGH
   - type: Corrodible
     isCorrodible: false
   - type: YautjaTechItem
@@ -792,10 +792,10 @@
   description: A strange alloy weave in the form of a vest. It feels cold with an alien weight.
   components:
   - type: CMArmor
-    melee: 10
-    bullet: 35
+    melee: 10 # CM-SS13 base melee LOW
+    bullet: 15 # CM-SS13 base bullet MEDIUMLOW
     bio: 20 # CM-SS13 base MEDIUM
-    explosionArmor: 30 # CM-SS13 base bomb MEDIUMHIGH
+    explosionArmor: 25 # CM-SS13 base bomb MEDIUMHIGH
 
 - type: entity
   parent: CMUYautjaBodyMesh
@@ -813,9 +813,9 @@
     blockShoot: false
   - type: CMArmor
     melee: 10
-    bullet: 35
-    bio: 40
-    explosionArmor: 30 # CM-SS13 thrall bomb MEDIUMHIGH
+    bullet: 15 # CM-SS13 thrall inherits base bullet MEDIUMLOW
+    bio: 20 # CM-SS13 thrall inherits base MEDIUM
+    explosionArmor: 25 # CM-SS13 thrall inherited bomb MEDIUMHIGH
 
 - type: entity
   parent: ClothingShoesBase
@@ -1445,9 +1445,9 @@
   - type: YautjaTechItem
   - type: CMArmor
     melee: 10
-    bullet: 35
+    bullet: 15 # CM-SS13 scalable bullet MEDIUMLOW
     bio: 20 # CM-SS13 scalable MEDIUM
-    explosionArmor: 35 # CM-SS13 hunter bomb HIGH
+    explosionArmor: 25 # CM-SS13 scalable bomb MEDIUMHIGH
   - type: YautjaScalableRepair
     damagedText: cmu-yautja-repair-worn
 

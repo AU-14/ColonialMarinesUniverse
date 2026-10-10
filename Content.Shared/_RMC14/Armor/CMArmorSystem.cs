@@ -352,7 +352,23 @@ public sealed partial class CMArmorSystem : EntitySystem
         var immuneToAP = TryComp<CMArmorComponent>(ent, out var armorComp) && armorComp.ImmuneToAP;
         if (HasComp<XenoComponent>(ent))
         {
-            ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier);
+            //cmu
+            var armorEffectiveness = 1f;
+            if (args.Impact.Delivery == DamageImpactDelivery.Melee)
+            {
+                args.Damage = args.Damage * 1.5f;
+
+                if (args.Tool is { } meleeTool && meleeTool != args.Origin)
+                {
+                    armorPiercing += 20;
+                }
+                else if (HasComp<XenoComponent>(args.Origin))
+                {
+                    armorEffectiveness = 0.25f; //
+                }
+            }
+
+            ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier * armorEffectiveness);
             if (!immuneToAP)
                 ev.XenoArmor -= armorPiercing;
         }

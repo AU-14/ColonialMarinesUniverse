@@ -363,6 +363,14 @@ public sealed partial class XenoSystem : EntitySystem
 
     private void OnXenoMeleeHit(Entity<XenoComponent> xeno, ref MeleeHitEvent args)
     {
+        //cmu
+        if (args.IsHit &&
+            !MathHelper.CloseTo(XENO_SLASH_DAMAGE_MULT, 1f) &&
+            AnyXenoSizedTarget(args.HitEntities))
+        {
+            args.BonusDamage += (args.BaseDamage + args.BonusDamage) * (XENO_SLASH_DAMAGE_MULT - 1f);
+        }
+
         foreach (var hit in args.HitEntities)
         {
             if (!TryComp<EntityStorageComponent>(hit, out var storage))
@@ -373,6 +381,17 @@ public sealed partial class XenoSystem : EntitySystem
 
             _entityStorage.TryOpenStorage(xeno, hit);
         }
+    }
+    //cmu
+    private bool AnyXenoSizedTarget(IReadOnlyList<EntityUid> hits)
+    {
+        foreach (var hit in hits)
+        {
+            if (_size.TryGetSize(hit, out var size) && _size.IsXenoSized(size))
+                return true;
+        }
+
+        return false;
     }
 
     private void OnHiveChanged(Entity<XenoComponent> ent, ref HiveChangedEvent args)
