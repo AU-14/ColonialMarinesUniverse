@@ -178,3 +178,6 @@
   conditions:
   - !type:TileNotBlocked
   - !type:TileBarricadeClear
+  - !type:AU14MinimumSkill
+    skill: RMCSkillConstruction
+    level: 4
