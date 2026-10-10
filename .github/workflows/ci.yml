@@ -470,9 +470,14 @@ jobs:
               | FullyQualifiedName~CMU14.Evacuation.
               | FullyQualifiedName~CMU14.Weapons.
               | FullyQualifiedName~CMU14.TacticalMap.
+          # CMU14: the six-guard squad fight still picks up state from earlier expedition tests on recycled
+          # pool servers and flakes inside the cmu shard, alone it passes. drop this once the leak is found
+          - name: cmu_expedition_squads
+            filter: FullyQualifiedName~CMU14.Expeditions.CMUExpeditionAdvancedAgentTest.SixGuardsCoordinateWithoutStarvationAndMeasureSearchCost
           - name: cmu
             filter: >-
               FullyQualifiedName~CMU14.
+              & FullyQualifiedName!~CMU14.Expeditions.CMUExpeditionAdvancedAgentTest.SixGuardsCoordinateWithoutStarvationAndMeasureSearchCost
               & FullyQualifiedName!~CMU14.ColonyEconomy.
               & FullyQualifiedName!~CMU14.Fire.
               & FullyQualifiedName!~CMU14.ForceOnForce.
@@ -547,7 +552,7 @@ jobs:
           case "$shard" in
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
             cmu_yautja_smoke) workers=1 ;;
-            root_1|cmu|cmu_systems|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            root_1|cmu|cmu_systems|cmu_expedition_squads|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             cmu_lobby_ui) workers=1 ;;
             map_loading) workers=1; hang_timeout=20m ;;
           esac
