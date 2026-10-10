@@ -17,7 +17,7 @@ namespace Content.Server.CMU14.Falling;
 /// Falling out of a flying dropship without a parachute: whoever crash lands on the planet breaks every limb and
 /// takes a severe concussion. Parachutes turn the crash into a paradrop before this ever happens.
 /// </summary>
-public sealed class CMUCrashLandInjurySystem : EntitySystem
+public sealed partial class CMUCrashLandInjurySystem : EntitySystem
 {
     [Dependency] private SharedBoneSystem _bones = default!;
     [Dependency] private CMUChemicalMedicalSystem _chemicalMedical = default!;

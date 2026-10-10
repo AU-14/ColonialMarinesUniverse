@@ -74,6 +74,7 @@ public sealed class CMU3DFoamAppearanceTest
         Label = label, Min = Vector3.Zero, Max = new Vector3(.1f), Color = CMU3DFoamAppearance.SourceTint,
     };
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model()
     {
         var definition = new CMU3DFoamAppearanceDefinition { BaseParts = [Part("body")] };

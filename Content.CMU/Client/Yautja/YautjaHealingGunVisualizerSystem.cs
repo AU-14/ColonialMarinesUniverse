@@ -5,7 +5,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Client.CMU14.Yautja;
 
-public sealed class YautjaHealingGunVisualizerSystem : EntitySystem
+public sealed partial class YautjaHealingGunVisualizerSystem : EntitySystem
 {
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedItemSystem _item = default!;

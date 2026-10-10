@@ -12,6 +12,8 @@ namespace Content.IntegrationTests.CMU14.Threats.Wendigo;
 [TestFixture]
 public sealed class CMUWendigoResearchUnlockTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> WEYUPrototype = "WEYU";
+
     public override PoolSettings PoolSettings => new() { Connected = false };
 
     [TestPrototypes]
@@ -192,7 +194,7 @@ public sealed class CMUWendigoResearchUnlockTest : GameTest
                     Assert.That(unlock.IsWeylandYutaniFaction(null), Is.False);
                 });
 
-                platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>("WEYU");
+                platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(WEYUPrototype);
                 Assert.That(unlock.IsWeylandYutaniFaction("GOVFOR"), Is.True);
                 Assert.That(unlock.IsWeylandYutaniFaction("opfor"), Is.False);
             }

@@ -10,6 +10,7 @@ using Content.Shared.Tag;
 using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.CMU14.Medical.Treatment.FirstAid;
 
@@ -17,6 +18,8 @@ namespace Content.IntegrationTests.CMU14.Medical.Treatment.FirstAid;
 [TestFixture]
 public sealed class SplintCastRemovalTest : GameTest
 {
+    private static readonly ProtoId<TagPrototype> InstantDoAftersTag = "InstantDoAfters";
+
     [TestCase(false)]
     [TestCase(true)]
     public async Task MedicCanTakeSupportOffAnotherPatient(bool cast)
@@ -29,7 +32,7 @@ public sealed class SplintCastRemovalTest : GameTest
             medic = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             patient = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
             SEntMan.EnsureComponent<CMInStasisComponent>(patient);
-            SEntMan.System<TagSystem>().AddTag(medic, "InstantDoAfters");
+            SEntMan.System<TagSystem>().AddTag(medic, InstantDoAftersTag);
 
             Assert.That(SEntMan.System<CMUMedicalBodyIndexSystem>().TryGetBodyPart(patient,
                 new CMUMedicalBodyPartKey(BodyPartType.Arm, BodyPartSymmetry.Left), out part), Is.True);

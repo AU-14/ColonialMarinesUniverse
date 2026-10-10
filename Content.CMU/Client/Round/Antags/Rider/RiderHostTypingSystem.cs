@@ -14,7 +14,7 @@ using Robust.Shared.Timing;
 namespace Content.Client.CMU14.Round.Antags.Rider;
 
 // mirrors the rider's typing onto the host, but only for channels that actually come out of the host's mouth
-public sealed class RiderHostTypingSystem : EntitySystem
+public sealed partial class RiderHostTypingSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IPlayerManager _player = default!;

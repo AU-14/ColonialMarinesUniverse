@@ -32,6 +32,8 @@ namespace Content.IntegrationTests._RMC14;
 [TestOf(typeof(ClientHiddenAppearanceSystem))]
 public sealed class HiddenAppearanceTest : InteractionTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<MarkingsGroupPrototype> HumanPrototype = "Human";
+
     private static readonly Color HiddenEyeColor = Color.Cyan;
     private static readonly Color HiddenSkinColor = Color.Teal;
     private static readonly Color HiddenHairColor = Color.Magenta;
@@ -262,7 +264,7 @@ public sealed class HiddenAppearanceTest : InteractionTest
         await OverrideCVar(Side.Server, RMCCVars.HidePlayerIdentities, true);
         await Client.WaitAssertion(() =>
         {
-            var group = CProtoMan.Index<MarkingsGroupPrototype>("Human");
+            var group = CProtoMan.Index<MarkingsGroupPrototype>(HumanPrototype);
             Assert.Multiple(() =>
             {
                 Assert.That(

@@ -12,6 +12,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaOriginalSpawnLoadoutTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<StartingGearPrototype> CMUYautjaYoungbloodGearPrototype = "CMUYautjaYoungbloodGear";
+
     [Test]
     public async Task HunterPlayerSpawnStartsOnlyWithBracerAndCommunicator()
     {
@@ -91,7 +93,7 @@ public sealed class YautjaOriginalSpawnLoadoutTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var gear = prototypes.Index<StartingGearPrototype>("CMUYautjaYoungbloodGear");
+            var gear = prototypes.Index<StartingGearPrototype>(CMUYautjaYoungbloodGearPrototype);
 
             Assert.That(gear.Equipment.Keys, Is.EquivalentTo(new[] { "ears", "gloves" }));
             Assert.That(gear.Equipment["ears"], Is.EqualTo("CMUYautjaCommunicator"));

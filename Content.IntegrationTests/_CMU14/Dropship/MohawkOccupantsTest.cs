@@ -43,7 +43,7 @@ public sealed class MohawkOccupantsTest
             var entities = pair.Server.EntMan;
             ship = LoadShip(entities, variant);
             var transform = entities.System<SharedTransformSystem>();
-            var seats = entities.EntityQuery<MohawkSeatComponent>().ToArray();
+            var seats = entities.QueryEntities<MohawkSeatComponent>().ToArray();
             Assert.That(seats, Has.Length.EqualTo(variant.StartsWith("omaha") ? 64 : 21));
             foreach (var x in new[] { -0.5f, 1.5f })
                 Assert.That(seats.Count(s => entities.GetComponent<TransformComponent>(s.Owner).LocalPosition == new Vector2(x, 9.5f)),
@@ -454,7 +454,7 @@ public sealed class MohawkOccupantsTest
             transform.SetWorldRotation(ship, Angle.FromDegrees(degrees));
             var assembly = entities.GetComponent<MultiDeckDropshipComponent>(ship);
             entities.System<MultiDeckDropshipSystem>().Synchronize((ship, assembly));
-            var gears = entities.EntityQuery<MohawkLandingGearComponent>().ToArray();
+            var gears = entities.QueryEntities<MohawkLandingGearComponent>().ToArray();
             Assert.That(gears, Has.Length.EqualTo(4));
             foreach (var gear in gears)
             {
@@ -490,7 +490,7 @@ public sealed class MohawkOccupantsTest
             var transform = entities.System<SharedTransformSystem>();
             transform.SetWorldRotation(ship, Angle.FromDegrees(degrees));
             entities.System<MultiDeckDropshipSystem>().Synchronize((ship, assembly));
-            var bulkheads = entities.EntityQuery<MohawkRampSegmentComponent>().Where(p => p.Lower && p.Stage == 4).ToArray();
+            var bulkheads = entities.QueryEntities<MohawkRampSegmentComponent>().Where(p => p.Comp.Lower && p.Comp.Stage == 4).ToArray();
             Assert.That(bulkheads, Has.Length.EqualTo(3));
             foreach (var deployed in new[] { true, false, true })
             {

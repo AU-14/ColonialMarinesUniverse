@@ -16,6 +16,8 @@ namespace Content.IntegrationTests.Tests.Roles;
 [TestOf(typeof(StationSpawningSystem))]
 public sealed class StationSpawningMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<StartingGearPrototype> StationSpawningMergeGearPrototype = "StationSpawningMergeGear";
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: entity
@@ -53,7 +55,7 @@ public sealed class StationSpawningMergeRegressionTest : GameTest
         {
             var spawning = Server.System<StationSpawningSystem>();
             var inventory = Server.System<InventorySystem>();
-            var gear = SProtoMan.Index<StartingGearPrototype>("StationSpawningMergeGear");
+            var gear = SProtoMan.Index<StartingGearPrototype>(StationSpawningMergeGearPrototype);
 
             var wearer = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
             var wearerProbe = SEntMan.AddComponent<StationSpawningMergeProbeComponent>(wearer);
@@ -111,7 +113,7 @@ public sealed partial class StationSpawningMergeProbeComponent : Component
     public Box2i[] GridAtFill = [];
 }
 
-public sealed class StationSpawningMergeProbeSystem : EntitySystem
+public sealed partial class StationSpawningMergeProbeSystem : EntitySystem
 {
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedStorageSystem _storage = default!;

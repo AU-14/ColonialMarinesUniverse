@@ -12,7 +12,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Util;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.util;
-using Content.Shared.CMU14.util;
+
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CharacterInfo;
 using Content.Shared.Inventory;

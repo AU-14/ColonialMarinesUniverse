@@ -460,7 +460,7 @@ public sealed class GunOwnerPenaltyRegressionTest : GameTest
 
     private void AssertPenaltyOwners<T>(params EntityUid[] expected) where T : Component
     {
-        var actual = SEntMan.EntityQuery<T>().Select(component => component.Owner).ToHashSet();
+        var actual = SEntMan.QueryEntities<T>().Select(component => component.Owner).ToHashSet();
         Assert.That(actual, Is.EquivalentTo(expected));
     }
 

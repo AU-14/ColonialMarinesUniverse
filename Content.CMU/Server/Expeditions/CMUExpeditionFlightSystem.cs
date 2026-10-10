@@ -5,7 +5,7 @@ using Content.Shared.Verbs;
 namespace Content.Server.CMU14.Expeditions;
 
 /// <summary>Only the seated pilot can choose a theater; native takeoff clearance still applies.</summary>
-public sealed class CMUExpeditionFlightSystem : EntitySystem
+public sealed partial class CMUExpeditionFlightSystem : EntitySystem
 {
     [Dependency] private FighterSystem _fighters = default!;
 

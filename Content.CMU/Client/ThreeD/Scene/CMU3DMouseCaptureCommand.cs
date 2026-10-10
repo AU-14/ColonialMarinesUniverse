@@ -6,7 +6,7 @@ using Robust.Client.Input;
 namespace Content.Client.CMU14.ThreeD.Scene;
 
 [AnyCommand]
-public sealed class CMU3DMouseCaptureCommand : LocalizedEntityCommands
+public sealed partial class CMU3DMouseCaptureCommand : LocalizedEntityCommands
 {
     [Dependency] private IInputManager _input = default!;
     public override string Command => "cmu_3d_capture";

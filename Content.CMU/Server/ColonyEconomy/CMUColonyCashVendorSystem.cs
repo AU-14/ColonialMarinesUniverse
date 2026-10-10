@@ -16,7 +16,7 @@ namespace Content.Server.CMU14.ColonyEconomy;
 /// cigarette, recreation and clothing vendors on the planet and on the GOVFOR/OPFOR ships for
 /// cash-operated CMU versions.
 /// </summary>
-public sealed class CMUColonyCashVendorSystem : EntitySystem
+public sealed partial class CMUColonyCashVendorSystem : EntitySystem
 {
     [Dependency] private SharedTransformSystem _transform = default!;
 

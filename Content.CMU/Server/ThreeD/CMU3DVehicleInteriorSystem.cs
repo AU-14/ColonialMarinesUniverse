@@ -4,7 +4,7 @@ using Content.Shared.CMU14.ThreeD;
 namespace Content.Server.CMU14.ThreeD;
 
 /// <summary>Vehicle cabins inherit opt-in availability without enabling unrelated maps.</summary>
-public sealed class CMU3DVehicleInteriorSystem : EntitySystem
+public sealed partial class CMU3DVehicleInteriorSystem : EntitySystem
 {
     [Dependency] private MetaDataSystem _metadata = default!;
 

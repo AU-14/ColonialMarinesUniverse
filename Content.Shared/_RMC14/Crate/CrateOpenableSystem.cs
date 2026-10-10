@@ -29,7 +29,7 @@ public sealed partial class CrateOpenableSystem : EntitySystem
 
         if (!_tool.HasQuality(args.Used, ent.Comp.Tool))
         {
-            _popup.PopupClient(Loc.GetString(ent.Comp.WrongToolPopup), ent, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString(ent.Comp.WrongToolPopup), ent, args.User, PopupType.SmallCaution);
             return;
         }
 

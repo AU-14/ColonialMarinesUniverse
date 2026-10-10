@@ -11,6 +11,7 @@ namespace Content.Tests.Client.CMU14.ThreeD;
 [TestFixture]
 public sealed class CMU3DScenePlacementTest
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void ConnectedTableSupportsSeamItemsWhileKeepingUnjoinedEdgesInset()
     {
@@ -35,6 +36,7 @@ public sealed class CMU3DScenePlacementTest
         Assert.That(top.Max, Is.EqualTo(new Vector3(.47f, .44f, .835f)));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void RotatedOffCenterTableSupportsOnlyPropsInsideItsActualTop()
     {
@@ -139,6 +141,7 @@ public sealed class CMU3DScenePlacementTest
         Assert.That(model.Parts[0].Max.Z, Is.EqualTo(.15f));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Boards() => new()
     {
         SupportSurfaces = ["left", "right"],
@@ -149,6 +152,7 @@ public sealed class CMU3DScenePlacementTest
         ],
     };
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Prop()
     {
         var prop = new CMU3DModelPrototype { Placement = "surface" };

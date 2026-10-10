@@ -7,7 +7,7 @@ namespace Content.Server.CMU14.Round.Antags.SerialKiller;
 
 public sealed partial class SerialKillerRuleSystem : GameRuleSystem<SerialKillerRuleComponent>
 {
-    [Dependency] private readonly WantedSystem _wantedSystem = default!;
+    [Dependency] private WantedSystem _wantedSystem = default!;
 
     public override void Initialize()
     {

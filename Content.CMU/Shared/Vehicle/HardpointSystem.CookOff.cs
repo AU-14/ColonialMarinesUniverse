@@ -38,7 +38,7 @@ public sealed partial class HardpointSystem
         if (!IsWrecked(target))
             return true;
 
-        _popup.PopupClient(GetWreckMessage(target), target, user, PopupType.SmallCaution);
+        _popup.PopupEntity(GetWreckMessage(target), target, user, PopupType.SmallCaution);
         return false;
     }
 }

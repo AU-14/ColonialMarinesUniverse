@@ -22,6 +22,6 @@ public sealed partial class CMUAggressiveGrabSystem : EntitySystem
             return;
 
         args.Cancelled = true;
-        _popup.PopupClient(Loc.GetString("cmu-pull-aggressive-struggle-hint"), ent, ent, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-pull-aggressive-struggle-hint"), ent, ent, PopupType.SmallCaution);
     }
 }

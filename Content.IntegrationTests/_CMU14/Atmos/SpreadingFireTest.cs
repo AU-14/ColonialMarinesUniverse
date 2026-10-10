@@ -37,14 +37,14 @@ public sealed class SpreadingFireTest : GameTest
 
             var system = Server.System<CMUSpreadingFireSystem>();
             Assert.DoesNotThrow(() => system.Update(0));
-            var fires = SEntMan.EntityQuery<TileFireComponent>().ToArray();
+            var fires = SEntMan.QueryEntities<TileFireComponent>().ToArray();
             Assert.That(fires, Has.Length.EqualTo(3), "The destination may only ignite once.");
             var child = fires.Single(f => !parents.Contains(f.Owner));
             var childSpread = SEntMan.GetComponent<CMUSpreadingFireComponent>(child.Owner);
             Assert.That(childSpread.Depth, Is.EqualTo(2));
             Assert.That(childSpread.NextSpread, Is.EqualTo(SGameTiming.CurTime + childSpread.SpreadEvery));
             system.Update(0);
-            Assert.That(SEntMan.EntityQuery<TileFireComponent>().Count(), Is.EqualTo(3),
+            Assert.That(SEntMan.QueryEntities<TileFireComponent>().Count(), Is.EqualTo(3),
                 "New fires must wait for their spread interval.");
         });
     }
@@ -72,7 +72,7 @@ public sealed class SpreadingFireTest : GameTest
             spread.Depth = 3;
             spread.NextSpread = TimeSpan.Zero;
             system.Update(0);
-            Assert.That(SEntMan.EntityQuery<TileFireComponent>().Count(), Is.EqualTo(1),
+            Assert.That(SEntMan.QueryEntities<TileFireComponent>().Count(), Is.EqualTo(1),
                 "An explicit depth must not bypass the AU14-only spread restriction.");
         });
     }

@@ -54,7 +54,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
             return;
 
         if (args.Popup)
-            _popup.PopupClient(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-skills-cant-operate", ("target", ent)), args.Buckle, args.User);
     }
 
     private void OnPortGunSeatUnstrapped(Entity<VehiclePortGunSeatComponent> ent, ref UnstrappedEvent args)
@@ -75,7 +75,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
 
         if (portGun.Operator != null && portGun.Operator != args.User)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-in-use", ("operator", Name(portGun.Operator.Value))), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-in-use", ("operator", Name(portGun.Operator.Value))), ent, args.User);
             return;
         }
 
@@ -247,13 +247,13 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
 
         if (!TryGetPortGunSeat(user))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-need-seat"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-need-seat"), ent, user);
             return false;
         }
 
         if (!_vehicleSystem.TryGetVehicleFromInterior(ent.Owner, out var vehicleUid) || vehicleUid == null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-no-vehicle"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-no-vehicle"), ent, user);
             return false;
         }
 
@@ -264,7 +264,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
             !slot.HasItem ||
             slot.Item == null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-no-gun"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-no-gun"), ent, user);
             return false;
         }
 
@@ -272,7 +272,7 @@ public sealed partial class VehiclePortGunSystem : EntitySystem
 
         if (!TryComp(gunUid, out VehiclePortGunComponent? portGunComp) || !TryComp(gunUid, out GunComponent? _))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-portgun-no-gun"), ent, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-portgun-no-gun"), ent, user);
             return false;
         }
 

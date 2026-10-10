@@ -160,7 +160,7 @@ public sealed partial class CMU3DSceneControl
             Direction? direction = sprite.EnableDirectionOverride ? sprite.DirectionOverride
                 : faceCamera ? (yaw - new Angle(planeYaw)).GetDir() : null;
             var bounds = Matrix3Helpers.CreateRotation(eyeRotation)
-                .TransformBox(sprite.CalculateRotatedBoundingBox(default, artYaw, eyeRotation));
+                .TransformBox(sprites.CalculateBounds((uid, sprite), default, artYaw, eyeRotation));
             if (bounds.Width <= 0 || bounds.Height <= 0) continue;
             var scale = along
                 ? new Vector2((SpriteCell - 4) / (bounds.Width * EyeManager.PixelsPerMeter), (SpriteCell - 4) / (bounds.Height * EyeManager.PixelsPerMeter))

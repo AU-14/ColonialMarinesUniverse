@@ -4,10 +4,10 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Client.CMU14.Yautja;
 
-public sealed class YautjaWallVisionSystem : EntitySystem
+public sealed partial class YautjaWallVisionSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
-    [Dependency] private readonly IPlayerManager _players = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _players = default!;
 
     public override void Initialize()
     {

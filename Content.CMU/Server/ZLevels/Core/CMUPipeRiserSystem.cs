@@ -11,14 +11,14 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Server.CMU14.ZLevels.Core;
 
-public sealed class CMUPipeRiserSystem : EntitySystem
+public sealed partial class CMUPipeRiserSystem : EntitySystem
 {
     private const string PryingQuality = "Prying";
 
-    [Dependency] private readonly NodeContainerSystem _nodeContainer = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedToolSystem _tool = default!;
-    [Dependency] private readonly CMUZPairingSystem _zPairing = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private CMUZPairingSystem _zPairing = default!;
 
     public override void Initialize()
     {
@@ -65,7 +65,7 @@ public sealed class CMUPipeRiserSystem : EntitySystem
         Dirty(ent.Owner, paired);
 
         var direction = Loc.GetString(paired.Offset > 0 ? "cmu-z-direction-above" : "cmu-z-direction-below");
-        _popup.PopupClient(Loc.GetString("cmu-pipe-riser-dir-toggled", ("direction", direction)), ent, args.User);
+        _popup.PopupEntity(Loc.GetString("cmu-pipe-riser-dir-toggled", ("direction", direction)), ent, args.User);
 
         _zPairing.Unpair((ent.Owner, paired));
         _zPairing.TryPair((ent.Owner, paired));

@@ -21,6 +21,8 @@ namespace Content.IntegrationTests._CMU14.ForceOnForce;
 [TestFixture]
 public sealed class ForceOnForceBombardmentTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ForceOnForceBombardmentPrototype> CMUFoFBombardmentPrototype = "CMUFoFBombardment";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     private async Task<EntityUid> GroundViewer()
@@ -30,11 +32,11 @@ public sealed class ForceOnForceBombardmentTest : GameTest
         await Server.WaitPost(() =>
         {
             var grid = SEntMan.GetComponent<MapGridComponent>(map.GridCoords.EntityId);
-            SEntMan.EnsureComponent<RMCPlanetComponent>(SEntMan.GetComponent<TransformComponent>(grid.Owner).MapUid!.Value);
+            SEntMan.EnsureComponent<RMCPlanetComponent>(SEntMan.GetComponent<TransformComponent>(map.GridCoords.EntityId).MapUid!.Value);
             var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["RMCFloorVehicleInteriorDarkSterile"].TileId);
             var maps = Server.System<SharedMapSystem>();
             for (var x = -22; x <= 22; x++)
-            for (var y = -22; y <= 22; y++) maps.SetTile(grid.Owner, grid, new Vector2i(x, y), floor);
+            for (var y = -22; y <= 22; y++) maps.SetTile(map.GridCoords.EntityId, grid, new Vector2i(x, y), floor);
             viewer = SEntMan.SpawnEntity("MobObserver", map.GridCoords);
             SEntMan.EnsureComponent<MobStateComponent>(viewer);
             Server.System<MindSystem>().ControlMob(ServerSession!.UserId, viewer);
@@ -76,15 +78,15 @@ public sealed class ForceOnForceBombardmentTest : GameTest
                 await Pair.RunSeconds(.5f);
                 await Server.WaitAssertion(() =>
                 {
-                    Assert.That(SEntMan.EntityQuery<FighterFlybyComponent>().Any(), Is.False, "orbital fire must never summon a jet");
-                    var beams = SEntMan.EntityQuery<FighterLaserComponent>().Any();
+                    Assert.That(SEntMan.QueryEntities<FighterFlybyComponent>().Any(), Is.False, "orbital fire must never summon a jet");
+                    var beams = SEntMan.QueryEntities<FighterLaserComponent>().Any();
                     if (variant != 1) Assert.That(beams, Is.False, "shells, meteors and concussion blasts are not laser variants");
                     sawBeam |= beams;
-                    foreach (var effect in SEntMan.EntityQuery<ForceOnForceBombardmentVisualComponent>())
+                    foreach (var effect in SEntMan.QueryEntities<ForceOnForceBombardmentVisualComponent>())
                     {
-                        Assert.That(effect.Variant, Is.EqualTo(variant), "a selected type must not cycle into another type");
-                        variations.Add(effect.Variation);
-                        if (effect.Impacted) impacts[effect.Owner] = effect.ImpactAt;
+                        Assert.That(effect.Comp.Variant, Is.EqualTo(variant), "a selected type must not cycle into another type");
+                        variations.Add(effect.Comp.Variation);
+                        if (effect.Comp.Impacted) impacts[effect.Owner] = effect.Comp.ImpactAt;
                     }
                 });
             }
@@ -107,10 +109,10 @@ public sealed class ForceOnForceBombardmentTest : GameTest
             var position = SEntMan.GetComponent<TransformComponent>(viewer).Coordinates.Offset(new Vector2(10, 0));
             typeof(ForceOnForceBombardmentSystem).GetMethod("Present", BindingFlags.Instance | BindingFlags.NonPublic)!
                 .Invoke(Server.System<ForceOnForceBombardmentSystem>(),
-                    [position, Vector2.UnitX, 2, SProtoMan.Index<ForceOnForceBombardmentPrototype>("CMUFoFBombardment")]);
-            var effect = SEntMan.EntityQuery<ForceOnForceBombardmentVisualComponent>().Single();
+                    [position, Vector2.UnitX, 2, SProtoMan.Index<ForceOnForceBombardmentPrototype>(CMUFoFBombardmentPrototype)]);
+            var effect = SEntMan.QueryEntities<ForceOnForceBombardmentVisualComponent>().Single();
             incoming = effect.Owner;
-            Assert.That(effect.Impacted, Is.False);
+            Assert.That(effect.Comp.Impacted, Is.False);
             Assert.That(SEntMan.HasComponent<FighterStrikeVisualComponent>(incoming), Is.False);
             // A bystander walks under the incoming effect after the initial location was chosen.
             var body = SEntMan.SpawnEntity(null, position.Offset(new Vector2(0, 8)));
@@ -121,8 +123,8 @@ public sealed class ForceOnForceBombardmentTest : GameTest
         await Server.WaitAssertion(() =>
         {
             Assert.That(SEntMan.Deleted(incoming), Is.True, "cancel the descent when its landing zone becomes occupied");
-            Assert.That(SEntMan.EntityQuery<FighterStrikeVisualComponent>().Any(), Is.False);
-            Assert.That(SEntMan.EntityQuery<FighterLaserComponent>().Any(), Is.False);
+            Assert.That(SEntMan.QueryEntities<FighterStrikeVisualComponent>().Any(), Is.False);
+            Assert.That(SEntMan.QueryEntities<FighterLaserComponent>().Any(), Is.False);
         });
     }
 }

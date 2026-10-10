@@ -1892,7 +1892,7 @@ public sealed partial class HardpointSystem : EntitySystem
 
             if (TryGetFailureRepairStep(args.Failure, nextStep, out var next))
             {
-                _popup.PopupClient(
+                _popup.PopupEntity(
                     $"{GetFailureName(args.Failure)} repair step complete. Next: {GetFailureRepairToolName(next)}.",
                     ent.Owner,
                     args.User);
@@ -1904,7 +1904,7 @@ public sealed partial class HardpointSystem : EntitySystem
         if (!RemoveHardpointFailure(vehicle, ent.Owner, args.Failure, ent.Comp))
             return;
 
-        _popup.PopupClient($"{GetFailureName(args.Failure)} repaired.", ent.Owner, args.User);
+        _popup.PopupEntity($"{GetFailureName(args.Failure)} repaired.", ent.Owner, args.User);
     }
 
     // CMU14 method: vehicle damage and usability.
@@ -2038,14 +2038,14 @@ public sealed partial class HardpointSystem : EntitySystem
 
         if (ent.Comp.Integrity >= ent.Comp.MaxIntegrity)
         {
-            _popup.PopupClient(Loc.GetString("rmc-hardpoint-intact"), ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-hardpoint-intact"), ent.Owner, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return true;
         }
 
         if (isFrame && HasDamagedMountedHardpoints(ent.Owner))
         {
-            _popup.PopupClient("Repair the vehicle's hardpoints to restore hull integrity.", ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity("Repair the vehicle's hardpoints to restore hull integrity.", ent.Owner, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return true;
         }
@@ -2060,14 +2060,14 @@ public sealed partial class HardpointSystem : EntitySystem
 
         if (usedWelder && isFrame && ent.Comp.Integrity >= weldCap - ent.Comp.FrameRepairEpsilon)
         {
-            _popup.PopupClient("Finish tightening the frame with a wrench.", ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity("Finish tightening the frame with a wrench.", ent.Owner, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return true;
         }
 
         if (usedWrench && ent.Comp.Integrity < weldCap - ent.Comp.FrameRepairEpsilon)
         {
-            _popup.PopupClient("Weld the frame before tightening it.", ent.Owner, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity("Weld the frame before tightening it.", ent.Owner, args.User, PopupType.SmallCaution);
             args.Handled = true;
             return true;
         }
@@ -2184,7 +2184,7 @@ public sealed partial class HardpointSystem : EntitySystem
         if (ent.Comp.RepairSound != null)
             _audio.PlayPredicted(ent.Comp.RepairSound, ent.Owner, args.User);
 
-        _popup.PopupClient(Loc.GetString("rmc-hardpoint-repaired"), ent.Owner, args.User);
+        _popup.PopupEntity(Loc.GetString("rmc-hardpoint-repaired"), ent.Owner, args.User);
 
         var vehicle = _topology.TryGetVehicle(ent.Owner, out var containingVehicle)
             ? containingVehicle
@@ -2241,7 +2241,7 @@ public sealed partial class HardpointSystem : EntitySystem
             return true;
 
         if (popup)
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-maintenance-repair-required"), vehicle, user);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-maintenance-repair-required"), vehicle, user);
         return false;
     }
 

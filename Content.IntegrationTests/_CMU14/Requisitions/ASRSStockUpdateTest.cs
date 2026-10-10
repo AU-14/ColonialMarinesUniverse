@@ -17,6 +17,9 @@ namespace Content.IntegrationTests.CMU14.Requisitions;
 [TestOf(typeof(RequisitionsSystem))]
 public sealed class ASRSStockUpdateTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<PlatoonPrototype> ASRSStockTestPlatoonPrototype = "ASRSStockTestPlatoon";
+    private static readonly Robust.Shared.Prototypes.EntProtoId ASRSStockLegacyComputerPrototype = "ASRSStockLegacyComputer";
+
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
     [TestPrototypes]
@@ -210,8 +213,8 @@ public sealed class ASRSStockUpdateTest : GameTest
             var system = Server.System<RequisitionsSystem>();
             var platoons = Server.System<PlatoonSpawnRuleSystem>();
             var previous = platoons.SelectedGovforPlatoon;
-            var selected = SProtoMan.Index<PlatoonPrototype>("ASRSStockTestPlatoon");
-            var prototype = SProtoMan.Index<EntityPrototype>("ASRSStockLegacyComputer");
+            var selected = SProtoMan.Index<PlatoonPrototype>(ASRSStockTestPlatoonPrototype);
+            var prototype = SProtoMan.Index<EntityPrototype>(ASRSStockLegacyComputerPrototype);
             var catalog = (RequisitionsComputerComponent) prototype.Components["RequisitionsComputer"].Component;
 
             try

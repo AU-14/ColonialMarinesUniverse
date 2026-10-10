@@ -250,7 +250,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         if (HasComp<HardpointItemComponent>(args.Used) &&
             HasComp<VehicleTurretAttachmentComponent>(args.Used))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-turret-no-base"), ent.Owner, actor);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-turret-no-base"), ent.Owner, actor);
             args.Handled = true;
             return;
         }
@@ -279,7 +279,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         // CMU14: fresh parts don't bring a wreck back
         if (_hardpoints.IsWrecked(ent.Owner))
         {
-            _popup.PopupClient(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, user);
+            _popup.PopupEntity(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, user);
             return true;
         }
 

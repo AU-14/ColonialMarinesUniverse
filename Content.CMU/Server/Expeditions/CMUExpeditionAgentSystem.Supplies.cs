@@ -20,8 +20,8 @@ public sealed partial class CMUExpeditionAgentSystem
     private IEnumerable<EntityUid> SupplyItems(EntityUid uid) => SupplyStores(uid).SelectMany(bag => bag.Container.ContainedEntities);
 
     private bool CanStoreSupply(EntityUid uid, EntityUid item) => SupplyStores(uid).Any(bag =>
-        _scavengeStorage.CanInsert(bag.Owner, item, out _) &&
-        _scavengeRmcStorage.CanInsert((bag.Owner, bag), item, uid, out _));
+        _scavengeStorage.CanInsert(bag.Container.Owner, item, out _) &&
+        _scavengeRmcStorage.CanInsert((bag.Container.Owner, bag), item, uid, out _));
 
     private bool StoreSupply(EntityUid uid, EntityUid item)
     {

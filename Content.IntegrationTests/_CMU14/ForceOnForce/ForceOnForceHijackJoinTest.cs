@@ -30,6 +30,8 @@ namespace Content.IntegrationTests._CMU14.ForceOnForce;
 [TestFixture]
 public sealed class ForceOnForceHijackJoinTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> ForceOnForcePrototype = "ForceOnForce";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
     private EntityUid _ship;
     private EntityUid _destination;
@@ -53,7 +55,7 @@ public sealed class ForceOnForceHijackJoinTest : GameTest
         await Server.WaitAssertion(() =>
         {
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(Server.System<GameTicker>(),
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             _ground = ground.GridCoords;
             _attackerCarrier = friendly.GridCoords;
             _defenderCarrier = enemy.GridCoords;

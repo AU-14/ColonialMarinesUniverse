@@ -255,7 +255,7 @@ public sealed partial class YautjaMaskSystem : EntitySystem
             return;
 
         _audio.PlayPvs(zoomed ? mask.Comp.ZoomOnSound : mask.Comp.ZoomOffSound, mask.Owner);
-        _popup.PopupClient(Loc.GetString(zoomed ? "cmu-yautja-mask-zoom-enabled" : "cmu-yautja-mask-zoom-disabled"), user, user);
+        _popup.PopupEntity(Loc.GetString(zoomed ? "cmu-yautja-mask-zoom-enabled" : "cmu-yautja-mask-zoom-disabled"), user, user);
     }
 
     private Vector2 GetMaskZoomOffset(Entity<YautjaMaskComponent> mask, EntityUid user)

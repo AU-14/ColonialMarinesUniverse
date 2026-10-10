@@ -45,6 +45,7 @@ public sealed class CMU3DVehicleAppearanceTest
     }
 #pragma warning restore RA0002
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void RemovingHardpointAndChangingDamageStateRebuildsOnlyVisibleAssemblies()
     {
@@ -70,6 +71,7 @@ public sealed class CMU3DVehicleAppearanceTest
         Assert.That(armed, Is.EqualTo(new[] { hull, cannon }), "A later composition must not mutate a published assembly.");
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void UnknownStateOrResourceCannotSilentlyDiscardInstalledEquipment()
     {
@@ -83,6 +85,7 @@ public sealed class CMU3DVehicleAppearanceTest
         Assert.That(catalog.TryVehicleParts(model, [("other.rsi", "hull")], out _), Is.False);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void MountedTurretUsesItsOwnPhysicalYawWithoutBindingDroppedOrUnrelatedItems()
     {

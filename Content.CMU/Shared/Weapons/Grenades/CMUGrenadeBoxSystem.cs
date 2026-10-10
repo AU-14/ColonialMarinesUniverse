@@ -14,7 +14,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Weapons.Grenades;
 
-public sealed class CMUGrenadeBoxSystem : EntitySystem
+public sealed partial class CMUGrenadeBoxSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedContainerSystem _container = default!;

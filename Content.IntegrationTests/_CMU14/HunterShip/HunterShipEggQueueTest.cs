@@ -11,6 +11,8 @@ namespace Content.IntegrationTests.CMU14.HunterShip;
 [TestFixture]
 public sealed class HunterShipEggQueueTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMXenoLarvaPrototype = "CMXenoLarva";
+
     [Test]
     public async Task AlphaAndForsakenEggsSpawnQueueableLarvae()
     {
@@ -25,20 +27,20 @@ public sealed class HunterShipEggQueueTest
                 .Where(proto => !proto.Abstract &&
                                 proto.ID.StartsWith("CMUHunterShip", StringComparison.Ordinal) &&
                                 proto.ID.Contains("Egg", StringComparison.Ordinal) &&
-                                proto.TryGetComponent<XenoEggComponent>(out _, factory))
+                                proto.TryComp<XenoEggComponent>(out _, factory))
                 .ToArray();
 
             Assert.That(eggs, Is.Not.Empty);
             foreach (var egg in eggs)
             {
-                Assert.That(egg.TryGetComponent<XenoEggComponent>(out var xenoEgg, factory), Is.True, egg.ID);
+                Assert.That(egg.TryComp<XenoEggComponent>(out var xenoEgg, factory), Is.True, egg.ID);
                 Assert.That(xenoEgg!.Spawn.Id, Is.EqualTo("CMXenoLarva"), egg.ID);
-                Assert.That(egg.TryGetComponent<GhostRoleComponent>(out _, factory), Is.False,
+                Assert.That(egg.TryComp<GhostRoleComponent>(out _, factory), Is.False,
                     $"Egg {egg.ID} must not carry a direct ghost role.");
             }
 
-            var larva = prototypes.Index<EntityPrototype>("CMXenoLarva");
-            Assert.That(larva.TryGetComponent<LarvaQueueableComponent>(out _, factory), Is.True,
+            var larva = prototypes.Index<EntityPrototype>(CMXenoLarvaPrototype);
+            Assert.That(larva.TryComp<LarvaQueueableComponent>(out _, factory), Is.True,
                 "CMXenoLarva must enter the standard larva queue.");
         });
 

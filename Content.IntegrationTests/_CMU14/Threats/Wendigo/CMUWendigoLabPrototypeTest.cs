@@ -18,6 +18,9 @@ namespace Content.IntegrationTests.CMU14.Threats.Wendigo;
 [TestFixture]
 public sealed class CMUWendigoLabPrototypeTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUSyringeMH32Prototype = "CMUSyringeMH32";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUCrateMH32Prototype = "CMUCrateMH32";
+
     private const string Full = "AU14Wendigo";
     private const string Lesser = "CMUWendigoLesser";
 
@@ -59,25 +62,25 @@ public sealed class CMUWendigoLabPrototypeTest : GameTest
         var full = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(Full);
         var lesser = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(Lesser);
 
-        Assert.That(full.TryGetComponent<MobThresholdsComponent>(out var fullThresholds, _compFactory));
-        Assert.That(lesser.TryGetComponent<MobThresholdsComponent>(out var lesserThresholds, _compFactory));
+        Assert.That(full.TryComp<MobThresholdsComponent>(out var fullThresholds, _compFactory));
+        Assert.That(lesser.TryComp<MobThresholdsComponent>(out var lesserThresholds, _compFactory));
         Assert.That(DeadThreshold(fullThresholds!), Is.EqualTo(FixedPoint2.New(1500)));
         Assert.That(DeadThreshold(lesserThresholds!), Is.EqualTo(FixedPoint2.New(1200)));
 
-        Assert.That(full.TryGetComponent<XenoPunchComponent>(out var fullPunch, _compFactory));
-        Assert.That(lesser.TryGetComponent<XenoPunchComponent>(out var lesserPunch, _compFactory));
+        Assert.That(full.TryComp<XenoPunchComponent>(out var fullPunch, _compFactory));
+        Assert.That(lesser.TryComp<XenoPunchComponent>(out var lesserPunch, _compFactory));
         AssertScaled(fullPunch!.Damage, lesserPunch!.Damage, "punch");
 
-        Assert.That(full.TryGetComponent<MeleeWeaponComponent>(out var fullMelee, _compFactory));
-        Assert.That(lesser.TryGetComponent<MeleeWeaponComponent>(out var lesserMelee, _compFactory));
+        Assert.That(full.TryComp<MeleeWeaponComponent>(out var fullMelee, _compFactory));
+        Assert.That(lesser.TryComp<MeleeWeaponComponent>(out var lesserMelee, _compFactory));
         AssertScaled(fullMelee!.Damage, lesserMelee!.Damage, "melee");
 
-        Assert.That(full.TryGetComponent<XenoHeadbiteComponent>(out var fullBite, _compFactory));
-        Assert.That(lesser.TryGetComponent<XenoHeadbiteComponent>(out var lesserBite, _compFactory));
+        Assert.That(full.TryComp<XenoHeadbiteComponent>(out var fullBite, _compFactory));
+        Assert.That(lesser.TryComp<XenoHeadbiteComponent>(out var lesserBite, _compFactory));
         AssertScaled(fullBite!.Damage, lesserBite!.Damage, "headbite");
 
-        Assert.That(full.TryGetComponent<XenoComponent>(out var fullXeno, _compFactory));
-        Assert.That(lesser.TryGetComponent<XenoComponent>(out var lesserXeno, _compFactory));
+        Assert.That(full.TryComp<XenoComponent>(out var fullXeno, _compFactory));
+        Assert.That(lesser.TryComp<XenoComponent>(out var lesserXeno, _compFactory));
         Assert.That(fullXeno!.ActionIds, Does.Contain("ActionWendigoDoom"));
         Assert.That(lesserXeno!.ActionIds, Does.Not.Contain("ActionWendigoDoom"));
         Assert.That(lesserXeno.ActionIds, Does.Contain("ActionXenoPunch"));
@@ -110,13 +113,13 @@ public sealed class CMUWendigoLabPrototypeTest : GameTest
     [RunOnSide(Side.Server)]
     public void Mh32SyringeAndCrateAreStocked()
     {
-        var syringe = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>("CMUSyringeMH32");
-        Assert.That(syringe.TryGetComponent<SolutionComponent>(out var solution, _compFactory));
+        var syringe = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(CMUSyringeMH32Prototype);
+        Assert.That(syringe.TryComp<SolutionComponent>(out var solution, _compFactory));
         Assert.That(solution!.Solution.GetTotalPrototypeQuantity("CMUMH32"), Is.EqualTo(FixedPoint2.New(15)));
         Assert.That(solution.Solution.Volume, Is.EqualTo(FixedPoint2.New(15)));
 
-        var crate = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>("CMUCrateMH32");
-        Assert.That(crate.TryGetComponent<StorageFillComponent>(out var fill, _compFactory));
+        var crate = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(CMUCrateMH32Prototype);
+        Assert.That(crate.TryComp<StorageFillComponent>(out var fill, _compFactory));
         var total = 0;
         foreach (var entry in fill!.Contents)
         {

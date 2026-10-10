@@ -49,7 +49,8 @@ public sealed partial class CMUExpeditionAgentSystem
                 return false;
             }
             agent.FortificationDecision = "moving-to-build-position";
-            Move(uid, stance, precise: true, validated: true);
+            // Steer inside the work radius instead of stopping on its boundary.
+            Move(uid, stance, precise: true, routeWaypoint: true, validated: true);
             return true;
         }
         if (agent.WorkDoAfter is { } running)

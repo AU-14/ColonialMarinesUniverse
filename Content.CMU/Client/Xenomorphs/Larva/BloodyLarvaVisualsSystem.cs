@@ -4,8 +4,10 @@ using Robust.Shared.Maths;
 
 namespace Content.Client.CMU14.Xenomorphs.Larva;
 
-public sealed class BloodyLarvaVisualsSystem : EntitySystem
+public sealed partial class BloodyLarvaVisualsSystem : EntitySystem
 {
+    [Dependency] private SpriteSystem _sprites = default!;
+
     private const float FadeDuration = 1.0f; // seconds
     private const string BloodyLayer = "bloody";
 
@@ -21,14 +23,14 @@ public sealed class BloodyLarvaVisualsSystem : EntitySystem
         if (!args.AppearanceData.TryGetValue(BloodyLarvaVisuals.Bloody, out var value) || value is not bool bloody)
             return;
 
-        if (!TryComp<SpriteComponent>(ent, out var sprite) || !sprite.LayerMapTryGet(BloodyLayer, out var layer))
+        if (!TryComp<SpriteComponent>(ent, out var sprite) || !_sprites.LayerMapTryGet((ent, sprite), BloodyLayer, out var layer, logMissing: false))
             return;
 
         if (bloody)
         {
             _fading.Remove(ent.Owner);
-            sprite.LayerSetVisible(layer, true);
-            sprite.LayerSetColor(layer, Color.White);
+            _sprites.LayerSetVisible((ent, sprite), layer, true);
+            _sprites.LayerSetColor((ent, sprite), layer, Color.White);
         }
         else
         {
@@ -45,7 +47,7 @@ public sealed class BloodyLarvaVisualsSystem : EntitySystem
 
         foreach (var (uid, progress) in _fading)
         {
-            if (!TryComp<SpriteComponent>(uid, out var sprite) || !sprite.LayerMapTryGet(BloodyLayer, out var layer))
+            if (!TryComp<SpriteComponent>(uid, out var sprite) || !_sprites.LayerMapTryGet((uid, sprite), BloodyLayer, out var layer, logMissing: false))
             {
                 finished.Add(uid);
                 continue;
@@ -55,13 +57,13 @@ public sealed class BloodyLarvaVisualsSystem : EntitySystem
 
             if (newProgress >= 1f)
             {
-                sprite.LayerSetVisible(layer, false);
-                sprite.LayerSetColor(layer, Color.White);
+                _sprites.LayerSetVisible((uid, sprite), layer, false);
+                _sprites.LayerSetColor((uid, sprite), layer, Color.White);
                 finished.Add(uid);
                 continue;
             }
 
-            sprite.LayerSetColor(layer, Color.White.WithAlpha(1f - newProgress));
+            _sprites.LayerSetColor((uid, sprite), layer, Color.White.WithAlpha(1f - newProgress));
             _fading[uid] = newProgress;
         }
 

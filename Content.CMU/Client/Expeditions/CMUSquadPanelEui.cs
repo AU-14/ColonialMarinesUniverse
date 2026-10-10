@@ -185,7 +185,7 @@ public sealed class CMUSquadPanelEui : BaseEui
     public override void Closed()
     {
         _closed = true;
-        _window?.Dispose();
+        _window?.Release();
         _window = null;
     }
 }

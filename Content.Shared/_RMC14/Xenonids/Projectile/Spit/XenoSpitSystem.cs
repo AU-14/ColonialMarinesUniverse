@@ -184,7 +184,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
 
         active.FiredProjectile = true;
         Dirty(xeno, active);
-        _popup.PopupClient(Loc.GetString("cm-xeno-charge-spit-expire"), xeno, xeno, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-charge-spit-expire"), xeno, xeno, PopupType.SmallCaution);
     }
 
     private void OnXenoSlowingSpitAction(Entity<XenoSlowingSpitComponent> xeno, ref XenoSlowingSpitActionEvent args)
@@ -314,7 +314,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
 
         _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-charge-spit"), xeno, xeno);
+        _popup.PopupEntity(Loc.GetString("cm-xeno-charge-spit"), xeno, xeno);
         if(_net.IsServer)
             SpawnAttachedTo(xeno.Comp.Effect, xeno.Owner.ToCoordinates());
     }
@@ -424,7 +424,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
         // if (!args.Handled) // CMU14
         //     return;
 
-        _popup.PopupClient(Loc.GetString("rmc-xeno-acid-ball-shoot-self"), ent, ent);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-acid-ball-shoot-self"), ent, ent);
     }
 
     private void OnApplyAcidStacksProjectileHit(Entity<ApplyAcidStacksComponent> ent, ref ProjectileHitEvent args)
@@ -654,7 +654,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             if (!charging.DidPopup)
             {
                 charging.DidPopup = true;
-                _popup.PopupClient(Loc.GetString("cm-xeno-charge-spit-expire"), uid, uid, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cm-xeno-charge-spit-expire"), uid, uid, PopupType.SmallCaution);
             }
         }
 

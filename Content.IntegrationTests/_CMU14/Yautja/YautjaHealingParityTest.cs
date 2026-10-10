@@ -27,6 +27,14 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaHealingParityTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHealingGunPrototype = "CMUYautjaHealingGun";
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageTypePrototype> BluntPrototype = "Blunt";
+    private static readonly Robust.Shared.Prototypes.ProtoId<ReagentPrototype> thweiPrototype = "thwei";
+    private static readonly Robust.Shared.Prototypes.ProtoId<ReagentPrototype> dathweiPrototype = "dathwei";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaStabilizerGelPrototype = "CMUYautjaStabilizerGel";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaWoundClampPrototype = "CMUYautjaWoundClamp";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipPlacedCMUAutodocPodSleeperSouthOffset0x8Prototype = "CMUHunterShipPlacedCMUAutodocPodSleeperSouthOffset0x8";
+
     [Test]
     public async Task YautjaMedicalApplicationsUseCmss13SoundContract()
     {
@@ -67,14 +75,14 @@ public sealed class YautjaHealingParityTest
                 "/Audio/_RMC14/Medical/Surgery/cautery2.ogg",
                 "/Audio/Items/welder.ogg");
 
-            var gunPrototype = prototypes.Index<EntityPrototype>("CMUYautjaHealingGun");
-            Assert.That(gunPrototype.TryGetComponent<YautjaHealingGunComponent>(out var gun, factory), Is.True);
+            var gunPrototype = prototypes.Index<EntityPrototype>(CMUYautjaHealingGunPrototype);
+            Assert.That(gunPrototype.TryComp<YautjaHealingGunComponent>(out var gun, factory), Is.True);
             AssertSoundPath(resources, gun!.ReloadSound, "/Audio/_RMC14/Medical/air_release.ogg");
 
             foreach (var injectorId in new[] { "CMUYautjaAutoInjector", "CMUYautjaThrallAutoInjector" })
             {
                 var injector = prototypes.Index<EntityPrototype>(injectorId);
-                Assert.That(injector.TryGetComponent<HyposprayComponent>(out var hypospray, factory), Is.True, injectorId);
+                Assert.That(injector.TryComp<HyposprayComponent>(out var hypospray, factory), Is.True, injectorId);
                 AssertSoundPath(
                     resources,
                     hypospray!.InjectSound,
@@ -84,7 +92,7 @@ public sealed class YautjaHealingParityTest
             foreach (var herbId in new[] { "CMUYautjaAdvancedBruisePack", "CMUYautjaAdvancedOintment" })
             {
                 var herb = prototypes.Index<EntityPrototype>(herbId);
-                Assert.That(herb.TryGetComponent<WoundTreaterComponent>(out var treater, factory), Is.True, herbId);
+                Assert.That(herb.TryComp<WoundTreaterComponent>(out var treater, factory), Is.True, herbId);
                 Assert.Multiple(() =>
                 {
                     Assert.That(treater!.TreatBeginSound, Is.Null, $"{herbId} has no application sound in CMSS13.");
@@ -116,7 +124,7 @@ public sealed class YautjaHealingParityTest
                 skills.SetSkill(patient, "RMCSkillSurgery", 1);
                 damageable.TryChangeDamage(
                     patient,
-                    new DamageSpecifier(prototypes.Index<DamageTypePrototype>("Blunt"), 20),
+                    new DamageSpecifier(prototypes.Index<DamageTypePrototype>(BluntPrototype), 20),
                     ignoreResistances: true);
 
                 var parts = dispatch.BuildPartEntriesForSurgerySelection(
@@ -148,8 +156,8 @@ public sealed class YautjaHealingParityTest
         {
             var entMan = server.EntMan;
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var thwei = prototypes.Index<ReagentPrototype>("thwei");
-            var dathwei = prototypes.Index<ReagentPrototype>("dathwei");
+            var thwei = prototypes.Index<ReagentPrototype>(thweiPrototype);
+            var dathwei = prototypes.Index<ReagentPrototype>(dathweiPrototype);
 
             AssertMedicineEffects(thwei, new()
             {
@@ -208,17 +216,17 @@ public sealed class YautjaHealingParityTest
                     entMan.DeleteEntity(bracer);
             }
 
-            var stabilizer = prototypes.Index<EntityPrototype>("CMUYautjaStabilizerGel");
-            var gun = prototypes.Index<EntityPrototype>("CMUYautjaHealingGun");
-            var clamp = prototypes.Index<EntityPrototype>("CMUYautjaWoundClamp");
+            var stabilizer = prototypes.Index<EntityPrototype>(CMUYautjaStabilizerGelPrototype);
+            var gun = prototypes.Index<EntityPrototype>(CMUYautjaHealingGunPrototype);
+            var clamp = prototypes.Index<EntityPrototype>(CMUYautjaWoundClampPrototype);
 
             Assert.Multiple(() =>
             {
-                Assert.That(stabilizer.TryGetComponent<CMSurgeryToolComponent>(out _), Is.True,
+                Assert.That(stabilizer.TryComp<CMSurgeryToolComponent>(out _, entMan.ComponentFactory), Is.True,
                     "The stabilizer gel must be a surgery tool in the CMU surgery flow.");
-                Assert.That(gun.TryGetComponent<CMSurgeryToolComponent>(out _), Is.True,
+                Assert.That(gun.TryComp<CMSurgeryToolComponent>(out _, entMan.ComponentFactory), Is.True,
                     "The healing gun must be a surgery tool in the CMU surgery flow.");
-                Assert.That(clamp.TryGetComponent<CMSurgeryToolComponent>(out _), Is.True,
+                Assert.That(clamp.TryComp<CMSurgeryToolComponent>(out _, entMan.ComponentFactory), Is.True,
                     "The wound clamp must be a surgery tool in the CMU surgery flow.");
             });
 
@@ -235,8 +243,8 @@ public sealed class YautjaHealingParityTest
                     "Medicomp stages must retain CMSS13's 5/15/10 second timings.");
             });
 
-            var sleeper = prototypes.Index<EntityPrototype>("CMUHunterShipPlacedCMUAutodocPodSleeperSouthOffset0x8");
-            Assert.That(sleeper.TryGetComponent<CMUAutodocPodComponent>(out var sleeperConfig), Is.True);
+            var sleeper = prototypes.Index<EntityPrototype>(CMUHunterShipPlacedCMUAutodocPodSleeperSouthOffset0x8Prototype);
+            Assert.That(sleeper.TryComp<CMUAutodocPodComponent>(out var sleeperConfig, entMan.ComponentFactory), Is.True);
             Assert.Multiple(() =>
             {
                 Assert.That(sleeperConfig.AvailableChemicals.Select(id => id.Id), Is.EquivalentTo(new[]
@@ -285,7 +293,7 @@ public sealed class YautjaHealingParityTest
         string failurePath)
     {
         var step = prototypes.Index<EntityPrototype>(stepId);
-        Assert.That(step.TryGetComponent<CMUSurgeryStepAudioComponent>(out var audio, factory), Is.True, stepId);
+        Assert.That(step.TryComp<CMUSurgeryStepAudioComponent>(out var audio, factory), Is.True, stepId);
         Assert.That(audio!.StartSounds, Has.Count.EqualTo(startPaths.Length), stepId);
 
         for (var i = 0; i < startPaths.Length; i++)

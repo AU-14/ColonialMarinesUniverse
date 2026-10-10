@@ -43,6 +43,8 @@ namespace Content.IntegrationTests.CMU14.CargoVehicle;
 [TestFixture]
 public sealed class CMUCargoVehicleTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUCargoCarrierWreckPrototype = "CMUCargoCarrierWreck";
+
     private const string CarrierId = "CMUCargoCarrier";
     private const string ControllerId = "CMUCargoCarrierController";
     private const string DeploymentCrateId = "CMUCrateCargoCarrier";
@@ -142,7 +144,7 @@ public sealed class CMUCargoVehicleTest
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(ControllerId, out var controller), Is.True);
             Assert.That(controller!.TryComp<CMUCargoVehicleControllerComponent>(out _, factory), Is.True);
-            Assert.That(prototypes.TryIndex<EntityPrototype>("CMUCargoCarrierWreck", out var wreck), Is.True);
+            Assert.That(prototypes.TryIndex<EntityPrototype>(CMUCargoCarrierWreckPrototype, out var wreck), Is.True);
             Assert.That(wreck!.TryComp<ExplosionResistanceComponent>(out var resistance, factory), Is.True);
             Assert.That(resistance!.DamageCoefficient, Is.Zero);
             Assert.That(wreck.TryComp<PhysicsComponent>(out var wreckPhysics, factory), Is.True);

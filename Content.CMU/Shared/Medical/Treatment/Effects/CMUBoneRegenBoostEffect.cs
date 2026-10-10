@@ -22,7 +22,7 @@ public sealed partial class CMUBoneRegenBoostEffect : EntityEffectBase<CMUBoneRe
 public sealed partial class CMUBoneRegenBoostEntityEffectSystem
     : EntityEffectSystem<MetaDataComponent, CMUBoneRegenBoostEffect>
 {
-    [Dependency] private readonly StatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
 
     protected override void Effect(
         Entity<MetaDataComponent> entity,

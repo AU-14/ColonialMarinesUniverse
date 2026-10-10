@@ -209,7 +209,7 @@ public sealed partial class RMCMagneticSystem : EntitySystem
             return;
 
         var popup = Loc.GetString("rmc-sling-link", ("item", args.Entity), ("pouch", ent.Owner));
-        _popup.PopupClient(popup, args.OldParent, args.OldParent, PopupType.Medium);
+        _popup.PopupEntity(popup, args.OldParent, args.OldParent, PopupType.Medium);
 
         if (_net.IsClient)
             return;
@@ -263,7 +263,7 @@ public sealed partial class RMCMagneticSystem : EntitySystem
                 Dirty(ent);
 
                 var popup = Loc.GetString("rmc-sling-unlink", ("item", item), ("pouch", ent.Owner));
-                _popup.PopupClient(popup, user, user, PopupType.Medium);
+                _popup.PopupEntity(popup, user, user, PopupType.Medium);
             }
         });
     }
@@ -290,7 +290,7 @@ public sealed partial class RMCMagneticSystem : EntitySystem
                 RemComp<RMCSlingPouchItemComponent>(ent);
 
                 var popup = Loc.GetString("rmc-sling-unlink", ("item", ent.Owner), ("pouch", pouch));
-                _popup.PopupClient(popup, user, user, PopupType.Medium);
+                _popup.PopupEntity(popup, user, user, PopupType.Medium);
             }
         });
     }
@@ -328,7 +328,7 @@ public sealed partial class RMCMagneticSystem : EntitySystem
                     var popup = Loc.GetString("rmc-magnetize-return",
                         ("item", uid),
                         ("magnetizer", insertInto));
-                    _popup.PopupClient(popup, user, user, PopupType.Medium);
+                    _popup.PopupEntity(popup, user, user, PopupType.Medium);
 
                     comp.Returned = true;
                     Dirty(uid, comp);
@@ -344,7 +344,7 @@ public sealed partial class RMCMagneticSystem : EntitySystem
                         var popup = Loc.GetString("rmc-magnetize-return",
                             ("item", uid),
                             ("magnetizer", magnetizer));
-                        _popup.PopupClient(popup, user, user, PopupType.Medium);
+                        _popup.PopupEntity(popup, user, user, PopupType.Medium);
 
                         comp.Returned = true;
                         Dirty(uid, comp);

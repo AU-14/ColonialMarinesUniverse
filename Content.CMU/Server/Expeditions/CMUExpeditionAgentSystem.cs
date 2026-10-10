@@ -512,7 +512,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         ExpireMeleeMemory(agent, now);
         foreach (var hostile in ExpeditionHostiles(uid, agent))
         {
-            if (!CombatTargetAlive(hostile) || !TryComp<TransformComponent>(hostile, out var targetTransform) ||
+            if (!CombatTargetAlive(hostile) || !TryComp(hostile, out TransformComponent? targetTransform) ||
                 targetTransform.MapID != transform.MapID || !Visible(uid, hostile, agent.DetectionRange))
                 continue;
             agent.VisibleThreats.Add(targetTransform.Coordinates);
@@ -829,16 +829,19 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             return false;
         }
         var precise = agent.State == CMUExpeditionAgentState.Peeking;
+        var seekingShelter = agent.CoverAnchor != null &&
+            agent.State is CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo;
         // Native steering can oscillate around a tiny sub-tile radius. Stop as soon as the actual
         // stance near the destination has the required firing cone, not at an arbitrary tile centre.
         var clearStance = precise && agent.LastSeen is { } threat &&
             _transform.InRange(transform.Coordinates, destination, 0.7f) &&
             _transform.InRange(transform.Coordinates, threat, agent.FireRange - 0.25f) &&
             FiringLaneClear(uid, transform.Coordinates, threat);
-        var shelteredStop = agent.State is CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Withdraw &&
+        var shelteredStop = (seekingShelter || agent.State is CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Withdraw) &&
             _transform.InRange(transform.Coordinates, destination, 0.55f) && BodyFits(uid, transform.Coordinates) &&
             ShelteredFromKnownThreats(uid, agent, transform.Coordinates);
-        if (clearStance || shelteredStop || _transform.InRange(transform.Coordinates, destination, precise ? 0.12f : ArrivalRange))
+        if (clearStance || shelteredStop || !seekingShelter &&
+            _transform.InRange(transform.Coordinates, destination, precise ? 0.12f : ArrivalRange))
         {
             _steering.Unregister(uid);
             // Cancel travel momentum at a deliberate cover stop; otherwise a short arrival radius
@@ -884,14 +887,16 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             agent.NextReposition = now + TimeSpan.FromSeconds(1);
             return false;
         }
-        Move(uid, destination, precise);
+        // The ordinary arrival radius can leave a shoulder exposed at a shelter's edge.
+        // Finish the approach until the body is sheltered, then permit treatment/reloading.
+        Move(uid, destination, precise, routeWaypoint: seekingShelter);
         return true;
     }
 
     private bool Visible(EntityUid observer, EntityUid target, float range) =>
         // Remembered contacts can be deleted between decisions (gibbing, evolution, disconnects).
-        TryComp<TransformComponent>(observer, out var observerTransform) &&
-        TryComp<TransformComponent>(target, out var targetTransform) &&
+        TryComp(observer, out TransformComponent? observerTransform) &&
+        TryComp(target, out TransformComponent? targetTransform) &&
         _interaction.InRangeUnobstructed((observer, observerTransform), (target, targetTransform), range,
             CollisionGroup.Impassable | CollisionGroup.InteractImpassable,
             predicate: entity => entity == observer || entity == target || HasComp<NpcFactionMemberComponent>(entity) ||

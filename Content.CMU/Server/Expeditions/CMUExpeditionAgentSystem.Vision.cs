@@ -70,7 +70,7 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var uid in sources)
         {
             if (!TryComp<PointLightComponent>(uid, out var light) || light.ContainerOccluded ||
-                !TryComp<TransformComponent>(uid, out var transform) || transform.MapID != map.MapId)
+                !TryComp(uid, out TransformComponent? transform) || transform.MapID != map.MapId)
                 continue;
             var radius = light.Radius;
             if (IsFlare(uid) && TryComp<ExpendableLightComponent>(uid, out var flare))

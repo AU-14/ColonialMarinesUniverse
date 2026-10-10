@@ -10,7 +10,7 @@ namespace Content.Shared.CMU14.Yautja;
 /// Shared restrictions for all Yautja: human guns refuse them (use and pickup), and
 /// raised thralls carry a visible corruption on examine.
 /// </summary>
-public sealed class YautjaRestrictionsSystem : EntitySystem
+public sealed partial class YautjaRestrictionsSystem : EntitySystem
 {
     [Dependency] private SharedPopupSystem _popup = default!;
 
@@ -27,7 +27,7 @@ public sealed class YautjaRestrictionsSystem : EntitySystem
             return;
 
         args.Cancel();
-        _popup.PopupClient(Loc.GetString("cmu-yautja-weapon-refuse"), ent, ent, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-weapon-refuse"), ent, ent, PopupType.SmallCaution);
     }
 
     private void OnPickupAttempt(Entity<YautjaComponent> ent, ref PickupAttemptEvent args)
@@ -36,7 +36,7 @@ public sealed class YautjaRestrictionsSystem : EntitySystem
             return;
 
         args.Cancel();
-        _popup.PopupClient(Loc.GetString("cmu-yautja-weapon-refuse"), ent, ent, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-weapon-refuse"), ent, ent, PopupType.SmallCaution);
     }
 
     private void OnThrallExamined(Entity<YautjaThrallComponent> ent, ref ExaminedEvent args)

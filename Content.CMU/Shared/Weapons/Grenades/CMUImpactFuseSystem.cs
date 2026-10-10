@@ -9,7 +9,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Weapons.Grenades;
 
-public sealed class CMUImpactFuseSystem : EntitySystem
+public sealed partial class CMUImpactFuseSystem : EntitySystem
 {
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;

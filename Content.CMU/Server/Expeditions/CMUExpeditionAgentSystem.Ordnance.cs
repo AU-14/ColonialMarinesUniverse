@@ -109,7 +109,7 @@ public sealed partial class CMUExpeditionAgentSystem
             var key = (tile.Value.GridUid, tile.Value.GridIndices);
             if (!_smokeTiles.TryGetValue(key, out var opaque))
             {
-                var anchored = _maps.GetAnchoredEntitiesEnumerator(key.GridUid, grid, key.GridIndices);
+                var anchored = _maps.GetAnchoredEntities(key.GridUid, grid, key.GridIndices);
                 while (anchored.MoveNext(out var entity))
                     if (HasComp<SmokeComponent>(entity) && TryComp<OccluderComponent>(entity, out var occluder) && occluder.Enabled)
                         opaque = true;

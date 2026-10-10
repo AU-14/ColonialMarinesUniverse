@@ -798,7 +798,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (HasComp<YautjaComponent>(patient) &&
             TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed) &&
             Prototypes.TryIndex<EntityPrototype>(armed.SurgeryId, out var surgery) &&
-            surgery.TryGetComponent<CMUYautjaMedicompSurgeryConditionComponent>(out _, ComponentFactory))
+            surgery.TryComp<CMUYautjaMedicompSurgeryConditionComponent>(out _, ComponentFactory))
         {
             return true;
         }

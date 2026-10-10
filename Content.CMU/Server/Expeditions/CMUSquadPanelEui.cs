@@ -8,7 +8,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Expeditions;
 
-public sealed class CMUSquadPanelEui : BaseEui
+public sealed partial class CMUSquadPanelEui : BaseEui
 {
     [Dependency] private IAdminManager _admin = default!;
     [Dependency] private IEntitySystemManager _systems = default!;

@@ -1,7 +1,7 @@
 namespace Content.Client.CMU14.ThreeD;
 
 /// <summary>Owns the workbench lifetime so disconnecting releases the old session's sprite references.</summary>
-public sealed class CMU3DPreviewSystem : EntitySystem
+public sealed partial class CMU3DPreviewSystem : EntitySystem
 {
     [Dependency] private CMU3DModelLibrary _models = default!;
 

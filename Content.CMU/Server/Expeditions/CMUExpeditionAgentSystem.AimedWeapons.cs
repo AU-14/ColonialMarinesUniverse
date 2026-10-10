@@ -24,7 +24,7 @@ public sealed partial class CMUExpeditionAgentSystem
             !TryComp<AimedShotComponent>(weapon, out var aimed) || aimed.Targets.Count == 0 ||
             agent.Target is not { } target || target != agent.AimedTarget || !Visible(uid, target, agent.FireRange) ||
             !AcceptOrderedContact(uid, agent, target) || !_mobs.IsAlive(target) ||
-            !SafeShot(uid, agent, gun.Comp, Transform(target).Coordinates) || agent.RushTarget != null ||
+            !SafeShot(uid, agent, gun, Transform(target).Coordinates) || agent.RushTarget != null ||
             agent.LastHit > agent.AimedStarted || agent.State != CMUExpeditionAgentState.Engage ||
             agent.Action != null || agent.Treatment != null || agent.PendingWeapon != null ||
             agent.SpacingDestination != null || GrenadeDanger(Transform(uid).Coordinates) || now >= agent.AimedUntil)

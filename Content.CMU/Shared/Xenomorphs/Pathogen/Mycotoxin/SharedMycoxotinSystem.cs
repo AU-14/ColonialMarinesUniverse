@@ -196,7 +196,7 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
                         break;
                 }
 
-                Expose(victim, injector);
+                Expose(victim, uid, injector);
             }
         }
 
@@ -210,14 +210,14 @@ public abstract partial class SharedMycotoxinSystem : EntitySystem
         }
     }
 
-    private void Expose(EntityUid victim, MycotoxinInjectorComponent injector)
+    private void Expose(EntityUid victim, EntityUid source, MycotoxinInjectorComponent injector)
     {
         var isNew = !HasComp<MycotoxinExposureComponent>(victim);
         var exposure = EnsureComp<MycotoxinExposureComponent>(victim);
         if (isNew)
         {
             exposure.EmbryoSpawn = injector.EmbryoSpawn;
-            exposure.SourceHive = _hive.GetHive(injector.Owner)?.Owner;
+            exposure.SourceHive = _hive.GetHive(source)?.Owner;
             exposure.StrongEffects = injector.StrongExposureEffects;
             OnFirstExposure(victim, injector.StrongExposureEffects);
         }

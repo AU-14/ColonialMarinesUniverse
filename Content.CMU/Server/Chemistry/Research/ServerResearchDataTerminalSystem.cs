@@ -40,7 +40,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         public Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> Reports = [];
     }
 
-    [Dependency] private readonly Content.Server.CMU14.Threats.Mobs.Wendigo.Lab.CMUWendigoResearchUnlockSystem _wendigoUnlock = default!;
+    [Dependency] private Content.Server.CMU14.Threats.Mobs.Wendigo.Lab.CMUWendigoResearchUnlockSystem _wendigoUnlock = default!;
 
     private readonly Dictionary<string, FactionResearch> _factions = new(StringComparer.OrdinalIgnoreCase);
     public FactionResearch GetResearch(string faction)

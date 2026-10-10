@@ -541,6 +541,8 @@ jobs:
           workers=4
           hang_timeout=5m
           case "$shard" in
+            # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
+            cmu_yautja_smoke) workers=1 ;;
             root_1|cmu|cmu_systems|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             cmu_lobby_ui) workers=1 ;;
             map_loading) workers=1; hang_timeout=20m ;;

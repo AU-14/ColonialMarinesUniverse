@@ -63,7 +63,7 @@ public sealed class TwoPointSlingRegressionTest : GameTest
     [TestCase("WeaponShotgunM42A1", "RMCAttachmentMagneticHarness", false)]
     [TestCase("WeaponShotgunM42A1", "RMCAttachmentTwoPointSling", false)]
     [TestCase("RMCWeaponLauncherM5ATL", null, true)]
-    public async Task FailedSlingReturnLeavesWeaponWithGroundFriction(string prototype, string attachment, bool fillSlotAfterThrow)
+    public async Task FailedSlingReturnLeavesWeaponWithGroundFriction(string prototype, string? attachment, bool fillSlotAfterThrow)
     {
         var map = await Pair.CreateTestMap();
         var gun = EntityUid.Invalid;
