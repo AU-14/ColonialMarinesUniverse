@@ -135,15 +135,17 @@
   - type: MedicallyUnskilledDoAfter
     min: 0
   - type: Hypospray # CMU14: inject the whole mixed dose at once
-    transferAmount: 21
+    transferAmount: 27
   - type: SolutionContainerManager
     solutions:
       pen:
-        maxVol: 21 # CMU14: 15 tricordrazine + 6 paracetamol
+        maxVol: 27 # CMU14: 15 tricordrazine + 6 paracetamol + 6 dexalin
         reagents:
         - ReagentId: CMTricordrazine
           Quantity: 15
         - ReagentId: CMUParacetamol # CMU14
+          Quantity: 6
+        - ReagentId: CMDexalin # CMU14
           Quantity: 6
   - type: SolutionContainerVisuals
     maxFillLevels: 1
@@ -154,6 +156,7 @@
     reagents:
       CMTricordrazine: 15
       CMUParacetamol: 6 # CMU14
+      CMDexalin: 6 # CMU14
   - type: IconLabel
     labelTextLocId: rmc-first-aid-container-label-text
 
