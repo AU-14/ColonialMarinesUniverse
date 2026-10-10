@@ -60,7 +60,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool InvestigateSound(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.HeardPoint is not { } heard || now >= agent.HeardUntil || agent.Target != null ||
+        if (agent.HoldPosition || agent.HeardPoint is not { } heard || now >= agent.HeardUntil || agent.Target != null ||
             agent.OrderedDestination != null || agent.TravelGoal != null || agent.Entrench || agent.Action != null ||
             agent.Treatment != null || agent.SupplySource != null || agent.RecoveryUntil > now ||
             agent.Duty is CMUSquadDuty.Medic or CMUSquadDuty.RearGuard ||

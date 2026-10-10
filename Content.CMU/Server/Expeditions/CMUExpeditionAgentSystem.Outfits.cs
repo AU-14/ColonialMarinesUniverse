@@ -15,6 +15,20 @@ public sealed partial class CMUExpeditionAgentSystem
         ["uacg"] = "CMUExpeditionOutfitUACG", ["prodigy"] = "CMUExpeditionOutfitProdigy",
     };
 
+    private static readonly Dictionary<string, (ProtoId<StartingGearPrototype> Mobile, ProtoId<StartingGearPrototype> Heavy)> OutfitRoles = new()
+    {
+        ["uscm"] = ("CMUExpeditionOutfitUSCMMobile", "CMUExpeditionOutfitUSCMHeavy"),
+        ["rmc"] = ("CMUExpeditionOutfitRMCMobile", "CMUExpeditionOutfitRMCHeavy"),
+        ["upp"] = ("CMUExpeditionOutfitUPPMobile", "CMUExpeditionOutfitUPPHeavy"),
+        ["pmc"] = ("CMUExpeditionOutfitPMCMobile", "CMUExpeditionOutfitPMC"),
+        ["clf"] = ("CMUExpeditionOutfitCLFMobile", "CMUExpeditionOutfitCLFHeavy"),
+        ["cmb"] = ("CMUExpeditionOutfitCMBMobile", "CMUExpeditionOutfitCMB"),
+        ["lacn"] = ("CMUExpeditionOutfitLACNMobile", "CMUExpeditionOutfitLACNHeavy"),
+        ["ccaf"] = ("CMUExpeditionOutfitCCAFMobile", "CMUExpeditionOutfitCCAF"),
+        ["uacg"] = ("CMUExpeditionOutfitUACGMobile", "CMUExpeditionOutfitUACG"),
+        ["prodigy"] = ("CMUExpeditionOutfitProdigyMobile", "CMUExpeditionOutfitProdigy"),
+    };
+
     public static IEnumerable<string> OutfitNames => OutfitCatalog.Keys.Prepend("scavenger");
     public static bool IsOutfit(string outfit) => outfit == "scavenger" || OutfitCatalog.ContainsKey(outfit);
 
@@ -24,7 +38,17 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (outfit == "scavenger")
             return true;
-        if (!OutfitCatalog.TryGetValue(outfit, out var id) || !ProtoMan.TryIndex(id, out var gear))
+        if (!OutfitCatalog.TryGetValue(outfit, out var id))
+            return false;
+        var agent = Comp<CMUExpeditionAgentComponent>(uid);
+        if (OutfitRoles.TryGetValue(outfit, out var roles))
+        {
+            if (agent.AntiVehicle || agent.CombatRole is CMUExpeditionCombatRole.Flanker or CMUExpeditionCombatRole.Medic)
+                id = roles.Mobile;
+            else if (agent.CombatRole is CMUExpeditionCombatRole.Support or CMUExpeditionCombatRole.Breacher)
+                id = roles.Heavy;
+        }
+        if (!ProtoMan.TryIndex(id, out var gear))
             return false;
         var original = new Dictionary<string, EntityUid>();
         var slots = _inventory.GetSlotEnumerator(uid);
@@ -72,7 +96,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 _inventory.TryEquip(uid, item, slot, silent: true);
         }
         if (success)
-            Comp<CMUExpeditionAgentComponent>(uid).Outfit = outfit;
+            agent.Outfit = outfit;
         return success;
     }
 }

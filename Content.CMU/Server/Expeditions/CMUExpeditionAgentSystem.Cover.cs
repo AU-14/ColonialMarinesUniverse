@@ -24,13 +24,13 @@ public sealed partial class CMUExpeditionAgentSystem
     private const CollisionGroup MovementMask = CollisionGroup.MobMask | CollisionGroup.InteractImpassable |
         CollisionGroup.BarricadeImpassable | CollisionGroup.BarbedBarricade;
     [Dependency] private SharedPhysicsSystem _physics = default!;
-    private readonly Dictionary<(EntityUid User, EntityCoordinates Point, float Radius, bool Doors, bool Firing, EntityUid? Vault), bool> _bodyClearCache = new();
+    private readonly Dictionary<(EntityUid User, EntityCoordinates Point, float Radius, bool Doors, bool Firing, EntityUid? Vault, bool Vaults), bool> _bodyClearCache = new();
 
     private bool BodyFits(EntityUid uid, EntityCoordinates point, float radius = AgentBodyRadius, bool planningDoors = false,
-        bool firing = false, EntityUid? vault = null)
+        bool firing = false, EntityUid? vault = null, bool allowVault = true)
     {
         var mask = NavigationMask(uid, planningDoors);
-        var key = (planningDoors || mask != MovementMask ? uid : EntityUid.Invalid, point, radius, planningDoors, firing, vault);
+        var key = (planningDoors || mask != MovementMask ? uid : EntityUid.Invalid, point, radius, planningDoors, firing, vault, allowVault);
         if (_bodyClearCache.TryGetValue(key, out var clear))
             return clear;
         var location = _transform.ToMapCoordinates(point);
@@ -47,7 +47,7 @@ public sealed partial class CMUExpeditionAgentSystem
         clear = !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide &&
             fixture.Entity != uid && !HasComp<NpcFactionMemberComponent>(fixture.Entity) &&
             fixture.Entity != vault && !(firing && LowBulletCover(fixture.Entity)) &&
-            !(planningDoors && (CanNavigateDoor(uid, fixture.Entity) || CanNavigateVault(uid, fixture.Entity))));
+            !(planningDoors && (CanNavigateDoor(uid, fixture.Entity) || allowVault && CanNavigateVault(uid, fixture.Entity))));
         _bodyClearCache[key] = clear;
         return clear;
     }
@@ -147,6 +147,8 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool ShelteredFromKnownThreats(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates location)
     {
+        if (KnownDangerCost(agent, location) >= 2)
+            return false;
         if (agent.LastSeen is { } threat && _timing.CurTime < agent.ForgetAt && !Sheltered(uid, location, threat))
             return false;
         foreach (var visible in agent.VisibleThreats)
@@ -231,7 +233,8 @@ public sealed partial class CMUExpeditionAgentSystem
         var threatPosition = _transform.ToMapCoordinates(threat).Position;
         foreach (var candidate in candidates)
         {
-            if (CoverHistoryCost(agent, candidate.Position) >= 6 || GrenadeDanger(candidate.Position) || Reserved(uid, candidate.Position) || agent.FailedPosition is { } failed &&
+            if (CoverHistoryCost(agent, candidate.Position) >= 6 || KnownDangerCost(agent, candidate.Position) >= 5 ||
+                GrenadeDanger(candidate.Position) || Reserved(uid, candidate.Position) || agent.FailedPosition is { } failed &&
                 _timing.CurTime < agent.AvoidPositionUntil && _transform.InRange(candidate.Position, failed, 1.4f))
                 continue;
             if (ShelteredFromKnownThreats(uid, agent, candidate.Position))
@@ -297,11 +300,14 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     private bool TraversablePassage(EntityUid uid, EntityCoordinates from, EntityCoordinates to, float radius = AgentBodyRadius,
-        bool escapingHazard = false, bool planningDoors = false, EntityUid? vault = null)
+        bool escapingHazard = false, bool planningDoors = false, EntityUid? vault = null, bool allowVault = true,
+        float hazardEscapeRange = 1.5f)
     {
         var start = _transform.ToMapCoordinates(from);
         var end = _transform.ToMapCoordinates(to);
-        if (start.MapId != end.MapId || !BodyFits(uid, from, radius, planningDoors, vault: vault) || !BodyFits(uid, to, radius, planningDoors, vault: vault))
+        if (start.MapId != end.MapId || !BodyFits(uid, from, radius, planningDoors, vault: vault, allowVault: allowVault) ||
+            !BodyFits(uid, to, radius, planningDoors, vault: vault, allowVault: allowVault) ||
+            !FirePassageSafe(from, to, radius, escapingHazard))
             return false;
         to = _transform.ToCoordinates(from.EntityId, end);
         var steps = Math.Max(1, (int) MathF.Ceiling(Vector2.Distance(start.Position, end.Position) * 4));
@@ -311,7 +317,7 @@ public sealed partial class CMUExpeditionAgentSystem
             var position = Vector2.Lerp(from.Position, to.Position, step / (float) steps);
             if (GroundSafe(new EntityCoordinates(from.EntityId, position)))
                 reachedSafeGround = true;
-            else if (!escapingHazard || reachedSafeGround || Vector2.Distance(from.Position, position) > 1.5f)
+            else if (!escapingHazard || reachedSafeGround || Vector2.Distance(from.Position, position) > hazardEscapeRange)
                 return false;
         }
         var translation = end.Position - start.Position;
@@ -330,7 +336,7 @@ public sealed partial class CMUExpeditionAgentSystem
         }, IgnoreShapeSkin: true));
         // Sensors (including RMC water) do not become static route walls.
         return !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide && fixture.Entity != vault &&
-            !(planningDoors && (CanNavigateDoor(uid, fixture.Entity) || CanNavigateVault(uid, fixture.Entity))));
+            !(planningDoors && (CanNavigateDoor(uid, fixture.Entity) || allowVault && CanNavigateVault(uid, fixture.Entity))));
     }
 
 

@@ -99,7 +99,7 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (agent.ExposureScores.TryGetValue(point, out var score))
             return score;
-        score = 0;
+        score = KnownDangerCost(agent, point) / 3;
         foreach (var threat in agent.ThreatSectors)
             if (threat is { } contact && !Sheltered(uid, point, contact.Position))
                 score += contact.Weight;

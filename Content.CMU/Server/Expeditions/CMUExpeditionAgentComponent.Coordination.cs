@@ -24,6 +24,8 @@ public sealed partial class CMUExpeditionAgentComponent
     public TimeSpan TrafficActiveUntil;
     public EntityUid? TrafficYieldTo;
     public EntityCoordinates? TrafficYieldPoint;
+    public EntityCoordinates? TrafficPassExit;
+    public TimeSpan NextTrafficPocket;
     public TimeSpan? TrafficWaitingSince;
     public EntityCoordinates? TrafficBlockedPoint;
     public TimeSpan AvoidTrafficUntil;

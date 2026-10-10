@@ -49,6 +49,17 @@ public sealed class CMUSquadDiagram : Control
             handle.DrawCircle(Project(rejected), 7, Color.Orange, false);
         foreach (var member in _members)
             if (member.Map == selected.Map)
-                handle.DrawCircle(Project(member.Position), member.Entity == selected.Entity ? 6 : 4, Color.White);
+            {
+                var point = Project(member.Position);
+                var color = !member.Active ? Color.Gray : member.Injured ? Color.Orange : Color.White;
+                handle.DrawCircle(point, 4, color);
+                if (member.Entity == selected.Entity)
+                    handle.DrawCircle(point, 8, Color.Cyan, false);
+                if (!member.Active)
+                {
+                    handle.DrawLine(point - new Vector2(5), point + new Vector2(5), color);
+                    handle.DrawLine(point + new Vector2(-5, 5), point + new Vector2(5, -5), color);
+                }
+            }
     }
 }

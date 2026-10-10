@@ -31,7 +31,7 @@ public sealed partial class CMUExpeditionAgentSystem
             Illumination(point) >= agent.MinimumSightLight;
     }
 
-    private float Illumination(EntityCoordinates point)
+    private void RefreshLightSnapshot()
     {
         if (_timing.CurTime >= _nextLightSnapshot)
         {
@@ -50,6 +50,11 @@ public sealed partial class CMUExpeditionAgentSystem
                 lights.Add(uid);
             }
         }
+    }
+
+    private float Illumination(EntityCoordinates point)
+    {
+        RefreshLightSnapshot();
         if (_illuminationCache.TryGetValue(point, out var cached))
             return cached;
         var map = _transform.ToMapCoordinates(point);
