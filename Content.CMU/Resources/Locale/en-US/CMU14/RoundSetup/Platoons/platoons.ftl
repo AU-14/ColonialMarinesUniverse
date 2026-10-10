@@ -7,3 +7,4 @@ cmu-platoon-hazops-name = USCM Hazardous Operations Unit
 cmu-platoon-prodigysf-name = Prodigy Security Forces
 cmu-platoon-vaipo-name = VAI Primary Operations
 cmu-platoon-rmc-name = TWE Royal Marine Commandos
+cmu-platoon-bear-name = PMC 'BEAR'

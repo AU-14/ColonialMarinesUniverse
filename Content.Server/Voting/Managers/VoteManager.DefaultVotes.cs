@@ -617,7 +617,7 @@ namespace Content.Server.Voting.Managers
                 if(_playerManager.PlayerCount > (preset.MaxPlayers ?? int.MaxValue))
                     continue;
 #endif
-                presets[preset.ID] = Loc.GetString(preset.ModeTitle);
+                presets[preset.ID] = Loc.GetString(preset.ModeTitle); // CMU14: Hardcode localization
             }
 
             _entityManager.System<CMUPresetVoteSystem>().RemoveLastPlayedPreset(presets); // CMU14

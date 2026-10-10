@@ -69,7 +69,7 @@ public sealed partial class VehicleSupplyWindow : FancyWindow
     {
         if (preview == null || string.IsNullOrWhiteSpace(preview.VehicleId))
         {
-            PreviewTitle.Text = Loc.GetString("cmu-vehicle-supply-preview-title");
+            PreviewTitle.Text = Loc.GetString("cmu-vehicle-supply-preview-title"); // CMU14 Hardcode Localization
             VehiclePreview.SetPrototype(null);
             _previewLayers.Clear();
             _previewDirty = false;
@@ -81,7 +81,7 @@ public sealed partial class VehicleSupplyWindow : FancyWindow
             return;
         }
 
-        PreviewTitle.Text = preview.Name;
+        PreviewTitle.Text = preview.Name; // CMU14 Hardcode Localization
         VehiclePreview.SetPrototype(preview.VehicleId);
         VehiclePreview.OverrideDirection = Direction.South;
 

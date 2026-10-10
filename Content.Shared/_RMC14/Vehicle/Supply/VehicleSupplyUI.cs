@@ -101,20 +101,20 @@ public sealed class VehicleSupplyLoadoutCategoryState
 public sealed class VehicleSupplyPreviewState
 {
     public string VehicleId;
-    public string Name;
+    public string Name; // CMU14: Hardcode localization
     public int CopyIndex;
     public List<VehicleHardpointLayerState> Layers;
     public List<VehicleSupplyPreviewOverlay> Overlays;
 
     public VehicleSupplyPreviewState(
         string vehicleId,
-        string name,
+        string name, // CMU14: Hardcode localization
         int copyIndex,
         List<VehicleHardpointLayerState> layers,
         List<VehicleSupplyPreviewOverlay> overlays)
     {
         VehicleId = vehicleId;
-        Name = name;
+        Name = name; // CMU14: Hardcode localization
         CopyIndex = copyIndex;
         Layers = layers;
         Overlays = overlays;

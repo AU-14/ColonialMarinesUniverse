@@ -67,6 +67,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
             : Loc.GetString("cmu-vehicle-supply-allowance", ("platoon", state.PlatoonName),
                 ("used", state.IssuedVehicles.Count), ("limit", state.VehicleLimit));
         _window.IssuedLabel.Text = string.Join(", ", state.IssuedVehicles);
+        // CMU14 Hardcode localization Begin: removing hardcode for easy localization in downstreams
         var modeText = GetLiftModeLabel(state.LiftMode);
         var activeText = string.IsNullOrWhiteSpace(state.ActiveVehicleId)
             ? Loc.GetString("cmu-vehicle-supply-active-none")
@@ -75,6 +76,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
 
         _window.StatusLabel.Text = Loc.GetString("cmu-vehicle-supply-status-line",
             ("lift", modeText), ("status", busyText), ("active", activeText));
+            // CMU14 End
 
         var raising = state.LiftMode == VehicleSupplyLiftMode.Raising;
         var lowering = state.LiftMode == VehicleSupplyLiftMode.Lowering;
@@ -156,7 +158,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
             {
                 var copyToggle = new HardpointButton
                 {
-                    LabelText = _copyExpanded.Contains(vehicleId)
+                    LabelText = _copyExpanded.Contains(vehicleId) // CMU14 Hardcode Localization
                         ? Loc.GetString("cmu-vehicle-supply-copies-expanded")
                         : Loc.GetString("cmu-vehicle-supply-copies-collapsed"),
                     MinSize = new Vector2(110, 0)
@@ -347,9 +349,11 @@ public sealed class VehicleSupplyBui : BoundUserInterface
 
         var expanded = _copyExpanded.Contains(vehicleId);
         container.Visible = expanded;
+        // CMU14 Hardcode Localization start
         toggle.LabelText = expanded
             ? Loc.GetString("cmu-vehicle-supply-copies-expanded")
             : Loc.GetString("cmu-vehicle-supply-copies-collapsed");
+            // CMU14 Hardcode Localization end
     }
 
     private static void ApplySelectionStyle(HardpointButton button, bool selected)
@@ -367,6 +371,7 @@ public sealed class VehicleSupplyBui : BoundUserInterface
         button.RefreshStyle();
     }
 
+    // CMU14 Hardcode localization Begin: removing hardcode for easy localization in downstreams
     private static string GetLiftModeLabel(VehicleSupplyLiftMode? mode)
     {
         return mode switch
@@ -379,4 +384,5 @@ public sealed class VehicleSupplyBui : BoundUserInterface
             VehicleSupplyLiftMode.Preparing => Loc.GetString("cmu-vehicle-supply-lift-preparing"),
         };
     }
+    // CMU14 End
 }

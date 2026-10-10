@@ -52,6 +52,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     private const string FavoritesCategory = "#favorites";
     private const string RecentCategory = "#recent";
 
+    // CMU14 Hardcode localization Begin: removing hardcode for easy localization in downstreams
     private static readonly Dictionary<string, string> CategoryLocKeys = new()
     {
         ["Air Defense"] = "rmc-requisitions-category-air-defense",
@@ -90,6 +91,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
     {
         return Loc.GetString(CategoryLocKeys[category]);
     }
+    // CMU14 End
 
     protected override void Open()
     {
@@ -157,26 +159,26 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         {
             case Lowered or Raised when uiState.Busy:
                 platformLabel = $"Platform: {uiState.PlatformLowered}";
-                platformButtonLabel = Loc.GetString("cmu-asrs-button-busy");
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-busy"); // CMU14 Hardcode Localization
                 platformButtonDisabled = true;
                 break;
             case Lowered:
-                platformButtonLabel = Loc.GetString("cmu-asrs-button-raise");
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-raise"); // CMU14 Hardcode Localization
                 platformLabel = "Platform: Lowered";
                 raise = true;
                 break;
             case Raised:
-                platformButtonLabel = Loc.GetString("cmu-asrs-button-lower");
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-lower"); // CMU14 Hardcode Localization
                 platformLabel = "Platform: Raised";
                 raise = false;
                 break;
             case Lowering:
-                platformButtonLabel = Loc.GetString("cmu-asrs-button-wait");
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-wait"); // CMU14 Hardcode Localization
                 platformLabel = "Lowering...";
                 platformButtonDisabled = true;
                 break;
             case Raising:
-                platformButtonLabel = Loc.GetString("cmu-asrs-button-wait");
+                platformButtonLabel = Loc.GetString("cmu-asrs-button-wait"); // CMU14 Hardcode Localization
                 platformLabel = "Raising...";
                 platformButtonDisabled = true;
                 break;
@@ -307,7 +309,7 @@ public sealed partial class RequisitionsBui(EntityUid owner, Enum uiKey) : Bound
         AddItemCategoryButton(Loc.GetString("cmu-asrs-category-favorites"), FavoritesCategory);
         AddItemCategoryButton(Loc.GetString("cmu-asrs-category-recent"), RecentCategory);
         foreach (var category in allCategories)
-            AddItemCategoryButton(GetLocalizedCategoryName(category), category);
+            AddItemCategoryButton(GetLocalizedCategoryName(category), category); // CMU14 Hardcode Localization
 
         view.ItemsContainer.RemoveAllChildren();
         _itemRows.Clear();

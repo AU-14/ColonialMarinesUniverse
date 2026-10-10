@@ -898,7 +898,7 @@ namespace Content.Server.GameTicking
                 : Preset != null
                     ? Loc.GetString(Preset.ModeTitle)
                     : string.Empty;
-            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoon ? Loc.GetString(govforPlatoon.Name) : string.Empty;
+            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon is { } govforPlatoon ? Loc.GetString(govforPlatoon.Name) : string.Empty; // CMU14: Hardcode localization
 
             return new RoundStatusWebhookData(
                 RoundId,
