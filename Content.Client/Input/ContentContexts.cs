@@ -157,6 +157,7 @@ namespace Content.Client.Input
             human.AddFunction(CMKeyFunctions.RMCPickUpDroppedItems);
             human.AddFunction(CMKeyFunctions.RMCInteractWithOtherHand);
             human.AddFunction(CMKeyFunctions.RMCRest);
+            human.AddFunction(CMUKeyFunctions.CMUOpenWornStorage); // CMU14
             human.AddFunction(CMUKeyFunctions.CMUCycleBodyZoneTarget);
             human.AddFunction(CMUKeyFunctions.CMUCycleBodyZoneTargetReverse);
             human.AddFunction(CMUKeyFunctions.CMUTargetBodyZoneHead);
