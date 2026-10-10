@@ -19,8 +19,8 @@
   background: /Textures/CMU14/Lobby/clfriot.png
 
 - type: lobbyBackground
-  id: AU14LobbyWendigoFollowed
-  background: /Textures/CMU14/Lobby/WendigoFollowed.png
+  id: AU14ParkAlwaysWins
+  background: /Textures/CMU14/Lobby/ParkAlwaysWins.png
 
 - type: lobbyBackground
   id: CMU14LobbyWorkingJoes
