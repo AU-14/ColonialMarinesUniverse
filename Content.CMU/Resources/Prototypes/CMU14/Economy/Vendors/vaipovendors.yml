@@ -1045,6 +1045,8 @@
         amount: 5
       - id: RMCM2CCase
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54C
@@ -1097,6 +1099,8 @@
         amount: 15
       - id: RMCMagazinePistolM1984HP
         amount: 5
+      - id: RMCMagazinePistolSU6
+        amount: 15
     - name: Magazine Boxes
       entries:
       - id: RMCBoxMagazineRifleM54C

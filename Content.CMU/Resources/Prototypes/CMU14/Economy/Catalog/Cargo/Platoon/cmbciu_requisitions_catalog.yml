@@ -275,6 +275,8 @@
         stockReplenishDelay: 300
     - name: Weapons
       entries:
+      - cost: 800
+        crate: RMCCrateSU6
       - cost: 250
         crate: RMCCrateMK80
       - cost: 600
@@ -309,6 +311,8 @@
         stockReplenishDelay: 1200
     - name: Ammo
       entries:
+      - cost: 250
+        crate: RMCCrateBoxMagazineSmartPistol
       - cost: 500
         crate: CMUCrateBoxMagazineRifleM16APExt
       - cost: 300

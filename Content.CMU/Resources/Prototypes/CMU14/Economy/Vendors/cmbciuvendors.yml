@@ -1115,6 +1115,8 @@
         amount: 1
       - id: CMUWeaponLauncherM81
         amount: 3
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: AU14MagazineRifleM20A
@@ -1167,6 +1169,8 @@
         amount: 5
       - id: RMCMagazinePistolMK45
         amount: 200
+      - id: RMCMagazinePistolSU6
+        amount: 15
     - name: Magazine Boxes
       entries:
       - id: RMCBoxBulletsRifle

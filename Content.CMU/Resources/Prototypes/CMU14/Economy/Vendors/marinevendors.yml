@@ -1567,6 +1567,8 @@
         amount: 5
       - id: RMCML66DCase
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
@@ -1621,6 +1623,8 @@
         amount: 100
       - id: RMCSpeedLoader44Marksman
         amount: 10
+      - id: RMCMagazinePistolSU6
+        amount: 15
     - name: Magazine Boxes
       entries:
       - id: CMUBoxMagazineRifleM54CMK1
