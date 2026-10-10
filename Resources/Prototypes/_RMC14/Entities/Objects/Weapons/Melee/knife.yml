@@ -2,8 +2,17 @@
   abstract: true
   id: RMCBaseMeleeWeapon
   components:
+  # CMU14: melee-vs-Xeno damage is resolved centrally by the xeno/melee combat configuration in
+  # CMArmorSystem, so the per-weapon multiplier is disabled. Kept commented for merge safety.
+  # - type: MeleeDamageMultiplier
+  #   whitelist:
+  #     components:
+  #     - Xeno
   - type: MeleeWeapon
     angle: 0
+  # CMU14: the flat 20 armour penetration is applied centrally in CMArmorSystem for the item-attack path.
+  # - type: CMArmorPiercing
+  #   amount: 20
   - type: InteractedBlacklist
     blacklist:
       components:

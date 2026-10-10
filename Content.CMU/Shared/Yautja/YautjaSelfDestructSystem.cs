@@ -155,15 +155,21 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
         args.Handled = true;
 
-        // The worn bracer is this user's, so keep its owner field in step: a stale/null User makes
-        // CanUseSelfDestructCommon report "the alien technology refuses to respond".
-        if (bracer.Comp.User != user)
+        // YautjaPowerSystem owns User: OnEquipped sets it to the wearer and OnUnequipped clears it, and
+        // TryGetWornBracer only returns a bracer worn by this user, so it already matches. Writing it
+        // here would hide a stale value rather than fix whatever produced it.
+
+        // Our own timer wins the click, so hauling a body can never leave it armed and uncancellable.
+        if (bracer.Comp.SelfDestructArmed)
         {
-            bracer.Comp.User = user;
-            Dirty(bracer);
+            StopSelfDestructAudio(bracer);
+            TryCancelSelfDestruct(bracer, user);
+            return;
         }
 
-        if (TryGetPulledDeadVictim(user, out var dragged))
+        // Only a hauled dead hunter wearing their own bracer is a remote target: a marine corpse or a
+        // trophy must not swallow the click.
+        if (TryGetPulledDeadVictim(user, out var dragged) && HasFittedBracer(dragged))
         {
             if (TryCancelRemoteDeadVictimSelfDestruct(bracer, user, dragged))
                 return;
@@ -171,14 +177,6 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             if (CanUseRemoteDeadVictimSelfDestruct(bracer, user, dragged, null, out var draggedBracer))
                 TryRemoteDetonateDeadVictimSelfDestruct(bracer, user, dragged, draggedBracer.Owner);
 
-            // While hauling a body the icon only ever acts on the body's bracer, never on our own.
-            return;
-        }
-
-        if (bracer.Comp.SelfDestructArmed)
-        {
-            StopSelfDestructAudio(bracer);
-            TryCancelSelfDestruct(bracer, user);
             return;
         }
 
@@ -390,6 +388,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
         _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-cancelled"), user, user);
         BroadcastToYautja(Loc.GetString("cmu-yautja-self-destruct-broadcast-cancelled", ("hunter", Name(user))), except: user);
+        // Cancelling stays audible: StopSelfDestructAudio above only silences the arm and warning streams.
+        _audio.PlayPvs(bracer.Comp.SelfDestructCancelSound, user);
         _adminLog.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(user):hunter} has deactivated their Self-Destruct.");
         return true;
@@ -612,6 +612,17 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
         return xform.GridUid is { } grid && HasComp<YautjaHuntingGroundComponent>(grid) ||
                xform.MapUid is { } map && HasComp<YautjaHuntingGroundComponent>(map);
+    }
+
+    /// <summary>
+    /// True when the hauled corpse is a hunter wearing their own bracer, making it a valid remote
+    /// self-destruct target rather than an arbitrary body or trophy.
+    /// </summary>
+    private bool HasFittedBracer(EntityUid victim)
+    {
+        return _inventory.TryGetSlotEntity(victim, "gloves", out var gloves) &&
+               TryComp(gloves, out YautjaBracerComponent? victimBracer) &&
+               victimBracer.User == victim;
     }
 
     private bool TryGetPulledDeadVictim(EntityUid user, out EntityUid victim)

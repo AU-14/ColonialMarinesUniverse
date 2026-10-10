@@ -10936,6 +10936,15 @@ public sealed class YautjaSmokeTest
             await pair.ReallyBeIdle(10);
             await AssertClientHasPopup(client, "<b>This Human does not have a bracer attached.</b>");
 
+            // The detonation broadcast goes to every Yautja except the actor, so observe it from the
+            // listener: a client still attached to the actor never receives it, and a lingering label
+            // from the old attach made the check pass for the wrong reason.
+            await server.WaitPost(() =>
+            {
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, listener);
+            });
+
             await server.WaitPost(() =>
             {
                 var entMan = server.EntMan;
@@ -10961,14 +10970,9 @@ public sealed class YautjaSmokeTest
             await pair.ReallyBeIdle(10);
             await AssertClientHasPopup(
                 client,
-                "You activate the timer. May Guan Thwei's final hunt be swift.",
-                "A'ke Ret has triggered Guan Thwei's bracer's self-destruction sequence.");
-
-            await server.WaitPost(() =>
-            {
-                var session = server.PlayerMan.Sessions.Single();
-                server.PlayerMan.SetAttachedEntity(session, listener);
-            });
+                "A'ke Ret has triggered Guan Thwei's bracer's self-destruction sequence.",
+                // The actor's own confirmation is private to them, so the listener must not receive it.
+                "You activate the timer. May Guan Thwei's final hunt be swift.");
 
             await server.WaitPost(() =>
             {
@@ -10994,6 +10998,25 @@ public sealed class YautjaSmokeTest
                     message.Contains($"in {expectedArea}", StringComparison.OrdinalIgnoreCase)),
                 Is.True,
                 $"CMSS13 logs '[key_name(boomer)] triggered the predator self-destruct sequence of [victim] ([victim.key]) in [A.name]'.\nActual logs:\n{joinedMessages}");
+
+            // The other half of the except: rule. Arming your own bracer must give you your own
+            // confirmation and must not also announce you to yourself in the third person.
+            await server.WaitPost(() =>
+            {
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, boomer);
+
+                var entMan = server.EntMan;
+                var selfDestruct = entMan.System<YautjaSelfDestructSystem>();
+                Assert.That(selfDestruct.TryArmSelfDestruct(
+                    (boomerBracer, entMan.GetComponent<YautjaBracerComponent>(boomerBracer)), boomer), Is.True);
+            });
+
+            await pair.ReallyBeIdle(10);
+            await AssertClientHasPopup(
+                client,
+                "You set the timer. May your journey to the great hunting grounds be swift.",
+                "A'ke Ret has triggered their bracer's self-destruction sequence.");
         }
         finally
         {

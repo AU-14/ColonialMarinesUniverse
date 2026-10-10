@@ -302,7 +302,8 @@ public sealed class YautjaRackAccessTest
             var roles = entMan.System<SharedRoleSystem>();
             var adultRack = entMan.SpawnEntity("CMUYautjaLoadoutVendor", MapCoordinates.Nullspace);
             var elderRack = entMan.SpawnEntity("CMUYautjaElderLoadoutVendor", MapCoordinates.Nullspace);
-            var spawned = new List<EntityUid> { adultRack, elderRack };
+            var youngbloodRack = entMan.SpawnEntity("CMUYautjaYoungbloodLoadoutVendor", MapCoordinates.Nullspace);
+            var spawned = new List<EntityUid> { adultRack, elderRack, youngbloodRack };
 
             try
             {
@@ -316,9 +317,34 @@ public sealed class YautjaRackAccessTest
                     Assert.That(RackOpenCancelled(entMan, adultRack, youngblood), Is.True,
                         "CMU14: the rank still gates - a youngblood cannot open the adult rack.");
 
+                    var unblooded = Ranked(entMan, mind, roles, spawned, YautjaRank.Unblooded, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, adultRack, unblooded), Is.True,
+                        "CMU14: an unblooded is below the adult rack's Blooded gate.");
+
                     var elder = Ranked(entMan, mind, roles, spawned, YautjaRank.Elder, "CMUYautjaHunter");
                     Assert.That(RackOpenCancelled(entMan, elderRack, elder), Is.False,
                         "CMU14: an elder opens the elder rack with no ID card on.");
+
+                    // Ranks above the rack's own must also pass: the gate is "this rank or above".
+                    var elderOnAdult = Ranked(entMan, mind, roles, spawned, YautjaRank.Elder, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, adultRack, elderOnAdult), Is.False,
+                        "CMU14: an elder opens the adult rack with no ID card on.");
+
+                    var eliteOnAdult = Ranked(entMan, mind, roles, spawned, YautjaRank.Elite, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, adultRack, eliteOnAdult), Is.False,
+                        "CMU14: an elite opens the adult rack with no ID card on.");
+
+                    var ancientOnElder = Ranked(entMan, mind, roles, spawned, YautjaRank.Ancient, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, elderRack, ancientOnElder), Is.False,
+                        "CMU14: an ancient opens the elder rack with no ID card on.");
+
+                    var leaderOnElder = Ranked(entMan, mind, roles, spawned, YautjaRank.Leader, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, elderRack, leaderOnElder), Is.False,
+                        "CMU14: a leader opens the elder rack with no ID card on.");
+
+                    var bloodedOnYoungblood = Ranked(entMan, mind, roles, spawned, YautjaRank.Blooded, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, youngbloodRack, bloodedOnYoungblood), Is.False,
+                        "CMU14: a blooded hunter opens the youngblood rack with no ID card on.");
                 });
             }
             finally

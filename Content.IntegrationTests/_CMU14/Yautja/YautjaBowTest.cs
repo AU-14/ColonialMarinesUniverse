@@ -11586,7 +11586,7 @@ public sealed class YautjaBowTest
                     AssertSoundPath(gun.SoundGunshot!, "/Audio/CMU14/Yautja/woodhit.ogg");
                     Assert.That(entMan.HasComponent<WieldableComponent>(launcher), Is.True);
                     Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(launcher), Is.False,
-                        "CMSS13 /obj/item/weapon/gun/launcher/spike sets flags_item = ITEM_PREDATOR|TWOHANDED.");
+                        "CMU14: the spike launcher is wieldable (cm-ss13 flags_item = ITEM_PREDATOR|TWOHANDED) but does not require wielding to fire.");
                     AssertNonCorrodible(entMan, launcher);
                 });
             }
@@ -12080,7 +12080,7 @@ public sealed class YautjaBowTest
                         "CMSS13 incendiary mode sets shot_cost = 5.");
                     Assert.That(entMan.HasComponent<WieldableComponent>(pistol), Is.True);
                     Assert.That(entMan.HasComponent<GunRequiresWieldComponent>(pistol), Is.False,
-                        "CMSS13 plasma pistol sets flags_item = ITEM_PREDATOR|IGNITING_ITEM|TWOHANDED.");
+                        "CMU14: the plasma pistol is wieldable (cm-ss13 flags_item = ITEM_PREDATOR|IGNITING_ITEM|TWOHANDED) but does not require wielding to fire.");
                     AssertIncendiaryPayload(entMan,
                         incendiaryBolt,
                         "CMSS13 incendiary plasma pistol mode switches to /datum/ammo/energy/yautja/pistol/incendiary.");

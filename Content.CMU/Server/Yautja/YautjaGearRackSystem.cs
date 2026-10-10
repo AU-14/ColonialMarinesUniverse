@@ -350,8 +350,9 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
 
     private bool HasRackAccess(EntityUid user, YautjaRank rank)
     {
-        // CMU14: no ID card required - a Yautja of the rack's own rank may open it.
-        if (TryComp<YautjaComponent>(user, out var yautja) && yautja.ClanRank == rank)
+        // CMU14: no ID card required - a Yautja of the rack's rank or above may open it. YautjaRank is
+        // ordered by seniority, so an elder opens the adult rack too.
+        if (TryComp<YautjaComponent>(user, out var yautja) && yautja.ClanRank >= rank)
             return true;
 
         foreach (var access in YautjaRankMetadata.GetRackAccessTags(rank))
