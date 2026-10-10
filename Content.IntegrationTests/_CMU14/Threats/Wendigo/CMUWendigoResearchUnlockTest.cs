@@ -110,6 +110,9 @@ public sealed class CMUWendigoResearchUnlockTest : GameTest
                     .First(category => category.Name == CMUWendigoResearchUnlockSystem.ResearchCategory)
                     .Entries.Single(e => e.Crate.Id == CMUWendigoResearchUnlockSystem.MH32Crate);
                 Assert.That(entry.Cost, Is.EqualTo(3500));
+                Assert.That(entry.MaxStock, Is.EqualTo(1), "MH-32 is limited stock.");
+                Assert.That(entry.StartingStock, Is.EqualTo(1));
+                Assert.That(entry.StockReplenishDelay, Is.EqualTo(TimeSpan.FromMinutes(30)));
 
                 research.UpdateClearance(0, 3, "corporate");
                 research.UpdateClearance(0, 4, "corporate");

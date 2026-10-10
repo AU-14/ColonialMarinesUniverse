@@ -1,6 +1,12 @@
+using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Fixtures.Attributes;
+using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Body;
+using Content.Shared.Body.Components;
+using Content.Shared.Chemistry.Components.SolutionManager;
+using Content.Shared.Metabolism;
 using Content.Shared._RMC14.Xenonids.Headbite;
 using Content.Shared._RMC14.Xenonids.Punch;
 using Content.Shared.Chemistry.Components;
@@ -19,6 +25,7 @@ namespace Content.IntegrationTests.CMU14.Threats.Wendigo;
 public sealed class CMUWendigoLabPrototypeTest : GameTest
 {
     private const string Full = "AU14Wendigo";
+    private const string Lab = "CMUWendigoLab";
     private const string Lesser = "CMUWendigoLesser";
 
     [SidedDependency(Side.Server)] private readonly IComponentFactory _compFactory = default!;
@@ -125,5 +132,31 @@ public sealed class CMUWendigoLabPrototypeTest : GameTest
         }
 
         Assert.That(total, Is.EqualTo(2));
+    }
+
+    [Test]
+    [RunOnSide(Side.Server)]
+    public void LabWendigosAreTreatableButNaturalOnesAreNot()
+    {
+        foreach (var id in new[] { Lab, Lesser })
+        {
+            var proto = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(id);
+            Assert.That(proto.TryGetComponent<WoundableComponent>(out _, _compFactory), Is.True,
+                $"{id} must take wound kits and sutures.");
+            Assert.That(proto.TryGetComponent<InjectableSolutionComponent>(out _, _compFactory), Is.True,
+                $"{id} must accept syringes and hyposprays.");
+            Assert.That(proto.TryGetComponent<BloodstreamComponent>(out _, _compFactory), Is.True, id);
+            Assert.That(proto.TryGetComponent<InitialBodyComponent>(out var body, _compFactory), Is.True, id);
+            Assert.That(body!.Organs.Values.Select(organ => organ.Id), Does.Contain("CMUOrganWendigoHeart"),
+                $"{id} needs a metabolising heart so medicine works.");
+        }
+
+        var heart = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>("CMUOrganWendigoHeart");
+        Assert.That(heart.TryGetComponent<MetabolizerComponent>(out _, _compFactory), Is.True);
+
+        var natural = SProtoMan.Index<Robust.Shared.Prototypes.EntityPrototype>(Full);
+        Assert.That(natural.TryGetComponent<WoundableComponent>(out _, _compFactory), Is.False,
+            "Natural Wendigos stay untreatable.");
+        Assert.That(natural.TryGetComponent<InjectableSolutionComponent>(out _, _compFactory), Is.False);
     }
 }

@@ -295,6 +295,11 @@ public sealed partial class HealthScannerBui : BoundUserInterface
         if (uiState.CMURiderReading is { } riderReading)
             _window.CMURiderLabel.Text = riderReading;
 
+        // CMU14: lab Wendigo procedure progress
+        _window.CMUWendigoBanner.Visible = uiState.CMUWendigoReading is not null;
+        if (uiState.CMUWendigoReading is { } wendigoReading)
+            _window.CMUWendigoLabel.Text = wendigoReading;
+
         if (!_window.IsOpen)
         {
             _window.OpenCentered();

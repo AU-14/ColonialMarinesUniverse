@@ -18,6 +18,10 @@ using Content.Shared.CMU14.Chemistry;
 using Content.Shared.CMU14.Round.Antags.Cannibal;
 using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Content.Shared.Chat.Prototypes;
+using Content.Shared.CMU14.Medical.Diagnostics;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -54,6 +58,7 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
 {
     [Dependency] private readonly IAdminLogManager _adminLog = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedRMCEmoteSystem _emote = default!;
     [Dependency] private readonly GhostRoleSystem _ghostRole = default!;
@@ -62,6 +67,7 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;
     [Dependency] private readonly SharedMindSystem _mind = default!;
     [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly MobThresholdSystem _thresholds = default!;
     [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly RoleSystem _role = default!;
@@ -75,7 +81,7 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     public static readonly ProtoId<ReagentPrototype> MH32 = "CMUMH32";
     public static readonly ProtoId<ReagentPrototype> MH33 = "CMUMH33";
 
-    public static readonly EntProtoId FullWendigo = "AU14Wendigo";
+    public static readonly EntProtoId FullWendigo = "CMUWendigoLab";
     public static readonly EntProtoId LesserWendigo = "CMUWendigoLesser";
 
     private static readonly EntProtoId MindRoleFeral = "MindRoleCMUWendigoLab";
@@ -105,6 +111,25 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     private static readonly TimeSpan MutationGrace = TimeSpan.FromSeconds(5);
 
     /// <summary>
+    /// How long a ready subject waits for its next input before relapsing a stage.
+    /// </summary>
+    public static readonly TimeSpan ReadyWindow = TimeSpan.FromMinutes(4);
+    private static readonly TimeSpan WindowWarning = TimeSpan.FromSeconds(60);
+
+    /// <summary>
+    /// From this instability on, MH-33 no longer binds the Wendigo to its master.
+    /// </summary>
+    public const int UnstableThreshold = 3;
+
+    /// <summary>
+    /// At this instability the subject's body gives out and the procedure ends in death.
+    /// </summary>
+    public const int MaxInstability = 5;
+
+    private const string CollapseDamageType = "Poison";
+    private static readonly FixedPoint2 CollapseMargin = 5;
+
+    /// <summary>
     /// How long a recorded injector stays attributable to the reagent that follows it.
     /// The injector event and the reagent reaction happen in the same tick.
     /// </summary>
@@ -114,12 +139,14 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     private const int MutationWarningLines = 4;
 
     private readonly List<string> _roundEndLines = new();
+    private readonly HashSet<EntityUid> _pendingCollapse = new();
 
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<HumanoidProfileComponent, IngestingEvent>(OnIngesting);
+        SubscribeLocalEvent<CMUWendigoMealComponent, FullyEatenEvent>(OnMealEaten);
 
         SubscribeLocalEvent<CMUWendigoSubjectComponent, TargetBeforeInjectEvent>(OnBeforeInject);
         SubscribeLocalEvent<CMUWendigoSubjectComponent, CMUBeforeHyposprayInjectEvent>(OnBeforeHyposprayInject);
@@ -127,6 +154,7 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
         SubscribeLocalEvent<CMUWendigoSubjectComponent, MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<CMUWendigoSubjectComponent, CMUWendigoTransformDoAfterEvent>(OnTransformDoAfter);
         SubscribeLocalEvent<CMUWendigoSubjectComponent, ExaminedEvent>(OnSubjectExamined);
+        SubscribeLocalEvent<CMUWendigoSubjectComponent, CMUHealthScannerReadingEvent>(OnScannerReading);
 
         SubscribeLocalEvent<CMUWendigoTamedComponent, ExaminedEvent>(OnTamedExamined);
 
@@ -173,47 +201,65 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
         var humanMeat = _tag.HasTag(args.Food, MeatTag)
             && CMUHumanMeat.IsHumanStock(MetaData(args.Food).EntityPrototype);
 
-        if (!TryComp(ent, out CMUWendigoSubjectComponent? subject))
+        if (humanMeat)
         {
-            // Nutrition from this bite has not been applied yet, so the starving check sees the pre-meal value.
-            if (humanMeat && IsEligibleSubject(ent) && IsStarving(ent))
-                BeginProcedure(ent);
+            // Human meat only counts once the piece is finished; remember the eater and their hunger at the first bite.
+            var meal = EnsureComp<CMUWendigoMealComponent>(args.Food);
+            if (meal.Eater != ent.Owner)
+            {
+                meal.Eater = ent;
+                meal.StartedStarving = IsStarving(ent);
+            }
 
             return;
         }
 
-        var now = _timing.CurTime;
-        if (!humanMeat)
+        // Before the Stabilized Mutagen stage, other food breaks the hunger cycle.
+        if (TryComp(ent, out CMUWendigoSubjectComponent? subject)
+            && subject.Stage is CMUWendigoSubjectStage.Fed1 or CMUWendigoSubjectStage.Fed2)
         {
-            // Before the Stabilized Mutagen stage, other food breaks the hunger cycle.
-            if (subject.Stage is CMUWendigoSubjectStage.Fed1 or CMUWendigoSubjectStage.Fed2)
-                Abort((ent, subject));
+            Abort((ent, subject));
+        }
+    }
+
+    private void OnMealEaten(Entity<CMUWendigoMealComponent> food, ref FullyEatenEvent args)
+    {
+        if (food.Comp.Eater is not { } eater || TerminatingOrDeleted(eater))
+            return;
+
+        if (!TryComp(eater, out CMUWendigoSubjectComponent? subject))
+        {
+            if (food.Comp.StartedStarving && IsEligibleSubject(eater))
+                BeginProcedure(eater);
 
             return;
         }
 
-        if (now < subject.StageEndsAt)
+        var ent = (eater, subject);
+        if (_timing.CurTime < subject.StageEndsAt)
         {
-            PopupNotReady(ent);
+            PopupNotReady(eater);
+            AddInstability(ent, $"finished human meat too early in stage {subject.Stage}");
             return;
         }
 
         switch (subject.Stage)
         {
             case CMUWendigoSubjectStage.Fed1:
-                SetStage((ent, subject), CMUWendigoSubjectStage.Fed2, _random.Next(FeedMin, FeedMax));
-                _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-fed-again"), ent, ent, PopupType.Medium);
+                SetStage(ent, CMUWendigoSubjectStage.Fed2, _random.Next(FeedMin, FeedMax));
+                _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-fed-again"), eater, eater, PopupType.Medium);
                 break;
             case CMUWendigoSubjectStage.Mutagen:
-                SetStage((ent, subject), CMUWendigoSubjectStage.Gestation, GestationTime);
-                var now2 = _timing.CurTime;
-                subject.NextFlavorAt = now2 + _random.Next(FlavorMin, FlavorMax);
-                subject.NextSeizureAt = now2 + _random.Next(GestationSeizureMin, GestationSeizureMax);
-                _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-gestation-start"), ent, ent, PopupType.LargeCaution);
+                SetStage(ent, CMUWendigoSubjectStage.Gestation, GestationTime);
+                var now = _timing.CurTime;
+                subject.NextFlavorAt = now + _random.Next(FlavorMin, FlavorMax);
+                subject.NextSeizureAt = now + _random.Next(GestationSeizureMin, GestationSeizureMax);
+                _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-gestation-start"), eater, eater, PopupType.LargeCaution);
                 break;
             default:
                 // Fed2 waits for Stabilized Mutagen, Gestation for MH-32/MH-33; meat does nothing more.
-                PopupNotReady(ent);
+                PopupNotReady(eater);
+                AddInstability(ent, $"finished human meat in stage {subject.Stage}, which does not take meat");
                 break;
         }
     }
@@ -276,12 +322,14 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
         {
             // Wrong stage or too early: the dose is wasted.
             PopupNotReady(ent);
+            AddInstability(ent, $"injected with {args.ReagentQuantity.Quantity}u {reagent} in stage {ent.Comp.Stage} before it was ready");
             return;
         }
 
         if (args.ReagentQuantity.Quantity < RequiredDose)
         {
             _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-dose-too-small"), ent, ent, PopupType.Small);
+            AddInstability(ent, $"injected with {args.ReagentQuantity.Quantity}u {reagent}, under the {RequiredDose}u dose");
             return;
         }
 
@@ -300,6 +348,7 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
         var now = _timing.CurTime;
         var subject = ent.Comp;
         subject.Stage = CMUWendigoSubjectStage.Mutating;
+        subject.StageStartedAt = now;
         subject.StageEndsAt = now + MutationTime;
         subject.Tamed = tamed;
         subject.NextMutationPulseAt = now;
@@ -340,18 +389,29 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
 
     private void OnMobStateChanged(Entity<CMUWendigoSubjectComponent> ent, ref MobStateChangedEvent args)
     {
+        if (args.NewMobState == MobState.Critical)
+        {
+            // Letting the subject fall into crit strains the procedure, but does not stop it.
+            AddInstability(ent, "fell into critical condition");
+            return;
+        }
+
         if (args.NewMobState != MobState.Dead)
             return;
 
         // Death is the only cancel once Stabilized Mutagen is in; revival does not restore progress.
         _doAfter.Cancel(ent.Comp.DoAfter);
         RemCompDeferred<CMUWendigoSubjectComponent>(ent);
+        _adminLog.Add(LogType.Action, LogImpact.Medium,
+            $"{ToPrettyString(ent):subject} died in Wendigo stage {ent.Comp.Stage}; the procedure was cancelled");
     }
 
     private void Abort(Entity<CMUWendigoSubjectComponent> ent)
     {
         RemCompDeferred<CMUWendigoSubjectComponent>(ent);
         _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-aborted"), ent, ent, PopupType.Medium);
+        _adminLog.Add(LogType.Action, LogImpact.Medium,
+            $"{ToPrettyString(ent):subject} ate other food in Wendigo stage {ent.Comp.Stage}; the procedure was aborted");
     }
 
     private void OnTransformDoAfter(Entity<CMUWendigoSubjectComponent> ent, ref CMUWendigoTransformDoAfterEvent args)
@@ -372,6 +432,16 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
             _adminLog.Add(LogType.Action, LogImpact.Medium,
                 $"{ToPrettyString(ent):subject} was no longer a valid Wendigo subject when the mutation finished");
             return;
+        }
+
+        if (subject.Tamed && subject.Instability >= UnstableThreshold)
+        {
+            // An unstable body rejects MH-33's conditioning: the Wendigo comes out feral.
+            subject.Tamed = false;
+            _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-bond-failed-others", ("subject", ent.Owner)),
+                ent, PopupType.LargeCaution);
+            _adminLog.Add(LogType.Action, LogImpact.High,
+                $"{ToPrettyString(ent):subject}'s MH-33 bond failed at instability {subject.Instability}/{MaxInstability}; the Wendigo is feral");
         }
 
         var variant = HasComp<CannibalComponent>(ent) ? FullWendigo : LesserWendigo;
@@ -462,12 +532,39 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     {
         base.Update(frameTime);
 
+        foreach (var collapsed in _pendingCollapse)
+        {
+            if (TerminatingOrDeleted(collapsed)
+                || !TryComp(collapsed, out DamageableComponent? damageable)
+                || !_thresholds.TryGetDeadThreshold(collapsed, out var dead))
+            {
+                continue;
+            }
+
+            // Exactly past the dead threshold, so the body dies without being gibbed.
+            var needed = dead.Value - _damageable.GetTotalDamage((collapsed, damageable)) + CollapseMargin;
+            if (needed <= FixedPoint2.Zero)
+                continue;
+
+            var damage = new DamageSpecifier();
+            damage.DamageDict[CollapseDamageType] = needed;
+            _damageable.TryChangeDamage(collapsed, damage, ignoreResistances: true, interruptsDoAfters: false);
+        }
+
+        _pendingCollapse.Clear();
+
         var now = _timing.CurTime;
         var query = EntityQueryEnumerator<CMUWendigoSubjectComponent>();
         while (query.MoveNext(out var uid, out var subject))
         {
             if (!_mobState.IsAlive(uid))
+            {
+                // A ready window is paused while the subject is down, so revival never lands on an instant relapse.
+                if (subject.ReadyCuePlayed && subject.Stage != CMUWendigoSubjectStage.Mutating)
+                    subject.WindowEndsAt += TimeSpan.FromSeconds(frameTime);
+
                 continue;
+            }
 
             var ent = (uid, subject);
             if (subject.Stage == CMUWendigoSubjectStage.Mutating)
@@ -501,6 +598,19 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
                 continue;
             }
 
+            if (now >= subject.WindowEndsAt)
+            {
+                MissWindow(ent);
+                continue;
+            }
+
+            if (!subject.WindowWarned && now >= subject.WindowEndsAt - WindowWarning)
+            {
+                subject.WindowWarned = true;
+                WindowClosingCue(ent);
+                continue;
+            }
+
             if (now >= subject.NextReadyCueAt)
             {
                 subject.NextReadyCueAt = now + _random.Next(ReadyCueMin, ReadyCueMax);
@@ -512,8 +622,11 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     private void SetStage(Entity<CMUWendigoSubjectComponent> ent, CMUWendigoSubjectStage stage, TimeSpan duration)
     {
         ent.Comp.Stage = stage;
+        ent.Comp.StageStartedAt = _timing.CurTime;
         ent.Comp.StageEndsAt = _timing.CurTime + duration;
         ent.Comp.ReadyCuePlayed = false;
+        _adminLog.Add(LogType.Action, LogImpact.Medium,
+            $"{ToPrettyString(ent):subject} entered Wendigo stage {stage}, ready in {duration.TotalSeconds:F0}s");
     }
 
     private void GestationTick(Entity<CMUWendigoSubjectComponent> ent, TimeSpan now)
@@ -533,26 +646,132 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     }
 
     /// <summary>
-    /// Plays once when a stage's timer finishes, so the scientists can tell the subject is ready.
+    /// Plays once when a stage's timer finishes: a seizure with red text the subject and everyone nearby can see.
     /// </summary>
     private void ExpiryCue(Entity<CMUWendigoSubjectComponent> ent)
     {
+        LocId self, others;
         switch (ent.Comp.Stage)
         {
             case CMUWendigoSubjectStage.Fed1:
+                self = "cmu-wendigo-lab-ready-fed";
+                others = "cmu-wendigo-lab-ready-fed-others";
+                break;
             case CMUWendigoSubjectStage.Fed2:
-                Seizure(ent, MinorSeizure);
+                self = "cmu-wendigo-lab-ready-fed2";
+                others = "cmu-wendigo-lab-ready-fed2-others";
                 break;
             case CMUWendigoSubjectStage.Mutagen:
-                _jitter.DoJitter(ent, TimeSpan.FromSeconds(3), true, 8, 5);
-                _emote.TryEmoteWithChat(ent, Cough, forceEmote: true, cooldown: TimeSpan.Zero);
-                _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-ready-mutagen"), ent, ent, PopupType.Medium);
+                self = "cmu-wendigo-lab-ready-mutagen";
+                others = "cmu-wendigo-lab-ready-mutagen-others";
                 break;
             case CMUWendigoSubjectStage.Gestation:
-                _jitter.DoJitter(ent, TimeSpan.FromSeconds(4), true, 12, 6);
-                _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-ready-gestation"), ent, ent, PopupType.LargeCaution);
+                self = "cmu-wendigo-lab-ready-gestation";
+                others = "cmu-wendigo-lab-ready-gestation-others";
                 break;
+            default:
+                return;
         }
+
+        ent.Comp.WindowEndsAt = _timing.CurTime + ReadyWindow;
+        ent.Comp.WindowWarned = false;
+        Seizure(ent, MinorSeizure, self, others);
+        _adminLog.Add(LogType.Action, LogImpact.Medium,
+            $"{ToPrettyString(ent):subject} completed Wendigo stage {ent.Comp.Stage}; the next step must land within {ReadyWindow.TotalMinutes} minutes");
+    }
+
+    /// <summary>
+    /// One minute before a ready subject relapses.
+    /// </summary>
+    private void WindowClosingCue(Entity<CMUWendigoSubjectComponent> ent)
+    {
+        _jitter.DoJitter(ent, TimeSpan.FromSeconds(3), true, 12, 6);
+        _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-window-closing"), ent, ent, PopupType.LargeCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-window-closing-others", ("subject", ent.Owner)),
+            ent, Filter.PvsExcept(ent), true, PopupType.MediumCaution);
+        _adminLog.Add(LogType.Action, LogImpact.Low,
+            $"{ToPrettyString(ent):subject}'s Wendigo stage {ent.Comp.Stage} window closes in {WindowWarning.TotalSeconds}s");
+    }
+
+    /// <summary>
+    /// The ready window passed without the next input: the subject loses a stage and the procedure destabilises.
+    /// </summary>
+    private void MissWindow(Entity<CMUWendigoSubjectComponent> ent)
+    {
+        var missed = ent.Comp.Stage;
+        _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-window-missed"), ent, ent, PopupType.LargeCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-window-missed-others", ("subject", ent.Owner)),
+            ent, Filter.PvsExcept(ent), true, PopupType.MediumCaution);
+
+        CMUWendigoSubjectStage previous;
+        switch (missed)
+        {
+            case CMUWendigoSubjectStage.Fed2:
+                previous = CMUWendigoSubjectStage.Fed1;
+                break;
+            case CMUWendigoSubjectStage.Mutagen:
+                previous = CMUWendigoSubjectStage.Fed2;
+                break;
+            case CMUWendigoSubjectStage.Gestation:
+                previous = CMUWendigoSubjectStage.Mutagen;
+                break;
+            default:
+                // Nothing to fall back to from the first meal: the hunger cycle breaks.
+                RemCompDeferred<CMUWendigoSubjectComponent>(ent);
+                _adminLog.Add(LogType.Action, LogImpact.Medium,
+                    $"{ToPrettyString(ent):subject} missed the Wendigo stage {missed} window; the procedure ended");
+                return;
+        }
+
+        // Back to the previous stage, already ready: the lost step has to be repeated.
+        SetStage(ent, previous, TimeSpan.Zero);
+        AddInstability(ent, $"missed the stage {missed} window and relapsed to {previous}");
+    }
+
+    /// <summary>
+    /// Records a mistake. Each one is announced to the subject and onlookers; the maximum kills the subject.
+    /// </summary>
+    private void AddInstability(Entity<CMUWendigoSubjectComponent> ent, string reason)
+    {
+        if (ent.Comp.Instability >= MaxInstability)
+            return;
+
+        ent.Comp.Instability++;
+        var level = ent.Comp.Instability;
+        _adminLog.Add(LogType.Action, LogImpact.Medium,
+            $"{ToPrettyString(ent):subject} Wendigo instability {level}/{MaxInstability}: {reason}");
+
+        if (level >= MaxInstability)
+        {
+            Collapse(ent);
+            return;
+        }
+
+        var severe = level >= UnstableThreshold;
+        _jitter.DoJitter(ent, TimeSpan.FromSeconds(2), true, 14, 8);
+        _popup.PopupEntity(
+            Loc.GetString(severe ? "cmu-wendigo-lab-instability-severe" : "cmu-wendigo-lab-instability",
+                ("level", level), ("max", MaxInstability)),
+            ent, ent, PopupType.LargeCaution);
+        _popup.PopupEntity(
+            Loc.GetString(severe ? "cmu-wendigo-lab-instability-severe-others" : "cmu-wendigo-lab-instability-others",
+                ("subject", ent.Owner), ("level", level), ("max", MaxInstability)),
+            ent, Filter.PvsExcept(ent), true, PopupType.MediumCaution);
+    }
+
+    private void Collapse(Entity<CMUWendigoSubjectComponent> ent)
+    {
+        _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-collapse"), ent, ent, PopupType.LargeCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-collapse-others", ("subject", ent.Owner)),
+            ent, Filter.PvsExcept(ent), true, PopupType.LargeCaution);
+        _adminLog.Add(LogType.Action, LogImpact.High,
+            $"{ToPrettyString(ent):subject}'s body gave out at Wendigo instability {MaxInstability}; the subject died");
+
+        _doAfter.Cancel(ent.Comp.DoAfter);
+        RemCompDeferred<CMUWendigoSubjectComponent>(ent);
+
+        // Applied next update: a collapse can start inside a mob state change (falling into crit).
+        _pendingCollapse.Add(ent);
     }
 
     /// <summary>
@@ -586,12 +805,19 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
             ent, Filter.PvsExcept(ent), true, PopupType.MediumCaution);
     }
 
-    private void Seizure(EntityUid uid, TimeSpan duration)
+    private void Seizure(EntityUid uid, TimeSpan duration,
+        LocId self = default, LocId others = default)
     {
+        if (self == default)
+            self = "cmu-wendigo-lab-seizure";
+        if (others == default)
+            others = "cmu-wendigo-lab-seizure-others";
+
         _jitter.DoJitter(uid, duration, true, 10, 6);
         _stun.TryParalyze(uid, duration, true);
-        _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-seizure"), uid, uid, PopupType.LargeCaution);
-        _popup.PopupEntity(Loc.GetString("cmu-wendigo-lab-seizure-others", ("subject", uid)),
+        // Caution popups render red.
+        _popup.PopupEntity(Loc.GetString(self), uid, uid, PopupType.LargeCaution);
+        _popup.PopupEntity(Loc.GetString(others, ("subject", uid)),
             uid, Filter.PvsExcept(uid), true, PopupType.MediumCaution);
     }
 
@@ -612,8 +838,64 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
             return;
         }
 
-        if (_timing.CurTime >= ent.Comp.StageEndsAt)
+        if (IsReadyForFinalDose(ent.Comp))
             args.PushMarkup(Loc.GetString("cmu-wendigo-lab-examine-ready"));
+
+        if (ent.Comp.Instability >= UnstableThreshold)
+            args.PushMarkup(Loc.GetString("cmu-wendigo-lab-examine-unstable-severe"));
+        else if (ent.Comp.Instability > 0)
+            args.PushMarkup(Loc.GetString("cmu-wendigo-lab-examine-unstable"));
+    }
+
+    private void OnScannerReading(Entity<CMUWendigoSubjectComponent> ent, ref CMUHealthScannerReadingEvent args)
+    {
+        args.State.CMUWendigoReading = BuildScannerReading(ent.Comp);
+    }
+
+    /// <summary>
+    /// Health analyzer line: stage, overall progress, what the subject is waiting for, and instability.
+    /// </summary>
+    public string BuildScannerReading(CMUWendigoSubjectComponent subject)
+    {
+        var now = _timing.CurTime;
+        var stageIndex = (int) subject.Stage;
+        var stageLength = subject.StageEndsAt - subject.StageStartedAt;
+        var stageFraction = stageLength <= TimeSpan.Zero
+            ? 1f
+            : Math.Clamp((float) ((now - subject.StageStartedAt) / stageLength), 0f, 1f);
+        var stageCount = Enum.GetValues<CMUWendigoSubjectStage>().Length;
+        var progress = (int) MathF.Round((stageIndex + stageFraction) / stageCount * 100f);
+
+        string status;
+        if (subject.Stage == CMUWendigoSubjectStage.Mutating)
+            status = Loc.GetString("cmu-wendigo-lab-scanner-mutating");
+        else if (now < subject.StageEndsAt)
+            status = Loc.GetString("cmu-wendigo-lab-scanner-developing", ("time", FormatTime(subject.StageEndsAt - now)));
+        else
+            status = Loc.GetString("cmu-wendigo-lab-scanner-ready");
+
+        return Loc.GetString("cmu-wendigo-lab-scanner",
+            ("stage", Loc.GetString($"cmu-wendigo-lab-stage-{subject.Stage.ToString().ToLowerInvariant()}")),
+            ("progress", progress),
+            ("status", status),
+            ("instability", subject.Instability),
+            ("max", MaxInstability));
+    }
+
+    private static string FormatTime(TimeSpan time)
+    {
+        if (time < TimeSpan.Zero)
+            time = TimeSpan.Zero;
+
+        return $"{(int) time.TotalMinutes}:{time.Seconds:D2}";
+    }
+
+    /// <summary>
+    /// Gestation is over and the subject will take MH-32 or MH-33.
+    /// </summary>
+    public bool IsReadyForFinalDose(CMUWendigoSubjectComponent subject)
+    {
+        return subject.Stage == CMUWendigoSubjectStage.Gestation && _timing.CurTime >= subject.StageEndsAt;
     }
 
     private void OnTamedExamined(Entity<CMUWendigoTamedComponent> ent, ref ExaminedEvent args)
@@ -636,6 +918,7 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _roundEndLines.Clear();
+        _pendingCollapse.Clear();
     }
 
     #endregion
