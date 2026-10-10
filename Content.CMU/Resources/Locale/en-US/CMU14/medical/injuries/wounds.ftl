@@ -26,9 +26,14 @@ cmu-medical-cast-needed = Apply a cast to keep the bone from setting wrong.
 cmu-medical-cast-verb-remove = Remove cast
 cmu-medical-cast-removing = Removing cast...
 cmu-medical-cast-removed = The cast is removed.
+cmu-medical-cast-removed-early = The cast comes off before the bone has finished setting.
 cmu-medical-cast-ready-remove = The cast is ready to come off.
 cmu-medical-cast-broke = The cast cracks apart as the bone breaks again.
 cmu-medical-cast-malunion = The bone has set wrong.
+
+cmu-medical-splint-verb-remove = Remove splint
+cmu-medical-splint-removing = Removing splint...
+cmu-medical-splint-removed = The splint is removed.
 
 # Body part picker used by bandaging.
 cmu-medical-body-part-picker-header = Pick a part to bandage
