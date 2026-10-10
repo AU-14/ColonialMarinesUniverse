@@ -784,6 +784,9 @@
       state: engine_0
     - map: [ hood ]
       state: hood_closed
+    # Under the doors: the passenger's swings open in front of it.
+    - map: [ extinguisher ]
+      state: extinguisher_0
     - map: [ door_driver ]
       state: door_driver_closed
     - map: [ door_passenger ]
@@ -800,16 +803,15 @@
       state: turn_signal_left_0
     - map: [ turn_signal_right ]
       state: turn_signal_right_0
-    - map: [ taillight_left ]
-      state: taillight_left_0
-    - map: [ taillight_right ]
-      state: taillight_right_0
-    - map: [ extinguisher ]
-      state: extinguisher_0
     - map: [ windshield ]
       state: windshield_up_0
     - map: [ spare ]
       state: spare_0
+    # Over the spare beside the right one.
+    - map: [ taillight_left ]
+      state: taillight_left_0
+    - map: [ taillight_right ]
+      state: taillight_right_0
     - map: [ jerrycan ]
       state: jerrycan_0
     - map: [ shovel ]
@@ -843,6 +845,13 @@
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
+      jeep-headlight-left: !type:ContainerSlot
+      jeep-headlight-right: !type:ContainerSlot
+      jeep-turn-signal-left: !type:ContainerSlot
+      jeep-turn-signal-right: !type:ContainerSlot
+      jeep-taillight-left: !type:ContainerSlot
+      jeep-taillight-right: !type:ContainerSlot
+      jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -890,8 +899,8 @@
         name: cmu-jeep-part-extinguisher
         startingItem: CMFireExtinguisherPortable
         whitelist:
-          components:
-          - FireExtinguisher
+          tags:
+          - CMFireExtinguisherPortable
       jeep-hood:
         name: cmu-jeep-part-hood
         startingItem: CMUJeepHood
@@ -981,6 +990,13 @@
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
+      jeep-headlight-left: !type:ContainerSlot
+      jeep-headlight-right: !type:ContainerSlot
+      jeep-turn-signal-left: !type:ContainerSlot
+      jeep-turn-signal-right: !type:ContainerSlot
+      jeep-taillight-left: !type:ContainerSlot
+      jeep-taillight-right: !type:ContainerSlot
+      jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -1029,8 +1045,8 @@
         name: cmu-jeep-part-extinguisher
         startingItem: CMFireExtinguisherPortable
         whitelist:
-          components:
-          - FireExtinguisher
+          tags:
+          - CMFireExtinguisherPortable
       jeep-hood:
         name: cmu-jeep-part-hood
         startingItem: CMUJeepHood
@@ -1256,6 +1272,13 @@
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
+      jeep-headlight-left: !type:ContainerSlot
+      jeep-headlight-right: !type:ContainerSlot
+      jeep-turn-signal-left: !type:ContainerSlot
+      jeep-turn-signal-right: !type:ContainerSlot
+      jeep-taillight-left: !type:ContainerSlot
+      jeep-taillight-right: !type:ContainerSlot
+      jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -1305,8 +1328,8 @@
         name: cmu-jeep-part-extinguisher
         startingItem: CMFireExtinguisherPortable
         whitelist:
-          components:
-          - FireExtinguisher
+          tags:
+          - CMFireExtinguisherPortable
       jeep-hood:
         name: cmu-jeep-part-hood
         startingItem: CMUJeepHood
@@ -1442,6 +1465,13 @@
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
+      jeep-headlight-left: !type:ContainerSlot
+      jeep-headlight-right: !type:ContainerSlot
+      jeep-turn-signal-left: !type:ContainerSlot
+      jeep-turn-signal-right: !type:ContainerSlot
+      jeep-taillight-left: !type:ContainerSlot
+      jeep-taillight-right: !type:ContainerSlot
+      jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -1490,8 +1520,8 @@
         name: cmu-jeep-part-extinguisher
         startingItem: CMFireExtinguisherPortable
         whitelist:
-          components:
-          - FireExtinguisher
+          tags:
+          - CMFireExtinguisherPortable
       jeep-hood:
         name: cmu-jeep-part-hood
         startingItem: CMUJeepHood
@@ -1570,6 +1600,10 @@
       state: shovel_overlay_0
     - map: [ axe ]
       state: axe_overlay_0
+    # The hood raised or swinging; shut, it is the hood layer under the windshield.
+    - map: [ hood_raised ]
+      state: hood_open_overlay
+      visible: false
     - map: [ fuel_door ]
       state: fuel_door_closed_overlay
     - map: [ wheels ]
@@ -1702,6 +1736,10 @@
       state: shovel_overlay_0
     - map: [ axe ]
       state: axe_overlay_0
+    # The hood raised or swinging; shut, it is the hood layer under the windshield.
+    - map: [ hood_raised ]
+      state: hood_open_overlay
+      visible: false
     - map: [ fuel_door ]
       state: fuel_door_closed_overlay
     - map: [ wheels ]

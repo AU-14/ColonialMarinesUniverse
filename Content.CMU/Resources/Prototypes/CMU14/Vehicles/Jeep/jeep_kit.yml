@@ -26,6 +26,13 @@
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
+      jeep-headlight-left: !type:ContainerSlot
+      jeep-headlight-right: !type:ContainerSlot
+      jeep-turn-signal-left: !type:ContainerSlot
+      jeep-turn-signal-right: !type:ContainerSlot
+      jeep-taillight-left: !type:ContainerSlot
+      jeep-taillight-right: !type:ContainerSlot
+      jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -67,8 +74,8 @@
       jeep-extinguisher:
         name: cmu-jeep-part-extinguisher
         whitelist:
-          components:
-          - FireExtinguisher
+          tags:
+          - CMFireExtinguisherPortable
       jeep-hood:
         name: cmu-jeep-part-hood
         disableEject: true
@@ -122,6 +129,13 @@
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
+      jeep-headlight-left: !type:ContainerSlot
+      jeep-headlight-right: !type:ContainerSlot
+      jeep-turn-signal-left: !type:ContainerSlot
+      jeep-turn-signal-right: !type:ContainerSlot
+      jeep-taillight-left: !type:ContainerSlot
+      jeep-taillight-right: !type:ContainerSlot
+      jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -163,8 +177,8 @@
       jeep-extinguisher:
         name: cmu-jeep-part-extinguisher
         whitelist:
-          components:
-          - FireExtinguisher
+          tags:
+          - CMFireExtinguisherPortable
       jeep-hood:
         name: cmu-jeep-part-hood
         disableEject: true
@@ -218,6 +232,13 @@
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
+      jeep-headlight-left: !type:ContainerSlot
+      jeep-headlight-right: !type:ContainerSlot
+      jeep-turn-signal-left: !type:ContainerSlot
+      jeep-turn-signal-right: !type:ContainerSlot
+      jeep-taillight-left: !type:ContainerSlot
+      jeep-taillight-right: !type:ContainerSlot
+      jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -258,8 +279,8 @@
       jeep-extinguisher:
         name: cmu-jeep-part-extinguisher
         whitelist:
-          components:
-          - FireExtinguisher
+          tags:
+          - CMFireExtinguisherPortable
       jeep-hood:
         name: cmu-jeep-part-hood
         disableEject: true
@@ -306,6 +327,13 @@
       jeep-axe: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
+      jeep-headlight-left: !type:ContainerSlot
+      jeep-headlight-right: !type:ContainerSlot
+      jeep-turn-signal-left: !type:ContainerSlot
+      jeep-turn-signal-right: !type:ContainerSlot
+      jeep-taillight-left: !type:ContainerSlot
+      jeep-taillight-right: !type:ContainerSlot
+      jeep-ignition: !type:ContainerSlot
       jeep-hood: !type:ContainerSlot
       jeep-door-driver: !type:ContainerSlot
       jeep-door-passenger: !type:ContainerSlot
@@ -348,8 +376,8 @@
       jeep-extinguisher:
         name: cmu-jeep-part-extinguisher
         whitelist:
-          components:
-          - FireExtinguisher
+          tags:
+          - CMFireExtinguisherPortable
       jeep-hood:
         name: cmu-jeep-part-hood
         disableEject: true

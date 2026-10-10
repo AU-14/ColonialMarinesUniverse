@@ -43,6 +43,47 @@ public sealed class CMUJeepVisualSystem : EntitySystem
 
     private static readonly string[] Panels = [CMUJeepSystem.DriverDoor, CMUJeepSystem.PassengerDoor, CMUJeepSystem.Tailgate];
 
+    // The order the jeep, then its overlay over the riders, draws the parts in, as jeep.yml lists
+    // their layers; a raised hood is the overlay's later hood_raised layer. The part masks are all
+    // drawn at one depth, so this decides which takes a click where they overlap: the one on top.
+    private static readonly string[] JeepLayers =
+    [
+        "engine", "hood", "extinguisher", CMUJeepSystem.DriverDoor, CMUJeepSystem.PassengerDoor, CMUJeepSystem.Tailgate,
+        "fuel_door", "headlight_left", "headlight_right", "turn_signal_left", "turn_signal_right", "windshield", "spare",
+        "taillight_left", "taillight_right", "jerrycan", "shovel", "axe", "wheels",
+    ];
+
+    private static readonly string[] OverlayLayers =
+    [
+        CMUJeepSystem.DriverDoor, CMUJeepSystem.PassengerDoor, CMUJeepSystem.Tailgate, "taillight_left", "taillight_right",
+        "hood", "headlight_left", "headlight_right", "turn_signal_left", "turn_signal_right", "extinguisher", "windshield",
+        "spare", "jerrycan", "shovel", "axe", "hood_raised", "fuel_door", "wheels",
+    ];
+
+    // The directions the overlay draws a part in, over the riders; the art's ATTACHMENTS, HOOD_OVER,
+    // DOOR_OVER, TAILGATE_OVER and FUEL_DOOR_OVER.
+    private static readonly Dictionary<string, Direction[]> OverRiders = new()
+    {
+        ["hood"] = [Direction.South],
+        ["windshield"] = [Direction.South],
+        ["extinguisher"] = [Direction.South, Direction.East],
+        ["headlight_left"] = [Direction.South],
+        ["headlight_right"] = [Direction.South],
+        ["turn_signal_left"] = [Direction.South],
+        ["turn_signal_right"] = [Direction.South],
+        ["taillight_left"] = [Direction.North],
+        ["taillight_right"] = [Direction.North],
+        ["spare"] = [Direction.North],
+        ["jerrycan"] = [Direction.North],
+        ["shovel"] = [Direction.West],
+        ["axe"] = [Direction.West],
+        [CMUJeepSystem.DriverDoor] = [Direction.West],
+        [CMUJeepSystem.PassengerDoor] = [Direction.East],
+        [CMUJeepSystem.Tailgate] = [Direction.North],
+        ["fuel_door"] = [Direction.East],
+        ["wheels"] = [Direction.East, Direction.West],
+    };
+
     // Part outlines are tinted like the standard hover outline: green in reach, red out of reach.
     private static readonly Color InReachColor = new(0f, 1f, 0f, 0.6f);
     private static readonly Color OutOfReachColor = new(1f, 0f, 0f, 0.6f);
@@ -86,8 +127,10 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             if (!_swings.TryGetValue(uid, out var swings))
                 _swings[uid] = swings = new Dictionary<string, Swing>();
 
-            Animate((uid, sprite), overlay, "hood", SwingOf(swings, "hood"), jeep.HoodOpen, HoodSwing,
-                "hood_open", "hood_closed", "hood_opening", "hood_closing");
+            var hood = SwingOf(swings, "hood");
+            Animate((uid, sprite), overlay, "hood", hood, jeep.HoodOpen, HoodSwing,
+                "hood_open", "hood_closed", "hood_opening", "hood_closing", "hood_raised");
+            var lidRaised = jeep.HoodOpen || hood.Start != null;
             var glass = jeep.WindshieldDamaged ? "1" : "0";
             Animate((uid, sprite), overlay, "windshield", SwingOf(swings, "windshield"), jeep.WindshieldDown, WindshieldSwing,
                 $"windshield_down_{glass}", $"windshield_up_{glass}", $"windshield_folding_{glass}", $"windshield_raising_{glass}");
@@ -143,8 +186,18 @@ public sealed class CMUJeepVisualSystem : EntitySystem
 
                 var fitted = IsFitted(uid, slots, part.Slot);
                 SetVisible((uid, sprite), part.Id, fitted);
-                if (overlay != null)
-                    SetVisible(overlay.Value, part.Id, fitted);
+                if (overlay == null)
+                    continue;
+
+                // Shut, the hood goes under the windshield, which folds down onto it; raised, the lid
+                // stands in front of it.
+                if (part.Id == "hood")
+                {
+                    SetVisible(overlay.Value, "hood_raised", fitted && lidRaised);
+                    fitted &= !lidRaised;
+                }
+
+                SetVisible(overlay.Value, part.Id, fitted);
             }
 
             if (TryComp(uid, out CMUVehicleCargoComponent? cargo) && overlay != null)
@@ -201,11 +254,15 @@ public sealed class CMUJeepVisualSystem : EntitySystem
                 _ => part.Slot is not { } kitSlot || !_jeepSystem.IsKitBlocked(vehicle, jeep, kitSlot),
             };
             SetVisible((uid, sprite), "mask", !combat && fitted && reachable);
-            sprite.RenderOrder = 1;
+            sprite.RenderOrder = MaskOrder(part, jeep, RenderDirection(xform));
             ApplyFrame((uid, sprite), xform);
         }
     }
 
+    /// <summary>
+    /// Shows a swinging part's state on the jeep and its overlay. Out of its off state the overlay
+    /// draws it from the raisedKey layer, if given.
+    /// </summary>
     private void Animate(
         Entity<SpriteComponent> jeep,
         Entity<SpriteComponent>? overlay,
@@ -216,7 +273,8 @@ public sealed class CMUJeepVisualSystem : EntitySystem
         string onState,
         string offState,
         string toOn,
-        string toOff)
+        string toOff,
+        string? raisedKey = null)
     {
         if (swing.Shown is { } shown && shown != on)
             swing.Start = _timing.RealTime;
@@ -228,7 +286,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             swing.Start = null;
             SetState(jeep, key, on ? onState : offState);
             if (overlay != null)
-                SetState(overlay.Value, key, OverlayState(on ? onState : offState));
+                SetState(overlay.Value, on ? raisedKey ?? key : key, OverlayState(on ? onState : offState));
             return;
         }
 
@@ -239,7 +297,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
         var time = (float) Math.Min(elapsed.TotalSeconds, length.TotalSeconds - 0.001);
         SetState(jeep, key, state, time);
         if (overlay != null)
-            SetState(overlay.Value, key, OverlayState(state), time);
+            SetState(overlay.Value, raisedKey ?? key, OverlayState(state), time);
     }
 
     private static Swing SwingOf(Dictionary<string, Swing> swings, string key)
@@ -293,6 +351,22 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             "shovel" or "axe" when jeep.DriverDoorOpen => $"click_{part.Part}_open",
             var id => $"click_{id}",
         };
+    }
+
+    /// <summary>
+    /// A part mask's render order, which takes the click where masks overlap: where the jeep draws the
+    /// part, over the riders above the rest. The seats are under everything.
+    /// </summary>
+    private static uint MaskOrder(CMUVehiclePartComponent part, CMUJeepComponent jeep, Direction direction)
+    {
+        var id = part.Part == "hood" && jeep.HoodOpen ? "hood_raised" : part.Part;
+        var layer = id == "hood_raised" ? "hood" : id;
+        var over = OverRiders.TryGetValue(layer, out var directions) && directions.Contains(direction);
+        var index = Array.IndexOf(over ? OverlayLayers : JeepLayers, over ? id : layer);
+        if (index < 0)
+            return 1;
+
+        return (uint) ((over ? 2 + JeepLayers.Length : 2) + index);
     }
 
     private static string OutlineState(CMUVehiclePartComponent part, CMUJeepComponent jeep)
@@ -354,12 +428,17 @@ public sealed class CMUJeepVisualSystem : EntitySystem
     /// same leftover angle as the bodywork, which a jeep can also rest at. The engine's click test
     /// follows a no-rotation sprite's layer rotation, so clicks and hover land on the part drawn there.
     /// </summary>
+    private Direction RenderDirection(TransformComponent xform)
+    {
+        return VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(_transform.GetWorldRotation(xform) + _eye.CurrentEye.Rotation);
+    }
+
     private void ApplyFrame(Entity<SpriteComponent> ent, TransformComponent xform)
     {
         var sprite = ent.Comp;
         var eyeRotation = _eye.CurrentEye.Rotation;
         var worldRotation = _transform.GetWorldRotation(xform);
-        var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(worldRotation + eyeRotation);
+        var direction = RenderDirection(xform);
         var leftover = worldRotation + eyeRotation - direction.ToAngle();
 
         sprite.EnableDirectionOverride = true;
