@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Content.Shared.CMU14.Expeditions;
 using Content.Shared._RMC14.Barricade;
+using Content.Shared.BarricadeBlock;
 using Content.Shared.NPC;
 using Content.Shared.NPC.Components;
 using Content.Shared.Physics;
@@ -23,11 +24,13 @@ public sealed partial class CMUExpeditionAgentSystem
     private const CollisionGroup MovementMask = CollisionGroup.MobMask | CollisionGroup.InteractImpassable |
         CollisionGroup.BarricadeImpassable | CollisionGroup.BarbedBarricade;
     [Dependency] private SharedPhysicsSystem _physics = default!;
-    private readonly Dictionary<(EntityUid User, EntityCoordinates Point, float Radius, bool Doors), bool> _bodyClearCache = new();
+    private readonly Dictionary<(EntityUid User, EntityCoordinates Point, float Radius, bool Doors, bool Firing, EntityUid? Vault), bool> _bodyClearCache = new();
 
-    private bool BodyFits(EntityUid uid, EntityCoordinates point, float radius = AgentBodyRadius, bool planningDoors = false)
+    private bool BodyFits(EntityUid uid, EntityCoordinates point, float radius = AgentBodyRadius, bool planningDoors = false,
+        bool firing = false, EntityUid? vault = null)
     {
-        var key = (planningDoors ? uid : EntityUid.Invalid, point, radius, planningDoors);
+        var mask = NavigationMask(uid, planningDoors);
+        var key = (planningDoors || mask != MovementMask ? uid : EntityUid.Invalid, point, radius, planningDoors, firing, vault);
         if (_bodyClearCache.TryGetValue(key, out var clear))
             return clear;
         var location = _transform.ToMapCoordinates(point);
@@ -38,18 +41,19 @@ public sealed partial class CMUExpeditionAgentSystem
             new Robust.Shared.Physics.Transform(location.Position, Angle.Zero), fixtures, new FixtureQueryArgs(new QueryFilter
         {
             LayerBits = 0,
-            MaskBits = (long) MovementMask,
+            MaskBits = (long) mask,
             Flags = QueryFlags.Dynamic | QueryFlags.Static,
         }, IgnoreShapeSkin: true));
         clear = !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide &&
             fixture.Entity != uid && !HasComp<NpcFactionMemberComponent>(fixture.Entity) &&
-            !(planningDoors && CanNavigateDoor(uid, fixture.Entity)));
+            fixture.Entity != vault && !(firing && LowBulletCover(fixture.Entity)) &&
+            !(planningDoors && (CanNavigateDoor(uid, fixture.Entity) || CanNavigateVault(uid, fixture.Entity))));
         _bodyClearCache[key] = clear;
         return clear;
     }
 
     private bool RayClear(EntityUid uid, MapCoordinates from, MapCoordinates to, bool movement = false, bool shelter = false,
-        bool breakWindows = false, EntityUid? impactBody = null)
+        bool breakWindows = false, EntityUid? impactBody = null, bool partialCover = false)
     {
         if (from.MapId != to.MapId)
             return false;
@@ -63,17 +67,35 @@ public sealed partial class CMUExpeditionAgentSystem
         // Only the existence of an obstruction matters. Do not collect every hit behind the first wall.
         return !_physics.IntersectRayWithPredicate(from.MapId, ray, delta.Length(),
             entity => entity == uid || !movement && entity == impactBody || HasComp<NpcFactionMemberComponent>(entity) ||
-                !movement && ((breakWindows || shelter) && WindowAllowsShot(uid, entity) || BarricadeAllowsShot(entity, delta) ||
-                    shelter && TryComp<DirectionalBulletBlockerComponent>(entity, out var blocker) && blocker.BlockChance < 1), true).Any();
+                !movement && ((breakWindows || shelter) && WindowAllowsShot(uid, entity) ||
+                    BarricadeAllowsShot(entity, from, delta, partialCover || shelter)), true).Any();
     }
 
-    private bool BarricadeAllowsShot(EntityUid entity, Vector2 shot)
+    private bool LowBulletCover(EntityUid entity) =>
+        HasComp<DirectionalBulletBlockerComponent>(entity) || HasComp<BarricadeBlockComponent>(entity);
+
+    private bool BarricadeAllowsShot(EntityUid entity, MapCoordinates origin, Vector2 shot, bool partialCover)
     {
-        if (!TryComp<DirectionalBulletBlockerComponent>(entity, out var blocker))
+        if (!LowBulletCover(entity))
             return false;
-        var front = _transform.GetWorldRotation(entity).RotateVec(new Vector2(0, -1));
-        // Match native directional projectile collision, including fire from behind a mound.
-        return Vector2.Dot(-Vector2.Normalize(shot), front) < MathF.Cos(blocker.FrontBlockAngle * MathF.PI / 360);
+        // Either native PreventCollide handler can let a projectile pass. Do not roll the
+        // probability here: partial cover permits a volley, but never guarantees shelter.
+        var rotation = _transform.GetWorldRotation(entity);
+        if (TryComp<DirectionalBulletBlockerComponent>(entity, out var directional))
+        {
+            var front = rotation.RotateVec(new Vector2(0, -1));
+            if (Vector2.Dot(-Vector2.Normalize(shot), front) < MathF.Cos(directional.FrontBlockAngle * MathF.PI / 360)
+                || (partialCover ? directional.BlockChance < 1 : directional.BlockChance <= 0))
+                return true;
+        }
+        if (!TryComp<BarricadeBlockComponent>(entity, out var blocker))
+            return false;
+        if (partialCover ? blocker.Blocking < 100 : blocker.Blocking <= 0)
+            return true;
+        var facing = shot.ToWorldAngle().GetCardinalDir();
+        var coverFacing = rotation.GetCardinalDir();
+        return (facing == coverFacing || blocker.Bidirectional && facing == coverFacing.GetOpposite())
+            && Vector2.Distance(origin.Position, _transform.GetWorldPosition(entity)) <= blocker.Distance;
     }
 
     private bool FiringLaneClear(EntityUid uid, EntityCoordinates from, EntityCoordinates to)
@@ -81,19 +103,19 @@ public sealed partial class CMUExpeditionAgentSystem
         var start = _transform.ToMapCoordinates(from);
         var end = _transform.ToMapCoordinates(to);
         var delta = end.Position - start.Position;
-        if (start.MapId != end.MapId || delta.LengthSquared() < 0.01f || !BodyFits(uid, from) ||
-            !RayClear(uid, start, end, breakWindows: true, impactBody: VehicleAimBody(uid)))
+        if (start.MapId != end.MapId || delta.LengthSquared() < 0.01f || !BodyFits(uid, from, firing: true) ||
+            !RayClear(uid, start, end, breakWindows: true, impactBody: VehicleAimBody(uid), partialCover: true))
             return false;
         // Clear the body and muzzle around nearby corners, then require a direct line to the
         // target. Trees beside a distant target may catch stray rounds without blocking the shot.
         var muzzleEnd = _transform.ToCoordinates(from.EntityId,
             new MapCoordinates(start.Position + Vector2.Normalize(delta) * Math.Min(1.25f, delta.Length()), start.MapId));
-        return ClearLane(uid, from, muzzleEnd, 0.3f, breakWindows: true);
+        return ClearLane(uid, from, muzzleEnd, 0.3f, breakWindows: true, partialCover: true);
     }
 
     /// <summary>Three rays leave room for the body's width and the weapon's scatter around a corner.</summary>
     private bool ClearLane(EntityUid uid, EntityCoordinates from, EntityCoordinates to, float endWidth, bool movement = false,
-        bool breakWindows = false, EntityUid? impactBody = null)
+        bool breakWindows = false, EntityUid? impactBody = null, bool partialCover = false)
     {
         var start = _transform.ToMapCoordinates(from);
         var end = _transform.ToMapCoordinates(to);
@@ -101,11 +123,11 @@ public sealed partial class CMUExpeditionAgentSystem
         if (start.MapId != end.MapId || delta.LengthSquared() < 0.01f)
             return false;
         var perpendicular = Vector2.Normalize(new Vector2(-delta.Y, delta.X));
-        return RayClear(uid, start, end, movement, breakWindows: breakWindows, impactBody: impactBody) &&
+        return RayClear(uid, start, end, movement, breakWindows: breakWindows, impactBody: impactBody, partialCover: partialCover) &&
                RayClear(uid, new MapCoordinates(start.Position + perpendicular * 0.3f, start.MapId),
-                   new MapCoordinates(end.Position + perpendicular * endWidth, end.MapId), movement, breakWindows: breakWindows, impactBody: impactBody) &&
+                   new MapCoordinates(end.Position + perpendicular * endWidth, end.MapId), movement, breakWindows: breakWindows, impactBody: impactBody, partialCover: partialCover) &&
                RayClear(uid, new MapCoordinates(start.Position - perpendicular * 0.3f, start.MapId),
-                   new MapCoordinates(end.Position - perpendicular * endWidth, end.MapId), movement, breakWindows: breakWindows, impactBody: impactBody);
+                   new MapCoordinates(end.Position - perpendicular * endWidth, end.MapId), movement, breakWindows: breakWindows, impactBody: impactBody, partialCover: partialCover);
     }
 
     private bool Sheltered(EntityUid uid, EntityCoordinates location, EntityCoordinates threat)
@@ -275,11 +297,11 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     private bool TraversablePassage(EntityUid uid, EntityCoordinates from, EntityCoordinates to, float radius = AgentBodyRadius,
-        bool escapingHazard = false, bool planningDoors = false)
+        bool escapingHazard = false, bool planningDoors = false, EntityUid? vault = null)
     {
         var start = _transform.ToMapCoordinates(from);
         var end = _transform.ToMapCoordinates(to);
-        if (start.MapId != end.MapId || !BodyFits(uid, from, radius, planningDoors) || !BodyFits(uid, to, radius, planningDoors))
+        if (start.MapId != end.MapId || !BodyFits(uid, from, radius, planningDoors, vault: vault) || !BodyFits(uid, to, radius, planningDoors, vault: vault))
             return false;
         to = _transform.ToCoordinates(from.EntityId, end);
         var steps = Math.Max(1, (int) MathF.Ceiling(Vector2.Distance(start.Position, end.Position) * 4));
@@ -303,12 +325,12 @@ public sealed partial class CMUExpeditionAgentSystem
         var fixtures = new HashSet<FixtureProxy>();
         _lookup.GetFixturesIntersecting(start.MapId, bounds, fixtures, new FixtureQueryArgs(new QueryFilter
         {
-            MaskBits = (long) MovementMask,
+            MaskBits = (long) NavigationMask(uid, planningDoors),
             IsIgnored = entity => entity == uid || HasComp<NpcFactionMemberComponent>(entity),
         }, IgnoreShapeSkin: true));
         // Sensors (including RMC water) do not become static route walls.
-        return !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide &&
-            !(planningDoors && CanNavigateDoor(uid, fixture.Entity)));
+        return !fixtures.Any(fixture => fixture.Fixture.Hard && fixture.Body.CanCollide && fixture.Entity != vault &&
+            !(planningDoors && (CanNavigateDoor(uid, fixture.Entity) || CanNavigateVault(uid, fixture.Entity))));
     }
 
 
@@ -338,6 +360,47 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             agent.PeekPosition = candidate;
             agent.FightingPosition = null;
+            BeginMove(uid, agent, candidate, CMUExpeditionAgentState.Peeking, now);
+            return true;
+        }
+        return false;
+    }
+
+    private bool TryBlockedFiringAngle(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates threat, TimeSpan now)
+    {
+        if (now < agent.NextBlockedAngle || agent.RushTarget != null || agent.Action != null
+            || !_guns.TryGetGun(uid, out var gun))
+            return false;
+        agent.NextBlockedAngle = now + TimeSpan.FromSeconds(2);
+        // If everyone has a blocked lane, waiting for successful covering fire deadlocks.
+        // Permit one short, exposure-checked move; the other members keep their positions.
+        var squad = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
+        while (squad.MoveNext(out var other, out var buddy))
+            if (LocalSquadMember(uid, agent, other, buddy) && CommittedMovement(buddy))
+                return false;
+        var start = Transform(uid).Coordinates;
+        var delta = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(threat)).Position - start.Position;
+        if (delta.LengthSquared() < 0.01f)
+            return false;
+        var forward = Vector2.Normalize(delta);
+        var side = new Vector2(-forward.Y, forward.X);
+        var exposure = ExposureScore(uid, agent, start);
+        foreach (var length in new[] { 2.5f, 4f, 5.5f })
+        foreach (var direction in new[] { side, -side, Vector2.Normalize(side + forward), Vector2.Normalize(-side + forward) })
+        {
+            var candidate = start.Offset(direction * length);
+            if (agent.Home is not { } home || !_transform.InRange(home, candidate, agent.LeashRange)
+                || !_transform.InRange(candidate, threat, WeaponFireRange(uid, agent))
+                || Reserved(uid, candidate) || GrenadeDanger(candidate)
+                || agent.FailedPosition is { } failed && now < agent.AvoidPositionUntil && _transform.InRange(candidate, failed, 1)
+                || !SafeShot(uid, agent, gun, threat, candidate) || !TraversablePassage(uid, start, candidate)
+                || ExposureScore(uid, agent, candidate) > exposure + 0.5f
+                || ExposureScore(uid, agent, start.Offset(direction * length / 2)) > exposure + 0.5f)
+                continue;
+            ReleaseManeuver(uid, agent);
+            ClearCover(agent);
+            agent.PeekPosition = candidate;
+            agent.SquadDecision = "opening-blocked-firing-angle";
             BeginMove(uid, agent, candidate, CMUExpeditionAgentState.Peeking, now);
             return true;
         }

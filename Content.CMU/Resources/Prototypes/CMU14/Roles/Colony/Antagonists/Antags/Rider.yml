@@ -1,9 +1,10 @@
 - type: antagSpecifier
-  parent: CMUAntagSpecifierColonyBase
   id: Rider
   prefRoles: [ RiderRole ]
   jobBlacklistGroup:
+  - AllGovforCommandStaff
   - AllOpforCommandStaff
+  - AllColonyDepartmentHeadJobs
   briefing:
     text: rider-role-greeting
     color: SpringGreen
@@ -287,6 +288,22 @@
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
       state: fling
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderExitActionEvent
+
+# what the seizing rider sees on the host's bar; same event, but mid-seize it only hands the body back
+- type: entity
+  id: ActionRiderSeizeRelease
+  name: Release Host
+  description: Let go of the wheel early. They get their body back and you stay inside. The grip cost is paid either way.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: regurgitate
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:RiderExitActionEvent

@@ -445,6 +445,7 @@
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
       - id: AU14BeltMedicBagRMC
+        recommended: true
       - id: AU14BeltMedicalRMC
     - name: Medical Backpacks
       entries:
@@ -1220,10 +1221,12 @@
       - id: AU14BeltUtilityCombatRMCFilled
         name: royal marine combat toolbelt rig (filled)
         recommended: true
-      - id: AU14PouchToolsFilledComtech
-        name: tactical tools pouch (filled)
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
@@ -1366,6 +1369,8 @@
         amount: 1
       - id: AU14Mk86Case
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: CMUMagazineGPMGTWE
@@ -1408,6 +1413,8 @@
         amount: 200
       - id: AU14MagazinePistolL165A1
         amount: 200
+      - id: RMCMagazinePistolSU6
+        amount: 30
     - name: Magazine Boxes
       entries:
       - id: RMCBoxMagazineRifleL24
@@ -1558,6 +1565,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

@@ -2,8 +2,8 @@
   abstract: true
   parent: FoodTinBase
   id: RuMCFoodTinIRP
-  name: тушёнка
-  description: Обычная тушёнка, наиболее любимый и распространённый консервированный продукт среди военных и обычных гражданских.
+  name: tushonka
+  description: Ordinary stewed meat, the most loved and widespread canned food among soldiers and civilians alike.
   components:
   - type: Sprite
     sprite: _RuMC14/Objects/Consulable/Food/Tin/2condensed_milk.rsi

@@ -36,6 +36,7 @@ public sealed partial class CMUExpeditionAgentSystem
         return usable;
     }
 
+    // Route queries also admit native vaults. Move executes those interactions before steering.
     private bool RoutePoint(EntityUid uid, EntityCoordinates point) =>
         GroundSafe(point) && BodyFits(uid, point, planningDoors: true);
 

@@ -1,8 +1,8 @@
 - type: antagSpecifier
-  parent: CMUAntagSpecifierColonyBase
   id: Replicant
   prefRoles: [ ReplicantRole ]
   jobBlacklistGroup:
+  - AllGovforCommandStaff
   - AllOpforCommandStaff
   briefing:
     text: replicant-role-greeting

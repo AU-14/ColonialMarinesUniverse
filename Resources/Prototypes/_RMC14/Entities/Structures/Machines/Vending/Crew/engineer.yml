@@ -62,6 +62,7 @@
       choices: { CMBelt: 1 }
       entries:
       - id: RMCBeltUtilityGeneral
+      - id: RMCBeltConstruction
       - id: CMBeltUtilityFilled
         name: M276 Toolbelt Rig (Full)
         recommended: true

@@ -13,9 +13,10 @@ permissions:
   pull-requests: read
 
 concurrency:
-  # staging runs overlap instead of cancelling
-  group: ${{ github.ref == 'refs/heads/staging' && format('ci-{0}-{1}', github.ref, github.run_id) || format('ci-{0}', github.ref) }}
-  cancel-in-progress: true
+  # CMU14: only PR pushes supersede each other. every branch push and merge-queue run
+  # finishes, otherwise the next merge cancels it and nobody knows which merge broke master
+  group: ${{ github.event_name == 'pull_request' && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   DOTNET_VERSION: 10.0.x
@@ -49,8 +50,15 @@ jobs:
       - name: Build once
         run: dotnet build Content.YAMLLinter/Content.YAMLLinter.csproj --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
 
-      - name: Run Content.Tests
-        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal -- NUnit.ConsoleOut=0 NUnit.ExplicitMode=None
+      # CMU14: unit tests run in their own job so the shards don't wait on them
+      - name: Upload unit test build
+        uses: actions/upload-artifact@v7
+        with:
+          name: build-unit-tests
+          path: bin/Content.Tests/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
 
       - name: Upload YAML linter build
         uses: actions/upload-artifact@v7
@@ -81,6 +89,30 @@ jobs:
           retention-days: 1
           compression-level: 0
 
+  unit-tests:
+    name: Unit Tests
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+          submodules: recursive
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-unit-tests
+          path: bin/Content.Tests/
+
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Run Content.Tests
+        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal -- NUnit.ConsoleOut=0 NUnit.ExplicitMode=None
+
   yaml-linter:
     name: YAML Linter
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
@@ -93,12 +125,12 @@ jobs:
           persist-credentials: true
           submodules: recursive
 
-      - uses: actions/download-artifact@v8.0.1
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: build-yaml-linter
           path: bin/Content.YAMLLinter/
 
-      - uses: actions/download-artifact@v8.0.1
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: build-runtime
           path: bin/
@@ -180,6 +212,7 @@ jobs:
     if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     needs:
       - build
+      - unit-tests
       - yaml-linter
       - asset-validation
       - integration-tests
@@ -192,6 +225,7 @@ jobs:
           script: |
             const results = {
               'Build': '${{ needs.build.result }}',
+              'Unit Tests': '${{ needs.unit-tests.result }}',
               'YAML Linter': '${{ needs.yaml-linter.result }}',
               'Asset Validation': '${{ needs.asset-validation.result }}',
               'Content.IntegrationTests': '${{ needs.integration-tests.result }}',
@@ -210,8 +244,10 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: build
     # one instance of each shard at a time across overlapping staging runs
+    # CMU14: staging only. on master a third overlapping run would cancel the second one's
+    # waiting shards (github keeps one pending job per group), which is the gap we're closing
     concurrency:
-      group: ci-shard-${{ github.ref }}-${{ matrix.shard.name }}
+      group: ${{ github.ref == 'refs/heads/staging' && format('ci-shard-{0}-{1}', github.ref, matrix.shard.name) || format('ci-shard-{0}-{1}-{2}', github.ref, matrix.shard.name, github.run_id) }}
       cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 45
@@ -395,6 +431,10 @@ jobs:
               & FullyQualifiedName!~CMU14.Yautja.YautjaBowTest.
               & FullyQualifiedName!~CMU14.Yautja.YautjaPredatorRoleTest.
               & FullyQualifiedName!~CMU14.Yautja.YautjaSmokeTest.
+              & FullyQualifiedName!~CMU14.Yautja.YautjaHuntingGroundMapTest.
+          # CMU14: walks every hunting ground map, ~11 of cmu_yautja's 17 minutes on its own
+          - name: cmu_yautja_maps
+            filter: FullyQualifiedName~CMU14.Yautja.YautjaHuntingGroundMapTest.
           - name: cmu_yautja_weapons
             filter: FullyQualifiedName~CMU14.Yautja.YautjaBowTest.
           - name: cmu_yautja_roles
@@ -417,9 +457,31 @@ jobs:
               FullyQualifiedName~CMU14.Medical.
               & FullyQualifiedName!~CMU14.Medical.Anatomy.
               & FullyQualifiedName!~CMU14.Medical.Treatment.
+          # CMU14: the heaviest areas of the cmu catch-all, about half its time. cmu stays the
+          # catch-all so new areas always land somewhere; keep this list and its exclusions in sync
+          - name: cmu_systems
+            filter: >-
+              FullyQualifiedName~CMU14.ColonyEconomy.
+              | FullyQualifiedName~CMU14.Fire.
+              | FullyQualifiedName~CMU14.ForceOnForce.
+              | FullyQualifiedName~CMU14.ThreeD.
+              | FullyQualifiedName~CMU14.Threats.
+              | FullyQualifiedName~CMU14.DroneOperator.
+              | FullyQualifiedName~CMU14.Evacuation.
+              | FullyQualifiedName~CMU14.Weapons.
+              | FullyQualifiedName~CMU14.TacticalMap.
           - name: cmu
             filter: >-
               FullyQualifiedName~CMU14.
+              & FullyQualifiedName!~CMU14.ColonyEconomy.
+              & FullyQualifiedName!~CMU14.Fire.
+              & FullyQualifiedName!~CMU14.ForceOnForce.
+              & FullyQualifiedName!~CMU14.ThreeD.
+              & FullyQualifiedName!~CMU14.Threats.
+              & FullyQualifiedName!~CMU14.DroneOperator.
+              & FullyQualifiedName!~CMU14.Evacuation.
+              & FullyQualifiedName!~CMU14.Weapons.
+              & FullyQualifiedName!~CMU14.TacticalMap.
               & FullyQualifiedName!~CMU14.Medical.
               & FullyQualifiedName!~CMU14.Chemistry.
               & FullyQualifiedName!~CMU14.Dropship.
@@ -443,12 +505,12 @@ jobs:
           persist-credentials: true
           submodules: recursive
 
-      - uses: actions/download-artifact@v8.0.1
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: build-integration-tests
           path: bin/Content.IntegrationTests/
 
-      - uses: actions/download-artifact@v8.0.1
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: build-runtime
           path: bin/
@@ -479,7 +541,7 @@ jobs:
           workers=4
           hang_timeout=5m
           case "$shard" in
-            root_1|cmu|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
+            root_1|cmu|cmu_systems|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             cmu_lobby_ui) workers=1 ;;
             map_loading) workers=1; hang_timeout=20m ;;
           esac
@@ -512,6 +574,10 @@ jobs:
 
           # Localization policy and upstream content freezes are opt-in in the full suite.
           FILTER="($FILTER) & FullyQualifiedName!~.Localization. & FullyQualifiedName!~.WizdenContentFreeze."
+          # CMU14: SS14-only content, ~43 runner-minutes a run. the antag test only scans
+          # Resources/Prototypes (no CMU rules) and station power only loads SS14 stations.
+          # both still run in the nightly Build & Test Debug full suite
+          FILTER="$FILTER & FullyQualifiedName!~.GameRules.AntagGhostRoleTest. & FullyQualifiedName!~.Power.StationPowerTests."
           echo "--- $shard shard filter ---"
           echo "$FILTER"
           cd bin/Content.IntegrationTests || exit 1
