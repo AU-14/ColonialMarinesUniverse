@@ -62,6 +62,9 @@ cmu-squads-cooperate = Assist nearby friendly squads
 cmu-squads-cooperate-tip = Share contacts by compatible radio and let one free squad assist from a different approach. Hold, guard and explicit travel orders take priority.
 cmu-squads-relations-note = Applies to the selected squad.
     Use “default” to restore faction defaults.
+    In Targets, AllHostile engages every non-friendly combatant.
+    Squadmates, friendly factions and ignored entities remain protected.
+cmu-squads-all-hostile-option = AllHostile — targets all non-friendlies
 cmu-squads-friendly-heading = Friendly factions
 cmu-squads-target-heading = Hostile factions
 cmu-squads-overview = {$active}/{$total} active · {$phase} · {$points} patrol points · {$operation}

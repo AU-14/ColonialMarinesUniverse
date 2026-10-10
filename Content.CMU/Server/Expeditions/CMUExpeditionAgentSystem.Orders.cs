@@ -1,4 +1,5 @@
 using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.CMU14.Expeditions;
 using Robust.Shared.Map;
 using System.Linq;
@@ -7,18 +8,56 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentSystem
 {
+    private const string AllHostileFaction = "AllHostile";
+
+    // In expedition target orders this is an engagement mode, not a requirement
+    // that the enemy belongs to the native AllHostile faction.
+    private static bool TargetsAllHostiles(CMUExpeditionAgentComponent agent) =>
+        agent.TargetFactions.Contains(AllHostileFaction);
+
+    private bool ProtectedSquadmate(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid other) =>
+        agent.Squad != 0 && TryComp<CMUExpeditionAgentComponent>(other, out var buddy) &&
+        buddy.Squad == agent.Squad && Transform(uid).MapID == Transform(other).MapID;
+
+    public bool TryParseFactionOrders(string value, bool targets, out string[] factions, out string invalid)
+    {
+        factions = Array.Empty<string>();
+        invalid = "";
+        if (value.Trim().Equals("default", StringComparison.OrdinalIgnoreCase))
+            return true;
+        var entries = value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        for (var i = 0; i < entries.Length; i++)
+        {
+            if (targets && (entries[i].Equals(AllHostileFaction, StringComparison.OrdinalIgnoreCase) ||
+                            entries[i].Equals("allhostiles", StringComparison.OrdinalIgnoreCase)))
+                entries[i] = AllHostileFaction;
+            if (ProtoMan.HasIndex<NpcFactionPrototype>(entries[i]))
+                continue;
+            invalid = entries[i];
+            return false;
+        }
+        factions = entries.Distinct().ToArray();
+        return true;
+    }
+
     private bool IsFriendly(EntityUid uid, EntityUid other)
     {
         if (uid == other)
             return true;
-        if (VehicleBody(other) && TryComp<CMUExpeditionAgentComponent>(uid, out var driverObserver))
-            return VehicleDisposition(uid, driverObserver, other) < 0;
-        if (TryComp<CMUExpeditionAgentComponent>(uid, out var agent) && TryComp<NpcFactionMemberComponent>(other, out var factions))
+        if (TryComp<CMUExpeditionAgentComponent>(uid, out var agent))
         {
-            if (factions.Factions.Any(f => agent.FriendlyFactions.Contains(f.Id)))
+            var allHostile = TargetsAllHostiles(agent);
+            if (allHostile && (ProtectedSquadmate(uid, agent, other) || _factions.IsIgnored(uid, other)))
                 return true;
-            if (factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)))
-                return false;
+            if (VehicleBody(other))
+                return VehicleDisposition(uid, agent, other) < 0;
+            if (TryComp<NpcFactionMemberComponent>(other, out var factions))
+            {
+                if (factions.Factions.Any(f => agent.FriendlyFactions.Contains(f.Id)))
+                    return true;
+                if (!allHostile && factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)))
+                    return false;
+            }
         }
         return _factions.IsEntityFriendly(uid, other);
     }
@@ -30,8 +69,8 @@ public sealed partial class CMUExpeditionAgentSystem
         var nearby = new HashSet<EntityUid>();
         var location = _transform.GetMapCoordinates(uid);
         _lookup.GetEntitiesInRange(location.MapId, location.Position, agent.DetectionRange, nearby);
-        return nearby.Where(other => other != uid && TryComp<NpcFactionMemberComponent>(other, out var factions) &&
-            factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)) && !IsFriendly(uid, other)).Union(HostileVehicles(uid, agent));
+        return nearby.Where(other => !VehicleBody(other) && AcceptOrderedContact(uid, agent, other))
+            .Union(HostileVehicles(uid, agent));
     }
 
     private bool AcceptOrderedContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target)
@@ -40,6 +79,8 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         if (VehicleBody(target))
             return ArmedVehicle(target) && VehicleDisposition(uid, agent, target) > 0;
+        if (TargetsAllHostiles(agent))
+            return _mobs.IsAlive(target);
         if (agent.TargetFactions.Count > 0)
             return TryComp<NpcFactionMemberComponent>(target, out var member) &&
                 member.Factions.Any(f => agent.TargetFactions.Contains(f.Id));

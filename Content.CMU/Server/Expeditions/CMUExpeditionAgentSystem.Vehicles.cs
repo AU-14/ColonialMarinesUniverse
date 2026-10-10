@@ -32,7 +32,8 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool CombatTargetAlive(EntityUid target) => _mobs.IsAlive(target) || ArmedVehicle(target);
 
     // Vehicles have no MobState and often inherit their identity from operators/interiors.
-    // Any friendly aboard vetoes a rocket; unknown/neutral vehicles are never invented enemies.
+    // Any friendly aboard vetoes a rocket. All-hostile orders also permit known neutral
+    // identities, but never invent an enemy from an unidentified, unoccupied vehicle.
     private int VehicleDisposition(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid vehicle)
     {
         var identities = new HashSet<EntityUid> { vehicle };
@@ -58,9 +59,15 @@ public sealed partial class CMUExpeditionAgentSystem
             factions.Add(ownerFaction.ToUpperInvariant());
         if (!TryComp<NpcFactionMemberComponent>(uid, out var own))
             return 0;
+        var allHostile = TargetsAllHostiles(agent);
+        if (allHostile && identities.Any(identity =>
+                ProtectedSquadmate(uid, agent, identity) || _factions.IsIgnored(uid, identity)))
+            return -1;
         if (factions.Any(faction => agent.FriendlyFactions.Contains(faction) ||
                 own.Factions.Any(id => id.Id == faction) || own.FriendlyFactions.Any(id => id.Id == faction)))
             return -1;
+        if (allHostile && (factions.Count > 0 || identities.Any(identity => identity != vehicle && _mobs.IsAlive(identity))))
+            return 1;
         return factions.Any(faction => agent.TargetFactions.Contains(faction) || agent.TargetFactions.Count == 0 &&
             own.HostileFactions.Any(id => id.Id == faction)) ? 1 : 0;
     }
