@@ -533,6 +533,10 @@ jobs:
           # startup (e.g. GasOutletInjector in PushKindInheritance).
           # Keep this test-process workaround until the engine loader is fixed.
           DOTNET_PROCESSOR_COUNT: "1"
+          # CMU14: cap the managed heap at 60% (~10 GB of the 16 GB runner). uncapped, server GC let
+          # long shards grow to 11.5 GB managed at 86% machine load and the runner died mid-run
+          # ("received a shutdown signal"). the live set is ~5 GB, so the cap only makes GC collect sooner
+          DOTNET_GCHeapHardLimitPercent: "0x3C"
         run: |
           export DOTNET_gcServer=1
           shard="${{ matrix.shard.name }}"
