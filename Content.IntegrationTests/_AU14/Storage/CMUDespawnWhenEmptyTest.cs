@@ -39,6 +39,8 @@ public sealed class CMUDespawnWhenEmptyTest
             Assert.That(prototype.TryComp<CMUDespawnWhenEmptyComponent>(out var despawn, server.EntMan.ComponentFactory), Is.True);
             Assert.That(despawn!.Delay, Is.EqualTo(TimeSpan.FromMinutes(1)));
         });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
@@ -91,5 +93,7 @@ public sealed class CMUDespawnWhenEmptyTest
                 Assert.That(entities.EntityExists(held), Is.True, "An empty kit inside a container despawned.");
             });
         });
+
+        await pair.CleanReturnAsync();
     }
 }
