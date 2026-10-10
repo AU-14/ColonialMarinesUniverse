@@ -353,6 +353,9 @@
       - id: CMUMaskGas
         amount: 5
         points: 3
+      - id: CMUMaskGasBlack
+        amount: 5
+        points: 3
       - id: CMUGasMaskFilter
         amount: 5
         points: 2

@@ -272,7 +272,11 @@
       entries:
       - id: CMUMaskGas
         amount: 40
+      - id: CMUMaskGasBlack
+        amount: 40
       - id: CMUMaskPrescriptionGas
+        amount: 10
+      - id: CMUMaskPrescriptionGasBlack
         amount: 10
       - id: CMUGasMaskFilter
         amount: 80
@@ -1240,6 +1244,8 @@
     - name: Protective Equipment
       entries:
       - id: CMUMaskGas
+        amount: 30
+      - id: CMUMaskGasBlack
         amount: 30
       - id: CMUGasMaskFilter
         amount: 30

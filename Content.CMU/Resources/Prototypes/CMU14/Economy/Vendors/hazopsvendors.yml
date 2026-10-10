@@ -782,6 +782,8 @@
       entries:
       - id: CMUMaskGas
         amount: 30
+      - id: CMUMaskGasBlack
+        amount: 30
       - id: CMUGasMaskFilter
         amount: 30
       - id: CMUFieldGasTankOxygenFilled
