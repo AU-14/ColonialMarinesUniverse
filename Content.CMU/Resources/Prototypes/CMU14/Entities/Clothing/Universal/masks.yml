@@ -1,0 +1,9 @@
+- type: entity
+  parent: CMMaskGas
+  id: CMUMaskGas
+  suffix: CMU
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Masks/gasmask.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Masks/gasmask.rsi
