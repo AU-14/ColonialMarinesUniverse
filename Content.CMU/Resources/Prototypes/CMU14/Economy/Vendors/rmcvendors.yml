@@ -445,6 +445,7 @@
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
       - id: AU14BeltMedicBagRMC
+        recommended: true
       - id: AU14BeltMedicalRMC
     - name: Medical Backpacks
       entries:
@@ -1220,10 +1221,12 @@
       - id: AU14BeltUtilityCombatRMCFilled
         name: royal marine combat toolbelt rig (filled)
         recommended: true
-      - id: AU14PouchToolsFilledComtech
-        name: tactical tools pouch (filled)
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
