@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Components;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.PowerLoader;
 using Content.Shared.CMU14;
+using Content.Shared.CMU14.Dropship.Fabricator; // CMU14
 using Content.Shared.CMU14.Dropship.MultiDeck;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Coordinates;
@@ -277,7 +278,11 @@ public sealed partial class DropshipFabricatorSystem : EntitySystem
         var pointsComp = EnsureComp<DropshipFabricatorPointsComponent>(points);
         // CMU14: faction gameplay fixes.
         pointsComp.Faction = faction;
-        pointsComp.Points = _startingPoints;
+        // CMU14 Start: per-preset dropship fabricator points
+        var startingEv = new CMUGetDropshipFabricatorStartingPointsEvent(_startingPoints);
+        RaiseLocalEvent(ref startingEv);
+        pointsComp.Points = startingEv.Points;
+        // CMU14 End
         return (points, pointsComp);
     }
 

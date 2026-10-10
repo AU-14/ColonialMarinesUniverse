@@ -26,6 +26,7 @@
   showInVote: true
   description: Investigate a mysterious distress signal as government forces.
   requiresGovforVote: true
+  dropshipFabricatorStartingPoints: 20000
   supportedPlanets:
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
 # - CMUPlanetStableGarrisonDistress # govfor spawns planetside
@@ -62,6 +63,7 @@
   thirdPartyInterval: 3600
   thirdPartyRatio: 0.15
   maxThirdParties: 3
+  dropshipFabricatorStartingPoints: 7500
   supportedPlanets:
   - SharedPlanetPool
 # - AUPlanetLV624 # Green Hell # map lacks medical, dropships - govfor spawns outside base
@@ -89,6 +91,7 @@
   thirdPartyInterval: 1800
   thirdPartyRatio: 0.10
   maxThirdParties: 4
+  dropshipFabricatorStartingPoints: 25000
   supportedPlanets:
   - ForceOnForcePlanetPool
   rules:

@@ -156,7 +156,9 @@ public sealed partial class RMCCVars : CVars
         CVarDef.Create("rmc.bioscan_variance", 2, CVar.REPLICATED | CVar.SERVER);
 
     public static readonly CVarDef<int> RMCDropshipFabricatorStartingPoints =
-        CVarDef.Create("rmc.dropship_fabricator_starting_points", 10000, CVar.REPLICATED | CVar.SERVER);
+        // CMU14 Start: raised round-start fabricator budget (was 10000)
+        CVarDef.Create("rmc.dropship_fabricator_starting_points", 17500, CVar.REPLICATED | CVar.SERVER);
+        // CMU14 End
 
     public static readonly CVarDef<float> RMCDropshipFabricatorGainEverySeconds =
         CVarDef.Create("rmc.dropship_fabricator_gain_every_seconds", 0.5f, CVar.REPLICATED | CVar.SERVER); // CMU14: increase dropship fabricator point generation
