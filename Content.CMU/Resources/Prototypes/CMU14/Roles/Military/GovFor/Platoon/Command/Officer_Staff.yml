@@ -58,7 +58,7 @@
     time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 43200 # 12 hours
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -196,7 +196,7 @@
     time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 43200 # 12 hours
+    time: 18000 # 5 hours
   name: Staff Officer
   spawnMenuRoleName: Staff Officer (UPP)
   ranks:
@@ -215,7 +215,7 @@
     time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 43200 # 12 hours
+    time: 18000 # 5 hours
   name: PMC Operations Adjutant
   description: au14-job-description-govforplatop
   spawnMenuRoleName: Staff Officer (WYPMC)

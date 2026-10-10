@@ -57,7 +57,7 @@
     time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMilitaryEngineering
     time: 18000 # 5 hours
@@ -204,7 +204,7 @@
     time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMilitaryEngineering
     time: 18000 # 5 hours
@@ -226,7 +226,7 @@
     time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:TotalJobsTimeRequirement
     group: CMUJobsMilitaryEngineering
     time: 18000 # 5 hours

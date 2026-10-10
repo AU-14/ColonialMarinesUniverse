@@ -57,14 +57,9 @@
     # - type: JobPrefix
     #   prefix: au14-job-prefix-govformoCMBCIU
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
-  - !type:TotalJobsTimeRequirement
-    group: CMUJobsMedical
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 30
   - !type:TraitsRequirement
@@ -204,14 +199,9 @@
   id: AU14JobGOVFOROfficerMedicalUPP
   roundForce: UPP
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
-  - !type:TotalJobsTimeRequirement
-    group: CMUJobsMedical
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   name: Chief Medical Officer
   spawnMenuRoleName: CMO (UPP)
   ranks:
@@ -226,14 +216,9 @@
   id: AU14JobGOVFOROfficerMedicalWYPMC
   roundForce: WYPMC
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 36000 # 10 hours
-  - !type:TotalJobsTimeRequirement
-    group: CMUJobsMedical
-    time: 36000 # 10 hours
+    time: 18000 # 5 hours
   name: PMC Chief Medical Officer
   spawnMenuRoleName: CMO (WYPMC)
   ranks:
