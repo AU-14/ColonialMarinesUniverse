@@ -45,10 +45,11 @@ public sealed class XenoMeleeArmorTest
             }
 
             // Damage multipliers with the armour nullified by a huge explicit penetration, so only the
-            // multipliers show: baseline 100 -> xeno-melee config x1.5 -> claw XVX x1.5 = x2.25.
+            // multipliers show: baseline 100 -> xeno-melee config x1.5 -> per-target XVX claw x1.5 = x2.25.
             var raw = Hit(100, impact: default, ap: 100);
             var rawBody = Hit(100, origin: xeno, tool: xeno, impact: DamageImpact.MeleeSlash, ap: 100);
-            var rawClaw = Hit(150, origin: xeno, tool: xeno, impact: DamageImpact.MeleeSlash, ap: 100);
+            var rawClaw = Hit(100, origin: xeno, tool: xeno,
+                impact: DamageImpact.MeleeSlash with { Context = DamageImpactContext.XenoClaw }, ap: 100);
 
             Assert.That(rawBody / raw, Is.EqualTo(1.5).Within(0.02),
                 "Any melee hit on a xeno gets the xeno/melee config x1.5, whoever dealt it.");
@@ -74,19 +75,15 @@ public sealed class XenoMeleeArmorTest
             Assert.That(xenoBody, Is.GreaterThan(marineBody),
                 "A xeno body attack must ignore three quarters of the victim's armour, so it lands more.");
 
-            // The claw swing's own XVX slash multiplier is driven from MeleeHitEvent.
+            // The claw swing marks itself; the +50% itself lands per target in CMArmorSystem through the
+            // same helper the xeno abilities use, so a swing catching several mobs only boosts the
+            // xeno-sized ones.
             var clawSwing = new MeleeHitEvent(new List<EntityUid> { xeno }, xeno, xeno,
                 new DamageSpecifier(slash, FixedPoint2.New(100)), null);
             entMan.EventBus.RaiseLocalEvent(xeno, clawSwing);
-            Assert.That((double) clawSwing.BonusDamage.GetTotal().Float(), Is.EqualTo(50).Within(0.5),
-                "A xeno claw swing on a xeno-sized target must add +50% (XVX_SLASH_DAMAGEMULT).");
 
-            // ... and must not fire for a non-xeno-sized target.
-            var nonXenoSwing = new MeleeHitEvent(new List<EntityUid> { bayonet }, xeno, xeno,
-                new DamageSpecifier(slash, FixedPoint2.New(100)), null);
-            entMan.EventBus.RaiseLocalEvent(xeno, nonXenoSwing);
-            Assert.That((double) nonXenoSwing.BonusDamage.GetTotal().Float(), Is.EqualTo(0).Within(0.001),
-                "Clawing something that is not xeno-sized must not get the XVX bonus.");
+            Assert.That(clawSwing.Impact.Context.HasFlag(DamageImpactContext.XenoClaw), Is.True,
+                "A xeno claw swing must be marked for the per-target XVX slash multiplier.");
         });
 
         await pair.CleanReturnAsync();
