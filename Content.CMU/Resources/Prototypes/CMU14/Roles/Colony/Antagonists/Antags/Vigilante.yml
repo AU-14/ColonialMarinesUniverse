@@ -43,6 +43,7 @@
     antagPrototype: VigilanteRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-vigilante
 
 - type: antag
   parent: CMUAntagColonyBase

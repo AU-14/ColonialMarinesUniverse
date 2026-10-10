@@ -6,3 +6,8 @@
   - type: MindRole
     exclusiveAntag: true
     roleType: TeamAntagonist
+    subtype: cmu-role-subtype-threat
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/job_icons.rsi
+      state: threat_member

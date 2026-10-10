@@ -61,6 +61,11 @@
     antagPrototype: WeylandYutaniAgentRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-wy-agent
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudWE-YA
 
 - type: antag
   parent: CMUAntagColonyBase
@@ -131,6 +136,7 @@
     antagPrototype: CorporateSpyRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-corporate-spy
 
 - type: antag
   parent: CMUAntagColonyBase

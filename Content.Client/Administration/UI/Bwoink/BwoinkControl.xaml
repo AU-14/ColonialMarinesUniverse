@@ -24,6 +24,12 @@
                 <Control HorizontalExpand="True" MinWidth="5" />
                 <Button Visible="True" Name="PopOut" Access="Public" Text="{Loc 'admin-logs-pop-out'}" StyleClasses="OpenBoth" HorizontalAlignment="Left" />
                 <Control HorizontalExpand="True" />
+                <!-- CMU14 Tickets Begin: AHelp ticket status, claim and close -->
+                <Label Visible="False" Name="CMUTicketStatusLabel" ClipText="True" HorizontalExpand="True" MinWidth="120" Margin="4 0" VAlign="Center" />
+                <Button Visible="False" Name="CMUTicketClaim" Text="{Loc 'cmu-ahelp-ticket-claim'}" StyleClasses="OpenRight" />
+                <Button Visible="False" Name="CMUTicketClose" Text="{Loc 'cmu-ahelp-ticket-close'}" StyleClasses="OpenLeft" />
+                <Control MinWidth="5" />
+                <!-- CMU14 End -->
                 <Button Visible="False" Name="PlayerLogs" Text="{Loc 'admin-player-actions-logs'}" StyleClasses="OpenRight" />
                 <Button Visible="False" Access="Public" Name="Notes" Text="{Loc 'admin-player-actions-notes'}" StyleClasses="OpenBoth" />
                 <controls:ConfirmButton Visible="False" Name="Kick" Text="{Loc 'admin-player-actions-kick'}" ConfirmationText="{Loc 'admin-player-actions-confirm'}" StyleClasses="OpenBoth" />

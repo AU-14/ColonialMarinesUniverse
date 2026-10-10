@@ -52,6 +52,7 @@
     antagPrototype: DrugDealerRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-drug-dealer
 
 - type: antag
   parent: CMUAntagColonyBase

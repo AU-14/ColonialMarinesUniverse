@@ -43,6 +43,7 @@
     antagPrototype: CannibalRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-cannibal
 
 - type: antag
   parent: CMUAntagColonyBase

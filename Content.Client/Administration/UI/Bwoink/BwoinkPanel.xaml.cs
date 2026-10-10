@@ -62,9 +62,9 @@ namespace Content.Client.Administration.UI.Bwoink
             InputTextChanged?.Invoke(args.Text);
         }
 
-        public void ReceiveLine(SharedBwoinkSystem.BwoinkTextMessage message)
+        public void ReceiveLine(SharedBwoinkSystem.BwoinkTextMessage message, bool countUnread = true) // CMU14: AHelp ticket history replay
         {
-            if (!Visible)
+            if (!Visible && countUnread) // CMU14: replayed lines are not unread
                 Unread++;
 
             var formatted = new FormattedMessage(1);

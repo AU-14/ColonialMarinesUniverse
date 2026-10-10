@@ -157,6 +157,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         }
 
         UIHelper!.Receive(message);
+        CMURecordBwoink(message); // CMU14: mirror for AHelp ticket history replay
     }
 
     private void DiscordRelayUpdated(BwoinkDiscordRelayUpdated args, EntitySessionEventArgs session)
@@ -187,6 +188,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         UIHelper.OnClose += () => { SetAHelpPressed(false); };
         UIHelper.OnOpen +=  () => { SetAHelpPressed(true); };
         SetAHelpPressed(UIHelper.IsOpen);
+        CMUOnUIHelperCreated(); // CMU14: refill a rebuilt admin handler from AHelp ticket history
     }
 
     public void Open()
@@ -540,6 +542,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
     {
         Window?.Close();
         Window = null;
+        Control?.CMUShutdownTickets(); // CMU14: AHelp tickets
         Control = null;
         _activePanelMap.Clear();
         EverOpened = false;

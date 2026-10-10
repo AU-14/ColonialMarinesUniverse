@@ -65,6 +65,7 @@ public sealed partial class AdminUIController : UIController,
     public void OnStateEntered(LobbyState state)
     {
         EnsureWindow();
+        CMULobbyEntered(); // CMU14: lobby Admin button
         AdminStatusUpdated();
     }
 
@@ -131,17 +132,20 @@ public sealed partial class AdminUIController : UIController,
     private void OnWindowOpen()
     {
         AdminButton?.SetClickPressed(true);
+        CMUSetLobbyAdminButtonPressed(true); // CMU14: lobby Admin button
     }
 
     private void OnWindowClosed()
     {
         AdminButton?.SetClickPressed(false);
+        CMUSetLobbyAdminButtonPressed(false); // CMU14: lobby Admin button
     }
 
     private void OnWindowDisposed()
     {
         if (AdminButton != null)
             AdminButton.Pressed = false;
+        CMUSetLobbyAdminButtonPressed(false); // CMU14: lobby Admin button
 
         if (_window == null)
             return;
@@ -158,6 +162,7 @@ public sealed partial class AdminUIController : UIController,
     {
         if (AdminButton != null)
             AdminButton.Visible = _conGroups.CanAdminMenu();
+        CMUUpdateLobbyAdminButton(); // CMU14: lobby Admin button
     }
 
     private void AdminButtonPressed(ButtonEventArgs args)

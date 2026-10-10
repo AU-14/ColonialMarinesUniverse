@@ -48,6 +48,11 @@
     antagPrototype: CLFSleeperAgentRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-clf-sleeper-agent
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudCLF
 
 - type: antag
   parent: CMUAntagColonyBase

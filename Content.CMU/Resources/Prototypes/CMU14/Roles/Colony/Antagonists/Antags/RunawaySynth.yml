@@ -70,6 +70,11 @@
     antagPrototype: RunawaySynthRole
     exclusiveAntag: true
     roleType: SoloAntagonist
+    subtype: cmu-role-subtype-runaway-synth
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: synth
 
 - type: antag
   parent: CMUAntagColonyBase

@@ -179,6 +179,11 @@
                                               SeparationOverride="1" HorizontalExpand="True">
                                     <Button Name="AHelpButton" Access="Public" Text="{Loc 'ui-lobby-ahelp-button'}"
                                             StyleClasses="CrtCommandCell" HorizontalExpand="True" VerticalExpand="True" />
+                                    <!-- CMU14 Lobby Admin Begin: admin menu toggle, shown by AdminUIController -->
+                                    <Button Name="AdminButton" Access="Public" Text="{Loc 'cmu-lobby-admin-button'}"
+                                            StyleClasses="CrtCommandCell" HorizontalExpand="True" VerticalExpand="True"
+                                            Visible="False" />
+                                    <!-- CMU14 End -->
                                     <vote:VoteCallMenuButton Name="CallVoteButton" StyleClasses="CrtCommandCell"
                                                              HorizontalExpand="True" VerticalExpand="True" />
                                     <Button Name="OptionsButton" Access="Public" StyleClasses="CrtCommandCell"

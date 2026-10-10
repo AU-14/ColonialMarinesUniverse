@@ -43,6 +43,7 @@ namespace Content.Client.Administration.UI.Bwoink
                 return;
 
             AHelpHelper = helper;
+            CMUInitTickets(); // CMU14: AHelp ticket controls
 
             _adminManager.AdminStatusUpdated += UpdateButtons;
             UpdateButtons();
@@ -66,6 +67,7 @@ namespace Content.Client.Administration.UI.Bwoink
                     sb.Append(info.ActiveThisRound ? '⭘' : '·');
 
                 sb.Append(' ');
+                sb.Append(CMUTicketGlyph(info.SessionId)); // CMU14: AHelp ticket marker
                 if (AHelpHelper.TryGetChannel(info.SessionId, out var panel) && panel.Unread > 0)
                 {
                     if (panel.Unread < 11)
@@ -109,6 +111,13 @@ namespace Content.Client.Administration.UI.Bwoink
                 // Pinned players first
                 if (a.IsPinned != b.IsPinned)
                     return a.IsPinned ? -1 : 1;
+
+                // CMU14 Tickets Begin: then open tickets nobody has claimed
+                var aWaiting = CMUIsTicketWaiting(a.SessionId);
+                var bWaiting = CMUIsTicketWaiting(b.SessionId);
+                if (aWaiting != bWaiting)
+                    return aWaiting ? -1 : 1;
+                // CMU14 End
 
                 // Then, any chat with unread messages.
                 var aUnread = ach.Unread > 0;
@@ -208,6 +217,7 @@ namespace Content.Client.Administration.UI.Bwoink
                 return;
 
             _adminManager.AdminStatusUpdated -= UpdateButtons;
+            CMUShutdownTickets(); // CMU14: AHelp ticket controls
         }
 
         public void OnBwoink(NetUserId channel)
@@ -257,6 +267,8 @@ namespace Content.Client.Administration.UI.Bwoink
 
             Follow.Visible = _adminManager.CanCommand("follow");
             Follow.Disabled = !Follow.Visible || disabled;
+
+            CMUUpdateTicketControls(); // CMU14: AHelp ticket controls
         }
 
         private string FormatTabTitle(ItemList.Item li, PlayerInfo? pl = default)
