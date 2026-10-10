@@ -44,3 +44,12 @@
     sprite: CMU14/Clothing/Masks/gasmask_black.rsi
   - type: Clothing
     sprite: CMU14/Clothing/Masks/gasmask_black.rsi
+
+- type: entity
+  parent: CMUMaskGasBlack
+  id: CMUMaskPrescriptionGasBlack
+  name: black prescription gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
