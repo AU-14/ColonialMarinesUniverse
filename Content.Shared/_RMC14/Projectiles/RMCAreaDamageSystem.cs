@@ -46,7 +46,7 @@ public sealed partial class RMCAreaDamageSystem : EntitySystem
     /// <summary>
     ///     Apply damage to entities near a target.
     /// </summary>
-    private void ApplyAreaDamage(EntityUid uid, EntityUid target, DamageSpecifier damage, EntityUid? shooter = null, RMCAreaDamageComponent? areaDamage = null)
+    public void ApplyAreaDamage(EntityUid uid, // CMU14: public so hitscan shots can splash EntityUid target, DamageSpecifier damage, EntityUid? shooter = null, RMCAreaDamageComponent? areaDamage = null)
     {
         if (!Resolve(uid, ref areaDamage))
             return;

@@ -163,47 +163,45 @@
     amount: 30
   - type: IgnorePredictionHide
 
+# CMU14 Begin: the electrolaser fires a hitscan beam like the laser guns, with its old projectile's stats
 - type: entity
-  parent: RMCBaseBullet
+  parent: BasicHitscan
   id: RMCProjectileElectrolaser
-  name: Electrolaser Projectile
+  name: Electrolaser Beam
   categories: [ HideSpawnMenu ]
   components:
-  - type: Sprite
-    sprite: Structures/Power/Generation/Tesla/energy_miniball.rsi
-    layers:
-    - state: tesla_projectile
-      shader: unshaded
-  - type: Electrified
-    requirePower: false
-  - type: StaminaDamageOnCollide
-    damage: 15
-  - type: Projectile
-    impactEffect: BulletImpactEffect
-    maxFixedRange: 32
+  - type: HitscanBasicRaycast
+    maxDistance: 32
+  - type: CMUHitscanImpact
     damage:
       types:
         Piercing: 10
         Heat: 160
         Asphyxiation: 15
-    soundHit:
-      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
-  - type: RMCProjectileAccuracy
-    accuracy: 130
-    thresholds:
-    - range: 32
-      falloff: 5
-  - type: RMCProjectileDamageFalloff
-    thresholds:
-    - range: 32
-      falloff: 9999
-      ignoreModifiers: true
+  - type: HitscanStaminaDamage
+    staminaDamage: 15
+  - type: CMArmorPiercing
+    amount: 15
   - type: RMCAreaDamage
     damageArea: 0.65
     falloffDistance: 1.0
-  - type: CMArmorPiercing
-    amount: 15
-  - type: IgnorePredictionHide
+  - type: Electrified
+    requirePower: false
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_blue
+    travelFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: beam_blue
+    impactFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: impact_blue
+  - type: HitscanBasicEffects
+    sound:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+# CMU14 End
+
 - type: entity
   parent: RMCBaseBullet
   id: VehicleProjectileDragonFlame

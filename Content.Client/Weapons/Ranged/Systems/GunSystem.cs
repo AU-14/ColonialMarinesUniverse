@@ -354,7 +354,7 @@ public sealed partial class GunSystem : SharedGunSystem
                 case CartridgeAmmoComponent cartridge:
                     if (!cartridge.Spent)
                     {
-                        if (predictProjectiles)
+                        if (predictProjectiles && !IsHitscanCartridge(cartridge)) // CMU14: the server traces hitscan cartridges
                         {
                             var uid = Spawn(cartridge.Prototype, fromEnt);
                             CreateAndFireProjectiles(uid, cartridge);
@@ -797,4 +797,11 @@ public sealed partial class GunSystem : SharedGunSystem
     }
 
     public override void PlayImpactSound(EntityUid otherEntity, DamageSpecifier? modifiedDamage, SoundSpecifier? weaponSound, bool forceWeaponSound) { }
+
+    // CMU14 method
+    private bool IsHitscanCartridge(CartridgeAmmoComponent cartridge)
+    {
+        return ProtoManager.TryIndex(cartridge.Prototype, out var proto) &&
+               proto.HasComponent<HitscanAmmoComponent>(EntityManager.ComponentFactory);
+    }
 }
