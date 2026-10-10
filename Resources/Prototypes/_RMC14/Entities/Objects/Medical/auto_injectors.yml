@@ -134,13 +134,17 @@
       map: ["enum.SolutionContainerLayers.Fill"]
   - type: MedicallyUnskilledDoAfter
     min: 0
+  - type: Hypospray # CMU14: inject the whole mixed dose at once
+    transferAmount: 21
   - type: SolutionContainerManager
     solutions:
       pen:
-        maxVol: 15
+        maxVol: 21 # CMU14: 15 tricordrazine + 6 paracetamol
         reagents:
         - ReagentId: CMTricordrazine
           Quantity: 15
+        - ReagentId: CMUParacetamol # CMU14
+          Quantity: 6
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     emptySpriteName: tricord0
@@ -149,6 +153,7 @@
   - type: CMRefillableSolution
     reagents:
       CMTricordrazine: 15
+      CMUParacetamol: 6 # CMU14
   - type: IconLabel
     labelTextLocId: rmc-first-aid-container-label-text
 
