@@ -12751,5 +12751,39 @@
   id: 776
   time: '2026-10-10T10:42:57.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2133
+- author: troytroy400
+  changes:
+  - message: Lowered playtime requirements for many GOVFOR and OPFOR jobs. Automatic
+      Rifleman now needs 3h of military time, Fireteam Leader 4h, Radio Traffic Operator
+      2h, Weapons Specialist 3h, Combat Technician 2h and Vehicle Crewman 5h.
+    type: Tweak
+  - message: Hospital Corpsman now needs 2h of military time and 1h in any medical
+      role.
+    type: Tweak
+  - message: Pilot roles now only need 2h of flight crew time.
+    type: Tweak
+  - message: Officer requirements have been lowered. The Executive Officer no longer
+      needs 24h overall. Staff and Engineering Officers need 6h overall and 5h of
+      military time, and the Engineering Officer also needs 5h of military engineering.
+      The Logistics Officer needs 6h overall. The Intelligence Officer only needs
+      2h as Fireteam Leader.
+    type: Tweak
+  - message: Medical Officer needs 5h of military time and 3h in any medical role.
+    type: Tweak
+  - message: The Aux Support Synth no longer has a playtime requirement.
+    type: Tweak
+  - message: Lowered playtime requirements for colony jobs. Law enforcement officers
+      (CMB Deputy, CWPS Ranger, PAP Officer, Colony Security Officer) need 4h overall.
+      Paramedics need 2h in medical roles. Physicians need 3h in medical roles.
+    type: Tweak
+  - message: Head of Service and Head of Engineering now need 5h in their department
+      instead of 10h. Mob Boss needs 2h in criminal jobs. Orbital Arbiter needs 2h
+      as Orbital Counsel.
+    type: Tweak
+  - message: Operations Synthetic and Psychologist no longer have a playtime requirement.
+    type: Tweak
+  id: 777
+  time: '2026-10-10T12:43:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2141
 Name: CMU
 Order: -1

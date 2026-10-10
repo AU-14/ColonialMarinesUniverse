@@ -83,30 +83,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     // ---- Faction syncing helpers ----
 
     /// <summary>
-    /// Gets all ambassador consoles that share the same faction name.
-    /// </summary>
-    private List<(EntityUid Uid, AmbassadorConsoleComponent Comp)> GetFactionConsoles(string factionName)
-    {
-        var result = new List<(EntityUid, AmbassadorConsoleComponent)>();
-        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (comp.FactionName == factionName)
-                result.Add((uid, comp));
-        }
-        return result;
-    }
-
-    /// <summary>
     /// Syncs shared state from source to all other consoles with the same faction.
     /// Budget, active statuses, and timers are synced.
     /// </summary>
     private void SyncFaction(AmbassadorConsoleComponent source)
     {
-        var consoles = GetFactionConsoles(source.FactionName);
-        foreach (var (uid, comp) in consoles)
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out _, out var comp))
         {
-            if (comp == source)
+            if (comp == source || comp.FactionName != source.FactionName)
                 continue;
 
             comp.Budget = source.Budget;
@@ -137,10 +122,11 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
 
     private void RefreshFactionUi(AmbassadorConsoleComponent source)
     {
-        var consoles = GetFactionConsoles(source.FactionName);
-        foreach (var (uid, comp) in consoles)
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
         {
-            UpdateUiState(uid, comp);
+            if (comp.FactionName == source.FactionName)
+                UpdateUiState(uid, comp);
         }
     }
 
