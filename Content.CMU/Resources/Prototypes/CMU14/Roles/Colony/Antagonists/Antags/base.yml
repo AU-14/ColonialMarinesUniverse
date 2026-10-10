@@ -1,13 +1,3 @@
-# Shared selection restrictions apply even to antagonists with an explicit job whitelist.
-- type: antagSpecifier
-  abstract: true
-  id: CMUAntagSpecifierColonyBase
-  jobBlacklistGroup:
-  - AllGovforJobs
-  - AllColonyDepartmentHeadJobs
-  - CMUAmbassadorJobs
-  - CMUColonyLawEnforcementJobs
-
 # Shared abstract base for all colony antag prototypes.
 - type: antag
   abstract: true

@@ -1,10 +1,11 @@
 - type: antagSpecifier
-  parent: CMUAntagSpecifierColonyBase
   id: CLFVeteran
   prefRoles: [ CLFVeteranRole ]
   jobBlacklistGroup:
+  - AllGovforJobs
   - AllOpforJobs
   - AllCLFJobs
+# - AllColonyDepartmentHeadJobs
   - AllSynthJobs
   briefing:
     text: clfveteran-role-greeting
