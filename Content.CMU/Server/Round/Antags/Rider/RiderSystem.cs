@@ -883,7 +883,7 @@ public sealed partial class RiderSystem : EntitySystem
 
         ent.Comp.SeizeActive = true;
         ent.Comp.SeizeEndsAt = _timing.CurTime + ent.Comp.SeizeDuration;
-        _actions.AddAction(host, ref ent.Comp.SeizeExitAction, "ActionRiderExit");
+        _actions.AddAction(host, ref ent.Comp.SeizeExitAction, "ActionRiderSeizeRelease");
         _popup.PopupEntity(Loc.GetString("rider-seize-host"), host, host, PopupType.LargeCaution);
         _adminLogger.Add(LogType.AntagSelection, LogImpact.High,
             $"{ToPrettyString(ent):rider} seized {ToPrettyString(host):host}");
