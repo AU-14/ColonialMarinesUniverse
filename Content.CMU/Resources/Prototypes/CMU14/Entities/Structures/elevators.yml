@@ -2,6 +2,8 @@
 # closed rail loop defines the movable footprint, so it can be irregularly shaped.
 # The controller must be on the platform; destinations need aligned, clear space
 # on the adjacent linked z-level.
+# Contained inventory travels with its owner and does not add to the entity limit.
+# Anchored platform structures remain anchored after travel.
 - type: entity
   parent: Railing
   id: CMUElevatorRail
@@ -31,6 +33,10 @@
     state: elevator
     drawdepth: HighFloorObjects
   - type: InteractionOutline
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
   - type: CMUElevator
   - type: CMUElevatorWeightLimit
     maxEntities: 20

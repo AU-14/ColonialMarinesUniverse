@@ -23,6 +23,7 @@ public sealed class CMUElevatorSystem : EntitySystem
     private const int MaximumFootprintTiles = 1024;
     private const float EntityLookupRadius = 0.75f;
     private const float ControlInteractionDistance = 2f;
+    private const string ZLevelEyePrototype = "CMUZLevelEye";
 
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
@@ -238,8 +239,12 @@ public sealed class CMUElevatorSystem : EntitySystem
             if (TerminatingOrDeleted(entity))
                 continue;
 
+            var xform = Transform(entity);
+            var wasAnchored = xform.Anchored;
             var coordinates = _transform.GetMapCoordinates(entity);
             _transform.SetMapCoordinates(entity, new MapCoordinates(coordinates.Position, targetMapComp.MapId));
+            if (wasAnchored && !_transform.AnchorEntity((entity, xform)))
+                Log.Error($"Failed to re-anchor elevator structure {ToPrettyString(entity)} at its destination.");
         }
 
         foreach (var tile in _tilesToMove)
@@ -376,11 +381,12 @@ public sealed class CMUElevatorSystem : EntitySystem
             var localCoordinates = _map.GridTileToLocal(source.GridUid, source.Grid, tile);
             var mapCoordinates = _transform.ToMapCoordinates(localCoordinates);
             _nearby.Clear();
-            _lookup.GetEntitiesInRange(mapCoordinates.MapId, mapCoordinates.Position, EntityLookupRadius, _nearby, LookupFlags.All);
+            _lookup.GetEntitiesInRange(mapCoordinates.MapId, mapCoordinates.Position, EntityLookupRadius, _nearby, LookupFlags.Uncontained);
 
             foreach (var entity in _nearby)
             {
-                if (entity == source.MapUid || entity == source.GridUid || TerminatingOrDeleted(entity))
+                if (entity == source.MapUid || entity == source.GridUid ||
+                    TerminatingOrDeleted(entity) || IsViewProbe(entity))
                     continue;
 
                 var xform = Transform(entity);
@@ -426,7 +432,8 @@ public sealed class CMUElevatorSystem : EntitySystem
         {
             if (HasComp<MapComponent>(entity) ||
                 HasComp<MapGridComponent>(entity) ||
-                TerminatingOrDeleted(entity))
+                TerminatingOrDeleted(entity) ||
+                IsViewProbe(entity))
                 continue;
 
             var xform = Transform(entity);
@@ -447,6 +454,11 @@ public sealed class CMUElevatorSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private bool IsViewProbe(EntityUid entity)
+    {
+        return MetaData(entity).EntityPrototype?.ID == ZLevelEyePrototype;
     }
 
     private bool CanManage(Entity<CMUElevatorComponent> ent, EntityUid user)
