@@ -68,9 +68,10 @@ with crayons. Only the medical jeep is marked, with outlined red crosses on whit
 
 The jeep is open, so riders are drawn between the vehicle and an overlay entity:
 
-1. Vehicle entity: `jeep_base`, `damaged_frame`, `engine_*`, the hood state, the doors and the
-   tailgate, the fuel door, the other hardpoints, then `wheels_0` / `wheels_1` (layer
-   `rmc-wheels`).
+1. Vehicle entity: `jeep_base`, `damaged_frame`, `engine_*`, the hood state, the extinguisher
+   (under the doors: the passenger's swings open in front of it), the doors and the tailgate, the
+   fuel door, the other hardpoints (`BASE_KIT_ORDER`: the tail lights over the spare beside them),
+   then `wheels_0` / `wheels_1` (layer `rmc-wheels`).
 2. Crate (when loaded) and riders, far to near. Facing north the crate goes after the riders.
 3. Overlay entity: `jeep_overlay`, `damaged_overlay`, the doors' and tailgate's `*_overlay`
    states, `hood_closed_overlay`, the hardpoint
@@ -148,8 +149,8 @@ Following the humvee, `_0` is intact and `_1` is damaged (`damagedVehicleState`)
 - **Draw order with the windshield:** facing south, a shut hood is drawn under the windshield,
   which can lie folded on it. A raising, raised or closing lid is drawn over it, in front of the
   upright windshield. The two never clash because the hood only opens with the windshield up. In
-  practice that is two overlay layers, one below the hardpoints for the shut hood and one above
-  them for the moving and open lid.
+  practice that is two overlay layers, `hood` below the hardpoints for the shut hood and
+  `hood_raised` above them for the moving and open lid.
 - **Engine hardpoint:** sits in the bay under the lid, so it only shows with the hood open. To fix a
   damaged engine, open the hood and replace or repair the engine hardpoint.
 - **Smoke:** `engine_smoke_0` (light, damaged) and `engine_smoke_1` (heavy, nearly broken) are
@@ -381,7 +382,9 @@ Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml
 
 Clickable parts are child entities whose sprite is the `click_*` mask: the part's own pixels at
 about 12% alpha, just over the engine's click threshold and invisible over the part itself. Clicks
-and hover pick the part, and the hover draws the matching `*_outline` state on the overlay.
+and hover pick the part, and the hover draws the matching `*_outline` state on the overlay. Where
+masks overlap, the part drawn on top in that direction takes the click (its render order follows
+the layer stack); the seats are under every other part.
 
 CMU14-marked edits outside the jeep files: RMC's grid mover ignores entities riding the vehicle,
 RMC's weapon seats fall back to the open vehicle a CMU seat belongs to, turrets take an optional

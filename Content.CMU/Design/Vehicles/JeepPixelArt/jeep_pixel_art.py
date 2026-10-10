@@ -90,6 +90,9 @@ PAL = {
     "lit_dim": ramp((255, 238, 186), (252, 228, 168), (246, 216, 150), (236, 200, 132), (210, 170, 100)),
     "od_flat": ramp((110, 118, 74), (110, 118, 74), (110, 118, 74), (110, 118, 74), (34, 38, 24)),
     "od_in_flat": ramp((80, 86, 54), (80, 86, 54), (80, 86, 54), (80, 86, 54), (30, 33, 21)),
+    "white_flat": ramp((220, 220, 209), (220, 220, 209), (220, 220, 209), (220, 220, 209), (140, 140, 130)),
+    "red_flat": ramp((197, 62, 47), (197, 62, 47), (197, 62, 47), (197, 62, 47), (76, 22, 18)),
+    "red_line_flat": ramp((92, 27, 21), (92, 27, 21), (92, 27, 21), (92, 27, 21), (60, 16, 12)),
     "rust": ramp((176, 102, 64), (146, 80, 48), (120, 64, 40), (98, 52, 32), (54, 28, 16)),
 }
 GLASS = "glass"
@@ -106,7 +109,7 @@ PAINT_SKIP_PARTS = {"jerrycan", "shovel", "axe", "ammo"}
 PAINT_ALPHA = 254
 PAINT_MUD_ALPHA = 253
 # Materials shaded as one flat surface: no lines or highlights between pixels of the same part.
-FLAT_MATS = {"od_flat", "od_in_flat"}
+FLAT_MATS = {"od_flat", "od_in_flat", "white_flat", "red_flat", "red_line_flat"}
 
 VARIANTS = ("cargo", "gunner", "transport", "medical")
 RSI_NAMES = {"cargo": "jeep", "gunner": "jeep_gunner", "transport": "jeep_transport", "medical": "jeep_medical"}
@@ -160,6 +163,17 @@ LAMP_SIDES = {"left": 0, "right": 1}
 LAMPS = tuple(f"{kind}_{side}" for kind in ("headlight", "turn_signal", "taillight") for side in LAMP_SIDES)
 # What a jeep spawns with; the preview draws these unless told otherwise.
 FITTED = ("engine",) + LAMPS + ("windshield_up", "spare", "jerrycan", "shovel", "axe", "extinguisher")
+TAIL_LIGHTS = ("taillight_left", "taillight_right")
+# The order the vehicle entity draws its kit in, as jeep.yml lists its layers: the extinguisher under
+# the doors (drawn before them), the passenger's swinging open in front of it, and the tail lights
+# over the spare beside the right one.
+BASE_KIT_ORDER = (("engine", "extinguisher") + tuple(n for n in LAMPS if n not in TAIL_LIGHTS)
+                  + ("windshield_up", "windshield_down", "wirecutter", "searchlight", "spare") + TAIL_LIGHTS
+                  + ("jerrycan", "shovel", "axe"))
+# The overlay entity's, over the riders.
+OVERLAY_KIT_ORDER = (TAIL_LIGHTS + tuple(n for n in LAMPS if n not in TAIL_LIGHTS)
+                     + ("extinguisher", "windshield_up", "windshield_down", "wirecutter", "searchlight", "spare",
+                        "jerrycan", "shovel", "axe"))
 # Centre r of each headlight, out beside the grille under the fender line.
 HEADLIGHTS = (-14, 13)
 HEADLIGHT_Z = 13
@@ -723,7 +737,8 @@ def door_panel(part, variant=None):
 # A swung panel is resampled at a slant, so its voxels step in depth from one pixel to the next and
 # would each get an outline. Swung, its paint is shaded as one flat surface instead, like the open
 # hood's; only its edges keep their outline.
-PANEL_FLAT = {"od": "od_flat", "od_seam": "od_in_flat", "od_in": "od_in_flat"}
+PANEL_FLAT = {"od": "od_flat", "od_seam": "od_in_flat", "od_in": "od_in_flat",
+              "white": "white_flat", "red": "red_flat", "red_line": "red_line_flat"}
 
 
 def flattened(model):
@@ -1143,8 +1158,7 @@ def hood_open(degrees=HOOD_OPEN_DEGREES, variant=None):
     lid = hood_lid(variant)
     if degrees == 0:
         return lid
-    flat = {"od": "od_flat", "od_seam": "od_in_flat", "od_in": "od_in_flat"}
-    lid = Model({k: (flat.get(mat, mat), part) for k, (mat, part) in lid.vox.items()})
+    lid = flattened(lid)
     t = math.radians(degrees)
     hinge_f, hinge_z = 10.0, HOOD + 1.0
     m = Model()
@@ -1534,9 +1548,9 @@ HOOD_SHOULDERS = (-9, 8)
 
 # The near axle's tyres stand in front of the body in the front and back views, full width beside
 # the headlights or tail lights; this much depth puts them ahead of everything else. The lamps at
-# that end (fender markers, tail lamps) stay in front of the tyres.
+# that end (fender markers, tail lamps) stay in front of the tyres, smashed or whole.
 NEAR_WHEEL_PRIORITY = 1000.0
-LAMP_MATERIALS = {"amber", "red", "lit", "lit_red", "lit_amber", "lit_brake"}
+LAMP_MATERIALS = {"amber", "red", "lit", "lit_red", "lit_amber", "lit_brake", "char"}
 LAMP_PARTS = set(LAMPS) | {"lights"}
 # Ties between faces at the same depth go to the higher voxel: in the flattened views two heights
 # share a screen row, and the lower one must not show through, like grille slats on the hood edge.
@@ -2930,19 +2944,22 @@ def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=Non
     img.alpha_composite(to_image(v["base"]))
     if damaged:
         img.alpha_composite(to_image(damage(v["base"], seed(variant, view, "base"))))
-    hardpoints = list(fitted)
-    # Vehicle entity: engine, then the hood lid over it, then everything hung on the body.
+    hardpoints = [n for n in BASE_KIT_ORDER if n in fitted] + [n for n in fitted if n not in BASE_KIT_ORDER]
+    # Vehicle entity: engine, then the hood lid over it, the extinguisher, the doors, then everything
+    # else hung on the body.
     if "engine" in hardpoints:
         img.alpha_composite(to_image(v[f"engine_{st}"]))
     if hood and view not in HOOD_OVER:
         img.alpha_composite(to_image(v[hood]))
+    if "extinguisher" in hardpoints and view not in ATTACHMENTS["extinguisher"]:
+        img.alpha_composite(to_image(kit("extinguisher")))
     for p in shown:
         if view not in PANEL_OVER[p]:
             img.alpha_composite(to_image(v[f"{p}_swing"][opened[p]]))
     if view not in FUEL_DOOR_OVER:
         img.alpha_composite(to_image(v["fuel_door_swing"][fuel_door]))
     for name in hardpoints:
-        if name != "engine" and view not in ATTACHMENTS[name]:
+        if name not in ("engine", "extinguisher") and view not in ATTACHMENTS[name]:
             img.alpha_composite(to_image(kit(name)))
     wheel_px = v["wheels_destroyed"] if damaged else (v["wheels"] if frame is None else v["wheels_frames"][frame])
     if wheels_on:
@@ -2986,7 +3003,7 @@ def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=Non
     # raised lid goes over it, standing in front of the upright windshield.
     if hood == "hood_closed" and view in HOOD_OVER:
         img.alpha_composite(to_image(v[hood]))
-    for name in hardpoints:
+    for name in [n for n in OVERLAY_KIT_ORDER if n in hardpoints] + [n for n in hardpoints if n not in OVERLAY_KIT_ORDER]:
         if view in ATTACHMENTS[name]:
             img.alpha_composite(to_image(kit(name)))
     if hood and hood != "hood_closed" and view in HOOD_OVER:
