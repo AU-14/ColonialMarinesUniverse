@@ -13,3 +13,7 @@ emplacement-mount-CMUMachineGunM2CDropshipLoaded-description-mounted = A dropshi
 emplacement-mount-RMCSmartGunMountedStatic-name = ML66D mount
 emplacement-mount-RMCSmartGunMountedStatic-description = A foldable mount for the ML66D, provides stability to the ML66D.
 emplacement-mount-RMCSmartGunMountedStatic-description-mounted = A deployable, heavy machine gun. It fires specialized tungsten rounds for increased armor penetration.
+
+emplacement-mount-RuMCMachineGunUTES-C-name = UTES-C heavy machine gun
+emplacement-mount-RuMCMachineGunUTES-C-description = The disassembled UTES-C HMG, with its telescopic tripods folded up and unable to fire.
+emplacement-mount-RuMCMachineGunUTES-C-description-mounted = A deployable UPP 12.7x108mm heavy machine gun on its tripod. Slow to set up and murder on the back, but once it's down it puts out a wall of heavy rounds.

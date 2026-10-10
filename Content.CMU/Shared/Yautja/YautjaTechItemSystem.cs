@@ -3,6 +3,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Events;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Weapons.Ranged.Flamer;
+using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Item;
@@ -26,6 +27,7 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
         SubscribeLocalEvent<YautjaTechItemComponent, StaminaMeleeHitEvent>(OnStaminaMeleeHit);
         SubscribeLocalEvent<YautjaTechItemComponent, ProjectileHitEvent>(OnProjectileHit);
         SubscribeLocalEvent<YautjaTechItemComponent, GettingPickedUpAttemptEvent>(OnPickupAttempt);
+        SubscribeLocalEvent<YautjaTechItemComponent, InteractHandEvent>(OnInteractHand, before: [typeof(SharedItemSystem)]);
         SubscribeLocalEvent<YautjaTechItemComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<YautjaTechItemComponent, AttemptMeleeEvent>(OnAttemptMelee);
         SubscribeLocalEvent<YautjaTechItemComponent, ThrowItemAttemptEvent>(OnThrowAttempt);
@@ -66,14 +68,24 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
         args.Multiplier *= ent.Comp.DamageMultiplier;
     }
 
+    // attempt events are also asked by verb lists, examine and context menus, so this one only blocks;
+    // the zap waits for an actual grab in OnInteractHand
     private void OnPickupAttempt(Entity<YautjaTechItemComponent> ent, ref GettingPickedUpAttemptEvent args)
     {
         if (!ent.Comp.BlockPickup || IsAllowed(args.User))
             return;
 
+        args.Cancel();
+    }
+
+    private void OnInteractHand(Entity<YautjaTechItemComponent> ent, ref InteractHandEvent args)
+    {
+        if (args.Handled || !ent.Comp.BlockPickup || IsAllowed(args.User))
+            return;
+
         Misuse(ent.Owner, args.User, YautjaTechMisuseKind.Pickup);
         Deny(args.User);
-        args.Cancel();
+        args.Handled = true;
     }
 
     private void OnUseInHand(Entity<YautjaTechItemComponent> ent, ref UseInHandEvent args)

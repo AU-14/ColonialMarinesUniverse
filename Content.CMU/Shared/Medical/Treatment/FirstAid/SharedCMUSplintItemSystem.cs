@@ -34,6 +34,8 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
 
     private const float CastRemovePromptSeconds = 30f;
     private const float CastRemoveDoAfterSeconds = 1f;
+    private const float CastRemoveEarlyDoAfterSeconds = 5f;
+    private const float SplintRemoveDoAfterSeconds = 2f;
     private static readonly CMUMedicalWorkKey CastHealWork = new("cast-heal-complete");
     private static readonly CMUMedicalWorkKey CastRemovePromptWork = new("cast-remove-prompt");
     private static readonly CMUMedicalWorkKey PostOpMalunionWork = new("post-op-malunion-check");
@@ -55,6 +57,7 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
         SubscribeLocalEvent<CMUCastComponent, CMUMedicalWorkDueEvent>(OnCastWorkDue);
         SubscribeLocalEvent<CMUPostOpBoneSetComponent, CMUMedicalWorkDueEvent>(OnPostOpWorkDue);
         SubscribeLocalEvent<CMUHumanMedicalComponent, CMUCastVerbRemoveDoAfterEvent>(OnCastVerbRemoveDoAfter);
+        SubscribeLocalEvent<CMUHumanMedicalComponent, CMUSplintVerbRemoveDoAfterEvent>(OnSplintVerbRemoveDoAfter);
 
         Cfg.OnValueChanged(CMUMedicalCCVars.Enabled, v => _medicalEnabled = v, true);
         Cfg.OnValueChanged(CMUMedicalCCVars.BoneEnabled, v => _boneEnabled = v, true);
@@ -277,35 +280,49 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             QueueDel(ent.Owner);
     }
 
-    public void AddCastRemoveVerb(Entity<CMUHumanMedicalComponent> patient, ref GetVerbsEvent<AlternativeVerb> args)
+    // patient or whoever's treating them. a cast pulled before the bone's done healing loses the progress
+    public void AddSupportRemoveVerbs(Entity<CMUHumanMedicalComponent> patient, ref GetVerbsEvent<AlternativeVerb> args)
     {
         if (!IsLayerEnabled())
             return;
         if (!args.CanInteract || !args.CanAccess)
             return;
-        if (args.User != patient.Owner)
-            return;
-        if (!FindRemovableCast(patient.Owner, out var part))
-            return;
 
         var user = args.User;
         var patientUid = patient.Owner;
-        var verb = new AlternativeVerb
+
+        if (FindSupportedPart<CMUCastComponent>(user, patientUid, out var castPart))
         {
-            Text = Loc.GetString("cmu-medical-cast-verb-remove"),
-            Act = () => StartCastRemoveDoAfter(user, patientUid, part),
-            Priority = 1,
-        };
-        args.Verbs.Add(verb);
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("cmu-medical-cast-verb-remove"),
+                Act = () => StartCastRemoveDoAfter(user, patientUid, castPart),
+                Priority = 1,
+            });
+        }
+
+        if (FindSupportedPart<CMUSplintedComponent>(user, patientUid, out var splintPart))
+        {
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("cmu-medical-splint-verb-remove"),
+                Act = () => StartSplintRemoveDoAfter(user, patientUid, splintPart),
+                Priority = 1,
+            });
+        }
     }
 
     private void StartCastRemoveDoAfter(EntityUid user, EntityUid patient, EntityUid part)
     {
+        // cutting off a cast that hasn't done its job yet is slower than one that's ready to come off
+        var early = TryComp<CMUCastComponent>(part, out var cast) && !cast.ReadyToRemove;
+        var delay = early ? CastRemoveEarlyDoAfterSeconds : CastRemoveDoAfterSeconds;
         var removeEv = new CMUCastVerbRemoveDoAfterEvent { PreSelectedPart = GetNetEntity(part) };
-        var removeDo = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(CastRemoveDoAfterSeconds),
+        var removeDo = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(delay),
             removeEv, patient, target: patient)
         {
             BlockDuplicate = true,
+            BreakOnMove = true,
         };
         if (DoAfter.TryStartDoAfter(removeDo))
             Popup.PopupPredicted(Loc.GetString("cmu-medical-cast-removing"), patient, user);
@@ -319,15 +336,95 @@ public abstract partial class SharedCMUSplintItemSystem : EntitySystem
             return;
         if (!ResolvePart(patient.Owner, args.PreSelectedPart, out var part))
             return;
-        if (!TryComp<CMUCastComponent>(part, out var cast) || !cast.ReadyToRemove)
+        if (!TryComp<CMUCastComponent>(part, out var cast))
             return;
 
+        var early = !cast.ReadyToRemove;
         MedicalScheduler.Cancel(part, CastHealWork);
         MedicalScheduler.Cancel(part, CastRemovePromptWork);
         RemComp<CMUCastComponent>(part);
+
+        // the cast was holding off the malunion roll, so pulling it early puts that back on the clock
+        if (early && Net.IsServer && TryComp<CMUPostOpBoneSetComponent>(part, out var postOp))
+            SchedulePostOpMalunion(part, postOp);
+
         var ev = new CMUCastChangedEvent(part, true);
         RaiseLocalEvent(ref ev);
-        Popup.PopupPredicted(Loc.GetString("cmu-medical-cast-removed"), patient.Owner, args.User);
+        Popup.PopupPredicted(
+            Loc.GetString(early ? "cmu-medical-cast-removed-early" : "cmu-medical-cast-removed"),
+            patient.Owner,
+            args.User);
+    }
+
+    private void StartSplintRemoveDoAfter(EntityUid user, EntityUid patient, EntityUid part)
+    {
+        var removeEv = new CMUSplintVerbRemoveDoAfterEvent { PreSelectedPart = GetNetEntity(part) };
+        var removeDo = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(SplintRemoveDoAfterSeconds),
+            removeEv, patient, target: patient)
+        {
+            BlockDuplicate = true,
+            BreakOnMove = true,
+        };
+        if (DoAfter.TryStartDoAfter(removeDo))
+            Popup.PopupPredicted(Loc.GetString("cmu-medical-splint-removing"), patient, user);
+    }
+
+    private void OnSplintVerbRemoveDoAfter(Entity<CMUHumanMedicalComponent> patient, ref CMUSplintVerbRemoveDoAfterEvent args)
+    {
+        if (args.Cancelled)
+            return;
+        if (!IsLayerEnabled())
+            return;
+        if (args.PreSelectedPart is not { } netPart
+            || !TryGetEntity(netPart, out var stored)
+            || !TryComp<BodyPartComponent>(stored.Value, out var bodyPart)
+            || bodyPart.Body != patient.Owner)
+        {
+            return;
+        }
+
+        var part = stored.Value;
+        if (!HasComp<CMUSplintedComponent>(part))
+            return;
+
+        // the fracture underneath was never touched, so it's back to full effect as soon as this comes off
+        RemComp<CMUSplintedComponent>(part);
+        var ev = new CMUSplintChangedEvent(part, true);
+        RaiseLocalEvent(ref ev);
+        Popup.PopupPredicted(Loc.GetString("cmu-medical-splint-removed"), patient.Owner, args.User);
+    }
+
+    // aim-picker part first if it has T, otherwise the first part that does
+    private bool FindSupportedPart<T>(EntityUid user, EntityUid patient, out EntityUid part) where T : IComponent
+    {
+        part = default;
+        if (TryComp<BodyZoneTargetingComponent>(user, out var aim) && aim.LastSelectedAt > TimeSpan.Zero)
+        {
+            var (partType, symmetry) = SharedBodyZoneTargetingSystem.ToBodyPart(aim.Selected);
+            foreach (var (id, partComp) in MedicalIndex.GetBodyParts(patient))
+            {
+                if (partComp.PartType != partType)
+                    continue;
+                if (symmetry is { } s && partComp.Symmetry != s)
+                    continue;
+                if (!HasComp<T>(id))
+                    continue;
+
+                part = id;
+                return true;
+            }
+        }
+
+        foreach (var (id, _) in MedicalIndex.GetBodyParts(patient))
+        {
+            if (!HasComp<T>(id))
+                continue;
+
+            part = id;
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -594,6 +691,13 @@ public sealed partial class CMUCastApplyDoAfterEvent : SimpleDoAfterEvent
 
 [Serializable, NetSerializable]
 public sealed partial class CMUCastVerbRemoveDoAfterEvent : SimpleDoAfterEvent
+{
+    [DataField]
+    public NetEntity? PreSelectedPart;
+}
+
+[Serializable, NetSerializable]
+public sealed partial class CMUSplintVerbRemoveDoAfterEvent : SimpleDoAfterEvent
 {
     [DataField]
     public NetEntity? PreSelectedPart;
