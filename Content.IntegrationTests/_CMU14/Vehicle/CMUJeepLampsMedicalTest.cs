@@ -1,5 +1,7 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Vehicle.Jeep;
@@ -158,6 +160,45 @@ public sealed class CMUJeepLampsMedicalTest : GameTest
 
             Assert.That(slots.TryInsert(jeep, CMUVehicleIgnitionComponent.SlotId, key!.Value, null), Is.True);
             Assert.That(CanRun(jeep), Is.True);
+        });
+    }
+
+    [Test]
+    public async Task DriverPullsTheKeyIntoTheirHand()
+    {
+        var (jeep, user) = await SpawnJeep("CMUVehicleJeepCargo");
+        await Server.WaitPost(() =>
+        {
+            SEntMan.System<CMUJeepSystem>()
+                .SetPanel((jeep, SEntMan.GetComponent<CMUJeepComponent>(jeep)), CMUJeepSystem.DriverDoor, true);
+            Hold(user, null);
+        });
+        await RunTicksSync(5);
+
+        await Server.WaitPost(() =>
+        {
+            var driverSeat = SEntMan.GetComponent<CMUVehicleSeatsComponent>(jeep).SeatEntities
+                .Single(seat => SEntMan.GetComponent<CMUVehicleSeatComponent>(seat).Driver);
+            Assert.That(SEntMan.System<SharedBuckleSystem>().TryBuckle(user, user, driverSeat), Is.True);
+        });
+        await RunTicksSync(5);
+
+        await Server.WaitPost(() =>
+        {
+            var action = SEntMan.GetComponent<CMUVehicleDriverActionsComponent>(jeep).EjectKeyActionEntity;
+            Assert.That(action, Is.Not.Null, "The driver should get a key button.");
+            SEntMan.System<SharedActionsSystem>()
+                .PerformAction(user, (action!.Value, SEntMan.GetComponent<ActionComponent>(action.Value)));
+        });
+        await RunTicksSync(5);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.GetComponent<CMUVehicleIgnitionComponent>(jeep).KeySlot.HasItem, Is.False);
+            var held = SEntMan.System<SharedHandsSystem>().GetActiveItem(user);
+            Assert.That(held, Is.Not.Null);
+            Assert.That(SEntMan.GetComponent<MetaDataComponent>(held!.Value).EntityPrototype?.ID, Is.EqualTo("CMUJeepKey"));
+            Assert.That(CanRun(jeep), Is.False, "Without its key the jeep can't run.");
         });
     }
 
