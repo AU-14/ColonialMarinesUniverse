@@ -1,4 +1,4 @@
-# Concrete barricade: lay a frame from 20 metal rods, then pour a concrete bag onto it.
+# Concrete barricade: lay a frame from 22 metal rods, then pour a concrete bag onto it.
 # Fresh concrete is weak for 10 minutes, then hardens into a barricade that outclasses HESCO
 # against bullets and explosives.
 
@@ -13,7 +13,7 @@
       - !type:SnapToGrid
       steps:
       - material: CMRodMetal
-        amount: 20
+        amount: 22
         doAfter: 3
 
   - node: frame
@@ -26,13 +26,13 @@
         icon:
           sprite: CMU14/Items/cement.rsi
           state: cementbag1
-        doAfter: 5
+        doAfter: 10
     # Take an unpoured frame back apart for its rods.
     - to: start
       completed:
       - !type:SpawnPrototype
         prototype: CMRodMetal1
-        amount: 20
+        amount: 22
       - !type:DeleteEntity
       steps:
       - tool: Prying
