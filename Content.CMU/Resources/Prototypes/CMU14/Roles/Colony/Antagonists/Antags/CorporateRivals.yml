@@ -15,10 +15,10 @@
 
 # ├──[ Weyland Yutani Agent ]────────────────────────────────────────┤
 - type: antagSpecifier
-  parent: CMUAntagSpecifierColonyBase
   id: WeylandYutaniAgent
   prefRoles: [ WeylandYutaniAgentRole ]
   jobBlacklistGroup:
+  - AllGovforJobs
   - AllOpforJobs
   - AllCLFJobs
   - AllWeYuJobs
@@ -81,10 +81,10 @@
 
 # ├──[ Corporate Spy ]───────────────────────────────────────────────┤
 - type: antagSpecifier
-  parent: CMUAntagSpecifierColonyBase
   id: CorporateSpy
   prefRoles: [ CorporateSpyRole ]
   jobBlacklistGroup:
+  - AllGovforJobs
   - AllOpforJobs
   - AllCLFJobs
   jobBlacklist:

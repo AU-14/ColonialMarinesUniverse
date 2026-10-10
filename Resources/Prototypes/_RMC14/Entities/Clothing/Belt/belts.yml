@@ -373,73 +373,100 @@
       Urban: _RMC14/Objects/Clothing/Belt/knife/snow-desert-urban.rsi
       Classic: _RMC14/Objects/Clothing/Belt/knife/jungle-classic.rsi
 
-- type: entity
-  parent: CMBeltBaseStorage
-  id: CMBeltMedical
-  name: M276 pattern medical storage rig # TODO: differentiate from pattern lifesaver
-  description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport bulkier medical supplies.
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Clothing/Belt/medical.rsi
-  - type: Clothing
-    sprite: _RMC14/Objects/Clothing/Belt/medical.rsi
-  - type: Storage
-    maxItemSize: Normal
-    grid:
-    - 0,0,13,3 # 14 slots
-    whitelist:
-      tags:
-      - DiscreteHealthAnalyzer
-      - Dropper
-      - GlassBeaker
-      - Bottle
-      - PillPacket
-      - PillCanister
-      - Syringe
-      - CMSurgicalLine
-      - CMSynthGraft
-      - Brutepack
-      - CMBloodPack
-      - Gauze
-      - Ointment
-      - CMOintment
-      - CMTraumaKit
-      - CMBurnKit
-      - CMAutoInjector
-      - CMRollerItem
-      - BodyBag
-      - RMCGlovesLatex
-      - SterileMask
-      - Hypospray
-      - CigPack
-      - RMCPenlight
-      - Flare
-      - RMCMiniTank
-      # New Med
-      # - CMRetractor
-      # - CMHemostat
-      # - CMBoneSaw
-      # - CMCautery
-      # - CMSurgicalDrill
-      # - RMCScalpel
-      # - CMBoneSetter
-      # - CMBoneGel
-      - CMUBoneGraft
-      - CMUCastItem
-      - CMUOrganClamp
-      - CMUSplintItem
-      components:
-      - CMSurgeryTool # catch-all for above commented out NewMed tags
-      - Hypospray
-      - Defibrillator
-      - Pill
-      - RMCHandLabeler
-      - RMCStethoscope
-      - RMCLighter
-  - type: FixedItemSizeStorage
-  - type: Tag
-    tags:
-    - RMCBeltMedical
+# You're probably looking for: Content.CMU/Resources/Prototypes/CMU14/Entities/Clothing/Universal/medical_storage.yml
+# CMU14: moved to Content.CMU/Resources/Prototypes/CMU14/Entities/Clothing/Universal/medical_storage.yml, do not restore
+# - type: entity
+#   parent: CMBeltBaseStorage
+#   id: CMBeltMedical
+#   name: M276 pattern medical storage rig # TODO: differentiate from pattern lifesaver
+#   # CMU14: also carries magazines, differentiates from the lifesaver bag
+#   description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport bulkier medical supplies and spare ammunition magazines.
+#   components:
+#   - type: Sprite
+#     sprite: _RMC14/Objects/Clothing/Belt/medical.rsi
+#   - type: Clothing
+#     sprite: _RMC14/Objects/Clothing/Belt/medical.rsi
+#   - type: Storage
+#     maxItemSize: Normal
+#     grid:
+#     - 0,0,13,3 # 14 slots
+#     whitelist:
+#       tags:
+#       - DiscreteHealthAnalyzer
+#       - Dropper
+#       - GlassBeaker
+#       - Bottle
+#       - PillPacket
+#       - PillCanister
+#       - Syringe
+#       - CMSurgicalLine
+#       - CMSynthGraft
+#       - Brutepack
+#       - CMBloodPack
+#       - Gauze
+#       - Ointment
+#       - CMOintment
+#       - CMTraumaKit
+#       - CMBurnKit
+#       - CMAutoInjector
+#       - CMRollerItem
+#       - BodyBag
+#       - RMCGlovesLatex
+#       - SterileMask
+#       - Hypospray
+#       - CigPack
+#       - RMCPenlight
+#       - Flare
+#       - RMCMiniTank
+#       # New Med
+#       # - CMRetractor
+#       # - CMHemostat
+#       # - CMBoneSaw
+#       # - CMCautery
+#       # - CMSurgicalDrill
+#       # - RMCScalpel
+#       # - CMBoneSetter
+#       # - CMBoneGel
+#       - CMUBoneGraft
+#       - CMUCastItem
+#       - CMUOrganClamp
+#       - CMUSplintItem
+#       - CMUCPRMask
+#       # CMU14: magazines and shells, see description
+#       - CMMagazinePistol
+#       - RMCMagazineRevolver
+#       - CMMagazineRifle
+#       - RMCMagazineShotgun
+#       - CMMagazineSmg
+#       - CMMagazineSniper
+#       - RMCShellShotgun
+#       - RMCShellShotgunHDSG
+#       components:
+#       - CMSurgeryTool # catch-all for above commented out NewMed tags
+#       - Hypospray
+#       - Defibrillator
+#       - Pill
+#       - RMCHandLabeler
+#       - RMCStethoscope
+#       - RMCLighter
+#       # CMU14: speed loaders and other ammo providers
+#       - BallisticAmmoProvider
+#     # CMU14: underbarrel attachments are ammo providers too
+#     blacklist:
+#       tags:
+#       - RMCAttachmentUnderbarrel
+#   # CMU14: large magazine variants bypass the size limit, mirrors CMBeltMarine
+#   - type: IgnoreContentsSize
+#     items:
+#       tags:
+#       - CMMagazineRifle
+#       - RMCMagazineShotgun
+#       - RMCShellShotgunHDSG
+#       - CMMagazineSmg
+#   - type: FixedItemSizeStorage
+#   - type: Tag
+#     tags:
+#     - RMCBeltMedical
 
 - type: entity
   parent: CMBeltBaseStorage

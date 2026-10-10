@@ -11,6 +11,7 @@
   winconditions:
   - KillAllGovforRule
   - KillAllXenoRule
+  - HiveCollapseRule
 
 - type: partySpawn
   id: NeomorphsThreatSpawns

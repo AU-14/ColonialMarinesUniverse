@@ -1,9 +1,13 @@
 - type: antagSpecifier
-  parent: CMUAntagSpecifierColonyBase
   id: RunawaySynth
   prefRoles: [ RunawaySynthRole ]
   jobBlacklistGroup:
+  - AllGovforCommandStaff
   - AllOpforCommandStaff
+# jobBlacklist:
+# - AU14JobCivilianCorporateLiaison
+# - AU14JobCivilianColonyAdministrator
+# - AU14JobCivilianOrbitalArbiter
   briefing:
     text: runawaysynth-role-greeting
     color: CornflowerBlue

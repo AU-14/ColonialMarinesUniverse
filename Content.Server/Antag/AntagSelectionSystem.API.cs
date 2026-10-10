@@ -501,7 +501,7 @@ public sealed partial class AntagSelectionSystem
                 continue;
 
             blacklist ??= new HashSet<ProtoId<JobPrototype>>();
-            blacklist.UnionWith(GetJobsInBlacklistGroup(group)); // CMU14
+            blacklist.UnionWith(group.Jobs);
         }
 
         return blacklist;

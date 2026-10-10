@@ -1923,10 +1923,10 @@ public sealed partial class YautjaHuntConsoleComponent : Component
     [DataField]
     public int SpawnCount = 1;
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan HuntCooldown = TimeSpan.FromMinutes(20);
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan BloodingCooldown = TimeSpan.FromMinutes(40);
 
     [DataField]

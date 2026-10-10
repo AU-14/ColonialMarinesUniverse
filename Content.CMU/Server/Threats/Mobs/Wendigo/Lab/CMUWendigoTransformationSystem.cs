@@ -399,7 +399,6 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
             var tamed = EnsureComp<CMUWendigoTamedComponent>(wendigo);
             tamed.Master = subject.Master;
             tamed.MasterName = subject.MasterName ?? Loc.GetString("cmu-wendigo-lab-unknown-master");
-            Dirty(wendigo, tamed);
         }
 
         if (hasMind)

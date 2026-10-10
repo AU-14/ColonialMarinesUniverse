@@ -61,7 +61,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     private int _nextContractId;
 
     [ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan XClearanceLockout = TimeSpan.FromMinutes(60);
+    public TimeSpan XClearanceLockout = TimeSpan.FromMinutes(40);
 
     [Dependency] private ServerReagentGeneratorSystem _generator = default!;
     [Dependency] private IGameTiming _timer = default!;
