@@ -19,9 +19,9 @@ public sealed partial class CMUExpeditionAgentSystem
         ["skirmisher"] = ["CMUExpeditionScavengerSkirmisher"],
         ["machinegunner"] = ["CMUExpeditionScavengerMachinegunner"],
         ["veteran"] = ["CMUExpeditionScavengerVeteran"],
-        ["mixed"] = ["CMUExpeditionScavenger", "CMUExpeditionScavengerSupport", "CMUExpeditionScavengerSkirmisher",
-            "CMUExpeditionScavengerMedic", "CMUExpeditionScavengerBreacher", "CMUExpeditionScavengerMarksman",
-            "CMUExpeditionScavengerRocketeer", "CMUExpeditionScavengerVeteran", "CMUExpeditionScavengerMachinegunner"],
+        ["mixed"] = ["CMUExpeditionScavengerVeteran", "CMUExpeditionScavengerMachinegunner", "CMUExpeditionScavengerMedic",
+            "CMUExpeditionScavengerBreacher", "CMUExpeditionScavengerRocketeer", "CMUExpeditionScavengerScout",
+            "CMUExpeditionScavengerAssault", "CMUExpeditionScavengerMarksman", "CMUExpeditionScavengerSkirmisher"],
         ["specialists"] = ["CMUExpeditionScavengerSupport", "CMUExpeditionScavengerAssault", "CMUExpeditionScavengerMarksman",
             "CMUExpeditionScavengerRocketeer", "CMUExpeditionScavengerMedic", "CMUExpeditionScavengerBreacher"],
         ["medical"] = ["CMUExpeditionScavengerMedic", "CMUExpeditionScavengerSupport",
@@ -30,6 +30,10 @@ public sealed partial class CMUExpeditionAgentSystem
             "CMUExpeditionScavengerAssault", "CMUExpeditionScavengerSupport", "CMUExpeditionScavengerMedic"],
         ["fireteam"] = ["CMUExpeditionScavengerVeteran", "CMUExpeditionScavengerMachinegunner",
             "CMUExpeditionScavengerSkirmisher", "CMUExpeditionScavengerMedic", "CMUExpeditionScavengerMarksman"],
+        ["patrol"] = ["CMUExpeditionScavengerScout", "CMUExpeditionScavenger", "CMUExpeditionScavengerMedic",
+            "CMUExpeditionScavengerSkirmisher", "CMUExpeditionScavengerSupport", "CMUExpeditionScavengerRocketeer"],
+        ["defense"] = ["CMUExpeditionScavengerMachinegunner", "CMUExpeditionScavengerMarksman", "CMUExpeditionScavengerMedic",
+            "CMUExpeditionScavengerBreacher", "CMUExpeditionScavengerRocketeer", "CMUExpeditionScavengerVeteran"],
     };
 
     public static IEnumerable<string> SquadVariants => SquadPresets.Keys;

@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._RMC14.Weapons.Ranged.Chamber;
 using Content.Shared.Directions;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -22,6 +23,16 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         var ammo = new GetAmmoCountEvent();
         RaiseLocalEvent(weapon, ref ammo);
+        // RMC's reserve chamber supplies a real round after magazine removal, but its
+        // system does not contribute that round to the magazine's count event.
+        if (TryComp<RMCGunChamberComponent>(weapon, out var rmcChamber) && rmcChamber.Enabled &&
+            _containers.TryGetContainer(weapon, rmcChamber.ContainerId, out var reserve))
+            foreach (var round in reserve.ContainedEntities)
+                if (!TryComp<CartridgeAmmoComponent>(round, out var cartridge) || !cartridge.Spent)
+                    ammo.Count++;
+        if (HasComp<ChamberMagazineAmmoProviderComponent>(weapon) && _guns.GetChamberEntity(weapon) is { } chambered &&
+            TryComp<CartridgeAmmoComponent>(chambered, out var spent) && spent.Spent)
+            ammo.Count = Math.Max(0, ammo.Count - 1);
         return ammo.Count;
     }
 
@@ -31,8 +42,12 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var hand in _hands.EnumerateHands(uid))
             if (_hands.TryGetHeldItem(uid, hand, out var item) && HasComp<GunComponent>(item))
                 weapons.Add(item.Value);
-        if (_inventory.TryGetSlotEntity(uid, SuitStorageSlot, out var slung) && HasComp<GunComponent>(slung))
-            weapons.Add(slung.Value);
+        // Include directly equipped guns as well as the sling: custom kits may holster a
+        // backup on the belt instead of putting it inside one of the supply containers.
+        var slots = _inventory.GetSlotEnumerator(uid);
+        while (slots.MoveNext(out var slot))
+            if (slot.ContainedEntity is { } equipped && HasComp<GunComponent>(equipped))
+                weapons.Add(equipped);
         foreach (var item in SupplyItems(uid))
             if (HasComp<GunComponent>(item))
                 weapons.Add(item);
@@ -41,7 +56,9 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool ChooseWeapon(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.Action != null || agent.Treatment != null || agent.WorkItem != null || agent.PreparingWork)
+        if (agent.Action != null || agent.Treatment != null || agent.WorkItem != null || agent.PreparingWork ||
+            agent.FlareItem != null || agent.UtilityCleanupItem != null || agent.FireRescueTarget != null ||
+            agent.LastStandTarget != null || agent.PendingMeleeWeapon != null)
             return false;
         if (agent.PendingWeapon == null && HasCoverCommitment(uid, agent, now))
             return false;
@@ -63,7 +80,9 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.PendingWeapon = null;
             agent.NextWeaponChoice = now + TimeSpan.FromSeconds(3);
             // Revalidate possession and usefulness after freeing the wielding hand.
-            if (!CarriedWeapons(uid).Contains(pending) || WeaponScore(uid, agent, pending) < 0)
+            if (!CarriedWeapons(uid).Contains(pending) || WeaponScore(uid, agent, pending) < 0 ||
+                current.Owner.IsValid() && WeaponAmmo(current) > 0 && !LoadoutReadinessSafe(uid, agent, now) &&
+                WeaponScore(uid, agent, pending) < WeaponScore(uid, agent, current))
                 return false;
             var wasSlung = _inventory.TryGetSlotEntity(uid, SuitStorageSlot, out var slung) && slung == pending;
             if (!_hands.IsHolding(uid, pending, out _) && !_hands.TryPickupAnyHand(uid, pending))
@@ -94,10 +113,15 @@ public sealed partial class CMUExpeditionAgentSystem
         if (now < agent.NextWeaponChoice)
             return false;
         agent.NextWeaponChoice = now + TimeSpan.FromSeconds(0.5);
+        var prepare = LoadoutReadinessWeapon(uid, agent, now);
+        if (prepare == current.Owner)
+            return false;
         var best = current.Owner.IsValid() ? WeaponScore(uid, agent, current) + (WeaponAmmo(current) > 0 ? 4 : 0) : -1;
-        EntityUid? chosen = null;
+        EntityUid? chosen = prepare;
         foreach (var weapon in CarriedWeapons(uid))
         {
+            if (prepare != null)
+                break;
             var score = WeaponScore(uid, agent, weapon);
             if (score < 0 || score <= best || weapon == current.Owner)
                 continue;
@@ -153,10 +177,19 @@ public sealed partial class CMUExpeditionAgentSystem
         if (!loaded && SpareAmmunition(uid, weapon) == null)
             return -100;
         TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role);
-        // A loaded backup beats an empty primary. An empty but reloadable gun remains an
-        // option even in the open, where the rearm executor must find shelter or coverage.
+        // Under contact, a loaded backup beats an empty primary. During a lull, restore
+        // the preferred reloadable weapon instead of remaining on the pistol indefinitely.
         if (!loaded)
-            return role?.Rocket == true ? -100 : 1;
+        {
+            if (role?.Rocket == true)
+                return -100;
+            var quiet = agent.Target == null && _timing.CurTime >= agent.ForgetAt &&
+                _timing.CurTime - agent.LastHit > TimeSpan.FromSeconds(2);
+            // Once both guns are empty, reload the preferred primary instead of tying
+            // every empty candidate with the currently held pistol. Every loaded gun
+            // still outranks these contact-time scores (loaded scores are at least 2).
+            return quiet ? role?.Priority ?? 20 : Math.Clamp((role?.Priority ?? 20) / 100f, 0.01f, 1f);
+        }
         var score = role?.Priority ?? 20;
         if (agent.Target is not { } target || !Visible(uid, target, agent.FireRange))
             return role?.Rocket == true ? -100 : score;
@@ -195,12 +228,19 @@ public sealed partial class CMUExpeditionAgentSystem
                 buddy.Target != null && _mobs.IsAlive(other))
                 return false;
         }
-        // Save the one-shot tube for clustered contacts or an entrenched shooter which
-        // has punished repeated peeks. A close rush needs the ready firearm instead.
+        // A visible shooter actively wounding the squad warrants the tube too. Waiting
+        // for two hits on this agent's own cover peek ignores open-ground ambushes and
+        // the gunner already killing the front of the column.
         if (ArmedVehicle(target) && VehicleDisposition(uid, agent, target) > 0)
             return true;
-        if (agent.RepeatedPeekHits >= 2)
+        if (agent.RepeatedPeekHits >= 2 && _timing.CurTime - agent.LastPeekHit < TimeSpan.FromSeconds(15) ||
+            agent.RecentShooters.TryGetValue(target, out var until) && _timing.CurTime < until)
             return true;
+        var squad = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
+        while (squad.MoveNext(out var other, out var buddy))
+            if (LocalSquadMember(uid, agent, other, buddy) &&
+                buddy.RecentShooters.TryGetValue(target, out until) && _timing.CurTime < until)
+                return true;
         var contacts = 0;
         foreach (var threat in agent.VisibleThreats)
             if (_transform.InRange(point, threat, 3) && ++contacts >= 2)

@@ -32,7 +32,8 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (medic.Patient == null)
         {
-            if (HasCoverCommitment(uid, agent, now) || now < medic.NextTriage || agent.Action != null || agent.Treatment != null || agent.PendingWeapon != null ||
+            if (agent.HoldPosition && agent.OrderedDestination != null ||
+                HasCoverCommitment(uid, agent, now) || now < medic.NextTriage || agent.Action != null || agent.Treatment != null || agent.PendingWeapon != null ||
                 agent.State is CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Withdraw or CMUExpeditionAgentState.PlanMove)
                 return false;
             medic.NextTriage = now + TimeSpan.FromSeconds(1);
@@ -65,6 +66,13 @@ public sealed partial class CMUExpeditionAgentSystem
             !TryComp<CMUExpeditionPatientComponent>(patient, out var claim) || claim.Medic != uid)
         {
             CancelMedical(uid, agent, "patient-unavailable", true);
+            return false;
+        }
+        // Hold permits aid at the assigned position, without following a patient who
+        // leaves it or interrupting the approach to an explicit guard destination.
+        if (agent.HoldPosition && (agent.OrderedDestination != null || !_interaction.InRangeUnobstructed(uid, patient, 1.25f)))
+        {
+            CancelMedical(uid, agent, "patient-outside-hold", true);
             return false;
         }
         if (Visible(uid, patient, medic.SearchRange + 2))
@@ -168,6 +176,11 @@ public sealed partial class CMUExpeditionAgentSystem
                 MedicalWorkSafe(uid, agent, medic, patient) && MedicalItems(uid).Any(item => UsefulDressing(item, patient) &&
                     TryComp<HealingComponent>(item, out var dressing) && dressing.BloodlossModifier < 0))
                 return WorkOnPatient(uid, agent, medic, patient, now, stabilizeBleeding: true);
+            if (agent.HoldPosition)
+            {
+                CancelMedical(uid, agent, "extraction-outside-hold", true);
+                return false;
+            }
             medic.Shelter ??= MedicalCollectionPoint(uid, agent);
             if (medic.Shelter is not { } shelter)
             {
@@ -199,6 +212,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             if (patient == uid || medic.RetryAfter.ContainsKey(patient) || !ValidMedicalPatient(uid, patient) ||
                 !Visible(uid, patient, medic.SearchRange) ||
+                agent.HoldPosition && !_interaction.InRangeUnobstructed(uid, patient, 1.25f) ||
                 agent.Home is not { } home || !_transform.InRange(home, Transform(patient).Coordinates, agent.LeashRange) ||
                 TryComp<CMUExpeditionPatientComponent>(patient, out var claim) && claim.Medic != uid &&
                 TryComp<CMUExpeditionMedicComponent>(claim.Medic, out var owner) && owner.Patient == patient ||
@@ -306,8 +320,8 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void StowMedicalItem(EntityUid uid, CMUExpeditionMedicComponent medic)
     {
-        if (medic.Item is { } item && Exists(item) && _hands.IsHolding(uid, item, out _) &&
-            (!Supplies(uid, out var bag) || !_hands.TryDropIntoContainer(uid, item, bag.Container)))
+        if (!HasComp<ActorComponent>(uid) && medic.Item is { } item && Exists(item) && _hands.IsHolding(uid, item, out _) &&
+            !StoreSupply(uid, item))
             _hands.TryDrop(uid, item);
         medic.Item = null;
     }

@@ -1,4 +1,12 @@
 - type: entity
+  parent: CMSatchelMedical
+  id: CMUExpeditionMedicalPack
+  components:
+  - type: Storage
+    grid:
+    - 0,0,20,1
+
+- type: entity
   parent: CMDefibrillator
   id: CMUExpeditionDefibrillator
   components:
@@ -13,13 +21,13 @@
 - type: startingGear
   id: CMUExpeditionMedicGear
   equipment:
-    head: RMCArmorHelmetMercenaryReinforced
+    head: RMCArmorHelmetMercenaryEngineer
     jumpsuit: RMCJumpsuitMercenaryHeavy
-    outerClothing: RMCArmorMercenaryHeavy
+    outerClothing: RMCArmorMercenaryEngineer
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMUExpeditionFieldPack
+    back: CMUExpeditionMedicalPack
     belt: CMBeltMarine
     pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
@@ -27,16 +35,23 @@
   - CMUExpeditionSMG
   storage:
     back:
+    - RMCM5Bayonet
     - CMUExpeditionDefibrillator
     - CMUExpeditionStabilizer
     - CMUExpeditionFieldDressing
     - CMUExpeditionFieldDressing
     - CMUExpeditionFieldDressing
-    - CMUExpeditionSmokeGrenade
     - CMPackFlare
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineSMGM63
     - CMMagazineSMGM63
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
+    pocket2:
+    - CMUExpeditionStabilizer
+    - CMUExpeditionFieldDressing
 
 - type: entity
   parent: CMUExpeditionScavenger

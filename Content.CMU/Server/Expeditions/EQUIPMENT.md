@@ -21,10 +21,40 @@ Clothing does not change weapons, team, IFF identity or orders. Use the existing
 `cmu-expedition-orders` friendly/target actions to change affiliations. The default enemy is GOVFOR.
 Status reports include the applied outfit, supply transfers, flare use, vision decisions and bipod attempts.
 
+The default six-member `mixed` squad now includes a veteran rifleman, machine gunner, medic,
+breacher, rocketeer and scout. `patrol` and `defense` provide mobile and defensive combined-arms
+compositions. Individual role presets remain available. Faction outfits use native mobile armor
+for scouts, skirmishers, medics and rocketeers, and native heavier choices for support/breach roles
+where that faction has one. Clothing retains native protection and movement penalties.
+
+All fourteen kits have finite, role-sized ammunition reserves: most carry four primary magazines,
+assault/rich kits carry five, poor pistol kits carry three pistol magazines, machine gunners carry
+three spare boxes, and breachers carry 24 spare slugs. These are additional to loaded ammunition.
+Sidearms and their spare magazines occupy the utility pouch, leaving pack space for utilities and reserves.
+Support roles use logistics packs; medics use a medical pack and a second stabilizer in their pouch.
+Scouts, skirmishers, rocketeers, breachers, snipers and medics carry two smoke grenades.
+
+Starting supplies fit their native container grids: the five-slot ammo belt holds at most five
+magazines or shell handfuls; the large general pouch fits a normal pistol and small spare magazine.
+The 21-by-two pack grid holds each role's utilities, including the medic's larger supply list.
+Armor storage is available for later resupply but is not needed to fit a starting kit. Standard
+packs accept at most normal-sized items, so large rifles use suit storage when stowed; spare grid
+space does not override item-size limits or faction armor's native storage restrictions.
+
 ## Weapons and retention
 
+- Loaded rifles, SMGs, shotguns and machine guns remain preferred at ordinary room distances.
+  The sniper may draw its sidearm inside two metres. An empty primary can still yield to a loaded
+  backup immediately; after contact expires, the preferred reloadable primary is drawn again so
+  the normal reload behavior can restore it before the next engagement.
 - Native full auto is selected only when the gun supports it. AI volleys still limit rounds;
   chambering, recoil, skills, native fire delays and finite ammunition remain in force.
+- Visible contested fights use longer finite automatic volleys: up to 18 rounds in the open
+  and ten from a held angle, followed by a short reassessment. Distant unthreatened targets keep
+  ordinary bursts. Low ammunition and semi-automatic weapons retain their ordinary volley sizes.
+  Tracking a visible opponent through a burst pause no longer adds a second aim delay; a recently
+  seen opponent reappearing at the angle can interrupt that pause. Lost sight still stops entity
+  targeting, and the existing brief muzzle-flash response only uses its observed fixed position.
 - Native bipods deploy when stationary with a distant visible target and a safe lane. Their native
   deployment time and movement/turn interruption still apply. A deployment attempt is not proof of a brace.
 - Breachers prefer close range and use up to six shots per volley, subject to native pumping and fire rate.
@@ -67,6 +97,11 @@ blast clearance; the squad rocket cooldown remains 20 seconds. A blocked rockete
 short, reachable launch position within roughly three metres, without abandoning a covering commitment
 or chasing an unseen vehicle. Rifles can engage hulls but retain their native armor effectiveness.
 
+A currently visible shooter who recently wounded the rocketeer or a nearby squadmate is also a
+rocket opportunity. Infantry opportunities use the same bounded launch-position search and squad
+lane-clearing as vehicles. Launches still require the native six-metre maximum impact distance,
+minimum separation, clear backblast, friendly blast clearance and the existing squad cooldown.
+
 ## Sight and flares
 
 Target recognition requires geometric sight, smoke clearance and sufficient light (except within
@@ -81,12 +116,21 @@ Rockets and aimed sniper locks require a visible target. Walls, smoke and friend
 
 Every kit carries one native M94 pack containing eight real flares. Agents draw individual flares
 through native item-slot ejection, then ignite and throw them toward a dark contact or route,
-with a shared 30-second cooldown after a successful throw. Damage, a close rush, movement and blocked
-throws interrupt handling. Flares are consumed, and replacement flares must be found or shared.
+with a shared 30-second cooldown after a successful throw. Damage, a close rush and blocked
+throws interrupt handling. Safe movement can continue during preparation; the current throw lane
+and range are rechecked. The landing area rejects overlapping lit flares and friendly throws in
+preparation or flight, even when the distant objective itself is still dark. Walls separate coverage,
+and a flare near the end of its fade can be replaced. Flares remain finite inventory items.
+
+The active gun can fire during flare or grenade preparation when native one-handed use permits it.
+Cover moves, flanks and grenade approaches keep the rifle ready. Actual grenade handling retains its
+movement/damage interruption and hand requirements; two-handed-only guns cannot bypass their grip.
+Cancelled hand items retain cleanup ownership if native storage/drop is temporarily blocked.
 
 ## Resupply and communication
 
-Belts, the second-pocket pouch and backpacks are searched in that order for storage and consumption.
+Belts, both pocket pouches, armor storage and backpacks are searched in that order for storage and consumption.
+Directly equipped guns in any inventory slot are considered alongside held and stored weapons.
 Quiet, unordered agents collect useful reserves: six spare magazines per carried gun or 24 shells,
 two HE and two smoke grenades, eight fresh flares and one stored dressing. Packed flares count
 toward reserves; a replacement pack is collected only with two or fewer flares remaining. Sharing
@@ -94,8 +138,10 @@ loose flares or surplus packs retains at least two flares for the donor. Capacit
 may stop collection earlier; these are targets, not guaranteed inventory sizes. A full shotgun still
 recognizes compatible reserve shells. No ammunition or grenade is created by resupply behavior.
 
-Nearby accessible bags, dead bodies and crates can supply items. Living/critical inventories are
-excluded; opening crates uses native lock, weld and access checks. Retrieval uses an adjacent reachable
+Nearby accessible bags, dead bodies and crates can supply items. When all carried loaded guns and
+compatible reserves are exhausted, critical bodies can also supply useful weapons and ammunition.
+Recovery from critical condition cancels that permission. Healthy inventories remain excluded;
+opening crates uses native lock, weld and access checks. Retrieval uses an adjacent reachable
 position, has a five-second bound and interrupts for combat/orders. Loaded replacement expedition
 rocket tubes can be collected when the rocketeer has no loaded tube and has room.
 
@@ -146,7 +192,39 @@ still apply. A shotgun stops topping off once it has a live round and a visible 
 reloads immediately ready the rifle and resume a safe known target without a second aim delay;
 native weapon readiness, ammunition and fire-rate checks remain active.
 
+Held ranged corners can use a recent, locally observed position for a grenade attempt.
+The position is frozen in map coordinates and expires six seconds after observation;
+radio reports alone cannot authorize this throw. When the direct throw lane is blocked,
+the agent searches stances within three metres with a real clear throw lane, a ground
+route and no increase in sampled exposure. A wholly sheltered route can proceed without
+a shooter; an exposed route requires actual covering fire through approach and preparation.
+The action has a five-second bound and rechecks contact, route, support and explosive safety.
+If no suitable HE stance exists, a reachable landing on the near side can provide smoke.
+Melee contacts do not trigger this obscuring fallback. The grenade is primed only after
+the native throw succeeds; collision, friction and moving bodies still determine its real
+landing. The planner does not bend trajectories around walls or assume a ricochet.
+
 Manual verification (not run locally): empty a rifle and shotgun with compatible reserves,
 with and without contact. Check actual magazine/shell consumption, full quiet top-offs,
 single-shell combat reloads, prompt resumed fire, and recovery after damage, lost covering
 fire, occupied hands, a rush and an explicit order. Native insert delays must still be honored.
+
+Quiet loadout readiness selects reloadable empty carried guns, including stored backups, and partial
+tubes for finite native reloads, then restores normal weapon preference. Ammunition in directly equipped
+pockets or a hand is recognized. Full tubes do not start another insertion. Native pump weapons are
+cycled after firing; legacy open/empty chambers are handled conditionally, without invoking the RMC
+chamber's unrelated unique action. A live RMC reserve-chamber round counts as usable ammunition.
+
+All fourteen kits carry a finite M5 bayonet. An exhausted soldier threatened by a nearby faster
+pursuer, a fresh failed escape, or an attacker already landing contact hits can stop fleeing and
+select its best carried melee weapon. The final closing step stays within 1.5 metres of that decision
+and respects Hold, terrain and known danger. Native attack range, cooldown and obstruction still apply.
+Gaining ammunition or losing the nearby threat releases the knife hand and restores normal behavior.
+
+Self-treatment owns its hands before native unwielding finishes deleting the virtual grip.
+Preparation waits up to 0.6 seconds for a free hand and retains that ownership through the native
+healing callback, preventing weapon readiness from re-wielding between preparation and the dose.
+Blocked preparation releases the claim and backs off for one second. Native damage events marked
+non-interrupting, such as ongoing wound damage, do not count as fresh attacks. Actual hits, immediate
+hazards, loss of safe shelter and explicit orders can still interrupt treatment; a sound report alone
+cannot. Completion applies and consumes the actual dressing through the existing healing system.

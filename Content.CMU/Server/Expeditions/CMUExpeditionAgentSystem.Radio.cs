@@ -106,7 +106,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
         while (query.MoveNext(out var other, out var buddy))
         {
-            if (other == uid || !SameSquad(uid, agent, other, buddy) || HasComp<ActorComponent>(other) ||
+            if (other == uid || !CanShareContact(uid, agent, other, buddy) || HasComp<ActorComponent>(other) ||
                 !_mobs.IsAlive(other) || !RadioReady(other, out var receiver) ||
                 !TryComp<ActiveRadioComponent>(receiver, out var radio) || !radio.Channels.Contains(channel.ID) ||
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 40))
@@ -114,8 +114,12 @@ public sealed partial class CMUExpeditionAgentSystem
             var receive = new RadioReceiveAttemptEvent(channel, headset, receiver);
             RaiseLocalEvent(ref receive);
             RaiseLocalEvent(receiver, ref receive);
-            if (!receive.Cancelled)
+            if (!receive.Cancelled && AcceptOrderedContact(other, buddy, target) &&
+                AcceptSquadAssistance(other, buddy, uid, agent, target, position, now))
+            {
                 QueueContactReport(buddy, target, position, now);
+                ShareKnownDanger(agent, buddy, position, now);
+            }
         }
     }
 
@@ -124,10 +128,14 @@ public sealed partial class CMUExpeditionAgentSystem
         var source = args.RelayedEvent.MessageSource;
         if (source == ent.Owner || !_reports.TryGetValue(source, out var report) ||
             HasComp<ActorComponent>(ent) || !_mobs.IsAlive(ent) || !RadioReady(ent, out _) ||
-            !TryComp<CMUExpeditionAgentComponent>(source, out var sender) || !SameSquad(ent, ent.Comp, source, sender) ||
+            !TryComp<CMUExpeditionAgentComponent>(source, out var sender) || !CanShareContact(source, sender, ent, ent.Comp) ||
             !_transform.InRange(Transform(source).Coordinates, Transform(ent).Coordinates, 40))
             return;
+        if (!AcceptOrderedContact(ent, ent.Comp, report.Target) ||
+            !AcceptSquadAssistance(ent, ent.Comp, source, sender, report.Target, report.Position, report.Observed))
+            return;
         QueueContactReport(ent.Comp, report.Target, report.Position, report.Observed);
+        ShareKnownDanger(sender, ent.Comp, report.Position, report.Observed);
     }
 
     private static void QueueContactReport(CMUExpeditionAgentComponent agent, EntityUid target,

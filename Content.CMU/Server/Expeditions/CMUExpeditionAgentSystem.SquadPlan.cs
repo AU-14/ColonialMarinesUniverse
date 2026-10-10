@@ -66,6 +66,7 @@ public sealed partial class CMUExpeditionAgentSystem
                     plan.Members.FirstOrDefault(CanOrderSquadMember, plan.Members[0]));
             RefreshSquadPlan(plan, now);
         }
+        UpdateSquadOperations(now);
         _squadPlanMilliseconds = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
     }
 
@@ -134,10 +135,21 @@ public sealed partial class CMUExpeditionAgentSystem
             offset -= direction * (duty is CMUSquadDuty.Medic or CMUSquadDuty.Recover or CMUSquadDuty.RearGuard ? 3 : plan.Phase is "anti-rush" or "withdraw" ? 2 : 0);
             var world = _transform.ToMapCoordinates(anchor).Offset(offset);
             var point = _transform.ToCoordinates(anchor.EntityId, world);
-            if (TrySquadCoordinates(point, out point) && ValidOrderPoint(member, point))
-                agent.DutyPoint = point;
-            else
-                agent.DutyPoint = null;
+            var rear = _transform.ToCoordinates(anchor.EntityId,
+                _transform.ToMapCoordinates(anchor).Offset(-direction * (1 + index * 1.1f)));
+            agent.DutyPoint = null;
+            // A broad firing line may fall inside corridor walls. Fall back to staggered
+            // depth and nearby live ground instead of losing the defensive assignment.
+            foreach (var candidate in NearbySquadPositions(point, 1).Concat(NearbySquadPositions(rear, 2)))
+            {
+                if (!TrySquadCoordinates(candidate, out var usable) || !ValidOrderPoint(member, usable) ||
+                    KnownDangerCost(agent, usable) > 5 || Reserved(member, usable) ||
+                    local.Any(other => other != member && Comp<CMUExpeditionAgentComponent>(other).DutyPoint is { } assigned &&
+                        _transform.InRange(assigned, usable, 1.3f)))
+                    continue;
+                agent.DutyPoint = usable;
+                break;
+            }
         }
         foreach (var source in plan.Supplies.Where(pair => pair.Value.Until <= now || !Exists(pair.Key)).Select(pair => pair.Key).ToArray())
             plan.Supplies.Remove(source);
@@ -151,7 +163,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool FollowSquadDuty(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.Action != null || agent.PendingWeapon != null || agent.Treatment != null || agent.FlareItem != null ||
+        if (agent.HoldPosition || agent.Action != null || agent.PendingWeapon != null || agent.Treatment != null || agent.FlareItem != null ||
             agent.RushTarget != null || CommittedMovement(agent) || HasCoverCommitment(uid, agent, now) ||
             !OptionalDecisionReady(agent) || now < agent.NextDutyMove || agent.DutyPoint is not { } point ||
             agent.Home is not { } home || !_transform.InRange(home, point, agent.LeashRange) ||

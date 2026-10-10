@@ -15,6 +15,7 @@ public sealed partial class CMUExpeditionAgentSystem
 {
     private static readonly ProtoId<TagPrototype> FlareTag = "Flare";
     private static readonly ProtoId<TagPrototype> FlarePackTag = "CMFlarePack";
+    private readonly List<(EntityUid Flare, EntityCoordinates Point, TimeSpan Until)> _flareLandings = new();
 
     private bool IsFlare(EntityUid uid) => HasComp<ExpendableLightComponent>(uid) &&
         (_tags.HasTag(uid, FlareTag) || MetaData(uid).EntityPrototype is { } prototype &&
@@ -73,11 +74,18 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.FlareItem is { } item && Exists(item) && !HasComp<ActorComponent>(uid) &&
             _hands.IsHolding(uid, item, out _))
         {
-            if (!FreshFlare(item) || !Supplies(uid, out var bag) ||
-                !StoreOwnedItem(uid, item, bag))
-                _hands.TryDrop(uid, item);
+            if ((!FreshFlare(item) || !StoreSupply(uid, item)) && !_hands.TryDrop(uid, item))
+            {
+                // Native drop may be blocked during an interruption. Retain ownership
+                // so the offhand is retried once interaction becomes possible again.
+                agent.FlareCleanupPending = true;
+                agent.FlareDestination = null;
+                agent.VisionDecision = "flare-cleanup-blocked";
+                return;
+            }
         }
         agent.FlareItem = null;
+        agent.FlareCleanupPending = false;
         agent.FlareDestination = null;
         agent.RifleLoweredUntil = TimeSpan.Zero;
     }
@@ -86,16 +94,22 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (agent.FlareItem is { } item)
         {
+            if (agent.FlareCleanupPending)
+            {
+                CancelFlare(uid, agent);
+                return false;
+            }
             if (!Exists(item) || now >= agent.FlareUntil || agent.LastHit > agent.FlareStarted ||
                 agent.Action != null || agent.Treatment != null || agent.RushTarget != null ||
-                agent.FlareStartPosition is not { } start || !_transform.InRange(start, Transform(uid).Coordinates, 0.4f) ||
-                agent.FlareDestination is not { } point || !ClearLane(uid, Transform(uid).Coordinates, point, 0.3f))
+                agent.PendingWeapon != null || agent.ScavengeTarget != null || agent.WorkItem != null || agent.PreparingWork ||
+                agent.FlareDestination is not { } point ||
+                !_transform.InRange(Transform(uid).Coordinates, point, 7) || !GroundSafe(point) ||
+                FlareAreaCovered(uid, point) || !ClearLane(uid, Transform(uid).Coordinates, point, 0.3f))
             {
                 CancelFlare(uid, agent);
                 agent.NextFlare = now + TimeSpan.FromSeconds(5);
                 return false;
             }
-            _steering.Unregister(uid);
             if (now < agent.FlareReadyAt)
                 return true;
             if (!_hands.IsHolding(uid, item, out _))
@@ -105,6 +119,8 @@ public sealed partial class CMUExpeditionAgentSystem
                     CancelFlare(uid, agent);
                     return false;
                 }
+                if (_guns.TryGetGun(uid, out var heldGun))
+                    ActivateWeapon(uid, heldGun.Owner);
                 agent.FlareReadyAt = now + TimeSpan.FromSeconds(0.6);
                 return true;
             }
@@ -115,15 +131,19 @@ public sealed partial class CMUExpeditionAgentSystem
                 CancelFlare(uid, agent);
                 return false;
             }
-            _throwing.TryThrow(item, point, user: uid, compensateFriction: true);
-            agent.FlaresUsed++;
+            var thrown = _throwing.TryThrow(item, point, user: uid, compensateFriction: true);
+            if (thrown)
+            {
+                agent.FlaresUsed++;
+                _flareLandings.Add((item, point, now + TimeSpan.FromSeconds(3)));
+            }
             agent.FlareItem = null;
             CancelFlare(uid, agent);
             _nextLightSnapshot = TimeSpan.Zero;
-            DelaySquadFlares(uid, agent, now + TimeSpan.FromSeconds(30));
+            DelaySquadFlares(uid, agent, now + TimeSpan.FromSeconds(thrown ? 30 : 5));
             return true;
         }
-        if (now < agent.NextFlare || agent.Action != null || agent.PendingWeapon != null || agent.Treatment != null ||
+        if (now < agent.NextFlare || agent.UtilityCleanupItem != null || agent.Action != null || agent.PendingWeapon != null || agent.Treatment != null ||
             agent.WorkItem != null || agent.PreparingWork || agent.ScavengeTarget != null || agent.RushTarget != null ||
             agent.LastDamage >= agent.RetreatDamage || now - agent.LastHit < TimeSpan.FromSeconds(0.75) ||
             GrenadeDanger(Transform(uid).Coordinates) || HasCoverCommitment(uid, agent, now))
@@ -145,22 +165,65 @@ public sealed partial class CMUExpeditionAgentSystem
             delta = _transform.ToCoordinates(position.EntityId, ahead).Position - position.Position;
         }
         var throwAt = position.Offset(Vector2.Normalize(delta) * Math.Min(6, delta.Length()));
-        if (!GroundSafe(throwAt) || !ClearLane(uid, position, throwAt, 0.3f) || SmokeOccludes(position, throwAt))
+        // A distant dark objective may lie beyond an already lit landing spot. Check
+        // the actual throw area, including friendly throws still in preparation/flight.
+        if (!GroundSafe(throwAt) || FlareAreaCovered(uid, throwAt) ||
+            !ClearLane(uid, position, throwAt, 0.3f) || SmokeOccludes(position, throwAt))
             return false;
         CancelWork(uid, agent);
-        if (_guns.TryGetGun(uid, out var gun))
-            _wield.TryUnwield(gun.Owner, uid);
+        PrepareUtilityHand(uid);
         agent.FlareItem = flare;
+        agent.FlareCleanupPending = false;
         agent.FlareDestination = throwAt;
-        agent.FlareStartPosition = position;
         agent.FlareStarted = now;
         agent.FlareReadyAt = now + TimeSpan.FromSeconds(0.2);
         agent.FlareUntil = now + TimeSpan.FromSeconds(2);
         agent.RifleLoweredUntil = agent.FlareUntil;
         agent.VisionDecision = "preparing-flare";
-        _steering.Unregister(uid);
         DelaySquadFlares(uid, agent, agent.FlareUntil + TimeSpan.FromSeconds(1));
         return true;
+    }
+
+    private void PrepareUtilityHand(EntityUid uid)
+    {
+        // Only release a virtual grip when it occupies the hand needed for the item.
+        // Picking up into the offhand preserves the active gun and its native restrictions.
+        if (_hands.GetEmptyHandCount(uid) == 0 && _guns.TryGetGun(uid, out var gun))
+            _wield.TryUnwield(gun.Owner, uid);
+    }
+
+    private bool FlareAreaCovered(EntityUid uid, EntityCoordinates point)
+    {
+        var now = _timing.CurTime;
+        var map = _transform.ToMapCoordinates(point);
+        RefreshLightSnapshot();
+        if (_visionLights.TryGetValue(map.MapId, out var lights))
+        foreach (var light in lights)
+        {
+            if (!IsFlare(light) || !TryComp<ExpendableLightComponent>(light, out var flare) ||
+                !flare.Activated || flare.CurrentState == ExpendableLightState.Fading && flare.StateExpiryTime < 8 ||
+                _containers.IsEntityOrParentInContainer(light) ||
+                !TryComp(light, out TransformComponent? transform) || transform.MapID != map.MapId)
+                continue;
+            var radius = flare.CurrentState == ExpendableLightState.Fading
+                ? Math.Min(5, 1 + 6 * Math.Clamp(flare.StateExpiryTime / Math.Max(0.01f, (float) flare.FadeOutDuration.TotalSeconds), 0, 1))
+                : 5;
+            if (_transform.InRange(transform.Coordinates, point, radius) &&
+                SightLine(light, point, radius))
+                return true;
+        }
+        _flareLandings.RemoveAll(landing => landing.Until <= now || !Exists(landing.Flare));
+        foreach (var landing in _flareLandings)
+            if (_transform.InRange(landing.Point, point, 5) && ClearLane(uid, landing.Point, point, 0.1f))
+                return true;
+        var query = EntityQueryEnumerator<CMUExpeditionAgentComponent, TransformComponent>();
+        while (query.MoveNext(out var other, out var buddy, out var transform))
+            if (other != uid && transform.MapID == map.MapId && _mobs.IsAlive(other) && !HasComp<ActorComponent>(other) &&
+                IsFriendly(uid, other) && buddy.FlareItem != null && now < buddy.FlareUntil &&
+                buddy.FlareDestination is { } reserved && _transform.InRange(reserved, point, 5) &&
+                ClearLane(uid, reserved, point, 0.1f))
+                return true;
+        return false;
     }
 
     private void DelaySquadFlares(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan until)

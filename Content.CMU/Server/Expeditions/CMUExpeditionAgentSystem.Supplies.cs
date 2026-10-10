@@ -11,7 +11,7 @@ public sealed partial class CMUExpeditionAgentSystem
     private IEnumerable<StorageComponent> SupplyStores(EntityUid uid)
     {
         // Belt first: ready ammunition should not compete with a rifle for backpack space.
-        foreach (var slot in new[] { "belt", "pocket2", "back" })
+        foreach (var slot in new[] { "belt", "pocket2", "pocket1", "outerClothing", "back" })
             if (_inventory.TryGetSlotEntity(uid, slot, out var bag) && TryComp<StorageComponent>(bag, out var storage) &&
                 _scavengeStorage.CanInteract(uid, (bag.Value, storage)) && _scavengeRmcStorage.CanEject(bag.Value, uid, out _))
                 yield return storage;

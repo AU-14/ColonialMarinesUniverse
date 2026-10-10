@@ -14,10 +14,10 @@ public sealed partial class CMUExpeditionAgentSystem
     private bool HasGrenadeContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates target)
     {
         foreach (var hostile in ExpeditionHostiles(uid, agent))
-            if (_mobs.IsAlive(hostile) && _transform.InRange(Transform(hostile).Coordinates, target, 3) &&
-                Visible(uid, hostile, agent.DetectionRange))
+            if (_mobs.IsAlive(hostile) && Visible(uid, hostile, agent.DetectionRange) &&
+                _transform.InRange(Transform(hostile).Coordinates, target, 3))
                 return true;
-        return false;
+        return RememberedGrenadeContact(agent, target);
     }
 
     private EntityCoordinates? BlastPoint(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid grenade)

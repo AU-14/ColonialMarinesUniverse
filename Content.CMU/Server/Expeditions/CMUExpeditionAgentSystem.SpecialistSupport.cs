@@ -42,7 +42,8 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             var rocket = Comp<CMUExpeditionAgentComponent>(member);
             if (member == uid || !rocket.AntiVehicle || now < rocket.NextRocket || rocket.Target is not { } target ||
-                !ArmedVehicle(target) || !Visible(member, target, rocket.FireRange) || !HasReadyRocket(member) ||
+                !Visible(member, target, rocket.FireRange) || !HasReadyRocket(member) ||
+                !RocketOpportunity(member, rocket, target, Transform(target).Coordinates) ||
                 !_transform.InRange(start, Transform(member).Coordinates, 9))
                 continue;
             var muzzle = _transform.GetWorldPosition(member);

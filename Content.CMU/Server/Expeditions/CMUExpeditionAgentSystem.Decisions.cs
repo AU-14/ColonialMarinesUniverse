@@ -14,7 +14,33 @@ public sealed partial class CMUExpeditionAgentSystem
                 agent.DecisionHistory.Dequeue();
         }
         agent.DecisionOwner = owner;
+        agent.DecisionReason = reason;
+        agent.DecisionRevision++;
         agent.DecisionUntil = _timing.CurTime + TimeSpan.FromSeconds(seconds);
+    }
+
+    private void DescribeActivity(CMUExpeditionAgentComponent agent)
+    {
+        if (agent.Action is { } action)
+            Decision(agent, "utility", action.ToString());
+        else if (agent.PendingWeapon != null)
+            Decision(agent, "weapon", agent.WeaponDecision);
+        else if (agent.SpacingDestination != null)
+            Decision(agent, "spacing", agent.SpacingDecision);
+        else if (agent.Treatment != null)
+            Decision(agent, "medical", "self-treatment");
+        else if (agent.AimedWeapon != null)
+            Decision(agent, "aimed-weapon", "native-aim-in-progress");
+        else if (agent.FlareItem != null)
+            Decision(agent, "flare", "preparing-illumination");
+        else if (agent.WorkItem != null || agent.PreparingWork)
+            Decision(agent, "fortification", agent.FortificationDecision);
+        else if (agent.CoverDestination != null)
+            Decision(agent, "movement", agent.State.ToString());
+        else if (agent.OrderedDestination != null)
+            Decision(agent, "orders", agent.OrderBlocked ? "route-blocked" : "following-destination");
+        else
+            Decision(agent, agent.State.ToString(), agent.LastFireCheck);
     }
 
     // A productive burst owns optional decisions. Native firing, emergency evasion and
@@ -28,10 +54,12 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         }
         if (agent.Action != null || agent.Treatment != null || agent.PendingWeapon != null || agent.FlareItem != null ||
-            agent.State != CMUExpeditionAgentState.Engage || now >= agent.BurstEnd ||
+            agent.State != CMUExpeditionAgentState.Engage || agent.ShotsFired <= 0 || now >= agent.BurstEnd ||
             agent.ShotsFired >= VolleySize(agent) || !_guns.TryGetGun(uid, out var gun) || WeaponAmmo(gun) <= 0 ||
             !TryAimPoint(uid, agent, gun, out var aim) || !SafeShot(uid, agent, gun, aim))
             return false;
+        // Readiness runs later in ThinkCore. Claiming an unfired volley would skip the
+        // re-wield needed after drawing a primary or finishing a hand-based utility.
         Decision(agent, "fire", "productive-volley", 0.3);
         return true;
     }
@@ -82,6 +110,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.Courage = Math.Clamp(agent.BaseCourage.Value + doctrine.Courage - .5f, .1f, .95f);
         agent.Disposition = agent.Aggression >= .7f ? CMUExpeditionDisposition.Aggressive :
             agent.Aggression <= .35f ? CMUExpeditionDisposition.Cautious : CMUExpeditionDisposition.Steady;
+        agent.LearningLoaded = false;
         agent.PreferredFireRange = Math.Clamp(agent.BasePreferredRange.Value + doctrine.Range, 2, agent.FireRange - 1);
         agent.PositionCommitDuration = agent.BasePositionCommit.Value * doctrine.Commitment;
         Decision(agent, "doctrine", name);
