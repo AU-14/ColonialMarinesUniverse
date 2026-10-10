@@ -1675,6 +1675,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         session.MindId = resolvedMind;
         RefreshDroneSkills((linkedDrone, droneComp));
         AddEndControlAction((linkedDrone, session));
+        LendOperatorLanguages((linkedDrone, session));
 
         operatorComp.ControlledDrone = linkedDrone;
         operatorComp.Drone = linkedDrone;
@@ -2242,7 +2243,10 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             RemCompDeferred<CMURemotePilotingComponent>(operatorUid);
 
         if (droneExists)
+        {
+            ReturnOperatorLanguages(drone);
             RemCompDeferred<CMUDroneControlSessionComponent>(drone.Owner);
+        }
     }
 
     private void AddEndControlAction(Entity<CMUDroneControlSessionComponent> drone)
