@@ -28,13 +28,6 @@
     thrown:
       contact: Crush
       penetration: None
-  - type: MeleeDamageMultiplier
-    multiplier: 0
-    whitelist:
-      components:
-      - Xeno
-  - type: CMArmorPiercing
-    amount: 0
   - type: DisarmMalus
     malus: 0.2
   - type: Clothing
@@ -1013,10 +1006,6 @@
     count: 12
   - type: Wieldable
     wieldedInhandPrefix: spike_launcher
-  - type: GunRequiresWield
-  - type: WieldDelay
-    baseDelay: 0.45
-    preventFiring: true
   - type: WieldableSpeedModifiers
     base: 0.75
     light: 0.9
@@ -1202,7 +1191,6 @@
   - type: UniqueAction
   - type: Wieldable
     wieldedInhandPrefix: plasma_pistol
-  - type: GunRequiresWield
 - type: entity
   parent: BaseItem
   id: CMUYautjaPlasmaCarbine

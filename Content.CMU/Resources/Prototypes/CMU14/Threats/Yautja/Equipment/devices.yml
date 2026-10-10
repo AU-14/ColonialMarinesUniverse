@@ -646,13 +646,6 @@
       collection: CMUYautjaWristBladesMiss
     soundHitNonLiving:
       collection: CMUYautjaWristBladesHitDirt
-  - type: MeleeDamageMultiplier
-    multiplier: 0
-    whitelist:
-      components:
-      - Xeno
-  - type: CMArmorPiercing
-    amount: 0
   - type: DamageOtherOnHit
     damage:
       types:
@@ -700,13 +693,6 @@
       collection: CMUYautjaSwordMiss
     soundHitNonLiving:
       collection: CMUYautjaSwordHitDirt
-  - type: MeleeDamageMultiplier
-    multiplier: 0
-    whitelist:
-      components:
-      - Xeno
-  - type: CMArmorPiercing
-    amount: 0
   - type: DamageOtherOnHit
     damage:
       types:
@@ -748,13 +734,6 @@
         Blunt: 20
     soundHit:
       collection: CMUYautjaChainGauntletHit
-  - type: MeleeDamageMultiplier
-    multiplier: 0
-    whitelist:
-      components:
-      - Xeno
-  - type: CMArmorPiercing
-    amount: 0
   - type: StaminaDamageOnHit
     damage: 15
   - type: DamageImpactProfile
