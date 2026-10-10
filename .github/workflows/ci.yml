@@ -13,9 +13,10 @@ permissions:
   pull-requests: read
 
 concurrency:
-  # staging runs overlap instead of cancelling
-  group: ${{ github.ref == 'refs/heads/staging' && format('ci-{0}-{1}', github.ref, github.run_id) || format('ci-{0}', github.ref) }}
-  cancel-in-progress: true
+  # CMU14: only PR pushes supersede each other. every branch push and merge-queue run
+  # finishes, otherwise the next merge cancels it and nobody knows which merge broke master
+  group: ${{ github.event_name == 'pull_request' && format('ci-{0}', github.ref) || format('ci-{0}-{1}', github.ref, github.run_id) }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   DOTNET_VERSION: 10.0.x
@@ -210,8 +211,10 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: build
     # one instance of each shard at a time across overlapping staging runs
+    # CMU14: staging only. on master a third overlapping run would cancel the second one's
+    # waiting shards (github keeps one pending job per group), which is the gap we're closing
     concurrency:
-      group: ci-shard-${{ github.ref }}-${{ matrix.shard.name }}
+      group: ${{ github.ref == 'refs/heads/staging' && format('ci-shard-{0}-{1}', github.ref, matrix.shard.name) || format('ci-shard-{0}-{1}-{2}', github.ref, matrix.shard.name, github.run_id) }}
       cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 45
