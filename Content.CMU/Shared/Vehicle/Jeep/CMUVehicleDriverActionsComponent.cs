@@ -5,8 +5,9 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// Driver actions of an open vehicle: the hazard lights, the automatic turn signals, the horn and the
-/// headlight switch. Added to the vehicle the first time someone takes its driver's seat.
+/// Driver actions of an open vehicle: the hazard lights, the automatic turn signals, the horn, the
+/// headlight switch and taking the key out. Added to the vehicle the first time someone takes its
+/// driver's seat.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUVehicleDriverActionsComponent : Component
@@ -24,6 +25,9 @@ public sealed partial class CMUVehicleDriverActionsComponent : Component
     public EntProtoId AutoSignalsAction = "CMUActionJeepAutoSignals";
 
     [DataField]
+    public EntProtoId EjectKeyAction = "CMUActionJeepEjectKey";
+
+    [DataField]
     public EntityUid? HazardsActionEntity;
 
     [DataField]
@@ -34,6 +38,9 @@ public sealed partial class CMUVehicleDriverActionsComponent : Component
 
     [DataField]
     public EntityUid? AutoSignalsActionEntity;
+
+    [DataField]
+    public EntityUid? EjectKeyActionEntity;
 
     /// <summary>
     /// Both turn signals blink together while this is on.
@@ -53,3 +60,5 @@ public sealed partial class CMUVehicleHazardsActionEvent : InstantActionEvent;
 public sealed partial class CMUVehicleHornActionEvent : InstantActionEvent;
 
 public sealed partial class CMUVehicleAutoSignalsActionEvent : InstantActionEvent;
+
+public sealed partial class CMUVehicleEjectKeyActionEvent : InstantActionEvent;

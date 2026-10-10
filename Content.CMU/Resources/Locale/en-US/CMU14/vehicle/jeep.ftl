@@ -104,6 +104,6 @@ cmu-jeep-assembly-manual =
 
     {"["}bold]6. Fuel.[/bold] Open the fuel door on the right rear quarter and use the second fuel can on it.
 
-    {"["}bold]7. Key.[/bold] Put the key in the ignition. Without it the engine won't start, and taking it out stops it.
+    {"["}bold]7. Key.[/bold] Put the key in the ignition. Without it the engine won't start, and taking it out stops it. At the wheel, your key button pulls it out into your hand.
 
     {"["}bold]Driving.[/bold] Doors open let the crew in and out at once; over a shut door it takes a moment. The headlight switch cycles low beam, high beam and off. Lower the tailgate to load or unload a crate. On the medical jeep, drag a casualty onto the surgical bed over the lowered tailgate; the medic's seat faces the bed.

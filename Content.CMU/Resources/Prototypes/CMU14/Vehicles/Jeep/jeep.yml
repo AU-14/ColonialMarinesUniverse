@@ -666,7 +666,7 @@
   # A spray painter resprays the body in its chosen colour; see paint.swsl.
   - type: CMUVehiclePaint
     layers: [ base, damaged_frame, engine, hood, door_driver, door_passenger, tailgate, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, taillight_left, taillight_right, extinguisher, windshield, spare, rmc-wheels ]
-    overlayLayers: [ body, damaged_frame, door_driver, door_passenger, tailgate, taillight_left, taillight_right, hood, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, extinguisher, windshield, spare, wheels ]
+    overlayLayers: [ body, damaged_frame, door_driver, door_passenger, tailgate, taillight_left, taillight_right, hood, hood_raised, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, extinguisher, windshield, spare, wheels ]
   - type: RMCIgnoreGhostInteractionLimits
   - type: RequireProjectileTarget
     alwaysHitWhitelist:

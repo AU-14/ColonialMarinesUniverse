@@ -9,8 +9,9 @@ namespace Content.Client.CMU14.Vehicle;
 
 /// <summary>
 /// Shows a vehicle's paint and dirt: the paint shader on its painted layers, its overlay's and its
-/// mounted turret's, with the vehicle's colour and dirt. Only the art's paint pixels change colour;
-/// dirt falls on all of them. A clean vehicle in its factory paint has no shader at all.
+/// mounted turret's, with the vehicle's colour and dirt. Only the art's paint pixels change colour or
+/// get dirty. The shader stays on even while the vehicle is clean in its factory paint, since it is
+/// what draws those pixels opaque: their alpha carries how soon they get dirty.
 /// </summary>
 public sealed class CMUVehiclePaintVisualSystem : EntitySystem
 {
@@ -51,12 +52,6 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
         while (query.MoveNext(out var uid, out var paint, out var sprite))
         {
             var dirt = CompOrNull<CMUVehicleGrimeComponent>(uid)?.Dirt ?? 0f;
-            if (paint.Color == null && dirt <= 0f)
-            {
-                Unpaint((uid, paint));
-                continue;
-            }
-
             if (!_paints.TryGetValue(uid, out var entry))
             {
                 entry = (_prototypes.Index(PaintShader).InstanceUnique(), null, -1f);

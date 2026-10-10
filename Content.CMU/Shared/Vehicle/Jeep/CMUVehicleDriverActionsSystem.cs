@@ -1,5 +1,7 @@
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Actions;
+using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Popups;
 using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.Audio.Systems;
@@ -9,16 +11,18 @@ using Robust.Shared.Timing;
 namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// Gives an open vehicle's driver buttons for the hazard lights, the automatic turn signals, the horn
-/// and the headlight switch while they drive.
+/// Gives an open vehicle's driver buttons for the hazard lights, the automatic turn signals, the horn,
+/// the headlight switch and taking the key out of the ignition while they drive.
 /// The horn is the vehicle's own <see cref="VehicleSoundComponent.HornSound"/>, with its cooldown.
 /// </summary>
 public sealed class CMUVehicleDriverActionsSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private CMUJeepSystem _jeep = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
@@ -29,6 +33,7 @@ public sealed class CMUVehicleDriverActionsSystem : EntitySystem
         SubscribeLocalEvent<VehicleOperatorComponent, CMUVehicleHornActionEvent>(OnHorn);
         SubscribeLocalEvent<VehicleOperatorComponent, CMUVehicleHeadlightsActionEvent>(OnHeadlights);
         SubscribeLocalEvent<VehicleOperatorComponent, CMUVehicleAutoSignalsActionEvent>(OnAutoSignals);
+        SubscribeLocalEvent<VehicleOperatorComponent, CMUVehicleEjectKeyActionEvent>(OnEjectKey);
     }
 
     private void OnOperatorSet(Entity<CMUVehicleSeatsComponent> ent, ref VehicleOperatorSetEvent args)
@@ -51,6 +56,9 @@ public sealed class CMUVehicleDriverActionsSystem : EntitySystem
             _actions.AddAction(driver, ref actions.HeadlightsActionEntity, actions.HeadlightsAction);
             _jeep.RefreshHeadlightsAction(ent.Owner);
         }
+
+        if (HasComp<CMUVehicleIgnitionComponent>(ent))
+            _actions.AddAction(driver, ref actions.EjectKeyActionEntity, actions.EjectKeyAction);
     }
 
     private void OnShutdown(Entity<CMUVehicleDriverActionsComponent> ent, ref ComponentShutdown args)
@@ -68,14 +76,17 @@ public sealed class CMUVehicleDriverActionsSystem : EntitySystem
         _actions.RemoveAction(actions.HornActionEntity);
         _actions.RemoveAction(actions.HeadlightsActionEntity);
         _actions.RemoveAction(actions.AutoSignalsActionEntity);
+        _actions.RemoveAction(actions.EjectKeyActionEntity);
         QueueDel(actions.HazardsActionEntity);
         QueueDel(actions.HornActionEntity);
         QueueDel(actions.HeadlightsActionEntity);
         QueueDel(actions.AutoSignalsActionEntity);
+        QueueDel(actions.EjectKeyActionEntity);
         actions.HazardsActionEntity = null;
         actions.HornActionEntity = null;
         actions.HeadlightsActionEntity = null;
         actions.AutoSignalsActionEntity = null;
+        actions.EjectKeyActionEntity = null;
     }
 
     private void OnHazards(Entity<VehicleOperatorComponent> ent, ref CMUVehicleHazardsActionEvent args)
@@ -129,6 +140,28 @@ public sealed class CMUVehicleDriverActionsSystem : EntitySystem
 
         args.Handled = true;
         _jeep.CycleHeadlights((vehicle, lights), args.Performer);
+    }
+
+    /// <summary>
+    /// The driver pulls the key from the ignition into their hand, which stops the engine.
+    /// </summary>
+    private void OnEjectKey(Entity<VehicleOperatorComponent> ent, ref CMUVehicleEjectKeyActionEvent args)
+    {
+        if (args.Handled ||
+            !TryGetDriven(ent, args.Performer, out var vehicle, out _) ||
+            !TryComp(vehicle, out CMUVehicleIgnitionComponent? ignition))
+        {
+            return;
+        }
+
+        args.Handled = true;
+        if (!ignition.KeySlot.HasItem)
+        {
+            _popup.PopupClient(Loc.GetString("cmu-vehicle-ignition-examine-no-key"), vehicle, args.Performer);
+            return;
+        }
+
+        _itemSlots.TryEjectToHands(vehicle, ignition.KeySlot, args.Performer, true);
     }
 
     private bool TryGetDriven(

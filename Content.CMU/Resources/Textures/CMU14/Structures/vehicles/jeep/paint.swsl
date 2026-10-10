@@ -1,25 +1,45 @@
 // Repaints a jeep layer in any colour and dirties it. The jeep generator writes its paint pixels with
-// alpha 254 (253 where mud is splashed over the paint); everything else is opaque and keeps its own
-// colours. A paint pixel keeps its shading: its brightness relative to the olive the art was drawn in
-// scales the new colour, so the jeep's lips, faces, seams and outlines all carry over. Dirt falls on
-// every pixel as dust in blotches, growing with how dirty the jeep is; the low, mud-splashed bodywork
-// cakes with mud first. Lit like the sprite.
+// alpha just under 255 (PAINT_ALPHA - 2 * dirt level - mud in jeep_pixel_art.py); everything else is
+// opaque and keeps its own colours. A paint pixel keeps its shading: its brightness relative to the
+// olive the art was drawn in scales the new colour, so the jeep's lips, faces, seams and outlines all
+// carry over. The art's dirt level says how soon the pixel gets dirty: the sills, wheel arches, the
+// panels behind the wheels and the bumpers first, the upper body barely. Dirt spreads from there in
+// soft patches, dark wet mud where it is thickest and lighter dust at its edges. The windshield's glass
+// (alpha 78, streaks 150, less its own dust level) dusts over the same way, a film that clouds it,
+// thickest low on the panes and clear where the wipers sweep. Lit like the sprite. The engine samples
+// textures and takes colour uniforms in linear light, so the colours written here are sRGB, converted.
 
 uniform highp vec4 paint;       // the chosen colour
 uniform highp float painted;    // 1 when the jeep has been resprayed, else it keeps its factory olive
 uniform highp vec4 base;        // the olive "top" tone the art was drawn in
 uniform highp vec4 mud;         // the mud splashed on the low bodywork
-uniform highp float dirt;       // 0 clean to 1 caked
+uniform highp float dirt;       // 0 clean to 1 as dirty as it gets
 
 highp float hash(highp vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
 }
 
+// Smoothly interpolated hash, for tones that drift across the body.
+highp float noise(highp vec2 p) {
+    highp vec2 i = floor(p);
+    highp vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), f.x),
+               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+
+highp vec3 srgb(highp vec3 c) {
+    return zFromSrgb(vec4(c, 1.0)).rgb;
+}
+
 void fragment() {
     highp vec4 texel = zTexture(UV);
     highp float mark = floor(texel.a * 255.0 + 0.5);
-    highp float paintPixel = step(252.5, mark) * step(mark, 254.5);
-    highp float muddy = step(252.5, mark) * step(mark, 253.5);
+    highp float paintPixel = step(238.5, mark) * step(mark, 254.5);
+    highp float code = (254.0 - mark) * paintPixel;
+    highp float muddy = mod(code, 2.0) * paintPixel;
+    // 0 gets dirty first, 1 last.
+    highp float soon = floor(code / 2.0) / 7.0;
 
     highp float shade = zGrayscale(texel.rgb) / max(zGrayscale(base.rgb), 0.001);
     // Any colour goes, black included: a touch of the art's own light and shadow is added on top,
@@ -31,15 +51,24 @@ void fragment() {
     col = mix(col, mud.rgb, muddy / 3.0);
     col = mix(texel.rgb, col, paintPixel * painted);
 
-    // Dust in blotches a few pixels across, with a grain; mud on the low bodywork first.
-    highp vec2 px = floor(UV / TEXTURE_PIXEL_SIZE);
-    highp float n = hash(floor(px / 3.0)) * 0.65 + hash(px) * 0.35;
-    highp float dusty = step(n, dirt * 1.1) * step(0.001, dirt);
-    highp float caked = muddy * step(n, dirt * 1.7) * step(0.001, dirt);
-    highp vec3 dust = vec3(0.62, 0.55, 0.42) * clamp(shade, 0.55, 1.15);
-    highp vec3 mudCol = vec3(0.34, 0.27, 0.18) * clamp(shade, 0.6, 1.1);
-    col = mix(col, dust, dusty * (0.35 + 0.3 * dirt));
-    col = mix(col, mudCol, caked * 0.7);
+    highp float amount = clamp((dirt * 0.95 - soon) / 0.25, 0.0, 1.0) * paintPixel * step(0.001, dirt);
+    // The tone drifts over the frame, not the atlas, so a state's frames and its layers share it.
+    highp vec2 px = floor(UV2 * 96.0);
+    highp float drift = (noise(px / 7.0) - 0.5) * 0.4;
+    highp float tone = clamp(soon + drift, 0.0, 1.0);
+    highp vec3 grime = mix(srgb(vec3(0.20, 0.16, 0.11)), srgb(vec3(0.50, 0.44, 0.33)), tone) * clamp(shade, 0.65, 1.1);
+    col = mix(col, grime, amount * mix(0.8, 0.3, soon));
 
-    COLOR = vec4(col, mix(texel.a, 1.0, paintPixel));
+    // A streak is told from the damage overlay's alphas by its colour.
+    highp float tint = step(70.5, mark) * step(mark, 78.5);
+    highp float streak = step(142.5, mark) * step(mark, 150.5) *
+        step(distance(texel.rgb, srgb(vec3(232.0, 244.0, 242.0) / 255.0)), 0.03);
+    highp float glass = max(tint, streak);
+    highp float glassSoon = (tint * (78.0 - mark) + streak * (150.0 - mark)) / 7.0;
+    highp float film = clamp((dirt * 0.95 - glassSoon) / 0.25, 0.0, 1.0) * glass * step(0.001, dirt);
+    highp vec3 dust = mix(srgb(vec3(0.40, 0.34, 0.26)), srgb(vec3(0.58, 0.52, 0.40)), clamp(glassSoon + drift, 0.0, 1.0));
+    col = mix(col, dust, film * 0.7);
+
+    highp float alpha = mix(texel.a, 1.0, paintPixel);
+    COLOR = vec4(col, mix(alpha, max(alpha, 0.85), film * 0.8));
 }

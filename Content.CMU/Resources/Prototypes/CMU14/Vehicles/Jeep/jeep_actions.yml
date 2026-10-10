@@ -56,6 +56,24 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
 
+# Pulls the key from the ignition into the driver's hand, which stops the engine.
+- type: entity
+  id: CMUActionJeepEjectKey
+  parent: BaseAction
+  name: Take out the key
+  description: Pull the key from the ignition into your hand. The engine stops without it.
+  components:
+  - type: InstantAction
+    event: !type:CMUVehicleEjectKeyActionEvent
+  - type: Action
+    itemIconStyle: BigAction
+    useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Misc/vehicle_key.rsi
+      state: key
+      map: ["enum.ActionVisuals.Icon"]
+
 # One switch for the headlights: off, low beam, high beam, off. The icon shows where it is; there
 # is no toggled icon layer, which would hide it.
 - type: entity

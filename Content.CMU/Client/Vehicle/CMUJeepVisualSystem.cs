@@ -84,6 +84,15 @@ public sealed class CMUJeepVisualSystem : EntitySystem
         ["wheels"] = [Direction.East, Direction.West],
     };
 
+    // The panel beside a seat: swung open or taken off, more of the seat shows, all of which takes
+    // clicks and outlines (click_seat_<id>_open, seat_<id>_open_outline).
+    private static readonly Dictionary<string, string> SeatPanels = new()
+    {
+        ["seat_driver"] = CMUJeepSystem.DriverDoor,
+        ["seat_passenger"] = CMUJeepSystem.PassengerDoor,
+        ["seat_bed"] = CMUJeepSystem.Tailgate,
+    };
+
     // Part outlines are tinted like the standard hover outline: green in reach, red out of reach.
     private static readonly Color InReachColor = new(0f, 1f, 0f, 0.6f);
     private static readonly Color OutOfReachColor = new(1f, 0f, 0f, 0.6f);
@@ -208,7 +217,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
                 var outline = hovered is { } h &&
                               TryComp(h, out CMUVehiclePartComponent? hoveredPart) &&
                               hoveredPart.Vehicle == uid
-                    ? OutlineState(hoveredPart, jeep)
+                    ? OutlineState(hoveredPart, jeep, SeatOpened(uid, jeep, hoveredPart.Part))
                     : null;
 
                 if (outline != null)
@@ -237,7 +246,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             if (vehicleSprite.BaseRSI is { } rsi && sprite[mask].ActualRsi != rsi)
                 _sprite.LayerSetRsi((uid, sprite), mask, rsi);
 
-            SetState((uid, sprite), "mask", MaskState(part, jeep));
+            SetState((uid, sprite), "mask", MaskState(part, jeep, SeatOpened(vehicle, jeep, part.Part)));
 
             // A hidden mask drops out of the click test, so in combat mode attacks and aimed shots land
             // on the jeep itself. An empty slot's mask shows, a faint ghost of what goes there, only
@@ -339,7 +348,17 @@ public sealed class CMUJeepVisualSystem : EntitySystem
         return state.EndsWith("_0") || state.EndsWith("_1") ? $"{state[..^2]}_overlay{state[^2..]}" : $"{state}_overlay";
     }
 
-    private static string MaskState(CMUVehiclePartComponent part, CMUJeepComponent jeep)
+    /// <summary>
+    /// Whether a seat's door or tailgate is open or off, showing more of it.
+    /// </summary>
+    private bool SeatOpened(EntityUid vehicle, CMUJeepComponent jeep, string part)
+    {
+        return SeatPanels.TryGetValue(part, out var panel) &&
+               CMUJeepSystem.HasPart(jeep, panel) &&
+               (CMUJeepSystem.GetPanelFlag(jeep, panel) || !_jeepSystem.IsPanelFitted(vehicle, jeep, panel));
+    }
+
+    private static string MaskState(CMUVehiclePartComponent part, CMUJeepComponent jeep, bool seatOpened)
     {
         return part.Part switch
         {
@@ -349,6 +368,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             CMUJeepSystem.DriverDoor or CMUJeepSystem.PassengerDoor or CMUJeepSystem.Tailgate =>
                 CMUJeepSystem.GetPanelFlag(jeep, part.Part) ? $"click_{part.Part}_open" : $"click_{part.Part}_closed",
             "shovel" or "axe" when jeep.DriverDoorOpen => $"click_{part.Part}_open",
+            var id when seatOpened => $"click_{id}_open",
             var id => $"click_{id}",
         };
     }
@@ -369,7 +389,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
         return (uint) ((over ? 2 + JeepLayers.Length : 2) + index);
     }
 
-    private static string OutlineState(CMUVehiclePartComponent part, CMUJeepComponent jeep)
+    private static string OutlineState(CMUVehiclePartComponent part, CMUJeepComponent jeep, bool seatOpened)
     {
         return part.Part switch
         {
@@ -379,6 +399,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             CMUJeepSystem.DriverDoor or CMUJeepSystem.PassengerDoor or CMUJeepSystem.Tailgate =>
                 CMUJeepSystem.GetPanelFlag(jeep, part.Part) ? $"{part.Part}_open_outline" : $"{part.Part}_outline",
             "shovel" or "axe" when jeep.DriverDoorOpen => $"{part.Part}_open_outline",
+            var id when seatOpened => $"{id}_open_outline",
             var id => $"{id}_outline",
         };
     }

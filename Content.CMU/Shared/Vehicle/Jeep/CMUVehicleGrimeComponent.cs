@@ -5,7 +5,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// Dirt a vehicle picks up as it drives, fastest off-road, shown as dust and mud through its paint
+/// Dirt a vehicle picks up as it drives, fastest off-road, shown as grime and mud through its paint
 /// shader. Blood lands on it as splats stored with its crayon drawings: from riders' wounds and from
 /// whoever it runs down. Space cleaner, soap or a wet mop takes dirt, blood and crayon off.
 /// </summary>
@@ -25,7 +25,7 @@ public sealed partial class CMUVehicleGrimeComponent : Component
     /// Dirt per tile driven on bare ground; paved ground outdoors and floors indoors give less.
     /// </summary>
     [DataField]
-    public float DirtPerTile = 0.004f;
+    public float DirtPerTile = 0.001f;
 
     [DataField]
     public float PavedFactor = 0.35f;
