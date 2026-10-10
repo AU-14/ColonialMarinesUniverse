@@ -85,7 +85,7 @@ namespace Content.Tests.Shared.Alert
             var proto = (YamlMappingNode) rootNode[0];
             var serMan = IoCManager.Resolve<ISerializationManager>();
 
-            return serMan.Read<AlertPrototype>(new MappingDataNode(proto));
+            return serMan.Read<AlertPrototype>(new MappingDataNode(proto), notNullableOverride: true);
         }
     }
 }

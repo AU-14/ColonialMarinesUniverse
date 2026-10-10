@@ -22,7 +22,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Server.CMU14.DroneOperator;
 
 /// <summary>Alternate fuels remain usable, but stress the drone and rupture when its chassis is wrecked.</summary>
-public sealed class CMUFlamerDroneHazardSystem : EntitySystem
+public sealed partial class CMUFlamerDroneHazardSystem : EntitySystem
 {
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;

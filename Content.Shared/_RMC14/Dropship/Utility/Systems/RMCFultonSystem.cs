@@ -67,26 +67,26 @@ public sealed partial class RMCFultonSystem : EntitySystem
 
         if (_mobState.IsAlive(target) || _mobState.IsCritical(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fulton-not-dead", ("fulton", used), ("target", target)), target, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fulton-not-dead", ("fulton", used), ("target", target)), target, user);
             return;
         }
 
         if (HasComp<PerishableComponent>(target) && !_rotting.IsRotten(target) ||
             HasComp<RMCRevivableComponent>(target) && !_unrevivable.IsUnrevivable(target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fulton-not-unrevivable", ("fulton", used), ("target", target)), target, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fulton-not-unrevivable", ("fulton", used), ("target", target)), target, user);
             return;
         }
 
         if (!_rmcPlanet.IsOnPlanet(target.ToCoordinates()))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fulton-not-planet", ("fulton", used)), target, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fulton-not-planet", ("fulton", used)), target, user);
             return;
         }
 
         if (!_area.CanFulton(target.ToCoordinates()))
         {
-            _popup.PopupClient(Loc.GetString("rmc-fulton-underground", ("fulton", used)), target, user);
+            _popup.PopupEntity(Loc.GetString("rmc-fulton-underground", ("fulton", used)), target, user);
             return;
         }
 
@@ -98,7 +98,7 @@ public sealed partial class RMCFultonSystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-fulton-attach-start-self", ("fulton", used), ("target", target));
             var othersMsg = Loc.GetString("rmc-fulton-attach-start-others", ("user", user), ("fulton", used), ("target", target));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
         }
     }
 

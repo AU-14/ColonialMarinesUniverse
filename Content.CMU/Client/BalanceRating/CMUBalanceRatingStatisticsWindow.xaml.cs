@@ -41,7 +41,7 @@ public sealed partial class CMUBalanceRatingStatisticsWindow : DefaultWindow
 
     private void RefreshRows()
     {
-        StatisticsGrid.DisposeAllChildren();
+        StatisticsGrid.ReleaseChildren();
         AddHeaders();
 
         var query = Search.Text.Trim();

@@ -14,7 +14,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Medical.CPR;
 
-public sealed class CMUCPRMaskSystem : EntitySystem
+public sealed partial class CMUCPRMaskSystem : EntitySystem
 {
     [Dependency] private FoldableSystem _foldable = default!;
     [Dependency] private InventorySystem _inventory = default!;

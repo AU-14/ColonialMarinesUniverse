@@ -654,6 +654,6 @@ public sealed partial class FaxSystem : EntitySystem
     private void NotifyAdmins(string faxName, EntityUid faxReceiver)
     {
         _chat.SendAdminAnnouncement(Loc.GetString("fax-machine-chat-notify", ("fax", faxName), ("faxReceiver", ToPrettyString(faxReceiver))));
-        _audioSystem.PlayGlobal("/Audio/Machines/high_tech_confirm.ogg", Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false, AudioParams.Default.AddVolume(-8f));
+        _audioSystem.PlayGlobal(new ResolvedPathSpecifier("/Audio/Machines/high_tech_confirm.ogg"), Filter.Empty().AddPlayers(_adminManager.ActiveAdmins), false, AudioParams.Default.AddVolume(-8f));
     }
 }

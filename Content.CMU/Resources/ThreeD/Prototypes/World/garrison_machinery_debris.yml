@@ -1,0 +1,2908 @@
+# Canonical editable drafts; see SOURCES_MACHINERY_DEBRIS.md.
+- type: cmu3DModel
+  id: CMU3DRMCMachinePropBig1
+  label: Industrial machinery 1
+  status: draft
+  sourcePrototypes:
+  - RMCMachinePropBig1
+  description: Source-specific industrial cabinet with separate grilles, fan discs, controls and service panels. Straight
+    ducts and circular housings use capped cylinders; hidden construction and physical height are inferred. Source
+    animation is not implemented.
+  referencePrototype: RMCMachinePropBig1
+  referenceRsi: /Textures/_RMC14/Structures/hybrisa_machine_props.rsi
+  referenceState: buildingventbig1
+  sourceDirections: 1
+  parts:
+  - label: cast equipment cabinet
+    min: -0.42000, -0.19200, 0.04920
+    max: 0.36000, 0.16200, 0.86920
+    color: '#676B66'
+  - label: front recessed panel
+    min: -0.36500, -0.21180, 0.13120
+    max: 0.30500, -0.19020, 0.79540
+    color: '#454B46'
+  - label: vertical frame
+    min: -0.40700, -0.22140, 0.06560
+    max: -0.36300, -0.18900, 0.85280
+    color: '#83867D'
+  - label: vertical frame
+    min: 0.30300, -0.22140, 0.06560
+    max: 0.34700, -0.18900, 0.85280
+    color: '#83867D'
+  - label: bottom plinth
+    min: -0.44000, -0.21000, 0.00000
+    max: 0.38000, 0.17400, 0.07380
+    color: '#292E29'
+  - label: side bracket
+    min: -0.44500, -0.11400, 0.33620
+    max: -0.39500, 0.06600, 0.48380
+    color: '#454B46'
+  - label: side bracket
+    min: 0.33500, -0.11400, 0.33620
+    max: 0.38500, 0.06600, 0.48380
+    color: '#454B46'
+  - label: straight exhaust duct
+    min: -0.17500, -0.16900, 0.84460
+    max: 0.11500, 0.12100, 1.36940
+    color: '#292E29'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.19500, -0.18900, 0.86100
+    max: 0.13500, 0.14100, 0.89790
+    color: '#454B46'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.19500, -0.18900, 1.01680
+    max: 0.13500, 0.14100, 1.05370
+    color: '#454B46'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.19500, -0.18900, 1.17260
+    max: 0.13500, 0.14100, 1.20950
+    color: '#454B46'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.19500, -0.18900, 1.32840
+    max: 0.13500, 0.14100, 1.36530
+    color: '#454B46'
+    shape: CylinderZ
+  - label: overhead exhaust hood
+    min: -0.29000, -0.16800, 1.33660
+    max: 0.23000, 0.14400, 1.59080
+    color: '#454B46'
+  - label: hood front lip
+    min: -0.30000, -0.18000, 1.51700
+    max: 0.24000, -0.15600, 1.58260
+    color: '#83867D'
+  - label: hood inlet shadow
+    min: -0.22000, -0.17640, 1.36120
+    max: 0.16000, -0.16740, 1.50060
+    color: '#1C211D'
+  - label: hood roof seam
+    min: -0.22400, -0.13200, 1.58670
+    max: -0.19600, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: -0.13400, -0.13200, 1.58670
+    max: -0.10600, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: -0.04400, -0.13200, 1.58670
+    max: -0.01600, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: 0.04600, -0.13200, 1.58670
+    max: 0.07400, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: 0.13600, -0.13200, 1.58670
+    max: 0.16400, 0.11400, 1.60146
+    color: '#676B66'
+  - label: circular fan housing
+    min: -0.33000, -0.24960, 0.32920
+    max: -0.07000, -0.20160, 0.58920
+    color: '#83867D'
+    shape: CylinderY
+  - label: recessed fan grille
+    min: -0.31570, -0.25770, 0.34350
+    max: -0.08430, -0.24870, 0.57490
+    color: '#292E29'
+    shape: CylinderY
+  - label: fan guard vertical
+    min: -0.28700, -0.26100, 0.38330
+    max: -0.26900, -0.25440, 0.53510
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: -0.29256, -0.26220, 0.38786
+    max: -0.10744, -0.25560, 0.40262
+    color: '#676B66'
+  - label: fan guard vertical
+    min: -0.23500, -0.26100, 0.36624
+    max: -0.21700, -0.25440, 0.55216
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: -0.31336, -0.26220, 0.43050
+    max: -0.08664, -0.25560, 0.44526
+    color: '#676B66'
+  - label: fan guard vertical
+    min: -0.18300, -0.26100, 0.36624
+    max: -0.16500, -0.25440, 0.55216
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: -0.31336, -0.26220, 0.47314
+    max: -0.08664, -0.25560, 0.48790
+    color: '#676B66'
+  - label: fan guard vertical
+    min: -0.13100, -0.26100, 0.38330
+    max: -0.11300, -0.25440, 0.53510
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: -0.29256, -0.26220, 0.51578
+    max: -0.10744, -0.25560, 0.53054
+    color: '#676B66'
+  - label: fan center hub
+    min: -0.23000, -0.27300, 0.42920
+    max: -0.17000, -0.26340, 0.48920
+    color: '#83867D'
+    shape: CylinderY
+  - label: circular fan housing
+    min: 0.01000, -0.24960, 0.32920
+    max: 0.27000, -0.20160, 0.58920
+    color: '#83867D'
+    shape: CylinderY
+  - label: recessed fan grille
+    min: 0.02430, -0.25770, 0.34350
+    max: 0.25570, -0.24870, 0.57490
+    color: '#292E29'
+    shape: CylinderY
+  - label: fan guard vertical
+    min: 0.05300, -0.26100, 0.38330
+    max: 0.07100, -0.25440, 0.53510
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.04744, -0.26220, 0.38786
+    max: 0.23256, -0.25560, 0.40262
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.10500, -0.26100, 0.36624
+    max: 0.12300, -0.25440, 0.55216
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.02664, -0.26220, 0.43050
+    max: 0.25336, -0.25560, 0.44526
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.15700, -0.26100, 0.36624
+    max: 0.17500, -0.25440, 0.55216
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.02664, -0.26220, 0.47314
+    max: 0.25336, -0.25560, 0.48790
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.20900, -0.26100, 0.38330
+    max: 0.22700, -0.25440, 0.53510
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.04744, -0.26220, 0.51578
+    max: 0.23256, -0.25560, 0.53054
+    color: '#676B66'
+  - label: fan center hub
+    min: 0.11000, -0.27300, 0.42920
+    max: 0.17000, -0.26340, 0.48920
+    color: '#83867D'
+    shape: CylinderY
+  - label: service latch
+    min: -0.24000, -0.22800, 0.72160
+    max: -0.16000, -0.21000, 0.77080
+    color: '#83867D'
+  - label: service latch
+    min: 0.10000, -0.22800, 0.72160
+    max: 0.18000, -0.21000, 0.77080
+    color: '#83867D'
+  - label: indicator socket
+    min: -0.21100, -0.23160, 0.14760
+    max: -0.13900, -0.21060, 0.22140
+    color: '#1C211D'
+  - label: indicator lens
+    min: -0.19400, -0.23580, 0.16318
+    max: -0.15600, -0.23040, 0.20582
+    color: '#B9A344'
+  - label: indicator socket
+    min: -0.06600, -0.23160, 0.14760
+    max: 0.00600, -0.21060, 0.22140
+    color: '#1C211D'
+  - label: indicator lens
+    min: -0.04900, -0.23580, 0.16318
+    max: -0.01100, -0.23040, 0.20582
+    color: '#AF2023'
+  - label: indicator socket
+    min: 0.07900, -0.23160, 0.14760
+    max: 0.15100, -0.21060, 0.22140
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.09600, -0.23580, 0.16318
+    max: 0.13400, -0.23040, 0.20582
+    color: '#A8A236'
+  - label: indicator socket
+    min: -0.30600, -0.23160, 0.76670
+    max: -0.23400, -0.21060, 0.84050
+    color: '#1C211D'
+  - label: indicator lens
+    min: -0.28900, -0.23580, 0.78228
+    max: -0.25100, -0.23040, 0.82492
+    color: '#B7A948'
+  - label: indicator socket
+    min: 0.17400, -0.23160, 0.76670
+    max: 0.24600, -0.21060, 0.84050
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.19100, -0.23580, 0.78228
+    max: 0.22900, -0.23040, 0.82492
+    color: '#A92830'
+- type: cmu3DModel
+  id: CMU3DRMCMachinePropBig10
+  label: Industrial machinery 10
+  status: draft
+  sourcePrototypes:
+  - RMCMachinePropBig10
+  description: Source-specific industrial cabinet with separate grilles, fan discs, controls and service panels. Straight
+    ducts and circular housings use capped cylinders; hidden construction and physical height are inferred. Source
+    animation is not implemented.
+  referencePrototype: RMCMachinePropBig10
+  referenceRsi: /Textures/_RMC14/Structures/hybrisa_machine_props.rsi
+  referenceState: buildingventbig10
+  sourceDirections: 1
+  parts:
+  - label: cast equipment cabinet
+    min: -0.38000, -0.19200, 0.04920
+    max: 0.32000, 0.16200, 0.86920
+    color: '#676B66'
+  - label: front recessed panel
+    min: -0.32500, -0.21180, 0.13120
+    max: 0.26500, -0.19020, 0.79540
+    color: '#454B46'
+  - label: vertical frame
+    min: -0.36700, -0.22140, 0.06560
+    max: -0.32300, -0.18900, 0.85280
+    color: '#83867D'
+  - label: vertical frame
+    min: 0.26300, -0.22140, 0.06560
+    max: 0.30700, -0.18900, 0.85280
+    color: '#83867D'
+  - label: bottom plinth
+    min: -0.40000, -0.21000, 0.00000
+    max: 0.34000, 0.17400, 0.07380
+    color: '#292E29'
+  - label: side bracket
+    min: -0.40500, -0.11400, 0.33620
+    max: -0.35500, 0.06600, 0.48380
+    color: '#454B46'
+  - label: side bracket
+    min: 0.29500, -0.11400, 0.33620
+    max: 0.34500, 0.06600, 0.48380
+    color: '#454B46'
+  - label: straight exhaust duct
+    min: -0.17500, -0.16900, 0.84460
+    max: 0.11500, 0.12100, 1.36940
+    color: '#292E29'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.19500, -0.18900, 0.86100
+    max: 0.13500, 0.14100, 0.89790
+    color: '#454B46'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.19500, -0.18900, 1.01680
+    max: 0.13500, 0.14100, 1.05370
+    color: '#454B46'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.19500, -0.18900, 1.17260
+    max: 0.13500, 0.14100, 1.20950
+    color: '#454B46'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.19500, -0.18900, 1.32840
+    max: 0.13500, 0.14100, 1.36530
+    color: '#454B46'
+    shape: CylinderZ
+  - label: overhead exhaust hood
+    min: -0.29000, -0.16800, 1.33660
+    max: 0.23000, 0.14400, 1.59080
+    color: '#454B46'
+  - label: hood front lip
+    min: -0.30000, -0.18000, 1.51700
+    max: 0.24000, -0.15600, 1.58260
+    color: '#83867D'
+  - label: hood inlet shadow
+    min: -0.22000, -0.17640, 1.36120
+    max: 0.16000, -0.16740, 1.50060
+    color: '#1C211D'
+  - label: hood roof seam
+    min: -0.22400, -0.13200, 1.58670
+    max: -0.19600, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: -0.13400, -0.13200, 1.58670
+    max: -0.10600, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: -0.04400, -0.13200, 1.58670
+    max: -0.01600, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: 0.04600, -0.13200, 1.58670
+    max: 0.07400, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: 0.13600, -0.13200, 1.58670
+    max: 0.16400, 0.11400, 1.60146
+    color: '#676B66'
+  - label: dark louvre recess
+    min: -0.28500, -0.22800, 0.30340
+    max: 0.22500, -0.21000, 0.63140
+    color: '#1C211D'
+  - label: horizontal louvre blade
+    min: -0.26000, -0.24900, 0.32308
+    max: 0.20000, -0.22620, 0.34670
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: -0.26000, -0.24900, 0.38868
+    max: 0.20000, -0.22620, 0.41230
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: -0.26000, -0.24900, 0.45428
+    max: 0.20000, -0.22620, 0.47790
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: -0.26000, -0.24900, 0.51988
+    max: 0.20000, -0.22620, 0.54350
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: -0.26000, -0.24900, 0.58548
+    max: 0.20000, -0.22620, 0.60910
+    color: '#83867D'
+  - label: indicator socket
+    min: -0.21100, -0.23160, 0.14760
+    max: -0.13900, -0.21060, 0.22140
+    color: '#1C211D'
+  - label: indicator lens
+    min: -0.19400, -0.23580, 0.16318
+    max: -0.15600, -0.23040, 0.20582
+    color: '#405F3B'
+  - label: indicator socket
+    min: -0.06600, -0.23160, 0.14760
+    max: 0.00600, -0.21060, 0.22140
+    color: '#1C211D'
+  - label: indicator lens
+    min: -0.04900, -0.23580, 0.16318
+    max: -0.01100, -0.23040, 0.20582
+    color: '#586448'
+  - label: indicator socket
+    min: 0.07900, -0.23160, 0.14760
+    max: 0.15100, -0.21060, 0.22140
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.09600, -0.23580, 0.16318
+    max: 0.13400, -0.23040, 0.20582
+    color: '#778167'
+  - label: indicator socket
+    min: -0.30600, -0.23160, 0.76670
+    max: -0.23400, -0.21060, 0.84050
+    color: '#1C211D'
+  - label: indicator lens
+    min: -0.28900, -0.23580, 0.78228
+    max: -0.25100, -0.23040, 0.82492
+    color: '#B7A948'
+  - label: indicator socket
+    min: 0.17400, -0.23160, 0.76670
+    max: 0.24600, -0.21060, 0.84050
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.19100, -0.23580, 0.78228
+    max: 0.22900, -0.23040, 0.82492
+    color: '#4F713D'
+- type: cmu3DModel
+  id: CMU3DRMCMachinePropBig2
+  label: Industrial machinery 2
+  status: draft
+  sourcePrototypes:
+  - RMCMachinePropBig2
+  description: Source-specific industrial cabinet with separate grilles, fan discs, controls and service panels. Straight
+    ducts and circular housings use capped cylinders; hidden construction and physical height are inferred. Source
+    animation is not implemented. The paired cabinet retains its left-tile pivot and extends into the tile on its
+    right.
+  referencePrototype: RMCMachinePropBig2
+  referenceRsi: /Textures/_RMC14/Structures/hybrisa_machine_props.rsi
+  referenceState: buildingventbig2
+  sourceDirections: 1
+  parts:
+  - label: cast equipment cabinet
+    min: -0.23000, -0.19200, 0.04920
+    max: 0.55000, 0.16200, 0.86920
+    color: '#676B66'
+  - label: front recessed panel
+    min: -0.17500, -0.21180, 0.13120
+    max: 0.49500, -0.19020, 0.79540
+    color: '#454B46'
+  - label: vertical frame
+    min: -0.21700, -0.22140, 0.06560
+    max: -0.17300, -0.18900, 0.85280
+    color: '#83867D'
+  - label: vertical frame
+    min: 0.49300, -0.22140, 0.06560
+    max: 0.53700, -0.18900, 0.85280
+    color: '#83867D'
+  - label: bottom plinth
+    min: -0.25, -0.21, 0
+    max: 1.255, 0.174, 0.0738
+    color: '#292E29'
+  - label: side bracket
+    min: -0.25500, -0.11400, 0.33620
+    max: -0.20500, 0.06600, 0.48380
+    color: '#454B46'
+  - label: side bracket
+    min: 0.525, -0.114, 0.3362
+    max: 0.61, 0.066, 0.4838
+    color: '#454B46'
+  - label: straight exhaust duct
+    min: 0.01500, -0.16900, 0.84460
+    max: 0.30500, 0.12100, 1.36940
+    color: '#292E29'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.00500, -0.18900, 0.86100
+    max: 0.32500, 0.14100, 0.89790
+    color: '#454B46'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.00500, -0.18900, 1.01680
+    max: 0.32500, 0.14100, 1.05370
+    color: '#454B46'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.00500, -0.18900, 1.17260
+    max: 0.32500, 0.14100, 1.20950
+    color: '#454B46'
+    shape: CylinderZ
+  - label: duct collar
+    min: -0.00500, -0.18900, 1.32840
+    max: 0.32500, 0.14100, 1.36530
+    color: '#454B46'
+    shape: CylinderZ
+  - label: overhead exhaust hood
+    min: -0.10000, -0.16800, 1.33660
+    max: 0.42000, 0.14400, 1.59080
+    color: '#454B46'
+  - label: hood front lip
+    min: -0.11000, -0.18000, 1.51700
+    max: 0.43000, -0.15600, 1.58260
+    color: '#83867D'
+  - label: hood inlet shadow
+    min: -0.03000, -0.17640, 1.36120
+    max: 0.35000, -0.16740, 1.50060
+    color: '#1C211D'
+  - label: hood roof seam
+    min: -0.03400, -0.13200, 1.58670
+    max: -0.00600, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: 0.05600, -0.13200, 1.58670
+    max: 0.08400, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: 0.14600, -0.13200, 1.58670
+    max: 0.17400, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: 0.23600, -0.13200, 1.58670
+    max: 0.26400, 0.11400, 1.60146
+    color: '#676B66'
+  - label: hood roof seam
+    min: 0.32600, -0.13200, 1.58670
+    max: 0.35400, 0.11400, 1.60146
+    color: '#676B66'
+  - label: circular fan housing
+    min: -0.14000, -0.24960, 0.32920
+    max: 0.12000, -0.20160, 0.58920
+    color: '#83867D'
+    shape: CylinderY
+  - label: recessed fan grille
+    min: -0.12570, -0.25770, 0.34350
+    max: 0.10570, -0.24870, 0.57490
+    color: '#292E29'
+    shape: CylinderY
+  - label: fan guard vertical
+    min: -0.09700, -0.26100, 0.38330
+    max: -0.07900, -0.25440, 0.53510
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: -0.10256, -0.26220, 0.38786
+    max: 0.08256, -0.25560, 0.40262
+    color: '#676B66'
+  - label: fan guard vertical
+    min: -0.04500, -0.26100, 0.36624
+    max: -0.02700, -0.25440, 0.55216
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: -0.12336, -0.26220, 0.43050
+    max: 0.10336, -0.25560, 0.44526
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.00700, -0.26100, 0.36624
+    max: 0.02500, -0.25440, 0.55216
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: -0.12336, -0.26220, 0.47314
+    max: 0.10336, -0.25560, 0.48790
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.05900, -0.26100, 0.38330
+    max: 0.07700, -0.25440, 0.53510
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: -0.10256, -0.26220, 0.51578
+    max: 0.08256, -0.25560, 0.53054
+    color: '#676B66'
+  - label: fan center hub
+    min: -0.04000, -0.27300, 0.42920
+    max: 0.02000, -0.26340, 0.48920
+    color: '#83867D'
+    shape: CylinderY
+  - label: circular fan housing
+    min: 0.20000, -0.24960, 0.32920
+    max: 0.46000, -0.20160, 0.58920
+    color: '#83867D'
+    shape: CylinderY
+  - label: recessed fan grille
+    min: 0.21430, -0.25770, 0.34350
+    max: 0.44570, -0.24870, 0.57490
+    color: '#292E29'
+    shape: CylinderY
+  - label: fan guard vertical
+    min: 0.24300, -0.26100, 0.38330
+    max: 0.26100, -0.25440, 0.53510
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.23744, -0.26220, 0.38786
+    max: 0.42256, -0.25560, 0.40262
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.29500, -0.26100, 0.36624
+    max: 0.31300, -0.25440, 0.55216
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.21664, -0.26220, 0.43050
+    max: 0.44336, -0.25560, 0.44526
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.34700, -0.26100, 0.36624
+    max: 0.36500, -0.25440, 0.55216
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.21664, -0.26220, 0.47314
+    max: 0.44336, -0.25560, 0.48790
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.39900, -0.26100, 0.38330
+    max: 0.41700, -0.25440, 0.53510
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.23744, -0.26220, 0.51578
+    max: 0.42256, -0.25560, 0.53054
+    color: '#676B66'
+  - label: fan center hub
+    min: 0.30000, -0.27300, 0.42920
+    max: 0.36000, -0.26340, 0.48920
+    color: '#83867D'
+    shape: CylinderY
+  - label: service latch
+    min: -0.05000, -0.22800, 0.72160
+    max: 0.03000, -0.21000, 0.77080
+    color: '#83867D'
+  - label: service latch
+    min: 0.29000, -0.22800, 0.72160
+    max: 0.37000, -0.21000, 0.77080
+    color: '#83867D'
+  - label: indicator socket
+    min: -0.02100, -0.23160, 0.14760
+    max: 0.05100, -0.21060, 0.22140
+    color: '#1C211D'
+  - label: indicator lens
+    min: -0.00400, -0.23580, 0.16318
+    max: 0.03400, -0.23040, 0.20582
+    color: '#B9A344'
+  - label: indicator socket
+    min: 0.12400, -0.23160, 0.14760
+    max: 0.19600, -0.21060, 0.22140
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.14100, -0.23580, 0.16318
+    max: 0.17900, -0.23040, 0.20582
+    color: '#AF2023'
+  - label: indicator socket
+    min: 0.26900, -0.23160, 0.14760
+    max: 0.34100, -0.21060, 0.22140
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.28600, -0.23580, 0.16318
+    max: 0.32400, -0.23040, 0.20582
+    color: '#A8A236'
+  - label: indicator socket
+    min: -0.11600, -0.23160, 0.76670
+    max: -0.04400, -0.21060, 0.84050
+    color: '#1C211D'
+  - label: indicator lens
+    min: -0.09900, -0.23580, 0.78228
+    max: -0.06100, -0.23040, 0.82492
+    color: '#B7A948'
+  - label: indicator socket
+    min: 0.36400, -0.23160, 0.76670
+    max: 0.43600, -0.21060, 0.84050
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.38100, -0.23580, 0.78228
+    max: 0.41900, -0.23040, 0.82492
+    color: '#A92830'
+  - label: cast equipment cabinet
+    min: 0.58500, -0.19200, 0.04920
+    max: 1.23500, 0.16200, 1.06600
+    color: '#676B66'
+  - label: front recessed panel
+    min: 0.64000, -0.21180, 0.13120
+    max: 1.18000, -0.19020, 0.99220
+    color: '#454B46'
+  - label: vertical frame
+    min: 0.59800, -0.22140, 0.06560
+    max: 0.64200, -0.18900, 1.04960
+    color: '#83867D'
+  - label: vertical frame
+    min: 1.17800, -0.22140, 0.06560
+    max: 1.22200, -0.18900, 1.04960
+    color: '#83867D'
+  - label: side bracket
+    min: 1.21000, -0.11400, 0.33620
+    max: 1.26000, 0.06600, 0.48380
+    color: '#454B46'
+  - label: circular fan housing
+    min: 0.64500, -0.24960, 0.60660
+    max: 0.87500, -0.20160, 0.83660
+    color: '#83867D'
+    shape: CylinderY
+  - label: recessed fan grille
+    min: 0.65765, -0.25770, 0.61925
+    max: 0.86235, -0.24870, 0.82395
+    color: '#292E29'
+    shape: CylinderY
+  - label: fan guard vertical
+    min: 0.68200, -0.26100, 0.65446
+    max: 0.70000, -0.25440, 0.78874
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.67812, -0.26220, 0.65764
+    max: 0.84188, -0.25560, 0.67240
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.72800, -0.26100, 0.63937
+    max: 0.74600, -0.25440, 0.80383
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.65972, -0.26220, 0.69536
+    max: 0.86028, -0.25560, 0.71012
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.77400, -0.26100, 0.63937
+    max: 0.79200, -0.25440, 0.80383
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.65972, -0.26220, 0.73308
+    max: 0.86028, -0.25560, 0.74784
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.82000, -0.26100, 0.65446
+    max: 0.83800, -0.25440, 0.78874
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.67812, -0.26220, 0.77080
+    max: 0.84188, -0.25560, 0.78556
+    color: '#676B66'
+  - label: fan center hub
+    min: 0.73000, -0.27300, 0.69160
+    max: 0.79000, -0.26340, 0.75160
+    color: '#83867D'
+    shape: CylinderY
+  - label: circular fan housing
+    min: 0.93500, -0.24960, 0.60660
+    max: 1.16500, -0.20160, 0.83660
+    color: '#83867D'
+    shape: CylinderY
+  - label: recessed fan grille
+    min: 0.94765, -0.25770, 0.61925
+    max: 1.15235, -0.24870, 0.82395
+    color: '#292E29'
+    shape: CylinderY
+  - label: fan guard vertical
+    min: 0.97200, -0.26100, 0.65446
+    max: 0.99000, -0.25440, 0.78874
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.96812, -0.26220, 0.65764
+    max: 1.13188, -0.25560, 0.67240
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 1.01800, -0.26100, 0.63937
+    max: 1.03600, -0.25440, 0.80383
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.94972, -0.26220, 0.69536
+    max: 1.15028, -0.25560, 0.71012
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 1.06400, -0.26100, 0.63937
+    max: 1.08200, -0.25440, 0.80383
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.94972, -0.26220, 0.73308
+    max: 1.15028, -0.25560, 0.74784
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 1.11000, -0.26100, 0.65446
+    max: 1.12800, -0.25440, 0.78874
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.96812, -0.26220, 0.77080
+    max: 1.13188, -0.25560, 0.78556
+    color: '#676B66'
+  - label: fan center hub
+    min: 1.02000, -0.27300, 0.69160
+    max: 1.08000, -0.26340, 0.75160
+    color: '#83867D'
+    shape: CylinderY
+  - label: dark louvre recess
+    min: 0.67000, -0.22800, 0.28700
+    max: 1.15000, -0.21000, 0.54940
+    color: '#1C211D'
+  - label: horizontal louvre blade
+    min: 0.69500, -0.24900, 0.30668
+    max: 1.12500, -0.22620, 0.33030
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: 0.69500, -0.24900, 0.37228
+    max: 1.12500, -0.22620, 0.39590
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: 0.69500, -0.24900, 0.43788
+    max: 1.12500, -0.22620, 0.46150
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: 0.69500, -0.24900, 0.50348
+    max: 1.12500, -0.22620, 0.52710
+    color: '#83867D'
+  - label: lower service door
+    min: 0.77000, -0.22560, 0.08200
+    max: 1.10000, -0.21000, 0.18860
+    color: '#292E29'
+  - label: indicator socket
+    min: 0.73400, -0.23160, 0.94710
+    max: 0.80600, -0.21060, 1.02090
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.75100, -0.23580, 0.96268
+    max: 0.78900, -0.23040, 1.00532
+    color: '#BFAB47'
+  - label: indicator socket
+    min: 0.87400, -0.23160, 0.94710
+    max: 0.94600, -0.21060, 1.02090
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.89100, -0.23580, 0.96268
+    max: 0.92900, -0.23040, 1.00532
+    color: '#B72C31'
+  - label: indicator socket
+    min: 1.01400, -0.23160, 0.94710
+    max: 1.08600, -0.21060, 1.02090
+    color: '#1C211D'
+  - label: indicator lens
+    min: 1.03100, -0.23580, 0.96268
+    max: 1.06900, -0.23040, 1.00532
+    color: '#555D4A'
+- type: cmu3DModel
+  id: CMU3DRMCMachinePropBig8
+  label: Industrial machinery 8
+  status: draft
+  sourcePrototypes:
+  - RMCMachinePropBig8
+  description: Source-specific industrial cabinet with separate grilles, fan discs, controls and service panels. Straight
+    ducts and circular housings use capped cylinders; hidden construction and physical height are inferred. Source
+    animation is not implemented. The paired cabinet retains its left-tile pivot and extends into the tile on its
+    right.
+  referencePrototype: RMCMachinePropBig8
+  referenceRsi: /Textures/_RMC14/Structures/hybrisa_machine_props.rsi
+  referenceState: buildingventbig8
+  sourceDirections: 1
+  parts:
+  - label: cast equipment cabinet
+    min: -0.36500, -0.19200, 0.06000
+    max: 0.27500, 0.16200, 1.36000
+    color: '#676B66'
+  - label: front recessed panel
+    min: -0.31000, -0.21180, 0.16000
+    max: 0.22000, -0.19020, 1.27000
+    color: '#454B46'
+  - label: vertical frame
+    min: -0.35200, -0.22140, 0.08000
+    max: -0.30800, -0.18900, 1.34000
+    color: '#83867D'
+  - label: vertical frame
+    min: 0.21800, -0.22140, 0.08000
+    max: 0.26200, -0.18900, 1.34000
+    color: '#83867D'
+  - label: bottom plinth
+    min: -0.38500, -0.21000, 0.00000
+    max: 0.29500, 0.17400, 0.09000
+    color: '#292E29'
+  - label: side bracket
+    min: -0.39000, -0.11400, 0.41000
+    max: -0.34000, 0.06600, 0.59000
+    color: '#454B46'
+  - label: side bracket
+    min: 0.25000, -0.11400, 0.41000
+    max: 0.30000, 0.06600, 0.59000
+    color: '#454B46'
+  - label: dark louvre recess
+    min: -0.27000, -0.22800, 0.39000
+    max: 0.18000, -0.21000, 0.77000
+    color: '#1C211D'
+  - label: horizontal louvre blade
+    min: -0.24500, -0.24900, 0.41280
+    max: 0.15500, -0.22620, 0.44016
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: -0.24500, -0.24900, 0.48880
+    max: 0.15500, -0.22620, 0.51616
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: -0.24500, -0.24900, 0.56480
+    max: 0.15500, -0.22620, 0.59216
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: -0.24500, -0.24900, 0.64080
+    max: 0.15500, -0.22620, 0.66816
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: -0.24500, -0.24900, 0.71680
+    max: 0.15500, -0.22620, 0.74416
+    color: '#83867D'
+  - label: upper cabinet drawer
+    min: -0.29000, -0.22500, 0.90000
+    max: 0.20000, -0.21000, 1.08000
+    color: '#676B66'
+  - label: drawer pull
+    min: -0.12000, -0.24000, 0.98000
+    max: 0.03000, -0.22380, 1.00500
+    color: '#83867D'
+  - label: upper cabinet drawer
+    min: -0.29000, -0.22500, 1.15000
+    max: 0.20000, -0.21000, 1.33000
+    color: '#676B66'
+  - label: drawer pull
+    min: -0.12000, -0.24000, 1.23000
+    max: 0.03000, -0.22380, 1.25500
+    color: '#83867D'
+  - label: indicator socket
+    min: -0.14600, -0.23160, 0.19500
+    max: -0.07400, -0.21060, 0.28500
+    color: '#1C211D'
+  - label: indicator lens
+    min: -0.12900, -0.23580, 0.21400
+    max: -0.09100, -0.23040, 0.26600
+    color: '#BFB05A'
+  - label: indicator socket
+    min: -0.00600, -0.23160, 0.19500
+    max: 0.06600, -0.21060, 0.28500
+    color: '#1C211D'
+  - label: indicator lens
+    min: 0.01100, -0.23580, 0.21400
+    max: 0.04900, -0.23040, 0.26600
+    color: '#B64936'
+  - label: blue white equipment display
+    min: 0.04000, -0.23760, 1.28000
+    max: 0.16000, -0.22320, 1.32000
+    color: '#A7B9BD'
+  - label: furnace base
+    min: 0.30000, -0.22200, 0.00000
+    max: 1.36000, 0.20400, 0.10000
+    color: '#1C211D'
+  - label: furnace shell
+    min: 0.34000, -0.18600, 0.10000
+    max: 1.32000, 0.16800, 1.57000
+    color: '#454B46'
+  - label: raised front casting
+    min: 0.41000, -0.22500, 0.14000
+    max: 1.25000, -0.18600, 1.49000
+    color: '#676B66'
+  - label: heavy furnace side rail
+    min: 0.36000, -0.23400, 0.10000
+    max: 0.43000, 0.15000, 1.42000
+    color: '#292E29'
+  - label: heavy furnace side rail
+    min: 1.24000, -0.23400, 0.10000
+    max: 1.31000, 0.15000, 1.42000
+    color: '#292E29'
+  - label: furnace crown
+    min: 0.47000, -0.19200, 1.57000
+    max: 1.18000, 0.17400, 1.72000
+    color: '#676B66'
+  - label: circular fan housing
+    min: 0.68000, -0.24960, 1.34000
+    max: 0.98000, -0.20160, 1.64000
+    color: '#83867D'
+    shape: CylinderY
+  - label: recessed fan grille
+    min: 0.69650, -0.25770, 1.35650
+    max: 0.96350, -0.24870, 1.62350
+    color: '#292E29'
+    shape: CylinderY
+  - label: fan guard vertical
+    min: 0.73100, -0.26100, 1.38320
+    max: 0.74900, -0.25440, 1.59680
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.72320, -0.26220, 1.39100
+    max: 0.93680, -0.25560, 1.40900
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.79100, -0.26100, 1.35920
+    max: 0.80900, -0.25440, 1.62080
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.69920, -0.26220, 1.45100
+    max: 0.96080, -0.25560, 1.46900
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.85100, -0.26100, 1.35920
+    max: 0.86900, -0.25440, 1.62080
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.69920, -0.26220, 1.51100
+    max: 0.96080, -0.25560, 1.52900
+    color: '#676B66'
+  - label: fan guard vertical
+    min: 0.91100, -0.26100, 1.38320
+    max: 0.92900, -0.25440, 1.59680
+    color: '#676B66'
+  - label: fan guard horizontal
+    min: 0.72320, -0.26220, 1.57100
+    max: 0.93680, -0.25560, 1.58900
+    color: '#676B66'
+  - label: fan center hub
+    min: 0.80000, -0.27300, 1.46000
+    max: 0.86000, -0.26340, 1.52000
+    color: '#83867D'
+    shape: CylinderY
+  - label: dark louvre recess
+    min: 0.51500, -0.22800, 0.26000
+    max: 1.14500, -0.21000, 0.66000
+    color: '#1C211D'
+  - label: horizontal louvre blade
+    min: 0.54000, -0.24900, 0.28400
+    max: 1.12000, -0.22620, 0.31280
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: 0.54000, -0.24900, 0.36400
+    max: 1.12000, -0.22620, 0.39280
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: 0.54000, -0.24900, 0.44400
+    max: 1.12000, -0.22620, 0.47280
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: 0.54000, -0.24900, 0.52400
+    max: 1.12000, -0.22620, 0.55280
+    color: '#83867D'
+  - label: horizontal louvre blade
+    min: 0.54000, -0.24900, 0.60400
+    max: 1.12000, -0.22620, 0.63280
+    color: '#83867D'
+  - label: dark louvre recess
+    min: 0.54000, -0.22800, 0.82000
+    max: 1.12000, -0.21000, 1.06000
+    color: '#1C211D'
+  - label: arched furnace upper casting
+    min: 0.40000, -0.24210, 1.24000
+    max: 1.26000, -0.18510, 1.73000
+    color: '#60665E'
+    shape: Ellipsoid
+  - label: arched furnace opening
+    min: 0.48500, -0.25980, 0.79000
+    max: 1.17500, -0.23700, 1.28000
+    color: '#252C27'
+    shape: Ellipsoid
+  - label: square furnace throat
+    min: 0.49000, -0.26040, 0.74000
+    max: 1.17000, -0.24600, 1.01000
+    color: '#252C27'
+  - label: vertical furnace grate
+    min: 0.56000, -0.27720, 0.83000
+    max: 0.59000, -0.25800, 1.01000
+    color: '#83867D'
+  - label: vertical furnace grate
+    min: 0.63800, -0.27720, 0.83000
+    max: 0.66800, -0.25800, 1.01000
+    color: '#83867D'
+  - label: vertical furnace grate
+    min: 0.71600, -0.27720, 0.83000
+    max: 0.74600, -0.25800, 1.01000
+    color: '#83867D'
+  - label: vertical furnace grate
+    min: 0.79400, -0.27720, 0.83000
+    max: 0.82400, -0.25800, 1.01000
+    color: '#83867D'
+  - label: vertical furnace grate
+    min: 0.87200, -0.27720, 0.83000
+    max: 0.90200, -0.25800, 1.01000
+    color: '#83867D'
+  - label: vertical furnace grate
+    min: 0.95000, -0.27720, 0.83000
+    max: 0.98000, -0.25800, 1.01000
+    color: '#83867D'
+  - label: vertical furnace grate
+    min: 1.02800, -0.27720, 0.83000
+    max: 1.05800, -0.25800, 1.01000
+    color: '#83867D'
+- type: cmu3DModel
+  id: CMU3DRMCMachinePropBig9
+  label: Industrial machinery 9
+  status: draft
+  sourcePrototypes:
+  - RMCMachinePropBig9
+  description: Source-specific industrial cabinet with separate grilles, fan discs, controls and service panels. Straight
+    ducts and circular housings use capped cylinders; hidden construction and physical height are inferred. Source
+    animation is not implemented.
+  referencePrototype: RMCMachinePropBig9
+  referenceRsi: /Textures/_RMC14/Structures/hybrisa_machine_props.rsi
+  referenceState: buildingventbig9
+  sourceDirections: 1
+  parts:
+  - label: cast equipment cabinet
+    min: -0.47000, -0.19200, 0.06000
+    max: 0.47000, 0.16200, 1.00000
+    color: '#676B66'
+  - label: front recessed panel
+    min: -0.41500, -0.21180, 0.16000
+    max: 0.41500, -0.19020, 0.91000
+    color: '#454B46'
+  - label: vertical frame
+    min: -0.45700, -0.22140, 0.08000
+    max: -0.41300, -0.18900, 0.98000
+    color: '#83867D'
+  - label: vertical frame
+    min: 0.41300, -0.22140, 0.08000
+    max: 0.45700, -0.18900, 0.98000
+    color: '#83867D'
+  - label: bottom plinth
+    min: -0.49000, -0.21000, 0.00000
+    max: 0.49000, 0.17400, 0.09000
+    color: '#292E29'
+  - label: side bracket
+    min: -0.49500, -0.11400, 0.41000
+    max: -0.44500, 0.06600, 0.59000
+    color: '#454B46'
+  - label: side bracket
+    min: 0.44500, -0.11400, 0.41000
+    max: 0.49500, 0.06600, 0.59000
+    color: '#454B46'
+  - label: left maintenance panel
+    min: -0.38000, -0.23400, 0.30000
+    max: -0.16000, -0.21000, 0.72000
+    color: '#676B66'
+  - label: panel seam
+    min: -0.37000, -0.24000, 0.40000
+    max: -0.18000, -0.23280, 0.41500
+    color: '#83867D'
+  - label: panel seam
+    min: -0.37000, -0.24000, 0.53000
+    max: -0.18000, -0.23280, 0.54500
+    color: '#83867D'
+  - label: panel seam
+    min: -0.37000, -0.24000, 0.65000
+    max: -0.18000, -0.23280, 0.66500
+    color: '#83867D'
+  - label: monitor frame
+    min: -0.10000, -0.24000, 0.36000
+    max: 0.39000, -0.21000, 0.85000
+    color: '#1C211D'
+  - label: source monitor display
+    min: -0.04500, -0.25020, 0.48000
+    max: 0.33500, -0.24300, 0.77000
+    color: '#FFFFFF'
+    surface: CMU3DMachineryArtGreenMonitor
+    surfaceAxis: XZ
+  - label: lower monitor bezel
+    min: -0.08500, -0.25260, 0.38000
+    max: 0.37000, -0.23880, 0.47000
+    color: '#454B46'
+  - label: upper ventilation slot
+    min: -0.35300, -0.24000, 0.88000
+    max: -0.30700, -0.22800, 0.95000
+    color: '#1C211D'
+  - label: upper ventilation slot
+    min: -0.26300, -0.24000, 0.88000
+    max: -0.21700, -0.22800, 0.95000
+    color: '#1C211D'
+  - label: upper ventilation slot
+    min: -0.17300, -0.24000, 0.88000
+    max: -0.12700, -0.22800, 0.95000
+    color: '#1C211D'
+  - label: upper ventilation slot
+    min: -0.02300, -0.24000, 0.88000
+    max: 0.02300, -0.22800, 0.95000
+    color: '#1C211D'
+  - label: upper ventilation slot
+    min: 0.07700, -0.24000, 0.88000
+    max: 0.12300, -0.22800, 0.95000
+    color: '#1C211D'
+  - label: upper ventilation slot
+    min: 0.17700, -0.24000, 0.88000
+    max: 0.22300, -0.22800, 0.95000
+    color: '#1C211D'
+  - label: upper ventilation slot
+    min: 0.27700, -0.24000, 0.88000
+    max: 0.32300, -0.22800, 0.95000
+    color: '#1C211D'
+  - label: lower intake slot
+    min: -0.34200, -0.24000, 0.15000
+    max: -0.29800, -0.22800, 0.27000
+    color: '#1C211D'
+  - label: lower intake slot
+    min: -0.26200, -0.24000, 0.15000
+    max: -0.21800, -0.22800, 0.27000
+    color: '#1C211D'
+  - label: lower intake slot
+    min: -0.18200, -0.24000, 0.15000
+    max: -0.13800, -0.22800, 0.27000
+    color: '#1C211D'
+- type: cmu3DModel
+  id: CMU3DDecorFloorGlass1
+  label: Discarded bottles and cans 1
+  status: draft
+  sourcePrototypes:
+  - DecorFloorGlass1
+  description: Static source-specific arrangement of bottles, cans, shards and discarded glassware. Each object is
+    volumetric with separate necks, rims and labels. Original opaque source palette retained; transparent glass, irregular
+    break edges, fine dents and hidden surfaces remain unfinished. Ground composition is centered in its saved tile
+    independently of the padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear
+    footprint.
+  referencePrototype: DecorFloorGlass1
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: glass_1
+  sourceDirections: 1
+  parts:
+  - label: discarded bottle body
+    min: -0.10375, 0.03008, 0.01500
+    max: 0.04125, 0.17508, 0.35100
+    color: '#675B40'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: -0.10375, 0.03008, 0.28800
+    max: 0.04125, 0.17508, 0.38400
+    color: '#675B40'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: -0.06170, 0.07213, 0.35520
+    max: -0.00080, 0.13303, 0.47040
+    color: '#675B40'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: -0.07112, 0.06271, 0.46080
+    max: 0.00863, 0.14245, 0.48580
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: -0.10484, 0.02899, 0.11520
+    max: 0.04234, 0.17617, 0.23040
+    color: '#867B61'
+    shape: CylinderZ
+  - label: discarded bottle body
+    min: 0.17750, 0.06133, 0.01500
+    max: 0.32250, 0.20633, 0.33700
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: 0.17750, 0.06133, 0.27600
+    max: 0.32250, 0.20633, 0.36800
+    color: '#586849'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: 0.21955, 0.10338, 0.34040
+    max: 0.28045, 0.16428, 0.45080
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: 0.21013, 0.09396, 0.44160
+    max: 0.28987, 0.17370, 0.46660
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: 0.17641, 0.06024, 0.11040
+    max: 0.32359, 0.20742, 0.22080
+    color: '#867B61'
+    shape: CylinderZ
+  - label: dented metal can
+    min: -0.20500, -0.03992, 0.01500
+    max: -0.04500, 0.12008, 0.26500
+    color: '#777365'
+    shape: CylinderZ
+  - label: rolled can rim
+    min: -0.20980, -0.04472, 0.23600
+    max: -0.04020, 0.12488, 0.26900
+    color: '#A29B87'
+    shape: CylinderZ
+  - label: dark can top
+    min: -0.18500, -0.01992, 0.26700
+    max: -0.06500, 0.10008, 0.27400
+    color: '#4D4B41'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.20660, -0.04152, 0.04000
+    max: -0.04340, 0.12168, 0.05900
+    color: '#686353'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.20660, -0.04152, 0.15000
+    max: -0.04340, 0.12168, 0.16900
+    color: '#686353'
+    shape: CylinderZ
+  - label: crushed can
+    min: -0.40250, -0.05117, 0.01700
+    max: -0.22250, 0.06883, 0.10200
+    color: '#8D8875'
+    shape: CylinderX
+  - label: crushed can end
+    min: -0.25550, -0.03967, 0.02900
+    max: -0.21550, 0.05733, 0.08600
+    color: '#625F52'
+    shape: CylinderX
+  - label: broken glass shard
+    min: 0.16625, -0.18242, 0.01000
+    max: 0.32625, -0.11242, 0.04300
+    color: '#546C40'
+  - label: broken glass shard
+    min: 0.29125, -0.14492, 0.01000
+    max: 0.36125, -0.06992, 0.04300
+    color: '#546C40'
+  - label: broken glass shard
+    min: 0.31875, -0.20742, 0.01000
+    max: 0.38375, -0.12742, 0.04300
+    color: '#546C40'
+- type: cmu3DModel
+  id: CMU3DDecorFloorGlass2
+  label: Discarded bottles and cans 2
+  status: draft
+  sourcePrototypes:
+  - DecorFloorGlass2
+  description: Static source-specific arrangement of bottles, cans, shards and discarded glassware. Each object is
+    volumetric with separate necks, rims and labels. Original opaque source palette retained; transparent glass, irregular
+    break edges, fine dents and hidden surfaces remain unfinished. Ground composition is centered in its saved tile
+    independently of the padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear
+    footprint.
+  referencePrototype: DecorFloorGlass2
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: glass_2
+  sourceDirections: 1
+  parts:
+  - label: dented metal can
+    min: -0.29875, 0.03260, 0.01500
+    max: -0.13875, 0.19260, 0.24500
+    color: '#777365'
+    shape: CylinderZ
+  - label: rolled can rim
+    min: -0.30355, 0.02780, 0.21600
+    max: -0.13395, 0.19740, 0.24900
+    color: '#A29B87'
+    shape: CylinderZ
+  - label: dark can top
+    min: -0.27875, 0.05260, 0.24700
+    max: -0.15875, 0.17260, 0.25400
+    color: '#4D4B41'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.30035, 0.03100, 0.04000
+    max: -0.13715, 0.19420, 0.05900
+    color: '#686353'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.30035, 0.03100, 0.13800
+    max: -0.13715, 0.19420, 0.15700
+    color: '#686353'
+    shape: CylinderZ
+  - label: discarded bottle body
+    min: -0.04125, 0.00885, 0.01500
+    max: 0.10375, 0.15385, 0.33000
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: -0.04125, 0.00885, 0.27000
+    max: 0.10375, 0.15385, 0.36000
+    color: '#586849'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: 0.00080, 0.05090, 0.33300
+    max: 0.06170, 0.11180, 0.44100
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: -0.00863, 0.04148, 0.43200
+    max: 0.07112, 0.12122, 0.45700
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: -0.04234, 0.00776, 0.10800
+    max: 0.10484, 0.15494, 0.21600
+    color: '#867B61'
+    shape: CylinderZ
+  - label: discarded bottle body
+    min: 0.20875, -0.05365, 0.01500
+    max: 0.35375, 0.09135, 0.19000
+    color: '#4D623F'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: 0.20875, -0.05365, 0.15000
+    max: 0.35375, 0.09135, 0.20000
+    color: '#4D623F'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: 0.25080, -0.01160, 0.18500
+    max: 0.31170, 0.04930, 0.24500
+    color: '#4D623F'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: 0.24138, -0.02102, 0.24000
+    max: 0.32112, 0.05872, 0.26500
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: 0.20766, -0.05474, 0.06000
+    max: 0.35484, 0.09244, 0.12000
+    color: '#867B61'
+    shape: CylinderZ
+  - label: crushed can
+    min: -0.09000, -0.19740, 0.01700
+    max: 0.09000, -0.07740, 0.10200
+    color: '#8D8875'
+    shape: CylinderX
+  - label: crushed can end
+    min: 0.05700, -0.18590, 0.02900
+    max: 0.09700, -0.08890, 0.08600
+    color: '#625F52'
+    shape: CylinderX
+- type: cmu3DModel
+  id: CMU3DDecorFloorGlass3
+  label: Discarded bottles and cans 3
+  status: draft
+  sourcePrototypes:
+  - DecorFloorGlass3
+  description: Static source-specific arrangement of bottles, cans, shards and discarded glassware. Each object is
+    volumetric with separate necks, rims and labels. Original opaque source palette retained; transparent glass, irregular
+    break edges, fine dents and hidden surfaces remain unfinished. Ground composition is centered in its saved tile
+    independently of the padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear
+    footprint.
+  referencePrototype: DecorFloorGlass3
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: glass_3
+  sourceDirections: 1
+  parts:
+  - label: discarded bottle body
+    min: 0.02125, 0.06133, 0.01500
+    max: 0.16625, 0.20633, 0.35100
+    color: '#675B40'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: 0.02125, 0.06133, 0.28800
+    max: 0.16625, 0.20633, 0.38400
+    color: '#675B40'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: 0.06330, 0.10338, 0.35520
+    max: 0.12420, 0.16428, 0.47040
+    color: '#675B40'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: 0.05387, 0.09396, 0.46080
+    max: 0.13362, 0.17370, 0.48580
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: 0.02016, 0.06024, 0.11520
+    max: 0.16734, 0.20742, 0.23040
+    color: '#867B61'
+    shape: CylinderZ
+  - label: discarded bottle body
+    min: -0.16625, -0.03242, 0.01500
+    max: -0.02125, 0.11258, 0.23900
+    color: '#675B40'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: -0.16625, -0.03242, 0.19200
+    max: -0.02125, 0.11258, 0.25600
+    color: '#675B40'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: -0.12420, 0.00963, 0.23680
+    max: -0.06330, 0.07053, 0.31360
+    color: '#675B40'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: -0.13362, 0.00021, 0.30720
+    max: -0.05387, 0.07995, 0.33220
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: -0.16734, -0.03351, 0.07680
+    max: -0.02016, 0.11367, 0.15360
+    color: '#867B61'
+    shape: CylinderZ
+  - label: goblet foot
+    min: 0.24750, -0.05617, 0.01400
+    max: 0.37750, 0.07383, 0.03900
+    color: '#9B9582'
+    shape: CylinderZ
+  - label: goblet stem
+    min: 0.29700, -0.00667, 0.03300
+    max: 0.32800, 0.02433, 0.18300
+    color: '#A9A28B'
+    shape: CylinderZ
+  - label: goblet bowl
+    min: 0.21750, -0.08617, 0.17000
+    max: 0.40750, 0.10383, 0.29000
+    color: '#999585'
+    shape: Ellipsoid
+  - label: goblet rim
+    min: 0.21750, -0.08617, 0.27200
+    max: 0.40750, 0.10383, 0.29000
+    color: '#B1AB98'
+    shape: CylinderZ
+  - label: broken glass shard
+    min: -0.08375, -0.18242, 0.01000
+    max: 0.07625, -0.11242, 0.04300
+    color: '#546C40'
+  - label: broken glass shard
+    min: 0.04125, -0.14492, 0.01000
+    max: 0.11125, -0.06992, 0.04300
+    color: '#546C40'
+  - label: broken glass shard
+    min: 0.06875, -0.20742, 0.01000
+    max: 0.13375, -0.12742, 0.04300
+    color: '#546C40'
+  - label: dark goblet interior
+    min: 0.24250, -0.06117, 0.28700
+    max: 0.38250, 0.07883, 0.29200
+    color: '#5E5E50'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DDecorFloorGlass4
+  label: Discarded bottles and cans 4
+  status: draft
+  sourcePrototypes:
+  - DecorFloorGlass4
+  description: Static source-specific arrangement of bottles, cans, shards and discarded glassware. Each object is
+    volumetric with separate necks, rims and labels. Original opaque source palette retained; transparent glass, irregular
+    break edges, fine dents and hidden surfaces remain unfinished. Ground composition is centered in its saved tile
+    independently of the padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear
+    footprint.
+  referencePrototype: DecorFloorGlass4
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: glass_4
+  sourceDirections: 1
+  parts:
+  - label: discarded bottle body
+    min: -0.18110, -0.01540, 0.01500
+    max: -0.04814, 0.11756, 0.40700
+    color: '#67553B'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: -0.18110, -0.01540, 0.33600
+    max: -0.04814, 0.11756, 0.44800
+    color: '#67553B'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: -0.14254, 0.02316, 0.41440
+    max: -0.08670, 0.07900, 0.54880
+    color: '#67553B'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: -0.15118, 0.01452, 0.53760
+    max: -0.07806, 0.08764, 0.56260
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: -0.18210, -0.01640, 0.13440
+    max: -0.04714, 0.11856, 0.26880
+    color: '#867B61'
+    shape: CylinderZ
+  - label: discarded bottle body
+    min: 0.10545, 0.04191, 0.01500
+    max: 0.23841, 0.17487, 0.32300
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: 0.10545, 0.04191, 0.26400
+    max: 0.23841, 0.17487, 0.35200
+    color: '#586849'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: 0.14401, 0.08047, 0.32560
+    max: 0.19985, 0.13631, 0.43120
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: 0.13537, 0.07183, 0.42240
+    max: 0.20849, 0.14495, 0.44740
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: 0.10445, 0.04091, 0.10560
+    max: 0.23941, 0.17587, 0.21120
+    color: '#867B61'
+    shape: CylinderZ
+  - label: dented metal can
+    min: -0.10201, -0.07959, 0.01500
+    max: 0.04470, 0.06713, 0.36500
+    color: '#777365'
+    shape: CylinderZ
+  - label: rolled can rim
+    min: -0.10641, -0.08399, 0.33600
+    max: 0.04910, 0.07153, 0.36900
+    color: '#A29B87'
+    shape: CylinderZ
+  - label: dark can top
+    min: -0.08367, -0.06125, 0.36700
+    max: 0.02636, 0.04879, 0.37400
+    color: '#4D4B41'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.10348, -0.08106, 0.04000
+    max: 0.04617, 0.06859, 0.05900
+    color: '#686353'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.10348, -0.08106, 0.21000
+    max: 0.04617, 0.06859, 0.22900
+    color: '#686353'
+    shape: CylinderZ
+  - label: discarded bottle body
+    min: 0.30604, -0.13002, 0.01500
+    max: 0.43900, 0.00294, 0.20400
+    color: '#675B40'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: 0.30604, -0.13002, 0.16200
+    max: 0.43900, 0.00294, 0.21600
+    color: '#675B40'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: 0.34460, -0.09146, 0.19980
+    max: 0.40044, -0.03562, 0.26460
+    color: '#675B40'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: 0.33596, -0.10010, 0.25920
+    max: 0.40908, -0.02698, 0.28420
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: 0.30504, -0.13102, 0.06480
+    max: 0.44000, 0.00394, 0.12960
+    color: '#867B61'
+    shape: CylinderZ
+  - label: broken glass shard
+    min: -0.30604, -0.15295, 0.01000
+    max: -0.15932, -0.08876, 0.04300
+    color: '#546C40'
+  - label: broken glass shard
+    min: -0.19142, -0.11856, 0.01000
+    max: -0.12723, -0.04979, 0.04300
+    color: '#546C40'
+  - label: broken glass shard
+    min: -0.16620, -0.17587, 0.01000
+    max: -0.10660, -0.10251, 0.04300
+    color: '#546C40'
+- type: cmu3DModel
+  id: CMU3DDecorFloorGlass6
+  label: Discarded bottles and cans 6
+  status: draft
+  sourcePrototypes:
+  - DecorFloorGlass6
+  description: Static source-specific arrangement of bottles, cans, shards and discarded glassware. Each object is
+    volumetric with separate necks, rims and labels. Original opaque source palette retained; transparent glass, irregular
+    break edges, fine dents and hidden surfaces remain unfinished. Ground composition is centered in its saved tile
+    independently of the padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear
+    footprint.
+  referencePrototype: DecorFloorGlass6
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: glass_6
+  sourceDirections: 1
+  parts:
+  - label: discarded bottle body
+    min: -0.19473, 0.06047, 0.01500
+    max: -0.05176, 0.20344, 0.24600
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: -0.19473, 0.06047, 0.19800
+    max: -0.05176, 0.20344, 0.26400
+    color: '#586849'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: -0.15327, 0.10193, 0.24420
+    max: -0.09323, 0.16198, 0.32340
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: -0.16256, 0.09264, 0.31680
+    max: -0.08394, 0.17127, 0.34180
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: -0.19581, 0.05940, 0.07920
+    max: -0.05069, 0.20451, 0.15840
+    color: '#867B61'
+    shape: CylinderZ
+  - label: discarded bottle body
+    min: -0.00986, -0.06278, 0.01500
+    max: 0.13311, 0.08019, 0.32300
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle shoulder
+    min: -0.00986, -0.06278, 0.26400
+    max: 0.13311, 0.08019, 0.35200
+    color: '#586849'
+    shape: Ellipsoid
+  - label: bottle neck
+    min: 0.03160, -0.02132, 0.32560
+    max: 0.09165, 0.03873, 0.43120
+    color: '#586849'
+    shape: CylinderZ
+  - label: bottle mouth rim
+    min: 0.02230, -0.03061, 0.42240
+    max: 0.10094, 0.04802, 0.44740
+    color: '#39392E'
+    shape: CylinderZ
+  - label: weathered paper label
+    min: -0.01093, -0.06385, 0.10560
+    max: 0.13418, 0.08127, 0.21120
+    color: '#867B61'
+    shape: CylinderZ
+  - label: dented metal can
+    min: -0.38700, -0.07017, 0.01500
+    max: -0.22924, 0.08759, 0.22500
+    color: '#777365'
+    shape: CylinderZ
+  - label: rolled can rim
+    min: -0.39174, -0.07491, 0.19600
+    max: -0.22451, 0.09232, 0.22900
+    color: '#A29B87'
+    shape: CylinderZ
+  - label: dark can top
+    min: -0.36728, -0.05045, 0.22700
+    max: -0.24896, 0.06787, 0.23400
+    color: '#4D4B41'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.38858, -0.07175, 0.04000
+    max: -0.22767, 0.08916, 0.05900
+    color: '#686353'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.38858, -0.07175, 0.12600
+    max: -0.22767, 0.08916, 0.14500
+    color: '#686353'
+    shape: CylinderZ
+  - label: crushed can
+    min: -0.15036, -0.20451, 0.01700
+    max: 0.02711, -0.08620, 0.10200
+    color: '#8D8875'
+    shape: CylinderX
+  - label: crushed can end
+    min: -0.00542, -0.19318, 0.02900
+    max: 0.03402, -0.09753, 0.08600
+    color: '#625F52'
+    shape: CylinderX
+  - label: broken glass shard
+    min: 0.22555, -0.05662, 0.01000
+    max: 0.38331, 0.01240, 0.04300
+    color: '#546C40'
+  - label: broken glass shard
+    min: 0.34880, -0.01964, 0.01000
+    max: 0.41782, 0.05431, 0.04300
+    color: '#546C40'
+  - label: broken glass shard
+    min: 0.37591, -0.08127, 0.01000
+    max: 0.44000, -0.00239, 0.04300
+    color: '#546C40'
+- type: cmu3DModel
+  id: CMU3DDecorFloorTrashbags1
+  label: Refuse bags 1
+  status: draft
+  sourcePrototypes:
+  - DecorFloorTrashbags1
+  description: Distinct source bag grouping, with tied necks, overlapping round bodies, gathered folds and separate
+    loose cans where shown. Opaque brown-black source palette and single-frame fixed facing are retained. Fine fabric
+    creases and hidden depths remain inferred. Ground composition is centered in its saved tile independently of the
+    padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear footprint.
+  referencePrototype: DecorFloorTrashbags1
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: trashbags_1
+  sourceDirections: 1
+  parts:
+  - label: slumped bag body
+    min: -0.20000, -0.15415, 0.02000
+    max: 0.20000, 0.22585, 0.39130
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.15100, -0.06395, 0.22560
+    max: 0.08100, 0.17165, 0.39950
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: -0.09200, 0.01125, 0.37130
+    max: -0.00800, 0.10245, 0.46530
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.11000, 0.03985, 0.42770
+    max: 0.00200, 0.08285, 0.46295
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.14200, -0.10682, 0.05640
+    max: -0.11400, -0.07946, 0.31490
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.05800, -0.14617, 0.05640
+    max: -0.03000, -0.11881, 0.28200
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.03800, -0.14430, 0.05640
+    max: 0.06600, -0.11694, 0.31490
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.11400, -0.10682, 0.05640
+    max: 0.14200, -0.07946, 0.28200
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.20000, -0.16175, 0.01700
+    max: 0.02400, 0.06625, 0.14860
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.03200, -0.16175, 0.01700
+    max: 0.19200, 0.06625, 0.14860
+    color: '#393026'
+    shape: Ellipsoid
+  - label: crushed can
+    min: -0.37125, -0.14915, 0.01700
+    max: -0.19125, -0.02915, 0.10200
+    color: '#8D8875'
+    shape: CylinderX
+  - label: crushed can end
+    min: -0.22425, -0.13765, 0.02900
+    max: -0.18425, -0.04065, 0.08600
+    color: '#625F52'
+    shape: CylinderX
+  - label: dented metal can
+    min: 0.02375, -0.22165, 0.01500
+    max: 0.16375, -0.08165, 0.09500
+    color: '#777365'
+    shape: CylinderZ
+  - label: rolled can rim
+    min: 0.01955, -0.22585, 0.06600
+    max: 0.16795, -0.07745, 0.09900
+    color: '#A29B87'
+    shape: CylinderZ
+  - label: dark can top
+    min: 0.04125, -0.20415, 0.09700
+    max: 0.14625, -0.09915, 0.10400
+    color: '#4D4B41'
+    shape: CylinderZ
+  - label: can seam
+    min: 0.02235, -0.22305, 0.04000
+    max: 0.16515, -0.08025, 0.05900
+    color: '#686353'
+    shape: CylinderZ
+  - label: can seam
+    min: 0.02235, -0.22305, 0.04800
+    max: 0.16515, -0.08025, 0.06700
+    color: '#686353'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DDecorFloorTrashbags2
+  label: Refuse bags 2
+  status: draft
+  sourcePrototypes:
+  - DecorFloorTrashbags2
+  description: Distinct source bag grouping, with tied necks, overlapping round bodies, gathered folds and separate
+    loose cans where shown. Opaque brown-black source palette and single-frame fixed facing are retained. Fine fabric
+    creases and hidden depths remain inferred. Ground composition is centered in its saved tile independently of the
+    padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear footprint.
+  referencePrototype: DecorFloorTrashbags2
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: trashbags_2
+  sourceDirections: 1
+  parts:
+  - label: slumped bag body
+    min: -0.38750, -0.09227, 0.02000
+    max: 0.01250, 0.26773, 0.38340
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.33850, -0.00587, 0.22080
+    max: -0.10650, 0.21733, 0.39100
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: -0.27950, 0.06553, 0.36340
+    max: -0.19550, 0.15193, 0.45540
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.29750, 0.09173, 0.41860
+    max: -0.18550, 0.13473, 0.45310
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.32950, -0.04654, 0.05520
+    max: -0.30150, -0.02062, 0.30820
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.24550, -0.08382, 0.05520
+    max: -0.21750, -0.05790, 0.27600
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.14950, -0.08204, 0.05520
+    max: -0.12150, -0.05612, 0.30820
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.07350, -0.04654, 0.05520
+    max: -0.04550, -0.02062, 0.27600
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.38750, -0.09947, 0.01700
+    max: -0.16350, 0.11653, 0.14580
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.21950, -0.09947, 0.01700
+    max: 0.00450, 0.11653, 0.14580
+    color: '#393026'
+    shape: Ellipsoid
+  - label: slumped bag body
+    min: -0.00250, -0.12853, 0.02000
+    max: 0.37750, 0.24148, 0.35180
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: 0.04230, -0.04022, 0.20160
+    max: 0.26270, 0.18918, 0.35700
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: 0.09760, 0.03308, 0.33180
+    max: 0.17740, 0.12188, 0.41580
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: 0.07750, 0.06048, 0.38220
+    max: 0.18950, 0.10348, 0.41370
+    color: '#554838'
+  - label: creased bag fold
+    min: 0.05260, -0.08199, 0.05040
+    max: 0.07920, -0.05535, 0.28140
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.13240, -0.12031, 0.05040
+    max: 0.15900, -0.09367, 0.25200
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.22360, -0.11848, 0.05040
+    max: 0.25020, -0.09184, 0.28140
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.29580, -0.08199, 0.05040
+    max: 0.32240, -0.05535, 0.25200
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.00250, -0.13592, 0.01700
+    max: 0.21030, 0.08608, 0.13460
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.15710, -0.13592, 0.01700
+    max: 0.36990, 0.08608, 0.13460
+    color: '#393026'
+    shape: Ellipsoid
+  - label: crushed can
+    min: -0.37125, -0.19103, 0.01700
+    max: -0.19125, -0.07102, 0.10200
+    color: '#8D8875'
+    shape: CylinderX
+  - label: crushed can end
+    min: -0.22425, -0.17952, 0.02900
+    max: -0.18425, -0.08252, 0.08600
+    color: '#625F52'
+    shape: CylinderX
+  - label: dented metal can
+    min: -0.03875, -0.26352, 0.01500
+    max: 0.10125, -0.12352, 0.09500
+    color: '#777365'
+    shape: CylinderZ
+  - label: rolled can rim
+    min: -0.04295, -0.26772, 0.06600
+    max: 0.10545, -0.11932, 0.09900
+    color: '#A29B87'
+    shape: CylinderZ
+  - label: dark can top
+    min: -0.02125, -0.24602, 0.09700
+    max: 0.08375, -0.14102, 0.10400
+    color: '#4D4B41'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.04015, -0.26492, 0.04000
+    max: 0.10265, -0.12212, 0.05900
+    color: '#686353'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.04015, -0.26492, 0.04800
+    max: 0.10265, -0.12212, 0.06700
+    color: '#686353'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DDecorFloorTrashbags3
+  label: Refuse bags 3
+  status: draft
+  sourcePrototypes:
+  - DecorFloorTrashbags3
+  description: Distinct source bag grouping, with tied necks, overlapping round bodies, gathered folds and separate
+    loose cans where shown. Opaque brown-black source palette and single-frame fixed facing are retained. Fine fabric
+    creases and hidden depths remain inferred. Ground composition is centered in its saved tile independently of the
+    padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear footprint.
+  referencePrototype: DecorFloorTrashbags3
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: trashbags_3
+  sourceDirections: 1
+  parts:
+  - label: slumped bag body
+    min: -0.27625, -0.04477, 0.02000
+    max: 0.21375, 0.33523, 0.36760
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.20835, 0.04543, 0.21120
+    max: 0.07585, 0.28103, 0.37400
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: -0.13270, 0.12063, 0.34760
+    max: -0.02980, 0.21183, 0.43560
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.14125, 0.14923, 0.40040
+    max: -0.02925, 0.19223, 0.43340
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.20520, 0.00256, 0.05280
+    max: -0.17090, 0.02992, 0.29480
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.10230, -0.03679, 0.05280
+    max: -0.06800, -0.00943, 0.26400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.01530, -0.03492, 0.05280
+    max: 0.04960, -0.00756, 0.29480
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.10840, 0.00256, 0.05280
+    max: 0.14270, 0.02992, 0.26400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.27625, -0.05237, 0.01700
+    max: -0.00185, 0.17563, 0.14020
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.07045, -0.05237, 0.01700
+    max: 0.20395, 0.17563, 0.14020
+    color: '#393026'
+    shape: Ellipsoid
+  - label: slumped bag body
+    min: -0.09125, -0.24852, 0.02000
+    max: 0.27875, 0.10148, 0.33600
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.04855, -0.16402, 0.19200
+    max: 0.16605, 0.05298, 0.34000
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: 0.00490, -0.09452, 0.31600
+    max: 0.08260, -0.01052, 0.39600
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.01625, -0.06952, 0.36400
+    max: 0.09575, -0.02652, 0.39400
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.03760, -0.20359, 0.04800
+    max: -0.01170, -0.17839, 0.26800
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.04010, -0.23983, 0.04800
+    max: 0.06600, -0.21463, 0.24000
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.12890, -0.23810, 0.04800
+    max: 0.15480, -0.21290, 0.26800
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.19920, -0.20359, 0.04800
+    max: 0.22510, -0.17839, 0.24000
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.09125, -0.25553, 0.01700
+    max: 0.11595, -0.04552, 0.12900
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.06415, -0.25553, 0.01700
+    max: 0.27135, -0.04552, 0.12900
+    color: '#393026'
+    shape: Ellipsoid
+  - label: crushed can
+    min: -0.27750, -0.25853, 0.01700
+    max: -0.09750, -0.13852, 0.10200
+    color: '#8D8875'
+    shape: CylinderX
+  - label: crushed can end
+    min: -0.13050, -0.24702, 0.02900
+    max: -0.09050, -0.15002, 0.08600
+    color: '#625F52'
+    shape: CylinderX
+  - label: dented metal can
+    min: -0.03875, -0.33102, 0.01500
+    max: 0.10125, -0.19103, 0.09500
+    color: '#777365'
+    shape: CylinderZ
+  - label: rolled can rim
+    min: -0.04295, -0.33522, 0.06600
+    max: 0.10545, -0.18682, 0.09900
+    color: '#A29B87'
+    shape: CylinderZ
+  - label: dark can top
+    min: -0.02125, -0.31352, 0.09700
+    max: 0.08375, -0.20852, 0.10400
+    color: '#4D4B41'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.04015, -0.33242, 0.04000
+    max: 0.10265, -0.18962, 0.05900
+    color: '#686353'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.04015, -0.33242, 0.04800
+    max: 0.10265, -0.18962, 0.06700
+    color: '#686353'
+    shape: CylinderZ
+- type: cmu3DModel
+  id: CMU3DDecorFloorTrashbags4
+  label: Refuse bags 4
+  status: draft
+  sourcePrototypes:
+  - DecorFloorTrashbags4
+  description: Distinct source bag grouping, with tied necks, overlapping round bodies, gathered folds and separate
+    loose cans where shown. Opaque brown-black source palette and single-frame fixed facing are retained. Fine fabric
+    creases and hidden depths remain inferred. Ground composition is centered in its saved tile independently of the
+    padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear footprint.
+  referencePrototype: DecorFloorTrashbags4
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: trashbags_4
+  sourceDirections: 1
+  parts:
+  - label: slumped bag body
+    min: -0.36764, -0.18884, 0.02000
+    max: -0.04085, 0.15663, 0.32810
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.33169, -0.10639, 0.18720
+    max: -0.14215, 0.10779, 0.33150
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: -0.28524, -0.03795, 0.30810
+    max: -0.21662, 0.04496, 0.38610
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.30695, -0.01237, 0.35490
+    max: -0.20238, 0.02778, 0.38415
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.32025, -0.14539, 0.04680
+    max: -0.29738, -0.12052, 0.26130
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.25163, -0.18117, 0.04680
+    max: -0.22875, -0.15630, 0.23400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.17320, -0.17946, 0.04680
+    max: -0.15032, -0.15459, 0.26130
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.11111, -0.14539, 0.04680
+    max: -0.08823, -0.12052, 0.23400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.36764, -0.19575, 0.01700
+    max: -0.18464, 0.01153, 0.12620
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.23039, -0.19575, 0.01700
+    max: -0.04738, 0.01153, 0.12620
+    color: '#393026'
+    shape: Ellipsoid
+  - label: slumped bag body
+    min: -0.19724, -0.00910, 0.02000
+    max: 0.13889, 0.32702, 0.35180
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.15933, 0.07157, 0.20160
+    max: 0.03562, 0.27997, 0.35700
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: -0.11116, 0.13823, 0.33180
+    max: -0.04057, 0.21890, 0.41580
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.13188, 0.16269, 0.38220
+    max: -0.02731, 0.20284, 0.41370
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.14850, 0.03359, 0.05040
+    max: -0.12497, 0.05780, 0.28140
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.07792, -0.00121, 0.05040
+    max: -0.05439, 0.02299, 0.25200
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.00275, 0.00045, 0.05040
+    max: 0.02628, 0.02465, 0.28140
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.06662, 0.03359, 0.05040
+    max: 0.09015, 0.05780, 0.25200
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.19724, -0.01583, 0.01700
+    max: -0.00901, 0.18585, 0.13460
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.05607, -0.01583, 0.01700
+    max: 0.13216, 0.18585, 0.13460
+    color: '#393026'
+    shape: Ellipsoid
+  - label: slumped bag body
+    min: 0.08520, -0.31955, 0.02000
+    max: 0.44000, 0.05392, 0.30440
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: 0.12703, -0.23179, 0.17280
+    max: 0.33281, -0.00023, 0.30600
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: 0.17866, -0.15803, 0.28440
+    max: 0.25317, -0.06839, 0.35640
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: 0.15989, -0.12908, 0.32760
+    max: 0.26447, -0.08893, 0.35460
+    color: '#554838'
+  - label: creased bag fold
+    min: 0.13665, -0.27387, 0.04320
+    max: 0.16148, -0.24698, 0.24120
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.21115, -0.31255, 0.04320
+    max: 0.23599, -0.28566, 0.21600
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.29631, -0.31070, 0.04320
+    max: 0.32114, -0.28381, 0.24120
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.36372, -0.27387, 0.04320
+    max: 0.38855, -0.24698, 0.21600
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.08520, -0.32702, 0.01700
+    max: 0.28389, -0.10294, 0.11780
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.23422, -0.32702, 0.01700
+    max: 0.43290, -0.10294, 0.11780
+    color: '#393026'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DDecorFloorTrashbags5
+  label: Refuse bags 5
+  status: draft
+  sourcePrototypes:
+  - DecorFloorTrashbags5
+  description: Distinct source bag grouping, with tied necks, overlapping round bodies, gathered folds and separate
+    loose cans where shown. Opaque brown-black source palette and single-frame fixed facing are retained. Fine fabric
+    creases and hidden depths remain inferred. Ground composition is centered in its saved tile independently of the
+    padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear footprint.
+  referencePrototype: DecorFloorTrashbags5
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: trashbags_5
+  sourceDirections: 1
+  parts:
+  - label: slumped bag body
+    min: -0.30875, -0.03897, 0.02000
+    max: 0.12125, 0.30102, 0.32810
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.25345, 0.04363, 0.18720
+    max: -0.00405, 0.25443, 0.33150
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: -0.18890, 0.11123, 0.30810
+    max: -0.09860, 0.19282, 0.38610
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.20375, 0.13503, 0.35490
+    max: -0.09175, 0.17802, 0.38415
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.24640, 0.00516, 0.04680
+    max: -0.21630, 0.02964, 0.26130
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.15610, -0.03004, 0.04680
+    max: -0.12600, -0.00556, 0.23400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.05290, -0.02836, 0.04680
+    max: -0.02280, -0.00388, 0.26130
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.02880, 0.00516, 0.04680
+    max: 0.05890, 0.02964, 0.23400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.30875, -0.04578, 0.01700
+    max: -0.06795, 0.15823, 0.12620
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.12815, -0.04578, 0.01700
+    max: 0.11265, 0.15823, 0.12620
+    color: '#393026'
+    shape: Ellipsoid
+  - label: slumped bag body
+    min: 0.00250, -0.11148, 0.02000
+    max: 0.37250, 0.24852, 0.32810
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: 0.04520, -0.02508, 0.18720
+    max: 0.25980, 0.19812, 0.33150
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: 0.09865, 0.04633, 0.30810
+    max: 0.17635, 0.13272, 0.38610
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: 0.07750, 0.07253, 0.35490
+    max: 0.18950, 0.11552, 0.38415
+    color: '#554838'
+  - label: creased bag fold
+    min: 0.05615, -0.06574, 0.04680
+    max: 0.08205, -0.03982, 0.26130
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.13385, -0.10302, 0.04680
+    max: 0.15975, -0.07710, 0.23400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.22265, -0.10124, 0.04680
+    max: 0.24855, -0.07532, 0.26130
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.29295, -0.06574, 0.04680
+    max: 0.31885, -0.03982, 0.23400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.00250, -0.11868, 0.01700
+    max: 0.20970, 0.09732, 0.12620
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.15790, -0.11868, 0.01700
+    max: 0.36510, 0.09732, 0.12620
+    color: '#393026'
+    shape: Ellipsoid
+  - label: slumped bag body
+    min: -0.21750, -0.23773, 0.02000
+    max: 0.09250, 0.06228, 0.29650
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.18740, -0.16272, 0.16800
+    max: -0.00760, 0.02327, 0.29750
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: -0.14505, -0.10273, 0.27650
+    max: -0.07995, -0.03073, 0.34650
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.17250, -0.08372, 0.31850
+    max: -0.06050, -0.04073, 0.34475
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.17255, -0.19679, 0.04200
+    max: -0.15085, -0.17518, 0.23450
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.10745, -0.22785, 0.04200
+    max: -0.08575, -0.20624, 0.21000
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.03305, -0.22636, 0.04200
+    max: -0.01135, -0.20477, 0.23450
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.02585, -0.19679, 0.04200
+    max: 0.04755, -0.17518, 0.21000
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.21750, -0.24373, 0.01700
+    max: -0.04390, -0.06372, 0.11500
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.08730, -0.24373, 0.01700
+    max: 0.08630, -0.06372, 0.11500
+    color: '#393026'
+    shape: Ellipsoid
+  - label: slumped bag body
+    min: 0.14625, -0.29523, 0.02000
+    max: 0.41625, -0.00522, 0.25700
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: 0.16795, -0.22212, 0.14400
+    max: 0.32455, -0.04233, 0.25500
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: 0.20290, -0.16403, 0.23700
+    max: 0.25960, -0.09443, 0.29700
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: 0.17125, -0.14622, 0.27300
+    max: 0.28325, -0.10322, 0.29550
+    color: '#554838'
+  - label: creased bag fold
+    min: 0.18540, -0.25507, 0.03600
+    max: 0.20430, -0.23419, 0.20100
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.24210, -0.28511, 0.03600
+    max: 0.26100, -0.26423, 0.18000
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.30690, -0.28367, 0.03600
+    max: 0.32580, -0.26279, 0.20100
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.35820, -0.25507, 0.03600
+    max: 0.37710, -0.23419, 0.18000
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.14625, -0.30103, 0.01700
+    max: 0.29745, -0.12702, 0.10100
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.25965, -0.30103, 0.01700
+    max: 0.41085, -0.12702, 0.10100
+    color: '#393026'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DDecorFloorTrashbags6
+  label: Refuse bags 6
+  status: draft
+  sourcePrototypes:
+  - DecorFloorTrashbags6
+  description: Distinct source bag grouping, with tied necks, overlapping round bodies, gathered folds and separate
+    loose cans where shown. Opaque brown-black source palette and single-frame fixed facing are retained. Fine fabric
+    creases and hidden depths remain inferred. Ground composition is centered in its saved tile independently of the
+    padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear footprint.
+  referencePrototype: DecorFloorTrashbags6
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: trashbags_6
+  sourceDirections: 1
+  parts:
+  - label: slumped bag body
+    min: -0.14070, -0.06921, 0.02000
+    max: 0.25995, 0.26467, 0.37550
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.08996, 0.01140, 0.21600
+    max: 0.14242, 0.21840, 0.38250
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: -0.03014, 0.07770, 0.35550
+    max: 0.05399, 0.15783, 0.44550
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.04531, 0.10155, 0.40950
+    max: 0.06153, 0.14256, 0.44325
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.08261, -0.02635, 0.05400
+    max: -0.05456, -0.00231, 0.30150
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.00153, -0.06092, 0.05400
+    max: 0.02957, -0.03688, 0.27000
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.09768, -0.05927, 0.05400
+    max: 0.12573, -0.03523, 0.30150
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.17381, -0.02635, 0.05400
+    max: 0.20185, -0.00231, 0.27000
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.14070, -0.07589, 0.01700
+    max: 0.08366, 0.12444, 0.14300
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.02757, -0.07589, 0.01700
+    max: 0.25193, 0.12444, 0.14300
+    color: '#393026'
+    shape: Ellipsoid
+  - label: slumped bag body
+    min: -0.32076, -0.23853, 0.02000
+    max: 0.02266, 0.07627, 0.32810
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: -0.28203, -0.16155, 0.18720
+    max: -0.08285, 0.03363, 0.33150
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: -0.23281, -0.09887, 0.30810
+    max: -0.16069, -0.02332, 0.38610
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: -0.25398, -0.07732, 0.35490
+    max: -0.14714, -0.03630, 0.38415
+    color: '#554838'
+  - label: creased bag fold
+    min: -0.27096, -0.19719, 0.04680
+    max: -0.24692, -0.17452, 0.26130
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.19885, -0.22979, 0.04680
+    max: -0.17481, -0.20713, 0.23400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.11643, -0.22824, 0.04680
+    max: -0.09239, -0.20557, 0.26130
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: -0.05118, -0.19719, 0.04680
+    max: -0.02714, -0.17452, 0.23400
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.32076, -0.24483, 0.01700
+    max: -0.12845, -0.05595, 0.12620
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: -0.17652, -0.24483, 0.01700
+    max: 0.01579, -0.05595, 0.12620
+    color: '#393026'
+    shape: Ellipsoid
+  - label: slumped bag body
+    min: 0.09659, -0.25761, 0.02000
+    max: 0.44000, 0.09535, 0.31230
+    color: '#3B352C'
+    shape: Ellipsoid
+  - label: gathered bag shoulder
+    min: 0.13531, -0.17338, 0.17760
+    max: 0.33450, 0.04545, 0.31450
+    color: '#453B2F'
+    shape: Ellipsoid
+  - label: cinched bag neck
+    min: 0.18454, -0.10345, 0.29230
+    max: 0.25665, -0.01874, 0.36630
+    color: '#302A22'
+    shape: Ellipsoid
+  - label: knotted bag tie
+    min: 0.16336, -0.07732, 0.33670
+    max: 0.27020, -0.03630, 0.36445
+    color: '#554838'
+  - label: creased bag fold
+    min: 0.14638, -0.21322, 0.04440
+    max: 0.17042, -0.18781, 0.24790
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.21850, -0.24978, 0.04440
+    max: 0.24254, -0.22436, 0.22200
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.30092, -0.24803, 0.04440
+    max: 0.32496, -0.22262, 0.24790
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: creased bag fold
+    min: 0.36617, -0.21322, 0.04440
+    max: 0.39020, -0.18781, 0.22200
+    color: '#2D2821'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.09659, -0.26467, 0.01700
+    max: 0.28890, -0.05290, 0.12060
+    color: '#393026'
+    shape: Ellipsoid
+  - label: rumpled lower bag
+    min: 0.24082, -0.26467, 0.01700
+    max: 0.43313, -0.05290, 0.12060
+    color: '#393026'
+    shape: Ellipsoid
+- type: cmu3DModel
+  id: CMU3DDecorFloorBookPile4
+  label: Scattered worn book stacks
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBookPile4
+  description: Two offset source book piles with separate worn covers and page blocks. Their differing heights and
+    ground spread follow the source composition; diagonal binding angles and wear remain unfinished. Ground composition
+    is centered in its saved tile independently of the padded 48-pixel sprite canvas; the relative arrangement is
+    retained within the wall-clear footprint.
+  referencePrototype: DecorFloorBookPile4
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: bookpile_4
+  sourceDirections: 1
+  parts:
+  - label: worn book cover
+    min: -0.28000, 0.11300, 0.01000
+    max: -0.04000, 0.32300, 0.08500
+    color: '#524D3E'
+  - label: exposed yellowed pages
+    min: -0.25500, 0.10700, 0.02300
+    max: -0.05500, 0.12000, 0.07000
+    color: '#90836A'
+  - label: worn book cover
+    min: -0.29500, 0.12800, 0.09000
+    max: -0.08500, 0.32800, 0.15500
+    color: '#524D3E'
+  - label: exposed yellowed pages
+    min: -0.27000, 0.12200, 0.10300
+    max: -0.10000, 0.13500, 0.14000
+    color: '#90836A'
+  - label: worn book cover
+    min: -0.43000, -0.10200, 0.01000
+    max: -0.17000, 0.09800, 0.07500
+    color: '#524D3E'
+  - label: exposed yellowed pages
+    min: -0.40500, -0.10800, 0.02300
+    max: -0.18500, -0.09500, 0.06000
+    color: '#90836A'
+  - label: worn book cover
+    min: 0.11500, -0.32200, 0.01000
+    max: 0.38500, -0.10200, 0.08500
+    color: '#524D3E'
+  - label: exposed yellowed pages
+    min: 0.14000, -0.32800, 0.02300
+    max: 0.37000, -0.31500, 0.07000
+    color: '#90836A'
+  - label: worn book cover
+    min: 0.10000, -0.28700, 0.09000
+    max: 0.34000, -0.07700, 0.15000
+    color: '#524D3E'
+  - label: exposed yellowed pages
+    min: 0.12500, -0.29300, 0.10300
+    max: 0.32500, -0.28000, 0.13500
+    color: '#90836A'
+  - label: worn book cover
+    min: 0.08000, -0.26200, 0.15500
+    max: 0.30000, -0.06200, 0.22500
+    color: '#524D3E'
+  - label: exposed yellowed pages
+    min: 0.10500, -0.26800, 0.16800
+    max: 0.28500, -0.25500, 0.21000
+    color: '#90836A'
+- type: cmu3DModel
+  id: CMU3DDecorFloorFood1
+  label: Discarded food carton and cans
+  status: draft
+  sourcePrototypes:
+  - DecorFloorFood1
+  description: Open discarded carton, metal food containers and torn wrapping follow the source grouping. Fold angles,
+    crumpled paper and unseen surfaces remain approximate. Ground composition is centered in its saved tile independently
+    of the padded 48-pixel sprite canvas; the relative arrangement is retained within the wall-clear footprint.
+  referencePrototype: DecorFloorFood1
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: foodstuff_1
+  sourceDirections: 1
+  parts:
+  - label: discarded carton
+    min: -0.22000, 0.15750, 0.01000
+    max: 0.12000, 0.41750, 0.19000
+    color: '#6A5336'
+  - label: carton opening
+    min: -0.18500, 0.18750, 0.19000
+    max: 0.09000, 0.38750, 0.19500
+    color: '#342D22'
+  - label: raised carton back flap
+    min: -0.22000, 0.38750, 0.18000
+    max: 0.12000, 0.41750, 0.28000
+    color: '#8D704D'
+  - label: folded carton flap
+    min: -0.27000, 0.14750, 0.17000
+    max: -0.15000, 0.36750, 0.20000
+    color: '#806342'
+  - label: dented metal can
+    min: -0.04250, -0.24375, 0.01500
+    max: 0.16750, -0.03375, 0.11500
+    color: '#777365'
+    shape: CylinderZ
+  - label: rolled can rim
+    min: -0.04880, -0.25005, 0.08600
+    max: 0.17380, -0.02745, 0.11900
+    color: '#A29B87'
+    shape: CylinderZ
+  - label: dark can top
+    min: -0.01625, -0.21750, 0.11700
+    max: 0.14125, -0.06000, 0.12400
+    color: '#4D4B41'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.04460, -0.24585, 0.04000
+    max: 0.16960, -0.03165, 0.05900
+    color: '#686353'
+    shape: CylinderZ
+  - label: can seam
+    min: -0.04460, -0.24585, 0.06000
+    max: 0.16960, -0.03165, 0.07900
+    color: '#686353'
+    shape: CylinderZ
+  - label: crushed can
+    min: 0.22250, -0.35500, 0.01700
+    max: 0.40250, -0.23500, 0.10200
+    color: '#8D8875'
+    shape: CylinderX
+  - label: crushed can end
+    min: 0.36950, -0.34350, 0.02900
+    max: 0.40950, -0.24650, 0.08600
+    color: '#625F52'
+    shape: CylinderX
+  - label: crushed can
+    min: -0.15250, -0.41750, 0.01700
+    max: 0.02750, -0.29750, 0.10200
+    color: '#8D8875'
+    shape: CylinderX
+  - label: crushed can end
+    min: -0.00550, -0.40600, 0.02900
+    max: 0.03450, -0.30900, 0.08600
+    color: '#625F52'
+    shape: CylinderX
+  - label: torn wrapping
+    min: -0.17000, -0.02750, 0.01200
+    max: -0.10500, 0.03250, 0.02900
+    color: '#908A73'
+  - label: torn wrapping
+    min: -0.11000, -0.10750, 0.01200
+    max: -0.04500, -0.04750, 0.02900
+    color: '#908A73'
+  - label: torn wrapping
+    min: -0.02000, -0.14750, 0.01200
+    max: 0.04500, -0.08750, 0.02900
+    color: '#908A73'
+- type: cmu3DModel
+  id: CMU3DDecorBarrels
+  label: Rusted standing and fallen drums
+  status: draft
+  sourcePrototypes:
+  - DecorBarrels
+  description: Source arrangement of one upright and two fallen rusty drums. Capped cylinders preserve straight sidewalls
+    and separate hoops/lids. Crushed barrel deformation, corrosion and hidden construction remain approximate. Ground
+    composition is centered in its saved tile independently of the padded 48-pixel sprite canvas; the relative arrangement
+    is retained within the wall-clear footprint.
+  referencePrototype: DecorBarrels
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: barrels1
+  sourceDirections: 1
+  parts:
+  - label: upright rusty drum
+    min: 0.01428, -0.43096, 0.02000
+    max: 0.42358, -0.02165, 0.71000
+    color: '#68462E'
+    shape: CylinderZ
+  - label: rusty drum hoop
+    min: 0.00524, -0.44000, 0.07000
+    max: 0.43262, -0.01261, 0.10700
+    color: '#89603B'
+    shape: CylinderZ
+  - label: rusty drum hoop
+    min: 0.00524, -0.44000, 0.30000
+    max: 0.43262, -0.01261, 0.33700
+    color: '#89603B'
+    shape: CylinderZ
+  - label: rusty drum hoop
+    min: 0.00524, -0.44000, 0.55000
+    max: 0.43262, -0.01261, 0.58700
+    color: '#89603B'
+    shape: CylinderZ
+  - label: rusty drum hoop
+    min: 0.00524, -0.44000, 0.68000
+    max: 0.43262, -0.01261, 0.71700
+    color: '#89603B'
+    shape: CylinderZ
+  - label: dark rusted lid
+    min: 0.02618, -0.41906, 0.71900
+    max: 0.41168, -0.03355, 0.73100
+    color: '#3D2B1F'
+    shape: CylinderZ
+  - label: fallen rusty drum
+    min: -0.41882, -0.21679, 0.03500
+    max: -0.01904, 0.24011, 0.45500
+    color: '#523523'
+    shape: CylinderY
+  - label: fallen drum rim
+    min: -0.42644, -0.21203, 0.02700
+    max: -0.01142, -0.17586, 0.46300
+    color: '#70482D'
+    shape: CylinderY
+  - label: fallen drum rim
+    min: -0.42644, 0.19918, 0.02700
+    max: -0.01142, 0.23535, 0.46300
+    color: '#70482D'
+    shape: CylinderY
+  - label: fallen drum end
+    min: -0.39978, -0.22726, 0.05500
+    max: -0.03807, -0.21488, 0.43500
+    color: '#402D22'
+    shape: CylinderY
+  - label: fallen rusty drum
+    min: -0.12374, -0.01690, 0.07500
+    max: 0.27604, 0.44000, 0.49500
+    color: '#523523'
+    shape: CylinderY
+  - label: fallen drum rim
+    min: -0.13136, -0.01214, 0.06700
+    max: 0.28366, 0.02403, 0.50300
+    color: '#70482D'
+    shape: CylinderY
+  - label: fallen drum rim
+    min: -0.13136, 0.39907, 0.06700
+    max: 0.28366, 0.43524, 0.50300
+    color: '#70482D'
+    shape: CylinderY
+  - label: fallen drum end
+    min: -0.10471, -0.02737, 0.09500
+    max: 0.25700, -0.01499, 0.47500
+    color: '#402D22'
+    shape: CylinderY
+  - label: irregular corrosion
+    min: 0.06663, -0.40421, 0.19000
+    max: 0.14278, -0.38993, 0.33000
+    color: '#493221'
+    shape: Ellipsoid
+  - label: irregular corrosion
+    min: 0.23321, -0.43092, 0.38000
+    max: 0.31888, -0.41664, 0.53000
+    color: '#513522'
+    shape: Ellipsoid
+  - label: irregular corrosion
+    min: 0.10946, -0.43344, 0.57000
+    max: 0.23321, -0.41916, 0.63000
+    color: '#936340'
+    shape: Ellipsoid
+  - label: irregular corrosion
+    min: 0.33077, -0.38971, 0.12000
+    max: 0.37361, -0.37543, 0.24000
+    color: '#4A3120'
+    shape: Ellipsoid

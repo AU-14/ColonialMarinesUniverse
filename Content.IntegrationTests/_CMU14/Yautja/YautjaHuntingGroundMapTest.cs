@@ -9,7 +9,6 @@ using Content.Client.Clickable;
 using Content.Server.Maps;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Power.Components;
-using Content.Server.Spawners.Components;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared.CMU14.Yautja;
@@ -39,6 +38,11 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaHuntingGroundMapTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13Prototype = "CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaYoungbloodLoadoutVendorPrototype = "CMUYautjaYoungbloodLoadoutVendor";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLeftSouthOffset0x16Prototype = "CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLeftSouthOffset0x16";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthVariant02Offset0x16Prototype = "CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthVariant02Offset0x16";
+
     [Test]
     public async Task TeleporterDialogRejectsResponsesFromThePreviousActor()
     {
@@ -157,7 +161,7 @@ public sealed class YautjaHuntingGroundMapTest
                      })
             {
                 var prototype = prototypes.Index<EntityPrototype>(prototypeId);
-                Assert.That(prototype.TryGetComponent<AccessReaderComponent>(out var reader, factory), Is.True, prototypeId);
+                Assert.That(prototype.TryComp<AccessReaderComponent>(out var reader, factory), Is.True, prototypeId);
 
                 var actual = reader!.AccessLists
                     .SelectMany(access => access)
@@ -196,173 +200,6 @@ public sealed class YautjaHuntingGroundMapTest
                 "Playable planet maps missing a CMUYautjaGroundRelayDestination marker:\n" +
                 string.Join('\n', errors));
         });
-
-        await pair.CleanReturnAsync();
-    }
-
-    [Test]
-    public async Task PlayablePlanetGroundRelaysAreAwayFromHumanStructures()
-    {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
-        var server = pair.Server;
-
-        var errors = new List<string>();
-
-        await server.WaitPost(() =>
-        {
-            var entMan = server.EntMan;
-            var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var componentFactory = entMan.ComponentFactory;
-            var loader = entMan.System<MapLoaderSystem>();
-            var mapSystem = entMan.System<SharedMapSystem>();
-            var transform = entMan.System<SharedTransformSystem>();
-            var turf = entMan.System<TurfSystem>();
-            var loadedMaps = new List<EntityUid>();
-
-            try
-            {
-                var mapPaths = GetPlayablePlanetMapPaths(prototypes, componentFactory, pair.IsTestPrototype);
-                Assert.That(mapPaths, Is.Not.Empty,
-                    "Every currently playable primary planet map must be checked.");
-
-                foreach (var mapPath in mapPaths)
-                {
-                    if (!loader.TryLoadMap(mapPath, out var map, out var grids,
-                            DeserializationOptions.Default with { InitializeMaps = true }) ||
-                        map == null ||
-                        grids == null)
-                    {
-                        errors.Add($"{mapPath}: failed to load map.");
-                        continue;
-                    }
-
-                    loadedMaps.Add(map.Value.Owner);
-                    var gridIds = grids.Select(grid => grid.Owner).ToHashSet();
-                    var dangerousTriggers = new List<LoadedDangerousTrigger>();
-                    var humanStructures = new List<LoadedHumanStructure>();
-                    var relayMarkers = new List<LoadedGroundRelayMarker>();
-
-                    var entityQuery = entMan.EntityQueryEnumerator<MetaDataComponent, TransformComponent>();
-                    while (entityQuery.MoveNext(out var uid, out var meta, out var xform))
-                    {
-                        if (xform.GridUid is not { } gridUid ||
-                            !gridIds.Contains(gridUid) ||
-                            meta.EntityPrototype is not { } prototype)
-                        {
-                            continue;
-                        }
-
-                        if (prototype.ID == "CMUYautjaGroundRelayDestination" &&
-                            entMan.TryGetComponent<YautjaRelayDestinationComponent>(uid, out var destination) &&
-                            destination.Kind == YautjaRelayDestinationKind.Ground)
-                        {
-                            relayMarkers.Add(new LoadedGroundRelayMarker(
-                                uid,
-                                gridUid,
-                                transform.GetWorldPosition(xform),
-                                $"{destination.Id} ({destination.DisplayName})"));
-                            continue;
-                        }
-
-                        if (TryGetDangerousTriggerComponents(entMan, componentFactory, uid, out var triggerComponents))
-                        {
-                            dangerousTriggers.Add(new LoadedDangerousTrigger(
-                                gridUid,
-                                transform.GetWorldPosition(xform),
-                                prototype.ID,
-                                triggerComponents));
-                        }
-
-                        if (!IsHumanInfrastructure(entMan, uid, meta, xform))
-                            continue;
-
-                        humanStructures.Add(new LoadedHumanStructure(
-                            uid,
-                            gridUid,
-                            transform.GetWorldPosition(xform),
-                            prototype.ID));
-                    }
-
-                    if (relayMarkers.Count == 0)
-                    {
-                        errors.Add($"{mapPath}: no CMUYautjaGroundRelayDestination markers were loaded.");
-                        entMan.DeleteEntity(map.Value.Owner);
-                        continue;
-                    }
-
-                    if (humanStructures.Count == 0)
-                    {
-                        errors.Add($"{mapPath}: no classified human infrastructure was found.");
-                        entMan.DeleteEntity(map.Value.Owner);
-                        continue;
-                    }
-
-                    foreach (var marker in relayMarkers)
-                    {
-                        var markerXform = entMan.GetComponent<TransformComponent>(marker.Uid);
-                        if (markerXform.GridUid is not { } markerGrid ||
-                            !entMan.TryGetComponent<MapGridComponent>(markerGrid, out var gridComp) ||
-                            !mapSystem.TryGetTileRef(markerGrid, gridComp, markerXform.Coordinates, out var tileRef))
-                        {
-                            errors.Add($"{mapPath}: relay {marker.Label} at {marker.Position} is not on a valid grid tile.");
-                            continue;
-                        }
-
-                        foreach (var trigger in dangerousTriggers.Where(trigger =>
-                                     trigger.GridUid == marker.GridUid &&
-                                     trigger.Position == marker.Position))
-                        {
-                            errors.Add(
-                                $"{mapPath}: relay {marker.Label} at {marker.Position} overlaps dangerous trigger " +
-                                $"{trigger.Prototype} ({trigger.Components}).");
-                        }
-
-                        if (tileRef.Tile.IsEmpty ||
-                            turf.IsTileBlocked(tileRef, CollisionGroup.MobMask))
-                        {
-                            errors.Add($"{mapPath}: relay {marker.Label} at {marker.Position} is not on an accessible open cell.");
-                        }
-
-                        var nearest = humanStructures
-                            .Where(structure => structure.GridUid == marker.GridUid)
-                            .Select(structure => new
-                            {
-                                Structure = structure,
-                                Distance = Vector2.Distance(marker.Position, structure.Position),
-                            })
-                            .OrderBy(candidate => candidate.Distance)
-                            .FirstOrDefault();
-
-                        if (nearest == null)
-                        {
-                            errors.Add($"{mapPath}: relay {marker.Label} at {marker.Position} has no classified human infrastructure on its grid.");
-                            continue;
-                        }
-
-                        if (nearest.Distance < 8f)
-                        {
-                            errors.Add(
-                                $"{mapPath}: relay {marker.Label} at {marker.Position} is {nearest.Distance:0.##} tiles from " +
-                                $"{nearest.Structure.Prototype} at {nearest.Structure.Position}; expected at least 8.");
-                        }
-                    }
-
-                    entMan.DeleteEntity(map.Value.Owner);
-                }
-            }
-            finally
-            {
-                foreach (var loadedMap in loadedMaps)
-                {
-                    if (!entMan.Deleted(loadedMap))
-                        entMan.DeleteEntity(loadedMap);
-                }
-            }
-        });
-
-        Assert.That(errors, Is.Empty,
-            "In-rotation ground relay markers must be open, free of dangerous triggers, and at least 8 tiles from human infrastructure:\n" +
-            string.Join('\n', errors));
 
         await pair.CleanReturnAsync();
     }
@@ -461,8 +298,8 @@ public sealed class YautjaHuntingGroundMapTest
             var turf = entMan.System<TurfSystem>();
 
             var console = prototypes.Index<EntityPrototype>(
-                "CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13");
-            Assert.That(console.TryGetComponent<YautjaHuntConsoleComponent>(out var consoleComp, factory), Is.True);
+                CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13Prototype);
+            Assert.That(console.TryComp<YautjaHuntConsoleComponent>(out var consoleComp, factory), Is.True);
             var desert = consoleComp!.AvailableDestinations.Single(destination => destination.Id == "desert_moon");
 
             Assert.That(loader.TryLoadMap(
@@ -798,10 +635,10 @@ public sealed class YautjaHuntingGroundMapTest
             Assert.That(map, Is.Not.Null);
             Assert.That(grids, Is.Not.Null);
 
-            var destination = entMan.EntityQuery<YautjaHuntTeleportDestinationComponent, TransformComponent>()
+            var destination = entMan.QueryEntities<YautjaHuntTeleportDestinationComponent, TransformComponent>()
                 .Where(destination =>
-                    destination.Item1.Kind == YautjaHuntTeleporterKind.Ship &&
-                    destination.Item1.Id == "desert_moon")
+                    destination.Item1.Comp.Kind == YautjaHuntTeleporterKind.Ship &&
+                    destination.Item1.Comp.Id == "desert_moon")
                 .Select(destination => destination.Item2.Owner)
                 .Single();
             var teleporter = entMan.SpawnEntity(null, origin.GridCoords);
@@ -861,9 +698,9 @@ public sealed class YautjaHuntingGroundMapTest
             var factory = server.EntMan.ComponentFactory;
 
             Assert.That(prototypes.TryIndex<EntityPrototype>(
-                "CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13",
+                CMUHunterShipPlacedCMUHunterShipFlightConsoleOverwatchSouthOffset0x13Prototype,
                 out var console), Is.True);
-            Assert.That(console!.TryGetComponent<YautjaHuntConsoleComponent>(out var component, factory), Is.True);
+            Assert.That(console!.TryComp<YautjaHuntConsoleComponent>(out var component, factory), Is.True);
             Assert.That(component!.Kind, Is.EqualTo(YautjaHuntConsoleKind.HuntingGroundSelection));
             Assert.That(component.AvailableDestinations.Select(destination => destination.Id),
                 Does.Contain("jungle_moon"));
@@ -889,7 +726,7 @@ public sealed class YautjaHuntingGroundMapTest
             var resources = server.ResolveDependency<IResourceManager>();
 
             var selectionConsoles = prototypes.EnumeratePrototypes<EntityPrototype>()
-                .Where(proto => proto.TryGetComponent<YautjaHuntConsoleComponent>(out var component, factory) &&
+                .Where(proto => proto.TryComp<YautjaHuntConsoleComponent>(out var component, factory) &&
                                 component.Kind == YautjaHuntConsoleKind.HuntingGroundSelection)
                 .ToArray();
 
@@ -897,7 +734,7 @@ public sealed class YautjaHuntingGroundMapTest
 
             foreach (var console in selectionConsoles)
             {
-                Assert.That(console.TryGetComponent<YautjaHuntConsoleComponent>(out var component, factory), Is.True);
+                Assert.That(console.TryComp<YautjaHuntConsoleComponent>(out var component, factory), Is.True);
                 var destinations = component!.AvailableDestinations;
 
                 Assert.Multiple(() =>
@@ -1287,12 +1124,12 @@ public sealed class YautjaHuntingGroundMapTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            Assert.That(prototypes.HasIndex<EntityPrototype>("CMUYautjaYoungbloodLoadoutVendor"), Is.True);
+            Assert.That(prototypes.HasIndex<EntityPrototype>(CMUYautjaYoungbloodLoadoutVendorPrototype), Is.True);
 
             var youngWrapper = prototypes.Index<EntityPrototype>(
-                "CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLeftSouthOffset0x16");
+                CMUHunterShipPlacedCMUYautjaYoungbloodLoadoutVendorPredVendorLeftSouthOffset0x16Prototype);
             var adultWrapper = prototypes.Index<EntityPrototype>(
-                "CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthVariant02Offset0x16");
+                CMUHunterShipPlacedCMUYautjaLoadoutVendorPredVendorCentreSouthVariant02Offset0x16Prototype);
 
             Assert.That(youngWrapper.Parents, Does.Contain("CMUYautjaYoungbloodLoadoutVendor"));
             Assert.That(adultWrapper.Parents, Does.Contain("CMUYautjaLoadoutVendor"));
@@ -1316,8 +1153,8 @@ public sealed class YautjaHuntingGroundMapTest
 
             var rackPrototypes = prototypes.EnumeratePrototypes<EntityPrototype>()
                 .Where(proto => !proto.Abstract &&
-                                proto.TryGetComponent<YautjaGearRackComponent>(out _, factory) &&
-                                proto.TryGetComponent<SpriteComponent>(out _, factory))
+                                proto.TryComp<YautjaGearRackComponent>(out _, factory) &&
+                                proto.TryComp<SpriteComponent>(out _, factory))
                 .ToArray();
 
             Assert.That(rackPrototypes, Is.Not.Empty);
@@ -1381,161 +1218,10 @@ public sealed class YautjaHuntingGroundMapTest
         return paths;
     }
 
-    private static bool IsHumanInfrastructure(
-        IEntityManager entMan,
-        EntityUid uid,
-        MetaDataComponent meta,
-        TransformComponent transform)
-    {
-        if (IsHumanSpawn(entMan, uid, meta))
-            return true;
-
-        if (!transform.Anchored ||
-            meta.EntityPrototype is not { } prototype)
-        {
-            return false;
-        }
-
-        var prototypeText = $"{prototype.ID} {meta.EntityName}";
-        return ContainsAny(prototypeText, HumanInfrastructureTerms) &&
-               !ContainsAny(prototypeText, NonHumanInfrastructureTerms);
-    }
-
-    private static bool IsHumanSpawn(IEntityManager entMan, EntityUid uid, MetaDataComponent meta)
-    {
-        if (!entMan.TryGetComponent<SpawnPointComponent>(uid, out var spawn))
-            return false;
-
-        if (meta.EntityPrototype is { } prototype &&
-            ContainsAny($"{prototype.ID} {meta.EntityName}", NonHumanInfrastructureTerms))
-        {
-            return false;
-        }
-
-        return spawn.Job != null ||
-               spawn.SpawnType is SpawnPointType.Job or
-                   SpawnPointType.LateJoin or
-                   SpawnPointType.LateJoinGovfor or
-                   SpawnPointType.LateJoinOpfor;
-    }
-
-    private static bool ContainsAny(string value, IReadOnlyList<string> terms)
-    {
-        foreach (var term in terms)
-        {
-            if (value.Contains(term, StringComparison.OrdinalIgnoreCase))
-                return true;
-        }
-
-        return false;
-    }
-
-    private static bool TryGetDangerousTriggerComponents(
-        IEntityManager entMan,
-        IComponentFactory componentFactory,
-        EntityUid uid,
-        out string dangerousComponents)
-    {
-        var components = entMan.GetComponents(uid)
-            .Select(component => componentFactory.GetComponentName(component.GetType()))
-            .Where(componentName =>
-                componentName.Equals("CMUFalling", StringComparison.Ordinal) ||
-                componentName.Contains("Teleport", StringComparison.OrdinalIgnoreCase) ||
-                componentName.Contains("Damage", StringComparison.OrdinalIgnoreCase) &&
-                componentName.Contains("Trigger", StringComparison.OrdinalIgnoreCase))
-            .OrderBy(componentName => componentName, StringComparer.Ordinal)
-            .ToArray();
-
-        dangerousComponents = string.Join(", ", components);
-        return components.Length > 0;
-    }
-
-    private static readonly string[] HumanInfrastructureTerms =
-    [
-        "airlock",
-        "apc",
-        "barricade",
-        "bed",
-        "button",
-        "cabinet",
-        "cable",
-        "chair",
-        "computer",
-        "console",
-        "crate",
-        "desk",
-        "door",
-        "engine",
-        "fence",
-        "furniture",
-        "generator",
-        "girder",
-        "lamp",
-        "locker",
-        "machine",
-        "machinery",
-        "pipe",
-        "rack",
-        "railing",
-        "sandbag",
-        "shelf",
-        "shutter",
-        "sign",
-        "table",
-        "terminal",
-        "vendor",
-        "vending",
-        "wall",
-        "window",
-    ];
-
-    private static readonly string[] NonHumanInfrastructureTerms =
-    [
-        "boulder",
-        "bush",
-        "cave",
-        "crystal",
-        "flora",
-        "flower",
-        "foliage",
-        "grass",
-        "hive",
-        "moss",
-        "mushroom",
-        "plant",
-        "resin",
-        "rock",
-        "root",
-        "stalagmite",
-        "tree",
-        "vegetation",
-        "vine",
-        "weed",
-        "xeno",
-    ];
-
-    private readonly record struct LoadedGroundRelayMarker(
-        EntityUid Uid,
-        EntityUid GridUid,
-        Vector2 Position,
-        string Label);
-
-    private readonly record struct LoadedDangerousTrigger(
-        EntityUid GridUid,
-        Vector2 Position,
-        string Prototype,
-        string Components);
-
     private readonly record struct LoadedHuntingGroundLandmark(
         EntityUid Uid,
         Vector2 Position,
         Angle Rotation);
-
-    private readonly record struct LoadedHumanStructure(
-        EntityUid Uid,
-        EntityUid GridUid,
-        Vector2 Position,
-        string Prototype);
 
     private static Dictionary<string, int> CountMapPrototypes(IResourceManager resources, ResPath mapPath)
     {

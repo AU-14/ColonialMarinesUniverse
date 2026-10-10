@@ -11,7 +11,7 @@ namespace Content.Shared.CMU14.Medical.Defibrillator;
 /// Plays a defibrillator's voice prompts. An AED analyzes before every shock: "shock advised" and it charges at
 /// the energy it picked, then "stand clear" just before the shock; "no shock advised" and it won't charge at all.
 /// </summary>
-public sealed class CMUDefibVoiceSystem : EntitySystem
+public sealed partial class CMUDefibVoiceSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private CMUDefibChargeSystem _charge = default!;
@@ -36,13 +36,13 @@ public sealed class CMUDefibVoiceSystem : EntitySystem
         {
             args.Cancelled = true;
             Prompt(ent, ent.Comp.NoShockAdvisedSound, args.User);
-            _popup.PopupClient(Loc.GetString("cmu-defib-no-shock-advised"), ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-defib-no-shock-advised"), ent, args.User, PopupType.MediumCaution);
             return;
         }
 
         _charge.SetAdvisedJoules(ent, advice.Joules);
         Prompt(ent, ent.Comp.ShockAdvisedSound, args.User);
-        _popup.PopupClient(Loc.GetString("cmu-defib-shock-advised", ("joules", advice.Joules)), ent, args.User);
+        _popup.PopupEntity(Loc.GetString("cmu-defib-shock-advised", ("joules", advice.Joules)), ent, args.User);
     }
 
     private void OnZapStarted(Entity<CMUDefibVoiceComponent> ent, ref CMUDefibZapStartedEvent args)

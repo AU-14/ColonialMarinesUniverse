@@ -4,7 +4,7 @@ This cloud art batch supplies 23 editable physical assemblies: eleven exact-prot
 
 ## Deliverables
 
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_containers_cloud.yml`: editable physical parts
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_containers_cloud.yml`: editable physical parts
 - `garrison_containers_cloud_art.yml`: 51 original PNG label crops, reserved atlas indices 4000–4050
 - `Content.CMU/Resources/Textures/CMU14/ThreeD/containers_cloud/`: unchanged source pixels cropped into curved-wall print strips
 - `Tools/three_d/generated/cloud-containers/models/`: 23 GLBs and manifest produced directly by unchanged `build_models.py`
@@ -92,8 +92,8 @@ Run from repository root:
 
     python Tools/three_d/author_containers_cloud.py
     python Tools/three_d/verify_containers_cloud.py
-    python Tools/three_d/build_models.py --source Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_containers_cloud.yml --output Tools/three_d/generated/cloud-containers/models --review-output Tools/three_d/generated/cloud-containers/review --viewer-output Tools/three_d/generated/cloud-containers/viewer
-    python Tools/three_d/build_models.py --source Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_containers_cloud.yml --output Tools/three_d/generated/cloud-containers/models --review-output Tools/three_d/generated/cloud-containers/review --viewer-output Tools/three_d/generated/cloud-containers/viewer --check
+    python Tools/three_d/build_models.py --source Content.CMU/Resources/ThreeD/Prototypes/World/garrison_containers_cloud.yml --output Tools/three_d/generated/cloud-containers/models --review-output Tools/three_d/generated/cloud-containers/review --viewer-output Tools/three_d/generated/cloud-containers/viewer
+    python Tools/three_d/build_models.py --source Content.CMU/Resources/ThreeD/Prototypes/World/garrison_containers_cloud.yml --output Tools/three_d/generated/cloud-containers/models --review-output Tools/three_d/generated/cloud-containers/review --viewer-output Tools/three_d/generated/cloud-containers/viewer --check
 
 ## Attribution
 
@@ -117,3 +117,11 @@ These geometry and crop adaptations retain the applicable source attribution and
 
 ## Cumulative atlas assignment
 This cumulative snapshot uses centrally allocated, nonconflicting atlas slots. Any authoring-time numeric range in this historical family note is superseded by the canonical surface YAML and `Tools/three_d/generated/cloud-review/atlas-allocation-current.json`. Source IDs, original PNG pixels and modeled geometry are unchanged by atlas-index remapping.
+
+## Container simplification (2026-10-09)
+
+The current YAML and matching GLBs supersede the original segment counts above. Chemistry bottles use eight joined facets for the body, shoulder, neck and open rim; the bottom band over the closed heel uses one capped cylinder. Filled bottles now contain 37 parts instead of 80 (empty: 35 instead of 78). Jug spout rings use eight facets (49 to 41 parts), and Bobda cans use an eight-facet top rim and one bottom band (45 to 22 parts). The same edits apply to authored sprite poses and unbound fill/lid studies.
+
+Facet widths span neighbouring sides; their backs and open centres are retained. Default reagent colors, liquid volumes, original label PNGs, source bindings, draft statuses and state-selection contracts are unchanged. Existing limitations on live chemistry fill/lid appearance still apply. All attribution and licenses above remain applicable.
+
+See [comparison and measurements](Reviews/ContainerSimplification/README.md) for native GPU evidence and geometry checks.

@@ -267,9 +267,11 @@ public sealed partial class ANPRCRadioComponent : Component
     public int SweepKilohertzPerSecond = 10_000;
 
     // how recently a frequency must have carried traffic for the passing head to
-    // catch it. short window plus a slow head means most passes come up empty
+    // catch it. short window plus a slow head means most passes come up empty.
+    // has to outlast one full pass (~20 s) plus the 1 s head step, or a line said just
+    // after the head went by is stale by the time it comes round and never counts
     [DataField("sweepActivityWindow")]
-    public TimeSpan SweepActivityWindow = TimeSpan.FromSeconds(20);
+    public TimeSpan SweepActivityWindow = TimeSpan.FromSeconds(22);
 
     // how far away a transmitter can be and still be intercepted, at MED power. the
     // transmitter's own TX power scales it (LO 0.6, HI 1.5): shouting carries further

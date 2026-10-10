@@ -13,6 +13,8 @@ namespace Content.IntegrationTests.Tests;
 [TestFixture]
 public sealed class ToiletFishingMergeRegressionTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId ConstructedToiletPrototype = "ConstructedToilet";
+
     private static readonly EntProtoId[] FishableToilets =
     [
         "ToiletEmpty",
@@ -46,7 +48,7 @@ public sealed class ToiletFishingMergeRegressionTest
                 });
             }
 
-            Assert.That(prototypes.TryIndex<EntityPrototype>("ConstructedToilet", out var constructed), Is.True);
+            Assert.That(prototypes.TryIndex<EntityPrototype>(ConstructedToiletPrototype, out var constructed), Is.True);
             Assert.That(constructed!.TryComp<FixturesComponent>(out var constructedFixtures, factory), Is.True);
             Assert.Multiple(() =>
             {

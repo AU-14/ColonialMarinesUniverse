@@ -943,28 +943,28 @@
     - type: Storage
       maxItemSize: Small
       grid:
-      - 0,0,13,3 # 14 slots
+      - 0,0,15,3 # CMU14: 16 slots so the cast fits
       whitelist:
         tags:
         - CMTraumaKit
-        - CMBurnKit
+        - CMBurnKit # CMU14
         - CMSurgicalLine
         - CMSynthGraft
-        - CMUCastItem
+        - CMUCastItem # CMU14
         components:
         - CMSurgeryTool
     - type: FixedItemSizeStorage
   - type: Storage
     maxItemSize: Small
     grid:
-    - 0,0,13,3 # 14 slots
+    - 0,0,15,3 # CMU14: 16 slots so the cast fits
     whitelist:
       tags:
       - CMTraumaKit
-      - CMBurnKit
+      - CMBurnKit # CMU14
       - CMSurgicalLine
       - CMSynthGraft
-      - CMUCastItem
+      - CMUCastItem # CMU14
       components:
       - CMSurgeryTool
   - type: FixedItemSizeStorage
@@ -984,7 +984,7 @@
     - id: CMUOrganClampItem
     - id: CMSurgicalLine
     - id: CMSynthGraft
-    - id: CMUCastItem
+    - id: CMUCastItem # CMU14
 - type: entity
   parent: CMWebbingBase
   id: CMWebbingSurgicalBlue
@@ -1000,28 +1000,28 @@
     - type: Storage
       maxItemSize: Small
       grid:
-      - 0,0,13,3 # 14 slots
+      - 0,0,15,3 # CMU14: 16 slots so the cast fits
       whitelist:
         tags:
         - CMTraumaKit
-        - CMBurnKit
+        - CMBurnKit # CMU14
         - CMSurgicalLine
         - CMSynthGraft
-        - CMUCastItem
+        - CMUCastItem # CMU14
         components:
         - CMSurgeryTool
     - type: FixedItemSizeStorage
   - type: Storage
     maxItemSize: Small
     grid:
-    - 0,0,13,3 # 14 slots
+    - 0,0,15,3 # CMU14: 16 slots so the cast fits
     whitelist:
       tags:
       - CMTraumaKit
-      - CMBurnKit
+      - CMBurnKit # CMU14
       - CMSurgicalLine
       - CMSynthGraft
-      - CMUCastItem
+      - CMUCastItem # CMU14
       components:
       - CMSurgeryTool
   - type: FixedItemSizeStorage
@@ -1041,7 +1041,7 @@
     - id: CMUOrganClampItem
     - id: CMSurgicalLine
     - id: CMSynthGraft
-    - id: CMUCastItem
+    - id: CMUCastItem # CMU14
 - type: entity
   parent: RMCWebbingDropPouch
   id: RMCToolDropPouchFilled

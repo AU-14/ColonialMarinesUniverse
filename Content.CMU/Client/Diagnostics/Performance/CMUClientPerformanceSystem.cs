@@ -274,7 +274,7 @@ public sealed partial class CMUClientPerformanceSystem : EntitySystem
         if (inventory)
         {
             AppendSettings(text);
-            AppendInventory(text);
+            AppendInventory(text, budgeted: reason == "periodic");
             _nextInventory = now + TimeSpan.FromSeconds(InventorySeconds);
         }
         Write(text.ToString());

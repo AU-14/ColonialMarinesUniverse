@@ -11,8 +11,8 @@ public enum CMUTacticalFact : uint
     PressureApplied = 8192, FlankAvailable = 16384, Flanked = 32768, Engaged = 65536,
 }
 
-public enum CMUTacticalAction : byte { TakeCover, Reload, Treat, ApproachCasualty, GrabCasualty, DragCasualty, ThrowGrenade, Flank, Attack }
-public enum CMUTacticalGoal : byte { Fight, Rearm, Recover, Rescue, Flush, Flank }
+public enum CMUTacticalAction : byte { TakeCover, Reload, Treat, ApproachCasualty, GrabCasualty, DragCasualty, ThrowGrenade, Flank, Attack, MedicalAid }
+public enum CMUTacticalGoal : byte { Fight, Rearm, Recover, Rescue, Flush, Flank, Aid }
 
 public readonly record struct CMUTacticalOperator(CMUTacticalAction Action, CMUTacticalFact Requires,
     CMUTacticalFact Forbids, CMUTacticalFact Adds, CMUTacticalFact Removes, float Cost);

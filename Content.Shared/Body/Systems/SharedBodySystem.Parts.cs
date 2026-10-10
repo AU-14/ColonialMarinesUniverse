@@ -211,7 +211,7 @@ public sealed partial class SharedBodySystem
 
         bool TrySnapshot(EntityUid entity)
         {
-            if (TerminatingOrDeleted(entity) || !TryComp<TransformComponent>(entity, out var transform))
+            if (TerminatingOrDeleted(entity) || !TryComp(entity, out TransformComponent? transform))
                 return false;
             _containers.TryGetContainingContainer(entity, out var previous);
             subtree.Add((entity, previous, transform.Coordinates));

@@ -15,13 +15,13 @@ namespace Content.Server.Camera;
 /// session describes one player's selection, capabilities, and live
 /// view lease for that receiver.
 /// </summary>
-public sealed class CameraSessionSystem : EntitySystem
+public sealed partial class CameraSessionSystem : EntitySystem
 {
     private static readonly TimeSpan ValidationInterval = TimeSpan.FromSeconds(0.5);
-    [Dependency] private readonly AccessReaderSystem _accessReader = default!;
-    [Dependency] private readonly CameraNetworkSystem _networks = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ViewSubscriberSystem _viewSubscriber = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private CameraNetworkSystem _networks = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ViewSubscriberSystem _viewSubscriber = default!;
 
     private readonly Dictionary<uint, CameraViewerSession> _sessions = [];
     private readonly Dictionary<(ICommonSession Viewer, EntityUid Receiver), uint> _sessionByKey = [];

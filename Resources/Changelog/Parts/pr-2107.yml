@@ -1,0 +1,8 @@
+author: TheHellFireo
+category: CMU
+changes:
+- message: Added optional first-person 3D on Stable Garrison Redux. Use cmu3d to toggle
+    it, with a controls popup and a customizable mouse-capture shortcut.
+  type: Add
+time: '2026-10-08T19:24:54.0000000+00:00'
+url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2107

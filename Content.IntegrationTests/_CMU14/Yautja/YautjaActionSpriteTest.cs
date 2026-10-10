@@ -31,8 +31,10 @@ public sealed class YautjaActionSpriteTest
 
     internal static SpriteSpecifier.Rsi? ReadIcon(EntityPrototype prototype, IComponentFactory factory, bool active = false)
     {
-        if (!prototype.TryGetComponent<SpriteComponent>(out var sprite, factory) ||
+        if (!prototype.TryComp<SpriteComponent>(out var sprite, factory) ||
+#pragma warning disable CS0618 // CMU14: Prototype sprites have no entity UID for SpriteSystem.
             !sprite.LayerMapTryGet(active ? ActionVisuals.IconToggled : ActionVisuals.Icon, out var index))
+#pragma warning restore CS0618
             return null;
 
         var layer = sprite[index];

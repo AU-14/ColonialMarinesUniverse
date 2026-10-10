@@ -67,6 +67,7 @@ public sealed class CMU3DAnchorStateTest
         return (installed, loose);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model(string id, string source, string suffix, bool anchored)
     {
         var state = (anchored ? "pipe-" : "conpipe-") + suffix;

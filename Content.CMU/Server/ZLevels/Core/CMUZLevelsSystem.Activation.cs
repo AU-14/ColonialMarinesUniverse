@@ -163,7 +163,7 @@ public sealed partial class CMUZLevelsSystem
         if (!TryComp<MapGridComponent>(mapUid, out var grid))
             return false;
 
-        var query = _map.GetAnchoredEntitiesEnumerator(mapUid, grid, tile);
+        var query = _map.GetAnchoredEntities(mapUid, grid, tile);
         while (query.MoveNext(out var uid))
         {
             if (HasComp<CMUZLevelHighGroundComponent>(uid))

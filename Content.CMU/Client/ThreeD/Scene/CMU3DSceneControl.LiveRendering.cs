@@ -1,11 +1,14 @@
+using Content.Shared.Standing;
 using System.Numerics;
 using Content.Client.Clickable;
 using Content.Client.Effects;
 using Content.Shared._RMC14.Effect;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Item;
 using Content.Shared.Projectiles;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Shared.Graphics;
 using Robust.Shared.Map;
 using SixLabors.ImageSharp.PixelFormats;
@@ -19,14 +22,15 @@ public sealed partial class CMU3DSceneControl
     private const int SpriteCell = 128;
     private const int BillboardTexels = 4;
     [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IPlayerManager _players = default!;
     private readonly List<EntityUid> _billboardEntities = [];
     private readonly HashSet<EntityUid> _liveSpriteEntities = [];
     private readonly List<BillboardCandidate> _billboards = [];
     private readonly record struct BillboardCandidate(EntityUid Uid, SpriteComponent Sprite, TransformComponent Transform,
         Box2 Bounds, Angle Yaw, float PlaneYaw, Vector2 Scale, Vector2 Size, Vector3 Center, Vector3 Offset,
-        bool FaceCamera, bool Combat, bool AlongTrajectory, float Tilt, Direction? Direction)
+        bool FaceCamera, bool Combat, bool AlongTrajectory, bool Ground, float Tilt, Direction? Direction)
     {
-        public float WorldScale => Combat ? 1 : 1.6f;
+        public float WorldScale => Combat || Ground ? 1 : 1.6f;
         public Angle EyeRotation => FaceCamera || AlongTrajectory ? Angle.Zero : new Angle(-PlaneYaw);
     }
     private readonly List<BillboardCandidate> _billboardCandidates = [];
@@ -48,19 +52,15 @@ public sealed partial class CMU3DSceneControl
 
     protected override void Draw(IRenderHandle render)
     {
-        var renderedLive = false;
         if (FirstPerson && !_released && _hasScene && _gameTiming.RealTime >= _nextLiveRender)
         {
             PrepareLiveRendering(render);
-            renderedLive = true;
             _redraw = true;
             _nextLiveRender = _gameTiming.RealTime + TimeSpan.FromSeconds(1.0 / 30);
         }
         if (FirstPerson && !_released && _hasScene)
         {
             UpdateBillboardPositions();
-            if (!renderedLive) PrepareEquipment();
-            _redraw |= _equipment.Count > 0;
         }
         Draw(render.DrawingHandleScreen);
     }
@@ -76,7 +76,6 @@ public sealed partial class CMU3DSceneControl
             new TextureSampleParameters { Filter = false }, "cmu-3d-live-sprites");
         _billboardTexture ??= _clyde.CreateBlankTexture<Rgba32>(new Vector2i(BillboardLimit * BillboardTexels, 1), "cmu-3d-sprite-data", parameters);
         CollectBillboards(sprites, transforms);
-        PrepareEquipment();
         _billboards.Clear();
         var handle = render.DrawingHandleScreen;
         var previous = handle.GetTransform();
@@ -94,16 +93,8 @@ public sealed partial class CMU3DSceneControl
                     var cell = new Vector2(index % BillboardColumns, index / BillboardColumns) * SpriteCell;
                     var position = cell + new Vector2(SpriteCell / 2f) -
                         candidate.Bounds.Center * new Vector2(1, -1) * (candidate.Scale * EyeManager.PixelsPerMeter);
-                    var hidden = HideEquipmentLayers(uid, sprite, sprites);
-                    try
-                    {
-                        render.DrawEntity(uid, position, candidate.Scale, candidate.Yaw, candidate.EyeRotation,
-                            overrideDirection: candidate.Direction, sprite: sprite, xform: candidate.Transform, xformSystem: transforms);
-                    }
-                    finally
-                    {
-                        foreach (var layer in hidden) sprites.LayerSetVisible((uid, sprite), layer, true);
-                    }
+                    render.DrawEntity(uid, position, candidate.Scale, candidate.Yaw, candidate.EyeRotation,
+                        overrideDirection: candidate.Direction, sprite: sprite, xform: candidate.Transform, xformSystem: transforms);
                     _billboards.Add(candidate);
                     PackBillboard(index, candidate);
                 }
@@ -145,7 +136,7 @@ public sealed partial class CMU3DSceneControl
         var elevation = _entities.System<CMU3DElevationSystem>();
         foreach (var uid in _liveSpriteEntities)
         {
-            if (uid == _equipmentPlayers.LocalEntity ||
+            if (uid == _players.LocalEntity ||
                 !_entities.TryGetComponent(uid, out SpriteComponent? sprite) || !sprite.Visible || sprite.Color.A <= 0 || sprite.ContainerOccluded ||
                 !_entities.TryGetComponent(uid, out TransformComponent? xform) || !SceneMaps.Contains(xform.MapID) ||
                 !_entities.TryGetComponent(uid, out MetaDataComponent? meta) ||
@@ -156,10 +147,12 @@ public sealed partial class CMU3DSceneControl
             var combat = _entities.HasComponent<ProjectileComponent>(uid) ||
                          _entities.HasComponent<CMU3DCombatVisualComponent>(uid);
             var along = _entities.TryGetComponent(uid, out CMU3DCombatVisualComponent? effect) && effect.AlongTrajectory;
-            var faceCamera = !along && (combat || _entities.HasComponent<MobStateComponent>(uid) ||
+            var prone = _entities.TryGetComponent(uid, out StandingStateComponent? standing) && !standing.Standing;
+            var faceCamera = !prone && !along && (combat || _entities.HasComponent<MobStateComponent>(uid) ||
                                        _entities.HasComponent<EffectVisualsComponent>(uid) || _entities.HasComponent<RMCEffectComponent>(uid));
+            var ground = !faceCamera && !along && (prone || _entities.HasComponent<ItemComponent>(uid));
             var planeYaw = faceCamera ? BillboardFacing(transforms.GetWorldPosition(xform), camera)
-                : sprite.NoRotation && !along ? 0f : (float) yaw.Reduced().Theta;
+                : ground || sprite.NoRotation && !along ? 0f : (float) yaw.Reduced().Theta;
             // Rasterize portraits and beams in their own axes. Applying the 3D plane angle
             // again through DrawEntity's 2D eye transform spins the artwork inside the plane.
             var artYaw = faceCamera || along ? Angle.Zero : yaw;
@@ -167,14 +160,14 @@ public sealed partial class CMU3DSceneControl
             Direction? direction = sprite.EnableDirectionOverride ? sprite.DirectionOverride
                 : faceCamera ? (yaw - new Angle(planeYaw)).GetDir() : null;
             var bounds = Matrix3Helpers.CreateRotation(eyeRotation)
-                .TransformBox(sprite.CalculateRotatedBoundingBox(default, artYaw, eyeRotation));
+                .TransformBox(sprites.CalculateBounds((uid, sprite), default, artYaw, eyeRotation));
             if (bounds.Width <= 0 || bounds.Height <= 0) continue;
             var scale = along
                 ? new Vector2((SpriteCell - 4) / (bounds.Width * EyeManager.PixelsPerMeter), (SpriteCell - 4) / (bounds.Height * EyeManager.PixelsPerMeter))
                 : new Vector2((SpriteCell - 4) / (Math.Max(bounds.Width, bounds.Height) * EyeManager.PixelsPerMeter));
-            var size = new Vector2(SpriteCell) / (scale * EyeManager.PixelsPerMeter) * (combat ? 1 : 1.6f);
+            var size = new Vector2(SpriteCell) / (scale * EyeManager.PixelsPerMeter) * (combat || ground ? 1 : 1.6f);
             var candidate = new BillboardCandidate(uid, sprite, xform, bounds, artYaw, planeYaw, scale, size,
-                default, default, faceCamera, combat, along, 0, direction);
+                default, default, faceCamera, combat, along, ground, 0, direction);
             candidate = PositionBillboard(candidate, transforms, elevation, camera);
             var center = candidate.Center;
             var radius = size.Length() / 2;
@@ -210,24 +203,17 @@ public sealed partial class CMU3DSceneControl
         var origin = new Vector3(position - SceneOrigin,
             elevation.PhysicalHeight(billboard.Uid, SceneDepth));
         if (billboard.Combat) origin.Z += CMU3DCombatVisualComponent.WeaponHeight;
-        if (_entities.TryGetComponent(billboard.Uid, out CMU3DCombatVisualComponent? effect) && effect.Weapon is { } weapon)
-        {
-            foreach (var group in _equipment)
-            {
-                if (group.Item != weapon || group.Pose.Slot != "hand") continue;
-                var forward = group.Own ? camera.Forward : new Vector3(transforms.GetWorldRotation(billboard.Transform).ToVec(), 0);
-                var localDirection = group.Transform.InverseDirection(forward);
-                var half = (group.High - group.Low) / 2;
-                var travel = Math.Min(half.X / Math.Max(.000001f, MathF.Abs(localDirection.X)),
-                    Math.Min(half.Y / Math.Max(.000001f, MathF.Abs(localDirection.Y)), half.Z / Math.Max(.000001f, MathF.Abs(localDirection.Z))));
-                // Use the front of the actual held model, including the local first-person pose.
-                origin = group.Transform.Point((group.Low + group.High) / 2 + localDirection * travel) + forward * .05f;
-                break;
-            }
-        }
         var up = Vector3.UnitZ;
         var tilt = 0f;
-        if (billboard.AlongTrajectory)
+        if (billboard.Ground)
+        {
+            // Item artwork is a top-down footprint, including transparent padding.
+            // Keep it on its physical floor instead of raising it into an upright portrait.
+            origin.Z += .01f;
+            up = Vector3.UnitY;
+            tilt = -MathF.PI / 2;
+        }
+        else if (billboard.AlongTrajectory)
         {
             up = Vector3.Cross(camera.Origin - origin, right);
             up = up.LengthSquared() < .000001f ? Vector3.UnitZ : Vector3.Normalize(up);
@@ -235,7 +221,7 @@ public sealed partial class CMU3DSceneControl
             tilt = MathF.Atan2(Vector3.Dot(up, new Vector3(right.Y, -right.X, 0)), up.Z);
         }
         var offset = right * (billboard.Bounds.Center.X * billboard.WorldScale) + up *
-            (billboard.Combat ? billboard.Bounds.Center.Y : billboard.Bounds.Height / 2) * billboard.WorldScale;
+            (billboard.Combat || billboard.Ground ? billboard.Bounds.Center.Y : billboard.Bounds.Height / 2) * billboard.WorldScale;
         return billboard with { Center = origin + offset, Offset = offset, PlaneYaw = planeYaw, Tilt = tilt };
     }
 
@@ -302,9 +288,10 @@ public sealed partial class CMU3DSceneControl
         foreach (var billboard in _billboards)
         {
             var right = new Vector3(MathF.Cos(billboard.PlaneYaw), MathF.Sin(billboard.PlaneYaw), 0);
+            var up = billboard.Ground ? Vector3.UnitY : Vector3.UnitZ;
             var eye = new Robust.Shared.Graphics.Eye { Rotation = billboard.EyeRotation };
             if (billboard.Combat || billboard.Size == Vector2.Zero ||
-                !CMU3DTargeting.IntersectBillboard(origin, ray, billboard.Center, billboard.Size, right, distance, out var t, out var local) ||
+                !CMU3DTargeting.IntersectBillboard(origin, ray, billboard.Center, billboard.Size, right, distance, out var t, out var local, up) ||
                 !_entities.TryGetComponent(billboard.Uid, out SpriteComponent? sprite) ||
                 !_entities.TryGetComponent(billboard.Uid, out TransformComponent? xform)) continue;
             var sourcePoint = transforms.GetWorldPosition(xform) + (-eye.Rotation).RotateVec(billboard.Bounds.Center + local / billboard.WorldScale);
@@ -317,7 +304,6 @@ public sealed partial class CMU3DSceneControl
 
     private void ReleaseLiveRendering()
     {
-        ReleaseEquipment();
         _lightViewport?.Dispose();
         _spriteAtlas?.Dispose();
         _billboardTexture?.Dispose();

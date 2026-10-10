@@ -6,6 +6,16 @@ binding under **Options → Controls → Camera → 3D: Toggle mouse capture**.
 See [player controls and current limits](FIRST_PERSON_WALK.md). First person is available
 to players only on Redux; the separate live scene workbench still requires debug permission.
 
+<!-- CMU14 -->
+The latest [Redux coverage pass](../../Content.CMU/Resources/Models/CMU14/Garrison/Reviews/ReduxCoverage/README.md)
+adds 138 draft models and 203 exact prototype bindings for cables, disposal pipes,
+faction vendors, supply vehicles and other props, bringing the library to 2,614 exports.
+It audits all seven Redux levels and their spawner/vendor/vehicle choices: all 1,734
+resolved physical types have model bindings or existing native presentation. Six
+legacy references still lack content definitions or parents. These counts measure
+coverage; model fidelity and live animation remain subject to the linked review's limits.
+<!-- /CMU14 -->
+
 Generated review screenshots, scene exports and audit outputs are produced locally under
 `Tools/three_d/generated/` and are omitted from this submission. The sections below retain
 the prototype's production history; their counts and test results describe the original
@@ -144,7 +154,9 @@ cmu_3d off
 
 Drag to orbit, scroll to zoom, and use the cardinal views to compare a model with its source prototype icon. Searchable selectors expose all assets and their reference IDs. The marine is a scale mannequin and the rifle is an unrigged prop.
 
-- Editable definitions: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/*.yml`.
+- Editable world definitions: `Content.CMU/Resources/ThreeD/Prototypes/World/*.yml`.
+- Equipment authoring definitions: `Content.CMU/Resources/ThreeD/Prototypes/Equipment/*.yml`.
+- These presentation libraries are outside the normal prototype startup directory. Open 3D views share world geometry; only the model workbench loads equipment drafts. Closing the last view unloads model instances and parsed YAML and releases scene caches. Closing only the workbench unloads equipment while another 3D view can keep using world geometry. Reopening after release loads the required library again and can pause while loading. Memory becomes eligible for normal garbage collection; toggles do not force a collection. The server and clients that stay in 2D never load these libraries. Map elevation profiles and the shader declaration remain under `Prototypes/CMU14/ThreeD`.
 - Portable models: `Content.CMU/Resources/Models/CMU14/Garrison/*.glb`.
 - Attributions and modeling assumptions: `Content.CMU/Resources/Models/CMU14/Garrison/SOURCES*.md`.
 - Contact sheet: `Tools/three_d/generated/review/overview.png`.

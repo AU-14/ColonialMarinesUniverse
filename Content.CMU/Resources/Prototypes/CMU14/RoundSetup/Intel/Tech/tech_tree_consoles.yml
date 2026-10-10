@@ -65,6 +65,8 @@
         type: TechControlConsoleBui
   - type: TechControlConsole
     team: clf
+  # dynamic so the cell can drag it, which also let IED blasts fling it out of the camp for the round
+  - type: CMUExplosionImmovable
   - type: Transform
     anchored: false
   - type: Physics

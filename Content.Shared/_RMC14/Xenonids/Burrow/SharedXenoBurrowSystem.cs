@@ -255,7 +255,7 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
                 {
                     if (!doAfter.Value.Cancelled && !doAfter.Value.Completed)
                     {
-                        _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-down-doafter-stop"), burrower, burrower, PopupType.SmallCaution);
+                        _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-down-doafter-stop"), burrower, burrower, PopupType.SmallCaution);
                         return;
                     }
                 }
@@ -273,7 +273,7 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
             };
 
             if (_doAfter.TryStartDoAfter(burrowDoAfterArgs))
-                _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-down-start"), burrower, burrower);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-down-start"), burrower, burrower);
         }
     }
 
@@ -284,14 +284,14 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
 
         if (args.Cancelled)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-down-failure-break"), burrower, burrower);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-down-failure-break"), burrower, burrower);
             burrower.Comp.NextBurrowAt = _time.CurTime + burrower.Comp.BurrowCooldown;
             return;
         }
 
         if (HasComp<XenoRestingComponent>(burrower))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-down-failure-rest"), burrower, burrower);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-down-failure-rest"), burrower, burrower);
             return;
         }
 
@@ -302,14 +302,14 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
 
         var ev = new BurrowedEvent(true);
         RaiseLocalEvent(burrower, ref ev);
-        _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-down-finish"), burrower, burrower);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-down-finish"), burrower, burrower);
     }
 
     private bool CanBurrowPopup(Entity<XenoBurrowComponent> ent)
     {
         if (ent.Comp.NextBurrowAt > _time.CurTime)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-down-failure-cooldown"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-down-failure-cooldown"), ent, ent);
             return false;
         }
 
@@ -318,7 +318,7 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
         if (!_area.TryGetArea(coordinates, out var area, out _) ||
             area.Value.Comp.NoTunnel)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-down-failure-bad-area"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-down-failure-bad-area"), ent, ent);
             return false;
         }
 
@@ -329,13 +329,13 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
             var tile = _map.GetTileRef(gridId.Value, grid, coordinates);
             if (_turf.IsSpace(tile))
             {
-                _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-failure-space"), ent, ent);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-failure-space"), ent, ent);
                 return false;
             }
         }
         else
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-failure-space"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-failure-space"), ent, ent);
             return false;
         }
 
@@ -348,14 +348,14 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
 
         if (ent.Comp.NextTunnelAt > _time.CurTime)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-move-failure-coolown"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-move-failure-coolown"), ent, ent);
             return false;
         }
 
         if (!_area.TryGetArea(target, out var area, out _) ||
             area.Value.Comp.NoTunnel)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-move-failure-bad-area"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-move-failure-bad-area"), ent, ent);
             return false;
         }
 
@@ -366,37 +366,37 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
             var tile = _map.GetTileRef(gridId.Value, grid, target);
             if (_turf.IsSpace(tile))
             {
-                _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-failure-space"), ent, ent);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-failure-space"), ent, ent);
                 return false;
             }
 
             if (_turf.IsTileBlocked(tile, CollisionGroup.Impassable))
             {
-                _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-move-failure-solid"), ent, ent);
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-move-failure-solid"), ent, ent);
                 return false;
             }
         }
         else
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-failure-space"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-failure-space"), ent, ent);
             return false;
         }
 
         if (!target.TryDistance(_entities, ent.Owner.ToCoordinates(), out var burrowDistance))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-move-failure"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-move-failure"), ent, ent);
             return false;
         }
         if (distance > ent.Comp.MaxTunnelingDistance)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-move-failure"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-move-failure"), ent, ent);
             return false;
         }
 
         if (!ent.Comp.Tunneling)
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-move-start"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-move-start"), ent, ent);
         else
-            _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-move-break"), ent, ent);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-move-break"), ent, ent);
         distance = burrowDistance;
         return true;
     }
@@ -419,7 +419,7 @@ public abstract partial class SharedXenoBurrowSystem : EntitySystem
             _transform.SetCoordinates(burrower, _entities.GetCoordinates(args.TargetCoords));
         var ev = new BurrowedEvent(false);
         RaiseLocalEvent(burrower, ref ev);
-        _popup.PopupClient(Loc.GetString("rmc-xeno-burrow-move-finish"), burrower, burrower);
+        _popup.PopupEntity(Loc.GetString("rmc-xeno-burrow-move-finish"), burrower, burrower);
     }
 }
 

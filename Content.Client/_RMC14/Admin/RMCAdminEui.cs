@@ -80,8 +80,8 @@ public sealed partial class RMCAdminEui : BaseEui
             if (entity.Abstract || !entity.TryComp(out XenoComponent? xeno, _compFactory))
                 continue;
 
-            if (entity.HasComponent<XenoStrainComponent>(_compFactory) ||
-                entity.HasComponent<XenoHiddenComponent>(_compFactory))
+            if (entity.HasComp<XenoStrainComponent>(_compFactory) ||
+                entity.HasComp<XenoHiddenComponent>(_compFactory))
             {
                 continue;
             }
@@ -171,7 +171,7 @@ public sealed partial class RMCAdminEui : BaseEui
             });
         }
 
-        _adminWindow.MarineTab.SpecialistSkills.DisposeAllChildren();
+        _adminWindow.MarineTab.SpecialistSkills.ReleaseChildren();
         foreach (var comp in s.SpecialistSkills)
         {
             var specButton = new Button
@@ -202,7 +202,7 @@ public sealed partial class RMCAdminEui : BaseEui
             _adminWindow.MarineTab.SpecialistPointsSpinBox.OverrideValue(specialistPoints);
         }
 
-        _adminWindow.MarineTab.Squads.DisposeAllChildren();
+        _adminWindow.MarineTab.Squads.ReleaseChildren();
         foreach (var squad in s.Squads)
         {
             var squadRow = new RMCSquadRow()

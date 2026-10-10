@@ -1022,7 +1022,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (!TrySnapAbilityTargetToTile(warlock, args.Target, warlock.Comp.PsychicCrushInitRange, out var target)
             || !CanKeepPsychicCrushTarget(warlock, target))
         {
-            _popup.PopupClient(Loc.GetString("cmu-xeno-warlock-psychic-crush-invalid-target"), warlock, warlock,
+            _popup.PopupEntity(Loc.GetString("cmu-xeno-warlock-psychic-crush-invalid-target"), warlock, warlock,
                 PopupType.SmallCaution);
             return;
         }
@@ -1126,7 +1126,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         if (!CanStartPsychicShield(warlock, direction))
         {
-            _popup.PopupClient(Loc.GetString("cmu-xeno-warlock-psychic-shield-obstructed"),
+            _popup.PopupEntity(Loc.GetString("cmu-xeno-warlock-psychic-shield-obstructed"),
                 warlock,
                 warlock,
                 PopupType.SmallCaution);

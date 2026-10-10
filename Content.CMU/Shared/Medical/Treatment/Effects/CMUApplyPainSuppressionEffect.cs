@@ -41,7 +41,7 @@ public sealed partial class CMUApplyPainSuppressionEffect : EntityEffectBase<CMU
 public sealed partial class CMUApplyPainSuppressionEntityEffectSystem
     : EntityEffectSystem<MetaDataComponent, CMUApplyPainSuppressionEffect>
 {
-    [Dependency] private readonly SharedPainShockSystem _pain = default!;
+    [Dependency] private SharedPainShockSystem _pain = default!;
 
     protected override void Effect(
         Entity<MetaDataComponent> entity,

@@ -24,7 +24,7 @@ from placement import resolve_placements
 GEN = ROOT / 'Tools/three_d/generated'
 BASE = ROOT / '.codex/model-batch-baseline994'
 REVIEW = GEN / 'review/loose-workwear'
-MODEL = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_loose_workwear.yml'
+MODEL = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_loose_workwear.yml'
 ART = MODEL.with_name('garrison_loose_workwear_art.yml')
 TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces/LooseWorkwear'
 NOTE = ROOT / 'Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_LOOSE_WORKWEAR.md'

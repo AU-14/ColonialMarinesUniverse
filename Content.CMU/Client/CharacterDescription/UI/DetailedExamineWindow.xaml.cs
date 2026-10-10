@@ -11,7 +11,7 @@ namespace Content.Client.CMU14.CharacterDescription.UI;
 [GenerateTypedNameReferences]
 public sealed partial class DetailedExamineWindow : DefaultWindow
 {
-    [Dependency] private  IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     public DetailedExamineWindow()
     {
@@ -24,7 +24,7 @@ public sealed partial class DetailedExamineWindow : DefaultWindow
     public void UpdateState(DetailedExamineEuiState state)
     {
         Title = state.Name;
-        ContentContainer.DisposeAllChildren();
+        ContentContainer.ReleaseChildren();
 
         CharacterDescriptionRowBuilder.AddHeading(ContentContainer, state.Name);
         CharacterDescriptionRowBuilder.AddRow(ContentContainer, Loc.GetString("detailed-examine-age"), state.Age > 0 ? state.Age.ToString() : null, Loc.GetString("detailed-examine-age-tooltip"));

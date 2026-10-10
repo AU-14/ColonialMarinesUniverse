@@ -27,7 +27,7 @@
 - type: entity
   parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORPlatCo
-  name: plt. commander ID card
+  name: commanding officer ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORPlatCo

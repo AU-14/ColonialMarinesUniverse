@@ -92,7 +92,7 @@
     allowSpeech: true
     allowMovement: true
     name: Liquidator Medic
-    description: Вы член группы ликвидаторов UPP! Ваша задача выжечь дотла всю биологическую угрозу на колонии, ни шагу назад!
+    description: You are part of a UPP liquidator team! Your job is to burn every biological threat on the colony to the ground. Not one step back!
     job: RuMCUPPLiquidatorMedic
     raffle:
       settings: short
@@ -109,7 +109,7 @@
     belt: AU14BeltMedicBagProdigyFilled
     pocket1: AU14PouchIFAKFill
     pocket2: AU14PouchIFAKFill
-    back: RMCSatchelSPPFullMarksman
+    back: CMUUPPNavalInfantrySatchelFullMarksman
     ears: RuMCHeadsetLiquidator
     suitstorage: RMCWeaponRifleAK4047
   inhand:

@@ -16,6 +16,9 @@ namespace Content.IntegrationTests.CMU14.Threats;
 
 public sealed class ForceInterestTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ThirdPartyPrototype> TestForceInterestPartyPrototype = "TestForceInterestParty";
+    private static readonly Robust.Shared.Prototypes.ProtoId<ThreatPrototype> TestForceInterestThreatPrototype = "TestForceInterestThreat";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [TestPrototypes]
@@ -56,7 +59,7 @@ public sealed class ForceInterestTest : GameTest
             SEntMan.SpawnEntity("thirdpartyleaderspawnmarker", map.GridCoords);
             SEntMan.SpawnEntity("thirdpartyentityspawnmarker", map.GridCoords);
 
-            var party = Server.ProtoMan.Index<ThirdPartyPrototype>("TestForceInterestParty");
+            var party = Server.ProtoMan.Index<ThirdPartyPrototype>(TestForceInterestPartyPrototype);
             var spawn = Server.ProtoMan.Index(party.PartySpawn);
             SEntMan.System<ThirdPartySystem>().SpawnThirdParty(party, spawn, false);
             var forces = SEntMan.System<ForceInterestSystem>().GetForces(ServerSession!);
@@ -91,7 +94,7 @@ public sealed class ForceInterestTest : GameTest
             Server.PlayerMan.SetAttachedEntity(ServerSession!, null);
             SEntMan.SpawnEntity("threatleaderspawnmarker", map.GridCoords);
             SEntMan.SpawnEntity("threatentityspawnmarker", map.GridCoords);
-            var threat = Server.ProtoMan.Index<ThreatPrototype>("TestForceInterestThreat");
+            var threat = Server.ProtoMan.Index<ThreatPrototype>(TestForceInterestThreatPrototype);
             SEntMan.System<ThreatSystem>().SchedulePendingThreatSpawn(threat, map.MapId, new(), TimeSpan.FromSeconds(1));
             Assert.That(SEntMan.System<ForceInterestSystem>().GetForces(ServerSession!), Is.Empty);
         });

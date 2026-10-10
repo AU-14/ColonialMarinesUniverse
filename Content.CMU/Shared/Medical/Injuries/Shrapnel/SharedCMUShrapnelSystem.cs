@@ -404,7 +404,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
             return;
         if (!TryFindExtractionPart(target, out var part, user, selectedPart))
         {
-            _popup.PopupPredicted(Loc.GetString("cmu-medical-shrapnel-none"), target, user);
+            _popup.PopupBroadcast(Loc.GetString("cmu-medical-shrapnel-none"), target, user);
             return;
         }
 
@@ -420,7 +420,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         };
 
         if (_doAfter.TryStartDoAfter(doAfter))
-            _popup.PopupPredicted(Loc.GetString("cmu-medical-shrapnel-extract-start"), target, user);
+            _popup.PopupBroadcast(Loc.GetString("cmu-medical-shrapnel-extract-start"), target, user);
     }
 
     private void OnExtractorDoAfter(Entity<CMUShrapnelExtractorComponent> ent, ref CMUShrapnelExtractDoAfterEvent args)
@@ -440,7 +440,7 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
         if (TryExtractShrapnel(target, ent, out var removed, args.User, preferred))
         {
-            _popup.PopupPredicted(
+            _popup.PopupBroadcast(
                 Loc.GetString("cmu-medical-shrapnel-extract-finish", ("count", removed)),
                 target,
                 args.User);

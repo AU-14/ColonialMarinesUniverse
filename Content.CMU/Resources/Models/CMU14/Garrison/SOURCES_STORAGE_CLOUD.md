@@ -6,7 +6,7 @@ published change, completed gameplay conversion or fidelity approval.
 
 ## Deliverables
 
-- Canonical geometry: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_storage_cloud.yml`
+- Canonical geometry: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_storage_cloud.yml`
 - Original-art crops: adjacent `garrison_storage_cloud_art.yml`
 - Textures: `Content.CMU/Resources/Textures/CMU14/ThreeD/storage_cloud/`
 - Eight GLBs adjacent to this note; all `status: draft`

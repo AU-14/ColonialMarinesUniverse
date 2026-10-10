@@ -6,11 +6,11 @@ using Robust.Shared.Map;
 
 namespace Content.Server.CMU14.ZLevels.Core;
 
-public sealed class CMUZPairingSystem : EntitySystem
+public sealed partial class CMUZPairingSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private readonly HashSet<Entity<CMUZPairedComponent>> _candidates = new();
 

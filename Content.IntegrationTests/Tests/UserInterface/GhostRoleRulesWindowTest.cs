@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using Content.Client.UserInterface.Systems.Ghost.Controls.Roles;
 using Content.Shared.CCVar;
 using Content.Shared.Ghost.Roles;
@@ -29,7 +30,7 @@ public sealed class GhostRoleRulesWindowTest
             }
             finally
             {
-                window.DisposeAllChildren();
+                window.ReleaseChildren();
             }
         });
 

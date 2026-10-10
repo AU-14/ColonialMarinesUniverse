@@ -108,7 +108,7 @@ public sealed partial class RMCAirShotSystem : EntitySystem
             var toRemove = new List<ICommonSession>();
 
             var selfMessage = Loc.GetString("rmc-gun-shoot-air-self", ("weapon", ent));
-            _popup.PopupClient(selfMessage, args.User, args.User, PopupType.LargeCaution);
+            _popup.PopupEntity(selfMessage, args.User, args.User, PopupType.LargeCaution);
 
             foreach (var player in players.Recipients)
             {
@@ -165,7 +165,7 @@ public sealed partial class RMCAirShotSystem : EntitySystem
         if (!ent.Comp.IgnoreRoof && !_area.CanCAS(shooterCoordinates))
         {
             var msg = Loc.GetString("rmc-gun-shoot-air-blocked");
-            _popup.PopupClient(msg, shooterCoordinates, shooter, PopupType.SmallCaution);
+            _popup.PopupCoordinates(msg, shooterCoordinates, shooter, PopupType.SmallCaution);
             return;
         }
 

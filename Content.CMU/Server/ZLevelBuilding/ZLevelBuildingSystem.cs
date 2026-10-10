@@ -37,17 +37,19 @@ namespace Content.Server.CMU14.ZLevelBuilding;
 /// </summary>
 public sealed partial class ZLevelBuildingSystem : EntitySystem
 {
-    [Dependency] private  CMUZLevelsSystem _zLevels = default!;
-    [Dependency] private  MapSystem _map = default!;
-    [Dependency] private  SharedMapSystem _mapManager = default!;
-    [Dependency] private  SharedTransformSystem _transform = default!;
-    [Dependency] private  ITileDefinitionManager _tileDef = default!;
-    [Dependency] private  DamageableSystem _damage = default!;
-    [Dependency] private  TurfSystem _turf = default!;
-    [Dependency] private  IRobustRandom _random = default!;
-    [Dependency] private  IGameTiming _timing = default!;
-    [Dependency] private  TagSystem _tag = default!;
-    [Dependency] private  ZBorderSyncSystem _borderSync = default!;
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> WallTag = "Wall";
+
+    [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private SharedMapSystem _mapManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ITileDefinitionManager _tileDef = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private ZBorderSyncSystem _borderSync = default!;
 
     /// <summary>
     /// Global code switch for the whole building overhaul. Set to <c>false</c> to disable dig-down / lazy
@@ -631,7 +633,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
     /// CMBaseWallInvincible family). These mark the playfield boundary.</summary>
     private bool IsIndestructibleWall(EntityUid uid)
     {
-        return _tag.HasTag(uid, "Wall") && !HasComp<Content.Shared.Damage.Components.DamageableComponent>(uid);
+        return _tag.HasTag(uid, WallTag) && !HasComp<Content.Shared.Damage.Components.DamageableComponent>(uid);
     }
 
     /// <summary>If an indestructible border wall stands at <paramref name="worldPos"/> on the level directly
@@ -735,7 +737,7 @@ public sealed partial class ZLevelBuildingSystem : EntitySystem
                 foreach (var anchored in _map.GetAnchoredEntities(sourceGridUid, sourceGrid, sourceTile))
                 {
                     // Anchored entities can be deleted mid-shutdown; MetaData throws on those.
-                    if (!TryComp<MetaDataComponent>(anchored, out var anchoredMeta))
+                    if (!TryComp(anchored, out MetaDataComponent? anchoredMeta))
                         continue;
 
                     // Admin-editable border set (Z-Sync Lists tool) - see TryGetBorderWallAbove.

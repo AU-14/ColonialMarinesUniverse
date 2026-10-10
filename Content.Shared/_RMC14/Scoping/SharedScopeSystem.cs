@@ -136,7 +136,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
 
         var zoomLevel = GetCurrentZoomLevel(scope);
         if (zoomLevel.Name != null)
-            _popup.PopupClient(Loc.GetString("rcm-action-popup-scope-cycle-zoom", ("zoom", zoomLevel.Name)), args.Performer, args.Performer);
+            _popup.PopupEntity(Loc.GetString("rcm-action-popup-scope-cycle-zoom", ("zoom", zoomLevel.Name)), args.Performer, args.Performer);
 
         Dirty(scope);
     }
@@ -214,7 +214,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
         if (scope.Comp.Attachment && !TryGetActiveEntity(scope, out ent))
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-must-attach", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
@@ -224,21 +224,21 @@ public abstract partial class SharedScopeSystem : EntitySystem
             !IsMountedVultureSpotterScope(scope))
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-user-must-hold", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
         if (_pulling.IsPulled(user))
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-user-must-not-pulled", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
         if (_container.IsEntityInContainer(user) && !scope.Comp.CanUseInsideContainer)
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-user-must-not-contained", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
@@ -247,14 +247,14 @@ public abstract partial class SharedScopeSystem : EntitySystem
             !wieldable.Wielded)
         {
             var msgError = Loc.GetString("cm-action-popup-scoping-user-must-wield", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
         if (HasComp<OverwatchWatchingComponent>(user))
         {
             var msgError = Loc.GetString("rmc-action-popup-scoping-user-cannot-view-cameras", ("scope", ent));
-            _popup.PopupClient(msgError, user, user);
+            _popup.PopupEntity(msgError, user, user);
             return false;
         }
 
@@ -319,7 +319,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
         if (scope.Comp.ScopePopup != null)
         {
             var msgUser = Loc.GetString(scope.Comp.ScopePopup, ("scope", scope.Owner));
-            _popup.PopupClient(msgUser, user, user);
+            _popup.PopupEntity(msgUser, user, user);
         }
 
         _actionsSystem.SetToggled(scope.Comp.ScopingToggleActionEntity, true);
@@ -362,7 +362,7 @@ public abstract partial class SharedScopeSystem : EntitySystem
         if (scope.Comp.UnScopePopup != null)
         {
             var msgUser = Loc.GetString(scope.Comp.UnScopePopup, ("scope", scope.Owner));
-            _popup.PopupClient(msgUser, user, user);
+            _popup.PopupEntity(msgUser, user, user);
         }
 
         _actionsSystem.SetToggled(scope.Comp.ScopingToggleActionEntity, false);

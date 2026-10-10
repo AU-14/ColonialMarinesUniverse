@@ -14,6 +14,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaRadioRegressionTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaCommunicatorPrototype = "CMUYautjaCommunicator";
+    private static readonly Robust.Shared.Prototypes.EntProtoId FactionYautjaPrototype = "FactionYautja";
+
     private static readonly string[] YautjaChannels =
     [
         "CMUYautja",
@@ -34,12 +37,12 @@ public sealed class YautjaRadioRegressionTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.EntMan.ComponentFactory;
 
-            var communicator = prototypes.Index<EntityPrototype>("CMUYautjaCommunicator");
-            Assert.That(communicator.TryGetComponent<ItemIFFComponent>(out var iff, factory), Is.True);
+            var communicator = prototypes.Index<EntityPrototype>(CMUYautjaCommunicatorPrototype);
+            Assert.That(communicator.TryComp<ItemIFFComponent>(out var iff, factory), Is.True);
             Assert.That(iff!.Factions, Does.Contain(new EntProtoId<IFFFactionComponent>("FactionYautja")));
 
-            var faction = prototypes.Index<EntityPrototype>("FactionYautja");
-            Assert.That(faction.TryGetComponent<FactionFrequenciesComponent>(out var frequencies, factory), Is.True);
+            var faction = prototypes.Index<EntityPrototype>(FactionYautjaPrototype);
+            Assert.That(faction.TryComp<FactionFrequenciesComponent>(out var frequencies, factory), Is.True);
             Assert.That(frequencies!.Channels, Is.EquivalentTo(YautjaChannels));
 
             foreach (var candidate in prototypes.EnumeratePrototypes<RadioChannelPrototype>())

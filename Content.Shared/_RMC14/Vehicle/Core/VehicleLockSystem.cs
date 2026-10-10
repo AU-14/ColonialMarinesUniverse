@@ -44,6 +44,17 @@ public sealed partial class VehicleLockSystem : EntitySystem
         SubscribeLocalEvent<VehicleLockActionComponent, ComponentShutdown>(OnLockActionShutdown);
         SubscribeLocalEvent<VehicleLockComponent, VehicleLockBreakDoAfterEvent>(OnLockBreakDoAfter);
         SubscribeLocalEvent<VehicleLockComponent, VehicleLockRepairDoAfterEvent>(OnLockRepairDoAfter);
+        SubscribeLocalEvent<VehicleLockComponent, VehicleFrameIntegrityChangedEvent>(OnLockFrameIntegrityChanged);
+    }
+
+    private void OnLockFrameIntegrityChanged(Entity<VehicleLockComponent> ent, ref VehicleFrameIntegrityChangedEvent args)
+    {
+        if (_net.IsClient || args.Intact || !ent.Comp.Locked)
+            return;
+
+        ent.Comp.Locked = false;
+        Dirty(ent);
+        RefreshLockAction(ent.Owner, ent.Comp);
     }
 
     private void OnVehicleMapInit(Entity<VehicleEnterComponent> ent, ref MapInitEvent args)
@@ -151,6 +162,12 @@ public sealed partial class VehicleLockSystem : EntitySystem
             return;
         }
 
+        if (!lockComp.Locked && _vehicle.IsVehicleFrameDestroyed(vehicle))
+        {
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-lock-frame-destroyed"), ent.Owner, ent.Owner, PopupType.SmallCaution);
+            return;
+        }
+
         lockComp.Locked = !lockComp.Locked;
         RefreshLockAction(vehicle, lockComp, ent.Comp);
 
@@ -201,9 +218,9 @@ public sealed partial class VehicleLockSystem : EntitySystem
             return;
 
         // CMU14: wreck locks are beyond repair too.
-        if (_hardpoints.IsDestroyedBeyondRepair(ent.Owner))
+        if (_hardpoints.IsWrecked(ent.Owner))
         {
-            _popup.PopupClient(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, args.User);
+            _popup.PopupEntity(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, args.User);
             args.Handled = true;
             return;
         }
@@ -244,8 +261,8 @@ public sealed partial class VehicleLockSystem : EntitySystem
 
     private void OnLockRepairDoAfter(Entity<VehicleLockComponent> ent, ref VehicleLockRepairDoAfterEvent args)
     {
-        // CMU14: destruction can happen during the repair.
-        if (_hardpoints.IsDestroyedBeyondRepair(ent.Owner))
+        // CMU14: it can get wrecked mid-repair
+        if (_hardpoints.IsWrecked(ent.Owner))
             return;
 
         if (_net.IsClient || args.Cancelled || args.Handled || !ent.Comp.Broken)
@@ -414,6 +431,12 @@ public sealed partial class VehicleLockSystem : EntitySystem
         if (!vehicleLock.Locked && vehicleLock.ForcedOpen)
         {
             _popup.PopupEntity(Loc.GetString("rmc-vehicle-lock-too-damaged"), user, user, PopupType.SmallCaution);
+            return true;
+        }
+
+        if (!vehicleLock.Locked && _vehicle.IsVehicleFrameDestroyed(vehicle))
+        {
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-lock-frame-destroyed"), user, user, PopupType.SmallCaution);
             return true;
         }
 

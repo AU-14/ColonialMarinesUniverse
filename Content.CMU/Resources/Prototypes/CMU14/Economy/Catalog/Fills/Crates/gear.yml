@@ -370,3 +370,13 @@
     contents:
     - id: CMUHeadElectronicHearingProtection
       amount: 10
+
+- type: entity
+  parent: RMCCrateSupply
+  id: CMUCrateSupplyFieldOxygen
+  name: high-capacity oxygen tanks crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUFieldGasTankOxygenFilled
+      amount: 5

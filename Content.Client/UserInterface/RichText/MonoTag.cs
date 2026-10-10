@@ -22,7 +22,7 @@ public sealed partial class MonoTag : IMarkupTagHandler
     /// <inheritdoc/>
     public void PushDrawContext(MarkupNode node, MarkupDrawingContext context)
     {
-        var font = FontTag.CreateFont(context.Font, node, _resourceCache, _prototypeManager, MonoFont);
+        var font = CMUFontPrototypes.CreateFont(context.Font, node, _resourceCache, _prototypeManager, MonoFont);
         context.Font.Push(font);
     }
 

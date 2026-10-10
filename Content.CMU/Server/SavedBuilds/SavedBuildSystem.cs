@@ -273,7 +273,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         // Those must be repositioned too: skipping them left entities stranded at their ORIGINAL saved spot
         // (the "completely messed up placement" bug).
         var roots = result.Entities
-            .Where(e => EntityManager.EntityExists(e)
+            .Where(e => Exists(e)
                 && (Transform(e).ParentUid == targetMapUid || HasComp<MapGridComponent>(Transform(e).ParentUid)))
             .ToList();
 
@@ -347,7 +347,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             {
                 var rootEnt = job.Roots[job.Index];
                 // Entities can be deleted between slices (admin cleanup, a cave-in, gibbing).
-                if (!EntityManager.EntityExists(rootEnt))
+                if (!Exists(rootEnt))
                     continue;
 
                 PlaceOneRoot(job, rootEnt);
@@ -366,7 +366,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             var anchorWanted = 0;
             foreach (var (ent, anchored) in job.AnchorIntents)
             {
-                if (!EntityManager.EntityExists(ent))
+                if (!Exists(ent))
                     continue;
 
                 var xform = Transform(ent);
@@ -391,7 +391,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             // deferred. Rebuild each package now at its final level and coordinates.
             foreach (var rootEnt in job.Roots)
             {
-                if (EntityManager.EntityExists(rootEnt) && TryComp<ZStairComponent>(rootEnt, out var stair))
+                if (Exists(rootEnt) && TryComp<ZStairComponent>(rootEnt, out var stair))
                     _zStairs.EnsureSetup((rootEnt, stair));
             }
 
@@ -406,7 +406,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             _adminLog.Add(LogType.Action, LogImpact.Medium,
                 $"{ToPrettyString(user):player} (user {job.Session.UserId}) placed saved build '{job.Id}' ({job.Roots.Count} roots, {placedTiles} tiles) at {job.TargetMap}");
 
-            if (EntityManager.EntityExists(user))
+            if (Exists(user))
                 _popup.PopupEntity(Loc.GetString("saved-build-placed", ("count", job.Roots.Count + placedTiles)), user, user);
 
             return true;
@@ -415,7 +415,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
         {
             Log.Error($"Failed to commit saved build '{job.Id}' for {job.Session.Name}; deleting staged entities: {e}");
             _mapLoader.Delete(job.Result);
-            if (EntityManager.EntityExists(user))
+            if (Exists(user))
                 _popup.PopupEntity(Loc.GetString("saved-build-error-load"), user, user);
 
             return true;
@@ -1198,7 +1198,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
             if (TryGetRecipeTarget(recipe, out var target) &&
                 _prototype.TryIndex<EntityPrototype>(target, out var targetProto) &&
-                targetProto.TryGetComponent<TileApplierComponent>(out var applier, _componentFactory))
+                targetProto.TryComp<TileApplierComponent>(out var applier, _componentFactory))
                 allowed.Add(applier.Tile);
         }
 

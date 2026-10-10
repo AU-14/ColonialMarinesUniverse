@@ -33,7 +33,7 @@ def presentation_target(prototype):
 def read_models(source: Path) -> list[dict]:
     models = []
     seen = set()
-    for path in ([source] if source.is_file() else sorted(source.glob("*.yml"))):
+    for path in ([source] if source.is_file() else sorted(source.rglob("*.yml"))):
         for model in yaml.load(path.read_text(encoding="utf-8"), Loader=getattr(yaml, "CSafeLoader", yaml.SafeLoader)) or []:
             if model.get("type") != "cmu3DModel":
                 continue
@@ -199,7 +199,7 @@ def markdown_summary(coverage: dict) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--inventory", type=Path, default=ROOT / "Tools/three_d/generated/inventory.json")
-    parser.add_argument("--models", type=Path, default=ROOT / "Content.CMU/Resources/Prototypes/CMU14/ThreeD")
+    parser.add_argument("--models", type=Path, default=ROOT / "Content.CMU/Resources/ThreeD/Prototypes")
     parser.add_argument("--output", type=Path, default=ROOT / "Tools/three_d/generated")
     args = parser.parse_args()
     inventory = json.loads(args.inventory.read_text(encoding="utf-8"))

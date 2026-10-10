@@ -47,6 +47,8 @@
         Slash: 35
         Piercing: 35
     armorPiercing: 10
+    zLevelPenetration: 1
+    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentGau21Cannon
     soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
     soundGround: /Audio/_RMC14/Dropship/gau.ogg
@@ -213,7 +215,7 @@
   parent: RMCDropshipAttachmentAmmoRocket
   id: RMCDropshipAttachmentAmmoRocketNapalm
   name: AGM-99 'Napalm'
-  description: The AGM-99 'Napalm' is an incendiary missile used to turn specific targeted areas into giant balls of fire for a long time. Can be loaded into the LAU-444 Guided Missile Launcher.
+  description: The AGM-99 'Napalm' is an incendiary missile used to turn specific targeted areas into giant balls of fire for a long time.
   components:
   #cmu start
   - type: RMCGenericExamine
@@ -274,7 +276,7 @@
   parent: RMCDropshipAttachmentAmmoRocket
   id: RMCDropshipAttachmentAmmoRocketThermobaric
   name: BLU-200 'Dragon's Breath'
-  description: The BLU-200 'Dragon's Breath' is a thermobaric fuel-air bomb. The aerosolized fuel mixture creates a vacuum when ignited causing serious damage to those in its way. Can be loaded into the LAU-444 Guided Missile Launcher.
+  description: The BLU-200 'Dragon's Breath' is a thermobaric fuel-air bomb. The aerosolized fuel mixture creates a vacuum when ignited causing serious damage to those in its way.
   components:
   #cmu start
   - type: RMCGenericExamine
