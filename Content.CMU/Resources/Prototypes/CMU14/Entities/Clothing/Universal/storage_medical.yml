@@ -84,7 +84,7 @@
       - BallisticAmmoProvider # speed loaders and other ammo providers
     blacklist:
       tags:
-      - RMCAttachmentUnderbarrel # attachments are ammo providers too
+      - RMCAttachmentUnderbarrel
   - type: IgnoreContentsSize
     # large magazine variants bypass the size limit, mirrors CMBeltMarine
     items:
@@ -94,6 +94,23 @@
       - RMCShellShotgunHDSG
       - CMMagazineSmg
   - type: FixedItemSizeStorage
+  # Five ammo items, matching the M276 ammo rig's five-slot grid
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-max-mags
+      count: 5
+      whitelist:
+        tags:
+        - CMMagazinePistol
+        - RMCMagazineRevolver
+        - CMMagazineRifle
+        - RMCMagazineShotgun
+        - CMMagazineSmg
+        - CMMagazineSniper
+        - RMCShellShotgun
+        - RMCShellShotgunHDSG
+        components:
+        - BallisticAmmoProvider
   - type: Tag
     tags:
     - RMCBeltMedical
