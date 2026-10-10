@@ -67,8 +67,8 @@ public sealed partial class PowerLoaderSystem : EntitySystem
     private static readonly EntProtoId DefaultHandVisual = "RMCVirtualDropshipGearRight";
 
     // AU-14: tag-based matching for the JDAM bomb clamp and its bombs.
-    private static readonly ProtoId<TagPrototype> JDAMBombTag = "AU14JDAMBomb";
-    private static readonly ProtoId<TagPrototype> JDAMBombClampTag = "AU14JDAMBombClamp";
+    private static readonly ProtoId<TagPrototype> JDAMBombTag = "CMUJDAMBomb";
+    private static readonly ProtoId<TagPrototype> JDAMBombClampTag = "CMUJDAMBombClamp";
 
     private EntityQuery<PowerLoaderGrabbableComponent> _powerLoaderGrabbableQuery;
 

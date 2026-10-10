@@ -47,8 +47,6 @@
         Slash: 35
         Piercing: 35
     armorPiercing: 10
-    zLevelPenetration: 1
-    applyEffectsOnPenetrationLevels: true
     weapon: RMCDropshipAttachmentGau21Cannon
     soundCockpit: /Audio/_RMC14/Dropship/gau_incockpit.ogg
     soundGround: /Audio/_RMC14/Dropship/gau.ogg
