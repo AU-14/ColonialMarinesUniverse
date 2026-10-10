@@ -574,6 +574,10 @@ jobs:
 
           # Localization policy and upstream content freezes are opt-in in the full suite.
           FILTER="($FILTER) & FullyQualifiedName!~.Localization. & FullyQualifiedName!~.WizdenContentFreeze."
+          # CMU14: SS14-only content, ~43 runner-minutes a run. the antag test only scans
+          # Resources/Prototypes (no CMU rules) and station power only loads SS14 stations.
+          # both still run in the nightly Build & Test Debug full suite
+          FILTER="$FILTER & FullyQualifiedName!~.GameRules.AntagGhostRoleTest. & FullyQualifiedName!~.Power.StationPowerTests."
           echo "--- $shard shard filter ---"
           echo "$FILTER"
           cd bin/Content.IntegrationTests || exit 1
