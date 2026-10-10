@@ -1,0 +1,96 @@
+- type: entity
+  id: CMUPlanetFortMcNeil
+  name: Fort McNeil
+  components:
+  - type: RMCPlanetMapPrototype
+    votename: "Fort McNeil"
+    mapId: cmufortmcneil
+    lorePrimer: CMUPrimerPlanetFortMcNeil
+    allegiance: UA
+    camouflage: Desert
+    announcement: "An automated distress signal has been received from the colony site of Fort McNeil, on the border world of White Antre. A response team has been dispatched to investigate."
+    platoonsGovfor:
+    - USCM
+    - WEYU
+    - RMC
+    - CMBCIU
+    - HAZOPS
+    - ProdigySF
+    - VAIPO
+    platoonsOpfor:
+    - LACN
+    - UPP
+    defaultgovfor: USCM
+    defaultopfor: UPP
+    govforinship: true
+    opforinship: true
+    daycycleenabled: true
+    thirdpartyinterval: 1800
+    thirdparties:
+    - FreeCompanyRaiders
+    - CLFCellReinforcementsSurv
+    - DiplomaticAttachesSurv
+    - ProdigySurvLarge
+    - ProdigySurvMedium
+    - ProdigySurvSmall
+    - USArmy
+    - USArmyAlt
+    - USArmyAlt2
+    - USArmyTank
+    - WEYUSurvLarge
+    - WEYUSurvMedium
+    - WEYUSurvSmall
+    - CLFSurvsBig
+    - CLFSurvsMedium
+    - CLFSurvsSmall
+    - ICRCReliefParty
+    - TimeSharesSalesman
+    - UACGLostTeam
+    - NSPAInvestigationParty
+    - LACNSniperteam
+    - RMCRRT
+    - USArmyArmored
+    - CMBInvestigationParty
+    - CMBInvestigationPartyAlt
+    - XenoParasiteRunnerParty
+    - ApeThirdParty
+    - ProfessorVonBandolier
+    - WYPMCParty
+    - WYPMCPartyAlt
+    - biomorphThirdParty
+    threats:
+    - XenoThreat
+    - NeomorphsThreat
+    # - BadBloodClanThreat
+    # - XenoThreatCF # no xenocf markers
+    # - NeomorphsThreatCF # no xenocf markers
+    # - CultistThreatCF
+    # - WendigoThreatCF
+    # - AbominationsThreatCF # no xenocf markers
+    # - TribalsThreatCF
+    # - ApeThreatCF
+    jobScalingFof: DefaultGovforOpforScale
+    jobScalingIns: DefaultInsurgencyScale
+    
+- type: lorePrimer
+  id: CMUPrimerPlanetFortMcNeil
+  planetText: "An automated distress signal has been received from the colony site of Fort McNeil, on the border world of White Antre. A response team has been dispatched to investigate."
+  
+- type: gameMap
+  id: cmufortmcneil
+  mapName: Fort McNeil
+  mapPath: "/Maps/CMU14/FortMcNeilMultiZ/FortMcNeilMultiZ0.yml"
+  mapsBelow: []
+  mapsAbove:
+  - "/Maps/CMU14/FortMcNeilMultiZ/FortMcNeilMultiZ1.yml"
+  - "/Maps/CMU14/FortMcNeilMultiZ/FortMcNeilMultiZ2.yml"
+  minPlayers: 0
+  maxPlayers: 75
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    fortmcneil:
+      stationProto: StandardUNMCWarship
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: Fort McNeil

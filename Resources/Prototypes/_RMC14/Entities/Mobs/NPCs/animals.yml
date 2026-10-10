@@ -390,6 +390,38 @@
     follow: true
     location: cmu-warp-location-garry
 
+- type: entity #CMU14
+  parent: RMCMobRat
+  id: CMUMobEryk
+  name: Eryk
+  description: Looks like he's gotten out of his encolosure. Seemingly more sanguine than you would expect from a rat.
+  components:
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      30: Critical
+      40: Dead 
+  - type: Grammar
+    attributes:
+      proper: true
+      gender: male
+    
+- type: entity #CMU14
+  parent: RMCMobRatGray
+  id: CMUMobJoao
+  name: Joao
+  description: How has he gotten out of his encolosure? Oh, and it seems like he's got a bit of a foul temper.
+  components:
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      30: Critical
+      40: Dead 
+  - type: Grammar
+    attributes:
+      proper: true
+      gender: male
+
 # Spawners
 - type: entity
   parent: SpawnMobMouse
@@ -528,3 +560,33 @@
   - type: ConditionalSpawner
     prototypes:
     - RMCMobMouseDoc
+
+- type: entity #CMU14
+  parent: MarkerBase
+  id: CMUSpawnMobEryk
+  name: Eryk Spawner
+  suffix: CMU
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: icon-0
+      sprite: _RMC14/Mobs/Animals/rat.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - CMUMobEryk
+
+- type: entity #CMU14
+  parent: MarkerBase
+  id: CMUSpawnMobJoao
+  name: Joao Spawner
+  suffix: CMU
+  components:
+  - type: Sprite
+    layers:
+    - state: green
+    - state: icon-2
+      sprite: _RMC14/Mobs/Animals/rat.rsi
+  - type: ConditionalSpawner
+    prototypes:
+    - CMUMobJoao
