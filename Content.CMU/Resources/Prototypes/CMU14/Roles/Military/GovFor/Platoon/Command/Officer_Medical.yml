@@ -60,6 +60,9 @@
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 10800 # 3 hours
   - !type:AgeRequirement
     requiredAge: 30
   - !type:TraitsRequirement
@@ -202,6 +205,9 @@
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 10800 # 3 hours
   name: Chief Medical Officer
   spawnMenuRoleName: CMO (UPP)
   ranks:
@@ -219,6 +225,9 @@
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
+  - !type:TotalJobsTimeRequirement
+    group: CMUJobsMedical
+    time: 10800 # 3 hours
   name: PMC Chief Medical Officer
   spawnMenuRoleName: CMO (WYPMC)
   ranks:
