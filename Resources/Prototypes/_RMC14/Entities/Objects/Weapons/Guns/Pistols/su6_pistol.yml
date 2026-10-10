@@ -34,7 +34,7 @@
     - Burst
     recoilWielded: 1
     recoilUnwielded: 2
-    scatterWielded: 10
+    scatterWielded: 8 # CMU14: matched to the M4A4
     scatterUnwielded: 10
     baseFireRate: 10
     burstScatterMult: 5
@@ -111,7 +111,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 30
+        Piercing: 36 # CMU14: buffed closer to the M4A4's 9mm (40)
   - type: CMArmorPiercing
     amount: 20
   - type: RMCProjectileAccuracy
