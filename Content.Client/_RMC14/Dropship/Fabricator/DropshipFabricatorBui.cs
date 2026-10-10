@@ -169,6 +169,21 @@ public sealed partial class DropshipFabricatorBui : BoundUserInterface
             });
         }
 
+        if (_prototypes.TryIndex(entry.Id, out var proto) &&
+            proto.TryGetComponent(out DropshipAmmoComponent? ammo, _compFactory))
+        {
+            info.AddChild(new Label
+            {
+                Text = ammo.TargetLowestZLevel
+                    ? Loc.GetString("cmu-dropship-fabricator-item-penetration-max", ("ap", ammo.ArmorPiercing))
+                    : Loc.GetString("cmu-dropship-fabricator-item-penetration",
+                        ("ap", ammo.ArmorPiercing),
+                        ("levels", ammo.ZLevelPenetration)),
+                StyleClasses = { StyleNano.StyleClassCrtDimText },
+                ClipText = true,
+            });
+        }
+
         var button = new Button
         {
             Text = Loc.GetString("rmc-dropship-fabricator-fabricate", ("cost", entry.Cost)),

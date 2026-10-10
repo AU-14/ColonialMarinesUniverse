@@ -6,5 +6,11 @@ cmu-dropship-fabricator-search-placeholder = Search weapons or ammo...
 cmu-dropship-fabricator-equipment = EQUIPMENT ({$count})
 cmu-dropship-fabricator-ammo = AMMUNITION ({$count})
 cmu-dropship-fabricator-item-weapon = For: {$weapon}
+cmu-dropship-fabricator-item-penetration = Armor piercing: {$ap} | Floor penetration: {$levels ->
+    [0] none
+    [one] 1 level
+   *[other] {$levels} levels
+}
+cmu-dropship-fabricator-item-penetration-max = Armor piercing: {$ap} | Floor penetration: MAX
 cmu-dropship-fabricator-no-equipment = No matching equipment.
 cmu-dropship-fabricator-no-ammo = No matching ammunition.
