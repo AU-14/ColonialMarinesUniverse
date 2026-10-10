@@ -1,6 +1,4 @@
-using System.Linq;
 using System.Numerics;
-using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage.Components;
 using Content.Shared.Database;
@@ -38,14 +36,6 @@ public sealed partial class HitscanBasicRaycastSystem : EntitySystem
         var mapCords = _transform.ToMapCoordinates(args.FromCoordinates);
         var ray = new CollisionRay(mapCords.Position, args.ShotDirection, (int) ent.Comp.CollisionMask);
         var rayCastResults = _physics.IntersectRay(mapCords.MapId, ray, ent.Comp.MaxDistance, shooter, false);
-
-        // CMU14 Begin: guns mounted in a vehicle shoot past their own hull, like their projectiles do
-        if (HasComp<GunIgnoreContainerOwnerCollisionComponent>(args.Gun))
-        {
-            var owners = GetContainerOwners(args.Gun);
-            rayCastResults = rayCastResults.Where(hit => !owners.Contains(hit.HitEntity));
-        }
-        // CMU14 End
 
         var target = args.Target;
         // If you are in a container, use the raycast result
@@ -94,20 +84,6 @@ public sealed partial class HitscanBasicRaycastSystem : EntitySystem
             var strikeEvent = new HitscanRaycastStrikeEvent { Data = data };
             RaiseLocalEvent(data.HitEntity.Value, ref strikeEvent);
         }
-    }
-
-    // CMU14 method
-    private HashSet<EntityUid> GetContainerOwners(EntityUid gun)
-    {
-        var owners = new HashSet<EntityUid>();
-        var current = gun;
-        while (_container.TryGetContainingContainer((current, null), out var container))
-        {
-            owners.Add(container.Owner);
-            current = container.Owner;
-        }
-
-        return owners;
     }
 
     /// <summary>

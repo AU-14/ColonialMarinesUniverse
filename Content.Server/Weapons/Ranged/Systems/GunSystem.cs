@@ -104,27 +104,7 @@ public sealed partial class GunSystem : SharedGunSystem
                     if (!cartridge.Spent)
                     {
                         var projectile = Spawn(cartridge.Prototype, fromEnt);
-                        // CMU14 Begin: cartridges can load hitscan shots, such as the tank electrolaser
-                        if (HasComp<HitscanAmmoComponent>(projectile))
-                        {
-                            var cartridgeTrace = new HitscanTraceEvent
-                            {
-                                FromCoordinates = fromCoordinates,
-                                ShotDirection = mapDirection.Normalized(),
-                                Gun = gun,
-                                Shooter = user,
-                                Target = gun.Comp.Target,
-                            };
-                            RaiseLocalEvent(projectile, ref cartridgeTrace);
-                            Del(projectile);
-                            MuzzleFlash(gun, cartridge, mapDirection.ToAngle(), user);
-                            PlayGunshotSound(gun.Comp.SoundGunshotModified, gun, user);
-                        }
-                        else
-                        {
-                            CreateAndFireProjectiles(projectile, cartridge);
-                        }
-                        // CMU14 End
+                        CreateAndFireProjectiles(projectile, cartridge);
 
                         RaiseLocalEvent(cartridgeUid, new AmmoShotEvent
                         {
