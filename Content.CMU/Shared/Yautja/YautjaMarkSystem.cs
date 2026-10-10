@@ -374,7 +374,7 @@ public sealed partial class YautjaMarkSystem : EntitySystem
     {
         if (!HasComp<YautjaComponent>(user))
         {
-            _popup.PopupClient(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), user, user, PopupType.SmallCaution);
             return false;
         }
         return bracer.Comp.User == user && _inventory.InSlotWithFlags((bracer, null, null), bracer.Comp.Slots);

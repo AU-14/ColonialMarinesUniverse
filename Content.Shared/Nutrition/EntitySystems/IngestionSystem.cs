@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared.Actions.Events;
 using Content.Shared.Administration.Logs;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -255,7 +256,9 @@ public sealed partial class IngestionSystem : EntitySystem
         var food = args.Ingested;
         var forceFed = args.User != entity.Owner;
 
-        if (!_body.TryGetOrgansWithComponent<StomachComponent>(entity!, out var stomachs))
+        var stomachs = _body.EnumerateOrgans<StomachComponent>(entity!)
+            .Select(organ => new Entity<StomachComponent>(organ.Owner, organ.Comp2)).ToList();
+        if (stomachs.Count == 0)
             return;
 
         // Can we digest the specific item we're trying to eat?
@@ -320,7 +323,9 @@ public sealed partial class IngestionSystem : EntitySystem
         if (!CanConsume(args.User, entity, food, out var solution, out _))
             return;
 
-        if (!_body.TryGetOrgansWithComponent<StomachComponent>(entity!, out var stomachs))
+        var stomachs = _body.EnumerateOrgans<StomachComponent>(entity!)
+            .Select(organ => new Entity<StomachComponent>(organ.Owner, organ.Comp2)).ToList();
+        if (stomachs.Count == 0)
             return;
 
         var forceFed = args.User != entity.Owner;

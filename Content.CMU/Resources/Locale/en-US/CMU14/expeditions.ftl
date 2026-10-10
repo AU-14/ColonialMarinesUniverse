@@ -37,11 +37,10 @@ ent-CMUExpeditionMiner = SUNDIAL experimental miner
 
 cmu-expedition-airspace = Expedition {$seed} — altitude level {$level}
 cmu-expedition-time-set = Expedition lighting time updated on every level.
-cmu-expedition-announcement-sender = SUNDIAL — GOVERNMENT RECOVERY COMMAND
-cmu-expedition-announcement = PRIORITY BLACK. A recovery corridor has been established at {$sector}. The beacon is live: {$lz}. Govfor flight crews, prepare for deployment. Recover the experimental asset, hold the extraction zone, and bring your people home. SUNDIAL is watching.
+cmu-expedition-announcement = PRIORITY BLACK ASSIGNMENT. Recover the experimental miner at {$sector}. LZ {$lz} is open. GOVFOR, deploy immediately.
 cmu-expedition-fly = Launch to {$sector}
 cmd-cmu-expedition-orders-desc = Set expedition squad movement, guard work, tactics, and faction rules.
-cmd-cmu-expedition-orders-help = cmu-expedition-orders <map ID|here> <squad ID> <move|guard|patrol-add> [x y, omit with here]; or patrol-start|patrol-stop|patrol-clear; or style <Steady|Aggressive|Cautious>; or friendly|target <comma-separated NPC factions|default>
+cmd-cmu-expedition-orders-help = cmu-expedition-orders <map ID|here> <squad ID> <move|guard|patrol-add> [x y, omit with here] [guard only: auto|north|east|south|west]; or patrol-start|patrol-stop|patrol-clear; or style <Steady|Aggressive|Cautious>; or friendly|target <comma-separated NPC factions|default>
 cmu-expedition-unknown-faction = Unknown NPC faction: {$faction}.
 cmu-expedition-orders-applied = Orders applied to {$count} expedition guards.
 cmu-expedition-ai-squad = Squad {$squad} created. Use cmu-expedition-orders to direct it.

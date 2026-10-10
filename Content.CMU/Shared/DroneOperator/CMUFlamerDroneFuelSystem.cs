@@ -7,7 +7,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.DroneOperator;
 
-public sealed class CMUFlamerDroneFuelSystem : EntitySystem
+public sealed partial class CMUFlamerDroneFuelSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
 

@@ -49,7 +49,7 @@ public abstract partial class SharedMedevacSystem : EntitySystem
         var targetCoord = ent.Owner.ToCoordinates();
         if (utilComp.Target == null)
         {
-            _popup.PopupClient(Loc.GetString("rmc-medevac-no-target"), targetCoord, args.User);
+            _popup.PopupCoordinates(Loc.GetString("rmc-medevac-no-target"), targetCoord, args.User);
             return;
         }
 
@@ -74,7 +74,7 @@ public abstract partial class SharedMedevacSystem : EntitySystem
         }
         else
         {
-            _popup.PopupClient(Loc.GetString("rmc-medevac-stretcher-failure"), targetCoord, args.User);
+            _popup.PopupCoordinates(Loc.GetString("rmc-medevac-stretcher-failure"), targetCoord, args.User);
             ent.Comp.IsActivated = false;
         }
         Dirty(ent);

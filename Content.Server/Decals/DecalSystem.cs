@@ -33,12 +33,16 @@ public sealed partial class DecalSystem : SharedDecalSystem
         base.Initialize();
 
         SubscribeLocalEvent<TileChangedEvent>(OnTileChanged);
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
         SubscribeLocalEvent<DecalGridComponent, ComponentStartup>(OnLegacyDecalGridStartup);
+#pragma warning restore CS0618
         SubscribeLocalEvent<BeforeSerializationEvent>(OnBeforeSerialization);
         SubscribeLocalEvent<PostGridSplitEvent>(OnGridSplit);
     }
 
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
     private void OnLegacyDecalGridStartup(EntityUid uid, DecalGridComponent component, ComponentStartup args)
+#pragma warning restore CS0618
     {
         MigrateLegacyDecalGrid(uid, component);
         RemComp(uid, component);
@@ -57,7 +61,9 @@ public sealed partial class DecalSystem : SharedDecalSystem
 
         foreach (var uid in ev.Entities)
         {
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
             if (!TryComp<DecalGridComponent>(uid, out var component))
+#pragma warning restore CS0618
                 continue;
 
             MigrateLegacyDecalGrid(uid, component);
@@ -74,7 +80,9 @@ public sealed partial class DecalSystem : SharedDecalSystem
         }
     }
 
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
     private void MigrateLegacyDecalGrid(EntityUid uid, DecalGridComponent component)
+#pragma warning restore CS0618
     {
         // Old maps store grid-wide decal chunks; convert them into chunk entities and remove the legacy component.
         foreach (var chunk in component.ChunkCollection.ChunkCollection.Values)

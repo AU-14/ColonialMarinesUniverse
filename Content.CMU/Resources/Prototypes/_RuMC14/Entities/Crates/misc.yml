@@ -32,6 +32,72 @@
 
 - type: entity
   parent: RMCCrateWeapons
+  id: RuMCCrateAH12Magazine
+  name: contains the magazine AH12
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCMagazineAH12
+      amount: 5
+    - id: RuMCMagazineAH12Tracer
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateAH12Magazine_Large
+  name: contains the magazine AH12 (Large)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCMagazineAH12Large
+      amount: 6
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateAH12Magazine_AP
+  name: contains the magazine AH12 (AP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCMagazineAH12AP
+      amount: 6
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateAH12Magazine_JHP
+  name: contains the magazine AH12 (JHP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCMagazineAH12JHP
+      amount: 6
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateAK4047
+  name: contains the AK4047
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCRifleAK4047Case
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateAK4047Magazine
+  name: contains the magazine AK4047 (any)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCMagazineRifleAK4047bakelite
+      amount: 5
+    - id: RMCMagazineRifleAK4047
+      amount: 5
+    - id: RuMCMagazineRifleAK4047bakeliteLarge
+      amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
   id: RuMCCrateVAL
   name: contains the VAL
   components:
@@ -40,6 +106,27 @@
     - id: RuMCGunVALCase_alt
       amount: 1
 
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateVALMagazine
+  name: contains the magazine VAL
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCMagazineVAL
+      amount: 8
+    - id: RuMCMagazineVALTracer
+      amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RuMCCrateVALMagazine_AP
+  name: contains the magazine VAL (AP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RuMCMagazineVALAP
+      amount: 10
 
 - type: entity
   parent: RMCCrateWeapons

@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,9 @@ namespace Content.IntegrationTests.Tests.ClientSession;
 [EnsureCVar(Side.Client, typeof(CCVars), nameof(CCVars.CrewManifestWithoutEntity), true)]
 public sealed class TickerLateJoinMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> ClientSessionGovJobPrototype = "ClientSessionGovJob";
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> ClientSessionOpJobPrototype = "ClientSessionOpJob";
+
     private static readonly NetEntity Station = new(880001);
 
     [TestPrototypes]
@@ -188,14 +192,14 @@ public sealed class TickerLateJoinMergeRegressionTest : GameTest
 
                 Assert.That(JobUIComparer.TryCreate(Client.ProtoMan,
                     ticker.JobWeightsByStation[Station], out var comparer), Is.True);
-                var gov = Client.ProtoMan.Index<JobPrototype>("ClientSessionGovJob");
-                var op = Client.ProtoMan.Index<JobPrototype>("ClientSessionOpJob");
+                var gov = Client.ProtoMan.Index<JobPrototype>(ClientSessionGovJobPrototype);
+                var op = Client.ProtoMan.Index<JobPrototype>(ClientSessionOpJobPrototype);
                 Assert.That(comparer!.Compare(op, gov), Is.LessThan(0),
                     "LateJoin must use the station's typed weight profile rather than source order");
             }
             finally
             {
-                gui.Dispose();
+                gui.Release();
             }
 
             Assert.That(SubscriberCount(ticker, "LobbyJobsAvailableUpdated"), Is.EqualTo(baselineSubscribers),
@@ -217,7 +221,7 @@ public sealed class TickerLateJoinMergeRegressionTest : GameTest
             }
             finally
             {
-                empty.Dispose();
+                empty.Release();
             }
         });
     }

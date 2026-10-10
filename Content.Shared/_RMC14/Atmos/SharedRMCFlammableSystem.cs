@@ -356,7 +356,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         Pat(ent.Owner, patter.Stacks);
 
         _audio.PlayPredicted(patter.Sound, user, user);
-        _popup.PopupClient($"You try to put out the fire on {Name(ent)}!", ent, user, PopupType.SmallCaution);
+        _popup.PopupEntity($"You try to put out the fire on {Name(ent)}!", ent, user, PopupType.SmallCaution);
         _popup.PopupEntity($"{Name(user)} tries to put out the fire on you!", ent, ent, PopupType.SmallCaution);
 
         var others = Filter.PvsExcept(ent).RemoveWhereAttachedEntity(e => e == user || e == ent.Owner);
@@ -695,7 +695,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             solution.Volume <= FixedPoint2.Zero)
         {
             if (popup)
-                _popup.PopupClient($"The {Name(ent)} is empty...", ent, user, PopupType.SmallCaution);
+                _popup.PopupEntity($"The {Name(ent)} is empty...", ent, user, PopupType.SmallCaution);
 
             return false;
         }
@@ -714,7 +714,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
             if (popup)
             {
                 var msg = $"There's not enough flammable liquid in the {Name(ent)}!";
-                _popup.PopupClient(msg, ent, user, PopupType.SmallCaution);
+                _popup.PopupEntity(msg, ent, user, PopupType.SmallCaution);
             }
 
             return false;

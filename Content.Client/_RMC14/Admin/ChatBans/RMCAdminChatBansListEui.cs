@@ -1,4 +1,4 @@
-﻿using Content.Client._RMC14.UserInterface;
+using Content.Client._RMC14.UserInterface;
 using Content.Client.Eui;
 using Content.Shared._RMC14.Admin.ChatBans;
 using Content.Shared.Eui;
@@ -44,7 +44,7 @@ public sealed class RMCAdminChatBansListEui : BaseEui
         if (_window == null || _state == null)
             return;
 
-        _window.Container.DisposeAllChildren();
+        _window.Container.ReleaseChildren();
         foreach (var ban in _state.Bans)
         {
             var row = new RMCAdminChatBanRow();

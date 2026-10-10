@@ -47,5 +47,5 @@ public sealed partial class CMUDayNightAtmosphereComponent : Component
     // queries until the flush, and two same-frame MapInits would both see
     // each other and strip themselves, leaving the network with no driver.
     [ViewVariables]
-    public bool Initialized;
+    public bool CycleStarted;
 }

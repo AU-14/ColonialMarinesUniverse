@@ -128,9 +128,6 @@ public sealed class PlayTimeMergeRegressionTest : GameTest
     [SidedDependency(Side.Server)]
     private readonly IConfigurationManager _serverConfiguration = default!;
 
-    [SidedDependency(Side.Client)]
-    private readonly IConfigurationManager _clientConfiguration = default!;
-
     public override PoolSettings PoolSettings => new()
     {
         Connected = true,

@@ -10,6 +10,7 @@ namespace Content.Tests.Client.CMU14.ThreeD;
 [TestFixture]
 public sealed class CMU3DElevationTest
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void RaisedLandingAndCameraFollowTheSameStairAscent()
     {
@@ -31,6 +32,7 @@ public sealed class CMU3DElevationTest
         Assert.That(camera.Origin.Z, Is.EqualTo(CMU3DFirstPersonCamera.EyeHeight + .39f).Within(.00001f));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void NegativeCoordinatesAndRecessedLandingRemainContinuous()
     {

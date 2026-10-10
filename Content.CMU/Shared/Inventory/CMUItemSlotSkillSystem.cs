@@ -35,7 +35,7 @@ public sealed partial class CMUItemSlotSkillSystem : EntitySystem
             return true;
 
         var message = Loc.GetString(ent.Comp.FailPopup);
-        _popup.PopupClient(message, ent, userUid, PopupType.SmallCaution);
+        _popup.PopupEntity(message, ent, userUid, PopupType.SmallCaution);
         return false;
     }
 }

@@ -63,6 +63,7 @@
     pocket2: RMCPouchDocument
   inhand:
   - CMPenFountain
+  - AU14TabletGovfor
 
 - type: playTimeTracker
   id: CMUJobGOVFORAdjutantDress
@@ -293,6 +294,7 @@
     pocket2: RMCPouchDocument
   inhand:
   - CMPenFountain
+  - AU14TabletOpfor
 
 - type: entity
   parent: CMSpawnPointJobBase

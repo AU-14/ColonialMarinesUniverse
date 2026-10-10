@@ -12,14 +12,12 @@ public sealed partial class CMUExpeditionAgentSystem
 {
     private bool _orderRouteSearched;
 
-    public static bool IsSquadVariant(string variant) => variant is "mixed" or "regular" or "poor" or "rich" or "scout";
-
     public bool CanOrderSquadMember(EntityUid uid) => !HasComp<ActorComponent>(uid) && _mobs.IsAlive(uid);
 
-    public int SpawnSquad(EntityCoordinates center, int count, string variant, out int squad)
+    public int SpawnSquad(EntityCoordinates center, int count, string variant, out int squad, string outfit = "scavenger")
     {
         squad = 0;
-        if (count is < 1 or > 12 || !IsSquadVariant(variant) || !TrySquadCoordinates(center, out center))
+        if (count is < 1 or > 12 || !IsSquadVariant(variant) || !IsOutfit(outfit) || !TrySquadCoordinates(center, out center))
             return 0;
 
         _bodyClearCache.Clear();
@@ -53,23 +51,16 @@ public sealed partial class CMUExpeditionAgentSystem
                 squad = Math.Max(squad, member.Squad + 1);
         if (map != null)
             map.NextSquad = squad + 1;
-        var mixed = new[] { "CMUExpeditionScavenger", "CMUExpeditionScavengerPoor", "CMUExpeditionScavengerAggressive",
-            "CMUExpeditionScavengerScout", "CMUExpeditionScavengerCautious", "CMUExpeditionScavengerRich" };
+        var composition = SquadPresets[variant];
         for (var i = 0; i < positions.Count; i++)
         {
-            var prototype = variant switch
-            {
-                "poor" => "CMUExpeditionScavengerPoor",
-                "rich" => "CMUExpeditionScavengerRich",
-                "scout" => "CMUExpeditionScavengerScout",
-                "regular" => "CMUExpeditionScavenger",
-                _ => mixed[i % mixed.Length],
-            };
+            var prototype = composition[i % composition.Length];
             var uid = Spawn(prototype, positions[i]);
             var agent = Comp<CMUExpeditionAgentComponent>(uid);
+            if (!ApplySpawnOutfit(uid, outfit))
+                Log.Error($"Expedition outfit {outfit} could not be equipped on {ToPrettyString(uid)}; retained original equipment.");
             agent.Squad = squad;
             agent.Home = positions[i];
-            agent.Entrench = true;
             agent.NextThink = _timing.CurTime + TimeSpan.FromSeconds(i * 0.02);
         }
         if (map != null)
@@ -92,10 +83,10 @@ public sealed partial class CMUExpeditionAgentSystem
         return GroundSafe(point) && BodyFits(uid, point);
     }
 
-    public bool OrderSquadPoint(EntityUid uid, EntityCoordinates center, string action, List<EntityCoordinates> reserved)
+    public bool OrderSquadPoint(EntityUid uid, EntityCoordinates center, string action, List<EntityCoordinates> reserved, Direction? facing = null)
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) || !CanOrderSquadMember(uid) ||
-            !TrySquadCoordinates(center, out center) || Transform(uid).MapUid != Transform(center.EntityId).MapUid ||
+            !TrySquadCoordinates(center, out center) ||
             action == "patrol-add" && agent.PatrolPoints.Count >= 8)
             return false;
         foreach (var point in NearbySquadPositions(center, 4))
@@ -104,8 +95,10 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             if (action == "patrol-add")
                 agent.PatrolPoints.Add(point);
-            else if (!OrderPosition(uid, point, action == "guard"))
+            else if (!OrderPosition(uid, point, action == "guard", facing))
                 continue;
+            if (action != "patrol-add")
+                agent.OrderRally = center;
             reserved.Add(point);
             return true;
         }
@@ -129,16 +122,24 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool FollowOrders(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
+        if (FollowLevelOrder(uid, agent, now))
+            return true;
         if (agent.OrderedDestination is not { } destination)
             return false;
         var start = Transform(uid).Coordinates;
+        if (WaitForSquad(uid, agent, now))
+            return true;
         if (_transform.InRange(start, destination, 0.5f))
         {
             agent.Home = destination;
             agent.OrderRoute.Clear();
             agent.OrderBlocked = false;
+            agent.OrderBlockedSince = null;
             agent.OrderedDestination = null;
+            ClearTraffic(agent);
             _steering.Unregister(uid);
+            if (agent.TravelGoal != null)
+                return true;
             if (agent.Patrolling && agent.PatrolPoints.Count >= 2)
             {
                 agent.PatrolIndex = (agent.PatrolIndex + 1) % agent.PatrolPoints.Count;
@@ -161,7 +162,11 @@ public sealed partial class CMUExpeditionAgentSystem
                 return true;
             }
             _orderRouteSearched = true;
-            if (!BuildTacticalRoute(uid, agent, destination, ordered: true))
+            if (BorrowSquadRoute(uid, agent, destination))
+                return true;
+            if (RecoverStraggler(uid, agent, now, out var recoverySearched))
+                return true;
+            if (recoverySearched || !BuildTacticalRoute(uid, agent, destination, ordered: true, allowVaults: !agent.AutoPatrol))
             {
                 BlockOrder();
                 return true;
@@ -170,36 +175,52 @@ public sealed partial class CMUExpeditionAgentSystem
                 agent.OrderRoute.Enqueue(point);
             agent.Route.Clear();
             agent.RouteDestination = null;
-            agent.OrderProgressPosition = start;
-            agent.OrderProgressAt = now;
             agent.OrderBlocked = false;
         }
-        while (agent.OrderRoute.TryPeek(out var arrived) && _transform.InRange(start, arrived, ArrivalRange))
-            agent.OrderRoute.Dequeue();
+        AdvanceRoute(uid, agent.OrderRoute, start);
         if (!agent.OrderRoute.TryPeek(out var next))
             return true;
-        if (agent.OrderProgressPosition is not { } progress || !_transform.InRange(start, progress, 0.2f))
+        UpdateMoveProgress(agent, start, next, now);
+        if (agent.LastOrderProgressPosition is not { } progress || !_transform.InRange(start, progress, 0.5f))
         {
-            agent.OrderProgressPosition = start;
-            agent.OrderProgressAt = now;
+            agent.LastOrderProgressPosition = start;
+            agent.OrderBlockedSince = null;
         }
-        if (now - agent.OrderProgressAt >= TimeSpan.FromSeconds(2) ||
-            TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath ||
-            !ValidOrderPoint(uid, next) || !DryPassage(uid, start, next) || !ClearLane(uid, start, next, 0.35f, movement: true))
+        if (!WaitingAtDoor(uid, agent) && (now - agent.MoveProgressAt >= TimeSpan.FromSeconds(2) ||
+            TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath) ||
+            !RoutePassage(uid, start, next, allowVault: !agent.AutoPatrol) || !KnownDangerPassage(uid, agent, start, next))
         {
-            BlockOrder();
+            var detour = new Queue<EntityCoordinates>();
+            if (LocalDetour(uid, agent, next, detour, allowVaults: !agent.AutoPatrol))
+            {
+                var remaining = agent.OrderRoute.Skip(1).ToArray();
+                agent.OrderRoute.Clear();
+                foreach (var point in detour.Concat(remaining))
+                    agent.OrderRoute.Enqueue(point);
+                return true;
+            }
+            var localNext = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(next));
+            var delta = localNext.Position - start.Position;
+            if (delta.LengthSquared() > 0.01f)
+            {
+                agent.TrafficBlockedPoint = start.Offset(Vector2.Normalize(delta) * Math.Min(1, delta.Length()));
+                agent.AvoidTrafficUntil = now + TimeSpan.FromSeconds(6);
+            }
+            BlockOrder(retrySoon: true);
             return true;
         }
         // The combat leash follows travel progress; contact interrupts orders near this position.
         agent.Home = start;
-        Move(uid, next);
+        Move(uid, next, routeWaypoint: agent.OrderRoute.Count > 1, validated: true);
         return true;
 
-        void BlockOrder()
+        void BlockOrder(bool retrySoon = false)
         {
             agent.OrderRoute.Clear();
             agent.OrderBlocked = true;
-            agent.NextOrderRoute = now + TimeSpan.FromSeconds(3);
+            agent.OrderBlockedSince ??= now;
+            agent.OrderFailures++;
+            agent.NextOrderRoute = now + TimeSpan.FromSeconds(retrySoon ? 0.5 : 3);
             _steering.Unregister(uid);
         }
     }

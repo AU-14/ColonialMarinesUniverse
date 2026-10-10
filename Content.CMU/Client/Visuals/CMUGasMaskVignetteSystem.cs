@@ -4,7 +4,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Visuals;
 
-public sealed class CMUGasMaskVignetteSystem : EntitySystem
+public sealed partial class CMUGasMaskVignetteSystem : EntitySystem
 {
     [Dependency] private IOverlayManager _overlays = default!;
     [Dependency] private IPlayerManager _player = default!;

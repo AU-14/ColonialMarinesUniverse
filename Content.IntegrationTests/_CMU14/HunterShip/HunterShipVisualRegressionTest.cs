@@ -45,6 +45,9 @@ namespace Content.IntegrationTests.CMU14.HunterShip;
 [TestFixture]
 public sealed class HunterShipVisualRegressionTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipPlacedCryoPodPredCellSouthOffset1x16Prototype = "CMUHunterShipPlacedCryoPodPredCellSouthOffset1x16";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CryoPodPrototype = "CryoPod";
+
     [TestCase("CMUHunterShipPlacedBaseItemSheetPhoronglassSouth", "sheet-phoronglass")]
     [TestCase("CMUHunterShipPlacedBaseItemSheetPhoronrglassSouthOffset2x4", "sheet-phoronrglass")]
     public async Task HunterShipGlassStackKeepsItsSpriteWhenCountChanges(string prototype, string state)
@@ -58,7 +61,7 @@ public sealed class HunterShipVisualRegressionTest
 
         foreach (var count in new[] { 1, 25, 50 })
         {
-            await server.WaitPost(() => server.System<SharedStackSystem>().SetCount(stack, count));
+            await server.WaitPost(() => server.System<SharedStackSystem>().SetCount((stack, (StackComponent?) null), count));
             await pair.RunTicksSync(5);
             await client.WaitAssertion(() =>
             {
@@ -95,7 +98,7 @@ public sealed class HunterShipVisualRegressionTest
             foreach (var (id, direction) in expected)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<CMUZLevelLadderComponent>(out var ladder, factory), Is.True, id);
+                Assert.That(prototype.TryComp<CMUZLevelLadderComponent>(out var ladder, factory), Is.True, id);
 
                 var upField = typeof(CMUZLevelLadderComponent).GetField("CanMoveUp");
                 var downField = typeof(CMUZLevelLadderComponent).GetField("CanMoveDown");
@@ -216,7 +219,7 @@ public sealed class HunterShipVisualRegressionTest
             Assert.That(flameProps, Is.Not.Empty);
             foreach (var prototype in flameProps)
             {
-                Assert.That(prototype.TryGetComponent<ServerPointLightComponent>(out var light, factory),
+                Assert.That(prototype.TryComp<ServerPointLightComponent>(out var light, factory),
                     Is.True, prototype.ID);
                 Assert.That(light!.Enabled, Is.True, prototype.ID);
                 Assert.That(light.Radius, Is.GreaterThan(0), prototype.ID);
@@ -238,13 +241,13 @@ public sealed class HunterShipVisualRegressionTest
             var factory = client.EntMan.ComponentFactory;
             var runes = prototypes.EnumeratePrototypes<EntityPrototype>()
                 .Where(proto => !proto.Abstract && IsHunterShipRune(proto))
-                .Where(proto => proto.TryGetComponent<SpriteComponent>(out _, factory))
+                .Where(proto => proto.TryComp<SpriteComponent>(out _, factory))
                 .ToArray();
 
             Assert.That(runes, Is.Not.Empty);
             foreach (var prototype in runes)
             {
-                Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory),
+                Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory),
                     Is.True, prototype.ID);
                 Assert.That(sprite!.DrawDepth, Is.EqualTo((int) DrawDepth.HighFloorObjects), prototype.ID);
                 Assert.That(sprite.AllLayers, Is.Not.Empty, prototype.ID);
@@ -276,7 +279,7 @@ public sealed class HunterShipVisualRegressionTest
             Assert.That(runes, Is.Not.Empty);
             foreach (var prototype in runes)
             {
-                Assert.That(prototype.TryGetComponent<ServerPointLightComponent>(out var light, factory),
+                Assert.That(prototype.TryComp<ServerPointLightComponent>(out var light, factory),
                     Is.True, prototype.ID);
                 Assert.That(light!.Enabled, Is.True, prototype.ID);
                 Assert.That(light.Radius, Is.EqualTo(1.25f), prototype.ID);
@@ -305,7 +308,7 @@ public sealed class HunterShipVisualRegressionTest
             Assert.That(runes, Is.Not.Empty);
             foreach (var prototype in runes)
             {
-                Assert.That(prototype.TryGetComponent<PointLightComponent>(out var light, factory), Is.True,
+                Assert.That(prototype.TryComp<PointLightComponent>(out var light, factory), Is.True,
                     prototype.ID);
                 Assert.That(light!.Enabled, Is.True, prototype.ID);
                 Assert.That(light.Radius, Is.EqualTo(1.25f), prototype.ID);
@@ -332,7 +335,7 @@ public sealed class HunterShipVisualRegressionTest
             foreach (var id in HypersleepIds)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<GenericVisualizerComponent>(out var visualizer, factory), Is.True, id);
+                Assert.That(prototype.TryComp<GenericVisualizerComponent>(out var visualizer, factory), Is.True, id);
                 var full = visualizer!.Visuals[CryostorageVisuals.Full];
                 var baseVisuals = full["enum.HyperSleepChamberLayers.Base"];
 
@@ -404,12 +407,12 @@ public sealed class HunterShipVisualRegressionTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.EntMan.ComponentFactory;
             var hunterCryo = prototypes.Index<EntityPrototype>(
-                "CMUHunterShipPlacedCryoPodPredCellSouthOffset1x16");
-            var genericCryo = prototypes.Index<EntityPrototype>("CryoPod");
+                CMUHunterShipPlacedCryoPodPredCellSouthOffset1x16Prototype);
+            var genericCryo = prototypes.Index<EntityPrototype>(CryoPodPrototype);
 
-            Assert.That(hunterCryo.TryGetComponent<ContainerManagerComponent>(out var hunterContainers, factory),
+            Assert.That(hunterCryo.TryComp<ContainerManagerComponent>(out var hunterContainers, factory),
                 Is.True);
-            Assert.That(genericCryo.TryGetComponent<ContainerManagerComponent>(out var genericContainers, factory),
+            Assert.That(genericCryo.TryComp<ContainerManagerComponent>(out var genericContainers, factory),
                 Is.True);
             var expectedContainerKeys = new[]
             {
@@ -465,9 +468,9 @@ public sealed class HunterShipVisualRegressionTest
             Assert.That(lanterns, Is.Not.Empty);
             foreach (var prototype in lanterns)
             {
-                Assert.That(prototype.TryGetComponent<ServerPointLightComponent>(out var light, factory), Is.True, prototype.ID);
+                Assert.That(prototype.TryComp<ServerPointLightComponent>(out var light, factory), Is.True, prototype.ID);
                 Assert.That(light!.Enabled, Is.True, prototype.ID);
-                Assert.That(prototype.TryGetComponent<CMUStartHandheldLightOnComponent>(out _, factory), Is.True,
+                Assert.That(prototype.TryComp<CMUStartHandheldLightOnComponent>(out _, factory), Is.True,
                     prototype.ID);
             }
 
@@ -496,8 +499,8 @@ public sealed class HunterShipVisualRegressionTest
             var factory = client.EntMan.ComponentFactory;
             var racks = prototypes.EnumeratePrototypes<EntityPrototype>()
                 .Where(proto => !proto.Abstract &&
-                                proto.TryGetComponent<YautjaGearRackComponent>(out _, factory) &&
-                                proto.TryGetComponent<SpriteComponent>(out _, factory))
+                                proto.TryComp<YautjaGearRackComponent>(out _, factory) &&
+                                proto.TryComp<SpriteComponent>(out _, factory))
                 .ToArray();
 
             Assert.That(racks, Is.Not.Empty);
@@ -700,7 +703,8 @@ public sealed class HunterShipVisualRegressionTest
             Assert.That(food.EdibleVolume((firstFood, entMan.GetComponent<EdibleComponent>(firstFood))), Is.GreaterThan(Content.Shared.FixedPoint.FixedPoint2.Zero));
             Assert.That(food.HasMouthAvailable(hunter), Is.True);
             var body = entMan.System<Content.Shared.Body.BodySystem>();
-            Assert.That(body.TryGetOrgansWithComponent<StomachComponent>(hunter, out var stomachs), Is.True,
+            var stomachs = body.EnumerateOrgans<StomachComponent>(hunter).Select(organ => new Robust.Shared.GameObjects.Entity<StomachComponent>(organ.Owner, organ.Comp2)).ToList();
+            Assert.That(stomachs.Count > 0, Is.True,
                 "The Yautja body must have a stomach for the current ingestion system.");
             Assert.That(food.IsDigestibleBy(firstFood, stomachs!, out _), Is.True,
                 "Hunter ship meat must be digestible by the Yautja stomach.");
@@ -713,11 +717,11 @@ public sealed class HunterShipVisualRegressionTest
             Assert.That(result, Is.True,
                 $"started={result} hunter={hunterXform.Coordinates} food={foodXform.Coordinates}");
             initialFoodVolume = food.EdibleVolume((firstFood, entMan.GetComponent<EdibleComponent>(firstFood)));
-            priorAudio = entMan.EntityQuery<AudioComponent>().Select(audio => audio.Owner).ToHashSet();
+            priorAudio = entMan.QueryEntities<AudioComponent>().Select(audio => audio.Owner).ToHashSet();
         });
 
         await PoolManager.WaitUntil(server,
-            () => server.EntMan.EntityQuery<AudioComponent>().Any(audio => !priorAudio.Contains(audio.Owner)),
+            () => server.EntMan.QueryEntities<AudioComponent>().Any(audio => !priorAudio.Contains(audio.Owner)),
             maxTicks: 120);
         await server.WaitAssertion(() =>
         {

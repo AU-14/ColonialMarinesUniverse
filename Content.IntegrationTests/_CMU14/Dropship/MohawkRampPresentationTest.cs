@@ -18,6 +18,8 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 [TestFixture]
 public sealed class MohawkRampPresentationTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUMultiZStairsPrototype = "CMUMultiZStairs";
+
     [TestCase("omaha")]
     [TestCase("midway")]
     [TestCase("omaha_navy")]
@@ -44,7 +46,7 @@ public sealed class MohawkRampPresentationTest
                 var indices = new Vector2i(x, y);
                 cabinTiles.Add(indices, maps.GetTileRef(ship, cabin, indices).Tile);
             }
-            foreach (var part in entities.EntityQuery<MohawkRampSegmentComponent>().Where(p => p.Lower))
+            foreach (var part in entities.QueryEntities<MohawkRampSegmentComponent>().Where(p => p.Comp.Lower))
                 parts.Add(entities.GetComponent<TransformComponent>(part.Owner).LocalPosition, entities.GetNetEntity(part.Owner));
             Assert.That(parts, Has.Count.EqualTo(12));
             Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true), Is.True);
@@ -67,7 +69,7 @@ public sealed class MohawkRampPresentationTest
                         "Midway keeps its three cabin-end ramp tiles while the remaining floor lowers.");
                 }
                 var stairs = (CMUZLevelHighGroundComponent) pair.Server.ResolveDependency<IPrototypeManager>()
-                    .Index<EntityPrototype>("CMUMultiZStairs").Components["CMUZLevelHighGround"].Component;
+                    .Index<EntityPrototype>(CMUMultiZStairsPrototype).Components["CMUZLevelHighGround"].Component;
                 foreach (var (position, net) in parts)
                 {
                     var uid = entities.GetEntity(net);

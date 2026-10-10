@@ -679,6 +679,15 @@ public sealed partial class ThreatSystem : EntitySystem
                 return spawned;
             }
 
+            // short on markers? share them out per body type, otherwise the first type listed eats
+            // all of them and you get a tribe of spearmen with no bows or shaman
+            int leaderMarkerBudget = leaderMarkers.Count;
+            if (leaderReq > leaderMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(leaderBodies, ref leaderMarkerBudget);
+            int memberMarkerBudget = memberMarkers.Count;
+            if (memberReq > memberMarkerBudget)
+                ThreatVoteSelection.DistributeBodies(memberBodies, ref memberMarkerBudget);
+
             // Spawn leaders — each entity proto gets its own scaled count
             foreach ((string protoId, int count) in leaderBodies)
             {

@@ -179,7 +179,7 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
         //     !stretcherArea.Value.Comp.Medevac))
         if (!_dropshipWeapon.CasDebug && !_areas.CanMedevac(snappedCoords))
         {
-            _popup.PopupClient(Loc.GetString("rmc-medevac-area-not-cas"), stretcherCoords, user);
+            _popup.PopupCoordinates(Loc.GetString("rmc-medevac-area-not-cas"), stretcherCoords, user);
             return;
         }
 
@@ -190,7 +190,7 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
         _dropshipWeapon.MakeTarget(stretcher, name, false);
 
         _appearance.SetData(stretcher, MedevacStretcherVisuals.BeaconState, BeaconVisuals.On);
-        _popup.PopupClient(Loc.GetString("rmc-medevac-activate-beacon"), stretcherCoords, user);
+        _popup.PopupCoordinates(Loc.GetString("rmc-medevac-activate-beacon"), stretcherCoords, user);
     }
 
     private void DeactivateBeacon(EntityUid stretcher)

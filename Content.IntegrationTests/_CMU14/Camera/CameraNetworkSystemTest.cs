@@ -44,6 +44,8 @@ namespace Content.IntegrationTests._CMU14.Camera;
 [Parallelizable(ParallelScope.All)]
 public sealed class CameraNetworkSystemTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> CMUTestCameraZMapPrototype = "CMUTestCameraZMap";
+
     private const string NetworkA = "CMUTestCameraNetworkA";
     private const string NetworkB = "CMUTestCameraNetworkB";
 
@@ -151,16 +153,16 @@ public sealed class CameraNetworkSystemTest
                 var entities = server.EntMan;
                 if (roundCleanup)
                     entities.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
-                foreach (var network in entities.EntityQuery<CameraNetworkIdentityComponent>().ToArray())
+                foreach (var network in entities.QueryEntities<CameraNetworkIdentityComponent>().ToArray())
                     entities.DeleteEntity(network.Owner);
             });
             await server.WaitRunTicks(1);
             await server.WaitAssertion(() =>
             {
-                var identities = server.EntMan.EntityQuery<CameraNetworkIdentityComponent>().ToArray();
+                var identities = server.EntMan.QueryEntities<CameraNetworkIdentityComponent>().ToArray();
                 foreach (var prototype in server.ProtoMan.EnumeratePrototypes<CameraNetworkPrototype>())
                 {
-                    Assert.That(identities.Count(identity => identity.Seed?.Id == prototype.ID), Is.EqualTo(1),
+                    Assert.That(identities.Count(identity => identity.Comp.Seed?.Id == prototype.ID), Is.EqualTo(1),
                         $"{prototype.ID} must be seeded before any camera or receiver spawns in the new round");
                 }
             });
@@ -1469,7 +1471,7 @@ public sealed class CameraNetworkSystemTest
                 var entMan = server.EntMan;
                 var ticker = entMan.System<GameTicker>();
                 var mapSystem = entMan.System<SharedMapSystem>();
-                var mapPrototype = server.ProtoMan.Index<GameMapPrototype>("CMUTestCameraZMap");
+                var mapPrototype = server.ProtoMan.Index<GameMapPrototype>(CMUTestCameraZMapPrototype);
                 var options = DeserializationOptions.Default with { InitializeMaps = true };
 
                 ticker.LoadGameMap(mapPrototype, out _, options);
@@ -3745,20 +3747,20 @@ public sealed class CameraNetworkReceiverChangedProbeSystem : EntitySystem
         if (ent.Comp.FirstMember is { } first &&
             ent.Comp.SecondMember is { } second &&
             ent.Comp.ExpectedNetwork is { } expected &&
-            EntityManager.TryGetComponent(first, out CameraNetworkMemberComponent? firstMember) &&
-            EntityManager.TryGetComponent(second, out CameraNetworkMemberComponent? secondMember))
+            TryComp(first, out CameraNetworkMemberComponent? firstMember) &&
+            TryComp(second, out CameraNetworkMemberComponent? secondMember))
         {
             ent.Comp.SawBothUpdated = firstMember.Networks.Contains(expected) &&
                                       secondMember.Networks.Contains(expected);
         }
 
         if (args.Kind == CameraReceiverChangeKind.Marker && ent.Comp.RemoveReceiverOnMarker)
-            EntityManager.RemoveComponent<CameraNetworkReceiverComponent>(ent.Owner);
+            RemComp<CameraNetworkReceiverComponent>(ent.Owner);
 
         if (args.Kind == CameraReceiverChangeKind.Marker && ent.Comp.MarkerToQueue is { } marker)
         {
             ent.Comp.MarkerToQueue = null;
-            EntityManager.AddComponent<CameraMapMarkerComponent>(marker);
+            AddComp<CameraMapMarkerComponent>(marker);
         }
     }
 

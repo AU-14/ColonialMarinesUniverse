@@ -186,7 +186,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
                     ("player", ent),
                     ("current", GetCurrentSongCount(ent)),
                     ("total", total));
-                _popup.PopupClient(msg, ent, args.Performer);
+                _popup.PopupEntity(msg, ent, args.Performer);
                 break;
             }
             case AudioState.Playing:
@@ -196,7 +196,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
                 else if (tape is { Comp.Custom: true })
                     _audio.SetState(ent.Comp.CustomAudioStream, AudioState.Paused);
 
-                _popup.PopupClient(Loc.GetString("rmc-cassette-pause", ("player", ent)), ent, args.Performer);
+                _popup.PopupEntity(Loc.GetString("rmc-cassette-pause", ("player", ent)), ent, args.Performer);
                 ent.Comp.State = AudioState.Paused;
                 break;
             }
@@ -211,7 +211,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
                     ("player", ent),
                     ("current", GetCurrentSongCount(ent)),
                     ("total", total));
-                _popup.PopupClient(msg, ent, args.Performer);
+                _popup.PopupEntity(msg, ent, args.Performer);
                 ent.Comp.State = AudioState.Playing;
                 break;
             }
@@ -227,7 +227,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
         var msg = Loc.GetString("rmc-cassette-change",
             ("current", GetCurrentSongCount(ent)),
             ("total", GetTotalSongs(ent)));
-        _popup.PopupClient(msg, ent, args.Performer);
+        _popup.PopupEntity(msg, ent, args.Performer);
     }
 
     private void OnPlayerRestart(Entity<CassettePlayerComponent> ent, ref CassetteRestartActionEvent args)
@@ -236,7 +236,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
         var msg = Loc.GetString("rmc-cassette-restart",
             ("current", GetCurrentSongCount(ent)),
             ("total", GetTotalSongs(ent)));
-        _popup.PopupClient(msg, ent, args.Performer);
+        _popup.PopupEntity(msg, ent, args.Performer);
     }
 
     private void PlaySong(Entity<CassettePlayerComponent> player, EntityUid actor, int? tape = null)

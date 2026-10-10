@@ -359,6 +359,343 @@
   techTree: CMUIntelTechTree_GOVFOR
 
 - type: platoon
+  id: BEAR
+  vehicleSupplyCatalog:
+  - CMUFighterGround
+  - VehicleSPPTank
+  - VehicleSPPAPC
+  - VehicleSPPVan
+  - VehicleSPPVanArmed
+  - VehicleSPPVanMedical
+  - VehicleSPPVanLogistics
+  - VehicleSPPVanPrisoner
+  name: "PMC 'BEAR'"
+  lorePrimer: RuMCPrimerPlatoonBEAR
+  Allegiance: UPP
+  languages:
+    - Russian
+    - German
+    - Mandarin
+    - Spanish
+    - English
+    - TacticalSignLanguage
+  reqlist: BEARCargoCatalog
+  vendorSet: BEAR
+  platoonPatch: /Textures/_RuMC14/Clothing/Patches/BEAR.rsi/icon.png
+  chevronOverrides:
+    AU14JobPlatCoBase:
+      UPP_Major:
+        entity: AU14ChevronUPPNIMajor
+        requirements: []
+      UPP_JuniorColonel:
+        entity: AU14ChevronUPPNIJuniorColonel
+        requirements: []
+      UPP_Colonel:
+        entity: AU14ChevronUPPNIColonel
+        requirements: []
+
+    AU14JobadvisorBase:
+      UPP_SeniorCommissar:
+        entity: AU14ChevronUPPNISeniorCommisar
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORadvisor
+          time: 36000 # 10 hours
+      UPP_Commissar:
+        entity: AU14ChevronUPPNICommisar
+        requirements: []
+
+    AU14JobAdjutantBase:
+      UPP_Captain:
+        entity: AU14ChevronUPPNICaptain
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORadvisor
+          time: 36000 # 10 hours
+      UPP_SeniorLieutenant:
+        entity: AU14ChevronUPPNISeniorLieutenant
+        requirements: []
+
+    AU14JobOfficerEngiBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOfficerIntelBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOfficerLogisticsBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOfficerMedicalBase:
+      UPP_Lieutenant:
+        entity: AU14ChevronUPPNILieutenant
+        requirements: []
+
+    AU14JobOfficerMPBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobPlatOpBase:
+      UPP_Lieutenant:
+        entity: AU14ChevronUPPNILieutenant
+        requirements: []
+
+    AU14JobVehicleCommanderBase:
+      UPP_FirstSergeant:
+        entity: AU14ChevronUPPNIFirstSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORVehicleCommander
+          time: 36000 #10 hours
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements: []
+
+    AU14JobSectionSergeantBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSectionSergeant
+          time: 36000 #10 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements: []
+
+    AU14JobSquadSergeantBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSquadSergeant
+          time: 36000 #10 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements: []
+
+    AU14JobDCCBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORDCC
+          time: 36000 #10 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements: []
+
+    AU14JobDSPilotBase:
+      UPP_SeniorWarrantOfficer:
+        entity: AU14ChevronUPPNISeniorWarrantOfficer
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORDSPilot
+          time: 36000 #10 hours
+      UPP_WarrantOfficer:
+        entity: AU14ChevronUPPNIWarrantOfficer
+        requirements: []
+
+    AU14JobGOVFORFighterPilot:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobOPFORFighterPilot:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobAuxTechBase:
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORAuxTech
+          time: 86400 # 24 hours
+      UPP_SeniorGefreiter:
+        entity: AU14ChevronUPPNISeniorGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORAuxTech
+          time: 36000 #10 hours
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements: []
+
+    AU14JobEngineeringTechBase:
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFOREngineeringTech
+          time: 86400 # 24 hours
+      UPP_SeniorGefreiter:
+        entity: AU14ChevronUPPNISeniorGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFOREngineeringTech
+          time: 36000 #10 hours
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements: []
+
+    AU14JobSquadCombatTechBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSquadCombatTech
+          time: 36000 #10 hours
+      UPP_Private:
+        entity: AU14ChevronUPPNIPrivate
+        requirements: []
+
+    CMUJobDroneOperatorBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: CMUJobGOVFORDroneOperator
+          time: 36000 #10 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements: []
+
+    AU14JobSquadAutomaticRiflemanBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSquadAutomaticRifleman
+          time: 36000 #10 hours
+      UPP_Private:
+        entity: AU14ChevronUPPNIPrivate
+        requirements: []
+
+    AU14JobSquadRiflemanBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORSquadRifleman
+          time: 36000 #10 hours
+      UPP_Private:
+        entity: AU14ChevronUPPNIPrivate
+        requirements: []
+
+    AU14JobWeaponsSpecialistBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORWeaponsSpecialist
+          time: 36000 #10 hours
+      UPP_Private:
+        entity: AU14ChevronUPPNIPrivate
+        requirements: []
+
+    AU14JobMilitaryDoctorBase:
+      UPP_JuniorLieutenant:
+        entity: AU14ChevronUPPNIJuniorLieutenant
+        requirements: []
+
+    AU14JobNurseBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORNurse
+          time: 86400 # 24 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORNurse
+          time: 36000 #10 hours
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements: []
+
+    AU14JobPlatoonCorpsmanBase:
+      UPP_Gefreiter:
+        entity: AU14ChevronUPPNIGefreiter
+        requirements: []
+
+    AU14JobGOVFORCombatCorrespondentBase:
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements: []
+
+    AU14JobRadioTelephoneOperatorBase: # FTL not RTO
+      UPP_Plutonowy:
+        entity: AU14ChevronUPPNIPlutonowy
+        requirements: []
+
+    AU14JobMilitaryPoliceBase:
+      UPP_SeniorSergeant:
+        entity: AU14ChevronUPPNISeniorSergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORMilitaryPoliceMan
+          time: 86400 # 24 hours
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORMilitaryPoliceMan
+          time: 36000 #10 hours
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements: []
+
+    AU14JobRadioTrafficOperatorBase:
+      UPP_SeniorGefreiter:
+        entity: AU14ChevronUPPNISeniorGefreiter
+        requirements: []
+
+    AU14JobVehicleCrewmanBase:
+      UPP_Sergeant:
+        entity: AU14ChevronUPPNISergeant
+        requirements:
+        - !type:RoleTimeRequirement
+          role: AU14JobGOVFORVehicleCrewman
+          time: 36000 #10 hours
+      UPP_Corporal:
+        entity: AU14ChevronUPPNICorporal
+        requirements: []
+
+    AU14JobAuxSupportSynthBase:
+      UPP_WarrantOfficer:
+        entity: AU14ChevronUPPNIWarrantOfficer
+        requirements: []
+
+  possibleships:
+      - USSBushRedux
+  # jobClassOverride:
+  #   SquadRifleman: AU14JobGOVFORSquadRiflemanUPP
+  #   PlatCo: AU14JobGOVFORPlatCoUPP
+  #   PlatOp: AU14JobGOVFORPlatOpUPP
+  #   # SectionSergeant: AU14JobGOVFORSectionSergeantUPP # unused
+  #   SquadSergeant: AU14JobGOVFORSquadSergeantUPP
+  #   RadioTelephoneOperator: AU14JobGOVFORRadioTelephoneOperatorUPP
+  #   SquadCombatTech: AU14JobGOVFORSquadCombatTechUPP
+  #   SquadAutomaticRifleman: AU14JobGOVFORSquadAutomaticRiflemanUPP
+  #   PlatoonCorpsman: AU14JobGOVFORPlatoonCorpsmanUPP
+  #   DSPilot: AU14JobGOVFORDSPilotUPP
+  #   DCC: AU14JobGOVFORDCCUPP
+  #   SupportSynth: AU14JobGOVFORAuxSupportSynthUPP
+  CompatibleDropships:
+  - /Maps/CMU14/Shuttles/alamo.yml
+  - /Maps/_RMC14/Shuttles/dynamic_gunship.yml
+  techTree: CMUIntelTechTree_GOVFOR
+
+- type: platoon
   id: UPP
   vehicleSupplyCatalog:
   - CMUFighterGround
@@ -2092,6 +2429,10 @@
   techTree: CMUIntelTechTree_GOVFOR
 
 # Add more platoons as needed
+
+- type: lorePrimer
+  id: RuMCPrimerPlatoonBEAR
+  PlatoonInfo: lore-primer-platoon-bear-info
 
 - type: lorePrimer
   id: AU14PrimerPlatoonLACN

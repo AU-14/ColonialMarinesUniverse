@@ -18,7 +18,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.RoundStatistics;
-using Content.Shared.Administration.Logs;
+
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;

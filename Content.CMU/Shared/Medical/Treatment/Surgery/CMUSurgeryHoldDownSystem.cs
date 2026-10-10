@@ -13,7 +13,7 @@ namespace Content.Shared.CMU14.Medical.Treatment.Surgery;
 /// <summary>
 ///     Lets a bystander hold a downed patient still so a surgeon can operate without steps failing.
 /// </summary>
-public sealed class CMUSurgeryHoldDownSystem : EntitySystem
+public sealed partial class CMUSurgeryHoldDownSystem : EntitySystem
 {
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MobStateSystem _mobState = default!;
@@ -107,7 +107,7 @@ public sealed class CMUSurgeryHoldDownSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter))
             return;
 
-        _popup.PopupPredicted(Loc.GetString("cmu-surgery-hold-down-start-self", ("target", target)),
+        _popup.PopupEntity(Loc.GetString("cmu-surgery-hold-down-start-self", ("target", target)),
             Loc.GetString("cmu-surgery-hold-down-start-others", ("user", user), ("target", target)),
             target,
             user);

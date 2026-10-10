@@ -75,21 +75,21 @@ public sealed class MohawkLandingTest
                 Assert.That(zLevels.TryAddMapsIntoZNetwork(network, levels), Is.True);
                 var transform = entities.System<SharedTransformSystem>();
                 // Carrier hangar destinations are created from vendor markers during round setup.
-                foreach (var marker in entities.EntityQuery<VendorMarkerComponent>(true).ToArray())
+                foreach (var marker in entities.QueryEntities<VendorMarkerComponent>(true).ToArray())
                 {
                     var markerTransform = entities.GetComponent<TransformComponent>(marker.Owner);
-                    if (!carriers.Contains(mapId) || !marker.Ship ||
+                    if (!carriers.Contains(mapId) || !marker.Comp.Ship ||
                         markerTransform.MapUid is not { } markerMap || !levels.ContainsKey(markerMap) ||
-                        marker.Class != PlatoonMarkerClass.DropshipDestination)
+                        marker.Comp.Class != PlatoonMarkerClass.DropshipDestination)
                         continue;
                     entities.SpawnAttachedTo("CMDropshipDestinationHome", markerTransform.Coordinates,
                         rotation: markerTransform.LocalRotation);
                 }
                 // Third-party destinations are not selectable by platoon dropships.
-                var destinations = entities.EntityQuery<DropshipDestinationComponent>(true)
+                var destinations = entities.QueryEntities<DropshipDestinationComponent>(true)
                     .Where(d => entities.GetComponent<TransformComponent>(d.Owner).MapUid is { } map && levels.ContainsKey(map) &&
-                                d.Destinationtype == DropshipDestinationComponent.DestinationType.Dropship &&
-                                d.FactionController != "thirdparty").ToArray();
+                                d.Comp.Destinationtype == DropshipDestinationComponent.DestinationType.Dropship &&
+                                d.Comp.FactionController != "thirdparty").ToArray();
                 Assert.That(destinations, Is.Not.Empty, $"{mapId} must exercise its LZs or generated hangar destinations.");
                 TestContext.Progress.WriteLine($"{mapId}: {destinations.Length} landing pads on {levels.Count} levels");
                 foreach (var destination in destinations)

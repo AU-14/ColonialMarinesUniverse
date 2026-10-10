@@ -11,6 +11,8 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (uid == other)
             return true;
+        if (VehicleBody(other) && TryComp<CMUExpeditionAgentComponent>(uid, out var driverObserver))
+            return VehicleDisposition(uid, driverObserver, other) < 0;
         if (TryComp<CMUExpeditionAgentComponent>(uid, out var agent) && TryComp<NpcFactionMemberComponent>(other, out var factions))
         {
             if (factions.Factions.Any(f => agent.FriendlyFactions.Contains(f.Id)))
@@ -24,38 +26,82 @@ public sealed partial class CMUExpeditionAgentSystem
     private IEnumerable<EntityUid> ExpeditionHostiles(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         if (agent.TargetFactions.Count == 0)
-            return _factions.GetNearbyHostiles(uid, agent.DetectionRange).Where(other => !IsFriendly(uid, other));
+            return _factions.GetNearbyHostiles(uid, agent.DetectionRange).Where(other => !IsFriendly(uid, other)).Union(HostileVehicles(uid, agent));
         var nearby = new HashSet<EntityUid>();
         var location = _transform.GetMapCoordinates(uid);
         _lookup.GetEntitiesInRange(location.MapId, location.Position, agent.DetectionRange, nearby);
         return nearby.Where(other => other != uid && TryComp<NpcFactionMemberComponent>(other, out var factions) &&
-            factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)) && !IsFriendly(uid, other));
+            factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)) && !IsFriendly(uid, other)).Union(HostileVehicles(uid, agent));
     }
 
-    private bool AcceptOrderedContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target) =>
-        !IsFriendly(uid, target) && (agent.TargetFactions.Count == 0 ||
-            TryComp<NpcFactionMemberComponent>(target, out var member) && member.Factions.Any(f => agent.TargetFactions.Contains(f.Id)));
+    private bool AcceptOrderedContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target)
+    {
+        if (!Exists(target) || IsFriendly(uid, target))
+            return false;
+        if (VehicleBody(target))
+            return ArmedVehicle(target) && VehicleDisposition(uid, agent, target) > 0;
+        if (agent.TargetFactions.Count > 0)
+            return TryComp<NpcFactionMemberComponent>(target, out var member) &&
+                member.Factions.Any(f => agent.TargetFactions.Contains(f.Id));
+        // Receiving another squad's report does not make its neutral contacts hostile.
+        // Match native acquisition, including per-entity retaliation and ignore rules.
+        return !_factions.IsIgnored(uid, target) &&
+            (TryComp<NpcFactionMemberComponent>(uid, out var observer) &&
+                TryComp<NpcFactionMemberComponent>(target, out var contact) && observer.HostileFactions.Overlaps(contact.Factions) ||
+             _factions.GetHostiles(uid).Contains(target));
+    }
 
-    public bool OrderPosition(EntityUid uid, EntityCoordinates destination, bool entrench)
+    public bool OrderPosition(EntityUid uid, EntityCoordinates destination, bool entrench, Direction? facing = null)
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) ||
             !TrySquadCoordinates(destination, out destination) ||
-            Transform(uid).MapUid != Transform(destination.EntityId).MapUid || !ValidOrderPoint(uid, destination))
+            !ValidOrderPoint(uid, destination))
             return false;
         ResetOrders(uid, agent);
         agent.Patrolling = false;
+        agent.HoldPosition = entrench;
         agent.OrderedDestination = destination;
-        agent.Entrench = entrench;
+        agent.OrderRally = destination;
+        agent.Entrench = entrench && !HasComp<CMUExpeditionMedicComponent>(uid);
+        agent.GuardAnchor = entrench ? destination : null;
+        agent.GuardFacing = facing == null ? null :
+            (facing.Value.ToAngle() - _transform.GetWorldRotation(destination.EntityId)).GetCardinalDir();
+        agent.NextWork = _timing.CurTime + TimeSpan.FromSeconds(3);
+        agent.FortificationDecision = agent.Entrench ? "awaiting-guard-position" : "not-ordered";
         agent.Target = null;
         agent.LastSeen = null;
+        agent.PendingWeapon = null;
         return true;
     }
 
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
-        CancelWork(uid, agent);
-        CancelPlan(uid, agent, false);
-        CancelTreatment(agent);
+        ResetSquadOperations(uid, agent);
+        agent.AutoPatrol = false;
+        agent.AutoPatrolAnchor = null;
+        agent.HoldPosition = false;
+        agent.SupportSquadRoot = null;
+        agent.SupportUntil = TimeSpan.Zero;
+        agent.OperationsDecision = "local-orders";
+        CancelAgentActivity(uid, agent, "explicit-command");
+        agent.TravelGoal = null;
+        agent.TravelPortal = null;
+        agent.PortalUntil = TimeSpan.Zero;
+        agent.FailedPortals.Clear();
+        agent.HeardPoint = null;
+        agent.SupplySource = null;
+        agent.DeliveryRecipient = null;
+        agent.DeliveryPoint = null;
+        agent.FailedDeliveries.Clear();
+        agent.NextRegroupRoute = TimeSpan.Zero;
+        agent.DutyUntil = TimeSpan.Zero;
+        Decision(agent, "orders-reset", "explicit-command");
+        agent.FlashPosition = null;
+        agent.Entrench = false;
+        agent.GuardFacing = null;
+        agent.GuardAnchor = null;
+        agent.FortificationPoint = null;
+        agent.FortificationDecision = "not-ordered";
         agent.Target = null;
         agent.LastSeen = null;
         agent.RadioTarget = null;
@@ -67,8 +113,12 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.OrderRoute.Clear();
         agent.NextOrderRoute = TimeSpan.Zero;
         agent.OrderBlocked = false;
-        ClearCover(agent);
-        _steering.Unregister(uid);
+        agent.OrderBlockedSince = null;
+        agent.LastOrderProgressPosition = null;
+        agent.OrderRally = null;
+        agent.CohesionWaitSince = null;
+        agent.NextCohesionWait = TimeSpan.Zero;
+        ClearThreatAssessment(agent);
         agent.State = CMUExpeditionAgentState.Guard;
     }
 

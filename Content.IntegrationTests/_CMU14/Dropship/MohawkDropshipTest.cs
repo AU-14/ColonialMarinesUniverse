@@ -372,15 +372,15 @@ public sealed class MohawkDropshipTest
 
             var lower = assembly.Decks[-1];
             var upper = assembly.Decks[1];
-            foreach (var body in entities.EntityQuery<PhysicsComponent>())
+            foreach (var body in entities.QueryEntities<PhysicsComponent>())
             {
                 var xform = entities.GetComponent<TransformComponent>(body.Owner);
-                if (body.BodyType != BodyType.Static || !body.CanCollide || (xform.ParentUid != ship && xform.ParentUid != lower))
+                if (body.Comp.BodyType != BodyType.Static || !body.Comp.CanCollide || (xform.ParentUid != ship && xform.ParentUid != lower))
                     continue;
                 Assert.That(xform.Anchored, Is.True, $"Ship fixture {entities.GetComponent<MetaDataComponent>(body.Owner).EntityPrototype?.ID} at {xform.LocalPosition} needs an anchoring tile.");
                 hull.Add(body.Owner, (xform.ParentUid, xform.LocalPosition));
             }
-            foreach (var control in entities.EntityQuery<MohawkControlComponent>())
+            foreach (var control in entities.QueryEntities<MohawkControlComponent>())
             {
                 var xform = entities.GetComponent<TransformComponent>(control.Owner);
                 controls.Add(control.Owner, (xform.GridUid!.Value, xform.LocalPosition));
@@ -402,9 +402,9 @@ public sealed class MohawkDropshipTest
             Assert.That(entities.HasComponent<MohawkRampMovingComponent>(ship), Is.True);
             mechanisms.SetHatchDeployed(ship, true, true);
             mechanisms.SetRampDeployed(ship, true, true);
-            var hatch = entities.EntityQuery<MohawkHatchComponent>().Single();
+            var hatch = entities.QueryEntities<MohawkHatchComponent>().Single();
             Assert.That(entities.HasComponent<CMUZLevelLadderComponent>(hatch.Owner), Is.True);
-            var lowerLadder = entities.EntityQuery<MohawkLowerLadderComponent>().Single();
+            var lowerLadder = entities.QueryEntities<MohawkLowerLadderComponent>().Single();
             Assert.That(entities.HasComponent<CMUZLevelLadderComponent>(lowerLadder.Owner), Is.True);
 
             var destination = maps.CreateMap();
@@ -484,7 +484,7 @@ public sealed class MohawkDropshipTest
                 new EntityCoordinates(finalGround, new Vector2(-31, 17)), out finalCabin), Is.True);
             var shuttles = entities.System<ShuttleSystem>();
             shuttles.DefaultArrivalTime = 0.5f;
-            var nav = entities.EntityQuery<DropshipNavigationComputerComponent>()
+            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .First(c => entities.GetComponent<TransformComponent>(c.Owner).GridUid == ship);
             // Authored pad markers sit at tile centers. The ship must still land
             // at the tile corner, including when it has been turned around.
@@ -497,11 +497,11 @@ public sealed class MohawkDropshipTest
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
-            foreach (var door in entities.EntityQuery<DoorComponent>()
+            foreach (var door in entities.QueryEntities<DoorComponent>()
                          .Where(d => entities.GetComponent<TransformComponent>(d.Owner).GridUid == travellingShip))
             {
                 Assert.That(entities.GetComponent<DoorBoltComponent>(door.Owner).BoltsDown,
-                    Is.EqualTo(door.Location != DoorLocation.Cockpit),
+                    Is.EqualTo(door.Comp.Location != DoorLocation.Cockpit),
                     "Takeoff must secure exterior hatches while leaving cockpit access usable.");
             }
         });
@@ -547,7 +547,7 @@ public sealed class MohawkDropshipTest
         await pair.RunTicksSync(2);
         await server.WaitAssertion(() =>
         {
-            Assert.That(server.EntMan.EntityQuery<DropshipDeckComponent>().Any(), Is.False);
+            Assert.That(server.EntMan.QueryEntities<DropshipDeckComponent>().Any(), Is.False);
         });
         await pair.CleanReturnAsync();
     }

@@ -62,7 +62,7 @@ public sealed partial class XenoHeadbuttSystem : EntitySystem
 
         if (TryComp<XenoCrestComponent>(xeno, out var crest) && crest.Lowered && !_interaction.InRangeUnobstructed(xeno.Owner, args.Target))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-headbutt-too-far"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-headbutt-too-far"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 

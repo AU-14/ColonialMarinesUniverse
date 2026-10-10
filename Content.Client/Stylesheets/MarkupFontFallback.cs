@@ -26,7 +26,7 @@ public static class MarkupFontFallback
             if (!prototypes.TryIndex(fontId, out FontPrototype? proto))
                 proto = prototypes.Index<FontPrototype>(FontTag.DefaultFont);
 
-            return cache.GetFont(new[] { proto.Path, Symbols, Symbols2 }, size);
+            return cache.GetFont(new[] { CMUFontPrototypes.GetPath(proto), Symbols, Symbols2 }, size);
         };
     }
 }

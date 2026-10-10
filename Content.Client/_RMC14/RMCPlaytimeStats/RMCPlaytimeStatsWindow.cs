@@ -18,6 +18,7 @@ using Content.Client.Administration.UI.CustomControls;
 using Content.Shared.Localizations;
 using Content.Shared._RMC14.Medal;
 using Content.Shared._RMC14.CCVar;
+using Content.Shared.CMU14.CCVar; // cmu edit
 using Content.Shared.CCVar;
 using Robust.Shared.Configuration;
 using Robust.Shared.Timing;
@@ -154,11 +155,38 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
         _silverTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeSilverMedalTimeHours));
         _goldTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeGoldMedalTimeHours));
         _platinumTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimePlatinumMedalTimeHours));
+        // cmu edit start: medal hours for non-xeno jobs
+        _cmuBronzeTime = TimeSpan.FromHours(_config.GetCVar(AU14CCVars.PlaytimeMedalBronzeHours));
+        _cmuSilverTime = TimeSpan.FromHours(_config.GetCVar(AU14CCVars.PlaytimeMedalSilverHours));
+        _cmuGoldTime = TimeSpan.FromHours(_config.GetCVar(AU14CCVars.PlaytimeMedalGoldHours));
+        _cmuPlatinumTime = TimeSpan.FromHours(_config.GetCVar(AU14CCVars.PlaytimeMedalPlatinumHours));
+        // cmu edit end
         _rubyTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeRubyMedalTimeHours));
         _emeraldTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeEmeraldMedalTimeHours));
         _amethystTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimeAmethystMedalTimeHours));
         _prismaticTime = TimeSpan.FromHours(_config.GetCVar(RMCCVars.RMCPlaytimePrismaticMedalTimeHours));
     }
+
+    // cmu edit start: the medals the server awards for non-xeno jobs
+    private TimeSpan _cmuBronzeTime;
+    private TimeSpan _cmuSilverTime;
+    private TimeSpan _cmuGoldTime;
+    private TimeSpan _cmuPlatinumTime;
+
+    private RMCPlaytimeMedalType? CMUGetMedalType(TimeSpan playtime)
+    {
+        if (playtime >= _cmuPlatinumTime)
+            return RMCPlaytimeMedalType.Platinum;
+        if (playtime >= _cmuGoldTime)
+            return RMCPlaytimeMedalType.Gold;
+        if (playtime >= _cmuSilverTime)
+            return RMCPlaytimeMedalType.Silver;
+        if (playtime >= _cmuBronzeTime)
+            return RMCPlaytimeMedalType.Bronze;
+
+        return null;
+    }
+    // cmu edit end
 
     private RMCPlaytimeMedalType? GetMedalType(TimeSpan playtime, float scale = 1f) // CMU14 Method
     {
@@ -195,9 +223,16 @@ public sealed partial class RMCPlaytimeStatsWindow : FancyWindow
         if (!_prototypeManager.TryIndex<JobPrototype>(jobId, out var job))
             return null;
 
-        var medalType = departmentId == "CMXeno" // CMU14
-            ? GetMedalType(playtime)
-            : GetMedalType(playtime, _marineRankScale);
+        // cmu edit start: xeno rank icons keep their tiers, other jobs show the medal the server awards
+        // var medalType = departmentId == "CMXeno" // CMU14
+        //     ? GetMedalType(playtime)
+        //     : GetMedalType(playtime, _marineRankScale);
+        var isXenoTracker = _prototypeManager.TryIndex<PlayTimeTrackerPrototype>(job.PlayTimeTracker, out var xenoCheck) &&
+                            xenoCheck.IsXeno;
+        var medalType = isXenoTracker
+            ? departmentId == "CMXeno" ? GetMedalType(playtime) : GetMedalType(playtime, _marineRankScale)
+            : CMUGetMedalType(playtime);
+        // cmu edit end
         if (medalType == null)
             return null;
 

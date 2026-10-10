@@ -81,7 +81,7 @@ public sealed class MohawkWeedsTest
             for (var y = -8; y <= 8; y++)
                 maps.SetTile(ground, GroundTile(new Vector2(x + 0.5f, y + 0.5f)), tile);
 
-            foreach (var ramp in entities.EntityQuery<MohawkRampSegmentComponent>().Where(r => r.Lower))
+            foreach (var ramp in entities.QueryEntities<MohawkRampSegmentComponent>().Where(r => r.Comp.Lower))
             {
                 var xform = entities.GetComponent<TransformComponent>(ramp.Owner);
                 Assert.That(xform.Anchored, Is.True);
@@ -99,7 +99,7 @@ public sealed class MohawkWeedsTest
                 maps.GridTileToLocal(ground, ground, GroundTile(new Vector2(-0.5f, -4.5f))));
             weeds.AssignSource(oldWeeds, source);
             oldWeedsNet = entities.GetNetEntity(oldWeeds);
-            var belly = entities.EntityQuery<MetaDataComponent>().Single(m => m.EntityName == "underside fuel lines");
+            var belly = entities.QueryEntities<MetaDataComponent>().Single(m => m.Comp.EntityName == "underside fuel lines");
             bellyNet = entities.GetNetEntity(belly.Owner);
             Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true, true), Is.True);
             foreach (var (_, lowerTile, groundTile) in rampTiles)

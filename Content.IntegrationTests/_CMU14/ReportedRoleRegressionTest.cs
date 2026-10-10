@@ -21,6 +21,8 @@ namespace Content.IntegrationTests._CMU14;
 [TestFixture]
 public sealed class ReportedRoleRegressionTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> THREATPrototype = "THREAT";
+
     private static readonly ProtoId<NpcFactionPrototype> Govfor = "GOVFOR";
 
     [TestCase(false)]
@@ -120,7 +122,7 @@ public sealed class ReportedRoleRegressionTest
             void AssignThreat()
             {
                 entities.EnsureComponent<ThreatComponent>(target).ObjectiveJob = "AU14JobThreatMember";
-                entities.System<NpcFactionSystem>().AddFaction(target, "THREAT");
+                entities.System<NpcFactionSystem>().AddFaction(target, THREATPrototype);
                 entities.EventBus.RaiseEvent(EventSource.Local, new ObjectiveWatchedEntityStartupEvent(target));
             }
         });

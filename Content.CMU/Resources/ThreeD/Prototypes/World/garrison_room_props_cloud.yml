@@ -752,150 +752,102 @@
     max: 0.233, -0.037, 0.14
     color: '#3C3C3C'
     shape: CylinderZ
-  - label: separate cup rim 0
-    min: 0.2075871, -0.1045, 0.241
-    max: 0.2479629, -0.0865, 0.259
+  - label: separate cup rim 01
+    min: 0.1949065, -0.124, 0.241
+    max: 0.2657779, -0.106, 0.259
     color: '#78797B'
     shape: CylinderX
-    yaw: 104.99999999999996
+    yaw: 90.000002
     pitch: 0.0
-  - label: cup wall facet 0
-    min: 0.211, -0.125, 0.135
-    max: 0.255, -0.105, 0.245
+  - label: separate cup rim 02
+    min: 0.1728393, -0.070725, 0.241
+    max: 0.2437107, -0.052725, 0.259
+    color: '#78797B'
+    shape: CylinderX
+    yaw: 135.000002
+    pitch: 0.0
+  - label: separate cup rim 03
+    min: 0.1195643, -0.0486578, 0.241
+    max: 0.1904357, -0.0306578, 0.259
+    color: '#78797B'
+    shape: CylinderX
+    yaw: 180.000002
+    pitch: 0.0
+  - label: separate cup rim 04
+    min: 0.0662893, -0.070725, 0.241
+    max: 0.1371607, -0.052725, 0.259
+    color: '#78797B'
+    shape: CylinderX
+    yaw: 225.000002
+    pitch: 0.0
+  - label: separate cup rim 05
+    min: 0.0442221, -0.124, 0.241
+    max: 0.1150935, -0.106, 0.259
+    color: '#78797B'
+    shape: CylinderX
+    yaw: 270.000002
+    pitch: 0.0
+  - label: separate cup rim 06
+    min: 0.0662893, -0.177275, 0.241
+    max: 0.1371607, -0.159275, 0.259
+    color: '#78797B'
+    shape: CylinderX
+    yaw: 315.000002
+    pitch: 0.0
+  - label: separate cup rim 07
+    min: 0.1195643, -0.1993422, 0.241
+    max: 0.1904357, -0.1813422, 0.259
+    color: '#78797B'
+    shape: CylinderX
+    yaw: 2.0e-06
+    pitch: 0.0
+  - label: separate cup rim 08
+    min: 0.1728393, -0.177275, 0.241
+    max: 0.2437107, -0.159275, 0.259
+    color: '#78797B'
+    shape: CylinderX
+    yaw: 45.000002
+    pitch: 0.0
+  - label: cup wall facet 01
+    min: 0.1960492, -0.125, 0.135
+    max: 0.2699508, -0.105, 0.245
     color: '#484A48'
     yaw: 90.0
-  - label: separate cup rim 1
-    min: 0.1880871, -0.070725, 0.241
-    max: 0.2284629, -0.052725, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: 135.00000000000003
-    pitch: 0.0
-  - label: cup wall facet 1
-    min: 0.20055, -0.086, 0.135
-    max: 0.24455, -0.066, 0.245
+  - label: cup wall facet 02
+    min: 0.1732035, -0.0698457, 0.135
+    max: 0.2471051, -0.0498457, 0.245
     color: '#484A48'
-    yaw: 120.0
-  - label: separate cup rim 2
-    min: 0.1543121, -0.051225, 0.241
-    max: 0.1946879, -0.033225, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: 165.0
-    pitch: 0.0
-  - label: cup wall facet 2
-    min: 0.172, -0.05745, 0.135
-    max: 0.216, -0.03745, 0.245
-    color: '#484A48'
-    yaw: 150.0
-  - label: separate cup rim 3
-    min: 0.1153121, -0.051225, 0.241
-    max: 0.1556879, -0.033225, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: -165.00000000000003
-    pitch: 0.0
-  - label: cup wall facet 3
-    min: 0.133, -0.047, 0.135
-    max: 0.177, -0.027, 0.245
+    yaw: 135.0
+  - label: cup wall facet 03
+    min: 0.1180492, -0.047, 0.135
+    max: 0.1919508, -0.027, 0.245
     color: '#484A48'
     yaw: 180.0
-  - label: separate cup rim 4
-    min: 0.0815371, -0.070725, 0.241
-    max: 0.1219129, -0.052725, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: -135.00000000000003
-    pitch: 0.0
-  - label: cup wall facet 4
-    min: 0.094, -0.05745, 0.135
-    max: 0.138, -0.03745, 0.245
+  - label: cup wall facet 04
+    min: 0.0628949, -0.0698457, 0.135
+    max: 0.1367965, -0.0498457, 0.245
     color: '#484A48'
-    yaw: 210.0
-  - label: separate cup rim 5
-    min: 0.0620371, -0.1045, 0.241
-    max: 0.1024129, -0.0865, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: -105.00000000000001
-    pitch: 0.0
-  - label: cup wall facet 5
-    min: 0.06545, -0.086, 0.135
-    max: 0.10945, -0.066, 0.245
-    color: '#484A48'
-    yaw: 240.0
-  - label: separate cup rim 6
-    min: 0.0620371, -0.1435, 0.241
-    max: 0.1024129, -0.1255, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: -75.00000000000001
-    pitch: 0.0
-  - label: cup wall facet 6
-    min: 0.055, -0.125, 0.135
-    max: 0.099, -0.105, 0.245
+    yaw: 225.0
+  - label: cup wall facet 05
+    min: 0.0400492, -0.125, 0.135
+    max: 0.1139508, -0.105, 0.245
     color: '#484A48'
     yaw: 270.0
-  - label: separate cup rim 7
-    min: 0.0815371, -0.177275, 0.241
-    max: 0.1219129, -0.159275, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: -45.00000000000003
-    pitch: 0.0
-  - label: cup wall facet 7
-    min: 0.06545, -0.164, 0.135
-    max: 0.10945, -0.144, 0.245
+  - label: cup wall facet 06
+    min: 0.0628949, -0.1801543, 0.135
+    max: 0.1367965, -0.1601543, 0.245
     color: '#484A48'
-    yaw: 300.0
-  - label: separate cup rim 8
-    min: 0.1153121, -0.196775, 0.241
-    max: 0.1556879, -0.178775, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: -15.000000000000027
-    pitch: 0.0
-  - label: cup wall facet 8
-    min: 0.094, -0.19255, 0.135
-    max: 0.138, -0.17255, 0.245
-    color: '#484A48'
-    yaw: 330.0
-  - label: separate cup rim 9
-    min: 0.1543121, -0.196775, 0.241
-    max: 0.1946879, -0.178775, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: 15.000000000000018
-    pitch: 0.0
-  - label: cup wall facet 9
-    min: 0.133, -0.203, 0.135
-    max: 0.177, -0.183, 0.245
+    yaw: 315.0
+  - label: cup wall facet 07
+    min: 0.1180492, -0.203, 0.135
+    max: 0.1919508, -0.183, 0.245
     color: '#484A48'
     yaw: 0.0
-  - label: separate cup rim 10
-    min: 0.1880871, -0.177275, 0.241
-    max: 0.2284629, -0.159275, 0.259
-    color: '#78797B'
-    shape: CylinderX
+  - label: cup wall facet 08
+    min: 0.1732035, -0.1801543, 0.135
+    max: 0.2471051, -0.1601543, 0.245
+    color: '#484A48'
     yaw: 45.0
-    pitch: 0.0
-  - label: cup wall facet 10
-    min: 0.172, -0.19255, 0.135
-    max: 0.216, -0.17255, 0.245
-    color: '#484A48'
-    yaw: 30.0
-  - label: separate cup rim 11
-    min: 0.2075871, -0.1435, 0.241
-    max: 0.2479629, -0.1255, 0.259
-    color: '#78797B'
-    shape: CylinderX
-    yaw: 74.99999999999997
-    pitch: 0.0
-  - label: cup wall facet 11
-    min: 0.20055, -0.164, 0.135
-    max: 0.24455, -0.144, 0.245
-    color: '#484A48'
-    yaw: 60.0
   - label: pot handle upper
     min: 0.233, -0.124, 0.221
     max: 0.264, -0.106, 0.239
@@ -1101,150 +1053,102 @@
           max: 0.233, -0.037, 0.14
           color: '#3C3C3C'
           shape: CylinderZ
-        - label: separate cup rim 0
-          min: 0.2075871, -0.1045, 0.241
-          max: 0.2479629, -0.0865, 0.259
+        - label: separate cup rim 01
+          min: 0.1949065, -0.124, 0.241
+          max: 0.2657779, -0.106, 0.259
           color: '#78797B'
           shape: CylinderX
-          yaw: 104.99999999999996
+          yaw: 90.000002
           pitch: 0.0
-        - label: cup wall facet 0
-          min: 0.211, -0.125, 0.135
-          max: 0.255, -0.105, 0.245
+        - label: separate cup rim 02
+          min: 0.1728393, -0.070725, 0.241
+          max: 0.2437107, -0.052725, 0.259
+          color: '#78797B'
+          shape: CylinderX
+          yaw: 135.000002
+          pitch: 0.0
+        - label: separate cup rim 03
+          min: 0.1195643, -0.0486578, 0.241
+          max: 0.1904357, -0.0306578, 0.259
+          color: '#78797B'
+          shape: CylinderX
+          yaw: 180.000002
+          pitch: 0.0
+        - label: separate cup rim 04
+          min: 0.0662893, -0.070725, 0.241
+          max: 0.1371607, -0.052725, 0.259
+          color: '#78797B'
+          shape: CylinderX
+          yaw: 225.000002
+          pitch: 0.0
+        - label: separate cup rim 05
+          min: 0.0442221, -0.124, 0.241
+          max: 0.1150935, -0.106, 0.259
+          color: '#78797B'
+          shape: CylinderX
+          yaw: 270.000002
+          pitch: 0.0
+        - label: separate cup rim 06
+          min: 0.0662893, -0.177275, 0.241
+          max: 0.1371607, -0.159275, 0.259
+          color: '#78797B'
+          shape: CylinderX
+          yaw: 315.000002
+          pitch: 0.0
+        - label: separate cup rim 07
+          min: 0.1195643, -0.1993422, 0.241
+          max: 0.1904357, -0.1813422, 0.259
+          color: '#78797B'
+          shape: CylinderX
+          yaw: 2.0e-06
+          pitch: 0.0
+        - label: separate cup rim 08
+          min: 0.1728393, -0.177275, 0.241
+          max: 0.2437107, -0.159275, 0.259
+          color: '#78797B'
+          shape: CylinderX
+          yaw: 45.000002
+          pitch: 0.0
+        - label: cup wall facet 01
+          min: 0.1960492, -0.125, 0.135
+          max: 0.2699508, -0.105, 0.245
           color: '#484A48'
           yaw: 90.0
-        - label: separate cup rim 1
-          min: 0.1880871, -0.070725, 0.241
-          max: 0.2284629, -0.052725, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: 135.00000000000003
-          pitch: 0.0
-        - label: cup wall facet 1
-          min: 0.20055, -0.086, 0.135
-          max: 0.24455, -0.066, 0.245
+        - label: cup wall facet 02
+          min: 0.1732035, -0.0698457, 0.135
+          max: 0.2471051, -0.0498457, 0.245
           color: '#484A48'
-          yaw: 120.0
-        - label: separate cup rim 2
-          min: 0.1543121, -0.051225, 0.241
-          max: 0.1946879, -0.033225, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: 165.0
-          pitch: 0.0
-        - label: cup wall facet 2
-          min: 0.172, -0.05745, 0.135
-          max: 0.216, -0.03745, 0.245
-          color: '#484A48'
-          yaw: 150.0
-        - label: separate cup rim 3
-          min: 0.1153121, -0.051225, 0.241
-          max: 0.1556879, -0.033225, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: -165.00000000000003
-          pitch: 0.0
-        - label: cup wall facet 3
-          min: 0.133, -0.047, 0.135
-          max: 0.177, -0.027, 0.245
+          yaw: 135.0
+        - label: cup wall facet 03
+          min: 0.1180492, -0.047, 0.135
+          max: 0.1919508, -0.027, 0.245
           color: '#484A48'
           yaw: 180.0
-        - label: separate cup rim 4
-          min: 0.0815371, -0.070725, 0.241
-          max: 0.1219129, -0.052725, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: -135.00000000000003
-          pitch: 0.0
-        - label: cup wall facet 4
-          min: 0.094, -0.05745, 0.135
-          max: 0.138, -0.03745, 0.245
+        - label: cup wall facet 04
+          min: 0.0628949, -0.0698457, 0.135
+          max: 0.1367965, -0.0498457, 0.245
           color: '#484A48'
-          yaw: 210.0
-        - label: separate cup rim 5
-          min: 0.0620371, -0.1045, 0.241
-          max: 0.1024129, -0.0865, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: -105.00000000000001
-          pitch: 0.0
-        - label: cup wall facet 5
-          min: 0.06545, -0.086, 0.135
-          max: 0.10945, -0.066, 0.245
-          color: '#484A48'
-          yaw: 240.0
-        - label: separate cup rim 6
-          min: 0.0620371, -0.1435, 0.241
-          max: 0.1024129, -0.1255, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: -75.00000000000001
-          pitch: 0.0
-        - label: cup wall facet 6
-          min: 0.055, -0.125, 0.135
-          max: 0.099, -0.105, 0.245
+          yaw: 225.0
+        - label: cup wall facet 05
+          min: 0.0400492, -0.125, 0.135
+          max: 0.1139508, -0.105, 0.245
           color: '#484A48'
           yaw: 270.0
-        - label: separate cup rim 7
-          min: 0.0815371, -0.177275, 0.241
-          max: 0.1219129, -0.159275, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: -45.00000000000003
-          pitch: 0.0
-        - label: cup wall facet 7
-          min: 0.06545, -0.164, 0.135
-          max: 0.10945, -0.144, 0.245
+        - label: cup wall facet 06
+          min: 0.0628949, -0.1801543, 0.135
+          max: 0.1367965, -0.1601543, 0.245
           color: '#484A48'
-          yaw: 300.0
-        - label: separate cup rim 8
-          min: 0.1153121, -0.196775, 0.241
-          max: 0.1556879, -0.178775, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: -15.000000000000027
-          pitch: 0.0
-        - label: cup wall facet 8
-          min: 0.094, -0.19255, 0.135
-          max: 0.138, -0.17255, 0.245
-          color: '#484A48'
-          yaw: 330.0
-        - label: separate cup rim 9
-          min: 0.1543121, -0.196775, 0.241
-          max: 0.1946879, -0.178775, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: 15.000000000000018
-          pitch: 0.0
-        - label: cup wall facet 9
-          min: 0.133, -0.203, 0.135
-          max: 0.177, -0.183, 0.245
+          yaw: 315.0
+        - label: cup wall facet 07
+          min: 0.1180492, -0.203, 0.135
+          max: 0.1919508, -0.183, 0.245
           color: '#484A48'
           yaw: 0.0
-        - label: separate cup rim 10
-          min: 0.1880871, -0.177275, 0.241
-          max: 0.2284629, -0.159275, 0.259
-          color: '#78797B'
-          shape: CylinderX
+        - label: cup wall facet 08
+          min: 0.1732035, -0.1801543, 0.135
+          max: 0.2471051, -0.1601543, 0.245
+          color: '#484A48'
           yaw: 45.0
-          pitch: 0.0
-        - label: cup wall facet 10
-          min: 0.172, -0.19255, 0.135
-          max: 0.216, -0.17255, 0.245
-          color: '#484A48'
-          yaw: 30.0
-        - label: separate cup rim 11
-          min: 0.2075871, -0.1435, 0.241
-          max: 0.2479629, -0.1255, 0.259
-          color: '#78797B'
-          shape: CylinderX
-          yaw: 74.99999999999997
-          pitch: 0.0
-        - label: cup wall facet 11
-          min: 0.20055, -0.164, 0.135
-          max: 0.24455, -0.144, 0.245
-          color: '#484A48'
-          yaw: 60.0
         - label: pot handle upper
           min: 0.233, -0.124, 0.221
           max: 0.264, -0.106, 0.239
@@ -4418,117 +4322,61 @@
     shape: CylinderX
     yaw: -90.0
     pitch: 0.0
-  - label: separate orange circular hoop segment 0
-    min: 0.0950893, -0.2202736, 0.621
-    max: 0.1434717, -0.1982736, 0.643
+  - label: separate orange circular hoop segment 01
+    min: 0.0661854, -0.244, 0.621
+    max: 0.1770493, -0.222, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 101.25
+    yaw: 89.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 1
-    min: 0.07693, -0.176433, 0.621
-    max: 0.1253124, -0.154433, 0.643
+  - label: separate orange circular hoop segment 02
+    min: 0.0305645, -0.1580035, 0.621
+    max: 0.1414284, -0.1360035, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 123.75000000000001
+    yaw: 134.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 2
-    min: 0.0433758, -0.1428788, 0.621
-    max: 0.0917582, -0.1208788, 0.643
+  - label: separate orange circular hoop segment 03
+    min: -0.0554319, -0.1223827, 0.621
+    max: 0.0554319, -0.1003827, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 146.25
+    yaw: 179.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 3
-    min: -0.0004648, -0.1247195, 0.621
-    max: 0.0479176, -0.1027195, 0.643
+  - label: separate orange circular hoop segment 04
+    min: -0.1414284, -0.1580035, 0.621
+    max: -0.0305645, -0.1360035, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 168.75
+    yaw: 224.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 4
-    min: -0.0479176, -0.1247195, 0.621
-    max: 0.0004648, -0.1027195, 0.643
+  - label: separate orange circular hoop segment 05
+    min: -0.1770493, -0.244, 0.621
+    max: -0.0661854, -0.222, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -168.75
+    yaw: 269.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 5
-    min: -0.0917582, -0.1428788, 0.621
-    max: -0.0433758, -0.1208788, 0.643
+  - label: separate orange circular hoop segment 06
+    min: -0.1414284, -0.3299965, 0.621
+    max: -0.0305645, -0.3079965, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -146.25
+    yaw: 314.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 6
-    min: -0.1253124, -0.176433, 0.621
-    max: -0.07693, -0.154433, 0.643
+  - label: separate orange circular hoop segment 07
+    min: -0.0554319, -0.3656173, 0.621
+    max: 0.0554319, -0.3436173, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -123.75000000000001
+    yaw: 359.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 7
-    min: -0.1434717, -0.2202736, 0.621
-    max: -0.0950893, -0.1982736, 0.643
+  - label: separate orange circular hoop segment 08
+    min: 0.0305645, -0.3299965, 0.621
+    max: 0.1414284, -0.3079965, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -101.25000000000001
-    pitch: 0.0
-  - label: separate orange circular hoop segment 8
-    min: -0.1434717, -0.2677264, 0.621
-    max: -0.0950893, -0.2457264, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -78.75000000000003
-    pitch: 0.0
-  - label: separate orange circular hoop segment 9
-    min: -0.1253124, -0.311567, 0.621
-    max: -0.07693, -0.289567, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -56.25
-    pitch: 0.0
-  - label: separate orange circular hoop segment 10
-    min: -0.0917582, -0.3451212, 0.621
-    max: -0.0433758, -0.3231212, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -33.74999999999999
-    pitch: 0.0
-  - label: separate orange circular hoop segment 11
-    min: -0.0479176, -0.3632805, 0.621
-    max: 0.0004648, -0.3412805, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -11.250000000000007
-    pitch: 0.0
-  - label: separate orange circular hoop segment 12
-    min: -0.0004648, -0.3632805, 0.621
-    max: 0.0479176, -0.3412805, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 11.249999999999943
-    pitch: 0.0
-  - label: separate orange circular hoop segment 13
-    min: 0.0433758, -0.3451212, 0.621
-    max: 0.0917582, -0.3231212, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 33.75000000000005
-    pitch: 0.0
-  - label: separate orange circular hoop segment 14
-    min: 0.07693, -0.311567, 0.621
-    max: 0.1253124, -0.289567, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 56.249999999999964
-    pitch: 0.0
-  - label: separate orange circular hoop segment 15
-    min: 0.0950893, -0.2677264, 0.621
-    max: 0.1434717, -0.2457264, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 78.74999999999997
+    yaw: 44.999985
     pitch: 0.0
   - label: white net strand 0-0
     min: 0.0587777, -0.2271254, 0.5715
@@ -4965,117 +4813,61 @@
           shape: CylinderX
           yaw: -90.0
           pitch: 0.0
-        - label: separate orange circular hoop segment 0
-          min: 0.0950893, -0.2202736, 0.621
-          max: 0.1434717, -0.1982736, 0.643
+        - label: separate orange circular hoop segment 01
+          min: 0.0661854, -0.244, 0.621
+          max: 0.1770493, -0.222, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 101.25
+          yaw: 89.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 1
-          min: 0.07693, -0.176433, 0.621
-          max: 0.1253124, -0.154433, 0.643
+        - label: separate orange circular hoop segment 02
+          min: 0.0305645, -0.1580035, 0.621
+          max: 0.1414284, -0.1360035, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 123.75000000000001
+          yaw: 134.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 2
-          min: 0.0433758, -0.1428788, 0.621
-          max: 0.0917582, -0.1208788, 0.643
+        - label: separate orange circular hoop segment 03
+          min: -0.0554319, -0.1223827, 0.621
+          max: 0.0554319, -0.1003827, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 146.25
+          yaw: 179.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 3
-          min: -0.0004648, -0.1247195, 0.621
-          max: 0.0479176, -0.1027195, 0.643
+        - label: separate orange circular hoop segment 04
+          min: -0.1414284, -0.1580035, 0.621
+          max: -0.0305645, -0.1360035, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 168.75
+          yaw: 224.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 4
-          min: -0.0479176, -0.1247195, 0.621
-          max: 0.0004648, -0.1027195, 0.643
+        - label: separate orange circular hoop segment 05
+          min: -0.1770493, -0.244, 0.621
+          max: -0.0661854, -0.222, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -168.75
+          yaw: 269.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 5
-          min: -0.0917582, -0.1428788, 0.621
-          max: -0.0433758, -0.1208788, 0.643
+        - label: separate orange circular hoop segment 06
+          min: -0.1414284, -0.3299965, 0.621
+          max: -0.0305645, -0.3079965, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -146.25
+          yaw: 314.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 6
-          min: -0.1253124, -0.176433, 0.621
-          max: -0.07693, -0.154433, 0.643
+        - label: separate orange circular hoop segment 07
+          min: -0.0554319, -0.3656173, 0.621
+          max: 0.0554319, -0.3436173, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -123.75000000000001
+          yaw: 359.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 7
-          min: -0.1434717, -0.2202736, 0.621
-          max: -0.0950893, -0.1982736, 0.643
+        - label: separate orange circular hoop segment 08
+          min: 0.0305645, -0.3299965, 0.621
+          max: 0.1414284, -0.3079965, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -101.25000000000001
-          pitch: 0.0
-        - label: separate orange circular hoop segment 8
-          min: -0.1434717, -0.2677264, 0.621
-          max: -0.0950893, -0.2457264, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -78.75000000000003
-          pitch: 0.0
-        - label: separate orange circular hoop segment 9
-          min: -0.1253124, -0.311567, 0.621
-          max: -0.07693, -0.289567, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -56.25
-          pitch: 0.0
-        - label: separate orange circular hoop segment 10
-          min: -0.0917582, -0.3451212, 0.621
-          max: -0.0433758, -0.3231212, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -33.74999999999999
-          pitch: 0.0
-        - label: separate orange circular hoop segment 11
-          min: -0.0479176, -0.3632805, 0.621
-          max: 0.0004648, -0.3412805, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -11.250000000000007
-          pitch: 0.0
-        - label: separate orange circular hoop segment 12
-          min: -0.0004648, -0.3632805, 0.621
-          max: 0.0479176, -0.3412805, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 11.249999999999943
-          pitch: 0.0
-        - label: separate orange circular hoop segment 13
-          min: 0.0433758, -0.3451212, 0.621
-          max: 0.0917582, -0.3231212, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 33.75000000000005
-          pitch: 0.0
-        - label: separate orange circular hoop segment 14
-          min: 0.07693, -0.311567, 0.621
-          max: 0.1253124, -0.289567, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 56.249999999999964
-          pitch: 0.0
-        - label: separate orange circular hoop segment 15
-          min: 0.0950893, -0.2677264, 0.621
-          max: 0.1434717, -0.2457264, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 78.74999999999997
+          yaw: 44.999985
           pitch: 0.0
         - label: white net strand 0-0
           min: 0.0587777, -0.2271254, 0.5715
@@ -5517,117 +5309,61 @@
     shape: CylinderX
     yaw: -90.0
     pitch: 0.0
-  - label: separate orange circular hoop segment 0
-    min: 0.0950893, -0.2202736, 0.621
-    max: 0.1434717, -0.1982736, 0.643
+  - label: separate orange circular hoop segment 01
+    min: 0.0661854, -0.244, 0.621
+    max: 0.1770493, -0.222, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 101.25
+    yaw: 89.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 1
-    min: 0.07693, -0.176433, 0.621
-    max: 0.1253124, -0.154433, 0.643
+  - label: separate orange circular hoop segment 02
+    min: 0.0305645, -0.1580035, 0.621
+    max: 0.1414284, -0.1360035, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 123.75000000000001
+    yaw: 134.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 2
-    min: 0.0433758, -0.1428788, 0.621
-    max: 0.0917582, -0.1208788, 0.643
+  - label: separate orange circular hoop segment 03
+    min: -0.0554319, -0.1223827, 0.621
+    max: 0.0554319, -0.1003827, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 146.25
+    yaw: 179.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 3
-    min: -0.0004648, -0.1247195, 0.621
-    max: 0.0479176, -0.1027195, 0.643
+  - label: separate orange circular hoop segment 04
+    min: -0.1414284, -0.1580035, 0.621
+    max: -0.0305645, -0.1360035, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 168.75
+    yaw: 224.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 4
-    min: -0.0479176, -0.1247195, 0.621
-    max: 0.0004648, -0.1027195, 0.643
+  - label: separate orange circular hoop segment 05
+    min: -0.1770493, -0.244, 0.621
+    max: -0.0661854, -0.222, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -168.75
+    yaw: 269.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 5
-    min: -0.0917582, -0.1428788, 0.621
-    max: -0.0433758, -0.1208788, 0.643
+  - label: separate orange circular hoop segment 06
+    min: -0.1414284, -0.3299965, 0.621
+    max: -0.0305645, -0.3079965, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -146.25
+    yaw: 314.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 6
-    min: -0.1253124, -0.176433, 0.621
-    max: -0.07693, -0.154433, 0.643
+  - label: separate orange circular hoop segment 07
+    min: -0.0554319, -0.3656173, 0.621
+    max: 0.0554319, -0.3436173, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -123.75000000000001
+    yaw: 359.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 7
-    min: -0.1434717, -0.2202736, 0.621
-    max: -0.0950893, -0.1982736, 0.643
+  - label: separate orange circular hoop segment 08
+    min: 0.0305645, -0.3299965, 0.621
+    max: 0.1414284, -0.3079965, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -101.25000000000001
-    pitch: 0.0
-  - label: separate orange circular hoop segment 8
-    min: -0.1434717, -0.2677264, 0.621
-    max: -0.0950893, -0.2457264, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -78.75000000000003
-    pitch: 0.0
-  - label: separate orange circular hoop segment 9
-    min: -0.1253124, -0.311567, 0.621
-    max: -0.07693, -0.289567, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -56.25
-    pitch: 0.0
-  - label: separate orange circular hoop segment 10
-    min: -0.0917582, -0.3451212, 0.621
-    max: -0.0433758, -0.3231212, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -33.74999999999999
-    pitch: 0.0
-  - label: separate orange circular hoop segment 11
-    min: -0.0479176, -0.3632805, 0.621
-    max: 0.0004648, -0.3412805, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -11.250000000000007
-    pitch: 0.0
-  - label: separate orange circular hoop segment 12
-    min: -0.0004648, -0.3632805, 0.621
-    max: 0.0479176, -0.3412805, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 11.249999999999943
-    pitch: 0.0
-  - label: separate orange circular hoop segment 13
-    min: 0.0433758, -0.3451212, 0.621
-    max: 0.0917582, -0.3231212, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 33.75000000000005
-    pitch: 0.0
-  - label: separate orange circular hoop segment 14
-    min: 0.07693, -0.311567, 0.621
-    max: 0.1253124, -0.289567, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 56.249999999999964
-    pitch: 0.0
-  - label: separate orange circular hoop segment 15
-    min: 0.0950893, -0.2677264, 0.621
-    max: 0.1434717, -0.2457264, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 78.74999999999997
+    yaw: 44.999985
     pitch: 0.0
   - label: white net strand 0-0
     min: 0.0587777, -0.2271254, 0.5715
@@ -6064,117 +5800,61 @@
           shape: CylinderX
           yaw: -90.0
           pitch: 0.0
-        - label: separate orange circular hoop segment 0
-          min: 0.0950893, -0.2202736, 0.621
-          max: 0.1434717, -0.1982736, 0.643
+        - label: separate orange circular hoop segment 01
+          min: 0.0661854, -0.244, 0.621
+          max: 0.1770493, -0.222, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 101.25
+          yaw: 89.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 1
-          min: 0.07693, -0.176433, 0.621
-          max: 0.1253124, -0.154433, 0.643
+        - label: separate orange circular hoop segment 02
+          min: 0.0305645, -0.1580035, 0.621
+          max: 0.1414284, -0.1360035, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 123.75000000000001
+          yaw: 134.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 2
-          min: 0.0433758, -0.1428788, 0.621
-          max: 0.0917582, -0.1208788, 0.643
+        - label: separate orange circular hoop segment 03
+          min: -0.0554319, -0.1223827, 0.621
+          max: 0.0554319, -0.1003827, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 146.25
+          yaw: 179.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 3
-          min: -0.0004648, -0.1247195, 0.621
-          max: 0.0479176, -0.1027195, 0.643
+        - label: separate orange circular hoop segment 04
+          min: -0.1414284, -0.1580035, 0.621
+          max: -0.0305645, -0.1360035, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 168.75
+          yaw: 224.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 4
-          min: -0.0479176, -0.1247195, 0.621
-          max: 0.0004648, -0.1027195, 0.643
+        - label: separate orange circular hoop segment 05
+          min: -0.1770493, -0.244, 0.621
+          max: -0.0661854, -0.222, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -168.75
+          yaw: 269.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 5
-          min: -0.0917582, -0.1428788, 0.621
-          max: -0.0433758, -0.1208788, 0.643
+        - label: separate orange circular hoop segment 06
+          min: -0.1414284, -0.3299965, 0.621
+          max: -0.0305645, -0.3079965, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -146.25
+          yaw: 314.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 6
-          min: -0.1253124, -0.176433, 0.621
-          max: -0.07693, -0.154433, 0.643
+        - label: separate orange circular hoop segment 07
+          min: -0.0554319, -0.3656173, 0.621
+          max: 0.0554319, -0.3436173, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -123.75000000000001
+          yaw: 359.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 7
-          min: -0.1434717, -0.2202736, 0.621
-          max: -0.0950893, -0.1982736, 0.643
+        - label: separate orange circular hoop segment 08
+          min: 0.0305645, -0.3299965, 0.621
+          max: 0.1414284, -0.3079965, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -101.25000000000001
-          pitch: 0.0
-        - label: separate orange circular hoop segment 8
-          min: -0.1434717, -0.2677264, 0.621
-          max: -0.0950893, -0.2457264, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -78.75000000000003
-          pitch: 0.0
-        - label: separate orange circular hoop segment 9
-          min: -0.1253124, -0.311567, 0.621
-          max: -0.07693, -0.289567, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -56.25
-          pitch: 0.0
-        - label: separate orange circular hoop segment 10
-          min: -0.0917582, -0.3451212, 0.621
-          max: -0.0433758, -0.3231212, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -33.74999999999999
-          pitch: 0.0
-        - label: separate orange circular hoop segment 11
-          min: -0.0479176, -0.3632805, 0.621
-          max: 0.0004648, -0.3412805, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -11.250000000000007
-          pitch: 0.0
-        - label: separate orange circular hoop segment 12
-          min: -0.0004648, -0.3632805, 0.621
-          max: 0.0479176, -0.3412805, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 11.249999999999943
-          pitch: 0.0
-        - label: separate orange circular hoop segment 13
-          min: 0.0433758, -0.3451212, 0.621
-          max: 0.0917582, -0.3231212, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 33.75000000000005
-          pitch: 0.0
-        - label: separate orange circular hoop segment 14
-          min: 0.07693, -0.311567, 0.621
-          max: 0.1253124, -0.289567, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 56.249999999999964
-          pitch: 0.0
-        - label: separate orange circular hoop segment 15
-          min: 0.0950893, -0.2677264, 0.621
-          max: 0.1434717, -0.2457264, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 78.74999999999997
+          yaw: 44.999985
           pitch: 0.0
         - label: white net strand 0-0
           min: 0.0587777, -0.2271254, 0.5715
@@ -6616,117 +6296,61 @@
     shape: CylinderX
     yaw: -90.0
     pitch: 0.0
-  - label: separate orange circular hoop segment 0
-    min: 0.0950893, -0.2202736, 0.621
-    max: 0.1434717, -0.1982736, 0.643
+  - label: separate orange circular hoop segment 01
+    min: 0.0661854, -0.244, 0.621
+    max: 0.1770493, -0.222, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 101.25
+    yaw: 89.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 1
-    min: 0.07693, -0.176433, 0.621
-    max: 0.1253124, -0.154433, 0.643
+  - label: separate orange circular hoop segment 02
+    min: 0.0305645, -0.1580035, 0.621
+    max: 0.1414284, -0.1360035, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 123.75000000000001
+    yaw: 134.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 2
-    min: 0.0433758, -0.1428788, 0.621
-    max: 0.0917582, -0.1208788, 0.643
+  - label: separate orange circular hoop segment 03
+    min: -0.0554319, -0.1223827, 0.621
+    max: 0.0554319, -0.1003827, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 146.25
+    yaw: 179.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 3
-    min: -0.0004648, -0.1247195, 0.621
-    max: 0.0479176, -0.1027195, 0.643
+  - label: separate orange circular hoop segment 04
+    min: -0.1414284, -0.1580035, 0.621
+    max: -0.0305645, -0.1360035, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 168.75
+    yaw: 224.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 4
-    min: -0.0479176, -0.1247195, 0.621
-    max: 0.0004648, -0.1027195, 0.643
+  - label: separate orange circular hoop segment 05
+    min: -0.1770493, -0.244, 0.621
+    max: -0.0661854, -0.222, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -168.75
+    yaw: 269.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 5
-    min: -0.0917582, -0.1428788, 0.621
-    max: -0.0433758, -0.1208788, 0.643
+  - label: separate orange circular hoop segment 06
+    min: -0.1414284, -0.3299965, 0.621
+    max: -0.0305645, -0.3079965, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -146.25
+    yaw: 314.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 6
-    min: -0.1253124, -0.176433, 0.621
-    max: -0.07693, -0.154433, 0.643
+  - label: separate orange circular hoop segment 07
+    min: -0.0554319, -0.3656173, 0.621
+    max: 0.0554319, -0.3436173, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -123.75000000000001
+    yaw: 359.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 7
-    min: -0.1434717, -0.2202736, 0.621
-    max: -0.0950893, -0.1982736, 0.643
+  - label: separate orange circular hoop segment 08
+    min: 0.0305645, -0.3299965, 0.621
+    max: 0.1414284, -0.3079965, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -101.25000000000001
-    pitch: 0.0
-  - label: separate orange circular hoop segment 8
-    min: -0.1434717, -0.2677264, 0.621
-    max: -0.0950893, -0.2457264, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -78.75000000000003
-    pitch: 0.0
-  - label: separate orange circular hoop segment 9
-    min: -0.1253124, -0.311567, 0.621
-    max: -0.07693, -0.289567, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -56.25
-    pitch: 0.0
-  - label: separate orange circular hoop segment 10
-    min: -0.0917582, -0.3451212, 0.621
-    max: -0.0433758, -0.3231212, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -33.74999999999999
-    pitch: 0.0
-  - label: separate orange circular hoop segment 11
-    min: -0.0479176, -0.3632805, 0.621
-    max: 0.0004648, -0.3412805, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -11.250000000000007
-    pitch: 0.0
-  - label: separate orange circular hoop segment 12
-    min: -0.0004648, -0.3632805, 0.621
-    max: 0.0479176, -0.3412805, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 11.249999999999943
-    pitch: 0.0
-  - label: separate orange circular hoop segment 13
-    min: 0.0433758, -0.3451212, 0.621
-    max: 0.0917582, -0.3231212, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 33.75000000000005
-    pitch: 0.0
-  - label: separate orange circular hoop segment 14
-    min: 0.07693, -0.311567, 0.621
-    max: 0.1253124, -0.289567, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 56.249999999999964
-    pitch: 0.0
-  - label: separate orange circular hoop segment 15
-    min: 0.0950893, -0.2677264, 0.621
-    max: 0.1434717, -0.2457264, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 78.74999999999997
+    yaw: 44.999985
     pitch: 0.0
   - label: white net strand 0-0
     min: 0.0587777, -0.2271254, 0.5715
@@ -7163,117 +6787,61 @@
           shape: CylinderX
           yaw: -90.0
           pitch: 0.0
-        - label: separate orange circular hoop segment 0
-          min: 0.0950893, -0.2202736, 0.621
-          max: 0.1434717, -0.1982736, 0.643
+        - label: separate orange circular hoop segment 01
+          min: 0.0661854, -0.244, 0.621
+          max: 0.1770493, -0.222, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 101.25
+          yaw: 89.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 1
-          min: 0.07693, -0.176433, 0.621
-          max: 0.1253124, -0.154433, 0.643
+        - label: separate orange circular hoop segment 02
+          min: 0.0305645, -0.1580035, 0.621
+          max: 0.1414284, -0.1360035, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 123.75000000000001
+          yaw: 134.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 2
-          min: 0.0433758, -0.1428788, 0.621
-          max: 0.0917582, -0.1208788, 0.643
+        - label: separate orange circular hoop segment 03
+          min: -0.0554319, -0.1223827, 0.621
+          max: 0.0554319, -0.1003827, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 146.25
+          yaw: 179.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 3
-          min: -0.0004648, -0.1247195, 0.621
-          max: 0.0479176, -0.1027195, 0.643
+        - label: separate orange circular hoop segment 04
+          min: -0.1414284, -0.1580035, 0.621
+          max: -0.0305645, -0.1360035, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 168.75
+          yaw: 224.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 4
-          min: -0.0479176, -0.1247195, 0.621
-          max: 0.0004648, -0.1027195, 0.643
+        - label: separate orange circular hoop segment 05
+          min: -0.1770493, -0.244, 0.621
+          max: -0.0661854, -0.222, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -168.75
+          yaw: 269.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 5
-          min: -0.0917582, -0.1428788, 0.621
-          max: -0.0433758, -0.1208788, 0.643
+        - label: separate orange circular hoop segment 06
+          min: -0.1414284, -0.3299965, 0.621
+          max: -0.0305645, -0.3079965, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -146.25
+          yaw: 314.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 6
-          min: -0.1253124, -0.176433, 0.621
-          max: -0.07693, -0.154433, 0.643
+        - label: separate orange circular hoop segment 07
+          min: -0.0554319, -0.3656173, 0.621
+          max: 0.0554319, -0.3436173, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -123.75000000000001
+          yaw: 359.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 7
-          min: -0.1434717, -0.2202736, 0.621
-          max: -0.0950893, -0.1982736, 0.643
+        - label: separate orange circular hoop segment 08
+          min: 0.0305645, -0.3299965, 0.621
+          max: 0.1414284, -0.3079965, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -101.25000000000001
-          pitch: 0.0
-        - label: separate orange circular hoop segment 8
-          min: -0.1434717, -0.2677264, 0.621
-          max: -0.0950893, -0.2457264, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -78.75000000000003
-          pitch: 0.0
-        - label: separate orange circular hoop segment 9
-          min: -0.1253124, -0.311567, 0.621
-          max: -0.07693, -0.289567, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -56.25
-          pitch: 0.0
-        - label: separate orange circular hoop segment 10
-          min: -0.0917582, -0.3451212, 0.621
-          max: -0.0433758, -0.3231212, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -33.74999999999999
-          pitch: 0.0
-        - label: separate orange circular hoop segment 11
-          min: -0.0479176, -0.3632805, 0.621
-          max: 0.0004648, -0.3412805, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -11.250000000000007
-          pitch: 0.0
-        - label: separate orange circular hoop segment 12
-          min: -0.0004648, -0.3632805, 0.621
-          max: 0.0479176, -0.3412805, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 11.249999999999943
-          pitch: 0.0
-        - label: separate orange circular hoop segment 13
-          min: 0.0433758, -0.3451212, 0.621
-          max: 0.0917582, -0.3231212, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 33.75000000000005
-          pitch: 0.0
-        - label: separate orange circular hoop segment 14
-          min: 0.07693, -0.311567, 0.621
-          max: 0.1253124, -0.289567, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 56.249999999999964
-          pitch: 0.0
-        - label: separate orange circular hoop segment 15
-          min: 0.0950893, -0.2677264, 0.621
-          max: 0.1434717, -0.2457264, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 78.74999999999997
+          yaw: 44.999985
           pitch: 0.0
         - label: white net strand 0-0
           min: 0.0587777, -0.2271254, 0.5715
@@ -7715,117 +7283,61 @@
     shape: CylinderX
     yaw: -90.0
     pitch: 0.0
-  - label: separate orange circular hoop segment 0
-    min: 0.0950893, -0.2202736, 0.621
-    max: 0.1434717, -0.1982736, 0.643
+  - label: separate orange circular hoop segment 01
+    min: 0.0661854, -0.244, 0.621
+    max: 0.1770493, -0.222, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 101.25
+    yaw: 89.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 1
-    min: 0.07693, -0.176433, 0.621
-    max: 0.1253124, -0.154433, 0.643
+  - label: separate orange circular hoop segment 02
+    min: 0.0305645, -0.1580035, 0.621
+    max: 0.1414284, -0.1360035, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 123.75000000000001
+    yaw: 134.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 2
-    min: 0.0433758, -0.1428788, 0.621
-    max: 0.0917582, -0.1208788, 0.643
+  - label: separate orange circular hoop segment 03
+    min: -0.0554319, -0.1223827, 0.621
+    max: 0.0554319, -0.1003827, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 146.25
+    yaw: 179.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 3
-    min: -0.0004648, -0.1247195, 0.621
-    max: 0.0479176, -0.1027195, 0.643
+  - label: separate orange circular hoop segment 04
+    min: -0.1414284, -0.1580035, 0.621
+    max: -0.0305645, -0.1360035, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: 168.75
+    yaw: 224.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 4
-    min: -0.0479176, -0.1247195, 0.621
-    max: 0.0004648, -0.1027195, 0.643
+  - label: separate orange circular hoop segment 05
+    min: -0.1770493, -0.244, 0.621
+    max: -0.0661854, -0.222, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -168.75
+    yaw: 269.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 5
-    min: -0.0917582, -0.1428788, 0.621
-    max: -0.0433758, -0.1208788, 0.643
+  - label: separate orange circular hoop segment 06
+    min: -0.1414284, -0.3299965, 0.621
+    max: -0.0305645, -0.3079965, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -146.25
+    yaw: 314.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 6
-    min: -0.1253124, -0.176433, 0.621
-    max: -0.07693, -0.154433, 0.643
+  - label: separate orange circular hoop segment 07
+    min: -0.0554319, -0.3656173, 0.621
+    max: 0.0554319, -0.3436173, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -123.75000000000001
+    yaw: 359.999985
     pitch: 0.0
-  - label: separate orange circular hoop segment 7
-    min: -0.1434717, -0.2202736, 0.621
-    max: -0.0950893, -0.1982736, 0.643
+  - label: separate orange circular hoop segment 08
+    min: 0.0305645, -0.3299965, 0.621
+    max: 0.1414284, -0.3079965, 0.643
     color: '#B64620'
     shape: CylinderX
-    yaw: -101.25000000000001
-    pitch: 0.0
-  - label: separate orange circular hoop segment 8
-    min: -0.1434717, -0.2677264, 0.621
-    max: -0.0950893, -0.2457264, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -78.75000000000003
-    pitch: 0.0
-  - label: separate orange circular hoop segment 9
-    min: -0.1253124, -0.311567, 0.621
-    max: -0.07693, -0.289567, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -56.25
-    pitch: 0.0
-  - label: separate orange circular hoop segment 10
-    min: -0.0917582, -0.3451212, 0.621
-    max: -0.0433758, -0.3231212, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -33.74999999999999
-    pitch: 0.0
-  - label: separate orange circular hoop segment 11
-    min: -0.0479176, -0.3632805, 0.621
-    max: 0.0004648, -0.3412805, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: -11.250000000000007
-    pitch: 0.0
-  - label: separate orange circular hoop segment 12
-    min: -0.0004648, -0.3632805, 0.621
-    max: 0.0479176, -0.3412805, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 11.249999999999943
-    pitch: 0.0
-  - label: separate orange circular hoop segment 13
-    min: 0.0433758, -0.3451212, 0.621
-    max: 0.0917582, -0.3231212, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 33.75000000000005
-    pitch: 0.0
-  - label: separate orange circular hoop segment 14
-    min: 0.07693, -0.311567, 0.621
-    max: 0.1253124, -0.289567, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 56.249999999999964
-    pitch: 0.0
-  - label: separate orange circular hoop segment 15
-    min: 0.0950893, -0.2677264, 0.621
-    max: 0.1434717, -0.2457264, 0.643
-    color: '#B64620'
-    shape: CylinderX
-    yaw: 78.74999999999997
+    yaw: 44.999985
     pitch: 0.0
   - label: white net strand 0-0
     min: 0.0587777, -0.2271254, 0.5715
@@ -8262,117 +7774,61 @@
           shape: CylinderX
           yaw: -90.0
           pitch: 0.0
-        - label: separate orange circular hoop segment 0
-          min: 0.0950893, -0.2202736, 0.621
-          max: 0.1434717, -0.1982736, 0.643
+        - label: separate orange circular hoop segment 01
+          min: 0.0661854, -0.244, 0.621
+          max: 0.1770493, -0.222, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 101.25
+          yaw: 89.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 1
-          min: 0.07693, -0.176433, 0.621
-          max: 0.1253124, -0.154433, 0.643
+        - label: separate orange circular hoop segment 02
+          min: 0.0305645, -0.1580035, 0.621
+          max: 0.1414284, -0.1360035, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 123.75000000000001
+          yaw: 134.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 2
-          min: 0.0433758, -0.1428788, 0.621
-          max: 0.0917582, -0.1208788, 0.643
+        - label: separate orange circular hoop segment 03
+          min: -0.0554319, -0.1223827, 0.621
+          max: 0.0554319, -0.1003827, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 146.25
+          yaw: 179.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 3
-          min: -0.0004648, -0.1247195, 0.621
-          max: 0.0479176, -0.1027195, 0.643
+        - label: separate orange circular hoop segment 04
+          min: -0.1414284, -0.1580035, 0.621
+          max: -0.0305645, -0.1360035, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: 168.75
+          yaw: 224.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 4
-          min: -0.0479176, -0.1247195, 0.621
-          max: 0.0004648, -0.1027195, 0.643
+        - label: separate orange circular hoop segment 05
+          min: -0.1770493, -0.244, 0.621
+          max: -0.0661854, -0.222, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -168.75
+          yaw: 269.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 5
-          min: -0.0917582, -0.1428788, 0.621
-          max: -0.0433758, -0.1208788, 0.643
+        - label: separate orange circular hoop segment 06
+          min: -0.1414284, -0.3299965, 0.621
+          max: -0.0305645, -0.3079965, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -146.25
+          yaw: 314.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 6
-          min: -0.1253124, -0.176433, 0.621
-          max: -0.07693, -0.154433, 0.643
+        - label: separate orange circular hoop segment 07
+          min: -0.0554319, -0.3656173, 0.621
+          max: 0.0554319, -0.3436173, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -123.75000000000001
+          yaw: 359.999985
           pitch: 0.0
-        - label: separate orange circular hoop segment 7
-          min: -0.1434717, -0.2202736, 0.621
-          max: -0.0950893, -0.1982736, 0.643
+        - label: separate orange circular hoop segment 08
+          min: 0.0305645, -0.3299965, 0.621
+          max: 0.1414284, -0.3079965, 0.643
           color: '#B64620'
           shape: CylinderX
-          yaw: -101.25000000000001
-          pitch: 0.0
-        - label: separate orange circular hoop segment 8
-          min: -0.1434717, -0.2677264, 0.621
-          max: -0.0950893, -0.2457264, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -78.75000000000003
-          pitch: 0.0
-        - label: separate orange circular hoop segment 9
-          min: -0.1253124, -0.311567, 0.621
-          max: -0.07693, -0.289567, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -56.25
-          pitch: 0.0
-        - label: separate orange circular hoop segment 10
-          min: -0.0917582, -0.3451212, 0.621
-          max: -0.0433758, -0.3231212, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -33.74999999999999
-          pitch: 0.0
-        - label: separate orange circular hoop segment 11
-          min: -0.0479176, -0.3632805, 0.621
-          max: 0.0004648, -0.3412805, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: -11.250000000000007
-          pitch: 0.0
-        - label: separate orange circular hoop segment 12
-          min: -0.0004648, -0.3632805, 0.621
-          max: 0.0479176, -0.3412805, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 11.249999999999943
-          pitch: 0.0
-        - label: separate orange circular hoop segment 13
-          min: 0.0433758, -0.3451212, 0.621
-          max: 0.0917582, -0.3231212, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 33.75000000000005
-          pitch: 0.0
-        - label: separate orange circular hoop segment 14
-          min: 0.07693, -0.311567, 0.621
-          max: 0.1253124, -0.289567, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 56.249999999999964
-          pitch: 0.0
-        - label: separate orange circular hoop segment 15
-          min: 0.0950893, -0.2677264, 0.621
-          max: 0.1434717, -0.2457264, 0.643
-          color: '#B64620'
-          shape: CylinderX
-          yaw: 78.74999999999997
+          yaw: 44.999985
           pitch: 0.0
         - label: white net strand 0-0
           min: 0.0587777, -0.2271254, 0.5715

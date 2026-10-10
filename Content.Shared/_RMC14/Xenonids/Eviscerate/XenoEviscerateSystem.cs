@@ -53,7 +53,7 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
 
         if (rage <= 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-eviscerate-fail"), xeno, xeno, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-eviscerate-fail"), xeno, xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -81,13 +81,13 @@ public sealed partial class XenoEviscerateSystem : EntitySystem
             {
                 var selfMsg = Loc.GetString("rmc-xeno-eviscerate-windup-self");
                 var msg = Loc.GetString("rmc-xeno-eviscerate-windup", ("xeno", xeno));
-                _popup.PopupPredicted(selfMsg, msg, xeno, xeno, PopupType.MediumCaution);
+                _popup.PopupEntity(selfMsg, msg, xeno, xeno, PopupType.MediumCaution);
             }
             else
             {
                 var selfMsg = Loc.GetString("rmc-xeno-eviscerate-windup-small-self");
                 var msg = Loc.GetString("rmc-xeno-eviscerate-windup-small", ("xeno", xeno));
-                _popup.PopupPredicted(selfMsg, msg, xeno, xeno, PopupType.MediumCaution);
+                _popup.PopupEntity(selfMsg, msg, xeno, xeno, PopupType.MediumCaution);
             }
         }
     }

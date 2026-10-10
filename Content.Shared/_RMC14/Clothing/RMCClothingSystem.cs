@@ -91,7 +91,7 @@ public sealed partial class RMCClothingSystem : EntitySystem
         args.Cancel();
 
         var denyReason = Loc.GetString(ent.Comp.DenyReason);
-        _popup.PopupClient(denyReason, args.EquipTarget, args.EquipTarget, PopupType.SmallCaution);
+        _popup.PopupEntity(denyReason, args.EquipTarget, args.EquipTarget, PopupType.SmallCaution);
     }
 
     private void OnDropped(Entity<ClothingComponent> ent, ref DroppedEvent args)
@@ -166,7 +166,7 @@ public sealed partial class RMCClothingSystem : EntitySystem
                 if (type.BlacklistPopup != null && user != null)
                 {
                     var msg = Loc.GetString(type.BlacklistPopup);
-                    _popup.PopupClient(msg, user.Value, user.Value, PopupType.SmallCaution);
+                    _popup.PopupEntity(msg, user.Value, user.Value, PopupType.SmallCaution);
                 }
 
                 return;

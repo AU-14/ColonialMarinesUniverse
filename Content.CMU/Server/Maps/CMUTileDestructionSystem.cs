@@ -23,7 +23,7 @@ namespace Content.Server.CMU14.Maps;
 /// A planted charge sticks to an invisible anchor on the tile; when the charge goes off it deletes the anchor like a
 /// wall, and the anchor takes the tile with it.
 /// </summary>
-public sealed class CMUTileDestructionSystem : EntitySystem
+public sealed partial class CMUTileDestructionSystem : EntitySystem
 {
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
@@ -184,7 +184,7 @@ public sealed class CMUTileDestructionSystem : EntitySystem
     {
         tileRef = default;
         grid = default;
-        if (coords.GetGridUid(EntityManager) is not { } gridUid || !TryComp(gridUid, out MapGridComponent? gridComp))
+        if (_transform.GetGrid(coords) is not { } gridUid || !TryComp(gridUid, out MapGridComponent? gridComp))
             return false;
 
         if (!_map.TryGetTileRef(gridUid, gridComp, coords, out tileRef) ||
@@ -199,7 +199,7 @@ public sealed class CMUTileDestructionSystem : EntitySystem
 
     private EntityUid GetOrSpawnAnchor(TileRef tileRef, Entity<MapGridComponent> grid)
     {
-        var anchored = _map.GetAnchoredEntitiesEnumerator(grid, grid, tileRef.GridIndices);
+        var anchored = _map.GetAnchoredEntities(grid, grid, tileRef.GridIndices);
         while (anchored.MoveNext(out var uid))
         {
             if (HasComp<CMUTileChargeAnchorComponent>(uid))

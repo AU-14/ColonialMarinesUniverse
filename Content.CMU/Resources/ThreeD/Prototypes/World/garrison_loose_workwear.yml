@@ -2022,13 +2022,9 @@
     surface: CMU3DLooseWorkwearSurface2943
     surfaceAxis: XY
   - min: -0.1875, 0.125, 0.004
-    max: -0.15625, 0.15625, 0.058
-    color: '#30343C'
-    label: folded vest panel section 3
-  - min: -0.1875, 0.125, 0.058
     max: -0.15625, 0.15625, 0.06
     color: '#30343C'
-    label: folded vest panel original fabric 3
+    label: folded vest panel section 3
   - min: -0.09375, 0.09375, 0.004
     max: -0.0625, 0.15625, 0.058
     color: '#30343C'
@@ -2050,13 +2046,9 @@
     surface: CMU3DLooseWorkwearSurface2944
     surfaceAxis: XY
   - min: 0.125, 0.125, 0.004
-    max: 0.15625, 0.15625, 0.058
-    color: '#30343C'
-    label: folded vest panel section 6
-  - min: 0.125, 0.125, 0.058
     max: 0.15625, 0.15625, 0.06
     color: '#30343C'
-    label: folded vest panel original fabric 6
+    label: folded vest panel section 6
   - min: -0.0625, 0.09375, 0.004
     max: -0.03125, 0.125, 0.058
     color: '#30343C'
@@ -2192,13 +2184,9 @@
           surface: CMU3DLooseWorkwearSurface2943
           surfaceAxis: XY
         - min: -0.1875, 0.125, 0.004
-          max: -0.15625, 0.15625, 0.058
-          color: '#30343C'
-          label: folded vest panel section 3
-        - min: -0.1875, 0.125, 0.058
           max: -0.15625, 0.15625, 0.06
           color: '#30343C'
-          label: folded vest panel original fabric 3
+          label: folded vest panel section 3
         - min: -0.09375, 0.09375, 0.004
           max: -0.0625, 0.15625, 0.058
           color: '#30343C'
@@ -2220,13 +2208,9 @@
           surface: CMU3DLooseWorkwearSurface2944
           surfaceAxis: XY
         - min: 0.125, 0.125, 0.004
-          max: 0.15625, 0.15625, 0.058
-          color: '#30343C'
-          label: folded vest panel section 6
-        - min: 0.125, 0.125, 0.058
           max: 0.15625, 0.15625, 0.06
           color: '#30343C'
-          label: folded vest panel original fabric 6
+          label: folded vest panel section 6
         - min: -0.0625, 0.09375, 0.004
           max: -0.03125, 0.125, 0.058
           color: '#30343C'

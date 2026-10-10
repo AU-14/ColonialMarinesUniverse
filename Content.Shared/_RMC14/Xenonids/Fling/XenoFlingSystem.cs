@@ -68,7 +68,7 @@ public sealed partial class XenoFlingSystem : EntitySystem
 
         if (_size.TryGetSize(target, out var size) && size >= RMCSizes.Big)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-fling-too-big", ("target", target)), xeno, xeno,
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-fling-too-big", ("target", target)), xeno, xeno,
                 PopupType.MediumCaution);
             return false;
         }

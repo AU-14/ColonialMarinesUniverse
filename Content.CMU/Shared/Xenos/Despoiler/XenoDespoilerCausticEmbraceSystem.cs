@@ -412,7 +412,7 @@ public sealed partial class XenoDespoilerCausticEmbraceSystem : EntitySystem
                 ignoreResistances: false,
                 origin: uid);
 
-            _acid.ApplyAcid(victim, uid, enhance: true);
+            _acid.ApplyAcid(victim, uid, acidTier: 3);
 
             _stun.TryParalyze(
                 victim,

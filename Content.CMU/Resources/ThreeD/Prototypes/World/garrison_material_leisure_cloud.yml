@@ -2589,154 +2589,106 @@
     no played animation or sound behavior. Physical depth, rear and underside are inferred. Draft art only; no native,
     full-map, gameplay-state or fidelity approval. See SOURCES_MATERIAL_LEISURE_CLOUD.md.
   parts:
-  - label: tom 0 separate curved shell stave 0
-    min: -0.097, -0.013, 0.498
-    max: -0.013, 0.013, 0.718
+  - label: tom 0 separate curved shell stave 01
+    min: -0.1188747, -0.013, 0.498
+    max: 0.0088747, 0.013, 0.718
     color: '#5D4937'
     yaw: 90.0
-  - label: tom 0 separate curved shell stave 1
-    min: -0.1157564, 0.057, 0.498
-    max: -0.0317564, 0.083, 0.718
+  - label: tom 0 separate curved shell stave 02
+    min: -0.1598797, 0.0859949, 0.498
+    max: -0.0321304, 0.1119949, 0.718
     color: '#5D4937'
-    yaw: 120.0
-  - label: tom 0 separate curved shell stave 2
-    min: -0.167, 0.1082436, 0.498
-    max: -0.083, 0.1342436, 0.718
+    yaw: 135.0
+  - label: tom 0 separate curved shell stave 03
+    min: -0.2588747, 0.127, 0.498
+    max: -0.1311253, 0.153, 0.718
     color: '#5D4937'
-    yaw: 150.0
-  - label: tom 0 separate curved shell stave 3
-    min: -0.237, 0.127, 0.498
-    max: -0.153, 0.153, 0.718
+    yaw: 180.0
+  - label: tom 0 separate curved shell stave 04
+    min: -0.3578696, 0.0859949, 0.498
+    max: -0.2301203, 0.1119949, 0.718
     color: '#5D4937'
-    yaw: -180.0
-  - label: tom 0 separate curved shell stave 4
-    min: -0.307, 0.1082436, 0.498
-    max: -0.223, 0.1342436, 0.718
+    yaw: 225.0
+  - label: tom 0 separate curved shell stave 05
+    min: -0.3988747, -0.013, 0.498
+    max: -0.2711253, 0.013, 0.718
     color: '#5D4937'
-    yaw: -150.0
-  - label: tom 0 separate curved shell stave 5
-    min: -0.3582436, 0.057, 0.498
-    max: -0.2742436, 0.083, 0.718
+    yaw: 270.0
+  - label: tom 0 separate curved shell stave 06
+    min: -0.3578696, -0.1119949, 0.498
+    max: -0.2301203, -0.0859949, 0.718
     color: '#5D4937'
-    yaw: -120.0
-  - label: tom 0 separate curved shell stave 6
-    min: -0.377, -0.013, 0.498
-    max: -0.293, 0.013, 0.718
-    color: '#5D4937'
-    yaw: -90.0
-  - label: tom 0 separate curved shell stave 7
-    min: -0.3582436, -0.083, 0.498
-    max: -0.2742436, -0.057, 0.718
-    color: '#5D4937'
-    yaw: -60.0
-  - label: tom 0 separate curved shell stave 8
-    min: -0.307, -0.1342436, 0.498
-    max: -0.223, -0.1082436, 0.718
-    color: '#5D4937'
-    yaw: -30.0
-  - label: tom 0 separate curved shell stave 9
-    min: -0.237, -0.153, 0.498
-    max: -0.153, -0.127, 0.718
+    yaw: 315.0
+  - label: tom 0 separate curved shell stave 07
+    min: -0.2588747, -0.153, 0.498
+    max: -0.1311253, -0.127, 0.718
     color: '#5D4937'
     yaw: 0.0
-  - label: tom 0 separate curved shell stave 10
-    min: -0.167, -0.1342436, 0.498
-    max: -0.083, -0.1082436, 0.718
+  - label: tom 0 separate curved shell stave 08
+    min: -0.1598797, -0.1119949, 0.498
+    max: -0.0321304, -0.0859949, 0.718
     color: '#5D4937'
-    yaw: 30.0
-  - label: tom 0 separate curved shell stave 11
-    min: -0.1157564, -0.083, 0.498
-    max: -0.0317564, -0.057, 0.718
-    color: '#5D4937'
-    yaw: 60.0
+    yaw: 45.0
   - label: tom 0 cream drum skin
     min: -0.337, -0.142, 0.718
     max: -0.053, 0.142, 0.73
     color: '#E4DCC0'
     shape: CylinderZ
-  - label: tom 0 separate metal rim 0
-    min: -0.0958935, 0.02775, 0.489
-    max: -0.0198007, 0.04575, 0.507
+  - label: tom 0 separate metal rim 01
+    min: -0.1160514, -0.009, 0.489
+    max: 0.0100337, 0.009, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: 105.0
+    yaw: 89.999997
     pitch: 0.0
-  - label: tom 0 separate metal rim 1
-    min: -0.1326435, 0.0914029, 0.489
-    max: -0.0565507, 0.1094029, 0.507
+  - label: tom 0 separate metal rim 02
+    min: -0.1576397, 0.0914029, 0.489
+    max: -0.0315545, 0.1094029, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: 135.0
+    yaw: 134.999997
     pitch: 0.0
-  - label: tom 0 separate metal rim 2
-    min: -0.1962964, 0.1281529, 0.489
-    max: -0.1202036, 0.1461529, 0.507
+  - label: tom 0 separate metal rim 03
+    min: -0.2580426, 0.1329911, 0.489
+    max: -0.1319574, 0.1509911, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: 165.0
+    yaw: 179.999997
     pitch: 0.0
-  - label: tom 0 separate metal rim 3
-    min: -0.2697964, 0.1281529, 0.489
-    max: -0.1937036, 0.1461529, 0.507
+  - label: tom 0 separate metal rim 04
+    min: -0.3584455, 0.0914029, 0.489
+    max: -0.2323603, 0.1094029, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -165.00000000000003
+    yaw: 224.999997
     pitch: 0.0
-  - label: tom 0 separate metal rim 4
-    min: -0.3334493, 0.0914029, 0.489
-    max: -0.2573565, 0.1094029, 0.507
+  - label: tom 0 separate metal rim 05
+    min: -0.4000337, -0.009, 0.489
+    max: -0.2739486, 0.009, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -135.0
+    yaw: 269.999997
     pitch: 0.0
-  - label: tom 0 separate metal rim 5
-    min: -0.3701993, 0.02775, 0.489
-    max: -0.2941065, 0.04575, 0.507
+  - label: tom 0 separate metal rim 06
+    min: -0.3584455, -0.1094029, 0.489
+    max: -0.2323603, -0.0914029, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -105.00000000000001
+    yaw: 314.999997
     pitch: 0.0
-  - label: tom 0 separate metal rim 6
-    min: -0.3701993, -0.04575, 0.489
-    max: -0.2941065, -0.02775, 0.507
+  - label: tom 0 separate metal rim 07
+    min: -0.2580426, -0.1509911, 0.489
+    max: -0.1319574, -0.1329911, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -74.99999999999999
+    yaw: 359.999997
     pitch: 0.0
-  - label: tom 0 separate metal rim 7
-    min: -0.3334493, -0.1094029, 0.489
-    max: -0.2573565, -0.0914029, 0.507
+  - label: tom 0 separate metal rim 08
+    min: -0.1576397, -0.1094029, 0.489
+    max: -0.0315545, -0.0914029, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -45.00000000000003
-    pitch: 0.0
-  - label: tom 0 separate metal rim 8
-    min: -0.2697964, -0.1461529, 0.489
-    max: -0.1937036, -0.1281529, 0.507
-    color: '#B6BAB6'
-    shape: CylinderX
-    yaw: -15.000000000000028
-    pitch: 0.0
-  - label: tom 0 separate metal rim 9
-    min: -0.1962964, -0.1461529, 0.489
-    max: -0.1202036, -0.1281529, 0.507
-    color: '#B6BAB6'
-    shape: CylinderX
-    yaw: 15.0
-    pitch: 0.0
-  - label: tom 0 separate metal rim 10
-    min: -0.1326435, -0.1094029, 0.489
-    max: -0.0565507, -0.0914029, 0.507
-    color: '#B6BAB6'
-    shape: CylinderX
-    yaw: 45.0
-    pitch: 0.0
-  - label: tom 0 separate metal rim 11
-    min: -0.0958935, -0.04575, 0.489
-    max: -0.0198007, -0.02775, 0.507
-    color: '#B6BAB6'
-    shape: CylinderX
-    yaw: 74.99999999999997
+    yaw: 44.999997
     pitch: 0.0
   - label: tom 0 separate metal rim 0 member 2
     min: -0.0958935, 0.02775, 0.721
@@ -2850,154 +2802,106 @@
     shape: CylinderX
     yaw: 0.0
     pitch: 90.0
-  - label: tom 1 separate curved shell stave 0
-    min: 0.293, -0.013, 0.498
-    max: 0.377, 0.013, 0.718
+  - label: tom 1 separate curved shell stave 01
+    min: 0.2711253, -0.013, 0.498
+    max: 0.3988747, 0.013, 0.718
     color: '#5D4937'
     yaw: 90.0
-  - label: tom 1 separate curved shell stave 1
-    min: 0.2742436, 0.057, 0.498
-    max: 0.3582436, 0.083, 0.718
+  - label: tom 1 separate curved shell stave 02
+    min: 0.2301203, 0.0859949, 0.498
+    max: 0.3578696, 0.1119949, 0.718
     color: '#5D4937'
-    yaw: 120.0
-  - label: tom 1 separate curved shell stave 2
-    min: 0.223, 0.1082436, 0.498
-    max: 0.307, 0.1342436, 0.718
+    yaw: 135.0
+  - label: tom 1 separate curved shell stave 03
+    min: 0.1311253, 0.127, 0.498
+    max: 0.2588747, 0.153, 0.718
     color: '#5D4937'
-    yaw: 150.0
-  - label: tom 1 separate curved shell stave 3
-    min: 0.153, 0.127, 0.498
-    max: 0.237, 0.153, 0.718
+    yaw: 180.0
+  - label: tom 1 separate curved shell stave 04
+    min: 0.0321304, 0.0859949, 0.498
+    max: 0.1598797, 0.1119949, 0.718
     color: '#5D4937'
-    yaw: -180.0
-  - label: tom 1 separate curved shell stave 4
-    min: 0.083, 0.1082436, 0.498
-    max: 0.167, 0.1342436, 0.718
+    yaw: 225.0
+  - label: tom 1 separate curved shell stave 05
+    min: -0.0088747, -0.013, 0.498
+    max: 0.1188747, 0.013, 0.718
     color: '#5D4937'
-    yaw: -150.0
-  - label: tom 1 separate curved shell stave 5
-    min: 0.0317564, 0.057, 0.498
-    max: 0.1157564, 0.083, 0.718
+    yaw: 270.0
+  - label: tom 1 separate curved shell stave 06
+    min: 0.0321304, -0.1119949, 0.498
+    max: 0.1598797, -0.0859949, 0.718
     color: '#5D4937'
-    yaw: -120.0
-  - label: tom 1 separate curved shell stave 6
-    min: 0.013, -0.013, 0.498
-    max: 0.097, 0.013, 0.718
-    color: '#5D4937'
-    yaw: -90.0
-  - label: tom 1 separate curved shell stave 7
-    min: 0.0317564, -0.083, 0.498
-    max: 0.1157564, -0.057, 0.718
-    color: '#5D4937'
-    yaw: -60.0
-  - label: tom 1 separate curved shell stave 8
-    min: 0.083, -0.1342436, 0.498
-    max: 0.167, -0.1082436, 0.718
-    color: '#5D4937'
-    yaw: -30.0
-  - label: tom 1 separate curved shell stave 9
-    min: 0.153, -0.153, 0.498
-    max: 0.237, -0.127, 0.718
+    yaw: 315.0
+  - label: tom 1 separate curved shell stave 07
+    min: 0.1311253, -0.153, 0.498
+    max: 0.2588747, -0.127, 0.718
     color: '#5D4937'
     yaw: 0.0
-  - label: tom 1 separate curved shell stave 10
-    min: 0.223, -0.1342436, 0.498
-    max: 0.307, -0.1082436, 0.718
+  - label: tom 1 separate curved shell stave 08
+    min: 0.2301203, -0.1119949, 0.498
+    max: 0.3578696, -0.0859949, 0.718
     color: '#5D4937'
-    yaw: 30.0
-  - label: tom 1 separate curved shell stave 11
-    min: 0.2742436, -0.083, 0.498
-    max: 0.3582436, -0.057, 0.718
-    color: '#5D4937'
-    yaw: 60.0
+    yaw: 45.0
   - label: tom 1 cream drum skin
     min: 0.053, -0.142, 0.718
     max: 0.337, 0.142, 0.73
     color: '#E4DCC0'
     shape: CylinderZ
-  - label: tom 1 separate metal rim 0
-    min: 0.2941065, 0.02775, 0.489
-    max: 0.3701993, 0.04575, 0.507
+  - label: tom 1 separate metal rim 01
+    min: 0.2739486, -0.009, 0.489
+    max: 0.4000337, 0.009, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: 105.0
+    yaw: 89.999997
     pitch: 0.0
-  - label: tom 1 separate metal rim 1
-    min: 0.2573565, 0.0914029, 0.489
-    max: 0.3334493, 0.1094029, 0.507
+  - label: tom 1 separate metal rim 02
+    min: 0.2323603, 0.0914029, 0.489
+    max: 0.3584455, 0.1094029, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: 135.0
+    yaw: 134.999997
     pitch: 0.0
-  - label: tom 1 separate metal rim 2
-    min: 0.1937036, 0.1281529, 0.489
-    max: 0.2697964, 0.1461529, 0.507
+  - label: tom 1 separate metal rim 03
+    min: 0.1319574, 0.1329911, 0.489
+    max: 0.2580426, 0.1509911, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: 165.0
+    yaw: 179.999997
     pitch: 0.0
-  - label: tom 1 separate metal rim 3
-    min: 0.1202036, 0.1281529, 0.489
-    max: 0.1962964, 0.1461529, 0.507
+  - label: tom 1 separate metal rim 04
+    min: 0.0315545, 0.0914029, 0.489
+    max: 0.1576397, 0.1094029, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -165.00000000000003
+    yaw: 224.999997
     pitch: 0.0
-  - label: tom 1 separate metal rim 4
-    min: 0.0565507, 0.0914029, 0.489
-    max: 0.1326435, 0.1094029, 0.507
+  - label: tom 1 separate metal rim 05
+    min: -0.0100337, -0.009, 0.489
+    max: 0.1160514, 0.009, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -135.0
+    yaw: 269.999997
     pitch: 0.0
-  - label: tom 1 separate metal rim 5
-    min: 0.0198007, 0.02775, 0.489
-    max: 0.0958935, 0.04575, 0.507
+  - label: tom 1 separate metal rim 06
+    min: 0.0315545, -0.1094029, 0.489
+    max: 0.1576397, -0.0914029, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -105.0
+    yaw: 314.999997
     pitch: 0.0
-  - label: tom 1 separate metal rim 6
-    min: 0.0198007, -0.04575, 0.489
-    max: 0.0958935, -0.02775, 0.507
+  - label: tom 1 separate metal rim 07
+    min: 0.1319574, -0.1509911, 0.489
+    max: 0.2580426, -0.1329911, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -75.0
+    yaw: 359.999997
     pitch: 0.0
-  - label: tom 1 separate metal rim 7
-    min: 0.0565507, -0.1094029, 0.489
-    max: 0.1326435, -0.0914029, 0.507
+  - label: tom 1 separate metal rim 08
+    min: 0.2323603, -0.1094029, 0.489
+    max: 0.3584455, -0.0914029, 0.507
     color: '#B6BAB6'
     shape: CylinderX
-    yaw: -45.00000000000003
-    pitch: 0.0
-  - label: tom 1 separate metal rim 8
-    min: 0.1202036, -0.1461529, 0.489
-    max: 0.1962964, -0.1281529, 0.507
-    color: '#B6BAB6'
-    shape: CylinderX
-    yaw: -15.000000000000028
-    pitch: 0.0
-  - label: tom 1 separate metal rim 9
-    min: 0.1937036, -0.1461529, 0.489
-    max: 0.2697964, -0.1281529, 0.507
-    color: '#B6BAB6'
-    shape: CylinderX
-    yaw: 15.0
-    pitch: 0.0
-  - label: tom 1 separate metal rim 10
-    min: 0.2573565, -0.1094029, 0.489
-    max: 0.3334493, -0.0914029, 0.507
-    color: '#B6BAB6'
-    shape: CylinderX
-    yaw: 44.99999999999997
-    pitch: 0.0
-  - label: tom 1 separate metal rim 11
-    min: 0.2941065, -0.04575, 0.489
-    max: 0.3701993, -0.02775, 0.507
-    color: '#B6BAB6'
-    shape: CylinderX
-    yaw: 75.0
+    yaw: 44.999997
     pitch: 0.0
   - label: tom 1 separate metal rim 0 member 2
     min: 0.2941065, 0.02775, 0.721

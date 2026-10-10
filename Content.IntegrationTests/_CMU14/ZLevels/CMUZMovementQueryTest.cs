@@ -1,3 +1,6 @@
+using Content.Shared.Vehicle.Components;
+using Content.Shared.Vehicle;
+using Content.Shared._RMC14.Vehicle;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -130,6 +133,47 @@ public sealed class CMUZMovementQueryTest : GameTest
         // ground check queues removal of that falling component at the normal lifecycle boundary.
         await Pair.RunTicksSync(2);
         await Server.WaitAssertion(() => AssertSettled(_upper, 0f));
+    }
+
+    [Test]
+    public async Task HumveeFallsWithTurretAndCanMoveAfterLanding()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            CreateScenario(true);
+            SEntMan.DeleteEntity(_body);
+            _body = SEntMan.SpawnEntity("VehicleHumvee", new EntityCoordinates(_map.Owner, 0.5f, 0.5f));
+            _cleanup.Add(_body);
+            _bodyZ = SComp<CMUZPhysicsComponent>(_body);
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = -3; x <= 3; x++)
+            for (var y = -3; y <= 3; y++)
+                maps.SetTile(_map, new Vector2i(x, y), Tile.Empty);
+            _z.WakeZPhysics((_body, _bodyZ));
+        });
+        await Pair.RunTicksSync(100);
+        await Server.WaitAssertion(() =>
+        {
+            AssertSettled(_lower, 0f);
+            var mover = SComp<GridVehicleMoverComponent>(_body);
+            Assert.That(mover.SyncedGrid, Is.EqualTo(_lower));
+            var transform = SComp<TransformComponent>(_body);
+            var position = _transform.GetWorldPosition(transform);
+            Assert.That(Server.System<GridVehicleMoverSystem>().TryShoveVehicle(_body, _body, Vector2.UnitX), Is.True,
+                "A landed vehicle must accept movement on its new floor.");
+            Assert.That(_transform.GetWorldPosition(_body).X, Is.GreaterThan(position.X));
+            var visuals = SEntMan.EntityQueryEnumerator<CMUZVisualFollowerComponent, TransformComponent>();
+            var visualCount = 0;
+            while (visuals.MoveNext(out _, out var follower, out var visualTransform))
+            {
+                if (follower.Target == _body)
+                {
+                    visualCount++;
+                    Assert.That(visualTransform.MapUid, Is.EqualTo(_lower), "Turret visuals must follow the hull across floors.");
+                }
+            }
+            Assert.That(visualCount, Is.GreaterThan(0), "The armed humvee must exercise its separate turret visuals.");
+        });
     }
 
     [Test, Explicit("Run by exact method filter to record Release movement and footprint costs.")]

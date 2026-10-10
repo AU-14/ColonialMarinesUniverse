@@ -119,7 +119,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (!_whitelist.IsWhitelistPass(ent.Comp.Whitelist, args.Performer))
         {
             var popup = Loc.GetString("cm-gun-unskilled", ("gun", ent.Owner));
-            _popup.PopupClient(popup, args.Performer, args.Performer, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.Performer, args.Performer, PopupType.SmallCaution);
             return;
         }
 
@@ -185,7 +185,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
             SpawnCloakEffects(user, ent.Comp.CloakEffect);
 
             var popupOthers = Loc.GetString("rmc-cloak-activate-others", ("user", user));
-            _popup.PopupPredicted(Loc.GetString("rmc-cloak-activate-self"), popupOthers, user, user, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("rmc-cloak-activate-self"), popupOthers, user, user, PopupType.Medium);
 
             if (_net.IsServer)
                 _audio.PlayPvs(ent.Comp.CloakSound, user);
@@ -214,7 +214,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
                 turnInvisible.UncloakTime = _timing.CurTime;
 
                 var forcedPopupOthers = Loc.GetString("rmc-cloak-forced-deactivate-others", ("user", user));
-                _popup.PopupPredicted(Loc.GetString("rmc-cloak-forced-deactivate-self"), forcedPopupOthers, user, user, PopupType.Medium);
+                _popup.PopupEntity(Loc.GetString("rmc-cloak-forced-deactivate-self"), forcedPopupOthers, user, user, PopupType.Medium);
             }
             else
             {
@@ -227,7 +227,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
 
                 turnInvisible.UncloakTime = _timing.CurTime;
                 var popupOthers = Loc.GetString("rmc-cloak-deactivate-others", ("user", user));
-                _popup.PopupPredicted(Loc.GetString("rmc-cloak-deactivate-self"), popupOthers, user, user, PopupType.Medium);
+                _popup.PopupEntity(Loc.GetString("rmc-cloak-deactivate-self"), popupOthers, user, user, PopupType.Medium);
             }
 
             ToggleLayers(user, ent.Comp.CloakedHideLayers, true);
@@ -266,7 +266,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
             args.Cancelled = true;
 
             var popup = Loc.GetString("rmc-cloak-attempt-shoot");
-            _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
         }
     }
 
@@ -280,7 +280,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
             args.Handled = true;
 
             var popup = Loc.GetString(ent.Comp.CancelMessage);
-            _popup.PopupClient(popup, args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(popup, args.User, args.User, PopupType.SmallCaution);
         }
     }
 

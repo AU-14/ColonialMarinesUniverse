@@ -152,6 +152,7 @@
       key_slots:
       - AU14EncryptionKeyOpfor
       - AU14EncryptionKeyOpforJTAC
+      - AU14EncryptionKeyOpforIntel
 
 - type: entity
   parent: AU14HeadsetOpforMarine
@@ -164,6 +165,31 @@
       key_slots:
       - AU14EncryptionKeyOpfor
       - AU14EncryptionKeyOpforJTAC
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: CMUHeadsetOpforMarineAuxiliary
+  name: OPFOR squad auxiliary radio headset
+  description: This is used by OPFOR squad corpsmen and engineers to communicate on the radio, including the auxiliary channel.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforIntel
+
+- type: entity
+  parent: AU14HeadsetOpforMarine
+  id: CMUHeadsetOpforDroneOperator
+  name: OPFOR drone operator radio headset
+  description: This is used by OPFOR drone operators to communicate on the radio, including the JTAC and auxiliary channels.
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyOpfor
+      - AU14EncryptionKeyOpforJTAC
+      - AU14EncryptionKeyOpforIntel
 
 - type: entity
   parent: AU14HeadsetOpforMarine

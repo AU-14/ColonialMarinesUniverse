@@ -48,7 +48,7 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
 
         if (!_xeno.CanAbilityAttackTarget(xeno, target.Value))
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-direct-spore-infect-invalid"),
                 xeno,
                 xeno);
@@ -57,7 +57,7 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
 
         if (_mobState.IsDead(target.Value))
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-direct-spore-infect-dead"),
                 xeno,
                 xeno);
@@ -66,7 +66,7 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
 
         if (HasComp<CMUPathogenWalkerComponent>(target.Value))
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-direct-spore-infect-invalid"),
                 xeno,
                 xeno);
@@ -75,7 +75,7 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
 
         if (!HasComp<InfectableComponent>(target.Value))
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-direct-spore-infect-invalid"),
                 xeno,
                 xeno);
@@ -84,7 +84,7 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
 
         if (HasComp<VictimInfectedComponent>(target.Value))
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-direct-spore-infect-already"),
                 xeno,
                 xeno);
@@ -155,7 +155,7 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
 
         if (protItem != null && !_random.Prob(0.1f))
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-xeno-direct-spore-infect-blocked"),
                 xeno, xeno, PopupType.SmallCaution);
             return;
@@ -185,7 +185,7 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
                 _parasite.SetHive((target, victimComp), hiveEnt);
         }
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu-xeno-direct-spore-infect-hit", ("target", target)),
             Loc.GetString("cmu-xeno-direct-spore-infect-hit", ("target", target)),
             xeno,

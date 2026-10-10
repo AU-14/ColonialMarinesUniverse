@@ -12,7 +12,7 @@ namespace Content.Client.CMU14.FactionRoster;
 [GenerateTypedNameReferences]
 public sealed partial class FactionRosterConsoleWindow : DefaultWindow
 {
-    [Dependency] private  IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     private readonly List<FactionRosterEntryWindow> _openEntryWindows = new();
 
@@ -31,7 +31,7 @@ public sealed partial class FactionRosterConsoleWindow : DefaultWindow
 
     public void UpdateState(FactionRosterConsoleBuiState state)
     {
-        ContentContainer.DisposeAllChildren();
+        ContentContainer.ReleaseChildren();
         CountLabel.Text = Loc.GetString("faction-roster-console-count", ("count", state.Entries.Count));
 
         foreach (var entry in state.Entries)

@@ -106,8 +106,6 @@
         RMCSkillNavigations: 1
 
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -243,8 +241,6 @@
   name: au14-job-name-govforauxsupportsynthRMC
   spawnMenuRoleName: Support Synth (TWE RMC)
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 7200 # 2 hours
   - !type:TraitsRequirement
     inverted: true
     traits:
@@ -275,8 +271,6 @@
   roundForce: UPP
   spawnMenuRoleName: Support Synth (UPP)
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 7200 # 2 hours
   - !type:TraitsRequirement
     inverted: true
     traits:

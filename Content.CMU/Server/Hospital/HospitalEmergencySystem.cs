@@ -65,6 +65,9 @@ namespace Content.Server.CMU14.Hospital;
 
 public sealed partial class HospitalEmergencySystem : EntitySystem
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageGroupPrototype> BrutePrototype = "Brute";
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageGroupPrototype> BurnPrototype = "Burn";
+
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -769,7 +772,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         // MapInit can move an existing foreign object onto the new map. Current
         // map membership is insufficient provenance for deleting it later.
         var preexisting = new HashSet<EntityUid>();
-        var existing = EntityManager.AllEntityQueryEnumerator<TransformComponent>();
+        var existing = AllEntityQuery<TransformComponent>();
         while (existing.MoveNext(out var existingUid, out _))
             preexisting.Add(existingUid);
         try
@@ -796,7 +799,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
             }
             // Include newly spawned MapInit equipment, but never claim existing
             // visitors/property that an initialization callback moved onto it.
-            var authored = EntityManager.AllEntityQueryEnumerator<TransformComponent>();
+            var authored = AllEntityQuery<TransformComponent>();
             while (authored.MoveNext(out var entity, out var transform))
                 if (!preexisting.Contains(entity) && transform.MapUid is { } authoredMap && lease.Maps.ContainsKey(authoredMap))
                     lease.AuthoredEntities.Add(entity);
@@ -1592,8 +1595,8 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
         var remainingDamage = TryComp<DamageableComponent>(patient, out var damageable)
             ? _damage.GetAllDamage((patient, damageable)) : new DamageSpecifier();
         treatmentPending = remainingDamage.AnyPositive();
-        var brute = _prototypes.Index<DamageGroupPrototype>("Brute");
-        var burn = _prototypes.Index<DamageGroupPrototype>("Burn");
+        var brute = _prototypes.Index<DamageGroupPrototype>(BrutePrototype);
+        var burn = _prototypes.Index<DamageGroupPrototype>(BurnPrototype);
         TryComp<CMUSurgeryInProgressComponent>(patient, out var surgery);
         var surgerySiteSeen = false;
         var surgeryTargetMissing = surgery != null && TryComp<HospitalPatientComponent>(patient, out var admission) &&

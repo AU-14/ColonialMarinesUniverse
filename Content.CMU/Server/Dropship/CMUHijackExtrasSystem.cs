@@ -37,6 +37,7 @@ using Robust.Shared.Collections;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -48,7 +49,7 @@ namespace Content.Server.CMU14.Dropship;
 ///     presets that don't run the classic <see cref="CMDistressSignalRuleComponent"/> rule.
 ///     That rule provides these itself, so this system must stay off while it is active.
 /// </summary>
-public sealed class CMUHijackExtrasSystem : EntitySystem
+public sealed partial class CMUHijackExtrasSystem : EntitySystem
 {
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IConfigurationManager _config = default!;
@@ -126,6 +127,10 @@ public sealed class CMUHijackExtrasSystem : EntitySystem
         foreach (var (xeno, comp, xform) in originalXenos)
         {
             if (TerminatingOrDeleted(xeno) || _mobState.IsDead(xeno))
+                continue;
+
+            // Lab-made Wendigos are not hive xenos and never feed the burrowed larva queue.
+            if (HasComp<CMUWendigoLabMadeComponent>(xeno))
                 continue;
 
             if ((ev.Dropship == null || xform.GridUid != ev.Dropship) && _rmcPlanet.IsOnPlanetLevel(xform))

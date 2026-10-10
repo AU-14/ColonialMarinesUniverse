@@ -7,7 +7,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Item.HoldUp;
 
-public sealed class CMUHoldUpItemSystem : EntitySystem
+public sealed partial class CMUHoldUpItemSystem : EntitySystem
 {
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedHandsSystem _hands = default!;

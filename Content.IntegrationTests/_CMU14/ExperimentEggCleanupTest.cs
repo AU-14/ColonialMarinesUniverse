@@ -11,6 +11,8 @@ namespace Content.IntegrationTests._CMU14;
 [TestFixture]
 public sealed class ExperimentEggCleanupTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> ColonyFallPrototype = "ColonyFall";
+
     [Test]
     public async Task RoundCleanupPreservesCrateEggsAndRemovesLooseStructures()
     {
@@ -27,7 +29,7 @@ public sealed class ExperimentEggCleanupTest
             looseEgg = entities.SpawnEntity("XenoEgg", map.GridCoords);
             weeds = entities.SpawnEntity("XenoWeeds", map.GridCoords);
             server.System<AuRoundSystem>().SetPreset(server.ResolveDependency<IPrototypeManager>()
-                .Index<GamePresetPrototype>("ColonyFall"));
+                .Index<GamePresetPrototype>(ColonyFallPrototype));
             entities.EventBus.RaiseEvent(EventSource.Local, new RoundStartingEvent(1));
         });
         await pair.RunTicksSync(2);

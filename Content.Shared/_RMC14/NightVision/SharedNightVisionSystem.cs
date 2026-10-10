@@ -164,7 +164,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
     {
         if (args.User != null && HasComp<ScopingComponent>(args.User))
         {
-            _popup.PopupClient("You cannot use the night vision optic while using optics.",
+            _popup.PopupEntity("You cannot use the night vision optic while using optics.",
                 args.User.Value,
                 args.User,
                 PopupType.SmallCaution);
@@ -274,7 +274,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
 
         if (item.Comp.Skills != null && !_skills.HasAllSkills(user, item.Comp.Skills))
         {
-            _popup.PopupClient(Loc.GetString("rmc-skills-hud-toggle"), user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-skills-hud-toggle"), user, user, PopupType.MediumCaution);
             return;
         }
 
@@ -289,7 +289,8 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
             {
                 nightVision = EnsureComp<NightVisionComponent>(user);
 
-                if (item.Comp.ExperimentalMesonFov || item.Comp.RestorePreviousState)
+                // CMU14: innate too, otherwise a visor's green filter overwrote a synth's own NV for good
+                if (item.Comp.ExperimentalMesonFov || item.Comp.RestorePreviousState || nightVision.Innate)
                 {
                     // Some equipment temporarily overrides an existing vision source and must restore it on disable.
                     item.Comp.HadNightVision = true;
@@ -403,7 +404,8 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
 
         if (TryComp(user, out NightVisionComponent? nightVision))
         {
-            if ((item.Comp.ExperimentalMesonFov || item.Comp.RestorePreviousState) && item.Comp.HadNightVision)
+            // CMU14: HadNightVision is only set when the previous state got saved, innate included
+            if (item.Comp.HadNightVision)
             {
                 // Restore the previous component state so innate synth night vision survives item toggles.
                 nightVision.State = item.Comp.PreviousState;

@@ -474,6 +474,7 @@ public sealed partial class CMUReconstructionControl : Control
         CancelStroke();
     }
 
+    [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
     protected override void Dispose(bool disposing)
     {
         if (disposing) _render.Dispose();

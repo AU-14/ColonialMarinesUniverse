@@ -8,6 +8,8 @@ public sealed partial class CMUExpeditionAgentComponent
 {
     [DataField] public int Squad;
     [DataField] public bool PlanningEnabled = true;
+    [DataField] public TimeSpan MagazineReloadDuration = TimeSpan.FromSeconds(0.8);
+    [DataField] public TimeSpan ShellReloadDuration = TimeSpan.FromSeconds(0.3);
     public CMUTacticalGoal Goal;
     public Queue<CMUTacticalAction> Plan = new();
     public CMUTacticalAction? Action;
@@ -35,11 +37,16 @@ public sealed partial class CMUExpeditionAgentComponent
     public bool Patrolling;
     public int PatrolIndex;
     public TimeSpan NextOrderRoute;
-    public EntityCoordinates? OrderProgressPosition;
-    public TimeSpan OrderProgressAt;
     public bool OrderBlocked;
     public bool Entrench;
+    public Direction? GuardFacing;
+    public EntityCoordinates? GuardAnchor;
+    public EntityCoordinates? FortificationPoint;
+    public Direction FortificationFacing;
+    public readonly HashSet<EntityUid> ExistingFortifications = new();
+    public string FortificationDecision = "not-ordered";
     public EntityUid? WorkItem;
+    public bool PreparingWork;
     public DoAfterId? WorkDoAfter;
     public bool WorkBuild;
     public TimeSpan NextWork;
@@ -47,6 +54,7 @@ public sealed partial class CMUExpeditionAgentComponent
     public readonly HashSet<string> FriendlyFactions = new();
     public readonly HashSet<string> TargetFactions = new();
     public TimeSpan NextRescue;
+    public TimeSpan MedicalCoverUntil;
     public TimeSpan NextFlank;
     public TimeSpan NextRadio;
     public EntityUid? RadioTarget;
@@ -57,7 +65,13 @@ public sealed partial class CMUExpeditionAgentComponent
     public bool ContactFromRadio;
     public int ReportsReceived;
     public int ReportsAccepted;
-    public TimeSpan NextRadioResponse;
+    public TimeSpan NextRadioAnnouncement;
+    public EntityUid? LastAnnouncedContact;
+    public EntityCoordinates? LastAnnouncedPosition;
+    public TimeSpan LastRadioAnnouncement;
+    public EntityUid? LastSharedContact;
+    public TimeSpan LastSharedAt;
+    public int RadioCallouts;
     public string RadioDecision = "idle";
     public int Reloads;
     public int GrenadesThrown;
@@ -78,6 +92,10 @@ public sealed partial class CMUExpeditionAgentComponent
     public float LearnedFlankCost = 1;
     public float LearnedDangerCost = 1;
     public bool LearningLoaded;
+    public TimeSpan NextExperienceRefresh;
+    public string ExperienceGroup = "baseline";
+    public int ExperienceSamples;
+    public bool PeekOutcomeRecorded;
     public float ActionInitialDamage;
     public float PeekInitialDamage;
     public bool LastMoveFailed;

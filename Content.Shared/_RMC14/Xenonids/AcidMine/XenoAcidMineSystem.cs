@@ -31,7 +31,7 @@ public sealed partial class XenoAcidMineSystem : EntitySystem
 
         if (!_examine.InRangeUnOccluded(xeno.Owner, args.Target, xeno.Comp.Range))
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-acid-mine-see-fail"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-acid-mine-see-fail"), xeno, xeno);
             return;
         }
 
@@ -45,7 +45,7 @@ public sealed partial class XenoAcidMineSystem : EntitySystem
 
         var popupSelf = Loc.GetString("rmc-xeno-acid-mine-self");
         var popupOthers = Loc.GetString("rmc-xeno-acid-mine-others", ("xeno", xeno));
-        _popup.PopupPredicted(popupSelf, popupOthers, xeno, xeno);
+        _popup.PopupEntity(popupSelf, popupOthers, xeno, xeno);
 
         if (_net.IsClient)
             return;

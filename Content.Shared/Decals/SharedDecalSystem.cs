@@ -22,7 +22,9 @@ namespace Content.Shared.Decals
         {
             base.Initialize();
 
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
             SubscribeLocalEvent<DecalGridComponent, ComponentGetState>(OnGetState);
+#pragma warning restore CS0618
             SubscribeLocalEvent<DecalChunkComponent, ComponentStartup>(OnChunkStartup);
             // CMU14: per decal delta states, one entry per changed decal instead of the whole chunk dictionary
             SubscribeLocalEvent<DecalChunkComponent, ComponentGetState>(OnChunkGetState);
@@ -105,7 +107,9 @@ namespace Content.Shared.Decals
             EntityManager.EventBus.RaiseComponentEvent(uid, component, ref ev);
         }
 
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
         private void OnGetState(EntityUid uid, DecalGridComponent component, ref ComponentGetState args)
+#pragma warning restore CS0618
         {
             if (PvsEnabled && !args.ReplayState)
                 return;
@@ -117,7 +121,9 @@ namespace Content.Shared.Decals
                 return;
             }
 
+#pragma warning disable CS0618 // CMU14: Read legacy grid decals when migrating saved maps and replay state.
             var data = new Dictionary<Vector2i, DecalGridComponent.DecalChunk>();
+#pragma warning restore CS0618
             foreach (var (index, chunk) in component.ChunkCollection.ChunkCollection)
             {
                 if (chunk.LastModified >= args.FromTick)

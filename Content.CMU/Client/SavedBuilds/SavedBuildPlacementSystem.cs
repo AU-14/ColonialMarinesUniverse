@@ -31,19 +31,19 @@ namespace Content.Client.CMU14.SavedBuilds;
 /// places vanilla construction ghosts for each entity, which they then build normally (consuming
 /// materials) — i.e. building the whole saved structure the vanilla way.
 /// </summary>
-public sealed class SavedBuildPlacementSystem : EntitySystem
+public sealed partial class SavedBuildPlacementSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly SharedMapSystem _mapManager = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly CMUClientZLevelsSystem _zLevels = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private SharedMapSystem _mapManager = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IResourceCache _cache = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private CMUClientZLevelsSystem _zLevels = default!;
 
     public bool Active { get; private set; }
     public bool IsAdmin { get; private set; }
@@ -329,7 +329,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
                     _recipeByTarget[targetId] = recipe;
 
                 if (_proto.TryIndex<EntityPrototype>(targetId, out var targetProto) &&
-                    targetProto.TryGetComponent<TileApplierComponent>(out var applier, _componentFactory))
+                    targetProto.TryComp<TileApplierComponent>(out var applier, _componentFactory))
                     _recipeByTile.TryAdd(applier.Tile, recipe);
             }
         }

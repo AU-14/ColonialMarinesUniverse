@@ -51,7 +51,7 @@ public sealed class FighterLaserTest : GameTest
             _flare = SEntMan.SpawnEntity("RMCFlareCAS", new EntityCoordinates(map.Grid.Owner, new Vector2(.5f)));
             SEntMan.System<ExpendableLightSystem>().TryActivate((_flare, SEntMan.GetComponent<ExpendableLightComponent>(_flare)));
             SEntMan.System<SharedDropshipWeaponSystem>().MakeDropshipTarget(_flare, "TEST", "govfor");
-            var position = Server.Transform(_flare).WorldPosition;
+            var position = SEntMan.System<SharedTransformSystem>().GetWorldPosition(_flare);
             var terrain = Server.Transform(_flare).MapUid!.Value;
             _aircraft = System.CreateAircraft(terrain, position);
             _aircraft.Comp.Battlefield = new Box2(position - new Vector2(120), position + new Vector2(120));
@@ -87,7 +87,7 @@ public sealed class FighterLaserTest : GameTest
 
     private void CleanWorld()
     {
-        foreach (var payload in SEntMan.EntityQuery<AmmoInFlightComponent>().ToArray()) SEntMan.DeleteEntity(payload.Owner);
+        foreach (var payload in SEntMan.QueryEntities<AmmoInFlightComponent>().ToArray()) SEntMan.DeleteEntity(payload.Owner);
         if (!SEntMan.Deleted(_flare)) SEntMan.DeleteEntity(_flare);
         SEntMan.DeleteEntity(Server.Transform(_aircraft).MapUid!.Value);
     }

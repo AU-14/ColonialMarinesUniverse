@@ -5,9 +5,9 @@ using DrawDepthTag = Content.Shared.DrawDepth.DrawDepth;
 
 namespace Content.Client.CMU14.WallLean;
 
-public sealed class CMUWallLeanVisualsSystem : EntitySystem
+public sealed partial class CMUWallLeanVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private readonly Dictionary<EntityUid, (Vector2 Offset, int DrawDepth)> _base = new();
 

@@ -35,7 +35,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using Content.Shared.UserInterface;
-using Content.Shared.DoAfter;
+
 using Content.Shared.Traits.Assorted;
 using Content.Shared.Verbs;
 using Content.Shared.Access.Systems;

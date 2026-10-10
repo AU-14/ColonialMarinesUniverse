@@ -36,7 +36,7 @@ public sealed class BodyPartPickerBui : BoundUserInterface
         if (_window is null)
             return;
 
-        _window.PartList.DisposeAllChildren();
+        _window.PartList.ReleaseChildren();
 
         if (state.Available.Count == 0)
         {

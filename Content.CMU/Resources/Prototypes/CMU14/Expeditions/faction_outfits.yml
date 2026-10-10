@@ -1,0 +1,162 @@
+# Clothing-only spawn profiles. Mobile and heavy roles keep their faction's visual identity.
+# Weapons, supplies and faction orders remain independent of clothing.
+- type: startingGear
+  id: CMUExpeditionOutfitUSCM
+  equipment:
+    jumpsuit: AU14CamoUSCMFatigues
+    outerClothing: CMArmorM3Medium
+    head: ArmorHelmetM10
+
+- type: startingGear
+  id: CMUExpeditionOutfitRMC
+  equipment:
+    jumpsuit: AU14FatiguesDesertRMC
+    outerClothing: AU14ArmorRMC
+    head: AU14HeadHelmetRMC
+
+- type: startingGear
+  id: CMUExpeditionOutfitUPP
+  equipment:
+    jumpsuit: AU14FatiguesUPP
+    outerClothing: AU14UPPArmor
+    head: AU14UPPNavalInfantryHelmet
+
+- type: startingGear
+  id: CMUExpeditionOutfitPMC
+  equipment:
+    jumpsuit: AU14WYPMCFatigues
+    outerClothing: AU14WYPMCArmor
+    head: AU14WYPMCHelmet
+
+- type: startingGear
+  id: CMUExpeditionOutfitCLF
+  equipment:
+    jumpsuit: RMCJumpsuitCLFWebbing
+    outerClothing: RMCCoatMilitiaVest
+    head: RMCHeadMilitiaHood
+
+- type: startingGear
+  id: CMUExpeditionOutfitCMB
+  equipment:
+    jumpsuit: AU14CMBUniform
+    outerClothing: AU14CMBCIUArmor
+    head: AU14CMBCIUHelmet
+
+- type: startingGear
+  id: CMUExpeditionOutfitLACN
+  equipment:
+    jumpsuit: AU14LACNUniform
+    outerClothing: AU14LACNArmorStandard
+    head: AU14LACNHelmetStandard
+
+- type: startingGear
+  id: CMUExpeditionOutfitCCAF
+  equipment:
+    jumpsuit: AU14CCAFUniform
+    outerClothing: AU14CCAFArmor
+    head: AU14CCAFHelmetISACV
+
+- type: startingGear
+  id: CMUExpeditionOutfitUACG
+  equipment:
+    jumpsuit: AU14UACGFatigues
+    outerClothing: AU14ArmorM3UACG
+    head: AU14UACGHelmet
+
+- type: startingGear
+  id: CMUExpeditionOutfitProdigy
+  equipment:
+    jumpsuit: AU14ProdigyFatigues
+    outerClothing: CMUArmorProdigyFlakVest
+    head: AU14ProdigyBallisticHelmet
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUSCM
+  id: CMUExpeditionOutfitUSCMMobile
+  equipment:
+    outerClothing: CMArmorM3Light
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUSCM
+  id: CMUExpeditionOutfitUSCMHeavy
+  equipment:
+    outerClothing: CMArmorM3Heavy
+
+- type: startingGear
+  parent: CMUExpeditionOutfitRMC
+  id: CMUExpeditionOutfitRMCMobile
+  equipment:
+    outerClothing: AU14ArmorLightRMC
+
+- type: startingGear
+  parent: CMUExpeditionOutfitRMC
+  id: CMUExpeditionOutfitRMCHeavy
+  equipment:
+    outerClothing: AU14ArmorPointmanRMC
+    head: AU14HeadHelmetRMCHeavy
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUPP
+  id: CMUExpeditionOutfitUPPMobile
+  equipment:
+    outerClothing: AU14UPPArmorMinimalistic
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUPP
+  id: CMUExpeditionOutfitUPPHeavy
+  equipment:
+    outerClothing: AU14UPPArmorBulky
+
+- type: startingGear
+  parent: CMUExpeditionOutfitPMC
+  id: CMUExpeditionOutfitPMCMobile
+  equipment:
+    outerClothing: AU14WYPMCArmorMin
+
+- type: startingGear
+  parent: CMUExpeditionOutfitCLF
+  id: CMUExpeditionOutfitCLFMobile
+  equipment:
+    outerClothing: RMCCoatMilitiaHarness
+
+- type: startingGear
+  parent: CMUExpeditionOutfitCLF
+  id: CMUExpeditionOutfitCLFHeavy
+  equipment:
+    outerClothing: AU14CLFFlakVest
+
+- type: startingGear
+  parent: CMUExpeditionOutfitCMB
+  id: CMUExpeditionOutfitCMBMobile
+  equipment:
+    outerClothing: AU14ArmorBallisticVest
+
+- type: startingGear
+  parent: CMUExpeditionOutfitLACN
+  id: CMUExpeditionOutfitLACNMobile
+  equipment:
+    outerClothing: AU14LACNArmorStandardPadless
+
+- type: startingGear
+  parent: CMUExpeditionOutfitLACN
+  id: CMUExpeditionOutfitLACNHeavy
+  equipment:
+    outerClothing: AU14LACNCommandoArmorPointman
+
+- type: startingGear
+  parent: CMUExpeditionOutfitCCAF
+  id: CMUExpeditionOutfitCCAFMobile
+  equipment:
+    outerClothing: AU14CCAFArmorStripped
+
+- type: startingGear
+  parent: CMUExpeditionOutfitUACG
+  id: CMUExpeditionOutfitUACGMobile
+  equipment:
+    outerClothing: AU14ArmorBallisticVest
+
+- type: startingGear
+  parent: CMUExpeditionOutfitProdigy
+  id: CMUExpeditionOutfitProdigyMobile
+  equipment:
+    outerClothing: CMUArmorProdigyFlakVestAlt

@@ -11,6 +11,7 @@ namespace Content.Tests.Client.CMU14.ThreeD;
 [TestFixture]
 public sealed class CMU3DEquipmentTransformTest
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void HeldGripFollowsLocalLookWithoutAReplicatedActorUpdate()
     {
@@ -29,6 +30,7 @@ public sealed class CMU3DEquipmentTransformTest
         Assert.That(Vector2.Distance(a, b), Is.LessThan(.001f));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void SwitchingHandsMovesTheGripWithoutMirroringAnAsymmetricModel()
     {
@@ -43,6 +45,7 @@ public sealed class CMU3DEquipmentTransformTest
         Assert.That(Vector3.Dot(Vector3.Cross(left.X, left.Y), left.Z), Is.GreaterThan(0));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void AttachmentRayKeepsWorldDistanceAcrossRotationScaleAndStairHeight()
     {

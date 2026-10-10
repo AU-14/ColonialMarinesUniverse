@@ -61,10 +61,10 @@ public sealed class YautjaMachineSourceParityTest
                 {
                     Assert.That(prototype.Name, Is.EqualTo(row.Name), $"{row.Id} CMSS13 source name");
                     Assert.That(prototype.Description, Is.EqualTo(row.Description), $"{row.Id} CMSS13 source description");
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(row.RsiPath), $"{row.Id} CMSS13 yautja_machines.dmi import path");
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo(row.IconState), $"{row.Id} CMSS13 icon_state");
-                    Assert.That(prototype.TryGetComponent<IconComponent>(out var icon, factory), Is.True, $"{row.Id} icon");
+                    Assert.That(prototype.TryComp<IconComponent>(out var icon, factory), Is.True, $"{row.Id} icon");
                     var rsiIcon = (SpriteSpecifier.Rsi) icon!.Icon;
                     Assert.That(rsiIcon.RsiPath.ToString(), Does.EndWith(row.RsiPath.ToString().Replace("/Textures/", string.Empty)),
                         $"{row.Id} icon RSI");
@@ -92,9 +92,9 @@ public sealed class YautjaMachineSourceParityTest
 
                         if (row.Dense)
                         {
-                            Assert.That(prototype.TryGetComponent<PhysicsComponent>(out var physics, factory), Is.True, $"{row.Id} physics");
+                            Assert.That(prototype.TryComp<PhysicsComponent>(out var physics, factory), Is.True, $"{row.Id} physics");
                             Assert.That(physics!.BodyType, Is.EqualTo(BodyType.Static), $"{row.Id} CMSS13 density static body");
-                            Assert.That(prototype.TryGetComponent<FixturesComponent>(out var fixtures, factory), Is.True, $"{row.Id} fixtures");
+                            Assert.That(prototype.TryComp<FixturesComponent>(out var fixtures, factory), Is.True, $"{row.Id} fixtures");
                             Assert.That(fixtures!.Fixtures.Values.Any(fixture => fixture.Hard), Is.True, $"{row.Id} blocking fixture");
                         }
 
@@ -227,12 +227,12 @@ public sealed class YautjaMachineSourceParityTest
                 {
                     Assert.That(prototype.Name, Is.EqualTo("remote door-control"), $"{row.Id} CMSS13 source name");
                     Assert.That(prototype.Description, Is.EqualTo("A remote control-switch for a door."), $"{row.Id} CMSS13 source description");
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(YautjaMachinesRsi), $"{row.Id} /door_control/yautja icon import path");
                     Assert.That(sprite.AllLayers.Single().RsiState.Name, Is.EqualTo(row.IconState), $"{row.Id} CMSS13 runtime icon_state");
                     Assert.That(sprite.DrawDepth, Is.EqualTo((int) DrawDepth.Objects), $"{row.Id} CMSS13 TILE_BOUND object sprite depth");
 
-                    Assert.That(prototype.TryGetComponent<IconComponent>(out var icon, factory), Is.True, $"{row.Id} icon");
+                    Assert.That(prototype.TryComp<IconComponent>(out var icon, factory), Is.True, $"{row.Id} icon");
                     var rsiIcon = (SpriteSpecifier.Rsi) icon!.Icon;
                     Assert.That(rsiIcon.RsiPath.ToString(), Does.EndWith(YautjaMachinesRsi.ToString().Replace("/Textures/", string.Empty)),
                         $"{row.Id} icon RSI");
@@ -297,12 +297,12 @@ public sealed class YautjaMachineSourceParityTest
                     if (row.Description != null)
                         Assert.That(prototype.Description, Is.EqualTo(row.Description), $"{row.Id} {row.SourcePath} source description");
 
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(YautjaMachinesRsi), $"{row.Id} yautja_machines.dmi import path");
                     Assert.That(sprite.AllLayers.Single().RsiState.Name, Is.EqualTo(row.IconState), $"{row.Id} source/DMM icon_state");
                     Assert.That(sprite.DrawDepth, Is.EqualTo((int) DrawDepth.Objects), $"{row.Id} direct helper object sprite depth");
 
-                    Assert.That(prototype.TryGetComponent<IconComponent>(out var icon, factory), Is.True, $"{row.Id} icon");
+                    Assert.That(prototype.TryComp<IconComponent>(out var icon, factory), Is.True, $"{row.Id} icon");
                     var rsiIcon = (SpriteSpecifier.Rsi) icon!.Icon;
                     Assert.That(rsiIcon.RsiPath.ToString(), Does.EndWith(YautjaMachinesRsi.ToString().Replace("/Textures/", string.Empty)),
                         $"{row.Id} icon RSI");
@@ -338,9 +338,9 @@ public sealed class YautjaMachineSourceParityTest
                             Assert.That(corrodible!.IsCorrodible, Is.False,
                                 $"{row.Id} {row.SourcePath} has unacidable = TRUE.");
 
-                            Assert.That(prototype.TryGetComponent<PhysicsComponent>(out var physics, factory), Is.True, $"{row.Id} physics");
+                            Assert.That(prototype.TryComp<PhysicsComponent>(out var physics, factory), Is.True, $"{row.Id} physics");
                             Assert.That(physics!.BodyType, Is.EqualTo(BodyType.Static), $"{row.Id} dense console static body");
-                            Assert.That(prototype.TryGetComponent<FixturesComponent>(out var fixtures, factory), Is.True, $"{row.Id} fixtures");
+                            Assert.That(prototype.TryComp<FixturesComponent>(out var fixtures, factory), Is.True, $"{row.Id} fixtures");
                             Assert.That(fixtures!.Fixtures.Values.Any(fixture => fixture.Hard), Is.True,
                                 $"{row.Id} {row.SourcePath} dense console fixture");
                         });
@@ -376,12 +376,12 @@ public sealed class YautjaMachineSourceParityTest
                 {
                     Assert.That(prototype.Name, Is.EqualTo(row.Name), $"{row.Id} {row.SourcePath} wrapper-backed name");
                     Assert.That(prototype.Description, Is.EqualTo(row.Description), $"{row.Id} {row.SourcePath} wrapper-backed description");
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(YautjaMachinesRsi), $"{row.Id} yautja_machines.dmi import path");
                     Assert.That(sprite.AllLayers.Single().RsiState.Name, Is.EqualTo(row.IconState), $"{row.Id} DMM/conversion icon_state");
                     Assert.That(sprite.DrawDepth, Is.EqualTo((int) DrawDepth.Objects), $"{row.Id} direct helper object sprite depth");
 
-                    Assert.That(prototype.TryGetComponent<IconComponent>(out var icon, factory), Is.True, $"{row.Id} icon");
+                    Assert.That(prototype.TryComp<IconComponent>(out var icon, factory), Is.True, $"{row.Id} icon");
                     var rsiIcon = (SpriteSpecifier.Rsi) icon!.Icon;
                     Assert.That(rsiIcon.RsiPath.ToString(), Does.EndWith(YautjaMachinesRsi.ToString().Replace("/Textures/", string.Empty)),
                         $"{row.Id} icon RSI");
@@ -613,7 +613,7 @@ public sealed class YautjaMachineSourceParityTest
         string id,
         IReadOnlyDictionary<ProtoId<MaterialPrototype>, int> expected)
     {
-        Assert.That(prototype.TryGetComponent<MaterialStorageComponent>(out var storage, factory), Is.True, $"{id} MaterialStorage");
+        Assert.That(prototype.TryComp<MaterialStorageComponent>(out var storage, factory), Is.True, $"{id} MaterialStorage");
         Assert.Multiple(() =>
         {
             foreach (var (material, amount) in expected)

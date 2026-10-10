@@ -83,7 +83,7 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
         if (_window == null)
             return;
 
-        _window.Sections.DisposeAllChildren();
+        _window.Sections.ReleaseChildren();
 
         for (var sectionIndex = 0; sectionIndex < vendor.Sections.Count; sectionIndex++)
         {
@@ -442,7 +442,7 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
     {
         var name = new FormattedMessage();
         // cmu edit start: section names may be locale keys
-        var sectionName = Loc.TryGetString(section.Name, out var localized) ? localized : section.Name;
+        var sectionName = IoCManager.Resolve<ILocalizationManager>().TryGetString(section.Name, out var localized) ? localized : section.Name;
         name.PushTag(new MarkupNode("bold", new MarkupParameter(sectionName.ToUpperInvariant()), null));
         name.AddText(sectionName.ToUpperInvariant());
         // cmu edit end

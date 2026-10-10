@@ -232,6 +232,7 @@ public sealed class CMU3DSceneCatalogTest
         Assert.That(catalog.Resolve("Chair")!.Value.Model, Is.SameAs(reviewed));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model(string reference, string status = "draft") => new()
     {
         SourcePrototypes = [reference],
