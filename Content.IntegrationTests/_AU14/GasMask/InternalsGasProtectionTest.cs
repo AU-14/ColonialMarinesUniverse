@@ -3,7 +3,7 @@ using Content.Shared.CMU14.GasMask;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
-using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -83,7 +83,7 @@ public sealed class InternalsGasProtectionTest
 
         await server.WaitAssertion(() =>
         {
-            var damage = server.EntMan.GetComponent<DamageableComponent>(victim).Damage.DamageDict;
+            var damage = server.EntMan.System<DamageableSystem>().GetAllDamage(victim).DamageDict;
             Assert.Multiple(() =>
             {
                 Assert.That(damage.GetValueOrDefault("Heat"), Is.GreaterThan(Content.Shared.FixedPoint.FixedPoint2.Zero),
