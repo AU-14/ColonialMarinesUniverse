@@ -780,6 +780,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private readonly List<RunechatPageLayout> _layouts = new();
         private Vector2 _cachedSize;
         private bool _layoutDirty = true;
+        private float _layoutScale;
         private int _currentPage;
         private float _pageTime;
         private float _animationTime;
@@ -843,7 +844,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             for (var i = 0; i < layout.Lines.Count; i++)
             {
                 var line = layout.Lines[i];
-                var visibleBounds = GetVisibleBounds(line);
+                var visibleBounds = line.VisibleBounds;
                 Texture? languageIcon = i == 0 ? _languageIcon : null;
                 var languageIconWidth = languageIcon != null ? GetLanguageIconSize() : 0f;
                 var iconWidth = _style.PrefixEmoteIcon && i == 0 ? GetVisibleIconWidth() : 0f;
@@ -892,7 +893,9 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 
         private void EnsureLayout()
         {
-            if (!_layoutDirty)
+            // Bubbles are measured before they enter a UI root. Entering another root
+            // changes UIScale without sending UIScaleChanged to the control.
+            if (!_layoutDirty && _layoutScale == UIScale)
                 return;
 
             _layouts.Clear();
@@ -912,6 +915,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             _cachedSize = new Vector2(
                 (width + horizontalPadding * 2f) / UIScale,
                 (height + verticalPadding * 2f) / UIScale);
+            _layoutScale = UIScale;
             _layoutDirty = false;
         }
 
@@ -934,8 +938,20 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                 width = MathF.Max(width, lineWidth);
             }
 
+            // Runs and fonts remain fixed until UIScaleChanged invalidates this layout.
+            // All halo/stroke/fill passes share these advances and visible glyph bounds.
+            var lineLayouts = new List<RunechatLineLayout>(lines.Count);
+            foreach (var line in lines)
+            {
+                var runs = new RunechatRunLayout[line.Count];
+                for (var i = 0; i < line.Count; i++)
+                    runs[i] = new RunechatRunLayout(line[i], MeasureRunWidth(line[i]));
+
+                lineLayouts.Add(new RunechatLineLayout(runs, GetVisibleBounds(line)));
+            }
+
             var height = GetLineHeight() * lines.Count;
-            return new RunechatPageLayout(lines, lineWidths, width, height);
+            return new RunechatPageLayout(lineLayouts, width, height);
         }
 
         private void WrapRunPage(List<TextRun> pageRuns, List<List<TextRun>> lines, List<float> lineWidths)
@@ -1049,12 +1065,17 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             foreach (var piece in word)
             {
                 var pieceStartWidth = currentWidth;
+                var pieceWidth = 0f;
+                var font = GetFont(piece.Italic);
                 var builder = new StringBuilder();
 
                 foreach (var rune in piece.Text.EnumerateRunes())
                 {
-                    var candidateText = builder.ToString() + rune;
-                    var candidateWidth = MeasureRunWidth(new TextRun(candidateText, piece.Bold, piece.Italic, piece.ColorOverride));
+                    var advance = font.GetCharMetrics(rune, UIScale)?.Advance ?? 0;
+                    var nextWidth = pieceWidth + advance;
+                    var candidateWidth = nextWidth;
+                    if (piece.Bold && candidateWidth > 0f)
+                        candidateWidth += GetSyntheticBoldOffset();
 
                     if (builder.Length > 0 && pieceStartWidth + candidateWidth > GetMaxWidth())
                     {
@@ -1065,11 +1086,15 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                         builder.Clear();
                         builder.Append(rune);
                         pieceStartWidth = 0f;
-                        currentWidth = MeasureRunWidth(new TextRun(builder.ToString(), piece.Bold, piece.Italic, piece.ColorOverride));
+                        pieceWidth = advance;
+                        currentWidth = pieceWidth;
+                        if (piece.Bold && currentWidth > 0f)
+                            currentWidth += GetSyntheticBoldOffset();
                         continue;
                     }
 
                     builder.Append(rune);
+                    pieceWidth = nextWidth;
                     currentWidth = pieceStartWidth + candidateWidth;
                 }
 
@@ -1241,7 +1266,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         private void DrawOutlinedLine(
             DrawingHandleScreen handle,
             Vector2 position,
-            List<TextRun> lineRuns,
+            RunechatLineLayout line,
             Color textColor,
             float textOpacity)
         {
@@ -1253,15 +1278,15 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
             // Outline/halo passes always render pure black regardless of any
             // per-run color override - only the final fill pass below should
             // pick up a highlighted word's color.
-            DrawLinePasses(handle, position, lineRuns, TextHaloOffsets, haloOffset, haloColor, useRunColor: false, textOpacity);
-            DrawLinePasses(handle, position, lineRuns, TextStrokeOffsets, strokeOffset, strokeColor, useRunColor: false, textOpacity);
-            DrawLineMain(handle, position, lineRuns, textColor, useRunColor: true, textOpacity);
+            DrawLinePasses(handle, position, line, TextHaloOffsets, haloOffset, haloColor, useRunColor: false, textOpacity);
+            DrawLinePasses(handle, position, line, TextStrokeOffsets, strokeOffset, strokeColor, useRunColor: false, textOpacity);
+            DrawLineMain(handle, position, line, textColor, useRunColor: true, textOpacity);
         }
 
         private void DrawLinePasses(
             DrawingHandleScreen handle,
             Vector2 position,
-            List<TextRun> lineRuns,
+            RunechatLineLayout line,
             IReadOnlyList<Vector2> offsets,
             float offset,
             Color color,
@@ -1270,22 +1295,24 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         {
             foreach (var direction in offsets)
             {
-                DrawLineMain(handle, position + direction * offset, lineRuns, color, useRunColor, textOpacity);
+                DrawLineMain(handle, position + direction * offset, line, color, useRunColor, textOpacity);
             }
         }
 
         private void DrawLineMain(
             DrawingHandleScreen handle,
             Vector2 position,
-            List<TextRun> lineRuns,
+            RunechatLineLayout line,
             Color color,
             bool useRunColor,
             float textOpacity)
         {
             var cursor = position;
 
-            foreach (var run in lineRuns)
+            for (var i = 0; i < line.Runs.Count; i++)
             {
+                var layout = line.Runs[i];
+                var run = layout.Run;
                 var font = GetFont(run.Italic);
                 var drawColor = useRunColor && run.ColorOverride is { } runColor
                     ? runColor.WithAlpha(runColor.A * textOpacity)
@@ -1296,7 +1323,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
                 if (run.Bold)
                     handle.DrawString(font, cursor + new Vector2(GetSyntheticBoldOffset(), 0f), run.Text, UIScale, drawColor);
 
-                cursor += new Vector2(MeasureRunWidth(run), 0f);
+                cursor += new Vector2(layout.Width, 0f);
             }
         }
 
@@ -1408,9 +1435,14 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
         }
 
         private sealed record RunechatPageLayout(
-            IReadOnlyList<List<TextRun>> Lines,
-            IReadOnlyList<float> LineWidths,
+            IReadOnlyList<RunechatLineLayout> Lines,
             float Width,
             float Height);
+
+        private sealed record RunechatLineLayout(
+            IReadOnlyList<RunechatRunLayout> Runs,
+            (float Left, float Width, float Top, float Height) VisibleBounds);
+
+        private readonly record struct RunechatRunLayout(TextRun Run, float Width);
     }
 }

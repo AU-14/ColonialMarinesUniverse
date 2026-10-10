@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared.CMU14.Chemistry; // CMU14: pooled per-call reagent snapshots.
 using Content.Shared.CMU14.Medical.Anatomy.Metabolism.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Medical.Stasis;
@@ -145,8 +146,11 @@ public sealed partial class MetabolizerSystem : EntitySystem
 
         LookupSolution(ent, solutionData, true, out var transferSolution, out var transferSolutionEntity, out _);
 
-        // Copy the solution do not edit the original solution list
-        var list = solution.Contents.ToList();
+        // CMU14 Snapshot Begin: effects can mutate the solution or enter metabolism again.
+        // var list = solution.Contents.ToList();
+        using var snapshot = new CMUReagentSnapshot(solution.Contents);
+        var list = snapshot.Span;
+        // CMU14 End
 
         // Collecting blood reagent for filtering
         var ev = new MetabolismExclusionEvent();

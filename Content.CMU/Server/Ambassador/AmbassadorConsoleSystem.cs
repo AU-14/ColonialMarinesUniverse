@@ -44,6 +44,8 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
 
     private static readonly ProtoId<TagPrototype> CurrencyTag = "Currency";
 
+    private readonly HashSet<string> _tickedFactions = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -76,30 +78,15 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     // ---- Faction syncing helpers ----
 
     /// <summary>
-    /// Gets all ambassador consoles that share the same faction name.
-    /// </summary>
-    private List<(EntityUid Uid, AmbassadorConsoleComponent Comp)> GetFactionConsoles(string factionName)
-    {
-        var result = new List<(EntityUid, AmbassadorConsoleComponent)>();
-        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (comp.FactionName == factionName)
-                result.Add((uid, comp));
-        }
-        return result;
-    }
-
-    /// <summary>
     /// Syncs shared state from source to all other consoles with the same faction.
     /// Budget, active statuses, and timers are synced.
     /// </summary>
     private void SyncFaction(AmbassadorConsoleComponent source)
     {
-        var consoles = GetFactionConsoles(source.FactionName);
-        foreach (var (uid, comp) in consoles)
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out _, out var comp))
         {
-            if (comp == source)
+            if (comp == source || comp.FactionName != source.FactionName)
                 continue;
 
             comp.Budget = source.Budget;
@@ -113,7 +100,8 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
             comp.SignalBoostTimer = source.SignalBoostTimer;
             comp.SignalJamActive = source.SignalJamActive;
             comp.SignalJamTimer = source.SignalJamTimer;
-            comp.CalledParties = new HashSet<string>(source.CalledParties);
+            if (!comp.CalledParties.SetEquals(source.CalledParties))
+                comp.CalledParties = new HashSet<string>(source.CalledParties);
         }
     }
 
@@ -123,10 +111,11 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
     private void UpdateAllFactionUi(AmbassadorConsoleComponent source)
     {
         SyncFaction(source);
-        var consoles = GetFactionConsoles(source.FactionName);
-        foreach (var (uid, comp) in consoles)
+        var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
+        while (query.MoveNext(out var uid, out var comp))
         {
-            UpdateUiState(uid, comp);
+            if (comp.FactionName == source.FactionName)
+                UpdateUiState(uid, comp);
         }
     }
 
@@ -137,17 +126,13 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
         base.Update(frameTime);
 
         // Only tick one console per faction to avoid double-charging.
-        var tickedFactions = new HashSet<string>();
+        _tickedFactions.Clear();
 
         var query = EntityQueryEnumerator<AmbassadorConsoleComponent>();
         while (query.MoveNext(out var uid, out var comp))
         {
-            if (!tickedFactions.Add(comp.FactionName))
-            {
-                // Already ticked this faction — just update UI from synced state
-                UpdateUiState(uid, comp);
+            if (!_tickedFactions.Add(comp.FactionName))
                 continue;
-            }
 
             comp.ReplenishTimer += frameTime;
             if (comp.ReplenishTimer >= comp.ReplenishInterval)
@@ -230,7 +215,6 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
             }
 
             UpdateSignalModifier();
-            SyncFaction(comp);
             UpdateAllFactionUi(comp);
         }
     }
@@ -321,21 +305,34 @@ public sealed partial class AmbassadorConsoleSystem : EntitySystem
 
     private void UpdateUiState(EntityUid uid, AmbassadorConsoleComponent comp)
     {
-        var econ = _adminConsole.BuildEconomyStatus();
-        // Use cached radar results (blank until scanned)
-        var state = new AmbassadorConsoleBuiState(
-            comp.Budget, comp.EmbargoActive, comp.TradePactActive, comp.CommsJamActive,
-            comp.SignalBoostActive, comp.SignalJamActive,
-            comp.LastRadarScanResults, econ,
-            comp.FactionName,
-            comp.EmbargoCostPerMinute,
-            comp.TradePactCostPerMinute,
-            comp.CommsJamCostPerMinute,
-            comp.SignalBoostCostPerMinute,
-            comp.SignalJamCostPerMinute,
-            comp.BroadcastCost,
-            comp.RadarScanCost);
-        _ui.SetUiState(uid, AmbassadorConsoleUi.Key, state);
+        // Opening either window publishes its current state immediately. Closed
+        // windows need no economy/party projection or network state each tick.
+        var consoleOpen = _ui.IsUiOpen(uid, AmbassadorConsoleUi.Key);
+        var thirdPartyOpen = _ui.IsUiOpen(uid, AmbassadorThirdPartyUi.Key);
+        if (!consoleOpen && !thirdPartyOpen)
+            return;
+
+        if (consoleOpen)
+        {
+            var econ = _adminConsole.BuildEconomyStatus();
+            // Use cached radar results (blank until scanned)
+            var state = new AmbassadorConsoleBuiState(
+                comp.Budget, comp.EmbargoActive, comp.TradePactActive, comp.CommsJamActive,
+                comp.SignalBoostActive, comp.SignalJamActive,
+                comp.LastRadarScanResults, econ,
+                comp.FactionName,
+                comp.EmbargoCostPerMinute,
+                comp.TradePactCostPerMinute,
+                comp.CommsJamCostPerMinute,
+                comp.SignalBoostCostPerMinute,
+                comp.SignalJamCostPerMinute,
+                comp.BroadcastCost,
+                comp.RadarScanCost);
+            _ui.SetUiState(uid, AmbassadorConsoleUi.Key, state);
+        }
+
+        if (!thirdPartyOpen)
+            return;
 
         var thirdParties = new Dictionary<string, (string DisplayName, float Cost)>();
         foreach (var (id, cost) in comp.CallableParties)

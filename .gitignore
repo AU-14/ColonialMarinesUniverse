@@ -327,6 +327,9 @@ settings.local.json
 # C# Dev Kit cache file
 *.lscache
 
+# CMU14: generated performance benchmark reports.
+/BenchmarkDotNet.Artifacts/
+
 # personal agent configs
 AGENTS.md
 CLAUDE.md
