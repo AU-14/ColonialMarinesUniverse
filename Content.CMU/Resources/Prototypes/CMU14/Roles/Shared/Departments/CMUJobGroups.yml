@@ -46,6 +46,20 @@
     - AU14JobCLFPhysician
     - AU14JobCLFSurgeon
 
+# GOVFOR and OPFOR medical jobs share playtime trackers, so these cover both sides.
+- type: entity
+  id: CMUJobsMilitaryMedical
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: JobGroup
+    name: cmu-role-timer-military-medical-roles
+    color: "#008160"
+    jobs:
+    - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFORNurse
+    - AU14JobGOVFORMilitaryDoctor
+    - AU14JobGOVFOROfficerMedical
+
 - type: entity
   id: CMUJobsMilitaryEngineering
   categories: [ HideSpawnMenu ]
