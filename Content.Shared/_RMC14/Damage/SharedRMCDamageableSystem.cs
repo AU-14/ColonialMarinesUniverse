@@ -833,7 +833,9 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                     DoEmote(user, emote);
                 }
 
-                if (!sealedLungs && damage.Popup is { } popup && _random.Prob(0.5f))
+                if (sealedLungs && _random.Prob(0.5f))
+                    _popup.PopupEntity(Loc.GetString("cmu-smoke-internals-acid-burns"), user, user, PopupType.SmallCaution);
+                else if (!sealedLungs && damage.Popup is { } popup && _random.Prob(0.5f))
                     _popup.PopupEntity(popup, user, user, PopupType.SmallCaution);
                 // CMU14 End
 
