@@ -50,8 +50,15 @@ jobs:
       - name: Build once
         run: dotnet build Content.YAMLLinter/Content.YAMLLinter.csproj --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
 
-      - name: Run Content.Tests
-        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal -- NUnit.ConsoleOut=0 NUnit.ExplicitMode=None
+      # CMU14: unit tests run in their own job so the shards don't wait on them
+      - name: Upload unit test build
+        uses: actions/upload-artifact@v7
+        with:
+          name: build-unit-tests
+          path: bin/Content.Tests/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
 
       - name: Upload YAML linter build
         uses: actions/upload-artifact@v7
@@ -81,6 +88,30 @@ jobs:
           if-no-files-found: error
           retention-days: 1
           compression-level: 0
+
+  unit-tests:
+    name: Unit Tests
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+          submodules: recursive
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: build-unit-tests
+          path: bin/Content.Tests/
+
+      - uses: actions/setup-dotnet@v6.0.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Run Content.Tests
+        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal -- NUnit.ConsoleOut=0 NUnit.ExplicitMode=None
 
   yaml-linter:
     name: YAML Linter
@@ -181,6 +212,7 @@ jobs:
     if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     needs:
       - build
+      - unit-tests
       - yaml-linter
       - asset-validation
       - integration-tests
@@ -193,6 +225,7 @@ jobs:
           script: |
             const results = {
               'Build': '${{ needs.build.result }}',
+              'Unit Tests': '${{ needs.unit-tests.result }}',
               'YAML Linter': '${{ needs.yaml-linter.result }}',
               'Asset Validation': '${{ needs.asset-validation.result }}',
               'Content.IntegrationTests': '${{ needs.integration-tests.result }}',
