@@ -1106,6 +1106,28 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 string text;
                 BoundUserInterfaceMessage msg;
                 var utilityMount = utilityContainer.ContainedEntities[0];
+
+                // AU-14: crew-compartment-mounted weapons (BOFORS, howitzer, bomb clamp)
+                // are fireable from the weapons console, listed with the weapons.
+                if (EntMan.TryGetComponent(utilityMount, out DropshipWeaponComponent? utilityWeapon) &&
+                    utilityWeapon.DirectFireOnly != true)
+                {
+                    var weaponNetEnt = EntMan.GetNetEntity(utilityMount);
+                    var hasWeaponLocation = _weaponSystem.TryGetWeaponLocation(utilityMount, out var weaponLocation);
+                    var weaponMsg = new DropshipTerminalWeaponsChooseWeaponMsg(first, weaponNetEnt);
+                    var weaponData = new DropshipWeaponsButtonData(
+                        hasWeaponLocation
+                            ? $"{utilityWeapon.Abbreviation} {(int) weaponLocation}"
+                            : utilityWeapon.Abbreviation,
+                        _ => SendPredictedMessage(weaponMsg),
+                        weaponNetEnt
+                    );
+
+                    var weaponOrder = hasWeaponLocation ? (int) weaponLocation : int.MaxValue;
+                    weapons.Add(new OrderedWeapon(weaponData, weaponOrder));
+                    continue;
+                }
+
                 if (EntMan.HasComponent<MedevacComponent>(utilityMount))
                 {
                     text = "Medevac";

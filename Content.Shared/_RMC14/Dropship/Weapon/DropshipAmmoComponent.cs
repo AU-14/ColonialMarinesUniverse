@@ -11,7 +11,7 @@ using Robust.Shared.Serialization;
 namespace Content.Shared._RMC14.Dropship.Weapon;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedDropshipWeaponSystem), typeof(GunshipDirectFireSystem))]
+[Access(typeof(SharedDropshipWeaponSystem), typeof(GunshipDirectFireSystem), typeof(AmmoHolderSystem))]
 public sealed partial class DropshipAmmoComponent : Component
 {
     [DataField, AutoNetworkedField]

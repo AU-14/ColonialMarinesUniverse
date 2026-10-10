@@ -1187,6 +1187,16 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         var weapons = new List<EntityUid>();
         foreach (var attachmentPoint in dropship.Comp.AttachmentPoints)
         {
+            // AU-14: include weapons mounted on crew compartment (utility) points.
+            if (TryComp(attachmentPoint, out DropshipUtilityPointComponent? utilityPoint) &&
+                _container.TryGetContainer(attachmentPoint, utilityPoint.UtilitySlotId, out var utilityContainer) &&
+                utilityContainer.ContainedEntities.Count > 0 &&
+                HasComp<DropshipWeaponComponent>(utilityContainer.ContainedEntities[0]))
+            {
+                weapons.Add(utilityContainer.ContainedEntities[0]);
+                continue;
+            }
+
             if (!TryComp(attachmentPoint, out DropshipWeaponPointComponent? weaponPoint) ||
                 !_container.TryGetContainer(attachmentPoint, weaponPoint.WeaponContainerSlotId, out var weaponContainer) ||
                 weaponContainer.ContainedEntities.Count == 0)
@@ -1525,12 +1535,25 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!Resolve(weapon, ref weapon.Comp, false))
             return false;
 
-        if (!_container.TryGetContainingContainer((weapon, null), out var container) ||
-            !TryComp(container.Owner, out DropshipWeaponPointComponent? point) ||
-            !_container.TryGetContainer(container.Owner, point.AmmoContainerSlotId, out var ammoContainer))
-        {
+        if (!_container.TryGetContainingContainer((weapon, null), out var container))
             return false;
+
+        BaseContainer? ammoContainer = null;
+        if (TryComp(container.Owner, out DropshipWeaponPointComponent? point))
+        {
+            _container.TryGetContainer(container.Owner, point.AmmoContainerSlotId, out var pointAmmo);
+            ammoContainer = pointAmmo;
         }
+        // AU-14: weapons mounted on crew compartment (utility) attach points store
+        // their hand-loaded ammo on the utility point instead.
+        else if (TryComp(container.Owner, out DropshipUtilityPointComponent? utilityPoint))
+        {
+            _container.TryGetContainer(container.Owner, utilityPoint.AmmoContainerSlotId, out var utilityAmmo);
+            ammoContainer = utilityAmmo;
+        }
+
+        if (ammoContainer == null)
+            return false;
 
         foreach (var contained in ammoContainer.ContainedEntities)
         {
@@ -2518,13 +2541,17 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         if (!_container.TryGetContainingContainer(weaponEntity, out var container))
             return false;
 
-        if (!TryComp(container.Owner, out DropshipWeaponPointComponent? point))
+        DropshipWeaponPointLocation? location = null;
+        if (TryComp(container.Owner, out DropshipWeaponPointComponent? point))
+            location = point.Location;
+        // AU-14: weapons mounted on crew compartment points can have a location too.
+        else if (TryComp(container.Owner, out DropshipUtilityPointComponent? utilityPoint))
+            location = utilityPoint.Location;
+
+        if (location is not { } loc)
             return false;
 
-        if (point.Location is not { } location)
-            return false;
-
-        locationId = location;
+        locationId = loc;
         return true;
     }
 

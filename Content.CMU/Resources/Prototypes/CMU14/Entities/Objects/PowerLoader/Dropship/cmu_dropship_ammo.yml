@@ -38,6 +38,37 @@
     range: 5
 
 - type: entity
+  parent: RMCSmokeExplosionProof
+  id: AU14WeedKillerExplosionProofRocket
+  components:
+  - type: Sprite
+    color: "#c2aac799"
+  - type: EvenSmoke
+    spawn: RMCGasWeedKiller
+    range: 6
+
+- type: entity
+  id: AU14FlareExplosionProofRocket
+  name: flare burst
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Effects/effects.rsi
+    state: explosion_particle
+  - type: TimedDespawn
+    lifetime: 0.5
+  - type: EffectAlphaAnimation
+  - type: PointLight
+    enabled: true
+    radius: 30
+  - type: RMCScorchEffectOnSpawn
+    probability: 0.9
+    tileLimit: 10
+    scatter: true
+    randomRotation: true
+
+- type: entity
   id: AU14EffectExplosionParticleJDAM
   name: explosion
   components:
@@ -67,13 +98,15 @@
   - type: RMCGenericExamine
     message: It can penetrate 3 z-levels.
   - type: Sprite
+    sprite: CMU14/Objects/Dropship/jdam.rsi
     layers:
-    - state: jdam
+    - state: jdam2_bst
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 12
     zLevelPenetration: 3
     applyEffectsOnPenetrationLevels: true
+    weapon: RMCDropshipAttachmentGuidedMissileLauncher
     explosion:
       total: 10000
       slope: 4.5
@@ -93,13 +126,15 @@
   - type: RMCGenericExamine
     message: It can penetrate 3 z-levels.
   - type: Sprite
+    sprite: CMU14/Objects/Dropship/jdam.rsi
     layers:
-    - state: jdami
+    - state: jdam2_nap
       map: [ "enum.DropshipAmmoVisuals.Fill"]
   - type: DropshipAmmo
     travelTime: 11
     zLevelPenetration: 3
     applyEffectsOnPenetrationLevels: true
+    weapon: RMCDropshipAttachmentGuidedMissileLauncher
     explosion:
       total: 10000
       slope: 4.5
@@ -279,3 +314,54 @@
       total: 3000
       slope: 5.5
       max: 55
+
+- type: entity
+  parent: CMUDropshipAmmoHowitzerRackHE
+  id: CMUDropshipAmmoHowitzerRackHEFrag
+  name: M137 105mm HE-FRAG shell rack
+  description: A heavy rack holding four PGU-45/B 105mm high-explosive fragmentation shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
+  components:
+  - type: ItemSlots
+    slots:
+      shell1:
+        startingItem: CMUDropshipAmmoHowitzerHEFrag
+      shell2:
+        startingItem: CMUDropshipAmmoHowitzerHEFrag
+      shell3:
+        startingItem: CMUDropshipAmmoHowitzerHEFrag
+      shell4:
+        startingItem: CMUDropshipAmmoHowitzerHEFrag
+
+- type: entity
+  parent: CMUDropshipAmmoHowitzerRackHE
+  id: CMUDropshipAmmoHowitzerRackHEAT
+  name: M137 105mm HEAT shell rack
+  description: A heavy rack holding four PGU-46/B 105mm high-explosive anti-tank shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
+  components:
+  - type: ItemSlots
+    slots:
+      shell1:
+        startingItem: CMUDropshipAmmoHowitzerHEAT
+      shell2:
+        startingItem: CMUDropshipAmmoHowitzerHEAT
+      shell3:
+        startingItem: CMUDropshipAmmoHowitzerHEAT
+      shell4:
+        startingItem: CMUDropshipAmmoHowitzerHEAT
+
+- type: entity
+  parent: CMUDropshipAmmoHowitzerRackHE
+  id: CMUDropshipAmmoHowitzerRackAirburst
+  name: M137 105mm airburst shell rack
+  description: A heavy rack holding four PGU-47/B 105mm high-explosive airburst shells for the M137 105mm Howitzer. Too heavy to carry - drag it or move it with a powerloader.
+  components:
+  - type: ItemSlots
+    slots:
+      shell1:
+        startingItem: CMUDropshipAmmoHowitzerAirburst
+      shell2:
+        startingItem: CMUDropshipAmmoHowitzerAirburst
+      shell3:
+        startingItem: CMUDropshipAmmoHowitzerAirburst
+      shell4:
+        startingItem: CMUDropshipAmmoHowitzerAirburst

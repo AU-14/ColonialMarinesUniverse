@@ -173,6 +173,30 @@
     {
       "name": "sentry_system_deployed",
       "directions": 4
+    },
+    {
+      "name": "bofors_cannon_loaded"
+    },
+    {
+      "name": "bofors_cannon_unloaded"
+    },
+    {
+      "name": "bofors_cannon_unloadedalt"
+    },
+    {
+      "name": "boforsnew2"
+    },
+    {
+      "name": "cas_howitzer_105_installed_loaded"
+    },
+    {
+      "name": "cas_howitzer_105_installed_unloaded"
+    },
+    {
+      "name": "cas_howitzer_105_uninstalled"
+    },
+    {
+      "name": "cas_howitzer_105_uninstalled_loaded"
     }
   ]
 }

@@ -63,3 +63,71 @@
   - type: DropshipFabricatorPrintable
     category: Ammo
     cost: 500
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoLaserCannon
+  id: RMCDropshipAttachmentAmmoLaserCannonGreen
+  name: BTU-18/LW-G 'Verdant' Hi-Cap Laser Battery
+  description: A high-capacity laser battery used to power laser beam weapons, tuned to a green wavelength that spreads intense green fire over a wide area. Can be loaded into the LWU-6B Laser Cannon.
+  components:
+  - type: DropshipAmmo
+    ammoType: laser_battery_green
+    roundsPerShot: 5
+    fire:
+      type: RMCTileFireGreen
+      range: 6
+      total: 32
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 600
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoLaserCannon
+  id: RMCDropshipAttachmentAmmoLaserCannonBlue
+  name: BTU-18/LW-B 'Glacier' Hi-Cap Laser Battery
+  description: A high-capacity laser battery used to power laser beam weapons, tuned to a blue wavelength that concentrates blue fire on a small area. Can be loaded into the LWU-6B Laser Cannon.
+  components:
+  - type: DropshipAmmo
+    ammoType: laser_battery_blue
+    roundsPerShot: 20
+    fire:
+      type: RMCTileFireBlue
+      range: 3
+      total: 16
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 600
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoLaserCannon
+  id: RMCDropshipAttachmentAmmoLaserCannonWhite
+  name: BTU-18/LW-W 'Daybreak' Hi-Cap Laser Battery
+  description: An experimental low-capacity laser battery used to power laser beam weapons, packing as much charge as possible into the tiny battery to release a searing white-hot blast. Can be loaded into the LWU-6B Laser Cannon.
+  components:
+  - type: DropshipAmmo
+    ammoType: laser_battery_white
+    roundsPerShot: 50
+    fire:
+      type: RMCTileFireOB
+      range: 2
+      total: 8
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 700
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoLaserCannon
+  id: RMCDropshipAttachmentAmmoLaserCannonRapid
+  name: BTU-18/LW-R 'Rapidfire' Hi-Cap Laser Battery
+  description: A high-capacity laser battery used to power laser beam weapons, overclocked to dump charge rapidly and spread napalm fire over the target. Can be loaded into the LWU-6B Laser Cannon.
+  components:
+  - type: DropshipAmmo
+    ammoType: laser_battery_rapid
+    roundsPerShot: 20
+    fire:
+      type: RMCTileFireNapalm
+      range: 3
+      total: 16
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 600
