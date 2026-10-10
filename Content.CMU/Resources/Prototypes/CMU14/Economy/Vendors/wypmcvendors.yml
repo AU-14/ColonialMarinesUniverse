@@ -253,7 +253,7 @@
       entries:
       - id: CMUMaskGas
         amount: 40
-      - id: CMMaskPrescriptionGas
+      - id: CMUMaskPrescriptionGas
         amount: 10
       - id: CMUGasMaskFilterWY
         amount: 40

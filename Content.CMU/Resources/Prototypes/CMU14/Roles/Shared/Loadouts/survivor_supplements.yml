@@ -4,7 +4,7 @@
   - DistressSignal
   entries:
   - items:
-    - CMUMaskGas # CMMaskPrescriptionGas
+    - CMUMaskGas # CMUMaskPrescriptionGas
     - CMUGasMaskFilter
   - skill: RMCSkillConstruction
     level: 2
