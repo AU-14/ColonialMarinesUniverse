@@ -22,12 +22,13 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool TreatmentSafe(EntityUid uid, CMUExpeditionAgentComponent agent) =>
         _npcs.Enabled && !HasComp<ActorComponent>(uid) && _mobs.IsAlive(uid) &&
+        _timing.CurTime - agent.LastHit >= TimeSpan.FromSeconds(0.75) &&
         ShelteredFromKnownThreats(uid, agent, Transform(uid).Coordinates);
 
     private bool TryTreat(EntityUid uid, CMUExpeditionAgentComponent agent, float damage, TimeSpan now)
     {
         if (!ShouldTreat(agent, damage, now) || !TreatmentSafe(uid, agent) ||
-            !_inventory.TryGetSlotEntity(uid, "pocket1", out var medicine) ||
+            PersonalDressing(uid) is not { } medicine ||
             !TryComp<HealingComponent>(medicine, out var healing) ||
             TryComp<StackComponent>(medicine, out var stack) && stack.Count <= 0)
             return false;
@@ -48,7 +49,7 @@ public sealed partial class CMUExpeditionAgentSystem
             BreakOnDamage = true,
             DamageThreshold = 0.1f,
             ExtraCheck = () => TreatmentSafe(uid, agent) &&
-                _inventory.TryGetSlotEntity(uid, "pocket1", out var current) && current == medicine,
+                PersonalDressing(uid) == medicine,
         };
         if (!_doAfter.TryStartDoAfter(args, out var id))
             return false;
@@ -57,9 +58,7 @@ public sealed partial class CMUExpeditionAgentSystem
         return true;
     }
 
-    private bool HasMedicine(EntityUid uid) =>
-        _inventory.TryGetSlotEntity(uid, "pocket1", out var medicine) && HasComp<HealingComponent>(medicine) &&
-        (!TryComp<StackComponent>(medicine, out var stack) || stack.Count > 0);
+    private bool HasMedicine(EntityUid uid) => PersonalDressing(uid) != null;
 
     private static bool ShouldTreat(CMUExpeditionAgentComponent agent, float damage, TimeSpan now)
     {

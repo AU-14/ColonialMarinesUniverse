@@ -451,7 +451,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
         return true;
     }
 
-    public int ChemicallyMendFractures(EntityUid body, FixedPoint2 amount)
+    public int ChemicallyMendFractures(EntityUid body, FixedPoint2 amount, bool requireSet = true)
     {
         if (amount <= FixedPoint2.Zero)
             return 0;
@@ -462,7 +462,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
             if (!TryComp<BoneComponent>(part, out var bone) ||
                 !TryComp<FractureComponent>(part, out var fracture) ||
                 fracture.Severity is FractureSeverity.None or FractureSeverity.Shattered ||
-                !HasComp<CMUSplintedComponent>(part) && !HasComp<CMUCastComponent>(part))
+                requireSet && !HasComp<CMUSplintedComponent>(part) && !HasComp<CMUCastComponent>(part))
             {
                 continue;
             }

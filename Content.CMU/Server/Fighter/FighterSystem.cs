@@ -8,6 +8,7 @@ using Content.Shared.Audio;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Fighter;
+using Content.Shared.CMU14.ThreeD;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.Popups;
@@ -67,6 +68,10 @@ public sealed partial class FighterSystem : EntitySystem
         while (TryComp(terrain, out CMUZLevelMapComponent? upper) && upper.Depth > 0 && upper.MapBelow is { } below)
             terrain = below;
         var cockpitMap = _map.CreateMap(out var cockpitId, runMapInit: true);
+        AddComp<CMU3DVehicleCabinComponent>(cockpitMap);
+        // The cockpit's terrain association is fixed for its lifetime.
+        if (HasComp<CMU3DMapComponent>(terrain))
+            AddComp<CMU3DMapComponent>(cockpitMap);
         var backdrop = EnsureComp<ParallaxComponent>(cockpitMap);
         backdrop.Parallax = "CMUFighterEmpty";
         Dirty(cockpitMap, backdrop);

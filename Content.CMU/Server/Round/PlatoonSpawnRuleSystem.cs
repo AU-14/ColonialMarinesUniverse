@@ -21,6 +21,7 @@ using Content.Shared.GameTicking.Components;
 using Robust.Shared.EntitySerialization.Systems;
 using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
+using Content.Shared._RMC14.Vendors;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.CMU14;
@@ -692,6 +693,14 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
     private void SetRequisitionsVendorAccess(EntityUid vendor, PlatoonMarkerClass markerClass, string faction)
     {
+        // spec kit limit is counted per side off this, multi-deck ships can't rely on the grid's faction
+        if (markerClass == PlatoonMarkerClass.SWeapons &&
+            TryComp<CMAutomatedVendorComponent>(vendor, out var automatedVendor))
+        {
+            automatedVendor.Faction = faction;
+            Dirty(vendor, automatedVendor);
+        }
+
         if (markerClass is not (PlatoonMarkerClass.ReqVend or PlatoonMarkerClass.SWeapons) ||
             !TryComp<AccessReaderComponent>(vendor, out var accessReader))
         {

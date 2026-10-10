@@ -50,7 +50,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
             return;
 
         if (TryComp<BloodstreamComponent>(body, out var bloodstream))
-            _bloodstream.TryBleedOut((body, bloodstream), FixedPoint2.New(rate * tickSeconds));
+            _bloodstream.TryBleedOut((body, bloodstream), FixedPoint2.New(rate * tickSeconds), cmuWoundBleed: true);
     }
 
     private void DrainBlood(EntityUid body, float amount)

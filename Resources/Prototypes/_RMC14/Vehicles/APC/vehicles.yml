@@ -38,12 +38,14 @@
     wallSmashSlowdownMultiplier: 0.2
     wallSmashSlowdownDuration: 1.5
     speedAtZeroIntegrity: 0.5
+    weightClass: Light
   - type: VehicleOvercharge
     speedMultiplier: 1.25
     duration: 4
     cooldown: 18
     overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
   - type: VehicleSound
+    crashSound: /Audio/_RMC14/Effects/metal_crash.ogg
     runningSound: /Audio/Effects/Vehicle/vehicleengineidle.ogg
     runningSoundCooldown: 2.6
     hornSound: /Audio/Effects/Vehicle/carhorn.ogg
@@ -130,7 +132,7 @@
     autoRot: true
     offset: "0,0.9"
   - type: Corrodible
-    isCorrodible: false
+    isCorrodible: true
   - type: DoAfter
   - type: UserInterface
     interfaces:
@@ -207,6 +209,9 @@
     - offset: -1.5,0
       radius: 0.7
       interiorCoords: 1.55,-1.2
+  - type: VehicleXenoSize
+    minimumSize: Xeno
+  - type: VehicleDemolition
 
 - type: entity
   parent: VehicleAPCBase

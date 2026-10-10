@@ -10,14 +10,21 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Destructible;
 using Content.Shared.Doors.Systems;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Standing;
+using Content.Shared.StepTrigger.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Vehicle.Components;
 using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared._RMC14.Water;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Fortify;
+using Content.Shared._RMC14.Xenonids.Weeds;
+using Content.Shared.Popups;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -37,6 +44,11 @@ namespace Content.Shared.Vehicle;
 
 public sealed partial class GridVehicleMoverSystem : EntitySystem
 {
+    [Dependency] private VehicleSqueezeUnderSystem _squeezeUnder = default!;
+    [Dependency] private XenoFortifySystem _fortify = default!;
+    [Dependency] private Content.Shared._RMC14.Vehicle.VehicleSystem _rmcVehicles = default!;
+    [Dependency] private RMCWaterSystem _rmcWater = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private SharedTransformSystem transform = default!;
     [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private SharedMapSystem map = default!;
@@ -94,8 +106,6 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private const float PushWallOverlapArea = 0.01f;
     private const float MovementFixedStep = 1f / 60f;
     private const int MaxFixedStepsPerFrame = 6;
-    private const float ClientSmoothingSnapDistance = 1.25f;
-    private const float ClientSmoothingRate = 22f;
 
 
     public static readonly List<(EntityUid grid, Vector2i tile)> DebugTestedTiles = new();
@@ -110,6 +120,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private readonly HashSet<EntityUid> _pushTileIntersecting = new();
     private readonly List<EntityUid>[] _hitsBuffers = { new(), new(), new() };
     private int _hitsDepth;
+    private readonly HashSet<EntityUid> _vehicleBoundsIntersecting = new();
     private readonly Dictionary<EntityUid, TimeSpan> _lastMobCollision = new();
     private readonly DamageSpecifier _mobCollisionDamage = new() { DamageDict = { [CollisionDamageType] = MobCollisionDamage } };
     private readonly Dictionary<EntityUid, TimeSpan> _nextImmobilePopupAt = new();
@@ -200,11 +211,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         SubscribeLocalEvent<GridVehicleMoverComponent, ReAnchorEvent>(OnMoverReAnchor);
         SubscribeLocalEvent<GridVehicleMoverComponent, VehicleCanRunEvent>(OnMoverCanRun);
         SubscribeLocalEvent<GridVehicleMoverComponent, PreventCollideEvent>(OnMoverPreventCollide);
+        SubscribeLocalEvent<XenoComponent, XenoFortifyAttemptEvent>(OnXenoFortifyAttemptVehicleBounds);
     }
 
     private void OnMoverStartup(Entity<GridVehicleMoverComponent> ent, ref ComponentStartup args)
     {
-        TrySyncMoverToCurrentGrid(ent, centerOnTile: true, force: true);
+        TrySyncMoverToCurrentGrid(ent, centerOnTile: false, force: true);
     }
 
     private void OnMoverShutdown(Entity<GridVehicleMoverComponent> ent, ref ComponentShutdown args)
@@ -212,6 +224,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         _hardState.Remove(ent.Owner);
         _movementAccumulator.Remove(ent.Owner);
         _activeXenoPushers.Remove(ent.Owner);
+        _nextToxicWaterDamage.Remove(ent.Owner);
         _nextImmobilePopupAt.Remove(ent.Owner);
         _immobileAnnounced.Remove(ent.Owner);
         _poweredDemolitionContacts.Remove(ent.Owner);
@@ -353,7 +366,17 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             return;
         }
 
+        if (HasComp<MobStateComponent>(args.OtherEntity) &&
+            (_mobState.IsDead(args.OtherEntity) || _standing.IsDown(args.OtherEntity)))
+        {
+            args.Cancelled = true;
+            return;
+        }
+
         if (args.OtherBody.BodyType != BodyType.Static)
+            return;
+
+        if (!args.OtherFixture.Hard && HasComp<StepTriggerComponent>(args.OtherEntity))
             return;
 
         if (IsNormallyMobPassable(args.OtherFixture))
@@ -412,9 +435,11 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
 
             SyncMoverFacingToTransform(uid, mover, grid);
 
+            UpdateVehicleToxicWater(uid, mover, xform);
+
             if (_net.IsClient && !ShouldPredictVehicleMovement(vehicle))
             {
-                SmoothReplicatedVehicle(uid, grid, mover, frameTime);
+                // CMU14: replicated transforms already interpolate; moving them here fights remote eyes.
                 continue;
             }
 
@@ -482,25 +507,65 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         Dirty(uid, mover);
     }
 
-    private void SmoothReplicatedVehicle(EntityUid uid, EntityUid grid, GridVehicleMoverComponent mover, float frameTime)
+    private void OnXenoFortifyAttemptVehicleBounds(Entity<XenoComponent> xeno, ref XenoFortifyAttemptEvent args)
     {
-        var xform = Transform(uid);
-        if (!xform.ParentUid.IsValid())
+        if (args.Cancelled)
             return;
 
-        var coords = new EntityCoordinates(grid, mover.Position);
-        var target = transform.WithEntityId(coords, xform.ParentUid).Position;
-        var current = xform.LocalPosition;
-        var delta = target - current;
+        if (!IsWithinVehicleBounds(xeno.Owner))
+            return;
 
-        if (delta.LengthSquared() >= ClientSmoothingSnapDistance * ClientSmoothingSnapDistance)
+        _popup.PopupClient(Loc.GetString("cm-xeno-fortify-cant-vehicle"), xeno, xeno);
+        args.Cancelled = true;
+    }
+
+    private bool IsWithinVehicleBounds(EntityUid xeno)
+    {
+        var xform = Transform(xeno);
+        if (xform.MapUid == null)
+            return false;
+
+        if (!fixtureQ.TryComp(xeno, out var xenoFixtures))
+            return false;
+
+        var xenoTx = physics.GetPhysicsTransform(xeno, xform);
+        if (!TryGetFixtureAabb(xenoFixtures, xenoTx, out var xenoAabb))
+            return false;
+
+        if (xform.GridUid is { } grid && gridQ.TryComp(grid, out var gridComp))
         {
-            transform.SetLocalPosition(uid, target, xform);
-            return;
+            var tileIndices = map.TileIndicesFor(grid, gridComp, xform.Coordinates);
+            var tileLocal = map.GridTileToLocal(grid, gridComp, tileIndices);
+            var tileWorld = transform.ToMapCoordinates(tileLocal).Position;
+            xenoAabb = Box2.CenteredAround(tileWorld, xenoAabb.Size);
         }
 
-        var alpha = 1f - MathF.Exp(-ClientSmoothingRate * frameTime);
-        var smoothed = Vector2.Lerp(current, target, alpha);
-        transform.SetLocalPosition(uid, smoothed, xform);
+        _vehicleBoundsIntersecting.Clear();
+        lookup.GetEntitiesIntersecting(xform.MapID, xenoAabb, _vehicleBoundsIntersecting, LookupFlags.Dynamic | LookupFlags.Static);
+
+        foreach (var other in _vehicleBoundsIntersecting)
+        {
+            if (other == xeno)
+                continue;
+
+            if (!HasComp<GridVehicleMoverComponent>(other))
+                continue;
+
+            if (!TryComp(other, out VehicleComponent? vehicle) || vehicle.MovementKind != VehicleMovementKind.Grid)
+                continue;
+
+            if (!fixtureQ.TryComp(other, out var vehicleFixtures))
+                continue;
+
+            var vehicleTx = physics.GetPhysicsTransform(other, Transform(other));
+            if (!TryGetFixtureAabb(vehicleFixtures, vehicleTx, out var vehicleAabb))
+                continue;
+
+            if (vehicleAabb.Intersects(xenoAabb))
+                return true;
+        }
+
+        return false;
     }
+
 }

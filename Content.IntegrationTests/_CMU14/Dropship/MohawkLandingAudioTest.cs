@@ -34,6 +34,8 @@ public sealed class MohawkLandingAudioTest
         EntityUid onboardStream = default;
         EntityUid exteriorStream = default;
         EntityUid travelStream = default;
+        EntityUid listener = default;
+        var hearsDeparture = variant == "midway" && customCue;
         var expected = customCue ? Landing : OriginalLanding;
         var expectedTakeoff = customCue ? Takeoff : OriginalTakeoff;
         var expectedFlight = customCue ? Flight : OriginalFlight;
@@ -58,6 +60,12 @@ public sealed class MohawkLandingAudioTest
 #pragma warning restore RA0002
             }
             var ground = maps.CreateMap();
+            var listenerMap = hearsDeparture ? entities.GetComponent<TransformComponent>(ship).MapUid!.Value : ground;
+            listener = entities.SpawnEntity("MobObserver", new EntityCoordinates(listenerMap, 0, 0));
+            if (hearsDeparture)
+                entities.System<SharedTransformSystem>().SetMapCoordinates(listener,
+                    entities.System<SharedTransformSystem>().GetMapCoordinates(ship));
+            pair.Server.PlayerMan.SetAttachedEntity(pair.Server.PlayerMan.Sessions.Single(), listener);
             destination = entities.SpawnEntity(null, new EntityCoordinates(ground, 20, 20));
             entities.AddComponent<DropshipDestinationComponent>(destination);
             var nav = entities.EntityQuery<DropshipNavigationComputerComponent>()
@@ -101,6 +109,8 @@ public sealed class MohawkLandingAudioTest
             Assert.That(tail.Flags.HasFlag(AudioFlags.NoOcclusion), Is.True,
                 "The departure point must keep the chosen takeoff tail, not switch to the stock cue.");
             Assert.That(tail.Params.Loop, Is.False, "The departure point must not loop forever.");
+            Assert.That(tail.IncludedEntities, hearsDeparture ? Does.Contain(listener) : Does.Not.Contain(listener),
+                "Only listeners near the departure point should receive its sound tail, not clients on unrelated maps.");
             if (startupTime > 15.836f)
                 Assert.That(entities.GetComponent<FTLComponent>(ship).StartupStream, Is.Null,
                     "The onboard takeoff loop stops when the flight loop starts.");
@@ -142,6 +152,8 @@ public sealed class MohawkLandingAudioTest
             Assert.That(entities.EntityExists(travelStream), Is.False,
                 "The flight loop must stop at touchdown.");
             entities.DeleteEntity(ship);
+            pair.Server.PlayerMan.SetAttachedEntity(pair.Server.PlayerMan.Sessions.Single(), null);
+            entities.DeleteEntity(listener);
         });
         await pair.CleanReturnAsync();
     }

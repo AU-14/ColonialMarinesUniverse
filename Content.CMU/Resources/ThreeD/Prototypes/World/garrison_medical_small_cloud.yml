@@ -18,249 +18,130 @@
     levels, lid changes, spilling, breakage and held states remain unsupported.'
   parts:
   - label: thin hollow vessel wall 01
-    min: 0.131631, 0.058483, 0.031
-    max: 0.203863, 0.080483, 0.333
+    min: 0.101304, -0.011000, 0.031000
+    max: 0.261832, 0.011000, 0.333000
     color: '#8BABA892'
-    yaw: 112.5
+    yaw: 90.0
   - label: thin hollow vessel wall 02
-    min: 0.092272, 0.117388, 0.031
-    max: 0.164504, 0.139388, 0.333
+    min: 0.048124, 0.117388, 0.031000
+    max: 0.208652, 0.139388, 0.333000
     color: '#8BABA892'
     yaw: 135.0
   - label: thin hollow vessel wall 03
-    min: 0.033367, 0.156747, 0.031
-    max: 0.105599, 0.178747, 0.333
+    min: -0.080264, 0.170568, 0.031000
+    max: 0.080264, 0.192568, 0.333000
     color: '#8BABA892'
-    yaw: 157.5
+    yaw: 180.0
   - label: thin hollow vessel wall 04
-    min: -0.036116, 0.170568, 0.031
-    max: 0.036116, 0.192568, 0.333
+    min: -0.208652, 0.117388, 0.031000
+    max: -0.048124, 0.139388, 0.333000
     color: '#8BABA892'
-    yaw: -180.0
+    yaw: 225.0
   - label: thin hollow vessel wall 05
-    min: -0.105599, 0.156747, 0.031
-    max: -0.033367, 0.178747, 0.333
+    min: -0.261832, -0.011000, 0.031000
+    max: -0.101304, 0.011000, 0.333000
     color: '#8BABA892'
-    yaw: -157.5
+    yaw: 270.0
   - label: thin hollow vessel wall 06
-    min: -0.164504, 0.117388, 0.031
-    max: -0.092272, 0.139388, 0.333
+    min: -0.208652, -0.139388, 0.031000
+    max: -0.048124, -0.117388, 0.333000
     color: '#8BABA892'
-    yaw: -135.0
+    yaw: 315.0
   - label: thin hollow vessel wall 07
-    min: -0.203863, 0.058483, 0.031
-    max: -0.131631, 0.080483, 0.333
+    min: -0.080264, -0.192568, 0.031000
+    max: 0.080264, -0.170568, 0.333000
     color: '#8BABA892'
-    yaw: -112.5
+    yaw: 0.0
   - label: thin hollow vessel wall 08
-    min: -0.217684, -0.011, 0.031
-    max: -0.145452, 0.011, 0.333
-    color: '#8BABA892'
-    yaw: -90.0
-  - label: thin hollow vessel wall 09
-    min: -0.203863, -0.080483, 0.031
-    max: -0.131631, -0.058483, 0.333
-    color: '#8BABA892'
-    yaw: -67.5
-  - label: thin hollow vessel wall 10
-    min: -0.164504, -0.139388, 0.031
-    max: -0.092272, -0.117388, 0.333
-    color: '#8BABA892'
-    yaw: -45.0
-  - label: thin hollow vessel wall 11
-    min: -0.105599, -0.178747, 0.031
-    max: -0.033367, -0.156747, 0.333
-    color: '#8BABA892'
-    yaw: -22.5
-  - label: thin hollow vessel wall 12
-    min: -0.036116, -0.192568, 0.031
-    max: 0.036116, -0.170568, 0.333
-    color: '#8BABA892'
-    yaw: -0.0
-  - label: thin hollow vessel wall 13
-    min: 0.033367, -0.178747, 0.031
-    max: 0.105599, -0.156747, 0.333
-    color: '#8BABA892'
-    yaw: 22.5
-  - label: thin hollow vessel wall 14
-    min: 0.092272, -0.139388, 0.031
-    max: 0.164504, -0.117388, 0.333
+    min: 0.048124, -0.139388, 0.031000
+    max: 0.208652, -0.117388, 0.333000
     color: '#8BABA892'
     yaw: 45.0
-  - label: thin hollow vessel wall 15
-    min: 0.131631, -0.080483, 0.031
-    max: 0.203863, -0.058483, 0.333
-    color: '#8BABA892'
-    yaw: 67.5
-  - label: thin hollow vessel wall 16
-    min: 0.145452, -0.011, 0.031
-    max: 0.217684, 0.011, 0.333
-    color: '#8BABA892'
-    yaw: 90.0
   - label: rolled open mouth 01
-    min: 0.13803, 0.060861, 0.3145
-    max: 0.213774, 0.084861, 0.3415
+    min: 0.106060, -0.012000, 0.314500
+    max: 0.274730, 0.012000, 0.341500
     color: '#B7C9C3'
-    yaw: 112.5
+    yaw: 90.0
   - label: rolled open mouth 02
-    min: 0.096758, 0.12263, 0.3145
-    max: 0.172501, 0.14663, 0.3415
+    min: 0.050295, 0.122630, 0.314500
+    max: 0.218964, 0.146630, 0.341500
     color: '#B7C9C3'
     yaw: 135.0
   - label: rolled open mouth 03
-    min: 0.034989, 0.163902, 0.3145
-    max: 0.110733, 0.187902, 0.3415
+    min: -0.084335, 0.178395, 0.314500
+    max: 0.084335, 0.202395, 0.341500
     color: '#B7C9C3'
-    yaw: 157.5
+    yaw: 180.0
   - label: rolled open mouth 04
-    min: -0.037872, 0.178395, 0.3145
-    max: 0.037872, 0.202395, 0.3415
+    min: -0.218964, 0.122630, 0.314500
+    max: -0.050295, 0.146630, 0.341500
     color: '#B7C9C3'
-    yaw: -180.0
+    yaw: 225.0
   - label: rolled open mouth 05
-    min: -0.110733, 0.163902, 0.3145
-    max: -0.034989, 0.187902, 0.3415
+    min: -0.274730, -0.012000, 0.314500
+    max: -0.106060, 0.012000, 0.341500
     color: '#B7C9C3'
-    yaw: -157.5
+    yaw: 270.0
   - label: rolled open mouth 06
-    min: -0.172501, 0.12263, 0.3145
-    max: -0.096758, 0.14663, 0.3415
+    min: -0.218964, -0.146630, 0.314500
+    max: -0.050295, -0.122630, 0.341500
     color: '#B7C9C3'
-    yaw: -135.0
+    yaw: 315.0
   - label: rolled open mouth 07
-    min: -0.213774, 0.060861, 0.3145
-    max: -0.13803, 0.084861, 0.3415
+    min: -0.084335, -0.202395, 0.314500
+    max: 0.084335, -0.178395, 0.341500
     color: '#B7C9C3'
-    yaw: -112.5
+    yaw: 0.0
   - label: rolled open mouth 08
-    min: -0.228267, -0.012, 0.3145
-    max: -0.152523, 0.012, 0.3415
-    color: '#B7C9C3'
-    yaw: -90.0
-  - label: rolled open mouth 09
-    min: -0.213774, -0.084861, 0.3145
-    max: -0.13803, -0.060861, 0.3415
-    color: '#B7C9C3'
-    yaw: -67.5
-  - label: rolled open mouth 10
-    min: -0.172501, -0.14663, 0.3145
-    max: -0.096758, -0.12263, 0.3415
-    color: '#B7C9C3'
-    yaw: -45.0
-  - label: rolled open mouth 11
-    min: -0.110733, -0.187902, 0.3145
-    max: -0.034989, -0.163902, 0.3415
-    color: '#B7C9C3'
-    yaw: -22.5
-  - label: rolled open mouth 12
-    min: -0.037872, -0.202395, 0.3145
-    max: 0.037872, -0.178395, 0.3415
-    color: '#B7C9C3'
-    yaw: -0.0
-  - label: rolled open mouth 13
-    min: 0.034989, -0.187902, 0.3145
-    max: 0.110733, -0.163902, 0.3415
-    color: '#B7C9C3'
-    yaw: 22.5
-  - label: rolled open mouth 14
-    min: 0.096758, -0.14663, 0.3145
-    max: 0.172501, -0.12263, 0.3415
+    min: 0.050295, -0.146630, 0.314500
+    max: 0.218964, -0.122630, 0.341500
     color: '#B7C9C3'
     yaw: 45.0
-  - label: rolled open mouth 15
-    min: 0.13803, -0.084861, 0.3145
-    max: 0.213774, -0.060861, 0.3415
-    color: '#B7C9C3'
-    yaw: 67.5
-  - label: rolled open mouth 16
-    min: 0.152523, -0.012, 0.3145
-    max: 0.228267, 0.012, 0.3415
-    color: '#B7C9C3'
-    yaw: 90.0
   - label: closed vessel floor
     min: -0.193125, -0.193125, 0.0
     max: 0.193125, 0.193125, 0.036
     color: '#5A8D88A0'
     shape: CylinderZ
   - label: thickened glass foot 01
-    min: 0.128076, 0.054106, 0.021
-    max: 0.198357, 0.081106, 0.049
+    min: 0.097395, -0.013500, 0.021000
+    max: 0.255933, 0.013500, 0.049000
     color: '#5A8D88'
-    yaw: 112.5
+    yaw: 90.0
   - label: thickened glass foot 02
-    min: 0.08978, 0.11142, 0.021
-    max: 0.160061, 0.13842, 0.049
+    min: 0.045652, 0.111420, 0.021000
+    max: 0.204189, 0.138420, 0.049000
     color: '#5A8D88'
     yaw: 135.0
   - label: thickened glass foot 03
-    min: 0.032466, 0.149716, 0.021
-    max: 0.102747, 0.176716, 0.049
+    min: -0.079269, 0.163164, 0.021000
+    max: 0.079269, 0.190164, 0.049000
     color: '#5A8D88'
-    yaw: 157.5
+    yaw: 180.0
   - label: thickened glass foot 04
-    min: -0.035141, 0.163164, 0.021
-    max: 0.035141, 0.190164, 0.049
+    min: -0.204189, 0.111420, 0.021000
+    max: -0.045652, 0.138420, 0.049000
     color: '#5A8D88'
-    yaw: -180.0
+    yaw: 225.0
   - label: thickened glass foot 05
-    min: -0.102747, 0.149716, 0.021
-    max: -0.032466, 0.176716, 0.049
+    min: -0.255933, -0.013500, 0.021000
+    max: -0.097395, 0.013500, 0.049000
     color: '#5A8D88'
-    yaw: -157.5
+    yaw: 270.0
   - label: thickened glass foot 06
-    min: -0.160061, 0.11142, 0.021
-    max: -0.08978, 0.13842, 0.049
+    min: -0.204189, -0.138420, 0.021000
+    max: -0.045652, -0.111420, 0.049000
     color: '#5A8D88'
-    yaw: -135.0
+    yaw: 315.0
   - label: thickened glass foot 07
-    min: -0.198357, 0.054106, 0.021
-    max: -0.128076, 0.081106, 0.049
+    min: -0.079269, -0.190164, 0.021000
+    max: 0.079269, -0.163164, 0.049000
     color: '#5A8D88'
-    yaw: -112.5
+    yaw: 0.0
   - label: thickened glass foot 08
-    min: -0.211805, -0.0135, 0.021
-    max: -0.141523, 0.0135, 0.049
-    color: '#5A8D88'
-    yaw: -90.0
-  - label: thickened glass foot 09
-    min: -0.198357, -0.081106, 0.021
-    max: -0.128076, -0.054106, 0.049
-    color: '#5A8D88'
-    yaw: -67.5
-  - label: thickened glass foot 10
-    min: -0.160061, -0.13842, 0.021
-    max: -0.08978, -0.11142, 0.049
-    color: '#5A8D88'
-    yaw: -45.0
-  - label: thickened glass foot 11
-    min: -0.102747, -0.176716, 0.021
-    max: -0.032466, -0.149716, 0.049
-    color: '#5A8D88'
-    yaw: -22.5
-  - label: thickened glass foot 12
-    min: -0.035141, -0.190164, 0.021
-    max: 0.035141, -0.163164, 0.049
-    color: '#5A8D88'
-  - label: thickened glass foot 13
-    min: 0.032466, -0.176716, 0.021
-    max: 0.102747, -0.149716, 0.049
-    color: '#5A8D88'
-    yaw: 22.5
-  - label: thickened glass foot 14
-    min: 0.08978, -0.13842, 0.021
-    max: 0.160061, -0.11142, 0.049
+    min: 0.045652, -0.138420, 0.021000
+    max: 0.204189, -0.111420, 0.049000
     color: '#5A8D88'
     yaw: 45.0
-  - label: thickened glass foot 15
-    min: 0.128076, -0.081106, 0.021
-    max: 0.198357, -0.054106, 0.049
-    color: '#5A8D88'
-    yaw: 67.5
-  - label: thickened glass foot 16
-    min: 0.141523, -0.0135, 0.021
-    max: 0.211805, 0.0135, 0.049
-    color: '#5A8D88'
-    yaw: 90.0
   - label: original curved graduation column 16
     min: 0.0, -0.197492, 0.02624
     max: 0.03125, -0.187492, 0.21648
@@ -322,249 +203,130 @@
     the physical mouth; not a runtime Openable adapter.
   parts:
   - label: thin hollow vessel wall 01
-    min: 0.131631, 0.058483, 0.031
-    max: 0.203863, 0.080483, 0.333
+    min: 0.101304, -0.011000, 0.031000
+    max: 0.261832, 0.011000, 0.333000
     color: '#8BABA892'
-    yaw: 112.5
+    yaw: 90.0
   - label: thin hollow vessel wall 02
-    min: 0.092272, 0.117388, 0.031
-    max: 0.164504, 0.139388, 0.333
+    min: 0.048124, 0.117388, 0.031000
+    max: 0.208652, 0.139388, 0.333000
     color: '#8BABA892'
     yaw: 135.0
   - label: thin hollow vessel wall 03
-    min: 0.033367, 0.156747, 0.031
-    max: 0.105599, 0.178747, 0.333
+    min: -0.080264, 0.170568, 0.031000
+    max: 0.080264, 0.192568, 0.333000
     color: '#8BABA892'
-    yaw: 157.5
+    yaw: 180.0
   - label: thin hollow vessel wall 04
-    min: -0.036116, 0.170568, 0.031
-    max: 0.036116, 0.192568, 0.333
+    min: -0.208652, 0.117388, 0.031000
+    max: -0.048124, 0.139388, 0.333000
     color: '#8BABA892'
-    yaw: -180.0
+    yaw: 225.0
   - label: thin hollow vessel wall 05
-    min: -0.105599, 0.156747, 0.031
-    max: -0.033367, 0.178747, 0.333
+    min: -0.261832, -0.011000, 0.031000
+    max: -0.101304, 0.011000, 0.333000
     color: '#8BABA892'
-    yaw: -157.5
+    yaw: 270.0
   - label: thin hollow vessel wall 06
-    min: -0.164504, 0.117388, 0.031
-    max: -0.092272, 0.139388, 0.333
+    min: -0.208652, -0.139388, 0.031000
+    max: -0.048124, -0.117388, 0.333000
     color: '#8BABA892'
-    yaw: -135.0
+    yaw: 315.0
   - label: thin hollow vessel wall 07
-    min: -0.203863, 0.058483, 0.031
-    max: -0.131631, 0.080483, 0.333
+    min: -0.080264, -0.192568, 0.031000
+    max: 0.080264, -0.170568, 0.333000
     color: '#8BABA892'
-    yaw: -112.5
+    yaw: 0.0
   - label: thin hollow vessel wall 08
-    min: -0.217684, -0.011, 0.031
-    max: -0.145452, 0.011, 0.333
-    color: '#8BABA892'
-    yaw: -90.0
-  - label: thin hollow vessel wall 09
-    min: -0.203863, -0.080483, 0.031
-    max: -0.131631, -0.058483, 0.333
-    color: '#8BABA892'
-    yaw: -67.5
-  - label: thin hollow vessel wall 10
-    min: -0.164504, -0.139388, 0.031
-    max: -0.092272, -0.117388, 0.333
-    color: '#8BABA892'
-    yaw: -45.0
-  - label: thin hollow vessel wall 11
-    min: -0.105599, -0.178747, 0.031
-    max: -0.033367, -0.156747, 0.333
-    color: '#8BABA892'
-    yaw: -22.5
-  - label: thin hollow vessel wall 12
-    min: -0.036116, -0.192568, 0.031
-    max: 0.036116, -0.170568, 0.333
-    color: '#8BABA892'
-    yaw: -0.0
-  - label: thin hollow vessel wall 13
-    min: 0.033367, -0.178747, 0.031
-    max: 0.105599, -0.156747, 0.333
-    color: '#8BABA892'
-    yaw: 22.5
-  - label: thin hollow vessel wall 14
-    min: 0.092272, -0.139388, 0.031
-    max: 0.164504, -0.117388, 0.333
+    min: 0.048124, -0.139388, 0.031000
+    max: 0.208652, -0.117388, 0.333000
     color: '#8BABA892'
     yaw: 45.0
-  - label: thin hollow vessel wall 15
-    min: 0.131631, -0.080483, 0.031
-    max: 0.203863, -0.058483, 0.333
-    color: '#8BABA892'
-    yaw: 67.5
-  - label: thin hollow vessel wall 16
-    min: 0.145452, -0.011, 0.031
-    max: 0.217684, 0.011, 0.333
-    color: '#8BABA892'
-    yaw: 90.0
   - label: rolled open mouth 01
-    min: 0.13803, 0.060861, 0.3145
-    max: 0.213774, 0.084861, 0.3415
+    min: 0.106060, -0.012000, 0.314500
+    max: 0.274730, 0.012000, 0.341500
     color: '#B7C9C3'
-    yaw: 112.5
+    yaw: 90.0
   - label: rolled open mouth 02
-    min: 0.096758, 0.12263, 0.3145
-    max: 0.172501, 0.14663, 0.3415
+    min: 0.050295, 0.122630, 0.314500
+    max: 0.218964, 0.146630, 0.341500
     color: '#B7C9C3'
     yaw: 135.0
   - label: rolled open mouth 03
-    min: 0.034989, 0.163902, 0.3145
-    max: 0.110733, 0.187902, 0.3415
+    min: -0.084335, 0.178395, 0.314500
+    max: 0.084335, 0.202395, 0.341500
     color: '#B7C9C3'
-    yaw: 157.5
+    yaw: 180.0
   - label: rolled open mouth 04
-    min: -0.037872, 0.178395, 0.3145
-    max: 0.037872, 0.202395, 0.3415
+    min: -0.218964, 0.122630, 0.314500
+    max: -0.050295, 0.146630, 0.341500
     color: '#B7C9C3'
-    yaw: -180.0
+    yaw: 225.0
   - label: rolled open mouth 05
-    min: -0.110733, 0.163902, 0.3145
-    max: -0.034989, 0.187902, 0.3415
+    min: -0.274730, -0.012000, 0.314500
+    max: -0.106060, 0.012000, 0.341500
     color: '#B7C9C3'
-    yaw: -157.5
+    yaw: 270.0
   - label: rolled open mouth 06
-    min: -0.172501, 0.12263, 0.3145
-    max: -0.096758, 0.14663, 0.3415
+    min: -0.218964, -0.146630, 0.314500
+    max: -0.050295, -0.122630, 0.341500
     color: '#B7C9C3'
-    yaw: -135.0
+    yaw: 315.0
   - label: rolled open mouth 07
-    min: -0.213774, 0.060861, 0.3145
-    max: -0.13803, 0.084861, 0.3415
+    min: -0.084335, -0.202395, 0.314500
+    max: 0.084335, -0.178395, 0.341500
     color: '#B7C9C3'
-    yaw: -112.5
+    yaw: 0.0
   - label: rolled open mouth 08
-    min: -0.228267, -0.012, 0.3145
-    max: -0.152523, 0.012, 0.3415
-    color: '#B7C9C3'
-    yaw: -90.0
-  - label: rolled open mouth 09
-    min: -0.213774, -0.084861, 0.3145
-    max: -0.13803, -0.060861, 0.3415
-    color: '#B7C9C3'
-    yaw: -67.5
-  - label: rolled open mouth 10
-    min: -0.172501, -0.14663, 0.3145
-    max: -0.096758, -0.12263, 0.3415
-    color: '#B7C9C3'
-    yaw: -45.0
-  - label: rolled open mouth 11
-    min: -0.110733, -0.187902, 0.3145
-    max: -0.034989, -0.163902, 0.3415
-    color: '#B7C9C3'
-    yaw: -22.5
-  - label: rolled open mouth 12
-    min: -0.037872, -0.202395, 0.3145
-    max: 0.037872, -0.178395, 0.3415
-    color: '#B7C9C3'
-    yaw: -0.0
-  - label: rolled open mouth 13
-    min: 0.034989, -0.187902, 0.3145
-    max: 0.110733, -0.163902, 0.3415
-    color: '#B7C9C3'
-    yaw: 22.5
-  - label: rolled open mouth 14
-    min: 0.096758, -0.14663, 0.3145
-    max: 0.172501, -0.12263, 0.3415
+    min: 0.050295, -0.146630, 0.314500
+    max: 0.218964, -0.122630, 0.341500
     color: '#B7C9C3'
     yaw: 45.0
-  - label: rolled open mouth 15
-    min: 0.13803, -0.084861, 0.3145
-    max: 0.213774, -0.060861, 0.3415
-    color: '#B7C9C3'
-    yaw: 67.5
-  - label: rolled open mouth 16
-    min: 0.152523, -0.012, 0.3145
-    max: 0.228267, 0.012, 0.3415
-    color: '#B7C9C3'
-    yaw: 90.0
   - label: closed vessel floor
     min: -0.193125, -0.193125, 0.0
     max: 0.193125, 0.193125, 0.036
     color: '#5A8D88A0'
     shape: CylinderZ
   - label: thickened glass foot 01
-    min: 0.128076, 0.054106, 0.021
-    max: 0.198357, 0.081106, 0.049
+    min: 0.097395, -0.013500, 0.021000
+    max: 0.255933, 0.013500, 0.049000
     color: '#5A8D88'
-    yaw: 112.5
+    yaw: 90.0
   - label: thickened glass foot 02
-    min: 0.08978, 0.11142, 0.021
-    max: 0.160061, 0.13842, 0.049
+    min: 0.045652, 0.111420, 0.021000
+    max: 0.204189, 0.138420, 0.049000
     color: '#5A8D88'
     yaw: 135.0
   - label: thickened glass foot 03
-    min: 0.032466, 0.149716, 0.021
-    max: 0.102747, 0.176716, 0.049
+    min: -0.079269, 0.163164, 0.021000
+    max: 0.079269, 0.190164, 0.049000
     color: '#5A8D88'
-    yaw: 157.5
+    yaw: 180.0
   - label: thickened glass foot 04
-    min: -0.035141, 0.163164, 0.021
-    max: 0.035141, 0.190164, 0.049
+    min: -0.204189, 0.111420, 0.021000
+    max: -0.045652, 0.138420, 0.049000
     color: '#5A8D88'
-    yaw: -180.0
+    yaw: 225.0
   - label: thickened glass foot 05
-    min: -0.102747, 0.149716, 0.021
-    max: -0.032466, 0.176716, 0.049
+    min: -0.255933, -0.013500, 0.021000
+    max: -0.097395, 0.013500, 0.049000
     color: '#5A8D88'
-    yaw: -157.5
+    yaw: 270.0
   - label: thickened glass foot 06
-    min: -0.160061, 0.11142, 0.021
-    max: -0.08978, 0.13842, 0.049
+    min: -0.204189, -0.138420, 0.021000
+    max: -0.045652, -0.111420, 0.049000
     color: '#5A8D88'
-    yaw: -135.0
+    yaw: 315.0
   - label: thickened glass foot 07
-    min: -0.198357, 0.054106, 0.021
-    max: -0.128076, 0.081106, 0.049
+    min: -0.079269, -0.190164, 0.021000
+    max: 0.079269, -0.163164, 0.049000
     color: '#5A8D88'
-    yaw: -112.5
+    yaw: 0.0
   - label: thickened glass foot 08
-    min: -0.211805, -0.0135, 0.021
-    max: -0.141523, 0.0135, 0.049
-    color: '#5A8D88'
-    yaw: -90.0
-  - label: thickened glass foot 09
-    min: -0.198357, -0.081106, 0.021
-    max: -0.128076, -0.054106, 0.049
-    color: '#5A8D88'
-    yaw: -67.5
-  - label: thickened glass foot 10
-    min: -0.160061, -0.13842, 0.021
-    max: -0.08978, -0.11142, 0.049
-    color: '#5A8D88'
-    yaw: -45.0
-  - label: thickened glass foot 11
-    min: -0.102747, -0.176716, 0.021
-    max: -0.032466, -0.149716, 0.049
-    color: '#5A8D88'
-    yaw: -22.5
-  - label: thickened glass foot 12
-    min: -0.035141, -0.190164, 0.021
-    max: 0.035141, -0.163164, 0.049
-    color: '#5A8D88'
-  - label: thickened glass foot 13
-    min: 0.032466, -0.176716, 0.021
-    max: 0.102747, -0.149716, 0.049
-    color: '#5A8D88'
-    yaw: 22.5
-  - label: thickened glass foot 14
-    min: 0.08978, -0.13842, 0.021
-    max: 0.160061, -0.11142, 0.049
+    min: 0.045652, -0.138420, 0.021000
+    max: 0.204189, -0.111420, 0.049000
     color: '#5A8D88'
     yaw: 45.0
-  - label: thickened glass foot 15
-    min: 0.128076, -0.081106, 0.021
-    max: 0.198357, -0.054106, 0.049
-    color: '#5A8D88'
-    yaw: 67.5
-  - label: thickened glass foot 16
-    min: 0.141523, -0.0135, 0.021
-    max: 0.211805, 0.0135, 0.049
-    color: '#5A8D88'
-    yaw: 90.0
   - label: original curved graduation column 16
     min: 0.0, -0.197492, 0.02624
     max: 0.03125, -0.187492, 0.21648
@@ -640,250 +402,130 @@
     levels, lid changes, spilling, breakage and held states remain unsupported.'
   parts:
   - label: thin hollow vessel wall 01
-    min: 0.164961, 0.076077, 0.031
-    max: 0.255483, 0.098077, 0.419
+    min: 0.128235, -0.011000, 0.031000
+    max: 0.326849, 0.011000, 0.419000
     color: '#8BABA892'
-    yaw: 112.5
+    yaw: 90.0
   - label: thin hollow vessel wall 02
-    min: 0.115636, 0.149897, 0.031
-    max: 0.206158, 0.171897, 0.419
+    min: 0.061589, 0.149896, 0.031000
+    max: 0.260204, 0.171896, 0.419000
     color: '#8BABA892'
     yaw: 135.0
   - label: thin hollow vessel wall 03
-    min: 0.041816, 0.199222, 0.031
-    max: 0.132338, 0.221222, 0.419
+    min: -0.099307, 0.216542, 0.031000
+    max: 0.099307, 0.238542, 0.419000
     color: '#8BABA892'
-    yaw: 157.5
+    yaw: 180.0
   - label: thin hollow vessel wall 04
-    min: -0.045261, 0.216542, 0.031
-    max: 0.045261, 0.238542, 0.419
+    min: -0.260204, 0.149896, 0.031000
+    max: -0.061589, 0.171896, 0.419000
     color: '#8BABA892'
-    yaw: -180.0
+    yaw: 225.0
   - label: thin hollow vessel wall 05
-    min: -0.132338, 0.199222, 0.031
-    max: -0.041816, 0.221222, 0.419
+    min: -0.326849, -0.011000, 0.031000
+    max: -0.128235, 0.011000, 0.419000
     color: '#8BABA892'
-    yaw: -157.5
+    yaw: 270.0
   - label: thin hollow vessel wall 06
-    min: -0.206158, 0.149897, 0.031
-    max: -0.115636, 0.171897, 0.419
+    min: -0.260204, -0.171896, 0.031000
+    max: -0.061589, -0.149896, 0.419000
     color: '#8BABA892'
-    yaw: -135.0
+    yaw: 315.0
   - label: thin hollow vessel wall 07
-    min: -0.255483, 0.076077, 0.031
-    max: -0.164961, 0.098077, 0.419
+    min: -0.099307, -0.238542, 0.031000
+    max: 0.099307, -0.216542, 0.419000
     color: '#8BABA892'
-    yaw: -112.5
+    yaw: 0.0
   - label: thin hollow vessel wall 08
-    min: -0.272803, -0.011, 0.031
-    max: -0.182281, 0.011, 0.419
-    color: '#8BABA892'
-    yaw: -90.0
-  - label: thin hollow vessel wall 09
-    min: -0.255483, -0.098077, 0.031
-    max: -0.164961, -0.076077, 0.419
-    color: '#8BABA892'
-    yaw: -67.5
-  - label: thin hollow vessel wall 10
-    min: -0.206158, -0.171897, 0.031
-    max: -0.115636, -0.149897, 0.419
-    color: '#8BABA892'
-    yaw: -45.0
-  - label: thin hollow vessel wall 11
-    min: -0.132338, -0.221222, 0.031
-    max: -0.041816, -0.199222, 0.419
-    color: '#8BABA892'
-    yaw: -22.5
-  - label: thin hollow vessel wall 12
-    min: -0.045261, -0.238542, 0.031
-    max: 0.045261, -0.216542, 0.419
-    color: '#8BABA892'
-    yaw: -0.0
-  - label: thin hollow vessel wall 13
-    min: 0.041816, -0.221222, 0.031
-    max: 0.132338, -0.199222, 0.419
-    color: '#8BABA892'
-    yaw: 22.5
-  - label: thin hollow vessel wall 14
-    min: 0.115636, -0.171897, 0.031
-    max: 0.206158, -0.149897, 0.419
+    min: 0.061589, -0.171896, 0.031000
+    max: 0.260204, -0.149896, 0.419000
     color: '#8BABA892'
     yaw: 45.0
-  - label: thin hollow vessel wall 15
-    min: 0.164961, -0.098077, 0.031
-    max: 0.255483, -0.076077, 0.419
-    color: '#8BABA892'
-    yaw: 67.5
-  - label: thin hollow vessel wall 16
-    min: 0.182281, -0.011, 0.031
-    max: 0.272803, 0.011, 0.419
-    color: '#8BABA892'
-    yaw: 90.0
   - label: rolled open mouth 01
-    min: 0.17136, 0.078455, 0.4005
-    max: 0.265393, 0.102455, 0.4275
+    min: 0.132991, -0.012000, 0.400500
+    max: 0.339747, 0.012000, 0.427500
     color: '#B7C9C3'
-    yaw: 112.5
+    yaw: 90.0
   - label: rolled open mouth 02
-    min: 0.120122, 0.155138, 0.4005
-    max: 0.214155, 0.179138, 0.4275
+    min: 0.063760, 0.155138, 0.400500
+    max: 0.270516, 0.179138, 0.427500
     color: '#B7C9C3'
     yaw: 135.0
   - label: rolled open mouth 03
-    min: 0.043438, 0.206377, 0.4005
-    max: 0.137471, 0.230377, 0.4275
+    min: -0.103378, 0.224369, 0.400500
+    max: 0.103378, 0.248369, 0.427500
     color: '#B7C9C3'
-    yaw: 157.5
+    yaw: 180.0
   - label: rolled open mouth 04
-    min: -0.047017, 0.224369, 0.4005
-    max: 0.047017, 0.248369, 0.4275
+    min: -0.270516, 0.155138, 0.400500
+    max: -0.063760, 0.179138, 0.427500
     color: '#B7C9C3'
-    yaw: -180.0
+    yaw: 225.0
   - label: rolled open mouth 05
-    min: -0.137471, 0.206377, 0.4005
-    max: -0.043438, 0.230377, 0.4275
+    min: -0.339747, -0.012000, 0.400500
+    max: -0.132991, 0.012000, 0.427500
     color: '#B7C9C3'
-    yaw: -157.5
+    yaw: 270.0
   - label: rolled open mouth 06
-    min: -0.214155, 0.155138, 0.4005
-    max: -0.120122, 0.179138, 0.4275
+    min: -0.270516, -0.179138, 0.400500
+    max: -0.063760, -0.155138, 0.427500
     color: '#B7C9C3'
-    yaw: -135.0
+    yaw: 315.0
   - label: rolled open mouth 07
-    min: -0.265393, 0.078455, 0.4005
-    max: -0.17136, 0.102455, 0.4275
+    min: -0.103378, -0.248369, 0.400500
+    max: 0.103378, -0.224369, 0.427500
     color: '#B7C9C3'
-    yaw: -112.5
+    yaw: 0.0
   - label: rolled open mouth 08
-    min: -0.283386, -0.012, 0.4005
-    max: -0.189352, 0.012, 0.4275
-    color: '#B7C9C3'
-    yaw: -90.0
-  - label: rolled open mouth 09
-    min: -0.265393, -0.102455, 0.4005
-    max: -0.17136, -0.078455, 0.4275
-    color: '#B7C9C3'
-    yaw: -67.5
-  - label: rolled open mouth 10
-    min: -0.214155, -0.179138, 0.4005
-    max: -0.120122, -0.155138, 0.4275
-    color: '#B7C9C3'
-    yaw: -45.0
-  - label: rolled open mouth 11
-    min: -0.137471, -0.230377, 0.4005
-    max: -0.043438, -0.206377, 0.4275
-    color: '#B7C9C3'
-    yaw: -22.5
-  - label: rolled open mouth 12
-    min: -0.047017, -0.248369, 0.4005
-    max: 0.047017, -0.224369, 0.4275
-    color: '#B7C9C3'
-    yaw: -0.0
-  - label: rolled open mouth 13
-    min: 0.043438, -0.230377, 0.4005
-    max: 0.137471, -0.206377, 0.4275
-    color: '#B7C9C3'
-    yaw: 22.5
-  - label: rolled open mouth 14
-    min: 0.120122, -0.179138, 0.4005
-    max: 0.214155, -0.155138, 0.4275
+    min: 0.063760, -0.179138, 0.400500
+    max: 0.270516, -0.155138, 0.427500
     color: '#B7C9C3'
     yaw: 45.0
-  - label: rolled open mouth 15
-    min: 0.17136, -0.102455, 0.4005
-    max: 0.265393, -0.078455, 0.4275
-    color: '#B7C9C3'
-    yaw: 67.5
-  - label: rolled open mouth 16
-    min: 0.189352, -0.012, 0.4005
-    max: 0.283386, 0.012, 0.4275
-    color: '#B7C9C3'
-    yaw: 90.0
   - label: closed vessel floor
     min: -0.24, -0.24, 0.0
     max: 0.24, 0.24, 0.036
     color: '#5A8D88A0'
     shape: CylinderZ
   - label: thickened glass foot 01
-    min: 0.161405, 0.0717, 0.021
-    max: 0.249976, 0.0987, 0.049
+    min: 0.124327, -0.013500, 0.021000
+    max: 0.320950, 0.013500, 0.049000
     color: '#5A8D88'
-    yaw: 112.5
+    yaw: 90.0
   - label: thickened glass foot 02
-    min: 0.113144, 0.143929, 0.021
-    max: 0.201715, 0.170929, 0.049
+    min: 0.059117, 0.143929, 0.021000
+    max: 0.255741, 0.170929, 0.049000
     color: '#5A8D88'
     yaw: 135.0
   - label: thickened glass foot 03
-    min: 0.040914, 0.192191, 0.021
-    max: 0.129485, 0.219191, 0.049
+    min: -0.098312, 0.209139, 0.021000
+    max: 0.098312, 0.236139, 0.049000
     color: '#5A8D88'
-    yaw: 157.5
+    yaw: 180.0
   - label: thickened glass foot 04
-    min: -0.044286, 0.209138, 0.021
-    max: 0.044286, 0.236138, 0.049
+    min: -0.255741, 0.143929, 0.021000
+    max: -0.059117, 0.170929, 0.049000
     color: '#5A8D88'
-    yaw: -180.0
+    yaw: 225.0
   - label: thickened glass foot 05
-    min: -0.129485, 0.192191, 0.021
-    max: -0.040914, 0.219191, 0.049
+    min: -0.320950, -0.013500, 0.021000
+    max: -0.124327, 0.013500, 0.049000
     color: '#5A8D88'
-    yaw: -157.5
+    yaw: 270.0
   - label: thickened glass foot 06
-    min: -0.201715, 0.143929, 0.021
-    max: -0.113144, 0.170929, 0.049
+    min: -0.255741, -0.170929, 0.021000
+    max: -0.059117, -0.143929, 0.049000
     color: '#5A8D88'
-    yaw: -135.0
+    yaw: 315.0
   - label: thickened glass foot 07
-    min: -0.249976, 0.0717, 0.021
-    max: -0.161405, 0.0987, 0.049
+    min: -0.098312, -0.236139, 0.021000
+    max: 0.098312, -0.209139, 0.049000
     color: '#5A8D88'
-    yaw: -112.5
+    yaw: 0.0
   - label: thickened glass foot 08
-    min: -0.266924, -0.0135, 0.021
-    max: -0.178353, 0.0135, 0.049
-    color: '#5A8D88'
-    yaw: -90.0
-  - label: thickened glass foot 09
-    min: -0.249976, -0.0987, 0.021
-    max: -0.161405, -0.0717, 0.049
-    color: '#5A8D88'
-    yaw: -67.5
-  - label: thickened glass foot 10
-    min: -0.201715, -0.170929, 0.021
-    max: -0.113144, -0.143929, 0.049
-    color: '#5A8D88'
-    yaw: -45.0
-  - label: thickened glass foot 11
-    min: -0.129485, -0.219191, 0.021
-    max: -0.040914, -0.192191, 0.049
-    color: '#5A8D88'
-    yaw: -22.5
-  - label: thickened glass foot 12
-    min: -0.044286, -0.236138, 0.021
-    max: 0.044286, -0.209138, 0.049
-    color: '#5A8D88'
-    yaw: -0.0
-  - label: thickened glass foot 13
-    min: 0.040914, -0.219191, 0.021
-    max: 0.129485, -0.192191, 0.049
-    color: '#5A8D88'
-    yaw: 22.5
-  - label: thickened glass foot 14
-    min: 0.113144, -0.170929, 0.021
-    max: 0.201715, -0.143929, 0.049
+    min: 0.059117, -0.170929, 0.021000
+    max: 0.255741, -0.143929, 0.049000
     color: '#5A8D88'
     yaw: 45.0
-  - label: thickened glass foot 15
-    min: 0.161405, -0.0987, 0.021
-    max: 0.249976, -0.0717, 0.049
-    color: '#5A8D88'
-    yaw: 67.5
-  - label: thickened glass foot 16
-    min: 0.178353, -0.0135, 0.021
-    max: 0.266924, 0.0135, 0.049
-    color: '#5A8D88'
-    yaw: 90.0
   - label: original curved graduation column 17
     min: 0.03125, -0.240378, 0.03312
     max: 0.0625, -0.230378, 0.27324
@@ -952,250 +594,130 @@
     the physical mouth; not a runtime Openable adapter.
   parts:
   - label: thin hollow vessel wall 01
-    min: 0.164961, 0.076077, 0.031
-    max: 0.255483, 0.098077, 0.419
+    min: 0.128235, -0.011000, 0.031000
+    max: 0.326849, 0.011000, 0.419000
     color: '#8BABA892'
-    yaw: 112.5
+    yaw: 90.0
   - label: thin hollow vessel wall 02
-    min: 0.115636, 0.149897, 0.031
-    max: 0.206158, 0.171897, 0.419
+    min: 0.061589, 0.149896, 0.031000
+    max: 0.260204, 0.171896, 0.419000
     color: '#8BABA892'
     yaw: 135.0
   - label: thin hollow vessel wall 03
-    min: 0.041816, 0.199222, 0.031
-    max: 0.132338, 0.221222, 0.419
+    min: -0.099307, 0.216542, 0.031000
+    max: 0.099307, 0.238542, 0.419000
     color: '#8BABA892'
-    yaw: 157.5
+    yaw: 180.0
   - label: thin hollow vessel wall 04
-    min: -0.045261, 0.216542, 0.031
-    max: 0.045261, 0.238542, 0.419
+    min: -0.260204, 0.149896, 0.031000
+    max: -0.061589, 0.171896, 0.419000
     color: '#8BABA892'
-    yaw: -180.0
+    yaw: 225.0
   - label: thin hollow vessel wall 05
-    min: -0.132338, 0.199222, 0.031
-    max: -0.041816, 0.221222, 0.419
+    min: -0.326849, -0.011000, 0.031000
+    max: -0.128235, 0.011000, 0.419000
     color: '#8BABA892'
-    yaw: -157.5
+    yaw: 270.0
   - label: thin hollow vessel wall 06
-    min: -0.206158, 0.149897, 0.031
-    max: -0.115636, 0.171897, 0.419
+    min: -0.260204, -0.171896, 0.031000
+    max: -0.061589, -0.149896, 0.419000
     color: '#8BABA892'
-    yaw: -135.0
+    yaw: 315.0
   - label: thin hollow vessel wall 07
-    min: -0.255483, 0.076077, 0.031
-    max: -0.164961, 0.098077, 0.419
+    min: -0.099307, -0.238542, 0.031000
+    max: 0.099307, -0.216542, 0.419000
     color: '#8BABA892'
-    yaw: -112.5
+    yaw: 0.0
   - label: thin hollow vessel wall 08
-    min: -0.272803, -0.011, 0.031
-    max: -0.182281, 0.011, 0.419
-    color: '#8BABA892'
-    yaw: -90.0
-  - label: thin hollow vessel wall 09
-    min: -0.255483, -0.098077, 0.031
-    max: -0.164961, -0.076077, 0.419
-    color: '#8BABA892'
-    yaw: -67.5
-  - label: thin hollow vessel wall 10
-    min: -0.206158, -0.171897, 0.031
-    max: -0.115636, -0.149897, 0.419
-    color: '#8BABA892'
-    yaw: -45.0
-  - label: thin hollow vessel wall 11
-    min: -0.132338, -0.221222, 0.031
-    max: -0.041816, -0.199222, 0.419
-    color: '#8BABA892'
-    yaw: -22.5
-  - label: thin hollow vessel wall 12
-    min: -0.045261, -0.238542, 0.031
-    max: 0.045261, -0.216542, 0.419
-    color: '#8BABA892'
-    yaw: -0.0
-  - label: thin hollow vessel wall 13
-    min: 0.041816, -0.221222, 0.031
-    max: 0.132338, -0.199222, 0.419
-    color: '#8BABA892'
-    yaw: 22.5
-  - label: thin hollow vessel wall 14
-    min: 0.115636, -0.171897, 0.031
-    max: 0.206158, -0.149897, 0.419
+    min: 0.061589, -0.171896, 0.031000
+    max: 0.260204, -0.149896, 0.419000
     color: '#8BABA892'
     yaw: 45.0
-  - label: thin hollow vessel wall 15
-    min: 0.164961, -0.098077, 0.031
-    max: 0.255483, -0.076077, 0.419
-    color: '#8BABA892'
-    yaw: 67.5
-  - label: thin hollow vessel wall 16
-    min: 0.182281, -0.011, 0.031
-    max: 0.272803, 0.011, 0.419
-    color: '#8BABA892'
-    yaw: 90.0
   - label: rolled open mouth 01
-    min: 0.17136, 0.078455, 0.4005
-    max: 0.265393, 0.102455, 0.4275
+    min: 0.132991, -0.012000, 0.400500
+    max: 0.339747, 0.012000, 0.427500
     color: '#B7C9C3'
-    yaw: 112.5
+    yaw: 90.0
   - label: rolled open mouth 02
-    min: 0.120122, 0.155138, 0.4005
-    max: 0.214155, 0.179138, 0.4275
+    min: 0.063760, 0.155138, 0.400500
+    max: 0.270516, 0.179138, 0.427500
     color: '#B7C9C3'
     yaw: 135.0
   - label: rolled open mouth 03
-    min: 0.043438, 0.206377, 0.4005
-    max: 0.137471, 0.230377, 0.4275
+    min: -0.103378, 0.224369, 0.400500
+    max: 0.103378, 0.248369, 0.427500
     color: '#B7C9C3'
-    yaw: 157.5
+    yaw: 180.0
   - label: rolled open mouth 04
-    min: -0.047017, 0.224369, 0.4005
-    max: 0.047017, 0.248369, 0.4275
+    min: -0.270516, 0.155138, 0.400500
+    max: -0.063760, 0.179138, 0.427500
     color: '#B7C9C3'
-    yaw: -180.0
+    yaw: 225.0
   - label: rolled open mouth 05
-    min: -0.137471, 0.206377, 0.4005
-    max: -0.043438, 0.230377, 0.4275
+    min: -0.339747, -0.012000, 0.400500
+    max: -0.132991, 0.012000, 0.427500
     color: '#B7C9C3'
-    yaw: -157.5
+    yaw: 270.0
   - label: rolled open mouth 06
-    min: -0.214155, 0.155138, 0.4005
-    max: -0.120122, 0.179138, 0.4275
+    min: -0.270516, -0.179138, 0.400500
+    max: -0.063760, -0.155138, 0.427500
     color: '#B7C9C3'
-    yaw: -135.0
+    yaw: 315.0
   - label: rolled open mouth 07
-    min: -0.265393, 0.078455, 0.4005
-    max: -0.17136, 0.102455, 0.4275
+    min: -0.103378, -0.248369, 0.400500
+    max: 0.103378, -0.224369, 0.427500
     color: '#B7C9C3'
-    yaw: -112.5
+    yaw: 0.0
   - label: rolled open mouth 08
-    min: -0.283386, -0.012, 0.4005
-    max: -0.189352, 0.012, 0.4275
-    color: '#B7C9C3'
-    yaw: -90.0
-  - label: rolled open mouth 09
-    min: -0.265393, -0.102455, 0.4005
-    max: -0.17136, -0.078455, 0.4275
-    color: '#B7C9C3'
-    yaw: -67.5
-  - label: rolled open mouth 10
-    min: -0.214155, -0.179138, 0.4005
-    max: -0.120122, -0.155138, 0.4275
-    color: '#B7C9C3'
-    yaw: -45.0
-  - label: rolled open mouth 11
-    min: -0.137471, -0.230377, 0.4005
-    max: -0.043438, -0.206377, 0.4275
-    color: '#B7C9C3'
-    yaw: -22.5
-  - label: rolled open mouth 12
-    min: -0.047017, -0.248369, 0.4005
-    max: 0.047017, -0.224369, 0.4275
-    color: '#B7C9C3'
-    yaw: -0.0
-  - label: rolled open mouth 13
-    min: 0.043438, -0.230377, 0.4005
-    max: 0.137471, -0.206377, 0.4275
-    color: '#B7C9C3'
-    yaw: 22.5
-  - label: rolled open mouth 14
-    min: 0.120122, -0.179138, 0.4005
-    max: 0.214155, -0.155138, 0.4275
+    min: 0.063760, -0.179138, 0.400500
+    max: 0.270516, -0.155138, 0.427500
     color: '#B7C9C3'
     yaw: 45.0
-  - label: rolled open mouth 15
-    min: 0.17136, -0.102455, 0.4005
-    max: 0.265393, -0.078455, 0.4275
-    color: '#B7C9C3'
-    yaw: 67.5
-  - label: rolled open mouth 16
-    min: 0.189352, -0.012, 0.4005
-    max: 0.283386, 0.012, 0.4275
-    color: '#B7C9C3'
-    yaw: 90.0
   - label: closed vessel floor
     min: -0.24, -0.24, 0.0
     max: 0.24, 0.24, 0.036
     color: '#5A8D88A0'
     shape: CylinderZ
   - label: thickened glass foot 01
-    min: 0.161405, 0.0717, 0.021
-    max: 0.249976, 0.0987, 0.049
+    min: 0.124327, -0.013500, 0.021000
+    max: 0.320950, 0.013500, 0.049000
     color: '#5A8D88'
-    yaw: 112.5
+    yaw: 90.0
   - label: thickened glass foot 02
-    min: 0.113144, 0.143929, 0.021
-    max: 0.201715, 0.170929, 0.049
+    min: 0.059117, 0.143929, 0.021000
+    max: 0.255741, 0.170929, 0.049000
     color: '#5A8D88'
     yaw: 135.0
   - label: thickened glass foot 03
-    min: 0.040914, 0.192191, 0.021
-    max: 0.129485, 0.219191, 0.049
+    min: -0.098312, 0.209139, 0.021000
+    max: 0.098312, 0.236139, 0.049000
     color: '#5A8D88'
-    yaw: 157.5
+    yaw: 180.0
   - label: thickened glass foot 04
-    min: -0.044286, 0.209138, 0.021
-    max: 0.044286, 0.236138, 0.049
+    min: -0.255741, 0.143929, 0.021000
+    max: -0.059117, 0.170929, 0.049000
     color: '#5A8D88'
-    yaw: -180.0
+    yaw: 225.0
   - label: thickened glass foot 05
-    min: -0.129485, 0.192191, 0.021
-    max: -0.040914, 0.219191, 0.049
+    min: -0.320950, -0.013500, 0.021000
+    max: -0.124327, 0.013500, 0.049000
     color: '#5A8D88'
-    yaw: -157.5
+    yaw: 270.0
   - label: thickened glass foot 06
-    min: -0.201715, 0.143929, 0.021
-    max: -0.113144, 0.170929, 0.049
+    min: -0.255741, -0.170929, 0.021000
+    max: -0.059117, -0.143929, 0.049000
     color: '#5A8D88'
-    yaw: -135.0
+    yaw: 315.0
   - label: thickened glass foot 07
-    min: -0.249976, 0.0717, 0.021
-    max: -0.161405, 0.0987, 0.049
+    min: -0.098312, -0.236139, 0.021000
+    max: 0.098312, -0.209139, 0.049000
     color: '#5A8D88'
-    yaw: -112.5
+    yaw: 0.0
   - label: thickened glass foot 08
-    min: -0.266924, -0.0135, 0.021
-    max: -0.178353, 0.0135, 0.049
-    color: '#5A8D88'
-    yaw: -90.0
-  - label: thickened glass foot 09
-    min: -0.249976, -0.0987, 0.021
-    max: -0.161405, -0.0717, 0.049
-    color: '#5A8D88'
-    yaw: -67.5
-  - label: thickened glass foot 10
-    min: -0.201715, -0.170929, 0.021
-    max: -0.113144, -0.143929, 0.049
-    color: '#5A8D88'
-    yaw: -45.0
-  - label: thickened glass foot 11
-    min: -0.129485, -0.219191, 0.021
-    max: -0.040914, -0.192191, 0.049
-    color: '#5A8D88'
-    yaw: -22.5
-  - label: thickened glass foot 12
-    min: -0.044286, -0.236138, 0.021
-    max: 0.044286, -0.209138, 0.049
-    color: '#5A8D88'
-    yaw: -0.0
-  - label: thickened glass foot 13
-    min: 0.040914, -0.219191, 0.021
-    max: 0.129485, -0.192191, 0.049
-    color: '#5A8D88'
-    yaw: 22.5
-  - label: thickened glass foot 14
-    min: 0.113144, -0.170929, 0.021
-    max: 0.201715, -0.143929, 0.049
+    min: 0.059117, -0.170929, 0.021000
+    max: 0.255741, -0.143929, 0.049000
     color: '#5A8D88'
     yaw: 45.0
-  - label: thickened glass foot 15
-    min: 0.161405, -0.0987, 0.021
-    max: 0.249976, -0.0717, 0.049
-    color: '#5A8D88'
-    yaw: 67.5
-  - label: thickened glass foot 16
-    min: 0.178353, -0.0135, 0.021
-    max: 0.266924, 0.0135, 0.049
-    color: '#5A8D88'
-    yaw: 90.0
   - label: original curved graduation column 17
     min: 0.03125, -0.240378, 0.03312
     max: 0.0625, -0.230378, 0.27324
@@ -1278,250 +800,130 @@
     levels, lid changes, spilling, breakage and held states remain unsupported.'
   parts:
   - label: thin hollow vessel wall 01
-    min: 0.164961, 0.076077, 0.031
-    max: 0.255483, 0.098077, 0.419
+    min: 0.128235, -0.011000, 0.031000
+    max: 0.326849, 0.011000, 0.419000
     color: '#6F6D68'
-    yaw: 112.5
+    yaw: 90.0
   - label: thin hollow vessel wall 02
-    min: 0.115636, 0.149897, 0.031
-    max: 0.206158, 0.171897, 0.419
+    min: 0.061589, 0.149896, 0.031000
+    max: 0.260204, 0.171896, 0.419000
     color: '#6F6D68'
     yaw: 135.0
   - label: thin hollow vessel wall 03
-    min: 0.041816, 0.199222, 0.031
-    max: 0.132338, 0.221222, 0.419
+    min: -0.099307, 0.216542, 0.031000
+    max: 0.099307, 0.238542, 0.419000
     color: '#6F6D68'
-    yaw: 157.5
+    yaw: 180.0
   - label: thin hollow vessel wall 04
-    min: -0.045261, 0.216542, 0.031
-    max: 0.045261, 0.238542, 0.419
+    min: -0.260204, 0.149896, 0.031000
+    max: -0.061589, 0.171896, 0.419000
     color: '#6F6D68'
-    yaw: -180.0
+    yaw: 225.0
   - label: thin hollow vessel wall 05
-    min: -0.132338, 0.199222, 0.031
-    max: -0.041816, 0.221222, 0.419
+    min: -0.326849, -0.011000, 0.031000
+    max: -0.128235, 0.011000, 0.419000
     color: '#6F6D68'
-    yaw: -157.5
+    yaw: 270.0
   - label: thin hollow vessel wall 06
-    min: -0.206158, 0.149897, 0.031
-    max: -0.115636, 0.171897, 0.419
+    min: -0.260204, -0.171896, 0.031000
+    max: -0.061589, -0.149896, 0.419000
     color: '#6F6D68'
-    yaw: -135.0
+    yaw: 315.0
   - label: thin hollow vessel wall 07
-    min: -0.255483, 0.076077, 0.031
-    max: -0.164961, 0.098077, 0.419
+    min: -0.099307, -0.238542, 0.031000
+    max: 0.099307, -0.216542, 0.419000
     color: '#6F6D68'
-    yaw: -112.5
+    yaw: 0.0
   - label: thin hollow vessel wall 08
-    min: -0.272803, -0.011, 0.031
-    max: -0.182281, 0.011, 0.419
-    color: '#6F6D68'
-    yaw: -90.0
-  - label: thin hollow vessel wall 09
-    min: -0.255483, -0.098077, 0.031
-    max: -0.164961, -0.076077, 0.419
-    color: '#6F6D68'
-    yaw: -67.5
-  - label: thin hollow vessel wall 10
-    min: -0.206158, -0.171897, 0.031
-    max: -0.115636, -0.149897, 0.419
-    color: '#6F6D68'
-    yaw: -45.0
-  - label: thin hollow vessel wall 11
-    min: -0.132338, -0.221222, 0.031
-    max: -0.041816, -0.199222, 0.419
-    color: '#6F6D68'
-    yaw: -22.5
-  - label: thin hollow vessel wall 12
-    min: -0.045261, -0.238542, 0.031
-    max: 0.045261, -0.216542, 0.419
-    color: '#6F6D68'
-    yaw: -0.0
-  - label: thin hollow vessel wall 13
-    min: 0.041816, -0.221222, 0.031
-    max: 0.132338, -0.199222, 0.419
-    color: '#6F6D68'
-    yaw: 22.5
-  - label: thin hollow vessel wall 14
-    min: 0.115636, -0.171897, 0.031
-    max: 0.206158, -0.149897, 0.419
+    min: 0.061589, -0.171896, 0.031000
+    max: 0.260204, -0.149896, 0.419000
     color: '#6F6D68'
     yaw: 45.0
-  - label: thin hollow vessel wall 15
-    min: 0.164961, -0.098077, 0.031
-    max: 0.255483, -0.076077, 0.419
-    color: '#6F6D68'
-    yaw: 67.5
-  - label: thin hollow vessel wall 16
-    min: 0.182281, -0.011, 0.031
-    max: 0.272803, 0.011, 0.419
-    color: '#6F6D68'
-    yaw: 90.0
   - label: rolled open mouth 01
-    min: 0.17136, 0.078455, 0.4005
-    max: 0.265393, 0.102455, 0.4275
+    min: 0.132991, -0.012000, 0.400500
+    max: 0.339747, 0.012000, 0.427500
     color: '#494846'
-    yaw: 112.5
+    yaw: 90.0
   - label: rolled open mouth 02
-    min: 0.120122, 0.155138, 0.4005
-    max: 0.214155, 0.179138, 0.4275
+    min: 0.063760, 0.155138, 0.400500
+    max: 0.270516, 0.179138, 0.427500
     color: '#494846'
     yaw: 135.0
   - label: rolled open mouth 03
-    min: 0.043438, 0.206377, 0.4005
-    max: 0.137471, 0.230377, 0.4275
+    min: -0.103378, 0.224369, 0.400500
+    max: 0.103378, 0.248369, 0.427500
     color: '#494846'
-    yaw: 157.5
+    yaw: 180.0
   - label: rolled open mouth 04
-    min: -0.047017, 0.224369, 0.4005
-    max: 0.047017, 0.248369, 0.4275
+    min: -0.270516, 0.155138, 0.400500
+    max: -0.063760, 0.179138, 0.427500
     color: '#494846'
-    yaw: -180.0
+    yaw: 225.0
   - label: rolled open mouth 05
-    min: -0.137471, 0.206377, 0.4005
-    max: -0.043438, 0.230377, 0.4275
+    min: -0.339747, -0.012000, 0.400500
+    max: -0.132991, 0.012000, 0.427500
     color: '#494846'
-    yaw: -157.5
+    yaw: 270.0
   - label: rolled open mouth 06
-    min: -0.214155, 0.155138, 0.4005
-    max: -0.120122, 0.179138, 0.4275
+    min: -0.270516, -0.179138, 0.400500
+    max: -0.063760, -0.155138, 0.427500
     color: '#494846'
-    yaw: -135.0
+    yaw: 315.0
   - label: rolled open mouth 07
-    min: -0.265393, 0.078455, 0.4005
-    max: -0.17136, 0.102455, 0.4275
+    min: -0.103378, -0.248369, 0.400500
+    max: 0.103378, -0.224369, 0.427500
     color: '#494846'
-    yaw: -112.5
+    yaw: 0.0
   - label: rolled open mouth 08
-    min: -0.283386, -0.012, 0.4005
-    max: -0.189352, 0.012, 0.4275
-    color: '#494846'
-    yaw: -90.0
-  - label: rolled open mouth 09
-    min: -0.265393, -0.102455, 0.4005
-    max: -0.17136, -0.078455, 0.4275
-    color: '#494846'
-    yaw: -67.5
-  - label: rolled open mouth 10
-    min: -0.214155, -0.179138, 0.4005
-    max: -0.120122, -0.155138, 0.4275
-    color: '#494846'
-    yaw: -45.0
-  - label: rolled open mouth 11
-    min: -0.137471, -0.230377, 0.4005
-    max: -0.043438, -0.206377, 0.4275
-    color: '#494846'
-    yaw: -22.5
-  - label: rolled open mouth 12
-    min: -0.047017, -0.248369, 0.4005
-    max: 0.047017, -0.224369, 0.4275
-    color: '#494846'
-    yaw: -0.0
-  - label: rolled open mouth 13
-    min: 0.043438, -0.230377, 0.4005
-    max: 0.137471, -0.206377, 0.4275
-    color: '#494846'
-    yaw: 22.5
-  - label: rolled open mouth 14
-    min: 0.120122, -0.179138, 0.4005
-    max: 0.214155, -0.155138, 0.4275
+    min: 0.063760, -0.179138, 0.400500
+    max: 0.270516, -0.155138, 0.427500
     color: '#494846'
     yaw: 45.0
-  - label: rolled open mouth 15
-    min: 0.17136, -0.102455, 0.4005
-    max: 0.265393, -0.078455, 0.4275
-    color: '#494846'
-    yaw: 67.5
-  - label: rolled open mouth 16
-    min: 0.189352, -0.012, 0.4005
-    max: 0.283386, 0.012, 0.4275
-    color: '#494846'
-    yaw: 90.0
   - label: closed vessel floor
     min: -0.24, -0.24, 0.0
     max: 0.24, 0.24, 0.036
     color: '#262421'
     shape: CylinderZ
   - label: lower metal collar 01
-    min: 0.161405, 0.0717, 0.021
-    max: 0.249976, 0.0987, 0.049
+    min: 0.124327, -0.013500, 0.021000
+    max: 0.320950, 0.013500, 0.049000
     color: '#494846'
-    yaw: 112.5
+    yaw: 90.0
   - label: lower metal collar 02
-    min: 0.113144, 0.143929, 0.021
-    max: 0.201715, 0.170929, 0.049
+    min: 0.059117, 0.143929, 0.021000
+    max: 0.255741, 0.170929, 0.049000
     color: '#494846'
     yaw: 135.0
   - label: lower metal collar 03
-    min: 0.040914, 0.192191, 0.021
-    max: 0.129485, 0.219191, 0.049
+    min: -0.098312, 0.209139, 0.021000
+    max: 0.098312, 0.236139, 0.049000
     color: '#494846'
-    yaw: 157.5
+    yaw: 180.0
   - label: lower metal collar 04
-    min: -0.044286, 0.209138, 0.021
-    max: 0.044286, 0.236138, 0.049
+    min: -0.255741, 0.143929, 0.021000
+    max: -0.059117, 0.170929, 0.049000
     color: '#494846'
-    yaw: -180.0
+    yaw: 225.0
   - label: lower metal collar 05
-    min: -0.129485, 0.192191, 0.021
-    max: -0.040914, 0.219191, 0.049
+    min: -0.320950, -0.013500, 0.021000
+    max: -0.124327, 0.013500, 0.049000
     color: '#494846'
-    yaw: -157.5
+    yaw: 270.0
   - label: lower metal collar 06
-    min: -0.201715, 0.143929, 0.021
-    max: -0.113144, 0.170929, 0.049
+    min: -0.255741, -0.170929, 0.021000
+    max: -0.059117, -0.143929, 0.049000
     color: '#494846'
-    yaw: -135.0
+    yaw: 315.0
   - label: lower metal collar 07
-    min: -0.249976, 0.0717, 0.021
-    max: -0.161405, 0.0987, 0.049
+    min: -0.098312, -0.236139, 0.021000
+    max: 0.098312, -0.209139, 0.049000
     color: '#494846'
-    yaw: -112.5
+    yaw: 0.0
   - label: lower metal collar 08
-    min: -0.266924, -0.0135, 0.021
-    max: -0.178353, 0.0135, 0.049
-    color: '#494846'
-    yaw: -90.0
-  - label: lower metal collar 09
-    min: -0.249976, -0.0987, 0.021
-    max: -0.161405, -0.0717, 0.049
-    color: '#494846'
-    yaw: -67.5
-  - label: lower metal collar 10
-    min: -0.201715, -0.170929, 0.021
-    max: -0.113144, -0.143929, 0.049
-    color: '#494846'
-    yaw: -45.0
-  - label: lower metal collar 11
-    min: -0.129485, -0.219191, 0.021
-    max: -0.040914, -0.192191, 0.049
-    color: '#494846'
-    yaw: -22.5
-  - label: lower metal collar 12
-    min: -0.044286, -0.236138, 0.021
-    max: 0.044286, -0.209138, 0.049
-    color: '#494846'
-    yaw: -0.0
-  - label: lower metal collar 13
-    min: 0.040914, -0.219191, 0.021
-    max: 0.129485, -0.192191, 0.049
-    color: '#494846'
-    yaw: 22.5
-  - label: lower metal collar 14
-    min: 0.113144, -0.170929, 0.021
-    max: 0.201715, -0.143929, 0.049
+    min: 0.059117, -0.170929, 0.021000
+    max: 0.255741, -0.143929, 0.049000
     color: '#494846'
     yaw: 45.0
-  - label: lower metal collar 15
-    min: 0.161405, -0.0987, 0.021
-    max: 0.249976, -0.0717, 0.049
-    color: '#494846'
-    yaw: 67.5
-  - label: lower metal collar 16
-    min: 0.178353, -0.0135, 0.021
-    max: 0.266924, 0.0135, 0.049
-    color: '#494846'
-    yaw: 90.0
   - label: front recessed blue gauge bezel
     min: -0.0925, -0.265, 0.03933
     max: 0.0925, -0.227, 0.29187
@@ -1565,250 +967,130 @@
     the physical mouth; not a runtime Openable adapter.
   parts:
   - label: thin hollow vessel wall 01
-    min: 0.164961, 0.076077, 0.031
-    max: 0.255483, 0.098077, 0.419
+    min: 0.128235, -0.011000, 0.031000
+    max: 0.326849, 0.011000, 0.419000
     color: '#6F6D68'
-    yaw: 112.5
+    yaw: 90.0
   - label: thin hollow vessel wall 02
-    min: 0.115636, 0.149897, 0.031
-    max: 0.206158, 0.171897, 0.419
+    min: 0.061589, 0.149896, 0.031000
+    max: 0.260204, 0.171896, 0.419000
     color: '#6F6D68'
     yaw: 135.0
   - label: thin hollow vessel wall 03
-    min: 0.041816, 0.199222, 0.031
-    max: 0.132338, 0.221222, 0.419
+    min: -0.099307, 0.216542, 0.031000
+    max: 0.099307, 0.238542, 0.419000
     color: '#6F6D68'
-    yaw: 157.5
+    yaw: 180.0
   - label: thin hollow vessel wall 04
-    min: -0.045261, 0.216542, 0.031
-    max: 0.045261, 0.238542, 0.419
+    min: -0.260204, 0.149896, 0.031000
+    max: -0.061589, 0.171896, 0.419000
     color: '#6F6D68'
-    yaw: -180.0
+    yaw: 225.0
   - label: thin hollow vessel wall 05
-    min: -0.132338, 0.199222, 0.031
-    max: -0.041816, 0.221222, 0.419
+    min: -0.326849, -0.011000, 0.031000
+    max: -0.128235, 0.011000, 0.419000
     color: '#6F6D68'
-    yaw: -157.5
+    yaw: 270.0
   - label: thin hollow vessel wall 06
-    min: -0.206158, 0.149897, 0.031
-    max: -0.115636, 0.171897, 0.419
+    min: -0.260204, -0.171896, 0.031000
+    max: -0.061589, -0.149896, 0.419000
     color: '#6F6D68'
-    yaw: -135.0
+    yaw: 315.0
   - label: thin hollow vessel wall 07
-    min: -0.255483, 0.076077, 0.031
-    max: -0.164961, 0.098077, 0.419
+    min: -0.099307, -0.238542, 0.031000
+    max: 0.099307, -0.216542, 0.419000
     color: '#6F6D68'
-    yaw: -112.5
+    yaw: 0.0
   - label: thin hollow vessel wall 08
-    min: -0.272803, -0.011, 0.031
-    max: -0.182281, 0.011, 0.419
-    color: '#6F6D68'
-    yaw: -90.0
-  - label: thin hollow vessel wall 09
-    min: -0.255483, -0.098077, 0.031
-    max: -0.164961, -0.076077, 0.419
-    color: '#6F6D68'
-    yaw: -67.5
-  - label: thin hollow vessel wall 10
-    min: -0.206158, -0.171897, 0.031
-    max: -0.115636, -0.149897, 0.419
-    color: '#6F6D68'
-    yaw: -45.0
-  - label: thin hollow vessel wall 11
-    min: -0.132338, -0.221222, 0.031
-    max: -0.041816, -0.199222, 0.419
-    color: '#6F6D68'
-    yaw: -22.5
-  - label: thin hollow vessel wall 12
-    min: -0.045261, -0.238542, 0.031
-    max: 0.045261, -0.216542, 0.419
-    color: '#6F6D68'
-    yaw: -0.0
-  - label: thin hollow vessel wall 13
-    min: 0.041816, -0.221222, 0.031
-    max: 0.132338, -0.199222, 0.419
-    color: '#6F6D68'
-    yaw: 22.5
-  - label: thin hollow vessel wall 14
-    min: 0.115636, -0.171897, 0.031
-    max: 0.206158, -0.149897, 0.419
+    min: 0.061589, -0.171896, 0.031000
+    max: 0.260204, -0.149896, 0.419000
     color: '#6F6D68'
     yaw: 45.0
-  - label: thin hollow vessel wall 15
-    min: 0.164961, -0.098077, 0.031
-    max: 0.255483, -0.076077, 0.419
-    color: '#6F6D68'
-    yaw: 67.5
-  - label: thin hollow vessel wall 16
-    min: 0.182281, -0.011, 0.031
-    max: 0.272803, 0.011, 0.419
-    color: '#6F6D68'
-    yaw: 90.0
   - label: rolled open mouth 01
-    min: 0.17136, 0.078455, 0.4005
-    max: 0.265393, 0.102455, 0.4275
+    min: 0.132991, -0.012000, 0.400500
+    max: 0.339747, 0.012000, 0.427500
     color: '#494846'
-    yaw: 112.5
+    yaw: 90.0
   - label: rolled open mouth 02
-    min: 0.120122, 0.155138, 0.4005
-    max: 0.214155, 0.179138, 0.4275
+    min: 0.063760, 0.155138, 0.400500
+    max: 0.270516, 0.179138, 0.427500
     color: '#494846'
     yaw: 135.0
   - label: rolled open mouth 03
-    min: 0.043438, 0.206377, 0.4005
-    max: 0.137471, 0.230377, 0.4275
+    min: -0.103378, 0.224369, 0.400500
+    max: 0.103378, 0.248369, 0.427500
     color: '#494846'
-    yaw: 157.5
+    yaw: 180.0
   - label: rolled open mouth 04
-    min: -0.047017, 0.224369, 0.4005
-    max: 0.047017, 0.248369, 0.4275
+    min: -0.270516, 0.155138, 0.400500
+    max: -0.063760, 0.179138, 0.427500
     color: '#494846'
-    yaw: -180.0
+    yaw: 225.0
   - label: rolled open mouth 05
-    min: -0.137471, 0.206377, 0.4005
-    max: -0.043438, 0.230377, 0.4275
+    min: -0.339747, -0.012000, 0.400500
+    max: -0.132991, 0.012000, 0.427500
     color: '#494846'
-    yaw: -157.5
+    yaw: 270.0
   - label: rolled open mouth 06
-    min: -0.214155, 0.155138, 0.4005
-    max: -0.120122, 0.179138, 0.4275
+    min: -0.270516, -0.179138, 0.400500
+    max: -0.063760, -0.155138, 0.427500
     color: '#494846'
-    yaw: -135.0
+    yaw: 315.0
   - label: rolled open mouth 07
-    min: -0.265393, 0.078455, 0.4005
-    max: -0.17136, 0.102455, 0.4275
+    min: -0.103378, -0.248369, 0.400500
+    max: 0.103378, -0.224369, 0.427500
     color: '#494846'
-    yaw: -112.5
+    yaw: 0.0
   - label: rolled open mouth 08
-    min: -0.283386, -0.012, 0.4005
-    max: -0.189352, 0.012, 0.4275
-    color: '#494846'
-    yaw: -90.0
-  - label: rolled open mouth 09
-    min: -0.265393, -0.102455, 0.4005
-    max: -0.17136, -0.078455, 0.4275
-    color: '#494846'
-    yaw: -67.5
-  - label: rolled open mouth 10
-    min: -0.214155, -0.179138, 0.4005
-    max: -0.120122, -0.155138, 0.4275
-    color: '#494846'
-    yaw: -45.0
-  - label: rolled open mouth 11
-    min: -0.137471, -0.230377, 0.4005
-    max: -0.043438, -0.206377, 0.4275
-    color: '#494846'
-    yaw: -22.5
-  - label: rolled open mouth 12
-    min: -0.047017, -0.248369, 0.4005
-    max: 0.047017, -0.224369, 0.4275
-    color: '#494846'
-    yaw: -0.0
-  - label: rolled open mouth 13
-    min: 0.043438, -0.230377, 0.4005
-    max: 0.137471, -0.206377, 0.4275
-    color: '#494846'
-    yaw: 22.5
-  - label: rolled open mouth 14
-    min: 0.120122, -0.179138, 0.4005
-    max: 0.214155, -0.155138, 0.4275
+    min: 0.063760, -0.179138, 0.400500
+    max: 0.270516, -0.155138, 0.427500
     color: '#494846'
     yaw: 45.0
-  - label: rolled open mouth 15
-    min: 0.17136, -0.102455, 0.4005
-    max: 0.265393, -0.078455, 0.4275
-    color: '#494846'
-    yaw: 67.5
-  - label: rolled open mouth 16
-    min: 0.189352, -0.012, 0.4005
-    max: 0.283386, 0.012, 0.4275
-    color: '#494846'
-    yaw: 90.0
   - label: closed vessel floor
     min: -0.24, -0.24, 0.0
     max: 0.24, 0.24, 0.036
     color: '#2E2C2A'
     shape: CylinderZ
   - label: lower metal collar 01
-    min: 0.161405, 0.0717, 0.021
-    max: 0.249976, 0.0987, 0.049
+    min: 0.124327, -0.013500, 0.021000
+    max: 0.320950, 0.013500, 0.049000
     color: '#494846'
-    yaw: 112.5
+    yaw: 90.0
   - label: lower metal collar 02
-    min: 0.113144, 0.143929, 0.021
-    max: 0.201715, 0.170929, 0.049
+    min: 0.059117, 0.143929, 0.021000
+    max: 0.255741, 0.170929, 0.049000
     color: '#494846'
     yaw: 135.0
   - label: lower metal collar 03
-    min: 0.040914, 0.192191, 0.021
-    max: 0.129485, 0.219191, 0.049
+    min: -0.098312, 0.209139, 0.021000
+    max: 0.098312, 0.236139, 0.049000
     color: '#494846'
-    yaw: 157.5
+    yaw: 180.0
   - label: lower metal collar 04
-    min: -0.044286, 0.209138, 0.021
-    max: 0.044286, 0.236138, 0.049
+    min: -0.255741, 0.143929, 0.021000
+    max: -0.059117, 0.170929, 0.049000
     color: '#494846'
-    yaw: -180.0
+    yaw: 225.0
   - label: lower metal collar 05
-    min: -0.129485, 0.192191, 0.021
-    max: -0.040914, 0.219191, 0.049
+    min: -0.320950, -0.013500, 0.021000
+    max: -0.124327, 0.013500, 0.049000
     color: '#494846'
-    yaw: -157.5
+    yaw: 270.0
   - label: lower metal collar 06
-    min: -0.201715, 0.143929, 0.021
-    max: -0.113144, 0.170929, 0.049
+    min: -0.255741, -0.170929, 0.021000
+    max: -0.059117, -0.143929, 0.049000
     color: '#494846'
-    yaw: -135.0
+    yaw: 315.0
   - label: lower metal collar 07
-    min: -0.249976, 0.0717, 0.021
-    max: -0.161405, 0.0987, 0.049
+    min: -0.098312, -0.236139, 0.021000
+    max: 0.098312, -0.209139, 0.049000
     color: '#494846'
-    yaw: -112.5
+    yaw: 0.0
   - label: lower metal collar 08
-    min: -0.266924, -0.0135, 0.021
-    max: -0.178353, 0.0135, 0.049
-    color: '#494846'
-    yaw: -90.0
-  - label: lower metal collar 09
-    min: -0.249976, -0.0987, 0.021
-    max: -0.161405, -0.0717, 0.049
-    color: '#494846'
-    yaw: -67.5
-  - label: lower metal collar 10
-    min: -0.201715, -0.170929, 0.021
-    max: -0.113144, -0.143929, 0.049
-    color: '#494846'
-    yaw: -45.0
-  - label: lower metal collar 11
-    min: -0.129485, -0.219191, 0.021
-    max: -0.040914, -0.192191, 0.049
-    color: '#494846'
-    yaw: -22.5
-  - label: lower metal collar 12
-    min: -0.044286, -0.236138, 0.021
-    max: 0.044286, -0.209138, 0.049
-    color: '#494846'
-    yaw: -0.0
-  - label: lower metal collar 13
-    min: 0.040914, -0.219191, 0.021
-    max: 0.129485, -0.192191, 0.049
-    color: '#494846'
-    yaw: 22.5
-  - label: lower metal collar 14
-    min: 0.113144, -0.170929, 0.021
-    max: 0.201715, -0.143929, 0.049
+    min: 0.059117, -0.170929, 0.021000
+    max: 0.255741, -0.143929, 0.049000
     color: '#494846'
     yaw: 45.0
-  - label: lower metal collar 15
-    min: 0.161405, -0.0987, 0.021
-    max: 0.249976, -0.0717, 0.049
-    color: '#494846'
-    yaw: 67.5
-  - label: lower metal collar 16
-    min: 0.178353, -0.0135, 0.021
-    max: 0.266924, 0.0135, 0.049
-    color: '#494846'
-    yaw: 90.0
   - label: front recessed blue gauge bezel
     min: -0.0925, -0.265, 0.03933
     max: 0.0925, -0.227, 0.29187
@@ -4137,17 +3419,13 @@
     pitch: 4.63607
   - label: middle worn flap cloth panel 1
     min: -0.24, -0.1975, 0.058
-    max: -0.075, -0.0225, 0.072
+    max: 0.09, -0.0225, 0.072
     color: '#649A9A'
   - label: middle worn flap bound rolled seam 1
     min: -0.24, -0.048, 0.061
     max: -0.075, -0.032, 0.077
     color: '#264B4B'
     shape: CylinderX
-  - label: middle worn flap cloth panel 2
-    min: -0.075, -0.1975, 0.058
-    max: 0.09, -0.0225, 0.072
-    color: '#649A9A'
   - label: middle worn flap bound rolled seam 2
     min: -0.075, -0.048, 0.061
     max: 0.09, -0.032, 0.077
@@ -4465,17 +3743,13 @@
           pitch: 4.63607
         - label: middle worn flap cloth panel 1
           min: -0.24, -0.1975, 0.058
-          max: -0.075, -0.0225, 0.072
+          max: 0.09, -0.0225, 0.072
           color: '#649A9A'
         - label: middle worn flap bound rolled seam 1
           min: -0.24, -0.048, 0.061
           max: -0.075, -0.032, 0.077
           color: '#264B4B'
           shape: CylinderX
-        - label: middle worn flap cloth panel 2
-          min: -0.075, -0.1975, 0.058
-          max: 0.09, -0.0225, 0.072
-          color: '#649A9A'
         - label: middle worn flap bound rolled seam 2
           min: -0.075, -0.048, 0.061
           max: 0.09, -0.032, 0.077

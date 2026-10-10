@@ -12,17 +12,23 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMSatchel
+    back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
   inhand:
   - WeaponRifleMAR40
   storage:
     back:
-    - RMCMagazineRifleMAR40
-    - RMCMagazineRifleMAR40
     - CMUExpeditionBlastGrenade
     - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
     - RMCShovel
+    - CMPackFlare
+    belt:
+    - RMCMagazineRifleMAR40
+    - RMCMagazineRifleMAR40
 
 - type: entity
   parent: CMMobHuman
@@ -84,14 +90,18 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMSatchel
+    back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
   inhand:
   - CMWeaponPistolM1984
   storage:
     back:
-    - CMMagazinePistolM1984
     - RMCShovel
+    - CMPackFlare
+    belt:
+    - CMMagazinePistolM1984
 
 - type: startingGear
   id: CMUExpeditionScavengerRichGear
@@ -102,18 +112,24 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMSatchel
+    back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
   inhand:
-  - RMCWeaponRifleM54CSemiStripped
+  - CMUExpeditionAssaultRifle
   storage:
     back:
     - CMMagazineRifleM54C
-    - CMMagazineRifleM54C
-    - CMMagazineRifleM54C
     - CMUExpeditionBlastGrenade
     - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
     - RMCShovel
+    - CMPackFlare
+    belt:
+    - CMMagazineRifleM54C
+    - CMMagazineRifleM54C
 
 - type: startingGear
   id: CMUExpeditionScavengerScoutGear
@@ -124,16 +140,22 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMSatchel
+    back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
   inhand:
   - RMCWeaponRifleMAR30
   storage:
     back:
-    - RMCMagazineRifleMAR40
-    - RMCMagazineRifleMAR40
     - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
     - RMCShovel
+    - CMPackFlare
+    belt:
+    - RMCMagazineRifleMAR40
+    - RMCMagazineRifleMAR40
 
 - type: entity
   parent: CMUExpeditionScavenger
@@ -174,6 +196,7 @@
   id: CMUExpeditionScavengerScout
   components:
   - type: CMUExpeditionAgent
+    combatRole: Flanker
     disposition: Cautious
     aggression: 0.4
     courage: 0.55

@@ -43,6 +43,10 @@
       enum.TacticalMapUserUi.Key:
         type: TacticalMapUserBui
   - type: IgnoreXenoWeedsSlowdown
+  # human base slows the puller by the target's weight, preds drag anything at full speed
+  - type: SlowOnPull
+    multiplier: 1
+    slowdowns: []
   - type: Skills
     preset: CMUSkillPresetYautjaWarrior
   - type: Loadout
@@ -101,6 +105,10 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 3.7
     baseSprintSpeed: 7.1
+  # cmss13 /datum/pain/yautja: nothing until horrible, and horrible only gives the distressing slowdown
+  - type: PainShock
+    minimumFeltTier: Shock
+    maximumFeltTier: Severe
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -260,6 +268,9 @@
   - type: Yautja
   - type: YautjaYoungblood
   - type: IgnoreXenoWeedsSlowdown
+  - type: SlowOnPull
+    multiplier: 1
+    slowdowns: []
   - type: Skills
     preset: CMUSkillPresetYautjaWarrior
   - type: Icon
@@ -316,6 +327,9 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.4
     baseSprintSpeed: 8.4
+  - type: PainShock
+    minimumFeltTier: Shock
+    maximumFeltTier: Severe
   - type: MobThresholds
     thresholds:
       0: Alive

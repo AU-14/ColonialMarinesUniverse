@@ -1,3 +1,5 @@
+using Content.Shared.Interaction;
+using Content.Shared._RMC14.Xenonids.Spray;
 #pragma warning disable RA0002 // Arrange module damage and operator/view state explicitly.
 
 using System.Linq;
@@ -107,6 +109,51 @@ public sealed class VehicleGameplayRegressionTest : GameTest
               support:
                 startingItem: VehicleGameplayModule
         """;
+
+    [Test]
+    public async Task AcidSprayDamagesInstalledVehicleWheels()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid vehicle = default;
+        EntityUid wheel = default;
+        float before = 0;
+        await Server.WaitAssertion(() =>
+        {
+            vehicle = SEntMan.SpawnEntity("VehicleHumvee", map.GridCoords.Offset(new Vector2(2, 0)));
+            wheel = SEntMan.SpawnEntity("VehicleHumveeWheel", map.GridCoords);
+            var slots = Server.System<ItemSlotsSystem>();
+            Assert.That(slots.TryGetSlot(vehicle, "wheel-1", out var slot), Is.True);
+            Assert.That(slots.TryInsert(vehicle, slot!, wheel, null), Is.True);
+            before = Integrity(wheel).Integrity;
+            var xeno = SEntMan.SpawnEntity("CMXenoSpitter", map.GridCoords);
+            Server.System<XenoSprayAcidSystem>().CreateLine(xeno, map.GridCoords,
+                SComp<TransformComponent>(vehicle).Coordinates, TimeSpan.Zero, 4f, "XenoAcidSprayWeak");
+        });
+        await Pair.RunTicksSync(5);
+        await Server.WaitAssertion(() => Assert.That(Integrity(wheel).Integrity, Is.LessThan(before),
+            "A spray intersecting the hull must damage its installed wheels."));
+    }
+
+    [Test]
+    public async Task AltClickPeeksInsideVehicleWhileHoldingAnItem()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var vehicle = SEntMan.SpawnEntity("VehicleHumvee", map.GridCoords);
+            var entry = SComp<VehicleEnterComponent>(vehicle).EntryPoints[0];
+            var user = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(entry.Offset));
+            var item = SEntMan.SpawnEntity("CMScrewdriver", SComp<TransformComponent>(user).Coordinates);
+            Assert.That(Server.System<SharedHandsSystem>().TryPickupAnyHand(user, item), Is.True);
+            Assert.That(Server.System<SharedInteractionSystem>().AltInteract(user, vehicle), Is.True);
+            var target = SComp<EyeComponent>(user).Target;
+            Assert.That(target, Is.Not.Null);
+            Assert.That(SComp<TransformComponent>(target!.Value).MapID,
+                Is.EqualTo(SComp<VehicleInteriorComponent>(vehicle).MapId));
+            Assert.That(SComp<TransformComponent>(user).MapID,
+                Is.EqualTo(SComp<TransformComponent>(vehicle).MapID), "Peeking must not enter the vehicle.");
+        });
+    }
 
     [TestCase(false)]
     [TestCase(true)]

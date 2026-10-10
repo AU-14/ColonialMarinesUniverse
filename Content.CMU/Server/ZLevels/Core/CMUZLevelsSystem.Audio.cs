@@ -1,3 +1,4 @@
+using Content.Server._RMC14.Vehicle;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels;
 using Content.Shared.CMU14.ZLevels.Core.Components;
@@ -15,6 +16,7 @@ public sealed partial class CMUZLevelsSystem
     private const float CrossZAudioOpeningRadius = 1.5f;
     private static readonly TimeSpan CrossZAudioRefreshInterval = TimeSpan.FromMilliseconds(200);
 
+    [Dependency] private VehicleAudioRelaySystem _vehicleAudio = default!;
     [Dependency] private SharedAudioSystem _audioSystem = default!;
 
     private readonly HashSet<EntityUid> _pendingZLevelAudio = new();
@@ -52,6 +54,9 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnAudioMove(Entity<AudioComponent> ent, ref MoveEvent args)
     {
+        if (!_creatingZLevelAudioProjection && !_zLevelAudioProjections.Contains(ent))
+            _vehicleAudio.QueueSound(ent);
+
         if (_creatingZLevelAudioProjection || _zLevelAudioProjections.Contains(ent) || _manualZLevelAudioSources.Contains(ent) ||
             !_zLevelsEnabled || !_crossZAudioEnabled || args.Component.MapUid is not { } map ||
             !TryGetZNetwork(map, out _))
