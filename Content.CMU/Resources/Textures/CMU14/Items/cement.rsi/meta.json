@@ -8,7 +8,19 @@
   },
   "states": [
     {
-      "name": "single"
+      "name": "old"
+    },
+    {
+      "name": "cementbag1"
+    },
+    {
+      "name": "cementbag2"
+    },
+    {
+      "name": "cementbag3"
+    },
+    {
+      "name": "cementbag4"
     }
   ]
 }
