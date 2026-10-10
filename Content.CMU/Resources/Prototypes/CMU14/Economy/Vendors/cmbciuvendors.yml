@@ -1170,7 +1170,7 @@
       - id: RMCMagazinePistolMK45
         amount: 200
       - id: RMCMagazinePistolSU6
-        amount: 15
+        amount: 30
     - name: Magazine Boxes
       entries:
       - id: RMCBoxBulletsRifle
