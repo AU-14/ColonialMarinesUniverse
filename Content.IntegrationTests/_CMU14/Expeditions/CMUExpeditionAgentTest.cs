@@ -223,7 +223,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
     [Test]
     public async Task SquadStaggersPeeksAndBothGuardsKeepAttacking()
     {
-        EntityUid map = default;
+        EntityUid map = default, enemy = default, enemyRifle = default;
         var guards = new List<EntityUid>();
         var rifles = new List<EntityUid>();
         var initial = new List<int>();
@@ -237,9 +237,11 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 generator.Update(0);
             var lz = expedition.Plan.LandingZone;
             var origin = new EntityCoordinates(map, new Vector2(lz.X + 0.5f, lz.Y + 0.5f));
-            var enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
+            enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(5, 0)));
             SEntMan.AddComponent<GodmodeComponent>(enemy);
             Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
+            enemyRifle = SEntMan.SpawnEntity("WeaponRifleMAR40", SEntMan.GetComponent<TransformComponent>(enemy).Coordinates);
+            Assert.That(Server.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>().TryPickupAnyHand(enemy, enemyRifle), Is.True);
             foreach (var y in new[] { 1, 2, 3, -2, -3, -4 })
             {
                 var coordinates = origin.Offset(new Vector2(-2, y));
@@ -253,6 +255,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 guards.Add(guard);
                 var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
                 // Begin with two already-acquired contacts in known shelters to isolate squad scheduling.
+                agent.PlanningEnabled = false;
                 agent.Target = enemy;
                 agent.LastSeen = SEntMan.GetComponent<TransformComponent>(enemy).Coordinates;
                 agent.LastContact = SGameTiming.CurTime;
@@ -265,6 +268,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 initial.Add(Ammo(gun.Owner));
             }
         });
+        var nextIncomingShot = TimeSpan.Zero;
         for (var sample = 0; sample < 80; sample++)
         {
             await Pair.RunSeconds(0.15f);
@@ -276,6 +280,15 @@ public sealed class CMUExpeditionAgentTest : GameTest
                     var state = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State;
                     if (state is CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage)
                         attackers++;
+                    // Productive positions persist without pressure. Native incoming fire
+                    // makes each attacker return to shelter and yield the next peek.
+                    if (state == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
+                    {
+                        var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, 1.2f));
+                        Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
+                            (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), aim), Is.True);
+                        nextIncomingShot = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
+                    }
                 }
                 Assert.That(attackers, Is.LessThanOrEqualTo(1), "A pair must stagger its exposure, not pop out together.");
             });
@@ -285,12 +298,18 @@ public sealed class CMUExpeditionAgentTest : GameTest
             for (var index = 0; index < 2; index++)
                 Assert.That(Ammo(rifles[index]), Is.LessThan(initial[index]), $"Guard {index} must receive an attack turn.");
             var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guards[0]);
+            SEntMan.DeleteEntity(enemy);
+            var agents = Server.System<CMUExpeditionAgentSystem>();
+            agents.ResetOrders(guards[0], agent);
             var failed = SEntMan.GetComponent<TransformComponent>(guards[0]).Coordinates.Offset(new Vector2(-3, 0));
+            // A reachable timeout now retries a local detour. Block the destination so
+            // this check exercises a real failed move after that recovery is exhausted.
+            SEntMan.SpawnEntity("CMUExpeditionHull", failed);
             agent.CoverDestination = failed;
             agent.State = CMUExpeditionAgentState.Reposition;
             agent.MoveUntil = SGameTiming.CurTime - TimeSpan.FromSeconds(1);
             agent.NextThink = SGameTiming.CurTime;
-            Server.System<CMUExpeditionAgentSystem>().Update(0);
+            agents.Update(0);
             Assert.That(agent.FailedPosition, Is.EqualTo(failed), "Timed-out actions must inform the next position search.");
             Assert.That(agent.AvoidPositionUntil, Is.GreaterThan(SGameTiming.CurTime));
             SEntMan.DeleteEntity(map);
@@ -476,7 +495,12 @@ public sealed class CMUExpeditionAgentTest : GameTest
             var lz = expedition.Plan.LandingZone;
             origin = new EntityCoordinates(map, new Vector2(lz.X + 0.5f, lz.Y + 0.5f));
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", origin.Offset(new Vector2(-7, 0)));
+            // Tactical utilities have separate tests; isolate sight, movement and self-treatment.
+            SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).PlanningEnabled = false;
             enemy = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(7, 0)));
+            // Exercise the ranged-contact investigation delay, not melee-threat memory.
+            var enemyWeapon = SEntMan.SpawnEntity("WeaponRifleMAR40", SEntMan.GetComponent<TransformComponent>(enemy).Coordinates);
+            Assert.That(Server.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>().TryPickupAnyHand(enemy, enemyWeapon), Is.True);
             SEntMan.AddComponent<GodmodeComponent>(enemy);
             Server.System<NpcFactionSystem>().AddFaction(enemy, GOVFORPrototype);
             var ally = SEntMan.SpawnEntity("CMMobHuman", origin.Offset(new Vector2(-7, 2)));
