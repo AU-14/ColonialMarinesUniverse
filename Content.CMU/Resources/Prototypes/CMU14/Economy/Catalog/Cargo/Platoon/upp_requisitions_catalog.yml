@@ -334,7 +334,7 @@
     - name: Specialist Ammo
       entries:
       - cost: 1500
-      - crate: CMUCrateMagazineSVAROGIncen
+        crate: CMUCrateMagazineSVAROGIncen
       - cost: 1000
         crate: CMUCrateMagazineSVAROG
       - cost: 1500
