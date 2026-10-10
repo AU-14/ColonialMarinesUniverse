@@ -65,15 +65,17 @@
           bounds: "-0.49,-0.55,0.49,-0.45"
         mask:
         - FullTileMask
+        # BulletImpassable so shots hit the frame instead of passing through it.
         layer:
         - LowImpassable
+        - BulletImpassable
   - type: Damageable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 150
+        damage: 20
       behaviors:
       - !type:PlaySoundBehavior
         sound:
