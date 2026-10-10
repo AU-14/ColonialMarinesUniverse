@@ -1,5 +1,5 @@
-# Clothing-only spawn profiles. Mobile and heavy roles keep their faction's visual identity.
-# Weapons, supplies and faction orders remain independent of clothing.
+# Clothing portions of spawn-time faction kits. Mobile and heavy roles retain faction identity.
+# FactionLoadouts supplies native primaries and ammunition; faction orders remain independent.
 - type: startingGear
   id: CMUExpeditionOutfitUSCM
   equipment:

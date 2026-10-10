@@ -37,6 +37,36 @@ bank-shot planner, arbitrary whole-map exploration or promise of synchronized ro
 policy/method simulations verify selected decisions; live native geometry and combat outcomes
 need gameplay validation. No integration tests are required by this implementation workflow.
 
+## Assault orders and readable diagnostics
+
+An assault retains a strategic destination across local firefights and survival actions. In contact,
+the squad rotates short advances between ready members while others fire. A member already advancing
+keeps its assignment until the bound finishes or a higher-priority action interrupts it. Actual covering
+fire can permit leaving shelter toward that same opponent; it never permits a newly exposed crossfire,
+known dangerous passage, unsafe floor or occupied destination. Without a shooter, the existing bounded
+fallback permits only a safe step. Lost contact resumes travel toward the objective rather than chasing
+an uncertain sound. Healing, ammunition work, urgent evasion and anti-armor work retain their priority.
+
+Anti-rush uses the current nearby rush assessment, not the presence of any melee memory. A visible gun
+in either hand keeps a humanoid classified as a ranged opponent during hand utility. Projectile damage
+records incoming fire independently of the attacker's subsequently selected item. A cleared rush has a
+short grace period before the squad resumes its previous mission.
+
+The squad panel separates the commanded order, chosen tactic and cause, individual executing action,
+and current blocking condition. Stopped members retain their last living diagnostics, including the
+tactic cause and rocket safety decision. Copy diagnostics exports the displayed squad state as text.
+Rocket checks distinguish hull obstruction, range, blast area, backblast and friendly firing-cone blocks;
+the first-impact ray includes vehicle hull collision layers and preserves intervening obstacles.
+
+Faction spawn kits select a role-appropriate native primary and matching finite ammunition in addition
+to clothing. The catalog covers USCM, RMC, UPP, PMC, CLF, CMB, LACN, CCAF, UACG and Prodigy; scavenger
+kits retain their mixed equipment. The panel groups variants into rifleman, assault, support, marksman,
+rocketeer and medic roles, while existing console names and mob prototypes remain compatible.
+Spawn replacement restores dependent inventory slots before fitting equipment, retains the old primary
+and reserves until the replacement succeeds, and rolls back on insertion failure. Empty native weapons
+take ammunition from the supplied reserves. Weapon qualification components enable the appropriate
+native specialist actions; fire rate, projectile damage, wielding and aiming remain native.
+
 ## Sources and adaptations
 
 - [Jeff Orkin, Three States and a Plan: The A.I. of F.E.A.R., GDC 2006](https://www.gamedevs.org/uploads/three-states-plan-ai-of-fear.pdf).

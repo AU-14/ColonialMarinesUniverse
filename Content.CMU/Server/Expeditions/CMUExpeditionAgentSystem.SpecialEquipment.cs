@@ -39,7 +39,7 @@ public sealed partial class CMUExpeditionAgentSystem
             var deploy = new AttachableToggleStartedEvent(gun, uid, slot);
             RaiseLocalEvent(attachment, ref deploy);
             agent.BipodsDeployed++;
-            agent.WeaponDecision = "deploying-bipod";
+            agent.WeaponDecision = "bipod-deployment-requested";
         }
     }
 

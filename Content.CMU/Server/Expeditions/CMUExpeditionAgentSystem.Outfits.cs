@@ -32,9 +32,9 @@ public sealed partial class CMUExpeditionAgentSystem
     public static IEnumerable<string> OutfitNames => OutfitCatalog.Keys.Prepend("scavenger");
     public static bool IsOutfit(string outfit) => outfit == "scavenger" || OutfitCatalog.ContainsKey(outfit);
 
-    // Spawn-time clothing only. Orders, team/IFF identity, weapons, medicine and supplies
-    // retain their existing settings; admins set friendlies and targets explicitly.
-    private bool ApplySpawnOutfit(EntityUid uid, string outfit)
+    // Spawn-time faction clothing and armament. Existing medicine, tools, launchers
+    // and faction/IFF orders remain intact; admins set team relations explicitly.
+    private bool ApplySpawnOutfit(EntityUid uid, string outfit, int variantIndex = 0)
     {
         if (outfit == "scavenger")
             return true;
@@ -77,13 +77,22 @@ public sealed partial class CMUExpeditionAgentSystem
                 break;
             }
         }
+        // Uniform/vest replacement can dislodge dependent slots. Restore their exact
+        // containers before the armament transaction checks native storage capacity.
+        if (success)
+            foreach (var (slot, item) in original)
+                if (!replacements.ContainsKey(slot) && !_inventory.TryGetSlotEntity(uid, slot, out _) &&
+                    !_inventory.TryEquip(uid, item, slot, silent: true))
+                    success = false;
+        if (success)
+            success = ApplySpawnArmament(uid, agent, outfit, variantIndex);
         if (!success)
         {
             foreach (var (slot, item) in replacements)
             {
                 if (_inventory.TryGetSlotEntity(uid, slot, out var worn) && worn == item)
                     _inventory.TryUnequip(uid, slot, silent: true);
-                QueueDel(item);
+                Del(item);
             }
         }
         // Removing a uniform/vest may dislodge dependent slots. Restore the very same
@@ -92,8 +101,8 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             if (success && replacements.ContainsKey(slot))
                 QueueDel(item);
-            else if (!_inventory.TryGetSlotEntity(uid, slot, out _))
-                _inventory.TryEquip(uid, item, slot, silent: true);
+            else if (!_inventory.TryGetSlotEntity(uid, slot, out _) && !_inventory.TryEquip(uid, item, slot, silent: true))
+                Log.Error($"Could not restore original expedition slot {slot} on {ToPrettyString(uid)} after rejected faction outfit.");
         }
         if (success)
             agent.Outfit = outfit;

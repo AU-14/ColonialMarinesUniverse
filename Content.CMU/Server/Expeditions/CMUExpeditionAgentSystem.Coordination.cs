@@ -39,11 +39,14 @@ public sealed partial class CMUExpeditionAgentSystem
         _mobs.IsAlive(other) && !HasComp<ActorComponent>(other) &&
         _transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 14);
 
-    private bool TryReserveManeuver(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
+    private bool TryReserveManeuver(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now,
+        EntityCoordinates? destination = null)
     {
         if (HasCoverCommitment(uid, agent, now))
             return false;
-        if (agent.CoveringShooter != null)
+        if (agent.UncoveredManeuverDestination is { } reserved && destination is { } requested && reserved != requested)
+            return false;
+        if (agent.CoveringShooter != null || agent.UncoveredManeuverDestination != null)
             return ManeuverSupported(uid, agent, now);
         if (agent.Target == null || now >= agent.ForgetAt)
             return true;
@@ -73,9 +76,22 @@ public sealed partial class CMUExpeditionAgentSystem
             return true;
         if (covering == null)
         {
+            if (agent.ManeuverWaitTarget != agent.Target)
+            {
+                agent.ManeuverWaitTarget = agent.Target;
+                agent.ManeuverWaitSince = now;
+            }
+            agent.ManeuverWaitSince ??= now;
+            // Do not wait forever for a shooter who cannot get a clear lane. Only one
+            // short, no-more-exposed step can proceed without actual covering fire.
+            if (destination is { } step && now - agent.ManeuverWaitSince >= TimeSpan.FromSeconds(1.5) &&
+                TryUncoveredManeuver(uid, agent, step, now))
+                return true;
             agent.SquadDecision = "holding-for-covering-fire";
             return false;
         }
+        agent.ManeuverWaitSince = null;
+        agent.ManeuverWaitTarget = null;
         agent.CoveringShooter = chosen;
         agent.ManeuverUntil = now + TimeSpan.FromSeconds(6);
         covering.CoveringFor = uid;
@@ -88,6 +104,15 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool ManeuverSupported(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
+        if (agent.UncoveredManeuverDestination is { } destination)
+        {
+            var actual = agent.CoverDestination ?? agent.SpacingDestination;
+            if ((actual == null || actual == destination) && now < agent.ManeuverUntil && SafeUncoveredStep(uid, agent, destination))
+                return true;
+            ReleaseManeuver(uid, agent);
+            agent.SquadDecision = "uncovered-step-ended";
+            return false;
+        }
         if (agent.CoveringShooter is not { } shooter)
             return true;
         if (now < agent.ManeuverUntil && TryComp<CMUExpeditionAgentComponent>(shooter, out var buddy) &&
@@ -97,7 +122,12 @@ public sealed partial class CMUExpeditionAgentSystem
             buddy.CoveringUntil = now + TimeSpan.FromSeconds(1);
             return true;
         }
+        var remaining = agent.CoverDestination ?? agent.SpacingDestination;
         ReleaseManeuver(uid, agent);
+        // Losing a supporter's shot for a moment must not strand a mover halfway to
+        // shelter. Finish only the same bounded safe leg, never an exposed assault.
+        if (remaining is { } step && TryUncoveredManeuver(uid, agent, step, now))
+            return true;
         agent.SquadDecision = "support-lost-returning-fire";
         agent.InterruptedMoves++;
         return false;
@@ -113,6 +143,46 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         agent.CoveringShooter = null;
         agent.ManeuverUntil = TimeSpan.Zero;
+        agent.UncoveredManeuverDestination = null;
+    }
+
+    private bool SafeUncoveredStep(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates destination)
+    {
+        var start = Transform(uid).Coordinates;
+        if (!_transform.InRange(start, destination, 3) ||
+            !TraversablePassage(uid, start, destination, allowVault: false) ||
+            !KnownDangerPassage(uid, agent, start, destination) || Reserved(uid, destination) ||
+            MeleeClearance(agent, destination) < Math.Min(agent.MeleeStandoffRange, MeleeClearance(agent, start)))
+            return false;
+        var end = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(destination));
+        var middle = start.Offset((end.Position - start.Position) * 0.5f);
+        var exposure = ExposureScore(uid, agent, start);
+        return ExposureScore(uid, agent, middle) <= exposure + 0.25f &&
+            ExposureScore(uid, agent, destination) <= exposure &&
+            !CrossesCoveringFire(uid, agent, start, destination);
+    }
+
+    private bool TryUncoveredManeuver(EntityUid uid, CMUExpeditionAgentComponent agent,
+        EntityCoordinates destination, TimeSpan now)
+    {
+        var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
+        while (query.MoveNext(out var other, out var buddy))
+        {
+            if (LocalSquadMember(uid, agent, other, buddy) && SharedEngagement(agent, buddy) &&
+                (buddy.UncoveredManeuverDestination != null && now < buddy.ManeuverUntil ||
+                    buddy.ExposedStepUntil > now))
+                return false;
+        }
+        if (!SafeUncoveredStep(uid, agent, destination))
+            return false;
+        agent.UncoveredManeuverDestination = destination;
+        agent.ManeuverUntil = now + TimeSpan.FromSeconds(3);
+        agent.Route.Clear();
+        agent.RouteDestination = null;
+        agent.ManeuverWaitSince = null;
+        agent.ManeuverWaitTarget = null;
+        agent.SquadDecision = "repositioning-without-covering-fire";
+        return true;
     }
 
     private bool HasCoverCommitment(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)

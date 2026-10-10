@@ -342,7 +342,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool TryAdjustPeek(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates threat, TimeSpan now)
     {
-        if (now < agent.NextPeekAdjustment)
+        if (now < agent.NextPeekAdjustment || agent.UncoveredManeuverDestination != null && now < agent.ManeuverUntil)
             return false;
         agent.NextPeekAdjustment = now + TimeSpan.FromSeconds(1.2);
         var start = Transform(uid).Coordinates;

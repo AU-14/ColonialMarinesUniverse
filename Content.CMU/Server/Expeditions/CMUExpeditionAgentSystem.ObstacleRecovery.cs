@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Server.NPC.Components;
 using Content.Shared.CMU14.Expeditions;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
@@ -76,39 +77,87 @@ public sealed partial class CMUExpeditionAgentSystem
             KnownDangerPassage(uid, agent, Point(a), Point(b));
     }
 
+    private static void ResetTravelCohesion(CMUExpeditionAgentComponent agent)
+    {
+        agent.CohesionWaitSince = null;
+        agent.NextCohesionWait = TimeSpan.Zero;
+        agent.CohesionDestination = null;
+        agent.CohesionAdvanceOrigin = null;
+        agent.CohesionWaitExhausted = false;
+    }
+
     private bool WaitForSquad(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.OrderRally is not { } rally || now < agent.NextCohesionWait ||
-            agent.RushTarget != null || now - agent.LastHit < TimeSpan.FromSeconds(2))
-            return false;
         var start = Transform(uid).Coordinates;
+        if (agent.CohesionDestination != agent.OrderedDestination)
+        {
+            ResetTravelCohesion(agent);
+            agent.CohesionDestination = agent.OrderedDestination;
+            agent.CohesionAdvanceOrigin = start;
+        }
+        if (agent.OrderRally is not { } rally || agent.OrderedDestination == null || now < agent.NextCohesionWait ||
+            agent.Target != null || agent.RushTarget != null || now < agent.IncomingFireUntil || now < agent.SuppressedUntil ||
+            now - agent.LastHit < TimeSpan.FromSeconds(2) || agent.WaitingForDoor != null ||
+            agent.TrafficYieldPoint != null || agent.TrafficYieldTo != null ||
+            agent.CohesionAdvanceOrigin is not { } origin || _transform.InRange(start, origin, 4))
+        {
+            if (agent.CohesionWaitSince != null)
+                agent.CohesionWaitExhausted = true;
+            agent.CohesionWaitSince = null;
+            return false;
+        }
+        var map = Transform(uid).MapID;
+        if (!Exists(rally.EntityId) || Transform(rally.EntityId).MapID != map)
+            return false;
+        var rallyPosition = _transform.ToMapCoordinates(rally).Position;
+        var separated = false;
         var lagging = false;
-        var ownDistance = Vector2.Distance(_transform.ToMapCoordinates(start).Position, _transform.ToMapCoordinates(rally).Position);
+        var ownDistance = Vector2.Distance(_transform.ToMapCoordinates(start).Position, rallyPosition);
         var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
         while (query.MoveNext(out var other, out var buddy))
         {
             if (other == uid || !SameSquad(uid, agent, other, buddy) || !_mobs.IsAlive(other) ||
-                HasComp<ActorComponent>(other) || buddy.OrderedDestination == null ||
+                HasComp<ActorComponent>(other) || Transform(other).MapID != map || buddy.OrderedDestination == null ||
                 buddy.OrderRally is not { } otherRally || !_transform.InRange(rally, otherRally, 1) ||
-                buddy.OrderBlockedSince is { } blocked && now - blocked > TimeSpan.FromSeconds(12) ||
                 _transform.InRange(start, Transform(other).Coordinates, 8))
                 continue;
-            var otherDistance = Vector2.Distance(_transform.GetWorldPosition(other), _transform.ToMapCoordinates(rally).Position);
-            if (otherDistance > ownDistance + 5)
+            var otherDistance = Vector2.Distance(_transform.GetWorldPosition(other), rallyPosition);
+            if (otherDistance <= ownDistance + 5)
+                continue;
+            separated = true;
+            // A member who is fighting, treating or blocked cannot close the gap just
+            // because the front stops. Only wait for an active approach to this order.
+            if (!buddy.OrderBlocked && buddy.Action == null && buddy.Treatment == null && buddy.TreatmentMedicine == null &&
+                buddy.PendingWeapon == null && buddy.Target == null && buddy.RushTarget == null &&
+                buddy.WaitingForDoor == null && buddy.TrafficYieldTo == null && buddy.LastDamage < buddy.RetreatDamage &&
+                TryComp<NPCSteeringComponent>(other, out var steering) && steering.Status == SteeringStatus.Moving)
                 lagging = true;
         }
-        if (!lagging)
+        if (!separated)
         {
+            if (agent.CohesionWaitSince != null || agent.CohesionWaitExhausted)
+            {
+                agent.CohesionAdvanceOrigin = start;
+                agent.NextCohesionWait = now + TimeSpan.FromSeconds(8);
+            }
+            agent.CohesionWaitSince = null;
+            agent.CohesionWaitExhausted = false;
+            return false;
+        }
+        if (!lagging || agent.CohesionWaitExhausted || NearSquadDoorway(uid))
+        {
+            if (agent.CohesionWaitSince != null)
+                agent.CohesionWaitExhausted = true;
             agent.CohesionWaitSince = null;
             return false;
         }
         agent.CohesionWaitSince ??= now;
-        if (now - agent.CohesionWaitSince >= TimeSpan.FromSeconds(4))
+        if (now - agent.CohesionWaitSince >= TimeSpan.FromSeconds(2))
         {
-            // An unreachable member cannot deadlock the entire squad. The member keeps
-            // its own bounded reroute attempts and exposes blocked status to the admin.
+            // One brief pause per separation episode. A still-distant member must not
+            // impose a repeating stop/advance cycle on everyone ahead of the bottleneck.
             agent.CohesionWaitSince = null;
-            agent.NextCohesionWait = now + TimeSpan.FromSeconds(2);
+            agent.CohesionWaitExhausted = true;
             return false;
         }
         agent.MoveProgressAt = now;
