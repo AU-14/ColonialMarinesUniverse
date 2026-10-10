@@ -19,6 +19,7 @@
         Blunt: 8
   - type: GunIFF
     enabled: true
+    preventFriendlyFire: true # CMU14: block firing at friendlies like the smart-scope
   - type: Gun
     shotsPerBurst: 3
     selectedMode: SemiAuto
