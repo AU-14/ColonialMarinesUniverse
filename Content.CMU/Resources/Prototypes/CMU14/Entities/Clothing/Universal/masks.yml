@@ -34,3 +34,13 @@
   components:
   - type: VisionCorrection
     visionBonus: -4
+
+- type: entity
+  parent: CMUMaskGas
+  id: CMUMaskGasBlack
+  name: black gas mask
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Masks/gasmask_black.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Masks/gasmask_black.rsi
