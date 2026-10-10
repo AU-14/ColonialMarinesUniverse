@@ -2,7 +2,7 @@
     xmlns:controls="clr-namespace:Content.Client.CMU14.Expeditions" Title="{Loc cmu-squads-title}" MinSize="1040 760">
     <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="8">
         <BoxContainer Orientation="Horizontal" SeparationOverride="8">
-            <OptionButton Access="Public" Name="Squad" HorizontalExpand="True" />
+            <OptionButton Access="Public" Name="Squad" MinHeight="28" HorizontalExpand="True" />
             <Button Access="Public" Name="Refresh" Text="{Loc cmu-squads-refresh}" />
             <CheckBox Access="Public" Name="Live" Text="{Loc cmu-squads-live}" Pressed="True" />
         </BoxContainer>
@@ -19,7 +19,7 @@
                             <Label Text="Y" /><LineEdit Access="Public" Name="Y" Text="0" MinWidth="65" HorizontalExpand="True" />
                         </BoxContainer>
                         <BoxContainer Orientation="Horizontal" SeparationOverride="5">
-                            <Label Text="{Loc cmu-squads-facing}" /><OptionButton Access="Public" Name="Facing" HorizontalExpand="True" />
+                            <Label Text="{Loc cmu-squads-facing}" /><OptionButton Access="Public" Name="Facing" MinHeight="28" HorizontalExpand="True" />
                         </BoxContainer>
                         <BoxContainer Orientation="Horizontal" SeparationOverride="5">
                             <Button Access="Public" Name="Move" Text="{Loc cmu-squads-move}" HorizontalExpand="True" />
@@ -43,7 +43,7 @@
                         <Slider Access="Public" Name="AimSkill" MinValue="0" MaxValue="100" Value="100" Rounded="True"
                             HorizontalExpand="True" ToolTip="{Loc cmu-squads-aim-skill-tip}" />
                         <CheckBox Access="Public" Name="Cooperate" Text="{Loc cmu-squads-cooperate}" ToolTip="{Loc cmu-squads-cooperate-tip}" />
-                        <OptionButton Access="Public" Name="OrderDoctrine" />
+                        <OptionButton Access="Public" Name="OrderDoctrine" MinHeight="28" />
                         <Button Access="Public" Name="ApplyDoctrine" Text="{Loc cmu-squads-doctrine}" />
                     </BoxContainer>
                 </ScrollContainer>
@@ -53,11 +53,11 @@
                         <Label Text="{Loc cmu-squads-count}" />
                         <LineEdit Access="Public" Name="Count" Text="6" />
                         <Label Text="{Loc cmu-squads-composition}" />
-                        <OptionButton Access="Public" Name="Variant" />
+                        <OptionButton Access="Public" Name="Variant" MinHeight="28" />
                         <Label Text="{Loc cmu-squads-outfit}" />
-                        <OptionButton Access="Public" Name="Outfit" />
+                        <OptionButton Access="Public" Name="Outfit" MinHeight="28" />
                         <Label Text="{Loc cmu-squads-doctrine-label}" />
-                        <OptionButton Access="Public" Name="Doctrine" />
+                        <OptionButton Access="Public" Name="Doctrine" MinHeight="28" />
                         <Label Text="{Loc cmu-squads-clothing-note}" />
                         <Button Access="Public" Name="Spawn" Text="{Loc cmu-squads-spawn}" Margin="0 8 0 0" />
                     </BoxContainer>
@@ -65,7 +65,7 @@
                 <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
                     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8" HorizontalExpand="True">
                         <Label Text="{Loc cmu-squads-relations-note}" />
-                        <OptionButton Access="Public" Name="Faction" />
+                        <OptionButton Access="Public" Name="Faction" MinHeight="28" />
                         <Label Text="{Loc cmu-squads-friendly-heading}" Margin="0 8 0 0" />
                         <LineEdit Access="Public" Name="Friendlies" PlaceHolder="{Loc cmu-squads-factions}" />
                         <Button Access="Public" Name="AddFriendly" Text="{Loc cmu-squads-add-friendly}" />
@@ -78,7 +78,7 @@
                 </ScrollContainer>
             </TabContainer>
             <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="6">
-                <OptionButton Access="Public" Name="Member" HorizontalExpand="True" />
+                <OptionButton Access="Public" Name="Member" MinHeight="28" HorizontalExpand="True" />
                 <Label Access="Public" Name="MemberSummary" Text="" ClipText="True" />
                 <TabContainer Access="Public" Name="InspectTabs" HorizontalExpand="True" VerticalExpand="True">
                     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
