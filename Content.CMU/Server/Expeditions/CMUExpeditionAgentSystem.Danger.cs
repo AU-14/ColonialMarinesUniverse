@@ -242,6 +242,11 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (agent.RushTarget != null || agent.SpacingDestination != null || now < agent.NextIncomingResponse)
             return false;
+        if (ContinuingDangerEscape(uid, agent, now))
+        {
+            agent.IncomingFireDecision = "continuing-escape-to-cover";
+            return false;
+        }
         // A clear return shot retains the ordinary burst/cover rhythm. An unseen or corner-blocked
         // attacker must not bypass self-preservation merely because Observe found no target.
         if (agent.LastDamage < agent.EmergencyHealDamage && agent.Target is { } target &&
@@ -295,5 +300,23 @@ public sealed partial class CMUExpeditionAgentSystem
         ReadyRifle(uid, agent);
         Move(uid, escape, validated: true);
         return true;
+    }
+
+    private bool ContinuingDangerEscape(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
+    {
+        if (agent.CoverDestination is not { } destination || now >= agent.MoveUntil ||
+            now - agent.MoveProgressAt >= TimeSpan.FromSeconds(1.5) ||
+            agent.State is not (CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.Withdraw or
+                CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.PlanMove) ||
+            GrenadeDanger(destination))
+            return false;
+        var start = Transform(uid).Coordinates;
+        var next = agent.RouteDestination == destination && agent.Route.TryPeek(out var waypoint) ? waypoint : destination;
+        // Incoming rounds are expected during a withdrawal. Preserve a progressing
+        // route to safer ground instead of cancelling it for a new sidestep every hit.
+        return KnownDangerCost(agent, destination) < KnownDangerCost(agent, start) - 0.5f &&
+            KnownDangerPassage(uid, agent, start, next) &&
+            ExposureScore(uid, agent, destination) <= ExposureScore(uid, agent, start) &&
+            MeleeClearance(agent, next) >= Math.Min(agent.MeleeStandoffRange, MeleeClearance(agent, start));
     }
 }

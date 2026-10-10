@@ -62,7 +62,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 var point = _transform.ToCoordinates(start.EntityId, _transform.ToMapCoordinates(start).Offset(side * offset));
                 if (!ValidOrderPoint(uid, point) || Reserved(uid, point) || !TraversablePassage(uid, start, point) ||
                     ExposureScore(uid, agent, point) > ExposureScore(uid, agent, start) ||
-                    !TryReserveManeuver(uid, agent, now))
+                    !TryReserveManeuver(uid, agent, now, point))
                     continue;
                 Decision(agent, "clear-launch-lane", "supporting-rocketeer", 1);
                 BeginMove(uid, agent, point, CMUExpeditionAgentState.Reposition, now);

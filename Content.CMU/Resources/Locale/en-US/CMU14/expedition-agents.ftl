@@ -150,6 +150,7 @@ cmu-expedition-variant-medical = Medic with support and rifle escorts
 cmu-expedition-variant-raiders = Shotgun, MP5, assault, support and medic
 cmu-expedition-variant-fireteam = AR10 veteran, M60 gunner, MP5 skirmisher, medic and marksman
 cmu-expedition-order-move = Travel to a point, resume after contact
+cmu-expedition-order-assault = Fight toward a point with short advances and covering fire
 cmu-expedition-order-guard = Travel to a point and fortify when safe
 cmu-expedition-hint-guard-facing = Guard facing (map cardinal direction), or auto to select an open approach
 cmu-expedition-ai-fieldcraft-status = Fieldcraft: construction={ $construction }, facing={ $facing }, supplies looted={ $supplies }, hazard={ $hazard }, dodges={ $dodges }, local detours={ $detours }, order failures={ $failures }
@@ -161,3 +162,5 @@ cmu-expedition-order-style = Change aggression, courage and preferred range
 cmu-expedition-order-friendly = Set friendly faction overrides
 cmu-expedition-order-target = Set target faction overrides
 cmu-expedition-ai-door-status = Doors: { $decision }; waiting for { $door }; opened { $opened }; failed { $failures }.
+ent-CMUExpeditionRocketPack = expedition launcher carrier
+    .desc = A field pack with external lashings for one reserve disposable launcher alongside its ordinary supplies.
