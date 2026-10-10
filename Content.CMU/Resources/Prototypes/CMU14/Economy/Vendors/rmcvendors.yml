@@ -1369,6 +1369,8 @@
         amount: 1
       - id: AU14Mk86Case
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: CMUMagazineGPMGTWE
@@ -1411,6 +1413,8 @@
         amount: 200
       - id: AU14MagazinePistolL165A1
         amount: 200
+      - id: RMCMagazinePistolSU6
+        amount: 30
     - name: Magazine Boxes
       entries:
       - id: RMCBoxMagazineRifleL24
@@ -1561,6 +1565,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

@@ -133,6 +133,7 @@ public sealed class RulesKeyRebindMergeRegressionTest : GameTest
                     CMKeyFunctions.CMHolsterSecondary,
                     CMKeyFunctions.CMHolsterTertiary,
                     CMKeyFunctions.CMHolsterQuaternary,
+                    CMUKeyFunctions.CMUOpenWornStorage,
                     CMKeyFunctions.RMCPickUpDroppedItems,
                     CMKeyFunctions.RMCInteractWithOtherHand,
                     CMKeyFunctions.RMCRest,

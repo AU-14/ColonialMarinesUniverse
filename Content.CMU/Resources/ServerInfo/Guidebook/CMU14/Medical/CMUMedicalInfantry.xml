@@ -25,7 +25,7 @@
   - [bold]Hemostatic gauze packet[/bold]: use the packet in your hand to open it, then use the gauze on a wound. It dresses one wound, then it's gone.
   - [bold]Ointment[/bold]: treats burns. Use it on a burned body part; a tube has 10 uses.
   - [bold]Splint[/bold]: holds a broken arm or leg together so moving on it doesn't make it worse.
-  - [bold]First-aid autoinjector[/bold]: a single shot of tricordrazine, which heals all damage a little, and dexalin, which helps with suffocation.
+  - [bold]First-aid autoinjector[/bold]: one shot that gives you 15u of tricordrazine, which heals all damage a little, 6u of paracetamol, a mild painkiller, and 6u of dexalin, which helps with suffocation.
   - [bold]Tricordrazine pill packet[/bold]: four pills that each heal all damage a little. Don't take more than 2 in a short time.
   - [bold]Tramadol pill packet[/bold]: four painkillers. Take one at a time, and don't take another for a while.
   - [bold]CPR mask[/bold]: put it on an unconscious squadmate to make your CPR count for more.
@@ -58,6 +58,7 @@
   ### 5. Deal with the Pain
   - Pain slows you down, throws off your aim and can put you into shock, where you keep collapsing.
   - Take [bold]one[/bold] tramadol pill. It masks the pain but doesn't fix what's causing it.
+  - The first-aid autoinjector's paracetamol also takes the edge off milder pain.
   - Overdosing on painkillers is dangerous. Don't stack them.
 
   ### 6. Top Up Your Health

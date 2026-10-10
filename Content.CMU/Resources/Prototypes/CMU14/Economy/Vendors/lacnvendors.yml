@@ -569,7 +569,7 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMUBeltMedicalLACN
+      - id: CMUBeltMedicBagLACN
     - name: General Medical Supplies
       entries:
       - id: AU14HemostaticGauzePacket
@@ -1308,6 +1308,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum
@@ -1423,7 +1425,7 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMUBeltMedicalLACN
+      - id: CMUBeltMedicBagLACN
     - name: Medical Webbing
       choices: { CMUPlatoonSurgicalWebbing: 1 }
       entries:
@@ -1608,9 +1610,9 @@
     - name: Tool Storage
       choices: { CMUCTToolStorage: 1 }
       entries:
-      # - id: CMULACNBeltUtilityFilled
-      #   name: LACN utility tools rig (filled)
-      #   recommended: true
+      - id: AU14BeltUtilityCombatFilled
+        name: LACN utility tools rig (filled)
+        recommended: true
       - id: RMCBeltConstruction
         name: LACN construction rig
       - id: AU14PouchToolsFilledComtech

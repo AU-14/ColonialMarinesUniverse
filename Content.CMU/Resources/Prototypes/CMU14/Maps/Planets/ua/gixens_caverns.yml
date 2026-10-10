@@ -20,7 +20,6 @@
     - WEYU
     - CMBCIU
     - UPP
-    - BEAR
     defaultgovfor: HAZOPS
     defaultopfor: CMBCIU
     govforinship: true
