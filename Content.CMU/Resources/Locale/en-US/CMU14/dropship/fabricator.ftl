@@ -1,0 +1,10 @@
+cmu-dropship-fabricator-filter-title = FILTER BY WEAPON
+cmu-dropship-fabricator-filter-all = All ({$count})
+cmu-dropship-fabricator-filter-weapon = {$weapon} ({$count})
+cmu-dropship-fabricator-filter-support = Support & Utility ({$count})
+cmu-dropship-fabricator-search-placeholder = Search weapons or ammo...
+cmu-dropship-fabricator-equipment = EQUIPMENT ({$count})
+cmu-dropship-fabricator-ammo = AMMUNITION ({$count})
+cmu-dropship-fabricator-item-weapon = For: {$weapon}
+cmu-dropship-fabricator-no-equipment = No matching equipment.
+cmu-dropship-fabricator-no-ammo = No matching ammunition.
