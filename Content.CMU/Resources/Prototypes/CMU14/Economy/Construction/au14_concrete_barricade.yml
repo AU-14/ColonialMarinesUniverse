@@ -58,6 +58,7 @@
     drawdepth: WallTops
   - type: InteractionOutline
   - type: Rotatable
+  - type: Climbable
   - type: Fixtures
     fixtures:
       fix1:
