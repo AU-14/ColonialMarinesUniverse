@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Stun;
 using System.Numerics;
 using Content.Shared.DoAfter;
 using Content.Shared._RMC14.Sprite;
@@ -81,7 +81,7 @@ public sealed partial class XenoChargerJockeySystem : EntitySystem
                 var riderName = Identity.Entity(user, EntityManager);
                 var selfMessage = Loc.GetString("rmc-xeno-jockey-start-self", ("charger", chargerName));
                 var othersMessage = Loc.GetString("rmc-xeno-jockey-start-others", ("rider", riderName), ("charger", chargerName));
-                _popup.PopupPredicted(selfMessage, othersMessage, user, user);
+                _popup.PopupEntity(selfMessage, othersMessage, user, user);
             }
         };
 

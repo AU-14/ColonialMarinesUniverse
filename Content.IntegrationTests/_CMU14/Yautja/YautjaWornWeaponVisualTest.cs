@@ -104,7 +104,7 @@ public sealed class YautjaWornWeaponVisualTest
             foreach (var (id, expectedSprite, expectedState) in BackWeapons)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, id);
+                Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, id);
                 Assert.That(clothing!.Slots & SlotFlags.BACK, Is.EqualTo(SlotFlags.BACK),
                     $"{id} must be wearable in the backpack slot.");
 
@@ -161,7 +161,7 @@ public sealed class YautjaWornWeaponVisualTest
             foreach (var id in HeldWeapons)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<ItemComponent>(out var item, factory), Is.True, id);
+                Assert.That(prototype.TryComp<ItemComponent>(out var item, factory), Is.True, id);
                 Assert.That(item!.RsiPath, Is.Not.Null, $"{id} must define an in-hand RSI.");
                 Assert.That(item.HeldPrefix, Is.Not.Null, $"{id} must define an in-hand prefix.");
 
@@ -197,7 +197,7 @@ public sealed class YautjaWornWeaponVisualTest
             foreach (var (id, expectedPrefix) in BackGuns)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, id);
+                Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, id);
                 Assert.That(clothing!.Slots & SlotFlags.BACK, Is.EqualTo(SlotFlags.BACK),
                     $"{id} must be wearable on the back.");
                 Assert.That(clothing.RsiPath, Is.EqualTo("CMU14/Yautja/pred_guns_back.rsi"), id);

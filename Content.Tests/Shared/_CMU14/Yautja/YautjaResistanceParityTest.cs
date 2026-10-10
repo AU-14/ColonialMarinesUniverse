@@ -12,6 +12,8 @@ namespace Content.Tests.Shared.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaResistanceParityTest : ContentUnitTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageModifierSetPrototype> CMUYautjaPrototype = "CMUYautja";
+
     private IPrototypeManager _prototypes = default!;
 
     [OneTimeSetUp]
@@ -40,7 +42,7 @@ public sealed class YautjaResistanceParityTest : ContentUnitTest
     [Test]
     public void DamageModifierSetMatchesCmss13SpeciesValues()
     {
-        var modifiers = _prototypes.Index<DamageModifierSetPrototype>("CMUYautja").Coefficients;
+        var modifiers = _prototypes.Index<DamageModifierSetPrototype>(CMUYautjaPrototype).Coefficients;
 
         Assert.That(modifiers, Has.Count.EqualTo(5));
         Assert.That(modifiers["Blunt"], Is.EqualTo(0.28f));

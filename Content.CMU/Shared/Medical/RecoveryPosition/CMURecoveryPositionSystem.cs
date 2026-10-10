@@ -19,7 +19,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Medical.RecoveryPosition;
 
-public sealed class CMURecoveryPositionSystem : EntitySystem
+public sealed partial class CMURecoveryPositionSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
@@ -77,7 +77,7 @@ public sealed class CMURecoveryPositionSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter))
             return;
 
-        _popup.PopupPredicted(Loc.GetString("cmu-recovery-position-start-self", ("target", target)),
+        _popup.PopupEntity(Loc.GetString("cmu-recovery-position-start-self", ("target", target)),
             Loc.GetString("cmu-recovery-position-start-others", ("user", user), ("target", target)),
             target,
             user);

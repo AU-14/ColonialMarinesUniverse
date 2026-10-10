@@ -34,6 +34,8 @@ namespace Content.IntegrationTests._RMC14;
 [NonParallelizable]
 public sealed class WaterSubmersionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ShaderPrototype> RMCWaterSubmersionPrototype = "RMCWaterSubmersion";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     // CMU14: client surface updates also run on entities without collision fixtures.
@@ -223,7 +225,7 @@ public sealed class WaterSubmersionTest : GameTest
                 foreach (var state in new[] { "coast_shallow", "coast_deep", "shallow", "intermediate", "deep", "bubbles" })
                     Assert.That(rsi.TryGetState(state, out _), Is.True, $"{size}/{state}");
             }
-            Assert.That(CProtoMan.Index<ShaderPrototype>("RMCWaterSubmersion").InstanceUnique(), Is.Not.Null);
+            Assert.That(CProtoMan.Index<ShaderPrototype>(RMCWaterSubmersionPrototype).InstanceUnique(), Is.Not.Null);
             foreach (var id in new[] { "CMFloorShallowWaterEntity", "CMFloorDeepWaterEntity", "RMCEntityDesertWaterShallow", "AUEntityShepBeachCornerEdge" })
             {
                 var entity = CEntMan.SpawnEntity(id, MapCoordinates.Nullspace);

@@ -6,7 +6,7 @@ Date: 2026-10-06. Source repository: `TheHellFireo/CMU-Garrison-3D`, branch `Chi
 
 Twelve exact prototype mappings add draft candidates for 33 Redux and nine classic saved placements. These are physical, editable assemblies; none is marked reviewed or fidelity-approved. Two bag models also contain the source-owned open state, giving fourteen static pose compositions in twelve portable GLBs. No animation clip is invented. No engine, gameplay, map transform or runtime code was modified, and nothing was published.
 
-Canonical prototypes: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_food_cloud.yml`. Original print crops: adjacent `garrison_food_cloud_art.yml`; atlas indices 3800–3803. Derived print PNGs live in `Content.CMU/Resources/Textures/CMU14/ThreeD/food_cloud/`. The YAML is the editable geometry authority.
+Canonical prototypes: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_food_cloud.yml`. Original print crops: adjacent `garrison_food_cloud_art.yml`; atlas indices 3800–3803. Derived print PNGs live in `Content.CMU/Resources/Textures/CMU14/ThreeD/food_cloud/`. The YAML is the editable geometry authority.
 
 ## Inspected source evidence
 

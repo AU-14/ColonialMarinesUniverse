@@ -19,7 +19,7 @@ import surfaces
 from author_wide_machinery import world_parts, contacts, box_bounds
 
 STAGE = ROOT / '.codex/large-computers-staged'
-MODEL_REL = Path('Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_large_computers.yml')
+MODEL_REL = Path('Content.CMU/Resources/ThreeD/Prototypes/World/garrison_large_computers.yml')
 ART_REL = MODEL_REL.with_name('garrison_large_computers_art.yml')
 TEXTURE_REL = Path('Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces')
 NOTES_REL = Path('Content.CMU/Resources/Models/CMU14/Garrison/SOURCES_LARGE_COMPUTERS.md')
@@ -37,7 +37,7 @@ def sha(path):
 class Pool:
     def __init__(self, output):
         self.output, self.entries, self.crops, self.hashes = output, [], [], {}
-        registry = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+        registry = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World'
         paths = [p for p in registry.glob('*.yml') if p.name != ART_REL.name]
         for stage in (ROOT / '.codex').glob('*staged*'):
             if stage != STAGE:

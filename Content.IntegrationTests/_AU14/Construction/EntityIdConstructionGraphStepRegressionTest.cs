@@ -9,6 +9,8 @@ namespace Content.IntegrationTests.CMU14.Construction;
 [TestOf(typeof(EntityIdConstructionGraphStep))]
 public sealed class EntityIdConstructionGraphStepRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionGraphPrototype> TestExactPrototypeConstructionGraphPrototype = "TestExactPrototypeConstructionGraph";
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: constructionGraph
@@ -31,7 +33,7 @@ public sealed class EntityIdConstructionGraphStepRegressionTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var graph = SProtoMan.Index<ConstructionGraphPrototype>(
-                "TestExactPrototypeConstructionGraph");
+                TestExactPrototypeConstructionGraphPrototype);
             var edge = graph.Edge("start", "target");
             Assert.That(edge, Is.Not.Null);
 

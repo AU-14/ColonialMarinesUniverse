@@ -200,7 +200,7 @@ public sealed class CmuColorPickerPanel : Control
     /// </summary>
     public void SetPalette(string? paletteId)
     {
-        _palette.DisposeAllChildren();
+        _palette.ReleaseChildren();
 
         if (string.IsNullOrWhiteSpace(paletteId) ||
             !_prototypes.TryIndex<ColorPalettePrototype>(paletteId, out var prototype))

@@ -178,7 +178,7 @@ public sealed class StructuralScannerOverlay : Overlay
             {
                 for (var dy = -searchRadius; dy <= searchRadius; dy++)
                 {
-                    var anchored = _map.GetAnchoredEntitiesEnumerator(
+                    var anchored = _map.GetAnchoredEntities(
                         belowGridUid,
                         belowGrid,
                         belowCenter + new Vector2i(dx, dy));
@@ -260,7 +260,7 @@ public sealed class StructuralScannerOverlay : Overlay
         var solid = !_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty;
         if (!solid)
         {
-            var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+            var anchored = _map.GetAnchoredEntities(gridUid, grid, tile);
             while (anchored.MoveNext(out var uid))
             {
                 if (_entMan.HasComponent<ZLevelWallSupportComponent>(uid) ||

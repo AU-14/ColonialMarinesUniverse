@@ -908,7 +908,7 @@ public sealed partial class CMUZLevelsSystem
                         _profilePvsStairTiles++;
 
                     var tile = centerTile + new Vector2i(x, y);
-                    var query = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+                    var query = _map.GetAnchoredEntities(gridUid, grid, tile);
                     while (query.MoveNext(out var uid))
                     {
                         if (profiling)
@@ -1342,7 +1342,7 @@ public sealed partial class CMUZLevelsSystem
     {
         //A dirty trick: we call PredictedPopup on the falling entity on SERVER.
         //This means that the one who is falling does not see the popup itself, but everyone around them does. This is what we need.
-        _popup.PopupPredictedCoordinates(Loc.GetString("cmu-zlevel-falling-popup", ("name", Identity.Name(ent, EntityManager))), Transform(ent).Coordinates, ent);
+        _popup.PopupCoordinates(Loc.GetString("cmu-zlevel-falling-popup", ("name", Identity.Name(ent, EntityManager))), Transform(ent).Coordinates);
     }
 
 }

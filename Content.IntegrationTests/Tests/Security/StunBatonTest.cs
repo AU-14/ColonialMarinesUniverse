@@ -49,16 +49,16 @@ public sealed class StunBatonTests : InteractionTest
                 var prototype = ProtoMan.Index<EntityPrototype>(id);
                 Assert.Multiple(() =>
                 {
-                    Assert.That(prototype.TryGetComponent<ItemToggleExaminableStatusComponent>(out _, Factory), Is.True, id.Id);
-                    Assert.That(prototype.TryGetComponent<ItemToggleRequiresChargeComponent>(out var toggleCharge, Factory), Is.True, id.Id);
+                    Assert.That(prototype.TryComp<ItemToggleExaminableStatusComponent>(out _, Factory), Is.True, id.Id);
+                    Assert.That(prototype.TryComp<ItemToggleRequiresChargeComponent>(out var toggleCharge, Factory), Is.True, id.Id);
                     Assert.That(toggleCharge!.RequiredCharge, Is.EqualTo(50), id.Id);
-                    Assert.That(prototype.TryGetComponent<MeleeBatteryHitsLeftComponent>(out _, Factory), Is.True, id.Id);
-                    Assert.That(prototype.TryGetComponent<StaminaDamageOnHitRequiresToggleComponent>(out _, Factory), Is.True, id.Id);
-                    Assert.That(prototype.TryGetComponent<StaminaDamageOnHitRequiresChargeComponent>(out var hitCharge, Factory), Is.True, id.Id);
+                    Assert.That(prototype.TryComp<MeleeBatteryHitsLeftComponent>(out _, Factory), Is.True, id.Id);
+                    Assert.That(prototype.TryComp<StaminaDamageOnHitRequiresToggleComponent>(out _, Factory), Is.True, id.Id);
+                    Assert.That(prototype.TryComp<StaminaDamageOnHitRequiresChargeComponent>(out var hitCharge, Factory), Is.True, id.Id);
                     Assert.That(hitCharge!.RequiredCharge, Is.EqualTo(50), id.Id);
-                    Assert.That(prototype.TryGetComponent<RMCStaminaDamageOnHitComponent>(out var rmcStamina, Factory), Is.True, id.Id);
+                    Assert.That(prototype.TryComp<RMCStaminaDamageOnHitComponent>(out var rmcStamina, Factory), Is.True, id.Id);
                     Assert.That(rmcStamina!.Damage, Is.EqualTo(rmcDamage), id.Id);
-                    Assert.That(prototype.TryGetComponent<ItemToggleComponent>(out _, Factory), Is.EqualTo(hasToggle), id.Id);
+                    Assert.That(prototype.TryComp<ItemToggleComponent>(out _, Factory), Is.EqualTo(hasToggle), id.Id);
                 });
             }
         });

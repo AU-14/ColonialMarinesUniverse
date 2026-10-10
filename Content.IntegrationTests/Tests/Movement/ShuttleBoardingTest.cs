@@ -89,7 +89,7 @@ public sealed class ShuttleBoardingTest : InteractionTest
                 Server.System<ShuttleSystem>().Disable(MapData.Grid.Owner);
             if (tileMovement)
                 SEntMan.EnsureComponent<CMUTileMovementComponent>(SPlayer);
-            foreach (var door in SEntMan.EntityQuery<DoorComponent>())
+            foreach (var door in SEntMan.QueryEntities<DoorComponent>())
             {
                 if (SEntMan.GetComponent<TransformComponent>(door.Owner).GridUid == MapData.Grid.Owner)
                     Server.System<SharedDoorSystem>().StartOpening(door.Owner, door);

@@ -37,7 +37,7 @@ public sealed class YautjaRackBundleStaticFactsTest
                     Assert.That(prototype.Name, Is.EqualTo(row.Name), $"{row.Id} local source-shaped bundle wrapper name");
                     Assert.That(prototype.Description, Is.EqualTo(row.Description), $"{row.Id} local source-shaped bundle wrapper description");
                     Assert.That(prototype.HideSpawnMenu, Is.True, $"{row.Id} rack-only bundle wrapper should be hidden from spawn menu");
-                    Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
+                    Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, $"{row.Id} sprite");
                     Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(row.SpritePath), $"{row.Id} sprite RSI");
                     Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo(row.SpriteState), $"{row.Id} sprite state");
                 });

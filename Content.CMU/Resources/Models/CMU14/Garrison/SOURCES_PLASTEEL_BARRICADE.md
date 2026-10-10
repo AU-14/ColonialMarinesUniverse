@@ -2,7 +2,7 @@
 
 `CMU3DReinforcedPlasteelBarricade` maps `RMCBarricadeBrutePlasteel`, placed
 56 times on Stable Garrison Redux +1. The editable source is
-`Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_plasteel_barricade.yml`.
+`Content.CMU/Resources/ThreeD/Prototypes/World/garrison_plasteel_barricade.yml`.
 All saved transforms are retained, including 7 south, 26 east, 11 north and
 12 west facings. No source map is edited.
 

@@ -56,7 +56,7 @@
     UPP_Plutonowy:
       entity: AU14ChevronUPPNIPlutonowy
       requirements: []
-  spawnMenuRoleName: UPP GROM Pointman (Survivor)
+  spawnMenuRoleName: UPP GROM Pointman
   startingGear: AU14GearUPPGROMPointman
   greeting: au14-uppgrom-greeting
   icon: "CMJobIconEmpty"
@@ -90,14 +90,14 @@
   id: AU14GearUPPGROMPointman
   equipment:
     id: AU14IDCardUPPGROMPointman
-    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    outerClothing: CMUUPPArmorFull
     jumpsuit: AU14FatiguesUPPGROM
     shoes: RMCBootsSPPFilled
     head: AU14UPPPatrolCap
     belt: AU14ShotgunShellLoadingRigUPPFull
-    pocket1: AU14PouchPistolAltFull
-    pocket2: AU14PouchIFAKFill
-    back: RMCSatchelSPPFull
+    pocket1: AU14GrenadeHighExplosiveUPP
+    pocket2: RuMCUPPPouchIFAKFill
+    back: CMUUPPNavalInfantrySatchelFull
     ears: RMCHeadsetGROM
     suitstorage: RMCWeaponShotgunType23
 

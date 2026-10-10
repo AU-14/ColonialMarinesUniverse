@@ -1,4 +1,5 @@
 using Content.Server.Ghost.Roles;
+using Content.Server.Ghost.Roles.Components; // CMU14
 using Content.Shared._RMC14.Xenonids.Construction.EggMorpher;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -109,6 +110,10 @@ public sealed partial class XenoEggRoleSystem : EntitySystem
         var user = args.Actor;
 
         if (!SharedChecks(ent, user))
+            return;
+
+        // CMU14: a parasite can lose its role while the selection window is open.
+        if (!TryComp<GhostRoleComponent>(ent, out var role) || role.Taken)
             return;
 
         if (_actor.TryGetSession(user, out var session) && session != null)

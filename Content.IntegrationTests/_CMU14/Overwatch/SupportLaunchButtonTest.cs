@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using System.Reflection;
 using Content.Client._RMC14.Overwatch;
 using Content.Client._RMC14.SupplyDrop;
@@ -86,7 +87,7 @@ public sealed class SupportLaunchButtonTest : GameTest
         }
         finally
         {
-            await Client.WaitPost(() => view.Dispose());
+            await Client.WaitPost(() => view.Release());
         }
     }
 

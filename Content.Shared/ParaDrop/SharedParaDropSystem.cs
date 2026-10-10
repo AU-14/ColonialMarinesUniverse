@@ -248,7 +248,7 @@ public abstract partial class SharedParaDropSystem : EntitySystem
             // Cancel the jump if there is no viable target
             if (randomCoordinates == null)
             {
-                _popup.PopupClient(Loc.GetString("rmc-dropship-paradrop-failed "), dropping, PopupType.SmallCaution);
+                _popup.PopupSelf(Loc.GetString("rmc-dropship-paradrop-failed "), dropping, PopupType.SmallCaution);
                 return;
             }
 
@@ -324,7 +324,7 @@ public abstract partial class SharedParaDropSystem : EntitySystem
 
             var position = _mapSystem.LocalToTile(grid, gridComp, targetLocation);
             var dropArea = new Box2(position.X - dropScatter, position.Y - dropScatter, position.X + dropScatter, position.Y + dropScatter);
-            var enumerable = _mapSystem.GetTilesEnumerator(grid, gridComp, dropArea);
+            var enumerable = _mapSystem.GetTilesIntersecting(grid, gridComp, dropArea);
 
             var viableTiles = new List<TileRef>();
             while (enumerable.MoveNext(out var tileRef))

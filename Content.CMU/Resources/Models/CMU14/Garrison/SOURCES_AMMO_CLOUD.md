@@ -26,7 +26,7 @@ The three magazines have two static studies each: composed `base + mag-1` loaded
 
 ## Crops, editable assets and evidence
 
-Canonical authored files: `garrison_ammo_cloud.yml` and `garrison_ammo_cloud_art.yml` under `Content.CMU/Resources/Prototypes/CMU14/ThreeD`. Six original unresampled label crops occupy atlas slots 2409–2414 under `Textures/CMU14/ThreeD/ammo_cloud`. No whole-sprite slab textures are used. The models contain 284 individually named solid parts, using boxes, cylinders, ellipsoids and folded wedges. Physical depths, underside/reverse construction and material behavior are visual inferences, not engineering dimensions.
+Canonical authored files: `garrison_ammo_cloud.yml` and `garrison_ammo_cloud_art.yml` under `Content.CMU/Resources/ThreeD/Prototypes/World`. Six original unresampled label crops occupy atlas slots 2409–2414 under `Textures/CMU14/ThreeD/ammo_cloud`. No whole-sprite slab textures are used. The models contain 284 individually named solid parts, using boxes, cylinders, ellipsoids and folded wedges. Physical depths, underside/reverse construction and material behavior are visual inferences, not engineering dimensions.
 
 `Tools/three_d/author_ammo_cloud.py` regenerates this batch without changing the exporter. `Tools/three_d/verify_ammo_cloud.py` performs the art-specific checks. The unchanged `build_models.py` exports 13 real GLBs and deterministically verifies them with their manifest and viewer references. Total exported triangle count is 14,360.
 

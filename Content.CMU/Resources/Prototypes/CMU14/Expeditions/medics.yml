@@ -1,0 +1,61 @@
+- type: entity
+  parent: CMDefibrillator
+  id: CMUExpeditionDefibrillator
+  components:
+  - type: CMUExpeditionMedicalTool
+
+- type: entity
+  parent: RMCMedicAutoInjectorTricordrazineRevival15
+  id: CMUExpeditionStabilizer
+  components:
+  - type: CMUExpeditionMedicalTool
+
+- type: startingGear
+  id: CMUExpeditionMedicGear
+  equipment:
+    head: RMCArmorHelmetMercenaryReinforced
+    jumpsuit: RMCJumpsuitMercenaryHeavy
+    outerClothing: RMCArmorMercenaryHeavy
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    pocket1: CMUExpeditionFieldDressing
+    back: CMUExpeditionFieldPack
+    belt: CMBeltMarine
+    pocket2: RMCPouchGeneralLarge
+    ears: CMUExpeditionHeadset
+  inhand:
+  - CMUExpeditionSMG
+  storage:
+    back:
+    - CMUExpeditionDefibrillator
+    - CMUExpeditionStabilizer
+    - CMUExpeditionFieldDressing
+    - CMUExpeditionFieldDressing
+    - CMUExpeditionFieldDressing
+    - CMUExpeditionSmokeGrenade
+    - CMPackFlare
+    belt:
+    - CMMagazineSMGM63
+    - CMMagazineSMGM63
+
+- type: entity
+  parent: CMUExpeditionScavenger
+  id: CMUExpeditionScavengerMedic
+  components:
+  - type: CMUExpeditionMedic
+  - type: CMUExpeditionAgent
+    combatRole: Medic
+    disposition: Cautious
+    aggression: 0.3
+    courage: 0.75
+    preferredFireRange: 9
+    burstSize: 3
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 1
+      RMCSkillConstruction: 1
+      RMCSkillMedical: 2
+  - type: Loadout
+    prototypes: [CMUExpeditionMedicGear]
+  - type: FixedIdentity
+    name: cmu-expedition-medic-identity

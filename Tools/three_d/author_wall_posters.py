@@ -25,7 +25,7 @@ from author_wide_machinery import world_parts, box_bounds
 ROOT = Path(__file__).resolve().parents[2]
 GENERATED = ROOT / 'Tools/three_d/generated'
 REVIEW = GENERATED / 'review/wall-posters'
-PROTOTYPES = ROOT / 'Content.CMU/Resources/Prototypes/CMU14/ThreeD'
+PROTOTYPES = ROOT / 'Content.CMU/Resources/ThreeD/Prototypes/World'
 TEXTURES = ROOT / 'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces'
 MODEL_FILE = PROTOTYPES / 'garrison_wall_posters.yml'
 ART_FILE = PROTOTYPES / 'garrison_wall_posters_art.yml'

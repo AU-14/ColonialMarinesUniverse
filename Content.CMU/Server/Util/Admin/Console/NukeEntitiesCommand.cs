@@ -215,6 +215,8 @@ public sealed partial class NukePuddlesCommand : NukeEntitiesCommand
 [AdminCommand(AdminFlags.Fun)]
 public sealed partial class NukeTrashCommand : NukeEntitiesCommand
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> TrashTag = "Trash";
+
     [Dependency] private TagSystem _tag = default!;
 
     private static readonly string[] AdditionalTrashTags = { };
@@ -269,7 +271,7 @@ public sealed partial class NukeTrashCommand : NukeEntitiesCommand
         if (!EntityManager.TryGetComponent<TagComponent>(uid, out var tags))
             return false;
 
-        if (_tag.HasTag(tags, "Trash"))
+        if (_tag.HasTag(tags, TrashTag))
             return true;
 
         foreach (var tag in AdditionalTrashTags)
@@ -286,5 +288,5 @@ public sealed partial class NukeTrashCommand : NukeEntitiesCommand
         && (AdditionalTrashPrototypes.Contains(proto.ID)
             || (proto.Components.TryGetValue("Tag", out var reg)
                 && reg.Component is TagComponent tag
-                && (_tag.HasTag(tag, "Trash") || AdditionalTrashTags.Any(t => _tag.HasTag(tag, t))))); // CMU14: analyzer-safe tag access
+                && (_tag.HasTag(tag, TrashTag) || AdditionalTrashTags.Any(t => _tag.HasTag(tag, t))))); // CMU14: analyzer-safe tag access
 }

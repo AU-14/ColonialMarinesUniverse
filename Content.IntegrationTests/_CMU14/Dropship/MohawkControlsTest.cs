@@ -47,19 +47,19 @@ public sealed class MohawkControlsTest
                     new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
                 ship = loaded!.Value.Owner;
             }
-            var doors = entities.EntityQuery<DoorComponent>()
+            var doors = entities.QueryEntities<DoorComponent>()
                 .Where(d => entities.GetComponent<TransformComponent>(d.Owner).GridUid == ship).ToArray();
-            Assert.That(doors.Count(d => d.Location == DoorLocation.Port), Is.EqualTo(1));
-            Assert.That(doors.Count(d => d.Location == DoorLocation.Starboard), Is.EqualTo(1));
-            port = doors.Single(d => d.Location == DoorLocation.Port).Owner;
-            starboard = doors.Single(d => d.Location == DoorLocation.Starboard).Owner;
+            Assert.That(doors.Count(d => d.Comp.Location == DoorLocation.Port), Is.EqualTo(1));
+            Assert.That(doors.Count(d => d.Comp.Location == DoorLocation.Starboard), Is.EqualTo(1));
+            port = doors.Single(d => d.Comp.Location == DoorLocation.Port).Owner;
+            starboard = doors.Single(d => d.Comp.Location == DoorLocation.Starboard).Owner;
             Assert.That(entities.GetComponent<TransformComponent>(port).LocalRotation.Theta,
                 Is.EqualTo(Angle.FromDegrees(-90).Theta).Within(0.0001));
             Assert.That(entities.GetComponent<TransformComponent>(starboard).LocalRotation.Theta,
                 Is.EqualTo(Angle.FromDegrees(90).Theta).Within(0.0001));
 
             var dropships = entities.System<SharedDropshipSystem>();
-            var controls = entities.EntityQuery<MohawkControlComponent>().ToArray();
+            var controls = entities.QueryEntities<MohawkControlComponent>().ToArray();
             Assert.That(controls, Has.Length.EqualTo(5));
             foreach (var control in controls)
             {
@@ -68,8 +68,8 @@ public sealed class MohawkControlsTest
                 Assert.That(dropships.TryGetGridDropship(control.Owner, out var owner), Is.True);
                 Assert.That(owner.Owner, Is.EqualTo(ship));
             }
-            starboardButton = controls.Single(c => c.Group == MohawkControlGroup.Starboard).Owner;
-            portButton = controls.Single(c => c.Group == MohawkControlGroup.Port).Owner;
+            starboardButton = controls.Single(c => c.Comp.Group == MohawkControlGroup.Starboard).Owner;
+            portButton = controls.Single(c => c.Comp.Group == MohawkControlGroup.Port).Owner;
             user = entities.SpawnEntity(null, new EntityCoordinates(ship, 0.5f, 0.5f));
             var use = new InteractHandEvent(user, starboardButton);
             entities.EventBus.RaiseLocalEvent(starboardButton, use);

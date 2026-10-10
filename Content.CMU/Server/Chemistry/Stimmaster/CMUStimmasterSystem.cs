@@ -124,7 +124,7 @@ public sealed partial class CMUStimmasterSystem : EntitySystem
         var container = _container.EnsureContainer<Container>(ent, ent.Comp.InjectorContainer);
         if (container.Count + args.Amount > ent.Comp.MaxStoredInjectors)
         {
-            _popup.PopupClient(Loc.GetString("cmu-stimmaster-storage-full"), ent, args.Actor, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-stimmaster-storage-full"), ent, args.Actor, PopupType.SmallCaution);
             return;
         }
 
@@ -139,7 +139,7 @@ public sealed partial class CMUStimmasterSystem : EntitySystem
         if (!_materials.CanChangeMaterialAmount((ent.Owner, storage), materials) ||
             !_materials.TryChangeMaterialAmount((ent.Owner, storage), materials))
         {
-            _popup.PopupClient(Loc.GetString("cmu-stimmaster-not-enough-materials"), ent, args.Actor, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-stimmaster-not-enough-materials"), ent, args.Actor, PopupType.SmallCaution);
             return;
         }
 
@@ -189,7 +189,7 @@ public sealed partial class CMUStimmasterSystem : EntitySystem
             !_solution.TryGetSolution(ent.Owner, BufferSolution, out var buffer) ||
             buffer.Value.Comp.Solution.Volume <= FixedPoint2.Zero)
         {
-            _popup.PopupClient(Loc.GetString("cmu-stimmaster-no-selection-or-chemicals"), ent, args.Actor, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-stimmaster-no-selection-or-chemicals"), ent, args.Actor, PopupType.SmallCaution);
             return;
         }
 
@@ -208,7 +208,7 @@ public sealed partial class CMUStimmasterSystem : EntitySystem
 
         if (injectors.Count == 0)
         {
-            _popup.PopupClient(Loc.GetString("cmu-stimmaster-no-selection-or-chemicals"), ent, args.Actor, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-stimmaster-no-selection-or-chemicals"), ent, args.Actor, PopupType.SmallCaution);
             return;
         }
 
@@ -228,7 +228,7 @@ public sealed partial class CMUStimmasterSystem : EntitySystem
 
         if (insufficientChemicals)
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 Loc.GetString("cmu-stimmaster-not-enough-chemicals-for-injector"),
                 ent,
                 args.Actor,

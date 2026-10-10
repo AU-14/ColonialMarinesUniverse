@@ -1,12 +1,14 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
+using Content.Client.Administration.Managers;
 using Content.Client.Administration.Systems;
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Mentor;
+using Content.Shared.CCVar;
 using Content.Shared.Input;
 using Robust.Client.Audio;
 using Robust.Client.Graphics;
@@ -29,6 +31,7 @@ namespace Content.Client._RMC14.Mentor;
 public sealed partial class StaffHelpUIController : UIController, IOnSystemChanged<BwoinkSystem>
 {
     [Dependency] private AHelpUIController _aHelp = default!;
+    [Dependency] private IClientAdminManager _adminManager = default!; // CMU14
     [Dependency] private IClyde _clyde = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private INetManager _net = default!;
@@ -49,6 +52,7 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
     private MentorHelpWindow? _mentorHelpWindow;
     private MentorWindow? _mentorWindow;
     private SoundSpecifier? _mHelpSound;
+    private bool _bwoinkSoundEnabled; // CMU14
     private bool _unread;
     private (TimeSpan Timestamp, bool Typing) _lastTypingUpdateSent;
 
@@ -71,6 +75,9 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
         _net.RegisterNetMessage<MentorClientTeleportMsg>();
 
         _config.OnValueChanged(RMCCVars.RMCMentorHelpSound, v => _mHelpSound = new SoundPathSpecifier(v), true);
+
+        // CMU14: honor the AHelp notification sound toggle for mentorhelp too
+        _config.OnValueChanged(CCVars.BwoinkSoundEnabled, v => _bwoinkSoundEnabled = v, true);
     }
 
     private void OnMentorStatus(MentorStatusMsg msg)
@@ -157,7 +164,9 @@ public sealed partial class StaffHelpUIController : UIController, IOnSystemChang
 
         if (other)
         {
-            _audio?.PlayGlobal(_mHelpSound, Filter.Local(), false);
+            // CMU14: honor the AHelp notification sound toggle for mentorhelp too
+            if (_mHelpSound != null && (_bwoinkSoundEnabled || !_adminManager.IsActive()))
+                _audio?.PlayGlobal(_mHelpSound, Filter.Local(), false);
             _clyde.RequestWindowAttention();
 
             if (!IsMentor)

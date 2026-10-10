@@ -267,10 +267,13 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
       - id: CMBeltMedicBag
+        recommended: true
+      - id: CMBeltMedical
     - name: General Medical Supplies
       entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
@@ -629,8 +632,10 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
-      - id: ANPRC117GRadioFilled
+      - id: ANPRC117GRadioIssued
         amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
       - id: ANPRCMastAntenna
         amount: 1
       - id: RMCExplosiveBreachingCharge
@@ -1063,6 +1068,8 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
     - name: Hearing Protection
       entries:
       - id: CMUHeadElectronicHearingProtection
@@ -1195,10 +1202,12 @@
       - id: AU14BeltUtilityCombatFilled
         name: M276 pattern combat toolbelt rig (filled)
         recommended: true
-      - id: AU14PouchToolsFilledComtech
-        name: tactical tools pouch (filled)
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
@@ -1329,6 +1338,8 @@
       entries:
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
@@ -1515,6 +1526,7 @@
   name: USCM automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]
   - type: Sprite
@@ -1555,6 +1567,8 @@
         amount: 5
       - id: RMCML66DCase
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
@@ -1609,6 +1623,8 @@
         amount: 100
       - id: RMCSpeedLoader44Marksman
         amount: 10
+      - id: RMCMagazinePistolSU6
+        amount: 30
     - name: Magazine Boxes
       entries:
       - id: CMUBoxMagazineRifleM54CMK1
@@ -1741,6 +1757,12 @@
         amount: 10
       - id: RMCPouchMagazinePistolLarge
         amount: 10
+      - id: RMCPouchGeneralLarge
+        amount: 5
+      - id: RMCPouchDocument
+        amount: 5
+      - id: RMCPouchShotgunLarge
+        amount: 5
     - name: Devices
       entries:
       - id: RMCIntelDetector
@@ -1753,12 +1775,24 @@
         amount: 4
       - id: MineDetector
         amount: 2
-    - name: RTO Packs
-      entries:
-      - id: AU14BackpackRTOPackJungle
+      - id: CMUDeployableZLevelLadder
         amount: 2
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
+    - name: Protective Equipment
+      entries:
+      - id: CMMaskGas
+        amount: 30
+      - id: CMUGasMaskFilter
+        amount: 30
+      - id: CMUFieldGasTankOxygenFilled
+        amount: 15
+    - name: Radio Equipment
+      entries:
+      - id: ANPRC117GRadio
+        amount: 3
+      - id: ANPRCWhipAntenna
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 2
     - name: Materials
       entries:
       - id: CMSheetMetal
@@ -1769,6 +1803,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

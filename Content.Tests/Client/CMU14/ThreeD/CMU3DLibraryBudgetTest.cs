@@ -18,17 +18,18 @@ namespace Content.Tests.Client.CMU14.ThreeD;
 [TestFixture]
 public sealed class CMU3DLibraryBudgetTest
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void EveryAuthoredModelFitsThePreviewPartitionBudget()
     {
         var directory = new DirectoryInfo(TestContext.CurrentContext.TestDirectory);
-        const string relative = "Content.CMU/Resources/Prototypes/CMU14/ThreeD";
+        const string relative = "Content.CMU/Resources/ThreeD/Prototypes";
         while (directory != null && !Directory.Exists(Path.Combine(directory.FullName, relative)))
             directory = directory.Parent;
         Assert.That(directory, Is.Not.Null, "Run from a checkout containing the model source resources.");
 
         var count = 0;
-        foreach (var path in Directory.GetFiles(Path.Combine(directory!.FullName, relative), "*.yml"))
+        foreach (var path in Directory.GetFiles(Path.Combine(directory!.FullName, relative), "*.yml", SearchOption.AllDirectories))
         {
             using var reader = File.OpenText(path);
             var yaml = new YamlStream();

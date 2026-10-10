@@ -475,10 +475,10 @@ public sealed class YautjaFeedbackRegressionTest
         var factory = IoCManager.Resolve<IComponentFactory>();
         var expected = prototypes.Index<EntityPrototype>(visualPrototype);
 
-        Assert.That(expected.TryGetComponent<SpriteComponent>(out var expectedSprite, factory), Is.True, visualPrototype);
-        Assert.That(expected.TryGetComponent<IconComponent>(out var expectedIcon, factory), Is.True, visualPrototype);
-        Assert.That(expected.TryGetComponent<ItemComponent>(out var expectedItem, factory), Is.True, visualPrototype);
-        Assert.That(expected.TryGetComponent<ClothingComponent>(out var expectedClothing, factory), Is.True, visualPrototype);
+        Assert.That(expected.TryComp<SpriteComponent>(out var expectedSprite, factory), Is.True, visualPrototype);
+        Assert.That(expected.TryComp<IconComponent>(out var expectedIcon, factory), Is.True, visualPrototype);
+        Assert.That(expected.TryComp<ItemComponent>(out var expectedItem, factory), Is.True, visualPrototype);
+        Assert.That(expected.TryComp<ClothingComponent>(out var expectedClothing, factory), Is.True, visualPrototype);
 
         var actualSprite = entMan.GetComponent<SpriteComponent>(bracer);
         var actualIcon = entMan.GetComponent<IconComponent>(bracer);

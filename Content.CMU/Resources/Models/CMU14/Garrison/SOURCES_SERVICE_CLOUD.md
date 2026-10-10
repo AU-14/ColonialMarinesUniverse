@@ -6,7 +6,7 @@ Eleven editable solid assemblies cover twelve exact prototype IDs. This is an ar
 
 The authoring script is `Tools/three_d/author_service_cloud.py`. It writes only this family's canonical YAML, source-detail crops, direct GLBs, review images and family report. GLBs use the unchanged `Tools/three_d/build_models.py` exporter. No full shared export, map change, game launch or publishing was performed.
 
-- Definitions: `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_service_cloud.yml`
+- Definitions: `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_service_cloud.yml`
 - Surface definitions: `garrison_service_cloud_art.yml`
 - Original-detail crops: `Content.CMU/Resources/Textures/CMU14/ThreeD/service_cloud/`
 - Atlas reservation used: 2616–2660, 45 surfaces

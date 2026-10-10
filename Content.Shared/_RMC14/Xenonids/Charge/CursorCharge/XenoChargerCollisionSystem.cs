@@ -1,4 +1,5 @@
-﻿using System.Linq;
+using Content.Shared.Vehicle;
+using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Explosion;
@@ -34,6 +35,9 @@ namespace Content.Shared._RMC14.Xenonids.Charge.CursorCharge;
 
 public sealed partial class XenoChargerCollisionSystem : EntitySystem
 {
+    [Dependency] private GridVehicleMoverSystem _gridVehicles = default!;
+    [Dependency] private VehicleWheelSystem _wheels = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
@@ -172,7 +176,19 @@ public sealed partial class XenoChargerCollisionSystem : EntitySystem
         {
             var damage = new DamageSpecifier();
             damage.DamageDict[_blunt] = stage * xeno.StructureDamageMultiplier;
-            _damageable.TryChangeDamage(target, damage, origin: charger);
+            // CMU14: grid vehicles store hull health in hardpoint integrity.
+            if (HasComp<HardpointIntegrityComponent>(target))
+                _hardpoints.DamageHardpoint(target, target, damage.GetTotal().Float());
+            else
+                _damageable.TryChangeDamage(target, damage, origin: charger);
+            if (_net.IsServer)
+            {
+                var direction = _transform.GetWorldPosition(target) - _transform.GetWorldPosition(charger);
+                if (!_wheels.HasAnyFunctionalWheel(target) && direction.LengthSquared() > 0.001f)
+                    _gridVehicles.TryShoveVehicle(target, charger, Vector2.Normalize(direction));
+                if (TryComp(target, out GridVehicleMoverComponent? mover))
+                    _vehicle.DoInteriorCrashEffect(target, mover.MaxSpeed, mover.MaxSpeed);
+            }
 
             // Vehicles are heavy — always stop the charge
             _movement.ResetToIdle(charger);
@@ -298,27 +314,20 @@ public sealed partial class XenoChargerCollisionSystem : EntitySystem
         {
             var damage = new DamageSpecifier();
             damage.DamageDict[_blunt] = stage * xeno.StructureDamageMultiplier;
-            _damageable.TryChangeDamage(target, damage, origin: charger);
-
-            if (isCharged && _vehicle.TryGetOccupants(target, out var passengers, out var xenos))
+            // CMU14: grid vehicles store hull health in hardpoint integrity.
+            if (HasComp<HardpointIntegrityComponent>(target))
+                _hardpoints.DamageHardpoint(target, target, damage.GetTotal().Float());
+            else
+                _damageable.TryChangeDamage(target, damage, origin: charger);
+            if (_net.IsServer)
             {
-                foreach (var occupant in passengers.Concat(xenos))
-                {
-                    if (TerminatingOrDeleted(occupant) || _mobState.IsDead(occupant))
-                        continue;
-
-                    var throwDir = new Vector2(
-                        _random.NextFloat(-1f, 1f),
-                        _random.NextFloat(-1f, 1f)
-                    );
-
-                    if (throwDir.LengthSquared() > 0.001f)
-                        throwDir = Vector2.Normalize(throwDir);
-
-                    _stun.TryKnockdown(occupant, TimeSpan.FromSeconds(1), false);
-                    _throwing.TryThrow(occupant, throwDir, 20f);
-                }
+                var direction = _transform.GetWorldPosition(target) - _transform.GetWorldPosition(charger);
+                if (!_wheels.HasAnyFunctionalWheel(target) && direction.LengthSquared() > 0.001f)
+                    _gridVehicles.TryShoveVehicle(target, charger, Vector2.Normalize(direction));
+                if (TryComp(target, out GridVehicleMoverComponent? mover))
+                    _vehicle.DoInteriorCrashEffect(target, mover.MaxSpeed, mover.MaxSpeed);
             }
+
             _movement.ResetToIdle(charger);
             return;
         }

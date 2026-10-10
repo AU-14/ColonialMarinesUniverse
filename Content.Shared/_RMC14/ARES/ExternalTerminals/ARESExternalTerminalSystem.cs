@@ -84,7 +84,7 @@ public sealed partial class ARESExternalTerminalSystem : EntitySystem
 
         foreach (var entity in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (entity.HasComponent<ARESLogTypeComponent>())
+            if (entity.HasComp<ARESLogTypeComponent>(_componentFactory))
             {
                 LogTypes.Add(entity.ID);
                 continue;

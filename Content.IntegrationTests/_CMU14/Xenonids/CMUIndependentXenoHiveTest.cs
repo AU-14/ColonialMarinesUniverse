@@ -24,6 +24,12 @@ namespace Content.IntegrationTests.CMU14.Xenonids;
 [TestFixture]
 public sealed class CMUIndependentXenoHiveTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipAlphaHivePrototype = "CMUHunterShipAlphaHive";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipForsakenHivePrototype = "CMUHunterShipForsakenHive";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipObjEffectAlienEggForsakenEggGrowingSouthPrototype = "CMUHunterShipObjEffectAlienEggForsakenEggGrowingSouth";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouthPrototype = "CMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouth";
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> CMUYautjaHunterShipPrototype = "CMUYautjaHunterShip";
+
     private static readonly string[] HunterShipEggs =
     [
         "CMUHunterShipPlacedBaseItemEggItemSouthOffset1x2",
@@ -43,8 +49,8 @@ public sealed class CMUIndependentXenoHiveTest
         var server = pair.Server;
         var prototypes = server.ResolveDependency<IPrototypeManager>();
 
-        Assert.That(prototypes.HasIndex<EntityPrototype>("CMUHunterShipAlphaHive") &&
-                    prototypes.HasIndex<EntityPrototype>("CMUHunterShipForsakenHive"), Is.True);
+        Assert.That(prototypes.HasIndex<EntityPrototype>(CMUHunterShipAlphaHivePrototype) &&
+                    prototypes.HasIndex<EntityPrototype>(CMUHunterShipForsakenHivePrototype), Is.True);
 
         Exception? callbackException = null;
         Color alphaColor = default;
@@ -126,9 +132,9 @@ public sealed class CMUIndependentXenoHiveTest
         await server.WaitAssertion(() =>
         {
             Assert.That(prototypes.TryIndex<EntityPrototype>(
-                "CMUHunterShipObjEffectAlienEggForsakenEggGrowingSouth", out var egg), Is.True);
+                CMUHunterShipObjEffectAlienEggForsakenEggGrowingSouthPrototype, out var egg), Is.True);
             Assert.That(prototypes.TryIndex<EntityPrototype>(
-                "CMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouth", out var weeds), Is.True);
+                CMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouthPrototype, out var weeds), Is.True);
 
             Assert.That(egg!.TryComp<XenoEggComponent>(out var eggComp, components), Is.True);
             Assert.That(egg.TryComp<CMUHunterShipHiveAssignmentComponent>(out var eggAssignment, components), Is.True);
@@ -304,7 +310,7 @@ public sealed class CMUIndependentXenoHiveTest
 
         await server.WaitAssertion(() =>
         {
-            var map = prototypes.Index<GameMapPrototype>("CMUYautjaHunterShip");
+            var map = prototypes.Index<GameMapPrototype>(CMUYautjaHunterShipPrototype);
             var options = DeserializationOptions.Default with { InitializeMaps = true };
             Assert.DoesNotThrow(() => ticker.LoadGameMap(map, out _, options));
         });

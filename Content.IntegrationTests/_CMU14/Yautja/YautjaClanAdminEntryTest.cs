@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Client.Administration.Managers;
@@ -71,7 +72,7 @@ public sealed class YautjaClanAdminEntryTest
             }
             finally
             {
-                tab.DisposeAllChildren();
+                tab.ReleaseChildren();
             }
         });
 
@@ -118,7 +119,7 @@ public sealed class YautjaClanAdminEntryTest
                 }
                 finally
                 {
-                    tab.DisposeAllChildren();
+                    tab.ReleaseChildren();
                 }
             });
         }

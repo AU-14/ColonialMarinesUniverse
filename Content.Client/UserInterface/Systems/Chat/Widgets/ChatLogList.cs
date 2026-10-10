@@ -54,7 +54,7 @@ internal sealed class ChatLogList : Control
         if (entry.Row == null)
             return;
         RemoveChild(entry.Row);
-        entry.Row.Dispose();
+        entry.Row.Release();
         entry.Row = null;
         _materialized.Remove(entry);
     }

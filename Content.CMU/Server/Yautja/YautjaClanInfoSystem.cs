@@ -8,7 +8,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaClanInfoSystem : EntitySystem
+public sealed partial class YautjaClanInfoSystem : EntitySystem
 {
     [Dependency] private EuiManager _eui = default!;
 

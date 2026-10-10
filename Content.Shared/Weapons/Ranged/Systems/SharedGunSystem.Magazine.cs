@@ -87,7 +87,7 @@ public abstract partial class SharedGunSystem
         ent.Comp.EjectToHand = ejectToHand;
         Dirty(ent);
 
-        PopupSystem.PopupClient(Loc.GetString(ejectToHand
+        PopupSystem.PopupEntity(Loc.GetString(ejectToHand
             ? "cmu-gun-magazine-auto-eject-set-to-hand"
             : "cmu-gun-magazine-auto-eject-set-to-ground"), ent, user);
     }

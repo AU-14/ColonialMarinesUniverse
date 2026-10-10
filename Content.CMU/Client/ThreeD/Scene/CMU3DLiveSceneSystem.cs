@@ -1,3 +1,4 @@
+using Content.Shared.Mobs.Systems;
 using System.Numerics;
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using System.Linq;
@@ -30,12 +31,14 @@ namespace Content.Client.CMU14.ThreeD.Scene;
 /// </summary>
 public sealed partial class CMU3DLiveSceneSystem : EntitySystem
 {
+    [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private IClientAdminManager _admins = default!;
     [Dependency] private Robust.Shared.Network.IClientNetManager _network = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private CMU3DElevationSystem _elevation = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private CMU3DModelLibrary _modelLibrary = default!;
     [Dependency] private ITileDefinitionManager _tiles = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -57,6 +60,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
     private static readonly Vector2i[] FloorNeighbours = [new(0, -1), new(1, 0), new(0, 1), new(-1, 0)];
 
     private CMU3DLiveSceneWindow? _window;
+    private CMU3DModelLibrary.Lease? _modelLease;
     private CMU3DSceneCatalog? _catalog;
     private readonly Dictionary<string, Color[]> _tileColors = new(StringComparer.Ordinal);
     private readonly HashSet<Entity<SpriteComponent>> _candidates = [];
@@ -107,6 +111,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
         if (!_admins.HasFlag(AdminFlags.Debug) || !TryContext(out _, out _))
             return false;
         CloseFirstPerson();
+        _modelLease ??= _modelLibrary.AcquireWorld();
         if (_window == null)
         {
             var window = new CMU3DLiveSceneWindow();
@@ -149,25 +154,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
             return;
         _window = null;
         UpdateSubscription(0);
-        _actor = null;
-        _selected = null;
-        _selectedModel = null;
-        _boxes.Clear();
-        _entityBoxes.Clear();
-        _animatedSprites.Clear();
-        _candidates.Clear();
-        _wallTargets.Clear();
-        _ordered.Clear();
-        _grids.Clear();
-        _surfaces.Clear();
-        _surfaceProps.Clear();
-        _surfaceOffsets.Clear();
-        _surfaceRearWalls.Clear();
-        _surfaceMountFallbacks.Clear();
-        _terrainCutouts.Clear();
-        _terrainTargetPrototypes.Clear();
-        _terrainSources.Clear();
-        _terrainVolumes.Clear();
+        ReleaseSceneData();
     }
 
     private void OnAdminStatusUpdated()
@@ -202,7 +189,9 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
             return false;
         if (firstPerson || _firstPersonView != null)
         {
-            if (transform.MapUid is not { } map || !HasComp<CMU3DMapComponent>(map))
+            // Use the normal unconscious/dead view, including its visibility restrictions.
+            if (_mobState.IsIncapacitated(controlled) ||
+                transform.MapUid is not { } map || !HasComp<CMU3DMapComponent>(map))
                 return false;
         }
         else if (!_admins.HasFlag(AdminFlags.Debug))
@@ -244,6 +233,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
     {
         if (_catalog != null)
             return;
+        _modelLease!.EnsureLoaded();
         _catalog = new CMU3DSceneCatalog(_prototypes.EnumeratePrototypes<CMU3DModelPrototype>(), id =>
             _prototypes.TryIndex<EntityPrototype>(id, out var prototype) ? prototype.Parents : null);
         foreach (var material in _prototypes.EnumeratePrototypes<CMU3DTileMaterialPrototype>())
@@ -398,6 +388,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 }
                 var id = candidate.Meta.EntityPrototype?.ID;
                 var match = id == null ? null : _catalog!.Resolve(id);
+                match = VehicleTurretMatch(candidate.Uid, match);
                 var unsupportedState = false;
                 if (id != null && _catalog!.HasRandomSpriteVariants(id))
                 {
@@ -431,6 +422,11 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 IReadOnlyList<CMU3DModelPart>? stateParts = null;
                 var appearanceKey = string.Empty;
                 var paperOffset = Vector2.Zero;
+                var xenoAnimated = false;
+                if (match is { } xenoMatch && xenoMatch.Model.XenoStates.Count > 0)
+                    unsupportedState |= !TryXenoParts(candidate.Sprite, xenoMatch.Model, out stateParts, out xenoAnimated);
+                if (match is { } vehicleMatch && vehicleMatch.Model.VehicleLayers.Count > 0)
+                    unsupportedState |= !TryVehicleParts(candidate.Uid, candidate.Sprite, vehicleMatch.Model, out stateParts);
                 if (match is { } paperMatch && paperMatch.Model.WallPaper)
                     unsupportedState |= !paperMatch.Exact ||
                         !TryPaperOffset(candidate.Uid, candidate.Sprite, paperMatch.Model, out paperOffset);
@@ -498,6 +494,12 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                     position += model.GroundOffset;
                     renderYaw = CMU3DSceneLayout.RenderYaw(model, candidate.Yaw, candidate.Sprite.NoRotation,
                         candidate.Sprite.SnapCardinals) + (float) candidate.Sprite.Rotation.Theta;
+                    if (model.VehicleTurretPrototypes.Length > 0 &&
+                        TryVehiclePose(candidate.Uid, out var mountPosition, out var mountYaw))
+                    {
+                        position = mountPosition - origin + model.GroundOffset;
+                        renderYaw = CMU3DSceneLayout.RenderYaw(model, (float) mountYaw.Theta, false, false);
+                    }
                     if (model.OpeningFacingTargets.Length > 0)
                         renderYaw = OpeningFacingYaw(candidate.Uid, model, renderYaw);
                     IReadOnlyList<CMU3DModelPart> parts = stateParts ?? model.Parts;
@@ -542,6 +544,12 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                         }
                         else if (model.BackWallMountTargets.Length > 0)
                             position += BackWallMountOffset(candidate.Uid, model, renderYaw, wallOffset);
+                    }
+                    else if (model.WallMounted && HasComp<CMU3DVehicleCabinComponent>(mapUid))
+                    {
+                        // Cabin fixtures are placed directly against custom hull art.
+                        // Undo the ordinary model's half-tile wall-face offset.
+                        position += new Vector2(-MathF.Sin(renderYaw), MathF.Cos(renderYaw)) * .5f;
                     }
                     else if (model.FaceAwayFromWall)
                         renderYaw = ApplianceYaw(candidate.Uid, model, renderYaw);
@@ -602,7 +610,7 @@ public sealed partial class CMU3DLiveSceneSystem : EntitySystem
                 if (useModel)
                 {
                     var model = match!.Value.Model;
-                    if (model.SpriteStates.Count > 0 || model.ChargerAppearance != null ||
+                    if (model.SpriteStates.Count > 0 || xenoAnimated || model.ChargerAppearance != null ||
                         model.FoamAppearance != null || model.SolutionAppearance != null)
                         _animatedSprites.Add(candidate.Uid);
                     if (model.Placement == "surface")

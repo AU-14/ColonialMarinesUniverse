@@ -60,7 +60,7 @@ public sealed class AnchoredTileCacheTest : GameTest
                         foreach (var entity in cache.Get(map.Grid, Vector2i.Zero)) sum += entity.Id;
                         continue;
                     }
-                    var query = maps.GetAnchoredEntitiesEnumerator(map.Grid, map.Grid.Comp, Vector2i.Zero);
+                    var query = maps.GetAnchoredEntities(map.Grid, map.Grid.Comp, Vector2i.Zero);
                     if (path == 1)
                     {
                         while (query.MoveNext(out var entity)) sum += entity!.Value.Id;
@@ -225,7 +225,7 @@ public sealed class AnchoredTileCacheTest : GameTest
                 var tile = new Vector2i(i % 100, i / 100 + 1);
                 var uid = SEntMan.SpawnEntity(null, new EntityCoordinates(map.Grid, tile + new Vector2(0.5f)));
                 Assert.That(transforms.AnchorEntity(uid), Is.True);
-                var direct = maps.GetAnchoredEntitiesEnumerator(map.Grid, map.Grid.Comp, tile);
+                var direct = maps.GetAnchoredEntities(map.Grid, map.Grid.Comp, tile);
                 var present = false;
                 while (direct.MoveNext(out var member)) present |= member == uid;
                 Assert.That(present, Is.True, $"Fixture membership at index {i}, tile {tile}, actual {SEntMan.GetComponent<TransformComponent>(uid).Coordinates}");

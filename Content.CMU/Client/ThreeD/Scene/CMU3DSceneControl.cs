@@ -201,9 +201,6 @@ public sealed partial class CMU3DSceneControl : Control
                 ? new Vector3(camera.Origin.X, camera.Origin.Y, VisibleRadius)
                 : new Vector3(0, 0, SceneRadius));
             _shader.SetParameter("selectedBox", (float) _selectedBox);
-            _shader.SetParameter("equipmentBoxes", (Texture?) _equipmentTexture ?? Texture.White);
-            _shader.SetParameter("equipmentRoots", (Texture?) _equipmentRoots ?? Texture.White);
-            _shader.SetParameter("equipmentCount", (float) _equipment.Count);
             _shader.SetParameter("liveLight", _lightViewport?.LightRenderTarget.Texture ?? Texture.White);
             _shader.SetParameter("useLiveLight", FirstPerson ? 1f : 0f);
             _shader.SetParameter("brightness", Brightness);

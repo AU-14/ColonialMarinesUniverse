@@ -369,6 +369,8 @@
         amount: 80
       - id: AU14PouchGasMaskBag
         amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
     - name: Hearing Protection
       entries:
       - id: CMUHeadElectronicHearingProtection
@@ -443,6 +445,7 @@
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
       - id: AU14BeltMedicBagRMC
+        recommended: true
       - id: AU14BeltMedicalRMC
     - name: Medical Backpacks
       entries:
@@ -450,6 +453,8 @@
         amount: 9
     - name: General Medical Supplies
       entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
@@ -799,6 +804,12 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
+      - id: ANPRC117GRadioIssued
+        amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 1
       - id: AU14HeadBeretRMCOfficer
         name: Officer Beret
         amount: 3
@@ -1210,10 +1221,12 @@
       - id: AU14BeltUtilityCombatRMCFilled
         name: royal marine combat toolbelt rig (filled)
         recommended: true
-      - id: AU14PouchToolsFilledComtech
-        name: tactical tools pouch (filled)
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
@@ -1309,6 +1322,7 @@
   name: royal marines automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]
   - type: Sprite
@@ -1349,8 +1363,14 @@
         amount: 1
       - id: RMCWeaponRifleL89A2
         amount: 1
+      - id: RMCWeaponRifleL88A1
+        amount: 2
+      - id: RMCWeaponRifleL88A2
+        amount: 1
       - id: AU14Mk86Case
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: CMUMagazineGPMGTWE
@@ -1374,7 +1394,7 @@
       - id: RMCMagazineRifleL90DrumAP
         amount: 1
       - id: RMCMagazineRifleL88
-        amount: 16
+        amount: 40
       - id: RMCMagazineRifleL88AP
         amount: 4
       - id: RMCBoxShotgunBuckshot
@@ -1393,6 +1413,8 @@
         amount: 200
       - id: AU14MagazinePistolL165A1
         amount: 200
+      - id: RMCMagazinePistolSU6
+        amount: 30
     - name: Magazine Boxes
       entries:
       - id: RMCBoxMagazineRifleL24
@@ -1463,8 +1485,6 @@
       entries:
       - id: RMCAttachmentExtendedBarrel
         amount: 5
-      - id: RMCAttachmentShotgunChoke
-        amount: 3
     - name: Rail Attachments
       entries:
       - id: RMCAttachmentTwoPointSling
@@ -1487,10 +1507,6 @@
         amount: 5
       - id: RMCAttachmentU7UnderbarrelShotgun
         amount: 3
-    - name: Stock Attachments
-      entries:
-      - id: RMCAttachmentM42A2CollapsibleStock
-        amount: 3
     - name: Load Bearing Equipment
       entries:
       - id: RMCOuterClothingExternalWebbingBlack
@@ -1503,6 +1519,12 @@
         amount: 10
       - id: RMCPouchMagazinePistolLarge
         amount: 10
+      - id: RMCPouchGeneralLarge
+        amount: 5
+      - id: RMCPouchDocument
+        amount: 5
+      - id: RMCPouchShotgunLarge
+        amount: 5
     - name: Devices
       entries:
       - id: RMCIntelDetector
@@ -1515,14 +1537,24 @@
         amount: 4
       - id: MineDetector
         amount: 2
-    - name: RTO Packs
+      - id: CMUDeployableZLevelLadder
+        amount: 2
+    - name: Protective Equipment
       entries:
-      - id: AU14BackpackRTOPackJungle
-        amount: 1
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
-      - id: AU14BackpackRTOPackGray
-        amount: 1
+      - id: AU14MaskGasRMC
+        amount: 30
+      - id: CMUGasMaskFilter
+        amount: 30
+      - id: CMUFieldGasTankOxygenFilled
+        amount: 15
+    - name: Radio Equipment
+      entries:
+      - id: ANPRC117GRadio
+        amount: 3
+      - id: ANPRCWhipAntenna
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 2
     - name: Materials
       entries:
       - id: CMSheetMetal
@@ -1533,6 +1565,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

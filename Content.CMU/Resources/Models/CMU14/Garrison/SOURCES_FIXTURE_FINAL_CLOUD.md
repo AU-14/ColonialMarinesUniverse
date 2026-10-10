@@ -12,8 +12,8 @@ The source-facing, front/rear orbit, constant-scale and synthetic opposed-door/f
 
 ## Canonical files
 
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_fixture_final_cloud.yml`
-- `Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_fixture_final_cloud_art.yml`
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_fixture_final_cloud.yml`
+- `Content.CMU/Resources/ThreeD/Prototypes/World/garrison_fixture_final_cloud_art.yml`
 - `Content.CMU/Resources/Textures/CMU14/ThreeD/fixture_final_cloud/`
 - `Content.CMU/Resources/Models/CMU14/Garrison/CMU3D*Cloud.glb` as enumerated in `fixture-final-cloud-manifest.json`
 - `Tools/three_d/generated/review/fixture-final-cloud/`

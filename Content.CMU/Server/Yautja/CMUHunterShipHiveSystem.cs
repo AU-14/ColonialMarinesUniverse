@@ -15,7 +15,7 @@ namespace Content.Server.CMU14.Yautja;
 /// <summary>
 /// Creates and scopes the two xeno hives used by the specimen displays on the Hunter Ship.
 /// </summary>
-public sealed class CMUHunterShipHiveSystem : EntitySystem
+public sealed partial class CMUHunterShipHiveSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private MapSystem _map = default!;
@@ -54,7 +54,7 @@ public sealed class CMUHunterShipHiveSystem : EntitySystem
     {
         foreach (var grid in args.Station.Comp.Grids)
         {
-            if (TryComp<TransformComponent>(grid, out var transform))
+            if (TryComp(grid, out TransformComponent? transform))
             {
                 ent.Comp.RootMap = transform.MapID;
                 break;

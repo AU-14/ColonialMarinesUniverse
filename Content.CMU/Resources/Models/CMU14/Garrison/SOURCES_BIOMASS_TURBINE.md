@@ -124,7 +124,7 @@ it on is not evidence of implemented gameplay. No active state is claimed comple
 
 Editable models are `garrison_biomass_turbine.yml` and
 `garrison_biomass_supports.yml` under
-`Content.CMU/Resources/Prototypes/CMU14/ThreeD/`. Their matching art definitions are
+`Content.CMU/Resources/ThreeD/Prototypes/World/`. Their matching art definitions are
 `garrison_biomass_turbine_art.yml` and `garrison_biomass_support_art.yml`.
 The two generators are `Tools/three_d/author_biomass_turbine.py` and
 `Tools/three_d/author_biomass_supports.py`. Textures live under

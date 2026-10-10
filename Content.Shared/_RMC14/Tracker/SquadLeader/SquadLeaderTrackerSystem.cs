@@ -459,6 +459,11 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
 
     private bool CanChangeFireteamMember(EntityUid user, EntityUid target, bool add, EntityUid? trackerOwner = null)
     {
+        // cmu edit start: auxiliary squads have no fireteams
+        if (add && CMUInAuxiliarySquad(target))
+            return false;
+        // cmu edit end
+
         // Allow direct squad leaders immediately.
         if (HasComp<SquadLeaderComponent>(user))
         {
@@ -709,7 +714,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
                 var trackingComponent = _factory.GetComponent(trackerMode.Component).GetType();
                 var targetName = "";
 
-                if (EntityManager.TryGetComponent(trackableUid, trackingComponent, out _))
+                if (TryComp(trackableUid, trackingComponent, out _))
                 {
                     if (!_net.IsClient)
                         targetName = Name(trackableUid);
@@ -895,7 +900,7 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
                 if (trackerMode.Component != null)
                 {
                     var trackingComponent = _factory.GetComponent(trackerMode.Component).GetType();
-                    if (EntityManager.TryGetComponent(trackableUid, trackingComponent, out _))
+                    if (TryComp(trackableUid, trackingComponent, out _))
                     {
                         SetTarget((uid, tracker), trackableUid);
 

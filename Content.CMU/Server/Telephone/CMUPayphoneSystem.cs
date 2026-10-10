@@ -3,7 +3,7 @@ using Content.Shared.CMU14.Telephone;
 
 namespace Content.Server.CMU14.Telephone;
 
-public sealed class CMUPayphoneSystem : EntitySystem
+public sealed partial class CMUPayphoneSystem : EntitySystem
 {
     [Dependency] private AreaSystem _areas = default!;
     [Dependency] private MetaDataSystem _metaData = default!;

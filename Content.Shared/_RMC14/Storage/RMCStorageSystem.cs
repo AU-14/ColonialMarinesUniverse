@@ -267,7 +267,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
             return;
 
         var msg = Loc.GetString("rmc-storage-nested-unable", ("nested", ent), ("parent", container.Owner));
-        _popup.PopupClient(msg, ent, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(msg, ent, args.User, PopupType.SmallCaution);
     }
 
     private void OnEntityStorageWhitelistAttempt(Entity<RMCEntityStorageWhitelistComponent> ent, ref ContainerIsInsertingAttemptEvent args)
@@ -321,7 +321,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
     {
         if (!_skills.HasAllSkills(user, storage.Comp.Skills))
         {
-            _popup.PopupClient(Loc.GetString("cm-storage-unskilled"), storage, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cm-storage-unskilled"), storage, user, PopupType.SmallCaution);
             return true;
         }
 

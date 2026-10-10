@@ -82,6 +82,7 @@ public sealed class CMU3DDoorAppearanceTest
 
     private static CMU3DButtonLayer Layer(string state, int frame) => new("/Textures/" + Rsi, state, frame, true, Color.White, true);
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model()
     {
         var model = new CMU3DModelPrototype { SourcePrototypes = ["TestShutter"], ReferenceRsi = Rsi, SourceDirections = 4 };

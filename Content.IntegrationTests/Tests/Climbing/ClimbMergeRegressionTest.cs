@@ -25,6 +25,8 @@ namespace Content.IntegrationTests.Tests.Climbing;
 [TestOf(typeof(ClimbSystem))]
 public sealed class ClimbMergeRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageTypePrototype> BluntPrototype = "Blunt";
+
     private const string ClimbFixtureName = "climb";
 
     [TestPrototypes]
@@ -135,7 +137,7 @@ public sealed class ClimbMergeRegressionTest : GameTest
                     "includeTarget must raise one AttemptClimb event without duplicating the lookup hit");
             });
 
-            var blunt = SProtoMan.Index<DamageTypePrototype>("Blunt");
+            var blunt = SProtoMan.Index<DamageTypePrototype>(BluntPrototype);
             var damage = Server.System<DamageableSystem>().TryChangeDamage(
                 climber,
                 new DamageSpecifier(blunt, FixedPoint2.New(1)),

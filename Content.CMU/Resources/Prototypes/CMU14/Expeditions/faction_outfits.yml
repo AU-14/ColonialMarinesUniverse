@@ -1,0 +1,70 @@
+# Clothing-only spawn profiles. Role equipment and faction orders are independent.
+- type: startingGear
+  id: CMUExpeditionOutfitUSCM
+  equipment:
+    jumpsuit: AU14CamoUSCMFatigues
+    outerClothing: CMArmorM3Medium
+    head: ArmorHelmetM10
+
+- type: startingGear
+  id: CMUExpeditionOutfitRMC
+  equipment:
+    jumpsuit: AU14FatiguesDesertRMC
+    outerClothing: AU14ArmorRMC
+    head: AU14HeadHelmetRMC
+
+- type: startingGear
+  id: CMUExpeditionOutfitUPP
+  equipment:
+    jumpsuit: AU14FatiguesUPP
+    outerClothing: AU14UPPArmor
+    head: AU14UPPNavalInfantryHelmet
+
+- type: startingGear
+  id: CMUExpeditionOutfitPMC
+  equipment:
+    jumpsuit: AU14WYPMCFatigues
+    outerClothing: AU14WYPMCArmor
+    head: AU14WYPMCHelmet
+
+- type: startingGear
+  id: CMUExpeditionOutfitCLF
+  equipment:
+    jumpsuit: RMCJumpsuitCLFWebbing
+    outerClothing: RMCCoatMilitiaVest
+    head: RMCHeadMilitiaHood
+
+- type: startingGear
+  id: CMUExpeditionOutfitCMB
+  equipment:
+    jumpsuit: AU14CMBUniform
+    outerClothing: AU14CMBCIUArmor
+    head: AU14CMBCIUHelmet
+
+- type: startingGear
+  id: CMUExpeditionOutfitLACN
+  equipment:
+    jumpsuit: AU14LACNUniform
+    outerClothing: AU14LACNArmorStandard
+    head: AU14LACNHelmetStandard
+
+- type: startingGear
+  id: CMUExpeditionOutfitCCAF
+  equipment:
+    jumpsuit: AU14CCAFUniform
+    outerClothing: AU14CCAFArmor
+    head: AU14CCAFHelmetISACV
+
+- type: startingGear
+  id: CMUExpeditionOutfitUACG
+  equipment:
+    jumpsuit: AU14UACGFatigues
+    outerClothing: AU14ArmorM3UACG
+    head: AU14UACGHelmet
+
+- type: startingGear
+  id: CMUExpeditionOutfitProdigy
+  equipment:
+    jumpsuit: AU14ProdigyFatigues
+    outerClothing: CMUArmorProdigyFlakVest
+    head: AU14ProdigyBallisticHelmet

@@ -25,7 +25,7 @@ import scene
 import surfaces
 from author_wide_machinery import world_parts, contacts
 
-MODEL_FILE = ROOT/'Content.CMU/Resources/Prototypes/CMU14/ThreeD/garrison_baked_food.yml'
+MODEL_FILE = ROOT/'Content.CMU/Resources/ThreeD/Prototypes/World/garrison_baked_food.yml'
 ART_FILE = MODEL_FILE.with_name('garrison_baked_food_art.yml')
 TEXTURES = ROOT/'Content.CMU/Resources/Textures/CMU14/ThreeD/Surfaces'
 REFERENCES = ROOT/'Content.CMU/Resources/Textures/CMU14/ThreeD/BakedFoodReferences.rsi'

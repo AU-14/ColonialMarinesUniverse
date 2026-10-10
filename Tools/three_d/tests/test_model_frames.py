@@ -13,7 +13,7 @@ from button_animation_review import source_frames
 class ModelFrameTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.models = [bm.validate_model(m) for m in yaml.load((bm.SOURCE / 'garrison_architecture.yml').read_text(encoding='utf-8'), Loader=yaml.CSafeLoader)
+        cls.models = [bm.validate_model(m) for m in yaml.load((bm.WORLD_SOURCE / 'garrison_architecture.yml').read_text(encoding='utf-8'), Loader=yaml.CSafeLoader)
                       if m.get('doorButtonStates')]
 
     def test_all_authored_frame_solids_preserve_source_projection(self):
@@ -35,11 +35,14 @@ class ModelFrameTest(unittest.TestCase):
                             self.assertAlmostEqual(part['max'][1], -.502)
                             left = round(part['min'][0] * 32 + 16)
                             right = round(part['max'][0] * 32 + 16)
-                            row = round(16 - (part['max'][2] - 1.335) * 32)
+                            # CMU14: Coalesced solids can span several source rows; compare their full projection.
+                            top = round(16 - (part['max'][2] - 1.335) * 32)
+                            bottom = round(16 - (part['min'][2] - 1.335) * 32)
                             color = tuple(round(v * 255) for v in bm.rgba(part['color']))
-                            for x in range(left, right):
-                                self.assertEqual(actual.getpixel((x, row))[3], 0)
-                                actual.putpixel((x, row), color)
+                            for row in range(top, bottom):
+                                for x in range(left, right):
+                                    self.assertEqual(actual.getpixel((x, row))[3], 0)
+                                    actual.putpixel((x, row), color)
                         self.assertEqual(actual.getchannel('A').tobytes(), expected.getchannel('A').tobytes())
                         for y in range(32):
                             for x in range(32):
