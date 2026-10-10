@@ -36,7 +36,7 @@ public sealed class CMUDespawnWhenEmptyTest
         await server.WaitAssertion(() =>
         {
             var prototype = server.ProtoMan.Index(WeaponKit);
-            Assert.That(prototype.TryGetComponent<CMUDespawnWhenEmptyComponent>(out var despawn, server.EntMan.ComponentFactory), Is.True);
+            Assert.That(prototype.TryComp<CMUDespawnWhenEmptyComponent>(out var despawn, server.EntMan.ComponentFactory), Is.True);
             Assert.That(despawn!.Delay, Is.EqualTo(TimeSpan.FromMinutes(1)));
         });
     }

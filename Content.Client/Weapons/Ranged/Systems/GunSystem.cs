@@ -802,6 +802,6 @@ public sealed partial class GunSystem : SharedGunSystem
     private bool IsHitscanCartridge(CartridgeAmmoComponent cartridge)
     {
         return ProtoManager.TryIndex(cartridge.Prototype, out var proto) &&
-               proto.HasComponent<HitscanAmmoComponent>(EntityManager.ComponentFactory);
+               proto.HasComp<HitscanAmmoComponent>(EntityManager.ComponentFactory);
     }
 }
