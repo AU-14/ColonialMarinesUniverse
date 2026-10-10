@@ -233,7 +233,9 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool KeepFightingPosition(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
+        // shaken counts as pressured, so no exposed angle after the just-hit window either
         if (agent.Target == null || agent.RushTarget != null || GrenadeDanger(Transform(uid).Coordinates) ||
+            agent.Emotion == CMUExpeditionEmotion.Shaken ||
             agent.LastDamage >= agent.RetreatDamage || now - agent.LastHit < TimeSpan.FromSeconds(0.75) ||
             !_guns.TryGetGun(uid, out var gun) || WeaponAmmo(gun) == 0 ||
             !TryAimPoint(uid, agent, gun, out var point) || !SafeShot(uid, agent, gun, point))
