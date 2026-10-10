@@ -1,5 +1,4 @@
 using Content.Shared.Damage;
-using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Events;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Weapons.Ranged.Flamer;
@@ -23,7 +22,6 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<DamageableComponent, DamageModifyAfterResistEvent>(OnDamageModifyAfterResist);
         SubscribeLocalEvent<YautjaTechItemComponent, StaminaMeleeHitEvent>(OnStaminaMeleeHit);
         SubscribeLocalEvent<YautjaTechItemComponent, ProjectileHitEvent>(OnProjectileHit);
         SubscribeLocalEvent<YautjaTechItemComponent, GettingPickedUpAttemptEvent>(OnPickupAttempt);
@@ -32,20 +30,6 @@ public sealed partial class YautjaTechItemSystem : EntitySystem
         SubscribeLocalEvent<YautjaTechItemComponent, AttemptMeleeEvent>(OnAttemptMelee);
         SubscribeLocalEvent<YautjaTechItemComponent, ThrowItemAttemptEvent>(OnThrowAttempt);
         SubscribeLocalEvent<YautjaTechItemComponent, AttemptShootEvent>(OnShootAttempt, before: [typeof(SharedRMCFlamerSystem)]);
-    }
-
-    private void OnDamageModifyAfterResist(Entity<DamageableComponent> ent, ref DamageModifyAfterResistEvent args)
-    {
-        if (args.Tool is not { } tool ||
-            HasComp<ProjectileComponent>(tool) ||
-            !TryComp(tool, out YautjaTechItemComponent? tech) ||
-            tech.DamageMultiplier == 1f ||
-            !args.Damage.AnyPositive())
-        {
-            return;
-        }
-
-        args.Damage *= tech.DamageMultiplier;
     }
 
     private void OnProjectileHit(Entity<YautjaTechItemComponent> ent, ref ProjectileHitEvent args)

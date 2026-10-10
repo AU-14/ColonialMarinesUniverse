@@ -36,6 +36,7 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
@@ -52,6 +53,7 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, YautjaSelfDestructConfirmArmEvent>(OnSelfDestructConfirmArm);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaSelfDestructConfirmCancelEvent>(OnSelfDestructConfirmCancel);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaSelfDestructConfirmRemoteDeadVictimEvent>(OnSelfDestructConfirmRemoteDeadVictim);
+        SubscribeLocalEvent<YautjaComponent, YautjaSelfDestructAlertEvent>(OnSelfDestructAlert);
         SubscribeLocalEvent<MobStateChangedEvent>(OnAnyMobStateChanged);
     }
 
@@ -78,7 +80,7 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
             var seconds = Math.Max(1, (int) Math.Ceiling((bracer.SelfDestructAt - now).TotalSeconds));
             _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-warning", ("seconds", seconds)), user, user, PopupType.LargeCaution);
-            _audio.PlayPvs(bracer.SelfDestructWarningSound, user);
+            bracer.SelfDestructWarningStream = _audio.PlayPvs(bracer.SelfDestructWarningSound, user)?.Entity;
             bracer.NextSelfDestructWarning = now + bracer.SelfDestructWarningEvery;
             Dirty(uid, bracer);
         }
@@ -133,6 +135,54 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         }
 
         TryRemoteDetonateDeadVictimSelfDestruct(ent, user.Value, victim.Value, victimBracer.Value);
+    }
+
+    private void OnSelfDestructAlert(Entity<YautjaComponent> ent, ref YautjaSelfDestructAlertEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        // Server-authoritative: the alert click also runs client-side, and a client-created predicted
+        // sound is a separate entity the server can never stop - which is why a cancel left the arm
+        // sounds ringing.
+        if (_net.IsClient)
+        {
+            args.Handled = true;
+            return;
+        }
+
+        var user = args.User;
+        if (!_power.TryGetWornBracer(user, out var bracer))
+            return;
+
+        args.Handled = true;
+
+        // YautjaPowerSystem owns User: OnEquipped sets it to the wearer and OnUnequipped clears it, and
+        // TryGetWornBracer only returns a bracer worn by this user, so it already matches. Writing it
+        // here would hide a stale value rather than fix whatever produced it.
+
+        // Our own timer wins the click, so hauling a body can never leave it armed and uncancellable.
+        if (bracer.Comp.SelfDestructArmed)
+        {
+            StopSelfDestructAudio(bracer);
+            TryCancelSelfDestruct(bracer, user);
+            return;
+        }
+
+        // Only a hauled dead hunter wearing their own bracer is a remote target: a marine corpse or a
+        // trophy must not swallow the click.
+        if (TryGetPulledDeadVictim(user, out var dragged) && HasFittedBracer(dragged))
+        {
+            if (TryCancelRemoteDeadVictimSelfDestruct(bracer, user, dragged))
+                return;
+
+            if (CanUseRemoteDeadVictimSelfDestruct(bracer, user, dragged, null, out var draggedBracer))
+                TryRemoteDetonateDeadVictimSelfDestruct(bracer, user, dragged, draggedBracer.Owner);
+
+            return;
+        }
+
+        TryArmSelfDestruct(bracer, user);
     }
 
     private void OnAnyMobStateChanged(MobStateChangedEvent args)
@@ -248,7 +298,7 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         if (notifyYautja)
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-armed"), victim, victim, PopupType.LargeCaution);
-            BroadcastToYautja(Loc.GetString("cmu-yautja-self-destruct-broadcast-armed", ("hunter", Name(victim))));
+            BroadcastToYautja(Loc.GetString("cmu-yautja-self-destruct-broadcast-armed", ("hunter", Name(victim))), except: user);
         }
 
         StopSelfDestructAudio(bracer);
@@ -288,12 +338,42 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         BroadcastToYautja(Loc.GetString(
             "cmu-yautja-self-destruct-broadcast-remote-armed",
             ("hunter", Name(user)),
-            ("victim", Name(victim))));
+            ("victim", Name(victim))), except: user);
         _adminLog.Add(LogType.Action, LogImpact.High,
             $"{ToPrettyString(user):hunter} triggered the predator self-destruct sequence of {ToPrettyString(victim):victim} in {_area.GetAreaName(user)}");
 
         var ev = new YautjaSelfDestructArmedEvent(victimBracer.Owner, user, victim, true);
         RaiseLocalEvent(victimBracer.Owner, ref ev);
+        return true;
+    }
+
+    public bool TryCancelRemoteDeadVictimSelfDestruct(
+        Entity<YautjaBracerComponent> bracer,
+        EntityUid user,
+        EntityUid victim)
+    {
+        // CanUseRemoteDeadVictimSelfDestruct bails out when the victim's bracer is already armed,
+        // which is precisely the state to cancel, so the checks are repeated here without that gate.
+        if (!CanUseSelfDestructCommon(bracer, user) ||
+            !TryGetPulledDeadVictim(user, out var pulled) ||
+            pulled != victim ||
+            !_inventory.TryGetSlotEntity(victim, "gloves", out var gloves) ||
+            !TryComp(gloves, out YautjaBracerComponent? victimBracer) ||
+            victimBracer.User != victim ||
+            !victimBracer.SelfDestructArmed)
+        {
+            return false;
+        }
+
+        victimBracer.SelfDestructArmed = false;
+        victimBracer.SelfDestructAt = TimeSpan.Zero;
+        victimBracer.NextSelfDestructWarning = TimeSpan.Zero;
+        StopSelfDestructAudio((gloves.Value, victimBracer));
+        Dirty(gloves.Value, victimBracer);
+
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-cancelled"), user, user);
+        _adminLog.Add(LogType.Action, LogImpact.Medium,
+            $"{ToPrettyString(user):hunter} cancelled the self-destruct of {ToPrettyString(victim):victim}");
         return true;
     }
 
@@ -309,14 +389,15 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         Dirty(bracer);
 
         _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-cancelled"), user, user);
-        BroadcastToYautja(Loc.GetString("cmu-yautja-self-destruct-broadcast-cancelled", ("hunter", Name(user))));
+        BroadcastToYautja(Loc.GetString("cmu-yautja-self-destruct-broadcast-cancelled", ("hunter", Name(user))), except: user);
+        // Cancelling stays audible: StopSelfDestructAudio above only silences the arm and warning streams.
         _audio.PlayPvs(bracer.Comp.SelfDestructCancelSound, user);
         _adminLog.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(user):hunter} has deactivated their Self-Destruct.");
         return true;
     }
 
-    private void BroadcastToYautja(string message)
+    private void BroadcastToYautja(string message, EntityUid? except = null)
     {
         if (_net.IsClient)
             return;
@@ -324,7 +405,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         var query = EntityQueryEnumerator<YautjaComponent>();
         while (query.MoveNext(out var uid, out _))
         {
-            if (!Deleted(uid))
+            // The acting hunter already gets the large red confirmation; the broadcast is for everyone else.
+            if (uid != except && !Deleted(uid))
                 _popup.PopupEntity(message, uid, uid, PopupType.Medium);
         }
     }
@@ -534,6 +616,17 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
                xform.MapUid is { } map && HasComp<YautjaHuntingGroundComponent>(map);
     }
 
+    /// <summary>
+    /// True when the hauled corpse is a hunter wearing their own bracer, making it a valid remote
+    /// self-destruct target rather than an arbitrary body or trophy.
+    /// </summary>
+    private bool HasFittedBracer(EntityUid victim)
+    {
+        return _inventory.TryGetSlotEntity(victim, "gloves", out var gloves) &&
+               TryComp(gloves, out YautjaBracerComponent? victimBracer) &&
+               victimBracer.User == victim;
+    }
+
     private bool TryGetPulledDeadVictim(EntityUid user, out EntityUid victim)
     {
         if (TryComp(user, out PullerComponent? puller) &&
@@ -566,5 +659,6 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
     {
         bracer.Comp.SelfDestructLaughStream = _audio.Stop(bracer.Comp.SelfDestructLaughStream);
         bracer.Comp.SelfDestructArmStream = _audio.Stop(bracer.Comp.SelfDestructArmStream);
+        bracer.Comp.SelfDestructWarningStream = _audio.Stop(bracer.Comp.SelfDestructWarningStream);
     }
 }

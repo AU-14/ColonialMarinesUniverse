@@ -471,10 +471,12 @@
       params:
         variation: 0.1
         volume: -5
-  - type: MeleeDamageMultiplier # 1.5x Damage against other xenos
-    whitelist:
-      components:
-      - Xeno
+  # CMU14: melee damage against xenos is resolved centrally by the xeno/melee combat configuration in
+  # CMArmorSystem, so the per-entity multiplier is disabled. Upstream code kept commented for merge safety.
+  # - type: MeleeDamageMultiplier # 1.5x Damage against other xenos
+  #   whitelist:
+  #     components:
+  #     - Xeno
   - type: Tackle
   - type: XenoClaws
 

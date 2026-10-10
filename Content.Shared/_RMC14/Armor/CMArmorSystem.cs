@@ -352,7 +352,35 @@ public sealed partial class CMArmorSystem : EntitySystem
         var immuneToAP = TryComp<CMArmorComponent>(ent, out var armorComp) && armorComp.ImmuneToAP;
         if (HasComp<XenoComponent>(ent))
         {
-            ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier);
+            // CMU14 XenoClawSlash Begin: a claw swing marked by XenoSystem applies the XVX slash
+            // multiplier per target, and only to xenos - a swing that catches a marine and a xeno must
+            // not boost the marine.
+            if ((args.Impact.Context & DamageImpactContext.XenoClaw) != 0)
+                args.Damage = args.Damage * XenoSystem.XENO_SLASH_DAMAGE_MULT;
+            // CMU14 End
+            // CMU14 XenoMeleeArmor Begin: CM-SS13's xeno/melee combat configuration. Any melee hit on a
+            // xeno deals x1.5 (damage_initial_multiplier); the flat 20 penetration is the item-attack path
+            // only, and a xeno's own body attack ignores three quarters of the victim's armour
+            // (XVX_ARMOR_EFFECTIVEMULT).
+            var armorEffectiveness = 1f;
+            if (args.Impact.Delivery == DamageImpactDelivery.Melee)
+            {
+                args.Damage = args.Damage * 1.5f;
+
+                if (args.Tool is { } meleeTool && meleeTool != args.Origin)
+                {
+                    armorPiercing += 20;
+                }
+                else if (HasComp<XenoComponent>(args.Origin))
+                {
+                    armorEffectiveness = 0.25f;
+                }
+            }
+
+            // CMU14: upstream line is ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier);
+            ev.XenoArmor = (int)(ev.XenoArmor * ev.ArmorModifier * armorEffectiveness);
+            // CMU14 End
+
             if (!immuneToAP)
                 ev.XenoArmor -= armorPiercing;
         }

@@ -289,6 +289,90 @@ public sealed class YautjaRackAccessTest
         await pair.CleanReturnAsync();
     }
 
+    [Test]
+    public async Task YautjaRacksOpenWithoutAnIdCard()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var mind = entMan.System<MindSystem>();
+            var roles = entMan.System<SharedRoleSystem>();
+            var adultRack = entMan.SpawnEntity("CMUYautjaLoadoutVendor", MapCoordinates.Nullspace);
+            var elderRack = entMan.SpawnEntity("CMUYautjaElderLoadoutVendor", MapCoordinates.Nullspace);
+            var youngbloodRack = entMan.SpawnEntity("CMUYautjaYoungbloodLoadoutVendor", MapCoordinates.Nullspace);
+            var spawned = new List<EntityUid> { adultRack, elderRack, youngbloodRack };
+
+            try
+            {
+                Assert.Multiple(() =>
+                {
+                    var blooded = Ranked(entMan, mind, roles, spawned, YautjaRank.Blooded, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, adultRack, blooded), Is.False,
+                        "CMU14: a Yautja of the rack's rank opens it with no ID card on.");
+
+                    var youngblood = Ranked(entMan, mind, roles, spawned, YautjaRank.YoungBlood, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, adultRack, youngblood), Is.True,
+                        "CMU14: the rank still gates - a youngblood cannot open the adult rack.");
+
+                    var unblooded = Ranked(entMan, mind, roles, spawned, YautjaRank.Unblooded, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, adultRack, unblooded), Is.True,
+                        "CMU14: an unblooded is below the adult rack's Blooded gate.");
+
+                    var elder = Ranked(entMan, mind, roles, spawned, YautjaRank.Elder, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, elderRack, elder), Is.False,
+                        "CMU14: an elder opens the elder rack with no ID card on.");
+
+                    // Ranks above the rack's own must also pass: the gate is "this rank or above".
+                    var elderOnAdult = Ranked(entMan, mind, roles, spawned, YautjaRank.Elder, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, adultRack, elderOnAdult), Is.False,
+                        "CMU14: an elder opens the adult rack with no ID card on.");
+
+                    var eliteOnAdult = Ranked(entMan, mind, roles, spawned, YautjaRank.Elite, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, adultRack, eliteOnAdult), Is.False,
+                        "CMU14: an elite opens the adult rack with no ID card on.");
+
+                    var ancientOnElder = Ranked(entMan, mind, roles, spawned, YautjaRank.Ancient, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, elderRack, ancientOnElder), Is.False,
+                        "CMU14: an ancient opens the elder rack with no ID card on.");
+
+                    var leaderOnElder = Ranked(entMan, mind, roles, spawned, YautjaRank.Leader, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, elderRack, leaderOnElder), Is.False,
+                        "CMU14: a leader opens the elder rack with no ID card on.");
+
+                    var bloodedOnYoungblood = Ranked(entMan, mind, roles, spawned, YautjaRank.Blooded, "CMUYautjaHunter");
+                    Assert.That(RackOpenCancelled(entMan, youngbloodRack, bloodedOnYoungblood), Is.False,
+                        "CMU14: a blooded hunter opens the youngblood rack with no ID card on.");
+                });
+            }
+            finally
+            {
+                foreach (var uid in spawned)
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static EntityUid Ranked(
+        IEntityManager entMan,
+        MindSystem mind,
+        SharedRoleSystem roles,
+        ICollection<EntityUid> spawned,
+        YautjaRank rank,
+        string job)
+    {
+        var user = User(entMan, mind, roles, spawned, job: job);
+        entMan.EnsureComponent<YautjaComponent>(user).ClanRank = rank;
+        return user;
+    }
+
     private static bool RackOpenCancelled(IEntityManager entMan, EntityUid rack, EntityUid user)
     {
         var ev = new ActivatableUIOpenAttemptEvent(user, false);

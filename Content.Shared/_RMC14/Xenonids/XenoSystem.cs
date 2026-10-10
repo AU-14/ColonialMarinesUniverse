@@ -363,6 +363,14 @@ public sealed partial class XenoSystem : EntitySystem
 
     private void OnXenoMeleeHit(Entity<XenoComponent> xeno, ref MeleeHitEvent args)
     {
+        // CMU14 XenoClawSlash Begin: CM-SS13's claw swing runs its damage through get_xeno_damage_slash,
+        // which multiplies by XVX_SLASH_DAMAGEMULT when the victim is xeno-sized. Mark the swing so
+        // CMArmorSystem can apply that per target with the same helper the xeno abilities use: a swing
+        // that catches several mobs must only boost the xeno-sized ones.
+        if (args.IsHit)
+            args.Impact = args.Impact with { Context = args.Impact.Context | DamageImpactContext.XenoClaw };
+        // CMU14 End
+
         foreach (var hit in args.HitEntities)
         {
             if (!TryComp<EntityStorageComponent>(hit, out var storage))
