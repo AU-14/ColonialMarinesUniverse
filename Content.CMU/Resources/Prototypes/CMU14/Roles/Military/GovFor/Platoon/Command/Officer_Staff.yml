@@ -55,7 +55,7 @@
       prefix: au14-job-prefix-AU14JobGOVFORPlatOpWYPMC
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 43200 # 12 hours
@@ -193,7 +193,7 @@
   roundForce: UPP
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 43200 # 12 hours
@@ -212,7 +212,7 @@
   roundForce: WYPMC
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 43200 # 12 hours

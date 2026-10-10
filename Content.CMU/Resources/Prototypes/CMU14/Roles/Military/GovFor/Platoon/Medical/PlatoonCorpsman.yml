@@ -94,7 +94,7 @@
     group: CMUDepartmentsMilitary
     time: 7200 # 2 hours
   - !type:TotalJobsTimeRequirement
-    group: CMUJobsMilitaryMedical
+    group: CMUJobsMedical
     time: 3600 # 1 hour
   - !type:TraitsRequirement
     inverted: true
