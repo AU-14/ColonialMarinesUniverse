@@ -107,7 +107,7 @@
     thresholds:
     - trigger:
         !type:DamageTrigger
-        damage: 50
+        damage: 80
       behaviors:
       - !type:PlaySoundBehavior
         sound:
@@ -115,7 +115,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: DamageVisuals
-    damageDivisor: 4.17
+    damageDivisor: 6.67
   - type: CMUConcreteHardening
     hardened: AU14JerseyBarricadeConstructed
     delay: 600
