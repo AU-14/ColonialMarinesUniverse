@@ -79,7 +79,6 @@
   - [bold]Wet concrete[/bold]: freshly poured concrete is pale and soft, with only 80 health. You [bold]can't wire it[/bold] until it hardens. Examine it to see how long it has left.
   - [bold]Hardened[/bold]: after [bold]10 minutes[/bold] it hardens on its own into a concrete barricade with 1500 health. It shrugs off much of the damage from bullets and explosions, and you can now wire it with barbed wire.
   - Anyone can vault a concrete barricade at any stage, unless it's wired.
-  - [bold]Getting bags[/bold]: platoon requisition vendors stock concrete bags, and crates of 10 can be ordered from the requisitions lift.
 
   ## Sandbags
   Fill empty sandbags with an entrenching tool, then stack them into sandbag barricades.
