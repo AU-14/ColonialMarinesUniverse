@@ -464,12 +464,15 @@ jobs:
               FullyQualifiedName~CMU14.ColonyEconomy.
               | FullyQualifiedName~CMU14.Fire.
               | FullyQualifiedName~CMU14.ForceOnForce.
-              | FullyQualifiedName~CMU14.ThreeD.
               | FullyQualifiedName~CMU14.Threats.
               | FullyQualifiedName~CMU14.DroneOperator.
               | FullyQualifiedName~CMU14.Evacuation.
               | FullyQualifiedName~CMU14.Weapons.
               | FullyQualifiedName~CMU14.TacticalMap.
+          # CMU14: the 3D tests build fresh client/server pairs and load the 3D libraries, ~10 GB by the
+          # end. they were most of cmu_systems' memory, on their own they can't push the others over
+          - name: cmu_threed
+            filter: FullyQualifiedName~CMU14.ThreeD.
           # CMU14: the six-guard squad fight still picks up state from earlier expedition tests on recycled
           # pool servers and flakes inside the cmu shard, alone it passes. drop this once the leak is found
           - name: cmu_expedition_squads
@@ -578,6 +581,8 @@ jobs:
             cmu_yautja_smoke) workers=1 ;;
             root_1|cmu|cmu_systems|cmu_expedition_squads|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             cmu_lobby_ui) workers=1 ;;
+            # CMU14: every 3D case makes its own pair, two at once is the memory peak
+            cmu_threed) workers=1 ;;
             map_loading) workers=1; hang_timeout=20m ;;
           esac
 
