@@ -113,6 +113,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (portal == null || !Exists(active) || portal.From != currentMap)
             {
                 CancelPortalClimb(uid, agent);
+                _steering.Unregister(uid);
                 agent.TravelPortal = null;
                 agent.OrderedDestination = null;
                 agent.OrderRoute.Clear();
@@ -123,6 +124,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (now >= agent.PortalUntil && agent.PortalUntil != TimeSpan.Zero)
             {
                 CancelPortalClimb(uid, agent);
+                _steering.Unregister(uid);
                 agent.FailedPortals[active] = now + TimeSpan.FromSeconds(15);
                 agent.TravelPortal = null;
                 agent.OrderedDestination = null;
@@ -134,6 +136,7 @@ public sealed partial class CMUExpeditionAgentSystem
             }
             if (agent.OrderBlockedSince is { } blocked && now - blocked > TimeSpan.FromSeconds(5))
             {
+                _steering.Unregister(uid);
                 agent.PortalUntil = now;
                 return true;
             }
@@ -148,6 +151,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 return false; // FollowOrders executes the approach using ordinary routes/door handling.
             if (!ValidOrderPoint(uid, portal.Landing))
             {
+                _steering.Unregister(uid);
                 agent.PortalUntil = now;
                 return true;
             }
@@ -174,7 +178,10 @@ public sealed partial class CMUExpeditionAgentSystem
             return true;
         }
         if (now < agent.NextPortalSearch)
+        {
+            _steering.Unregister(uid);
             return true;
+        }
         agent.NextPortalSearch = now + TimeSpan.FromSeconds(3);
         foreach (var failed in agent.FailedPortals.Where(pair => pair.Value <= now || !Exists(pair.Key)).Select(pair => pair.Key).ToArray())
             agent.FailedPortals.Remove(failed);
@@ -197,6 +204,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         }
         agent.OrderBlocked = true;
+        _steering.Unregister(uid);
         Decision(agent, "level-blocked", "no-usable-portal-chain");
         return true;
     }

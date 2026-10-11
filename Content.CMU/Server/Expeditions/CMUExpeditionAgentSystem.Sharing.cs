@@ -6,7 +6,7 @@ namespace Content.Server.CMU14.Expeditions;
 public sealed partial class CMUExpeditionAgentSystem
 {
     private bool LogisticsSafe(EntityUid uid, CMUExpeditionAgentComponent agent) =>
-        _mobs.IsAlive(uid) && !HasComp<ActorComponent>(uid) && agent.Action == null && agent.PendingWeapon == null &&
+        _mobs.IsAlive(uid) && !HasComp<ActorComponent>(uid) && agent.UtilityCleanupItem == null && agent.Action == null && agent.PendingWeapon == null &&
         agent.FlareItem == null && agent.WorkItem == null && !agent.PreparingWork && agent.Treatment == null &&
         agent.ScavengeTarget == null && agent.RushTarget == null && !CommittedMovement(agent) &&
         agent.Target == null && _timing.CurTime - agent.LastContact > TimeSpan.FromSeconds(6) &&

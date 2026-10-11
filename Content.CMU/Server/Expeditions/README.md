@@ -141,24 +141,27 @@ Guards can cross shallow and deep RMC water at native wading speed, including on
 
 | Variant | Equipment and behavior |
 | --- | --- |
-| `regular` | MAR-40, militia vest, two spare magazines, blast and smoke grenades |
-| `poor` | Scrapper with a surplus pistol, one spare magazine, patched coat, lower courage, no grenades |
-| `rich` | Salvage baron with reinforced armor, modern M41A/2 rifle, three spare magazines, four-shot volleys, blast and smoke grenades |
-| `scout` | Trail scout with a MAR-30 carbine, harness, smoke grenade, longer detection range and cautious positioning |
-| `assault` | M63 SMG, five-shot volleys, aggressive close-range positioning |
-| `support` | M41AE2 heavy pulse rifle, seven-shot volleys, longer holds at useful range |
-| `marksman` | M4SPR rifle, two-shot volleys, longer detection/fire range, pistol when crowded |
-| `rocketeer` | M63 SMG and a single AT-loaded RPG-36 in suit storage; checks blast/backblast safety and returns to the firearm after firing |
-| `medic` | M63, finite dressings/injector/defibrillator; treatment and covered casualty extraction |
-| `breacher` | Type 23 with heavy slugs, twelve spare shells and a pistol; favors close-range positions |
-| `skirmisher` | MP5, light harness, smoke and pistol; favors covered flanks and flank response |
-| `machinegunner` | M60, two spare belts and pistol; eight-shot volleys and covering-fire preference |
-| `veteran` | AR10, reinforced armor, three spare magazines and pistol; steady mid-range fire |
+| `regular` | MAR-40, militia vest, four spare magazines, blast and smoke grenades |
+| `poor` | Scrapper with an M1984 pistol, three spare magazines, patched coat, reserve dressing, smoke and lower courage |
+| `rich` | Salvage baron with reinforced armor, M41A/2 rifle, five spare magazines, four-shot base volleys, blast and smoke grenades |
+| `scout` | MAR-30 carbine, harness, four spare magazines, two smoke grenades, longer detection range and cautious positioning |
+| `assault` | M63 SMG, standard mercenary armor, five spare magazines, five-shot base volleys and close-range positioning |
+| `support` | M41AE2 heavy pulse rifle, heavy armor, four spare magazines, logistics pack and covering-fire preference |
+| `marksman` | M4SPR rifle, standard mercenary armor, four spare magazines, two-shot base volleys and longer detection/fire range |
+| `sniper` | M42A family sniper rifle, four spare magazines, two smoke grenades and native aimed shots; sidearm inside two metres |
+| `rocketeer` | M63 SMG, four spare magazines, two smoke grenades and one AT-loaded RPG-36 in suit storage; safe launches against vehicles or active firing positions |
+| `medic` | M63, four spare magazines, medical pack, two stabilizers, finite dressings/defibrillator and two smoke grenades; treatment and covered casualty extraction |
+| `breacher` | Type 23 with heavy slugs, heavy armor, 24 spare shells, two smoke grenades and a pistol; favors close-range positions |
+| `skirmisher` | MP5, light harness, four spare magazines, two smoke grenades and pistol; favors covered flanks and flank response |
+| `machinegunner` | M60, heavy armor, three spare boxes, logistics pack and pistol; eight-shot base volleys and covering-fire preference |
+| `veteran` | AR10, standard mercenary armor, four spare magazines and pistol; steady mid-range fire |
 | `specialists` | Support, assault, marksman, rocketeer, medic, breacher |
 | `medical` | Medic, support, assault, regular |
 | `raiders` | Breacher, skirmisher, assault, support, medic |
 | `fireteam` | Veteran, machinegunner, skirmisher, medic, marksman |
-| `mixed` | Regular, support, skirmisher, medic, breacher, marksman, rocketeer, veteran, machinegunner |
+| `mixed` | Veteran, machinegunner, medic, breacher, rocketeer, scout, assault, marksman, skirmisher |
+| `patrol` | Scout, regular, medic, skirmisher, support, rocketeer |
+| `defense` | Machinegunner, marksman, medic, breacher, rocketeer, veteran |
 
 All variants carry finite dressings and a squad headset. Medics use their pack space for medical
 supplies; other roles carry a shovel. Everyone except poor scrappers and medics also carries a backup pistol,
@@ -167,6 +170,11 @@ They target GOVFOR by default. `cmu-expedition-ai here 5 fireteam` spawns one of
 Mixed compositions repeat in the listed order when more members are requested.
 Every spawnable kit explicitly lists its clothing, headset and pack. Kits do not inherit another
 role's in-hand weapon or backpack contents.
+Spare counts exclude loaded ammunition. Pistols and their spare magazine occupy the utility pouch;
+primary reserves use the ammo belt, with extra breacher shells in the pack. Faction outfits vary
+native armor by role. Visible contested fights extend automatic volleys and shorten reassessment
+pauses; distant unthreatened shots retain ordinary bursts. Native cadence, finite ammunition,
+fresh sight and friendly-lane checks remain mandatory for every shot.
 Press **Tab** for variants with descriptions, counts, live maps and squad IDs. Orders complete actions,
 styles and comma-separated factions. Map commands also complete scenarios, biomes, landforms,
 stories and time arguments; the visit command completes connected players.
@@ -178,13 +186,17 @@ range. The guard must then reach a usable firing distance. Reloading uses real s
 covering shooter; damage, close rushes and lost support interrupt an exposed reload.
 Exhausted guards can use safe grenades/smoke and claim nearby loaded firearms, compatible magazines or
 shells, and known HE/smoke grenades within four metres, with a five-second retrieval limit. They can
-loot dead bodies and accessible bags/belts; living or critical bodies and locked storage are excluded.
+loot dead bodies and accessible bags/belts. Fully exhausted agents can also retrieve compatible weapons
+and ammunition from critical bodies, with recovery rechecked before transfer. Healthy bodies and locked
+storage remain excluded.
 Quiet, unordered guards stock compatible ammunition across belts, pouches and backpacks: up to six
 spare magazines per carried gun or 24 shells, two HE and two smoke grenades, eight flares and a reserve dressing.
 Every kit starts with one native eight-flare pack; the AI draws individual flares from its slots.
 They open accessible crates and share surplus with nearby squadmates running low. Items remain finite,
 storage limits apply, and combat interrupts optional scavenging. At contact distance
-they use native weapon-butt or unarmed attacks while attempting to escape, rather than charging into melee.
+they use native weapon-butt or unarmed attacks while attempting to escape. If an exhausted agent is caught
+by a faster nearby pursuer or cannot complete its escape, it can draw its carried bayonet and fight within
+a short, bounded approach. Quiet agents prepare empty carried guns and partial tubes using real reserves.
 Radio snapshots are shared silently every two seconds with duplicate suppression. Audible contact
 callouts share a 25-second cooldown across nearby friendly squads. A continuously reported enemy is
 announced once; it becomes new again only after 60 seconds without a report. Lines reflect stress,

@@ -4,16 +4,26 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentComponent
 {
+    public bool PendingInterruptingDamage;
     public EntityUid? SquadRoot;
     public string Doctrine = "balanced";
     public CMUSquadDuty Duty;
     public string SquadPhase = "holding";
+    public string SquadPhaseReason = "no-contact";
     public EntityCoordinates? DutyPoint;
     public TimeSpan NextDutyMove;
     public TimeSpan NextRegroupRoute;
     public TimeSpan DutyUntil;
     public string DecisionOwner = "idle";
+    public string DecisionReason = "idle";
+    public uint DecisionRevision;
     public TimeSpan DecisionUntil;
+    public double LastThinkMilliseconds;
+    public double AverageThinkMilliseconds;
+    public double MaxThinkMilliseconds;
+    public long ThinkSamples;
+    public long StateTransitions;
+    public bool ReturningHome;
     public readonly Queue<string> DecisionHistory = new();
     public readonly List<(EntityCoordinates Point, TimeSpan Until, int Hits)> BadCover = new();
     public float? BasePreferredRange;
@@ -21,6 +31,8 @@ public sealed partial class CMUExpeditionAgentComponent
     public float? BaseCourage;
     public TimeSpan? BasePositionCommit;
     public EntityCoordinates? HeardPoint;
+    public string HeardKind = "none";
+    public TimeSpan HeardAt;
     public TimeSpan HeardUntil;
     public TimeSpan NextHearing;
     public EntityUid? SupplySource;

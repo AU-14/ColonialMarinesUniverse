@@ -14,8 +14,8 @@ public sealed partial class CMUExpeditionAgentComponent
     public bool FiringAtFlash;
     public int FlashShots;
     public EntityUid? FlareItem;
+    public bool FlareCleanupPending;
     public EntityCoordinates? FlareDestination;
-    public EntityCoordinates? FlareStartPosition;
     public TimeSpan FlareStarted;
     public TimeSpan FlareReadyAt;
     public TimeSpan FlareUntil;

@@ -2,6 +2,7 @@ using System.Numerics;
 using System.Linq;
 using Content.Shared.CMU14.Hearing;
 using Content.Shared.Weapons.Ranged.Components;
+using Robust.Shared.Map;
 using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Expeditions;
@@ -30,15 +31,25 @@ public sealed partial class CMUExpeditionAgentSystem
         while (query.MoveNext(out var uid, out var agent, out var transform))
         {
             if (HasComp<ActorComponent>(uid) || !_mobs.IsAlive(uid) || transform.MapID != from.MapId ||
-                !ExpeditionHostiles(uid, agent).Contains(args.User) || !Visible(uid, args.User, agent.DetectionRange))
+                !ExpeditionHostiles(uid, agent).Contains(args.User))
                 continue;
             var offset = _transform.GetWorldPosition(transform) - from.Position;
             var along = Vector2.Dot(offset, direction);
             if (along < 0 || along > length + 1 || (offset - along * direction).LengthSquared() > 1.5f * 1.5f)
                 continue;
-            // React to nearby hostile fire only when its source is perceived. Hearing does not grant target tracking.
+            var passing = new MapCoordinates(from.Position + direction * along, from.MapId);
+            // A bullet passing the body is observable even when the muzzle or shooter is hidden.
+            // The shot must physically reach this section of its lane, never pass through a wall.
+            if (!RayClear(uid, from, passing, shelter: true))
+                continue;
+            RememberIncomingFire(uid, agent,
+                _transform.ToCoordinates(transform.MapUid!.Value, passing), _timing.CurTime, hit: false);
+            ObserveIncomingLane(uid, agent, passing, direction, _timing.CurTime);
             agent.Stress = Math.Min(1, agent.Stress + 0.22f);
             agent.SuppressedUntil = _timing.CurTime + TimeSpan.FromSeconds(1.8 - agent.Courage);
+            // Local pressure is separate from identifying its source or authorizing a shot.
+            if (!Visible(uid, args.User, agent.DetectionRange))
+                continue;
             var newShooter = !agent.RecentShooters.TryGetValue(args.User, out var until) || until <= _timing.CurTime;
             if (newShooter && agent.RecentShooters.Count >= 16)
                 agent.RecentShooters.Remove(agent.RecentShooters.MinBy(pair => pair.Value).Key);
@@ -62,7 +73,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             if (other == uid || HasComp<ActorComponent>(other) || !_mobs.IsAlive(other) ||
                 buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.Incapacitated or CMUExpeditionAgentState.RecoverWeapon ||
-                buddy.Squad != agent.Squad ||
+                !CoordinatedSquadMember(uid, agent, other, buddy) ||
                 !SharedEngagement(agent, buddy) || !IsFriendly(uid, other) ||
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12))
                 continue;
@@ -93,7 +104,7 @@ public sealed partial class CMUExpeditionAgentSystem
         while (query.MoveNext(out var other, out var buddy))
         {
             if (other == uid || !_mobs.IsAlive(other) || HasComp<ActorComponent>(other) ||
-                buddy.Squad != agent.Squad || buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.Incapacitated or CMUExpeditionAgentState.RecoverWeapon ||
+                !CoordinatedSquadMember(uid, agent, other, buddy) || buddy.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.Incapacitated or CMUExpeditionAgentState.RecoverWeapon ||
                 !SharedEngagement(agent, buddy) || !IsFriendly(uid, other) ||
                 !_transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, 12))
                 continue;
@@ -109,10 +120,16 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     private TimeSpan RecoveryDelay(CMUExpeditionAgentComponent agent) =>
+        agent.FireControlRecovery ?? BaseRecoveryDelay(agent);
+
+    private TimeSpan BaseRecoveryDelay(CMUExpeditionAgentComponent agent) =>
         UrgentFire(agent, _timing.CurTime) ? TimeSpan.FromSeconds(0.1) :
             TimeSpan.FromSeconds(agent.BurstPause.TotalSeconds * (1.2 - agent.Initiative * 0.4 + agent.Stress * 0.6));
 
     private static int VolleySize(CMUExpeditionAgentComponent agent) =>
+        agent.FireControlVolley > 0 ? agent.FireControlVolley : BaseVolleySize(agent);
+
+    private static int BaseVolleySize(CMUExpeditionAgentComponent agent) =>
         Math.Min(agent.WeaponBurstLimit,
             Math.Max(Math.Min(2, agent.BurstSize), agent.BurstSize - (agent.Emotion == CMUExpeditionEmotion.Shaken ? 1 : 0)));
 }

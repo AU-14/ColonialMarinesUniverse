@@ -54,12 +54,7 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (agent.State != CMUExpeditionAgentState.Incapacitated)
         {
-            CancelVault(agent);
-            CancelWork(uid, agent);
-            CancelPlan(uid, agent, false);
-            CancelTreatment(agent);
-            ClearCover(agent);
-            StopSpacing(uid, agent);
+            CancelAgentActivity(uid, agent, "incapacitated");
             agent.State = CMUExpeditionAgentState.Incapacitated;
             agent.LastFireCheck = "incapacitated";
         }

@@ -13,6 +13,7 @@ public sealed partial class CMUExpeditionAgentSystem
         public readonly List<EntityUid> Members = new();
         public readonly Dictionary<EntityUid, (EntityCoordinates Point, TimeSpan Until)> Supplies = new();
         public string Phase = "holding";
+        public string PhaseReason = "no-contact";
         public TimeSpan Until;
         public EntityCoordinates? Rally;
         public EntityCoordinates? Contact;
@@ -66,6 +67,7 @@ public sealed partial class CMUExpeditionAgentSystem
                     plan.Members.FirstOrDefault(CanOrderSquadMember, plan.Members[0]));
             RefreshSquadPlan(plan, now);
         }
+        UpdateSquadOperations(now);
         _squadPlanMilliseconds = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
     }
 
@@ -77,30 +79,53 @@ public sealed partial class CMUExpeditionAgentSystem
         if (local.Length == 0)
         {
             plan.Phase = "no-active-members";
+            plan.PhaseReason = "no-active-members";
             return;
         }
         var observers = local.Select(member => Comp<CMUExpeditionAgentComponent>(member)).ToArray();
         var contact = observers.FirstOrDefault(agent => agent.LastSeen != null && now < agent.ForgetAt);
         plan.Contact = contact?.LastSeen;
-        var melee = observers.Any(agent => agent.RushTarget != null || agent.MeleeMemory.Count > 0);
-        plan.UrgentThreat = local.Where(member => Comp<CMUExpeditionAgentComponent>(member).RushTarget != null)
+        // Only the current nearby rush can trigger a squad emergency. Its evidence
+        // must still be fresh when an incapacitated observer can no longer run Observe.
+        var rushing = local.Where(member => Comp<CMUExpeditionAgentComponent>(member) is var observer &&
+            observer.RushTarget is { } rush && observer.MeleeMemory.TryGetValue(rush, out var memory) && now < memory.Until).ToArray();
+        var melee = rushing.Length > 0;
+        plan.UrgentThreat = rushing
             .OrderBy(member => MeleeClearance(Comp<CMUExpeditionAgentComponent>(member), Transform(member).Coordinates))
             .Select(member => Comp<CMUExpeditionAgentComponent>(member).RushTarget).FirstOrDefault();
         var casualties = observers.Count(agent => agent.LastDamage >= agent.RetreatDamage || agent.RecoveryUntil > now ||
             agent.Stress > .85f && agent.Courage < .6f) +
             plan.Members.Count(member => !_mobs.IsAlive(member) && _transform.InRange(anchor, Transform(member).Coordinates, 22));
-        var low = local.Count(member => !_guns.TryGetGun(member, out var gun) || WeaponAmmo(gun) == 0 && SpareAmmunition(member) == null);
-        var phase = contact == null ? (observers.Any(agent => agent.OrderedDestination != null || agent.TravelGoal != null) ? "travelling" : "holding") :
-            melee ? "anti-rush" : casualties + low >= Math.Max(2, local.Length / 2) ? "withdraw" :
-            observers.Any(agent => agent.AntiVehicle && agent.Target is { } target && ArmedVehicle(target)) ? "anti-armor" : "fire-and-move";
-        // Emergencies override; ordinary plans persist long enough to execute their assignments.
-        if (phase != plan.Phase && (now >= plan.Until || phase is "anti-rush" or "withdraw" || contact == null))
+        // Switching hands and medical work do not mean the member has run out of ammo.
+        var low = local.Count(member => (!_guns.TryGetGun(member, out var gun) || WeaponAmmo(gun) == 0) &&
+            !HasUsableCarriedAmmo(member));
+        var assault = observers.Any(agent => agent.AssaultDestination != null);
+        var travelling = observers.Any(agent => agent.OrderedDestination != null || agent.TravelGoal != null);
+        var (phase, reason) = melee ? ("anti-rush", "closing-melee-threat") :
+            contact == null ? assault ? ("assault-advance", "assault-objective") :
+                travelling ? ("travelling", "moving-to-order") : ("holding", "no-contact") :
+            casualties + low >= Math.Max(2, local.Length / 2) ? ("withdraw", "casualties-or-empty-weapons") :
+            observers.Any(agent => agent.AntiVehicle && agent.Target is { } target && ArmedVehicle(target)) ? ("anti-armor", "vehicle-contact") :
+            assault ? ("assault", "assault-contact") : ("fire-and-move", "engaging-contact");
+        // Only a brief grace follows a close rush. Ordinary phases retain their
+        // assignment, but a new assault or its completion takes effect immediately.
+        var assaultChanged = phase is "assault" or "assault-advance" || plan.Phase is "assault" or "assault-advance";
+        if (phase != plan.Phase && (now >= plan.Until || phase is "anti-rush" or "withdraw" ||
+                plan.Phase is not ("anti-rush" or "withdraw") &&
+                (contact == null || assaultChanged || phase == "anti-armor" || plan.Phase is "holding" or "travelling")))
         {
             plan.Phase = phase;
-            plan.Until = now + TimeSpan.FromSeconds(8);
+            plan.PhaseReason = reason;
+            plan.Until = now + TimeSpan.FromSeconds(phase == "anti-rush" ? 1.25 : 8);
             plan.Rally = anchor;
             foreach (var member in plan.Members)
                 Comp<CMUExpeditionAgentComponent>(member).DutyUntil = TimeSpan.Zero;
+        }
+        else if (phase == plan.Phase)
+        {
+            plan.PhaseReason = reason;
+            if (phase == "anti-rush")
+                plan.Until = now + TimeSpan.FromSeconds(1.25);
         }
         plan.Rally ??= anchor;
         var direction = contact?.LastSeen is { } seen && Transform(seen.EntityId).MapID == Transform(leader).MapID
@@ -109,6 +134,25 @@ public sealed partial class CMUExpeditionAgentSystem
             direction = Vector2.UnitY;
         direction = Vector2.Normalize(direction);
         var side = new Vector2(-direction.Y, direction.X);
+        var assaultAdvancer = plan.Phase == "assault" ? local
+            .Where(member => Comp<CMUExpeditionAgentComponent>(member) is var candidate &&
+                candidate.AssaultDestination != null && candidate.LastDamage < candidate.RetreatDamage && candidate.RecoveryUntil <= now &&
+                candidate.Action == null && candidate.Treatment == null && candidate.PendingWeapon == null &&
+                candidate.TreatmentMedicine == null && candidate.WorkItem == null && !candidate.PreparingWork &&
+                candidate.FlareItem == null && candidate.UtilityCleanupItem == null && candidate.SpacingDestination == null &&
+                candidate.RushTarget == null && candidate.FireRescueTarget == null && candidate.ScavengeTarget == null &&
+                candidate.AimedWeapon == null && !candidate.CornerHolding && candidate.CornerDestination == null &&
+                candidate.State is not (CMUExpeditionAgentState.Incapacitated or CMUExpeditionAgentState.Disabled or
+                    CMUExpeditionAgentState.Reloading or CMUExpeditionAgentState.Healing or CMUExpeditionAgentState.Retreat or
+                    CMUExpeditionAgentState.Withdraw or CMUExpeditionAgentState.OutOfAmmo) &&
+                _guns.TryGetGun(member, out var readyGun) && WeaponAmmo(readyGun) > 0 &&
+                (candidate.AssaultBoundDestination != null || now >= candidate.AssaultNextBound))
+            .OrderByDescending(member => Comp<CMUExpeditionAgentComponent>(member).AssaultBoundDestination != null)
+            .ThenBy(member => Comp<CMUExpeditionAgentComponent>(member).CombatRole is
+                CMUExpeditionCombatRole.Support or CMUExpeditionCombatRole.Marksman or CMUExpeditionCombatRole.Medic)
+            .ThenBy(member => Comp<CMUExpeditionAgentComponent>(member).AssaultBoundsCompleted)
+            .ThenBy(member => Comp<CMUExpeditionAgentComponent>(member).AssaultNextBound)
+            .Select(member => (EntityUid?) member).FirstOrDefault() : null;
         var advancing = local.Any(member => Comp<CMUExpeditionAgentComponent>(member) is { Duty: CMUSquadDuty.Advance } existing &&
             now < existing.DutyUntil && existing.LastDamage < existing.RetreatDamage && existing.RecoveryUntil <= now);
         for (var index = 0; index < local.Length; index++)
@@ -116,12 +160,15 @@ public sealed partial class CMUExpeditionAgentSystem
             var member = local[index];
             var agent = Comp<CMUExpeditionAgentComponent>(member);
             agent.SquadPhase = plan.Phase;
-            if (now < agent.DutyUntil && agent.LastDamage < agent.RetreatDamage && agent.RecoveryUntil <= now)
+            agent.SquadPhaseReason = plan.PhaseReason;
+            var advanceChanged = plan.Phase == "assault" && (member == assaultAdvancer) != (agent.Duty == CMUSquadDuty.Advance);
+            if (!advanceChanged && now < agent.DutyUntil && agent.LastDamage < agent.RetreatDamage && agent.RecoveryUntil <= now)
             {
                 advancing |= agent.Duty == CMUSquadDuty.Advance;
                 continue;
             }
             var duty = agent.RecoveryUntil > now || agent.LastDamage >= agent.RetreatDamage ? CMUSquadDuty.Recover :
+                member == assaultAdvancer ? CMUSquadDuty.Advance :
                 HasComp<CMUExpeditionMedicComponent>(member) ? CMUSquadDuty.Medic :
                 agent.AntiVehicle && plan.Phase == "anti-armor" ? CMUSquadDuty.AntiArmor :
                 index == local.Length - 1 && local.Length > 3 ? CMUSquadDuty.RearGuard :
@@ -134,10 +181,21 @@ public sealed partial class CMUExpeditionAgentSystem
             offset -= direction * (duty is CMUSquadDuty.Medic or CMUSquadDuty.Recover or CMUSquadDuty.RearGuard ? 3 : plan.Phase is "anti-rush" or "withdraw" ? 2 : 0);
             var world = _transform.ToMapCoordinates(anchor).Offset(offset);
             var point = _transform.ToCoordinates(anchor.EntityId, world);
-            if (TrySquadCoordinates(point, out point) && ValidOrderPoint(member, point))
-                agent.DutyPoint = point;
-            else
-                agent.DutyPoint = null;
+            var rear = _transform.ToCoordinates(anchor.EntityId,
+                _transform.ToMapCoordinates(anchor).Offset(-direction * (1 + index * 1.1f)));
+            agent.DutyPoint = null;
+            // A broad firing line may fall inside corridor walls. Fall back to staggered
+            // depth and nearby live ground instead of losing the defensive assignment.
+            foreach (var candidate in NearbySquadPositions(point, 1).Concat(NearbySquadPositions(rear, 2)))
+            {
+                if (!TrySquadCoordinates(candidate, out var usable) || !ValidOrderPoint(member, usable) ||
+                    KnownDangerCost(agent, usable) > 5 || Reserved(member, usable) ||
+                    local.Any(other => other != member && Comp<CMUExpeditionAgentComponent>(other).DutyPoint is { } assigned &&
+                        _transform.InRange(assigned, usable, 1.3f)))
+                    continue;
+                agent.DutyPoint = usable;
+                break;
+            }
         }
         foreach (var source in plan.Supplies.Where(pair => pair.Value.Until <= now || !Exists(pair.Key)).Select(pair => pair.Key).ToArray())
             plan.Supplies.Remove(source);
@@ -151,7 +209,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool FollowSquadDuty(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.Action != null || agent.PendingWeapon != null || agent.Treatment != null || agent.FlareItem != null ||
+        if (agent.HoldPosition || agent.Action != null || agent.PendingWeapon != null || agent.Treatment != null || agent.FlareItem != null ||
             agent.RushTarget != null || CommittedMovement(agent) || HasCoverCommitment(uid, agent, now) ||
             !OptionalDecisionReady(agent) || now < agent.NextDutyMove || agent.DutyPoint is not { } point ||
             agent.Home is not { } home || !_transform.InRange(home, point, agent.LeashRange) ||
@@ -165,7 +223,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.NextDutyMove = now + TimeSpan.FromSeconds(4);
         if (!TraversablePassage(uid, Transform(uid).Coordinates, point) ||
             ExposureScore(uid, agent, point) > ExposureScore(uid, agent, Transform(uid).Coordinates) ||
-            !TryReserveManeuver(uid, agent, now))
+            !TryReserveManeuver(uid, agent, now, point))
             return false;
         Decision(agent, "squad-move", agent.SquadPhase, 1);
         BeginMove(uid, agent, point, CMUExpeditionAgentState.Reposition, now);

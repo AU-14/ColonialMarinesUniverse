@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._RMC14.Weapons.Ranged.Chamber;
 using Content.Shared.Directions;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -22,6 +23,16 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         var ammo = new GetAmmoCountEvent();
         RaiseLocalEvent(weapon, ref ammo);
+        // RMC's reserve chamber supplies a real round after magazine removal, but its
+        // system does not contribute that round to the magazine's count event.
+        if (TryComp<RMCGunChamberComponent>(weapon, out var rmcChamber) && rmcChamber.Enabled &&
+            _containers.TryGetContainer(weapon, rmcChamber.ContainerId, out var reserve))
+            foreach (var round in reserve.ContainedEntities)
+                if (!TryComp<CartridgeAmmoComponent>(round, out var cartridge) || !cartridge.Spent)
+                    ammo.Count++;
+        if (HasComp<ChamberMagazineAmmoProviderComponent>(weapon) && _guns.GetChamberEntity(weapon) is { } chambered &&
+            TryComp<CartridgeAmmoComponent>(chambered, out var spent) && spent.Spent)
+            ammo.Count = Math.Max(0, ammo.Count - 1);
         return ammo.Count;
     }
 
@@ -31,8 +42,12 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var hand in _hands.EnumerateHands(uid))
             if (_hands.TryGetHeldItem(uid, hand, out var item) && HasComp<GunComponent>(item))
                 weapons.Add(item.Value);
-        if (_inventory.TryGetSlotEntity(uid, SuitStorageSlot, out var slung) && HasComp<GunComponent>(slung))
-            weapons.Add(slung.Value);
+        // Include directly equipped guns as well as the sling: custom kits may holster a
+        // backup on the belt instead of putting it inside one of the supply containers.
+        var slots = _inventory.GetSlotEnumerator(uid);
+        while (slots.MoveNext(out var slot))
+            if (slot.ContainedEntity is { } equipped && HasComp<GunComponent>(equipped))
+                weapons.Add(equipped);
         foreach (var item in SupplyItems(uid))
             if (HasComp<GunComponent>(item))
                 weapons.Add(item);
@@ -41,7 +56,9 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool ChooseWeapon(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.Action != null || agent.Treatment != null || agent.WorkItem != null || agent.PreparingWork)
+        if (agent.Action != null || agent.Treatment != null || agent.WorkItem != null || agent.PreparingWork ||
+            agent.FlareItem != null || agent.UtilityCleanupItem != null || agent.FireRescueTarget != null ||
+            agent.LastStandTarget != null || agent.PendingMeleeWeapon != null)
             return false;
         if (agent.PendingWeapon == null && HasCoverCommitment(uid, agent, now))
             return false;
@@ -63,11 +80,16 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.PendingWeapon = null;
             agent.NextWeaponChoice = now + TimeSpan.FromSeconds(3);
             // Revalidate possession and usefulness after freeing the wielding hand.
-            if (!CarriedWeapons(uid).Contains(pending) || WeaponScore(uid, agent, pending) < 0)
+            if (!CarriedWeapons(uid).Contains(pending) || WeaponScore(uid, agent, pending) < 0 ||
+                current.Owner.IsValid() && WeaponAmmo(current) > 0 && !LoadoutReadinessSafe(uid, agent, now) &&
+                WeaponScore(uid, agent, pending) < WeaponScore(uid, agent, current))
                 return false;
             var wasSlung = _inventory.TryGetSlotEntity(uid, SuitStorageSlot, out var slung) && slung == pending;
             if (!_hands.IsHolding(uid, pending, out _) && !_hands.TryPickupAnyHand(uid, pending))
+            {
+                agent.WeaponDecision = "pickup-blocked";
                 return false;
+            }
             if (current.Owner.IsValid() && current.Owner != pending && !StowWeapon(uid, current) &&
                 HasComp<GunRequiresWieldComponent>(pending))
             {
@@ -94,10 +116,15 @@ public sealed partial class CMUExpeditionAgentSystem
         if (now < agent.NextWeaponChoice)
             return false;
         agent.NextWeaponChoice = now + TimeSpan.FromSeconds(0.5);
+        var prepare = LoadoutReadinessWeapon(uid, agent, now);
+        if (prepare == current.Owner)
+            return false;
         var best = current.Owner.IsValid() ? WeaponScore(uid, agent, current) + (WeaponAmmo(current) > 0 ? 4 : 0) : -1;
-        EntityUid? chosen = null;
+        EntityUid? chosen = prepare;
         foreach (var weapon in CarriedWeapons(uid))
         {
+            if (prepare != null)
+                break;
             var score = WeaponScore(uid, agent, weapon);
             if (score < 0 || score <= best || weapon == current.Owner)
                 continue;
@@ -149,17 +176,34 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (!Exists(weapon) || !TryComp<GunComponent>(weapon, out var gun))
             return -100;
+        TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role);
         var loaded = WeaponAmmo(weapon) > 0;
         if (!loaded && SpareAmmunition(uid, weapon) == null)
+        {
+            if (role?.Rocket == true)
+                agent.RocketDecision = "rocket-empty";
             return -100;
-        TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role);
-        // A loaded backup beats an empty primary. An empty but reloadable gun remains an
-        // option even in the open, where the rearm executor must find shelter or coverage.
+        }
+        // Under contact, a loaded backup beats an empty primary. During a lull, restore
+        // the preferred reloadable weapon instead of remaining on the pistol indefinitely.
         if (!loaded)
-            return role?.Rocket == true ? -100 : 1;
+        {
+            if (role?.Rocket == true)
+                return -100;
+            var quiet = agent.Target == null && _timing.CurTime >= agent.ForgetAt &&
+                _timing.CurTime - agent.LastHit > TimeSpan.FromSeconds(2);
+            // Once both guns are empty, reload the preferred primary instead of tying
+            // every empty candidate with the currently held pistol. Every loaded gun
+            // still outranks these contact-time scores (loaded scores are at least 2).
+            return quiet ? role?.Priority ?? 20 : Math.Clamp((role?.Priority ?? 20) / 100f, 0.01f, 1f);
+        }
         var score = role?.Priority ?? 20;
         if (agent.Target is not { } target || !Visible(uid, target, agent.FireRange))
+        {
+            if (role?.Rocket == true)
+                agent.RocketDecision = "no-visible-rocket-contact";
             return role?.Rocket == true ? -100 : score;
+        }
         var point = Transform(target).Coordinates;
         var distance = Vector2.Distance(_transform.GetWorldPosition(uid), _transform.GetWorldPosition(target));
         if (role != null)
@@ -167,50 +211,76 @@ public sealed partial class CMUExpeditionAgentSystem
             if (!(role.Rocket && ArmedVehicle(target)) && (distance < role.MinimumRange || distance > role.MaximumRange))
             {
                 if (role.Rocket)
+                {
+                    agent.RocketDecision = distance < role.MinimumRange ? "rocket-too-close" : "rocket-out-of-range";
                     return -100;
+                }
                 // Select the pistol and manoeuvre into its range instead of refusing to draw it.
                 score -= 8;
             }
             if (distance < role.CloseRange)
                 score += role.ClosePriority;
-            if (role.Rocket && (!RocketOpportunity(uid, agent, target, point) ||
-                !SafeShot(uid, agent, (weapon, gun), point)))
-                return -100;
+            if (role.Rocket)
+            {
+                if (!RocketOpportunity(uid, agent, target, point, out agent.RocketDecision) ||
+                    !SafeShot(uid, agent, (weapon, gun), point, out agent.RocketDecision))
+                    return -100;
+                agent.RocketDecision = "rocket-ready";
+            }
         }
         return Math.Max(2, score);
     }
 
-    private bool RocketOpportunity(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target, EntityCoordinates point)
+    private bool RocketOpportunity(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target, EntityCoordinates point) =>
+        RocketOpportunity(uid, agent, target, point, out _);
+
+    private bool RocketOpportunity(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target, EntityCoordinates point,
+        out string reason)
     {
-        if (_timing.CurTime < agent.NextRocket || agent.RushTarget != null || agent.SpacingDestination != null)
+        reason = "rocket-cooldown";
+        if (_timing.CurTime < agent.NextRocket)
+            return false;
+        reason = "rocket-spacing";
+        if (agent.RushTarget != null || agent.SpacingDestination != null)
             return false;
         var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
         while (query.MoveNext(out var other, out var buddy))
         {
-            if (other == uid || !SameSquad(uid, agent, other, buddy))
+            if (!LocalSquadMember(uid, agent, other, buddy))
                 continue;
+            reason = "rocket-squad-launching";
             if (_timing.CurTime < buddy.NextRocket || buddy.PendingWeapon is { } pending &&
                 TryComp<CMUExpeditionWeaponRoleComponent>(pending, out var role) && role.Rocket ||
                 _guns.TryGetGun(other, out var gun) && TryComp<CMUExpeditionWeaponRoleComponent>(gun, out var active) && active.Rocket &&
                 buddy.Target != null && _mobs.IsAlive(other))
                 return false;
         }
-        // Save the one-shot tube for clustered contacts or an entrenched shooter which
-        // has punished repeated peeks. A close rush needs the ready firearm instead.
+        reason = "rocket-ready";
+        // A visible shooter actively wounding the squad warrants the tube too. Waiting
+        // for two hits on this agent's own cover peek ignores open-ground ambushes and
+        // the gunner already killing the front of the column.
         if (ArmedVehicle(target) && VehicleDisposition(uid, agent, target) > 0)
             return true;
-        if (agent.RepeatedPeekHits >= 2)
+        if (agent.RepeatedPeekHits >= 2 && _timing.CurTime - agent.LastPeekHit < TimeSpan.FromSeconds(15) ||
+            agent.RecentShooters.TryGetValue(target, out var until) && _timing.CurTime < until)
             return true;
+        var squad = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
+        while (squad.MoveNext(out var other, out var buddy))
+            if (LocalSquadMember(uid, agent, other, buddy) &&
+                buddy.RecentShooters.TryGetValue(target, out until) && _timing.CurTime < until)
+                return true;
         var contacts = 0;
         foreach (var threat in agent.VisibleThreats)
             if (_transform.InRange(point, threat, 3) && ++contacts >= 2)
                 return true;
+        reason = "rocket-no-opportunity";
         return false;
     }
 
     private bool SafeWeaponEffect(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun,
-        EntityCoordinates start, EntityCoordinates destination)
+        EntityCoordinates start, EntityCoordinates destination, out string reason)
     {
+        reason = "weapon-effect-clear";
         if (!TryComp<CMUExpeditionWeaponRoleComponent>(gun.Owner, out var role))
             return true;
         var from = _transform.ToMapCoordinates(start);
@@ -223,19 +293,34 @@ public sealed partial class CMUExpeditionAgentSystem
             // Range and explosion safety use the first hull impact, not the centre of a
             // large APC. A wall or another body before the hull invalidates this rocket.
             if (!VehicleImpact(uid, hull, start, destination, out blastPoint))
+            {
+                reason = "vehicle-impact-blocked";
                 return false;
+            }
             distance = Vector2.Distance(from.Position, _transform.ToMapCoordinates(blastPoint).Position);
         }
         if (distance < role.MinimumRange || distance > role.MaximumRange)
+        {
+            reason = distance < role.MinimumRange
+                ? role.Rocket ? "rocket-too-close" : "weapon-too-close"
+                : role.Rocket ? "rocket-out-of-range" : "weapon-out-of-range";
             return false;
+        }
         if (!role.Rocket)
             return true;
-        if (_timing.CurTime < agent.NextRocket || !SafeBlast(uid, blastPoint, role.BlastRadius, 0.4f) ||
-            !ClearLane(uid, start, destination, 0.6f, impactBody: vehicle))
+        reason = "rocket-cooldown";
+        if (_timing.CurTime < agent.NextRocket)
+            return false;
+        reason = "rocket-blast-unsafe";
+        if (!SafeBlast(uid, blastPoint, role.BlastRadius, 0.4f))
+            return false;
+        reason = "rocket-lane-blocked";
+        if (!ClearLane(uid, start, destination, 0.6f, impactBody: vehicle))
             return false;
         // Native CMU backblast affects the two cardinal tiles behind the shooter.
         var rear = (to.Position - from.Position).ToWorldAngle().GetCardinalDir().GetOpposite().ToVec();
         var behind = _transform.ToCoordinates(start.EntityId, from.Offset(rear * 2));
+        reason = "rocket-backblast-blocked";
         if (!ClearLane(uid, start, behind, 0.8f))
             return false;
         var nearby = new HashSet<EntityUid>();
@@ -252,14 +337,21 @@ public sealed partial class CMUExpeditionAgentSystem
             if (along > 0 && along < distance &&
                 Vector2.Distance(position, from.Position + forward * along) < 0.8f &&
                 !SafeBlast(uid, Transform(entity).Coordinates, role.BlastRadius, 0.4f))
+            {
+                reason = "rocket-intervening-body";
                 return false;
+            }
             if (!IsFriendly(uid, entity))
                 continue;
             for (var sample = 0; sample < 2; sample++)
                 if (Vector2.Distance(position + velocity * (sample * 0.4f), from.Position + rear) < 1.5f ||
                     Vector2.Distance(position + velocity * (sample * 0.4f), from.Position + rear * 2) < 1.5f)
+                {
+                    reason = "rocket-backblast-friendly";
                     return false;
+                }
         }
+        reason = "rocket-ready";
         return true;
     }
 }

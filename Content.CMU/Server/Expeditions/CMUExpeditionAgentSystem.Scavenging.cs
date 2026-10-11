@@ -15,6 +15,11 @@ public sealed partial class CMUExpeditionAgentSystem
     [Dependency] private RMCStorageSystem _scavengeRmcStorage = default!;
     [Dependency] private SharedEntityStorageSystem _supplyCrates = default!;
 
+    private bool CanScavengeCasualty(EntityUid uid, EntityUid casualty, EntityUid item) =>
+        _mobs.IsDead(casualty) || _mobs.IsCritical(casualty) && !HasUsableCarriedAmmo(uid) &&
+        (HasComp<GunComponent>(item) && WeaponAmmo(item) > 0 ||
+            CarriedWeapons(uid).Any(gun => CompatibleAmmunition(uid, gun, item)));
+
     private bool ScavengeSource(EntityUid uid, EntityUid item, out EntityUid source)
     {
         source = item;
@@ -30,10 +35,10 @@ public sealed partial class CMUExpeditionAgentSystem
                     return false;
                 if (_containers.TryGetContainingContainer((source, null, null), out var worn))
                 {
-                    // Loot one accessible bag/belt layer on a dead body. Living allies,
-                    // patients in crit and arbitrary nested/locked containers are excluded.
+                    // A critical casualty supplies only an exhausted combatant's gun/ammo.
+                    // Recovery from crit invalidates the selection before native pickup.
                     source = worn.Owner;
-                    if (!_mobs.IsDead(source))
+                    if (!CanScavengeCasualty(uid, source, item))
                         return false;
                 }
             }
@@ -43,7 +48,7 @@ public sealed partial class CMUExpeditionAgentSystem
                     !crate.Open && !_supplyCrates.CanOpen(uid, source, silent: true, crate))
                     return false;
             }
-            else if (!_mobs.IsDead(source) ||
+            else if (!CanScavengeCasualty(uid, source, item) ||
                 !_hands.IsHolding(source, item, out _) &&
                 !_inventory.CanUnequip(uid, source, container.ID, out _))
                 return false;
@@ -104,10 +109,11 @@ public sealed partial class CMUExpeditionAgentSystem
         return false;
     }
 
-    private IEnumerable<EntityUid> NearbyLoot(IEnumerable<EntityUid> nearby)
+    private IEnumerable<EntityUid> NearbyLoot(IEnumerable<EntityUid> nearby, bool includeCritical = false)
     {
         var items = new HashSet<EntityUid>();
-        foreach (var source in nearby.Where(item => HasComp<StorageComponent>(item) || HasComp<EntityStorageComponent>(item) || _mobs.IsDead(item) ||
+        foreach (var source in nearby.Where(item => HasComp<StorageComponent>(item) || HasComp<EntityStorageComponent>(item) ||
+                     _mobs.IsDead(item) || includeCritical && _mobs.IsCritical(item) ||
                      HasComp<GunComponent>(item) || HasComp<BallisticAmmoProviderComponent>(item) ||
                      HasComp<CartridgeAmmoComponent>(item) || KnownLootGrenade(item, out _) || FlareSupplyCount(item) > 0 || StockDressing(item) || FreshMedicalTool(item)).Take(24))
         {
@@ -116,7 +122,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 items.UnionWith(looseStorage.Container.ContainedEntities.Take(32));
             if (TryComp<EntityStorageComponent>(source, out var crate))
                 items.UnionWith(crate.Contents.ContainedEntities.Take(32));
-            if (!_mobs.IsDead(source))
+            if (!_mobs.IsDead(source) && !(includeCritical && _mobs.IsCritical(source)))
                 continue;
             foreach (var hand in _hands.EnumerateHands(source))
                 if (_hands.TryGetHeldItem(source, hand, out var held))
