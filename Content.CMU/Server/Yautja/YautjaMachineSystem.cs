@@ -1,5 +1,8 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared.CMU14.Yautja;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.Interaction;
@@ -21,10 +24,14 @@ public sealed partial class YautjaMachineSystem : EntitySystem
     private static readonly EntProtoId HumanRightFootBonePrototype = "CMUYautjaHumanRightFootBoneTrophy";
     private static readonly EntProtoId HumanRibcagePrototype = "CMUYautjaHumanRibcageTrophy";
 
+    private static readonly EntProtoId DetachedBodyPrototype = "DetachedBody";
+
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private MetaDataSystem _metadata = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private YautjaTrophySystem _trophies = default!;
 
     public override void Initialize()
     {
@@ -66,8 +73,7 @@ public sealed partial class YautjaMachineSystem : EntitySystem
         if (IsBusyWithCauldron(args.User))
             return;
 
-        if (!TryComp(args.Used, out BodyPartComponent? bodyPart) ||
-            bodyPart.Body != null)
+        if (!TryResolveSeveredLimb(args.Used, out var bodyPart))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-cauldron-not-limb", ("cauldron", ent.Owner)), args.User, args.User);
             return;
@@ -123,7 +129,8 @@ public sealed partial class YautjaMachineSystem : EntitySystem
         SetCauldronState(ent, ent.Comp.BaseState);
 
         if (args.Target is not { } limb ||
-            Deleted(limb))
+            TerminatingOrDeleted(limb) ||
+            EntityManager.IsQueuedForDeletion(limb))
         {
             return;
         }
@@ -134,8 +141,7 @@ public sealed partial class YautjaMachineSystem : EntitySystem
             return;
         }
 
-        if (!TryComp(limb, out BodyPartComponent? bodyPart) ||
-            bodyPart.Body != null ||
+        if (!TryResolveSeveredLimb(limb, out var bodyPart) ||
             !HasComp<YautjaFlayedComponent>(limb) ||
             !TryGetBonePrototype(bodyPart, out var prototype))
         {
@@ -148,11 +154,32 @@ public sealed partial class YautjaMachineSystem : EntitySystem
         trophy.Hunter = args.User;
         trophy.SourceName = Name(limb);
         Dirty(bone, trophy);
+        _trophies.RecordCraftedTrophy(args.User, trophy.Kind);
 
         if (bodyPart.PartType == BodyPartType.Head)
             _metadata.SetEntityDescription(bone, Loc.GetString("cmu-yautja-cauldron-skull-desc", ("limb", limb)));
 
         QueueDel(limb);
+    }
+
+    // severed limbs aren't bare parts. Nubody drops a DetachedBody carrier with the part inside
+    // (and part.Body points at the carrier, so Body == null never passes). unwrap it here,
+    // same as surgery does. a bare part with no body is still fine for old spawns
+    public bool TryResolveSeveredLimb(EntityUid held, [NotNullWhen(true)] out BodyPartComponent? bodyPart)
+    {
+        if (TryComp(held, out bodyPart))
+            return bodyPart.Body == null;
+
+        bodyPart = null;
+        if (MetaData(held).EntityPrototype?.ID != DetachedBodyPrototype.Id ||
+            !TryComp<BodyComponent>(held, out var carrier) ||
+            _body.GetRootPartOrNull(held, carrier) is not { } root)
+        {
+            return false;
+        }
+
+        bodyPart = root.BodyPart;
+        return true;
     }
 
     private bool IsBusyWithCauldron(EntityUid user)

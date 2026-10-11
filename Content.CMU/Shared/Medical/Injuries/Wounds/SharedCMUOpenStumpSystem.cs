@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU14.Medical.Injuries.Wounds;
 
-public abstract class SharedCMUOpenStumpSystem : EntitySystem
+public abstract partial class SharedCMUOpenStumpSystem : EntitySystem
 {
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] private INetManager _net = default!;

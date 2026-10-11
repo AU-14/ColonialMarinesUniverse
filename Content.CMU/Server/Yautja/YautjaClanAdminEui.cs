@@ -19,7 +19,7 @@ using Robust.Shared.Network;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaClanAdminEui : BaseEui
+public sealed partial class YautjaClanAdminEui : BaseEui
 {
     public const AdminFlags RequiredAdminFlag = AdminFlags.Clans;
 

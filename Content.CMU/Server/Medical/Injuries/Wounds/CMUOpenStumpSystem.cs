@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -8,7 +9,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Medical.Injuries.Wounds;
 
-public sealed class CMUOpenStumpSystem : SharedCMUOpenStumpSystem
+public sealed partial class CMUOpenStumpSystem : SharedCMUOpenStumpSystem
 {
     [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -30,7 +31,10 @@ public sealed class CMUOpenStumpSystem : SharedCMUOpenStumpSystem
 
             stumps.NextBleed = now + BleedInterval;
 
+            // synths don't bleed from wounds and never refill on their own, so an open stump
+            // used to drain a dead synth to zero before anyone could weld it back together
             if (part.Body is not { } body ||
+                HasComp<SynthComponent>(body) ||
                 HasComp<CMInStasisComponent>(body) ||
                 _wounds.IsBloodFlowOccluded(uid) ||
                 !TryComp<BloodstreamComponent>(body, out var bloodstream))

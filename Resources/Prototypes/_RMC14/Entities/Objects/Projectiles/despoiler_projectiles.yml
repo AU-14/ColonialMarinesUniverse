@@ -13,7 +13,7 @@
   - type: Projectile
     damage:
       types:
-        Heat: 20
+        Heat: 10
         Piercing: 0
     deleteOnCollide: true
   - type: XenoProjectile

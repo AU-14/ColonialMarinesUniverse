@@ -8,12 +8,12 @@ using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Weapons.Melee;
 
-public sealed class InsaneGibSystem : EntitySystem
+public sealed partial class InsaneGibSystem : EntitySystem
 {
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

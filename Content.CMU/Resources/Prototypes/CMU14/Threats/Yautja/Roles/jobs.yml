@@ -13,6 +13,7 @@
   jobPreviewEntity: CMUMobYautja
   startingGear: CMUYautjaHunterSpawnGear
   usePlayerProfile: false
+  applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
   special:
   - !type:AddComponentSpecial
     components:
@@ -28,13 +29,14 @@
   description: cmu-yautja-job-description-hellhound
   playTimeTracker: CMUYautjaHellhound
   icon: CMJobIconEmpty
-  supervisors: cm-job-supervisors-nobody
+  supervisors: cmu-job-supervisors-yautja-hellhound
   joinNotifyCrew: false
   hidden: true
   canBeAntag: false
   jobEntity: CMUMobYautjaHellhound
   jobPreviewEntity: CMUMobYautjaHellhound
   usePlayerProfile: false
+  applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
 - type: job
   parent: CMJobBase
@@ -43,7 +45,7 @@
   description: cmu-yautja-job-description-youngblood
   playTimeTracker: CMUYautjaYoungblood
   icon: CMJobIconEmpty
-  supervisors: cm-job-supervisors-nobody
+  supervisors: cmu-job-supervisors-yautja-youngblood
   joinNotifyCrew: false
   hidden: true
   canBeAntag: false
@@ -52,6 +54,7 @@
   jobPreviewEntity: CMUMobYautjaYoungblood
   startingGear: CMUYautjaYoungbloodGear
   usePlayerProfile: false
+  applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
 - type: job
   parent: CMJobBase
@@ -69,6 +72,7 @@
   jobPreviewEntity: CMUMobYautjaBadBlood
   startingGear: CMUYautjaBadBloodSpawnGear
   usePlayerProfile: false
+  applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
 - type: job
   parent: CMJobBase
@@ -86,6 +90,7 @@
   jobPreviewEntity: CMUMobYautjaMilitaryCasteSoldier
   startingGear: CMUYautjaMilitaryCasteSoldierGear
   usePlayerProfile: false
+  applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
 - type: job
   parent: CMJobBase
@@ -103,6 +108,7 @@
   jobPreviewEntity: CMUMobYautjaMilitaryCasteEnforcer
   startingGear: CMUYautjaMilitaryCasteEnforcerGear
   usePlayerProfile: false
+  applyTraits: false # Human character traits, including accents, do not apply to Yautja roles.
 
 - type: startingGear
   id: CMUYautjaMilitaryCasteSoldierGear

@@ -31,6 +31,9 @@
     - TimeSharesSalesman
     - UPPGROM
     - UPPGROMAlt
+    - CHTORM_PMC_BEAR
+    - GROZA_PMC_BEAR
+    - SKALA_PMC_BEAR
     - UPPGROMAlt2
     - USArmyTank
     - UACGLostTeam
@@ -78,6 +81,8 @@
 - type: gameMap
   id: StableGarrisonRedux
   mapName: Stable Garrison
+  zLevelsComponentOverrides:
+  - type: CMU3DMap
   allegiance: UA
   mapPath: /Maps/CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ0.yml
   mapsBelow:

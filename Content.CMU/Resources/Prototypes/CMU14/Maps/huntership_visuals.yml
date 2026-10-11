@@ -4802,7 +4802,7 @@
   parent: RMCShutterAlmayer
   id: CMUHunterShipObjStructureMachineryDoorPoddoorYautjaArmoryHdoor1NorthIdArmory
   name: "Armory Shutter"
-  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructibleвЂ”nothing can penetrate its defenses."
+  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructible—nothing can penetrate its defenses."
   suffix: Hunter Ship exact functional door
   components:
   - type: Sprite
@@ -4838,7 +4838,7 @@
   parent: RMCShutterAlmayer
   id: CMUHunterShipObjStructureMachineryDoorPoddoorYautjaArmoryHdoor1NorthIdArmory2
   name: "Armory Shutter"
-  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructibleвЂ”nothing can penetrate its defenses."
+  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructible—nothing can penetrate its defenses."
   suffix: Hunter Ship exact functional door
   components:
   - type: Sprite
@@ -4874,7 +4874,7 @@
   parent: RMCShutterAlmayerOpen
   id: CMUHunterShipObjStructureMachineryDoorPoddoorYautjaOpenHdoor1EastIdResearchlockdown
   name: "Yautja Shutter"
-  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructibleвЂ”nothing can penetrate its defenses."
+  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructible—nothing can penetrate its defenses."
   suffix: Hunter Ship exact functional door
   components:
   - type: Sprite
@@ -4911,7 +4911,7 @@
   parent: RMCShutterAlmayerOpen
   id: CMUHunterShipObjStructureMachineryDoorPoddoorYautjaOpenHdoor1EastIdResearchlockdown2
   name: "Yautja Shutter"
-  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructibleвЂ”nothing can penetrate its defenses."
+  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructible—nothing can penetrate its defenses."
   suffix: Hunter Ship exact functional door
   components:
   - type: Sprite
@@ -4948,7 +4948,7 @@
   parent: RMCShutterAlmayerOpen
   id: CMUHunterShipObjStructureMachineryDoorPoddoorYautjaOpenHdoor1NorthIdHoundcells
   name: "Yautja Shutter"
-  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructibleвЂ”nothing can penetrate its defenses."
+  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructible—nothing can penetrate its defenses."
   suffix: Hunter Ship exact functional door
   components:
   - type: Sprite
@@ -4985,7 +4985,7 @@
   parent: RMCShutterAlmayerOpen
   id: CMUHunterShipObjStructureMachineryDoorPoddoorYautjaOpenHdoor1NorthIdPrisonlockdown
   name: "Yautja Shutter"
-  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructibleвЂ”nothing can penetrate its defenses."
+  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructible—nothing can penetrate its defenses."
   suffix: Hunter Ship exact functional door
   components:
   - type: Sprite
@@ -5022,7 +5022,7 @@
   parent: RMCShutterAlmayerOpen
   id: CMUHunterShipObjStructureMachineryDoorPoddoorYautjaOpenHdoor1NorthIdPrisonlockdown2
   name: "Yautja Shutter"
-  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructibleвЂ”nothing can penetrate its defenses."
+  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructible—nothing can penetrate its defenses."
   suffix: Hunter Ship exact functional door
   components:
   - type: Sprite
@@ -5059,7 +5059,7 @@
   parent: RMCShutterAlmayerOpen
   id: CMUHunterShipObjStructureMachineryDoorPoddoorYautjaOpenHdoor1NorthIdResearchlockdown
   name: "Yautja Shutter"
-  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructibleвЂ”nothing can penetrate its defenses."
+  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructible—nothing can penetrate its defenses."
   suffix: Hunter Ship exact functional door
   components:
   - type: Sprite
@@ -5096,7 +5096,7 @@
   parent: RMCShutterAlmayerOpen
   id: CMUHunterShipObjStructureMachineryDoorPoddoorYautjaOpenHdoor1NorthIdResearchlockdown2
   name: "Yautja Shutter"
-  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructibleвЂ”nothing can penetrate its defenses."
+  description: "A heavily reinforced metal-alloy door, designed to be virtually indestructible—nothing can penetrate its defenses."
   suffix: Hunter Ship exact functional door
   components:
   - type: Sprite
@@ -12901,7 +12901,7 @@
   parent: [ CMChairNonFold, CMUYautjaStructureN32x32HunterPropsBoneThrone ]
   id: CMUHunterShipPlacedCMChairNonFoldBoneThroneSouthOffset16x8
   name: "Throne of the Eternal Hunt"
-  description: "A grotesquely magnificent seat, carved from the remains of the most formidable prey. Twisted spines, shattered skulls, and serrated bones form a testament to the ancient hunterвЂ™s unchallenged supremacy. The throne whispers of countless battles, its macabre elegance a reminder that only the strongest may sit upon it."
+  description: "A grotesquely magnificent seat, carved from the remains of the most formidable prey. Twisted spines, shattered skulls, and serrated bones form a testament to the ancient hunter’s unchallenged supremacy. The throne whispers of countless battles, its macabre elegance a reminder that only the strongest may sit upon it."
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
@@ -12932,7 +12932,7 @@
   parent: [ CMChairNonFold, CMUYautjaStructureN32x32HunterPropsBoneThroneTop ]
   id: CMUHunterShipPlacedCMChairNonFoldBoneThroneTopSouthOffset16x40
   name: "Throne of the Eternal Hunt"
-  description: "A grotesquely magnificent seat, carved from the remains of the most formidable prey. Twisted spines, shattered skulls, and serrated bones form a testament to the ancient hunterвЂ™s unchallenged supremacy. The throne whispers of countless battles, its macabre elegance a reminder that only the strongest may sit upon it."
+  description: "A grotesquely magnificent seat, carved from the remains of the most formidable prey. Twisted spines, shattered skulls, and serrated bones form a testament to the ancient hunter’s unchallenged supremacy. The throne whispers of countless battles, its macabre elegance a reminder that only the strongest may sit upon it."
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
@@ -34245,7 +34245,7 @@
   parent: BedrollFolded
   id: CMUHunterShipPlacedRollerBedSpawnFoldedBedrollComfySouthOffset0x7
   name: "Folded comfy bedroll"
-  description: "Folded and innocent-looking вЂ” but donвЂ™t be fooled. It's technically illegal in three sectors for causing excessive napping."
+  description: "Folded and innocent-looking — but don’t be fooled. It's technically illegal in three sectors for causing excessive napping."
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite

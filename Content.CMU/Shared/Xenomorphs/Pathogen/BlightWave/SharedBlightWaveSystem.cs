@@ -66,7 +66,7 @@ public abstract partial class SharedBlightWaveSystem : EntitySystem
                 mob, PopupType.MediumCaution);
         }
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu14-xeno-blight-wave-self"),
             Loc.GetString("cmu14-xeno-blight-wave-others", ("xeno", xeno.Owner)),
             xeno, xeno, PopupType.LargeCaution);

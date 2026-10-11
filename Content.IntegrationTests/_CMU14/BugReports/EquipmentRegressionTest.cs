@@ -25,6 +25,8 @@ namespace Content.IntegrationTests.CMU14.BugReports;
 [TestFixture]
 public sealed class EquipmentRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> BugReportOpforSpecialistPrototype = "BugReportOpforSpecialist";
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: job
@@ -76,8 +78,8 @@ public sealed class EquipmentRegressionTest : GameTest
             flight.BulletSpread = 0;
             flight.ImpactEffects.Add("BugReportCASImpact");
             SEntMan.System<SharedDropshipWeaponSystem>().Update(0);
-            var impacts = SEntMan.EntityQuery<MetaDataComponent>()
-                .Where(meta => meta.EntityPrototype?.ID == "BugReportCASImpact").ToArray();
+            var impacts = SEntMan.QueryEntities<MetaDataComponent>()
+                .Where(meta => meta.Comp.EntityPrototype?.ID == "BugReportCASImpact").ToArray();
             Assert.That(impacts.Length, Is.EqualTo(roofed ? 0 : 1));
             foreach (var impact in impacts)
                 SEntMan.DeleteEntity(impact.Owner);
@@ -123,7 +125,7 @@ public sealed class EquipmentRegressionTest : GameTest
             var card = SEntMan.Spawn();
             var access = SEntMan.EnsureComponent<AccessComponent>(card);
             access.Tags.Add("AU14AccessGovforSquadWeaponsSpecialist");
-            var job = SProtoMan.Index<JobPrototype>("BugReportOpforSpecialist");
+            var job = SProtoMan.Index<JobPrototype>(BugReportOpforSpecialistPrototype);
             typeof(StationSpawningSystem).GetMethod("SetWeaponsSpecialistAccess", BindingFlags.NonPublic | BindingFlags.Instance)!
                 .Invoke(SEntMan.System<StationSpawningSystem>(), [card, job, job]);
             Assert.That(access.Tags.Select(t => t.Id), Does.Contain("AU14AccessOpforSquadWeaponsSpecialist"));
@@ -166,11 +168,11 @@ public sealed class EquipmentRegressionTest : GameTest
             var scatter = SEntMan.GetComponent<ScatteringGrenadeComponent>(projectile);
             scatter.IsTriggered = true;
             SEntMan.System<ScatteringGrenadeSystem>().Update(0);
-            var flares = SEntMan.EntityQuery<ExpendableLightComponent, FlareSignalComponent>().ToArray();
+            var flares = SEntMan.QueryEntities<ExpendableLightComponent, FlareSignalComponent>().ToArray();
             Assert.That(flares, Is.Not.Empty);
             foreach (var (light, _) in flares)
             {
-                Assert.That(light.Activated, Is.True);
+                Assert.That(light.Comp.Activated, Is.True);
                 Assert.That(SEntMan.HasComponent<DropshipTargetComponent>(light.Owner), Is.True);
                 SEntMan.DeleteEntity(light.Owner);
             }

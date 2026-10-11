@@ -26,7 +26,7 @@ public partial struct StampDisplayInfo
     /// <summary>Custom stamp labels are literal text; stock stamps use localization IDs.</summary>
     public readonly string GetDisplayName()
     {
-        return Loc.TryGetString(StampedName, out var localized) ? localized : StampedName;
+        return IoCManager.Resolve<ILocalizationManager>().TryGetString(StampedName, out var localized) ? localized : StampedName;
     }
 };
 

@@ -222,7 +222,7 @@ public sealed partial class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundU
         if (_window == null)
             return;
 
-        _window.RecommendationsList.DisposeAllChildren();
+        _window.RecommendationsList.ReleaseChildren();
         _recommendationGroups.Clear();
 
         foreach (var group in state.RecommendationGroups)
@@ -569,7 +569,7 @@ public sealed partial class MedalsPanelBui(EntityUid owner, Enum uiKey) : BoundU
             _medalsInfoBuilt = true;
         }
 
-        _window.ViewMedalsList.DisposeAllChildren();
+        _window.ViewMedalsList.ReleaseChildren();
 
         foreach (var entry in state.AwardedMedals)
         {

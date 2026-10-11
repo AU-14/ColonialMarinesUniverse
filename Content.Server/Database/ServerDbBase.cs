@@ -18,7 +18,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.CMU14.Allegiance;
 using Content.Shared.CMU14.Origin;
 using Content.Shared.CMU14.RoundStatistics;
-using Content.Shared.Administration.Logs;
+
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Database;
 using Content.Shared.Humanoid;
@@ -1252,6 +1252,11 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             var result = Enum.TryParse(outcome.Outcome, out CMURoundStatisticsOutcome parsedOutcome)
                 ? parsedOutcome
                 : CMURoundStatisticsOutcome.Unknown;
+
+            // CMU14: rounds ended by the hive collapse rule used to record as marine major, reclassify by source
+            if (result == CMURoundStatisticsOutcome.MarineMajorXenoWipe
+                && outcome.Source == "HiveCollapseRule")
+                result = CMURoundStatisticsOutcome.MarineMinorHiveCollapse;
 
             return new CMURoundOutcomeRecord(
                 outcome.RoundId,

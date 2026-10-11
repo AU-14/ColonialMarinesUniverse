@@ -161,7 +161,7 @@ public sealed partial class PlantableFlagSystem : EntitySystem
         target = coords.Offset(rot.ToWorldVec());
         if (_rmcMap.IsTileBlocked(target.Value))
         {
-            _popup.PopupClient(
+            _popup.PopupEntity(
                 $"You need a clear, open area to plant the {Name(ent)}, something is blocking the way in front of you!",
                 user,
                 user,

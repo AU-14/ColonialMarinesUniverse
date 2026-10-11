@@ -179,7 +179,7 @@ public sealed partial class EEXRappelSystem : SharedEEXRappelSystem
 
     private bool HasLadderAt(Entity<MapGridComponent> grid, Vector2i tile)
     {
-        var anchored = _map.GetAnchoredEntitiesEnumerator(grid.Owner, grid.Comp, tile);
+        var anchored = _map.GetAnchoredEntities(grid.Owner, grid.Comp, tile);
         while (anchored.MoveNext(out var uid))
         {
             if (HasComp<CMUZLevelLadderComponent>(uid) || HasComp<LadderComponent>(uid))

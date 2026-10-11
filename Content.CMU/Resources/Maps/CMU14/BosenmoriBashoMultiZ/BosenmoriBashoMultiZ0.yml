@@ -88839,14 +88839,15 @@ entities:
         14,13: 17906312118425092096
         14,14: 17361641481273145592
         15,13: 18446462598732840960
+    - type: CMUBreathingRequiredMap
     - type: MapAtmosphere
       space: False
       mixture:
         temperature: 293.15
         volume: 2500
         moles:
-          Oxygen: 21.8124
-          Nitrogen: 81.1594
+          Oxygen: 1.0297
+          Nitrogen: 101.9421
         immutable: True
     - type: ChunkContainer
       chunkEntities:

@@ -180,10 +180,8 @@ public abstract partial class SharedPopupSystem : EntitySystem
     [Obsolete("Popups are automatically predicted now, just call PopupEntity and the client will handle prediction.")]
     public void PopupClient(string? message, EntityUid? recipient, PopupType type = PopupType.Small)
     {
-        if (recipient == null)
-            return;
-
-        PopupEntity(message, recipient.Value, recipient, type); // Only show the popup to the recipient, since this was the original behavior.
+        // CMU14: keep the compatibility entry point on the same audience policy as the supported helper.
+        PopupSelf(message, recipient, type);
     }
 
     [Obsolete("Popups are automatically predicted now, just call PopupEntity and the client will handle prediction.")]
@@ -201,10 +199,8 @@ public abstract partial class SharedPopupSystem : EntitySystem
     [Obsolete("Popups are automatically predicted now, just call PopupEntity and the client will handle prediction.")]
     public void PopupPredicted(string? message, EntityUid uid, EntityUid? recipient, PopupType type = PopupType.Small)
     {
-        if (recipient.HasValue && !ShouldBroadcastToOthers(recipient.Value))
-            return;
-
-        PopupEntity(message, uid, type); // The recipent was only used for prediction reasons, not as a filter, so we ignore it here.
+        // CMU14: keep the compatibility entry point on the same audience policy as the supported helper.
+        PopupBroadcast(message, uid, recipient, type);
     }
 
     [Obsolete("Popups are automatically predicted now, just call PopupEntity and the client will handle prediction.")]

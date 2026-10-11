@@ -12,6 +12,8 @@ using Content.Client.UserInterface.Systems.Inventory.Controls;
 using Content.Client.UserInterface.Systems.Inventory.Widgets;
 using Content.Client.UserInterface.Systems.Inventory.Windows;
 using Content.Shared._RMC14.Storage;
+using Content.Shared.CMU14.Input;
+using Content.Shared.CMU14.Inventory;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Input;
 using Content.Shared.Inventory.VirtualItem;
@@ -20,6 +22,7 @@ using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
@@ -32,6 +35,7 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
     IOnSystemChanged<ClientInventorySystem>, IOnSystemChanged<HandsSystem>, IOnSystemChanged<WebbingSystem>, IOnSystemChanged<UniformAccessorySystem>
 {
     [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IConfigurationManager _cfg = default!; // CMU14
 
     [UISystemDependency] private readonly ClientInventorySystem _inventorySystem = default!;
     [UISystemDependency] private readonly HandsSystem _handsSystem = default!;
@@ -276,6 +280,20 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
     {
         var slot = control.SlotName;
 
+        // CMU14 Begin: open worn storage by key, or by an empty-handed click when the player opts in
+        if (args.Function == CMUKeyFunctions.CMUOpenWornStorage ||
+            (args.Function == EngineKeyFunctions.UIClick &&
+             _cfg.GetCVar(CMUInventoryCVars.ClickOpensWornStorage) &&
+             _handsSystem.GetActiveHandEntity() == null))
+        {
+            if (TryOpenWornStorage(slot))
+            {
+                args.Handle();
+                return;
+            }
+        }
+        // CMU14 End
+
         if (args.Function == EngineKeyFunctions.UIClick)
         {
             _inventorySystem.UIInventoryActivate(control.SlotName);
@@ -315,6 +333,20 @@ public sealed partial class InventoryUIController : UIController, IOnStateEntere
         }
 
         args.Handle();
+    }
+
+    // CMU14 method
+    private bool TryOpenWornStorage(string slot)
+    {
+        if (_playerUid is not { } player ||
+            !_inventorySystem.TryGetSlotEntity(player, slot, out var item) ||
+            !_entities.HasComponent<StorageComponent>(item.Value))
+        {
+            return false;
+        }
+
+        _inventorySystem.UIInventoryStorageActivate(slot);
+        return true;
     }
 
     private void StoragePressed(GUIBoundKeyEventArgs args, SlotControl control)

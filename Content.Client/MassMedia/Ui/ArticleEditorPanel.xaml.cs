@@ -1,4 +1,4 @@
-﻿using Content.Client.Message;
+using Content.Client.Message;
 using Content.Client.RichText;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.RichText;
@@ -119,6 +119,7 @@ public sealed partial class ArticleEditorPanel : Control
         ArticleDraftUpdated?.Invoke(string.Empty, string.Empty);
     }
 
+    [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

@@ -212,7 +212,7 @@ au14-usarmy-armored-greeting = You are a member of US Army 32nd Armored Division
 
     You were dispatched to aid GOVFOR forces in the AO!
 
-    Get ready for action and report to the GVOFR Commander!
+    Get ready for action and report to the GOVFOR Commanding Officer!
 
     You are friendly to GOVFOR, neutral to civilians and hostile to CLF!
 
@@ -423,6 +423,7 @@ au14-job-prefix-tweiasf-pl = 24/PARA PL
 au14-job-description-twepara = You are a member of the Imperial Armed Space Forces 24th Parachute Regiment. Follow your orders.
 
 au14-job-description-IASFsurv = You are a stranded member of the IASF 24th Parachute Regiment. Fight for Empress, country and also your life.
+au14-job-description-IASFsurv-bosenmori = You are a stranded member of the IASF 24th Parachute Regiment who was training in the areas around the colony of Bosenmori Basho. Fight for your Empress, country and also your life.
 
 au14-job-greeting-IASFsurv = You have been stranded in this colony, dropship out of fuel and almost out of ammunition
     Most of your squad is dead, you are all thats left... For now

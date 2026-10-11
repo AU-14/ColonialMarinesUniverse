@@ -75,7 +75,7 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
         // Other penalty consumers have their own CVar callbacks. Refresh after
         // those callbacks finish so held-gun caches use the new configuration too.
         // Paused patients also need current projections when the layer is toggled.
-        var query = EntityManager.AllEntityQueryEnumerator<CMUHumanMedicalComponent>();
+        var query = AllEntityQuery<CMUHumanMedicalComponent>();
         while (query.MoveNext(out var body, out _))
         {
             if (!TerminatingOrDeleted(body))

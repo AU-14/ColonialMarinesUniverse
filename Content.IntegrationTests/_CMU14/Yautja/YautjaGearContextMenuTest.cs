@@ -127,9 +127,11 @@ public sealed class YautjaGearContextMenuTest
                         entMan.GetComponent<YautjaBracerComponent>(bracer).Charge = 1000;
 
                         var gear = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
+                        gear.GearPrototypes[YautjaGearKind.Scimitar] = "CMUYautjaScimitar";
+                        gear.GearPrototypes[YautjaGearKind.ChainGauntlet] = "CMUYautjaChainGauntlet";
                         if (scenario.AttachmentPrototype == null)
                         {
-                            source = gear.Gear[scenario.Kind];
+                            source = default;
                         }
                         else
                         {
@@ -148,6 +150,9 @@ public sealed class YautjaGearContextMenuTest
                         }
 
                         RaiseGearAction(entMan, bracer, hunter, action, scenario);
+
+                        if (source == default)
+                            source = gear.Gear[scenario.Kind];
 
                         var stored = entMan.GetComponent<YautjaStoredGearComponent>(source);
                         deployed = stored.AttachedWeapon ?? source;

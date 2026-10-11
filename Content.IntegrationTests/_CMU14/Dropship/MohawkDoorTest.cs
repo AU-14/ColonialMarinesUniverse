@@ -38,15 +38,15 @@ public sealed class MohawkDoorTest
             Assert.That(entities.System<MapLoaderSystem>().TryLoadGrid(mapId,
                 new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
-            foreach (var door in entities.EntityQuery<DoorComponent>()
+            foreach (var door in entities.QueryEntities<DoorComponent>()
                          .Where(d => entities.GetComponent<TransformComponent>(d.Owner).GridUid == ship))
             {
                 Assert.That(entities.HasComponent<WeldableComponent>(door.Owner), Is.True);
                 Assert.That(entities.HasComponent<WiresComponent>(door.Owner), Is.True);
                 Assert.That(entities.HasComponent<WiresPanelComponent>(door.Owner), Is.True);
-                Assert.That(door.ChangeAirtight, Is.True);
+                Assert.That(door.Comp.ChangeAirtight, Is.True);
                 var position = entities.GetComponent<TransformComponent>(door.Owner).LocalPosition;
-                position += door.Location switch
+                position += door.Comp.Location switch
                 {
                     DoorLocation.Port => new Vector2(1.1f, 0f),
                     DoorLocation.Starboard => new Vector2(-1.1f, 0f),

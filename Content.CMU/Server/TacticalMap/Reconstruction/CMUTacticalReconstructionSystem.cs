@@ -280,7 +280,7 @@ public sealed partial class CMUTacticalReconstructionSystem : EntitySystem
                 continue;
             // Map-as-grid entities have no collision fixtures, so LocalAABB is not maintained.
             // Read tile extents once when opening; expensive structure extraction stays budgeted.
-            var tiles = _maps.GetAllTilesEnumerator(map, grid);
+            var tiles = _maps.GetAllTiles(map, grid);
             while (tiles.MoveNext(out var tile))
             {
                 if (tile is not { } value) continue;

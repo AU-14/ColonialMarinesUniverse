@@ -1,4 +1,6 @@
 using System.Numerics;
+using Content.Server._RMC14.Language.Systems;
+using Content.Shared._RMC14.Language.Components;
 using Content.Shared.CMU14.DroneOperator;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -52,6 +54,16 @@ public sealed class CMUDroneControlSafeguardsTest
         await server.WaitAssertion(() =>
         {
             Assert.That(entities.GetComponent<MindComponent>(mind).VisitingEntity, Is.EqualTo(drone));
+            // bleeding and other passive ticks don't interrupt do-afters, so they mustn't drop the link either
+            var bleed = new DamageSpecifier();
+            bleed.DamageDict.Add("Bloodloss", 1);
+            entities.System<DamageableSystem>().TryChangeDamage(user, bleed, ignoreResistances: true, interruptsDoAfters: false, ignoreGlobalModifiers: true);
+        });
+        await server.WaitRunTicks(3);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(entities.GetComponent<MindComponent>(mind).VisitingEntity, Is.EqualTo(drone),
+                "a bleed tick kicked the operator out of the drone");
             ChangeDamage(user, 1);
         });
         await server.WaitRunTicks(3);
@@ -113,5 +125,53 @@ public sealed class CMUDroneControlSafeguardsTest
             damage.DamageDict.Add("Blunt", amount);
             entities.System<DamageableSystem>().TryChangeDamage(target, damage, ignoreResistances: true, ignoreGlobalModifiers: true);
         }
+    }
+
+    [Test]
+    public async Task DroneSpeaksTheOperatorsLanguagesOnlyWhilePiloted()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var map = await pair.CreateTestMap();
+        var server = pair.Server;
+        var entities = server.EntMan;
+
+        await server.WaitAssertion(() =>
+        {
+            var language = entities.System<LanguageSystem>();
+            var user = entities.SpawnEntity("CMMobHuman", map.GridCoords);
+            entities.AddComponent<CMUDroneOperatorComponent>(user);
+            entities.EnsureComponent<LanguageComponent>(user);
+            language.AddLanguage(user, "Portuguese");
+            language.SetLanguage(user, "Portuguese");
+
+            var drone = entities.SpawnEntity("CMUCombatDrone", map.GridCoords.Offset(new Vector2(2, 0)));
+            var tablet = entities.SpawnEntity("CMUDroneControlTablet", map.GridCoords);
+            Assert.That(entities.System<SharedHandsSystem>().TryPickupAnyHand(user, tablet, checkActionBlocker: false), Is.True);
+            var link = new InteractUsingEvent(user, tablet, drone, entities.GetComponent<TransformComponent>(drone).Coordinates);
+            entities.EventBus.RaiseLocalEvent(drone, link);
+            var minds = entities.System<SharedMindSystem>();
+            var mind = minds.CreateMind(null).Owner;
+            minds.TransferTo(mind, user);
+
+            entities.EventBus.RaiseLocalEvent(tablet, new UseInHandEvent(user));
+            Assert.That(entities.GetComponent<MindComponent>(mind).VisitingEntity, Is.EqualTo(drone));
+            Assert.That(language.CanSpeak(drone, "Portuguese"), Is.True, "the UGV should talk in its operator's languages");
+            Assert.That(language.GetCurrentLanguage(drone).Id, Is.EqualTo("Portuguese"),
+                "the UGV should start on whatever the operator had selected");
+
+            // hop back out with the end-control action
+            entities.EventBus.RaiseLocalEvent(drone, new CMUDroneEndControlActionEvent());
+        });
+        await server.WaitRunTicks(3);
+        await server.WaitAssertion(() =>
+        {
+            var language = entities.System<LanguageSystem>();
+            var drone = entities.EntityQueryEnumerator<CMUDroneAndroidComponent>();
+            Assert.That(drone.MoveNext(out var droneUid, out _), Is.True);
+            Assert.That(entities.HasComponent<CMUDroneControlSessionComponent>(droneUid), Is.False);
+            Assert.That(language.CanSpeak(droneUid, "Portuguese"), Is.False,
+                "an unattended drone shouldn't keep the last operator's languages");
+        });
+        await pair.CleanReturnAsync();
     }
 }

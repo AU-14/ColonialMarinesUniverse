@@ -13,6 +13,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaHuntingTrapTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHuntingTrapPrototype = "CMUYautjaHuntingTrap";
+
     [Test]
     public async Task HuntingTrapStaticPrototypeMatchesCmss13SourceFacts()
     {
@@ -68,9 +70,9 @@ public sealed class YautjaHuntingTrapTest
         {
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
-            var prototype = prototypes.Index<EntityPrototype>("CMUYautjaHuntingTrap");
+            var prototype = prototypes.Index<EntityPrototype>(CMUYautjaHuntingTrapPrototype);
 
-            Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True);
+            Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True);
             Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/CMU14/Yautja/yautja_items.rsi")));
             Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo("yauttrap0"),
                 "CMSS13 /obj/item/hunting_trap icon_state = \"yauttrap0\".");

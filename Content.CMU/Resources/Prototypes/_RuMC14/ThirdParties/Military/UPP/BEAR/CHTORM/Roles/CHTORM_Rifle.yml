@@ -125,7 +125,7 @@
     ears: RuMCHeadsetBEAR
   storage:
     back:
-    - RMCMRESPP
+    - RuMCirpUPP
     - AU14PacketGrenadeHighExplosiveUPPFilled
     - AU14GrenadeSmokeUPP
     - RMCExplosiveBreachingCharge

@@ -17,7 +17,7 @@
   weight: 20
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 3
+  ghostsNeeded: 3
   roundstart: false
 
 - type: thirdParty
@@ -26,10 +26,10 @@
   displayName: Freelancers (Survivors)
   entrymethod: ground
   weight: 8
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: true
   announcearrival: ''
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - colonyfall

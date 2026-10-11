@@ -7,3 +7,6 @@ reagent-name-speed-demon = Speed Demon
 
 au-pill-contents-psilocybin = Grounded Psilocybin Mushrooms
 reagent-desc-speed-demon = A dangerous street drug that greatly increases speed and reflexes, but is highly toxic.
+
+construction-smokeable-joint-leaf = Leaf-Rolled Joint
+construction-smokeable-joint-rainbow-leaf = Leaf-Rolled Rainbow Joint

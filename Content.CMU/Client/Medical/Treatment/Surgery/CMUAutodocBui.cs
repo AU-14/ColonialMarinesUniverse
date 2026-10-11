@@ -177,7 +177,7 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         if (_window is null)
             return;
 
-        _window.ChemicalList.DisposeAllChildren();
+        _window.ChemicalList.ReleaseChildren();
         if (state.Chemicals.Count == 0)
         {
             _window.ChemicalList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-autodoc-no-chemicals")));

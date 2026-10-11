@@ -228,7 +228,7 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
             if (!_prototype.TryIndex(ent.Comp.Access, out var accessPrototype) || accessPrototype.Name == null)
                 return;
 
-            _popup.PopupClient($"This id is missing the {Loc.GetString(accessPrototype.Name)}",
+            _popup.PopupSelf($"This id is missing the {Loc.GetString(accessPrototype.Name)}",
                 args.Actor,
                 PopupType.MediumCaution);
         }

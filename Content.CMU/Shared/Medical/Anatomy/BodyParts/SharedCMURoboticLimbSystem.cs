@@ -170,7 +170,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
 
         if (!TryPickRepairTarget(user, ent.Owner, repairKind, out var part, out var robotic))
         {
-            _popup.PopupClient(Loc.GetString("rmc-repairable-not-damaged", ("target", ent.Owner)),
+            _popup.PopupEntity(Loc.GetString("rmc-repairable-not-damaged", ("target", ent.Owner)),
                 user,
                 user,
                 PopupType.SmallCaution);
@@ -506,7 +506,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
 
         var selfMsg = Loc.GetString(selfKey, ("target", target), ("tool", tool), ("limb", limb));
         var othersMsg = Loc.GetString(othersKey, ("user", user), ("target", target), ("tool", tool), ("limb", limb));
-        _popup.PopupPredicted(selfMsg, othersMsg, target, user);
+        _popup.PopupEntity(selfMsg, othersMsg, target, user);
     }
 
     private void PopupRepairFinish(
@@ -526,7 +526,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
 
         var selfMsg = Loc.GetString(selfKey, ("target", target), ("tool", tool), ("limb", limb));
         var othersMsg = Loc.GetString(othersKey, ("user", user), ("target", target), ("tool", tool), ("limb", limb));
-        _popup.PopupPredicted(selfMsg, othersMsg, target, user);
+        _popup.PopupEntity(selfMsg, othersMsg, target, user);
     }
 
     private string LimbName(EntityUid part)

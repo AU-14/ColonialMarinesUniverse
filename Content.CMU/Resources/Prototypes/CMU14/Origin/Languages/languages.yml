@@ -294,6 +294,20 @@
     maxSyllables: 3
 
 - type: language
+  id: Beast
+  name: "Beast"
+  description: "The tongue of nature."
+  typefaceId: DefaultItalic
+  languageIcon:
+    sprite: /Textures/_RMC14/Interface/map_blips.rsi
+    state: hellhound
+  expectedVocabularySize: 40
+  obfuscationMethod:
+    !type:SyllableObfuscation
+    replacement: ["grr", "grrr", "ghrr", "gnrr", "grrk", "rgh", "grhk", "grrrah", "rrgh", "hrrk", "snrr", "snrgh", "snra", "gnaar", "vrrr", "vrak", "rawr", "rawrr", "raargh", "graah", "graargh", "braargh", "roargh", "wraar", "groar", "hss", "hsss", "ssrah", "ssk", "zrah", "krk", "krrk", "grk", "hrak"]
+    maxSyllables: 3
+
+- type: language
   id: Arcturian
   name: "Arcturian"
   description: "An ancient alien language from the Arcturian colonies."
@@ -341,7 +355,7 @@
     Russian: 0.45
     Serbian: 0.35
     Czech: 0.38
-    Slovak: 0.35  
+    Slovak: 0.35
 
 - type: language
   id: Korean
@@ -500,7 +514,7 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["ба", "ва", "га", "да", "ђа", "жа", "за", "ка", "ља", "на", "ња", "па", "ра", "са", "та", "ћа", "ча", "џа", "ша", "би", "ли", "ђи", "жи", "ки", "љи", "ми", "ни", "њи", "ри", "ћи", "бра", "дра", "гра", "вра", "здр", "шта", "чар", "жар", "њег", "љуб", "ћир"]
-    
+
 - type: language
   id: Lithuanian
   name: "Lithuanian"
@@ -554,7 +568,7 @@
     replacement: ["a", "aa", "ba", "bha", "cha", "da", "dha", "ga", "ha", "ja", "ka", "kha", "la", "ma", "na", "pa", "pha", "ra", "sa", "sha", "ta", "tha", "va", "ya", "raj", "dev", "ram", "krish", "sur", "prem", "dhar", "kar", "nagar", "mandir", "shakti", "ganga", "chandra", "akash"]
   sisterLanguages:
     Urdu: 0.85
-  
+
 - type: language
   id: Vietnamese
   name: "Vietnamese"

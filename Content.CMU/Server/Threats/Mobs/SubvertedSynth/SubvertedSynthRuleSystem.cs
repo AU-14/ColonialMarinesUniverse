@@ -220,7 +220,7 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
 
             var type = entry.Component.GetType();
             Component? previous = null;
-            if (EntityManager.TryGetComponent(ent.Owner, type, out var existing))
+            if (TryComp(ent.Owner, type, out var existing))
             {
                 previous = (Component) _serialization.CreateCopy(existing, notNullableOverride: true);
                 RemComp(ent.Owner, existing);
@@ -255,7 +255,7 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
         {
             if (!IsCurrentSubversion(ent))
                 return false;
-            if (!EntityManager.TryGetComponent(ent.Owner, type, out var current)
+            if (!TryComp(ent.Owner, type, out var current)
                 || !ReferenceEquals(current, overlay.Applied))
                 continue;
 

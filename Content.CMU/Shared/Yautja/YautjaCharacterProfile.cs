@@ -298,7 +298,7 @@ public sealed partial class YautjaCharacterProfile
     public static YautjaCharacterProfile Default => new();
 
     [DataField]
-    public string Name { get; private set; } = "Неизвестно";
+    public string Name { get; private set; } = "Unknown";
 
     [DataField]
     public int Age { get; private set; } = 100;

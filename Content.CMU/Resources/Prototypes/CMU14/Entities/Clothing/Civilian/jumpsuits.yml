@@ -2,7 +2,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianWorkwearBlue
-  name: Blue Workwear
+  name: blue workwear
   description: Work clothes designed for getting dirty while still looking good.
   components:
   - type: Sprite
@@ -11,7 +11,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianWorkwearGreen
-  name: Green Workwear
+  name: green workwear
   description: Work clothes designed for getting dirty while still looking good.
   components:
   - type: Sprite
@@ -20,7 +20,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianWorkwearPink
-  name: Pink Workwear
+  name: pink workwear
   description: Work clothes designed for getting dirty while still looking good.
   components:
   - type: Sprite
@@ -29,7 +29,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianWorkwearYellow
-  name: Yellow Workwear
+  name: yellow workwear
   description: Work clothes designed for getting dirty while still looking good.
   components:
   - type: Sprite
@@ -40,7 +40,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianBoilerSuitCyan
-  name: Cyan Boilersuit
+  name: cyan boilersuit
   description: Rugged waterproof clothes for the hardworking man.
   components:
   - type: Sprite
@@ -49,7 +49,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianBoilerSuitDarkBlue
-  name: Dark Blue Boilersuit
+  name: dark blue boilersuit
   description: Rugged waterproof clothes for the hardworking man.
   components:
   - type: Sprite
@@ -58,7 +58,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianBoilerSuitDarkBlueSynth
-  name: Support Synthetic Uniform
+  name: support synthetic uniform
   description: Rugged waterproof clothes for the hardworking synth.
   components:
   - type: Sprite
@@ -76,7 +76,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianBoilerSuitGray
-  name: Gray Boilersuit
+  name: gray boilersuit
   description: Rugged waterproof clothes for the hardworking man.
   components:
   - type: Sprite
@@ -85,7 +85,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianBoilerSuitGreen
-  name: Green Boilersuit
+  name: green boilersuit
   description: Rugged waterproof clothes for the hardworking man.
   components:
   - type: Sprite
@@ -94,7 +94,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianBoilerSuitKhaki
-  name: Khaki Boilersuit
+  name: khaki boilersuit
   description: Rugged waterproof clothes for the hardworking man.
   components:
   - type: Sprite
@@ -103,7 +103,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianBoilerSuitLightBlue
-  name: Light Blue Boilersuit
+  name: light blue boilersuit
   description: Rugged waterproof clothes for the hardworking man.
   components:
   - type: Sprite
@@ -112,7 +112,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianBoilerSuitWhite
-  name: White Boilersuit
+  name: white boilersuit
   description: Rugged waterproof clothes for the hardworking man.
   components:
   - type: Sprite
@@ -121,7 +121,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianPrisonJumpsuit
-  name: Prison Jumpsuit
+  name: prison jumpsuit
   description: A jumpsuit designed for inmates.
   components:
   - type: Sprite
@@ -131,7 +131,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianWeYuEngineerClothes
-  name: WeYu Engineer Clothes
+  name: We-Yu engineer clothes
   description: Clothes designed for WeYu engineers.
   components:
   - type: Sprite
@@ -140,7 +140,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14JoeHazmat
-  name: Working Joe Hazardous Uniform
+  name: Working Joe hazardous uniform
   description: A reinforced uniform used for Synthetic labor in hazardous areas. Tomorrow, Together. Its vital tracker and tracking beacon appear to be enabled.
   components:
   - type: Sprite
@@ -153,7 +153,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianParamedicClothesRed
-  name: Red Paramedic Clothes
+  name: red paramedic clothes
   description: Clothes designed for paramedics.
   components:
   - type: Sprite
@@ -162,7 +162,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianParamedicClothesGreen
-  name: Green Paramedic Clothes
+  name: green paramedic clothes
   description: Clothes designed for paramedics.
   components:
   - type: Sprite
@@ -171,7 +171,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianSanitationClothes
-  name: Sanitation Clothes
+  name: sanitation clothes
   description: Clothes designed for Sanitation workers.
   components:
   - type: Sprite
@@ -180,7 +180,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: CMUJumpsuitCivilianForeman
-  name: We-Yu Engineering Forman Clothes
+  name: We-Yu engineering foreman clothes
   description: Clothes designed for WeYu engineering formans.
   components:
   - type: Sprite
@@ -189,7 +189,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianKellandMiningClothes
-  name: Kelland Mining Clothes
+  name: Kelland Mining clothes
   description: Clothes made for the miners of the Kelland Mining Corporation.
   components:
   - type: Sprite
@@ -198,7 +198,7 @@
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
   id: AU14CivilianBaristaClothes
-  name: Barista Clothes
+  name: barista clothes
   description: Clothes designed for those who make coffee.
   components:
   - type: Sprite

@@ -136,6 +136,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private void OnAnyMobStateChanged(MobStateChangedEvent args)
     {
+        CountLifeKill(args);
+
         if (args.NewMobState != MobState.Dead ||
             args.OldMobState >= args.NewMobState ||
             args.Origin is not { } hunter ||
@@ -152,6 +154,24 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
         var record = EnsureComp<YautjaTrophyRecordComponent>(hunter);
         AddScore(hunter, honor, record);
+    }
+
+    // cmss13's life_kills_total. honor worth and scalp text read this but nothing ever
+    // bumped it, so everyone was worth 1. only humanoid/xeno kills count
+    private void CountLifeKill(MobStateChangedEvent args)
+    {
+        if (args.NewMobState != MobState.Dead ||
+            args.OldMobState >= args.NewMobState ||
+            args.Origin is not { } killer ||
+            killer == args.Target ||
+            TerminatingOrDeleted(killer) ||
+            !HasComp<MobStateComponent>(killer) ||
+            !HasComp<HumanoidProfileComponent>(args.Target) && !HasComp<XenoComponent>(args.Target))
+        {
+            return;
+        }
+
+        EnsureComp<YautjaHonorWorthComponent>(killer).LifeKillsTotal++;
     }
 
     private void OnGetAlternativeVerbs(Entity<MobStateComponent> target, ref GetVerbsEvent<AlternativeVerb> args)
@@ -174,16 +194,9 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             return;
         }
 
+        // corpses go through the butcher action / dagger, verbs are just for live captives
         if (_mobState.IsAlive(targetUid, mobState))
-        {
             AddRitualVerbs(user, targetUid, verbs);
-            return;
-        }
-
-        if (!_mobState.IsAlive(targetUid, mobState))
-            return;
-
-        AddRitualVerbs(user, targetUid, verbs);
     }
 
     private void AddRitualVerbs<TVerb>(EntityUid hunter, EntityUid target, SortedSet<TVerb> verbs)
@@ -280,9 +293,11 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         var mapCoordinates = _transform.GetMapCoordinates(hunter);
         foreach (var candidate in _lookup.GetEntitiesInRange<MobStateComponent>(mapCoordinates, 1.5f))
         {
+            // only list what we can actually butcher, synths/larvae used to show up and do nothing
             if (candidate.Owner == hunter ||
                 !_mobState.IsDead(candidate.Owner, candidate.Comp) ||
-                !IsPotentialButcherTarget(candidate.Owner))
+                !IsPotentialButcherTarget(candidate.Owner) ||
+                !CanButcher(hunter, candidate.Owner, out _))
             {
                 continue;
             }
@@ -293,7 +308,10 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         }
 
         if (options.Count == 0)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-trophy-invalid"), hunter, hunter, PopupType.SmallCaution);
             return false;
+        }
 
         _dialog.OpenOptions(
             hunter,
@@ -308,10 +326,15 @@ public sealed partial class YautjaTrophySystem : EntitySystem
     {
         if (!TryGetEntity(args.User, out var user) ||
             !TryGetEntity(args.Target, out var target) ||
-            user != hunter.Owner ||
-            !CanStartButcher(hunter.Owner) ||
+            user != hunter.Owner)
+        {
+            return;
+        }
+
+        if (!CanStartButcher(hunter.Owner) ||
             !CanButcher(hunter.Owner, target.Value, out var kind))
         {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-trophy-invalid"), hunter, hunter, PopupType.SmallCaution);
             return;
         }
 
@@ -691,10 +714,25 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         if (stage >= 4)
         {
             TryCompletePreyClaim(hunter, target.Owner);
+            DropCorpseBelongings(target.Owner);
             QueueDel(target.Owner);
         }
 
         return true;
+    }
+
+    // QueueDel on the corpse nukes everything inside it too, so dump the gear first
+    // (guns, IDs, stolen pred tech, etc.)
+    private void DropCorpseBelongings(EntityUid corpse)
+    {
+        _hands.DropAll(corpse, checkActionBlocker: false, doDropInteraction: false);
+
+        var slots = _inventory.GetSlotEnumerator(corpse);
+        while (slots.MoveNext(out var slot))
+        {
+            if (slot.ContainedEntity != null)
+                _inventory.TryUnequip(corpse, corpse, slot.ID, silent: true, force: true);
+        }
     }
 
     private void CompleteFinalButcherStage(EntityUid hunter, EntityUid target, YautjaButcherKind kind, EntityCoordinates coords)
@@ -703,16 +741,11 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         {
             Spawn(XenoRemainsPrototype, coords);
 
-            var skull = Spawn(GetTrophyPrototype(target, YautjaTrophyKind.XenoSkull, XenoSkullPrototype), coords);
-            var pelt = Spawn(GetTrophyPrototype(target, YautjaTrophyKind.XenoPelt, XenoPeltPrototype), coords);
-            RemComp<YautjaTrophyComponent>(skull);
-            RemComp<YautjaTrophyComponent>(pelt);
-            RemComp<UniformAccessoryComponent>(skull);
-            RemComp<UniformAccessoryComponent>(pelt);
-
+            // these used to get their trophy/accessory comps stripped, so a butchered xeno
+            // never showed up on the record or the display and couldn't be worn
             var realName = MetaData(target).EntityName;
-            _meta.SetEntityName(skull, $"{realName} skull");
-            _meta.SetEntityName(pelt, $"{realName} pelt");
+            SpawnXenoButcherTrophy(hunter, target, YautjaTrophyKind.XenoSkull, XenoSkullPrototype, coords, $"{realName} skull");
+            SpawnXenoButcherTrophy(hunter, target, YautjaTrophyKind.XenoPelt, XenoPeltPrototype, coords, $"{realName} pelt");
             return;
         }
 
@@ -733,6 +766,26 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         Spawn(HumanRemainsPrototype, coords);
     }
 
+    private void SpawnXenoButcherTrophy(
+        EntityUid hunter,
+        EntityUid xeno,
+        YautjaTrophyKind kind,
+        EntProtoId fallback,
+        EntityCoordinates coords,
+        string name)
+    {
+        var uid = Spawn(GetTrophyPrototype(xeno, kind, fallback), coords);
+        var trophy = EnsureComp<YautjaTrophyComponent>(uid);
+        trophy.Kind = kind;
+        trophy.Hunter = hunter;
+        trophy.SourceName = GetSourceName(xeno, kind);
+        Dirty(uid, trophy);
+        _meta.SetEntityName(uid, name);
+
+        if (HasComp<YautjaComponent>(hunter))
+            RecordTrophy(hunter, kind);
+    }
+
     private bool TryCompleteButcherLimb(EntityUid hunter, EntityUid target, YautjaButcherProcedure procedure)
     {
         if (!CanStartButcher(hunter) ||
@@ -744,8 +797,20 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             return false;
         }
 
-        var severed = new BodyPartSeveredEvent(target, part, type);
-        RaiseLocalEvent(part, ref severed);
+        // NOT BodyPartSeveredEvent, that's the after-the-fact notification. raising it
+        // just lied to listeners and the limb stayed on
+        var partName = Name(part);
+        var sever = new BodyPartSeverAttemptEvent(target, part, type);
+        RaiseLocalEvent(part, ref sever, broadcast: true);
+        if (!sever.Succeeded || sever.DetachedBody is not { } detached)
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-butcher-part-failed"), hunter, hunter, PopupType.SmallCaution);
+            return false;
+        }
+
+        // cmss13 names dropped limbs "<owner>'s <limb>", the cauldron reads the source name off this
+        _meta.SetEntityName(detached, $"{Name(target)}'s {partName}");
+
         TryCompletePreyClaim(hunter, target);
         _audio.PlayPvs(EnsureComp<YautjaTrophySourceComponent>(target).ButcherFinishSound, target);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-butcher-part-finished", ("target", target)), hunter, hunter);
@@ -1234,6 +1299,15 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             $"{ToPrettyString(hunter):hunter} gained Yautja ritual duel credit for defeating {ToPrettyString(target):target}");
     }
 
+    // for trophies that don't come from harvesting (cauldron bones/skulls). yautja only, thralls don't get a record
+    public void RecordCraftedTrophy(EntityUid hunter, YautjaTrophyKind kind)
+    {
+        if (Deleted(hunter) || !HasComp<YautjaComponent>(hunter))
+            return;
+
+        RecordTrophy(hunter, kind);
+    }
+
     private void RecordTrophy(EntityUid hunter, YautjaTrophyKind kind)
     {
         var record = EnsureComp<YautjaTrophyRecordComponent>(hunter);
@@ -1458,7 +1532,8 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             !TryComp<MobStateComponent>(target, out var mobState) ||
             !_mobState.IsDead(target, mobState) ||
             !IsAdjacent(hunter, target) ||
-            IsBlockedButcherTarget(target))
+            IsBlockedButcherTarget(target) ||
+            HasComp<YautjaComponent>(target))
         {
             return false;
         }

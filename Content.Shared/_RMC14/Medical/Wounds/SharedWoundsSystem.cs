@@ -227,11 +227,11 @@ public abstract partial class SharedWoundsSystem : EntitySystem
             if (user == target)
             {
                 if (treater.Comp.NoWoundsOnUserPopup is { } popup)
-                    _popup.PopupClient(Loc.GetString(popup), user, user);
+                    _popup.PopupEntity(Loc.GetString(popup), user, user);
             }
             else if (treater.Comp.NoWoundsOnTargetPopup is { } popup)
             {
-                _popup.PopupClient(Loc.GetString(popup), user, user);
+                _popup.PopupEntity(Loc.GetString(popup), user, user);
             }
 
             return;
@@ -267,7 +267,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         }
 
         if (userPopup != null)
-            _popup.PopupClient(Loc.GetString(userPopup, ("target", target)), target, user);
+            _popup.PopupEntity(Loc.GetString(userPopup, ("target", target)), target, user);
 
         if (user != target && targetPopup != null)
             _popup.PopupEntity(Loc.GetString(targetPopup, ("user", user)), target, target, PopupType.Large);
@@ -294,7 +294,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         {
             handle = true;
             if (doPopups)
-                _popup.PopupClient(Loc.GetString("cmu-medical-bandage-synth-requires-repair-tools"), target, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cmu-medical-bandage-synth-requires-repair-tools"), target, user, PopupType.SmallCaution);
 
             return false;
         }
@@ -319,13 +319,13 @@ public abstract partial class SharedWoundsSystem : EntitySystem
             if (user == target)
             {
                 if (doPopups && treater.Comp.NoneSelfPopup is { } selfPopup)
-                    _popup.PopupClient(Loc.GetString(selfPopup), target, user);
+                    _popup.PopupEntity(Loc.GetString(selfPopup), target, user);
 
                 return false;
             }
 
             if (doPopups && treater.Comp.NoneOtherPopup is { } otherPopup)
-                _popup.PopupClient(Loc.GetString(otherPopup, ("target", target)), target, user);
+                _popup.PopupEntity(Loc.GetString(otherPopup, ("target", target)), target, user);
 
             return false;
         }
@@ -380,7 +380,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
                 TryComp(treater, out StackComponent? stack) &&
                 _stacks.GetCount((treater.Owner, stack)) < 2)
             {
-                _popup.PopupClient(Loc.GetString("cm-wounds-failed-not-enough", ("treater", treater.Owner)), target, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cm-wounds-failed-not-enough", ("treater", treater.Owner)), target, user, PopupType.SmallCaution);
                 return false;
             }
 
@@ -390,11 +390,11 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         if (doPopups)
         {
             if (surgeryUntreated)
-                _popup.PopupClient(Loc.GetString("cm-wounds-open-cut", ("target", targetName), ("treater", treater.Owner)), target, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cm-wounds-open-cut", ("target", targetName), ("treater", treater.Owner)), target, user, PopupType.SmallCaution);
             else if (otherUntreated)
-                _popup.PopupClient(Loc.GetString("cm-wounds-cannot-treat", ("treater", treater.Owner)), target, user, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("cm-wounds-cannot-treat", ("treater", treater.Owner)), target, user, PopupType.SmallCaution);
             else
-                _popup.PopupClient(Loc.GetString("cm-wounds-already-treated", ("target", target)), target, user);
+                _popup.PopupEntity(Loc.GetString("cm-wounds-already-treated", ("target", target)), target, user);
         }
 
         wounded = default;
@@ -414,7 +414,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
             return true;
 
         if (doPopups)
-            _popup.PopupClient(Loc.GetString("cm-wounds-failed-unskilled", ("treater", treater.Owner)), popupTarget, user, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cm-wounds-failed-unskilled", ("treater", treater.Owner)), popupTarget, user, PopupType.SmallCaution);
 
         return false;
     }
@@ -428,7 +428,7 @@ public abstract partial class SharedWoundsSystem : EntitySystem
         handled = true;
         var delay = _skills.GetDelay(user, treater);
         if (delay > TimeSpan.Zero)
-            _popup.PopupClient(Loc.GetString("cm-wounds-start-fumbling", ("name", treater.Owner)), target, user);
+            _popup.PopupEntity(Loc.GetString("cm-wounds-start-fumbling", ("name", treater.Owner)), target, user);
 
         var scaling = treater.Comp.ScalingDoAfter;
         scaling *= _skills.GetSkillDelayMultiplier(user, treater.Comp.DoAfterSkill, treater.Comp.DoAfterSkillMultipliers);

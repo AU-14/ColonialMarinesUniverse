@@ -243,6 +243,20 @@ public abstract partial class SharedMoverController : VirtualController
         {
             if (!weightless)
             {
+                // CMU14: a pounce/throw owns the velocity while airborne. Discard the old
+                // walking slide so landing cannot resume a destination behind the mover.
+                // EndSlide also zeros velocity, which would cancel the pounce itself.
+                if (TileMovementQuery.TryComp(uid, out var airborneTileMovement))
+                {
+                    airborneTileMovement.SlideActive = false;
+                    airborneTileMovement.FailureSlideActive = false;
+                    airborneTileMovement.WasWeightlessLastTick = false;
+                    airborneTileMovement.MovementKeyInitialDownTime = null;
+                    airborneTileMovement.CurrentSlideMoveButtons = MoveButtons.None;
+                    airborneTileMovement.LastTickLocalCoordinates = null;
+                    Dirty(uid, airborneTileMovement);
+                }
+
                 UsedMobMovement[uid] = false;
                 return;
             }

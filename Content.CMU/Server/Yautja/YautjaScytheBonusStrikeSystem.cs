@@ -7,7 +7,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaScytheBonusStrikeSystem : EntitySystem
+public sealed partial class YautjaScytheBonusStrikeSystem : EntitySystem
 {
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
