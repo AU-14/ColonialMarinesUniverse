@@ -1,0 +1,71 @@
+# Same as CMMaskGas, but with CMU sprites. The camo layers are drawn as-is instead of being tinted per map.
+- type: entity
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
+  id: CMUMaskGas
+  name: gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air.
+  suffix: CMU
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Masks/gasmask.rsi
+    layers:
+    - state: base
+    - state: camo
+  - type: Clothing
+    sprite: CMU14/Clothing/Masks/gasmask.rsi
+    slots:
+    - Mask
+    - Suitstorage
+    clothingVisuals:
+      mask:
+      - state: equipped-MASK
+      - state: equipped-MASK-color
+  - type: Item
+    size: Small
+    sprite: CMU14/Clothing/Masks/gasmask.rsi
+    inhandVisuals:
+      left:
+      - state: inhand-left
+      - state: inhand-left-color
+      right:
+      - state: inhand-right
+      - state: inhand-right-color
+  - type: Tag
+    tags:
+    - GasMask
+  - type: MycotoxinProtection
+    fullProtection: false
+  - type: CMUItemStain
+    wornStates:
+      mask: gasmask_blood
+
+- type: entity
+  parent: CMUMaskGas
+  id: CMUMaskPrescriptionGas
+  name: prescription gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air. Contains prescription lenses.
+  suffix: CMU
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: CMUMaskGas
+  id: CMUMaskGasBlack
+  name: black gas mask
+  components:
+  - type: Sprite
+    sprite: CMU14/Clothing/Masks/gasmask_black.rsi
+  - type: Clothing
+    sprite: CMU14/Clothing/Masks/gasmask_black.rsi
+  - type: Item
+    sprite: CMU14/Clothing/Masks/gasmask_black.rsi
+
+- type: entity
+  parent: CMUMaskGasBlack
+  id: CMUMaskPrescriptionGasBlack
+  name: black prescription gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
