@@ -464,12 +464,15 @@ jobs:
               FullyQualifiedName~CMU14.ColonyEconomy.
               | FullyQualifiedName~CMU14.Fire.
               | FullyQualifiedName~CMU14.ForceOnForce.
-              | FullyQualifiedName~CMU14.ThreeD.
               | FullyQualifiedName~CMU14.Threats.
               | FullyQualifiedName~CMU14.DroneOperator.
               | FullyQualifiedName~CMU14.Evacuation.
               | FullyQualifiedName~CMU14.Weapons.
               | FullyQualifiedName~CMU14.TacticalMap.
+          # CMU14: the 3D tests build fresh client/server pairs and load the 3D libraries, ~10 GB by the
+          # end. they were most of cmu_systems' memory, on their own they can't push the others over
+          - name: cmu_threed
+            filter: FullyQualifiedName~CMU14.ThreeD.
           - name: cmu
             filter: >-
               FullyQualifiedName~CMU14.
@@ -525,6 +528,30 @@ jobs:
           cp -r Resources/* bin/Resources/
           cp -r RobustToolbox/Resources/* bin/RobustToolbox/Resources/
 
+      # CMU14: the runner has 16 GB and no real headroom, a memory spike used to kill it outright
+      # ("received a shutdown signal"). with swap the spike just runs slower. goes on the /mnt scratch
+      # disk when the image has one, the root disk is small
+      - name: Add swap
+        shell: bash
+        run: |
+          echo "--- before ---"; swapon --show; free -h; df -h / /mnt 2>/dev/null || true
+          dir=/mnt
+          if ! mountpoint -q /mnt || (( $(df --output=avail -BG /mnt | tail -1 | tr -dc 0-9) < 20 )); then
+            dir=/
+          fi
+          size=16
+          if (( $(df --output=avail -BG "$dir" | tail -1 | tr -dc 0-9) < size + 4 )); then
+            echo "::warning::not enough disk for ${size}G swap on $dir, keeping the image's swap"
+            exit 0
+          fi
+          sudo swapoff -a || true
+          sudo rm -f /mnt/swapfile /swapfile
+          sudo fallocate -l ${size}G "$dir/ci-swap"
+          sudo chmod 600 "$dir/ci-swap"
+          sudo mkswap "$dir/ci-swap"
+          sudo swapon "$dir/ci-swap"
+          echo "--- after ---"; swapon --show; free -h
+
       - name: Run ${{ matrix.shard.name }}
         shell: bash
         env:
@@ -540,12 +567,21 @@ jobs:
           # CMU14: bound concurrent pairs and allow the full-rotation map sweeps to finish.
           workers=4
           hang_timeout=5m
+          # CMU14: cap the managed heap at 80% (~12.8 GB of the 16 GB runner). uncapped, server GC let
+          # long shards grow past the runner and it died mid-run ("received a shutdown signal").
+          # not lower: the linters and the 3D model tests really hold ~10 GB and ran out of memory at 60%
+          export DOTNET_GCHeapHardLimitPercent=0x50
           case "$shard" in
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
             cmu_yautja_smoke) workers=1 ;;
             root_1|cmu|cmu_systems|cmu_spatial|cmu_medical_anatomy|cmu_yautja*) workers=2 ;;
             cmu_lobby_ui) workers=1 ;;
+            # CMU14: every 3D case makes its own pair, two at once is the memory peak
+            cmu_threed) workers=1 ;;
             map_loading) workers=1; hang_timeout=20m ;;
+            # CMU14: four linter pairs at once went past the runner's RAM into swap and the GC crawled
+            # until the hang watchdog killed it. two keep it in memory
+            proto_lint_serial) workers=2 ;;
           esac
 
           if [[ "$shard" == root_* ]]; then

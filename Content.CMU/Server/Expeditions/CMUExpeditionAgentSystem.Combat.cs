@@ -16,6 +16,9 @@ public sealed partial class CMUExpeditionAgentSystem
     [Dependency] private SharedCombatModeSystem _combat = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
 
+    private static bool WaitingForFirstShot(CMUExpeditionAgentComponent agent, TimeSpan now) =>
+        agent.ShotsFired == 0 && now < agent.FireAt + TimeSpan.FromSeconds(3);
+
     private void OnShotAttempted(Entity<CMUExpeditionAgentComponent> ent, ref ShotAttemptedEvent args)
     {
         if (HasComp<ActorComponent>(ent))
@@ -152,7 +155,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             // Do not spend an unfired volley on a native wield/readiness delay and then
             // impose another aim/pause cycle. Sight and lane failures still abort below.
-            if (agent.ShotsFired == 0 && now < agent.FireAt + TimeSpan.FromSeconds(3))
+            if (WaitingForFirstShot(agent, now))
                 agent.BurstEnd = now + TimeSpan.FromSeconds(0.2);
             else
             {
@@ -342,9 +345,23 @@ public sealed partial class CMUExpeditionAgentSystem
         var direction = Vector2.Normalize(to.Position - from.Position);
         if (nearby == null)
         {
-            nearby = new HashSet<EntityUid>();
-            _lookup.GetEntitiesInRange(uid, agent.FireRange + 3, nearby);
+            nearby = _nearbyPool.Get();
+            try
+            {
+                _lookup.GetEntitiesInRange(uid, agent.FireRange + 3, nearby);
+                return FriendlyShotConeClear(uid, agent, gun, from, distance, spread, direction, nearby, out reason);
+            }
+            finally
+            {
+                _nearbyPool.Return(nearby);
+            }
         }
+        return FriendlyShotConeClear(uid, agent, gun, from, distance, spread, direction, nearby, out reason);
+    }
+
+    private bool FriendlyShotConeClear(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun,
+        MapCoordinates from, float distance, float spread, Vector2 direction, HashSet<EntityUid> nearby, out string reason)
+    {
         foreach (var entity in nearby)
         {
             if (entity == uid || !IsFriendly(uid, entity) ||

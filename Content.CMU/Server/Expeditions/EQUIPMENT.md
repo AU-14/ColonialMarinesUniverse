@@ -15,9 +15,10 @@ cmu-expedition-ai here 3 rocketeer
 cmu-expedition-ai here 2 sniper rmc
 ```
 
-The fourth argument selects clothing and completes with Tab: `scavenger`, `uscm`, `rmc` (TWE),
+The fourth argument selects faction equipment and completes with Tab: `scavenger`, `uscm`, `rmc` (TWE),
 `upp` (SPP), `pmc`, `clf`, `cmb`, `lacn`, `ccaf`, `uacg`, `prodigy`.
-Clothing does not change weapons, team, IFF identity or orders. Use the existing
+Faction equipment supplies native primaries, compatible reserves and role-appropriate armor.
+It retains the role's grenades, tools and medical supplies. It does not change team, IFF identity or orders. Use the existing
 `cmu-expedition-orders` friendly/target actions to change affiliations. The default enemy is GOVFOR.
 Status reports include the applied outfit, supply transfers, flare use, vision decisions and bipod attempts.
 
@@ -32,7 +33,19 @@ assault/rich kits carry five, poor pistol kits carry three pistol magazines, mac
 three spare boxes, and breachers carry 24 spare slugs. These are additional to loaded ammunition.
 Sidearms and their spare magazines occupy the utility pouch, leaving pack space for utilities and reserves.
 Support roles use logistics packs; medics use a medical pack and a second stabilizer in their pouch.
-Scouts, skirmishers, rocketeers, breachers, snipers and medics carry two smoke grenades.
+Every faction and squad preset carries HE as well as smoke. The common role kits supply:
+
+| Kit | HE grenades | Smoke grenades | Specialist supplies |
+| --- | ---: | ---: | --- |
+| Regular, scout, skirmisher, support, machine gunner, marksman, sniper, veteran | 2 | 2 | Native primary, finite reserves and utility tools |
+| Assault, rich | 3 | 2 | Extra ammunition and breaching firepower |
+| Shotgun breacher | 2 | 2 | Six spare shell handfuls |
+| Poor | 1 | 1 | Pistol and three spare magazines |
+| Rocketeer | 1 | 2 | Two loaded disposable launchers |
+| Medic | 1 | 2 | Defibrillator, two stabilizers and dressings |
+
+The aggressive and cautious scavengers inherit the regular kit. These supplies survive faction
+clothing/primary swaps; no faction-specific preset depends on finding explosives after deployment.
 
 Starting supplies fit their native container grids: the five-slot ammo belt holds at most five
 magazines or shell handfuls; the large general pouch fits a normal pistol and small spare magazine.
@@ -50,13 +63,15 @@ space does not override item-size limits or faction armor's native storage restr
 - Native full auto is selected only when the gun supports it. AI volleys still limit rounds;
   chambering, recoil, skills, native fire delays and finite ammunition remain in force.
 - Visible contested fights use longer finite automatic volleys: up to 18 rounds in the open
-  and ten from a held angle, followed by a short reassessment. Distant unthreatened targets keep
+  and ten from a held angle. Assigned suppressing fire allows 18-30 rounds with a four-second
+  volley window, followed by a short reassessment. Distant unthreatened targets keep
   ordinary bursts. Low ammunition and semi-automatic weapons retain their ordinary volley sizes.
   Tracking a visible opponent through a burst pause no longer adds a second aim delay; a recently
   seen opponent reappearing at the angle can interrupt that pause. Lost sight still stops entity
   targeting, and the existing brief muzzle-flash response only uses its observed fixed position.
-- Native bipods deploy when stationary with a distant visible target and a safe lane. Their native
-  deployment time and movement/turn interruption still apply. A deployment attempt is not proof of a brace.
+- Native bipods deploy while stationary, including before contact or while covering an advancing
+  squadmate. Close threats and committed movement interrupt preparation. Their native deployment
+  time and movement/turn interruption still apply. Diagnostics count completed deployments.
 - Breachers prefer close range and use up to six shots per volley, subject to native pumping and fire rate.
 - The `sniper` variant carries the native M42A family weapon and uses its aimed shot when stable,
   with one distant visible threat. New danger, damage, movement, loss of sight or control transfer
@@ -103,6 +118,10 @@ lane-clearing as vehicles. Launches still require the native six-metre maximum i
 minimum separation, clear backblast, friendly blast clearance and the existing squad cooldown.
 
 ## Sight and flares
+
+Default aim skill is 65%. Ordinary detection range is 17 tiles; scouts and marksman variants,
+including snipers, detect to 21 tiles. Both ranges are one tile shorter than the previous defaults.
+Weapon range, illumination, smoke and geometric sight can shorten actual engagement distance.
 
 Target recognition requires geometric sight, smoke clearance and sufficient light (except within
 1.5 metres). The server estimates light from ambient map light, roofs and unoccluded point lights.
@@ -155,6 +174,12 @@ Continuously reported contacts are not announced again. After 60 seconds without
 may become a new contact. Phrase pools reflect stress, injury, aggression, a close rush or medic role.
 
 ## In-game verification still required
+
+Focused integration coverage exercises corridor traffic, assault follow-through, incoming-fire
+escape, reload/weapon recovery, Almayer glass doors, smoke placement and native bipod deployment.
+The SSD-timeout regression verifies that an AI body stays awake while ordinary disconnected humans
+still fall asleep and genuine forced sleep still incapacitates the AI. AI ownership only exempts
+the disconnected-player sleep effect; it does not remove medical sleep, stuns or knockdowns.
 
 1. Spawn all specialist variants and all ten outfits. Check complete clothing, belt/pouch/pack,
    one primary, sidearm and finite starting supplies. Swap under full storage, empty both weapons,

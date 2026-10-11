@@ -725,7 +725,7 @@ public sealed partial class HumanoidProfileEditor
 
             platoonOptions.Add(new PlatoonRankOptions(
                 platoon.ID,
-                platoon.Name,
+                Loc.GetString(platoon.Name), // CMU14: Hardcode localization
                 platoon.PlatoonPatch,
                 ranks));
         }

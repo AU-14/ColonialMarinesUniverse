@@ -1706,6 +1706,23 @@ public sealed partial class YautjaHivebreakerComponent : Component
     [DataField]
     public SoundSpecifier FinishSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Voice/Roars/pred_roar1.wav");
 
+    // off for the WeYu lab copy, anyone holding it can enthrall
+    [DataField]
+    public bool RequireBadBloodUser = true;
+
+    [DataField]
+    public bool DishonorOnConversion = true;
+
+    [DataField]
+    public bool BroadcastOnConversion = true;
+
+    [DataField]
+    public LocId EnthralledPopup = "cmu-yautja-hivebreaker-enthralled-target";
+
+    // thrall takes the user's npc + iff factions instead of the Thrall* ones below
+    [DataField]
+    public bool CopyMasterFactions;
+
     [DataField]
     public bool BloodOnConversion = true;
 

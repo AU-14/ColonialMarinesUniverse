@@ -67,7 +67,7 @@ internal static class AuRoundSelectionRules
 
         return new VoteOptions
         {
-            Title = "Select Planet",
+            Title = Loc.GetString("au14-vote-title-select-planet"),
             Options = options,
             Duration = duration,
             CarryoverEnabled = true,

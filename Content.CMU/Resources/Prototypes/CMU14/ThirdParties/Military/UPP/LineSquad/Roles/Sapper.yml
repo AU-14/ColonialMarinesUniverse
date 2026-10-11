@@ -68,7 +68,7 @@
   equipment:
     head: ArmorHelmetSPPEngineer
     eyes: RMCWeldingGoggles
-    mask: CMMaskGas
+    mask: CMUMaskGas
     jumpsuit: CMJumpsuitSPPEngi
     outerClothing: RMCArmorSPPRifleman
     gloves: RMCHandsVeteranInsulated

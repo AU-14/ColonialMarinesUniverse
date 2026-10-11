@@ -11,7 +11,7 @@
         amount: 2
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
-      - id: CMUYautjaHivebreaker
+      - id: CMUWeYuHivebreaker
         prob: 0.1
 
 - type: entity
@@ -36,7 +36,7 @@
     contents:
       - id: RMCBottleMindbreaker
         amount: 7
-      - id: CMUYautjaHivebreaker
+      - id: CMUWeYuHivebreaker
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
       - id: AU14DrugDealerDrugBottle
@@ -95,7 +95,7 @@
       children:
       - id: XenoEgg
       - id: XenoEgg
-      - id: CMUYautjaHivebreaker
+      - id: CMUWeYuHivebreaker
         prob: 0.1
       weight: 1
     - !type:AllSelector

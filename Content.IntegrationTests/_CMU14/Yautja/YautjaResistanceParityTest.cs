@@ -72,6 +72,7 @@ public sealed class YautjaResistanceParityTest
             var flammable = server.EntMan.GetComponent<FlammableComponent>(hunter);
             var initialStacks = flammable.FireStacks;
             flammable.NextUpdate = server.ResolveDependency<IGameTiming>().CurTime;
+            server.System<FlammableSystem>().RefreshUpdateSnapshot();
             server.System<FlammableSystem>().Update(0);
             Assert.Multiple(() =>
             {

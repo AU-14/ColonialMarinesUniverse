@@ -114,7 +114,7 @@ public sealed class ASRSStockUpdateTest : GameTest
 
         - type: platoon
           id: ASRSStockTestPlatoon
-          name: Stock regression platoon
+          name: cmu-platoon-uscm-name
           reqlist: ASRSStockLegacyComputer
 
         - type: entity
