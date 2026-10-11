@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Shared.CMU14.Vehicle.Jeep;
 using Content.Shared.Storage.Components;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Vehicle.Jeep;
 
@@ -10,6 +11,7 @@ namespace Content.Server.CMU14.Vehicle.Jeep;
 /// </summary>
 public sealed class CMUVehicleKitCrateSystem : EntitySystem
 {
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
@@ -39,6 +41,12 @@ public sealed class CMUVehicleKitCrateSystem : EntitySystem
         var origin = xform.Coordinates;
         var chassis = Spawn(ent.Comp.Chassis, origin);
         _transform.SetWorldRotation(chassis, Angle.Zero);
+
+        if (ent.Comp.Paints.Count > 0 && TryComp(chassis, out CMUVehiclePaintComponent? paint))
+        {
+            paint.Color = _random.Pick(ent.Comp.Paints);
+            Dirty(chassis, paint);
+        }
 
         // The chassis faces south, along y; the contents go down its left and right sides.
         var count = ent.Comp.Contents.Count;

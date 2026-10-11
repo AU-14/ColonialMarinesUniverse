@@ -17,3 +17,17 @@
         crate: CMUCrateJeepKitTransport
       - cost: 20000
         crate: CMUCrateJeepKitGunner
+
+# The colony's ASRS console only gets the cargo and medical jeeps.
+- type: entity
+  abstract: true
+  id: CMUASRSColonyJeepKits
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Vehicles
+      entries:
+      - cost: 12000
+        crate: CMUCrateJeepKitCargoColony
+      - cost: 15000
+        crate: CMUCrateJeepKitMedicalColony

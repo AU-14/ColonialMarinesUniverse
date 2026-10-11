@@ -12,7 +12,7 @@ namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 /// <summary>
 /// Respraying a vehicle with a vehicle spray painter: the colour picked in its window becomes the
-/// vehicle's paint after a do-after, for some of its charges.
+/// vehicle's paint, or its wheels' when sprayed on them, after a do-after, for some of its charges.
 /// </summary>
 public sealed class CMUVehiclePaintSystem : EntitySystem
 {
@@ -31,18 +31,30 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
 
     private void OnInteractUsing(Entity<CMUVehiclePaintComponent> ent, ref InteractUsingEvent args)
     {
-        if (args.Handled || !TryComp(args.Used, out CMUVehicleSprayPainterComponent? painter))
+        if (args.Handled || !HasComp<CMUVehicleSprayPainterComponent>(args.Used))
             return;
 
         args.Handled = true;
-        if (!_charges.HasCharges(args.Used, ent.Comp.ChargeCost))
+        TryRespray(ent.AsNullable(), args.User, args.Used, false);
+    }
+
+    /// <summary>
+    /// Starts respraying the vehicle, or only its wheels, in the painter's colour.
+    /// </summary>
+    public bool TryRespray(Entity<CMUVehiclePaintComponent?> ent, EntityUid user, EntityUid used, bool wheels)
+    {
+        if (!Resolve(ent, ref ent.Comp, false) || !TryComp(used, out CMUVehicleSprayPainterComponent? painter))
+            return false;
+
+        if (!_charges.HasCharges(used, wheels ? ent.Comp.WheelChargeCost : ent.Comp.ChargeCost))
         {
-            _popup.PopupClient(Loc.GetString("cmu-vehicle-paint-empty"), ent, args.User);
-            return;
+            _popup.PopupClient(Loc.GetString("cmu-vehicle-paint-empty"), ent, user);
+            return false;
         }
 
         var color = painter.Color.WithAlpha(1f);
-        var doAfter = new DoAfterArgs(EntityManager, args.User, ent.Comp.Delay, new CMUVehiclePaintDoAfterEvent(color), ent, ent, args.Used)
+        var delay = wheels ? ent.Comp.WheelDelay : ent.Comp.Delay;
+        var doAfter = new DoAfterArgs(EntityManager, user, delay, new CMUVehiclePaintDoAfterEvent(color, wheels), ent, ent, used)
         {
             BreakOnMove = true,
             BreakOnDamage = true,
@@ -51,8 +63,11 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
             DuplicateCondition = DuplicateConditions.SameTarget,
         };
 
-        if (_doAfter.TryStartDoAfter(doAfter))
-            _audio.PlayPredicted(painter.SpraySound, ent, args.User);
+        if (!_doAfter.TryStartDoAfter(doAfter))
+            return false;
+
+        _audio.PlayPredicted(painter.SpraySound, ent, user);
+        return true;
     }
 
     private void OnPaint(Entity<CMUVehiclePaintComponent> ent, ref CMUVehiclePaintDoAfterEvent args)
@@ -61,13 +76,17 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!_charges.TryUseCharges(used, ent.Comp.ChargeCost))
+        if (!_charges.TryUseCharges(used, args.Wheels ? ent.Comp.WheelChargeCost : ent.Comp.ChargeCost))
         {
             _popup.PopupClient(Loc.GetString("cmu-vehicle-paint-empty"), ent, args.User);
             return;
         }
 
-        ent.Comp.Color = args.Color;
+        if (args.Wheels)
+            ent.Comp.WheelColor = args.Color;
+        else
+            ent.Comp.Color = args.Color;
+
         Dirty(ent);
 
         if (TryComp(used, out CMUVehicleSprayPainterComponent? painter))
@@ -78,8 +97,8 @@ public sealed class CMUVehiclePaintSystem : EntitySystem
             _audio.PlayPredicted(painter.SpraySound, ent, args.User);
         }
 
-        _popup.PopupClient(Loc.GetString("cmu-vehicle-paint-done", ("vehicle", ent.Owner)), ent, args.User);
+        _popup.PopupClient(Loc.GetString(args.Wheels ? "cmu-vehicle-paint-wheels-done" : "cmu-vehicle-paint-done", ("vehicle", ent.Owner)), ent, args.User);
         _adminLog.Add(LogType.Action, LogImpact.Low,
-            $"{ToPrettyString(args.User):user} repainted {ToPrettyString(ent):target} {args.Color.ToHex()}");
+            $"{ToPrettyString(args.User):user} repainted {ToPrettyString(ent):target}{(args.Wheels ? " wheels" : "")} {args.Color.ToHex()}");
     }
 }

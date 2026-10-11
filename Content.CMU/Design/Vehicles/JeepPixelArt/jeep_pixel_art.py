@@ -60,6 +60,7 @@ PAL = {
     "groove": ramp((58, 58, 56), (44, 44, 43), (36, 36, 35), (30, 30, 29), (16, 16, 16)),
     "rim": ramp((132, 139, 92), (110, 117, 75), (92, 98, 62), (74, 79, 50), (34, 37, 24)),
     "rim_dk": ramp((80, 86, 56), (64, 69, 45), (54, 58, 38), (46, 49, 32), (26, 28, 18)),
+    "rim_hi": ramp((158, 165, 110), (140, 147, 97), (124, 131, 86), (100, 106, 68), (40, 44, 28)),
     "hub": ramp((170, 172, 152), (142, 144, 126), (118, 120, 104), (96, 98, 85), (44, 44, 40)),
     "steel": ramp((178, 178, 168), (144, 144, 136), (114, 114, 108), (90, 90, 86), (42, 42, 40)),
     "gun": ramp((118, 120, 120), (82, 84, 85), (64, 66, 67), (50, 52, 53), (20, 21, 22)),
@@ -105,11 +106,11 @@ MUD = (98, 84, 58)
 BODY_MATS = {"od", "od_seam", "frame"}
 # The jeep's paint, which a spray painter recolours in game. Its pixels are written with alpha just
 # under 255, invisible in the art but read by the paint shader, which keeps their shading and swaps
-# the olive for the chosen colour. The chassis and the wheel rims are painted with the body; kit
-# carried on the jeep keeps its own colours. The alpha also tells the shader how soon the pixel
+# the olive for the chosen colour. The chassis is painted with the body and the wheel rims with the
+# wheels' own paint; kit carried on the jeep keeps its own colours. The alpha also tells the shader how soon the pixel
 # picks up dirt (dirt_level) and whether the art splashes mud over it:
 # PAINT_ALPHA - 2 * level - mud.
-PAINT_MATS = {"od", "od_light", "od_in", "od_seam", "od_flat", "od_in_flat", "frame", "rim", "rim_dk"}
+PAINT_MATS = {"od", "od_light", "od_in", "od_seam", "od_flat", "od_in_flat", "frame", "rim", "rim_dk", "rim_hi"}
 PAINT_SKIP_PARTS = {"jerrycan", "shovel", "axe", "jack", "ammo"}
 PAINT_ALPHA = 254
 DIRT_LEVELS = 8
@@ -338,6 +339,29 @@ def noise(*key):
     return zlib.crc32(repr(key).encode()) % 1000 / 1000.0
 
 
+# Lug nuts on the rim, a whole pixel each so every frame keeps the pattern square; they turn a
+# quarter of the way round over the tyre's lug pitch, so the loop repeats seamlessly.
+RIM_NUTS = 4
+RIM_NUT_RADIUS = 3
+
+
+def rim(u, v, phase, destroyed=False):
+    """Material of a rim pixel on the wheel's outer face: a dark lip, a plain dish, a bright hub cap
+    and the lug nuts. A destroyed rim has a burnt lip, a scorched dish, a dull cap and two nuts gone."""
+    d = math.hypot(u, v)
+    if d > 4.9:
+        return "char" if destroyed else "rim_dk"
+    if d < 1.5:
+        return "rim" if destroyed else "rim_hi"
+    for n in range(RIM_NUTS):
+        a = phase * LUGS / RIM_NUTS + n * 2 * math.pi / RIM_NUTS
+        if (u, v) == (round(RIM_NUT_RADIUS * math.cos(a)), round(RIM_NUT_RADIUS * math.sin(a))):
+            return "rim" if destroyed and n % 2 else "rim_dk"
+    if destroyed and d > 3.5 and noise(u, v, 11) < 0.35:
+        return "char"
+    return "rim"
+
+
 def wheel_disc(u, v, slice_parity, outer_slice, phase, destroyed=False, radius=WHEEL_R):
     """Material of one voxel of a knobby tyre on a combat rim, or None for air. A destroyed tyre is
     shredded and flat at the bottom, with the rim showing through."""
@@ -351,24 +375,12 @@ def wheel_disc(u, v, slice_parity, outer_slice, phase, destroyed=False, radius=W
         if d > 5.6 and (v < -5.6 or noise(u, v, slice_parity) < 0.38):
             return None
         if outer_slice and d <= 5.6:
-            if d > 4.9:
-                return "char"
-            if d < 1.5:
-                return "rim_dk"
-            return "rim_dk" if noise(u, v) < 0.3 else "rim"
+            return rim(u, v, phase, destroyed=True)
         return "char" if noise(v, u, 7) < 0.5 else "black"
     if d > radius - 0.9 and groove:
         return None
     if outer_slice and d <= 5.6:
-        if d > 4.9:
-            return "rim_dk"
-        if d < 1.7:
-            return "hub"
-        for n in range(5):
-            la = phase * 2.2 + n * 2 * math.pi / 5
-            if math.hypot(u - 3.1 * math.cos(la), v - 3.1 * math.sin(la)) < 0.75:
-                return "steel"
-        return "rim"
+        return rim(u, v, phase)
     if d > radius - 1.7 and groove:
         return "groove"
     return "rubber"

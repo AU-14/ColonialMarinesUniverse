@@ -34,6 +34,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
     [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private CMUVehiclePaintSystem _paint = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private CMUVehicleSeatSystem _seats = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -416,6 +417,10 @@ public sealed partial class CMUJeepSystem : EntitySystem
         var used = args.Used;
         switch (ent.Comp.Part)
         {
+            case "wheels" when HasComp<CMUVehicleSprayPainterComponent>(used):
+                _paint.TryRespray(vehicle, user, used, true);
+                args.Handled = true;
+                return;
             case "fuel_door" when _fuel.IsFuelCan(vehicle, used):
                 if (!jeep.FuelDoorOpen)
                     _popup.PopupClient(Loc.GetString("cmu-vehicle-fuel-door-closed"), vehicle, user);

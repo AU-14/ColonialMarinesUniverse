@@ -373,6 +373,9 @@ for a dropship's LAG-14 launcher, dropped by parachute at a laser or flare.
 
 The platoons order the kits from the ASRS under Vehicles (`jeep_requisitions.yml`): cargo 12,000,
 medical 15,000, transport 17,500, gun jeep 20,000, against an account that opens a round at 20,000.
+The colony's ASRS console only sells the cargo and medical kits, at the same prices, as
+`CMUCrateJeepKit*Colony`: their chassis comes in one of five showroom paints picked at random
+(apple red, navy blue, electric yellow, orange, gunmetal), from the crate's `paints` list.
 
 ## Crayons
 
@@ -414,7 +417,7 @@ Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml
 | `Shared/Vehicle/Jeep/CMUVehicleIgnition*` | the ignition key slot: no key, no running |
 | `Shared/Vehicle/Jeep/CMUVehicleFuel*` | fuel use and refuelling from a fuel can at the fuel door; the do-after bar starts at the tank level |
 | `Shared/Vehicle/Jeep/CMUVehicleCargo*` | loading, wrenching down and unloading a crate on the cargo bed, over the tailgate |
-| `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand, 30 charges, 5 a respray) and respraying the jeep with it; the art marks its paint pixels with an alpha just under 255 that also carries their dirt level and the art's mud (`PAINT_ALPHA - 2 * level - mud`, 239 to 254), so the shader is always on |
+| `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand, 30 charges, 5 a respray and 1 for the wheels, printed at the autolathe) and respraying the jeep with it, or only its wheels and spare when sprayed on the wheels (grey metal rims by default, their own shader instance); the art marks its paint pixels with an alpha just under 255 that also carries their dirt level and the art's mud (`PAINT_ALPHA - 2 * level - mud`, 239 to 254), so the shader is always on |
 | `Shared/Vehicle/Jeep/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs` | crayon drawings (up to 50) and blood splashes anchored to the body via `crayon_maps/` |
 | `Shared/Vehicle/Jeep/CMUVehicleGrime*`, `Server/.../CMUVehicleGrimeBuildUpSystem.cs` | dirt from driving, blood from wounded riders and anyone run down, cleaning |
 | `Shared/Vehicle/Jeep/CMUVehicleKitCrate*`, `Server/.../CMUVehicleKitCrateSystem.cs`, `jeep_kit.yml` | kit crates opening into a chassis with its parts, launch-bay rounds, the manual |

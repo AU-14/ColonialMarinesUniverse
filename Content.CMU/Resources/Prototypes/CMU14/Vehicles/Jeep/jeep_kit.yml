@@ -720,6 +720,26 @@
     dropPod: false
     useParachute: true
 
+# Colony kits: civilian jeeps in a random showroom paint: apple red, navy blue, electric yellow,
+# orange or gunmetal.
+- type: entity
+  parent: CMUCrateJeepKitCargo
+  id: CMUCrateJeepKitCargoColony
+  suffix: Colony
+  components:
+  - type: CMUVehicleKitCrate
+    chassis: CMUVehicleJeepCargoChassis
+    paints: [ "#D7262E", "#2E4F8A", "#FFE41A", "#F07A1A", "#6A737B" ]
+
+- type: entity
+  parent: CMUCrateJeepKitMedical
+  id: CMUCrateJeepKitMedicalColony
+  suffix: Colony
+  components:
+  - type: CMUVehicleKitCrate
+    chassis: CMUVehicleJeepMedicalChassis
+    paints: [ "#D7262E", "#2E4F8A", "#FFE41A", "#F07A1A", "#6A737B" ]
+
 - type: entity
   parent: CMPaperWritten
   id: CMUPaperJeepAssemblyManual

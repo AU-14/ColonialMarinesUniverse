@@ -59,6 +59,7 @@ cmu-vehicle-crayon-miss = You can only draw on the bodywork.
 cmu-vehicle-crayon-empty = The crayon is used up.
 cmu-vehicle-paint-empty = The spray painter is out of paint.
 cmu-vehicle-paint-done = You respray {THE($vehicle)}.
+cmu-vehicle-paint-wheels-done = You respray the wheels of {THE($vehicle)}.
 
 # Moving parts come off screwdriver, wrench, hand, and go back on hand, wrench, screwdriver.
 cmu-jeep-part-unscrewed = You take the screws out of the {$part}. Its bolts still hold it.
@@ -86,7 +87,7 @@ cmu-vehicle-grime-clean = It's already clean.
 cmu-vehicle-grime-scrubbed = You scrub {THE($vehicle)} clean.
 cmu-vehicle-spray-painter-title = Vehicle paint
 cmu-vehicle-spray-painter-hex = Hex
-cmu-vehicle-spray-painter-charges = Paint left: {$current}/{$max} (a respray uses 5)
+cmu-vehicle-spray-painter-charges = Paint left: {$current}/{$max} (a respray uses 5, the wheels 1)
 
 # The manual packed in a jeep kit crate.
 cmu-jeep-assembly-manual =

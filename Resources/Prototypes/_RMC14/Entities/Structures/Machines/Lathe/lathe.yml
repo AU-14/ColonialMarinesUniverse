@@ -38,6 +38,7 @@
     - RMCRecipesLathe
     # AU14 building overhaul: admin-added autolathe recipes (managed by the in-game Lathe Editor, Admin Tools).
     - AU14AutolatheRecipes
+    - CMUVehicleLatheRecipes
   - type: MaterialStorage
     storage:
       CMSteel: 30000

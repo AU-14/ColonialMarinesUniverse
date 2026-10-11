@@ -19,6 +19,12 @@ public sealed partial class CMUVehicleKitCrateComponent : Component
     public float LayOut = 1.1f;
 
     /// <summary>
+    /// Colours the chassis comes painted in, one picked at random. Empty keeps the factory olive.
+    /// </summary>
+    [DataField]
+    public List<Color> Paints = new();
+
+    /// <summary>
     /// What the crate held as it was opened.
     /// </summary>
     public List<EntityUid> Contents = new();
