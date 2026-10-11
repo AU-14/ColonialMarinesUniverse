@@ -1,6 +1,8 @@
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.CMU14.Expeditions;
+using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Map;
 using System.Linq;
 
@@ -79,18 +81,28 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         if (VehicleBody(target))
             return ArmedVehicle(target) && VehicleDisposition(uid, agent, target) > 0;
+        var orderedFaction = agent.TargetFactions.Count > 0 &&
+            TryComp<NpcFactionMemberComponent>(target, out var member) &&
+            member.Factions.Any(f => agent.TargetFactions.Contains(f.Id));
         if (TargetsAllHostiles(agent))
-            return _mobs.IsAlive(target);
+            return _mobs.IsAlive(target) && (orderedFaction || NativeHostile(uid, target) || HasEquippedWeapon(target));
         if (agent.TargetFactions.Count > 0)
-            return TryComp<NpcFactionMemberComponent>(target, out var member) &&
-                member.Factions.Any(f => agent.TargetFactions.Contains(f.Id));
+            return orderedFaction;
         // Receiving another squad's report does not make its neutral contacts hostile.
         // Match native acquisition, including per-entity retaliation and ignore rules.
-        return !_factions.IsIgnored(uid, target) &&
+        return NativeHostile(uid, target);
+    }
+
+    private bool NativeHostile(EntityUid uid, EntityUid target) =>
+        !_factions.IsIgnored(uid, target) &&
             (TryComp<NpcFactionMemberComponent>(uid, out var observer) &&
                 TryComp<NpcFactionMemberComponent>(target, out var contact) && observer.HostileFactions.Overlaps(contact.Factions) ||
              _factions.GetHostiles(uid).Contains(target));
-    }
+
+    // Fists and animal bites are innate melee components, not evidence that a neutral
+    // is armed. Inspect held items, never hidden inventory, for non-hostile contacts.
+    private bool HasEquippedWeapon(EntityUid target) => HasComp<GunComponent>(target) ||
+        _hands.EnumerateHeld(target).Any(item => HasComp<GunComponent>(item) || HasComp<MeleeWeaponComponent>(item));
 
     public bool OrderPosition(EntityUid uid, EntityCoordinates destination, bool entrench, Direction? facing = null)
     {
