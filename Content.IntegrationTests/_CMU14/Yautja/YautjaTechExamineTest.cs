@@ -15,7 +15,7 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 public sealed class YautjaTechExamineTest : GameTest
 {
     [Test]
-    public async Task LookingIsFreeButGrabbingStillHurts()
+    public async Task LookingAndGrabbingAreBothFree()
     {
         var map = await Pair.CreateTestMap();
 
