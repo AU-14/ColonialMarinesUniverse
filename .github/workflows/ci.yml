@@ -545,17 +545,10 @@ jobs:
           # CMU14: bound concurrent pairs and allow the full-rotation map sweeps to finish.
           workers=4
           hang_timeout=5m
-          # CMU14: cap the managed heap at 60% (~10 GB of the 16 GB runner). uncapped, server GC let
-          # long shards grow to 11.5 GB managed at 86% machine load and the runner died mid-run
-          # ("received a shutdown signal"). their live set is ~5 GB, so the cap only makes GC collect sooner
-          heap_cap=0x3C
-          case "$shard" in
-            # the linters really hold more than 10 GB live and run out of memory under the cap
-            proto_lint_serial) heap_cap="" ;;
-          esac
-          if [ -n "$heap_cap" ]; then
-            export DOTNET_GCHeapHardLimitPercent="$heap_cap"
-          fi
+          # CMU14: cap the managed heap at 80% (~12.8 GB of the 16 GB runner). uncapped, server GC let
+          # long shards grow past the runner and it died mid-run ("received a shutdown signal").
+          # not lower: the linters and the 3D model tests really hold ~10 GB and ran out of memory at 60%
+          export DOTNET_GCHeapHardLimitPercent=0x50
           case "$shard" in
             # CMU14: destructive smoke pairs approach the runner's memory limit in parallel.
             cmu_yautja_smoke) workers=1 ;;
