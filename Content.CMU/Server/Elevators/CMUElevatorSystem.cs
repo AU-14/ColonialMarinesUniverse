@@ -3,18 +3,29 @@ using System.Linq;
 using Content.Shared.CMU14.Elevators;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Requisitions;
+using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.Doors.Components;
+using Content.Shared.Doors.Systems;
+using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Gibbing;
 using Content.Shared.Interaction;
+using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Robust.Server.GameObjects;
+using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Elevators;
 
@@ -24,6 +35,7 @@ public sealed class CMUElevatorSystem : EntitySystem
     private const float EntityLookupRadius = 0.75f;
     private const float ControlInteractionDistance = 2f;
     private const string ZLevelEyePrototype = "CMUZLevelEye";
+    private static readonly TimeSpan LandingSweepInterval = TimeSpan.FromSeconds(1);
 
     private static readonly Vector2i[] CardinalOffsets =
     {
@@ -34,11 +46,15 @@ public sealed class CMUElevatorSystem : EntitySystem
     };
 
     [Dependency] private DialogSystem _dialog = default!;
+    [Dependency] private SharedDoorSystem _doors = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private MapSystem _map = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRequisitionsSystem _requisitions = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private ITileDefinitionManager _tileDefinitions = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
@@ -49,8 +65,11 @@ public sealed class CMUElevatorSystem : EntitySystem
     private readonly HashSet<(Vector2i, Vector2i)> _blockedEdges = new();
     private readonly HashSet<Vector2i> _footprintTiles = new();
     private readonly HashSet<Vector2i> _solidTiles = new();
+    private readonly HashSet<Vector2i> _openSides = new();
     private readonly Queue<Vector2i> _floodQueue = new();
     private readonly List<ElevatorTile> _tilesToMove = new();
+    private readonly List<Entity<DoorComponent>> _doorList = new();
+    private TimeSpan _nextLandingSweep;
 
     public override void Initialize()
     {
@@ -63,6 +82,78 @@ public sealed class CMUElevatorSystem : EntitySystem
         SubscribeLocalEvent<CMUElevatorCallButtonComponent, ActivateInWorldEvent>(OnCallButtonActivate);
     }
 
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var now = _timing.CurTime;
+        var sweepLandings = now >= _nextLandingSweep;
+        if (sweepLandings)
+            _nextLandingSweep = now + LandingSweepInterval;
+
+        var query = EntityQueryEnumerator<CMUElevatorComponent>();
+        while (query.MoveNext(out var uid, out var comp))
+        {
+            Entity<CMUElevatorComponent> ent = (uid, comp);
+            if (comp.PendingTarget is not { } target)
+            {
+                if (sweepLandings)
+                    SecureIdleLandingDoors(ent);
+
+                continue;
+            }
+
+            SecureDoors(ent);
+            if (now < comp.ArriveAt)
+                continue;
+
+            var user = comp.PendingUser;
+            comp.PendingTarget = null;
+            comp.PendingUser = null;
+            FinishTrip(ent, target, user);
+        }
+    }
+
+    /// <summary>
+    /// Validates the trip, then shuts the doors and starts the travel cycle. The trip is checked again on arrival.
+    /// </summary>
+    private bool TryRequestTrip(Entity<CMUElevatorComponent> ent, EntityUid targetMap, EntityUid user, out bool arrived)
+    {
+        arrived = false;
+        if (ent.Comp.PendingTarget != null)
+        {
+            Popup(user, "cmu-elevator-moving");
+            return false;
+        }
+
+        if (ent.Comp.TravelTime <= TimeSpan.Zero)
+        {
+            FinishTrip(ent, targetMap, user);
+            arrived = Transform(ent).MapUid == targetMap;
+            return arrived;
+        }
+
+        if (!TryMovePlatform(ent, targetMap, false, out var failure))
+        {
+            Popup(user, failure);
+            return false;
+        }
+
+        ent.Comp.PendingTarget = targetMap;
+        ent.Comp.PendingUser = user;
+        ent.Comp.ArriveAt = _timing.CurTime + ent.Comp.TravelTime;
+        SecureDoors(ent);
+        return true;
+    }
+
+    private void FinishTrip(Entity<CMUElevatorComponent> ent, EntityUid targetMap, EntityUid? user)
+    {
+        if (!TryMovePlatform(ent, targetMap, true, out var failure) && user is { } u && !Deleted(u))
+            Popup(u, failure);
+
+        ReleaseDoors(ent);
+    }
+
     private void OnActivate(Entity<CMUElevatorComponent> ent, ref ActivateInWorldEvent args)
     {
         if (args.Handled)
@@ -72,6 +163,12 @@ public sealed class CMUElevatorSystem : EntitySystem
         if (ent.Comp.Disabled)
         {
             Popup(args.User, "cmu-elevator-disabled");
+            return;
+        }
+
+        if (ent.Comp.PendingTarget != null)
+        {
+            Popup(args.User, "cmu-elevator-moving");
             return;
         }
 
@@ -143,13 +240,10 @@ public sealed class CMUElevatorSystem : EntitySystem
             return;
         }
 
-        if (!TryMovePlatform(elevator, floor, out var failure))
-        {
-            Popup(args.User, failure);
+        if (!TryRequestTrip(elevator, floor, args.User, out var arrived))
             return;
-        }
 
-        _popup.PopupEntity(Loc.GetString("cmu-elevator-call-arrived"), ent, args.User);
+        _popup.PopupEntity(Loc.GetString(arrived ? "cmu-elevator-call-arrived" : "cmu-elevator-call-coming"), ent, args.User);
     }
 
     private bool TryFindElevator(string elevatorId, EntityUid floor, out Entity<CMUElevatorComponent> elevator)
@@ -236,11 +330,10 @@ public sealed class CMUElevatorSystem : EntitySystem
             return;
         }
 
-        if (!TryMovePlatform(ent, targetMap.Value, out var failure))
-            Popup(user, failure);
+        TryRequestTrip(ent, targetMap.Value, user, out _);
     }
 
-    private bool TryMovePlatform(Entity<CMUElevatorComponent> ent, EntityUid targetMap, out string failure)
+    private bool TryMovePlatform(Entity<CMUElevatorComponent> ent, EntityUid targetMap, bool execute, out string failure)
     {
         if (!TryBuildFootprint(ent, out var source, out var footprint, out failure))
             return false;
@@ -264,6 +357,11 @@ public sealed class CMUElevatorSystem : EntitySystem
         _crushTargets.Clear();
         _tilesToMove.Clear();
 
+        ent.Comp.HomeMap ??= source.MapUid;
+        var homeTile = _tileDefinitions.TryGetDefinition(ent.Comp.HomeFloorTile, out var homeTileDef)
+            ? new Tile(homeTileDef.TileId)
+            : Tile.Empty;
+
         // The platform passes through every level between here and the destination, so the whole shaft must be open.
         var minDepth = Math.Min(sourceLevel.Depth, targetLevel.Depth);
         var maxDepth = Math.Max(sourceLevel.Depth, targetLevel.Depth);
@@ -272,16 +370,18 @@ public sealed class CMUElevatorSystem : EntitySystem
             if (depth <= minDepth || depth >= maxDepth || !TryComp<MapComponent>(map, out var shaftMap))
                 continue;
 
+            var shaftAllowed = map == ent.Comp.HomeMap ? homeTile : Tile.Empty;
             foreach (var sourceTile in footprint)
             {
-                if (!TryCheckShaftTile(source, sourceTile, map, shaftMap, false, out failure))
+                if (!TryCheckShaftTile(source, sourceTile, map, shaftMap, false, shaftAllowed, out failure))
                     return false;
             }
         }
 
+        var targetAllowed = targetMap == ent.Comp.HomeMap ? homeTile : Tile.Empty;
         foreach (var sourceTile in footprint)
         {
-            if (!TryCheckShaftTile(source, sourceTile, targetMap, targetMapComp, true, out failure))
+            if (!TryCheckShaftTile(source, sourceTile, targetMap, targetMapComp, true, targetAllowed, out failure))
                 return false;
         }
 
@@ -299,6 +399,10 @@ public sealed class CMUElevatorSystem : EntitySystem
             failure = "cmu-elevator-overloaded";
             return false;
         }
+
+        failure = string.Empty;
+        if (!execute)
+            return true;
 
         foreach (var target in _crushTargets)
         {
@@ -325,8 +429,10 @@ public sealed class CMUElevatorSystem : EntitySystem
                 Log.Error($"Failed to re-anchor elevator structure {ToPrettyString(entity)} at its destination.");
         }
 
+        // The car takes its floor with it; its home floor keeps bare plating so the shaft isn't a hole.
+        var leftBehind = source.MapUid == ent.Comp.HomeMap ? homeTile : Tile.Empty;
         foreach (var tile in _tilesToMove)
-            _map.SetTile(source.GridUid, source.Grid, tile.SourceTile, Tile.Empty);
+            _map.SetTile(source.GridUid, source.Grid, tile.SourceTile, tile.Tile.IsEmpty ? Tile.Empty : leftBehind);
 
         failure = string.Empty;
         return true;
@@ -335,6 +441,7 @@ public sealed class CMUElevatorSystem : EntitySystem
     /// <summary>
     /// Checks that the level has open space under/over one platform tile. Mobs in the way are crushed.
     /// The destination must have a grid to land on; intermediate levels may be open space.
+    /// <paramref name="allowedTile"/> is the plating the car left on its home floor, which it may pass or land on.
     /// </summary>
     private bool TryCheckShaftTile(
         ElevatorSource source,
@@ -342,6 +449,7 @@ public sealed class CMUElevatorSystem : EntitySystem
         EntityUid levelMap,
         MapComponent levelMapComp,
         bool destination,
+        Tile allowedTile,
         out string failure)
     {
         var sourceLocal = _map.GridTileToLocal(source.GridUid, source.Grid, sourceTile);
@@ -359,7 +467,9 @@ public sealed class CMUElevatorSystem : EntitySystem
 
         var tile = _map.TileIndicesFor(gridUid, grid, levelCoordinates);
         var blocked = destination ? "cmu-elevator-destination-blocked" : "cmu-elevator-shaft-blocked";
-        if (_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) && !tileRef.Tile.IsEmpty ||
+        if (_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) &&
+            !tileRef.Tile.IsEmpty &&
+            (allowedTile.IsEmpty || tileRef.Tile.TypeId != allowedTile.TypeId) ||
             HasBlockingEntity(gridUid, grid, tile, levelCoordinates))
         {
             failure = blocked;
@@ -402,7 +512,8 @@ public sealed class CMUElevatorSystem : EntitySystem
         var rails = EntityQueryEnumerator<CMUElevatorRailComponent, TransformComponent>();
         while (rails.MoveNext(out _, out var rail, out var railXform))
         {
-            if (string.IsNullOrWhiteSpace(rail.ElevatorId) ||
+            if (rail.Landing ||
+                string.IsNullOrWhiteSpace(rail.ElevatorId) ||
                 rail.ElevatorId != ent.Comp.ElevatorId ||
                 railXform.MapUid != mapUid ||
                 railXform.GridUid != gridUid)
@@ -456,12 +567,14 @@ public sealed class CMUElevatorSystem : EntitySystem
     /// <summary>
     /// Floods outward from the control. Railings block the edge they face; full-tile pieces such as walls
     /// and doors join the platform but the flood only continues from them into other full-tile pieces.
-    /// The outline is closed when the flood never leaves the pieces' bounding box.
+    /// The platform must be enclosed on at least three sides: the flood may leave the pieces' bounding box
+    /// through one side only, which stays open.
     /// </summary>
     private bool TryFloodFootprint(Vector2i start, Box2i bounds, bool legacyRing, out string failure)
     {
         _footprintTiles.Clear();
         _floodQueue.Clear();
+        _openSides.Clear();
         failure = "cmu-elevator-outline-open";
 
         if (!Contains(bounds, start))
@@ -483,8 +596,14 @@ public sealed class CMUElevatorSystem : EntitySystem
 
                 if (!Contains(bounds, next))
                 {
-                    _footprintTiles.Clear();
-                    return false;
+                    _openSides.Add(offset);
+                    if (_openSides.Count > 1)
+                    {
+                        _footprintTiles.Clear();
+                        return false;
+                    }
+
+                    continue;
                 }
 
                 if (_footprintTiles.Add(next))
@@ -532,7 +651,7 @@ public sealed class CMUElevatorSystem : EntitySystem
             foreach (var entity in _nearby)
             {
                 if (entity == source.MapUid || entity == source.GridUid ||
-                    TerminatingOrDeleted(entity) || IsViewProbe(entity))
+                    TerminatingOrDeleted(entity) || IsViewProbe(entity) || HasComp<GhostComponent>(entity))
                     continue;
 
                 var xform = Transform(entity);
@@ -553,6 +672,10 @@ public sealed class CMUElevatorSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    /// Counts everything riding the platform, including the contents of bags, crates, and riders' inventories.
+    /// The elevator's own control and outline pieces are free.
+    /// </summary>
     private int CountPlatformLoad()
     {
         var count = 0;
@@ -564,12 +687,31 @@ public sealed class CMUElevatorSystem : EntitySystem
                 continue;
             }
 
-            count++;
+            count += CountWithContents(entity);
         }
 
         return count;
     }
 
+    private int CountWithContents(EntityUid entity)
+    {
+        var count = 1;
+        if (!TryComp<ContainerManagerComponent>(entity, out var manager))
+            return count;
+
+        foreach (var container in manager.Containers.Values)
+        {
+            foreach (var contained in container.ContainedEntities)
+                count += CountWithContents(contained);
+        }
+
+        return count;
+    }
+
+    /// <summary>
+    /// Whether anything on this tile stops the car. Mobs and player-controlled entities are crushed instead,
+    /// and ghosts and anything without collision (audio, view probes, AI eyes) are ignored.
+    /// </summary>
     private bool HasBlockingEntity(EntityUid gridUid, MapGridComponent grid, Vector2i tile, MapCoordinates coordinates)
     {
         _nearby.Clear();
@@ -579,7 +721,8 @@ public sealed class CMUElevatorSystem : EntitySystem
             if (HasComp<MapComponent>(entity) ||
                 HasComp<MapGridComponent>(entity) ||
                 TerminatingOrDeleted(entity) ||
-                IsViewProbe(entity))
+                IsViewProbe(entity) ||
+                HasComp<GhostComponent>(entity))
                 continue;
 
             var xform = Transform(entity);
@@ -596,10 +739,120 @@ public sealed class CMUElevatorSystem : EntitySystem
                 continue;
             }
 
+            if (!TryComp<PhysicsComponent>(entity, out var physics) || !physics.CanCollide)
+                continue;
+
+            if (HasComp<ActorComponent>(entity))
+            {
+                _crushTargets.Add(entity);
+                continue;
+            }
+
             return true;
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Shuts and bolts the car's doors and every landing door, and raises the car's retractable railings.
+    /// Doors that are still closing are bolted on a later tick.
+    /// </summary>
+    private void SecureDoors(Entity<CMUElevatorComponent> ent)
+    {
+        foreach (var door in GetElevatorDoors(ent, landingFloor: null))
+            SecureDoor(door);
+
+        SetCarRailings(ent, RequisitionsRailingMode.Raising);
+    }
+
+    /// <summary>
+    /// The car is waiting on a floor: unbolt its doors and that floor's landing doors, and lower its railings.
+    /// </summary>
+    private void ReleaseDoors(Entity<CMUElevatorComponent> ent)
+    {
+        foreach (var door in GetElevatorDoors(ent, Transform(ent).MapUid))
+        {
+            if (TryComp<DoorBoltComponent>(door, out var bolts) && bolts.BoltsDown)
+                _doors.TrySetBoltDown((door, bolts), false);
+        }
+
+        SetCarRailings(ent, RequisitionsRailingMode.Lowering);
+    }
+
+    /// <summary>
+    /// Keeps landing doors on floors the car isn't on shut and bolted.
+    /// </summary>
+    private void SecureIdleLandingDoors(Entity<CMUElevatorComponent> ent)
+    {
+        var carMap = Transform(ent).MapUid;
+        foreach (var door in GetElevatorDoors(ent, landingFloor: null))
+        {
+            if (TryComp<CMUElevatorRailComponent>(door, out var rail) &&
+                rail.Landing &&
+                Transform(door).MapUid != carMap)
+            {
+                SecureDoor(door);
+            }
+        }
+    }
+
+    private void SecureDoor(Entity<DoorComponent> door)
+    {
+        if (door.Comp.State == DoorState.Closed)
+        {
+            if (TryComp<DoorBoltComponent>(door, out var bolts) && !bolts.BoltsDown)
+                _doors.TrySetBoltDown((door, bolts), true);
+
+            return;
+        }
+
+        if (door.Comp.State is DoorState.Open or DoorState.Opening)
+            _doors.TryClose(door, door.Comp);
+    }
+
+    private void SetCarRailings(Entity<CMUElevatorComponent> ent, RequisitionsRailingMode mode)
+    {
+        var mapUid = Transform(ent).MapUid;
+        var query = EntityQueryEnumerator<CMUElevatorRailComponent, RequisitionsRailingComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var rail, out var railing, out var xform))
+        {
+            if (rail.Landing || rail.ElevatorId != ent.Comp.ElevatorId || xform.MapUid != mapUid)
+                continue;
+
+            // Lowered/Raised are the settled forms of Lowering/Raising; don't replay the animation.
+            var settled = mode == RequisitionsRailingMode.Lowering
+                ? RequisitionsRailingMode.Lowered
+                : RequisitionsRailingMode.Raised;
+            if (railing.Mode != mode && railing.Mode != settled)
+                _requisitions.SetRailingMode((uid, railing), mode);
+        }
+    }
+
+    /// <summary>
+    /// The car's doors plus landing doors: all of them, or only those on <paramref name="landingFloor"/>.
+    /// </summary>
+    private List<Entity<DoorComponent>> GetElevatorDoors(Entity<CMUElevatorComponent> ent, EntityUid? landingFloor)
+    {
+        _doorList.Clear();
+        var mapUid = Transform(ent).MapUid;
+        if (mapUid == null || string.IsNullOrWhiteSpace(ent.Comp.ElevatorId))
+            return _doorList;
+
+        var query = EntityQueryEnumerator<CMUElevatorRailComponent, DoorComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var rail, out var door, out var xform))
+        {
+            if (rail.ElevatorId != ent.Comp.ElevatorId)
+                continue;
+
+            var include = rail.Landing
+                ? landingFloor == null ? _zLevels.IsSameZNetwork(xform.MapUid, mapUid.Value) : xform.MapUid == landingFloor
+                : xform.MapUid == mapUid;
+            if (include)
+                _doorList.Add((uid, door));
+        }
+
+        return _doorList;
     }
 
     private bool IsViewProbe(EntityUid entity)

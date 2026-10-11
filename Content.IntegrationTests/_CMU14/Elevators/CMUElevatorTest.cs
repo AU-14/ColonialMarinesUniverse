@@ -2,11 +2,15 @@ using Content.IntegrationTests.Fixtures;
 using Content.Server.CMU14.Elevators;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CMU14.Elevators;
 using Content.Shared.CMU14.ZLevels.Core.Components;
+using Content.Shared.Doors.Components;
+using Content.Shared.Doors.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
+using Content.Shared.Mobs.Systems;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Containers;
@@ -52,6 +56,7 @@ public sealed class CMUElevatorTest : GameTest
             var center = new EntityCoordinates(_lower, new Vector2(1.5f));
             _control = SEntMan.SpawnEntity("CMUElevatorControl", center);
             SComp<CMUElevatorComponent>(_control).ElevatorId = "test-lift";
+            SComp<CMUElevatorComponent>(_control).TravelTime = TimeSpan.Zero;
             _rider = SEntMan.SpawnEntity("CMMobHuman", center);
             var zLevels = SEntMan.System<CMUZLevelsSystem>();
             var network = zLevels.CreateZNetwork();
@@ -100,7 +105,7 @@ public sealed class CMUElevatorTest : GameTest
                 .ToDictionary(entity => entity, entity => SComp<TransformComponent>(entity).ParentUid);
             var bodyContainers = SComp<ContainerManagerComponent>(_rider).Containers.Values
                 .SelectMany(container => container.ContainedEntities.Select(entity => (container, entity))).ToArray();
-            Assert.That(SComp<CMUElevatorWeightLimitComponent>(_control).MaxEntities, Is.EqualTo(20));
+            Assert.That(SComp<CMUElevatorWeightLimitComponent>(_control).MaxEntities, Is.EqualTo(250));
             var lowerEye = SEntMan.SpawnEntity("CMUZLevelEye", center);
             var upperEye = SEntMan.SpawnEntity("CMUZLevelEye", new EntityCoordinates(_upper, new Vector2(1.5f)));
 
@@ -143,8 +148,9 @@ public sealed class CMUElevatorTest : GameTest
                     {
                         Assert.That(_maps.GetTileRef(destination, SComp<MapGridComponent>(destination),
                             new Vector2i(x, y)).Tile.IsEmpty, Is.False);
+                        // The lower level is the elevator's home floor, so it keeps plating when the car leaves.
                         Assert.That(_maps.GetTileRef(source, SComp<MapGridComponent>(source),
-                            new Vector2i(x, y)).Tile.IsEmpty, Is.True);
+                            new Vector2i(x, y)).Tile.IsEmpty, Is.EqualTo(source == _upper));
                     }
                 }
             }
@@ -173,10 +179,11 @@ public sealed class CMUElevatorTest : GameTest
         });
     }
 
-    [TestCase(false, false)]
-    [TestCase(true, false)]
-    [TestCase(true, true)]
-    public async Task DirectionalRailFenceDefinesPlatform(bool twoByTwo, bool leaveGap)
+    [TestCase(false, 0)]
+    [TestCase(true, 0)]
+    [TestCase(true, 1)]
+    [TestCase(true, 2)]
+    public async Task DirectionalRailFenceDefinesPlatform(bool twoByTwo, int openSides)
     {
         await Server.WaitAssertion(() =>
         {
@@ -198,8 +205,11 @@ public sealed class CMUElevatorTest : GameTest
                     (new(1, 1), Direction.North), (new(1, 1), Direction.East),
                     (new(1, 1), Direction.South), (new(1, 1), Direction.West),
                 };
-            if (leaveGap)
-                fences = fences[..^1];
+
+            // One open side is allowed; a second one leaves the platform undefined.
+            var openFacings = new[] { Direction.North, Direction.East }.Take(openSides).ToArray();
+            fences = fences.Where(fence => !openFacings.Contains(fence.Facing)).ToArray();
+            var leaveGap = openSides > 1;
 
             var xformSystem = SEntMan.System<SharedTransformSystem>();
             foreach (var (tile, facing) in fences)
@@ -255,7 +265,7 @@ public sealed class CMUElevatorTest : GameTest
                         Assert.That(_maps.GetTileRef(destination, SComp<MapGridComponent>(destination), tile).Tile.IsEmpty,
                             Is.EqualTo(!onPlatform && destination == _upper));
                         Assert.That(_maps.GetTileRef(source, SComp<MapGridComponent>(source), tile).Tile.IsEmpty,
-                            Is.EqualTo(onPlatform || source == _upper));
+                            Is.EqualTo(source == _upper));
                     }
                 }
             }
@@ -281,7 +291,7 @@ public sealed class CMUElevatorTest : GameTest
             for (var x = 0; x < 3; x++)
             for (var y = 0; y < 3; y++)
             {
-                if (x == 1 && y == 1 || leaveGap && x == 2 && y == 1)
+                if (x == 1 && y == 1 || leaveGap && x != 1 && y == 1)
                     continue;
 
                 var prototype = x == 1 && y == 0 ? "CMUElevatorDoor" : "CMUElevatorWall";
@@ -405,6 +415,250 @@ public sealed class CMUElevatorTest : GameTest
                 SEntMan.EventBus.RaiseLocalEvent(button, activation);
                 Assert.That(activation.Handled, Is.True);
             }
+        });
+    }
+
+    [Test]
+    public async Task TravelCycleShutsAndBoltsDoorsUntilArrival()
+    {
+        EntityUid door = default;
+        await Server.WaitAssertion(() =>
+        {
+            foreach (var rail in _rails)
+                SEntMan.DeleteEntity(rail);
+            _rails.Clear();
+
+            for (var x = 0; x < 3; x++)
+            for (var y = 0; y < 3; y++)
+            {
+                if (x == 1 && y == 1)
+                    continue;
+
+                var prototype = x == 1 && y == 0 ? "CMUElevatorDoor" : "CMUElevatorWall";
+                var piece = SEntMan.SpawnEntity(prototype, new EntityCoordinates(_lower, new Vector2(x + 0.5f, y + 0.5f)));
+                SComp<CMUElevatorRailComponent>(piece).ElevatorId = "test-lift";
+                _rails.Add(piece);
+                if (prototype == "CMUElevatorDoor")
+                    door = piece;
+            }
+
+            SComp<CMUElevatorComponent>(_control).TravelTime = TimeSpan.FromSeconds(3);
+        });
+
+        await Pair.RunTicksSync(5);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SEntMan.System<SharedDoorSystem>().TryOpen(door), Is.True);
+        });
+        await Pair.RunSeconds(1.5f);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DoorComponent>(door).State, Is.EqualTo(DoorState.Open));
+            Select(_upper);
+            Assert.That(SComp<CMUElevatorComponent>(_control).PendingTarget, Is.EqualTo(_upper));
+            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(_lower), "The trip should not be instant.");
+        });
+
+        await Pair.RunSeconds(1.5f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DoorComponent>(door).State, Is.EqualTo(DoorState.Closed));
+            Assert.That(SComp<DoorBoltComponent>(door).BoltsDown, Is.True);
+            Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_lower));
+
+            // Requests made while the car is moving are refused.
+            Select(_lower);
+            Assert.That(SComp<CMUElevatorComponent>(_control).PendingTarget, Is.EqualTo(_upper));
+        });
+
+        await Pair.RunSeconds(2);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<CMUElevatorComponent>(_control).PendingTarget, Is.Null);
+            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(_upper));
+            Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_upper));
+            Assert.That(SComp<TransformComponent>(door).MapUid, Is.EqualTo(_upper));
+            Assert.That(SComp<DoorComponent>(door).State, Is.EqualTo(DoorState.Closed));
+            Assert.That(SComp<DoorBoltComponent>(door).BoltsDown, Is.False);
+        });
+
+        void Select(EntityUid target)
+        {
+            SEntMan.EventBus.RaiseLocalEvent(_control,
+                new CMUElevatorFloorSelectedEvent(SEntMan.GetNetEntity(_rider), SEntMan.GetNetEntity(target)));
+        }
+    }
+
+    [Test]
+    public async Task LandingDoorsStayBoltedUntilTheCarWaitsOnTheirFloor()
+    {
+        EntityUid lowerLanding = default, upperLanding = default;
+        await Server.WaitAssertion(() =>
+        {
+            var plating = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["Plating"].TileId);
+            _maps.SetTile(_upper, SComp<MapGridComponent>(_upper), new Vector2i(1, -1), plating);
+            _maps.SetTile(_lower, SComp<MapGridComponent>(_lower), new Vector2i(1, -1), plating);
+            lowerLanding = Spawn(_lower);
+            upperLanding = Spawn(_upper);
+        });
+
+        await Pair.RunSeconds(1.5f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DoorBoltComponent>(upperLanding).BoltsDown, Is.True,
+                "The landing door of a floor the car isn't on should be bolted.");
+            Assert.That(SComp<DoorBoltComponent>(lowerLanding).BoltsDown, Is.False);
+
+            SEntMan.EventBus.RaiseLocalEvent(_control,
+                new CMUElevatorFloorSelectedEvent(SEntMan.GetNetEntity(_rider), SEntMan.GetNetEntity(_upper)));
+            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(_upper));
+            Assert.That(SComp<TransformComponent>(lowerLanding).MapUid, Is.EqualTo(_lower),
+                "Landing doors are not part of the car.");
+            Assert.That(SComp<DoorBoltComponent>(upperLanding).BoltsDown, Is.False);
+        });
+
+        await Pair.RunSeconds(1.5f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<DoorBoltComponent>(lowerLanding).BoltsDown, Is.True);
+            Assert.That(SComp<DoorBoltComponent>(upperLanding).BoltsDown, Is.False);
+        });
+
+        EntityUid Spawn(EntityUid map)
+        {
+            var door = SEntMan.SpawnEntity("CMUElevatorLandingDoor", new EntityCoordinates(map, new Vector2(1.5f, -0.5f)));
+            SComp<CMUElevatorRailComponent>(door).ElevatorId = "test-lift";
+            return door;
+        }
+    }
+
+    [Test]
+    public async Task RetractableRailingRisesInTransitAndLowersOnArrival()
+    {
+        EntityUid gate = default;
+        await Server.WaitAssertion(() =>
+        {
+            foreach (var rail in _rails)
+                SEntMan.DeleteEntity(rail);
+            _rails.Clear();
+
+            var xformSystem = SEntMan.System<SharedTransformSystem>();
+            foreach (var facing in new[] { Direction.North, Direction.East, Direction.South, Direction.West })
+            {
+                var prototype = facing == Direction.South ? "CMUElevatorRetractableRail" : "CMUElevatorRail";
+                var rail = SEntMan.SpawnEntity(prototype, new EntityCoordinates(_lower, new Vector2(1.5f)));
+                xformSystem.SetLocalRotation(rail, facing.ToAngle());
+                SComp<CMUElevatorRailComponent>(rail).ElevatorId = "test-lift";
+                _rails.Add(rail);
+                if (facing == Direction.South)
+                    gate = rail;
+            }
+
+            SComp<CMUElevatorComponent>(_control).TravelTime = TimeSpan.FromSeconds(2);
+        });
+
+        await Pair.RunTicksSync(5);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<RequisitionsRailingComponent>(gate).Mode, Is.EqualTo(RequisitionsRailingMode.Lowered));
+            SEntMan.EventBus.RaiseLocalEvent(_control,
+                new CMUElevatorFloorSelectedEvent(SEntMan.GetNetEntity(_rider), SEntMan.GetNetEntity(_upper)));
+            Assert.That(SComp<CMUElevatorComponent>(_control).PendingTarget, Is.EqualTo(_upper));
+            Assert.That(SComp<RequisitionsRailingComponent>(gate).Mode, Is.EqualTo(RequisitionsRailingMode.Raising));
+        });
+
+        await Pair.RunSeconds(3);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(_upper));
+            Assert.That(SComp<TransformComponent>(gate).MapUid, Is.EqualTo(_upper));
+            Assert.That(SComp<RequisitionsRailingComponent>(gate).Mode, Is.EqualTo(RequisitionsRailingMode.Lowering));
+        });
+    }
+
+    [Test]
+    public async Task HomeFloorKeepsPlatingAndAcceptsTheCarBack()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var tiles = Server.ResolveDependency<ITileDefinitionManager>();
+            SComp<CMUElevatorComponent>(_control).HomeFloorTile = "CMFloorPlating";
+            var lowerGrid = SComp<MapGridComponent>(_lower);
+
+            Select(_upper);
+            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(_upper));
+            Assert.That(_maps.GetTileRef(_lower, lowerGrid, new Vector2i(1, 1)).Tile.TypeId,
+                Is.EqualTo(tiles["CMFloorPlating"].TileId));
+
+            Select(_lower);
+            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(_lower));
+            Assert.That(_maps.GetTileRef(_lower, lowerGrid, new Vector2i(1, 1)).Tile.TypeId,
+                Is.EqualTo(tiles["Plating"].TileId), "The car's own floor replaces the home plating.");
+            Assert.That(_maps.GetTileRef(_upper, SComp<MapGridComponent>(_upper), new Vector2i(1, 1)).Tile.IsEmpty,
+                Is.True, "Only the home floor keeps plating.");
+        });
+
+        void Select(EntityUid target)
+        {
+            SEntMan.EventBus.RaiseLocalEvent(_control,
+                new CMUElevatorFloorSelectedEvent(SEntMan.GetNetEntity(_rider), SEntMan.GetNetEntity(target)));
+        }
+    }
+
+    [Test]
+    public async Task MobsInThePathAreCrushedWhileGhostsAndIntangiblesAreIgnored()
+    {
+        EntityUid victim = default;
+        await Server.WaitAssertion(() =>
+        {
+            victim = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(_upper, new Vector2(0.5f)));
+            var upperGhost = SEntMan.SpawnEntity("AdminObserver", new EntityCoordinates(_upper, new Vector2(2.5f)));
+            var lowerGhost = SEntMan.SpawnEntity("AdminObserver", new EntityCoordinates(_lower, new Vector2(1.5f)));
+            var marker = SEntMan.SpawnEntity(null, new EntityCoordinates(_upper, new Vector2(1.5f, 0.5f)));
+
+            SEntMan.EventBus.RaiseLocalEvent(_control,
+                new CMUElevatorFloorSelectedEvent(SEntMan.GetNetEntity(_rider), SEntMan.GetNetEntity(_upper)));
+
+            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(_upper));
+            Assert.That(SComp<TransformComponent>(_rider).MapUid, Is.EqualTo(_upper));
+            Assert.That(SEntMan.Deleted(victim) ||
+                        SEntMan.IsQueuedForDeletion(victim) ||
+                        SEntMan.System<MobStateSystem>().IsDead(victim),
+                Is.True, "A mob in the car's path must be crushed.");
+            Assert.That(SComp<TransformComponent>(lowerGhost).MapUid, Is.EqualTo(_lower), "Ghosts are not carried.");
+            Assert.That(SEntMan.Deleted(upperGhost), Is.False, "Ghosts are not crushed.");
+            Assert.That(SEntMan.Deleted(marker), Is.False);
+
+            // Mindless observers carry dangling action references that PVS reports as errors.
+            SEntMan.DeleteEntity(upperGhost);
+            SEntMan.DeleteEntity(lowerGhost);
+        });
+    }
+
+    [TestCase(21, false)]
+    [TestCase(22, true)]
+    public async Task ContainedEntitiesCountTowardTheWeightLimit(int maxEntities, bool moves)
+    {
+        await Server.WaitAssertion(() =>
+        {
+            SEntMan.DeleteEntity(_rider);
+            var center = new EntityCoordinates(_lower, new Vector2(1.5f));
+            var backpack = SEntMan.SpawnEntity("CMBackpack", center);
+            var storage = SEntMan.System<SharedStorageSystem>();
+            for (var i = 0; i < 21; i++)
+                Assert.That(storage.Insert(backpack, SEntMan.SpawnEntity("CMPen", center), out _, playSound: false), Is.True);
+
+            SComp<CMUElevatorWeightLimitComponent>(_control).MaxEntities = maxEntities;
+            var caller = SEntMan.SpawnEntity("CMMobHuman", new EntityCoordinates(_upper, new Vector2(5.5f)));
+            var button = SEntMan.SpawnEntity("CMUElevatorCallButton", new EntityCoordinates(_upper, new Vector2(4.5f)));
+            SComp<CMUElevatorCallButtonComponent>(button).ElevatorId = "test-lift";
+            SEntMan.EventBus.RaiseLocalEvent(button, new ActivateInWorldEvent(caller, button, true));
+
+            // The backpack plus its 21 pens is 22 entities.
+            Assert.That(SComp<TransformComponent>(_control).MapUid, Is.EqualTo(moves ? _upper : _lower));
+            Assert.That(SComp<TransformComponent>(backpack).MapUid, Is.EqualTo(moves ? _upper : _lower));
+            Assert.That(SComp<CMUElevatorComponent>(_control).Disabled, Is.EqualTo(!moves));
         });
     }
 
