@@ -57,7 +57,7 @@ public sealed partial class CMUExpeditionAgentSystem
             var prototype = composition[i % composition.Length];
             var uid = Spawn(prototype, positions[i]);
             var agent = Comp<CMUExpeditionAgentComponent>(uid);
-            if (!ApplySpawnOutfit(uid, outfit))
+            if (!ApplySpawnOutfit(uid, outfit, i))
                 Log.Error($"Expedition outfit {outfit} could not be equipped on {ToPrettyString(uid)}; retained original equipment.");
             agent.Squad = squad;
             agent.Home = positions[i];
@@ -95,7 +95,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             if (action == "patrol-add")
                 agent.PatrolPoints.Add(point);
-            else if (!OrderPosition(uid, point, action == "guard", facing))
+            else if (action == "assault" ? !OrderAssault(uid, point) : !OrderPosition(uid, point, action == "guard", facing))
                 continue;
             if (action != "patrol-add")
                 agent.OrderRally = center;
@@ -127,8 +127,6 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.OrderedDestination is not { } destination)
             return false;
         var start = Transform(uid).Coordinates;
-        if (WaitForSquad(uid, agent, now))
-            return true;
         if (_transform.InRange(start, destination, 0.5f))
         {
             agent.Home = destination;
@@ -136,8 +134,14 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.OrderBlocked = false;
             agent.OrderBlockedSince = null;
             agent.OrderedDestination = null;
+            ResetTravelCohesion(agent);
             ClearTraffic(agent);
             _steering.Unregister(uid);
+            if (agent.AssaultDestination == destination)
+            {
+                CompleteAssaultOrder(agent);
+                return true;
+            }
             if (agent.TravelGoal != null)
                 return true;
             if (agent.Patrolling && agent.PatrolPoints.Count >= 2)
@@ -148,33 +152,43 @@ public sealed partial class CMUExpeditionAgentSystem
             }
             return true;
         }
-        if (now < agent.NextOrderRoute)
+        if (WaitForSquad(uid, agent, now))
+            return true;
+        if (agent.OrderRoute.Count == 0 && now < agent.NextOrderRoute)
         {
             _steering.Unregister(uid);
             return true;
         }
-        if (agent.OrderRoute.Count == 0)
+        if (agent.OrderRoute.Count == 0 && !BorrowSquadRoute(uid, agent, destination))
         {
-            // Admin routes can span the map. Spread their larger searches across frames.
-            if (_orderRouteSearched)
+            // A nearby clear leg or a borrowed route does not consume the one large
+            // search per frame. Start it immediately so the whole group can leave.
+            if (!agent.OrderBlocked && _transform.InRange(start, destination, 12) &&
+                RoutePassage(uid, start, destination, allowVault: false) && KnownDangerPassage(uid, agent, start, destination))
+                agent.OrderRoute.Enqueue(destination);
+            else
             {
-                _steering.Unregister(uid);
-                return true;
+                if (_orderRouteSearched)
+                {
+                    if (!ContinuePendingOrderStep(uid, agent, start, destination))
+                        _steering.Unregister(uid);
+                    return true;
+                }
+                _orderRouteSearched = true;
+                var regrouped = RecoverStraggler(uid, agent, now, out var recoverySearched);
+                if (!regrouped)
+                {
+                    if (recoverySearched || !BuildTacticalRoute(uid, agent, destination, ordered: true, allowVaults: !agent.AutoPatrol))
+                    {
+                        BlockOrder();
+                        return true;
+                    }
+                    foreach (var point in agent.Route)
+                        agent.OrderRoute.Enqueue(point);
+                    agent.Route.Clear();
+                    agent.RouteDestination = null;
+                }
             }
-            _orderRouteSearched = true;
-            if (BorrowSquadRoute(uid, agent, destination))
-                return true;
-            if (RecoverStraggler(uid, agent, now, out var recoverySearched))
-                return true;
-            if (recoverySearched || !BuildTacticalRoute(uid, agent, destination, ordered: true, allowVaults: !agent.AutoPatrol))
-            {
-                BlockOrder();
-                return true;
-            }
-            foreach (var point in agent.Route)
-                agent.OrderRoute.Enqueue(point);
-            agent.Route.Clear();
-            agent.RouteDestination = null;
             agent.OrderBlocked = false;
         }
         AdvanceRoute(uid, agent.OrderRoute, start);
@@ -223,5 +237,22 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.NextOrderRoute = now + TimeSpan.FromSeconds(retrySoon ? 0.5 : 3);
             _steering.Unregister(uid);
         }
+    }
+
+    private bool ContinuePendingOrderStep(EntityUid uid, CMUExpeditionAgentComponent agent,
+        EntityCoordinates start, EntityCoordinates destination)
+    {
+        if (!TryComp<NPCSteeringComponent>(uid, out var steering) || steering.Status != SteeringStatus.Moving ||
+            !_transform.InRange(start, steering.Coordinates, 4) ||
+            !start.TryDistance(EntityManager, destination, out var remaining) ||
+            !steering.Coordinates.TryDistance(EntityManager, destination, out var nextRemaining) || nextRemaining >= remaining ||
+            !RoutePassage(uid, start, steering.Coordinates, allowVault: false) ||
+            !KnownDangerPassage(uid, agent, start, steering.Coordinates))
+            return false;
+        // Retain only the short, revalidated step towards this order. Move still owns
+        // real doors, friendly traffic and hazards while the route budget is occupied.
+        agent.Home = start;
+        Move(uid, steering.Coordinates, routeWaypoint: true, validated: true);
+        return true;
     }
 }
