@@ -244,8 +244,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool CornerFlanker(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates point, TimeSpan now)
     {
-        if (agent.CombatRole is CMUExpeditionCombatRole.Support or CMUExpeditionCombatRole.Marksman or CMUExpeditionCombatRole.Medic ||
-            now < agent.CornerProbeUntil)
+        if (now < agent.CornerProbeUntil)
             return false;
         var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
         while (query.MoveNext(out var other, out var buddy))
@@ -255,12 +254,15 @@ public sealed partial class CMUExpeditionAgentSystem
             if (buddy.CornerDangerPoint is { } known && _transform.InRange(known, point, 3) &&
                 (now < buddy.CornerProbeUntil || buddy.CornerDestination != null && buddy.CornerFlanking))
                 return false;
-            if (other.CompareTo(uid) < 0 && !buddy.HoldPosition && !buddy.Entrench && buddy.Action == null &&
+            // A defence squad may consist entirely of specialists. Prefer a rifleman,
+            // then a marksman, without excluding every member from a safe alternate.
+            var priority = CornerFlankPriority(buddy).CompareTo(CornerFlankPriority(agent));
+            if ((priority < 0 || priority == 0 && other.CompareTo(uid) < 0) &&
+                !buddy.HoldPosition && !buddy.Entrench && buddy.Action == null &&
                 buddy.RushTarget == null && buddy.LastDamage < buddy.RetreatDamage && buddy.RecoveryUntil <= now &&
                 buddy.PendingWeapon == null && buddy.Treatment == null && buddy.FlareItem == null && buddy.ScavengeTarget == null &&
                 buddy.SpacingDestination == null && now >= buddy.NextCornerSearch && !CommittedMovement(buddy) &&
                 !HasCoverCommitment(other, buddy, now) &&
-                buddy.CombatRole is not (CMUExpeditionCombatRole.Support or CMUExpeditionCombatRole.Marksman or CMUExpeditionCombatRole.Medic) &&
                 _guns.TryGetGun(other, out var gun) && WeaponAmmo(gun) > 0 &&
                 !(TryAimPoint(other, buddy, gun, out var aim) && SafeShot(other, buddy, gun, aim)) &&
                 FindHeldCorner(other, buddy, now, out var otherCorner, out _) && _transform.InRange(otherCorner, point, 3))
@@ -268,6 +270,14 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         return true;
     }
+
+    private static int CornerFlankPriority(CMUExpeditionAgentComponent agent) => agent.CombatRole switch
+    {
+        CMUExpeditionCombatRole.Marksman => 1,
+        CMUExpeditionCombatRole.Support => 2,
+        CMUExpeditionCombatRole.Medic => 3,
+        _ => 0,
+    };
 
     private void BeginCornerMove(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates point, TimeSpan now, bool flank)
     {

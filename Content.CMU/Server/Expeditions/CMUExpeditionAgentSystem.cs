@@ -262,14 +262,14 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         if (ContinueTreatment(uid, agent, damage, hit, now))
             return;
 
+        if (RespondToIncomingFire(uid, agent, now))
+            return;
+
         // A serious wound commits to shelter before optional firing/spacing can
         // replace that route. Immediate melee and fire escapes retain priority.
         if ((agent.State == CMUExpeditionAgentState.Retreat || damage >= agent.EmergencyHealDamage) &&
             _guns.TryGetGun(uid, out var retreatGun) && WeaponAmmo(retreatGun) > 0 &&
             RunRetreat(uid, agent, transform, true, damage, hit, now))
-            return;
-
-        if (RespondToIncomingFire(uid, agent, now))
             return;
 
         if (RunLastStand(uid, agent, now))
@@ -743,7 +743,6 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         agent.Rifle = gun;
         agent.WeaponBurstLimit = TryComp<CMUExpeditionWeaponRoleComponent>(gun, out var role) ? role.BurstLimit : int.MaxValue;
         EnsureComp<CMUExpeditionWeaponComponent>(gun);
-        ConfigureEquipment(uid, agent, gun);
         // Moving between firing positions does not require a free hand. Keep the rifle ready
         // through peeks, withdrawals and flanks instead of restarting its native wield delay.
         var usingHands = agent.Treatment != null || agent.TreatmentMedicine != null || agent.ScavengeTarget != null ||
@@ -765,7 +764,10 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         }
         if (!usingHands && agent.WorkItem == null && !agent.PreparingWork && agent.FlareItem == null &&
             agent.PendingWeapon == null && agent.FireRescueTarget == null && _timing.CurTime >= agent.RifleLoweredUntil)
+        {
             PrepareNativeWeapon(uid, agent, gun.Owner, _timing.CurTime);
+            ConfigureEquipment(uid, agent, gun);
+        }
         return WeaponAmmo(gun) > 0;
     }
 

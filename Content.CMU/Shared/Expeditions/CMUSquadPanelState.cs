@@ -21,7 +21,7 @@ public sealed class CMUSquadPanelState : EuiStateBase
     public string CurrentDoctrine = "balanced";
     public bool AutomaticPatrol;
     public bool Coordinating;
-    public int AimSkillPercent = 100;
+    public int AimSkillPercent = 65;
 }
 
 [Serializable, NetSerializable]
@@ -59,5 +59,5 @@ public sealed class CMUSquadPanelMessage : EuiMessageBase
     public float Y;
     public string Facing = "auto";
     public bool Enabled;
-    public int AimSkillPercent = 100;
+    public int AimSkillPercent = 65;
 }

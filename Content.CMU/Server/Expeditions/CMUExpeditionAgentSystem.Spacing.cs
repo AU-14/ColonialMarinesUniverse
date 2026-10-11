@@ -83,7 +83,8 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.SpacingDestination is { } destination)
         {
             var exposedStep = agent.ExposedStepUntil > now;
-            var arrived = _transform.InRange(start, destination, exposedStep ? 0.3f : 0.5f);
+            var incomingEscape = agent.SpacingDecision == "evading-incoming-fire";
+            var arrived = _transform.InRange(start, destination, incomingEscape ? 0.15f : exposedStep ? 0.3f : 0.5f);
             var blocked = !KnownDangerPassage(uid, agent, start, destination) ||
                 TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath;
             // Keep a committed escape step unless it now leads towards the closest attacker.
@@ -101,7 +102,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 }
             }
             else
-                Move(uid, destination, precise: exposedStep, validated: true);
+                Move(uid, destination, precise: exposedStep || incomingEscape, validated: true);
         }
         if (agent.SpacingDestination == null && agent.RushTarget != null && now >= agent.NextSpacingSearch)
         {
