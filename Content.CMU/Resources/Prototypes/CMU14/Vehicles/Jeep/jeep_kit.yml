@@ -8,8 +8,10 @@
   suffix: Unassembled
   components:
   # Empty tank; the kit's spare fuel can fills it. Its lamps and key come in the crate.
-  - type: CMUVehicleFuel
-    fuel: 0
+  - type: Solution
+    id: fuel
+    solution:
+      reagents: []
   - type: CMUJeepLamps
     fitted: false
   - type: CMUVehicleIgnition
@@ -24,6 +26,7 @@
       jeep-jerrycan: !type:ContainerSlot
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
+      jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
       jeep-headlight-left: !type:ContainerSlot
@@ -64,6 +67,11 @@
         whitelist:
           tags:
           - FireAxe
+      jeep-jack:
+        name: cmu-jeep-part-jack
+        whitelist:
+          tags:
+          - MaintenanceJack
       jeep-windshield:
         name: cmu-jeep-part-windshield
         disableEject: true
@@ -111,8 +119,10 @@
   suffix: Unassembled
   components:
   # Empty tank; the kit's spare fuel can fills it. Its lamps and key come in the crate.
-  - type: CMUVehicleFuel
-    fuel: 0
+  - type: Solution
+    id: fuel
+    solution:
+      reagents: []
   - type: CMUJeepLamps
     fitted: false
   - type: CMUVehicleIgnition
@@ -127,6 +137,7 @@
       jeep-jerrycan: !type:ContainerSlot
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
+      jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
       jeep-headlight-left: !type:ContainerSlot
@@ -167,6 +178,11 @@
         whitelist:
           tags:
           - FireAxe
+      jeep-jack:
+        name: cmu-jeep-part-jack
+        whitelist:
+          tags:
+          - MaintenanceJack
       jeep-windshield:
         name: cmu-jeep-part-windshield
         disableEject: true
@@ -214,8 +230,10 @@
   suffix: Unassembled
   components:
   # Empty tank; the kit's spare fuel can fills it. Its lamps and key come in the crate.
-  - type: CMUVehicleFuel
-    fuel: 0
+  - type: Solution
+    id: fuel
+    solution:
+      reagents: []
   - type: CMUJeepLamps
     fitted: false
   - type: CMUVehicleIgnition
@@ -230,6 +248,7 @@
       jeep-jerrycan: !type:ContainerSlot
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
+      jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
       jeep-headlight-left: !type:ContainerSlot
@@ -269,6 +288,11 @@
         whitelist:
           tags:
           - FireAxe
+      jeep-jack:
+        name: cmu-jeep-part-jack
+        whitelist:
+          tags:
+          - MaintenanceJack
       jeep-windshield:
         name: cmu-jeep-part-windshield
         disableEject: true
@@ -309,8 +333,10 @@
   suffix: Unassembled
   components:
   # Empty tank; the kit's spare fuel can fills it. Its lamps and key come in the crate.
-  - type: CMUVehicleFuel
-    fuel: 0
+  - type: Solution
+    id: fuel
+    solution:
+      reagents: []
   - type: CMUJeepLamps
     fitted: false
   - type: CMUVehicleIgnition
@@ -325,6 +351,7 @@
       jeep-jerrycan: !type:ContainerSlot
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
+      jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
       jeep-headlight-left: !type:ContainerSlot
@@ -366,6 +393,11 @@
         whitelist:
           tags:
           - FireAxe
+      jeep-jack:
+        name: cmu-jeep-part-jack
+        whitelist:
+          tags:
+          - MaintenanceJack
       jeep-windshield:
         name: cmu-jeep-part-windshield
         disableEject: true
@@ -453,6 +485,7 @@
     - id: RMCFuelCan
     - id: CMEntrenchingTool
     - id: RMCFireAxe
+    - id: AU14MaintenanceJack
     - id: CMFireExtinguisherPortable
     - id: CMWrench
     - id: CMScrewdriver
@@ -521,6 +554,7 @@
     - id: RMCFuelCan
     - id: CMEntrenchingTool
     - id: RMCFireAxe
+    - id: AU14MaintenanceJack
     - id: CMFireExtinguisherPortable
     - id: CMWrench
     - id: CMScrewdriver
@@ -589,6 +623,7 @@
     - id: RMCFuelCan
     - id: CMEntrenchingTool
     - id: RMCFireAxe
+    - id: AU14MaintenanceJack
     - id: CMFireExtinguisherPortable
     - id: CMWrench
     - id: CMScrewdriver
@@ -656,6 +691,7 @@
     - id: RMCFuelCan
     - id: CMEntrenchingTool
     - id: RMCFireAxe
+    - id: AU14MaintenanceJack
     - id: CMFireExtinguisherPortable
     - id: CMWrench
     - id: CMScrewdriver

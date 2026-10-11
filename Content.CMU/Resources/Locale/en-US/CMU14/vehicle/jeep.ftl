@@ -26,6 +26,7 @@ cmu-jeep-part-spare = spare wheel set
 cmu-jeep-part-jerrycan = jerry can
 cmu-jeep-part-shovel = shovel
 cmu-jeep-part-axe = fire axe
+cmu-jeep-part-jack = maintenance jack
 cmu-jeep-part-door-driver = driver's door
 cmu-jeep-part-door-passenger = passenger's door
 cmu-jeep-part-tailgate = tailgate
@@ -44,6 +45,7 @@ cmu-jeep-engine-examine = The engine is at {$percent}%.
 cmu-jeep-engine-fine = The engine doesn't need any work.
 cmu-jeep-part-fine = There's nothing to fix on the {$part}.
 cmu-jeep-wreck-warning = Flames burst from under {THE($vehicle)}'s hood! Get clear before it goes up!
+cmu-jeep-fire-out = The fire under {THE($vehicle)}'s hood dies down with a hiss.
 cmu-jeep-hull-wrecked = {CAPITALIZE(THE($vehicle))} buckles and sags on its wheels. It won't go any further until the hull is repaired.
 cmu-vehicle-cargo-load-verb = Load crate
 cmu-vehicle-cargo-unload-verb = Unload crate
@@ -103,7 +105,7 @@ cmu-jeep-assembly-manual =
 
     {"["}bold]3. Lamps.[/bold] Two headlights, two turn signals for the front fenders and two tail lights. Each fits either side: hold it and click where it goes. They come off with a screwdriver.
 
-    {"["}bold]4. Kit.[/bold] Hang the shovel and the fire axe on the driver's door and strap the fire extinguisher to the cowl ahead of the passenger's door. On the cargo, medical and gun jeeps, hang the spare wheel set and a fuel can on the tailgate while it is up. On the transport they hang on the rear wall.
+    {"["}bold]4. Kit.[/bold] Hang the shovel and the fire axe on the driver's door, the maintenance jack on the passenger's door, and strap the fire extinguisher to the cowl ahead of the passenger's door. On the cargo, medical and gun jeeps, hang the spare wheel set and a fuel can on the tailgate while it is up. On the transport they hang on the rear wall.
 
     {"["}bold]5. Gun jeep only.[/bold] Fit the gun mount on the pedestal behind the seats.
 

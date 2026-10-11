@@ -1,3 +1,4 @@
+using System.Numerics;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.CMU14.Vehicle.Jeep;
@@ -31,10 +32,34 @@ public sealed partial class CMUVehicleCrashComponent : Component
         var t = Math.Clamp((speed - minSpeed) / (maxSpeed - minSpeed), 0f, 1f);
         return minFraction + (1f - minFraction) * t;
     }
+
+    /// <summary>
+    /// Whether an obstacle touches a vehicle's front: of the vehicle's faces, in its own space (front
+    /// is -y), the one the obstacle reaches least past. A wide obstacle met bumper first counts.
+    /// </summary>
+    public static bool IsFrontContact(Vector2 position, Angle rotation, Box2 local, Box2 obstacle)
+    {
+        var toLocal = -rotation;
+        var min = new Vector2(float.MaxValue);
+        var max = new Vector2(float.MinValue);
+        foreach (var corner in new[] { obstacle.BottomLeft, obstacle.BottomRight, obstacle.TopLeft, obstacle.TopRight })
+        {
+            var point = toLocal.RotateVec(corner - position);
+            min = Vector2.Min(min, point);
+            max = Vector2.Max(max, point);
+        }
+
+        var front = max.Y - local.Bottom;
+        var rear = local.Top - min.Y;
+        var left = max.X - local.Left;
+        var right = local.Right - min.X;
+        return front <= MathF.Min(rear, MathF.Min(left, right));
+    }
 }
 
 /// <summary>
-/// A vehicle crashed into something and its hull took <see cref="HullDamage"/>.
+/// A vehicle crashed into something and its hull took <see cref="HullDamage"/>. <see cref="Frontal"/>
+/// when it drove forward into something ahead of its front.
 /// </summary>
 [ByRefEvent]
-public readonly record struct CMUVehicleCrashedEvent(float HullDamage);
+public readonly record struct CMUVehicleCrashedEvent(float HullDamage, bool Frontal);

@@ -64,13 +64,31 @@ public sealed partial class GridVehicleMoverSystem
             _hardpoints.DamageVehicleHull(vehicle, hullDamage);
     }
 
-    private void CMUOnCrashed(EntityUid vehicle, float hullDamage)
+    private void CMUOnCrashed(EntityUid vehicle, GridVehicleMoverComponent mover, EntityUid target, float hullDamage)
     {
         if (hullDamage <= 0f)
             return;
 
-        var ev = new CMUVehicleCrashedEvent(hullDamage);
+        var ev = new CMUVehicleCrashedEvent(hullDamage, CMUIsFrontalCrash(vehicle, mover, target));
         RaiseLocalEvent(vehicle, ref ev);
+    }
+
+    /// <summary>
+    /// Driving forward into something at the front. Reversing, or a contact on a side or the rear, isn't.
+    /// </summary>
+    private bool CMUIsFrontalCrash(EntityUid vehicle, GridVehicleMoverComponent mover, EntityUid target)
+    {
+        if (mover.CurrentSpeed <= 0f ||
+            !fixtureQ.TryComp(vehicle, out var fixtures) ||
+            !fixtureQ.TryComp(target, out var targetFixtures) ||
+            !TryGetFixtureLocalAabb(fixtures, out var local) ||
+            !TryGetFixtureAabb(targetFixtures, physics.GetPhysicsTransform(target), out var obstacle))
+        {
+            return false;
+        }
+
+        var (position, rotation) = transform.GetWorldPositionRotation(vehicle);
+        return CMUVehicleCrashComponent.IsFrontContact(position, rotation, local, obstacle);
     }
 
     private void CMUApplyVehicleCollision(

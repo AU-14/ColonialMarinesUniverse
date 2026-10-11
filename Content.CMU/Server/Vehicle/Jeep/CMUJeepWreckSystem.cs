@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
+using Content.Shared.Chemistry;
 using Content.Shared.CMU14.Vehicle.Jeep;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage.Systems;
@@ -52,6 +53,38 @@ public sealed class CMUJeepWreckSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<CMUJeepWreckComponent, DamageChangedEvent>(OnDamageChanged);
+        SubscribeLocalEvent<CMUJeepWreckComponent, ReactionEntityEvent>(OnReaction);
+    }
+
+    /// <summary>
+    /// Water on the burning engine, sprayed or splashed, puts the fire out and leaves the engine barely running.
+    /// </summary>
+    private void OnReaction(Entity<CMUJeepWreckComponent> ent, ref ReactionEntityEvent args)
+    {
+        if (ent.Comp.DetonateAt == null ||
+            args.Method != ReactionMethod.Touch ||
+            args.Reagent.ID != ent.Comp.ExtinguishReagent ||
+            TerminatingOrDeleted(ent))
+        {
+            return;
+        }
+
+        ent.Comp.DetonateAt = null;
+        ent.Comp.LastEngine = ent.Comp.ExtinguishedEngine;
+        QueueDel(ent.Comp.FireLight);
+        ent.Comp.FireLight = null;
+        ent.Comp.Crackle = _audio.Stop(ent.Comp.Crackle);
+
+        if (TryComp(ent, out CMUJeepComponent? jeep))
+        {
+            jeep.Burning = false;
+            jeep.EngineIntegrity = MathF.Max(jeep.EngineIntegrity, ent.Comp.ExtinguishedEngine);
+            ent.Comp.LastEngine = jeep.EngineIntegrity;
+            Dirty(ent, jeep);
+        }
+
+        _popup.PopupEntity(Loc.GetString(ent.Comp.ExtinguishedPopup, ("vehicle", ent.Owner)), ent, Filter.Pvs(ent), true,
+            PopupType.Medium);
     }
 
     private void OnDamageChanged(Entity<CMUJeepWreckComponent> ent, ref DamageChangedEvent args)
@@ -132,9 +165,9 @@ public sealed class CMUJeepWreckSystem : EntitySystem
             Dirty(ent.Owner, jeep);
         }
 
-        SpawnAttachedTo(ent.Comp.FireLightPrototype, new EntityCoordinates(ent.Owner, ent.Comp.EngineBay));
+        ent.Comp.FireLight = SpawnAttachedTo(ent.Comp.FireLightPrototype, new EntityCoordinates(ent.Owner, ent.Comp.EngineBay));
         if (ent.Comp.WarningSound is { } crackle)
-            _audio.PlayPvs(crackle, ent.Owner, crackle.Params.WithLoop(true));
+            ent.Comp.Crackle = _audio.PlayPvs(crackle, ent.Owner, crackle.Params.WithLoop(true))?.Entity;
 
         _popup.PopupEntity(Loc.GetString(ent.Comp.WarningPopup, ("vehicle", ent.Owner)),
             ent.Owner,

@@ -8,16 +8,20 @@ using Robust.Shared.Serialization;
 namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// A vehicle tank that burns fuel while driving and is refilled from fuel cans through its fuel door.
+/// A vehicle fuel tank: the vehicle's own <see cref="Solution"/> solution, burned while driving and
+/// filled from a fuel can through its fuel door.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent]
 public sealed partial class CMUVehicleFuelComponent : Component
 {
-    [DataField, AutoNetworkedField]
-    public float Fuel = 60f;
+    /// <summary>
+    /// The tank's solution on the vehicle, and the one a fuel can pours from.
+    /// </summary>
+    [DataField]
+    public string Solution = "fuel";
 
     [DataField]
-    public float MaxFuel = 60f;
+    public ProtoId<ReagentPrototype> Reagent = "WeldingFuel";
 
     /// <summary>
     /// Fuel burned per second while the vehicle moves.
@@ -32,18 +36,20 @@ public sealed partial class CMUVehicleFuelComponent : Component
     public float PourRate = 6f;
 
     [DataField]
-    public string CanSolution = "fuel";
-
-    [DataField]
-    public ProtoId<ReagentPrototype> Reagent = "WeldingFuel";
-
-    [DataField]
     public SoundSpecifier? PourSound = new SoundPathSpecifier("/Audio/Effects/refill.ogg");
 
+    /// <summary>
+    /// How often burned fuel leaves the tank.
+    /// </summary>
     [DataField]
     public TimeSpan SyncInterval = TimeSpan.FromSeconds(1);
 
     public TimeSpan NextSync;
+
+    /// <summary>
+    /// Fuel burned but not yet taken from the tank.
+    /// </summary>
+    public float Pending;
 }
 
 [Serializable, NetSerializable]

@@ -81,6 +81,8 @@ PAL = {
     "axe_red": ramp((148, 73, 73), (116, 60, 60), (98, 56, 55), (84, 54, 54), (44, 30, 29)),
     "axe_wood": ramp((200, 155, 112), (178, 138, 99), (162, 124, 89), (109, 88, 51), (60, 40, 16)),
     "etool": ramp((110, 128, 124), (84, 100, 98), (66, 80, 78), (54, 64, 62), (26, 32, 31)),
+    # The K92 maintenance jack's orange grips and head.
+    "jack_orange": ramp((236, 132, 30), (219, 116, 9), (152, 80, 4), (106, 56, 2), (76, 42, 5)),
     "brass": ramp((222, 188, 98), (198, 162, 76), (172, 138, 62), (142, 112, 50), (80, 62, 26)),
     "lit": ramp((255, 252, 230), (255, 248, 214), (255, 244, 200), (250, 236, 180), (240, 224, 160)),
     "lit_red": ramp((255, 120, 96), (255, 92, 70), (240, 70, 54), (220, 56, 44), (190, 40, 32)),
@@ -108,7 +110,7 @@ BODY_MATS = {"od", "od_seam", "frame"}
 # picks up dirt (dirt_level) and whether the art splashes mud over it:
 # PAINT_ALPHA - 2 * level - mud.
 PAINT_MATS = {"od", "od_light", "od_in", "od_seam", "od_flat", "od_in_flat", "frame", "rim", "rim_dk"}
-PAINT_SKIP_PARTS = {"jerrycan", "shovel", "axe", "ammo"}
+PAINT_SKIP_PARTS = {"jerrycan", "shovel", "axe", "jack", "ammo"}
 PAINT_ALPHA = 254
 DIRT_LEVELS = 8
 PAINT_MIN_ALPHA = PAINT_ALPHA - 2 * (DIRT_LEVELS - 1) - 1
@@ -152,6 +154,7 @@ ATTACHMENTS = {
     "jerrycan": "N",
     "shovel": "W",
     "axe": "W",
+    "jack": "E",
     "engine": "",
     "extinguisher": "SE",
     "headlight_left": "S",
@@ -166,18 +169,18 @@ ATTACHMENTS = {
 LAMP_SIDES = {"left": 0, "right": 1}
 LAMPS = tuple(f"{kind}_{side}" for kind in ("headlight", "turn_signal", "taillight") for side in LAMP_SIDES)
 # What a jeep spawns with; the preview draws these unless told otherwise.
-FITTED = ("engine",) + LAMPS + ("windshield_up", "spare", "jerrycan", "shovel", "axe", "extinguisher")
+FITTED = ("engine",) + LAMPS + ("windshield_up", "spare", "jerrycan", "shovel", "axe", "jack", "extinguisher")
 TAIL_LIGHTS = ("taillight_left", "taillight_right")
 # The order the vehicle entity draws its kit in, as jeep.yml lists its layers: the extinguisher under
 # the doors (drawn before them), the passenger's swinging open in front of it, and the tail lights
 # over the spare beside the right one.
 BASE_KIT_ORDER = (("engine", "extinguisher") + tuple(n for n in LAMPS if n not in TAIL_LIGHTS)
                   + ("windshield_up", "windshield_down", "wirecutter", "searchlight", "spare") + TAIL_LIGHTS
-                  + ("jerrycan", "shovel", "axe"))
+                  + ("jerrycan", "shovel", "axe", "jack"))
 # The overlay entity's, over the riders.
 OVERLAY_KIT_ORDER = (TAIL_LIGHTS + tuple(n for n in LAMPS if n not in TAIL_LIGHTS)
                      + ("extinguisher", "windshield_up", "windshield_down", "wirecutter", "searchlight", "spare",
-                        "jerrycan", "shovel", "axe"))
+                        "jerrycan", "shovel", "axe", "jack"))
 # Centre r of each headlight, out beside the grille under the fender line.
 HEADLIGHTS = (-14, 13)
 HEADLIGHT_Z = 13
@@ -198,7 +201,7 @@ FUEL_DOOR_OVER = "E"
 FUEL_DOOR_SWING = (0, 35, 70, 100)
 # Side doors: the opening in each side wall from the front seats' cushions to the cowl, above the
 # step. Hinged on their front edge, they swing out; the driver's is on the left (r < 0) and carries
-# the shovel and the axe. Past about 70 degrees the open near door would reach below the wheels.
+# the shovel and the axe, the passenger's the maintenance jack. Past about 70 degrees the open near door would reach below the wheels.
 DOOR = dict(f0=-10, f1=5, z0=8, z1=RIM)
 DOORS = {"door_driver": -1, "door_passenger": 1}
 DOOR_OVER = {"door_driver": "W", "door_passenger": "E"}
@@ -215,12 +218,15 @@ PANEL_OVER = {**DOOR_OVER, "tailgate": TAILGATE_OVER}
 ALL_PANELS = tuple(DOORS) + ("tailgate",)
 # Hardpoints hung on a hinged panel, which swing with it; per variant.
 RIDES = {
-    "cargo": {"shovel": "door_driver", "axe": "door_driver", "spare": "tailgate", "jerrycan": "tailgate"},
-    "gunner": {"shovel": "door_driver", "axe": "door_driver", "spare": "tailgate", "jerrycan": "tailgate"},
-    "transport": {"shovel": "door_driver", "axe": "door_driver"},
-    "medical": {"shovel": "door_driver", "axe": "door_driver", "spare": "tailgate", "jerrycan": "tailgate"},
+    "cargo": {"shovel": "door_driver", "axe": "door_driver", "jack": "door_passenger", "spare": "tailgate",
+              "jerrycan": "tailgate"},
+    "gunner": {"shovel": "door_driver", "axe": "door_driver", "jack": "door_passenger", "spare": "tailgate",
+               "jerrycan": "tailgate"},
+    "transport": {"shovel": "door_driver", "axe": "door_driver", "jack": "door_passenger"},
+    "medical": {"shovel": "door_driver", "axe": "door_driver", "jack": "door_passenger", "spare": "tailgate",
+                "jerrycan": "tailgate"},
 }
-RIDE_NAMES = ("shovel", "axe", "spare", "jerrycan")
+RIDE_NAMES = ("shovel", "axe", "jack", "spare", "jerrycan")
 SMOKE_FRAMES = 8
 SMOKE_DELAY = 0.12
 
@@ -1126,6 +1132,25 @@ def axe(damaged=False):
     return m
 
 
+def jack(damaged=False):
+    """K92 maintenance jack strapped along the foot of the passenger's door, under the medical
+    jeep's cross: a dark shaft with orange grips, the claw toward the back, the head toward the hinges."""
+    m = Model()
+    m.box(-7, 2, 20, 20, 9, 9, "gun", "jack")
+    for f in (-5, -1):
+        m.box(f, f, 20, 20, 9, 9, "jack_orange", "jack")
+    m.box(3, 4, 20, 20, 8, 10, "jack_orange", "jack")
+    m.box(4, 4, 20, 20, 8, 8, "steel", "jack")
+    m.box(-9, -8, 20, 20, 8, 8, "steel", "jack")
+    m.box(-9, -8, 20, 20, 10, 10, "steel", "jack")
+    m.box(-8, -8, 20, 20, 9, 9, "steel", "jack")
+    m.box(-4, -4, 21, 21, 8, 10, "black", "jack")
+    m.box(0, 0, 21, 21, 8, 10, "black", "jack")
+    if damaged:
+        m.paint(lambda f, r, z: f in (3, 4) and z == 10, "char")
+    return m
+
+
 def extinguisher(damaged=False):
     """The portable fire extinguisher strapped upright to the outside of the cowl, ahead of the
     passenger door, like RMC's: a dull red bottle with a pale label band, the dark valve and its
@@ -1470,6 +1495,7 @@ HARDPOINTS = {
     "jerrycan": jerrycan,
     "shovel": shovel,
     "axe": axe,
+    "jack": jack,
     "engine": engine,
     "extinguisher": extinguisher,
     **{f"headlight_{side}": headlight(side) for side in LAMP_SIDES},
@@ -2360,7 +2386,7 @@ def write_crayon_map(variant, per_dir):
 CLICK_IDS = {"hood_lid": 1, "fuel_door": 2, "engine": 3, "windshield": 5, "spare": 6,
              "jerrycan": 7, "shovel": 8, "axe": 9, "wirecutter": 10, "searchlight": 11, "wheel": 12,
              "door_driver": 18, "door_passenger": 19, "tailgate": 20,
-             **{lamp: 21 + i for i, lamp in enumerate(LAMPS)}, "extinguisher": 28}
+             **{lamp: 21 + i for i, lamp in enumerate(LAMPS)}, "extinguisher": 28, "jack": 29}
 OUTLINE = (255, 255, 255)
 # Seat regions in jeep space (f, r, z ranges) for outlines and click ids, per version. The passenger
 # seat's covers it turned round too, its back then against the dash.
@@ -2442,7 +2468,7 @@ def click_masks(variant, per_dir, dy):
             "wheels": ("shut", d["wheels"]),
             "engine": ("open", d["engine_0"]),
         }
-        for name in ("spare", "jerrycan", "shovel", "axe", "extinguisher") + LAMPS:
+        for name in ("spare", "jerrycan", "shovel", "axe", "jack", "extinguisher") + LAMPS:
             parts[name] = ("shut", d[f"{name}_0"])
         for p in ALL_PANELS:
             has = p in panels(variant)
@@ -3349,7 +3375,7 @@ def main():
             for v in DIRS:
                 img = composite(var, v, per[var], dy, fitted=fitted, wheels_on=bool(fitted))
                 state_dir = os.path.join(RSI_DIR, RSI_NAMES[var] + ".rsi")
-                names = (["spare", "jerrycan", "shovel", "axe", "extinguisher", "wheels"] + list(LAMPS) if not fitted
+                names = (["spare", "jerrycan", "shovel", "axe", "jack", "extinguisher", "wheels"] + list(LAMPS) if not fitted
                          else ["hood", "fuel_door"] + list(panels(var)))
                 for n in names:
                     sheet_img = Image.open(os.path.join(state_dir, n + "_outline.png")).convert("RGBA")

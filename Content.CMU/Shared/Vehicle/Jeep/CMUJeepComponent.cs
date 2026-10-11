@@ -56,20 +56,30 @@ public sealed partial class CMUJeepComponent : Component
     public SoundSpecifier? TailgateCloseSound;
 
     [DataField, AutoNetworkedField]
-    public float EngineIntegrity = 50f;
+    public float EngineIntegrity = 150f;
 
     [DataField]
-    public float EngineMaxIntegrity = 50f;
+    public float EngineMaxIntegrity = 150f;
+
+    /// <summary>
+    /// Share of a head on crash's hull damage that also wears the engine. Other crashes spare it.
+    /// </summary>
+    [DataField]
+    public float EngineCrashShare = 1f;
+
+    /// <summary>
+    /// Where the engine sits and the hull around it, in vehicle space (facing south, front is -y).
+    /// A hit landing on the engine bay is a direct hit.
+    /// </summary>
+    [DataField]
+    public Box2 EngineBay = new(-0.45f, -1.05f, 0.45f, -0.3f);
+
+    [DataField]
+    public Box2 HullBounds = new(-0.45f, -1.05f, 0.45f, 1.05f);
 
     /// <summary>
     /// Engine integrity fractions below which it smokes lightly and heavily.
     /// </summary>
-    /// <summary>
-    /// Share of a crash's hull damage that also wears the engine.
-    /// </summary>
-    [DataField]
-    public float EngineCrashShare = 0.2f;
-
     [DataField]
     public float EngineSmokeFraction = 0.5f;
 
@@ -80,7 +90,7 @@ public sealed partial class CMUJeepComponent : Component
     /// Integrity each welding pass restores to the engine: two passes from dead to whole.
     /// </summary>
     [DataField]
-    public float EngineRepairAmount = 25f;
+    public float EngineRepairAmount = 75f;
 
     [DataField]
     public TimeSpan EngineRepairDelay = TimeSpan.FromSeconds(4);
@@ -122,11 +132,14 @@ public sealed partial class CMUJeepComponent : Component
     public Dictionary<string, int> Fastening = new();
 
     /// <summary>
-    /// Share of each hit on the hull taken by the engine and the fitted windshield. The lamps take
-    /// theirs as <see cref="CMUJeepLampData"/> says.
+    /// Share of each hit taken by the engine, of a direct hit on the engine bay, and by the fitted
+    /// windshield. The lamps take theirs as <see cref="CMUJeepLampData"/> says.
     /// </summary>
     [DataField]
-    public float EngineDamageShare = 0.3f;
+    public float EngineDamageShare = 0.2f;
+
+    [DataField]
+    public float EngineDirectHitShare = 1f;
 
     [DataField]
     public float WindshieldDamageShare = 0.25f;
@@ -153,8 +166,8 @@ public sealed partial class CMUJeepComponent : Component
     public bool JerryCanLeaking;
 
     /// <summary>
-    /// The hull gave out and the engine is on fire: flames lick out from under the hood until the jeep
-    /// goes up.
+    /// The engine gave out and is on fire: flames lick out from under the hood until the jeep goes up
+    /// or the fire is put out.
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool Burning;

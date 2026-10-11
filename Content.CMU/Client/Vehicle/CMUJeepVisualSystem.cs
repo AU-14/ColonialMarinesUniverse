@@ -55,14 +55,14 @@ public sealed class CMUJeepVisualSystem : EntitySystem
     [
         "engine", "hood", "extinguisher", CMUJeepSystem.DriverDoor, CMUJeepSystem.PassengerDoor, CMUJeepSystem.Tailgate,
         "fuel_door", "headlight_left", "headlight_right", "turn_signal_left", "turn_signal_right", "windshield", "spare",
-        "taillight_left", "taillight_right", "jerrycan", "shovel", "axe", "wheels",
+        "taillight_left", "taillight_right", "jerrycan", "shovel", "axe", "jack", "wheels",
     ];
 
     private static readonly string[] OverlayLayers =
     [
         CMUJeepSystem.DriverDoor, CMUJeepSystem.PassengerDoor, CMUJeepSystem.Tailgate, "taillight_left", "taillight_right",
         "hood", "headlight_left", "headlight_right", "turn_signal_left", "turn_signal_right", "extinguisher", "windshield",
-        "spare", "jerrycan", "shovel", "axe", "hood_raised", "fuel_door", "wheels",
+        "spare", "jerrycan", "shovel", "axe", "jack", "hood_raised", "fuel_door", "wheels",
     ];
 
     // The directions the overlay draws a part in, over the riders; the art's ATTACHMENTS, HOOD_OVER,
@@ -82,6 +82,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
         ["jerrycan"] = [Direction.North],
         ["shovel"] = [Direction.West],
         ["axe"] = [Direction.West],
+        ["jack"] = [Direction.East],
         [CMUJeepSystem.DriverDoor] = [Direction.West],
         [CMUJeepSystem.PassengerDoor] = [Direction.East],
         [CMUJeepSystem.Tailgate] = [Direction.North],
@@ -187,10 +188,11 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             }
 
             // Kit hung on a panel swings with it: the shovel and the axe on the driver's door, the
-            // spare and the jerry can on the tailgate.
+            // jack on the passenger's, the spare and the jerry can on the tailgate.
             var can = jeep.JerryCanLeaking ? "1" : "0";
             AnimateKit((uid, sprite), overlay, swings, jeep, "shovel", CMUJeepSystem.DriverDoor, "0");
             AnimateKit((uid, sprite), overlay, swings, jeep, "axe", CMUJeepSystem.DriverDoor, "0");
+            AnimateKit((uid, sprite), overlay, swings, jeep, "jack", CMUJeepSystem.PassengerDoor, "0");
             AnimateKit((uid, sprite), overlay, swings, jeep, "spare", CMUJeepSystem.Tailgate, "0");
             AnimateKit((uid, sprite), overlay, swings, jeep, "jerrycan", CMUJeepSystem.Tailgate, can);
             var engine = jeep.EngineIntegrity / jeep.EngineMaxIntegrity;
@@ -415,6 +417,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             CMUJeepSystem.DriverDoor or CMUJeepSystem.PassengerDoor or CMUJeepSystem.Tailgate =>
                 CMUJeepSystem.GetPanelFlag(jeep, part.Part) ? $"click_{part.Part}_open" : $"click_{part.Part}_closed",
             "shovel" or "axe" when jeep.DriverDoorOpen => $"click_{part.Part}_open",
+            "jack" when jeep.PassengerDoorOpen => $"click_{part.Part}_open",
             var id when seatOpened => $"click_{id}_open",
             var id => $"click_{id}",
         };
@@ -446,6 +449,7 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             CMUJeepSystem.DriverDoor or CMUJeepSystem.PassengerDoor or CMUJeepSystem.Tailgate =>
                 CMUJeepSystem.GetPanelFlag(jeep, part.Part) ? $"{part.Part}_open_outline" : $"{part.Part}_outline",
             "shovel" or "axe" when jeep.DriverDoorOpen => $"{part.Part}_open_outline",
+            "jack" when jeep.PassengerDoorOpen => $"{part.Part}_open_outline",
             var id when seatOpened => $"{id}_open_outline",
             var id => $"{id}_outline",
         };

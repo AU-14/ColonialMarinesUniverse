@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
@@ -30,13 +32,13 @@ public sealed class CMUVehicleFuelSystem : EntitySystem
 
     private void OnCanRun(Entity<CMUVehicleFuelComponent> ent, ref VehicleCanRunEvent args)
     {
-        if (ent.Comp.Fuel <= 0f)
+        if (!HasFuel((ent, ent.Comp)))
             args.CanRun = false;
     }
 
     private void OnExamined(Entity<CMUVehicleFuelComponent> ent, ref ExaminedEvent args)
     {
-        args.PushMarkup(Loc.GetString("cmu-vehicle-fuel-examine", ("percent", (int) MathF.Round(Fraction(ent.Comp) * 100))));
+        args.PushMarkup(Loc.GetString("cmu-vehicle-fuel-examine", ("percent", (int) MathF.Round(Fraction(ent) * 100))));
     }
 
     public override void Update(float frameTime)
@@ -48,28 +50,30 @@ public sealed class CMUVehicleFuelSystem : EntitySystem
         while (query.MoveNext(out var uid, out var fuel, out var mover, out var vehicle))
         {
             // Only the engine burns fuel: pushes and coasting with nobody at the wheel are free.
-            if (!mover.IsMoving || mover.IsPushMove || vehicle.Operator == null || fuel.Fuel <= 0f)
-            {
-                // Send what burned since the last sync, or stopped vehicles show a stale level.
-                if (fuel.NextSync > _timing.CurTime)
-                {
-                    fuel.NextSync = _timing.CurTime;
-                    Dirty(uid, fuel);
-                }
-
+            if (!mover.IsMoving || mover.IsPushMove || vehicle.Operator is not { } driver || !HasFuel((uid, fuel)))
                 continue;
-            }
 
-            fuel.Fuel = MathF.Max(0f, fuel.Fuel - fuel.BurnRate * frameTime);
-            if (fuel.Fuel > 0f && _timing.CurTime < fuel.NextSync)
+            fuel.Pending += fuel.BurnRate * frameTime;
+            if (_timing.CurTime < fuel.NextSync)
                 continue;
 
             fuel.NextSync = _timing.CurTime + fuel.SyncInterval;
-            Dirty(uid, fuel);
+            var hundredths = (int) (fuel.Pending * 100f);
+            if (hundredths <= 0 || !TryGetTank((uid, fuel), out var tank, out _))
+                continue;
 
-            if (fuel.Fuel <= 0f && vehicle.Operator is { } driver)
+            fuel.Pending -= hundredths / 100f;
+            _solution.RemoveReagent(tank.Value, fuel.Reagent.Id, FixedPoint2.FromHundredths(hundredths));
+            if (!HasFuel((uid, fuel)))
                 _popup.PopupEntity(Loc.GetString("cmu-vehicle-fuel-empty"), uid, driver, PopupType.MediumCaution);
         }
+    }
+
+    public bool HasFuel(Entity<CMUVehicleFuelComponent?> vehicle)
+    {
+        return Resolve(vehicle, ref vehicle.Comp, false) &&
+               TryGetTank((vehicle, vehicle.Comp), out _, out var tank) &&
+               tank.GetTotalPrototypeQuantity(vehicle.Comp.Reagent) > 0;
     }
 
     /// <summary>
@@ -78,7 +82,7 @@ public sealed class CMUVehicleFuelSystem : EntitySystem
     public bool IsFuelCan(Entity<CMUVehicleFuelComponent?> vehicle, EntityUid can)
     {
         return Resolve(vehicle, ref vehicle.Comp, false) &&
-               _solution.TryGetSolution(can, vehicle.Comp.CanSolution, out _, out _);
+               _solution.TryGetSolution(can, vehicle.Comp.Solution, out _, out _);
     }
 
     /// <summary>
@@ -88,25 +92,26 @@ public sealed class CMUVehicleFuelSystem : EntitySystem
     public bool TryStartRefuel(Entity<CMUVehicleFuelComponent?> vehicle, EntityUid user, EntityUid can)
     {
         if (!Resolve(vehicle, ref vehicle.Comp, false) ||
-            !_solution.TryGetSolution(can, vehicle.Comp.CanSolution, out _, out var solution))
+            !TryGetTank((vehicle, vehicle.Comp), out _, out var tank) ||
+            !_solution.TryGetSolution(can, vehicle.Comp.Solution, out _, out var contents))
         {
             return false;
         }
 
         var fuel = vehicle.Comp;
-        if (solution.GetTotalPrototypeQuantity(fuel.Reagent) <= 0)
+        if (contents.GetTotalPrototypeQuantity(fuel.Reagent) <= 0)
         {
             _popup.PopupClient(Loc.GetString("cmu-vehicle-fuel-can-empty"), vehicle, user);
             return true;
         }
 
-        if (fuel.Fuel >= fuel.MaxFuel)
+        if (tank.AvailableVolume <= 0)
         {
             _popup.PopupClient(Loc.GetString("cmu-vehicle-fuel-full"), vehicle, user);
             return true;
         }
 
-        var delay = TimeSpan.FromSeconds(fuel.MaxFuel / fuel.PourRate);
+        var delay = TimeSpan.FromSeconds(tank.MaxVolume.Float() / fuel.PourRate);
         var args = new DoAfterArgs(EntityManager, user, delay, new CMUVehicleRefuelDoAfterEvent(), vehicle, vehicle, can)
         {
             BreakOnMove = true,
@@ -118,7 +123,7 @@ public sealed class CMUVehicleFuelSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(args, out var id))
             return true;
 
-        _doAfter.CMUSetProgress(id.Value, Fraction(fuel));
+        _doAfter.CMUSetProgress(id.Value, Fraction((vehicle, fuel)));
         _audio.PlayPredicted(fuel.PourSound, vehicle, user);
         return true;
     }
@@ -127,7 +132,7 @@ public sealed class CMUVehicleFuelSystem : EntitySystem
     {
         var doAfter = args.DoAfter;
         var progress = (float) ((_timing.CurTime - doAfter.StartTime) / doAfter.Args.Delay);
-        if (!Pour(ent, doAfter.Args.Used, progress * ent.Comp.MaxFuel))
+        if (!Pour(ent, doAfter.Args.Used, progress))
             args.Cancel();
     }
 
@@ -137,48 +142,54 @@ public sealed class CMUVehicleFuelSystem : EntitySystem
             return;
 
         args.Handled = true;
-        if (!Pour(ent, args.Used, ent.Comp.MaxFuel))
-            return;
-
-        if (_net.IsServer)
-        {
-            // Pours move whole hundredths, so top off the last sliver instead of stopping at 59.99.
-            ent.Comp.Fuel = ent.Comp.MaxFuel;
-            Dirty(ent);
-        }
-
-        _popup.PopupClient(Loc.GetString("cmu-vehicle-fuel-full"), ent, args.User);
+        if (Pour(ent, args.Used, 1f))
+            _popup.PopupClient(Loc.GetString("cmu-vehicle-fuel-full"), ent, args.User);
     }
 
     /// <summary>
-    /// Moves fuel from the can until the tank reaches the target level. False once the can is dry.
+    /// Moves fuel from the can into the tank until it is filled to the given fraction. False once the
+    /// can runs dry.
     /// </summary>
-    private bool Pour(Entity<CMUVehicleFuelComponent> ent, EntityUid? can, float target)
+    private bool Pour(Entity<CMUVehicleFuelComponent> ent, EntityUid? can, float fraction)
     {
         if (_net.IsClient)
             return true;
 
-        if (can == null || !_solution.TryGetSolution(can.Value, ent.Comp.CanSolution, out var solutionEnt, out _))
+        if (can == null ||
+            !TryGetTank(ent, out var tankEnt, out var tank) ||
+            !_solution.TryGetSolution(can.Value, ent.Comp.Solution, out var canEnt, out _))
+        {
             return false;
+        }
 
-        // Compare in FixedPoint2: the can only hands out whole hundredths, so a float need is never fully met.
-        var need = FixedPoint2.New(MathF.Min(target, ent.Comp.MaxFuel) - ent.Comp.Fuel);
+        var need = FixedPoint2.Min(tank.MaxVolume * Math.Clamp(fraction, 0f, 1f), tank.MaxVolume) - tank.Volume;
         if (need <= FixedPoint2.Zero)
             return true;
 
-        var poured = _solution.RemoveReagent(solutionEnt.Value, ent.Comp.Reagent.Id, need);
-        ent.Comp.Fuel = MathF.Min(ent.Comp.MaxFuel, ent.Comp.Fuel + poured.Float());
-        Dirty(ent);
+        var moved = _solution.RemoveReagent(canEnt.Value, ent.Comp.Reagent.Id, need);
+        if (moved > FixedPoint2.Zero)
+            _solution.TryAddReagent(tankEnt.Value, ent.Comp.Reagent.Id, moved);
 
-        if (poured >= need)
+        if (moved >= need)
             return true;
 
         _popup.PopupEntity(Loc.GetString("cmu-vehicle-fuel-can-empty"), ent, PopupType.Small);
         return false;
     }
 
-    private static float Fraction(CMUVehicleFuelComponent fuel)
+    private bool TryGetTank(
+        Entity<CMUVehicleFuelComponent> ent,
+        [NotNullWhen(true)] out Entity<SolutionComponent>? tankEnt,
+        [NotNullWhen(true)] out Solution? tank)
     {
-        return fuel.MaxFuel <= 0f ? 0f : Math.Clamp(fuel.Fuel / fuel.MaxFuel, 0f, 1f);
+        return _solution.TryGetSolution(ent.Owner, ent.Comp.Solution, out tankEnt, out tank);
+    }
+
+    private float Fraction(Entity<CMUVehicleFuelComponent> ent)
+    {
+        if (!TryGetTank(ent, out _, out var tank) || tank.MaxVolume <= 0)
+            return 0f;
+
+        return Math.Clamp(tank.GetTotalPrototypeQuantity(ent.Comp.Reagent).Float() / tank.MaxVolume.Float(), 0f, 1f);
     }
 }

@@ -85,17 +85,17 @@
   components:
   - type: Sprite
     state: tires
+  # The wheel set is the cargo, transport and medical jeeps' whole hull.
   - type: HardpointItem
+    damageRegion: Sides
     hardpointType: Wheel
     vehicleFamily: CMUJeep
     slotType: Wheel
     damageMultiplier: 0.15
     repairRate: 0.0165
-  # The wheel set is the cargo and transport jeeps' whole hull; at zero the jeep blows up. Two hard
-  # crashes (30 each) wreck it.
   - type: HardpointIntegrity
-    maxIntegrity: 60
-    integrity: 60
+    maxIntegrity: 250
+    integrity: 250
   - type: VehicleWheelItem
   - type: Tag
     tags:
@@ -298,8 +298,8 @@
     damageMultiplier: 0.15
     repairRate: 0.008
   - type: HardpointIntegrity
-    maxIntegrity: 30
-    integrity: 30
+    maxIntegrity: 75
+    integrity: 75
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
@@ -356,8 +356,8 @@
     damageMultiplier: 0.1
     repairRate: 0.01
   - type: HardpointIntegrity
-    maxIntegrity: 30
-    integrity: 30
+    maxIntegrity: 75
+    integrity: 75
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     showOverlay: false
@@ -371,7 +371,11 @@
     selectedMode: FullAuto
     availableModes:
     - FullAuto
-    soundGunshot: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a_2.ogg
+    soundGunshot:
+      path: /Audio/_RuMC14/Weapons/Guns/Gunshots/gun_UTES-C.ogg
+      params:
+        volume: -1
+        variation: 0.05
     cameraRecoilScalar: 0
   - type: GunIFF
     enabled: true
@@ -389,10 +393,6 @@
     arc: 100
   - type: RefillableByBulletBox
     bulletType: VehicleAmmoBoxCupola
-  # The turret frames are drawn looking straight down on the gun, so its muzzle is 2 px up the screen
-  # from the pivot whichever way it points, and 21 px out along the barrel (jeep_pixel_art.py
-  # MG_MUZZLE). The lift is a directional offset that doesn't turn; the length is the muzzle offset,
-  # which turns with the barrel. Shots and the flash both start there.
   # Shots and the muzzle flash start at the gun's pivot on the jeep (the art's MG_PIVOT, 16 voxels
   # behind the middle) out along the aim by the barrel (MG_MUZZLE, 21 px), the same from every camera
   # rotation.
@@ -483,6 +483,9 @@
     - id: axe
       name: cmu-jeep-part-axe
       slot: jeep-axe
+    - id: jack
+      name: cmu-jeep-part-jack
+      slot: jeep-jack
     # Strapped to the outside of the cowl, ahead of the passenger door.
     - id: extinguisher
       name: cmu-jeep-part-extinguisher
@@ -650,9 +653,15 @@
       north: -0.66,-1.47,0.66,1.16
       east: -1.25,-0.81,1.34,0.78
       west: -1.34,-0.81,1.25,0.78
+  # The fuel tank, filled through the fuel door.
   - type: CMUVehicleFuel
-    fuel: 45
-    maxFuel: 60
+  - type: Solution
+    id: fuel
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: WeldingFuel
+        Quantity: 45
   - type: CMUVehicleCrayon
     map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep.png
   # Dirt from driving, blood from wounded riders and anyone run down; space cleaner, soap or a wet
@@ -765,9 +774,6 @@
     damageModifierSet: VehicleFrameHumvee
   - type: Injurable
     damageContainer: StructuralMarine
-  - type: MeleeReceivedMultiplier
-    xenoMultiplier: 5
-    otherMultiplier: 1
   - type: InteractionOutline
   - type: Sprite
     drawdepth: BelowMobs
@@ -816,6 +822,8 @@
       state: shovel_0
     - map: [ axe ]
       state: axe_0
+    - map: [ jack ]
+      state: jack_0
     - map: [ rmc-wheels ]
       state: wheels_1
   - type: CMUVehicleOverlay
@@ -841,6 +849,7 @@
       jeep-jerrycan: !type:ContainerSlot
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
+      jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
       jeep-headlight-left: !type:ContainerSlot
@@ -885,6 +894,12 @@
         whitelist:
           tags:
           - FireAxe
+      jeep-jack:
+        name: cmu-jeep-part-jack
+        startingItem: AU14MaintenanceJack
+        whitelist:
+          tags:
+          - MaintenanceJack
       jeep-windshield:
         name: cmu-jeep-part-windshield
         startingItem: CMUJeepWindshield
@@ -936,11 +951,11 @@
     slots:
     - wheel-1
   - type: HardpointIntegrity
-    maxIntegrity: 600
-    integrity: 600
+    maxIntegrity: 400
+    integrity: 400
   - type: HardpointState
   - type: Appearance
-  # Goes up when damage takes the hull to zero, leaving a wreck. A light vehicle's blast: a frag grenade's
+  # Goes up when its engine dies, leaving a wreck. A light vehicle's blast: a frag grenade's
   # core but a shorter reach, about 2.4 tiles, and roughly half the Bison's a tile out where the crew lands.
   - type: CMUJeepWreck
   - type: Explosive
@@ -986,6 +1001,7 @@
       jeep-jerrycan: !type:ContainerSlot
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
+      jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
       jeep-headlight-left: !type:ContainerSlot
@@ -1031,6 +1047,12 @@
         whitelist:
           tags:
           - FireAxe
+      jeep-jack:
+        name: cmu-jeep-part-jack
+        startingItem: AU14MaintenanceJack
+        whitelist:
+          tags:
+          - MaintenanceJack
       jeep-windshield:
         name: cmu-jeep-part-windshield
         startingItem: CMUJeepWindshield
@@ -1186,6 +1208,9 @@
     - id: axe
       name: cmu-jeep-part-axe
       slot: jeep-axe
+    - id: jack
+      name: cmu-jeep-part-jack
+      slot: jeep-jack
     # Strapped to the outside of the cowl, ahead of the passenger door.
     - id: extinguisher
       name: cmu-jeep-part-extinguisher
@@ -1268,6 +1293,7 @@
       jeep-jerrycan: !type:ContainerSlot
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
+      jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
       jeep-headlight-left: !type:ContainerSlot
@@ -1314,6 +1340,12 @@
         whitelist:
           tags:
           - FireAxe
+      jeep-jack:
+        name: cmu-jeep-part-jack
+        startingItem: AU14MaintenanceJack
+        whitelist:
+          tags:
+          - MaintenanceJack
       jeep-windshield:
         name: cmu-jeep-part-windshield
         startingItem: CMUJeepWindshield
@@ -1461,6 +1493,7 @@
       jeep-jerrycan: !type:ContainerSlot
       jeep-shovel: !type:ContainerSlot
       jeep-axe: !type:ContainerSlot
+      jeep-jack: !type:ContainerSlot
       jeep-windshield: !type:ContainerSlot
       jeep-extinguisher: !type:ContainerSlot
       jeep-headlight-left: !type:ContainerSlot
@@ -1506,6 +1539,12 @@
         whitelist:
           tags:
           - FireAxe
+      jeep-jack:
+        name: cmu-jeep-part-jack
+        startingItem: AU14MaintenanceJack
+        whitelist:
+          tags:
+          - MaintenanceJack
       jeep-windshield:
         name: cmu-jeep-part-windshield
         startingItem: CMUJeepWindshield
@@ -1598,6 +1637,8 @@
       state: shovel_overlay_0
     - map: [ axe ]
       state: axe_overlay_0
+    - map: [ jack ]
+      state: jack_overlay_0
     # The hood raised or swinging; shut, it is the hood layer under the windshield.
     - map: [ hood_raised ]
       state: hood_open_overlay
@@ -1734,6 +1775,8 @@
       state: shovel_overlay_0
     - map: [ axe ]
       state: axe_overlay_0
+    - map: [ jack ]
+      state: jack_overlay_0
     # The hood raised or swinging; shut, it is the hood layer under the windshield.
     - map: [ hood_raised ]
       state: hood_open_overlay
@@ -1879,7 +1922,7 @@
     color: "#FF2A1A"
     castShadows: false
 
-# The burning engine's flickering glow, spawned on a wrecked jeep's engine bay until it goes up.
+# The burning engine's flickering glow, on a jeep's engine bay until it goes up or the fire is put out.
 - type: entity
   id: CMUJeepFireLight
   categories: [ HideSpawnMenu ]

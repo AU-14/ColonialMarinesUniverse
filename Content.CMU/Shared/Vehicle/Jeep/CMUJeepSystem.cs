@@ -45,6 +45,8 @@ public sealed partial class CMUJeepSystem : EntitySystem
     public const string SpareSlot = "jeep-spare";
     public const string ShovelSlot = "jeep-shovel";
     public const string AxeSlot = "jeep-axe";
+    public const string JackSlot = "jeep-jack";
+    public const string ExtinguisherSlot = "jeep-extinguisher";
 
     // Hinged panels, by part id.
     public const string Hood = "hood";
@@ -58,6 +60,10 @@ public sealed partial class CMUJeepSystem : EntitySystem
     public const int Fastened = 2;
 
     private readonly List<(EntityUid Vehicle, EntityUid Projectile)> _passedThrough = new();
+
+    // Slots a player only fills by clicking the slot's own mask: never from a click on the jeep, never by a swap.
+    private static readonly HashSet<string> MaskOnlySlots = [JerryCanSlot, ExtinguisherSlot, JackSlot];
+    private bool _maskInsert;
 
     public override void Initialize()
     {
@@ -77,6 +83,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
         SubscribeLocalEvent<CMUVehiclePartComponent, InteractHandEvent>(OnPartInteractHand);
         SubscribeLocalEvent<CMUVehiclePartComponent, InteractUsingEvent>(OnPartInteractUsing);
 
+        InitializeEngine();
         InitializeHeadlights();
         InitializeLamps();
     }
@@ -120,11 +127,11 @@ public sealed partial class CMUJeepSystem : EntitySystem
     }
 
     /// <summary>
-    /// A crash shakes the engine too, by a share of what it does to the hull.
+    /// A head on crash shakes the engine too, by a share of what it does to the hull.
     /// </summary>
     private void OnCrashed(Entity<CMUJeepComponent> ent, ref CMUVehicleCrashedEvent args)
     {
-        if (_net.IsClient || ent.Comp.EngineIntegrity <= 0f)
+        if (_net.IsClient || !args.Frontal || ent.Comp.EngineIntegrity <= 0f)
             return;
 
         ent.Comp.EngineIntegrity = MathF.Max(0f, ent.Comp.EngineIntegrity - args.HullDamage * ent.Comp.EngineCrashShare);
@@ -195,8 +202,8 @@ public sealed partial class CMUJeepSystem : EntitySystem
     }
 
     /// <summary>
-    /// Reads each hit before RMC routes it into the hardpoints and frame, and wears the jeep's own
-    /// parts by their shares of it.
+    /// Reads each hit before RMC routes it into the hardpoints and frame: the engine soaks up its
+    /// share and the jeep's own parts wear by theirs.
     /// </summary>
     private void OnDamageModify(Entity<CMUJeepComponent> ent, ref DamageModifyEvent args)
     {
@@ -208,10 +215,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
             return;
 
         var jeep = ent.Comp;
-        var engineWasRunning = jeep.EngineIntegrity > 0f;
-        jeep.EngineIntegrity = MathF.Max(0f, jeep.EngineIntegrity - total * jeep.EngineDamageShare);
-        if (engineWasRunning && jeep.EngineIntegrity <= 0f && TryComp(ent, out VehicleComponent? vehicle) && vehicle.Operator is { } driver)
-            _popup.PopupEntity(Loc.GetString("cmu-jeep-engine-dead"), ent, driver, PopupType.MediumCaution);
+        AbsorbIntoEngine(ent, ref args, total);
 
         WearPart(ent, WindshieldSlot, total * jeep.WindshieldDamageShare);
         WearLamps(ent, total);
@@ -414,19 +418,12 @@ public sealed partial class CMUJeepSystem : EntitySystem
         {
             case "fuel_door" when _fuel.IsFuelCan(vehicle, used):
                 if (!jeep.FuelDoorOpen)
-                {
                     _popup.PopupClient(Loc.GetString("cmu-vehicle-fuel-door-closed"), vehicle, user);
-                    args.Handled = true;
-                    return;
-                }
+                else
+                    _fuel.TryStartRefuel(vehicle, user, used);
 
-                if (_fuel.TryStartRefuel(vehicle, user, used))
-                {
-                    args.Handled = true;
-                    return;
-                }
-
-                break;
+                args.Handled = true;
+                return;
             case "engine" when IsHoodOpen(vehicle, jeep) && _tool.HasQuality(used, jeep.EngineRepairQuality):
                 if (jeep.EngineIntegrity >= jeep.EngineMaxIntegrity)
                 {
@@ -479,7 +476,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
         if (ent.Comp.Slot is { } slotId &&
             TryGetPartSlot(vehicle, slotId, out var slot) &&
             !slot.HasItem &&
-            _itemSlots.TryInsert(vehicle, slotId, used, user))
+            TryInsertByMask(vehicle, slotId, used, user))
         {
             args.Handled = true;
             return;
@@ -559,15 +556,18 @@ public sealed partial class CMUJeepSystem : EntitySystem
         return jeep.Fastening.GetValueOrDefault(slotId, Fastened);
     }
 
+    private static readonly string[] KitSlots = [ShovelSlot, AxeSlot, JackSlot, SpareSlot, JerryCanSlot];
+
     /// <summary>
-    /// The panel kit hangs on: the shovel and the axe on the driver's door, the spare and the jerry
-    /// can on the tailgate.
+    /// The panel kit hangs on: the shovel and the axe on the driver's door, the maintenance jack on
+    /// the passenger's, the spare and the jerry can on the tailgate.
     /// </summary>
     private static string? KitHost(string slotId)
     {
         return slotId switch
         {
             ShovelSlot or AxeSlot => DriverDoor,
+            JackSlot => PassengerDoor,
             SpareSlot or JerryCanSlot => Tailgate,
             _ => null,
         };
@@ -575,7 +575,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
 
     private bool IsPanelLoaded(EntityUid vehicle, string panel)
     {
-        foreach (var slotId in new[] { ShovelSlot, AxeSlot, SpareSlot, JerryCanSlot })
+        foreach (var slotId in KitSlots)
         {
             if (KitHost(slotId) == panel && HasItem(vehicle, slotId))
                 return true;
@@ -769,10 +769,29 @@ public sealed partial class CMUJeepSystem : EntitySystem
         return !IsPanelFitted(vehicle, jeep, host) || host == Tailgate && jeep.TailgateOpen;
     }
 
+    private bool TryInsertByMask(EntityUid vehicle, string slotId, EntityUid used, EntityUid user)
+    {
+        _maskInsert = true;
+        try
+        {
+            return _itemSlots.TryInsert(vehicle, slotId, used, user);
+        }
+        finally
+        {
+            _maskInsert = false;
+        }
+    }
+
     private void OnSlotInsertAttempt(Entity<CMUJeepComponent> ent, ref ItemSlotInsertAttemptEvent args)
     {
         if (args.Cancelled || args.Slot.ID is not { } slotId)
             return;
+
+        if (args.User != null && !_maskInsert && MaskOnlySlots.Contains(slotId))
+        {
+            args.Cancelled = true;
+            return;
+        }
 
         if (IsKitBlocked(ent, ent.Comp, slotId))
         {

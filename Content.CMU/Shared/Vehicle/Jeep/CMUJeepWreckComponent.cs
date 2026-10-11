@@ -9,7 +9,7 @@ namespace Content.Shared.CMU14.Vehicle.Jeep;
 /// Blows the jeep up once damage destroys its engine: the engine bursts into flames, with smoke,
 /// sparks and the crackle of the fire, then its riders are thrown clear, the blast from its
 /// <c>Explosive</c> goes off, and the jeep and everything fitted to it give way to a burnt-out wreck,
-/// debris and fire. Server only.
+/// debris and fire. Water on the fire first puts it out. Server only.
 /// </summary>
 [RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMUJeepWreckComponent : Component
@@ -21,7 +21,7 @@ public sealed partial class CMUJeepWreckComponent : Component
     public TimeSpan Delay = TimeSpan.FromSeconds(6);
 
     /// <summary>
-    /// The fire's crackle, looped on the jeep until it goes up.
+    /// The fire's crackle, looped on the jeep until it goes up or the fire is put out.
     /// </summary>
     [DataField]
     public SoundSpecifier? WarningSound = new SoundPathSpecifier("/Audio/Effects/burning.ogg");
@@ -148,8 +148,26 @@ public sealed partial class CMUJeepWreckComponent : Component
     public float LastEngine;
 
     /// <summary>
-    /// Damaged since the last check, so a hull already at zero still goes up when hit again.
+    /// Damaged since the last check.
     /// </summary>
     [ViewVariables]
     public bool Hit;
+
+    /// <summary>
+    /// Water on the burning engine puts it out, leaving the engine at this integrity.
+    /// </summary>
+    [DataField]
+    public string ExtinguishReagent = "Water";
+
+    [DataField]
+    public float ExtinguishedEngine = 1f;
+
+    [DataField]
+    public LocId ExtinguishedPopup = "cmu-jeep-fire-out";
+
+    [ViewVariables]
+    public EntityUid? FireLight;
+
+    [ViewVariables]
+    public EntityUid? Crackle;
 }

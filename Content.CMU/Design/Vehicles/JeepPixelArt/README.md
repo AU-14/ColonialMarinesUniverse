@@ -124,6 +124,7 @@ so an empty slot still reads.
 | jerry can | `jerrycan_*`; the damaged can is holed and drips fuel. On the tailgate like the spare | `RMCFuelCan` |
 | shovel | `shovel_*`, on the driver's door, swinging with it | `CMEntrenchingTool` |
 | axe | `axe_*`, on the driver's door above the shovel | `RMCFireAxe` |
+| jack | `jack_*`, low on the passenger's door, swinging with it | `AU14MaintenanceJack` (anything tagged `MaintenanceJack`) |
 | hood | `hood_*` | jeep hood |
 | doors | `door_driver_*`, `door_passenger_*` | jeep door (fits either side) |
 | tailgate (cargo, gunner) | `tailgate_*`; blank states on the transport | jeep tailgate |
@@ -175,11 +176,12 @@ Following the humvee, `_0` is intact and `_1` is damaged (`damagedVehicleState`)
 - **Side doors:** the openings run from the front seats to the cowl, above the step, on all four
   jeeps. Hinged at their front edge, they swing out to 70 degrees: `door_driver_*` and
   `door_passenger_*`, each `closed`, `open`, `opening`, `closing` (5 frames at 0.07 s) with
-  `_overlay` twins. The driver's door is on the left (-r) and carries the shovel and the axe.
+  `_overlay` twins. The driver's door is on the left (-r) and carries the shovel and the axe; the
+  passenger's carries the maintenance jack.
 - **Tailgate (cargo, gun and medical jeeps):** the rear wall between the corner posts, above the
   bed, folds down rearward until it lies level with the bed: `tailgate_*`, same states. The spare and the
   jerry can hang on it and fold away under it. The transport's bench backs onto a fixed wall.
-- **Kit on a panel:** `shovel`, `axe`, `spare` and `jerrycan` have `<name>_open_<0/1>`,
+- **Kit on a panel:** `shovel`, `axe`, `jack`, `spare` and `jerrycan` have `<name>_open_<0/1>`,
   `<name>_opening_<0/1>` and `<name>_closing_<0/1>` (with `_overlay` twins) swinging with their
   panel, plus `<name>_open_outline` and `click_<name>_open`.
 - **Shading:** mid-swing a panel is shaded as one flat surface, like the open hood; lying level, the
@@ -229,11 +231,15 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
   - Crates load and unload, and a loose one slides off, only over a lowered tailgate. The spare and
     the jerry can can't be reached while it is down.
   - Clicking the fuel door opens or closes it.
-  - Clicking a fitted item (shovel, axe, jerry can, spare, extinguisher, wheels and so on) takes it
+  - Clicking a fitted item (shovel, axe, jack, jerry can, spare, extinguisher, wheels and so on) takes it
     into the hand. A lamp only comes off with a screwdriver.
 - **Holding an item:** an empty slot the item would go into shows its mask as a faint ghost of what
   goes there, with its `*_outline` on hover; clicking it fits the item there. That picks the side
-  for a door or a lamp, which fit either. Clicking the jeep elsewhere fills the first empty slot.
+  for a door or a lamp, which fit either. Clicking the jeep elsewhere fills the first empty slot,
+  except the jerry can, extinguisher and jack, which only go in through their own mask and never swap
+  with the one fitted.
+  - A fuel can on the open fuel door pours into the tank, a `fuel` solution on the jeep, and stays
+  in the hand.
 - **Key:** a jeep's key goes in the ignition by clicking the jeep with it; alt-click takes it out, and
   so does the driver's key button (`CMUActionJeepEjectKey`), into their hand. Each jeep's key is cut
   for it alone (`CMUVehicleKey`, the ignition's `KeyCode`, shown on examine as J-1234): a jeep that
@@ -263,6 +269,7 @@ lights off, with hazards, and signalling left and right; `jeep_signals.gif` blin
   | 2 | fuel door | 7 | jerry can | 12 | wheels |
   | 3 | engine | 8 | shovel | 18–20 | driver's door, passenger's door, tailgate |
   | 28 | extinguisher | 9 | axe | 13–17 | seats: driver, passenger, rear left, rear right, gunner |
+  | 29 | jack | | | | |
   | 27 | surgical bed | 21–26 | headlights, turn signals, tail lights (left, right each) | | |
 
   The maps are drawn with every slot filled, so they also find an empty slot.
@@ -327,12 +334,16 @@ jeep's turned end for end (`REVERSED_SEATS`), its back against the dash, so the 
 
 ## Wrecked hull and burning wreck
 
-The hull (the fitted hardpoints' integrity, the wheel set's 60 on the cargo and transport jeeps) and
-the engine (50) wear separately. Hits wear both. A crash wears the hull by the mover's
+The hull (the fitted hardpoints' integrity: the wheel set's 250, plus 75 each for the gun jeep's
+mount and gun, so 400) and the engine (150) wear separately. The jeep takes the humvee's
+resistances. The engine soaks up a fifth of every hit (`EngineDamageShare`) and all of a direct
+hit on the engine bay (`EngineBay`), sparing the hull that much while it has integrity left: a shot where its line enters the hull, a blast or an attacker
+at the point of the hull nearest to it. A crash wears the hull by the mover's
 `wallSmashHullDamage` scaled with impact speed (`CMUVehicleCrash`): a third of it at
 `wallSmashMinSpeed`, all of it at top speed, so 10 to 30, and only on the wheel set, so a crash
-never wrecks the gun (`WheelsOnly`; running someone over too); it wears the engine by a fifth of
-that (`EngineCrashShare`). The engine smokes below half and heavily below a fifth.
+never wrecks the gun (`WheelsOnly`; running someone over too). Only a head on crash, driving
+forward into something ahead of the bumper, wears the engine, by as much (`EngineCrashShare`).
+The engine smokes below half and heavily below a fifth.
 
 When the hull gives out the jeep won't run, but doesn't burn: it sags on its shredded tyres with the
 hood popped ajar, the windshield cracked and the frame damage at its worst, until the hull is
@@ -343,6 +354,7 @@ lick out from under the hood and through the grille (`engine_fire`, 8 frames at 
 heavy smoke), a flickering orange glow lights it, the fire crackles, and sparks fly from the engine
 bay with now and then a bang. After six seconds it goes up and leaves a wreck from
 `jeep_wreck.rsi`, which the fire left under it doesn't burn away. `jeep_engine_fire.gif` shows it.
+Water on it first, from an extinguisher or a splash, puts the fire out and leaves the engine at 1.
 
 ## Kit crate
 
@@ -352,7 +364,7 @@ takes the crate's place and its contents are laid out on both sides:
 - windshield, hood, two doors, and the tailgate on cargo, medical and gun jeeps;
 - two headlights, two turn signals and two tail lights;
 - the gun mount for the gun jeep;
-- two fuel cans, the shovel, the fire axe and the fire extinguisher;
+- two fuel cans, the shovel, the fire axe, the maintenance jack and the fire extinguisher;
 - a wrench, a screwdriver, the ignition key and the assembly manual.
 
 The chassis has its engine but an empty tank, and no lamps or key. The crate parachutes in like any

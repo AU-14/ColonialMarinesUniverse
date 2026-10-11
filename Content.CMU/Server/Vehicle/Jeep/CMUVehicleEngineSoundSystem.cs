@@ -14,6 +14,7 @@ namespace Content.Server.CMU14.Vehicle.Jeep;
 public sealed class CMUVehicleEngineSoundSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private CMUVehicleFuelSystem _fuel = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     public override void Update(float frameTime)
@@ -82,7 +83,7 @@ public sealed class CMUVehicleEngineSoundSystem : EntitySystem
     /// </summary>
     private bool IsStalled(EntityUid uid)
     {
-        return TryComp(uid, out CMUVehicleFuelComponent? fuel) && fuel.Fuel <= 0f ||
+        return HasComp<CMUVehicleFuelComponent>(uid) && !_fuel.HasFuel(uid) ||
                TryComp(uid, out CMUJeepComponent? jeep) && jeep.EngineIntegrity <= 0f ||
                TryComp(uid, out HardpointIntegrityComponent? hull) && hull.MaxIntegrity > 0f && hull.Integrity <= 0f;
     }

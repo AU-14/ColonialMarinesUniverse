@@ -845,7 +845,7 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
             _wheels.DamageWheels(vehicle, wheelDamage);
         if (hullDamage > 0f)
             CMUDamageCrashHull(vehicle, hullDamage);
-        CMUOnCrashed(vehicle, hullDamage);
+        CMUOnCrashed(vehicle, mover, target, hullDamage);
         return true;
     }
 

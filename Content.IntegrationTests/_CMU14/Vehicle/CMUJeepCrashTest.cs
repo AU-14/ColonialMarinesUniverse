@@ -1,6 +1,8 @@
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Weapons.Ranged.Ammo.BulletBox;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -16,7 +18,7 @@ using Robust.Shared.Map;
 namespace Content.IntegrationTests.CMU14.Vehicle;
 
 /// <summary>
-/// Crashes wear the jeep's wheels by how hard it hit and its engine a little, never its gun; a wrecked
+/// Crashes wear the jeep's wheels by how hard it hit, its engine only head on, never its gun; a wrecked
 /// hull stops the jeep where it stands, and only a destroyed engine sets it alight. An ammo box used on
 /// the gun jeep loads its gun, and each jeep's key fits it alone.
 /// </summary>
@@ -61,16 +63,79 @@ public sealed class CMUJeepCrashTest : GameTest
     }
 
     [Test]
-    public async Task CrashWearsTheEngineALittle()
+    public void HeadOnMeansTheFrontTouches()
+    {
+        // The jeep's hull, facing south: the front is -y.
+        var hull = new Box2(-0.45f, -1.05f, 0.45f, 1.05f);
+        foreach (var degrees in new[] { 0.0, 90.0, 180.0, 270.0 })
+        {
+            var rotation = Angle.FromDegrees(degrees);
+            Box2 At(float x0, float y0, float x1, float y1)
+            {
+                var a = rotation.RotateVec(new System.Numerics.Vector2(x0, y0));
+                var b = rotation.RotateVec(new System.Numerics.Vector2(x1, y1));
+                return Box2.FromTwoPoints(a, b);
+            }
+
+            var position = System.Numerics.Vector2.Zero;
+            Assert.That(CMUVehicleCrashComponent.IsFrontContact(position, rotation, hull, At(-0.5f, -2f, 0.5f, -1.05f)), Is.True, $"wall ahead, {degrees}");
+            Assert.That(CMUVehicleCrashComponent.IsFrontContact(position, rotation, hull, At(0f, -4f, 3f, -1.05f)), Is.True, $"wide obstacle met half on, {degrees}");
+            Assert.That(CMUVehicleCrashComponent.IsFrontContact(position, rotation, hull, At(0.45f, -0.8f, 1.5f, 0.8f)), Is.False, $"beside, {degrees}");
+            Assert.That(CMUVehicleCrashComponent.IsFrontContact(position, rotation, hull, At(-0.5f, 1.05f, 0.5f, 2f)), Is.False, $"behind, {degrees}");
+        }
+    }
+
+    [Test]
+    public async Task OnlyHeadOnCrashesWearTheEngine()
     {
         var jeep = await SpawnJeep();
         await Server.WaitAssertion(() =>
         {
             var comp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
             var before = comp.EngineIntegrity;
-            var ev = new CMUVehicleCrashedEvent(30f);
-            SEntMan.EventBus.RaiseLocalEvent(jeep, ref ev);
+            var side = new CMUVehicleCrashedEvent(30f, false);
+            SEntMan.EventBus.RaiseLocalEvent(jeep, ref side);
+            Assert.That(comp.EngineIntegrity, Is.EqualTo(before), "A side or rear crash shouldn't touch the engine.");
+
+            var front = new CMUVehicleCrashedEvent(30f, true);
+            SEntMan.EventBus.RaiseLocalEvent(jeep, ref front);
             Assert.That(comp.EngineIntegrity, Is.EqualTo(before - 30f * comp.EngineCrashShare).Within(0.01f));
+        });
+    }
+
+    [Test]
+    public async Task DirectHitsOnTheEngineBayWearTheEngineFully()
+    {
+        var jeep = await SpawnJeep();
+        await Server.WaitAssertion(() =>
+        {
+            var comp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
+            var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
+            // Facing south: the hood is toward -y.
+            var ahead = SEntMan.SpawnEntity(null, new EntityCoordinates(grid, 0.5f, -2.5f));
+            var beside = SEntMan.SpawnEntity(null, new EntityCoordinates(grid, 2.5f, 0.75f));
+            var behind = SEntMan.SpawnEntity(null, new EntityCoordinates(grid, 0.5f, 3.5f));
+            var damage = new DamageSpecifier();
+            damage.DamageDict["Structural"] = 10;
+            var damageable = SEntMan.System<DamageableSystem>();
+
+            var hull = SEntMan.GetComponent<Content.Shared._RMC14.Vehicle.HardpointIntegrityComponent>(jeep);
+            foreach (var origin in new EntityUid?[] { null, beside, behind })
+            {
+                var before = comp.EngineIntegrity;
+                var hullBefore = hull.Integrity;
+                damageable.TryChangeDamage(jeep, damage, origin: origin);
+                Assert.That(comp.EngineIntegrity, Is.EqualTo(before - 10f * comp.EngineDamageShare).Within(0.01f),
+                    "The engine soaks up a fifth of any hit.");
+                Assert.That(hull.Integrity, Is.LessThan(hullBefore), "The rest goes on to the hull.");
+            }
+
+            var direct = comp.EngineIntegrity;
+            var hullDirect = hull.Integrity;
+            damageable.TryChangeDamage(jeep, damage, origin: ahead);
+            Assert.That(comp.EngineIntegrity, Is.EqualTo(direct - 10f * comp.EngineDirectHitShare).Within(0.01f),
+                "A hit on the hood goes into the engine.");
+            Assert.That(hull.Integrity, Is.EqualTo(hullDirect), "The engine soaks all of a direct hit.");
         });
     }
 

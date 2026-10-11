@@ -121,8 +121,10 @@ public sealed class CMUJeepDoorsTest : GameTest
         const string slot = "jeep-door-passenger";
 
         // The passenger's door is on the far side; the steps don't care which way the door faces.
+        // Its jack comes off first.
         await Server.WaitPost(() =>
         {
+            Assert.That(SEntMan.System<ItemSlotsSystem>().TryEject(jeep, CMUJeepSystem.JackSlot, null, out _), Is.True);
             door = Part(jeep, CMUJeepSystem.PassengerDoor);
             Hold(user, "CMScrewdriver");
             Click(user, door);
@@ -178,6 +180,51 @@ public sealed class CMUJeepDoorsTest : GameTest
             var jeepComp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
             Assert.That(CMUJeepSystem.GetFastening(jeepComp, slot), Is.EqualTo(CMUJeepSystem.Fastened));
         });
+    }
+
+    [Test]
+    public async Task JackHangsOnThePassengerDoor()
+    {
+        var (jeep, user) = await SpawnJeep("CMUVehicleJeepCargo");
+        EntityUid jack = default;
+        EntityUid door = default;
+
+        await Server.WaitPost(() =>
+        {
+            var grid = SEntMan.GetComponent<TransformComponent>(jeep).ParentUid;
+            SEntMan.System<SharedTransformSystem>().SetCoordinates(user, new EntityCoordinates(grid, -0.45f, 0.75f));
+            var fitted = SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, CMUJeepSystem.JackSlot);
+            Assert.That(fitted, Is.Not.Null);
+            Assert.That(SEntMan.GetComponent<MetaDataComponent>(fitted!.Value).EntityPrototype?.ID, Is.EqualTo("AU14MaintenanceJack"));
+
+            jack = Part(jeep, "jack");
+            door = Part(jeep, CMUJeepSystem.PassengerDoor);
+            Hold(user, "CMScrewdriver");
+            Click(user, door);
+        });
+        await RunSeconds(3f);
+
+        await Server.WaitPost(() =>
+        {
+            var jeepComp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
+            Assert.That(CMUJeepSystem.GetFastening(jeepComp, "jeep-door-passenger"), Is.EqualTo(CMUJeepSystem.Fastened),
+                "The door stays on while the jack hangs on it.");
+            Hold(user, null);
+            Click(user, jack);
+        });
+        await RunTicksSync(5);
+
+        await Server.WaitPost(() =>
+        {
+            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, CMUJeepSystem.JackSlot), Is.Null,
+                "An empty hand should take the jack off.");
+            Click(user, jack);
+        });
+        await RunTicksSync(5);
+
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.System<ItemSlotsSystem>().GetItemOrNull(jeep, CMUJeepSystem.JackSlot), Is.Not.Null,
+                "The jack should go back on the door."));
     }
 
     [Test]

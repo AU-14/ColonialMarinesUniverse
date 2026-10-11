@@ -8,6 +8,11 @@ public sealed partial class HardpointSystem
     /// Wears only a vehicle's wheels by a crash's hull damage, split between them, leaving its guns and
     /// other hardpoints alone. With no wheels left to wear it does nothing.
     /// </summary>
+    public float CMUIncomingDamageMultiplier(EntityUid? origin, EntityUid? tool)
+    {
+        return GetVehicleIncomingDamageMultiplier(origin, tool);
+    }
+
     public bool CMUDamageHullWheels(EntityUid vehicle, float amount)
     {
         if (_net.IsClient || amount <= 0f)
