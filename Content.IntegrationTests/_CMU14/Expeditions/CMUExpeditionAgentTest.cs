@@ -290,7 +290,10 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 foreach (var guard in guards)
                 {
                     var state = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State;
-                    if (state is CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage)
+                    // slots only gate stepping out of a shelter. a guard the near misses chased off its
+                    // cover may shoot back from the open, that's self-defence (CanLeaveCover)
+                    if (state is CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage &&
+                        SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).CoverAnchor != null)
                         attackers++;
                     // Productive positions persist without pressure. Native incoming fire
                     // makes each attacker return to shelter and yield the next peek.
