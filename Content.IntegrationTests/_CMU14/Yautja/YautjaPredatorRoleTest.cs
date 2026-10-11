@@ -96,6 +96,37 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaPredatorRoleTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaHunterPrototype = "CMUYautjaHunter";
+    private static readonly Robust.Shared.Prototypes.ProtoId<DepartmentPrototype> AU14DepartmentThreatPrototype = "AU14DepartmentThreat";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUMobYautjaPrototype = "CMUMobYautja";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMURandomHumanoidYautjaHunterPrototype = "CMURandomHumanoidYautjaHunter";
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaBadBloodPrototype = "CMUYautjaBadBlood";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaPredatorRoundPrototype = "CMUYautjaPredatorRound";
+    private static readonly Robust.Shared.Prototypes.ProtoId<GameMapPrototype> CMUYautjaHunterShipPrototype = "CMUYautjaHunterShip";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipMarkerClanSpawnPrototype = "CMUHunterShipMarkerClanSpawn";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipMarkerPredatorSpawnPrototype = "CMUHunterShipMarkerPredatorSpawn";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaRelayBeaconPrototype = "CMUYautjaRelayBeacon";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaSimpleRelayBeaconPrototype = "CMUYautjaSimpleRelayBeacon";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHumanShipRelayDestinationPrototype = "CMUYautjaHumanShipRelayDestination";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaGroundRelayDestinationPrototype = "CMUYautjaGroundRelayDestination";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUActionYautjaAddTeleporterLocationPrototype = "CMUActionYautjaAddTeleporterLocation";
+    private static readonly Robust.Shared.Prototypes.ProtoId<RadioChannelPrototype> CMUYautjaPrototype = "CMUYautja";
+    private static readonly Robust.Shared.Prototypes.ProtoId<RadioChannelPrototype> CMUYautjaStrandedPrototype = "CMUYautjaStranded";
+    private static readonly Robust.Shared.Prototypes.ProtoId<RadioChannelPrototype> CMUYautjaBadBloodPrototype2 = "CMUYautjaBadBlood";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipTeleporterYautjaShipPrototype = "CMUHunterShipTeleporterYautjaShip";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipTeleporterYautjaYoungPrototype = "CMUHunterShipTeleporterYautjaYoung";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUActionYautjaMarkForHuntPrototype = "CMUActionYautjaMarkForHunt";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUActionYautjaToggleVisorPrototype = "CMUActionYautjaToggleVisor";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUActionYautjaTranslatorPrototype = "CMUActionYautjaTranslator";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUActionYautjaAudioPanelPrototype = "CMUActionYautjaAudioPanel";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaHoundObservationPadPrototype = "CMUYautjaHoundObservationPad";
+    private static readonly Robust.Shared.Prototypes.ProtoId<HealthIconPrototype> CMUYautjaIconThrallPrototype = "CMUYautjaIconThrall";
+    private static readonly Robust.Shared.Prototypes.ProtoId<HealthIconPrototype> CMUYautjaIconStudentPrototype = "CMUYautjaIconStudent";
+    private static readonly Robust.Shared.Prototypes.ProtoId<HealthIconPrototype> CMUYautjaIconBloodedPrototype = "CMUYautjaIconBlooded";
+    private static readonly Robust.Shared.Prototypes.ProtoId<HealthIconPrototype> CMUYautjaIconBloodedThrallPrototype = "CMUYautjaIconBloodedThrall";
+    private static readonly Robust.Shared.Prototypes.ProtoId<HealthIconPrototype> CMUYautjaRankIconBloodedPrototype = "CMUYautjaRankIconBlooded";
+    private static readonly Robust.Shared.Prototypes.ProtoId<EmoteSoundsPrototype> CMUBaseYautjaPrototype = "CMUBaseYautja";
+
     [TestCase(YautjaSkinColor.Gray)]
     [TestCase(YautjaSkinColor.White)]
     public async Task YautjaSpawnPreservesSelectedAchromaticSkinColor(YautjaSkinColor skinColor)
@@ -168,7 +199,7 @@ public sealed class YautjaPredatorRoleTest
 
                 var hidden = entMan.GetComponent<HiddenAppearanceComponent>(clientHunter);
                 Assert.That(hidden.Appearance?.Appearance.SkinColor, Is.EqualTo(expected));
-                Assert.That(sprite.LayerMapTryGet(HumanoidVisualLayers.Chest, out var chestLayer), Is.True);
+                Assert.That(entMan.System<SpriteSystem>().LayerMapTryGet((clientHunter, sprite), HumanoidVisualLayers.Chest, out var chestLayer, logMissing: false), Is.True);
                 var chest = (SpriteComponent.Layer) sprite[chestLayer];
                 Assert.That(chest.Color, Is.EqualTo(expected));
                 Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"));
@@ -307,8 +338,8 @@ public sealed class YautjaPredatorRoleTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var job = prototypes.Index<JobPrototype>("CMUYautjaHunter");
-            var threatDepartment = prototypes.Index<DepartmentPrototype>("AU14DepartmentThreat");
+            var job = prototypes.Index<JobPrototype>(CMUYautjaHunterPrototype);
+            var threatDepartment = prototypes.Index<DepartmentPrototype>(AU14DepartmentThreatPrototype);
 
             Assert.Multiple(() =>
             {
@@ -338,13 +369,13 @@ public sealed class YautjaPredatorRoleTest
             {
                 var prototypes = server.ResolveDependency<IPrototypeManager>();
 
-                Assert.That(prototypes.TryIndex<EntityPrototype>("CMUMobYautja", out var hunter), Is.True);
+                Assert.That(prototypes.TryIndex<EntityPrototype>(CMUMobYautjaPrototype, out var hunter), Is.True);
                 Assert.That(hunter!.HideSpawnMenu, Is.False,
                     "CMUMobYautja must remain the visible direct F7 spawn prototype.");
                 Assert.That(hunter.Components.ContainsKey("Loadout"), Is.True,
                     "The direct F7 hunter must retain its original-style minimal loadout.");
 
-                Assert.That(prototypes.TryIndex<EntityPrototype>("CMURandomHumanoidYautjaHunter", out var legacySpawner), Is.True);
+                Assert.That(prototypes.TryIndex<EntityPrototype>(CMURandomHumanoidYautjaHunterPrototype, out var legacySpawner), Is.True);
                 Assert.That(legacySpawner!.HideSpawnMenu, Is.True,
                     "The legacy random humanoid marker must not be selectable from F7.");
             });
@@ -400,7 +431,7 @@ public sealed class YautjaPredatorRoleTest
             var containers = entMan.System<SharedContainerSystem>();
             var stationSpawning = entMan.System<StationSpawningSystem>();
 
-            var job = prototypes.Index<JobPrototype>("CMUYautjaBadBlood");
+            var job = prototypes.Index<JobPrototype>(CMUYautjaBadBloodPrototype);
             Assert.Multiple(() =>
             {
                 Assert.That(job.Hidden, Is.True,
@@ -492,9 +523,9 @@ public sealed class YautjaPredatorRoleTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var rulePrototype = prototypes.Index<EntityPrototype>("CMUYautjaPredatorRound");
+            var rulePrototype = prototypes.Index<EntityPrototype>(CMUYautjaPredatorRoundPrototype);
 
-            Assert.That(rulePrototype.TryGetComponent<YautjaPredatorRoundComponent>(out var predatorRound, server.EntMan.ComponentFactory), Is.True);
+            Assert.That(rulePrototype.TryComp<YautjaPredatorRoundComponent>(out var predatorRound, server.EntMan.ComponentFactory), Is.True);
             Assert.Multiple(() =>
             {
                 Assert.That(predatorRound!.ModePredator, Is.True);
@@ -524,7 +555,7 @@ public sealed class YautjaPredatorRoleTest
 
         await server.WaitAssertion(() =>
         {
-            Assert.That(prototypes.TryIndex<GameMapPrototype>("CMUYautjaHunterShip", out var map), Is.True);
+            Assert.That(prototypes.TryIndex<GameMapPrototype>(CMUYautjaHunterShipPrototype, out var map), Is.True);
             var options = DeserializationOptions.Default with { InitializeMaps = true };
             Assert.DoesNotThrow(() => ticker.LoadGameMap(map!, out _, options));
         });
@@ -608,7 +639,7 @@ public sealed class YautjaPredatorRoleTest
 
                 if (predatorStations.Count == 0)
                 {
-                    var hunterMap = prototypes.Index<GameMapPrototype>("CMUYautjaHunterShip");
+                    var hunterMap = prototypes.Index<GameMapPrototype>(CMUYautjaHunterShipPrototype);
                     var stationQuery = entMan.EntityQueryEnumerator<StationDataComponent, MetaDataComponent>();
                     while (stationQuery.MoveNext(out var station, out _, out var metadata))
                     {
@@ -783,7 +814,7 @@ public sealed class YautjaPredatorRoleTest
                 // first-time map load (including Z-level linking) is covered by
                 // PredatorRoundStartAutomaticallyLoadsHunterShipZLevels below.
                 var ticker = entMan.System<GameTicker>();
-                Assert.That(ticker.StartGameRule("CMUYautjaPredatorRound", out var ruleUid), Is.True);
+                Assert.That(ticker.StartGameRule(CMUYautjaPredatorRoundPrototype, out var ruleUid), Is.True);
                 // A marker makes EnsurePredatorRound take its already-provisioned
                 // spawn-point path without loading the large map into this
                 // connected EUI test.
@@ -835,12 +866,12 @@ public sealed class YautjaPredatorRoleTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
 
-            var clan = prototypes.Index<EntityPrototype>("CMUHunterShipMarkerClanSpawn");
-            Assert.That(clan.TryGetComponent<SpawnPointComponent>(out var clanSpawn, server.EntMan.ComponentFactory), Is.True);
+            var clan = prototypes.Index<EntityPrototype>(CMUHunterShipMarkerClanSpawnPrototype);
+            Assert.That(clan.TryComp<SpawnPointComponent>(out var clanSpawn, server.EntMan.ComponentFactory), Is.True);
             Assert.That(clanSpawn!.SpawnType, Is.EqualTo(SpawnPointType.LateJoin));
 
-            var predator = prototypes.Index<EntityPrototype>("CMUHunterShipMarkerPredatorSpawn");
-            Assert.That(predator.TryGetComponent<SpawnPointComponent>(out var predatorSpawn, server.EntMan.ComponentFactory), Is.True);
+            var predator = prototypes.Index<EntityPrototype>(CMUHunterShipMarkerPredatorSpawnPrototype);
+            Assert.That(predator.TryComp<SpawnPointComponent>(out var predatorSpawn, server.EntMan.ComponentFactory), Is.True);
             Assert.That(predatorSpawn!.SpawnType, Is.EqualTo(SpawnPointType.Job));
             Assert.That(predatorSpawn.Job.ToString(), Is.EqualTo("CMUYautjaHunter"));
         });
@@ -859,8 +890,8 @@ public sealed class YautjaPredatorRoleTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var componentFactory = server.EntMan.ComponentFactory;
 
-            var relay = prototypes.Index<EntityPrototype>("CMUYautjaRelayBeacon");
-            Assert.That(relay.TryGetComponent<YautjaRelayBeaconComponent>(out var relayBeacon, componentFactory), Is.True);
+            var relay = prototypes.Index<EntityPrototype>(CMUYautjaRelayBeaconPrototype);
+            Assert.That(relay.TryComp<YautjaRelayBeaconComponent>(out var relayBeacon, componentFactory), Is.True);
             Assert.That(Enum.TryParse<YautjaRelayDestinationKind>("Ground", out var ground), Is.True,
                 "The relay beacon needs a distinct multi-point ground destination kind.");
             Assert.That(relayBeacon!.AllowedDestinations, Is.EqualTo(new[]
@@ -876,23 +907,23 @@ public sealed class YautjaPredatorRoleTest
             Assert.That(server.ResolveDependency<IResourceManager>().ContentFileExists(signalPath), Is.True,
                 "The CMSS13 sound/ambience/signal.ogg relay pulse asset should be imported, not just guarded as a missing file.");
 
-            var simpleRelay = prototypes.Index<EntityPrototype>("CMUYautjaSimpleRelayBeacon");
-            Assert.That(simpleRelay.TryGetComponent<YautjaRelayBeaconComponent>(out var simpleBeacon, componentFactory), Is.True);
+            var simpleRelay = prototypes.Index<EntityPrototype>(CMUYautjaSimpleRelayBeaconPrototype);
+            Assert.That(simpleRelay.TryComp<YautjaRelayBeaconComponent>(out var simpleBeacon, componentFactory), Is.True);
             Assert.That(simpleBeacon!.AllowedDestinations, Is.EqualTo(new[]
             {
                 YautjaRelayDestinationKind.YautjaShip,
             }));
 
-            var clanSpawn = prototypes.Index<EntityPrototype>("CMUHunterShipMarkerClanSpawn");
-            Assert.That(clanSpawn.TryGetComponent<YautjaRelayDestinationComponent>(out var clanDestination, componentFactory), Is.True);
+            var clanSpawn = prototypes.Index<EntityPrototype>(CMUHunterShipMarkerClanSpawnPrototype);
+            Assert.That(clanSpawn.TryComp<YautjaRelayDestinationComponent>(out var clanDestination, componentFactory), Is.True);
             Assert.That(clanDestination!.Kind, Is.EqualTo(YautjaRelayDestinationKind.YautjaShip));
 
-            var predatorSpawn = prototypes.Index<EntityPrototype>("CMUHunterShipMarkerPredatorSpawn");
-            Assert.That(predatorSpawn.TryGetComponent<YautjaRelayDestinationComponent>(out var predatorDestination, componentFactory), Is.True);
+            var predatorSpawn = prototypes.Index<EntityPrototype>(CMUHunterShipMarkerPredatorSpawnPrototype);
+            Assert.That(predatorSpawn.TryComp<YautjaRelayDestinationComponent>(out var predatorDestination, componentFactory), Is.True);
             Assert.That(predatorDestination!.Kind, Is.EqualTo(YautjaRelayDestinationKind.YautjaShip));
 
-            var humanShip = prototypes.Index<EntityPrototype>("CMUYautjaHumanShipRelayDestination");
-            Assert.That(humanShip.TryGetComponent<YautjaRelayDestinationComponent>(out var humanShipDestination, componentFactory), Is.True);
+            var humanShip = prototypes.Index<EntityPrototype>(CMUYautjaHumanShipRelayDestinationPrototype);
+            Assert.That(humanShip.TryComp<YautjaRelayDestinationComponent>(out var humanShipDestination, componentFactory), Is.True);
             Assert.That(humanShipDestination!.Kind, Is.EqualTo(YautjaRelayDestinationKind.HumanShip));
         });
 
@@ -910,8 +941,8 @@ public sealed class YautjaPredatorRoleTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var componentFactory = server.EntMan.ComponentFactory;
 
-            Assert.That(prototypes.TryIndex<EntityPrototype>("CMUYautjaGroundRelayDestination", out var marker), Is.True);
-            Assert.That(marker!.TryGetComponent<YautjaRelayDestinationComponent>(out var destination, componentFactory), Is.True);
+            Assert.That(prototypes.TryIndex<EntityPrototype>(CMUYautjaGroundRelayDestinationPrototype, out var marker), Is.True);
+            Assert.That(marker!.TryComp<YautjaRelayDestinationComponent>(out var destination, componentFactory), Is.True);
             Assert.That(destination!.Kind.ToString(), Is.EqualTo("Ground"));
 
             Assert.That(typeof(YautjaRelayBeaconDestinationEntry)
@@ -1111,12 +1142,12 @@ public sealed class YautjaPredatorRoleTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var actions = entMan.System<ActionContainerSystem>();
 
-            var action = prototypes.Index<EntityPrototype>("CMUActionYautjaAddTeleporterLocation");
-            Assert.That(action.TryGetComponent<InstantActionComponent>(out var instant, entMan.ComponentFactory), Is.True);
+            var action = prototypes.Index<EntityPrototype>(CMUActionYautjaAddTeleporterLocationPrototype);
+            Assert.That(action.TryComp<InstantActionComponent>(out var instant, entMan.ComponentFactory), Is.True);
             Assert.That(instant!.Event, Is.TypeOf<YautjaAddTeleporterLocationActionEvent>());
 
-            var relayPrototype = prototypes.Index<EntityPrototype>("CMUYautjaRelayBeacon");
-            Assert.That(relayPrototype.TryGetComponent<YautjaRelayBeaconComponent>(out var relayPrototypeComp, entMan.ComponentFactory), Is.True);
+            var relayPrototype = prototypes.Index<EntityPrototype>(CMUYautjaRelayBeaconPrototype);
+            Assert.That(relayPrototype.TryComp<YautjaRelayBeaconComponent>(out var relayPrototypeComp, entMan.ComponentFactory), Is.True);
             Assert.That(relayPrototypeComp!.AddTeleporterLocationActionId.Id, Is.EqualTo("CMUActionYautjaAddTeleporterLocation"));
 
             var hands = entMan.System<SharedHandsSystem>();
@@ -2012,7 +2043,7 @@ public sealed class YautjaPredatorRoleTest
                 radio.SendRadioMessage(
                     speaker,
                     "Stolen words.",
-                    prototypes.Index<RadioChannelPrototype>("CMUYautja"),
+                    prototypes.Index<RadioChannelPrototype>(CMUYautjaPrototype),
                     communicator);
 
                 Assert.Multiple(() =>
@@ -2062,7 +2093,7 @@ public sealed class YautjaPredatorRoleTest
                 radio.SendRadioMessage(
                     speaker,
                     "Honor binds the pack.",
-                    prototypes.Index<RadioChannelPrototype>("CMUYautja"),
+                    prototypes.Index<RadioChannelPrototype>(CMUYautjaPrototype),
                     communicator);
 
                 Assert.Multiple(() =>
@@ -2109,7 +2140,7 @@ public sealed class YautjaPredatorRoleTest
                 radio.SendRadioMessage(
                     speaker,
                     "Stand down!",
-                    prototypes.Index<RadioChannelPrototype>("CMUYautja"),
+                    prototypes.Index<RadioChannelPrototype>(CMUYautjaPrototype),
                     communicator);
 
                 Assert.Multiple(() =>
@@ -2165,7 +2196,7 @@ public sealed class YautjaPredatorRoleTest
                 radio.SendRadioMessage(
                     speaker,
                     "No clan, only survival.",
-                    prototypes.Index<RadioChannelPrototype>("CMUYautjaStranded"),
+                    prototypes.Index<RadioChannelPrototype>(CMUYautjaStrandedPrototype),
                     communicator);
 
                 Assert.Multiple(() =>
@@ -2227,7 +2258,7 @@ public sealed class YautjaPredatorRoleTest
             radio.SendRadioMessage(
                 speaker,
                 "Only once.",
-                prototypes.Index<RadioChannelPrototype>("CMUYautjaBadBlood"),
+                prototypes.Index<RadioChannelPrototype>(CMUYautjaBadBloodPrototype2),
                 communicator);
 
             Assert.That(recorder.DeliveryCount(hivebrokenXeno, "Only once."), Is.EqualTo(1),
@@ -2290,7 +2321,7 @@ public sealed class YautjaPredatorRoleTest
                 radio.SendRadioMessage(
                     speaker,
                     "Follow the broken hive.",
-                    prototypes.Index<RadioChannelPrototype>("CMUYautjaBadBlood"),
+                    prototypes.Index<RadioChannelPrototype>(CMUYautjaBadBloodPrototype2),
                     communicator);
 
                 Assert.Multiple(() =>
@@ -2358,7 +2389,7 @@ public sealed class YautjaPredatorRoleTest
                 radio.SendRadioMessage(
                     speaker,
                     "The clan is dead.",
-                    prototypes.Index<RadioChannelPrototype>("CMUYautjaBadBlood"),
+                    prototypes.Index<RadioChannelPrototype>(CMUYautjaBadBloodPrototype2),
                     communicator);
 
                 Assert.Multiple(() =>
@@ -3717,14 +3748,14 @@ public sealed class YautjaPredatorRoleTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var componentFactory = server.EntMan.ComponentFactory;
 
-            var ship = prototypes.Index<EntityPrototype>("CMUHunterShipTeleporterYautjaShip");
+            var ship = prototypes.Index<EntityPrototype>(CMUHunterShipTeleporterYautjaShipPrototype);
             Assert.That(ship.Name, Is.EqualTo("Hunter ship Yautja hunting ground teleporter"));
-            Assert.That(ship.TryGetComponent<YautjaHuntTeleporterComponent>(out var shipTeleporter, componentFactory), Is.True);
+            Assert.That(ship.TryComp<YautjaHuntTeleporterComponent>(out var shipTeleporter, componentFactory), Is.True);
             Assert.That(shipTeleporter!.Kind, Is.EqualTo(YautjaHuntTeleporterKind.Ship));
 
-            var young = prototypes.Index<EntityPrototype>("CMUHunterShipTeleporterYautjaYoung");
+            var young = prototypes.Index<EntityPrototype>(CMUHunterShipTeleporterYautjaYoungPrototype);
             Assert.That(young.Name, Is.EqualTo("Hunter ship youngblood hunting ground teleporter"));
-            Assert.That(young.TryGetComponent<YautjaHuntTeleporterComponent>(out var youngTeleporter, componentFactory), Is.True);
+            Assert.That(young.TryComp<YautjaHuntTeleporterComponent>(out var youngTeleporter, componentFactory), Is.True);
             Assert.That(youngTeleporter!.Kind, Is.EqualTo(YautjaHuntTeleporterKind.Young));
 
             AssertHuntDestination(prototypes, componentFactory, "CMUYautjaHuntDestinationJungleMoon", YautjaHuntTeleporterKind.Ship, "jungle_moon", "Jungle Moon");
@@ -3745,7 +3776,7 @@ public sealed class YautjaPredatorRoleTest
                 foreach (var relay in placedRelays)
                 {
                     Assert.That(relay.Name, Is.EqualTo("relay beacon"), relay.ID);
-                    Assert.That(relay.TryGetComponent<YautjaRelayBeaconComponent>(out var relayComp, componentFactory), Is.True, relay.ID);
+                    Assert.That(relay.TryComp<YautjaRelayBeaconComponent>(out var relayComp, componentFactory), Is.True, relay.ID);
                     Assert.That(relayComp!.AllowedDestinations, Is.EqualTo(new[]
                     {
                         YautjaRelayDestinationKind.YautjaShip,
@@ -3767,14 +3798,14 @@ public sealed class YautjaPredatorRoleTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var mark = prototypes.Index<EntityPrototype>("CMUActionYautjaMarkForHunt");
-            var visor = prototypes.Index<EntityPrototype>("CMUActionYautjaToggleVisor");
-            var translator = prototypes.Index<EntityPrototype>("CMUActionYautjaTranslator");
-            var audioPanel = prototypes.Index<EntityPrototype>("CMUActionYautjaAudioPanel");
+            var mark = prototypes.Index<EntityPrototype>(CMUActionYautjaMarkForHuntPrototype);
+            var visor = prototypes.Index<EntityPrototype>(CMUActionYautjaToggleVisorPrototype);
+            var translator = prototypes.Index<EntityPrototype>(CMUActionYautjaTranslatorPrototype);
+            var audioPanel = prototypes.Index<EntityPrototype>(CMUActionYautjaAudioPanelPrototype);
 
-            Assert.That(mark.TryGetComponent<ActionComponent>(out var markAction, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(mark.TryGetComponent<TargetActionComponent>(out var markTarget, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(mark.TryGetComponent<EntityTargetActionComponent>(out var markEntity, server.EntMan.ComponentFactory), Is.True);
+            Assert.That(mark.TryComp<ActionComponent>(out var markAction, server.EntMan.ComponentFactory), Is.True);
+            Assert.That(mark.TryComp<TargetActionComponent>(out var markTarget, server.EntMan.ComponentFactory), Is.True);
+            Assert.That(mark.TryComp<EntityTargetActionComponent>(out var markEntity, server.EntMan.ComponentFactory), Is.True);
             Assert.Multiple(() =>
             {
                 Assert.That(markAction!.RaiseOnUser, Is.True);
@@ -3784,15 +3815,15 @@ public sealed class YautjaPredatorRoleTest
                 Assert.That(markEntity.Event, Is.TypeOf<YautjaMarkForHuntActionEvent>());
             });
 
-            Assert.That(visor.TryGetComponent<ActionComponent>(out var visorAction, server.EntMan.ComponentFactory), Is.True);
+            Assert.That(visor.TryComp<ActionComponent>(out var visorAction, server.EntMan.ComponentFactory), Is.True);
             Assert.That(visorAction.BackgroundOn, Is.Null);
 
-            Assert.That(translator.TryGetComponent<ActionComponent>(out var translatorAction, server.EntMan.ComponentFactory), Is.True);
+            Assert.That(translator.TryComp<ActionComponent>(out var translatorAction, server.EntMan.ComponentFactory), Is.True);
             Assert.That(translatorAction.BackgroundOn, Is.Null);
             Assert.That(translatorAction.UseDelay, Is.Null);
 
-            Assert.That(audioPanel.TryGetComponent<ActionComponent>(out var audioPanelAction, server.EntMan.ComponentFactory), Is.True);
-            Assert.That(audioPanel.TryGetComponent<InstantActionComponent>(out var audioPanelInstant, server.EntMan.ComponentFactory), Is.True);
+            Assert.That(audioPanel.TryComp<ActionComponent>(out var audioPanelAction, server.EntMan.ComponentFactory), Is.True);
+            Assert.That(audioPanel.TryComp<InstantActionComponent>(out var audioPanelInstant, server.EntMan.ComponentFactory), Is.True);
             Assert.That(audioPanelInstant!.Event, Is.TypeOf<YautjaAudioPanelActionEvent>());
 
             var visibleActionsWithoutMetadata = new[]
@@ -3870,7 +3901,7 @@ public sealed class YautjaPredatorRoleTest
                 .Where(proto => proto.ID.StartsWith("CMUActionYautja"))
                 .Select(proto =>
                 {
-                    Assert.That(proto.TryGetComponent<ActionComponent>(out var action, componentFactory), Is.True, $"{proto.ID} must have ActionComponent.");
+                    Assert.That(proto.TryComp<ActionComponent>(out var action, componentFactory), Is.True, $"{proto.ID} must have ActionComponent.");
                     return proto;
                 })
                 .SelectMany(proto => new[]
@@ -3959,16 +3990,16 @@ public sealed class YautjaPredatorRoleTest
             Assert.That(animatedBracer!.IsAnimated, Is.True, "CMSS13 hunting bracer world icon should keep its animated bracer frames.");
             Assert.That(animatedBracer.DelayCount, Is.EqualTo(6));
 
-            var relay = prototypes.Index<EntityPrototype>("CMUYautjaRelayBeacon");
-            Assert.That(relay.TryGetComponent<SpriteComponent>(out var relaySprite, componentFactory), Is.True);
+            var relay = prototypes.Index<EntityPrototype>(CMUYautjaRelayBeaconPrototype);
+            Assert.That(relay.TryComp<SpriteComponent>(out var relaySprite, componentFactory), Is.True);
             Assert.That(relaySprite!.BaseRSI?.Path, Is.EqualTo(hunterGearPath));
 
-            var simpleRelay = prototypes.Index<EntityPrototype>("CMUYautjaSimpleRelayBeacon");
-            Assert.That(simpleRelay.TryGetComponent<SpriteComponent>(out var simpleRelaySprite, componentFactory), Is.True);
+            var simpleRelay = prototypes.Index<EntityPrototype>(CMUYautjaSimpleRelayBeaconPrototype);
+            Assert.That(simpleRelay.TryComp<SpriteComponent>(out var simpleRelaySprite, componentFactory), Is.True);
             Assert.That(simpleRelaySprite!.BaseRSI?.Path, Is.EqualTo(thrallGearPath));
 
-            var pad = prototypes.Index<EntityPrototype>("CMUYautjaHoundObservationPad");
-            Assert.That(pad.TryGetComponent<SpriteComponent>(out var padSprite, componentFactory), Is.True);
+            var pad = prototypes.Index<EntityPrototype>(CMUYautjaHoundObservationPadPrototype);
+            Assert.That(pad.TryComp<SpriteComponent>(out var padSprite, componentFactory), Is.True);
             Assert.That(padSprite!.BaseRSI?.Path, Is.EqualTo(hunterGearPath));
         });
 
@@ -3998,7 +4029,7 @@ public sealed class YautjaPredatorRoleTest
                 .Where(proto => proto.ID.StartsWith("CMUActionYautja"))
                 .Where(proto => !proto.ID.StartsWith("CMUActionYautjaAbomination"))
                 .Where(proto => !proto.ID.StartsWith("CMUActionYautjaHellhound"))
-                .Where(proto => proto.TryGetComponent<ActionComponent>(out _, componentFactory))
+                .Where(proto => proto.TryComp<ActionComponent>(out _, componentFactory))
                 .ToList();
 
             Assert.That(yautjaActions, Is.Not.Empty);
@@ -4006,7 +4037,7 @@ public sealed class YautjaPredatorRoleTest
             {
                 foreach (var proto in yautjaActions)
                 {
-                    Assert.That(proto.TryGetComponent<ActionComponent>(out var action, componentFactory), Is.True);
+                    Assert.That(proto.TryComp<ActionComponent>(out var action, componentFactory), Is.True);
                     if (allowedCooldownActions.TryGetValue(proto.ID, out var cooldown))
                         Assert.That(action!.UseDelay, Is.EqualTo(TimeSpan.FromSeconds(cooldown)),
                             $"{proto.ID} retains its source or current CMU cooldown.");
@@ -4613,10 +4644,10 @@ public sealed class YautjaPredatorRoleTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var thrall = prototypes.Index<HealthIconPrototype>("CMUYautjaIconThrall");
-            var student = prototypes.Index<HealthIconPrototype>("CMUYautjaIconStudent");
-            var blooded = prototypes.Index<HealthIconPrototype>("CMUYautjaIconBlooded");
-            var bloodedThrall = prototypes.Index<HealthIconPrototype>("CMUYautjaIconBloodedThrall");
+            var thrall = prototypes.Index<HealthIconPrototype>(CMUYautjaIconThrallPrototype);
+            var student = prototypes.Index<HealthIconPrototype>(CMUYautjaIconStudentPrototype);
+            var blooded = prototypes.Index<HealthIconPrototype>(CMUYautjaIconBloodedPrototype);
+            var bloodedThrall = prototypes.Index<HealthIconPrototype>(CMUYautjaIconBloodedThrallPrototype);
 
             Assert.That(thrall.Icon, Is.EqualTo(StatusIcon("hunter_thralled")));
             Assert.That(student.Icon, Is.EqualTo(StatusIcon("predhud")));
@@ -4856,7 +4887,7 @@ public sealed class YautjaPredatorRoleTest
                     "A real ship-spawned Yautja must expose its rank icon through the client status-icon pipeline.");
 
                 var prototypes = pair.Client.ResolveDependency<IPrototypeManager>();
-                var rankIcon = prototypes.Index<HealthIconPrototype>("CMUYautjaRankIconBlooded");
+                var rankIcon = prototypes.Index<HealthIconPrototype>(CMUYautjaRankIconBloodedPrototype);
                 Assert.That(rankIcon.IsShaded, Is.False,
                     "CMSS13 rank HUD icons must remain visible independently of world lighting.");
             });
@@ -4992,7 +5023,7 @@ public sealed class YautjaPredatorRoleTest
 
             Assert.That(entries, Is.EqualTo(expected));
 
-            var yautjaSounds = prototypes.Index<EmoteSoundsPrototype>("CMUBaseYautja");
+            var yautjaSounds = prototypes.Index<EmoteSoundsPrototype>(CMUBaseYautjaPrototype);
             Assert.Multiple(() =>
             {
                 foreach (var (_, emote, _) in expected)
@@ -5141,7 +5172,7 @@ public sealed class YautjaPredatorRoleTest
         string displayName)
     {
         var prototype = prototypes.Index<EntityPrototype>(id);
-        Assert.That(prototype.TryGetComponent<YautjaHuntTeleportDestinationComponent>(out var destination, componentFactory), Is.True);
+        Assert.That(prototype.TryComp<YautjaHuntTeleportDestinationComponent>(out var destination, componentFactory), Is.True);
         Assert.That(destination!.Kind, Is.EqualTo(kind), id);
         Assert.That(destination.Id, Is.EqualTo(destinationId), id);
         Assert.That(destination.DisplayName, Is.EqualTo(displayName), id);

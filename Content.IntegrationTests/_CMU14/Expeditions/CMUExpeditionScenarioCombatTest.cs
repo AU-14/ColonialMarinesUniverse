@@ -18,6 +18,8 @@ namespace Content.IntegrationTests._CMU14.Expeditions;
 [TestFixture, NonParallelizable]
 public sealed class CMUExpeditionScenarioCombatTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.NPC.Prototypes.NpcFactionPrototype> GOVFORPrototype = "GOVFOR";
+
     public override PoolSettings PoolSettings => new() { Dirty = true, Connected = true };
 
     [TestCase("Trees", "CMUExpeditionWoodland", CMUExpeditionLandform.RiverValley)]
@@ -50,7 +52,7 @@ public sealed class CMUExpeditionScenarioCombatTest : GameTest
             guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", from);
             player = SEntMan.SpawnEntity("CMMobHuman", to);
             SEntMan.AddComponent<GodmodeComponent>(player);
-            Server.System<NpcFactionSystem>().AddFaction(player, "GOVFOR");
+            Server.System<NpcFactionSystem>().AddFaction(player, GOVFORPrototype);
             Server.PlayerMan.SetAttachedEntity(ServerSession, player);
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
             rifle = gun.Owner;

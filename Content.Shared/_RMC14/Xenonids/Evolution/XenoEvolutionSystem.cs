@@ -193,7 +193,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
         var time = _timing.CurTime;
         if (_prototypes.TryIndex(args.Choice, out var choice) &&
-            choice.HasComponent<XenoEvolutionGranterComponent>(_compFactory) &&
+            choice.HasComp<XenoEvolutionGranterComponent>(_compFactory) &&
             _xenoHive.GetHive(xeno.Owner) is { } hive &&
             hive.Comp.LastQueenDeath is { } lastQueenDeath &&
             time < lastQueenDeath + hive.Comp.NewQueenCooldown)
@@ -219,7 +219,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         };
 
         if (xeno.Comp.EvolutionDelay > TimeSpan.Zero)
-            _popup.PopupClient(Loc.GetString("cm-xeno-evolution-start"), xeno, xeno);
+            _popup.PopupEntity(Loc.GetString("cm-xeno-evolution-start"), xeno, xeno);
 
         if (_doAfter.TryStartDoAfter(doAfter))
         {
@@ -378,13 +378,13 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         var castes = new List<(EntProtoId Id, int Tier)>();
         foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
         {
-            if (!prototype.TryGetComponent(out XenoEvolutionComponent? evolution, _compFactory))
+            if (!prototype.TryComp(out XenoEvolutionComponent? evolution, _compFactory))
                 continue;
 
             foreach (var id in evolution.EvolvesTo)
             {
                 if (_prototypes.TryIndex(id, out var caste) &&
-                    caste.TryGetComponent(out XenoComponent? xeno, _compFactory))
+                    caste.TryComp(out XenoComponent? xeno, _compFactory))
                 {
                     castes.Add((id, xeno.Tier));
                 }
@@ -512,7 +512,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         // CMU14 End
 
         if (predicted)
-            _popup.PopupClient(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
         else
             _popup.PopupEntity(Loc.GetString("rmc-xeno-evolution-cant-evolve-damaged"), xeno, xeno, PopupType.MediumCaution);
 
@@ -570,7 +570,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
         if (!ContainedCheckPopup(xeno, doPopup))
             return false;
 
-        if (prototype.HasComponent<XenoEvolutionGranterComponent>(_compFactory) && HiveHasLivingQueen(xeno.Owner))
+        if (prototype.HasComp<XenoEvolutionGranterComponent>(_compFactory) && HiveHasLivingQueen(xeno.Owner))
         {
             if (doPopup)
                 _popup.PopupEntity(Loc.GetString("rmc-xeno-evolution-failed-queen-exists"), xeno, xeno, PopupType.MediumCaution);

@@ -18,6 +18,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaResistanceParityTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageModifierSetPrototype> CMUYautjaPrototype = "CMUYautja";
+
     [Test]
     public async Task YautjaDamageModifierSetMatchesCmss13SpeciesValues()
     {
@@ -28,7 +30,7 @@ public sealed class YautjaResistanceParityTest
             await server.WaitAssertion(() =>
             {
                 var prototypes = server.ResolveDependency<IPrototypeManager>();
-                var modifiers = prototypes.Index<DamageModifierSetPrototype>("CMUYautja").Coefficients;
+                var modifiers = prototypes.Index<DamageModifierSetPrototype>(CMUYautjaPrototype).Coefficients;
 
                 Assert.That(modifiers, Has.Count.EqualTo(5));
                 Assert.That(modifiers["Blunt"], Is.EqualTo(0.28f));

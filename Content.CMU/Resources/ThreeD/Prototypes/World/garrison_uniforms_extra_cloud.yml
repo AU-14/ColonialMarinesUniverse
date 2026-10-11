@@ -22,7 +22,7 @@
     color: '#474249'
   - label: left barista shirt continuous cloth panel
     min: -0.15, -0.1203125, 0.008
-    max: -0.015625, 0.0921875, 0.04
+    max: 0.11875, 0.0921875, 0.04
     color: '#9E978F'
   - label: left barista shirt left turned edge
     min: -0.1546875, -0.120625, 0.006
@@ -51,10 +51,6 @@
     color: '#9E978F'
     shape: WedgeY
     yaw: 90
-  - label: right barista shirt continuous cloth panel
-    min: -0.015625, -0.1203125, 0.008
-    max: 0.11875, 0.0921875, 0.04
-    color: '#9E978F'
   - label: right barista shirt left turned edge
     min: -0.0203125, -0.120625, 0.006
     max: -0.0053125, 0.0925, 0.035
@@ -247,7 +243,7 @@
     color: '#272E2F'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#636D6E'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -276,10 +272,6 @@
     color: '#636D6E'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#636D6E'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -536,7 +528,7 @@
     color: '#181D23'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#414C5A'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -565,10 +557,6 @@
     color: '#414C5A'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#414C5A'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -825,7 +813,7 @@
     color: '#2B2C2D'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#686A6B'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -854,10 +842,6 @@
     color: '#686A6B'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#686A6B'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -1114,7 +1098,7 @@
     color: '#534F43'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#A49F92'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -1143,10 +1127,6 @@
     color: '#A49F92'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#A49F92'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -1403,7 +1383,7 @@
     color: '#3F4A63'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#546388'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -1432,10 +1412,6 @@
     color: '#546388'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#546388'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -1684,7 +1660,7 @@
     color: '#2B3F2F'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#3C533F'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -1713,10 +1689,6 @@
     color: '#3C533F'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#3C533F'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -1965,7 +1937,7 @@
     color: '#673333'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#845757'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -1994,10 +1966,6 @@
     color: '#845757'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#845757'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -2246,7 +2214,7 @@
     color: '#4B422E'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#756542'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -2275,10 +2243,6 @@
     color: '#756542'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#756542'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -2528,7 +2492,7 @@
     color: '#1B1E1B'
   - label: left LACN coat torso continuous cloth panel
     min: -0.1484375, -0.0859375, 0.008
-    max: -0.015625, 0.1296875, 0.043
+    max: 0.1171875, 0.1296875, 0.043
     color: '#646E64'
   - label: left LACN coat torso left turned edge
     min: -0.153125, -0.08625, 0.006
@@ -2559,7 +2523,7 @@
     yaw: 90
   - label: left long coat tail continuous cloth panel
     min: -0.1703125, -0.2484375, 0.008
-    max: -0.015625, -0.0875, 0.041
+    max: 0.1171875, -0.0875, 0.041
     color: '#7E8D7E'
   - label: left long coat tail left turned edge
     min: -0.175, -0.24875, 0.006
@@ -2593,10 +2557,6 @@
     max: -0.0203125, -0.2359375, 0.024
     color: '#1B1E1B'
     shape: CylinderX
-  - label: right LACN coat torso continuous cloth panel
-    min: -0.015625, -0.0859375, 0.008
-    max: 0.1171875, 0.1296875, 0.043
-    color: '#646E64'
   - label: right LACN coat torso left turned edge
     min: -0.0203125, -0.08625, 0.006
     max: -0.0053125, 0.13, 0.038
@@ -2624,10 +2584,6 @@
     color: '#646E64'
     shape: WedgeY
     yaw: 90
-  - label: right long coat tail continuous cloth panel
-    min: -0.0375, -0.2484375, 0.008
-    max: 0.1171875, -0.0875, 0.041
-    color: '#7E8D7E'
   - label: right long coat tail left turned edge
     min: -0.0421875, -0.24875, 0.006
     max: -0.0271875, -0.0871875, 0.036000000000000004
@@ -2769,7 +2725,7 @@
     color: '#272E2F'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#636D6E'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -2798,10 +2754,6 @@
     color: '#636D6E'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#636D6E'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -3068,7 +3020,7 @@
     color: '#252C33'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#303C46'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -3097,10 +3049,6 @@
     color: '#303C46'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#303C46'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -3349,7 +3297,7 @@
     color: '#182129'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.125, 0.008
-    max: -0.015625, 0.0890625, 0.043
+    max: 0.1171875, 0.0890625, 0.043
     color: '#29343E'
   - label: left shirt front left turned edge
     min: -0.153125, -0.1253125, 0.006
@@ -3378,10 +3326,6 @@
     color: '#29343E'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.125, 0.008
-    max: 0.1171875, 0.0890625, 0.043
-    color: '#29343E'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.1253125, 0.006
     max: -0.0053125, 0.089375, 0.038
@@ -3630,7 +3574,7 @@
     color: '#4B422E'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.125, 0.008
-    max: -0.015625, 0.0890625, 0.043
+    max: 0.1171875, 0.0890625, 0.043
     color: '#756542'
   - label: left shirt front left turned edge
     min: -0.153125, -0.1253125, 0.006
@@ -3659,10 +3603,6 @@
     color: '#756542'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.125, 0.008
-    max: 0.1171875, 0.0890625, 0.043
-    color: '#756542'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.1253125, 0.006
     max: -0.0053125, 0.089375, 0.038
@@ -3911,7 +3851,7 @@
     color: '#25321C'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.125, 0.008
-    max: -0.015625, 0.0890625, 0.043
+    max: 0.1171875, 0.0890625, 0.043
     color: '#36462B'
   - label: left shirt front left turned edge
     min: -0.153125, -0.1253125, 0.006
@@ -3940,10 +3880,6 @@
     color: '#36462B'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.125, 0.008
-    max: 0.1171875, 0.0890625, 0.043
-    color: '#36462B'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.1253125, 0.006
     max: -0.0053125, 0.089375, 0.038
@@ -4192,7 +4128,7 @@
     color: '#393939'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.125, 0.008
-    max: -0.015625, 0.0890625, 0.043
+    max: 0.1171875, 0.0890625, 0.043
     color: '#616161'
   - label: left shirt front left turned edge
     min: -0.153125, -0.1253125, 0.006
@@ -4221,10 +4157,6 @@
     color: '#616161'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.125, 0.008
-    max: 0.1171875, 0.0890625, 0.043
-    color: '#616161'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.1253125, 0.006
     max: -0.0053125, 0.089375, 0.038
@@ -4473,7 +4405,7 @@
     color: '#403A30'
   - label: left shirt front continuous cloth panel
     min: -0.1484375, -0.0625, 0.008
-    max: -0.015625, 0.1515625, 0.043
+    max: 0.1171875, 0.1515625, 0.043
     color: '#625D45'
   - label: left shirt front left turned edge
     min: -0.153125, -0.0628125, 0.006
@@ -4502,10 +4434,6 @@
     color: '#625D45'
     shape: WedgeY
     yaw: 90
-  - label: right shirt front continuous cloth panel
-    min: -0.015625, -0.0625, 0.008
-    max: 0.1171875, 0.1515625, 0.043
-    color: '#625D45'
   - label: right shirt front left turned edge
     min: -0.0203125, -0.0628125, 0.006
     max: -0.0053125, 0.151875, 0.038
@@ -4750,7 +4678,7 @@
     color: '#BDB3B3'
   - label: left white dress shirt front continuous cloth panel
     min: -0.1375, -0.0265625, 0.008
-    max: -0.015625, 0.1859375, 0.038
+    max: 0.10625, 0.1859375, 0.038
     color: '#EBE7E7'
   - label: left white dress shirt front left turned edge
     min: -0.1421875, -0.026875, 0.006
@@ -4779,10 +4707,6 @@
     color: '#EBE7E7'
     shape: WedgeY
     yaw: 90
-  - label: right white dress shirt front continuous cloth panel
-    min: -0.015625, -0.0265625, 0.008
-    max: 0.10625, 0.1859375, 0.038
-    color: '#EBE7E7'
   - label: right white dress shirt front left turned edge
     min: -0.0203125, -0.026875, 0.006
     max: -0.0053125, 0.18625, 0.033
@@ -4880,7 +4804,7 @@
     color: '#1E1E1E'
   - label: left black folded dress trousers continuous cloth panel
     min: -0.16875, -0.175, 0.008
-    max: -0.015625, -0.0359375, 0.034
+    max: 0.1375, -0.0359375, 0.034
     color: '#232323'
   - label: left black folded dress trousers left turned edge
     min: -0.1734375, -0.1753125, 0.006
@@ -4917,10 +4841,6 @@
     min: -0.153125, -0.1515625, 0.039
     max: -0.12875, -0.0984375, 0.044
     color: '#771913'
-  - label: right black folded dress trousers continuous cloth panel
-    min: -0.015625, -0.175, 0.008
-    max: 0.1375, -0.0359375, 0.034
-    color: '#232323'
   - label: right black folded dress trousers left turned edge
     min: -0.0203125, -0.1753125, 0.006
     max: -0.0053125, -0.035625, 0.029

@@ -182,7 +182,7 @@ public readonly record struct HydroTickEvent<T>(
 /// </summary>
 public sealed partial class RMCChemicalEffectSystem : EntityEffectSystem<MetaDataComponent, RMCChemicalEffect>
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     private EntityQuery<MobStateComponent> _mobStateQuery;
 

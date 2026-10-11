@@ -51,7 +51,7 @@ public sealed class CMUExpeditionOperationsTest : GameTest
             var found = false;
             while (built.MoveNext(out _, out _, out var xform))
                 found |= xform.MapUid == map && Vector2.Distance(xform.LocalPosition, destination.Position) < 3;
-            Assert.That(found, Is.True, $"Dig and build a real native mound: state={agent.State}, tool={agent.WorkItem}, action={agent.WorkDoAfter}.");
+            Assert.That(found, Is.True, $"Dig and build a real native mound: state={agent.State}, tool={agent.WorkItem}, action={agent.WorkDoAfter}, decision={agent.FortificationDecision}.");
             SEntMan.DeleteEntity(guard);
             // Move the aircraft test away from the newly built barricade.
             var site = destination.Offset(new Vector2(-8, -4));

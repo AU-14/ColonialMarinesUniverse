@@ -7,7 +7,7 @@ namespace Content.Shared.CMU14.Threats.Mobs.Wendigo.Lab;
 /// Tracks a human test subject through the Weyland-Yutani Wendigo procedure.
 /// Each stage only accepts its next input once <see cref="StageEndsAt"/> has passed.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentPause]
+[RegisterComponent, AutoGenerateComponentPause]
 public sealed partial class CMUWendigoSubjectComponent : Component
 {
     [DataField]

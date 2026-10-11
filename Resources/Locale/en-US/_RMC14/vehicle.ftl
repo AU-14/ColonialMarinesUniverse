@@ -33,6 +33,7 @@ rmc-hardpoint-ui-integrity = {$current}/{$max} ({$percent}%)
 rmc-hardpoint-ui-no-integrity = No integrity data
 rmc-hardpoint-ui-remove = Remove
 rmc-hardpoint-ui-removing = Removing...
+rmc-hardpoint-disintegrates = {CAPITALIZE(THE($item))} disintegrates into a useless pile of scrap under the damage it suffered.
 rmc-vehicle-ammo-loader-no-vehicle = The loader isn't connected to a vehicle.
 rmc-vehicle-ammo-loader-no-hardpoint = No compatible hardpoint is installed.
 rmc-vehicle-ammo-loader-wrong-ammo = That ammo doesn't fit this loader.
@@ -146,3 +147,19 @@ rmc-hardpoint-removal-prying-tool = Hold a crowbar or maintenance jack to remove
 # CMU14
 cmu-vehicle-supply-unassigned = No platoon assigned to this depot.
 cmu-vehicle-supply-allowance = {$platoon} — Vehicles issued: {$used}/{$limit} (maximum one tank and one VTOL)
+
+rmc-vehicle-lock-frame-destroyed = The vehicle cannot be locked while its frame is destroyed.
+
+rmc-hardpoint-remove-blocked = That hardpoint is fixed in place.
+
+rmc-vehicle-demolition-frame-intact = The vehicle frame is too intact to rig with charges. Destroy it first.
+
+rmc-vehicle-demolition-busy = Someone is already rigging this wreck.
+
+rmc-vehicle-demolition-start = You start rigging the wreck with explosives...
+
+rmc-vehicle-demolition-no-skill = You do not know how to rig demolition charges.
+
+rmc-vehicle-too-small-to-damage = We're too small to do any significant damage to this vehicle!
+
+rmc-vehicle-demolition-armed = The charge is planted and is counting down!

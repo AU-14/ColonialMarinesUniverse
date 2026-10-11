@@ -64,7 +64,7 @@ public sealed partial class XenoSpikeShieldSystem : EntitySystem
                     predicted: false
                 );
 
-            _popup.PopupPredicted(Loc.GetString("rmc-spike-shield-hit", ("user", ent)), ent, ent);
+            _popup.PopupBroadcast(Loc.GetString("rmc-spike-shield-hit", ("user", ent)), ent, ent);
         }
 
         Dirty(ent, ent.Comp);

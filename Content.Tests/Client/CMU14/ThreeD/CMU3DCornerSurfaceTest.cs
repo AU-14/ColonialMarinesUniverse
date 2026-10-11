@@ -28,6 +28,7 @@ public sealed class CMU3DCornerSurfaceTest
         Assert.That(CMU3DSceneLayout.CornerStates(mask), Is.EqualTo(new[] { se, ne, nw, sw }));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void SourceDirectionSlotsStayInTheirWorldQuadrants()
     {
@@ -56,6 +57,7 @@ public sealed class CMU3DCornerSurfaceTest
         Assert.That(CMU3DSceneLayout.CornerParts(new CMU3DModelPrototype(), 255), Is.Empty);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void UnequalSourcePatchesRetainAllStructuralParts()
     {

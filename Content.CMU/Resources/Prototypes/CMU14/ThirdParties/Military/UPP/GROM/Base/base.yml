@@ -96,14 +96,12 @@
 # Equipment
 
 - type: entity
-  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  parent: [AU14FatiguesUPP, RMCAlternateFoldableUniformBase]
   id: AU14FatiguesUPPGROM
   suffix: AU14, GROM
   name: UPP naval infantry fatigues
   description: A standard set of Union of Progressive Peoples Fatigues. It has shards of light Kevlar to help protect against shrapnel. This one has blood and tears after countless battles.
   components:
-  - type: Sprite
-    sprite: CMU14/Clothing/UPP/jumpsuits/upprecon.rsi
   - type: WebbingClothing
     startingWebbing: AU14WebbingDropPouchUPPFull
   - type: UniformAccessoryHolder
@@ -118,9 +116,9 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCWeaponPistolT74
-    - id: RMCMagazinePistolT73
-      amount: 2
+    - id: RMCWeaponPistolNP92
+    - id: RMCMagazinePistolNP92
+      amount: 6
 
 - type: entity
   parent: RMCOuterClothingExternalWebbing
@@ -139,12 +137,33 @@
   components:
   - type: StorageFill
     contents:
-    - id: AU14MREUPP
+    - id: RuMCirpUPP
     - id: CMCanteen
 
 - type: entity
-  parent: RMCSatchelSPP
-  id: RMCSatchelSPPFull
+  parent: AU14UPPArmor
+  id: CMUUPPArmorFull
+  suffix: GROM, Full
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14ArmorGarbShinGuardsUPP
+    - id: AU14ArmorGarbShoulderPadsUPP
+    - id: AU14ArmorGarbSmallWebbingUPP
+
+- type: entity
+  parent: AU14UPPArmorMinimalistic
+  id: CMUUPPArmorFullMinimalistic
+  suffix: GROM, Full
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14ArmorGarbShoulderPadsUPP
+    - id: AU14ArmorGarbSmallWebbingUPP
+
+- type: entity
+  parent: RuMCUPPNavalInfantrySatchel
+  id: CMUUPPNavalInfantrySatchelFull
   suffix: Full, GROM
   components:
   - type: StorageFill
@@ -156,8 +175,8 @@
       amount: 1
 
 - type: entity
-  parent: RMCSatchelSPP
-  id: RMCSatchelSPPFullMarksman
+  parent: RuMCUPPNavalInfantrySatchel
+  id: CMUUPPNavalInfantrySatchelFullMarksman
   suffix: Full, GROM
   components:
   - type: StorageFill
@@ -168,15 +187,16 @@
     - id: RMCMagazineRifleAK4047AP
       amount: 2
 
-
 - type: entity
-  parent: RMCSatchelSPP
-  id: RMCSatchelSPPFullMachinegunner
+  parent: RuMCUPPNavalInfantrySatchel
+  id: CMUUPPNavalInfantrySatchelFullMachinegunner
   suffix: Full, GROM
   components:
   - type: StorageFill
     contents:
     - id: RMCRadioHandheldColony
+    - id: RMCMagazineLMGQYJ72
+      amount: 4
 
 - type: entity
   parent: RMCPouchCommand
@@ -240,10 +260,27 @@
       amount: 1
 
 - type: entity
-  parent: AU14BeltSmartGunOperatorPistolUPP
+  parent: RuMCUPPNavalInfantryBeltMachinegunner
   id: AU14BeltSmartGunOperatorPistolUPPFull
   suffix: Full, GROM, T74
   components:
+  - type: Storage
+    whitelist:
+      tags:
+      - Sidearm # Keep the issued pistol with the machinegunner belt's ammunition.
+      - AU14MagazineSmartGunUPP
+      - CMMagazinePistol
+      - CMMagazineRifle
+      - RuMCMagazineAH12
+      - RMCMagazineShotgun
+      - CMMagazineSmg
+      - CMMagazineSniper
+      - RMCMagazineLMGQYJ72
+      - RMCShellShotgun
+      - Flare
+      - RuMCMagazineTachanka
+      - RuMCMagazineUTES-C
+      - RuMCMagazineUTES-CTracter
   - type: StorageFill
     contents:
     - id: RMCWeaponPistolT74
@@ -253,8 +290,18 @@
       amount: 2
 
 - type: entity
-  parent: RMCPouchMagazine
-  id: RMCPouchMagazineUPPFull
+  parent: RuMCUPPPouchMagazine
+  id: CMUUPPPouchMagazineUPPFullMarksman
+  suffix: Full, GROM, AK4047
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleAK4047
+      amount: 3
+
+- type: entity
+  parent: RuMCUPPPouchMagazine
+  id: CMUUPPPouchMagazineUPPFull
   suffix: Full, GROM, AG80
   components:
   - type: StorageFill

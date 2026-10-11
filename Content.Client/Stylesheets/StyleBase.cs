@@ -10,7 +10,8 @@ using Robust.Shared.Maths;
 
 namespace Content.Client.Stylesheets
 {
-    [Obsolete("Please use the new sheetlet system to define styles, and remove all references to this class as it may be deleted in the future")]
+    // CMU14: The live CRT stylesheet still inherits these shared style resources.
+    // [Obsolete("Please use the new sheetlet system to define styles, and remove all references to this class as it may be deleted in the future")]
     public abstract class StyleBase
     {
         public abstract Stylesheet Stylesheet { get; }

@@ -1,0 +1,26 @@
+- type: entity
+  parent: BaseItem
+  id: AU14ConcreteBag
+  name: concrete bag
+  description: A heavy bag of dry concrete mix. Pour it onto a concrete barricade frame to finish the barricade.
+  components:
+  - type: Sprite
+    sprite: CMU14/Items/cement.rsi
+    layers:
+    - state: cementbag1
+      map: [ "base" ]
+  - type: RandomSprite
+    available:
+    - base:
+        cementbag1: ""
+        cementbag2: ""
+        cementbag3: ""
+        cementbag4: ""
+  - type: Item
+    size: Large
+  - type: Tag
+    tags:
+    - AU14ConcreteBag
+
+- type: Tag
+  id: AU14ConcreteBag

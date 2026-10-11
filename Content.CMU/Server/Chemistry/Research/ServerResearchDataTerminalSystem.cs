@@ -40,7 +40,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         public Dictionary<int, (string, string, TimeSpan, bool, GeneratedReagentData, bool, bool)> Reports = [];
     }
 
-    [Dependency] private readonly Content.Server.CMU14.Threats.Mobs.Wendigo.Lab.CMUWendigoResearchUnlockSystem _wendigoUnlock = default!;
+    [Dependency] private Content.Server.CMU14.Threats.Mobs.Wendigo.Lab.CMUWendigoResearchUnlockSystem _wendigoUnlock = default!;
 
     private readonly Dictionary<string, FactionResearch> _factions = new(StringComparer.OrdinalIgnoreCase);
     public FactionResearch GetResearch(string faction)
@@ -61,7 +61,7 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     private int _nextContractId;
 
     [ViewVariables(VVAccess.ReadOnly)]
-    public TimeSpan XClearanceLockout = TimeSpan.FromMinutes(60);
+    public TimeSpan XClearanceLockout = TimeSpan.FromMinutes(40);
 
     [Dependency] private ServerReagentGeneratorSystem _generator = default!;
     [Dependency] private IGameTiming _timer = default!;

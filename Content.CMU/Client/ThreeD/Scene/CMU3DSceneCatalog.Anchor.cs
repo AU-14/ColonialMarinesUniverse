@@ -23,6 +23,12 @@ public sealed partial class CMU3DSceneCatalog
             "DisposalJunction" => "j1",
             "DisposalJunctionFlipped" => "j2",
             "DisposalXJunction" => "x",
+            "DisposalPipe" => "s",
+            "DisposalBend" => "c",
+            "DisposalTrunk" => "t",
+            "DisposalRouter" => "j1s",
+            "DisposalRouterFlipped" => "j2s",
+            "DisposalYJunction" => "y",
             _ => null,
         };
         if (suffix == null || model.Anchored is not { } anchored || model.ReferencePrototype != reference ||

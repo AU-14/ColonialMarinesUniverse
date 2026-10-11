@@ -22,7 +22,7 @@ public sealed partial class ObjectivesConsoleWindow : FancyWindow
         CurrentWinPointsLabel.Text = $"Current Win Points: {currentWinPoints:0.##}";
         RequiredWinPointsLabel.Text = $"Points to Final Objective: {requiredWinPoints}";
 
-        ObjectivesList.DisposeAllChildren();
+        ObjectivesList.ReleaseChildren();
         foreach (var obj in SortForDisplay(objectives))
         {
             var entry = new ObjectiveEntryControl();

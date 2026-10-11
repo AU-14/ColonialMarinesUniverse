@@ -508,7 +508,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             args.Handled = true;
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient(Loc.GetString("rmc-power-loader-wrong-weapon"), args.Target, buckled, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-power-loader-wrong-weapon"), args.Target, buckled, PopupType.SmallCaution);
             }
 
             return;
@@ -523,7 +523,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         {
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient(Loc.GetString("rmc-power-loader-wrong-ammo"), args.Target, buckled, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-power-loader-wrong-ammo"), args.Target, buckled, PopupType.SmallCaution);
             }
 
             return;
@@ -533,7 +533,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         {
             foreach (var buckled in args.Buckled)
             {
-                _popup.PopupClient(Loc.GetString("rmc-power-loader-full-ammo", ("ammo", args.Target)), args.Target, buckled, PopupType.SmallCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-power-loader-full-ammo", ("ammo", args.Target)), args.Target, buckled, PopupType.SmallCaution);
             }
 
             return;
@@ -561,7 +561,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
         foreach (var buckled in args.Buckled)
         {
-            _popup.PopupClient(Loc.GetString("rmc-power-loader-transfer-ammo", ("rounds", roundsToFill), ("ammo", args.Target)), args.Target, buckled);
+            _popup.PopupEntity(Loc.GetString("rmc-power-loader-transfer-ammo", ("rounds", roundsToFill), ("ammo", args.Target)), args.Target, buckled);
         }
     }
 
@@ -902,7 +902,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
 
         UpdateTarget(ent, target.Value);
-        _popup.PopupClient("You move your dropship above the selected stretcher's beacon. You can now manually activate the medevac system to hoist the patient up.", args.Actor);
+        _popup.PopupSelf("You move your dropship above the selected stretcher's beacon. You can now manually activate the medevac system to hoist the patient up.", args.Actor);
     }
 
     private void OnWeaponsFultonPrevious(Entity<DropshipTerminalWeaponsComponent> ent, ref DropshipTerminalWeaponsFultonPreviousMsg args)
@@ -1961,13 +1961,13 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
                         for (var offset = 1; offset <= flight.ZLevelPenetration; offset++)
                         {
-                            if (!_zLevels.TryMapOffset((sourceMapUid, null), offset, out _, out var targetMapComp))
+                            if (!_zLevels.TryMapOffset((sourceMapUid, null), offset, out var targetMapUid, out var targetMapComp))
                                 break;
 
                             // Check if there's an opening to this level
                             if (_zLevels.TryFindZShotOpening(
                                     sourceMapUid,
-                                    targetMapComp.Owner,
+                                    targetMapUid.Value.Owner,
                                     offset,
                                     worldPos,
                                     worldPos,
@@ -1995,7 +1995,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                                 if (flight.Fire != null)
                                 {
                                     var chain = _onCollide.SpawnChain();
-                                    var coords = new EntityCoordinates(targetMapComp.Owner, worldPos);
+                                    var coords = new EntityCoordinates(targetMapUid.Value.Owner, worldPos);
 
                                     if (flight.Fire.Total is { } total)
                                     {
@@ -2052,18 +2052,18 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                         var worldPos = targetMap.Position;
                         var lowestLevel = 0;
                         var lowestLevelMap = sourceMapUid;
-                        var lowestLevelMapComp = EntityManager.GetComponent<MapComponent>(sourceMapUid);
+                        var lowestLevelMapComp = Comp<MapComponent>(sourceMapUid);
 
                         // Find the lowest z-level with an opening/tiles
                         for (var offset = 1; offset <= 10; offset++) // Search up to 10 levels down
                         {
-                            if (!_zLevels.TryMapOffset((sourceMapUid, null), offset, out _, out var nextMapComp))
+                            if (!_zLevels.TryMapOffset((sourceMapUid, null), offset, out var nextMapUid, out var nextMapComp))
                                 break;
 
                             // Check if there's an opening to this level
                             if (_zLevels.TryFindZShotOpening(
                                     sourceMapUid,
-                                    nextMapComp.Owner,
+                                    nextMapUid.Value.Owner,
                                     offset,
                                     worldPos,
                                     worldPos,
@@ -2072,7 +2072,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
                                     maxSourceDistanceFromOpeningEdgeTiles: 2f))
                             {
                                 lowestLevel = offset;
-                                lowestLevelMap = nextMapComp.Owner;
+                                lowestLevelMap = nextMapUid.Value.Owner;
                                 lowestLevelMapComp = nextMapComp;
                             }
                             else
@@ -2279,7 +2279,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         var tile = _map.LocalToTile(gridUid, grid, impactCoords);
-        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        var anchored = _map.GetAnchoredEntities(gridUid, grid, tile);
 
         var foundWall = false;
         while (anchored.MoveNext(out var uid))
@@ -2322,7 +2322,7 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return false;
 
         var tile = _map.LocalToTile(gridUid, grid, impactCoords);
-        var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+        var anchored = _map.GetAnchoredEntities(gridUid, grid, tile);
 
         while (anchored.MoveNext(out var uid))
         {

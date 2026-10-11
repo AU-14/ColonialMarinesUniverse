@@ -77,7 +77,7 @@ public sealed partial class XenoAbductSystem : EntitySystem
         var tiles = _line.DrawLine(xenoCoords, GetCoordinates(target), TimeSpan.Zero, xeno.Comp.Range, out _);
         if (tiles.Count == 0)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-abduct-no-room"), xeno, PopupType.SmallCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-xeno-abduct-no-room"), xeno, PopupType.SmallCaution);
             return;
         }
 
@@ -110,7 +110,7 @@ public sealed partial class XenoAbductSystem : EntitySystem
     {
         if (args.Cancelled || args.Handled)
         {
-            _popup.PopupClient(Loc.GetString("rmc-xeno-abduct-cancel"), xeno, xeno, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("rmc-xeno-abduct-cancel"), xeno, xeno, PopupType.Medium);
             CleanUpTiles(xeno);
 
             DoCooldown(xeno);

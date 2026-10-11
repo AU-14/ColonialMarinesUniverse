@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using System.Collections;
 using System.Reflection;
 using Content.Client.Info;
@@ -90,7 +91,7 @@ public sealed class RulesKeyRebindMergeRegressionTest : GameTest
             }
             finally
             {
-                window.Dispose();
+                window.Release();
                 Client.CfgMan.SetCVar(CCVars.CrtUiColor, originalColor);
                 Client.CfgMan.SetCVar(CCVars.CrtUiEnabled, originalEnabled);
             }
@@ -133,6 +134,7 @@ public sealed class RulesKeyRebindMergeRegressionTest : GameTest
                     CMKeyFunctions.CMHolsterSecondary,
                     CMKeyFunctions.CMHolsterTertiary,
                     CMKeyFunctions.CMHolsterQuaternary,
+                    CMUKeyFunctions.CMUOpenWornStorage,
                     CMKeyFunctions.RMCPickUpDroppedItems,
                     CMKeyFunctions.RMCInteractWithOtherHand,
                     CMKeyFunctions.RMCRest,
@@ -181,7 +183,7 @@ public sealed class RulesKeyRebindMergeRegressionTest : GameTest
             }
             finally
             {
-                tab.Dispose();
+                tab.Release();
             }
 
             Assert.Multiple(() =>

@@ -1956,8 +1956,7 @@
   id: CMU3DCMUXenoEggNotDSNaturalFinalCloud
   label: Silver-blue xeno egg shell
   status: draft
-  sourcePrototypes:
-  - CMUXenoEggNotDS
+  sourcePrototypes: []
   referencePrototype: CMUXenoEggNotDS
   referenceRsi: /Textures/_RMC14/Structures/Xenos/xeno_egg.rsi
   referenceState: egg_item

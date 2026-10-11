@@ -1,3 +1,4 @@
+using Content.Client.CMU14.UserInterface;
 using Content.Server.Camera;
 using Content.Shared.Camera;
 using Content.Shared.Damage.Systems;
@@ -158,6 +159,21 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaSmokeTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<AlertPrototype> CMUYautjaPowerPrototype = "CMUYautjaPower";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaFalconDroneBadBloodPrototype = "CMUYautjaFalconDroneBadBlood";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaFalconDroneBadBloodDeployedPrototype = "CMUYautjaFalconDroneBadBloodDeployed";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaFalconDroneDestroyedPrototype = "CMUYautjaFalconDroneDestroyed";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaFalconDroneDisabledPrototype = "CMUYautjaFalconDroneDisabled";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUActionYautjaFalconControlPrototype = "CMUActionYautjaFalconControl";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUActionYautjaFalconRecallPrototype = "CMUActionYautjaFalconRecall";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUHunterShipSleepingHellhoundPrototype = "CMUHunterShipSleepingHellhound";
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Ghost.Roles.Raffles.GhostRoleRaffleSettingsPrototype> defaultPrototype = "default";
+    private static readonly Robust.Shared.Prototypes.ProtoId<EmotePrototype> CMUYautjaHellhoundRoarPrototype = "CMUYautjaHellhoundRoar";
+    private static readonly Robust.Shared.Prototypes.ProtoId<EmotePrototype> CMUYautjaHellhoundGrowlPrototype = "CMUYautjaHellhoundGrowl";
+    private static readonly Robust.Shared.Prototypes.ProtoId<EmotePrototype> CMUYautjaHellhoundHissPrototype = "CMUYautjaHellhoundHiss";
+    private static readonly Robust.Shared.Prototypes.ProtoId<EmotePrototype> XenoHelpPrototype = "XenoHelp";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUActionYautjaHellhoundSenseOwnerPrototype = "CMUActionYautjaHellhoundSenseOwner";
+
     private static readonly ProtoId<RadioChannelPrototype> YautjaRadioChannel = "CMUYautja";
 
     private static readonly string[] VoiceActionIds =
@@ -804,7 +820,7 @@ public sealed class YautjaSmokeTest
             var inventory = entMan.System<InventorySystem>();
             var power = entMan.System<YautjaPowerSystem>();
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var alert = prototypes.Index<AlertPrototype>("CMUYautjaPower");
+            var alert = prototypes.Index<AlertPrototype>(CMUYautjaPowerPrototype);
             var expectedStates = new[]
             {
                 "powerbar100",
@@ -905,7 +921,7 @@ public sealed class YautjaSmokeTest
             var inventory = entMan.System<InventorySystem>();
             var power = entMan.System<YautjaPowerSystem>();
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var alert = prototypes.Index<AlertPrototype>("CMUYautjaPower");
+            var alert = prototypes.Index<AlertPrototype>(CMUYautjaPowerPrototype);
 
             var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
@@ -5783,7 +5799,8 @@ public sealed class YautjaSmokeTest
                     foreach (var migratedActionId in migratedActionIds)
                         Assert.That(actionIds, Does.Not.Contain(migratedActionId), $"{migratedActionId} belongs to the bracer menu.");
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaOpenMarkPanel"));
-                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaSelfDestruct"));
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaSelfDestruct"),
+                        "self-destruct is a bindable hotkey now, the bracer menu button still works too");
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTranslator"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleBracerIdChip"));
                     Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaLinkThrallBracer"));
@@ -6671,7 +6688,7 @@ public sealed class YautjaSmokeTest
             }
             finally
             {
-                contextElement.Dispose();
+                contextElement.Release();
             }
 
             var ui = client.ResolveDependency<IUserInterfaceManager>();
@@ -14937,13 +14954,13 @@ public sealed class YautjaSmokeTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.ResolveDependency<IComponentFactory>();
             var falcon = prototypes.Index(FalconDronePrototype);
-            var badBloodFalcon = prototypes.Index("CMUYautjaFalconDroneBadBlood");
+            var badBloodFalcon = prototypes.Index(CMUYautjaFalconDroneBadBloodPrototype);
             var deployed = prototypes.Index(FalconDroneDeployedPrototype);
-            var badBloodDeployed = prototypes.Index("CMUYautjaFalconDroneBadBloodDeployed");
-            var destroyed = prototypes.Index("CMUYautjaFalconDroneDestroyed");
-            var disabled = prototypes.Index("CMUYautjaFalconDroneDisabled");
-            var controlAction = prototypes.Index("CMUActionYautjaFalconControl");
-            var recallAction = prototypes.Index("CMUActionYautjaFalconRecall");
+            var badBloodDeployed = prototypes.Index(CMUYautjaFalconDroneBadBloodDeployedPrototype);
+            var destroyed = prototypes.Index(CMUYautjaFalconDroneDestroyedPrototype);
+            var disabled = prototypes.Index(CMUYautjaFalconDroneDisabledPrototype);
+            var controlAction = prototypes.Index(CMUActionYautjaFalconControlPrototype);
+            var recallAction = prototypes.Index(CMUActionYautjaFalconRecallPrototype);
 
             Assert.Multiple(() =>
             {
@@ -15830,9 +15847,9 @@ public sealed class YautjaSmokeTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.EntMan.ComponentFactory;
-            var prototype = prototypes.Index<EntityPrototype>("CMUHunterShipSleepingHellhound");
+            var prototype = prototypes.Index<EntityPrototype>(CMUHunterShipSleepingHellhoundPrototype);
 
-            Assert.That(prototype.TryGetComponent<UserInterfaceComponent>(out _, factory), Is.True,
+            Assert.That(prototype.TryComp<UserInterfaceComponent>(out _, factory), Is.True,
                 "The sleeping Hellhound must expose UserInterface so DialogBui can open the wake confirmation.");
         });
 
@@ -15893,7 +15910,7 @@ public sealed class YautjaSmokeTest
                     Assert.That(entMan.TryGetComponent(hellhoundUid, out GhostRoleRaffleComponent? raffle), Is.True);
                     Assert.Multiple(() =>
                     {
-                        var defaults = server.ProtoMan.Index<Content.Shared.Ghost.Roles.Raffles.GhostRoleRaffleSettingsPrototype>("default").Settings;
+                        var defaults = server.ProtoMan.Index<Content.Shared.Ghost.Roles.Raffles.GhostRoleRaffleSettingsPrototype>(defaultPrototype).Settings;
                         Assert.That(raffle!.Countdown, Is.EqualTo(TimeSpan.FromSeconds(defaults.InitialDuration)));
                         Assert.That(raffle.JoinExtendsDurationBy, Is.EqualTo(TimeSpan.FromSeconds(defaults.JoinExtendsDurationBy)));
                         Assert.That(raffle.MaxDuration, Is.EqualTo(TimeSpan.FromSeconds(defaults.MaxDuration)));
@@ -15989,7 +16006,7 @@ public sealed class YautjaSmokeTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(raffle!.CurrentMembers, Does.Contain(session));
-                    var defaults = server.ProtoMan.Index<Content.Shared.Ghost.Roles.Raffles.GhostRoleRaffleSettingsPrototype>("default").Settings;
+                    var defaults = server.ProtoMan.Index<Content.Shared.Ghost.Roles.Raffles.GhostRoleRaffleSettingsPrototype>(defaultPrototype).Settings;
                     Assert.That(raffle.Countdown, Is.EqualTo(TimeSpan.FromSeconds(defaults.InitialDuration)));
                     Assert.That(raffle.JoinExtendsDurationBy, Is.EqualTo(TimeSpan.FromSeconds(defaults.JoinExtendsDurationBy)));
                     Assert.That(raffle.MaxDuration, Is.EqualTo(TimeSpan.FromSeconds(defaults.MaxDuration)));
@@ -16589,9 +16606,9 @@ public sealed class YautjaSmokeTest
 
                 Assert.Multiple(() =>
                 {
-                    var roar = prototypes.Index<EmotePrototype>("CMUYautjaHellhoundRoar");
-                    var growl = prototypes.Index<EmotePrototype>("CMUYautjaHellhoundGrowl");
-                    var hiss = prototypes.Index<EmotePrototype>("CMUYautjaHellhoundHiss");
+                    var roar = prototypes.Index<EmotePrototype>(CMUYautjaHellhoundRoarPrototype);
+                    var growl = prototypes.Index<EmotePrototype>(CMUYautjaHellhoundGrowlPrototype);
+                    var hiss = prototypes.Index<EmotePrototype>(CMUYautjaHellhoundHissPrototype);
 
                     Assert.That(roar.ChatMessages, Is.EqualTo(new[] { "rmc-emote-xeno-roar" }));
                     Assert.That(growl.ChatMessages, Is.EqualTo(new[] { "cmu-yautja-hellhound-emote-growl" }));
@@ -16602,7 +16619,7 @@ public sealed class YautjaSmokeTest
                     Assert.That(speech.EmoteOverrides["XenoRoar"].ToString(), Is.EqualTo("CMUYautjaHellhoundRoar"));
                     Assert.That(speech.EmoteOverrides["Growl"].ToString(), Is.EqualTo("CMUYautjaHellhoundGrowl"));
                     Assert.That(speech.EmoteOverrides["Hiss"].ToString(), Is.EqualTo("CMUYautjaHellhoundHiss"));
-                    Assert.That(prototypes.Index<EmotePrototype>("XenoHelp").ChatTriggers, Does.Contain("needshelp"));
+                    Assert.That(prototypes.Index<EmotePrototype>(XenoHelpPrototype).ChatTriggers, Does.Contain("needshelp"));
                     Assert.That(speech.AllowedEmotes.Select(id => id.ToString()), Does.Not.Contain("XenoHelp"));
                     Assert.That(entMan.GetComponent<XenoComponent>(hellhound).EmoteSounds?.ToString(), Is.EqualTo("Xeno"),
                         "CMSS13 Hellhound source audio is ed209_20sec plus giant_lizard growl/hiss, but those assets are not present in the local source mirror yet.");
@@ -16677,7 +16694,7 @@ public sealed class YautjaSmokeTest
                 {
                     var gorgeAction = entMan.GetComponent<ActionComponent>(gorge);
                     var senseOwnerAction = entMan.GetComponent<ActionComponent>(senseOwner);
-                    var senseOwnerPrototype = prototypes.Index<EntityPrototype>("CMUActionYautjaHellhoundSenseOwner");
+                    var senseOwnerPrototype = prototypes.Index<EntityPrototype>(CMUActionYautjaHellhoundSenseOwnerPrototype);
                     Assert.Multiple(() =>
                     {
                         Assert.That(leapDamage.GetTotal(), Is.EqualTo((FixedPoint2) 30),
@@ -19601,13 +19618,13 @@ public sealed class YautjaSmokeTest
 
     private static void AssertPrototypeSpriteState(EntityPrototype prototype, IComponentFactory factory, string state)
     {
-        Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, prototype.ID);
+        Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, prototype.ID);
         Assert.That(sprite!.AllLayers.First().RsiState.Name, Is.EqualTo(state), $"{prototype.ID} CMSS13 icon_state");
     }
 
     private static void AssertPrototypeActionIconState(EntityPrototype prototype, IComponentFactory factory, string state)
     {
-        Assert.That(prototype.TryGetComponent<ActionComponent>(out var action, factory), Is.True, prototype.ID);
+        Assert.That(prototype.TryComp<ActionComponent>(out var action, factory), Is.True, prototype.ID);
         var icon = YautjaActionSpriteTest.ReadIcon(prototype, factory);
         Assert.That(icon, Is.Not.Null, $"{prototype.ID} action icon");
         Assert.That(icon!.RsiState, Is.EqualTo(state), $"{prototype.ID} CMSS13 action_icon_state");
@@ -19972,7 +19989,7 @@ public sealed partial class YautjaTestEmoteListenerComponent : Component;
 
 // Seed the slot draw at completion so unrelated simulation RNG during the
 // three-second DoAfter cannot choose a different function for these scenarios.
-public sealed class YautjaBracerRandomSeedTestSystem : EntitySystem
+public sealed partial class YautjaBracerRandomSeedTestSystem : EntitySystem
 {
     [Dependency] private IRobustRandom _random = default!;
 

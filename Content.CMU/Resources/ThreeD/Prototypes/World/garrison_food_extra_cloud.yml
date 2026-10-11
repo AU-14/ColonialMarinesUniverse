@@ -3362,163 +3362,85 @@
     color: '#C2C2C2'
     shape: CylinderZ
   - label: dipping cup open wall 01
-    min: 0.347, -0.121117, 0.016
-    max: 0.373, -0.068883, 0.146
+    min: 0.347, -0.1493478, 0.016
+    max: 0.373, -0.0406522, 0.146
     color: '#D0D0D0'
+    yaw: 0.0
   - label: dipping cup open wall 02
-    min: 0.338094, -0.076343, 0.016
-    max: 0.364094, -0.024109, 0.146
+    min: 0.3127315, -0.0666163, 0.016
+    max: 0.3387315, 0.0420793, 0.146
     color: '#D0D0D0'
-    yaw: 22.5
+    yaw: 45.0
   - label: dipping cup open wall 03
-    min: 0.312731, -0.038386, 0.016
-    max: 0.338731, 0.013849, 0.146
+    min: 0.23, -0.0323478, 0.016
+    max: 0.256, 0.0763478, 0.146
     color: '#D0D0D0'
-    yaw: 45.0
+    yaw: 90.0
   - label: dipping cup open wall 04
-    min: 0.274774, -0.013023, 0.016
-    max: 0.300774, 0.039211, 0.146
-    color: '#D0D0D0'
-    yaw: 67.5
-  - label: dipping cup open wall 05
-    min: 0.23, -0.004117, 0.016
-    max: 0.256, 0.048117, 0.146
-    color: '#D0D0D0'
-    yaw: 90.0
-  - label: dipping cup open wall 06
-    min: 0.185226, -0.013023, 0.016
-    max: 0.211226, 0.039211, 0.146
-    color: '#D0D0D0'
-    yaw: 112.5
-  - label: dipping cup open wall 07
-    min: 0.147269, -0.038386, 0.016
-    max: 0.173269, 0.013849, 0.146
+    min: 0.1472685, -0.0666163, 0.016
+    max: 0.1732685, 0.0420793, 0.146
     color: '#D0D0D0'
     yaw: 135.0
+  - label: dipping cup open wall 05
+    min: 0.113, -0.1493478, 0.016
+    max: 0.139, -0.0406522, 0.146
+    color: '#D0D0D0'
+    yaw: 180.0
+  - label: dipping cup open wall 06
+    min: 0.1472685, -0.2320793, 0.016
+    max: 0.1732685, -0.1233837, 0.146
+    color: '#D0D0D0'
+    yaw: 225.0
+  - label: dipping cup open wall 07
+    min: 0.23, -0.2663478, 0.016
+    max: 0.256, -0.1576522, 0.146
+    color: '#D0D0D0'
+    yaw: 270.0
   - label: dipping cup open wall 08
-    min: 0.121906, -0.076343, 0.016
-    max: 0.147906, -0.024109, 0.146
+    min: 0.3127315, -0.2320793, 0.016
+    max: 0.3387315, -0.1233837, 0.146
     color: '#D0D0D0'
-    yaw: 157.5
-  - label: dipping cup open wall 09
-    min: 0.113, -0.121117, 0.016
-    max: 0.139, -0.068883, 0.146
-    color: '#D0D0D0'
-    yaw: -180.0
-  - label: dipping cup open wall 10
-    min: 0.121906, -0.165891, 0.016
-    max: 0.147906, -0.113657, 0.146
-    color: '#D0D0D0'
-    yaw: -157.5
-  - label: dipping cup open wall 11
-    min: 0.147269, -0.203849, 0.016
-    max: 0.173269, -0.151614, 0.146
-    color: '#D0D0D0'
-    yaw: -135.0
-  - label: dipping cup open wall 12
-    min: 0.185226, -0.229211, 0.016
-    max: 0.211226, -0.176977, 0.146
-    color: '#D0D0D0'
-    yaw: -112.5
-  - label: dipping cup open wall 13
-    min: 0.23, -0.238117, 0.016
-    max: 0.256, -0.185883, 0.146
-    color: '#D0D0D0'
-    yaw: -90.0
-  - label: dipping cup open wall 14
-    min: 0.274774, -0.229211, 0.016
-    max: 0.300774, -0.176977, 0.146
-    color: '#D0D0D0'
-    yaw: -67.5
-  - label: dipping cup open wall 15
-    min: 0.312731, -0.203849, 0.016
-    max: 0.338731, -0.151614, 0.146
-    color: '#D0D0D0'
-    yaw: -45.0
-  - label: dipping cup open wall 16
-    min: 0.338094, -0.165891, 0.016
-    max: 0.364094, -0.113657, 0.146
-    color: '#D0D0D0'
-    yaw: -22.5
+    yaw: 315.0
   - label: dipping cup rolled rim 01
-    min: 0.348, -0.12172, 0.1385
-    max: 0.376, -0.06828, 0.1635
+    min: 0.348, -0.1505904, 0.1385
+    max: 0.376, -0.0394096, 0.1635
     color: '#EFEFEF'
+    yaw: 0.0
   - label: dipping cup rolled rim 02
-    min: 0.338942, -0.076181, 0.1385
-    max: 0.366942, -0.022741, 0.1635
-    color: '#EFEFEF'
-    yaw: 22.5
-  - label: dipping cup rolled rim 03
-    min: 0.313146, -0.037574, 0.1385
-    max: 0.341146, 0.015866, 0.1635
+    min: 0.3131457, -0.0664447, 0.1385
+    max: 0.3411457, 0.0447361, 0.1635
     color: '#EFEFEF'
     yaw: 45.0
-  - label: dipping cup rolled rim 04
-    min: 0.274539, -0.011778, 0.1385
-    max: 0.302539, 0.041662, 0.1635
-    color: '#EFEFEF'
-    yaw: 67.5
-  - label: dipping cup rolled rim 05
-    min: 0.229, -0.00272, 0.1385
-    max: 0.257, 0.05072, 0.1635
+  - label: dipping cup rolled rim 03
+    min: 0.229, -0.0315904, 0.1385
+    max: 0.257, 0.0795904, 0.1635
     color: '#EFEFEF'
     yaw: 90.0
-  - label: dipping cup rolled rim 06
-    min: 0.183461, -0.011778, 0.1385
-    max: 0.211461, 0.041662, 0.1635
-    color: '#EFEFEF'
-    yaw: 112.5
-  - label: dipping cup rolled rim 07
-    min: 0.144854, -0.037574, 0.1385
-    max: 0.172854, 0.015866, 0.1635
+  - label: dipping cup rolled rim 04
+    min: 0.1448543, -0.0664447, 0.1385
+    max: 0.1728543, 0.0447361, 0.1635
     color: '#EFEFEF'
     yaw: 135.0
+  - label: dipping cup rolled rim 05
+    min: 0.11, -0.1505904, 0.1385
+    max: 0.138, -0.0394096, 0.1635
+    color: '#EFEFEF'
+    yaw: 180.0
+  - label: dipping cup rolled rim 06
+    min: 0.1448543, -0.2347361, 0.1385
+    max: 0.1728543, -0.1235553, 0.1635
+    color: '#EFEFEF'
+    yaw: 225.0
+  - label: dipping cup rolled rim 07
+    min: 0.229, -0.2695904, 0.1385
+    max: 0.257, -0.1584096, 0.1635
+    color: '#EFEFEF'
+    yaw: 270.0
   - label: dipping cup rolled rim 08
-    min: 0.119058, -0.076181, 0.1385
-    max: 0.147058, -0.022741, 0.1635
+    min: 0.3131457, -0.2347361, 0.1385
+    max: 0.3411457, -0.1235553, 0.1635
     color: '#EFEFEF'
-    yaw: 157.5
-  - label: dipping cup rolled rim 09
-    min: 0.11, -0.12172, 0.1385
-    max: 0.138, -0.06828, 0.1635
-    color: '#EFEFEF'
-    yaw: -180.0
-  - label: dipping cup rolled rim 10
-    min: 0.119058, -0.167259, 0.1385
-    max: 0.147058, -0.113819, 0.1635
-    color: '#EFEFEF'
-    yaw: -157.5
-  - label: dipping cup rolled rim 11
-    min: 0.144854, -0.205866, 0.1385
-    max: 0.172854, -0.152426, 0.1635
-    color: '#EFEFEF'
-    yaw: -135.0
-  - label: dipping cup rolled rim 12
-    min: 0.183461, -0.231662, 0.1385
-    max: 0.211461, -0.178222, 0.1635
-    color: '#EFEFEF'
-    yaw: -112.5
-  - label: dipping cup rolled rim 13
-    min: 0.229, -0.24072, 0.1385
-    max: 0.257, -0.18728, 0.1635
-    color: '#EFEFEF'
-    yaw: -90.0
-  - label: dipping cup rolled rim 14
-    min: 0.274539, -0.231662, 0.1385
-    max: 0.302539, -0.178222, 0.1635
-    color: '#EFEFEF'
-    yaw: -67.5
-  - label: dipping cup rolled rim 15
-    min: 0.313146, -0.205866, 0.1385
-    max: 0.341146, -0.152426, 0.1635
-    color: '#EFEFEF'
-    yaw: -45.0
-  - label: dipping cup rolled rim 16
-    min: 0.338942, -0.167259, 0.1385
-    max: 0.366942, -0.113819, 0.1635
-    color: '#EFEFEF'
-    yaw: -22.5
+    yaw: 315.0
   - label: recessed dark dipping sauce
     min: 0.1395, -0.1985, 0.0955
     max: 0.3465, 0.0085, 0.1085

@@ -314,7 +314,7 @@ namespace Content.Server.Atmos.EntitySystems
             if (!CanWaterExtinguish(uid, flammable) || !_rmcWater.IsInWater(uid))
                 return false;
 
-            Extinguish(uid, flammable);
+            TryExtinguish((uid, flammable));
             return true;
         }
 

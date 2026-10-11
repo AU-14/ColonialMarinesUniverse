@@ -692,10 +692,6 @@ public sealed class YautjaThrallPhase8Test
         EntityUid thrall = default;
         EntityUid masterBracer = default;
         EntityUid thrallBracer = default;
-        EntityUid thrallObservedMaster = default;
-        EntityUid thrallObservedThrall = default;
-        EntityUid thrallObservedMasterBracer = default;
-        EntityUid thrallObservedThrallBracer = default;
         EntityUid? previousAttached = null;
         CultureInfo? previousCulture = null;
 

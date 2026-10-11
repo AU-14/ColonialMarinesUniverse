@@ -346,7 +346,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
 
         var selfMsg = Loc.GetString("rmc-nailgun-finish-self", ("material", stackUid), ("target", hole.Owner));
         var othersMsg = Loc.GetString("rmc-repairable-finish-others", ("user", args.User), ("material", stackUid), ("target", hole.Owner));
-        _popup.PopupPredicted(selfMsg, othersMsg, args.User, args.User);
+        _popup.PopupEntity(selfMsg, othersMsg, args.User, args.User);
         _audio.PlayPredicted(nailgun.RepairSound, wall.Owner, args.User);
 
         if (_net.IsClient)
@@ -468,7 +468,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
         if (!userCoords.TryDistance(EntityManager, _transform, wallCoords, out var distance) ||
             distance > SharedInteractionSystem.InteractionRange)
         {
-            _popup.PopupClient(Loc.GetString("interaction-system-user-interaction-cannot-reach"), user, PopupType.SmallCaution);
+            _popup.PopupSelf(Loc.GetString("interaction-system-user-interaction-cannot-reach"), user, PopupType.SmallCaution);
             return false;
         }
 
@@ -895,7 +895,7 @@ public sealed partial class XenoAcidHoleSystem : EntitySystem
         {
             var selfMsg = Loc.GetString("rmc-repairable-start-self", ("target", hole.Owner));
             var othersMsg = Loc.GetString("rmc-repairable-start-others", ("user", user), ("target", hole.Owner));
-            _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+            _popup.PopupEntity(selfMsg, othersMsg, user, user);
         }
     }
 }

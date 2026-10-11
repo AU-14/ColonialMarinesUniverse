@@ -156,8 +156,8 @@ public sealed class CMUXenoZLevelTest : GameTest
         await Pair.RunSeconds(6);
         await Server.WaitAssertion(() =>
         {
-            var clouds = SEntMan.EntityQuery<EvenSmokeComponent, TransformComponent>()
-                .Where(e => e.Item2.MapUid == map).ToArray();
+            var clouds = SEntMan.QueryEntities<EvenSmokeComponent, TransformComponent>()
+                .Where(e => e.Item2.Comp.MapUid == map).ToArray();
             var positions = clouds.Select(e => SEntMan.System<SharedTransformSystem>().GetMapCoordinates(e.Item1.Owner).Position).ToArray();
             Assert.That(positions.Length, Is.EqualTo(1 + 2 * range * (range + 1)));
             Assert.That(positions.Distinct().Count(), Is.EqualTo(positions.Length), "Converging gas fronts must not create duplicate clouds.");
@@ -188,9 +188,9 @@ public sealed class CMUXenoZLevelTest : GameTest
         {
             var transform = SEntMan.System<SharedTransformSystem>();
             var map = gridless ? _sky : _upper;
-            var clouds = SEntMan.EntityQuery<EvenSmokeComponent, TransformComponent>().ToArray();
-            Assert.That(clouds.Where(e => e.Item2.MapUid == map).All(e => transform.GetWorldPosition(e.Item2).X < 1), Is.True);
-            Assert.That(clouds.Count(e => e.Item2.MapUid == _unrelated), Is.EqualTo(1));
+            var clouds = SEntMan.QueryEntities<EvenSmokeComponent, TransformComponent>().ToArray();
+            Assert.That(clouds.Where(e => e.Item2.Comp.MapUid == map).All(e => transform.GetWorldPosition(e.Item2.Comp).X < 1), Is.True);
+            Assert.That(clouds.Count(e => e.Item2.Comp.MapUid == _unrelated), Is.EqualTo(1));
         });
     }
 }

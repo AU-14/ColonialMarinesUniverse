@@ -5,10 +5,10 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Pushups;
 
-public sealed class CMUPushupsVisualsSystem : EntitySystem
+public sealed partial class CMUPushupsVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     private const float PushupHeight = 0.08f;
     private const float SitupHeight = 0.04f;

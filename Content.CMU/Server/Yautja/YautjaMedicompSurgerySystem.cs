@@ -25,7 +25,7 @@ namespace Content.Server.CMU14.Yautja;
 ///     Implements the CMSS13 mcomp_wounds effects while leaving scheduling,
 ///     tool validation, self-surgery and session locking to CMU surgery.
 /// </summary>
-public sealed class YautjaMedicompSurgerySystem : EntitySystem
+public sealed partial class YautjaMedicompSurgerySystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;

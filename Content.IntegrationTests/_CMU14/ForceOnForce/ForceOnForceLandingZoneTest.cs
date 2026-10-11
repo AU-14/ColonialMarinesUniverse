@@ -18,6 +18,8 @@ namespace Content.IntegrationTests._CMU14.ForceOnForce;
 [TestFixture]
 public sealed class ForceOnForceLandingZoneTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> ForceOnForcePrototype = "ForceOnForce";
+
     public override PoolSettings PoolSettings => new() { Dirty = true };
 
     [Test]
@@ -25,7 +27,7 @@ public sealed class ForceOnForceLandingZoneTest : GameTest
     {
         await Server.WaitAssertion(() =>
         {
-            var preset = SProtoMan.Index<GamePresetPrototype>("ForceOnForce");
+            var preset = SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype);
             var planets = GamePlanetPoolPrototype.ExpandPlanetIds(SProtoMan, preset.PlanetPool, preset.SupportedPlanets);
             Assert.That(planets, Is.EquivalentTo(new[]
             {

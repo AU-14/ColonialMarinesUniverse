@@ -28,7 +28,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Explosion;
 
-public sealed class CMUGrenadeBodyBlockSystem : EntitySystem
+public sealed partial class CMUGrenadeBodyBlockSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -149,7 +149,7 @@ public sealed class CMUGrenadeBodyBlockSystem : EntitySystem
         var total = new DamageSpecifier();
         if (fragments.FillPrototype is { } fill &&
             _proto.TryIndex(fill, out var fillProto) &&
-            fillProto.TryGetComponent<ProjectileComponent>(out var fillProjectile, _factory))
+            fillProto.TryComp<ProjectileComponent>(out var fillProjectile, _factory))
         {
             for (var i = 0; i < fragments.UnspawnedCount; i++)
                 total += fillProjectile.Damage;

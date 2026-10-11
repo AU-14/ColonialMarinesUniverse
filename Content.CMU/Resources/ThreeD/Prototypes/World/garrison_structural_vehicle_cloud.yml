@@ -110,7 +110,7 @@
     color: '#929292'
   - label: closed door leaf 0
     min: -0.703125, -0.513, 0.055
-    max: -0.015625, -0.462, 1.0
+    max: 0.703125, -0.462, 1
     color: '#53638F'
   - label: source blue door paint 0
     min: -0.703125, -0.518, 0.0
@@ -118,10 +118,6 @@
     color: '#FFFFFF'
     surface: CMU3DStructuralVehicleCloudArt000
     surfaceAxis: XZ
-  - label: closed door leaf 1
-    min: -0.015625, -0.513, 0.055
-    max: 0.703125, -0.462, 1.0
-    color: '#53638F'
   - label: source blue door paint 1
     min: -0.015625, -0.518, 0.0
     max: 0.703125, -0.514, 1.0

@@ -154,6 +154,11 @@
     - ActionXenoPsychicWhisper
   - type: XenoPsychicCommunication
     whisperRange: 7
+  # psychic whisper opens its text dialog on the whisperer, no key here means it silently never opens
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
   # Hands exist only so the hatchling can trigger vent entrance interactions;
   # the empty WhitelistPickup keeps those hands from looting anything
   - type: Hands
@@ -283,6 +288,22 @@
     layers:
     - sprite: _RMC14/Actions/xeno_actions.rsi
       state: fling
+      map: ["enum.ActionVisuals.Icon"]
+  - type: InstantAction
+    event: !type:RiderExitActionEvent
+
+# what the seizing rider sees on the host's bar; same event, but mid-seize it only hands the body back
+- type: entity
+  id: ActionRiderSeizeRelease
+  name: Release Host
+  description: Let go of the wheel early. They get their body back and you stay inside. The grip cost is paid either way.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: regurgitate
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:RiderExitActionEvent
@@ -508,6 +529,11 @@
     currentLanguage: RiderCant
     defaultLanguage: RiderCant
   - type: AllLanguages
+  # alerts has to be here already or the nv toggle alert never shows at map init
+  - type: Alerts
+  - type: NightVision
+    innate: true
+    alert: XenoNightVision
 
 - type: entity
   id: ActionRiderManifest

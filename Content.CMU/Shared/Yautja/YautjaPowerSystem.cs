@@ -132,6 +132,11 @@ public sealed partial class YautjaPowerSystem : EntitySystem
         AddAction(ent.Comp, ref args, ref ent.Comp.OpenBracerMenuAction, ent.Comp.OpenBracerMenuActionId);
         AddAction(ent.Comp, ref args, ref ent.Comp.ToggleCloakAction, ent.Comp.ToggleCloakActionId);
         AddAction(ent.Comp, ref args, ref ent.Comp.RecallAction, ent.Comp.RecallActionId);
+        // the action proto + handler existed but nothing ever granted it, so sd was menu-only
+        // and the drag-a-dead-hunter path was unreachable. whitelist still keeps it off military bracers,
+        // youngbloods can't sd at all so no point giving them a button that just says no
+        if (!HasComp<YautjaYoungbloodComponent>(args.User))
+            AddAction(ent.Comp, ref args, ref ent.Comp.SelfDestructAction, ent.Comp.SelfDestructActionId);
 
         if (ent.Comp.EnableRaiseThrall)
             AddAction(ent.Comp, ref args, ref ent.Comp.RaiseThrallAction, ent.Comp.RaiseThrallActionId);
@@ -279,7 +284,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
 
         if (action.Comp.RequireMask && !HasActiveMask(args.User))
         {
-            _popup.PopupClient(Loc.GetString("cmu-yautja-mask-required"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-mask-required"), args.User, args.User, PopupType.SmallCaution);
             args.Cancelled = true;
             return;
         }
@@ -459,7 +464,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
     {
         if (_net.IsClient || !popupOnServer)
         {
-            _popup.PopupClient(message, user, user, PopupType.MediumCaution);
+            _popup.PopupEntity(message, user, user, PopupType.MediumCaution);
             return;
         }
 

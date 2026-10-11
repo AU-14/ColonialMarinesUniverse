@@ -2,6 +2,7 @@ using Content.Server.Body.Systems;
 using Content.Shared.Atmos;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -78,6 +79,12 @@ namespace Content.Server.Body.Components
 
         [DataField]
         public TimeSpan GaspEmoteCooldown = TimeSpan.FromSeconds(8);
+
+        /// <summary>
+        ///     CMU14: Asphyxiation damage needed before running short of air makes the mob gasp.
+        /// </summary>
+        [DataField]
+        public FixedPoint2 GaspDamageThreshold = FixedPoint2.New(20);
 
         [ViewVariables]
         public TimeSpan LastGaspEmoteTime;

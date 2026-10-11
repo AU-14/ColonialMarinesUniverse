@@ -105,7 +105,7 @@ public sealed partial class DropshipFabricatorBui : BoundUserInterface
             ("count", fabricator.Queue.Count),
             ("max", fabricator.MaxQueue)));
 
-        _window.QueueContainer.DisposeAllChildren();
+        _window.QueueContainer.ReleaseChildren();
         if (fabricator.Queue.Count == 0)
         {
             var empty = new Label

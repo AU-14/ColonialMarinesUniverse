@@ -44,7 +44,8 @@ public sealed partial class CMUExpeditionAgentComponent : Component
     public TimeSpan FireAt;
     public TimeSpan BurstEnd;
     public TimeSpan MoveUntil;
-    public EntityCoordinates? MoveProgressPosition;
+    public EntityCoordinates? MoveProgressDestination;
+    public float MoveProgressDistance;
     public TimeSpan MoveProgressAt;
     public TimeSpan RifleLoweredUntil;
     public int ShotsFired;
@@ -97,6 +98,9 @@ public enum CMUExpeditionAgentState : byte
     Rescuing,
     Throwing,
     Disabled,
+    Incapacitated,
+    RecoverWeapon,
+    Scavenge,
 }
 
 public enum CMUExpeditionDisposition : byte { Steady, Aggressive, Cautious }

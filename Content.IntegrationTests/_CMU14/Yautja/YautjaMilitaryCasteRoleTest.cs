@@ -28,6 +28,14 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaMilitaryCasteRoleTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaPoweredArmorEnforcerPrototype = "CMUYautjaPoweredArmorEnforcer";
+    private static readonly Robust.Shared.Prototypes.ProtoId<HealthIconPrototype> CMUYautjaMilitarySoldierIconPrototype = "CMUYautjaMilitarySoldierIcon";
+    private static readonly Robust.Shared.Prototypes.ProtoId<HealthIconPrototype> CMUYautjaMilitaryEnforcerIconPrototype = "CMUYautjaMilitaryEnforcerIcon";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUMobYautjaMilitaryCasteSoldierPrototype = "CMUMobYautjaMilitaryCasteSoldier";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUMobYautjaMilitaryCasteEnforcerPrototype = "CMUMobYautjaMilitaryCasteEnforcer";
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaMilitaryCasteSoldierPrototype = "CMUYautjaMilitaryCasteSoldier";
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaMilitaryCasteEnforcerPrototype = "CMUYautjaMilitaryCasteEnforcer";
+
     [Test]
     public async Task MilitaryCasteWornGearUsesOriginalCmss13OnMobRsi()
     {
@@ -82,13 +90,13 @@ public sealed class YautjaMilitaryCasteRoleTest
             foreach (var (id, expectedState) in expectedStates)
             {
                 var prototype = prototypes.Index<EntityPrototype>(id);
-                Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, id);
+                Assert.That(prototype.TryComp<ClothingComponent>(out var clothing, factory), Is.True, id);
                 Assert.That(clothing!.RsiPath, Is.EqualTo(wornPath), id);
                 Assert.That(clothing.EquippedState, Is.EqualTo(expectedState), id);
             }
 
-            var enforcer = prototypes.Index<EntityPrototype>("CMUYautjaPoweredArmorEnforcer");
-            Assert.That(enforcer.TryGetComponent<ClothingComponent>(out var enforcerClothing, factory), Is.True);
+            var enforcer = prototypes.Index<EntityPrototype>(CMUYautjaPoweredArmorEnforcerPrototype);
+            Assert.That(enforcer.TryComp<ClothingComponent>(out var enforcerClothing, factory), Is.True);
             Assert.That(enforcerClothing!.EquippedState, Is.EqualTo("fullarmor_soldier_lead"));
         });
 
@@ -188,10 +196,10 @@ public sealed class YautjaMilitaryCasteRoleTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var soldier = prototypes.Index<HealthIconPrototype>("CMUYautjaMilitarySoldierIcon");
-            var enforcer = prototypes.Index<HealthIconPrototype>("CMUYautjaMilitaryEnforcerIcon");
-            var soldierMob = prototypes.Index<EntityPrototype>("CMUMobYautjaMilitaryCasteSoldier");
-            var enforcerMob = prototypes.Index<EntityPrototype>("CMUMobYautjaMilitaryCasteEnforcer");
+            var soldier = prototypes.Index<HealthIconPrototype>(CMUYautjaMilitarySoldierIconPrototype);
+            var enforcer = prototypes.Index<HealthIconPrototype>(CMUYautjaMilitaryEnforcerIconPrototype);
+            var soldierMob = prototypes.Index<EntityPrototype>(CMUMobYautjaMilitaryCasteSoldierPrototype);
+            var enforcerMob = prototypes.Index<EntityPrototype>(CMUMobYautjaMilitaryCasteEnforcerPrototype);
 
             Assert.Multiple(() =>
             {
@@ -216,8 +224,8 @@ public sealed class YautjaMilitaryCasteRoleTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var soldier = prototypes.Index<JobPrototype>("CMUYautjaMilitaryCasteSoldier");
-            var enforcer = prototypes.Index<JobPrototype>("CMUYautjaMilitaryCasteEnforcer");
+            var soldier = prototypes.Index<JobPrototype>(CMUYautjaMilitaryCasteSoldierPrototype);
+            var enforcer = prototypes.Index<JobPrototype>(CMUYautjaMilitaryCasteEnforcerPrototype);
 
             Assert.Multiple(() =>
             {

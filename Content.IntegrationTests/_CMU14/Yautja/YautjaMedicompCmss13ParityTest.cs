@@ -22,6 +22,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaMedicompCmss13ParityTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ReagentPrototype> thweiPrototype = "thwei";
+    private static readonly Robust.Shared.Prototypes.ProtoId<ReagentPrototype> dathweiPrototype = "dathwei";
+
     [Test]
     public async Task HerbalCaseContainsTwoTenUseHerbStacksLikeCmss13()
     {
@@ -79,8 +82,8 @@ public sealed class YautjaMedicompCmss13ParityTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var solutionSystem = entMan.System<SharedSolutionContainerSystem>();
 
-            var thwei = prototypes.Index<ReagentPrototype>("thwei");
-            var dathwei = prototypes.Index<ReagentPrototype>("dathwei");
+            var thwei = prototypes.Index<ReagentPrototype>(thweiPrototype);
+            var dathwei = prototypes.Index<ReagentPrototype>(dathweiPrototype);
 
             Assert.Multiple(() =>
             {
@@ -247,10 +250,10 @@ public sealed class YautjaMedicompCmss13ParityTest
         Color expectedOverlayColor)
     {
         var prototype = prototypes.Index<EntityPrototype>(id);
-        Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
-        Assert.That(prototype.TryGetComponent<HyposprayComponent>(out var hypospray, factory), Is.True, id);
+        Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, id);
+        Assert.That(prototype.TryComp<HyposprayComponent>(out var hypospray, factory), Is.True, id);
         Assert.That(solutionSystem.TryGetSolution(prototype, "pen", out var pen), Is.True, id);
-        Assert.That(prototype.TryGetComponent<SolutionContainerVisualsComponent>(out var visuals, factory), Is.True, id);
+        Assert.That(prototype.TryComp<SolutionContainerVisualsComponent>(out var visuals, factory), Is.True, id);
         var layers = sprite!.AllLayers.ToArray();
 
         Assert.Multiple(() =>
@@ -312,7 +315,7 @@ public sealed class YautjaMedicompCmss13ParityTest
         params string[] expectedStates)
     {
         var prototype = prototypes.Index<EntityPrototype>(id);
-        Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
+        Assert.That(prototype.TryComp<SpriteComponent>(out var sprite, factory), Is.True, id);
         Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath(expectedPath)), $"{id} scoped RSI");
         Assert.That(sprite.AllLayers.Select(layer => layer.RsiState.Name).ToArray(), Is.EqualTo(expectedStates), $"{id} source sprite states");
     }

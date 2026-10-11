@@ -9,6 +9,9 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaWallVisionPrototypeTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUMobYautjaPrototype = "CMUMobYautja";
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMUYautjaNightVisionGlassesPrototype = "CMUYautjaNightVisionGlasses";
+
     [Test]
     public async Task YautjaWallVisionIsSeparateFromTheNightVisionVisor()
     {
@@ -20,14 +23,14 @@ public sealed class YautjaWallVisionPrototypeTest
             var prototypes = client.ResolveDependency<IPrototypeManager>();
             var factory = client.EntMan.ComponentFactory;
 
-            var yautja = prototypes.Index<EntityPrototype>("CMUMobYautja");
-            var visor = prototypes.Index<EntityPrototype>("CMUYautjaNightVisionGlasses");
+            var yautja = prototypes.Index<EntityPrototype>(CMUMobYautjaPrototype);
+            var visor = prototypes.Index<EntityPrototype>(CMUYautjaNightVisionGlassesPrototype);
 
             Assert.Multiple(() =>
             {
-                Assert.That(yautja.TryGetComponent<YautjaComponent>(out _, factory), Is.True);
-                Assert.That(visor.TryGetComponent<NightVisionItemComponent>(out var nightVision, factory), Is.True);
-                Assert.That(visor.TryGetComponent<YautjaMaskVisorGlassesComponent>(out var thermalVisor, factory), Is.True);
+                Assert.That(yautja.TryComp<YautjaComponent>(out _, factory), Is.True);
+                Assert.That(visor.TryComp<NightVisionItemComponent>(out var nightVision, factory), Is.True);
+                Assert.That(visor.TryComp<YautjaMaskVisorGlassesComponent>(out var thermalVisor, factory), Is.True);
                 Assert.That(nightVision!.DefaultState, Is.EqualTo(NightVisionState.Full));
                 Assert.That(thermalVisor!.ThermalVisionEnabled, Is.False,
                     "Only a server-created, mask-linked visor may activate thermal wall vision.");

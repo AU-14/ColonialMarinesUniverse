@@ -21,6 +21,8 @@ namespace Content.IntegrationTests._CMU14;
 [TestFixture]
 public sealed class ReportedDropshipRegressionTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageTypePrototype> PiercingPrototype = "Piercing";
+
     [TestCase("BulletRifle10x24mm", 1f)]
     [TestCase("XenoSpitProjectile", 4f)]
     public async Task LiveProjectilesCollideWithLexingtonHull(string prototype, float multiplier)
@@ -74,7 +76,7 @@ public sealed class ReportedDropshipRegressionTest
             var projectile = entities.SpawnEntity(null, map.GridCoords);
             var physics = entities.AddComponent<PhysicsComponent>(projectile);
             var shot = entities.AddComponent<ProjectileComponent>(projectile);
-            shot.Damage = new DamageSpecifier(pair.Server.ResolveDependency<IPrototypeManager>().Index<DamageTypePrototype>("Piercing"), FixedPoint2.New(10));
+            shot.Damage = new DamageSpecifier(pair.Server.ResolveDependency<IPrototypeManager>().Index<DamageTypePrototype>(PiercingPrototype), FixedPoint2.New(10));
             if (acid)
                 entities.AddComponent<XenoAcidProjectileComponent>(projectile);
             var before = integrity.Integrity;

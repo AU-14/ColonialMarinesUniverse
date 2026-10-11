@@ -26,15 +26,17 @@ namespace Content.Server.CMU14.Round.Antags.Replicant;
 /// </summary>
 public sealed partial class ReplicantSystem : EntitySystem
 {
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly HumanoidOrganAppearanceSystem _organs = default!;
-    [Dependency] private readonly MetaDataSystem _meta = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly PopupSystem _popup = default!;
-    [Dependency] private readonly SharedIdCardSystem _idCard = default!;
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly WantedSystem _wanted = default!;
+    private static readonly Robust.Shared.Prototypes.EntProtoId ActionReplicantAssumeIdentityPrototype = "ActionReplicantAssumeIdentity";
+
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _organs = default!;
+    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private WantedSystem _wanted = default!;
 
     public override void Initialize()
     {
@@ -46,7 +48,7 @@ public sealed partial class ReplicantSystem : EntitySystem
 
     private void OnReplicantSpawned(Entity<ReplicantComponent> ent, ref ComponentStartup args)
     {
-        _actions.AddAction(ent, ref ent.Comp.Action, "ActionReplicantAssumeIdentity");
+        _actions.AddAction(ent, ref ent.Comp.Action, ActionReplicantAssumeIdentityPrototype);
 
         _wanted.SendFaxToGroup(
             ColonyCmbFax.MarshalBureauFaxGroup,
@@ -75,7 +77,7 @@ public sealed partial class ReplicantSystem : EntitySystem
             return;
 
         var targets = new List<ReplicantTargetInfo>();
-        var enumerator = EntityManager.AllEntityQueryEnumerator<HumanoidProfileComponent, MobStateComponent>();
+        var enumerator = AllEntityQuery<HumanoidProfileComponent, MobStateComponent>();
         while (enumerator.MoveNext(out var uid, out _, out _))
         {
             if (uid == ent.Owner || !_mobState.IsAlive(uid))
@@ -164,7 +166,7 @@ public sealed partial class ReplicantSystem : EntitySystem
         while (query.MoveNext(out var card, out _))
         {
             var current = card;
-            while (EntityManager.TryGetComponent(current, out TransformComponent? xform) && xform.ParentUid.IsValid())
+            while (TryComp(current, out TransformComponent? xform) && xform.ParentUid.IsValid())
             {
                 current = xform.ParentUid;
                 if (current != replicant)

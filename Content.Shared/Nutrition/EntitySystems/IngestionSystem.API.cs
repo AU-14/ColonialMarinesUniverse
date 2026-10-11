@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Reagent;
@@ -162,7 +162,7 @@ public sealed partial class IngestionSystem
 
         foreach (var trash in trashes)
         {
-            var spawnedTrash = EntityManager.PredictedSpawn(trash, position);
+            var spawnedTrash = PredictedSpawn(trash, position);
 
             // If the user is holding the item
             if (!pickup)

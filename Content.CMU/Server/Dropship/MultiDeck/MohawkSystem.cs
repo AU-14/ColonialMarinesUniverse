@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Dropship;
+using Content.Shared.Access.Systems;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -51,6 +52,7 @@ public sealed partial class MohawkSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
 
     private static readonly SoundSpecifier RampSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/omaha_ramp.ogg");
     private static readonly SoundSpecifier HatchSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/nightcustard_motor_whirring.ogg");
@@ -147,6 +149,13 @@ public sealed partial class MohawkSystem : EntitySystem
         if (HasComp<XenoComponent>(args.User))
         {
             TrySabotage(control, args.User);
+            return;
+        }
+        // The side doors stay open to everyone; only the boarding ramp and ladder are crew-restricted.
+        if (control.Comp.Group is MohawkControlGroup.Ramp or MohawkControlGroup.Hatch &&
+            !_accessReader.IsAllowed(args.User, control))
+        {
+            _popup.PopupEntity(Loc.GetString("cmu-mohawk-controls-no-access"), control, args.User);
             return;
         }
         if (mechanisms.BrokenControls.Contains(control.Comp.Group))

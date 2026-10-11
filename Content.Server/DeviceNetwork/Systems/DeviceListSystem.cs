@@ -96,7 +96,8 @@ public sealed partial class DeviceListSystem : SharedDeviceListSystem
 
         foreach (var recipient in args.Recipients)
         {
-            if (component.Devices.Contains(recipient.Owner) == component.IsAllowList)
+            if (recipient.OwnerEntity is { } recipientUid &&
+                component.Devices.Contains(recipientUid) == component.IsAllowList)
                 filteredRecipients.Add(recipient);
         }
 

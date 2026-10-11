@@ -170,7 +170,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
             if (_squadViews.TryGetValue(squad.Id, out var monitor))
             {
-                monitor.RolesContainer.DisposeAllChildren();
+                monitor.RolesContainer.ReleaseChildren();
             }
             else
             {
@@ -916,7 +916,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
 
     private void AddSaving(BoxContainer longitudes, BoxContainer latitudes, BoxContainer comments, BoxContainer saves, Thickness margin)
     {
-        longitudes.DisposeAllChildren();
+        longitudes.ReleaseChildren();
 
         var panel = CreatePanel(50);
         panel.AddChild(new Label
@@ -926,7 +926,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         });
         longitudes.AddChild(panel);
 
-        latitudes.DisposeAllChildren();
+        latitudes.ReleaseChildren();
         panel = CreatePanel(50);
         panel.AddChild(new Label
         {
@@ -935,7 +935,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         });
         latitudes.AddChild(panel);
 
-        comments.DisposeAllChildren();
+        comments.ReleaseChildren();
         panel = CreatePanel(50);
         panel.AddChild(new Label
         {
@@ -944,7 +944,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         });
         comments.AddChild(panel);
 
-        saves.DisposeAllChildren();
+        saves.ReleaseChildren();
         panel = CreatePanel(50);
         panel.AddChild(new Label
         {

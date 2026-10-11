@@ -29,6 +29,8 @@ namespace Content.IntegrationTests.CMU14.Trigger;
 [TestFixture]
 public sealed class KeyedTimerMigrationTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId RMCTimerTriggerPrototype = "RMCTimerTrigger";
+
     private const string StartTimerKey = "startTimer";
     private const string FinalTriggerKey = "trigger";
 
@@ -129,7 +131,7 @@ public sealed class KeyedTimerMigrationTest
                 }
             }
 
-            var timerDevice = prototypes.Index<EntityPrototype>("RMCTimerTrigger");
+            var timerDevice = prototypes.Index<EntityPrototype>(RMCTimerTriggerPrototype);
             Assert.That(timerDevice.TryComp<PayloadTriggerComponent>(out var payload, factory), Is.True);
             Assert.That(payload!.Components, Is.Not.Null);
             Assert.That(payload.Components!.TryGetValue("TriggerOnUse", out var nestedUse), Is.True);

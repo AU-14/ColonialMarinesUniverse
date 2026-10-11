@@ -8,6 +8,7 @@
     instantDestroy: true
     passOnDestroy: true
   - type: VehicleSmashable
+    minDestroyWeightClass: Light
   - type: Transform
     anchored: true
   - type: Physics

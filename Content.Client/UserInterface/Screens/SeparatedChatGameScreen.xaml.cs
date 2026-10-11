@@ -94,6 +94,7 @@ public sealed partial class SeparatedChatGameScreen : InGameScreen
         LayoutContainer.SetMarginLeft(Hotbar, offset);
     }
 
+    [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);
