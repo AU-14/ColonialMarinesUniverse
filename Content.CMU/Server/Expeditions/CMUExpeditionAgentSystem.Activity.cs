@@ -26,6 +26,8 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.WaitingForDoor = null;
         agent.CoveringFor = null;
         agent.CoveringUntil = TimeSpan.Zero;
+        agent.ManeuverWaitTarget = null;
+        agent.ManeuverWaitSince = null;
         agent.ContactDestination = null;
         agent.ContactMoveUntil = TimeSpan.Zero;
         agent.FlankAssignment = null;

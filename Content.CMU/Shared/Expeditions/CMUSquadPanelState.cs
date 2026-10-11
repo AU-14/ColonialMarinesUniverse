@@ -30,7 +30,8 @@ public sealed record CMUSquadSummary(NetEntity Root, string Label);
 [Serializable, NetSerializable]
 public sealed record CMUSquadMemberView(NetEntity Entity, string Name, int Map, Vector2 Position,
     Vector2? Target, Vector2? Destination, Vector2? Cover, List<Vector2> Route, List<Vector2> RejectedCover,
-    string Summary, string Detail, bool Active, bool Injured);
+    string Summary, string Detail, bool Active, bool Injured,
+    string Order = "", string Tactic = "", string TacticReason = "", string Action = "", string Status = "", bool Recorded = false);
 
 [Serializable, NetSerializable]
 public enum CMUSquadPanelAction : byte
@@ -39,6 +40,7 @@ public enum CMUSquadPanelAction : byte
     Resupply, Doctrine, Friendly, Target,
     PatrolClear, AutoPatrol, Cooperation,
     AimSkill,
+    Assault,
 }
 
 [Serializable, NetSerializable]

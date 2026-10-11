@@ -21,7 +21,8 @@ public sealed partial class CMUExpeditionAgentSystem
             return false;
         if (agent.Action != null)
         {
-            if (hit || now >= agent.ActionUntil || !ManeuverSupported(uid, agent, now) ||
+            if (hit && !(agent.Action == A.TakeCover && ContinuingDangerEscape(uid, agent, now)) ||
+                now >= agent.ActionUntil || !ManeuverSupported(uid, agent, now) ||
                 GrenadeDanger(Transform(uid).Coordinates) && agent.Action != A.TakeCover)
             {
                 CancelPlan(uid, agent, true);
@@ -66,7 +67,7 @@ public sealed partial class CMUExpeditionAgentSystem
             {
                 goal = CMUTacticalGoal.Flush;
             }
-            else if (!agent.HoldPosition && !agent.CornerHolding && agent.RecoveryUntil <= now && agent.Duty is not (CMUSquadDuty.Overwatch or CMUSquadDuty.RearGuard or CMUSquadDuty.Medic or CMUSquadDuty.Recover) &&
+            else if (agent.AssaultDestination == null && !agent.HoldPosition && !agent.CornerHolding && agent.RecoveryUntil <= now && agent.Duty is not (CMUSquadDuty.Overwatch or CMUSquadDuty.RearGuard or CMUSquadDuty.Medic or CMUSquadDuty.Recover) &&
                 damage < agent.RetreatDamage && available && armed && !agent.Crossfire && now >= agent.NextFlank && agent.HasCoveringAlly &&
                 (agent.Duty == CMUSquadDuty.Advance || agent.Initiative >= (agent.CombatRole == CMUExpeditionCombatRole.Flanker ? 0.4f : 0.6f) * agent.LearnedFlankCost ||
                     agent.RepeatedPeekHits >= 2) && !SquadHasFlanker(uid, agent) &&
@@ -195,7 +196,7 @@ public sealed partial class CMUExpeditionAgentSystem
             case A.Flank:
                 if (agent.ActionDestination is { } destination &&
                     (action != A.TakeCover || agent.Goal != CMUTacticalGoal.Recover ||
-                        damage >= agent.EmergencyHealDamage || TryReserveManeuver(uid, agent, now)))
+                        damage >= agent.EmergencyHealDamage || TryReserveManeuver(uid, agent, now, destination)))
                     success = StartPlanMove(uid, agent, destination, now);
                 break;
             case A.Reload:
@@ -256,11 +257,17 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool StartPlanMove(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates point, TimeSpan now)
     {
+        if (agent.AssaultDestination != null && agent.Action == A.Flank)
+            return false;
+        if (agent.UncoveredManeuverDestination is { } reserved &&
+            (reserved != point || now >= agent.ManeuverUntil || !SafeUncoveredStep(uid, agent, point)))
+            return false;
         ClearCover(agent);
-        if (!BuildTacticalRoute(uid, agent, point))
+        if (agent.UncoveredManeuverDestination == null && !BuildTacticalRoute(uid, agent, point))
             return false;
         agent.ActiveMoveDestination = point;
-        BeginMove(uid, agent, point, CMUExpeditionAgentState.PlanMove, now);
+        if (!BeginMove(uid, agent, point, CMUExpeditionAgentState.PlanMove, now))
+            return false;
         agent.MoveUntil = agent.ActionUntil;
         return true;
     }

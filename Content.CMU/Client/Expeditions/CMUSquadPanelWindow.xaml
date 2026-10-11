@@ -4,12 +4,13 @@
         <BoxContainer Orientation="Horizontal" SeparationOverride="8">
             <OptionButton Access="Public" Name="Squad" MinHeight="28" HorizontalExpand="True" />
             <Button Access="Public" Name="Refresh" Text="{Loc cmu-squads-refresh}" />
+            <Button Access="Public" Name="CopyDiagnostics" Text="{Loc cmu-squads-copy}" ToolTip="{Loc cmu-squads-copy-tip}" Disabled="True" />
             <CheckBox Access="Public" Name="Live" Text="{Loc cmu-squads-live}" Pressed="True" />
         </BoxContainer>
-        <Label Access="Public" Name="Overview" Text="{Loc cmu-squads-select}" ClipText="True" />
+        <RichTextLabel Access="Public" Name="Overview" Text="{Loc cmu-squads-select}" HorizontalExpand="True" />
         <BoxContainer Orientation="Horizontal" VerticalExpand="True" SeparationOverride="12">
             <TabContainer Access="Public" Name="CommandTabs" MinWidth="360" MaxWidth="400" VerticalExpand="True">
-                <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
                     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8" HorizontalExpand="True">
                         <Label Text="{Loc cmu-squads-destination}" />
                         <CheckBox Access="Public" Name="Here" Text="{Loc cmu-squads-here}" Pressed="True" />
@@ -22,14 +23,17 @@
                             <Label Text="{Loc cmu-squads-facing}" /><OptionButton Access="Public" Name="Facing" MinHeight="28" HorizontalExpand="True" />
                         </BoxContainer>
                         <BoxContainer Orientation="Horizontal" SeparationOverride="5">
-                            <Button Access="Public" Name="Move" Text="{Loc cmu-squads-move}" HorizontalExpand="True" />
-                            <Button Access="Public" Name="Guard" Text="{Loc cmu-squads-guard}" HorizontalExpand="True" />
+                            <Button Access="Public" Name="Move" Text="{Loc cmu-squads-move}" ToolTip="{Loc cmu-squads-move-tip}" MinHeight="32" HorizontalExpand="True" />
+                            <Button Access="Public" Name="Assault" Text="{Loc cmu-squads-assault}" ToolTip="{Loc cmu-squads-assault-tip}" MinHeight="32" HorizontalExpand="True" />
                         </BoxContainer>
                         <BoxContainer Orientation="Horizontal" SeparationOverride="5">
+                            <Button Access="Public" Name="Guard" Text="{Loc cmu-squads-guard}" HorizontalExpand="True" />
                             <Button Access="Public" Name="Hold" Text="{Loc cmu-squads-hold}" HorizontalExpand="True" />
-                            <Button Access="Public" Name="Regroup" Text="{Loc cmu-squads-regroup}" HorizontalExpand="True" />
                         </BoxContainer>
-                        <Button Access="Public" Name="Resupply" Text="{Loc cmu-squads-resupply}" />
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="5">
+                            <Button Access="Public" Name="Regroup" Text="{Loc cmu-squads-regroup}" HorizontalExpand="True" />
+                            <Button Access="Public" Name="Resupply" Text="{Loc cmu-squads-resupply}" HorizontalExpand="True" />
+                        </BoxContainer>
                         <Label Text="{Loc cmu-squads-patrol-heading}" Margin="0 10 0 0" />
                         <CheckBox Access="Public" Name="AutoPatrol" Text="{Loc cmu-squads-auto-patrol}" ToolTip="{Loc cmu-squads-auto-patrol-tip}" />
                         <Button Access="Public" Name="PatrolAdd" Text="{Loc cmu-squads-patrol-add}" />
@@ -47,7 +51,7 @@
                         <Button Access="Public" Name="ApplyDoctrine" Text="{Loc cmu-squads-doctrine}" />
                     </BoxContainer>
                 </ScrollContainer>
-                <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
                     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8" HorizontalExpand="True">
                         <Label Text="{Loc cmu-squads-deploy-note}" />
                         <Label Text="{Loc cmu-squads-count}" />
@@ -62,7 +66,7 @@
                         <Button Access="Public" Name="Spawn" Text="{Loc cmu-squads-spawn}" Margin="0 8 0 0" />
                     </BoxContainer>
                 </ScrollContainer>
-                <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+                <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
                     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8" HorizontalExpand="True">
                         <Label Text="{Loc cmu-squads-relations-note}" />
                         <OptionButton Access="Public" Name="Faction" MinHeight="28" />
@@ -79,19 +83,36 @@
             </TabContainer>
             <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" SeparationOverride="6">
                 <OptionButton Access="Public" Name="Member" MinHeight="28" HorizontalExpand="True" />
-                <Label Access="Public" Name="MemberSummary" Text="" ClipText="True" />
+                <RichTextLabel Access="Public" Name="MemberSummary" Text="" HorizontalExpand="True" />
                 <TabContainer Access="Public" Name="InspectTabs" HorizontalExpand="True" VerticalExpand="True">
                     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="6">
+                        <Label Access="Public" Name="ActivityHeading" Text="{Loc cmu-squads-activity-heading}" StyleClasses="LabelHeading" />
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                            <Label Text="{Loc cmu-squads-order-label}" MinWidth="78" VerticalAlignment="Top" />
+                            <RichTextLabel Access="Public" Name="OrderSummary" HorizontalExpand="True" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                            <Label Text="{Loc cmu-squads-tactic-label}" MinWidth="78" VerticalAlignment="Top" />
+                            <RichTextLabel Access="Public" Name="TacticSummary" HorizontalExpand="True" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                            <Label Text="{Loc cmu-squads-action-label}" MinWidth="78" VerticalAlignment="Top" />
+                            <RichTextLabel Access="Public" Name="ActionSummary" HorizontalExpand="True" />
+                        </BoxContainer>
+                        <BoxContainer Orientation="Horizontal" SeparationOverride="8">
+                            <Label Text="{Loc cmu-squads-status-label}" MinWidth="78" VerticalAlignment="Top" />
+                            <RichTextLabel Access="Public" Name="ActivityStatus" HorizontalExpand="True" />
+                        </BoxContainer>
                         <Label Text="{Loc cmu-squads-diagram}" />
-                        <controls:CMUSquadDiagram Access="Public" Name="Diagram" MinHeight="330" VerticalExpand="True" HorizontalExpand="True" />
+                        <controls:CMUSquadDiagram Access="Public" Name="Diagram" MinHeight="240" VerticalExpand="True" HorizontalExpand="True" />
                         <Label Text="{Loc cmu-squads-legend}" />
                     </BoxContainer>
-                    <ScrollContainer HorizontalExpand="True" VerticalExpand="True" Margin="8">
-                        <Label Access="Public" Name="Detail" Text="" />
+                    <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True" Margin="8">
+                        <RichTextLabel Access="Public" Name="Detail" Text="" HorizontalExpand="True" />
                     </ScrollContainer>
                 </TabContainer>
             </BoxContainer>
         </BoxContainer>
-        <Label Access="Public" Name="Status" Text="" ClipText="True" />
+        <RichTextLabel Access="Public" Name="Status" Text="" HorizontalExpand="True" />
     </BoxContainer>
 </controls:CMUSquadPanelWindow>

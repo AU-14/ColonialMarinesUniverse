@@ -10,6 +10,7 @@ public sealed partial class CMUExpeditionAgentComponent
     public int WeaponSwitches;
     public int WeaponBurstLimit = int.MaxValue;
     public string WeaponDecision = "primary";
+    public string RocketDecision = "no-rocket-contact";
     public TimeSpan NextRocket;
     public int RocketsFired;
     public string GrenadeDecision = "idle";

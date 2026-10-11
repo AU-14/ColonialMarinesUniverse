@@ -86,6 +86,14 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
 
     private void Stop(Entity<CMUExpeditionAgentComponent> ent)
     {
+        FreezeLivingDiagnostics(ent, ent.Comp);
+        if (ent.Comp.AssaultDestination != null)
+        {
+            ent.Comp.OrderedDestination = null;
+            ent.Comp.OrderRally = null;
+            ent.Comp.OrderRoute.Clear();
+            ClearAssaultOrder(ent.Comp);
+        }
         ResetSquadOperations(ent, ent.Comp);
         ent.Comp.SupportSquadRoot = null;
         ent.Comp.SupportUntil = TimeSpan.Zero;
@@ -167,6 +175,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         // an unrelated squad/fire message, hiding the controller that took priority.
         if (revision == agent.DecisionRevision)
             DescribeActivity(agent);
+        CaptureLivingDiagnostics(uid, agent, now);
     }
 
     private void ThinkCore(EntityUid uid, CMUExpeditionAgentComponent agent, TransformComponent transform, TimeSpan now)
@@ -315,7 +324,9 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             return;
         if (!agent.CornerHolding && ApproachVehicleShot(uid, agent, now))
             return;
-        if (hasAmmo && !agent.CornerHolding && ContinueContactMovement(uid, agent, now))
+        if (FollowAssaultOrder(uid, agent, hasAmmo, damage, now))
+            return;
+        if (hasAmmo && agent.AssaultDestination == null && !agent.CornerHolding && ContinueContactMovement(uid, agent, now))
             return;
         if (RunPlan(uid, agent, hasAmmo, damage, hit, now))
             return;
@@ -397,7 +408,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
                 if (now >= agent.PositionCommittedUntil && now >= agent.NextReposition)
                 {
                     agent.NextReposition = now + agent.RepositionCooldown;
-                    if (FindPosition(uid, agent, transform, false) is { } better && TryReserveManeuver(uid, agent, now))
+                    if (FindPosition(uid, agent, transform, false) is { } better && TryReserveManeuver(uid, agent, now, better.Anchor))
                     {
                         agent.CoverAnchor = better.Anchor;
                         agent.PeekPosition = better.Peek;
@@ -515,7 +526,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         if (agent.CoverAnchor == null && now >= agent.NextReposition && now >= agent.FirstContact + agent.BurstDuration)
         {
             agent.NextReposition = now + agent.RepositionCooldown;
-            if (FindPosition(uid, agent, transform, false) is { } position && TryReserveManeuver(uid, agent, now))
+            if (FindPosition(uid, agent, transform, false) is { } position && TryReserveManeuver(uid, agent, now, position.Anchor))
             {
                 agent.CoverAnchor = position.Anchor;
                 agent.PeekPosition = position.Peek;
@@ -556,7 +567,12 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var rememberedMelee = 0;
         foreach (var (hostile, distance) in candidates)
         {
-            if (!IsMeleeThreat(hostile) || distance > agent.MeleeStandoffRange + 4)
+            if (!IsMeleeThreat(hostile))
+            {
+                agent.MeleeMemory.Remove(hostile);
+                continue;
+            }
+            if (distance > agent.MeleeStandoffRange + 4)
                 continue;
             if (rememberedMelee++ < 8)
                 RememberMelee(agent, hostile, Transform(hostile).Coordinates, now);
@@ -782,7 +798,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         ClearCover(agent);
         var position = FindPosition(uid, agent, transform, true);
         if (hasAmmo && (position == null || agent.LastDamage < agent.EmergencyHealDamage &&
-                !TryReserveManeuver(uid, agent, now)))
+                !TryReserveManeuver(uid, agent, now, position.Value.Anchor)))
         {
             // No real shelter exists: keep the gun in the fight instead of walking home
             // or waiting out a treatment hold in the open.
@@ -823,8 +839,12 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         agent.RouteDestination = null;
     }
 
-    private void BeginMove(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates destination, CMUExpeditionAgentState state, TimeSpan now)
+    private bool BeginMove(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates destination, CMUExpeditionAgentState state, TimeSpan now)
     {
+        // Permission belongs to one destination and its direct walkable corridor.
+        if (agent.UncoveredManeuverDestination is { } reserved &&
+            (reserved != destination || now >= agent.ManeuverUntil || !SafeUncoveredStep(uid, agent, destination)))
+            return false;
         ClearTraffic(agent);
         agent.ResumeVolley = state == CMUExpeditionAgentState.Peeking &&
             agent.State == CMUExpeditionAgentState.Engage && agent.ShotsFired > 0;
@@ -839,15 +859,23 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             agent.PeekInitialDamage = agent.LastDamage;
             agent.PeekOutcomeRecorded = false;
         }
+        if (agent.UncoveredManeuverDestination != null)
+        {
+            agent.Route.Clear();
+            agent.RouteDestination = null;
+            Move(uid, destination, validated: true);
+            return true;
+        }
         if (state is CMUExpeditionAgentState.Reposition or CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo or CMUExpeditionAgentState.Withdraw &&
             agent.LastSeen != null && !_transform.InRange(Transform(uid).Coordinates, destination, 2) && !BuildTacticalRoute(uid, agent, destination))
         {
             agent.MoveUntil = now;
             ReleaseManeuver(uid, agent);
             _steering.Unregister(uid);
-            return;
+            return false;
         }
         Move(uid, destination, state == CMUExpeditionAgentState.Peeking);
+        return true;
     }
 
     private bool ContinueMove(EntityUid uid, CMUExpeditionAgentComponent agent, TransformComponent transform, TimeSpan now)
@@ -905,7 +933,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         if (!WaitingAtDoor(uid, agent) && (now >= agent.MoveUntil || now - agent.MoveProgressAt >= TimeSpan.FromSeconds(1.5) ||
             TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath))
         {
-            if (LocalDetour(uid, agent, destination, agent.Route))
+            if (agent.UncoveredManeuverDestination == null && LocalDetour(uid, agent, destination, agent.Route))
             {
                 agent.RouteDestination = destination;
                 agent.MoveUntil = now + TimeSpan.FromSeconds(2);
@@ -1028,6 +1056,11 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             if (destination != validatedStep && (!CornerMovementAllowed(uid, traveller, destination) ||
                 !GrenadeStagingMovementAllowed(uid, traveller, destination) || !FireMovementAllowed(uid, traveller, destination)))
                 return;
+            if (traveller.UncoveredManeuverDestination != null && !SafeUncoveredStep(uid, traveller, destination))
+            {
+                _steering.Unregister(uid);
+                return;
+            }
             if (traveller.TrafficYieldPoint == destination)
                 precise = true;
             validated |= TraversablePassage(uid, Transform(uid).Coordinates, destination);
