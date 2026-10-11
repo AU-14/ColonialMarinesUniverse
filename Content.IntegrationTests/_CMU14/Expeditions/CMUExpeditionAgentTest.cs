@@ -235,10 +235,10 @@ public sealed class CMUExpeditionAgentTest : GameTest
     public async Task SquadStaggersPeeksAndBothGuardsKeepAttacking()
     {
         EntityUid map = default, enemy = default, enemyRifle = default;
-        EntityCoordinates incomingAim = default;
         var guards = new List<EntityUid>();
         var rifles = new List<EntityUid>();
         var initial = new List<int>();
+        var pressured = new HashSet<EntityUid>();
         await Server.WaitAssertion(() =>
         {
             var generator = Server.System<CMUExpeditionSystem>();
@@ -281,8 +281,6 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 rifles.Add(gun.Owner);
                 initial.Add(Ammo(gun.Owner));
             }
-            // Both peeks face this gap between the upper and lower shelter walls.
-            incomingAim = origin.Offset(new Vector2(-4, -0.5f));
         });
         var nextIncomingShot = TimeSpan.Zero;
         for (var sample = 0; sample < 80; sample++)
@@ -301,15 +299,21 @@ public sealed class CMUExpeditionAgentTest : GameTest
                     // makes each attacker return to shelter and yield the next peek.
                     if (state == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
                     {
-                        Assert.That(Server.System<SharedInteractionSystem>().InRangeUnobstructed(
+                        // Track the actual attacker after a flank or escape step. Firing at
+                        // the original gap stops creating pressure once the guard moves away.
+                        // Godmode above isolates suppression from projectile damage.
+                        var incomingAim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates;
+                        if (!Server.System<SharedInteractionSystem>().InRangeUnobstructed(
                             Server.System<SharedTransformSystem>().GetMapCoordinates(enemy),
                             Server.System<SharedTransformSystem>().ToMapCoordinates(incomingAim), 18,
                             CollisionGroup.Impassable | CollisionGroup.InteractImpassable | CollisionGroup.BulletImpassable,
-                            predicate: e => e == enemy || guards.Contains(e)), Is.True, "Pressure must pass through the firing gap.");
+                            predicate: e => e == enemy || guards.Contains(e)))
+                            continue;
                         Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
                             (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), incomingAim), Is.True);
                         Assert.That(agent.SuppressedUntil, Is.GreaterThan(SGameTiming.CurTime),
-                            "The exposed attacker must perceive the shot before it is expected to yield its peek.");
+                            $"The exposed attacker must perceive the shot before yielding its peek: guard={guard}, aim={incomingAim}.");
+                        pressured.Add(guard);
                         nextIncomingShot = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
                     }
                 }
@@ -318,6 +322,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
         }
         await Server.WaitAssertion(() =>
         {
+            Assert.That(pressured, Is.EquivalentTo(guards), "Both attackers must receive real incoming fire.");
             for (var index = 0; index < 2; index++)
                 Assert.That(Ammo(rifles[index]), Is.LessThan(initial[index]), $"Guard {index} must receive an attack turn.");
             var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guards[0]);

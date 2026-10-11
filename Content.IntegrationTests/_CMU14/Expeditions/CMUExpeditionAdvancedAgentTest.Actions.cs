@@ -47,9 +47,16 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             // Exercise rifle reloads rather than switching to the loadout's backup pistol.
             foreach (var item in Stored(guard).Where(SEntMan.HasComponent<GunComponent>))
                 SEntMan.DeleteEntity(item);
-            // Keep this finite-reserve scenario independent of the balanced squad kit.
+            // Keep the finite reserve in native uniform webbing: overlooking that storage
+            // used to leave a loaded-out guard unable to begin reloading an empty rifle.
+            Assert.That(Server.System<InventorySystem>().TryGetSlotEntity(guard, "jumpsuit", out var uniform), Is.True);
+            var reserves = SEntMan.GetComponent<StorageComponent>(uniform!.Value).Container.ContainedEntities
+                .Where(item => SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40")
+                .Take(2).ToHashSet();
+            Assert.That(reserves.Count, Is.EqualTo(2));
             foreach (var magazine in Stored(guard).Where(item =>
-                         SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40").Skip(2))
+                         SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40" &&
+                         !reserves.Contains(item)))
                 SEntMan.DeleteEntity(magazine);
             Assert.That(Stored(guard).Count(item =>
                 SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40"), Is.EqualTo(2));
@@ -332,7 +339,12 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
                 preparing = agent.Action == action && agent.ActionDoAfter != null;
             });
         }
-        await Server.WaitAssertion(() => Assert.That(preparing, Is.True,
-            $"The guard must start a real {action} do-after before it can be interrupted."));
+        await Server.WaitAssertion(() =>
+        {
+            var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
+            Assert.That(preparing, Is.True,
+                $"The guard must start a real {action} do-after before it can be interrupted. " +
+                $"state={agent.State}, action={agent.Action}, weapon={agent.WeaponDecision}, failures={agent.FailedPlans}");
+        });
     }
 }
