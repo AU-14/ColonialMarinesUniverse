@@ -266,6 +266,8 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
                 // Begin with two already-acquired contacts in known shelters to isolate squad scheduling.
                 agent.PlanningEnabled = false;
+                // attack slots only coordinate real squadmates, squad 0 means "no squad"
+                agent.Squad = 1;
                 agent.Target = enemy;
                 agent.LastSeen = SEntMan.GetComponent<TransformComponent>(enemy).Coordinates;
                 agent.LastContact = SGameTiming.CurTime;
@@ -294,7 +296,10 @@ public sealed class CMUExpeditionAgentTest : GameTest
                     // makes each attacker return to shelter and yield the next peek.
                     if (state == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
                     {
-                        var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, 1.2f));
+                        // pass on the side away from this guard's own hull, a lane that clips it stops the round
+                        var guardAgent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
+                        var away = guardAgent.CoverAnchor is { } shelter && guardAgent.PeekPosition is { } peek && shelter.Y > peek.Y ? -1.2f : 1.2f;
+                        var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, away));
                         Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
                             (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), aim), Is.True);
                         nextIncomingShot = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
