@@ -75,7 +75,9 @@ public sealed partial class CMUExpeditionAgentSystem
                 (!TryComp<CMUExpeditionWeaponRoleComponent>(gun, out var role) || !role.Rocket),
             true, safe, agent.CoverAnchor == null, UrgentFire(agent, now) || now < agent.IncomingFireUntil,
             enemyFiring, now < agent.FireControlPeekUntil,
-            Vector2.Distance(_transform.GetWorldPosition(uid), _transform.GetWorldPosition(contact)));
+            Vector2.Distance(_transform.GetWorldPosition(uid), _transform.GetWorldPosition(contact)),
+            HasCoverCommitment(uid, agent, now) || agent.CombatRole == CMUExpeditionCombatRole.Support &&
+                agent.SquadPhase is "assault" or "fire-and-move");
         var plan = CMUInfantryFirePolicy.Decide(context);
         agent.FireControlVolley = plan.Volley;
         agent.FireControlDuration = TimeSpan.FromSeconds(plan.Duration);

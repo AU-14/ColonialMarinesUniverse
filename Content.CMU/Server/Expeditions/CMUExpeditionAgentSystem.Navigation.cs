@@ -55,7 +55,8 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void InvestigateContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates contact, TimeSpan now, bool visible = false)
     {
-        if (agent.HoldPosition)
+        if (agent.HoldPosition || agent.LastDamage >= agent.RetreatDamage ||
+            agent.Duty == CMUSquadDuty.Recover || agent.SquadPhase == "withdraw")
         {
             _steering.Unregister(uid);
             agent.State = CMUExpeditionAgentState.Watch;
@@ -228,7 +229,10 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.MoveProgressAt = _timing.CurTime;
         return true;
 
-        EntityCoordinates Coordinates(int cell) => cell == first ? start : cell == last ? destination :
+        // Search from the first cell's centre as well. Using the body's offset here
+        // can reject every outgoing edge at a bend before it has a chance to centre.
+        // Route simplification above still validates the real body-to-centre segment.
+        EntityCoordinates Coordinates(int cell) => cell == last ? destination :
             new(start.EntityId, new Vector2(origin.X + cell % size + 0.5f, origin.Y + cell / size + 0.5f));
         bool Walkable(int cell)
         {

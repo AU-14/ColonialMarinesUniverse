@@ -47,22 +47,20 @@ public sealed partial class CMUExpeditionAgentSystem
         EntityCoordinates threat = default;
         var keepShot = _guns.TryGetGun(blocker, out var gun) && TryAimPoint(blocker, buddy, gun, out threat) &&
             SafeShot(blocker, buddy, gun, threat);
-        foreach (var distance in new[] { 0.85f, 1.15f, 1.5f })
-        foreach (var direction in new[] { side, -side, Vector2.Normalize(side + localForward),
-                     Vector2.Normalize(-side + localForward), localForward })
+        foreach (var candidate in Pockets())
         {
-            var candidate = start.Offset(direction * distance);
             var world = _transform.ToMapCoordinates(candidate);
             // The destination must actually free the requested lane. Merely shoving a
             // stationary body farther down the same one-wide corridor repeats the jam.
             if (SegmentDistance(world.Position, origin.Position, origin.Position + forward * 2) < AgentBodyRadius * 2 + 0.15f ||
+                !ClearsUpcomingTrafficRoute(agent, origin, world) ||
                 buddy.Home is not { } home || !_transform.InRange(home, candidate, buddy.LeashRange) ||
                 !TraversablePassage(blocker, start, candidate, allowVault: false) ||
                 !TrafficPassageClear(blocker, start, candidate) || !KnownDangerPassage(blocker, buddy, start, candidate) ||
                 !KnownDangerPassage(uid, agent, start, candidate) ||
                 CrossesCoveringFire(blocker, buddy, start, candidate) ||
                 ExposureScore(blocker, buddy, candidate) > exposure + 0.1f ||
-                ExposureScore(blocker, buddy, start.Offset(direction * distance / 2)) > exposure + 0.1f ||
+                ExposureScore(blocker, buddy, start.Offset((candidate.Position - start.Position) / 2)) > exposure + 0.1f ||
                 keepShot && !SafeShot(blocker, buddy, gun, threat, candidate))
                 continue;
             buddy.TrafficNudgeRequester = uid;
@@ -74,6 +72,51 @@ public sealed partial class CMUExpeditionAgentSystem
             return true;
         }
         return false;
+
+        IEnumerable<EntityCoordinates> Pockets()
+        {
+            foreach (var distance in new[] { 0.85f, 1.15f, 1.5f })
+            foreach (var direction in new[] { side, -side, Vector2.Normalize(side + localForward),
+                         Vector2.Normalize(-side + localForward), localForward })
+                yield return start.Offset(direction * distance);
+            // At a crowded corridor exit the usable pocket may hug a wall and miss
+            // every radial sample. Check nearby tiles with a small sub-tile offset;
+            // the same swept-body, firing-lane and route-clearance checks still apply.
+            var center = new EntityCoordinates(start.EntityId, MathF.Floor(start.X) + 0.5f, MathF.Floor(start.Y) + 0.5f);
+            var inset = 0.5f - AgentBodyRadius - 0.01f;
+            foreach (var tile in NearbySquadPositions(center, 2))
+            foreach (var offset in new[] { Vector2.Zero, new Vector2(-inset, -inset), new Vector2(-inset, inset),
+                         new Vector2(inset, -inset), new Vector2(inset, inset) })
+            {
+                var point = tile.Offset(offset);
+                if (_transform.InRange(start, point, 2.5f))
+                    yield return point;
+            }
+        }
+    }
+
+    private bool ClearsUpcomingTrafficRoute(CMUExpeditionAgentComponent requester, MapCoordinates start, MapCoordinates pocket)
+    {
+        var previous = start.Position;
+        var remaining = 4f;
+        var route = requester.OrderRoute.Count > 0 ? requester.OrderRoute : requester.Route;
+        // Clearing the current leg must not park a helper in the requester's next
+        // bend or destination, where both would immediately queue against each other.
+        foreach (var step in route)
+        {
+            var next = _transform.ToMapCoordinates(step).Position;
+            var offset = next - previous;
+            var length = offset.Length();
+            if (length > remaining)
+                next = previous + offset / length * remaining;
+            if (SegmentDistance(pocket.Position, previous, next) < AgentBodyRadius * 2 + 0.15f)
+                return false;
+            remaining -= length;
+            if (remaining <= 0)
+                break;
+            previous = next;
+        }
+        return true;
     }
 
     private bool UpdateTrafficYield(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
