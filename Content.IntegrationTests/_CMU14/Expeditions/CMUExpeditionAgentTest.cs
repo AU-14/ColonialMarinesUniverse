@@ -599,11 +599,20 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 new DamageSpecifier { DamageDict = { ["Blunt"] = 10 } }, ignoreResistances: true);
             Assert.That(Server.System<DamageableSystem>().GetTotalDamage(guard).Float(), Is.GreaterThanOrEqualTo(4));
         });
-        await Pair.RunSeconds(0.6f);
+        // a hit with the shooter in view first steps the guard out of the fire lane, then it retreats.
+        // how much of that sidestep fits in one think window depends on tick timing, so wait for it
+        var retreating = false;
+        for (var sample = 0; sample < 20 && !retreating; sample++)
+        {
+            await Pair.RunSeconds(0.15f);
+            await Server.WaitPost(() => retreating =
+                SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State == CMUExpeditionAgentState.Retreat);
+        }
         await Server.WaitAssertion(() =>
         {
             var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
-            Assert.That(agent.State, Is.EqualTo(CMUExpeditionAgentState.Retreat));
+            Assert.That(agent.State, Is.EqualTo(CMUExpeditionAgentState.Retreat),
+                $"A wounded guard must fall back; last decision {agent.DecisionOwner}/{agent.DecisionReason}, incoming={agent.IncomingFireDecision}.");
             Assert.That(SEntMan.HasComponent<NPCSteeringComponent>(guard), Is.True);
             Assert.That(agent.CoverDestination, Is.Not.Null);
             // Native steering targets the next danger-route waypoint, not the final shelter.
@@ -637,7 +646,6 @@ public sealed class CMUExpeditionAgentTest : GameTest
             return count.Count;
         }
     }
-}
 
     // a near miss 1.2 tiles off the guard, on a side whose lane is actually open. the AI only feels
     // rounds that physically reach it (RayClear, shelter), and where the guard fights from depends on
@@ -661,3 +669,4 @@ public sealed class CMUExpeditionAgentTest : GameTest
         }
         return null;
     }
+}
