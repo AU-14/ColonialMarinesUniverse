@@ -1,5 +1,8 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Antag;
+using Content.Server.CMU14.Language;
+using Content.Shared._RMC14.Language;
+using Content.Shared._RMC14.Language.Prototypes;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
@@ -59,6 +62,7 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     [Dependency] private readonly IAdminLogManager _adminLog = default!;
     [Dependency] private readonly AntagSelectionSystem _antag = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly CMUXenoLanguageSystem _xenoLanguage = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedRMCEmoteSystem _emote = default!;
     [Dependency] private readonly GhostRoleSystem _ghostRole = default!;
@@ -90,6 +94,14 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     private static readonly ProtoId<TagPrototype> MeatTag = "Meat";
     private static readonly SatiationValue Starving = "Starving";
     private const string HumanSpecies = "Human";
+
+    /// <summary>
+    /// The base human languages used by the GOVFOR/OPFOR platoons (sign language excluded).
+    /// </summary>
+    public static readonly ProtoId<LanguagePrototype>[] LabMadeLanguages =
+    [
+        "English", "Spanish", "Mandarin", "Japanese", "Russian", "German", "Brazilian",
+    ];
 
     public static readonly FixedPoint2 RequiredDose = 15;
 
@@ -157,6 +169,7 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
         SubscribeLocalEvent<CMUWendigoSubjectComponent, CMUHealthScannerReadingEvent>(OnScannerReading);
 
         SubscribeLocalEvent<CMUWendigoTamedComponent, ExaminedEvent>(OnTamedExamined);
+        SubscribeLocalEvent<CMUWendigoLabMadeComponent, DetermineEntityLanguagesEvent>(OnLabMadeLanguages);
 
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndText);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
@@ -449,6 +462,8 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
         var wendigo = SpawnAtPosition(variant, Transform(ent).Coordinates);
 
         EnsureComp<CMUWendigoLabMadeComponent>(wendigo);
+        // The subject keeps the human languages they knew; English stays their active one.
+        _xenoLanguage.RefreshEnglish(wendigo);
 
         DropEverything(ent);
 
@@ -896,6 +911,19 @@ public sealed class CMUWendigoTransformationSystem : EntitySystem
     public bool IsReadyForFinalDose(CMUWendigoSubjectComponent subject)
     {
         return subject.Stage == CMUWendigoSubjectStage.Gestation && _timing.CurTime >= subject.StageEndsAt;
+    }
+
+    /// <summary>
+    /// Lab-made Wendigos were human: they keep the base human languages. English itself comes from
+    /// <see cref="CMUXenoLanguageSystem"/>, which otherwise strips it from xenos.
+    /// </summary>
+    private void OnLabMadeLanguages(Entity<CMUWendigoLabMadeComponent> ent, ref DetermineEntityLanguagesEvent args)
+    {
+        foreach (var language in LabMadeLanguages)
+        {
+            args.SpokenLanguages.Add(language);
+            args.UnderstoodLanguages.Add(language);
+        }
     }
 
     private void OnTamedExamined(Entity<CMUWendigoTamedComponent> ent, ref ExaminedEvent args)
