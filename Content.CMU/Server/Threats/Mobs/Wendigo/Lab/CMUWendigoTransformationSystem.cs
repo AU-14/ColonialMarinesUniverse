@@ -97,10 +97,12 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
 
     /// <summary>
     /// The base human languages used by the GOVFOR/OPFOR platoons (sign language excluded).
+    /// Given to every lab-made Wendigo on purpose, whatever the subject spoke, so it can follow
+    /// what is said around it. Keep in sync with the platoon language presets.
     /// </summary>
     public static readonly ProtoId<LanguagePrototype>[] LabMadeLanguages =
     [
-        "English", "Spanish", "Mandarin", "Japanese", "Russian", "German", "Brazilian",
+        "English", "Spanish", "Mandarin", "Japanese", "Russian", "German", "Portuguese",
     ];
 
     public static readonly FixedPoint2 RequiredDose = 15;
@@ -462,7 +464,8 @@ public sealed partial class CMUWendigoTransformationSystem : EntitySystem
         var wendigo = SpawnAtPosition(variant, Transform(ent).Coordinates);
 
         EnsureComp<CMUWendigoLabMadeComponent>(wendigo);
-        // The subject keeps the human languages they knew; English stays their active one.
+        // The Wendigo keeps the base human languages (LabMadeLanguages), not just the ones the
+        // subject knew, so it understands what's going on around it; English stays its active one.
         _xenoLanguage.RefreshEnglish(wendigo);
 
         DropEverything(ent);
