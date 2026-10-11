@@ -316,6 +316,10 @@ public sealed class CMUExpeditionAgentTest : GameTest
             SEntMan.DeleteEntity(enemy);
             var agents = Server.System<CMUExpeditionAgentSystem>();
             agents.ResetOrders(guards[0], agent);
+            // the last near miss can be a second old, and dodging it would win this think over the move timeout
+            agent.IncomingFireUntil = TimeSpan.Zero;
+            agent.SuppressedUntil = TimeSpan.Zero;
+            agent.SpacingDestination = null;
             var failed = SEntMan.GetComponent<TransformComponent>(guards[0]).Coordinates.Offset(new Vector2(-3, 0));
             // A reachable timeout now retries a local detour. Block the destination so
             // this check exercises a real failed move after that recovery is exhausted.
