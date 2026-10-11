@@ -27,6 +27,8 @@
 
   ### A. Weapon Systems
 
+  Exterior Bofors and Howitzer mounts on the Fallujah and Mohawk display the full weapon frame, whether loaded or empty. Interior mounts retain their separate loaded and unloaded artwork.
+
   Interior-mounted Bofors, Howitzer, and JDAM bomb clamps are listed alongside exterior weapons. When more than four weapons are installed, use the [bold]PREVIOUS[/bold] and [bold]NEXT[/bold] buttons at the bottom of the equipment, strike weapon, or firemission editor screen to browse the weapon pages.
 
      <GuideEntityEmbed Entity="RMCDropshipAttachmentGau21Cannon"/>
