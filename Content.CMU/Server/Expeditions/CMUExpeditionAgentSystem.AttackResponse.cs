@@ -30,8 +30,13 @@ public sealed partial class CMUExpeditionAgentSystem
         ent.Comp.NextMovingBurst = now;
         // A hit accelerates self-defence, but its damage attribution is not a sensor
         // that reveals the current location of an attacker behind smoke or walls.
-        if (args.Origin is { } source && Exists(source) && AcceptOrderedContact(ent, ent.Comp, source) &&
-            Visible(ent, source, ent.Comp.DetectionRange))
+        if (args.Origin is not { } source || !Exists(source))
+            return;
+        // AllHostile excludes unarmed neutrals until they attack. Remember actual
+        // aggressors through native hostility without bypassing friendly protection or sight.
+        if (TargetsAllHostiles(ent.Comp) && _mobs.IsAlive(source) && !IsFriendly(ent, source))
+            _factions.AggroEntity(ent.Owner, source);
+        if (AcceptOrderedContact(ent, ent.Comp, source) && Visible(ent, source, ent.Comp.DetectionRange))
         {
             if (args.Impact.Delivery == DamageImpactDelivery.Projectile)
             {

@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.CMU14.Expeditions;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Weapons.Ranged.Components;
 
 namespace Content.Server.CMU14.Expeditions;
@@ -32,13 +33,18 @@ public sealed partial class CMUExpeditionAgentSystem
             weapon = active;
         if (weapon is not { } gun || SpareAmmunition(uid, gun) is not { } spare)
             return null;
-        // Do not replace a loaded magazine just to tidy the inventory. A tube can be
-        // topped off, but a full tube must not start another failed insertion do-after.
-        if (_itemSlots.TryGetSlot(gun, "gun_magazine", out _))
-            return WeaponAmmo(gun) == 0 ? spare : null;
+        // Prepare a nearly empty magazine during a lull or before a bound, but never
+        // trade it for an equally depleted spare. Tubes retain their native capacity check.
+        if (TryComp<ItemSlotsComponent>(gun, out var slots) &&
+            _itemSlots.TryGetSlot((gun, slots), "gun_magazine", out _))
+            return WeaponAmmo(gun) <= 2 && WeaponAmmo(spare) > WeaponAmmo(gun) ? spare : null;
         return TryComp<BallisticAmmoProviderComponent>(gun, out var tube) &&
             _guns.CanInsertBallistic((gun, tube), spare) ? spare : null;
     }
+
+    private bool AssaultWeaponReady(EntityUid uid) =>
+        _guns.TryGetGun(uid, out var gun) && WeaponAmmo(gun) > 0 &&
+        (WeaponAmmo(gun) > 2 || ReloadAmmunition(uid, gun) == null);
 
     private bool LoadoutReadinessSafe(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now) =>
         agent.PlanningEnabled && agent.Action == null && agent.Treatment == null && agent.WorkItem == null &&

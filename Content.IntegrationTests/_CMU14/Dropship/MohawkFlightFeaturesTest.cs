@@ -43,7 +43,7 @@ public sealed class MohawkFlightFeaturesTest
             entities.AddComponent<DropshipDestinationComponent>(target);
             passenger = entities.SpawnEntity("CMMobHuman", new EntityCoordinates(ship, 0.5f, 0.5f));
             entities.EnsureComponent<ParaDroppableComponent>(passenger);
-            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>().Single();
+            var nav = OnShip<DropshipNavigationComputerComponent>(entities, ship);
             Assert.That(entities.System<SharedDropshipSystem>().FlyTo((nav.Owner, nav), target, null,
                 startupTime: 0.5f, hyperspaceTime: 30f), Is.True);
         });
@@ -51,7 +51,7 @@ public sealed class MohawkFlightFeaturesTest
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
-            var terminal = entities.QueryEntities<DropshipTerminalWeaponsComponent>().First(t => !t.Comp.Gunnery);
+            var terminal = OnShip<DropshipTerminalWeaponsComponent>(entities, ship, t => !t.Comp.Gunnery);
 #pragma warning disable RA0002 // Supply a selected target without the unrelated laser-designator setup.
             terminal.Comp.Target = target;
 #pragma warning restore RA0002
@@ -63,8 +63,11 @@ public sealed class MohawkFlightFeaturesTest
         await pair.Server.WaitAssertion(() =>
         {
             var entities = pair.Server.EntMan;
-            foreach (var door in entities.QueryEntities<DoorComponent>()
-                         .Where(d => d.Comp.Location is DoorLocation.Port or DoorLocation.Starboard))
+            var sideDoors = AllOnShip<DoorComponent>(entities, ship)
+                .Where(d => d.Comp.Location is DoorLocation.Port or DoorLocation.Starboard)
+                .ToList();
+            Assert.That(sideDoors, Is.Not.Empty);
+            foreach (var door in sideDoors)
                 Assert.That(door.Comp.State, Is.EqualTo(DoorState.Open));
             Assert.That(entities.GetComponent<MohawkMechanismsComponent>(ship).RampDeployed, Is.False);
 
@@ -79,7 +82,7 @@ public sealed class MohawkFlightFeaturesTest
         {
             var entities = pair.Server.EntMan;
             Assert.That(entities.HasComponent<ActiveParaDropComponent>(ship), Is.False);
-            foreach (var door in entities.QueryEntities<DoorComponent>()
+            foreach (var door in AllOnShip<DoorComponent>(entities, ship)
                          .Where(d => d.Comp.Location is DoorLocation.Port or DoorLocation.Starboard))
                 Assert.That(door.Comp.State, Is.EqualTo(DoorState.Closed));
             entities.DeleteEntity(passenger);
@@ -108,7 +111,7 @@ public sealed class MohawkFlightFeaturesTest
             entities.AddComponent<ShipFactionComponent>(carrier);
             var marker = entities.SpawnEntity(null, new EntityCoordinates(carrier, 10, 10));
             entities.AddComponent<DropshipHijackDestinationComponent>(marker);
-            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>().Single();
+            var nav = OnShip<DropshipNavigationComputerComponent>(entities, ship);
             var queen = entities.SpawnEntity("CMXenoQueen", entities.GetComponent<TransformComponent>(nav.Owner).Coordinates.Offset(new(0, -1)));
             entities.EnsureComponent<XenoMaturingComponent>(queen);
 #pragma warning disable RA0002 // Skip the tested-elsewhere three-second console lockout do-after.
@@ -126,6 +129,22 @@ public sealed class MohawkFlightFeaturesTest
             entities.DeleteEntity(carrier);
         });
         await pair.CleanReturnAsync();
+    }
+
+    // pooled servers can still have consoles and doors from earlier tests, so only look at this ship
+    private static Entity<T> OnShip<T>(IEntityManager entities, EntityUid ship, Func<Entity<T>, bool>? filter = null) where T : IComponent
+    {
+        return AllOnShip<T>(entities, ship).First(e => filter?.Invoke(e) ?? true);
+    }
+
+    private static IEnumerable<Entity<T>> AllOnShip<T>(IEntityManager entities, EntityUid ship) where T : IComponent
+    {
+        var grids = new HashSet<EntityUid> { ship };
+        if (entities.TryGetComponent(ship, out MultiDeckDropshipComponent? decks))
+            grids.UnionWith(decks.Decks.Values);
+
+        return entities.QueryEntities<T>()
+            .Where(e => entities.GetComponent<TransformComponent>(e.Owner).GridUid is { } grid && grids.Contains(grid));
     }
 
     private static EntityUid LoadShip(IEntityManager entities, string variant)

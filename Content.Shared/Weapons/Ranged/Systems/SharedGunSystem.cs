@@ -547,10 +547,10 @@ public abstract partial class SharedGunSystem : EntitySystem
         var shotEv = new GunShotEvent(user, ev.Ammo, fromCoordinates, toCoordinates.Value);
         RaiseLocalEvent(gun, ref shotEv);
 
-        // cmu edit start
-        var cmuFiredEv = new Content.Shared.CMU14.Hearing.CMUGunFiredEvent(gun, user, fromCoordinates);
+        // CMU14 Hearing Begin: broadcast the actual shot trajectory
+        var cmuFiredEv = new Content.Shared.CMU14.Hearing.CMUGunFiredEvent(gun, user, fromCoordinates, toCoordinates.Value);
         RaiseLocalEvent(ref cmuFiredEv);
-        // cmu edit end
+        // CMU14 End
 
         if (userImpulse && TryComp<PhysicsComponent>(user, out var userPhysics))
         {

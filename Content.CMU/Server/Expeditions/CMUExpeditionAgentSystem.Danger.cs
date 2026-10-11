@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Linq;
 using Content.Shared.CMU14.Expeditions;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
@@ -227,6 +228,22 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.KnownDanger.RemoveAll(danger => danger.Until <= now || !Exists(danger.Point.EntityId));
         agent.KnownFireLanes.RemoveAll(lane => lane.Until <= now || !Exists(lane.Start.EntityId) || !Exists(lane.End.EntityId));
         var start = Transform(uid).Coordinates;
+        if (agent.IncomingEscapeDestination is { } committedEscape)
+        {
+            if (agent.CoverDestination == committedEscape && agent.State == CMUExpeditionAgentState.PlanMove &&
+                agent.Action == null && ContinuingDangerEscape(uid, agent, now) && ContinueMove(uid, agent, Transform(uid), now))
+            {
+                agent.IncomingFireDecision = "continuing-escape-to-cover";
+                return true;
+            }
+            agent.IncomingEscapeDestination = null;
+            if (agent.CoverDestination == committedEscape)
+            {
+                ClearCover(agent);
+                _steering.Unregister(uid);
+                agent.State = CMUExpeditionAgentState.Guard;
+            }
+        }
         if (now >= agent.IncomingFireUntil)
         {
             if (now >= agent.SuppressedUntil && now - agent.LastHit > TimeSpan.FromSeconds(3) &&
@@ -259,7 +276,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var candidates = new List<EntityCoordinates>();
         if (agent.LastSafePosition is { } previous && Exists(previous.EntityId) && _transform.InRange(start, previous, 4))
             candidates.Add(previous);
-        foreach (var distance in new[] { 2.25f, 1.25f, 0.75f })
+        foreach (var distance in new[] { 2.25f, 1.25f, 1f, 0.75f })
         for (var direction = 0; direction < 8; direction++)
         {
             var angle = direction * MathF.Tau / 8;
@@ -271,7 +288,8 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             var danger = KnownDangerCost(agent, candidate);
             if (danger >= currentCost - 0.5f || agent.Home is not { } home ||
-                !_transform.InRange(home, candidate, agent.LeashRange) || Reserved(uid, candidate) ||
+                !_transform.InRange(home, candidate, agent.LeashRange) || !TrafficPassageClear(uid, start, candidate) ||
+                EscapeReserved(uid, candidate) ||
                 !TraversablePassage(uid, start, candidate, allowVault: false) || !KnownDangerPassage(uid, agent, start, candidate) ||
                 ExposureScore(uid, agent, candidate) > currentExposure + 0.5f ||
                 MeleeClearance(agent, candidate) < Math.Min(3, MeleeClearance(agent, start)))
@@ -285,6 +303,8 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (best is not { } escape)
         {
+            if (TryIncomingFireRoute(uid, agent, start, now))
+                return true;
             agent.IncomingFireDecision = "incoming-fire-no-safe-step";
             return false;
         }
@@ -300,6 +320,72 @@ public sealed partial class CMUExpeditionAgentSystem
         ReadyRifle(uid, agent);
         Move(uid, escape, validated: true);
         return true;
+    }
+
+    private bool EscapeReserved(EntityUid uid, EntityCoordinates point)
+    {
+        var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
+        while (query.MoveNext(out var other, out var buddy))
+            if (other != uid && _mobs.IsAlive(other) && IsFriendly(uid, other) &&
+                (buddy.SpacingDestination is { } shortStep && _transform.InRange(point, shortStep, 0.8f) ||
+                 buddy.IncomingEscapeDestination is { } route && _transform.InRange(point, route, 0.8f)))
+                return true;
+        return false;
+    }
+
+    private bool TryIncomingFireRoute(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates start, TimeSpan now)
+    {
+        if (now < agent.NextIncomingRoute || agent.Home is not { } home)
+            return false;
+        agent.NextIncomingRoute = now + TimeSpan.FromSeconds(2);
+        var currentDanger = KnownDangerCost(agent, start);
+        var currentExposure = ExposureScore(uid, agent, start);
+        var candidates = new List<EntityCoordinates>();
+        if (agent.LastSafePosition is { } safe && Exists(safe.EntityId) && _transform.InRange(start, safe, 8))
+            candidates.Add(safe);
+        foreach (var distance in new[] { 4f, 7f })
+        for (var direction = 0; direction < 8; direction++)
+        {
+            var angle = direction * MathF.Tau / 8;
+            candidates.Add(start.Offset(new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * distance));
+        }
+        // A wall can make every short sidestep fail. Search a bounded route to quieter
+        // ground using witnessed fire only; no target or inferred muzzle is required.
+        foreach (var destination in candidates.Where(point => _transform.InRange(home, point, agent.LeashRange) &&
+                     KnownDangerCost(agent, point) < Math.Min(2, currentDanger - 0.5f) &&
+                     ExposureScore(uid, agent, point) <= currentExposure && GroundSafe(point) && BodyFits(uid, point) &&
+                     !EscapeReserved(uid, point) && TrafficPassageClear(uid, point, point) &&
+                     MeleeClearance(agent, point) >= Math.Min(agent.MeleeStandoffRange, MeleeClearance(agent, start)))
+                 .OrderBy(point => KnownDangerCost(agent, point) + FriendlyCrowding(uid, point) +
+                     (agent.LastSafePosition == point ? -3 : 0)).Take(2))
+        {
+            if (!BuildTacticalRoute(uid, agent, destination, allowVaults: false))
+                continue;
+            var route = agent.Route.ToArray();
+            var previous = start;
+            var valid = true;
+            foreach (var step in route)
+            {
+                valid &= KnownDangerPassage(uid, agent, previous, step) &&
+                    ExposureScore(uid, agent, step) <= currentExposure + 0.5f;
+                previous = step;
+            }
+            if (!valid)
+                continue;
+            CancelAimedWeapon(agent);
+            CancelFlare(uid, agent);
+            BeginCombatSpacing(uid, agent, now);
+            foreach (var step in route)
+                agent.Route.Enqueue(step);
+            agent.RouteDestination = destination;
+            BeginMove(uid, agent, destination, CMUExpeditionAgentState.PlanMove, now);
+            agent.MoveUntil = now + TimeSpan.FromSeconds(8);
+            agent.IncomingEscapeDestination = destination;
+            agent.IncomingFireDecision = "routing-out-of-observed-fire";
+            agent.IncomingFireEscapes++;
+            return true;
+        }
+        return false;
     }
 
     private bool ContinuingDangerEscape(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)

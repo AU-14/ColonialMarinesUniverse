@@ -13,6 +13,8 @@ public sealed partial class CMUExpeditionAgentComponent
     public EntityUid? ManeuverWaitTarget;
     public TimeSpan? ManeuverWaitSince;
     public EntityCoordinates? UncoveredManeuverDestination;
+    // when the covering shooter stopped being ready, for the short grace on a maneuver
+    public TimeSpan? SupportLapseSince;
     public string SquadDecision = "idle";
     public EntityCoordinates? ContactDestination;
     public EntityCoordinates? FightingPosition;
