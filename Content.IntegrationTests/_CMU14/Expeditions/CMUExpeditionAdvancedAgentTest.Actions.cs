@@ -35,6 +35,13 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             EntityUid enemy;
             (map, guard, enemy) = Arena("CMUExpeditionScavenger");
             SEntMan.DeleteEntity(enemy);
+            // Webbing transfers its starting magazines into the uniform on later ticks.
+            // Finish that transfer before fixing the finite reserve, with this agent idle.
+            SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).NextThink = TimeSpan.MaxValue;
+        });
+        await Pair.RunTicksSync(3);
+        await Server.WaitAssertion(() =>
+        {
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
             rifle = gun.Owner;
             // Exercise rifle reloads rather than switching to the loadout's backup pistol.
@@ -44,7 +51,10 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             foreach (var magazine in Stored(guard).Where(item =>
                          SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40").Skip(2))
                 SEntMan.DeleteEntity(magazine);
+            Assert.That(Stored(guard).Count(item =>
+                SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40"), Is.EqualTo(2));
             Empty();
+            SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).NextThink = SGameTiming.CurTime;
         });
         await WaitForUtility(guard, CMUTacticalAction.Reload);
         await Server.WaitAssertion(() =>

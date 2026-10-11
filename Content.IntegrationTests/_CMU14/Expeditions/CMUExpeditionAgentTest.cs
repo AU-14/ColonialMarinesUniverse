@@ -148,6 +148,8 @@ public sealed class CMUExpeditionAgentTest : GameTest
             agent.PeekPosition = origin.Offset(new Vector2(-4, 0));
             agent.State = CMUExpeditionAgentState.Recover;
             Server.System<SharedTransformSystem>().SetCoordinates(guard, agent.CoverAnchor.Value);
+            // Isolate perceived near-miss pressure from random projectile hits and medical retreat.
+            SEntMan.AddComponent<GodmodeComponent>(guard);
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
             rifle = gun.Owner;
             SEntMan.EnsureComponent<TestListenerComponent>(rifle);
@@ -184,7 +186,13 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 shots.Clear();
                 if (agent.State == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
                 {
-                    var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, 1.2f));
+                    // Shoot below the peek: the positive-Y offset intersects its shelter wall.
+                    var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, -1.2f));
+                    Assert.That(Server.System<SharedInteractionSystem>().InRangeUnobstructed(
+                        Server.System<SharedTransformSystem>().GetMapCoordinates(enemy),
+                        Server.System<SharedTransformSystem>().ToMapCoordinates(aim), 18,
+                        CollisionGroup.Impassable | CollisionGroup.InteractImpassable | CollisionGroup.BulletImpassable,
+                        predicate: e => e == guard || e == enemy), Is.True, "The incoming shot must clear the shelter.");
                     Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
                         (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), aim), Is.True);
                     Assert.That(agent.SuppressedUntil, Is.GreaterThan(SGameTiming.CurTime),
@@ -227,6 +235,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
     public async Task SquadStaggersPeeksAndBothGuardsKeepAttacking()
     {
         EntityUid map = default, enemy = default, enemyRifle = default;
+        EntityCoordinates incomingAim = default;
         var guards = new List<EntityUid>();
         var rifles = new List<EntityUid>();
         var initial = new List<int>();
@@ -255,6 +264,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
             {
                 var anchor = origin.Offset(new Vector2(-4, index == 0 ? 2 : -3));
                 var guard = SEntMan.SpawnEntity("CMUExpeditionScavenger", anchor);
+                SEntMan.AddComponent<GodmodeComponent>(guard);
                 guards.Add(guard);
                 var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
                 // Begin with two already-acquired contacts in known shelters to isolate squad scheduling.
@@ -271,6 +281,8 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 rifles.Add(gun.Owner);
                 initial.Add(Ammo(gun.Owner));
             }
+            // Both peeks face this gap between the upper and lower shelter walls.
+            incomingAim = origin.Offset(new Vector2(-4, -0.5f));
         });
         var nextIncomingShot = TimeSpan.Zero;
         for (var sample = 0; sample < 80; sample++)
@@ -281,16 +293,23 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 var attackers = 0;
                 foreach (var guard in guards)
                 {
-                    var state = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State;
+                    var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
+                    var state = agent.State;
                     if (state is CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage)
                         attackers++;
                     // Productive positions persist without pressure. Native incoming fire
                     // makes each attacker return to shelter and yield the next peek.
                     if (state == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
                     {
-                        var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, 1.2f));
+                        Assert.That(Server.System<SharedInteractionSystem>().InRangeUnobstructed(
+                            Server.System<SharedTransformSystem>().GetMapCoordinates(enemy),
+                            Server.System<SharedTransformSystem>().ToMapCoordinates(incomingAim), 18,
+                            CollisionGroup.Impassable | CollisionGroup.InteractImpassable | CollisionGroup.BulletImpassable,
+                            predicate: e => e == enemy || guards.Contains(e)), Is.True, "Pressure must pass through the firing gap.");
                         Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
-                            (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), aim), Is.True);
+                            (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), incomingAim), Is.True);
+                        Assert.That(agent.SuppressedUntil, Is.GreaterThan(SGameTiming.CurTime),
+                            "The exposed attacker must perceive the shot before it is expected to yield its peek.");
                         nextIncomingShot = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
                     }
                 }
@@ -440,7 +459,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
             await Server.WaitAssertion(() =>
             {
                 var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
-                healing = agent.State == CMUExpeditionAgentState.Healing;
+                healing = agent.Treatment != null;
                 if (sample % 10 == 0)
                     medicalTrace.Add($"{agent.State}: {SEntMan.GetComponent<TransformComponent>(guard).Coordinates}, dest={agent.CoverDestination}, hands={Server.System<Content.Shared.Hands.EntitySystems.SharedHandsSystem>().GetEmptyHandCount(guard)}, damage={Server.System<DamageableSystem>().GetTotalDamage(guard)}");
             });
@@ -459,7 +478,14 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 "Interrupted treatment must not consume a dressing.");
             Assert.That(Server.System<DamageableSystem>().GetTotalDamage(guard).Float(), Is.GreaterThanOrEqualTo(32));
         });
-        await Pair.RunSeconds(12);
+        // Damage in shelter invalidates that position. Allow another cover move as well
+        // as three native three-second doses and their hand/cooldown transitions.
+        var exhausted = false;
+        for (var sample = 0; sample < 100 && !exhausted; sample++)
+        {
+            await Pair.RunSeconds(0.2f);
+            await Server.WaitAssertion(() => exhausted = SEntMan.Deleted(medicine));
+        }
         float damageAfter = 0;
         await Server.WaitAssertion(() =>
         {
