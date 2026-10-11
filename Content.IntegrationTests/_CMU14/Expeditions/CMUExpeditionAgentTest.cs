@@ -470,7 +470,9 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 "Interrupted treatment must not consume a dressing.");
             Assert.That(Server.System<DamageableSystem>().GetTotalDamage(guard).Float(), Is.GreaterThanOrEqualTo(32));
         });
-        await Pair.RunSeconds(12);
+        // three 3 s dressings, each after freeing a hand and a 0.4 s reassessment, plus the
+        // step away from the shot that interrupted the first one. ~12 s, so 12 was a coin flip
+        await Pair.RunSeconds(16);
         float damageAfter = 0;
         await Server.WaitAssertion(() =>
         {
