@@ -249,7 +249,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 var now = _timing.CurTime;
                 ContinueAction(ent, agent, agent.LastDamage, now);
                 agent.RifleLoweredUntil = now;
-                agent.NextThink = now;
+                RequestThink(agent, now);
                 agent.NextReposition = now + agent.BurstDuration;
                 agent.NextPlan = now + agent.BurstDuration;
                 if (ReadyRifle(ent, agent) && _guns.TryGetGun(ent, out var ready)

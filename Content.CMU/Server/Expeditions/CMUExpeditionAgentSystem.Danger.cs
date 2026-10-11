@@ -128,7 +128,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.KnownFireLanes.Add(lane);
         }
         agent.ExposureScores.Clear();
-        agent.NextThink = now;
+        RequestThink(agent, now);
     }
 
     private void ObserveIncomingLane(EntityUid uid, CMUExpeditionAgentComponent agent,
@@ -190,7 +190,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             RememberDanger(agent, point, now, 16, 1.7f, 24);
             agent.Stress = Math.Min(1, agent.Stress + 0.2f);
-            agent.NextThink = now;
+            RequestThink(agent, now);
             // Re-evaluate any cached approach through the witnessed casualty, including patrol orders.
             agent.Route.Clear();
             agent.RouteDestination = null;
@@ -207,7 +207,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.SuppressedUntil = now + TimeSpan.FromSeconds(hit ? 1.5 : 1);
         if (!hit && now < agent.NextIncomingObservation)
             return;
-        agent.NextThink = now;
+        RequestThink(agent, now);
         agent.NextIncomingObservation = now + TimeSpan.FromSeconds(0.4);
         RememberDanger(agent, point, now, hit ? 12 : 7, hit ? 1.5f : 1.1f, hit ? 12 : 6);
         if (!hit)
@@ -219,7 +219,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 !IsFriendly(observer, uid) || !Visible(observer, uid, 10))
                 continue;
             RememberDanger(buddy, point, now, 9, 1.3f, 8);
-            buddy.NextThink = now;
+            RequestThink(buddy, now);
         }
     }
 

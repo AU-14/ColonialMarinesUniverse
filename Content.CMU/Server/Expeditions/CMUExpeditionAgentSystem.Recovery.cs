@@ -44,7 +44,7 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         ent.Comp.Rifle = args.Unequipped;
         ent.Comp.NextWeaponRecovery = _timing.CurTime;
-        ent.Comp.NextThink = _timing.CurTime;
+        RequestThink(ent.Comp, _timing.CurTime);
     }
 
     private bool PauseForKnockdown(EntityUid uid, CMUExpeditionAgentComponent agent)
@@ -59,7 +59,7 @@ public sealed partial class CMUExpeditionAgentSystem
             if (agent.State == CMUExpeditionAgentState.Incapacitated)
             {
                 agent.State = CMUExpeditionAgentState.Guard;
-                agent.NextThink = _timing.CurTime;
+                RequestThink(agent, _timing.CurTime);
             }
             return false;
         }

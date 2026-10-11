@@ -345,9 +345,23 @@ public sealed partial class CMUExpeditionAgentSystem
         var direction = Vector2.Normalize(to.Position - from.Position);
         if (nearby == null)
         {
-            nearby = new HashSet<EntityUid>();
-            _lookup.GetEntitiesInRange(uid, agent.FireRange + 3, nearby);
+            nearby = _nearbyPool.Get();
+            try
+            {
+                _lookup.GetEntitiesInRange(uid, agent.FireRange + 3, nearby);
+                return FriendlyShotConeClear(uid, agent, gun, from, distance, spread, direction, nearby, out reason);
+            }
+            finally
+            {
+                _nearbyPool.Return(nearby);
+            }
         }
+        return FriendlyShotConeClear(uid, agent, gun, from, distance, spread, direction, nearby, out reason);
+    }
+
+    private bool FriendlyShotConeClear(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun,
+        MapCoordinates from, float distance, float spread, Vector2 direction, HashSet<EntityUid> nearby, out string reason)
+    {
         foreach (var entity in nearby)
         {
             if (entity == uid || !IsFriendly(uid, entity) ||

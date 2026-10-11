@@ -25,7 +25,7 @@ public sealed partial class CMUExpeditionAgentSystem
         ent.Comp.PendingInterruptingDamage = true;
         ent.Comp.LastHit = now;
         RememberIncomingFire(ent, ent.Comp, Transform(ent).Coordinates, now, hit: true);
-        ent.Comp.NextThink = now;
+        RequestThink(ent.Comp, now);
         ent.Comp.ImmediateFireUntil = now + TimeSpan.FromSeconds(0.8);
         ent.Comp.NextMovingBurst = now;
         // A hit accelerates self-defence, but its damage attribution is not a sensor

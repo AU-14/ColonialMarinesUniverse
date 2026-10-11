@@ -66,13 +66,46 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private IEnumerable<EntityUid> ExpeditionHostiles(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
-        if (agent.TargetFactions.Count == 0)
-            return _factions.GetNearbyHostiles(uid, agent.DetectionRange).Where(other => !IsFriendly(uid, other)).Union(HostileVehicles(uid, agent));
-        var nearby = new HashSet<EntityUid>();
-        var location = _transform.GetMapCoordinates(uid);
-        _lookup.GetEntitiesInRange(location.MapId, location.Position, agent.DetectionRange, nearby);
-        return nearby.Where(other => !VehicleBody(other) && AcceptOrderedContact(uid, agent, other))
-            .Union(HostileVehicles(uid, agent));
+        var nearby = _nearbyPool.Get();
+        try
+        {
+            // Infantry and vehicle acquisition share the same spatial query. Keep the
+            // collection leased until enumeration ends, including early-return callers.
+            _lookup.GetEntitiesInRange(uid, agent.DetectionRange, nearby);
+            foreach (var other in nearby)
+                if (AcquisitionHostile(uid, agent, other))
+                    yield return other;
+            // Native retaliation is not range-limited until the visibility check.
+            if (agent.TargetFactions.Count == 0 && HasComp<NpcFactionMemberComponent>(uid))
+                foreach (var other in _factions.GetHostiles(uid))
+                    if (!nearby.Contains(other) && AcquisitionHostile(uid, agent, other))
+                        yield return other;
+        }
+        finally
+        {
+            _nearbyPool.Return(nearby);
+        }
+    }
+
+    private bool AcquisitionHostile(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid other)
+    {
+        if (VehicleBody(other))
+            return ArmedVehicle(other) && VehicleDisposition(uid, agent, other) > 0;
+        if (agent.TargetFactions.Count == 0 && !HasComp<NpcFactionMemberComponent>(other) &&
+            !_factions.GetHostiles(uid).Contains(other))
+            return false;
+        return (agent.TargetFactions.Count > 0 || HasComp<NpcFactionMemberComponent>(uid)) &&
+            AcceptOrderedContact(uid, agent, other);
+    }
+
+    private bool NearbyExpeditionHostile(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid other)
+    {
+        if (!Exists(other))
+            return false;
+        var retaliation = agent.TargetFactions.Count == 0 && !VehicleBody(other) &&
+            HasComp<NpcFactionMemberComponent>(uid) && _factions.GetHostiles(uid).Contains(other);
+        return (retaliation || _transform.InRange(Transform(uid).Coordinates, Transform(other).Coordinates, agent.DetectionRange)) &&
+            AcquisitionHostile(uid, agent, other);
     }
 
     private bool AcceptOrderedContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target)

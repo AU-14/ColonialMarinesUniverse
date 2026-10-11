@@ -121,6 +121,7 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
     public override void Update(float frameTime)
     {
         var now = _timing.CurTime;
+        _dueThinks.Clear();
         _orderRouteSearched = false;
         _localRouteSearched = false;
         _bodyClearCache.Clear();
@@ -155,17 +156,17 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             if (PauseForKnockdown(uid, agent))
                 continue;
             if (agent.NextThink <= now)
-            {
-                agent.NextThink = now + ThinkInterval;
-                agent.Home ??= transform.Coordinates;
-                LoadExperience(uid, agent);
-                // RMC removes this at map init from humans without a player. This body is AI-owned.
-                EnsureComp<InputMoverComponent>(uid);
-                EnsureComp<ActiveNPCComponent>(uid);
-                // Expedition fire has its own lead and trigger discipline; never run two gun controllers.
-                RemComp<NPCRangedCombatComponent>(uid);
-                Think(uid, agent, transform, now);
-            }
+                _dueThinks.Add((uid, agent));
+        }
+        RunDueThinks(now);
+        // Shooting is not part of the decision budget. Always revalidate targets and
+        // friendly lanes at the native weapon cadence, including deferred agents.
+        query = EntityQueryEnumerator<CMUExpeditionAgentComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var agent, out _))
+        {
+            if (!_npcs.Enabled || HasComp<ActorComponent>(uid) || !_mobs.IsAlive(uid) ||
+                agent.State is CMUExpeditionAgentState.Disabled or CMUExpeditionAgentState.Incapacitated)
+                continue;
             UpdateFire(uid, agent, now);
         }
     }
@@ -175,7 +176,17 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         var previous = agent.State;
         var revision = agent.DecisionRevision;
         var started = Stopwatch.GetTimestamp();
-        ThinkCore(uid, agent, transform, now);
+        _thinkingAgent = uid;
+        _reservationAgentsBuilt = false;
+        try
+        {
+            ThinkCore(uid, agent, transform, now);
+        }
+        finally
+        {
+            _thinkingAgent = null;
+            _reservationAgents.Clear();
+        }
         agent.LastThinkMilliseconds = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
         agent.AverageThinkMilliseconds = agent.ThinkSamples++ == 0 ? agent.LastThinkMilliseconds :
             agent.AverageThinkMilliseconds * 0.9 + agent.LastThinkMilliseconds * 0.1;
