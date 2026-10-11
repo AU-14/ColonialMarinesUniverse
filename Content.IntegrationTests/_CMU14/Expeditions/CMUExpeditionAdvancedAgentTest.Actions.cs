@@ -3,6 +3,7 @@ using Content.Server.CMU14.Expeditions;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.CMU14.Expeditions;
 using Content.Shared._RMC14.Explosion;
+using Content.Shared._RMC14.Weapons.Ranged.Chamber;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage.Components;
 using Content.Shared.Inventory;
@@ -15,6 +16,7 @@ using Content.Shared.Storage;
 using Content.Shared.Throwing;
 using Content.Shared.Trigger.Components;
 using Content.Shared.Weapons.Ranged.Components;
+using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -37,6 +39,9 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             rifle = gun.Owner;
             // Exercise rifle reloads rather than switching to the loadout's backup pistol.
             foreach (var item in Stored(guard).Where(SEntMan.HasComponent<GunComponent>))
+                SEntMan.DeleteEntity(item);
+            // the test counts reloads down to an empty reserve, so trim the loadout to two spares
+            foreach (var item in Stored(guard).Where(item => SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40").Skip(2))
                 SEntMan.DeleteEntity(item);
             Empty();
         });
@@ -77,6 +82,14 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
         {
             Assert.That(Server.System<ItemSlotsSystem>().TryEject(rifle, "gun_magazine", guard, out var magazine), Is.True);
             SEntMan.DeleteEntity(magazine!.Value);
+            // the RMC chamber keeps one round after the magazine comes out, and the AI rightly won't reload
+            // a rifle that can still fire, so clear it too
+            if (SEntMan.TryGetComponent<RMCGunChamberComponent>(rifle, out var chamber) &&
+                Server.System<SharedContainerSystem>().TryGetContainer(rifle, chamber.ContainerId, out var reserve))
+            {
+                foreach (var round in reserve.ContainedEntities.ToArray())
+                    SEntMan.DeleteEntity(round);
+            }
         }
     }
 
