@@ -56,6 +56,13 @@ public sealed partial class TechSystem : EntitySystem
             });
     }
 
+    // CMU14-start
+    private string LocOrRaw(string value)
+    {
+        return Loc.TryGetString(value, out var localized) ? localized : value;
+    }
+    // CMU14-end
+
     private void OnTechAnnounce(TechAnnounceEvent ev)
     {
         var msg = Loc.GetString("rmc-announcement-message-raw", ("author", ev.Author), ("message", ev.Message));
