@@ -20,14 +20,17 @@
     spriteLayer: light
   - type: PointLight
     enabled: false
-    radius: 5
-    softness: 5
+    radius: 12 # CMU14: longer directional beam
+    energy: 1.5 # CMU14
+    softness: 1 # CMU14
+    lightMask: ConeSingle # CMU14
     autoRot: true
     netsync: false
   - type: HandheldLight
     addPrefix: false
     blinkingBehaviourId: blinking
     radiatingBehaviourId: radiating
+  - type: CMUHelmetMountedLight # CMU14: toggleable while stored in a worn helmet
   - type: NoHandsInteractionBlocked
   - type: LightBehaviour
     behaviours:
@@ -35,8 +38,8 @@
       id: radiating
       interpolate: Linear
       maxDuration: 2.0
-      startValue: 3.0
-      endValue: 2.0
+      startValue: 8.0 # CMU14: scaled to the longer beam
+      endValue: 6.0 # CMU14
       isLooped: true
       property: Radius
       enabled: false
@@ -46,7 +49,7 @@
       interpolate: Nearest
       maxDuration: 1.0
       startValue: 0.1
-      endValue: 2.0
+      endValue: 6.0 # CMU14
       isLooped: true
       property: Radius
       enabled: false
