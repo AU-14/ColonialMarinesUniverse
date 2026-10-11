@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Original Sprite by Aleksh, Modified by Ramiris, SharkSnake98 on Github, RavenCaat on GitHub, github noctyrnal, and @TadJohnson00 (GitHub), _24 and _a3 by github monomethylhydrazine; static layer composition for CMU 3D review, see SOURCES_SUPPLIES.md.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "RMCBoxFlashlights"
+    },
+    {
+      "name": "RMCBoxFlashlightsEmpty"
+    },
+    {
+      "name": "RMCBoxMRE"
+    },
+    {
+      "name": "RMCBoxMagazinePistolM77APEmpty"
+    },
+    {
+      "name": "RMCBoxShotgunBeanbag"
+    },
+    {
+      "name": "RMCBoxShotgunBuckshot"
+    },
+    {
+      "name": "RMCBoxShotgunSlugs"
+    }
+  ]
+}

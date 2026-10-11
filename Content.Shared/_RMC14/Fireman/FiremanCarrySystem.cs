@@ -25,6 +25,8 @@ using Content.Shared.Strip;
 using Content.Shared.Throwing;
 using Content.Shared.Whitelist;
 using Robust.Shared.Physics.Events;
+using Robust.Shared.Physics.Components; // CMU14
+using Robust.Shared.Physics.Systems; // CMU14
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
@@ -37,6 +39,7 @@ public sealed partial class FiremanCarrySystem : EntitySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!; // CMU14
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
     [Dependency] private SharedRMCSpriteSystem _rmcSprite = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -243,6 +246,11 @@ public sealed partial class FiremanCarrySystem : EntitySystem
 
         _transform.SetParent(ent, user);
         _transform.SetLocalPosition(ent, Vector2.Zero);
+
+        // CMU14: parenting preserves world momentum, but a carried body must be stationary relative to its carrier.
+        if (TryComp(ent, out PhysicsComponent? physics))
+            _physics.ResetDynamics(ent, physics);
+
         _standing.Down(ent, changeCollision: true);
 
         _movementSpeed.RefreshMovementSpeedModifiers(user);
@@ -508,7 +516,13 @@ public sealed partial class FiremanCarrySystem : EntitySystem
             RemCompDeferred<BeingFiremanCarriedComponent>(target);
 
             if (carrying == target)
+            {
+                // CMU14: discard residual carry motion before detaching, without cancelling an intentional throw.
+                if (!HasComp<ThrownItemComponent>(target) && TryComp(target, out PhysicsComponent? physics))
+                    _physics.ResetDynamics(target, physics);
+
                 _toReparent.Add((target, user));
+            }
         }
 
         _standing.Stand(target);

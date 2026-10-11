@@ -1,7 +1,7 @@
 <Document>
   # Surgery
 
-  Some injuries can only be fixed by operating: compound and shattered fractures, internal bleeding, damaged organs, eschar and severed limbs.
+  Some injuries can only be fixed by operating: compound and shattered fractures, internal bleeding, damaged organs, eschar, severed limbs and the bleeding stumps they leave.
 
   <Box>
     <GuideEntityEmbed Entity="CMScalpel" Caption="Scalpel"/>
@@ -91,7 +91,7 @@
 
   - [textlink="Organ Surgery" link="CMUGuideSurgeryOrgans"]: suturing, removing and replacing organs, the brain and eyes, and embryo removal.
 
-  - [textlink="Limb Surgery" link="CMUGuideSurgeryLimbs"]: amputation, reattachment and replacement limbs.
+  - [textlink="Limb Surgery" link="CMUGuideSurgeryLimbs"]: closing stumps, amputation, reattachment and replacement limbs.
 
   ## After Surgery
   - The patient is left [bold]recovering from surgery[/bold] for a while and can't run.

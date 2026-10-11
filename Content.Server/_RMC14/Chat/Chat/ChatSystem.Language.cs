@@ -7,11 +7,18 @@ using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Language;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Language.Systems;
+using Content.Shared._RMC14.Stun; // CMU14
+using Content.Shared.Administration; // CMU14
+using Content.Shared.Bed.Sleep; // CMU14
 using Content.Shared.Chat;
 using Content.Shared.Database;
+using Content.Shared.Ghost.Components; // CMU14
 using Content.Shared.IdentityManagement;
 using Content.Shared.Players;
 using Content.Shared.Radio;
+using Content.Shared.Speech; // CMU14
+using Content.Shared.Speech.Muting; // CMU14
+using Content.Shared.StatusEffectNew; // CMU14
 using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.Network;
@@ -37,7 +44,18 @@ public sealed partial class ChatSystem
         if (listener == null)
             return transformedName;
 
-        if (HasComp<YautjaComponent>(source) && HasComp<YautjaComponent>(listener.Value))
+        // CMU14: clan chat names follow the bracer's name broadcast, same as identity
+        if (TryComp<YautjaComponent>(source, out var sourceYautja)
+            && HasComp<YautjaComponent>(listener.Value))
+            return sourceYautja.BracerNameActive
+                ? MetaData(source).EntityName
+                : Loc.GetString(sourceYautja.IdentityName);
+
+        // CMU14: admin ghosts see a Yautja's true name instead of the unknown mask
+        if (HasComp<YautjaComponent>(source)
+            && TryComp<GhostComponent>(listener.Value, out var listenerGhost)
+            && listenerGhost.CanGhostInteract
+            && _adminManager.IsAdmin(listener.Value))
             return MetaData(source).EntityName;
 
         if (TryComp<FixedIdentityComponent>(source, out var fixedIdentity) &&
@@ -144,6 +162,16 @@ public sealed partial class ChatSystem
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Say from {ToPrettyString(source):user}{logName} in {language}: {logMessage}.");
     }
 
+    // CMU14 method: MobState cancels CanSpeak for crit, which would also kill whispering.
+    private bool CanWhisperInCrit(EntityUid source) =>
+        _critWhisperEnabled
+        && _mobStateSystem.IsCritical(source)
+        && TryComp<SpeechComponent>(source, out var speech) && speech.Enabled
+        && !HasComp<SleepingComponent>(source)
+        && !HasComp<RMCUnconsciousComponent>(source)
+        && !_newStatus.HasEffectComp<MutedStatusEffectComponent>(source)
+        && (!TryComp<AdminFrozenComponent>(source, out var frozen) || !frozen.Muted);
+
     private void SendEntityWhisperWithLanguage(
         EntityUid source,
         string originalMessage,
@@ -168,7 +196,8 @@ public sealed partial class ChatSystem
         var needsLos = languagePrototype?.NeedsLOS ?? false;
         var needsSpeech = languagePrototype?.NeedsSpeech ?? true;
 
-        if (needsSpeech && !_actionBlocker.CanSpeak(source) && !ignoreActionBlocker)
+        if (needsSpeech && !_actionBlocker.CanSpeak(source) && !ignoreActionBlocker
+            && !CanWhisperInCrit(source)) // CMU14
             return;
 
         var message = TransformSpeech(source, FormattedMessage.RemoveMarkupPermissive(markedMessage));

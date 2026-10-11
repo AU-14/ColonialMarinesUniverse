@@ -1253,6 +1253,11 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                 ? parsedOutcome
                 : CMURoundStatisticsOutcome.Unknown;
 
+            // CMU14: rounds ended by the hive collapse rule used to record as marine major, reclassify by source
+            if (result == CMURoundStatisticsOutcome.MarineMajorXenoWipe
+                && outcome.Source == "HiveCollapseRule")
+                result = CMURoundStatisticsOutcome.MarineMinorHiveCollapse;
+
             return new CMURoundOutcomeRecord(
                 outcome.RoundId,
                 preset,

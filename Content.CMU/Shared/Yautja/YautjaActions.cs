@@ -16,8 +16,6 @@ public sealed partial class YautjaOpenMarkPanelActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaMarkForHuntActionEvent : EntityTargetActionEvent;
 
-public sealed partial class YautjaLeapActionEvent : WorldTargetActionEvent;
-
 public sealed partial class YautjaOpenBracerMenuActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaRecallActionEvent : InstantActionEvent;
@@ -76,10 +74,6 @@ public sealed partial class YautjaAddTrackedItemActionEvent : InstantActionEvent
 public sealed partial class YautjaRemoveTrackedItemActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaCreateStabilisingCrystalActionEvent : InstantActionEvent;
-
-public sealed partial class YautjaCreateFieldRationActionEvent : InstantActionEvent;
-
-public sealed partial class YautjaCreateHuntingCanteenActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaCreateHumanStabilisingCrystalActionEvent : InstantActionEvent;
 

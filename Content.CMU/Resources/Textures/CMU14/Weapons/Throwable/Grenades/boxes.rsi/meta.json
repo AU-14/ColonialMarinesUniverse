@@ -1,0 +1,457 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve at commit 1e74f4651b29ccee521b32ee5cfded93f5d83c62 (PR #854)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "base_uscm_nade"
+    },
+    {
+      "name": "base_uscm_40mm"
+    },
+    {
+      "name": "base_training_nade"
+    },
+    {
+      "name": "base_uscm_ltl"
+    },
+    {
+      "name": "base_upp_nade"
+    },
+    {
+      "name": "base_uscm_nade_lid"
+    },
+    {
+      "name": "base_uscm_40mm_lid"
+    },
+    {
+      "name": "base_training_nade_lid"
+    },
+    {
+      "name": "base_uscm_ltl_lid"
+    },
+    {
+      "name": "base_upp_nade_lid"
+    },
+    {
+      "name": "model_m38"
+    },
+    {
+      "name": "model_m40"
+    },
+    {
+      "name": "model_m42"
+    },
+    {
+      "name": "model_m47"
+    },
+    {
+      "name": "model_m51a"
+    },
+    {
+      "name": "model_m60"
+    },
+    {
+      "name": "model_m77"
+    },
+    {
+      "name": "model_m108"
+    },
+    {
+      "name": "model_mo7"
+    },
+    {
+      "name": "model_m74"
+    },
+    {
+      "name": "model_m15"
+    },
+    {
+      "name": "model_m66"
+    },
+    {
+      "name": "model_sebb"
+    },
+    {
+      "name": "model_type6"
+    },
+    {
+      "name": "model_typesmoke"
+    },
+    {
+      "name": "stripe_hedp"
+    },
+    {
+      "name": "stripe_hiam"
+    },
+    {
+      "name": "stripe_hefa"
+    },
+    {
+      "name": "stripe_agmi"
+    },
+    {
+      "name": "stripe_agmf"
+    },
+    {
+      "name": "stripe_agms"
+    },
+    {
+      "name": "stripe_heap"
+    },
+    {
+      "name": "stripe_phos"
+    },
+    {
+      "name": "stripe_smoke"
+    },
+    {
+      "name": "stripe_gsmoke"
+    },
+    {
+      "name": "stripe_rsmoke"
+    },
+    {
+      "name": "stripe_bfab"
+    },
+    {
+      "name": "stripe_buck"
+    },
+    {
+      "name": "stripe_m15"
+    },
+    {
+      "name": "stripe_training"
+    },
+    {
+      "name": "stripe_foam"
+    },
+    {
+      "name": "stripe_sebb"
+    },
+    {
+      "name": "stripe_tgas"
+    },
+    {
+      "name": "stripe_type6"
+    },
+    {
+      "name": "stripe_typesmoke"
+    },
+    {
+      "name": "on_fire",
+      "delays": [
+        [
+          0.1,
+          0.2,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "fill_40mm_agmf-0"
+    },
+    {
+      "name": "fill_40mm_agmf-1"
+    },
+    {
+      "name": "fill_40mm_agmf-2"
+    },
+    {
+      "name": "fill_40mm_agmf-3"
+    },
+    {
+      "name": "fill_40mm_agmf-4"
+    },
+    {
+      "name": "fill_40mm_agmi-0"
+    },
+    {
+      "name": "fill_40mm_agmi-1"
+    },
+    {
+      "name": "fill_40mm_agmi-2"
+    },
+    {
+      "name": "fill_40mm_agmi-3"
+    },
+    {
+      "name": "fill_40mm_agmi-4"
+    },
+    {
+      "name": "fill_40mm_agms-0"
+    },
+    {
+      "name": "fill_40mm_agms-1"
+    },
+    {
+      "name": "fill_40mm_agms-2"
+    },
+    {
+      "name": "fill_40mm_agms-3"
+    },
+    {
+      "name": "fill_40mm_agms-4"
+    },
+    {
+      "name": "fill_bfab-0"
+    },
+    {
+      "name": "fill_bfab-1"
+    },
+    {
+      "name": "fill_bfab-2"
+    },
+    {
+      "name": "fill_bfab-3"
+    },
+    {
+      "name": "fill_bfab-4"
+    },
+    {
+      "name": "fill_buck-0"
+    },
+    {
+      "name": "fill_buck-1"
+    },
+    {
+      "name": "fill_buck-2"
+    },
+    {
+      "name": "fill_buck-3"
+    },
+    {
+      "name": "fill_buck-4"
+    },
+    {
+      "name": "fill_foam-0"
+    },
+    {
+      "name": "fill_foam-1"
+    },
+    {
+      "name": "fill_foam-2"
+    },
+    {
+      "name": "fill_foam-3"
+    },
+    {
+      "name": "fill_foam-4"
+    },
+    {
+      "name": "fill_gsmoke-0"
+    },
+    {
+      "name": "fill_gsmoke-1"
+    },
+    {
+      "name": "fill_gsmoke-2"
+    },
+    {
+      "name": "fill_gsmoke-3"
+    },
+    {
+      "name": "fill_gsmoke-4"
+    },
+    {
+      "name": "fill_heap-0"
+    },
+    {
+      "name": "fill_heap-1"
+    },
+    {
+      "name": "fill_heap-2"
+    },
+    {
+      "name": "fill_heap-3"
+    },
+    {
+      "name": "fill_heap-4"
+    },
+    {
+      "name": "fill_hedp-0"
+    },
+    {
+      "name": "fill_hedp-1"
+    },
+    {
+      "name": "fill_hedp-2"
+    },
+    {
+      "name": "fill_hedp-3"
+    },
+    {
+      "name": "fill_hedp-4"
+    },
+    {
+      "name": "fill_hefa-0"
+    },
+    {
+      "name": "fill_hefa-1"
+    },
+    {
+      "name": "fill_hefa-2"
+    },
+    {
+      "name": "fill_hefa-3"
+    },
+    {
+      "name": "fill_hefa-4"
+    },
+    {
+      "name": "fill_hiam-0"
+    },
+    {
+      "name": "fill_hiam-1"
+    },
+    {
+      "name": "fill_hiam-2"
+    },
+    {
+      "name": "fill_hiam-3"
+    },
+    {
+      "name": "fill_hiam-4"
+    },
+    {
+      "name": "fill_m15-0"
+    },
+    {
+      "name": "fill_m15-1"
+    },
+    {
+      "name": "fill_m15-2"
+    },
+    {
+      "name": "fill_m15-3"
+    },
+    {
+      "name": "fill_m15-4"
+    },
+    {
+      "name": "fill_phos-0"
+    },
+    {
+      "name": "fill_phos-1"
+    },
+    {
+      "name": "fill_phos-2"
+    },
+    {
+      "name": "fill_phos-3"
+    },
+    {
+      "name": "fill_phos-4"
+    },
+    {
+      "name": "fill_rsmoke-0"
+    },
+    {
+      "name": "fill_rsmoke-1"
+    },
+    {
+      "name": "fill_rsmoke-2"
+    },
+    {
+      "name": "fill_rsmoke-3"
+    },
+    {
+      "name": "fill_rsmoke-4"
+    },
+    {
+      "name": "fill_sebb-0"
+    },
+    {
+      "name": "fill_sebb-1"
+    },
+    {
+      "name": "fill_sebb-2"
+    },
+    {
+      "name": "fill_sebb-3"
+    },
+    {
+      "name": "fill_sebb-4"
+    },
+    {
+      "name": "fill_smoke-0"
+    },
+    {
+      "name": "fill_smoke-1"
+    },
+    {
+      "name": "fill_smoke-2"
+    },
+    {
+      "name": "fill_smoke-3"
+    },
+    {
+      "name": "fill_smoke-4"
+    },
+    {
+      "name": "fill_tgas-0"
+    },
+    {
+      "name": "fill_tgas-1"
+    },
+    {
+      "name": "fill_tgas-2"
+    },
+    {
+      "name": "fill_tgas-3"
+    },
+    {
+      "name": "fill_tgas-4"
+    },
+    {
+      "name": "fill_training-0"
+    },
+    {
+      "name": "fill_training-1"
+    },
+    {
+      "name": "fill_training-2"
+    },
+    {
+      "name": "fill_training-3"
+    },
+    {
+      "name": "fill_training-4"
+    },
+    {
+      "name": "fill_type6-0"
+    },
+    {
+      "name": "fill_type6-1"
+    },
+    {
+      "name": "fill_type6-2"
+    },
+    {
+      "name": "fill_type6-3"
+    },
+    {
+      "name": "fill_type6-4"
+    },
+    {
+      "name": "fill_typesmoke-0"
+    },
+    {
+      "name": "fill_typesmoke-1"
+    },
+    {
+      "name": "fill_typesmoke-2"
+    },
+    {
+      "name": "fill_typesmoke-3"
+    },
+    {
+      "name": "fill_typesmoke-4"
+    }
+  ]
+}

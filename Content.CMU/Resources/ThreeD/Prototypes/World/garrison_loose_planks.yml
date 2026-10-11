@@ -1,0 +1,1075 @@
+# Exact source pixels and inferred shallow timber geometry; all drafts.
+- type: cmu3DModel
+  id: CMU3DLooseFloorBoard3
+  label: Loose cave floor planks 3
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBoard3
+  referencePrototype: DecorFloorBoard3
+  referenceRsi: CMU14/N14content/cave_decor.rsi
+  referenceState: boards_drought_ns-3
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  description: Source-shaped solid timber sections with original drought/mammoth grain, separate raised crossing
+    sections and exact alpha gaps. Static fixed noRot visual orientation; saved source yaw/position unchanged. Heights
+    .004-.076 tiles and hidden continuation are inferred. Bedroll/platform compound support remains a documented
+    draft limitation. See SOURCES_LOOSE_PLANKS.md.
+  parts:
+  - label: lower timber solid section 1
+    min: -0.156250000, 0.156250000, 0.004000000
+    max: 0.250000000, 0.468750000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 2
+    min: -0.156250000, 0.125000000, 0.004000000
+    max: 0.218750000, 0.156250000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 3
+    min: -0.156250000, 0.093750000, 0.004000000
+    max: 0.187500000, 0.125000000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 4
+    min: -0.156250000, -0.406250000, 0.004000000
+    max: 0.156250000, 0.093750000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 5
+    min: -0.187500000, -0.375000000, 0.004000000
+    max: -0.156250000, -0.187500000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 6
+    min: -0.218750000, -0.375000000, 0.004000000
+    max: -0.187500000, -0.250000000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 7
+    min: -0.250000000, -0.375000000, 0.004000000
+    max: -0.218750000, -0.312500000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 8
+    min: -0.093750000, -0.437500000, 0.004000000
+    max: 0.156250000, -0.406250000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 9
+    min: -0.031250000, -0.468750000, 0.004000000
+    max: 0.125000000, -0.437500000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 10
+    min: 0.031250000, -0.500000000, 0.004000000
+    max: 0.125000000, -0.468750000, 0.040000000
+    color: '#3D2716'
+  - label: crossing timber solid section 1
+    min: 0.218750000, -0.250000000, 0.040000000
+    max: 0.250000000, 0.156250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 2
+    min: 0.187500000, -0.312500000, 0.040000000
+    max: 0.218750000, 0.125000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 3
+    min: 0.250000000, -0.125000000, 0.040000000
+    max: 0.312500000, 0.125000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 4
+    min: 0.156250000, -0.375000000, 0.040000000
+    max: 0.187500000, 0.093750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 5
+    min: 0.312500000, 0.000000000, 0.040000000
+    max: 0.375000000, 0.093750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 6
+    min: 0.125000000, -0.437500000, 0.040000000
+    max: 0.156250000, 0.062500000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 7
+    min: 0.093750000, -0.500000000, 0.040000000
+    max: 0.125000000, 0.031250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 8
+    min: 0.062500000, -0.500000000, 0.040000000
+    max: 0.093750000, 0.000000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 9
+    min: 0.312500000, -0.062500000, 0.040000000
+    max: 0.343750000, 0.000000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 10
+    min: 0.031250000, -0.500000000, 0.040000000
+    max: 0.062500000, -0.031250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 11
+    min: 0.000000000, -0.468750000, 0.040000000
+    max: 0.031250000, -0.062500000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 12
+    min: -0.031250000, -0.468750000, 0.040000000
+    max: 0.000000000, -0.093750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 13
+    min: -0.062500000, -0.437500000, 0.040000000
+    max: -0.031250000, -0.125000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 14
+    min: 0.250000000, -0.187500000, 0.040000000
+    max: 0.281250000, -0.125000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 15
+    min: -0.093750000, -0.437500000, 0.040000000
+    max: -0.062500000, -0.156250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 16
+    min: -0.125000000, -0.406250000, 0.040000000
+    max: -0.093750000, -0.187500000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 17
+    min: -0.156250000, -0.406250000, 0.040000000
+    max: -0.125000000, -0.218750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 18
+    min: -0.187500000, -0.375000000, 0.040000000
+    max: -0.156250000, -0.250000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 19
+    min: -0.218750000, -0.375000000, 0.040000000
+    max: -0.187500000, -0.281250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 20
+    min: -0.250000000, -0.375000000, 0.040000000
+    max: -0.218750000, -0.312500000, 0.076000000
+    color: '#3D2716'
+  - label: lower timber original grain
+    min: -0.218750000, -0.281250000, 0.039000000
+    max: 0.250000000, 0.468750000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2500
+    surfaceAxis: XY
+  - label: crossing timber original grain
+    min: -0.250000000, -0.500000000, 0.075000000
+    max: 0.375000000, 0.156250000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2501
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DLooseFloorBoard4
+  label: Loose cave floor planks 4
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBoard4
+  referencePrototype: DecorFloorBoard4
+  referenceRsi: CMU14/N14content/cave_decor.rsi
+  referenceState: boards_drought_ns-4
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: floor
+  description: Source-shaped solid timber sections with original drought/mammoth grain, separate raised crossing
+    sections and exact alpha gaps. Static fixed noRot visual orientation; saved source yaw/position unchanged. Heights
+    .004-.076 tiles and hidden continuation are inferred. Bedroll/platform compound support remains a documented
+    draft limitation. See SOURCES_LOOSE_PLANKS.md.
+  parts:
+  - label: lower timber solid section 1
+    min: 0.000000000, -0.500000000, 0.004000000
+    max: 0.093750000, 0.500000000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 2
+    min: -0.062500000, -0.500000000, 0.004000000
+    max: 0.000000000, 0.468750000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 3
+    min: 0.093750000, -0.500000000, 0.004000000
+    max: 0.125000000, 0.468750000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 4
+    min: -0.125000000, -0.500000000, 0.004000000
+    max: -0.062500000, 0.437500000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 5
+    min: -0.187500000, -0.500000000, 0.004000000
+    max: -0.125000000, 0.406250000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 6
+    min: 0.125000000, -0.500000000, 0.004000000
+    max: 0.156250000, 0.406250000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 7
+    min: -0.250000000, 0.281250000, 0.004000000
+    max: -0.187500000, 0.375000000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 8
+    min: -0.218750000, 0.218750000, 0.004000000
+    max: -0.187500000, 0.281250000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 9
+    min: -0.250000000, -0.500000000, 0.004000000
+    max: -0.187500000, 0.156250000, 0.040000000
+    color: '#3D2716'
+  - label: crossing timber solid section 1
+    min: 0.000000000, -0.062500000, 0.040000000
+    max: 0.093750000, 0.500000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 2
+    min: -0.062500000, 0.000000000, 0.040000000
+    max: 0.000000000, 0.468750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 3
+    min: 0.093750000, -0.187500000, 0.040000000
+    max: 0.125000000, 0.468750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 4
+    min: -0.125000000, 0.093750000, 0.040000000
+    max: -0.062500000, 0.437500000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 5
+    min: -0.187500000, 0.156250000, 0.040000000
+    max: -0.125000000, 0.406250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 6
+    min: 0.125000000, -0.218750000, 0.040000000
+    max: 0.156250000, 0.406250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 7
+    min: -0.250000000, 0.281250000, 0.040000000
+    max: -0.187500000, 0.375000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 8
+    min: 0.156250000, -0.156250000, 0.040000000
+    max: 0.187500000, 0.343750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 9
+    min: -0.218750000, 0.218750000, 0.040000000
+    max: -0.187500000, 0.281250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 10
+    min: 0.187500000, -0.156250000, 0.040000000
+    max: 0.218750000, 0.281250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 11
+    min: 0.218750000, -0.125000000, 0.040000000
+    max: 0.250000000, 0.218750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 12
+    min: -0.156250000, 0.125000000, 0.040000000
+    max: -0.125000000, 0.156250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 13
+    min: 0.250000000, -0.125000000, 0.040000000
+    max: 0.281250000, 0.156250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 14
+    min: -0.093750000, 0.062500000, 0.040000000
+    max: -0.062500000, 0.093750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 15
+    min: 0.281250000, -0.093750000, 0.040000000
+    max: 0.312500000, 0.093750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 16
+    min: 0.312500000, -0.093750000, 0.040000000
+    max: 0.343750000, 0.031250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 17
+    min: -0.031250000, -0.031250000, 0.040000000
+    max: 0.000000000, 0.000000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 18
+    min: 0.343750000, -0.093750000, 0.040000000
+    max: 0.375000000, -0.031250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 19
+    min: 0.031250000, -0.093750000, 0.040000000
+    max: 0.093750000, -0.062500000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 20
+    min: 0.062500000, -0.156250000, 0.040000000
+    max: 0.093750000, -0.093750000, 0.076000000
+    color: '#3D2716'
+  - label: lower timber original grain
+    min: -0.250000000, -0.500000000, 0.039000000
+    max: 0.156250000, 0.156250000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2502
+    surfaceAxis: XY
+  - label: crossing timber original grain
+    min: -0.250000000, -0.218750000, 0.075000000
+    max: 0.375000000, 0.500000000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2503
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DLooseFloorBoard8
+  label: Loose cave floor planks 8
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBoard8
+  referencePrototype: DecorFloorBoard8
+  referenceRsi: CMU14/N14content/cave_decor.rsi
+  referenceState: boards_drought_we-2
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: surface
+  description: Source-shaped solid timber sections with original drought/mammoth grain, separate raised crossing
+    sections and exact alpha gaps. Static fixed noRot visual orientation; saved source yaw/position unchanged. Heights
+    .004-.076 tiles and hidden continuation are inferred. Bedroll/platform compound support remains a documented
+    draft limitation. See SOURCES_LOOSE_PLANKS.md.
+  parts:
+  - label: lower timber solid section 1
+    min: -0.500000000, -0.125000000, 0.004000000
+    max: 0.250000000, 0.156250000, 0.040000000
+    color: '#2F1B11'
+  - label: lower timber solid section 2
+    min: -0.500000000, -0.218750000, 0.004000000
+    max: 0.187500000, -0.125000000, 0.040000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 1
+    min: -0.156250000, -0.031250000, 0.040000000
+    max: 0.000000000, 0.375000000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 2
+    min: 0.000000000, -0.093750000, 0.040000000
+    max: 0.093750000, 0.343750000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 3
+    min: -0.187500000, -0.031250000, 0.040000000
+    max: -0.156250000, 0.312500000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 4
+    min: 0.093750000, -0.125000000, 0.040000000
+    max: 0.187500000, 0.312500000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 5
+    min: 0.187500000, -0.125000000, 0.040000000
+    max: 0.312500000, 0.281250000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 6
+    min: 0.312500000, -0.156250000, 0.040000000
+    max: 0.406250000, 0.250000000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 7
+    min: -0.218750000, 0.000000000, 0.040000000
+    max: -0.187500000, 0.218750000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 8
+    min: 0.406250000, 0.125000000, 0.040000000
+    max: 0.500000000, 0.218750000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 9
+    min: 0.406250000, 0.031250000, 0.040000000
+    max: 0.468750000, 0.125000000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 10
+    min: 0.406250000, -0.062500000, 0.040000000
+    max: 0.437500000, 0.031250000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 11
+    min: -0.093750000, -0.062500000, 0.040000000
+    max: 0.000000000, -0.031250000, 0.076000000
+    color: '#2F1B11'
+  - label: crossing timber solid section 12
+    min: 0.281250000, -0.156250000, 0.040000000
+    max: 0.312500000, -0.125000000, 0.076000000
+    color: '#2F1B11'
+  - label: lower timber original grain
+    min: -0.500000000, -0.218750000, 0.039000000
+    max: 0.187500000, 0.156250000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2504
+    surfaceAxis: XY
+  - label: crossing timber original grain
+    min: -0.218750000, -0.156250000, 0.075000000
+    max: 0.500000000, 0.375000000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2505
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DLooseFloorBoard11
+  label: Loose cave floor planks 11
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBoard11
+  referencePrototype: DecorFloorBoard11
+  referenceRsi: CMU14/N14content/cave_decor.rsi
+  referenceState: boards_drought_we-5
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: floor
+  description: Source-shaped solid timber sections with original drought/mammoth grain, separate raised crossing
+    sections and exact alpha gaps. Static fixed noRot visual orientation; saved source yaw/position unchanged. Heights
+    .004-.076 tiles and hidden continuation are inferred. Bedroll/platform compound support remains a documented
+    draft limitation. See SOURCES_LOOSE_PLANKS.md.
+  parts:
+  - label: lower timber solid section 1
+    min: -0.468750000, -0.125000000, 0.004000000
+    max: 0.187500000, 0.125000000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 2
+    min: -0.500000000, -0.125000000, 0.004000000
+    max: -0.468750000, 0.093750000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 3
+    min: 0.187500000, -0.281250000, 0.004000000
+    max: 0.500000000, 0.093750000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 4
+    min: -0.437500000, -0.156250000, 0.004000000
+    max: 0.187500000, -0.125000000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 5
+    min: -0.312500000, -0.187500000, 0.004000000
+    max: 0.187500000, -0.156250000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 6
+    min: -0.187500000, -0.218750000, 0.004000000
+    max: 0.187500000, -0.187500000, 0.040000000
+    color: '#3D2716'
+  - label: lower timber solid section 7
+    min: -0.156250000, -0.281250000, 0.004000000
+    max: 0.187500000, -0.218750000, 0.040000000
+    color: '#3D2716'
+  - label: crossing timber solid section 1
+    min: -0.437500000, -0.156250000, 0.040000000
+    max: -0.281250000, 0.250000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 2
+    min: -0.281250000, -0.187500000, 0.040000000
+    max: -0.187500000, 0.218750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 3
+    min: -0.468750000, -0.125000000, 0.040000000
+    max: -0.437500000, 0.187500000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 4
+    min: -0.187500000, -0.218750000, 0.040000000
+    max: -0.062500000, 0.187500000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 5
+    min: -0.062500000, -0.281250000, 0.040000000
+    max: 0.062500000, 0.156250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 6
+    min: 0.062500000, -0.281250000, 0.040000000
+    max: 0.187500000, 0.125000000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 7
+    min: -0.500000000, -0.125000000, 0.040000000
+    max: -0.468750000, 0.093750000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 8
+    min: -0.312500000, -0.187500000, 0.040000000
+    max: -0.281250000, -0.156250000, 0.076000000
+    color: '#3D2716'
+  - label: crossing timber solid section 9
+    min: -0.156250000, -0.281250000, 0.040000000
+    max: -0.062500000, -0.218750000, 0.076000000
+    color: '#3D2716'
+  - label: lower timber original grain
+    min: 0.187500000, -0.281250000, 0.039000000
+    max: 0.500000000, 0.093750000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2506
+    surfaceAxis: XY
+  - label: crossing timber original grain
+    min: -0.500000000, -0.281250000, 0.075000000
+    max: 0.187500000, 0.250000000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2507
+    surfaceAxis: XY
+  supportSurfaces:
+  - lower timber solid section 1
+  - lower timber solid section 2
+  - lower timber solid section 3
+  - lower timber solid section 4
+  - lower timber solid section 5
+  - lower timber solid section 6
+  - lower timber solid section 7
+  - crossing timber solid section 1
+  - crossing timber solid section 2
+  - crossing timber solid section 3
+  - crossing timber solid section 4
+  - crossing timber solid section 5
+  - crossing timber solid section 6
+  - crossing timber solid section 7
+  - crossing timber solid section 8
+  - crossing timber solid section 9
+- type: cmu3DModel
+  id: CMU3DLooseFloorBoard17
+  label: Loose cave floor planks 17
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBoard17
+  referencePrototype: DecorFloorBoard17
+  referenceRsi: CMU14/N14content/cave_decor.rsi
+  referenceState: boards_mammoth_ns-5
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: floor
+  description: Source-shaped solid timber sections with original drought/mammoth grain, separate raised crossing
+    sections and exact alpha gaps. Static fixed noRot visual orientation; saved source yaw/position unchanged. Heights
+    .004-.076 tiles and hidden continuation are inferred. Bedroll/platform compound support remains a documented
+    draft limitation. See SOURCES_LOOSE_PLANKS.md.
+  parts:
+  - label: lower timber solid section 1
+    min: -0.031250000, -0.468750000, 0.004000000
+    max: 0.062500000, 0.500000000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 2
+    min: -0.125000000, -0.468750000, 0.004000000
+    max: -0.031250000, 0.468750000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 3
+    min: 0.062500000, -0.468750000, 0.004000000
+    max: 0.093750000, 0.468750000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 4
+    min: 0.093750000, -0.468750000, 0.004000000
+    max: 0.125000000, 0.375000000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 5
+    min: 0.125000000, -0.468750000, 0.004000000
+    max: 0.156250000, 0.250000000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 6
+    min: 0.156250000, -0.468750000, 0.004000000
+    max: 0.281250000, 0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 1
+    min: -0.031250000, -0.187500000, 0.040000000
+    max: 0.062500000, 0.500000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 2
+    min: -0.125000000, -0.187500000, 0.040000000
+    max: -0.031250000, 0.468750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 3
+    min: 0.062500000, -0.187500000, 0.040000000
+    max: 0.093750000, 0.468750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 4
+    min: -0.218750000, -0.031250000, 0.040000000
+    max: -0.125000000, 0.437500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 5
+    min: -0.312500000, 0.250000000, 0.040000000
+    max: -0.218750000, 0.406250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 6
+    min: 0.093750000, -0.187500000, 0.040000000
+    max: 0.125000000, 0.375000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 7
+    min: -0.281250000, 0.218750000, 0.040000000
+    max: -0.218750000, 0.250000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 8
+    min: 0.125000000, 0.156250000, 0.040000000
+    max: 0.156250000, 0.250000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 9
+    min: -0.250000000, 0.125000000, 0.040000000
+    max: -0.218750000, 0.218750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 10
+    min: -0.187500000, -0.093750000, 0.040000000
+    max: -0.125000000, -0.031250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 11
+    min: -0.156250000, -0.187500000, 0.040000000
+    max: -0.125000000, -0.093750000, 0.076000000
+    color: '#3B2A1D'
+  - label: lower timber original grain
+    min: -0.125000000, -0.468750000, 0.039000000
+    max: 0.281250000, 0.156250000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2508
+    surfaceAxis: XY
+  - label: crossing timber original grain
+    min: -0.312500000, -0.187500000, 0.075000000
+    max: 0.156250000, 0.500000000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2509
+    surfaceAxis: XY
+  supportSurfaces:
+  - lower timber solid section 1
+  - lower timber solid section 2
+  - lower timber solid section 3
+  - lower timber solid section 4
+  - lower timber solid section 5
+  - lower timber solid section 6
+  - crossing timber solid section 1
+  - crossing timber solid section 2
+  - crossing timber solid section 3
+  - crossing timber solid section 4
+  - crossing timber solid section 5
+  - crossing timber solid section 6
+  - crossing timber solid section 7
+  - crossing timber solid section 8
+  - crossing timber solid section 9
+  - crossing timber solid section 10
+  - crossing timber solid section 11
+- type: cmu3DModel
+  id: CMU3DLooseFloorBoard18
+  label: Loose cave floor planks 18
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBoard18
+  referencePrototype: DecorFloorBoard18
+  referenceRsi: CMU14/N14content/cave_decor.rsi
+  referenceState: boards_mammoth_ns-6
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: floor
+  description: Source-shaped solid timber sections with original drought/mammoth grain, separate raised crossing
+    sections and exact alpha gaps. Static fixed noRot visual orientation; saved source yaw/position unchanged. Heights
+    .004-.076 tiles and hidden continuation are inferred. Bedroll/platform compound support remains a documented
+    draft limitation. See SOURCES_LOOSE_PLANKS.md.
+  parts:
+  - label: lower timber solid section 1
+    min: 0.062500000, -0.500000000, 0.004000000
+    max: 0.156250000, 0.500000000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 2
+    min: 0.000000000, -0.500000000, 0.004000000
+    max: 0.062500000, 0.468750000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 3
+    min: -0.062500000, -0.500000000, 0.004000000
+    max: 0.000000000, 0.437500000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 4
+    min: -0.125000000, -0.500000000, 0.004000000
+    max: -0.062500000, 0.406250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 5
+    min: -0.187500000, 0.281250000, 0.004000000
+    max: -0.125000000, 0.375000000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 6
+    min: -0.156250000, 0.218750000, 0.004000000
+    max: -0.125000000, 0.281250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 7
+    min: -0.250000000, -0.500000000, 0.004000000
+    max: -0.125000000, 0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 8
+    min: 0.156250000, -0.218750000, 0.004000000
+    max: 0.187500000, -0.187500000, 0.040000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 1
+    min: 0.062500000, -0.062500000, 0.040000000
+    max: 0.156250000, 0.500000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 2
+    min: 0.000000000, 0.031250000, 0.040000000
+    max: 0.062500000, 0.468750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 3
+    min: 0.156250000, -0.187500000, 0.040000000
+    max: 0.187500000, 0.468750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 4
+    min: -0.062500000, 0.093750000, 0.040000000
+    max: 0.000000000, 0.437500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 5
+    min: -0.125000000, 0.125000000, 0.040000000
+    max: -0.062500000, 0.406250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 6
+    min: 0.187500000, -0.187500000, 0.040000000
+    max: 0.250000000, 0.406250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 7
+    min: -0.187500000, 0.281250000, 0.040000000
+    max: -0.125000000, 0.375000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 8
+    min: -0.156250000, 0.218750000, 0.040000000
+    max: -0.125000000, 0.281250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 9
+    min: 0.250000000, -0.156250000, 0.040000000
+    max: 0.281250000, 0.281250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 10
+    min: 0.281250000, -0.156250000, 0.040000000
+    max: 0.312500000, 0.218750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 11
+    min: -0.250000000, 0.125000000, 0.040000000
+    max: -0.125000000, 0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 12
+    min: 0.312500000, -0.125000000, 0.040000000
+    max: 0.343750000, 0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 13
+    min: -0.031250000, 0.062500000, 0.040000000
+    max: 0.000000000, 0.093750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 14
+    min: 0.343750000, -0.093750000, 0.040000000
+    max: 0.406250000, 0.093750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 15
+    min: 0.031250000, -0.031250000, 0.040000000
+    max: 0.062500000, 0.031250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 16
+    min: 0.406250000, -0.093750000, 0.040000000
+    max: 0.437500000, -0.031250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 17
+    min: 0.093750000, -0.093750000, 0.040000000
+    max: 0.156250000, -0.062500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 18
+    min: 0.125000000, -0.156250000, 0.040000000
+    max: 0.156250000, -0.093750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 19
+    min: 0.343750000, -0.125000000, 0.040000000
+    max: 0.375000000, -0.093750000, 0.076000000
+    color: '#3B2A1D'
+  - label: lower timber original grain
+    min: -0.250000000, -0.500000000, 0.039000000
+    max: 0.187500000, 0.125000000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2510
+    surfaceAxis: XY
+  - label: crossing timber original grain
+    min: -0.250000000, -0.187500000, 0.075000000
+    max: 0.437500000, 0.500000000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2511
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DLooseFloorBoard19
+  label: Loose cave floor planks 19
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBoard19
+  referencePrototype: DecorFloorBoard19
+  referenceRsi: CMU14/N14content/cave_decor.rsi
+  referenceState: boards_mammoth_we-1
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: floor
+  description: Source-shaped solid timber sections with original drought/mammoth grain, separate raised crossing
+    sections and exact alpha gaps. Static fixed noRot visual orientation; saved source yaw/position unchanged. Heights
+    .004-.076 tiles and hidden continuation are inferred. Bedroll/platform compound support remains a documented
+    draft limitation. See SOURCES_LOOSE_PLANKS.md.
+  parts:
+  - label: lower timber solid section 1
+    min: -0.468750000, -0.125000000, 0.004000000
+    max: 0.156250000, 0.125000000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 2
+    min: -0.500000000, -0.125000000, 0.004000000
+    max: -0.468750000, 0.093750000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 3
+    min: 0.156250000, -0.281250000, 0.004000000
+    max: 0.500000000, 0.093750000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 4
+    min: -0.437500000, -0.156250000, 0.004000000
+    max: 0.156250000, -0.125000000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 5
+    min: -0.312500000, -0.187500000, 0.004000000
+    max: 0.156250000, -0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 6
+    min: -0.218750000, -0.218750000, 0.004000000
+    max: 0.156250000, -0.187500000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 7
+    min: -0.156250000, -0.281250000, 0.004000000
+    max: 0.156250000, -0.218750000, 0.040000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 1
+    min: -0.343750000, -0.156250000, 0.040000000
+    max: -0.281250000, 0.281250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 2
+    min: -0.437500000, -0.156250000, 0.040000000
+    max: -0.343750000, 0.250000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 3
+    min: -0.281250000, -0.187500000, 0.040000000
+    max: -0.187500000, 0.250000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 4
+    min: -0.468750000, -0.125000000, 0.040000000
+    max: -0.437500000, 0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 5
+    min: -0.187500000, -0.218750000, 0.040000000
+    max: -0.093750000, 0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 6
+    min: 0.000000000, -0.281250000, 0.040000000
+    max: 0.062500000, 0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 7
+    min: -0.093750000, -0.281250000, 0.040000000
+    max: 0.000000000, 0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 8
+    min: 0.062500000, -0.281250000, 0.040000000
+    max: 0.156250000, 0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 9
+    min: -0.500000000, -0.125000000, 0.040000000
+    max: -0.468750000, 0.093750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 10
+    min: 0.156250000, -0.281250000, 0.040000000
+    max: 0.218750000, 0.093750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 11
+    min: -0.312500000, -0.187500000, 0.040000000
+    max: -0.281250000, -0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 12
+    min: -0.218750000, -0.218750000, 0.040000000
+    max: -0.187500000, -0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 13
+    min: -0.156250000, -0.281250000, 0.040000000
+    max: -0.093750000, -0.218750000, 0.076000000
+    color: '#3B2A1D'
+  - label: lower timber original grain
+    min: 0.218750000, -0.281250000, 0.039000000
+    max: 0.500000000, 0.093750000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2512
+    surfaceAxis: XY
+  - label: crossing timber original grain
+    min: -0.500000000, -0.281250000, 0.075000000
+    max: 0.218750000, 0.281250000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2513
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DLooseFloorBoard22
+  label: Loose cave floor planks 22
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBoard22
+  referencePrototype: DecorFloorBoard22
+  referenceRsi: CMU14/N14content/cave_decor.rsi
+  referenceState: boards_mammoth_we-4
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: floor
+  description: Source-shaped solid timber sections with original drought/mammoth grain, separate raised crossing
+    sections and exact alpha gaps. Static fixed noRot visual orientation; saved source yaw/position unchanged. Heights
+    .004-.076 tiles and hidden continuation are inferred. Bedroll/platform compound support remains a documented
+    draft limitation. See SOURCES_LOOSE_PLANKS.md.
+  parts:
+  - label: lower timber solid section 1
+    min: -0.187500000, -0.218750000, 0.004000000
+    max: -0.156250000, 0.187500000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 2
+    min: 0.156250000, -0.218750000, 0.004000000
+    max: 0.187500000, 0.187500000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 3
+    min: -0.375000000, -0.218750000, 0.004000000
+    max: -0.187500000, 0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 4
+    min: -0.156250000, -0.218750000, 0.004000000
+    max: 0.156250000, 0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 5
+    min: 0.187500000, -0.218750000, 0.004000000
+    max: 0.375000000, 0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 1
+    min: -0.312500000, -0.218750000, 0.040000000
+    max: -0.187500000, 0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 2
+    min: 0.187500000, -0.218750000, 0.040000000
+    max: 0.312500000, 0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 3
+    min: -0.375000000, -0.218750000, 0.040000000
+    max: -0.312500000, 0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 4
+    min: 0.312500000, -0.218750000, 0.040000000
+    max: 0.375000000, 0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: lower timber original grain
+    min: -0.187500000, -0.218750000, 0.039000000
+    max: 0.187500000, 0.187500000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2514
+    surfaceAxis: XY
+  - label: crossing timber original grain
+    min: -0.375000000, -0.218750000, 0.075000000
+    max: 0.375000000, 0.187500000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2515
+    surfaceAxis: XY
+- type: cmu3DModel
+  id: CMU3DLooseFloorBoard23
+  label: Loose cave floor planks 23
+  status: draft
+  sourcePrototypes:
+  - DecorFloorBoard23
+  referencePrototype: DecorFloorBoard23
+  referenceRsi: CMU14/N14content/cave_decor.rsi
+  referenceState: boards_mammoth_we-5
+  sourceDirections: 1
+  useEntityRotation: false
+  yawOffset: 0
+  groundOffset: 0,0
+  placement: floor
+  description: Source-shaped solid timber sections with original drought/mammoth grain, separate raised crossing
+    sections and exact alpha gaps. Static fixed noRot visual orientation; saved source yaw/position unchanged. Heights
+    .004-.076 tiles and hidden continuation are inferred. Bedroll/platform compound support remains a documented
+    draft limitation. See SOURCES_LOOSE_PLANKS.md.
+  parts:
+  - label: lower timber solid section 1
+    min: 0.156250000, -0.218750000, 0.004000000
+    max: 0.218750000, 0.218750000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 2
+    min: 0.062500000, -0.218750000, 0.004000000
+    max: 0.156250000, 0.187500000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 3
+    min: -0.468750000, -0.125000000, 0.004000000
+    max: 0.062500000, 0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 4
+    min: 0.218750000, -0.156250000, 0.004000000
+    max: 0.468750000, 0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 5
+    min: -0.500000000, -0.125000000, 0.004000000
+    max: -0.468750000, 0.093750000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 6
+    min: 0.468750000, -0.156250000, 0.004000000
+    max: 0.500000000, 0.062500000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 7
+    min: -0.437500000, -0.156250000, 0.004000000
+    max: 0.062500000, -0.125000000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 8
+    min: -0.312500000, -0.187500000, 0.004000000
+    max: 0.062500000, -0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 9
+    min: 0.218750000, -0.187500000, 0.004000000
+    max: 0.375000000, -0.156250000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 10
+    min: -0.218750000, -0.218750000, 0.004000000
+    max: 0.062500000, -0.187500000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 11
+    min: 0.218750000, -0.218750000, 0.004000000
+    max: 0.250000000, -0.187500000, 0.040000000
+    color: '#3B2A1D'
+  - label: lower timber solid section 12
+    min: 0.062500000, -0.281250000, 0.004000000
+    max: 0.125000000, -0.218750000, 0.040000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 1
+    min: -0.343750000, -0.156250000, 0.040000000
+    max: -0.281250000, 0.281250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 2
+    min: -0.437500000, -0.156250000, 0.040000000
+    max: -0.343750000, 0.250000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 3
+    min: -0.281250000, -0.187500000, 0.040000000
+    max: -0.187500000, 0.250000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 4
+    min: 0.218750000, -0.156250000, 0.040000000
+    max: 0.437500000, 0.250000000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 5
+    min: -0.468750000, -0.125000000, 0.040000000
+    max: -0.437500000, 0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 6
+    min: -0.187500000, -0.218750000, 0.040000000
+    max: -0.093750000, 0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 7
+    min: 0.000000000, -0.281250000, 0.040000000
+    max: 0.062500000, 0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 8
+    min: 0.437500000, -0.156250000, 0.040000000
+    max: 0.468750000, 0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 9
+    min: -0.093750000, -0.281250000, 0.040000000
+    max: 0.000000000, 0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 10
+    min: -0.500000000, -0.125000000, 0.040000000
+    max: -0.468750000, 0.093750000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 11
+    min: 0.468750000, -0.156250000, 0.040000000
+    max: 0.500000000, 0.062500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 12
+    min: -0.312500000, -0.187500000, 0.040000000
+    max: -0.281250000, -0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 13
+    min: 0.218750000, -0.187500000, 0.040000000
+    max: 0.375000000, -0.156250000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 14
+    min: -0.218750000, -0.218750000, 0.040000000
+    max: -0.187500000, -0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 15
+    min: 0.218750000, -0.218750000, 0.040000000
+    max: 0.250000000, -0.187500000, 0.076000000
+    color: '#3B2A1D'
+  - label: crossing timber solid section 16
+    min: -0.125000000, -0.281250000, 0.040000000
+    max: -0.093750000, -0.218750000, 0.076000000
+    color: '#3B2A1D'
+  - label: lower timber original grain
+    min: 0.062500000, -0.281250000, 0.039000000
+    max: 0.218750000, 0.218750000, 0.040000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2516
+    surfaceAxis: XY
+  - label: crossing timber original grain
+    min: -0.500000000, -0.281250000, 0.075000000
+    max: 0.500000000, 0.281250000, 0.076000000
+    color: '#FFFFFF'
+    surface: CMU3DLoosePlankSurface2517
+    surfaceAxis: XY

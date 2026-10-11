@@ -74,13 +74,13 @@
       - cost: 2000
         crate: RMCCrateBreachingCharges
       - cost: 1000
-        crate: RMCCrateGrenadesHighExplosiveBox
+        crate: CMUCrateGrenadeBoxHEDP
       - cost: 2000
-        crate: RMCCrateGrenadesBoxHEFA
+        crate: CMUCrateGrenadeBoxHEFA
       - cost: 1800
-        crate: RMCCrateGrenadesAirburstFragBox
+        crate: CMUCrateGrenadeBoxAGMF
       - cost: 2000
-        crate: RMCCrateBoxAGMI
+        crate: CMUCrateGrenadeBoxAGMI
       - cost: 2000
         crate: RMCCrateGrenadesAirburstFrag
       - cost: 2000
@@ -301,6 +301,10 @@
         crate: RMCCrateBoxMagazineSentryShotgun
       - cost: 600
         crate: RMCCrateBoxMagazineSentryFire
+      - cost: 600
+        crate: RMCCrateBoxMagazineSentryFireBlue
+      - cost: 600
+        crate: RMCCrateBoxMagazineSentryFireSmoke
       - cost: 300
         crate: RMCCrateBoxShellsShotgunSlugs
       - cost: 300

@@ -1,0 +1,17 @@
+<Document>
+  # Interstellar Human Rights Organization
+
+  <CMUGuideImage Path="/Textures/CMU14/Interface/Paper/IHROHeader.png" MaxHeight="256"/>
+
+  The [bold]Interstellar Human Rights Organization[/bold] (IHRO) is an independent watchdog that works under the umbrella of the [textlink="United Nations" link="CMUGuideLoreUN"] (UN). Its mission is to document abuses of human rights across human space, and to make sure the people responsible can't simply bury them out on the frontier.
+
+  ## Observers
+  - The IHRO's [bold]Interstellar Human Rights Observers[/bold] travel to the frontier to document and record any atrocities that may be taking place in its darker corners.
+  - Observers usually travel alongside others for protection, such as [textlink="Colonial Marshal Bureau" link="CMUGuideLoreCMB"] (CMB) patrols or [textlink="UNISC" link="CMUGuideLoreUNISC"] peacekeepers.
+  - Their reports are used to hold governments, militaries and corporations to the standards of the [textlink="Geneva Conventions of 12th August 2106" link="AU14UCMJGENCON"].
+  - Many call the program a PR stunt, but the work is important, and on the frontier an observer may be the only independent witness to what happens.
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearCMBInvestigationRightsObserver" Caption="Observer"/>
+  </Box>
+</Document>

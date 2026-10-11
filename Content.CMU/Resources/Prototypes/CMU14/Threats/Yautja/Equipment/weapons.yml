@@ -941,7 +941,7 @@
   - type: Sprite
     sprite: CMU14/Yautja/weapons.rsi
     layers:
-    - state: harpoon
+    - state: spike
   - type: Projectile
     impactEffect: BulletImpactEffect
     damage:
@@ -1004,6 +1004,7 @@
     count: 12
   - type: Wieldable
     wieldedInhandPrefix: spike_launcher
+  - type: GunRequiresWield
   - type: WieldDelay
     baseDelay: 0.45
     preventFiring: true
@@ -1012,7 +1013,6 @@
     light: 0.9
     medium: 0.85
     heavy: 0.85
-  - type: GunRequiresWield
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/rifle_mouse.rsi

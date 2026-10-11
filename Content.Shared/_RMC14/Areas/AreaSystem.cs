@@ -59,6 +59,9 @@ public sealed partial class AreaSystem : EntitySystem
         _xenoConstruct = GetEntityQuery<XenoConstructComponent>();
 
         SubscribeLocalEvent<AreaGridComponent, MapInitEvent>(OnAreaGridMapInit);
+        // CMU14: normalize gameplay permissions after map initialization, preserving editor/save defaults.
+        // SubscribeLocalEvent<AreaComponent, ComponentInit>(OnAreaInit);
+        SubscribeLocalEvent<AreaComponent, MapInitEvent>(OnAreaMapInit);
 
         Subs.CVar(_config, RMCCVars.RMCHiveSpreadEarlyMinutes, v => _earlySpreadHiveTime = TimeSpan.FromMinutes(v), true);
     }

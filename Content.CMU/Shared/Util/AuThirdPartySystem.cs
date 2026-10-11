@@ -32,7 +32,7 @@ public abstract partial class AuThirdPartySystem : EntitySystem
 
         filtered.RemoveAll(proto =>
             proto.BlacklistedGamemodes.Contains(currentGamemode) ||
-            (proto.whitelistedgamemodes.Count > 0 && !proto.whitelistedgamemodes.Contains(currentGamemode)) ||
+            (proto.WhitelistedGamemodes.Count > 0 && !proto.WhitelistedGamemodes.Contains(currentGamemode)) ||
             proto.MaxPlayers < playerCount ||
             proto.MinPlayers > playerCount ||
             (currentThreat != null && proto.BlacklistedThreats.Contains(currentThreat)) ||

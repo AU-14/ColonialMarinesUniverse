@@ -13,7 +13,8 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: ci-${{ github.ref }}
+  # staging runs overlap instead of cancelling
+  group: ${{ github.ref == 'refs/heads/staging' && format('ci-{0}-{1}', github.ref, github.run_id) || format('ci-{0}', github.ref) }}
   cancel-in-progress: true
 
 env:
@@ -208,6 +209,10 @@ jobs:
     name: Testcases / ${{ matrix.shard.name }}
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     needs: build
+    # one instance of each shard at a time across overlapping staging runs
+    concurrency:
+      group: ci-shard-${{ github.ref }}-${{ matrix.shard.name }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 45
     strategy:

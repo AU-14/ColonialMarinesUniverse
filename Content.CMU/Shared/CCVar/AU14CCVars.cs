@@ -46,4 +46,11 @@ public sealed partial class AU14CCVars : CVars
 
     public static readonly CVarDef<string> SeparatedHudStatusSide =
         CVarDef.Create("au14.separated_hud_status_side", "right", CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Hide this player's username from the round-end summary, so other players can't tie it to the character.
+    /// Client-side preference, replicated so the server can read it at round end.
+    /// </summary>
+    public static readonly CVarDef<bool> HideRoundEndUsername =
+        CVarDef.Create("cmu.hide_round_end_username", false, CVar.ARCHIVE | CVar.REPLICATED | CVar.CLIENT);
 }

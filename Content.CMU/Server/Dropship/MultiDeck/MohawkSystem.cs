@@ -262,6 +262,9 @@ public sealed partial class MohawkSystem : EntitySystem
             {
                 var ladder = EnsureComp<CMUZLevelLadderComponent>(uid);
                 ladder.Offset = upper ? -1 : 1;
+                // Ladder activation chooses direction from these flags, not the offset's sign.
+                ladder.CanMoveUp = !upper;
+                ladder.CanMoveDown = upper;
                 ladder.StartSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/mountain852_climbing_ladder_initial.ogg");
                 ladder.FinishSound = new SoundPathSpecifier("/Audio/CMU14/Dropships/Mohawk/mountain852_climbing_ladder_human_after.ogg");
                 Dirty(uid, ladder);

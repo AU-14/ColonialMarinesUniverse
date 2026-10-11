@@ -20,5 +20,5 @@ public sealed partial class CCVars
     ///     Whether or not to kill the player's mob on ghosting, when it is in a critical health state.
     /// </summary>
     public static readonly CVarDef<bool> GhostKillCrit =
-        CVarDef.Create("ghost.kill_crit", true, CVar.REPLICATED | CVar.SERVER);
+        CVarDef.Create("ghost.kill_crit", false, CVar.REPLICATED | CVar.SERVER); // cmu edit: ghosting from crit leaves the body alive
 }

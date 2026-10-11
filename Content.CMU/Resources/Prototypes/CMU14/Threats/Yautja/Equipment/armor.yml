@@ -22,8 +22,8 @@
   - type: CMArmor
     melee: 25
     bullet: 40
-    bio: 40
-    explosionArmor: 45
+    bio: 20 # CM-SS13 base MEDIUM
+    explosionArmor: 30 # CM-SS13 base bomb MEDIUMHIGH
   - type: CMHardArmor
   - type: Corrodible
     isCorrodible: false
@@ -43,8 +43,8 @@
   - type: CMArmor
     melee: 25
     bullet: 40
-    bio: 40
-    explosionArmor: 45
+    bio: 20 # CM-SS13 base MEDIUM
+    explosionArmor: 30 # CM-SS13 base bomb MEDIUMHIGH
 
 - type: entity
   parent: CMUYautjaHeavyClanArmor
@@ -60,8 +60,8 @@
   - type: CMArmor
     melee: 25
     bullet: 50
-    bio: 45
-    explosionArmor: 50
+    bio: 25 # CM-SS13 hunter MEDIUMHIGH
+    explosionArmor: 35 # CM-SS13 hunter bomb HIGH
   - type: RemoveComponents
     components:
     - type: YautjaTechItem
@@ -75,8 +75,8 @@
   - type: CMArmor
     melee: 35
     bullet: 45
-    bio: 45
-    explosionArmor: 50
+    bio: 25 # CM-SS13 hunter MEDIUMHIGH
+    explosionArmor: 35 # CM-SS13 hunter bomb HIGH
 
 - type: entity
   parent: CMUYautjaClanArmor
@@ -490,8 +490,8 @@
   - type: CMArmor
     melee: 45
     bullet: 45
-    bio: 45
-    explosionArmor: 45
+    bio: 25 # CM-SS13 thrall MEDIUMHIGH
+    explosionArmor: 30 # CM-SS13 thrall bomb MEDIUMHIGH
 
 - type: entity
   parent: CMUYautjaThrallArmorEbony
@@ -555,8 +555,8 @@
   - type: CMArmor
     melee: 50
     bullet: 50
-    bio: 50
-    explosionArmor: 55
+    bio: 35 # CM-SS13 powered HIGHPLUS
+    explosionArmor: 45 # CM-SS13 powered bomb VERYHIGH
   - type: RMCImmuneToIgnition
     intensityResistance: 20
     immuneToDirectHits: false
@@ -620,8 +620,8 @@
   - type: CMArmor
     melee: 35
     bullet: 20
-    bio: 40
-    explosionArmor: 50
+    bio: 20 # CM-SS13 scalable MEDIUM
+    explosionArmor: 30 # CM-SS13 scalable bomb base
 
   - type: YautjaTechItem
   - type: YautjaScalableRepair
@@ -719,8 +719,8 @@
   - type: CMArmor
     melee: 35
     bullet: 40
-    bio: 40
-    explosionArmor: 50
+    bio: 20 # CM-SS13 scalable MEDIUM
+    explosionArmor: 30 # CM-SS13 scalable bomb base
   - type: YautjaScalableRepair
     damagedText: cmu-yautja-repair-damaged
 
@@ -777,8 +777,8 @@
   - type: CMArmor
     melee: 10
     bullet: 40
-    bio: 45
-    explosionArmor: 50
+    bio: 25 # CM-SS13 hunter MEDIUMHIGH
+    explosionArmor: 35 # CM-SS13 hunter bomb HIGH
   - type: Corrodible
     isCorrodible: false
   - type: YautjaTechItem
@@ -794,8 +794,8 @@
   - type: CMArmor
     melee: 10
     bullet: 35
-    bio: 40
-    explosionArmor: 45
+    bio: 20 # CM-SS13 base MEDIUM
+    explosionArmor: 30 # CM-SS13 base bomb MEDIUMHIGH
 
 - type: entity
   parent: CMUYautjaBodyMesh
@@ -815,7 +815,7 @@
     melee: 10
     bullet: 35
     bio: 40
-    explosionArmor: 45
+    explosionArmor: 30 # CM-SS13 thrall bomb MEDIUMHIGH
 
 - type: entity
   parent: ClothingShoesBase
@@ -842,8 +842,8 @@
   - type: CMArmor
     melee: 35
     bullet: 45
-    bio: 40
-    explosionArmor: 45
+    bio: 20 # CM-SS13 base MEDIUM
+    explosionArmor: 30 # CM-SS13 base bomb MEDIUMHIGH
   - type: Corrodible
     isCorrodible: false
 
@@ -874,8 +874,8 @@
   - type: CMArmor
     melee: 40
     bullet: 50
-    bio: 45
-    explosionArmor: 50
+    bio: 25 # CM-SS13 stone MEDIUMHIGH
+    explosionArmor: 35 # CM-SS13 stone bomb HIGH
   - type: RemoveComponents
     components:
     - type: YautjaTechItem
@@ -889,8 +889,8 @@
   - type: CMArmor
     melee: 45
     bullet: 50
-    bio: 45
-    explosionArmor: 50
+    bio: 25 # CM-SS13 clan MEDIUMHIGH
+    explosionArmor: 35 # CM-SS13 clan bomb HIGH
 
 - type: entity
   parent: CMUYautjaClanGreaves
@@ -1104,8 +1104,8 @@
   - type: CMArmor
     melee: 35
     bullet: 45
-    bio: 40
-    explosionArmor: 45
+    bio: 25 # CM-SS13 thrall MEDIUMHIGH
+    explosionArmor: 30 # CM-SS13 thrall bomb MEDIUMHIGH
 
 - type: entity
   parent: CMUYautjaThrallGreavesEbony
@@ -1159,8 +1159,8 @@
   - type: CMArmor
     melee: 40
     bullet: 45
-    bio: 40
-    explosionArmor: 45
+    bio: 20 # CM-SS13 scalable MEDIUM
+    explosionArmor: 30 # CM-SS13 scalable bomb base
   - type: YautjaScalableRepair
     damagedText: cmu-yautja-repair-damaged-they
 
@@ -1255,8 +1255,8 @@
   - type: CMArmor
     melee: 40
     bullet: 45
-    bio: 40
-    explosionArmor: 45
+    bio: 20 # CM-SS13 scalable MEDIUM
+    explosionArmor: 30 # CM-SS13 scalable bomb base
   - type: YautjaScalableRepair
     damagedText: cmu-yautja-repair-damaged-they
 
@@ -1418,8 +1418,8 @@
   - type: CMArmor
     melee: 35
     bullet: 40
-    bio: 40
-    explosionArmor: 50
+    bio: 20 # CM-SS13 scalable MEDIUM
+    explosionArmor: 35 # CM-SS13 hunter bomb HIGH
   - type: YautjaScalableRepair
     damagedText: cmu-yautja-repair-damaged
 
@@ -1446,8 +1446,8 @@
   - type: CMArmor
     melee: 10
     bullet: 35
-    bio: 40
-    explosionArmor: 45
+    bio: 20 # CM-SS13 scalable MEDIUM
+    explosionArmor: 35 # CM-SS13 hunter bomb HIGH
   - type: YautjaScalableRepair
     damagedText: cmu-yautja-repair-worn
 
@@ -1508,8 +1508,8 @@
   - type: CMArmor
     melee: 40
     bullet: 45
-    bio: 40
-    explosionArmor: 45
+    bio: 20 # CM-SS13 scalable MEDIUM
+    explosionArmor: 35 # CM-SS13 hunter bomb HIGH
   - type: YautjaScalableRepair
     damagedText: cmu-yautja-repair-damaged-they
 

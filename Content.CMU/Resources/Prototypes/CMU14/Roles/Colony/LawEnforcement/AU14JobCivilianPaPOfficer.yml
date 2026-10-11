@@ -41,6 +41,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   playTimeTracker: AU14JobCivilianPaPOfficer
   ranks:
     RMCRankCivilian: []

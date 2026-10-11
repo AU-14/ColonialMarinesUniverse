@@ -5,16 +5,19 @@ using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Clothing.EntitySystems;
+using Content.Shared.Dataset;
 using Content.Shared.DetailExaminable;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
 using Content.Shared.Preferences;
+using Content.Shared.Random.Helpers;
 using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Yautja;
 
@@ -29,6 +32,10 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
     [Dependency] private SharedItemSystem _items = default!;
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private IRobustRandom _random = default!;
+
+    private static readonly ProtoId<LocalizedDatasetPrototype> YautjaFirstName = "CMUNamesYautjaFirst";
+    private static readonly ProtoId<LocalizedDatasetPrototype> YautjaLastName = "CMUNamesYautjaLast";
 
     private static readonly Dictionary<string, string> PostVendProfileSlots = new()
     {
@@ -76,6 +83,11 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
             YautjaRankResolver.CanUseUnique(authoritativeBaseRank),
             false);
         var profile = yautjaProfile.SanitizeForCapabilities(capabilities);
+        // A nameless profile rolls a CMSS13-style random name; the default is only a placeholder.
+        // "Неизвестно" is the pre-fix default, still present in saved profiles.
+        if (profile.Name is "Unknown" or "Неизвестно")
+            profile = profile.WithName(
+                $"{_random.Pick(_prototypes.Index(YautjaFirstName))} {_random.Pick(_prototypes.Index(YautjaLastName))}");
         var rank = capabilities.ForStatus(profile.Status).Rank;
         EnsureComp<YautjaAppliedProfileComponent>(uid).Profile = profile.Clone();
 
@@ -90,6 +102,11 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
             .WithSex(profile.Sex)
             .WithGender(profile.Gender)
             .WithCharacterAppearance(profile.Appearance);
+
+        // DefaultWithSpecies leaves Voice at the human default, which strips every
+        // Yautja emote sound once applied. Take the voice from the species map.
+        if (yautja.VocalSounds.TryGetValue(profile.Sex, out var voice))
+            humanoidProfile = humanoidProfile.WithVoice(voice);
 
         _humanoid.ApplyProfileTo((uid, humanoid), humanoidProfile);
         _visualBody.ApplyProfileTo(uid, humanoidProfile);

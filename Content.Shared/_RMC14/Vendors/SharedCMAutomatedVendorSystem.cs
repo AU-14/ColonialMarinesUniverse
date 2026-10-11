@@ -829,7 +829,11 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         }
         else
         {
-            var spawn = SpawnAtPosition(toVend, vendor.ToCoordinates());
+            // CMU14: yautja racks are solid multi-tile fixtures, so gear that is not
+            // auto-equipped must land at the hunter's feet instead of on the rack
+            var spawn = SpawnAtPosition(toVend, HasComp<YautjaGearRackComponent>(vendor)
+                ? player.ToCoordinates()
+                : vendor.ToCoordinates());
             AfterVend(spawn, player, vendor, offset, replaceSlot: replaceSlot);
         }
     }

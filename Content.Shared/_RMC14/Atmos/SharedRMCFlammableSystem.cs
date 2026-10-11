@@ -792,6 +792,27 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         }
     }
 
+    // cmu edit start
+    /// <summary>
+    /// Makes a fire that spread from another burn exactly as strong as it, with the same age and lifetime, so the
+    /// whole burn dies down and goes out together.
+    /// </summary>
+    public void MatchTileFire(Entity<TileFireComponent> child, Entity<TileFireComponent> parent)
+    {
+        child.Comp.SpawnedAt = parent.Comp.SpawnedAt;
+        child.Comp.Duration = parent.Comp.Duration;
+        child.Comp.GrowthDuration = parent.Comp.GrowthDuration;
+        child.Comp.MatureIntensity = parent.Comp.MatureIntensity;
+        Dirty(child);
+
+        if (TryComp(parent, out RMCIgniteOnCollideComponent? parentIgnite) &&
+            TryComp(child, out RMCIgniteOnCollideComponent? childIgnite))
+        {
+            SetIntensityDuration((child, childIgnite, null), parentIgnite.Intensity, parentIgnite.Duration);
+        }
+    }
+    // cmu edit end
+
     public void SetIntensityDuration(Entity<RMCIgniteOnCollideComponent?, DamageOnCollideComponent?> ent, int? intensity, int? duration)
     {
         Resolve(ent, ref ent.Comp1, ref ent.Comp2, false);

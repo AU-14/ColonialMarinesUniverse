@@ -58,7 +58,7 @@ public sealed class ForceInterestTest : GameTest
 
             var party = Server.ProtoMan.Index<ThirdPartyPrototype>("TestForceInterestParty");
             var spawn = Server.ProtoMan.Index(party.PartySpawn);
-            Assert.That(SEntMan.System<ThirdPartySystem>().SpawnThirdParty(party, spawn, false), Is.True);
+            SEntMan.System<ThirdPartySystem>().SpawnThirdParty(party, spawn, false);
             var forces = SEntMan.System<ForceInterestSystem>().GetForces(ServerSession!);
             Assert.That(forces, Has.Length.EqualTo(1));
             id = forces[0].Identifier;

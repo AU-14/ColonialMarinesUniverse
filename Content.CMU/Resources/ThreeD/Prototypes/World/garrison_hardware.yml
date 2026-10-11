@@ -1,0 +1,2623 @@
+# Hardware expansion; attribution and assumptions in SOURCES_HARDWARE.md.
+- type: cmu3DModel
+  id: CMU3DWallIntercom
+  label: Wall intercom
+  sourcePrototypes:
+  - AUColonyIntercom
+  - CMIntercomEngineering
+  status: draft
+  description: Boxed intercom with upper speaker ribs, U-shaped amber display and lower microphone slots. The powered
+    source layer was inspected alongside its case. Source frames and saved placement inspected; height, depth and hidden
+    surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: AUColonyIntercom
+  referenceRsi: /Textures/_RMC14/Structures/Wallmounts/intercom.rsi
+  referenceState: intercom-p
+  wallMounted: true
+  parts:
+  - label: intercom mounting plate
+    min: -0.21000, -0.55000, 1.29000
+    max: 0.21000, -0.50100, 1.80000
+    color: '#242A29'
+  - label: intercom case
+    min: -0.18000, -0.62000, 1.32000
+    max: 0.18000, -0.55000, 1.77000
+    color: '#858580'
+  - label: upper speaker recess
+    min: -0.15000, -0.63300, 1.60000
+    max: 0.15000, -0.62100, 1.72000
+    color: '#282E2F'
+  - label: speaker horizontal rib
+    min: -0.15000, -0.64800, 1.61400
+    max: 0.15000, -0.63600, 1.62600
+    color: '#A5A5A0'
+  - label: speaker horizontal rib
+    min: -0.15000, -0.64800, 1.64800
+    max: 0.15000, -0.63600, 1.66000
+    color: '#A5A5A0'
+  - label: speaker horizontal rib
+    min: -0.15000, -0.64800, 1.68200
+    max: 0.15000, -0.63600, 1.69400
+    color: '#A5A5A0'
+  - label: intercom display
+    min: -0.15000, -0.63300, 1.40500
+    max: 0.15000, -0.62100, 1.57300
+    color: '#14242A'
+  - label: amber left line
+    min: -0.11200, -0.64900, 1.43500
+    max: -0.08800, -0.63700, 1.54800
+    color: '#EEAA34'
+  - label: amber bottom line
+    min: -0.08800, -0.64900, 1.43500
+    max: 0.09200, -0.63700, 1.45900
+    color: '#EEAA34'
+  - label: amber right line
+    min: 0.09200, -0.64900, 1.43500
+    max: 0.11600, -0.63700, 1.54800
+    color: '#EEAA34'
+  - label: lower microphone grille
+    min: -0.12800, -0.64400, 1.34000
+    max: -0.10600, -0.63200, 1.37500
+    color: '#373C3A'
+  - label: lower microphone grille
+    min: -0.07300, -0.64400, 1.34000
+    max: -0.05100, -0.63200, 1.37500
+    color: '#373C3A'
+  - label: lower microphone grille
+    min: -0.01800, -0.64400, 1.34000
+    max: 0.00400, -0.63200, 1.37500
+    color: '#373C3A'
+  - label: lower microphone grille
+    min: 0.03700, -0.64400, 1.34000
+    max: 0.05900, -0.63200, 1.37500
+    color: '#373C3A'
+  - label: lower microphone grille
+    min: 0.09200, -0.64400, 1.34000
+    max: 0.11400, -0.63200, 1.37500
+    color: '#373C3A'
+  - label: status dot
+    min: 0.12000, -0.64800, 1.38700
+    max: 0.14400, -0.63600, 1.40400
+    color: '#698879'
+- type: cmu3DModel
+  id: CMU3DWallVentDuct
+  label: Wall vent with duct
+  sourcePrototypes:
+  - RMCMachinePropSmallVent
+  status: draft
+  description: Individual source vent silhouette; projecting ribbed duct hangs below the mounting frame. Source frames
+    and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime appearance changes remain
+    unfinished.
+  sourceDirections: 1
+  referencePrototype: RMCMachinePropSmallVent
+  referenceRsi: /Textures/_RMC14/Structures/hybrisa_machine_wall_props.rsi
+  referenceState: smallwallvent1
+  wallMounted: true
+  parts:
+  - label: vent mounting rim
+    min: -0.25000, -0.56200, 1.56000
+    max: 0.25000, -0.50100, 2.03000
+    color: '#474D45'
+  - label: raised vent surround
+    min: -0.22500, -0.62500, 1.59000
+    max: 0.22500, -0.56200, 2.00000
+    color: '#5B6259'
+  - label: upper rim highlight
+    min: -0.20000, -0.63800, 1.95100
+    max: 0.20000, -0.62600, 1.98400
+    color: '#797F74'
+  - label: dark grille recess
+    min: -0.17800, -0.63800, 1.63000
+    max: 0.17800, -0.62600, 1.92500
+    color: '#151B16'
+  - label: vertical mesh strand
+    min: -0.16700, -0.65200, 1.64100
+    max: -0.15600, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.65900
+    max: 0.17000, -0.64400, 1.67200
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: -0.10600, -0.65200, 1.64100
+    max: -0.09500, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.70600
+    max: 0.17000, -0.64400, 1.71900
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: -0.04500, -0.65200, 1.64100
+    max: -0.03400, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.75300
+    max: 0.17000, -0.64400, 1.76600
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: 0.01600, -0.65200, 1.64100
+    max: 0.02700, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.80000
+    max: 0.17000, -0.64400, 1.81300
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: 0.07700, -0.65200, 1.64100
+    max: 0.08800, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.84700
+    max: 0.17000, -0.64400, 1.86000
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: 0.13800, -0.65200, 1.64100
+    max: 0.14900, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.89400
+    max: 0.17000, -0.64400, 1.90700
+    color: '#303B2F'
+  - label: duct dark core
+    min: -0.12500, -0.75000, 1.11000
+    max: 0.12500, -0.61000, 1.75000
+    color: '#252C25'
+  - label: flexible duct ring
+    min: -0.13900, -0.78000, 1.12000
+    max: 0.13900, -0.59200, 1.16000
+    color: '#3E483A'
+  - label: ring highlight
+    min: -0.11200, -0.79300, 1.13100
+    max: 0.11200, -0.78100, 1.14600
+    color: '#535D4B'
+  - label: flexible duct ring
+    min: -0.13900, -0.78000, 1.22500
+    max: 0.13900, -0.59200, 1.26500
+    color: '#3E483A'
+  - label: ring highlight
+    min: -0.11200, -0.79300, 1.23600
+    max: 0.11200, -0.78100, 1.25100
+    color: '#535D4B'
+  - label: flexible duct ring
+    min: -0.13900, -0.78000, 1.33000
+    max: 0.13900, -0.59200, 1.37000
+    color: '#3E483A'
+  - label: ring highlight
+    min: -0.11200, -0.79300, 1.34100
+    max: 0.11200, -0.78100, 1.35600
+    color: '#535D4B'
+  - label: flexible duct ring
+    min: -0.13900, -0.78000, 1.43500
+    max: 0.13900, -0.59200, 1.47500
+    color: '#3E483A'
+  - label: ring highlight
+    min: -0.11200, -0.79300, 1.44600
+    max: 0.11200, -0.78100, 1.46100
+    color: '#535D4B'
+  - label: flexible duct ring
+    min: -0.13900, -0.78000, 1.54000
+    max: 0.13900, -0.59200, 1.58000
+    color: '#3E483A'
+  - label: ring highlight
+    min: -0.11200, -0.79300, 1.55100
+    max: 0.11200, -0.78100, 1.56600
+    color: '#535D4B'
+  - label: flexible duct ring
+    min: -0.13900, -0.78000, 1.64500
+    max: 0.13900, -0.59200, 1.68500
+    color: '#3E483A'
+  - label: ring highlight
+    min: -0.11200, -0.79300, 1.65600
+    max: 0.11200, -0.78100, 1.67100
+    color: '#535D4B'
+- type: cmu3DModel
+  id: CMU3DWallVentMesh
+  label: Wall mesh vent
+  sourcePrototypes:
+  - RMCMachinePropSmallVent2
+  status: draft
+  description: Individual source vent silhouette; square dark wire mesh sits in a raised narrow frame. Source frames
+    and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime appearance changes remain
+    unfinished.
+  sourceDirections: 1
+  referencePrototype: RMCMachinePropSmallVent2
+  referenceRsi: /Textures/_RMC14/Structures/hybrisa_machine_wall_props.rsi
+  referenceState: smallwallvent2
+  wallMounted: true
+  parts:
+  - label: vent mounting rim
+    min: -0.25000, -0.56200, 1.56000
+    max: 0.25000, -0.50100, 2.03000
+    color: '#474D45'
+  - label: raised vent surround
+    min: -0.22500, -0.62500, 1.59000
+    max: 0.22500, -0.56200, 2.00000
+    color: '#5B6259'
+  - label: upper rim highlight
+    min: -0.20000, -0.63800, 1.95100
+    max: 0.20000, -0.62600, 1.98400
+    color: '#797F74'
+  - label: dark grille recess
+    min: -0.17800, -0.63800, 1.63000
+    max: 0.17800, -0.62600, 1.92500
+    color: '#151B16'
+  - label: vertical mesh strand
+    min: -0.16700, -0.65200, 1.64100
+    max: -0.15600, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.65900
+    max: 0.17000, -0.64400, 1.67200
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: -0.10600, -0.65200, 1.64100
+    max: -0.09500, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.70600
+    max: 0.17000, -0.64400, 1.71900
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: -0.04500, -0.65200, 1.64100
+    max: -0.03400, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.75300
+    max: 0.17000, -0.64400, 1.76600
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: 0.01600, -0.65200, 1.64100
+    max: 0.02700, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.80000
+    max: 0.17000, -0.64400, 1.81300
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: 0.07700, -0.65200, 1.64100
+    max: 0.08800, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.84700
+    max: 0.17000, -0.64400, 1.86000
+    color: '#303B2F'
+  - label: vertical mesh strand
+    min: 0.13800, -0.65200, 1.64100
+    max: 0.14900, -0.64000, 1.91100
+    color: '#343E31'
+  - label: horizontal mesh strand
+    min: -0.17000, -0.65600, 1.89400
+    max: 0.17000, -0.64400, 1.90700
+    color: '#303B2F'
+- type: cmu3DModel
+  id: CMU3DWallShower
+  label: Wall shower head and mixer
+  sourcePrototypes:
+  - CMShower
+  status: draft
+  description: 'Curved supply arm, perforated rose, vertical feed and mixer. Source directions and showers #2808/#2812
+    establish the opposite mounting axis to their curtain openings. No water simulation. Source frames and saved placement
+    inspected; height, depth and hidden surfaces remain inferred. Runtime appearance changes remain unfinished.'
+  sourceDirections: 4
+  referencePrototype: CMShower
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/shower.rsi
+  referenceState: shower
+  wallMounted: true
+  yawOffset: 180
+  parts:
+  - label: lower shower bracket
+    min: -0.07000, -0.55500, 0.28000
+    max: 0.07000, -0.50100, 0.43000
+    color: '#636C64'
+  - label: vertical water pipe
+    min: -0.02700, -0.60400, 0.37000
+    max: 0.02700, -0.56000, 2.20000
+    color: '#9CA59A'
+  - label: dark pipe side
+    min: 0.02700, -0.60400, 0.39000
+    max: 0.04700, -0.56000, 2.16000
+    color: '#52605B'
+  - label: mixer mount
+    min: -0.07000, -0.66500, 1.09000
+    max: 0.07000, -0.55000, 1.23000
+    color: '#707F75'
+  - label: temperature control
+    min: -0.10000, -0.69000, 1.12500
+    max: 0.10000, -0.66500, 1.18000
+    color: '#9CABA0'
+  - label: hot marker
+    min: -0.08000, -0.70300, 1.13700
+    max: -0.04300, -0.69100, 1.17000
+    color: '#984638'
+  - label: cold marker
+    min: 0.04600, -0.70300, 1.13700
+    max: 0.08300, -0.69100, 1.17000
+    color: '#557F94'
+  - label: curved shower arm
+    min: -0.02350, -0.62279, 2.15293
+    max: 0.02350, -0.57579, 2.19993
+    color: '#8B978C'
+  - label: curved shower arm
+    min: -0.02350, -0.66136, 2.18579
+    max: 0.02350, -0.61436, 2.23279
+    color: '#8B978C'
+  - label: curved shower arm
+    min: -0.02350, -0.69993, 2.21864
+    max: 0.02350, -0.65293, 2.26564
+    color: '#8B978C'
+  - label: curved shower arm
+    min: -0.02350, -0.73850, 2.25150
+    max: 0.02350, -0.69150, 2.29850
+    color: '#8B978C'
+  - label: curved shower arm
+    min: -0.02350, -0.77707, 2.28436
+    max: 0.02350, -0.73007, 2.33136
+    color: '#8B978C'
+  - label: curved shower arm
+    min: -0.02350, -0.81564, 2.31721
+    max: 0.02350, -0.76864, 2.36421
+    color: '#8B978C'
+  - label: curved shower arm
+    min: -0.02350, -0.85421, 2.35007
+    max: 0.02350, -0.80721, 2.39707
+    color: '#8B978C'
+  - label: shower rose housing
+    min: -0.09000, -0.96000, 2.33000
+    max: 0.09000, -0.79000, 2.39000
+    color: '#687568'
+  - label: rose perforated face
+    min: -0.07300, -0.94200, 2.31800
+    max: 0.07300, -0.80600, 2.33000
+    color: '#38473F'
+  - label: rose water aperture
+    min: -0.05900, -0.91900, 2.31200
+    max: -0.04100, -0.90100, 2.31800
+    color: '#9AA59B'
+  - label: rose water aperture
+    min: -0.05900, -0.85900, 2.31200
+    max: -0.04100, -0.84100, 2.31800
+    color: '#9AA59B'
+  - label: rose water aperture
+    min: -0.00900, -0.91900, 2.31200
+    max: 0.00900, -0.90100, 2.31800
+    color: '#9AA59B'
+  - label: rose water aperture
+    min: -0.00900, -0.85900, 2.31200
+    max: 0.00900, -0.84100, 2.31800
+    color: '#9AA59B'
+  - label: rose water aperture
+    min: 0.04100, -0.91900, 2.31200
+    max: 0.05900, -0.90100, 2.31800
+    color: '#9AA59B'
+  - label: rose water aperture
+    min: 0.04100, -0.85900, 2.31200
+    max: 0.05900, -0.84100, 2.31800
+    color: '#9AA59B'
+- type: cmu3DModel
+  id: CMU3DFaxMachine
+  label: Desktop fax machine
+  sourcePrototypes:
+  - CMFax
+  - CMFaxCMB
+  - RMCFaxLiaison
+  status: draft
+  description: Wide feed/scanner body and distinct narrow right control tower, with an output tray and small display.
+    Rest on the actual desk support when available. Source frames and saved placement inspected; height, depth and hidden
+    surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: CMFax
+  referenceRsi: /Textures/_RMC14/Structures/Machines/fax_machine.rsi
+  referenceState: icon
+  placement: surface
+  parts:
+  - label: fax lower foot
+    min: -0.30000, -0.24000, 0.00000
+    max: 0.30000, 0.24000, 0.05500
+    color: '#494845'
+  - label: fax main case
+    min: -0.35000, -0.26000, 0.05500
+    max: 0.23000, 0.26000, 0.29000
+    color: '#77716A'
+  - label: paper feed rear lip
+    min: -0.33000, 0.18000, 0.29000
+    max: 0.20000, 0.26000, 0.36000
+    color: '#A49A91'
+  - label: paper feed dark recess
+    min: -0.30000, 0.07500, 0.28600
+    max: 0.18000, 0.18000, 0.30000
+    color: '#3C3B38'
+  - label: fax feed roller
+    min: -0.27700, 0.09000, 0.30000
+    max: -0.24900, 0.17000, 0.31700
+    color: '#514D47'
+  - label: fax feed roller
+    min: -0.21200, 0.09000, 0.30000
+    max: -0.18400, 0.17000, 0.31700
+    color: '#514D47'
+  - label: fax feed roller
+    min: -0.14700, 0.09000, 0.30000
+    max: -0.11900, 0.17000, 0.31700
+    color: '#514D47'
+  - label: fax feed roller
+    min: -0.08200, 0.09000, 0.30000
+    max: -0.05400, 0.17000, 0.31700
+    color: '#514D47'
+  - label: fax feed roller
+    min: -0.01700, 0.09000, 0.30000
+    max: 0.01100, 0.17000, 0.31700
+    color: '#514D47'
+  - label: fax feed roller
+    min: 0.04800, 0.09000, 0.30000
+    max: 0.07600, 0.17000, 0.31700
+    color: '#514D47'
+  - label: fax feed roller
+    min: 0.11300, 0.09000, 0.30000
+    max: 0.14100, 0.17000, 0.31700
+    color: '#514D47'
+  - label: scanner cover
+    min: -0.33000, -0.15000, 0.29000
+    max: 0.19000, 0.07000, 0.34000
+    color: '#948A81'
+  - label: fax output tray
+    min: -0.27000, -0.37000, 0.06500
+    max: 0.13000, -0.26000, 0.09200
+    color: '#4F4C47'
+  - label: right control tower
+    min: 0.23000, -0.26000, 0.05500
+    max: 0.43000, 0.26000, 0.33000
+    color: '#524E49'
+  - label: display surround
+    min: 0.25500, 0.04500, 0.33000
+    max: 0.40500, 0.20000, 0.34700
+    color: '#A1998D'
+  - label: small display
+    min: 0.27600, 0.06400, 0.34700
+    max: 0.38400, 0.18000, 0.35700
+    color: '#223436'
+  - label: display pale glyph
+    min: 0.30000, 0.09000, 0.35700
+    max: 0.34000, 0.15000, 0.36000
+    color: '#ABC9B8'
+  - label: fax keypad
+    min: 0.26000, -0.17000, 0.33000
+    max: 0.29000, -0.14000, 0.34500
+    color: '#ACA49A'
+  - label: fax keypad
+    min: 0.30600, -0.17000, 0.33000
+    max: 0.33600, -0.14000, 0.34500
+    color: '#ACA49A'
+  - label: fax keypad
+    min: 0.35200, -0.17000, 0.33000
+    max: 0.38200, -0.14000, 0.34500
+    color: '#ACA49A'
+  - label: fax keypad
+    min: 0.26000, -0.11000, 0.33000
+    max: 0.29000, -0.08000, 0.34500
+    color: '#ACA49A'
+  - label: fax keypad
+    min: 0.30600, -0.11000, 0.33000
+    max: 0.33600, -0.08000, 0.34500
+    color: '#ACA49A'
+  - label: fax keypad
+    min: 0.35200, -0.11000, 0.33000
+    max: 0.38200, -0.08000, 0.34500
+    color: '#ACA49A'
+- type: cmu3DModel
+  id: CMU3DCashRegister
+  label: Powered cash register
+  sourcePrototypes:
+  - RMCCashRegisterOn
+  status: draft
+  description: Raised green display, keypad, closed till and side receipt housing. Table placement follows the saved
+    checkout counter; drawer opening and contents are not represented. Source frames and saved placement inspected; height,
+    depth and hidden surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 4
+  referencePrototype: RMCCashRegisterOn
+  referenceRsi: /Textures/_RMC14/Structures/Machines/computer.rsi
+  referenceState: register_on
+  placement: surface
+  parts:
+  - label: register drawer
+    min: -0.24000, -0.27000, 0.00000
+    max: 0.24000, 0.25000, 0.14500
+    color: '#635B55'
+  - label: drawer seam
+    min: -0.21000, -0.28300, 0.05900
+    max: 0.21000, -0.27100, 0.08700
+    color: '#302F2D'
+  - label: drawer pull
+    min: -0.16000, -0.29500, 0.08500
+    max: 0.16000, -0.28300, 0.10600
+    color: '#A19587'
+  - label: register keyboard plinth
+    min: -0.23000, -0.20000, 0.14500
+    max: 0.23000, 0.02000, 0.20500
+    color: '#81766D'
+  - label: cashier keypad
+    min: -0.19100, -0.16900, 0.20500
+    max: -0.14400, -0.13900, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: -0.12200, -0.16900, 0.20500
+    max: -0.07500, -0.13900, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: -0.05300, -0.16900, 0.20500
+    max: -0.00600, -0.13900, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: 0.01600, -0.16900, 0.20500
+    max: 0.06300, -0.13900, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: 0.08500, -0.16900, 0.20500
+    max: 0.13200, -0.13900, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: 0.15400, -0.16900, 0.20500
+    max: 0.20100, -0.13900, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: -0.19100, -0.11700, 0.20500
+    max: -0.14400, -0.08700, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: -0.12200, -0.11700, 0.20500
+    max: -0.07500, -0.08700, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: -0.05300, -0.11700, 0.20500
+    max: -0.00600, -0.08700, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: 0.01600, -0.11700, 0.20500
+    max: 0.06300, -0.08700, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: 0.08500, -0.11700, 0.20500
+    max: 0.13200, -0.08700, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: 0.15400, -0.11700, 0.20500
+    max: 0.20100, -0.08700, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: -0.19100, -0.06500, 0.20500
+    max: -0.14400, -0.03500, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: -0.12200, -0.06500, 0.20500
+    max: -0.07500, -0.03500, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: -0.05300, -0.06500, 0.20500
+    max: -0.00600, -0.03500, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: 0.01600, -0.06500, 0.20500
+    max: 0.06300, -0.03500, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: 0.08500, -0.06500, 0.20500
+    max: 0.13200, -0.03500, 0.22200
+    color: '#ADA294'
+  - label: cashier keypad
+    min: 0.15400, -0.06500, 0.20500
+    max: 0.20100, -0.03500, 0.22200
+    color: '#ADA294'
+  - label: screen pedestal
+    min: -0.16000, 0.04500, 0.14000
+    max: 0.16000, 0.20000, 0.31000
+    color: '#443F3A'
+  - label: raised screen case
+    min: -0.24000, 0.02600, 0.27000
+    max: 0.24000, 0.21000, 0.72000
+    color: '#A08E7F'
+  - label: screen dark rim
+    min: -0.19500, 0.01300, 0.33200
+    max: 0.19500, 0.02500, 0.65500
+    color: '#494238'
+  - label: green register display
+    min: -0.16000, 0.00000, 0.36500
+    max: 0.16000, 0.01200, 0.62600
+    color: '#638A22'
+  - label: display digit bar
+    min: -0.11500, -0.01300, 0.39000
+    max: -0.05300, -0.00100, 0.40700
+    color: '#C5DE58'
+  - label: display digit bar
+    min: -0.11500, -0.01300, 0.48500
+    max: -0.05300, -0.00100, 0.50200
+    color: '#C5DE58'
+  - label: display digit bar
+    min: -0.11500, -0.01300, 0.58300
+    max: -0.05300, -0.00100, 0.60000
+    color: '#C5DE58'
+  - label: display digit stem
+    min: -0.11500, -0.01300, 0.42000
+    max: -0.09800, -0.00100, 0.47500
+    color: '#C5DE58'
+  - label: display digit stem
+    min: -0.11500, -0.01300, 0.52000
+    max: -0.09800, -0.00100, 0.57500
+    color: '#C5DE58'
+  - label: display digit bar
+    min: -0.01400, -0.01300, 0.39000
+    max: 0.04800, -0.00100, 0.40700
+    color: '#C5DE58'
+  - label: display digit bar
+    min: -0.01400, -0.01300, 0.48500
+    max: 0.04800, -0.00100, 0.50200
+    color: '#C5DE58'
+  - label: display digit bar
+    min: -0.01400, -0.01300, 0.58300
+    max: 0.04800, -0.00100, 0.60000
+    color: '#C5DE58'
+  - label: display digit stem
+    min: 0.03100, -0.01300, 0.42000
+    max: 0.04800, -0.00100, 0.47500
+    color: '#C5DE58'
+  - label: display digit stem
+    min: 0.03100, -0.01300, 0.52000
+    max: 0.04800, -0.00100, 0.57500
+    color: '#C5DE58'
+  - label: display digit bar
+    min: 0.08500, -0.01300, 0.39000
+    max: 0.14700, -0.00100, 0.40700
+    color: '#C5DE58'
+  - label: display digit bar
+    min: 0.08500, -0.01300, 0.48500
+    max: 0.14700, -0.00100, 0.50200
+    color: '#C5DE58'
+  - label: display digit bar
+    min: 0.08500, -0.01300, 0.58300
+    max: 0.14700, -0.00100, 0.60000
+    color: '#C5DE58'
+  - label: display digit stem
+    min: 0.08500, -0.01300, 0.42000
+    max: 0.10200, -0.00100, 0.47500
+    color: '#C5DE58'
+  - label: display digit stem
+    min: 0.08500, -0.01300, 0.52000
+    max: 0.10200, -0.00100, 0.57500
+    color: '#C5DE58'
+  - label: receipt printer housing
+    min: -0.30000, 0.04000, 0.25000
+    max: -0.24000, 0.20000, 0.62000
+    color: '#6E635A'
+  - label: receipt printer vent
+    min: -0.29000, 0.02700, 0.28000
+    max: -0.25100, 0.03900, 0.29600
+    color: '#332F2B'
+  - label: receipt printer vent
+    min: -0.29000, 0.02700, 0.33500
+    max: -0.25100, 0.03900, 0.35100
+    color: '#332F2B'
+  - label: receipt printer vent
+    min: -0.29000, 0.02700, 0.39000
+    max: -0.25100, 0.03900, 0.40600
+    color: '#332F2B'
+  - label: receipt printer vent
+    min: -0.29000, 0.02700, 0.44500
+    max: -0.25100, 0.03900, 0.46100
+    color: '#332F2B'
+  - label: receipt printer vent
+    min: -0.29000, 0.02700, 0.50000
+    max: -0.25100, 0.03900, 0.51600
+    color: '#332F2B'
+- type: cmu3DModel
+  id: CMU3DPhotocopier
+  label: Photocopier
+  sourcePrototypes:
+  - RMCPhotocopier
+  - RMCPhotocopierSmallHitbox
+  status: draft
+  description: Freestanding copier with inset blue scanner bed, raised right control panel, side output ledge and separate
+    paper drawers. The Pro version retains its blue-gray palette. Source frames and saved placement inspected; height,
+    depth and hidden surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: RMCPhotocopier
+  referenceRsi: /Textures/_RMC14/Structures/Machines/photocopier.rsi
+  referenceState: bigscanner
+  parts:
+  - label: copier foot
+    min: -0.31000, -0.28000, 0.00000
+    max: -0.25000, -0.22000, 0.09000
+    color: '#30362B'
+  - label: copier foot
+    min: -0.31000, 0.25000, 0.00000
+    max: -0.25000, 0.31000, 0.09000
+    color: '#30362B'
+  - label: copier foot
+    min: 0.25000, -0.28000, 0.00000
+    max: 0.31000, -0.22000, 0.09000
+    color: '#30362B'
+  - label: copier foot
+    min: 0.25000, 0.25000, 0.00000
+    max: 0.31000, 0.31000, 0.09000
+    color: '#30362B'
+  - label: copier cabinet
+    min: -0.36000, -0.32000, 0.09000
+    max: 0.36000, 0.32000, 0.83000
+    color: '#575E49'
+  - label: scanner frame
+    min: -0.35000, -0.29000, 0.83000
+    max: 0.23000, 0.29000, 0.93000
+    color: '#8A8F73'
+  - label: scanner glass
+    min: -0.29000, -0.24000, 0.92600
+    max: 0.17000, 0.23000, 0.94000
+    color: '#233445'
+  - label: scanner back seal
+    min: -0.31000, 0.20000, 0.94000
+    max: 0.19000, 0.24500, 0.95100
+    color: '#30362B'
+  - label: raised control side
+    min: 0.23000, -0.20000, 0.83000
+    max: 0.39000, 0.27000, 0.96500
+    color: '#575E49'
+  - label: green control key
+    min: 0.26500, 0.01500, 0.96500
+    max: 0.31700, 0.04800, 0.98000
+    color: '#579D31'
+  - label: green control key
+    min: 0.26500, 0.06700, 0.96500
+    max: 0.31700, 0.10000, 0.98000
+    color: '#579D31'
+  - label: green control key
+    min: 0.26500, 0.11900, 0.96500
+    max: 0.31700, 0.15200, 0.98000
+    color: '#579D31'
+  - label: green control key
+    min: 0.26500, 0.17100, 0.96500
+    max: 0.31700, 0.20400, 0.98000
+    color: '#579D31'
+  - label: side output shelf
+    min: 0.36000, -0.03000, 0.54000
+    max: 0.49000, 0.22000, 0.58500
+    color: '#575E49'
+  - label: paper cassette recess
+    min: -0.30000, -0.33400, 0.25000
+    max: 0.11000, -0.32200, 0.38500
+    color: '#30362B'
+  - label: cassette bottom lip
+    min: -0.29500, -0.34900, 0.25000
+    max: 0.10500, -0.33700, 0.27500
+    color: '#8A8F73'
+  - label: paper cassette recess
+    min: -0.30000, -0.33400, 0.47000
+    max: 0.11000, -0.32200, 0.60500
+    color: '#30362B'
+  - label: cassette bottom lip
+    min: -0.29500, -0.34900, 0.47000
+    max: 0.10500, -0.33700, 0.49500
+    color: '#8A8F73'
+  - label: front ventilation slot
+    min: 0.15500, -0.33400, 0.24000
+    max: 0.17900, -0.32200, 0.31000
+    color: '#30362B'
+  - label: front ventilation slot
+    min: 0.19800, -0.33400, 0.24000
+    max: 0.22200, -0.32200, 0.31000
+    color: '#30362B'
+  - label: front ventilation slot
+    min: 0.24100, -0.33400, 0.24000
+    max: 0.26500, -0.32200, 0.31000
+    color: '#30362B'
+  - label: front ventilation slot
+    min: 0.28400, -0.33400, 0.24000
+    max: 0.30800, -0.32200, 0.31000
+    color: '#30362B'
+  - label: bottom front molding
+    min: -0.32000, -0.33800, 0.12000
+    max: 0.32000, -0.32600, 0.14800
+    color: '#8A8F73'
+- type: cmu3DModel
+  id: CMU3DPhotocopierPro
+  label: Photocopier Pro
+  sourcePrototypes:
+  - RMCPhotocopierPro
+  status: draft
+  description: Freestanding copier with inset blue scanner bed, raised right control panel, side output ledge and separate
+    paper drawers. The Pro version retains its blue-gray palette. Source frames and saved placement inspected; height,
+    depth and hidden surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: RMCPhotocopierPro
+  referenceRsi: /Textures/_RMC14/Structures/Machines/photocopier.rsi
+  referenceState: bigscannerpro
+  parts:
+  - label: copier foot
+    min: -0.31000, -0.28000, 0.00000
+    max: -0.25000, -0.22000, 0.09000
+    color: '#192133'
+  - label: copier foot
+    min: -0.31000, 0.25000, 0.00000
+    max: -0.25000, 0.31000, 0.09000
+    color: '#192133'
+  - label: copier foot
+    min: 0.25000, -0.28000, 0.00000
+    max: 0.31000, -0.22000, 0.09000
+    color: '#192133'
+  - label: copier foot
+    min: 0.25000, 0.25000, 0.00000
+    max: 0.31000, 0.31000, 0.09000
+    color: '#192133'
+  - label: copier cabinet
+    min: -0.36000, -0.32000, 0.09000
+    max: 0.36000, 0.32000, 0.83000
+    color: '#303A50'
+  - label: scanner frame
+    min: -0.35000, -0.29000, 0.83000
+    max: 0.23000, 0.29000, 0.93000
+    color: '#596883'
+  - label: scanner glass
+    min: -0.29000, -0.24000, 0.92600
+    max: 0.17000, 0.23000, 0.94000
+    color: '#233445'
+  - label: scanner back seal
+    min: -0.31000, 0.20000, 0.94000
+    max: 0.19000, 0.24500, 0.95100
+    color: '#192133'
+  - label: raised control side
+    min: 0.23000, -0.20000, 0.83000
+    max: 0.39000, 0.27000, 0.96500
+    color: '#303A50'
+  - label: green control key
+    min: 0.26500, 0.01500, 0.96500
+    max: 0.31700, 0.04800, 0.98000
+    color: '#579D31'
+  - label: green control key
+    min: 0.26500, 0.06700, 0.96500
+    max: 0.31700, 0.10000, 0.98000
+    color: '#579D31'
+  - label: green control key
+    min: 0.26500, 0.11900, 0.96500
+    max: 0.31700, 0.15200, 0.98000
+    color: '#579D31'
+  - label: green control key
+    min: 0.26500, 0.17100, 0.96500
+    max: 0.31700, 0.20400, 0.98000
+    color: '#579D31'
+  - label: side output shelf
+    min: 0.36000, -0.03000, 0.54000
+    max: 0.49000, 0.22000, 0.58500
+    color: '#303A50'
+  - label: paper cassette recess
+    min: -0.30000, -0.33400, 0.25000
+    max: 0.11000, -0.32200, 0.38500
+    color: '#192133'
+  - label: cassette bottom lip
+    min: -0.29500, -0.34900, 0.25000
+    max: 0.10500, -0.33700, 0.27500
+    color: '#596883'
+  - label: paper cassette recess
+    min: -0.30000, -0.33400, 0.47000
+    max: 0.11000, -0.32200, 0.60500
+    color: '#192133'
+  - label: cassette bottom lip
+    min: -0.29500, -0.34900, 0.47000
+    max: 0.10500, -0.33700, 0.49500
+    color: '#596883'
+  - label: front ventilation slot
+    min: 0.15500, -0.33400, 0.24000
+    max: 0.17900, -0.32200, 0.31000
+    color: '#192133'
+  - label: front ventilation slot
+    min: 0.19800, -0.33400, 0.24000
+    max: 0.22200, -0.32200, 0.31000
+    color: '#192133'
+  - label: front ventilation slot
+    min: 0.24100, -0.33400, 0.24000
+    max: 0.26500, -0.32200, 0.31000
+    color: '#192133'
+  - label: front ventilation slot
+    min: 0.28400, -0.33400, 0.24000
+    max: 0.30800, -0.32200, 0.31000
+    color: '#192133'
+  - label: bottom front molding
+    min: -0.32000, -0.33800, 0.12000
+    max: 0.32000, -0.32600, 0.14800
+    color: '#596883'
+- type: cmu3DModel
+  id: CMU3DWallATM
+  label: Colony ATM
+  sourcePrototypes:
+  - AUColonyATM
+  status: draft
+  description: Wall-mounted tan terminal with a left green display, right yellow keypad and lower service drawer. Saved
+    examples occupy wall tiles; the backplate stays on the selected wall face. Source frames and saved placement inspected;
+    height, depth and hidden surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: AUColonyATM
+  referenceRsi: /Textures/CMU14/Structures/Machines/atm.rsi
+  referenceState: atm
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: ATM wall backplate
+    min: -0.28000, -0.55300, 0.71000
+    max: 0.28000, -0.50100, 1.82000
+    color: '#403D36'
+  - label: ATM housing
+    min: -0.25500, -0.69000, 0.75000
+    max: 0.25500, -0.55300, 1.78000
+    color: '#A29078'
+  - label: upper amber trim
+    min: -0.22500, -0.70300, 1.63500
+    max: 0.22500, -0.69100, 1.74800
+    color: '#DAC58F'
+  - label: header central light
+    min: -0.08000, -0.71800, 1.65600
+    max: 0.08000, -0.70600, 1.72100
+    color: '#F0D478'
+  - label: header pale insert
+    min: -0.19000, -0.71800, 1.66000
+    max: -0.13000, -0.70600, 1.71600
+    color: '#DED9BA'
+  - label: header pale insert
+    min: 0.13000, -0.71800, 1.66000
+    max: 0.19000, -0.70600, 1.71600
+    color: '#DED9BA'
+  - label: console dark inset
+    min: -0.22600, -0.70300, 1.04000
+    max: 0.22400, -0.69100, 1.57400
+    color: '#504831'
+  - label: green ATM screen
+    min: -0.18700, -0.72000, 1.32000
+    max: 0.03300, -0.70800, 1.53000
+    color: '#80A33B'
+  - label: ATM screen text
+    min: -0.16000, -0.73500, 1.36100
+    max: 0.00900, -0.72300, 1.39100
+    color: '#B3CB72'
+  - label: ATM screen text
+    min: -0.16000, -0.73500, 1.45200
+    max: 0.00900, -0.72300, 1.48200
+    color: '#B3CB72'
+  - label: ATM keypad
+    min: 0.08600, -0.72200, 1.12000
+    max: 0.13000, -0.71000, 1.17200
+    color: '#D5B96C'
+  - label: ATM keypad
+    min: 0.14500, -0.72200, 1.12000
+    max: 0.18900, -0.71000, 1.17200
+    color: '#D5B96C'
+  - label: ATM keypad
+    min: 0.08600, -0.72200, 1.21400
+    max: 0.13000, -0.71000, 1.26600
+    color: '#D5B96C'
+  - label: ATM keypad
+    min: 0.14500, -0.72200, 1.21400
+    max: 0.18900, -0.71000, 1.26600
+    color: '#D5B96C'
+  - label: ATM keypad
+    min: 0.08600, -0.72200, 1.30800
+    max: 0.13000, -0.71000, 1.36000
+    color: '#D5B96C'
+  - label: ATM keypad
+    min: 0.14500, -0.72200, 1.30800
+    max: 0.18900, -0.71000, 1.36000
+    color: '#D5B96C'
+  - label: ATM keypad
+    min: 0.08600, -0.72200, 1.40200
+    max: 0.13000, -0.71000, 1.45400
+    color: '#D5B96C'
+  - label: ATM keypad
+    min: 0.14500, -0.72200, 1.40200
+    max: 0.18900, -0.71000, 1.45400
+    color: '#D5B96C'
+  - label: cash dispenser slot
+    min: -0.18000, -0.72200, 1.10000
+    max: 0.02000, -0.71000, 1.15000
+    color: '#292E26'
+  - label: lower drawer surround
+    min: -0.21800, -0.70300, 0.80200
+    max: 0.21800, -0.69100, 0.96100
+    color: '#B6A491'
+  - label: lower drawer inset
+    min: -0.19200, -0.71900, 0.83700
+    max: 0.19200, -0.70700, 0.93300
+    color: '#696157'
+  - label: drawer horizontal crease
+    min: -0.17300, -0.73100, 0.86300
+    max: 0.17400, -0.71900, 0.88700
+    color: '#403E36'
+- type: cmu3DModel
+  id: CMU3DSmartMedicalFridge
+  label: Medical smart fridge
+  sourcePrototypes:
+  - RMCSmartFridge
+  status: draft
+  description: Green medical cabinet with white cap and cross, framed dispensing recess and lower green panel. Source
+    frames and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime appearance changes
+    remain unfinished.
+  sourceDirections: 1
+  referencePrototype: RMCSmartFridge
+  referenceRsi: /Textures/_RMC14/Structures/Machines/smart_fridge.rsi
+  referenceState: smartfridge
+  parts:
+  - label: fridge foot
+    min: -0.28000, -0.24000, 0.00000
+    max: -0.21000, 0.24000, 0.06500
+    color: '#A8ADA4'
+  - label: fridge foot
+    min: 0.21000, -0.24000, 0.00000
+    max: 0.28000, 0.24000, 0.06500
+    color: '#A8ADA4'
+  - label: medical fridge cabinet
+    min: -0.29000, -0.30000, 0.06500
+    max: 0.29000, 0.30000, 1.28000
+    color: '#34634F'
+  - label: rounded top cap
+    min: -0.30000, -0.31000, 1.28000
+    max: 0.30000, 0.30000, 1.36000
+    color: '#C9CCC0'
+  - label: top white molding
+    min: -0.27000, -0.31300, 1.22000
+    max: 0.27000, -0.30100, 1.28000
+    color: '#E0E1D5'
+  - label: medical label panel
+    min: -0.26300, -0.31300, 0.83000
+    max: 0.26300, -0.30100, 1.20000
+    color: '#B5BFB0'
+  - label: medical cross upright
+    min: -0.05000, -0.32900, 0.87000
+    max: 0.05000, -0.31700, 1.14700
+    color: '#557D64'
+  - label: medical cross horizontal
+    min: -0.15800, -0.32900, 0.96200
+    max: 0.15800, -0.31700, 1.05500
+    color: '#557D64'
+  - label: dispensing bay rim
+    min: -0.26300, -0.31300, 0.45500
+    max: 0.26300, -0.30100, 0.80000
+    color: '#A1AAA0'
+  - label: recessed dispensing bay
+    min: -0.22600, -0.32800, 0.49800
+    max: 0.22300, -0.31600, 0.75900
+    color: '#2B3835'
+  - label: lower dispensing shelf
+    min: -0.22300, -0.34200, 0.49900
+    max: 0.21900, -0.33000, 0.53800
+    color: '#737F73'
+  - label: lower green panel
+    min: -0.25900, -0.31500, 0.13000
+    max: 0.25900, -0.30300, 0.42000
+    color: '#45745C'
+  - label: bay side button
+    min: 0.22300, -0.33000, 0.94000
+    max: 0.25800, -0.31800, 0.99000
+    color: '#58866F'
+  - label: bay side button
+    min: 0.22300, -0.33000, 1.10000
+    max: 0.25800, -0.31800, 1.15000
+    color: '#58866F'
+- type: cmu3DModel
+  id: CMU3DDisposalUnit
+  label: Disposal chute
+  sourcePrototypes:
+  - CMDisposalUnit
+  status: draft
+  description: Open rectangular disposal hopper with a real recessed chute, front grille and green ready marker. Flush
+    animation and contents remain unsupported. Source frames and saved placement inspected; height, depth and hidden
+    surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: CMDisposalUnit
+  referenceRsi: /Textures/_RMC14/Structures/Piping/disposal.rsi
+  referenceState: disposal
+  parts:
+  - label: disposal foot
+    min: -0.30000, -0.31000, 0.00000
+    max: 0.30000, 0.30000, 0.09000
+    color: '#60635F'
+  - label: disposal lower body
+    min: -0.29000, -0.29000, 0.09000
+    max: 0.29000, 0.29000, 0.75000
+    color: '#878981'
+  - label: hopper outer side
+    min: -0.29000, -0.29000, 0.75000
+    max: -0.23000, 0.29000, 0.94000
+    color: '#878981'
+  - label: hopper outer side
+    min: 0.23000, -0.29000, 0.75000
+    max: 0.29000, 0.29000, 0.94000
+    color: '#878981'
+  - label: hopper outer end
+    min: -0.23000, -0.29000, 0.75000
+    max: 0.23000, -0.23500, 0.94000
+    color: '#878981'
+  - label: hopper outer end
+    min: -0.23000, 0.23500, 0.75000
+    max: 0.23000, 0.29000, 0.94000
+    color: '#878981'
+  - label: front dark panel
+    min: -0.25000, -0.30300, 0.16000
+    max: 0.25000, -0.29100, 0.77000
+    color: '#3C413C'
+  - label: front ventilation bar
+    min: -0.12000, -0.31800, 0.27000
+    max: -0.09600, -0.30600, 0.65000
+    color: '#888D83'
+  - label: front ventilation bar
+    min: -0.04500, -0.31800, 0.27000
+    max: -0.02100, -0.30600, 0.65000
+    color: '#888D83'
+  - label: front ventilation bar
+    min: 0.03000, -0.31800, 0.27000
+    max: 0.05400, -0.30600, 0.65000
+    color: '#888D83'
+  - label: front ventilation bar
+    min: 0.10500, -0.31800, 0.27000
+    max: 0.12900, -0.30600, 0.65000
+    color: '#888D83'
+  - label: ready indicator
+    min: 0.10000, -0.31800, 0.70500
+    max: 0.18000, -0.30600, 0.74500
+    color: '#74C54A'
+  - label: top rim side
+    min: -0.29000, -0.29000, 0.94000
+    max: -0.23000, 0.29000, 1.02000
+    color: '#BCC3B9'
+  - label: top rim side
+    min: 0.23000, -0.29000, 0.94000
+    max: 0.29000, 0.29000, 1.02000
+    color: '#BCC3B9'
+  - label: top rim end
+    min: -0.23000, -0.29000, 0.94000
+    max: 0.23000, -0.23500, 1.02000
+    color: '#AEB6AE'
+  - label: top rim end
+    min: -0.23000, 0.23500, 0.94000
+    max: 0.23000, 0.29000, 1.02000
+    color: '#AEB6AE'
+  - label: open chute bottom
+    min: -0.22900, -0.23200, 0.75000
+    max: 0.22900, 0.23000, 0.76500
+    color: '#14262A'
+  - label: chute inner side
+    min: -0.22900, -0.23200, 0.76500
+    max: -0.21300, 0.23000, 0.94000
+    color: '#374B4B'
+  - label: chute inner side
+    min: 0.21300, -0.23200, 0.76500
+    max: 0.22900, 0.23000, 0.94000
+    color: '#374B4B'
+  - label: chute inner end
+    min: -0.21300, -0.23200, 0.76500
+    max: 0.21300, -0.21600, 0.94000
+    color: '#304140'
+  - label: chute inner end
+    min: -0.21300, 0.21400, 0.76500
+    max: 0.21300, 0.23000, 0.94000
+    color: '#304140'
+  - label: base molding
+    min: -0.26500, -0.31200, 0.09000
+    max: 0.26500, -0.30000, 0.13000
+    color: '#A5A59A'
+- type: cmu3DModel
+  id: CMU3DFireExtinguisher
+  label: Handheld fire extinguisher
+  sourcePrototypes:
+  - CMFireExtinguisher
+  status: draft
+  description: Red pressure cylinder, cream instructions, squeeze handle and a separate hanging hose. Upright loose-item
+    pose. Source frames and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime appearance
+    changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: CMFireExtinguisher
+  referenceRsi: /Textures/_RMC14/Objects/fire_extinguisher.rsi
+  referenceState: fire_extinguisher0
+  placement: surface
+  parts:
+  - label: red pressure cylinder
+    min: -0.04785, -0.087, 0.035
+    max: 0.04785, 0.087, 0.39
+    color: '#A73639'
+  - label: red pressure cylinder
+    min: -0.087, -0.04785, 0.035
+    max: -0.04785, 0.04785, 0.39
+    color: '#A73639'
+  - label: red pressure cylinder
+    min: 0.04785, -0.04785, 0.035
+    max: 0.087, 0.04785, 0.39
+    color: '#A73639'
+  - label: cylinder shoulder
+    min: -0.0363, -0.066, 0.39
+    max: 0.0363, 0.066, 0.43
+    color: '#BB4445'
+  - label: cylinder shoulder
+    min: -0.066, -0.0363, 0.39
+    max: -0.0363, 0.0363, 0.43
+    color: '#BB4445'
+  - label: cylinder shoulder
+    min: 0.0363, -0.0363, 0.39
+    max: 0.066, 0.0363, 0.43
+    color: '#BB4445'
+  - label: cylinder foot
+    min: -0.0462, -0.084, 0.0
+    max: 0.0462, 0.084, 0.04
+    color: '#662A2D'
+  - label: cylinder foot
+    min: -0.084, -0.0462, 0.0
+    max: -0.0462, 0.0462, 0.04
+    color: '#662A2D'
+  - label: cylinder foot
+    min: 0.0462, -0.0462, 0.0
+    max: 0.084, 0.0462, 0.04
+    color: '#662A2D'
+  - label: cream instructions
+    min: -0.077, -0.09, 0.14
+    max: 0.077, -0.085, 0.31
+    color: '#C7BB8C'
+  - label: label instruction line
+    min: -0.056, -0.103, 0.17
+    max: 0.058, -0.091, 0.183
+    color: '#8E8C69'
+  - label: label instruction line
+    min: -0.056, -0.103, 0.22
+    max: 0.058, -0.091, 0.233
+    color: '#8E8C69'
+  - label: label instruction line
+    min: -0.056, -0.103, 0.27
+    max: 0.058, -0.091, 0.283
+    color: '#8E8C69'
+  - label: upper neck
+    min: -0.024, -0.024, 0.43
+    max: 0.024, 0.024, 0.473
+    color: '#6F5140'
+  - label: squeeze handle
+    min: -0.084, -0.021, 0.477
+    max: 0.085, 0.025, 0.498
+    color: '#292C26'
+  - label: safety hose
+    min: 0.03642, 0.01633, 0.448
+    max: 0.06658, 0.04033, 0.472
+    color: '#252E28'
+  - label: safety hose
+    min: 0.06542, 0.013, 0.436
+    max: 0.09558, 0.037, 0.46
+    color: '#252E28'
+  - label: safety hose
+    min: 0.09442, 0.00967, 0.424
+    max: 0.12458, 0.03367, 0.448
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.1115, 0.0075, 0.3688
+    max: 0.1365, 0.0325, 0.4312
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.1115, 0.0075, 0.3088
+    max: 0.1365, 0.0325, 0.3712
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.1115, 0.0075, 0.2488
+    max: 0.1365, 0.0325, 0.3112
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.1115, 0.0075, 0.1888
+    max: 0.1365, 0.0325, 0.2512
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.1115, 0.0075, 0.1288
+    max: 0.1365, 0.0325, 0.1912
+    color: '#252E28'
+  - label: hose nozzle
+    min: 0.095, -0.013, 0.075
+    max: 0.142, 0.034, 0.18
+    color: '#4D5041'
+- type: cmu3DModel
+  id: CMU3DHybrisaExtinguisherCabinet
+  label: Hybrisa glazed extinguisher cabinet
+  sourcePrototypes:
+  - AU14HybrisaExtinguisherCabinet
+  status: draft
+  description: 'Closed framed glass cabinet containing the red extinguisher. Saved cabinet #391 contains entity #392;
+    empty/open runtime states need separate geometry. Source frames and saved placement inspected; height, depth and
+    hidden surfaces remain inferred. Runtime appearance changes remain unfinished.'
+  sourceDirections: 1
+  referencePrototype: AU14HybrisaExtinguisherCabinet
+  referenceRsi: /Textures/CMU14/fireextingushercabinet.rsi
+  referenceState: frame
+  wallMounted: true
+  useEntityRotation: true
+  parts:
+  - label: cabinet back
+    min: -0.20000, -0.54800, 0.77000
+    max: 0.20000, -0.50100, 1.72000
+    color: '#434C48'
+  - label: cabinet inner shadow
+    min: -0.16800, -0.56000, 0.82000
+    max: 0.16800, -0.54800, 1.67000
+    color: '#1D2925'
+  - label: cabinet stile
+    min: -0.20000, -0.80500, 0.77000
+    max: -0.16400, -0.54800, 1.72000
+    color: '#68746F'
+  - label: cabinet stile
+    min: 0.16400, -0.80500, 0.77000
+    max: 0.20000, -0.54800, 1.72000
+    color: '#68746F'
+  - label: cabinet horizontal frame
+    min: -0.16400, -0.80500, 0.77000
+    max: 0.16400, -0.54800, 0.80800
+    color: '#74827D'
+  - label: cabinet horizontal frame
+    min: -0.16400, -0.80500, 1.68200
+    max: 0.16400, -0.54800, 1.72000
+    color: '#74827D'
+  - label: red pressure cylinder
+    min: -0.0703395, -0.76489, 0.89145
+    max: 0.0703395, -0.5091100000000001, 1.4133
+    color: '#A73639'
+  - label: red pressure cylinder
+    min: -0.12788999999999998, -0.7073395, 0.89145
+    max: -0.0703395, -0.5666605, 1.4133
+    color: '#A73639'
+  - label: red pressure cylinder
+    min: 0.0703395, -0.7073395, 0.89145
+    max: 0.12788999999999998, -0.5666605, 1.4133
+    color: '#A73639'
+  - label: cylinder shoulder
+    min: -0.053361, -0.73402, 1.4133
+    max: 0.053361, -0.53998, 1.4721
+    color: '#BB4445'
+  - label: cylinder shoulder
+    min: -0.09702000000000001, -0.690361, 1.4133
+    max: -0.053361, -0.583639, 1.4721
+    color: '#BB4445'
+  - label: cylinder shoulder
+    min: 0.053361, -0.690361, 1.4133
+    max: 0.09702000000000001, -0.583639, 1.4721
+    color: '#BB4445'
+  - label: cylinder foot
+    min: -0.067914, -0.76048, 0.84
+    max: 0.067914, -0.51352, 0.8987999999999999
+    color: '#662A2D'
+  - label: cylinder foot
+    min: -0.12348, -0.704914, 0.84
+    max: -0.067914, -0.569086, 0.8987999999999999
+    color: '#662A2D'
+  - label: cylinder foot
+    min: 0.067914, -0.704914, 0.84
+    max: 0.12348, -0.569086, 0.8987999999999999
+    color: '#662A2D'
+  - label: cream instructions
+    min: -0.11319, -0.7693, 1.0458
+    max: 0.11319, -0.76195, 1.2957
+    color: '#C7BB8C'
+  - label: label instruction line
+    min: -0.08232, -0.78841, 1.0899
+    max: 0.08526, -0.77077, 1.10901
+    color: '#8E8C69'
+  - label: label instruction line
+    min: -0.08232, -0.78841, 1.1634
+    max: 0.08526, -0.77077, 1.18251
+    color: '#8E8C69'
+  - label: label instruction line
+    min: -0.08232, -0.78841, 1.2368999999999999
+    max: 0.08526, -0.77077, 1.2560099999999998
+    color: '#8E8C69'
+  - label: upper neck
+    min: -0.03528, -0.67228, 1.4721
+    max: 0.03528, -0.60172, 1.53531
+    color: '#6F5140'
+  - label: squeeze handle
+    min: -0.12348, -0.66787, 1.5411899999999998
+    max: 0.12495, -0.6002500000000001, 1.57206
+    color: '#292C26'
+  - label: safety hose
+    min: 0.0535374, -0.6129949, 1.49856
+    max: 0.0978726, -0.5777149, 1.5338399999999999
+    color: '#252E28'
+  - label: safety hose
+    min: 0.0961674, -0.61789, 1.4809199999999998
+    max: 0.1405026, -0.5826100000000001, 1.5162
+    color: '#252E28'
+  - label: safety hose
+    min: 0.13879740000000002, -0.6227851, 1.46328
+    max: 0.18313259999999998, -0.5875051, 1.49856
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.163905, -0.6259750000000001, 1.382136
+    max: 0.200655, -0.589225, 1.4738639999999998
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.163905, -0.6259750000000001, 1.293936
+    max: 0.200655, -0.589225, 1.3856639999999998
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.163905, -0.6259750000000001, 1.205736
+    max: 0.200655, -0.589225, 1.297464
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.163905, -0.6259750000000001, 1.1175359999999999
+    max: 0.200655, -0.589225, 1.209264
+    color: '#252E28'
+  - label: hanging hose
+    min: 0.163905, -0.6259750000000001, 1.029336
+    max: 0.200655, -0.589225, 1.121064
+    color: '#252E28'
+  - label: hose nozzle
+    min: 0.13965, -0.65611, 0.9502499999999999
+    max: 0.20873999999999998, -0.58702, 1.1046
+    color: '#4D5041'
+  - label: closed glass panel
+    min: -0.15500, -0.81900, 0.82200
+    max: 0.15100, -0.80800, 1.67000
+    color: '#74958B50'
+  - label: door handle
+    min: 0.14400, -0.85500, 1.13000
+    max: 0.16600, -0.82000, 1.39000
+    color: '#9AA39A'
+- type: cmu3DModel
+  id: CMU3DSmallFloodlight
+  label: Tripod floodlight
+  sourcePrototypes:
+  - RMCSmallFloodlight
+  status: draft
+  description: Compact twin-lamp housing on a short mast and three splayed legs. Physical aim follows the saved entity
+    rotation, including the west-facing lights; billboard noRot does not erase it. No actual light is emitted. Source
+    frames and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime appearance changes
+    remain unfinished.
+  sourceDirections: 1
+  referencePrototype: RMCSmallFloodlight
+  referenceRsi: /Textures/_RMC14/Objects/Misc/Lights/floodlight.rsi
+  referenceState: smallfloodon
+  useEntityRotation: true
+  parts:
+  - label: tripod center
+    min: -0.05500, -0.10000, 0.06500
+    max: 0.05500, 0.10000, 0.18000
+    color: '#4B4B3C'
+  - label: tripod center
+    min: -0.10000, -0.05500, 0.06500
+    max: -0.05500, 0.05500, 0.18000
+    color: '#4B4B3C'
+  - label: tripod center
+    min: 0.05500, -0.05500, 0.06500
+    max: 0.10000, 0.05500, 0.18000
+    color: '#4B4B3C'
+  - label: tripod leg
+    min: -0.05883, -0.02383, 0.10075
+    max: 0.00217, 0.03717, 0.16175
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.11550, -0.01050, 0.08325
+    max: -0.05450, 0.05050, 0.14425
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.17217, 0.00283, 0.06575
+    max: -0.11117, 0.06383, 0.12675
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.22883, 0.01617, 0.04825
+    max: -0.16783, 0.07717, 0.10925
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.28550, 0.02950, 0.03075
+    max: -0.22450, 0.09050, 0.09175
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.34217, 0.04283, 0.01325
+    max: -0.28117, 0.10383, 0.07425
+    color: '#66634F'
+  - label: yellow foot cap
+    min: -0.38700, 0.03700, 0.00000
+    max: -0.29300, 0.12300, 0.04000
+    color: '#8D7C1E'
+  - label: tripod leg
+    min: -0.00217, -0.02383, 0.10075
+    max: 0.05883, 0.03717, 0.16175
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.05450, -0.01050, 0.08325
+    max: 0.11550, 0.05050, 0.14425
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.11117, 0.00283, 0.06575
+    max: 0.17217, 0.06383, 0.12675
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.16783, 0.01617, 0.04825
+    max: 0.22883, 0.07717, 0.10925
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.22450, 0.02950, 0.03075
+    max: 0.28550, 0.09050, 0.09175
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.28117, 0.04283, 0.01325
+    max: 0.34217, 0.10383, 0.07425
+    color: '#66634F'
+  - label: yellow foot cap
+    min: 0.29300, 0.03700, 0.00000
+    max: 0.38700, 0.12300, 0.04000
+    color: '#8D7C1E'
+  - label: tripod leg
+    min: -0.03050, -0.06120, 0.10075
+    max: 0.03050, 0.00120, 0.16175
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.12120, 0.08325
+    max: 0.03050, -0.05880, 0.14425
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.18120, 0.06575
+    max: 0.03050, -0.11880, 0.12675
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.24120, 0.04825
+    max: 0.03050, -0.17880, 0.10925
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.30120, 0.03075
+    max: 0.03050, -0.23880, 0.09175
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.36120, 0.01325
+    max: 0.03050, -0.29880, 0.07425
+    color: '#66634F'
+  - label: yellow foot cap
+    min: -0.04700, -0.40300, 0.00000
+    max: 0.04700, -0.31700, 0.04000
+    color: '#8D7C1E'
+  - label: square mast
+    min: -0.04000, -0.04000, 0.16000
+    max: 0.04000, 0.04000, 0.72000
+    color: '#545A52'
+  - label: mast highlight
+    min: -0.02600, -0.05000, 0.20000
+    max: -0.00900, -0.04000, 0.65000
+    color: '#8A8F83'
+  - label: mast collar
+    min: -0.06000, -0.06000, 0.53000
+    max: 0.06000, 0.06000, 0.63000
+    color: '#373D34'
+  - label: floodlight housing
+    min: -0.27500, -0.11000, 0.65000
+    max: 0.27500, 0.12000, 1.01000
+    color: '#343B2D'
+  - label: reflector surround
+    min: -0.24600, -0.12300, 0.68600
+    max: 0.24600, -0.11100, 0.93800
+    color: '#646A4B'
+  - label: lamp dark gasket
+    min: -0.21800, -0.13600, 0.71400
+    max: -0.01600, -0.12400, 0.90400
+    color: '#182C2B'
+  - label: pale lamp glass
+    min: -0.19900, -0.14900, 0.73000
+    max: -0.03500, -0.13700, 0.88600
+    color: '#B5E1D8'
+  - label: lamp core
+    min: -0.17500, -0.16200, 0.74400
+    max: -0.05900, -0.15000, 0.87400
+    color: '#DEF3E4'
+  - label: lamp dark gasket
+    min: 0.01600, -0.13600, 0.71400
+    max: 0.21800, -0.12400, 0.90400
+    color: '#182C2B'
+  - label: pale lamp glass
+    min: 0.03500, -0.14900, 0.73000
+    max: 0.19900, -0.13700, 0.88600
+    color: '#B5E1D8'
+  - label: lamp core
+    min: 0.05900, -0.16200, 0.74400
+    max: 0.17500, -0.15000, 0.87400
+    color: '#DEF3E4'
+  - label: upper hazard mark
+    min: -0.23300, -0.12400, 0.95100
+    max: -0.18600, -0.11200, 0.99300
+    color: '#887817'
+  - label: upper hazard mark
+    min: -0.13300, -0.12400, 0.95100
+    max: -0.08600, -0.11200, 0.99300
+    color: '#887817'
+  - label: upper hazard mark
+    min: -0.03300, -0.12400, 0.95100
+    max: 0.01400, -0.11200, 0.99300
+    color: '#887817'
+  - label: upper hazard mark
+    min: 0.06700, -0.12400, 0.95100
+    max: 0.11400, -0.11200, 0.99300
+    color: '#887817'
+  - label: upper hazard mark
+    min: 0.16700, -0.12400, 0.95100
+    max: 0.21400, -0.11200, 0.99300
+    color: '#887817'
+- type: cmu3DModel
+  id: CMU3DTallFloodlight
+  label: Tall tripod floodlight
+  sourcePrototypes:
+  - AU14TallFloodlight
+  status: draft
+  description: Tall mast, twin lower lamps, dark upper service panel, yellow hazard details and three splayed legs. Sprite
+    height offset is not a horizontal displacement. No actual light is emitted. Source frames and saved placement inspected;
+    height, depth and hidden surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: AU14TallFloodlight
+  referenceRsi: /Textures/_RMC14/Objects/Misc/Lights/floodlightbig.rsi
+  referenceState: bigfloodon
+  useEntityRotation: true
+  parts:
+  - label: tripod center
+    min: -0.05500, -0.10000, 0.06500
+    max: 0.05500, 0.10000, 0.18000
+    color: '#4B4B3C'
+  - label: tripod center
+    min: -0.10000, -0.05500, 0.06500
+    max: -0.05500, 0.05500, 0.18000
+    color: '#4B4B3C'
+  - label: tripod center
+    min: 0.05500, -0.05500, 0.06500
+    max: 0.10000, 0.05500, 0.18000
+    color: '#4B4B3C'
+  - label: tripod leg
+    min: -0.05883, -0.02383, 0.10075
+    max: 0.00217, 0.03717, 0.16175
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.11550, -0.01050, 0.08325
+    max: -0.05450, 0.05050, 0.14425
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.17217, 0.00283, 0.06575
+    max: -0.11117, 0.06383, 0.12675
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.22883, 0.01617, 0.04825
+    max: -0.16783, 0.07717, 0.10925
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.28550, 0.02950, 0.03075
+    max: -0.22450, 0.09050, 0.09175
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.34217, 0.04283, 0.01325
+    max: -0.28117, 0.10383, 0.07425
+    color: '#66634F'
+  - label: yellow foot cap
+    min: -0.38700, 0.03700, 0.00000
+    max: -0.29300, 0.12300, 0.04000
+    color: '#8D7C1E'
+  - label: tripod leg
+    min: -0.00217, -0.02383, 0.10075
+    max: 0.05883, 0.03717, 0.16175
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.05450, -0.01050, 0.08325
+    max: 0.11550, 0.05050, 0.14425
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.11117, 0.00283, 0.06575
+    max: 0.17217, 0.06383, 0.12675
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.16783, 0.01617, 0.04825
+    max: 0.22883, 0.07717, 0.10925
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.22450, 0.02950, 0.03075
+    max: 0.28550, 0.09050, 0.09175
+    color: '#66634F'
+  - label: tripod leg
+    min: 0.28117, 0.04283, 0.01325
+    max: 0.34217, 0.10383, 0.07425
+    color: '#66634F'
+  - label: yellow foot cap
+    min: 0.29300, 0.03700, 0.00000
+    max: 0.38700, 0.12300, 0.04000
+    color: '#8D7C1E'
+  - label: tripod leg
+    min: -0.03050, -0.06120, 0.10075
+    max: 0.03050, 0.00120, 0.16175
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.12120, 0.08325
+    max: 0.03050, -0.05880, 0.14425
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.18120, 0.06575
+    max: 0.03050, -0.11880, 0.12675
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.24120, 0.04825
+    max: 0.03050, -0.17880, 0.10925
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.30120, 0.03075
+    max: 0.03050, -0.23880, 0.09175
+    color: '#66634F'
+  - label: tripod leg
+    min: -0.03050, -0.36120, 0.01325
+    max: 0.03050, -0.29880, 0.07425
+    color: '#66634F'
+  - label: yellow foot cap
+    min: -0.04700, -0.40300, 0.00000
+    max: 0.04700, -0.31700, 0.04000
+    color: '#8D7C1E'
+  - label: square mast
+    min: -0.04000, -0.04000, 0.16000
+    max: 0.04000, 0.04000, 2.39000
+    color: '#545A52'
+  - label: mast highlight
+    min: -0.02600, -0.05000, 0.20000
+    max: -0.00900, -0.04000, 2.32000
+    color: '#8A8F83'
+  - label: mast collar
+    min: -0.06000, -0.06000, 2.20000
+    max: 0.06000, 0.06000, 2.30000
+    color: '#373D34'
+  - label: floodlight housing
+    min: -0.27500, -0.11000, 2.32000
+    max: 0.27500, 0.12000, 2.95000
+    color: '#343B2D'
+  - label: reflector surround
+    min: -0.24600, -0.12300, 2.35600
+    max: 0.24600, -0.11100, 2.60800
+    color: '#646A4B'
+  - label: lamp dark gasket
+    min: -0.21800, -0.13600, 2.38400
+    max: -0.01600, -0.12400, 2.57400
+    color: '#182C2B'
+  - label: pale lamp glass
+    min: -0.19900, -0.14900, 2.40000
+    max: -0.03500, -0.13700, 2.55600
+    color: '#B5E1D8'
+  - label: lamp core
+    min: -0.17500, -0.16200, 2.41400
+    max: -0.05900, -0.15000, 2.54400
+    color: '#DEF3E4'
+  - label: lamp dark gasket
+    min: 0.01600, -0.13600, 2.38400
+    max: 0.21800, -0.12400, 2.57400
+    color: '#182C2B'
+  - label: pale lamp glass
+    min: 0.03500, -0.14900, 2.40000
+    max: 0.19900, -0.13700, 2.55600
+    color: '#B5E1D8'
+  - label: lamp core
+    min: 0.05900, -0.16200, 2.41400
+    max: 0.17500, -0.15000, 2.54400
+    color: '#DEF3E4'
+  - label: upper hazard mark
+    min: -0.23300, -0.12400, 2.89100
+    max: -0.18600, -0.11200, 2.93300
+    color: '#887817'
+  - label: upper hazard mark
+    min: -0.13300, -0.12400, 2.89100
+    max: -0.08600, -0.11200, 2.93300
+    color: '#887817'
+  - label: upper hazard mark
+    min: -0.03300, -0.12400, 2.89100
+    max: 0.01400, -0.11200, 2.93300
+    color: '#887817'
+  - label: upper hazard mark
+    min: 0.06700, -0.12400, 2.89100
+    max: 0.11400, -0.11200, 2.93300
+    color: '#887817'
+  - label: upper hazard mark
+    min: 0.16700, -0.12400, 2.89100
+    max: 0.21400, -0.11200, 2.93300
+    color: '#887817'
+  - label: upper service panel
+    min: -0.22000, -0.12400, 2.65000
+    max: 0.22000, -0.11200, 2.85500
+    color: '#1E291E'
+  - label: upper service bolt
+    min: -0.16000, -0.14000, 2.72000
+    max: -0.13300, -0.12800, 2.75000
+    color: '#6F712A'
+  - label: upper service bolt
+    min: 0.00000, -0.14000, 2.72000
+    max: 0.02700, -0.12800, 2.75000
+    color: '#6F712A'
+  - label: upper service bolt
+    min: 0.16000, -0.14000, 2.72000
+    max: 0.18700, -0.12800, 2.75000
+    color: '#6F712A'
+  - label: lamp side adjustment grip
+    min: -0.31000, -0.01800, 2.46000
+    max: -0.28000, 0.05500, 2.56000
+    color: '#7F9382'
+  - label: lamp side adjustment grip
+    min: 0.28000, -0.01800, 2.46000
+    max: 0.31000, 0.05500, 2.56000
+    color: '#7F9382'
+- type: cmu3DModel
+  id: CMU3DTrafficSignal
+  label: Traffic signal and control post
+  sourcePrototypes:
+  - RMCTrafficLight
+  - colonysiren
+  status: draft
+  description: Three hooded signal lenses in a yellow case, gray control box and narrow octagonal post base. Four source
+    directions keep the road-facing orientation. Source screen offset recenters the padded art and is not copied to the
+    base. Source frames and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime appearance
+    changes remain unfinished.
+  sourceDirections: 4
+  referencePrototype: RMCTrafficLight
+  referenceRsi: /Textures/_RMC14/Objects/Misc/Lights/trafficlights.rsi
+  referenceState: trafficlight
+  parts:
+  - label: octagonal foot
+    min: -0.09900, -0.18000, 0.00000
+    max: 0.09900, 0.18000, 0.10000
+    color: '#595C54'
+  - label: octagonal foot
+    min: -0.18000, -0.09900, 0.00000
+    max: -0.09900, 0.09900, 0.10000
+    color: '#595C54'
+  - label: octagonal foot
+    min: 0.09900, -0.09900, 0.00000
+    max: 0.18000, 0.09900, 0.10000
+    color: '#595C54'
+  - label: raised plinth
+    min: -0.06600, -0.12000, 0.10000
+    max: 0.06600, 0.12000, 0.19000
+    color: '#7B7D70'
+  - label: raised plinth
+    min: -0.12000, -0.06600, 0.10000
+    max: -0.06600, 0.06600, 0.19000
+    color: '#7B7D70'
+  - label: raised plinth
+    min: 0.06600, -0.06600, 0.10000
+    max: 0.12000, 0.06600, 0.19000
+    color: '#7B7D70'
+  - label: dark post root
+    min: -0.04125, -0.07500, 0.19000
+    max: 0.04125, 0.07500, 0.30000
+    color: '#343C36'
+  - label: dark post root
+    min: -0.07500, -0.04125, 0.19000
+    max: -0.04125, 0.04125, 0.30000
+    color: '#343C36'
+  - label: dark post root
+    min: 0.04125, -0.04125, 0.19000
+    max: 0.07500, 0.04125, 0.30000
+    color: '#343C36'
+  - label: steel mast
+    min: -0.03800, -0.04200, 0.27000
+    max: 0.03800, 0.04200, 1.74000
+    color: '#585E59'
+  - label: mast highlight
+    min: -0.02800, -0.05000, 0.29000
+    max: -0.01000, -0.04300, 1.70000
+    color: '#7A8377'
+  - label: traffic control box
+    min: -0.08900, -0.07100, 0.84000
+    max: 0.08900, 0.09500, 1.43000
+    color: '#59605A'
+  - label: control hatch
+    min: -0.06600, -0.08400, 0.91000
+    max: 0.06600, -0.07200, 1.36000
+    color: '#74796C'
+  - label: control hatch fastener
+    min: -0.04600, -0.09600, 0.94000
+    max: -0.01900, -0.08400, 0.97600
+    color: '#313E35'
+  - label: control hatch fastener
+    min: -0.04600, -0.09600, 1.04000
+    max: -0.01900, -0.08400, 1.07600
+    color: '#313E35'
+  - label: control hatch fastener
+    min: -0.04600, -0.09600, 1.25000
+    max: -0.01900, -0.08400, 1.28600
+    color: '#313E35'
+  - label: pedestrian control
+    min: 0.02600, -0.09600, 1.08300
+    max: 0.05400, -0.08400, 1.15800
+    color: '#6D3225'
+  - label: rear control module
+    min: 0.08900, 0.01600, 1.05000
+    max: 0.14900, 0.10800, 1.24000
+    color: '#464C45'
+  - label: yellow signal body
+    min: -0.12900, -0.08200, 1.58000
+    max: 0.12900, 0.13000, 3.01000
+    color: '#716032'
+  - label: top signal cap
+    min: -0.14600, -0.10300, 2.98000
+    max: 0.14600, 0.13900, 3.06000
+    color: '#A08A49'
+  - label: lower signal surround
+    min: -0.10500, -0.09500, 1.65000
+    max: 0.10500, -0.08300, 2.87000
+    color: '#282E22'
+  - label: signal lens rim
+    min: -0.09700, -0.11000, 1.64900
+    max: 0.09700, -0.09800, 1.95100
+    color: '#8D7837'
+  - label: dark signal aperture
+    min: -0.07700, -0.12500, 1.67700
+    max: 0.07700, -0.11300, 1.92300
+    color: '#111C18'
+  - label: unlit colored lens
+    min: -0.05700, -0.13800, 1.70800
+    max: 0.05700, -0.12600, 1.89200
+    color: '#314B2B'
+  - label: signal visor top
+    min: -0.11700, -0.21000, 1.92300
+    max: 0.11700, -0.11500, 1.95500
+    color: '#514A2D'
+  - label: signal visor side
+    min: -0.11700, -0.17500, 1.81300
+    max: -0.10000, -0.11500, 1.92400
+    color: '#45442D'
+  - label: signal visor side
+    min: 0.10000, -0.17500, 1.81300
+    max: 0.11700, -0.11500, 1.92400
+    color: '#45442D'
+  - label: signal lens rim
+    min: -0.09700, -0.11000, 2.06900
+    max: 0.09700, -0.09800, 2.37100
+    color: '#8D7837'
+  - label: dark signal aperture
+    min: -0.07700, -0.12500, 2.09700
+    max: 0.07700, -0.11300, 2.34300
+    color: '#111C18'
+  - label: unlit colored lens
+    min: -0.05700, -0.13800, 2.12800
+    max: 0.05700, -0.12600, 2.31200
+    color: '#655528'
+  - label: signal visor top
+    min: -0.11700, -0.21000, 2.34300
+    max: 0.11700, -0.11500, 2.37500
+    color: '#514A2D'
+  - label: signal visor side
+    min: -0.11700, -0.17500, 2.23300
+    max: -0.10000, -0.11500, 2.34400
+    color: '#45442D'
+  - label: signal visor side
+    min: 0.10000, -0.17500, 2.23300
+    max: 0.11700, -0.11500, 2.34400
+    color: '#45442D'
+  - label: signal lens rim
+    min: -0.09700, -0.11000, 2.48900
+    max: 0.09700, -0.09800, 2.79100
+    color: '#8D7837'
+  - label: dark signal aperture
+    min: -0.07700, -0.12500, 2.51700
+    max: 0.07700, -0.11300, 2.76300
+    color: '#111C18'
+  - label: unlit colored lens
+    min: -0.05700, -0.13800, 2.54800
+    max: 0.05700, -0.12600, 2.73200
+    color: '#582E22'
+  - label: signal visor top
+    min: -0.11700, -0.21000, 2.76300
+    max: 0.11700, -0.11500, 2.79500
+    color: '#514A2D'
+  - label: signal visor side
+    min: -0.11700, -0.17500, 2.65300
+    max: -0.10000, -0.11500, 2.76400
+    color: '#45442D'
+  - label: signal visor side
+    min: 0.10000, -0.17500, 2.65300
+    max: 0.11700, -0.11500, 2.76400
+    color: '#45442D'
+- type: cmu3DModel
+  id: CMU3DBrokenStreetlight
+  label: Broken twin-arm streetlight
+  sourcePrototypes:
+  - AU14StreetlightBroken
+  status: draft
+  description: Gray braced pole with an intact dark left lamp, a broken downward right arm and exposed cables. Base remains
+    at the saved pivot; the tall padded artwork is not a lateral offset. Source frames and saved placement inspected;
+    height, depth and hidden surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: AU14StreetlightBroken
+  referenceRsi: /Textures/_RMC14/Objects/Misc/Lights/streetlight.rsi
+  referenceState: broken
+  parts:
+  - label: octagonal foot
+    min: -0.09900, -0.18000, 0.00000
+    max: 0.09900, 0.18000, 0.10000
+    color: '#595C54'
+  - label: octagonal foot
+    min: -0.18000, -0.09900, 0.00000
+    max: -0.09900, 0.09900, 0.10000
+    color: '#595C54'
+  - label: octagonal foot
+    min: 0.09900, -0.09900, 0.00000
+    max: 0.18000, 0.09900, 0.10000
+    color: '#595C54'
+  - label: raised plinth
+    min: -0.06600, -0.12000, 0.10000
+    max: 0.06600, 0.12000, 0.19000
+    color: '#7B7D70'
+  - label: raised plinth
+    min: -0.12000, -0.06600, 0.10000
+    max: -0.06600, 0.06600, 0.19000
+    color: '#7B7D70'
+  - label: raised plinth
+    min: 0.06600, -0.06600, 0.10000
+    max: 0.12000, 0.06600, 0.19000
+    color: '#7B7D70'
+  - label: dark post root
+    min: -0.04125, -0.07500, 0.19000
+    max: 0.04125, 0.07500, 0.30000
+    color: '#343C36'
+  - label: dark post root
+    min: -0.07500, -0.04125, 0.19000
+    max: -0.04125, 0.04125, 0.30000
+    color: '#343C36'
+  - label: dark post root
+    min: 0.04125, -0.04125, 0.19000
+    max: 0.07500, 0.04125, 0.30000
+    color: '#343C36'
+  - label: steel mast
+    min: -0.03800, -0.04200, 0.27000
+    max: 0.03800, 0.04200, 1.74000
+    color: '#585E59'
+  - label: mast highlight
+    min: -0.02800, -0.05000, 0.29000
+    max: -0.01000, -0.04300, 1.70000
+    color: '#7A8377'
+  - label: streetlight upper mast
+    min: -0.03200, -0.03400, 1.70000
+    max: 0.03200, 0.03400, 2.92000
+    color: '#65726D'
+  - label: mast clamp
+    min: -0.04600, -0.04300, 0.47000
+    max: 0.04600, 0.04300, 0.51000
+    color: '#89918A'
+  - label: mast clamp
+    min: -0.04600, -0.04300, 0.75000
+    max: 0.04600, 0.04300, 0.79000
+    color: '#89918A'
+  - label: mast clamp
+    min: -0.04600, -0.04300, 1.03000
+    max: 0.04600, 0.04300, 1.07000
+    color: '#89918A'
+  - label: mast clamp
+    min: -0.04600, -0.04300, 1.31000
+    max: 0.04600, 0.04300, 1.35000
+    color: '#89918A'
+  - label: mast clamp
+    min: -0.04600, -0.04300, 1.59000
+    max: 0.04600, 0.04300, 1.63000
+    color: '#89918A'
+  - label: mast clamp
+    min: -0.04600, -0.04300, 1.87000
+    max: 0.04600, 0.04300, 1.91000
+    color: '#89918A'
+  - label: mast clamp
+    min: -0.04600, -0.04300, 2.15000
+    max: 0.04600, 0.04300, 2.19000
+    color: '#89918A'
+  - label: mast clamp
+    min: -0.04600, -0.04300, 2.43000
+    max: 0.04600, 0.04300, 2.47000
+    color: '#89918A'
+  - label: intact short light arm
+    min: -0.06290, -0.03100, 2.78567
+    max: 0.00123, 0.03100, 2.84767
+    color: '#63736B'
+  - label: intact short light arm
+    min: -0.12457, -0.03100, 2.77900
+    max: -0.06043, 0.03100, 2.84100
+    color: '#63736B'
+  - label: intact short light arm
+    min: -0.18623, -0.03100, 2.77233
+    max: -0.12210, 0.03100, 2.83433
+    color: '#63736B'
+  - label: intact short light arm
+    min: -0.24790, -0.03100, 2.76567
+    max: -0.18377, 0.03100, 2.82767
+    color: '#63736B'
+  - label: intact short light arm
+    min: -0.30957, -0.03100, 2.75900
+    max: -0.24543, 0.03100, 2.82100
+    color: '#63736B'
+  - label: intact short light arm
+    min: -0.37123, -0.03100, 2.75233
+    max: -0.30710, 0.03100, 2.81433
+    color: '#63736B'
+  - label: unlit left housing
+    min: -0.51000, -0.08200, 2.72000
+    max: -0.28000, 0.08200, 2.80000
+    color: '#4D6158'
+  - label: broken left diffuser
+    min: -0.48000, -0.05700, 2.70400
+    max: -0.31000, 0.05700, 2.72000
+    color: '#303E36'
+  - label: bent broken right arm
+    min: 0.03029, -0.03400, 2.74314
+    max: 0.09829, 0.03400, 2.81114
+    color: '#66766F'
+  - label: bent broken right arm
+    min: 0.07886, -0.03400, 2.69743
+    max: 0.14686, 0.03400, 2.76543
+    color: '#66766F'
+  - label: bent broken right arm
+    min: 0.12743, -0.03400, 2.65171
+    max: 0.19543, 0.03400, 2.71971
+    color: '#66766F'
+  - label: bent broken right arm
+    min: 0.17600, -0.03400, 2.60600
+    max: 0.24400, 0.03400, 2.67400
+    color: '#66766F'
+  - label: bent broken right arm
+    min: 0.22457, -0.03400, 2.56029
+    max: 0.29257, 0.03400, 2.62829
+    color: '#66766F'
+  - label: bent broken right arm
+    min: 0.27314, -0.03400, 2.51457
+    max: 0.34114, 0.03400, 2.58257
+    color: '#66766F'
+  - label: bent broken right arm
+    min: 0.32171, -0.03400, 2.46886
+    max: 0.38971, 0.03400, 2.53686
+    color: '#66766F'
+  - label: exposed red wire
+    min: 0.35215, -0.04513, 2.43410
+    max: 0.37035, -0.03113, 2.48090
+    color: '#71332D'
+  - label: exposed red wire
+    min: 0.33465, -0.05137, 2.38910
+    max: 0.35285, -0.03737, 2.43590
+    color: '#71332D'
+  - label: exposed red wire
+    min: 0.31715, -0.05763, 2.34410
+    max: 0.33535, -0.04363, 2.39090
+    color: '#71332D'
+  - label: exposed red wire
+    min: 0.29965, -0.06388, 2.29910
+    max: 0.31785, -0.04987, 2.34590
+    color: '#71332D'
+  - label: loose black wire
+    min: -0.36785, -0.03825, 2.66390
+    max: -0.34965, -0.02425, 2.72110
+    color: '#26342D'
+  - label: loose black wire
+    min: -0.38535, -0.04075, 2.60890
+    max: -0.36715, -0.02675, 2.66610
+    color: '#26342D'
+  - label: loose black wire
+    min: -0.40285, -0.04325, 2.55390
+    max: -0.38465, -0.02925, 2.61110
+    color: '#26342D'
+  - label: loose black wire
+    min: -0.42035, -0.04575, 2.49890
+    max: -0.40215, -0.03175, 2.55610
+    color: '#26342D'
+  - label: broken mast access hatch
+    min: -0.05200, -0.06000, 1.16000
+    max: 0.05200, -0.04200, 1.47000
+    color: '#303F36'
+  - label: hatch exposed cable
+    min: 0.01458, -0.07563, 1.35430
+    max: 0.03667, -0.06163, 1.39070
+    color: '#7D352D'
+  - label: hatch exposed cable
+    min: 0.03582, -0.07888, 1.31930
+    max: 0.05793, -0.06488, 1.35570
+    color: '#7D352D'
+  - label: hatch exposed cable
+    min: 0.05708, -0.08213, 1.28430
+    max: 0.07918, -0.06812, 1.32070
+    color: '#7D352D'
+  - label: hatch exposed cable
+    min: 0.07833, -0.08538, 1.24930
+    max: 0.10043, -0.07137, 1.28570
+    color: '#7D352D'
+- type: cmu3DModel
+  id: CMU3DHandLantern
+  label: Caged hand lantern
+  sourcePrototypes:
+  - RMCFlashlightLantern
+  status: draft
+  description: Unlit bronze lantern with dark chamber, four cage uprights, octagonal rims and an open carrying handle.
+    Source frames and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime appearance
+    changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: RMCFlashlightLantern
+  referenceRsi: /Textures/_RMC14/Objects/Tools/Light/lantern.rsi
+  referenceState: lantern
+  placement: surface
+  parts:
+  - label: lantern base
+    min: -0.06325, -0.11500, 0.00000
+    max: 0.06325, 0.11500, 0.05700
+    color: '#766849'
+  - label: lantern base
+    min: -0.11500, -0.06325, 0.00000
+    max: -0.06325, 0.06325, 0.05700
+    color: '#766849'
+  - label: lantern base
+    min: 0.06325, -0.06325, 0.00000
+    max: 0.11500, 0.06325, 0.05700
+    color: '#766849'
+  - label: dark lamp core
+    min: -0.04345, -0.07900, 0.05700
+    max: 0.04345, 0.07900, 0.34000
+    color: '#3B3523'
+  - label: dark lamp core
+    min: -0.07900, -0.04345, 0.05700
+    max: -0.04345, 0.04345, 0.34000
+    color: '#3B3523'
+  - label: dark lamp core
+    min: 0.04345, -0.04345, 0.05700
+    max: 0.07900, 0.04345, 0.34000
+    color: '#3B3523'
+  - label: lantern cage upright
+    min: -0.08300, -0.08000, 0.05000
+    max: -0.06500, -0.06200, 0.35000
+    color: '#9C8C66'
+  - label: lantern cage upright
+    min: -0.08300, 0.06200, 0.05000
+    max: -0.06500, 0.08000, 0.35000
+    color: '#9C8C66'
+  - label: lantern cage upright
+    min: 0.06500, -0.08000, 0.05000
+    max: 0.08300, -0.06200, 0.35000
+    color: '#9C8C66'
+  - label: lantern cage upright
+    min: 0.06500, 0.06200, 0.05000
+    max: 0.08300, 0.08000, 0.35000
+    color: '#9C8C66'
+  - label: central cage upright
+    min: -0.01200, -0.09100, 0.05000
+    max: 0.01200, -0.07900, 0.35000
+    color: '#998661'
+  - label: central cage upright
+    min: -0.01200, 0.07900, 0.05000
+    max: 0.01200, 0.09100, 0.35000
+    color: '#998661'
+  - label: lantern upper rim
+    min: -0.06270, -0.11400, 0.34000
+    max: 0.06270, 0.11400, 0.38300
+    color: '#A3936B'
+  - label: lantern upper rim
+    min: -0.11400, -0.06270, 0.34000
+    max: -0.06270, 0.06270, 0.38300
+    color: '#A3936B'
+  - label: lantern upper rim
+    min: 0.06270, -0.06270, 0.34000
+    max: 0.11400, 0.06270, 0.38300
+    color: '#A3936B'
+  - label: handle upright
+    min: -0.10100, -0.01600, 0.38000
+    max: -0.07700, 0.01600, 0.50000
+    color: '#9E8B60'
+  - label: handle upright
+    min: 0.07700, -0.01600, 0.38000
+    max: 0.10100, 0.01600, 0.50000
+    color: '#9E8B60'
+  - label: carrying handle
+    min: -0.07700, -0.01600, 0.47800
+    max: 0.07700, 0.01600, 0.51000
+    color: '#BBA77A'
+- type: cmu3DModel
+  id: CMU3DRedGroundBeacon
+  label: Small red ground beacon
+  sourcePrototypes:
+  - RMCLightStickRedSmall
+  status: draft
+  description: Slim red signal beacon on a small ground foot, without a tall post. Glow is a surface color, not live
+    lighting. Source frames and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    appearance changes remain unfinished.
+  sourceDirections: 1
+  referencePrototype: RMCLightStickRedSmall
+  referenceRsi: /Textures/_RMC14/Objects/Misc/Lights/lightstick.rsi
+  referenceState: lightstick_red_variant1
+  parts:
+  - label: beacon foot
+    min: -0.03740, -0.06800, 0.00000
+    max: 0.03740, 0.06800, 0.05200
+    color: '#737E7B'
+  - label: beacon foot
+    min: -0.06800, -0.03740, 0.00000
+    max: -0.03740, 0.03740, 0.05200
+    color: '#737E7B'
+  - label: beacon foot
+    min: 0.03740, -0.03740, 0.00000
+    max: 0.06800, 0.03740, 0.05200
+    color: '#737E7B'
+  - label: beacon lamp collar
+    min: -0.03025, -0.05500, 0.09000
+    max: 0.03025, 0.05500, 0.13000
+    color: '#505953'
+  - label: beacon lamp collar
+    min: -0.05500, -0.03025, 0.09000
+    max: -0.03025, 0.03025, 0.13000
+    color: '#505953'
+  - label: beacon lamp collar
+    min: 0.03025, -0.03025, 0.09000
+    max: 0.05500, 0.03025, 0.13000
+    color: '#505953'
+  - label: red beacon lens
+    min: -0.03300, -0.06000, 0.13000
+    max: 0.03300, 0.06000, 0.31000
+    color: '#B52140'
+  - label: red beacon lens
+    min: -0.06000, -0.03300, 0.13000
+    max: -0.03300, 0.03300, 0.31000
+    color: '#B52140'
+  - label: red beacon lens
+    min: 0.03300, -0.03300, 0.13000
+    max: 0.06000, 0.03300, 0.31000
+    color: '#B52140'
+  - label: red lens core
+    min: -0.01400, -0.06300, 0.15000
+    max: 0.01400, -0.05800, 0.29000
+    color: '#FA6680'
+  - label: beacon cap
+    min: -0.03410, -0.06200, 0.31000
+    max: 0.03410, 0.06200, 0.33800
+    color: '#632F43'
+  - label: beacon cap
+    min: -0.06200, -0.03410, 0.31000
+    max: -0.03410, 0.03410, 0.33800
+    color: '#632F43'
+  - label: beacon cap
+    min: 0.03410, -0.03410, 0.31000
+    max: 0.06200, 0.03410, 0.33800
+    color: '#632F43'
+- type: cmu3DModel
+  id: CMU3DRedBeaconPost
+  label: Red beacon post
+  sourcePrototypes:
+  - RMCLightStick
+  status: draft
+  description: Slim red signal beacon on a narrow metal post. Glow is a surface color, not live lighting. Source frames
+    and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime appearance changes remain
+    unfinished.
+  sourceDirections: 1
+  referencePrototype: RMCLightStick
+  referenceRsi: /Textures/_RMC14/Objects/Misc/Lights/lightstick.rsi
+  referenceState: lightstick_spoke1
+  parts:
+  - label: beacon foot
+    min: -0.05225, -0.09500, 0.00000
+    max: 0.05225, 0.09500, 0.05200
+    color: '#737E7B'
+  - label: beacon foot
+    min: -0.09500, -0.05225, 0.00000
+    max: -0.05225, 0.05225, 0.05200
+    color: '#737E7B'
+  - label: beacon foot
+    min: 0.05225, -0.05225, 0.00000
+    max: 0.09500, 0.05225, 0.05200
+    color: '#737E7B'
+  - label: beacon post
+    min: -0.01800, -0.01800, 0.05000
+    max: 0.01800, 0.01800, 1.02000
+    color: '#71837F'
+  - label: beacon lamp collar
+    min: -0.03025, -0.05500, 1.02000
+    max: 0.03025, 0.05500, 1.06000
+    color: '#505953'
+  - label: beacon lamp collar
+    min: -0.05500, -0.03025, 1.02000
+    max: -0.03025, 0.03025, 1.06000
+    color: '#505953'
+  - label: beacon lamp collar
+    min: 0.03025, -0.03025, 1.02000
+    max: 0.05500, 0.03025, 1.06000
+    color: '#505953'
+  - label: red beacon lens
+    min: -0.03300, -0.06000, 1.06000
+    max: 0.03300, 0.06000, 1.24000
+    color: '#B52140'
+  - label: red beacon lens
+    min: -0.06000, -0.03300, 1.06000
+    max: -0.03300, 0.03300, 1.24000
+    color: '#B52140'
+  - label: red beacon lens
+    min: 0.03300, -0.03300, 1.06000
+    max: 0.06000, 0.03300, 1.24000
+    color: '#B52140'
+  - label: red lens core
+    min: -0.01400, -0.06300, 1.08000
+    max: 0.01400, -0.05800, 1.22000
+    color: '#FA6680'
+  - label: beacon cap
+    min: -0.03410, -0.06200, 1.24000
+    max: 0.03410, 0.06200, 1.26800
+    color: '#632F43'
+  - label: beacon cap
+    min: -0.06200, -0.03410, 1.24000
+    max: -0.03410, 0.03410, 1.26800
+    color: '#632F43'
+  - label: beacon cap
+    min: 0.03410, -0.03410, 1.24000
+    max: 0.06200, 0.03410, 1.26800
+    color: '#632F43'
+- type: cmu3DModel
+  id: CMU3DFloorVentPump
+  label: Flush floor vent
+  sourcePrototypes:
+  - CMVentPump
+  status: draft
+  description: Low square vent flange and open grille. The on-state base was inspected separately from its runtime welded
+    overlay; no above-floor machine pedestal is added. Source frames and saved placement inspected; height, depth and
+    hidden surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 4
+  referencePrototype: CMVentPump
+  referenceRsi: /Textures/_RMC14/Structures/Piping/Atmospherics/vent_pump.rsi
+  referenceState: 'on'
+  parts:
+  - label: floor vent flange
+    min: -0.32000, -0.32000, 0.00000
+    max: 0.32000, 0.32000, 0.02400
+    color: '#68756C'
+  - label: vent dark inset
+    min: -0.20500, -0.20500, 0.02400
+    max: 0.20500, 0.20500, 0.02800
+    color: '#253830'
+  - label: vent horizontal slat
+    min: -0.18500, -0.17400, 0.03300
+    max: 0.18500, -0.14700, 0.04700
+    color: '#667F70'
+  - label: vent horizontal slat
+    min: -0.18500, -0.09600, 0.03300
+    max: 0.18500, -0.06900, 0.04700
+    color: '#667F70'
+  - label: vent horizontal slat
+    min: -0.18500, -0.01800, 0.03300
+    max: 0.18500, 0.00900, 0.04700
+    color: '#667F70'
+  - label: vent horizontal slat
+    min: -0.18500, 0.06000, 0.03300
+    max: 0.18500, 0.08700, 0.04700
+    color: '#667F70'
+  - label: vent horizontal slat
+    min: -0.18500, 0.13800, 0.03300
+    max: 0.18500, 0.16500, 0.04700
+    color: '#667F70'
+  - label: recessed grille support
+    min: -0.14800, -0.19300, 0.02900
+    max: -0.12700, 0.19300, 0.03300
+    color: '#425E51'
+  - label: recessed grille support
+    min: 0.12700, -0.19300, 0.02900
+    max: 0.14800, 0.19300, 0.03300
+    color: '#425E51'
+  - label: flange corner bolt
+    min: -0.26600, -0.26600, 0.02400
+    max: -0.24400, -0.24400, 0.03600
+    color: '#42564B'
+  - label: flange corner bolt
+    min: -0.26600, 0.24600, 0.02400
+    max: -0.24400, 0.26800, 0.03600
+    color: '#42564B'
+  - label: flange corner bolt
+    min: 0.24600, -0.26600, 0.02400
+    max: 0.26800, -0.24400, 0.03600
+    color: '#42564B'
+  - label: flange corner bolt
+    min: 0.24600, 0.24600, 0.02400
+    max: 0.26800, 0.26800, 0.03600
+    color: '#42564B'
+  - label: status socket
+    min: -0.05100, -0.29100, 0.02400
+    max: 0.05100, -0.22100, 0.03100
+    color: '#394E49'
+  - label: cyan status inset
+    min: -0.02400, -0.27800, 0.03100
+    max: 0.02400, -0.23700, 0.03700
+    color: '#458F9C'
+  - label: status glint
+    min: -0.01800, -0.27300, 0.03700
+    max: 0.00300, -0.24500, 0.03900
+    color: '#6DB9C7'
+- type: cmu3DModel
+  id: CMU3DWideWashbasin
+  label: Wide wall washbasin
+  sourcePrototypes:
+  - SinkWide
+  status: draft
+  description: Pale open basin, faucet, two tap handles and visible drain return. Rear edge sits at local north boundary
+    matching the saved alcove; the bowl is hollow, not a closed block. Source frames and saved placement inspected; height,
+    depth and hidden surfaces remain inferred. Runtime appearance changes remain unfinished.
+  sourceDirections: 4
+  referencePrototype: SinkWide
+  referenceRsi: /Textures/Structures/Furniture/sink.rsi
+  referenceState: sink_wide
+  parts:
+  - label: sink wall bracket
+    min: -0.23000, 0.41500, 0.80000
+    max: 0.23000, 0.47800, 0.91000
+    color: '#605E63'
+  - label: basin bottom
+    min: -0.29000, 0.04500, 0.77500
+    max: 0.29000, 0.41000, 0.79500
+    color: '#807980'
+  - label: basin side
+    min: -0.33000, 0.00500, 0.79500
+    max: -0.29000, 0.44500, 1.00000
+    color: '#B7A9AD'
+  - label: basin side
+    min: 0.29000, 0.00500, 0.79500
+    max: 0.33000, 0.44500, 1.00000
+    color: '#B7A9AD'
+  - label: basin rim end
+    min: -0.29000, 0.00500, 0.79500
+    max: 0.29000, 0.04500, 1.00000
+    color: '#C1B3B5'
+  - label: basin rim end
+    min: -0.29000, 0.40500, 0.79500
+    max: 0.29000, 0.44500, 1.00000
+    color: '#C1B3B5'
+  - label: basin inner floor
+    min: -0.27000, 0.05300, 0.79200
+    max: 0.27000, 0.39800, 0.80600
+    color: '#514D59'
+  - label: basin front shine
+    min: -0.30000, -0.00600, 0.95800
+    max: 0.30000, 0.00500, 0.98500
+    color: '#D4C6C8'
+  - label: drain metal ring
+    min: -0.02255, 0.20900, 0.80600
+    max: 0.02255, 0.29100, 0.82000
+    color: '#949999'
+  - label: drain metal ring
+    min: -0.04100, 0.22745, 0.80600
+    max: -0.02255, 0.27255, 0.82000
+    color: '#949999'
+  - label: drain metal ring
+    min: 0.02255, 0.22745, 0.80600
+    max: 0.04100, 0.27255, 0.82000
+    color: '#949999'
+  - label: drain opening
+    min: -0.01265, 0.22700, 0.82000
+    max: 0.01265, 0.27300, 0.82400
+    color: '#333D3E'
+  - label: drain opening
+    min: -0.02300, 0.23735, 0.82000
+    max: -0.01265, 0.26265, 0.82400
+    color: '#333D3E'
+  - label: drain opening
+    min: 0.01265, 0.23735, 0.82000
+    max: 0.02300, 0.26265, 0.82400
+    color: '#333D3E'
+  - label: drain downpipe
+    min: -0.03800, 0.22000, 0.20000
+    max: 0.03800, 0.27800, 0.77600
+    color: '#777A7E'
+  - label: drain return
+    min: -0.02900, 0.24300, 0.17800
+    max: 0.02900, 0.30100, 0.23600
+    color: '#6D7376'
+  - label: drain return
+    min: -0.02900, 0.28700, 0.17200
+    max: 0.02900, 0.34500, 0.23000
+    color: '#6D7376'
+  - label: drain return
+    min: -0.02900, 0.33100, 0.16600
+    max: 0.02900, 0.38900, 0.22400
+    color: '#6D7376'
+  - label: drain return
+    min: -0.02900, 0.37500, 0.16000
+    max: 0.02900, 0.43300, 0.21800
+    color: '#6D7376'
+  - label: drain return
+    min: -0.02900, 0.41900, 0.15400
+    max: 0.02900, 0.47700, 0.21200
+    color: '#6D7376'
+  - label: faucet stem
+    min: -0.02700, 0.35700, 0.99000
+    max: 0.02700, 0.41500, 1.18000
+    color: '#B0A7B0'
+  - label: faucet spout
+    min: -0.02700, 0.22000, 1.15500
+    max: 0.02700, 0.36000, 1.19000
+    color: '#D1C4CC'
+  - label: tap foot
+    min: -0.16000, 0.36800, 1.00000
+    max: -0.11500, 0.41400, 1.02800
+    color: '#96909B'
+  - label: tap handle
+    min: -0.17700, 0.37600, 1.02800
+    max: -0.09800, 0.40000, 1.05500
+    color: '#707C9D'
+  - label: tap foot
+    min: 0.12000, 0.36800, 1.00000
+    max: 0.16500, 0.41400, 1.02800
+    color: '#96909B'
+  - label: tap handle
+    min: 0.10300, 0.37600, 1.02800
+    max: 0.18200, 0.40000, 1.05500
+    color: '#AE777D'

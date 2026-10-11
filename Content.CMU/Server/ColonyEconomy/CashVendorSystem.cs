@@ -21,6 +21,7 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedIdCardSystem _idCard = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ColonyBankSystem _bank = default!;
 
     public override void Initialize()
     {
@@ -107,11 +108,9 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
                 return;
             deptConsole.DepartmentBudget -= effectivePrice;
         }
-        else
+        else if (!TryPayWithCashAndCard(uid, comp, msg.Actor, effectivePrice))
         {
-            if (comp.InsertedCash < effectivePrice)
-                return;
-            comp.InsertedCash -= effectivePrice;
+            return;
         }
 
         if (taxRevenue > 0)
@@ -122,6 +121,46 @@ public sealed partial class AU14CashVendorSystem : EntitySystem
 
         Spawn(item.ItemId, Transform(uid).Coordinates);
         UpdateUi(uid, comp);
+    }
+
+    /// <summary>
+    ///     Pays with the cash inserted in the machine first, then charges whatever it doesn't cover
+    ///     to the bank account of the ID card the buyer has on them.
+    /// </summary>
+    private bool TryPayWithCashAndCard(EntityUid uid, AU14CashVendorComponent comp, EntityUid buyer, int price)
+    {
+        var fromCash = (int) Math.Min(Math.Floor(comp.InsertedCash), price);
+        var fromCard = price - fromCash;
+
+        if (fromCard > 0)
+        {
+            if (!_idCard.TryFindIdCard(buyer, out var idCard))
+            {
+                _popup.PopupCursor(Loc.GetString("cash-vendor-insufficient-cash"), buyer, PopupType.SmallCaution);
+                return false;
+            }
+
+            var card = idCard.Comp;
+            if (_bank.IsLocked(card, out _))
+            {
+                _popup.PopupCursor(Loc.GetString("cash-vendor-card-locked"), buyer, PopupType.SmallCaution);
+                return false;
+            }
+
+            if (card.AccountBalance < fromCard)
+            {
+                _popup.PopupCursor(Loc.GetString("cash-vendor-insufficient-funds"), buyer, PopupType.SmallCaution);
+                return false;
+            }
+
+            card.AccountBalance -= fromCard;
+            Dirty(idCard);
+            _bank.RecordTransaction(idCard, AtmHistoryKind.Purchase, fromCard);
+            _popup.PopupCursor(Loc.GetString("cash-vendor-card-charged", ("amount", fromCard)), buyer);
+        }
+
+        comp.InsertedCash -= fromCash;
+        return true;
     }
 
     private void OnReturnChange(EntityUid uid, AU14CashVendorComponent comp, AU14CashVendorReturnChangeBuiMsg msg)

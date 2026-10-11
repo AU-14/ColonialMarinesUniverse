@@ -16,7 +16,7 @@
   weight:  20
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 0
+  ghostsNeeded: 0
   roundstart: false
 
 - type: thirdParty
@@ -28,5 +28,5 @@
   weight: 1
   minplayers: 500
   maxplayers: 600
-  GhostsNeeded: 600
+  ghostsNeeded: 600
   roundstart: false

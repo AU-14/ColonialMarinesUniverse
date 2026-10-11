@@ -118,8 +118,6 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         SubscribeLocalEvent<YautjaBracerComponent, YautjaAddTrackedItemActionEvent>(OnAddTrackedItem);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaRemoveTrackedItemActionEvent>(OnRemoveTrackedItem);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateStabilisingCrystalActionEvent>(OnCreateStabilisingCrystal);
-        SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateFieldRationActionEvent>(OnCreateFieldRation);
-        SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHuntingCanteenActionEvent>(OnCreateHuntingCanteen);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHumanStabilisingCrystalActionEvent>(OnCreateHumanStabilisingCrystal);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaCreateHuntingTrapActionEvent>(OnCreateHuntingTrap);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaBracerMisuseDoAfterEvent>(OnBracerMisuseDoAfter);
@@ -423,26 +421,6 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         TryCreateHumanStabilisingCrystal(ent, args.Performer);
     }
 
-    private void OnCreateFieldRation(Entity<YautjaBracerComponent> ent, ref YautjaCreateFieldRationActionEvent args)
-    {
-        if (args.Handled || !_rmcActions.TryUseAction(args))
-            return;
-
-        args.Handled = true;
-        TryCreateItem(ent, args.Performer, ent.Comp.FieldRationPrototype, ent.Comp.FieldRationCost,
-            ent.Comp.FieldRationCooldown, ref ent.Comp.NextFieldRation, "cmu-yautja-bracer-item-created");
-    }
-
-    private void OnCreateHuntingCanteen(Entity<YautjaBracerComponent> ent, ref YautjaCreateHuntingCanteenActionEvent args)
-    {
-        if (args.Handled || !_rmcActions.TryUseAction(args))
-            return;
-
-        args.Handled = true;
-        TryCreateItem(ent, args.Performer, ent.Comp.HuntingCanteenPrototype, ent.Comp.HuntingCanteenCost,
-            ent.Comp.HuntingCanteenCooldown, ref ent.Comp.NextHuntingCanteen, "cmu-yautja-bracer-item-created");
-    }
-
     private void OnCreateHuntingTrap(Entity<YautjaBracerComponent> ent, ref YautjaCreateHuntingTrapActionEvent args)
     {
         if (args.Handled)
@@ -576,18 +554,18 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
             case YautjaBracerMisuseAction.RemoveTrackedItem:
                 return RemoveTrackedItem(bracer, user);
             case YautjaBracerMisuseAction.CreateStabilisingCrystal:
-                return TryCreateItem(bracer, user, bracer.Comp.StabilisingCrystalPrototype, bracer.Comp.StabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-crystal-created");
+                return TryCreateItem(bracer, user, bracer.Comp.StabilisingCrystalPrototype, bracer.Comp.StabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal);
             case YautjaBracerMisuseAction.CreateHumanStabilisingCrystal:
-                return TryCreateItem(bracer, user, bracer.Comp.HumanStabilisingCrystalPrototype, bracer.Comp.HumanStabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-human-crystal-created");
+                return TryCreateItem(bracer, user, bracer.Comp.HumanStabilisingCrystalPrototype, bracer.Comp.HumanStabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal);
             case YautjaBracerMisuseAction.CreateHealingCapsule:
                 if (!bracer.Comp.HealingEnabled)
                 {
                     _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-healing-disabled"), user, user, PopupType.MediumCaution);
                     return true;
                 }
-                return TryCreateItem(bracer, user, bracer.Comp.HealingCapsulePrototype, bracer.Comp.HealingCapsuleCost, bracer.Comp.HealingCapsuleCooldown, ref bracer.Comp.NextHealingCapsule, "cmu-yautja-bracer-healing-capsule-created");
+                return TryCreateItem(bracer, user, bracer.Comp.HealingCapsulePrototype, bracer.Comp.HealingCapsuleCost, bracer.Comp.HealingCapsuleCooldown, ref bracer.Comp.NextHealingCapsule);
             case YautjaBracerMisuseAction.CreateHuntingTrap:
-                return TryCreateItem(bracer, user, bracer.Comp.HuntingTrapPrototype, bracer.Comp.HuntingTrapCost, bracer.Comp.HuntingTrapCooldown, ref bracer.Comp.NextHuntingTrap, "cmu-yautja-bracer-hunting-trap-created");
+                return TryCreateItem(bracer, user, bracer.Comp.HuntingTrapPrototype, bracer.Comp.HuntingTrapCost, bracer.Comp.HuntingTrapCooldown, ref bracer.Comp.NextHuntingTrap);
             case YautjaBracerMisuseAction.None:
             case YautjaBracerMisuseAction.SelfDestruct:
             default:
@@ -1325,8 +1303,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         EntProtoId prototype,
         FixedPoint2 cost,
         TimeSpan cooldown,
-        ref TimeSpan nextUse,
-        LocId createdMessage)
+        ref TimeSpan nextUse)
     {
         if (bracer.Comp.User != user)
             return false;
@@ -1350,7 +1327,6 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
         _hands.TryPickupAnyHand(user, item);
         nextUse = _timing.CurTime + cooldown;
         _audio.PlayPvs(bracer.Comp.FabricateSound, bracer.Owner);
-        _popup.PopupEntity(Loc.GetString(createdMessage, ("item", item)), user, user);
         return true;
     }
 
@@ -1451,7 +1427,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
                     EntityManager.System<YautjaAttachmentSystem>().TryToggleCaster((bracer.Owner, casterGearContainer), user);
                 break;
             case 5:
-                TryCreateItem(bracer, user, bracer.Comp.StabilisingCrystalPrototype, bracer.Comp.StabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal, "cmu-yautja-bracer-crystal-created");
+                TryCreateItem(bracer, user, bracer.Comp.StabilisingCrystalPrototype, bracer.Comp.StabilisingCrystalCost, bracer.Comp.StabilisingCrystalCooldown, ref bracer.Comp.NextStabilisingCrystal);
                 break;
             case 6:
                 EntityManager.System<YautjaSmartDiscSystem>().TryCallDisc(bracer, user);

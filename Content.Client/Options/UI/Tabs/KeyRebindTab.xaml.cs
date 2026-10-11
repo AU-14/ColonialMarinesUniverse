@@ -381,6 +381,7 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(EngineKeyFunctions.CameraRotateRight);
             AddButton(EngineKeyFunctions.CameraReset);
             AddButton(ContentKeyFunctions.RotateCameraWithMouse);
+            AddButton(CMUKeyFunctions.CMUToggleFirstPersonMouse); // CMU14
             AddButton(ContentKeyFunctions.ZoomIn);
             AddButton(ContentKeyFunctions.ZoomOut);
             AddButton(ContentKeyFunctions.ResetZoom);

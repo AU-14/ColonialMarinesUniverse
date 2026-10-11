@@ -1,0 +1,16 @@
+<Document>
+  # Latin American Colonial Navy
+
+  <Box>
+    <CMUGuideOutfitEmbed Gear="AU14GearLACNCommandoSniperTeamSniper" Caption="Commando Sniper"/>
+    <CMUGuideOutfitEmbed Gear="AU14GearLACNCommandoSniperTeamSpotter" Caption="Commando Spotter"/>
+  </Box>
+
+  The [bold]Latin American Colonial Navy[/bold] (LACN) is a branch of the [textlink="United Americas" link="CMUGuideLoreUA"]' space forces. Its [bold]Landing Forces[/bold] specialize in rapid deployment and shock tactics for planetary assault and occupation.
+
+  ## Under Construction
+  This page is still being written.
+
+  ## Playable Units
+  - [textlink="LACN Landing Forces" link="CMUGuideLorePlatoonLACN"]
+</Document>

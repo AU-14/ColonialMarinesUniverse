@@ -8,7 +8,6 @@ using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.Yautja;
-using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
@@ -1007,17 +1006,6 @@ public sealed partial class ThreatSystem : EntitySystem
         EnsureComp<NpcFactionMemberComponent>(entity);
         _npcFaction.AddFaction((entity, CompOrNull<NpcFactionMemberComponent>(entity)), threatNPCFaction);
         RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(entity));
-    }
-
-    internal bool HasCrashedDropship()
-    {
-        EntityQueryEnumerator<DropshipComponent> dropships = EntityQueryEnumerator<DropshipComponent>();
-        while (dropships.MoveNext(out _, out DropshipComponent? dropship))
-        {
-            return dropship.Crashed;
-        }
-
-        return false;
     }
 
     internal bool IsExcludedFromVictory(EntityUid uid, MobStateComponent mobState)

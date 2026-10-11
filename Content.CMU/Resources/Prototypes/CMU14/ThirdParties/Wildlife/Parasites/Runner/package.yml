@@ -57,7 +57,7 @@
 - type: thirdParty
   id: XenoParasiteRunnerParty
   partyspawn: XenoParasiteRunnerPartySpawn
-  blacklistedgamemodes:
+  blacklistedGamemodes:
   - insurgency
   - forceonforce
   - DistressSignal
@@ -65,5 +65,5 @@
   weight: 10
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 2
+  ghostsNeeded: 2
   roundstart: false

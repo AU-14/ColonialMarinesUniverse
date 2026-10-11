@@ -113,6 +113,24 @@ public sealed class CrtScreenControl : Control
     /// <summary>Set when the render-target path threw, so the console command can report why.</summary>
     public string? LastError { get; private set; }
 
+    /// <summary>
+    ///     Whether the pass draws at all right now. A surface that needs its scanlines either way -
+    ///     a prop screen still looks like a tube with the theme off - draws its own when this is false.
+    /// </summary>
+    /// <remarks>
+    ///     Checked here, every frame, rather than trusted to callers. This is a CRT-theme effect and
+    ///     must never appear on the base UI - but each window gating it for itself means every new
+    ///     caller has to remember, and has to subscribe to every cvar that could change the answer.
+    ///     OptionsMenu did neither correctly: it watched CrtUiEnabled but only re-applied the
+    ///     palette, so turning the theme off left the grain running on the settings window.
+    /// </remarks>
+    public bool Drawing => _shader != null
+        && Source != null
+        && Visible
+        && StyleNano.CrtUiEnabled
+        && _cfg.GetCVar(CCVars.CMUCrtEffectIntensity) > 0f
+        && LastError == null;
+
     public CrtScreenControl()
     {
         IoCManager.InjectDependencies(this);
@@ -139,15 +157,8 @@ public sealed class CrtScreenControl : Control
     {
         var handle = renderHandle.DrawingHandleScreen;
 
-        if (_shader == null || Source == null)
-            return;
-
-        // Checked here, every frame, rather than trusted to callers. This is a CRT-theme effect and
-        // must never appear on the base UI - but each window gating it for itself means every new
-        // caller has to remember, and has to subscribe to every cvar that could change the answer.
-        // OptionsMenu did neither correctly: it watched CrtUiEnabled but only re-applied the
-        // palette, so turning the theme off left the grain running on the settings window.
-        if (!StyleNano.CrtUiEnabled)
+        // A failed render pass is retried every frame; LastError only gates Drawing for callers.
+        if (_shader == null || Source == null || !StyleNano.CrtUiEnabled)
             return;
 
         var intensity = _cfg.GetCVar(CCVars.CMUCrtEffectIntensity);

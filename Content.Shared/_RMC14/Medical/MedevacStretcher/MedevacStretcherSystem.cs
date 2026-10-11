@@ -173,9 +173,11 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
 
         var stretcherCoords = stretcher.ToCoordinates();
         var snappedCoords = stretcher.ToCoordinates().SnapToGrid(EntityManager);
-        if (!_dropshipWeapon.CasDebug &&
-            (!_areas.TryGetArea(snappedCoords, out var stretcherArea, out _) ||
-            !stretcherArea.Value.Comp.Medevac))
+        // CMU14: use effective roof permissions, including hive protection.
+        // if (!_dropshipWeapon.CasDebug &&
+        //     (!_areas.TryGetArea(snappedCoords, out var stretcherArea, out _) ||
+        //     !stretcherArea.Value.Comp.Medevac))
+        if (!_dropshipWeapon.CasDebug && !_areas.CanMedevac(snappedCoords))
         {
             _popup.PopupClient(Loc.GetString("rmc-medevac-area-not-cas"), stretcherCoords, user);
             return;

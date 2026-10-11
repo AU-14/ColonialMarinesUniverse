@@ -567,8 +567,8 @@ public sealed partial class HardpointSystem : EntitySystem
         var previous = frameIntegrity.Integrity;
         var previousMax = frameIntegrity.MaxIntegrity;
         frameIntegrity.MaxIntegrity = totalMaxIntegrity;
-        // CMU14: fitting or refreshing hardpoints cannot restore a cooked-off hull.
-        frameIntegrity.Integrity = IsCookedOff(vehicle) ? 0 : Math.Clamp(totalIntegrity, 0f, totalMaxIntegrity);
+        // CMU14: fitting or refreshing hardpoints cannot restore a permanently wrecked hull.
+        frameIntegrity.Integrity = IsDestroyedBeyondRepair(vehicle) ? 0 : Math.Clamp(totalIntegrity, 0f, totalMaxIntegrity);
 
         if (Math.Abs(previous - frameIntegrity.Integrity) < 0.01f &&
             Math.Abs(previousMax - frameIntegrity.MaxIntegrity) < 0.01f)
@@ -1340,8 +1340,8 @@ public sealed partial class HardpointSystem : EntitySystem
 
     private void OnVehicleCanRun(Entity<HardpointSlotsComponent> ent, ref VehicleCanRunEvent args)
     {
-        // CMU14: cook-off is an irreversible loss of the vehicle.
-        if (IsCookedOff(ent.Owner))
+        // CMU14: a permanently wrecked vehicle cannot run.
+        if (IsDestroyedBeyondRepair(ent.Owner))
         {
             args.CanRun = false;
             return;
@@ -1579,7 +1579,7 @@ public sealed partial class HardpointSystem : EntitySystem
         current = frame.Integrity;
         max = GetFactoryMaxIntegrity(vehicle, frame);
         // CMU14: surviving parts do not count as a repairable hull.
-        if (IsCookedOff(vehicle))
+        if (IsDestroyedBeyondRepair(vehicle))
         {
             current = 0;
             return true;
@@ -2624,8 +2624,8 @@ public sealed partial class HardpointSystem : EntitySystem
     // Used to Rejuv (Content.Server/Blackfoot/VehicleRejuvenateSystem)
     public void ResetAllHardpointsToFullHealth(EntityUid vehicle)
     {
-        // CMU14: service/reset paths cannot revive a cooked-off tank.
-        if (IsCookedOff(vehicle))
+        // CMU14: service/reset paths cannot revive a permanently wrecked vehicle.
+        if (IsDestroyedBeyondRepair(vehicle))
             return;
 
         if (!TryComp<HardpointSlotsComponent>(vehicle, out var hardpoints)

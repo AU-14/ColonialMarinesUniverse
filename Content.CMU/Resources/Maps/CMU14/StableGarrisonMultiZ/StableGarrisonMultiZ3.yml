@@ -536,6 +536,8 @@ entities:
         colorHex: '#02020B'
       - time: 1
         colorHex: '#000000'
+    - type: CMU3DElevation
+      profile: CMU3DStableGarrisonRedux3
     - type: MapGrid
       chunks:
         0,0:

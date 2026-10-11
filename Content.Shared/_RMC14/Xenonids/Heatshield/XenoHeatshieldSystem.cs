@@ -41,9 +41,11 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
     [Dependency] private XenoSystem _xeno = default!;
 
     private const float BileSprayTileRadius = 0.65f;
+    private const int BileSprayLength = 3; // CMU14: triple the original one-row reach.
 
     private readonly HashSet<Entity<FlammableComponent>> _nearbyFlammables = new();
     private readonly HashSet<EntityUid> _bileSprayTargets = new();
+    private readonly List<EntityCoordinates> _bileSprayTiles = new(); // CMU14
 
     public override void Initialize()
     {
@@ -87,6 +89,13 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
             return;
         }
 
+        // CMU14: a selected enemy takes priority over fire on the ground beneath it.
+        if (args.Entity is { } hostile && HasComp<FlammableComponent>(hostile) &&
+            CanUseBileOnEntity(xeno, hostile) && TryUseBileSpray(xeno, args.Target, ref args))
+        {
+            return;
+        }
+
         if (TryExtinguishTileFire(xeno, args.Target, ref args))
             return;
 
@@ -115,20 +124,32 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
         return true;
     }
 
+    // CMU14: include the selected enemy and extend the existing three-wide spray to three rows.
     private bool TryUseBileSpray(Entity<XenoHeatshieldComponent> xeno, EntityCoordinates target, ref XenoVomitBileActionEvent args)
     {
         _bileSprayTargets.Clear();
+        _bileSprayTiles.Clear();
+
+        if (args.Entity is { } selected && HasComp<FlammableComponent>(selected) &&
+            CanUseBileOnEntity(xeno, selected))
+        {
+            _bileSprayTargets.Add(selected);
+        }
 
         var xenoCoords = _transform.GetMoverCoordinates(xeno);
-        if (!TryGetBileSprayVectors(xenoCoords, target, out var forward, out var side))
-            return false;
+        if (TryGetBileSprayVectors(xenoCoords, target, out var forward, out var side))
+        {
+            for (var distance = 1; distance <= BileSprayLength; distance++)
+            {
+                var center = _rmcMap.SnapToGrid(xenoCoords.Offset(forward * distance));
+                _bileSprayTiles.Add(center.Offset(-side));
+                _bileSprayTiles.Add(center);
+                _bileSprayTiles.Add(center.Offset(side));
+            }
 
-        var center = _rmcMap.SnapToGrid(xenoCoords.Offset(forward));
-        var left = center.Offset(-side);
-        var right = center.Offset(side);
-        AddBileSprayTargets(xeno, left);
-        AddBileSprayTargets(xeno, center);
-        AddBileSprayTargets(xeno, right);
+            foreach (var tile in _bileSprayTiles)
+                AddBileSprayTargets(xeno, tile);
+        }
 
         if (_bileSprayTargets.Count == 0)
             return false;
@@ -140,9 +161,8 @@ public sealed partial class XenoHeatshieldSystem : EntitySystem
         if (_flammable.IsOnFire((xeno.Owner, null)))
         {
             _audio.PlayPredicted(FireSpewSound, xeno, xeno);
-            SpawnAtPosition(FireSpewEffectPrototype, left);
-            SpawnAtPosition(FireSpewEffectPrototype, center);
-            SpawnAtPosition(FireSpewEffectPrototype, right);
+            foreach (var tile in _bileSprayTiles)
+                SpawnAtPosition(FireSpewEffectPrototype, tile);
         }
 
         foreach (var bileTarget in _bileSprayTargets)

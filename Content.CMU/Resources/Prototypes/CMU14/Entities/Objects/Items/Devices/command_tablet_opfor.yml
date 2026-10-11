@@ -7,12 +7,22 @@
   - type: AccessReader
     access: [[ "AU14AccessOpforCommand" ]]
   - type: MarineCommunicationsComputer
-    canCreateEcho: false
-    canGiveMedals: true
-    canInitiateEvac: true
     faction: opfor
   - type: TacticalMapComputer
     faction: opfor
   - type: MarineControlComputer
     faction: opfor
-    canPrintCommendations: false
+
+- type: entity
+  parent: AU14TabletGovfor
+  id: CMUCommandTabletAdmin
+  name: admin command tablet
+  suffix: Admin, DO NOT MAP, CMU
+  components:
+  - type: AccessReader
+    access:
+    - [ "AU14AccessOpforCommand" ]
+    - [ "AU14AccessGovforCommand" ]
+  - type: CMUAdminTablet
+  - type: MarineCommunicationsComputer
+    announceAuthor: rmc-announcement-author-highcommand

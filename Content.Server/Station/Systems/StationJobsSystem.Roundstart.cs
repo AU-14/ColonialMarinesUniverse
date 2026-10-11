@@ -562,6 +562,11 @@ public sealed partial class StationJobsSystem
                 if (!(roleBans == null || !roleBans.Contains(jobId))) //TODO: Replace with IsRoleBanned
                     continue;
 
+                // cmu edit start: military physical standards
+                if (!Content.Shared.CMU14.Roles.CMUMilitaryHeightRequirement.Check(job, EntityManager.ComponentFactory, profile, out _))
+                    continue;
+                // cmu edit end
+
                 if (!outputDict.TryGetValue(jobId, out var priorities))
                 {
                     priorities = new Dictionary<JobPriority, HashSet<NetUserId>>();

@@ -17,7 +17,9 @@
     keyOut: trigger
     delay: 4
     beepSound:
-      path: "/Audio/_RMC14/Explosion/armbomb.ogg"
+      # cmu edit start: grenade priming sound (cmss13-pve#517)
+      path: "/Audio/CMU14/Weapons/Grenades/grenade.ogg"
+      # cmu edit end
       params:
         volume: -5
     initialBeepDelay: 0
@@ -80,9 +82,14 @@
   - CMGrenadeBase
   - RMCM40DPTags
   id: CMGrenadeHighExplosive
-  name: 30mm HEDP grenade
-  description: High-Explosive Dual-Purpose. A small, but deceptively strong blast grenade that has been phasing out the M15 HE grenades alongside the 30mm HEFA. Capable of being loaded in grenade launchers, or thrown by hand.
+  # cmu edit start: M40 HEDP designation and impact fuse (cmss13-pve#517)
+  name: M40 HEDP grenade
+  description: High-Explosive Dual-Purpose. A small, but deceptively strong grenade that has been phasing out the M15 HE grenade. Explodes with a powerful blast. Can be fired from a grenade launcher for impact detonation, or primed in-hand and thrown to detonate after 4 seconds.
+  # cmu edit end
   components:
+  # cmu edit start: detonate on impact when fired from a launcher (cmss13-pve#517)
+  - type: TriggerOnFixedDistanceStop
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40hedp.rsi
   - type: ExplodeOnTrigger
@@ -107,22 +114,30 @@
   - CMGrenadeBase
   - RMCM40DPTags
   id: CMGrenadeSmoke
-  name: 30mm HSDP smoke grenade
-  description: The 30mm HSDP is a small, but powerful smoke grenade. Based off the same platform as the 30mm HEDP. It is set to detonate in 2.5 seconds.
+  # cmu edit start: M47 HSDP designation and impact fuse (cmss13-pve#517)
+  name: M47 HSDP smoke grenade
+  description: The M47 HSDP is a small, but powerful smoke grenade. Based off the same platform as the M40 HEDP. Can be fired from a grenade launcher for impact detonation, or primed in-hand and thrown to detonate after 2.5 seconds.
+  # cmu edit end
   components:
+  # cmu edit start: detonate on impact when fired from a launcher (cmss13-pve#517)
+  - type: TriggerOnFixedDistanceStop
+  # cmu edit end
   - type: TimerTrigger
     delay: 2.5
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40smoke.rsi
   - type: SpawnOnTrigger
-    proto: RMCSmoke
+    # cmu edit start: smoke grenades last 35 seconds
+    proto: CMUSmokeGrenade
+    # cmu edit end
   - type: EmitSoundOnTrigger
     sound: /Audio/Effects/smoke.ogg
     positional: true
   - type: DeleteOnTrigger
+  # cmu edit start: use the standard grenade arm sound
   - type: TimerTriggerVisuals
-    primingSound:
-      path: /Audio/Effects/Smoke-grenade.ogg
+    primingSound: null
+  # cmu edit end
   - type: Tag
     tags:
     - Grenade
@@ -141,6 +156,9 @@
   - type: Sprite
     sprite: _RMC14/Effects/smoke.rsi
     state: smoke2
+    # cmu edit start: non-lethal smoke is darker than WP smoke (cmss13-pve#719)
+    color: "#adadad"
+    # cmu edit end
   - type: TimedDespawn
     lifetime: 10
   - type: Tag
@@ -179,6 +197,9 @@
   - type: Sprite
     sprite: _RMC14/Effects/smoke.rsi
     state: smoke2
+    # cmu edit start: WP smoke is lighter than non-lethal smoke (cmss13-pve#719)
+    color: "#dddddd"
+    # cmu edit end
   - type: TimedDespawn
     lifetime: 5
   - type: Tag
@@ -246,6 +267,10 @@
   name: 30mm HEFA grenade
   description: High-Explosive Fragmenting-Antipersonnel. A small, but deceptively strong fragmentation grenade that has been phasing out the M15 fragmentation grenades alongside the 30mm HEDP. Capable of being loaded in grenade launchers, or thrown by hand.
   components:
+  # cmu edit start: not dual-purpose, so no impact fuse; the launcher's own fuse sets it off (cmss13-pve#517)
+  - type: TriggerOnFixedDistanceStop
+    delay: 10
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40hefa.rsi
   - type: Explosive
@@ -278,8 +303,14 @@
   parent: CMGrenadeHighExplosive
   id: CMGrenadeFragOld
   name: M15 fragmentation grenade
-  description: An outdated UNMC Fragmentation Grenade. With decades of service in the UNMC, the old M15 Fragmentation Grenade is slowly being replaced by the slightly safer 30mm-series grenades. It is set to detonate in 4 seconds.
+  # cmu edit start: no UNMC mentions
+  description: An outdated fragmentation grenade. After decades of service, the old M15 Fragmentation Grenade is slowly being replaced by the slightly safer 30mm-series grenades. It is set to detonate in 4 seconds.
+  # cmu edit end
   components:
+  # cmu edit start: not dual-purpose, so no impact fuse; the launcher's own fuse sets it off (cmss13-pve#517)
+  - type: TriggerOnFixedDistanceStop
+    delay: 10
+  # cmu edit end
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m15frag.rsi
   - type: Explosive
@@ -305,6 +336,11 @@
     maxShrapnel: 0
   - type: CMVocalizeTrigger
   - type: RMCScorchEffect
+  # cmu edit start: M15 pin pull sound (ported from cmss13-pve#560)
+  - type: TimerTrigger
+    beepSound:
+      path: /Audio/CMU14/Weapons/pinpull.ogg
+  # cmu edit end
 
 - type: entity
   parent: CMGrenadeFragOld
@@ -360,13 +396,15 @@
   - RMCM40DPTags
   - CMGrenadeBase
   id: RMCGrenadeIncendiary
-  name: 30mm HIAM grenade
-  description: The 30mm High-explosive-Incendiary, Anti-Mobility grenade is a small, but deceptively strong incendiary grenade designed to disrupt enemy mobility with long-lasting Type B napalm. It is set to detonate in 4 seconds.
+  # cmu edit start: M77 HIAM designation (cmss13-pve#517)
+  name: M77 HIAM incendiary grenade
+  description: High-explosive-Incendiary, Anti-Mobility. The M77 is a small, but deceptively strong incendiary grenade designed to disrupt enemy mobility with long-lasting Type B napalm spread by a small explosive charge within the casing. It is set to detonate in 4 seconds.
+  # cmu edit end
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Grenades/m40hidp.rsi
   - type: TimerTrigger
-    beepSound: null
+    # cmu edit: keep the standard grenade arm sound (was beepSound: null)
   - type: CMVocalizeTrigger
   - type: TileFireOnTrigger
     spawn: RMCTileFireGreen
@@ -385,12 +423,13 @@
     sprite: _RMC14/Objects/Weapons/Grenades/m40wpdp.rsi
   - type: TimerTrigger
     delay: 2
-    beepSound: null
+    # cmu edit: keep the standard grenade arm sound (was beepSound: null)
   - type: CMVocalizeTrigger
   - type: DeleteOnTrigger
+  # cmu edit start: use the standard grenade arm sound
   - type: TimerTriggerVisuals
-    primingSound:
-      path: /Audio/Effects/Smoke-grenade.ogg
+    primingSound: null
+  # cmu edit end
   - type: SpawnOnTrigger
     proto: RMCSmokePhosphorusWeak
   - type: EmitSoundOnTrigger
@@ -400,11 +439,13 @@
 - type: entity
   parent: RMCGrenadeWhitePhosphorus
   id: RMCGrenadeWhitePhosphorusCompound
-  name: 30mm CCDP chemical compound grenade
-  description: The 30mm CCDP is a small, but powerful chemical compound grenade, similar in effect to WPDP. Word on the block says that the CCDP doesn't actually release White Phosphorus, but some other chemical developed in We-Ya labs.
+  # cmu edit start: M60 WPSI designation and white-cap sprite (cmss13-pve#517)
+  name: M60 WPSI grenade
+  description: The M60 WPSI is a small, but powerful chemical compound grenade, designated as such with a white cap. Usable for both smoke-screen purposes and as an incendiary device.
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Weapons/Grenades/ied.rsi
+    sprite: CMU14/Weapons/Throwable/Grenades/wpsi.rsi
+  # cmu edit end
   - type: SpawnOnTrigger
     proto: RMCSmokePhosphorus
 

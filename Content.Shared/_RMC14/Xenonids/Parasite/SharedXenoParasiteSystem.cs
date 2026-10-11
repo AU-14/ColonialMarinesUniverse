@@ -821,6 +821,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
                 var victimComp = EnsureComp<VictimInfectedComponent>(infectedVictim);
                 victimComp.InfectorUser = para.InfectorUser;
+                victimComp.InfectorParasite = GetNetEntity(uid); // CMU14: a late dialog reply must survive parasite cleanup.
                 victimComp.InfectorWantsLarva = para.InfectorWantsLarva;
                 victimComp.InfectorLarvaClaimPending = para.InfectorLarvaClaimPending;
                 SetHive((infectedVictim, victimComp), _hive.GetHive(uid)?.Owner);
@@ -1278,26 +1279,34 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         Dirty(burst);
     }
 
-    protected bool TrySetLarvaClaimChoice(Entity<XenoParasiteComponent> parasite, EntityUid victim, NetUserId userId, bool wantsLarva)
+    // CMU14 method: a completed infection owns the claim independently of its spent parasite.
+    protected bool TrySetLarvaClaimChoice(NetEntity parasiteId, EntityUid victim, NetUserId userId, bool wantsLarva)
     {
-        if (parasite.Comp.InfectedVictim != victim ||
-            parasite.Comp.InfectorUser != userId)
-        {
-            return false;
-        }
-
-        parasite.Comp.InfectorWantsLarva = wantsLarva;
-        parasite.Comp.InfectorLarvaClaimPending = false;
-        Dirty(parasite);
-
         if (TryComp(victim, out VictimInfectedComponent? infected) &&
-            infected.InfectorUser == userId)
+            infected.InfectorParasite == parasiteId &&
+            infected.InfectorUser == userId &&
+            infected.InfectorLarvaClaimPending)
         {
             infected.InfectorWantsLarva = wantsLarva;
             infected.InfectorLarvaClaimPending = false;
             Dirty(victim, infected);
+            return true;
         }
 
+        // Before fall-off there is no infection component, so the attached parasite still owns the claim.
+        if (!TryGetEntity(parasiteId, out var parasiteUid) ||
+            !TryComp<XenoParasiteComponent>(parasiteUid.Value, out var parasite) ||
+            parasite.FellOff ||
+            parasite.InfectedVictim != victim ||
+            parasite.InfectorUser != userId ||
+            !parasite.InfectorLarvaClaimPending)
+        {
+            return false;
+        }
+
+        parasite.InfectorWantsLarva = wantsLarva;
+        parasite.InfectorLarvaClaimPending = false;
+        Dirty(parasiteUid.Value, parasite);
         return true;
     }
 
@@ -1339,6 +1348,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     protected void ClearInfectorUser(Entity<VictimInfectedComponent> victim)
     {
         victim.Comp.InfectorUser = null;
+        victim.Comp.InfectorParasite = null; // CMU14
         victim.Comp.InfectorWantsLarva = false;
         victim.Comp.InfectorLarvaClaimPending = false;
         Dirty(victim);

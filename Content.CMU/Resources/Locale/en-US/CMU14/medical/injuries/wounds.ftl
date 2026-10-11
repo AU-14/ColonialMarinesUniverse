@@ -14,10 +14,12 @@ cmu-medical-bandage-no-wounds = No untreated wounds to bandage.
 cmu-medical-bandage-no-wounds-on-body-part = No untreated wounds on the selected body part.
 cmu-medical-bandage-synth-requires-repair-tools = Synthetics require a welder for brute damage and cable coils for burns.
 cmu-medical-tourniquet-applied = The tourniquet is applied.
+cmu-medical-tourniquet-applied-stump = The tourniquet is clamped over the stump.
 cmu-medical-tourniquet-removed = The tourniquet is removed.
 cmu-medical-tourniquet-already-on = That limb already has a tourniquet.
 cmu-medical-tourniquet-no-target = There is no limb to tourniquet.
 cmu-medical-tourniquet-verb-remove = Remove tourniquet
+cmu-medical-tourniquet-verb-remove-stump = Remove tourniquet from stump
 cmu-medical-tourniquet-necrosis = The limb has gone necrotic.
 
 cmu-medical-cast-needed = Apply a cast to keep the bone from setting wrong.

@@ -120,6 +120,11 @@ public sealed partial class K9System : EntitySystem
     private void OnDogMapInit(Entity<K9DogComponent> ent, ref MapInitEvent args)
     {
         _actions.AddAction(ent.Owner, ref ent.Comp.ArmGrabAction, ent.Comp.ArmGrabActionId);
+
+        // CMU14: preset-bond beasts wake already bound and track with their own senses
+        if (ent.Comp.PresetBond)
+            return;
+
         _actions.AddAction(ent.Owner, ref ent.Comp.TrackMasterAction, ent.Comp.TrackMasterActionId);
         _actions.AddAction(ent.Owner, ref ent.Comp.RequestMasterAction, ent.Comp.RequestMasterActionId);
     }
@@ -284,7 +289,12 @@ public sealed partial class K9System : EntitySystem
         ent.Comp.Escaping = true;
         Dirty(ent);
 
-        _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-escape-attempt"), ent.Owner, ent.Owner, PopupType.Medium);
+        // CMU14: the jaws the victim fights follow the dog that bit them
+        LocId escapeKey = "rmc-k9-arm-grab-escape-attempt";
+        if (TryComp<K9DogComponent>(ent.Comp.Dog, out var grabDog) && grabDog.GrabEscapeMessage is { } escapeMsg)
+            escapeKey = escapeMsg;
+
+        _popup.PopupEntity(Loc.GetString(escapeKey), ent.Owner, ent.Owner, PopupType.Medium);
 
         var doAfter = new DoAfterArgs(EntityManager, ent.Owner, ent.Comp.EscapeDuration, new K9EscapeGrabDoAfterEvent(), ent.Owner)
         {
@@ -541,11 +551,16 @@ public sealed partial class K9System : EntitySystem
         if (_net.IsServer)
         {
             _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Voice/Vulpkanin/dog_bark2.ogg"), dog);
-            var masterKey = asHandler ? "rmc-k9-bind-success-handler" : "rmc-k9-bind-success-marine";
-            var dogKey = asHandler ? "rmc-k9-bind-success-dog-handler" : "rmc-k9-bind-success-dog-marine";
+            // CMU14: per-dog bind flavor overrides (the hellhound greets its master differently)
+            LocId masterKey = dogComp.BindMessageMaster ?? (asHandler ? (LocId) "rmc-k9-bind-success-handler" : "rmc-k9-bind-success-marine");
+            LocId dogKey = dogComp.BindMessageDog ?? (asHandler ? (LocId) "rmc-k9-bind-success-dog-handler" : "rmc-k9-bind-success-dog-marine");
             _popup.PopupEntity(Loc.GetString(masterKey, ("dog", dog)), master, master, PopupType.Medium);
             _popup.PopupEntity(Loc.GetString(dogKey, ("master", master)), dog, dog, PopupType.Medium);
         }
+
+        // CMU14 event: owner mirrors follow the bond of record
+        var bondEv = new K9BondChangedEvent(dogComp.Master, dogComp.HandlerBonded);
+        RaiseLocalEvent(dog, ref bondEv);
     }
 
     private void UnbindMaster(EntityUid dog, K9DogComponent dogComp)
@@ -560,6 +575,10 @@ public sealed partial class K9System : EntitySystem
         dogComp.Master = null;
         dogComp.HandlerBonded = false;
         Dirty(dog, dogComp);
+
+        // CMU14 event: owner mirrors follow the unbind
+        var bondEv = new K9BondChangedEvent(null, false);
+        RaiseLocalEvent(dog, ref bondEv);
     }
 
     private void SyncMasterAccess(EntityUid dog, EntityUid master)
@@ -728,6 +747,10 @@ public sealed partial class K9System : EntitySystem
         if (args.Handled)
             return;
 
+        // CMU14: feeding a power cell is a synthetic trick
+        if (!ent.Comp.BatteryTrick)
+            return;
+
         // If user is feeding a battery / power cell to the synth dog
         if (HasComp<PowerCellComponent>(args.Used))
         {
@@ -742,6 +765,10 @@ public sealed partial class K9System : EntitySystem
 
     private void OnDogMeleeHit(Entity<K9DogComponent> ent, ref MeleeHitEvent args)
     {
+        // CMU14: headbite strikes are synthetic jaws, not a hunting beast's bite
+        if (!ent.Comp.HeadbiteStrikes)
+            return;
+
         if (_net.IsClient || args.HitEntities.Count == 0)
             return;
 
@@ -759,8 +786,12 @@ public sealed partial class K9System : EntitySystem
         if (_net.IsClient)
             return;
 
-        _audio.PlayPvs(new SoundPathSpecifier("/Audio/Machines/twobeep.ogg"), dog);
-        _popup.PopupEntity(Loc.GetString("rmc-k9-good-boy-popup", ("dog", dog), ("user", user)), dog, PopupType.Medium);
+        // CMU14: praise in the dog's own voice; synth K9s beep and boop
+        TryComp<K9DogComponent>(dog, out var k9);
+        _audio.PlayPvs(k9?.PraiseSound ?? new SoundPathSpecifier("/Audio/Machines/twobeep.ogg"), dog);
+
+        LocId praiseMsg = k9?.PraiseMessage is { } msg ? msg : "rmc-k9-good-boy-popup";
+        _popup.PopupEntity(Loc.GetString(praiseMsg, ("dog", dog), ("user", user)), dog, PopupType.Medium);
     }
 
     private void OnMarkedTargetDamageModify(Entity<K9MarkedTargetComponent> ent, ref DamageModifyEvent args)
@@ -822,6 +853,10 @@ public sealed partial class K9System : EntitySystem
         var dogQuery = EntityQueryEnumerator<K9DogComponent, TransformComponent>();
         while (dogQuery.MoveNext(out var uid, out var dog, out var xform))
         {
+            // CMU14: the xeno scan can be switched off per dog
+            if (!dog.AcousticSenses)
+                continue;
+
             if (curTime < dog.NextSensesScan)
                 continue;
 
@@ -853,8 +888,16 @@ public sealed partial class K9System : EntitySystem
                 dog.NextSensesAlert = curTime + dog.SensesAlertCooldown;
                 Dirty(uid, dog);
 
-                _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Voice/Vulpkanin/dog_growl2.ogg"), uid);
-                _popup.PopupEntity(Loc.GetString("rmc-k9-senses-alert-growl", ("dog", uid)), uid, PopupType.MediumCaution);
+                // CMU14: stealth hunting beasts warn in silence; synth K9s growl for everyone to hear
+                if (dog.SilentSensesAlert)
+                {
+                    _popup.PopupEntity(Loc.GetString("rmc-k9-senses-alert-silent-dog"), uid, Filter.Entities(uid), true, PopupType.Medium);
+                }
+                else
+                {
+                    _audio.PlayPvs(new SoundPathSpecifier("/Audio/_RMC14/Voice/Vulpkanin/dog_growl2.ogg"), uid);
+                    _popup.PopupEntity(Loc.GetString("rmc-k9-senses-alert-growl", ("dog", uid)), uid, PopupType.MediumCaution);
+                }
 
                 if (dog.Master is { } master && Exists(master))
                 {

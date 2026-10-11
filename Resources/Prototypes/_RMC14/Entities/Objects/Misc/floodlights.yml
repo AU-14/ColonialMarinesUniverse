@@ -223,6 +223,7 @@
     isCorrodible: false
   - type: Appearance
   - type: Eye
+  - type: CMUWarshipExteriorLight # CMU14: hull floodlight switches off on red alert, see CMUWarshipAlertLightsSystem
 
 - type: entity
   abstract: true

@@ -1,12 +1,14 @@
 using Content.Shared.Examine;
 using Content.Shared.Popups;
 using Content.Shared.FixedPoint;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared._RMC14.Weapons.Common;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
@@ -15,6 +17,7 @@ namespace Content.Shared.CMU14.Yautja;
 public sealed partial class YautjaCasterSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedGunSystem _gun = default!;
@@ -33,6 +36,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         SubscribeLocalEvent<YautjaCasterComponent, TakeAmmoEvent>(OnTakeAmmo, before: [_gun.GetType()]);
         SubscribeLocalEvent<YautjaCasterComponent, AmmoShotEvent>(OnAmmoShot);
         SubscribeLocalEvent<YautjaCasterComponent, GunShotEvent>(OnGunShot);
+        SubscribeLocalEvent<YautjaCasterComponent, ContainerGettingInsertedAttemptEvent>(OnCasterInsertAttempt);
         SubscribeLocalEvent<YautjaCasterProjectileRefundComponent, EntityTerminatingEvent>(OnProjectileTerminating);
     }
 
@@ -45,7 +49,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
         if (!CanUseCasterTech(args.User))
         {
-            _popup.PopupClient(Loc.GetString("cmu-yautja-tech-denied"), args.User, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), args.User, args.User, PopupType.SmallCaution);
             return;
         }
 
@@ -55,7 +59,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
         if (_net.IsClient)
         {
-            PopupMode(ent, args.User, "cmu-yautja-caster-mode-next", mode.Value);
+            PopupMode(ent, args.User, "cmu-yautja-caster-mode-set", mode.Value);
             return;
         }
 
@@ -69,7 +73,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         };
 
         SetMode(ent, mode.Value, cost);
-        PopupMode(ent, args.User, "cmu-yautja-caster-mode-set");
+        PopupMode(ent, args.User, "cmu-yautja-caster-mode-set", mode.Value);
     }
 
     private void OnUniqueAction(Entity<YautjaCasterComponent> ent, ref UniqueActionEvent args)
@@ -81,7 +85,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
         if (!CanUseCasterTech(args.UserUid))
         {
-            _popup.PopupClient(Loc.GetString("cmu-yautja-tech-denied"), args.UserUid, args.UserUid, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-tech-denied"), args.UserUid, args.UserUid, PopupType.SmallCaution);
             return;
         }
 
@@ -91,12 +95,12 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
         if (_net.IsClient)
         {
-            PopupMode(ent, args.UserUid, "cmu-yautja-caster-mode-next", mode);
+            PopupMode(ent, args.UserUid, "cmu-yautja-caster-mode-set", mode);
             return;
         }
 
         SetMode(ent, mode, cost);
-        PopupMode(ent, args.UserUid, "cmu-yautja-caster-mode-set");
+        PopupMode(ent, args.UserUid, "cmu-yautja-caster-mode-set", mode);
     }
 
     private void OnExamined(Entity<YautjaCasterComponent> ent, ref ExaminedEvent args)
@@ -169,7 +173,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
     private void PopupCooldown(Entity<YautjaCasterComponent> ent, EntityUid user, TimeSpan cooldownUntil)
     {
         var remaining = (int) Math.Ceiling((cooldownUntil - _timing.CurTime).TotalSeconds);
-        _popup.PopupClient(Loc.GetString("cmu-yautja-caster-cooldown", ("seconds", remaining)), ent.Owner, user, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-caster-cooldown", ("seconds", remaining)), ent.Owner, user, PopupType.SmallCaution);
 
         if (ent.Comp.CooldownSound != null)
             _audio.PlayPredicted(ent.Comp.CooldownSound, ent.Owner, user);
@@ -346,11 +350,6 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             ("amount", (int) amount));
     }
 
-    private void PopupMode(Entity<YautjaCasterComponent> ent, EntityUid user, LocId message)
-    {
-        PopupMode(ent, user, message, ent.Comp.CurrentMode);
-    }
-
     private void PopupMode(Entity<YautjaCasterComponent> ent, EntityUid user, LocId message, int modeIndex)
     {
         var mode = GetMode(ent.Comp);
@@ -361,9 +360,23 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             return;
 
         var text = Loc.GetString(message, ("mode", Loc.GetString(mode.Name)));
-        if (_net.IsClient)
-            _popup.PopupPredicted(text, user, user, PopupType.Medium);
-        else
-            _popup.PopupClient(text, user, user, PopupType.Medium);
+        _popup.PopupEntity(text, user, user, PopupType.Medium);
+    }
+
+    private void OnCasterInsertAttempt(Entity<YautjaCasterComponent> ent, ref ContainerGettingInsertedAttemptEvent args)
+    {
+        if (args.Cancelled
+            || !TryComp(ent.Owner, out YautjaStoredGearComponent? stored)
+            || !stored.Deployed)
+            return;
+
+        // CMU14: while deployed the caster is bound to the hunter it belongs to. It may stay in one of that
+        // entity's hands, but may not be moved into any other container - suit storage, racks, tables,
+        // backpacks/storage or another entity's containers. The bracer retraction inserts with force: true,
+        // so it is unaffected by this guard.
+        if (_hands.TryGetHand(args.Container.Owner, args.Container.ID, out _))
+            return;
+
+        args.Cancel();
     }
 }

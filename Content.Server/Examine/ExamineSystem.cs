@@ -3,6 +3,9 @@ using Content.Server.CMU14.Examine;
 using Content.Server.Chat.Managers;
 using Content.Server.Verbs;
 using Content.Shared.CCVar;
+// cmu edit start
+using Content.Shared.CMU14.Medical.Diagnostics.Examine;
+// cmu edit end
 using Content.Shared.Chat;
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
@@ -93,7 +96,8 @@ namespace Content.Server.Examine
             var coveredByCharacterBreakdown = HasComp<ExaminableCharacterComponent>(entity)
                 && _netConfigManager.GetClientCVar(channel, CCVars.ExamineLogInChat);
 
-            if (!coveredByCharacterBreakdown && _netConfigManager.GetClientCVar(channel, CCVars.ExamineFullTextInChat))
+            var echoedFullText = !coveredByCharacterBreakdown && _netConfigManager.GetClientCVar(channel, CCVars.ExamineFullTextInChat);
+            if (echoedFullText)
             {
                 var markup = text.ToMarkup();
                 if (!string.IsNullOrWhiteSpace(FormattedMessage.RemoveMarkupPermissive(markup)))
@@ -103,6 +107,19 @@ namespace Content.Server.Examine
                     _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
                 }
             }
+
+            // cmu edit start
+            if (!echoedFullText && _netConfigManager.GetClientCVar(channel, CCVars.ExamineWoundsInChat))
+            {
+                var woundLines = EntityManager.System<CMUMedicalExamineSystem>().GetBodyPartLines(entity);
+                if (woundLines.Count > 0)
+                {
+                    var name = FormattedMessage.EscapeText(Identity.Name(entity, EntityManager, playerEnt));
+                    var woundLog = $"[color=gold][bold]{name}[/bold][/color]\n{string.Join("\n", woundLines)}";
+                    _chatManager.ChatMessageToOne(ChatChannel.Emotes, woundLog, woundLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
+                }
+            }
+            // cmu edit end
         }
     }
 }

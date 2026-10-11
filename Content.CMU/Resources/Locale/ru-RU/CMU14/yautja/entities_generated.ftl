@@ -54,9 +54,6 @@ ent-CMUActionYautjaGuardChainGauntlet = { cmu-yautja-chain-gauntlet-guard-action
 ent-CMUActionYautjaRemoveBracerAttachments = { cmu-yautja-remove-bracer-attachments-action-name }
     .desc = { cmu-yautja-remove-bracer-attachments-action-desc }
 
-ent-CMUActionYautjaLeap = прыжок
-    .desc = Прыгнуть в указанную точку.
-
 ent-CMUActionYautjaMarkForHunt = пометить для Hunt
     .desc = Пометить цель для охоты.
 

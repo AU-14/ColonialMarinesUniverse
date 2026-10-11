@@ -1,0 +1,5573 @@
+# Physical source-derived natural prop drafts; see SOURCES_NATURAL_FINAL_CLOUD.md.
+- type: cmu3DModel
+  id: CMU3DRMCBushg3NaturalFinalCloud
+  label: Sparse forked green g3 bush
+  status: draft
+  sourcePrototypes:
+  - RMCBushg3
+  referencePrototype: RMCBushg3
+  referenceRsi: /Textures/Decals/Flora/flora_bushes.rsi
+  referenceState: bushg3
+  sourceDirections: 1
+  description: Source exposed branching silhouette rebuilt with fourteen connected round branches, twenty-seven positioned
+    leaf sprays and twenty-seven depth leaves. Source translucent ground shadow is excluded from geometry. No canopy
+    sphere or full-sprite surface is used. Physical unseen depth and material finish remain inferred. All art is draft;
+    no native, live-map fit or fidelity certification.
+  parts:
+  - label: continuous forked wood branch 01
+    min: -0.108119, -0.0415, 0.04625
+    max: 0.017494, 0.0535, 0.14125
+    color: '#4D4035'
+    shape: CylinderX
+    yaw: 75.40342
+    pitch: 84.33469
+  - label: continuous forked wood branch 02
+    min: -0.122271, -0.0345, 0.154
+    max: -0.030854, 0.0325, 0.221
+    color: '#584F3E'
+    shape: CylinderX
+    yaw: 169.63754
+    pitch: 43.13248
+  - label: continuous forked wood branch 03
+    min: -0.164644, -0.027, 0.231688
+    max: -0.085356, 0.019, 0.277688
+    color: '#665C4A'
+    shape: CylinderX
+    yaw: 158.99321
+    pitch: 65.02689
+  - label: continuous forked wood branch 04
+    min: -0.237866, -0.0245, 0.332937
+    max: -0.105884, 0.0065, 0.363938
+    color: '#4D4035'
+    shape: CylinderX
+    yaw: 169.13147
+    pitch: 61.17101
+  - label: continuous forked wood branch 05
+    min: -0.310682, -0.0265, 0.32925
+    max: -0.117443, 0.0025, 0.35825
+    color: '#584F3E'
+    shape: CylinderX
+    yaw: 175.32919
+    pitch: 40.30586
+  - label: continuous forked wood branch 06
+    min: -0.224312, -0.027, 0.189125
+    max: -0.106938, 0.001, 0.217125
+    color: '#665C4A'
+    shape: CylinderX
+    yaw: 173.91147
+    pitch: -15.44073
+  - label: continuous forked wood branch 07
+    min: -0.050757, -0.0165, 0.155
+    max: 0.100757, 0.0485, 0.22
+    color: '#4D4035'
+    shape: CylinderX
+    yaw: 4.98772
+    pitch: 24.36217
+  - label: continuous forked wood branch 08
+    min: 0.013817, 0.0, 0.274875
+    max: 0.170558, 0.044, 0.318875
+    color: '#584F3E'
+    shape: CylinderX
+    yaw: 104.59658
+    pitch: 85.46243
+  - label: continuous forked wood branch 09
+    min: 0.030404, 0.0085, 0.43975
+    max: 0.200846, 0.0415, 0.47275
+    color: '#665C4A'
+    shape: CylinderX
+    yaw: 13.49573
+    pitch: 72.44108
+  - label: continuous forked wood branch 10
+    min: -0.041065, -0.025, 0.354312
+    max: 0.091065, 0.007, 0.386313
+    color: '#4D4035'
+    shape: CylinderX
+    yaw: 174.77605
+    pitch: -4.0687
+  - label: continuous forked wood branch 11
+    min: -0.144653, -0.0295, 0.404687
+    max: -0.014722, -0.0045, 0.429688
+    color: '#584F3E'
+    shape: CylinderX
+    yaw: 171.26762
+    pitch: 52.53126
+  - label: continuous forked wood branch 12
+    min: 0.09658, -0.024, 0.233
+    max: 0.219045, 0.01, 0.267
+    color: '#665C4A'
+    shape: CylinderX
+    yaw: 5.62331
+  - label: continuous forked wood branch 13
+    min: 0.209776, -0.0165, 0.260937
+    max: 0.283974, 0.0085, 0.285938
+    color: '#4D4035'
+    shape: CylinderX
+    yaw: 12.04258
+    pitch: 39.17983
+  - label: continuous forked wood branch 14
+    min: 0.098316, -0.0095, 0.375
+    max: 0.214184, 0.0155, 0.4
+    color: '#584F3E'
+    shape: CylinderX
+    yaw: 6.08853
+    pitch: 12.46035
+  - label: source-position leaf spray 01
+    min: -0.342375, -0.089, 0.391375
+    max: -0.276375, -0.027, 0.477375
+    color: '#426436'
+    shape: SlantedXReverse
+    yaw: -35
+    pitch: 16
+  - label: branch-depth paired leaf 01
+    min: -0.316375, -0.1615, 0.395875
+    max: -0.264375, -0.0725, 0.450875
+    color: '#405D33'
+    shape: SlantedY
+    yaw: 40
+  - label: leaf joining petiole 1
+    min: -0.359553, -0.0645, 0.410375
+    max: -0.240197, -0.0525, 0.422375
+    color: '#4D6F3C'
+    shape: CylinderX
+    yaw: -80.77608
+    pitch: 6.73605
+  - label: source-position leaf spray 02
+    min: -0.335375, 0.002, 0.3255
+    max: -0.258375, 0.064, 0.4245
+    color: '#517C42'
+    shape: SlantedX
+    yaw: 15
+    pitch: -16
+  - label: branch-depth paired leaf 02
+    min: -0.303875, 0.0475, 0.3365
+    max: -0.251875, 0.1365, 0.3915
+    color: '#426436'
+    shape: SlantedY
+    yaw: 90
+  - label: source-position leaf spray 03
+    min: -0.30025, -0.037, 0.419
+    max: -0.21225, 0.025, 0.531
+    color: '#619350'
+    shape: SlantedXReverse
+    yaw: 60
+    pitch: 16
+  - label: branch-depth paired leaf 03
+    min: -0.26325, -0.1095, 0.4365
+    max: -0.21125, -0.0205, 0.4915
+    color: '#4D6F3C'
+    shape: SlantedY
+    yaw: 135
+  - label: source-position leaf spray 04
+    min: -0.261125, 0.041, 0.36875
+    max: -0.195125, 0.103, 0.49375
+    color: '#5C8648'
+    shape: SlantedX
+    yaw: -20
+    pitch: -16
+  - label: branch-depth paired leaf 04
+    min: -0.235125, 0.0865, 0.39275
+    max: -0.183125, 0.1755, 0.44775
+    color: '#405D33'
+    shape: SlantedY
+    yaw: 55
+  - label: leaf joining petiole 4
+    min: -0.285179, 0.0595, 0.40725
+    max: -0.152071, 0.0715, 0.41925
+    color: '#4D6F3C'
+    shape: CylinderX
+    yaw: 81.74747
+    pitch: 6.03736
+  - label: source-position leaf spray 05
+    min: -0.191625, -0.119, 0.4945
+    max: -0.114625, -0.057, 0.5805
+    color: '#426436'
+    shape: SlantedXReverse
+    yaw: 20
+    pitch: 16
+  - label: branch-depth paired leaf 05
+    min: -0.160125, -0.1915, 0.499
+    max: -0.108125, -0.1025, 0.554
+    color: '#426436'
+    shape: SlantedY
+    yaw: 95
+  - label: source-position leaf spray 06
+    min: -0.159625, -0.089, 0.4505
+    max: -0.071625, -0.027, 0.5495
+    color: '#517C42'
+    shape: SlantedX
+    yaw: -30
+    pitch: -16
+  - label: branch-depth paired leaf 06
+    min: -0.122625, -0.0435, 0.4615
+    max: -0.070625, 0.0455, 0.5165
+    color: '#4D6F3C'
+    shape: SlantedY
+    yaw: 45
+  - label: source-position leaf spray 07
+    min: -0.161125, 0.002, 0.36275
+    max: -0.095125, 0.064, 0.47475
+    color: '#619350'
+    shape: SlantedXReverse
+    yaw: 40
+    pitch: 16
+  - label: branch-depth paired leaf 07
+    min: -0.135125, -0.0705, 0.38025
+    max: -0.083125, 0.0185, 0.43525
+    color: '#405D33'
+    shape: SlantedY
+    yaw: 115
+  - label: leaf joining petiole 7
+    min: -0.136182, -0.019, 0.39475
+    max: -0.101068, -0.007, 0.40675
+    color: '#4D6F3C'
+    shape: CylinderX
+    yaw: -53.84181
+    pitch: 23.49695
+  - label: source-position leaf spray 08
+    min: -0.18225, -0.037, 0.3
+    max: -0.10525, 0.025, 0.425
+    color: '#5C8648'
+    shape: SlantedX
+    yaw: -30
+    pitch: -16
+  - label: branch-depth paired leaf 08
+    min: -0.15075, 0.0085, 0.324
+    max: -0.09875, 0.0975, 0.379
+    color: '#426436'
+    shape: SlantedY
+    yaw: 45
+  - label: source-position leaf spray 09
+    min: -0.259625, 0.041, 0.207
+    max: -0.171625, 0.103, 0.293
+    color: '#426436'
+    shape: SlantedXReverse
+    yaw: 50
+    pitch: 16
+  - label: branch-depth paired leaf 09
+    min: -0.222625, -0.0315, 0.2115
+    max: -0.170625, 0.0575, 0.2665
+    color: '#4D6F3C'
+    shape: SlantedY
+    yaw: 125
+  - label: source-position leaf spray 10
+    min: -0.26425, -0.119, 0.138
+    max: -0.19825, -0.057, 0.237
+    color: '#517C42'
+    shape: SlantedX
+    yaw: -40
+    pitch: -16
+  - label: branch-depth paired leaf 10
+    min: -0.23825, -0.0735, 0.149
+    max: -0.18625, 0.0155, 0.204
+    color: '#405D33'
+    shape: SlantedY
+    yaw: 35
+  - label: leaf joining petiole 10
+    min: -0.240445, -0.0205, 0.1635
+    max: -0.203055, -0.0085, 0.1755
+    color: '#4D6F3C'
+    shape: CylinderX
+    yaw: -56.76829
+    pitch: 21.98929
+  - label: source-position leaf spray 11
+    min: -0.1885, -0.089, 0.1065
+    max: -0.1115, -0.027, 0.2185
+    color: '#619350'
+    shape: SlantedXReverse
+    yaw: -25
+    pitch: 16
+  - label: branch-depth paired leaf 11
+    min: -0.157, -0.1615, 0.124
+    max: -0.105, -0.0725, 0.179
+    color: '#426436'
+    shape: SlantedY
+    yaw: 50
+  - label: source-position leaf spray 12
+    min: -0.134625, 0.002, 0.303125
+    max: -0.046625, 0.064, 0.428125
+    color: '#5C8648'
+    shape: SlantedX
+    yaw: 70
+    pitch: -16
+  - label: branch-depth paired leaf 12
+    min: -0.097625, 0.0475, 0.327125
+    max: -0.045625, 0.1365, 0.382125
+    color: '#4D6F3C'
+    shape: SlantedY
+    yaw: 145
+  - label: source-position leaf spray 13
+    min: -0.054875, -0.037, 0.307
+    max: 0.011125, 0.025, 0.393
+    color: '#426436'
+    shape: SlantedXReverse
+    yaw: 65
+    pitch: 16
+  - label: branch-depth paired leaf 13
+    min: -0.028875, -0.1095, 0.3115
+    max: 0.023125, -0.0205, 0.3665
+    color: '#405D33'
+    shape: SlantedY
+    yaw: 140
+  - label: leaf joining petiole 13
+    min: -0.046951, -0.0385, 0.326
+    max: 0.022201, -0.0265, 0.338
+    color: '#4D6F3C'
+    shape: CylinderX
+    yaw: -73.70595
+    pitch: 11.68041
+  - label: source-position leaf spray 14
+    min: -0.022875, 0.041, 0.26925
+    max: 0.054125, 0.103, 0.36825
+    color: '#517C42'
+    shape: SlantedX
+    yaw: -20
+    pitch: -16
+  - label: branch-depth paired leaf 14
+    min: 0.008625, 0.0865, 0.28025
+    max: 0.060625, 0.1755, 0.33525
+    color: '#426436'
+    shape: SlantedY
+    yaw: 55
+  - label: source-position leaf spray 15
+    min: -0.01275, -0.119, 0.18775
+    max: 0.07525, -0.057, 0.29975
+    color: '#619350'
+    shape: SlantedXReverse
+    yaw: 30
+    pitch: 16
+  - label: branch-depth paired leaf 15
+    min: 0.02425, -0.1915, 0.20525
+    max: 0.07625, -0.1025, 0.26025
+    color: '#4D6F3C'
+    shape: SlantedY
+    yaw: 105
+  - label: source-position leaf spray 16
+    min: 0.001375, -0.089, 0.40625
+    max: 0.067375, -0.027, 0.53125
+    color: '#5C8648'
+    shape: SlantedX
+    yaw: -25
+    pitch: -16
+  - label: branch-depth paired leaf 16
+    min: 0.027375, -0.0435, 0.43025
+    max: 0.079375, 0.0455, 0.48525
+    color: '#405D33'
+    shape: SlantedY
+    yaw: 50
+  - label: leaf joining petiole 16
+    min: 0.032064, -0.0055, 0.44475
+    max: 0.055686, 0.0065, 0.45675
+    color: '#4D6F3C'
+    shape: CylinderX
+    yaw: 3.01279
+    pitch: 36.34651
+  - label: source-position leaf spray 17
+    min: 0.033375, 0.002, 0.391375
+    max: 0.110375, 0.064, 0.477375
+    color: '#426436'
+    shape: SlantedXReverse
+    yaw: 35
+    pitch: 16
+  - label: branch-depth paired leaf 17
+    min: 0.064875, -0.0705, 0.395875
+    max: 0.116875, 0.0185, 0.450875
+    color: '#426436'
+    shape: SlantedY
+    yaw: 110
+  - label: source-position leaf spray 18
+    min: 0.084125, -0.037, 0.513
+    max: 0.172125, 0.025, 0.612
+    color: '#517C42'
+    shape: SlantedX
+    yaw: -15
+    pitch: -16
+  - label: branch-depth paired leaf 18
+    min: 0.121125, 0.0085, 0.524
+    max: 0.173125, 0.0975, 0.579
+    color: '#4D6F3C'
+    shape: SlantedY
+    yaw: 60
+  - label: source-position leaf spray 19
+    min: 0.120125, 0.041, 0.4315
+    max: 0.186125, 0.103, 0.5435
+    color: '#619350'
+    shape: SlantedXReverse
+    yaw: 25
+    pitch: 16
+  - label: branch-depth paired leaf 19
+    min: 0.146125, -0.0315, 0.449
+    max: 0.198125, 0.0575, 0.504
+    color: '#405D33'
+    shape: SlantedY
+    yaw: 100
+  - label: leaf joining petiole 19
+    min: 0.149153, 0.0005, 0.4635
+    max: 0.176097, 0.0125, 0.4755
+    color: '#4D6F3C'
+    shape: CylinderX
+    yaw: 34.38034
+    pitch: 31.30467
+  - label: source-position leaf spray 20
+    min: 0.108375, -0.119, 0.35625
+    max: 0.185375, -0.057, 0.48125
+    color: '#5C8648'
+    shape: SlantedX
+    yaw: -35
+    pitch: -16
+  - label: branch-depth paired leaf 20
+    min: 0.139875, -0.0735, 0.38025
+    max: 0.191875, 0.0155, 0.43525
+    color: '#426436'
+    shape: SlantedY
+    yaw: 40
+  - label: source-position leaf spray 21
+    min: 0.140375, -0.089, 0.328875
+    max: 0.228375, -0.027, 0.414875
+    color: '#426436'
+    shape: SlantedXReverse
+    yaw: 45
+    pitch: 16
+  - label: branch-depth paired leaf 21
+    min: 0.177375, -0.1615, 0.333375
+    max: 0.229375, -0.0725, 0.388375
+    color: '#4D6F3C'
+    shape: SlantedY
+    yaw: 120
+  - label: source-position leaf spray 22
+    min: 0.195125, 0.002, 0.35675
+    max: 0.261125, 0.064, 0.45575
+    color: '#517C42'
+    shape: SlantedX
+    yaw: 20
+    pitch: -16
+  - label: branch-depth paired leaf 22
+    min: 0.221125, 0.0475, 0.36775
+    max: 0.273125, 0.1365, 0.42275
+    color: '#405D33'
+    shape: SlantedY
+    yaw: 95
+  - label: leaf joining petiole 22
+    min: 0.190136, 0.04, 0.38225
+    max: 0.285114, 0.052, 0.39425
+    color: '#4D6F3C'
+    shape: CylinderX
+    yaw: 78.33123
+    pitch: 8.47635
+  - label: source-position leaf spray 23
+    min: 0.164625, -0.037, 0.2565
+    max: 0.241625, 0.025, 0.3685
+    color: '#619350'
+    shape: SlantedXReverse
+    yaw: -50
+    pitch: 16
+  - label: branch-depth paired leaf 23
+    min: 0.196125, -0.1095, 0.274
+    max: 0.248125, -0.0205, 0.329
+    color: '#426436'
+    shape: SlantedY
+    yaw: 25
+  - label: source-position leaf spray 24
+    min: 0.209125, 0.041, 0.2375
+    max: 0.297125, 0.103, 0.3625
+    color: '#5C8648'
+    shape: SlantedX
+    yaw: 40
+    pitch: -16
+  - label: branch-depth paired leaf 24
+    min: 0.246125, 0.0865, 0.2615
+    max: 0.298125, 0.1755, 0.3165
+    color: '#4D6F3C'
+    shape: SlantedY
+    yaw: 115
+  - label: source-position leaf spray 25
+    min: 0.242, -0.119, 0.182
+    max: 0.308, -0.057, 0.268
+    color: '#426436'
+    shape: SlantedXReverse
+    yaw: -40
+    pitch: 16
+  - label: branch-depth paired leaf 25
+    min: 0.268, -0.1915, 0.1865
+    max: 0.32, -0.1025, 0.2415
+    color: '#405D33'
+    shape: SlantedY
+    yaw: 35
+  - label: leaf joining petiole 25
+    min: 0.210059, -0.0795, 0.201
+    max: 0.358941, -0.0675, 0.213
+    color: '#4D6F3C'
+    shape: CylinderX
+    yaw: -82.63525
+    pitch: 5.39572
+  - label: source-position leaf spray 26
+    min: 0.164625, -0.089, 0.15675
+    max: 0.241625, -0.027, 0.25575
+    color: '#517C42'
+    shape: SlantedX
+    yaw: 25
+    pitch: -16
+  - label: branch-depth paired leaf 26
+    min: 0.196125, -0.0435, 0.16775
+    max: 0.248125, 0.0455, 0.22275
+    color: '#426436'
+    shape: SlantedY
+    yaw: 100
+  - label: source-position leaf spray 27
+    min: 0.11225, 0.002, 0.119
+    max: 0.20025, 0.064, 0.231
+    color: '#619350'
+    shape: SlantedXReverse
+    yaw: -25
+    pitch: 16
+  - label: branch-depth paired leaf 27
+    min: 0.14925, -0.0705, 0.1365
+    max: 0.20125, 0.0185, 0.1915
+    color: '#4D6F3C'
+    shape: SlantedY
+    yaw: 50
+- type: cmu3DModel
+  id: CMU3DRMCRock06NaturalFinalCloud
+  label: Six separate gray rock06 fragments
+  status: draft
+  sourcePrototypes:
+  - RMCRock06
+  referencePrototype: RMCRock06
+  referenceRsi: /Textures/Decals/Flora/flora_rocks.rsi
+  referenceState: rock06
+  sourceDirections: 1
+  description: 'Six independent source stones: three small chips, one back-right slender shard, a tall front-left
+    fracture and a low front-right rock. Separate sloped solid wedges and exposed fracture planes preserve gaps and
+    gray palette. Alpha-50 source shadows are excluded. Physical unseen depth and material finish remain inferred.
+    All art is draft; no native, live-map fit or fidelity certification.'
+  parts:
+  - label: upper left chip irregular low stone foot
+    min: -0.414375, 0.47544, 0.0
+    max: -0.304375, 0.56944, 0.042
+    color: '#3A3A3A'
+    shape: Ellipsoid
+    yaw: -35
+  - label: upper left chip angular chipped body
+    min: -0.399325, 0.47459, 0.000445
+    max: -0.319425, 0.57029, 0.070755
+    color: '#555555'
+    shape: WedgeY
+    yaw: 55
+  - label: upper left chip exposed broken end
+    min: -0.398975, 0.48484, 0.010235
+    max: -0.346175, 0.56004, 0.066305
+    color: '#454545'
+    shape: Ellipsoid
+    yaw: -35
+  - label: upper left chip small pale face
+    min: -0.394575, 0.49048, 0.05518
+    max: -0.361575, 0.5356, 0.07298
+    color: '#6F6F6F'
+    shape: SlantedX
+    yaw: -35
+  - label: upper middle chip irregular low stone foot
+    min: -0.14425, 0.479298, 0.0
+    max: -0.04325, 0.579298, 0.042
+    color: '#3A3A3A'
+    shape: Ellipsoid
+    yaw: 18
+  - label: upper middle chip angular chipped body
+    min: -0.13625, 0.485363, 0.000395
+    max: -0.05125, 0.573233, 0.062805
+    color: '#555555'
+    shape: WedgeY
+    yaw: 108
+  - label: upper middle chip exposed broken end
+    min: -0.13011, 0.489298, 0.009085
+    max: -0.08163, 0.569298, 0.058855
+    color: '#454545'
+    shape: Ellipsoid
+    yaw: 18
+  - label: upper middle chip small pale face
+    min: -0.12607, 0.495298, 0.04898
+    max: -0.09577, 0.543298, 0.06478
+    color: '#6F6F6F'
+    shape: SlantedX
+    yaw: 18
+  - label: middle left chip irregular low stone foot
+    min: -0.369125, 0.267608, 0.0
+    max: -0.237125, 0.376608, 0.042
+    color: '#3A3A3A'
+    shape: Ellipsoid
+    yaw: -12
+  - label: middle left chip angular chipped body
+    min: -0.34945, 0.264688, 0.00032
+    max: -0.2568, 0.379528, 0.05088
+    color: '#555555'
+    shape: WedgeY
+    yaw: 78
+  - label: middle left chip exposed broken end
+    min: -0.350645, 0.278508, 0.00736
+    max: -0.287285, 0.365708, 0.04768
+    color: '#454545'
+    shape: Ellipsoid
+    yaw: -12
+  - label: middle left chip small pale face
+    min: -0.345365, 0.285048, 0.03968
+    max: -0.305765, 0.337368, 0.05248
+    color: '#6F6F6F'
+    shape: SlantedX
+    yaw: -12
+  - label: back right long shard irregular low stone foot
+    min: 0.0075, 0.025033, 0.0
+    max: 0.3175, 0.176033, 0.042
+    color: '#3A3A3A'
+    shape: Ellipsoid
+    yaw: 27
+  - label: back right long shard dominant sloping fracture
+    min: 0.1021, -0.045167, 0.0
+    max: 0.2229, 0.246233, 0.186
+    color: '#555555'
+    shape: WedgeY
+    yaw: -63
+  - label: back right long shard narrower fractured side
+    min: 0.15334, -0.068887, 0.00093
+    max: 0.20166, 0.188413, 0.14787
+    color: '#454545'
+    shape: WedgeY
+    yaw: -63
+  - label: back right long shard pale sloping crest
+    min: 0.16497, 0.047433, 0.09021
+    max: 0.23443, 0.177633, 0.15531
+    color: '#6F6F6F'
+    shape: WedgeY
+    yaw: -63
+  - label: back right long shard low split toe
+    min: 0.018915, 0.037103, 0.0
+    max: 0.120085, 0.154903, 0.05208
+    color: '#454545'
+    shape: WedgeY
+    yaw: -63
+  - label: front left rising shard irregular low stone foot
+    min: -0.41275, -0.54942, 0.0
+    max: 0.02525, -0.32442, 0.042
+    color: '#3A3A3A'
+    shape: Ellipsoid
+    yaw: -12
+  - label: front left rising shard dominant sloping fracture
+    min: -0.28375, -0.64278, 0.0
+    max: -0.10375, -0.23106, 0.32
+    color: '#555555'
+    shape: WedgeY
+    yaw: 78
+  - label: front left rising shard narrower fractured side
+    min: -0.21475, -0.67944, 0.0016
+    max: -0.14275, -0.3159, 0.2544
+    color: '#454545'
+    shape: WedgeY
+    yaw: 78
+  - label: front left rising shard pale sloping crest
+    min: -0.29806, -0.5169, 0.1552
+    max: -0.19456, -0.33294, 0.2672
+    color: '#6F6F6F'
+    shape: WedgeY
+    yaw: 78
+  - label: front left rising shard low split toe
+    min: -0.137725, -0.52689, 0.0
+    max: 0.013025, -0.36045, 0.0896
+    color: '#454545'
+    shape: WedgeY
+    yaw: 78
+  - label: front right low shard irregular low stone foot
+    min: 0.10725, -0.550838, 0.0
+    max: 0.48025, -0.347838, 0.042
+    color: '#3A3A3A'
+    shape: Ellipsoid
+    yaw: 16
+  - label: front right low shard dominant sloping fracture
+    min: 0.21255, -0.624648, 0.0
+    max: 0.37495, -0.274028, 0.137
+    color: '#555555'
+    shape: WedgeY
+    yaw: -74
+  - label: front right low shard narrower fractured side
+    min: 0.27627, -0.658943, 0.000685
+    max: 0.34123, -0.349353, 0.108915
+    color: '#454545'
+    shape: WedgeY
+    yaw: -74
+  - label: front right low shard pale sloping crest
+    min: 0.29182, -0.515668, 0.066445
+    max: 0.3852, -0.359008, 0.114395
+    color: '#6F6F6F'
+    shape: WedgeY
+    yaw: -74
+  - label: front right low shard low split toe
+    min: 0.113845, -0.526298, 0.0
+    max: 0.249855, -0.384558, 0.03836
+    color: '#454545'
+    shape: WedgeY
+    yaw: -74
+- type: cmu3DModel
+  id: CMU3DRMCStump1NaturalFinalCloud
+  label: Low dark broken stump
+  status: draft
+  sourcePrototypes:
+  - RMCStump1
+  referencePrototype: RMCStump1
+  referenceRsi: /Textures/Objects/Decoration/Flora/flora_treessnow.rsi
+  referenceState: treestump
+  sourceDirections: 1
+  description: 'Inspected 64px tree frame: the opaque stump occupies only a small central footprint; broad alpha-28/53
+    ground shadow is not geometry. Short irregular bark trunk, dark flared roots, exposed ochre scars and two tiny
+    untouched lichen/bark crops. Sprite offset (0,0.7) is projected artwork padding, not an arbitrary world XY shift.
+    Physical unseen depth and material finish remain inferred. All art is draft; no native, live-map fit or fidelity
+    certification.'
+  parts:
+  - label: irregular bark trunk core
+    min: -0.1175, -0.103, 0.0
+    max: 0.1175, 0.103, 0.42
+    color: '#312622'
+    shape: CylinderZ
+  - label: cut top plane
+    min: -0.1115, -0.101, 0.4095
+    max: 0.1115, 0.101, 0.4365
+    color: '#4B4949'
+    shape: CylinderZ
+  - label: long split bark flute 1
+    min: 0.0765, -0.02, 0.013
+    max: 0.1235, 0.02, 0.411
+    color: '#312622'
+    shape: CylinderZ
+  - label: flared root 1
+    min: 0.065692, -0.0235, 0.0405
+    max: 0.186308, 0.0235, 0.0875
+    color: '#1D1618'
+    shape: CylinderX
+    pitch: -40.29215
+  - label: long split bark flute 2
+    min: 0.062256, 0.042305, 0.013
+    max: 0.109256, 0.082305, 0.411
+    color: '#4A4028'
+    shape: CylinderZ
+    yaw: 36
+  - label: flared root 2
+    min: 0.046981, 0.051889, 0.0405
+    max: 0.169123, 0.098889, 0.0875
+    color: '#312622'
+    shape: CylinderX
+    yaw: 32.9259
+    pitch: -39.68754
+  - label: long split bark flute 3
+    min: 0.01111, 0.086518, 0.013
+    max: 0.05811, 0.126518, 0.411
+    color: '#524F3B'
+    shape: CylinderZ
+    yaw: 72
+  - label: flared root 3
+    min: -0.017069, 0.105387, 0.0405
+    max: 0.104286, 0.152387, 0.0875
+    color: '#4A4028'
+    shape: CylinderX
+    yaw: 69.97097
+    pitch: -39.99666
+  - label: long split bark flute 4
+    min: -0.054402, 0.075106, 0.013
+    max: -0.007402, 0.115106, 0.411
+    color: '#251C1C'
+    shape: CylinderZ
+    yaw: 108
+  - label: flared root 4
+    min: -0.095888, 0.091578, 0.0405
+    max: 0.018016, 0.138578, 0.0875
+    color: '#1D1618'
+    shape: CylinderX
+    yaw: 110.02903
+    pitch: -43.2188
+  - label: long split bark flute 5
+    min: -0.109256, 0.042305, 0.013
+    max: -0.062256, 0.082305, 0.411
+    color: '#312622'
+    shape: CylinderZ
+    yaw: 144
+  - label: flared root 5
+    min: -0.169123, 0.051889, 0.0405
+    max: -0.046981, 0.098889, 0.0875
+    color: '#312622'
+    shape: CylinderX
+    yaw: 147.0741
+    pitch: -39.68754
+  - label: long split bark flute 6
+    min: -0.1355, -0.02, 0.013
+    max: -0.0885, 0.02, 0.411
+    color: '#4A4028'
+    shape: CylinderZ
+    yaw: -180
+  - label: flared root 6
+    min: -0.205737, -0.0235, 0.0405
+    max: -0.076503, 0.0235, 0.0875
+    color: '#4A4028'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: -37.12527
+  - label: long split bark flute 7
+    min: -0.104402, -0.078779, 0.013
+    max: -0.057402, -0.038779, 0.411
+    color: '#524F3B'
+    shape: CylinderZ
+    yaw: -144
+  - label: flared root 7
+    min: -0.160985, -0.094622, 0.0405
+    max: -0.042888, -0.047622, 0.0875
+    color: '#1D1618'
+    shape: CylinderX
+    yaw: -147.0741
+    pitch: -41.33614
+  - label: long split bark flute 8
+    min: -0.056256, -0.120812, 0.013
+    max: -0.009256, -0.080812, 0.411
+    color: '#251C1C'
+    shape: CylinderZ
+    yaw: -108
+  - label: flared root 8
+    min: -0.100064, -0.145483, 0.0405
+    max: 0.017519, -0.098483, 0.0875
+    color: '#312622'
+    shape: CylinderX
+    yaw: -110.02903
+    pitch: -41.55669
+  - label: long split bark flute 9
+    min: 0.01111, -0.126518, 0.013
+    max: 0.05811, -0.086518, 0.411
+    color: '#312622'
+    shape: CylinderZ
+    yaw: -72
+  - label: flared root 9
+    min: -0.017069, -0.152387, 0.0405
+    max: 0.104286, -0.105387, 0.0875
+    color: '#4A4028'
+    shape: CylinderX
+    yaw: -69.97097
+    pitch: -39.99666
+  - label: long split bark flute 10
+    min: 0.057402, -0.078779, 0.013
+    max: 0.104402, -0.038779, 0.411
+    color: '#4A4028'
+    shape: CylinderZ
+    yaw: -36
+  - label: flared root 10
+    min: 0.042888, -0.094622, 0.0405
+    max: 0.160985, -0.047622, 0.0875
+    color: '#1D1618'
+    shape: CylinderX
+    yaw: -32.9259
+    pitch: -41.33614
+  - label: ochre vertical exposed wood scar 1
+    min: -0.0815, -0.1105, 0.269
+    max: -0.0505, -0.0955, 0.389
+    color: '#4A4028'
+  - label: ochre vertical exposed wood scar 2
+    min: -0.035, -0.1175, 0.1335
+    max: 0.001, -0.1025, 0.3005
+    color: '#4A4028'
+  - label: ochre vertical exposed wood scar 3
+    min: 0.0395, -0.0945, 0.102
+    max: 0.0745, -0.0795, 0.242
+    color: '#4A4028'
+  - label: ochre vertical exposed wood scar 4
+    min: 0.0745, -0.0505, 0.247
+    max: 0.1155, -0.0355, 0.333
+    color: '#4A4028'
+  - label: original tiny gray bark lichen
+    min: 0.02075, -0.119, 0.18275
+    max: 0.08325, -0.113, 0.24525
+    color: '#FFFFFF'
+    surface: CMU3DNaturalFinalCloudArt00
+    surfaceAxis: XZ
+  - label: original top bark scar
+    min: -0.00425, -0.11, 0.32475
+    max: 0.05825, -0.104, 0.38725
+    color: '#FFFFFF'
+    surface: CMU3DNaturalFinalCloudArt01
+    surfaceAxis: XZ
+- type: cmu3DModel
+  id: CMU3DFishBassNaturalFinalCloud
+  label: Olive bass lying world prop
+  status: draft
+  sourcePrototypes:
+  - FishBass
+  referencePrototype: FishBass
+  referenceRsi: /Textures/_SS14/_Goobstation/Objects/Specific/Fishing/fish.rsi
+  referenceState: bass
+  sourceDirections: 1
+  description: Original bass silhouette retains two tail lobes, two dorsal fins, lower fins, pale belly, pink gill
+    slit, black eye and separate jaw. Source pixel coordinates guide the plan form; thickness is inferred for a lying
+    world prop. No fish swimming rig, locomotion or carried animation. Physical unseen depth and material finish remain
+    inferred. All art is draft; no native, live-map fit or fidelity certification.
+  parts:
+  - label: continuous olive fish body
+    min: -0.31, -0.155, 0.0045
+    max: 0.435, 0.155, 0.1895
+    color: '#757548'
+    shape: Ellipsoid
+  - label: pale lower belly volume
+    min: -0.254125, -0.170875, 0.07
+    max: 0.422875, -0.022875, 0.194
+    color: '#E4E4DD'
+    shape: Ellipsoid
+  - label: olive arched dorsal flank
+    min: -0.2845, 0.007875, 0.032
+    max: 0.4095, 0.160875, 0.186
+    color: '#727244'
+    shape: Ellipsoid
+  - label: rounded right head and snout
+    min: 0.21375, -0.13125, 0.0135
+    max: 0.47375, 0.09375, 0.1585
+    color: '#919157'
+    shape: Ellipsoid
+  - label: pale jaw below mouth
+    min: 0.311, -0.12875, 0.083
+    max: 0.464, -0.03375, 0.171
+    color: '#E4E4DD'
+    shape: Ellipsoid
+  - label: narrow caudal peduncle
+    min: -0.391875, -0.023875, 0.023
+    max: -0.201875, 0.080125, 0.129
+    color: '#424229'
+    shape: Ellipsoid
+  - label: upper tail fan triangular fan
+    min: -0.4005, 0.02025, -0.0325
+    max: -0.3745, 0.19225, 0.1125
+    color: '#757548'
+    shape: WedgeYReverse
+    yaw: -30
+    pitch: 90
+  - label: upper tail fan raised fin ray 1
+    min: -0.468314, 0.045481, 0.0545
+    max: -0.35942, 0.052481, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: -13.48219
+  - label: upper tail fan raised fin ray 2
+    min: -0.462948, 0.06559, 0.0545
+    max: -0.341566, 0.07259, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: 0.67233
+  - label: upper tail fan raised fin ray 3
+    min: -0.460515, 0.085699, 0.0545
+    max: -0.320779, 0.092699, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: 11.65806
+  - label: lower tail fan triangular fan
+    min: -0.397375, -0.128375, -0.0335
+    max: -0.371375, 0.059625, 0.1135
+    color: '#727244'
+    shape: WedgeY
+    yaw: 28
+    pitch: 90
+  - label: lower tail fan raised fin ray 1
+    min: -0.460897, -0.019345, 0.0545
+    max: -0.314239, -0.012345, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: -15.80651
+  - label: lower tail fan raised fin ray 2
+    min: -0.462298, 0.003064, 0.0545
+    max: -0.336669, 0.010064, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: -4.59712
+  - label: lower tail fan raised fin ray 3
+    min: -0.466957, 0.025473, 0.0545
+    max: -0.355839, 0.032473, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: 10.26947
+  - label: large first dorsal fin triangular fan
+    min: -0.20675, 0.095375, -0.076
+    max: -0.18075, 0.298375, 0.156
+    color: '#919157'
+    shape: WedgeYReverse
+    yaw: -12
+    pitch: 90
+  - label: large first dorsal fin raised fin ray 1
+    min: -0.285573, 0.11897, 0.0545
+    max: -0.114583, 0.12597, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: 0.33909
+  - label: large first dorsal fin raised fin ray 2
+    min: -0.285544, 0.145776, 0.0545
+    max: -0.103217, 0.152776, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: 11.62938
+  - label: large first dorsal fin raised fin ray 3
+    min: -0.288581, 0.172582, 0.0545
+    max: -0.088784, 0.179582, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: 21.27489
+  - label: long second dorsal fin triangular fan
+    min: 0.040125, 0.14, -0.13
+    max: 0.066125, 0.21, 0.21
+    color: '#919157'
+    shape: WedgeY
+    pitch: 90
+  - label: long second dorsal fin raised fin ray 1
+    min: -0.057126, 0.17815, 0.0545
+    max: 0.190576, 0.18515, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: -8.77782
+  - label: long second dorsal fin raised fin ray 2
+    min: -0.056322, 0.1876, 0.0545
+    max: 0.189772, 0.1946, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: -5.87739
+  - label: long second dorsal fin raised fin ray 3
+    min: -0.055837, 0.19705, 0.0545
+    max: 0.189287, 0.20405, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: -2.94645
+  - label: lower anal fin triangular fan
+    min: -0.222375, -0.215375, -0.069
+    max: -0.196375, -0.103375, 0.149
+    color: '#919157'
+    shape: WedgeYReverse
+    yaw: -15
+    pitch: 90
+  - label: lower anal fin raised fin ray 1
+    min: -0.290657, -0.204619, 0.0545
+    max: -0.132408, -0.197619, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: -7.68098
+  - label: lower anal fin raised fin ray 2
+    min: -0.288647, -0.190014, 0.0545
+    max: -0.126591, -0.183014, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: -0.59331
+  - label: lower anal fin raised fin ray 3
+    min: -0.28781, -0.175409, 0.0545
+    max: -0.119601, -0.168409, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: 6.07273
+  - label: small pelvic fin triangular fan
+    min: 0.09325, -0.247125, -0.018
+    max: 0.11925, -0.159125, 0.098
+    color: '#808033'
+    shape: WedgeY
+    yaw: 25
+    pitch: 90
+  - label: small pelvic fin raised fin ray 1
+    min: 0.058876, -0.197087, 0.0545
+    max: 0.154968, -0.190087, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: -4.63838
+  - label: small pelvic fin raised fin ray 2
+    min: 0.057238, -0.18632, 0.0545
+    max: 0.146565, -0.17932, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: 4.22775
+  - label: small pelvic fin raised fin ray 3
+    min: 0.054376, -0.175553, 0.0545
+    max: 0.139385, -0.168553, 0.0615
+    color: '#727244'
+    shape: CylinderX
+    yaw: 14.2611
+  - label: near side pectoral fin triangular fan
+    min: 0.065125, -0.09725, 0.0705
+    max: 0.091125, 0.00975, 0.2955
+    color: '#808033'
+    shape: WedgeYReverse
+    yaw: -10
+    pitch: 90
+  - label: near side pectoral fin raised fin ray 1
+    min: -0.001364, -0.087275, 0.1975
+    max: 0.161777, -0.080275, 0.2045
+    color: '#727244'
+    shape: CylinderX
+    yaw: -3.21999
+  - label: near side pectoral fin raised fin ray 2
+    min: -0.000544, -0.073049, 0.1975
+    max: 0.165973, -0.066049, 0.2045
+    color: '#727244'
+    shape: CylinderX
+    yaw: 3.37528
+  - label: near side pectoral fin raised fin ray 3
+    min: -0.000775, -0.058823, 0.1975
+    max: 0.171221, -0.051823, 0.2045
+    color: '#727244'
+    shape: CylinderX
+    yaw: 9.62962
+  - label: dark original eye socket
+    min: 0.359563, 0.024, 0.1355
+    max: 0.418562, 0.076, 0.1585
+    color: '#424229'
+    shape: Ellipsoid
+  - label: single black source eye
+    min: 0.376, 0.037563, 0.152
+    max: 0.404, 0.065563, 0.168
+    color: '#000000'
+    shape: Ellipsoid
+  - label: pink gill slit segment 1
+    min: 0.22948, -0.033438, 0.151
+    max: 0.27677, -0.013437, 0.171
+    color: '#C57E7E'
+    shape: CylinderX
+    yaw: -97.59464
+  - label: pink gill slit segment 2
+    min: 0.22948, -0.080312, 0.151
+    max: 0.27677, -0.060312, 0.171
+    color: '#C57E7E'
+    shape: CylinderX
+    yaw: -82.40536
+  - label: olive gill cover seam segment 1
+    min: 0.20619, 0.044563, 0.175
+    max: 0.246935, 0.058563, 0.189
+    color: '#424229'
+    shape: CylinderX
+    yaw: -85.60129
+  - label: olive gill cover seam segment 2
+    min: 0.206198, 0.000812, 0.175
+    max: 0.253177, 0.014812, 0.189
+    color: '#424229'
+    shape: CylinderX
+    yaw: -86.18593
+  - label: short dark mouth opening segment 1
+    min: 0.424944, -0.036187, 0.1225
+    max: 0.468806, -0.023187, 0.1355
+    color: '#424229'
+    shape: CylinderX
+    yaw: -4.08562
+  - label: original central bass scale mottling
+    min: -0.09375, -0.00625, 0.198
+    max: 0.125, 0.0875, 0.202
+    color: '#FFFFFF'
+    surface: CMU3DNaturalFinalCloudArt02
+    surfaceAxis: XY
+  - label: original lower silver scale detail
+    min: -0.125, -0.1, 0.152
+    max: 0.0, -0.0375, 0.156
+    color: '#FFFFFF'
+    surface: CMU3DNaturalFinalCloudArt03
+    surfaceAxis: XY
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DFishingRodNaturalFinalCloud
+  label: Red-reel fishing rod
+  status: draft
+  sourcePrototypes:
+  - FishingRod
+  referencePrototype: FishingRod
+  referenceRsi: /Textures/_SS14/_Goobstation/Objects/Specific/Fishing/fishing_rod.rsi
+  referenceState: icon
+  sourceDirections: 1
+  description: Dark rubber grip, brown tapered blank, gold tip wrap, red reel, metal bracket, open guides and physically
+    attached line beside the shaft. Source default icon is a loose world prop. CMU Fishing owners spawn a separate
+    lure and rope visuals; they do not switch the rod sprite to icon-active. No cast or reel animation is invented.
+    Physical unseen depth and material finish remain inferred. All art is draft; no native, live-map fit or fidelity
+    certification.
+  parts:
+  - label: black rubber handle segment 1
+    min: -0.409592, -0.33, 0.019
+    max: -0.184158, -0.27, 0.079
+    color: '#1E1E1E'
+    shape: CylinderX
+    yaw: 46.1233
+  - label: gray handle collar segment 1
+    min: -0.252835, -0.1945, 0.017
+    max: -0.084665, -0.1305, 0.081
+    color: '#8E8E8E'
+    shape: CylinderX
+    yaw: 48.01279
+  - label: brown composite rod blank segment 1
+    min: -0.196983, 0.000812, 0.0325
+    max: 0.187608, 0.039812, 0.0715
+    color: '#412424'
+    shape: CylinderX
+    yaw: 46.31691
+  - label: brown composite rod blank segment 2
+    min: 0.057598, 0.294563, 0.0325
+    max: 0.467402, 0.333563, 0.0715
+    color: '#412424'
+    shape: CylinderX
+    yaw: 49.01958
+  - label: dark back of rod blank segment 1
+    min: -0.202753, 0.016938, 0.0655
+    max: 0.184003, 0.029937, 0.0785
+    color: '#2E1919'
+    shape: CylinderX
+    yaw: 45.98212
+  - label: dark back of rod blank segment 2
+    min: 0.054473, 0.310687, 0.0655
+    max: 0.464277, 0.323687, 0.0785
+    color: '#2E1919'
+    shape: CylinderX
+    yaw: 49.01958
+  - label: gold rod tip wrap segment 1
+    min: 0.332928, 0.424687, 0.0375
+    max: 0.417072, 0.459688, 0.0725
+    color: '#B37D26'
+    shape: CylinderX
+    yaw: 58.67131
+  - label: attached pale line beside shaft segment 1
+    min: -0.1608, -0.055438, 0.066
+    max: 0.157675, -0.041438, 0.08
+    color: '#DFDFDF'
+    shape: CylinderX
+    yaw: 47.38594
+  - label: attached pale line beside shaft segment 2
+    min: 0.030585, 0.228937, 0.066
+    max: 0.475665, 0.242938, 0.08
+    color: '#DFDFDF'
+    shape: CylinderX
+    yaw: 48.70054
+  - label: attached pale line beside shaft segment 3
+    min: 0.36875, 0.427375, 0.066
+    max: 0.43125, 0.441375, 0.08
+    color: '#DFDFDF'
+    shape: CylinderX
+    yaw: 90.0
+  - label: round red reel case
+    min: -0.236125, -0.251625, 0.034
+    max: -0.095125, -0.129625, 0.14
+    color: '#8E0000'
+    shape: CylinderZ
+  - label: raised red reel spool
+    min: -0.211125, -0.233625, 0.134
+    max: -0.120125, -0.147625, 0.16
+    color: '#A30000'
+    shape: CylinderZ
+  - label: steel reel bracket segment 1
+    min: -0.191985, -0.160438, 0.071
+    max: -0.095515, -0.136437, 0.095
+    color: '#B8B8B8'
+    shape: CylinderX
+    yaw: -24.90477
+  - label: steel reel bracket segment 2
+    min: -0.140451, -0.20575, 0.071
+    max: -0.084549, -0.18175, 0.095
+    color: '#B8B8B8'
+    shape: CylinderX
+    yaw: -116.56505
+  - label: small reel crank segment 1
+    min: -0.216885, -0.22, 0.1545
+    max: -0.176865, -0.205, 0.1695
+    color: '#343434'
+    shape: CylinderX
+    yaw: -141.34019
+  - label: small reel crank segment 2
+    min: -0.227589, -0.22625, 0.1545
+    max: -0.209911, -0.21125, 0.1695
+    color: '#343434'
+    shape: CylinderX
+    yaw: 135.0
+  - label: open line guide 1 side 1
+    min: -0.094562, -0.071875, 0.072
+    max: -0.058562, -0.061875, 0.09
+    color: '#949494'
+  - label: open line guide 1 side 2
+    min: -0.094562, -0.111875, 0.072
+    max: -0.058562, -0.101875, 0.09
+    color: '#949494'
+  - label: open line guide 1 side 3
+    min: -0.102562, -0.106875, 0.072
+    max: -0.092562, -0.066875, 0.09
+    color: '#949494'
+  - label: open line guide 1 side 4
+    min: -0.060562, -0.106875, 0.072
+    max: -0.050562, -0.066875, 0.09
+    color: '#949494'
+  - label: open line guide 2 side 1
+    min: 0.064813, 0.103125, 0.072
+    max: 0.100813, 0.113125, 0.09
+    color: '#949494'
+  - label: open line guide 2 side 2
+    min: 0.064813, 0.063125, 0.072
+    max: 0.100813, 0.073125, 0.09
+    color: '#949494'
+  - label: open line guide 2 side 3
+    min: 0.056813, 0.068125, 0.072
+    max: 0.066813, 0.108125, 0.09
+    color: '#949494'
+  - label: open line guide 2 side 4
+    min: 0.098813, 0.068125, 0.072
+    max: 0.108813, 0.108125, 0.09
+    color: '#949494'
+  - label: open line guide 3 side 1
+    min: 0.242938, 0.29375, 0.072
+    max: 0.278938, 0.30375, 0.09
+    color: '#949494'
+  - label: open line guide 3 side 2
+    min: 0.242938, 0.25375, 0.072
+    max: 0.278938, 0.26375, 0.09
+    color: '#949494'
+  - label: open line guide 3 side 3
+    min: 0.234938, 0.25875, 0.072
+    max: 0.244938, 0.29875, 0.09
+    color: '#949494'
+  - label: open line guide 3 side 4
+    min: 0.276938, 0.25875, 0.072
+    max: 0.286938, 0.29875, 0.09
+    color: '#949494'
+  - label: original red reel color detail
+    min: -0.196875, -0.221875, 0.161
+    max: -0.134375, -0.159375, 0.165
+    color: '#FFFFFF'
+    surface: CMU3DNaturalFinalCloudArt04
+    surfaceAxis: XY
+  placement: surface
+  useEntityRotation: true
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0, 0
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: black rubber handle segment 1
+          min: -0.409592, -0.33, 0.019
+          max: -0.184158, -0.27, 0.079
+          color: '#1E1E1E'
+          shape: CylinderX
+          yaw: 46.1233
+        - label: gray handle collar segment 1
+          min: -0.252835, -0.1945, 0.017
+          max: -0.084665, -0.1305, 0.081
+          color: '#8E8E8E'
+          shape: CylinderX
+          yaw: 48.01279
+        - label: brown composite rod blank segment 1
+          min: -0.196983, 0.000812, 0.0325
+          max: 0.187608, 0.039812, 0.0715
+          color: '#412424'
+          shape: CylinderX
+          yaw: 46.31691
+        - label: brown composite rod blank segment 2
+          min: 0.057598, 0.294563, 0.0325
+          max: 0.467402, 0.333563, 0.0715
+          color: '#412424'
+          shape: CylinderX
+          yaw: 49.01958
+        - label: dark back of rod blank segment 1
+          min: -0.202753, 0.016938, 0.0655
+          max: 0.184003, 0.029937, 0.0785
+          color: '#2E1919'
+          shape: CylinderX
+          yaw: 45.98212
+        - label: dark back of rod blank segment 2
+          min: 0.054473, 0.310687, 0.0655
+          max: 0.464277, 0.323687, 0.0785
+          color: '#2E1919'
+          shape: CylinderX
+          yaw: 49.01958
+        - label: gold rod tip wrap segment 1
+          min: 0.332928, 0.424687, 0.0375
+          max: 0.417072, 0.459688, 0.0725
+          color: '#B37D26'
+          shape: CylinderX
+          yaw: 58.67131
+        - label: attached pale line beside shaft segment 1
+          min: -0.1608, -0.055438, 0.066
+          max: 0.157675, -0.041438, 0.08
+          color: '#DFDFDF'
+          shape: CylinderX
+          yaw: 47.38594
+        - label: attached pale line beside shaft segment 2
+          min: 0.030585, 0.228937, 0.066
+          max: 0.475665, 0.242938, 0.08
+          color: '#DFDFDF'
+          shape: CylinderX
+          yaw: 48.70054
+        - label: attached pale line beside shaft segment 3
+          min: 0.36875, 0.427375, 0.066
+          max: 0.43125, 0.441375, 0.08
+          color: '#DFDFDF'
+          shape: CylinderX
+          yaw: 90.0
+        - label: round red reel case
+          min: -0.236125, -0.251625, 0.034
+          max: -0.095125, -0.129625, 0.14
+          color: '#8E0000'
+          shape: CylinderZ
+        - label: raised red reel spool
+          min: -0.211125, -0.233625, 0.134
+          max: -0.120125, -0.147625, 0.16
+          color: '#A30000'
+          shape: CylinderZ
+        - label: steel reel bracket segment 1
+          min: -0.191985, -0.160438, 0.071
+          max: -0.095515, -0.136437, 0.095
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: -24.90477
+        - label: steel reel bracket segment 2
+          min: -0.140451, -0.20575, 0.071
+          max: -0.084549, -0.18175, 0.095
+          color: '#B8B8B8'
+          shape: CylinderX
+          yaw: -116.56505
+        - label: small reel crank segment 1
+          min: -0.216885, -0.22, 0.1545
+          max: -0.176865, -0.205, 0.1695
+          color: '#343434'
+          shape: CylinderX
+          yaw: -141.34019
+        - label: small reel crank segment 2
+          min: -0.227589, -0.22625, 0.1545
+          max: -0.209911, -0.21125, 0.1695
+          color: '#343434'
+          shape: CylinderX
+          yaw: 135.0
+        - label: open line guide 1 side 1
+          min: -0.094562, -0.071875, 0.072
+          max: -0.058562, -0.061875, 0.09
+          color: '#949494'
+        - label: open line guide 1 side 2
+          min: -0.094562, -0.111875, 0.072
+          max: -0.058562, -0.101875, 0.09
+          color: '#949494'
+        - label: open line guide 1 side 3
+          min: -0.102562, -0.106875, 0.072
+          max: -0.092562, -0.066875, 0.09
+          color: '#949494'
+        - label: open line guide 1 side 4
+          min: -0.060562, -0.106875, 0.072
+          max: -0.050562, -0.066875, 0.09
+          color: '#949494'
+        - label: open line guide 2 side 1
+          min: 0.064813, 0.103125, 0.072
+          max: 0.100813, 0.113125, 0.09
+          color: '#949494'
+        - label: open line guide 2 side 2
+          min: 0.064813, 0.063125, 0.072
+          max: 0.100813, 0.073125, 0.09
+          color: '#949494'
+        - label: open line guide 2 side 3
+          min: 0.056813, 0.068125, 0.072
+          max: 0.066813, 0.108125, 0.09
+          color: '#949494'
+        - label: open line guide 2 side 4
+          min: 0.098813, 0.068125, 0.072
+          max: 0.108813, 0.108125, 0.09
+          color: '#949494'
+        - label: open line guide 3 side 1
+          min: 0.242938, 0.29375, 0.072
+          max: 0.278938, 0.30375, 0.09
+          color: '#949494'
+        - label: open line guide 3 side 2
+          min: 0.242938, 0.25375, 0.072
+          max: 0.278938, 0.26375, 0.09
+          color: '#949494'
+        - label: open line guide 3 side 3
+          min: 0.234938, 0.25875, 0.072
+          max: 0.244938, 0.29875, 0.09
+          color: '#949494'
+        - label: open line guide 3 side 4
+          min: 0.276938, 0.25875, 0.072
+          max: 0.286938, 0.29875, 0.09
+          color: '#949494'
+        - label: original red reel color detail
+          min: -0.196875, -0.221875, 0.161
+          max: -0.134375, -0.159375, 0.165
+          color: '#FFFFFF'
+          surface: CMU3DNaturalFinalCloudArt04
+          surfaceAxis: XY
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DFishingRodNaturalFinalCloudActiveStudy
+  label: Red-reel fishing rod / extended-line source study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: FishingRod
+  referenceRsi: /Textures/_SS14/_Goobstation/Objects/Specific/Fishing/fishing_rod.rsi
+  referenceState: icon-active
+  sourceDirections: 1
+  description: Unbound static study of original icon-active resource. Extended attached line with red/white float
+    and bent end. Actual inspected CMU fishing owners use separate lure/rope entities and do not bind this world sprite
+    state. This study does not claim a live casting pose. Physical unseen depth and material finish remain inferred.
+    All art is draft; no native, live-map fit or fidelity certification.
+  parts:
+  - label: black rubber handle segment 1
+    min: -0.409592, -0.33, 0.019
+    max: -0.184158, -0.27, 0.079
+    color: '#1E1E1E'
+    shape: CylinderX
+    yaw: 46.1233
+  - label: gray handle collar segment 1
+    min: -0.252835, -0.1945, 0.017
+    max: -0.084665, -0.1305, 0.081
+    color: '#8E8E8E'
+    shape: CylinderX
+    yaw: 48.01279
+  - label: brown composite rod blank segment 1
+    min: -0.196983, 0.000812, 0.0325
+    max: 0.187608, 0.039812, 0.0715
+    color: '#412424'
+    shape: CylinderX
+    yaw: 46.31691
+  - label: brown composite rod blank segment 2
+    min: 0.057598, 0.294563, 0.0325
+    max: 0.467402, 0.333563, 0.0715
+    color: '#412424'
+    shape: CylinderX
+    yaw: 49.01958
+  - label: dark back of rod blank segment 1
+    min: -0.202753, 0.016938, 0.0655
+    max: 0.184003, 0.029937, 0.0785
+    color: '#2E1919'
+    shape: CylinderX
+    yaw: 45.98212
+  - label: dark back of rod blank segment 2
+    min: 0.054473, 0.310687, 0.0655
+    max: 0.464277, 0.323687, 0.0785
+    color: '#2E1919'
+    shape: CylinderX
+    yaw: 49.01958
+  - label: gold rod tip wrap segment 1
+    min: 0.332928, 0.424687, 0.0375
+    max: 0.417072, 0.459688, 0.0725
+    color: '#B37D26'
+    shape: CylinderX
+    yaw: 58.67131
+  - label: attached pale line beside shaft segment 1
+    min: -0.1608, -0.055438, 0.066
+    max: 0.157675, -0.041438, 0.08
+    color: '#DFDFDF'
+    shape: CylinderX
+    yaw: 47.38594
+  - label: attached pale line beside shaft segment 2
+    min: 0.030585, 0.228937, 0.066
+    max: 0.475665, 0.242938, 0.08
+    color: '#DFDFDF'
+    shape: CylinderX
+    yaw: 48.70054
+  - label: attached pale line beside shaft segment 3
+    min: 0.36875, 0.427375, 0.066
+    max: 0.43125, 0.441375, 0.08
+    color: '#DFDFDF'
+    shape: CylinderX
+    yaw: 90.0
+  - label: round red reel case
+    min: -0.236125, -0.251625, 0.034
+    max: -0.095125, -0.129625, 0.14
+    color: '#8E0000'
+    shape: CylinderZ
+  - label: raised red reel spool
+    min: -0.211125, -0.233625, 0.134
+    max: -0.120125, -0.147625, 0.16
+    color: '#A30000'
+    shape: CylinderZ
+  - label: steel reel bracket segment 1
+    min: -0.191985, -0.160438, 0.071
+    max: -0.095515, -0.136437, 0.095
+    color: '#B8B8B8'
+    shape: CylinderX
+    yaw: -24.90477
+  - label: steel reel bracket segment 2
+    min: -0.140451, -0.20575, 0.071
+    max: -0.084549, -0.18175, 0.095
+    color: '#B8B8B8'
+    shape: CylinderX
+    yaw: -116.56505
+  - label: small reel crank segment 1
+    min: -0.216885, -0.22, 0.1545
+    max: -0.176865, -0.205, 0.1695
+    color: '#343434'
+    shape: CylinderX
+    yaw: -141.34019
+  - label: small reel crank segment 2
+    min: -0.227589, -0.22625, 0.1545
+    max: -0.209911, -0.21125, 0.1695
+    color: '#343434'
+    shape: CylinderX
+    yaw: 135.0
+  - label: open line guide 1 side 1
+    min: -0.094562, -0.071875, 0.072
+    max: -0.058562, -0.061875, 0.09
+    color: '#949494'
+  - label: open line guide 1 side 2
+    min: -0.094562, -0.111875, 0.072
+    max: -0.058562, -0.101875, 0.09
+    color: '#949494'
+  - label: open line guide 1 side 3
+    min: -0.102562, -0.106875, 0.072
+    max: -0.092562, -0.066875, 0.09
+    color: '#949494'
+  - label: open line guide 1 side 4
+    min: -0.060562, -0.106875, 0.072
+    max: -0.050562, -0.066875, 0.09
+    color: '#949494'
+  - label: open line guide 2 side 1
+    min: 0.064813, 0.103125, 0.072
+    max: 0.100813, 0.113125, 0.09
+    color: '#949494'
+  - label: open line guide 2 side 2
+    min: 0.064813, 0.063125, 0.072
+    max: 0.100813, 0.073125, 0.09
+    color: '#949494'
+  - label: open line guide 2 side 3
+    min: 0.056813, 0.068125, 0.072
+    max: 0.066813, 0.108125, 0.09
+    color: '#949494'
+  - label: open line guide 2 side 4
+    min: 0.098813, 0.068125, 0.072
+    max: 0.108813, 0.108125, 0.09
+    color: '#949494'
+  - label: open line guide 3 side 1
+    min: 0.242938, 0.29375, 0.072
+    max: 0.278938, 0.30375, 0.09
+    color: '#949494'
+  - label: open line guide 3 side 2
+    min: 0.242938, 0.25375, 0.072
+    max: 0.278938, 0.26375, 0.09
+    color: '#949494'
+  - label: open line guide 3 side 3
+    min: 0.234938, 0.25875, 0.072
+    max: 0.244938, 0.29875, 0.09
+    color: '#949494'
+  - label: open line guide 3 side 4
+    min: 0.276938, 0.25875, 0.072
+    max: 0.286938, 0.29875, 0.09
+    color: '#949494'
+  - label: extended pale line from tip segment 1
+    min: 0.115625, 0.134187, 0.042
+    max: 0.73125, 0.150188, 0.058
+    color: '#EEEEEE'
+    shape: CylinderX
+    yaw: -90.0
+  - label: small white float body
+    min: 0.37675, -0.269375, 0.0125
+    max: 0.46075, -0.174375, 0.0815
+    color: '#EEEEEE'
+    shape: Ellipsoid
+  - label: red float top band
+    min: 0.37825, -0.21975, 0.0595
+    max: 0.45925, -0.16775, 0.0865
+    color: '#E34E4E'
+    shape: CylinderZ
+  - label: line below float segment 1
+    min: 0.33125, -0.353312, 0.032
+    max: 0.509375, -0.337312, 0.048
+    color: '#B8B8B8'
+    shape: CylinderX
+    yaw: -90.0
+  - label: line below float segment 2
+    min: 0.38531, -0.459562, 0.032
+    max: 0.428752, -0.443562, 0.048
+    color: '#B8B8B8'
+    shape: CylinderX
+    yaw: -127.69424
+  - label: line below float segment 3
+    min: 0.355735, -0.462688, 0.032
+    max: 0.398952, -0.446688, 0.048
+    color: '#B8B8B8'
+    shape: CylinderX
+    yaw: 139.39871
+  - label: original red reel color detail
+    min: -0.196875, -0.221875, 0.161
+    max: -0.134375, -0.159375, 0.165
+    color: '#FFFFFF'
+    surface: CMU3DNaturalFinalCloudArt04
+    surfaceAxis: XY
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DFishingRodMakeshiftNaturalFinalCloud
+  label: Makeshift branch fishing rod
+  status: draft
+  sourcePrototypes:
+  - FishingRodMakeshift
+  referencePrototype: FishingRodMakeshift
+  referenceRsi: /Textures/_SS14/_Goobstation/Objects/Specific/Fishing/makeshift_rod.rsi
+  referenceState: icon
+  sourceDirections: 1
+  description: Forked irregular wooden stick with string lashings. No manufactured reel is invented. Source default
+    icon is a loose world prop. CMU Fishing owners spawn a separate lure and rope visuals; they do not switch the
+    rod sprite to icon-active. No cast or reel animation is invented. Physical unseen depth and material finish remain
+    inferred. All art is draft; no native, live-map fit or fidelity certification.
+  parts:
+  - label: uneven wooden makeshift rod segment 1
+    min: -0.477514, -0.327937, 0.0115
+    max: -0.194361, -0.268937, 0.0705
+    color: '#714400'
+    shape: CylinderX
+    yaw: 47.68378
+  - label: uneven wooden makeshift rod segment 2
+    min: -0.284106, -0.121687, 0.0115
+    max: -0.003394, -0.062687, 0.0705
+    color: '#714400'
+    shape: CylinderX
+    yaw: 46.35319
+  - label: uneven wooden makeshift rod segment 3
+    min: -0.10411, 0.115813, 0.0115
+    max: 0.275985, 0.174813, 0.0705
+    color: '#714400'
+    shape: CylinderX
+    yaw: 45.6662
+  - label: lighter exposed branch ridge segment 1
+    min: -0.470719, -0.293313, 0.0555
+    max: -0.169906, -0.272313, 0.0765
+    color: '#905600'
+    shape: CylinderX
+    yaw: 47.52612
+  - label: lighter exposed branch ridge segment 2
+    min: -0.264658, -0.076125, 0.0555
+    max: 0.027158, -0.055125, 0.0765
+    color: '#905600'
+    shape: CylinderX
+    yaw: 46.7357
+  - label: lighter exposed branch ridge segment 3
+    min: -0.072103, 0.156688, 0.0555
+    max: 0.281478, 0.177688, 0.0765
+    color: '#905600'
+    shape: CylinderX
+    yaw: 45.71616
+  - label: crooked upper fork twig segment 1
+    min: -0.16417, -0.020688, 0.025
+    max: -0.07333, 0.011312, 0.057
+    color: '#905600'
+    shape: CylinderX
+    yaw: 139.18492
+  - label: crooked upper fork twig segment 2
+    min: -0.185977, 0.04025, 0.025
+    max: -0.123398, 0.07225, 0.057
+    color: '#905600'
+    shape: CylinderX
+    yaw: 92.86241
+  - label: short lower broken twig segment 1
+    min: -0.251268, -0.233687, 0.0265
+    max: -0.201857, -0.200687, 0.0595
+    color: '#623B00'
+    shape: CylinderX
+    yaw: -18.43495
+  - label: string binding at upper tip segment 1
+    min: 0.161232, 0.273813, 0.068
+    max: 0.210643, 0.291813, 0.086
+    color: '#DCD7B4'
+    shape: CylinderX
+    yaw: 55.30485
+  - label: string binding at upper tip segment 2
+    min: 0.199372, 0.289438, 0.068
+    max: 0.235003, 0.307438, 0.086
+    color: '#DCD7B4'
+    shape: CylinderX
+    yaw: -15.25512
+  - label: broken upper tip segment 1
+    min: 0.189832, 0.303187, 0.037
+    max: 0.24298, 0.331188, 0.065
+    color: '#905600'
+    shape: CylinderX
+    yaw: 91.68468
+  placement: surface
+  useEntityRotation: true
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0, 0
+  spriteStates:
+    icon:
+      frames:
+      - parts:
+        - label: uneven wooden makeshift rod segment 1
+          min: -0.477514, -0.327937, 0.0115
+          max: -0.194361, -0.268937, 0.0705
+          color: '#714400'
+          shape: CylinderX
+          yaw: 47.68378
+        - label: uneven wooden makeshift rod segment 2
+          min: -0.284106, -0.121687, 0.0115
+          max: -0.003394, -0.062687, 0.0705
+          color: '#714400'
+          shape: CylinderX
+          yaw: 46.35319
+        - label: uneven wooden makeshift rod segment 3
+          min: -0.10411, 0.115813, 0.0115
+          max: 0.275985, 0.174813, 0.0705
+          color: '#714400'
+          shape: CylinderX
+          yaw: 45.6662
+        - label: lighter exposed branch ridge segment 1
+          min: -0.470719, -0.293313, 0.0555
+          max: -0.169906, -0.272313, 0.0765
+          color: '#905600'
+          shape: CylinderX
+          yaw: 47.52612
+        - label: lighter exposed branch ridge segment 2
+          min: -0.264658, -0.076125, 0.0555
+          max: 0.027158, -0.055125, 0.0765
+          color: '#905600'
+          shape: CylinderX
+          yaw: 46.7357
+        - label: lighter exposed branch ridge segment 3
+          min: -0.072103, 0.156688, 0.0555
+          max: 0.281478, 0.177688, 0.0765
+          color: '#905600'
+          shape: CylinderX
+          yaw: 45.71616
+        - label: crooked upper fork twig segment 1
+          min: -0.16417, -0.020688, 0.025
+          max: -0.07333, 0.011312, 0.057
+          color: '#905600'
+          shape: CylinderX
+          yaw: 139.18492
+        - label: crooked upper fork twig segment 2
+          min: -0.185977, 0.04025, 0.025
+          max: -0.123398, 0.07225, 0.057
+          color: '#905600'
+          shape: CylinderX
+          yaw: 92.86241
+        - label: short lower broken twig segment 1
+          min: -0.251268, -0.233687, 0.0265
+          max: -0.201857, -0.200687, 0.0595
+          color: '#623B00'
+          shape: CylinderX
+          yaw: -18.43495
+        - label: string binding at upper tip segment 1
+          min: 0.161232, 0.273813, 0.068
+          max: 0.210643, 0.291813, 0.086
+          color: '#DCD7B4'
+          shape: CylinderX
+          yaw: 55.30485
+        - label: string binding at upper tip segment 2
+          min: 0.199372, 0.289438, 0.068
+          max: 0.235003, 0.307438, 0.086
+          color: '#DCD7B4'
+          shape: CylinderX
+          yaw: -15.25512
+        - label: broken upper tip segment 1
+          min: 0.189832, 0.303187, 0.037
+          max: 0.24298, 0.331188, 0.065
+          color: '#905600'
+          shape: CylinderX
+          yaw: 91.68468
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DFishingRodMakeshiftNaturalFinalCloudActiveStudy
+  label: Makeshift branch fishing rod / extended-line source study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: FishingRodMakeshift
+  referenceRsi: /Textures/_SS14/_Goobstation/Objects/Specific/Fishing/makeshift_rod.rsi
+  referenceState: icon-active
+  sourceDirections: 1
+  description: Unbound static study of original icon-active resource. Extended attached line and simple hook. Actual
+    inspected CMU fishing owners use separate lure/rope entities and do not bind this world sprite state. This study
+    does not claim a live casting pose. Physical unseen depth and material finish remain inferred. All art is draft;
+    no native, live-map fit or fidelity certification.
+  parts:
+  - label: uneven wooden makeshift rod segment 1
+    min: -0.477514, -0.327937, 0.0115
+    max: -0.194361, -0.268937, 0.0705
+    color: '#714400'
+    shape: CylinderX
+    yaw: 47.68378
+  - label: uneven wooden makeshift rod segment 2
+    min: -0.284106, -0.121687, 0.0115
+    max: -0.003394, -0.062687, 0.0705
+    color: '#714400'
+    shape: CylinderX
+    yaw: 46.35319
+  - label: uneven wooden makeshift rod segment 3
+    min: -0.10411, 0.115813, 0.0115
+    max: 0.275985, 0.174813, 0.0705
+    color: '#714400'
+    shape: CylinderX
+    yaw: 45.6662
+  - label: lighter exposed branch ridge segment 1
+    min: -0.470719, -0.293313, 0.0555
+    max: -0.169906, -0.272313, 0.0765
+    color: '#905600'
+    shape: CylinderX
+    yaw: 47.52612
+  - label: lighter exposed branch ridge segment 2
+    min: -0.264658, -0.076125, 0.0555
+    max: 0.027158, -0.055125, 0.0765
+    color: '#905600'
+    shape: CylinderX
+    yaw: 46.7357
+  - label: lighter exposed branch ridge segment 3
+    min: -0.072103, 0.156688, 0.0555
+    max: 0.281478, 0.177688, 0.0765
+    color: '#905600'
+    shape: CylinderX
+    yaw: 45.71616
+  - label: crooked upper fork twig segment 1
+    min: -0.16417, -0.020688, 0.025
+    max: -0.07333, 0.011312, 0.057
+    color: '#905600'
+    shape: CylinderX
+    yaw: 139.18492
+  - label: crooked upper fork twig segment 2
+    min: -0.185977, 0.04025, 0.025
+    max: -0.123398, 0.07225, 0.057
+    color: '#905600'
+    shape: CylinderX
+    yaw: 92.86241
+  - label: short lower broken twig segment 1
+    min: -0.251268, -0.233687, 0.0265
+    max: -0.201857, -0.200687, 0.0595
+    color: '#623B00'
+    shape: CylinderX
+    yaw: -18.43495
+  - label: string binding at upper tip segment 1
+    min: 0.161232, 0.273813, 0.068
+    max: 0.210643, 0.291813, 0.086
+    color: '#DCD7B4'
+    shape: CylinderX
+    yaw: 55.30485
+  - label: string binding at upper tip segment 2
+    min: 0.199372, 0.289438, 0.068
+    max: 0.235003, 0.307438, 0.086
+    color: '#DCD7B4'
+    shape: CylinderX
+    yaw: -15.25512
+  - label: broken upper tip segment 1
+    min: 0.189832, 0.303187, 0.037
+    max: 0.24298, 0.331188, 0.065
+    color: '#905600'
+    shape: CylinderX
+    yaw: 91.68468
+  - label: long pale improvised fishing line segment 1
+    min: -0.09375, -0.050125, 0.0335
+    max: 0.58125, -0.031125, 0.0525
+    color: '#EDE6BE'
+    shape: CylinderX
+    yaw: -90.0
+  - label: dark simple hook segment 1
+    min: 0.228054, -0.405813, 0.0325
+    max: 0.262571, -0.384813, 0.0535
+    color: '#606070'
+    shape: CylinderX
+    yaw: -84.80557
+  - label: dark simple hook segment 2
+    min: 0.243586, -0.432375, 0.0325
+    max: 0.273601, -0.411375, 0.0535
+    color: '#606070'
+    shape: CylinderX
+    yaw: -38.65981
+  placement: surface
+  useEntityRotation: true
+- type: cmu3DModel
+  id: CMU3DCMUXenoEggNotDSNaturalFinalCloud
+  label: Silver-blue xeno egg shell
+  status: draft
+  sourcePrototypes:
+  - CMUXenoEggNotDS
+  referencePrototype: CMUXenoEggNotDS
+  referenceRsi: /Textures/_RMC14/Structures/Xenos/xeno_egg.rsi
+  referenceState: egg_item
+  sourceDirections: 1
+  description: 'Inherited XenoEgg.State defaults to Item and the original Base layer starts at egg_item. Four static
+    source poses are distinct: portable closed item, squat rooted growing egg, taller rooted grown closed egg, and
+    opened/hatched shell with a genuine mouth and exposed pink lips. Opening and exploding RSI animations are not
+    authored; opened is the source post-hatch appearance, not a separate invented state. Fragile/sustained alternate
+    RSI and gameplay spawning remain unsupported. Physical unseen depth and material finish remain inferred. All art
+    is draft; no native, live-map fit or fidelity certification.'
+  parts:
+  - label: curved carapace rib 01 section 1
+    min: 0.075508, -0.042463, 0.043827
+    max: 0.174073, 0.042463, 0.085629
+    color: '#38332F'
+    shape: CylinderX
+    pitch: 47.42705
+  - label: curved carapace rib 01 section 2
+    min: 0.113393, -0.051161, 0.138861
+    max: 0.235259, 0.051161, 0.180663
+    color: '#2B2724'
+    shape: CylinderX
+    pitch: 74.58719
+  - label: curved carapace rib 01 section 3
+    min: 0.122553, -0.051161, 0.257466
+    max: 0.243247, 0.051161, 0.299268
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 82.74514
+  - label: curved carapace rib 01 section 4
+    min: 0.080929, -0.047068, 0.373453
+    max: 0.208662, 0.047068, 0.415255
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 61.49112
+  - label: curved carapace rib 01 section 5
+    min: -0.002897, -0.030696, 0.466242
+    max: 0.125783, 0.030696, 0.508044
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 34.74258
+  - label: curved carapace rib 02 section 1
+    min: 0.066522, -0.002768, 0.043827
+    max: 0.164061, 0.082159, 0.085629
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: 18.9988
+    pitch: 48.08743
+  - label: curved carapace rib 02 section 2
+    min: 0.100221, 0.004292, 0.138861
+    max: 0.221892, 0.106613, 0.180663
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: 18.9988
+    pitch: 74.9238
+  - label: curved carapace rib 02 section 3
+    min: 0.108652, 0.007019, 0.257466
+    max: 0.229302, 0.10934, 0.299268
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: -161.0012
+    pitch: 82.90952
+  - label: curved carapace rib 02 section 4
+    min: 0.070237, -0.001009, 0.373453
+    max: 0.19731, 0.093127, 0.415255
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -161.0012
+    pitch: 62.04413
+  - label: curved carapace rib 02 section 5
+    min: -0.006583, -0.011152, 0.466242
+    max: 0.120115, 0.050241, 0.508044
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: -161.0012
+    pitch: 35.36644
+  - label: curved carapace rib 03 section 1
+    min: 0.040733, 0.030884, 0.043827
+    max: 0.135748, 0.115811, 0.085629
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: 39.73416
+    pitch: 49.81169
+  - label: curved carapace rib 03 section 2
+    min: 0.062668, 0.051302, 0.138861
+    max: 0.183867, 0.153623, 0.180663
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: 39.73416
+    pitch: 75.77563
+  - label: curved carapace rib 03 section 3
+    min: 0.069057, 0.056341, 0.257466
+    max: 0.189602, 0.158663, 0.299268
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -140.26584
+    pitch: 83.32371
+  - label: curved carapace rib 03 section 4
+    min: 0.039653, 0.038038, 0.373453
+    max: 0.165118, 0.132173, 0.415255
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: -140.26584
+    pitch: 63.46117
+  - label: curved carapace rib 03 section 5
+    min: -0.017444, 0.005417, 0.466242
+    max: 0.104337, 0.06681, 0.508044
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: -140.26584
+    pitch: 37.02565
+  - label: curved carapace rib 04 section 1
+    min: 0.001544, 0.05337, 0.043827
+    max: 0.093967, 0.138297, 0.085629
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: 63.51211
+    pitch: 51.75339
+  - label: curved carapace rib 04 section 2
+    min: 0.006349, 0.082713, 0.138861
+    max: 0.127074, 0.185035, 0.180663
+    color: '#38332F'
+    shape: CylinderX
+    yaw: 63.51211
+    pitch: 76.69165
+  - label: curved carapace rib 04 section 3
+    min: 0.009773, 0.089297, 0.257466
+    max: 0.130213, 0.191619, 0.299268
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: -116.48789
+    pitch: 83.76643
+  - label: curved carapace rib 04 section 4
+    min: -0.006507, 0.064128, 0.373453
+    max: 0.117329, 0.158264, 0.415255
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: -116.48789
+    pitch: 65.0127
+  - label: curved carapace rib 04 section 5
+    min: -0.034816, 0.016489, 0.466242
+    max: 0.081842, 0.077882, 0.508044
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: -116.48789
+    pitch: 38.94849
+  - label: curved carapace rib 05 section 1
+    min: -0.045664, 0.061266, 0.043827
+    max: 0.045664, 0.146193, 0.085629
+    color: '#38332F'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 52.63373
+  - label: curved carapace rib 05 section 2
+    min: -0.060264, 0.093743, 0.138861
+    max: 0.060264, 0.196065, 0.180663
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 77.09311
+  - label: curved carapace rib 05 section 3
+    min: -0.060198, 0.10087, 0.257466
+    max: 0.060198, 0.203191, 0.299268
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 83.95963
+  - label: curved carapace rib 05 section 4
+    min: -0.061577, 0.07329, 0.373453
+    max: 0.061577, 0.167425, 0.415255
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 65.70157
+  - label: curved carapace rib 05 section 5
+    min: -0.057234, 0.020376, 0.466242
+    max: 0.057234, 0.081769, 0.508044
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 39.83999
+  - label: curved carapace rib 06 section 1
+    min: -0.093967, 0.05337, 0.043827
+    max: -0.001544, 0.138297, 0.085629
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: 116.48789
+    pitch: 51.75339
+  - label: curved carapace rib 06 section 2
+    min: -0.127074, 0.082713, 0.138861
+    max: -0.006349, 0.185035, 0.180663
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: 116.48789
+    pitch: 76.69165
+  - label: curved carapace rib 06 section 3
+    min: -0.130213, 0.089297, 0.257466
+    max: -0.009773, 0.191619, 0.299268
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: -63.51211
+    pitch: 83.76643
+  - label: curved carapace rib 06 section 4
+    min: -0.117329, 0.064128, 0.373453
+    max: 0.006507, 0.158264, 0.415255
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -63.51211
+    pitch: 65.0127
+  - label: curved carapace rib 06 section 5
+    min: -0.081842, 0.016489, 0.466242
+    max: 0.034816, 0.077882, 0.508044
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: -63.51211
+    pitch: 38.94849
+  - label: curved carapace rib 07 section 1
+    min: -0.135748, 0.030884, 0.043827
+    max: -0.040733, 0.115811, 0.085629
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: 140.26584
+    pitch: 49.81169
+  - label: curved carapace rib 07 section 2
+    min: -0.183867, 0.051302, 0.138861
+    max: -0.062668, 0.153623, 0.180663
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: 140.26584
+    pitch: 75.77563
+  - label: curved carapace rib 07 section 3
+    min: -0.189602, 0.056341, 0.257466
+    max: -0.069057, 0.158663, 0.299268
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -39.73416
+    pitch: 83.32371
+  - label: curved carapace rib 07 section 4
+    min: -0.165118, 0.038038, 0.373453
+    max: -0.039653, 0.132173, 0.415255
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: -39.73416
+    pitch: 63.46117
+  - label: curved carapace rib 07 section 5
+    min: -0.104337, 0.005417, 0.466242
+    max: 0.017444, 0.06681, 0.508044
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: -39.73416
+    pitch: 37.02565
+  - label: curved carapace rib 08 section 1
+    min: -0.164061, -0.002768, 0.043827
+    max: -0.066522, 0.082159, 0.085629
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: 161.0012
+    pitch: 48.08743
+  - label: curved carapace rib 08 section 2
+    min: -0.221892, 0.004292, 0.138861
+    max: -0.100221, 0.106613, 0.180663
+    color: '#38332F'
+    shape: CylinderX
+    yaw: 161.0012
+    pitch: 74.9238
+  - label: curved carapace rib 08 section 3
+    min: -0.229302, 0.007019, 0.257466
+    max: -0.108652, 0.10934, 0.299268
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: -18.9988
+    pitch: 82.90952
+  - label: curved carapace rib 08 section 4
+    min: -0.19731, -0.001009, 0.373453
+    max: -0.070237, 0.093127, 0.415255
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: -18.9988
+    pitch: 62.04413
+  - label: curved carapace rib 08 section 5
+    min: -0.120115, -0.011152, 0.466242
+    max: 0.006583, 0.050241, 0.508044
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: -18.9988
+    pitch: 35.36644
+  - label: curved carapace rib 09 section 1
+    min: -0.174073, -0.042463, 0.043827
+    max: -0.075508, 0.042463, 0.085629
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 47.42705
+  - label: curved carapace rib 09 section 2
+    min: -0.235259, -0.051161, 0.138861
+    max: -0.113393, 0.051161, 0.180663
+    color: '#2B2724'
+    shape: CylinderX
+    yaw: -180.0
+    pitch: 74.58719
+  - label: curved carapace rib 09 section 3
+    min: -0.243247, -0.051161, 0.257466
+    max: -0.122553, 0.051161, 0.299268
+    color: '#4A453E'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 82.74514
+  - label: curved carapace rib 09 section 4
+    min: -0.208662, -0.047068, 0.373453
+    max: -0.080929, 0.047068, 0.415255
+    color: '#3F3935'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 61.49112
+  - label: curved carapace rib 09 section 5
+    min: -0.125783, -0.030696, 0.466242
+    max: 0.002897, 0.030696, 0.508044
+    color: '#38332F'
+    shape: CylinderX
+    yaw: 0.0
+    pitch: 34.74258
+  - label: curved carapace rib 10 section 1
+    min: -0.164061, -0.082159, 0.043827
+    max: -0.066522, 0.002768, 0.085629
+    color: '#1F1D1F'
+    shape: CylinderX
+    yaw: -161.0012
+    pitch: 48.08743
+  - label: curved carapace rib 10 section 2
+    min: -0.221892, -0.106613, 0.138861
+    max: -0.100221, -0.004292, 0.180663
+    color: '#829AA4'
+    shape: CylinderX
+    yaw: -161.0012
+    pitch: 74.9238
+  - label: curved carapace rib 10 section 3
+    min: -0.229302, -0.10934, 0.257466
+    max: -0.108652, -0.007019, 0.299268
+    color: '#829AA4'
+    shape: CylinderX
+    yaw: 18.9988
+    pitch: 82.90952
+  - label: curved carapace rib 10 section 4
+    min: -0.19731, -0.093127, 0.373453
+    max: -0.070237, 0.001009, 0.415255
+    color: '#6C808D'
+    shape: CylinderX
+    yaw: 18.9988
+    pitch: 62.04413
+  - label: curved carapace rib 10 section 5
+    min: -0.120115, -0.050241, 0.466242
+    max: 0.006583, 0.011152, 0.508044
+    color: '#14161B'
+    shape: CylinderX
+    yaw: 18.9988
+    pitch: 35.36644
+  - label: curved carapace rib 11 section 1
+    min: -0.135748, -0.115811, 0.043827
+    max: -0.040733, -0.030884, 0.085629
+    color: '#423D37'
+    shape: CylinderX
+    yaw: -140.26584
+    pitch: 49.81169
+  - label: curved carapace rib 11 section 2
+    min: -0.183867, -0.153623, 0.138861
+    max: -0.062668, -0.051302, 0.180663
+    color: '#B3B4B4'
+    shape: CylinderX
+    yaw: -140.26584
+    pitch: 75.77563
+  - label: curved carapace rib 11 section 3
+    min: -0.189602, -0.158663, 0.257466
+    max: -0.069057, -0.056341, 0.299268
+    color: '#B3B4B4'
+    shape: CylinderX
+    yaw: 39.73416
+    pitch: 83.32371
+  - label: curved carapace rib 11 section 4
+    min: -0.165118, -0.132173, 0.373453
+    max: -0.039653, -0.038038, 0.415255
+    color: '#B4B4B4'
+    shape: CylinderX
+    yaw: 39.73416
+    pitch: 63.46117
+  - label: curved carapace rib 11 section 5
+    min: -0.104337, -0.06681, 0.466242
+    max: 0.017444, -0.005417, 0.508044
+    color: '#7A7A7A'
+    shape: CylinderX
+    yaw: 39.73416
+    pitch: 37.02565
+  - label: curved carapace rib 12 section 1
+    min: -0.093967, -0.138297, 0.043827
+    max: -0.001544, -0.05337, 0.085629
+    color: '#5C6B77'
+    shape: CylinderX
+    yaw: -116.48789
+    pitch: 51.75339
+  - label: curved carapace rib 12 section 2
+    min: -0.127074, -0.185035, 0.138861
+    max: -0.006349, -0.082713, 0.180663
+    color: '#5C6B77'
+    shape: CylinderX
+    yaw: -116.48789
+    pitch: 76.69165
+  - label: curved carapace rib 12 section 3
+    min: -0.130213, -0.191619, 0.257466
+    max: -0.009773, -0.089297, 0.299268
+    color: '#5C6B77'
+    shape: CylinderX
+    yaw: 63.51211
+    pitch: 83.76643
+  - label: curved carapace rib 12 section 4
+    min: -0.117329, -0.158264, 0.373453
+    max: 0.006507, -0.064128, 0.415255
+    color: '#B4B4B4'
+    shape: CylinderX
+    yaw: 63.51211
+    pitch: 65.0127
+  - label: curved carapace rib 12 section 5
+    min: -0.081842, -0.077882, 0.466242
+    max: 0.034816, -0.016489, 0.508044
+    color: '#1F1D1F'
+    shape: CylinderX
+    yaw: 63.51211
+    pitch: 38.94849
+  - label: curved carapace rib 13 section 1
+    min: -0.045664, -0.146193, 0.043827
+    max: 0.045664, -0.061266, 0.085629
+    color: '#5C6B77'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 52.63373
+  - label: curved carapace rib 13 section 2
+    min: -0.060264, -0.196065, 0.138861
+    max: 0.060264, -0.093743, 0.180663
+    color: '#5C6B77'
+    shape: CylinderX
+    yaw: -90.0
+    pitch: 77.09311
+  - label: curved carapace rib 13 section 3
+    min: -0.060198, -0.203191, 0.257466
+    max: 0.060198, -0.10087, 0.299268
+    color: '#5C6B77'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 83.95963
+  - label: curved carapace rib 13 section 4
+    min: -0.061577, -0.167425, 0.373453
+    max: 0.061577, -0.07329, 0.415255
+    color: '#A5B0B0'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 65.70157
+  - label: curved carapace rib 13 section 5
+    min: -0.057234, -0.081769, 0.466242
+    max: 0.057234, -0.020376, 0.508044
+    color: '#57666E'
+    shape: CylinderX
+    yaw: 90.0
+    pitch: 39.83999
+  - label: curved carapace rib 14 section 1
+    min: 0.001544, -0.138297, 0.043827
+    max: 0.093967, -0.05337, 0.085629
+    color: '#1F1D1F'
+    shape: CylinderX
+    yaw: -63.51211
+    pitch: 51.75339
+  - label: curved carapace rib 14 section 2
+    min: 0.006349, -0.185035, 0.138861
+    max: 0.127074, -0.082713, 0.180663
+    color: '#829AA4'
+    shape: CylinderX
+    yaw: -63.51211
+    pitch: 76.69165
+  - label: curved carapace rib 14 section 3
+    min: 0.009773, -0.191619, 0.257466
+    max: 0.130213, -0.089297, 0.299268
+    color: '#829AA4'
+    shape: CylinderX
+    yaw: 116.48789
+    pitch: 83.76643
+  - label: curved carapace rib 14 section 4
+    min: -0.006507, -0.158264, 0.373453
+    max: 0.117329, -0.064128, 0.415255
+    color: '#9CADAD'
+    shape: CylinderX
+    yaw: 116.48789
+    pitch: 65.0127
+  - label: curved carapace rib 14 section 5
+    min: -0.034816, -0.077882, 0.466242
+    max: 0.081842, -0.016489, 0.508044
+    color: '#14161B'
+    shape: CylinderX
+    yaw: 116.48789
+    pitch: 38.94849
+  - label: curved carapace rib 15 section 1
+    min: 0.040733, -0.115811, 0.043827
+    max: 0.135748, -0.030884, 0.085629
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -39.73416
+    pitch: 49.81169
+  - label: curved carapace rib 15 section 2
+    min: 0.062668, -0.153623, 0.138861
+    max: 0.183867, -0.051302, 0.180663
+    color: '#14161B'
+    shape: CylinderX
+    yaw: -39.73416
+    pitch: 75.77563
+  - label: curved carapace rib 15 section 3
+    min: 0.069057, -0.158663, 0.257466
+    max: 0.189602, -0.056341, 0.299268
+    color: '#14161B'
+    shape: CylinderX
+    yaw: 140.26584
+    pitch: 83.32371
+  - label: curved carapace rib 15 section 4
+    min: 0.039653, -0.132173, 0.373453
+    max: 0.165118, -0.038038, 0.415255
+    color: '#38332F'
+    shape: CylinderX
+    yaw: 140.26584
+    pitch: 63.46117
+  - label: curved carapace rib 15 section 5
+    min: -0.017444, -0.06681, 0.466242
+    max: 0.104337, -0.005417, 0.508044
+    color: '#38332F'
+    shape: CylinderX
+    yaw: 140.26584
+    pitch: 37.02565
+  - label: curved carapace rib 16 section 1
+    min: 0.066522, -0.082159, 0.043827
+    max: 0.164061, 0.002768, 0.085629
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -18.9988
+    pitch: 48.08743
+  - label: curved carapace rib 16 section 2
+    min: 0.100221, -0.106613, 0.138861
+    max: 0.221892, -0.004292, 0.180663
+    color: '#38332F'
+    shape: CylinderX
+    yaw: -18.9988
+    pitch: 74.9238
+  - label: curved carapace rib 16 section 3
+    min: 0.108652, -0.10934, 0.257466
+    max: 0.229302, -0.007019, 0.299268
+    color: '#38332F'
+    shape: CylinderX
+    yaw: 161.0012
+    pitch: 82.90952
+  - label: curved carapace rib 16 section 4
+    min: 0.070237, -0.093127, 0.373453
+    max: 0.19731, 0.001009, 0.415255
+    color: '#38332F'
+    shape: CylinderX
+    yaw: 161.0012
+    pitch: 62.04413
+  - label: curved carapace rib 16 section 5
+    min: -0.006583, -0.050241, 0.466242
+    max: 0.120115, 0.011152, 0.508044
+    color: '#38332F'
+    shape: CylinderX
+    yaw: 161.0012
+    pitch: 35.36644
+  - label: recessed interior shell floor
+    min: -0.092045, -0.076369, 0.002619
+    max: 0.092045, 0.076369, 0.031803
+    color: '#14161B'
+    shape: Ellipsoid
+  - label: continuous closed inner carapace backing
+    min: -0.160375, -0.128621, 0.013844
+    max: 0.160375, 0.128621, 0.505476
+    color: '#5C6B77'
+    shape: Ellipsoid
+  - label: closed tiny apical shell join
+    min: -0.016882, -0.015274, 0.509218
+    max: 0.016882, 0.015274, 0.538401
+    color: '#B4B4B4'
+    shape: Ellipsoid
+  - label: source-guided short shell striation 1
+    min: -0.119779, -0.13657, 0.159762
+    max: -0.09727, -0.1221, 0.214388
+    color: '#B3B4B4'
+    shape: SlantedX
+    yaw: 18
+  - label: source-guided short shell striation 2
+    min: -0.083604, -0.157659, 0.227109
+    max: -0.061095, -0.143189, 0.281735
+    color: '#B4B4B4'
+    shape: SlantedX
+    yaw: -18
+  - label: source-guided short shell striation 3
+    min: -0.131837, -0.125551, 0.27949
+    max: -0.109328, -0.111081, 0.334116
+    color: '#211E21'
+    shape: SlantedX
+    yaw: 18
+  - label: source-guided short shell striation 4
+    min: -0.094858, -0.132453, 0.331871
+    max: -0.07235, -0.117983, 0.386497
+    color: '#89A1A6'
+    shape: SlantedX
+    yaw: -18
+  - label: source-guided short shell striation 5
+    min: -0.046625, -0.134422, 0.361803
+    max: -0.024117, -0.119952, 0.416429
+    color: '#1E1C1E'
+    shape: SlantedX
+    yaw: 18
+  - label: source-guided short shell striation 6
+    min: -0.000804, -0.162456, 0.294456
+    max: 0.021705, -0.147986, 0.349082
+    color: '#72838F'
+    shape: SlantedX
+    yaw: -18
+  - label: source-guided short shell striation 7
+    min: 0.035371, -0.164082, 0.234592
+    max: 0.05788, -0.149612, 0.289218
+    color: '#677882'
+    shape: SlantedX
+    yaw: 18
+  - label: source-guided short shell striation 8
+    min: -0.059487, -0.161023, 0.159762
+    max: -0.036979, -0.146553, 0.214388
+    color: '#7D909F'
+    shape: SlantedX
+    yaw: -18
+  - label: source-guided short shell striation 9
+    min: 0.06833, -0.138221, 0.324388
+    max: 0.090839, -0.123751, 0.379014
+    color: '#14161B'
+    shape: SlantedX
+    yaw: 18
+  - label: source-guided short shell striation 10
+    min: 0.099682, -0.143243, 0.197177
+    max: 0.12219, -0.128773, 0.251803
+    color: '#38332F'
+    shape: SlantedX
+    yaw: -18
+  - label: source-guided short shell striation 11
+    min: -0.02492, -0.109611, 0.414184
+    max: -0.002412, -0.095141, 0.46881
+    color: '#14161B'
+    shape: SlantedX
+    yaw: 18
+  - label: source-guided short shell striation 12
+    min: 0.020901, -0.121161, 0.391735
+    max: 0.04341, -0.106691, 0.446361
+    color: '#3F3935'
+    shape: SlantedX
+    yaw: -18
+  - label: original small silver-blue shell striation
+    min: -0.09325, -0.167796, 0.243571
+    max: -0.012862, -0.161796, 0.337109
+    color: '#FFFFFF'
+    surface: CMU3DNaturalFinalCloudArt05
+    surfaceAxis: XZ
+  useEntityRotation: true
+  sourceSpriteRotates: true
+  sourceSpriteOffset: 0, 0
+  spriteStates:
+    egg_item:
+      frames:
+      - parts:
+        - label: curved carapace rib 01 section 1
+          min: 0.075508, -0.042463, 0.043827
+          max: 0.174073, 0.042463, 0.085629
+          color: '#38332F'
+          shape: CylinderX
+          pitch: 47.42705
+        - label: curved carapace rib 01 section 2
+          min: 0.113393, -0.051161, 0.138861
+          max: 0.235259, 0.051161, 0.180663
+          color: '#2B2724'
+          shape: CylinderX
+          pitch: 74.58719
+        - label: curved carapace rib 01 section 3
+          min: 0.122553, -0.051161, 0.257466
+          max: 0.243247, 0.051161, 0.299268
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 82.74514
+        - label: curved carapace rib 01 section 4
+          min: 0.080929, -0.047068, 0.373453
+          max: 0.208662, 0.047068, 0.415255
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 61.49112
+        - label: curved carapace rib 01 section 5
+          min: -0.002897, -0.030696, 0.466242
+          max: 0.125783, 0.030696, 0.508044
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 34.74258
+        - label: curved carapace rib 02 section 1
+          min: 0.066522, -0.002768, 0.043827
+          max: 0.164061, 0.082159, 0.085629
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 48.08743
+        - label: curved carapace rib 02 section 2
+          min: 0.100221, 0.004292, 0.138861
+          max: 0.221892, 0.106613, 0.180663
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 74.9238
+        - label: curved carapace rib 02 section 3
+          min: 0.108652, 0.007019, 0.257466
+          max: 0.229302, 0.10934, 0.299268
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 82.90952
+        - label: curved carapace rib 02 section 4
+          min: 0.070237, -0.001009, 0.373453
+          max: 0.19731, 0.093127, 0.415255
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 62.04413
+        - label: curved carapace rib 02 section 5
+          min: -0.006583, -0.011152, 0.466242
+          max: 0.120115, 0.050241, 0.508044
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 35.36644
+        - label: curved carapace rib 03 section 1
+          min: 0.040733, 0.030884, 0.043827
+          max: 0.135748, 0.115811, 0.085629
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 49.81169
+        - label: curved carapace rib 03 section 2
+          min: 0.062668, 0.051302, 0.138861
+          max: 0.183867, 0.153623, 0.180663
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 75.77563
+        - label: curved carapace rib 03 section 3
+          min: 0.069057, 0.056341, 0.257466
+          max: 0.189602, 0.158663, 0.299268
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 83.32371
+        - label: curved carapace rib 03 section 4
+          min: 0.039653, 0.038038, 0.373453
+          max: 0.165118, 0.132173, 0.415255
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 63.46117
+        - label: curved carapace rib 03 section 5
+          min: -0.017444, 0.005417, 0.466242
+          max: 0.104337, 0.06681, 0.508044
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 37.02565
+        - label: curved carapace rib 04 section 1
+          min: 0.001544, 0.05337, 0.043827
+          max: 0.093967, 0.138297, 0.085629
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 51.75339
+        - label: curved carapace rib 04 section 2
+          min: 0.006349, 0.082713, 0.138861
+          max: 0.127074, 0.185035, 0.180663
+          color: '#38332F'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 76.69165
+        - label: curved carapace rib 04 section 3
+          min: 0.009773, 0.089297, 0.257466
+          max: 0.130213, 0.191619, 0.299268
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 83.76643
+        - label: curved carapace rib 04 section 4
+          min: -0.006507, 0.064128, 0.373453
+          max: 0.117329, 0.158264, 0.415255
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 65.0127
+        - label: curved carapace rib 04 section 5
+          min: -0.034816, 0.016489, 0.466242
+          max: 0.081842, 0.077882, 0.508044
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 38.94849
+        - label: curved carapace rib 05 section 1
+          min: -0.045664, 0.061266, 0.043827
+          max: 0.045664, 0.146193, 0.085629
+          color: '#38332F'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 52.63373
+        - label: curved carapace rib 05 section 2
+          min: -0.060264, 0.093743, 0.138861
+          max: 0.060264, 0.196065, 0.180663
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 77.09311
+        - label: curved carapace rib 05 section 3
+          min: -0.060198, 0.10087, 0.257466
+          max: 0.060198, 0.203191, 0.299268
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 83.95963
+        - label: curved carapace rib 05 section 4
+          min: -0.061577, 0.07329, 0.373453
+          max: 0.061577, 0.167425, 0.415255
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 65.70157
+        - label: curved carapace rib 05 section 5
+          min: -0.057234, 0.020376, 0.466242
+          max: 0.057234, 0.081769, 0.508044
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 39.83999
+        - label: curved carapace rib 06 section 1
+          min: -0.093967, 0.05337, 0.043827
+          max: -0.001544, 0.138297, 0.085629
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 51.75339
+        - label: curved carapace rib 06 section 2
+          min: -0.127074, 0.082713, 0.138861
+          max: -0.006349, 0.185035, 0.180663
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 76.69165
+        - label: curved carapace rib 06 section 3
+          min: -0.130213, 0.089297, 0.257466
+          max: -0.009773, 0.191619, 0.299268
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 83.76643
+        - label: curved carapace rib 06 section 4
+          min: -0.117329, 0.064128, 0.373453
+          max: 0.006507, 0.158264, 0.415255
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 65.0127
+        - label: curved carapace rib 06 section 5
+          min: -0.081842, 0.016489, 0.466242
+          max: 0.034816, 0.077882, 0.508044
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 38.94849
+        - label: curved carapace rib 07 section 1
+          min: -0.135748, 0.030884, 0.043827
+          max: -0.040733, 0.115811, 0.085629
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 49.81169
+        - label: curved carapace rib 07 section 2
+          min: -0.183867, 0.051302, 0.138861
+          max: -0.062668, 0.153623, 0.180663
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 75.77563
+        - label: curved carapace rib 07 section 3
+          min: -0.189602, 0.056341, 0.257466
+          max: -0.069057, 0.158663, 0.299268
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 83.32371
+        - label: curved carapace rib 07 section 4
+          min: -0.165118, 0.038038, 0.373453
+          max: -0.039653, 0.132173, 0.415255
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 63.46117
+        - label: curved carapace rib 07 section 5
+          min: -0.104337, 0.005417, 0.466242
+          max: 0.017444, 0.06681, 0.508044
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 37.02565
+        - label: curved carapace rib 08 section 1
+          min: -0.164061, -0.002768, 0.043827
+          max: -0.066522, 0.082159, 0.085629
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 48.08743
+        - label: curved carapace rib 08 section 2
+          min: -0.221892, 0.004292, 0.138861
+          max: -0.100221, 0.106613, 0.180663
+          color: '#38332F'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 74.9238
+        - label: curved carapace rib 08 section 3
+          min: -0.229302, 0.007019, 0.257466
+          max: -0.108652, 0.10934, 0.299268
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 82.90952
+        - label: curved carapace rib 08 section 4
+          min: -0.19731, -0.001009, 0.373453
+          max: -0.070237, 0.093127, 0.415255
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 62.04413
+        - label: curved carapace rib 08 section 5
+          min: -0.120115, -0.011152, 0.466242
+          max: 0.006583, 0.050241, 0.508044
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 35.36644
+        - label: curved carapace rib 09 section 1
+          min: -0.174073, -0.042463, 0.043827
+          max: -0.075508, 0.042463, 0.085629
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 47.42705
+        - label: curved carapace rib 09 section 2
+          min: -0.235259, -0.051161, 0.138861
+          max: -0.113393, 0.051161, 0.180663
+          color: '#2B2724'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 74.58719
+        - label: curved carapace rib 09 section 3
+          min: -0.243247, -0.051161, 0.257466
+          max: -0.122553, 0.051161, 0.299268
+          color: '#4A453E'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 82.74514
+        - label: curved carapace rib 09 section 4
+          min: -0.208662, -0.047068, 0.373453
+          max: -0.080929, 0.047068, 0.415255
+          color: '#3F3935'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 61.49112
+        - label: curved carapace rib 09 section 5
+          min: -0.125783, -0.030696, 0.466242
+          max: 0.002897, 0.030696, 0.508044
+          color: '#38332F'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 34.74258
+        - label: curved carapace rib 10 section 1
+          min: -0.164061, -0.082159, 0.043827
+          max: -0.066522, 0.002768, 0.085629
+          color: '#1F1D1F'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 48.08743
+        - label: curved carapace rib 10 section 2
+          min: -0.221892, -0.106613, 0.138861
+          max: -0.100221, -0.004292, 0.180663
+          color: '#829AA4'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 74.9238
+        - label: curved carapace rib 10 section 3
+          min: -0.229302, -0.10934, 0.257466
+          max: -0.108652, -0.007019, 0.299268
+          color: '#829AA4'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 82.90952
+        - label: curved carapace rib 10 section 4
+          min: -0.19731, -0.093127, 0.373453
+          max: -0.070237, 0.001009, 0.415255
+          color: '#6C808D'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 62.04413
+        - label: curved carapace rib 10 section 5
+          min: -0.120115, -0.050241, 0.466242
+          max: 0.006583, 0.011152, 0.508044
+          color: '#14161B'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 35.36644
+        - label: curved carapace rib 11 section 1
+          min: -0.135748, -0.115811, 0.043827
+          max: -0.040733, -0.030884, 0.085629
+          color: '#423D37'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 49.81169
+        - label: curved carapace rib 11 section 2
+          min: -0.183867, -0.153623, 0.138861
+          max: -0.062668, -0.051302, 0.180663
+          color: '#B3B4B4'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 75.77563
+        - label: curved carapace rib 11 section 3
+          min: -0.189602, -0.158663, 0.257466
+          max: -0.069057, -0.056341, 0.299268
+          color: '#B3B4B4'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 83.32371
+        - label: curved carapace rib 11 section 4
+          min: -0.165118, -0.132173, 0.373453
+          max: -0.039653, -0.038038, 0.415255
+          color: '#B4B4B4'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 63.46117
+        - label: curved carapace rib 11 section 5
+          min: -0.104337, -0.06681, 0.466242
+          max: 0.017444, -0.005417, 0.508044
+          color: '#7A7A7A'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 37.02565
+        - label: curved carapace rib 12 section 1
+          min: -0.093967, -0.138297, 0.043827
+          max: -0.001544, -0.05337, 0.085629
+          color: '#5C6B77'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 51.75339
+        - label: curved carapace rib 12 section 2
+          min: -0.127074, -0.185035, 0.138861
+          max: -0.006349, -0.082713, 0.180663
+          color: '#5C6B77'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 76.69165
+        - label: curved carapace rib 12 section 3
+          min: -0.130213, -0.191619, 0.257466
+          max: -0.009773, -0.089297, 0.299268
+          color: '#5C6B77'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 83.76643
+        - label: curved carapace rib 12 section 4
+          min: -0.117329, -0.158264, 0.373453
+          max: 0.006507, -0.064128, 0.415255
+          color: '#B4B4B4'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 65.0127
+        - label: curved carapace rib 12 section 5
+          min: -0.081842, -0.077882, 0.466242
+          max: 0.034816, -0.016489, 0.508044
+          color: '#1F1D1F'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 38.94849
+        - label: curved carapace rib 13 section 1
+          min: -0.045664, -0.146193, 0.043827
+          max: 0.045664, -0.061266, 0.085629
+          color: '#5C6B77'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 52.63373
+        - label: curved carapace rib 13 section 2
+          min: -0.060264, -0.196065, 0.138861
+          max: 0.060264, -0.093743, 0.180663
+          color: '#5C6B77'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 77.09311
+        - label: curved carapace rib 13 section 3
+          min: -0.060198, -0.203191, 0.257466
+          max: 0.060198, -0.10087, 0.299268
+          color: '#5C6B77'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 83.95963
+        - label: curved carapace rib 13 section 4
+          min: -0.061577, -0.167425, 0.373453
+          max: 0.061577, -0.07329, 0.415255
+          color: '#A5B0B0'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 65.70157
+        - label: curved carapace rib 13 section 5
+          min: -0.057234, -0.081769, 0.466242
+          max: 0.057234, -0.020376, 0.508044
+          color: '#57666E'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 39.83999
+        - label: curved carapace rib 14 section 1
+          min: 0.001544, -0.138297, 0.043827
+          max: 0.093967, -0.05337, 0.085629
+          color: '#1F1D1F'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 51.75339
+        - label: curved carapace rib 14 section 2
+          min: 0.006349, -0.185035, 0.138861
+          max: 0.127074, -0.082713, 0.180663
+          color: '#829AA4'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 76.69165
+        - label: curved carapace rib 14 section 3
+          min: 0.009773, -0.191619, 0.257466
+          max: 0.130213, -0.089297, 0.299268
+          color: '#829AA4'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 83.76643
+        - label: curved carapace rib 14 section 4
+          min: -0.006507, -0.158264, 0.373453
+          max: 0.117329, -0.064128, 0.415255
+          color: '#9CADAD'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 65.0127
+        - label: curved carapace rib 14 section 5
+          min: -0.034816, -0.077882, 0.466242
+          max: 0.081842, -0.016489, 0.508044
+          color: '#14161B'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 38.94849
+        - label: curved carapace rib 15 section 1
+          min: 0.040733, -0.115811, 0.043827
+          max: 0.135748, -0.030884, 0.085629
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 49.81169
+        - label: curved carapace rib 15 section 2
+          min: 0.062668, -0.153623, 0.138861
+          max: 0.183867, -0.051302, 0.180663
+          color: '#14161B'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 75.77563
+        - label: curved carapace rib 15 section 3
+          min: 0.069057, -0.158663, 0.257466
+          max: 0.189602, -0.056341, 0.299268
+          color: '#14161B'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 83.32371
+        - label: curved carapace rib 15 section 4
+          min: 0.039653, -0.132173, 0.373453
+          max: 0.165118, -0.038038, 0.415255
+          color: '#38332F'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 63.46117
+        - label: curved carapace rib 15 section 5
+          min: -0.017444, -0.06681, 0.466242
+          max: 0.104337, -0.005417, 0.508044
+          color: '#38332F'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 37.02565
+        - label: curved carapace rib 16 section 1
+          min: 0.066522, -0.082159, 0.043827
+          max: 0.164061, 0.002768, 0.085629
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 48.08743
+        - label: curved carapace rib 16 section 2
+          min: 0.100221, -0.106613, 0.138861
+          max: 0.221892, -0.004292, 0.180663
+          color: '#38332F'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 74.9238
+        - label: curved carapace rib 16 section 3
+          min: 0.108652, -0.10934, 0.257466
+          max: 0.229302, -0.007019, 0.299268
+          color: '#38332F'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 82.90952
+        - label: curved carapace rib 16 section 4
+          min: 0.070237, -0.093127, 0.373453
+          max: 0.19731, 0.001009, 0.415255
+          color: '#38332F'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 62.04413
+        - label: curved carapace rib 16 section 5
+          min: -0.006583, -0.050241, 0.466242
+          max: 0.120115, 0.011152, 0.508044
+          color: '#38332F'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 35.36644
+        - label: recessed interior shell floor
+          min: -0.092045, -0.076369, 0.002619
+          max: 0.092045, 0.076369, 0.031803
+          color: '#14161B'
+          shape: Ellipsoid
+        - label: continuous closed inner carapace backing
+          min: -0.160375, -0.128621, 0.013844
+          max: 0.160375, 0.128621, 0.505476
+          color: '#5C6B77'
+          shape: Ellipsoid
+        - label: closed tiny apical shell join
+          min: -0.016882, -0.015274, 0.509218
+          max: 0.016882, 0.015274, 0.538401
+          color: '#B4B4B4'
+          shape: Ellipsoid
+        - label: source-guided short shell striation 1
+          min: -0.119779, -0.13657, 0.159762
+          max: -0.09727, -0.1221, 0.214388
+          color: '#B3B4B4'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 2
+          min: -0.083604, -0.157659, 0.227109
+          max: -0.061095, -0.143189, 0.281735
+          color: '#B4B4B4'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 3
+          min: -0.131837, -0.125551, 0.27949
+          max: -0.109328, -0.111081, 0.334116
+          color: '#211E21'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 4
+          min: -0.094858, -0.132453, 0.331871
+          max: -0.07235, -0.117983, 0.386497
+          color: '#89A1A6'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 5
+          min: -0.046625, -0.134422, 0.361803
+          max: -0.024117, -0.119952, 0.416429
+          color: '#1E1C1E'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 6
+          min: -0.000804, -0.162456, 0.294456
+          max: 0.021705, -0.147986, 0.349082
+          color: '#72838F'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 7
+          min: 0.035371, -0.164082, 0.234592
+          max: 0.05788, -0.149612, 0.289218
+          color: '#677882'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 8
+          min: -0.059487, -0.161023, 0.159762
+          max: -0.036979, -0.146553, 0.214388
+          color: '#7D909F'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 9
+          min: 0.06833, -0.138221, 0.324388
+          max: 0.090839, -0.123751, 0.379014
+          color: '#14161B'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 10
+          min: 0.099682, -0.143243, 0.197177
+          max: 0.12219, -0.128773, 0.251803
+          color: '#38332F'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 11
+          min: -0.02492, -0.109611, 0.414184
+          max: -0.002412, -0.095141, 0.46881
+          color: '#14161B'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 12
+          min: 0.020901, -0.121161, 0.391735
+          max: 0.04341, -0.106691, 0.446361
+          color: '#3F3935'
+          shape: SlantedX
+          yaw: -18
+        - label: original small silver-blue shell striation
+          min: -0.09325, -0.167796, 0.243571
+          max: -0.012862, -0.161796, 0.337109
+          color: '#FFFFFF'
+          surface: CMU3DNaturalFinalCloudArt05
+          surfaceAxis: XZ
+      delays:
+      - 1
+    egg_growing:
+      frames:
+      - parts:
+        - label: curved carapace rib 01 section 1
+          min: 0.087776, -0.046361, 0.034259
+          max: 0.184714, 0.046361, 0.079898
+          color: '#393532'
+          shape: CylinderX
+          pitch: 41.32134
+        - label: curved carapace rib 01 section 2
+          min: 0.135593, -0.055857, 0.118062
+          max: 0.245061, 0.055857, 0.1637
+          color: '#2D2A27'
+          shape: CylinderX
+          pitch: 71.15369
+        - label: curved carapace rib 01 section 3
+          min: 0.146247, -0.055857, 0.22265
+          max: 0.253128, 0.055857, 0.268289
+          color: '#434343'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 81.04306
+        - label: curved carapace rib 01 section 4
+          min: 0.098446, -0.051388, 0.324929
+          max: 0.217725, 0.051388, 0.370568
+          color: '#393532'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 56.07968
+        - label: curved carapace rib 01 section 5
+          min: 0.000921, -0.033514, 0.406752
+          max: 0.133244, 0.033514, 0.452391
+          color: '#393532'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 29.25557
+        - label: curved carapace rib 02 section 1
+          min: 0.078027, -0.003022, 0.034259
+          max: 0.173721, 0.0897, 0.079898
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 41.98025
+        - label: curved carapace rib 02 section 2
+          min: 0.121235, 0.004686, 0.118062
+          max: 0.230444, 0.116399, 0.1637
+          color: '#434343'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 71.55564
+        - label: curved carapace rib 02 section 3
+          min: 0.131076, 0.007663, 0.22265
+          max: 0.237899, 0.119376, 0.268289
+          color: '#393532'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 81.2449
+        - label: curved carapace rib 02 section 4
+          min: 0.086835, -0.001102, 0.324929
+          max: 0.20527, 0.101675, 0.370568
+          color: '#393532'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 56.69141
+        - label: curved carapace rib 02 section 5
+          min: -0.003035, -0.012175, 0.406752
+          max: 0.126988, 0.054853, 0.452391
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 29.82473
+        - label: curved carapace rib 03 section 1
+          min: 0.050031, 0.033719, 0.034259
+          max: 0.142649, 0.126441, 0.079898
+          color: '#434343'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 43.71613
+        - label: curved carapace rib 03 section 2
+          min: 0.080291, 0.056011, 0.118062
+          max: 0.188872, 0.167724, 0.1637
+          color: '#393532'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 72.57552
+        - label: curved carapace rib 03 section 3
+          min: 0.08786, 0.061512, 0.22265
+          max: 0.194541, 0.173226, 0.268289
+          color: '#393532'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 81.75382
+        - label: curved carapace rib 03 section 4
+          min: 0.053597, 0.041529, 0.324929
+          max: 0.16997, 0.144305, 0.370568
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 58.26956
+        - label: curved carapace rib 03 section 5
+          min: -0.014714, 0.005915, 0.406752
+          max: 0.109583, 0.072943, 0.452391
+          color: '#434343'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 31.34977
+        - label: curved carapace rib 04 section 1
+          min: 0.007421, 0.058268, 0.034259
+          max: 0.096857, 0.150991, 0.079898
+          color: '#393532'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 45.69798
+        - label: curved carapace rib 04 section 2
+          min: 0.01886, 0.090305, 0.118062
+          max: 0.12681, 0.202018, 0.1637
+          color: '#393532'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 73.67642
+        - label: curved carapace rib 04 section 3
+          min: 0.023147, 0.097493, 0.22265
+          max: 0.129687, 0.209207, 0.268289
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 82.29829
+        - label: curved carapace rib 04 section 4
+          min: 0.003359, 0.070014, 0.324929
+          max: 0.117634, 0.17279, 0.370568
+          color: '#434343'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 60.0148
+        - label: curved carapace rib 04 section 5
+          min: -0.033475, 0.018002, 0.406752
+          max: 0.084818, 0.08503, 0.452391
+          color: '#393532'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 33.1384
+        - label: curved carapace rib 05 section 1
+          min: -0.044043, 0.066889, 0.034259
+          max: 0.044043, 0.159611, 0.079898
+          color: '#393532'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 46.60609
+        - label: curved carapace rib 05 section 2
+          min: -0.053844, 0.102348, 0.118062
+          max: 0.053844, 0.214061, 0.1637
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 74.16022
+        - label: curved carapace rib 05 section 3
+          min: -0.05324, 0.110128, 0.22265
+          max: 0.05324, 0.221842, 0.268289
+          color: '#434343'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 82.53604
+        - label: curved carapace rib 05 section 4
+          min: -0.056697, 0.080017, 0.324929
+          max: 0.056697, 0.182793, 0.370568
+          color: '#393532'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 60.79537
+        - label: curved carapace rib 05 section 5
+          min: -0.057858, 0.022247, 0.406752
+          max: 0.057858, 0.089275, 0.452391
+          color: '#393532'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 33.9757
+        - label: curved carapace rib 06 section 1
+          min: -0.096857, 0.058268, 0.034259
+          max: -0.007421, 0.150991, 0.079898
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 45.69798
+        - label: curved carapace rib 06 section 2
+          min: -0.12681, 0.090305, 0.118062
+          max: -0.01886, 0.202018, 0.1637
+          color: '#434343'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 73.67642
+        - label: curved carapace rib 06 section 3
+          min: -0.129687, 0.097493, 0.22265
+          max: -0.023147, 0.209207, 0.268289
+          color: '#393532'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 82.29829
+        - label: curved carapace rib 06 section 4
+          min: -0.117634, 0.070014, 0.324929
+          max: -0.003359, 0.17279, 0.370568
+          color: '#393532'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 60.0148
+        - label: curved carapace rib 06 section 5
+          min: -0.084818, 0.018002, 0.406752
+          max: 0.033475, 0.08503, 0.452391
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 33.1384
+        - label: curved carapace rib 07 section 1
+          min: -0.142649, 0.033719, 0.034259
+          max: -0.050031, 0.126441, 0.079898
+          color: '#434343'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 43.71613
+        - label: curved carapace rib 07 section 2
+          min: -0.188872, 0.056011, 0.118062
+          max: -0.080291, 0.167724, 0.1637
+          color: '#393532'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 72.57552
+        - label: curved carapace rib 07 section 3
+          min: -0.194541, 0.061512, 0.22265
+          max: -0.08786, 0.173226, 0.268289
+          color: '#393532'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 81.75382
+        - label: curved carapace rib 07 section 4
+          min: -0.16997, 0.041529, 0.324929
+          max: -0.053597, 0.144305, 0.370568
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 58.26956
+        - label: curved carapace rib 07 section 5
+          min: -0.109583, 0.005915, 0.406752
+          max: 0.014714, 0.072943, 0.452391
+          color: '#434343'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 31.34977
+        - label: curved carapace rib 08 section 1
+          min: -0.173721, -0.003022, 0.034259
+          max: -0.078027, 0.0897, 0.079898
+          color: '#393532'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 41.98025
+        - label: curved carapace rib 08 section 2
+          min: -0.230444, 0.004686, 0.118062
+          max: -0.121235, 0.116399, 0.1637
+          color: '#393532'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 71.55564
+        - label: curved carapace rib 08 section 3
+          min: -0.237899, 0.007663, 0.22265
+          max: -0.131076, 0.119376, 0.268289
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 81.2449
+        - label: curved carapace rib 08 section 4
+          min: -0.20527, -0.001102, 0.324929
+          max: -0.086835, 0.101675, 0.370568
+          color: '#434343'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 56.69141
+        - label: curved carapace rib 08 section 5
+          min: -0.126988, -0.012175, 0.406752
+          max: 0.003035, 0.054853, 0.452391
+          color: '#393532'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 29.82473
+        - label: curved carapace rib 09 section 1
+          min: -0.184714, -0.046361, 0.034259
+          max: -0.087776, 0.046361, 0.079898
+          color: '#393532'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 41.32134
+        - label: curved carapace rib 09 section 2
+          min: -0.245061, -0.055857, 0.118062
+          max: -0.135593, 0.055857, 0.1637
+          color: '#2D2A27'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 71.15369
+        - label: curved carapace rib 09 section 3
+          min: -0.253128, -0.055857, 0.22265
+          max: -0.146247, 0.055857, 0.268289
+          color: '#434343'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 81.04306
+        - label: curved carapace rib 09 section 4
+          min: -0.217725, -0.051388, 0.324929
+          max: -0.098446, 0.051388, 0.370568
+          color: '#393532'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 56.07968
+        - label: curved carapace rib 09 section 5
+          min: -0.133244, -0.033514, 0.406752
+          max: -0.000921, 0.033514, 0.452391
+          color: '#393532'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 29.25557
+        - label: curved carapace rib 10 section 1
+          min: -0.173721, -0.0897, 0.034259
+          max: -0.078027, 0.003022, 0.079898
+          color: '#262E31'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 41.98025
+        - label: curved carapace rib 10 section 2
+          min: -0.230444, -0.116399, 0.118062
+          max: -0.121235, -0.004686, 0.1637
+          color: '#201E20'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 71.55564
+        - label: curved carapace rib 10 section 3
+          min: -0.237899, -0.119376, 0.22265
+          max: -0.131076, -0.007663, 0.268289
+          color: '#939494'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 81.2449
+        - label: curved carapace rib 10 section 4
+          min: -0.20527, -0.101675, 0.324929
+          max: -0.086835, 0.001102, 0.370568
+          color: '#697680'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 56.69141
+        - label: curved carapace rib 10 section 5
+          min: -0.126988, -0.054853, 0.406752
+          max: 0.003035, 0.012175, 0.452391
+          color: '#949494'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 29.82473
+        - label: curved carapace rib 11 section 1
+          min: -0.142649, -0.126441, 0.034259
+          max: -0.050031, -0.033719, 0.079898
+          color: '#161416'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 43.71613
+        - label: curved carapace rib 11 section 2
+          min: -0.188872, -0.167724, 0.118062
+          max: -0.080291, -0.056011, 0.1637
+          color: '#423C38'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 72.57552
+        - label: curved carapace rib 11 section 3
+          min: -0.194541, -0.173226, 0.22265
+          max: -0.08786, -0.061512, 0.268289
+          color: '#4E5860'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 81.75382
+        - label: curved carapace rib 11 section 4
+          min: -0.16997, -0.144305, 0.324929
+          max: -0.053597, -0.041529, 0.370568
+          color: '#949494'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 58.26956
+        - label: curved carapace rib 11 section 5
+          min: -0.109583, -0.072943, 0.406752
+          max: 0.014714, -0.005915, 0.452391
+          color: '#949494'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 31.34977
+        - label: curved carapace rib 12 section 1
+          min: -0.096857, -0.150991, 0.034259
+          max: -0.007421, -0.058268, 0.079898
+          color: '#262E31'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 45.69798
+        - label: curved carapace rib 12 section 2
+          min: -0.12681, -0.202018, 0.118062
+          max: -0.01886, -0.090305, 0.1637
+          color: '#2E2B28'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 73.67642
+        - label: curved carapace rib 12 section 3
+          min: -0.129687, -0.209207, 0.22265
+          max: -0.023147, -0.097493, 0.268289
+          color: '#6D7D84'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 82.29829
+        - label: curved carapace rib 12 section 4
+          min: -0.117634, -0.17279, 0.324929
+          max: -0.003359, -0.070014, 0.370568
+          color: '#6D7D84'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 60.0148
+        - label: curved carapace rib 12 section 5
+          min: -0.084818, -0.08503, 0.406752
+          max: 0.033475, -0.018002, 0.452391
+          color: '#4E5860'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 33.1384
+        - label: curved carapace rib 13 section 1
+          min: -0.044043, -0.159611, 0.034259
+          max: 0.044043, -0.066889, 0.079898
+          color: '#262E31'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 46.60609
+        - label: curved carapace rib 13 section 2
+          min: -0.053844, -0.214061, 0.118062
+          max: 0.053844, -0.102348, 0.1637
+          color: '#1B1A1B'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 74.16022
+        - label: curved carapace rib 13 section 3
+          min: -0.05324, -0.221842, 0.22265
+          max: 0.05324, -0.110128, 0.268289
+          color: '#8D9292'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 82.53604
+        - label: curved carapace rib 13 section 4
+          min: -0.056697, -0.182793, 0.324929
+          max: 0.056697, -0.080017, 0.370568
+          color: '#546169'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 60.79537
+        - label: curved carapace rib 13 section 5
+          min: -0.057858, -0.089275, 0.406752
+          max: 0.057858, -0.022247, 0.452391
+          color: '#697680'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 33.9757
+        - label: curved carapace rib 14 section 1
+          min: 0.007421, -0.150991, 0.034259
+          max: 0.096857, -0.058268, 0.079898
+          color: '#141214'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 45.69798
+        - label: curved carapace rib 14 section 2
+          min: 0.01886, -0.202018, 0.118062
+          max: 0.12681, -0.090305, 0.1637
+          color: '#262321'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 73.67642
+        - label: curved carapace rib 14 section 3
+          min: 0.023147, -0.209207, 0.22265
+          max: 0.129687, -0.097493, 0.268289
+          color: '#313131'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 82.29829
+        - label: curved carapace rib 14 section 4
+          min: 0.003359, -0.17279, 0.324929
+          max: 0.117634, -0.070014, 0.370568
+          color: '#4D575F'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 60.0148
+        - label: curved carapace rib 14 section 5
+          min: -0.033475, -0.08503, 0.406752
+          max: 0.084818, -0.018002, 0.452391
+          color: '#4A545A'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 33.1384
+        - label: curved carapace rib 15 section 1
+          min: 0.050031, -0.126441, 0.034259
+          max: 0.142649, -0.033719, 0.079898
+          color: '#262E31'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 43.71613
+        - label: curved carapace rib 15 section 2
+          min: 0.080291, -0.167724, 0.118062
+          max: 0.188872, -0.056011, 0.1637
+          color: '#262E31'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 72.57552
+        - label: curved carapace rib 15 section 3
+          min: 0.08786, -0.173226, 0.22265
+          max: 0.194541, -0.061512, 0.268289
+          color: '#1E1C1B'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 81.75382
+        - label: curved carapace rib 15 section 4
+          min: 0.053597, -0.144305, 0.324929
+          max: 0.16997, -0.041529, 0.370568
+          color: '#101215'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 58.26956
+        - label: curved carapace rib 15 section 5
+          min: -0.014714, -0.072943, 0.406752
+          max: 0.109583, -0.005915, 0.452391
+          color: '#171517'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 31.34977
+        - label: curved carapace rib 16 section 1
+          min: 0.078027, -0.0897, 0.034259
+          max: 0.173721, 0.003022, 0.079898
+          color: '#262E31'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 41.98025
+        - label: curved carapace rib 16 section 2
+          min: 0.121235, -0.116399, 0.118062
+          max: 0.230444, -0.004686, 0.1637
+          color: '#262E31'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 71.55564
+        - label: curved carapace rib 16 section 3
+          min: 0.131076, -0.119376, 0.22265
+          max: 0.237899, -0.007663, 0.268289
+          color: '#393532'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 81.2449
+        - label: curved carapace rib 16 section 4
+          min: 0.086835, -0.101675, 0.324929
+          max: 0.20527, 0.001102, 0.370568
+          color: '#393532'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 56.69141
+        - label: curved carapace rib 16 section 5
+          min: -0.003035, -0.054853, 0.406752
+          max: 0.126988, 0.012175, 0.452391
+          color: '#393532'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 29.82473
+        - label: recessed interior shell floor
+          min: -0.100493, -0.083379, 0.00231
+          max: 0.100493, 0.083379, 0.028044
+          color: '#181618'
+          shape: Ellipsoid
+        - label: continuous closed inner carapace backing
+          min: -0.175095, -0.140427, 0.012207
+          max: 0.175095, 0.140427, 0.445738
+          color: '#606B73'
+          shape: Ellipsoid
+        - label: closed tiny apical shell join
+          min: -0.018431, -0.016676, 0.449037
+          max: 0.018431, 0.016676, 0.474772
+          color: '#949494'
+          shape: Ellipsoid
+        - label: source-guided short shell striation 1
+          min: -0.130773, -0.149105, 0.140881
+          max: -0.106198, -0.133307, 0.189051
+          color: '#6D7D84'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 2
+          min: -0.091278, -0.17213, 0.200269
+          max: -0.066703, -0.156332, 0.248439
+          color: '#4E5860'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 3
+          min: -0.143938, -0.137075, 0.246459
+          max: -0.119363, -0.121277, 0.294629
+          color: '#191719'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 4
+          min: -0.103565, -0.14461, 0.29265
+          max: -0.07899, -0.128812, 0.34082
+          color: '#939494'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 5
+          min: -0.050905, -0.146761, 0.319044
+          max: -0.02633, -0.130962, 0.367214
+          color: '#1A181A'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 6
+          min: -0.000878, -0.177367, 0.259656
+          max: 0.023697, -0.161569, 0.307827
+          color: '#4E5860'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 7
+          min: 0.038617, -0.179143, 0.206867
+          max: 0.063192, -0.163345, 0.255037
+          color: '#939494'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 8
+          min: -0.064948, -0.175803, 0.140881
+          max: -0.040373, -0.160005, 0.189051
+          color: '#949494'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 9
+          min: 0.074602, -0.150908, 0.286051
+          max: 0.099177, -0.13511, 0.334221
+          color: '#697680'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 10
+          min: 0.108831, -0.156391, 0.173874
+          max: 0.133406, -0.140593, 0.222044
+          color: '#393939'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 11
+          min: -0.027208, -0.119672, 0.365235
+          max: -0.002633, -0.103874, 0.413405
+          color: '#101215'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 12
+          min: 0.022819, -0.132282, 0.345439
+          max: 0.047394, -0.116484, 0.393609
+          color: '#1A181A'
+          shape: SlantedX
+          yaw: -18
+        - label: attached basal tendril 1.1
+          min: 0.165531, 0.042476, 0.030884
+          max: 0.255323, 0.071476, 0.059884
+          color: '#2D3639'
+          shape: CylinderX
+          yaw: 39.05979
+          pitch: -12.06516
+        - label: attached basal tendril 1.2
+          min: 0.210647, 0.117014, 0.0145
+          max: 0.305311, 0.141014, 0.0385
+          color: '#404040'
+          shape: CylinderX
+          yaw: 73.12384
+          pitch: -11.57852
+        - label: attached basal tendril 2.1
+          min: 0.057204, 0.151834, 0.030884
+          max: 0.14605, 0.180834, 0.059884
+          color: '#2D3639'
+          shape: CylinderX
+          yaw: 87.07646
+          pitch: -12.19565
+        - label: attached basal tendril 2.2
+          min: 0.02958, 0.240017, 0.0145
+          max: 0.129173, 0.264017, 0.0385
+          color: '#404040'
+          shape: CylinderX
+          yaw: 120.03296
+          pitch: -10.99816
+        - label: attached basal tendril 3.1
+          min: -0.11339, 0.163756, 0.030884
+          max: -0.020019, 0.192756, 0.059884
+          color: '#2D3639'
+          shape: CylinderX
+          yaw: 132.60661
+          pitch: -11.5961
+        - label: attached basal tendril 3.2
+          min: -0.1971, 0.215392, 0.0145
+          max: -0.094347, 0.239392, 0.0385
+          color: '#404040'
+          shape: CylinderX
+          yaw: 162.15081
+          pitch: -10.65591
+        - label: attached basal tendril 4.1
+          min: -0.243098, 0.071257, 0.030884
+          max: -0.148825, 0.100257, 0.059884
+          color: '#2D3639'
+          shape: CylinderX
+          yaw: 174.73476
+          pitch: -11.48376
+        - label: attached basal tendril 4.2
+          min: -0.334452, 0.057564, 0.0145
+          max: -0.23647, 0.081564, 0.0385
+          color: '#404040'
+          shape: CylinderX
+          yaw: -154.84098
+          pitch: -11.18116
+        - label: attached basal tendril 5.1
+          min: -0.255323, -0.071476, 0.030884
+          max: -0.165531, -0.042476, 0.059884
+          color: '#2D3639'
+          shape: CylinderX
+          yaw: -140.94021
+          pitch: -12.06516
+        - label: attached basal tendril 5.2
+          min: -0.305311, -0.141014, 0.0145
+          max: -0.210647, -0.117014, 0.0385
+          color: '#404040'
+          shape: CylinderX
+          yaw: -106.87616
+          pitch: -11.57852
+        - label: attached basal tendril 6.1
+          min: -0.14605, -0.180834, 0.030884
+          max: -0.057204, -0.151834, 0.059884
+          color: '#2D3639'
+          shape: CylinderX
+          yaw: -92.92354
+          pitch: -12.19565
+        - label: attached basal tendril 6.2
+          min: -0.129173, -0.264017, 0.0145
+          max: -0.02958, -0.240017, 0.0385
+          color: '#404040'
+          shape: CylinderX
+          yaw: -59.96704
+          pitch: -10.99816
+        - label: attached basal tendril 7.1
+          min: 0.020019, -0.192756, 0.030884
+          max: 0.11339, -0.163756, 0.059884
+          color: '#2D3639'
+          shape: CylinderX
+          yaw: -47.39339
+          pitch: -11.5961
+        - label: attached basal tendril 7.2
+          min: 0.094347, -0.239392, 0.0145
+          max: 0.1971, -0.215392, 0.0385
+          color: '#404040'
+          shape: CylinderX
+          yaw: -17.84919
+          pitch: -10.65591
+        - label: attached basal tendril 8.1
+          min: 0.148825, -0.100257, 0.030884
+          max: 0.243098, -0.071257, 0.059884
+          color: '#2D3639'
+          shape: CylinderX
+          yaw: -5.26524
+          pitch: -11.48376
+        - label: attached basal tendril 8.2
+          min: 0.23647, -0.081564, 0.0145
+          max: 0.334452, -0.057564, 0.0385
+          color: '#404040'
+          shape: CylinderX
+          yaw: 25.15902
+          pitch: -11.18116
+      delays:
+      - 1
+    egg:
+      frames:
+      - parts:
+        - label: curved carapace rib 01 section 1
+          min: 0.091419, -0.052823, 0.0605
+          max: 0.219051, 0.052823, 0.1125
+          color: '#38342F'
+          shape: CylinderX
+          pitch: 49.46444
+        - label: curved carapace rib 01 section 2
+          min: 0.135811, -0.063642, 0.1875
+          max: 0.297899, 0.063642, 0.2395
+          color: '#2D2926'
+          shape: CylinderX
+          pitch: 75.6071
+        - label: curved carapace rib 01 section 3
+          min: 0.14696, -0.063642, 0.346
+          max: 0.30808, 0.063642, 0.398
+          color: '#49413C'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 83.24197
+        - label: curved carapace rib 01 section 4
+          min: 0.096079, -0.058551, 0.501
+          max: 0.264161, 0.058551, 0.553
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 63.17884
+        - label: curved carapace rib 01 section 5
+          min: -0.005582, -0.038185, 0.625
+          max: 0.158447, 0.038185, 0.677
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 36.68791
+        - label: curved carapace rib 02 section 1
+          min: 0.080216, -0.003443, 0.0605
+          max: 0.206621, 0.102202, 0.1125
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 50.11862
+        - label: curved carapace rib 02 section 2
+          min: 0.119418, 0.005339, 0.1875
+          max: 0.281278, 0.132623, 0.2395
+          color: '#49413C'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 75.92336
+        - label: curved carapace rib 02 section 3
+          min: 0.129667, 0.008731, 0.346
+          max: 0.290736, 0.136015, 0.398
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 83.39529
+        - label: curved carapace rib 02 section 4
+          min: 0.082756, -0.001255, 0.501
+          max: 0.250062, 0.115846, 0.553
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 63.70946
+        - label: curved carapace rib 02 section 5
+          min: -0.010198, -0.013872, 0.625
+          max: 0.151426, 0.062498, 0.677
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 37.3257
+        - label: curved carapace rib 03 section 1
+          min: 0.04807, 0.038419, 0.0605
+          max: 0.171465, 0.144064, 0.1125
+          color: '#49413C'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 51.82174
+        - label: curved carapace rib 03 section 2
+          min: 0.072684, 0.063818, 0.1875
+          max: 0.233995, 0.191102, 0.2395
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 76.72312
+        - label: curved carapace rib 03 section 3
+          min: 0.080407, 0.070086, 0.346
+          max: 0.241354, 0.19737, 0.398
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 83.78159
+        - label: curved carapace rib 03 section 4
+          min: 0.044655, 0.047317, 0.501
+          max: 0.210073, 0.164419, 0.553
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 65.0665
+        - label: curved carapace rib 03 section 5
+          min: -0.023787, 0.006739, 0.625
+          max: 0.131879, 0.083109, 0.677
+          color: '#49413C'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 39.01725
+        - label: curved carapace rib 04 section 1
+          min: -0.000749, 0.06639, 0.0605
+          max: 0.119561, 0.172036, 0.1125
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 53.73109
+        - label: curved carapace rib 04 section 2
+          min: 0.002606, 0.102892, 0.1875
+          max: 0.163367, 0.230176, 0.2395
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 77.5823
+        - label: curved carapace rib 04 section 3
+          min: 0.006656, 0.111082, 0.346
+          max: 0.167481, 0.238366, 0.398
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 84.1944
+        - label: curved carapace rib 04 section 4
+          min: -0.012824, 0.079773, 0.501
+          max: 0.150682, 0.196874, 0.553
+          color: '#49413C'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 66.54813
+        - label: curved carapace rib 04 section 5
+          min: -0.045485, 0.020511, 0.625
+          max: 0.103984, 0.096882, 0.677
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 40.969
+        - label: curved carapace rib 05 section 1
+          min: -0.059504, 0.076212, 0.0605
+          max: 0.059504, 0.181858, 0.1125
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 54.59384
+        - label: curved carapace rib 05 section 2
+          min: -0.080266, 0.116613, 0.1875
+          max: 0.080266, 0.243897, 0.2395
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 77.95859
+        - label: curved carapace rib 05 section 3
+          min: -0.080387, 0.125478, 0.346
+          max: 0.080387, 0.252762, 0.398
+          color: '#49413C'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 84.37451
+        - label: curved carapace rib 05 section 4
+          min: -0.081354, 0.091169, 0.501
+          max: 0.081354, 0.208271, 0.553
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 67.20461
+        - label: curved carapace rib 05 section 5
+          min: -0.073413, 0.025347, 0.625
+          max: 0.073413, 0.101718, 0.677
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 41.87076
+        - label: curved carapace rib 06 section 1
+          min: -0.119561, 0.06639, 0.0605
+          max: 0.000749, 0.172036, 0.1125
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 53.73109
+        - label: curved carapace rib 06 section 2
+          min: -0.163367, 0.102892, 0.1875
+          max: -0.002606, 0.230176, 0.2395
+          color: '#49413C'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 77.5823
+        - label: curved carapace rib 06 section 3
+          min: -0.167481, 0.111082, 0.346
+          max: -0.006656, 0.238366, 0.398
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 84.1944
+        - label: curved carapace rib 06 section 4
+          min: -0.150682, 0.079773, 0.501
+          max: 0.012824, 0.196874, 0.553
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 66.54813
+        - label: curved carapace rib 06 section 5
+          min: -0.103984, 0.020511, 0.625
+          max: 0.045485, 0.096882, 0.677
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 40.969
+        - label: curved carapace rib 07 section 1
+          min: -0.171465, 0.038419, 0.0605
+          max: -0.04807, 0.144064, 0.1125
+          color: '#49413C'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 51.82174
+        - label: curved carapace rib 07 section 2
+          min: -0.233995, 0.063818, 0.1875
+          max: -0.072684, 0.191102, 0.2395
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 76.72312
+        - label: curved carapace rib 07 section 3
+          min: -0.241354, 0.070086, 0.346
+          max: -0.080407, 0.19737, 0.398
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 83.78159
+        - label: curved carapace rib 07 section 4
+          min: -0.210073, 0.047317, 0.501
+          max: -0.044655, 0.164419, 0.553
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 65.0665
+        - label: curved carapace rib 07 section 5
+          min: -0.131879, 0.006739, 0.625
+          max: 0.023787, 0.083109, 0.677
+          color: '#49413C'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 39.01725
+        - label: curved carapace rib 08 section 1
+          min: -0.206621, -0.003443, 0.0605
+          max: -0.080216, 0.102202, 0.1125
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 50.11862
+        - label: curved carapace rib 08 section 2
+          min: -0.281278, 0.005339, 0.1875
+          max: -0.119418, 0.132623, 0.2395
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 75.92336
+        - label: curved carapace rib 08 section 3
+          min: -0.290736, 0.008731, 0.346
+          max: -0.129667, 0.136015, 0.398
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 83.39529
+        - label: curved carapace rib 08 section 4
+          min: -0.250062, -0.001255, 0.501
+          max: -0.082756, 0.115846, 0.553
+          color: '#49413C'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 63.70946
+        - label: curved carapace rib 08 section 5
+          min: -0.151426, -0.013872, 0.625
+          max: 0.010198, 0.062498, 0.677
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 37.3257
+        - label: curved carapace rib 09 section 1
+          min: -0.219051, -0.052823, 0.0605
+          max: -0.091419, 0.052823, 0.1125
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 49.46444
+        - label: curved carapace rib 09 section 2
+          min: -0.297899, -0.063642, 0.1875
+          max: -0.135811, 0.063642, 0.2395
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 75.6071
+        - label: curved carapace rib 09 section 3
+          min: -0.30808, -0.063642, 0.346
+          max: -0.14696, 0.063642, 0.398
+          color: '#49413C'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 83.24197
+        - label: curved carapace rib 09 section 4
+          min: -0.264161, -0.058551, 0.501
+          max: -0.096079, 0.058551, 0.553
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 63.17884
+        - label: curved carapace rib 09 section 5
+          min: -0.158447, -0.038185, 0.625
+          max: 0.005582, 0.038185, 0.677
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 36.68791
+        - label: curved carapace rib 10 section 1
+          min: -0.206621, -0.102202, 0.0605
+          max: -0.080216, 0.003443, 0.1125
+          color: '#282428'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 50.11862
+        - label: curved carapace rib 10 section 2
+          min: -0.281278, -0.132623, 0.1875
+          max: -0.119418, -0.005339, 0.2395
+          color: '#686868'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 75.92336
+        - label: curved carapace rib 10 section 3
+          min: -0.290736, -0.136015, 0.346
+          max: -0.129667, -0.008731, 0.398
+          color: '#B4B4B4'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 83.39529
+        - label: curved carapace rib 10 section 4
+          min: -0.250062, -0.115846, 0.501
+          max: -0.082756, 0.001255, 0.553
+          color: '#B4B4B4'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 63.70946
+        - label: curved carapace rib 10 section 5
+          min: -0.151426, -0.062498, 0.625
+          max: 0.010198, 0.013872, 0.677
+          color: '#14161B'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 37.3257
+        - label: curved carapace rib 11 section 1
+          min: -0.171465, -0.144064, 0.0605
+          max: -0.04807, -0.038419, 0.1125
+          color: '#37322E'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 51.82174
+        - label: curved carapace rib 11 section 2
+          min: -0.233995, -0.191102, 0.1875
+          max: -0.072684, -0.063818, 0.2395
+          color: '#778C98'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 76.72312
+        - label: curved carapace rib 11 section 3
+          min: -0.241354, -0.19737, 0.346
+          max: -0.080407, -0.070086, 0.398
+          color: '#B3B4B4'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 83.78159
+        - label: curved carapace rib 11 section 4
+          min: -0.210073, -0.164419, 0.501
+          max: -0.044655, -0.047317, 0.553
+          color: '#211E21'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 65.0665
+        - label: curved carapace rib 11 section 5
+          min: -0.131879, -0.083109, 0.625
+          max: 0.023787, -0.006739, 0.677
+          color: '#646464'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 39.01725
+        - label: curved carapace rib 12 section 1
+          min: -0.119561, -0.172036, 0.0605
+          max: 0.000749, -0.06639, 0.1125
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 53.73109
+        - label: curved carapace rib 12 section 2
+          min: -0.163367, -0.230176, 0.1875
+          max: -0.002606, -0.102892, 0.2395
+          color: '#515151'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 77.5823
+        - label: curved carapace rib 12 section 3
+          min: -0.167481, -0.238366, 0.346
+          max: -0.006656, -0.111082, 0.398
+          color: '#7D909F'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 84.1944
+        - label: curved carapace rib 12 section 4
+          min: -0.150682, -0.196874, 0.501
+          max: 0.012824, -0.079773, 0.553
+          color: '#B4B4B4'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 66.54813
+        - label: curved carapace rib 12 section 5
+          min: -0.103984, -0.096882, 0.625
+          max: 0.045485, -0.020511, 0.677
+          color: '#515D62'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 40.969
+        - label: curved carapace rib 13 section 1
+          min: -0.059504, -0.181858, 0.0605
+          max: 0.059504, -0.076212, 0.1125
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 54.59384
+        - label: curved carapace rib 13 section 2
+          min: -0.080266, -0.243897, 0.1875
+          max: 0.080266, -0.116613, 0.2395
+          color: '#4E5C62'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 77.95859
+        - label: curved carapace rib 13 section 3
+          min: -0.080387, -0.252762, 0.346
+          max: 0.080387, -0.125478, 0.398
+          color: '#54646D'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 84.37451
+        - label: curved carapace rib 13 section 4
+          min: -0.081354, -0.208271, 0.501
+          max: 0.081354, -0.091169, 0.553
+          color: '#778B97'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 67.20461
+        - label: curved carapace rib 13 section 5
+          min: -0.073413, -0.101718, 0.625
+          max: 0.073413, -0.025347, 0.677
+          color: '#1E1C1E'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 41.87076
+        - label: curved carapace rib 14 section 1
+          min: -0.000749, -0.172036, 0.0605
+          max: 0.119561, -0.06639, 0.1125
+          color: '#211F21'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 53.73109
+        - label: curved carapace rib 14 section 2
+          min: 0.002606, -0.230176, 0.1875
+          max: 0.163367, -0.102892, 0.2395
+          color: '#454545'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 77.5823
+        - label: curved carapace rib 14 section 3
+          min: 0.006656, -0.238366, 0.346
+          max: 0.167481, -0.111082, 0.398
+          color: '#4C5860'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 84.1944
+        - label: curved carapace rib 14 section 4
+          min: -0.012824, -0.196874, 0.501
+          max: 0.150682, -0.079773, 0.553
+          color: '#A1AFAF'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 66.54813
+        - label: curved carapace rib 14 section 5
+          min: -0.045485, -0.096882, 0.625
+          max: 0.103984, -0.020511, 0.677
+          color: '#14161B'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 40.969
+        - label: curved carapace rib 15 section 1
+          min: 0.04807, -0.144064, 0.0605
+          max: 0.171465, -0.038419, 0.1125
+          color: '#131213'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 51.82174
+        - label: curved carapace rib 15 section 2
+          min: 0.072684, -0.191102, 0.1875
+          max: 0.233995, -0.063818, 0.2395
+          color: '#211F21'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 76.72312
+        - label: curved carapace rib 15 section 3
+          min: 0.080407, -0.19737, 0.346
+          max: 0.241354, -0.070086, 0.398
+          color: '#475359'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 83.78159
+        - label: curved carapace rib 15 section 4
+          min: 0.044655, -0.164419, 0.501
+          max: 0.210073, -0.047317, 0.553
+          color: '#14161B'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 65.0665
+        - label: curved carapace rib 15 section 5
+          min: -0.023787, -0.083109, 0.625
+          max: 0.131879, -0.006739, 0.677
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 39.01725
+        - label: curved carapace rib 16 section 1
+          min: 0.080216, -0.102202, 0.0605
+          max: 0.206621, 0.003443, 0.1125
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 50.11862
+        - label: curved carapace rib 16 section 2
+          min: 0.119418, -0.132623, 0.1875
+          max: 0.281278, -0.005339, 0.2395
+          color: '#191619'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 75.92336
+        - label: curved carapace rib 16 section 3
+          min: 0.129667, -0.136015, 0.346
+          max: 0.290736, -0.008731, 0.398
+          color: '#14161B'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 83.39529
+        - label: curved carapace rib 16 section 4
+          min: 0.082756, -0.115846, 0.501
+          max: 0.250062, 0.001255, 0.553
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 63.70946
+        - label: curved carapace rib 16 section 5
+          min: -0.010198, -0.062498, 0.625
+          max: 0.151426, 0.013872, 0.677
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 37.3257
+        - label: recessed interior shell floor
+          min: -0.1145, -0.095, 0.0035
+          max: 0.1145, 0.095, 0.0425
+          color: '#14161B'
+          shape: Ellipsoid
+        - label: continuous closed inner carapace backing
+          min: -0.1995, -0.16, 0.0185
+          max: 0.1995, 0.16, 0.6755
+          color: '#5C6B77'
+          shape: Ellipsoid
+        - label: closed tiny apical shell join
+          min: -0.021, -0.019, 0.6805
+          max: 0.021, 0.019, 0.7195
+          color: '#B4B4B4'
+          shape: Ellipsoid
+        - label: source-guided short shell striation 1
+          min: -0.149, -0.169888, 0.2135
+          max: -0.121, -0.151888, 0.2865
+          color: '#778C98'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 2
+          min: -0.104, -0.196121, 0.3035
+          max: -0.076, -0.178121, 0.3765
+          color: '#5B6A76'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 3
+          min: -0.164, -0.156181, 0.3735
+          max: -0.136, -0.138181, 0.4465
+          color: '#B3B4B4'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 4
+          min: -0.118, -0.164766, 0.4435
+          max: -0.09, -0.146766, 0.5165
+          color: '#B3B4B4'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 5
+          min: -0.058, -0.167216, 0.4835
+          max: -0.03, -0.149216, 0.5565
+          color: '#5C6B77'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 6
+          min: -0.001, -0.202088, 0.3935
+          max: 0.027, -0.184088, 0.4665
+          color: '#72838F'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 7
+          min: 0.044, -0.204112, 0.3135
+          max: 0.072, -0.186112, 0.3865
+          color: '#484848'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 8
+          min: -0.074, -0.200306, 0.2135
+          max: -0.046, -0.182306, 0.2865
+          color: '#5F5F5F'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 9
+          min: 0.085, -0.171942, 0.4335
+          max: 0.113, -0.153942, 0.5065
+          color: '#677882'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 10
+          min: 0.124, -0.178189, 0.2635
+          max: 0.152, -0.160189, 0.3365
+          color: '#282423'
+          shape: SlantedX
+          yaw: -18
+        - label: source-guided short shell striation 11
+          min: -0.031, -0.136352, 0.5535
+          max: -0.003, -0.118352, 0.6265
+          color: '#ADB2B2'
+          shape: SlantedX
+          yaw: 18
+        - label: source-guided short shell striation 12
+          min: 0.026, -0.15072, 0.5235
+          max: 0.054, -0.13272, 0.5965
+          color: '#57666E'
+          shape: SlantedX
+          yaw: -18
+        - label: original small silver-blue shell striation
+          min: -0.116, -0.208, 0.3255
+          max: -0.016, -0.202, 0.4505
+          color: '#FFFFFF'
+          surface: CMU3DNaturalFinalCloudArt06
+          surfaceAxis: XZ
+        - label: attached basal tendril 1.1
+          min: 0.184488, 0.050418, 0.045
+          max: 0.295025, 0.079418, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: 39.05979
+          pitch: -25.16306
+        - label: attached basal tendril 1.2
+          min: 0.240258, 0.134996, 0.0145
+          max: 0.347615, 0.158996, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: 73.12384
+          pitch: -10.19381
+        - label: attached basal tendril 2.1
+          min: 0.061022, 0.175018, 0.045
+          max: 0.170562, 0.204018, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: 87.07646
+          pitch: -25.40835
+        - label: attached basal tendril 2.2
+          min: 0.033941, 0.275143, 0.0145
+          max: 0.146939, 0.299143, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: 120.03296
+          pitch: -9.67992
+        - label: attached basal tendril 3.1
+          min: -0.133163, 0.188601, 0.045
+          max: -0.018841, 0.217601, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: 132.60661
+          pitch: -24.2751
+        - label: attached basal tendril 3.2
+          min: -0.224341, 0.247086, 0.0145
+          max: -0.107728, 0.271086, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: 162.15081
+          pitch: -9.37709
+        - label: attached basal tendril 4.1
+          min: -0.280914, 0.08321, 0.045
+          max: -0.165636, 0.11221, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: 174.73476
+          pitch: -24.06102
+        - label: attached basal tendril 4.2
+          min: -0.380827, 0.06726, 0.0145
+          max: -0.269671, 0.09126, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: -154.84098
+          pitch: -9.84191
+        - label: attached basal tendril 5.1
+          min: -0.295025, -0.079418, 0.045
+          max: -0.184488, -0.050418, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -140.94021
+          pitch: -25.16306
+        - label: attached basal tendril 5.2
+          min: -0.347615, -0.158996, 0.0145
+          max: -0.240258, -0.134996, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: -106.87616
+          pitch: -10.19381
+        - label: attached basal tendril 6.1
+          min: -0.170562, -0.204018, 0.045
+          max: -0.061022, -0.175018, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -92.92354
+          pitch: -25.40835
+        - label: attached basal tendril 6.2
+          min: -0.146939, -0.299143, 0.0145
+          max: -0.033941, -0.275143, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: -59.96704
+          pitch: -9.67992
+        - label: attached basal tendril 7.1
+          min: 0.018841, -0.217601, 0.045
+          max: 0.133163, -0.188601, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -47.39339
+          pitch: -24.2751
+        - label: attached basal tendril 7.2
+          min: 0.107728, -0.271086, 0.0145
+          max: 0.224341, -0.247086, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: -17.84919
+          pitch: -9.37709
+        - label: attached basal tendril 8.1
+          min: 0.165636, -0.11221, 0.045
+          max: 0.280914, -0.08321, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -5.26524
+          pitch: -24.06102
+        - label: attached basal tendril 8.2
+          min: 0.269671, -0.09126, 0.0145
+          max: 0.380827, -0.06726, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: 25.15902
+          pitch: -9.84191
+      delays:
+      - 1
+    egg_opened:
+      frames:
+      - parts:
+        - label: curved carapace rib 01 section 1
+          min: 0.091419, -0.052823, 0.0605
+          max: 0.219051, 0.052823, 0.1125
+          color: '#38342F'
+          shape: CylinderX
+          pitch: 49.46444
+        - label: curved carapace rib 01 section 2
+          min: 0.135811, -0.063642, 0.1875
+          max: 0.297899, 0.063642, 0.2395
+          color: '#2D2926'
+          shape: CylinderX
+          pitch: 75.6071
+        - label: curved carapace rib 01 section 3
+          min: 0.165496, -0.063642, 0.33
+          max: 0.294284, 0.063642, 0.382
+          color: '#47403B'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 83.66079
+        - label: curved carapace rib 01 section 4
+          min: 0.181557, -0.059823, 0.4315
+          max: 0.256893, 0.059823, 0.4835
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 84.58454
+        - label: curved carapace rib 02 section 1
+          min: 0.080216, -0.003443, 0.0605
+          max: 0.206621, 0.102202, 0.1125
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 50.11862
+        - label: curved carapace rib 02 section 2
+          min: 0.119418, 0.005339, 0.1875
+          max: 0.281278, 0.132623, 0.2395
+          color: '#47403B'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 75.92336
+        - label: curved carapace rib 02 section 3
+          min: 0.148015, 0.009485, 0.33
+          max: 0.276767, 0.136769, 0.382
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 83.80477
+        - label: curved carapace rib 02 section 4
+          min: 0.164877, 0.009911, 0.4315
+          max: 0.240198, 0.129558, 0.4835
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 84.70781
+        - label: curved carapace rib 03 section 1
+          min: 0.04807, 0.038419, 0.0605
+          max: 0.171465, 0.144064, 0.1125
+          color: '#47403B'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 51.82174
+        - label: curved carapace rib 03 section 2
+          min: 0.072684, 0.063818, 0.1875
+          max: 0.233995, 0.191102, 0.2395
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 76.72312
+        - label: curved carapace rib 03 section 3
+          min: 0.098224, 0.071479, 0.33
+          max: 0.22689, 0.198763, 0.382
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 84.16747
+        - label: curved carapace rib 03 section 4
+          min: 0.117373, 0.069029, 0.4315
+          max: 0.192658, 0.188676, 0.4835
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 85.01824
+        - label: curved carapace rib 04 section 1
+          min: -0.000749, 0.06639, 0.0605
+          max: 0.119561, 0.172036, 0.1125
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 53.73109
+        - label: curved carapace rib 04 section 2
+          min: 0.002606, 0.102892, 0.1875
+          max: 0.163367, 0.230176, 0.2395
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 77.5823
+        - label: curved carapace rib 04 section 3
+          min: 0.023685, 0.112902, 0.33
+          max: 0.152265, 0.240186, 0.382
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 84.55499
+        - label: curved carapace rib 04 section 4
+          min: 0.04627, 0.10853, 0.4315
+          max: 0.121518, 0.228177, 0.4835
+          color: '#47403B'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 85.34979
+        - label: curved carapace rib 05 section 1
+          min: -0.059504, 0.076212, 0.0605
+          max: 0.059504, 0.181858, 0.1125
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 54.59384
+        - label: curved carapace rib 05 section 2
+          min: -0.080266, 0.116613, 0.1875
+          max: 0.080266, 0.243897, 0.2395
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 77.95859
+        - label: curved carapace rib 05 section 3
+          min: -0.064272, 0.127448, 0.33
+          max: 0.064272, 0.254732, 0.382
+          color: '#47403B'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 84.72406
+        - label: curved carapace rib 05 section 4
+          min: -0.037616, 0.122402, 0.4315
+          max: 0.037616, 0.242048, 0.4835
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 85.4944
+        - label: curved carapace rib 06 section 1
+          min: -0.119561, 0.06639, 0.0605
+          max: 0.000749, 0.172036, 0.1125
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 53.73109
+        - label: curved carapace rib 06 section 2
+          min: -0.163367, 0.102892, 0.1875
+          max: -0.002606, 0.230176, 0.2395
+          color: '#47403B'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 77.5823
+        - label: curved carapace rib 06 section 3
+          min: -0.152265, 0.112902, 0.33
+          max: -0.023685, 0.240186, 0.382
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 84.55499
+        - label: curved carapace rib 06 section 4
+          min: -0.121518, 0.10853, 0.4315
+          max: -0.04627, 0.228177, 0.4835
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 85.34979
+        - label: curved carapace rib 07 section 1
+          min: -0.171465, 0.038419, 0.0605
+          max: -0.04807, 0.144064, 0.1125
+          color: '#47403B'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 51.82174
+        - label: curved carapace rib 07 section 2
+          min: -0.233995, 0.063818, 0.1875
+          max: -0.072684, 0.191102, 0.2395
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 76.72312
+        - label: curved carapace rib 07 section 3
+          min: -0.22689, 0.071479, 0.33
+          max: -0.098224, 0.198763, 0.382
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 84.16747
+        - label: curved carapace rib 07 section 4
+          min: -0.192658, 0.069029, 0.4315
+          max: -0.117373, 0.188676, 0.4835
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 85.01824
+        - label: curved carapace rib 08 section 1
+          min: -0.206621, -0.003443, 0.0605
+          max: -0.080216, 0.102202, 0.1125
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 50.11862
+        - label: curved carapace rib 08 section 2
+          min: -0.281278, 0.005339, 0.1875
+          max: -0.119418, 0.132623, 0.2395
+          color: '#38342F'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 75.92336
+        - label: curved carapace rib 08 section 3
+          min: -0.276767, 0.009485, 0.33
+          max: -0.148015, 0.136769, 0.382
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 83.80477
+        - label: curved carapace rib 08 section 4
+          min: -0.240198, 0.009911, 0.4315
+          max: -0.164877, 0.129558, 0.4835
+          color: '#47403B'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 84.70781
+        - label: curved carapace rib 09 section 1
+          min: -0.219051, -0.052823, 0.0605
+          max: -0.091419, 0.052823, 0.1125
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 49.46444
+        - label: curved carapace rib 09 section 2
+          min: -0.297899, -0.063642, 0.1875
+          max: -0.135811, 0.063642, 0.2395
+          color: '#2D2926'
+          shape: CylinderX
+          yaw: -180.0
+          pitch: 75.6071
+        - label: curved carapace rib 09 section 3
+          min: -0.294284, -0.063642, 0.33
+          max: -0.165496, 0.063642, 0.382
+          color: '#47403B'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 83.66079
+        - label: curved carapace rib 09 section 4
+          min: -0.256893, -0.059823, 0.4315
+          max: -0.181557, 0.059823, 0.4835
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: 0.0
+          pitch: 84.58454
+        - label: curved carapace rib 10 section 1
+          min: -0.206621, -0.102202, 0.0605
+          max: -0.080216, 0.003443, 0.1125
+          color: '#282428'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 50.11862
+        - label: curved carapace rib 10 section 2
+          min: -0.281278, -0.132623, 0.1875
+          max: -0.119418, -0.005339, 0.2395
+          color: '#686868'
+          shape: CylinderX
+          yaw: -161.0012
+          pitch: 75.92336
+        - label: curved carapace rib 10 section 3
+          min: -0.276767, -0.136769, 0.33
+          max: -0.148015, -0.009485, 0.382
+          color: '#B4B4B4'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 83.80477
+        - label: curved carapace rib 10 section 4
+          min: -0.240198, -0.129558, 0.4315
+          max: -0.164877, -0.009911, 0.4835
+          color: '#B4B4B4'
+          shape: CylinderX
+          yaw: 18.9988
+          pitch: 84.70781
+        - label: curved carapace rib 11 section 1
+          min: -0.171465, -0.144064, 0.0605
+          max: -0.04807, -0.038419, 0.1125
+          color: '#37322E'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 51.82174
+        - label: curved carapace rib 11 section 2
+          min: -0.233995, -0.191102, 0.1875
+          max: -0.072684, -0.063818, 0.2395
+          color: '#778C98'
+          shape: CylinderX
+          yaw: -140.26584
+          pitch: 76.72312
+        - label: curved carapace rib 11 section 3
+          min: -0.22689, -0.198763, 0.33
+          max: -0.098224, -0.071479, 0.382
+          color: '#B3B4B4'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 84.16747
+        - label: curved carapace rib 11 section 4
+          min: -0.192658, -0.188676, 0.4315
+          max: -0.117373, -0.069029, 0.4835
+          color: '#211E21'
+          shape: CylinderX
+          yaw: 39.73416
+          pitch: 85.01824
+        - label: curved carapace rib 12 section 1
+          min: -0.119561, -0.172036, 0.0605
+          max: 0.000749, -0.06639, 0.1125
+          color: '#3E3733'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 53.73109
+        - label: curved carapace rib 12 section 2
+          min: -0.163367, -0.230176, 0.1875
+          max: -0.002606, -0.102892, 0.2395
+          color: '#515151'
+          shape: CylinderX
+          yaw: -116.48789
+          pitch: 77.5823
+        - label: curved carapace rib 12 section 3
+          min: -0.152265, -0.240186, 0.33
+          max: -0.023685, -0.112902, 0.382
+          color: '#31363D'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 84.55499
+        - label: curved carapace rib 12 section 4
+          min: -0.121518, -0.228177, 0.4315
+          max: -0.04627, -0.10853, 0.4835
+          color: '#40464D'
+          shape: CylinderX
+          yaw: 63.51211
+          pitch: 85.34979
+        - label: curved carapace rib 13 section 1
+          min: -0.059504, -0.181858, 0.0605
+          max: 0.059504, -0.076212, 0.1125
+          color: '#38342F'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 54.59384
+        - label: curved carapace rib 13 section 2
+          min: -0.080266, -0.243897, 0.1875
+          max: 0.080266, -0.116613, 0.2395
+          color: '#323A3F'
+          shape: CylinderX
+          yaw: -90.0
+          pitch: 77.95859
+        - label: curved carapace rib 13 section 3
+          min: -0.064272, -0.254732, 0.33
+          max: 0.064272, -0.127448, 0.382
+          color: '#272B30'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 84.72406
+        - label: curved carapace rib 13 section 4
+          min: -0.037616, -0.242048, 0.4315
+          max: 0.037616, -0.122402, 0.4835
+          color: '#AFB2B2'
+          shape: CylinderX
+          yaw: 90.0
+          pitch: 85.4944
+        - label: curved carapace rib 14 section 1
+          min: -0.000749, -0.172036, 0.0605
+          max: 0.119561, -0.06639, 0.1125
+          color: '#211F21'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 53.73109
+        - label: curved carapace rib 14 section 2
+          min: 0.002606, -0.230176, 0.1875
+          max: 0.163367, -0.102892, 0.2395
+          color: '#2D2E30'
+          shape: CylinderX
+          yaw: -63.51211
+          pitch: 77.5823
+        - label: curved carapace rib 14 section 3
+          min: 0.023685, -0.240186, 0.33
+          max: 0.152265, -0.112902, 0.382
+          color: '#25282D'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 84.55499
+        - label: curved carapace rib 14 section 4
+          min: 0.04627, -0.228177, 0.4315
+          max: 0.121518, -0.10853, 0.4835
+          color: '#9DADAD'
+          shape: CylinderX
+          yaw: 116.48789
+          pitch: 85.34979
+        - label: curved carapace rib 15 section 1
+          min: 0.04807, -0.144064, 0.0605
+          max: 0.171465, -0.038419, 0.1125
+          color: '#131213'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 51.82174
+        - label: curved carapace rib 15 section 2
+          min: 0.072684, -0.191102, 0.1875
+          max: 0.233995, -0.063818, 0.2395
+          color: '#211F21'
+          shape: CylinderX
+          yaw: -39.73416
+          pitch: 76.72312
+        - label: curved carapace rib 15 section 3
+          min: 0.098224, -0.198763, 0.33
+          max: 0.22689, -0.071479, 0.382
+          color: '#2E353B'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 84.16747
+        - label: curved carapace rib 15 section 4
+          min: 0.117373, -0.188676, 0.4315
+          max: 0.192658, -0.069029, 0.4835
+          color: '#2D2E30'
+          shape: CylinderX
+          yaw: 140.26584
+          pitch: 85.01824
+        - label: curved carapace rib 16 section 1
+          min: 0.080216, -0.102202, 0.0605
+          max: 0.206621, 0.003443, 0.1125
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 50.11862
+        - label: curved carapace rib 16 section 2
+          min: 0.119418, -0.132623, 0.1875
+          max: 0.281278, -0.005339, 0.2395
+          color: '#191619'
+          shape: CylinderX
+          yaw: -18.9988
+          pitch: 75.92336
+        - label: curved carapace rib 16 section 3
+          min: 0.148015, -0.136769, 0.33
+          max: 0.276767, -0.009485, 0.382
+          color: '#14161B'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 83.80477
+        - label: curved carapace rib 16 section 4
+          min: 0.164877, -0.129558, 0.4315
+          max: 0.240198, -0.009911, 0.4835
+          color: '#14161B'
+          shape: CylinderX
+          yaw: 161.0012
+          pitch: 84.70781
+        - label: recessed interior shell floor
+          min: -0.1145, -0.095, 0.0035
+          max: 0.1145, 0.095, 0.0425
+          color: '#14161B'
+          shape: Ellipsoid
+        - label: opened curled shell lip 1
+          min: 0.174496, -0.060007, 0.4755
+          max: 0.266496, 0.115993, 0.5305
+          color: '#996666'
+          shape: SlantedY
+          yaw: -81.40563
+          pitch: 13
+        - label: exposed pink inner lip 1
+          min: 0.173586, -0.046567, 0.5205
+          max: 0.258586, 0.101433, 0.5395
+          color: '#BF9F9F'
+          shape: SlantedY
+          yaw: -81.40563
+        - label: opened curled shell lip 2
+          min: -0.009557, 0.096802, 0.4755
+          max: 0.082443, 0.272802, 0.5305
+          color: '#996666'
+          shape: SlantedY
+          yaw: -9.40563
+          pitch: -13
+        - label: exposed pink inner lip 2
+          min: -0.006786, 0.107106, 0.5205
+          max: 0.078214, 0.255106, 0.5395
+          color: '#BF9F9F'
+          shape: SlantedY
+          yaw: -9.40563
+        - label: opened curled shell lip 3
+          min: -0.243973, -0.001779, 0.4755
+          max: -0.151973, 0.174221, 0.5305
+          color: '#996666'
+          shape: SlantedY
+          yaw: 62.59437
+          pitch: 13
+        - label: exposed pink inner lip 3
+          min: -0.236513, 0.010497, 0.5205
+          max: -0.151513, 0.158497, 0.5395
+          color: '#BF9F9F'
+          shape: SlantedY
+          yaw: 62.59437
+        - label: opened curled shell lip 4
+          min: -0.204797, -0.219514, 0.4755
+          max: -0.112797, -0.043514, 0.5305
+          color: '#996666'
+          shape: SlantedY
+          yaw: 134.59437
+          pitch: -13
+        - label: exposed pink inner lip 4
+          min: -0.198121, -0.202884, 0.5205
+          max: -0.113121, -0.054884, 0.5395
+          color: '#BF9F9F'
+          shape: SlantedY
+          yaw: 134.59437
+        - label: opened curled shell lip 5
+          min: 0.053831, -0.255501, 0.4755
+          max: 0.145831, -0.079501, 0.5305
+          color: '#996666'
+          shape: SlantedY
+          yaw: -153.40563
+          pitch: 13
+        - label: exposed pink inner lip 5
+          min: 0.055334, -0.238151, 0.5205
+          max: 0.140334, -0.090151, 0.5395
+          color: '#BF9F9F'
+          shape: SlantedY
+          yaw: -153.40563
+        - label: original tiny opened shell blue strip
+          min: -0.126, -0.206, 0.313
+          max: -0.026, -0.2, 0.363
+          color: '#FFFFFF'
+          surface: CMU3DNaturalFinalCloudArt07
+          surfaceAxis: XZ
+        - label: attached basal tendril 1.1
+          min: 0.184488, 0.050418, 0.045
+          max: 0.295025, 0.079418, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: 39.05979
+          pitch: -25.16306
+        - label: attached basal tendril 1.2
+          min: 0.240258, 0.134996, 0.0145
+          max: 0.347615, 0.158996, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: 73.12384
+          pitch: -10.19381
+        - label: attached basal tendril 2.1
+          min: 0.061022, 0.175018, 0.045
+          max: 0.170562, 0.204018, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: 87.07646
+          pitch: -25.40835
+        - label: attached basal tendril 2.2
+          min: 0.033941, 0.275143, 0.0145
+          max: 0.146939, 0.299143, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: 120.03296
+          pitch: -9.67992
+        - label: attached basal tendril 3.1
+          min: -0.133163, 0.188601, 0.045
+          max: -0.018841, 0.217601, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: 132.60661
+          pitch: -24.2751
+        - label: attached basal tendril 3.2
+          min: -0.224341, 0.247086, 0.0145
+          max: -0.107728, 0.271086, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: 162.15081
+          pitch: -9.37709
+        - label: attached basal tendril 4.1
+          min: -0.280914, 0.08321, 0.045
+          max: -0.165636, 0.11221, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: 174.73476
+          pitch: -24.06102
+        - label: attached basal tendril 4.2
+          min: -0.380827, 0.06726, 0.0145
+          max: -0.269671, 0.09126, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: -154.84098
+          pitch: -9.84191
+        - label: attached basal tendril 5.1
+          min: -0.295025, -0.079418, 0.045
+          max: -0.184488, -0.050418, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -140.94021
+          pitch: -25.16306
+        - label: attached basal tendril 5.2
+          min: -0.347615, -0.158996, 0.0145
+          max: -0.240258, -0.134996, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: -106.87616
+          pitch: -10.19381
+        - label: attached basal tendril 6.1
+          min: -0.170562, -0.204018, 0.045
+          max: -0.061022, -0.175018, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -92.92354
+          pitch: -25.40835
+        - label: attached basal tendril 6.2
+          min: -0.146939, -0.299143, 0.0145
+          max: -0.033941, -0.275143, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: -59.96704
+          pitch: -9.67992
+        - label: attached basal tendril 7.1
+          min: 0.018841, -0.217601, 0.045
+          max: 0.133163, -0.188601, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -47.39339
+          pitch: -24.2751
+        - label: attached basal tendril 7.2
+          min: 0.107728, -0.271086, 0.0145
+          max: 0.224341, -0.247086, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: -17.84919
+          pitch: -9.37709
+        - label: attached basal tendril 8.1
+          min: 0.165636, -0.11221, 0.045
+          max: 0.280914, -0.08321, 0.074
+          color: '#2D393E'
+          shape: CylinderX
+          yaw: -5.26524
+          pitch: -24.06102
+        - label: attached basal tendril 8.2
+          min: 0.269671, -0.09126, 0.0145
+          max: 0.380827, -0.06726, 0.0385
+          color: '#364348'
+          shape: CylinderX
+          yaw: 25.15902
+          pitch: -9.84191
+      delays:
+      - 1
+- type: cmu3DModel
+  id: CMU3DCMUXenoEggNotDSNaturalFinalCloudDestroyedStudy
+  label: Destroyed xeno shell / unbound source study
+  status: draft
+  sourcePrototypes: []
+  referencePrototype: CMUXenoEggNotDS
+  referenceRsi: /Textures/_RMC14/Structures/Xenos/xeno_egg.rsi
+  referenceState: egg_exploded
+  sourceDirections: 1
+  description: Original egg_exploded resource belongs to the replacement XenoEggDestroyed entity. This unbound art
+    study is not mapped to CMUXenoEggNotDS default, does not claim a destroyed-state transition and does not create
+    any entity or parasite. Physical unseen depth and material finish remain inferred. All art is draft; no native,
+    live-map fit or fidelity certification.
+  parts:
+  - label: destroyed shell shard 1
+    min: -0.390625, -0.275, 0.0
+    max: -0.140625, -0.1, 0.102
+    color: '#38342F'
+    shape: WedgeY
+    yaw: 25
+  - label: exposed torn pink inner shell 1
+    min: -0.37625, -0.243375, 0.097
+    max: -0.18625, -0.119125, 0.121
+    color: '#BF9F9F'
+    shape: SlantedY
+    yaw: 25
+  - label: destroyed shell shard 2
+    min: -0.21975, -0.25725, 0.0
+    max: 0.03225, -0.05525, 0.174
+    color: '#191619'
+    shape: WedgeY
+    yaw: -10
+  - label: exposed torn pink inner shell 2
+    min: -0.205135, -0.22171, 0.169
+    max: -0.013615, -0.07829, 0.193
+    color: '#BF9F9F'
+    shape: SlantedY
+    yaw: -10
+  - label: destroyed shell shard 3
+    min: -0.052375, -0.304125, 0.0
+    max: 0.183625, -0.102125, 0.115
+    color: '#996666'
+    shape: WedgeY
+    yaw: 15
+  - label: exposed torn pink inner shell 3
+    min: -0.03968, -0.268585, 0.11
+    max: 0.13968, -0.125165, 0.134
+    color: '#BF9F9F'
+    shape: SlantedY
+    yaw: 15
+  - label: destroyed shell shard 4
+    min: 0.075625, -0.322, 0.0
+    max: 0.330625, -0.178, 0.058
+    color: '#2D393E'
+    shape: WedgeY
+    yaw: -15
+  - label: exposed torn pink inner shell 4
+    min: 0.0906, -0.29487, 0.053
+    max: 0.2844, -0.19263, 0.077
+    color: '#BF9F9F'
+    shape: SlantedY
+    yaw: -15
+  - label: destroyed shell shard 5
+    min: -0.12075, -0.3615, 0.0
+    max: 0.18325, -0.2635, 0.034
+    color: '#38342F'
+    shape: WedgeY
+    yaw: 28
+  - label: exposed torn pink inner shell 5
+    min: -0.099895, -0.34104, 0.029
+    max: 0.131145, -0.27146, 0.053
+    color: '#BF9F9F'
+    shape: SlantedY
+    yaw: 28
+  - label: fallen attached shell root 1
+    min: 0.039326, -0.2125, 0.0155
+    max: 0.290674, -0.1875, 0.0405
+    color: '#2D393E'
+    shape: CylinderX
+    pitch: -5.93742
+  - label: fallen attached shell root 2
+    min: 0.004482, -0.122589, 0.0155
+    max: 0.20127, -0.097589, 0.0405
+    color: '#2D393E'
+    shape: CylinderX
+    yaw: 36.95693
+    pitch: -7.59222
+  - label: fallen attached shell root 3
+    min: -0.11602, -0.100383, 0.0155
+    max: 0.042588, -0.075383, 0.0405
+    color: '#2D393E'
+    shape: CylinderX
+    yaw: 110.8271
+    pitch: -9.43483
+  - label: fallen attached shell root 4
+    min: -0.266607, -0.162603, 0.0155
+    max: -0.030713, -0.137603, 0.0405
+    color: '#2D393E'
+    shape: CylinderX
+    yaw: 163.88363
+    pitch: -6.32795
+  - label: fallen attached shell root 5
+    min: -0.266607, -0.262397, 0.0155
+    max: -0.030713, -0.237397, 0.0405
+    color: '#2D393E'
+    shape: CylinderX
+    yaw: -163.88363
+    pitch: -6.32795
+  - label: fallen attached shell root 6
+    min: -0.11602, -0.324617, 0.0155
+    max: 0.042588, -0.299617, 0.0405
+    color: '#2D393E'
+    shape: CylinderX
+    yaw: -110.8271
+    pitch: -9.43483
+  - label: fallen attached shell root 7
+    min: 0.004482, -0.302411, 0.0155
+    max: 0.20127, -0.277411, 0.0405
+    color: '#2D393E'
+    shape: CylinderX
+    yaw: -36.95693
+    pitch: -7.59222

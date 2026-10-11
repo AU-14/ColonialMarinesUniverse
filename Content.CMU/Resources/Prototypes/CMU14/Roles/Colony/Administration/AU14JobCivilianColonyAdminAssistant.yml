@@ -40,6 +40,8 @@
     traits:
     - NonResuscitable
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     AU14RankColonySeniorAdminAssistant:
     - !type:RoleTimeRequirement
@@ -77,6 +79,7 @@
     - RMCRadioHandheldColonyOff
     - CMPaperBin30
     - CMPaperBin30
+    - AU14StampDepAdmin  
   inhand:
     - AU14BriefcaseLawBundle
     - CMUMobilePhone

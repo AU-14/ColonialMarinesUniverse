@@ -53,6 +53,13 @@ public sealed partial class SapperAtmHackingComponent : Component
     [DataField]
     public string CashPrototype = "RMCSpaceCash";
 
+    /// <summary>
+    ///     Longest message the sapper may leave on a siphoned ATM's screen (untrusted client text,
+    ///     clamped server-side).
+    /// </summary>
+    [DataField]
+    public int MaxAtmMessageLength = 64;
+
     /// <summary>Card logins leaked from every ATM this rig has hacked. Server-only.</summary>
     [ViewVariables]
     public List<SkimmedAccount> CapturedAccounts = new();
@@ -87,6 +94,13 @@ public sealed partial class SapperAtmHackedComponent : Component
 
     [ViewVariables]
     public TimeSpan NextSpark;
+
+    /// <summary>
+    ///     A line the sapper left on the out-of-order screen, there until the machine repairs itself.
+    ///     Null for none.
+    /// </summary>
+    [ViewVariables]
+    public string? Message;
 }
 
 /// <summary>

@@ -14,6 +14,8 @@
     inverted: true
     traits:
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBDeputy

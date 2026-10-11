@@ -513,6 +513,8 @@
   name: PGU-420 multi-purpose 90mm ammunition crate
   description: Four hundred rounds for the Midway's twin M90 guns, fired in forty-round bursts.
   components:
+  - type: RMCGenericExamine
+    message: It can penetrate 3 z-levels.
   - type: DropshipAmmo
     rounds: 400
     maxRounds: 400
@@ -522,6 +524,8 @@
     targetSpread: 1
     bulletSpread: 2
     armorPiercing: 30
+    zLevelPenetration: 3
+    applyEffectsOnPenetrationLevels: true
     damage:
       types:
         Piercing: 145

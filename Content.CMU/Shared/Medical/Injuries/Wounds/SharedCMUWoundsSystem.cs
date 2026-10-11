@@ -979,7 +979,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             if (bodyOwner is null || IsWoundPhysiologySuspended(bodyOwner.Value))
                 continue;
 
-            if (TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
+            // Arterial bleeding keeps draining a corpse; lesser bleeds stop at death.
+            if (wounds.ExternalBleeding != ExternalBleedTier.Arterial &&
+                TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
                 continue;
 
             ApplyExternalBleed(bodyOwner.Value, partUid, wounds.ExternalBleeding, 1f);

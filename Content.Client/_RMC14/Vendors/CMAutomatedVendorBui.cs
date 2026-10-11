@@ -337,7 +337,11 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                 var personalRemaining = entry.MaxPerUser is { } maxPerUser
                     ? maxPerUser - (user?.PurchaseCounts.GetValueOrDefault(entry.Id.Id) ?? 0)
                     : (int?) null;
-                var disabled = sectionDisabled || entry.Amount <= 0 || personalRemaining <= 0;
+                // CMU14: entries can carry their own choice budget
+                var entryChoicesExhausted = entry.Choices is { } entryChoice
+                    && (user?.Choices.GetValueOrDefault(entryChoice.Id) >= entryChoice.Amount
+                    || user == null && entryChoice.Amount <= 0);
+                var disabled = sectionDisabled || entryChoicesExhausted || entry.Amount <= 0 || personalRemaining <= 0;
                 if (section.TakeAll is { } takeAllId)
                 {
                     var takeAll = user?.TakeAll;
@@ -437,8 +441,11 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
     private FormattedMessage GetSectionName(CMVendorUserComponent? user, CMVendorSection section)
     {
         var name = new FormattedMessage();
-        name.PushTag(new MarkupNode("bold", new MarkupParameter(section.Name.ToUpperInvariant()), null));
-        name.AddText(section.Name.ToUpperInvariant());
+        // cmu edit start: section names may be locale keys
+        var sectionName = Loc.TryGetString(section.Name, out var localized) ? localized : section.Name;
+        name.PushTag(new MarkupNode("bold", new MarkupParameter(sectionName.ToUpperInvariant()), null));
+        name.AddText(sectionName.ToUpperInvariant());
+        // cmu edit end
 
         if (section.TakeAll != null)
         {

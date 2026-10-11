@@ -23,9 +23,9 @@ public sealed partial class HardpointSystem
     private void OnHardpointExamined(Entity<HardpointIntegrityComponent> ent, ref ExaminedEvent args)
     {
         // CMU14: distinguish permanent wrecks from ordinary repairable damage.
-        if (IsCookedOff(ent.Owner))
+        if (IsDestroyedBeyondRepair(ent.Owner))
         {
-            args.PushMarkup(Loc.GetString("cmu-tank-cook-off-unrepairable"));
+            args.PushMarkup(GetWreckMessage(ent.Owner));
             return;
         }
 

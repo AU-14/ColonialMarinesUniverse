@@ -727,10 +727,14 @@ namespace Content.Server.GameTicking
                 {
                     // Note that contentPlayerData?.Name sticks around after the player is disconnected.
                     // This is as opposed to ply?.Name which doesn't.
-                    PlayerOOCName = contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
+                    // cmu edit start: players can hide their username from the round-end summary
+                    PlayerOOCName = _cmuRoundEndAnonymity.IsHidden(userId)
+                        ? Loc.GetString("cmu-round-end-hidden-username")
+                        : contentPlayerData?.Name ?? "(IMPOSSIBLE: REGISTERED MIND WITH NO OWNER)",
+                    // cmu edit end
                     // Character name takes precedence over current entity name
                     PlayerICName = playerIcName,
-                    PlayerGuid = userId,
+                    PlayerGuid = _cmuRoundEndAnonymity.IsHidden(userId) ? null : userId, // cmu edit: don't leak the account of a hidden player
                     PlayerNetEntity = GetNetEntity(entity),
                     Role = antag
                         ? roles.First(role => role.Antagonist).Name

@@ -253,6 +253,12 @@ public sealed partial class XenoSystem : EntitySystem
 
     private void OnXenoHealthScannerAttemptTarget(Entity<XenoComponent> ent, ref HealthScannerAttemptTargetEvent args)
     {
+        // CMU14: yautja analyzers are built to read xeno physiology
+        if (args.Scanner is { } scannerUid
+            && TryComp<HealthScannerComponent>(scannerUid, out var scannerComp)
+            && scannerComp.AllowXenoTargets)
+            return;
+
         args.Popup = "The scanner can't make sense of this creature.";
         args.Cancelled = true;
     }

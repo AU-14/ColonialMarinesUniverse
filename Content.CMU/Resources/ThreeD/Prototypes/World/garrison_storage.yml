@@ -1,0 +1,4410 @@
+# Storage/furniture expansion; attribution and assumptions in SOURCES_STORAGE.md.
+- type: cmu3DModel
+  id: CMU3DStandardCloset
+  label: Standard narrow closet
+  sourcePrototypes:
+  - CMClosetBase
+  status: draft
+  description: Closed narrow closet with separate header, door border, latch and lower vents. Plain dark label slot retained.
+    Closed pose only; opening, welding and labels need appearance support. Source art and saved placement inspected;
+    height, depth and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: CMClosetBase
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Closets/standard.rsi
+  referenceState: closed
+  sourceDirections: 1
+  parts:
+  - label: closet foot
+    min: -0.23500, -0.40000, 0.00000
+    max: -0.17000, 0.40000, 0.09000
+    color: '#383C40'
+  - label: closet foot
+    min: 0.17000, -0.40000, 0.00000
+    max: 0.23500, 0.40000, 0.09000
+    color: '#383C40'
+  - label: closet shell
+    min: -0.25000, -0.44000, 0.07500
+    max: 0.25000, 0.44000, 1.88000
+    color: '#383C40'
+  - label: top cap
+    min: -0.25000, -0.45000, 1.82000
+    max: 0.25000, 0.45000, 1.88000
+    color: '#68707A'
+  - label: header inset
+    min: -0.20300, -0.46300, 1.66000
+    max: 0.20300, -0.45100, 1.79500
+    color: '#505761'
+  - label: door recess
+    min: -0.22100, -0.45300, 0.10000
+    max: 0.22100, -0.44100, 1.61000
+    color: '#262B2D'
+  - label: door face
+    min: -0.19400, -0.46700, 0.14000
+    max: 0.19400, -0.45500, 1.57000
+    color: '#505761'
+  - label: door edge molding
+    min: -0.21300, -0.48000, 0.13000
+    max: -0.19000, -0.46800, 1.59000
+    color: '#68707A'
+  - label: door edge molding
+    min: 0.19000, -0.48000, 0.13000
+    max: 0.21300, -0.46800, 1.59000
+    color: '#68707A'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 0.12000
+    max: 0.19000, -0.46800, 0.14500
+    color: '#68707A'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 1.56500
+    max: 0.19000, -0.46800, 1.59000
+    color: '#68707A'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.21000
+    max: 0.13500, -0.47000, 0.25700
+    color: '#383C40'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.25700
+    max: 0.13500, -0.47100, 0.26900
+    color: '#68707A'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.32000
+    max: 0.13500, -0.47000, 0.36700
+    color: '#383C40'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.36700
+    max: 0.13500, -0.47100, 0.37900
+    color: '#68707A'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.43000
+    max: 0.13500, -0.47000, 0.47700
+    color: '#383C40'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.47700
+    max: 0.13500, -0.47100, 0.48900
+    color: '#68707A'
+  - label: vertical door latch
+    min: 0.15100, -0.48800, 0.90000
+    max: 0.18400, -0.47600, 1.07500
+    color: '#232728'
+  - label: plain label slot
+    min: -0.08500, -0.48200, 1.22000
+    max: 0.08500, -0.47000, 1.26500
+    color: '#242D34'
+- type: cmu3DModel
+  id: CMU3DBombSuitCloset
+  label: Bomb-suit closet
+  sourcePrototypes:
+  - CMClosetBombFilled
+  status: draft
+  description: Closed narrow closet with separate header, door border, latch and lower vents. Original department marking
+    retained. Closed pose only; opening, welding and labels need appearance support. Source art and saved placement inspected;
+    height, depth and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: CMClosetBombFilled
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Closets/bombsuit.rsi
+  referenceState: closed
+  sourceDirections: 1
+  parts:
+  - label: closet foot
+    min: -0.23500, -0.40000, 0.00000
+    max: -0.17000, 0.40000, 0.09000
+    color: '#484332'
+  - label: closet foot
+    min: 0.17000, -0.40000, 0.00000
+    max: 0.23500, 0.40000, 0.09000
+    color: '#484332'
+  - label: closet shell
+    min: -0.25000, -0.44000, 0.07500
+    max: 0.25000, 0.44000, 1.88000
+    color: '#484332'
+  - label: top cap
+    min: -0.25000, -0.45000, 1.82000
+    max: 0.25000, 0.45000, 1.88000
+    color: '#8A7C5C'
+  - label: header inset
+    min: -0.20300, -0.46300, 1.66000
+    max: 0.20300, -0.45100, 1.79500
+    color: '#625941'
+  - label: door recess
+    min: -0.22100, -0.45300, 0.10000
+    max: 0.22100, -0.44100, 1.61000
+    color: '#262B2D'
+  - label: door face
+    min: -0.19400, -0.46700, 0.14000
+    max: 0.19400, -0.45500, 1.57000
+    color: '#625941'
+  - label: door edge molding
+    min: -0.21300, -0.48000, 0.13000
+    max: -0.19000, -0.46800, 1.59000
+    color: '#8A7C5C'
+  - label: door edge molding
+    min: 0.19000, -0.48000, 0.13000
+    max: 0.21300, -0.46800, 1.59000
+    color: '#8A7C5C'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 0.12000
+    max: 0.19000, -0.46800, 0.14500
+    color: '#8A7C5C'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 1.56500
+    max: 0.19000, -0.46800, 1.59000
+    color: '#8A7C5C'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.21000
+    max: 0.13500, -0.47000, 0.25700
+    color: '#484332'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.25700
+    max: 0.13500, -0.47100, 0.26900
+    color: '#8A7C5C'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.32000
+    max: 0.13500, -0.47000, 0.36700
+    color: '#484332'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.36700
+    max: 0.13500, -0.47100, 0.37900
+    color: '#8A7C5C'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.43000
+    max: 0.13500, -0.47000, 0.47700
+    color: '#484332'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.47700
+    max: 0.13500, -0.47100, 0.48900
+    color: '#8A7C5C'
+  - label: vertical door latch
+    min: 0.15100, -0.48800, 0.90000
+    max: 0.18400, -0.47600, 1.07500
+    color: '#232728'
+  - label: pale bomb-suit marking
+    min: -0.12000, -0.48200, 1.23000
+    max: -0.09200, -0.47000, 1.43000
+    color: '#D5CFB8'
+  - label: pale bomb-suit marking
+    min: -0.12000, -0.48200, 1.40500
+    max: -0.02900, -0.47000, 1.43500
+    color: '#D5CFB8'
+  - label: pale bomb-suit marking
+    min: -0.12000, -0.48200, 1.22000
+    max: -0.02900, -0.47000, 1.25000
+    color: '#D5CFB8'
+  - label: pale bomb-suit marking
+    min: 0.08000, -0.48200, 1.22000
+    max: 0.10900, -0.47000, 1.44000
+    color: '#D5CFB8'
+  - label: pale bomb-suit marking
+    min: 0.01200, -0.48200, 1.31000
+    max: 0.10900, -0.47000, 1.34000
+    color: '#D5CFB8'
+  - label: pale bomb-suit marking
+    min: 0.01200, -0.48200, 1.34000
+    max: 0.04000, -0.47000, 1.44000
+    color: '#D5CFB8'
+- type: cmu3DModel
+  id: CMU3DEmergencyCloset
+  label: Emergency equipment closet
+  sourcePrototypes:
+  - CMClosetEmergency
+  - CMClosetEmergencyFilled
+  status: draft
+  description: Closed narrow closet with separate header, door border, latch and lower vents. Original department marking
+    retained. Closed pose only; opening, welding and labels need appearance support. Source art and saved placement inspected;
+    height, depth and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: CMClosetEmergencyFilled
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Closets/emergency.rsi
+  referenceState: closed
+  sourceDirections: 1
+  parts:
+  - label: closet foot
+    min: -0.23500, -0.40000, 0.00000
+    max: -0.17000, 0.40000, 0.09000
+    color: '#344B65'
+  - label: closet foot
+    min: 0.17000, -0.40000, 0.00000
+    max: 0.23500, 0.40000, 0.09000
+    color: '#344B65'
+  - label: closet shell
+    min: -0.25000, -0.44000, 0.07500
+    max: 0.25000, 0.44000, 1.88000
+    color: '#344B65'
+  - label: top cap
+    min: -0.25000, -0.45000, 1.82000
+    max: 0.25000, 0.45000, 1.88000
+    color: '#6183A6'
+  - label: header inset
+    min: -0.20300, -0.46300, 1.66000
+    max: 0.20300, -0.45100, 1.79500
+    color: '#446384'
+  - label: door recess
+    min: -0.22100, -0.45300, 0.10000
+    max: 0.22100, -0.44100, 1.61000
+    color: '#262B2D'
+  - label: door face
+    min: -0.19400, -0.46700, 0.14000
+    max: 0.19400, -0.45500, 1.57000
+    color: '#446384'
+  - label: door edge molding
+    min: -0.21300, -0.48000, 0.13000
+    max: -0.19000, -0.46800, 1.59000
+    color: '#6183A6'
+  - label: door edge molding
+    min: 0.19000, -0.48000, 0.13000
+    max: 0.21300, -0.46800, 1.59000
+    color: '#6183A6'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 0.12000
+    max: 0.19000, -0.46800, 0.14500
+    color: '#6183A6'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 1.56500
+    max: 0.19000, -0.46800, 1.59000
+    color: '#6183A6'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.21000
+    max: 0.13500, -0.47000, 0.25700
+    color: '#344B65'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.25700
+    max: 0.13500, -0.47100, 0.26900
+    color: '#6183A6'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.32000
+    max: 0.13500, -0.47000, 0.36700
+    color: '#344B65'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.36700
+    max: 0.13500, -0.47100, 0.37900
+    color: '#6183A6'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.43000
+    max: 0.13500, -0.47000, 0.47700
+    color: '#344B65'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.47700
+    max: 0.13500, -0.47100, 0.48900
+    color: '#6183A6'
+  - label: vertical door latch
+    min: 0.15100, -0.48800, 0.90000
+    max: 0.18400, -0.47600, 1.07500
+    color: '#232728'
+  - label: white emergency label
+    min: -0.17000, -0.48200, 1.14000
+    max: 0.17000, -0.47000, 1.58000
+    color: '#CCCFCD'
+  - label: blue cross border
+    min: -0.05200, -0.49700, 1.18500
+    max: 0.05200, -0.48500, 1.53500
+    color: '#446384'
+  - label: blue cross border
+    min: -0.14000, -0.49700, 1.27500
+    max: 0.14000, -0.48500, 1.44000
+    color: '#446384'
+  - label: white cross stem
+    min: -0.02300, -0.51000, 1.21700
+    max: 0.02300, -0.49800, 1.50700
+    color: '#DDE2DC'
+  - label: white cross arms
+    min: -0.11200, -0.51000, 1.32200
+    max: 0.11200, -0.49800, 1.39700
+    color: '#DDE2DC'
+- type: cmu3DModel
+  id: CMU3DFireCloset
+  label: Fire equipment closet
+  sourcePrototypes:
+  - CMClosetFire
+  - CMClosetFireFilled
+  status: draft
+  description: Closed narrow closet with separate header, door border, latch and lower vents. Original department marking
+    retained. Closed pose only; opening, welding and labels need appearance support. Source art and saved placement inspected;
+    height, depth and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: CMClosetFireFilled
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Closets/firecloset.rsi
+  referenceState: closed
+  sourceDirections: 1
+  parts:
+  - label: closet foot
+    min: -0.23500, -0.40000, 0.00000
+    max: -0.17000, 0.40000, 0.09000
+    color: '#543031'
+  - label: closet foot
+    min: 0.17000, -0.40000, 0.00000
+    max: 0.23500, 0.40000, 0.09000
+    color: '#543031'
+  - label: closet shell
+    min: -0.25000, -0.44000, 0.07500
+    max: 0.25000, 0.44000, 1.88000
+    color: '#543031'
+  - label: top cap
+    min: -0.25000, -0.45000, 1.82000
+    max: 0.25000, 0.45000, 1.88000
+    color: '#A55151'
+  - label: header inset
+    min: -0.20300, -0.46300, 1.66000
+    max: 0.20300, -0.45100, 1.79500
+    color: '#864243'
+  - label: door recess
+    min: -0.22100, -0.45300, 0.10000
+    max: 0.22100, -0.44100, 1.61000
+    color: '#262B2D'
+  - label: door face
+    min: -0.19400, -0.46700, 0.14000
+    max: 0.19400, -0.45500, 1.57000
+    color: '#864243'
+  - label: door edge molding
+    min: -0.21300, -0.48000, 0.13000
+    max: -0.19000, -0.46800, 1.59000
+    color: '#A55151'
+  - label: door edge molding
+    min: 0.19000, -0.48000, 0.13000
+    max: 0.21300, -0.46800, 1.59000
+    color: '#A55151'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 0.12000
+    max: 0.19000, -0.46800, 0.14500
+    color: '#A55151'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 1.56500
+    max: 0.19000, -0.46800, 1.59000
+    color: '#A55151'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.21000
+    max: 0.13500, -0.47000, 0.25700
+    color: '#543031'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.25700
+    max: 0.13500, -0.47100, 0.26900
+    color: '#A55151'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.32000
+    max: 0.13500, -0.47000, 0.36700
+    color: '#543031'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.36700
+    max: 0.13500, -0.47100, 0.37900
+    color: '#A55151'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.43000
+    max: 0.13500, -0.47000, 0.47700
+    color: '#543031'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.47700
+    max: 0.13500, -0.47100, 0.48900
+    color: '#A55151'
+  - label: vertical door latch
+    min: 0.15100, -0.48800, 0.90000
+    max: 0.18400, -0.47600, 1.07500
+    color: '#232728'
+  - label: extinguisher symbol bottle
+    min: -0.04300, -0.48200, 1.18500
+    max: 0.04300, -0.47000, 1.48500
+    color: '#D6C6B5'
+  - label: extinguisher symbol handle
+    min: -0.08300, -0.48200, 1.46400
+    max: 0.07700, -0.47000, 1.50000
+    color: '#D6C6B5'
+  - label: extinguisher symbol hose
+    min: -0.10000, -0.48200, 1.41500
+    max: -0.07700, -0.47000, 1.48000
+    color: '#D6C6B5'
+- type: cmu3DModel
+  id: CMU3DRadiationCloset
+  label: Radiation equipment closet
+  sourcePrototypes:
+  - CMClosetRadiationFilled
+  status: draft
+  description: Closed narrow closet with separate header, door border, latch and lower vents. Original department marking
+    retained. Closed pose only; opening, welding and labels need appearance support. Source art and saved placement inspected;
+    height, depth and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: CMClosetRadiationFilled
+  referenceRsi: /Textures/_RMC14/Structures/Storage/Closets/radsuit.rsi
+  referenceState: closed
+  sourceDirections: 1
+  parts:
+  - label: closet foot
+    min: -0.23500, -0.40000, 0.00000
+    max: -0.17000, 0.40000, 0.09000
+    color: '#753310'
+  - label: closet foot
+    min: 0.17000, -0.40000, 0.00000
+    max: 0.23500, 0.40000, 0.09000
+    color: '#753310'
+  - label: closet shell
+    min: -0.25000, -0.44000, 0.07500
+    max: 0.25000, 0.44000, 1.88000
+    color: '#753310'
+  - label: top cap
+    min: -0.25000, -0.45000, 1.82000
+    max: 0.25000, 0.45000, 1.88000
+    color: '#BD5827'
+  - label: header inset
+    min: -0.20300, -0.46300, 1.66000
+    max: 0.20300, -0.45100, 1.79500
+    color: '#A24412'
+  - label: door recess
+    min: -0.22100, -0.45300, 0.10000
+    max: 0.22100, -0.44100, 1.61000
+    color: '#262B2D'
+  - label: door face
+    min: -0.19400, -0.46700, 0.14000
+    max: 0.19400, -0.45500, 1.57000
+    color: '#A24412'
+  - label: door edge molding
+    min: -0.21300, -0.48000, 0.13000
+    max: -0.19000, -0.46800, 1.59000
+    color: '#BD5827'
+  - label: door edge molding
+    min: 0.19000, -0.48000, 0.13000
+    max: 0.21300, -0.46800, 1.59000
+    color: '#BD5827'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 0.12000
+    max: 0.19000, -0.46800, 0.14500
+    color: '#BD5827'
+  - label: door edge molding
+    min: -0.19000, -0.48000, 1.56500
+    max: 0.19000, -0.46800, 1.59000
+    color: '#BD5827'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.21000
+    max: 0.13500, -0.47000, 0.25700
+    color: '#753310'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.25700
+    max: 0.13500, -0.47100, 0.26900
+    color: '#BD5827'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.32000
+    max: 0.13500, -0.47000, 0.36700
+    color: '#753310'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.36700
+    max: 0.13500, -0.47100, 0.37900
+    color: '#BD5827'
+  - label: lower ventilation recess
+    min: -0.13500, -0.48200, 0.43000
+    max: 0.13500, -0.47000, 0.47700
+    color: '#753310'
+  - label: vent lip
+    min: -0.13500, -0.48300, 0.47700
+    max: 0.13500, -0.47100, 0.48900
+    color: '#BD5827'
+  - label: vertical door latch
+    min: 0.15100, -0.48800, 0.90000
+    max: 0.18400, -0.47600, 1.07500
+    color: '#232728'
+  - label: radiation trefoil
+    min: -0.11500, -0.48300, 1.37000
+    max: -0.06300, -0.47100, 1.45000
+    color: '#302717'
+  - label: radiation trefoil
+    min: 0.06300, -0.48300, 1.37000
+    max: 0.11500, -0.47100, 1.45000
+    color: '#302717'
+  - label: radiation trefoil
+    min: -0.08100, -0.48300, 1.33800
+    max: -0.01900, -0.47100, 1.38900
+    color: '#302717'
+  - label: radiation trefoil
+    min: 0.01900, -0.48300, 1.33800
+    max: 0.08100, -0.47100, 1.38900
+    color: '#302717'
+  - label: radiation trefoil
+    min: -0.04700, -0.48300, 1.19000
+    max: 0.04700, -0.47100, 1.25000
+    color: '#302717'
+  - label: radiation trefoil
+    min: -0.02300, -0.48300, 1.24000
+    max: 0.02300, -0.47100, 1.31000
+    color: '#302717'
+- type: cmu3DModel
+  id: CMU3DGreenDumpster
+  label: Green twin-lid dumpster
+  sourcePrototypes:
+  - AU14DumpsterGreen
+  status: draft
+  description: Two independently ribbed closed lids, lift sockets, reinforced front and four casters. Body spans local
+    X -0.5..+1.5 around the original asymmetric pivot. The 128px padding is not a placement offset. Bag-open overlay
+    was inspected separately and is not baked into this closed pose. Source art and saved placement inspected; height,
+    depth and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: AU14DumpsterGreen
+  referenceRsi: /Textures/CMU14/Structures/dumpsters.rsi
+  referenceState: green
+  sourceDirections: 4
+  parts:
+  - label: caster bracket
+    min: -0.36000, -0.32000, 0.10000
+    max: -0.28000, -0.25500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: -0.37600, -0.34000, 0.01500
+    max: -0.26500, -0.23000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: -0.36000, 0.27000, 0.10000
+    max: -0.28000, 0.33500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: -0.37600, 0.25000, 0.01500
+    max: -0.26500, 0.36000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: 1.25000, -0.32000, 0.10000
+    max: 1.33000, -0.25500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: 1.23400, -0.34000, 0.01500
+    max: 1.34500, -0.23000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: 1.25000, 0.27000, 0.10000
+    max: 1.33000, 0.33500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: 1.23400, 0.25000, 0.01500
+    max: 1.34500, 0.36000, 0.12000
+    color: '#202323'
+  - label: lower bin shell
+    min: -0.45000, -0.43000, 0.17000
+    max: 1.45000, 0.43000, 0.86000
+    color: '#596F50'
+  - label: rear top lip
+    min: -0.47000, 0.40000, 0.86000
+    max: 1.47000, 0.46000, 0.94000
+    color: '#7F946C'
+  - label: bin side rim
+    min: -0.47000, -0.45000, 0.86000
+    max: -0.40000, 0.41000, 0.94000
+    color: '#7F946C'
+  - label: bin side rim
+    min: 1.40000, -0.45000, 0.86000
+    max: 1.47000, 0.41000, 0.94000
+    color: '#7F946C'
+  - label: front rolled rim
+    min: -0.47000, -0.46000, 0.84000
+    max: 1.47000, -0.40000, 0.93000
+    color: '#7F946C'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.22000
+    max: 1.45000, -0.43800, 0.25500
+    color: '#7F946C'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.39000
+    max: 1.45000, -0.43800, 0.42500
+    color: '#7F946C'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.64000
+    max: 1.45000, -0.43800, 0.67500
+    color: '#7F946C'
+  - label: side lift socket
+    min: -0.49500, -0.24000, 0.45000
+    max: -0.46000, 0.24000, 0.76000
+    color: '#7F946C'
+  - label: socket dark recess
+    min: -0.49800, -0.18000, 0.49000
+    max: -0.45400, 0.18000, 0.71000
+    color: '#282D28'
+  - label: side lift socket
+    min: 1.46000, -0.24000, 0.45000
+    max: 1.49500, 0.24000, 0.76000
+    color: '#7F946C'
+  - label: socket dark recess
+    min: 1.45700, -0.18000, 0.49000
+    max: 1.50100, 0.18000, 0.71000
+    color: '#282D28'
+  - label: dark closed lid
+    min: -0.43000, -0.43000, 0.93000
+    max: 0.48000, 0.40500, 1.01000
+    color: '#34313E'
+  - label: lid side border
+    min: -0.43000, -0.43000, 1.01000
+    max: -0.39500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid side border
+    min: 0.44500, -0.43000, 1.01000
+    max: 0.48000, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: -0.39500, -0.43000, 1.01000
+    max: 0.44500, -0.39500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: -0.39500, 0.37000, 1.01000
+    max: 0.44500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid recessed rib
+    min: -0.27000, -0.36000, 1.01000
+    max: -0.25300, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: -0.08500, -0.36000, 1.01000
+    max: -0.06800, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.10000, -0.36000, 1.01000
+    max: 0.11700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.28500, -0.36000, 1.01000
+    max: 0.30200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid front handle
+    min: -0.13000, -0.49000, 0.94400
+    max: 0.14000, -0.43500, 0.99000
+    color: '#25242B'
+  - label: rear hinge
+    min: -0.13000, 0.39700, 0.92500
+    max: 0.14000, 0.46300, 0.96500
+    color: '#6C6560'
+  - label: dark closed lid
+    min: 0.52000, -0.43000, 0.93000
+    max: 1.43000, 0.40500, 1.01000
+    color: '#34313E'
+  - label: lid side border
+    min: 0.52000, -0.43000, 1.01000
+    max: 0.55500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid side border
+    min: 1.39500, -0.43000, 1.01000
+    max: 1.43000, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: 0.55500, -0.43000, 1.01000
+    max: 1.39500, -0.39500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: 0.55500, 0.37000, 1.01000
+    max: 1.39500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid recessed rib
+    min: 0.68000, -0.36000, 1.01000
+    max: 0.69700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.86500, -0.36000, 1.01000
+    max: 0.88200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 1.05000, -0.36000, 1.01000
+    max: 1.06700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 1.23500, -0.36000, 1.01000
+    max: 1.25200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid front handle
+    min: 0.82000, -0.49000, 0.94400
+    max: 1.09000, -0.43500, 0.99000
+    color: '#25242B'
+  - label: rear hinge
+    min: 0.82000, 0.39700, 0.92500
+    max: 1.09000, 0.46300, 0.96500
+    color: '#6C6560'
+- type: cmu3DModel
+  id: CMU3DOrangeDumpster
+  label: Orange twin-lid dumpster
+  sourcePrototypes:
+  - AU14DumpsterOrange
+  status: draft
+  description: Two independently ribbed closed lids, lift sockets, reinforced front and four casters. Body spans local
+    X -0.5..+1.5 around the original asymmetric pivot. The 128px padding is not a placement offset. Bag-open overlay
+    was inspected separately and is not baked into this closed pose. Source art and saved placement inspected; height,
+    depth and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: AU14DumpsterOrange
+  referenceRsi: /Textures/CMU14/Structures/dumpsters.rsi
+  referenceState: orange
+  sourceDirections: 4
+  parts:
+  - label: caster bracket
+    min: -0.36000, -0.32000, 0.10000
+    max: -0.28000, -0.25500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: -0.37600, -0.34000, 0.01500
+    max: -0.26500, -0.23000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: -0.36000, 0.27000, 0.10000
+    max: -0.28000, 0.33500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: -0.37600, 0.25000, 0.01500
+    max: -0.26500, 0.36000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: 1.25000, -0.32000, 0.10000
+    max: 1.33000, -0.25500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: 1.23400, -0.34000, 0.01500
+    max: 1.34500, -0.23000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: 1.25000, 0.27000, 0.10000
+    max: 1.33000, 0.33500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: 1.23400, 0.25000, 0.01500
+    max: 1.34500, 0.36000, 0.12000
+    color: '#202323'
+  - label: lower bin shell
+    min: -0.45000, -0.43000, 0.17000
+    max: 1.45000, 0.43000, 0.86000
+    color: '#986539'
+  - label: rear top lip
+    min: -0.47000, 0.40000, 0.86000
+    max: 1.47000, 0.46000, 0.94000
+    color: '#B88752'
+  - label: bin side rim
+    min: -0.47000, -0.45000, 0.86000
+    max: -0.40000, 0.41000, 0.94000
+    color: '#B88752'
+  - label: bin side rim
+    min: 1.40000, -0.45000, 0.86000
+    max: 1.47000, 0.41000, 0.94000
+    color: '#B88752'
+  - label: front rolled rim
+    min: -0.47000, -0.46000, 0.84000
+    max: 1.47000, -0.40000, 0.93000
+    color: '#B88752'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.22000
+    max: 1.45000, -0.43800, 0.25500
+    color: '#B88752'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.39000
+    max: 1.45000, -0.43800, 0.42500
+    color: '#B88752'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.64000
+    max: 1.45000, -0.43800, 0.67500
+    color: '#B88752'
+  - label: side lift socket
+    min: -0.49500, -0.24000, 0.45000
+    max: -0.46000, 0.24000, 0.76000
+    color: '#B88752'
+  - label: socket dark recess
+    min: -0.49800, -0.18000, 0.49000
+    max: -0.45400, 0.18000, 0.71000
+    color: '#282D28'
+  - label: side lift socket
+    min: 1.46000, -0.24000, 0.45000
+    max: 1.49500, 0.24000, 0.76000
+    color: '#B88752'
+  - label: socket dark recess
+    min: 1.45700, -0.18000, 0.49000
+    max: 1.50100, 0.18000, 0.71000
+    color: '#282D28'
+  - label: dark closed lid
+    min: -0.43000, -0.43000, 0.93000
+    max: 0.48000, 0.40500, 1.01000
+    color: '#34313E'
+  - label: lid side border
+    min: -0.43000, -0.43000, 1.01000
+    max: -0.39500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid side border
+    min: 0.44500, -0.43000, 1.01000
+    max: 0.48000, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: -0.39500, -0.43000, 1.01000
+    max: 0.44500, -0.39500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: -0.39500, 0.37000, 1.01000
+    max: 0.44500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid recessed rib
+    min: -0.27000, -0.36000, 1.01000
+    max: -0.25300, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: -0.08500, -0.36000, 1.01000
+    max: -0.06800, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.10000, -0.36000, 1.01000
+    max: 0.11700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.28500, -0.36000, 1.01000
+    max: 0.30200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid front handle
+    min: -0.13000, -0.49000, 0.94400
+    max: 0.14000, -0.43500, 0.99000
+    color: '#25242B'
+  - label: rear hinge
+    min: -0.13000, 0.39700, 0.92500
+    max: 0.14000, 0.46300, 0.96500
+    color: '#6C6560'
+  - label: dark closed lid
+    min: 0.52000, -0.43000, 0.93000
+    max: 1.43000, 0.40500, 1.01000
+    color: '#34313E'
+  - label: lid side border
+    min: 0.52000, -0.43000, 1.01000
+    max: 0.55500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid side border
+    min: 1.39500, -0.43000, 1.01000
+    max: 1.43000, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: 0.55500, -0.43000, 1.01000
+    max: 1.39500, -0.39500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: 0.55500, 0.37000, 1.01000
+    max: 1.39500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid recessed rib
+    min: 0.68000, -0.36000, 1.01000
+    max: 0.69700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.86500, -0.36000, 1.01000
+    max: 0.88200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 1.05000, -0.36000, 1.01000
+    max: 1.06700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 1.23500, -0.36000, 1.01000
+    max: 1.25200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid front handle
+    min: 0.82000, -0.49000, 0.94400
+    max: 1.09000, -0.43500, 0.99000
+    color: '#25242B'
+  - label: rear hinge
+    min: 0.82000, 0.39700, 0.92500
+    max: 1.09000, 0.46300, 0.96500
+    color: '#6C6560'
+- type: cmu3DModel
+  id: CMU3DYellowDumpster
+  label: Yellow twin-lid dumpster
+  sourcePrototypes:
+  - AU14DumpsterYellow
+  status: draft
+  description: Two independently ribbed closed lids, lift sockets, reinforced front and four casters. Body spans local
+    X -0.5..+1.5 around the original asymmetric pivot. The 128px padding is not a placement offset. Bag-open overlay
+    was inspected separately and is not baked into this closed pose. Source art and saved placement inspected; height,
+    depth and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: AU14DumpsterYellow
+  referenceRsi: /Textures/CMU14/Structures/dumpsters.rsi
+  referenceState: yellow
+  sourceDirections: 4
+  parts:
+  - label: caster bracket
+    min: -0.36000, -0.32000, 0.10000
+    max: -0.28000, -0.25500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: -0.37600, -0.34000, 0.01500
+    max: -0.26500, -0.23000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: -0.36000, 0.27000, 0.10000
+    max: -0.28000, 0.33500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: -0.37600, 0.25000, 0.01500
+    max: -0.26500, 0.36000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: 1.25000, -0.32000, 0.10000
+    max: 1.33000, -0.25500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: 1.23400, -0.34000, 0.01500
+    max: 1.34500, -0.23000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: 1.25000, 0.27000, 0.10000
+    max: 1.33000, 0.33500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: 1.23400, 0.25000, 0.01500
+    max: 1.34500, 0.36000, 0.12000
+    color: '#202323'
+  - label: lower bin shell
+    min: -0.45000, -0.43000, 0.17000
+    max: 1.45000, 0.43000, 0.86000
+    color: '#8A791E'
+  - label: rear top lip
+    min: -0.47000, 0.40000, 0.86000
+    max: 1.47000, 0.46000, 0.94000
+    color: '#AD9A37'
+  - label: bin side rim
+    min: -0.47000, -0.45000, 0.86000
+    max: -0.40000, 0.41000, 0.94000
+    color: '#AD9A37'
+  - label: bin side rim
+    min: 1.40000, -0.45000, 0.86000
+    max: 1.47000, 0.41000, 0.94000
+    color: '#AD9A37'
+  - label: front rolled rim
+    min: -0.47000, -0.46000, 0.84000
+    max: 1.47000, -0.40000, 0.93000
+    color: '#AD9A37'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.22000
+    max: 1.45000, -0.43800, 0.25500
+    color: '#AD9A37'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.39000
+    max: 1.45000, -0.43800, 0.42500
+    color: '#AD9A37'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.64000
+    max: 1.45000, -0.43800, 0.67500
+    color: '#AD9A37'
+  - label: side lift socket
+    min: -0.49500, -0.24000, 0.45000
+    max: -0.46000, 0.24000, 0.76000
+    color: '#AD9A37'
+  - label: socket dark recess
+    min: -0.49800, -0.18000, 0.49000
+    max: -0.45400, 0.18000, 0.71000
+    color: '#282D28'
+  - label: side lift socket
+    min: 1.46000, -0.24000, 0.45000
+    max: 1.49500, 0.24000, 0.76000
+    color: '#AD9A37'
+  - label: socket dark recess
+    min: 1.45700, -0.18000, 0.49000
+    max: 1.50100, 0.18000, 0.71000
+    color: '#282D28'
+  - label: dark closed lid
+    min: -0.43000, -0.43000, 0.93000
+    max: 0.48000, 0.40500, 1.01000
+    color: '#34313E'
+  - label: lid side border
+    min: -0.43000, -0.43000, 1.01000
+    max: -0.39500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid side border
+    min: 0.44500, -0.43000, 1.01000
+    max: 0.48000, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: -0.39500, -0.43000, 1.01000
+    max: 0.44500, -0.39500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: -0.39500, 0.37000, 1.01000
+    max: 0.44500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid recessed rib
+    min: -0.27000, -0.36000, 1.01000
+    max: -0.25300, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: -0.08500, -0.36000, 1.01000
+    max: -0.06800, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.10000, -0.36000, 1.01000
+    max: 0.11700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.28500, -0.36000, 1.01000
+    max: 0.30200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid front handle
+    min: -0.13000, -0.49000, 0.94400
+    max: 0.14000, -0.43500, 0.99000
+    color: '#25242B'
+  - label: rear hinge
+    min: -0.13000, 0.39700, 0.92500
+    max: 0.14000, 0.46300, 0.96500
+    color: '#6C6560'
+  - label: dark closed lid
+    min: 0.52000, -0.43000, 0.93000
+    max: 1.43000, 0.40500, 1.01000
+    color: '#34313E'
+  - label: lid side border
+    min: 0.52000, -0.43000, 1.01000
+    max: 0.55500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid side border
+    min: 1.39500, -0.43000, 1.01000
+    max: 1.43000, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: 0.55500, -0.43000, 1.01000
+    max: 1.39500, -0.39500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: 0.55500, 0.37000, 1.01000
+    max: 1.39500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid recessed rib
+    min: 0.68000, -0.36000, 1.01000
+    max: 0.69700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.86500, -0.36000, 1.01000
+    max: 0.88200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 1.05000, -0.36000, 1.01000
+    max: 1.06700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 1.23500, -0.36000, 1.01000
+    max: 1.25200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid front handle
+    min: 0.82000, -0.49000, 0.94400
+    max: 1.09000, -0.43500, 0.99000
+    color: '#25242B'
+  - label: rear hinge
+    min: 0.82000, 0.39700, 0.92500
+    max: 1.09000, 0.46300, 0.96500
+    color: '#6C6560'
+- type: cmu3DModel
+  id: CMU3DWeyuDumpster
+  label: Weyland-Yutani twin-lid dumpster
+  sourcePrototypes:
+  - AU14DumpsterWeYu
+  status: draft
+  description: Two independently ribbed closed lids, lift sockets, reinforced front and four casters. Body spans local
+    X -0.5..+1.5 around the original asymmetric pivot. The 128px padding is not a placement offset. Bag-open overlay
+    was inspected separately and is not baked into this closed pose. Source art and saved placement inspected; height,
+    depth and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: AU14DumpsterWeYu
+  referenceRsi: /Textures/CMU14/Structures/dumpsters.rsi
+  referenceState: we-yu
+  sourceDirections: 4
+  parts:
+  - label: caster bracket
+    min: -0.36000, -0.32000, 0.10000
+    max: -0.28000, -0.25500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: -0.37600, -0.34000, 0.01500
+    max: -0.26500, -0.23000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: -0.36000, 0.27000, 0.10000
+    max: -0.28000, 0.33500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: -0.37600, 0.25000, 0.01500
+    max: -0.26500, 0.36000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: 1.25000, -0.32000, 0.10000
+    max: 1.33000, -0.25500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: 1.23400, -0.34000, 0.01500
+    max: 1.34500, -0.23000, 0.12000
+    color: '#202323'
+  - label: caster bracket
+    min: 1.25000, 0.27000, 0.10000
+    max: 1.33000, 0.33500, 0.22000
+    color: '#64625C'
+  - label: caster wheel
+    min: 1.23400, 0.25000, 0.01500
+    max: 1.34500, 0.36000, 0.12000
+    color: '#202323'
+  - label: lower bin shell
+    min: -0.45000, -0.43000, 0.17000
+    max: 1.45000, 0.43000, 0.86000
+    color: '#29292B'
+  - label: rear top lip
+    min: -0.47000, 0.40000, 0.86000
+    max: 1.47000, 0.46000, 0.94000
+    color: '#8D8026'
+  - label: bin side rim
+    min: -0.47000, -0.45000, 0.86000
+    max: -0.40000, 0.41000, 0.94000
+    color: '#8D8026'
+  - label: bin side rim
+    min: 1.40000, -0.45000, 0.86000
+    max: 1.47000, 0.41000, 0.94000
+    color: '#8D8026'
+  - label: front rolled rim
+    min: -0.47000, -0.46000, 0.84000
+    max: 1.47000, -0.40000, 0.93000
+    color: '#8D8026'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.22000
+    max: 1.45000, -0.43800, 0.25500
+    color: '#8D8026'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.39000
+    max: 1.45000, -0.43800, 0.42500
+    color: '#8D8026'
+  - label: front strengthening rib
+    min: -0.45000, -0.45000, 0.64000
+    max: 1.45000, -0.43800, 0.67500
+    color: '#8D8026'
+  - label: side lift socket
+    min: -0.49500, -0.24000, 0.45000
+    max: -0.46000, 0.24000, 0.76000
+    color: '#8D8026'
+  - label: socket dark recess
+    min: -0.49800, -0.18000, 0.49000
+    max: -0.45400, 0.18000, 0.71000
+    color: '#282D28'
+  - label: side lift socket
+    min: 1.46000, -0.24000, 0.45000
+    max: 1.49500, 0.24000, 0.76000
+    color: '#8D8026'
+  - label: socket dark recess
+    min: 1.45700, -0.18000, 0.49000
+    max: 1.50100, 0.18000, 0.71000
+    color: '#282D28'
+  - label: dark closed lid
+    min: -0.43000, -0.43000, 0.93000
+    max: 0.48000, 0.40500, 1.01000
+    color: '#34313E'
+  - label: lid side border
+    min: -0.43000, -0.43000, 1.01000
+    max: -0.39500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid side border
+    min: 0.44500, -0.43000, 1.01000
+    max: 0.48000, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: -0.39500, -0.43000, 1.01000
+    max: 0.44500, -0.39500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: -0.39500, 0.37000, 1.01000
+    max: 0.44500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid recessed rib
+    min: -0.27000, -0.36000, 1.01000
+    max: -0.25300, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: -0.08500, -0.36000, 1.01000
+    max: -0.06800, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.10000, -0.36000, 1.01000
+    max: 0.11700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.28500, -0.36000, 1.01000
+    max: 0.30200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid front handle
+    min: -0.13000, -0.49000, 0.94400
+    max: 0.14000, -0.43500, 0.99000
+    color: '#25242B'
+  - label: rear hinge
+    min: -0.13000, 0.39700, 0.92500
+    max: 0.14000, 0.46300, 0.96500
+    color: '#6C6560'
+  - label: dark closed lid
+    min: 0.52000, -0.43000, 0.93000
+    max: 1.43000, 0.40500, 1.01000
+    color: '#34313E'
+  - label: lid side border
+    min: 0.52000, -0.43000, 1.01000
+    max: 0.55500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid side border
+    min: 1.39500, -0.43000, 1.01000
+    max: 1.43000, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: 0.55500, -0.43000, 1.01000
+    max: 1.39500, -0.39500, 1.03500
+    color: '#514A5B'
+  - label: lid end border
+    min: 0.55500, 0.37000, 1.01000
+    max: 1.39500, 0.40500, 1.03500
+    color: '#514A5B'
+  - label: lid recessed rib
+    min: 0.68000, -0.36000, 1.01000
+    max: 0.69700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 0.86500, -0.36000, 1.01000
+    max: 0.88200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 1.05000, -0.36000, 1.01000
+    max: 1.06700, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid recessed rib
+    min: 1.23500, -0.36000, 1.01000
+    max: 1.25200, 0.34000, 1.01900
+    color: '#242530'
+  - label: lid front handle
+    min: 0.82000, -0.49000, 0.94400
+    max: 1.09000, -0.43500, 0.99000
+    color: '#25242B'
+  - label: rear hinge
+    min: 0.82000, 0.39700, 0.92500
+    max: 1.09000, 0.46300, 0.96500
+    color: '#6C6560'
+  - label: dark branding panel
+    min: -0.44000, -0.46600, 0.39000
+    max: 1.44000, -0.45400, 0.82000
+    color: '#24252A'
+  - label: yellow double-V emblem
+    min: -0.43567, -0.51250, 0.71850
+    max: -0.35267, -0.42950, 0.80150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: -0.36400, -0.51250, 0.65850
+    max: -0.28100, -0.42950, 0.74150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: -0.29233, -0.51250, 0.59850
+    max: -0.20933, -0.42950, 0.68150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: -0.22067, -0.51250, 0.53850
+    max: -0.13767, -0.42950, 0.62150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: -0.14900, -0.51250, 0.47850
+    max: -0.06600, -0.42950, 0.56150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: -0.07733, -0.51250, 0.41850
+    max: 0.00567, -0.42950, 0.50150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: -0.00233, -0.51250, 0.41850
+    max: 0.08067, -0.42950, 0.50150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.07600, -0.51250, 0.47850
+    max: 0.15900, -0.42950, 0.56150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.15433, -0.51250, 0.53850
+    max: 0.23733, -0.42950, 0.62150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.23267, -0.51250, 0.59850
+    max: 0.31567, -0.42950, 0.68150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.31100, -0.51250, 0.65850
+    max: 0.39400, -0.42950, 0.74150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.38933, -0.51250, 0.71850
+    max: 0.47233, -0.42950, 0.80150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.46840, -0.51250, 0.71850
+    max: 0.55160, -0.42950, 0.80150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.54840, -0.51250, 0.65850
+    max: 0.63160, -0.42950, 0.74150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.62840, -0.51250, 0.59850
+    max: 0.71160, -0.42950, 0.68150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.70840, -0.51250, 0.53850
+    max: 0.79160, -0.42950, 0.62150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.78840, -0.51250, 0.47850
+    max: 0.87160, -0.42950, 0.56150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.86840, -0.51250, 0.41850
+    max: 0.95160, -0.42950, 0.50150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 0.94840, -0.51250, 0.41850
+    max: 1.03160, -0.42950, 0.50150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 1.02840, -0.51250, 0.47850
+    max: 1.11160, -0.42950, 0.56150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 1.10840, -0.51250, 0.53850
+    max: 1.19160, -0.42950, 0.62150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 1.18840, -0.51250, 0.59850
+    max: 1.27160, -0.42950, 0.68150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 1.26840, -0.51250, 0.65850
+    max: 1.35160, -0.42950, 0.74150
+    color: '#A59331'
+  - label: yellow double-V emblem
+    min: 1.34840, -0.51250, 0.71850
+    max: 1.43160, -0.42950, 0.80150
+    color: '#A59331'
+  - label: pale emblem inset
+    min: -0.12000, -0.53100, 0.67500
+    max: 0.10000, -0.51900, 0.72600
+    color: '#B9BDB2'
+  - label: pale emblem inset
+    min: 0.82000, -0.53100, 0.67500
+    max: 1.04000, -0.51900, 0.72600
+    color: '#B9BDB2'
+- type: cmu3DModel
+  id: CMU3DWeymartShelf1
+  label: Stocked Weymart shelf 1
+  sourcePrototypes:
+  - AU14WeymartRacks1
+  status: draft
+  description: Three compact open shelves with source-specific stock layout 1. Products are separate solids with colored
+    labels; the gaps between shelves stay open. Shelf stock is a static part of this decorative source, not an inventory
+    visualization. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    contents and appearance changes remain unfinished.
+  referencePrototype: AU14WeymartRacks1
+  referenceRsi: /Textures/CMU14/Structures/hybrisiaracks.rsi
+  referenceState: longrack1
+  sourceDirections: 1
+  parts:
+  - label: shelf upright
+    min: -0.47500, -0.20160, 0.00000
+    max: -0.42500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: -0.47500, 0.17640, 0.00000
+    max: -0.42500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: -0.48300, -0.20448, 0.95744
+    max: -0.41700, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf upright
+    min: 0.42500, -0.20160, 0.00000
+    max: 0.47500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: 0.42500, 0.17640, 0.00000
+    max: 0.47500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: 0.41700, -0.20448, 0.95744
+    max: 0.48300, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.08160
+    max: 0.44500, 0.20160, 0.11900
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.07956
+    max: 0.46900, -0.21312, 0.11152
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.39440
+    max: 0.44500, 0.20160, 0.43180
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.39236
+    max: 0.46900, -0.21312, 0.42432
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.70720
+    max: 0.44500, 0.20160, 0.74460
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.70516
+    max: 0.46900, -0.21312, 0.73712
+    color: '#A6A99C'
+  - label: rear base stretcher
+    min: -0.42500, 0.18144, 0.03400
+    max: 0.42500, 0.20736, 0.07480
+    color: '#484F48'
+  - label: top narrow package
+    min: -0.38800, -0.12960, 0.74460
+    max: -0.31000, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: -0.37600, -0.13896, 0.80920
+    max: -0.32100, -0.13032, 0.84592
+    color: '#6BA3B9'
+  - label: top cap
+    min: -0.37600, -0.10080, 0.93160
+    max: -0.32200, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: -0.27300, -0.12960, 0.74460
+    max: -0.19500, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: -0.26100, -0.13896, 0.80920
+    max: -0.20600, -0.13032, 0.84592
+    color: '#6BA3B9'
+  - label: top cap
+    min: -0.26100, -0.10080, 0.93160
+    max: -0.20700, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: -0.15800, -0.12960, 0.74460
+    max: -0.08000, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: -0.14600, -0.13896, 0.80920
+    max: -0.09100, -0.13032, 0.84592
+    color: '#6BA3B9'
+  - label: top cap
+    min: -0.14600, -0.10080, 0.93160
+    max: -0.09200, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: -0.04300, -0.12960, 0.74460
+    max: 0.03500, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: -0.03100, -0.13896, 0.80920
+    max: 0.02400, -0.13032, 0.84592
+    color: '#6BA3B9'
+  - label: top cap
+    min: -0.03100, -0.10080, 0.93160
+    max: 0.02300, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: 0.07200, -0.12960, 0.74460
+    max: 0.15000, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: 0.08400, -0.13896, 0.80920
+    max: 0.13900, -0.13032, 0.84592
+    color: '#6BA3B9'
+  - label: top cap
+    min: 0.08400, -0.10080, 0.93160
+    max: 0.13800, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: 0.18700, -0.12960, 0.74460
+    max: 0.26500, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: 0.19900, -0.13896, 0.80920
+    max: 0.25400, -0.13032, 0.84592
+    color: '#6BA3B9'
+  - label: top cap
+    min: 0.19900, -0.10080, 0.93160
+    max: 0.25300, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: 0.30200, -0.12960, 0.74460
+    max: 0.38000, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: 0.31400, -0.13896, 0.80920
+    max: 0.36900, -0.13032, 0.84592
+    color: '#6BA3B9'
+  - label: top cap
+    min: 0.31400, -0.10080, 0.93160
+    max: 0.36800, 0.07200, 0.96220
+    color: '#272E37'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.43180
+    max: -0.23500, 0.12240, 0.61540
+    color: '#916F81'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.45900
+    max: -0.26100, -0.12312, 0.56440
+    color: '#C0AD9D'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.49300
+    max: -0.26200, -0.13248, 0.51136
+    color: '#916F81'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.43180
+    max: -0.03000, 0.12240, 0.61540
+    color: '#B49188'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.45900
+    max: -0.05600, -0.12312, 0.56440
+    color: '#C0AD9D'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.49300
+    max: -0.05700, -0.13248, 0.51136
+    color: '#B49188'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.43180
+    max: 0.17500, 0.12240, 0.61540
+    color: '#849270'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.45900
+    max: 0.14900, -0.12312, 0.56440
+    color: '#C0AD9D'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.49300
+    max: 0.14800, -0.13248, 0.51136
+    color: '#849270'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.43180
+    max: 0.38000, 0.12240, 0.61540
+    color: '#A96175'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.45900
+    max: 0.35400, -0.12312, 0.56440
+    color: '#C0AD9D'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.49300
+    max: 0.35300, -0.13248, 0.51136
+    color: '#A96175'
+  - label: small bottom stock
+    min: -0.38400, -0.11520, 0.11900
+    max: -0.33000, 0.08640, 0.26180
+    color: '#822B2C'
+  - label: small stock label
+    min: -0.37600, -0.12456, 0.15980
+    max: -0.34100, -0.11592, 0.19788
+    color: '#B14842'
+  - label: small bottom stock
+    min: -0.31000, -0.11520, 0.11900
+    max: -0.25600, 0.08640, 0.28560
+    color: '#822B2C'
+  - label: small stock label
+    min: -0.30200, -0.12456, 0.15980
+    max: -0.26700, -0.11592, 0.19788
+    color: '#B14842'
+  - label: small bottom stock
+    min: -0.23600, -0.11520, 0.11900
+    max: -0.18200, 0.08640, 0.26180
+    color: '#822B2C'
+  - label: small stock label
+    min: -0.22800, -0.12456, 0.15980
+    max: -0.19300, -0.11592, 0.19788
+    color: '#B14842'
+  - label: small bottom stock
+    min: -0.10200, -0.11520, 0.11900
+    max: -0.04800, 0.08640, 0.26180
+    color: '#6F6425'
+  - label: small stock label
+    min: -0.09400, -0.12456, 0.15980
+    max: -0.05900, -0.11592, 0.19788
+    color: '#A99938'
+  - label: small bottom stock
+    min: -0.02800, -0.11520, 0.11900
+    max: 0.02600, 0.08640, 0.28560
+    color: '#6F6425'
+  - label: small stock label
+    min: -0.02000, -0.12456, 0.15980
+    max: 0.01500, -0.11592, 0.19788
+    color: '#A99938'
+  - label: small bottom stock
+    min: 0.04600, -0.11520, 0.11900
+    max: 0.10000, 0.08640, 0.26180
+    color: '#6F6425'
+  - label: small stock label
+    min: 0.05400, -0.12456, 0.15980
+    max: 0.08900, -0.11592, 0.19788
+    color: '#A99938'
+  - label: small bottom stock
+    min: 0.18000, -0.11520, 0.11900
+    max: 0.23400, 0.08640, 0.26180
+    color: '#6D6138'
+  - label: small stock label
+    min: 0.18800, -0.12456, 0.15980
+    max: 0.22300, -0.11592, 0.19788
+    color: '#ADA16B'
+  - label: small bottom stock
+    min: 0.25400, -0.11520, 0.11900
+    max: 0.30800, 0.08640, 0.28560
+    color: '#6D6138'
+  - label: small stock label
+    min: 0.26200, -0.12456, 0.15980
+    max: 0.29700, -0.11592, 0.19788
+    color: '#ADA16B'
+  - label: small bottom stock
+    min: 0.32800, -0.11520, 0.11900
+    max: 0.38200, 0.08640, 0.26180
+    color: '#6D6138'
+  - label: small stock label
+    min: 0.33600, -0.12456, 0.15980
+    max: 0.37100, -0.11592, 0.19788
+    color: '#ADA16B'
+- type: cmu3DModel
+  id: CMU3DWeymartShelf2
+  label: Stocked Weymart shelf 2
+  sourcePrototypes:
+  - AU14WeymartRacks2
+  status: draft
+  description: Three compact open shelves with source-specific stock layout 2. Products are separate solids with colored
+    labels; the gaps between shelves stay open. Shelf stock is a static part of this decorative source, not an inventory
+    visualization. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    contents and appearance changes remain unfinished.
+  referencePrototype: AU14WeymartRacks2
+  referenceRsi: /Textures/CMU14/Structures/hybrisiaracks.rsi
+  referenceState: longrack2
+  sourceDirections: 1
+  parts:
+  - label: shelf upright
+    min: -0.47500, -0.20160, 0.00000
+    max: -0.42500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: -0.47500, 0.17640, 0.00000
+    max: -0.42500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: -0.48300, -0.20448, 0.95744
+    max: -0.41700, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf upright
+    min: 0.42500, -0.20160, 0.00000
+    max: 0.47500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: 0.42500, 0.17640, 0.00000
+    max: 0.47500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: 0.41700, -0.20448, 0.95744
+    max: 0.48300, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.08160
+    max: 0.44500, 0.20160, 0.11900
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.07956
+    max: 0.46900, -0.21312, 0.11152
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.39440
+    max: 0.44500, 0.20160, 0.43180
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.39236
+    max: 0.46900, -0.21312, 0.42432
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.70720
+    max: 0.44500, 0.20160, 0.74460
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.70516
+    max: 0.46900, -0.21312, 0.73712
+    color: '#A6A99C'
+  - label: rear base stretcher
+    min: -0.42500, 0.18144, 0.03400
+    max: 0.42500, 0.20736, 0.07480
+    color: '#484F48'
+  - label: top narrow package
+    min: -0.38800, -0.12960, 0.74460
+    max: -0.31000, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: -0.37600, -0.13896, 0.80920
+    max: -0.32100, -0.13032, 0.84592
+    color: '#C5AA39'
+  - label: top cap
+    min: -0.37600, -0.10080, 0.93160
+    max: -0.32200, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: -0.27300, -0.12960, 0.74460
+    max: -0.19500, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: -0.26100, -0.13896, 0.80920
+    max: -0.20600, -0.13032, 0.84592
+    color: '#C5AA39'
+  - label: top cap
+    min: -0.26100, -0.10080, 0.93160
+    max: -0.20700, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: -0.15800, -0.12960, 0.74460
+    max: -0.08000, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: -0.14600, -0.13896, 0.80920
+    max: -0.09100, -0.13032, 0.84592
+    color: '#C5AA39'
+  - label: top cap
+    min: -0.14600, -0.10080, 0.93160
+    max: -0.09200, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: -0.04300, -0.12960, 0.74460
+    max: 0.03500, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: -0.03100, -0.13896, 0.80920
+    max: 0.02400, -0.13032, 0.84592
+    color: '#C5AA39'
+  - label: top cap
+    min: -0.03100, -0.10080, 0.93160
+    max: 0.02300, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: 0.07200, -0.12960, 0.74460
+    max: 0.15000, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: 0.08400, -0.13896, 0.80920
+    max: 0.13900, -0.13032, 0.84592
+    color: '#C5AA39'
+  - label: top cap
+    min: 0.08400, -0.10080, 0.93160
+    max: 0.13800, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: 0.18700, -0.12960, 0.74460
+    max: 0.26500, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: 0.19900, -0.13896, 0.80920
+    max: 0.25400, -0.13032, 0.84592
+    color: '#C5AA39'
+  - label: top cap
+    min: 0.19900, -0.10080, 0.93160
+    max: 0.25300, 0.07200, 0.96220
+    color: '#272E37'
+  - label: top narrow package
+    min: 0.30200, -0.12960, 0.74460
+    max: 0.38000, 0.11520, 0.93160
+    color: '#CED5CD'
+  - label: top package stripe
+    min: 0.31400, -0.13896, 0.80920
+    max: 0.36900, -0.13032, 0.84592
+    color: '#C5AA39'
+  - label: top cap
+    min: 0.31400, -0.10080, 0.93160
+    max: 0.36800, 0.07200, 0.96220
+    color: '#272E37'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.43180
+    max: -0.23500, 0.12240, 0.61540
+    color: '#147C85'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.45900
+    max: -0.26100, -0.12312, 0.56440
+    color: '#C0AD9D'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.49300
+    max: -0.26200, -0.13248, 0.51136
+    color: '#147C85'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.43180
+    max: -0.03000, 0.12240, 0.61540
+    color: '#AE8E83'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.45900
+    max: -0.05600, -0.12312, 0.56440
+    color: '#C0AD9D'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.49300
+    max: -0.05700, -0.13248, 0.51136
+    color: '#AE8E83'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.43180
+    max: 0.17500, 0.12240, 0.61540
+    color: '#889770'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.45900
+    max: 0.14900, -0.12312, 0.56440
+    color: '#C0AD9D'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.49300
+    max: 0.14800, -0.13248, 0.51136
+    color: '#889770'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.43180
+    max: 0.38000, 0.12240, 0.61540
+    color: '#A8657B'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.45900
+    max: 0.35400, -0.12312, 0.56440
+    color: '#C0AD9D'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.49300
+    max: 0.35300, -0.13248, 0.51136
+    color: '#A8657B'
+  - label: small bottom stock
+    min: -0.38400, -0.11520, 0.11900
+    max: -0.33000, 0.08640, 0.26180
+    color: '#7D385F'
+  - label: small stock label
+    min: -0.37600, -0.12456, 0.15980
+    max: -0.34100, -0.11592, 0.19788
+    color: '#C96BA1'
+  - label: small bottom stock
+    min: -0.31000, -0.11520, 0.11900
+    max: -0.25600, 0.08640, 0.28560
+    color: '#7D385F'
+  - label: small stock label
+    min: -0.30200, -0.12456, 0.15980
+    max: -0.26700, -0.11592, 0.19788
+    color: '#C96BA1'
+  - label: small bottom stock
+    min: -0.23600, -0.11520, 0.11900
+    max: -0.18200, 0.08640, 0.26180
+    color: '#7D385F'
+  - label: small stock label
+    min: -0.22800, -0.12456, 0.15980
+    max: -0.19300, -0.11592, 0.19788
+    color: '#C96BA1'
+  - label: small bottom stock
+    min: -0.10200, -0.11520, 0.11900
+    max: -0.04800, 0.08640, 0.26180
+    color: '#173E51'
+  - label: small stock label
+    min: -0.09400, -0.12456, 0.15980
+    max: -0.05900, -0.11592, 0.19788
+    color: '#236D8C'
+  - label: small bottom stock
+    min: -0.02800, -0.11520, 0.11900
+    max: 0.02600, 0.08640, 0.28560
+    color: '#173E51'
+  - label: small stock label
+    min: -0.02000, -0.12456, 0.15980
+    max: 0.01500, -0.11592, 0.19788
+    color: '#236D8C'
+  - label: small bottom stock
+    min: 0.04600, -0.11520, 0.11900
+    max: 0.10000, 0.08640, 0.26180
+    color: '#173E51'
+  - label: small stock label
+    min: 0.05400, -0.12456, 0.15980
+    max: 0.08900, -0.11592, 0.19788
+    color: '#236D8C'
+  - label: small bottom stock
+    min: 0.18000, -0.11520, 0.11900
+    max: 0.23400, 0.08640, 0.26180
+    color: '#746843'
+  - label: small stock label
+    min: 0.18800, -0.12456, 0.15980
+    max: 0.22300, -0.11592, 0.19788
+    color: '#AD9963'
+  - label: small bottom stock
+    min: 0.25400, -0.11520, 0.11900
+    max: 0.30800, 0.08640, 0.28560
+    color: '#746843'
+  - label: small stock label
+    min: 0.26200, -0.12456, 0.15980
+    max: 0.29700, -0.11592, 0.19788
+    color: '#AD9963'
+  - label: small bottom stock
+    min: 0.32800, -0.11520, 0.11900
+    max: 0.38200, 0.08640, 0.26180
+    color: '#746843'
+  - label: small stock label
+    min: 0.33600, -0.12456, 0.15980
+    max: 0.37100, -0.11592, 0.19788
+    color: '#AD9963'
+- type: cmu3DModel
+  id: CMU3DWeymartShelf3
+  label: Stocked Weymart shelf 3
+  sourcePrototypes:
+  - AU14WeymartRacks3
+  status: draft
+  description: Three compact open shelves with source-specific stock layout 3. Products are separate solids with colored
+    labels; the gaps between shelves stay open. Shelf stock is a static part of this decorative source, not an inventory
+    visualization. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    contents and appearance changes remain unfinished.
+  referencePrototype: AU14WeymartRacks3
+  referenceRsi: /Textures/CMU14/Structures/hybrisiaracks.rsi
+  referenceState: longrack3
+  sourceDirections: 1
+  parts:
+  - label: shelf upright
+    min: -0.47500, -0.20160, 0.00000
+    max: -0.42500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: -0.47500, 0.17640, 0.00000
+    max: -0.42500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: -0.48300, -0.20448, 0.95744
+    max: -0.41700, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf upright
+    min: 0.42500, -0.20160, 0.00000
+    max: 0.47500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: 0.42500, 0.17640, 0.00000
+    max: 0.47500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: 0.41700, -0.20448, 0.95744
+    max: 0.48300, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.08160
+    max: 0.44500, 0.20160, 0.11900
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.07956
+    max: 0.46900, -0.21312, 0.11152
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.39440
+    max: 0.44500, 0.20160, 0.43180
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.39236
+    max: 0.46900, -0.21312, 0.42432
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.70720
+    max: 0.44500, 0.20160, 0.74460
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.70516
+    max: 0.46900, -0.21312, 0.73712
+    color: '#A6A99C'
+  - label: rear base stretcher
+    min: -0.42500, 0.18144, 0.03400
+    max: 0.42500, 0.20736, 0.07480
+    color: '#484F48'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.74460
+    max: -0.25800, 0.12240, 0.90100
+    color: '#AD9984'
+  - label: folded packet top
+    min: -0.37300, -0.11520, 0.90100
+    max: -0.26800, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.36100, -0.13176, 0.78608
+    max: -0.31800, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.31800, -0.13176, 0.81940
+    max: -0.27300, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: product carton
+    min: -0.22300, -0.12240, 0.74460
+    max: -0.09600, 0.12240, 0.90100
+    color: '#C1B57D'
+  - label: folded packet top
+    min: -0.21100, -0.11520, 0.90100
+    max: -0.10600, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.19900, -0.13176, 0.78608
+    max: -0.15600, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.15600, -0.13176, 0.81940
+    max: -0.11100, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: product carton
+    min: -0.06100, -0.12240, 0.74460
+    max: 0.06600, 0.12240, 0.90100
+    color: '#9AAC87'
+  - label: folded packet top
+    min: -0.04900, -0.11520, 0.90100
+    max: 0.05600, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.03700, -0.13176, 0.78608
+    max: 0.00600, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.00600, -0.13176, 0.81940
+    max: 0.05100, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: product carton
+    min: 0.10100, -0.12240, 0.74460
+    max: 0.22800, 0.12240, 0.90100
+    color: '#93ACA2'
+  - label: folded packet top
+    min: 0.11300, -0.11520, 0.90100
+    max: 0.21800, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.12500, -0.13176, 0.78608
+    max: 0.16800, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.16800, -0.13176, 0.81940
+    max: 0.21300, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: product carton
+    min: 0.26300, -0.12240, 0.74460
+    max: 0.39000, 0.12240, 0.90100
+    color: '#C0AE57'
+  - label: folded packet top
+    min: 0.27500, -0.11520, 0.90100
+    max: 0.38000, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.28700, -0.13176, 0.78608
+    max: 0.33000, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.33000, -0.13176, 0.81940
+    max: 0.37500, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: produce tray
+    min: -0.36500, -0.17280, 0.43180
+    max: -0.04500, 0.12960, 0.50660
+    color: '#444B43'
+  - label: row of packaged stock
+    min: -0.34100, -0.15120, 0.50660
+    max: -0.29400, 0.09360, 0.57460
+    color: '#8A6426'
+  - label: stock colored cap
+    min: -0.34100, -0.10800, 0.57460
+    max: -0.29400, 0.05760, 0.59704
+    color: '#6E773B'
+  - label: row of packaged stock
+    min: -0.26700, -0.15120, 0.50660
+    max: -0.22000, 0.09360, 0.57460
+    color: '#8A6426'
+  - label: stock colored cap
+    min: -0.26700, -0.10800, 0.57460
+    max: -0.22000, 0.05760, 0.59704
+    color: '#6E773B'
+  - label: row of packaged stock
+    min: -0.19300, -0.15120, 0.50660
+    max: -0.14600, 0.09360, 0.57460
+    color: '#8A6426'
+  - label: stock colored cap
+    min: -0.19300, -0.10800, 0.57460
+    max: -0.14600, 0.05760, 0.59704
+    color: '#6E773B'
+  - label: row of packaged stock
+    min: -0.11900, -0.15120, 0.50660
+    max: -0.07200, 0.09360, 0.57460
+    color: '#8A6426'
+  - label: stock colored cap
+    min: -0.11900, -0.10800, 0.57460
+    max: -0.07200, 0.05760, 0.59704
+    color: '#6E773B'
+  - label: produce tray
+    min: 0.04500, -0.17280, 0.43180
+    max: 0.36500, 0.12960, 0.50660
+    color: '#444B43'
+  - label: row of packaged stock
+    min: 0.06900, -0.15120, 0.50660
+    max: 0.11600, 0.09360, 0.57460
+    color: '#AD7732'
+  - label: stock colored cap
+    min: 0.06900, -0.10800, 0.57460
+    max: 0.11600, 0.05760, 0.59704
+    color: '#6E773B'
+  - label: row of packaged stock
+    min: 0.14300, -0.15120, 0.50660
+    max: 0.19000, 0.09360, 0.57460
+    color: '#AD7732'
+  - label: stock colored cap
+    min: 0.14300, -0.10800, 0.57460
+    max: 0.19000, 0.05760, 0.59704
+    color: '#6E773B'
+  - label: row of packaged stock
+    min: 0.21700, -0.15120, 0.50660
+    max: 0.26400, 0.09360, 0.57460
+    color: '#AD7732'
+  - label: stock colored cap
+    min: 0.21700, -0.10800, 0.57460
+    max: 0.26400, 0.05760, 0.59704
+    color: '#6E773B'
+  - label: row of packaged stock
+    min: 0.29100, -0.15120, 0.50660
+    max: 0.33800, 0.09360, 0.57460
+    color: '#AD7732'
+  - label: stock colored cap
+    min: 0.29100, -0.10800, 0.57460
+    max: 0.33800, 0.05760, 0.59704
+    color: '#6E773B'
+  - label: produce tray
+    min: -0.36500, -0.17280, 0.11900
+    max: -0.04500, 0.12960, 0.19380
+    color: '#444B43'
+  - label: row of packaged stock
+    min: -0.34100, -0.15120, 0.19380
+    max: -0.29400, 0.09360, 0.26180
+    color: '#72784F'
+  - label: row of packaged stock
+    min: -0.26700, -0.15120, 0.19380
+    max: -0.22000, 0.09360, 0.26180
+    color: '#72784F'
+  - label: row of packaged stock
+    min: -0.19300, -0.15120, 0.19380
+    max: -0.14600, 0.09360, 0.26180
+    color: '#72784F'
+  - label: row of packaged stock
+    min: -0.11900, -0.15120, 0.19380
+    max: -0.07200, 0.09360, 0.26180
+    color: '#72784F'
+  - label: produce tray
+    min: 0.04500, -0.17280, 0.11900
+    max: 0.36500, 0.12960, 0.19380
+    color: '#444B43'
+  - label: row of packaged stock
+    min: 0.06900, -0.15120, 0.19380
+    max: 0.11600, 0.09360, 0.26180
+    color: '#839A63'
+  - label: row of packaged stock
+    min: 0.14300, -0.15120, 0.19380
+    max: 0.19000, 0.09360, 0.26180
+    color: '#839A63'
+  - label: row of packaged stock
+    min: 0.21700, -0.15120, 0.19380
+    max: 0.26400, 0.09360, 0.26180
+    color: '#839A63'
+  - label: row of packaged stock
+    min: 0.29100, -0.15120, 0.19380
+    max: 0.33800, 0.09360, 0.26180
+    color: '#839A63'
+- type: cmu3DModel
+  id: CMU3DWeymartShelf4
+  label: Stocked Weymart shelf 4
+  sourcePrototypes:
+  - AU14WeymartRacks4
+  status: draft
+  description: Three compact open shelves with source-specific stock layout 4. Products are separate solids with colored
+    labels; the gaps between shelves stay open. Shelf stock is a static part of this decorative source, not an inventory
+    visualization. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    contents and appearance changes remain unfinished.
+  referencePrototype: AU14WeymartRacks4
+  referenceRsi: /Textures/CMU14/Structures/hybrisiaracks.rsi
+  referenceState: longrack4
+  sourceDirections: 1
+  parts:
+  - label: shelf upright
+    min: -0.47500, -0.20160, 0.00000
+    max: -0.42500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: -0.47500, 0.17640, 0.00000
+    max: -0.42500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: -0.48300, -0.20448, 0.95744
+    max: -0.41700, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf upright
+    min: 0.42500, -0.20160, 0.00000
+    max: 0.47500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: 0.42500, 0.17640, 0.00000
+    max: 0.47500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: 0.41700, -0.20448, 0.95744
+    max: 0.48300, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.08160
+    max: 0.44500, 0.20160, 0.11900
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.07956
+    max: 0.46900, -0.21312, 0.11152
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.39440
+    max: 0.44500, 0.20160, 0.43180
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.39236
+    max: 0.46900, -0.21312, 0.42432
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.70720
+    max: 0.44500, 0.20160, 0.74460
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.70516
+    max: 0.46900, -0.21312, 0.73712
+    color: '#A6A99C'
+  - label: rear base stretcher
+    min: -0.42500, 0.18144, 0.03400
+    max: 0.42500, 0.20736, 0.07480
+    color: '#484F48'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.74460
+    max: -0.25800, 0.12240, 0.90100
+    color: '#758893'
+  - label: folded packet top
+    min: -0.37300, -0.11520, 0.90100
+    max: -0.26800, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.36100, -0.13176, 0.78608
+    max: -0.31800, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.31800, -0.13176, 0.81940
+    max: -0.27300, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: product carton
+    min: -0.22300, -0.12240, 0.74460
+    max: -0.09600, 0.12240, 0.90100
+    color: '#647180'
+  - label: folded packet top
+    min: -0.21100, -0.11520, 0.90100
+    max: -0.10600, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.19900, -0.13176, 0.78608
+    max: -0.15600, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.15600, -0.13176, 0.81940
+    max: -0.11100, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: product carton
+    min: -0.06100, -0.12240, 0.74460
+    max: 0.06600, 0.12240, 0.90100
+    color: '#847789'
+  - label: folded packet top
+    min: -0.04900, -0.11520, 0.90100
+    max: 0.05600, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: -0.03700, -0.13176, 0.78608
+    max: 0.00600, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.00600, -0.13176, 0.81940
+    max: 0.05100, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: product carton
+    min: 0.10100, -0.12240, 0.74460
+    max: 0.22800, 0.12240, 0.90100
+    color: '#867584'
+  - label: folded packet top
+    min: 0.11300, -0.11520, 0.90100
+    max: 0.21800, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.12500, -0.13176, 0.78608
+    max: 0.16800, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.16800, -0.13176, 0.81940
+    max: 0.21300, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: product carton
+    min: 0.26300, -0.12240, 0.74460
+    max: 0.39000, 0.12240, 0.90100
+    color: '#6B7095'
+  - label: folded packet top
+    min: 0.27500, -0.11520, 0.90100
+    max: 0.38000, 0.10800, 0.91800
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.28700, -0.13176, 0.78608
+    max: 0.33000, -0.12312, 0.81940
+    color: '#BFC3B7'
+  - label: packet diagonal glint
+    min: 0.33000, -0.13176, 0.81940
+    max: 0.37500, -0.12312, 0.85340
+    color: '#BFC3B7'
+  - label: produce tray
+    min: -0.36500, -0.17280, 0.43180
+    max: -0.04500, 0.12960, 0.50660
+    color: '#444B43'
+  - label: row of packaged stock
+    min: -0.34100, -0.15120, 0.50660
+    max: -0.29400, 0.09360, 0.57460
+    color: '#3D7188'
+  - label: stock colored cap
+    min: -0.34100, -0.10800, 0.57460
+    max: -0.29400, 0.05760, 0.59704
+    color: '#A44332'
+  - label: row of packaged stock
+    min: -0.26700, -0.15120, 0.50660
+    max: -0.22000, 0.09360, 0.57460
+    color: '#3D7188'
+  - label: stock colored cap
+    min: -0.26700, -0.10800, 0.57460
+    max: -0.22000, 0.05760, 0.59704
+    color: '#A44332'
+  - label: row of packaged stock
+    min: -0.19300, -0.15120, 0.50660
+    max: -0.14600, 0.09360, 0.57460
+    color: '#3D7188'
+  - label: stock colored cap
+    min: -0.19300, -0.10800, 0.57460
+    max: -0.14600, 0.05760, 0.59704
+    color: '#A44332'
+  - label: row of packaged stock
+    min: -0.11900, -0.15120, 0.50660
+    max: -0.07200, 0.09360, 0.57460
+    color: '#3D7188'
+  - label: stock colored cap
+    min: -0.11900, -0.10800, 0.57460
+    max: -0.07200, 0.05760, 0.59704
+    color: '#A44332'
+  - label: produce tray
+    min: 0.04500, -0.17280, 0.43180
+    max: 0.36500, 0.12960, 0.50660
+    color: '#444B43'
+  - label: row of packaged stock
+    min: 0.06900, -0.15120, 0.50660
+    max: 0.11600, 0.09360, 0.57460
+    color: '#796078'
+  - label: stock colored cap
+    min: 0.06900, -0.10800, 0.57460
+    max: 0.11600, 0.05760, 0.59704
+    color: '#A44332'
+  - label: row of packaged stock
+    min: 0.14300, -0.15120, 0.50660
+    max: 0.19000, 0.09360, 0.57460
+    color: '#796078'
+  - label: stock colored cap
+    min: 0.14300, -0.10800, 0.57460
+    max: 0.19000, 0.05760, 0.59704
+    color: '#A44332'
+  - label: row of packaged stock
+    min: 0.21700, -0.15120, 0.50660
+    max: 0.26400, 0.09360, 0.57460
+    color: '#796078'
+  - label: stock colored cap
+    min: 0.21700, -0.10800, 0.57460
+    max: 0.26400, 0.05760, 0.59704
+    color: '#A44332'
+  - label: row of packaged stock
+    min: 0.29100, -0.15120, 0.50660
+    max: 0.33800, 0.09360, 0.57460
+    color: '#796078'
+  - label: stock colored cap
+    min: 0.29100, -0.10800, 0.57460
+    max: 0.33800, 0.05760, 0.59704
+    color: '#A44332'
+  - label: produce tray
+    min: -0.36500, -0.17280, 0.11900
+    max: -0.04500, 0.12960, 0.19380
+    color: '#444B43'
+  - label: row of packaged stock
+    min: -0.34100, -0.15120, 0.19380
+    max: -0.29400, 0.09360, 0.26180
+    color: '#247F84'
+  - label: row of packaged stock
+    min: -0.26700, -0.15120, 0.19380
+    max: -0.22000, 0.09360, 0.26180
+    color: '#247F84'
+  - label: row of packaged stock
+    min: -0.19300, -0.15120, 0.19380
+    max: -0.14600, 0.09360, 0.26180
+    color: '#247F84'
+  - label: row of packaged stock
+    min: -0.11900, -0.15120, 0.19380
+    max: -0.07200, 0.09360, 0.26180
+    color: '#247F84'
+  - label: produce tray
+    min: 0.04500, -0.17280, 0.11900
+    max: 0.36500, 0.12960, 0.19380
+    color: '#444B43'
+  - label: row of packaged stock
+    min: 0.06900, -0.15120, 0.19380
+    max: 0.11600, 0.09360, 0.26180
+    color: '#AE6A14'
+  - label: row of packaged stock
+    min: 0.14300, -0.15120, 0.19380
+    max: 0.19000, 0.09360, 0.26180
+    color: '#AE6A14'
+  - label: row of packaged stock
+    min: 0.21700, -0.15120, 0.19380
+    max: 0.26400, 0.09360, 0.26180
+    color: '#AE6A14'
+  - label: row of packaged stock
+    min: 0.29100, -0.15120, 0.19380
+    max: 0.33800, 0.09360, 0.26180
+    color: '#AE6A14'
+- type: cmu3DModel
+  id: CMU3DWeymartShelf5
+  label: Stocked Weymart shelf 5
+  sourcePrototypes:
+  - AU14WeymartRacks5
+  status: draft
+  description: Three compact open shelves with source-specific stock layout 5. Products are separate solids with colored
+    labels; the gaps between shelves stay open. Shelf stock is a static part of this decorative source, not an inventory
+    visualization. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    contents and appearance changes remain unfinished.
+  referencePrototype: AU14WeymartRacks5
+  referenceRsi: /Textures/CMU14/Structures/hybrisiaracks.rsi
+  referenceState: longrack5
+  sourceDirections: 1
+  parts:
+  - label: shelf upright
+    min: -0.47500, -0.20160, 0.00000
+    max: -0.42500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: -0.47500, 0.17640, 0.00000
+    max: -0.42500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: -0.48300, -0.20448, 0.95744
+    max: -0.41700, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf upright
+    min: 0.42500, -0.20160, 0.00000
+    max: 0.47500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: 0.42500, 0.17640, 0.00000
+    max: 0.47500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: 0.41700, -0.20448, 0.95744
+    max: 0.48300, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.08160
+    max: 0.44500, 0.20160, 0.11900
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.07956
+    max: 0.46900, -0.21312, 0.11152
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.39440
+    max: 0.44500, 0.20160, 0.43180
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.39236
+    max: 0.46900, -0.21312, 0.42432
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.70720
+    max: 0.44500, 0.20160, 0.74460
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.70516
+    max: 0.46900, -0.21312, 0.73712
+    color: '#A6A99C'
+  - label: rear base stretcher
+    min: -0.42500, 0.18144, 0.03400
+    max: 0.42500, 0.20736, 0.07480
+    color: '#484F48'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.11900
+    max: -0.23500, 0.12240, 0.31620
+    color: '#553963'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.14620
+    max: -0.26100, -0.12312, 0.26520
+    color: '#BFAECA'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.18020
+    max: -0.26200, -0.13248, 0.19856
+    color: '#553963'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.11900
+    max: -0.03000, 0.12240, 0.31620
+    color: '#553963'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.14620
+    max: -0.05600, -0.12312, 0.26520
+    color: '#BFAECA'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.18020
+    max: -0.05700, -0.13248, 0.19856
+    color: '#553963'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.11900
+    max: 0.17500, 0.12240, 0.31620
+    color: '#553963'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.14620
+    max: 0.14900, -0.12312, 0.26520
+    color: '#BFAECA'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.18020
+    max: 0.14800, -0.13248, 0.19856
+    color: '#553963'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.11900
+    max: 0.38000, 0.12240, 0.31620
+    color: '#553963'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.14620
+    max: 0.35400, -0.12312, 0.26520
+    color: '#BFAECA'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.18020
+    max: 0.35300, -0.13248, 0.19856
+    color: '#553963'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.43180
+    max: -0.23500, 0.12240, 0.62900
+    color: '#AA832C'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.45900
+    max: -0.26100, -0.12312, 0.57800
+    color: '#EBCE77'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.49300
+    max: -0.26200, -0.13248, 0.51136
+    color: '#AA832C'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.43180
+    max: -0.03000, 0.12240, 0.62900
+    color: '#AA832C'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.45900
+    max: -0.05600, -0.12312, 0.57800
+    color: '#EBCE77'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.49300
+    max: -0.05700, -0.13248, 0.51136
+    color: '#AA832C'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.43180
+    max: 0.17500, 0.12240, 0.62900
+    color: '#AA832C'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.45900
+    max: 0.14900, -0.12312, 0.57800
+    color: '#EBCE77'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.49300
+    max: 0.14800, -0.13248, 0.51136
+    color: '#AA832C'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.43180
+    max: 0.38000, 0.12240, 0.62900
+    color: '#AA832C'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.45900
+    max: 0.35400, -0.12312, 0.57800
+    color: '#EBCE77'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.49300
+    max: 0.35300, -0.13248, 0.51136
+    color: '#AA832C'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.74460
+    max: -0.23500, 0.12240, 0.94180
+    color: '#97391E'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.77180
+    max: -0.26100, -0.12312, 0.89080
+    color: '#D6A58B'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.80580
+    max: -0.26200, -0.13248, 0.82416
+    color: '#97391E'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.74460
+    max: -0.03000, 0.12240, 0.94180
+    color: '#97391E'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.77180
+    max: -0.05600, -0.12312, 0.89080
+    color: '#D6A58B'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.80580
+    max: -0.05700, -0.13248, 0.82416
+    color: '#97391E'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.74460
+    max: 0.17500, 0.12240, 0.94180
+    color: '#97391E'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.77180
+    max: 0.14900, -0.12312, 0.89080
+    color: '#D6A58B'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.80580
+    max: 0.14800, -0.13248, 0.82416
+    color: '#97391E'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.74460
+    max: 0.38000, 0.12240, 0.94180
+    color: '#97391E'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.77180
+    max: 0.35400, -0.12312, 0.89080
+    color: '#D6A58B'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.80580
+    max: 0.35300, -0.13248, 0.82416
+    color: '#97391E'
+- type: cmu3DModel
+  id: CMU3DWeymartShelf6
+  label: Stocked Weymart shelf 6
+  sourcePrototypes:
+  - AU14WeymartRacks6
+  status: draft
+  description: Three compact open shelves with source-specific stock layout 6. Products are separate solids with colored
+    labels; the gaps between shelves stay open. Shelf stock is a static part of this decorative source, not an inventory
+    visualization. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    contents and appearance changes remain unfinished.
+  referencePrototype: AU14WeymartRacks6
+  referenceRsi: /Textures/CMU14/Structures/hybrisiaracks.rsi
+  referenceState: longrack6
+  sourceDirections: 1
+  parts:
+  - label: shelf upright
+    min: -0.47500, -0.20160, 0.00000
+    max: -0.42500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: -0.47500, 0.17640, 0.00000
+    max: -0.42500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: -0.48300, -0.20448, 0.95744
+    max: -0.41700, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf upright
+    min: 0.42500, -0.20160, 0.00000
+    max: 0.47500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: 0.42500, 0.17640, 0.00000
+    max: 0.47500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: 0.41700, -0.20448, 0.95744
+    max: 0.48300, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.08160
+    max: 0.44500, 0.20160, 0.11900
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.07956
+    max: 0.46900, -0.21312, 0.11152
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.39440
+    max: 0.44500, 0.20160, 0.43180
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.39236
+    max: 0.46900, -0.21312, 0.42432
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.70720
+    max: 0.44500, 0.20160, 0.74460
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.70516
+    max: 0.46900, -0.21312, 0.73712
+    color: '#A6A99C'
+  - label: rear base stretcher
+    min: -0.42500, 0.18144, 0.03400
+    max: 0.42500, 0.20736, 0.07480
+    color: '#484F48'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.11900
+    max: -0.23500, 0.12240, 0.31620
+    color: '#2E4E7B'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.14620
+    max: -0.26100, -0.12312, 0.26520
+    color: '#E0D997'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.18020
+    max: -0.26200, -0.13248, 0.19856
+    color: '#2E4E7B'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.11900
+    max: -0.03000, 0.12240, 0.31620
+    color: '#2E4E7B'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.14620
+    max: -0.05600, -0.12312, 0.26520
+    color: '#E0D997'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.18020
+    max: -0.05700, -0.13248, 0.19856
+    color: '#2E4E7B'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.11900
+    max: 0.17500, 0.12240, 0.31620
+    color: '#2E4E7B'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.14620
+    max: 0.14900, -0.12312, 0.26520
+    color: '#E0D997'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.18020
+    max: 0.14800, -0.13248, 0.19856
+    color: '#2E4E7B'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.11900
+    max: 0.38000, 0.12240, 0.31620
+    color: '#2E4E7B'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.14620
+    max: 0.35400, -0.12312, 0.26520
+    color: '#E0D997'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.18020
+    max: 0.35300, -0.13248, 0.19856
+    color: '#2E4E7B'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.43180
+    max: -0.23500, 0.12240, 0.62900
+    color: '#6E613C'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.45900
+    max: -0.26100, -0.12312, 0.57800
+    color: '#C9C096'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.49300
+    max: -0.26200, -0.13248, 0.51136
+    color: '#6E613C'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.43180
+    max: -0.03000, 0.12240, 0.62900
+    color: '#6E613C'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.45900
+    max: -0.05600, -0.12312, 0.57800
+    color: '#C9C096'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.49300
+    max: -0.05700, -0.13248, 0.51136
+    color: '#6E613C'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.43180
+    max: 0.17500, 0.12240, 0.62900
+    color: '#6E613C'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.45900
+    max: 0.14900, -0.12312, 0.57800
+    color: '#C9C096'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.49300
+    max: 0.14800, -0.13248, 0.51136
+    color: '#6E613C'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.43180
+    max: 0.38000, 0.12240, 0.62900
+    color: '#6E613C'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.45900
+    max: 0.35400, -0.12312, 0.57800
+    color: '#C9C096'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.49300
+    max: 0.35300, -0.13248, 0.51136
+    color: '#6E613C'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.74460
+    max: -0.23500, 0.12240, 0.94180
+    color: '#516D55'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.77180
+    max: -0.26100, -0.12312, 0.89080
+    color: '#A3B79E'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.80580
+    max: -0.26200, -0.13248, 0.82416
+    color: '#516D55'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.74460
+    max: -0.03000, 0.12240, 0.94180
+    color: '#516D55'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.77180
+    max: -0.05600, -0.12312, 0.89080
+    color: '#A3B79E'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.80580
+    max: -0.05700, -0.13248, 0.82416
+    color: '#516D55'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.74460
+    max: 0.17500, 0.12240, 0.94180
+    color: '#516D55'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.77180
+    max: 0.14900, -0.12312, 0.89080
+    color: '#A3B79E'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.80580
+    max: 0.14800, -0.13248, 0.82416
+    color: '#516D55'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.74460
+    max: 0.38000, 0.12240, 0.94180
+    color: '#516D55'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.77180
+    max: 0.35400, -0.12312, 0.89080
+    color: '#A3B79E'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.80580
+    max: 0.35300, -0.13248, 0.82416
+    color: '#516D55'
+- type: cmu3DModel
+  id: CMU3DWeymartShelf7
+  label: Stocked Weymart shelf 7
+  sourcePrototypes:
+  - AU14WeymartRacks7
+  status: draft
+  description: Three compact open shelves with source-specific stock layout 7. Products are separate solids with colored
+    labels; the gaps between shelves stay open. Shelf stock is a static part of this decorative source, not an inventory
+    visualization. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    contents and appearance changes remain unfinished.
+  referencePrototype: AU14WeymartRacks7
+  referenceRsi: /Textures/CMU14/Structures/hybrisiaracks.rsi
+  referenceState: longrack7
+  sourceDirections: 1
+  parts:
+  - label: shelf upright
+    min: -0.47500, -0.20160, 0.00000
+    max: -0.42500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: -0.47500, 0.17640, 0.00000
+    max: -0.42500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: -0.48300, -0.20448, 0.95744
+    max: -0.41700, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf upright
+    min: 0.42500, -0.20160, 0.00000
+    max: 0.47500, -0.16560, 0.97580
+    color: '#858A80'
+  - label: shelf upright
+    min: 0.42500, 0.17640, 0.00000
+    max: 0.47500, 0.21240, 0.97580
+    color: '#858A80'
+  - label: top end cap
+    min: 0.41700, -0.20448, 0.95744
+    max: 0.48300, 0.21384, 0.99144
+    color: '#B2B6AA'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.08160
+    max: 0.44500, 0.20160, 0.11900
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.07956
+    max: 0.46900, -0.21312, 0.11152
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.39440
+    max: 0.44500, 0.20160, 0.43180
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.39236
+    max: 0.46900, -0.21312, 0.42432
+    color: '#A6A99C'
+  - label: shelf deck
+    min: -0.44500, -0.21240, 0.70720
+    max: 0.44500, 0.20160, 0.74460
+    color: '#686E64'
+  - label: shelf pale front lip
+    min: -0.46900, -0.22176, 0.70516
+    max: 0.46900, -0.21312, 0.73712
+    color: '#A6A99C'
+  - label: rear base stretcher
+    min: -0.42500, 0.18144, 0.03400
+    max: 0.42500, 0.20736, 0.07480
+    color: '#484F48'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.11900
+    max: -0.23500, 0.12240, 0.31620
+    color: '#884226'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.14620
+    max: -0.26100, -0.12312, 0.26520
+    color: '#D7B499'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.18020
+    max: -0.26200, -0.13248, 0.19856
+    color: '#884226'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.11900
+    max: -0.03000, 0.12240, 0.31620
+    color: '#884226'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.14620
+    max: -0.05600, -0.12312, 0.26520
+    color: '#D7B499'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.18020
+    max: -0.05700, -0.13248, 0.19856
+    color: '#884226'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.11900
+    max: 0.17500, 0.12240, 0.31620
+    color: '#884226'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.14620
+    max: 0.14900, -0.12312, 0.26520
+    color: '#D7B499'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.18020
+    max: 0.14800, -0.13248, 0.19856
+    color: '#884226'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.11900
+    max: 0.38000, 0.12240, 0.31620
+    color: '#884226'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.14620
+    max: 0.35400, -0.12312, 0.26520
+    color: '#D7B499'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.18020
+    max: 0.35300, -0.13248, 0.19856
+    color: '#884226'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.43180
+    max: -0.23500, 0.12240, 0.62900
+    color: '#246E84'
+  - label: folded packet top
+    min: -0.37300, -0.11520, 0.62900
+    max: -0.24500, 0.10800, 0.64600
+    color: '#91C7D6'
+  - label: packet diagonal glint
+    min: -0.36100, -0.13176, 0.47328
+    max: -0.31800, -0.12312, 0.50660
+    color: '#91C7D6'
+  - label: packet diagonal glint
+    min: -0.31800, -0.13176, 0.50660
+    max: -0.27300, -0.12312, 0.54060
+    color: '#91C7D6'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.43180
+    max: -0.03000, 0.12240, 0.62900
+    color: '#246E84'
+  - label: folded packet top
+    min: -0.16800, -0.11520, 0.62900
+    max: -0.04000, 0.10800, 0.64600
+    color: '#91C7D6'
+  - label: packet diagonal glint
+    min: -0.15600, -0.13176, 0.47328
+    max: -0.11300, -0.12312, 0.50660
+    color: '#91C7D6'
+  - label: packet diagonal glint
+    min: -0.11300, -0.13176, 0.50660
+    max: -0.06800, -0.12312, 0.54060
+    color: '#91C7D6'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.43180
+    max: 0.17500, 0.12240, 0.62900
+    color: '#246E84'
+  - label: folded packet top
+    min: 0.03700, -0.11520, 0.62900
+    max: 0.16500, 0.10800, 0.64600
+    color: '#91C7D6'
+  - label: packet diagonal glint
+    min: 0.04900, -0.13176, 0.47328
+    max: 0.09200, -0.12312, 0.50660
+    color: '#91C7D6'
+  - label: packet diagonal glint
+    min: 0.09200, -0.13176, 0.50660
+    max: 0.13700, -0.12312, 0.54060
+    color: '#91C7D6'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.43180
+    max: 0.38000, 0.12240, 0.62900
+    color: '#246E84'
+  - label: folded packet top
+    min: 0.24200, -0.11520, 0.62900
+    max: 0.37000, 0.10800, 0.64600
+    color: '#91C7D6'
+  - label: packet diagonal glint
+    min: 0.25400, -0.13176, 0.47328
+    max: 0.29700, -0.12312, 0.50660
+    color: '#91C7D6'
+  - label: packet diagonal glint
+    min: 0.29700, -0.13176, 0.50660
+    max: 0.34200, -0.12312, 0.54060
+    color: '#91C7D6'
+  - label: product carton
+    min: -0.38500, -0.12240, 0.74460
+    max: -0.23500, 0.12240, 0.94180
+    color: '#584365'
+  - label: printed product label
+    min: -0.35000, -0.13176, 0.77180
+    max: -0.26100, -0.12312, 0.89080
+    color: '#B6A0B4'
+  - label: label dark line
+    min: -0.32500, -0.14112, 0.80580
+    max: -0.26200, -0.13248, 0.82416
+    color: '#584365'
+  - label: product carton
+    min: -0.18000, -0.12240, 0.74460
+    max: -0.03000, 0.12240, 0.94180
+    color: '#584365'
+  - label: printed product label
+    min: -0.14500, -0.13176, 0.77180
+    max: -0.05600, -0.12312, 0.89080
+    color: '#B6A0B4'
+  - label: label dark line
+    min: -0.12000, -0.14112, 0.80580
+    max: -0.05700, -0.13248, 0.82416
+    color: '#584365'
+  - label: product carton
+    min: 0.02500, -0.12240, 0.74460
+    max: 0.17500, 0.12240, 0.94180
+    color: '#584365'
+  - label: printed product label
+    min: 0.06000, -0.13176, 0.77180
+    max: 0.14900, -0.12312, 0.89080
+    color: '#B6A0B4'
+  - label: label dark line
+    min: 0.08500, -0.14112, 0.80580
+    max: 0.14800, -0.13248, 0.82416
+    color: '#584365'
+  - label: product carton
+    min: 0.23000, -0.12240, 0.74460
+    max: 0.38000, 0.12240, 0.94180
+    color: '#584365'
+  - label: printed product label
+    min: 0.26500, -0.13176, 0.77180
+    max: 0.35400, -0.12312, 0.89080
+    color: '#B6A0B4'
+  - label: label dark line
+    min: 0.29000, -0.14112, 0.80580
+    max: 0.35300, -0.13248, 0.82416
+    color: '#584365'
+- type: cmu3DModel
+  id: CMU3DBlueComfyBench
+  label: Blue upholstered bench
+  sourcePrototypes:
+  - BenchBlueComfy
+  status: draft
+  description: Wide seat and separate padded backrest on an open gray frame. Source cover tint retained; all four directional
+    frames were inspected. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred.
+    Runtime contents and appearance changes remain unfinished.
+  referencePrototype: BenchBlueComfy
+  referenceRsi: /Textures/Structures/Furniture/Bench/comf_bench.rsi
+  referenceState: bench_solo_cover
+  sourceDirections: 4
+  referenceTint: '#334E6D'
+  parts:
+  - label: bench leg
+    min: -0.44000, -0.27000, 0.00000
+    max: -0.38000, -0.21500, 0.37500
+    color: '#5E696F'
+  - label: bench leg
+    min: -0.44000, 0.22000, 0.00000
+    max: -0.38000, 0.27500, 0.37500
+    color: '#5E696F'
+  - label: side floor runner
+    min: -0.44000, -0.27000, 0.01875
+    max: -0.38000, 0.27500, 0.05550
+    color: '#434C56'
+  - label: bench leg
+    min: 0.38000, -0.27000, 0.00000
+    max: 0.44000, -0.21500, 0.37500
+    color: '#5E696F'
+  - label: bench leg
+    min: 0.38000, 0.22000, 0.00000
+    max: 0.44000, 0.27500, 0.37500
+    color: '#5E696F'
+  - label: side floor runner
+    min: 0.38000, -0.27000, 0.01875
+    max: 0.44000, 0.27500, 0.05550
+    color: '#434C56'
+  - label: lower horizontal stretcher
+    min: -0.38000, -0.27000, 0.07500
+    max: 0.38000, -0.23000, 0.11325
+    color: '#424B54'
+  - label: lower horizontal stretcher
+    min: -0.38000, 0.22000, 0.07500
+    max: 0.38000, 0.26000, 0.11325
+    color: '#424B54'
+  - label: seat metal pan
+    min: -0.49000, -0.31000, 0.33750
+    max: 0.49000, 0.31000, 0.37500
+    color: '#767E82'
+  - label: seat cushion
+    min: -0.47000, -0.29500, 0.37500
+    max: 0.47000, 0.30000, 0.45750
+    color: '#334E6D'
+  - label: seat top seam
+    min: -0.44000, -0.27000, 0.45000
+    max: 0.44000, -0.23400, 0.46125
+    color: '#496783'
+  - label: back support
+    min: -0.41000, 0.23000, 0.36750
+    max: -0.36000, 0.28700, 0.81750
+    color: '#59636E'
+  - label: back support
+    min: 0.36000, 0.23000, 0.36750
+    max: 0.41000, 0.28700, 0.81750
+    color: '#59636E'
+  - label: back metal rim
+    min: -0.49000, 0.25500, 0.62250
+    max: 0.49000, 0.32300, 0.85500
+    color: '#767E82'
+  - label: back cushion
+    min: -0.45800, 0.20500, 0.63975
+    max: 0.45800, 0.25500, 0.83700
+    color: '#334E6D'
+  - label: back upper seam
+    min: -0.42600, 0.19200, 0.80250
+    max: 0.42600, 0.20500, 0.82200
+    color: '#496783'
+- type: cmu3DModel
+  id: CMU3DRedComfyBench
+  label: Red upholstered bench
+  sourcePrototypes:
+  - BenchRedComfy
+  status: draft
+  description: Wide seat and separate padded backrest on an open gray frame. Source cover tint retained; all four directional
+    frames were inspected. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred.
+    Runtime contents and appearance changes remain unfinished.
+  referencePrototype: BenchRedComfy
+  referenceRsi: /Textures/Structures/Furniture/Bench/comf_bench.rsi
+  referenceState: bench_solo_cover
+  sourceDirections: 4
+  referenceTint: '#8C4141'
+  parts:
+  - label: bench leg
+    min: -0.44000, -0.27000, 0.00000
+    max: -0.38000, -0.21500, 0.37500
+    color: '#5E696F'
+  - label: bench leg
+    min: -0.44000, 0.22000, 0.00000
+    max: -0.38000, 0.27500, 0.37500
+    color: '#5E696F'
+  - label: side floor runner
+    min: -0.44000, -0.27000, 0.01875
+    max: -0.38000, 0.27500, 0.05550
+    color: '#434C56'
+  - label: bench leg
+    min: 0.38000, -0.27000, 0.00000
+    max: 0.44000, -0.21500, 0.37500
+    color: '#5E696F'
+  - label: bench leg
+    min: 0.38000, 0.22000, 0.00000
+    max: 0.44000, 0.27500, 0.37500
+    color: '#5E696F'
+  - label: side floor runner
+    min: 0.38000, -0.27000, 0.01875
+    max: 0.44000, 0.27500, 0.05550
+    color: '#434C56'
+  - label: lower horizontal stretcher
+    min: -0.38000, -0.27000, 0.07500
+    max: 0.38000, -0.23000, 0.11325
+    color: '#424B54'
+  - label: lower horizontal stretcher
+    min: -0.38000, 0.22000, 0.07500
+    max: 0.38000, 0.26000, 0.11325
+    color: '#424B54'
+  - label: seat metal pan
+    min: -0.49000, -0.31000, 0.33750
+    max: 0.49000, 0.31000, 0.37500
+    color: '#767E82'
+  - label: seat cushion
+    min: -0.47000, -0.29500, 0.37500
+    max: 0.47000, 0.30000, 0.45750
+    color: '#8C4141'
+  - label: seat top seam
+    min: -0.44000, -0.27000, 0.45000
+    max: 0.44000, -0.23400, 0.46125
+    color: '#AA5955'
+  - label: back support
+    min: -0.41000, 0.23000, 0.36750
+    max: -0.36000, 0.28700, 0.81750
+    color: '#59636E'
+  - label: back support
+    min: 0.36000, 0.23000, 0.36750
+    max: 0.41000, 0.28700, 0.81750
+    color: '#59636E'
+  - label: back metal rim
+    min: -0.49000, 0.25500, 0.62250
+    max: 0.49000, 0.32300, 0.85500
+    color: '#767E82'
+  - label: back cushion
+    min: -0.45800, 0.20500, 0.63975
+    max: 0.45800, 0.25500, 0.83700
+    color: '#8C4141'
+  - label: back upper seam
+    min: -0.42600, 0.19200, 0.80250
+    max: 0.42600, 0.20500, 0.82200
+    color: '#AA5955'
+- type: cmu3DModel
+  id: CMU3DTanBenchLeft
+  label: Tan metal bench left end
+  sourcePrototypes:
+  - RMCBenchLeft
+  status: draft
+  description: Paired tan cushions and ribbed metal backs, front connecting foot bar and distinct outside end bracket.
+    Left/right variants preserve their joint boundary and directional art; one tile is one half of a longer bench. Source
+    art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime contents and appearance
+    changes remain unfinished.
+  referencePrototype: RMCBenchLeft
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/bench.rsi
+  referenceState: bench_left
+  sourceDirections: 4
+  parts:
+  - label: bench support leg
+    min: -0.34000, -0.22000, 0.00000
+    max: -0.28000, 0.25000, 0.40800
+    color: '#3B454A'
+  - label: long floor skid
+    min: -0.34000, -0.36000, 0.02000
+    max: -0.27800, 0.36000, 0.05680
+    color: '#67727A'
+  - label: bench support leg
+    min: 0.28000, -0.22000, 0.00000
+    max: 0.34000, 0.25000, 0.40800
+    color: '#3B454A'
+  - label: long floor skid
+    min: 0.28000, -0.36000, 0.02000
+    max: 0.34200, 0.36000, 0.05680
+    color: '#67727A'
+  - label: joined front foot bar
+    min: -0.48000, -0.36000, 0.02080
+    max: 0.48000, -0.31000, 0.06000
+    color: '#727F87'
+  - label: bench seat rail
+    min: -0.49000, -0.31000, 0.36800
+    max: 0.49000, 0.34000, 0.41120
+    color: '#3F494D'
+  - label: tan seat pad
+    min: -0.45800, -0.32000, 0.41120
+    max: -0.01500, 0.30000, 0.50400
+    color: '#9B8A66'
+  - label: pale seat inset
+    min: -0.41800, -0.27400, 0.50000
+    max: -0.05300, 0.24200, 0.52000
+    color: '#B6A582'
+  - label: back shell
+    min: -0.45800, 0.25500, 0.48000
+    max: -0.01500, 0.34000, 1.07200
+    color: '#566065'
+  - label: tan lower back pad
+    min: -0.45800, 0.19200, 0.51200
+    max: -0.01500, 0.25600, 0.71200
+    color: '#9E8E6D'
+  - label: tan middle back pad
+    min: -0.42400, 0.18600, 0.74000
+    max: -0.04800, 0.25500, 0.94800
+    color: '#AB9B79'
+  - label: pale head pad
+    min: -0.43200, 0.17500, 0.97520
+    max: -0.04100, 0.26300, 1.06320
+    color: '#C0B18E'
+  - label: back shell horizontal rib
+    min: -0.40800, 0.34000, 0.56800
+    max: -0.06300, 0.35900, 0.59120
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: -0.40800, 0.34000, 0.68000
+    max: -0.06300, 0.35900, 0.70320
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: -0.40800, 0.34000, 0.83200
+    max: -0.06300, 0.35900, 0.85520
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: -0.40800, 0.34000, 0.96000
+    max: -0.06300, 0.35900, 0.98320
+    color: '#343D41'
+  - label: rear mounting spine
+    min: -0.26400, 0.34100, 0.51200
+    max: -0.22400, 0.36700, 1.05600
+    color: '#7B8487'
+  - label: tan seat pad
+    min: 0.01600, -0.32000, 0.41120
+    max: 0.45900, 0.30000, 0.50400
+    color: '#9B8A66'
+  - label: pale seat inset
+    min: 0.05600, -0.27400, 0.50000
+    max: 0.42100, 0.24200, 0.52000
+    color: '#B6A582'
+  - label: back shell
+    min: 0.01600, 0.25500, 0.48000
+    max: 0.45900, 0.34000, 1.07200
+    color: '#566065'
+  - label: tan lower back pad
+    min: 0.01600, 0.19200, 0.51200
+    max: 0.45900, 0.25600, 0.71200
+    color: '#9E8E6D'
+  - label: tan middle back pad
+    min: 0.05000, 0.18600, 0.74000
+    max: 0.42600, 0.25500, 0.94800
+    color: '#AB9B79'
+  - label: pale head pad
+    min: 0.04200, 0.17500, 0.97520
+    max: 0.43300, 0.26300, 1.06320
+    color: '#C0B18E'
+  - label: back shell horizontal rib
+    min: 0.06600, 0.34000, 0.56800
+    max: 0.41100, 0.35900, 0.59120
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: 0.06600, 0.34000, 0.68000
+    max: 0.41100, 0.35900, 0.70320
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: 0.06600, 0.34000, 0.83200
+    max: 0.41100, 0.35900, 0.85520
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: 0.06600, 0.34000, 0.96000
+    max: 0.41100, 0.35900, 0.98320
+    color: '#343D41'
+  - label: rear mounting spine
+    min: 0.21000, 0.34100, 0.51200
+    max: 0.25000, 0.36700, 1.05600
+    color: '#7B8487'
+  - label: outer end bracket
+    min: -0.49000, -0.28000, 0.27200
+    max: -0.45500, 0.33000, 0.41600
+    color: '#58636A'
+- type: cmu3DModel
+  id: CMU3DTanBenchRight
+  label: Tan metal bench right end
+  sourcePrototypes:
+  - RMCBenchRight
+  status: draft
+  description: Paired tan cushions and ribbed metal backs, front connecting foot bar and distinct outside end bracket.
+    Left/right variants preserve their joint boundary and directional art; one tile is one half of a longer bench. Source
+    art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime contents and appearance
+    changes remain unfinished.
+  referencePrototype: RMCBenchRight
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/bench.rsi
+  referenceState: bench_right
+  sourceDirections: 4
+  parts:
+  - label: bench support leg
+    min: -0.34000, -0.22000, 0.00000
+    max: -0.28000, 0.25000, 0.40800
+    color: '#3B454A'
+  - label: long floor skid
+    min: -0.34000, -0.36000, 0.02000
+    max: -0.27800, 0.36000, 0.05680
+    color: '#67727A'
+  - label: bench support leg
+    min: 0.28000, -0.22000, 0.00000
+    max: 0.34000, 0.25000, 0.40800
+    color: '#3B454A'
+  - label: long floor skid
+    min: 0.28000, -0.36000, 0.02000
+    max: 0.34200, 0.36000, 0.05680
+    color: '#67727A'
+  - label: joined front foot bar
+    min: -0.48000, -0.36000, 0.02080
+    max: 0.48000, -0.31000, 0.06000
+    color: '#727F87'
+  - label: bench seat rail
+    min: -0.49000, -0.31000, 0.36800
+    max: 0.49000, 0.34000, 0.41120
+    color: '#3F494D'
+  - label: tan seat pad
+    min: -0.45800, -0.32000, 0.41120
+    max: -0.01500, 0.30000, 0.50400
+    color: '#9B8A66'
+  - label: pale seat inset
+    min: -0.41800, -0.27400, 0.50000
+    max: -0.05300, 0.24200, 0.52000
+    color: '#B6A582'
+  - label: back shell
+    min: -0.45800, 0.25500, 0.48000
+    max: -0.01500, 0.34000, 1.07200
+    color: '#566065'
+  - label: tan lower back pad
+    min: -0.45800, 0.19200, 0.51200
+    max: -0.01500, 0.25600, 0.71200
+    color: '#9E8E6D'
+  - label: tan middle back pad
+    min: -0.42400, 0.18600, 0.74000
+    max: -0.04800, 0.25500, 0.94800
+    color: '#AB9B79'
+  - label: pale head pad
+    min: -0.43200, 0.17500, 0.97520
+    max: -0.04100, 0.26300, 1.06320
+    color: '#C0B18E'
+  - label: back shell horizontal rib
+    min: -0.40800, 0.34000, 0.56800
+    max: -0.06300, 0.35900, 0.59120
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: -0.40800, 0.34000, 0.68000
+    max: -0.06300, 0.35900, 0.70320
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: -0.40800, 0.34000, 0.83200
+    max: -0.06300, 0.35900, 0.85520
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: -0.40800, 0.34000, 0.96000
+    max: -0.06300, 0.35900, 0.98320
+    color: '#343D41'
+  - label: rear mounting spine
+    min: -0.26400, 0.34100, 0.51200
+    max: -0.22400, 0.36700, 1.05600
+    color: '#7B8487'
+  - label: tan seat pad
+    min: 0.01600, -0.32000, 0.41120
+    max: 0.45900, 0.30000, 0.50400
+    color: '#9B8A66'
+  - label: pale seat inset
+    min: 0.05600, -0.27400, 0.50000
+    max: 0.42100, 0.24200, 0.52000
+    color: '#B6A582'
+  - label: back shell
+    min: 0.01600, 0.25500, 0.48000
+    max: 0.45900, 0.34000, 1.07200
+    color: '#566065'
+  - label: tan lower back pad
+    min: 0.01600, 0.19200, 0.51200
+    max: 0.45900, 0.25600, 0.71200
+    color: '#9E8E6D'
+  - label: tan middle back pad
+    min: 0.05000, 0.18600, 0.74000
+    max: 0.42600, 0.25500, 0.94800
+    color: '#AB9B79'
+  - label: pale head pad
+    min: 0.04200, 0.17500, 0.97520
+    max: 0.43300, 0.26300, 1.06320
+    color: '#C0B18E'
+  - label: back shell horizontal rib
+    min: 0.06600, 0.34000, 0.56800
+    max: 0.41100, 0.35900, 0.59120
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: 0.06600, 0.34000, 0.68000
+    max: 0.41100, 0.35900, 0.70320
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: 0.06600, 0.34000, 0.83200
+    max: 0.41100, 0.35900, 0.85520
+    color: '#343D41'
+  - label: back shell horizontal rib
+    min: 0.06600, 0.34000, 0.96000
+    max: 0.41100, 0.35900, 0.98320
+    color: '#343D41'
+  - label: rear mounting spine
+    min: 0.21000, 0.34100, 0.51200
+    max: 0.25000, 0.36700, 1.05600
+    color: '#7B8487'
+  - label: outer end bracket
+    min: 0.45500, -0.28000, 0.27200
+    max: 0.49000, 0.33000, 0.41600
+    color: '#58636A'
+- type: cmu3DModel
+  id: CMU3DSlattedWoodenBench
+  label: Slatted wooden bench
+  sourcePrototypes:
+  - WoodenBench
+  status: draft
+  description: Warm brown slatted seat, two separate back planks and four square legs. Source direction controls the
+    backrest side. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    contents and appearance changes remain unfinished.
+  referencePrototype: WoodenBench
+  referenceRsi: /Textures/Structures/Furniture/chairs.rsi
+  referenceState: wooden-bench
+  sourceDirections: 4
+  parts:
+  - label: wooden leg
+    min: -0.46000, -0.29000, 0.00000
+    max: -0.40000, -0.23500, 0.39200
+    color: '#5E2F12'
+  - label: wooden leg
+    min: -0.46000, 0.25000, 0.00000
+    max: -0.40000, 0.30500, 0.39200
+    color: '#5E2F12'
+  - label: seat end support
+    min: -0.46000, -0.31000, 0.32800
+    max: -0.40000, 0.32000, 0.38400
+    color: '#7D4119'
+  - label: back upright
+    min: -0.46000, 0.25500, 0.36000
+    max: -0.40000, 0.32000, 0.90400
+    color: '#773A12'
+  - label: wooden leg
+    min: 0.40000, -0.29000, 0.00000
+    max: 0.46000, -0.23500, 0.39200
+    color: '#5E2F12'
+  - label: wooden leg
+    min: 0.40000, 0.25000, 0.00000
+    max: 0.46000, 0.30500, 0.39200
+    color: '#5E2F12'
+  - label: seat end support
+    min: 0.40000, -0.31000, 0.32800
+    max: 0.46000, 0.32000, 0.38400
+    color: '#7D4119'
+  - label: back upright
+    min: 0.40000, 0.25500, 0.36000
+    max: 0.46000, 0.32000, 0.90400
+    color: '#773A12'
+  - label: wooden seat plank
+    min: -0.49000, -0.30000, 0.38400
+    max: 0.49000, -0.11000, 0.44000
+    color: '#95511F'
+  - label: wooden seat plank
+    min: -0.49000, -0.09500, 0.38400
+    max: 0.49000, 0.09500, 0.44000
+    color: '#95511F'
+  - label: wooden seat plank
+    min: -0.49000, 0.11000, 0.38400
+    max: 0.49000, 0.30000, 0.44000
+    color: '#95511F'
+  - label: wooden back plank
+    min: -0.49000, 0.25600, 0.61600
+    max: 0.49000, 0.31500, 0.74400
+    color: '#894315'
+  - label: back plank upper grain
+    min: -0.44500, 0.24300, 0.69760
+    max: 0.43000, 0.25500, 0.72080
+    color: '#B1692D'
+  - label: wooden back plank
+    min: -0.49000, 0.25600, 0.76800
+    max: 0.49000, 0.31500, 0.89600
+    color: '#894315'
+  - label: back plank upper grain
+    min: -0.44500, 0.24300, 0.84960
+    max: 0.43000, 0.25500, 0.87280
+    color: '#B1692D'
+  - label: seat grain
+    min: -0.42500, -0.26800, 0.44000
+    max: -0.36000, -0.24700, 0.44320
+    color: '#BC793D'
+  - label: seat grain
+    min: -0.29500, -0.07800, 0.44000
+    max: -0.23000, -0.05700, 0.44320
+    color: '#BC793D'
+  - label: seat grain
+    min: -0.16500, 0.11200, 0.44000
+    max: -0.10000, 0.13300, 0.44320
+    color: '#BC793D'
+  - label: seat grain
+    min: -0.03500, -0.26800, 0.44000
+    max: 0.03000, -0.24700, 0.44320
+    color: '#BC793D'
+  - label: seat grain
+    min: 0.09500, -0.07800, 0.44000
+    max: 0.16000, -0.05700, 0.44320
+    color: '#BC793D'
+  - label: seat grain
+    min: 0.22500, 0.11200, 0.44000
+    max: 0.29000, 0.13300, 0.44320
+    color: '#BC793D'
+  - label: seat grain
+    min: 0.35500, -0.26800, 0.44000
+    max: 0.42000, -0.24700, 0.44320
+    color: '#BC793D'
+- type: cmu3DModel
+  id: CMU3DRedPedestalBarStool
+  label: Red pedestal bar stool
+  sourcePrototypes:
+  - StoolBar
+  status: draft
+  description: Low red round cushion on a chrome pedestal and small rear handgrip. The grip changes sides with the four
+    source directions; no tall chair back is added. Source art and saved placement inspected; height, depth and hidden
+    surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: StoolBar
+  referenceRsi: /Textures/Structures/Furniture/chairs.rsi
+  referenceState: bar
+  sourceDirections: 4
+  parts:
+  - label: round pedestal foot
+    min: -0.13200, -0.24000, 0.00000
+    max: 0.13200, 0.24000, 0.07200
+    color: '#747C7B'
+  - label: round pedestal foot
+    min: -0.24000, -0.13200, 0.00000
+    max: -0.13200, 0.13200, 0.07200
+    color: '#747C7B'
+  - label: round pedestal foot
+    min: 0.13200, -0.13200, 0.00000
+    max: 0.24000, 0.13200, 0.07200
+    color: '#747C7B'
+  - label: upper pedestal foot
+    min: -0.09625, -0.17500, 0.07200
+    max: 0.09625, 0.17500, 0.10600
+    color: '#939A94'
+  - label: upper pedestal foot
+    min: -0.17500, -0.09625, 0.07200
+    max: -0.09625, 0.09625, 0.10600
+    color: '#939A94'
+  - label: upper pedestal foot
+    min: 0.09625, -0.09625, 0.07200
+    max: 0.17500, 0.09625, 0.10600
+    color: '#939A94'
+  - label: dark central post
+    min: -0.03500, -0.03500, 0.10600
+    max: 0.03500, 0.03500, 0.74000
+    color: '#323A37'
+  - label: post chrome strip
+    min: -0.01900, -0.04700, 0.12000
+    max: 0.00500, -0.03500, 0.73000
+    color: '#9A9E8F'
+  - label: seat underside
+    min: -0.17050, -0.31000, 0.72000
+    max: 0.17050, 0.31000, 0.80500
+    color: '#6D180D'
+  - label: seat underside
+    min: -0.31000, -0.17050, 0.72000
+    max: -0.17050, 0.17050, 0.80500
+    color: '#6D180D'
+  - label: seat underside
+    min: 0.17050, -0.17050, 0.72000
+    max: 0.31000, 0.17050, 0.80500
+    color: '#6D180D'
+  - label: red seat cushion
+    min: -0.17875, -0.32500, 0.80500
+    max: 0.17875, 0.32500, 0.93000
+    color: '#AE3020'
+  - label: red seat cushion
+    min: -0.32500, -0.17875, 0.80500
+    max: -0.17875, 0.17875, 0.93000
+    color: '#AE3020'
+  - label: red seat cushion
+    min: 0.17875, -0.17875, 0.80500
+    max: 0.32500, 0.17875, 0.93000
+    color: '#AE3020'
+  - label: seat highlight
+    min: -0.14850, -0.28200, 0.93000
+    max: 0.14850, 0.25800, 0.94500
+    color: '#C8402B'
+  - label: seat highlight
+    min: -0.27000, -0.16050, 0.93000
+    max: -0.14850, 0.13650, 0.94500
+    color: '#C8402B'
+  - label: seat highlight
+    min: 0.14850, -0.16050, 0.93000
+    max: 0.27000, 0.13650, 0.94500
+    color: '#C8402B'
+  - label: rear handgrip upright
+    min: -0.13500, 0.18000, 0.85000
+    max: -0.10500, 0.21600, 1.11000
+    color: '#798281'
+  - label: rear handgrip upright
+    min: 0.10500, 0.18000, 0.85000
+    max: 0.13500, 0.21600, 1.11000
+    color: '#798281'
+  - label: rear handgrip top
+    min: -0.13500, 0.18000, 1.08000
+    max: 0.13500, 0.21600, 1.11500
+    color: '#B0B5AA'
+- type: cmu3DModel
+  id: CMU3DWoodenCoatStand
+  label: Wooden coat stand
+  sourcePrototypes:
+  - RMCCoatRack
+  status: draft
+  description: Slim warm wooden stand with four rising hooks and a broad shallow foot. Coats, hats and other runtime
+    contents are not part of this empty stand. Source art and saved placement inspected; height, depth and hidden surfaces
+    remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: RMCCoatRack
+  referenceRsi: /Textures/_RMC14/Structures/Furniture/coatrack.rsi
+  referenceState: coatrack0
+  sourceDirections: 1
+  parts:
+  - label: coat stand foot
+    min: -0.10175, -0.18500, 0.00000
+    max: 0.10175, 0.18500, 0.07300
+    color: '#7F5E1B'
+  - label: coat stand foot
+    min: -0.18500, -0.10175, 0.00000
+    max: -0.10175, 0.10175, 0.07300
+    color: '#7F5E1B'
+  - label: coat stand foot
+    min: 0.10175, -0.10175, 0.00000
+    max: 0.18500, 0.10175, 0.07300
+    color: '#7F5E1B'
+  - label: upper wooden base
+    min: -0.07975, -0.14500, 0.07300
+    max: 0.07975, 0.14500, 0.12600
+    color: '#AA802B'
+  - label: upper wooden base
+    min: -0.14500, -0.07975, 0.07300
+    max: -0.07975, 0.07975, 0.12600
+    color: '#AA802B'
+  - label: upper wooden base
+    min: 0.07975, -0.07975, 0.07300
+    max: 0.14500, 0.07975, 0.12600
+    color: '#AA802B'
+  - label: coat stand central post
+    min: -0.03500, -0.03400, 0.12600
+    max: 0.03500, 0.03400, 1.75000
+    color: '#886017'
+  - label: post bright edge
+    min: -0.03800, -0.04300, 0.17000
+    max: -0.01300, -0.03400, 1.69000
+    color: '#BD8F2C'
+  - label: rising coat hook
+    min: -0.03600, -0.01850, 1.26900
+    max: 0.00100, 0.01850, 1.30600
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.07100, -0.01850, 1.30400
+    max: -0.03400, 0.01850, 1.34100
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.10600, -0.01850, 1.33900
+    max: -0.06900, 0.01850, 1.37600
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.14100, -0.01850, 1.37400
+    max: -0.10400, 0.01850, 1.41100
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.17600, -0.01850, 1.40900
+    max: -0.13900, 0.01850, 1.44600
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.21100, -0.01850, 1.44400
+    max: -0.17400, 0.01850, 1.48100
+    color: '#966D20'
+  - label: hook end
+    min: -0.23500, -0.02500, 1.46400
+    max: -0.18500, 0.02500, 1.54500
+    color: '#B78625'
+  - label: rising coat hook
+    min: -0.00100, -0.01850, 1.26900
+    max: 0.03600, 0.01850, 1.30600
+    color: '#966D20'
+  - label: rising coat hook
+    min: 0.03400, -0.01850, 1.30400
+    max: 0.07100, 0.01850, 1.34100
+    color: '#966D20'
+  - label: rising coat hook
+    min: 0.06900, -0.01850, 1.33900
+    max: 0.10600, 0.01850, 1.37600
+    color: '#966D20'
+  - label: rising coat hook
+    min: 0.10400, -0.01850, 1.37400
+    max: 0.14100, 0.01850, 1.41100
+    color: '#966D20'
+  - label: rising coat hook
+    min: 0.13900, -0.01850, 1.40900
+    max: 0.17600, 0.01850, 1.44600
+    color: '#966D20'
+  - label: rising coat hook
+    min: 0.17400, -0.01850, 1.44400
+    max: 0.21100, 0.01850, 1.48100
+    color: '#966D20'
+  - label: hook end
+    min: 0.18500, -0.02500, 1.46400
+    max: 0.23500, 0.02500, 1.54500
+    color: '#B78625'
+  - label: rising coat hook
+    min: -0.01850, -0.00267, 1.26900
+    max: 0.01850, 0.03433, 1.30600
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, 0.02900, 1.30400
+    max: 0.01850, 0.06600, 1.34100
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, 0.06067, 1.33900
+    max: 0.01850, 0.09767, 1.37600
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, 0.09233, 1.37400
+    max: 0.01850, 0.12933, 1.41100
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, 0.12400, 1.40900
+    max: 0.01850, 0.16100, 1.44600
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, 0.15567, 1.44400
+    max: 0.01850, 0.19267, 1.48100
+    color: '#966D20'
+  - label: hook end
+    min: -0.02500, 0.16500, 1.46400
+    max: 0.02500, 0.21500, 1.54500
+    color: '#B78625'
+  - label: rising coat hook
+    min: -0.01850, -0.03433, 1.26900
+    max: 0.01850, 0.00267, 1.30600
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, -0.06600, 1.30400
+    max: 0.01850, -0.02900, 1.34100
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, -0.09767, 1.33900
+    max: 0.01850, -0.06067, 1.37600
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, -0.12933, 1.37400
+    max: 0.01850, -0.09233, 1.41100
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, -0.16100, 1.40900
+    max: 0.01850, -0.12400, 1.44600
+    color: '#966D20'
+  - label: rising coat hook
+    min: -0.01850, -0.19267, 1.44400
+    max: 0.01850, -0.15567, 1.48100
+    color: '#966D20'
+  - label: hook end
+    min: -0.02500, -0.21500, 1.46400
+    max: 0.02500, -0.16500, 1.54500
+    color: '#B78625'
+- type: cmu3DModel
+  id: CMU3DNarrowFilingCabinet
+  label: Narrow three-drawer filing cabinet
+  sourcePrototypes:
+  - filingCabinet
+  - filingCabinetRandom
+  status: draft
+  description: 'Three closed drawers with separate recessed pulls, olive label holders and the source green lower strip.
+    The .333-tile maximum width fits closely packed saved cabinets #7485/#7486 inside their .36-tile collider. The open
+    overlay was inspected separately: it obscures the middle drawer, so only the closed base state is used. Source art
+    and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime contents and appearance
+    changes remain unfinished.'
+  referencePrototype: filingCabinet
+  referenceRsi: /Textures/Structures/Storage/cabinets.rsi
+  referenceState: filingcabinet
+  sourceDirections: 1
+  parts:
+  - label: filing cabinet shell
+    min: -0.16200, -0.43000, 0.04000
+    max: 0.16200, 0.43000, 1.31000
+    color: '#565D59'
+  - label: top overhang
+    min: -0.16650, -0.44000, 1.31000
+    max: 0.16650, 0.44000, 1.36000
+    color: '#858A83'
+  - label: cabinet foot
+    min: -0.15480, -0.37000, 0.00000
+    max: -0.10980, 0.35000, 0.05500
+    color: '#323936'
+  - label: cabinet foot
+    min: 0.10980, -0.37000, 0.00000
+    max: 0.15480, 0.35000, 0.05500
+    color: '#323936'
+  - label: drawer dark border
+    min: -0.14400, -0.44300, 0.12000
+    max: 0.14400, -0.43100, 0.47000
+    color: '#353E39'
+  - label: drawer face
+    min: -0.12600, -0.45700, 0.14400
+    max: 0.12600, -0.44500, 0.45100
+    color: '#717971'
+  - label: label holder
+    min: -0.07650, -0.47100, 0.32000
+    max: 0.07650, -0.45900, 0.40600
+    color: '#3D443C'
+  - label: olive paper label
+    min: -0.05400, -0.48700, 0.34500
+    max: 0.05400, -0.47500, 0.38600
+    color: '#B3B68A'
+  - label: recessed pull
+    min: -0.08730, -0.47100, 0.18500
+    max: 0.08730, -0.45900, 0.27700
+    color: '#252D27'
+  - label: pale drawer pull
+    min: -0.06660, -0.48900, 0.21000
+    max: 0.06660, -0.47700, 0.25000
+    color: '#CDD3C8'
+  - label: drawer dark border
+    min: -0.14400, -0.44300, 0.50000
+    max: 0.14400, -0.43100, 0.85000
+    color: '#353E39'
+  - label: drawer face
+    min: -0.12600, -0.45700, 0.52400
+    max: 0.12600, -0.44500, 0.83100
+    color: '#717971'
+  - label: label holder
+    min: -0.07650, -0.47100, 0.70000
+    max: 0.07650, -0.45900, 0.78600
+    color: '#3D443C'
+  - label: olive paper label
+    min: -0.05400, -0.48700, 0.72500
+    max: 0.05400, -0.47500, 0.76600
+    color: '#B3B68A'
+  - label: recessed pull
+    min: -0.08730, -0.47100, 0.56500
+    max: 0.08730, -0.45900, 0.65700
+    color: '#252D27'
+  - label: pale drawer pull
+    min: -0.06660, -0.48900, 0.59000
+    max: 0.06660, -0.47700, 0.63000
+    color: '#CDD3C8'
+  - label: drawer dark border
+    min: -0.14400, -0.44300, 0.88000
+    max: 0.14400, -0.43100, 1.23000
+    color: '#353E39'
+  - label: drawer face
+    min: -0.12600, -0.45700, 0.90400
+    max: 0.12600, -0.44500, 1.21100
+    color: '#717971'
+  - label: label holder
+    min: -0.07650, -0.47100, 1.08000
+    max: 0.07650, -0.45900, 1.16600
+    color: '#3D443C'
+  - label: olive paper label
+    min: -0.05400, -0.48700, 1.10500
+    max: 0.05400, -0.47500, 1.14600
+    color: '#B3B68A'
+  - label: recessed pull
+    min: -0.08730, -0.47100, 0.94500
+    max: 0.08730, -0.45900, 1.03700
+    color: '#252D27'
+  - label: pale drawer pull
+    min: -0.06660, -0.48900, 0.97000
+    max: 0.06660, -0.47700, 1.01000
+    color: '#CDD3C8'
+  - label: lower foot shadow
+    min: -0.14400, -0.44700, 0.04300
+    max: 0.14400, -0.43500, 0.10200
+    color: '#29322E'
+  - label: green bottom indicator
+    min: -0.13050, -0.46000, 0.04800
+    max: -0.09090, -0.44800, 0.07400
+    color: '#277A20'
+  - label: green bottom indicator
+    min: -0.07650, -0.46000, 0.04800
+    max: -0.03690, -0.44800, 0.07400
+    color: '#277A20'
+  - label: green bottom indicator
+    min: -0.02250, -0.46000, 0.04800
+    max: 0.01710, -0.44800, 0.07400
+    color: '#277A20'
+  - label: green bottom indicator
+    min: 0.03150, -0.46000, 0.04800
+    max: 0.07110, -0.44800, 0.07400
+    color: '#277A20'
+  - label: green bottom indicator
+    min: 0.08550, -0.46000, 0.04800
+    max: 0.12510, -0.44800, 0.07400
+    color: '#277A20'
+- type: cmu3DModel
+  id: CMU3DTimberPallet
+  label: Timber pallet
+  sourcePrototypes:
+  - DecorFloorPallet
+  status: draft
+  description: Five long top boards, spacer blocks and open fork entries. Original RSI has only South/North artwork;
+    East/West frames are empty, so those 3D views are inferred. Source art and saved placement inspected; height, depth
+    and hidden surfaces remain inferred. Runtime contents and appearance changes remain unfinished.
+  referencePrototype: DecorFloorPallet
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: pallet
+  sourceDirections: 4
+  supportSurfaces:
+  - top support board 1
+  - top support board 2
+  - top support board 3
+  - top support board 4
+  - top support board 5
+  parts:
+  - label: bottom runner
+    min: -0.44, -0.405, 0.0
+    max: -0.35, 0.405, 0.03
+    color: '#664C30'
+  - label: bottom runner
+    min: -0.045, -0.405, 0.0
+    max: 0.045, 0.405, 0.03
+    color: '#664C30'
+  - label: bottom runner
+    min: 0.35, -0.405, 0.0
+    max: 0.44, 0.405, 0.03
+    color: '#664C30'
+  - label: spacer block
+    min: -0.44, -0.405, 0.03
+    max: -0.35, -0.315, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.44, 0.0, 0.03
+    max: -0.35, 0.09, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.44, 0.315, 0.03
+    max: -0.35, 0.405, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.045, -0.405, 0.03
+    max: 0.045, -0.315, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.045, 0.0, 0.03
+    max: 0.045, 0.09, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.045, 0.315, 0.03
+    max: 0.045, 0.405, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: 0.35, -0.405, 0.03
+    max: 0.44, -0.315, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: 0.35, 0.0, 0.03
+    max: 0.44, 0.09, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: 0.35, 0.315, 0.03
+    max: 0.44, 0.405, 0.113
+    color: '#775737'
+  - label: top support board 5
+    min: -0.44, -0.405, 0.113
+    max: -0.278, 0.405, 0.15
+    color: '#967350'
+  - label: board grain
+    min: -0.415, -0.2511, 0.15
+    max: -0.397, 0.2106, 0.1515
+    color: '#B18B60'
+  - label: top support board 4
+    min: -0.264, -0.405, 0.113
+    max: -0.102, 0.405, 0.15
+    color: '#967350'
+  - label: top support board 3
+    min: -0.088, -0.405, 0.113
+    max: 0.074, 0.405, 0.15
+    color: '#967350'
+  - label: board grain
+    min: -0.063, -0.2511, 0.15
+    max: -0.045, 0.2106, 0.1515
+    color: '#B18B60'
+  - label: top support board 2
+    min: 0.088, -0.405, 0.113
+    max: 0.25, 0.405, 0.15
+    color: '#967350'
+  - label: top support board 1
+    min: 0.264, -0.405, 0.113
+    max: 0.426, 0.405, 0.15
+    color: '#967350'
+  - label: board grain
+    min: 0.289, -0.2511, 0.15
+    max: 0.307, 0.2106, 0.1515
+    color: '#B18B60'
+- type: cmu3DModel
+  id: CMU3DTimberPalletStack
+  label: Stack of timber pallets
+  sourcePrototypes:
+  - DecorFloorPalletStack
+  status: draft
+  description: Four separate pallets with alternating boards, exposed spacers and slightly staggered stacking. Original
+    East/West RSI frames are empty; side structure is inferred from the visible front and top. No solid filler hides
+    the fork slots. Source art and saved placement inspected; height, depth and hidden surfaces remain inferred. Runtime
+    contents and appearance changes remain unfinished.
+  referencePrototype: DecorFloorPalletStack
+  referenceRsi: /Textures/CMU14/N14content/world.rsi
+  referenceState: pallet_stack
+  sourceDirections: 4
+  supportSurfaces:
+  - top support board 1
+  - top support board 2
+  - top support board 3
+  - top support board 4
+  - top support board 5
+  parts:
+  - label: bottom runner
+    min: -0.40499999999999997, -0.41100000000000003, 0.0
+    max: -0.315, 0.359, 0.03
+    color: '#664C30'
+  - label: bottom runner
+    min: -0.09, -0.41100000000000003, 0.0
+    max: 0.0, 0.359, 0.03
+    color: '#664C30'
+  - label: bottom runner
+    min: 0.22500000000000003, -0.41100000000000003, 0.0
+    max: 0.315, 0.359, 0.03
+    color: '#664C30'
+  - label: spacer block
+    min: -0.40499999999999997, -0.41100000000000003, 0.03
+    max: -0.315, -0.321, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.40499999999999997, -0.026, 0.03
+    max: -0.315, 0.064, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.40499999999999997, 0.26899999999999996, 0.03
+    max: -0.315, 0.359, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.09, -0.41100000000000003, 0.03
+    max: 0.0, -0.321, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.09, -0.026, 0.03
+    max: 0.0, 0.064, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: -0.09, 0.26899999999999996, 0.03
+    max: 0.0, 0.359, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: 0.22500000000000003, -0.41100000000000003, 0.03
+    max: 0.315, -0.321, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: 0.22500000000000003, -0.026, 0.03
+    max: 0.315, 0.064, 0.113
+    color: '#775737'
+  - label: spacer block
+    min: 0.22500000000000003, 0.26899999999999996, 0.03
+    max: 0.315, 0.359, 0.113
+    color: '#775737'
+  - label: top pallet board
+    min: -0.40499999999999997, -0.41100000000000003, 0.113
+    max: -0.275, 0.359, 0.15
+    color: '#967350'
+  - label: board grain
+    min: -0.38, -0.2647, 0.15
+    max: -0.362, 0.1742, 0.153
+    color: '#B18B60'
+  - label: top pallet board
+    min: -0.261, -0.41100000000000003, 0.113
+    max: -0.131, 0.359, 0.15
+    color: '#967350'
+  - label: top pallet board
+    min: -0.11699999999999999, -0.41100000000000003, 0.113
+    max: 0.013000000000000005, 0.359, 0.15
+    color: '#967350'
+  - label: board grain
+    min: -0.092, -0.2647, 0.15
+    max: -0.074, 0.1742, 0.153
+    color: '#B18B60'
+  - label: top pallet board
+    min: 0.026999999999999996, -0.41100000000000003, 0.113
+    max: 0.15700000000000003, 0.359, 0.15
+    color: '#967350'
+  - label: top pallet board
+    min: 0.17099999999999999, -0.41100000000000003, 0.113
+    max: 0.301, 0.359, 0.15
+    color: '#967350'
+  - label: board grain
+    min: 0.196, -0.2647, 0.15
+    max: 0.21400000000000002, 0.1742, 0.153
+    color: '#B18B60'
+  - label: bottom runner
+    min: -0.4, -0.369, 0.157
+    max: 0.37, -0.279, 0.187
+    color: '#664C30'
+  - label: bottom runner
+    min: -0.4, -0.05399999999999999, 0.157
+    max: 0.37, 0.036000000000000004, 0.187
+    color: '#664C30'
+  - label: bottom runner
+    min: -0.4, 0.261, 0.157
+    max: 0.37, 0.351, 0.187
+    color: '#664C30'
+  - label: spacer block
+    min: 0.27999999999999997, -0.369, 0.187
+    max: 0.37, -0.279, 0.27
+    color: '#775737'
+  - label: spacer block
+    min: -0.105, -0.369, 0.187
+    max: -0.015, -0.279, 0.27
+    color: '#775737'
+  - label: spacer block
+    min: -0.4, -0.369, 0.187
+    max: -0.31, -0.279, 0.27
+    color: '#775737'
+  - label: spacer block
+    min: 0.27999999999999997, -0.05399999999999999, 0.187
+    max: 0.37, 0.036000000000000004, 0.27
+    color: '#775737'
+  - label: spacer block
+    min: -0.105, -0.05399999999999999, 0.187
+    max: -0.015, 0.036000000000000004, 0.27
+    color: '#775737'
+  - label: spacer block
+    min: -0.4, -0.05399999999999999, 0.187
+    max: -0.31, 0.036000000000000004, 0.27
+    color: '#775737'
+  - label: spacer block
+    min: 0.27999999999999997, 0.261, 0.187
+    max: 0.37, 0.351, 0.27
+    color: '#775737'
+  - label: spacer block
+    min: -0.105, 0.261, 0.187
+    max: -0.015, 0.351, 0.27
+    color: '#775737'
+  - label: spacer block
+    min: -0.4, 0.261, 0.187
+    max: -0.31, 0.351, 0.27
+    color: '#775737'
+  - label: top pallet board
+    min: -0.4, -0.369, 0.27
+    max: 0.37, -0.23900000000000002, 0.307
+    color: '#967350'
+  - label: board grain
+    min: -0.2152, -0.34400000000000003, 0.307
+    max: 0.2237, -0.326, 0.31
+    color: '#B18B60'
+  - label: top pallet board
+    min: -0.4, -0.225, 0.27
+    max: 0.37, -0.09499999999999999, 0.307
+    color: '#967350'
+  - label: top pallet board
+    min: -0.4, -0.08099999999999999, 0.27
+    max: 0.37, 0.049, 0.307
+    color: '#967350'
+  - label: board grain
+    min: -0.2152, -0.055999999999999994, 0.307
+    max: 0.2237, -0.038, 0.31
+    color: '#B18B60'
+  - label: top pallet board
+    min: -0.4, 0.063, 0.27
+    max: 0.37, 0.193, 0.307
+    color: '#967350'
+  - label: top pallet board
+    min: -0.4, 0.207, 0.27
+    max: 0.37, 0.33699999999999997, 0.307
+    color: '#967350'
+  - label: board grain
+    min: -0.2152, 0.23199999999999998, 0.307
+    max: 0.2237, 0.25, 0.31
+    color: '#B18B60'
+  - label: bottom runner
+    min: -0.345, -0.377, 0.314
+    max: -0.255, 0.393, 0.344
+    color: '#664C30'
+  - label: bottom runner
+    min: -0.03, -0.377, 0.314
+    max: 0.06, 0.393, 0.344
+    color: '#664C30'
+  - label: bottom runner
+    min: 0.28500000000000003, -0.377, 0.314
+    max: 0.375, 0.393, 0.344
+    color: '#664C30'
+  - label: spacer block
+    min: -0.345, -0.377, 0.344
+    max: -0.255, -0.287, 0.427
+    color: '#775737'
+  - label: spacer block
+    min: -0.345, 0.008000000000000004, 0.344
+    max: -0.255, 0.098, 0.427
+    color: '#775737'
+  - label: spacer block
+    min: -0.345, 0.303, 0.344
+    max: -0.255, 0.393, 0.427
+    color: '#775737'
+  - label: spacer block
+    min: -0.03, -0.377, 0.344
+    max: 0.06, -0.287, 0.427
+    color: '#775737'
+  - label: spacer block
+    min: -0.03, 0.008000000000000004, 0.344
+    max: 0.06, 0.098, 0.427
+    color: '#775737'
+  - label: spacer block
+    min: -0.03, 0.303, 0.344
+    max: 0.06, 0.393, 0.427
+    color: '#775737'
+  - label: spacer block
+    min: 0.28500000000000003, -0.377, 0.344
+    max: 0.375, -0.287, 0.427
+    color: '#775737'
+  - label: spacer block
+    min: 0.28500000000000003, 0.008000000000000004, 0.344
+    max: 0.375, 0.098, 0.427
+    color: '#775737'
+  - label: spacer block
+    min: 0.28500000000000003, 0.303, 0.344
+    max: 0.375, 0.393, 0.427
+    color: '#775737'
+  - label: top pallet board
+    min: -0.345, -0.377, 0.427
+    max: -0.21500000000000002, 0.393, 0.464
+    color: '#967350'
+  - label: board grain
+    min: -0.32, -0.2307, 0.464
+    max: -0.302, 0.2082, 0.467
+    color: '#B18B60'
+  - label: top pallet board
+    min: -0.201, -0.377, 0.427
+    max: -0.071, 0.393, 0.464
+    color: '#967350'
+  - label: top pallet board
+    min: -0.056999999999999995, -0.377, 0.427
+    max: 0.07300000000000001, 0.393, 0.464
+    color: '#967350'
+  - label: board grain
+    min: -0.032, -0.2307, 0.464
+    max: -0.014000000000000002, 0.2082, 0.467
+    color: '#B18B60'
+  - label: top pallet board
+    min: 0.087, -0.377, 0.427
+    max: 0.21700000000000003, 0.393, 0.464
+    color: '#967350'
+  - label: top pallet board
+    min: 0.23099999999999998, -0.377, 0.427
+    max: 0.361, 0.393, 0.464
+    color: '#967350'
+  - label: board grain
+    min: 0.256, -0.2307, 0.464
+    max: 0.274, 0.2082, 0.467
+    color: '#B18B60'
+  - label: bottom runner
+    min: -0.34, -0.33499999999999996, 0.471
+    max: 0.43, -0.24500000000000002, 0.501
+    color: '#664C30'
+  - label: bottom runner
+    min: -0.34, -0.019999999999999993, 0.471
+    max: 0.43, 0.07, 0.501
+    color: '#664C30'
+  - label: bottom runner
+    min: -0.34, 0.29500000000000004, 0.471
+    max: 0.43, 0.385, 0.501
+    color: '#664C30'
+  - label: spacer block
+    min: 0.33999999999999997, -0.33499999999999996, 0.501
+    max: 0.43, -0.24500000000000002, 0.584
+    color: '#775737'
+  - label: spacer block
+    min: -0.045, -0.33499999999999996, 0.501
+    max: 0.045, -0.24500000000000002, 0.584
+    color: '#775737'
+  - label: spacer block
+    min: -0.34, -0.33499999999999996, 0.501
+    max: -0.25, -0.24500000000000002, 0.584
+    color: '#775737'
+  - label: spacer block
+    min: 0.33999999999999997, -0.019999999999999993, 0.501
+    max: 0.43, 0.07, 0.584
+    color: '#775737'
+  - label: spacer block
+    min: -0.045, -0.019999999999999993, 0.501
+    max: 0.045, 0.07, 0.584
+    color: '#775737'
+  - label: spacer block
+    min: -0.34, -0.019999999999999993, 0.501
+    max: -0.25, 0.07, 0.584
+    color: '#775737'
+  - label: spacer block
+    min: 0.33999999999999997, 0.29500000000000004, 0.501
+    max: 0.43, 0.385, 0.584
+    color: '#775737'
+  - label: spacer block
+    min: -0.045, 0.29500000000000004, 0.501
+    max: 0.045, 0.385, 0.584
+    color: '#775737'
+  - label: spacer block
+    min: -0.34, 0.29500000000000004, 0.501
+    max: -0.25, 0.385, 0.584
+    color: '#775737'
+  - label: top support board 5
+    min: -0.34, -0.33499999999999996, 0.584
+    max: 0.43, -0.20500000000000002, 0.621
+    color: '#967350'
+  - label: board grain
+    min: -0.1552, -0.31, 0.621
+    max: 0.2837, -0.292, 0.6225
+    color: '#B18B60'
+  - label: top support board 4
+    min: -0.34, -0.191, 0.584
+    max: 0.43, -0.060999999999999985, 0.621
+    color: '#967350'
+  - label: top support board 3
+    min: -0.34, -0.046999999999999986, 0.584
+    max: 0.43, 0.083, 0.621
+    color: '#967350'
+  - label: board grain
+    min: -0.1552, -0.021999999999999995, 0.621
+    max: 0.2837, -0.004, 0.6225
+    color: '#B18B60'
+  - label: top support board 2
+    min: -0.34, 0.097, 0.584
+    max: 0.43, 0.227, 0.621
+    color: '#967350'
+  - label: top support board 1
+    min: -0.34, 0.241, 0.584
+    max: 0.43, 0.371, 0.621
+    color: '#967350'
+  - label: board grain
+    min: -0.1552, 0.266, 0.621
+    max: 0.2837, 0.284, 0.6225
+    color: '#B18B60'

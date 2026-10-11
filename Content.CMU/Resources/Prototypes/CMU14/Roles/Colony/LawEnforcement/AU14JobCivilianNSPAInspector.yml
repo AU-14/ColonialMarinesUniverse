@@ -47,6 +47,8 @@
     inverted: true
     traits:
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
