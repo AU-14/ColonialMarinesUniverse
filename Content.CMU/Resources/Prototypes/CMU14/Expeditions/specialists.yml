@@ -215,14 +215,15 @@
   parent: CMUExpeditionFieldPack
   id: CMUExpeditionRocketPack
   components:
-  - type: Item
-    size: Ginormous
   - type: Storage
     # The native disposable tube has a 7x4 shape. One half fits the reserve tube;
     # the other half fits the knife, shovel, flare pack and three grenades.
     grid:
     - 0,0,13,3
     maxItemSize: Ginormous
+  - type: Item
+    # as big as the biggest thing it carries, or it's a storage arbitrage loop
+    size: Ginormous
 
 - type: startingGear
   id: CMUExpeditionRocketeerGear

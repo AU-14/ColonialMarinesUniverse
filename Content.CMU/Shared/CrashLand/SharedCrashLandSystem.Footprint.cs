@@ -31,16 +31,7 @@ public abstract partial class SharedCrashLandSystem
         while (planets.MoveNext(out var planet, out _, out var planetGrid))
         {
             // roll inside the planet's real bounds instead of a fixed box that runs past small maps
-            var bounds = planetGrid.LocalAABB;
-            var minX = (int) MathF.Floor(bounds.Left);
-            var maxX = (int) MathF.Ceiling(bounds.Right);
-            var minY = (int) MathF.Floor(bounds.Bottom);
-            var maxY = (int) MathF.Ceiling(bounds.Top);
-            if (maxX <= minX || maxY <= minY)
-            {
-                // bounds not built yet, so use the same box the single-tile picker rolls in
-                (minX, maxX, minY, maxY) = (-200, 200, -200, 200);
-            }
+            var (minX, maxX, minY, maxY) = PlanetTileBounds(planet, planetGrid);
 
             for (var i = 0; i < FootprintAttempts; i++)
             {
@@ -59,6 +50,35 @@ public abstract partial class SharedCrashLandSystem
 
         // nowhere fits the whole hull; keep the old behaviour rather than silently cancelling the crash
         return TryGetCrashLandLocation(out location);
+    }
+
+    // max is exclusive, ready for _random.Next
+    private (int MinX, int MaxX, int MinY, int MaxY) PlanetTileBounds(EntityUid planet, MapGridComponent grid)
+    {
+        var bounds = grid.LocalAABB;
+        if (bounds.Width > 0 && bounds.Height > 0)
+        {
+            return ((int) MathF.Floor(bounds.Left), (int) MathF.Ceiling(bounds.Right),
+                (int) MathF.Floor(bounds.Bottom), (int) MathF.Ceiling(bounds.Top));
+        }
+
+        // the engine never builds LocalAABB for planet maps (grid on the map entity, no chunk fixtures),
+        // so rolling in the ±200 fallback box mostly missed small planets. walk the tiles instead
+        int minX = int.MaxValue, minY = int.MaxValue, maxX = int.MinValue, maxY = int.MinValue;
+        var tiles = _mapSystem.GetAllTilesEnumerator(planet, grid);
+        while (tiles.MoveNext(out var tile))
+        {
+            var index = tile.Value.GridIndices;
+            minX = Math.Min(minX, index.X);
+            minY = Math.Min(minY, index.Y);
+            maxX = Math.Max(maxX, index.X);
+            maxY = Math.Max(maxY, index.Y);
+        }
+
+        if (maxX < minX)
+            return (-200, 200, -200, 200);
+
+        return (minX, maxX + 1, minY, maxY + 1);
     }
 
     private bool FootprintFits(Entity<MapGridComponent> planet, Vector2i anchor, List<Vector2i> footprint)
