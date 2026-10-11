@@ -12926,5 +12926,13 @@
   id: 789
   time: '2026-10-11T16:10:32.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2156
+- author: P-MCT
+  changes:
+  - message: Apollo has just received a distress call from a backwater flyover colony
+      named Fort McNeil.
+    type: Map
+  id: 790
+  time: '2026-10-11T16:24:39.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/2096
 Name: CMU
 Order: -1
