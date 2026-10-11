@@ -148,11 +148,13 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (_guns.TryGetGun(uid, out var heldGun))
             ActivateWeapon(uid, heldGun.Owner);
-        _steering.Unregister(uid);
+        var movingThrow = agent.Action == CMUTacticalAction.ThrowGrenade;
+        if (!movingThrow)
+            _steering.Unregister(uid);
         agent.ActionItem = item;
         var args = new DoAfterArgs(EntityManager, uid, delay, new CMUExpeditionUtilityDoAfterEvent(), uid, used: item)
         {
-            NeedHand = true, BreakOnMove = true, BreakOnDamage = true, DamageThreshold = 0.1f,
+            NeedHand = true, BreakOnMove = !movingThrow, BreakOnDamage = true, DamageThreshold = 0.1f,
             ExtraCheck = () => _mobs.IsAlive(uid) && !HasComp<ActorComponent>(uid) && _npcs.Enabled &&
                 _hands.IsHolding(uid, item, out _) &&
                 (agent.Action != CMUTacticalAction.Reload || ReloadSafe(uid, agent)),
@@ -242,6 +244,11 @@ public sealed partial class CMUExpeditionAgentSystem
             QueueUtilityCleanup(ent, agent, item);
             agent.ActionItem = null;
             agent.ActionComplete = true;
+            if (agent.Action == CMUTacticalAction.ThrowGrenade && agent.SmokeGrenade && agent.Casualty == null)
+            {
+                BeginSmokeWithdrawal(ent, agent, agent.GrenadeTarget, agent.GrenadeObservedContact, _timing.CurTime);
+                RequestThink(agent, _timing.CurTime);
+            }
             if (agent.Action == CMUTacticalAction.Reload)
             {
                 // Release the utility state and ready the weapon immediately. A known

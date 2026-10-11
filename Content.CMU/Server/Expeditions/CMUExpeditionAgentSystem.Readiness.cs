@@ -99,9 +99,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 TryComp<CartridgeAmmoComponent>(round, out var cartridge) && cartridge.Spent);
         if (!pumpNeeded && !chamberNeeded)
             return true;
-        var movingAction = agent.State == CMUExpeditionAgentState.PlanMove &&
-            (agent.Action is CMUTacticalAction.TakeCover or CMUTacticalAction.Flank ||
-                agent.Action == CMUTacticalAction.ThrowGrenade && agent.GrenadeThrowStance != null);
+        var movingAction = agent.State == CMUExpeditionAgentState.PlanMove && MovementActionAllowsFire(uid, agent);
         if (agent.Action != null && !movingAction || agent.Treatment != null || agent.PendingWeapon != null ||
             agent.FlareItem != null || agent.UtilityCleanupItem != null ||
             agent.FireRescueTarget != null || agent.LastStandTarget != null || agent.PendingMeleeWeapon != null ||

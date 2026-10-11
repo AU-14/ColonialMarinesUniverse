@@ -281,6 +281,9 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         if (RunFireResponse(uid, agent, now))
             return;
 
+        if (RunSmokeWithdrawal(uid, agent, now))
+            return;
+
         if (ContinueTreatment(uid, agent, damage, hit, now))
             return;
 
@@ -765,12 +768,20 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         agent.Rifle = gun;
         agent.WeaponBurstLimit = TryComp<CMUExpeditionWeaponRoleComponent>(gun, out var role) ? role.BurstLimit : int.MaxValue;
         EnsureComp<CMUExpeditionWeaponComponent>(gun);
-        // Moving between firing positions does not require a free hand. Keep the rifle ready
-        // through peeks, withdrawals and flanks instead of restarting its native wield delay.
-        var usingHands = agent.Treatment != null || agent.TreatmentMedicine != null || agent.ScavengeTarget != null ||
+        var now = _timing.CurTime;
+        // Free transit uses normal movement speed. Contact and a short readiness hold
+        // keep combat bounds shouldered without repeated native wield delays.
+        var travelling = Traversing(uid) && now >= agent.WeaponRaisedUntil &&
+            (agent.Target == null || now - agent.LastContact >= TimeSpan.FromSeconds(2)) &&
+            now >= agent.ReturnFireUntil && agent.CoveringFor == null && now >= agent.MedicalCoverUntil &&
+            agent.State != CMUExpeditionAgentState.Peeking;
+        var dragging = agent.Action == CMUTacticalAction.DragCasualty ||
+            TryComp<CMUExpeditionMedicComponent>(uid, out var medic) && medic.Phase == CMUExpeditionMedicalPhase.Extract;
+        var usingHands = agent.Treatment != null || agent.TreatmentMedicine != null || agent.FlareItem != null ||
+            agent.UtilityCleanupItem != null || agent.ScavengeTarget != null && agent.RifleLoweredUntil != TimeSpan.Zero ||
             agent.State is CMUExpeditionAgentState.Reloading or CMUExpeditionAgentState.Rescuing or CMUExpeditionAgentState.Throwing or CMUExpeditionAgentState.Healing ||
-            agent.Action is CMUTacticalAction.GrabCasualty or CMUTacticalAction.DragCasualty;
-        if (usingHands || agent.WorkItem != null || agent.PreparingWork || _timing.CurTime < agent.RifleLoweredUntil)
+            agent.Action == CMUTacticalAction.GrabCasualty || dragging;
+        if (usingHands || travelling || agent.WorkItem != null || agent.PreparingWork || now < agent.RifleLoweredUntil)
         {
             _wield.TryUnwield(gun.Owner, uid);
             StowOtherWeapons(uid, gun.Owner);

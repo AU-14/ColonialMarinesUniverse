@@ -53,6 +53,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.ActionDestination = null;
         agent.GrenadeTarget = null;
         agent.SmokeGrenade = false;
+        agent.SmokeWithdrawalDestination = null;
         ClearGrenadeStaging(agent);
         if (goal == CMUTacticalGoal.Fight)
         {
@@ -84,8 +85,10 @@ public sealed partial class CMUExpeditionAgentSystem
             (goal is CMUTacticalGoal.Rearm or CMUTacticalGoal.Recover ||
              goal == CMUTacticalGoal.Fight && (!armed || agent.Crossfire && agent.Stress >= 0.6f && agent.HasCoveringAlly)) &&
             now >= agent.NextGrenade && GrenadeDecisionAvailable(uid, agent, now) &&
-            Grenade(uid, true) is { } screen && SmokePoint(uid, agent, screen, Transform(uid).Coordinates) is { } screening)
+            Grenade(uid, true) is { } screen && SmokePoint(uid, agent, screen, Transform(uid).Coordinates) is { } screening &&
+            FindSmokeWithdrawal(uid, agent, screening, agent.LastSeen, out var withdrawal))
         {
+            agent.SmokeWithdrawalDestination = withdrawal;
             agent.GrenadeTarget = screening;
             agent.SmokeGrenade = true;
             agent.GrenadeDecision = "screen-withdrawal";
@@ -246,7 +249,8 @@ public sealed partial class CMUExpeditionAgentSystem
         if (success && action is A.Reload or A.ThrowGrenade && agent.GrenadeThrowStance == null &&
             _guns.TryGetGun(uid, out _))
         {
-            _steering.Unregister(uid);
+            if (action == A.Reload)
+                _steering.Unregister(uid);
             if (agent.ActionItem is not { } heldItem || !_hands.IsHolding(uid, heldItem, out _))
                 PrepareUtilityHand(uid);
         }
@@ -274,6 +278,9 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool ContinueAction(EntityUid uid, CMUExpeditionAgentComponent agent, float damage, TimeSpan now)
     {
+        if (agent.Action == A.ThrowGrenade && agent.GrenadeThrowStance == null &&
+            agent.CoverDestination != null)
+            ContinueMove(uid, agent, Transform(uid), now);
         if (agent.Action == A.ThrowGrenade && agent.GrenadeThrowStance != null)
             return ContinueGrenadeStaging(uid, agent, now);
         if (agent.Action is A.Reload or A.ThrowGrenade && agent.ActionDoAfter == null && !agent.ActionComplete)
@@ -369,6 +376,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void CancelPlan(EntityUid uid, CMUExpeditionAgentComponent agent, bool failed)
     {
+        agent.SmokeWithdrawalDestination = null;
         ClearScavenging(uid, agent);
         ReleaseManeuver(uid, agent);
         CancelMedical(uid, agent, "task-cancelled", failed);

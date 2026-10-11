@@ -243,9 +243,25 @@ locking the squad forever. `cmu-expedition-ai-status <map ID>` includes the orde
 flag, detour/failure counts, construction decision, scavenged supplies and hazard responses.
 
 Alien escape decisions use nearby threats independently of shooting assignments. Last-seen melee
-positions persist for three seconds through smoke, without reading unseen positions or firing blind.
+positions persist for three seconds through smoke, without reading unseen positions or authorizing shots from melee memory.
 Smoke is withheld during nearby melee pressure. Visible incoming xeno/biomorph projectiles can trigger
 short sidesteps; persistent acid/fire tiles are avoided and trigger escape when underneath a guard.
+
+Smoke withdrawals select a reachable exit before committing the grenade and retain that movement
+after the throw, even without a covering shooter. A pressured guard engulfed by smoke also seeks
+clearer, safer ground. Smoke conceals movement but does not count as protection from bullets.
+
+Incoming rounds wake movement and firing immediately. A locally observed bullet direction or a
+recent directly seen contact can authorize limited suppression through smoke: up to six rounds
+per 2.5-second observation window by default. The aim point is frozen with uncertainty; hidden
+positions and velocities are never tracked. New incoming rounds can renew the evidence. Walls,
+native weapon readiness and an enlarged friendly-fire cone still veto every shot. Hearing alone
+does not authorize fire, and rockets and aimed entity locks still require visibility.
+
+Weapons are lowered during travel without contact and raised for contact or covering fire.
+Casualty approaches, armed retrieval and compatible one-handed utilities permit moving fire;
+grenade preparation can continue while walking. Treatment, reloads and other conflicting hand
+operations retain ownership of their hands and native action restrictions.
 
 Armed scavengers detect visible enemies and use their real loaded weapon with firearm training.
 They shoulder rifles, lead using projectile speed, aim for 0.18 seconds (0.08 after a peek), and fire

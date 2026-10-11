@@ -53,6 +53,8 @@ public sealed partial class CMUExpeditionAgentSystem
             return;
         args.Shots = Math.Min(args.Shots, Math.Max(0,
             VolleySize(agent) - (agent.MovingFire && CanFireWhileMoving(user, agent) ? agent.MovingShotsFired : agent.ShotsFired)));
+        if (agent.FiringAtSuppression)
+            args.Shots = Math.Min(args.Shots, Math.Max(0, agent.ReturnFireRounds));
     }
 
     private void OnGunShot(Entity<CMUExpeditionWeaponComponent> ent, ref GunShotEvent args)
@@ -60,7 +62,12 @@ public sealed partial class CMUExpeditionAgentSystem
         if (HasComp<ActorComponent>(args.User) || !TryComp<CMUExpeditionAgentComponent>(args.User, out var agent))
             return;
         agent.LastShotAt = _timing.CurTime;
-        agent.LastFireControlShotTarget = agent.FiringAtFlash ? null : agent.Target;
+        agent.LastFireControlShotTarget = agent.FiringAtFlash || agent.FiringAtSuppression ? null : agent.Target;
+        if (agent.FiringAtSuppression)
+        {
+            agent.ReturnFireRounds = Math.Max(0, agent.ReturnFireRounds - args.Ammo.Count);
+            agent.SuppressiveShots += args.Ammo.Count;
+        }
         if (agent.FiringAtFlash)
             agent.FlashShots += args.Ammo.Count;
         agent.LastFiredWeapon = ent.Owner;
@@ -122,7 +129,9 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.State == CMUExpeditionAgentState.Recover && agent.CoverAnchor == null;
         var canResume = resuming &&
             (now >= agent.FireAt || UrgentFire(agent, now)) &&
-            (agent.Target is { } target && CombatTargetAlive(target) && Visible(uid, target, agent.FireRange) || TryFlashAim(uid, agent, out _));
+            (agent.Target is { } target && CombatTargetAlive(target) && Visible(uid, target, agent.FireRange) ||
+                TryFlashAim(uid, agent, out _) ||
+                _guns.TryGetGun(uid, out var responding) && TryReturnFireAim(uid, agent, responding, out _));
         if (canResume && UrgentFire(agent, now) && agent.FireAt > now + TimeSpan.FromSeconds(0.1))
             agent.FireAt = now + TimeSpan.FromSeconds(0.1);
         if (agent.State == CMUExpeditionAgentState.HoldAngle && now >= agent.FireAt && canResume)
@@ -172,7 +181,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             agent.LastFireCheck = "no-visible-aim-point";
             agent.LostAimSince ??= now;
-            // Hold the stance through a brief loss behind a tree; never fire without sight.
+            // Hold the stance briefly when neither sight nor fresh incoming-fire evidence authorizes a shot.
             if (now - agent.LostAimSince < TimeSpan.FromSeconds(0.35))
                 return;
             if (agent.PeekPosition is { } unusable)
@@ -234,8 +243,8 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.FlareItem == null && (agent.TrafficNudgeDestination == null || now >= agent.TrafficNudgeUntil) &&
             StartAimedWeapon(uid, agent, gun))
             return;
-        agent.LastFireCheck = _guns.AttemptShoot(uid, gun, point, agent.FiringAtFlash ? null : agent.Target)
-            ? "trigger-accepted" : "native-trigger-rejected";
+        agent.LastFireCheck = _guns.AttemptShoot(uid, gun, point, agent.FiringAtFlash || agent.FiringAtSuppression ? null : agent.Target)
+            ? agent.FiringAtSuppression ? "suppression-trigger-accepted" : "trigger-accepted" : "native-trigger-rejected";
     }
 
     private void EndBurst(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now, bool allowPress = true)
@@ -293,6 +302,7 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         point = default;
         agent.FiringAtFlash = false;
+        agent.FiringAtSuppression = false;
         if (agent.Target is not { } target || !CombatTargetAlive(target) ||
             !AcceptOrderedContact(uid, agent, target) || !Visible(uid, target, agent.FireRange) ||
             !TryComp(target, out TransformComponent? transform))
@@ -301,6 +311,12 @@ public sealed partial class CMUExpeditionAgentSystem
             if (TryComp<CMUExpeditionWeaponRoleComponent>(gun.Owner, out var role) && role.Rocket ||
                 !TryFlashAim(uid, agent, out point))
             {
+                if (TryReturnFireAim(uid, agent, gun, out point))
+                {
+                    agent.FiringAtSuppression = true;
+                    agent.VisionDecision = "returning-fire-at-observed-lane";
+                    return true;
+                }
                 agent.VisionDecision = "no-visible-target-or-flash";
                 return false;
             }
@@ -338,6 +354,13 @@ public sealed partial class CMUExpeditionAgentSystem
         var scatter = Math.Clamp(gun.Comp.CurrentAngle.Theta + gun.Comp.AngleIncreaseModified.Theta -
             gun.Comp.AngleDecayModified.Theta * elapsed, gun.Comp.MinAngleModified.Theta, gun.Comp.MaxAngleModified.Theta);
         var spread = (float) Math.Tan(Math.Min(scatter, Math.PI / 2) / 2);
+        if (agent.FiringAtSuppression)
+        {
+            // Uncertain fire needs a wider cone, checked to the weapon's full range:
+            // a short observed lane is not where the bullets stop travelling.
+            spread += 0.12f;
+            distance = Math.Max(distance, WeaponFireRange(uid, agent));
+        }
         reason = "obstructed-firing-cone";
         if (!FiringLaneClear(uid, start, point))
             return false;
