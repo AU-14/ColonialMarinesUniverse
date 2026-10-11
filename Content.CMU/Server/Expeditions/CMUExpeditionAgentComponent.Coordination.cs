@@ -10,6 +10,9 @@ public sealed partial class CMUExpeditionAgentComponent
     public EntityUid? CoveringFor;
     public TimeSpan CoveringUntil;
     public TimeSpan ManeuverUntil;
+    public EntityUid? ManeuverWaitTarget;
+    public TimeSpan? ManeuverWaitSince;
+    public EntityCoordinates? UncoveredManeuverDestination;
     public string SquadDecision = "idle";
     public EntityCoordinates? ContactDestination;
     public EntityCoordinates? FightingPosition;

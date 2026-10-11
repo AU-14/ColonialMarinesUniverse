@@ -21,14 +21,14 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void DescribeActivity(CMUExpeditionAgentComponent agent)
     {
-        if (agent.Action is { } action)
+        if (agent.Treatment != null || agent.TreatmentMedicine != null)
+            Decision(agent, "medical", agent.Treatment != null ? "native-self-treatment" : "freeing-treatment-hand");
+        else if (agent.Action is { } action)
             Decision(agent, "utility", action.ToString());
         else if (agent.PendingWeapon != null)
             Decision(agent, "weapon", agent.WeaponDecision);
         else if (agent.SpacingDestination != null)
             Decision(agent, "spacing", agent.SpacingDecision);
-        else if (agent.Treatment != null)
-            Decision(agent, "medical", "self-treatment");
         else if (agent.AimedWeapon != null)
             Decision(agent, "aimed-weapon", "native-aim-in-progress");
         else if (agent.FlareItem != null)
@@ -50,10 +50,13 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.RushTarget != null || now - agent.LastHit < TimeSpan.FromSeconds(0.3) ||
             agent.LastDamage >= agent.EmergencyHealDamage || GrenadeDanger(Transform(uid).Coordinates))
         {
-            Decision(agent, "survival", "immediate-threat");
+            // Urgency permits the caller to reconsider a burst. It is not itself an
+            // executed survival action; the controller that actually acts names it.
+            if (agent.DecisionOwner == "fire")
+                agent.DecisionUntil = now;
             return false;
         }
-        if (agent.Action != null || agent.Treatment != null || agent.PendingWeapon != null || agent.FlareItem != null ||
+        if (agent.Action != null || agent.Treatment != null || agent.TreatmentMedicine != null || agent.PendingWeapon != null || agent.FlareItem != null ||
             agent.State != CMUExpeditionAgentState.Engage || agent.ShotsFired <= 0 || now >= agent.BurstEnd ||
             agent.ShotsFired >= VolleySize(agent) || !_guns.TryGetGun(uid, out var gun) || WeaponAmmo(gun) <= 0 ||
             !TryAimPoint(uid, agent, gun, out var aim) || !SafeShot(uid, agent, gun, aim))
