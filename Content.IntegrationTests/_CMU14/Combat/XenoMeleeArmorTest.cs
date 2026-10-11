@@ -75,9 +75,8 @@ public sealed class XenoMeleeArmorTest
             Assert.That(xenoBody, Is.GreaterThan(marineBody),
                 "A xeno body attack must ignore three quarters of the victim's armour, so it lands more.");
 
-            // The claw swing marks itself; the +50% itself lands per target in CMArmorSystem through the
-            // same helper the xeno abilities use, so a swing catching several mobs only boosts the
-            // xeno-sized ones.
+            // The claw swing marks itself; the +50% itself lands per target in CMArmorSystem, gated on
+            // XenoComponent, so a swing catching several mobs only boosts the xeno victims.
             var clawSwing = new MeleeHitEvent(new List<EntityUid> { xeno }, xeno, xeno,
                 new DamageSpecifier(slash, FixedPoint2.New(100)), null);
             entMan.EventBus.RaiseLocalEvent(xeno, clawSwing);
