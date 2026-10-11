@@ -179,7 +179,8 @@ public sealed partial class CMUExpeditionAgentSystem
             var point = _transform.ToCoordinates(start.EntityId, origin.Offset(direction * forward + side * sideways));
             var candidateScore = forward - Math.Abs(sideways) * 0.25f;
             if (candidateScore <= score || !GroundSafe(point) || !SafeGrenade(uid, point, smoke) ||
-                SmokeReserved(uid, agent, point))
+                SmokeReserved(uid, agent, point) ||
+                !SmokeScreensApproach(uid, start, agent.CornerDangerPoint ?? contact, point))
                 continue;
             score = candidateScore;
             best = point;

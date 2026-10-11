@@ -28,6 +28,23 @@
   parent: WeaponSMGM63
   id: CMUExpeditionSMG
   components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: CMMagazineSMGM63
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/smg_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazineSMGM63
+          - CMMagazineSMGM63AP
+          - CMMagazineSMGM63Ext
+          - RMCMagazineSMGM63Rubber
+          - RMCMagazineSMGM63HEAP
+          - RMCMagazineSMGM63WP
+          - RMCMagazineSMGM63Incendiary
   - type: CMUExpeditionWeaponRole
     maximumRange: 11
     closePriority: 8
@@ -42,7 +59,7 @@
     burstLimit: 7
 
 - type: entity
-  parent: WeaponRifleM4SPR
+  parent: WeaponRifleM4SPRFilled
   id: CMUExpeditionMarksmanRifle
   components:
   - type: CMUExpeditionWeaponRole
@@ -88,6 +105,9 @@
     - RMCShovel
     - CMPackFlare
     - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineSMGM63
@@ -135,6 +155,8 @@
     - RMCShovel
     - CMPackFlare
     - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineRifleM54CE2
@@ -183,6 +205,8 @@
     - RMCShovel
     - CMPackFlare
     - CMUExpeditionBlastGrenade
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineRifleM4SPR
@@ -203,7 +227,7 @@
     burstSize: 2
     burstPause: 0.65
     fireRange: 14
-    detectionRange: 22
+    detectionRange: 21
     preferredFireRange: 11
     aggression: 0.35
   - type: Loadout
@@ -246,8 +270,8 @@
     - CMUExpeditionDisposableLauncher
     - RMCM5Bayonet
     - RMCShovel
-    - CMUExpeditionBlastGrenade
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:
