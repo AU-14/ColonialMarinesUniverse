@@ -116,6 +116,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         ent.Comp.State = CMUExpeditionAgentState.Disabled;
     }
 
+    private readonly List<(EntityUid Uid, CMUExpeditionAgentComponent Agent, TransformComponent Transform)> _thinkOrder = new();
+
     public override void Update(float frameTime)
     {
         var now = _timing.CurTime;
@@ -132,9 +134,18 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
         _grenadeHazards.RemoveAll(hazard => hazard.Until <= now);
         if (_npcs.Enabled)
             UpdateSquadPlans(now);
+        // think in uid order, not storage order. the query walks the component dict, and deleted entities leave
+        // holes that new ones fill, so after enough churn (a long round, a recycled test server) agents got
+        // visited in a different order and the first-come stuff (flank slot, covering shooter) went to someone else
+        _thinkOrder.Clear();
         var query = EntityQueryEnumerator<CMUExpeditionAgentComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var agent, out var transform))
+        while (query.MoveNext(out var queued, out var queuedAgent, out var queuedTransform))
+            _thinkOrder.Add((queued, queuedAgent, queuedTransform));
+        _thinkOrder.Sort((a, b) => a.Uid.CompareTo(b.Uid));
+        foreach (var (uid, agent, transform) in _thinkOrder)
         {
+            if (agent.Deleted)
+                continue;
             if (!_npcs.Enabled || HasComp<ActorComponent>(uid) || !_mobs.IsAlive(uid))
             {
                 if (agent.State != CMUExpeditionAgentState.Disabled)
