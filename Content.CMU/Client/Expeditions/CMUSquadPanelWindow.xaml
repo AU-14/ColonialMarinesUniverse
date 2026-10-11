@@ -68,7 +68,7 @@
                 </ScrollContainer>
                 <ScrollContainer HScrollEnabled="False" HorizontalExpand="True" VerticalExpand="True">
                     <BoxContainer Orientation="Vertical" Margin="8" SeparationOverride="8" HorizontalExpand="True">
-                        <Label Text="{Loc cmu-squads-relations-note}" />
+                        <RichTextLabel Text="{Loc cmu-squads-relations-note}" HorizontalExpand="True" />
                         <OptionButton Access="Public" Name="Faction" MinHeight="28" />
                         <Label Text="{Loc cmu-squads-friendly-heading}" Margin="0 8 0 0" />
                         <LineEdit Access="Public" Name="Friendlies" PlaceHolder="{Loc cmu-squads-factions}" />

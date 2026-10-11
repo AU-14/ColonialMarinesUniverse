@@ -67,15 +67,6 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.ExposureScores.Clear();
     }
 
-    // the witnessed-casualty mark (weight 16) walls the body off, so a rescuer could never path to it.
-    // whoever commits to the rescue accepts that spot; everyone else keeps avoiding it
-    private void AcceptCasualtyDanger(CMUExpeditionAgentComponent agent, EntityUid casualty)
-    {
-        var point = Transform(casualty).Coordinates;
-        if (agent.KnownDanger.RemoveAll(danger => _transform.InRange(danger.Point, point, 1f)) > 0)
-            agent.ExposureScores.Clear();
-    }
-
     private float KnownDangerCost(CMUExpeditionAgentComponent agent, EntityCoordinates point)
     {
         if (agent.KnownDanger.Count == 0 && agent.KnownFireLanes.Count == 0)

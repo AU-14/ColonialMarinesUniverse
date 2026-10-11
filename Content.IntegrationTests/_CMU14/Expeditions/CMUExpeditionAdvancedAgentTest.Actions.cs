@@ -35,15 +35,33 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
             EntityUid enemy;
             (map, guard, enemy) = Arena("CMUExpeditionScavenger");
             SEntMan.DeleteEntity(enemy);
+            // Webbing transfers its starting magazines into the uniform on later ticks.
+            // Finish that transfer before fixing the finite reserve, with this agent idle.
+            SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).NextThink = TimeSpan.MaxValue;
+        });
+        await Pair.RunTicksSync(3);
+        await Server.WaitAssertion(() =>
+        {
             Assert.That(Server.System<GunSystem>().TryGetGun(guard, out var gun), Is.True);
             rifle = gun.Owner;
             // Exercise rifle reloads rather than switching to the loadout's backup pistol.
             foreach (var item in Stored(guard).Where(SEntMan.HasComponent<GunComponent>))
                 SEntMan.DeleteEntity(item);
-            // the test counts reloads down to an empty reserve, so trim the loadout to two spares
-            foreach (var item in Stored(guard).Where(item => SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40").Skip(2))
-                SEntMan.DeleteEntity(item);
+            // Keep the finite reserve in native uniform webbing: overlooking that storage
+            // used to leave a loaded-out guard unable to begin reloading an empty rifle.
+            Assert.That(Server.System<InventorySystem>().TryGetSlotEntity(guard, "jumpsuit", out var uniform), Is.True);
+            var reserves = SEntMan.GetComponent<StorageComponent>(uniform!.Value).Container.ContainedEntities
+                .Where(item => SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40")
+                .Take(2).ToHashSet();
+            Assert.That(reserves.Count, Is.EqualTo(2));
+            foreach (var magazine in Stored(guard).Where(item =>
+                         SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40" &&
+                         !reserves.Contains(item)))
+                SEntMan.DeleteEntity(magazine);
+            Assert.That(Stored(guard).Count(item =>
+                SEntMan.GetComponent<MetaDataComponent>(item).EntityPrototype?.ID == "RMCMagazineRifleMAR40"), Is.EqualTo(2));
             Empty();
+            SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).NextThink = SGameTiming.CurTime;
         });
         await WaitForUtility(guard, CMUTacticalAction.Reload);
         await Server.WaitAssertion(() =>
@@ -82,14 +100,11 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
         {
             Assert.That(Server.System<ItemSlotsSystem>().TryEject(rifle, "gun_magazine", guard, out var magazine), Is.True);
             SEntMan.DeleteEntity(magazine!.Value);
-            // the RMC chamber keeps one round after the magazine comes out, and the AI rightly won't reload
-            // a rifle that can still fire, so clear it too
-            if (SEntMan.TryGetComponent<RMCGunChamberComponent>(rifle, out var chamber) &&
-                Server.System<SharedContainerSystem>().TryGetContainer(rifle, chamber.ContainerId, out var reserve))
-            {
-                foreach (var round in reserve.ContainedEntities.ToArray())
+            // Removing an RMC magazine retains a live chambered round.
+            var chamber = SEntMan.GetComponent<RMCGunChamberComponent>(rifle);
+            if (Server.System<SharedContainerSystem>().TryGetContainer(rifle, chamber.ContainerId, out var container))
+                foreach (var round in container.ContainedEntities.ToArray())
                     SEntMan.DeleteEntity(round);
-            }
         }
     }
 
@@ -300,10 +315,14 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
     private List<EntityUid> Stored(EntityUid guard)
     {
         var items = new List<EntityUid>();
-        foreach (var slot in new[] { "back", "belt" })
+        var slots = Server.System<InventorySystem>().GetSlotEnumerator(guard);
+        while (slots.MoveNext(out var slot))
         {
-            Assert.That(Server.System<InventorySystem>().TryGetSlotEntity(guard, slot, out var bag), Is.True);
-            items.AddRange(SEntMan.GetComponent<StorageComponent>(bag!.Value).Container.ContainedEntities);
+            if (slot.ContainedEntity is not { } item)
+                continue;
+            items.Add(item);
+            if (SEntMan.TryGetComponent<StorageComponent>(item, out var storage))
+                items.AddRange(storage.Container.ContainedEntities);
         }
         return items;
     }
@@ -320,7 +339,12 @@ public sealed partial class CMUExpeditionAdvancedAgentTest
                 preparing = agent.Action == action && agent.ActionDoAfter != null;
             });
         }
-        await Server.WaitAssertion(() => Assert.That(preparing, Is.True,
-            $"The guard must start a real {action} do-after before it can be interrupted."));
+        await Server.WaitAssertion(() =>
+        {
+            var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
+            Assert.That(preparing, Is.True,
+                $"The guard must start a real {action} do-after before it can be interrupted. " +
+                $"state={agent.State}, action={agent.Action}, weapon={agent.WeaponDecision}, failures={agent.FailedPlans}");
+        });
     }
 }

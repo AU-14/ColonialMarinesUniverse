@@ -249,9 +249,6 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             return;
         ValidateCover(uid, agent, hit, now);
 
-        if (RespondToIncomingFire(uid, agent, now))
-            return;
-
         if (AvoidAlienAttack(uid, agent, now))
         {
             CancelAimedWeapon(agent);
@@ -263,6 +260,16 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             return;
 
         if (ContinueTreatment(uid, agent, damage, hit, now))
+            return;
+
+        // A serious wound commits to shelter before optional firing/spacing can
+        // replace that route. Immediate melee and fire escapes retain priority.
+        if ((agent.State == CMUExpeditionAgentState.Retreat || damage >= agent.EmergencyHealDamage) &&
+            _guns.TryGetGun(uid, out var retreatGun) && WeaponAmmo(retreatGun) > 0 &&
+            RunRetreat(uid, agent, transform, true, damage, hit, now))
+            return;
+
+        if (RespondToIncomingFire(uid, agent, now))
             return;
 
         if (RunLastStand(uid, agent, now))
@@ -351,26 +358,8 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             FollowOrders(uid, agent, now);
             return;
         }
-        if (agent.State != CMUExpeditionAgentState.Retreat && agent.State != CMUExpeditionAgentState.OutOfAmmo &&
-            (!hasAmmo || damage >= agent.RetreatDamage && now >= agent.NextRetreat &&
-                HasMedicine(uid) && ShouldTreat(agent, damage, now)))
-        {
-            BeginRetreat(uid, agent, transform, hasAmmo, now);
-        }
-
-        if (agent.State is CMUExpeditionAgentState.Retreat or CMUExpeditionAgentState.OutOfAmmo)
-        {
-            if (!hasAmmo && (hit || GrenadeDanger(transform.Coordinates)) && now >= agent.NextRetreat)
-                BeginRetreat(uid, agent, transform, false, now);
-            if (ContinueMove(uid, agent, transform, now))
-                return;
-            if (TryTreat(uid, agent, damage, now))
-                return;
-            if (!hasAmmo || now < agent.HoldUntil)
-                return;
-            agent.State = agent.CoverAnchor != null ? CMUExpeditionAgentState.Recover : CMUExpeditionAgentState.Guard;
-            agent.FireAt = now;
-        }
+        if (RunRetreat(uid, agent, transform, hasAmmo, damage, hit, now))
+            return;
 
         // Suppression must not cancel every peek before its first shot. Ordinary pressure
         // can cut a volley short after firing; life-threatening damage can interrupt at once.
@@ -808,6 +797,13 @@ public sealed partial class CMUExpeditionAgentSystem : EntitySystem
             agent.NextRetreat = now + TimeSpan.FromSeconds(6);
             return;
         }
+        // Retiring the old hand/movement task once prevents a stale spacing
+        // destination or utility action from taking this shelter route back.
+        if (agent.Action != null)
+            CancelPlan(uid, agent, false);
+        StopSpacing(uid, agent);
+        CancelAimedWeapon(agent);
+        CancelFlare(uid, agent);
         agent.CoverAnchor = position?.Anchor;
         var destination = position?.Anchor ?? FindAmmoEscape(uid, agent, transform.Coordinates);
         if (destination is { } retreat)

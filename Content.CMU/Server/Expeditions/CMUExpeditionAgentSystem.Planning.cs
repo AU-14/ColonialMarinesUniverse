@@ -229,10 +229,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 break;
             case A.ApproachCasualty:
                 if (ValidCasualty(uid, agent) && TryReserveManeuver(uid, agent, now))
-                {
-                    AcceptCasualtyDanger(agent, agent.Casualty!.Value);
-                    success = StartPlanMove(uid, agent, Transform(agent.Casualty.Value).Coordinates, now);
-                }
+                    success = ApproachCasualty(uid, agent, now);
                 break;
             case A.GrabCasualty:
                 if (_guns.TryGetGun(uid, out var gun))
