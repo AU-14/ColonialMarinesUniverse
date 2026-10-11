@@ -221,6 +221,9 @@
     grid:
     - 0,0,13,3
     maxItemSize: Ginormous
+  - type: Item
+    # as big as the biggest thing it carries, or it's a storage arbitrage loop
+    size: Ginormous
 
 - type: startingGear
   id: CMUExpeditionRocketeerGear
