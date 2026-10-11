@@ -329,16 +329,31 @@ public sealed class CMUExpeditionAgentTest : GameTest
             SEntMan.DeleteEntity(enemy);
             var agents = Server.System<CMUExpeditionAgentSystem>();
             agents.ResetOrders(guards[0], agent);
-            var failed = SEntMan.GetComponent<TransformComponent>(guards[0]).Coordinates.Offset(new Vector2(-3, 0));
+            // Order cancellation preserves observed danger. End that combat stimulus
+            // before checking a movement timeout, so evasion cannot replace this route.
+            agent.IncomingFireUntil = agent.SuppressedUntil = TimeSpan.Zero;
+            agent.KnownDanger.Clear();
+            agent.KnownFireLanes.Clear();
+            var position = SEntMan.GetComponent<TransformComponent>(guards[0]).Coordinates;
+            var failed = position.Offset(new Vector2(-3, 0));
             // A reachable timeout now retries a local detour. Block the destination so
             // this check exercises a real failed move after that recovery is exhausted.
             SEntMan.SpawnEntity("CMUExpeditionHull", failed);
             agent.CoverDestination = failed;
             agent.State = CMUExpeditionAgentState.Reposition;
+            // A new waypoint counts as progress and grants slow wading more time.
+            // Seed the previous observation to represent an actually stalled move.
+            agent.MoveProgressDestination = failed;
+            agent.MoveProgressDistance = Vector2.Distance(position.Position, failed.Position);
+            agent.MoveProgressAt = SGameTiming.CurTime - TimeSpan.FromSeconds(2);
             agent.MoveUntil = SGameTiming.CurTime - TimeSpan.FromSeconds(1);
+            agent.FailedPosition = null;
+            agent.LastMoveFailed = false;
             agent.NextThink = SGameTiming.CurTime;
             agents.Update(0);
-            Assert.That(agent.FailedPosition, Is.EqualTo(failed), "Timed-out actions must inform the next position search.");
+            Assert.That(agent.FailedPosition, Is.EqualTo(failed),
+                $"Timed-out actions must inform the next position search: {agent.State}, {agent.DecisionOwner}/{agent.DecisionReason}.");
+            Assert.That(agent.LastMoveFailed, Is.True);
             Assert.That(agent.AvoidPositionUntil, Is.GreaterThan(SGameTiming.CurTime));
             SEntMan.DeleteEntity(map);
         });
