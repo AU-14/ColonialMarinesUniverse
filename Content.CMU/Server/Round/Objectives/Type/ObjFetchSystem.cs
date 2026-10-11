@@ -251,9 +251,11 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             if (!TryComp(objUid, out CMUObjectiveComponent? auComp) || !auComp.Active)
                 continue;
 
-            if (TryComp(objUid, out FetchObjectiveComponent? fetchComp)
-                    && !string.IsNullOrEmpty(fetchComp.TargetPrototype)
-                    && !string.Equals(fetchComp.TargetPrototype, proto, StringComparison.OrdinalIgnoreCase))
+            // the interest list is shared with kill/arrest/destroy/interact objectives and wildcard ones match
+            // every entity, so only claim for a fetch objective that wants this exact proto. otherwise bodies,
+            // cades and vendors become fetch items and ping on intel detectors
+            if (!TryComp(objUid, out FetchObjectiveComponent? fetchComp)
+                    || !string.Equals(fetchComp.TargetPrototype, proto, StringComparison.OrdinalIgnoreCase))
                 continue;
 
             if (HasComp<FetchItemComponent>(uid))

@@ -757,10 +757,6 @@
         amount: 5
       - id: RuMCUPPNavalInfantryCapUshankaCommander
         amount: 10
-    - name: Backpack
-      entries:
-      - id: RMCBackpackRTOSPP
-        amount: 5
     - name: Pouches
       entries:
       - id: AU14PouchCommandFill

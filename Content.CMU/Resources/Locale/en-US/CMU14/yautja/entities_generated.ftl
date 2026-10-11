@@ -501,6 +501,9 @@ ent-CMUYautjaHoundObservationPadInternalCamera = Hellhound Observation Interface
 ent-CMUYautjaHivebreaker = hivebreaker
     .desc = A device used by fallen Yautja to break a Xenomorph Hivemind and enthrall a serpent.
 
+ent-CMUWeYuHivebreaker = salvaged hivebreaker
+    .desc = A recovered Yautja hivebreaker, its alien interlocks cut out and rewired by Weyland-Yutani. Breaks a serpent's link to the Hivemind and binds it to whoever holds the device.
+
 ent-CMUYautjaTemporaryLandingZoneFolded = temporary landing zone
     .desc = PLACEHOLDER
 
