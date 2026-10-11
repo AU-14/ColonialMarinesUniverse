@@ -20505,6 +20505,7 @@ entities:
     - Vehicle
     - VehicleOperatorDamage
     - GridVehicleMover
+    - InputMover
     - VehicleOvercharge
     - VehicleSound
     - VehicleSpotlight
@@ -20809,6 +20810,19 @@ entities:
     - type: Physics
       linearDamping: 8
       angularDamping: 8
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000001
+    components:
+    - type: MetaData
+      name: Fort McNeil ground relay
+    - type: Transform
+      pos: 72.5,64.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: fort-mcneil.ground.relay
+      displayName: Fort McNeil Ground Relay
 - proto: CableHV
   entities:
   - uid: 9591
@@ -46412,11 +46426,6 @@ entities:
           - 11057
           showEnts: False
           occludes: True
-    - type: UserInterface
-      actors:
-        enum.StorageUiKey.Key:
-        - invalid
-    - type: ActiveUserInterface
 - proto: RMCPowerCellCrap
   entities:
   - uid: 7985
