@@ -10,6 +10,7 @@ ent-RMCTechTreeConsoleCLF = CLF tech tree console
 ent-CMUIntelTechTree_GOVFOR = intel tech tree (GovFor)
 ent-CMUIntelTechTree_OPFOR = intel tech tree (OpFor)
 ent-CMUIntelTechTree_CLF = intel tech tree (CLF)
+ent-CMUIntelTechTree_UA = intel tech tree (UA)
 
 ## Tech tiers
 cmu-tech-tier-one = Unlock Tier 1
@@ -102,3 +103,16 @@ cmu-tech-clf-prodigy-yankee-desc = Summon a PMC team from PART, specifically Yan
 
 ## CLF Announcements
 cmu-tech-clf-prodigy-yankee-announce = A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+
+## UA
+cmu-tech-ua-req-budget = Requisition Budget Increase
+cmu-tech-ua-req-budget-desc = Distributes resources to requisitions for spending.
+cmu-tech-ua-us-army-armored = US Army 32nd ArmDiv reinforcements
+cmu-tech-ua-us-army-armored-desc = Summon a squad from US Army 32nd Armored Division.
+cmu-tech-ua-prodigy-yankee = Prodigy Armed Repair Team Yankee
+cmu-tech-ua-prodigy-yankee-desc = Summon a PMC team from PART, specifically Yankee Squad
+
+## UA Announcements
+cmu-tech-ua-req-budget-announce = Additional supply budget has been authorised for this operation.
+cmu-tech-ua-us-army-armored-announce = A US Army 32nd Armored Division squad has been dispatched to aid with the operation.
+cmu-tech-ua-prodigy-yankee-announce = A Prodigy Armed Repair Team has been dispatched to aid with the operation.
