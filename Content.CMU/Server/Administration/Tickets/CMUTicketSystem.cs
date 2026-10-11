@@ -555,14 +555,15 @@ public sealed partial class CMUTicketSystem : EntitySystem
             admin.Channel);
     }
 
+    // In-game admins are inactive but still handle AHelps, so both go through the AHelp view of admin data.
     private bool IsTicketAdmin(ICommonSession session)
     {
-        return _adminManager.GetAdminData(session)?.HasFlag(AdminFlags.Adminhelp) ?? false;
+        return ((AdminManager) _adminManager).CMUHasAhelp(session);
     }
 
     private IEnumerable<ICommonSession> GetTicketAdmins()
     {
-        return _adminManager.ActiveAdmins.Where(IsTicketAdmin);
+        return ((AdminManager) _adminManager).CMUAhelpAdmins;
     }
 
     private void BroadcastUpdate(CMUTicketInfo ticket)
@@ -628,8 +629,8 @@ public sealed partial class CMUTicketSystem : EntitySystem
 
     private void OnPermsChanged(AdminPermsChangedEventArgs args)
     {
-        var hasAdminhelp = args.Flags is { } flags && (flags & AdminFlags.Adminhelp) != 0;
-        if (!hasAdminhelp)
+        // Not args.Flags: entering in-game admin mode clears them, but the admin keeps the AHelp and their claims.
+        if (!IsTicketAdmin(args.Player))
         {
             ReleaseClaimsBy(args.Player.UserId, args.Player.Name);
             return;

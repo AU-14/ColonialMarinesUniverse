@@ -1,4 +1,5 @@
 using Content.Client.CMU14.Administration.Tickets;
+using Content.Client.UserInterface.Systems.Bwoink;
 using Content.Shared.Administration;
 using Content.Shared.CMU14.Administration.Tickets;
 using Robust.Client.Player;
@@ -125,7 +126,8 @@ public sealed partial class BwoinkControl
 
     private void CMUUpdateTicketControls()
     {
-        var visible = _cmuTickets != null && _adminManager.HasFlag(AdminFlags.Adminhelp);
+        // Through the AHelp controller so in-game admins, who are inactive, keep the ticket controls.
+        var visible = _cmuTickets != null && _ui.GetUIController<AHelpUIController>().CMUHasAhelp();
         CMUTicketStatusLabel.Visible = visible;
         CMUTicketClaim.Visible = visible;
         CMUTicketClose.Visible = visible;

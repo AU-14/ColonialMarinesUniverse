@@ -115,6 +115,8 @@ public sealed partial class AdminSystem : EntitySystem
         {
             RaiseNetworkEvent(updateEv, admin.Channel);
         }
+
+        CMURelayToIngameAdmins(updateEv); // CMU14: in-game admins get the list without antag details
     }
 
     private void OnPlayerRenamed(Entity<ActorComponent> ent, ref EntityRenamedEvent args)
@@ -135,6 +137,8 @@ public sealed partial class AdminSystem : EntitySystem
         {
             RaiseNetworkEvent(playerInfoChangedEvent, admin.Channel);
         }
+
+        CMURelayToIngameAdmins(playerInfoChangedEvent); // CMU14: in-game admins get the update without antag details
     }
 
     public PlayerInfo? GetCachedPlayerInfo(NetUserId? netUserId)

@@ -321,7 +321,7 @@ namespace Content.Server.Administration.Systems
             _typingUpdateTimestamps[args.SenderSession.UserId] = (_timing.RealTime, msg.Typing);
 
             // Non-admins can only ever type on their own ahelp, guard against fake messages
-            var isAdmin = _adminManager.GetAdminData(args.SenderSession)?.HasFlag(AdminFlags.Adminhelp) ?? false;
+            var isAdmin = CMUAhelpAdminData(args.SenderSession)?.HasFlag(AdminFlags.Adminhelp) ?? false; // CMU14: in-game admins
             var channel = isAdmin ? msg.Channel : args.SenderSession.UserId;
             var update = new BwoinkPlayerTypingUpdated(channel, args.SenderSession.Name, msg.Typing);
 
@@ -706,7 +706,7 @@ namespace Content.Server.Administration.Systems
             // TODO: Sanitize text?
             // Confirm that this person is actually allowed to send a message here.
             var personalChannel = senderSession.UserId == message.UserId;
-            var senderAdmin = _adminManager.GetAdminData(senderSession);
+            var senderAdmin = CMUAhelpAdminData(senderSession); // CMU14: in-game admins
             var senderAHelpAdmin = senderAdmin?.HasFlag(AdminFlags.Adminhelp) ?? false;
             var authorized = personalChannel && !message.AdminOnly || senderAHelpAdmin;
             if (!authorized)
@@ -782,8 +782,8 @@ namespace Content.Server.Administration.Systems
 
         private IList<INetChannel> GetNonAfkAdmins()
         {
-            return _adminManager.ActiveAdmins
-                .Where(p => (_adminManager.GetAdminData(p)?.HasFlag(AdminFlags.Adminhelp) ?? false) &&
+            return CMUAhelpAdmins() // CMU14: in-game admins
+                .Where(p => (CMUAhelpAdminData(p)?.HasFlag(AdminFlags.Adminhelp) ?? false) &&
                             !_afkManager.IsAfk(p))
                 .Select(p => p.Channel)
                 .ToList();
@@ -791,8 +791,8 @@ namespace Content.Server.Administration.Systems
 
         private IList<INetChannel> GetTargetAdmins()
         {
-            return _adminManager.ActiveAdmins
-                .Where(p => _adminManager.GetAdminData(p)?.HasFlag(AdminFlags.Adminhelp) ?? false)
+            return CMUAhelpAdmins() // CMU14: in-game admins
+                .Where(p => CMUAhelpAdminData(p)?.HasFlag(AdminFlags.Adminhelp) ?? false)
                 .Select(p => p.Channel)
                 .ToList();
         }

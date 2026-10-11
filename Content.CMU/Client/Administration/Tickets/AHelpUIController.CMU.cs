@@ -1,3 +1,4 @@
+using Content.Client.CMU14.Administration;
 using Content.Client.CMU14.Administration.Tickets;
 using Content.Shared.Administration;
 using Content.Shared.CMU14.Administration.Tickets;
@@ -64,8 +65,44 @@ public sealed partial class AHelpUIController : IOnSystemChanged<CMUTicketClient
         }
 
         // A fresh admin handler replays the whole mirror while it is created.
-        if (_adminManager.HasFlag(AdminFlags.Adminhelp))
+        if (CMUHasAhelp())
             EnsureUIHelper();
+    }
+}
+
+// CMU14 class: in-game admin mode. The admin is inactive, so the client admin manager no longer reports
+// Adminhelp; CMUIngameAdminClientSystem says they still handle AHelps.
+public sealed partial class AHelpUIController : IOnSystemChanged<CMUIngameAdminClientSystem>
+{
+    private CMUIngameAdminClientSystem? _cmuIngameAdmin;
+
+    /// <summary>
+    /// Whether the local player gets the admin AHelp window: an Adminhelp admin or an in-game admin.
+    /// </summary>
+    public bool CMUHasAhelp()
+    {
+        return _adminManager.HasFlag(AdminFlags.Adminhelp) || (_cmuIngameAdmin?.IngameAdmin ?? false);
+    }
+
+    public void OnSystemLoaded(CMUIngameAdminClientSystem system)
+    {
+        _cmuIngameAdmin = system;
+        system.OnStateChanged += CMUOnIngameAdminChanged;
+    }
+
+    public void OnSystemUnloaded(CMUIngameAdminClientSystem system)
+    {
+        system.OnStateChanged -= CMUOnIngameAdminChanged;
+        _cmuIngameAdmin = null;
+    }
+
+    private void CMUOnIngameAdminChanged()
+    {
+        if (_playerManager.LocalUser == null)
+            return;
+
+        EnsureUIHelper();
+        UpdateUnreadState();
     }
 }
 

@@ -235,6 +235,7 @@ namespace Content.Server.Administration.Managers
                 }
             }
 
+            CMUApplyIngameAdmin(player); // CMU14: a reload keeps in-game admin mode
             SendPermsChangedEvent(player);
             UpdateAdminStatus(player);
         }
@@ -340,6 +341,7 @@ namespace Content.Server.Administration.Managers
             msg.AvailableCommands = commands.ToArray();
 
             _netMgr.ServerSendMessage(msg, session.Channel);
+            CMUOnAdminStatusSent(session); // CMU14: in-game admin mode follows every admin status change
         }
 
         private void PlayerStatusChanged(object? sender, SessionStatusEventArgs e)
@@ -389,6 +391,7 @@ namespace Content.Server.Administration.Managers
             };
 
             _admins.Add(session, reg);
+            CMUApplyIngameAdmin(session); // CMU14: a relog keeps in-game admin mode
 
             if (session.ContentData()!.Stealthed)
                 reg.Data.Stealth = true;

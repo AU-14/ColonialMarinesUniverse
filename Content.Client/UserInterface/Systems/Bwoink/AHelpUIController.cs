@@ -144,7 +144,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         }
         if (message.PlaySound && localPlayer.UserId != message.TrueSender)
         {
-            if (_aHelpSound != null && (_bwoinkSoundEnabled || !_adminManager.IsActive()))
+            if (_aHelpSound != null && (_bwoinkSoundEnabled || !(_adminManager.IsActive() || CMUHasAhelp()))) // CMU14: in-game admins keep the sound setting
                 _audio.PlayGlobal(_aHelpSound, Filter.Local(), false);
             _clyde.RequestWindowAttention();
         }
@@ -173,7 +173,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
 
     public void EnsureUIHelper()
     {
-        var isAdmin = _adminManager.HasFlag(AdminFlags.Adminhelp);
+        var isAdmin = CMUHasAhelp(); // CMU14: in-game admins keep the admin AHelp window
 
         if (UIHelper != null && UIHelper.IsAdmin == isAdmin)
             return;
@@ -284,7 +284,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
     // RMC14
     private void UpdateUnreadState()
     {
-        var isAdmin = _adminManager.HasFlag(AdminFlags.Adminhelp);
+        var isAdmin = CMUHasAhelp(); // CMU14: in-game admins
         var isMentor = _staffHelp.IsMentor;
         var red = isAdmin && _hasUnreadAHelp || isMentor && _hasUnreadMHelp;
 
