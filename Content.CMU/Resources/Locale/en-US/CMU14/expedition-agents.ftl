@@ -164,3 +164,4 @@ cmu-expedition-order-target = Set target factions; AllHostile engages all non-fr
 cmu-expedition-ai-door-status = Doors: { $decision }; waiting for { $door }; opened { $opened }; failed { $failures }.
 ent-CMUExpeditionRocketPack = expedition launcher carrier
     .desc = A field pack with external lashings for one reserve disposable launcher alongside its ordinary supplies.
+cmu-expedition-ai-status-budget = All maps, last tick: {$processed} decisions completed, {$deferred} deferred, {$milliseconds} ms deciding. Firing checks run every tick.

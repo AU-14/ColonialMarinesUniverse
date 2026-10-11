@@ -336,7 +336,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 case CMUSquadPanelAction.AimSkill:
                     agent.AimSkill = message.AimSkillPercent / 100f;
                     agent.NextAimCorrection = TimeSpan.Zero;
-                    agent.NextThink = _timing.CurTime;
+                    RequestThink(agent, _timing.CurTime);
                     break;
                 case CMUSquadPanelAction.Friendly:
                 case CMUSquadPanelAction.Target:
