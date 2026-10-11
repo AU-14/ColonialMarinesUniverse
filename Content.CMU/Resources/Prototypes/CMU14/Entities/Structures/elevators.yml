@@ -1,7 +1,11 @@
-# Give each lift a unique elevatorId on its control and rails. A connected,
-# closed rail loop defines the movable footprint, so it can be irregularly shaped.
-# The controller must be on the platform; destinations need aligned, clear space
-# on the adjacent linked z-level.
+# Give each lift a unique elevatorId on its control, rails, walls, and doors. Rails are
+# directional: each fences the side of its tile that it faces. Place them on the
+# platform's edge tiles facing outward so the fence fully encloses the control; any
+# shape works. CMUElevatorWall and CMUElevatorDoor fill their whole tile and can
+# replace rails edge-to-edge. The control has no collision and may share a rail's tile.
+# The controller must be on the platform. Players pick any linked floor from the control;
+# destinations need aligned, clear space and every level in between must be open.
+# Put a CMUElevatorCallButton with the same elevatorId on each floor to call the lift.
 # Contained inventory travels with its owner and does not add to the entity limit.
 # Anchored platform structures remain anchored after travel.
 - type: entity
@@ -20,14 +24,36 @@
     state: raised
   - type: CMUElevatorRail
 
+# Full-tile pieces: they join the platform and travel with it, and they close the
+# outline just like railings. Connect them edge-to-edge around the platform.
+- type: entity
+  parent: RMCWallElevator
+  id: CMUElevatorWall
+  description: An elevator shaft wall. Walls and doors with the same elevator ID as the control form part of the platform's outline.
+  components:
+  - type: CMUElevatorRail
+    fullTile: true
+
+- type: entity
+  parent: CMUAirlockUPPGrey
+  id: CMUElevatorDoor
+  name: elevator door
+  description: An elevator door. Walls and doors with the same elevator ID as the control form part of the platform's outline.
+  components:
+  - type: CMUElevatorRail
+    fullTile: true
 - type: entity
   parent: BaseStructure
   id: CMUElevatorControl
   name: elevator control
-  description: Use to move the elevator between linked z-levels. The control must be inside its closed rail outline.
+  description: Use to send the elevator to any linked floor. The control must be inside its closed rail outline.
   placement:
     mode: SnapgridCenter
   components:
+  # Walk-through, so it can share a platform tile with railings and riders.
+  - type: Physics
+    bodyType: Static
+    canCollide: false
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: elevator
@@ -40,3 +66,26 @@
   - type: CMUElevator
   - type: CMUElevatorWeightLimit
     maxEntities: 20
+
+# Place one on each floor the elevator serves, outside the shaft, with the elevator's ID.
+- type: entity
+  id: CMUElevatorCallButton
+  name: elevator call button
+  description: Calls the elevator to this floor.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _RMC14/Objects/door_button.rsi
+    state: doorctrl
+  - type: Clickable
+  - type: InteractionOutline
+  - type: WallMount
+    arc: 360
+  - type: CMUElevatorCallButton
