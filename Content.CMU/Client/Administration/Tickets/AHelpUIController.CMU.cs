@@ -33,8 +33,9 @@ public sealed partial class AHelpUIController : IOnSystemChanged<CMUTicketClient
         if (UIHelper is not AdminAHelpUIHandler admin || _cmuTickets == null)
             return;
 
-        admin.CMUReplay(_cmuTickets.History);
-        // The mirror only holds what this client saw while it was an admin; ask for the server copy.
+        // Shows the local mirror at once. It only holds what this client saw while it was an admin, so the
+        // server copy is requested too and replaces it when it lands.
+        admin.CMUReplay(_cmuTickets.History, authoritative: false);
         _cmuTickets.RequestSnapshot();
     }
 
@@ -55,9 +56,10 @@ public sealed partial class AHelpUIController : IOnSystemChanged<CMUTicketClient
         if (_cmuTickets == null || _playerManager.LocalUser == null)
             return;
 
+        // The mirror now holds the server snapshot, which is authoritative over what the handler shows.
         if (UIHelper is AdminAHelpUIHandler admin)
         {
-            admin.CMUReplay(_cmuTickets.History);
+            admin.CMUReplay(_cmuTickets.History, authoritative: true);
             return;
         }
 
@@ -69,7 +71,7 @@ public sealed partial class AHelpUIController : IOnSystemChanged<CMUTicketClient
 
 public sealed partial class AdminAHelpUIHandler
 {
-    // Channels that already show lines in this handler. Replays skip them so nothing is doubled.
+    // Channels that already show lines in this handler. Local-mirror replays skip them so nothing is doubled.
     private readonly HashSet<NetUserId> _cmuFilledChannels = new();
 
     public void CMUMarkFilled(NetUserId channel)
@@ -78,17 +80,26 @@ public sealed partial class AdminAHelpUIHandler
     }
 
     /// <summary>
-    /// Writes stored history into channels that have no lines yet, without counting them as unread.
+    /// Writes stored history into channels without counting it as unread. An <paramref name="authoritative"/>
+    /// replay is the server snapshot: every channel it carries is cleared and refilled, so lines this client
+    /// missed (for example while deadminned) appear. Otherwise only channels with no lines yet are filled.
     /// </summary>
-    public void CMUReplay(IReadOnlyDictionary<NetUserId, List<CMUTicketMessageEntry>> history)
+    public void CMUReplay(IReadOnlyDictionary<NetUserId, List<CMUTicketMessageEntry>> history, bool authoritative)
     {
         NetUserId? replayed = null;
         foreach (var (channel, lines) in history)
         {
-            if (lines.Count == 0 || !_cmuFilledChannels.Add(channel))
+            if (lines.Count == 0)
+                continue;
+
+            var filled = !_cmuFilledChannels.Add(channel);
+            if (filled && !authoritative)
                 continue;
 
             var panel = EnsurePanel(channel);
+            if (filled)
+                panel.CMUClearLines();
+
             foreach (var line in lines)
             {
                 var message = new SharedBwoinkSystem.BwoinkTextMessage(

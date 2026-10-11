@@ -52,8 +52,9 @@ public sealed class CMUAntagSubtypeTest : GameTest
     private static readonly ResPath CMUPrototypeRoot = new("/Prototypes/CMU14");
 
     /// <summary>
-    /// Every non-abstract antag mind role authored under the CMU prototype root must name a localized subtype,
-    /// so a newly added CMU antag cannot silently fall back to the generic role type in admin tooling.
+    /// Every non-abstract antag mind role authored under the CMU prototype root must name a localized subtype
+    /// and carry an admin icon, so a newly added CMU antag cannot silently fall back to the generic role type
+    /// or the generic dagger in admin tooling.
     /// </summary>
     [Test]
     public async Task CMUAntagMindRolesHaveLocalizedSubtypes()
@@ -94,6 +95,7 @@ public sealed class CMUAntagSubtypeTest : GameTest
         await Server.WaitAssertion(() =>
         {
             var antagRoles = new Dictionary<string, MindRoleComponent>();
+            var withIcon = new HashSet<string>();
             foreach (var id in cmuEntityIds)
             {
                 if (!prototypes.TryIndex<EntityPrototype>(id, out var proto) ||
@@ -105,6 +107,8 @@ public sealed class CMUAntagSubtypeTest : GameTest
                 }
 
                 antagRoles[id] = mindRole;
+                if (proto.TryComp<CMUAdminRoleIconComponent>(out _, factory))
+                    withIcon.Add(id);
             }
 
             Assert.Multiple(() =>
@@ -118,6 +122,9 @@ public sealed class CMUAntagSubtypeTest : GameTest
                     Assert.That(mindRole.Subtype, Is.Not.Null, $"{id} has no subtype");
                     if (mindRole.Subtype is { } subtype)
                         Assert.That(loc.HasString(subtype), $"{id} subtype {subtype} is not localized");
+
+                    // The subtype name is shown next to an icon; without one admins get the generic dagger.
+                    Assert.That(withIcon, Does.Contain(id), $"{id} has no {nameof(CMUAdminRoleIconComponent)}");
                 }
             });
         });

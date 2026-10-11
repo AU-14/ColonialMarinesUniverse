@@ -45,6 +45,10 @@
     exclusiveAntag: true
     roleType: SoloAntagonist
     subtype: cmu-role-subtype-cannibal
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudmutineer
 
 - type: antag
   parent: CMUAntagColonyBase

@@ -105,8 +105,8 @@ public sealed partial class CMUTicketSystem : EntitySystem
 
     /// <summary>
     /// Stores one channel line, opening a ticket first when the player writes in their own channel
-    /// with no open ticket. An admin's first player-visible reply into an open ticket marks it answered.
-    /// Returns the ticket that was opened, if any.
+    /// with no open ticket. An admin's first player-visible reply into a ticket that is not closed marks it
+    /// answered, and claims it for them when nobody holds it. Returns the ticket that was opened, if any.
     /// </summary>
     public CMUTicketInfo? RecordMessage(
         NetUserId channel,
@@ -128,19 +128,48 @@ public sealed partial class CMUTicketSystem : EntitySystem
                  !adminOnly &&
                  sender != SharedBwoinkSystem.SystemUserId &&
                  _tickets.TryGetValue(channel, out var ticket) &&
-                 ticket is { Status: CMUTicketStatus.Open, AnsweredBy: null })
+                 ticket.Status != CMUTicketStatus.Closed)
         {
-            ticket = ticket with
-            {
-                AnsweredBy = sender,
-                AnsweredByName = senderName,
-            };
-            _tickets[channel] = ticket;
-            BroadcastUpdate(ticket);
+            // Like the "opened" notice, the claim notice is echoed before admins and Discord get the line
+            // itself, so it is stored first too and a replayed channel reads like the live one.
+            OnAdminReply(ticket, sender, senderName);
         }
 
         AppendHistory(channel, new CMUTicketMessageEntry(sentAt, sender, text, adminOnly, playSound));
         return opened;
+    }
+
+    /// <summary>
+    /// A player-visible admin reply into a ticket that is not closed. The first one marks the ticket answered,
+    /// whatever its claim state, so a later unclaim does not offer Acknowledge again. A reply into an unclaimed
+    /// ticket claims it for the replier; one into a ticket someone else holds does not take it over.
+    /// The player already sees the reply, so like Acknowledge no separate claim notice goes to them.
+    /// </summary>
+    private void OnAdminReply(CMUTicketInfo ticket, NetUserId admin, string adminName)
+    {
+        var answers = ticket.AnsweredBy == null;
+        var claims = ticket.ClaimedBy == null;
+        if (!answers && !claims)
+            return;
+
+        if (answers)
+            ticket = ticket with { AnsweredBy = admin, AnsweredByName = adminName };
+
+        if (claims)
+            ticket = ticket with { Status = CMUTicketStatus.Claimed, ClaimedBy = admin, ClaimedByName = adminName };
+
+        _tickets[ticket.Player] = ticket;
+
+        if (claims)
+        {
+            AdminEcho(ticket.Player,
+                Loc.GetString("cmu-ahelp-ticket-admin-claimed-reply", ("id", ticket.Id), ("admin", adminName)),
+                adminName);
+            _adminLog.Add(LogType.AdminMessage, LogImpact.Low,
+                $"{adminName:admin} claimed AHelp ticket #{ticket.Id} of {ticket.PlayerName:player} by replying");
+        }
+
+        BroadcastUpdate(ticket);
     }
 
     /// <summary>

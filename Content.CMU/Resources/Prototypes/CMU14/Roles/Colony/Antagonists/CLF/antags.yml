@@ -51,6 +51,10 @@
     exclusiveAntag: true
     roleType: TeamAntagonist
     subtype: cmu-role-subtype-clf-recruit
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudCLF
 
 - type: antag
   parent: CMUAntagCLFBase

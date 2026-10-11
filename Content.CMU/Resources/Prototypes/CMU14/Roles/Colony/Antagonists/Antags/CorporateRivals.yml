@@ -137,6 +137,10 @@
     exclusiveAntag: true
     roleType: SoloAntagonist
     subtype: cmu-role-subtype-corporate-spy
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/CMU14/Interface/au14colonyjobicons.rsi
+      state: laselle_liaison
 
 - type: antag
   parent: CMUAntagColonyBase

@@ -1,6 +1,7 @@
 using Content.Client.CMU14.Administration.Tickets;
 using Content.Server.Administration.Managers;
 using Content.Server.CMU14.Administration.Tickets;
+using Content.Shared.Administration;
 using Content.Shared.CCVar;
 using Content.Shared.CMU14.Administration.Tickets;
 using Content.Shared.GameTicking;
@@ -309,16 +310,88 @@ public sealed class CMUTicketSystemTest
             Assert.That(reopened.AnsweredBy, Is.Null);
             Assert.That(tickets.TryAcknowledge(player, adminB, "AdminB"), Is.EqualTo(CMUTicketActionResult.Success));
 
-            // An admin-only note does not answer a ticket; a plain admin reply does, and blocks acknowledging.
+            // An admin-only note does not answer a ticket; a plain admin reply does, and blocks acknowledging
+            // even once the reply's claim is released.
             var answered = new NetUserId(Guid.NewGuid());
             tickets.RecordMessage(answered, answered, "Answered", "help", false, true, now);
             tickets.RecordMessage(answered, adminA, "AdminA", "note", true, false, now);
             Assert.That(tickets.GetTicket(answered)!.AnsweredBy, Is.Null);
+            Assert.That(tickets.GetTicket(answered)!.ClaimedBy, Is.Null, "An admin-only note must not claim.");
             tickets.RecordMessage(answered, adminA, "AdminA", "on it", false, true, now);
             Assert.That(tickets.GetTicket(answered)!.AnsweredBy, Is.EqualTo(adminA));
             Assert.That(tickets.GetTicket(answered)!.AnsweredByName, Is.EqualTo("AdminA"));
+            tickets.TryUnclaim(answered, adminA, "AdminA");
             Assert.That(tickets.TryAcknowledge(answered, adminB, "AdminB"), Is.EqualTo(CMUTicketActionResult.AlreadyAnswered));
             Assert.That(tickets.GetTicket(answered)!.AcknowledgedBy, Is.Null);
+
+            tickets.Reset();
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// Typing a reply claims an unowned ticket, never takes over someone else's claim, and marks the ticket
+    /// answered whatever its claim state, so releasing the claim later does not offer Acknowledge again.
+    /// </summary>
+    [Test]
+    public async Task ReplyClaimsAndAnswers()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var tickets = server.System<CMUTicketSystem>();
+            tickets.Reset();
+
+            var player = new NetUserId(Guid.NewGuid());
+            var adminA = new NetUserId(Guid.NewGuid());
+            var adminB = new NetUserId(Guid.NewGuid());
+            var now = DateTime.Now;
+
+            // The first reply into an open ticket claims it for the replier, with a notice ahead of the reply.
+            tickets.RecordMessage(player, player, "Player", "help", false, true, now);
+            tickets.RecordMessage(player, adminA, "AdminA", "on it", false, true, now);
+            var ticket = tickets.GetTicket(player)!;
+            Assert.That(ticket.Status, Is.EqualTo(CMUTicketStatus.Claimed));
+            Assert.That(ticket.ClaimedBy, Is.EqualTo(adminA));
+            Assert.That(ticket.ClaimedByName, Is.EqualTo("AdminA"));
+            var history = tickets.GetHistory(player);
+            Assert.That(history[^1].TrueSender, Is.EqualTo(adminA), "The reply must be the last stored line.");
+            Assert.That(history[^2].TrueSender, Is.EqualTo(SharedBwoinkSystem.SystemUserId), "The claim notice must precede the reply.");
+
+            // Another admin replying does not take the claim over or change who answered first.
+            tickets.RecordMessage(player, adminB, "AdminB", "me too", false, true, now);
+            Assert.That(tickets.GetTicket(player)!.ClaimedBy, Is.EqualTo(adminA));
+            Assert.That(tickets.GetTicket(player)!.AnsweredBy, Is.EqualTo(adminA));
+
+            // Claim -> reply -> unclaim: the reply made while claimed still counts as an answer.
+            var claimedFirst = new NetUserId(Guid.NewGuid());
+            tickets.RecordMessage(claimedFirst, claimedFirst, "ClaimedFirst", "help", false, true, now);
+            tickets.TryClaim(claimedFirst, adminA, "AdminA");
+            tickets.RecordMessage(claimedFirst, adminA, "AdminA", "looking", false, true, now);
+            Assert.That(tickets.GetTicket(claimedFirst)!.AnsweredBy, Is.EqualTo(adminA));
+            tickets.TryUnclaim(claimedFirst, adminA, "AdminA");
+            Assert.That(tickets.GetTicket(claimedFirst)!.AnsweredBy, Is.EqualTo(adminA));
+            Assert.That(tickets.TryAcknowledge(claimedFirst, adminB, "AdminB"), Is.EqualTo(CMUTicketActionResult.AlreadyAnswered));
+
+            // The same holds when the claimer leaves instead of unclaiming. A separate admin leaves, so the
+            // first ticket's claim is not released along with it.
+            var adminC = new NetUserId(Guid.NewGuid());
+            var leftBehind = new NetUserId(Guid.NewGuid());
+            tickets.RecordMessage(leftBehind, leftBehind, "LeftBehind", "help", false, true, now);
+            tickets.TryClaim(leftBehind, adminC, "AdminC");
+            tickets.RecordMessage(leftBehind, adminC, "AdminC", "looking", false, true, now);
+            tickets.ReleaseClaimsBy(adminC, "AdminC");
+            Assert.That(tickets.GetTicket(leftBehind)!.Status, Is.EqualTo(CMUTicketStatus.Open));
+            Assert.That(tickets.TryAcknowledge(leftBehind, adminB, "AdminB"), Is.EqualTo(CMUTicketActionResult.AlreadyAnswered));
+
+            // A reply into a closed ticket neither reopens nor claims it.
+            tickets.TryClose(player, adminA, "AdminA", "done");
+            tickets.RecordMessage(player, adminB, "AdminB", "one more note", false, true, now);
+            Assert.That(tickets.GetTicket(player)!.Status, Is.EqualTo(CMUTicketStatus.Closed));
+            Assert.That(tickets.GetTicket(player)!.ClaimedBy, Is.EqualTo(adminA));
 
             tickets.Reset();
         });

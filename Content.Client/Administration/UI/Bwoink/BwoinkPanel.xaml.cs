@@ -73,6 +73,8 @@ namespace Content.Client.Administration.UI.Bwoink
             LastMessage = message.SentAt;
         }
 
+        public void CMUClearLines() => TextOutput.Clear(); // CMU14: AHelp ticket snapshot refills the panel
+
         private void UpdateTypingIndicator()
         {
             var msg = new FormattedMessage();

@@ -45,6 +45,10 @@
     exclusiveAntag: true
     roleType: SoloAntagonist
     subtype: cmu-role-subtype-vigilante
+  - type: CMUAdminRoleIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: cmb_dep
 
 - type: antag
   parent: CMUAntagColonyBase

@@ -3,6 +3,7 @@
 cmu-ahelp-ticket-admin-opened = Ticket #{$id} opened by {$player}.
 cmu-ahelp-ticket-admin-acknowledged = {$admin} acknowledged and claimed ticket #{$id}.
 cmu-ahelp-ticket-admin-claimed = Ticket #{$id} claimed by {$admin}.
+cmu-ahelp-ticket-admin-claimed-reply = Ticket #{$id} claimed by {$admin} by replying.
 cmu-ahelp-ticket-admin-takeover = Ticket #{$id} taken over by {$admin} from {$previous}.
 cmu-ahelp-ticket-admin-unclaimed = Ticket #{$id} unclaimed by {$admin}.
 cmu-ahelp-ticket-admin-unclaimed-other = Ticket #{$id}: {$admin} released {$previous}'s claim.
