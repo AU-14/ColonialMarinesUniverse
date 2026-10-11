@@ -59,6 +59,9 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.Action != null || agent.Treatment != null || agent.TreatmentMedicine != null || agent.PendingWeapon != null || agent.FlareItem != null ||
             agent.State != CMUExpeditionAgentState.Engage || agent.ShotsFired <= 0 || now >= agent.BurstEnd ||
             agent.ShotsFired >= VolleySize(agent) || !_guns.TryGetGun(uid, out var gun) || WeaponAmmo(gun) <= 0 ||
+            // bursts chain back to back, so holding every fresh one left the planner (grenades, rescues,
+            // withdrawals) no turn all fight. a volley under way keeps it, an unfired burst yields when the planner is due
+            agent.ShotsFired == 0 && now >= agent.NextPlan ||
             !TryAimPoint(uid, agent, gun, out var aim) || !SafeShot(uid, agent, gun, aim))
             return false;
         // Readiness runs later in ThinkCore. Claiming an unfired volley would skip the
@@ -68,8 +71,7 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     private bool OptionalDecisionReady(CMUExpeditionAgentComponent agent) =>
-        _timing.CurTime >= agent.DecisionUntil || agent.DecisionOwner != "fire";
-
+        _timing.CurTime >= agent.DecisionUntil || agent.DecisionOwner != "fire" || agent.ShotsFired == 0;
     private void RememberBadCover(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates point)
     {
         var now = _timing.CurTime;

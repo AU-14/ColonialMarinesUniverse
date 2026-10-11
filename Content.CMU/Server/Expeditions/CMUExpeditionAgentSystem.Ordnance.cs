@@ -71,11 +71,42 @@ public sealed partial class CMUExpeditionAgentSystem
         foreach (var distance in new[] { Math.Min(4, delta.Length() * 0.5f), 2f })
         {
             var point = _transform.ToCoordinates(protectedPoint.EntityId, origin.Offset(direction * distance));
-            if (!SafeGrenade(uid, point, grenade) || SmokeReserved(uid, agent, point))
+            if (!SafeGrenade(uid, point, grenade) || SmokeReserved(uid, agent, point) ||
+                !SmokeScreensApproach(uid, protectedPoint, contact, point))
                 continue;
+            RememberGrenadeContact(agent, contact, agent.LastContact);
             return point;
         }
         return null;
+    }
+
+    private bool SmokeScreensApproach(EntityUid uid, EntityCoordinates protectedPoint,
+        EntityCoordinates threat, EntityCoordinates landing)
+    {
+        var start = _transform.ToMapCoordinates(protectedPoint);
+        var end = _transform.ToMapCoordinates(threat);
+        var screen = _transform.ToMapCoordinates(landing);
+        var delta = end.Position - start.Position;
+        if (start.MapId != end.MapId || screen.MapId != start.MapId || delta.LengthSquared() < 1)
+            return false;
+        var along = Vector2.Dot(screen.Position - start.Position, delta) / delta.LengthSquared();
+        if (along is <= 0 or >= 1)
+            return false;
+        var crossing = new MapCoordinates(start.Position + delta * along, start.MapId);
+        // The landing must reach the threatened approach. An adjacent room separated
+        // by a wall cannot screen that lane merely because the grenade fits there.
+        return Vector2.Distance(screen.Position, crossing.Position) <= 1.5f &&
+            RayClear(uid, screen, crossing, shelter: true);
+    }
+
+    private bool SmokeScreenStillUseful(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates landing)
+    {
+        if (agent.GrenadeObservedContact is not { } contact || !Exists(contact.EntityId) ||
+            _timing.CurTime >= agent.GrenadeContactUntil || agent.RushTarget != null || agent.MeleeThreats.Count > 0)
+            return false;
+        var protectedPoint = agent.Casualty is { } casualty && Exists(casualty)
+            ? Transform(casualty).Coordinates : Transform(uid).Coordinates;
+        return SmokeScreensApproach(uid, protectedPoint, agent.CornerDangerPoint ?? contact, landing);
     }
 
     private bool SmokeReserved(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates point)

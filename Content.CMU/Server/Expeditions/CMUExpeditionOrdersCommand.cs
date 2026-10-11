@@ -116,10 +116,8 @@ public sealed partial class CMUExpeditionOrdersCommand : LocalizedEntityCommands
         else if (action is "friendly" or "target")
         {
             if (args.Length != 4) { shell.WriteError(Help); return; }
-            if (args[3] != "default") factions = args[3].Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-            foreach (var faction in factions)
-                if (!_prototypes.TryIndex<NpcFactionPrototype>(faction, out _))
-                { shell.WriteError(Loc.GetString("cmu-expedition-unknown-faction", ("faction", faction))); return; }
+            if (!_agents.TryParseFactionOrders(args[3], action == "target", out factions, out var invalid))
+            { shell.WriteError(Loc.GetString("cmu-expedition-unknown-faction", ("faction", invalid))); return; }
         }
         else { shell.WriteError(Help); return; }
         var count = 0;

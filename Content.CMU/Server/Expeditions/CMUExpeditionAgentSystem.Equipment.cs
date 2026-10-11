@@ -59,7 +59,8 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         var ammo = new GetAmmoCountEvent();
         RaiseLocalEvent(item, ref ammo);
-        return _itemSlots.TryGetSlot(gun, "gun_magazine", out var slot) && ammo.Count > 0 &&
+        return TryComp<ItemSlotsComponent>(gun, out var slots) &&
+            _itemSlots.TryGetSlot((gun, slots), "gun_magazine", out var slot) && ammo.Count > 0 &&
             _itemSlots.CanInsert(gun, slot, item, uid, swap: true) ||
             TryComp<BallisticAmmoProviderComponent>(gun, out var tube) &&
             TryComp<CartridgeAmmoComponent>(item, out var cartridge) && !cartridge.Spent &&
@@ -174,7 +175,8 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         var success = false;
         if (agent.Action == CMUTacticalAction.Reload && ReloadSafe(ent, agent) && _guns.TryGetGun(ent, out var gun) &&
-            _itemSlots.TryGetSlot(gun.Owner, "gun_magazine", out var slot) &&
+            TryComp<ItemSlotsComponent>(gun, out var slots) &&
+            _itemSlots.TryGetSlot((gun.Owner, slots), "gun_magazine", out var slot) &&
             _itemSlots.CanInsert(gun, slot, item, ent, swap: true))
         {
             EntityUid? old = null;
@@ -211,7 +213,8 @@ public sealed partial class CMUExpeditionAgentSystem
             }
         }
         else if (agent.Action == CMUTacticalAction.ThrowGrenade && agent.GrenadeTarget is { } target &&
-            (agent.SmokeGrenade || HasGrenadeContact(ent, agent, target)) && SafeGrenade(ent, target, item))
+            (agent.SmokeGrenade ? SmokeScreenStillUseful(ent, agent, target) : HasGrenadeContact(ent, agent, target)) &&
+            SafeGrenade(ent, target, item))
         {
             if (_hands.TryDrop(ent.Owner, item) && _throwing.TryThrow(item, target, user: ent, compensateFriction: true))
             {
