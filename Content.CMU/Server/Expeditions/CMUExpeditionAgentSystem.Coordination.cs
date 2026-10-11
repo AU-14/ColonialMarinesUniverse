@@ -115,15 +115,26 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (agent.CoveringShooter is not { } shooter)
             return true;
-        if (now < agent.ManeuverUntil && TryComp<CMUExpeditionAgentComponent>(shooter, out var buddy) &&
+        // A slow but progressing flank may outlive the initial reservation. Renew only
+        // while its actual movement deadline and shooter remain valid; stalls still expire.
+        var progressing = agent.CoverDestination != null && now < agent.MoveUntil &&
+            now - agent.MoveProgressAt < TimeSpan.FromSeconds(1.5);
+        if ((now < agent.ManeuverUntil || progressing) && TryComp<CMUExpeditionAgentComponent>(shooter, out var buddy) &&
             buddy.CoveringFor == uid && LocalSquadMember(uid, agent, shooter, buddy) &&
             CoveringFireReady(shooter, buddy, out _) && SharedEngagement(agent, buddy))
         {
+            if (now >= agent.ManeuverUntil)
+                agent.ManeuverUntil = now + TimeSpan.FromSeconds(1);
             buddy.CoveringUntil = now + TimeSpan.FromSeconds(1);
             return true;
         }
         var remaining = agent.CoverDestination ?? agent.SpacingDestination;
         ReleaseManeuver(uid, agent);
+        // A reload or blocked lane retires this shooter, not every ready rifle in the squad.
+        // Handoff preserves the mover's existing destination and deadline.
+        if (progressing && remaining is { } continuing && TryReserveManeuver(uid, agent, now, continuing) &&
+            agent.CoveringShooter != null)
+            return true;
         // Losing a supporter's shot for a moment must not strand a mover halfway to
         // shelter. Finish only the same bounded safe leg, never an exposed assault.
         if (remaining is { } step && TryUncoveredManeuver(uid, agent, step, now))

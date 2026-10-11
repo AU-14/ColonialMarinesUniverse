@@ -239,6 +239,7 @@ public sealed class CMUExpeditionAgentTest : GameTest
         var rifles = new List<EntityUid>();
         var initial = new List<int>();
         var pressured = new HashSet<EntityUid>();
+        var sawStaggeredOpening = false;
         await Server.WaitAssertion(() =>
         {
             var generator = Server.System<CMUExpeditionSystem>();
@@ -288,13 +289,20 @@ public sealed class CMUExpeditionAgentTest : GameTest
             await Pair.RunSeconds(0.15f);
             await Server.WaitAssertion(() =>
             {
-                var attackers = 0;
+                // Attack slots govern the initial departure from these safe shelters.
+                // After live incoming fire, both exposed guards may defend themselves;
+                // counting every Aim/Engage state would incorrectly forbid that response.
+                if (pressured.Count == 0)
+                {
+                    var attackers = guards.Count(guard => SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).State is
+                        CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage);
+                    Assert.That(attackers, Is.LessThanOrEqualTo(1), "A pair must stagger its initial departure from shelter.");
+                    sawStaggeredOpening |= attackers == 1;
+                }
                 foreach (var guard in guards)
                 {
                     var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
                     var state = agent.State;
-                    if (state is CMUExpeditionAgentState.Peeking or CMUExpeditionAgentState.Aim or CMUExpeditionAgentState.Engage)
-                        attackers++;
                     // Productive positions persist without pressure. Native incoming fire
                     // makes each attacker return to shelter and yield the next peek.
                     if (state == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
@@ -317,11 +325,11 @@ public sealed class CMUExpeditionAgentTest : GameTest
                         nextIncomingShot = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
                     }
                 }
-                Assert.That(attackers, Is.LessThanOrEqualTo(1), "A pair must stagger its exposure, not pop out together.");
             });
         }
         await Server.WaitAssertion(() =>
         {
+            Assert.That(sawStaggeredOpening, Is.True, "One guard must open the attack while its partner waits in shelter.");
             Assert.That(pressured, Is.EquivalentTo(guards), "Both attackers must receive real incoming fire.");
             for (var index = 0; index < 2; index++)
                 Assert.That(Ammo(rifles[index]), Is.LessThan(initial[index]), $"Guard {index} must receive an attack turn.");

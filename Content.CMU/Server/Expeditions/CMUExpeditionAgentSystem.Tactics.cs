@@ -77,9 +77,14 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             members++;
             // Empty/blocked rifles cannot indefinitely monopolize the squad's exposure slots.
+            // An unfired volley still owns its bounded native readiness window; otherwise
+            // entering Engage releases the slot before the first round leaves the gun.
             if (CoveringFireReady(other, buddy, out _) ||
                 buddy.State == CMUExpeditionAgentState.Peeking && _timing.CurTime < buddy.MoveUntil ||
-                buddy.State == CMUExpeditionAgentState.Aim && _timing.CurTime < buddy.FireAt + TimeSpan.FromSeconds(0.5))
+                buddy.State == CMUExpeditionAgentState.Aim && _timing.CurTime < buddy.FireAt + TimeSpan.FromSeconds(0.5) ||
+                buddy.State == CMUExpeditionAgentState.Engage && WaitingForFirstShot(buddy, _timing.CurTime) &&
+                buddy.Action == null && buddy.PendingWeapon == null && buddy.Treatment == null &&
+                _guns.TryGetGun(other, out var gun) && WeaponAmmo(gun) > 0)
                 attacking++;
         }
         // Local attack slots stagger exposure; they are released immediately on retreat, injury, death or possession.
