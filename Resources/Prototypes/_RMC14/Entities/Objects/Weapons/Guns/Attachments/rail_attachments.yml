@@ -20,7 +20,7 @@
     spriteLayer: light
   - type: PointLight
     enabled: false
-    radius: 12 # CMU14: longer directional beam
+    radius: 5
     energy: 1.5 # CMU14
     softness: 1 # CMU14
     lightMask: ConeSingle # CMU14
@@ -38,8 +38,8 @@
       id: radiating
       interpolate: Linear
       maxDuration: 2.0
-      startValue: 8.0 # CMU14: scaled to the longer beam
-      endValue: 6.0 # CMU14
+      startValue: 3.0
+      endValue: 2.0
       isLooped: true
       property: Radius
       enabled: false
@@ -49,7 +49,7 @@
       interpolate: Nearest
       maxDuration: 1.0
       startValue: 0.1
-      endValue: 6.0 # CMU14
+      endValue: 2.0
       isLooped: true
       property: Radius
       enabled: false
