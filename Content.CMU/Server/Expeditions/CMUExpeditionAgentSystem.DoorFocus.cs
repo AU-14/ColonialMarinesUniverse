@@ -69,7 +69,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool TryResolveDoorFiringLane(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates threat, TimeSpan now)
     {
-        if (agent.TrafficNudgeDestination != null)
+        if (agent.TrafficNudgeDestination != null || agent.UncoveredManeuverDestination != null && now < agent.ManeuverUntil)
             return false;
         var start = Transform(uid).Coordinates;
         // Friendly-fire rejection alone must never provoke door opening or an extra move.

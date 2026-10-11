@@ -33,13 +33,15 @@ public sealed partial class CMUExpeditionAgentSystem
         if (args.Origin is { } source && Exists(source) && AcceptOrderedContact(ent, ent.Comp, source) &&
             Visible(ent, source, ent.Comp.DetectionRange))
         {
-            if (args.Impact.Delivery == DamageImpactDelivery.Projectile && !IsMeleeThreat(source))
+            if (args.Impact.Delivery == DamageImpactDelivery.Projectile)
+            {
                 ObserveIncomingLane(ent, ent.Comp, _transform.GetMapCoordinates(ent),
                     _transform.GetWorldPosition(ent) - _transform.GetWorldPosition(source), now);
-            if (!ent.Comp.RecentShooters.ContainsKey(source) && ent.Comp.RecentShooters.Count >= 16)
-                ent.Comp.RecentShooters.Remove(ent.Comp.RecentShooters.MinBy(pair => pair.Value).Key);
-            ent.Comp.RecentShooters[source] = now + TimeSpan.FromSeconds(2);
-            if (IsMeleeThreat(source))
+                if (!ent.Comp.RecentShooters.ContainsKey(source) && ent.Comp.RecentShooters.Count >= 16)
+                    ent.Comp.RecentShooters.Remove(ent.Comp.RecentShooters.MinBy(pair => pair.Value).Key);
+                ent.Comp.RecentShooters[source] = now + TimeSpan.FromSeconds(2);
+            }
+            if (args.Impact.Delivery == DamageImpactDelivery.Melee)
                 RememberMelee(ent.Comp, source, Transform(source).Coordinates, now);
         }
     }

@@ -211,6 +211,17 @@
   - type: FixedIdentity
     name: cmu-expedition-marksman-identity
 
+- type: entity
+  parent: CMUExpeditionFieldPack
+  id: CMUExpeditionRocketPack
+  components:
+  - type: Storage
+    # The native disposable tube has a 7x4 shape. One half fits the reserve tube;
+    # the other half fits the knife, shovel, flare pack and three grenades.
+    grid:
+    - 0,0,13,3
+    maxItemSize: Ginormous
+
 - type: startingGear
   id: CMUExpeditionRocketeerGear
   equipment:
@@ -220,7 +231,7 @@
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
-    back: CMUExpeditionFieldPack
+    back: CMUExpeditionRocketPack
     belt: CMBeltMarine
     pocket2: RMCPouchGeneralLarge
     ears: CMUExpeditionHeadset
@@ -229,10 +240,11 @@
   - CMUExpeditionSMG
   storage:
     back:
+    - CMUExpeditionDisposableLauncher
     - RMCM5Bayonet
     - RMCShovel
-    - CMPackFlare
     - CMUExpeditionBlastGrenade
+    - CMPackFlare
     - CMUExpeditionSmokeGrenade
     - CMUExpeditionSmokeGrenade
     belt:

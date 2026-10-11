@@ -69,6 +69,7 @@ public sealed partial class CMUExpeditionAgentSystem
         if (TryComp<CMUExpeditionWeaponRoleComponent>(ent, out var role) && role.Rocket)
         {
             agent.RocketsFired++;
+            agent.RocketDecision = "rocket-fired";
             agent.NextRocket = _timing.CurTime + TimeSpan.FromSeconds(20);
             agent.NextWeaponChoice = _timing.CurTime;
             var squad = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
@@ -203,9 +204,9 @@ public sealed partial class CMUExpeditionAgentSystem
             EndBurst(uid, agent, now, false);
             return;
         }
-        if (!SafeShot(uid, agent, gun, point))
+        if (!SafeShot(uid, agent, gun, point, out var unsafeShot))
         {
-            agent.LastFireCheck = "friendly-in-firing-cone";
+            agent.LastFireCheck = unsafeShot;
             if (now < agent.SpacingUntil || agent.TrafficNudgeDestination != null && now < agent.TrafficNudgeUntil)
                 return;
             agent.BlockedShotSince ??= now;
@@ -315,13 +316,18 @@ public sealed partial class CMUExpeditionAgentSystem
     }
 
     private bool SafeShot(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun, EntityCoordinates point,
-        EntityCoordinates? origin = null, HashSet<EntityUid>? nearby = null)
+        EntityCoordinates? origin = null, HashSet<EntityUid>? nearby = null) =>
+        SafeShot(uid, agent, gun, point, out _, origin, nearby);
+
+    private bool SafeShot(EntityUid uid, CMUExpeditionAgentComponent agent, Entity<GunComponent> gun, EntityCoordinates point,
+        out string reason, EntityCoordinates? origin = null, HashSet<EntityUid>? nearby = null)
     {
         var start = origin ?? Transform(uid).Coordinates;
         var from = _transform.ToMapCoordinates(start);
         var to = _transform.ToMapCoordinates(point);
         var distance = Vector2.Distance(from.Position, to.Position);
-        if (from.MapId != to.MapId || distance < 0.1f || !SafeWeaponEffect(uid, agent, gun, start, point))
+        reason = "invalid-shot-destination";
+        if (from.MapId != to.MapId || distance < 0.1f || !SafeWeaponEffect(uid, agent, gun, start, point, out reason))
             return false;
         // Match the next native shot's recoil, including recovery since the previous shot.
         // Using maximum sustained-fire scatter made whole squads wait on empty lanes.
@@ -329,6 +335,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var scatter = Math.Clamp(gun.Comp.CurrentAngle.Theta + gun.Comp.AngleIncreaseModified.Theta -
             gun.Comp.AngleDecayModified.Theta * elapsed, gun.Comp.MinAngleModified.Theta, gun.Comp.MaxAngleModified.Theta);
         var spread = (float) Math.Tan(Math.Min(scatter, Math.PI / 2) / 2);
+        reason = "obstructed-firing-cone";
         if (!FiringLaneClear(uid, start, point))
             return false;
 
@@ -354,9 +361,13 @@ public sealed partial class CMUExpeditionAgentSystem
                 if (along < -0.3f || along > distance + 2)
                     continue;
                 if ((offset - direction * along).Length() < 0.55f + Math.Max(0, along) * spread)
+                {
+                    reason = "friendly-in-firing-cone";
                     return false;
+                }
             }
         }
+        reason = "shot-clear";
         return true;
     }
 }

@@ -18,6 +18,17 @@ public sealed partial class CMUExpeditionAgentSystem
     [Dependency] private SharedDoorSystem _doors = default!;
     [Dependency] private TagSystem _tags = default!;
     private readonly Dictionary<(EntityUid User, EntityUid Door), bool> _doorPassageCache = new();
+    private readonly HashSet<Entity<DoorComponent>> _cohesionDoors = new();
+
+    private bool NearSquadDoorway(EntityUid uid)
+    {
+        // Even an already open door must be cleared before the front pauses for the
+        // rear. Its collision fixture may be disabled, so query the door component.
+        _cohesionDoors.Clear();
+        var point = _transform.GetMapCoordinates(uid);
+        _lookup.GetEntitiesInRange(point.MapId, point.Position, 2, _cohesionDoors);
+        return _cohesionDoors.Count > 0;
+    }
 
     // Planning may cross a usable door; physical movement and cover checks never ignore it.
     private bool CanNavigateDoor(EntityUid uid, EntityUid obstacle)

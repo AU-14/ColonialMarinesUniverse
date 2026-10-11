@@ -10,6 +10,9 @@ public sealed partial class CMUExpeditionAgentComponent
     public EntityCoordinates? OrderRally;
     public TimeSpan? CohesionWaitSince;
     public TimeSpan NextCohesionWait;
+    public EntityCoordinates? CohesionDestination;
+    public EntityCoordinates? CohesionAdvanceOrigin;
+    public bool CohesionWaitExhausted;
     public TimeSpan? OrderBlockedSince;
     public int OrderFailures;
     public EntityCoordinates? LastOrderProgressPosition;
