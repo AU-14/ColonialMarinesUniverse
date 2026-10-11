@@ -10,6 +10,8 @@ using Robust.Client.ComponentTrees;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -26,6 +28,16 @@ namespace Content.Client.CMU14.ZLevels.Lighting;
 /// </summary>
 public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
 {
+    internal static Box2Rotated ProjectedBounds(IViewportControl viewport, Vector2 origin, Vector2 size)
+    {
+        var a = viewport.ScreenToMap(origin).Position;
+        var b = viewport.ScreenToMap(origin + new Vector2(size.X, 0)).Position;
+        var c = viewport.ScreenToMap(origin + new Vector2(0, size.Y)).Position;
+        var d = viewport.ScreenToMap(origin + size).Position;
+        return new Box2Rotated(new Box2(Vector2.Min(Vector2.Min(a, b), Vector2.Min(c, d)),
+            Vector2.Max(Vector2.Max(a, b), Vector2.Max(c, d))), Angle.Zero);
+    }
+
     private const float OpeningConnectionDistance = 1.5f;
     private const int MinStripCandidateCount = 4;
     private const float MinStripLength = 3f;
@@ -195,7 +207,11 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         _activeThisFrame.Clear();
         _candidates.Clear();
 
-        var viewBounds = _eyeManager.GetWorldViewbounds();
+        // A ghost/eye switch can precede the viewport's eye update. Use its actual
+        // four projected corners instead of unrotating with a different CurrentEye.
+        var viewBounds = _eyeManager.MainViewport is Control viewport
+            ? ProjectedBounds(_eyeManager.MainViewport, viewport.GlobalPixelPosition, viewport.PixelSize)
+            : _eyeManager.GetWorldViewbounds();
         var viewAabb = viewBounds.CalcBoundingBox();
         var playerWorldPosition = _eyeManager.CurrentEye.Position.Position;
         // Lighting must not depend on whichever viewport last wrote diagnostic statistics.

@@ -31,6 +31,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private BodyPartSeveranceSystem _severance = default!;
+    [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
 
     /// <summary>
     ///     Bodies queued for next-tick glove-drop / shoe-drop / force-down.
@@ -140,6 +141,7 @@ public sealed partial class CMUSeveranceCosmeticSystem : EntitySystem
         var partType = args.Part.Comp.PartType;
         var symmetry = args.Part.Comp.Symmetry;
         _severance.ClearMissingPartStatus(ent.Owner, partType, symmetry);
+        _stumps.CloseStump(ent.Owner, partType, symmetry);
 
         if (CMUMedicalVisualLayers.ForBodyPart(partType, symmetry) is { } layer &&
             HasComp<HideableHumanoidLayersComponent>(ent.Owner))

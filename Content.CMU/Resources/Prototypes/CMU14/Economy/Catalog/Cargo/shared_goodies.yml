@@ -69,6 +69,8 @@
         crate: CMUCanisterAir
       - cost: 200
         crate: CMUCanisterOxygen
+      - cost: 250
+        crate: CMUCrateSupplyFieldOxygen
       - cost: 200
         crate: CMUCanisterNitrogen
       - cost: 250

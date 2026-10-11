@@ -1,0 +1,9 @@
+<Document>
+  # Galaxy Map
+
+  The settled stars of the middle heavens as of 2182.
+
+  [italic]Scroll over the map to zoom, drag to pan, and right-click to reset.[/italic]
+
+  <CMUGuideZoomImage Path="/ServerInfo/Guidebook/CMU14/Lore/galaxymap.png"/>
+</Document>

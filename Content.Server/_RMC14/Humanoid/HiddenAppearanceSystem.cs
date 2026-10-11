@@ -9,7 +9,7 @@ using Robust.Shared.Configuration;
 
 namespace Content.Server._RMC14.Humanoid;
 
-public sealed class HiddenAppearanceSystem : EntitySystem
+public sealed partial class HiddenAppearanceSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private HumanoidOrganAppearanceSystem _appearance = default!;

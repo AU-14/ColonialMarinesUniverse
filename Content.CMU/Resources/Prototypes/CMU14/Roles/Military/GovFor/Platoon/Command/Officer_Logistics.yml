@@ -57,7 +57,7 @@
     #   prefix: au14-job-prefix-govforlogisticsCMBCIU
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
@@ -74,6 +74,8 @@
     - NoEnglish
     - SlowRunner
     - Anemic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -210,7 +212,7 @@
   roundForce: UPP
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours
@@ -229,7 +231,7 @@
   roundForce: WYPMC
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
     time: 18000 # 5 hours

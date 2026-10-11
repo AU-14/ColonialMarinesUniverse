@@ -9,6 +9,12 @@ namespace Content.Shared.CMU14.Humanoid
     public static class CMUHairStyles
     {
         /// <summary>
+        /// Loose style used when untying hair that spawned already tied back, since there is no
+        /// original style to restore. Bob Hair 3, from the regulation list.
+        /// </summary>
+        public static readonly ProtoId<MarkingPrototype> SpawnedTiedUntieHairStyle = "HumanHairBobcut";
+
+        /// <summary>
         /// Long, loose hairstyles that are eligible to be tied back via the "Tie Hair Back" verb.
         /// </summary>
         public static readonly IReadOnlyList<ProtoId<MarkingPrototype>> TieableHairStyles = new List<ProtoId<MarkingPrototype>>
@@ -53,13 +59,6 @@ namespace Content.Shared.CMU14.Humanoid
             "RMCHumanHairLongestAlt",
             "RMCHumanHairLongEmo",
             "RMCHumanHairLongOvereye",
-            "HumanHairLongBedhead",
-            "HumanHairLongBedhead2",
-            "HumanHairClassicLong2",
-            "HumanHairClassicLong3",
-            "HumanHairLong",
-            "HumanHairLong2",
-            "HumanHairLong3",
             "HumanHairLongWithBundles",
             "HumanHairLongovereye",
             "HumanHairLbangs",
@@ -67,10 +66,7 @@ namespace Content.Shared.CMU14.Humanoid
             "HumanHairLongfringe",
             "HumanHairLongsidepart",
             "HumanHairVlong",
-            "HumanHairLongest",
-            "HumanHairLongest2",
             "HumanHairVlongfringe",
-            "HumanHairSpookyLong",
             "HumanHairProtagonist",
             // Classic modern / classic wisp / modern / messy
             "HumanHairClassicModern",
@@ -162,11 +158,9 @@ namespace Content.Shared.CMU14.Humanoid
             // Twintails
             "HumanHairTwintail",
             // Two strands
-            "HumanHairTwoStrands",
             // Uneven
             "HumanHairUneven",
             // Unkept
-            "HumanHairUnkept",
             // Volaju
             "HumanHairVolaju",
             // Wisp
@@ -178,7 +172,6 @@ namespace Content.Shared.CMU14.Humanoid
         /// </summary>
         public static readonly IReadOnlyList<ProtoId<MarkingPrototype>> TiedBackHairStyles = new List<ProtoId<MarkingPrototype>>
         {
-            "HumanHairHbraid", // Braid (Low)
             "RMCHumanHairBun", // Bun
             "HumanHairManbun", // Bun (Manbun)
             "HumanHairTightbun", // Bun (Tight)

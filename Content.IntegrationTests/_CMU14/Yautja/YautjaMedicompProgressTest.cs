@@ -3,6 +3,7 @@ using System.Linq;
 using Content.Server.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Treatment.Surgery;
+using Content.Shared.CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
@@ -19,6 +20,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaMedicompProgressTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageGroupPrototype> BrutePrototype = "Brute";
+
     private static readonly (string Tool, int Step, string Label)[] Stages =
     [
         ("CMUYautjaStabilizerGel", 0, "stabilize wounds"),
@@ -26,8 +29,9 @@ public sealed class YautjaMedicompProgressTest
         ("CMUYautjaWoundClamp", 2, "clamp wounds"),
     ];
 
-    [Test]
-    public async Task MedicompStagesUseOneContinuousDoAfter()
+    [TestCase(false)]
+    [TestCase(true)]
+    public async Task MedicompStagesUseOneContinuousDoAfter(bool severePain)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -41,18 +45,26 @@ public sealed class YautjaMedicompProgressTest
             var hands = entMan.System<SharedHandsSystem>();
             var flow = entMan.System<CMUSurgeryFlowSystem>();
             var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
-            var brute = prototypes.Index<DamageGroupPrototype>("Brute");
+            var brute = prototypes.Index<DamageGroupPrototype>(BrutePrototype);
 
             foreach (var (toolPrototype, step, label) in Stages)
             {
                 var patient = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
-                var surgeon = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+                var surgeon = severePain ? patient : entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
                 var tool = entMan.SpawnEntity(toolPrototype, MapCoordinates.Nullspace);
 
                 try
                 {
                     skills.SetSkill(surgeon, "RMCSkillSurgery", 3);
                     damageable.TryChangeDamage(patient, new DamageSpecifier(brute, 20));
+                    if (severePain)
+                    {
+                        var pain = entMan.GetComponent<PainShockComponent>(patient);
+                        pain.Pain = 90;
+                        pain.RawTier = PainTier.Severe;
+                        Assert.That(entMan.System<SharedPainShockSystem>().GetEffectiveTier(patient, pain),
+                            Is.GreaterThanOrEqualTo(PainTier.Severe));
+                    }
                     var targetPart = FindPart(entMan, patient, BodyPartType.Arm, BodyPartSymmetry.Left);
 
                     Assert.That(

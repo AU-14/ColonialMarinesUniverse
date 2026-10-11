@@ -79,6 +79,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         SubscribeLocalEvent<YautjaStoredGearComponent, GotUnequippedHandEvent>(OnStoredGearUnequippedHand);
         SubscribeLocalEvent<YautjaStoredGearComponent, DroppedEvent>(OnStoredGearDropped);
         SubscribeLocalEvent<YautjaStoredGearComponent, RMCDroppedEvent>(OnStoredGearRMCDropped);
+        SubscribeLocalEvent<YautjaStoredGearComponent, RMCItemDropAttemptEvent>(OnStoredGearDropAttempt);
+        SubscribeLocalEvent<YautjaStoredGearComponent, ContainerGettingRemovedAttemptEvent>(OnStoredGearRemoveAttempt);
         SubscribeLocalEvent<YautjaStoredGearHandRemovalCompletedEvent>(OnStoredGearHandRemovalCompleted);
         SubscribeLocalEvent<DoorComponent, YautjaBracerAttachmentForceDoorDoAfterEvent>(OnBracerAttachmentForceDoorDoAfter);
         SubscribeLocalEvent<AirlockComponent, InteractUsingEvent>(OnForceAirlockWithBracerAttachment);
@@ -604,7 +606,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearThrowAttempt(Entity<YautjaStoredGearComponent> ent, ref ThrowItemAttemptEvent args)
     {
-        if (!ent.Comp.Deployed)
+        // Standalone gear with no bracer to retract into stays throwable
+        if (ent.Comp.Bracer is null)
             return;
 
         TryRetractStoredGear(ent, args.User);
@@ -613,9 +616,6 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearFellDownThrowAttempt(Entity<YautjaStoredGearComponent> ent, ref FellDownThrowAttemptEvent args)
     {
-        if (!ent.Comp.Deployed)
-            return;
-
         args.Cancelled = true;
     }
 
@@ -634,8 +634,10 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearUnequippedHand(Entity<YautjaStoredGearComponent> ent, ref GotUnequippedHandEvent args)
     {
-        if (!ent.Comp.Deployed || ent.Comp.Retracting)
+        if (ent.Comp.Retracting)
             return;
+
+        ent.Comp.ReinsertedByDeploy = false;
 
         // This event is raised from inside container removal. Wait until the transfer has completed before
         // moving the gear again, otherwise hand -> hand/container operations are re-entered mid-insertion.
@@ -644,10 +646,16 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearHandRemovalCompleted(YautjaStoredGearHandRemovalCompletedEvent args)
     {
-        if (!TryComp(args.Gear, out YautjaStoredGearComponent? stored) ||
-            !stored.Deployed ||
-            stored.Retracting)
+        if (!TryComp(args.Gear, out YautjaStoredGearComponent? stored)
+            || !stored.Deployed
+            || stored.Retracting)
+            return;
+
+        // A deploy in the same frame as the removal re-lands the gear in a hand, so the removal
+        // never left the deployment. Any other removal retracts, including a hand-to-hand swap.
+        if (stored.ReinsertedByDeploy)
         {
+            stored.ReinsertedByDeploy = false;
             return;
         }
 
@@ -656,18 +664,55 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnStoredGearDropped(Entity<YautjaStoredGearComponent> ent, ref DroppedEvent args)
     {
-        if (!ent.Comp.Deployed)
-            return;
-
         TryRetractStoredGear(ent, args.User);
     }
 
     private void OnStoredGearRMCDropped(Entity<YautjaStoredGearComponent> ent, ref RMCDroppedEvent args)
     {
-        if (!ent.Comp.Deployed)
-            return;
-
         TryRetractStoredGear(ent, args.User);
+    }
+
+    private void OnStoredGearDropAttempt(Entity<YautjaStoredGearComponent> ent, ref RMCItemDropAttemptEvent args)
+    {
+        if (args.Cancelled ||
+            !ent.Comp.Deployed ||
+            !HasComp<YautjaCasterComponent>(ent.Owner))
+        {
+            return;
+        }
+
+        // CMU14: a deployed plasma caster is glued to the hunter. No drop attempt - the player's own drop,
+        // a disarm, a strip or a forced drop - may take it out of the hand. Instead it re-attaches to its
+        // source bracer, matching CMSS13 plasma_caster/dropped() which forceMoves the caster back to source.
+        var user = ent.Comp.Bracer is { } bracer && !TerminatingOrDeleted(bracer)
+            ? Transform(bracer).ParentUid
+            : ent.Owner;
+
+        TryRetractStoredGear(ent, user);
+        args.Cancelled = true;
+    }
+
+    private void OnStoredGearRemoveAttempt(Entity<YautjaStoredGearComponent> ent, ref ContainerGettingRemovedAttemptEvent args)
+    {
+        // Retracting disables this guard - the retraction itself has to take the gear out of the hand.
+        if (args.Cancelled ||
+            ent.Comp.Retracting ||
+            !ent.Comp.Deployed ||
+            !HasComp<YautjaCasterComponent>(ent.Owner))
+        {
+            return;
+        }
+
+        // CMU14: a deployed plasma caster is glued to the hunter. Any attempt to take it out of the hand -
+        // the player's own drop, another entity stripping it (which skips the CanDrop action blocker), a
+        // hand swap or a container transfer - re-attaches it to its source bracer instead of removing it.
+        // This is the same hook UnremoveableComponent uses, scoped to the caster and non-destructive.
+        var user = ent.Comp.Bracer is { } bracer && !TerminatingOrDeleted(bracer)
+            ? Transform(bracer).ParentUid
+            : ent.Owner;
+
+        TryRetractStoredGear(ent, user);
+        args.Cancel();
     }
 
     private void ToggleGear(Entity<YautjaGearContainerComponent> bracer, InstantActionEvent args, YautjaGearKind kind)
@@ -874,6 +919,10 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             _popup.PopupEntity(Loc.GetString("cmu-yautja-hands-full"), user, user, PopupType.SmallCaution);
             return;
         }
+
+        stored.ReinsertedByDeploy = true;
+        if (deployed != gear && TryComp(deployed, out YautjaStoredGearComponent? deployedStored))
+            deployedStored.ReinsertedByDeploy = true;
 
         SetGearState(bracer, gear, kind, true);
         PlayGearSound(GetDeploySound(bracer.Comp, kind), user);

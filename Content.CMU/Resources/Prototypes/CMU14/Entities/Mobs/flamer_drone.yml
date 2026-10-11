@@ -19,6 +19,7 @@
           Damaged: {color: "#b2a697"}
           Destroyed: {color: "#6f6560"}
   - type: CMUFlamerDrone
+  - type: CMUFlamerDroneFuel
   - type: Gun
     cameraRecoilScalar: 0
     fireRate: 0.7

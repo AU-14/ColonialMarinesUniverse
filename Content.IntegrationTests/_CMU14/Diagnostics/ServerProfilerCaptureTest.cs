@@ -128,6 +128,14 @@ public sealed class ServerProfilerCaptureTest
                 var spawn = completed.FrameSamples.Single(row => row.IndexOffset == 1).Samples.Single();
                 Assert.That(spawn.Name, Is.EqualTo("CMU PlayerSpawn"));
                 Assert.That(spawn.TotalSeconds, Is.EqualTo(0.2).Within(0.000001));
+
+                // Completion retries must retain the newly finished input frame without rereading
+                // and logging the old history a second time on the simulation thread.
+                var retry = CMUPerformanceProfilerReader.Capture(profiler, new HashSet<string>(), 8, 1024,
+                    sinceIndexOffset: 1);
+                Assert.That(retry.FrameSamples.Select(row => row.IndexOffset), Is.EqualTo(new[] { 1L }));
+                Assert.That(retry.FrameSamples.Single().Samples.Single(), Is.EqualTo(spawn));
+                Assert.That(retry.EventsRead, Is.LessThan(completed.EventsRead));
             }
             finally
             {

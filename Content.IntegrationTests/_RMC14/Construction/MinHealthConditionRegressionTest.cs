@@ -11,6 +11,8 @@ namespace Content.IntegrationTests._RMC14.Construction;
 [TestOf(typeof(MinHealth))]
 public sealed class MinHealthConditionRegressionTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageTypePrototype> BluntPrototype = "Blunt";
+
     [TestPrototypes]
     private const string Prototypes = """
         - type: entity
@@ -66,7 +68,7 @@ public sealed class MinHealthConditionRegressionTest : GameTest
             var entity = SEntMan.SpawnEntity("RMCMinHealthFinite", map.GridCoords);
             var damageable = SEntMan.GetComponent<DamageableComponent>(entity);
             var damage = SEntMan.System<DamageableSystem>();
-            var blunt = SProtoMan.Index<DamageTypePrototype>("Blunt");
+            var blunt = SProtoMan.Index<DamageTypePrototype>(BluntPrototype);
             var condition = new MinHealth
             {
                 Threshold = FixedPoint2.New(0.78),

@@ -9,6 +9,35 @@
     gender: female
   - type: RandomHumanoidAppearance
   - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
     allowedFemaleHairStyles:
     - RMCHumanHairShortbangs
     - RMCHumanHairBobcurl
@@ -38,4 +67,27 @@
     - "#B79A5A"
     - "#4A1F12"
     - "#7A5E42"
+    allowedBeardStyles:
+    - HumanFacialHairSmallstache
+    - HumanFacialHairChinlessbeard
+    - HumanFacialHairCroppedfullbeard
+    - HumanFacialHair5oclockmoustache
+    - HumanFacialHairFiveoclock
+    - HumanFacialHairJensen
+    - HumanFacialHair7oclockmoustache
+    - HumanFacialHair7oclock
+    - HumanFacialHair3oclock
+    - HumanFacialHairSelleck
+    - HumanFacialHairSideburn
+    - HumanFacialHairElvis
+    - HumanFacialHairMutton
+    - HumanFacialHairMoustache
+    - HumanFacialHairPencilstache
+    - HumanFacialHairWalrus
+    - HumanFacialHairFumanchu
+    - HumanFacialHairHogan
+    - HumanFacialHairVandyke
+    - RMCHumanFacialHairSoulfulSelleck
+    - HumanFacialHairGt
+    - HumanFacialHairFullbeard
     allowedEyeColorsHex: [ "#000000" ]

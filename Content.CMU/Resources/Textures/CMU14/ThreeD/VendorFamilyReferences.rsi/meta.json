@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/09a5191fb11aab8ddffe3f9be94292b53e4d96f6/icons/obj/structures/machinery/vending.dmi; static source-layer compositions for CMU 3D review. See SOURCES_VENDOR_FAMILY.md.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "coffee_off"
+    },
+    {
+      "name": "coffee_cash"
+    },
+    {
+      "name": "cigs_off"
+    },
+    {
+      "name": "snack_off"
+    },
+    {
+      "name": "koor_off"
+    }
+  ]
+}

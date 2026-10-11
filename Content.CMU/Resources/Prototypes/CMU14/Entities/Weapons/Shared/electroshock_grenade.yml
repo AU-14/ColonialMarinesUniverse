@@ -1,0 +1,161 @@
+# G2 Electroshock grenade ("Sonic Electric Ball Breaker"), ported from cmss13-devs/cmss13#6667.
+
+- type: entity
+  parent: CMGrenadeBase
+  id: CMUGrenadeElectroshock
+  name: G2 Electroshock grenade
+  description: This is a G2 Electroshock Grenade. Produced by Armat Battlefield Systems, it's sometimes referred to as the Sonic Electric Ball Breaker, after a rash of incidents where the intense 1.2 gV sonic payload caused... rupturing. A bounding landmine mode is available for this weapon which activates a small drill to self-bury itself when planted. Simply plant it at your feet and walk away.
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/electroshock.rsi
+    layers:
+    - state: icon
+      map: ["enum.TriggerVisualLayers.Base"]
+  - type: TimerTriggerVisuals
+    unprimedSprite: icon
+    primingSprite: primed
+    primingSound:
+      path: /Audio/CMU14/Weapons/Grenades/grenade.ogg
+      params:
+        volume: -5
+  - type: TimerTrigger
+    delay: 3
+    beepSound:
+      path: /Audio/CMU14/Weapons/Grenades/sebb_beep.ogg
+      params:
+        volume: 2
+    initialBeepDelay: 2.4
+    beepInterval: 10
+  - type: CMUElectroshock
+    minePrototype: CMUGrenadeElectroshockPlanted
+  # From a launcher it flies straight like a bullet and goes off on impact.
+  - type: IgnoreArc
+  - type: CMUImpactFuse
+  - type: Tag
+    tags:
+    - Grenade
+    - HandGrenade
+    - LauncherCompatibleGrenade
+
+# A grenade that is already counting down, popped out of the ground by a triggered mine.
+- type: entity
+  parent: CMUGrenadeElectroshock
+  id: CMUGrenadeElectroshockPrimed
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CMUElectroshock
+    minePrototype: null
+  # Goes off a second after the mine is tripped.
+  - type: TimerTrigger
+    delay: 1
+    initialBeepDelay: 0.4
+
+- type: entity
+  parent: BaseItem
+  id: CMUGrenadeElectroshockPlanted
+  name: G2 Electroshock grenade
+  description: A G2 electroshock grenade planted as a landmine.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Weapons/Throwable/electroshock.rsi
+    drawdepth: BelowMobs
+    layers:
+    - state: planted
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: Item
+    size: Small
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: {state: planted_active}
+          False: {state: planted}
+  - type: Fixtures
+    fixtures:
+      trigger:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.3,-0.3,0.3,0.3"
+        hard: false
+        layer:
+        - Opaque
+        mask:
+        - MobLayer
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.2,-0.2,0.2,0.2"
+        density: 20
+        mask:
+        - ItemMask
+  - type: Damageable
+  - type: Injurable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 20
+      behaviors:
+      - !type:TriggerBehavior
+  - type: RMCLandmine
+    placementDelay: 5
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+  - type: CMUElectroshock
+    primedPrototype: CMUGrenadeElectroshockPrimed
+    disarmedPrototype: CMUGrenadeElectroshock
+    triggerKeys: []
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  id: CMUElectroshockPulseEffect
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: CMU14/Effects/electroshock_pulse.rsi
+    drawdepth: Effects
+    noRot: true
+    layers:
+    - state: pulse
+      shader: unshaded
+  - type: TimedDespawn
+    lifetime: 0.5
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: CMPacketBase
+  id: CMUPacketGrenadeElectroshock
+  name: G2 electroshock grenade packet
+  description: It contains three G2 electroshock grenades.
+  components:
+  - type: Sprite
+    layers:
+    - state: sebb_packet
+      map: [ "closedLayer" ]
+    - state: sebb_packet_e
+      map: [ "openLayer", "emptyLayer"]
+
+- type: entity
+  parent: CMUPacketGrenadeElectroshock
+  id: CMUPacketGrenadeElectroshockFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUGrenadeElectroshock
+      amount: 3
+
+- type: entity
+  parent: RMCCrateExplosives
+  id: CMUCrateGrenadesElectroshock
+  name: G2 electroshock grenades crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUPacketGrenadeElectroshockFilled
+      amount: 2

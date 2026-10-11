@@ -9,10 +9,18 @@
   suffix: Yautja
   components:
   - type: YautjaHellhound
+  - type: K9Dog
+    presetBond: true
+    silentSensesAlert: true
+    batteryTrick: false
+    headbiteStrikes: false
+    grabEscapeMessage: rmc-k9-arm-grab-escape-hellhound
+    praiseMessage: rmc-k9-good-boy-hellhound
+    praiseSound: /Audio/_RMC14/Voice/Vulpkanin/dog_whine.ogg
+    bindMessageMaster: rmc-k9-bind-master-hellhound
+    bindMessageDog: rmc-k9-bind-dog-hellhound
   - type: Language
-    spokenLanguages: []
-    understoodLanguages:
-    - Yautja
+    preset: CMUHellhoundLanguagePreset
   - type: RMCCamera
     rename: false
   - type: GhostRole
@@ -67,6 +75,8 @@
   - type: CombatMode
     canDisarm: true
     disarmFailChance: 0
+  - type: Input
+    context: "xenonid"
   - type: Xeno
     role: CMUYautjaHellhound
     accessLevels: []

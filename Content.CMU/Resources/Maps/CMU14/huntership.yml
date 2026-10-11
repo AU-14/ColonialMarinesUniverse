@@ -5,7 +5,7 @@ meta:
   forkId: cmu14
   forkVersion: huntership-port-visual-1to1
   time: "2026-06-03T17:16:10.811Z"
-  entityCount: 6157
+  entityCount: 6151
 maps:
 - 200001
 grids:
@@ -357,38 +357,6 @@ entities:
     components:
     - type: Transform
       pos: 54.5,64.5
-      parent: 200002
-- proto: CMUHunterShipObjEffectAlienEggForsakenEggGrowingSouth
-  entities:
-  - uid: 200028
-    components:
-    - type: Transform
-      pos: 14.5,65.5
-      parent: 200002
-  - uid: 200029
-    components:
-    - type: Transform
-      pos: 16.5,65.5
-      parent: 200002
-  - uid: 200030
-    components:
-    - type: Transform
-      pos: 14.5,66.5
-      parent: 200002
-  - uid: 200031
-    components:
-    - type: Transform
-      pos: 16.5,66.5
-      parent: 200002
-  - uid: 200032
-    components:
-    - type: Transform
-      pos: 14.5,67.5
-      parent: 200002
-  - uid: 200033
-    components:
-    - type: Transform
-      pos: 16.5,67.5
       parent: 200002
 - proto: CMUHunterShipObjEffectAlienWeedsNodeForsakenWeednodeSouth
   entities:

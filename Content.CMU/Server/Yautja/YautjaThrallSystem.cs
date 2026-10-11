@@ -20,6 +20,8 @@ using Content.Server._RMC14.Language.Systems;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Damage;
@@ -83,6 +85,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private AreaSystem _areas = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private DialogSystem _dialog = default!;
@@ -780,9 +783,12 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         var user = args.Performer;
         var target = args.Target;
 
+        // rejuvenate doesn't regrow parts, so butchered corpses without a head came back alive
         if (HasComp<YautjaThrallComponent>(target)
             || !HasComp<HumanoidProfileComponent>(target)
-            || !_mob.IsDead(target))
+            || !_mob.IsDead(target)
+            || !_body.BodyHasPartType(target, BodyPartType.Head)
+            || !_body.BodyHasPartType(target, BodyPartType.Torso))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-raise-invalid"), user, user, PopupType.SmallCaution);
             return;

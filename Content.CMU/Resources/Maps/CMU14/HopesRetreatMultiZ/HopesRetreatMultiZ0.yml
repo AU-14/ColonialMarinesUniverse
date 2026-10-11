@@ -130515,7 +130515,7 @@ entities:
           name: null
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesHighExplosiveBox
+          crate: CMUCrateGrenadeBoxHEDP
           cost: 1000
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
@@ -130523,7 +130523,7 @@ entities:
           name: null
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesBoxHEFA
+          crate: CMUCrateGrenadeBoxHEFA
           cost: 2000
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
@@ -130531,7 +130531,7 @@ entities:
           name: null
           maxStock: 0
           entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 1800
         - stockReplenishDelay: 600
           stockReplenishAmount: 1
@@ -130539,7 +130539,7 @@ entities:
           name: null
           maxStock: 0
           entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 2000
         - stockReplenishDelay: 600
           stockReplenishAmount: 1

@@ -1,0 +1,3207 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-4.0",
+  "copyright": "Composed original equipment artwork; per-state original authors, licenses and source hashes in Models/CMU14/Garrison/SOURCES_WORN_EQUIPMENT.json.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "CMU3DWornAU14IMPBackpackMarineBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CultistSatchelBlackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14SlingSatchelBlueBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14LACNBackpackSniperBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14RMCRRTBackpackBreacherBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14SatchelDemoSpecUPPBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14AU14MolleBackpackCOFullBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14MolleSatchelBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CMDefibrillatorBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodCloakPackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaCloakPackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingBackpackSatchelLeatherBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMBackpackEngineerBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMBackpackMedicalBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BackpackAmmoRCMSurvL90Back",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMBackpackMarineMedicBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14StrikeOrganizerBackpackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMBackpackSniperBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUDroneOperatorChoicePackFilledBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelPMCCommandoFilledBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelPMCBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelWelderRUBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBackpackRCMMedicPVPFilledParaMedicBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBackpackSPPCommandoBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelMarineChestrigPVEBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMSatchelMarineTechBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14DrugDealerDrugBackpackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelChemistryBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMSatchelBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMSatchelEngineerBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMSatchelMedicalBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelBureauObserverSecureFillBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMSatchelSecurityBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UACGPatrolRucksackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelMarineIntelSatchelBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14SatchelMarineAdvisorMilitaryBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelWelderBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelLightpackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelLightpackBlackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelLightpackWelderBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelLightpackWeYaBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelPMCMedicBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelSPPBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSatchelSPPWelderEngineerBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14SatchelCMBShotgunBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCScabbardMacheteFilledBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCScabbardMacheteSGFilledBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackBack65bb7889",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14SmartpackBlackFilledBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14SmartpackBlackFilledBack8a036aab",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackGreenBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackGreenBack0135369d",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackTanBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackTanBack89622eb5",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackWhiteBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackWhiteBack3ab7593c",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackA1Back",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackA1Backdbb6327a",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackA1BlackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackA1BlackBack1c96e404",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackA1GreenBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackA1GreenBack1289c809",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackA1TanBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSmartpackA1TanBack3098caf3",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCPMCSyntheticSmartpackBack",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCPMCSyntheticSmartpackBack7ef9922b",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltMarineRMCFullL90Belt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltUtilityCombatProdigyRUFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolRMCFullL165A1Belt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltMedicBagSupportSynthRMCBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ShotgunShellLoadingRigRMCFullBuckshotBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolUPPFullBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltSmartGunOperatorPistolUPPFullBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltMedicalUPPFullBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltUtilityGeneralBlackBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltMedicBagSupportSynthBlackBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolBlackBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14M276ShotgunShellLoadingRigBlackVonBandolierBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaHuntingPouchBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingBeltQuiverBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornTrashBagBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCScabbardMacheteFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMatebaBeltLuxuriousFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltBrowneFilledCMPBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltUtilityCombatFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltConstructionCLFSurvBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterNailgunFillBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolUSArmyFullBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterPistolParaM44Belt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterPistolParaCustomBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterPistolSPPNPZ92Belt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolCMBHG45Belt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterPistolWeYaMK80FillBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterRevolverBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterRevolverSpearheadFillBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UACGBeltFilledM20aBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14MatebaCustomBeltFilledAmmoBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltMedicalFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltMedicBagFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltMedicBagProdigyFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltMedicBagPMCFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltPMCFilledCommandoBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMedicalL75RCMFillParaBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMBeltSecurityMPBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltSmartGunOperatorPistolForeconFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltSmartGunOperatorPistolPMCFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UACGAmmoBearerBeltBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltMarineArmyUPPTDFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltUtilityFilledBelt",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaCommunicatorEars",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCM5CameraGearEars",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCEarmuffsEars",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GlassesBiMexOrangeEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GlassesPersonalOrangeEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1BallisticEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1ClearBallisticEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1DarkBallisticEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1LaserBallisticEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1OrangeBallisticEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1PolarizedBallisticEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingEyesGlassesCheapSunglassesEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesBloodredEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesGreenEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesMidnightEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesNightblueEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesPinkEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesSunriseEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesSunsetEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesM1A1BallisticEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesM1A1BallisticBlueEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesAviatorsEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesAviatorsSilverEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCPrescriptionSunglassesBigFakeEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticBlackEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticBlueEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticPolarizedBlueEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCEyepatchEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHipsterGlassesEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesKutjevoEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesM4SPRBattleSightEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesMedicalHUDGlassesEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesMarineRpgOldEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticOrangeEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticPolarizedOrangeEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticPurpleEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesReagentHUDGlassesEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticRedEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesMarineRpgEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMGlassesSecurityEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesSecurityBlueEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesHUDSecurityEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticSquadEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCPrescriptionSunglassesEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesTriMaxBlackEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesTriMaxBronzeEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesTriMaxYellowEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCWeldingGogglesEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ProdigyWeldingGogglesEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticYellowEyes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14LACNGlovesGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HandsRMCGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodBracerGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingHandsGlovesNitrileGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14PVEHandsInsulatedBlackMarineGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHandsBrownGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHandsDeluxeMarineGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHandsVeteranCBRNGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHandsInsulatedGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHandsLatexGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HandsProdigyRUGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHandsVeteranRoyalMarineGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHandsVeteranGloves",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CWPSCampaignHatHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivBallCapBlackHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivBallCapBlueTruckerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivFedoraBrownHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivFedoraGrayHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivFedoraTanHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivBallCapRedTruckerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14DesertBoonieHatHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UACGPatrolCapHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14DesertM10HelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14DesertM11HelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadPithHelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JungleBoonieHatHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JunglePatrolCapHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JungleM10CorpsmanHelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JungleM10HelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JungleM11HelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CamoM50HelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadCommandoBeanieHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14LACNNavyCapHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14PARTOperatorHelmetHeavyHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ProdigyBallisticHelmetPARTHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ProdigyBeretPARTHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadBeretRMCHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadBeretRMCOfficerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadHelmetRMCHeavyHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadHelmetRMCHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadHelmetRMCMedicHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadHelmetRMCSniperHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UNISCBeretHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UNISCM10HelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UNISCM11HelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UPPBoonieHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UPPPatrolCapHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UPPNavalInfantryHelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14USASFAirCrewHelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14USASFSECFORBeretHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HelmetGhillieHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HatUSArmyHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HelmetUSArmyHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorHelmetPMCTacticalHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorHelmetPMCTacticalEngiHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WYPPOCapHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WYPMCSniperHatHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14USCMVeteranCapHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMU14ProdigyCapGreyHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUHelmetBoneTribalHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingHeadHatHoodCulthoodHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCM5CameraGearHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeanieHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeanieGrayHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeanieGreenHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeanieTanHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeretUSArmyMajorHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadBeretADJHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadDressBluesHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadFedoraBrownHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapSurgBlueHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapSurgGreenHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapSurgOrangeHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadBeretEngineerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeretFreelancerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeretGeneralHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeretGreenHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeretPurpleHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14HeadBeretSOHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadBeretRedHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadBeretTanHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadBeretCMPHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeretUSArmyHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBoonieHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBoonieTanHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadMilitiaBucketHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapBureauHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapFlippableHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapOfficerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapPeakedCMPHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapPeakedFormalHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapPeakedServiceHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapCargoHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapCMOHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapDrillHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadDuragBlackHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadFlapCapHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadBandBrownHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadBandGrayHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadBandGreenHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadBandRedHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBandSquadHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadBandTanHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapMPHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapPizzaGalaxyHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCProvostCommandBeretHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapQuartermasterHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadUNMCHeadsetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadWeYaPilotCapHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorHelmetM10CMBVisorSWATHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHardhatBlueHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHardhatOrangeHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHardhatRedHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHardhatWhiteHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHardHatHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHoodBioWeYaHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHoodBioWeYaAltHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapGeneralHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetM10Head",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorHelmetM10ChiefMPHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorHelmetM11CGeneralHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorHelmetCovertHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorCapProvostHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHelmetWeldingHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorHelmetPMCBlackHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetPMCHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetPMCCommandoHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetPMCCorporateHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetPMCCorporateLeadHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetPMCDirectorHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetPMCFieldOfficerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorHelmetPMCCorporateHybrisaHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorHelmetPMCDarkHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorHelmetPMCKutjevoSecurityHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapManagerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetPMCOfficerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetPMCRiotShieldHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadRoyalFlightHelmetHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadRoyalL1HelmetBallisticHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadParaBeretHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapPeakedParaHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadParaBeretLeadHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorHelmetArmyUPPHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapSPPBeretHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapSPPHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetSPPEngineerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorHelmetSPPFirefighterHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetSPPHeavyHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornArmorHelmetSPPHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapSPPPolBlackHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapSPPPolKomWhiteHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMHeadCapSPPPeakedPoliceHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapSPPCivilianPlantWorkerHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeretTSEHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadBeretTSEPAHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapTSEPAPeakedHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHeadCapTSEPAPeakedGoldHead",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14IDCardCivilianKellandWardenId",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14IDCardColonyCMBMarshalId",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUIDCardRaiderId",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14IDCardFORECONCommanderId",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUIDCardProvostAdvisorId",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingUniformJumpsuitColorBrownJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CCAFUniformJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CMBUniformJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CWPSUniformJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianParamedicClothesGreenJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianParamedicClothesRedJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianSanitationClothesJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianWeYuEngineerClothesJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianWorkwearBlueJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianBoilerSuitCyanJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianBoilerSuitDarkBlueSynthJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFlannelPurpleJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFlannelRedJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFlannelWhiteJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFloralBlueJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFloralRedJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFloralYellowJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianWeYuEngineerFormanClothesJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianBoilerSuitGrayJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianWorkwearGreenJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JoeHazmatJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianBoilerSuitKhakiJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianKellandMiningClothesJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianBoilerSuitLightBlueJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianWorkwearPinkJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianPrisonJumpsuitJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianBoilerSuitWhiteJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianWorkwearYellowJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14LACNUniformCoatJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ProdigyFatiguesRUJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14FatiguesBlackRMCJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14FatiguesBlackRMCTeamleadJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UNISCFatiguesJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14FatiguesUPPGROMJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14USASFPilotJumpsuitJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14MarineUniformDressEnlistedDJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14MarineUniformDressSeniorDJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmyJumpsuitJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WYGuardFatiguesJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WYPMCFatiguesEngineerJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WYPMCFatiguesJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14UniversalBlackFatiguesJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitFORECONDesertJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitFORECONJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMU14ProdigySuitBlackJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMU14ProdigyJumpsuitGreyJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCSwatCMBUniformSpearheadJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitCivilianBlueVAIWebbingSurgicalJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitCivilianBrownJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitCivilianJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitCivilianGreenJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitPizzaGalaxyJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitCivilianRedVAIHEDPJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitCivilianScientistJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitCivilianVirologistJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitNormCivilianWhiteAltJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitCivilianYellowVAIToolWebbingJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitASOBlackJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitASOBlackAltJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitASOFormalJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitASOFormalAltJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumsuitWhiteServiceJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitBOJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitXOFormalJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitGeneralJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitDutchBandolierJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitMaintTechJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitOrdnanceTechJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonBlackJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonBlueJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonBrownJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitTShirtRedVAIHEDPJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonCorporateFormalJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonIvyJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitWornSuitJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitLiaisonGreyWorkwearJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonBlazerJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonCharcoalJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonFormalJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonOutingJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonOutingRedJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitLiaisonSuspendersJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitLiaisonManagerJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitLiaisonPilotJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitMPCorporateJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitMPJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitWOJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CBRNSuitJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmyJumpsuitTankerJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitVeteranPMCCorporateJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitVeteranPMCCorporateLeadJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitVeteranPMCDirectorJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WYSecurityUniformRigJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitVeteranPMCKutjevoJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitVeteranPMCCommandoJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitVeteranPMCNoWebbingPatchJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitProvostAgentJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitProvostCIJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitProvostMarshalJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitProvostJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitProvostSeniorJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitArmyUPPJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitSPPCiv4Jumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitSPPEngiJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitSPPMedicJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitSPPPaPJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitSPPJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMScrubsBlueJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ScrubsGreenDoctorSurgicalJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCScrubsGreyJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCScrubsLightBlueJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCScrubsOliveJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMScrubsPurpleJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitCLFWebbingBuckshotJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CMJumpsuitColonistCLFJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitCivilianFrontierJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitKutjevoJumperJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitSurvivorMarineDropPouchJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitRiotControlJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitAverageJoeJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitSyntheticOutdatedJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitSyntheticPristineJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitSyntheticJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitTShirtGrayJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitTShirtWhiteVAIToolWebbingJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitTShirtWhiteJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14JumpsuitIASFL90Jumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitMarineParaServiceJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitTSEPAJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitCMOJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJumpsuitFreelancerJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUJumpsuitRaiderWebbingBuckshotJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMJumpsuitResearchJumpsuit",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GlassesBiMexOrangeMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GlassesPersonalOrangeMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1BallisticMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1ClearBallisticMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1DarkBallisticMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1LaserBallisticMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1OrangeBallisticMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14GogglesM1A1PolarizedBallisticMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14MaskUSASFPilotOxygenMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14MOPPMaskMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred10CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred11CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred12CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred13CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred14CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred15CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred16CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred17CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred18CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred19CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred01CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred20CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred02CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred03CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred04CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred05CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred06CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred07CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred08CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskPred09CrimsonMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskBadBloodBaneMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskBadBloodCommandoMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskBadBloodCommandoAltMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskBadBloodLunaticMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaMaskBadBloodVenatorMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornJointMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCigaretteMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCigarMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesBloodredMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesGreenMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesMidnightMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesNightblueMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesPinkMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesSunriseMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHippieGlassesSunsetMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesM1A1BallisticMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesM1A1BallisticBlueMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesAviatorsMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesAviatorsSilverMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCPrescriptionSunglassesBigFakeMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticBlackMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticBlueMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticPolarizedBlueMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCEyepatchMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHipsterGlassesMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesKutjevoMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesMarineRpgOldMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticOrangeMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticPolarizedOrangeMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticPurpleMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticRedMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesMarineRpgMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCPrescriptionSunglassesMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesTriMaxBlackMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesTriMaxBronzeMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGlassesTriMaxYellowMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCGogglesBallisticYellowMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskKeffiyehMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskKeffiyehBlackMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskKeffiyehBlueMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskKeffiyehGreenMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskKeffiyehRedMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskKeffiyehWhiteMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefBlackMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefGrayMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefGreenMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefRedMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefTanMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefTanDownMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefWhiteMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfRedMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfBlackMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfGrayMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfGreenMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfSquadMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfTanMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfTanDownMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskSmockBlackMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfBlackMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfDesertMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfGreenMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfGreyMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfSnowMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfUrbanMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskBalaclavaMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMMaskCoifMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMMaskGasMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskCoifGreenMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskCoifGreyMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskKutjevoRespiratorMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskBalaclavaSkullBlackMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskBalaclavaSkullBlueMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskBalaclavaSPPCommandoMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskGasSPPMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMMaskSterileMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskSWATMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCVisorSWATMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskBalaclavaGreenMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskCoifTanMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMTarbackCigarMask",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingNeckStethoscopeNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefBlackNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefGrayNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefGreenNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefRedNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefTanNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefTanDownNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskNeckerchiefWhiteNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfRedNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfBlackNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfGrayNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfGreenNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfSquadNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfTanNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskScarfTanDownNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskSmockBlackNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfBlackNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfDesertNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfGreenNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfGreyNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfSnowNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMaskTornScarfUrbanNeck",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CMBDeputyWindbreakerOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CMBMarshalWindbreakerOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CWPSBomberOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianHazardVestParamedicGreenOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianHazardVestKellandMiningCorporationOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianHazardVestSanitationOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianHazardVestParamedicWhiteOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketBlueParkaOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WindbreakerBlueOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketBomberJacketOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianBrownTrenchCoatOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketGrayPufferJacketOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketGrayPufferVestOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianGrayTrenchCoatOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketGreenParkaOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketKhakiPufferJacketOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketKhakiPufferVestOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketOldCoatOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketOrangePufferJacketOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketRedParkaOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketSnowSuitOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketTanPufferVestOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianTanTrenchCoatOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianJacketYellowParkaOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianTurnoutGearOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFullSuitParamedicGreenOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFullSuitParamedicRedOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFullSuitSanitationOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CivilianFullSuitWeYuEngineerOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorM3DesertOneOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorM3JungleOneOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorSmartGunJungleCombatHarnessOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorM3JungleThreeOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorM3JungleTwoOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14LACNCommandoArmorStandardOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorProdigyXAS23OuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorProdigyXAS23SOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorProdigyXAS23GOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUArmorProdigyFlakVestOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUArmorProdigyFlakVestAltOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUArmorProdigyFlakVestMedicalOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorRMCOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorSmartGunDesertCombatHarnessRMCOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorPointmanRMCOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorM3UNISCOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorSmartGunUNISCCombatHarnessOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14USASFICPS2OuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorUSArmyNormalOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorUSArmyOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorUSArmySynthOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WYPPOArmorOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WYPMCArmorMinOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14WYPMCArmorOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorBallisticVestOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14CMDefibrillatorOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodArmorBaneOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodArmorCommandoAltOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodArmorLunaticOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodArmorScavengerAltOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmorOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmor2OuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmor3OuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmor4OuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmor5OuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmor6OuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmor7OuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmorBoneOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmorBronzeOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmorCrimsonOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanArmorSilverOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingOuterRobesCultOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorVestOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorM3GeneralOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorPMCRiotOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM3VLSynthClassicOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM3VLSynthDesertOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM3VLSynthOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM3VLSynthSnowOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM3VLSynthUrbanOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM3VLBallisticsOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM3WOOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorM4RMediumOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatBomberOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBrownWEYACoatOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCFancySuitJacketBlackOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCFancySuitJacketBrownOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketCorporateBlackOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketCorporateBlueOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketCorporateBrownOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketCorporateFormalOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketCorporateKhakiOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketCorporateManagerOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCFancySuitJacketLightBrownOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCProvostCoatMarshalFilledOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCProvostJacketFilledOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCProvostCommandJacketFilledOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatSnowSurvivorCMBDeputyOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketWindbreakerFirstResponderOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketWindbreakerOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketWindbreakerBrownOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketWindbreakerExpeditionOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketWindbreakerGreyOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatASOBlackOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatASOBlackAltOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatASOWhiteOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatASOWhiteAltOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMCoatChiefMPOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMCoatXOFormalOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCClothingHolidayRobesOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatJacketGeneralFilledOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMCoatMPOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCQuartermasterJacketOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatServiceOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatWeYaPilotOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorDutchJacketVonBandolierOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHazardVestBlackOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHazardVestBlueOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHazardVestOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCHazardVestYellowOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCLabcoatBrownOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCLabcoatCMOOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCLabcoatOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCLabcoatOpenedOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCLabcoatLongOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMedicalApronOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCLabcoatScienceOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCLabcoatShortOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCLabcoatVirologyOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatMilitiaOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14SuitBioWeYuOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ExternalWebbingOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCOuterClothingExternalWebbingBlackOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM4PMCCorporateOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM4PMCCorporateLeadOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorPMCDirectorOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM4PMCSmartGunHarnessOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorM4PMCLightOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorProvostFlexiOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorProvostLightOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorProvostMarshalOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorProvostOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorProvostSeniorFilledOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorProvostAgentOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorParaSynthVestFillOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorArmyUPPOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorSPPCommandoOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorSPPFirefighterOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorSPPHeavySpecialistOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatKommissarShortBlackOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatOfficerShortWhiteOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatSPPOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatPaPOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorSPPRiflemanOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorSPPSupportOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatTSEPAHighVisVestOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCCoatTSEPAOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCArmorVestTSEPAOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCJacketParaCOJacketFilledOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14ArmorCBRNOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMArmorFreelancerOuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUArmorRaiderXM40OuterClothing",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingShoesColorRedShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornClothingShoesColorWhiteShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14LACNBootsShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BootsJungleShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodGreavesBaneShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodGreavesCommandoAltShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodGreavesLunaticShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaBadBloodGreavesScavengerAltShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanGreavesShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanGreaves2Shoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanGreaves3Shoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMUYautjaClanGreaves4Shoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMBootsBlackShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornCMBootsBrownShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BootsCBRNShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBootsPMCShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBootsRoyalFilledShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesSandalsShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesBlackShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesBlueShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesBrownShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesGreenShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesOrangeShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesPurpleShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesRedShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesWhiteShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesYellowShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesFancyLeatherShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesLaceupShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesLaceupBrownShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCShoesLeatherShoes",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolRMCFullL165A1Suitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolUPPFullSuitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolBlackSuitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCScabbardMacheteFilledSuitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCMatebaBeltLuxuriousFilledSuitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolUSArmyFullSuitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterPistolParaM44Suitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterPistolParaCustomSuitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterPistolSPPNPZ92Suitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14BeltHolsterPistolCMBHG45Suitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterPistolWeYaMK80FillSuitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterRevolverSuitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornRMCBeltHolsterRevolverSpearheadFillSuitstorage",
+      "directions": 4
+    },
+    {
+      "name": "CMU3DWornAU14MatebaCustomBeltFilledAmmoSuitstorage",
+      "directions": 4
+    }
+  ]
+}

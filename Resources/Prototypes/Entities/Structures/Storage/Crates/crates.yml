@@ -697,6 +697,10 @@
   name: coffin
   description: A comfy coffin, excellent place for the vampires and corpses.
   components:
+  # cmu edit start
+  - type: EntityStorage
+    capacity: 10
+  # cmu edit end
   - type: Sprite
     sprite: Structures/Storage/Crates/coffin.rsi
     layers:

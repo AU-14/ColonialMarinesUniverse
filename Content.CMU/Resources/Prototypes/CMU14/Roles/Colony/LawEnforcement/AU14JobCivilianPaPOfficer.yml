@@ -33,7 +33,7 @@
   canBeAntag: false
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
+    time: 14400 # 4 hours
   - !type:AgeRequirement
     requiredAge: 21
   - !type:TraitsRequirement
@@ -41,6 +41,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   playTimeTracker: AU14JobCivilianPaPOfficer
   ranks:
     RMCRankCivilian: []

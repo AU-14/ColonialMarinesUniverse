@@ -98,6 +98,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
             var boost = Spawn(null, MapCoordinates.Nullspace);
             var evoOverride = EnsureComp<EvolutionOverrideComponent>(boost);
             evoOverride.Amount = 10;
+            evoOverride.IgnoreGranter = true; // CMU14: hijacking requires leaving the ovipositor.
             Dirty(boost, evoOverride);
 
             EnsureComp<TimedDespawnComponent>(boost).Lifetime = 180;
@@ -159,7 +160,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
             if (!prototype.TryComp(out XenoComponent? xeno, _compFactory))
                 continue;
 
-            if (xeno.UnlockAt == TimeSpan.Zero || prototype.HasComponent<XenoHiddenComponent>(_compFactory))
+            if (xeno.UnlockAt == TimeSpan.Zero || prototype.HasComp<XenoHiddenComponent>(_compFactory))
                 continue;
 
             ent.Comp.Unlocks.GetOrNew(xeno.UnlockAt).Add(prototype.ID);

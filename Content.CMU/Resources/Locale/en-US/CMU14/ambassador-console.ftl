@@ -56,7 +56,6 @@ ambassador-console-trade-pact-ended-no-funds = Trade pact by { $faction } has en
 ambassador-console-comms-jam-ended-no-funds = Communications jamming by { $faction } has ended due to insufficient funds.
 ambassador-console-embassy-sender = { $faction } Embassy
 ambassador-console-default-sender = Ambassador Console
-ambassador-console-support-unavailable = Unable to dispatch support at this time.
 ambassador-console-embargo-enabled = A trade embargo has been activated by { $faction }. Submission point payouts are reduced by 20%.
 ambassador-console-embargo-disabled = The trade embargo by { $faction } has been lifted.
 ambassador-console-trade-pact-enabled = A trade pact has been activated by { $faction }. Submission point payouts are increased by 20%.

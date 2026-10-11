@@ -31,6 +31,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
+    [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
     [Dependency] private SkillsSystem _skills = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
@@ -69,7 +70,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         }
         var state = args.State;
 
-        FillBodyParts(args.Patient, state);
+        FillBodyParts(args.Patient, state, showExternalBleeding: skill >= 1);
         if (skill >= 2)
         {
             state.CMUSyntheticPhysiology = HasComp<SynthComponent>(args.Patient);
@@ -118,7 +119,7 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
         _ => CMUPainShockRisk.Low,
     };
 
-    private void FillBodyParts(EntityUid patient, HealthScannerBuiState state)
+    private void FillBodyParts(EntityUid patient, HealthScannerBuiState state, bool showExternalBleeding)
     {
         var parts = new Dictionary<BodyPartType, CMUBodyPartReadout>();
         var seen = new HashSet<(BodyPartType, BodyPartSymmetry)>();
@@ -153,9 +154,33 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
                 HasComp<CMUEscharComponent>(partUid),
                 HasComp<CMUSplintedComponent>(partUid),
                 HasComp<CMUCastComponent>(partUid),
-                HasComp<CMUTourniquetComponent>(partUid));
+                HasComp<CMUTourniquetComponent>(partUid),
+                showExternalBleeding ? pw?.ExternalBleeding ?? ExternalBleedTier.None : ExternalBleedTier.None);
         }
         state.CMUParts = parts;
+
+        if (!showExternalBleeding)
+            return;
+
+        var stumps = new List<CMUStumpReadout>();
+        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(patient))
+        {
+            if (!TryComp<CMUOpenStumpComponent>(partUid, out var open))
+                continue;
+
+            foreach (var stump in open.Stumps)
+                stumps.Add(new CMUStumpReadout(stump.Type, stump.Symmetry, stump.Clamped));
+        }
+
+        if (stumps.Count > 0)
+            state.CMUStumps = stumps;
+    }
+
+    /// <summary>The part's own external bleed, or arterial while it has an open stump that isn't clamped.</summary>
+    private ExternalBleedTier PartBleedTier(EntityUid part, BodyPartWoundComponent? wounds)
+    {
+        var tier = wounds?.ExternalBleeding ?? ExternalBleedTier.None;
+        return _stumps.HasUnclampedStump(part) ? ExternalBleedTier.Arterial : tier;
     }
 
     private static BodyPartType ToDictKey(BodyPartType type, BodyPartSymmetry sym)
@@ -235,13 +260,13 @@ public sealed partial class HealthScannerCMUExtensionSystem : EntitySystem
 
         foreach (var (partUid, _) in _medicalIndex.GetBodyParts(patient))
         {
-            if (!TryComp<BodyPartWoundComponent>(partUid, out var pw))
-                continue;
-            if (pw.ExternalBleeding == ExternalBleedTier.None)
+            var tier = PartBleedTier(partUid, CompOrNull<BodyPartWoundComponent>(partUid));
+            if (tier == ExternalBleedTier.None)
                 continue;
 
             state.CMUExternalBleeding = true;
-            return;
+            if (tier > state.CMUExternalBleedTier)
+                state.CMUExternalBleedTier = tier;
         }
     }
 

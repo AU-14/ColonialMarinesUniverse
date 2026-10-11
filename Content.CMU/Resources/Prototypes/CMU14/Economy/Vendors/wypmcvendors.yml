@@ -251,14 +251,20 @@
         amount: 2
     - name: Gas Mask
       entries:
-      - id: CMMaskGas
+      - id: CMUMaskGas
         amount: 40
-      - id: CMMaskPrescriptionGas
+      - id: CMUMaskGasBlack
+        amount: 40
+      - id: CMUMaskPrescriptionGas
+        amount: 10
+      - id: CMUMaskPrescriptionGasBlack
         amount: 10
       - id: CMUGasMaskFilterWY
         amount: 40
       - id: AU14PouchGasMaskBag
         amount: 20
+      - id: CMUFieldOxygenTankFilled
+        amount: 40
     - name: Medical Supplies
       entries:
       - id: AU14PouchIFAKFill
@@ -350,9 +356,13 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: AU14BeltMedicBagBlack
+      - id: CMUBeltMedicBagPMC
+        recommended: true
+      - id: CMUBeltMedicalPMC
     - name: General Medical Supplies
       entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2
       - id: CMUMaskCPR
         amount: 30
       - id: AU14HemostaticGauzePacket
@@ -701,6 +711,12 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
+      - id: ANPRC117GRadioIssued
+        amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 1
       - id: ArmorHelmetPMCFieldOfficer
         amount: 3
       - id: RMCExplosiveBreachingCharge
@@ -1006,6 +1022,7 @@
   name: We-Yu PMC automated requisitions vendor
   description: An automated supply rack hooked up to a big storage of various firearms, ammunitions, explosives, load carrying equipment and other miscellaneous items.
   components:
+  - type: CMURequisitionsVendor
   - type: AccessReader
     access: [ ["AU14AccessGovforReq"] ]
   - type: Sprite
@@ -1110,6 +1127,8 @@
         amount: 5
     - name: explosives
       entries:
+      - id: CMUBoxGrenadeTraining
+        amount: 1
       - id: CMPacketGrenadeHighExplosiveFilled
         amount: 6
       - id: AU14PacketGrenadeFragM12Filled
@@ -1146,12 +1165,12 @@
         amount: 2
       - id: RMCRocketM5510Brute
         amount: 12
+      - id: AU14Bangalore
+        amount: 2
     - name: Barrel Attachments
       entries:
       - id: RMCAttachmentExtendedBarrel
         amount: 5
-      - id: RMCAttachmentShotgunChoke
-        amount: 3
     - name: Rail Attachments
       entries:
       - id: RMCAttachmentTwoPointSling
@@ -1194,6 +1213,12 @@
         amount: 10
       - id: RMCPouchMagazinePistolLarge
         amount: 10
+      - id: RMCPouchGeneralLarge
+        amount: 5
+      - id: RMCPouchDocument
+        amount: 5
+      - id: RMCPouchShotgunLarge
+        amount: 5
     - name: Devices
       entries:
       - id: RMCIntelDetector
@@ -1206,14 +1231,26 @@
         amount: 4
       - id: MineDetector
         amount: 2
-    - name: RTO Packs
+      - id: CMUDeployableZLevelLadder
+        amount: 2
+    - name: Protective Equipment
       entries:
-      - id: AU14BackpackRTOPackJungle
-        amount: 1
-      - id: AU14BackpackRTOPackDesert
-        amount: 1
-      - id: AU14BackpackRTOPackGray
-        amount: 1
+      - id: CMUMaskGas
+        amount: 30
+      - id: CMUMaskGasBlack
+        amount: 30
+      - id: CMUGasMaskFilterWY
+        amount: 30
+      - id: CMUFieldGasTankOxygenFilled
+        amount: 15
+    - name: Radio Equipment
+      entries:
+      - id: ANPRC117GRadio
+        amount: 3
+      - id: ANPRCWhipAntenna
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 2
     - name: Materials
       entries:
       - id: CMSheetMetal
@@ -1224,6 +1261,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

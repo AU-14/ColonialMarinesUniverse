@@ -12,7 +12,7 @@
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1
       RMCSkillMedical: 2
-      RMCSkillSurgery: 1
+      RMCSkillSurgery: 2
       RMCSkillFirearms: 2
   - type: JobPrefix
     prefix: au14-job-prefix-nurse

@@ -283,6 +283,8 @@
         points: 6
       - id: CMBloodPackFull
         points: 5
+      - id: CMUSynthBloodPackFull # CMU14
+        points: 5
       - id: CMPortableSurgicalBed
         points: 10
       - id: CMPillCanisterBicaridine

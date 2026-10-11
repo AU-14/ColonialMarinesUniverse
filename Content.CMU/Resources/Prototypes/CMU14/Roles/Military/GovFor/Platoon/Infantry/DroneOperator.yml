@@ -49,6 +49,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -70,7 +72,7 @@
   id: CMUGearGOVFORDroneOperator
   equipment:
     id: CMUIDCardDroneOperator
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforDroneOperator
 
 - type: startingGear
   id: CMUGearGOVFORDroneOperatorDummy
@@ -79,7 +81,7 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetGovforMarine
+    ears: CMUHeadsetGovforDroneOperator
     back: CMUDroneOperatorChoicePackFilled
 
 - type: entity
@@ -158,7 +160,7 @@
   id: CMUGearOPFORDroneOperator
   equipment:
     id: CMUIDCardOPFORDroneOperator
-    ears: AU14HeadsetOpforMarine
+    ears: CMUHeadsetOpforDroneOperator
 
 - type: startingGear
   id: CMUGearOPFORDroneOperatorDummy
@@ -167,7 +169,7 @@
     shoes: AU14BootsJungle
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
-    ears: AU14HeadsetOpforMarine
+    ears: CMUHeadsetOpforDroneOperator
     back: CMUDroneOperatorChoicePackFilled
 
 - type: entity

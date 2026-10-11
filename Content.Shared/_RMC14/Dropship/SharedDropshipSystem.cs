@@ -1,8 +1,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics; // CMU14
 using Content.Shared.CMU14.Marines; // CMU14
 using Content.Shared.CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CMU14.Dropship.MultiDeck; // CMU14
+using Content.Shared.CMU14.Dropship.GunshipControls; // CMU14
 using Content.Shared.CMU14.Xenomorphs.Pathogen;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -71,6 +73,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private RMCPlanetSystem _planet = default!; // CMU14
     // CMU14: Force on Force roles, hijacking, announcements and identification.
     [Dependency] private IRobustRandom _hijackRandom = default!;
 
@@ -221,14 +224,14 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             string.Equals(wsComp.Faction, "thirdparty", StringComparison.OrdinalIgnoreCase))
         {
             args.Cancel();
-            _popup.PopupClient(Loc.GetString("rmc-dropship-hijack-thirdparty"), ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-dropship-hijack-thirdparty"), ent, args.User, PopupType.MediumCaution);
             return;
         }
 
         if (!isHijacker && !CanUseNavigation(ent, args.User))
         {
             args.Cancel();
-            _popup.PopupClient(Loc.GetString("cmu-dropship-navigation-access-denied"), ent, args.User);
+            _popup.PopupEntity(Loc.GetString("cmu-dropship-navigation-access-denied"), ent, args.User);
             return;
         }
 
@@ -242,7 +245,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         if (lockedOutRemaining > TimeSpan.Zero && !isHijacker)
         {
             args.Cancel();
-            _popup.PopupClient(Loc.GetString("rmc-dropship-locked-out", ("minutes", (int)lockedOutRemaining.TotalMinutes)), ent, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-dropship-locked-out", ("minutes", (int)lockedOutRemaining.TotalMinutes)), ent, args.User, PopupType.MediumCaution);
 
             if (_skills.HasSkill(args.User, ent.Comp.Skill, ent.Comp.FlyBySkillLevel))
             {
@@ -459,11 +462,11 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         if (ent.Comp.LockedOutUntil < _timing.CurTime)
         {
             _ui.CloseUis(ent.Owner);
-            _popup.PopupClient(Loc.GetString("rmc-dropship-locked-out-bypass-complete"), ent, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("rmc-dropship-locked-out-bypass-complete"), ent, args.User, PopupType.Medium);
             return;
         }
 
-        _popup.PopupClient(Loc.GetString("rmc-dropship-locked-out-bypass"), ent, args.User, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("rmc-dropship-locked-out-bypass"), ent, args.User, PopupType.Medium);
     }
 
     private void OnHumanHijackDoAfter(Entity<DropshipNavigationComputerComponent> ent, ref DropshipHumanHijackDoAfterEvent args)
@@ -578,6 +581,10 @@ public abstract partial class SharedDropshipSystem : EntitySystem
                 if (!computer.Hijackable)
                     continue;
 
+                // CMU14: Xenos can summon transports for hijack, but not the gunship.
+                if (isXeno && HasComp<GunshipControlsComponent>(computerId))
+                    continue;
+
                 if (Transform(computerId).GridUid != uid)
                     continue;
 
@@ -600,7 +607,9 @@ public abstract partial class SharedDropshipSystem : EntitySystem
                     continue;
                 }
 
-                if (FlyTo((computerId, computer), closestDestination.Value, user))
+                // CMU14: this validated remote queen call is an automated dispatch.
+                // if (FlyTo((computerId, computer), closestDestination.Value, user))
+                if (FlyTo((computerId, computer), closestDestination.Value, null))
                 {
                     _popup.PopupEntity("You call down one of the dropships to your location", user, user, PopupType.LargeCaution);
                     var locationName = Loc.GetString("rmc-dropship-hijack-queen-call-unknown-location");
@@ -639,7 +648,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
             if (!string.Equals(terminal.Comp.Faction, userFaction, StringComparison.OrdinalIgnoreCase))
             {
-                _popup.PopupClient(Loc.GetString("rmc-dropship-terminal-wrong-faction"), terminal, args.User, PopupType.MediumCaution);
+                _popup.PopupEntity(Loc.GetString("rmc-dropship-terminal-wrong-faction"), terminal, args.User, PopupType.MediumCaution);
                 args.Cancel();
                 return;
             }
@@ -1165,13 +1174,13 @@ public abstract partial class SharedDropshipSystem : EntitySystem
     private bool TryDropshipLaunchPopup(EntityUid computer, EntityUid user, bool predicted)
     {
         var roundDuration = _gameTicker.RoundDuration();
-        if (roundDuration < _dropshipInitialDelay)
+        if (roundDuration < _dropshipInitialDelay && !IsExemptFromInitialDelay(computer)) // CMU14
         {
             var minutesLeft = Math.Max(1, (int)(_dropshipInitialDelay - roundDuration).TotalMinutes);
             var msg = Loc.GetString("rmc-dropship-pre-flight-fueling", ("minutes", minutesLeft));
 
             if (predicted)
-                _popup.PopupClient(msg, computer, user, PopupType.MediumCaution);
+                _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
             else
                 _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
 
@@ -1191,7 +1200,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             var msg = Loc.GetString("rmc-dropship-pre-hijack", ("minutes", minutesLeft));
 
             if (predicted)
-                _popup.PopupClient(msg, computer, user, PopupType.MediumCaution);
+                _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
             else
                 _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
 
@@ -1228,21 +1237,25 @@ public abstract partial class SharedDropshipSystem : EntitySystem
             var msg = Loc.GetString("rmc-dropship-invalid-hijack");
 
             if (predicted)
-                _popup.PopupClient(msg, computer, user, PopupType.MediumCaution);
+                _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
             else
                 _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
 
             return false;
         }
 
-        // Prevent shipside hijacks by immature xeno queens (xeno-specific check).
+        // CMU14: colony grids and connected underground levels are planets too.
+        // Preserve the cabin-to-colony map resolution above and the shipside maturity restriction.
+        var onPlanet = _planet.IsOnPlanetLevel(Transform(user)) ||
+            map is { } colonyMap && _planet.IsOnPlanetLevel(Transform(colonyMap));
         if (HasComp<XenoMaturingComponent>(user) &&
-            !HasComp<RMCPlanetComponent>(map))
+            // !HasComp<RMCPlanetComponent>(map))
+            !onPlanet)
         {
             var msg = Loc.GetString("rmc-dropship-invalid-hijack");
 
             if (predicted)
-                _popup.PopupClient(msg, computer, user, PopupType.MediumCaution);
+                _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
             else
                 _popup.PopupEntity(msg, computer, user, PopupType.MediumCaution);
 
@@ -1523,6 +1536,16 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         }
     }
 
+
+    // CMU14: preserve the authored landing offset when creating destinations from markers.
+    public void SetLandingOffset(Entity<DropshipDestinationComponent?> destination, Vector2 offset)
+    {
+        if (!Resolve(destination, ref destination.Comp))
+            return;
+
+        destination.Comp.LandingOffset = offset;
+        Dirty(destination);
+    }
 
     public void SetDestinationType(EntityUid uid, string destinationtype)
     {

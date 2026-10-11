@@ -12,6 +12,8 @@
     inverted: true
     traits:
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
   roundSide: Civilian
   roundForce: COLONY_SECURITY
   roundRole: CivilianColonySecurityLeader

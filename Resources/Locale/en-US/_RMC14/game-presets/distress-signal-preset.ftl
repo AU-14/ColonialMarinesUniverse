@@ -27,9 +27,10 @@ rmc-distress-signal-next-map-tiebreaker = Vote tied between:
 rmc-distress-signal-fallen = In memoriam of our fallen soldiers:
  {$fallen}
 
-cm-distress-signal-medals = Medal Awards:
-cm-distress-signal-jellies = Royal Jelly Awards:
+# CMU14: markup so names, medals and citations stand out; the roundend screen renders rich text
+cm-distress-signal-medals = {"["}bold][color=blue]Medal Awards:[/color][/bold]
+cm-distress-signal-jellies = {"["}bold][color=purple]Royal Jelly Awards:[/color][/bold]
 
-rmc-distress-signal-got-medal = {$receiver} is awarded the {$award}: '{$awardDescription}' by {$giver}
+rmc-distress-signal-got-medal = {"["}bold]{$receiver}[/bold] is awarded the [color=gold][bold]{$award}[/bold][/color]: [italic]'{$awardDescription}'[/italic] by {$giver}
 
-rmc-distress-signal-got-jelly = {$receiver} is awarded the {$award}: '{$awardDescription}' by {$giver}
+rmc-distress-signal-got-jelly = {"["}bold]{$receiver}[/bold] is awarded the [color=purple][bold]{$award}[/bold][/color]: [italic]'{$awardDescription}'[/italic] by {$giver}

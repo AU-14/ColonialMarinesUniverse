@@ -29,6 +29,7 @@ using Content.Shared.Stunnable;
 using Content.Shared.Timing;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Whitelist; // CMU14
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
@@ -57,6 +58,7 @@ namespace Content.Shared.Cuffs
         [Dependency] private SharedTransformSystem _transform = default!;
         [Dependency] private UseDelaySystem _delay = default!;
         [Dependency] private SharedCombatModeSystem _combatMode = default!;
+        [Dependency] private EntityWhitelistSystem _whitelist = default!; // CMU14
 
         public override void Initialize()
         {
@@ -483,6 +485,12 @@ namespace Content.Shared.Cuffs
                 return null;
 
             var cuffs = Spawn(cuffProto, Transform(target).Coordinates);
+            // CMU14: instant restraints must obey the same body restrictions as manual cuffing.
+            if (_whitelist.IsWhitelistFail(cuffable.CuffsWhitelist, cuffs))
+            {
+                QueueDel(cuffs);
+                return null;
+            }
             if (!TryComp<HandcuffComponent>(cuffs, out var cuffComp))
             {
                 QueueDel(cuffs);
@@ -506,6 +514,9 @@ namespace Content.Shared.Cuffs
         public bool TryAddNewCuffs(EntityUid target, EntityUid user, EntityUid handcuff, CuffableComponent? component = null, HandcuffComponent? cuff = null)
         {
             if (!Resolve(target, ref component) || !Resolve(handcuff, ref cuff))
+                return false;
+
+            if (_whitelist.IsWhitelistFail(component.CuffsWhitelist, handcuff)) // CMU14
                 return false;
 
             if (!_interaction.InRangeUnobstructed(handcuff, target))
@@ -534,6 +545,9 @@ namespace Content.Shared.Cuffs
         public bool TryCuffing(EntityUid user, EntityUid target, EntityUid handcuff, HandcuffComponent? handcuffComponent = null, CuffableComponent? cuffable = null)
         {
             if (!Resolve(handcuff, ref handcuffComponent) || !Resolve(target, ref cuffable, false))
+                return false;
+
+            if (_whitelist.IsWhitelistFail(cuffable.CuffsWhitelist, handcuff)) // CMU14
                 return false;
 
             if (!TryComp<HandsComponent>(target, out var hands))

@@ -44,7 +44,7 @@ public sealed partial class RMCSelectableSoundsSystem : EntitySystem
                         action.Sound = sound;
 
                     var msg = Loc.GetString("rmc-sound-select", ("sound", name));
-                    _popup.PopupClient(msg, user, user);
+                    _popup.PopupEntity(msg, user, user);
                 },
             };
 

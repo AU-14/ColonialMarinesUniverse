@@ -48,7 +48,7 @@ public sealed class MohawkUndercarriageTest
                 new ResPath($"/Maps/CMU14/ShuttlesDropships/Mohawk/{variant}.yml"), out var loaded), Is.True);
             ship = loaded!.Value.Owner;
             cabinNet = entities.GetNetEntity(ship);
-            var warp = entities.EntityQuery<WarpPointComponent>()
+            var warp = entities.QueryEntities<WarpPointComponent>()
                 .Single(w => entities.GetComponent<TransformComponent>(w.Owner).ParentUid == ship);
             cabinWarp = entities.GetNetEntity(warp.Owner);
             var expectedName = variant.StartsWith("omaha") ? "Omaha" : "Midway";
@@ -63,7 +63,7 @@ public sealed class MohawkUndercarriageTest
                 originalTiles[entities.GetNetEntity(deck)] = maps.GetAllTiles(deck, entities.GetComponent<MapGridComponent>(deck))
                     .ToDictionary(t => t.GridIndices, t => tileDefinitions[t.Tile.TypeId].ID);
             }
-            foreach (var edge in entities.EntityQuery<MohawkRampEdgingComponent>())
+            foreach (var edge in entities.QueryEntities<MohawkRampEdgingComponent>())
                 rampEdges.Add(entities.GetNetEntity(edge.Owner), entities.GetComponent<TransformComponent>(edge.Owner).LocalPosition);
             Assert.That(rampEdges, Has.Count.EqualTo(10));
             Assert.That(entities.System<MohawkSystem>().SetRampDeployed(ship, true, true), Is.True);
@@ -79,7 +79,7 @@ public sealed class MohawkUndercarriageTest
 
             // Fuel-line artwork has its origin over an empty cell. It must be
             // attached even before moving, without adding an invisible floor.
-            var belly = entities.EntityQuery<MetaDataComponent>().Single(m => m.EntityName == "underside fuel lines");
+            var belly = entities.QueryEntities<MetaDataComponent>().Single(m => m.Comp.EntityName == "underside fuel lines");
             Assert.That(entities.GetComponent<TransformComponent>(belly.Owner).ParentUid, Is.EqualTo(lower));
             var children = entities.GetComponent<TransformComponent>(lower).ChildEnumerator;
             while (children.MoveNext(out var child))
@@ -111,7 +111,7 @@ public sealed class MohawkUndercarriageTest
             entities.AddComponent<DropshipDestinationComponent>(marker);
             transform.SetWorldRotation(marker, Angle.FromDegrees(180));
             entities.System<ShuttleSystem>().DefaultArrivalTime = 0.5f;
-            var nav = entities.EntityQuery<DropshipNavigationComputerComponent>()
+            var nav = entities.QueryEntities<DropshipNavigationComputerComponent>()
                 .First(c => entities.GetComponent<TransformComponent>(c.Owner).GridUid == ship);
             Assert.That(entities.System<SharedDropshipSystem>().FlyTo((nav.Owner, nav), marker, null,
                 startupTime: 0.5f, hyperspaceTime: 10f), Is.True);
@@ -149,8 +149,8 @@ public sealed class MohawkUndercarriageTest
             Assert.That(entities.GetComponent<TransformComponent>(lower).MapUid, Is.EqualTo(destinationGround));
             Assert.That(entities.HasComponent<ParallaxComponent>(destinationGround), Is.False,
                 "Landing must not overwrite a destination's background with the flight effect.");
-            Assert.That(entities.EntityQuery<AudioComponent>().Any(a =>
-                a.FileName == "/Audio/CMU14/Dropships/Mohawk/landing.ogg"), Is.True);
+            Assert.That(entities.QueryEntities<AudioComponent>().Any(a =>
+                a.Comp.FileName == "/Audio/CMU14/Dropships/Mohawk/landing.ogg"), Is.True);
             Assert.That(entities.GetComponent<TransformComponent>(entities.GetEntity(cabinWarp)).ParentUid, Is.EqualTo(ship));
             foreach (var (net, position) in rampEdges)
             {

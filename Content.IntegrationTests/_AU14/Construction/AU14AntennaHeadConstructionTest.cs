@@ -44,11 +44,13 @@ public sealed class AU14AntennaHeadConstructionTest : InteractionTest
         AssertPrototype(Head);
     }
 
-    [Test]
-    public async Task RaiseKeyAndReopenMast()
+    // CMU14: both engineering and mast-specific RTO training support the full assembly flow.
+    [TestCase("RMCSkillEngineer", 2)]
+    [TestCase("RMCSkillJtac", 4)]
+    public async Task RaiseKeyAndReopenMast(string skill, int level)
     {
         await Server.WaitPost(() =>
-            Server.System<SkillsSystem>().SetSkill(SPlayer, "RMCSkillEngineer", 2));
+            Server.System<SkillsSystem>().SetSkill(SPlayer, skill, level));
 
         await SpawnTarget("AU14CommsMastFooting");
 

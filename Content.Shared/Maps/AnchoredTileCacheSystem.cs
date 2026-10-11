@@ -10,7 +10,7 @@ namespace Content.Shared.Maps;
 /// values are deliberately not cached: callers still observe current height, immunity,
 /// damage and permission state. Invalidating a snapshot cannot change an active reader.
 /// </summary>
-public sealed class AnchoredTileCacheSystem : EntitySystem
+public sealed partial class AnchoredTileCacheSystem : EntitySystem
 {
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedMapSystem _map = default!;
@@ -92,7 +92,7 @@ public sealed class AnchoredTileCacheSystem : EntitySystem
             if (ent.Comp.GridUid is { } gridUid && TryComp(gridUid, out MapGridComponent? grid))
             {
                 var tile = _map.CoordinatesToTile(gridUid, grid, ent.Comp.Coordinates);
-                var query = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+                var query = _map.GetAnchoredEntities(gridUid, grid, tile);
                 while (query.MoveNext(out var uid))
                 {
                     if (uid != ent.Owner) continue;
@@ -173,7 +173,7 @@ public sealed class AnchoredTileCacheSystem : EntitySystem
 
         CacheMisses++;
         _scratch.Clear();
-        var query = _map.GetAnchoredEntitiesEnumerator(grid, grid.Comp, tile);
+        var query = _map.GetAnchoredEntities(grid, grid.Comp, tile);
         while (query.MoveNext(out var uid)) _scratch.Add(uid.Value);
         var cached = _scratch.ToImmutableArray();
         _scratch.Clear();

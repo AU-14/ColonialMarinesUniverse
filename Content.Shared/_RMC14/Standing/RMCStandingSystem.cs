@@ -67,7 +67,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
                             SetRest((ent, rest), false);
 
                             if (_standing.IsDown(ent))
-                                _popup.PopupClient(Loc.GetString("rmc-standing-stand-when-able"), ent, ent, PopupType.Medium);
+                                _popup.PopupEntity(Loc.GetString("rmc-standing-stand-when-able"), ent, ent, PopupType.Medium);
                         }
                         else
                         {
@@ -75,7 +75,7 @@ public sealed partial class RMCStandingSystem : EntitySystem
                                 return;
 
                             if (_standing.IsDown(ent))
-                                _popup.PopupClient(Loc.GetString("rmc-standing-keep-lying"), ent, ent, PopupType.Medium);
+                                _popup.PopupEntity(Loc.GetString("rmc-standing-keep-lying"), ent, ent, PopupType.Medium);
 
                             if (_standing.Down(ent, downedBy: ent))
                             {

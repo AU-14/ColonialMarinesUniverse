@@ -92,7 +92,7 @@ public sealed partial class AU14MastAssemblySystem : EntitySystem
         if (!feedWork && !IsConstructionInput(args.Used))
             return;
 
-        if (!_skills.HasSkill(args.User, ent.Comp.Skill, ent.Comp.RequiredSkillLevel))
+        if (!HasMastTraining(args.User, ent.Comp))
         {
             // Handled, so construction never sees the interaction and the untrained user is told why rather than
             // being left clicking at a structure that silently does nothing.
@@ -301,7 +301,7 @@ public sealed partial class AU14MastAssemblySystem : EntitySystem
         if (!ent.Comp.ExamineHint)
             return;
 
-        if (!_skills.HasSkill(args.Examiner, ent.Comp.Skill, ent.Comp.RequiredSkillLevel))
+        if (!HasMastTraining(args.Examiner, ent.Comp))
             args.PushMarkup(Loc.GetString("au14-mast-examine-untrained"));
     }
 
@@ -379,4 +379,8 @@ public sealed partial class AU14MastAssemblySystem : EntitySystem
     }
 
     #endregion
+
+    private bool HasMastTraining(EntityUid user, AU14MastAssemblyComponent mast) =>
+        _skills.HasSkill(user, mast.Skill, mast.RequiredSkillLevel) ||
+        _skills.HasSkill(user, mast.AlternativeSkill, mast.AlternativeSkillLevel);
 }

@@ -28,6 +28,8 @@ namespace Content.IntegrationTests.CMU14.Medical.Injuries.Wounds;
 [TestFixture]
 public sealed class PassiveWoundRecoveryReentryTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<Content.Shared.Tag.TagPrototype> InstantDoAftersPrototype = "InstantDoAfters";
+
     [TestCase(RecoveryInterruption.Stasis)]
     [TestCase(RecoveryInterruption.Rejuvenate)]
     [TestCase(RecoveryInterruption.RejuvenateThenHit)]
@@ -87,7 +89,7 @@ public sealed class PassiveWoundRecoveryReentryTest
                 treater.InstantWoundTreatmentSkills.Clear();
                 treater.WoundsTreatedPerUse = 1;
                 entities.System<SkillsSystem>().SetSkill(medic, "RMCSkillMedical", 2);
-                entities.System<TagSystem>().AddTag(medic, "InstantDoAfters");
+                entities.System<TagSystem>().AddTag(medic, InstantDoAftersPrototype);
                 Assert.That(entities.System<SharedHandsSystem>().TryPickupAnyHand(medic, gauze, checkActionBlocker: false), Is.True);
                 entities.System<SharedBodyZoneTargetingSystem>().SelectZone((medic, null), TargetBodyZone.LeftArm);
                 // Accelerate only the actual DoAfter clock, not its completion event

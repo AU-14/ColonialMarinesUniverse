@@ -3,6 +3,7 @@
   name: trait-cmu-prosthetic-left-arm-name
   description: trait-cmu-prosthetic-left-arm-desc
   category: Disabilities
+  cost: 2
   components:
   - type: CMUProstheticLeftArm
 
@@ -11,6 +12,7 @@
   name: trait-cmu-prosthetic-right-arm-name
   description: trait-cmu-prosthetic-right-arm-desc
   category: Disabilities
+  cost: 2
   components:
   - type: CMUProstheticRightArm
 
@@ -19,6 +21,7 @@
   name: trait-cmu-prosthetic-left-leg-name
   description: trait-cmu-prosthetic-left-leg-desc
   category: Disabilities
+  cost: 2
   components:
   - type: CMUProstheticLeftLeg
 
@@ -27,6 +30,7 @@
   name: trait-cmu-prosthetic-right-leg-name
   description: trait-cmu-prosthetic-right-leg-desc
   category: Disabilities
+  cost: 2
   components:
   - type: CMUProstheticRightLeg
 
@@ -35,5 +39,47 @@
   name: trait-cmu-hyperacusis-name
   description: trait-cmu-hyperacusis-desc
   category: Disabilities
+  cost: 1
   components:
   - type: CMUHyperacusis
+
+- type: trait
+  id: CMUAlcoholic
+  name: cmu-trait-alcoholic-name
+  description: cmu-trait-alcoholic-desc
+  category: Disabilities
+  cost: 1
+  components:
+    - type: CMUSubstanceAddiction
+      anyAlcohol: true
+      cravingAlert: CMUAlcoholCraving
+      onsetMessage: cmu-alcoholic-onset
+      cravingMessage: cmu-alcoholic-craving
+      shakeMessage: cmu-alcoholic-shake
+      satisfiedMessage: cmu-alcoholic-satisfied
+
+- type: trait
+  id: CMUDrugAddict
+  name: cmu-trait-drugaddict-name
+  description: cmu-trait-drugaddict-desc
+  category: Disabilities
+  cost: 1
+  components:
+    - type: CMUSubstanceAddiction
+      reagents:
+      - SpaceDrugs
+      - RMCSpaceDrugs
+      - RMCPsilocybin
+      - THC
+      - Desoxyephedrine
+      - Ephedrine
+      - Stimulants
+      - Happiness
+      - CMUOxycodone
+      - CMUTramadol
+      - CMUFentanyl
+      cravingAlert: CMUDrugCraving
+      onsetMessage: cmu-drugaddict-onset
+      cravingMessage: cmu-drugaddict-craving
+      shakeMessage: cmu-drugaddict-shake
+      satisfiedMessage: cmu-drugaddict-satisfied

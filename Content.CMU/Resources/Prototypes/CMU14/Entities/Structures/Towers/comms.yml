@@ -11,6 +11,8 @@
   noRotate: true
   skill: RMCSkillEngineer
   requiredSkillLevel: 2
+  alternativeSkill: RMCSkillJtac
+  alternativeSkillLevel: 4
   listed:
   - AU14CommsMastFootingBuild
   - AU14MastAntennaHeadFrameBuild
@@ -25,6 +27,8 @@
   materialCost: 40
   skill: RMCSkillEngineer
   requiredSkillLevel: 2
+  alternativeSkill: RMCSkillJtac
+  alternativeSkillLevel: 4
 
 - type: rmcConstruction
   id: AU14MastAntennaHeadFrameBuild
@@ -36,6 +40,8 @@
   materialCost: 20
   skill: RMCSkillEngineer
   requiredSkillLevel: 2
+  alternativeSkill: RMCSkillJtac
+  alternativeSkillLevel: 4
   ignoreBuildRestrictions: true
   restrictedCollisionGroup: null
 

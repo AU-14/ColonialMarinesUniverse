@@ -47,6 +47,7 @@ using Robust.Shared.Utility;
 namespace Content.IntegrationTests.CMU14.Medical.Treatment.Surgery;
 
 [TestFixture]
+[Parallelizable(ParallelScope.All)]
 public sealed class ConditionDrivenSurgeryTest
 {
     [Test]

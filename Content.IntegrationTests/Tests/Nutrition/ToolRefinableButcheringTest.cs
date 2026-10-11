@@ -1,6 +1,9 @@
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.CMU14.Round.Antags.Cannibal; // CMU14
 using Content.Shared.Traits.Assorted;
+using Content.Shared.Tools.Components; // CMU14
+using Content.Shared.Verbs; // CMU14
+using Robust.Shared.Localization; // CMU14
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 
@@ -52,10 +55,13 @@ public sealed class ToolRefinableButcheringTest : InteractionTest
         var targetNet = await SpawnTarget("ToolRefinableButcheringTestTarget");
         var target = ToServer(targetNet);
 
-        await InteractUsing("ToolRefinableButcheringTestTool", awaitDoAfters: false);
+        await PlaceInHands("ToolRefinableButcheringTestTool"); // CMU14
+        await Interact(awaitDoAfters: false); // CMU14
+        Assert.That(ActiveDoAfters, Is.Empty, "Left clicks must not start butchering."); // CMU14
+        await Slice(); // CMU14
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1));
 
-        await Interact(awaitDoAfters: false);
+        await Slice(); // CMU14: butchering is verb-only.
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1),
             "Repeating the same tool-target pair must retain the first do-after without adding or cancelling it.");
 
@@ -74,12 +80,13 @@ public sealed class ToolRefinableButcheringTest : InteractionTest
         var targetNet = await SpawnTarget("ToolRefinableButcheringWaitTestTarget");
         var target = ToServer(targetNet);
 
-        await InteractUsing("ToolRefinableButcheringTestTool", awaitDoAfters: false);
+        await PlaceInHands("ToolRefinableButcheringTestTool"); // CMU14
+        await Slice(); // CMU14
         Assert.That(ActiveDoAfters, Is.Empty,
             "A revivable wait-for-rot victim must not start tool refinement.");
 
         await Server.WaitPost(() => SEntMan.EnsureComponent<UnrevivableComponent>(target));
-        await Interact(awaitDoAfters: false);
+        await Slice(); // CMU14: butchering is verb-only.
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1));
 
         await Server.WaitPost(() => SEntMan.RemoveComponent<UnrevivableComponent>(target));
@@ -92,7 +99,7 @@ public sealed class ToolRefinableButcheringTest : InteractionTest
         }
 
         await Server.WaitPost(() => SEntMan.EnsureComponent<UnrevivableComponent>(target));
-        await Interact(awaitDoAfters: false);
+        await Slice(); // CMU14: butchering is verb-only.
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1),
             "A completion-time rejection must clear the active tool-target pair for a later valid attempt.");
 
@@ -113,7 +120,8 @@ public sealed class ToolRefinableButcheringTest : InteractionTest
 
         await Server.WaitPost(() => SEntMan.EnsureComponent<CannibalComponent>(SPlayer));
 
-        await InteractUsing("ToolRefinableButcheringTestTool", awaitDoAfters: false);
+        await PlaceInHands("ToolRefinableButcheringTestTool"); // CMU14
+        await Slice(); // CMU14
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1),
             "A cannibal must start carving a fresh wait-for-rot victim.");
 
@@ -130,7 +138,8 @@ public sealed class ToolRefinableButcheringTest : InteractionTest
     {
         var targetNet = await SpawnTarget("ToolRefinableButcheringTestTarget");
         var target = ToServer(targetNet);
-        await InteractUsing("ToolRefinableButcheringTestTool", awaitDoAfters: false);
+        await PlaceInHands("ToolRefinableButcheringTestTool"); // CMU14
+        await Slice(); // CMU14
         Assert.That(ActiveDoAfters.Count(), Is.EqualTo(1));
         var doAfter = ActiveDoAfters.Single();
 
@@ -152,6 +161,21 @@ public sealed class ToolRefinableButcheringTest : InteractionTest
                 "A target that enters a container before completion must remain recoverable.");
             Assert.That(CountResults(), Is.Zero);
         }
+    }
+
+    // CMU14: exercise the same right-click verb used by players.
+    private async Task Slice()
+    {
+        await Server.WaitPost(() =>
+        {
+            var target = STarget!.Value;
+            var label = Loc.GetString(SEntMan.GetComponent<ToolRefinableComponent>(target).VerbText!);
+            var verbs = Server.System<SharedVerbSystem>();
+            var verb = verbs.GetLocalVerbs(target, SPlayer, typeof(InteractionVerb)).Single(verb => verb.Text == label);
+            if (!verb.Disabled)
+                verbs.ExecuteVerb(verb, SPlayer, target);
+        });
+        await RunTicks(1);
     }
 
     private int CountResults()

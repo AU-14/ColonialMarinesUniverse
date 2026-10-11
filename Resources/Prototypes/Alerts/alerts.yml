@@ -38,6 +38,10 @@
     - alertType: Rooted
     - alertType: Pacified
     - alertType: Stealthy
+    # cmu edit start: keep the squad leader tracker directly above the normal squad tracker
+    - category: CMUSquadLeaderTracker
+    - category: SquadTracker
+    # cmu edit end
 
 - type: entity
   id: AlertSpriteView

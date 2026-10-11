@@ -100,6 +100,8 @@ public sealed partial class ShuttleSystem
         // CMU14: faction gameplay fixes.
         if (TryComp(ent.Comp.StartupStream, out AudioComponent? startup) && startup.Params.Loop)
             ent.Comp.StartupStream = _audio.Stop(ent.Comp.StartupStream);
+        // CMU14: interrupted flights must release their owned loop as well as normal arrivals.
+        ent.Comp.TravelStream = _audio.Stop(ent.Comp.TravelStream);
     }
 
     private void OnStationPostInit(ref StationPostInitEvent ev)
@@ -462,9 +464,14 @@ public sealed partial class ShuttleSystem
                 playback = length > 0 ? playback % length : 0;
             }
             var tailParams = startupAudio.Params;
-            var clippedAudio = _audio.PlayStatic(new SoundPathSpecifier(startupAudio.FileName), Filter.Broadcast(),
-                // CMU14: faction gameplay fixes.
-                new EntityCoordinates(fromMapUid.Value, _mapSystem.GetGridPosition(entity.Owner)), true, tailParams.WithLoop(false));
+            // CMU14 Begin: distant clients should not allocate an inaudible departure tail.
+            // var clippedAudio = _audio.PlayStatic(new SoundPathSpecifier(startupAudio.FileName), Filter.Broadcast(),
+            //     new EntityCoordinates(fromMapUid.Value, _mapSystem.GetGridPosition(entity.Owner)), true, tailParams.WithLoop(false));
+            var tailCoordinates = new EntityCoordinates(fromMapUid.Value, _mapSystem.GetGridPosition(entity.Owner));
+            var tailAudience = Filter.Empty().AddInRange(_transform.ToMapCoordinates(tailCoordinates), tailParams.MaxDistance);
+            var clippedAudio = _audio.PlayStatic(new SoundPathSpecifier(startupAudio.FileName), tailAudience,
+                tailCoordinates, true, tailParams.WithLoop(false));
+            // CMU14 End
 
             // CMU14: faction gameplay fixes.
             _audio.SetPlaybackPosition(clippedAudio, playback);
@@ -1073,7 +1080,7 @@ public sealed partial class ShuttleSystem
         var tiles = new HashSet<Vector2i>();
         if (TryComp(uid, out MapGridComponent? shuttleGrid))
         {
-            var enumerator = _mapSystem.GetAllTilesEnumerator(uid, shuttleGrid);
+            var enumerator = _mapSystem.GetAllTiles(uid, shuttleGrid);
             while (enumerator.MoveNext(out var tile))
             {
                 tiles.Add(tile.Value.GridIndices);
@@ -1123,9 +1130,13 @@ public sealed partial class ShuttleSystem
                 if (_bodyQuery.TryGetComponent(ent, out var mob))
                 {
                     var position = _transform.GetMapCoordinates(ent);
-                    var diff = position.Position - aabb.Center;
-                    if (!tiles.Contains(diff.Floored()))
+                    // CMU14 Begin: tile indices use the authored grid origin, including the ship's rotation.
+                    // var diff = position.Position - aabb.Center;
+                    // if (!tiles.Contains(diff.Floored()))
+                    var localPosition = _transform.ToCoordinates(uid, position).Position;
+                    if (!tiles.Contains(localPosition.Floored()))
                         continue;
+                    // CMU14 End
 
                     _logger.Add(LogType.Gib, LogImpact.Extreme, $"{ToPrettyString(ent):player} got gibbed by the shuttle" +
                                                                 $" {ToPrettyString(uid)} arriving from FTL at {xform.Coordinates:coordinates}");

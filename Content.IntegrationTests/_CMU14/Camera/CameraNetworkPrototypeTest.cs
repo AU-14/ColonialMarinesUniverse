@@ -21,6 +21,10 @@ namespace Content.IntegrationTests._CMU14.Camera;
 [TestFixture]
 public sealed class CameraNetworkPrototypeTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionGraphPrototype> SurveillanceCameraPrototype = "SurveillanceCamera";
+    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionGraphPrototype> WallmountTelescreenPrototype = "WallmountTelescreen";
+    private static readonly Robust.Shared.Prototypes.ProtoId<ConstructionGraphPrototype> WallmountTelevisionPrototype = "WallmountTelevision";
+
     private static readonly (EntProtoId Id, CameraSourceKinds SourceKinds, bool Marker)[] MapSourceCameras =
     {
         ("CMUSurveillanceCameraColonyCMB", CameraSourceKinds.Rmc, true),
@@ -163,13 +167,13 @@ public sealed class CameraNetworkPrototypeTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(prototypes.Index<ConstructionGraphPrototype>("SurveillanceCamera")
+                    Assert.That(prototypes.Index<ConstructionGraphPrototype>(SurveillanceCameraPrototype)
                             .Nodes["camera"].Entity.GetId(null, null, new(server.EntMan)),
                         Is.EqualTo("SurveillanceCameraConstructed"));
-                    Assert.That(prototypes.Index<ConstructionGraphPrototype>("WallmountTelescreen")
+                    Assert.That(prototypes.Index<ConstructionGraphPrototype>(WallmountTelescreenPrototype)
                             .Nodes["Telescreen"].Entity.GetId(null, null, new(server.EntMan)),
                         Is.EqualTo("WallmountTelescreen"));
-                    Assert.That(prototypes.Index<ConstructionGraphPrototype>("WallmountTelevision")
+                    Assert.That(prototypes.Index<ConstructionGraphPrototype>(WallmountTelevisionPrototype)
                             .Nodes["Television"].Entity.GetId(null, null, new(server.EntMan)),
                         Is.EqualTo("WallmountTelevision"));
                 });

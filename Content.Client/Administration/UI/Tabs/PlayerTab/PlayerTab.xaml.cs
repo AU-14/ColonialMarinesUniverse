@@ -102,6 +102,7 @@ public sealed partial class PlayerTab : Control
         RefreshPlayerList(_players);
     }
 
+    [Obsolete("Retained for CMUControlLifetime.Release cleanup.")]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

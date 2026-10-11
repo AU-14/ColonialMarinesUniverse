@@ -132,6 +132,12 @@
       - id: AU14CivFedoraBrown
       - id: AU14CivFedoraGray
       - id: AU14HeadCommandoBeanie
+      - id: CMUCivBoonieHatTan
+      - id: CMUCivBoonieHatGreen
+      - id: CMUCivWorkCapTan
+      - id: CMUCivWorkCapGreen
+      - id: CMUCivSunCapTan
+      - id: CMUCivSunCapGreen
     - name: Glasses
       choices: { CMUcivilianclothesglasses: 2 }
       entries:
@@ -322,8 +328,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedicBag
       - id: AU14BeltMedicBagBlack
+        recommended: true
+      - id: CMBeltMedicBag
     - name: Medical Equipment
       entries:
       - id: AU14CMDefibrillator
@@ -520,3 +527,7 @@
       - id: RMCFlashlightPen
       - id: AU14CMDefibrillator
       - id: RMCSynthResetKey
+    - name: Synthetic Supplies
+      entries:
+      - id: CMUSynthBloodPackFull
+        amount: 2

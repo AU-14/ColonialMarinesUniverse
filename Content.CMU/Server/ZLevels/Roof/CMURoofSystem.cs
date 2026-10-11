@@ -35,7 +35,7 @@ public sealed partial class CMURoofSystem : CMUSharedRoofSystem
             if (!GridQuery.TryComp(map, out var mapGrid))
                 continue;
 
-            var enumerator = Map.GetAllTilesEnumerator(map, mapGrid);
+            var enumerator = Map.GetAllTiles(map, mapGrid);
             var roofComp = EnsureComp<RoofComponent>(map);
 
             while (enumerator.MoveNext(out var tileRef))

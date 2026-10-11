@@ -9,11 +9,15 @@
   icon: "RMCJobIconBureauDeputy"
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
+    time: 14400 # 4 hours
+  - !type:AgeRequirement
+    requiredAge: 21
   - !type:TraitsRequirement
     inverted: true
     traits:
     - NoEnglish
+    - CMUAlcoholic
+    - CMUDrugAddict
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBDeputy

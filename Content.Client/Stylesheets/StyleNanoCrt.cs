@@ -1,6 +1,6 @@
 using System.Numerics;
-using Content.Client._CMU14.Interface;
-using Content.Client._CMU14.UserInterface.ColorPicker;
+using Content.Client.CMU14.Interface;
+using Content.Client.CMU14.UserInterface.ColorPicker;
 using Content.Client.Resources;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Chat.Widgets;

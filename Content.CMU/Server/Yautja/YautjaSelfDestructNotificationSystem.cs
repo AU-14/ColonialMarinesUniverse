@@ -8,7 +8,7 @@ using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Yautja;
 
-public sealed class YautjaSelfDestructNotificationSystem : EntitySystem
+public sealed partial class YautjaSelfDestructNotificationSystem : EntitySystem
 {
     [Dependency] private AreaSystem _area = default!;
     [Dependency] private IChatManager _chat = default!;

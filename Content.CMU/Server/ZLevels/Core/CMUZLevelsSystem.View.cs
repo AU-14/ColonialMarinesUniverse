@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.CMU14.ThreeD;
 using Content.Shared.Timing;
 using Microsoft.Extensions.ObjectPool;
 using System.Linq;
@@ -726,7 +727,8 @@ public sealed partial class CMUZLevelsSystem
 
     private bool CanUseZLevelViewOrigin(EntityUid uid)
     {
-        if (TerminatingOrDeleted(uid))
+        // A 3D subscription already covers the full stack; it is not another 2D camera.
+        if (TerminatingOrDeleted(uid) || HasComp<CMU3DViewProbeComponent>(uid))
             return false;
 
         if (Transform(uid).MapUid is not { } map ||
@@ -742,7 +744,7 @@ public sealed partial class CMUZLevelsSystem
 
     private bool IsZLevelProbe(EntityUid uid)
     {
-        return _probeEyeIndex.ContainsKey(uid);
+        return _probeEyeIndex.ContainsKey(uid) || HasComp<CMU3DViewProbeComponent>(uid);
     }
 
     private void QueueDeleteViewerProbeEyes(Entity<CMUZLevelViewerComponent> ent)
@@ -906,7 +908,7 @@ public sealed partial class CMUZLevelsSystem
                         _profilePvsStairTiles++;
 
                     var tile = centerTile + new Vector2i(x, y);
-                    var query = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+                    var query = _map.GetAnchoredEntities(gridUid, grid, tile);
                     while (query.MoveNext(out var uid))
                     {
                         if (profiling)
@@ -1340,7 +1342,7 @@ public sealed partial class CMUZLevelsSystem
     {
         //A dirty trick: we call PredictedPopup on the falling entity on SERVER.
         //This means that the one who is falling does not see the popup itself, but everyone around them does. This is what we need.
-        _popup.PopupPredictedCoordinates(Loc.GetString("cmu-zlevel-falling-popup", ("name", Identity.Name(ent, EntityManager))), Transform(ent).Coordinates, ent);
+        _popup.PopupCoordinates(Loc.GetString("cmu-zlevel-falling-popup", ("name", Identity.Name(ent, EntityManager))), Transform(ent).Coordinates);
     }
 
 }

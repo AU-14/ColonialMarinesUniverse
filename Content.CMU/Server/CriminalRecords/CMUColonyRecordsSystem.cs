@@ -12,7 +12,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.CriminalRecords;
 
-public sealed class CMUColonyRecordsSystem : EntitySystem
+public sealed partial class CMUColonyRecordsSystem : EntitySystem
 {
     [Dependency] private CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
     [Dependency] private StationRecordsSystem _records = default!;

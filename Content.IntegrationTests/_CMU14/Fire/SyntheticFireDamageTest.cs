@@ -37,6 +37,7 @@ public sealed class SyntheticFireDamageTest : GameTest
             Assert.That(fire.Ignite(mob, 30, 20, null), Is.True);
             var flammable = SEntMan.GetComponent<FlammableComponent>(mob);
             flammable.NextUpdate = Server.ResolveDependency<IGameTiming>().CurTime;
+            Server.System<FlammableSystem>().RefreshUpdateSnapshot();
             Server.System<FlammableSystem>().Update(0);
             var expectedBurn = flammable.Damage.GetTotal().Float() * 6 * resistance;
             Assert.That(damage.TotalDamage.Float(), Is.EqualTo(expectedBurn).Within(0.02), "Ongoing burns must use the same resistance as contact damage.");

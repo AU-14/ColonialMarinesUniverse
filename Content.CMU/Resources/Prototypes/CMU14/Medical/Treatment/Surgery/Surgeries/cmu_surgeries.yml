@@ -535,3 +535,17 @@
     - CMUSurgeryStepPrepReattachSocket
     - CMUSurgeryStepReattachLimb
     - CMUSurgeryStepCloseReattach
+
+# ---- Stump closure ---------------------------------------------------
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryCloseStump
+  name: Close Stump
+  components:
+  - type: CMSurgery
+    priority: 8
+    steps:
+    - CMUSurgeryStepClampStumpArtery
+    - CMUSurgeryStepCauterizeStump
+  - type: CMUOpenStumpSurgeryCondition

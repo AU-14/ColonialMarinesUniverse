@@ -18,6 +18,7 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private CMUMedicalExamineProjectionSystem _woundProjection = default!;
+    [Dependency] private SharedCMUOpenStumpSystem _stumps = default!;
 
     private const string UntreatedWoundColor = "#ff4d4d";
     private const string TreatedWoundColor = "#7bd88f";
@@ -46,18 +47,28 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
 
         using (args.PushGroup(nameof(CMUMedicalExamineSystem), -1))
         {
-            AddBodyPartLines(
-                ent,
-                args,
-                _cfg.GetCVar(CMUMedicalCCVars.WoundsEnabled),
-                _cfg.GetCVar(CMUMedicalCCVars.BoneEnabled),
-                _cfg.GetCVar(CMUMedicalCCVars.BodyPartEnabled));
+            foreach (var line in GetBodyPartLines(ent))
+                args.PushMarkup(line);
         }
     }
 
-    private void AddBodyPartLines(
+    /// <summary>
+    /// The per-body-part wound, fracture and missing-limb lines shown when examining someone, as markup.
+    /// </summary>
+    public List<string> GetBodyPartLines(EntityUid body)
+    {
+        if (!_cfg.GetCVar(CMUMedicalCCVars.Enabled))
+            return new List<string>();
+
+        return BuildBodyPartLines(
+            body,
+            _cfg.GetCVar(CMUMedicalCCVars.WoundsEnabled),
+            _cfg.GetCVar(CMUMedicalCCVars.BoneEnabled),
+            _cfg.GetCVar(CMUMedicalCCVars.BodyPartEnabled));
+    }
+
+    private List<string> BuildBodyPartLines(
         EntityUid body,
-        ExaminedEvent args,
         bool includeWounds,
         bool includeFractures,
         bool includeMissingParts)
@@ -127,19 +138,32 @@ public sealed partial class CMUMedicalExamineSystem : EntitySystem
                 partSummaries.Add(new BodyPartExamineSummary(
                     BodyPartSortOrder(type, symmetry),
                     FormatPartName(type, symmetry),
-                    $"[color={SeveredColor}]SEVERED[/color]"));
+                    $"[color={SeveredColor}]SEVERED[/color]{StumpSuffix(body, type, symmetry)}"));
             }
         }
 
         partSummaries.Sort((a, b) => a.Order.CompareTo(b.Order));
 
+        var lines = new List<string>(partSummaries.Count);
         foreach (var summary in partSummaries)
         {
-            args.PushMarkup(Loc.GetString(
+            lines.Add(Loc.GetString(
                 "cmu-medical-examine-body-part-line",
                 ("part", summary.Part),
                 ("conditions", summary.Conditions)));
         }
+
+        return lines;
+    }
+
+    private string StumpSuffix(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry)
+    {
+        if (!_stumps.TryFindStump(body, type, symmetry, out _, out var stump))
+            return string.Empty;
+
+        return stump.Clamped
+            ? $"; [color={TreatedWoundColor}]tourniquet on the stump[/color]"
+            : $"; [color={UntreatedWoundColor}]the stump is squirting blood[/color]";
     }
 
     public string GetDetailedExamineText(EntityUid body)

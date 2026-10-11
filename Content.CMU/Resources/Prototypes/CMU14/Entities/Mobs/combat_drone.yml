@@ -9,6 +9,7 @@
   parent: BaseMob
   id: CMUBaseCombatDrone
   components:
+  - type: RMCNightVisionVisible
   - type: CMUDroneAndroid
     supportsModules: false
   - type: CMUCombatDrone
@@ -141,6 +142,7 @@
   id: CMUCombatDroneTurretVisual
   categories: [HideSpawnMenu]
   components:
+  - type: RMCNightVisionVisible
   - type: Sprite
     sprite: CMU14/Mobs/CombatDrone/ugv.rsi
     noRot: true

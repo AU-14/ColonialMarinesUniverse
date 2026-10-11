@@ -183,6 +183,8 @@
     - popup: rmc-storage-limit-cant-fit
       count: 12
       whitelist:
+        components:
+        - YautjaTechItem
   - type: YautjaTechItem
   - type: StaticPrice
     price: 50
@@ -526,34 +528,6 @@
     worn: false
   - type: StaticPrice
     price: 200
-- type: entity
-  parent: CMFoodBase
-  id: CMUYautjaFieldRation
-  name: preserved hunting ration
-  description: Strips of dried meat packed in waxy alien leaves. It smells aggressively of spice.
-  components:
-  - type: Sprite
-    sprite: Objects/Consumable/Food/meat.rsi
-    state: plain
-  - type: Item
-    size: Tiny
-  - type: Solution
-    id: food
-    solution:
-      maxVol: 25
-      reagents:
-      - ReagentId: Nutriment
-        Quantity: 25
-
-- type: entity
-  parent: CMCanteenBase
-  id: CMUYautjaHuntingCanteen
-  name: hunting canteen
-  description: A lacquered alien gourd sealed with resin. The water inside tastes faintly of copper.
-  components:
-  - type: Sprite
-    state: canteen
-    color: "#b85440"
 - type: radioChannel
   id: CMUYautjaStranded
   name: chat-radio-cmu-yautja-stranded
@@ -675,6 +649,21 @@
     size: Tiny
     sprite: CMU14/HunterShip/obj/items/hunter/thrall_gear.rsi
   - type: YautjaRelayBeacon
+    allowCustomDestinations: false
+    allowedDestinations:
+    - YautjaShip
+  - type: StaticPrice
+    price: 100
+
+- type: entity
+  parent: CMUYautjaRelayBeacon
+  id: CMUYautjaYoungbloodRelayBeacon
+  name: youngblood relay beacon
+  suffix: Yautja, Youngblood
+  description: A device covered in sacred text, attuned to young hunters. It whirrs and beeps every couple of seconds.
+  components:
+  - type: YautjaRelayBeacon
+    youngbloodOnly: true
     allowCustomDestinations: false
     allowedDestinations:
     - YautjaShip

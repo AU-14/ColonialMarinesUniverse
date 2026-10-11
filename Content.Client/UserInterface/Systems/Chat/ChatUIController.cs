@@ -14,7 +14,7 @@ using Content.Client.Gameplay;
 using Content.Client.Ghost;
 using Content.Client.Mind;
 using Content.Client.Roles;
-using Content.Client._CMU14.Interface;
+using Content.Client.CMU14.Interface;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Screens;
 using Content.Client.UserInterface.Systems.Chat.Widgets;
@@ -607,6 +607,14 @@ public sealed partial class ChatUIController : UIController
         if (!_ent.TryGetComponent<TransformComponent>(entity, out var xform))
             return false;
 
+        // CMU14: first person projects each loaded floor directly instead of using the 2D stair portal offset.
+        if (_eye.MainViewport is Content.Client.CMU14.ThreeD.Scene.CMU3DSceneControl { FirstPerson: true } scene)
+        {
+            sameMap = xform.MapID == scene.SceneMap;
+            return scene.SceneMaps.Contains(xform.MapID);
+        }
+        // CMU14
+
         if (xform.MapID == _eye.CurrentEye.Position.MapId)
         {
             sameMap = true;
@@ -838,7 +846,8 @@ public sealed partial class ChatUIController : UIController
 
             var otherPos = _transform?.GetMapCoordinates(ent) ?? MapCoordinates.Nullspace;
 
-            if (sameMap && occluded && !_examine.InRangeUnOccluded(
+            // CMU14: the perspective speech control checks occlusion against the visible 3D solids.
+            if (sameMap && occluded && _eye.MainViewport is not Content.Client.CMU14.ThreeD.Scene.CMU3DSceneControl { FirstPerson: true } && !_examine.InRangeUnOccluded(
                     playerPos,
                     otherPos, 0f,
                     (ent, player), predicate))

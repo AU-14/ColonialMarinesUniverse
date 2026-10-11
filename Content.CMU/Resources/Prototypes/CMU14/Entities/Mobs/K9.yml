@@ -56,6 +56,7 @@
   - type: CombatMode
     canDisarm: false
   - type: MobState
+  - type: StandingState
   - type: GhostTakeoverAvailable
   - type: CrashLandable
   - type: StunShakeable
@@ -113,6 +114,9 @@
         Slash: 30
   - type: Synth
   - type: ComplexInteraction
+  - type: Climbing
+  - type: Language
+    preset: AU14LanguagePresetSynth
   - type: Access
   - type: Tag
     tags:

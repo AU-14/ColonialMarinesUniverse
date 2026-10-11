@@ -14,10 +14,13 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
+using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
+using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.Input;
 using Robust.Shared.Utility;
+using ClientEyeSystem = Robust.Client.GameObjects.EyeSystem;
 
 namespace Content.IntegrationTests.CMU14.TacticalMap;
 
@@ -38,6 +41,7 @@ public sealed partial class CMUReconstructionTest
         var secondTile = new Vector2i(-4, 5);
         try
         {
+            await Server.WaitPost(() => Server.CfgMan.SetCVar(CVars.NetPVS, true));
             await Client.WaitPost(() => Client.ResolveDependency<IConfigurationManager>().SetCVar(CCVars.CMUTacMapClassic, classic));
             await Server.WaitAssertion(() =>
             {
@@ -90,6 +94,24 @@ public sealed partial class CMUReconstructionTest
             });
             await Pair.RunTicksSync(20);
 
+            async Task AssertClientView(EntityUid target)
+            {
+                var queenNet = SEntMan.GetNetEntity(queen);
+                var targetNet = SEntMan.GetNetEntity(target);
+                await Client.WaitAssertion(() =>
+                {
+                    var clientQueen = CEntMan.GetEntity(queenNet);
+                    var clientTarget = CEntMan.GetEntity(targetNet);
+                    var camera = CEntMan.GetComponent<EyeComponent>(clientQueen);
+                    Assert.That(camera.Target, Is.EqualTo(target == queen ? (EntityUid?) null : clientTarget),
+                        "The client camera must follow the selected view.");
+                    CEntMan.System<ClientEyeSystem>().FrameUpdate(0);
+                    Assert.That(Client.ResolveDependency<IEyeManager>().CurrentEye.Position,
+                        Is.EqualTo(CEntMan.System<SharedTransformSystem>().GetMapCoordinates(clientTarget)),
+                        "The rendered view must be centered on the selected entity.");
+                });
+            }
+
             async Task Select(Vector2i tile, EntityUid target)
             {
                 await Server.WaitAssertion(() =>
@@ -131,6 +153,7 @@ public sealed partial class CMUReconstructionTest
                         Assert.That(SComp<TransformComponent>(eye).LocalPosition, Is.EqualTo(new Vector2(0.5f)),
                             "Clicking a xeno off weeds must watch it instead of teleporting the eye.");
                 });
+                await AssertClientView(target);
             }
 
             await Select(firstTile, first);
@@ -147,17 +170,21 @@ public sealed partial class CMUReconstructionTest
                 Assert.That(SComp<EyeComponent>(queen).Target, Is.EqualTo(remoteEye ? (EntityUid?) eye : null));
             });
             await Pair.RunTicksSync(10);
+            await AssertClientView(remoteEye ? eye : queen);
             await Select(secondTile, second); // Rewatch after movement, even if the same icon was last selected.
             await Server.WaitAssertion(() =>
             {
                 _ui.CloseUi(queen, TacticalMapUserUi.Key, queen);
                 Assert.That(SComp<EyeComponent>(queen).Target, Is.EqualTo(second), "Closing the map should reveal the watched xeno.");
             });
+            await Pair.RunTicksSync(10);
+            await AssertClientView(second);
         }
         finally
         {
             if (Server.IsAlive) await Server.WaitPost(() =>
             {
+                Server.CfgMan.SetCVar(CVars.NetPVS, false);
                 if (queen.IsValid()) _ui.CloseUi(queen, TacticalMapUserUi.Key, queen);
                 Server.PlayerMan.SetAttachedEntity(session, original);
                 foreach (var xeno in new[] { queen, first, second })

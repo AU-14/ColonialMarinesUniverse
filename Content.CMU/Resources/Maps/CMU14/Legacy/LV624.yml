@@ -80781,19 +80781,19 @@ entities:
           cost: 4000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesHighExplosiveBox
+          crate: CMUCrateGrenadeBoxHEDP
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesBoxHEFA
+          crate: CMUCrateGrenadeBoxHEFA
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateGrenadesAirburstFragBox
+          crate: CMUCrateGrenadeBoxAGMF
           cost: 10000
           name: null
         - entities: []
-          crate: RMCCrateBoxAGMI
+          crate: CMUCrateGrenadeBoxAGMI
           cost: 10000
           name: null
         - entities: []

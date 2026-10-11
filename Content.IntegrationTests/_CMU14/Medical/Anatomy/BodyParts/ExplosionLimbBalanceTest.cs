@@ -18,6 +18,8 @@ namespace Content.IntegrationTests.CMU14.Medical.Anatomy.BodyParts;
 [TestFixture]
 public sealed class ExplosionLimbBalanceTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.EntProtoId CMGrenadeHighExplosivePrototype = "CMGrenadeHighExplosive";
+
     public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
     [TestPrototypes]
@@ -80,7 +82,7 @@ public sealed class ExplosionLimbBalanceTest : GameTest
         await Pair.RunTicksSync(2);
         await Server.WaitPost(() =>
         {
-            var blast = (ExplosiveComponent) SProtoMan.Index<EntityPrototype>("CMGrenadeHighExplosive").Components["Explosive"].Component;
+            var blast = (ExplosiveComponent) SProtoMan.Index<EntityPrototype>(CMGrenadeHighExplosivePrototype).Components["Explosive"].Component;
             foreach (var target in new[] { unarmored, armored })
                 Server.System<ExplosionSystem>().QueueExplosion(Server.System<SharedTransformSystem>().GetMapCoordinates(target),
                     blast.ExplosionType, blast.TotalIntensity, blast.IntensitySlope, blast.MaxIntensity,

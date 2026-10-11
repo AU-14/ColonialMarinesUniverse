@@ -1,0 +1,101 @@
+<Document>
+  # Cooking
+
+  A good meal goes a long way on a long deployment. This guide covers the kitchen equipment, the basic ingredients you make yourself, and every microwave recipe.
+
+  ## Equipment
+  <Box>
+    <GuideEntityEmbed Entity="CMMicrowave" Caption="Microwave"/>
+    <GuideEntityEmbed Entity="RMCKitchenReagentGrinder" Caption="All-In-One Grinder"/>
+    <GuideEntityEmbed Entity="KitchenSpike" Caption="Meat spike"/>
+  </Box>
+  <Box>
+    <GuideEntityEmbed Entity="RMCKitchenKnifeChef" Caption="Kitchen knife"/>
+    <GuideEntityEmbed Entity="RMCKitchenKnifeButcher" Caption="Butcher's cleaver"/>
+    <GuideEntityEmbed Entity="CMLockerFridge" Caption="Fridge"/>
+  </Box>
+  - [bold]Microwave[/bold]: where nearly all cooking happens. Put the solid ingredients in, pour in any liquids, then start it. If the contents don't match a recipe, you get burnt mess instead. Never put metal in it.
+  - [bold]All-In-One Grinder[/bold]: [bold]grind[/bold] food into its reagents (wheat into flour, for example) or [bold]juice[/bold] fruit and vegetables. Load the items, attach a beaker, then pick grind or juice.
+  - [bold]Meat spike[/bold]: hang a dead animal on it to butcher it into meat.
+  - [bold]Knives[/bold]: use a knife on food to slice it, such as cutting meat into cutlets or dough into slices. A rolling pin flattens dough.
+  - [bold]Fridge[/bold]: stores ingredients and finished meals.
+
+  ## Basic Ingredients
+  Many recipes start from ingredients you mix in a beaker or bowl rather than cook.
+  - [bold]Dough[/bold]: 45u flour and 15u water.
+  - [bold]Pie dough[/bold]: 40u flour, 10u butter and 5u water.
+  - [bold]Cornmeal dough[/bold]: 15u cornmeal and 6u egg.
+  - [bold]Tortilla dough[/bold]: 15u cornmeal and 10u water.
+  - [bold]Cake batter[/bold]: 20u flour, 10u butter, 6u egg and 10u milk; or 15u flour and 15u soy milk.
+  - [bold]Butter[/bold]: 30u cream and 1u salt.
+  - [bold]Cheese[/bold]: 40u milk and 5u enzyme.
+  - [bold]Tofu[/bold]: 55u soy milk and 5u enzyme.
+  - [bold]Meatball[/bold]: 5u raw animal protein, 5u flour and 6u egg.
+  - [bold]Chocolate bar[/bold]: 4u cocoa powder and 2u milk.
+
+  ## Sauces
+  - [bold]Ketchup[/bold]: tomato juice.
+  - [bold]Mayonnaise[/bold]: 5u oil, 6u egg and 5u vinegar or lemon juice.
+  - [bold]BBQ sauce[/bold]: ketchup and vinegar.
+  - [bold]Ketchunaise[/bold]: ketchup and mayonnaise.
+  - [bold]Hot sauce[/bold]: tomato juice, salt and capsaicin oil.
+  - [bold]Soy sauce[/bold]: 2u soy milk and 1u sulfuric acid.
+  - [bold]Vinegar[/bold]: ethanol and oxygen.
+  - [bold]Vinaigrette[/bold]: vinegar, olive oil and black pepper.
+
+  ## Microwave Recipes
+  ### Pizza Pies
+  <GuideMicrowaveGroupEmbed Group="Pizza"/>
+  <GuideMicrowaveEmbed Recipe="RecipeRMCPizzaSupreme"/>
+  <GuideMicrowaveEmbed Recipe="RecipeRMCPizzaCalabresa"/>
+
+  ### Savory Cooking
+  <GuideMicrowaveGroupEmbed Group="Savory"/>
+
+  ### Meat
+  <GuideMicrowaveGroupEmbed Group="Meat"/>
+
+  ### Breads
+  <GuideMicrowaveGroupEmbed Group="Breads"/>
+
+  ### Breakfast Foods
+  <GuideMicrowaveGroupEmbed Group="Breakfast"/>
+
+  ### Moth Foods
+  <GuideMicrowaveGroupEmbed Group="Moth"/>
+
+  ### Pastas & Noodles
+  <GuideMicrowaveGroupEmbed Group="Pasta"/>
+
+  ### Pastries & Desserts
+  <GuideMicrowaveGroupEmbed Group="Dessert"/>
+
+  ### Soups & Stews
+  <GuideMicrowaveGroupEmbed Group="Soup"/>
+
+  ### Pies & Tarts
+  <GuideMicrowaveGroupEmbed Group="Pie"/>
+
+  ### Bars & Cookies
+  <GuideMicrowaveGroupEmbed Group="BarsAndCookies"/>
+
+  ### Cakes
+  <GuideMicrowaveGroupEmbed Group="Cake"/>
+  <GuideMicrowaveEmbed Recipe="RecipeCakeBlackForest"/>
+  <GuideMicrowaveEmbed Recipe="RecipeRMCSuppermatter"/>
+
+  ### Salads
+  <GuideMicrowaveGroupEmbed Group="Salad"/>
+
+  ### Medicinal
+  <GuideMicrowaveGroupEmbed Group="Medicinal"/>
+
+  ### Other
+  <GuideMicrowaveGroupEmbed Group="Other"/>
+
+  ### Secret
+  <GuideMicrowaveGroupEmbed Group="Secret"/>
+
+  ## Drinks
+  See [textlink="Drink Recipes" link="RMCGuideDrinks"] for every drink and how to mix it.
+</Document>

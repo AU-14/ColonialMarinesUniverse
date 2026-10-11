@@ -1,0 +1,30 @@
+- type: entity
+  parent: CMChemMaster
+  id: CMUDrugLab
+  name: clandestine chemical lab
+  description: A jury rigged chemical manipulator, a strong acidic smell emanates from it.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: AccessReader
+    access: []
+  - type: RequiresSkill
+    skills: {}
+
+- type: entity
+  parent: BaseItem
+  id: CMUDrugCookingKit
+  name: unmarked cooking kit
+  description: A battered crate of glassware, tubing and solvents.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+    state: closed
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+    state: closed
+  - type: Item
+    size: Normal
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUDrugLab

@@ -18,7 +18,7 @@
   weight: 15
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 3
+  ghostsNeeded: 3
   roundstart: false
 
 - type: partySpawn
@@ -39,7 +39,7 @@
   weight: 5
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 3
+  ghostsNeeded: 3
   roundstart: false
 
 - type: partySpawn
@@ -62,5 +62,5 @@
   weight: 5
   minplayers: 0
   maxplayers: 400
-  GhostsNeeded: 5
+  ghostsNeeded: 5
   roundstart: false

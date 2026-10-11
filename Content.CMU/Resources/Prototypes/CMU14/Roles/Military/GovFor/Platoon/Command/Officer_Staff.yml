@@ -55,10 +55,10 @@
       prefix: au14-job-prefix-AU14JobGOVFORPlatOpWYPMC
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 43200 # 12 hours
+    time: 18000 # 5 hours
   - !type:AgeRequirement
     requiredAge: 25
   - !type:TraitsRequirement
@@ -72,6 +72,8 @@
     - SlowRunner
     - Anemic
     - Asthmatic
+    - CMUAlcoholic
+    - CMUDrugAddict
   ranks:
     RMCRankCivilian: []
   chevrons:
@@ -191,10 +193,10 @@
   roundForce: UPP
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 43200 # 12 hours
+    time: 18000 # 5 hours
   name: Staff Officer
   spawnMenuRoleName: Staff Officer (UPP)
   ranks:
@@ -210,10 +212,10 @@
   roundForce: WYPMC
   requirements:
   - !type:OverallPlaytimeRequirement
-    time: 43200 # 12 hours
+    time: 21600 # 6 hours
   - !type:TotalDepartmentsTimeRequirement
     group: CMUDepartmentsMilitary
-    time: 43200 # 12 hours
+    time: 18000 # 5 hours
   name: PMC Operations Adjutant
   description: au14-job-description-govforplatop
   spawnMenuRoleName: Staff Officer (WYPMC)

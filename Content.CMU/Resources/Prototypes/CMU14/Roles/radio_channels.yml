@@ -324,6 +324,14 @@
   tower: true
 
 - type: radioChannel
+  id: radioRaiders
+  name: chat-radio-raiders
+  keycode: "%"
+  frequency: 151.6
+  color: "#b5372b"
+  longRange: true
+
+- type: radioChannel
   id: PART
   name: chat-radio-part
   keycode: "1"

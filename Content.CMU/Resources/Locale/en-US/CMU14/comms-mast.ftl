@@ -1,5 +1,5 @@
-au14-mast-untrained = You are not trained to work on this. Mast work requires engineering training.
-au14-mast-examine-untrained = [color=gray]You need engineering training to work on this.[/color]
+au14-mast-untrained = You are not trained to work on this. Mast work requires engineering or RTO training.
+au14-mast-examine-untrained = [color=gray]You need engineering or RTO training to work on this.[/color]
 
 au14-mast-examine-unkeyed = [color=yellow]No COMSEC keys are loaded. The mast is not relaying anything.[/color]
 au14-mast-examine-keyed = Keyed for: [color=cyan]{ $factions }[/color].

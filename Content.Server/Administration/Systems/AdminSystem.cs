@@ -398,7 +398,7 @@ public sealed partial class AdminSystem : EntitySystem
                 _popup.PopupCoordinates(Loc.GetString("admin-erase-popup", ("user", name)), coordinates, PopupType.LargeCaution);
                 var filter = Filter.Pvs(coordinates, 1, EntityManager, _playerManager);
                 _audio.PlayStatic(
-                        "/Audio/Effects/pop_high.ogg",
+                        new ResolvedPathSpecifier("/Audio/Effects/pop_high.ogg"),
                         filter,
                         coordinates,
                         true,

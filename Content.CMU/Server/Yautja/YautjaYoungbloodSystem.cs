@@ -41,6 +41,16 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
 
     private static readonly string[] SquadTrackers =
     {
+        // OPFOR and faction variants are canonicalized to these GOVFOR trackers.
+        "AU14JobGOVFORSquadRifleman",
+        "AU14JobGOVFORPlatoonCorpsman",
+        "AU14JobGOVFORSquadCombatTech",
+        "AU14JobGOVFORSectionSergeant",
+        "AU14JobGOVFORWeaponsSpecialist",
+        "AU14JobGOVFORSquadAutomaticRifleman",
+        "AU14JobGOVFORSquadSergeant",
+        "AU14JobGOVFORRadioTelephoneOperator",
+        "CMUJobGOVFORDroneOperator",
         "CMJobRifleman",
         "CMJobHospitalCorpsman",
         "CMJobCombatTech",
@@ -72,6 +82,22 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
         "CMJobXenoSentinel",
         "CMJobXenoSpitter",
         "CMJobXenoWarrior",
+
+        // Pathogen castes keep their own trackers and count as xeno time.
+        "CMU14JobPathogenAberration",
+        "CMU14JobPathogenBlight",
+        "CMUJobPathogenBloodburster",
+        "CMU14JobPathogenBrute",
+        "CMU14JobPathogenConditor",
+        "CMU14JobPathogenHarbinger",
+        "CMU14JobPathogenHaze",
+        "CMU14JobPathogenMatriarch",
+        "CMU14JobPathogenNeomorph",
+        "CMU14JobPathogenOvermind",
+        "CMU14JobPathogenPopper",
+        "CMU14JobPathogenRoot",
+        "CMU14JobPathogenSprinter",
+        "CMU14JobPathogenVenator",
     };
 
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
@@ -140,6 +166,8 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
             !_playtime.TryGetTrackerTimes(args.Player, out var playtimes))
         {
             args.Cancelled = true;
+            if (args.ExplicitRequest)
+                SendServerMessage(args.Player, Loc.GetString("cmu-yautja-youngblood-raffle-unavailable"));
             return;
         }
 
@@ -153,6 +181,20 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
             SumTrackerTimes(playtimes, XenoTrackers));
 
         args.Cancelled = !eligibility.Allowed;
+        if (args.Cancelled && args.ExplicitRequest)
+        {
+            var message = eligibility.Reason switch
+            {
+                YautjaYoungbloodRejection.WhitelistOrBan => Loc.GetString("cmu-yautja-youngblood-raffle-restricted"),
+                YautjaYoungbloodRejection.MaximumYoungbloodTime => Loc.GetString("cmu-yautja-youngblood-raffle-maximum",
+                    ("hours", option.MaximumYoungbloodTime.TotalHours)),
+                YautjaYoungbloodRejection.MinimumYoungbloodTime => Loc.GetString("cmu-yautja-youngblood-raffle-minimum",
+                    ("hours", option.RejectionYoungbloodTime.TotalHours)),
+                _ => Loc.GetString("cmu-yautja-youngblood-raffle-experience",
+                    ("hours", option.RequiredSquadAndXenoTime.TotalHours)),
+            };
+            SendServerMessage(args.Player, message);
+        }
     }
 
     private void OnMindAdded(Entity<YautjaYoungbloodGhostRoleComponent> ent, ref MindAddedMessage args)

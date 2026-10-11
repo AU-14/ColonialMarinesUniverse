@@ -52,7 +52,8 @@ namespace Content.Server.Destructible.Thresholds.Behaviors
                     if (count == 0)
                         continue;
 
-                    if (EntityPrototypeHelpers.HasComponent<StackComponent>(entityId, system.PrototypeManager, system.EntityManager.ComponentFactory))
+                    if (system.PrototypeManager.TryIndex(entityId, out var prototype) &&
+                        prototype.HasComp<StackComponent>(system.EntityManager.ComponentFactory))
                     {
                         var spawned = SpawnInContainer
                             ? system.EntityManager.SpawnNextToOrDrop(entityId, owner)

@@ -1,0 +1,13 @@
+# Respirator given to humans while they're on a map with CMUBreathingRequiredMap (see CMUMapBreathingSystem).
+# Same settings as the respirator disabled in RMC's species base.
+- type: entity
+  id: CMUMapRespiratorTemplate
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Respirator
+    damage:
+      types:
+        Asphyxiation: 1.0
+    damageRecovery:
+      types:
+        Asphyxiation: -1.0

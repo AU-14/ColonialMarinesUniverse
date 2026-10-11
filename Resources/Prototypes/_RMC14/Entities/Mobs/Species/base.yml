@@ -308,8 +308,9 @@
       275: Dead
   - type: MobStateActions
     actions:
-      Critical:
-      - CMActionGhost
+      # cmu edit start: no ghost button while in crit
+      Critical: []
+      # cmu edit end
       Dead:
       - CMActionGhost
   - type: Destructible

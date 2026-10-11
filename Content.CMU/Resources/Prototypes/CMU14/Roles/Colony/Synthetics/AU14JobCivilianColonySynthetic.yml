@@ -6,6 +6,7 @@
   roundForce: COLONY
   roundRole: CivilianColonySynthetic
   roundComponents:
+  - type: RegulationAppearance
   - type: Language
     preset: AU14LanguagePresetSynth
   - type: LanguageLearning
@@ -60,8 +61,6 @@
   canBeAntag: false
   playTimeTracker: AU14JobCivilianColonySynthetic
   requirements:
-  - !type:OverallPlaytimeRequirement
-    time: 18000 # 5 hours
   - !type:TraitsRequirement
     inverted: true
     traits:

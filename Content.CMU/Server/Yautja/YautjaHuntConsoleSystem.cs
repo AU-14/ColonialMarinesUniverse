@@ -3,6 +3,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Ghost.Roles.Raffles;
 using Content.Server.Humanoid.Systems;
+using Content.Shared.Administration.Managers;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared.Coordinates;
@@ -11,6 +12,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
 using Content.Shared.GameTicking;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Ghost.Roles.Raffles;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid.Prototypes;
@@ -30,6 +32,7 @@ namespace Content.Server.CMU14.Yautja;
 
 public sealed partial class YautjaHuntConsoleSystem : EntitySystem
 {
+    [Dependency] private ISharedAdminManager _admin = default!;
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private DialogSystem _dialog = default!;
@@ -45,7 +48,11 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
 
     private bool _huntingGroundActivated;
+
+    [ViewVariables(VVAccess.ReadWrite)]
     private TimeSpan _nextHuntAt;
+
+    [ViewVariables(VVAccess.ReadWrite)]
     private TimeSpan _nextBloodingAt;
 
     public override void Initialize()
@@ -758,6 +765,9 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
 
     private bool CanUseSelectionConsole(EntityUid user)
     {
+        if (IsAdminGhost(user))
+            return true;
+
         if (HasComp<YautjaYoungbloodComponent>(user) || HasComp<YautjaThrallComponent>(user))
             return false;
 
@@ -766,8 +776,17 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
 
     private bool CanUseHuntConsole(EntityUid user)
     {
+        if (IsAdminGhost(user))
+            return true;
+
         return HasComp<YautjaComponent>(user) && !HasComp<YautjaYoungbloodComponent>(user);
     }
+
+    // Admins may drive the hunt consoles while aghosted. The ghost interact toggle still applies.
+    private bool IsAdminGhost(EntityUid user)
+        => TryComp(user, out GhostComponent? ghost)
+            && ghost.CanGhostInteract
+            && _admin.IsAdmin(user);
 
     private void PopupDenied(EntityUid console, EntityUid user)
     {

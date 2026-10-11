@@ -1,5 +1,5 @@
-using Content.Client._CMU14.Interface;
-using Content.Client._CMU14.UserInterface.Options;
+using Content.Client.CMU14.Interface;
+using Content.Client.CMU14.UserInterface.Options;
 using Content.Client.Administration.Managers;
 using Content.Client.Lobby.UI;
 using Content.Client.Stylesheets;

@@ -8,8 +8,17 @@
   components:
   - type: Sprite
     sprite: _RuMC14/Objects/Weapons/Grenades/RG35F.rsi
+  - type: TriggerOnUse
+    keyOut: startTimer
   - type: TimerTrigger
+    keysIn:
+    - startTimer
+    keyOut: trigger
     delay: 4
+    beepSound:
+      path: "/Audio/_RMC14/Explosion/armbomb.ogg"
+      params:
+        volume: -5
     initialBeepDelay: 0
     beepInterval: 10
     popup: null

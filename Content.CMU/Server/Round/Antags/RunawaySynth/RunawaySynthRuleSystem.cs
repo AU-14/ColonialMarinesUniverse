@@ -13,10 +13,10 @@ namespace Content.Server.CMU14.Round.Antags.RunawaySynth;
 
 public sealed partial class RunawaySynthRuleSystem : GameRuleSystem<RunawaySynthRuleComponent>
 {
-    [Dependency] private readonly StationSystem _stationSystem = default!;
-    [Dependency] private readonly SuspectDescriptionSystem _suspectDescription = default!;
-    [Dependency] private readonly WantedSystem _wantedSystem = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
+    [Dependency] private SuspectDescriptionSystem _suspectDescription = default!;
+    [Dependency] private WantedSystem _wantedSystem = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -36,7 +36,7 @@ public sealed partial class RunawaySynthRuleSystem : GameRuleSystem<RunawaySynth
         if (station != null)
         {
             var pool = new List<EntityUid>();
-            var enumerator = EntityManager.AllEntityQueryEnumerator<HumanoidProfileComponent>();
+            var enumerator = AllEntityQuery<HumanoidProfileComponent>();
             while (enumerator.MoveNext(out var colonist, out _))
             {
                 if (colonist == uid

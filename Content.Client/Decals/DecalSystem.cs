@@ -66,7 +66,8 @@ namespace Content.Client.Decals
                 return false;
 
             decals.Decals[predictedDecalId] = decal;
-            DirtyField(chunk.Owner, decals, nameof(DecalChunkComponent.Decals));
+            // DirtyField(chunk.Owner, decals, nameof(DecalChunkComponent.Decals)); // CMU14: delta states are manual, dirtying the dictionary field would be a no op
+            Dirty(chunk.Owner, decals);
             decalId = new DecalIndex(ChunkEntitySystem.GetChunkIndices(decal.Coordinates), predictedDecalId);
             return true;
         }
@@ -117,7 +118,8 @@ namespace Content.Client.Decals
                 return false;
             }
 
-            DirtyField(chunkEnt.Value.Owner, decals, nameof(DecalChunkComponent.Decals));
+            // DirtyField(chunkEnt.Value.Owner, decals, nameof(DecalChunkComponent.Decals)); // CMU14: delta states are manual, dirtying the dictionary field would be a no op
+            Dirty(chunkEnt.Value.Owner, decals);
             return true;
         }
 

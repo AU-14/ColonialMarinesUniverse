@@ -89,6 +89,7 @@ public sealed partial class XenoResinHoleSystem : SharedXenoResinHoleSystem
         SubscribeLocalEvent<XenoResinHoleComponent, ExaminedEvent>(OnExamine);
 
         SubscribeLocalEvent<InResinHoleRangeComponent, StoodEvent>(OnInRangeStand);
+        SubscribeLocalEvent<XenoResinHoleComponent, EntityTerminatingEvent>(OnCMUResinHoleTerminating); // CMU14
     }
 
     private void OnPlaceXenoResinHole(Entity<XenoComponent> xeno, ref XenoPlaceResinHoleActionEvent args)

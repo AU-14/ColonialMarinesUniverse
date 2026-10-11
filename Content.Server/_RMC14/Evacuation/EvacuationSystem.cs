@@ -65,7 +65,7 @@ public sealed partial class EvacuationSystem : SharedEvacuationSystem
         if (GetEvacuationProgress(grid) < 100 &&
             crashLandChance > 0 &&
             _random.Prob(crashLandChance) &&
-            _crashLand.TryGetCrashLandLocation(out var location))
+            _crashLand.TryGetCrashLandLocation(grid, out var location)) // CMU14: fit the whole hull on the planet
         {
             children = gridTransform.ChildEnumerator;
             while (children.MoveNext(out var child))

@@ -32,6 +32,11 @@ namespace Content.IntegrationTests.Tests.Movement;
 [TestOf(typeof(MoverController))]
 public sealed class MovementMergeRegressionTest : MovementTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<CloningSettingsPrototype> TraitsMentalPrototype = "TraitsMental";
+    private static readonly Robust.Shared.Prototypes.ProtoId<CloningSettingsPrototype> TraitsPhysicalPrototype = "TraitsPhysical";
+    private static readonly Robust.Shared.Prototypes.ProtoId<CloningSettingsPrototype> BodyPrototype = "Body";
+    private static readonly Robust.Shared.Prototypes.ProtoId<CloningSettingsPrototype> BaseClonePrototype = "BaseClone";
+
     [TestPrototypes]
     private const string Prototypes = @"
 - type: entity
@@ -76,10 +81,10 @@ public sealed class MovementMergeRegressionTest : MovementTest
     {
         await Server.WaitAssertion(() =>
         {
-            var mental = SProtoMan.Index<CloningSettingsPrototype>("TraitsMental");
-            var physical = SProtoMan.Index<CloningSettingsPrototype>("TraitsPhysical");
-            var body = SProtoMan.Index<CloningSettingsPrototype>("Body");
-            var clone = SProtoMan.Index<CloningSettingsPrototype>("BaseClone");
+            var mental = SProtoMan.Index<CloningSettingsPrototype>(TraitsMentalPrototype);
+            var physical = SProtoMan.Index<CloningSettingsPrototype>(TraitsPhysicalPrototype);
+            var body = SProtoMan.Index<CloningSettingsPrototype>(BodyPrototype);
+            var clone = SProtoMan.Index<CloningSettingsPrototype>(BaseClonePrototype);
 
             Assert.Multiple(() =>
             {
@@ -596,7 +601,7 @@ public sealed class MovementMergeRegressionTest : MovementTest
     [TestCase(null, true, 1, 1f)]
     [TestCase(null, false, 1, 0f)]
     public async Task AnalogFrictionOnlyQueriesVirtualSupportOnEmptyTiles(
-        string tileId, bool virtualGround, int expectedQueries, float frictionMultiplier)
+        string? tileId, bool virtualGround, int expectedQueries, float frictionMultiplier)
     {
         await Server.WaitAssertion(() =>
         {

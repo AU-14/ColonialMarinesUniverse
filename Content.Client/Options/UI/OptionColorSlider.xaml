@@ -1,4 +1,4 @@
 <Control xmlns="https://spacestation14.io"
-         xmlns:picker="clr-namespace:Content.Client._CMU14.UserInterface.ColorPicker">
+         xmlns:picker="clr-namespace:Content.Client.CMU14.UserInterface.ColorPicker">
     <picker:CmuColorPicker Name="Picker" Access="Public" HorizontalExpand="True" />
 </Control>

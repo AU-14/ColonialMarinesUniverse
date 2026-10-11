@@ -979,7 +979,9 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             if (bodyOwner is null || IsWoundPhysiologySuspended(bodyOwner.Value))
                 continue;
 
-            if (TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
+            // Arterial bleeding keeps draining a corpse; lesser bleeds stop at death.
+            if (wounds.ExternalBleeding != ExternalBleedTier.Arterial &&
+                TryComp<MobStateComponent>(bodyOwner, out var mob) && mob.CurrentState == MobState.Dead)
                 continue;
 
             ApplyExternalBleed(bodyOwner.Value, partUid, wounds.ExternalBleeding, 1f);
@@ -1161,7 +1163,7 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
     // pause state. Explicit treatment remains available while physiology is frozen.
     private bool IsWoundPhysiologySuspended(EntityUid body)
         => HasComp<CMInStasisComponent>(body) ||
-           TryComp<MetaDataComponent>(body, out var metadata) && metadata.EntityPaused;
+           TryComp(body, out MetaDataComponent? metadata) && metadata.EntityPaused;
 
     private bool IsCurrentWoundOwner(EntityUid body, EntityUid partUid, BodyPartComponent part,
         BodyPartWoundComponent wounds)

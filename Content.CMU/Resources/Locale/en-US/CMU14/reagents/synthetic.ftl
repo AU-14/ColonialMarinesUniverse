@@ -1,0 +1,10 @@
+reagent-name-silicone-oil = silicone oil
+reagent-desc-silicone-oil = Polydimethylsiloxane. A clear, slick oil that keeps artificial muscle fibres from grinding themselves apart.
+reagent-name-glycol = glycol
+reagent-desc-glycol = A sweet, syrupy coolant. Keeps fluid moving across a wide temperature range. Don't drink it.
+reagent-name-synthetic-latex = synthetic latex
+reagent-desc-synthetic-latex = A milky polymer emulsion stabilised with ammonia. Gives synthetic blood its body and its colour.
+reagent-name-surfactant = surfactant
+reagent-desc-surfactant = Sodium alkyl sulfate. Stops oil and water from separating out of a mixture.
+reagent-name-corrosion-inhibitor = corrosion inhibitor
+reagent-desc-corrosion-inhibitor = Sodium phosphate. Coats metal surfaces so circulating fluid doesn't eat them.

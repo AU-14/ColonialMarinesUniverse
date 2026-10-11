@@ -808,8 +808,12 @@
     state: roof3b
   - sprite: /Textures/_RMC14/Structures/Machines/ceiling.rsi
     state: roof4b
-  name: Area Info
-  description: Information of the area you are in.
+  # CMU14 Localization Begin
+  # name: Area Info
+  # description: Information of the area you are in.
+  name: cmu-alerts-area-info-name
+  description: cmu-alerts-area-info-desc
+  # CMU14 End
   minSeverity: 0
   maxSeverity: 7
 

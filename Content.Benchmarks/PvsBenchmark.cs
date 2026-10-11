@@ -1,4 +1,4 @@
-﻿#nullable enable
+#nullable enable
 using System;
 using System.IO;
 using System.Linq;
@@ -32,8 +32,16 @@ public class PvsBenchmark
 {
     public const string Map = "Maps/box.yml";
 
-    [Params(1, 8, 80)]
+    [Params(1, 8, 80, 250, 500, 600)] // CMU14: include the target population and headroom.
     public int PlayerCount { get; set; }
+
+    // CMU14: initialize a dedicated pool once across in-process scenarios.
+    private static readonly Lazy<ContentPoolManager> BenchmarkPool = new(() =>
+    {
+        var pool = new ContentPoolManager();
+        pool.Startup();
+        return pool;
+    });
 
     private TestPair _pair = default!;
     private IEntityManager _entMan = default!;
@@ -47,11 +55,16 @@ public class PvsBenchmark
     public void Setup()
     {
 #if !DEBUG
-        ProgramShared.PathOffset = "../../../../";
+        // CMU14: in-process runs use the normal output directory.
+        ProgramShared.PathOffset = Directory.Exists(Path.Combine(AppContext.BaseDirectory, "../../Resources"))
+            ? ""
+            : "../../../../";
 #endif
-        PoolManager.Startup();
+        // PoolManager.Startup(); // CMU14: the dedicated lazy pool owns initialization.
 
-        _pair = PoolManager.GetServerClient(testContext: new ExternalTestContext("Benchmark", StreamWriter.Null)).GetAwaiter().GetResult();
+        // CMU14: each scenario owns its world and sessions, including in-process runs.
+        _pair = BenchmarkPool.Value.GetPair(new PoolSettings { Fresh = true, Destructive = true },
+            testContext: new ExternalTestContext("Benchmark", StreamWriter.Null)).GetAwaiter().GetResult();
         _entMan = _pair.Server.ResolveDependency<IEntityManager>();
         _pair.Server.CfgMan.SetCVar(CVars.NetPVS, true);
         _pair.Server.CfgMan.SetCVar(CVars.ThreadParallelCount, 0);
@@ -59,6 +72,23 @@ public class PvsBenchmark
         _sys = _entMan.System<SharedTransformSystem>();
 
         SetupAsync().Wait();
+    }
+
+    // CMU14 method: shutdown is terminal for the shared pool; release only this pair.
+    [GlobalCleanup]
+    public async Task Cleanup()
+    {
+        if (_pair == null)
+            return;
+
+        try
+        {
+            await _pair.CleanReturnAsync();
+        }
+        finally
+        {
+            await _pair.DisposeAsync();
+        }
     }
 
     private async Task SetupAsync()

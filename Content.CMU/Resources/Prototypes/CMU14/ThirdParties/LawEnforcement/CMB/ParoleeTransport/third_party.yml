@@ -24,9 +24,9 @@
   weight: 20
   minplayers: 20
   maxplayers: 79
-  GhostsNeeded: 3
+  ghostsNeeded: 3
   roundstart: false
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall
 
@@ -38,8 +38,8 @@
   weight: 20
   minplayers: 80
   maxplayers: 600
-  GhostsNeeded: 4
+  ghostsNeeded: 4
   roundstart: false
-  whitelistedgamemodes:
+  whitelistedGamemodes:
     - insurgency
     - colonyfall

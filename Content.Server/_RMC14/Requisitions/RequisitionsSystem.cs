@@ -128,6 +128,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         // Also apply platoon catalog in case the console needs a custom catalog based on current round
         ApplyPlatoonCatalogToComputer(uid, comp);
         AddXRFToCatalog(uid, comp);
+        var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(); RaiseLocalEvent(uid, ref catalogBuilt); // CMU14
         ResetStock((uid, comp));
         Dirty(uid, comp);
     }
@@ -1140,6 +1141,11 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
     private void OnMoneyInserted(EntityUid uid, ColonyAtmComponent comp, EntInsertedIntoContainerMessage args)
     {
+        // CMU14: the colony ATM holds the customer's ID card, and the cash it pays out until it is taken,
+        // in containers of their own; neither is a payment.
+        if (args.Container.ID is ColonyAtmComponent.CardSlotId or ColonyAtmComponent.CashTrayId)
+            return;
+
         int stackCount = 1;
         if (TryComp(args.Entity, out StackComponent? stack))
             stackCount = stack.Count;
@@ -1223,6 +1229,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         {
             ApplyPlatoonCatalogToComputer(uid, comp);
             AddResearchTerminalToCatalog(uid, comp); // CMU14
+            var catalogBuilt = new CMURequisitionsCatalogBuiltEvent(); RaiseLocalEvent(uid, ref catalogBuilt); // CMU14
             ResetStock((uid, comp));
             Dirty(uid, comp);
         }

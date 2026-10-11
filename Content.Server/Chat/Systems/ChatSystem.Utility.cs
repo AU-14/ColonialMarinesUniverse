@@ -371,6 +371,7 @@ public sealed partial class ChatSystem
         return listener == source ||
                HasComp<YautjaComponent>(listener) ||
                HasComp<YautjaThrallComponent>(listener) ||
+               HasComp<YautjaHellhoundComponent>(listener) || // CMU14: hellhounds understand their handlers
                HasComp<YautjaHivebrokenXenoComponent>(listener);
     }
 }

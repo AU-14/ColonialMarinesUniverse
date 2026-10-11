@@ -2,7 +2,7 @@
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          xmlns:ui="clr-namespace:Content.Client.Options.UI"
          xmlns:s="clr-namespace:Content.Client.Stylesheets"
-         xmlns:cmu="clr-namespace:Content.Client._CMU14.UserInterface.Options">
+         xmlns:cmu="clr-namespace:Content.Client.CMU14.UserInterface.Options">
     <BoxContainer Orientation="Vertical">
         <!-- This tab had no ScrollContainer, so its content sat against the top with dead space
              underneath and nowhere to go if it grew. Same structure as the other tabs now. -->
