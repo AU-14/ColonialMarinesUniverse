@@ -13,6 +13,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.NPC;
+using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Weapons.Ranged.Events;
@@ -187,10 +188,9 @@ public sealed class CMUExpeditionAgentTest : GameTest
                         "Actual volleys must leave a clear firing position, not strike the shelter.");
                 }
                 shots.Clear();
-                if (agent.State == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
+                if (agent.State == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot &&
+                    OpenNearMiss(guard, enemy) is { } aim)
                 {
-                    // pass on the open side; north of the peek position the lane clips the hull, which stops the round
-                    var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, -1.2f));
                     Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
                         (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), aim), Is.True);
                     Assert.That(agent.SuppressedUntil, Is.GreaterThan(SGameTiming.CurTime),
@@ -294,12 +294,9 @@ public sealed class CMUExpeditionAgentTest : GameTest
                         attackers++;
                     // Productive positions persist without pressure. Native incoming fire
                     // makes each attacker return to shelter and yield the next peek.
-                    if (state == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
+                    if (state == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot &&
+                        OpenNearMiss(guard, enemy) is { } aim)
                     {
-                        // pass on the side away from this guard's own hull, a lane that clips it stops the round
-                        var guardAgent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
-                        var away = guardAgent.CoverAnchor is { } shelter && guardAgent.PeekPosition is { } peek && shelter.Y > peek.Y ? -1.2f : 1.2f;
-                        var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, away));
                         Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
                             (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), aim), Is.True);
                         nextIncomingShot = SGameTiming.CurTime + TimeSpan.FromSeconds(1);
@@ -634,3 +631,26 @@ public sealed class CMUExpeditionAgentTest : GameTest
         }
     }
 }
+
+    // a near miss 1.2 tiles off the guard, on a side whose lane is actually open. the AI only feels
+    // rounds that physically reach it (RayClear, shelter), and where the guard fights from depends on
+    // the run, so a fixed side sometimes clipped hull or scenery. null when neither side is open
+    private EntityCoordinates? OpenNearMiss(EntityUid guard, EntityUid enemy)
+    {
+        var transform = Server.System<SharedTransformSystem>();
+        var interaction = Server.System<SharedInteractionSystem>();
+        var body = SEntMan.GetComponent<TransformComponent>(guard).Coordinates;
+        var agent = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard);
+        // prefer passing on the side away from its shelter, that's the open side of a peek
+        var away = agent.CoverAnchor is { } shelter &&
+            transform.ToMapCoordinates(shelter).Position.Y > transform.ToMapCoordinates(body).Position.Y ? -1.2f : 1.2f;
+        foreach (var side in new[] { away, -away })
+        {
+            var aim = body.Offset(new Vector2(0, side));
+            if (interaction.InRangeUnobstructed(transform.GetMapCoordinates(enemy), transform.ToMapCoordinates(aim), 30,
+                    CollisionGroup.Impassable | CollisionGroup.InteractImpassable | CollisionGroup.BulletImpassable,
+                    predicate: e => e == guard || e == enemy || SEntMan.HasComponent<NpcFactionMemberComponent>(e)))
+                return aim;
+        }
+        return null;
+    }
