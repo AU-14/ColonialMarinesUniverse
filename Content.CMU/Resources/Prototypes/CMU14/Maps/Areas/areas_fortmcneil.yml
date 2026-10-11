@@ -264,8 +264,8 @@
   - type: Sprite
     state: shuttle
   - type: Area
-    resinAllowed: false
     landingZone: true
+    linkedLz: dropship_lz1
     minimapColor: '#EBE5E5E3'
     
 - type: entity
@@ -307,7 +307,7 @@
   - type: Sprite
     state: colony_caves_0
   - type: Area
-    CAS: true
+    CAS: false
     fulton: false
     mortarPlacement: false
     mortarFire: false

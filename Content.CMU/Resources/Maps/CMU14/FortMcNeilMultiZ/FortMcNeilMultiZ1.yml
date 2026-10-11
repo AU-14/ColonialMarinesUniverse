@@ -4,7 +4,7 @@ meta:
   engineVersion: v290.0.0
   forkId: ""
   forkVersion: ""
-  time: 10/08/2026 03:08:20
+  time: 10/11/2026 15:52:16
   entityCount: 9379
 maps:
 - 1
@@ -20904,6 +20904,11 @@ entities:
       pos: 46.5,76.5
     - type: Fixtures
       fixtures: {}
+    - type: Destructible
+      thresholds: []
+    - type: Damageable
+      radiationDamageTypes:
+      - Radiation
 - proto: RMCPrefabGreeble5
   entities:
   - uid: 9435
@@ -20913,6 +20918,9 @@ entities:
       pos: 42.5,75.5
     - type: Fixtures
       fixtures: {}
+    - type: Damageable
+      radiationDamageTypes:
+      - Radiation
   - uid: 9436
     components:
     - type: Transform
@@ -20920,6 +20928,8 @@ entities:
       pos: 42.5,74.5
     - type: Fixtures
       fixtures: {}
+    - type: Destructible
+      thresholds: []
   - uid: 9437
     components:
     - type: Transform
@@ -20927,6 +20937,11 @@ entities:
       pos: 46.5,74.5
     - type: Fixtures
       fixtures: {}
+    - type: Destructible
+      thresholds: []
+    - type: Damageable
+      radiationDamageTypes:
+      - Radiation
   - uid: 9438
     components:
     - type: Transform
@@ -20934,6 +20949,11 @@ entities:
       pos: 46.5,75.5
     - type: Fixtures
       fixtures: {}
+    - type: Destructible
+      thresholds: []
+    - type: Damageable
+      radiationDamageTypes:
+      - Radiation
 - proto: RMCWallStrataIce
   entities:
   - uid: 532
