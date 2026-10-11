@@ -135,20 +135,24 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             var point = _transform.ToCoordinates(new MapCoordinates(
                 Vector2.Lerp(start.Position, end.Position, sample / (float) steps), start.MapId));
-            if (!_turf.TryGetTileRef(point, out var tile) || !TryComp<MapGridComponent>(tile.Value.GridUid, out var grid))
-                continue;
-            var key = (tile.Value.GridUid, tile.Value.GridIndices);
-            if (!_smokeTiles.TryGetValue(key, out var opaque))
-            {
-                var anchored = _maps.GetAnchoredEntities(key.GridUid, grid, key.GridIndices);
-                while (anchored.MoveNext(out var entity))
-                    if (HasComp<SmokeComponent>(entity) && TryComp<OccluderComponent>(entity, out var occluder) && occluder.Enabled)
-                        opaque = true;
-                _smokeTiles[key] = opaque;
-            }
-            if (opaque)
+            if (SmokeAt(point))
                 return true;
         }
         return false;
+    }
+
+    private bool SmokeAt(EntityCoordinates point)
+    {
+        if (!_turf.TryGetTileRef(point, out var tile) || !TryComp<MapGridComponent>(tile.Value.GridUid, out var grid))
+            return false;
+        var key = (tile.Value.GridUid, tile.Value.GridIndices);
+        if (_smokeTiles.TryGetValue(key, out var opaque))
+            return opaque;
+        var anchored = _maps.GetAnchoredEntities(key.GridUid, grid, key.GridIndices);
+        while (anchored.MoveNext(out var entity))
+            if (HasComp<SmokeComponent>(entity) && TryComp<OccluderComponent>(entity, out var occluder) && occluder.Enabled)
+                opaque = true;
+        _smokeTiles[key] = opaque;
+        return opaque;
     }
 }
