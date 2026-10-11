@@ -184,7 +184,7 @@
           !type:PhysShapeAabb
           bounds: "-2.3,-2.3,2.3,2.3"
         layer:
-        - MidImpassable
+        - WallLayer
         mask:
         - ItemMask
         density: 1000
