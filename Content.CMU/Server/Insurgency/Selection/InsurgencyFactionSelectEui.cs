@@ -49,7 +49,7 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
 
     public override EuiStateBase GetNewState()
     {
-        return new InsurgencyFactionSelectEuiState(_defaults, CanUseCustom(), _platoons.SelectedGovforPlatoon?.Name);
+        return new InsurgencyFactionSelectEuiState(_defaults, CanUseCustom(), _platoons.SelectedGovforPlatoon is { } p ? Loc.GetString(p.Name) : null);
     }
 
     public override void Opened()

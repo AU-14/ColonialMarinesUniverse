@@ -93,7 +93,9 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.ManeuverWaitSince = null;
         agent.ManeuverWaitTarget = null;
         agent.CoveringShooter = chosen;
-        agent.ManeuverUntil = now + TimeSpan.FromSeconds(6);
+        // same budget the planner gives the action itself (StartNextAction, now + 10 s). at 6 s a
+        // longer flank route ran out mid-walk and got reported as lost support
+        agent.ManeuverUntil = now + TimeSpan.FromSeconds(10);
         covering.CoveringFor = uid;
         covering.CoveringUntil = now + TimeSpan.FromSeconds(1);
         covering.SquadDecision = "covering-mover";
@@ -116,14 +118,34 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.CoveringShooter is not { } shooter)
             return true;
         if (now < agent.ManeuverUntil && TryComp<CMUExpeditionAgentComponent>(shooter, out var buddy) &&
-            buddy.CoveringFor == uid && LocalSquadMember(uid, agent, shooter, buddy) &&
-            CoveringFireReady(shooter, buddy, out _) && SharedEngagement(agent, buddy))
+            buddy.CoveringFor == uid && LocalSquadMember(uid, agent, shooter, buddy) && SharedEngagement(agent, buddy))
         {
-            buddy.CoveringUntil = now + TimeSpan.FromSeconds(1);
-            return true;
+            if (CoveringFireReady(shooter, buddy, out _))
+            {
+                agent.SupportLapseSince = null;
+                buddy.CoveringUntil = now + TimeSpan.FromSeconds(1);
+                return true;
+            }
+            // readiness is checked every think, so the gap between bursts, a 0.8 s reload or a flicker
+            // of sight used to abort the mover on the spot. ride out a short lapse, only a long one counts
+            agent.SupportLapseSince ??= now;
+            if (now - agent.SupportLapseSince < TimeSpan.FromSeconds(1.5))
+            {
+                buddy.CoveringUntil = now + TimeSpan.FromSeconds(1);
+                return true;
+            }
         }
+        var deadline = agent.ManeuverUntil;
         var remaining = agent.CoverDestination ?? agent.SpacingDestination;
         ReleaseManeuver(uid, agent);
+        // cover dropped out (reloading, empty, lost the target), so hand it to another ready squadmate
+        // before aborting. keeps the original deadline so hand-offs can't stretch it. without this a
+        // squad that burns through mags never finished a flank, even with everyone else still firing
+        if (now < deadline && TryReserveManeuver(uid, agent, now) && agent.CoveringShooter != null)
+        {
+            agent.ManeuverUntil = deadline;
+            return true;
+        }
         // Losing a supporter's shot for a moment must not strand a mover halfway to
         // shelter. Finish only the same bounded safe leg, never an exposed assault.
         if (remaining is { } step && TryUncoveredManeuver(uid, agent, step, now))
@@ -144,6 +166,7 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.CoveringShooter = null;
         agent.ManeuverUntil = TimeSpan.Zero;
         agent.UncoveredManeuverDestination = null;
+        agent.SupportLapseSince = null;
     }
 
     private bool SafeUncoveredStep(EntityUid uid, CMUExpeditionAgentComponent agent, EntityCoordinates destination)
@@ -210,7 +233,9 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool KeepFightingPosition(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
+        // shaken counts as pressured, so no exposed angle after the just-hit window either
         if (agent.Target == null || agent.RushTarget != null || GrenadeDanger(Transform(uid).Coordinates) ||
+            agent.Emotion == CMUExpeditionEmotion.Shaken ||
             agent.LastDamage >= agent.RetreatDamage || now - agent.LastHit < TimeSpan.FromSeconds(0.75) ||
             !_guns.TryGetGun(uid, out var gun) || WeaponAmmo(gun) == 0 ||
             !TryAimPoint(uid, agent, gun, out var point) || !SafeShot(uid, agent, gun, point))

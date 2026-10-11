@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Destructible;
 using Content.Shared.Damage.Components;
+using Content.Shared.Doors.Components;
 using Content.Shared.Tag;
 using Robust.Shared.Prototypes;
 
@@ -19,7 +20,7 @@ public sealed partial class CMUExpeditionAgentSystem
         // RMC full-tile glass uses WallLayer, so neither the movement mask nor Opaque
         // collision bit describes sight. Honour real occluders (tint/shutters) instead.
         transparent = !(TryComp<OccluderComponent>(uid, out var occluder) && occluder.Enabled) &&
-            (_tags.HasTag(uid, WindowTag) || MetaData(uid).EntityPrototype is { } prototype &&
+            (HasComp<DoorComponent>(uid) || _tags.HasTag(uid, WindowTag) || MetaData(uid).EntityPrototype is { } prototype &&
                 ProtoMan.EnumerateParents<EntityPrototype>(prototype.ID).Any(parent => parent.ID == "CMBaseWindowIndestructible"));
         _windowSightCache[uid] = transparent;
         return transparent;

@@ -10,6 +10,8 @@ public sealed partial class CMUExpeditionAgentComponent
     public TimeSpan IncomingFireUntil;
     public TimeSpan NextIncomingResponse;
     public TimeSpan NextIncomingObservation;
+    public TimeSpan NextIncomingRoute;
+    public EntityCoordinates? IncomingEscapeDestination;
     public EntityCoordinates? LastSafePosition;
     public string IncomingFireDecision = "clear";
     public int IncomingFireEscapes;
