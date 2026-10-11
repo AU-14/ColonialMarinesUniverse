@@ -283,44 +283,11 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             return FetchAnalyzeResult.AlreadyFetched;
 
         var analyzerFaction = TryComp(analyzerUid, out FetchAnalyzerComponent? a) ? a.Faction.ToLowerInvariant() : string.Empty;
-        var wrongFaction = false;
+        if (!TryPickFetchObjective(proto, existing, analyzerFaction, out var objUid, out var creditFaction, out var wrongFaction))
+            return wrongFaction ? FetchAnalyzeResult.WrongFaction : FetchAnalyzeResult.NotObjective;
 
-        var query = EntityQueryEnumerator<FetchObjectiveComponent, CMUObjectiveComponent>();
-        while (query.MoveNext(out var objUid, out var fetchComp, out var auComp))
-        {
-            if (!auComp.Active || !string.Equals(fetchComp.TargetPrototype, proto, StringComparison.OrdinalIgnoreCase))
-                continue;
-
-            // An item already claimed by a different objective only counts for that one.
-            if (existing != null && existing.ObjectiveUid.IsValid() && existing.ObjectiveUid != objUid)
-                continue;
-
-            if (!string.IsNullOrEmpty(analyzerFaction) && !auComp.FactionNeutral && auComp.Faction.ToLowerInvariant() != analyzerFaction)
-            {
-                wrongFaction = true;
-                continue;
-            }
-
-            var creditFaction = string.IsNullOrEmpty(analyzerFaction) ? auComp.Faction.ToLowerInvariant() : analyzerFaction;
-            if (string.IsNullOrEmpty(creditFaction))
-                continue;
-
-            var item = EnsureComp<FetchItemComponent>(itemUid);
-            item.ObjectiveUid = objUid;
-            item.Fetched = true;
-            fetchComp.AmountFetchedPerFaction.TryAdd(creditFaction, 0);
-            fetchComp.AmountFetchedPerFaction[creditFaction]++;
-
-            if (ShouldCompleteForFaction(auComp, creditFaction, fetchComp.AmountFetchedPerFaction[creditFaction], fetchComp.FetchCount))
-            {
-                ObjInt.UnregisterInterest(objUid);
-                ObjCtrl.CompleteObjectiveForFaction(objUid, auComp, creditFaction, sawmill: _logs);
-            }
-
-            return FetchAnalyzeResult.Fetched;
-        }
-
-        return wrongFaction ? FetchAnalyzeResult.WrongFaction : FetchAnalyzeResult.NotObjective;
+        CreditFetch(itemUid, objUid, creditFaction);
+        return FetchAnalyzeResult.Fetched;
     }
 
     public int ScanForFetchItems(EntityUid analyzerUid, List<EntityUid>? fetched = null)
@@ -329,44 +296,116 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             return 0;
 
         var analyzerFaction = TryComp(analyzerUid, out FetchAnalyzerComponent? a) ? a.Faction.ToLowerInvariant() : string.Empty;
-        int totalFetched = 0;
+        var totalFetched = 0;
+
+        // item-first so each item goes to its own objective. the old objective-first loop let whichever
+        // objective came first eat every matching item in range, so two "fetch the WY laptop" objectives
+        // only ever paid out once
+        foreach (var ent in _lookup.GetEntitiesInRange(analyzerXform.Coordinates, 5f))
+        {
+            if (ent == analyzerUid || HasComp<FetchObjectiveComponent>(ent))
+                continue;
+
+            var proto = MetaData(ent).EntityPrototype?.ID;
+            if (string.IsNullOrEmpty(proto))
+                continue;
+
+            TryComp(ent, out FetchItemComponent? existing);
+            if (existing is { Fetched: true })
+                continue;
+
+            if (!TryPickFetchObjective(proto, existing, analyzerFaction, out var objUid, out var creditFaction, out _))
+                continue;
+
+            CreditFetch(ent, objUid, creditFaction);
+            totalFetched++;
+            fetched?.Add(ent);
+        }
+
+        return totalFetched;
+    }
+
+    // picks which active objective an item counts for. a claimed item only counts for its owner, an unclaimed
+    // one goes to an objective that still needs it before falling back to one that's already done
+    private bool TryPickFetchObjective(
+        string proto,
+        FetchItemComponent? existing,
+        string analyzerFaction,
+        out EntityUid objective,
+        out string creditFaction,
+        out bool wrongFaction)
+    {
+        objective = default;
+        creditFaction = string.Empty;
+        wrongFaction = false;
+
+        // an owner that's gone shouldn't strand the item
+        var owner = existing != null && existing.ObjectiveUid.IsValid() && HasComp<FetchObjectiveComponent>(existing.ObjectiveUid)
+            ? existing.ObjectiveUid
+            : EntityUid.Invalid;
+
+        EntityUid fallback = default;
+        var fallbackFaction = string.Empty;
 
         var query = EntityQueryEnumerator<FetchObjectiveComponent, CMUObjectiveComponent>();
         while (query.MoveNext(out var objUid, out var fetchComp, out var auComp))
         {
-            if (!auComp.Active || string.IsNullOrEmpty(fetchComp.TargetPrototype))
+            if (!auComp.Active || !string.Equals(fetchComp.TargetPrototype, proto, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (owner.IsValid() && owner != objUid)
                 continue;
 
             if (!string.IsNullOrEmpty(analyzerFaction) && !auComp.FactionNeutral && auComp.Faction.ToLowerInvariant() != analyzerFaction)
-                continue;
-
-            var creditFaction = string.IsNullOrEmpty(analyzerFaction) ? auComp.Faction.ToLowerInvariant() : analyzerFaction;
-            if (string.IsNullOrEmpty(creditFaction))
-                continue;
-
-            foreach (var ent in _lookup.GetEntitiesInRange(analyzerXform.Coordinates, 5f))
             {
-                if (ent == analyzerUid || ent == objUid) continue;
-                if (!TryComp(ent, out MetaDataComponent? meta) || meta.EntityPrototype?.ID != fetchComp.TargetPrototype) continue;
-
-                var item = EnsureComp<FetchItemComponent>(ent);
-                if (item.Fetched) continue;
-
-                item.ObjectiveUid = objUid;
-                fetchComp.AmountFetchedPerFaction.TryAdd(creditFaction, 0);
-                fetchComp.AmountFetchedPerFaction[creditFaction]++;
-                item.Fetched = true;
-                totalFetched++;
-                fetched?.Add(ent);
+                wrongFaction = true;
+                continue;
             }
 
-            if (ShouldCompleteForFaction(auComp, creditFaction, fetchComp.AmountFetchedPerFaction.GetValueOrDefault(creditFaction), fetchComp.FetchCount))
+            var credit = string.IsNullOrEmpty(analyzerFaction) ? auComp.Faction.ToLowerInvariant() : analyzerFaction;
+            if (string.IsNullOrEmpty(credit))
+                continue;
+
+            var stillNeeded = !auComp.StatusesPerFaction.ContainsValue(CMUObjectiveComponent.ObjectiveStatus.Completed)
+                && fetchComp.AmountFetchedPerFaction.GetValueOrDefault(credit) < fetchComp.FetchCount;
+            if (stillNeeded)
             {
-                ObjInt.UnregisterInterest(objUid);
-                ObjCtrl.CompleteObjectiveForFaction(objUid, auComp, creditFaction, sawmill: _logs);
+                objective = objUid;
+                creditFaction = credit;
+                return true;
+            }
+
+            if (!fallback.IsValid())
+            {
+                fallback = objUid;
+                fallbackFaction = credit;
             }
         }
-        return totalFetched;
+
+        if (!fallback.IsValid())
+            return false;
+
+        objective = fallback;
+        creditFaction = fallbackFaction;
+        return true;
+    }
+
+    private void CreditFetch(EntityUid itemUid, EntityUid objUid, string creditFaction)
+    {
+        var fetchComp = Comp<FetchObjectiveComponent>(objUid);
+        var auComp = Comp<CMUObjectiveComponent>(objUid);
+
+        var item = EnsureComp<FetchItemComponent>(itemUid);
+        item.ObjectiveUid = objUid;
+        item.Fetched = true;
+        fetchComp.AmountFetchedPerFaction.TryAdd(creditFaction, 0);
+        fetchComp.AmountFetchedPerFaction[creditFaction]++;
+
+        if (ShouldCompleteForFaction(auComp, creditFaction, fetchComp.AmountFetchedPerFaction[creditFaction], fetchComp.FetchCount))
+        {
+            ObjInt.UnregisterInterest(objUid);
+            ObjCtrl.CompleteObjectiveForFaction(objUid, auComp, creditFaction, sawmill: _logs);
+        }
     }
 
     private void OnFetchItemDestroyed(EntityUid uid, FetchItemComponent comp, ref EntityTerminatingEvent args)
