@@ -159,6 +159,9 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         else if (dead && TryComp<DefibrillatorComponent>(item, out var defibrillator))
         {
+            // Ordinary replacement devices need the same owned completion callback as
+            // the expedition kit, so a completed shock can continue into aftercare.
+            EnsureComp<CMUExpeditionMedicalToolComponent>(item);
             medic.Phase = CMUExpeditionMedicalPhase.Revive;
             medic.ShockCompleted = false;
             medic.Decision = "reviving-patient";

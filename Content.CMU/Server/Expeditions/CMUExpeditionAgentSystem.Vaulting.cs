@@ -142,7 +142,7 @@ public sealed partial class CMUExpeditionAgentSystem
         // ClimbSystem moves to the surface's origin. Validate that whole sweep, not just
         // the route ray, so an offset platform cannot pull the body through a nearby wall.
         if (!TraversablePassage(uid, start, landing, vault: obstacle)
-            || Reserved(uid, landing) || GrenadeDanger(landing)
+            || Reserved(uid, landing) || GrenadeDanger(landing) || !KnownDangerPassage(uid, agent, start, landing)
             || !_climb.CanVault(surface, uid, obstacle, out _)
             || TryComp<ClimbingComponent>(uid, out var current) && current.IsClimbing)
         {

@@ -92,6 +92,10 @@ public sealed partial class CMUExpeditionAgentComponent
     public float LearnedFlankCost = 1;
     public float LearnedDangerCost = 1;
     public bool LearningLoaded;
+    public TimeSpan NextExperienceRefresh;
+    public string ExperienceGroup = "baseline";
+    public int ExperienceSamples;
+    public bool PeekOutcomeRecorded;
     public float ActionInitialDamage;
     public float PeekInitialDamage;
     public bool LastMoveFailed;

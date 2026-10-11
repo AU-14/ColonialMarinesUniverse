@@ -3,6 +3,7 @@ using Content.Server.NPC.Components;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Movement.Components;
 using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
 
@@ -13,8 +14,21 @@ public sealed partial class CMUExpeditionAgentSystem
     private float CombatStride(EntityUid uid) => TryComp<MovementSpeedModifierComponent>(uid, out var speed)
         ? Math.Clamp(speed.CurrentSprintSpeed * 1.6f, 0.65f, 3f) : 3;
 
-    private bool IsMeleeThreat(EntityUid target) => HasComp<XenoComponent>(target) ||
-        HasComp<MeleeWeaponComponent>(target) && !_guns.TryGetGun(target, out _);
+    private bool IsMeleeThreat(EntityUid target)
+    {
+        if (HasComp<XenoComponent>(target))
+            return true;
+        if (_guns.TryGetGun(target, out _))
+            return false;
+        if (_hands.GetActiveItem(target) is { } active && HasComp<MeleeWeaponComponent>(active))
+            return true;
+        // Humans have a melee component for their fists. A visible rifle in the
+        // spare hand still identifies a ranged opponent during reloads or treatment.
+        foreach (var hand in _hands.EnumerateHands(target))
+            if (_hands.TryGetHeldItem(target, hand, out var held) && HasComp<GunComponent>(held))
+                return false;
+        return HasComp<MeleeWeaponComponent>(target);
+    }
 
     private float RushDistance(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target, float distance)
     {
@@ -68,8 +82,10 @@ public sealed partial class CMUExpeditionAgentSystem
         var start = Transform(uid).Coordinates;
         if (agent.SpacingDestination is { } destination)
         {
-            var arrived = _transform.InRange(start, destination, 0.5f);
-            var blocked = TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath;
+            var exposedStep = agent.ExposedStepUntil > now;
+            var arrived = _transform.InRange(start, destination, exposedStep ? 0.3f : 0.5f);
+            var blocked = !KnownDangerPassage(uid, agent, start, destination) ||
+                TryComp<NPCSteeringComponent>(uid, out var steering) && steering.Status == SteeringStatus.NoPath;
             // Keep a committed escape step unless it now leads towards the closest attacker.
             var closingGap = agent.MeleeThreats.Count > 0 &&
                 MeleeClearance(agent, destination) < MeleeClearance(agent, start) - 0.25f;
@@ -85,7 +101,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 }
             }
             else
-                Move(uid, destination, validated: true);
+                Move(uid, destination, precise: exposedStep, validated: true);
         }
         if (agent.SpacingDestination == null && agent.RushTarget != null && now >= agent.NextSpacingSearch)
         {
@@ -117,6 +133,7 @@ public sealed partial class CMUExpeditionAgentSystem
         CancelPlan(uid, agent, false);
         CancelTreatment(agent);
         ClearCover(agent);
+        ClearTraffic(agent);
         StopSpacing(uid, agent);
         agent.NextSpacingSearch = now;
         // Only the tactical response is accelerated; native wield/fire delays still apply.
@@ -191,6 +208,8 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.SpacingDestination = null;
         agent.SpacingUntil = TimeSpan.Zero;
         agent.SpacingDecision = "idle";
+        agent.ExposedStepUntil = TimeSpan.Zero;
+        agent.ExposureMovementDecision = "settled";
     }
 
     private bool TryDisperse(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)

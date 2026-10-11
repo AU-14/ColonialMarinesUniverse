@@ -8,5 +8,13 @@ namespace Content.Client.CMU14.Expeditions;
 [GenerateTypedNameReferences]
 public sealed partial class CMUSquadPanelWindow : DefaultWindow
 {
-    public CMUSquadPanelWindow() => RobustXamlLoader.Load(this);
+    public CMUSquadPanelWindow()
+    {
+        RobustXamlLoader.Load(this);
+        CommandTabs.SetTabTitle(0, Loc.GetString("cmu-squads-orders-tab"));
+        CommandTabs.SetTabTitle(1, Loc.GetString("cmu-squads-deploy-tab"));
+        CommandTabs.SetTabTitle(2, Loc.GetString("cmu-squads-relations-tab"));
+        InspectTabs.SetTabTitle(0, Loc.GetString("cmu-squads-map-tab"));
+        InspectTabs.SetTabTitle(1, Loc.GetString("cmu-squads-diagnostics-tab"));
+    }
 }

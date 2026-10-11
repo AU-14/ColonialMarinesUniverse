@@ -7,6 +7,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Stacks;
 using Content.Shared.Item.ItemToggle.Components;
 using Robust.Shared.Map;
+using Robust.Shared.Player;
 
 namespace Content.Server.CMU14.Expeditions;
 
@@ -16,7 +17,7 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool TryFortify(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (!agent.Entrench || agent.OrderedDestination != null || agent.Home is not { } home ||
+        if (agent.UtilityCleanupItem != null || agent.FlareItem != null || !agent.Entrench || agent.OrderedDestination != null || agent.Home is not { } home ||
             now - agent.LastContact < TimeSpan.FromSeconds(20) || now - agent.LastHit < TimeSpan.FromSeconds(20))
             return false;
         if (agent.FortificationPoint == null)
@@ -220,9 +221,9 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.WorkDoAfter is { } work && _doAfter.GetStatus(work) == DoAfterStatus.Running)
             _doAfter.Cancel(work);
         agent.WorkDoAfter = null;
-        if (agent.WorkItem is { } item && Exists(item))
+        if (!HasComp<ActorComponent>(uid) && agent.WorkItem is { } item && Exists(item) && _hands.IsHolding(uid, item, out _))
         {
-            if (!Supplies(uid, out var supplies) || !_hands.TryDropIntoContainer(uid, item, supplies.Container))
+            if (!StoreSupply(uid, item))
                 _hands.TryDrop(uid, item);
         }
         agent.WorkItem = null;

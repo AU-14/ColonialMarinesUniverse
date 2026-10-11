@@ -53,14 +53,16 @@ public sealed partial class CMUExpeditionAgentSystem
                 origin.Offset(new Vector2(_visionRandom.NextFloat(-error, error), _visionRandom.NextFloat(-error, error))));
             agent.HeardUntil = _timing.CurTime + TimeSpan.FromSeconds(10);
             agent.NextHearing = _timing.CurTime + TimeSpan.FromSeconds(3);
-            // No Target, LastSeen or FlashPosition is assigned by hearing.
-            Decision(agent, "heard-noise", kind);
+            // Perception records evidence; it does not take ownership from an active
+            // burst, reload or treatment, or shorten that controller's commitment.
+            agent.HeardKind = kind;
+            agent.HeardAt = _timing.CurTime;
         }
     }
 
     private bool InvestigateSound(EntityUid uid, CMUExpeditionAgentComponent agent, TimeSpan now)
     {
-        if (agent.HeardPoint is not { } heard || now >= agent.HeardUntil || agent.Target != null ||
+        if (agent.HoldPosition || agent.HeardPoint is not { } heard || now >= agent.HeardUntil || agent.Target != null ||
             agent.OrderedDestination != null || agent.TravelGoal != null || agent.Entrench || agent.Action != null ||
             agent.Treatment != null || agent.SupplySource != null || agent.RecoveryUntil > now ||
             agent.Duty is CMUSquadDuty.Medic or CMUSquadDuty.RearGuard ||

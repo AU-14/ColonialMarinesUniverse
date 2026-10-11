@@ -4,15 +4,16 @@
   components:
   - type: CMUExpeditionWeaponRole
     maximumRange: 18
+    closeRange: 2
     closePriority: -20
     burstLimit: 1
 
 - type: startingGear
   id: CMUExpeditionSniperGear
   equipment:
-    head: RMCArmorHelmetMercenaryReinforced
+    head: RMCArmorHelmetMercenary
     jumpsuit: RMCJumpsuitMercenaryHeavy
-    outerClothing: RMCArmorMercenaryHeavy
+    outerClothing: RMCArmorMercenary
     gloves: CMHandsBlackMarine
     shoes: RMCShoesBrown
     pocket1: CMUExpeditionFieldDressing
@@ -24,15 +25,20 @@
   - CMUExpeditionSniperRifle
   storage:
     back:
-    - CMUExpeditionSidearm
-    - CMMagazinePistolM1984
-    - CMUExpeditionSmokeGrenade
-    - CMUExpeditionBlastGrenade
+    - RMCM5Bayonet
     - RMCShovel
     - CMPackFlare
+    - CMUExpeditionBlastGrenade
+    - CMUExpeditionSmokeGrenade
+    - CMUExpeditionSmokeGrenade
     belt:
     - CMMagazineSniperM96S
     - CMMagazineSniperM96S
+    - CMMagazineSniperM96S
+    - CMMagazineSniperM96S
+    pocket2:
+    - CMUExpeditionSidearm
+    - CMMagazinePistolM1984
 
 - type: entity
   parent: CMUExpeditionScavengerMarksman

@@ -3,6 +3,70 @@
 Scope: the opt-in CMU scavenger controller, on expedition and ordinary maps. Decisions remain server-side;
 native steering, firearms, physics, factions and medical do-afters execute actions.
 
+## Robust controller handoffs and held-angle response
+
+`CancelAgentActivity` is the shared interruption boundary for replacement orders, incapacitation,
+loss of AI control and leash recovery. It releases transient actions and native steering while
+leaving persistent orders and contact memory to the caller. Cancellation does not stow or drop
+a tool after player possession. Ordinary tactical transitions still use their narrower executors.
+
+Observed near-fire geometry adds short, sight-clipped lane segments to the existing danger field.
+`CMUCornerResponsePolicy` supplies the same segment costs and passage checks to routing and local
+movement. A safe endpoint cannot authorize crossing a dangerous segment. Agents already inside
+danger can leave along a level or decreasing cost; radio copies retain the original expiry.
+
+The corner response stages crowded or exposed members and elects one available rifleman for a
+bounded alternate-route probe. Fully sheltered routes do not require a teammate to fire through
+an opaque corner. Exposed maneuvers still require real covering fire. When no safe route exists,
+containment preserves reloads, treatment, safe return fire and ordnance opportunities. Grenade
+staging uses a recent frozen local observation, a traversable throwing stance and final native
+trajectory/blast checks. Smoke can screen the accessible near side when HE cannot be positioned.
+
+Automatic patrol uses bounded coverage/failure memory instead of a repeating spoke loop. Shared
+destinations and limited cohesion waits keep members on the same leg; failed sectors expire and
+re-enter consideration. Candidate searches have a shared budget and squads rotate through it.
+Assistance has a shared approach side and expires on invalid contacts or persistent lack of progress.
+
+Current-round outcomes update the observer's bounded risk costs immediately and peers every five
+seconds. One exposed peek contributes at most one outcome. This adapts tactic selection costs; it
+does not modify aim skill, perception or weapon mechanics. Diagnostics retain executor reasons
+across state changes and expose decision-time samples alongside route and squad timing.
+
+These mechanisms remain local and evidence-limited. There is no unobserved room reconstruction,
+bank-shot planner, arbitrary whole-map exploration or promise of synchronized room entry. Pure
+policy/method simulations verify selected decisions; live native geometry and combat outcomes
+need gameplay validation. No integration tests are required by this implementation workflow.
+
+## Assault orders and readable diagnostics
+
+An assault retains a strategic destination across local firefights and survival actions. In contact,
+the squad rotates short advances between ready members while others fire. A member already advancing
+keeps its assignment until the bound finishes or a higher-priority action interrupts it. Actual covering
+fire can permit leaving shelter toward that same opponent; it never permits a newly exposed crossfire,
+known dangerous passage, unsafe floor or occupied destination. Without a shooter, the existing bounded
+fallback permits only a safe step. Lost contact resumes travel toward the objective rather than chasing
+an uncertain sound. Healing, ammunition work, urgent evasion and anti-armor work retain their priority.
+
+Anti-rush uses the current nearby rush assessment, not the presence of any melee memory. A visible gun
+in either hand keeps a humanoid classified as a ranged opponent during hand utility. Projectile damage
+records incoming fire independently of the attacker's subsequently selected item. A cleared rush has a
+short grace period before the squad resumes its previous mission.
+
+The squad panel separates the commanded order, chosen tactic and cause, individual executing action,
+and current blocking condition. Stopped members retain their last living diagnostics, including the
+tactic cause and rocket safety decision. Copy diagnostics exports the displayed squad state as text.
+Rocket checks distinguish hull obstruction, range, blast area, backblast and friendly firing-cone blocks;
+the first-impact ray includes vehicle hull collision layers and preserves intervening obstacles.
+
+Faction spawn kits select a role-appropriate native primary and matching finite ammunition in addition
+to clothing. The catalog covers USCM, RMC, UPP, PMC, CLF, CMB, LACN, CCAF, UACG and Prodigy; scavenger
+kits retain their mixed equipment. The panel groups variants into rifleman, assault, support, marksman,
+rocketeer and medic roles, while existing console names and mob prototypes remain compatible.
+Spawn replacement restores dependent inventory slots before fitting equipment, retains the old primary
+and reserves until the replacement succeeds, and rolls back on insertion failure. Empty native weapons
+take ammunition from the supplied reserves. Weapon qualification components enable the appropriate
+native specialist actions; fire rate, projectile damage, wielding and aiming remain native.
+
 ## Sources and adaptations
 
 - [Jeff Orkin, Three States and a Plan: The A.I. of F.E.A.R., GDC 2006](https://www.gamedevs.org/uploads/three-states-plan-ai-of-fear.pdf).
@@ -51,8 +115,11 @@ native steering, firearms, physics, factions and medical do-afters execute actio
    Stop a peek at usable geometry even when a teammate temporarily blocks firing. Stops
    inside valid shelter tolerate 55 cm of endpoint error, avoiding needless tiny corrections.
    Coverless recovery resumes aim only with a visible target and no active utility action.
-5. Hits or visible hostile fire passing within 1.5 metres interrupt exposure. Pressure
+5. Hits or physically reachable hostile fire passing within 1.5 metres interrupt exposure. Pressure
    delays the next peek; uncovered guards seek a safe refuge when one is reachable.
+   Damage can trigger a short evasive step even when the shooter is hidden. This records the
+   impact location, never an unseen shooter's transform. Witnessed casualties mark dangerous
+   approaches for up to 24 seconds; repeated radio reports do not extend that lifetime.
 6. Wounded guards use their physical three-dose dressing pack while sheltered. They free
    a hand and complete a three-second native medical action. Damage, movement, lost
    safety, incapacitation or player possession cancels treatment.
@@ -76,7 +143,10 @@ body position. Otherwise steering approaches within 5 cm of the corner. Validate
 use native local avoidance without a second navmesh path overriding the selected waypoints.
 Only a new closest approach resets stall timing; sideways wall jitter does not. Interrupted
 ordered segments retry after 0.5 seconds, while failed searches retain a three-second backoff.
-Route budgets remain 256 cells for tactics and 2048 for orders, with one ordered search per frame.
+The walking pass permits 256 cells for tactics and 2048 for orders. Only a failed walking pass
+permits a second search with vaults using the same budget; one ordered request runs per frame.
+Smoothing and early corner turns cannot add a vault to a walking route. Local detours likewise
+try walking before vaulting, with up to 384 expansions per pass.
 
 The distances and timers above are tuning choices for this game, not values claimed by
 the cited papers. The aim is readable, adaptable opposition with ordinary ammunition and
@@ -136,7 +206,10 @@ incoming hits at shelter, blocked lanes, rushes and grenades still override the 
 Each traveller advertises a short corridor. Followers queue behind a leading body; opposing traffic
 in narrow passages uses stable request time and entity-ID tie breaking. A yielding guard physically
 steps into a reachable passing pocket. Waiting pauses the ordinary stall clock, but after five seconds
-the guard replans around a temporarily blocked body instead of extending its queue forever. This
+the guard replans around a temporarily blocked body instead of extending its queue forever.
+Under incoming fire this timeout is two seconds. Passing a stationary shooter uses a fixed side
+pocket and parallel exit with body clearance; a tactical firing-position reservation does not
+incorrectly rule out the free lane of a two-tile corridor. This
 coordinates individual bounded routes; it is not a shared flow field or a guarantee of deadlock-free
 multi-agent pathfinding. Hard collision clearance stays at the native body radius.
 
@@ -178,7 +251,7 @@ Follow-up verification for equipment and ammunition exhaustion:
   guard seeks its usable range. Exhaust both guns, provide shelter or an actual covering shooter, then
   check reload progress and interruption when the shooter loses its lane, is disarmed or is knocked down.
 - Deplete all carried ammunition. Check safe last-resort grenades/smoke, exclusive retrieval of a loose
-  loaded gun within four metres, rejection of living inventories/hidden/blocked guns, five-second cancellation and
+  loaded gun within four metres, rejection of healthy inventories/hidden/blocked guns, five-second cancellation and
   native melee only when an enemy reaches contact distance. Orders, knockdown and player possession
   must release retrieval claims. Existing grenade and rocket limits remain in force.
 
@@ -540,11 +613,13 @@ ammunition, visible aim points and friendly-fire checks remain authoritative.
 
 Scavenging checks actual magazine-slot or ballistic compatibility and remaining ammunition. The
 four-metre, five-second claim can include loose items, accessible floor storage and a dead body's
-held items, inventory and one bag/belt layer. Living/critical bodies, locked storage, active grenades
+held items, inventory and one bag/belt layer. Critical bodies become eligible for emergency weapon/ammo
+retrieval only after all carried usable ammunition is exhausted, with critical state revalidated at pickup.
+Healthy bodies, locked storage, active grenades
 and unknown ordnance are rejected. HE and smoke with known native behavior can be adopted, while the
 existing squad throw budget remains unchanged. Pickups use hands and finite storage; a body/container
 search takes 0.8 seconds and a loose pickup 0.25 seconds. Loaded guards replenish only while quiet and
-without a travel order. No ammunition is fabricated or transferred from a living squadmate.
+without a travel order. No ammunition is fabricated; ordinary sharing remains a separate native transfer.
 
 Members on the same move order pause for a laggard over eight metres away and over five metres
 behind in progress. Each wait is capped at four seconds with a two-second interval. A member reporting

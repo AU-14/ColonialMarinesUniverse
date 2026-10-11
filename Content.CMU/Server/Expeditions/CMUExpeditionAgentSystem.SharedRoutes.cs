@@ -17,14 +17,17 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             var route = buddy.OrderRoute.Take(96).ToArray();
             var join = Array.FindIndex(route, point => _transform.InRange(Transform(uid).Coordinates, point, 4) &&
-                RoutePassage(uid, Transform(uid).Coordinates, point));
-            if (join < 0 || !RoutePassage(uid, route[^1], destination))
+                RoutePassage(uid, Transform(uid).Coordinates, point, allowVault: false) &&
+                KnownDangerPassage(uid, agent, Transform(uid).Coordinates, point));
+            if (join < 0 || !RoutePassage(uid, route[^1], destination, allowVault: false) ||
+                !KnownDangerPassage(uid, agent, route[^1], destination))
                 continue;
             var previous = Transform(uid).Coordinates;
             var valid = true;
             for (var index = join; index < route.Length; index++)
             {
-                if (!RoutePassage(uid, previous, route[index]))
+                if (!RoutePassage(uid, previous, route[index], allowVault: !agent.AutoPatrol) ||
+                    !KnownDangerPassage(uid, agent, previous, route[index]))
                 {
                     valid = false;
                     break;
@@ -59,7 +62,7 @@ public sealed partial class CMUExpeditionAgentSystem
         {
             searched = true;
             agent.NextRegroupRoute = now + TimeSpan.FromSeconds(12);
-            if (!BuildTacticalRoute(uid, agent, candidate, ordered: true))
+            if (!BuildTacticalRoute(uid, agent, candidate, ordered: true, allowVaults: !agent.AutoPatrol))
                 continue;
             agent.OrderRoute.Clear();
             foreach (var point in agent.Route)

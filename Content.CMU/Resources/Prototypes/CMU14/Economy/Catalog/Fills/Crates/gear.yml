@@ -228,7 +228,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: CMMaskGas
+    - id: CMUMaskGas
       amount: 4
     - id: CMUGasMaskFilter
       amount: 4

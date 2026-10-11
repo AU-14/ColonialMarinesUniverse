@@ -40,12 +40,19 @@ public sealed partial class CMUExpeditionAgentSystem
             weapon = active;
         if (weapon is not { } gun || !HasComp<GunComponent>(gun))
             return null;
-        foreach (var item in SupplyItems(uid))
+        EntityUid? chosen = null;
+        var mostRounds = 0;
+        foreach (var item in CarriedAmmunition(uid))
         {
-            if (CompatibleAmmunition(uid, gun, item))
-                return item;
+            if (!CompatibleAmmunition(uid, gun, item))
+                continue;
+            var rounds = HasComp<CartridgeAmmoComponent>(item) ? SupplyQuantity(item) : WeaponAmmo(item);
+            if (rounds <= mostRounds)
+                continue;
+            chosen = item;
+            mostRounds = rounds;
         }
-        return null;
+        return chosen;
     }
 
     private bool CompatibleAmmunition(EntityUid uid, EntityUid gun, EntityUid item)
@@ -80,14 +87,16 @@ public sealed partial class CMUExpeditionAgentSystem
         return false;
     }
 
-    private bool SafeGrenade(EntityUid uid, EntityCoordinates destination, EntityUid item)
+    private bool SafeGrenade(EntityUid uid, EntityCoordinates destination, EntityUid item, EntityCoordinates? origin = null)
     {
+        var from = origin ?? Transform(uid).Coordinates;
         if (!TryComp<CMUExpeditionGrenadeComponent>(item, out var grenade) ||
-            !_transform.InRange(Transform(uid).Coordinates, destination, 10) ||
-            !ClearLane(uid, Transform(uid).Coordinates, destination, 0.4f))
+            !_transform.InRange(from, destination, 10) ||
+            !ClearLane(uid, from, destination, 0.4f))
             return false;
-        return grenade.Smoke || SafeBlast(uid, destination, grenade.SafeRadius,
-            TryComp<TimerTriggerComponent>(item, out var timer) ? (float) timer.Delay.TotalSeconds : 4);
+        return grenade.Smoke || !_transform.InRange(from, destination, grenade.SafeRadius + 0.5f) &&
+            SafeBlast(uid, destination, grenade.SafeRadius,
+                TryComp<TimerTriggerComponent>(item, out var timer) ? (float) timer.Delay.TotalSeconds : 4);
     }
 
     private bool SafeBlast(EntityUid uid, EntityCoordinates destination, float radius, float prediction)
@@ -126,18 +135,25 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private bool StartUtility(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid item, TimeSpan delay)
     {
+        if (agent.UtilityCleanupItem != null)
+            return false;
         if (agent.Action == CMUTacticalAction.Reload && !_guns.TryGetGun(uid, out _))
             return false;
-        if (_guns.TryGetGun(uid, out var gun))
-            _wield.TryUnwield(gun.Owner, uid);
-        if (!_hands.TryPickupAnyHand(uid, item))
-            return false;
+        if (!_hands.IsHolding(uid, item, out _))
+        {
+            PrepareUtilityHand(uid);
+            if (!_hands.TryPickupAnyHand(uid, item))
+                return false;
+        }
+        if (_guns.TryGetGun(uid, out var heldGun))
+            ActivateWeapon(uid, heldGun.Owner);
         _steering.Unregister(uid);
         agent.ActionItem = item;
         var args = new DoAfterArgs(EntityManager, uid, delay, new CMUExpeditionUtilityDoAfterEvent(), uid, used: item)
         {
             NeedHand = true, BreakOnMove = true, BreakOnDamage = true, DamageThreshold = 0.1f,
             ExtraCheck = () => _mobs.IsAlive(uid) && !HasComp<ActorComponent>(uid) && _npcs.Enabled &&
+                _hands.IsHolding(uid, item, out _) &&
                 (agent.Action != CMUTacticalAction.Reload || ReloadSafe(uid, agent)),
         };
         return _doAfter.TryStartDoAfter(args, out agent.ActionDoAfter);
@@ -186,7 +202,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 // without a visible target; otherwise a shotgun can spend the whole fight loading.
                 var returnFire = agent.Target is { } contact && Visible(ent, contact, agent.FireRange)
                     && WeaponAmmo(tubeGun) > 0;
-                if (!returnFire && SpareAmmunition(ent, tubeGun) is { } next && _timing.CurTime < agent.ActionUntil)
+                if (!returnFire && ReloadAmmunition(ent, tubeGun) is { } next && _timing.CurTime < agent.ActionUntil)
                 {
                     agent.ActionItem = next;
                     agent.ActionStarted = _timing.CurTime;
@@ -220,6 +236,7 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         if (success)
         {
+            QueueUtilityCleanup(ent, agent, item);
             agent.ActionItem = null;
             agent.ActionComplete = true;
             if (agent.Action == CMUTacticalAction.Reload)
