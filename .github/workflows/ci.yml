@@ -530,6 +530,30 @@ jobs:
           cp -r Resources/* bin/Resources/
           cp -r RobustToolbox/Resources/* bin/RobustToolbox/Resources/
 
+      # CMU14: the runner has 16 GB and no real headroom, a memory spike used to kill it outright
+      # ("received a shutdown signal"). with swap the spike just runs slower. goes on the /mnt scratch
+      # disk when the image has one, the root disk is small
+      - name: Add swap
+        shell: bash
+        run: |
+          echo "--- before ---"; swapon --show; free -h; df -h / /mnt 2>/dev/null || true
+          dir=/mnt
+          if ! mountpoint -q /mnt || (( $(df --output=avail -BG /mnt | tail -1 | tr -dc 0-9) < 20 )); then
+            dir=/
+          fi
+          size=16
+          if (( $(df --output=avail -BG "$dir" | tail -1 | tr -dc 0-9) < size + 4 )); then
+            echo "::warning::not enough disk for ${size}G swap on $dir, keeping the image's swap"
+            exit 0
+          fi
+          sudo swapoff -a || true
+          sudo rm -f /mnt/swapfile /swapfile
+          sudo fallocate -l ${size}G "$dir/ci-swap"
+          sudo chmod 600 "$dir/ci-swap"
+          sudo mkswap "$dir/ci-swap"
+          sudo swapon "$dir/ci-swap"
+          echo "--- after ---"; swapon --show; free -h
+
       - name: Run ${{ matrix.shard.name }}
         shell: bash
         env:
