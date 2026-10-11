@@ -166,13 +166,23 @@ public sealed partial class CMUExpeditionAgentSystem
         // admit vaults when the bounded walking search cannot reach the destination.
         var allowVault = false;
         var budget = ordered ? 2048 : 256;
-        var route = CMUTacticalRoute.Find(size, first, last, Walkable, Danger, Passage, out var expanded, budget);
-        if (route == null && allowVaults)
+        List<int>? route;
+        int expanded;
+        var workspace = _routeWorkspacePool.Get();
+        try
         {
-            allowVault = true;
-            passages.Clear();
-            route = CMUTacticalRoute.Find(size, first, last, Walkable, Danger, Passage, out var vaultExpanded, budget);
-            expanded += vaultExpanded;
+            route = CMUTacticalRoute.Find(size, first, last, Walkable, Danger, Passage, out expanded, budget, workspace);
+            if (route == null && allowVaults)
+            {
+                allowVault = true;
+                passages.Clear();
+                route = CMUTacticalRoute.Find(size, first, last, Walkable, Danger, Passage, out var vaultExpanded, budget, workspace);
+                expanded += vaultExpanded;
+            }
+        }
+        finally
+        {
+            _routeWorkspacePool.Return(workspace);
         }
         agent.LastRouteCells = expanded;
         agent.LastRouteMilliseconds = Stopwatch.GetElapsedTime(started).TotalMilliseconds;

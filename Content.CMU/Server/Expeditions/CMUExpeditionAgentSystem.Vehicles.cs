@@ -72,15 +72,6 @@ public sealed partial class CMUExpeditionAgentSystem
             own.HostileFactions.Any(id => id.Id == faction)) ? 1 : 0;
     }
 
-    private IEnumerable<EntityUid> HostileVehicles(EntityUid uid, CMUExpeditionAgentComponent agent)
-    {
-        var nearby = new HashSet<EntityUid>();
-        _lookup.GetEntitiesInRange(uid, agent.DetectionRange, nearby);
-        foreach (var vehicle in nearby)
-            if (ArmedVehicle(vehicle) && VehicleDisposition(uid, agent, vehicle) > 0)
-                yield return vehicle;
-    }
-
     private bool HasReadyRocket(EntityUid uid) => CarriedWeapons(uid).Any(weapon =>
         TryComp<CMUExpeditionWeaponRoleComponent>(weapon, out var role) && role.Rocket && WeaponAmmo(weapon) > 0);
 

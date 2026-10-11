@@ -64,4 +64,52 @@ public sealed class CMUChemSimulatorReadinessTest : GameTest
             }
         });
     }
+
+    // BUG-864: relating TRF into a chem that still has ATX cancels both, the player has to see that first
+    [Test]
+    public async Task RelateWarnsWhenReferenceConflictsWithRemainingTargetProperty()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var simulator = SEntMan.SpawnEntity("CMUChemSimulator", map.GridCoords);
+            var component = SEntMan.GetComponent<ChemSimulatorComponent>(simulator);
+            var containers = Server.System<SharedContainerSystem>();
+            var system = Server.System<ServerChemSimulatorSystem>();
+
+            var target = Report(new() { ["Hypoxemic"] = 6, ["Antitoxic"] = 6, ["Ketogenic"] = 2 });
+            var reference = Report(new() { ["Transformative"] = 6, ["Hemogenic"] = 1 });
+            containers.Insert(target, containers.GetContainer(simulator, "target"));
+            containers.Insert(reference, containers.GetContainer(simulator, "reference"));
+
+            component.Mode = ChemSimulatorMode.Relate;
+            component.TargetProperty = "Hypoxemic";
+            component.ReferenceProperty = "Transformative";
+            Assert.That(system.TryGetConflictWarning((simulator, component), out var warning), Is.True);
+            Assert.That(warning, Does.Contain("CANCEL"));
+
+            // swapping the conflicting property itself out is fine
+            component.TargetProperty = "Antitoxic";
+            Assert.That(system.TryGetConflictWarning((simulator, component), out _), Is.False);
+
+            // no conflict at all
+            component.TargetProperty = "Hypoxemic";
+            component.ReferenceProperty = "Hemogenic";
+            Assert.That(system.TryGetConflictWarning((simulator, component), out _), Is.False);
+
+            // amplify never inserts anything
+            component.Mode = ChemSimulatorMode.Amplify;
+            component.ReferenceProperty = "Transformative";
+            Assert.That(system.TryGetConflictWarning((simulator, component), out _), Is.False);
+
+            EntityUid Report(Dictionary<string, int> properties)
+            {
+                var report = SEntMan.SpawnEntity(null, map.GridCoords);
+                var data = SEntMan.AddComponent<ResearchReportComponent>(report);
+                data.Completed = true;
+                data.Data = new GeneratedReagentData { ID = "CMUTestSimulatorReagent", Effects = properties };
+                return report;
+            }
+        });
+    }
 }

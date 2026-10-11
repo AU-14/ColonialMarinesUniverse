@@ -128,7 +128,7 @@ public sealed partial class CMUExpeditionAgentSystem
             agent.KnownFireLanes.Add(lane);
         }
         agent.ExposureScores.Clear();
-        agent.NextThink = now;
+        RequestThink(agent, now);
     }
 
     private void ObserveIncomingLane(EntityUid uid, CMUExpeditionAgentComponent agent,
@@ -162,6 +162,7 @@ public sealed partial class CMUExpeditionAgentSystem
         var lane = new CMUExpeditionFireLane(_transform.ToCoordinates(map, first), _transform.ToCoordinates(map, last),
             now + TimeSpan.FromSeconds(10), 12, 1.25f);
         StoreFireLane(agent, lane, now);
+        RememberReturnFire(uid, agent, passing, direction, now);
         var query = EntityQueryEnumerator<CMUExpeditionAgentComponent>();
         while (query.MoveNext(out var other, out var buddy))
         {
@@ -190,7 +191,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             RememberDanger(agent, point, now, 16, 1.7f, 24);
             agent.Stress = Math.Min(1, agent.Stress + 0.2f);
-            agent.NextThink = now;
+            RequestThink(agent, now);
             // Re-evaluate any cached approach through the witnessed casualty, including patrol orders.
             agent.Route.Clear();
             agent.RouteDestination = null;
@@ -203,11 +204,17 @@ public sealed partial class CMUExpeditionAgentSystem
     private void RememberIncomingFire(EntityUid uid, CMUExpeditionAgentComponent agent,
         EntityCoordinates point, TimeSpan now, bool hit)
     {
+        if (hit || now >= agent.IncomingFireUntil)
+        {
+            agent.FireAt = now;
+            agent.NextMovingBurst = now;
+            agent.ImmediateFireUntil = now + TimeSpan.FromSeconds(0.8);
+        }
         agent.IncomingFireUntil = now + TimeSpan.FromSeconds(hit ? 2.5 : 1.5);
         agent.SuppressedUntil = now + TimeSpan.FromSeconds(hit ? 1.5 : 1);
         if (!hit && now < agent.NextIncomingObservation)
             return;
-        agent.NextThink = now;
+        RequestThink(agent, now);
         agent.NextIncomingObservation = now + TimeSpan.FromSeconds(0.4);
         RememberDanger(agent, point, now, hit ? 12 : 7, hit ? 1.5f : 1.1f, hit ? 12 : 6);
         if (!hit)
@@ -219,7 +226,7 @@ public sealed partial class CMUExpeditionAgentSystem
                 !IsFriendly(observer, uid) || !Visible(observer, uid, 10))
                 continue;
             RememberDanger(buddy, point, now, 9, 1.3f, 8);
-            buddy.NextThink = now;
+            RequestThink(buddy, now);
         }
     }
 
@@ -266,7 +273,8 @@ public sealed partial class CMUExpeditionAgentSystem
         }
         // A clear return shot retains the ordinary burst/cover rhythm. An unseen or corner-blocked
         // attacker must not bypass self-preservation merely because Observe found no target.
-        if (agent.LastDamage < agent.EmergencyHealDamage && agent.Target is { } target &&
+        if (now - agent.LastHit >= TimeSpan.FromSeconds(0.75) &&
+            agent.LastDamage < agent.EmergencyHealDamage && agent.Target is { } target &&
             Visible(uid, target, WeaponFireRange(uid, agent)) && _guns.TryGetGun(uid, out var gun) &&
             WeaponAmmo(gun) > 0 && TryAimPoint(uid, agent, gun, out var aim) && SafeShot(uid, agent, gun, aim))
             return false;
@@ -328,6 +336,7 @@ public sealed partial class CMUExpeditionAgentSystem
         while (query.MoveNext(out var other, out var buddy))
             if (other != uid && _mobs.IsAlive(other) && IsFriendly(uid, other) &&
                 (buddy.SpacingDestination is { } shortStep && _transform.InRange(point, shortStep, 0.8f) ||
+                 buddy.SmokeEscapeDestination is { } smokeExit && _transform.InRange(point, smokeExit, 2) ||
                  buddy.IncomingEscapeDestination is { } route && _transform.InRange(point, route, 0.8f)))
                 return true;
         return false;

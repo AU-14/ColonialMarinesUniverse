@@ -118,7 +118,7 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(args.Text))
             return;
 
-        if (!_skills.HasSkill(args.Actor, ent.Comp.AnnounceSkill, ent.Comp.AnnounceSkillLevel))
+        if (!CMUCanAnnounce(ent, args.Actor)) // CMU14: synths can announce from a command tablet
         {
             _popup.PopupSelf(Loc.GetString("rmc-skills-no-training", ("target", ent)), args.Actor, PopupType.MediumCaution);
             return;
