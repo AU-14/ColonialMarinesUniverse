@@ -132,6 +132,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         SubscribeLocalEvent<DropshipWeaponPointComponent, EntInsertedIntoContainerMessage>(OnWeaponPointContainerInserted); // CMU14
         SubscribeLocalEvent<DropshipWeaponPointComponent, EntRemovedFromContainerMessage>(OnWeaponPointContainerChanged);
+        SubscribeLocalEvent<DropshipUtilityPointComponent, EntInsertedIntoContainerMessage>(OnUtilityPointContainerInserted);
         SubscribeLocalEvent<DropshipUtilityPointComponent, EntRemovedFromContainerMessage>(OnUtilityPointContainerChanged);
         SubscribeLocalEvent<DropshipEnginePointComponent, EntRemovedFromContainerMessage>(OnEnginePointContainerChanged);
         SubscribeLocalEvent<DropshipElectronicSystemPointComponent, EntRemovedFromContainerMessage>(OnElectronicPointContainerChanged);
@@ -1243,6 +1244,12 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
     public void SyncAppearance(Entity<DropshipWeaponPointComponent?> point)
     {
+        if (TryComp(point, out DropshipUtilityPointComponent? utilityPoint))
+        {
+            SyncAppearance(point, utilityPoint.UtilitySlotId);
+            return;
+        }
+
         if (!Resolve(point, ref point.Comp, logMissing: false))
             return;
 
@@ -1330,6 +1337,22 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
             if (utility.Sprite is not { } rsi)
                 continue;
+
+            if (TryComp(contained, out DropshipWeaponComponent? weapon) &&
+                weapon.UtilityAmmoAttachedSprite is { } loadedSprite &&
+                TryComp(point, out DropshipUtilityPointComponent? utilityPoint) &&
+                _container.TryGetContainer(point, utilityPoint.AmmoContainerSlotId, out var ammoContainer))
+            {
+                foreach (var ammoEntity in ammoContainer.ContainedEntities)
+                {
+                    if (TryComp(ammoEntity, out DropshipAmmoComponent? ammo) &&
+                        ammo.Rounds > 0 && ammo.Rounds >= ammo.RoundsPerShot)
+                    {
+                        rsi = loadedSprite;
+                        break;
+                    }
+                }
+            }
 
             _appearance.SetData(point, DropshipUtilityVisuals.Sprite, rsi.RsiPath.ToString());
             _appearance.SetData(point, DropshipUtilityVisuals.State, rsi.RsiState);
@@ -1463,9 +1486,15 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         SyncAppearance(ent.Owner);
     }
 
+    private void OnUtilityPointContainerInserted(Entity<DropshipUtilityPointComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        if (args.Container.ID == ent.Comp.UtilitySlotId || args.Container.ID == ent.Comp.AmmoContainerSlotId)
+            SyncAppearance(ent, ent.Comp.UtilitySlotId);
+    }
+
     private void OnUtilityPointContainerChanged(Entity<DropshipUtilityPointComponent> ent, ref EntRemovedFromContainerMessage args)
     {
-        if (args.Container.ID == ent.Comp.UtilitySlotId)
+        if (args.Container.ID == ent.Comp.UtilitySlotId || args.Container.ID == ent.Comp.AmmoContainerSlotId)
             SyncAppearance(ent, ent.Comp.UtilitySlotId);
     }
 

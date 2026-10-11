@@ -22,13 +22,16 @@
   - type: DropshipWeapon
     abbreviation: BMB
     fireDelay: 10
+    utilityAmmoAttachedSprite:
+      sprite: _RMC14/Objects/dropship_utility_attachments.rsi
+      state: bomb_clamp_interior_loaded
     skills:
       all:
         RMCSkillPilot: 2
   - type: DropshipAttachedSprite
     sprite:
       sprite: _RMC14/Objects/dropship_utility_attachments.rsi
-      state: bomb_clamp_interior_loaded
+      state: bomb_clamp_unloaded
   - type: Tag
     tags:
     - CMUJDAMBombClamp

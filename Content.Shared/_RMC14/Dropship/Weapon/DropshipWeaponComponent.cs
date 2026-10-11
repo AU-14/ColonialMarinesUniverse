@@ -47,6 +47,12 @@ public sealed partial class DropshipWeaponComponent : Component
     public SpriteSpecifier.Rsi? AmmoAttachedSprite;
 
     /// <summary>
+    /// Loaded artwork on crew-compartment utility mounts; the unloaded artwork is defined by DropshipAttachedSprite.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public SpriteSpecifier.Rsi? UtilityAmmoAttachedSprite;
+
+    /// <summary>
     ///     Specifies the ammo threshold at which the loaded ammo sprite changes.
     ///     Each threshold in this list requires a sprite with the base name of the fully loaded sprite, followed by "_ammo_count",
     ///     where "ammo_count" should be replaced with the actual number of rounds.
