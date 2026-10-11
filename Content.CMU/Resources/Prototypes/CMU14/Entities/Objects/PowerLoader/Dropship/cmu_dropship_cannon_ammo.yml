@@ -56,7 +56,6 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_1
-      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_1
@@ -106,7 +105,6 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_ap_1
-      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_ap_1
@@ -153,7 +151,6 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_ab_1
-      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_ab_1
@@ -204,7 +201,6 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_ht_1
-      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_ht_1
@@ -255,7 +251,6 @@
     sprite: _RMC14/Objects/dropship_ammo.rsi
     layers:
     - state: bofors_40mm_tray_in_1
-      visible: false
   - type: Icon
     sprite: _RMC14/Objects/dropship_ammo.rsi
     state: bofors_40mm_tray_in_1
@@ -546,10 +541,8 @@
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
-    offset: 0.5, 0.5
     layers:
     - state: lbtshell_he
-      visible: false
   - type: Icon
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     state: lbtshell_he
@@ -586,10 +579,8 @@
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
-    offset: 0.5, 0.5
     layers:
     - state: lbtshell_canister
-      visible: false
   - type: Icon
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     state: lbtshell_canister
@@ -631,10 +622,8 @@
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
-    offset: 0.5, 0.5
     layers:
     - state: lbtshell_heat
-      visible: false
   - type: Icon
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     state: lbtshell_heat
@@ -672,10 +661,8 @@
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
-    offset: 0.5, 0.5
     layers:
     - state: lbtshell_canister
-      visible: false
   - type: Icon
     sprite: CMU14/Structures/vehicles/ammo/vehicles.rsi
     state: lbtshell_canister

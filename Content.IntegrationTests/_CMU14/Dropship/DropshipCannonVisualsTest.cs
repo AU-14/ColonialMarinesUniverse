@@ -15,6 +15,7 @@ using Robust.Client.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests._CMU14.Dropship;
 
@@ -22,6 +23,58 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 public sealed class DropshipCannonVisualsTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+
+    [Test]
+    public async Task FabricatedIndividualAmmoIsVisibleAndCentered()
+    {
+        EntityUid map = default;
+        var printed = new List<NetEntity>();
+        await Server.WaitAssertion(() =>
+        {
+            map = SEntMan.System<SharedMapSystem>().CreateMap();
+            var fabricator = SEntMan.SpawnEntity("RMCDropshipFabricator",
+                new EntityCoordinates(map, Vector2.Zero));
+            var component = SEntMan.GetComponent<DropshipFabricatorComponent>(fabricator);
+            var system = SEntMan.System<DropshipFabricatorSystem>();
+            foreach (var prototype in new[]
+                     {
+                         "CMUDropshipAmmoHowitzerHE",
+                         "CMUDropshipAmmoHowitzerHEFrag",
+                         "CMUDropshipAmmoHowitzerHEAT",
+                         "CMUDropshipAmmoHowitzerAirburst",
+                         "CMUDropshipAmmoBOFORSMagHE",
+                         "CMUDropshipAmmoBOFORSMagAP",
+                         "CMUDropshipAmmoBOFORSMagAirburst",
+                         "CMUDropshipAmmoBOFORSMagHEAT",
+                         "CMUDropshipAmmoBOFORSMagIncendiary",
+                     })
+            {
+                component.Printing = prototype;
+                component.PrintAt = Server.ResolveDependency<IGameTiming>().CurTime;
+                system.Update(0);
+                Assert.That(component.Printing, Is.Null);
+                var ammo = SEntMan.EntityQuery<MetaDataComponent>()
+                    .Single(metadata => metadata.EntityPrototype?.ID == prototype);
+                printed.Add(SEntMan.GetNetEntity(ammo.Owner));
+            }
+        });
+        await Pair.RunUntilSynced();
+        await Client.WaitAssertion(() =>
+        {
+            foreach (var net in printed)
+            {
+                var uid = CEntMan.GetEntity(net);
+                var sprite = CEntMan.GetComponent<SpriteComponent>(uid);
+                Assert.That(sprite.Visible, Is.True, $"{net} world sprite");
+                Assert.That(sprite.Offset, Is.EqualTo(Vector2.Zero), $"{net} sprite offset");
+                var layer = sprite[0];
+                Assert.That(layer.Visible, Is.True, $"{net} ammo layer");
+                Assert.That(layer.ActualRsi, Is.Not.Null);
+                Assert.That(layer.ActualRsi!.TryGetState(layer.RsiState, out _), Is.True);
+            }
+        });
+        await Server.WaitAssertion(() => SEntMan.DeleteEntity(map));
+    }
 
     [TestCase("CMUDropshipAttachmentBOFORS", "CMUDropshipAmmoBOFORSMagHE",
         "boforsnew2", "bofors_cannon_interior")]
