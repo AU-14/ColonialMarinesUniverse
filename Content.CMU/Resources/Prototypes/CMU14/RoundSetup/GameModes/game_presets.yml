@@ -2,10 +2,10 @@
   id: ColonyFall
   alias:
   - colonyfall
-  name: Colony Fall
+  name: cmu-gamemode-colonyfall-name
   showInVote: true
   maxPlayers: 45
-  description: Live in an offworld colony as it falls into chaos.
+  description: cmu-gamemode-colonyfall-desc
   burrowedLarvaEnabled: false
   thirdPartyAutoSpawn: true
   thirdPartyInterval: 2250
@@ -22,9 +22,9 @@
   id: DistressSignal
   alias:
   - distresssignal
-  name: Distress Signal
+  name: cmu-gamemode-distresssignal-name
   showInVote: true
-  description: Investigate a mysterious distress signal as government forces.
+  description: cmu-gamemode-distresssignal-desc
   requiresGovforVote: true
   supportedPlanets:
 # - CMUPlanetStableGarrisonRedux # Govfor can hunker-down in Garrison; can be rushed by threats
@@ -52,9 +52,9 @@
   id: Insurgency
   alias:
   - insurgency
-  name: Insurgency
+  name: cmu-gamemode-insurgency-name
   showInVote: true
-  description: Insurgency mode
+  description: cmu-gamemode-insurgency-desc
   minPlayers: 30
   burrowedLarvaEnabled: false
   requiresGovforVote: true
@@ -78,9 +78,9 @@
   id: ForceOnForce
   alias:
   - forceonforce
-  name: Force on Force
+  name: cmu-gamemode-forceonforce-name
   showInVote: true
-  description: Two units face each other in combat.
+  description: cmu-gamemode-forceonforce-desc
   minPlayers: 80
   burrowedLarvaEnabled: false
   requiresOpforVote: true
