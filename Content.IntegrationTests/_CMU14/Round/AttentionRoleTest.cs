@@ -9,6 +9,8 @@ namespace Content.IntegrationTests.CMU14.Round;
 [TestFixture]
 public sealed class AttentionRoleTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobGOVFORPlatCoPrototype = "AU14JobGOVFORPlatCo";
+
     public override PoolSettings PoolSettings => new() { Connected = false };
 
     [Test]
@@ -81,7 +83,7 @@ public sealed class AttentionRoleTest : GameTest
             marine = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
             SEntMan.AddComponents(leader, SProtoMan.Index<JobPrototype>(jobId).RoundComponents);
             Assert.That(SEntMan.GetComponent<AU14CallToAttentionAbilityComponent>(leader).ActionEntity, Is.Not.Null);
-            SEntMan.AddComponents(commander, SProtoMan.Index<JobPrototype>("AU14JobGOVFORPlatCo").RoundComponents);
+            SEntMan.AddComponents(commander, SProtoMan.Index<JobPrototype>(AU14JobGOVFORPlatCoPrototype).RoundComponents);
             SEntMan.EnsureComponent<OriginalRoleComponent>(marine).Job = "AU14JobGOVFORSquadRifleman";
             SEntMan.GetComponent<AU14CallToAttentionAbilityComponent>(leader).ResponseStagger = TimeSpan.Zero;
             var action = new AU14CallToAttentionActionEvent();

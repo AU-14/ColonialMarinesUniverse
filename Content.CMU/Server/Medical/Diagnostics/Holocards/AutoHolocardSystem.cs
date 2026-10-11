@@ -52,7 +52,7 @@ public sealed partial class AutoHolocardSystem : EntitySystem
         field = value;
         // Configuration must release stale automatic labels on paused bodies too.
         var patients = new List<EntityUid>();
-        var query = EntityManager.AllEntityQueryEnumerator<HolocardStateComponent>();
+        var query = AllEntityQuery<HolocardStateComponent>();
         while (query.MoveNext(out var uid, out _))
             patients.Add(uid);
         foreach (var patient in patients)

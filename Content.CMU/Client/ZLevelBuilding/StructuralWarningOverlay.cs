@@ -144,7 +144,7 @@ public sealed class StructuralWarningOverlay : Overlay
         // Mapper-authored upper floors (e.g. the second storey of a pre-built building) have no such marker and
         // are permanent, so they must never trigger the cave-in vignette.
         var builtHere = false;
-        var builtEntities = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, playerTile);
+        var builtEntities = _map.GetAnchoredEntities(gridUid, grid, playerTile);
         while (builtEntities.MoveNext(out var anchored))
         {
             if (_entMan.HasComponent<StructuralSupportComponent>(anchored))
@@ -173,7 +173,7 @@ public sealed class StructuralWarningOverlay : Overlay
                 if (distance > MaximumSupportSpan)
                     continue;
 
-                var supports = _map.GetAnchoredEntitiesEnumerator(
+                var supports = _map.GetAnchoredEntities(
                     belowGridUid,
                     belowGrid,
                     belowTile + new Vector2i(dx, dy));

@@ -6,7 +6,7 @@ using Robust.Shared.Physics.Systems;
 
 namespace Content.Shared.CMU14.Weapons.Grenades;
 
-public sealed class CMUIgnoreFixedPointSystem : EntitySystem
+public sealed partial class CMUIgnoreFixedPointSystem : EntitySystem
 {
     [Dependency] private SharedPhysicsSystem _physics = default!;
 

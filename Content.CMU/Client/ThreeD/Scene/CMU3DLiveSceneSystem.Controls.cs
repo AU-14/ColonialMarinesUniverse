@@ -37,7 +37,7 @@ public sealed partial class CMU3DLiveSceneSystem
         {
             if (_captureControls == window)
                 _captureControls = null;
-            window.Dispose();
+            window.Release();
         };
         window.OpenCentered();
     }

@@ -144,7 +144,7 @@ public sealed partial class MotionDetectorSystem : EntitySystem
                 ent.Comp.Short = !ent.Comp.Short;
                 Dirty(ent);
                 _audio.PlayPredicted(ent.Comp.ToggleSound, ent, user);
-                _popup.PopupClient($"You change the {Name(ent)} to {(ent.Comp.Short ? "short" : "long")} range mode", ent, user);
+                _popup.PopupEntity($"You change the {Name(ent)} to {(ent.Comp.Short ? "short" : "long")} range mode", ent, user);
             },
         });
     }
@@ -203,7 +203,7 @@ public sealed partial class MotionDetectorSystem : EntitySystem
         var popup = _motionDetector.IsEnabled((ent, detector))
             ? Loc.GetString("rmc-toggleable-motion-detector-on", ("gun", ent))
             : Loc.GetString("rmc-toggleable-motion-detector-off", ("gun", ent));
-        _popup.PopupClient(popup, user, user, PopupType.Large);
+        _popup.PopupEntity(popup, user, user, PopupType.Large);
     }
 
     private void OnGetBatteryDrain(Entity<ToggleableMotionDetectorComponent> ent, ref GunGetBatteryDrainEvent args)

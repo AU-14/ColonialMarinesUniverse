@@ -409,7 +409,7 @@ public sealed partial class GameTicker
             if (proto.Abstract)
                 continue;
 
-            if (proto.HasComponent<GameRuleComponent>())
+            if (proto.HasComp<GameRuleComponent>(Factory))
                 yield return proto;
         }
     }

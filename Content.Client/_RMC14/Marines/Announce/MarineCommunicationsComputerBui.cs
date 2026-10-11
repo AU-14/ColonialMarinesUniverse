@@ -142,7 +142,7 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
             // CMU14: without an opfor gamerule there is no opfor side to switch to
             if (_window.AdminSection.Visible)
                 _window.TabletFactionButton.Disabled = !s.ForceOnForce;
-            _window.LandingZonesContainer.DisposeAllChildren();
+            _window.LandingZonesContainer.ReleaseChildren();
             _window.PlanetName.Text = s.Planet;
             _window.OperationName.Text = s.Operation;
 

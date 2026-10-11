@@ -165,7 +165,7 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
                 _utility.TryCreateHuntingTrap(ent, args.Actor);
                 break;
             case YautjaBracerPanelCommand.ToggleSelfDestruct:
-                _selfDestruct.TryOpenSelfDestructDialog(ent, args.Actor);
+                _selfDestruct.TryUseSelfDestruct(ent, args.Actor);
                 break;
             case YautjaBracerPanelCommand.ChangeExplosionType:
                 _utility.TryChangeExplosionType(ent, args.Actor);
@@ -230,38 +230,40 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
         var origin = _transform.GetMapCoordinates(user);
         var readout = new TrackerReadoutBuilder();
         var groups = new Dictionary<(int X, int Y), TrackerSignalGroup>();
-        var query = EntityQueryEnumerator<TransformComponent>();
-        while (query.MoveNext(out var uid, out var xform))
-        {
-            if (uid == bracer ||
-                Deleted(uid))
-            {
-                continue;
-            }
 
-            var coords = _transform.GetMapCoordinates(uid);
+        // only walk yautja and tracked gear. this used to walk every entity in the world
+        // and resolve map coords for each one, once a second per open bracer
+        var yautja = EntityQueryEnumerator<YautjaComponent, TransformComponent>();
+        while (yautja.MoveNext(out var uid, out _, out var xform))
+        {
+            if (uid == bracer || !_mobState.IsDead(uid))
+                continue;
+
+            var coords = _transform.GetMapCoordinates(uid, xform);
             if (coords.MapId == MapId.Nullspace)
                 continue;
 
-            if (HasComp<YautjaComponent>(uid) &&
-                _mobState.IsDead(uid))
-            {
-                readout.AddDead(GetTrackerLevelBucket(uid, xform, coords, origin));
-                if (coords.MapId == origin.MapId)
-                {
-                    AddTrackerSignal(groups, origin, coords, Loc.GetString(DeadYautjaBioSignatureName), readout, null);
-                }
+            readout.AddDead(GetTrackerLevelBucket(uid, xform, coords, origin));
+            if (coords.MapId == origin.MapId)
+                AddTrackerSignal(groups, origin, coords, Loc.GetString(DeadYautjaBioSignatureName), readout, null);
+        }
 
-                continue;
-            }
-
-            if (!HasComp<ItemComponent>(uid) ||
-                !IsTrackedItem(uid) ||
+        var gear = EntityQueryEnumerator<YautjaTrackedItemComponent, TransformComponent>();
+        while (gear.MoveNext(out var uid, out _, out var xform))
+        {
+            // dead yautja were already counted above
+            if (uid == bracer ||
+                HasComp<YautjaComponent>(uid) && _mobState.IsDead(uid) ||
+                !HasComp<ItemComponent>(uid) ||
                 xform.Anchored ||
                 ShouldHideFromTracker(uid))
             {
                 continue;
             }
+
+            var coords = _transform.GetMapCoordinates(uid, xform);
+            if (coords.MapId == MapId.Nullspace)
+                continue;
 
             readout.AddGear(GetTrackerLevelBucket(uid, xform, coords, origin));
             if (coords.MapId == origin.MapId)
@@ -315,11 +317,6 @@ public sealed partial class YautjaBracerMenuSystem : EntitySystem
             group.SetNearest((byte) direction, (int) distance, bearing);
 
         readout.TrySetClosest((int) distance, (byte) direction, bearing, closestName, GetTrackerAreaName(coords));
-    }
-
-    private bool IsTrackedItem(EntityUid uid)
-    {
-        return HasComp<YautjaTrackedItemComponent>(uid);
     }
 
     private string GetTrackerAreaName(MapCoordinates coords)

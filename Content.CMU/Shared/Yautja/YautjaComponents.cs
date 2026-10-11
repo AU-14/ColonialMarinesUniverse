@@ -960,6 +960,10 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
     [DataField]
     public TimeSpan NextDrain;
 
+    // visor got shut off because the bracer went away, not because the player turned it off
+    [DataField]
+    public bool VisorWaitingForPower;
+
     [DataField]
     public SlotFlags Slots { get; set; } = SlotFlags.MASK;
 
@@ -1702,6 +1706,23 @@ public sealed partial class YautjaHivebreakerComponent : Component
     [DataField]
     public SoundSpecifier FinishSound = new SoundPathSpecifier("/Audio/CMU14/Yautja/Voice/Roars/pred_roar1.wav");
 
+    // off for the WeYu lab copy, anyone holding it can enthrall
+    [DataField]
+    public bool RequireBadBloodUser = true;
+
+    [DataField]
+    public bool DishonorOnConversion = true;
+
+    [DataField]
+    public bool BroadcastOnConversion = true;
+
+    [DataField]
+    public LocId EnthralledPopup = "cmu-yautja-hivebreaker-enthralled-target";
+
+    // thrall takes the user's npc + iff factions instead of the Thrall* ones below
+    [DataField]
+    public bool CopyMasterFactions;
+
     [DataField]
     public bool BloodOnConversion = true;
 
@@ -1919,10 +1940,10 @@ public sealed partial class YautjaHuntConsoleComponent : Component
     [DataField]
     public int SpawnCount = 1;
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan HuntCooldown = TimeSpan.FromMinutes(20);
 
-    [DataField]
+    [DataField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan BloodingCooldown = TimeSpan.FromMinutes(40);
 
     [DataField]

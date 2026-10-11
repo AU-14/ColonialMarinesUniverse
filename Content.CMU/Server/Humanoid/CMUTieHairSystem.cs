@@ -14,6 +14,8 @@ namespace Content.Server.CMU14.Humanoid;
 /// <summary>
 /// Lets a humanoid with a long hairstyle tie their hair back into one of a curated set of
 /// tied-back styles via a right-click verb, and later untie it to restore the original style.
+/// Characters who spawn with a tied-back style can re-tie it into any of the other tied-back styles,
+/// or untie it into <see cref="CMUHairStyles.SpawnedTiedUntieHairStyle"/>.
 /// </summary>
 public sealed partial class CMUTieHairSystem : EntitySystem
 {
@@ -63,15 +65,31 @@ public sealed partial class CMUTieHairSystem : EntitySystem
             return;
         }
 
-        var currentHair = hairMarkings[0];
+        var currentHairId = hairMarkings[0].MarkingId;
 
-        if (!CMUHairStyles.TieableHairStyles.Any(style => style.Id == currentHair.MarkingId))
+        // Hair that spawned already tied back has no loose style to untie to, but can be
+        // re-tied into any of the other tied-back styles.
+        var tieable = IsTieable(currentHairId);
+        if (!tieable && !IsTiedBack(currentHairId))
             return;
+
+        if (!tieable)
+        {
+            args.Verbs.Add(new Verb
+            {
+                Text = Loc.GetString("cmu-tie-hair-back-untie-verb"),
+                Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/refresh.svg.192dpi.png")),
+                Act = () => StartUntieHair(uid, CMUHairStyles.SpawnedTiedUntieHairStyle),
+            });
+        }
 
         foreach (var styleId in CMUHairStyles.TiedBackHairStyles)
         {
-            if (!ProtoMan.TryIndex<MarkingPrototype>(styleId, out var prototype))
+            if ((!tieable && styleId.Id == currentHairId) ||
+                !ProtoMan.TryIndex<MarkingPrototype>(styleId, out var prototype))
+            {
                 continue;
+            }
 
             var tiedStyleId = prototype.ID;
             args.Verbs.Add(new Verb
@@ -82,6 +100,16 @@ public sealed partial class CMUTieHairSystem : EntitySystem
                 Act = () => StartTieHair(uid, tiedStyleId),
             });
         }
+    }
+
+    private static bool IsTieable(string hairId)
+    {
+        return CMUHairStyles.TieableHairStyles.Any(style => style.Id == hairId);
+    }
+
+    private static bool IsTiedBack(string hairId)
+    {
+        return CMUHairStyles.TiedBackHairStyles.Any(style => style.Id == hairId);
     }
 
     private void StartTieHair(EntityUid uid, string tiedStyleId)
@@ -96,11 +124,11 @@ public sealed partial class CMUTieHairSystem : EntitySystem
         });
     }
 
-    private void StartUntieHair(EntityUid uid)
+    private void StartUntieHair(EntityUid uid, string? looseStyleId = null)
     {
         _popup.PopupEntity(Loc.GetString("cmu-tie-hair-back-untying-self"), uid, uid);
 
-        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, uid, TieHairDelay, new CMUUntieHairDoAfterEvent(), uid, target: uid)
+        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, uid, TieHairDelay, new CMUUntieHairDoAfterEvent { LooseStyleId = looseStyleId }, uid, target: uid)
         {
             BreakOnDamage = true,
             BreakOnMove = true,
@@ -127,9 +155,14 @@ public sealed partial class CMUTieHairSystem : EntitySystem
 
         var currentHair = hairMarkings[0];
 
-        var tied = EnsureComp<CMUTiedHairComponent>(uid);
-        tied.OriginalHairId = currentHair.MarkingId;
-        tied.OriginalHairColors = new List<Color>(currentHair.MarkingColors);
+        // Hair that spawned tied back has no loose style to return to, so it is re-tied
+        // without being marked as tied (and gets no untie verb).
+        if (IsTieable(currentHair.MarkingId))
+        {
+            var tied = EnsureComp<CMUTiedHairComponent>(uid);
+            tied.OriginalHairId = currentHair.MarkingId;
+            tied.OriginalHairColors = new List<Color>(currentHair.MarkingColors);
+        }
 
         var replacement = tiedPrototype.AsMarking() with { Forced = currentHair.Forced };
         for (var i = 0; i < replacement.MarkingColors.Count && i < currentHair.MarkingColors.Count; i++)
@@ -149,23 +182,43 @@ public sealed partial class CMUTieHairSystem : EntitySystem
         if (args.Handled || args.Cancelled)
             return;
 
-        if (!TryComp<CMUTiedHairComponent>(uid, out var tied) ||
-            !_humanoidAppearance.TryGetMarkings(
+        if (!_humanoidAppearance.TryGetMarkings(
                 uid,
                 HumanoidVisualLayers.Hair,
                 out var organ,
                 out _,
                 out var hairMarkings) ||
-            hairMarkings.Count == 0 ||
-            !ProtoMan.TryIndex<MarkingPrototype>(tied.OriginalHairId, out var originalPrototype))
+            hairMarkings.Count == 0)
         {
             return;
         }
 
-        var replacement = originalPrototype.AsMarking() with { Forced = hairMarkings[0].Forced };
-        for (var i = 0; i < replacement.MarkingColors.Count && i < tied.OriginalHairColors.Count; i++)
+        // Hair tied with the verb restores its stored original; hair that spawned tied back
+        // unties into the fallback loose style, keeping its current colors.
+        string originalHairId;
+        List<Color> originalColors;
+        if (TryComp<CMUTiedHairComponent>(uid, out var tied))
         {
-            replacement = replacement.WithColorAt(i, tied.OriginalHairColors[i]);
+            originalHairId = tied.OriginalHairId;
+            originalColors = tied.OriginalHairColors;
+        }
+        else if (args.LooseStyleId != null && IsTiedBack(hairMarkings[0].MarkingId))
+        {
+            originalHairId = args.LooseStyleId;
+            originalColors = hairMarkings[0].MarkingColors.ToList();
+        }
+        else
+        {
+            return;
+        }
+
+        if (!ProtoMan.TryIndex<MarkingPrototype>(originalHairId, out var originalPrototype))
+            return;
+
+        var replacement = originalPrototype.AsMarking() with { Forced = hairMarkings[0].Forced };
+        for (var i = 0; i < replacement.MarkingColors.Count && i < originalColors.Count; i++)
+        {
+            replacement = replacement.WithColorAt(i, originalColors[i]);
         }
 
         var updated = hairMarkings.ToList();

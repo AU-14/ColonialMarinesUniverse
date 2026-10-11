@@ -21,6 +21,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaBoostyWhitelistTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> CMUYautjaHunterPrototype = "CMUYautjaHunter";
+
     [Test]
     public async Task BoostyPrioritiesOneThroughFourAllowHunterAndPriorityFiveDoesNot()
     {
@@ -57,7 +59,6 @@ public sealed class YautjaBoostyWhitelistTest
 
         await db.UpsertPatronTier("Test Boosty Priority Five", 9912833966292471869UL, 5, false, false, false, false, false, false);
 
-        player = player!;
         for (var priority = 1; priority <= 4; priority++)
         {
             await pair.Server.ExecuteCommand($"rmcboosty grant {player.UserId.UserId} \"Test Boosty Priority {priority}\"");
@@ -66,7 +67,7 @@ public sealed class YautjaBoostyWhitelistTest
 
             await pair.Server.WaitAssertion(() =>
             {
-                var hunter = prototypes.Index<JobPrototype>("CMUYautjaHunter");
+                var hunter = prototypes.Index<JobPrototype>(CMUYautjaHunterPrototype);
                 Assert.That(linkAccount.GetConnectedPatron(player.UserId)?.Tier?.Priority, Is.EqualTo(priority));
                 Assert.That(hunter.Whitelisted, Is.True);
                 Assert.That(jobWhitelist.IsAllowed(player, hunter.ID), Is.True);
@@ -134,7 +135,7 @@ public sealed class YautjaBoostyWhitelistTest
 
         await pair.Server.WaitAssertion(() =>
         {
-            var hunter = prototypes.Index<JobPrototype>("CMUYautjaHunter");
+            var hunter = prototypes.Index<JobPrototype>(CMUYautjaHunterPrototype);
             Assert.That(jobWhitelist.IsAllowed(player, hunter.ID), Is.False);
         });
 

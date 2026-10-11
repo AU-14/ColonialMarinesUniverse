@@ -289,6 +289,8 @@
     zoomOffset: 14
   - type: ParasiteResistance
     maxCount: 12
+  # sealed like any gas mask, so neomorph spores and popper infections get the same block chance
+  - type: MycotoxinProtection
   - type: EyeProtection
     protectionTime: 20
   - type: PressureProtection

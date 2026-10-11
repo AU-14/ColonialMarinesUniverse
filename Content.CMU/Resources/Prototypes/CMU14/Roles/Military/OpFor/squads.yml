@@ -54,6 +54,7 @@
   id: SquadOpforIntel
   name: Intel # this will cause confusion, but better than x2 Auxiliary
   components:
+  - type: CMUAuxiliarySquad
   - type: AU14SquadCallsign
     word: BLUE
   - type: SquadTeam

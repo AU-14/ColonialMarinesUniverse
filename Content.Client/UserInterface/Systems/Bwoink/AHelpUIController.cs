@@ -1,3 +1,4 @@
+using Robust.Shared.Audio;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
@@ -230,7 +231,7 @@ public sealed partial class AHelpUIController: UIController, IOnSystemChanged<Bw
         }
 
         helper.Control.Orphan();
-        helper.Window.Dispose();
+        helper.Window.Release();
         helper.Window = null;
         helper.EverOpened = false;
 
@@ -439,7 +440,7 @@ public sealed partial class AdminAHelpUIHandler : IAHelpUIHandler
                 {
                     panel.Orphan();
                 }
-                Control?.Dispose();
+                Control?.Release();
             }
             // window wont be closed here so we will invoke ourselves
             OnClose?.Invoke();

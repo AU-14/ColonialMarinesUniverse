@@ -19,7 +19,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.CMU14.Ops.ThirdParty;
 
 /// <summary>Lets ghosts call in a random minor third party once enough of the round's players are dead.</summary>
-public sealed class GhostThirdPartyCallSystem : EntitySystem
+public sealed partial class GhostThirdPartyCallSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private AuRoundSystem _auRound = default!;

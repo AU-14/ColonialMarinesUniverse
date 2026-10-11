@@ -1,0 +1,37 @@
+- type: decal
+  parent: RMCDecalBloodBase
+  id: CMUBloodDroplet1
+  defaultCleanable: true
+  defaultCustomColor: true
+  defaultSnap: false
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "1"
+
+- type: decal
+  parent: CMUBloodDroplet1
+  id: CMUBloodDroplet2
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "2"
+
+- type: decal
+  parent: CMUBloodDroplet1
+  id: CMUBloodDroplet3
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "3"
+
+- type: decal
+  parent: CMUBloodDroplet1
+  id: CMUBloodDroplet4
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "4"
+
+- type: decal
+  parent: CMUBloodDroplet1
+  id: CMUBloodDroplet5
+  sprite:
+    sprite: CMU14/HunterShip/effects/drip.rsi
+    state: "5"

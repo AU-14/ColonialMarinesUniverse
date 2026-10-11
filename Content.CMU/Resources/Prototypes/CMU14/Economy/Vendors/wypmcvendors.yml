@@ -251,9 +251,13 @@
         amount: 2
     - name: Gas Mask
       entries:
-      - id: CMMaskGas
+      - id: CMUMaskGas
         amount: 40
-      - id: CMMaskPrescriptionGas
+      - id: CMUMaskGasBlack
+        amount: 40
+      - id: CMUMaskPrescriptionGas
+        amount: 10
+      - id: CMUMaskPrescriptionGasBlack
         amount: 10
       - id: CMUGasMaskFilterWY
         amount: 40
@@ -352,7 +356,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: AU14BeltMedicBagBlack
+      - id: CMUBeltMedicBagPMC
+        recommended: true
+      - id: CMUBeltMedicalPMC
     - name: General Medical Supplies
       entries:
       - id: CMUSynthBloodPackFull
@@ -502,6 +508,15 @@
       choices: { CMUPlatoonAirCrewFlightVisor: 1 }
       entries:
       - id: AU14GogglesLAH99VisorHighTech
+    - name: Pilot HUD
+      choices: { CMUPlatoonAirCrewPilotHUD: 1 }
+      entries:
+      - id: RMCVisorPilotBlack
+      - id: RMCVisorPilotDarkblue
+      - id: RMCVisorPilotLightblue
+      - id: RMCVisorPilotPurple
+      - id: RMCVisorPilotRed
+      - id: RMCVisorPilotYellow
     - name: Flight Mask
       choices: { CMUPlatoonAirCrewFlightMask: 1 }
       entries:
@@ -696,6 +711,12 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
+      - id: ANPRC117GRadioIssued
+        amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
+      - id: ANPRCMastAntenna
+        amount: 1
       - id: ArmorHelmetPMCFieldOfficer
         amount: 3
       - id: RMCExplosiveBreachingCharge
@@ -1214,7 +1235,9 @@
         amount: 2
     - name: Protective Equipment
       entries:
-      - id: CMMaskGas
+      - id: CMUMaskGas
+        amount: 30
+      - id: CMUMaskGasBlack
         amount: 30
       - id: CMUGasMaskFilterWY
         amount: 30
@@ -1238,6 +1261,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

@@ -81,6 +81,7 @@ public sealed class CMU3DChargerAppearanceTest
     {
         Label=label,Min=Vector3.Zero,Max=new Vector3(.1f,.1f,.1f),
     };
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Model()
     {
         var definition=new CMU3DChargerAppearanceDefinition { BaseParts=[Part("body")] };

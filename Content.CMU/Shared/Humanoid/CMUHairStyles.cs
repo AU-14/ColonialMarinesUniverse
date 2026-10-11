@@ -9,6 +9,12 @@ namespace Content.Shared.CMU14.Humanoid
     public static class CMUHairStyles
     {
         /// <summary>
+        /// Loose style used when untying hair that spawned already tied back, since there is no
+        /// original style to restore. Bob Hair 3, from the regulation list.
+        /// </summary>
+        public static readonly ProtoId<MarkingPrototype> SpawnedTiedUntieHairStyle = "HumanHairBobcut";
+
+        /// <summary>
         /// Long, loose hairstyles that are eligible to be tied back via the "Tie Hair Back" verb.
         /// </summary>
         public static readonly IReadOnlyList<ProtoId<MarkingPrototype>> TieableHairStyles = new List<ProtoId<MarkingPrototype>>
@@ -166,7 +172,6 @@ namespace Content.Shared.CMU14.Humanoid
         /// </summary>
         public static readonly IReadOnlyList<ProtoId<MarkingPrototype>> TiedBackHairStyles = new List<ProtoId<MarkingPrototype>>
         {
-            "HumanHairHbraid", // Braid (Low)
             "RMCHumanHairBun", // Bun
             "HumanHairManbun", // Bun (Manbun)
             "HumanHairTightbun", // Bun (Tight)

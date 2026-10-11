@@ -10,6 +10,7 @@ namespace Content.Tests.Client.CMU14.ThreeD;
 [TestFixture]
 public sealed class CMU3DSceneLayoutTest
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void RepeatedVehicleFramesKeepTheirPhysicalFacingAndResidualRotation()
     {
@@ -28,6 +29,7 @@ public sealed class CMU3DSceneLayoutTest
             Is.EqualTo(MathF.PI / 2).Within(.00001));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void AliasedReferencesUseNearestPhysicalViewAndPreferRequestedSourceOnTies()
     {
@@ -41,6 +43,7 @@ public sealed class CMU3DSceneLayoutTest
         Assert.That(CMU3DSceneLayout.ReferenceDirection(model, Direction.North), Is.EqualTo(Direction.West));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void NonRotationalCornerFramesJoinTheSavedNorthAndWestPipes()
     {
@@ -68,6 +71,7 @@ public sealed class CMU3DSceneLayoutTest
         Assert.That(CMU3DSceneLayout.WallTargetYaw(MathF.PI, MathF.PI / 2, true, 2, 12), Is.EqualTo(MathF.PI / 2));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void VendorWindowBackingIsOptInAndDoesNotTreatDoorwaysAsBacking()
     {
@@ -94,6 +98,7 @@ public sealed class CMU3DSceneLayoutTest
         Assert.That(CMU3DSceneLayout.FaceAwayFromWallYaw(MathF.PI, MathF.PI / 2, 4), Is.Zero);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void ReversedSourceSideFramesFaceOperatorsWithoutReversingResidualRotation()
     {
@@ -107,6 +112,7 @@ public sealed class CMU3DSceneLayoutTest
         Assert.That(CMU3DSceneLayout.RenderYaw(model, -MathF.PI / 2, false, false), Is.EqualTo(MathF.PI).Within(.00001));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void ReferenceSideFramesFollowPhysicalReviewDirection()
     {
@@ -131,6 +137,7 @@ public sealed class CMU3DSceneLayoutTest
         Assert.That(rotated.Y, Is.EqualTo(-.36f).Within(.00001));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void AuthoredSourceTintIsAppliedOnceAndLiveChangesRemainRelative()
     {
@@ -142,6 +149,7 @@ public sealed class CMU3DSceneLayoutTest
         Assert.That(CMU3DSceneLayout.PresentationTint(new CMU3DModelPrototype(), tint), Is.EqualTo(tint));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void PhysicalCurtainAxisSurvivesBillboardCardinalSnapping()
     {
@@ -152,6 +160,7 @@ public sealed class CMU3DSceneLayoutTest
         Assert.That(CMU3DSceneLayout.RenderYaw(model, -MathF.PI / 2, false, true), Is.Zero.Within(.00001));
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [Test]
     public void FixedSingleFrameDoesNotEraseDirectionalChairFacing()
     {

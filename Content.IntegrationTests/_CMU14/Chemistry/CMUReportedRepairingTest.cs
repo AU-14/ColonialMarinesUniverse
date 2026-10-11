@@ -10,6 +10,7 @@ namespace Content.IntegrationTests.CMU14.Chemistry;
 [TestFixture]
 public sealed class CMUReportedRepairingTest
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     [TestCase("CMBarricadeMetal", true)]
     [TestCase("CMUCombatDrone", true)]
     [TestCase("CMUFlamerDrone", true)]

@@ -20,6 +20,8 @@ namespace Content.IntegrationTests.CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaMedicompProgressTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<DamageGroupPrototype> BrutePrototype = "Brute";
+
     private static readonly (string Tool, int Step, string Label)[] Stages =
     [
         ("CMUYautjaStabilizerGel", 0, "stabilize wounds"),
@@ -43,7 +45,7 @@ public sealed class YautjaMedicompProgressTest
             var hands = entMan.System<SharedHandsSystem>();
             var flow = entMan.System<CMUSurgeryFlowSystem>();
             var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
-            var brute = prototypes.Index<DamageGroupPrototype>("Brute");
+            var brute = prototypes.Index<DamageGroupPrototype>(BrutePrototype);
 
             foreach (var (toolPrototype, step, label) in Stages)
             {

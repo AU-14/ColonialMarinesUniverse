@@ -218,18 +218,18 @@ public sealed partial class K9System : EntitySystem
         if (HasComp<XenoComponent>(target))
         {
             args.Handled = true;
-            _popup.PopupClient(Loc.GetString("rmc-k9-arm-grab-xeno"), ent.Owner, ent.Owner);
+            _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-xeno"), ent.Owner, ent.Owner);
             return;
         }
 
-        if (!TryComp<TransformComponent>(target, out var targetXform) ||
-            !TryComp<TransformComponent>(ent, out var dogXform))
+        if (!TryComp(target, out TransformComponent? targetXform) ||
+            !TryComp(ent, out TransformComponent? dogXform))
             return;
 
         if (targetXform.MapID != dogXform.MapID ||
             Vector2.Distance(_transform.GetWorldPosition(targetXform), _transform.GetWorldPosition(dogXform)) > 2.5f)
         {
-            _popup.PopupClient(Loc.GetString("rmc-k9-arm-grab-out-of-range"), ent.Owner, ent.Owner);
+            _popup.PopupEntity(Loc.GetString("rmc-k9-arm-grab-out-of-range"), ent.Owner, ent.Owner);
             return;
         }
 

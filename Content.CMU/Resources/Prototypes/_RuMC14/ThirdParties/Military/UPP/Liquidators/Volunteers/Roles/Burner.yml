@@ -90,7 +90,7 @@
     allowSpeech: true
     allowMovement: true
     name: Liquidator
-    description: Вы член группы ликвидаторов UPP! Ваша задача выжечь дотла всю биологическую угрозу на колонии, ни шагу назад!
+    description: You are part of a UPP liquidator team! Your job is to burn every biological threat on the colony to the ground. Not one step back!
     job: RuMCUPPLiquidatorBurner
     raffle:
       settings: short

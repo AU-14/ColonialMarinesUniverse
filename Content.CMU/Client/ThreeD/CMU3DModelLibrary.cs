@@ -10,7 +10,7 @@ namespace Content.Client.CMU14.ThreeD;
 /// Loads presentation-only prototypes when needed. The server and ordinary 2D clients
 /// do not need to parse or retain model geometry, surfaces, or equipment poses.
 /// </summary>
-public sealed class CMU3DModelLibrary : IPostInjectInit
+public sealed partial class CMU3DModelLibrary : IPostInjectInit
 {
     [Dependency] private IPrototypeManager _prototypes = default!;
 

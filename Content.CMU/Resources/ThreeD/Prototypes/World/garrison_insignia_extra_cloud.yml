@@ -3268,21 +3268,9 @@
     min: -0.09375, -0.03125, 0
     max: 0.09375, 0.0, 0.027
     color: '#225566'
-  - label: Solid metal pendant contour 17
-    min: -0.125, -0.0625, 0
-    max: 0.125, -0.03125, 0.027
-    color: '#225566'
-  - label: Solid metal pendant contour 18
-    min: -0.125, -0.09375, 0
-    max: 0.125, -0.0625, 0.027
-    color: '#225566'
-  - label: Solid metal pendant contour 19
-    min: -0.125, -0.125, 0
-    max: 0.125, -0.09375, 0.027
-    color: '#225566'
   - label: Solid metal pendant contour 20
     min: -0.125, -0.15625, 0
-    max: 0.125, -0.125, 0.027
+    max: 0.125, -0.03125, 0.027
     color: '#225566'
   - label: Solid metal pendant contour 21
     min: -0.09375, -0.1875, 0
@@ -3334,21 +3322,9 @@
           min: -0.09375, -0.03125, 0
           max: 0.09375, 0.0, 0.027
           color: '#225566'
-        - label: Solid metal pendant contour 17
-          min: -0.125, -0.0625, 0
-          max: 0.125, -0.03125, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 18
-          min: -0.125, -0.09375, 0
-          max: 0.125, -0.0625, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 19
-          min: -0.125, -0.125, 0
-          max: 0.125, -0.09375, 0.027
-          color: '#225566'
         - label: Solid metal pendant contour 20
           min: -0.125, -0.15625, 0
-          max: 0.125, -0.125, 0.027
+          max: 0.125, -0.03125, 0.027
           color: '#225566'
         - label: Solid metal pendant contour 21
           min: -0.09375, -0.1875, 0
@@ -3397,21 +3373,9 @@
           min: -0.09375, -0.03125, 0
           max: 0.09375, 0.0, 0.027
           color: '#225566'
-        - label: Solid metal pendant contour 17
-          min: -0.125, -0.0625, 0
-          max: 0.125, -0.03125, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 18
-          min: -0.125, -0.09375, 0
-          max: 0.125, -0.0625, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 19
-          min: -0.125, -0.125, 0
-          max: 0.125, -0.09375, 0.027
-          color: '#225566'
         - label: Solid metal pendant contour 20
           min: -0.125, -0.15625, 0
-          max: 0.125, -0.125, 0.027
+          max: 0.125, -0.03125, 0.027
           color: '#225566'
         - label: Solid metal pendant contour 21
           min: -0.09375, -0.1875, 0
@@ -3460,21 +3424,9 @@
           min: -0.09375, -0.03125, 0
           max: 0.09375, 0.0, 0.027
           color: '#225566'
-        - label: Solid metal pendant contour 17
-          min: -0.125, -0.0625, 0
-          max: 0.125, -0.03125, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 18
-          min: -0.125, -0.09375, 0
-          max: 0.125, -0.0625, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 19
-          min: -0.125, -0.125, 0
-          max: 0.125, -0.09375, 0.027
-          color: '#225566'
         - label: Solid metal pendant contour 20
           min: -0.125, -0.15625, 0
-          max: 0.125, -0.125, 0.027
+          max: 0.125, -0.03125, 0.027
           color: '#225566'
         - label: Solid metal pendant contour 21
           min: -0.09375, -0.1875, 0
@@ -3523,21 +3475,9 @@
           min: -0.09375, -0.03125, 0
           max: 0.09375, 0.0, 0.027
           color: '#225566'
-        - label: Solid metal pendant contour 17
-          min: -0.125, -0.0625, 0
-          max: 0.125, -0.03125, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 18
-          min: -0.125, -0.09375, 0
-          max: 0.125, -0.0625, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 19
-          min: -0.125, -0.125, 0
-          max: 0.125, -0.09375, 0.027
-          color: '#225566'
         - label: Solid metal pendant contour 20
           min: -0.125, -0.15625, 0
-          max: 0.125, -0.125, 0.027
+          max: 0.125, -0.03125, 0.027
           color: '#225566'
         - label: Solid metal pendant contour 21
           min: -0.09375, -0.1875, 0
@@ -3586,21 +3526,9 @@
           min: -0.09375, -0.03125, 0
           max: 0.09375, 0.0, 0.027
           color: '#225566'
-        - label: Solid metal pendant contour 17
-          min: -0.125, -0.0625, 0
-          max: 0.125, -0.03125, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 18
-          min: -0.125, -0.09375, 0
-          max: 0.125, -0.0625, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 19
-          min: -0.125, -0.125, 0
-          max: 0.125, -0.09375, 0.027
-          color: '#225566'
         - label: Solid metal pendant contour 20
           min: -0.125, -0.15625, 0
-          max: 0.125, -0.125, 0.027
+          max: 0.125, -0.03125, 0.027
           color: '#225566'
         - label: Solid metal pendant contour 21
           min: -0.09375, -0.1875, 0
@@ -3649,21 +3577,9 @@
           min: -0.09375, -0.03125, 0
           max: 0.09375, 0.0, 0.027
           color: '#225566'
-        - label: Solid metal pendant contour 17
-          min: -0.125, -0.0625, 0
-          max: 0.125, -0.03125, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 18
-          min: -0.125, -0.09375, 0
-          max: 0.125, -0.0625, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 19
-          min: -0.125, -0.125, 0
-          max: 0.125, -0.09375, 0.027
-          color: '#225566'
         - label: Solid metal pendant contour 20
           min: -0.125, -0.15625, 0
-          max: 0.125, -0.125, 0.027
+          max: 0.125, -0.03125, 0.027
           color: '#225566'
         - label: Solid metal pendant contour 21
           min: -0.09375, -0.1875, 0
@@ -3712,21 +3628,9 @@
           min: -0.09375, -0.03125, 0
           max: 0.09375, 0.0, 0.027
           color: '#225566'
-        - label: Solid metal pendant contour 17
-          min: -0.125, -0.0625, 0
-          max: 0.125, -0.03125, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 18
-          min: -0.125, -0.09375, 0
-          max: 0.125, -0.0625, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 19
-          min: -0.125, -0.125, 0
-          max: 0.125, -0.09375, 0.027
-          color: '#225566'
         - label: Solid metal pendant contour 20
           min: -0.125, -0.15625, 0
-          max: 0.125, -0.125, 0.027
+          max: 0.125, -0.03125, 0.027
           color: '#225566'
         - label: Solid metal pendant contour 21
           min: -0.09375, -0.1875, 0
@@ -3775,21 +3679,9 @@
           min: -0.09375, -0.03125, 0
           max: 0.09375, 0.0, 0.027
           color: '#225566'
-        - label: Solid metal pendant contour 17
-          min: -0.125, -0.0625, 0
-          max: 0.125, -0.03125, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 18
-          min: -0.125, -0.09375, 0
-          max: 0.125, -0.0625, 0.027
-          color: '#225566'
-        - label: Solid metal pendant contour 19
-          min: -0.125, -0.125, 0
-          max: 0.125, -0.09375, 0.027
-          color: '#225566'
         - label: Solid metal pendant contour 20
           min: -0.125, -0.15625, 0
-          max: 0.125, -0.125, 0.027
+          max: 0.125, -0.03125, 0.027
           color: '#225566'
         - label: Solid metal pendant contour 21
           min: -0.09375, -0.1875, 0

@@ -486,7 +486,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private void PopupSelf(EntityUid user, string message)
     {
-        _popup.PopupClient(Loc.GetString(message), user, user, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString(message), user, user, PopupType.SmallCaution);
     }
 
     private int GetRequestedShotOffset(EntityUid shooter, bool requireReadyGunForLookUp = false)

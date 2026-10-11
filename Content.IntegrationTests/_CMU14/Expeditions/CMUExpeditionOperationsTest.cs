@@ -14,7 +14,13 @@ namespace Content.IntegrationTests._CMU14.Expeditions;
 [TestFixture, NonParallelizable]
 public sealed class CMUExpeditionOperationsTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { Dirty = true };
+    // fixed seed, these assert emergent fights and a fresh seed per pair made a different one miss each run
+    public override PoolSettings PoolSettings => new() { Dirty = true, ServerSeed = 1414 };
+
+    // learned tactics carry over between rounds on a recycled server, start every case from the baseline
+    [SetUp]
+    public async Task ResetExpeditionLearning() =>
+        await Server.WaitPost(() => Server.System<CMUExpeditionAgentSystem>().ResetLearnedExperience());
 
     [Test]
     public async Task AutomaticLandingZoneAndGuardOrderBuildPhysicalCover()
@@ -51,7 +57,7 @@ public sealed class CMUExpeditionOperationsTest : GameTest
             var found = false;
             while (built.MoveNext(out _, out _, out var xform))
                 found |= xform.MapUid == map && Vector2.Distance(xform.LocalPosition, destination.Position) < 3;
-            Assert.That(found, Is.True, $"Dig and build a real native mound: state={agent.State}, tool={agent.WorkItem}, action={agent.WorkDoAfter}.");
+            Assert.That(found, Is.True, $"Dig and build a real native mound: state={agent.State}, tool={agent.WorkItem}, action={agent.WorkDoAfter}, decision={agent.FortificationDecision}.");
             SEntMan.DeleteEntity(guard);
             // Move the aircraft test away from the newly built barricade.
             var site = destination.Offset(new Vector2(-8, -4));

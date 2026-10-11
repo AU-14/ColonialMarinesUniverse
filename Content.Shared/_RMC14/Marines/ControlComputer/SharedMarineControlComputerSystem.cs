@@ -119,7 +119,7 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
 
             if (marine == actor)
             {
-                _popup.PopupClient(Loc.GetString("rmc-medal-error-self-award"), actor, PopupType.MediumCaution);
+                _popup.PopupSelf(Loc.GetString("rmc-medal-error-self-award"), actor, PopupType.MediumCaution);
                 return;
             }
         }
@@ -340,7 +340,7 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
     {
         if (!HasComp<CommendationGiverComponent>(args.Actor))
         {
-            _popup.PopupClient(Loc.GetString("rmc-medal-error-officer-only"), args.Actor, PopupType.MediumCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-medal-error-officer-only"), args.Actor, PopupType.MediumCaution);
             return;
         }
 
@@ -387,7 +387,7 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
     {
         if (!HasComp<CommendationGiverComponent>(args.Actor))
         {
-            _popup.PopupClient(Loc.GetString("rmc-medal-error-officer-only"), args.Actor, PopupType.MediumCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-medal-error-officer-only"), args.Actor, PopupType.MediumCaution);
             return;
         }
 
@@ -435,7 +435,7 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
     {
         if (!HasComp<CommendationGiverComponent>(args.Actor))
         {
-            _popup.PopupClient(Loc.GetString("rmc-medal-error-officer-only"), args.Actor, PopupType.MediumCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-medal-error-officer-only"), args.Actor, PopupType.MediumCaution);
             return;
         }
 
@@ -463,7 +463,7 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
 
         if (!HasComp<CommendationGiverComponent>(actor))
         {
-            _popup.PopupClient(Loc.GetString("rmc-medal-error-officer-only"), actor, PopupType.MediumCaution);
+            _popup.PopupSelf(Loc.GetString("rmc-medal-error-officer-only"), actor, PopupType.MediumCaution);
             return;
         }
 
@@ -606,7 +606,7 @@ public abstract partial class SharedMarineControlComputerSystem : EntitySystem
             _timing.CurTime < ent.Comp.LastShipAnnouncement + cooldown)
         {
             var msg = Loc.GetString("rmc-announcement-cooldown", ("seconds", (int) cooldown.TotalSeconds));
-            _popup.PopupClient(msg, user);
+            _popup.PopupSelf(msg, user);
             return false;
         }
 

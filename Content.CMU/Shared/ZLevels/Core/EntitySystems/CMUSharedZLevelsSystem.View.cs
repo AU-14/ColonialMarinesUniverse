@@ -70,13 +70,13 @@ public abstract partial class CMUSharedZLevelsSystem
             ent.Comp.FaintUp = false;
             DirtyField(ent, ent.Comp, nameof(CMUZLevelViewerComponent.LookUp));
             DirtyField(ent, ent.Comp, nameof(CMUZLevelViewerComponent.FaintUp));
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-disabled"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-disabled"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
         if (HasComp<XenoNestedComponent>(ent))
         {
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-nested"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-nested"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -86,14 +86,14 @@ public abstract partial class CMUSharedZLevelsSystem
             // and simply draws nothing while one is overhead, so the mode can stay latched while moving.
             ent.Comp.FaintUp = true;
             DirtyField(ent, ent.Comp, nameof(CMUZLevelViewerComponent.FaintUp));
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-faint-up-enabled"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-faint-up-enabled"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
         // Faint -> full look up (original gates apply; on failure we stay in faint mode).
         if (HasOpaqueAbove(ent))
         {
-            _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
             return;
         }
 
@@ -103,7 +103,7 @@ public abstract partial class CMUSharedZLevelsSystem
         var ev = new CMUZLevelLookUpEnabledEvent();
         RaiseLocalEvent(ent, ev);
 
-        _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-enabled"), ent, ent, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-zlevel-look-up-enabled"), ent, ent, PopupType.SmallCaution);
     }
 
     public bool TryDisableLookUp(EntityUid uid)

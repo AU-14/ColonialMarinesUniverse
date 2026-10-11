@@ -6,10 +6,10 @@ using Robust.Shared.Configuration;
 
 namespace Content.Server.CMU14.Round;
 
-public sealed class CMUHostnameSystem : EntitySystem
+public sealed partial class CMUHostnameSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     private string _baseHostname = string.Empty;
 

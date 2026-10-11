@@ -592,6 +592,7 @@ public sealed partial class ExplosionSystem
             || EntityManager.IsQueuedForDeletion(uid)
             || HasComp<VehicleComponent>(uid)
             || HasComp<GridVehicleMoverComponent>(uid)
+            || CMUIsExplosionImmovable(uid) // CMU14
             || !_physicsQuery.TryGetComponent(uid, out var physics)
             || physics.BodyType != BodyType.Dynamic)
             return;

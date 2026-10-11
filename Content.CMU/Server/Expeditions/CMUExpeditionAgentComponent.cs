@@ -7,7 +7,7 @@ namespace Content.Server.CMU14.Expeditions;
 [RegisterComponent]
 public sealed partial class CMUExpeditionAgentComponent : Component
 {
-    [DataField] public float DetectionRange = 18;
+    [DataField] public float DetectionRange = 17;
     [DataField] public float FireRange = 12;
     [DataField] public float LeashRange = 28;
     [DataField] public CMUExpeditionDisposition Disposition = CMUExpeditionDisposition.Steady;
@@ -44,7 +44,8 @@ public sealed partial class CMUExpeditionAgentComponent : Component
     public TimeSpan FireAt;
     public TimeSpan BurstEnd;
     public TimeSpan MoveUntil;
-    public EntityCoordinates? MoveProgressPosition;
+    public EntityCoordinates? MoveProgressDestination;
+    public float MoveProgressDistance;
     public TimeSpan MoveProgressAt;
     public TimeSpan RifleLoweredUntil;
     public int ShotsFired;
@@ -97,6 +98,9 @@ public enum CMUExpeditionAgentState : byte
     Rescuing,
     Throwing,
     Disabled,
+    Incapacitated,
+    RecoverWeapon,
+    Scavenge,
 }
 
 public enum CMUExpeditionDisposition : byte { Steady, Aggressive, Cautious }

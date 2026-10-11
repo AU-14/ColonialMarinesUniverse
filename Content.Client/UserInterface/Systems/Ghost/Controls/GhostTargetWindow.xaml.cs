@@ -135,9 +135,9 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
         {
             var previousTab = _activeTab?.Name;
             ClearPreviewDummies();
-            FactionTabBar.DisposeAllChildren();
-            SubTabBar.DisposeAllChildren();
-            TabContentRoot.DisposeAllChildren();
+            FactionTabBar.ReleaseChildren();
+            SubTabBar.ReleaseChildren();
+            TabContentRoot.ReleaseChildren();
             _tabs.Clear();
             _rows.Clear();
             _activeTab = null;
@@ -604,7 +604,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
         private void RefreshSubTabs()
         {
-            SubTabBar.DisposeAllChildren();
+            SubTabBar.ReleaseChildren();
 
             if (_activeTab == null)
             {

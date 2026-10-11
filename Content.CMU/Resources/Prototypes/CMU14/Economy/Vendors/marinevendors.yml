@@ -267,8 +267,9 @@
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
       entries:
-      - id: CMBeltMedical
       - id: CMBeltMedicBag
+        recommended: true
+      - id: CMBeltMedical
     - name: General Medical Supplies
       entries:
       - id: CMUSynthBloodPackFull
@@ -631,8 +632,10 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
-      - id: ANPRC117GRadioFilled
+      - id: ANPRC117GRadioIssued
         amount: 2
+      - id: ANPRCFillCardIssued
+        amount: 3
       - id: ANPRCMastAntenna
         amount: 1
       - id: RMCExplosiveBreachingCharge
@@ -1057,9 +1060,13 @@
         amount: 8
     - name: Gas Mask
       entries:
-      - id: CMMaskGas
+      - id: CMUMaskGas
         amount: 40
-      - id: CMMaskPrescriptionGas
+      - id: CMUMaskGasBlack
+        amount: 40
+      - id: CMUMaskPrescriptionGas
+        amount: 10
+      - id: CMUMaskPrescriptionGasBlack
         amount: 10
       - id: CMUGasMaskFilter
         amount: 80
@@ -1199,10 +1206,12 @@
       - id: AU14BeltUtilityCombatFilled
         name: M276 pattern combat toolbelt rig (filled)
         recommended: true
-      - id: AU14PouchToolsFilledComtech
-        name: tactical tools pouch (filled)
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
+      - id: AU14PouchToolsFilledComtech
+        name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
       choices: { CMUPouchesCTBag: 1 }
       entries:
@@ -1333,6 +1342,8 @@
       entries:
       - id: AU14BeltUtilityFilled
         name: M276 pattern toolbelt rig (filled)
+      - id: RMCBeltConstruction
+        name: M277 pattern construction rig
       - id: AU14PouchToolsFilledComtech
         name: tactical tools pouch (filled)
     - name: Engineering Storage Bag
@@ -1560,6 +1571,8 @@
         amount: 5
       - id: RMCML66DCase
         amount: 1
+      - id: RMCGunCasePistolSmart
+        amount: 3
     - name: primary ammunition
       entries:
       - id: CMMagazineRifleM54CMK1
@@ -1614,6 +1627,8 @@
         amount: 100
       - id: RMCSpeedLoader44Marksman
         amount: 10
+      - id: RMCMagazinePistolSU6
+        amount: 30
     - name: Magazine Boxes
       entries:
       - id: CMUBoxMagazineRifleM54CMK1
@@ -1768,7 +1783,9 @@
         amount: 2
     - name: Protective Equipment
       entries:
-      - id: CMMaskGas
+      - id: CMUMaskGas
+        amount: 30
+      - id: CMUMaskGasBlack
         amount: 30
       - id: CMUGasMaskFilter
         amount: 30
@@ -1792,6 +1809,8 @@
         amount: 8
       - id: AU14HescoKit
         amount: 30
+      - id: AU14ConcreteBag
+        amount: 15
       - id: RMCSheetPlastic
         amount: 4
       - id: RMCSheetAluminum

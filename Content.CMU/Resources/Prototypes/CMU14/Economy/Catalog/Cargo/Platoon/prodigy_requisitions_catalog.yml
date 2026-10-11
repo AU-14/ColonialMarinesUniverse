@@ -11,6 +11,8 @@
         crate: RMCCrateEmptySandbags
       - cost: 500
         crate: RMCCrateSandbagsConstructionKit
+      - cost: 600
+        crate: AU14CrateConcreteBags
       - cost: 700
         crate: RMCCrateMetalSheets
       - cost: 800
@@ -137,6 +139,12 @@
         crate: RMCCrateFoodIngredients
     - name: Gear
       entries:
+      - cost: 300
+        crate: ANPRCFillCardResupplyCrate
+      - cost: 1500
+        crate: ANPRCRadioResupplyCrate
+      - cost: 2500
+        crate: AU14CrateMastAntennaHead
       - cost: 1200
         crate: AU14CrateTacticalMonocular
       - cost: 1700

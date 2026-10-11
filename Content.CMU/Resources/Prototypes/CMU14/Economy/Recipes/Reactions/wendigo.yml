@@ -1,0 +1,44 @@
+- type: reaction
+  id: CMUStabilizedMutagen
+  quantized: true
+  reactants:
+    CMDylovene:
+      amount: 10
+    RMCUranium:
+      amount: 5
+    RMCGold:
+      amount: 1
+    CMUUnstableMutagen:
+      amount: 5
+  products:
+    CMUStabilizedMutagen: 15
+
+- type: reaction
+  id: CMUStabilizedMutagenUpstream
+  quantized: true
+  reactants:
+    CMDylovene:
+      amount: 10
+    RMCUranium:
+      amount: 5
+    RMCGold:
+      amount: 1
+    UnstableMutagen:
+      amount: 5
+  products:
+    CMUStabilizedMutagen: 15
+
+- type: reaction
+  id: CMUMH33
+  quantized: true
+  reactants:
+    CMUMH32:
+      amount: 15
+    RMCGold:
+      amount: 15
+    RMCPlatinum:
+      amount: 10
+    CMUBlackSludge:
+      amount: 32
+  products:
+    CMUMH33: 15

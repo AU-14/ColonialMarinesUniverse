@@ -11,6 +11,8 @@
         crate: RMCCrateEmptySandbags
       - cost: 500
         crate: RMCCrateSandbagsConstructionKit
+      - cost: 600
+        crate: AU14CrateConcreteBags
       - cost: 700
         crate: RMCCrateMetalSheets
       - cost: 800
@@ -137,6 +139,12 @@
         crate: RMCCrateFoodIngredients
     - name: Gear
       entries:
+      - cost: 300
+        crate: ANPRCFillCardResupplyCrate
+      - cost: 1500
+        crate: ANPRCRadioResupplyCrate
+      - cost: 2500
+        crate: AU14CrateMastAntennaHead
       - cost: 1200
         crate: AU14CrateTacticalMonocular
       - cost: 1700
@@ -285,6 +293,8 @@
         stockReplenishDelay: 300
     - name: Weapons
       entries:
+      - cost: 800
+        crate: RMCCrateSU6
       - cost: 850
         crate: RMCCrateXM51
       - cost: 800
@@ -319,6 +329,8 @@
         stockReplenishDelay: 1200
     - name: Ammo
       entries:
+      - cost: 250
+        crate: RMCCrateBoxMagazineSmartPistol
       - cost: 400
         crate: RMCCrateBoxShellsShotgunBreaching
       - cost: 250

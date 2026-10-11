@@ -48,6 +48,12 @@ namespace Content.IntegrationTests._CMU14.ForceOnForce;
 [TestFixture]
 public sealed class ForceOnForceGameplayTest : GameTest
 {
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> ForceOnForcePrototype = "ForceOnForce";
+    private static readonly Robust.Shared.Prototypes.ProtoId<GamePresetPrototype> DistressSignalPrototype = "DistressSignal";
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobGOVFORSquadSergeantPrototype = "AU14JobGOVFORSquadSergeant";
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobOPFORSquadSergeantPrototype = "AU14JobOPFORSquadSergeant";
+    private static readonly Robust.Shared.Prototypes.ProtoId<JobPrototype> AU14JobGOVFORSquadRiflemanPrototype = "AU14JobGOVFORSquadRifleman";
+
     public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
 
     [Test]
@@ -59,7 +65,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             // Surface resolution receives map-relative coordinates, so mark the map itself.
             var planetMap = SEntMan.GetComponent<TransformComponent>(map.GridCoords.EntityId).MapUid!.Value;
             SEntMan.EnsureComponent<RMCPlanetComponent>(planetMap);
@@ -67,7 +73,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
             var grid = SEntMan.GetComponent<MapGridComponent>(map.GridCoords.EntityId);
             var floor = new Tile(Server.ResolveDependency<ITileDefinitionManager>()["RMCFloorVehicleInteriorDarkSterile"].TileId);
             for (var x = -20; x <= 20; x++)
-            for (var y = -20; y <= 20; y++) maps.SetTile(grid.Owner, grid, new Vector2i(x, y), floor);
+            for (var y = -20; y <= 20; y++) maps.SetTile(map.GridCoords.EntityId, grid, new Vector2i(x, y), floor);
             foreach (var (faction, position) in new[] { ("opfor", Vector2.Zero), ("govfor", new Vector2(9, 0)), ("neutral", new Vector2(-7, 0)) })
             {
                 var mob = SEntMan.SpawnEntity(null, map.GridCoords.Offset(position));
@@ -99,13 +105,13 @@ public sealed class ForceOnForceGameplayTest : GameTest
             Request();
             Request();
             Assert.That(Active(), Is.EqualTo(1), "the cooldown is shared by the faction and enforced on the server");
-            Assert.That(SEntMan.EntityQuery<FighterStrikeVisualComponent>().Any(), Is.False, "effects wait for the siren warning");
+            Assert.That(SEntMan.QueryEntities<FighterStrikeVisualComponent>().Any(), Is.False, "effects wait for the siren warning");
         });
         await Pair.RunSeconds(9);
         await Server.WaitAssertion(() =>
         {
             var transform = Server.System<SharedTransformSystem>();
-            var strikes = SEntMan.EntityQuery<FighterStrikeVisualComponent>().ToArray();
+            var strikes = SEntMan.QueryEntities<FighterStrikeVisualComponent>().ToArray();
             Assert.That(strikes, Is.Not.Empty);
             foreach (var strike in strikes)
             foreach (var occupant in occupants)
@@ -119,13 +125,13 @@ public sealed class ForceOnForceGameplayTest : GameTest
     [TestCase("govfor", "opfor")]
     [TestCase("opfor", "govfor")]
     [TestCase(null, null)]
-    public async Task RandomHijackCandidatesExcludeTheHumanAttackersOwnCarrier(string attacker, string enemy)
+    public async Task RandomHijackCandidatesExcludeTheHumanAttackersOwnCarrier(string? attacker, string? enemy)
     {
         await Server.WaitAssertion(() =>
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             var maps = Server.System<SharedMapSystem>();
             var expected = new List<EntityUid>();
             foreach (var faction in new[] { "govfor", "opfor", "unowned" })
@@ -157,7 +163,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             var factions = Server.System<ForceOnForceSystem>();
             var dropships = Server.System<ServerDropshipSystem>();
             var eligibility = typeof(ServerDropshipSystem).GetMethod("IsForceOnForceHijacker", BindingFlags.Instance | BindingFlags.NonPublic)!;
@@ -181,7 +187,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
             Assert.That(CanHijack(), Is.True);
             Assert.That(factions.CanCommand(user), Is.True);
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("DistressSignal"));
+                SProtoMan.Index<GamePresetPrototype>(DistressSignalPrototype));
             Assert.That(CanHijack(), Is.False);
         });
     }
@@ -267,7 +273,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             var platoons = Server.System<PlatoonSpawnRuleSystem>();
             platoons.SelectedGovforPlatoon = SProtoMan.Index<PlatoonPrototype>(faction == "govfor" ? platoon : enemyPlatoon);
             platoons.SelectedOpforPlatoon = SProtoMan.Index<PlatoonPrototype>(faction == "opfor" ? platoon : enemyPlatoon);
@@ -367,7 +373,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
         {
             var ticker = Server.System<GameTicker>();
             typeof(GameTicker).GetProperty(nameof(GameTicker.CurrentPreset))!.SetValue(ticker,
-                SProtoMan.Index<GamePresetPrototype>("ForceOnForce"));
+                SProtoMan.Index<GamePresetPrototype>(ForceOnForcePrototype));
             var respawn = Server.System<ForceOnForceRespawnSystem>();
             var player = ServerSession!.UserId;
             var body = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
@@ -481,7 +487,7 @@ public sealed class ForceOnForceGameplayTest : GameTest
             var costMethod = typeof(StationJobsSystem).GetMethod("GetForceOnForceJobCost", BindingFlags.Instance | BindingFlags.NonPublic)!;
             var profile = HumanoidCharacterProfile.DefaultWithSpecies()
                 .WithForceOnForcePreferences(side, ForceOnForceFallback.StayInLobby)
-                .WithForceOnForceJobPriority(SProtoMan.Index<JobPrototype>("AU14JobGOVFORSquadSergeant"), JobPriority.High, SProtoMan);
+                .WithForceOnForceJobPriority(SProtoMan.Index<JobPrototype>(AU14JobGOVFORSquadSergeantPrototype), JobPriority.High, SProtoMan);
             bool Accepted(string id) => costMethod.Invoke(jobs, [profile, SProtoMan.Index<JobPrototype>(id)]) != null;
             Assert.That(Accepted("AU14JobGOVFORSquadSergeant"), Is.EqualTo(govfor));
             Assert.That(Accepted("AU14JobOPFORSquadSergeant"), Is.EqualTo(opfor));
@@ -495,9 +501,9 @@ public sealed class ForceOnForceGameplayTest : GameTest
     {
         await Server.WaitAssertion(() =>
         {
-            var govfor = SProtoMan.Index<JobPrototype>("AU14JobGOVFORSquadSergeant");
-            var opfor = SProtoMan.Index<JobPrototype>("AU14JobOPFORSquadSergeant");
-            var rifleman = SProtoMan.Index<JobPrototype>("AU14JobGOVFORSquadRifleman");
+            var govfor = SProtoMan.Index<JobPrototype>(AU14JobGOVFORSquadSergeantPrototype);
+            var opfor = SProtoMan.Index<JobPrototype>(AU14JobOPFORSquadSergeantPrototype);
+            var rifleman = SProtoMan.Index<JobPrototype>(AU14JobGOVFORSquadRiflemanPrototype);
             var profile = HumanoidCharacterProfile.DefaultWithSpecies()
                 .WithGamemodeJobPriority("ForceOnForce", opfor.ID, JobPriority.High)
                 .WithGamemodeJobPriority("ForceOnForce", rifleman.ID, JobPriority.Medium)

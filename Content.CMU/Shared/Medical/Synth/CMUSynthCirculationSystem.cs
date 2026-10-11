@@ -91,7 +91,7 @@ public sealed partial class CMUSynthCirculationSystem : EntitySystem
         if (!_doAfter.TryStartDoAfter(doAfter))
             return;
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu-synth-organ-repair-start-self", ("target", ent.Owner), ("tool", used)),
             Loc.GetString("cmu-synth-organ-repair-start-others", ("user", args.User), ("target", ent.Owner), ("tool", used)),
             ent,
@@ -114,7 +114,7 @@ public sealed partial class CMUSynthCirculationSystem : EntitySystem
                 _organHealth.HealOrgan((organ.Owner, organ.Comp1), ent, ent.Comp.OrganRepairAmount);
         }
 
-        _popup.PopupPredicted(
+        _popup.PopupEntity(
             Loc.GetString("cmu-synth-organ-repair-finish-self", ("target", ent.Owner), ("tool", used)),
             Loc.GetString("cmu-synth-organ-repair-finish-others", ("user", args.User), ("target", ent.Owner), ("tool", used)),
             ent,
@@ -144,7 +144,7 @@ public sealed partial class CMUSynthCirculationSystem : EntitySystem
             return;
 
         args.Handled = true;
-        _popup.PopupClient(Loc.GetString("cmu-synth-blood-pack-incompatible", ("pack", ent.Owner), ("target", target)),
+        _popup.PopupEntity(Loc.GetString("cmu-synth-blood-pack-incompatible", ("pack", ent.Owner), ("target", target)),
             target,
             args.User,
             PopupType.SmallCaution);

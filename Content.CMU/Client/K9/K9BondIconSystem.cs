@@ -9,7 +9,7 @@ namespace Content.Client.CMU14.K9;
 /// <summary>
 /// Draws the bond icon over a K9 dog's bonded owner, visible only to the dog itself.
 /// </summary>
-public sealed class K9BondIconSystem : EntitySystem
+public sealed partial class K9BondIconSystem : EntitySystem
 {
     private static readonly ProtoId<FactionIconPrototype> BondIcon = "CMUK9Bond";
 

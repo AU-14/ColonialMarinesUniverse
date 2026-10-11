@@ -19,7 +19,7 @@ public sealed partial class CLFSaboteurSystem : EntitySystem
     private const string ClfFaxGroup = "clf";
     private const string ClfPaperPrototype = "CMUPaperCLF";
 
-    [Dependency] private readonly WantedSystem _wanted = default!;
+    [Dependency] private WantedSystem _wanted = default!;
 
     public override void Initialize()
     {
@@ -35,7 +35,7 @@ public sealed partial class CLFSaboteurSystem : EntitySystem
 
     private void CountSabotage()
     {
-        var enumerator = EntityManager.AllEntityQueryEnumerator<CLFSaboteurComponent>();
+        var enumerator = AllEntityQuery<CLFSaboteurComponent>();
         while (enumerator.MoveNext(out var uid, out var saboteur))
         {
             saboteur.Count++;

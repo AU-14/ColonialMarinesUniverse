@@ -4,6 +4,7 @@
   status: draft
   sourcePrototypes:
   - XenoTunnelMaint
+  - XenoTunnelMaintNoXenoDesc
   referencePrototype: XenoTunnelMaint
   referenceRsi: /Textures/_RMC14/Structures/Xenos/xeno_tunnel.rsi
   referenceState: maintenancehatch_alt

@@ -22,7 +22,7 @@ namespace Content.Server.CMU14.Weather;
 /// <summary>
 /// Applies <see cref="WeatherHazardComponent"/> data to mobs standing on tiles the weather can reach.
 /// </summary>
-public sealed class WeatherHazardSystem : EntitySystem
+public sealed partial class WeatherHazardSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private FlammableSystem _flammable = default!;

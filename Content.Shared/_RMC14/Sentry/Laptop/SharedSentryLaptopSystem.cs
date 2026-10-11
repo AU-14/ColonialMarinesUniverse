@@ -273,7 +273,7 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
         var parent = Transform(laptop).ParentUid;
         if (!HasComp<PlaceableSurfaceComponent>(parent))
         {
-            _popup.PopupClient("Place the laptop on a table first!", laptop, args.User);
+            _popup.PopupEntity("Place the laptop on a table first!", laptop, args.User);
             args.Cancel();
             return;
         }
@@ -437,13 +437,13 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
     {
         if (!laptop.Comp.IsOpen)
         {
-            _popup.PopupClient("The laptop must be opened first!", laptop, user);
+            _popup.PopupEntity("The laptop must be opened first!", laptop, user);
             return false;
         }
 
         if (GetLinkedSentries(laptop).Count >= laptop.Comp.MaxLinkedSentries)
         {
-            _popup.PopupClient($"The laptop can only control {laptop.Comp.MaxLinkedSentries} sentries at once!", laptop, user);
+            _popup.PopupEntity($"The laptop can only control {laptop.Comp.MaxLinkedSentries} sentries at once!", laptop, user);
             return false;
         }
 

@@ -93,6 +93,7 @@ public sealed class CMU3DSupportProbeTest
         Assert.That(CMU3DSupportProbe.TryPoint(model, out _), Is.False);
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "RA0039", Justification = "CMU14: This test supplies isolated mutable fixture data; prototype registration and inheritance are not exercised.")]
     private static CMU3DModelPrototype Prop()
     {
         var parts = new List<CMU3DModelPart>

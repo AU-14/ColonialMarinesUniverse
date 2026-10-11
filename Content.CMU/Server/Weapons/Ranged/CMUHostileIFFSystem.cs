@@ -7,7 +7,7 @@ namespace Content.Server.CMU14.Weapons.Ranged;
 // Entities that turn hostile (zombies, pathogen walkers, thralls, mimics) keep their old IFF
 // Clearing UserIFFComponent alone is not enough, an equipped dogtag's ItemIFF relays through
 // the id slot and friendly bullets still phase through them
-public sealed class CMUHostileIFFSystem : EntitySystem
+public sealed partial class CMUHostileIFFSystem : EntitySystem
 {
     [Dependency] private GunIFFSystem _gunIFF = default!;
     [Dependency] private InventorySystem _inventory = default!;

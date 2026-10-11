@@ -76,7 +76,7 @@ public sealed partial class CMURequisitionsStockConsoleWindow : DefaultWindow
 
     private void Rebuild(CMURequisitionsStockConsoleBuiState state)
     {
-        Sections.DisposeAllChildren();
+        Sections.ReleaseChildren();
         _rows.Clear();
 
         if (state.Vendors.Count == 0)

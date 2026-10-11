@@ -9,7 +9,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.CMU14.Medical.Injuries.Wounds;
 
-public sealed class CMUOpenStumpSystem : SharedCMUOpenStumpSystem
+public sealed partial class CMUOpenStumpSystem : SharedCMUOpenStumpSystem
 {
     [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private IGameTiming _timing = default!;

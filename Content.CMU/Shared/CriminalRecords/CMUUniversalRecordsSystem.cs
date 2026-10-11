@@ -8,7 +8,7 @@ namespace Content.Shared.CMU14.CriminalRecords;
 /// <summary>
 /// One records database for the whole round, independent of any map, grid or station.
 /// </summary>
-public sealed class CMUUniversalRecordsSystem : EntitySystem
+public sealed partial class CMUUniversalRecordsSystem : EntitySystem
 {
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private INetManager _net = default!;

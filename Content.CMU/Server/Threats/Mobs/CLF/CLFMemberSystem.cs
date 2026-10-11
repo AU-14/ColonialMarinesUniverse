@@ -56,8 +56,8 @@ public sealed partial class CLFMemberSystem : EntitySystem
         foreach (var name in SpecialistKitWhitelists)
         {
             var reg = factory.GetRegistration(name);
-            if (!EntityManager.HasComponent(ent, reg.Type))
-                EntityManager.AddComponent(ent, (Component) factory.GetComponent(reg));
+            if (!HasComp(ent, reg.Type))
+                AddComp(ent, (Component) factory.GetComponent(reg));
         }
     }
 

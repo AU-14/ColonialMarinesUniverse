@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Server.Chat.Systems;
+using Content.Server._RMC14.Marines;
 using Content.Server.CMU14.ZLevels.Core;
 using Content.Shared._NC14.DayNightCycle;
 using Content.Shared.Atmos;
@@ -13,7 +13,7 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionSystem
 {
-    [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     private bool BuildAirspace(BuildJob job, CMUExpeditionMapComponent expedition)
@@ -88,10 +88,9 @@ public sealed partial class CMUExpeditionSystem
 
     private void AnnounceExpedition(EntityUid map, CMUExpeditionMapComponent expedition)
     {
-        _chat.DispatchGlobalAnnouncement(Loc.GetString("cmu-expedition-announcement",
+        _marineAnnounce.AnnounceARES(map, Loc.GetString("cmu-expedition-announcement",
                 ("sector", Name(map)), ("lz", Name(expedition.LandingBeacon!.Value))),
-            Loc.GetString("cmu-expedition-announcement-sender"), playSound: true,
-            announcementSound: new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg"));
+            new SoundPathSpecifier("/Audio/_RMC14/AI/announce.ogg"), faction: "govfor");
     }
 
     private void OnExpeditionShutdown(Entity<CMUExpeditionMapComponent> ent, ref ComponentShutdown args)

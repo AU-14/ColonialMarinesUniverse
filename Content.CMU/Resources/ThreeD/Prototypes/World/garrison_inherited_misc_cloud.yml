@@ -848,24 +848,16 @@
     color: '#635F5B'
   - label: large pickup aperture surround left
     min: -0.1875, -0.326, 0.342
-    max: -0.15625, -0.275, 0.418
+    max: -0.15625, -0.14, 0.418
     color: '#635F5B'
   - label: large pickup aperture surround right
     min: -0.03125, -0.326, 0.342
-    max: 0.0, -0.275, 0.418
+    max: 0, -0.14, 0.418
     color: '#635F5B'
   - label: large pickup aperture dark recessed back
     min: -0.15625, -0.14, 0.342
     max: -0.03125, -0.12, 0.418
     color: '#1A2022'
-  - label: large pickup aperture left reveal
-    min: -0.1875, -0.28, 0.342
-    max: -0.15625, -0.14, 0.418
-    color: '#635F5B'
-  - label: large pickup aperture right reveal
-    min: -0.03125, -0.28, 0.342
-    max: 0.0, -0.14, 0.418
-    color: '#635F5B'
   - label: large pickup aperture collection floor
     min: -0.15625, -0.323, 0.304
     max: -0.03125, -0.14, 0.342
@@ -880,24 +872,16 @@
     color: '#635F5B'
   - label: small adjacent tray surround left
     min: 0.0625, -0.326, 0.342
-    max: 0.09375, -0.275, 0.418
+    max: 0.09375, -0.18, 0.418
     color: '#635F5B'
   - label: small adjacent tray surround right
     min: 0.21875, -0.326, 0.342
-    max: 0.25, -0.275, 0.418
+    max: 0.25, -0.18, 0.418
     color: '#635F5B'
   - label: small adjacent tray dark recessed back
     min: 0.09375, -0.18, 0.342
     max: 0.21875, -0.16, 0.418
     color: '#1A2022'
-  - label: small adjacent tray left reveal
-    min: 0.0625, -0.28, 0.342
-    max: 0.09375, -0.18, 0.418
-    color: '#635F5B'
-  - label: small adjacent tray right reveal
-    min: 0.21875, -0.28, 0.342
-    max: 0.25, -0.18, 0.418
-    color: '#635F5B'
   - label: small adjacent tray collection floor
     min: 0.09375, -0.323, 0.304
     max: 0.21875, -0.18, 0.342
@@ -1000,24 +984,16 @@
     color: '#8F8F8F'
   - label: upper narrow grille surround left
     min: -0.40625, -0.356, 1.026
-    max: -0.375, -0.305, 1.102
+    max: -0.375, -0.22, 1.102
     color: '#8F8F8F'
   - label: upper narrow grille surround right
     min: 0.09375, -0.356, 1.026
-    max: 0.125, -0.305, 1.102
+    max: 0.125, -0.22, 1.102
     color: '#8F8F8F'
   - label: upper narrow grille dark recessed back
     min: -0.375, -0.22, 1.026
     max: 0.09375, -0.2, 1.102
     color: '#202020'
-  - label: upper narrow grille left reveal
-    min: -0.40625, -0.31, 1.026
-    max: -0.375, -0.22, 1.102
-    color: '#8F8F8F'
-  - label: upper narrow grille right reveal
-    min: 0.09375, -0.31, 1.026
-    max: 0.125, -0.22, 1.102
-    color: '#8F8F8F'
   - label: upper narrow grille collection floor
     min: -0.375, -0.353, 0.988
     max: 0.09375, -0.22, 1.026
@@ -1124,24 +1100,16 @@
     color: '#595757'
   - label: deep center cup bay surround left
     min: -0.125, -0.356, 0.342
-    max: -0.09375, -0.305, 0.532
+    max: -0.09375, -0.1, 0.532
     color: '#595757'
   - label: deep center cup bay surround right
     min: 0.125, -0.356, 0.342
-    max: 0.15625, -0.305, 0.532
+    max: 0.15625, -0.1, 0.532
     color: '#595757'
   - label: deep center cup bay dark recessed back
     min: -0.09375, -0.1, 0.342
     max: 0.125, -0.08, 0.532
     color: '#202020'
-  - label: deep center cup bay left reveal
-    min: -0.125, -0.31, 0.342
-    max: -0.09375, -0.1, 0.532
-    color: '#595757'
-  - label: deep center cup bay right reveal
-    min: 0.125, -0.31, 0.342
-    max: 0.15625, -0.1, 0.532
-    color: '#595757'
   - label: deep center cup bay collection floor
     min: -0.09375, -0.353, 0.304
     max: 0.125, -0.1, 0.342
@@ -1602,14 +1570,6 @@
     color: '#333333'
   - label: paper sheet 1
     min: -0.15625, -0.21875, 0.029
-    max: 0.15625, 0.1875, 0.036
-    color: '#B9AF9D'
-  - label: paper sheet 2
-    min: -0.15625, -0.21875, 0.035
-    max: 0.15625, 0.1875, 0.042
-    color: '#B9AF9D'
-  - label: paper sheet 3
-    min: -0.15625, -0.21875, 0.041
     max: 0.15625, 0.1875, 0.048
     color: '#B9AF9D'
   - label: paper sheet 4

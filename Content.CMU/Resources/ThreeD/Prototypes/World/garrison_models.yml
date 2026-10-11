@@ -52,7 +52,7 @@
     color: '#767991'
     label: stepped folding side rail
   - min: -0.296, -0.052, 0.298
-    max: -0.244, 0.042, 0.408
+    max: -0.244, 0.052, 0.408
     color: '#767991'
     label: stepped folding side rail
   - min: -0.296, 0.023, 0.389
@@ -69,10 +69,6 @@
     label: stepped folding side rail
   - min: -0.296, 0.033, 0.207
     max: -0.244, 0.127, 0.317
-    color: '#767991'
-    label: stepped folding side rail
-  - min: -0.296, -0.042, 0.298
-    max: -0.244, 0.052, 0.408
     color: '#767991'
     label: stepped folding side rail
   - min: -0.296, -0.117, 0.389
@@ -92,7 +88,7 @@
     color: '#767991'
     label: stepped folding side rail
   - min: 0.244, -0.052, 0.298
-    max: 0.296, 0.042, 0.408
+    max: 0.296, 0.052, 0.408
     color: '#767991'
     label: stepped folding side rail
   - min: 0.244, 0.023, 0.389
@@ -109,10 +105,6 @@
     label: stepped folding side rail
   - min: 0.244, 0.033, 0.207
     max: 0.296, 0.127, 0.317
-    color: '#767991'
-    label: stepped folding side rail
-  - min: 0.244, -0.042, 0.298
-    max: 0.296, 0.052, 0.408
     color: '#767991'
     label: stepped folding side rail
   - min: 0.244, -0.117, 0.389

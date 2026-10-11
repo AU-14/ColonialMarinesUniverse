@@ -398,11 +398,6 @@
     shape: Ellipsoid
   - label: fine leafy crown edge
     color: '#476C21'
-    min: 0.04479, -0.07385, 0.58020
-    max: 0.10482, -0.01208, 0.68791
-    shape: Ellipsoid
-  - label: fine leafy crown edge
-    color: '#476C21'
     min: 0.23399, 0.01089, 0.59476
     max: 0.29402, 0.07266, 0.70247
     shape: Ellipsoid
@@ -1148,11 +1143,6 @@
     shape: Ellipsoid
   - label: fine leafy crown edge
     color: '#5A6E2C'
-    min: -0.01132, -0.02782, 0.84316
-    max: 0.08073, 0.04821, 0.96354
-    shape: Ellipsoid
-  - label: fine leafy crown edge
-    color: '#5A6E2C'
     min: 0.25319, -0.05891, 0.92204
     max: 0.34123, 0.01712, 1.06143
     shape: Ellipsoid
@@ -1280,118 +1270,66 @@
     max: 0.18270, 0.18270, 0.23585
     color: '#564344'
     shape: CylinderZ
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.20300, -0.07064, 0.22260
-    max: -0.17762, 0.07064, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.17762, -0.11834, 0.22260
-    max: -0.15225, 0.11834, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.15225, -0.14742, 0.22260
-    max: -0.12687, -0.08305, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.15225, 0.08305, 0.22260
-    max: -0.12687, 0.14742, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.12687, -0.16784, 0.22260
-    max: -0.10150, -0.11548, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.12687, 0.11548, 0.22260
-    max: -0.10150, 0.16784, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.10150, -0.18254, 0.22260
-    max: -0.07612, -0.13596, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.10150, 0.13596, 0.22260
-    max: -0.07612, 0.18254, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.07612, -0.19283, 0.22260
-    max: -0.05075, -0.14950, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.07612, 0.14950, 0.22260
-    max: -0.05075, 0.19283, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.05075, -0.19940, 0.22260
-    max: -0.02537, -0.15787, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.05075, 0.15787, 0.22260
-    max: -0.02537, 0.19940, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.02537, -0.20260, 0.22260
-    max: 0.00000, -0.16190, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.02537, 0.16190, 0.22260
-    max: 0.00000, 0.20260, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.00000, -0.20260, 0.22260
-    max: 0.02537, -0.16190, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.00000, 0.16190, 0.22260
-    max: 0.02537, 0.20260, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.02537, -0.19940, 0.22260
-    max: 0.05075, -0.15787, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.02537, 0.15787, 0.22260
-    max: 0.05075, 0.19940, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.05075, -0.19283, 0.22260
-    max: 0.07612, -0.14950, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.05075, 0.14950, 0.22260
-    max: 0.07612, 0.19283, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.07612, -0.18254, 0.22260
-    max: 0.10150, -0.13596, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.07612, 0.13596, 0.22260
-    max: 0.10150, 0.18254, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.10150, -0.16784, 0.22260
-    max: 0.12687, -0.11548, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.10150, 0.11548, 0.22260
-    max: 0.12687, 0.16784, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.12687, -0.14742, 0.22260
-    max: 0.15225, -0.08305, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.12687, 0.08305, 0.22260
-    max: 0.15225, 0.14742, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.15225, -0.11834, 0.22260
-    max: 0.17762, 0.11834, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.17762, -0.07064, 0.22260
-    max: 0.20300, 0.07064, 0.26500
+  - color: '#725852'
+    label: hollow curved planter rim 01
+    min: 0.17763, -0.0530403, 0.2226
+    max: 0.1960829, 0.0530403, 0.265
+    yaw: 0.0
+  - color: '#725852'
+    label: hollow curved planter rim 02
+    min: 0.152596, 0.040388, 0.2226
+    max: 0.1710489, 0.1464685, 0.265
+    yaw: 30.0
+  - color: '#725852'
+    label: hollow curved planter rim 03
+    min: 0.0842018, 0.1087822, 0.2226
+    max: 0.1026547, 0.2148627, 0.265
+    yaw: 60.0
+  - color: '#725852'
+    label: hollow curved planter rim 04
+    min: -0.0092265, 0.1338162, 0.2226
+    max: 0.0092265, 0.2398967, 0.265
+    yaw: 90.0
+  - color: '#725852'
+    label: hollow curved planter rim 05
+    min: -0.1026547, 0.1087822, 0.2226
+    max: -0.0842018, 0.2148627, 0.265
+    yaw: 120.0
+  - color: '#725852'
+    label: hollow curved planter rim 06
+    min: -0.1710489, 0.040388, 0.2226
+    max: -0.152596, 0.1464685, 0.265
+    yaw: 150.0
+  - color: '#725852'
+    label: hollow curved planter rim 07
+    min: -0.1960829, -0.0530403, 0.2226
+    max: -0.17763, 0.0530403, 0.265
+    yaw: 180.0
+  - color: '#725852'
+    label: hollow curved planter rim 08
+    min: -0.1710489, -0.1464685, 0.2226
+    max: -0.152596, -0.040388, 0.265
+    yaw: 210.0
+  - color: '#725852'
+    label: hollow curved planter rim 09
+    min: -0.1026547, -0.2148627, 0.2226
+    max: -0.0842018, -0.1087822, 0.265
+    yaw: 240.0
+  - color: '#725852'
+    label: hollow curved planter rim 10
+    min: -0.0092265, -0.2398967, 0.2226
+    max: 0.0092265, -0.1338162, 0.265
+    yaw: 270.0
+  - color: '#725852'
+    label: hollow curved planter rim 11
+    min: 0.0842018, -0.2148627, 0.2226
+    max: 0.1026547, -0.1087822, 0.265
+    yaw: 300.0
+  - color: '#725852'
+    label: hollow curved planter rim 12
+    min: 0.152596, -0.1464685, 0.2226
+    max: 0.1710489, -0.040388, 0.265
+    yaw: 330.0
   - label: recessed soil
     min: -0.16037, -0.16037, 0.25652
     max: 0.16037, 0.16037, 0.26216
@@ -2122,118 +2060,66 @@
     max: 0.15750, 0.15750, 0.21360
     color: '#4A4A4A'
     shape: CylinderZ
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.17500, -0.06090, 0.20160
-    max: -0.15312, 0.06090, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.15312, -0.10202, 0.20160
-    max: -0.13125, 0.10202, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.13125, -0.12708, 0.20160
-    max: -0.10937, -0.07159, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.13125, 0.07159, 0.20160
-    max: -0.10937, 0.12708, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.10938, -0.14469, 0.20160
-    max: -0.08750, -0.09955, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.10938, 0.09955, 0.20160
-    max: -0.08750, 0.14469, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.08750, -0.15736, 0.20160
-    max: -0.06562, -0.11721, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.08750, 0.11721, 0.20160
-    max: -0.06562, 0.15736, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.06562, -0.16624, 0.20160
-    max: -0.04375, -0.12888, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.06562, 0.12888, 0.20160
-    max: -0.04375, 0.16624, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.04375, -0.17190, 0.20160
-    max: -0.02188, -0.13610, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.04375, 0.13610, 0.20160
-    max: -0.02188, 0.17190, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.02188, -0.17466, 0.20160
-    max: -0.00000, -0.13957, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: -0.02188, 0.13957, 0.20160
-    max: -0.00000, 0.17466, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.00000, -0.17466, 0.20160
-    max: 0.02187, -0.13957, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.00000, 0.13957, 0.20160
-    max: 0.02187, 0.17466, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.02188, -0.17190, 0.20160
-    max: 0.04375, -0.13610, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.02188, 0.13610, 0.20160
-    max: 0.04375, 0.17190, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.04375, -0.16624, 0.20160
-    max: 0.06563, -0.12888, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.04375, 0.12888, 0.20160
-    max: 0.06563, 0.16624, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.06562, -0.15736, 0.20160
-    max: 0.08750, -0.11721, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.06562, 0.11721, 0.20160
-    max: 0.08750, 0.15736, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.08750, -0.14469, 0.20160
-    max: 0.10937, -0.09955, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.08750, 0.09955, 0.20160
-    max: 0.10937, 0.14469, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.10938, -0.12708, 0.20160
-    max: 0.13125, -0.07159, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.10938, 0.07159, 0.20160
-    max: 0.13125, 0.12708, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.13125, -0.10202, 0.20160
-    max: 0.15312, 0.10202, 0.24000
-  - label: hollow curved planter rim
-    color: '#8A8A8A'
-    min: 0.15313, -0.06090, 0.20160
-    max: 0.17500, 0.06090, 0.24000
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 01
+    min: 0.15313, -0.0457933, 0.2016
+    max: 0.169037, 0.0457933, 0.24
+    yaw: 0.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 02
+    min: 0.1315489, 0.0347484, 0.2016
+    max: 0.1474559, 0.1263351, 0.24
+    yaw: 30.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 03
+    min: 0.0725882, 0.0937091, 0.2016
+    max: 0.0884953, 0.1852957, 0.24
+    yaw: 60.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 04
+    min: -0.0079535, 0.1152902, 0.2016
+    max: 0.0079535, 0.2068768, 0.24
+    yaw: 90.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 05
+    min: -0.0884953, 0.0937091, 0.2016
+    max: -0.0725882, 0.1852957, 0.24
+    yaw: 120.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 06
+    min: -0.1474559, 0.0347484, 0.2016
+    max: -0.1315489, 0.1263351, 0.24
+    yaw: 150.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 07
+    min: -0.169037, -0.0457933, 0.2016
+    max: -0.15313, 0.0457933, 0.24
+    yaw: 180.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 08
+    min: -0.1474559, -0.1263351, 0.2016
+    max: -0.1315489, -0.0347484, 0.24
+    yaw: 210.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 09
+    min: -0.0884953, -0.1852957, 0.2016
+    max: -0.0725882, -0.0937091, 0.24
+    yaw: 240.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 10
+    min: -0.0079535, -0.2068768, 0.2016
+    max: 0.0079535, -0.1152902, 0.24
+    yaw: 270.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 11
+    min: 0.0725882, -0.1852957, 0.2016
+    max: 0.0884953, -0.0937091, 0.24
+    yaw: 300.0
+  - color: '#8A8A8A'
+    label: hollow curved planter rim 12
+    min: 0.1315489, -0.1263351, 0.2016
+    max: 0.1474559, -0.0347484, 0.24
+    yaw: 330.0
   - label: recessed soil
     min: -0.13825, -0.13825, 0.23232
     max: 0.13825, 0.13825, 0.23732
@@ -2737,118 +2623,66 @@
     max: 0.16200, 0.16200, 0.24920
     color: '#242424'
     shape: CylinderZ
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.18000, -0.06264, 0.23520
-    max: -0.15750, 0.06264, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.15750, -0.10493, 0.23520
-    max: -0.13500, 0.10493, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.13500, -0.13072, 0.23520
-    max: -0.11250, -0.07364, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.13500, 0.07364, 0.23520
-    max: -0.11250, 0.13072, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.11250, -0.14882, 0.23520
-    max: -0.09000, -0.10239, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.11250, 0.10239, 0.23520
-    max: -0.09000, 0.14882, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.09000, -0.16186, 0.23520
-    max: -0.06750, -0.12055, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.09000, 0.12055, 0.23520
-    max: -0.06750, 0.16186, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.06750, -0.17098, 0.23520
-    max: -0.04500, -0.13256, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.06750, 0.13256, 0.23520
-    max: -0.04500, 0.17098, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.04500, -0.17680, 0.23520
-    max: -0.02250, -0.13999, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.04500, 0.13999, 0.23520
-    max: -0.02250, 0.17680, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.02250, -0.17965, 0.23520
-    max: 0.00000, -0.14356, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: -0.02250, 0.14356, 0.23520
-    max: 0.00000, 0.17965, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.00000, -0.17965, 0.23520
-    max: 0.02250, -0.14356, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.00000, 0.14356, 0.23520
-    max: 0.02250, 0.17965, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.02250, -0.17680, 0.23520
-    max: 0.04500, -0.13999, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.02250, 0.13999, 0.23520
-    max: 0.04500, 0.17680, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.04500, -0.17098, 0.23520
-    max: 0.06750, -0.13256, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.04500, 0.13256, 0.23520
-    max: 0.06750, 0.17098, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.06750, -0.16186, 0.23520
-    max: 0.09000, -0.12055, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.06750, 0.12055, 0.23520
-    max: 0.09000, 0.16186, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.09000, -0.14882, 0.23520
-    max: 0.11250, -0.10239, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.09000, 0.10239, 0.23520
-    max: 0.11250, 0.14882, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.11250, -0.13072, 0.23520
-    max: 0.13500, -0.07364, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.11250, 0.07364, 0.23520
-    max: 0.13500, 0.13072, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.13500, -0.10493, 0.23520
-    max: 0.15750, 0.10493, 0.28000
-  - label: hollow curved planter rim
-    color: '#333333'
-    min: 0.15750, -0.06264, 0.23520
-    max: 0.18000, 0.06264, 0.28000
+  - color: '#333333'
+    label: hollow curved planter rim 01
+    min: 0.1575, -0.0470874, 0.2352
+    max: 0.1738666, 0.0470874, 0.28
+    yaw: 0.0
+  - color: '#333333'
+    label: hollow curved planter rim 02
+    min: 0.1353026, 0.0357542, 0.2352
+    max: 0.1516693, 0.1299291, 0.28
+    yaw: 30.0
+  - color: '#333333'
+    label: hollow curved planter rim 03
+    min: 0.0746583, 0.0963985, 0.2352
+    max: 0.091025, 0.1905734, 0.28
+    yaw: 60.0
+  - color: '#333333'
+    label: hollow curved planter rim 04
+    min: -0.0081833, 0.1185959, 0.2352
+    max: 0.0081833, 0.2127708, 0.28
+    yaw: 90.0
+  - color: '#333333'
+    label: hollow curved planter rim 05
+    min: -0.091025, 0.0963985, 0.2352
+    max: -0.0746583, 0.1905734, 0.28
+    yaw: 120.0
+  - color: '#333333'
+    label: hollow curved planter rim 06
+    min: -0.1516693, 0.0357542, 0.2352
+    max: -0.1353026, 0.1299291, 0.28
+    yaw: 150.0
+  - color: '#333333'
+    label: hollow curved planter rim 07
+    min: -0.1738666, -0.0470874, 0.2352
+    max: -0.1575, 0.0470874, 0.28
+    yaw: 180.0
+  - color: '#333333'
+    label: hollow curved planter rim 08
+    min: -0.1516693, -0.1299291, 0.2352
+    max: -0.1353026, -0.0357542, 0.28
+    yaw: 210.0
+  - color: '#333333'
+    label: hollow curved planter rim 09
+    min: -0.091025, -0.1905734, 0.2352
+    max: -0.0746583, -0.0963985, 0.28
+    yaw: 240.0
+  - color: '#333333'
+    label: hollow curved planter rim 10
+    min: -0.0081833, -0.2127708, 0.2352
+    max: 0.0081833, -0.1185959, 0.28
+    yaw: 270.0
+  - color: '#333333'
+    label: hollow curved planter rim 11
+    min: 0.0746583, -0.1905734, 0.2352
+    max: 0.091025, -0.0963985, 0.28
+    yaw: 300.0
+  - color: '#333333'
+    label: hollow curved planter rim 12
+    min: 0.1353026, -0.1299291, 0.2352
+    max: 0.1516693, -0.0357542, 0.28
+    yaw: 330.0
   - label: recessed soil
     min: -0.14220, -0.14220, 0.27104
     max: 0.14220, 0.14220, 0.27700
@@ -2887,118 +2721,66 @@
     max: 0.13050, 0.13050, 0.17800
     color: '#505050'
     shape: CylinderZ
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.14500, -0.05046, 0.16800
-    max: -0.12687, 0.05046, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.12687, -0.08453, 0.16800
-    max: -0.10875, 0.08453, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.10875, -0.10530, 0.16800
-    max: -0.09062, -0.05932, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.10875, 0.05932, 0.16800
-    max: -0.09062, 0.10530, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.09062, -0.11989, 0.16800
-    max: -0.07250, -0.08248, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.09062, 0.08248, 0.16800
-    max: -0.07250, 0.11989, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.07250, -0.13039, 0.16800
-    max: -0.05437, -0.09712, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.07250, 0.09712, 0.16800
-    max: -0.05437, 0.13039, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.05437, -0.13774, 0.16800
-    max: -0.03625, -0.10678, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.05437, 0.10678, 0.16800
-    max: -0.03625, 0.13774, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.03625, -0.14243, 0.16800
-    max: -0.01813, -0.11277, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.03625, 0.11277, 0.16800
-    max: -0.01813, 0.14243, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.01813, -0.14472, 0.16800
-    max: -0.00000, -0.11565, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: -0.01813, 0.11565, 0.16800
-    max: -0.00000, 0.14472, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.00000, -0.14472, 0.16800
-    max: 0.01812, -0.11565, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.00000, 0.11565, 0.16800
-    max: 0.01812, 0.14472, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.01813, -0.14243, 0.16800
-    max: 0.03625, -0.11277, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.01813, 0.11277, 0.16800
-    max: 0.03625, 0.14243, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.03625, -0.13774, 0.16800
-    max: 0.05438, -0.10678, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.03625, 0.10678, 0.16800
-    max: 0.05438, 0.13774, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.05438, -0.13039, 0.16800
-    max: 0.07250, -0.09712, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.05438, 0.09712, 0.16800
-    max: 0.07250, 0.13039, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.07250, -0.11989, 0.16800
-    max: 0.09062, -0.08248, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.07250, 0.08248, 0.16800
-    max: 0.09062, 0.11989, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.09062, -0.10530, 0.16800
-    max: 0.10875, -0.05932, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.09062, 0.05932, 0.16800
-    max: 0.10875, 0.10530, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.10875, -0.08453, 0.16800
-    max: 0.12687, 0.08453, 0.20000
-  - label: hollow curved planter rim
-    color: '#717171'
-    min: 0.12687, -0.05046, 0.16800
-    max: 0.14500, 0.05046, 0.20000
+  - color: '#717171'
+    label: hollow curved planter rim 01
+    min: 0.12688, -0.0380288, 0.168
+    max: 0.1400592, 0.0380288, 0.2
+    yaw: 0.0
+  - color: '#717171'
+    label: hollow curved planter rim 02
+    min: 0.1089985, 0.028706, 0.168
+    max: 0.1221777, 0.1047636, 0.2
+    yaw: 30.0
+  - color: '#717171'
+    label: hollow curved planter rim 03
+    min: 0.0601452, 0.0775593, 0.168
+    max: 0.0733244, 0.1536168, 0.2
+    yaw: 60.0
+  - color: '#717171'
+    label: hollow curved planter rim 04
+    min: -0.0065896, 0.0954409, 0.168
+    max: 0.0065896, 0.1714984, 0.2
+    yaw: 90.0
+  - color: '#717171'
+    label: hollow curved planter rim 05
+    min: -0.0733244, 0.0775593, 0.168
+    max: -0.0601452, 0.1536168, 0.2
+    yaw: 120.0
+  - color: '#717171'
+    label: hollow curved planter rim 06
+    min: -0.1221777, 0.028706, 0.168
+    max: -0.1089985, 0.1047636, 0.2
+    yaw: 150.0
+  - color: '#717171'
+    label: hollow curved planter rim 07
+    min: -0.1400592, -0.0380288, 0.168
+    max: -0.12688, 0.0380288, 0.2
+    yaw: 180.0
+  - color: '#717171'
+    label: hollow curved planter rim 08
+    min: -0.1221777, -0.1047636, 0.168
+    max: -0.1089985, -0.028706, 0.2
+    yaw: 210.0
+  - color: '#717171'
+    label: hollow curved planter rim 09
+    min: -0.0733244, -0.1536168, 0.168
+    max: -0.0601452, -0.0775593, 0.2
+    yaw: 240.0
+  - color: '#717171'
+    label: hollow curved planter rim 10
+    min: -0.0065896, -0.1714984, 0.168
+    max: 0.0065896, -0.0954409, 0.2
+    yaw: 270.0
+  - color: '#717171'
+    label: hollow curved planter rim 11
+    min: 0.0601452, -0.1536168, 0.168
+    max: 0.0733244, -0.0775593, 0.2
+    yaw: 300.0
+  - color: '#717171'
+    label: hollow curved planter rim 12
+    min: 0.1089985, -0.1047636, 0.168
+    max: 0.1221777, -0.028706, 0.2
+    yaw: 330.0
   - label: recessed soil
     min: -0.11455, -0.11455, 0.19360
     max: 0.11455, 0.11455, 0.19860
@@ -3372,118 +3154,66 @@
     max: 0.11880, 0.11880, 0.21360
     color: '#272727'
     shape: CylinderZ
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.13200, -0.04593, 0.20160
-    max: -0.11550, 0.04593, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.11550, -0.07695, 0.20160
-    max: -0.09900, 0.07695, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.09900, -0.09586, 0.20160
-    max: -0.08250, -0.05400, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.09900, 0.05400, 0.20160
-    max: -0.08250, 0.09586, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.08250, -0.10914, 0.20160
-    max: -0.06600, -0.07509, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.08250, 0.07509, 0.20160
-    max: -0.06600, 0.10914, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.06600, -0.11870, 0.20160
-    max: -0.04950, -0.08841, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.06600, 0.08841, 0.20160
-    max: -0.04950, 0.11870, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.04950, -0.12539, 0.20160
-    max: -0.03300, -0.09721, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.04950, 0.09721, 0.20160
-    max: -0.03300, 0.12539, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.03300, -0.12966, 0.20160
-    max: -0.01650, -0.10266, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.03300, 0.10266, 0.20160
-    max: -0.01650, 0.12966, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.01650, -0.13174, 0.20160
-    max: 0.00000, -0.10528, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: -0.01650, 0.10528, 0.20160
-    max: 0.00000, 0.13174, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.00000, -0.13174, 0.20160
-    max: 0.01650, -0.10528, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.00000, 0.10528, 0.20160
-    max: 0.01650, 0.13174, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.01650, -0.12966, 0.20160
-    max: 0.03300, -0.10266, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.01650, 0.10266, 0.20160
-    max: 0.03300, 0.12966, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.03300, -0.12539, 0.20160
-    max: 0.04950, -0.09721, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.03300, 0.09721, 0.20160
-    max: 0.04950, 0.12539, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.04950, -0.11870, 0.20160
-    max: 0.06600, -0.08841, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.04950, 0.08841, 0.20160
-    max: 0.06600, 0.11870, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.06600, -0.10914, 0.20160
-    max: 0.08250, -0.07509, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.06600, 0.07509, 0.20160
-    max: 0.08250, 0.10914, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.08250, -0.09586, 0.20160
-    max: 0.09900, -0.05400, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.08250, 0.05400, 0.20160
-    max: 0.09900, 0.09586, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.09900, -0.07695, 0.20160
-    max: 0.11550, 0.07695, 0.24000
-  - label: hollow curved planter rim
-    color: '#525252'
-    min: 0.11550, -0.04593, 0.20160
-    max: 0.13200, 0.04593, 0.24000
+  - color: '#525252'
+    label: hollow curved planter rim 01
+    min: 0.1155, -0.0346641, 0.2016
+    max: 0.1275022, 0.0346641, 0.24
+    yaw: 0.0
+  - color: '#525252'
+    label: hollow curved planter rim 02
+    min: 0.0992219, 0.0260864, 0.2016
+    max: 0.1112241, 0.0954147, 0.24
+    yaw: 30.0
+  - color: '#525252'
+    label: hollow curved planter rim 03
+    min: 0.0547494, 0.0705589, 0.2016
+    max: 0.0667517, 0.1398872, 0.24
+    yaw: 60.0
+  - color: '#525252'
+    label: hollow curved planter rim 04
+    min: -0.0060011, 0.086837, 0.2016
+    max: 0.0060011, 0.1561652, 0.24
+    yaw: 90.0
+  - color: '#525252'
+    label: hollow curved planter rim 05
+    min: -0.0667517, 0.0705589, 0.2016
+    max: -0.0547494, 0.1398872, 0.24
+    yaw: 120.0
+  - color: '#525252'
+    label: hollow curved planter rim 06
+    min: -0.1112241, 0.0260864, 0.2016
+    max: -0.0992219, 0.0954147, 0.24
+    yaw: 150.0
+  - color: '#525252'
+    label: hollow curved planter rim 07
+    min: -0.1275022, -0.0346641, 0.2016
+    max: -0.1155, 0.0346641, 0.24
+    yaw: 180.0
+  - color: '#525252'
+    label: hollow curved planter rim 08
+    min: -0.1112241, -0.0954147, 0.2016
+    max: -0.0992219, -0.0260864, 0.24
+    yaw: 210.0
+  - color: '#525252'
+    label: hollow curved planter rim 09
+    min: -0.0667517, -0.1398872, 0.2016
+    max: -0.0547494, -0.0705589, 0.24
+    yaw: 240.0
+  - color: '#525252'
+    label: hollow curved planter rim 10
+    min: -0.0060011, -0.1561652, 0.2016
+    max: 0.0060011, -0.086837, 0.24
+    yaw: 270.0
+  - color: '#525252'
+    label: hollow curved planter rim 11
+    min: 0.0547494, -0.1398872, 0.2016
+    max: 0.0667517, -0.0705589, 0.24
+    yaw: 300.0
+  - color: '#525252'
+    label: hollow curved planter rim 12
+    min: 0.0992219, -0.0954147, 0.2016
+    max: 0.1112241, -0.0260864, 0.24
+    yaw: 330.0
   - label: recessed soil
     min: -0.10428, -0.10428, 0.23232
     max: 0.10428, 0.10428, 0.23732
@@ -3747,11 +3477,6 @@
     color: '#39452A'
     min: -0.10953, -0.10790, 0.86240
     max: -0.05673, -0.05510, 0.93427
-    shape: Ellipsoid
-  - label: continuous tapered leaf blade
-    color: '#50613C'
-    min: -0.05707, -0.03057, 0.93573
-    max: -0.00427, 0.02223, 1.00760
     shape: Ellipsoid
   - label: continuous tapered leaf blade
     color: '#50613C'
@@ -4039,118 +3764,66 @@
     max: 0.18000, 0.18000, 0.20915
     color: '#5A4A36'
     shape: CylinderZ
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.20000, -0.06960, 0.19740
-    max: -0.17500, 0.06960, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.17500, -0.11659, 0.19740
-    max: -0.15000, 0.11659, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.15000, -0.14524, 0.19740
-    max: -0.12500, -0.08182, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.15000, 0.08182, 0.19740
-    max: -0.12500, 0.14524, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.12500, -0.16536, 0.19740
-    max: -0.10000, -0.11377, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.12500, 0.11377, 0.19740
-    max: -0.10000, 0.16536, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.10000, -0.17984, 0.19740
-    max: -0.07500, -0.13395, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.10000, 0.13395, 0.19740
-    max: -0.07500, 0.17984, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.07500, -0.18998, 0.19740
-    max: -0.05000, -0.14729, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.07500, 0.14729, 0.19740
-    max: -0.05000, 0.18998, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.05000, -0.19645, 0.19740
-    max: -0.02500, -0.15554, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.05000, 0.15554, 0.19740
-    max: -0.02500, 0.19645, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.02500, -0.19961, 0.19740
-    max: 0.00000, -0.15951, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: -0.02500, 0.15951, 0.19740
-    max: 0.00000, 0.19961, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.00000, -0.19961, 0.19740
-    max: 0.02500, -0.15951, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.00000, 0.15951, 0.19740
-    max: 0.02500, 0.19961, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.02500, -0.19645, 0.19740
-    max: 0.05000, -0.15554, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.02500, 0.15554, 0.19740
-    max: 0.05000, 0.19645, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.05000, -0.18998, 0.19740
-    max: 0.07500, -0.14729, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.05000, 0.14729, 0.19740
-    max: 0.07500, 0.18998, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.07500, -0.17984, 0.19740
-    max: 0.10000, -0.13395, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.07500, 0.13395, 0.19740
-    max: 0.10000, 0.17984, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.10000, -0.16536, 0.19740
-    max: 0.12500, -0.11377, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.10000, 0.11377, 0.19740
-    max: 0.12500, 0.16536, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.12500, -0.14524, 0.19740
-    max: 0.15000, -0.08182, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.12500, 0.08182, 0.19740
-    max: 0.15000, 0.14524, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.15000, -0.11659, 0.19740
-    max: 0.17500, 0.11659, 0.23500
-  - label: hollow curved planter rim
-    color: '#6A5641'
-    min: 0.17500, -0.06960, 0.19740
-    max: 0.20000, 0.06960, 0.23500
+  - color: '#6A5641'
+    label: hollow curved planter rim 01
+    min: 0.175, -0.0522638, 0.1974
+    max: 0.1931852, 0.0522638, 0.235
+    yaw: 0.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 02
+    min: 0.1503363, 0.0397825, 0.1974
+    max: 0.1685214, 0.1443101, 0.235
+    yaw: 30.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 03
+    min: 0.0829537, 0.107165, 0.1974
+    max: 0.1011389, 0.2116927, 0.235
+    yaw: 60.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 04
+    min: -0.0090926, 0.1318288, 0.1974
+    max: 0.0090926, 0.2363564, 0.235
+    yaw: 90.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 05
+    min: -0.1011389, 0.107165, 0.1974
+    max: -0.0829537, 0.2116927, 0.235
+    yaw: 120.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 06
+    min: -0.1685214, 0.0397825, 0.1974
+    max: -0.1503363, 0.1443101, 0.235
+    yaw: 150.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 07
+    min: -0.1931852, -0.0522638, 0.1974
+    max: -0.175, 0.0522638, 0.235
+    yaw: 180.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 08
+    min: -0.1685214, -0.1443101, 0.1974
+    max: -0.1503363, -0.0397825, 0.235
+    yaw: 210.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 09
+    min: -0.1011389, -0.2116927, 0.1974
+    max: -0.0829537, -0.107165, 0.235
+    yaw: 240.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 10
+    min: -0.0090926, -0.2363564, 0.1974
+    max: 0.0090926, -0.1318288, 0.235
+    yaw: 270.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 11
+    min: 0.0829537, -0.2116927, 0.1974
+    max: 0.1011389, -0.107165, 0.235
+    yaw: 300.0
+  - color: '#6A5641'
+    label: hollow curved planter rim 12
+    min: 0.1503363, -0.1443101, 0.1974
+    max: 0.1685214, -0.0397825, 0.235
+    yaw: 330.0
   - label: recessed soil
     min: -0.15800, -0.15800, 0.22748
     max: 0.15800, 0.15800, 0.23248
@@ -4514,118 +4187,66 @@
     max: 0.16650, 0.16650, 0.23585
     color: '#594742'
     shape: CylinderZ
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.18500, -0.06438, 0.22260
-    max: -0.16187, 0.06438, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.16187, -0.10785, 0.22260
-    max: -0.13875, 0.10785, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.13875, -0.13434, 0.22260
-    max: -0.11562, -0.07568, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.13875, 0.07568, 0.22260
-    max: -0.11562, 0.13434, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.11563, -0.15296, 0.22260
-    max: -0.09250, -0.10524, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.11563, 0.10524, 0.22260
-    max: -0.09250, 0.15296, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.09250, -0.16636, 0.22260
-    max: -0.06937, -0.12391, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.09250, 0.12391, 0.22260
-    max: -0.06937, 0.16636, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.06937, -0.17573, 0.22260
-    max: -0.04625, -0.13624, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.06937, 0.13624, 0.22260
-    max: -0.04625, 0.17573, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.04625, -0.18172, 0.22260
-    max: -0.02313, -0.14388, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.04625, 0.14388, 0.22260
-    max: -0.02313, 0.18172, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.02313, -0.18464, 0.22260
-    max: -0.00000, -0.14755, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: -0.02313, 0.14755, 0.22260
-    max: -0.00000, 0.18464, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.00000, -0.18464, 0.22260
-    max: 0.02312, -0.14755, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.00000, 0.14755, 0.22260
-    max: 0.02312, 0.18464, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.02313, -0.18172, 0.22260
-    max: 0.04625, -0.14388, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.02313, 0.14388, 0.22260
-    max: 0.04625, 0.18172, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.04625, -0.17573, 0.22260
-    max: 0.06938, -0.13624, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.04625, 0.13624, 0.22260
-    max: 0.06938, 0.17573, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.06938, -0.16636, 0.22260
-    max: 0.09250, -0.12391, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.06938, 0.12391, 0.22260
-    max: 0.09250, 0.16636, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.09250, -0.15296, 0.22260
-    max: 0.11562, -0.10524, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.09250, 0.10524, 0.22260
-    max: 0.11562, 0.15296, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.11562, -0.13434, 0.22260
-    max: 0.13875, -0.07568, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.11562, 0.07568, 0.22260
-    max: 0.13875, 0.13434, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.13875, -0.10785, 0.22260
-    max: 0.16187, 0.10785, 0.26500
-  - label: hollow curved planter rim
-    color: '#725852'
-    min: 0.16187, -0.06438, 0.22260
-    max: 0.18500, 0.06438, 0.26500
+  - color: '#725852'
+    label: hollow curved planter rim 01
+    min: 0.16188, -0.0483815, 0.2226
+    max: 0.1786963, 0.0483815, 0.265
+    yaw: 0.0
+  - color: '#725852'
+    label: hollow curved planter rim 02
+    min: 0.1390657, 0.0367625, 0.2226
+    max: 0.155882, 0.1335256, 0.265
+    yaw: 30.0
+  - color: '#725852'
+    label: hollow curved planter rim 03
+    min: 0.0767359, 0.0990923, 0.2226
+    max: 0.0935522, 0.1958554, 0.265
+    yaw: 60.0
+  - color: '#725852'
+    label: hollow curved planter rim 04
+    min: -0.0084081, 0.1219066, 0.2226
+    max: 0.0084081, 0.2186697, 0.265
+    yaw: 90.0
+  - color: '#725852'
+    label: hollow curved planter rim 05
+    min: -0.0935522, 0.0990923, 0.2226
+    max: -0.0767359, 0.1958554, 0.265
+    yaw: 120.0
+  - color: '#725852'
+    label: hollow curved planter rim 06
+    min: -0.155882, 0.0367625, 0.2226
+    max: -0.1390657, 0.1335256, 0.265
+    yaw: 150.0
+  - color: '#725852'
+    label: hollow curved planter rim 07
+    min: -0.1786963, -0.0483815, 0.2226
+    max: -0.16188, 0.0483815, 0.265
+    yaw: 180.0
+  - color: '#725852'
+    label: hollow curved planter rim 08
+    min: -0.155882, -0.1335256, 0.2226
+    max: -0.1390657, -0.0367625, 0.265
+    yaw: 210.0
+  - color: '#725852'
+    label: hollow curved planter rim 09
+    min: -0.0935522, -0.1958554, 0.2226
+    max: -0.0767359, -0.0990923, 0.265
+    yaw: 240.0
+  - color: '#725852'
+    label: hollow curved planter rim 10
+    min: -0.0084081, -0.2186697, 0.2226
+    max: 0.0084081, -0.1219066, 0.265
+    yaw: 270.0
+  - color: '#725852'
+    label: hollow curved planter rim 11
+    min: 0.0767359, -0.1958554, 0.2226
+    max: 0.0935522, -0.0990923, 0.265
+    yaw: 300.0
+  - color: '#725852'
+    label: hollow curved planter rim 12
+    min: 0.1390657, -0.1335256, 0.2226
+    max: 0.155882, -0.0367625, 0.265
+    yaw: 330.0
   - label: recessed soil
     min: -0.14615, -0.14615, 0.25652
     max: 0.14615, 0.14615, 0.26152
@@ -4904,118 +4525,66 @@
     max: 0.10800, 0.10800, 0.20025
     color: '#3D3935'
     shape: CylinderZ
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.12000, -0.04176, 0.18900
-    max: -0.10500, 0.04176, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.10500, -0.06996, 0.18900
-    max: -0.09000, 0.06996, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.09000, -0.08714, 0.18900
-    max: -0.07500, -0.04909, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.09000, 0.04909, 0.18900
-    max: -0.07500, 0.08714, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.07500, -0.09922, 0.18900
-    max: -0.06000, -0.06826, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.07500, 0.06826, 0.18900
-    max: -0.06000, 0.09922, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.06000, -0.10791, 0.18900
-    max: -0.04500, -0.08037, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.06000, 0.08037, 0.18900
-    max: -0.04500, 0.10791, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.04500, -0.11399, 0.18900
-    max: -0.03000, -0.08837, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.04500, 0.08837, 0.18900
-    max: -0.03000, 0.11399, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.03000, -0.11787, 0.18900
-    max: -0.01500, -0.09333, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.03000, 0.09333, 0.18900
-    max: -0.01500, 0.11787, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.01500, -0.11977, 0.18900
-    max: 0.00000, -0.09571, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: -0.01500, 0.09571, 0.18900
-    max: 0.00000, 0.11977, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.00000, -0.11977, 0.18900
-    max: 0.01500, -0.09571, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.00000, 0.09571, 0.18900
-    max: 0.01500, 0.11977, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.01500, -0.11787, 0.18900
-    max: 0.03000, -0.09333, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.01500, 0.09333, 0.18900
-    max: 0.03000, 0.11787, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.03000, -0.11399, 0.18900
-    max: 0.04500, -0.08837, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.03000, 0.08837, 0.18900
-    max: 0.04500, 0.11399, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.04500, -0.10791, 0.18900
-    max: 0.06000, -0.08037, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.04500, 0.08037, 0.18900
-    max: 0.06000, 0.10791, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.06000, -0.09922, 0.18900
-    max: 0.07500, -0.06826, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.06000, 0.06826, 0.18900
-    max: 0.07500, 0.09922, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.07500, -0.08714, 0.18900
-    max: 0.09000, -0.04909, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.07500, 0.04909, 0.18900
-    max: 0.09000, 0.08714, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.09000, -0.06996, 0.18900
-    max: 0.10500, 0.06996, 0.22500
-  - label: hollow curved planter rim
-    color: '#59534D'
-    min: 0.10500, -0.04176, 0.18900
-    max: 0.12000, 0.04176, 0.22500
+  - color: '#59534D'
+    label: hollow curved planter rim 01
+    min: 0.105, -0.0315583, 0.189
+    max: 0.1159111, 0.0315583, 0.225
+    yaw: 0.0
+  - color: '#59534D'
+    label: hollow curved planter rim 02
+    min: 0.0902018, 0.0236695, 0.189
+    max: 0.1011129, 0.0867861, 0.225
+    yaw: 30.0
+  - color: '#59534D'
+    label: hollow curved planter rim 03
+    min: 0.0497722, 0.064099, 0.189
+    max: 0.0606833, 0.1272156, 0.225
+    yaw: 60.0
+  - color: '#59534D'
+    label: hollow curved planter rim 04
+    min: -0.0054555, 0.0788973, 0.189
+    max: 0.0054555, 0.1420138, 0.225
+    yaw: 90.0
+  - color: '#59534D'
+    label: hollow curved planter rim 05
+    min: -0.0606833, 0.064099, 0.189
+    max: -0.0497722, 0.1272156, 0.225
+    yaw: 120.0
+  - color: '#59534D'
+    label: hollow curved planter rim 06
+    min: -0.1011129, 0.0236695, 0.189
+    max: -0.0902018, 0.0867861, 0.225
+    yaw: 150.0
+  - color: '#59534D'
+    label: hollow curved planter rim 07
+    min: -0.1159111, -0.0315583, 0.189
+    max: -0.105, 0.0315583, 0.225
+    yaw: 180.0
+  - color: '#59534D'
+    label: hollow curved planter rim 08
+    min: -0.1011129, -0.0867861, 0.189
+    max: -0.0902018, -0.0236695, 0.225
+    yaw: 210.0
+  - color: '#59534D'
+    label: hollow curved planter rim 09
+    min: -0.0606833, -0.1272156, 0.189
+    max: -0.0497722, -0.064099, 0.225
+    yaw: 240.0
+  - color: '#59534D'
+    label: hollow curved planter rim 10
+    min: -0.0054555, -0.1420138, 0.189
+    max: 0.0054555, -0.0788973, 0.225
+    yaw: 270.0
+  - color: '#59534D'
+    label: hollow curved planter rim 11
+    min: 0.0497722, -0.1272156, 0.189
+    max: 0.0606833, -0.064099, 0.225
+    yaw: 300.0
+  - color: '#59534D'
+    label: hollow curved planter rim 12
+    min: 0.0902018, -0.0867861, 0.189
+    max: 0.1011129, -0.0236695, 0.225
+    yaw: 330.0
   - label: recessed soil
     min: -0.09480, -0.09480, 0.21780
     max: 0.09480, 0.09480, 0.22280
@@ -5189,118 +4758,66 @@
     max: 0.17550, 0.17550, 0.22250
     color: '#594B45'
     shape: CylinderZ
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.19500, -0.06786, 0.21000
-    max: -0.17062, 0.06786, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.17062, -0.11368, 0.21000
-    max: -0.14625, 0.11368, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.14625, -0.14161, 0.21000
-    max: -0.12187, -0.07977, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.14625, 0.07977, 0.21000
-    max: -0.12187, 0.14161, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.12188, -0.16123, 0.21000
-    max: -0.09750, -0.11093, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.12188, 0.11093, 0.21000
-    max: -0.09750, 0.16123, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.09750, -0.17535, 0.21000
-    max: -0.07312, -0.13061, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.09750, 0.13061, 0.21000
-    max: -0.07312, 0.17535, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.07312, -0.18523, 0.21000
-    max: -0.04875, -0.14361, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.07312, 0.14361, 0.21000
-    max: -0.04875, 0.18523, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.04875, -0.19154, 0.21000
-    max: -0.02438, -0.15165, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.04875, 0.15165, 0.21000
-    max: -0.02438, 0.19154, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.02438, -0.19462, 0.21000
-    max: -0.00000, -0.15552, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: -0.02438, 0.15552, 0.21000
-    max: -0.00000, 0.19462, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.00000, -0.19462, 0.21000
-    max: 0.02438, -0.15552, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.00000, 0.15552, 0.21000
-    max: 0.02438, 0.19462, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.02438, -0.19154, 0.21000
-    max: 0.04875, -0.15165, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.02438, 0.15165, 0.21000
-    max: 0.04875, 0.19154, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.04875, -0.18523, 0.21000
-    max: 0.07313, -0.14361, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.04875, 0.14361, 0.21000
-    max: 0.07313, 0.18523, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.07312, -0.17535, 0.21000
-    max: 0.09750, -0.13061, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.07312, 0.13061, 0.21000
-    max: 0.09750, 0.17535, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.09750, -0.16123, 0.21000
-    max: 0.12187, -0.11093, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.09750, 0.11093, 0.21000
-    max: 0.12187, 0.16123, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.12188, -0.14161, 0.21000
-    max: 0.14625, -0.07977, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.12188, 0.07977, 0.21000
-    max: 0.14625, 0.14161, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.14625, -0.11368, 0.21000
-    max: 0.17062, 0.11368, 0.25000
-  - label: hollow curved planter rim
-    color: '#89746C'
-    min: 0.17063, -0.06786, 0.21000
-    max: 0.19500, 0.06786, 0.25000
+  - color: '#89746C'
+    label: hollow curved planter rim 01
+    min: 0.17063, -0.0509697, 0.21
+    max: 0.1883555, 0.0509697, 0.25
+    yaw: 0.0
+  - color: '#89746C'
+    label: hollow curved planter rim 02
+    min: 0.1465825, 0.0387767, 0.21
+    max: 0.1643081, 0.1407161, 0.25
+    yaw: 30.0
+  - color: '#89746C'
+    label: hollow curved planter rim 03
+    min: 0.0808836, 0.1044756, 0.21
+    max: 0.0986092, 0.206415, 0.25
+    yaw: 60.0
+  - color: '#89746C'
+    label: hollow curved planter rim 04
+    min: -0.0088628, 0.1285231, 0.21
+    max: 0.0088628, 0.2304625, 0.25
+    yaw: 90.0
+  - color: '#89746C'
+    label: hollow curved planter rim 05
+    min: -0.0986092, 0.1044756, 0.21
+    max: -0.0808836, 0.206415, 0.25
+    yaw: 120.0
+  - color: '#89746C'
+    label: hollow curved planter rim 06
+    min: -0.1643081, 0.0387767, 0.21
+    max: -0.1465825, 0.1407161, 0.25
+    yaw: 150.0
+  - color: '#89746C'
+    label: hollow curved planter rim 07
+    min: -0.1883555, -0.0509697, 0.21
+    max: -0.17063, 0.0509697, 0.25
+    yaw: 180.0
+  - color: '#89746C'
+    label: hollow curved planter rim 08
+    min: -0.1643081, -0.1407161, 0.21
+    max: -0.1465825, -0.0387767, 0.25
+    yaw: 210.0
+  - color: '#89746C'
+    label: hollow curved planter rim 09
+    min: -0.0986092, -0.206415, 0.21
+    max: -0.0808836, -0.1044756, 0.25
+    yaw: 240.0
+  - color: '#89746C'
+    label: hollow curved planter rim 10
+    min: -0.0088628, -0.2304625, 0.21
+    max: 0.0088628, -0.1285231, 0.25
+    yaw: 270.0
+  - color: '#89746C'
+    label: hollow curved planter rim 11
+    min: 0.0808836, -0.206415, 0.21
+    max: 0.0986092, -0.1044756, 0.25
+    yaw: 300.0
+  - color: '#89746C'
+    label: hollow curved planter rim 12
+    min: 0.1465825, -0.1407161, 0.21
+    max: 0.1643081, -0.0387767, 0.25
+    yaw: 330.0
   - label: recessed soil
     min: -0.15405, -0.15405, 0.24200
     max: 0.15405, 0.15405, 0.24700

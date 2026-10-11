@@ -3738,8 +3738,7 @@
 - type: cmu3DModel
   id: CMU3DResinDoor
   label: Resin door
-  sourcePrototypes:
-  - DoorXenoResin
+  sourcePrototypes: []
   status: draft
   description: Irregular resin arch, folded membrane and oblique raised sinew following the source palette. Open
     membrane retracts into the perimeter. Four direction frames inspected; sculptural depth, rear surface and height

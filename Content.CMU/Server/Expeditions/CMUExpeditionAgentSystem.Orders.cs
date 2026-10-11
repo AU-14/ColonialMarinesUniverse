@@ -1,5 +1,8 @@
 using Content.Shared.NPC.Components;
+using Content.Shared.NPC.Prototypes;
 using Content.Shared.CMU14.Expeditions;
+using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Map;
 using System.Linq;
 
@@ -7,16 +10,56 @@ namespace Content.Server.CMU14.Expeditions;
 
 public sealed partial class CMUExpeditionAgentSystem
 {
+    private const string AllHostileFaction = "AllHostile";
+
+    // In expedition target orders this is an engagement mode, not a requirement
+    // that the enemy belongs to the native AllHostile faction.
+    private static bool TargetsAllHostiles(CMUExpeditionAgentComponent agent) =>
+        agent.TargetFactions.Contains(AllHostileFaction);
+
+    private bool ProtectedSquadmate(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid other) =>
+        agent.Squad != 0 && TryComp<CMUExpeditionAgentComponent>(other, out var buddy) &&
+        buddy.Squad == agent.Squad && Transform(uid).MapID == Transform(other).MapID;
+
+    public bool TryParseFactionOrders(string value, bool targets, out string[] factions, out string invalid)
+    {
+        factions = Array.Empty<string>();
+        invalid = "";
+        if (value.Trim().Equals("default", StringComparison.OrdinalIgnoreCase))
+            return true;
+        var entries = value.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        for (var i = 0; i < entries.Length; i++)
+        {
+            if (targets && (entries[i].Equals(AllHostileFaction, StringComparison.OrdinalIgnoreCase) ||
+                            entries[i].Equals("allhostiles", StringComparison.OrdinalIgnoreCase)))
+                entries[i] = AllHostileFaction;
+            if (ProtoMan.HasIndex<NpcFactionPrototype>(entries[i]))
+                continue;
+            invalid = entries[i];
+            return false;
+        }
+        factions = entries.Distinct().ToArray();
+        return true;
+    }
+
     private bool IsFriendly(EntityUid uid, EntityUid other)
     {
         if (uid == other)
             return true;
-        if (TryComp<CMUExpeditionAgentComponent>(uid, out var agent) && TryComp<NpcFactionMemberComponent>(other, out var factions))
+        if (TryComp<CMUExpeditionAgentComponent>(uid, out var agent))
         {
-            if (factions.Factions.Any(f => agent.FriendlyFactions.Contains(f.Id)))
+            var allHostile = TargetsAllHostiles(agent);
+            if (allHostile && (ProtectedSquadmate(uid, agent, other) || _factions.IsIgnored(uid, other)))
                 return true;
-            if (factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)))
-                return false;
+            if (VehicleBody(other))
+                return VehicleDisposition(uid, agent, other) < 0;
+            if (TryComp<NpcFactionMemberComponent>(other, out var factions))
+            {
+                if (factions.Factions.Any(f => agent.FriendlyFactions.Contains(f.Id)))
+                    return true;
+                if (!allHostile && factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)))
+                    return false;
+            }
         }
         return _factions.IsEntityFriendly(uid, other);
     }
@@ -24,38 +67,95 @@ public sealed partial class CMUExpeditionAgentSystem
     private IEnumerable<EntityUid> ExpeditionHostiles(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
         if (agent.TargetFactions.Count == 0)
-            return _factions.GetNearbyHostiles(uid, agent.DetectionRange).Where(other => !IsFriendly(uid, other));
+            return _factions.GetNearbyHostiles(uid, agent.DetectionRange).Where(other => !IsFriendly(uid, other)).Union(HostileVehicles(uid, agent));
         var nearby = new HashSet<EntityUid>();
         var location = _transform.GetMapCoordinates(uid);
         _lookup.GetEntitiesInRange(location.MapId, location.Position, agent.DetectionRange, nearby);
-        return nearby.Where(other => other != uid && TryComp<NpcFactionMemberComponent>(other, out var factions) &&
-            factions.Factions.Any(f => agent.TargetFactions.Contains(f.Id)) && !IsFriendly(uid, other));
+        return nearby.Where(other => !VehicleBody(other) && AcceptOrderedContact(uid, agent, other))
+            .Union(HostileVehicles(uid, agent));
     }
 
-    private bool AcceptOrderedContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target) =>
-        !IsFriendly(uid, target) && (agent.TargetFactions.Count == 0 ||
-            TryComp<NpcFactionMemberComponent>(target, out var member) && member.Factions.Any(f => agent.TargetFactions.Contains(f.Id)));
+    private bool AcceptOrderedContact(EntityUid uid, CMUExpeditionAgentComponent agent, EntityUid target)
+    {
+        if (!Exists(target) || IsFriendly(uid, target))
+            return false;
+        if (VehicleBody(target))
+            return ArmedVehicle(target) && VehicleDisposition(uid, agent, target) > 0;
+        var orderedFaction = agent.TargetFactions.Count > 0 &&
+            TryComp<NpcFactionMemberComponent>(target, out var member) &&
+            member.Factions.Any(f => agent.TargetFactions.Contains(f.Id));
+        if (TargetsAllHostiles(agent))
+            return _mobs.IsAlive(target) && (orderedFaction || NativeHostile(uid, target) || HasEquippedWeapon(target));
+        if (agent.TargetFactions.Count > 0)
+            return orderedFaction;
+        // Receiving another squad's report does not make its neutral contacts hostile.
+        // Match native acquisition, including per-entity retaliation and ignore rules.
+        return NativeHostile(uid, target);
+    }
 
-    public bool OrderPosition(EntityUid uid, EntityCoordinates destination, bool entrench)
+    private bool NativeHostile(EntityUid uid, EntityUid target) =>
+        !_factions.IsIgnored(uid, target) &&
+            (TryComp<NpcFactionMemberComponent>(uid, out var observer) &&
+                TryComp<NpcFactionMemberComponent>(target, out var contact) && observer.HostileFactions.Overlaps(contact.Factions) ||
+             _factions.GetHostiles(uid).Contains(target));
+
+    // Fists and animal bites are innate melee components, not evidence that a neutral
+    // is armed. Inspect held items, never hidden inventory, for non-hostile contacts.
+    private bool HasEquippedWeapon(EntityUid target) => HasComp<GunComponent>(target) ||
+        _hands.EnumerateHeld(target).Any(item => HasComp<GunComponent>(item) || HasComp<MeleeWeaponComponent>(item));
+
+    public bool OrderPosition(EntityUid uid, EntityCoordinates destination, bool entrench, Direction? facing = null)
     {
         if (!TryComp<CMUExpeditionAgentComponent>(uid, out var agent) ||
             !TrySquadCoordinates(destination, out destination) ||
-            Transform(uid).MapUid != Transform(destination.EntityId).MapUid || !ValidOrderPoint(uid, destination))
+            !ValidOrderPoint(uid, destination))
             return false;
         ResetOrders(uid, agent);
         agent.Patrolling = false;
+        agent.HoldPosition = entrench;
         agent.OrderedDestination = destination;
-        agent.Entrench = entrench;
+        agent.OrderRally = destination;
+        agent.Entrench = entrench && !HasComp<CMUExpeditionMedicComponent>(uid);
+        agent.GuardAnchor = entrench ? destination : null;
+        agent.GuardFacing = facing == null ? null :
+            (facing.Value.ToAngle() - _transform.GetWorldRotation(destination.EntityId)).GetCardinalDir();
+        agent.NextWork = _timing.CurTime + TimeSpan.FromSeconds(3);
+        agent.FortificationDecision = agent.Entrench ? "awaiting-guard-position" : "not-ordered";
         agent.Target = null;
         agent.LastSeen = null;
+        agent.PendingWeapon = null;
         return true;
     }
 
     public void ResetOrders(EntityUid uid, CMUExpeditionAgentComponent agent)
     {
-        CancelWork(uid, agent);
-        CancelPlan(uid, agent, false);
-        CancelTreatment(agent);
+        ClearAssaultOrder(agent);
+        ResetSquadOperations(uid, agent);
+        agent.AutoPatrol = false;
+        agent.AutoPatrolAnchor = null;
+        agent.HoldPosition = false;
+        agent.SupportSquadRoot = null;
+        agent.SupportUntil = TimeSpan.Zero;
+        agent.OperationsDecision = "local-orders";
+        CancelAgentActivity(uid, agent, "explicit-command");
+        agent.TravelGoal = null;
+        agent.TravelPortal = null;
+        agent.PortalUntil = TimeSpan.Zero;
+        agent.FailedPortals.Clear();
+        agent.HeardPoint = null;
+        agent.SupplySource = null;
+        agent.DeliveryRecipient = null;
+        agent.DeliveryPoint = null;
+        agent.FailedDeliveries.Clear();
+        agent.NextRegroupRoute = TimeSpan.Zero;
+        agent.DutyUntil = TimeSpan.Zero;
+        Decision(agent, "orders-reset", "explicit-command");
+        agent.FlashPosition = null;
+        agent.Entrench = false;
+        agent.GuardFacing = null;
+        agent.GuardAnchor = null;
+        agent.FortificationPoint = null;
+        agent.FortificationDecision = "not-ordered";
         agent.Target = null;
         agent.LastSeen = null;
         agent.RadioTarget = null;
@@ -67,8 +167,11 @@ public sealed partial class CMUExpeditionAgentSystem
         agent.OrderRoute.Clear();
         agent.NextOrderRoute = TimeSpan.Zero;
         agent.OrderBlocked = false;
-        ClearCover(agent);
-        _steering.Unregister(uid);
+        agent.OrderBlockedSince = null;
+        agent.LastOrderProgressPosition = null;
+        agent.OrderRally = null;
+        ResetTravelCohesion(agent);
+        ClearThreatAssessment(agent);
         agent.State = CMUExpeditionAgentState.Guard;
     }
 

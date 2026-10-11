@@ -131,3 +131,9 @@ Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/1574b8777d8b8237
 License: CC-BY-SA-3.0
 
 Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/f7b9367cb5c083a8c052a40dece9417031e28ffe/icons/obj/items/vialbox.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_lefthand.dmi
+
+## Beaker simplification (2026-10-09)
+
+Current beaker YAML and matching GLBs replace sixteen-segment wall, mouth and foot rings with eight joined facets. The ordinary empty beaker falls from 57 to 33 parts, the large one from 58 to 34, and the high-capacity one from 55 to 31. Their lid studies use the same simplified vessels. The hollow apertures, translucent floors, graduation artwork and original material colors are retained.
+
+Other small medical props are unchanged. Source bindings, draft status, existing live fill/lid limitations and attribution/license terms above remain applicable. See [comparison and measurements](Reviews/ContainerSimplification/README.md).

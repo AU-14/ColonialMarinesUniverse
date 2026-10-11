@@ -12,7 +12,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared.CMU14.Util;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.CMU14.util;
-using Content.Shared.CMU14.util;
+
 using Content.Shared.CMU14.Yautja;
 using Content.Shared.CharacterInfo;
 using Content.Shared.Inventory;
@@ -313,7 +313,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         }
 
         if (!string.IsNullOrWhiteSpace(platoon.Name))
-            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", platoon.Name))); // RuMC edit
+            lines.Add(Loc.GetString("lore-primer-platoon-label", ("info", Loc.GetString(platoon.Name)))); // CMU14: Hardcode localization
     }
 
     // cmu edit start

@@ -18,7 +18,7 @@ namespace Content.IntegrationTests.CMU14.Medical.Hospital;
 [TestFixture]
 public sealed class HospitalFtlRoundTripTest
 {
-    [TestCase(false, false), TestCase(true, false), TestCase(false, true), Category("HospitalTransport"), Timeout(180000)]
+    [TestCase(false, false), TestCase(true, false), TestCase(false, true), Category("HospitalTransport"), CancelAfter(180000)]
     public async Task RealDeliveryAndPickupRetryCooldownAndSettleOnceAfterReturning(bool staleReservation, bool differentDeck)
     {
         await using var pair = await PoolManager.GetServerClient();

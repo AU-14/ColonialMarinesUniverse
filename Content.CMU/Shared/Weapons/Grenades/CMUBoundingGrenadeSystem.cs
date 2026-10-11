@@ -11,7 +11,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Weapons.Grenades;
 
-public sealed class CMUBoundingGrenadeSystem : EntitySystem
+public sealed partial class CMUBoundingGrenadeSystem : EntitySystem
 {
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private INetManager _net = default!;

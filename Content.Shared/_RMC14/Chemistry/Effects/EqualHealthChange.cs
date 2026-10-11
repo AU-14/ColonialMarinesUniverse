@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -59,8 +59,8 @@ public sealed partial class EqualHealthChange : EntityEffectBase<EqualHealthChan
 public sealed partial class EqualHealthChangeEntityEffectSystem
     : EntityEffectSystem<MetaDataComponent, EqualHealthChange>
 {
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
 
     protected override void Effect(Entity<MetaDataComponent> entity, ref EntityEffectEvent<EqualHealthChange> args)
     {

@@ -82,7 +82,10 @@ public sealed partial class VehicleEnterDoAfterEvent : SimpleDoAfterEvent
 }
 
 [Serializable, NetSerializable]
-public sealed partial class VehicleExitDoAfterEvent : SimpleDoAfterEvent;
+public sealed partial class VehicleExitDoAfterEvent : SimpleDoAfterEvent
+{
+    public override DoAfterEvent Clone() => new VehicleExitDoAfterEvent();
+}
 
 [ByRefEvent]
 public record struct VehicleEntryAttemptEvent(EntityUid User, int EntryIndex)

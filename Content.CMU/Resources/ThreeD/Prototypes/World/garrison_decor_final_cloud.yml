@@ -777,7 +777,7 @@
     surfaceAxis: XZ
   - label: left engraved remembrance plaque contour backing 0
     min: -1.5001, -0.175, -0.0001
-    max: -0.46865, -0.151, 0.65635
+    max: 0.5001, -0.151, 0.65635
     color: '#3B4140'
   - label: left engraved remembrance plaque original face
     min: -1.5, -0.17575, 0.0
@@ -785,10 +785,6 @@
     color: '#FFFFFF'
     surface: CMU3DDecorFinalCloudArt015
     surfaceAxis: XZ
-  - label: right engraved remembrance plaque contour backing 0
-    min: -0.46885, -0.175, -0.0001
-    max: 0.5001, -0.151, 0.65635
-    color: '#3B4140'
   - label: right engraved remembrance plaque original face
     min: -0.46875, -0.17575, 0.0
     max: 0.5, -0.17475, 0.65625

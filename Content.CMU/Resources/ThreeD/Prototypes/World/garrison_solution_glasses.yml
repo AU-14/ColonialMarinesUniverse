@@ -3405,16 +3405,12 @@
         surface: CMU3DSolutionGlassSurface3423
         surfaceAxis: XZ
       - label: source ice cube 1
-        min: -0.005000000, -0.037000000, 0.055500000
-        max: 0.075000000, 0.053000000, 0.135500000
+        min: -0.005, -0.037, 0.0555
+        max: 0.075, 0.053, 0.1915
         color: '#5BD4EEFF'
       - label: source ice cube 2
         min: -0.086000000, -0.037000000, 0.083500000
         max: -0.006000000, 0.053000000, 0.163500000
-        color: '#5BD4EEFF'
-      - label: source ice cube 3
-        min: -0.005000000, -0.037000000, 0.111500000
-        max: 0.075000000, 0.053000000, 0.191500000
         color: '#5BD4EEFF'
     - role: Overlay
       rsi: Objects/Consumable/Drinks/glass_clear.rsi

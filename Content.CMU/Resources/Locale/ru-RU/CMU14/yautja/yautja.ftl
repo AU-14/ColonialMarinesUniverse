@@ -380,6 +380,7 @@ cmu-yautja-butcher-stage-complete = Вы завершаете этап разд�
 cmu-yautja-butcher-finished = Вы заканчиваете разделывать {$target}.
 cmu-yautja-butcher-part-finished = Вы заканчиваете отделять часть от {$target}.
 cmu-yautja-butcher-part-missing = У жертвы нет этой части тела.
+cmu-yautja-butcher-part-failed = Эта часть не поддаётся.
 cmu-yautja-butcher-already-finished = Этот труп уже разделан.
 cmu-yautja-prey-claim-complete = {$hunter} завершает охоту на {$target} и забирает {$kind}.
 cmu-yautja-trophy-target-alive = Добыча ещё жива.

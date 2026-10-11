@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Serialization.Manager.Attributes;
 using Robust.Shared.Serialization.Markdown.Mapping;
@@ -44,7 +44,7 @@ namespace Content.IntegrationTests.Tests.Chemistry
         public void DeserializeNullDefinitionTest()
         {
             var node = new MappingDataNode().Add("unit", ValueDataNode.Null());
-            var definition = Serialization.Read<FixedPoint2TestDefinition>(node);
+            var definition = Serialization.Read<FixedPoint2TestDefinition>(node, notNullableOverride: true);
 
             Assert.That(definition.Unit, Is.Null);
         }

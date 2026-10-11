@@ -23,6 +23,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
     private static readonly ProtoId<ToolQualityPrototype> VanRemoveToolQuality = "Prying";
 
     private readonly HashSet<(EntityUid Owner, string SlotId)> _completingRemovals = new();
+    [Dependency] private Robust.Shared.Network.INetManager _net = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private HardpointSystem _hardpoints = default!;
@@ -159,8 +160,8 @@ public sealed partial class HardpointSlotSystem : EntitySystem
 
     private void OnInsertAttempt(Entity<HardpointSlotsComponent> ent, ref ItemSlotInsertAttemptEvent args)
     {
-        // CMU14: includes installations started before the frame was destroyed.
-        if (_hardpoints.IsDestroyedBeyondRepair(ent.Owner))
+        // CMU14: also catches installs started before it got wrecked
+        if (_hardpoints.IsWrecked(ent.Owner))
         {
             args.Cancelled = true;
             return;
@@ -249,7 +250,7 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         if (HasComp<HardpointItemComponent>(args.Used) &&
             HasComp<VehicleTurretAttachmentComponent>(args.Used))
         {
-            _popup.PopupClient(Loc.GetString("rmc-vehicle-turret-no-base"), ent.Owner, actor);
+            _popup.PopupEntity(Loc.GetString("rmc-vehicle-turret-no-base"), ent.Owner, actor);
             args.Handled = true;
             return;
         }
@@ -275,10 +276,10 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         if (!HasComp<HardpointItemComponent>(used))
             return false;
 
-        // CMU14: new parts cannot revive a permanently wrecked hull.
-        if (_hardpoints.IsDestroyedBeyondRepair(ent.Owner))
+        // CMU14: fresh parts don't bring a wreck back
+        if (_hardpoints.IsWrecked(ent.Owner))
         {
-            _popup.PopupClient(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, user);
+            _popup.PopupEntity(_hardpoints.GetWreckMessage(ent.Owner), ent.Owner, user);
             return true;
         }
 
@@ -474,6 +475,19 @@ public sealed partial class HardpointSlotSystem : EntitySystem
         if (!ejected || ejectedItem == null)
         {
             SetErrorAndRefresh("Couldn't remove the hardpoint. Free a hand and try again.");
+            return;
+        }
+
+        if (TryComp(ejectedItem.Value, out HardpointIntegrityComponent? ejectedIntegrity) && ejectedIntegrity.Integrity <= 0f)
+        {
+            if (_net.IsServer)
+            {
+                _popup.PopupEntity(Loc.GetString("rmc-hardpoint-disintegrates", ("item", ejectedItem.Value)), finalLocation.Owner, PopupType.MediumCaution);
+                QueueDel(ejectedItem.Value);
+            }
+
+            SetErrorAndRefresh(null);
+            _hardpoints.RefreshCanRun(ent.Owner);
             return;
         }
 
