@@ -327,12 +327,34 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         var firemission = Button("fire-mission", StrikeFireMission);
         var strikeVector = Button("vector", StrikeVector);
 
+        void SetWeaponPageControls()
+        {
+            var weapons = TryGetWeapons(first, out _, out _, out _, out _, out _, out _, out _, out _, out _);
+            var page = first ? _screenOneWeaponPage : _screenTwoWeaponPage;
+            DropshipWeaponsButtonData? previous = page > 0
+                ? ButtonAction("previous", _ => ChangeWeaponPage(-1))
+                : null;
+            DropshipWeaponsButtonData? next = (page + 1) * 4 < weapons.Count
+                ? ButtonAction("next", _ => ChangeWeaponPage(1))
+                : null;
+            screen.BottomRow.SetData(exit, four: previous, five: next);
+        }
+
+        void ChangeWeaponPage(int delta)
+        {
+            if (first)
+                _screenOneWeaponPage += delta;
+            else
+                _screenTwoWeaponPage += delta;
+            Refresh();
+        }
+
         void SetQuickTargetControls(DropshipWeaponsButtonData? previous, DropshipWeaponsButtonData? next)
         {
             TryGetWeapons(first, out var one, out var two, out var three, out var four, out _, out _, out _, out _, out _);
             screen.TopRow.SetData(fire, quick, four: previous, five: next);
             screen.LeftRow.SetData(one, two, three, four);
-            screen.BottomRow.SetData(exit);
+            SetWeaponPageControls();
             screen.ScreenLabel.Text = TargetAcquisition();
         }
 
@@ -350,8 +372,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 break;
             case Equip:
             {
-                screen.BottomRow.SetData(exit);
-                TryGetWeapons(
+                SetWeaponPageControls();
+                var allWeapons = TryGetWeapons(
                     first,
                     out var one,
                     out var two,
@@ -389,10 +411,8 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     text.AppendLine();
                 }
 
-                AddWeaponEntry(one);
-                AddWeaponEntry(two);
-                AddWeaponEntry(three);
-                AddWeaponEntry(four);
+                foreach (var entry in allWeapons)
+                    AddWeaponEntry(entry);
 
                 screen.ScreenLabel.Text = text.ToString();
                 screen.ScreenLabel.VerticalAlignment = VAlignment.Top;
@@ -442,6 +462,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 screen.TopRow.SetData(fire, quick, five: previous);
                 TryGetWeapons(first, out var one, out var two, out var three, out var four, out _, out _, out _, out _, out _);
                 screen.LeftRow.SetData(cancel, one, two, three, four);
+                SetWeaponPageControls();
                 screen.ScreenLabel.Text = TargetAcquisition();
                 break;
             }
@@ -733,7 +754,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     var selectedMission = terminal.FireMissions
                         .FirstOrDefault(fm => fm.Id == selectedId.Value);
 
-                    TryGetWeapons(
+                    var weaponButtons = TryGetWeapons(
                         first,
                         out var one,
                         out var two,
@@ -746,20 +767,19 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                         out _
                     );
 
-                    var weaponButtons = new [] { one, two, three, four };
                     var weaponData = new List<WeaponDisplayInfo>();
 
                     foreach (var button in weaponButtons)
                     {
-                        if (button?.Weapon == null)
+                        if (button.Weapon is not { } weaponNet)
                             continue;
 
-                        var weaponEntity = EntMan.GetEntity(button.Value.Weapon.Value);
+                        var weaponEntity = EntMan.GetEntity(weaponNet);
                         if (!EntMan.TryGetComponent(weaponEntity, out DropshipWeaponComponent? weaponComp))
                             continue;
 
                         var offsets = selectedMission.WeaponOffsets
-                            .Where(wo => wo.WeaponId == button.Value.Weapon.Value)
+                            .Where(wo => wo.WeaponId == weaponNet)
                             .ToList();
 
                         var hasLocation = _weaponSystem.TryGetWeaponLocation(weaponEntity, out var locationId);
@@ -810,6 +830,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                     out _
                 );
                 screen.RightRow.SetData(one, two, three, four);
+                SetWeaponPageControls();
 
                 var selectedWeaponId = first
                     ? terminal.ScreenOne.Weapon
@@ -874,7 +895,6 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
                 }
 
                 screen.TopRow.SetData(firemissionDelete,firemissionCreate, firemissionView);
-                screen.BottomRow.SetData(exit);
                 screen.ScreenLabel.Text = labelMessage;
                 break;
             }
@@ -1070,7 +1090,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         screen.BottomRow.SetData();
     }
 
-    private void TryGetWeapons(
+    private List<DropshipWeaponsButtonData> TryGetWeapons(
         bool first,
         out DropshipWeaponsButtonData? one,
         out DropshipWeaponsButtonData? two,
@@ -1092,7 +1112,7 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         electronicSystemOne = default;
         electronicSystemTwo = default;
         if (!_system.TryGetGridDropship(Owner, out var dropship))
-            return;
+            return new List<DropshipWeaponsButtonData>();
 
         var weapons = new List<OrderedWeapon>();
         var utility = new List<DropshipWeaponsButtonData?>();
@@ -1230,18 +1250,19 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
                 var order = hasLocation ? (int)location : int.MaxValue;
                 weapons.Add(new OrderedWeapon(data, order));
-
-                if (weapons.Count >= 4)
-                    break;
             }
         }
 
         weapons.Sort((a, b) => a.Order.CompareTo(b.Order));
 
-        one = weapons.Count > 0 ? weapons[0].Data : null;
-        two = weapons.Count > 1 ? weapons[1].Data : null;
-        three = weapons.Count > 2 ? weapons[2].Data : null;
-        four = weapons.Count > 3 ? weapons[3].Data : null;
+        var dataList = weapons.Select(weapon => weapon.Data).ToList();
+        ref var page = ref first ? ref _screenOneWeaponPage : ref _screenTwoWeaponPage;
+        page = Math.Clamp(page, 0, Math.Max(0, (dataList.Count - 1) / 4));
+        var start = page * 4;
+        one = dataList.Count > start ? dataList[start] : null;
+        two = dataList.Count > start + 1 ? dataList[start + 1] : null;
+        three = dataList.Count > start + 2 ? dataList[start + 2] : null;
+        four = dataList.Count > start + 3 ? dataList[start + 3] : null;
 
         utility.TryGetValue(0, out utilityOne);
         utility.TryGetValue(1, out utilityTwo);
@@ -1249,7 +1270,11 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         electronicSystem.TryGetValue(0, out electronicSystemOne);
         electronicSystem.TryGetValue(1, out electronicSystemTwo);
+        return dataList;
     }
+
+    private int _screenOneWeaponPage;
+    private int _screenTwoWeaponPage;
 
     private readonly struct OrderedWeapon
     {

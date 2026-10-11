@@ -551,6 +551,7 @@
     - CMUHowitzerShell
   - type: DropshipAmmo
     ammoType: howitzer_105mm_he
+    zLevelPenetration: 2
     rounds: 1
     maxRounds: 1
     roundsPerShot: 1
@@ -589,6 +590,7 @@
     - CMUHowitzerShell
   - type: DropshipAmmo
     ammoType: howitzer_105mm_hefrag
+    zLevelPenetration: 2
     rounds: 1
     maxRounds: 1
     roundsPerShot: 1
@@ -632,6 +634,7 @@
     - CMUHowitzerShell
   - type: DropshipAmmo
     ammoType: howitzer_105mm_heat
+    zLevelPenetration: 2
     rounds: 1
     maxRounds: 1
     roundsPerShot: 1
@@ -671,6 +674,7 @@
     - CMUHowitzerShell
   - type: DropshipAmmo
     ammoType: howitzer_105mm_airburst
+    zLevelPenetration: 2
     rounds: 8
     maxRounds: 8
     roundsPerShot: 8

@@ -27,6 +27,8 @@
 
   ### A. Weapon Systems
 
+  Interior-mounted Bofors, Howitzer, and JDAM bomb clamps are listed alongside exterior weapons. When more than four weapons are installed, use the [bold]PREVIOUS[/bold] and [bold]NEXT[/bold] buttons at the bottom of the equipment, strike weapon, or firemission editor screen to browse the weapon pages.
+
      <GuideEntityEmbed Entity="RMCDropshipAttachmentGau21Cannon"/>
   - [bold]Overview[/bold]: This is a powerful direct-fire cannon, offering versatility against a range of targets based on the ammunition selected.
   - [bold]Firing Window[/bold]: Usable during [color=#00FF00]Transit AND Fly-by runs[/color].
