@@ -189,7 +189,8 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 shots.Clear();
                 if (agent.State == CMUExpeditionAgentState.Engage && SGameTiming.CurTime >= nextIncomingShot)
                 {
-                    var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, 1.2f));
+                    // pass on the open side; north of the peek position the lane clips the hull, which stops the round
+                    var aim = SEntMan.GetComponent<TransformComponent>(guard).Coordinates.Offset(new Vector2(0, -1.2f));
                     Assert.That(Server.System<GunSystem>().AttemptShoot(enemy,
                         (enemyRifle, SEntMan.GetComponent<Content.Shared.Weapons.Ranged.Components.GunComponent>(enemyRifle)), aim), Is.True);
                     Assert.That(agent.SuppressedUntil, Is.GreaterThan(SGameTiming.CurTime),
@@ -219,7 +220,10 @@ public sealed class CMUExpeditionAgentTest : GameTest
                 .Cast<VolleyShot>().GroupBy(shot => (shot.Moving, shot.End)).ToArray();
             Assert.That(volleys.Count(group => !group.Key.Moving), Is.GreaterThanOrEqualTo(2), "The guard must complete repeated attacks.");
             Assert.That(coveredVolleys, Is.GreaterThanOrEqualTo(2), "Complete repeated attacks with physical returns to shelter.");
-            Assert.That(volleys.Select(group => group.Sum(shot => shot.Rounds)), Has.All.InRange(1, 3));
+            // the near misses make this a contested peek, and CMUInfantryFirePolicy lets an automatic from cover
+            // hold the trigger for up to two base volleys. still bounded, never a whole magazine
+            var burst = SEntMan.GetComponent<CMUExpeditionAgentComponent>(guard).BurstSize;
+            Assert.That(volleys.Select(group => group.Sum(shot => shot.Rounds)), Has.All.InRange(1, burst * 2));
             Assert.That(suppressionTested, Is.True);
             SEntMan.DeleteEntity(map);
         });
