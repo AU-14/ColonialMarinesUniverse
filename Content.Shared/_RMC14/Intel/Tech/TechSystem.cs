@@ -56,9 +56,21 @@ public sealed partial class TechSystem : EntitySystem
             });
     }
 
+    // CMU14-start
+    private static string LocOrRaw(string value)
+    {
+        return Loc.TryGetString(value, out var localized) ? localized : value;
+    }
+    // CMU14-end
+
     private void OnTechAnnounce(TechAnnounceEvent ev)
     {
-        var msg = Loc.GetString("rmc-announcement-message-raw", ("author", ev.Author), ("message", ev.Message));
+        // CMU14-start: use LocOrRaw to avoid missing localization keys causing exceptions
+        var author = LocOrRaw(ev.Author);
+        var message = LocOrRaw(ev.Message);
+
+        var msg = Loc.GetString("rmc-announcement-message-raw", ("author", author), ("message", message));
+        // CMU14-end
         _marineAnnounce.AnnounceToMarines(msg, ev.Sound, faction: ev.Team);
     }
 
@@ -202,12 +214,12 @@ public sealed partial class TechSystem : EntitySystem
         {
             foreach (var faction in idCardIFF.Factions)
             {
-                _core.CreateARESLog(faction, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {option.Name}");
+                _core.CreateARESLog(faction, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {LocOrRaw(option.Name)}"); // CMU14
             }
         }
         else
         {
-            _core.CreateARESLog(ent, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {option.Name}");
+            _core.CreateARESLog(ent, LogCat, (string) $"{Name(args.Actor)} purchased intel node: {LocOrRaw(option.Name)}"); // CMU14
         }
     }
 

@@ -9,8 +9,8 @@
       options:
 # ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
       -
-        - name: Unlock Tier 1
-          description: Transitions the tree to another tier.
+        - name: cmu-tech-tier-one
+          description: cmu-tech-tier-unlock-desc
           cost: 0
           events:
           - !type:TechUnlockTierEvent
@@ -20,8 +20,8 @@
             state: upgrade
 # ├──[ Tier 1: Requisition budget ]──────────────────────────────────┤
       -
-        - name: Requisition Budget Increase
-          description: Distributes resources to requisitions for spending.
+        - name: cmu-tech-opfor-req-budget
+          description: cmu-tech-opfor-req-budget-desc
           cost: 12
           increase: 3
           repurchasable: true
@@ -29,8 +29,8 @@
           - !type:TechRequisitionsBudgetEvent
             amount: 5000
           - !type:TechAnnounceEvent
-            author:  SPECIAL ASSETS AUTHORIZED
-            message: Additional supply budget has been authorised for this operation.
+            author: cmu-tech-author-special-assets
+            message: cmu-tech-opfor-req-budget-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
