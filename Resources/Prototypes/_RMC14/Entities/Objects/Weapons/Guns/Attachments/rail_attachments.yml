@@ -20,8 +20,8 @@
     spriteLayer: light
   - type: PointLight
     enabled: false
-    radius: 5
-    energy: 1.5 # CMU14
+    radius: 8
+    energy: 1.7 # CMU14
     softness: 1 # CMU14
     lightMask: ConeSingle # CMU14
     autoRot: true
