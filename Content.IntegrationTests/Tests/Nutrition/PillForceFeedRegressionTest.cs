@@ -10,6 +10,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Nutrition;
+using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -73,7 +74,7 @@ public sealed class PillForceFeedRegressionTest : GameTest
             Assert.That(SEntMan.TryGetComponent<DoAfterComponent>(feeder, out var doAfters), Is.True);
             Assert.That(doAfters!.DoAfters.Values.Any(data =>
                 data.Args.Event is EatingDoAfterEvent &&
-                data.Args.Delay == TimeSpan.FromSeconds(1) &&
+                data.Args.Delay == TimeSpan.FromSeconds(1) * IngestionSystem.CMUIngestionDelayMultiplier &&
                 !data.Cancelled &&
                 !data.Completed), Is.True);
 

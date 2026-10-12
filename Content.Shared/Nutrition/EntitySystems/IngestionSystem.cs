@@ -286,7 +286,8 @@ public sealed partial class IngestionSystem : EntitySystem
         if (!CanConsume(args.User, entity, args.Ingested, out var solution, out var time))
             return;
 
-        if (!_doAfter.TryStartDoAfter(GetEdibleDoAfterArgs(args.User, entity, food, time ?? TimeSpan.Zero)))
+        // CMU14: eating and drinking take twice as long.
+        if (!_doAfter.TryStartDoAfter(GetEdibleDoAfterArgs(args.User, entity, food, (time ?? TimeSpan.Zero) * CMUIngestionDelayMultiplier)))
             return;
 
         args.Handled = true;
@@ -449,6 +450,9 @@ public sealed partial class IngestionSystem : EntitySystem
         // Don't try to repeat if its being deleted
         args.Repeat = false;
     }
+
+    // CMU14: multiplier on every eating/drinking do-after, self-fed or force-fed.
+    public const double CMUIngestionDelayMultiplier = 2;
 
     /// <summary>
     /// Gets the DoAfterArgs for the specific event
