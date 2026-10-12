@@ -21,6 +21,13 @@ public sealed partial class MohawkChinGunComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool TrackingFireConfirmed;
+    [DataField]
+    public float SlewDegreesPerSecond = 30f;
+    [DataField]
+    public TimeSpan AuthorizationDuration = TimeSpan.FromSeconds(30);
+    public TimeSpan AuthorizedUntil;
+    public EntityCoordinates? PendingManualShot;
+    public float DesiredAimDegrees;
     public EntityUid? Eye;
     public EntityUid? PreviousEye;
     public bool PreviousDrawFov;

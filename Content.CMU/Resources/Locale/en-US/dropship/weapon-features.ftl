@@ -16,8 +16,9 @@ cmu-dropship-track-confirm = CONFIRM automatic fire
 cmu-dropship-track-clear = Stop / clear tracking
 cmu-dropship-track-ready = Tracking {$target}
     Awaiting fire confirmation
-cmu-dropship-track-firing = ENGAGING {$target}
-cmu-dropship-track-range = Tracking {$target} | Range: {$range} tiles | In arc
+cmu-dropship-track-firing = AUTHORIZED {$target}
+    Fires only while visible and safe
+cmu-dropship-track-range = Tracking {$target} | Range: {$range} tiles | {$status}
 cmu-dropship-aim-range = Range: {$range} tiles | {$status}
 cmu-dropship-aim-valid = Inside forward firing arc and range
 cmu-dropship-aim-invalid = Outside forward firing arc or range

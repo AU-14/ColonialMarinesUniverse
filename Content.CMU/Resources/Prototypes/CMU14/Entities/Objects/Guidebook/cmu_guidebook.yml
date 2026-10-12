@@ -6,6 +6,7 @@
   text: "/ServerInfo/Guidebook/CMU14/CMUGuidebook.xml"
   children:
   - AU14Comms
+  - CMUGuideCAS
   - CMUGuideMortar
   - CMUGuideExplosives
   - CMUGuideMedical
@@ -17,6 +18,13 @@
   - CMUChemicals
   - CMUGuideCooking
   - CMUGuideLore
+
+- type: guideEntry
+  parent: RMC
+  id: CMUGuideCAS
+  name: cmu-guide-entry-cas
+  priority: 2
+  text: "/ServerInfo/Guidebook/CMU14/Guides/CMUCAS.xml"
 
 - type: guideEntry
   parent: RMC

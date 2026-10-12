@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.PowerLoader;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared.CMU14.Weapons.Ranged;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
@@ -12,6 +14,7 @@ using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Timing;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 
@@ -32,6 +35,8 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
     [Dependency] private PowerLoaderSystem _powerLoader = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private MohawkChinGunSystem _chinGun = default!;
+    [Dependency] private GunIFFSystem _iff = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -88,6 +93,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         if (chinMount && Vector2.DistanceSquared(mountPosition, target.Position) >
             MathF.Pow(Comp<MohawkChinGunComponent>(point).Range, 2))
         {
+            Comp<MohawkChinGunComponent>(point).PendingManualShot = null;
             args.Cancelled = true;
             args.ResetCooldown = true;
             args.Message = Loc.GetString("cmu-mohawk-gunnery-out-of-range");
@@ -96,9 +102,23 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
         if (chinMount)
         {
-            point.Comp.AimOffsetDegrees = aimDegrees;
-            _appearance.SetData(point, GunshipDirectFireVisuals.AimOffsetDegrees, point.Comp.AimOffsetDegrees);
-            Dirty(point);
+            var chin = Comp<MohawkChinGunComponent>(point);
+            if (Vector2.Dot(shipRotation.RotateVec(Vector2.UnitY), target.Position - mountPosition) < 0)
+            {
+                chin.PendingManualShot = null;
+                args.Cancelled = true;
+                args.ResetCooldown = true;
+                args.Message = Loc.GetString("cmu-mohawk-gunnery-out-of-arc");
+                return;
+            }
+            if (!chin.TrackingFireConfirmed)
+                chin.PendingManualShot = targetCoordinates;
+            if (!_chinGun.RequestAim((point.Owner, chin), ent.Owner, targetCoordinates))
+            {
+                args.Cancelled = true;
+                args.ResetCooldown = true;
+                return;
+            }
         }
 
         // Pilot cursor bearing is measured around the dropship center. Measuring it
@@ -109,6 +129,16 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         var muzzleOffset = MathF.Max(0f, ent.Comp.MuzzleOffset);
         var originMap = new MapCoordinates(mountPosition + direction * muzzleOffset, gridXform.MapID);
         var targetMap = new MapCoordinates(mountPosition + direction * distance, gridXform.MapID);
+        if (chinMount && !_chinGun.IsSafeShot((point.Owner, Comp<MohawkChinGunComponent>(point)), originMap, targetMap, ent))
+        {
+            args.Cancelled = true;
+            args.ResetCooldown = true;
+            var chin = Comp<MohawkChinGunComponent>(point);
+            chin.PendingManualShot = null;
+            if (!chin.TrackingFireConfirmed)
+                args.Message = Loc.GetString("cmu-mohawk-gunnery-unsafe-shot");
+            return;
+        }
         args.FromCoordinates = _transform.ToCoordinates(originMap);
         args.ToCoordinates = _transform.ToCoordinates(targetMap);
     }
@@ -190,7 +220,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
     private void OnTakeAmmo(Entity<GunshipDirectFireWeaponComponent> ent, ref TakeAmmoEvent args)
     {
-        if (!TryResolveMount(ent, out var point, out _, out var ammoUid, out var ammo) ||
+        if (!TryResolveMount(ent, out var point, out var grid, out var ammoUid, out var ammo) ||
             ammoUid is not { } loadedAmmo ||
             ammo == null)
         {
@@ -207,6 +237,21 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
             ammo.Rounds -= roundsPerShot;
             var projectile = Spawn(ent.Comp.Projectile, args.Coordinates);
             args.Ammo.Add((projectile, _guns.EnsureShootable(projectile)));
+            if (TryComp(point, out MohawkChinGunComponent? chin))
+            {
+                chin.PendingManualShot = null;
+                var iffEvent = new AmmoShotEvent { FiredProjectiles = [projectile] };
+                _iff.GiveAmmoIFF(point.Owner, ref iffEvent, intrinsic: true, enabled: true);
+                if (_net.IsServer)
+                {
+                    var rotation = _transform.GetWorldRotation(grid);
+                    var position = _transform.GetMapCoordinates(point);
+                    var belowMount = new MapCoordinates(position.Position +
+                        rotation.RotateVec(new Vector2(point.Comp.LateralOffset, point.Comp.ForwardOffset)), position.MapId);
+                    var casing = Spawn("CMUMohawkM90Casing", _transform.ToCoordinates(belowMount));
+                    EnsureComp<CMUSpentCasingComponent>(casing).EjectedAt = _timing.CurTime;
+                }
+            }
         }
 
         _appearance.SetData(loadedAmmo, DropshipAmmoVisuals.Fill, ammo.Rounds);
@@ -249,6 +294,7 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
 
             _physics.SetLinearVelocity(uid, body.LinearVelocity + velocityCorrection, body: body);
         }
+
     }
 
     public bool TryResolveMount(

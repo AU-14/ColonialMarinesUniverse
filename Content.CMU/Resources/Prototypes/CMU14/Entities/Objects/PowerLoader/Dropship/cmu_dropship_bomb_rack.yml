@@ -1,6 +1,6 @@
 # CMU14: JDAM Bomb Clamp.
 # A crew-compartment (interior) only bomb clamp that holds a single JDAM family
-# bomb. Must be moved with a powerloader and loaded by hand.
+# bomb. The clamp and its bombs are moved and loaded with a powerloader.
 
 - type: Tag
   id: CMUJDAMBomb
@@ -43,6 +43,15 @@
 
 - type: entity
   parent: RMCDropshipAttachmentAmmoRocket
+  id: CMUDropshipAmmoJDAMBase
+  abstract: true
+  components:
+  - type: PowerLoaderAttachable
+    attachableTypes:
+    - RMCDropshipUtilityPoint
+
+- type: entity
+  parent: CMUDropshipAmmoJDAMBase
   id: CMUDropshipAmmoJDAMHE
   name: GBU-89B JDAM (HE)
   description: The GBU-89B Joint Direct Attack Munition is an old but reliable large guided munition. It has an excessively long travel time, but can level entire buildings. Loaded into the JDAM Bomb Clamp.
@@ -76,7 +85,7 @@
     cost: 7500
 
 - type: entity
-  parent: RMCDropshipAttachmentAmmoRocket
+  parent: CMUDropshipAmmoJDAMBase
   id: CMUDropshipAmmoJDAMIncendiary
   name: GBU-89C/N JDAM-I (Incendiary)
   description: The GBU-89C/N Joint Direct Attack Munition is an old but reliable large guided munition fitted with a napalm payload. It can level and set alight entire buildings. Loaded into the JDAM Bomb Clamp.
@@ -115,7 +124,7 @@
     cost: 8000
 
 - type: entity
-  parent: RMCDropshipAttachmentAmmoRocket
+  parent: CMUDropshipAmmoJDAMBase
   id: CMUDropshipAmmoJDAMAP
   name: GBU-89D/AP JDAM-AP
   description: The GBU-89D/AP Joint Direct Attack Munition trades blast radius for a hardened penetrator capable of cracking reinforced structures and armor. Loaded into the JDAM Bomb Clamp.
@@ -151,7 +160,7 @@
     cost: 7500
 
 - type: entity
-  parent: RMCDropshipAttachmentAmmoRocket
+  parent: CMUDropshipAmmoJDAMBase
   id: CMUDropshipAmmoJDAMCluster
   name: GBU-89E/CL JDAM-CLUSTER
   description: The GBU-89E/CL Joint Direct Attack Munition separates into a spread of low-yield bomblets over a wide area. Loaded into the JDAM Bomb Clamp.
@@ -187,7 +196,7 @@
     cost: 4000
 
 - type: entity
-  parent: RMCDropshipAttachmentAmmoRocket
+  parent: CMUDropshipAmmoJDAMBase
   id: CMUDropshipAmmoJDAMNapalm
   name: GBU-89F/N JDAM-NAPALM
   description: The GBU-89F/N Joint Direct Attack Munition blankets the target area in a persistent napalm firestorm. Loaded into the JDAM Bomb Clamp.

@@ -725,11 +725,15 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
             return;
         }
 
+        if (!CanFire(weapon.Value, DropshipWeaponStrikeType.Direct, actor, weapon: weaponComp))
+            return;
+
+        if (!TryGetWeaponAmmo((weapon.Value, weaponComp), out var ammo))
+            return;
+
         var offset = ClampOffset(ent);
         var coordinates = _transform.GetMoverCoordinates(target).SnapToGrid(EntityManager).Offset(offset);
-        if (weapon is not { } weaponEntity ||
-            !TryGetWeaponAmmo((weaponEntity, weaponComp), out var ammo) ||
-            (!CasDebug && !CanFireAtCoordinate(coordinates, ammo.Comp.ZLevelPenetration)))
+        if (!CasDebug && !CanFireAtCoordinate(coordinates, ammo.Comp.ZLevelPenetration))
         {
             var msg = Loc.GetString("rmc-laser-designator-not-cas");
             _popup.PopupCursor(msg, actor);
@@ -2749,6 +2753,9 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         }
         // CMU14 End
 
+        if (!CanFire(weapon, strikeType, actor, weapon: weaponComp))
+            return false;
+
         if (!TryGetWeaponAmmo((weapon, weaponComp), out var ammo))
             return false;
 
@@ -2757,9 +2764,6 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
         {
             return false;
         }
-
-        if (!CanFire(weapon, strikeType, actor, weapon: weaponComp))
-            return false;
 
         FireWeapon(weapon, targetCoordinates, strikeType,dropship, actor, terminalComp, weaponComp);
         return true;

@@ -12,6 +12,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
+using Content.Shared.Physics;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
 using Content.Shared.Weapons.Ranged.Components;
@@ -39,6 +40,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    private readonly HashSet<Entity<MobStateComponent>> _nearbyMobs = new();
 
     public override void Initialize()
     {
@@ -72,6 +75,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 continue;
 
             SetTracking((uid, chin), null);
+            chin.PendingManualShot = coordinates;
             _guns.AttemptShoot(args.Actor, (weapon, gun), coordinates);
             return;
         }
@@ -110,7 +114,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         }
 
         if (actor == weapon)
-            return _net.IsServer && point.Comp.Operator == null;
+            return false;
 
         if (point.Comp.Operator != actor || !IsSeatedOperator(point, actor))
         {
@@ -158,8 +162,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 return;
             }
 
-            if (!TryGetWeapon(uid, out var weapon) ||
-                !TryComp(args.Actor, out EyeComponent? eye))
+            if (!TryGetWeapon(uid, out var weapon))
             {
                 _popup.PopupEntity(Loc.GetString("rmc-dropship-weapons-fire-no-weapon"), console, args.Actor);
                 return;
@@ -173,6 +176,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             }
 
             chin.Operator = args.Actor;
+            var eye = EnsureComp<EyeComponent>(args.Actor);
             chin.Console = console;
             chin.PreviousEye = eye.Target;
             chin.PreviousDrawFov = eye.DrawFov;
@@ -194,6 +198,8 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             Dirty(point);
             return;
         }
+
+        _popup.PopupEntity(Loc.GetString("rmc-dropship-weapons-fire-no-weapon"), console, args.Actor);
     }
 
     private bool TryGetWeapon(EntityUid point, out EntityUid weapon)
@@ -280,6 +286,17 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         while (query.MoveNext(out var uid, out var chin, out var targeting))
         {
             var point = new Entity<MohawkChinGunComponent>(uid, chin);
+            if (TryComp(uid, out GunshipDirectFirePointComponent? directPoint))
+            {
+                var step = chin.SlewDegreesPerSecond * frameTime;
+                var next = directPoint.AimOffsetDegrees + Math.Clamp(chin.DesiredAimDegrees - directPoint.AimOffsetDegrees, -step, step);
+                if (next != directPoint.AimOffsetDegrees)
+                {
+                    directPoint.AimOffsetDegrees = next;
+                    _appearance.SetData(uid, GunshipDirectFireVisuals.AimOffsetDegrees, next);
+                    Dirty(uid, directPoint);
+                }
+            }
             if (chin.Operator is { } actor)
             {
                 if (!IsGrounded(uid) || !IsSeatedOperator(uid, actor) || chin.Console is not { } console ||
@@ -289,7 +306,9 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                 {
                     if (chin.TrackedTarget is { } target)
                     {
-                        if (!CanTrack(point, target) ||
+                        if (TerminatingOrDeleted(target) || !EnsureTrackingFaction(point) ||
+                            !_targeting.IsValidTarget((uid, targeting), target) ||
+                            TryComp(target, out MobStateComponent? targetMob) && targetMob.CurrentState == MobState.Dead ||
                             chin.TrackingFireConfirmed && TryGetWeapon(uid, out var loadedWeapon) &&
                             TryComp(loadedWeapon, out GunshipDirectFireWeaponComponent? loadedDirect) &&
                             _directFire.TryResolveMount((loadedWeapon, loadedDirect), out _, out _, out _, out var payload) &&
@@ -300,7 +319,19 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                         }
                         else
                         {
+                            if (chin.TrackingFireConfirmed && _timing.CurTime >= chin.AuthorizedUntil)
+                            {
+                                chin.TrackingFireConfirmed = false;
+                                Comp<DropshipTerminalWeaponsComponent>(console).TrackingFireConfirmed = false;
+                                Dirty(point);
+                                Dirty(console, Comp<DropshipTerminalWeaponsComponent>(console));
+                                _popup.PopupEntity(Loc.GetString("cmu-mohawk-gunnery-auth-expired"), console, actor);
+                            }
+                            if (!CanTrack(point, target))
+                                continue;
                             _transform.SetCoordinates(eye, _transform.GetMoverCoordinates(target));
+                            if (TryGetWeapon(uid, out var aimedWeapon))
+                                RequestAim(point, aimedWeapon, _transform.GetMoverCoordinates(target));
                             if (chin.TrackingFireConfirmed && TryGetWeapon(uid, out var trackedWeapon) &&
                                 TryComp(trackedWeapon, out GunComponent? trackedGun))
                                 _guns.AttemptShoot(actor, (trackedWeapon, trackedGun), Transform(target).Coordinates, target);
@@ -308,6 +339,9 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                         }
                     }
                     _transform.SetCoordinates(eye, GetCameraCoordinates(uid));
+                    if (chin.PendingManualShot is { } pending && TryGetWeapon(uid, out var manualWeapon) &&
+                        TryComp(manualWeapon, out GunComponent? manualGun))
+                        _guns.AttemptShoot(actor, (manualWeapon, manualGun), pending);
                 }
                 continue;
             }
@@ -351,17 +385,18 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
                     continue;
                 var muzzle = new MapCoordinates(position + Vector2.Normalize(delta) * direct.MuzzleOffset,
                     origin.MapId);
-                if (!_interaction.InRangeUnobstructed(muzzle, target, chin.Range,
-                        predicate: blocker => blocker == candidate || blocker == uid || blocker == weapon))
+                if (!_interaction.InRangeUnobstructed(muzzle, target, chin.Range, CollisionGroup.Opaque,
+                        predicate: blocker => blocker == candidate || blocker == uid || blocker == weapon ||
+                            !TryComp(blocker, out OccluderComponent? occluder) || !occluder.Enabled))
                     continue;
                 nearest = candidate;
                 nearestDistance = distance;
             }
 
             if (nearest is { } hostile)
-                _guns.AttemptShoot(weapon, (weapon, gun), Transform(hostile).Coordinates, hostile);
+                RequestAim(point, weapon, Transform(hostile).Coordinates);
             else
-                _appearance.SetData(uid, GunshipDirectFireVisuals.AimOffsetDegrees, 0f);
+                chin.DesiredAimDegrees = 0f;
         }
     }
 
@@ -422,14 +457,17 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             Vector2.Dot(rotation.RotateVec(Vector2.UnitY), delta) < -0.0001f)
             return false;
         var muzzle = new MapCoordinates(position + Vector2.Normalize(delta) * direct.MuzzleOffset, origin.MapId);
-        return _interaction.InRangeUnobstructed(muzzle, location, point.Comp.Range,
-            predicate: blocker => blocker == target || blocker == point.Owner || blocker == weapon);
+        return _interaction.InRangeUnobstructed(muzzle, location, point.Comp.Range, CollisionGroup.Opaque,
+            predicate: blocker => blocker == target || blocker == point.Owner || blocker == weapon ||
+                !TryComp(blocker, out OccluderComponent? occluder) || !occluder.Enabled);
     }
 
     private void SetTracking(Entity<MohawkChinGunComponent> point, EntityUid? target)
     {
         point.Comp.TrackedTarget = target;
         point.Comp.TrackingFireConfirmed = false;
+        point.Comp.AuthorizedUntil = TimeSpan.Zero;
+        point.Comp.PendingManualShot = null;
         Dirty(point);
         if (point.Comp.Console is { } console && TryComp(console, out DropshipTerminalWeaponsComponent? terminal))
         {
@@ -479,6 +517,7 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
             return;
         }
         point.Comp.TrackingFireConfirmed = true;
+        point.Comp.AuthorizedUntil = _timing.CurTime + point.Comp.AuthorizationDuration;
         console.Comp.TrackingFireConfirmed = true;
         Dirty(point);
         Dirty(console);
@@ -500,6 +539,53 @@ public sealed partial class MohawkChinGunSystem : EntitySystem
         if (!_targeting.TryApplyDefaultFaction(point, faction))
             return false;
         point.Comp.AssignedFaction = faction;
+        return true;
+    }
+
+    public bool RequestAim(Entity<MohawkChinGunComponent> point, EntityUid weapon, EntityCoordinates coordinates)
+    {
+        if (!TryComp(weapon, out GunshipDirectFireWeaponComponent? direct) ||
+            !_directFire.TryResolveMount((weapon, direct), out var mount, out var grid, out _, out _) ||
+            !coordinates.IsValid(EntityManager))
+            return false;
+        var location = _transform.ToMapCoordinates(coordinates);
+        var rotation = _transform.GetWorldRotation(grid);
+        var origin = _transform.GetMapCoordinates(point);
+        var position = origin.Position + rotation.RotateVec(new Vector2(mount.Comp.LateralOffset, mount.Comp.ForwardOffset));
+        var delta = location.Position - position;
+        if (origin.MapId != location.MapId || delta.LengthSquared() > point.Comp.Range * point.Comp.Range ||
+            Vector2.Dot(rotation.RotateVec(Vector2.UnitY), delta) < 0 ||
+            !GunshipDirectFireSystem.TryGetClampedAim(rotation, position, location.Position, direct.GimbalDegrees,
+                out _, out var degrees))
+            return false;
+        point.Comp.DesiredAimDegrees = degrees;
+        return MathF.Abs(mount.Comp.AimOffsetDegrees - degrees) < 0.5f;
+    }
+
+    public bool IsSafeShot(Entity<MohawkChinGunComponent> point, MapCoordinates muzzle, MapCoordinates target,
+        EntityUid weapon)
+    {
+        if (!EnsureTrackingFaction(point) || !TryComp(point, out SentryTargetingComponent? targeting) ||
+            !_interaction.InRangeUnobstructed(muzzle, target, point.Comp.Range, CollisionGroup.Opaque,
+                predicate: blocker => blocker == point.Owner || blocker == weapon || HasComp<MobStateComponent>(blocker) ||
+                    !TryComp(blocker, out OccluderComponent? occluder) || !occluder.Enabled))
+            return false;
+        var line = target.Position - muzzle.Position;
+        var lengthSquared = line.LengthSquared();
+        _nearbyMobs.Clear();
+        _lookup.GetEntitiesInRange(muzzle, point.Comp.Range + 2f, _nearbyMobs);
+        foreach (var mob in _nearbyMobs)
+        {
+            if (_targeting.IsValidTarget((point.Owner, targeting), mob.Owner))
+                continue;
+            var location = _transform.GetMapCoordinates(mob);
+            if (location.MapId != muzzle.MapId)
+                continue;
+            var fraction = lengthSquared > 0 ? Math.Clamp(Vector2.Dot(location.Position - muzzle.Position, line) / lengthSquared, 0, 1) : 0;
+            if (Vector2.DistanceSquared(location.Position, muzzle.Position + fraction * line) < 0.75f * 0.75f ||
+                Vector2.DistanceSquared(location.Position, target.Position) < 2f * 2f)
+                return false;
+        }
         return true;
     }
 }

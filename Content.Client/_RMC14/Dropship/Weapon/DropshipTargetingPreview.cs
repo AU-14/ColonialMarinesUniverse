@@ -96,7 +96,8 @@ public sealed class DropshipTargetingPreview : Control
                 {
                     _screen.PayloadPreviewLabel.Text = Loc.GetString("cmu-dropship-track-range",
                         ("target", _entities.GetComponent<MetaDataComponent>(tracked).EntityName),
-                        ("range", MathF.Round(distanceToAim, 1)));
+                        ("range", MathF.Round(distanceToAim, 1)),
+                        ("status", Loc.GetString(validAim ? "cmu-dropship-aim-valid" : "cmu-dropship-aim-invalid")));
                 }
                 else
                     _screen.PayloadPreviewLabel.Text = Loc.GetString("cmu-dropship-aim-range",
