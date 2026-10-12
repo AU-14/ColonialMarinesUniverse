@@ -1436,7 +1436,7 @@
     state: firstaid
   - type: CMVendorBundle
     bundle:
-    - RMCVisorMedicalAdvanced
+    - CMUVisorMedicalSquad
     - RMCGlassesMedicalHUDGlasses
     - AU14CMDefibrillator
     - CMHealthAnalyzer
