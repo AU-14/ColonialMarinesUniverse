@@ -25,6 +25,7 @@ lobby-info-gamemode = GAMEMODE
 lobby-info-players = PLAYERS
 lobby-info-round-time = ROUND TIME
 lobby-info-players-value = {$count} ({$ready} ready)
+lobby-info-none = None
 
 game-ticker-no-map-selected = [color=#FFB500]Map not yet selected![/color]
 game-ticker-no-map-selected-plain = Map not yet selected!

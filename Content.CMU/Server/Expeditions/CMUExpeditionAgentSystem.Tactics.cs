@@ -1,7 +1,6 @@
 using System.Numerics;
 using System.Linq;
 using Content.Shared.CMU14.Hearing;
-using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 
@@ -16,11 +15,10 @@ public sealed partial class CMUExpeditionAgentSystem
 
     private void OnNearbyGunfire(ref CMUGunFiredEvent args)
     {
-        if (!_npcs.Enabled || !TryComp<GunComponent>(args.Gun, out var gun) ||
-            gun.ShootCoordinates is not { } aim)
+        if (!_npcs.Enabled)
             return;
         var from = _transform.ToMapCoordinates(args.From);
-        var to = _transform.ToMapCoordinates(aim);
+        var to = _transform.ToMapCoordinates(args.To);
         var direction = to.Position - from.Position;
         if (from.MapId != to.MapId || direction.LengthSquared() < 0.01f)
             return;
@@ -79,9 +77,14 @@ public sealed partial class CMUExpeditionAgentSystem
                 continue;
             members++;
             // Empty/blocked rifles cannot indefinitely monopolize the squad's exposure slots.
+            // An unfired volley still owns its bounded native readiness window; otherwise
+            // entering Engage releases the slot before the first round leaves the gun.
             if (CoveringFireReady(other, buddy, out _) ||
                 buddy.State == CMUExpeditionAgentState.Peeking && _timing.CurTime < buddy.MoveUntil ||
-                buddy.State == CMUExpeditionAgentState.Aim && _timing.CurTime < buddy.FireAt + TimeSpan.FromSeconds(0.5))
+                buddy.State == CMUExpeditionAgentState.Aim && _timing.CurTime < buddy.FireAt + TimeSpan.FromSeconds(0.5) ||
+                buddy.State == CMUExpeditionAgentState.Engage && WaitingForFirstShot(buddy, _timing.CurTime) &&
+                buddy.Action == null && buddy.PendingWeapon == null && buddy.Treatment == null &&
+                _guns.TryGetGun(other, out var gun) && WeaponAmmo(gun) > 0)
                 attacking++;
         }
         // Local attack slots stagger exposure; they are released immediately on retreat, injury, death or possession.
