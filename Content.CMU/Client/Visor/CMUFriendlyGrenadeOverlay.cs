@@ -1,29 +1,25 @@
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.CMU14.Visor;
-using Content.Shared.Tag;
 using Content.Shared.Trigger.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
-using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Visor;
 
 /// <summary>
-/// Draws a red ring around primed grenades thrown or primed by friendlies, for someone looking through a squad optic.
+/// Draws a red ring around primed smart grenades thrown or primed by friendlies, for someone looking through a squad optic.
 /// </summary>
 public sealed class CMUFriendlyGrenadeOverlay : Overlay
 {
-    private static readonly ProtoId<TagPrototype> GrenadeTag = "Grenade";
-    private static readonly Color RingColor = Color.Red.WithAlpha(0.85f);
-    private const float RingRadius = 0.6f;
-    private const float RingThickness = 0.06f;
-    private const int RingLayers = 4;
+    private static readonly Color RingColor = Color.Red.WithAlpha(0.5f);
+    private const float RingRadius = 0.35f;
+    private const float RingThickness = 0.04f;
+    private const int RingLayers = 3;
 
     private readonly IEntityManager _entity;
     private readonly IPlayerManager _player;
     private readonly GunIFFSystem _iff;
-    private readonly TagSystem _tag;
     private readonly SharedTransformSystem _transform;
 
     private readonly HashSet<EntProtoId<IFFFactionComponent>> _viewerFactions = new();
@@ -36,7 +32,6 @@ public sealed class CMUFriendlyGrenadeOverlay : Overlay
         _entity = entity;
         _player = player;
         _iff = entity.System<GunIFFSystem>();
-        _tag = entity.System<TagSystem>();
         _transform = entity.System<SharedTransformSystem>();
     }
 
@@ -55,7 +50,7 @@ public sealed class CMUFriendlyGrenadeOverlay : Overlay
         {
             if (xform.MapID != args.MapId ||
                 timer.User is not { } user ||
-                !_tag.HasTag(uid, GrenadeTag) ||
+                !_entity.HasComponent<CMUSmartGrenadeComponent>(uid) ||
                 !IsFriendly(user))
             {
                 continue;

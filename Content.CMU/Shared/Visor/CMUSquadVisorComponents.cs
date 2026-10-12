@@ -19,3 +19,10 @@ public sealed partial class CMUSquadVisorWearerComponent : Component
     [DataField, AutoNetworkedField]
     public bool GrantedTracker;
 }
+
+/// <summary>
+/// A grenade with a smart fuse that a squad optic can pick out. Squad optic wearers see a ring around friendly ones
+/// once they're primed.
+/// </summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUSmartGrenadeComponent : Component;

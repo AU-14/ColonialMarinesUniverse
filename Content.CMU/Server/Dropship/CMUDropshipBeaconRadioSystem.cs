@@ -9,6 +9,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Dropship;
+using Content.Shared.CMU14.Preferences;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Radio;
@@ -48,7 +49,7 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
             return;
 
         var message = Loc.GetString("cmu-dropship-radio-fulton-deployed",
-            ("target", Name(ev.Target)),
+            ("target", PlainName(ev.Target)),
             ("location", DescribeLocation(_transform.ToMapCoordinates(ev.Location))),
             ("seconds", (int) ev.AvailableFor.TotalSeconds));
 
@@ -107,10 +108,19 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
         }
     }
 
-    /// <summary>The patient's name with their short rank in front, if they have one.</summary>
+    /// <summary>The patient's first and last name with their short rank in front, if they have one.</summary>
     private string PatientName(EntityUid patient)
     {
-        return _rank.GetSpeakerRankName(patient) ?? Name(patient);
+        var name = PlainName(patient);
+        return _rank.GetRankString(patient, isShort: true) is { } rank ? $"{rank} {name}" : name;
+    }
+
+    /// <summary>First and last name only, without the character's nickname.</summary>
+    private string PlainName(EntityUid uid)
+    {
+        var parts = CMUCharacterName.Parse(Name(uid));
+        var plain = CMUCharacterName.Compose(parts.First, parts.Last, string.Empty, false);
+        return plain.Length > 0 ? plain : Name(uid);
     }
 
     private string DescribeStatus(EntityUid patient)
