@@ -101,7 +101,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
     // one entry point for the hotkey and the bracer menu, they used to disagree on the remote case
     public bool TryUseSelfDestruct(Entity<YautjaBracerComponent> bracer, EntityUid user)
     {
-        if (TryGetPulledDeadVictim(user, out var victim))
+        // Our own armed timer wins the hotkey too, so hauling a body can never leave it uncancellable.
+        if (!bracer.Comp.SelfDestructArmed && TryGetPulledDeadVictim(user, out var victim))
             return TryOpenRemoteDeadVictimSelfDestructDialog(bracer, user, victim);
 
         return TryOpenSelfDestructDialog(bracer, user);
@@ -162,20 +163,19 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         // here would hide a stale value rather than fix whatever produced it.
 
         // Our own timer wins the click, so hauling a body can never leave it armed and uncancellable.
+        // TryCancelSelfDestruct stops the audio itself, so a cancel that fails - a dead owner's alert
+        // stays up and can still be clicked - no longer silences the timer it failed to stop.
         if (bracer.Comp.SelfDestructArmed)
         {
-            StopSelfDestructAudio(bracer);
             TryCancelSelfDestruct(bracer, user);
             return;
         }
 
         // Only a hauled dead hunter wearing their own bracer is a remote target: a marine corpse or a
-        // trophy must not swallow the click.
+        // trophy must not swallow the click. Their bracer can be armed from here, never disarmed:
+        // cancelling someone else's timer is deliberately not on the table.
         if (TryGetPulledDeadVictim(user, out var dragged) && HasFittedBracer(dragged))
         {
-            if (TryCancelRemoteDeadVictimSelfDestruct(bracer, user, dragged))
-                return;
-
             if (CanUseRemoteDeadVictimSelfDestruct(bracer, user, dragged, null, out var draggedBracer))
                 TryRemoteDetonateDeadVictimSelfDestruct(bracer, user, dragged, draggedBracer.Owner);
 
@@ -344,36 +344,6 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
         var ev = new YautjaSelfDestructArmedEvent(victimBracer.Owner, user, victim, true);
         RaiseLocalEvent(victimBracer.Owner, ref ev);
-        return true;
-    }
-
-    public bool TryCancelRemoteDeadVictimSelfDestruct(
-        Entity<YautjaBracerComponent> bracer,
-        EntityUid user,
-        EntityUid victim)
-    {
-        // CanUseRemoteDeadVictimSelfDestruct bails out when the victim's bracer is already armed,
-        // which is precisely the state to cancel, so the checks are repeated here without that gate.
-        if (!CanUseSelfDestructCommon(bracer, user) ||
-            !TryGetPulledDeadVictim(user, out var pulled) ||
-            pulled != victim ||
-            !_inventory.TryGetSlotEntity(victim, "gloves", out var gloves) ||
-            !TryComp(gloves, out YautjaBracerComponent? victimBracer) ||
-            victimBracer.User != victim ||
-            !victimBracer.SelfDestructArmed)
-        {
-            return false;
-        }
-
-        victimBracer.SelfDestructArmed = false;
-        victimBracer.SelfDestructAt = TimeSpan.Zero;
-        victimBracer.NextSelfDestructWarning = TimeSpan.Zero;
-        StopSelfDestructAudio((gloves.Value, victimBracer));
-        Dirty(gloves.Value, victimBracer);
-
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-cancelled"), user, user);
-        _adminLog.Add(LogType.Action, LogImpact.Medium,
-            $"{ToPrettyString(user):hunter} cancelled the self-destruct of {ToPrettyString(victim):victim}");
         return true;
     }
 

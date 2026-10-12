@@ -11,6 +11,7 @@ using NUnit.Framework;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.UnitTesting.Pool;
 
 namespace Content.IntegrationTests.CMU14.Yautja;
 
@@ -99,8 +100,52 @@ public sealed class YautjaBracerAlertSelfDestructTest
             });
 
             Assert.That(alerts.ActivateAlert(hunter, alert), Is.True);
-            Assert.That(corpseBracerComp.SelfDestructArmed, Is.False,
-                "Clicking again while hauling must cancel the hauled hunter's self-destruct.");
+            Assert.That(corpseBracerComp.SelfDestructArmed, Is.True,
+                "Clicking again while hauling must not cancel the hauled hunter's self-destruct.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ArmedHotkeyStillReachesYourOwnBracerWhileHauling()
+    {
+        // A connected client is needed so the hunter has a session for the self-destruct dialog.
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var inventory = entMan.System<InventorySystem>();
+            var mobState = entMan.System<MobStateSystem>();
+            var selfDestruct = entMan.System<YautjaSelfDestructSystem>();
+
+            // The self-destruct dialogs are UI, so the pair's session has to be driving the hunter.
+            var session = server.PlayerMan.Sessions.Single();
+
+            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            entMan.EnsureComponent<YautjaComponent>(hunter);
+            var hunterBracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
+            Assert.That(inventory.TryEquip(hunter, hunterBracer, "gloves", silent: true, force: true), Is.True);
+
+            server.PlayerMan.SetAttachedEntity(session, hunter);
+
+            var bracerEnt = (hunterBracer, entMan.GetComponent<YautjaBracerComponent>(hunterBracer));
+            Assert.That(selfDestruct.TryArmSelfDestruct(bracerEnt, hunter), Is.True,
+                "The hunter's own timer has to be armed for this case to mean anything.");
+
+            // A marine corpse carries no bracer, so its remote dialog is refused outright - which is what
+            // makes the hotkey's return value tell us which dialog it actually reached.
+            var corpse = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            mobState.ChangeMobState(corpse, MobState.Dead, entMan.GetComponent<MobStateComponent>(corpse), corpse);
+            entMan.EnsureComponent<PullerComponent>(hunter).Pulling = corpse;
+
+            Assert.That(selfDestruct.TryOpenRemoteDeadVictimSelfDestructDialog(bracerEnt, hunter, corpse), Is.False,
+                "Sanity check: the hauled bracerless corpse is refused, so reaching it would return false.");
+
+            Assert.That(selfDestruct.TryUseSelfDestruct(bracerEnt, hunter), Is.True,
+                "With your own timer armed, the hotkey must reach your own cancel dialog, not the hauled body's.");
         });
 
         await pair.CleanReturnAsync();

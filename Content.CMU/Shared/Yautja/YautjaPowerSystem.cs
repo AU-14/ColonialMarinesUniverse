@@ -532,6 +532,7 @@ public sealed partial class YautjaPowerSystem : EntitySystem
     {
         bracer.Comp.SelfDestructLaughStream = _audio.Stop(bracer.Comp.SelfDestructLaughStream);
         bracer.Comp.SelfDestructArmStream = _audio.Stop(bracer.Comp.SelfDestructArmStream);
+        bracer.Comp.SelfDestructWarningStream = _audio.Stop(bracer.Comp.SelfDestructWarningStream);
     }
 
     private bool HasActiveMask(EntityUid user)

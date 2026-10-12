@@ -25,14 +25,9 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
     private const float TileEpsilon = 0.25f;
     private const string RackFixtureId = "fix1";
     private const float RackFixtureHalfSize = 0.45f;
-    private static readonly ProtoId<AccessLevelPrototype> YautjaBadBloodAccess = "CMUAccessYautjaBadBlood";
-    private static readonly ProtoId<JobPrototype> HunterJob = "CMUYautjaHunter";
-    private static readonly ProtoId<JobPrototype> YoungbloodJob = "CMUYautjaYoungblood";
 
-    [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private SharedJobSystem _job = default!;
-    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private YautjaGearRackAccessSystem _rackAccess = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private FixtureSystem _fixtures = default!;
@@ -296,78 +291,13 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
         if (args.Cancelled)
             return;
 
-        var denial = ent.Comp.Kind switch
-        {
-            YautjaGearRackKind.Adult => DenyIfMissingAccessThenWrongRole(
-                HasRackAccess(args.User, YautjaRank.Blooded),
-                HasJob(args.User, HunterJob)),
-            YautjaGearRackKind.Youngblood => DenyIfMissingAccessThenWrongRole(
-                HasRackAccess(args.User, YautjaRank.YoungBlood),
-                HasJob(args.User, YoungbloodJob) || HasJob(args.User, HunterJob)),
-            YautjaGearRackKind.Elder => DenyIfMissingAccessThenWrongRole(
-                HasRackAccess(args.User, YautjaRank.Elder),
-                HasJob(args.User, HunterJob)),
-            YautjaGearRackKind.Thrall => HasComp<YautjaThrallComponent>(args.User)
-                ? null
-                : "cm-vending-machine-access-denied",
-            YautjaGearRackKind.BloodedThrall => HasComp<YautjaTechAuthorizedComponent>(args.User)
-                ? null
-                : "cm-vending-machine-access-denied",
-            YautjaGearRackKind.BadBlood => HasAccess(args.User, YautjaBadBloodAccess)
-                ? null
-                : "cm-vending-machine-access-denied",
-            YautjaGearRackKind.Stranded => HasRackAccess(args.User, YautjaRank.Blooded) &&
-                                            !HasAccess(args.User, YautjaBadBloodAccess)
-                ? null
-                : "cm-vending-machine-access-denied",
-            _ => null,
-        };
+        var denial = _rackAccess.GetOpenDenial(args.User, ent.Comp.Kind);
 
         if (denial == null)
             return;
 
         args.Cancel();
         _popup.PopupEntity(Loc.GetString(denial), ent, args.User);
-    }
-
-    private static string? DenyIfMissingAccessThenWrongRole(bool hasAccess, bool hasRole)
-    {
-        if (!hasAccess)
-            return "cm-vending-machine-access-denied";
-
-        return hasRole ? null : "cmu-yautja-rack-wrong-role";
-    }
-
-    private bool HasAccess(EntityUid user, ProtoId<AccessLevelPrototype> access)
-    {
-        // CMU14: a Yautja carries their access on the bracer chip, so recognise the badges directly.
-        if (access == YautjaBadBloodAccess && HasComp<YautjaBadBloodComponent>(user))
-            return true;
-
-        var tags = _accessReader.FindAccessTags(user);
-        return tags.Contains(access);
-    }
-
-    private bool HasRackAccess(EntityUid user, YautjaRank rank)
-    {
-        // CMU14: no ID card required - a Yautja of the rack's rank or above may open it. YautjaRank is
-        // ordered by seniority, so an elder opens the adult rack too.
-        if (TryComp<YautjaComponent>(user, out var yautja) && yautja.ClanRank >= rank)
-            return true;
-
-        foreach (var access in YautjaRankMetadata.GetRackAccessTags(rank))
-        {
-            if (HasAccess(user, access))
-                return true;
-        }
-
-        return false;
-    }
-
-    private bool HasJob(EntityUid user, ProtoId<JobPrototype> job)
-    {
-        return _mind.TryGetMind(user, out var mindId, out _) &&
-               _job.MindHasJobWithId(mindId, job.Id);
     }
 
     private void OnUiRangeCheck(Entity<YautjaGearRackComponent> ent, ref BoundUserInterfaceCheckRangeEvent args)
