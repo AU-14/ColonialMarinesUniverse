@@ -358,12 +358,16 @@ public sealed partial class CMArmorSystem : EntitySystem
             if ((args.Impact.Context & DamageImpactContext.XenoClaw) != 0)
                 args.Damage = args.Damage * XenoSystem.XENO_SLASH_DAMAGE_MULT;
             // CMU14 End
-            // CMU14 XenoMeleeArmor Begin: CM-SS13's xeno/melee combat configuration. Any melee hit on a
-            // xeno deals x1.5 (damage_initial_multiplier); the flat 20 penetration is the item-attack path
+            // CMU14 XenoMeleeArmor Begin: CM-SS13's xeno combat configuration. Anything melee-type on a
+            // xeno deals x1.5 (GLOB.xeno_melee.damage_initial_multiplier): the item attack path, the claw
+            // swing and every xeno ability, which all route through apply_armoured_damage(..., ARMOR_MELEE).
+            // Xeno projectiles take GLOB.xeno_ranged instead, so a non-Melee impact is only counted when
+            // the attack is a body attack (tool == origin). The flat 20 penetration is the item-attack path
             // only, and a xeno's own body attack ignores three quarters of the victim's armour
             // (XVX_ARMOR_EFFECTIVEMULT).
             var armorEffectiveness = 1f;
-            if (args.Impact.Delivery == DamageImpactDelivery.Melee)
+            if (args.Impact.Delivery == DamageImpactDelivery.Melee ||
+                (HasComp<XenoComponent>(args.Origin) && args.Tool == args.Origin))
             {
                 args.Damage = args.Damage * 1.5f;
 

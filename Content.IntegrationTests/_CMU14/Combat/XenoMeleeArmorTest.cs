@@ -56,6 +56,17 @@ public sealed class XenoMeleeArmorTest
             Assert.That(rawClaw / raw, Is.EqualTo(2.25).Within(0.03),
                 "Xeno melee on a xeno must total x2.25: XVX x1.5 on the swing times the config x1.5.");
 
+            // CM-SS13 runs every xeno ability through apply_armoured_damage(..., ARMOR_MELEE) too, so an
+            // ability that carries no Melee-delivery impact still gets the config x1.5. A xeno projectile
+            // takes the ranged config instead and must not.
+            var xenoAbility = Hit(100, origin: xeno, tool: xeno, impact: default, ap: 100);
+            var xenoProjectile = Hit(100, origin: xeno, tool: bayonet, impact: default, ap: 100);
+
+            Assert.That(xenoAbility / raw, Is.EqualTo(1.5).Within(0.02),
+                "A xeno ability on a xeno must get the xeno/melee config x1.5, exactly like the claw swing.");
+            Assert.That(xenoProjectile / raw, Is.EqualTo(1.0).Within(0.02),
+                "A xeno projectile on a xeno is ranged-type and must not get the melee config.");
+
             // Armour handling with the real armour in play.
             var baseline = Hit(100, impact: default);
             var marineBody = Hit(100, origin: nonXeno, tool: nonXeno, impact: DamageImpact.MeleeSlash);
