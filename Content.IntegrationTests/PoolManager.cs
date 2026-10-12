@@ -86,7 +86,9 @@ public static partial class PoolManager
         PoolSettings? settings = null,
         ITestContextLike? testContext = null)
     {
-        return await Instance.GetPair(settings, testContext);
+        var pair = await Instance.GetPair(settings, testContext);
+        pair.MarkBorrowed(); // CMU14: so a stale double dispose from the last borrower can't kill this test's pair
+        return pair;
     }
 
     /// <summary>
