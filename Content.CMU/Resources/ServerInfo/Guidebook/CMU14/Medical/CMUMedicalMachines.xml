@@ -35,4 +35,13 @@
   - Put the patient inside. Once their body temperature drops low enough, the cryoxadone slowly heals brute, burn, toxin and suffocation damage all at once.
   - Cryoxadone does nothing at normal body temperature. The patient has to be properly cold.
   - It's slow, but it needs nobody standing over it, so it's good for patients who are stable but badly hurt.
+
+  ## Limb Printer
+  <Box>
+    <GuideEntityEmbed Entity="CMULimbPrinter" Caption="Limb printer"/>
+  </Box>
+  The limb printer makes replacement arms, hands, legs and feet for patients who've lost one. Open it to pick the limb and side you need. The printed limb drops out next to the machine.
+  - [bold]Human limbs[/bold] need [bold]30u of biogenic matrix[/bold] from the beaker and [bold]7.5u of blood[/bold] from a syringe of the patient's blood. The printer starts with a beaker of 120u matrix, enough for four limbs. Chemistry can mix more.
+  - [bold]Robotic limbs[/bold] need [bold]15 metal sheets[/bold] loaded into the printer instead.
+  - The printer only makes the limb. Attaching it is surgery; see [textlink="Limb Surgery" link="CMUGuideSurgeryLimbs"].
 </Document>
