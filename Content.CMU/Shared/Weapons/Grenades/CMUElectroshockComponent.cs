@@ -43,11 +43,11 @@ public sealed partial class CMUElectroshockComponent : Component
 
     /// <summary>Applied damage is divided by this to get xenonid slowdown, in seconds.</summary>
     [DataField, AutoNetworkedField]
-    public float XenoSlowDivisor = 11;
+    public float XenoSlowDivisor = 8;
 
     /// <summary>Xenonids closer than this many tiles are also superslowed.</summary>
     [DataField, AutoNetworkedField]
-    public float XenoSuperslowRange = 2;
+    public float XenoSuperslowRange = 3;
 
     [DataField, AutoNetworkedField]
     public ProtoId<DamageTypePrototype> DamageType = "Heat";
