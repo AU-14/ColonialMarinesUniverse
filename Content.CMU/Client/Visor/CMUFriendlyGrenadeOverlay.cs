@@ -4,6 +4,7 @@ using Content.Shared.Trigger.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
+using Robust.Shared.Prototypes;
 
 namespace Content.Client.CMU14.Visor;
 
