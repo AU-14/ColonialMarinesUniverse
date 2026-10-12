@@ -1,17 +1,31 @@
+using Content.Shared._RMC14.Attachable.Systems;
 using Content.Shared._RMC14.Tracker.SquadLeader;
+using Content.Shared._RMC14.Weapons.Ranged;
+using Content.Shared.Actions;
+using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
+using Content.Shared.Popups;
+using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
 namespace Content.Shared.CMU14.Visor;
 
 /// <summary>
 /// The squad optic, while switched down, gives its wearer the squad leader / fireteam leader tracker if they don't
-/// already have one, and lets them see friendly primed grenades.
+/// already have one, lets them see friendly primed grenades and gives their guns IFF.
 /// </summary>
 public sealed partial class CMUSquadVisorSystem : EntitySystem
 {
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private AttachableIFFSystem _attachableIff = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private CMGunSystem _rmcGun = default!;
     [Dependency] private SquadLeaderTrackerSystem _tracker = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -21,6 +35,8 @@ public sealed partial class CMUSquadVisorSystem : EntitySystem
         SubscribeLocalEvent<CMUSquadVisorActiveComponent, ComponentShutdown>(OnActiveShutdown);
         SubscribeLocalEvent<CMUSquadVisorActiveComponent, GotEquippedEvent>(OnEquipped);
         SubscribeLocalEvent<CMUSquadVisorActiveComponent, GotUnequippedEvent>(OnUnequipped);
+
+        InitializeIFF();
     }
 
     private void OnActiveStartup(Entity<CMUSquadVisorActiveComponent> helmet, ref ComponentStartup args)
@@ -65,6 +81,9 @@ public sealed partial class CMUSquadVisorSystem : EntitySystem
         var marker = AddComp<CMUSquadVisorWearerComponent>(wearer);
         marker.GrantedTracker = _tracker.CMUTryGrantSquadVisorTracker(wearer);
         Dirty(wearer, marker);
+
+        AddToggleActions(wearer, marker);
+        UpdateHeldGuns(wearer);
     }
 
     private void Remove(EntityUid wearer, EntityUid helmet)
@@ -75,6 +94,8 @@ public sealed partial class CMUSquadVisorSystem : EntitySystem
         if (marker.GrantedTracker)
             _tracker.CMURemoveSquadVisorTracker(wearer);
 
+        RemoveToggleActions(wearer, marker);
         RemComp<CMUSquadVisorWearerComponent>(wearer);
+        UpdateHeldGuns(wearer);
     }
 }

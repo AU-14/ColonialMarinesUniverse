@@ -1,0 +1,39 @@
+- type: entity
+  parent: ActionMarineBase
+  id: CMUActionSquadVisorIFF
+  name: Toggle Optic IFF
+  description: Toggles your squad optic's IFF. While it's on, your gun won't fire with a friendly in the line of fire, but it's a little less accurate and loses damage over range a little faster.
+  components:
+  - type: Action
+    checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/iff_toggle_actions.rsi
+      state: iff_toggle_off
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/iff_toggle_actions.rsi
+      state: iff_toggle_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+  - type: InstantAction
+    event: !type:CMUToggleSquadVisorIFFActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: CMUActionSquadVisorGrenadeWarnings
+  name: Toggle Grenade Warnings
+  description: Toggles your squad optic marking friendly primed smart grenades.
+  components:
+  - type: Action
+    checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Weapons/Grenades/m40hedp.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Objects/Weapons/Grenades/m40hedp.rsi
+      state: primed
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
+  - type: InstantAction
+    event: !type:CMUToggleSquadVisorGrenadeWarningsActionEvent

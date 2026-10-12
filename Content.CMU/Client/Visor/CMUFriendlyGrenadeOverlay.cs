@@ -37,7 +37,8 @@ public sealed class CMUFriendlyGrenadeOverlay : Overlay
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
         return _player.LocalEntity is { } viewer &&
-               _entity.HasComponent<CMUSquadVisorWearerComponent>(viewer) &&
+               _entity.TryGetComponent(viewer, out CMUSquadVisorWearerComponent? wearer) &&
+               wearer.GrenadeWarningsEnabled &&
                _iff.TryGetFactions(viewer, _viewerFactions);
     }
 
