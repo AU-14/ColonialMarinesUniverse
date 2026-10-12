@@ -76,10 +76,13 @@ public sealed partial class FoFBalanceConfirmWindow : DefaultWindow
         MinWidth = CmuPanelMetrics.ChoiceWindowWidth;
 
         var target = ev.Govfor < ev.Opfor ? "GOVFOR" : "OPFOR";
+        var targetDisplay = target == "GOVFOR"
+            ? Loc.GetString("cmu-fof-target-govfor")
+            : Loc.GetString("cmu-fof-target-opfor");
 
         _join = new CmuChoiceCard(
-            Loc.GetString("cmu-fof-balance-confirm-join", ("target", target)),
-            Loc.GetString("cmu-fof-balance-confirm-join-desc", ("target", target), ("max", ev.MaxGap)),
+            Loc.GetString("cmu-fof-balance-confirm-join", ("target", targetDisplay)),
+            Loc.GetString("cmu-fof-balance-confirm-join-desc", ("target", targetDisplay), ("max", ev.MaxGap)),
             target == "GOVFOR" ? JoinRoundWindow.GovforPalette : JoinRoundWindow.OpforPalette,
             buttonOnLeft: true);
 

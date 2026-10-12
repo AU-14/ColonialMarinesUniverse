@@ -25,7 +25,7 @@ in diagnostics but are excluded from orders. This works on colony and expedition
   Two candidate route searches are allowed per operations update. Explicit move/guard/hold
   orders replace automatic patrol.
 - **Aim skill** applies 0-100% to the selected squad when the slider is released, without a
-  respawn. It changes target leading and stable aim error; 100% preserves full tracking.
+  respawn. New agents default to 65%. It changes target leading and stable aim error; 100% preserves full tracking.
   It does not change native gun spread, damage, recoil, ammunition or friendly-fire interlocks.
 - **Assist nearby friendly squads** permits one available squad to answer another squad's
   radio contact. Native headset/channel/range/send/receive checks still apply, on the same map

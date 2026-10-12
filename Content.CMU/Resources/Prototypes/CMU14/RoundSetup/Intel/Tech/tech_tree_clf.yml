@@ -9,8 +9,8 @@
       options:
 # ├──[ Tier 0 ]──────────────────────────────────────────────────────┤
       -
-        - name: Unlock Tier 1
-          description: Transitions the tree to another tier.
+        - name: cmu-tech-tier-one
+          description: cmu-tech-tier-unlock-desc
           cost: 0
           events:
           - !type:TechUnlockTierEvent
@@ -20,8 +20,8 @@
             state: upgrade
 # ├──[ Tier 1: Cell support & reinforcements ]───────────────────────┤
       -
-        - name: Requisition Budget Increase
-          description: Distributes resources to requisitions for spending.
+        - name: cmu-tech-clf-req-budget
+          description: cmu-tech-clf-req-budget-desc
           cost: 6
           increase: 2
           repurchasable: true
@@ -31,8 +31,8 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
-        - name: Insurgent Reinforcements
-          description: Summon reinforcements from a neighboring cell.
+        - name: cmu-tech-clf-reinforcements
+          description: cmu-tech-clf-reinforcements-desc
           cost: 25
           increase: 6
           repurchasable: true
@@ -42,8 +42,8 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Machine Gunner
-          description: Summon a machine gunner from a neighboring cell.
+        - name: cmu-tech-clf-machine-gunner
+          description: cmu-tech-clf-machine-gunner-desc
           cost: 8
           repurchasable: false
           events:
@@ -52,8 +52,8 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Call VAISO read on WY
-          description: Send intel on local WY facility to VAISO, summoning them for a raid. They are not hostile to CLF but not required to help directly!
+        - name: cmu-tech-clf-vaiso
+          description: cmu-tech-clf-vaiso-desc
           cost: 50
           repurchasable: false
           events:
@@ -62,8 +62,8 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Call CLF Commandos
-          description: Sends intel to CLF High command, summoning a team of CLF commandos to aid the cell
+        - name: cmu-tech-clf-commandos
+          description: cmu-tech-clf-commandos-desc
           cost: 50
           repurchasable: false
           events:
@@ -72,16 +72,16 @@
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
-        - name: Call Prodigy Armed Repair Team Yankee
-          description: Summon a PMC team from PART, specifically Yankee Squad, They are not hostile to CLF but not required to help directly!
+        - name: cmu-tech-clf-prodigy-yankee
+          description: cmu-tech-clf-prodigy-yankee-desc
           cost: 45
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
             thirdPartyId: ProdigyPARTY
           - !type:TechAnnounceEvent
-            author: INTEL OPERATIONS
-            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+            author: cmu-tech-author-intel-operations
+            message: cmu-tech-clf-prodigy-yankee-announce
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon

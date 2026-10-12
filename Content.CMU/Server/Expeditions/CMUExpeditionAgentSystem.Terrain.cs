@@ -6,8 +6,10 @@ using Content.Shared._RMC14.Xenonids.Despoiler;
 using Content.Shared.CMU14.Expeditions;
 using Content.Shared.Maps;
 using Content.Shared.Projectiles;
+using Microsoft.Extensions.ObjectPool;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Utility;
 
 namespace Content.Server.CMU14.Expeditions;
 
@@ -19,10 +21,16 @@ public sealed partial class CMUExpeditionAgentSystem
     private readonly HashSet<(EntityUid Grid, Vector2i Tile)> _acidTiles = new();
     private readonly Dictionary<(MapId Map, Vector2i Cell), List<Box2>> _fireCells = new();
     private readonly Dictionary<MapId, List<Box2>> _fireBounds = new();
+    private readonly ObjectPool<List<Box2>> _fireRegionPool =
+        new DefaultObjectPool<List<Box2>>(new ListPolicy<Box2>(), 1024);
     private const float FireClearance = 0.1f;
 
     private void RefreshFireRegions()
     {
+        foreach (var bucket in _fireCells.Values)
+            _fireRegionPool.Return(bucket);
+        foreach (var regions in _fireBounds.Values)
+            _fireRegionPool.Return(regions);
         _fireCells.Clear();
         _fireBounds.Clear();
         // Soft ignition sensors are absent from the hard-obstacle sweep. Index their
@@ -38,14 +46,14 @@ public sealed partial class CMUExpeditionAgentSystem
             bounds = new Box2(Vector2.Min(bounds.BottomLeft, position - new Vector2(0.35f)),
                 Vector2.Max(bounds.TopRight, position + new Vector2(0.35f)));
             if (!_fireBounds.TryGetValue(transform.MapID, out var regions))
-                _fireBounds[transform.MapID] = regions = new List<Box2>();
+                _fireBounds[transform.MapID] = regions = _fireRegionPool.Get();
             regions.Add(bounds);
             for (var x = (int) MathF.Floor(bounds.Left); x <= (int) MathF.Floor(bounds.Right); x++)
             for (var y = (int) MathF.Floor(bounds.Bottom); y <= (int) MathF.Floor(bounds.Top); y++)
             {
                 var key = (transform.MapID, new Vector2i(x, y));
                 if (!_fireCells.TryGetValue(key, out var bucket))
-                    _fireCells[key] = bucket = new List<Box2>();
+                    _fireCells[key] = bucket = _fireRegionPool.Get();
                 bucket.Add(bounds);
             }
         }
