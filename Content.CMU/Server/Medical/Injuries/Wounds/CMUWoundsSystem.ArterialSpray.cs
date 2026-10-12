@@ -10,6 +10,7 @@ using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 
 namespace Content.Server.CMU14.Medical.Injuries.Wounds;
 
