@@ -1,9 +1,11 @@
 <Document>
-  #Dropship Operations Guide
+  # CAS Handbook: How to Play
 
   ## Aerial Support & Deployment Platforms
 
-  Dropships are the backbone of UNMC tactical deployment and a critical source of battlefield firepower. The Almayer utilizes two advanced multi-role dropships: [color=#D2B48C]Alamo[/color] and [color=#808080]Normandy[/color].
+  This handbook explains the gameplay controls for fitting, loading, targeting, and firing dropship weapons. It is not an SOP, rules-of-engagement document, or UCMJ reference.
+
+  Dropships provide troop transport and Close Air Support (CAS). The available craft and attachment points depend on the map: examples include the [color=#D2B48C]Alamo[/color], [color=#808080]Normandy[/color], Fallujah, and Mohawk.
 
   [bold]Both the [color=#D2B48C]Alamo[/color] and [color=#808080]Normandy[/color] are engineered to perform essential troop transport and devastating Close Air Support (CAS) missions[/bold], adapting to the dynamic needs of any operation.
 
@@ -17,13 +19,23 @@
 
   ### Optimizing Your Transport Runs:
 
-  -   [bold]LZ Management:[/bold] Ensure that you always select the [color=#4CAF50][bold]PRIMARY LZ[/bold][/color].
+  -   [bold]Destination Selection:[/bold] Use the navigation console to select an available landing destination before launching. Transport travel and CAS fly-by runs are different flight modes.
   -   [bold]Departure Callouts:[/bold] Be sure to announce departure times on [color=#808080]common ship radio[/color] to reduce the chance of leaving any marine behind on ship.
   -   [bold]Have the Pilot Fly:[/bold] Having [color=#FFFF00]Piloting Skill 2[/color] (standard for Dropship/Gunship Pilots and ASOs) [color=#ADD8E6]reduces dropship refuel time by 25%[/color]. [bold]This stacks with the Cooling System.[/bold]
 
   ## II. Dropship Armaments & Engine Attachments
 
-  Understanding the available hardware is crucial before engaging in CAS. Both the [color=#D2B48C]Alamo[/color] and [color=#808080]Normandy[/color] can be outfitted with 4 weapon systems, 2 performance-enhancing engine attachments and 3 utility mounts.
+  The CAS interface supports up to [bold]seven weapons[/bold], including weapons on internal points. This does not add attachment points to a craft: your actual loadout is limited by the exterior, engine, and interior points on its map. An interior weapon occupies a point that could otherwise hold a utility module.
+
+  ### Preparing a Loadout
+
+  1. Print the weapon and its matching ammunition from the Dropship Part Fabricator.
+  2. Use a powerloader to move and install heavy weapon attachments on compatible points.
+  3. Load heavy GAU crates, laser batteries, and rocket packs with a powerloader. Match the ammunition to the installed weapon.
+  4. For BOFORS and Howitzer ammunition, take an individual magazine or shell from its tray or rack with [bold]both hands free[/bold], then click the weapon's attachment point to load it. Click the point with an empty hand to unload it. The whole tray or rack is a transport container, not the fired ammunition.
+  5. Open [bold]Equip[/bold] on the weapons console to check the installed weapon, loaded payload, and ammunition before flying.
+
+  Exterior powerloader loading is blocked while the dropship is in flight. Interior BOFORS and Howitzer mounts can be serviced by hand from the cabin; use them if you want to reload without returning to a landing pad.
 
   ### A. Weapon Systems
 
@@ -40,6 +52,25 @@
      <GuideEntityEmbed Entity="RMCDropshipAttachmentAmmoGAUAP"/>
   [bold]General Description[/bold]: A specialized armor-piercing sabot round engineered to defeat [color=#FF6347]heavily armored targets[/color]. It is less effective against infantry or unarmored targets. [color=#ADD8E6]Has a travel time of 6 seconds[/color]
 
+     <GuideEntityEmbed Entity="CMUDropshipAmmoGAUFragmentation"/>
+  [bold]PGU-110 "Hornet"[/bold]: Wide dispersion, fragmentation damage, and small explosive impacts. Choose it for groups of exposed infantry; it has low armor penetration and cannot penetrate overhead cover.
+     <GuideEntityEmbed Entity="CMUDropshipAmmoGAUArmorPiercing"/>
+  [bold]PGU-115 "Lance"[/bold]: Narrow dispersion, high armor penetration, and up to three levels of overhead penetration. It uses focused direct damage rather than an explosive blast.
+     <GuideEntityEmbed Entity="CMUDropshipAmmoGAUIncendiary"/>
+  [bold]PGU-120 "Cinder"[/bold]: Scattered incendiary impacts for area denial, with reduced direct damage. It cannot penetrate overhead cover.
+
+  These GAU crates hold [bold]400 rounds[/bold] and spend [bold]40 rounds per trigger[/bold]: ten full bursts per crate. One trigger starts a burst, not a single bullet.
+
+     <GuideEntityEmbed Entity="CMUDropshipMixedGauBelt"/>
+  [bold]Building a mixed GAU belt[/bold]:
+  1. Print an empty mixed ammunition belt carrier.
+  2. With a powerloader, use a GAU crate on the carrier. Repeat for up to three crates; they fill slots 1, 2, and 3 in order.
+  3. Install the carrier in the GAU's ammunition point instead of a single crate.
+  4. Each trigger fires one whole burst from the next slot: 1, then 2, then 3, then back to 1. Empty slots and crates with fewer than 40 rounds are skipped. A full three-crate carrier supplies thirty bursts.
+  5. Examine the carrier to inspect the slot order. Use its slot eject verbs to remove crates and change the loadout.
+
+  Mixing does not blend damage types inside a burst. [bold]Next burst[/bold] in the console identifies the next crate's payload; [bold]Bursts left[/bold] counts usable bursts across the carrier. The same sequence is used by direct CAS triggers and fire missions. Different GAU ammunition types cannot refill one another, and a carrier cannot be refilled by combining it with another carrier.
+
      <GuideEntityEmbed Entity="RMCDropshipAttachmentLaserCannon"/>
   - [bold]Overview[/bold]: An area denial weapon that projects a laser to create a field of intense, albeit short-lived fires.
   - [bold]Firing Window[/bold]: Can be used during [color=#00FF00]Transit AND Fly-by runs[/color].
@@ -47,6 +78,44 @@
      <GuideEntityEmbed Entity="RMCDropshipAttachmentAmmoLaserCannon"/>
   The cannon randomly covers a [color=#FFA500]7x7 area with 16 total fires[/color]. These fires have a very short duration but are of very high intensity, making them ideal for flushing enemies or temporary area denial.
   The ammunition is very cost-efficient, with a full reload providing 10 shots. It boasts the [color=#ADD8E6]fastest travel time of any CAS weapon (1 second)[/color] and has a minimal [color=#FFD700]1-tile inaccuracy[/color].
+
+     <GuideEntityEmbed Entity="RMCDropshipAttachmentAmmoLaserCannonGreen"/>
+  [bold]Green "Verdant"[/bold]: Wider green fire coverage; twenty triggers per battery.
+     <GuideEntityEmbed Entity="RMCDropshipAttachmentAmmoLaserCannonBlue"/>
+  [bold]Blue "Glacier"[/bold]: Concentrated blue fire coverage; five triggers per battery.
+     <GuideEntityEmbed Entity="RMCDropshipAttachmentAmmoLaserCannonWhite"/>
+  [bold]White "Daybreak"[/bold]: White-hot fire with a small footprint and high charge consumption; two triggers per battery.
+     <GuideEntityEmbed Entity="RMCDropshipAttachmentAmmoLaserCannonRapid"/>
+  [bold]Rapidfire[/bold]: Five simultaneous laser pulses per trigger, each igniting its own impact area. A full battery provides [bold]ten triggers[/bold], for fifty pulse impacts in total. It still uses the laser cannon's firing cooldown.
+
+  [bold]Changing the Rapidfire pattern[/bold]: Select the loaded laser cannon on either monitor, then click its pattern button to switch between [bold]Laser: wide ring[/bold] and [bold]Laser: sweeping line[/bold].
+  - [bold]Wide ring[/bold]: Five points around the aimpoint, six tiles from the center. There is no central pulse.
+  - [bold]Sweeping line[/bold]: Five points across a twelve-tile line, including a central pulse.
+  Both patterns follow the dropship's orientation and have the same charge cost. Check the preview before firing. Changing the pattern affects future shots, not pulses already released.
+
+     <GuideEntityEmbed Entity="CMUDropshipAttachmentBOFORS"/>
+  [bold]L/60 40mm BOFORS (ATC)[/bold]: Fits exterior weapon points and interior weapon-capable utility points. Each magazine holds twenty rounds; a trigger consumes five, providing [bold]four bursts per magazine[/bold]. All five ammunition types use genuine explosions, not GAU-style direct tile hits.
+  - [bold]HE[/bold]: General explosive bombardment.
+  - [bold]AP[/bold]: Penetrates cover before a focused explosive detonation.
+  - [bold]Airburst[/bold]: Wider anti-infantry coverage, with selectable burst height.
+  - [bold]HEAT[/bold]: A concentrated anti-armor explosive payload.
+  - [bold]Incendiary[/bold]: Explosive impacts that also start fires.
+
+  [bold]Changing BOFORS airburst height[/bold]: Load an Airburst magazine, select the BOFORS on the console, and click the height button to cycle [bold]low, medium, and high[/bold]. Medium is the default. Low concentrates the blast into fewer tiles at higher intensity; high spreads the same explosive energy over more tiles at lower intensity. The preview updates with the setting.
+
+  These are detonation-height gameplay profiles above the target, [bold]not a selector for a building floor or z-level[/bold]. The setting is only available for BOFORS Airburst ammunition, requires the weapon's pilot skill, and affects future shots only.
+
+     <GuideEntityEmbed Entity="CMUDropshipAttachmentHowitzer"/>
+  [bold]M137 105mm Howitzer (HWR)[/bold]: Fits exterior and interior points and holds one physical shell at a time. Load a fresh shell after firing.
+  - [bold]HE[/bold]: Heavy explosive damage against positions.
+  - [bold]HE-FRAG[/bold]: Explosive fragmentation coverage.
+  - [bold]HEAT[/bold]: Anti-armor bombardment.
+  - [bold]HE Airburst[/bold]: Multiple dispersed explosive impacts from one physical shell. It does not use the BOFORS height selector.
+
+     <GuideEntityEmbed Entity="CMUDropshipAttachmentJDAMBombClamp"/>
+  [bold]JDAM Bomb Clamp (BMB)[/bold]: Fits interior crew-compartment points only and holds one JDAM-family bomb. Use a powerloader to install the clamp and load its matching bomb into the point. HE provides a large blast; Incendiary adds fire; AP emphasizes penetration; Cluster disperses bomblets; Napalm blankets an area in fire. A cluster payload's displayed bomblet count does not mean the clamp holds several bombs.
+
+  BOFORS, Howitzer, and the bomb clamp use the normal CAS firing workflow and require a fly-by rather than ordinary transport transit. [bold]An internal mount allows cabin servicing; it does not turn a CAS weapon into a landed turret.[/bold]
 
      <GuideEntityEmbed Entity="RMCDropshipAttachmentGuidedMissileLauncher"/>
   - [bold]Overview[/bold]: This system fires expensive, single-shot, high-impact guided rockets designed for taking out significant targets.
@@ -59,6 +128,18 @@
   This missile delivers its payload in a [color=#FF6347]small but highly concentrated blast radius[/color]. Designed for precision strikes against durable single targets. [color=#ADD8E6]Has a travel time of 2 seconds[/color]
       <GuideEntityEmbed Entity="RMCDropshipAttachmentAmmoRocketNapalm"/>
   This missile has a [color=#FF6347]large blast radius[/color] and creates an intense fire in a [color=#FFA500]7x7 area[/color] upon impact. Its primary use is for extreme area denial. [color=#ADD8E6]Has a travel time of 6 seconds[/color]
+
+     <GuideEntityEmbed Entity="RMCDropshipAttachmentRocketPod"/>
+  [bold]LAU-229 Rocket Pod[/bold]: Uses Mini-Mike ammunition packs, not the LAU-444's single guided missiles. Check the launcher name before printing ammunition.
+  - [bold]Standard[/bold]: Explosive minirockets.
+  - [bold]Incendiary[/bold]: Adds fire to the impact.
+  - [bold]HEAT[/bold]: Anti-armor explosive payload.
+  - [bold]Pressure / Thermobaric[/bold]: Pulls nearby targets toward the impact.
+  - [bold]Flare[/bold]: Illuminates the impact area.
+  - [bold]White-phosphorus smoke[/bold]: Creates a smoke screen and burning phosphorus. Smoke is not harmless cover.
+  - [bold]Cluster Incendiary[/bold]: Releases six dispersed minirockets per trigger.
+  - [bold]Weedkiller[/bold]: Delivers weedkiller over the impact area.
+  Payloads differ in charge consumption, dispersion, and effects. Read the selected ammunition and remaining triggers instead of assuming every pack fires the same way.
 
   ### B. Engine Attachments
   These modules are fitted to dedicated engine attachment points  to enhance dropship performance.
@@ -92,7 +173,7 @@
   2. [bold]Command Intervention[/bold]: [color=#FFD700]The most effective and timely way to replenish spent dropship points is through Command intervention.[/color] Command staff can spend [color=#00FF00]"Intel Points"[/color] to purchase dropship points,
   which are then credited to the dropship systems for immediate fabrication of armaments and attachments.
 
-  -    This system means that the dropship's loadout and re-arming capability are directly tied to the overall strategic resource management of the marine operation. Pilots must be judicious with their ordnance, and effective communication with Command regarding point status and needs is essential.
+  -    Check each item's point cost before printing. Running out of points prevents further fabrication until the balance is replenished.
 
    ## A. Accessing & Understanding the CAS Interface
 
@@ -111,34 +192,78 @@
     <Box>[bold]Camera Control[/bold]:</Box>
     -   Located [italic]between the two main monitor windows[/italic], you will find four directional arrows.
     -   Using these arrows allows you to [color=#ADD8E6]slightly move the camera view around[/color] the selected target point. You can use the button in the center to reset the camera back to the target.
-    -   [color=#FFD700][bold]Important Note[/bold]: Moving the camera view in the "Cams" window [bold]does NOT change where the CAS strike will land[/bold]. The strike is always directed at the offset of the target selected in the "Target" window.
+    -   [color=#FFD700][bold]Important Note[/bold][/color]: Selecting a different camera subject does not change the strike target, but the directional arrows change the console's shared offset. Direct CAS strikes land at the selected strike target plus that offset. Check the targeting preview and reset the offset when you no longer need it.
 
     3.  [bold]The "Target"[/bold]
     -   This is your primary interface for selecting targets and firing the dropship's weapon systems.
-    <Box>[bold]Firing Sequence - Step-by-Step:</Box>
+    <Box>[bold]Firing Sequence - Step-by-Step:[/bold]</Box>
     -   [color=#FFA500][bold]Select Target[/bold][/color]:  You must choose a target. On the right side of the "Target" window, a list of available targets will be displayed. These targets are typically those designated by ground teams using [color=#FF0000]Laser Designators[/color] or [color=#00FF00]Signal Flares[/color]. Click on the desired target to select it.
     -   [color=#FFA500][bold]Select "Strike"[/bold][/color]: Once a target is selected, press the "Strike" button within the window.
     -   [color=#FFA500][bold]Select "Weapon"[/bold][/color]: This will bring up a list showing all equipped weapon systems.
     -   [color=#FFA500][bold]Choose Your Weapon[/bold][/color]: Select the specific weapon system you intend to fire at the chosen target.
+    -   [bold]Check the preview and payload settings[/bold]: With a weapon and valid target selected, the strike/weapon view can display the target camera with an overlay. Check the next burst, remaining bursts, and any laser-pattern or airburst-height setting.
     -   [color=#FF0000][bold]Select "Fire"[/bold][/color]: Confirm your selections by pressing the "Fire" button.
     -   [bold]If the sequence was performed correctly, you should hear the distinct sound of the selected weapon firing.[/bold]
 
-    <Box>[bold]Weapon Cooldowns & Rapid Fire:</Box>
+    <Box>[bold]Weapon Cooldowns & Rapid Fire:[/bold]</Box>
     -   Individual weapons have a [italic]short internal cooldown[/italic] before they can be fired again.
     -   However, there is [bold]no hard delay between firing -different- guns[/bold]. This means once one weapon has fired (example GAU-21), you can immediately repeat the "Strike" -> "Weapon" (select a different GAU-21 or another weapon) -> "Fire" sequence to unleash another salvo with a different weapon system very quickly. This allows for potent combined-arms attacks.
 
-    ### C. CAS Operations: Best Practices & What NOT To Do
+    ### C. Reading Targeting Previews
 
-    -   [bold]DO: Verify Target Designation[/bold]: Always ensure the target selected in your "Target" window is the correct one communicated by ground teams. Mistakes in target selection can be catastrophic.
-    -   [bold]DO: Monitor Ammo[/bold]: Regularly check your "Equip" window to keep track of remaining ammunition for each weapon system. Running dry is a bad look.
-    -   [bold]DO: Utilize Both Monitors Effectively[/bold]: For instance, keep "Target" open on one monitor for firing control and "Cams" or "Equip" open on the other for situational awareness or ammo checks.
-    -   [bold]DO: Practice Rapid Weapon Switching[/bold]: Get proficient with the "Strike -> Weapon -> Fire" sequence to quickly engage with multiple weapon systems if the situation demands it.
-    -   [color=#00FF00][bold]DO: Reset Your Target Offsets After Each Fire Mission[/bold][/color]: [bold]After completing a fire mission, ensure you reset any target offsets. You don't want to hit friendlies, do you?[/bold]
+    - [bold]Yellow outlines[/bold] show the estimated payload footprint. For a Rapidfire battery, the five separate outlines show its five impact areas.
+    - [bold]Orange outlines[/bold] show the dispersion envelope around the target. They are not a guarantee that every tile inside the outline will be damaged.
+    - Blast previews use an unobstructed estimate. Walls, overhead cover, penetration, blast resistance, and tile snapping affect actual impacts. Fire footprints can contain gaps.
+    - A camera can observe a different target from the selected strike target. [bold]Changing camera subjects alone does not select a new strike target.[/bold]
+    - The shared directional-arrow [bold]offset does affect direct CAS aim[/bold]: a direct strike uses the selected target plus that offset. Reset it with the center button. During a fire mission, the mission's vector and per-weapon step offsets control the pass.
 
-    -   [color=#FF0000][bold]DON'T: Fire Without Positive Target ID[/bold][/color]: Never fire "blindly" at an unconfirmed target. Friendly fire in CAS is devastating.
-    -   [color=#FF0000][bold]DON'T: Assume the Camera View is Your Aimpoint[/bold][/color]: Remember the "Cams" window is for observation; your shots go where the selected target in the "Target" window is.
-    -   [color=#FF0000][bold]DON'T: Neglect Communication on "Danger Close" Scenarios[/bold][/color]: If ground teams call "Danger Close," be extra vigilant. Ensure your strike won't endanger them. If in doubt, hold fire.
-    -   [color=#FF0000][bold]DON'T: Waste Expensive Ordnance[/bold][/color]: Use the appropriate weapon for the target. Don't fire a costly AGM-99 'Napalm' missile at a single drone.
+    ### D. Fire Missions
+
+    Open [bold]Fire Mission[/bold] to create and name a mission, then use its editor to select weapons and assign offsets at the available timing steps. A blank offset means that weapon will not fire at that step. Use weapon-page buttons to reach internal mounts or additional guns.
+
+    Choose the mission from the strike menu, select a designated target, choose the strike vector, and fire. The mission advances along that vector and releases the scheduled weapons at their steps. Check the ammunition totals before starting; mixed GAU belts advance one crate per scheduled burst.
+
+    ### E. Mohawk Groundside Chin Turret
+
+    The fixed twin 90mm M90 chin gun has a [bold]180-degree forward arc[/bold] and a [bold]30-tile range[/bold]. While landed, it automatically engages visible hostiles using the craft's existing faction/IFF rules and fires individual HEAP shells. Groundside turret operation is disabled during takeoff or hovering; airborne CAS uses the weapon's burst behavior instead.
+
+    [bold]Manual aiming[/bold]:
+    1. Buckle into the Mohawk's gunnery seat and open the dedicated gunnery console.
+    2. Press [bold]Take turret control[/bold]. This suspends the default automatic targeting.
+    3. Use the left camera view to aim and click to fire. Combat-mode firing in the main view is also supported.
+    4. The overlay shows the forward arc, range, and aim marker. Red indicates an out-of-range/out-of-arc aimpoint or confirmed tracked engagement; green indicates an aimpoint inside the arc and range. It does not guarantee an unobstructed shot.
+
+    [bold]Tracking a moving hostile[/bold]:
+    1. While in manual control, press [bold]Mark hostile[/bold], then click a visible hostile in the left camera view.
+    2. The camera follows the target and displays its range. Marking alone does [bold]not[/bold] fire.
+    3. Continue firing manually, or press [bold]CONFIRM automatic fire[/bold] to authorize repeated fire at that marked target.
+    4. Press [bold]Stop / clear tracking[/bold] to stop tracked engagement and return to manual aiming. Clicking the left camera to fire manually also clears tracking.
+
+    A dead, friendly, obscured, out-of-range, or rear-arc target loses its lock and automatic-fire confirmation. Mark and confirm again to resume. Running out of ammunition stops confirmed engagement. Closing the console, leaving the gunnery seat, or leaving the landed state releases manual control.
+
+    [bold]Restore automatic control[/bold] returns the turret to its default landed IFF targeting. Closing the console also restores that default behavior: it is [bold]not[/bold] a persistent hold-fire command.
+
+    ### F. Gameplay Troubleshooting
+
+    - [bold]Weapon missing from the list[/bold]: Check whether it is installed on a compatible point, then browse the weapon pages. A dedicated direct-fire-only weapon is not a normal CAS selection.
+    - [bold]Cannot load[/bold]: Match the ammunition to the weapon, clear the occupied ammunition slot, and use the correct method: powerloader for heavy packs, both hands free for individual hand-loaded rounds.
+    - [bold]Cannot fire[/bold]: Read the popup. Check flight mode, pilot skill, cooldown, loaded ammunition, and whether a fire mission is already active. Most CAS weapons cannot fire while landed.
+    - [bold]Target disappeared[/bold]: Have the ground player designate again, then reselect the target.
+    - [bold]Strike rejected under cover[/bold]: Select ammunition with suitable overhead penetration. Dispersion can move an impact beneath protected cover even when the central target is valid.
+    - [bold]Belt still has rounds but will not fire[/bold]: Every remaining crate may contain fewer than forty rounds. Leftover rounds from different crates are not combined into a burst.
+    - [bold]Pattern/height button missing[/bold]: Pattern selection requires a Rapidfire laser battery; height selection requires a BOFORS Airburst magazine.
+    - [bold]Turret will not track[/bold]: Take control from the gunnery seat while landed. The mark must be a visible IFF-hostile inside the forward arc and range.
+
+    ### G. Practical Gameplay Tips
+
+    -   [bold]Use both monitors[/bold]: Keep "Target" open for firing and "Cams" or "Equip" open for observation or ammunition checks.
+    -   [bold]Account for travel time[/bold]: The target can move between release and impact. Fast laser strikes and slower missiles or bombs require different lead distances.
+    -   [bold]Monitor ammunition[/bold]: Check the loaded payload and full bursts remaining before starting a mission.
+    -   [bold]Switch weapons during cooldowns[/bold]: Another ready weapon can fire while the first weapon cools down.
+    -   [bold]Reset offsets when changing tasks[/bold]: A forgotten direct-fire offset shifts subsequent strikes away from their designation.
+    -   [bold]Check the actual aimpoint[/bold]: Ordinary CAS uses the selected strike target plus the console offset, not an arbitrary camera subject. The manually controlled Mohawk chin turret instead uses your click in its left camera view.
+    -   [bold]Allow room for scatter and fire[/bold]: CAS explosions and burning tiles can damage nearby allies. The preview is an estimate, not a friendly-fire barrier.
+    -   [bold]Match the payload to the job[/bold]: Use precision or AP payloads for focused targets, fragmentation for exposed groups, and incendiaries for persistent area denial.
 
 
 </Document>
