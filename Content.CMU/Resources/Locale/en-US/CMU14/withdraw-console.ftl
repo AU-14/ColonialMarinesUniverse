@@ -7,6 +7,7 @@ withdraw-console-id-accepted = ID accepted ({ $count }/2). Swipe one more author
 withdraw-console-unlocked = Console unlocked. Withdraw protocol is now available.
 withdraw-console-dropdown-blocked = Withdrawal in progress: dropship cycle-down is locked. You may still return to the ship.
 withdraw-console-faction-not-allowed = Withdrawal is not authorized for this faction on the current operation.
+withdraw-console-gamemode-disabled = Withdrawal is not available during a distress signal operation.
 
 # Mid-withdrawal announcement (fires at half the total withdraw duration)
 withdraw-console-announcement = { $faction } WITHDRAWAL NOTICE: Formal withdrawal has been initiated. Withdrawal will complete in { $minutes } minutes. All personnel should prepare for evacuation.
