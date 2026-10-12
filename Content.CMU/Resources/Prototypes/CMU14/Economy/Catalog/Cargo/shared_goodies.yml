@@ -89,10 +89,6 @@
         crate: LiquidCarbonDioxideCanister
       - cost: 500
         crate: CMUCanisterNitrousOxide
-      - cost: 1600
-        crate: CMUCanisterPlasma
-      # - cost: 2000
-      #   crate: CMUCanisterPhoron
       - cost: 600
         crate: CMUGasCrystallizer
       - cost: 400
@@ -101,8 +97,6 @@
         crate: CMUGasThermoMachineFreezer
       - cost: 500
         crate: CMUGasCondenser
-      - cost: 1200
-        crate: CMUCrateAtmosPhoronKit
       - cost: 900
         crate: CMUCratePowerStarterKit
       - cost: 1500
@@ -117,8 +111,6 @@
       #   crate: TritiumCanister
       # - cost: 800
       #   crate: FrezonCanister
-      - cost: 700
-        crate: CMUCratePhoronSheets
       - cost: 600
         crate: AU14CrateBoxFirefighting
       - cost: 1200
@@ -139,3 +131,22 @@
         crate: RMCDirectionalFan
       - cost: 150
         crate: RMCTinyFan
+
+# Plasma and phoron for the colony refinery. Kept off the GOVFOR/OPFOR platoon catalogs: a burning plasma or phoron mix
+# can rupture tanks and canisters into explosions.
+- type: entity
+  abstract: true
+  id: CMUASRSRefineryGoodies
+  components:
+  - type: RequisitionsComputer
+    categories:
+    - name: Refinery
+      entries:
+      - cost: 1600
+        crate: CMUCanisterPlasma
+      # - cost: 2000
+      #   crate: CMUCanisterPhoron
+      - cost: 1200
+        crate: CMUCrateAtmosPhoronKit
+      - cost: 700
+        crate: CMUCratePhoronSheets
