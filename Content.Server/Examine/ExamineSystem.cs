@@ -91,21 +91,27 @@ namespace Content.Server.Examine
                 request.NetEntity, request.Id, text, verbs?.ToList()), channel);
 
             // AU14/CMU: optionally echo the exact same context-menu examine text into chat.
-            // Skip this if the target already gets the detailed character breakdown message,
-            // so examining a character doesn't produce two chat messages at once.
-            var coveredByCharacterBreakdown = HasComp<ExaminableCharacterComponent>(entity)
-                && _netConfigManager.GetClientCVar(channel, CCVars.ExamineLogInChat);
-
-            var echoedFullText = !coveredByCharacterBreakdown && _netConfigManager.GetClientCVar(channel, CCVars.ExamineFullTextInChat);
-            if (echoedFullText)
+            // CMU14: a character's chat breakdown carries the rest of their examine text too (description,
+            // health, pain and so on), so examining a character still sends one chat message.
+            var markup = text.ToMarkup();
+            var hasText = !string.IsNullOrWhiteSpace(FormattedMessage.RemoveMarkupPermissive(markup));
+            var echoedFullText = false;
+            if (HasComp<ExaminableCharacterComponent>(entity) &&
+                _netConfigManager.GetClientCVar(channel, CCVars.ExamineLogInChat))
             {
-                var markup = text.ToMarkup();
-                if (!string.IsNullOrWhiteSpace(FormattedMessage.RemoveMarkupPermissive(markup)))
-                {
-                    var itemName = FormattedMessage.EscapeText(Identity.Name(entity, EntityManager, playerEnt));
-                    var combinedLog = $"[color=gold][bold]{itemName}[/bold][/color]\n{markup}";
-                    _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
-                }
+                var combinedLog = EntityManager.System<ExaminableCharacterSystem>().BuildBreakdown(entity, playerEnt);
+                if (hasText)
+                    combinedLog += $"\n{markup}";
+
+                _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
+                echoedFullText = hasText;
+            }
+            else if (_netConfigManager.GetClientCVar(channel, CCVars.ExamineFullTextInChat) && hasText)
+            {
+                var itemName = FormattedMessage.EscapeText(Identity.Name(entity, EntityManager, playerEnt));
+                var combinedLog = $"[color=gold][bold]{itemName}[/bold][/color]\n{markup}";
+                _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
+                echoedFullText = true;
             }
 
             // cmu edit start
