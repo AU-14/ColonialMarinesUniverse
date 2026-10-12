@@ -57,7 +57,7 @@ public sealed partial class TechSystem : EntitySystem
     }
 
     // CMU14-start
-    private static string LocOrRaw(string value)
+    private string LocOrRaw(string value)
     {
         return Loc.TryGetString(value, out var localized) ? localized : value;
     }

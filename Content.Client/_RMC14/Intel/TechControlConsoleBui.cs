@@ -102,12 +102,12 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
         }
     }
 
-// CMU14-start
-    private static string LocOrRaw(string value)
+    // CMU14-start
+    private string LocOrRaw(string value)
     {
         return Loc.TryGetString(value, out var localized) ? localized : value;
     }
-// CMU14-end
+    // CMU14-end
 
     private void OpenOptionWindow(TechOption option, int tier, int optionIndex, FixedPoint2 points, int currentTier)
     {
