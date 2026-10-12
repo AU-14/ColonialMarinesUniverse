@@ -29,6 +29,7 @@
       map: [ "enum.IVDripVisualLayers.Base" ]
     - state: reagent0
       map: [ "enum.IVDripVisualLayers.Reagent" ]
+  - type: CMUBloodRefrigerator # CMU14: keeps hanging blood and plasma fresh
   - type: IVDrip
     reagentStates:
     - 0: reagent0
@@ -122,6 +123,7 @@
   components:
   - type: CMUBloodPackType # CMU14
     type: ONegative
+  - type: CMUPerishableBlood # CMU14: goes bad out of the fridge
   - type: SolutionContainerManager
     solutions:
       pack:

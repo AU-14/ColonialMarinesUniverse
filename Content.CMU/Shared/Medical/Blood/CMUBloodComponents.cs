@@ -85,3 +85,25 @@ public sealed partial class CMUSalineDilutionComponent : Component
     [DataField, AutoNetworkedField]
     public FixedPoint2 Saline;
 }
+
+/// <summary>
+/// Blood or plasma that goes bad after <see cref="ShelfLife"/> outside refrigeration. Time spent somewhere with
+/// <see cref="CMUBloodRefrigeratorComponent"/> doesn't count.
+/// </summary>
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+public sealed partial class CMUPerishableBloodComponent : Component
+{
+    [DataField]
+    public TimeSpan ShelfLife = TimeSpan.FromMinutes(30);
+
+    /// <summary>Unrefrigerated time spent so far.</summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan Warm;
+
+    [DataField, AutoNetworkedField]
+    public bool Spoiled;
+}
+
+/// <summary>Keeps blood and plasma stored inside it from going bad, like an IV stand or a freezer crate.</summary>
+[RegisterComponent, NetworkedComponent]
+public sealed partial class CMUBloodRefrigeratorComponent : Component;

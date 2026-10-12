@@ -71,6 +71,8 @@ public sealed class CMUBloodSystem : EntitySystem
         SubscribeLocalEvent<CMUHumanMedicalComponent, MapInitEvent>(OnHumanMapInit);
         SubscribeLocalEvent<CMUBloodPackTypeComponent, SolutionChangedEvent>(OnTypedPackSolutionChanged);
         SubscribeLocalEvent<CMUBloodPackTypeComponent, ExaminedEvent>(OnTypedPackExamined);
+        SubscribeLocalEvent<CMUPerishableBloodComponent, SolutionChangedEvent>(OnPerishableSolutionChanged);
+        SubscribeLocalEvent<CMUPerishableBloodComponent, ExaminedEvent>(OnPerishableExamined);
         SubscribeLocalEvent<BloodPackComponent, UseInHandEvent>(OnPackUseInHand);
 
         SubscribeLocalEvent<IVDripComponent, InteractUsingEvent>(OnIVInteractUsing);
@@ -105,6 +107,7 @@ public sealed class CMUBloodSystem : EntitySystem
             return;
 
         var donorType = GetBloodType(donor);
+        EnsureComp<CMUPerishableBloodComponent>(pack);
         var label = EnsureComp<CMUBloodPackTypeComponent>(pack);
         if (label.Mixed)
             return;
@@ -139,6 +142,70 @@ public sealed class CMUBloodSystem : EntitySystem
             args.PushMarkup(Loc.GetString("cmu-blood-pack-examine-type", ("type", CMUBloodTypes.Name(type))));
     }
 
+    private void OnPerishableSolutionChanged(Entity<CMUPerishableBloodComponent> ent, ref SolutionChangedEvent args)
+    {
+        // An emptied pack can hold fresh blood again.
+        if (args.Solution.Comp.Solution.Volume > FixedPoint2.Zero || ent.Comp.Warm == TimeSpan.Zero && !ent.Comp.Spoiled)
+            return;
+
+        ent.Comp.Warm = TimeSpan.Zero;
+        ent.Comp.Spoiled = false;
+        Dirty(ent);
+    }
+
+    private void OnPerishableExamined(Entity<CMUPerishableBloodComponent> ent, ref ExaminedEvent args)
+    {
+        if (ent.Comp.Spoiled)
+        {
+            args.PushMarkup(Loc.GetString("cmu-blood-pack-examine-spoiled"));
+            return;
+        }
+
+        if (IsRefrigerated(ent))
+            args.PushMarkup(Loc.GetString("cmu-blood-pack-examine-cold"));
+        else if (ent.Comp.Warm > ent.Comp.ShelfLife / 2)
+            args.PushMarkup(Loc.GetString("cmu-blood-pack-examine-warm"));
+    }
+
+    /// <summary>Whether something is stored inside a refrigerator, however deep.</summary>
+    public bool IsRefrigerated(EntityUid uid)
+    {
+        var current = uid;
+        while (_container.TryGetContainingContainer((current, null), out var container))
+        {
+            if (HasComp<CMUBloodRefrigeratorComponent>(container.Owner))
+                return true;
+
+            current = container.Owner;
+        }
+
+        return false;
+    }
+
+    private void UpdatePerishables(TimeSpan elapsed)
+    {
+        var query = EntityQueryEnumerator<CMUPerishableBloodComponent>();
+        while (query.MoveNext(out var uid, out var perishable))
+        {
+            if (perishable.Spoiled || IsRefrigerated(uid))
+                continue;
+
+            // An empty pack has nothing to go bad.
+            if (TryComp<BloodPackComponent>(uid, out var pack) &&
+                (!_solution.TryGetSolution(uid, pack.Solution, out _, out var contents) || contents.Volume <= FixedPoint2.Zero))
+            {
+                continue;
+            }
+
+            perishable.Warm += elapsed;
+            if (perishable.Warm >= perishable.ShelfLife)
+            {
+                perishable.Spoiled = true;
+                Dirty(uid, perishable);
+            }
+        }
+    }
+
     #endregion
 
     #region Transfusion
@@ -169,6 +236,19 @@ public sealed class CMUBloodSystem : EntitySystem
 
         var reference = references[0];
 
+        // Blood and plasma that went bad out of the fridge do no good and poison the patient.
+        if (TryComp<CMUPerishableBloodComponent>(pack, out var perishable) && perishable.Spoiled)
+        {
+            var spoiled = Destroy(transferred, PlasmaReagent);
+            foreach (var reagent in references)
+            {
+                spoiled += Destroy(transferred, reagent);
+            }
+
+            if (spoiled > FixedPoint2.Zero)
+                ApplyMismatchReaction(recipient, spoiled, "cmu-blood-spoiled-reaction");
+        }
+
         // Red cells and plasma each follow their own compatibility rules.
         if (TryComp<CMUBloodPackTypeComponent>(pack, out var label) && (label.Mixed || label.Type != null))
         {
@@ -190,7 +270,7 @@ public sealed class CMUBloodSystem : EntitySystem
                 destroyed += Destroy(transferred, PlasmaReagent);
 
             if (destroyed > FixedPoint2.Zero)
-                ApplyMismatchReaction(recipient, destroyed);
+                ApplyMismatchReaction(recipient, destroyed, "cmu-blood-mismatch-reaction");
         }
 
         var plasma = ConvertToBlood(transferred, PlasmaReagent, reference);
@@ -233,7 +313,7 @@ public sealed class CMUBloodSystem : EntitySystem
         return quantity;
     }
 
-    private void ApplyMismatchReaction(EntityUid recipient, FixedPoint2 destroyed)
+    private void ApplyMismatchReaction(EntityUid recipient, FixedPoint2 destroyed, LocId popup)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = destroyed * MismatchToxinPerUnit;
@@ -244,7 +324,7 @@ public sealed class CMUBloodSystem : EntitySystem
             return;
 
         _nextMismatchPopup[recipient] = now + MismatchPopupCooldown;
-        _popup.PopupEntity(Loc.GetString("cmu-blood-mismatch-reaction"), recipient, recipient, PopupType.MediumCaution);
+        _popup.PopupEntity(Loc.GetString(popup), recipient, recipient, PopupType.MediumCaution);
     }
 
     /// <summary>How much of a body's bleeding gets through, slowed by a recent plasma transfusion.</summary>
@@ -340,6 +420,7 @@ public sealed class CMUBloodSystem : EntitySystem
             return;
 
         _nextSalineTick = now + TimeSpan.FromSeconds(1);
+        UpdatePerishables(TimeSpan.FromSeconds(1));
 
         var query = EntityQueryEnumerator<CMUSalineDilutionComponent, BloodstreamComponent>();
         while (query.MoveNext(out var uid, out var dilution, out var bloodstream))

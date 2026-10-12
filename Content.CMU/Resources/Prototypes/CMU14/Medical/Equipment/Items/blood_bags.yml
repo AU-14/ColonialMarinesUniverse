@@ -73,6 +73,7 @@
   components:
   - type: CMUBloodPackType
     type: ABPositive
+  - type: CMUPerishableBlood
   - type: BloodPack
     transferableReagents: [ CMUBloodPlasma ]
   - type: CMUIVFlow

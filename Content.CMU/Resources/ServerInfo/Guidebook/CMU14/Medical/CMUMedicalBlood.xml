@@ -21,6 +21,13 @@
   - [color=red]The wrong type is destroyed in the bloodstream[/color]. It restores nothing, and it poisons the patient.
   - Drawing blood from someone into an empty pack labels it with their type. Filling one pack from two different types makes it [color=red]mixed[/color], safe for nobody. An emptied pack can be refilled with any type.
 
+  ## Keeping Blood Fresh
+  - Blood and plasma [color=red]go bad after 30 minutes out of the fridge[/color]. The time adds up, and putting a pack back in the cold pauses it but doesn't reset it.
+  - A [bold]freezer crate[/bold] or a full-size [bold]IV stand[/bold] keeps packs cold. A pack held in your hand or on a folding IV stand isn't.
+  - Examining a pack tells you when it's getting warm, and when it's gone bad.
+  - [color=red]Spoiled blood and plasma[/color] do no good and poison the patient. Saline doesn't spoil.
+  - An empty pack can be refilled with fresh blood.
+
   ## Giving Blood
   <Box>
     <GuideEntityEmbed Entity="CMBloodPackFull" Caption="Blood pack (O-)"/>
