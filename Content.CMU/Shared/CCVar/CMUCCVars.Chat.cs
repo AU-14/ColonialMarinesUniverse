@@ -55,4 +55,10 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<bool> HidePopupsOnScreen =
         CVarDef.Create("cmu.hide_popups_on_screen", false, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Don't open the examine popup when examining. Pair with <see cref="ExamineFullTextInChat"/> to read examines in chat.
+    /// </summary>
+    public static readonly CVarDef<bool> HideExamineTooltip =
+        CVarDef.Create("cmu.hide_examine_tooltip", false, CVar.CLIENTONLY | CVar.ARCHIVE);
 }

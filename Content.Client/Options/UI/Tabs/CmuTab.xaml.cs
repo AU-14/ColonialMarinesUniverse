@@ -42,6 +42,7 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.CMUTacMapCenterOnOpen, CenterTacMapCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineLogInChat, ExamineLogInChatCheckBox);
         Control.AddOptionCheckBox(CCVars.ExamineFullTextInChat, ExamineFullTextInChatCheckBox);
+        Control.AddOptionCheckBox(CCVars.HideExamineTooltip, HideExamineTooltipCheckBox);
         // cmu edit start
         Control.AddOptionCheckBox(CCVars.ExamineWoundsInChat, ExamineWoundsInChatCheckBox);
         // cmu edit end
