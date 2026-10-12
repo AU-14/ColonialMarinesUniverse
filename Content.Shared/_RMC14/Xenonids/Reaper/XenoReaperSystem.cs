@@ -258,6 +258,10 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (args.Target != xeno.Owner && !_hive.FromSameHive(xeno.Owner, args.Target))
             return;
 
+        // CMU14: weeds and resin are same-hive too, so a click that slips off a moving xeno used to mantle the floor and eat the cooldown
+        if (!HasComp<XenoComponent>(args.Target) || _mobState.IsDead(args.Target))
+            return;
+
         if (!HasFleshResinPopup(xeno, xeno.Comp.CarrionMantleCost) || !_rmcActions.TryUseAction(args))
             return;
 

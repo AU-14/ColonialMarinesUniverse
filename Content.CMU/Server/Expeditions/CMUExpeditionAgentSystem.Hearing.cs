@@ -65,7 +65,8 @@ public sealed partial class CMUExpeditionAgentSystem
         if (agent.HoldPosition || agent.HeardPoint is not { } heard || now >= agent.HeardUntil || agent.Target != null ||
             agent.OrderedDestination != null || agent.TravelGoal != null || agent.Entrench || agent.Action != null ||
             agent.Treatment != null || agent.SupplySource != null || agent.RecoveryUntil > now ||
-            agent.Duty is CMUSquadDuty.Medic or CMUSquadDuty.RearGuard ||
+            agent.LastDamage >= agent.RetreatDamage || agent.SquadPhase == "withdraw" ||
+            agent.Duty is CMUSquadDuty.Medic or CMUSquadDuty.RearGuard or CMUSquadDuty.Recover ||
             agent.Home is not { } home || !_transform.InRange(home, heard, agent.LeashRange))
             return false;
         if (_transform.InRange(Transform(uid).Coordinates, heard, 3))

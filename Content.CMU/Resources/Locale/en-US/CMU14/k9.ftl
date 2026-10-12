@@ -90,6 +90,7 @@ rmc-k9-arm-grab-escaped-self = You manage to break your arm free from the dog's 
 rmc-k9-arm-grab-escaped-dog = {$target} manages to break free from your jaws!
 rmc-k9-arm-grab-broken-damage = Due to heavy damage, the dog loses its grip!
 rmc-k9-arm-grab-xeno = The jaws cannot get a reliable lock on a xenomorph!
+rmc-k9-arm-grab-target-down = They are already down. There is nothing to hold onto.
 
 # Track Owner
 rmc-k9-track-master-none = You do not have a registered owner. Approach a marine and use 'Request Bond'.
@@ -120,15 +121,15 @@ rmc-k9-bind-master-hellhound = The hellhound accepts you as its master. Sic 'Em 
 rmc-k9-bind-dog-hellhound = {$master} is your master. Their hunt is yours.
 
 # Bodyguard Protocol
-rmc-k9-protector-rage-trigger = [color=red]{$dog} detects a threat to its handler and engages combat defense protocol![/color]
+rmc-k9-protector-rage-trigger = {$dog} detects a threat to its handler and engages combat defense protocol!
 
 # Sic Em
 rmc-k9-sic-em-shout = Handler {$handler} shouts: "SIC 'EM on {$target}!"
-rmc-k9-sic-em-dog-order = [color=orange]Handler order: ATTACK {$target}![/color]
+rmc-k9-sic-em-dog-order = Handler order: ATTACK {$target}!
 
 # Evacuate
 rmc-k9-evacuate-shout = Handler {$handler} shouts: "EVACUATE {$target}!"
-rmc-k9-evacuate-dog-order = [color=cyan]Handler order: EVACUATE {$target}![/color]
+rmc-k9-evacuate-dog-order = Handler order: EVACUATE {$target}!
 
 # Good Boy
 rmc-k9-good-boy-popup = {$user} praises {$dog}. {$dog} wags its mechanical tail and emits a happy beep-boop!
@@ -136,7 +137,7 @@ rmc-k9-good-boy-hellhound = {$user} praises {$dog}. {$dog} rumbles a low, please
 
 # Sensors
 rmc-k9-senses-alert-growl = {$dog} detects motion vibrations and growls into the darkness!
-rmc-k9-senses-alert-master = [color=red]Your K9 {$dog} detected enemy motion nearby![/color]
+rmc-k9-senses-alert-master = Your K9 {$dog} detected enemy motion nearby!
 rmc-k9-senses-alert-silent-dog = You catch movement stirring nearby and hold low and silent.
 
 # Directions

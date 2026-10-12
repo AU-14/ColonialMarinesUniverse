@@ -146,7 +146,9 @@ public sealed partial class CMUSquadPanelEui : BaseEui
                 return;
             Fill(_window.Variant, _variants, "mixed", value => Loc.GetString($"cmu-squads-variant-{value}"));
             Fill(_window.Outfit, _outfits, "scavenger");
-            Fill(_window.Doctrine, _doctrines, "balanced"); Fill(_window.Faction, _factions, "GOVFOR");
+            Fill(_window.Doctrine, _doctrines, "balanced");
+            Fill(_window.Faction, _factions, "GOVFOR", value => value == "AllHostile"
+                ? Loc.GetString("cmu-squads-all-hostile-option") : value);
             Fill(_window.OrderDoctrine, _doctrines, panel.CurrentDoctrine);
             _optionsLoaded = true;
             if (panel.Squads.Count == 0)

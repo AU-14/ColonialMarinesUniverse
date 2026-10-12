@@ -90,7 +90,7 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
                 {
                     OpenOptionWindow(option, tier, optionIndex, console.Tree.Points, console.Tree.Tier);
                 };
-                optionButton.ToolTip = option.Name;
+                optionButton.ToolTip = LocOrRaw(option.Name); // CMU14
                 optionButton.TooltipDelay = 0.1f;
 
                 optionContainer.AddChild(new Control { HorizontalExpand = true });
@@ -101,6 +101,13 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
             }
         }
     }
+
+// CMU14-start
+    private static string LocOrRaw(string value)
+    {
+        return Loc.TryGetString(value, out var localized) ? localized : value;
+    }
+// CMU14-end
 
     private void OpenOptionWindow(TechOption option, int tier, int optionIndex, FixedPoint2 points, int currentTier)
     {
@@ -113,10 +120,10 @@ public sealed partial class TechControlConsoleBui : BoundUserInterface
         _optionWindow = new TechControlConsoleOptionWindow();
         _optionWindow.OpenCentered();
         _optionWindow.OnClose += () => _optionWindow = null;
-        _optionWindow.Title = option.Name;
+        _optionWindow.Title = LocOrRaw(option.Name); // CMU14
         _optionWindow.CurrentPointsLabel.Text = Loc.GetString("rmc-ui-tech-points-value", ("value", points.Double().ToString("F1")));
-        _optionWindow.NameLabel.Text = option.Name;
-        _optionWindow.DescriptionLabel.Text = option.Description;
+        _optionWindow.NameLabel.Text = LocOrRaw(option.Name); // CMU14
+        _optionWindow.DescriptionLabel.Text = LocOrRaw(option.Description); // CMU14
         _optionWindow.CostLabel.Text = $"{option.CurrentCost}";
 
         _optionWindow.Statistics.ReleaseChildren();

@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.Weapons.Ranged.Whitelist;
+using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Storage;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Shared.Prototypes;
@@ -210,7 +211,8 @@ public sealed partial class CMUExpeditionAgentSystem
     {
         if (WeaponAmmo(weapon) > 0)
             return true;
-        if (_itemSlots.TryGetSlot(weapon, "gun_magazine", out var slot))
+        if (TryComp<ItemSlotsComponent>(weapon, out var slots) &&
+            _itemSlots.TryGetSlot((weapon, slots), "gun_magazine", out var slot))
         {
             // Only initialize an empty native slot. Do not replace a native supplied
             // magazine or manufacture rounds to compensate for an invalid prototype.

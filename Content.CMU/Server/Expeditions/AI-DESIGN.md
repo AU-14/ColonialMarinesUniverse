@@ -363,7 +363,7 @@ melee threats, brief last-seen snapshots, terrain, hazards and actual/planned fr
 Committed escape steps continue while the rifle fires through the normal aim, ammo, fire-rate,
 wield and friendly-fire checks. There is no speed boost or guaranteed escape from faster aliens.
 If trapped, the guard returns fire. Up to eight frozen melee positions persist for three seconds
-through smoke or sight loss, without updating hidden transforms/velocities or permitting blind shots.
+through smoke or sight loss, without updating hidden transforms/velocities or authorizing shots from melee memory.
 Smoke is withheld while melee threats are visible/recent. Observable incoming xeno/biomorph projectiles
 can trigger a bounded lateral dodge; short-lived spray and persistent acid tiles also inform navigation.
 Hazard escape may cross the unsafe starting patch for at most 1.5 metres, but cannot re-enter hazards
@@ -554,7 +554,7 @@ incapacitation and player possession, and record search cost with simultaneous c
 The survival/suppression follow-up is also build-only; no tests or in-game checks were run.
 Verify disarm and knockdown with the rifle underfoot and several tiles away, a stolen/stored
 rifle, missing hands, and a revived guard. Rush a squad with moving xenos/neomorphs around trees
-and corners, then retreat out of sight. Check fire during escape, no blind shots, no pursuit
+and corners, then retreat out of sight. Check fire during escape, no shots from melee memory, no pursuit
 into the remembered melee gap, water crossing, fire avoidance and behavior when no escape exists.
 Keep firing while advancing on a squad: guards must return shots between withdrawals and
 reject an exposed or penetrable shelter instead of repeatedly waiting there. Check crowded
@@ -609,7 +609,11 @@ Manual verification for corner routing (not yet run; build-only follow-up):
 Travel/fire state no longer depends on a live steering component: a queued, stopped or failed
 movement can still return fire. A blocked firing lane under pressure permits a deliberate short
 peek; hits wake the next decision and the trigger executor. Utility actions, wielding, fire rate,
-ammunition, visible aim points and friendly-fire checks remain authoritative.
+ammunition, observed firing evidence and friendly-fire checks remain authoritative. Incoming rounds
+can authorize bounded suppression at frozen, uncertain lane/contact positions through smoke;
+sound alone cannot. Smoke withdrawal keeps a validated escape route through sight/covering-fire
+loss. Travel without contact lowers the rifle; compatible approaches and one-handed utilities
+continue movement and firing together.
 
 Scavenging checks actual magazine-slot or ballistic compatibility and remaining ammunition. The
 four-metre, five-second claim can include loose items, accessible floor storage and a dead body's
@@ -642,7 +646,7 @@ Manual verification for this revision (not run):
    Repeat with native HE/smoke, active grenades and unsupported ordnance.
 5. Rush from two or three directions with xenos/neomorphs, then enter smoke, die in view or retreat
    behind walls. Check target spread, immediate contact priority, escape spacing, short memory and
-   no blind tracking/shooting. Use spit, slowing spit, spray and lingering acid; check feasible dodges,
+   no hidden tracking or shots from melee memory. Use spit, slowing spit, spray and lingering acid; check feasible dodges,
    unsafe-ground escape and no crossing into another acid patch or through solid cover.
 6. Order six/twelve guards past streetlights, traffic lights, furniture, trees and offset corners.
    Add/remove a blocker and separate one member. Check half-tile detours, bounded waits/retries,
@@ -669,5 +673,6 @@ barricades, sandbags and platform corners from both sides, then repeat with wire
 shutter, a blocked landing, a nearby friendly and a mid-action order/knockdown. Check detours
 around deployed folding barricades and resumption of the original order. Fight humans behind
 rotated, single and double rows of cover: verify return fire, limited lateral advances, real
-projectile blocking, no friendly fire, and no shots through full walls or smoke. Record squad
+projectile blocking, no friendly fire, and no shots through full walls. Smoke permits only bounded
+return fire using recent observed evidence, never hidden entity tracking. Record squad
 navigation cost with six guards; compilation alone does not validate movement in game.

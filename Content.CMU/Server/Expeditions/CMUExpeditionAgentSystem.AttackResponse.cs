@@ -25,13 +25,32 @@ public sealed partial class CMUExpeditionAgentSystem
         ent.Comp.PendingInterruptingDamage = true;
         ent.Comp.LastHit = now;
         RememberIncomingFire(ent, ent.Comp, Transform(ent).Coordinates, now, hit: true);
-        ent.Comp.NextThink = now;
+        RequestThink(ent.Comp, now);
         ent.Comp.ImmediateFireUntil = now + TimeSpan.FromSeconds(0.8);
         ent.Comp.NextMovingBurst = now;
+        if (args.Impact.Delivery == DamageImpactDelivery.Projectile && args.Tool is { } projectile &&
+            HasComp<ProjectileComponent>(projectile) && TryComp<PhysicsComponent>(projectile, out var body) &&
+            body.LinearVelocity.LengthSquared() > 0.01f)
+        {
+            // The impacting round provides a local bearing even when its shooter is hidden.
+            ObserveIncomingLane(ent, ent.Comp, _transform.GetMapCoordinates(ent), body.LinearVelocity, now);
+        }
+        else if (args.Impact.Delivery == DamageImpactDelivery.Projectile &&
+                 !ent.Comp.ContactFromRadio && ent.Comp.LastSeen is { } last && Exists(last.EntityId) &&
+                 now - ent.Comp.LastContact < ent.Comp.ReturnFireMemory)
+        {
+            RememberReturnFire(ent, ent.Comp, _transform.GetMapCoordinates(ent),
+                _transform.GetWorldPosition(ent) - _transform.ToMapCoordinates(last).Position, now);
+        }
         // A hit accelerates self-defence, but its damage attribution is not a sensor
         // that reveals the current location of an attacker behind smoke or walls.
-        if (args.Origin is { } source && Exists(source) && AcceptOrderedContact(ent, ent.Comp, source) &&
-            Visible(ent, source, ent.Comp.DetectionRange))
+        if (args.Origin is not { } source || !Exists(source))
+            return;
+        // AllHostile excludes unarmed neutrals until they attack. Remember actual
+        // aggressors through native hostility without bypassing friendly protection or sight.
+        if (TargetsAllHostiles(ent.Comp) && _mobs.IsAlive(source) && !IsFriendly(ent, source))
+            _factions.AggroEntity(ent.Owner, source);
+        if (AcceptOrderedContact(ent, ent.Comp, source) && Visible(ent, source, ent.Comp.DetectionRange))
         {
             if (args.Impact.Delivery == DamageImpactDelivery.Projectile)
             {
