@@ -56,41 +56,46 @@ public sealed class InternalsGasProtectionTest
     }
 
     [Test]
-    public async Task InternalsKeepOutNeurotoxinForTwiceTheBestFilter()
+    public async Task InternalsKeepOutNeurotoxinForTwelveSecondsPerExposure()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+        EntityUid victim = default;
+        var blocked = new List<bool>();
 
         await server.WaitAssertion(() =>
         {
             var entities = server.EntMan;
-            var gasMask = entities.System<SharedGasMaskSystem>();
             var internalsSystem = entities.System<SharedInternalsSystem>();
-
-            var victim = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var mask = entities.SpawnEntity("ClothingMaskBreath", MapCoordinates.Nullspace);
-            var tank = entities.SpawnEntity("OxygenTankFilled", MapCoordinates.Nullspace);
+            victim = entities.SpawnEntity("CMMobHuman", testMap.GridCoords);
+            var mask = entities.SpawnEntity("ClothingMaskBreath", testMap.GridCoords);
+            var tank = entities.SpawnEntity("OxygenTankFilled", testMap.GridCoords);
             var internals = entities.EnsureComponent<InternalsComponent>(victim);
             internalsSystem.ConnectBreathTool((victim, internals), mask);
             Assert.That(internalsSystem.TryConnectTank((victim, internals), tank), Is.True);
+        });
 
-            // The WY filter, the best against neurotoxin, absorbs 100 / 1.25 = 80 gas damage: eight 10-damage doses.
-            const int doses = 16;
-            for (var i = 0; i < doses; i++)
-            {
-                Assert.That(gasMask.TryAbsorbNeurotoxinWithInternals(victim, 10f), Is.True,
-                    $"internals should still keep out neurotoxin dose {i + 1}");
-            }
+        // Stay in the gas: one exposure a second for 14 seconds.
+        for (var second = 0; second <= 14; second++)
+        {
+            await server.WaitPost(() =>
+                blocked.Add(server.EntMan.System<SharedGasMaskSystem>().TryBlockNeurotoxinWithInternals(victim)));
+            await pair.RunSeconds(1f);
+        }
 
-            Assert.That(gasMask.IsInternalsBlockingNeurotoxin(victim), Is.False,
-                "internals must stop protecting once twice the best filter's protection is used up");
-            Assert.That(gasMask.TryAbsorbNeurotoxinWithInternals(victim, 10f), Is.False);
-            Assert.That(gasMask.IsBreathingInternals(victim), Is.True,
-                "spent neurotoxin protection must not stop internals keeping out other gases");
+        Assert.Multiple(() =>
+        {
+            Assert.That(blocked[11], Is.True, "internals should still hold after 11 seconds of exposure");
+            Assert.That(blocked[13], Is.False, "internals should give out after 12 seconds of exposure");
+        });
 
-            entities.DeleteEntity(victim);
-            entities.DeleteEntity(mask);
-            entities.DeleteEntity(tank);
+        // Step out of the gas, then back in: the timer starts over.
+        await pair.RunSeconds(3f);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.System<SharedGasMaskSystem>().TryBlockNeurotoxinWithInternals(victim), Is.True,
+                "a fresh exposure should be kept out again");
         });
 
         await pair.CleanReturnAsync();

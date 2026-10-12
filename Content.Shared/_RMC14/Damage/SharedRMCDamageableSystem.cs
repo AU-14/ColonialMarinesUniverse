@@ -745,10 +745,10 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
 
                 userDamage.NextDamageAt = time + userDamage.DamageEvery;
 
-                // CMU14: internals keep out the same gases a filter does. Neurotoxin wears them down like a filter.
+                // CMU14: internals keep out the same gases a filter does, but only hold neurotoxin out for a while per exposure.
                 var internalsSealed = _mask.IsBreathingInternals(user);
                 if (internalsSealed && TryComp<GasMaskFilterDamageComponent>(contact, out var internalsDamage) && internalsDamage.Neurotoxin)
-                    internalsSealed = _mask.TryAbsorbNeurotoxinWithInternals(user, internalsDamage.Damage);
+                    internalsSealed = _mask.TryBlockNeurotoxinWithInternals(user);
 
                 if (internalsSealed && HasComp<GasMaskFilterDamageComponent>(contact))
                     continue;
