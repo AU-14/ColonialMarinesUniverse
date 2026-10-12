@@ -14,8 +14,9 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.CMU14.Medical.Injuries.Wounds;
 
 /// <summary>
-/// Arterial bleeds don't just pool at the patient's feet: each spill squirts blood a few tiles away,
-/// leaving splatters along the way, and the patient is told they're spurting blood.
+/// Arterial bleeds squirt blood a few tiles away every <see cref="ArterialSprayInterval"/>, however fast they bleed,
+/// leaving splatters along the way, and the patient is told they're spurting blood. Spills in between pool at the
+/// patient's feet as usual.
 /// </summary>
 public sealed partial class CMUWoundsSystem
 {
@@ -27,7 +28,7 @@ public sealed partial class CMUWoundsSystem
     private const float ArterialSprayMinRange = 1.5f;
     private const float ArterialSprayMaxRange = 3f;
     private const int ArterialSpraySteps = 3;
-    private static readonly TimeSpan ArterialPopupCooldown = TimeSpan.FromSeconds(5);
+    private static readonly TimeSpan ArterialSprayInterval = TimeSpan.FromSeconds(10);
 
     private static readonly ProtoId<DecalPrototype>[] BloodSplatters =
     [
@@ -39,12 +40,18 @@ public sealed partial class CMUWoundsSystem
         "RMCDecalBloodSplatter6",
     ];
 
-    private readonly Dictionary<EntityUid, TimeSpan> _nextArterialPopup = new();
+    private readonly Dictionary<EntityUid, TimeSpan> _nextArterialSpray = new();
 
     private bool TrySprayArterialBlood(Entity<BloodstreamComponent> ent, Solution blood)
     {
         if (!TryGetArterialSource(ent, out var part))
             return false;
+
+        var now = Timing.CurTime;
+        if (_nextArterialSpray.TryGetValue(ent, out var next) && now < next)
+            return false;
+
+        _nextArterialSpray[ent] = now + ArterialSprayInterval;
 
         var origin = _transform.GetMapCoordinates(ent);
         var direction = _random.NextAngle().ToVec();
@@ -75,19 +82,9 @@ public sealed partial class CMUWoundsSystem
         var spillAt = landing is { } land ? _transform.ToCoordinates(land) : Transform(ent).Coordinates;
         _puddle.TrySpillAt(spillAt, blood, out _, sound: false);
 
-        PopupArterialSpray(ent, part);
-        return true;
-    }
-
-    private void PopupArterialSpray(EntityUid body, EntityUid part)
-    {
-        var now = Timing.CurTime;
-        if (_nextArterialPopup.TryGetValue(body, out var next) && now < next)
-            return;
-
-        _nextArterialPopup[body] = now + ArterialPopupCooldown;
-        _popup.PopupEntity(Loc.GetString("cmu-wound-arterial-spray", ("part", Name(part))), body, body,
+        _popup.PopupEntity(Loc.GetString("cmu-wound-arterial-spray", ("part", Name(part))), ent, ent,
             PopupType.MediumCaution);
+        return true;
     }
 
     /// <summary>An unoccluded arterial wound or open stump that would spray blood.</summary>
@@ -113,6 +110,6 @@ public sealed partial class CMUWoundsSystem
 
     private void OnArterialBodyShutdown(Entity<BloodstreamComponent> ent, ref ComponentShutdown args)
     {
-        _nextArterialPopup.Remove(ent);
+        _nextArterialSpray.Remove(ent);
     }
 }
