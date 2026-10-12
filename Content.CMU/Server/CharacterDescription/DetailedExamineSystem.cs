@@ -17,27 +17,27 @@ public sealed partial class DetailedExamineSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<CharacterDescriptionComponent, GetVerbsEvent<Verb>>(AddDetailedExamineVerb);
+        SubscribeLocalEvent<CharacterDescriptionComponent, GetVerbsEvent<ExamineVerb>>(AddDetailedExamineVerb);
     }
 
-    private void AddDetailedExamineVerb(Entity<CharacterDescriptionComponent> ent, ref GetVerbsEvent<Verb> args)
+    private void AddDetailedExamineVerb(Entity<CharacterDescriptionComponent> ent, ref GetVerbsEvent<ExamineVerb> args)
     {
-        if (!args.CanAccess || !args.CanInteract)
+        // Anyone who can see the character can read their description; there is no details-range requirement.
+        if (!_examine.CanExamine(args.User, ent))
             return;
 
         if (!TryComp(args.User, out ActorComponent? actor))
             return;
 
-        var detailsRange = _examine.IsInDetailsRange(args.User, ent);
         var player = actor.PlayerSession;
         var target = ent.Owner;
 
-        var verb = new Verb
+        var verb = new ExamineVerb
         {
             Text = Loc.GetString("detailed-examine-verb-text"),
-            Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/examine.svg.192dpi.png")),
-            Disabled = !detailsRange,
-            Message = detailsRange ? null : Loc.GetString("detailed-examine-verb-disabled"),
+            Message = Loc.GetString("detailed-examine-verb-message"),
+            Category = VerbCategory.Examine,
+            Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/VerbIcons/human-head-eyes.svg.192dpi.png")),
             Act = () => _euiManager.OpenEui(new DetailedExamineEui(GetNetEntity(target)), player),
         };
 

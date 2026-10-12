@@ -1,5 +1,5 @@
 detailed-examine-verb-text = Detailed Examine
-detailed-examine-verb-disabled = You need to get closer to examine them in detail.
+detailed-examine-verb-message = View their detailed character description.
 detailed-examine-window-title = Detailed Examine
 
 detailed-examine-age = Age
