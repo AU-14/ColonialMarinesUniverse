@@ -35,6 +35,16 @@
   - [bold]Robotic limbs[/bold] need [bold]15 metal sheets[/bold] loaded into the printer instead.
   - The printer only makes the limb. Attaching it is surgery; see [textlink="Limb Surgery" link="CMUGuideSurgeryLimbs"].
 
+  ## Portable Dialysis
+  <Box>
+    <GuideEntityEmbed Entity="RMCPortableDialysis" Caption="Portable dialysis machine"/>
+  </Box>
+  A battery-powered machine that cleans a patient's blood. Hook it up by using it on the patient; it needs [bold]medical training[/bold] (level 2) and stays connected while the patient is within 2 tiles.
+  - Every second it filters [bold]1.5u of each chemical[/bold] out of the bloodstream, good and bad alike. Use it to clear poisons and overdoses, not while their medicine is working.
+  - It also filters out [bold]saline[/bold], 3u a second, leaving the patient's own blood in its place. See [textlink="Blood and Transfusions" link="CMUGuideMedicalBlood"].
+  - [color=red]It costs the patient 6u of blood a second[/color]. Watch their blood level, and give blood if it drops.
+  - It disconnects when its battery runs out.
+
   ## Cryo Pod
   <Box>
     <GuideEntityEmbed Entity="CryoPod" Caption="Cryo pod"/>

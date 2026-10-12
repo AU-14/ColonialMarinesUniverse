@@ -55,5 +55,5 @@
   - Saline fills lost blood volume for any blood type, but it isn't blood.
   - [color=red]If more than a quarter of a patient's blood is saline, it starts poisoning them[/color], harder the further past that it goes.
   - The health analyzer shows how much of the blood is saline. It turns orange once it's past the safe share.
-  - The body slowly replaces saline with real blood. A [bold]portable dialysis machine[/bold] filters it out five times faster. Use saline to buy time, then follow up with blood.
+  - The body slowly replaces saline with real blood. A [bold]portable dialysis machine[/bold] filters it out five times faster; see [textlink="Medical Machines" link="CMUGuideMedicalMachines"]. Use saline to buy time, then follow up with blood.
 </Document>
