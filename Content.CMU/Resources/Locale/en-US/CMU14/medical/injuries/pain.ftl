@@ -23,7 +23,6 @@ cmu-medical-pain-reflection-shock-3 = You can't think straight. Make the pain st
 
 cmu-medical-pain-relief-1 = The painkiller starts to take the edge off.
 cmu-medical-pain-relief-2 = The pain dulls. You can breathe a little easier.
-cmu-medical-pain-relief-3 = The worst of it softens, for now.
 
 cmu-medical-shrapnel-none = No embedded shrapnel is found.
 cmu-medical-shrapnel-extract-verb = Remove shrapnel

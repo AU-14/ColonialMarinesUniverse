@@ -43,7 +43,6 @@ public sealed partial class PainShockSystem : SharedPainShockSystem
     {
         "cmu-medical-pain-relief-1",
         "cmu-medical-pain-relief-2",
-        "cmu-medical-pain-relief-3",
     };
 
     public override void Update(float frameTime)
