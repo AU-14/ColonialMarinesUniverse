@@ -15,8 +15,6 @@ public sealed class CMUFriendlyGrenadeOverlay : Overlay
 {
     private static readonly Color RingColor = Color.Red.WithAlpha(0.5f);
     private const float RingRadius = 0.35f;
-    private const float RingThickness = 0.04f;
-    private const int RingLayers = 3;
 
     private readonly IEntityManager _entity;
     private readonly IPlayerManager _player;
@@ -61,10 +59,8 @@ public sealed class CMUFriendlyGrenadeOverlay : Overlay
             if (!args.WorldAABB.Enlarged(RingRadius).Contains(position))
                 continue;
 
-            for (var i = 0; i < RingLayers; i++)
-            {
-                handle.DrawCircle(position, RingRadius + i * RingThickness / RingLayers, RingColor, filled: false);
-            }
+            // A single outline: stacked outlines overlap and read as solid instead of half transparent.
+            handle.DrawCircle(position, RingRadius, RingColor, filled: false);
         }
     }
 
