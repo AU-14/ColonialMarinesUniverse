@@ -26,14 +26,14 @@
   components:
   - type: Action
     checkCanInteract: false
+    itemIconStyle: NoItem
+    backgroundOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: template_on_big
   - type: Sprite
     layers:
-    - sprite: _RMC14/Objects/Weapons/Grenades/m40hedp.rsi
-      state: icon
+    - sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+      state: recoil_compensation
       map: ["enum.ActionVisuals.Icon"]
-    - sprite: _RMC14/Objects/Weapons/Grenades/m40hedp.rsi
-      state: primed
-      map: ["enum.ActionVisuals.IconToggled"]
-      visible: false
   - type: InstantAction
     event: !type:CMUToggleSquadVisorGrenadeWarningsActionEvent
