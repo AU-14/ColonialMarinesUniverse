@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.Buckle.Components;
 using Content.Shared.CMU14.Dropship;
 using Content.Shared.CMU14.Preferences;
@@ -28,6 +29,7 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
     [Dependency] private RadioSystem _radio = default!;
+    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
     [Dependency] private SharedRankSystem _rank = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
@@ -159,9 +161,14 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
             ? areaProto.Name
             : Loc.GetString("cmu-dropship-radio-unknown-area");
 
+        // The same grid the rangefinder reads out and mortars fire at.
+        var position = coordinates.Position.Floored();
+        if (_rmcPlanet.TryGetOffset(coordinates, out var offset))
+            position += offset;
+
         return Loc.GetString("cmu-dropship-radio-location",
             ("area", area),
-            ("x", (int) MathF.Floor(coordinates.X)),
-            ("y", (int) MathF.Floor(coordinates.Y)));
+            ("x", position.X),
+            ("y", position.Y));
     }
 }

@@ -18,6 +18,27 @@ public sealed partial class DetailedExamineSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CharacterDescriptionComponent, GetVerbsEvent<ExamineVerb>>(AddDetailedExamineVerb);
+        SubscribeLocalEvent<CharacterDescriptionComponent, GetVerbsEvent<Verb>>(AddEditDescriptionVerb);
+    }
+
+    private void AddEditDescriptionVerb(Entity<CharacterDescriptionComponent> ent, ref GetVerbsEvent<Verb> args)
+    {
+        if (!args.CanInteract || args.User != args.Target)
+            return;
+
+        if (!TryComp(args.User, out ActorComponent? actor))
+            return;
+
+        var player = actor.PlayerSession;
+        var target = ent.Owner;
+
+        args.Verbs.Add(new Verb
+        {
+            Text = Loc.GetString("cmu-edit-description-verb"),
+            Icon = new SpriteSpecifier.Texture(new ResPath("/Textures/Interface/character.svg.192dpi.png")),
+            Priority = -5,
+            Act = () => _euiManager.OpenEui(new EditCharacterDescriptionEui(target), player),
+        });
     }
 
     private void AddDetailedExamineVerb(Entity<CharacterDescriptionComponent> ent, ref GetVerbsEvent<ExamineVerb> args)

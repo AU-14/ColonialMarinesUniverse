@@ -53,3 +53,12 @@ faction-roster-console-colonist-job = Colonist
 faction-roster-console-count-tooltip = Number of personnel currently on file.
 faction-roster-console-refresh-tooltip = Re-query the roster for new or departed personnel.
 faction-roster-console-entry-tooltip = Click to open { $name }'s full dossier.
+
+cmu-edit-description-verb = Edit Description
+cmu-edit-description-title = Edit Description
+cmu-edit-description-hint = Changes only last for this round. Your saved character isn't affected.
+cmu-edit-description-short = Short Examine Text
+cmu-edit-description-full = Full Character Description
+cmu-edit-description-limit = { $count }/{ $max }
+cmu-edit-description-save = Save
+cmu-edit-description-cancel = Cancel
