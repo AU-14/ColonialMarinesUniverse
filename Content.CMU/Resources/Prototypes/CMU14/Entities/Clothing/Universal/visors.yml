@@ -21,3 +21,14 @@
     # Squad optic
     - type: GrantMarineIcons
     - type: CMUSquadVisorActive
+
+- type: entity
+  parent: CMUVisorMedicalSquad
+  id: CMUVisorMedicalSquadIntegrated
+  suffix: Integrated
+  components:
+  - type: UnremovableVisor
+  - type: Visor
+    toggledSprite:
+      sprite: _RMC14/Objects/Clothing/Head/Helmets/huds.rsi
+      state: med_sight_left
