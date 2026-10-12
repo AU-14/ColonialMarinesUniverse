@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.Popups;
@@ -32,23 +33,36 @@ public sealed partial class CMUJeepSystem
         }
 
         ent.Comp.Beams.Clear();
-        foreach (var driver in new[] { true, false })
+        foreach (var lamp in Headlights(ent))
         {
-            ent.Comp.Beams.Add(SpawnBeam(ent, ent.Comp.LowBeamPrototype, CMUHeadlightMode.Low, driver));
-            ent.Comp.Beams.Add(SpawnBeam(ent, ent.Comp.HighBeamPrototype, CMUHeadlightMode.High, driver));
+            ent.Comp.Beams.Add(SpawnBeam(ent, ent.Comp.LowBeamPrototype, CMUHeadlightMode.Low, lamp));
+            ent.Comp.Beams.Add(SpawnBeam(ent, ent.Comp.HighBeamPrototype, CMUHeadlightMode.High, lamp));
         }
 
         Dirty(ent);
         UpdateBeams(ent);
     }
 
-    private EntityUid SpawnBeam(EntityUid vehicle, string prototype, CMUHeadlightMode mode, bool driver)
+    private IEnumerable<CMUJeepLampData> Headlights(EntityUid vehicle)
+    {
+        if (!TryComp(vehicle, out CMUJeepLampsComponent? lamps))
+            yield break;
+
+        foreach (var lamp in lamps.Lamps)
+        {
+            if (lamp.Role == CMUVehicleLampRole.Headlight)
+                yield return lamp;
+        }
+    }
+
+    private EntityUid SpawnBeam(EntityUid vehicle, string prototype, CMUHeadlightMode mode, CMUJeepLampData lamp)
     {
         var beam = SpawnAttachedTo(prototype, new EntityCoordinates(vehicle, default));
         var comp = EnsureComp<CMUVehicleHeadlightBeamComponent>(beam);
         comp.Vehicle = vehicle;
         comp.Mode = mode;
-        comp.Driver = driver;
+        comp.Driver = lamp.Side == CMUVehicleLampSide.Left;
+        comp.Lamp = lamp.Id;
         Dirty(beam, comp);
 
         var follower = EnsureComp<CMUZVisualFollowerComponent>(beam);
@@ -79,12 +93,10 @@ public sealed partial class CMUJeepSystem
         if (_net.IsClient || !TryComp(vehicle, out CMUVehicleHeadlightsComponent? lights))
             return;
 
-        var driver = LampWorks(vehicle, DriverHeadlight);
-        var passenger = LampWorks(vehicle, PassengerHeadlight);
         foreach (var beam in lights.Beams)
         {
             if (TryComp(beam, out CMUVehicleHeadlightBeamComponent? comp))
-                _lights.SetEnabled(beam, (comp.Driver ? driver : passenger) && comp.Mode == lights.Mode);
+                _lights.SetEnabled(beam, LampWorks(vehicle, comp.Lamp) && comp.Mode == lights.Mode);
         }
     }
 
@@ -122,9 +134,7 @@ public sealed partial class CMUJeepSystem
                 _ => "cmu-jeep-headlights-high",
             };
 
-            if (ent.Comp.Mode != CMUHeadlightMode.Off &&
-                !LampWorks(ent, DriverHeadlight) &&
-                !LampWorks(ent, PassengerHeadlight))
+            if (ent.Comp.Mode != CMUHeadlightMode.Off && !Headlights(ent).Any(lamp => LampWorks(ent, lamp.Id)))
                 message = "cmu-jeep-headlights-broken";
 
             _popup.PopupEntity(Loc.GetString(message), ent, user.Value);

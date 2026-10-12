@@ -10,8 +10,8 @@ using Robust.Shared.Timing;
 namespace Content.Server.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// Knocks the riders of a vehicle out on a hard head on crash, each by their own roll, and blares the
-/// horn while its driver is out on the wheel.
+/// Blacks the riders of a vehicle out on a hard head on crash and knocks some out for longer, each by
+/// their own roll, and blares the horn while its driver is out on the wheel.
 /// </summary>
 public sealed class CMUVehicleCrashKnockoutSystem : EntitySystem
 {
@@ -29,7 +29,8 @@ public sealed class CMUVehicleCrashKnockoutSystem : EntitySystem
 
     /// <summary>
     /// The chance each rider is knocked out by a crash at a share of top speed: none below the
-    /// minimum, the minimum chance there, rising evenly to certain at top speed.
+    /// minimum, the minimum chance there, rising evenly to certain at top speed. Any crash from the
+    /// minimum on blacks every rider out for a moment.
     /// </summary>
     public static float Chance(CMUVehicleCrashKnockoutComponent comp, bool frontal, float speed)
     {
@@ -58,12 +59,20 @@ public sealed class CMUVehicleCrashKnockoutSystem : EntitySystem
             // Knocked out, a rider may slump out of the seat, which changes the strap's riders.
             foreach (var rider in strap.BuckledEntities.ToList())
             {
-                if (HasComp<RMCUnconsciousComponent>(rider) || !_random.Prob(chance))
+                if (HasComp<RMCUnconsciousComponent>(rider))
                     continue;
 
-                var duration = _random.Next(ent.Comp.MinDuration, ent.Comp.MaxDuration);
+                // Everyone blacks out for a moment; whoever loses the roll stays out.
+                var knockedOut = _random.Prob(chance);
+                var duration = knockedOut ? _random.Next(ent.Comp.MinDuration, ent.Comp.MaxDuration) : ent.Comp.Blackout;
                 if (!_sizeStun.TryKnockOut(rider, duration, false))
                     continue;
+
+                if (!knockedOut)
+                {
+                    _popup.PopupEntity(Loc.GetString("cmu-vehicle-crash-blackout"), rider, rider, PopupType.MediumCaution);
+                    continue;
+                }
 
                 _popup.PopupEntity(Loc.GetString("cmu-vehicle-crash-knocked-out", ("rider", rider)), rider, PopupType.MediumCaution);
                 if (driver)

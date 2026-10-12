@@ -78,8 +78,8 @@
   - type: CMUVehicleCrate
     vehicle: CMUVehicleJeepGunner
 
-# Colony crates: civilian jeeps in a random showroom paint: apple red, navy blue, electric yellow,
-# orange or gunmetal.
+# Colony crates: civilian jeeps on road tyres in a random showroom paint: apple red, navy blue,
+# electric yellow, orange or gunmetal.
 - type: entity
   parent: CMUCrateJeepCargo
   id: CMUCrateJeepCargoColony
@@ -87,6 +87,7 @@
   components:
   - type: CMUVehicleCrate
     vehicle: CMUVehicleJeepCargo
+    wheels: CMUJeepWheelRoad
     paints: [ "#D7262E", "#2E4F8A", "#FFE41A", "#F07A1A", "#6A737B" ]
 
 - type: entity
@@ -96,6 +97,7 @@
   components:
   - type: CMUVehicleCrate
     vehicle: CMUVehicleJeepMedical
+    wheels: CMUJeepWheelRoad
     paints: [ "#D7262E", "#2E4F8A", "#FFE41A", "#F07A1A", "#6A737B" ]
 
 # What an opened jeep crate leaves: its floor under the jeep, with the walls lying flat round it once

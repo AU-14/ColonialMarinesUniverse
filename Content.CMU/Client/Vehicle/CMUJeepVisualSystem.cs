@@ -19,9 +19,10 @@ using Robust.Shared.Timing;
 namespace Content.Client.CMU14.Vehicle;
 
 /// <summary>
-/// Draws an open jeep's hood, windshield, doors, tailgate, fuel door and stowed kit from its state
-/// with their swing animations (the kit hung on a door or the tailgate swings with it), keeps its
-/// clickable part masks on the jeep's frame and outlines the part under the mouse.
+/// Draws an open vehicle's hinged panels, windshield and stowed kit from its state with their swing
+/// animations (kit hung on a panel swings with it), keeps its clickable part masks on the vehicle's
+/// frame and outlines the part under the mouse. Which parts there are and how they behave comes from
+/// the vehicle's part list; how long a swing takes, from its art.
 /// </summary>
 public sealed class CMUJeepVisualSystem : EntitySystem
 {
@@ -39,67 +40,8 @@ public sealed class CMUJeepVisualSystem : EntitySystem
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VehicleTurretSystem _turret = default!;
+    [Dependency] private CMUVehicleTyreSystem _tyres = default!;
 
-    // Frames times frame delay of the generated swing states.
-    private static readonly TimeSpan HoodSwing = TimeSpan.FromSeconds(7 * 0.07);
-    private static readonly TimeSpan WindshieldSwing = TimeSpan.FromSeconds(5 * 0.07);
-    private static readonly TimeSpan FuelDoorSwing = TimeSpan.FromSeconds(4 * 0.07);
-    private static readonly TimeSpan PanelSwing = TimeSpan.FromSeconds(5 * 0.07);
-    // A wrecked hull pops the shut hood ajar: the third frame of its opening swing.
-    private const float PoppedHoodTime = 2 * 0.07f + 0.01f;
-
-    private static readonly string[] Panels = [CMUJeepSystem.DriverDoor, CMUJeepSystem.PassengerDoor, CMUJeepSystem.Tailgate];
-
-    // The order the jeep, then its overlay over the riders, draws the parts in, as jeep.yml lists
-    // their layers; a raised hood is the overlay's later hood_raised layer. The part masks are all
-    // drawn at one depth, so this decides which takes a click where they overlap: the one on top.
-    private static readonly string[] JeepLayers =
-    [
-        "engine", "hood", "extinguisher", CMUJeepSystem.DriverDoor, CMUJeepSystem.PassengerDoor, CMUJeepSystem.Tailgate,
-        "fuel_door", "headlight_left", "headlight_right", "turn_signal_left", "turn_signal_right", "windshield", "spare",
-        "taillight_left", "taillight_right", "jerrycan", "shovel", "axe", "jack", "wheels",
-    ];
-
-    private static readonly string[] OverlayLayers =
-    [
-        CMUJeepSystem.DriverDoor, CMUJeepSystem.PassengerDoor, CMUJeepSystem.Tailgate, "taillight_left", "taillight_right",
-        "hood", "headlight_left", "headlight_right", "turn_signal_left", "turn_signal_right", "extinguisher", "windshield",
-        "spare", "jerrycan", "shovel", "axe", "jack", "hood_raised", "fuel_door", "wheels",
-    ];
-
-    // The directions the overlay draws a part in, over the riders; the art's ATTACHMENTS, HOOD_OVER,
-    // DOOR_OVER, TAILGATE_OVER and FUEL_DOOR_OVER.
-    private static readonly Dictionary<string, Direction[]> OverRiders = new()
-    {
-        ["hood"] = [Direction.South],
-        ["windshield"] = [Direction.South],
-        ["extinguisher"] = [Direction.South, Direction.East],
-        ["headlight_left"] = [Direction.South],
-        ["headlight_right"] = [Direction.South],
-        ["turn_signal_left"] = [Direction.South],
-        ["turn_signal_right"] = [Direction.South],
-        ["taillight_left"] = [Direction.North],
-        ["taillight_right"] = [Direction.North],
-        ["spare"] = [Direction.North],
-        ["jerrycan"] = [Direction.North],
-        ["shovel"] = [Direction.West],
-        ["axe"] = [Direction.West],
-        ["jack"] = [Direction.East],
-        [CMUJeepSystem.DriverDoor] = [Direction.West],
-        [CMUJeepSystem.PassengerDoor] = [Direction.East],
-        [CMUJeepSystem.Tailgate] = [Direction.North],
-        ["fuel_door"] = [Direction.East],
-        ["wheels"] = [Direction.East, Direction.West],
-    };
-
-    // The panel beside a seat: swung open or taken off, more of the seat shows, all of which takes
-    // clicks and outlines (click_seat_<id>_open, seat_<id>_open_outline).
-    private static readonly Dictionary<string, string> SeatPanels = new()
-    {
-        ["seat_driver"] = CMUJeepSystem.DriverDoor,
-        ["seat_passenger"] = CMUJeepSystem.PassengerDoor,
-        ["seat_bed"] = CMUJeepSystem.Tailgate,
-    };
 
     // Part outlines are tinted like the standard hover outline: green in reach, red out of reach.
     private static readonly Color InReachColor = new(0f, 1f, 0f, 0.6f);
@@ -144,32 +86,54 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             if (!_swings.TryGetValue(uid, out var swings))
                 _swings[uid] = swings = new Dictionary<string, Swing>();
 
-            var hood = SwingOf(swings, "hood");
-            Animate((uid, sprite), overlay, "hood", hood, jeep.HoodOpen, HoodSwing,
-                "hood_open", ClosedHood(uid), "hood_opening", "hood_closing", "hood_raised");
-            var lidRaised = jeep.HoodOpen || hood.Start != null;
             // A wrecked hull shows at a glance: the hood popped ajar, the windshield cracked, the body
             // sagging on its wheels (CMUVehicleOverlayVisualSystem) and the frame damage at its worst.
             var hullWrecked = _jeepSystem.IsHullWrecked(uid);
-            if (hullWrecked && !lidRaised)
+            var raised = new HashSet<string>();
+            foreach (var part in jeep.Parts)
             {
-                SetState((uid, sprite), "hood", "hood_opening", PoppedHoodTime);
-                if (overlay != null)
-                    SetState(overlay.Value, "hood_raised", "hood_opening_overlay", PoppedHoodTime);
-
-                lidRaised = true;
-            }
-
-            var glass = jeep.WindshieldDamaged || hullWrecked ? "1" : "0";
-            Animate((uid, sprite), overlay, "windshield", SwingOf(swings, "windshield"), jeep.WindshieldDown, WindshieldSwing,
-                $"windshield_down_{glass}", $"windshield_up_{glass}", $"windshield_folding_{glass}", $"windshield_raising_{glass}");
-
-            foreach (var panel in Panels)
-            {
-                if (CMUJeepSystem.HasPart(jeep, panel))
+                var id = part.Id;
+                switch (part.Kind)
                 {
-                    Animate((uid, sprite), overlay, panel, SwingOf(swings, panel), CMUJeepSystem.GetPanelFlag(jeep, panel),
-                        PanelSwing, $"{panel}_open", $"{panel}_closed", $"{panel}_opening", $"{panel}_closing");
+                    case CMUVehiclePartKind.Panel:
+                    {
+                        var swing = SwingOf(swings, id);
+                        var open = CMUJeepSystem.GetPanelFlag(jeep, id);
+                        Animate((uid, sprite), overlay, id, swing, open, StateLength(sprite, $"{id}_opening"),
+                            $"{id}_open", ClosedState(uid, id), $"{id}_opening", $"{id}_closing", part.RaisedLayer);
+                        var up = open || swing.Start != null;
+                        if (part.AjarWhenWrecked && hullWrecked && !up)
+                        {
+                            var ajar = AjarTime(sprite, $"{id}_opening");
+                            SetState((uid, sprite), id, $"{id}_opening", ajar);
+                            if (overlay != null && part.RaisedLayer is { } raisedLayer)
+                                SetState(overlay.Value, raisedLayer, $"{id}_opening_overlay", ajar);
+
+                            up = true;
+                        }
+
+                        if (up)
+                            raised.Add(id);
+                        break;
+                    }
+                    case CMUVehiclePartKind.Windshield:
+                    {
+                        var glass = jeep.WindshieldDamaged || hullWrecked ? "1" : "0";
+                        Animate((uid, sprite), overlay, id, SwingOf(swings, id), jeep.WindshieldDown,
+                            StateLength(sprite, $"{id}_folding_{glass}"), $"{id}_down_{glass}", $"{id}_up_{glass}",
+                            $"{id}_folding_{glass}", $"{id}_raising_{glass}");
+                        break;
+                    }
+                    // Kit swings with the panel it hangs on, a leaking jerry can drawn holed.
+                    case CMUVehiclePartKind.Item when part.Slot != null:
+                    {
+                        var look = part.Slot == CMUJeepSystem.JerryCanSlot && jeep.JerryCanLeaking ? "1" : "0";
+                        var prefix = look == "0" && _itemSlots.TryGetSlot(uid, part.Slot, out var kitSlot)
+                            ? _tyres.StatePrefix(kitSlot.Item)
+                            : string.Empty;
+                        AnimateKit((uid, sprite), overlay, swings, jeep, id, part.Host, look, prefix);
+                        break;
+                    }
                 }
             }
 
@@ -189,14 +153,6 @@ public sealed class CMUJeepVisualSystem : EntitySystem
                 }
             }
 
-            // Kit hung on a panel swings with it: the shovel and the axe on the driver's door, the
-            // jack on the passenger's, the spare and the jerry can on the tailgate.
-            var can = jeep.JerryCanLeaking ? "1" : "0";
-            AnimateKit((uid, sprite), overlay, swings, jeep, "shovel", CMUJeepSystem.DriverDoor, "0");
-            AnimateKit((uid, sprite), overlay, swings, jeep, "axe", CMUJeepSystem.DriverDoor, "0");
-            AnimateKit((uid, sprite), overlay, swings, jeep, "jack", CMUJeepSystem.PassengerDoor, "0");
-            AnimateKit((uid, sprite), overlay, swings, jeep, "spare", CMUJeepSystem.Tailgate, "0");
-            AnimateKit((uid, sprite), overlay, swings, jeep, "jerrycan", CMUJeepSystem.Tailgate, can);
             var engine = jeep.EngineIntegrity / jeep.EngineMaxIntegrity;
             SetState((uid, sprite), "engine", engine < jeep.EngineSmokeFraction ? "engine_1" : "engine_0");
             if (overlay != null)
@@ -205,13 +161,10 @@ public sealed class CMUJeepVisualSystem : EntitySystem
                 SetVisible(overlay.Value, "smoke", engine < jeep.EngineSmokeFraction);
                 SetVisible(overlay.Value, "fire", jeep.Burning);
             }
-            Animate((uid, sprite), overlay, "fuel_door", SwingOf(swings, "fuel_door"), jeep.FuelDoorOpen, FuelDoorSwing,
-                "fuel_door_open", "fuel_door_closed", "fuel_door_opening", "fuel_door_closing");
-
             TryComp(uid, out ItemSlotsComponent? slots);
             foreach (var part in jeep.Parts)
             {
-                if (part.Slot == null || part.Id == "wheels")
+                if (part.Slot == null || part.Kind == CMUVehiclePartKind.Wheels)
                     continue;
 
                 var fitted = IsFitted(uid, slots, part.Slot);
@@ -221,10 +174,11 @@ public sealed class CMUJeepVisualSystem : EntitySystem
 
                 // Shut, the hood goes under the windshield, which folds down onto it; raised, the lid
                 // stands in front of it.
-                if (part.Id == "hood")
+                if (part.RaisedLayer is { } raisedLayer)
                 {
-                    SetVisible(overlay.Value, "hood_raised", fitted && lidRaised);
-                    fitted &= !lidRaised;
+                    var up = raised.Contains(part.Id);
+                    SetVisible(overlay.Value, raisedLayer, fitted && up);
+                    fitted &= !up;
                 }
 
                 SetVisible(overlay.Value, part.Id, fitted);
@@ -275,17 +229,15 @@ public sealed class CMUJeepVisualSystem : EntitySystem
             // while what is in hand would go in, so it is fitted where it is clicked; otherwise the jeep's
             // own item slots take it.
             TryComp(vehicle, out ItemSlotsComponent? vehicleSlots);
+            var data = CMUJeepSystem.PartData(jeep, part.Part);
             var fitted = part.Slot is not { } slotId ||
-                         part.Part == "wheels" ||
+                         data?.Kind == CMUVehiclePartKind.Wheels ||
                          IsFitted(vehicle, vehicleSlots, slotId) ||
                          HeldFits(vehicle, vehicleSlots, slotId);
-            var reachable = part.Part switch
-            {
-                "engine" => _jeepSystem.IsHoodOpen(vehicle, jeep),
-                _ => part.Slot is not { } kitSlot || !_jeepSystem.IsKitBlocked(vehicle, jeep, kitSlot),
-            };
+            var reachable = _jeepSystem.IsExposed(vehicle, jeep, part.Part) &&
+                            (part.Slot is not { } kitSlot || !_jeepSystem.IsKitBlocked(vehicle, jeep, kitSlot));
             SetVisible((uid, sprite), "mask", !combat && fitted && reachable);
-            sprite.RenderOrder = MaskOrder(part, jeep, RenderDirection(xform));
+            sprite.RenderOrder = MaskOrder(part, jeep, vehicle, vehicleSprite, RenderDirection(xform));
             ApplyFrame((uid, sprite), xform);
         }
     }
@@ -321,6 +273,28 @@ public sealed class CMUJeepVisualSystem : EntitySystem
                 EnsureComp<InteractionOutlineComponent>(uid);
             }
         }
+    }
+
+    /// <summary>
+    /// How long a state's animation takes, played once: a swing's length.
+    /// </summary>
+    private static TimeSpan StateLength(SpriteComponent sprite, string state)
+    {
+        return sprite.BaseRSI is { } rsi && rsi.TryGetState(state, out var rsiState)
+            ? TimeSpan.FromSeconds(rsiState.TotalDelay)
+            : TimeSpan.Zero;
+    }
+
+    /// <summary>
+    /// A point in a panel's opening swing just into its third frame: popped ajar.
+    /// </summary>
+    private static float AjarTime(SpriteComponent sprite, string state)
+    {
+        if (sprite.BaseRSI is not { } rsi || !rsi.TryGetState(state, out var rsiState))
+            return 0f;
+
+        var delays = rsiState.GetDelays();
+        return delays.Take(2).Sum() + 0.01f;
     }
 
     private void Animate(
@@ -369,8 +343,9 @@ public sealed class CMUJeepVisualSystem : EntitySystem
     }
 
     /// <summary>
-    /// A hung kit layer (states <c>name_suffix</c>, <c>name_open_suffix</c>, ...) swinging with the
-    /// panel it hangs on. A jeep without that panel keeps it fixed.
+    /// A kit layer (states <c>name_suffix</c>, <c>name_open_suffix</c>, ..., each after the prefix of
+    /// a look of its own, like a wheel set's road tyres) swinging with the panel it hangs on. Kit on no
+    /// panel, or on one the vehicle lacks, stays put.
     /// </summary>
     private void AnimateKit(
         Entity<SpriteComponent> jeep,
@@ -378,20 +353,23 @@ public sealed class CMUJeepVisualSystem : EntitySystem
         Dictionary<string, Swing> swings,
         CMUJeepComponent comp,
         string name,
-        string panel,
-        string suffix)
+        string? panel,
+        string suffix,
+        string prefix = "")
     {
-        if (!CMUJeepSystem.HasPart(comp, panel))
+        var state = prefix + name;
+        if (panel == null || !CMUJeepSystem.HasPart(comp, panel))
         {
-            SetState(jeep, name, $"{name}_{suffix}");
+            SetState(jeep, name, $"{state}_{suffix}");
             if (overlay != null)
-                SetState(overlay.Value, name, $"{name}_overlay_{suffix}");
+                SetState(overlay.Value, name, $"{state}_overlay_{suffix}");
 
             return;
         }
 
-        Animate(jeep, overlay, name, SwingOf(swings, name), CMUJeepSystem.GetPanelFlag(comp, panel), PanelSwing,
-            $"{name}_open_{suffix}", $"{name}_{suffix}", $"{name}_opening_{suffix}", $"{name}_closing_{suffix}");
+        Animate(jeep, overlay, name, SwingOf(swings, name), CMUJeepSystem.GetPanelFlag(comp, panel),
+            StateLength(jeep.Comp, $"{state}_opening_{suffix}"), $"{state}_open_{suffix}", $"{state}_{suffix}",
+            $"{state}_opening_{suffix}", $"{state}_closing_{suffix}");
     }
 
     private static string OverlayState(string state)
@@ -400,60 +378,87 @@ public sealed class CMUJeepVisualSystem : EntitySystem
     }
 
     /// <summary>
-    /// Whether a seat's door or tailgate is open or off, showing more of it.
+    /// Whether a seat's door is open or off, showing more of the seat, all of which takes clicks and
+    /// outlines (click_seat_<id>_open, seat_<id>_open_outline).
     /// </summary>
     private bool SeatOpened(EntityUid vehicle, CMUJeepComponent jeep, string part)
     {
-        return SeatPanels.TryGetValue(part, out var panel) &&
+        if (!part.StartsWith("seat_") || !TryComp(vehicle, out CMUVehicleSeatsComponent? seats))
+            return false;
+
+        var seat = seats.Seats.Find(s => $"seat_{s.Id}" == part);
+        return seat?.Door is { } panel &&
                CMUJeepSystem.HasPart(jeep, panel) &&
                (CMUJeepSystem.GetPanelFlag(jeep, panel) || !_jeepSystem.IsPanelFitted(vehicle, jeep, panel));
     }
 
+    /// <summary>
+    /// Whether kit hangs on a panel that stands open, showing its swung look.
+    /// </summary>
+    private static bool HostOpen(CMUVehiclePartData? data, CMUJeepComponent jeep)
+    {
+        return data?.Host is { } host && CMUJeepSystem.GetPanelFlag(jeep, host);
+    }
+
     private static string MaskState(CMUVehiclePartComponent part, CMUJeepComponent jeep, bool seatOpened)
     {
-        return part.Part switch
+        var id = part.Part;
+        var data = CMUJeepSystem.PartData(jeep, id);
+        return data?.Kind switch
         {
-            "hood" => jeep.HoodOpen ? "click_hood_open" : "click_hood_closed",
-            "windshield" => jeep.WindshieldDown ? "click_windshield_down" : "click_windshield_up",
-            "fuel_door" => jeep.FuelDoorOpen ? "click_fuel_door_open" : "click_fuel_door_closed",
-            CMUJeepSystem.DriverDoor or CMUJeepSystem.PassengerDoor or CMUJeepSystem.Tailgate =>
-                CMUJeepSystem.GetPanelFlag(jeep, part.Part) ? $"click_{part.Part}_open" : $"click_{part.Part}_closed",
-            "shovel" or "axe" when jeep.DriverDoorOpen => $"click_{part.Part}_open",
-            "jack" when jeep.PassengerDoorOpen => $"click_{part.Part}_open",
-            var id when seatOpened => $"click_{id}_open",
-            var id => $"click_{id}",
+            CMUVehiclePartKind.Panel => CMUJeepSystem.GetPanelFlag(jeep, id) ? $"click_{id}_open" : $"click_{id}_closed",
+            CMUVehiclePartKind.Windshield => jeep.WindshieldDown ? $"click_{id}_down" : $"click_{id}_up",
+            _ when HostOpen(data, jeep) || seatOpened => $"click_{id}_open",
+            _ => $"click_{id}",
         };
     }
 
     /// <summary>
-    /// A part mask's render order, which takes the click where masks overlap: where the jeep draws the
-    /// part, over the riders above the rest. The seats are under everything.
+    /// A part mask's render order, which takes the click where masks overlap: the order the vehicle,
+    /// then its overlay over the riders, draws the part's layers in, a raised panel from its raised
+    /// layer. The seats are under everything.
     /// </summary>
-    private static uint MaskOrder(CMUVehiclePartComponent part, CMUJeepComponent jeep, Direction direction)
+    private uint MaskOrder(CMUVehiclePartComponent part, CMUJeepComponent jeep, EntityUid vehicle, SpriteComponent vehicleSprite, Direction direction)
     {
-        var id = part.Part == "hood" && jeep.HoodOpen ? "hood_raised" : part.Part;
-        var layer = id == "hood_raised" ? "hood" : id;
-        var over = OverRiders.TryGetValue(layer, out var directions) && directions.Contains(direction);
-        var index = Array.IndexOf(over ? OverlayLayers : JeepLayers, over ? id : layer);
-        if (index < 0)
-            return 1;
+        var data = CMUJeepSystem.PartData(jeep, part.Part);
+        var raised = data?.RaisedLayer is { } raisedLayer && CMUJeepSystem.GetPanelFlag(jeep, part.Part) ? raisedLayer : null;
+        var count = vehicleSprite.AllLayers.Count();
+        if (OverRiders(vehicle, data, part.Part).Contains(direction) &&
+            TryComp(vehicle, out CMUVehicleOverlayComponent? overlay) &&
+            TryComp(overlay.Overlay, out SpriteComponent? overlaySprite) &&
+            _sprite.LayerMapTryGet((overlay.Overlay.Value, overlaySprite), raised ?? part.Part, out var overIndex, false))
+        {
+            return (uint) (2 + count + overIndex);
+        }
 
-        return (uint) ((over ? 2 + JeepLayers.Length : 2) + index);
+        var found = data?.Kind == CMUVehiclePartKind.Wheels
+            ? _sprite.LayerMapTryGet((vehicle, vehicleSprite), VehicleWheelLayers.Wheels, out var index, false)
+            : _sprite.LayerMapTryGet((vehicle, vehicleSprite), part.Part, out index, false);
+        return found ? (uint) (2 + index) : 1;
     }
+
+    private List<Direction> OverRiders(EntityUid vehicle, CMUVehiclePartData? data, string part)
+    {
+        if (data != null)
+            return data.OverRiders;
+
+        return TryComp(vehicle, out CMUJeepLampsComponent? lamps) && lamps.Lamps.Find(l => l.Id == part) is { } lamp
+            ? lamp.OverRiders
+            : NoDirections;
+    }
+
+    private static readonly List<Direction> NoDirections = new();
 
     private static string OutlineState(CMUVehiclePartComponent part, CMUJeepComponent jeep, bool seatOpened)
     {
-        return part.Part switch
+        var id = part.Part;
+        var data = CMUJeepSystem.PartData(jeep, id);
+        return data?.Kind switch
         {
-            "hood" => jeep.HoodOpen ? "hood_open_outline" : "hood_outline",
-            "windshield" => jeep.WindshieldDown ? "windshield_down_outline" : "windshield_up_outline",
-            "fuel_door" => jeep.FuelDoorOpen ? "fuel_door_open_outline" : "fuel_door_outline",
-            CMUJeepSystem.DriverDoor or CMUJeepSystem.PassengerDoor or CMUJeepSystem.Tailgate =>
-                CMUJeepSystem.GetPanelFlag(jeep, part.Part) ? $"{part.Part}_open_outline" : $"{part.Part}_outline",
-            "shovel" or "axe" when jeep.DriverDoorOpen => $"{part.Part}_open_outline",
-            "jack" when jeep.PassengerDoorOpen => $"{part.Part}_open_outline",
-            var id when seatOpened => $"{id}_open_outline",
-            var id => $"{id}_outline",
+            CMUVehiclePartKind.Panel => CMUJeepSystem.GetPanelFlag(jeep, id) ? $"{id}_open_outline" : $"{id}_outline",
+            CMUVehiclePartKind.Windshield => jeep.WindshieldDown ? $"{id}_down_outline" : $"{id}_up_outline",
+            _ when HostOpen(data, jeep) || seatOpened => $"{id}_open_outline",
+            _ => $"{id}_outline",
         };
     }
 
@@ -492,15 +497,16 @@ public sealed class CMUJeepVisualSystem : EntitySystem
     }
 
     /// <summary>
-    /// The shut hood's state: crumpled with the front, for as far as the front is crumpled.
+    /// A shut panel's state: the hood crumpled with the front, for as far as the front is crumpled.
     /// </summary>
-    private string ClosedHood(EntityUid uid)
+    private string ClosedState(EntityUid uid, string panel)
     {
         return TryComp(uid, out CMUVehicleFrontDamageComponent? front) &&
+               front.ClosedPanel == panel &&
                front.ClosedHoodState is { } dented &&
                _frontDamage.GetLevel((uid, front)) is var level and > 0
             ? dented + level
-            : "hood_closed";
+            : $"{panel}_closed";
     }
 
     private void SetVisible(Entity<SpriteComponent> ent, string key, bool visible)

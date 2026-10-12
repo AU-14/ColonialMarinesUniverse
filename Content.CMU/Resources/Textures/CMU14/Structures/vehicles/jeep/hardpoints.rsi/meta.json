@@ -11,6 +11,9 @@
             "name": "tires"
         },
         {
+            "name": "road_tires"
+        },
+        {
             "name": "mgturret"
         },
         {

@@ -12,6 +12,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using Color = Robust.Shared.Maths.Color;
 
 namespace Content.Client.CMU14.Vehicle;
 
@@ -103,7 +104,7 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         var query = EntityQueryEnumerator<CMUVehicleCrayonComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var crayon, out var sprite))
         {
-            if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 && !_paints.ContainsKey(uid))
+            if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 && crayon.Dots.Count == 0 && !_paints.ContainsKey(uid))
                 continue;
 
             Entity<SpriteComponent>? overlay = null;
@@ -120,7 +121,7 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
 
             // The overlay can arrive after the drawings, and a panel swinging changes what shows.
             var jeep = CompOrNull<CMUJeepComponent>(uid);
-            var openPanels = OpenPanels(jeep);
+            var openPanels = OpenPanels(jeep, crayon);
             if (paint.Stale ||
                 !ReferenceEquals(paint.Visuals, overlayVisuals) ||
                 paint.OpenPanels != openPanels)
@@ -162,8 +163,17 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
     private void Repaint(CMUVehicleCrayonComponent crayon, Paint paint, CMUVehicleOverlayVisualsComponent? overlayVisuals, CMUJeepComponent? jeep)
     {
         paint.Dispose();
-        if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 || GetImage(_maps, crayon.Map) is not { } map)
+        if (crayon.Drawings.Count == 0 && crayon.Blood.Count == 0 && crayon.Dots.Count == 0 ||
+            GetImage(_maps, crayon.Map) is not { } map)
+        {
             return;
+        }
+
+        var dots = new Dictionary<(Vector3, byte), Color>();
+        foreach (var dot in crayon.Dots)
+        {
+            dots[(dot.Voxel, dot.Face)] = dot.Color;
+        }
 
         for (var i = 0; i < MapDirections.Length; i++)
         {
@@ -185,13 +195,14 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
                     var surface = Pixel(map, px, py);
                     // The map has the panels shut, so an open one would leave its paint hanging in the air.
                     if (!DecodeSurface(surface.R, surface.G, surface.B, surface.A, out var voxel, out var front, out var overRiders, out var panel) ||
-                        IsPanelOpen(jeep, panel))
+                        IsPanelOpen(jeep, crayon, panel))
                     {
                         continue;
                     }
 
-                    // Crayon goes on over blood.
-                    if ((PaintPixel(crayon.Drawings, voxel, front, direction, Opacity) ??
+                    // Crayon goes on over blood, free drawing over the symbols.
+                    if ((DotPixel(dots, voxel, front, direction) ??
+                         PaintPixel(crayon.Drawings, voxel, front, direction, Opacity) ??
                          PaintPixel(crayon.Blood, voxel, front, direction, BloodOpacity)) is not { } color)
                         continue;
 
@@ -213,6 +224,17 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
             paint.Under[i] = anyUnder ? _clyde.LoadTextureFromImage(under) : null;
             paint.Over[i] = anyOver ? _clyde.LoadTextureFromImage(overImage) : null;
         }
+    }
+
+    private static Rgba32? DotPixel(Dictionary<(Vector3, byte), Color> dots, Vector3 voxel, bool front, Direction direction)
+    {
+        if (dots.Count == 0 ||
+            !dots.TryGetValue((voxel, FaceOf(front, direction)), out var c))
+        {
+            return null;
+        }
+
+        return new Rgba32(c.R, c.G, c.B, c.A * Opacity);
     }
 
     /// <summary>
@@ -257,12 +279,12 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         return image;
     }
 
-    public override bool TryGetSurface(ResPath map, Direction direction, int x, int y, out Vector3 voxel, out bool front, out bool overRiders, out CMUCrayonPanel panel)
+    public override bool TryGetSurface(ResPath map, Direction direction, int x, int y, out Vector3 voxel, out bool front, out bool overRiders, out int panel)
     {
         voxel = default;
         front = false;
         overRiders = false;
-        panel = CMUCrayonPanel.Body;
+        panel = 0;
         if (x < 0 || y < 0 || x >= FrameSize || y >= FrameSize || GetImage(_maps, map) is not { } image)
             return false;
 

@@ -98,7 +98,7 @@ public sealed class CMUJeepFuelFireTest : GameTest
             door = SEntMan.GetComponent<CMUJeepComponent>(jeep).PartEntities
                 .First(part => SEntMan.GetComponent<CMUVehiclePartComponent>(part).Part == "fuel_door");
             var comp = SEntMan.GetComponent<CMUJeepComponent>(jeep);
-            comp.FuelDoorOpen = true;
+            comp.OpenPanels.Add("fuel_door");
             SEntMan.Dirty(jeep, comp);
             Click(user, door);
         });

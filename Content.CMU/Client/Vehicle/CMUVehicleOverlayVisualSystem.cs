@@ -45,19 +45,13 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
     // Both signal states blink on the same two-frame cycle; this keeps every lamp in step.
     private const double SignalPeriod = 0.8;
 
-    // Each side's lit layers, and the lamp each needs fitted and whole: the tail lights carry the
-    // brake lights and the rear turn signals.
-    private static readonly string[] Sides = ["left", "right"];
-    private static readonly string[] SignalLayers =
-        ["signal_front_left", "signal_rear_left", "signal_front_right", "signal_rear_right"];
 
     // This frame's body lift per vehicle, in the vehicle's frame, for its mounted turrets to follow.
     private readonly Dictionary<EntityUid, (Vector2 Lift, Direction Direction)> _lifts = new();
 
-    // Client-side glows each overlay's vehicle throws from its lamps: rear left, rear right, front
-    // left, front right. The tail lights glow dim red, brighter braking; the turn signals amber.
+    // Client-side glows each overlay's vehicle throws from its tail lights and turn signals. The tail
+    // lights glow dim red, brighter braking; a blinking signal amber.
     private static readonly EntProtoId GlowPrototype = "CMUJeepLampGlow";
-    private static readonly string[] GlowLamps = ["taillight_left", "taillight_right", "turn_signal_left", "turn_signal_right"];
     private static readonly Color TailGlow = Color.FromHex("#FF2A1A");
     private static readonly Color SignalGlow = Color.FromHex("#FFA62A");
     private const float TailEnergy = 1f;
@@ -66,7 +60,7 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
     // How far out from its lamp a glow sits, in tiles, so it lights the ground past the bumper rather
     // than under the jeep.
     private const float GlowReach = 0.35f;
-    private readonly Dictionary<EntityUid, EntityUid?[]> _glows = new();
+    private readonly Dictionary<EntityUid, Dictionary<string, EntityUid>> _glows = new();
 
     public override void Initialize()
     {
@@ -350,23 +344,23 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         if (TryComp(vehicle, out CMUVehicleDriverActionsComponent? driver) && driver.Hazards)
             left = right = true;
 
-        foreach (var side in Sides)
-        {
-            var signal = side == "left" ? left : right;
-            var head = _jeep.LampWorks(vehicle, $"headlight_{side}");
-            var tail = _jeep.LampWorks(vehicle, $"taillight_{side}");
-            SetVisible(ent, $"headlight_{side}_on", lightsOn && head);
-            SetVisible(ent, $"taillight_{side}_on", lightsOn && tail);
-            SetVisible(ent, $"brake_{side}", braking && tail);
-            SetVisible(ent, $"signal_front_{side}", signal && _jeep.LampWorks(vehicle, $"turn_signal_{side}"));
-            SetVisible(ent, $"signal_rear_{side}", signal && tail);
-        }
-
+        // Each lamp's lit layers show while it is fitted and whole.
         var blink = (float) (_timing.CurTime.TotalSeconds % SignalPeriod);
-        foreach (var key in SignalLayers)
+        var lamps = CompOrNull<CMUJeepLampsComponent>(vehicle)?.Lamps ?? NoLamps;
+        foreach (var lamp in lamps)
         {
-            if (_sprite.LayerMapTryGet(ent.AsNullable(), key, out var index, false))
-                _sprite.LayerSetAnimationTime(ent.AsNullable(), index, blink);
+            var works = _jeep.LampWorks(vehicle, lamp.Id);
+            var signal = lamp.Side == CMUVehicleLampSide.Left ? left : right;
+            if (lamp.LitLayer is { } lit)
+                SetVisible(ent, lit, lightsOn && works);
+            if (lamp.BrakeLayer is { } brake)
+                SetVisible(ent, brake, braking && works);
+            if (lamp.SignalLayer is { } blinker)
+            {
+                SetVisible(ent, blinker, signal && works);
+                if (_sprite.LayerMapTryGet(ent.AsNullable(), blinker, out var index, false))
+                    _sprite.LayerSetAnimationTime(ent.AsNullable(), index, blink);
+            }
         }
 
         // The signal states show their lit frame for the first half of each blink; the relay ticks as
@@ -376,41 +370,46 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
             _audio.PlayEntity(visuals.SignalSound, Filter.Local(), vehicle, false);
 
         visuals.BlinkOn = blinkOn;
-        UpdateGlows(ent.Owner, vehicle, lightsOn, braking, left && blinkOn, right && blinkOn);
+        UpdateGlows(ent.Owner, vehicle, lamps, lightsOn, braking, left && blinkOn, right && blinkOn);
     }
+
+    private static readonly List<CMUJeepLampData> NoLamps = new();
 
     /// <summary>
     /// Lights the ground around the lamps that are lit: a dim red round each working tail light (with
     /// the lights on, brighter while braking), amber round a blinking turn signal, front and rear.
     /// </summary>
-    private void UpdateGlows(EntityUid overlay, EntityUid vehicle, bool lightsOn, bool braking, bool leftBlink, bool rightBlink)
+    private void UpdateGlows(EntityUid overlay, EntityUid vehicle, List<CMUJeepLampData> lamps, bool lightsOn, bool braking, bool leftBlink, bool rightBlink)
     {
         if (!_glows.TryGetValue(overlay, out var glows))
-            _glows[overlay] = glows = new EntityUid?[GlowLamps.Length];
+            _glows[overlay] = glows = new Dictionary<string, EntityUid>();
 
-        for (var i = 0; i < GlowLamps.Length; i++)
+        foreach (var lamp in lamps)
         {
-            var lamp = GlowLamps[i];
-            var blinking = lamp.EndsWith("left") ? leftBlink : rightBlink;
-            var works = _jeep.LampWorks(vehicle, lamp);
+            var tail = lamp.Role == CMUVehicleLampRole.TailLight;
+            if (!tail && lamp.Role != CMUVehicleLampRole.TurnSignal)
+                continue;
+
+            var blinking = lamp.SignalLayer != null && (lamp.Side == CMUVehicleLampSide.Left ? leftBlink : rightBlink);
+            var works = _jeep.LampWorks(vehicle, lamp.Id);
             Color? colour = null;
             var energy = 0f;
             if (works && blinking)
                 (colour, energy) = (SignalGlow, SignalEnergy);
-            else if (works && lamp.StartsWith("taillight") && braking)
+            else if (works && tail && braking)
                 (colour, energy) = (TailGlow, BrakeEnergy);
-            else if (works && lamp.StartsWith("taillight") && lightsOn)
+            else if (works && tail && lightsOn)
                 (colour, energy) = (TailGlow, TailEnergy);
 
-            if (glows[i] is not { } glow || TerminatingOrDeleted(glow))
+            if (!glows.TryGetValue(lamp.Id, out var glow) || TerminatingOrDeleted(glow))
             {
-                if (colour == null || !_jeep.TryGetLamp(vehicle, lamp, out var data))
+                if (colour == null)
                     continue;
 
-                // The jeep faces -y in its own space: tail lights reach back (+y), signals forward.
-                var reach = new Vector2(0f, lamp.StartsWith("taillight") ? GlowReach : -GlowReach);
-                glow = Spawn(GlowPrototype, new EntityCoordinates(vehicle, data.Offset + reach));
-                glows[i] = glow;
+                // The vehicle faces -y in its own space: a lamp's glow reaches out past its own end.
+                var reach = new Vector2(0f, MathF.Sign(lamp.Offset.Y) * GlowReach);
+                glow = Spawn(GlowPrototype, new EntityCoordinates(vehicle, lamp.Offset + reach));
+                glows[lamp.Id] = glow;
             }
 
             _lights.SetEnabled(glow, colour != null);
@@ -427,10 +426,10 @@ public sealed class CMUVehicleOverlayVisualSystem : EntitySystem
         if (!_glows.Remove(overlay, out var glows))
             return;
 
-        foreach (var glow in glows)
+        foreach (var glow in glows.Values)
         {
-            if (glow is { } uid && !TerminatingOrDeleted(uid))
-                QueueDel(uid);
+            if (!TerminatingOrDeleted(glow))
+                QueueDel(glow);
         }
     }
 

@@ -70,7 +70,10 @@ public sealed class CMUVehicleHeadlightVisualSystem : EntitySystem
             // the beam's own space. The light sits on the lens; the haze's cone starts there.
             var direction = VehicleTurretDirectionHelpers.GetRenderAlignedCardinalDir(
                 _transform.GetWorldRotation(xform) + eyeRotation);
-            var anchors = beam.Driver ? lights.DriverLampAnchors : lights.PassengerLampAnchors;
+            var anchors = TryComp(beam.Vehicle, out CMUJeepLampsComponent? lamps) &&
+                          lamps.Lamps.Find(l => l.Id == beam.Lamp) is { BeamAnchors.Count: > 0 } lampData
+                ? lampData.BeamAnchors
+                : beam.Driver ? lights.DriverLampAnchors : lights.PassengerLampAnchors;
             var lamp = (-direction.ToAngle()).RotateVec(anchors.GetValueOrDefault(direction) / EyeManager.PixelsPerMeter);
             _sprite.LayerSetOffset((uid, sprite), layer, lamp + new Vector2(0f, -lights.BeamHalfLength));
             if (!light.Offset.EqualsApprox(lamp))

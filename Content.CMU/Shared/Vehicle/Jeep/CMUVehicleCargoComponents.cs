@@ -27,6 +27,12 @@ public sealed partial class CMUVehicleCargoComponent : Component
     [DataField]
     public TimeSpan LoadDelay = TimeSpan.FromSeconds(2);
 
+    /// <summary>
+    /// The panel crates go on and come off over, like the tailgate; a vehicle without it is always open.
+    /// </summary>
+    [DataField]
+    public string Gate = "tailgate";
+
     [DataField]
     public ProtoId<ToolQualityPrototype> SecureQuality = "Anchoring";
 

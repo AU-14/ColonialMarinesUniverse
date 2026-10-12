@@ -16,10 +16,13 @@ public sealed class CMUVehicleSprayPainterBoundUserInterface(EntityUid owner, En
         base.Open();
         _window = this.CreateWindow<CMUVehicleSprayPainterWindow>();
         _window.OnColorPicked += color => SendPredictedMessage(new CMUVehicleSprayPainterColorMessage(color));
+        _window.OnModePicked += mode => SendPredictedMessage(new CMUVehicleSprayPainterModeMessage(mode));
+        _window.OnDesignPicked += (design, colors) =>
+            SendPredictedMessage(new CMUVehicleSprayPainterDesignMessage(design, colors));
 
-        // The colour is only read on opening: the server echoing a slider back would fight the drag.
+        // The painter is only read on opening: the server echoing a slider back would fight the drag.
         if (EntMan.TryGetComponent(Owner, out CMUVehicleSprayPainterComponent? painter))
-            _window.SetColor(painter.Color);
+            _window.SetState(painter.Mode, painter.Color, painter.Design, painter.DesignColors);
 
         Update();
     }

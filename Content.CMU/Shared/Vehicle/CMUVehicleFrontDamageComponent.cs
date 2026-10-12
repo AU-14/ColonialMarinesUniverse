@@ -71,6 +71,12 @@ public sealed partial class CMUVehicleFrontDamageComponent : Component
     /// </summary>
     [DataField]
     public string? ClosedHoodState;
+
+    /// <summary>
+    /// The panel that crumples with the front.
+    /// </summary>
+    [DataField]
+    public string ClosedPanel = "hood";
 }
 
 [Serializable, NetSerializable]

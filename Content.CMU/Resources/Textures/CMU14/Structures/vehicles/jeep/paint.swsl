@@ -55,9 +55,11 @@ void fragment() {
     highp float soon = floor(code / 2.0) / 7.0;
 
     highp float shade = zGrayscale(texel.rgb) / max(zGrayscale(base.rgb), 0.001);
-    // Any colour goes, black included: a touch of the art's own light and shadow is added on top,
-    // so even a black paint keeps its panels' edges.
-    highp vec3 lit = max(colour.rgb * shade + vec3((shade - 1.0) * 0.12), vec3(0.0));
+    // Any colour goes, black included: a touch of the art's own light is added on top, so even a
+    // black paint keeps its panels' edges. Shadow scales the colour as deep as the same touch would
+    // take it, never deeper than the art's shade squared, so a dark paint keeps its hue in shadow.
+    highp float dim = max(shade + (shade - 1.0) * 0.12 / max(zGrayscale(colour.rgb), 0.001), shade * shade);
+    highp vec3 lit = mix(colour.rgb * dim, colour.rgb * shade + vec3((shade - 1.0) * 0.12), step(1.0, shade));
     // A pale colour can't brighten past white; its highlights fade towards white instead.
     highp float over = clamp(max(lit.r, max(lit.g, lit.b)) - 1.0, 0.0, 1.0);
     highp vec3 col = mix(min(lit, vec3(1.0)), vec3(1.0), over);

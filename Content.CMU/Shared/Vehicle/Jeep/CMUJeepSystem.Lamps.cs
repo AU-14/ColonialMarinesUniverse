@@ -115,6 +115,7 @@ public sealed partial class CMUJeepSystem
                 Name = lamp.Name,
                 Slot = lamp.SlotId,
                 Offset = lamp.Offset,
+                OverRiders = lamp.OverRiders,
             };
         }
     }

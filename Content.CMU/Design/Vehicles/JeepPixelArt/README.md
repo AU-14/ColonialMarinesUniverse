@@ -55,7 +55,7 @@ it, back at their own depth once clear.
 | `jeep_transport.rsi` | 4 seats |
 | `jeep_medical.rsi` | 2 seats, the passenger's turned to face a surgical bed across the back; red crosses on the hood and the passenger's door |
 | `jeep_wreck.rsi` | one burnt-out wreck per version, named like its RSI |
-| `hardpoints.rsi` | item icons for parts with no game item yet: `tires`, `mgturret`, `windshield`, `wirecutter`, `searchlight`, `engine`, `headlight`, `turn_signal`, `taillight`, `hood`, `door`, `tailgate` |
+| `hardpoints.rsi` | item icons for parts with no game item yet: `tires`, `road_tires`, `mgturret`, `windshield`, `wirecutter`, `searchlight`, `engine`, `headlight`, `turn_signal`, `taillight`, `hood`, `door`, `tailgate` |
 | `cargo_straps.rsi` | `straps`, drawn over a standard crate once it is wrenched into the slot |
 | `jeep_beams.rsi` | `beam_low`, `beam_high`: the headlight haze, 320 px, one direction, the cone pointing down from the middle of the top edge |
 | `light_masks/` | `low_beam.png`, `high_beam.png`: the beams' light cones, pointing up (the game turns them to the jeep's front) |
@@ -75,16 +75,38 @@ The jeep is open, so riders are drawn between the vehicle and an overlay entity:
    (`hood_closed_dent1`-`3` while the front is crumpled), the extinguisher
    (under the doors: the passenger's swings open in front of it), the doors and the tailgate, the
    fuel door, the other hardpoints (`BASE_KIT_ORDER`: the tail lights over the spare beside them),
-   then `wheels_0` / `wheels_1` (layer `rmc-wheels`).
+   then `wheels_0` / `wheels_1` (layer `rmc-wheels`) and the rim design over them (`rims`, see Rim designs).
 2. Crate (when loaded) and riders, far to near. Facing north the crate goes after the riders.
 3. Overlay entity: `jeep_overlay`, `front_dent_overlay_*`, `damaged_overlay`, the doors' and tailgate's `*_overlay`
    states, `hood_closed_overlay`, the hardpoint
    `*_overlay_0` / `_1` states, then the raised hood (`hood_opening` / `hood_open` /
-   `hood_closing` `_overlay`) and the fuel door `*_overlay` states, `wheels_overlay_0` / `_1`, then
+   `hood_closing` `_overlay`) and the fuel door `*_overlay` states, `wheels_overlay_0` / `_1` and
+   their rim design, then
    the unshaded lit lamps (see Lights), `engine_smoke_*`, `engine_fire`, and last the `*_outline`
    hover highlights.
 4. Turret visual: `mgturret_0` / `mgturret_1`, like `humveeturret_0`. Facing north the gunner
    stands between the camera and the gun, so in that direction the turret goes under the riders.
+
+## Rim designs
+
+The vehicle spray painter can spray a rim design on the wheels (`jeep_rims.yml`: twelve designs,
+`CMURimDesignPrototype`). The art doesn't draw them: beside every intact wheel and spare state there
+is a rim map, `rims_<state>` (`rims_wheels_0`, `rims_wheels_overlay_0`, `rims_spare_0`,
+`rims_spare_open_0`, `rims_spare_opening_overlay_0` and so on), with a pixel wherever a rim shows in
+that state. Its red and green are the pixel's place on the rim's face (`4 + 24 * (u + 5)` and
+`4 + 24 * (v + 5)`, u forward on the wheels and right on the spare, v up, in voxels from the hub),
+its blue the wheel frame (`16 + 64 * frame`). The values are spaced so they read back the same
+through the engine's sRGB sampling. The script tags each rim voxel with its place (`rim_tagged`),
+renders the state again and keeps the tagged pixels of the state's own (`rim_map`), so a rim map
+follows the state exactly, swung spare included.
+
+In game `rims` and `spare_rims` layers follow the wheels and spare (`rimLayers` on `CMUVehiclePaint`):
+the map beside the state shown, its frame, offset and tint (`CMUVehicleRimVisualSystem`). `rim.swsl`
+reads the map and looks the pixel up in the vehicle's design, baked by the client into a 44 x 11
+texture of colours: one 11 pixel rim per frame. `CMURimDesigns` draws a design pixel by pixel: a lip,
+a cap and the pattern between (dish, spokes, holes, slots, crossed spokes or a hubcap), each part in
+the base (the wheels' paint), accent, lip or cap colour. Each frame turns the pattern a quarter of
+one repeat, so the four frame loop is seamless; nuts and lip bolts come in multiples of the count.
 
 ## Front crash damage
 
@@ -140,10 +162,10 @@ so an empty slot still reads.
 
 | Slot | States | Holds |
 | --- | --- | --- |
-| wheels | `wheels_0` intact (animated while moving), `wheels_1` destroyed; hidden when removed (brake drums show) | jeep wheel |
+| wheels | `wheels_0` intact (animated while moving), `wheels_1` destroyed; hidden when removed (brake drums show); `road_wheels_0` on road tyres | jeep wheel, jeep road wheel |
 | windshield | `windshield_up_*`, `windshield_down_*`; the damaged glass has bullet holes | jeep windshield |
 | turret (gunner) | `mgturret_0` / `_1` | heavy machine gun |
-| spare | `spare_*`; drawn as its tread face from the side; removed leaves the carrier. On the cargo and gun jeeps it hangs on the tailgate and folds under it | the same wheel-set item the wheel slot takes, so it replaces destroyed wheels |
+| spare | `spare_*`, `road_spare_*` for road tyres; drawn as its tread face from the side; removed leaves the carrier. On the cargo and gun jeeps it hangs on the tailgate and folds under it | the same wheel-set item the wheel slot takes, so it replaces destroyed wheels |
 | jerry can | `jerrycan_*`; the damaged can is holed and drips fuel. On the tailgate like the spare | `RMCFuelCan` |
 | shovel | `shovel_*`, on the driver's door, swinging with it | `CMEntrenchingTool` |
 | axe | `axe_*`, on the driver's door above the shovel | `RMCFireAxe` |
@@ -164,6 +186,34 @@ ring of jeep around them.
 
 Following the humvee, `_0` is intact and `_1` is damaged (`damagedVehicleState`). `PRIMARY`,
 `ATTACH`, `WHEEL` are empty placeholders for hidden hardpoint layers.
+
+## Tyres
+
+A wheel set's tyres (`cmuVehicleTyre`, `tyres.yml`) set the jeep's top speed and acceleration on
+the ground under it and how hard water drags it. Paved ground is any tile a shovel can't dig, rough
+ground any it can.
+
+| Tyre | Paved | Rough | Water drag | Look |
+| --- | --- | --- | --- | --- |
+| off-road (`CMUJeepWheel`) | 1 | 1 | 1 | knobbly: a notched edge and a checkered tread |
+| road (`CMUJeepWheelRoad`) | 1.15 | 0.8 | 1.35 | round, smooth sidewalls with a dark shoulder line, ribbed tread |
+
+The generator draws the road tyres with `tyres("road")` (`TYRE`): the same wheels and spare as the
+off-road ones, their rims in the same place, so the `road_*` states share the off-road states' rim
+maps; a shredded tyre looks the same either way. The colony's crates pack road wheels
+(`CMUVehicleCrate.wheels`). `jeep_road_tyres.png` shows them.
+
+## Cover
+
+The doors and windshield shield the riders (`CMUVehicleCover`, seat `doorSide` and `windshield`):
+
+- A shut door stops shots from its side (within 60 degrees of straight on) at the legs, feet and
+  groin of the rider beside it; the bodywork takes them. Open or taken off, or with the hull wrecked,
+  it stops nothing, and it never covers the chest or head.
+- The raised windshield catches half the shots from ahead at the front riders' heads and chests,
+  wearing by half of each; cracked, it stops nothing.
+- Folded down or taken off, it lets grit fly into the front riders' eyes from half of top speed over
+  rough ground: a few seconds of blurred sight, unless goggles, a visor or a mask cover their eyes.
 
 ## Hood and engine
 
@@ -442,6 +492,12 @@ Wheels and hardpoints aren't in the map: drawings stay on the bodywork. Use the 
 painted pixels between the vehicle entity and the overlay entity. `crayon()` and `crayon_demo()` in
 the script are the reference; `jeep_crayons.png` shows the result.
 
+A crayon's alt verb switches it between stamping its symbol and drawing freely. Drawing freely,
+pressing on a jeep and dragging traces a line onto the body: the client sends the cursor's path in
+batches and the server lays a dot on each body face under the line, through the same map, from the
+side the jeep is drawn from. Dots (up to 1500) are drawn over the symbols and cleaned off with them;
+every 40 new dots use a charge.
+
 ## In game
 
 Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml`, strings in
@@ -456,13 +512,16 @@ Prototypes are in `Content.CMU/Resources/Prototypes/CMU14/Vehicles/Jeep/jeep.yml
 | `Shared/Vehicle/Jeep/CMUVehicleIgnition*` | the ignition key slot: no key, no running |
 | `Shared/Vehicle/Jeep/CMUVehicleFuel*` | fuel use and refuelling from a fuel can at the fuel door; the do-after bar starts at the tank level |
 | `Shared/Vehicle/Jeep/CMUVehicleCargo*` | loading, wrenching down and unloading a crate on the cargo bed, over the tailgate |
-| `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand, 30 charges, 5 a respray and 1 for the wheels, printed at the autolathe) and respraying the jeep with it, or one part where it is sprayed: the body outside, the tub inside (by the body voxel under the click), the seats (on a seat) or the wheels and spare (on the wheels; grey metal rims by default, their own shader instance); the art marks its paint pixels with an alpha just under 255 that also carries their zone, dirt level and the art's mud (`PAINT_ALPHA - 16 * zone - 2 * level - mud`, 207 to 254: body 239-254, tub inside 223-238, seats 207-222), so the shader is always on; the engine and windshield only read the body's band (`plainLayers`), since their own art uses the others |
-| `Shared/Vehicle/Jeep/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs` | crayon drawings (up to 50) and blood splashes anchored to the body via `crayon_maps/` |
+| `Shared/Vehicle/Jeep/CMUVehiclePaint*`, `CMUVehicleSprayPainter*`, `paint.swsl` | the vehicle spray painter (an RGB colour window in hand with a rim design tab, 30 charges, 5 a respray, 1 for the wheels and 2 for a rim design, printed at the autolathe) and respraying the jeep with it, or one part where it is sprayed: the body outside, the tub inside (by the body voxel under the click), the seats (on a seat) or the wheels and spare (on the wheels; grey metal rims by default, their own shader instance); the art marks its paint pixels with an alpha just under 255 that also carries their zone, dirt level and the art's mud (`PAINT_ALPHA - 16 * zone - 2 * level - mud`, 207 to 254: body 239-254, tub inside 223-238, seats 207-222), so the shader is always on; the engine and windshield only read the body's band (`plainLayers`), since their own art uses the others |
+| `Shared/Vehicle/Jeep/CMURimDesign*`, `Client/Vehicle/CMUVehicleRimVisualSystem.cs`, `rim.swsl`, `jeep_rims.yml` | rim designs sprayed on the wheels in design mode, in their base, accent, lip and cap colours; painting the wheels after only changes the base, and the factory design takes a design off (see Rim designs) |
+| `Shared/Vehicle/Jeep/CMUVehicleCrayon*`, `Server/.../CMUVehicleCrayonSystem.cs`, `Client/Vehicle/CMUCrayonFreeDrawSystem.cs` | crayon drawings (up to 50), free drawn dots and blood splashes anchored to the body via `crayon_maps/` |
+| `Shared/Vehicle/CMUVehicleTyre*`, `CMUGridVehicleMoveSystem.Tyres.cs` | tyres from the fitted wheel set, and their speed and water drag on the ground under the jeep (see Tyres) |
+| `Shared/Vehicle/Jeep/CMUVehicleCover*` | shut doors and the raised windshield stopping shots at the riders, grit behind a lowered windshield (see Cover) |
 | `Shared/Vehicle/Jeep/CMUVehicleGrime*`, `Server/.../CMUVehicleGrimeBuildUpSystem.cs` | dirt from driving, blood from wounded riders and anyone run down, cleaning |
 | `Shared/Vehicle/Jeep/CMUVehicleCrate*`, `Client/Vehicle/CMUVehicleCrateRemainsVisualSystem.cs`, `jeep_crates.yml` | jeep crates opening into the jeep with their walls falling, launch-bay rounds |
 | `Shared/Vehicle/Jeep/CMUVehicleDropFlareComponent.cs`, `Server/.../CMUVehicleDropFlareSystem.cs` | the CLF's jeep drop flare |
 | `Shared/Vehicle/CMUVehicleFrontDamage*`, `Client/Vehicle/CMUVehicleFrontDamageVisualSystem.cs` | the front crumpled by head on crashes (see Front crash damage) and beaten straight with a welder used on the front, read from the crayon map under the click |
-| `Shared/Vehicle/Jeep/CMUVehicleCrashKnockout*`, `Server/.../CMUVehicleCrashKnockoutSystem.cs` | a hard head on crash (from 70% of top speed) knocks each rider out for 3 to 5 seconds, more surely the faster; the horn blares while the driver is out on the wheel |
+| `Shared/Vehicle/Jeep/CMUVehicleCrashKnockout*`, `Server/.../CMUVehicleCrashKnockoutSystem.cs` | a hard head on crash (from 70% of top speed) blacks every rider out for 2 seconds and knocks each out for 3 to 5, more surely the faster; the horn blares while the driver is out on the wheel |
 | `Shared/Vehicle/CMUGunDistantSound*`, `Server/Vehicle/CMUGunDistantSoundSystem.cs` | the gun's far shot, played to listeners 10 to 45 tiles away, placed on the map so it reaches them out of view |
 | `Shared/Vehicle/Jeep/CMUVehicleGunOrigin*` | shots from the gun's pivot on the jeep; the muzzle flash on the drawn barrel tip, for the way each client's camera is turned |
 | `Client/Vehicle/CMU*` | overlay frame and lights, part masks and hover outlines, swing animations, damage looks, suspension bob, crate placement, crayon painting, paint, headlight haze |

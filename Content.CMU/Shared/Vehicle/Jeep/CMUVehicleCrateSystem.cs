@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.SupplyDrop;
+using Content.Shared.CMU14.Vehicle;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
@@ -7,6 +8,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -97,6 +99,9 @@ public sealed class CMUVehicleCrateSystem : EntitySystem
             }
         }
 
+        if (ent.Comp.Wheels is { } wheels)
+            SwapWheels(vehicle, wheels);
+
         if (ent.Comp.Paints.Count > 0 && TryComp(vehicle, out CMUVehiclePaintComponent? paint))
         {
             paint.Color = _random.Pick(ent.Comp.Paints);
@@ -121,5 +126,26 @@ public sealed class CMUVehicleCrateSystem : EntitySystem
 
         QueueDel(ent);
         return vehicle;
+    }
+
+    /// <summary>
+    /// Swaps every wheel set aboard, fitted or stowed, for another kind.
+    /// </summary>
+    private void SwapWheels(EntityUid vehicle, EntProtoId wheels)
+    {
+        if (!TryComp(vehicle, out ContainerManagerComponent? manager))
+            return;
+
+        foreach (var container in _containers.GetAllContainers(vehicle, manager).ToArray())
+        {
+            foreach (var old in container.ContainedEntities.ToArray())
+            {
+                if (!HasComp<CMUVehicleTyreComponent>(old))
+                    continue;
+
+                Del(old);
+                SpawnInContainerOrDrop(wheels, vehicle, container.ID);
+            }
+        }
     }
 }

@@ -7,53 +7,22 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared.CMU14.Vehicle.Jeep;
 
 /// <summary>
-/// An open jeep's moving bodywork and the clickable parts spawned on it.
+/// An open vehicle's moving bodywork and the clickable parts spawned on it.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class CMUJeepComponent : Component
 {
+    /// <summary>
+    /// The hinged panels standing open, by part id.
+    /// </summary>
     [DataField, AutoNetworkedField]
-    public bool HoodOpen;
+    public HashSet<string> OpenPanels = new();
 
     [DataField, AutoNetworkedField]
     public bool WindshieldDown;
 
-    [DataField, AutoNetworkedField]
-    public bool FuelDoorOpen;
-
-    [DataField, AutoNetworkedField]
-    public bool DriverDoorOpen;
-
-    [DataField, AutoNetworkedField]
-    public bool PassengerDoorOpen;
-
-    /// <summary>
-    /// The cargo and gun jeeps' fold-down tailgate. Loads and unloads the bed, and the gunner
-    /// climbs in over it; the spare and the jerry can hang on it.
-    /// </summary>
-    [DataField, AutoNetworkedField]
-    public bool TailgateOpen;
-
-    [DataField]
-    public SoundSpecifier? HoodOpenSound;
-
-    [DataField]
-    public SoundSpecifier? HoodCloseSound;
-
     [DataField]
     public SoundSpecifier? WindshieldSound;
-
-    [DataField]
-    public SoundSpecifier? DoorOpenSound;
-
-    [DataField]
-    public SoundSpecifier? DoorCloseSound;
-
-    [DataField]
-    public SoundSpecifier? TailgateOpenSound;
-
-    [DataField]
-    public SoundSpecifier? TailgateCloseSound;
 
     [DataField, AutoNetworkedField]
     public float EngineIntegrity = 150f;
@@ -186,13 +155,17 @@ public sealed partial class CMUJeepComponent : Component
 public sealed partial class CMUVehiclePartData
 {
     /// <summary>
-    /// Part id, matching its click_* mask and *_outline states.
+    /// Part id, matching its sprite layer and its states: click_* mask, *_outline, and a panel's
+    /// *_closed, *_open, *_opening and *_closing.
     /// </summary>
     [DataField(required: true)]
     public string Id = string.Empty;
 
     [DataField(required: true)]
     public LocId Name;
+
+    [DataField]
+    public CMUVehiclePartKind Kind = CMUVehiclePartKind.Item;
 
     /// <summary>
     /// Item slot on the vehicle holding the part, when an empty hand can take it.
@@ -202,10 +175,88 @@ public sealed partial class CMUVehiclePartData
 
     /// <summary>
     /// Where the part's click mask sits, in vehicle space (facing south). Reach is measured to the
-    /// mask, so a part at the jeep's far end is spawned there.
+    /// mask, so a part at the vehicle's far end is spawned there.
     /// </summary>
     [DataField]
     public Vector2 Offset;
+
+    /// <summary>
+    /// The directions the vehicle's overlay draws the part in, over the riders.
+    /// </summary>
+    [DataField]
+    public List<Direction> OverRiders = new();
+
+    [DataField]
+    public SoundSpecifier? OpenSound;
+
+    [DataField]
+    public SoundSpecifier? CloseSound;
+
+    /// <summary>
+    /// A panel's parts that can only be reached while it is open or off, like the engine under the hood.
+    /// </summary>
+    [DataField]
+    public List<string> Exposes = new();
+
+    /// <summary>
+    /// Kit hung on this panel can't be reached while it stands open, like the spare on a lowered tailgate.
+    /// </summary>
+    [DataField]
+    public bool BlocksKitWhileOpen;
+
+    /// <summary>
+    /// Out of its shut position the overlay draws the panel from this layer instead, like the raised hood
+    /// standing in front of the windshield.
+    /// </summary>
+    [DataField]
+    public string? RaisedLayer;
+
+    /// <summary>
+    /// A wrecked hull pops the shut panel ajar.
+    /// </summary>
+    [DataField]
+    public bool AjarWhenWrecked;
+
+    /// <summary>
+    /// The panels a windshield folds onto: they can't open while it is down, and it can't fold while
+    /// they are open.
+    /// </summary>
+    [DataField]
+    public List<string> Interlock = new();
+
+    /// <summary>
+    /// The panel the kit hangs on and swings with; it can't be fitted or taken while the panel is off.
+    /// </summary>
+    [DataField]
+    public string? Host;
+
+    /// <summary>
+    /// The slot is only filled by clicking this part's own mask, never from a click on the vehicle.
+    /// </summary>
+    [DataField]
+    public bool MaskOnly;
+}
+
+public enum CMUVehiclePartKind : byte
+{
+    /// <summary>
+    /// Kit in an item slot, or a fixed fitting.
+    /// </summary>
+    Item,
+
+    /// <summary>
+    /// A hinged door, hood, boot lid, tailgate or fuel door.
+    /// </summary>
+    Panel,
+
+    /// <summary>
+    /// A windshield that folds down.
+    /// </summary>
+    Windshield,
+
+    Engine,
+
+    Wheels,
 }
 
 /// <summary>

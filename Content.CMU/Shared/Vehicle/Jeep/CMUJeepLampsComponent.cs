@@ -63,5 +63,71 @@ public sealed partial class CMUJeepLampData
     [DataField]
     public float DamageShare = 0.5f;
 
+    /// <summary>
+    /// The directions the vehicle's overlay draws the lamp in, over the riders.
+    /// </summary>
+    [DataField]
+    public List<Direction> OverRiders = new();
+
+    [DataField]
+    public CMUVehicleLampRole Role;
+
+    /// <summary>
+    /// The side it blinks with as a turn signal; a headlight's side also names its beams.
+    /// </summary>
+    [DataField]
+    public CMUVehicleLampSide Side;
+
+    /// <summary>
+    /// The overlay layer shown while the lights are on.
+    /// </summary>
+    [DataField]
+    public string? LitLayer;
+
+    /// <summary>
+    /// The overlay layer shown while braking.
+    /// </summary>
+    [DataField]
+    public string? BrakeLayer;
+
+    /// <summary>
+    /// The overlay layer blinking while its side's turn signal is on.
+    /// </summary>
+    [DataField]
+    public string? SignalLayer;
+
+    /// <summary>
+    /// A headlight's lens in each direction's art, in pixels from the vehicle origin (x right, y up):
+    /// where its beams start. Without them, the vehicle's driver or passenger anchors by side.
+    /// </summary>
+    [DataField]
+    public Dictionary<Direction, Vector2> BeamAnchors = new();
+
     public string SlotId => $"jeep-{Id.Replace('_', '-')}";
+}
+
+public enum CMUVehicleLampRole : byte
+{
+    /// <summary>
+    /// Throws the beams the headlight switch picks.
+    /// </summary>
+    Headlight,
+
+    /// <summary>
+    /// Glows red with the lights on, brighter braking.
+    /// </summary>
+    TailLight,
+
+    TurnSignal,
+
+    /// <summary>
+    /// Lit with the lights on and nothing more.
+    /// </summary>
+    Marker,
+}
+
+public enum CMUVehicleLampSide : byte
+{
+    Left,
+    Right,
 }

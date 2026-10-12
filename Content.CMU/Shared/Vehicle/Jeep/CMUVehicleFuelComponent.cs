@@ -24,6 +24,12 @@ public sealed partial class CMUVehicleFuelComponent : Component
     public ProtoId<ReagentPrototype> Reagent = "WeldingFuel";
 
     /// <summary>
+    /// The part that is the fuel door: a fuel can used on it fills the tank while it is open.
+    /// </summary>
+    [DataField]
+    public string Door = "fuel_door";
+
+    /// <summary>
     /// Fuel burned per second while the vehicle moves.
     /// </summary>
     [DataField]

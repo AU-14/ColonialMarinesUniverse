@@ -76,6 +76,11 @@ public sealed class CMUVehicleFuelSystem : EntitySystem
                tank.GetTotalPrototypeQuantity(vehicle.Comp.Reagent) > 0;
     }
 
+    public bool IsFuelDoor(Entity<CMUVehicleFuelComponent?> vehicle, string part)
+    {
+        return Resolve(vehicle, ref vehicle.Comp, false) && vehicle.Comp.Door == part;
+    }
+
     /// <summary>
     /// Whether an item holds the solution this tank is filled from, so it's meant for the fuel door.
     /// </summary>

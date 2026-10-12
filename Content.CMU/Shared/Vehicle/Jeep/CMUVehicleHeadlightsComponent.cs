@@ -75,6 +75,12 @@ public sealed partial class CMUVehicleHeadlightBeamComponent : Component
     public bool Driver;
 
     /// <summary>
+    /// The headlight the beam shines from, by lamp id.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public string Lamp = string.Empty;
+
+    /// <summary>
     /// How strongly the haze shows where its own light lands.
     /// </summary>
     [DataField]

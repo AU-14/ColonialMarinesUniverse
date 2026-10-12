@@ -90,6 +90,20 @@ public sealed partial class CMUVehicleSeatData
     public string? Door;
 
     /// <summary>
+    /// The side of the vehicle the seat's door is on, in vehicle space with the vehicle facing
+    /// south. Shut, the door stops shots from that side at the rider's legs and groin.
+    /// </summary>
+    [DataField]
+    public Direction? DoorSide;
+
+    /// <summary>
+    /// The seat is behind the windshield, which catches some shots from ahead at the rider's head
+    /// and chest while raised, and lets grit into their eyes at speed while down.
+    /// </summary>
+    [DataField]
+    public bool Windshield;
+
+    /// <summary>
     /// Screen pixels the rider's sprite is raised, for seats above the tub floor. Unused for
     /// directions listed in <see cref="PixelOffsets"/>, which already include it.
     /// </summary>
@@ -156,6 +170,12 @@ public sealed partial class CMUVehicleSeatComponent : Component
 
     [DataField, AutoNetworkedField]
     public string? Door;
+
+    [DataField, AutoNetworkedField]
+    public Direction? DoorSide;
+
+    [DataField, AutoNetworkedField]
+    public bool Windshield;
 
     [DataField, AutoNetworkedField]
     public bool Reversed;

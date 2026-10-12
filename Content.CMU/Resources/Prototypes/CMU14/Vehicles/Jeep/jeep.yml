@@ -44,6 +44,11 @@
   path: /Textures/CMU14/Structures/vehicles/jeep/paint.swsl
 
 - type: shader
+  id: CMUJeepRim
+  kind: source
+  path: /Textures/CMU14/Structures/vehicles/jeep/rim.swsl
+
+- type: shader
   id: CMUJeepBeam
   kind: source
   path: /Textures/CMU14/Structures/vehicles/jeep/beam.swsl
@@ -97,9 +102,24 @@
     maxIntegrity: 250
     integrity: 250
   - type: VehicleWheelItem
+  - type: CMUVehicleTyre
+    tyre: OffRoad
   - type: Tag
     tags:
     - CMUJeepWheel
+
+# Road tyres: smooth sidewalls and a ribbed tread. Quick on paving, slow on dirt and sand, and they
+# bog down in water. The colony's jeeps come on them.
+- type: entity
+  parent: CMUJeepWheel
+  id: CMUJeepWheelRoad
+  name: jeep road wheel set
+  description: A set of jeep wheels on road tyres. The spare on the tailgate is the same set.
+  components:
+  - type: Sprite
+    state: road_tires
+  - type: CMUVehicleTyre
+    tyre: Road
 
 - type: entity
   parent: CMUJeepHardpointBase
@@ -411,17 +431,12 @@
     barrel: 0.65625
 
 - type: entity
+  parent: CMUOpenVehicleBase
   id: CMUVehicleJeepBase
   abstract: true
   name: jeep
   description: A light, open four-by-four. Fast and nimble, but nothing stands between its crew and the bullets.
   components:
-  - type: RMCNightVisionVisible
-    priority: -2
-  - type: Vehicle
-    movementKind: Grid
-    transferDamage: false
-  - type: VehicleOperatorDamage
   - type: CMUVehicleSeats
     seats:
     - id: driver
@@ -429,6 +444,8 @@
       offset: 0.3125,0.25
       exit: 0.95,0.25
       door: door_driver
+      doorSide: East
+      windshield: true
       pixelOffsets:
         South: 10,6
         North: -10,-3
@@ -445,6 +462,8 @@
       offset: -0.3125,0.25
       exit: -0.95,0.25
       door: door_passenger
+      doorSide: West
+      windshield: true
       pixelOffsets:
         South: -10,6
         North: 10,-3
@@ -460,84 +479,132 @@
     - id: hood
       name: cmu-jeep-part-hood
       slot: jeep-hood
+      kind: Panel
+      exposes: [ engine ]
+      raisedLayer: hood_raised
+      ajarWhenWrecked: true
+      overRiders: [ South ]
+      openSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_open.wav
+        params:
+          volume: -2
+      closeSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_close.wav
+        params:
+          volume: -2
     - id: windshield
       name: cmu-jeep-part-windshield
       slot: jeep-windshield
+      kind: Windshield
+      interlock: [ hood ]
+      overRiders: [ South ]
     - id: door_driver
       name: cmu-jeep-part-door-driver
       slot: jeep-door-driver
+      kind: Panel
+      overRiders: [ West ]
+      openSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_open.wav
+        params:
+          volume: -5
+          pitch: 1.15
+      closeSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_close.wav
+        params:
+          volume: -5
+          pitch: 1.15
     - id: door_passenger
       name: cmu-jeep-part-door-passenger
       slot: jeep-door-passenger
+      kind: Panel
+      overRiders: [ East ]
+      openSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_open.wav
+        params:
+          volume: -5
+          pitch: 1.15
+      closeSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_close.wav
+        params:
+          volume: -5
+          pitch: 1.15
     # Spawned behind the bed, so it can be reached from behind the jeep.
     - id: tailgate
       name: cmu-jeep-part-tailgate
       slot: jeep-tailgate
       offset: 0,0.9
+      kind: Panel
+      blocksKitWhileOpen: true
+      overRiders: [ North ]
+      openSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_open.wav
+        params:
+          volume: -4
+          pitch: 0.9
+      closeSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_close.wav
+        params:
+          volume: -4
+          pitch: 0.9
     - id: fuel_door
       name: cmu-jeep-part-fuel-door
+      kind: Panel
+      overRiders: [ East ]
     - id: engine
       name: cmu-jeep-part-engine
+      kind: Engine
     - id: wheels
       name: cmu-jeep-part-wheels
       slot: wheel-1
+      kind: Wheels
+      overRiders: [ East, West ]
     - id: spare
       name: cmu-jeep-part-spare
       slot: jeep-spare
+      host: tailgate
+      overRiders: [ North ]
     - id: jerrycan
       name: cmu-jeep-part-jerrycan
       slot: jeep-jerrycan
+      host: tailgate
+      maskOnly: true
+      overRiders: [ North ]
     - id: shovel
       name: cmu-jeep-part-shovel
       slot: jeep-shovel
+      host: door_driver
+      overRiders: [ West ]
     - id: axe
       name: cmu-jeep-part-axe
       slot: jeep-axe
+      host: door_driver
+      overRiders: [ West ]
     - id: jack
       name: cmu-jeep-part-jack
       slot: jeep-jack
+      host: door_passenger
+      maskOnly: true
+      overRiders: [ East ]
     # Strapped to the outside of the cowl, ahead of the passenger door.
     - id: extinguisher
       name: cmu-jeep-part-extinguisher
       slot: jeep-extinguisher
       offset: -0.64,-0.23
-    hoodOpenSound:
-      path: /Audio/CMU14/Jeep/jeep_hood_open.wav
-      params:
-        volume: -2
-    hoodCloseSound:
-      path: /Audio/CMU14/Jeep/jeep_hood_close.wav
-      params:
-        volume: -2
+      maskOnly: true
+      overRiders: [ South, East ]
     windshieldSound:
       path: /Audio/CMU14/Jeep/jeep_windshield.wav
       params:
         volume: -2
-    doorOpenSound:
-      path: /Audio/CMU14/Jeep/jeep_hood_open.wav
-      params:
-        volume: -5
-        pitch: 1.15
-    doorCloseSound:
-      path: /Audio/CMU14/Jeep/jeep_hood_close.wav
-      params:
-        volume: -5
-        pitch: 1.15
-    tailgateOpenSound:
-      path: /Audio/CMU14/Jeep/jeep_hood_open.wav
-      params:
-        volume: -4
-        pitch: 0.9
-    tailgateCloseSound:
-      path: /Audio/CMU14/Jeep/jeep_hood_close.wav
-      params:
-        volume: -4
-        pitch: 0.9
   # Each lamp fitted on its own: offsets are where its click mask sits (vehicle space, facing south).
   - type: CMUJeepLamps
     lamps:
     - id: headlight_left
       name: cmu-jeep-part-headlight-left
+      overRiders: [ South ]
+      role: Headlight
+      side: Left
+      litLayer: headlight_left_on
       offset: 0.45,-1
       hitChance: 0.3
       damageShare: 0.5
@@ -551,6 +618,10 @@
           - CMUJeepHeadlight
     - id: headlight_right
       name: cmu-jeep-part-headlight-right
+      overRiders: [ South ]
+      role: Headlight
+      side: Right
+      litLayer: headlight_right_on
       offset: -0.45,-1
       hitChance: 0.3
       damageShare: 0.5
@@ -564,6 +635,10 @@
           - CMUJeepHeadlight
     - id: turn_signal_left
       name: cmu-jeep-part-turn-signal-left
+      overRiders: [ South ]
+      role: TurnSignal
+      side: Left
+      signalLayer: signal_front_left
       offset: 0.55,-0.88
       hitChance: 0.25
       damageShare: 0.4
@@ -577,6 +652,10 @@
           - CMUJeepTurnSignal
     - id: turn_signal_right
       name: cmu-jeep-part-turn-signal-right
+      overRiders: [ South ]
+      role: TurnSignal
+      side: Right
+      signalLayer: signal_front_right
       offset: -0.55,-0.88
       hitChance: 0.25
       damageShare: 0.4
@@ -590,6 +669,12 @@
           - CMUJeepTurnSignal
     - id: taillight_left
       name: cmu-jeep-part-taillight-left
+      overRiders: [ North ]
+      role: TailLight
+      side: Left
+      litLayer: taillight_left_on
+      brakeLayer: brake_left
+      signalLayer: signal_rear_left
       offset: 0.55,0.97
       hitChance: 0.25
       damageShare: 0.4
@@ -603,6 +688,12 @@
           - CMUJeepTailLight
     - id: taillight_right
       name: cmu-jeep-part-taillight-right
+      overRiders: [ North ]
+      role: TailLight
+      side: Right
+      litLayer: taillight_right_on
+      brakeLayer: brake_right
+      signalLayer: signal_rear_right
       offset: -0.55,0.97
       hitChance: 0.25
       damageShare: 0.4
@@ -614,71 +705,16 @@
         whitelist:
           tags:
           - CMUJeepTailLight
-  - type: CMUVehicleIgnition
-    keySlot:
-      name: cmu-jeep-part-ignition
-      startingItem: CMUJeepKey
-      swap: false
-      insertSound: /Audio/Machines/id_insert.ogg
-      ejectSound: /Audio/Machines/id_swipe.ogg
-      whitelist:
-        tags:
-        - CMUJeepKey
-  - type: CMUVehicleEngineSound
-    startSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_start.wav
-      params:
-        maxDistance: 12
-    idleSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_idle.wav
-      params:
-        volume: -2
-        maxDistance: 10
-    driveSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_drive.wav
-      params:
-        volume: -1
-        maxDistance: 12
-    roughSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_rough.wav
-      params:
-        volume: -2
-        maxDistance: 10
-    roughDriveSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_rough_drive.wav
-      params:
-        volume: -1
-        maxDistance: 12
-    revSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_rev.wav
-      params:
-        maxDistance: 12
-    stallSound:
-      path: /Audio/CMU14/Jeep/jeep_engine_sputter.wav
-      params:
-        maxDistance: 12
   - type: Clickable
     bounds:
       south: -0.66,-1.38,0.66,1.25
       north: -0.66,-1.47,0.66,1.16
       east: -1.25,-0.81,1.34,0.78
       west: -1.34,-0.81,1.25,0.78
-  # The fuel tank, filled through the fuel door.
-  - type: CMUVehicleFuel
-  - type: Solution
-    id: fuel
-    solution:
-      maxVol: 60
-      reagents:
-      - ReagentId: WeldingFuel
-        Quantity: 45
   - type: CMUVehicleCrayon
     map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep.png
-  # Dirt from driving, blood from wounded riders and anyone run down; space cleaner, soap or a wet
-  # mop takes it off, with the crayon. Reactive lets splashes reach it too.
-  - type: CMUVehicleGrime
-  - type: Reactive
   # A spray painter resprays the body, or the wheels on their own, in its chosen colour; see paint.swsl.
+  # Switched to its rim designs it sprays one on the wheels, drawn over the rims; see rim.swsl.
   - type: CMUVehiclePaint
     layers: [ base, front_dent, damaged_frame, hood, door_driver, door_passenger, tailgate, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, taillight_left, taillight_right, extinguisher ]
     overlayLayers: [ body, front_dent, damaged_frame, door_driver, door_passenger, tailgate, taillight_left, taillight_right, hood, hood_raised, fuel_door, headlight_left, headlight_right, turn_signal_left, turn_signal_right, extinguisher ]
@@ -686,66 +722,14 @@
     plainOverlayLayers: [ windshield ]
     wheelLayers: [ rmc-wheels, spare ]
     wheelOverlayLayers: [ wheels, spare ]
-  - type: RMCIgnoreGhostInteractionLimits
-  - type: RequireProjectileTarget
-    alwaysHitWhitelist:
-      components: [XenoAcidProjectile, VehicleDamageMultiplier]
-  - type: GridVehicleMover
-    maxSpeed: 8
-    acceleration: 5
-    deceleration: 12
-    maxRotationSpeedDegrees: 120
-    alignmentAssistDegrees: 8
-    ignoreLightObstacleDamage: true
-    rotationAccelerationDegrees: 240
-    rotationDecelerationDegrees: 300
-    turnDelay: 0.25
-    pushCooldown: 2
-    xenoBlockMinimumSize: Xeno
-    xenoPushMinimumSize: Immobile
-    # Crashes as hard as RMC's van, a little gentler on the hull: CMUVehicleCrash below scales the
-    # hull damage with impact speed, from a third of it at wallSmashMinSpeed to all of it at maxSpeed.
-    canSmashWalls: true
-    wallSmashMinSpeed: 5
-    wallSmashWheelDamage: 0.8
-    wallSmashHullDamage: 30
-    wallSmashSlowdownMultiplier: 0.75
-    wallSmashSlowdownDuration: 0.25
-    mobCollisionHullDamage: 8
-    speedAtZeroIntegrity: 0.35
-    crashImmobileDuration: 8
-    crashImmobileMinSpeed: 7.25
-    mobCrashImmobileDuration: 4
-    mobCrashImmobileMinSpeed: 5
-    xenoMobCrashImmobileDuration: 8
-    xenoMobCrashImmobileMinSpeed: 5
-  - type: CMUVehicleCrash
+    rimLayers:
+      rims: rmc-wheels
+      spare_rims: spare
+    rimOverlayLayers:
+      rims: wheels
+      spare_rims: spare
   - type: CMUVehicleFrontDamage
     closedHoodState: hood_closed_dent
-  - type: CMUVehicleCrashKnockout
-    hornSound:
-      path: /Audio/CMU14/Jeep/jeep_horn_long.wav
-      params:
-        volume: 2
-  - type: VehicleOvercharge
-    speedMultiplier: 1.55
-    duration: 3
-    cooldown: 14
-    overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
-  # The engine sounds come from CMUVehicleEngineSound, so there is no running sound here.
-  - type: VehicleSound
-    hornSound: /Audio/CMU14/Jeep/jeep_horn.wav
-    hornCooldown: 1
-    collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
-    collisionSoundCooldown: 1.5
-    collisionSoundMinSpeed: 7
-    mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
-  # The headlight switch. RMC's spotlight flag (F) follows it and lights the tail and marker lamps;
-  # the jeep itself has no light of its own, each beam is a child with a cone-shaped one.
-  - type: VehicleSpotlight
-    radius: 6
-    energy: 2.5
-    softness: 2
   - type: CMUVehicleHeadlights
     driverLampAnchors:
       South: 14,-37
@@ -761,11 +745,6 @@
       path: /Audio/Machines/lightswitch.ogg
       params:
         volume: -4
-  - type: Physics
-    bodyType: Dynamic
-  - type: CMUZPhysics
-  - type: CMUVehicleZTraversal
-  - type: CMUZLevelViewer
   - type: Fixtures
     fixtures:
       world:
@@ -791,11 +770,6 @@
         - LargeMobLayer
         layer:
         - LargeMobLayer
-  - type: Damageable
-    damageModifierSet: VehicleFrameHumvee
-  - type: Injurable
-    damageContainer: StructuralMarine
-  - type: InteractionOutline
   - type: Sprite
     drawdepth: BelowMobs
     sprite: CMU14/Structures/vehicles/jeep/jeep.rsi
@@ -835,6 +809,9 @@
       state: windshield_up_0
     - map: [ spare ]
       state: spare_0
+    - map: [ spare_rims ]
+      state: rims_spare_0
+      visible: false
     # Over the spare beside the right one.
     - map: [ taillight_left ]
       state: taillight_left_0
@@ -850,19 +827,11 @@
       state: jack_0
     - map: [ rmc-wheels ]
       state: wheels_1
+    - map: [ rims ]
+      state: rims_wheels_0
+      visible: false
   - type: CMUVehicleOverlay
     prototype: CMUJeepOverlay
-  - type: Corrodible
-    isCorrodible: false
-  - type: DoAfter
-  - type: UserInterface
-    interfaces:
-      enum.HardpointUiKey.Key:
-        type: HardpointBoundUserInterface
-      enum.VehicleWeaponsUiKey.Key:
-        type: VehicleWeaponsBoundUserInterface
-  - type: VehicleWeapons
-  - type: InputMover
   - type: ContainerContainer
     containers:
       wheel-1: !type:ContainerSlot
@@ -974,26 +943,9 @@
     slotCount: 1
     slots:
     - wheel-1
-  - type: HardpointIntegrity
-    maxIntegrity: 400
-    integrity: 400
-  - type: HardpointState
-  - type: Appearance
   # Goes up when its engine dies, leaving a wreck. A light vehicle's blast: a frag grenade's
   # core but a shorter reach, about 2.4 tiles, and roughly half the Bison's a tile out where the crew lands.
   - type: CMUJeepWreck
-  - type: Explosive
-    explosionType: RMC
-    totalIntensity: 60
-    intensitySlope: 4
-    maxIntensity: 8
-    maxTileBreak: 0
-    canCreateVacuum: false
-  - type: CMExplosionEffect
-  - type: RMCScorchEffect
-    radius: 2
-    centerRadius: 1
-
 - type: entity
   parent: CMUVehicleJeepBase
   id: CMUVehicleJeepCargo
@@ -1139,6 +1091,8 @@
       offset: 0.3125,0.25
       exit: 0.95,0.25
       door: door_driver
+      doorSide: East
+      windshield: true
       pixelOffsets:
         South: 10,6
         North: -10,-3
@@ -1155,6 +1109,8 @@
       offset: -0.3125,0.25
       exit: -0.95,0.25
       door: door_passenger
+      doorSide: West
+      windshield: true
       pixelOffsets:
         South: -10,6
         North: 10,-3
@@ -1197,49 +1153,106 @@
     sprite: CMU14/Structures/vehicles/jeep/jeep_transport.rsi
   - type: CMUVehicleOverlay
     prototype: CMUJeepTransportOverlay
-  # The rear bench backs onto a fixed wall: no tailgate. The list replaces the parent's; the sounds
-  # are kept.
+  # The rear bench backs onto a fixed wall: no tailgate, so the spare and the jerry can stay put. The
+  # list replaces the parent's.
   - type: CMUJeep
     parts:
     - id: hood
       name: cmu-jeep-part-hood
       slot: jeep-hood
+      kind: Panel
+      exposes: [ engine ]
+      raisedLayer: hood_raised
+      ajarWhenWrecked: true
+      overRiders: [ South ]
+      openSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_open.wav
+        params:
+          volume: -2
+      closeSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_close.wav
+        params:
+          volume: -2
     - id: windshield
       name: cmu-jeep-part-windshield
       slot: jeep-windshield
+      kind: Windshield
+      interlock: [ hood ]
+      overRiders: [ South ]
     - id: door_driver
       name: cmu-jeep-part-door-driver
       slot: jeep-door-driver
+      kind: Panel
+      overRiders: [ West ]
+      openSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_open.wav
+        params:
+          volume: -5
+          pitch: 1.15
+      closeSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_close.wav
+        params:
+          volume: -5
+          pitch: 1.15
     - id: door_passenger
       name: cmu-jeep-part-door-passenger
       slot: jeep-door-passenger
+      kind: Panel
+      overRiders: [ East ]
+      openSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_open.wav
+        params:
+          volume: -5
+          pitch: 1.15
+      closeSound:
+        path: /Audio/CMU14/Jeep/jeep_hood_close.wav
+        params:
+          volume: -5
+          pitch: 1.15
     - id: fuel_door
       name: cmu-jeep-part-fuel-door
+      kind: Panel
+      overRiders: [ East ]
     - id: engine
       name: cmu-jeep-part-engine
+      kind: Engine
     - id: wheels
       name: cmu-jeep-part-wheels
       slot: wheel-1
+      kind: Wheels
+      overRiders: [ East, West ]
     - id: spare
       name: cmu-jeep-part-spare
       slot: jeep-spare
+      overRiders: [ North ]
     - id: jerrycan
       name: cmu-jeep-part-jerrycan
       slot: jeep-jerrycan
+      maskOnly: true
+      overRiders: [ North ]
     - id: shovel
       name: cmu-jeep-part-shovel
       slot: jeep-shovel
+      host: door_driver
+      overRiders: [ West ]
     - id: axe
       name: cmu-jeep-part-axe
       slot: jeep-axe
+      host: door_driver
+      overRiders: [ West ]
     - id: jack
       name: cmu-jeep-part-jack
       slot: jeep-jack
+      host: door_passenger
+      maskOnly: true
+      overRiders: [ East ]
     # Strapped to the outside of the cowl, ahead of the passenger door.
     - id: extinguisher
       name: cmu-jeep-part-extinguisher
       slot: jeep-extinguisher
       offset: -0.64,-0.23
+      maskOnly: true
+      overRiders: [ South, East ]
   - type: CMUVehicleCrayon
     map: /Textures/CMU14/Structures/vehicles/jeep/crayon_maps/jeep_transport.png
   - type: CMUJeepWreck
@@ -1260,6 +1273,8 @@
       offset: 0.3125,0.25
       exit: 0.95,0.25
       door: door_driver
+      doorSide: East
+      windshield: true
       pixelOffsets:
         South: 10,6
         North: -10,-3
@@ -1276,6 +1291,8 @@
       offset: -0.3125,0.25
       exit: -0.95,0.25
       door: door_passenger
+      doorSide: West
+      windshield: true
       pixelOffsets:
         South: -10,6
         North: 10,-3
@@ -1453,6 +1470,8 @@
       offset: 0.3125,0.25
       exit: 0.95,0.25
       door: door_driver
+      doorSide: East
+      windshield: true
       pixelOffsets:
         South: 10,6
         North: -10,-3
@@ -1469,6 +1488,8 @@
       offset: -0.3125,0.25
       exit: -0.95,0.25
       door: door_passenger
+      doorSide: West
+      windshield: true
       reversed: true
       pixelOffsets:
         South: -10,7
@@ -1658,6 +1679,9 @@
       state: windshield_up_overlay_0
     - map: [ spare ]
       state: spare_overlay_0
+    - map: [ spare_rims ]
+      state: rims_spare_overlay_0
+      visible: false
     - map: [ jerrycan ]
       state: jerrycan_overlay_0
     - map: [ shovel ]
@@ -1674,6 +1698,9 @@
       state: fuel_door_closed_overlay
     - map: [ wheels ]
       state: wheels_overlay_0
+    - map: [ rims ]
+      state: rims_wheels_overlay_0
+      visible: false
     - map: [ headlight_left_on ]
       state: headlight_left_on
       shader: unshaded
@@ -1804,6 +1831,9 @@
       state: windshield_up_overlay_0
     - map: [ spare ]
       state: spare_overlay_0
+    - map: [ spare_rims ]
+      state: rims_spare_overlay_0
+      visible: false
     - map: [ jerrycan ]
       state: jerrycan_overlay_0
     - map: [ shovel ]
@@ -1820,6 +1850,9 @@
       state: fuel_door_closed_overlay
     - map: [ wheels ]
       state: wheels_overlay_0
+    - map: [ rims ]
+      state: rims_wheels_overlay_0
+      visible: false
     - map: [ headlight_left_on ]
       state: headlight_left_on
       shader: unshaded
@@ -2139,7 +2172,7 @@
   parent: BaseItem
   id: CMUVehicleSprayPainter
   name: vehicle spray painter
-  description: A paint gun with a cup of quick-drying vehicle enamel. Use it in hand to mix any colour; a full respray takes a few charges of paint.
+  description: A paint gun with a cup of quick-drying vehicle enamel. Use it in hand to mix any colour, or to pick a rim design for a vehicle's wheels; a full respray takes a few charges of paint.
   components:
   - type: Sprite
     sprite: CMU14/Structures/vehicles/jeep/vehicle_spray_painter.rsi

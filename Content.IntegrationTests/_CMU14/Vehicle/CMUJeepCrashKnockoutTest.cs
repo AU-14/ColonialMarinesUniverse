@@ -14,8 +14,8 @@ using Robust.Shared.Utility;
 namespace Content.IntegrationTests.CMU14.Vehicle;
 
 /// <summary>
-/// A hard head on crash knocks the jeep's riders out, more surely the faster it hit, and the horn
-/// blares while the driver is out on the wheel. The gun's close and distant shots and the horns load.
+/// A hard head on crash blacks the jeep's riders out and knocks them out, more surely the faster it
+/// hit, and the horn blares while the driver is out on the wheel. The gun's close and distant shots and the horns load.
 /// </summary>
 [TestFixture]
 public sealed class CMUJeepCrashKnockoutTest : GameTest
@@ -102,6 +102,25 @@ public sealed class CMUJeepCrashKnockoutTest : GameTest
             Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.False, "Back up within five seconds.");
             Assert.That(SEntMan.GetComponent<CMUVehicleCrashKnockoutComponent>(jeep).Horn, Is.Null, "The horn stops when the driver comes to.");
         });
+    }
+
+    [Test]
+    public async Task HardCrashBlacksTheDriverOutForAMoment()
+    {
+        var (jeep, driver) = await SeatedJeep();
+
+        await Server.WaitPost(() =>
+        {
+            var knockout = SEntMan.GetComponent<CMUVehicleCrashKnockoutComponent>(jeep);
+            knockout.MinChance = 0f;
+            Crash(jeep, true, 0.7f);
+            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.True, "A hard crash blacks the driver out.");
+            Assert.That(knockout.Horn, Is.Null, "A blackout doesn't hold the horn down.");
+        });
+
+        await RunSeconds(3f);
+        await Server.WaitAssertion(() =>
+            Assert.That(SEntMan.HasComponent<RMCUnconsciousComponent>(driver), Is.False, "Only for a moment."));
     }
 
     [Test]

@@ -47,6 +47,7 @@ cmu-jeep-part-fine = There's nothing to fix on the {$part}.
 cmu-jeep-wreck-warning = Flames burst from under {THE($vehicle)}'s hood! Get clear before it goes up!
 cmu-jeep-fire-out = The fire under {THE($vehicle)}'s hood dies down with a hiss.
 cmu-vehicle-crash-knocked-out = {CAPITALIZE(THE($rider))} slams forward with the crash and goes limp!
+cmu-vehicle-crash-blackout = You slam forward and everything goes black for a moment!
 cmu-vehicle-front-straightened = You beat the last of the dents out of {THE($vehicle)}'s front.
 cmu-vehicle-front-damage-1 = Its bumper is bent in from a crash.
 cmu-vehicle-front-damage-2 = [color=yellow]Its front end is crumpled from a crash.[/color]
@@ -67,6 +68,9 @@ cmu-vehicle-paint-done = You respray {THE($vehicle)}.
 cmu-vehicle-paint-wheels-done = You respray the wheels of {THE($vehicle)}.
 cmu-vehicle-paint-interior-done = You respray the inside of {THE($vehicle)}.
 cmu-vehicle-paint-seats-done = You respray the seats of {THE($vehicle)}.
+cmu-vehicle-paint-design-done = You spray {$design} rims on the wheels of {THE($vehicle)}.
+cmu-vehicle-paint-design-wheels = A rim design goes on the wheels.
+cmu-vehicle-paint-rims-examine = Its wheels have {$design} rims.
 
 # Moving parts come off screwdriver, wrench, hand, and go back on hand, wrench, screwdriver.
 cmu-jeep-part-unscrewed = You take the screws out of the {$part}. Its bolts still hold it.
@@ -94,10 +98,42 @@ cmu-vehicle-grime-clean = It's already clean.
 cmu-vehicle-grime-scrubbed = You scrub {THE($vehicle)} clean.
 cmu-vehicle-spray-painter-title = Vehicle paint
 cmu-vehicle-spray-painter-hex = Hex
-cmu-vehicle-spray-painter-charges = Paint left: {$current}/{$max} (a respray uses 5, the wheels 1)
+cmu-vehicle-spray-painter-charges = Paint left: {$current}/{$max} (a respray uses 5, the wheels 1, a rim design 2)
+cmu-vehicle-spray-painter-mode-paint = Paint
+cmu-vehicle-spray-painter-mode-design = Rim design
+cmu-vehicle-spray-painter-design-hint = Use it on a vehicle's wheels to spray the design on.
+cmu-vehicle-spray-painter-region-base = Base
+cmu-vehicle-spray-painter-region-accent = Accent
+cmu-vehicle-spray-painter-region-lip = Lip
+cmu-vehicle-spray-painter-region-cap = Cap
+
+cmu-rim-design-factory = Factory
+cmu-rim-design-five-spoke = Five spoke
+cmu-rim-design-six-spoke = Six spoke
+cmu-rim-design-rally = Rally
+cmu-rim-design-ten-spoke = Ten spoke
+cmu-rim-design-turbine = Turbine
+cmu-rim-design-mesh = Mesh
+cmu-rim-design-steelie = Steelie
+cmu-rim-design-slotted = Slotted
+cmu-rim-design-deep-dish = Deep dish
+cmu-rim-design-beadlock = Beadlock
+cmu-rim-design-hubcap = Hubcap
 
 # Jeep crates and the CLF's jeep drop flare.
 cmu-vehicle-crate-landing = It's still settling after the drop.
 cmu-vehicle-crate-unlatching = You start unlatching {THE($crate)}.
 cmu-vehicle-drop-flare-covered = The flare's beacon can't be seen from the sky here.
 cmu-vehicle-drop-flare-called = The flare's beacon chirps: a crate is on its way down.
+
+cmu-vehicle-tyre-offroad = [color=yellow]Off-road tyres[/color]: the same on any ground.
+cmu-vehicle-tyre-road = [color=yellow]Road tyres[/color]: quicker on paving, slower on dirt and sand, and they bog down in water.
+
+cmu-vehicle-cover-door = The shot slams into the door beside you!
+cmu-vehicle-cover-windshield = The windshield catches the shot!
+cmu-vehicle-cover-grit = Grit flies up into your eyes!
+
+cmu-vehicle-crayon-mode-free = Draw freely on vehicles
+cmu-vehicle-crayon-mode-symbols = Stamp symbols on vehicles
+cmu-vehicle-crayon-mode-free-set = You'll draw freely on vehicles: hold the click and drag across the body.
+cmu-vehicle-crayon-mode-symbols-set = You'll stamp symbols on vehicles.

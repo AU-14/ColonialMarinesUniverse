@@ -1,0 +1,167 @@
+# What every open vehicle shares: driving on the grid, its engine and key, fuel, crashes, damage, the
+# lights switch, z levels and how it goes up when wrecked. A vehicle adds its own parts, lamps, seats,
+# art and slots.
+- type: entity
+  id: CMUOpenVehicleBase
+  abstract: true
+  components:
+  - type: RMCNightVisionVisible
+    priority: -2
+  - type: Vehicle
+    movementKind: Grid
+    transferDamage: false
+  - type: VehicleOperatorDamage
+  - type: CMUVehicleIgnition
+    keySlot:
+      name: cmu-jeep-part-ignition
+      startingItem: CMUJeepKey
+      swap: false
+      insertSound: /Audio/Machines/id_insert.ogg
+      ejectSound: /Audio/Machines/id_swipe.ogg
+      whitelist:
+        tags:
+        - CMUJeepKey
+  - type: CMUVehicleEngineSound
+    startSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_start.wav
+      params:
+        maxDistance: 12
+    idleSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_idle.wav
+      params:
+        volume: -2
+        maxDistance: 10
+    driveSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_drive.wav
+      params:
+        volume: -1
+        maxDistance: 12
+    roughSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_rough.wav
+      params:
+        volume: -2
+        maxDistance: 10
+    roughDriveSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_rough_drive.wav
+      params:
+        volume: -1
+        maxDistance: 12
+    revSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_rev.wav
+      params:
+        maxDistance: 12
+    stallSound:
+      path: /Audio/CMU14/Jeep/jeep_engine_sputter.wav
+      params:
+        maxDistance: 12
+  # The fuel tank, filled through the fuel door.
+  - type: CMUVehicleFuel
+  - type: Solution
+    id: fuel
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: WeldingFuel
+        Quantity: 45
+  # Dirt from driving, blood from wounded riders and anyone run down; space cleaner, soap or a wet
+  # mop takes it off, with the crayon. Reactive lets splashes reach it too.
+  - type: CMUVehicleGrime
+  - type: Reactive
+  - type: RMCIgnoreGhostInteractionLimits
+  - type: RequireProjectileTarget
+    alwaysHitWhitelist:
+      components: [XenoAcidProjectile, VehicleDamageMultiplier]
+  - type: GridVehicleMover
+    maxSpeed: 8
+    acceleration: 5
+    deceleration: 12
+    maxRotationSpeedDegrees: 120
+    alignmentAssistDegrees: 8
+    ignoreLightObstacleDamage: true
+    rotationAccelerationDegrees: 240
+    rotationDecelerationDegrees: 300
+    turnDelay: 0.25
+    pushCooldown: 2
+    xenoBlockMinimumSize: Xeno
+    xenoPushMinimumSize: Immobile
+    # Crashes as hard as RMC's van, a little gentler on the hull: CMUVehicleCrash below scales the
+    # hull damage with impact speed, from a third of it at wallSmashMinSpeed to all of it at maxSpeed.
+    canSmashWalls: true
+    wallSmashMinSpeed: 5
+    wallSmashWheelDamage: 0.8
+    wallSmashHullDamage: 30
+    wallSmashSlowdownMultiplier: 0.75
+    wallSmashSlowdownDuration: 0.25
+    mobCollisionHullDamage: 8
+    speedAtZeroIntegrity: 0.35
+    crashImmobileDuration: 8
+    crashImmobileMinSpeed: 7.25
+    mobCrashImmobileDuration: 4
+    mobCrashImmobileMinSpeed: 5
+    xenoMobCrashImmobileDuration: 8
+    xenoMobCrashImmobileMinSpeed: 5
+  - type: CMUVehicleCrash
+  - type: CMUVehicleTyres
+  - type: CMUVehicleCover
+  - type: CMUVehicleCrashKnockout
+    hornSound:
+      path: /Audio/CMU14/Jeep/jeep_horn_long.wav
+      params:
+        volume: 2
+  - type: VehicleOvercharge
+    speedMultiplier: 1.55
+    duration: 3
+    cooldown: 14
+    overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
+  # The engine sounds come from CMUVehicleEngineSound, so there is no running sound here.
+  - type: VehicleSound
+    hornSound: /Audio/CMU14/Jeep/jeep_horn.wav
+    hornCooldown: 1
+    collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
+    collisionSoundCooldown: 1.5
+    collisionSoundMinSpeed: 7
+    mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
+  # The headlight switch. RMC's spotlight flag (F) follows it and lights the tail and marker lamps;
+  # the jeep itself has no light of its own, each beam is a child with a cone-shaped one.
+  - type: VehicleSpotlight
+    radius: 6
+    energy: 2.5
+    softness: 2
+  - type: Physics
+    bodyType: Dynamic
+  - type: CMUZPhysics
+  - type: CMUVehicleZTraversal
+  - type: CMUZLevelViewer
+  - type: Damageable
+    damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: InteractionOutline
+  - type: Corrodible
+    isCorrodible: false
+  - type: DoAfter
+  - type: UserInterface
+    interfaces:
+      enum.HardpointUiKey.Key:
+        type: HardpointBoundUserInterface
+      enum.VehicleWeaponsUiKey.Key:
+        type: VehicleWeaponsBoundUserInterface
+  - type: VehicleWeapons
+  - type: InputMover
+  - type: HardpointIntegrity
+    maxIntegrity: 400
+    integrity: 400
+  - type: HardpointState
+  - type: Appearance
+  - type: Explosive
+    explosionType: RMC
+    totalIntensity: 60
+    intensitySlope: 4
+    maxIntensity: 8
+    maxTileBreak: 0
+    canCreateVacuum: false
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+    radius: 2
+    centerRadius: 1
+

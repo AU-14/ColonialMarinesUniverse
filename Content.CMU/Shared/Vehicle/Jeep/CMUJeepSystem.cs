@@ -49,7 +49,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
     public const string JackSlot = "jeep-jack";
     public const string ExtinguisherSlot = "jeep-extinguisher";
 
-    // Hinged panels, by part id.
+    // The jeep's hinged panels, by part id.
     public const string Hood = "hood";
     public const string DriverDoor = "door_driver";
     public const string PassengerDoor = "door_passenger";
@@ -62,8 +62,6 @@ public sealed partial class CMUJeepSystem : EntitySystem
 
     private readonly List<(EntityUid Vehicle, EntityUid Projectile)> _passedThrough = new();
 
-    // Slots a player only fills by clicking the slot's own mask: never from a click on the jeep, never by a swap.
-    private static readonly HashSet<string> MaskOnlySlots = [JerryCanSlot, ExtinguisherSlot, JackSlot];
     private bool _maskInsert;
 
     public override void Initialize()
@@ -187,13 +185,15 @@ public sealed partial class CMUJeepSystem : EntitySystem
         // rise nor let the hood close. Refitted panels go on shut.
         if (args is EntRemovedFromContainerMessage)
         {
-            if (args.Container.ID == WindshieldSlot)
-                ent.Comp.WindshieldDown = false;
-
             foreach (var part in ent.Comp.Parts)
             {
-                if (part.Slot == args.Container.ID && IsPanel(part.Id))
-                    SetPanelFlag(ent.Comp, part.Id, false);
+                if (part.Slot != args.Container.ID)
+                    continue;
+
+                if (part.Kind == CMUVehiclePartKind.Windshield)
+                    ent.Comp.WindshieldDown = false;
+                else if (part.Kind == CMUVehiclePartKind.Panel)
+                    ent.Comp.OpenPanels.Remove(part.Id);
             }
 
             ent.Comp.Fastening.Remove(args.Container.ID);
@@ -218,7 +218,11 @@ public sealed partial class CMUJeepSystem : EntitySystem
         var jeep = ent.Comp;
         AbsorbIntoEngine(ent, ref args, total);
 
-        WearPart(ent, WindshieldSlot, total * jeep.WindshieldDamageShare);
+        foreach (var part in jeep.Parts)
+        {
+            if (part.Kind == CMUVehiclePartKind.Windshield && part.Slot is { } windshield)
+                WearPart(ent, windshield, total * jeep.WindshieldDamageShare);
+        }
         WearLamps(ent, total);
 
         if (total >= jeep.PunctureMinDamage &&
@@ -227,6 +231,39 @@ public sealed partial class CMUJeepSystem : EntitySystem
             slot.Item is { } can)
         {
             EnsureComp<CMUFuelLeakComponent>(can);
+        }
+
+        RefreshParts(ent);
+    }
+
+    /// <summary>
+    /// Whether a windshield is fitted, raised or folded.
+    /// </summary>
+    public bool HasWindshield(EntityUid vehicle, CMUJeepComponent jeep)
+    {
+        foreach (var part in jeep.Parts)
+        {
+            if (part.Kind == CMUVehiclePartKind.Windshield &&
+                part.Slot is { } slotId &&
+                TryGetPartSlot(vehicle, slotId, out var slot) &&
+                slot.HasItem)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Wears the windshield by a shot it caught.
+    /// </summary>
+    public void WearWindshield(Entity<CMUJeepComponent> ent, float damage)
+    {
+        foreach (var part in ent.Comp.Parts)
+        {
+            if (part.Kind == CMUVehiclePartKind.Windshield && part.Slot is { } windshield)
+                WearPart(ent, windshield, damage);
         }
 
         RefreshParts(ent);
@@ -257,7 +294,8 @@ public sealed partial class CMUJeepSystem : EntitySystem
     {
         var jeep = ent.Comp;
         Entity<ItemSlotsComponent?> vehicle = (ent.Owner, CompOrNull<ItemSlotsComponent>(ent.Owner));
-        jeep.WindshieldDamaged = IsBroken(vehicle, WindshieldSlot);
+        jeep.WindshieldDamaged = jeep.Parts.Exists(p => p.Kind == CMUVehiclePartKind.Windshield &&
+                                                         p.Slot is { } windshield && IsBroken(vehicle, windshield));
         RefreshLamps(vehicle);
         jeep.JerryCanLeaking = TryGetPartSlot(vehicle, JerryCanSlot, out var can) &&
                                HasComp<CMUFuelLeakComponent>(can.Item);
@@ -333,14 +371,16 @@ public sealed partial class CMUJeepSystem : EntitySystem
         if (IsLamp(vehicle, ent.Comp.Part))
             return;
 
+        var data = PartData(jeep, ent.Comp.Part);
+
         // A moving part with its screws and bolts out lifts off by hand.
-        if (IsMovingPart(ent.Comp.Part) &&
+        if (IsMovingPart(data) &&
             ent.Comp.Slot is { } looseSlot &&
             TryGetPartSlot(vehicle, looseSlot, out var loose) &&
             loose.HasItem &&
             GetFastening(jeep, looseSlot) == Loose)
         {
-            if (IsPanelLoaded(vehicle, ent.Comp.Part))
+            if (IsPanelLoaded(vehicle, jeep, ent.Comp.Part))
                 _popup.PopupClient(Loc.GetString("cmu-jeep-part-loaded", ("part", Name(ent))), vehicle, user);
             else
                 _itemSlots.TryEjectToHands(vehicle, loose, user, true);
@@ -349,48 +389,38 @@ public sealed partial class CMUJeepSystem : EntitySystem
             return;
         }
 
-        switch (ent.Comp.Part)
+        switch (data?.Kind)
         {
             // Toggled by the server alone: a predicted flip is undone and redone while the server
             // catches up, which replays the swing animation.
-            case Hood when _net.IsServer:
-                if (!IsPanelFitted(vehicle, jeep, Hood))
+            case CMUVehiclePartKind.Panel when _net.IsServer:
+                if (!IsPanelFitted(vehicle, jeep, data.Id))
                     return;
 
-                if (jeep.WindshieldDown && HasWindshield(vehicle))
+                if (!GetPanelFlag(jeep, data.Id) && IsHeldShutByWindshield(vehicle, jeep, data.Id))
                     _popup.PopupEntity(Loc.GetString("cmu-jeep-hood-blocked"), vehicle, user);
                 else
-                    SetHood((vehicle, jeep), !jeep.HoodOpen);
+                    SetPanel((vehicle, jeep), data.Id, !GetPanelFlag(jeep, data.Id));
                 break;
-            case "windshield" when _net.IsServer:
-                if (!HasWindshield(vehicle))
+            case CMUVehiclePartKind.Windshield when _net.IsServer:
+                if (!IsPanelFitted(vehicle, jeep, data.Id))
                     return;
 
-                if (jeep.HoodOpen && IsPanelFitted(vehicle, jeep, Hood))
+                if (!jeep.WindshieldDown && data.Interlock.Exists(p => GetPanelFlag(jeep, p) && IsPanelFitted(vehicle, jeep, p)))
                     _popup.PopupEntity(Loc.GetString("cmu-jeep-windshield-blocked"), vehicle, user);
                 else
                     SetWindshieldDown((vehicle, jeep), !jeep.WindshieldDown);
                 break;
-            case "fuel_door" when _net.IsServer:
-                jeep.FuelDoorOpen = !jeep.FuelDoorOpen;
-                Dirty(vehicle, jeep);
-                break;
-            case DriverDoor or PassengerDoor or Tailgate when _net.IsServer:
-                if (!IsPanelFitted(vehicle, jeep, ent.Comp.Part))
-                    return;
-
-                SetPanel((vehicle, jeep), ent.Comp.Part, !GetPanelFlag(jeep, ent.Comp.Part));
-                break;
-            case "engine" when _net.IsServer:
-                if (!IsHoodOpen(vehicle, jeep))
+            case CMUVehiclePartKind.Engine when _net.IsServer:
+                if (!IsExposed(vehicle, jeep, data.Id))
                     return;
 
                 var percent = (int) MathF.Round(jeep.EngineIntegrity / jeep.EngineMaxIntegrity * 100);
                 _popup.PopupEntity(Loc.GetString("cmu-jeep-engine-examine", ("percent", percent)), vehicle, user);
                 break;
-            case Hood or "windshield" or "fuel_door" or "engine" or DriverDoor or PassengerDoor or Tailgate:
+            case CMUVehiclePartKind.Panel or CMUVehiclePartKind.Windshield or CMUVehiclePartKind.Engine:
                 break;
-            case var seat when seat.StartsWith("seat_"):
+            case null when ent.Comp.Part.StartsWith("seat_"):
                 _seats.ClickSeat(ent.Owner, user);
                 break;
             default:
@@ -419,9 +449,11 @@ public sealed partial class CMUJeepSystem : EntitySystem
 
         var user = args.User;
         var used = args.Used;
+        var data = PartData(jeep, ent.Comp.Part);
+        var kind = data?.Kind;
         switch (ent.Comp.Part)
         {
-            case "wheels" when HasComp<CMUVehicleSprayPainterComponent>(used):
+            case var _ when kind == CMUVehiclePartKind.Wheels && HasComp<CMUVehicleSprayPainterComponent>(used):
                 _paint.TryRespray(vehicle, user, used, CMUVehiclePaintZone.Wheels);
                 args.Handled = true;
                 return;
@@ -429,15 +461,16 @@ public sealed partial class CMUJeepSystem : EntitySystem
                 _paint.TryRespray(vehicle, user, used, CMUVehiclePaintZone.Seats);
                 args.Handled = true;
                 return;
-            case "fuel_door" when _fuel.IsFuelCan(vehicle, used):
-                if (!jeep.FuelDoorOpen)
+            case var door when _fuel.IsFuelDoor(vehicle, door) && _fuel.IsFuelCan(vehicle, used):
+                if (!IsPanelOpen(vehicle, door))
                     _popup.PopupClient(Loc.GetString("cmu-vehicle-fuel-door-closed"), vehicle, user);
                 else
                     _fuel.TryStartRefuel(vehicle, user, used);
 
                 args.Handled = true;
                 return;
-            case "engine" when IsHoodOpen(vehicle, jeep) && _tool.HasQuality(used, jeep.EngineRepairQuality):
+            case var _ when kind == CMUVehiclePartKind.Engine && IsExposed(vehicle, jeep, ent.Comp.Part) &&
+                               _tool.HasQuality(used, jeep.EngineRepairQuality):
                 if (jeep.EngineIntegrity >= jeep.EngineMaxIntegrity)
                 {
                     _popup.PopupClient(Loc.GetString("cmu-jeep-engine-fine"), vehicle, user);
@@ -450,7 +483,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
 
                 args.Handled = true;
                 return;
-            case var glass when (glass == "windshield" || IsLamp(vehicle, glass)) &&
+            case var glass when (kind == CMUVehiclePartKind.Windshield || IsLamp(vehicle, glass)) &&
                                 ent.Comp.Slot is { } worn &&
                                 TryGetPartSlot(vehicle, worn, out var wornSlot) &&
                                 TryComp(wornSlot.Item, out CMUJeepPartIntegrityComponent? integrity) &&
@@ -478,7 +511,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
                 return;
             // A wrench on a fastened part falls through to the jeep, which wrenches down the crate on
             // the bed.
-            case var moving when IsMovingPart(moving) &&
+            case var moving when IsMovingPart(data) &&
                                  ent.Comp.Slot is { } movingSlot &&
                                  HasItem(vehicle, movingSlot) &&
                                  TryWorkPart((vehicle, jeep), moving, movingSlot, user, used):
@@ -511,7 +544,8 @@ public sealed partial class CMUJeepSystem : EntitySystem
         var jeep = ent.Comp;
         jeep.EngineIntegrity = MathF.Min(jeep.EngineMaxIntegrity, jeep.EngineIntegrity + jeep.EngineRepairAmount);
         Dirty(ent);
-        args.Repeat = jeep.HoodOpen && jeep.EngineIntegrity < jeep.EngineMaxIntegrity;
+        args.Repeat = jeep.EngineIntegrity < jeep.EngineMaxIntegrity &&
+                      jeep.Parts.Exists(p => p.Kind == CMUVehiclePartKind.Engine && IsExposed(ent, jeep, p.Id));
         args.Args.Event.Repeat = args.Repeat;
     }
 
@@ -541,27 +575,27 @@ public sealed partial class CMUJeepSystem : EntitySystem
         _itemSlots.TryEjectToHands(ent, slot, args.User, true);
     }
 
-    private bool HasWindshield(EntityUid vehicle)
-    {
-        return HasItem(vehicle, WindshieldSlot);
-    }
-
     private bool HasItem(EntityUid vehicle, string slotId)
     {
         return TryGetPartSlot(vehicle, slotId, out var slot) && slot.HasItem;
     }
 
+    public static CMUVehiclePartData? PartData(CMUJeepComponent jeep, string part)
+    {
+        return jeep.Parts.Find(p => p.Id == part);
+    }
+
     /// <summary>
     /// The parts that come off in steps: the windshield and the hinged panels.
     /// </summary>
-    public static bool IsMovingPart(string part)
+    public static bool IsMovingPart(CMUVehiclePartData? part)
     {
-        return part == "windshield" || IsPanel(part);
+        return part?.Kind is CMUVehiclePartKind.Panel or CMUVehiclePartKind.Windshield;
     }
 
     private static bool IsMovingPartSlot(CMUJeepComponent jeep, string slotId)
     {
-        return jeep.Parts.Exists(p => p.Slot == slotId && IsMovingPart(p.Id));
+        return jeep.Parts.Exists(p => p.Slot == slotId && IsMovingPart(p));
     }
 
     public static int GetFastening(CMUJeepComponent jeep, string slotId)
@@ -569,28 +603,19 @@ public sealed partial class CMUJeepSystem : EntitySystem
         return jeep.Fastening.GetValueOrDefault(slotId, Fastened);
     }
 
-    private static readonly string[] KitSlots = [ShovelSlot, AxeSlot, JackSlot, SpareSlot, JerryCanSlot];
-
     /// <summary>
-    /// The panel kit hangs on: the shovel and the axe on the driver's door, the maintenance jack on
-    /// the passenger's, the spare and the jerry can on the tailgate.
+    /// The panel the kit in a slot hangs on.
     /// </summary>
-    private static string? KitHost(string slotId)
+    private static string? KitHost(CMUJeepComponent jeep, string slotId)
     {
-        return slotId switch
-        {
-            ShovelSlot or AxeSlot => DriverDoor,
-            JackSlot => PassengerDoor,
-            SpareSlot or JerryCanSlot => Tailgate,
-            _ => null,
-        };
+        return jeep.Parts.Find(p => p.Slot == slotId && p.Host != null)?.Host;
     }
 
-    private bool IsPanelLoaded(EntityUid vehicle, string panel)
+    private bool IsPanelLoaded(EntityUid vehicle, CMUJeepComponent jeep, string panel)
     {
-        foreach (var slotId in KitSlots)
+        foreach (var part in jeep.Parts)
         {
-            if (KitHost(slotId) == panel && HasItem(vehicle, slotId))
+            if (part.Host == panel && part.Slot is { } slotId && HasItem(vehicle, slotId))
                 return true;
         }
 
@@ -629,7 +654,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
         }
 
         // What hangs on a panel comes off before the panel does.
-        if (to < from && IsPanelLoaded(jeep, part))
+        if (to < from && IsPanelLoaded(jeep, jeep.Comp, part))
         {
             _popup.PopupClient(Loc.GetString("cmu-jeep-part-loaded", ("part", PartName(jeep, slot))), jeep, user);
             return true;
@@ -672,9 +697,9 @@ public sealed partial class CMUJeepSystem : EntitySystem
         return TryGetPartSlot(vehicle, slotId, out var slot) && slot.Item is { } item ? Name(item) : slotId;
     }
 
-    public static bool IsPanel(string part)
+    public static bool IsPanel(CMUJeepComponent jeep, string part)
     {
-        return part is Hood or DriverDoor or PassengerDoor or Tailgate;
+        return PartData(jeep, part)?.Kind == CMUVehiclePartKind.Panel;
     }
 
     public static bool HasPart(CMUJeepComponent jeep, string part)
@@ -697,33 +722,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
 
     public static bool GetPanelFlag(CMUJeepComponent jeep, string part)
     {
-        return part switch
-        {
-            Hood => jeep.HoodOpen,
-            DriverDoor => jeep.DriverDoorOpen,
-            PassengerDoor => jeep.PassengerDoorOpen,
-            Tailgate => jeep.TailgateOpen,
-            _ => false,
-        };
-    }
-
-    private static void SetPanelFlag(CMUJeepComponent jeep, string part, bool open)
-    {
-        switch (part)
-        {
-            case Hood:
-                jeep.HoodOpen = open;
-                break;
-            case DriverDoor:
-                jeep.DriverDoorOpen = open;
-                break;
-            case PassengerDoor:
-                jeep.PassengerDoorOpen = open;
-                break;
-            case Tailgate:
-                jeep.TailgateOpen = open;
-                break;
-        }
+        return jeep.OpenPanels.Contains(part);
     }
 
     /// <summary>
@@ -744,42 +743,62 @@ public sealed partial class CMUJeepSystem : EntitySystem
     }
 
     /// <summary>
-    /// The engine can be reached with the hood up or taken off.
+    /// Whether a part can be reached: no panel covers it, or one that does is open or off, like the
+    /// engine under the hood.
     /// </summary>
-    public bool IsHoodOpen(EntityUid vehicle, CMUJeepComponent jeep)
+    public bool IsExposed(EntityUid vehicle, CMUJeepComponent jeep, string part)
     {
-        return jeep.HoodOpen || !IsPanelFitted(vehicle, jeep, Hood);
+        var covered = false;
+        foreach (var panel in jeep.Parts)
+        {
+            if (!panel.Exposes.Contains(part))
+                continue;
+
+            if (GetPanelFlag(jeep, panel.Id) || !IsPanelFitted(vehicle, jeep, panel.Id))
+                return true;
+
+            covered = true;
+        }
+
+        return !covered;
+    }
+
+    /// <summary>
+    /// Whether a folded windshield lies on the panel, so it can't open.
+    /// </summary>
+    private bool IsHeldShutByWindshield(EntityUid vehicle, CMUJeepComponent jeep, string panel)
+    {
+        return jeep.WindshieldDown &&
+               jeep.Parts.Exists(p => p.Kind == CMUVehiclePartKind.Windshield &&
+                                      p.Interlock.Contains(panel) &&
+                                      IsPanelFitted(vehicle, jeep, p.Id));
     }
 
     public void SetPanel(Entity<CMUJeepComponent> ent, string part, bool open)
     {
-        if (part == Hood)
-        {
-            SetHood(ent, open);
-            return;
-        }
-
         if (GetPanelFlag(ent.Comp, part) == open)
             return;
 
-        SetPanelFlag(ent.Comp, part, open);
+        if (open)
+            ent.Comp.OpenPanels.Add(part);
+        else
+            ent.Comp.OpenPanels.Remove(part);
+
         Dirty(ent);
-        var sound = part == Tailgate
-            ? open ? ent.Comp.TailgateOpenSound : ent.Comp.TailgateCloseSound
-            : open ? ent.Comp.DoorOpenSound : ent.Comp.DoorCloseSound;
-        _audio.PlayPvs(sound, ent);
+        var data = PartData(ent.Comp, part);
+        _audio.PlayPvs(open ? data?.OpenSound : data?.CloseSound, ent);
     }
 
     /// <summary>
-    /// Kit hung on a panel can't go on or come off while the panel is off; the spare and the jerry
-    /// can are also out of reach while the tailgate is down.
+    /// Kit hung on a panel can't go on or come off while the panel is off, nor while it stands open
+    /// if it carries its kit out of reach, like the spare on the lowered tailgate.
     /// </summary>
     public bool IsKitBlocked(EntityUid vehicle, CMUJeepComponent jeep, string slotId)
     {
-        if (KitHost(slotId) is not { } host || !HasPart(jeep, host))
+        if (KitHost(jeep, slotId) is not { } host || PartData(jeep, host) is not { } panel)
             return false;
 
-        return !IsPanelFitted(vehicle, jeep, host) || host == Tailgate && jeep.TailgateOpen;
+        return !IsPanelFitted(vehicle, jeep, host) || panel.BlocksKitWhileOpen && GetPanelFlag(jeep, host);
     }
 
     private bool TryInsertByMask(EntityUid vehicle, string slotId, EntityUid used, EntityUid user)
@@ -800,7 +819,7 @@ public sealed partial class CMUJeepSystem : EntitySystem
         if (args.Cancelled || args.Slot.ID is not { } slotId)
             return;
 
-        if (args.User != null && !_maskInsert && MaskOnlySlots.Contains(slotId))
+        if (args.User != null && !_maskInsert && ent.Comp.Parts.Exists(p => p.Slot == slotId && p.MaskOnly))
         {
             args.Cancelled = true;
             return;
@@ -828,16 +847,6 @@ public sealed partial class CMUJeepSystem : EntitySystem
     {
         if (!args.Cancelled && args.Slot.ID is { } slotId && IsKitBlocked(ent, ent.Comp, slotId))
             args.Cancelled = true;
-    }
-
-    public void SetHood(Entity<CMUJeepComponent> ent, bool open)
-    {
-        if (ent.Comp.HoodOpen == open)
-            return;
-
-        ent.Comp.HoodOpen = open;
-        Dirty(ent);
-        _audio.PlayPvs(open ? ent.Comp.HoodOpenSound : ent.Comp.HoodCloseSound, ent);
     }
 
     public void SetWindshieldDown(Entity<CMUJeepComponent> ent, bool down)

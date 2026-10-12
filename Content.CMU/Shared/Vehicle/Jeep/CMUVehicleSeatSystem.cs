@@ -216,6 +216,8 @@ public sealed class CMUVehicleSeatSystem : EntitySystem
             comp.Vehicle = ent;
             comp.Driver = data.Driver;
             comp.Door = data.Door;
+            comp.DoorSide = data.DoorSide;
+            comp.Windshield = data.Windshield;
             comp.Exit = data.Exit;
             comp.Lift = data.Lift;
             comp.PixelOffsets = new Dictionary<Direction, Vector2>(data.PixelOffsets);

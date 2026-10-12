@@ -10,18 +10,22 @@ into layers. Riders sit between the vehicle entity and an overlay entity:
     jeep_base                    body; brake drums show when the wheels are taken off
     damaged_frame                frame damage
     wheels_0 / wheels_1          intact (animated while moving) / destroyed, like the humvee
+    road_wheels_0, road_spare_*  the intact wheels and spare on road tyres
+    rims_<state>                 where the rims show in each intact wheel and spare state, for the
+                                 rim designs the client paints over them (rim.swsl)
     <hardpoint>_0 / _1           intact / damaged look of windshield_up, windshield_down,
                                  wirecutter and searchlight, in the directions they sit under riders
   overlay entity (over riders)
     jeep_overlay, damaged_overlay, wheels_overlay_0 / _1, <hardpoint>_overlay_0 / _1
   turret visual (gunner)         mgturret_0 / mgturret_1, drawn around the pivot like humveeturret_0
-  hardpoints.rsi (32 px)         item icons: tires, mgturret, windshield, wirecutter, searchlight
+  hardpoints.rsi (32 px)         item icons: tires, road_tires, mgturret, windshield, wirecutter, searchlight
   cargo_straps.rsi (32 px)       tie-downs drawn over a standard crate wrenched into the bed
 
 Empty PRIMARY / ATTACH / WHEEL states are the hidden placeholders hardpoint layers start from.
 
 Run: python Content.CMU/Design/Vehicles/JeepPixelArt/jeep_pixel_art.py
 """
+import contextlib
 import functools
 import json
 import math
@@ -355,32 +359,53 @@ def noise(*key):
     return zlib.crc32(repr(key).encode()) % 1000 / 1000.0
 
 
-# Lug nuts on the rim, a whole pixel each so every frame keeps the pattern square; they turn a
-# quarter of the way round over the tyre's lug pitch, so the loop repeats seamlessly.
+# The tyres being drawn: "offroad", knobbly with a notched edge and a checkered tread, or "road",
+# round with smooth sidewalls and a ribbed tread. Road tyres look the same in every wheel frame but
+# the nuts still turn.
+TYRE = "offroad"
+
+
+@contextlib.contextmanager
+def tyres(kind):
+    global TYRE
+    old, TYRE = TYRE, kind
+    try:
+        yield
+    finally:
+        TYRE = old
+
+
+# Lug nuts on the rim, a whole pixel each so every frame keeps the pattern square; they turn the
+# tyre's way, a quarter of the way round over its lug pitch, so the loop repeats seamlessly.
 RIM_NUTS = 4
 RIM_NUT_RADIUS = 3
 
 
-def rim(u, v, phase, destroyed=False):
+def rim(u, v, phase, destroyed=False, rim_r=5.6):
     """Material of a rim pixel on the wheel's outer face: a dark lip, a plain dish, a bright hub cap
-    and the lug nuts. A destroyed rim has a burnt lip, a scorched dish, a dull cap and two nuts gone."""
+    and the lug nuts. A destroyed rim has a burnt lip, a scorched dish, a dull cap and two nuts gone.
+    Sized to the rim, the jeep's reaching 5.6 voxels from the hub."""
+    s = rim_r / 5.6
     d = math.hypot(u, v)
-    if d > 4.9:
+    if d > 4.9 * s:
         return "char" if destroyed else "rim_dk"
-    if d < 1.5:
+    if d < 1.5 * s:
         return "rim" if destroyed else "rim_hi"
     for n in range(RIM_NUTS):
-        a = phase * LUGS / RIM_NUTS + n * 2 * math.pi / RIM_NUTS
-        if (u, v) == (round(RIM_NUT_RADIUS * math.cos(a)), round(RIM_NUT_RADIUS * math.sin(a))):
+        a = n * 2 * math.pi / RIM_NUTS - phase * LUGS / RIM_NUTS
+        if (u, v) == (round(RIM_NUT_RADIUS * s * math.cos(a)), round(RIM_NUT_RADIUS * s * math.sin(a))):
             return "rim" if destroyed and n % 2 else "rim_dk"
-    if destroyed and d > 3.5 and noise(u, v, 11) < 0.35:
+    if destroyed and d > 3.5 * s and noise(u, v, 11) < 0.35:
         return "char"
     return "rim"
 
 
-def wheel_disc(u, v, slice_parity, outer_slice, phase, destroyed=False, radius=WHEEL_R):
+def wheel_disc(u, v, slice_parity, outer_slice, phase, destroyed=False, radius=None, rim_r=None):
     """Material of one voxel of a knobby tyre on a combat rim, or None for air. A destroyed tyre is
-    shredded and flat at the bottom, with the rim showing through."""
+    shredded and flat at the bottom, with the rim showing through. Without sizes, the chassis' first
+    axle's."""
+    radius = CHASSIS.wheel_r if radius is None else radius
+    rim_r = radius * CHASSIS.rim_r / CHASSIS.wheel_r if rim_r is None else rim_r
     d = math.hypot(u, v)
     if d > radius:
         return None
@@ -388,31 +413,92 @@ def wheel_disc(u, v, slice_parity, outer_slice, phase, destroyed=False, radius=W
     k = ((ang + phase) / (2 * math.pi / LUGS) + 0.5 * slice_parity) % 1.0
     groove = k < 0.4
     if destroyed:
-        if d > 5.6 and (v < -5.6 or noise(u, v, slice_parity) < 0.38):
+        if d > rim_r and (v < -rim_r or noise(u, v, slice_parity) < 0.38):
             return None
-        if outer_slice and d <= 5.6:
-            return rim(u, v, phase, destroyed=True)
+        if outer_slice and d <= rim_r:
+            return rim(u, v, phase, destroyed=True, rim_r=rim_r)
         return "char" if noise(v, u, 7) < 0.5 else "black"
+    if outer_slice and d <= rim_r:
+        return rim(u, v, phase, rim_r=rim_r)
+    if TYRE == "road":
+        # A smooth sidewall, the tread's shoulder a dark line round it.
+        return "groove" if radius - 1.6 < d <= radius - 0.9 else "rubber"
     if d > radius - 0.9 and groove:
         return None
-    if outer_slice and d <= 5.6:
-        return rim(u, v, phase)
     if d > radius - 1.7 and groove:
         return "groove"
     return "rubber"
 
 
-def wheel(m, fc, zc, r0, r1, phase, clip=None, destroyed=False):
-    """Road wheel on an axle along r; the outermost slice shows the rim."""
-    outer = r1 if r1 >= 0 else r0
-    for a in range(-9, 10):
-        for b in range(-9, 10):
+def wheel(m, fc, zc, r0, r1, phase, clip=None, destroyed=False, radius=None, rim_r=None):
+    """Road wheel on an axle along r; the outermost slice shows the rim (both, for a wheel on the
+    middle like a bike's)."""
+    radius = CHASSIS.wheel_r if radius is None else radius
+    outer = (r0, r1) if r0 < 0 <= r1 else (r1 if r1 >= 0 else r0,)
+    reach = math.ceil(radius)
+    for a in range(-reach, reach + 1):
+        for b in range(-reach, reach + 1):
             for r in range(r0, r1 + 1):
                 if clip and clip(fc + a, r, zc + b):
                     continue
-                mat = wheel_disc(a, b, r % 2, r == outer, phase, destroyed)
+                mat = wheel_disc(a, b, r % 2, r in outer, phase, destroyed, radius, rim_r)
                 if mat:
                     m.put(fc + a, r, zc + b, mat, "wheel")
+
+
+# Rim designs: the client paints a chosen design over the rims (rim.swsl). Beside every intact wheel
+# and spare state, rims_<state> maps where a rim shows: red and green hold the pixel's place on the
+# rim's face (u forward or right, v up, in voxels from the hub), blue the wheel frame, spaced so the
+# values come back the same through the engine's sRGB sampling.
+RIM_MATS = {"rim", "rim_dk", "rim_hi"}
+RIM_STEP = 24
+
+
+def rim_tagged(model, place):
+    """The model with every rim voxel's material naming its place on the rim's face, for a rim map;
+    place(key, part) gives (u, v), or None where the voxel isn't on a rim's face."""
+    out = {}
+    for k, (mat, part) in model.vox.items():
+        uv = place(k, part) if mat in RIM_MATS else None
+        out[k] = (f"rimuv{uv[0]},{uv[1]}" if uv else mat, part)
+    return Model(out)
+
+
+def rim_place(u, v, rim_r):
+    """A rim pixel's place on the 11 pixel face the rim designs are drawn for: the jeep's as it is,
+    a bigger or smaller rim scaled to it."""
+    s = 5.6 / rim_r
+    return max(-5, min(5, round(u * s))), max(-5, min(5, round(v * s)))
+
+
+def wheel_rim(view):
+    """Where a road wheel's rim voxel sits on the rim's face, seen from the side."""
+    axles = [(round(a.f * LENGTH_SCALE.get(view, 1.0)), a) for a in CHASSIS.axle_list]
+
+    def place(k, part):
+        if part != "wheel" or view not in "EW":
+            return None
+        fc, a = min(axles, key=lambda e: abs(k[0] - e[0]))
+        return rim_place(k[0] - fc, k[2] - a.z, a.rim_r)
+    return place
+
+
+def spare_rim(k, part):
+    """Where the spare's rim voxel sits on its face, which looks backwards."""
+    _, r, z = CHASSIS.spare
+    return rim_place(k[1] - r, k[2] - z, CHASSIS.spare_rim_r)
+
+
+def rim_map(buf, pixels, frame=0):
+    """A rim map: of the given pixels, those where a tagged rim voxel shows."""
+    out = {}
+    for px in pixels:
+        e = buf.get(px)
+        if e is None or not e[1].startswith("rimuv"):
+            continue
+        u, v = (int(n) for n in e[1][5:].split(","))
+        out[px] = (4 + (u + 5) * RIM_STEP, 4 + (v + 5) * RIM_STEP, 16 + 64 * frame, 255)
+    return out
 
 
 def stamp(m, bitmap, mat, place):
@@ -437,26 +523,33 @@ def under_fender(r):
     return 9 <= r <= 19 or -20 <= r <= -10
 
 
-def tread_face(m, fc, r0, r1, frame, face, destroyed, lift=0, tub=True):
+def tread_face(m, fc, r0, r1, frame, face, destroyed, lift=0, tub=True, axle=None):
     """A tyre seen end-on: its tread face, as tall as the wheel is wide from the side. face is +1 for
     the front of the tyre (seen facing south), -1 for the back (facing north). A lifted tread keeps
     its full height outboard of the fender and tucks under it inboard. Without tub, the part inside
-    the rear tub is kept too, so a near rear tyre shows full width like a front one."""
-    radius = int(WHEEL_R)
+    the rear tub is kept too, so a near rear tyre shows full width like a front one. The chassis says
+    what hides a tread (the jeep's tub and fenders); the axle, how big the tyre is."""
+    axle = axle or CHASSIS.axle_at(fc)
+    radius = int(axle.r)
     f = fc + radius if face > 0 else fc - radius
     top = 2 * radius - 1
-    for z in range(0, top + 1):
+    z0 = round(axle.z - axle.r + 0.4)
+    for z in range(z0, z0 + top + 1):
         for r in range(r0, r1 + 1):
-            if tub and inside_tub(f, r, z + lift) or lift and z + lift >= FENDER - 1 and under_fender(r):
+            if CHASSIS.tread_hidden(f, r, z + lift, tub, lift):
                 continue
+            z_row = z - z0
             edge = r in (r0, r1)
-            if edge and z in (0, top):
+            if edge and z_row in (0, top):
                 continue
-            lug = ((z * face + frame) // 2 + (r % 2)) % 2 == 0
+            lug = ((z_row * face + frame) // 2 + (r % 2)) % 2 == 0
             if destroyed:
-                if z > top - 3 and noise(r, z) < 0.6 or noise(z, r, 3) < 0.3:
+                if z_row > top - 3 and noise(r, z_row) < 0.6 or noise(z_row, r, 3) < 0.3:
                     continue
                 mat = "char" if lug else "black"
+            elif TYRE == "road":
+                # Ribs running round the tyre, a groove between each pair.
+                mat = "groove" if (r - r0) % 3 == 1 and not edge else "rubber"
             else:
                 if edge and not lug:
                     continue
@@ -464,47 +557,57 @@ def tread_face(m, fc, r0, r1, frame, face, destroyed, lift=0, tub=True):
             m.put(f, r, z + lift, mat, "wheel")
 
 
-def wheels(view, phase=0.0, destroyed=False, axles=(FRONT_AXLE, REAR_AXLE)):
+def wheels(view, phase=0.0, destroyed=False, axles=None):
+    """The road wheels as a view draws them: discs from the sides, tread faces from ahead and behind.
+    Axles picks some of the chassis' by their f."""
     m = Model()
-    for fc in axles:
-        for r0, r1 in WHEEL_SPAN:
+    c = CHASSIS
+    for a in c.axle_list:
+        if axles is not None and a.f not in axles:
+            continue
+        for r0, r1 in a.spans:
             if view in "EW":
-                wheel(m, round(fc * LENGTH_SCALE[view]), WHEEL_Z, r0, r1, phase, inside_tub, destroyed)
+                wheel(m, round(a.f * LENGTH_SCALE[view]), a.z, r0, r1, phase, c.clip, destroyed, a.r, a.rim_r)
             else:
                 frame = round(phase / (2 * math.pi / LUGS) * WHEEL_FRAMES)
-                near = fc != FAR_AXLE.get(view)
-                lift = NEAR_WHEEL_LIFT.get(view, 0) if near else 0
-                tread_face(m, fc, r0, r1, frame, 1 if view == "S" else -1, destroyed, lift, tub=not near)
-    if view in "EW":
-        # Shadowed wheel well behind the near rear tyre; the far side keeps its plain inner skin.
-        r = 18 if view == "E" else -19
-        for f in range(REAR_AXLE - 10, REAR_AXLE + 11):
-            for z in range(6, RIM):
-                if math.hypot(f - REAR_AXLE, z - WHEEL_Z) < WHEEL_R + 0.6:
-                    m.put(f, r, z, "frame", "chassis")
+                near = a.f != far_axle(view)
+                lift = c.lift(a, view) if near else 0
+                tread_face(m, a.f, r0, r1, frame, 1 if view == "S" else -1, destroyed, lift, tub=not near, axle=a)
+    if view in "EW" and c.well:
+        c.well(m, view)
     return m
 
 
-# Front and back views draw the far axle's wheels this many rows towards the far end, tucked behind
-# the body, so the axles sit where the side view puts them instead of halfway up the tub.
-FAR_WHEEL_SHIFT = {"S": -13, "N": -14}
-# The near tyres are raised off the bottom edge so they stand tall beside the bumper, the same facing
-# north as facing south.
-NEAR_WHEEL_LIFT = {"S": 5, "N": 5}
-FAR_AXLE = {"S": REAR_AXLE, "N": FRONT_AXLE}
+def jeep_wheel_well(m, view):
+    """Shadowed wheel well behind the jeep's near rear tyre; the far side keeps its plain inner skin."""
+    r = 18 if view == "E" else -19
+    for f in range(REAR_AXLE - 10, REAR_AXLE + 11):
+        for z in range(6, RIM):
+            if math.hypot(f - REAR_AXLE, z - WHEEL_Z) < WHEEL_R + 0.6:
+                m.put(f, r, z, "frame", "chassis")
+
+
+def jeep_tread_hidden(f, r, z, tub, lift):
+    """What hides a jeep tyre's tread face: the rear tub, and the fender over a lifted near tyre."""
+    return tub and inside_tub(f, r, z) or lift and z >= FENDER - 1 and under_fender(r)
+
+
+def far_axle(view):
+    """The axle at the far end in a front or back view."""
+    return {"S": CHASSIS.axles[-1], "N": CHASSIS.axles[0]}.get(view)
 
 
 def near_axles(view):
-    return tuple(a for a in (FRONT_AXLE, REAR_AXLE) if a != FAR_AXLE.get(view))
+    return tuple(a for a in CHASSIS.axles if a != far_axle(view))
 
 
 def far_wheels(view, occupied, phase=0.0, destroyed=False):
     """The far axle's wheels for a front or back view, shifted, where nothing else is drawn."""
-    if view not in FAR_WHEEL_SHIFT:
+    if view not in CHASSIS.far_shift:
         return {}
-    buf, _ = render(wheels(view, phase, destroyed, axles=(FAR_AXLE[view],)), view)
+    buf, _ = render(wheels(view, phase, destroyed, axles=(far_axle(view),)), view)
     col = shade(buf)
-    shift = FAR_WHEEL_SHIFT[view]
+    shift = CHASSIS.far_shift[view]
     return {(x, y + shift): c for (x, y), c in col.items() if (x, y + shift) not in occupied}
 
 
@@ -672,6 +775,10 @@ def build(variant, view=None):
     m.mirror_box(-31, -31, 15, 19, 3, 5, "od", "bumperette")
     m.mirror_box(-31, -31, 16, 17, 13, 13, "black", "taillight")
     m.box(-32, -31, -1, 0, 3, 4, "steel", "bumperette")
+    # From the sides, the bumper's and bumperettes' ends would hang below the body line on their own;
+    # those views leave them to the front and back.
+    if view in ("E", "W"):
+        m.remove(lambda f, r, z: m.vox[(f, r, z)][1] in ("bumper", "bumperette") and z < 6)
     if variant not in TAILGATE_VARIANTS:
         rear_mounts(m, "rear_wall")
 
@@ -1069,29 +1176,33 @@ SPARE_F = (-38, -32)
 
 
 def spare(damaged=False):
-    """A jeep wheel on the rear carrier, axle along f, rim facing backwards."""
+    """A road wheel on the rear carrier (the chassis' spare), axle along f, rim facing backwards."""
     m = Model()
-    width = SPARE_F[1] - SPARE_F[0] + 1
-    for a in range(-9, 10):
-        for b in range(-9, 10):
-            for t in range(width):
-                mat = wheel_disc(a, b, t % 2, t == 0, 0.0, destroyed=damaged)
+    (f0, f1), rc, zc = CHASSIS.spare
+    radius = CHASSIS.spare_r
+    reach = math.ceil(radius)
+    for a in range(-reach, reach + 1):
+        for b in range(-reach, reach + 1):
+            for t in range(f1 - f0 + 1):
+                mat = wheel_disc(a, b, t % 2, t == 0, 0.0, damaged, radius, CHASSIS.spare_rim_r)
                 if mat:
-                    m.put(SPARE_F[0] + t, 7 + a, 14 + b, mat, "spare")
+                    m.put(f0 + t, rc + a, zc + b, mat, "spare")
     return m
 
 
 def spare_tread(damaged, view):
     """The spare seen from the side: its tread face, as tall as the wheel, textured like the road
-    tyres seen from the side: a knobby edge, a dotted groove band inside it and solid rubber."""
-    radius = int(WHEEL_R)
-    r = 7 + radius if view == "E" else 7 - radius
+    tyres seen from the side: a knobby edge, a dotted groove band inside it and solid rubber; road
+    tyres, ribbed."""
+    radius = int(CHASSIS.spare_r)
+    (f0, f1), rc, zc = CHASSIS.spare
+    r = rc + radius if view == "E" else rc - radius
     top = 2 * radius
     m = Model()
-    for z in range(14 - radius, 14 + radius + 1):
-        for f in range(SPARE_F[0], SPARE_F[1] + 1):
-            row = z - (14 - radius)
-            edge_f, edge_z = f in SPARE_F, row in (0, top)
+    for z in range(zc - radius, zc + radius + 1):
+        for f in range(f0, f1 + 1):
+            row = z - (zc - radius)
+            edge_f, edge_z = f in (f0, f1), row in (0, top)
             if edge_f and edge_z:
                 continue
             if damaged:
@@ -1100,12 +1211,93 @@ def spare_tread(damaged, view):
                     continue
                 m.put(f, r, z, "char" if lug else "black", "spare")
                 continue
+            if TYRE == "road":
+                m.put(f, r, z, "groove" if (f - f0) % 3 == 1 and not edge_f else "rubber", "spare")
+                continue
             if (edge_f or edge_z) and (row + f) % 2 == 0:
                 continue
-            band = f in (SPARE_F[0] + 1, SPARE_F[1] - 1) or row in (1, top - 1)
+            band = f in (f0 + 1, f1 - 1) or row in (1, top - 1)
             mat = "groove" if band and (row // 2 + f) % 2 == 0 else "rubber"
             m.put(f, r, z, mat, "spare")
     return m
+
+
+class Axle:
+    """One axle: where it is along the vehicle (f), its wheels' centre height and radius, their rims'
+    radius, and the tyres on it: (r0, r1) spans, a pair on either side for a car, one across the
+    middle for a bike."""
+
+    def __init__(self, f, z, r, spans, rim_r=None):
+        self.f, self.z, self.r = f, z, r
+        self.rim_r = rim_r if rim_r is not None else r * 2 / 3
+        self.spans = tuple(tuple(s) for s in spans)
+
+
+class Chassis:
+    """Where a vehicle's wheels are and how big, and what of its body hides or dirties them: the
+    jeep's by default. Every wheel, the spare, the round projection of wheels in the front and back
+    views and the dirt the wheels throw read the current chassis, so another vehicle (one drawn in the
+    open vehicles tool: a bike, a buggy) gets the same wheels by setting its own (with chassis(...)).
+    Axles go front first."""
+
+    def __init__(self, axles, far_shift=None, near_lift=None, spare=None, spare_r=None, fender=None, dirt=None,
+                 clip=None, tread_hidden=None, well=None, mud=None, crumple_front=None, crumple_parts=None):
+        self.axle_list = tuple(axles)
+        self.axles = tuple(a.f for a in self.axle_list)
+        first = self.axle_list[0]
+        self.wheel_z, self.wheel_r, self.rim_r = first.z, first.r, first.rim_r
+        wheelbase = abs(self.axles[0] - self.axles[-1])
+        # Front and back views draw the far axle's wheels this many rows towards the far end, tucked
+        # behind the body, so the axles sit where the side view puts them instead of halfway up it.
+        self.far_shift = far_shift or {"S": -round(wheelbase * 0.33), "N": -round(wheelbase * 0.35)}
+        # The near tyres are raised off the bottom edge so they stand tall beside the bumper.
+        self.near_lift = near_lift
+        # The spare: ((f0, f1), r, z) on its carrier, axle along f, and its radius.
+        self.spare = spare
+        self.spare_r = spare_r if spare_r is not None else self.axle_list[-1].r
+        self.spare_rim_r = self.spare_r * self.axle_list[-1].rim_r / self.axle_list[-1].r
+        self.fender = fender if fender is not None else round(max(a.z + a.r for a in self.axle_list) + 1.6)
+        # Where the wheels throw dirt: the body's sides from this far out, its front and rear ends.
+        outer = max(max(abs(r0), abs(r1)) for a in self.axle_list for r0, r1 in a.spans)
+        self.dirt = dirt or (outer - 10, self.axles[0] + 5, self.axles[-1] - 9)
+        self.clip = clip
+        self.tread_hidden = tread_hidden or (lambda f, r, z, tub, lift: False)
+        self.well = well
+        # How high the art splashes mud on the bodywork, or None for a vehicle that comes clean.
+        self.mud = mud
+        # Where a head on crash pushes the front in from, and the parts that give (None: its frontmost
+        # voxel, and everything near it).
+        self.crumple_front = crumple_front
+        self.crumple_parts = crumple_parts
+
+    def axle_at(self, f):
+        """The axle nearest to f."""
+        return min(self.axle_list, key=lambda a: abs(f - a.f))
+
+    def lift(self, axle, view):
+        return self.near_lift[view] if self.near_lift else round(axle.r * 0.6)
+
+
+JEEP_CHASSIS = Chassis(
+    [Axle(FRONT_AXLE, WHEEL_Z, WHEEL_R, WHEEL_SPAN, rim_r=5.6), Axle(REAR_AXLE, WHEEL_Z, WHEEL_R, WHEEL_SPAN, rim_r=5.6)],
+    far_shift={"S": -13, "N": -14}, near_lift={"S": 5, "N": 5}, spare=(SPARE_F, 7, 14), fender=FENDER,
+    dirt=(12, 26, -28), clip=inside_tub, tread_hidden=jeep_tread_hidden, well=jeep_wheel_well, mud=9,
+    crumple_front=32, crumple_parts={"bumper", "grille", "fender", "chassis_front", "hood_lid", "bay"})
+CHASSIS = JEEP_CHASSIS
+
+
+@contextlib.contextmanager
+def chassis(c):
+    """Draws with another vehicle's chassis for a while."""
+    global CHASSIS
+    old = CHASSIS
+    CHASSIS = c
+    dirt_level.cache_clear()
+    try:
+        yield c
+    finally:
+        CHASSIS = old
+        dirt_level.cache_clear()
 
 
 def jerrycan(damaged=False):
@@ -1642,7 +1834,7 @@ def windshield_rows(view, yi, z):
 
 
 def nearest_axle(f):
-    return FRONT_AXLE if abs(f - FRONT_AXLE) < abs(f - REAR_AXLE) else REAR_AXLE
+    return min(CHASSIS.axles, key=lambda a: abs(f - a))
 
 
 def lattice(x, y, z):
@@ -1688,24 +1880,27 @@ def dirt_level(f, r, z, part, face):
     the bumpers; the upper body and the top faces only gather a light dust. Smooth noise in jeep
     space breaks it into patches. A wheel rim only goes by radius, so it keeps its dirt as it turns."""
     cf, cz = f + 0.5, z + 0.5
+    c = CHASSIS
     if part in WHEEL_PARTS:
-        d = math.hypot(cf - nearest_axle(f), cz - WHEEL_Z)
+        a = c.axle_at(f)
+        d = math.hypot(cf - a.f, cz - a.z)
         e = 0.5 + 0.4 * clamp01((d - 2.0) / 4.0)
     else:
         lo, hi = DIRT_LOW_Z
         e = 0.85 * clamp01((hi - cz) / (hi - lo)) ** 1.3
         # The wheels throw it on the body's sides, below the fender line.
-        side = clamp01((abs(r + 0.5) - 12) / 5) * clamp01((FENDER + 1 - cz) / 3)
-        for axle in (FRONT_AXLE, REAR_AXLE):
-            df = cf - axle
-            d = math.hypot(df, cz - WHEEL_Z)
+        inner, front, rear = c.dirt
+        side = clamp01((abs(r + 0.5) - inner) / 5) * clamp01((c.fender + 1 - cz) / 3)
+        for a in c.axle_list:
+            df = cf - a.f
+            d = math.hypot(df, cz - a.z)
             gap, width, weight = DIRT_ARCH
-            e = max(e, side * weight * math.exp(-((d - WHEEL_R - gap) / width) ** 2))
+            e = max(e, side * weight * math.exp(-((d - a.r - gap) / width) ** 2))
             ahead, width, weight = DIRT_SPRAY
-            e = max(e, side * weight * math.exp(-((df + WHEEL_R + ahead) / width) ** 2) * clamp01((17 - cz) / 9))
-        if f >= 26:
+            e = max(e, side * weight * math.exp(-((df + a.r + ahead) / width) ** 2) * clamp01((17 - cz) / 9))
+        if f >= front:
             e = max(e, DIRT_FRONT * clamp01((17 - cz) / 8))
-        if f <= -28:
+        if f <= rear:
             e = max(e, DIRT_REAR * clamp01((19 - cz) / 9))
         e = max(e * (0.45 if face == "top" else 1.0), DIRT_DUST)
     n = smooth_noise(f, r, z, 6.0) * 0.65 + smooth_noise(f, r, z, 2.5) * 0.35
@@ -1742,10 +1937,11 @@ def wheel_rows(view, part, f, yi, z):
     WHEEL_SCALE, moved so the wheel's centre lands where the view's projection puts it."""
     depth, height = WHEEL_SCALE[view]
     if part == "spare":
-        centre_f, centre_z = (SPARE_F[0] + SPARE_F[1]) / 2, 14
+        (f0, f1), _, centre_z = CHASSIS.spare
+        centre_f = (f0 + f1) / 2
     else:
-        centre_f = nearest_axle(f)
-        centre_z = WHEEL_Z
+        a = CHASSIS.axle_at(f)
+        centre_f, centre_z = a.f, a.z
     cy = math.floor(to_world(view, centre_f + 0.5, 0.5)[1])
     shift = (math.floor(cy * DEPTH_SCALE[view] + centre_z * HEIGHT_SCALE[view]) -
              math.floor(cy * depth + centre_z * height))
@@ -1779,7 +1975,7 @@ def render(model, view, parts=None):
         depth = yi * DEPTH_SCALE[view]
         if part in ROUND_PARTS and view in WHEEL_SCALE:
             near, far = wheel_rows(view, part, f, yi, z)
-            if part in WHEEL_PARTS and nearest_axle(f) != FAR_AXLE[view]:
+            if part in WHEEL_PARTS and nearest_axle(f) != far_axle(view):
                 depth -= NEAR_WHEEL_PRIORITY
         elif part == "windshield" and view in WINDSHIELD_HEIGHT:
             near, far = windshield_rows(view, yi, z)
@@ -1805,7 +2001,8 @@ NEIGHBOURS = ((1, 0, 0.75), (-1, 0, 0.75), (0, -1, 1.25), (0, 1, 0.25))
 def shade(buf):
     """Colours a depth buffer. A pixel next to a farther surface becomes its material's outline;
     top faces get a lit lip where they fold into the face below and along their west edge; the row
-    above an outline on a vertical face falls into shadow; low bodywork picks up mud."""
+    above an outline on a vertical face falls into shadow; low bodywork picks up mud, as high as the
+    chassis says."""
     edge = set()
     # Rows on a flat top surface step this far in depth when the depth axis is squashed.
     stretch = 1 / min(1.0, DEPTH_SCALE.get(getattr(buf, "view", None), 1.0))
@@ -1831,8 +2028,9 @@ def shade(buf):
             col = pal["dark"] if (x, y + 1) in edge else pal["front"]
         z = key[2]
         mud = 0
-        if mat in BODY_MATS and face == "front" and z <= 9 and (x, y) not in edge:
-            if noise(*key) < (10 - z) * 0.07:
+        top = CHASSIS.mud
+        if top is not None and mat in BODY_MATS and face == "front" and z <= top and (x, y) not in edge:
+            if noise(*key) < (top + 1 - z) * 0.07:
                 col = tuple((c * 2 + mc) // 3 for c, mc in zip(col, MUD))
                 mud = 1
         alpha = 255
@@ -1888,6 +2086,25 @@ def layer_of(buf, col, glass, part):
         layer[px] = blend(layer.get(px), dirty_glass(*px, key) if part == "windshield" else glass_color(*px))
         glass_px.add(px)
     return layer, glass_px
+
+
+def wheel_frames(scene, view, occupied, rims=True):
+    """The near wheels turning against the scene, a frame for each step through a lug pitch, with
+    the far wheels where nothing else is drawn; and, with rims, each frame's rim map."""
+    frames = []
+    rim_frames = []
+    for k in range(WHEEL_FRAMES):
+        phase = k * (2 * math.pi / LUGS) / WHEEL_FRAMES
+        near_wheels = wheels(view, phase, axles=near_axles(view))
+        fb, _ = render(scene.merged(near_wheels), view)
+        fc = shade(fb)
+        frame = {px: fc[px] for px, v in fb.items() if v[2] in WHEEL_PARTS}
+        frame.update(far_wheels(view, occupied, phase))
+        frames.append(frame)
+        if rims:
+            tagged, _ = render(scene.merged(rim_tagged(near_wheels, wheel_rim(view))), view)
+            rim_frames.append(rim_map(tagged, frame, k))
+    return frames, rim_frames
 
 
 def split_direction(variant, view, dy):
@@ -1973,6 +2190,13 @@ def split_direction(variant, view, dy):
                 for px, c in damage(layer, seed(variant, view, name, "scorch"), light=True).items():
                     layer[px] = blend(layer[px], c)
             layers[f"{name}_{state}"] = layer
+            if name == "spare" and not damaged:
+                tagged, _ = render(model.merged(rim_tagged(part_model, spare_rim)), view)
+                layers["spare_rims"] = rim_map(tagged, layer)
+                with tyres("road"):
+                    road = spare_tread(False, view) if view in "EW" else make(False)
+                    buf, glass = render(model.merged(road), view)
+                    layers["road_spare_0"], _ = layer_of(buf, shade(buf), glass, part)
 
     occupied = set(full) | {px for name in FITTED for px in layers[f"{name}_0"]}
     layers["wheels"].update(far_wheels(view, occupied))
@@ -1993,14 +2217,9 @@ def split_direction(variant, view, dy):
         layers[f"hood_closed_dent{level}"] = {px: col[px] for px, e in buf.items() if e[2] == "hood_lid"}
     swing = [lid_layer(hood_open(a, variant)) for a in HOOD_SWING]
 
-    frames = []
-    for k in range(WHEEL_FRAMES):
-        phase = k * (2 * math.pi / LUGS) / WHEEL_FRAMES
-        fb, _ = render(body.merged(closed).merged(wheels(view, phase, axles=near_axles(view))), view)
-        fc = shade(fb)
-        frame = {px: fc[px] for px, v in fb.items() if v[2] in WHEEL_PARTS}
-        frame.update(far_wheels(view, occupied, phase))
-        frames.append(frame)
+    frames, rim_frames = wheel_frames(body.merged(closed), view, occupied)
+    with tyres("road"):
+        road_frames, _ = wheel_frames(body.merged(closed), view, occupied, rims=False)
 
     ox, oy = SIZE // 2, SIZE // 2 + dy
 
@@ -2033,6 +2252,8 @@ def split_direction(variant, view, dy):
         out["seats_open"][name] = set(place({px: 0 for px, (_, _, part, _, key) in buf.items()
                                              if part in SEAT_PARTS and seat_at(key, variant) == name}))
     out["wheels_frames"] = [place(f) for f in frames]
+    out["road_wheels_frames"] = [place(f) for f in road_frames]
+    out["rims_wheels_frames"] = [place(f) for f in rim_frames]
     out["hood_swing"] = [place(f) for f in swing]
 
     fold = {}
@@ -2066,26 +2287,43 @@ def split_direction(variant, view, dy):
     # Kit hung on a panel swings with it. The spare is drawn as a plain voxel wheel once it leaves
     # its upright place, where its round front and back projection no longer applies.
     rides = RIDES[variant]
-    for name in RIDE_NAMES:
+
+    def ride_frames(name, damaged, fitted):
         panel = rides.get(name)
+        frames_r = []
+        rim_swing = []
+        for a in panel_swing(panel or "door_driver"):
+            if panel is None or not a:
+                frames_r.append(fitted)
+                rim_swing.append(out.get("spare_rims", {}))
+                continue
+            piece = spare_tread(damaged, view) if name == "spare" and view in "EW" else HARDPOINTS[name](damaged)
+            tagged_piece = rim_tagged(piece, spare_rim) if name == "spare" and not damaged else None
+            if name == "spare":
+                piece = Model({k: (mat, "spare_swung") for k, (mat, _) in piece.vox.items()})
+            piece = panel_at(panel, a, piece)
+            part = "spare_swung" if name == "spare" else name
+            shut = model.without(panel).merged(panel_at(panel, a, variant=variant))
+            buf, glass = render(shut.merged(piece), view)
+            layer, glass_px = layer_of(buf, shade(buf), glass, part)
+            if damaged:
+                for px, c in damage(layer, seed(variant, view, name, "scorch"), light=True).items():
+                    layer[px] = blend(layer[px], c)
+            frames_r.append(place(layer))
+            if tagged_piece is not None:
+                swung = Model({k: (mat, "spare_swung") for k, (mat, _) in tagged_piece.vox.items()})
+                tagged, _ = render(shut.merged(panel_at(panel, a, swung)), view)
+                rim_swing.append(place(rim_map(tagged, layer)))
+        return frames_r, rim_swing
+
+    for name in RIDE_NAMES:
         for state, damaged in (("0", False), ("1", True)):
-            frames_r = []
-            for a in panel_swing(panel or "door_driver"):
-                if panel is None or not a:
-                    frames_r.append(out[f"{name}_{state}"])
-                    continue
-                piece = spare_tread(damaged, view) if name == "spare" and view in "EW" else HARDPOINTS[name](damaged)
-                if name == "spare":
-                    piece = Model({k: (mat, "spare_swung") for k, (mat, _) in piece.vox.items()})
-                piece = panel_at(panel, a, piece)
-                part = "spare_swung" if name == "spare" else name
-                buf, glass = render(model.without(panel).merged(panel_at(panel, a, variant=variant)).merged(piece), view)
-                layer, glass_px = layer_of(buf, shade(buf), glass, part)
-                if damaged:
-                    for px, c in damage(layer, seed(variant, view, name, "scorch"), light=True).items():
-                        layer[px] = blend(layer[px], c)
-                frames_r.append(place(layer))
+            frames_r, rim_swing = ride_frames(name, damaged, out[f"{name}_{state}"])
             out[f"{name}_swing_{state}"] = frames_r
+            if name == "spare" and state == "0":
+                out["rims_spare_swing"] = rim_swing
+    with tyres("road"):
+        out["road_spare_swing_0"], _ = ride_frames("spare", False, out["road_spare_0"])
     for state, (kind, side, _) in LIT_STATES.items():
         out[state] = place(lights_layer(model, view, kind, side))
     return out
@@ -2155,9 +2393,9 @@ def damage(pixels, rng_seed, light=False):
 # is sampled backwards from the deformed space, so stretched sheet stays whole. Paint stays paint, so
 # dents keep the jeep's colour and dirt; the edges that struck are scraped to bare steel.
 # The engine bay goes with them: the grille drives the radiator back.
-CRUMPLE_PARTS = {"bumper", "grille", "fender", "chassis_front", "hood_lid", "bay"}
+CRUMPLE_PARTS = JEEP_CHASSIS.crumple_parts
 CRUMPLE_LEVELS = 3
-CRUMPLE_FRONT = 32
+CRUMPLE_FRONT = JEEP_CHASSIS.crumple_front
 # The worst crumple: how far the nose is pushed back, the crumple zone's length behind it and the
 # folds' height, in voxels; and how far along it each level is.
 CRUMPLE_DEPTH = 5.5
@@ -2171,7 +2409,7 @@ CRUMPLE_SCRAPES = 4
 CREASE = (34, 38, 24, 255)
 
 
-def crumple_field(level, rng_seed):
+def crumple_field(level, rng_seed, front=None):
     """The crumple's displacement, (df, dr, dz) at a voxel of the undamaged jeep."""
     rnd = random.Random(rng_seed)
     centre = rnd.uniform(-6.0, 6.0)
@@ -2179,7 +2417,7 @@ def crumple_field(level, rng_seed):
     phase = rnd.uniform(0.0, math.tau)
     scale = CRUMPLE_SCALE[level]
     depth, zone, fold = CRUMPLE_DEPTH * scale, CRUMPLE_ZONE, CRUMPLE_FOLD * scale
-    back = CRUMPLE_FRONT - zone
+    back = (CRUMPLE_FRONT if front is None else front) - zone
 
     def field(f, r, z, part):
         hit = 0.45 + 0.55 * math.exp(-((r - centre) / width) ** 2)
@@ -2211,14 +2449,17 @@ def _bridges(moved, key):
 
 def crumple(model, level, rng_seed):
     """The model's voxels with its front crumpled to a level."""
-    field = crumple_field(level, rng_seed)
-    front = {k: v for k, v in model.vox.items() if v[1] in CRUMPLE_PARTS}
+    c = CHASSIS
+    nose = c.crumple_front if c.crumple_front is not None else max(k[0] for k in model.vox)
+    field = crumple_field(level, rng_seed, nose)
+    back = nose - CRUMPLE_ZONE - 1
+    parts = c.crumple_parts
+    front = {k: v for k, v in model.vox.items() if (v[1] in parts if parts is not None else k[0] >= back)}
     out = {k: v for k, v in model.vox.items() if k not in front}
-    back = CRUMPLE_FRONT - CRUMPLE_ZONE - 1
     # Scrapes to bare steel along the edges that struck, the bumper's face and the fenders' fronts:
     # picked on the undamaged jeep in one fixed order, so each level keeps the last one's.
     rnd = random.Random(rng_seed)
-    edges = sorted(k for k, v in front.items() if v[1] in ("bumper", "fender") and k[0] >= CRUMPLE_FRONT - 6 and
+    edges = sorted(k for k, v in front.items() if (parts is None or v[1] in ("bumper", "fender")) and k[0] >= nose - 6 and
                    (k[0] + 1, k[1], k[2]) not in model.vox)
     rnd.shuffle(edges)
     for k in edges[:CRUMPLE_SCRAPES * level]:
@@ -2458,13 +2699,19 @@ def face_on(model, facing):
 
 def icon_images():
     """Hardpoint item icons, each a 32 px single-direction state."""
-    tyre = Model()
-    for a in range(-9, 10):
-        for b in range(-9, 10):
-            for r in range(0, 6):
-                mat = wheel_disc(a, b, r % 2, r == 5, 0.0)
-                if mat:
-                    tyre.put(a, r, b, mat, "wheel")
+    def wheel_set():
+        tyre = Model()
+        for a in range(-9, 10):
+            for b in range(-9, 10):
+                for r in range(0, 6):
+                    mat = wheel_disc(a, b, r % 2, r == 5, 0.0)
+                    if mat:
+                        tyre.put(a, r, b, mat, "wheel")
+        return tyre
+
+    tyre = wheel_set()
+    with tyres("road"):
+        road_tyre = wheel_set()
     small_shield = Model()
     for z in range(0, 12):
         f = -(z // 3)
@@ -2473,6 +2720,7 @@ def icon_images():
             small_shield.put(f, r, z, "od" if frame else GLASS, "windshield")
     return {
         "tires": centred(tyre, "E", ICON),
+        "road_tires": centred(road_tyre, "E", ICON),
         "mgturret": centred(build_mg(), "E", ICON),
         "windshield": centred(small_shield, "S", ICON),
         "wirecutter": centred(wirecutter(), "E", ICON),
@@ -2775,6 +3023,12 @@ def write_rsi(variant, dy):
         for st in ("0", "1"):
             frames_of = (lambda key: lambda v: per_dir[v][key])(f"{name}_swing_{st}")
             save_swing(f"{name}_{st}", frames_of, ATTACHMENTS[name], closed=False, opened=f"{name}_open_{st}")
+    # The spare's rim maps, for each of its intact states.
+    over_spare = ATTACHMENTS["spare"]
+    save("rims_spare_0", [to_image({} if v in over_spare else per_dir[v]["spare_rims"]) for v in DIRS])
+    save("rims_spare_overlay_0", [to_image(per_dir[v]["spare_rims"] if v in over_spare else {}) for v in DIRS])
+    save_swing("rims_spare_0", lambda v: per_dir[v]["rims_spare_swing"], over_spare, closed=False,
+               opened="rims_spare_open_0")
     alpha = lambda d: {k for k, c in d.items() if c[3] > 0}
     for name in [n for n in HARDPOINTS if n in ATTACHMENTS]:
         save(name + "_outline", [to_image(outline(alpha(per_dir[v][name + "_0"]))) for v in DIRS])
@@ -2828,6 +3082,18 @@ def write_rsi(variant, dy):
     save("wheels_overlay_0", [to_image(f if near[v] else {}) for v in DIRS for f in per_dir[v]["wheels_frames"]],
          delays=anim)
     save("wheels_overlay_1", [to_image(per_dir[v]["wheels_destroyed"] if near[v] else {}) for v in DIRS])
+    # Road tyres: the wheels and the spare on smooth, ribbed tyres. Their rims are where the off-road
+    # tyres' are, so they share those rim maps; a shredded tyre looks the same either way.
+    save("road_wheels_0", [to_image(f) for v in DIRS for f in per_dir[v]["road_wheels_frames"]], delays=anim)
+    save("road_wheels_overlay_0", [to_image(f if near[v] else {}) for v in DIRS
+                                   for f in per_dir[v]["road_wheels_frames"]], delays=anim)
+    save("road_spare_0", [to_image({} if v in over_spare else per_dir[v]["road_spare_0"]) for v in DIRS])
+    save("road_spare_overlay_0", [to_image(per_dir[v]["road_spare_0"] if v in over_spare else {}) for v in DIRS])
+    save_swing("road_spare_0", lambda v: per_dir[v]["road_spare_swing_0"], over_spare, closed=False,
+               opened="road_spare_open_0")
+    save("rims_wheels_0", [to_image(f) for v in DIRS for f in per_dir[v]["rims_wheels_frames"]], delays=anim)
+    save("rims_wheels_overlay_0", [to_image(f if near[v] else {}) for v in DIRS for f in per_dir[v]["rims_wheels_frames"]],
+         delays=anim)
     for name, over_dirs in ATTACHMENTS.items():
         for state in ("0", "1"):
             key = f"{name}_{state}"
@@ -3253,10 +3519,10 @@ def paste(dst, src, x, y):
 
 def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=None, loaded=False,
               fitted=FITTED, wheels_on=True, turret=True, hood="hood_closed", smoke=None, lights=False,
-              fuel_door=0, door_driver=0, door_passenger=0, tailgate=0, front=0):
+              fuel_door=0, door_driver=0, door_passenger=0, tailgate=0, front=0, road=False):
     """What the game draws for one direction: vehicle layers, riders, then the overlay entity. The
     door, tailgate and fuel door arguments are frames of their swings (0 shut, -1 open); front is the
-    front damage level."""
+    front damage level; road, road tyres on the wheels and the spare."""
     v = per_dir[view]
     near = view in "EW"
     st = "1" if damaged else "0"
@@ -3266,9 +3532,10 @@ def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=Non
 
     def kit(name):
         panel = RIDES[variant].get(name)
+        key = "road_spare" if road and name == "spare" and not damaged else name
         if panel is not None and opened[panel]:
-            return v[f"{name}_swing_{st}"][opened[panel]]
-        return v[f"{name}_{st}"]
+            return v[f"{key}_swing_{st}"][opened[panel]]
+        return v[f"{key}_{st}"]
     img = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
     img.alpha_composite(to_image(v["base"]))
     if front:
@@ -3293,6 +3560,8 @@ def composite(variant, view, per_dir, dy, riders=False, damaged=False, frame=Non
         if name not in ("engine", "extinguisher") and view not in ATTACHMENTS[name]:
             img.alpha_composite(to_image(kit(name)))
     wheel_px = v["wheels_destroyed"] if damaged else (v["wheels"] if frame is None else v["wheels_frames"][frame])
+    if road and not damaged:
+        wheel_px = v["road_wheels_frames"][frame or 0]
     if wheels_on:
         img.alpha_composite(to_image(wheel_px))
 
@@ -3820,6 +4089,7 @@ def main():
         return sheet([[composite(var, v, per[var], dy, **kw) for v in DIRS] for var in VARIANTS], scale)
 
     grid().save(os.path.join(PREVIEW_DIR, "jeep_variants.png"))
+    grid(road=True).save(os.path.join(PREVIEW_DIR, "jeep_road_tyres.png"))
     grid(riders=True, loaded=True).save(os.path.join(PREVIEW_DIR, "jeep_riders.png"))
     down = tuple("windshield_down" if n == "windshield_up" else n for n in FITTED)
     everything = FITTED + ("wirecutter", "searchlight")

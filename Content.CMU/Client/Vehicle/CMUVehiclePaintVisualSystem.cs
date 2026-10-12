@@ -151,6 +151,10 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
         old.Wheels.Dispose();
     }
 
+    /// <summary>
+    /// A paint shader with every uniform set: one left unset keeps whatever the last vehicle drawn
+    /// with the shader had, painting its seats or tub on every other vehicle.
+    /// </summary>
     private ShaderInstance NewShader()
     {
         var shader = _prototypes.Index(PaintShader).InstanceUnique();
@@ -158,6 +162,12 @@ public sealed class CMUVehiclePaintVisualSystem : EntitySystem
         shader.SetParameter("mud", Mud);
         shader.SetParameter("paint", Base);
         shader.SetParameter("painted", 0f);
+        shader.SetParameter("interior", Base);
+        shader.SetParameter("paintedInterior", 0f);
+        shader.SetParameter("seats", Base);
+        shader.SetParameter("paintedSeats", 0f);
+        shader.SetParameter("zoned", 0f);
+        shader.SetParameter("dirt", 0f);
         return shader;
     }
 

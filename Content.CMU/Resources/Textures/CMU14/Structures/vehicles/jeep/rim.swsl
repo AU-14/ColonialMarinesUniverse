@@ -1,0 +1,29 @@
+// Draws a rim design over a vehicle's rims. The layer's texture is a rim map (rims_<state> in the
+// vehicle's RSI, written by jeep_pixel_art.py beside each intact wheel and spare state): where a rim
+// shows, red and green give the pixel's place on the rim's face and blue the wheel frame. The design
+// comes as a small texture of its colours, one 11 by 11 rim for each of the four frames side by side,
+// baked by the client (CMUVehicleRimVisualSystem) from the design and the colours sprayed on. Lit like
+// the sprite, and dirtied with the wheels. The engine samples textures in linear light; the map's
+// values are spaced far enough apart (RIM_STEP) to read back the same once turned back to sRGB.
+
+uniform sampler2D design;
+uniform highp float dirt;   // 0 clean to 1 as dirty as it gets
+
+highp float level(highp float channel, highp float first, highp float step) {
+    return floor((channel * 255.0 - first) / step + 0.5);
+}
+
+void fragment() {
+    highp vec4 map = zTexture(UV);
+    highp vec3 raw = zToSrgb(map).rgb;
+    highp float u = level(raw.r, 4.0, 24.0);
+    highp float v = level(raw.g, 4.0, 24.0);
+    highp float frame = level(raw.b, 16.0, 64.0);
+    highp vec2 cell = vec2(frame * 11.0 + u + 0.5, 10.0 - v + 0.5) / vec2(44.0, 11.0);
+    highp vec4 colour = zTextureSpec(design, cell);
+
+    // Wheels are the first thing on a vehicle to get dirty.
+    highp float amount = clamp((dirt * 0.95 - 0.1) / 0.25, 0.0, 1.0) * 0.55;
+    highp vec3 grime = zFromSrgb(vec4(0.33, 0.27, 0.19, 1.0)).rgb;
+    COLOR = vec4(mix(colour.rgb, grime, amount), colour.a * map.a);
+}

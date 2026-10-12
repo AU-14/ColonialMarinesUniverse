@@ -24,12 +24,12 @@ public sealed class CMUVehicleCrayonSystem : SharedCMUVehicleCrayonSystem
         _maps.Clear();
     }
 
-    public override bool TryGetSurface(ResPath map, Direction direction, int x, int y, out Vector3 voxel, out bool front, out bool overRiders, out CMUCrayonPanel panel)
+    public override bool TryGetSurface(ResPath map, Direction direction, int x, int y, out Vector3 voxel, out bool front, out bool overRiders, out int panel)
     {
         voxel = default;
         front = false;
         overRiders = false;
-        panel = CMUCrayonPanel.Body;
+        panel = 0;
         if (x < 0 || y < 0 || x >= FrameSize || y >= FrameSize || GetMap(map) is not { } image)
             return false;
 

@@ -327,7 +327,7 @@ public sealed class CMUVehicleCargoSystem : EntitySystem
     /// </summary>
     private bool IsTailgateOpen(EntityUid vehicle)
     {
-        return _jeep.IsPanelOpen(vehicle, CMUJeepSystem.Tailgate);
+        return !TryComp(vehicle, out CMUVehicleCargoComponent? cargo) || _jeep.IsPanelOpen(vehicle, cargo.Gate);
     }
 
     private bool IsPulledBy(EntityUid crate, EntityUid user)

@@ -23,6 +23,12 @@ public sealed partial class CMUVehicleCrateComponent : Component
     public List<Color> Paints = new();
 
     /// <summary>
+    /// The wheel set packed in place of the vehicle's own, if it comes on other tyres.
+    /// </summary>
+    [DataField]
+    public EntProtoId? Wheels;
+
+    /// <summary>
     /// The slot whose fitted item is left out of the crate.
     /// </summary>
     [DataField]
