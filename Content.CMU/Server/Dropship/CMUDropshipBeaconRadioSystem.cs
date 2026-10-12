@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server.CMU14.Radio;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship.Weapon;
@@ -48,7 +49,7 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
             ("location", DescribeLocation(_transform.ToMapCoordinates(ev.Location))),
             ("seconds", (int) ev.AvailableFor.TotalSeconds));
 
-        _radio.SendRadioMessage(ev.User, message, channel, ev.User);
+        SendClear(ev.User, message, channel);
     }
 
     private void OnMedevacBeacon(ref CMUMedevacBeaconEvent ev)
@@ -81,7 +82,23 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
                 : Loc.GetString("cmu-dropship-radio-medevac-empty", ("location", location));
         }
 
-        _radio.SendRadioMessage(ev.Stretcher, message, channel, ev.Stretcher);
+        SendClear(ev.Stretcher, message, channel);
+    }
+
+    /// <summary>Sends an automated call that no tower, range, jamming or garbling can stop.</summary>
+    private void SendClear(EntityUid source, string message, ProtoId<RadioChannelPrototype> channel)
+    {
+        var added = !HasComp<CMUClearRadioTransmissionComponent>(source);
+        EnsureComp<CMUClearRadioTransmissionComponent>(source);
+        try
+        {
+            _radio.SendRadioMessage(source, message, channel, source);
+        }
+        finally
+        {
+            if (added)
+                RemComp<CMUClearRadioTransmissionComponent>(source);
+        }
     }
 
     /// <summary>The patient's name with their short rank in front, if they have one.</summary>

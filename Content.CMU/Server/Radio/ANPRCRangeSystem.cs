@@ -6,6 +6,7 @@ using Content.Shared.CMU14.ZLevels.Core.Components;
 using Content.Shared.CMU14.Radio;
 using Content.Shared.Ghost.Components;
 using Content.Shared._RMC14.Chat;
+using Content.Shared._RMC14.Deafness;
 using Content.Shared._RMC14.Radio;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
@@ -37,11 +38,18 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
 
         SubscribeLocalEvent<RadioReceiveAttemptEvent>(
             OnReceiveAttempt,
-            after: [typeof(RMCTelephoneSystem)]);
+            after: [typeof(RMCTelephoneSystem), typeof(JammerSystem)]);
     }
 
     private void OnSendAttempt(ref RadioSendAttemptEvent args)
     {
+        // automated clear transmissions ignore towers, range and jamming
+        if (HasComp<CMUClearRadioTransmissionComponent>(args.RadioSource))
+        {
+            args.Cancelled = false;
+            return;
+        }
+
         if (!_comms.Enabled)
             return;
 
@@ -120,6 +128,13 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
 
     private void OnReceiveAttempt(ref RadioReceiveAttemptEvent args)
     {
+        // automated clear transmissions reach everyone on the net, except listeners who are deaf
+        if (HasComp<CMUClearRadioTransmissionComponent>(args.RadioSource))
+        {
+            args.Cancelled = HasComp<DeafComponent>(Transform(args.RadioReceiver).ParentUid);
+            return;
+        }
+
         if (!_comms.Enabled)
             return;
 
