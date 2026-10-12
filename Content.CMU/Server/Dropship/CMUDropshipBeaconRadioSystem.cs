@@ -140,7 +140,7 @@ public sealed partial class CMUDropshipBeaconRadioSystem : EntitySystem
             _ => null,
         };
 
-        return platoon is { Languages.Count: > 0 } ? platoon.Languages[0] : null;
+        return platoon is { Languages.Count: > 0 } ? (ProtoId<LanguagePrototype>?) platoon.Languages[0] : null;
     }
 
     private string DescribeLocation(MapCoordinates coordinates)
