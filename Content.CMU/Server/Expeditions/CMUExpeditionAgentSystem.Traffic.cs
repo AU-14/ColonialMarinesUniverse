@@ -155,8 +155,16 @@ public sealed partial class CMUExpeditionAgentSystem
             if (travelling && Vector2.Dot(forward, otherDirection) > -0.5f &&
                 Vector2.Dot(origin.Position - otherStart, otherDirection) > 0 &&
                 SegmentDistance(origin.Position, otherStart, otherEnd) < 0.8f &&
-                SegmentDistance(otherStart, origin.Position, end) >= 0.8f)
+                !bodyInFront) // a follower right behind us is close to our path start but not in our way
                 continue;
+            // at a bend both bodies can sit just "in front" of each other's new heading and each
+            // waits on the other forever. whoever is further along goes, the other keeps queueing
+            if (bodyInFront && travelling && buddy.TrafficYieldTo == uid)
+            {
+                var behind = Vector2.Dot(origin.Position - otherStart, otherDirection);
+                if (behind > ahead || behind == ahead && uid.CompareTo(other) < 0)
+                    continue;
+            }
             var otherFirst = !travelling || buddy.TrafficTicket < agent.TrafficTicket ||
                 buddy.TrafficTicket == agent.TrafficTicket && other.CompareTo(uid) < 0;
             if (!bodyInFront && !otherFirst || separation >= closest)
