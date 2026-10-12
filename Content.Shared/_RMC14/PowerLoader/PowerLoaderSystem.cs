@@ -1402,13 +1402,22 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
     private void InsertPoint(Entity<PowerLoaderComponent> user, EntityUid contained, BaseContainer slot)
     {
+        // Feed selection depends on authoritative occupancy; do not predict a transfer into a stale feed.
+        if (_net.IsClient && TryComp(slot.Owner, out DropshipWeaponPointComponent? point) &&
+            point.SecondAmmoContainerSlotId != null)
+            return;
         if (slot.ContainedEntities.Count > 0)
             return;
 
+        if (!_container.Insert(contained, slot))
+        {
+            Log.Warning($"Failed to install {ToPrettyString(contained)} into {slot.ID} on {ToPrettyString(slot.Owner)}.");
+            foreach (var pilot in GetBuckled(user))
+                _popup.PopupEntity(Loc.GetString("rmc-power-loader-occupied-ammo"), slot.Owner, pilot, PopupType.SmallCaution);
+            return;
+        }
         var ev = new DropShipAttachmentInsertedEvent(contained);
         RaiseLocalEvent(slot.Owner, ref ev);
-
-        _container.Insert(contained, slot);
         SyncHands((user, user.Comp));
     }
 

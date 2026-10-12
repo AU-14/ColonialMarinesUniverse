@@ -15,6 +15,9 @@
                 <Button Name="ChinGunControlButton" Access="Public" Visible="False"
                         Text="{Loc 'cmu-mohawk-gunnery-manual'}"
                         ToolTip="{Loc 'cmu-mohawk-gunnery-control-help'}" />
+                <Button Name="FreeFireButton" Access="Public" Visible="False"
+                        ToolTip="{Loc 'cmu-mohawk-free-fire-help'}" />
+                <Label Name="ChinGunHealthLabel" Access="Public" Visible="False" />
                 <Button Name="TrackTargetButton" Access="Public" Visible="False"
                         ToggleMode="True" Text="{Loc 'cmu-dropship-track-mark'}"
                         ToolTip="{Loc 'cmu-mohawk-gunnery-mark-help'}" />

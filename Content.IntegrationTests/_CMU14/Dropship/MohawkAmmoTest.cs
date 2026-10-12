@@ -21,6 +21,9 @@ using Content.Shared._RMC14.PowerLoader.Events;
 using Content.Shared.DoAfter;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Containers;
+using System.Reflection;
+using Content.Server.Explosion.EntitySystems;
+using Content.Shared.Explosion.Components;
 
 #pragma warning disable RA0002 // Arrange the mounted ammo pipeline and inspect its consumed payload.
 
@@ -30,6 +33,41 @@ namespace Content.IntegrationTests._CMU14.Dropship;
 public sealed class MohawkAmmoTest : GameTest
 {
     public override PoolSettings PoolSettings => new() { Dirty = true };
+
+    [Test]
+    public async Task TempestReallyCoversMoreTilesGroundsideAndAirborne()
+    {
+        var map = await Pair.CreateTestMap();
+        await Server.WaitAssertion(() =>
+        {
+            var maps = Server.System<SharedMapSystem>();
+            for (var x = -10; x <= 10; x++)
+            {
+                for (var y = -10; y <= 10; y++)
+                    maps.SetTile(map.Grid, new Vector2i(x, y), map.Tile.Tile);
+            }
+            var crate = SEntMan.SpawnEntity("CMUMohawkM90AmmoDevastator", map.GridCoords);
+            var ammo = SEntMan.GetComponent<DropshipAmmoComponent>(crate);
+            var ground = SEntMan.SpawnEntity("CMUMohawkM90DevastatorImpact", map.GridCoords);
+            var explosive = SEntMan.GetComponent<ExplosiveComponent>(ground);
+            var method = typeof(ExplosionSystem).GetMethod("GetExplosionTiles", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            var center = Server.System<SharedTransformSystem>().ToMapCoordinates(map.GridCoords);
+            int Tiles(float total, float slope, float max)
+            {
+                var result = ((int Area, List<float> Intensities, ExplosionSpaceTileFlood? Space,
+                    Dictionary<EntityUid, ExplosionGridTileFlood> Grids, System.Numerics.Matrix3x2 Matrix))
+                    method.Invoke(Server.System<ExplosionSystem>(), new object[] { center, "RMC", total, slope, max })!;
+                return result.Grids[map.Grid].TileLists.Sum(row => row.Value.Count);
+            }
+            var oldCoverage = Tiles(60, 6, 12);
+            var newCoverage = Tiles(ammo.Explosion!.Total, ammo.Explosion.Slope, ammo.Explosion.Max);
+            Assert.That(newCoverage, Is.GreaterThanOrEqualTo(oldCoverage * 1.5),
+                "Tempest's wider AoE must measurably increase actual explosion tile coverage.");
+            Assert.That(Tiles(explosive.TotalIntensity, explosive.IntensitySlope, explosive.MaxIntensity), Is.EqualTo(newCoverage));
+            Assert.That(ammo.FriendlyImpactRadius, Is.GreaterThanOrEqualTo(
+                SharedDropshipWeaponSystem.EstimateBlastRadius(ammo.Explosion)));
+        });
+    }
 
     [Test]
     public async Task DualFeedLoadsAlternatesFallsBackAndUnloadsBothCrates()
@@ -114,10 +152,11 @@ public sealed class MohawkAmmoTest : GameTest
         });
     }
 
-    [TestCase("CMUMohawkM90Ammo", "CMUMohawkM90HEAP", 165, 0, 275, false)]
-    [TestCase("CMUMohawkM90AmmoScatter", "CMUMohawkM90Scatter", 60, 10, 350, false)]
-    [TestCase("CMUMohawkM90AmmoIncendiary", "CMUMohawkM90Incendiary", 130, 2, 600, true)]
-    [TestCase("CMUMohawkM90AmmoDevastator", "CMUMohawkM90Devastator", 300, 12, 2000, false)]
+    [TestCase("CMUMohawkM90Ammo", "CMUMohawkM90HEAP", 165, 0, 3000, false)]
+    [TestCase("CMUMohawkM90AmmoScatter", "CMUMohawkM90Scatter", 60, 10, 3000, false)]
+    [TestCase("CMUMohawkM90AmmoIncendiary", "CMUMohawkM90Incendiary", 130, 2, 3000, true)]
+    [TestCase("CMUMohawkM90AmmoDevastator", "CMUMohawkM90Devastator", 300, 12, 6000, false)]
+    [TestCase("CMUMohawkM90AmmoKinetic", "CMUMohawkM90Kinetic", 82, 0, 750, false)]
     public async Task PowerloaderLoadsVariantAndGunConsumesItsProjectile(
         string crateId, string projectileId, int damage, int spread, int cost, bool burns)
     {

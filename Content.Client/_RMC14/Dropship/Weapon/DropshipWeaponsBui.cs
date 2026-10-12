@@ -67,6 +67,11 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         Window.ChinGunControlButton.OnPressed += _ =>
             SendMessage(new MohawkChinGunControlMessage());
+        Window.FreeFireButton.OnPressed += _ =>
+        {
+            StopManualTrigger();
+            SendMessage(new MohawkChinGunFreeFireMessage());
+        };
         Window.ConfirmTrackingButton.OnPressed += _ =>
         {
             if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal) &&
@@ -192,6 +197,18 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
         if (EntMan.TryGetComponent(Owner, out DropshipTerminalWeaponsComponent? terminal))
         {
             Window.ChinGunControlButton.Visible = terminal.Gunnery;
+            Window.FreeFireButton.Visible = terminal.Gunnery;
+            Window.FreeFireButton.Disabled = terminal.ChinGunDisabled || terminal.ChinGunFreeFireCooldown > 0;
+            Window.ChinGunControlButton.Disabled = terminal.ChinGunDisabled;
+            Window.ChinGunHealthLabel.Visible = terminal.Gunnery;
+            Window.ChinGunHealthLabel.Text = terminal.ChinGunDisabled
+                ? Loc.GetString("cmu-mohawk-gunnery-disabled")
+                : Loc.GetString("cmu-mohawk-gunnery-health", ("health", terminal.ChinGunHealth), ("max", 2000));
+            Window.FreeFireButton.Text = terminal.ChinGunFreeFireSeconds > 0
+                ? Loc.GetString("cmu-mohawk-free-fire-active", ("seconds", terminal.ChinGunFreeFireSeconds))
+                : terminal.ChinGunFreeFireCooldown > 0
+                    ? Loc.GetString("cmu-mohawk-free-fire-cooldown", ("seconds", terminal.ChinGunFreeFireCooldown))
+                    : Loc.GetString("cmu-mohawk-free-fire-enable");
             Window.ChinGunControlButton.Text = Loc.GetString(terminal.ChinGunOperator == null
                 ? "cmu-mohawk-gunnery-manual"
                 : "cmu-mohawk-gunnery-automatic");
@@ -316,22 +333,26 @@ public sealed class DropshipWeaponsBui : RMCPopOutBui<DropshipWeaponsWindow>
 
         var screen = first ? Window.ScreenOne : Window.ScreenTwo;
 
-        screen.Viewport.RemoveAllChildren();
-        var preview = new DropshipTargetingPreview(EntMan, Owner, first, screen);
-        preview.CursorAim += coordinates =>
+        if (!screen.Viewport.Children.OfType<DropshipTargetingPreview>().Any())
         {
-            if (_manualTriggerHeld && !_input.IsKeyDown(Keyboard.Key.MouseLeft))
-                StopManualTrigger();
-            var netCoordinates = EntMan.GetNetCoordinates(EntMan.System<SharedTransformSystem>().ToCoordinates(coordinates));
-            SendMessage(_manualTriggerHeld
-                ? new MohawkChinGunTriggerMessage(true, netCoordinates)
-                : new MohawkChinGunAimMessage(netCoordinates));
-        };
-        preview.CursorUnavailable += StopManualTrigger;
-        screen.Viewport.AddChild(preview);
-        screen.Viewport.MouseFilter = MouseFilterMode.Ignore;
+            var preview = new DropshipTargetingPreview(EntMan, Owner, first, screen);
+            preview.CursorAim += coordinates =>
+            {
+                if (_manualTriggerHeld && !_input.IsKeyDown(Keyboard.Key.MouseLeft))
+                    StopManualTrigger();
+                var netCoordinates = EntMan.GetNetCoordinates(EntMan.System<SharedTransformSystem>().ToCoordinates(coordinates));
+                SendMessage(_manualTriggerHeld
+                    ? new MohawkChinGunTriggerMessage(true, netCoordinates)
+                    : new MohawkChinGunAimMessage(netCoordinates));
+            };
+            preview.CursorUnavailable += StopManualTrigger;
+            screen.Viewport.AddChild(preview);
+        }
+        var turretCamera = first && terminal.ChinGunOperator != null && terminal.ChinGunEye != null;
+        screen.Viewport.MouseFilter = turretCamera ? MouseFilterMode.Stop : MouseFilterMode.Ignore;
         RefreshPayloadSettings(screen, compScreen);
-        screen.Viewport.Visible = false;
+        if (!turretCamera)
+            screen.Viewport.Visible = false;
         screen.FireMissionCreate.Visible = false;
         screen.FireMissionView.Visible = false;
         screen.FireMissionEdit.Visible = false;

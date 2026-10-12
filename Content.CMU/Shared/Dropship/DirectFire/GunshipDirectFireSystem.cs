@@ -48,6 +48,20 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
         SubscribeLocalEvent<GunshipDirectFireWeaponComponent, TakeAmmoEvent>(OnTakeAmmo);
         SubscribeLocalEvent<GunshipDirectFireWeaponComponent, GetAmmoCountEvent>(OnGetAmmoCount);
         SubscribeLocalEvent<GunshipDirectFireWeaponComponent, GunShotEvent>(OnGunShot);
+        SubscribeLocalEvent<GunshipDirectFireWeaponComponent, ShotAttemptedEvent>(OnShotAttempted);
+        SubscribeLocalEvent<GunshipDirectFireWeaponComponent, GunRefreshModifiersEvent>(OnRefreshModifiers);
+    }
+
+    private void OnShotAttempted(Entity<GunshipDirectFireWeaponComponent> ent, ref ShotAttemptedEvent args)
+    {
+        _guns.RefreshModifiers(args.Used.AsNullable());
+    }
+
+    private void OnRefreshModifiers(Entity<GunshipDirectFireWeaponComponent> ent, ref GunRefreshModifiersEvent args)
+    {
+        if (TryResolveMount(ent, out var point, out _, out _, out var ammo) &&
+            HasComp<MohawkChinGunComponent>(point) && ammo?.DirectFireRate is { } rate)
+            args.FireRate = rate;
     }
 
     private void OnAttemptShoot(Entity<GunshipDirectFireWeaponComponent> ent, ref AttemptShootEvent args)
@@ -410,7 +424,9 @@ public sealed partial class GunshipDirectFireSystem : EntitySystem
                 return null;
             foreach (var uid in slot.ContainedEntities)
             {
-                if (TryComp(uid, out DropshipAmmoComponent? payload) && payload.Weapon.Id == "CMUMohawkM90")
+                if (_containers.TryGetContainingContainer(uid, out var actual) && actual == slot &&
+                    Transform(uid).ParentUid == point &&
+                    TryComp(uid, out DropshipAmmoComponent? payload) && payload.Weapon.Id == "CMUMohawkM90")
                     return (uid, payload);
             }
             return null;

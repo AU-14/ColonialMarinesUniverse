@@ -16,6 +16,10 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
+using System.Reflection;
+using Robust.Client.Input;
+using Robust.Shared.Input;
+using Robust.Shared.Maths;
 
 namespace Content.IntegrationTests._CMU14.Dropship;
 
@@ -91,6 +95,45 @@ public sealed class MohawkMappedGunneryTest : GameTest
             Assert.That(window.FeedStatusLabel.Text, Does.Contain("400 rounds"));
             Assert.That(console.ChinGunFeedOne, Does.Contain("400 rounds"));
             Assert.That(console.ChinGunFeedTwo, Does.Contain("400 rounds"));
+            Assert.That(window.FreeFireButton.Visible, Is.True);
+            Assert.That(window.ChinGunHealthLabel.Text, Does.Contain("2000"));
+            var bui = (DropshipWeaponsBui) CEntMan.GetComponent<UserInterfaceComponent>(CEntMan.GetEntity(consoleNet))
+                .ClientOpenInterfaces[DropshipTerminalWeaponsUi.Key];
+            var preview = window.ScreenOne.Viewport.Children.OfType<DropshipTargetingPreview>().Single();
+            var elapsed = typeof(DropshipTargetingPreview).GetField("_aimElapsed", BindingFlags.Instance | BindingFlags.NonPublic)!;
+            elapsed.SetValue(preview, 0.08f);
+            var input = Client.ResolveDependency<IInputManager>();
+            var enabled = input.Enabled;
+            input.Enabled = true;
+            try
+            {
+                input.KeyDown(new KeyEventArgs(Keyboard.Key.MouseLeft, false, false, false, false, false, 0));
+                Assert.That(input.IsKeyDown(Keyboard.Key.MouseLeft), Is.True);
+                var viewport = window.ScreenOne.Viewport;
+                viewport.GetType().GetMethod("KeyBindDown", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .Invoke(viewport, new object[] { new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick, BoundKeyState.Down,
+                        default, true, Vector2.Zero, Vector2.Zero) });
+                var held = typeof(DropshipWeaponsBui).GetField("_manualTriggerHeld", BindingFlags.Instance | BindingFlags.NonPublic)!;
+                Assert.That(held.GetValue(bui), Is.True);
+                for (var i = 0; i < 100; i++)
+                {
+                    bui.Refresh();
+                    Assert.That(viewport.Visible, Is.True);
+                    Assert.That(viewport.Children.OfType<DropshipTargetingPreview>().Single(), Is.SameAs(preview));
+                    Assert.That(elapsed.GetValue(preview), Is.EqualTo(0.08f),
+                        "Ammo/aim refreshes must not starve the 100ms held-trigger heartbeat.");
+                    Assert.That(held.GetValue(bui), Is.True);
+                }
+                viewport.GetType().GetMethod("KeyBindUp", BindingFlags.Instance | BindingFlags.NonPublic)!
+                    .Invoke(viewport, new object[] { new GUIBoundKeyEventArgs(EngineKeyFunctions.UIClick, BoundKeyState.Up,
+                        default, true, Vector2.Zero, Vector2.Zero) });
+                Assert.That(held.GetValue(bui), Is.False, "Real UI release still stops the held trigger.");
+            }
+            finally
+            {
+                input.KeyUp(new KeyEventArgs(Keyboard.Key.MouseLeft, false, false, false, false, false, 0));
+                input.Enabled = enabled;
+            }
         });
         await Server.WaitAssertion(() =>
         {

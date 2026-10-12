@@ -34,6 +34,18 @@ public sealed partial class DropshipTerminalWeaponsComponent : Component
     public float ChinGunFlareRadius = 10f;
 
     [DataField, AutoNetworkedField]
+    public int ChinGunFreeFireSeconds;
+
+    [DataField, AutoNetworkedField]
+    public int ChinGunFreeFireCooldown;
+
+    [DataField, AutoNetworkedField]
+    public bool ChinGunDisabled;
+
+    [DataField, AutoNetworkedField]
+    public int ChinGunHealth = 2000;
+
+    [DataField, AutoNetworkedField]
     public int ChinGunFeed;
 
     [DataField, AutoNetworkedField]

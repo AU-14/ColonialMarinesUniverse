@@ -39,6 +39,15 @@ public sealed partial class MohawkChinGunComponent : Component
     public TimeSpan HeldFireUntil;
     public bool AirborneControl;
     public TimeSpan NextFireWarning;
+    public TimeSpan FreeFireUntil;
+    public TimeSpan FreeFireReadyAt;
+    public EntityUid? FreeFireConsole;
+    [DataField, AutoNetworkedField]
+    public float MaxHealth = 2000;
+    [DataField, AutoNetworkedField]
+    public bool Disabled;
+    [DataField, AutoNetworkedField]
+    public MohawkChinGunRepairStage RepairStage;
     [DataField]
     public float SlewDegreesPerSecond = 30f;
     [DataField]
@@ -58,6 +67,9 @@ public sealed partial class MohawkChinGunComponent : Component
 
 [Serializable, NetSerializable]
 public sealed class MohawkChinGunControlMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
+public sealed class MohawkChinGunFreeFireMessage : BoundUserInterfaceMessage;
 
 [Serializable, NetSerializable]
 public sealed class MohawkChinGunFireMessage(NetCoordinates coordinates) : BoundUserInterfaceMessage

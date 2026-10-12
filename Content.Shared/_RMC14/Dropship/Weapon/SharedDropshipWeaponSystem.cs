@@ -2817,14 +2817,16 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
     public bool TryFireChinGunAirburst(Entity<MohawkChinGunComponent> point, EntityUid weapon,
         EntityUid actor, EntityCoordinates coordinates, DropshipTerminalWeaponsComponent terminal)
     {
-        if (_net.IsClient || !_chinGun.IsAirborne(point) ||
+        if (_net.IsClient || !TryComp(weapon, out Content.Shared.Weapons.Ranged.Components.GunComponent? gun))
+            return false;
+        _gun.RefreshModifiers((weapon, gun));
+        if (!_chinGun.IsAirborne(point) ||
             !_chinGun.CanOperate(point, actor, weapon, out _) ||
             !_chinGun.IsInFlareArea(point, coordinates) ||
-            !TryComp(weapon, out Content.Shared.Weapons.Ranged.Components.GunComponent? gun) ||
             gun.NextFire > _timing.CurTime || gun.FireRateModified <= 0 ||
             !TryComp(weapon, out GunshipDirectFireWeaponComponent? direct) ||
             !_directFire.TryResolveMount((weapon, direct), out var mount, out var grid, out _, out _) ||
-            !_directFire.TryGetFeedAmmo(point, out var ammo) || ammo.Comp.Rounds <= 0)
+            !_directFire.TryGetFeedAmmo(point, out var ammo) || ammo.Comp.Rounds <= 0 || ammo.Comp.GroundOnly)
             return false;
 
         var landing = coordinates;
