@@ -45,3 +45,20 @@
       moles:
       - 3.932493683 # oxygen
       temperature: 293.15
+      
+- type: entity
+  parent: RMCExtendedEmergencyOxygenTank
+  id: CMUFieldOxygenTankHAZOPS
+  name: extended-use oxygen tank
+  description: A much larger version of the field gas tank, holding 10 L of gas while remaining lightweight and portable. Issued to HAZOPS.
+  components:
+  - type: Sprite
+    sprite: CMU14/Objects/Tools/Tanks/hazopsoxytank.rsi
+  - type: Item
+    sprite: CMU14/Objects/Tools/Tanks/hazopsoxytank.rsi
+  - type: Clothing
+    sprite: CMU14/Objects/Tools/Tanks/hazopsoxytank.rsi
+  - type: GasTank
+    air:
+      volume: 10
+      temperature: 293.15
