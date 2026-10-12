@@ -180,3 +180,24 @@
     size: Small
   - type: CMUIVPressureBag
     multiplier: 2
+
+# A portable cooler that only takes blood packs, IV bags and the like, and keeps blood and plasma from going bad.
+- type: entity
+  parent: RMCBeerCooler
+  id: CMUBloodCooler
+  name: blood cooler
+  description: A compact insulated cooler for blood packs and IV bags. Blood and plasma kept inside it stay fresh. Small enough to fit in a satchel.
+  suffix: Empty
+  components:
+  - type: Sprite
+    color: "#e8eef5"
+  - type: Item
+    size: Normal
+  - type: Storage
+    grid:
+    - 0,0,5,1
+    maxItemSize: Small
+    whitelist:
+      tags:
+      - CMBloodPack
+  - type: CMUBloodRefrigerator

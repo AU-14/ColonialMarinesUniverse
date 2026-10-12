@@ -145,6 +145,8 @@
         amount: 4
       - id: CMUMedicalOxygenTankFilled
         amount: 6
+      - id: CMUBloodCooler
+        amount: 4
      # FixOVien
 
 - type: entity
@@ -217,6 +219,8 @@
         amount: 20
       - id: CMUIVPressureBag
         amount: 6
+      - id: CMUBloodCooler
+        amount: 4
     - name: Empty Packs
       entries:
       - id: CMBloodPack
@@ -266,6 +270,8 @@
       - id: CMUSynthBloodPack
         amount: 4
         name: empty synthetic blood pack
+      - id: CMUBloodCooler
+        amount: 4
 
 - type: entity
   parent: AU14VendorBloodField
@@ -332,6 +338,8 @@
         amount: 3
       - id: AU14CMDefibrillator
         amount: 1
+      - id: CMUBloodCooler
+        amount: 4
     - name: Field Supplies
       entries:
       - id: CMFireExtinguisherPortable

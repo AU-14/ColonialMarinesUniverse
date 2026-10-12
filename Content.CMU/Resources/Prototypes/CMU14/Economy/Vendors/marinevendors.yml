@@ -1440,6 +1440,7 @@
     bundle:
     - CMUVisorMedicalSquad
     - RMCGlassesMedicalHUDGlasses
+    - CMUBloodCooler
     - AU14CMDefibrillator
     - CMHealthAnalyzer
     - RMCFlashlightPen

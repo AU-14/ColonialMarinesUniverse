@@ -23,7 +23,8 @@
 
   ## Keeping Blood Fresh
   - Blood and plasma [color=red]go bad after 30 minutes out of the fridge[/color]. The time adds up, and putting a pack back in the cold pauses it but doesn't reset it.
-  - A [bold]freezer crate[/bold] or a full-size [bold]IV stand[/bold] keeps packs cold. A pack held in your hand or on a folding IV stand isn't.
+  - A [bold]blood cooler[/bold], a [bold]freezer crate[/bold] or a full-size [bold]IV stand[/bold] keeps packs cold. A pack held in your hand or on a folding IV stand isn't.
+  - The blood cooler only holds blood packs and IV bags, and fits in a satchel. Corpsmen get one in their essential kit, and WeYu medical vendors stock them.
   - Examining a pack tells you when it's getting warm, and when it's gone bad.
   - [color=red]Spoiled blood and plasma[/color] do no good and poison the patient. Saline doesn't spoil.
   - An empty pack can be refilled with fresh blood.
@@ -34,6 +35,7 @@
     <GuideEntityEmbed Entity="CMUBloodPlasmaPack" Caption="Plasma pack (AB+)"/>
     <GuideEntityEmbed Entity="CMUSalineBag" Caption="Saline bag"/>
     <GuideEntityEmbed Entity="CMUIVPressureBag" Caption="Pressure bag"/>
+    <GuideEntityEmbed Entity="CMUBloodCooler" Caption="Blood cooler"/>
   </Box>
   - [bold]From your hand[/bold]: use a pack on the patient to hook it up. It stays connected while you hold it.
   - [bold]Squeeze it[/bold]: use the connected pack in your hand to squeeze it. It runs in three times as fast for a few seconds; keep squeezing to keep it going.
