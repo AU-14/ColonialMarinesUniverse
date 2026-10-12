@@ -33,12 +33,12 @@ public sealed partial class CMUWoundsSystem
 
     private static readonly ProtoId<DecalPrototype>[] BloodSplatters =
     [
-        "RMCDecalBloodSplatter1",
-        "RMCDecalBloodSplatter2",
-        "RMCDecalBloodSplatter3",
-        "RMCDecalBloodSplatter4",
-        "RMCDecalBloodSplatter5",
-        "RMCDecalBloodSplatter6",
+        "CMUBloodSplatter1",
+        "CMUBloodSplatter2",
+        "CMUBloodSplatter3",
+        "CMUBloodSplatter4",
+        "CMUBloodSplatter5",
+        "CMUBloodSplatter6",
     ];
 
     private readonly Dictionary<EntityUid, TimeSpan> _nextArterialSpray = new();
