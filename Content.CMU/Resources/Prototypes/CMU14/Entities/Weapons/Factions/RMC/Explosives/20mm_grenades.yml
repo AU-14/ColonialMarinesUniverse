@@ -38,6 +38,7 @@
   name: L103A1 20mm HE grenade
   description: A 20mm grenade that explodes upon impact. Less powerful than full-sized grenades.
   components:
+  - type: CMUSmartGrenade
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
@@ -76,6 +77,7 @@
   name: L108A1 20mm HESH grenade
   description: High-Explosive Dual-Purpose. A small, but deceptively strong blast grenade that has been phasing out the M15 HE grenades alongside the 30mm HEFA. Capable of being loaded in grenade launchers, or thrown by hand.
   components:
+  - type: CMUSmartGrenade
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
@@ -114,6 +116,7 @@
   name: L101A2 20mm nerve-agent grenade
   description: A 20mm grenade that explodes into a voluminous cloud of nerve gas upon impact.
   components:
+  - type: CMUSmartGrenade
   - type: Sprite
     sprite: CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:

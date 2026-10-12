@@ -50,7 +50,7 @@ public sealed class CMUFriendlyGrenadeOverlay : Overlay
         {
             if (xform.MapID != args.MapId ||
                 timer.User is not { } user ||
-                !_entity.HasComponent<CMUSmartGrenadeComponent>(uid) ||
+                !_entity.TryGetComponent(uid, out CMUSmartGrenadeComponent? smart) || !smart.Enabled ||
                 !IsFriendly(user))
             {
                 continue;

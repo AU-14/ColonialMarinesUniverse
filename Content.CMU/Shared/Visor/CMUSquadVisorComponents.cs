@@ -25,4 +25,9 @@ public sealed partial class CMUSquadVisorWearerComponent : Component
 /// once they're primed.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-public sealed partial class CMUSmartGrenadeComponent : Component;
+public sealed partial class CMUSmartGrenadeComponent : Component
+{
+    /// <summary>False on dumb grenades that inherit from a smart one.</summary>
+    [DataField]
+    public bool Enabled = true;
+}
