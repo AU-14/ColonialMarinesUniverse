@@ -1,16 +1,24 @@
-# Corpsman optic: the advanced medical optic and the squad optic in one visor.
+# Corpsman optic: the medical optic and the squad optic in one visor.
+# Based on the basic medical optic so it has no medical skill requirement: the advanced optic's skill check made the
+# visor cycle skip it for anyone without it, leaving no health bars. It looks like the advanced optic.
 - type: entity
-  parent: RMCVisorMedicalAdvanced
+  parent: RMCVisorMedical
   id: CMUVisorMedicalSquad
   name: medical squad optic
-  description: An insertable visor HUD for a standard helmet, issued to corpsmen. It combines the advanced medical optic's health readouts with the squad optic's squad display, trackers and grenade warnings.
+  description: An insertable visor HUD for a standard helmet, issued to corpsmen. It combines the medical optic's health readouts with the squad optic's squad display, trackers and grenade warnings.
   components:
+  - type: Sprite
+    state: med_adv_sight
+  - type: Visor
+    onIcon:
+      sprite: _RMC14/Objects/Clothing/helmet_visors.rsi
+      state: med_adv_sight_down
   - type: ToggleVisor
     ignoreRedundancy: true
   - type: CMUSquadOptic
   - type: ComponentToggler
     components:
-    # Advanced medical optic
+    # Medical optic
     - type: ShowHealthBars
       damageContainers:
       - Biological
