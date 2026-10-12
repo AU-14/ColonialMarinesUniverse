@@ -262,7 +262,7 @@
         name: first-aid pouch (pills)
     - name: Medical Headgear
       entries:
-      - id: AU14DesertM10CorpsmanHelmet
+      - id: AU14CamoM10CorpsmanHelmet
         amount: 9
     - name: Medical Storage
       choices: { CMUPlatoonMedicalStorage: 1 }
